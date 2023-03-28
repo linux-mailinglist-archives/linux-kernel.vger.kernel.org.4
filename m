@@ -2,171 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B646CBB0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8B26CBAFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 11:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbjC1JbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 05:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
+        id S232905AbjC1Ja5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 05:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjC1JaY (ORCPT
+        with ESMTP id S232743AbjC1JaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:30:24 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC907286
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:29:19 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id p204so14162302ybc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:29:19 -0700 (PDT)
+        Tue, 28 Mar 2023 05:30:06 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA4B72B2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:29:11 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id br6so14908842lfb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 02:29:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1679995751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yFB98fl8c+VxJhat2aITQJylt85+D41Na+tueFpnBAE=;
-        b=h6Vz5hHsFbSVlybmIlvV3llRGY6zxdMBPqd7vuRnJb91gssIrU+JkHC8x3k8jk99aZ
-         TUV+/AV65p6lGjzaxQBmfrutizEWwOo+EZeXN/NHKK4LwatIFW/QwCXbyNZ7bW8Vvnd5
-         K2dz4isaG3Fg9/yhee6xJqIWq4kl98h+rwO8U=
+        d=linaro.org; s=google; t=1679995744;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dk18DfrsZuq+WUDLgd3KU7WGbTjCqrV4Y3VCrkv2ukQ=;
+        b=nIDsD/3Uhou4S/AMUshlZp4REkr/B0iWYEkE6L4/jPyZHbFH8Ch8zzK4aJkHXXUrnT
+         /2PQz1XFLXG8rsvASOXccqnRhAN8CSqqo9WhYimiuuWhoRZkfX1r1tRs5Jd0lJJ00Wd7
+         e2LtZarRRPsvnEjVInvK0//wLA0tte8jIWd9f5xKCWaW+Nl/6YDMEJLwW6etgjayPXiG
+         8exy33d9pFfkBFGK6lrxOn05rm6OhrUp+pQEX/YnpVd6O7krqhIatLwbPiUNgv/MVJtf
+         0p47OKaHBOV1RQcaCTaUHC5eXtr0tz4hjKC1q0IjQ53D1LGfAXQr1qKrz5JS2OOiaXUV
+         kqfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679995751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yFB98fl8c+VxJhat2aITQJylt85+D41Na+tueFpnBAE=;
-        b=FO3Tq6YvegBoOLh8iFbaYUr2ZxEkPhZNXeie6hmVQViUCUMhCYhuGa4X3J8MzNZrIW
-         SQ6eHsiufBeBiWltubzd6lCjcQcPeDO/vWQlkQ+LTNgXXztI4qbtzdISM1+Zh95V68wY
-         yFOw3tKWGO8qhHYuxWsS3Mx7D/jyHnANYPhgraHJp/7SQwY6ENmaL2GQhWO95Kws5+kd
-         BziWxbvNaaQZPr2z9lm1YfBoH8mXDm83na6Lzuw0+HDUSKp8UUfRvgYvyjdB03tsbgmi
-         kWQGITh+dioOqRC/xqMj5gmuK+LZzdrzkh2QofZi07fqnjXub7fPacqtmOtUk7nBPzQY
-         M5XA==
-X-Gm-Message-State: AAQBX9dz7IIh0oC9/e3obsdCmXhfZvWz/aB5E2mIDK+AJ7zoE01IM60f
-        OSvTZW3ypD/XeRNeftlxaEP9uJfJ+voNG34j+WL8hQ==
-X-Google-Smtp-Source: AKy350afBwmCZQBALVcAA/Tbw4Xqq5Zxd871dGI57F78yPyqoxYIijJLMdgmt6M0w+Y8hISHOAZdDyJishaV0ICRHKo=
-X-Received: by 2002:a05:6902:188f:b0:b78:bced:2e3d with SMTP id
- cj15-20020a056902188f00b00b78bced2e3dmr7396712ybb.3.1679995751012; Tue, 28
- Mar 2023 02:29:11 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679995744;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dk18DfrsZuq+WUDLgd3KU7WGbTjCqrV4Y3VCrkv2ukQ=;
+        b=Z5DwxlsZztCk2FMa4faqc4sXwWnJmwQy+3/vruc7fG6MrbyedjZRd/VGXUQKf0wxck
+         IBZlbqvYNHiRyBNVjHKzcSEIfwCM0nCeN3gSc1E9M9VXm/t2yQtZiRMwVFUWqaZehCho
+         ptZyuTLeltd1jTVLRvQG6ulLlhUcUkJj62YiiaLbcmOZKCKUFRoP0knynaxqNDB+2q95
+         AayESvB3SFy7J6S21VP7kOJGh+G1itUf3LvKhAVP5XqqiZHIJvvCDEMPqhMQhO7rIA4g
+         s+YH4l6mF9klCuSnUEe8vzenS63m0dCVK6GBxN3NlVN8sSHmRRh8PvAlIgX70iMth2Qp
+         EozA==
+X-Gm-Message-State: AAQBX9eGOLcUT6j8VdUwDJMQzluxvohQ8eXj935XyKZaMBJ07t9d8c54
+        sKjRlW629/GYtR7TPjMi/ij4vg==
+X-Google-Smtp-Source: AKy350Y28HG8gD7zXHaAV6SDfZ00y0AiPHuQdsm7OVeyfnyXgpemP5e6hR/H2LQr0pjNDeREEXw+WQ==
+X-Received: by 2002:ac2:5a04:0:b0:4e8:487a:7c2e with SMTP id q4-20020ac25a04000000b004e8487a7c2emr4639191lfn.14.1679995743748;
+        Tue, 28 Mar 2023 02:29:03 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id w18-20020a056512099200b004dab932248fsm4980080lft.180.2023.03.28.02.29.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 02:29:03 -0700 (PDT)
+Message-ID: <ce24ffc4-3c0c-bf1b-354e-e5ee9db5d5c3@linaro.org>
+Date:   Tue, 28 Mar 2023 11:29:01 +0200
 MIME-Version: 1.0
-References: <20230328073328.3949796-1-dario.binacchi@amarulasolutions.com> <20230328084710.jnrwvydewx3atxti@pengutronix.de>
-In-Reply-To: <20230328084710.jnrwvydewx3atxti@pengutronix.de>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Tue, 28 Mar 2023 11:28:59 +0200
-Message-ID: <CABGWkvq0gOMw2J9GpLS=w+qg-3xhAst6KN9kvCuZnV9bSBJ3CA@mail.gmail.com>
-Subject: Re: [PATCH v10 0/5] can: bxcan: add support for ST bxCAN controller
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Rob Herring <robh@kernel.org>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 17/18] regulator: qcom-rpmh: add support for pmm8654au
+ regulators
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-can@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+References: <20230327125316.210812-1-brgl@bgdev.pl>
+ <20230327125316.210812-18-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230327125316.210812-18-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
-
-On Tue, Mar 28, 2023 at 10:47=E2=80=AFAM Marc Kleine-Budde <mkl@pengutronix=
-.de> wrote:
->
-> On 28.03.2023 09:33:23, Dario Binacchi wrote:
-> > The series adds support for the basic extended CAN controller (bxCAN)
-> > found in many low- to middle-end STM32 SoCs.
-> >
-> > The driver has been tested on the stm32f469i-discovery board with a
-> > kernel version 5.19.0-rc2 in loopback + silent mode:
-> >
-> > ip link set can0 type can bitrate 125000 loopback on listen-only on
-> > ip link set up can0
-> > candump can0 -L &
-> > cansend can0 300#AC.AB.AD.AE.75.49.AD.D1
-> >
-> > For uboot and kernel compilation, as well as for rootfs creation I used
-> > buildroot:
-> >
-> > make stm32f469_disco_sd_defconfig
-> > make
-> >
-> > but I had to patch can-utils and busybox as can-utils and iproute are
-> > not compiled for MMU-less microcotrollers. In the case of can-utils,
-> > replacing the calls to fork() with vfork(), I was able to compile the
-> > package with working candump and cansend applications, while in the
-> > case of iproute, I ran into more than one problem and finally I decided
-> > to extend busybox's ip link command for CAN-type devices. I'm still
-> > wondering if it was really necessary, but this way I was able to test
-> > the driver.
->
-> Applied to linux-can-next.
-
-Just one last question:
-To test this series, as described in the cover letter, I could not use
-the iproute2
-package since the microcontroller is without MMU. I then extended busybox f=
-or
-the ip link command. I actually also added the rtnl-link-can.c
-application to the
-libmnl library. So now I find myself with two applications that have
-been useful
-to me for this type of use case.
-Did I do useless work because I could use other tools? If instead the tools=
- for
-this use case are missing, what do you think is better to do?
-Submit to their respective repos or add this functionality to another
-project that
-I haven't considered ?
-
-Thanks and regards,
-Dario
-
->
-> Thanks,
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
+On 27.03.2023 14:53, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> Add the RPMH regulators exposed by the PMM8654au PMIC and its variants.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> ---
+I can't check the validity of the regulator types and ranges, but
+for the overall picture:
 
---=20
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Dario Binacchi
-
-Senior Embedded Linux Developer
-
-dario.binacchi@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+Konrad
+>  drivers/regulator/qcom-rpmh-regulator.c | 55 +++++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+> 
+> diff --git a/drivers/regulator/qcom-rpmh-regulator.c b/drivers/regulator/qcom-rpmh-regulator.c
+> index 4826d60e5d95..b0a58c62b1e2 100644
+> --- a/drivers/regulator/qcom-rpmh-regulator.c
+> +++ b/drivers/regulator/qcom-rpmh-regulator.c
+> @@ -694,6 +694,16 @@ static const struct rpmh_vreg_hw_data pmic5_pldo_lv = {
+>  	.of_map_mode = rpmh_regulator_pmic4_ldo_of_map_mode,
+>  };
+>  
+> +static const struct rpmh_vreg_hw_data pmic5_pldo515_mv = {
+> +	.regulator_type = VRM,
+> +	.ops = &rpmh_regulator_vrm_drms_ops,
+> +	.voltage_range = REGULATOR_LINEAR_RANGE(1800000, 0, 187, 8000),
+> +	.n_voltages = 188,
+> +	.hpm_min_load_uA = 10000,
+> +	.pmic_mode_map = pmic_mode_map_pmic5_ldo,
+> +	.of_map_mode = rpmh_regulator_pmic4_ldo_of_map_mode,
+> +};
+> +
+>  static const struct rpmh_vreg_hw_data pmic5_nldo = {
+>  	.regulator_type = VRM,
+>  	.ops = &rpmh_regulator_vrm_drms_ops,
+> @@ -704,6 +714,16 @@ static const struct rpmh_vreg_hw_data pmic5_nldo = {
+>  	.of_map_mode = rpmh_regulator_pmic4_ldo_of_map_mode,
+>  };
+>  
+> +static const struct rpmh_vreg_hw_data pmic5_nldo515 = {
+> +	.regulator_type = VRM,
+> +	.ops = &rpmh_regulator_vrm_drms_ops,
+> +	.voltage_range = REGULATOR_LINEAR_RANGE(320000, 0, 210, 8000),
+> +	.n_voltages = 211,
+> +	.hpm_min_load_uA = 30000,
+> +	.pmic_mode_map = pmic_mode_map_pmic5_ldo,
+> +	.of_map_mode = rpmh_regulator_pmic4_ldo_of_map_mode,
+> +};
+> +
+>  static const struct rpmh_vreg_hw_data pmic5_hfsmps510 = {
+>  	.regulator_type = VRM,
+>  	.ops = &rpmh_regulator_vrm_ops,
+> @@ -749,6 +769,15 @@ static const struct rpmh_vreg_hw_data pmic5_ftsmps525_mv = {
+>  	.of_map_mode = rpmh_regulator_pmic4_smps_of_map_mode,
+>  };
+>  
+> +static const struct rpmh_vreg_hw_data pmic5_ftsmps527 = {
+> +	.regulator_type = VRM,
+> +	.ops = &rpmh_regulator_vrm_ops,
+> +	.voltage_range = REGULATOR_LINEAR_RANGE(320000, 0, 215, 8000),
+> +	.n_voltages = 215,
+> +	.pmic_mode_map = pmic_mode_map_pmic5_smps,
+> +	.of_map_mode = rpmh_regulator_pmic4_smps_of_map_mode,
+> +};
+> +
+>  static const struct rpmh_vreg_hw_data pmic5_hfsmps515 = {
+>  	.regulator_type = VRM,
+>  	.ops = &rpmh_regulator_vrm_ops,
+> @@ -937,6 +966,28 @@ static const struct rpmh_vreg_init_data pmm8155au_vreg_data[] = {
+>  	{}
+>  };
+>  
+> +static const struct rpmh_vreg_init_data pmm8654au_vreg_data[] = {
+> +	RPMH_VREG("smps1",  "smp%s1",  &pmic5_ftsmps527,  "vdd-s1"),
+> +	RPMH_VREG("smps2",  "smp%s2",  &pmic5_ftsmps527,  "vdd-s2"),
+> +	RPMH_VREG("smps3",  "smp%s3",  &pmic5_ftsmps527,  "vdd-s3"),
+> +	RPMH_VREG("smps4",  "smp%s4",  &pmic5_ftsmps527,  "vdd-s4"),
+> +	RPMH_VREG("smps5",  "smp%s5",  &pmic5_ftsmps527,  "vdd-s5"),
+> +	RPMH_VREG("smps6",  "smp%s6",  &pmic5_ftsmps527,  "vdd-s6"),
+> +	RPMH_VREG("smps7",  "smp%s7",  &pmic5_ftsmps527,  "vdd-s7"),
+> +	RPMH_VREG("smps8",  "smp%s8",  &pmic5_ftsmps527,  "vdd-s8"),
+> +	RPMH_VREG("smps9",  "smp%s9",  &pmic5_ftsmps527,  "vdd-s9"),
+> +	RPMH_VREG("ldo1",   "ldo%s1",  &pmic5_nldo515,    "vdd-s9"),
+> +	RPMH_VREG("ldo2",   "ldo%s2",  &pmic5_nldo515,    "vdd-l2-l3"),
+> +	RPMH_VREG("ldo3",   "ldo%s3",  &pmic5_nldo515,    "vdd-l2-l3"),
+> +	RPMH_VREG("ldo4",   "ldo%s4",  &pmic5_nldo515,    "vdd-s9"),
+> +	RPMH_VREG("ldo5",   "ldo%s5",  &pmic5_nldo515,    "vdd-s9"),
+> +	RPMH_VREG("ldo6",   "ldo%s6",  &pmic5_nldo515,    "vdd-l6-l7"),
+> +	RPMH_VREG("ldo7",   "ldo%s7",  &pmic5_nldo515,    "vdd-l6-l7"),
+> +	RPMH_VREG("ldo8",   "ldo%s8",  &pmic5_pldo515_mv, "vdd-l8-l9"),
+> +	RPMH_VREG("ldo9",   "ldo%s9",  &pmic5_pldo,       "vdd-l8-l9"),
+> +	{}
+> +};
+> +
+>  static const struct rpmh_vreg_init_data pm8350_vreg_data[] = {
+>  	RPMH_VREG("smps1",  "smp%s1",  &pmic5_ftsmps510, "vdd-s1"),
+>  	RPMH_VREG("smps2",  "smp%s2",  &pmic5_ftsmps510, "vdd-s2"),
+> @@ -1431,6 +1482,10 @@ static const struct of_device_id __maybe_unused rpmh_regulator_match_table[] = {
+>  		.compatible = "qcom,pmm8155au-rpmh-regulators",
+>  		.data = pmm8155au_vreg_data,
+>  	},
+> +	{
+> +		.compatible = "qcom,pmm8654au-rpmh-regulators",
+> +		.data = pmm8654au_vreg_data,
+> +	},
+>  	{
+>  		.compatible = "qcom,pmx55-rpmh-regulators",
+>  		.data = pmx55_vreg_data,
