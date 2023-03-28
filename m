@@ -2,96 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFE86CBD18
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274CD6CBD29
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232919AbjC1LIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S232289AbjC1LLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbjC1LIa (ORCPT
+        with ESMTP id S231124AbjC1LK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:08:30 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184C583C4;
-        Tue, 28 Mar 2023 04:07:28 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id B6CF942525;
-        Tue, 28 Mar 2023 11:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1680001647; bh=8npJkxrhJiggmPvfO97ErfoUO5wnE+piw2jVg85zRIw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=MraoQJXXebpmFmBJjVCoJF8UwSZJkw8u5JgxTxrsrsqbNWGgT7bntdzL3DWRYC4qk
-         mkC2P5SF0oXBRpvApJ5Un9UKUBeCB/BnoI5YXOW71TgAiUTpO08nYzriLghnducs7w
-         PwSyp37+QDuoq9RqJ8s5qETn3Ho/ZeZfrGR/tyxmcoSDTYEU1PDwmAVpYY/70+rRsQ
-         ooSOtI3YBqgwFDVj+iLhIqk7JywPEnAJ/aTP/VqkL80XIcEyEcnVZXaPb3eD2Z69LK
-         9OesnLAagbcB7ucdDjVFoS773tDoR7+Wrz/SH3DhmND4reZYuD2kn9FUvuPXp5ijct
-         3h/CRQwqMNutA==
-Message-ID: <468d23ae-114d-9d3c-1920-7cae8355c1b8@marcan.st>
-Date:   Tue, 28 Mar 2023 20:07:22 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/2] arch: arm64: dts: apple: Disable unused PCIe ports
-Content-Language: en-US
-To:     Janne Grunau <j@jannau.net>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
+        Tue, 28 Mar 2023 07:10:58 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE02F8A62;
+        Tue, 28 Mar 2023 04:10:32 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id i5so48236197eda.0;
+        Tue, 28 Mar 2023 04:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680001780;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uibwFF2TVvqiHQK5fdq7Y5W42YgDAbkfIpArXeup5wU=;
+        b=GvosVofuIrNwAdPotbsCdwsUbkzugW8o8T4mpk/gBOlMSMfQ1N+O5zBy4vpji2VKd6
+         YGQerXOIhGkQO3kcHKf7Kb238ycUOOq/dQWuAQza7nIsvXqw6raSNWVgTOFkABjg7Mbr
+         PhJCo5ymWBHVIv2GgFjwQjIjbgyV5jmxHU6zP7PN2GgiOwKqjbh7mmmU1wIdgxGa1jcg
+         nKqwUbwzSBqMD+uZMsfO7NAZ4H1a8dYChG8Z7SLR4N2ii9kY1qpq/diqg0KPvaWQrH2p
+         qWsyQi1RxRZCHwK+sQ5+CZttAjj5cn6Gwd0+eDKVXMFOKb4qur3DphoXuxCV8pCttdcB
+         Ry5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680001780;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uibwFF2TVvqiHQK5fdq7Y5W42YgDAbkfIpArXeup5wU=;
+        b=MYwN774+r1Dr7xuJVGNvS9a+LFq9qCw4Ix/5A7hBcceonN/kGUby4AyGbmE75JrqUB
+         rJLVYLYQ7Cp21qs02LVF0YXF7CQZx0En1sJ5wXveSrI1M/kVigS4gINYJtEHkBmnuCQe
+         0WxXkeLn3/cauePAJR1b52HObIZ0MnLYWYSeTRG9uTU+4WouGwR7REWWL9hBGOW0S9jH
+         NZ/aGFKIi/oHba+x0iylK14Ah+yufBy8w7UUgZClop3IbTEa01xfMMHDUVeHLLkrPxKR
+         hjo/fSKWt0m+BYrf+JSvO+KZugSMkXAeX8YKtLnaswz6enA1ZVp4WUFeNnB6vYCV5Hir
+         +pAg==
+X-Gm-Message-State: AAQBX9fsHNM06+k7K0+Sy2BQ+/bjJ4DAInyhBe3upn1TFhQC3s/IPD/d
+        tedBvqHDKvVFAzWIkkiuEUE=
+X-Google-Smtp-Source: AKy350YoKtupGYJy02TQY9KyZjq77AewZQXmmmqeAPBbMAQ5AZCvoRndWAXn6zZu9khw6NtD7NiuIA==
+X-Received: by 2002:a17:906:3701:b0:886:221b:44e5 with SMTP id d1-20020a170906370100b00886221b44e5mr14200567ejc.62.1680001779643;
+        Tue, 28 Mar 2023 04:09:39 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id hy14-20020a1709068a6e00b009351546fb54sm11566185ejc.28.2023.03.28.04.09.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 04:09:39 -0700 (PDT)
+Date:   Tue, 28 Mar 2023 13:09:37 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>
-Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230214-apple_dts_pcie_disable_unused-v1-0-5ea0d3ddcde3@jannau.net>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <20230214-apple_dts_pcie_disable_unused-v1-0-5ea0d3ddcde3@jannau.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Linus Walleij <linusw@kernel.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: timer: Drop unneeded quotes
+Message-ID: <ZCLK8TN8dp8LJsQI@orome>
+References: <20230327170146.4104556-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="25Alk08cwWa0SAB7"
+Content-Disposition: inline
+In-Reply-To: <20230327170146.4104556-1-robh@kernel.org>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 23.07, Janne Grunau wrote:
-> The t8103 and t600x device trees deleted unused PCIe ports. This was
-> probably done to replicate Apple's device tree which doesn't has nodes
-> for most unused hardware.
-> A more accurate description of the hardware is to disable unused
-> hardware.
-> 
-> This was discovered during the review of the t8112 device trees in
-> https://lore.kernel.org/asahi/1ea2107a-bb86-8c22-0bbc-82c453ab08ce@linaro.org/
-> 
-> Signed-off-by: Janne Grunau <j@jannau.net>
+
+--25Alk08cwWa0SAB7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Mar 27, 2023 at 12:01:45PM -0500, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
-> Janne Grunau (2):
->       arm64: dts: apple: t8103: Disable unused PCIe ports
->       arm64: dts: apple: t600x: Disable unused PCIe ports
-> 
->  arch/arm64/boot/dts/apple/t600x-die0.dtsi      |  4 ++++
->  arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi | 11 -----------
->  arch/arm64/boot/dts/apple/t600x-j375.dtsi      | 11 +++++++++++
->  arch/arm64/boot/dts/apple/t8103-j274.dts       | 10 ++++++++++
->  arch/arm64/boot/dts/apple/t8103-j293.dts       | 15 ---------------
->  arch/arm64/boot/dts/apple/t8103-j313.dts       | 15 ---------------
->  arch/arm64/boot/dts/apple/t8103-j456.dts       | 10 ++++++++++
->  arch/arm64/boot/dts/apple/t8103-j457.dts       | 11 +++--------
->  arch/arm64/boot/dts/apple/t8103.dtsi           |  4 ++++
->  9 files changed, 42 insertions(+), 49 deletions(-)
-> ---
-> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-> change-id: 20230214-apple_dts_pcie_disable_unused-03c08218b8af
-> 
-> Best regards,
+>  .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml        | 2 +-
+>  Documentation/devicetree/bindings/timer/cdns,ttc.yaml         | 2 +-
+>  .../devicetree/bindings/timer/intel,ixp4xx-timer.yaml         | 4 ++--
+>  .../devicetree/bindings/timer/nvidia,tegra-timer.yaml         | 4 ++--
+>  .../devicetree/bindings/timer/nvidia,tegra186-timer.yaml      | 4 ++--
+>  Documentation/devicetree/bindings/timer/st,nomadik-mtu.yaml   | 4 ++--
+>  6 files changed, 10 insertions(+), 10 deletions(-)
 
-Thanks, applied to asahi-soc/dt!
+Reviewed-by: Thierry Reding <treding@nvidia.com>
 
-- Hector
+--25Alk08cwWa0SAB7
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQiyvEACgkQ3SOs138+
+s6HWXxAAl7iEzTN8cHtB4Rscf4jSFuHl8zMQdSYdB1cBcWeCmCbFhKCNvzIsWotb
+HU79w3Uko7gZfFNr44eYYTf4YsZI8aIXlAGzE9zPVATGTAUcnw6GfNY5siUVW+SD
+xENVkMf6K7vBTrp/Sl1IIPVDL+yfLvNIQCqADS/Xbv/E8AIl5vG6aKxCR3omKTQr
+enV+opxIbbADUhAQGKPerTF71+xdKFruRjYycmolPXX0QKfXRPv3oamD79zlmoxw
+mtVCr5E47EpVlRg7dc92HPzZwnqIyY+haNf/HmxaV9sQ4fOGBN7ZWVafav0bOuF0
+bsatDC6WLgMhjbg0AvxoCTpSzQT+ziB14moHGfJWKqNzzqOkGRJtjaZZyVGr3DXr
+lpsdgX3E+aiJExbESc8pT4EMs4cyBhn7W8yaBVILgMQ7B9twGe6UR+hChqqMKx3q
+s2TBOUWq+WnaZcZwBuyZKdgTKos5crlffbJaAh28uI2WTJ/GzPpvZZ/2rNyweXHb
+ypSQNHmHW8aU2YTFbKineicLjoMwyE0jXhvD6/Nog95qr8YQdxf7z3XYuF9Abqfm
+j0LUnLOcw5hYvhPN/93ZwR+KT9KhgpQTr94K5yoY1nNnAr++bqgWGILeEBsCEN5w
+kNTtR4j+ykgmKmTval7FiiWN6NevZKlWlDJadZVUNSKfm0hZ2sA=
+=Fy2B
+-----END PGP SIGNATURE-----
+
+--25Alk08cwWa0SAB7--
