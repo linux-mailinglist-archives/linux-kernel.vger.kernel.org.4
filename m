@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE406CC860
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD026CC863
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjC1QsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 12:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
+        id S230333AbjC1Qs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 12:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjC1QsR (ORCPT
+        with ESMTP id S230339AbjC1QsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 12:48:17 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CB161B5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 09:48:16 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id y5so15921976ybu.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 09:48:16 -0700 (PDT)
+        Tue, 28 Mar 2023 12:48:24 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4428A49;
+        Tue, 28 Mar 2023 09:48:22 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id q88so9523243qvq.13;
+        Tue, 28 Mar 2023 09:48:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680022095;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hqjMvaLDfnVK/y/k0tCfZPzOD0WMWLp677CWGc7a374=;
-        b=XjAzXOf+OAujAkz7gfYD9bViHIA/QbQ9fEmMRBGih1etPRYe3XSRXx8jsEfsHq+Cc8
-         Lo6WN0cMuzrd7f03oONWR+iWbra8k2QOSOM8gtzuBzmpo8LSH38sCgqN99bCpd2OL9kd
-         Sfur1RxCgss2GoIXOY2oiiZVVk+jrkzn55G7fHYBFycKcekFx+FXzsti9M2u1anHE04N
-         6SuCO8jfie1AJRT+iz8A1GQ6mInDoVJOCrYDx4crSxbwnGbd8hUXxdGMOA3pfKxkytC/
-         +4GwwvNB9LQNo6IpTf5gWxgGsvjLoxPBDyHQrdmAWEywIRt23Ug1TI8MDvyoOwEJPz29
-         wb1g==
+        d=gmail.com; s=20210112; t=1680022102;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U5Tvv02beQxw04P5UwgN8lsFSBfOGArfLL4YIiRjeVg=;
+        b=QGbyQ2OVm/JaefeGmkoM3bQ/pmorQVe+oX3slbncUyNgKcdrd60ZjraMe1BEkNahlB
+         LgUjx2vqbj+WcIOnxuYL+llvGJekVUkO3WQduZTR+gKtSkUuN8BgOUD26cyQ2HIXkIuX
+         cC2tW7bsjEpSeW6wlb1oJEiJm34Y71NuHA9JJb/GaH7bFSTeWlCyBat8Cp+H4mDcg53k
+         3ftrJBL0RYv5yfq/8mcLri7EOkcX64JGTY0xTeaIjJMPoe2vG0ya3A09FR8cptyfHc0H
+         lsvSu5EgejkesFf85yUFHHta8T/39f0j4kubbyLcTNPbMzdj9329B8u5g9lTOzegvv8o
+         jm4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680022095;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hqjMvaLDfnVK/y/k0tCfZPzOD0WMWLp677CWGc7a374=;
-        b=nLNT+Vdc/vfkn2Rvgx2E+fRJI9lCc3f+1pdHyW8psyVIkpkgr7NtXSXLi/dX6hBWHh
-         hbNVARKUqXPT+YyJ13Ej1bJV95S2nafHAR5GftqoADlp3/kGvL8yrS2leAMXMov0z46J
-         Zve1vY9h0Wyl72js3Kt9Wbc1L1ehk2VncYbQPEbLoxEqaPLi46f9mGyZcRXoI+xtiqjM
-         5y18nqmsUBhwvr6yz6sfeAemJBkhfcdVM65N6icds1cxasxGFT//DPgURpD+xB0rc0Iv
-         fUfnX5kos8JGxZa2HjyN8fKDOCszWADd7xInjKTat/NH0m+cQWNl6e9YrhFSJDqex4Nj
-         qytw==
-X-Gm-Message-State: AAQBX9ejOLZAbNzHMI5mGp0slEQWIdyt3TniOeniVM+J7ksrjLnxNGfN
-        Xr+h6e0icHUJTPULB/8c5iPqjvc7WOaRBX+a8/tlPA==
-X-Google-Smtp-Source: AKy350bjSmjCodaksLx+hSuUtpW5oB+G2DqmMThD/W+KhVBLprn2VUun8xaj/BSYCiPWYx2j+YNCZlePSB5YhiMnkj0=
-X-Received: by 2002:a05:6902:102b:b0:b6c:48c3:3c1c with SMTP id
- x11-20020a056902102b00b00b6c48c33c1cmr10837614ybt.13.1680022094777; Tue, 28
- Mar 2023 09:48:14 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680022102;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U5Tvv02beQxw04P5UwgN8lsFSBfOGArfLL4YIiRjeVg=;
+        b=sOxaqTqw9kdhECjphbJkRk8qrkVY0Na4SSTnqoQ+mNqOyYlCNbACHvEWlEScy1VvOw
+         drWqMhLc8LdFjz9QMr8upj4FWGkQePt9vq+buTM6owrM2QmEUZ7LdL2SVdbU5PwxUPSY
+         W1kd+FCPGKn797Pa73xmu2yP7S/Ptr+Q6HiSSTQcnoGoqLB0tDEXey7YGg3RYeP2PUpQ
+         3oUshyzSzBEUl96Gf+gfmC1rjJMPGyIS+/EFeT8xmazBfuTWuc1yjU6vh0rWPHSf01ry
+         iSbd26hl2qL7WIS28UsvHKfel5yUfA01IVralljGprR8P5AKyfr44R49UdohVgP+3tvM
+         bBuQ==
+X-Gm-Message-State: AAQBX9cc06cYa1Di+9GGyo3qHoMUwOcG94BszFQFpDVpM5mDRYTudcgP
+        HHtYJJli0vehEZui9tO/iOL0fw6n9pSk+bM=
+X-Google-Smtp-Source: AKy350YOkL74vRK61mRi1pJPqckixB4oEN5zmCmx5upWbMccNyntAe/H6RyfQGuqJMXUJOrCLBj4AA==
+X-Received: by 2002:a05:6214:130b:b0:56f:fb19:1650 with SMTP id pn11-20020a056214130b00b0056ffb191650mr29277713qvb.2.1680022101920;
+        Tue, 28 Mar 2023 09:48:21 -0700 (PDT)
+Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
+        by smtp.gmail.com with ESMTPSA id qh16-20020a0562144c1000b005dd8b93457bsm3938206qvb.19.2023.03.28.09.48.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 09:48:21 -0700 (PDT)
+From:   Gregory Price <gourry.memverge@gmail.com>
+X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, oleg@redhat.com, avagin@gmail.com,
+        peterz@infradead.org, luto@kernel.org, krisman@collabora.com,
+        tglx@linutronix.de, corbet@lwn.net, shuah@kernel.org,
+        catalin.marinas@arm.com, arnd@arndb.de, will@kernel.org,
+        mark.rutland@arm.com, tongtiangen@huawei.com, robin.murphy@arm.com,
+        Gregory Price <gregory.price@memverge.com>
+Subject: [PATCH v14 0/4] Checkpoint Support for Syscall User Dispatch
+Date:   Tue, 28 Mar 2023 12:48:07 -0400
+Message-Id: <20230328164811.2451-1-gregory.price@memverge.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-12-vipinsh@google.com>
- <ZBzL1Awe7S00dPUP@google.com>
-In-Reply-To: <ZBzL1Awe7S00dPUP@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 28 Mar 2023 09:47:38 -0700
-Message-ID: <CAHVum0c7pLnYYHhzPPQSbSb1NoeW9hBbidd9i8fHSEazPaSJbA@mail.gmail.com>
-Subject: Re: [Patch v4 11/18] KVM: x86/mmu: Add documentation of NUMA aware
- page table capability
-To:     David Matlack <dmatlack@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,133 +75,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 2:59=E2=80=AFPM David Matlack <dmatlack@google.com>=
- wrote:
->
-> On Mon, Mar 06, 2023 at 02:41:20PM -0800, Vipin Sharma wrote:
-> > Add documentation for KVM_CAP_NUMA_AWARE_PAGE_TABLE capability and
-> > explain why it is needed.
-> >
-> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > ---
-> >  Documentation/virt/kvm/api.rst | 29 +++++++++++++++++++++++++++++
-> >  1 file changed, 29 insertions(+)
-> >
-> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/ap=
-i.rst
-> > index 62de0768d6aa..7e3a1299ca8e 100644
-> > --- a/Documentation/virt/kvm/api.rst
-> > +++ b/Documentation/virt/kvm/api.rst
-> > @@ -7669,6 +7669,35 @@ This capability is aimed to mitigate the threat =
-that malicious VMs can
-> >  cause CPU stuck (due to event windows don't open up) and make the CPU
-> >  unavailable to host or other VMs.
-> >
-> > +7.34 KVM_CAP_NUMA_AWARE_PAGE_TABLE
-> > +------------------------------
-> > +
-> > +:Architectures: x86
-> > +:Target: VM
-> > +:Returns: 0 on success, -EINVAL if vCPUs are already created.
-> > +
-> > +This capability allows userspace to enable NUMA aware page tables allo=
-cations.
->
-> Call out that this capability overrides task mempolicies. e.g.
->
->   This capability causes KVM to use a custom NUMA memory policy when
->   allocating page tables. Specifically, KVM will attempt to co-locate
->   page tables pages with the memory that they map, rather than following
->   the mempolicy of the current task.
->
-> > +NUMA aware page tables are disabled by default. Once enabled, prior to=
- vCPU
-> > +creation, any page table allocated during the life of a VM will be all=
-ocated
->
-> The "prior to vCPU creation" part here is confusing because it sounds
-> like you're talking about any page tables allocated before vCPU
-> creation. Just delete that part and put it in a separate paragraph.
->
->  KVM_CAP_NUMA_AWARE_PAGE_TABLE must be enabled before any vCPU is
->  created, otherwise KVM will return -EINVAL.
->
-> > +preferably from the NUMA node of the leaf page.
-> > +
-> > +Without this capability, default feature is to use current thread memp=
-olicy and
->
-> s/default feature is to/KVM will/
->
-> > +allocate page table based on that.
->
-> s/and allocate page table based on that./to allocate page tables./
->
-> > +
-> > +This capability is useful to improve page accesses by a guest. For exa=
-mple, an
->
-> nit: Be more specific about how.
->
->  This capability aims to minimize the cost of TLB misses when a vCPU is
->  accessing NUMA-local memory, by reducing the number of remote memory
->  accesses needed to walk KVM's page tables.
->
-> > +initialization thread which access lots of remote memory and ends up c=
-reating
-> > +page tables on local NUMA node, or some service thread allocates memor=
-y on
-> > +remote NUMA nodes and later worker/background threads accessing that m=
-emory
-> > +will end up accessing remote NUMA node page tables.
->
-> It's not clear if these examples are talking about what happens when
-> KVM_CAP_NUMA_AWARE_PAGE_TABLE is enabled or disabled.
->
-> Also it's important to distinguish virtual NUMA nodes from physical NUMA
-> nodes and where these "threads" are running. How about this:
->
->  For example, when KVM_CAP_NUMA_AWARE_PAGE_TABLE is disabled and a vCPU
->  accesses memory on a remote NUMA node and triggers a KVM page fault,
->  KVM will allocate page tables to handle that fault on the node where
->  the vCPU is running rather than the node where the memory is allocated.
->  When KVM_CAP_NUMA_AWARE_PAGE_TABLE is enabled, KVM will allocate the
->  page tables on the node where the memory is located.
->
->  This is intended to be used in VM configurations that properly
->  virtualize NUMA. i.e. VMs with one or more virtual NUMA nodes, each of
->  which is mapped to a physical NUMA node. With this capability enabled
->  on such VMs, any guest memory access to virtually-local memory will be
->  translated through mostly[*] physically-local page tables, regardless
->  of how the memory was faulted in.
->
->  [*] KVM will fallback to allocating from remote NUMA nodes if the
->  preferred node is out of memory. Also, in VMs with 2 or more NUMA
->  nodes, higher level page tables will necessarily map memory across
->  multiple physical nodes.
->
-> > So, a multi NUMA node
-> > +guest, can with high confidence access local memory faster instead of =
-going
-> > +through remote page tables first.
-> > +
-> > +This capability is also helpful for host to reduce live migration impa=
-ct when
-> > +splitting huge pages during dirty log operations. If the thread splitt=
-ing huge
-> > +page is on remote NUMA node it will create page tables on remote node.=
- Even if
-> > +guest is careful in making sure that it only access local memory they =
-will end
-> > +up accessing remote page tables.
->
-> Please also cover the limitations of this feature:
->
->  - Impact on remote memory accesses (more expensive).
->  - How KVM handles NUMA node exhaustion.
->  - How high-level page tables can span multiple nodes.
->  - What KVM does if it can't determine the NUMA node of the pfn.
->  - What KVM does for faults on GPAs that aren't backed by a pfn.
->
+v14: implement task_access_ok variant for cross-task pointer checks
+     patch 2/4 changed from access_ok to task_access_ok
 
-Thanks for the suggestions, I will incorporate them in the next version.
+v13: sizeof consistency and cosmetic changes in patch 2
+
+v12: split test into its own patch
+     change from padding a u8 to using a u64
+     casting issues
+     checkpatch.pl
+
+[truncating version history]
+
+Syscall user dispatch makes it possible to cleanly intercept system
+calls from user-land.  However, most transparent checkpoint software
+presently leverages some combination of ptrace and system call
+injection to place software in a ready-to-checkpoint state.
+
+If Syscall User Dispatch is enabled at the time of being quiesced,
+injected system calls will subsequently be interposed upon and
+dispatched to the task's signal handler.
+
+Patch summary:
+- Create new task_access_ok which leverages the provided task's
+  information when validating userland pointers.  For ARM64 this means
+  MTE tags are accounted for.  For all other architectures, this simply
+  reduces to access_ok (presently).
+
+- Refactor configuration setting interface to operate on a task
+  rather than current, so the set and error paths can be consolidated
+
+- Implement a getter interface for Syscall User Dispatch config info.
+  To resume successfully, the checkpoint/resume software has to
+  save and restore this information.  Presently this configuration
+  is write-only, with no way for C/R software to save it.
+
+  This was done in ptrace because syscall user dispatch is not part of
+  uapi. The syscall_user_dispatch_config structure was added to the
+  ptrace exports.
+
+- Selftest for the new feature
+
+Gregory Price (4):
+  asm-generic,arm64: create task variant of access_ok
+  syscall_user_dispatch: helper function to operate on given task
+  ptrace,syscall_user_dispatch: checkpoint/restore support for SUD
+  selftest,ptrace: Add selftest for syscall user dispatch config api
+
+ .../admin-guide/syscall-user-dispatch.rst     |  4 ++
+ arch/arm64/include/asm/uaccess.h              | 13 +++-
+ include/asm-generic/access_ok.h               | 10 +++
+ include/linux/syscall_user_dispatch.h         | 18 +++++
+ include/uapi/linux/ptrace.h                   | 29 ++++++++
+ kernel/entry/syscall_user_dispatch.c          | 67 ++++++++++++++---
+ kernel/ptrace.c                               |  9 +++
+ tools/testing/selftests/ptrace/.gitignore     |  1 +
+ tools/testing/selftests/ptrace/Makefile       |  2 +-
+ tools/testing/selftests/ptrace/get_set_sud.c  | 72 +++++++++++++++++++
+ 10 files changed, 213 insertions(+), 12 deletions(-)
+ create mode 100644 tools/testing/selftests/ptrace/get_set_sud.c
+
+-- 
+2.39.1
+
