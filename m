@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286716CBD1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EF06CBD17
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbjC1LHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S232734AbjC1LHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbjC1LHM (ORCPT
+        with ESMTP id S232521AbjC1LHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Mar 2023 07:07:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6D47DB1
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E2D7EC3
         for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:07:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
-        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=NzbG62uobVMsZ3xGs5rS1xl6qih3MWfTeL8gqcFyTAQ=; b=qf/LfnoUp2GyeYLC6TFxAh+5Fo
-        uZwTfsDdPlWxGAtzbfFaZEkqMV31sgJOdbWMDdYbsuigUsGcPlcpxXHstik/C8DUvSRWmPSuz8QuV
-        CZDRM5zp+uE2Z5RfOeny//z7xSXqz0RCCLvn6EZZXtGN46zSjW6C7lRmjm6ctldkXHuEOgfypPb2P
-        +Vei5AUEZyRtDOSNFNvINg5rWu2A5utSgKeRNgDYUS9Lud5UI0QeJLpyyBXmii11UJjO+52yLDn6y
-        5ymtM9f1IS/CAWIGV/opiq8Sp1CNVtHHhAwFPRNGT7qDXfUyThMAx9OImENVt4W47R3VXqjTbjlvv
-        BwqX5DUw==;
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To;
+        bh=p1qY0ShNMle0RIdMAeucvk2dRsb0fc8qmQtfmBqonko=; b=jAv8+1QdeYm1LDKyGTjKACvQpJ
+        3TpsxpuEdg7FQIDb+Xs2RBYlLSbWBQqRB3GQeEZNR90Wl/GxgpekP4uHQMGh8mAFbyylbgTb/6saA
+        yzBegPfRG5kAkwFCO9oz02cOy/pWqpgQ/349ojHD4aRp+hlbyt5scLZ5VF/AYLHvJ8KhQBxXBeha5
+        W3mO0I0dTY83RBNexOhgSAl7Sv0alDfrZqIltK6lssk2AIvtyGdOLV7zFNvenUK5p4SAuBl3buSe4
+        icNh7OkMLMeWEIbdzkbMcGpTmDcbYedsvt6fIV5KLEM1iugDxtcEitlVbC1i4h2wZ+12jEYqbyxUU
+        uY5y8+aA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ph79k-008MD2-Pj; Tue, 28 Mar 2023 11:06:24 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1ph79l-006XUu-00;
+        Tue, 28 Mar 2023 11:06:26 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BE4F4300289;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C1A60300652;
         Tue, 28 Mar 2023 13:06:20 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id A33372CB745AA; Tue, 28 Mar 2023 13:06:20 +0200 (CEST)
-Message-ID: <20230328092622.062917921@infradead.org>
+        id A7842201F3C6C; Tue, 28 Mar 2023 13:06:20 +0200 (CEST)
+Message-ID: <20230328110353.631740156@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 28 Mar 2023 11:26:22 +0200
+Date:   Tue, 28 Mar 2023 11:26:23 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     mingo@kernel.org, vincent.guittot@linaro.org
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
@@ -49,211 +50,249 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
         joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
         yu.c.chen@intel.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org, efault@gmx.de
-Subject: [PATCH 00/17] sched: EEVDF using latency-nice
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        URI_DOTEDU autolearn=unavailable autolearn_force=no version=3.4.6
+        joel@joelfernandes.org, efault@gmx.de,
+        Parth Shah <parth@linux.ibm.com>
+Subject: [PATCH 01/17] sched: Introduce latency-nice as a per-task attribute
+References: <20230328092622.062917921@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+From: Parth Shah <parth@linux.ibm.com>
 
-Latest version of the EEVDF [1] patches.
+Latency-nice indicates the latency requirements of a task with respect
+to the other tasks in the system. The value of the attribute can be within
+the range of [-20, 19] both inclusive to be in-line with the values just
+like task nice values.
 
-Many changes since last time; most notably it now fully replaces CFS and uses
-lag based placement for migrations. Smaller changes include:
+Just like task nice, -20 is the 'highest' priority and conveys this
+task should get minimal latency, conversely 19 is the lowest priority
+and conveys this task will get the least consideration and will thus
+receive maximal latency.
 
- - uses scale_load_down() for avg_vruntime; I measured the max delta to be ~44
-   bits on a system/cgroup based kernel build.
- - fixed a bunch of reweight / cgroup placement issues
- - adaptive placement strategy for smaller slices
- - rename se->lag to se->vlag
-
-There's a bunch of RFC patches at the end and one DEBUG patch. Of those, the
-PLACE_BONUS patch is a mixed bag of pain. A number of benchmarks regress
-because EEVDF is actually fair and gives a 100% parent vs a 50% child a 67%/33%
-split (stress-futex, stress-nanosleep, starve, etc..) instead of a 50%/50%
-split that sleeper bonus achieves. Mostly I think these benchmarks are somewhat
-artificial/daft but who knows.
-
-The PLACE_BONUS thing horribly messes up things like hackbench and latency-nice
-because it places things too far to the left in the tree. Basically it messes
-with the whole 'when', by placing a task back in history you're putting a
-burden on the now to accomodate catching up. More tinkering required.
-
-But over-all the thing seems to be fairly usable and could do with more
-extensive testing.
-
-[1] https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=805acf7726282721504c8f00575d91ebfd750564
-
-Results:
-
-  hackbech -g $nr_cpu + cyclictest --policy other results:
-
-			EEVDF			 CFS
-
-		# Min Latencies: 00054
-  LNICE(19)	# Avg Latencies: 00660
-		# Max Latencies: 23103
-
-		# Min Latencies: 00052		00053
-  LNICE(0)	# Avg Latencies: 00318		00687
-		# Max Latencies: 08593		13913
-
-		# Min Latencies: 00054
-  LNICE(-19)	# Avg Latencies: 00055
-		# Max Latencies: 00061
-
-
-Some preliminary results from Chen Yu on a slightly older version:
-
-  schbench  (95% tail latency, lower is better)
-  =================================================================================
-  case                    nr_instance            baseline (std%)    compare% ( std%)
-  normal                   25%                     1.00  (2.49%)    -81.2%   (4.27%)
-  normal                   50%                     1.00  (2.47%)    -84.5%   (0.47%)
-  normal                   75%                     1.00  (2.5%)     -81.3%   (1.27%)
-  normal                  100%                     1.00  (3.14%)    -79.2%   (0.72%)
-  normal                  125%                     1.00  (3.07%)    -77.5%   (0.85%)
-  normal                  150%                     1.00  (3.35%)    -76.4%   (0.10%)
-  normal                  175%                     1.00  (3.06%)    -76.2%   (0.56%)
-  normal                  200%                     1.00  (3.11%)    -76.3%   (0.39%)
-  ==================================================================================
-
-  hackbench (throughput, higher is better)
-  ==============================================================================
-  case                    nr_instance            baseline(std%)  compare%( std%)
-  threads-pipe              25%                      1.00 (<2%)    -17.5 (<2%)
-  threads-socket            25%                      1.00 (<2%)    -1.9 (<2%)
-  threads-pipe              50%                      1.00 (<2%)     +6.7 (<2%)
-  threads-socket            50%                      1.00 (<2%)    -6.3  (<2%)
-  threads-pipe              100%                     1.00 (3%)     +110.1 (3%)
-  threads-socket            100%                     1.00 (<2%)    -40.2 (<2%)
-  threads-pipe              150%                     1.00 (<2%)    +125.4 (<2%)
-  threads-socket            150%                     1.00 (<2%)    -24.7 (<2%)
-  threads-pipe              200%                     1.00 (<2%)    -89.5 (<2%)
-  threads-socket            200%                     1.00 (<2%)    -27.4 (<2%)
-  process-pipe              25%                      1.00 (<2%)    -15.0 (<2%)
-  process-socket            25%                      1.00 (<2%)    -3.9 (<2%)
-  process-pipe              50%                      1.00 (<2%)    -0.4  (<2%)
-  process-socket            50%                      1.00 (<2%)    -5.3  (<2%)
-  process-pipe              100%                     1.00 (<2%)    +62.0 (<2%)
-  process-socket            100%                     1.00 (<2%)    -39.5  (<2%)
-  process-pipe              150%                     1.00 (<2%)    +70.0 (<2%)
-  process-socket            150%                     1.00 (<2%)    -20.3 (<2%)
-  process-pipe              200%                     1.00 (<2%)    +79.2 (<2%)
-  process-socket            200%                     1.00 (<2%)    -22.4  (<2%)
-  ==============================================================================
-
-  stress-ng (throughput, higher is better)
-  ==============================================================================
-  case                    nr_instance            baseline(std%)  compare%( std%)
-  switch                  25%                      1.00 (<2%)    -6.5 (<2%)
-  switch                  50%                      1.00 (<2%)    -9.2 (<2%)
-  switch                  75%                      1.00 (<2%)    -1.2 (<2%)
-  switch                  100%                     1.00 (<2%)    +11.1 (<2%)
-  switch                  125%                     1.00 (<2%)    -16.7% (9%)
-  switch                  150%                     1.00 (<2%)    -13.6 (<2%)
-  switch                  175%                     1.00 (<2%)    -16.2 (<2%)
-  switch                  200%                     1.00 (<2%)    -19.4% (<2%)
-  fork                    50%                      1.00 (<2%)    -0.1 (<2%)
-  fork                    75%                      1.00 (<2%)    -0.3 (<2%)
-  fork                    100%                     1.00 (<2%)    -0.1 (<2%)
-  fork                    125%                     1.00 (<2%)    -6.9 (<2%)
-  fork                    150%                     1.00 (<2%)    -8.8 (<2%)
-  fork                    200%                     1.00 (<2%)    -3.3 (<2%)
-  futex                   25%                      1.00 (<2%)    -3.2 (<2%)
-  futex                   50%                      1.00 (3%)     -19.9 (5%)
-  futex                   75%                      1.00 (6%)     -19.1 (2%)
-  futex                   100%                     1.00 (16%)    -30.5 (10%)
-  futex                   125%                     1.00 (25%)    -39.3 (11%)
-  futex                   150%                     1.00 (20%)    -27.2% (17%)
-  futex                   175%                     1.00 (<2%)    -18.6 (<2%)
-  futex                   200%                     1.00 (<2%)    -47.5 (<2%)
-  nanosleep               25%                      1.00 (<2%)    -0.1 (<2%)
-  nanosleep               50%                      1.00 (<2%)    -0.0% (<2%)
-  nanosleep               75%                      1.00 (<2%)    +15.2% (<2%)
-  nanosleep               100%                     1.00 (<2%)    -26.4 (<2%)
-  nanosleep               125%                     1.00 (<2%)    -1.3 (<2%)
-  nanosleep               150%                     1.00 (<2%)    +2.1  (<2%)
-  nanosleep               175%                     1.00 (<2%)    +8.3 (<2%)
-  nanosleep               200%                     1.00 (<2%)    +2.0% (<2%)
-  ===============================================================================
-
-  unixbench (throughput, higher is better)
-  ==============================================================================
-  case                    nr_instance            baseline(std%)  compare%( std%)
-  spawn                   125%                      1.00 (<2%)    +8.1 (<2%)
-  context1                100%                      1.00 (6%)     +17.4 (6%)
-  context1                75%                       1.00 (13%)    +18.8 (8%)
-  =================================================================================
-
-  netperf  (throughput, higher is better)
-  ===========================================================================
-  case                    nr_instance          baseline(std%)  compare%( std%)
-  UDP_RR                  25%                   1.00    (<2%)    -1.5%  (<2%)
-  UDP_RR                  50%                   1.00    (<2%)    -0.3%  (<2%)
-  UDP_RR                  75%                   1.00    (<2%)    +12.5% (<2%)
-  UDP_RR                 100%                   1.00    (<2%)    -4.3%  (<2%)
-  UDP_RR                 125%                   1.00    (<2%)    -4.9%  (<2%)
-  UDP_RR                 150%                   1.00    (<2%)    -4.7%  (<2%)
-  UDP_RR                 175%                   1.00    (<2%)    -6.1%  (<2%)
-  UDP_RR                 200%                   1.00    (<2%)    -6.6%  (<2%)
-  TCP_RR                  25%                   1.00    (<2%)    -1.4%  (<2%)
-  TCP_RR                  50%                   1.00    (<2%)    -0.2%  (<2%)
-  TCP_RR                  75%                   1.00    (<2%)    -3.9%  (<2%)
-  TCP_RR                 100%                   1.00    (2%)     +3.6%  (5%)
-  TCP_RR                 125%                   1.00    (<2%)    -4.2%  (<2%)
-  TCP_RR                 150%                   1.00    (<2%)    -6.0%  (<2%)
-  TCP_RR                 175%                   1.00    (<2%)    -7.4%  (<2%)
-  TCP_RR                 200%                   1.00    (<2%)    -8.4%  (<2%)
-  ==========================================================================
-
-
+[peterz: rebase, squash]
+Signed-off-by: Parth Shah <parth@linux.ibm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
-Also available at:
+ include/linux/sched.h            |    1 +
+ include/uapi/linux/sched.h       |    4 +++-
+ include/uapi/linux/sched/types.h |   19 +++++++++++++++++++
+ init/init_task.c                 |    3 ++-
+ kernel/sched/core.c              |   27 ++++++++++++++++++++++++++-
+ kernel/sched/debug.c             |    1 +
+ tools/include/uapi/linux/sched.h |    4 +++-
+ 7 files changed, 55 insertions(+), 4 deletions(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/eevdf
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -784,6 +784,7 @@ struct task_struct {
+ 	int				static_prio;
+ 	int				normal_prio;
+ 	unsigned int			rt_priority;
++	int				latency_prio;
+ 
+ 	struct sched_entity		se;
+ 	struct sched_rt_entity		rt;
+--- a/include/uapi/linux/sched.h
++++ b/include/uapi/linux/sched.h
+@@ -132,6 +132,7 @@ struct clone_args {
+ #define SCHED_FLAG_KEEP_PARAMS		0x10
+ #define SCHED_FLAG_UTIL_CLAMP_MIN	0x20
+ #define SCHED_FLAG_UTIL_CLAMP_MAX	0x40
++#define SCHED_FLAG_LATENCY_NICE		0x80
+ 
+ #define SCHED_FLAG_KEEP_ALL	(SCHED_FLAG_KEEP_POLICY | \
+ 				 SCHED_FLAG_KEEP_PARAMS)
+@@ -143,6 +144,7 @@ struct clone_args {
+ 			 SCHED_FLAG_RECLAIM		| \
+ 			 SCHED_FLAG_DL_OVERRUN		| \
+ 			 SCHED_FLAG_KEEP_ALL		| \
+-			 SCHED_FLAG_UTIL_CLAMP)
++			 SCHED_FLAG_UTIL_CLAMP		| \
++			 SCHED_FLAG_LATENCY_NICE)
+ 
+ #endif /* _UAPI_LINUX_SCHED_H */
+--- a/include/uapi/linux/sched/types.h
++++ b/include/uapi/linux/sched/types.h
+@@ -10,6 +10,7 @@ struct sched_param {
+ 
+ #define SCHED_ATTR_SIZE_VER0	48	/* sizeof first published struct */
+ #define SCHED_ATTR_SIZE_VER1	56	/* add: util_{min,max} */
++#define SCHED_ATTR_SIZE_VER2	60	/* add: latency_nice */
+ 
+ /*
+  * Extended scheduling parameters data structure.
+@@ -98,6 +99,22 @@ struct sched_param {
+  * scheduled on a CPU with no more capacity than the specified value.
+  *
+  * A task utilization boundary can be reset by setting the attribute to -1.
++ *
++ * Latency Tolerance Attributes
++ * ===========================
++ *
++ * A subset of sched_attr attributes allows to specify the relative latency
++ * requirements of a task with respect to the other tasks running/queued in the
++ * system.
++ *
++ * @ sched_latency_nice	task's latency_nice value
++ *
++ * The latency_nice of a task can have any value in a range of
++ * [MIN_LATENCY_NICE..MAX_LATENCY_NICE].
++ *
++ * A task with latency_nice with the value of LATENCY_NICE_MIN can be
++ * taken for a task requiring a lower latency as opposed to the task with
++ * higher latency_nice.
+  */
+ struct sched_attr {
+ 	__u32 size;
+@@ -120,6 +137,8 @@ struct sched_attr {
+ 	__u32 sched_util_min;
+ 	__u32 sched_util_max;
+ 
++	/* latency requirement hints */
++	__s32 sched_latency_nice;
+ };
+ 
+ #endif /* _UAPI_LINUX_SCHED_TYPES_H */
+--- a/init/init_task.c
++++ b/init/init_task.c
+@@ -78,6 +78,7 @@ struct task_struct init_task
+ 	.prio		= MAX_PRIO - 20,
+ 	.static_prio	= MAX_PRIO - 20,
+ 	.normal_prio	= MAX_PRIO - 20,
++	.latency_prio	= DEFAULT_PRIO,
+ 	.policy		= SCHED_NORMAL,
+ 	.cpus_ptr	= &init_task.cpus_mask,
+ 	.user_cpus_ptr	= NULL,
+@@ -89,7 +90,7 @@ struct task_struct init_task
+ 		.fn = do_no_restart_syscall,
+ 	},
+ 	.se		= {
+-		.group_node 	= LIST_HEAD_INIT(init_task.se.group_node),
++		.group_node	= LIST_HEAD_INIT(init_task.se.group_node),
+ 	},
+ 	.rt		= {
+ 		.run_list	= LIST_HEAD_INIT(init_task.rt.run_list),
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4684,6 +4684,8 @@ int sched_fork(unsigned long clone_flags
+ 		p->prio = p->normal_prio = p->static_prio;
+ 		set_load_weight(p, false);
+ 
++		p->latency_prio = NICE_TO_PRIO(0);
++
+ 		/*
+ 		 * We don't need the reset flag anymore after the fork. It has
+ 		 * fulfilled its duty:
+@@ -7428,7 +7430,7 @@ static struct task_struct *find_process_
+ #define SETPARAM_POLICY	-1
+ 
+ static void __setscheduler_params(struct task_struct *p,
+-		const struct sched_attr *attr)
++				  const struct sched_attr *attr)
+ {
+ 	int policy = attr->sched_policy;
+ 
+@@ -7452,6 +7454,13 @@ static void __setscheduler_params(struct
+ 	set_load_weight(p, true);
+ }
+ 
++static void __setscheduler_latency(struct task_struct *p,
++				   const struct sched_attr *attr)
++{
++	if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE)
++		p->latency_prio = NICE_TO_PRIO(attr->sched_latency_nice);
++}
++
+ /*
+  * Check the target process has a UID that matches the current process's:
+  */
+@@ -7592,6 +7601,13 @@ static int __sched_setscheduler(struct t
+ 			return retval;
+ 	}
+ 
++	if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE) {
++		if (attr->sched_latency_nice > MAX_NICE)
++			return -EINVAL;
++		if (attr->sched_latency_nice < MIN_NICE)
++			return -EINVAL;
++	}
++
+ 	if (pi)
+ 		cpuset_read_lock();
+ 
+@@ -7626,6 +7642,9 @@ static int __sched_setscheduler(struct t
+ 			goto change;
+ 		if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP)
+ 			goto change;
++		if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE &&
++		    attr->sched_latency_nice != PRIO_TO_NICE(p->latency_prio))
++			goto change;
+ 
+ 		p->sched_reset_on_fork = reset_on_fork;
+ 		retval = 0;
+@@ -7714,6 +7733,7 @@ static int __sched_setscheduler(struct t
+ 		__setscheduler_params(p, attr);
+ 		__setscheduler_prio(p, newprio);
+ 	}
++	__setscheduler_latency(p, attr);
+ 	__setscheduler_uclamp(p, attr);
+ 
+ 	if (queued) {
+@@ -7924,6 +7944,9 @@ static int sched_copy_attr(struct sched_
+ 	    size < SCHED_ATTR_SIZE_VER1)
+ 		return -EINVAL;
+ 
++	if ((attr->sched_flags & SCHED_FLAG_LATENCY_NICE) &&
++	    size < SCHED_ATTR_SIZE_VER2)
++		return -EINVAL;
+ 	/*
+ 	 * XXX: Do we want to be lenient like existing syscalls; or do we want
+ 	 * to be strict and return an error on out-of-bounds values?
+@@ -8161,6 +8184,8 @@ SYSCALL_DEFINE4(sched_getattr, pid_t, pi
+ 	get_params(p, &kattr);
+ 	kattr.sched_flags &= SCHED_FLAG_ALL;
+ 
++	kattr.sched_latency_nice = PRIO_TO_NICE(p->latency_prio);
++
+ #ifdef CONFIG_UCLAMP_TASK
+ 	/*
+ 	 * This could race with another potential updater, but this is fine
+--- a/kernel/sched/debug.c
++++ b/kernel/sched/debug.c
+@@ -1043,6 +1043,7 @@ void proc_sched_show_task(struct task_st
+ #endif
+ 	P(policy);
+ 	P(prio);
++	P(latency_prio);
+ 	if (task_has_dl_policy(p)) {
+ 		P(dl.runtime);
+ 		P(dl.deadline);
+--- a/tools/include/uapi/linux/sched.h
++++ b/tools/include/uapi/linux/sched.h
+@@ -132,6 +132,7 @@ struct clone_args {
+ #define SCHED_FLAG_KEEP_PARAMS		0x10
+ #define SCHED_FLAG_UTIL_CLAMP_MIN	0x20
+ #define SCHED_FLAG_UTIL_CLAMP_MAX	0x40
++#define SCHED_FLAG_LATENCY_NICE		0x80
+ 
+ #define SCHED_FLAG_KEEP_ALL	(SCHED_FLAG_KEEP_POLICY | \
+ 				 SCHED_FLAG_KEEP_PARAMS)
+@@ -143,6 +144,7 @@ struct clone_args {
+ 			 SCHED_FLAG_RECLAIM		| \
+ 			 SCHED_FLAG_DL_OVERRUN		| \
+ 			 SCHED_FLAG_KEEP_ALL		| \
+-			 SCHED_FLAG_UTIL_CLAMP)
++			 SCHED_FLAG_UTIL_CLAMP		| \
++			 SCHED_FLAG_LATENCY_NICE)
+ 
+ #endif /* _UAPI_LINUX_SCHED_H */
 
----
-Parth Shah (1):
-      sched: Introduce latency-nice as a per-task attribute
-
-Peter Zijlstra (14):
-      sched/fair: Add avg_vruntime
-      sched/fair: Remove START_DEBIT
-      sched/fair: Add lag based placement
-      rbtree: Add rb_add_augmented_cached() helper
-      sched/fair: Implement an EEVDF like policy
-      sched: Commit to lag based placement
-      sched/smp: Use lag to simplify cross-runqueue placement
-      sched: Commit to EEVDF
-      sched/debug: Rename min_granularity to base_slice
-      sched: Merge latency_offset into slice
-      sched/eevdf: Better handle mixed slice length
-      sched/eevdf: Sleeper bonus
-      sched/eevdf: Minimal vavg option
-      sched/eevdf: Debug / validation crud
-
-Vincent Guittot (2):
-      sched/fair: Add latency_offset
-      sched/fair: Add sched group latency support
-
- Documentation/admin-guide/cgroup-v2.rst |   10 +
- include/linux/rbtree_augmented.h        |   26 +
- include/linux/sched.h                   |    6 +
- include/uapi/linux/sched.h              |    4 +-
- include/uapi/linux/sched/types.h        |   19 +
- init/init_task.c                        |    3 +-
- kernel/sched/core.c                     |   65 +-
- kernel/sched/debug.c                    |   49 +-
- kernel/sched/fair.c                     | 1199 ++++++++++++++++---------------
- kernel/sched/features.h                 |   29 +-
- kernel/sched/sched.h                    |   23 +-
- tools/include/uapi/linux/sched.h        |    4 +-
- 12 files changed, 794 insertions(+), 643 deletions(-)
 
