@@ -2,107 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D576CCA29
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB356CCA2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjC1Snz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 14:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
+        id S229831AbjC1SqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 14:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjC1Sny (ORCPT
+        with ESMTP id S229511AbjC1Sp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 14:43:54 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E402121;
-        Tue, 28 Mar 2023 11:43:30 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 81b377ba140dd037; Tue, 28 Mar 2023 20:43:28 +0200
-Received: from kreacher.localnet (unknown [213.134.169.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 72F1578215F;
-        Tue, 28 Mar 2023 20:43:27 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Imre Deak <imre.deak@intel.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Subject: [PATCH v1] thermal: core: Drop excessive lockdep_assert_held() calls
-Date:   Tue, 28 Mar 2023 20:43:26 +0200
-Message-ID: <2681615.mvXUDI8C0e@kreacher>
+        Tue, 28 Mar 2023 14:45:59 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5B51FF5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:45:57 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r11so53660290edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680029155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WDPpGTUcAigUdKyxJFj5FSviALfqo1wtwcjHPt+uS1s=;
+        b=hybc48zyKPXEpWZviFjaAJ9WSBFVr1MfoVcaRbhXnniFqrgKcZURpL2D66EDfe2Tom
+         2enWNHJvfeVMeYKAokqAFAXfZky705CgievqgDkFCxw4bPSTAK2Jp0CTqI7/9FVShpJy
+         vR3o+VqgifbVaYRySVqKDxmaMMNXgAKvJzO0kZxGOm+jjAPdvnHtk7pGDo7cExEnhjW/
+         0fQi9SbN5MXhL+Y1R6QN/IJLbl9GreFFGWUTl+AvpY5hoTt68q4RTl/M0g27vj36Yw30
+         3H/+tfUlSanDAmXpy+sxacjiLYAoaymmPVTxzgAnJ/Lsg5sj0Yw2/MQpjUuiaHO+/Ydn
+         R6gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680029155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WDPpGTUcAigUdKyxJFj5FSviALfqo1wtwcjHPt+uS1s=;
+        b=BU5Slfy/3zICWeEkm6w6ujX+VAZ3ziSdfBgJ75v6sYIuaVYsY6JqGg9o9sIlKzs5qW
+         WAIWzNppGyCtfYXG4ipBciGEb6b+t/XAcAydB6nHhP2FrbjWJ9Sic3IGWhum6Lcw/YcI
+         RwRGsIuwxFqdinwAwd8MRrSVQ9lUGeGWvQxrH8nJL7ye9yUVSWWmbBdzY+PeYTWMr35L
+         vG+ojwqLpFg2OLiQTGqPtM17M8VXpfls1i2EFRwAbisK1LAvwRmsf3v9ENr485q9mzMZ
+         GqusXoT/YA8qhoILuaGY3yLPrCWVUvt+WV48Yu9Su9ZCTZ48KgrhcxSs2QTKozI1DixB
+         JJxw==
+X-Gm-Message-State: AAQBX9fLAUywZF6bN9fNdQWLcwxPvqUz3C0sE9+lgIA1hEUOTRBqRSks
+        F80xmXGbs9G4hn07tu+6L6GD95X8is7R2tu/R7kJ5Q==
+X-Google-Smtp-Source: AKy350Y0H1o8UGlIOfaueUA1+ITobbazVG++kPK+R45KzkjvS4CMUy84hYIf5MOC6prSXxfzvLslyCUom9GAmiX0YTY=
+X-Received: by 2002:a17:907:7b8a:b0:931:6e39:3d0b with SMTP id
+ ne10-20020a1709077b8a00b009316e393d0bmr8548276ejc.15.1680029155457; Tue, 28
+ Mar 2023 11:45:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20230328061638.203420-1-yosryahmed@google.com>
+ <20230328061638.203420-7-yosryahmed@google.com> <ZCMzfQuo9IhWVzRA@cmpxchg.org>
+In-Reply-To: <ZCMzfQuo9IhWVzRA@cmpxchg.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 28 Mar 2023 11:45:19 -0700
+Message-ID: <CAJD7tkZxEEcVZ9G7NSM56q_uOyL7e353NT06kD0mY5DyNmKTpw@mail.gmail.com>
+Subject: Re: [PATCH v1 6/9] memcg: sleep during flushing stats in safe contexts
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.169.43
-X-CLIENT-HOSTNAME: 213.134.169.43
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehgedguddvkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrdduieelrdegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieelrdegfedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehl
- ihhnrghrohdrohhrghdprhgtphhtthhopehimhhrvgdruggvrghksehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Mar 28, 2023 at 11:35=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.or=
+g> wrote:
+>
+> On Tue, Mar 28, 2023 at 06:16:35AM +0000, Yosry Ahmed wrote:
+> > @@ -642,24 +642,57 @@ static void __mem_cgroup_flush_stats(void)
+> >        * from memcg flushers (e.g. reclaim, refault, etc).
+> >        */
+> >       if (atomic_xchg(&stats_flush_ongoing, 1))
+> > -             return;
+> > +             return false;
+> >
+> >       WRITE_ONCE(flush_next_time, jiffies_64 + 2*FLUSH_TIME);
+> > -     cgroup_rstat_flush_atomic(root_mem_cgroup->css.cgroup);
+> > +     return true;
+> > +}
+> > +
+> > +static void mem_cgroup_post_stats_flush(void)
+> > +{
+> >       atomic_set(&stats_flush_threshold, 0);
+> >       atomic_set(&stats_flush_ongoing, 0);
+> >  }
+> >
+> > -void mem_cgroup_flush_stats(void)
+> > +static bool mem_cgroup_should_flush_stats(void)
+> >  {
+> > -     if (atomic_read(&stats_flush_threshold) > num_online_cpus())
+> > -             __mem_cgroup_flush_stats();
+> > +     return atomic_read(&stats_flush_threshold) > num_online_cpus();
+> > +}
+> > +
+> > +/* atomic functions, safe to call from any context */
+> > +static void __mem_cgroup_flush_stats_atomic(void)
+> > +{
+> > +     if (mem_cgroup_pre_stats_flush()) {
+> > +             cgroup_rstat_flush_atomic(root_mem_cgroup->css.cgroup);
+> > +             mem_cgroup_post_stats_flush();
+> > +     }
+> > +}
+>
+> I'm afraid I wasn't very nuanced with my complaint about the bool
+> parameter in the previous version. In this case, when you can do a
+> common helper for a couple of API functions defined right below it,
+> and the callers don't spread throughout the codebase, using bools
+> makes things simpler while still being easily understandable:
 
-The lockdep_assert_held() calls added to cooling_device_stats_setup()
-and cooling_device_stats_destroy() by commit 790930f44289 ("thermal:
-core: Introduce thermal_cooling_device_update()") trigger false-positive
-lockdep reports in code paths that are not subject to race conditions
-(before cooling device registration and after cooling device removal).
+Looking at your suggestion now, it seems fairly obvious that this is
+what I should have gone for. Will do that for v2. Thanks!
 
-For this reason, remove the lockdep_assert_held() calls from both
-cooling_device_stats_setup() and cooling_device_stats_destroy() and
-add one to thermal_cooling_device_stats_reinit() that has to be called
-under the cdev lock.
+>
+> static void do_flush_stats(bool may_sleep)
+> {
+>         if (atomic_xchg(&stats_flush_ongoing, 1))
+>                 return;
+>
+>         WRITE_ONCE(flush_next_time, jiffies_64 + 2*FLUSH_TIME);
+>         atomic_set(&stats_flush_threshold, 0);
+>
+>         if (!may_sleep)
+>                 cgroup_rstat_flush_atomic(root_mem_cgroup->css.cgroup);
+>         else
+>                 cgroup_rstat_flush(root_mem_cgroup->css.cgroup);
+>
+>         atomic_set(&stats_flush_ongoing, 0);
+> }
+>
+> void mem_cgroup_flush_stats(void)
+> {
+>         if (atomic_read(&stats_flush_threshold) > num_online_cpus())
+>                 do_flush_stats(true);
+> }
+>
+> void mem_cgroup_flush_stats_atomic(void)
+> {
+>         if (atomic_read(&stats_flush_threshold) > num_online_cpus())
+>                 do_flush_stats(false);
+> }
+>
+> >  void mem_cgroup_flush_stats_ratelimited(void)
+> >  {
+> >       if (time_after64(jiffies_64, READ_ONCE(flush_next_time)))
+> > -             mem_cgroup_flush_stats();
+> > +             mem_cgroup_flush_stats_atomic();
+> > +}
+>
+> This should probably be mem_cgroup_flush_stats_atomic_ratelimited().
+>
+> (Whee, kinda long, but that's alright. Very specialized caller...)
 
-Fixes: 790930f44289 ("thermal: core: Introduce thermal_cooling_device_update()")
-Link: https://lore.kernel.org/linux-acpi/ZCIDTLFt27Ei7+V6@ideak-desk.fi.intel.com
-Reported-by: Imre Deak <imre.deak@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_sysfs.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+It should, but the following patch makes it non-atomic anyway, so I
+thought I wouldn't clutter the diff by renaming it here and then
+reverting it back in the next patch.
 
-Index: linux-pm/drivers/thermal/thermal_sysfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-+++ linux-pm/drivers/thermal/thermal_sysfs.c
-@@ -876,8 +876,6 @@ static void cooling_device_stats_setup(s
- 	unsigned long states = cdev->max_state + 1;
- 	int var;
- 
--	lockdep_assert_held(&cdev->lock);
--
- 	var = sizeof(*stats);
- 	var += sizeof(*stats->time_in_state) * states;
- 	var += sizeof(*stats->trans_table) * states * states;
-@@ -903,8 +901,6 @@ out:
- 
- static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
- {
--	lockdep_assert_held(&cdev->lock);
--
- 	kfree(cdev->stats);
- 	cdev->stats = NULL;
- }
-@@ -931,6 +927,8 @@ void thermal_cooling_device_destroy_sysf
- 
- void thermal_cooling_device_stats_reinit(struct thermal_cooling_device *cdev)
- {
-+	lockdep_assert_held(&cdev->lock);
-+
- 	cooling_device_stats_destroy(cdev);
- 	cooling_device_stats_setup(cdev);
- }
+There is an argument for maintaining a clean history tho in case the
+next patch is reverted separately (which is the reason I put it in a
+separate patch to begin with) -- so perhaps I should rename it here to
+mem_cgroup_flush_stats_atomic_ratelimited () and back to
+mem_cgroup_flush_stats_ratelimited() in the next patch, just for
+consistency?
 
+>
+> Btw, can you guys think of a reason against moving the threshold check
+> into the common function? It would then apply to the time-limited
+> flushes as well, but that shouldn't hurt anything. This would make the
+> code even simpler:
 
+I think the point of having the threshold check outside the common
+function is that the periodic flusher always flushes, regardless of
+the threshold, to keep rstat flushing from critical contexts as cheap
+as possible.
 
+If you think it's not worth it, I can make that change. It is a
+separate functional change tho, so maybe in a separate patch.
+
+>
+> static void do_flush_stats(bool may_sleep)
+> {
+>         if (atomic_read(&stats_flush_threshold) <=3D num_online_cpus())
+>                 return;
+>
+>         if (atomic_xchg(&stats_flush_ongoing, 1))
+>                 return;
+>
+>         WRITE_ONCE(flush_next_time, jiffies_64 + 2*FLUSH_TIME);
+>         atomic_set(&stats_flush_threshold, 0);
+>
+>         if (!may_sleep)
+>                 cgroup_rstat_flush_atomic(root_mem_cgroup->css.cgroup);
+>         else
+>                 cgroup_rstat_flush(root_mem_cgroup->css.cgroup);
+>
+>         atomic_set(&stats_flush_ongoing, 0);
+> }
+>
+> void mem_cgroup_flush_stats(void)
+> {
+>         do_flush_stats(true);
+> }
+>
+> void mem_cgroup_flush_stats_atomic(void)
+> {
+>         do_flush_stats(false);
+> }
+>
+> void mem_cgroup_flush_stats_atomic_ratelimited(void)
+> {
+>         if (time_after64(jiffies_64, READ_ONCE(flush_next_time)))
+>                 do_flush_stats(false);
+> }
+>
+> > @@ -2845,7 +2845,7 @@ static void prepare_scan_count(pg_data_t *pgdat, =
+struct scan_control *sc)
+> >        * Flush the memory cgroup stats, so that we read accurate per-me=
+mcg
+> >        * lruvec stats for heuristics.
+> >        */
+> > -     mem_cgroup_flush_stats();
+> > +     mem_cgroup_flush_stats_atomic();
+>
+> I'm thinking this one could be non-atomic as well. It's called fairly
+> high up in reclaim without any locks held.
+
+A later patch does exactly that. I put making the reclaim and refault
+paths non-atomic in separate patches to easily revert them if we see a
+regression. Let me know if this is too defensive and if you'd rather
+have them squashed.
+
+Thanks!
