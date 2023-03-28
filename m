@@ -2,63 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B007A6CBE31
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2266CBE38
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232667AbjC1Lz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S232883AbjC1L4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbjC1Lzw (ORCPT
+        with ESMTP id S232723AbjC1L40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:55:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98C68A41
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:55:50 -0700 (PDT)
+        Tue, 28 Mar 2023 07:56:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16B19006
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 04:56:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68D8A60B24
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 985ABC433D2;
-        Tue, 28 Mar 2023 11:55:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7B5EB81C21
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:56:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C3BC4339C;
+        Tue, 28 Mar 2023 11:56:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680004549;
-        bh=o1gbd6Q5+PuxNMWGpMNsW7Voev+NdraTBgWWGtpU/jo=;
+        s=k20201202; t=1680004578;
+        bh=U2DW5wR8I1ZnOjNwxXw2mRrvf2AHqGXqR88pB/8UTYU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I1coS1fgw8eKHOf0GZTTiaC3squr9cE6N4AbGLMRghil2Ld13FSlWwegdInImTIMC
-         0oOObmG4zAPt1e+UMXYEYdho1rC+4xKcKyiw+pzc+AQ5N7siDyyiii8y/Duul23JIb
-         j3n6YUzqW/PnZMgParnLG88VMWEC1KR82J1STm2Xd4oonlbXWANR7Od6O4ftr9ai35
-         XLfufyKDUMQTRJQFNvEB8JA4a7hesFjyz+NSvOZKHj+CzTCG54bgROx0Oesi6Pd6Di
-         OwJdEVnrQ1wTZVxFKGpRpfLoKDAVON1lx8H4YEcM5Gog73mA7lC0rwQQdP2bzNs3UH
-         NmbaMXG/Ag2qg==
-Date:   Tue, 28 Mar 2023 12:55:43 +0100
+        b=dTwWYfZU4J2Ib3dwZ3Njl4iJAtPe6BdRRvfxDIXxOCIDjXfGboRrRwg/4MECJZ9dq
+         S4njcNJePJLjHlIaEqKd9aEN+Y4yAKvxfiMZxB1nMurJuT7a8R3wghHhWebHrsO2cV
+         35MoaiM2qKybmShAHRDXSOg79kbRJ2ee4Mc0tnYVtL7OErOHu8J7ZRHskbpkaWYBbp
+         N//kqpY4lYkPV1qApP1eHmGGesgiJ2vhwHDBfONhRGM4bIlP0AVtMrL33rtsO7gmR1
+         mV/IuGla5NpHQGnqICuA0edO+WU9g5RDQG3t8x88VbNc/v4f4fBaC2FVIK80yoMRWg
+         vMrClSn5jmncw==
+Date:   Tue, 28 Mar 2023 12:56:13 +0100
 From:   Will Deacon <will@kernel.org>
-To:     Jiucheng Xu <jiuchengxu@163.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        Chris Healy <cphealy@gmail.com>,
-        Chris Healy <healych@amazon.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] perf/amlogic: Fix large number of counter issue
-Message-ID: <20230328115543.GA1159@willie-the-truck>
-References: <20230209115403.521868-1-jiucheng.xu@amlogic.com>
- <20230209115403.521868-2-jiucheng.xu@amlogic.com>
- <20230327141054.GC31752@willie-the-truck>
- <79968005-28f3-d890-dfea-faca2e7d7947@163.com>
+To:     "Krcka, Tomas" <krckatom@amazon.de>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] iommu/arm-smmu-v3: Fix event queue overflow
+ acknowledgment
+Message-ID: <20230328115613.GB1159@willie-the-truck>
+References: <20230308092048.71390-1-krckatom@amazon.de>
+ <20230327121234.GA31342@willie-the-truck>
+ <8845FA6A-45F1-4090-B4A2-C0C28F709095@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <79968005-28f3-d890-dfea-faca2e7d7947@163.com>
+In-Reply-To: <8845FA6A-45F1-4090-B4A2-C0C28F709095@amazon.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,64 +63,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 10:29:04AM +0800, Jiucheng Xu wrote:
+On Tue, Mar 28, 2023 at 07:13:52AM +0000, Krcka, Tomas wrote:
 > 
-> My Amlogic email box has some issues. Use my personal email
-> <jiucheng.xu@163.com> to reply.
-> 
-> On 2023/3/27 22:10, Will Deacon wrote:
-> > [ EXTERNAL EMAIL ]
+> > On 27. Mar 2023, at 14:12, Will Deacon <will@kernel.org> wrote:
 > > 
-> > On Thu, Feb 09, 2023 at 07:54:02PM +0800, Jiucheng Xu wrote:
-> > > When use 1ms interval, very large number of counter happens
-> > > once in a while as below:
-> > > 
-> > > 25.968654513 281474976710655.84 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
-> > > 26.118657346 281474976710655.88 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
-> > > 26.180137180 281474976710655.66 MB meson_ddr_bw/chan_1_rw_bytes,arm=1/
-> > > 
-> > > Root cause is the race between irq handler
-> > > and pmu.read callback. Use spin lock to protect the sw&hw
-> > > counters.
-> > > 
-> > > Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
-> > > ---
-> > >   drivers/perf/amlogic/meson_ddr_pmu_core.c | 10 +++++++++-
-> > >   1 file changed, 9 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/perf/amlogic/meson_ddr_pmu_core.c b/drivers/perf/amlogic/meson_ddr_pmu_core.c
-> > > index 0b24dee1ed3c..9b2e5d5c0626 100644
-> > > --- a/drivers/perf/amlogic/meson_ddr_pmu_core.c
-> > > +++ b/drivers/perf/amlogic/meson_ddr_pmu_core.c
-> > > @@ -14,6 +14,7 @@
-> > >   #include <linux/perf_event.h>
-> > >   #include <linux/platform_device.h>
-> > >   #include <linux/printk.h>
-> > > +#include <linux/spinlock.h>
-> > >   #include <linux/sysfs.h>
-> > >   #include <linux/types.h>
-> > > @@ -23,6 +24,7 @@ struct ddr_pmu {
-> > >   	struct pmu pmu;
-> > >   	struct dmc_info info;
-> > >   	struct dmc_counter counters;	/* save counters from hw */
-> > > +	spinlock_t lock;		/* protect hw/sw counter */
-> > >   	bool pmu_enabled;
-> > >   	struct device *dev;
-> > >   	char *name;
-> > > @@ -92,10 +94,12 @@ static void meson_ddr_perf_event_update(struct perf_event *event)
-> > >   	int idx;
-> > >   	int chann_nr = pmu->info.hw_info->chann_nr;
-> > > +	spin_lock(&pmu->lock);
-> > Why doesn't this need the _irqsave() variant if we're racing with the irq
-> > handler?
+> > 
+> > On Wed, Mar 08, 2023 at 09:20:47AM +0000, Tomas Krcka wrote:
+> >> When an overflow occurs in the event queue, the SMMU toggles overflow
+> >> flag OVFLG in the PROD register.
+> >> The evtq thread is supposed to acknowledge the overflow flag by toggling
+> >> flag OVACKFLG in the CONS register, otherwise the overflow condition is
+> >> still active (OVFLG != OVACKFLG).
+> >> 
+> >> Currently the acknowledge register is toggled after clearing the event
+> >> queue but is never propagated to the hardware. It would be done next
+> >> time when executing evtq thread.
+> >> 
+> >> The SMMU still adds elements to the queue when the overflow condition is
+> >> active but any subsequent overflow information after clearing the event
+> >> queue will be lost.
+> >> 
+> >> This change keeps the SMMU in sync as it's expected by design.
+> >> 
+> >> Signed-off-by: Tomas Krcka <krckatom@amazon.de>
+> >> Suggested-by: KarimAllah Ahmed <karahmed@amazon.de>
+> >> ---
+> >> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 +
+> >> 1 file changed, 1 insertion(+)
+> >> 
+> >> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> >> index f2425b0f0cd6..acc1ff5ff69b 100644
+> >> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> >> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> >> @@ -1579,6 +1579,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, void *dev)
+> >>      /* Sync our overflow flag, as we believe we're up to speed */
+> >>      llq->cons = Q_OVF(llq->prod) | Q_WRP(llq, llq->cons) |
+> >>                  Q_IDX(llq, llq->cons);
+> >> +     queue_sync_cons_out(q);
+> >>      return IRQ_HANDLED;
+> >> }
+> > 
+> > I think I probably did mean to have something like this, but can we
+> > only do the actual h/w update if overflow has occurred? Otherwise I think
+> > we're pointlessly writing back the same value most of the time.
 > > 
 > > Will
-> I think meson_ddr_perf_event_update function is called with hard irq off.
-> So update function couldn't be interrupted by irq handler. Right?
+> 
+> Yes, we can, but then same applies for the priq as well, there we also write back
+> every time.
 
-I'm just confused about the race, then. The commit message says you have a
-race between an irq handler and a callback, which you fix with a spinlock
-that isn't irq safe. So either the race is real and the lock needs to be
-irqsafe, or the race is something else entirely, no?
+Sure, feel free to update both.
 
 Will
