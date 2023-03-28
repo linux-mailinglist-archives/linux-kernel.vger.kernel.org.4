@@ -2,213 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C256CC1F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F476CC1F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 16:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbjC1OU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 10:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
+        id S232322AbjC1OV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 10:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbjC1OUZ (ORCPT
+        with ESMTP id S229491AbjC1OVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:20:25 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C60FA26A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:20:20 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso7599733wmo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 07:20:20 -0700 (PDT)
+        Tue, 28 Mar 2023 10:21:25 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E2A102;
+        Tue, 28 Mar 2023 07:21:24 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso1831317pjf.0;
+        Tue, 28 Mar 2023 07:21:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680013219;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+PEtB1leftLnTtvh+oHN0PgNHoCI5eZGmZHEiBkpRwA=;
-        b=8QZSnfbOtyJyh9xV/e8zioGy7lOr8GXVGlKXrX7Ph766BOYNeeOfpM6muMSeN40UQ4
-         ekxCt/LjmXJQXfRZcWMY+nS9l3m5kBPPrMZOCt5ogEUdgmX8Cvuzikvw1pH4AsIBCdTu
-         4ewt9LW6Hv7yrOHy8RkMs+cfG9IwGyMKWrwVaPsHHdG/KY0jt+xqQE5DYX830789j2FR
-         E1MDoO/jDQdTZBTyG+rgqMb2WT+UZe68TF6LjFDU26FZ/7Tr+9eNK5jRHHufVIOaMO3U
-         P8dstfIEpDRqQf0+q7dyWyFjkc0bryMVcg/47azJpYSABzzRNFy7xNlfmd9mreruwGsk
-         ex5A==
+        d=gmail.com; s=20210112; t=1680013284;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EBTD9anSg+DK8ZTYd/DgBczIs+okCYD2CyOH9MpwvwM=;
+        b=ksycxZwnk4UEPjWWOOiiqyDfXgfNPznq5Xcrsca/beigGP9no3pfZAIphhSoCHPOVA
+         iVlLABmX4ctAi9nXWG0wVJPTrvn24ketP21QZWc8l8qoN0RYxF56ep4hMtKcz0a9ddA4
+         8lPxep52D0Qedn7RqeW5AF/1B1CUJfj1AJt1piKejolZYTN0llifmxmy0OUdD0kwb0ei
+         zPvyQet/XJdNFZqURh/+dBl7BlTo0nIyFkqqeYRr3ZdEuObN/uTdaOjIdRZvSFcntAEU
+         rkgXznM2yCPQZBsBwEOjTxONthQhDsR+EPszwLHbPa5dVjNkkgJYgzkDlfslX8ucG7yt
+         +IaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680013219;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+PEtB1leftLnTtvh+oHN0PgNHoCI5eZGmZHEiBkpRwA=;
-        b=2G5u49g7qgKlBYdP5k2+rM9kpMWMo8+lq2NgJHtC9L9TO21CckmsgUdAPTANTK4IEp
-         M2ycubHU2oGuuW84MB2R22AEOsJO9wTBS7dencouOI+T7WVop6jnU+KETi+F7dP89Kts
-         GQYwy2dCo9qw8sPhEpZpjngDffJpw0vIbNKsibB6mkIIBF+Y8eTHzhxYChRWWxwAQmsL
-         wo9WKh/3ojjEuXJ/7UD5Aml3LQpxMQ3+PDTEtbBNxsjJRo+k6+NonM9jOhD6iYayOx2n
-         yfMP9fFr0sF3Zwb3THG2QAgYYL+B4VN2cnmX7kvmsGcAOTBd5As8YSCFKwUji4yIIMzT
-         dRfg==
-X-Gm-Message-State: AO0yUKUvkWSWX9h/6NjYbsfnrPtE+JD3KCXJWHn1OcXpu7vZuveQNfxE
-        WdvJzMWo7SjIfzLN8QJTbItpew==
-X-Google-Smtp-Source: AK7set+BMwlEtjB3o6fUoqT4JYr5nGtbsMBbscTdTWB/vviOBBBLJCd6uSw5ZDqKEtisO3/CpdzCCQ==
-X-Received: by 2002:a1c:790b:0:b0:3ed:9ed7:d676 with SMTP id l11-20020a1c790b000000b003ed9ed7d676mr12553625wme.13.1680013218951;
-        Tue, 28 Mar 2023 07:20:18 -0700 (PDT)
-Received: from [10.3.3.14] (laubervilliers-657-1-248-155.w90-24.abo.wanadoo.fr. [90.24.137.155])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05600c378e00b003ed2276cd0dsm17205130wmr.38.2023.03.28.07.20.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 07:20:18 -0700 (PDT)
-Message-ID: <fc519231-dd00-8ce3-ecdb-a1e1364cd0c4@baylibre.com>
-Date:   Tue, 28 Mar 2023 16:20:17 +0200
+        d=1e100.net; s=20210112; t=1680013284;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EBTD9anSg+DK8ZTYd/DgBczIs+okCYD2CyOH9MpwvwM=;
+        b=jhtfQPHOvcsBrLnQ0QSlS/XJ7fq8zP+R/DVCXLApZb1HLiSzJRbOwrQkSe1cIqdxd8
+         dR9BkPwFNnEoB1NLvrX/3rNLGolOBxbIfrEnQh+u51aMJWBzRrInAvXb75nkqZRPxlhh
+         3b8hkjtimYwG/e0CDabMlj2jiq8LUf6GHjbQIti7+Gc8VFFqpAZmGgHVtNEJ/pGfcCLn
+         P+HX9pWC48/Aquvk3ruYxD2YvoyGM/krMj+doag40Ta8B3KXtVzQYeC3+BiE9ZuCuI3L
+         54ehhEbLQebLg0DsVQVOTUH7g6NJfsO7G6PBcVHGLSbrFLmqc5XoRpJ2ODm0Yb3wRivq
+         2NEg==
+X-Gm-Message-State: AAQBX9fsBClccYF1nAbkOHyuuEXVpV5yr6pLRUdNyMLEp7cpkaq690Fv
+        YK4jjg2w0gb3tnHfUp1vNkE=
+X-Google-Smtp-Source: AKy350ZUOoMaKKaMZEP+Uclx7Qf8HuNoKAm6zEbBiBBN5ugLie1EzM4ICCQko4Td+hPakrvv7/LLrQ==
+X-Received: by 2002:a17:902:cec6:b0:19a:ad2f:2df9 with SMTP id d6-20020a170902cec600b0019aad2f2df9mr17179609plg.55.1680013284114;
+        Tue, 28 Mar 2023 07:21:24 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
+        by smtp.gmail.com with ESMTPSA id g7-20020a170902934700b0019d397b0f18sm21141552plp.214.2023.03.28.07.21.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 07:21:23 -0700 (PDT)
+From:   Jason Xing <kerneljasonxing@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kerneljasonxing@gmail.com, Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH v2 net] net: rps: avoid raising a softirq on the current cpu when scheduling napi
+Date:   Tue, 28 Mar 2023 22:21:12 +0800
+Message-Id: <20230328142112.12493-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 1/4] dt-bindings: mfd: Add TI TPS6594 PMIC
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
-        gregkh@linuxfoundation.org, derek.kiernan@xilinx.com,
-        dragan.cvetic@xilinx.com
-Cc:     eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
-        stephen@networkplumber.org, davem@davemloft.net,
-        christian.koenig@amd.com, contact@emersion.fr,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
-        eblanc@baylibre.com, jneanne@baylibre.com
-References: <20230327154101.211732-1-jpanis@baylibre.com>
- <20230327154101.211732-2-jpanis@baylibre.com>
- <a0c18c3a-4f9e-f491-582f-8d3ca56ec26f@linaro.org>
- <75f0a18d-aed9-8610-2925-4e604b4b0241@baylibre.com>
- <f69d7b3a-6b30-5f30-9e72-7197a3a62a2c@linaro.org>
-From:   Julien Panis <jpanis@baylibre.com>
-In-Reply-To: <f69d7b3a-6b30-5f30-9e72-7197a3a62a2c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Jason Xing <kernelxing@tencent.com>
 
+When we are scheduling napi and then RPS decides to put the skb into
+a backlog queue of another cpu, we shouldn't raise the softirq for
+the current cpu. When to raise a softirq is based on whether we have
+more data left to process later. But apparently, as to the current
+cpu, there is no indication of more data enqueued, so we do not need
+this action. After enqueuing to another cpu, net_rx_action() or
+process_backlog() will call ipi and then another cpu will raise the
+softirq as expected.
 
-On 3/28/23 13:21, Krzysztof Kozlowski wrote:
-> On 28/03/2023 12:45, Julien Panis wrote:
->>
->> On 3/28/23 08:51, Krzysztof Kozlowski wrote:
->>> On 27/03/2023 17:40, Julien Panis wrote:
->>>> TPS6594 is a Power Management IC which provides regulators and others
->>>> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
->>>> PFSM (Pre-configurable Finite State Machine) managing the state of the
->>>> device.
->>>> TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
->>>>
->>>> Signed-off-by: Julien Panis <jpanis@baylibre.com>
->>>> ---
->>>>    .../devicetree/bindings/mfd/ti,tps6594.yaml   | 231 ++++++++++++++++++
->>>>    1 file changed, 231 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
->>>> new file mode 100644
->>>> index 000000000000..4498e6361b34
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
->>>> @@ -0,0 +1,231 @@
->>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/mfd/ti,tps6594.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: TI TPS6594 Power Management Integrated Circuit
->>>> +
->>>> +maintainers:
->>>> +  - Julien Panis <jpanis@baylibre.com>
->>>> +
->>>> +description:
->>>> +  TPS6594 is a Power Management IC which provides regulators and others
->>>> +  features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
->>>> +  PFSM (Pre-configurable Finite State Machine) managing the state of the device.
->>>> +  TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
->>> LP8764X? Compatible says LP8764.
->>>
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - ti,lp8764
->>> It's confusing. If x was wildcard, didn't you remove part of model name?
->> OK, I will remove 'X' from model name in v5.
-> There is no x in compatible. What is (are) the model name(s)?
+Also, raising more softirqs which set the corresponding bit field
+can make the IRQ mechanism think we probably need to start ksoftirqd
+on the current cpu. Actually it shouldn't happen.
 
-Basically, the model names are:
-- lp8764-q1 ('x' came from an error in internal documentation)
-- tps6593-q1
-- tps6594-q1
+Here are some codes to clarify how it can trigger ksoftirqd:
+__do_softirq()
+  [1] net_rx_action() -> enqueue_to_backlog() -> raise an IRQ
+  [2] check if pending is set again -> wakeup_softirqd
 
-But...for these 3 pmics, there are 19 PN provided
-by TI. For instance: tps659413f, tps659411f, ...
-Each PN gives information about non-volatile memory
-settings and firmware. So, there can be several PN
-for a given model name.
+Comments on above:
+[1] when RPS chooses another cpu to enqueue skb
+[2] in __do_softirq() it will wait a little bit of time around 2 jiffies
 
-Which solution is recommended in such situation ?
+In this patch, raising an IRQ can be avoided when RPS enqueues the skb
+into another backlog queue not the current one.
 
-IMO, using the 3 'xxxxxx-q1' names for compatible
-strings makes sense (that's what already exists in
-linux for others TI pmics).
-But if you think that full PN names should be specified
-to differentiate internal FW/NVM configurations, I will do
-that and we will get 19 compatible strings.
+I captured some data when starting one iperf3 process and found out
+we can reduces around ~1500 times/sec at least calling
+__raise_softirq_irqoff().
 
->
->>>
->>>> +      - ti,tps6593
->>>> +      - ti,tps6594
-> (...)
->
->>>> +
->>>> +  rtc:
->>>> +    type: object
->>>> +    description: RTC provided by this controller.
->>>> +    $ref: /schemas/rtc/rtc.yaml#
->>> I doubt that you can have here any RTC and any watchdog (below). This
->>> should be specific binding instead. Or list of compatibles if you have 3
->>> or more possible bindings.
->>>
->>> Additionally, judging by your DTS you do not have any resources in rtc
->>> and watchdog, so these should not be nodes by themself in such case.
->> It seems that I can't figure out what you and Rob mean by saying that
->> "binding must be complete" and that "RTC and watchdog may or may not
->> need binding changes".
->> What does "specific binding" mean ?
-> Specific means not loose, not generic, precise with some accurate
-> properties.
->
->> Should we add some specific property
->> for RTC/WDG provided by the PMIC ?
-> You know ask me to know what is in your device. I don't know. You should
-> know.
->
->> Should we write another yaml for both
->> of them ?
-> Depends. Pretty often yes, but think what do you want to put there?
+Fixes: 0a9627f2649a ("rps: Receive Packet Steering")
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+---
+v2:
+1) change the title and add more details.
+2) add one parameter to recognise whether it is napi or non-napi case
+suggested by Eric.
+Link: https://lore.kernel.org/lkml/20230325152417.5403-1-kerneljasonxing@gmail.com/
+---
+ net/core/dev.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-There's nothing to put there actually.
-
->
->> Why shouldn't they use the generic rtc/watchdog yaml ?
-> There are no properties in these nodes, so you do not need nodes. Or if
-> you have properties then you need specific binding, not generic one.
-
-We do not need nodes indeed, since we do not have properties to put in them.
-
->
->> I don't
->> understand why they would need some "binding changes". Any example
->> I could refer to ? (I might have not looked at the relevant ones for my case
->> before sending this v4)
-> git grep $ref | grep rtc.yaml
->
->
-> Best regards,
-> Krzysztof
->
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 1518a366783b..504dc3fc09b1 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4586,7 +4586,7 @@ static void trigger_rx_softirq(void *data)
+  * If yes, queue it to our IPI list and return 1
+  * If no, return 0
+  */
+-static int napi_schedule_rps(struct softnet_data *sd)
++static int napi_schedule_rps(struct softnet_data *sd, bool napi)
+ {
+ 	struct softnet_data *mysd = this_cpu_ptr(&softnet_data);
+ 
+@@ -4594,8 +4594,9 @@ static int napi_schedule_rps(struct softnet_data *sd)
+ 	if (sd != mysd) {
+ 		sd->rps_ipi_next = mysd->rps_ipi_list;
+ 		mysd->rps_ipi_list = sd;
++		if (!napi)
++			__raise_softirq_irqoff(NET_RX_SOFTIRQ);
+ 
+-		__raise_softirq_irqoff(NET_RX_SOFTIRQ);
+ 		return 1;
+ 	}
+ #endif /* CONFIG_RPS */
+@@ -4648,7 +4649,7 @@ static bool skb_flow_limit(struct sk_buff *skb, unsigned int qlen)
+  * queue (may be a remote CPU queue).
+  */
+ static int enqueue_to_backlog(struct sk_buff *skb, int cpu,
+-			      unsigned int *qtail)
++			      unsigned int *qtail, bool napi)
+ {
+ 	enum skb_drop_reason reason;
+ 	struct softnet_data *sd;
+@@ -4675,7 +4676,7 @@ static int enqueue_to_backlog(struct sk_buff *skb, int cpu,
+ 		 * We can use non atomic operation since we own the queue lock
+ 		 */
+ 		if (!__test_and_set_bit(NAPI_STATE_SCHED, &sd->backlog.state))
+-			napi_schedule_rps(sd);
++			napi_schedule_rps(sd, napi);
+ 		goto enqueue;
+ 	}
+ 	reason = SKB_DROP_REASON_CPU_BACKLOG;
+@@ -4933,7 +4934,7 @@ static int netif_rx_internal(struct sk_buff *skb)
+ 		if (cpu < 0)
+ 			cpu = smp_processor_id();
+ 
+-		ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
++		ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail, false);
+ 
+ 		rcu_read_unlock();
+ 	} else
+@@ -4941,7 +4942,7 @@ static int netif_rx_internal(struct sk_buff *skb)
+ 	{
+ 		unsigned int qtail;
+ 
+-		ret = enqueue_to_backlog(skb, smp_processor_id(), &qtail);
++		ret = enqueue_to_backlog(skb, smp_processor_id(), &qtail, false);
+ 	}
+ 	return ret;
+ }
+@@ -5670,7 +5671,7 @@ static int netif_receive_skb_internal(struct sk_buff *skb)
+ 		int cpu = get_rps_cpu(skb->dev, skb, &rflow);
+ 
+ 		if (cpu >= 0) {
+-			ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
++			ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail, false);
+ 			rcu_read_unlock();
+ 			return ret;
+ 		}
+@@ -5705,7 +5706,7 @@ void netif_receive_skb_list_internal(struct list_head *head)
+ 			if (cpu >= 0) {
+ 				/* Will be handled, remove from list */
+ 				skb_list_del_init(skb);
+-				enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
++				enqueue_to_backlog(skb, cpu, &rflow->last_qtail, true);
+ 			}
+ 		}
+ 	}
+-- 
+2.37.3
 
