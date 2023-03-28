@@ -2,92 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E3F6CCB04
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFA96CCB10
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjC1T4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 15:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
+        id S229733AbjC1T6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 15:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjC1T41 (ORCPT
+        with ESMTP id S229732AbjC1T6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:56:27 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFAD3AAA;
-        Tue, 28 Mar 2023 12:56:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1680033386; x=1711569386;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=d3xmdzUlUHuX0xIMraGebBNCDEpGfEWNIysVoHmlrc8=;
-  b=zw+8y/FJNMzxhqxyGfJl+LARhaNqM2Kk+ZFtBSVpLwychdlJw67JExZX
-   9R0VX1hIfD7W3qbR6WOmuAvHXe0qzg123dyMN7JM8dVjRhImawzoqtMlo
-   t4WHES7wrQpjQYLhNoUnE0RRdv43KJd9Aq9BKu4+LT4o9kPcnU+5uNcLM
-   6IrhIoDETgzlGtaN3luU+xuYO9OBVVaVlWcpnwvkCjc9PIliCHE/TUJqb
-   uHA0Bm4RAH7uTmfXl+ucjnVlwL9e/DChS2OUzTv4ryoSWOBSSDfrL0cDV
-   27UahbTXJDMetk/M9FvVm5p+YTWUzc/vem/CnogM3G9FQzFLDr8x6ylXY
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,297,1673938800"; 
-   d="scan'208";a="144351916"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Mar 2023 12:56:24 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 28 Mar 2023 12:56:22 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Tue, 28 Mar 2023 12:56:22 -0700
-From:   <Ryan.Wanner@microchip.com>
-To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>
-CC:     <linux-crypto@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH 4/4] crypto: atmel-aes - Match cfb block size with generic implementation
-Date:   Tue, 28 Mar 2023 12:56:29 -0700
-Message-ID: <5a21411d8dd263155f86fb067d446b3359a60c9b.1680019905.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <cover.1680019905.git.Ryan.Wanner@microchip.com>
-References: <cover.1680019905.git.Ryan.Wanner@microchip.com>
+        Tue, 28 Mar 2023 15:58:36 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2E03589
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:01 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id d17so13391112wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1680033480;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=idaRv/1WNtgD31Z/L8uF4ozvP49BG2CNqJUpm5ENzNo=;
+        b=h0HwqvAwn7NMrvh8dGUsAvz1Ej/b4pwBLxpXDXHR5qNmeVNgbBKWlDIxB0Fqdn4+Iw
+         7OuB6jiqgPMXPUfCO27xpwIiRRn15SMLlwDdDhkEEJN99zIp09WUYtk3T03EVhhXamHz
+         DKpfWOJA0ZiEby8Kwe/C9jK3NFYVeCRVnocCGhc5P6u1qrE4AZqbvWWt9xylcp3wt0Ip
+         vP540dw8F3G8deLwf7FxfrnTl9FuKC6U2j/uVe3lSTtdTrCK/pJ84p2Y+f0ZELkMuHYs
+         KaO0zz39EI5QCTfuAtOf3xdY1zxbJSslkt17ueuB9WwW/ujq8v+HKFRClT5mULHTi94c
+         aoqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680033480;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=idaRv/1WNtgD31Z/L8uF4ozvP49BG2CNqJUpm5ENzNo=;
+        b=E7rOSdLUgzlo3v8SjuUmF2j5SwPoDMkXQdDs33UnU/Rvmn85XsXBRs55voI2rzrN9a
+         15or97ln+fd5PMwlCHo9K7xxrcdM2Tc5LpN4rSzs9LoWD8OKhJwPfW30lQLXc/8U2NIl
+         HCNOnWDPbt1f2dMYKIggwBrggwn9fyUTKmVW1saP5rfPhTml4n5d9fm59dvFPh+IpmVv
+         JLXktCpZxgzoTBYOQkJHYNd5NzHQ3aW9CPhuDp2wnzf7NCYhBn167rpxAB9sRg4XG7SO
+         h464RBgWgjPzZ7DP6uh+QYGXHj9eMQVHEyFApcr0Hsucgr+ccx8lGxYcLW3gAUOm9YGJ
+         QFLg==
+X-Gm-Message-State: AAQBX9eD7J7KDUY6P6l7w4C+PwYnEa6UVvkvtLp5s3blU70HJj9utD4N
+        NcTcWlzCBv4scoW6IhRiA6dn5A==
+X-Google-Smtp-Source: AKy350Z5+R5FQg0B9g0Y0cMHXVv2gCrgJTtFbuQ/pJw3xdq+3Ijd4RltJXROCRkpSQr8rVIx5vc6FA==
+X-Received: by 2002:a5d:452e:0:b0:2cf:ef01:1def with SMTP id j14-20020a5d452e000000b002cfef011defmr12842417wra.30.1680033480304;
+        Tue, 28 Mar 2023 12:58:00 -0700 (PDT)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:8445:3123:91d7:959d])
+        by smtp.gmail.com with ESMTPSA id z6-20020a056000110600b002c557f82e27sm28248386wrw.99.2023.03.28.12.57.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 12:57:59 -0700 (PDT)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
+        brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com, Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH v17 0/8] Parallel CPU bringup for x86_64
+Date:   Tue, 28 Mar 2023 20:57:50 +0100
+Message-Id: <20230328195758.1049469-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
+This version changes the number of cpuhp_states reserved for parallel bringup
+from 4 (CPUHP_BP_PARALLEL_DYN to CPUHP_BP_PARALLEL_DYN_END) to 1
+CPUHP_BP_PARALLEL_STARTUP.
 
-Change blocksize to match the cfb(aes) generic implementation.
+Thanks,
+Usama
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
- drivers/crypto/atmel-aes.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes across versions:
+v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
+v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
+    in preparation for more parallelisation.
+v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
+    avoid scribbling on initial_gs in common_cpu_up(), and to allow all
+    24 bits of the physical X2APIC ID to be used. That patch still needs
+    a Signed-off-by from its original author, who once claimed not to
+    remember writing it at all. But now we've fixed it, hopefully he'll
+    admit it now :)
+v5: rebase to v6.1 and remeasure performance, disable parallel bringup
+    for AMD CPUs.
+v6: rebase to v6.2-rc6, disabled parallel boot on amd as a cpu bug and
+    reused timer calibration for secondary CPUs.
+v7: [David Woodhouse] iterate over all possible CPUs to find any existing
+    cluster mask in alloc_clustermask. (patch 1/9)
+    Keep parallel AMD support enabled in AMD, using APIC ID in CPUID leaf
+    0x0B (for x2APIC mode) or CPUID leaf 0x01 where 8 bits are sufficient.
+    Included sanity checks for APIC id from 0x0B. (patch 6/9)
+    Removed patch for reusing timer calibration for secondary CPUs.
+    commit message and code improvements.
+v8: Fix CPU0 hotplug by setting up the initial_gs, initial_stack and
+    early_gdt_descr.
+    Drop trampoline lock and bail if APIC ID not found in find_cpunr.
+    Code comments improved and debug prints added.
+v9: Drop patch to avoid repeated saves of MTRR at boot time.
+    rebased and retested at v6.2-rc8.
+    added kernel doc for no_parallel_bringup and made do_parallel_bringup
+    __ro_after_init.
+v10: Fixed suspend/resume not working with parallel smpboot.
+     rebased and retested to 6.2.
+     fixed checkpatch errors.
+v11: Added patches from Brian Gerst to remove the global variables initial_gs,
+     initial_stack, and early_gdt_descr from the 64-bit boot code
+     (https://lore.kernel.org/all/20230222221301.245890-1-brgerst@gmail.com/).
+v12: Fixed compilation errors, acquire tr_lock for every stack setup in
+     trampoline_64.S.
+     Rearranged commits for a cleaner git history.
+v13: Fix build error with CONFIG_FORCE_NR_CPUS.
+     Commit message improved, typos fixed and extra comments added.
+v14: Enable parallel bringup for SEV-ES guests.
+v15: use vendor parallel_smp when platform has CC_ATTR_GUEST_STATE_ENCRYPT.
+     Call smpboot_restore_warm_reset_vector incase any of the steps in
+     native_cpu_up fail.
+     Reset stale stack and kasan unpoison in bringup_cpu
+     Release trampoline_lock a bit earlier.
+v16: Roll back to CPUHP_OFFLINE on failure in parallel bringup case.
+     Release trampoline_lock earlier, just before setup_gdt.
+     Rebase to x86/apic (Linux 6.3-rc3).
+v17: Change number of states for parallel bringup to one.
 
-diff --git a/drivers/crypto/atmel-aes.c b/drivers/crypto/atmel-aes.c
-index 08a923c2a0eb..012cdf60d9d2 100644
---- a/drivers/crypto/atmel-aes.c
-+++ b/drivers/crypto/atmel-aes.c
-@@ -1335,7 +1335,7 @@ static struct skcipher_alg aes_algs[] = {
- {
- 	.base.cra_name		= "cfb(aes)",
- 	.base.cra_driver_name	= "atmel-cfb-aes",
--	.base.cra_blocksize	= AES_BLOCK_SIZE,
-+	.base.cra_blocksize	= 1,
- 	.base.cra_ctxsize	= sizeof(struct atmel_aes_ctx),
- 
- 	.init			= atmel_aes_init_tfm,
+David Woodhouse (8):
+  cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
+  cpu/hotplug: Reset task stack state in _cpu_up()
+  cpu/hotplug: Add CPUHP_BP_PARALLEL_STARTUP state before
+    CPUHP_BRINGUP_CPU
+  x86/smpboot: Split up native_cpu_up into separate phases and document
+    them
+  x86/smpboot: Support parallel startup of secondary CPUs
+  x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
+  x86/smpboot: Serialize topology updates for secondary bringup
+  x86/smpboot: Allow parallel bringup for SEV-ES
+
+ .../admin-guide/kernel-parameters.txt         |   3 +
+ arch/x86/coco/core.c                          |   5 +
+ arch/x86/include/asm/coco.h                   |   1 +
+ arch/x86/include/asm/cpu.h                    |   1 +
+ arch/x86/include/asm/realmode.h               |   3 +
+ arch/x86/include/asm/sev-common.h             |   3 +
+ arch/x86/include/asm/smp.h                    |  13 +-
+ arch/x86/include/asm/topology.h               |   2 -
+ arch/x86/kernel/acpi/sleep.c                  |   9 +-
+ arch/x86/kernel/apic/apic.c                   |   2 +-
+ arch/x86/kernel/cpu/common.c                  |   6 +-
+ arch/x86/kernel/cpu/topology.c                |   3 +-
+ arch/x86/kernel/head_64.S                     |  97 +++++
+ arch/x86/kernel/smpboot.c                     | 345 +++++++++++++-----
+ arch/x86/realmode/init.c                      |   3 +
+ arch/x86/realmode/rm/trampoline_64.S          |  27 +-
+ arch/x86/xen/smp_pv.c                         |   4 +-
+ include/linux/cpuhotplug.h                    |  22 ++
+ include/linux/smpboot.h                       |   7 +
+ kernel/cpu.c                                  |  50 ++-
+ kernel/smpboot.h                              |   2 -
+ 21 files changed, 492 insertions(+), 116 deletions(-)
+
 -- 
-2.37.2
+2.25.1
 
