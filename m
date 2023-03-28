@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7B36CB938
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1436CB936
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbjC1IVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S230396AbjC1IVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjC1IU7 (ORCPT
+        with ESMTP id S229647AbjC1IUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:20:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A791BC6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:20:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679991612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 28 Mar 2023 04:20:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820D644A7;
+        Tue, 28 Mar 2023 01:20:29 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1807D1FD81;
+        Tue, 28 Mar 2023 08:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679991628; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Q3X0O+/TM7LVotJgrmc2xoQ/T0kA0UQLhsWOW/x515A=;
-        b=RzcuhHor46+fs9wiO9GR7qynLKoFSYx6Gf33Y5qrck2xPn5bhkBPwLouM6p4DxViUEGEi2
-        EHXmm9K2/hAv8nQVr8JdbDcsofJiarvibfgdjasHMQ5FpLuo2O5n6ZsuVp7EkQhf6Alcql
-        t3wUp1ki5vjaNlEUxE1Ln7kW9WjsdJM=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-675-2wfgOGuIMS6VEfo-WAD1aA-1; Tue, 28 Mar 2023 04:20:11 -0400
-X-MC-Unique: 2wfgOGuIMS6VEfo-WAD1aA-1
-Received: by mail-qt1-f199.google.com with SMTP id s4-20020a05622a1a8400b003dbc6fc558aso7570223qtc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:20:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679991611;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q3X0O+/TM7LVotJgrmc2xoQ/T0kA0UQLhsWOW/x515A=;
-        b=EpDACdmchm8KaXUby6HuBjrejFgO2yp9gLRpiMjN69FH/LdjoEHvdMI+Ez5pNMs2ms
-         RkOec/T492y3jr7hvgfiVxmioeS3aJdYqkKnEgchbdOH7DNjVIDebr2RQCX/lmazwAvX
-         JKnEnpeLr/jl/wV+1socm1dl1cWZhI0idfqt/fwvrjBsvygGYAdFzFW2JPM1iUWk4jL5
-         S7qS+Xa0ZDsj7QSF/eV399saCGXbpT2OjvpXsM8vjkbRMUkGzTF0f/Uj6p/VHbbgYVAa
-         4sGlHINF4liZZTpcbUogfVmCDpHPHV7TntAGznBLUoPUdjosu4Kdc7G+Nw+tUbZDg1ay
-         zGSQ==
-X-Gm-Message-State: AAQBX9e2yzno+YXASJoQmhsXuBfdfyqBOQXF3GYwUjnqdWGnnuCFC6Ud
-        wVrvMS4ZEFofxHtS0EumJ6gGdhhENy24dW2xO+syFNDyG1UvuMvN3mcpRNIrQ4frNh9rceOW3kB
-        R1FcjWAB6zveEc3c/JnP1RyTY
-X-Received: by 2002:a05:622a:118a:b0:3e4:dcb4:162 with SMTP id m10-20020a05622a118a00b003e4dcb40162mr17628915qtk.4.1679991610933;
-        Tue, 28 Mar 2023 01:20:10 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bNpzeZ7gjbtIL2Ka8dMo1Bzn5V8O4UfVAoHsG5EFh/3BhzXlyah+r/S5EZ4D3ccfOazp/h+A==
-X-Received: by 2002:a05:622a:118a:b0:3e4:dcb4:162 with SMTP id m10-20020a05622a118a00b003e4dcb40162mr17628888qtk.4.1679991610700;
-        Tue, 28 Mar 2023 01:20:10 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
-        by smtp.gmail.com with ESMTPSA id 4-20020a05620a048400b007468bf8362esm11708565qkr.66.2023.03.28.01.20.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 01:20:09 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 10:20:01 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v4 1/3] vsock: support sockmap
-Message-ID: <6eyspnma2esx4nzi2kszxkbuvh3xjb2g4nuhvng6tkvtp3whn6@hpyehyt6imdn>
-References: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
- <20230327-vsock-sockmap-v4-1-c62b7cd92a85@bytedance.com>
+        bh=HRcn8tarDsWg3kdLklqiCIWLcIN+nPnBDYzbSZWYh8Y=;
+        b=gZupk3tipjwAsFo6fQqtftzCaAwarwag9hpdUBGeMueBBBkNzMbWNCjWCUdWc+umQ3pGjm
+        1hELF15qK4IdF7Gl+WNc1bWAD3sHlRQo0MeNCbEAhN5pnGXnf4Gj6gNC85BA2HMNrqjocL
+        rtI67tDECoZrGzT+v6QPY+HRTVhKnDM=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id ACFC22C142;
+        Tue, 28 Mar 2023 08:20:27 +0000 (UTC)
+Date:   Tue, 28 Mar 2023 10:20:26 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: union: was: Re: [PATCH printk v1 05/18] printk: Add non-BKL
+ console basic infrastructure
+Message-ID: <ZCKjSpDbiBVabbP5@alley>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
+ <20230302195618.156940-6-john.ogness@linutronix.de>
+ <ZBnVkarywpyWlDWW@alley>
+ <87y1nip3a1.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230327-vsock-sockmap-v4-1-c62b7cd92a85@bytedance.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87y1nip3a1.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 07:11:51PM +0000, Bobby Eshleman wrote:
->This patch adds sockmap support for vsock sockets. It is intended to be
->usable by all transports, but only the virtio and loopback transports
->are implemented.
->
->SOCK_STREAM, SOCK_DGRAM, and SOCK_SEQPACKET are all supported.
->
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->Acked-by: Michael S. Tsirkin <mst@redhat.com>
->---
-> drivers/vhost/vsock.c                   |   1 +
-> include/linux/virtio_vsock.h            |   1 +
-> include/net/af_vsock.h                  |  17 ++++
-> net/vmw_vsock/Makefile                  |   1 +
-> net/vmw_vsock/af_vsock.c                |  64 ++++++++++--
-> net/vmw_vsock/virtio_transport.c        |   2 +
-> net/vmw_vsock/virtio_transport_common.c |  25 +++++
-> net/vmw_vsock/vsock_bpf.c               | 174 ++++++++++++++++++++++++++++++++
-> net/vmw_vsock/vsock_loopback.c          |   2 +
-> 9 files changed, 281 insertions(+), 6 deletions(-)
+On Mon 2023-03-27 18:34:22, John Ogness wrote:
+> On 2023-03-21, Petr Mladek <pmladek@suse.com> wrote:
+> > It is not completely clear that that this struct is stored
+> > as atomic_long_t atomic_state[2] in struct console.
+> >
+> > What about adding?
+> >
+> > 		atomic_long_t atomic;
+> 
+> The struct is used to simplify interpretting and creating values to be
+> stored in the atomic state variable. I do not think it makes sense that
+> the atomic variable type itself is part of it.
 
-LGTM!
+It was just an idea. Feel free to keep it as is (not to add the atomic
+into the union).
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+> > Anyway, we should at least add a comment into struct console
+> > about that atomic_state[2] is used to store and access
+> > struct cons_state an atomic way. Also add a compilation
+> > check that the size is the same.
+> 
+> A compilation check would be nice. Is that possible?
 
-Thanks,
-Stefano
+I think the following might do the trick:
 
+static_assert(sizeof(struct cons_state) == sizeof(atomic_long_t));
+
+
+> I am renaming the struct to nbcon_state. Also the variable will be
+> called nbcon_state. With the description updated, I think it makes it
+> clearer that "struct nbcon_state" is used to interpret/create values of
+> console->nbcon_state.
+
+Sounds good.
+
+Best Regards,
+Petr
