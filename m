@@ -2,125 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E63E86CB719
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA596CB720
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 08:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbjC1G0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 02:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
+        id S232764AbjC1G1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 02:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbjC1G0L (ORCPT
+        with ESMTP id S232709AbjC1G0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 02:26:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB6B4ED5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:25:28 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ph2lX-00081R-6e; Tue, 28 Mar 2023 08:25:07 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 25D5119DDFA;
-        Tue, 28 Mar 2023 06:24:58 +0000 (UTC)
-Date:   Tue, 28 Mar 2023 08:24:56 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Peter Hong <peter_hong@fintek.com.tw>, wg@grandegger.com,
-        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, frank.jungclaus@esd.eu,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
-Subject: Re: [PATCH V3] can: usb: f81604: add Fintek F81604 support
-Message-ID: <20230328062456.wjk5gj4vbriu7fzq@pengutronix.de>
-References: <20230327051048.11589-1-peter_hong@fintek.com.tw>
- <CAMZ6Rq+ps1tLii1VfYyAqfD4ck_TGWBUo_ouK_vLfhoNEg-BPg@mail.gmail.com>
- <5bdee736-7868-81c3-e63f-a28787bd0007@fintek.com.tw>
- <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
+        Tue, 28 Mar 2023 02:26:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706D15272
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 23:25:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BEF48B81AEF
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91733C433EF;
+        Tue, 28 Mar 2023 06:25:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679984748;
+        bh=/gjN378BHPpXOBuY5ZBtQCxFRa5v+wfjv5N1z6Y/jBs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dH1R2Ibm3W3MCBkV5lrXi0+FotfnDyK0xLxyuG3hKSq5fCI8grjlIaaKmYxJK+dWs
+         aMMnrIdeJtPewg6zlyNPF9QcQBkST3UtXwLmcKDibpyPC2vGUi4sRAVAwzNE6nS+t2
+         jpf9ABSjs4ye5UdDznEr/ksf0yNJLM645OrSNq3dAGfaRLPtwLfPdqBoWpoXTmDwfC
+         mQmlQHKK6P7oqtIZ7tpzyAjJ8NlFUq+gqMTHjeDqNs6v0O8/MpvlhHL5gjLFUqLMnK
+         OoZi2YzyP5Of0faOwoydDJbQCWj5EHLbBDDw6bku7lXu8LzB8ot4shGIfWpkZ8FxCz
+         +R1eT5KqGDvxA==
+Date:   Tue, 28 Mar 2023 09:25:35 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Song Liu <song@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+Message-ID: <ZCKIX3de5AZfGggK@kernel.org>
+References: <20230308094106.227365-1-rppt@kernel.org>
+ <20230308094106.227365-2-rppt@kernel.org>
+ <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
+ <ZB6W1C88TU6CcjJH@kernel.org>
+ <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rqa5tlkfbiozleiu"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 27, 2023 at 03:43:27PM +0200, Michal Hocko wrote:
+> On Sat 25-03-23 09:38:12, Mike Rapoport wrote:
+> > On Fri, Mar 24, 2023 at 09:37:31AM +0100, Michal Hocko wrote:
+> > > On Wed 08-03-23 11:41:02, Mike Rapoport wrote:
+> > > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > > > 
+> > > > When set_memory or set_direct_map APIs used to change attribute or
+> > > > permissions for chunks of several pages, the large PMD that maps these
+> > > > pages in the direct map must be split. Fragmenting the direct map in such
+> > > > manner causes TLB pressure and, eventually, performance degradation.
+> > > > 
+> > > > To avoid excessive direct map fragmentation, add ability to allocate
+> > > > "unmapped" pages with __GFP_UNMAPPED flag that will cause removal of the
+> > > > allocated pages from the direct map and use a cache of the unmapped pages.
+> > > > 
+> > > > This cache is replenished with higher order pages with preference for
+> > > > PMD_SIZE pages when possible so that there will be fewer splits of large
+> > > > pages in the direct map.
+> > > > 
+> > > > The cache is implemented as a buddy allocator, so it can serve high order
+> > > > allocations of unmapped pages.
+> > > 
+> > > Why do we need a dedicated gfp flag for all this when a dedicated
+> > > allocator is used anyway. What prevents users to call unmapped_pages_{alloc,free}?
+> > 
+> > Using unmapped_pages_{alloc,free} adds complexity to the users which IMO
+> > outweighs the cost of a dedicated gfp flag.
+> 
+> Aren't those users rare and very special anyway?
+> 
+> > For modules we'd have to make x86::module_{alloc,free}() take care of
+> > mapping and unmapping the allocated pages in the modules virtual address
+> > range. This also might become relevant for another architectures in future
+> > and than we'll have several complex module_alloc()s. 
+> 
+> The module_alloc use is lacking any justification. More context would be
+> more than useful. Also vmalloc support for the proposed __GFP_UNMAPPED
+> likely needs more explanation as well.
+ 
+Right now module_alloc() boils down to vmalloc() with the virtual range
+limited to the modules area. The allocated chunk contains both code and
+data. When CONFIG_STRICT_MODULE_RWX is set, parts of the memory allocated
+with module_alloc() remapped with different permissions both in vmalloc
+address space and in the direct map. The change of permissions for small
+ranges causes splits of large pages in the direct map.
 
---rqa5tlkfbiozleiu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If we were to use unmapped_pages_alloc() in modules_alloc(), we would have
+to implement the part of vmalloc() that reserves the virtual addresses and
+maps the allocated memory there in module_alloc().
 
-On 28.03.2023 13:49:05, Vincent MAILHOL wrote:
-[...]
-> > >> +       int status, len;
-> > >> +
-> > >> +       if (can_dropped_invalid_skb(netdev, skb))
-> > >> +               return NETDEV_TX_OK;
-> > >> +
-> > >> +       netif_stop_queue(netdev);
-> > > In your driver, you send the CAN frames one at a time and wait for the
-> > > rx_handler to restart the queue. This approach dramatically degrades
-> > > the throughput. Is this a device limitation? Is the device not able to
-> > > manage more than one frame at a time?
-> > >
-> >
-> > This device will not NAK on TX frame not complete, it only NAK on TX
-> > endpoint
-> > memory not processed, so we'll send next frame unitl TX complete(TI)
-> > interrupt
-> > received.
-> >
-> > The device can polling status register via TX/RX endpoint, but it's more
-> > complex.
-> > We'll plan to do it when first driver landing in mainstream.
->=20
-> OK for me to have this as a next step. Marc, what do you think?
+> > And for secretmem while using unmapped_pages_alloc() is easy, the free path
+> > becomes really complex because actual page freeing for fd-based memory is
+> > deeply buried in the page cache code.
+> 
+> Why is that a problem? You already hook into the page freeing path and
+> special case unmapped memory.
 
-Fine with me. First make it work, then make it fast.
+I didn't say there is a problem with unmapped_pages_alloc() in secretmem, I
+said there is a problem with unmapped_pages_free() and hence are the
+special case for unmapped memory in the freeing path.
+ 
+> > My gut feeling is that for PKS using a gfp flag would save a lot of hassle
+> > as well.
+> 
+> Well, my take on this is that this is not a generic page allocator
+> functionality. It is clearly an allocator on top of the page allocator.
+> In general gfp flags are scarce and convenience argument usually fires
+> back later on in hard to predict ways. So I've learned to be careful
+> here. I am not saying this is a no-go but right now I do not see any
+> acutal advantage. The vmalloc usecase could be interesting in that
+> regards but it is not really clear to me whether this is a good idea in
+> the first place.
 
-But I think this will never be a fast and resource-efficient USB CAN
-adapter. There are exiting drivers with an open and documented USB
-interface (gs_usb) and Open Source =C2=B5C implementations (candlelight) wi=
-th
-better performance.
+I don't see the usage of a gfp flag as a convenience argument, but rather
+it feels for me that a gfp flag will cause less maintenance burden. Of
+course this is subjective.
 
-Marc
+And although this is an allocator on top of the page allocator, it is still
+very tightly coupled with the core page allocator. I'm still think that
+using a migrate type for this would have been more elegant, but I realize
+that a migrate type would have more impact on the allocation path.
+ 
+> -- 
+> Michal Hocko
+> SUSE Labs
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---rqa5tlkfbiozleiu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQiiDUACgkQvlAcSiqK
-BOh0cwf+OIsyfvXP3U85cp2q7trhkPiSxchYbsU7gUaDHBWKN1VDhNOwWYIyBpl3
-8iCh88sGwjX0Q9Ib1qmNJvNibgf4kr0ekK0sUgHhVg3IJjA/nEatAXNDO9vtEjGt
-vsHz+UPuLWWGnwxXmIAjbUiKpzvk7UO3uzlaQu4TKRMUKX0gG3ZzhVt1KNf5hj6J
-P2XQO2/AfQ3ve1rEGLJBf4T0Y6Y+D7EDiYVV7070yYt43/N9Z8z+sdB/1YRDZ5RD
-Fh7QDzGSM/91ZDlNpO120YyWX5Eu8UzDOaP7sCcwnd/Y+8Je3/fcyGXW6He1Sf6t
-HW9clTQNLjK5nrQenqZymCyeOCj1+w==
-=BXc1
------END PGP SIGNATURE-----
-
---rqa5tlkfbiozleiu--
+-- 
+Sincerely yours,
+Mike.
