@@ -2,250 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB356CCA2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 714CA6CCA32
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 20:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjC1SqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 14:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
+        id S229772AbjC1Sqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 14:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjC1Sp7 (ORCPT
+        with ESMTP id S229511AbjC1Sqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 14:45:59 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5B51FF5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:45:57 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id r11so53660290edd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 11:45:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680029155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WDPpGTUcAigUdKyxJFj5FSviALfqo1wtwcjHPt+uS1s=;
-        b=hybc48zyKPXEpWZviFjaAJ9WSBFVr1MfoVcaRbhXnniFqrgKcZURpL2D66EDfe2Tom
-         2enWNHJvfeVMeYKAokqAFAXfZky705CgievqgDkFCxw4bPSTAK2Jp0CTqI7/9FVShpJy
-         vR3o+VqgifbVaYRySVqKDxmaMMNXgAKvJzO0kZxGOm+jjAPdvnHtk7pGDo7cExEnhjW/
-         0fQi9SbN5MXhL+Y1R6QN/IJLbl9GreFFGWUTl+AvpY5hoTt68q4RTl/M0g27vj36Yw30
-         3H/+tfUlSanDAmXpy+sxacjiLYAoaymmPVTxzgAnJ/Lsg5sj0Yw2/MQpjUuiaHO+/Ydn
-         R6gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680029155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WDPpGTUcAigUdKyxJFj5FSviALfqo1wtwcjHPt+uS1s=;
-        b=BU5Slfy/3zICWeEkm6w6ujX+VAZ3ziSdfBgJ75v6sYIuaVYsY6JqGg9o9sIlKzs5qW
-         WAIWzNppGyCtfYXG4ipBciGEb6b+t/XAcAydB6nHhP2FrbjWJ9Sic3IGWhum6Lcw/YcI
-         RwRGsIuwxFqdinwAwd8MRrSVQ9lUGeGWvQxrH8nJL7ye9yUVSWWmbBdzY+PeYTWMr35L
-         vG+ojwqLpFg2OLiQTGqPtM17M8VXpfls1i2EFRwAbisK1LAvwRmsf3v9ENr485q9mzMZ
-         GqusXoT/YA8qhoILuaGY3yLPrCWVUvt+WV48Yu9Su9ZCTZ48KgrhcxSs2QTKozI1DixB
-         JJxw==
-X-Gm-Message-State: AAQBX9fLAUywZF6bN9fNdQWLcwxPvqUz3C0sE9+lgIA1hEUOTRBqRSks
-        F80xmXGbs9G4hn07tu+6L6GD95X8is7R2tu/R7kJ5Q==
-X-Google-Smtp-Source: AKy350Y0H1o8UGlIOfaueUA1+ITobbazVG++kPK+R45KzkjvS4CMUy84hYIf5MOC6prSXxfzvLslyCUom9GAmiX0YTY=
-X-Received: by 2002:a17:907:7b8a:b0:931:6e39:3d0b with SMTP id
- ne10-20020a1709077b8a00b009316e393d0bmr8548276ejc.15.1680029155457; Tue, 28
- Mar 2023 11:45:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230328061638.203420-1-yosryahmed@google.com>
- <20230328061638.203420-7-yosryahmed@google.com> <ZCMzfQuo9IhWVzRA@cmpxchg.org>
-In-Reply-To: <ZCMzfQuo9IhWVzRA@cmpxchg.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 28 Mar 2023 11:45:19 -0700
-Message-ID: <CAJD7tkZxEEcVZ9G7NSM56q_uOyL7e353NT06kD0mY5DyNmKTpw@mail.gmail.com>
-Subject: Re: [PATCH v1 6/9] memcg: sleep during flushing stats in safe contexts
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 28 Mar 2023 14:46:34 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7142107;
+        Tue, 28 Mar 2023 11:46:30 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 341855C00B9;
+        Tue, 28 Mar 2023 14:46:27 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 28 Mar 2023 14:46:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680029187; x=1680115587; bh=OR
+        P2FIKdfRirdyD2Lu4aWJpigZ2drmLWozeD8QCTfbg=; b=Zmq41Z/qSRMn9rYp+h
+        QDNmVcNMoLhclV/Hq1H5ugsx2lOCfEYHLvvTFmQg+RMWJrkym/WeIRc3MLvDHkDO
+        HTLlocYp2MP2d8ICO4tnvSs469GkfAH6/BwEDWyKiyXrt/Grg0Q36E3ytLWoMgVY
+        kVs6uuC6q4rihRfqOtOtxlAzLj5Do+ABME+dLp8/dowyD7zms93hlezwCC0hO2jO
+        gc4Etx3f3cr9lkTjP9KQr25IAKxCDW6mY9imntxbaqqBHgOY+zPHISXPfZNt/fuE
+        hdzRkfn+jZ/Tf25ykGdteW4/5VebEAdEgCiW2ZmIVpd9GHM26wsg4EidEvJeT/07
+        dtHw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680029187; x=1680115587; bh=ORP2FIKdfRird
+        yD2Lu4aWJpigZ2drmLWozeD8QCTfbg=; b=tdxBQh+0EYo2NEcZuqxzWQqO0iBup
+        z7kKFZO7eLXSnp/penapQpwCORauQUrn1+S28WIKpr9NXH22yUC7X7WM4KoT0sSA
+        Utdqa1wIqN3voN9NMdJhx+n1s/L0/t0c2qL7KhFQMUVrtS6IEovWlufwT4grYd2g
+        Mpvz5DsY3OOX4Brj/D+dZx/AThVFwhXIAhMoqD/yv/9Sc/Nx7VdtZdWPfPb9NT15
+        gTtJyaIh/FC/BxrH9ORyJMvFvYyPUafyy6Rrx2Hlw0Syj2ID5lqcQPJdSSMOhNwy
+        OCKv82SpmoGpl8+byqpQUt7DnPctCQ+AwuApPF2SjgNgsRo5HKGVYMvZQ==
+X-ME-Sender: <xms:AjYjZKbgzVIbwPrq7_BIJIaFu20D34SyJbGqsiK4XwKns_w6Nqafeg>
+    <xme:AjYjZNbme47GuCgltwoyMI2lamCL7qadYs67pfnBxYcEsfn0Y4m6CzxbITNpe_LPe
+    j8-T9eqA18pUsnotsk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehgedguddvlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:AjYjZE_lzVS2e3UQMYqpds57bY5IRM2trHFYYatTNaqTiMtbXjs0Zg>
+    <xmx:AjYjZMoIZ0O43yjyTJ-QbGtT2jmdVTsfR9278Yf55J9URtL8rIz6IQ>
+    <xmx:AjYjZFr-P8cIFe3xJN12TNHds6E7fgzjA64i5ULxbG61OHNEOdXovw>
+    <xmx:AzYjZLblnJuQRIaOyK96rwdmhmhmXmoh6aBI-vdT4fT2hJyOA9OBMA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4754DB60098; Tue, 28 Mar 2023 14:46:26 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-237-g62623e8e3f-fm-20230327.001-g62623e8e
+Mime-Version: 1.0
+Message-Id: <b0d8da28-2499-48db-be17-7d126697e303@app.fastmail.com>
+In-Reply-To: <20230328164811.2451-2-gregory.price@memverge.com>
+References: <20230328164811.2451-1-gregory.price@memverge.com>
+ <20230328164811.2451-2-gregory.price@memverge.com>
+Date:   Tue, 28 Mar 2023 20:46:06 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Gregory Price" <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Oleg Nesterov" <oleg@redhat.com>, avagin@gmail.com,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andy Lutomirski" <luto@kernel.org>, krisman@collabora.com,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Jonathan Corbet" <corbet@lwn.net>, shuah <shuah@kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>, tongtiangen@huawei.com,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "Gregory Price" <gregory.price@memverge.com>
+Subject: Re: [PATCH v14 1/4] asm-generic,arm64: create task variant of access_ok
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:35=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.or=
-g> wrote:
+On Tue, Mar 28, 2023, at 18:48, Gregory Price wrote:
+> On arm64, access_ok makes adjustments to pointers based on whether
+> memory tagging is enabled for a task (ARM MTE). When leveraging ptrace,
+> it's possible for a task to enable/disable various kernel features (such
+> as syscall user dispatch) which require user points as arguments.
 >
-> On Tue, Mar 28, 2023 at 06:16:35AM +0000, Yosry Ahmed wrote:
-> > @@ -642,24 +642,57 @@ static void __mem_cgroup_flush_stats(void)
-> >        * from memcg flushers (e.g. reclaim, refault, etc).
-> >        */
-> >       if (atomic_xchg(&stats_flush_ongoing, 1))
-> > -             return;
-> > +             return false;
-> >
-> >       WRITE_ONCE(flush_next_time, jiffies_64 + 2*FLUSH_TIME);
-> > -     cgroup_rstat_flush_atomic(root_mem_cgroup->css.cgroup);
-> > +     return true;
-> > +}
-> > +
-> > +static void mem_cgroup_post_stats_flush(void)
-> > +{
-> >       atomic_set(&stats_flush_threshold, 0);
-> >       atomic_set(&stats_flush_ongoing, 0);
-> >  }
-> >
-> > -void mem_cgroup_flush_stats(void)
-> > +static bool mem_cgroup_should_flush_stats(void)
-> >  {
-> > -     if (atomic_read(&stats_flush_threshold) > num_online_cpus())
-> > -             __mem_cgroup_flush_stats();
-> > +     return atomic_read(&stats_flush_threshold) > num_online_cpus();
-> > +}
-> > +
-> > +/* atomic functions, safe to call from any context */
-> > +static void __mem_cgroup_flush_stats_atomic(void)
-> > +{
-> > +     if (mem_cgroup_pre_stats_flush()) {
-> > +             cgroup_rstat_flush_atomic(root_mem_cgroup->css.cgroup);
-> > +             mem_cgroup_post_stats_flush();
-> > +     }
-> > +}
+> To enable Task A to set these features via ptrace with Task B's
+> pointers, a task variant of access_ok is required for architectures with
+> features such as memory tagging.
 >
-> I'm afraid I wasn't very nuanced with my complaint about the bool
-> parameter in the previous version. In this case, when you can do a
-> common helper for a couple of API functions defined right below it,
-> and the callers don't spread throughout the codebase, using bools
-> makes things simpler while still being easily understandable:
+> If the architecture does not implement task_access_ok, the operation
+> reduces to access_ok and the task argument is discarded.
+>
+> Signed-off-by: Gregory Price <gregory.price@memverge.com>
 
-Looking at your suggestion now, it seems fairly obvious that this is
-what I should have gone for. Will do that for v2. Thanks!
+For asm-generic:
 
->
-> static void do_flush_stats(bool may_sleep)
-> {
->         if (atomic_xchg(&stats_flush_ongoing, 1))
->                 return;
->
->         WRITE_ONCE(flush_next_time, jiffies_64 + 2*FLUSH_TIME);
->         atomic_set(&stats_flush_threshold, 0);
->
->         if (!may_sleep)
->                 cgroup_rstat_flush_atomic(root_mem_cgroup->css.cgroup);
->         else
->                 cgroup_rstat_flush(root_mem_cgroup->css.cgroup);
->
->         atomic_set(&stats_flush_ongoing, 0);
-> }
->
-> void mem_cgroup_flush_stats(void)
-> {
->         if (atomic_read(&stats_flush_threshold) > num_online_cpus())
->                 do_flush_stats(true);
-> }
->
-> void mem_cgroup_flush_stats_atomic(void)
-> {
->         if (atomic_read(&stats_flush_threshold) > num_online_cpus())
->                 do_flush_stats(false);
-> }
->
-> >  void mem_cgroup_flush_stats_ratelimited(void)
-> >  {
-> >       if (time_after64(jiffies_64, READ_ONCE(flush_next_time)))
-> > -             mem_cgroup_flush_stats();
-> > +             mem_cgroup_flush_stats_atomic();
-> > +}
->
-> This should probably be mem_cgroup_flush_stats_atomic_ratelimited().
->
-> (Whee, kinda long, but that's alright. Very specialized caller...)
-
-It should, but the following patch makes it non-atomic anyway, so I
-thought I wouldn't clutter the diff by renaming it here and then
-reverting it back in the next patch.
-
-There is an argument for maintaining a clean history tho in case the
-next patch is reverted separately (which is the reason I put it in a
-separate patch to begin with) -- so perhaps I should rename it here to
-mem_cgroup_flush_stats_atomic_ratelimited () and back to
-mem_cgroup_flush_stats_ratelimited() in the next patch, just for
-consistency?
-
->
-> Btw, can you guys think of a reason against moving the threshold check
-> into the common function? It would then apply to the time-limited
-> flushes as well, but that shouldn't hurt anything. This would make the
-> code even simpler:
-
-I think the point of having the threshold check outside the common
-function is that the periodic flusher always flushes, regardless of
-the threshold, to keep rstat flushing from critical contexts as cheap
-as possible.
-
-If you think it's not worth it, I can make that change. It is a
-separate functional change tho, so maybe in a separate patch.
-
->
-> static void do_flush_stats(bool may_sleep)
-> {
->         if (atomic_read(&stats_flush_threshold) <=3D num_online_cpus())
->                 return;
->
->         if (atomic_xchg(&stats_flush_ongoing, 1))
->                 return;
->
->         WRITE_ONCE(flush_next_time, jiffies_64 + 2*FLUSH_TIME);
->         atomic_set(&stats_flush_threshold, 0);
->
->         if (!may_sleep)
->                 cgroup_rstat_flush_atomic(root_mem_cgroup->css.cgroup);
->         else
->                 cgroup_rstat_flush(root_mem_cgroup->css.cgroup);
->
->         atomic_set(&stats_flush_ongoing, 0);
-> }
->
-> void mem_cgroup_flush_stats(void)
-> {
->         do_flush_stats(true);
-> }
->
-> void mem_cgroup_flush_stats_atomic(void)
-> {
->         do_flush_stats(false);
-> }
->
-> void mem_cgroup_flush_stats_atomic_ratelimited(void)
-> {
->         if (time_after64(jiffies_64, READ_ONCE(flush_next_time)))
->                 do_flush_stats(false);
-> }
->
-> > @@ -2845,7 +2845,7 @@ static void prepare_scan_count(pg_data_t *pgdat, =
-struct scan_control *sc)
-> >        * Flush the memory cgroup stats, so that we read accurate per-me=
-mcg
-> >        * lruvec stats for heuristics.
-> >        */
-> > -     mem_cgroup_flush_stats();
-> > +     mem_cgroup_flush_stats_atomic();
->
-> I'm thinking this one could be non-atomic as well. It's called fairly
-> high up in reclaim without any locks held.
-
-A later patch does exactly that. I put making the reclaim and refault
-paths non-atomic in separate patches to easily revert them if we see a
-regression. Let me know if this is too defensive and if you'd rather
-have them squashed.
-
-Thanks!
+Acked-by: Arnd Bergmann <arnd@arndb.de>
