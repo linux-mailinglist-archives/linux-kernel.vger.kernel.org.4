@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C966CB98C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9C56CB97D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbjC1IfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S230371AbjC1IfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbjC1Ieu (ORCPT
+        with ESMTP id S232336AbjC1Iew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:34:50 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD473C33;
-        Tue, 28 Mar 2023 01:34:49 -0700 (PDT)
+        Tue, 28 Mar 2023 04:34:52 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A327744A2;
+        Tue, 28 Mar 2023 01:34:50 -0700 (PDT)
 Date:   Tue, 28 Mar 2023 08:34:46 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1679992486;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jixwpSRz1aSQSeW9HfObnYv+cJLGJzWBbyq5GbH54MA=;
-        b=455QzYkf03UjCoEiPoySRVRcE55U8aEbbqOorPN8l/E3v6+L/v8RQL2kjYcHUnfVGk4/N1
-        VeuBxwsj3X5QitzGcV9qgF0m/8EgFhm4W+QVpxLzBIYHSC6OwI9kyXIyHHoPd8kS58ALsd
-        tBtQD/kkaY0I+pbJr2WmWUPBdB5CgO6l8yva26C7O+lxGC15yQTAkht72BSoExxX3ViWG2
-        Yops1GrmcC21Tf+KpwNL+CReDepwxuU2ry/L78aZb+iYjE11fwNT9MLNDweWo6LjdGAAfk
-        YGxxbN0ppI3WUCutSJl7ecUNA33oMsGA7wMRwWkIAyg/Uy+XLV5aNRk9MtVT/g==
+        bh=/E9RThjQnYRZlTnSoG675hq3QmrBCr0LO6QzwA39mWg=;
+        b=IUJuqqhlnP3tEQ+/KGWC8zQkSICUNHskF09If4hIVrnw6mxmbYa+eGuLsxnp37mc1vgU2/
+        67bbnTZTHUWxoV0xI691b8b2/DO/qvdnQ7X0Aht2VUP7U20lMEjuFMQqCFFZKjEbC1B9Dg
+        sjJKSOuSx0Xq34sRcivwQnGGZ9x6E1ZzfMtz7DOsnC3+cGccPWz4mLLE8IcuBBrngJHxbd
+        ujyvucYTUj86nh7FQZWytv5o2Gp4IKV2Re1FoePDk++etqLd6f+oAjbsmfQAYIMxKRjja0
+        2PVINdDzA7bvbugUj2bBvMjis2SVb/gpbRmIqdHFBcs9AYoVgy1RgRxJbd6Zrw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1679992486;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jixwpSRz1aSQSeW9HfObnYv+cJLGJzWBbyq5GbH54MA=;
-        b=suUy2pFanNy0/KW2MZKMIRSCD1Eg+C18TpvXE0ynLp/0VGw9pLclfi1G9KcWBDHzW2psr/
-        JdYQQ4wlH9DYSVBA==
+        bh=/E9RThjQnYRZlTnSoG675hq3QmrBCr0LO6QzwA39mWg=;
+        b=HoxXlVL+D1rOoWtwlkrB+Fc0U4sdnW3ykp9ld0xuA5OcASd8P8FofIRlMzE69vKJi6LRFM
+        COV67Vm/WEFv2FDQ==
 From:   "tip-bot2 for Valentin Schneider" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] smp: Trace IPIs sent via arch_send_call_function_ipi_mask()
+Subject: [tip: smp/core] trace: Add trace_ipi_send_cpumask()
 Cc:     Valentin Schneider <vschneid@redhat.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230307143558.294354-4-vschneid@redhat.com>
-References: <20230307143558.294354-4-vschneid@redhat.com>
+In-Reply-To: <20230307143558.294354-2-vschneid@redhat.com>
+References: <20230307143558.294354-2-vschneid@redhat.com>
 MIME-Version: 1.0
-Message-ID: <167999248607.5837.3688560536662044560.tip-bot2@tip-bot2>
+Message-ID: <167999248655.5837.17253281331535612099.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,50 +67,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the smp/core branch of tip:
 
-Commit-ID:     08407b5f61c1bbd4ebb26a76474df4354fd76fb7
-Gitweb:        https://git.kernel.org/tip/08407b5f61c1bbd4ebb26a76474df4354fd76fb7
+Commit-ID:     56eb0598c7a30c76009a082d3213486d6a013df0
+Gitweb:        https://git.kernel.org/tip/56eb0598c7a30c76009a082d3213486d6a013df0
 Author:        Valentin Schneider <vschneid@redhat.com>
-AuthorDate:    Tue, 07 Mar 2023 14:35:54 
+AuthorDate:    Tue, 07 Mar 2023 14:35:52 
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 24 Mar 2023 11:01:27 +01:00
+CommitterDate: Fri, 24 Mar 2023 11:01:26 +01:00
 
-smp: Trace IPIs sent via arch_send_call_function_ipi_mask()
+trace: Add trace_ipi_send_cpumask()
 
-This simply wraps around the arch function and prepends it with a
-tracepoint, similar to send_call_function_single_ipi().
+trace_ipi_raise() is unsuitable for generically tracing IPI sources due to
+its "reason" argument being an uninformative string (on arm64 all you get
+is "Function call interrupts" for SMP calls).
+
+Add a variant of it that exports a target cpumask, a callsite and a callback.
 
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Link: https://lore.kernel.org/r/20230307143558.294354-4-vschneid@redhat.com
+Link: https://lore.kernel.org/r/20230307143558.294354-2-vschneid@redhat.com
 ---
- kernel/smp.c |  9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ include/trace/events/ipi.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 770e879..03e6d57 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -103,6 +103,13 @@ void __init call_function_init(void)
- 	smpcfd_prepare_cpu(smp_processor_id());
- }
+diff --git a/include/trace/events/ipi.h b/include/trace/events/ipi.h
+index 0be71da..b1125dc 100644
+--- a/include/trace/events/ipi.h
++++ b/include/trace/events/ipi.h
+@@ -35,6 +35,28 @@ TRACE_EVENT(ipi_raise,
+ 	TP_printk("target_mask=%s (%s)", __get_bitmask(target_cpus), __entry->reason)
+ );
  
-+static __always_inline void
-+send_call_function_ipi_mask(struct cpumask *mask)
-+{
-+	trace_ipi_send_cpumask(mask, _RET_IP_, NULL);
-+	arch_send_call_function_ipi_mask(mask);
-+}
++TRACE_EVENT(ipi_send_cpumask,
 +
- #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
++	TP_PROTO(const struct cpumask *cpumask, unsigned long callsite, void *callback),
++
++	TP_ARGS(cpumask, callsite, callback),
++
++	TP_STRUCT__entry(
++		__cpumask(cpumask)
++		__field(void *, callsite)
++		__field(void *, callback)
++	),
++
++	TP_fast_assign(
++		__assign_cpumask(cpumask, cpumask_bits(cpumask));
++		__entry->callsite = (void *)callsite;
++		__entry->callback = callback;
++	),
++
++	TP_printk("cpumask=%s callsite=%pS callback=%pS",
++		  __get_cpumask(cpumask), __entry->callsite, __entry->callback)
++);
++
+ DECLARE_EVENT_CLASS(ipi_handler,
  
- static DEFINE_STATIC_KEY_MAYBE(CONFIG_CSD_LOCK_WAIT_DEBUG_DEFAULT, csdlock_debug_enabled);
-@@ -762,7 +769,7 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 		if (nr_cpus == 1)
- 			send_call_function_single_ipi(last_cpu);
- 		else if (likely(nr_cpus > 1))
--			arch_send_call_function_ipi_mask(cfd->cpumask_ipi);
-+			send_call_function_ipi_mask(cfd->cpumask_ipi);
- 	}
- 
- 	if (run_local && (!cond_func || cond_func(this_cpu, info))) {
+ 	TP_PROTO(const char *reason),
