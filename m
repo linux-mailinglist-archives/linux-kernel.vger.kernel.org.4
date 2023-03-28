@@ -2,207 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2E66CCC1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2556CCC24
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 23:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjC1VcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 17:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
+        id S229874AbjC1Vem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 17:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC1VcI (ORCPT
+        with ESMTP id S229729AbjC1Vel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 17:32:08 -0400
+        Tue, 28 Mar 2023 17:34:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081351BF6;
-        Tue, 28 Mar 2023 14:32:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9DB26BE;
+        Tue, 28 Mar 2023 14:34:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 996126196F;
-        Tue, 28 Mar 2023 21:32:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AC12C433D2;
-        Tue, 28 Mar 2023 21:32:04 +0000 (UTC)
-Date:   Tue, 28 Mar 2023 17:32:00 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
-        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
-        brauner@kernel.org, akpm@linux-foundation.org,
-        ebiederm@xmission.com, keescook@chromium.org, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 05/11] tracing/user_events: Add ioctl for disabling
- addresses
-Message-ID: <20230328173200.22ac45dc@gandalf.local.home>
-In-Reply-To: <20230324223028.172-6-beaub@linux.microsoft.com>
-References: <20230324223028.172-1-beaub@linux.microsoft.com>
-        <20230324223028.172-6-beaub@linux.microsoft.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABA8A6196F;
+        Tue, 28 Mar 2023 21:34:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D845BC433EF;
+        Tue, 28 Mar 2023 21:34:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680039279;
+        bh=vWyHCjF+BTgXOwgUXU3RyEwPO+Qw/pB93Lo/jd0y3nQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=OmpcmwqPF24Q0fAer/sLX2UWm/3sHFKbjiLDyYHNGNT3rJSGB0WUFOpniAoge4EpT
+         +C7ImmqB/NTjY5E+T/RdYNdeOIw1Qq0z0F996CyECzxWcAlAZv8J1+QDaFNSt1vr3a
+         Nhavp8GgUA7EX/+rlhRtaKIY3L+cJk775ZJVfWdWbemTmM32w8wT3Fx7peBXr+49EF
+         ONZPtOUpZxjSOEtQ3oYx2q/RJUjgvqPZzojXRP2xuk90x/Rpeiu9YNpiOES2POs0JD
+         v5i1LQ8RfCtH7xCZMzYC/dnvpnPnF37mA+foeFtX4Sf3uh4mQWdtSqSTZYJsdC+1mp
+         283nDZ9AJwQcg==
+Date:   Tue, 28 Mar 2023 16:34:37 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     korantwork@gmail.com
+Cc:     nirmal.patel@linux.intel.com, kbusch@kernel.org,
+        jonathan.derrick@linux.dev, lpieralisi@kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+Subject: Re: [PATCH v4] PCI: vmd: Add the module param to adjust MSI mode
+Message-ID: <20230328213437.GA2963709@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320132316.3126838-1-korantwork@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Mar 2023 15:30:22 -0700
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
+On Mon, Mar 20, 2023 at 09:23:16PM +0800, korantwork@gmail.com wrote:
+> From: Xinghui Li <korantli@tencent.com>
+> 
+> In the legacy, the vmd MSI mode can only be adjusted by configuring
+> vmd_ids table. This patch adds another way to adjust MSI mode by
+> adjusting module param, which allows users easier to adjust the vmd
+> according to the I/O scenario without rebuilding driver. There are two
+> params that could be recognized: on, off. The default param is NULL,
+> the goal is not to effect the existing settings of the device.
 
-> Enablements are now tracked by the lifetime of the task/mm. User
-> processes need to be able to disable their addresses if tracing is
-> requested to be turned off. Before unmapping the page would suffice.
-> However, we now need a stronger contract. Add an ioctl to enable this.
+"two params: on, off ... default param is NULL" doesn't read quite
+right because "NULL" is not a valid parameter value.
+
+I think you could just omit that last sentence completely because it's
+obvious that if you don't specify the parameter, it doesn't affect
+anything and the existing behavior is unchanged (it's determined by
+whether VMD_FEAT_CAN_BYPASS_MSI_REMAP is specified in vmd_ids[]).
+
+> Signed-off-by: Xinghui Li <korantli@tencent.com>
+> Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
+
+I think Lorenzo is out of the office this week, but I'm sure he'll
+take care of this when he returns.
+
+In the meantime, can you include a sample usage in the commit log so
+folks don't have to dig through the patch and figure out how to use
+the parameter?
+
+It would also be nice to include a hint about why a user would choose
+"on" or "off".  What is the performance effect?  What sort of I/O
+scenario would lead you to choose "on" vs "off"?
+
+ee81ee84f873 ("PCI: vmd: Disable MSI-X remapping when possible")
+suggests that MSI-X remapping (I assume the "msi_remap=on" case):
+
+  - Limits the number MSI-X vectors available to child devices to the
+    number of VMD MSI-X vectors.
+
+  - Reduces interrupt handling performance because child device
+    interrupts have to go through the VMD MSI-X domain interrupt
+    handler.
+
+So I assume "msi_remap=off" would remove that MSI-X vector limit and
+improve interrupt handling performance?
+
+But obviously there's more to consider because those are both good
+things and if we could do that all the time, we would.  So there must
+be cases where we *have* to remap.  ee81ee84f873 suggests that not all
+VMD devices support disabling remap.  There's also a hint that some
+virt configs require it.
+
+This patch doesn't enforce either of those things.  What happens if
+the user gets it wrong?
+
+>  drivers/pci/controller/vmd.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
 > 
-> A new flag bit is added, freeing, to user_event_enabler to ensure that
-> if the event is attempted to be removed while a fault is being handled
-> that the remove is delayed until after the fault is reattempted.
-> 
-> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> ---
->  include/uapi/linux/user_events.h | 24 +++++++++
->  kernel/trace/trace_events_user.c | 93 +++++++++++++++++++++++++++++++-
->  2 files changed, 115 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/uapi/linux/user_events.h b/include/uapi/linux/user_events.h
-> index 22521bc622db..3e7275e3234a 100644
-> --- a/include/uapi/linux/user_events.h
-> +++ b/include/uapi/linux/user_events.h
-> @@ -46,6 +46,27 @@ struct user_reg {
->  	__u32 write_index;
->  } __attribute__((__packed__));
+> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> index 990630ec57c6..fb61181baa9e 100644
+> --- a/drivers/pci/controller/vmd.c
+> +++ b/drivers/pci/controller/vmd.c
+> @@ -34,6 +34,19 @@
+>  #define MB2_SHADOW_OFFSET	0x2000
+>  #define MB2_SHADOW_SIZE		16
 >  
 > +/*
-> + * Describes an event unregister, callers must set the size, address and bit.
-> + * This structure is passed to the DIAG_IOCSUNREG ioctl to disable bit updates.
+> + * The VMD msi_remap module parameter provides the alternative way
+> + * to adjust MSI mode when loading vmd.ko other than vmd_ids table.
+> + * There are two params could be recognized:
+> + *
+> + * off: disable MSI remapping
+> + * on:  enable MSI remapping
+> + *
+
+Spurious blank line.
+
 > + */
-> +struct user_unreg {
-> +	/* Input: Size of the user_unreg structure being used */
-> +	__u32 size;
-> +
-> +	/* Input: Bit to unregister */
-> +	__u8 disable_bit;
-> +
-> +	/* Input: Reserved, set to 0 */
-> +	__u8 __reserved;
-> +
-> +	/* Input: Reserved, set to 0 */
-> +	__u16 __reserved2;
+> +static char *msi_remap;
+> +module_param(msi_remap, charp, 0444);
+> +MODULE_PARM_DESC(msi_remap, "Whether to enable MSI remapping function");
 
-These are reserved so they must be set to zero, such that old programs do
-not break when they become meaningful and something had it randomly set
-(due to being uninitialized).
+ee81ee84f873 mentions MSI-X explicitly (which is different from MSI),
+so maybe use "MSI-X" here and in the messages below to avoid any
+confusion.
 
-
-> +
-> +	/* Input: Address to unregister */
-> +	__u64 disable_addr;
-> +} __attribute__((__packed__));
-> +
->  #define DIAG_IOC_MAGIC '*'
-> 
-
-> @@ -2086,6 +2100,75 @@ static long user_events_ioctl_del(struct user_event_file_info *info,
->  	return ret;
->  }
+>  enum vmd_features {
+>  	/*
+>  	 * Device may contain registers which hint the physical location of the
+> @@ -875,6 +888,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  			return ret;
 >  
-> +static long user_unreg_get(struct user_unreg __user *ureg,
-> +			   struct user_unreg *kreg)
-> +{
-> +	u32 size;
-> +	long ret;
-> +
-> +	ret = get_user(size, &ureg->size);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (size > PAGE_SIZE)
-> +		return -E2BIG;
-> +
-> +	if (size < offsetofend(struct user_unreg, disable_addr))
-> +		return -EINVAL;
-> +
-> +	ret = copy_struct_from_user(kreg, sizeof(*kreg), ureg, size);
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * Unregisters an enablement address/bit within a task/user mm.
-> + */
-> +static long user_events_ioctl_unreg(unsigned long uarg)
-> +{
-> +	struct user_unreg __user *ureg = (struct user_unreg __user *)uarg;
-> +	struct user_event_mm *mm = current->user_event_mm;
-> +	struct user_event_enabler *enabler, *next;
-> +	struct user_unreg reg;
-> +	long ret;
-> +
-> +	ret = user_unreg_get(ureg, &reg);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (!mm)
-> +		return -ENOENT;
-> +
-> +	ret = -ENOENT;
-
-Probably should add:
-
-	if (reg.__reserved || reg.__reserved2)
-		return -EINVAL;
-
-here.
-
--- Steve
-
-> +
-> +	/*
-> +	 * Flags freeing and faulting are used to indicate if the enabler is in
-> +	 * use at all. When faulting is set a page-fault is occurring asyncly.
-> +	 * During async fault if freeing is set, the enabler will be destroyed.
-> +	 * If no async fault is happening, we can destroy it now since we hold
-> +	 * the event_mutex during these checks.
-> +	 */
-> +	mutex_lock(&event_mutex);
-> +
-> +	list_for_each_entry_safe(enabler, next, &mm->enablers, link)
-> +		if (enabler->addr == reg.disable_addr &&
-> +		    (enabler->values & ENABLE_VAL_BIT_MASK) == reg.disable_bit) {
-> +			set_bit(ENABLE_VAL_FREEING_BIT, ENABLE_BITOPS(enabler));
-> +
-> +			if (!test_bit(ENABLE_VAL_FAULTING_BIT, ENABLE_BITOPS(enabler)))
-> +				user_event_enabler_destroy(enabler);
-> +
-> +			/* Removed at least one */
-> +			ret = 0;
-> +		}
-> +
-> +	mutex_unlock(&event_mutex);
-> +
-> +	return ret;
-> +}
-> +
->  /*
->   * Handles the ioctl from user mode to register or alter operations.
->   */
-> @@ -2108,6 +2191,12 @@ static long user_events_ioctl(struct file *file, unsigned int cmd,
->  		ret = user_events_ioctl_del(info, uarg);
->  		mutex_unlock(&group->reg_mutex);
->  		break;
-> +
-> +	case DIAG_IOCSUNREG:
-> +		mutex_lock(&group->reg_mutex);
-> +		ret = user_events_ioctl_unreg(uarg);
-> +		mutex_unlock(&group->reg_mutex);
-> +		break;
+>  		vmd_set_msi_remapping(vmd, true);
+> +		dev_info(&vmd->dev->dev, "init vmd with remapping MSI\n");
+>  
+>  		ret = vmd_create_irq_domain(vmd);
+>  		if (ret)
+> @@ -887,6 +901,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  		irq_domain_update_bus_token(vmd->irq_domain, DOMAIN_BUS_VMD_MSI);
+>  	} else {
+>  		vmd_set_msi_remapping(vmd, false);
+> +		dev_info(&vmd->dev->dev, "init vmd with bypass MSI\n");
 >  	}
 >  
->  	return ret;
+>  	pci_add_resource(&resources, &vmd->resources[0]);
+> @@ -955,6 +970,16 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  	return 0;
+>  }
+>  
+> +static void vmd_config_msi_remap_param(unsigned long *features)
+> +{
+> +	if (msi_remap) {
+> +		if (strcmp(msi_remap, "on") == 0)
+> +			*features &= ~(VMD_FEAT_CAN_BYPASS_MSI_REMAP);
+> +		else if (strcmp(msi_remap, "off") == 0)
+> +			*features |= VMD_FEAT_CAN_BYPASS_MSI_REMAP;
 
+The usual strcmp() idiom is to test "!strcmp(...)" instead of
+"strcmp(...) == 0)".  No need for "()" around
+VMD_FEAT_CAN_BYPASS_MSI_REMAP.
+
+> +	}
+> +}
+> +
+>  static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  {
+>  	unsigned long features = (unsigned long) id->driver_data;
+> @@ -984,6 +1009,8 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  	if (err < 0)
+>  		goto out_release_instance;
+>  
+> +	vmd_config_msi_remap_param(&features);
+> +
+>  	vmd->cfgbar = pcim_iomap(dev, VMD_CFGBAR, 0);
+>  	if (!vmd->cfgbar) {
+>  		err = -ENOMEM;
+> -- 
+> 2.31.1
+> 
