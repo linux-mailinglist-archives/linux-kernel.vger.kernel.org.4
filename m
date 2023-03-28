@@ -2,131 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89F96CB920
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824136CB91D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjC1IOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S229784AbjC1IOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjC1IO1 (ORCPT
+        with ESMTP id S229815AbjC1IOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:14:27 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D963D46BB;
-        Tue, 28 Mar 2023 01:14:18 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32S7V5Q6025442;
-        Tue, 28 Mar 2023 08:14:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=VqXphoLRRkC3MK22/ZZDX/i9cnrP5GIKBdWiKIpo58o=;
- b=NacK++ypr+bkLEYWWdMkIRP4pQBP3TZU6/hCk5m2Xvb3DVUYmrqYRHeGa7VsIR20WyBQ
- jdqQPktvGlYZHM6JS4vRfe80JT/RwoimhGXAd5SlA0bHfrlowRL4kz2U5Sl3vgTCgBjv
- m1EsuvtYbETGz0TWyaF7/JNVmb0KaHfnSpmSIfyAshOu+rmZ3RGv14qB8nXot35K0lr1
- RBpmsDMziea4l6Q19P+iJf/WddcEmZ2rWqqAQCZpCjRIAL9fO9mlGCP9VuJqPtxTztEX
- I+3HFfEtcx6oab6o84XtrD+GDPH5bleHVE54pxQYOaUTwOomQUEA48PiFRn9yw+YQEzw bQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pk5773dnp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Mar 2023 08:14:12 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32S8E1iC017159
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Mar 2023 08:14:01 GMT
-Received: from [10.239.154.73] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Mar
- 2023 01:13:58 -0700
-Message-ID: <b06854ce-45e4-eeee-d5ec-51fb1d8d923f@quicinc.com>
-Date:   Tue, 28 Mar 2023 16:13:57 +0800
+        Tue, 28 Mar 2023 04:14:05 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46420B9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:14:03 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id b20so46209689edd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:14:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112; t=1679991242;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fdI7wx9n/RqOuCwicWLNyZaYr9uM1xIYll/4/2mTjTY=;
+        b=25ZPENnuKHPwXy4Ubxa5aPXgvvyTX5fAAxLoi0WnY7fmdhy4vcAtQQDVhfY1w1c0xk
+         0ZEnm7CUaFPsYz4Q7RV3D/g7OP1owkCYq/9MY4hi4Zn94Z7NgKowHulFCn3Q0NdXyKbT
+         mAsNq4e1gLwhqJkR+1aqgRT7Y++d2u19/776GozoRVWYGJqL5kACpAAwuaECzwDcEcQi
+         UZgUAB7hXkbmo+sRqekZSiL4ViwSwLmKBw/lUnxaBlCTATiWjoQ8xIkRWvmhMzmRjeK6
+         7nSiOMXC8N7JTSwlcKuvyKPTUrujetOHIGOiImdFF3I8Z7TMcisoak803v79pOO4UHty
+         hz7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679991242;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fdI7wx9n/RqOuCwicWLNyZaYr9uM1xIYll/4/2mTjTY=;
+        b=zsbRTz1L5El061edKYsc03r6DXIm1OBFOZ/TXOrbibYX4u7yajmPe/OAHelqO6R0B4
+         DLdBQGda9771AO/Lvbj+jpr5vADYKtBLgasF2vwUt05phmfKZDVLqoqgfkIAOu7AfoeB
+         XIa9R9V42HJ+R1WBy6S+mc8HYd4zZnJHarxP2C9z0GoXOCxBMr2YmQ15RiCEhU3+ikQz
+         G6MlP6TmQZ/deAP9Zq2n3a/AWhCPeFhCbMyFNqjmKzTT8P5P2iy3mQJd1lyKdAIqszph
+         SSZ6SbkvT3i1qy/7SYA7a27CZJLkcx7ho1ALrzt2YtZPSt6+d6Lj6G69AZdYdSfPiDrp
+         t8pA==
+X-Gm-Message-State: AAQBX9czQGTQaYyhmr/z3E/TRPDj6FG8gVdLOSJrGWRn4YCDAbrTNEFz
+        A0nxHoxH0vEcMuRP7SS9u7VkkA==
+X-Google-Smtp-Source: AKy350YFTmqqeRvEA0C5EY5CL4BisrXLAhMemHT46Ct82/K0IBUZHkf62Tvp5w1QS9YncqkBgd8SeA==
+X-Received: by 2002:a17:906:b16:b0:92a:3709:e872 with SMTP id u22-20020a1709060b1600b0092a3709e872mr14916112ejg.19.1679991241567;
+        Tue, 28 Mar 2023 01:14:01 -0700 (PDT)
+Received: from [192.168.0.161] (62-73-72-43.ip.btc-net.bg. [62.73.72.43])
+        by smtp.gmail.com with ESMTPSA id a25-20020a50c319000000b004bc15a440f1sm15699044edb.78.2023.03.28.01.14.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 01:14:01 -0700 (PDT)
+Message-ID: <6d92a9bb-f8ce-3d89-9048-039426480416@blackwall.org>
+Date:   Tue, 28 Mar 2023 11:14:00 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v8 1/2] leds: flash: add driver to support flash LED
- module in QCOM PMICs
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] net: bonding: avoid use-after-free with
+ tx_hashtbl/rx_hashtbl
 Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lee@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-        <linux-leds@vger.kernel.org>, <quic_collinsd@quicinc.com>,
-        <quic_subbaram@quicinc.com>, Luca Weiss <luca.weiss@fairphone.com>
-References: <20230303095023.538917-1-quic_fenglinw@quicinc.com>
- <20230303095023.538917-2-quic_fenglinw@quicinc.com>
- <ZB8xKGgvlb5oC/pt@duo.ucw.cz>
-From:   Fenglin Wu <quic_fenglinw@quicinc.com>
-In-Reply-To: <ZB8xKGgvlb5oC/pt@duo.ucw.cz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     sujing <sujing@kylinos.cn>, davem@davemloft.net
+Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        andy@greyhouse.net, j.vosburgh@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230328034037.2076930-1-sujing@kylinos.cn>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20230328034037.2076930-1-sujing@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YKAFSuBMpH-40JHoM3XkdIYiKhnUeLWZ
-X-Proofpoint-ORIG-GUID: YKAFSuBMpH-40JHoM3XkdIYiKhnUeLWZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- suspectscore=0 lowpriorityscore=0 impostorscore=0 bulkscore=0 adultscore=0
- mlxlogscore=770 phishscore=0 malwarescore=0 spamscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2303280068
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=3.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/03/2023 06:40, sujing wrote:
+> In bonding mode 6 (Balance-alb),
+> there are some potential race conditions between the 'bond_close' process
+> and the tx/rx processes that use tx_hashtbl/rx_hashtbl,
+> which may lead to use-after-free.
 
-
-On 3/26/2023 1:36 AM, Pavel Machek wrote:
-> On Fri 2023-03-03 17:50:22, Fenglin Wu wrote:
->> Add initial driver to support flash LED module found in Qualcomm
->> Technologies, Inc. PMICs. The flash module can have 3 or 4 channels
->> and each channel can be controlled indepedently and support full scale
->> current up to 1.5 A. It also supports connecting two channels together
->> to supply one LED component with full scale current up to 2 A. In that
->> case, the current will be split on each channel symmetrically and the
->> channels will be enabled and disabled at the same time.
->>
->> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
->> Tested-by: Luca Weiss <luca.weiss@fairphone.com> # sm7225-fairphone-fp4 + pm6150l
-> 
->> +	flash->led_cdev.brightness_set_blocking = qcom_flash_led_brightness_set;
->> +
->> +	init_data.fwnode = node;
->> +	init_data.devicename = NULL;
->> +	init_data.default_label = NULL;
->> +	init_data.devname_mandatory = false;
->> +
->> +	rc = devm_led_classdev_flash_register_ext(dev, flash, &init_data);
->> +	if (rc < 0) {
->> +		dev_err(dev, "Register flash LED classdev failed, rc=%d\n", rc);
->> +		return rc;
->> +	}
-> 
-> I'd expect setting max_brightness somewhere around here.
-> 
-> What does cat /sys/class/leds/*/max_brightness say (and what directory
-> name are you using)?
-
-LED_FULL is used as the default max_brightness, the driver will do the 
-calculation based on LED_FULL (as below) and set the corresponding 
-current when brightness is updated :
-
-u32 current_ma = brightness * led->max_torch_current_ma / LED_FULL;
-
-This is how max_brightness shows on my device:
-
-# cat /sys/class/leds/white:flash-0/max_brightness
-255
+Potential and may? Have you seen it happen and have a trace?
 
 > 
-> BR,								Pavel
+> For instance, when the bond6 device is in the 'bond_close' process
+> while some backlogged packets from upper level are transmitted
+
+How exactly would that happen? Queues get properly disabled before ndo_stop
+is called.
+
+> to 'bond_start_xmit', there is a spinlock contention between
+> 'tlb_deinitialize' and 'tlb_choose_channel'.
+> 
+> If 'tlb_deinitialize' preempts the lock before 'tlb_choose_channel',
+> a NULL pointer kernel panic will be triggered.
+> 
+> Here's the timeline:
+> 
+> bond_close  ------------------  bond_start_xmit
+> bond_alb_deinitialize  -------  __bond_start_xmit
+> tlb_deinitialize  ------------  bond_alb_xmit
+> spin_lock_bh  ----------------  bond_xmit_alb_slave_get
+> tx_hashtbl = NULL  -----------  tlb_choose_channel
+> spin_unlock_bh  --------------  //wait for spin_lock_bh
+> ------------------------------  spin_lock_bh
+> ------------------------------  __tlb_choose_channel
+> causing kernel panic ========>  tx_hashtbl[hash_index].tx_slave
+> ------------------------------  spin_unlock_bh
+
+I don't see how bond_close() can be called in parallel with bond_start_xmit.
+Tx queues are disabled and there's a synchronize_rcu() before the device's
+ndo_stop is called.
+
+> 
+> Signed-off-by: sujing <sujing@kylinos.cn>
+> ---
+>  drivers/net/bonding/bond_alb.c  | 32 +++++++++------------------
+>  drivers/net/bonding/bond_main.c | 39 +++++++++++++++++++++++++++------
+>  include/net/bond_alb.h          |  5 ++++-
+>  3 files changed, 46 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+> index b9dbad3a8af8..f6ff5ea835c4 100644
+> --- a/drivers/net/bonding/bond_alb.c
+> +++ b/drivers/net/bonding/bond_alb.c
+> @@ -71,7 +71,7 @@ static inline u8 _simple_hash(const u8 *hash_start, int hash_size)
+>  
+>  /*********************** tlb specific functions ***************************/
+>  
+> -static inline void tlb_init_table_entry(struct tlb_client_info *entry, int save_load)
+> +void tlb_init_table_entry(struct tlb_client_info *entry, int save_load)
+>  {
+>  	if (save_load) {
+>  		entry->load_history = 1 + entry->tx_bytes /
+> @@ -269,8 +269,8 @@ static void rlb_update_entry_from_arp(struct bonding *bond, struct arp_pkt *arp)
+>  	spin_unlock_bh(&bond->mode_lock);
+>  }
+>  
+> -static int rlb_arp_recv(const struct sk_buff *skb, struct bonding *bond,
+> -			struct slave *slave)
+> +int rlb_arp_recv(const struct sk_buff *skb, struct bonding *bond,
+> +		 struct slave *slave)
+>  {
+>  	struct arp_pkt *arp, _arp;
+>  
+> @@ -756,7 +756,7 @@ static void rlb_init_table_entry_src(struct rlb_client_info *entry)
+>  	entry->src_next = RLB_NULL_INDEX;
+>  }
+>  
+> -static void rlb_init_table_entry(struct rlb_client_info *entry)
+> +void rlb_init_table_entry(struct rlb_client_info *entry)
+>  {
+>  	memset(entry, 0, sizeof(struct rlb_client_info));
+>  	rlb_init_table_entry_dst(entry);
+> @@ -874,9 +874,6 @@ static int rlb_initialize(struct bonding *bond)
+>  
+>  	spin_unlock_bh(&bond->mode_lock);
+>  
+> -	/* register to receive ARPs */
+> -	bond->recv_probe = rlb_arp_recv;
+> -
+>  	return 0;
+>  }
+>  
+> @@ -888,7 +885,6 @@ static void rlb_deinitialize(struct bonding *bond)
+>  
+>  	kfree(bond_info->rx_hashtbl);
+>  	bond_info->rx_hashtbl = NULL;
+> -	bond_info->rx_hashtbl_used_head = RLB_NULL_INDEX;
+>  
+>  	spin_unlock_bh(&bond->mode_lock);
+>  }
+> @@ -1303,7 +1299,7 @@ static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
+>  
+>  /************************ exported alb functions ************************/
+>  
+> -int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+> +int bond_alb_initialize(struct bonding *bond)
+>  {
+>  	int res;
+>  
+> @@ -1311,15 +1307,10 @@ int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+>  	if (res)
+>  		return res;
+>  
+> -	if (rlb_enabled) {
+> -		res = rlb_initialize(bond);
+> -		if (res) {
+> -			tlb_deinitialize(bond);
+> -			return res;
+> -		}
+> -		bond->alb_info.rlb_enabled = 1;
+> -	} else {
+> -		bond->alb_info.rlb_enabled = 0;
+> +	res = rlb_initialize(bond);
+> +	if (res) {
+> +		tlb_deinitialize(bond);
+> +		return res;
+>  	}
+>  
+>  	return 0;
+> @@ -1327,12 +1318,9 @@ int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+>  
+>  void bond_alb_deinitialize(struct bonding *bond)
+>  {
+> -	struct alb_bond_info *bond_info = &(BOND_ALB_INFO(bond));
+> -
+>  	tlb_deinitialize(bond);
+>  
+> -	if (bond_info->rlb_enabled)
+> -		rlb_deinitialize(bond);
+> +	rlb_deinitialize(bond);
+>  }
+>  
+>  static netdev_tx_t bond_do_alb_xmit(struct sk_buff *skb, struct bonding *bond,
+> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> index 236e5219c811..8fcb5d3ac0a2 100644
+> --- a/drivers/net/bonding/bond_main.c
+> +++ b/drivers/net/bonding/bond_main.c
+> @@ -4217,6 +4217,7 @@ static int bond_open(struct net_device *bond_dev)
+>  	struct bonding *bond = netdev_priv(bond_dev);
+>  	struct list_head *iter;
+>  	struct slave *slave;
+> +	int i;
+>  
+>  	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter) {
+>  		bond->rr_tx_counter = alloc_percpu(u32);
+> @@ -4239,11 +4240,29 @@ static int bond_open(struct net_device *bond_dev)
+>  	}
+>  
+>  	if (bond_is_lb(bond)) {
+> -		/* bond_alb_initialize must be called before the timer
+> -		 * is started.
+> -		 */
+> -		if (bond_alb_initialize(bond, (BOND_MODE(bond) == BOND_MODE_ALB)))
+> -			return -ENOMEM;
+> +		struct alb_bond_info *bond_info = &(BOND_ALB_INFO(bond));
+> +
+> +		spin_lock_bh(&bond->mode_lock);
+> +
+> +		for (i = 0; i < TLB_HASH_TABLE_SIZE; i++)
+> +			tlb_init_table_entry(&bond_info->tx_hashtbl[i], 0);
+> +
+> +		spin_unlock_bh(&bond->mode_lock);
+> +
+> +		if (BOND_MODE(bond) == BOND_MODE_ALB) {
+> +			bond->alb_info.rlb_enabled = 1;
+> +			spin_lock_bh(&bond->mode_lock);
+> +
+> +			bond_info->rx_hashtbl_used_head = RLB_NULL_INDEX;
+> +			for (i = 0; i < RLB_HASH_TABLE_SIZE; i++)
+> +				rlb_init_table_entry(bond_info->rx_hashtbl + i);
+> +
+> +			spin_unlock_bh(&bond->mode_lock);
+> +			bond->recv_probe = rlb_arp_recv;
+> +		} else {
+> +			bond->alb_info.rlb_enabled = 0;
+> +		}
+> +
+>  		if (bond->params.tlb_dynamic_lb || BOND_MODE(bond) == BOND_MODE_ALB)
+>  			queue_delayed_work(bond->wq, &bond->alb_work, 0);
+>  	}
+> @@ -4279,8 +4298,6 @@ static int bond_close(struct net_device *bond_dev)
+>  
+>  	bond_work_cancel_all(bond);
+>  	bond->send_peer_notif = 0;
+> -	if (bond_is_lb(bond))
+> -		bond_alb_deinitialize(bond);
+>  	bond->recv_probe = NULL;
+>  
+>  	if (bond_uses_primary(bond)) {
+> @@ -5854,6 +5871,8 @@ static void bond_uninit(struct net_device *bond_dev)
+>  	struct list_head *iter;
+>  	struct slave *slave;
+>  
+> +	bond_alb_deinitialize(bond);
+> +
+>  	bond_netpoll_cleanup(bond_dev);
+>  
+>  	/* Release the bonded slaves */
+> @@ -6295,6 +6314,12 @@ static int bond_init(struct net_device *bond_dev)
+>  	    bond_dev->addr_assign_type == NET_ADDR_PERM)
+>  		eth_hw_addr_random(bond_dev);
+>  
+> +	/* bond_alb_initialize must be called before the timer
+> +	 * is started.
+> +	 */
+> +	if (bond_alb_initialize(bond))
+> +		return -ENOMEM;
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/include/net/bond_alb.h b/include/net/bond_alb.h
+> index 9dc082b2d543..9fd16e20ef82 100644
+> --- a/include/net/bond_alb.h
+> +++ b/include/net/bond_alb.h
+> @@ -150,7 +150,7 @@ struct alb_bond_info {
+>  						 */
+>  };
+>  
+> -int bond_alb_initialize(struct bonding *bond, int rlb_enabled);
+> +int bond_alb_initialize(struct bonding *bond);
+>  void bond_alb_deinitialize(struct bonding *bond);
+>  int bond_alb_init_slave(struct bonding *bond, struct slave *slave);
+>  void bond_alb_deinit_slave(struct bonding *bond, struct slave *slave);
+> @@ -165,5 +165,8 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
+>  void bond_alb_monitor(struct work_struct *);
+>  int bond_alb_set_mac_address(struct net_device *bond_dev, void *addr);
+>  void bond_alb_clear_vlan(struct bonding *bond, unsigned short vlan_id);
+> +int rlb_arp_recv(const struct sk_buff *skb, struct bonding *bond, struct slave *slave);
+> +void tlb_init_table_entry(struct tlb_client_info *entry, int save_load);
+> +void rlb_init_table_entry(struct rlb_client_info *entry);
+>  #endif /* _NET_BOND_ALB_H */
+>  
+
