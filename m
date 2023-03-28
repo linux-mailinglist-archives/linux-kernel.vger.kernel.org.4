@@ -2,60 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5794F6CCA6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4DF6CCA6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 21:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjC1THx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 15:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        id S229638AbjC1TJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 15:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjC1THv (ORCPT
+        with ESMTP id S229536AbjC1TJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:07:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF722719;
-        Tue, 28 Mar 2023 12:07:50 -0700 (PDT)
+        Tue, 28 Mar 2023 15:09:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE639D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 12:09:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69D53B81CA8;
-        Tue, 28 Mar 2023 19:07:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1110C433D2;
-        Tue, 28 Mar 2023 19:07:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4372B6191D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 19:09:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8272EC433EF;
+        Tue, 28 Mar 2023 19:09:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680030467;
-        bh=ssr+04WYQP/MuT28p4/ksJLN0ZZeX1hkEAtus4Xzjno=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VhSmw80koljABs1Ar+f+KOOq9HFE34jhJJ0I1Z06REJKH/5Tuqp5n5HpPt3TTX7zf
-         jJCCeQBGd0b3HVxlf/w8KxDJPyuOczogo7XCOlV8OutI5KXd9W7spgUd8tB2KDOme/
-         eB+odT9IGLnXP3rrHwyGA2LOE00E8ShUu6YK6OvrIuT16TeZACd2aT9syWTtcDvHWS
-         u68TmXSUtDVB9TWJ2lY8GBNLS+VkYL2+5Coi11uhTbz+cyV+V51Lw//+hanvi8tkjO
-         szm7AaKCV3WuWN+b/CQ1wgLSaTelTJvfKxoQVEgkcsTU4I+olOGXNqP/Fhp1wYRk9O
-         B5VetVbYWREAw==
-Date:   Tue, 28 Mar 2023 12:07:45 -0700
+        s=k20201202; t=1680030548;
+        bh=iEymzBzaU4bQVBwE7T/LgoV6sJObq+3Ajj05E4kG0RA=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=bF8B0JBDnMFzkv9fIUcE0kR8rLsBHwVf7frqmpVhrSneq8dovcCMUUXiwI1Ow5JHO
+         isWy9/rwI/nHte6qSaLdC86LqKscxJyX46op3Xlit59JZRzsQxK3XIWND9NfSDAVaf
+         WmVht3Odvelj5/fsHDyMos2qDLk2/PPzXOOic+eE94Hgdm5y1sZEQFKRZFK1YHDJvO
+         94RTD0h6yiOl91X6Js9+fAAJ1zxGs/wg6ijKSOWoYyKPw/Sp9Q51lcBOvGjtYXg12Q
+         WGUWCObNHgt7dWsac+J7Hn284QB8uzgnQ2fuJ/YEuO+zS1lNj5uxyxt+i+yKMBV+QF
+         erdDR75egBz6A==
+Date:   Tue, 28 Mar 2023 12:09:06 -0700
 From:   Nathan Chancellor <nathan@kernel.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-toolchains@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: Linux 6.3-rc3
-Message-ID: <20230328190745.GA375033@dev-arch.thelio-3990X>
-References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
- <20230320180501.GA598084@dev-arch.thelio-3990X>
- <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
- <20230320185337.GA615556@dev-arch.thelio-3990X>
- <87pm91uf9c.fsf@kernel.org>
- <20230322163637.GA918620@dev-arch.thelio-3990X>
- <87wn36ctdi.fsf@kernel.org>
- <20230324151150.GC428955@dev-arch.thelio-3990X>
- <87o7oicgwv.fsf@kernel.org>
+To:     llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: Slim and optimized LLVM toolchains for building the Linux kernel
+Message-ID: <20230328190906.GB375033@dev-arch.thelio-3990X>
+References: <20230319235619.GA18547@dev-arch.thelio-3990X>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87o7oicgwv.fsf@kernel.org>
+In-Reply-To: <20230319235619.GA18547@dev-arch.thelio-3990X>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -65,51 +51,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 05:23:12PM +0200, Kalle Valo wrote:
-> Nathan Chancellor <nathan@kernel.org> writes:
+On Sun, Mar 19, 2023 at 04:56:21PM -0700, Nathan Chancellor wrote:
+> Hi everyone,
 > 
-> >> This is nitpicking but it would be nice if the tarball contents wouldn't
-> >> conflict with each other. Now both llvm-16.0.0-aarch64.tar.gz and
-> >> llvm-16.0.0-x86_64.tar extract to the same directory llvm-16.0.0 with
-> >> same binary names. It would be much better if they would extract to
-> >> llvm-16.0.0-aarch64 and llvm-16.0.0-x86_64, respectively.
-> >> 
-> >> For example, Arnd's crosstool packages don't conflict with each other:
-> >> 
-> >> https://mirrors.edge.kernel.org/pub/tools/crosstool/
-> >
-> > I could certainly do that but what is the use case for extracting both?
-> > You cannot run the aarch64 version on an x86_64 host and vice versa, so
-> > why bother extracting them?
+> To make building the Linux kernel with clang/LLVM easier and more
+> accessible to people (since distributions tend to only package one
+> version at a time and it may be old or have bugs that have since been
+> fixed), I have uploaded some slim, profile guided optimized LLVM toolchains
+> to my section of kernel.org/pub:
 > 
-> Ah, I didn't realise that. I assumed llvm-16.0.0-aarch64.tar.gz was a
-> cross compiler. I'm sure you documented that in the page but hey who
-> reads the documentation ;)
+> https://mirrors.edge.kernel.org/pub/linux/kernel/people/nathan/llvm/
 
-:)
+This is now
 
-I have adjusted the README to hopefully make that clearer.
+https://mirrors.edge.kernel.org/pub/tools/llvm/
 
-> > I had figured the architecture would be irrelevant once installed on
-> > the host, so I opted only to include it in the tarball name. Perhaps I
-> > should make it clearer that these are the host architectures, not the
-> > target architectures (because clang is multi-targeted, unlike GCC)?
+so that they are no longer tied directly to my kernel.org account. I
+have updated the README with additional information based on feedback
+that I have received thus far.
+
+> The landing page should have all the relevant information but if I need
+> to clarify or expand on anything, I am more than happy to do so.
 > 
-> Makes sense now. But I still think it's good style that a tarball named
-> llvm-16.0.0-aarch64.tar.gz extracts to llvm-16.0.0-aarch64.
-
-Indeed, I have adjusted it for future builds:
-
-https://github.com/nathanchance/env/commit/314837e6706889138121a32140d2acdc7895d390
-
-> >> And maybe request a similar llvm directory under pub/tools to make it
-> >> more official? :)
-
-We now have https://kernel.org/pub/tools/llvm/, which is about as
-official as we can get I suppose :)
-
-https://kernel.org/pub/linux/kernel/people/nathan/llvm/ now points
-people there.
+> Due to benchmarking the compilers against the kernel during PGO, they
+> can handily beat distribution versions that have not been optimized:
+> 
+> https://gist.github.com/nathanchance/8d1abed70077ac92cb198ef32389072e
+> 
+> I aim to keep these up to date with the latest stable versions of LLVM
+> as they are released (so 16.0.0 will be replaced with 16.0.1 when it is
+> released, etc).
 
 Cheers,
 Nathan
