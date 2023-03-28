@@ -2,136 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8796CCCCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 00:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6142D6CCCD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 00:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjC1WIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 18:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S229817AbjC1WKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 18:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjC1WIv (ORCPT
+        with ESMTP id S229554AbjC1WKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 18:08:51 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB291BFE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:08:49 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 582E1C01F; Wed, 29 Mar 2023 00:08:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1680041328; bh=lIAxBZX8Ok9MLTzD8LQPfEMHK5pZ4ioFrz+9hrOO4h4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K21RGKXCuiDcpFs4KNSlwq2+RDm091FpHB7hmVjdY67N4tan3/AqTwuO8eqv881+m
-         SX9NSFIaYEbRHrv6wwVxwHKgcJR3HbPiNF4Abgz6sytjK0vYPjt/kVN9DWDv2ujF30
-         2jmXwRrGuP+td8/Jpela255I5utBcqy6h1EN/yj+B1G2euC03aowW1ezfEEaOiqkVw
-         jv78c5uOUKWyUbmqFwW/5VUgpkHGIvePa6GJCHchOoJCGkr49th5Wqs5QgtN96qWUW
-         DvMKlhYjruSU69Sac8jHCkeJHN1bPsVP5Fnfx+NxV5VLTfW02tyGUoUuYhThwzIMBj
-         yNiN7CIx02fug==
+        Tue, 28 Mar 2023 18:10:00 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E92F1FC3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:09:57 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id r14so4492775oiw.12
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 15:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=usp.br; s=usp-google; t=1680041396;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+do5RbLU3FTsGCyiGfUyvpvc06CIKe8iN2wcuyFgpdk=;
+        b=Xpn9Q5gVncsLo51GKrL6c6j8Xvr3Cw7fVwaMSzFQslWxG1K3wWhkJpHRZ519ne2b5C
+         Rv5kRiXfXne25VOVjR/Ca+aO64nUkX0AnChhFB2k4Kko6H7O/DfgBBloSXZXuSkn5znl
+         vOoTA47SfQdiQp7w+zOWyFY31pBV3NKlKqueYOLudpad7EMpkQxhKVsgjrs5IknVJXZh
+         NVIGYaRf6shqf3eTEbkCOanf1Fe8HImUjtk2nxI6s3icOF/7LxJxoKoDAlLp78IpGFlu
+         uCVR7AwQL8IVtSK+Ir2va5M/N0ZSMXeLhLcEPJWfiS08sNEFRIeYwSTnkR+44hQJlQAB
+         OWRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680041396;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+do5RbLU3FTsGCyiGfUyvpvc06CIKe8iN2wcuyFgpdk=;
+        b=hzTFNKlkmVgH83XmE/LgJ4oxK/HIqhVo1uetlTMh6Rrg9XflYs0VoBay8iomRCE5S4
+         skF+6poBcmtPbuYuo40ZlFQqwqEl8QR+aN9RiembuXoRyaaOUD3nJhz2MBSMuml7uYAt
+         6B8KwmnlrOzjt4JIFPunbBUOIH3welIa+nPAFYd1koBJtyOZZ4BX6h7T7KyxumBl56iA
+         VOkAgykNBzhQdWWefF3NJdOP8FVk0zS5H+iC/Li235FgY+bYNL0yw+nmhieo2Jb1gmDD
+         58aS1jbjhvVOPncmWfTA7VB+l9GlSr6bqbZgxZ3fA+0Fmyedfb11vNEcFdL72kMw9TNc
+         vylQ==
+X-Gm-Message-State: AO0yUKXmiO3R+HDPUkHKkfvxJ/NnhSwxYjb+AmDZTvXayAoearVyVJnc
+        tQ5JRl6HmbOlRAxVIJcBaKG5bQ==
+X-Google-Smtp-Source: AK7set/TXS3xSTLtKC+z7VZsY/Cb0Lq/C02tDibxlVEYu2PSIT1ral1k8nJ/tIKCnGedRgkbJbybZg==
+X-Received: by 2002:a05:6808:394a:b0:383:d1e3:38f9 with SMTP id en10-20020a056808394a00b00383d1e338f9mr7790081oib.16.1680041396675;
+        Tue, 28 Mar 2023 15:09:56 -0700 (PDT)
+Received: from ARCHaio.localdomain ([2804:1b3:a2c0:c911:919f:bd20:4f2a:8383])
+        by smtp.gmail.com with ESMTPSA id ee39-20020a056870c82700b0017299192eb1sm5400446oab.25.2023.03.28.15.09.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 15:09:56 -0700 (PDT)
+From:   Caio Novais <caionovais@usp.br>
+To:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Wesley Chalmers <Wesley.Chalmers@amd.com>,
+        "Lee, Alvin" <Alvin.Lee2@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Caio Novais <caionovais@usp.br>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
+        Gabe Teeger <gabe.teeger@amd.com>, Roman Li <roman.li@amd.com>,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH 0/2] drm/amd/display: Remove a unused variable and add a function prototype
+Date:   Tue, 28 Mar 2023 19:09:45 -0300
+Message-Id: <20230328220947.108188-1-caionovais@usp.br>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 70BD5C009;
-        Wed, 29 Mar 2023 00:08:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1680041327; bh=lIAxBZX8Ok9MLTzD8LQPfEMHK5pZ4ioFrz+9hrOO4h4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=20HcFiyuj80bZO9Ai5zvaFWJDqwmczJDYJUdYJw7bay1mp7M902oPe3QbdjAy3ELL
-         T6HAGE5O92Ep70tctj4M6R82CrRofD7VLqVW1uGJUA1EUCFioNTMuZu1ftPS9YPg1i
-         Eh6xzCfz7BNuE14GLpJ3X4WHZxS3Oq+npszRnLVLEHY7Jt6TciupADjmnh92UgM/gY
-         9Gyq8quPvzpHPBc03VXn0IXszRBOsa1xJg0rXir3aQshTW4EwBUi/+j+j/IB/A5F9P
-         uuZjhi+uplqfGFOuD1kytrK8qzGrtYaEVcAAssVaJGSN4UL72VO8Jt11qS0Mfome63
-         MdoOkY07B6EjA==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 5723ce5b;
-        Tue, 28 Mar 2023 22:08:41 +0000 (UTC)
-Date:   Wed, 29 Mar 2023 07:08:26 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jeff Layton <jlayton@kernel.org>, lucho@ionkov.net,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Amir Goldstein <amir73il@gmail.com>,
-        Pankaj Raghav <p.raghav@samsung.com>
-Subject: Re: 9p caching with cache=loose and cache=fscache
-Message-ID: <ZCNlWnQTbWoBBPd2@codewreck.org>
-References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org>
- <ZCHU6k56nF5849xj@bombadil.infradead.org>
- <ZCJRlqc/epbRhm93@codewreck.org>
- <2391219.DQnbcWml7j@silver>
- <ZCMmrnmZFcH65Orp@bombadil.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZCMmrnmZFcH65Orp@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Luis Chamberlain wrote on Tue, Mar 28, 2023 at 10:41:02AM -0700:
-> >   "To speedup things you can also consider to use e.g. cache=loose instead.
-> 
-> My experience is that cache=loose is totally useless.
+This patchset removes one unused variable and adds a function prototype.
 
-If the fs you mount isn't accessed by the host while the VM is up, and
-isn't shared with another guest (e.g. "exclusive share"), you'll get
-what you expect.
+Caio Novais (2):
+  drm/amd/display: Remove unused variable 'scl_enable'
+  drm/amd/display: Add previous prototype to
+    'optc3_wait_drr_doublebuffer_pending_clear'
 
-I have no idea what people use qemu's virtfs for but this is apparently
-common enough that it was recommended before without anyone complaining
-since that started being recommended in 2011[1] until now?
-
-[1] https://wiki.qemu.org/index.php?title=Documentation/9psetup&diff=2178&oldid=2177
-
-(now I'm not arguing it should be recommended, my stance as a 9p
-maintainer is that the default should be used unless you know what
-you're doing, so the new code should just remove the 'cache=none'
-altogether as that's the default.
-With the new cache models Eric is preparing comes, we'll get a new safe
-default that will likely be better than cache=none, there is no reason
-to explicitly recommend the historic safe model as the default has
-always been on the safe side and we have no plan of changing that.)
-
-> >    That will deploy a filesystem cache on guest side and reduces the amount of
-> >    9p requests to hosts. As a consequence however guest might not see file
-> >    changes performed on host side *at* *all*
-> 
-> I think that makes it pretty useless, aren't most setups on the guest read-only?
-> 
-> It is not about "may not see", just won't. For example I modified the
-> Makefile and compiled a full kernel and even with those series of
-> changes, the guest *minutes later* never saw any updates.
-
-read-only on the guest has nothing to do with it, nor has time.
-
-If the directory is never accessed on the guest before the kernel has
-been built, you'll be able to make install on the guest -- once, even if
-the build was done after the VM booted and fs mounted.
-
-After it's been read once, it'll stay in cache until memory pressure (or
-an admin action like umount/mount or sysctl vm.drop_caches=3) clears it.
-
-
-I believe that's why it appeared to work until you noticed the issue and
-had to change the mount option -- I'd expect in most case you'll run
-make install once and reboot/kexec into the new kernel.
-
-It's not safe for your usecase and cache=none definitely sounds better
-to me, but people should use defaults make their own informed decision.
-
-
->>   In the above example the folder /home/guest/9p_setup/ shared of the
->>   host is shared with the folder /tmp/shared on the guest. We use no
->>   cache because current caching mechanisms need more work and the
->>   results are not what you would expect."
->
-> I got a wiki account now and I was the one who had clarified this.
-
-Thanks for helping making this clearer.
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.h               | 2 ++
+ .../gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c | 2 --
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 -- 
-Dominique
+2.40.0
+
