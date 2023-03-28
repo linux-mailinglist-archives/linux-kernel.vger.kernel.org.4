@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3716CBDA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27486CBDA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 13:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbjC1L2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 07:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S232837AbjC1L3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 07:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbjC1L2H (ORCPT
+        with ESMTP id S232709AbjC1L3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 07:28:07 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FE9901B;
-        Tue, 28 Mar 2023 04:27:45 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id t10so48081804edd.12;
-        Tue, 28 Mar 2023 04:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680002864;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aH679ERMSWNWvXyyXLYJ8g9hSSHQrkcB5OP8voimmFc=;
-        b=gXIQbLvbeMucqMf+c3bLPfUYw9LCwhdze69JIPGKgQYp55MekKZrZhC05qqHwTIxjs
-         Q+vH8szRNFgSiSMMRaPm8ftuQrQrKvg79urc0qS1cubJ8PlEOU6VeTesKuNDa9hLZYJG
-         WIVTUh3hR3JuqiIRlVyfXOMVT7Xjvzce1iVAGFIH9MadtQeLW63l9804BtYxEC9tiCWh
-         vSYikVo9nPkNEsb34uh0sRuxTRkeYnjElvSjjVs6UzKCmRPyt9lTcM8EnuhUjOqboGSo
-         nkkm/S2zYEOUd2bzpPp4JgaB1D3CYutiTLnuor/NKxz9T0uc5qbB4fsxLY0Pine+Kpyo
-         KWfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680002864;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aH679ERMSWNWvXyyXLYJ8g9hSSHQrkcB5OP8voimmFc=;
-        b=Axgk9CkhlsdB3aJm3hAlU60KNQT1zC3ixE5VUENERb4gfw2WSaOE5TzlGGxL+eLv9+
-         er5nfo/ZKw9tzjwBJUnvntiX1AT6zqBrJCKS30xZ/ztYHURyi5LDmyyG4y0MZQG4GtBD
-         4Wij/xNmqH+LM+fXh2yUFj0G0MnSauhopwhpe6fjbTYt4XaMiymt8rKlESI3Dbv5S+RM
-         fgc+4e0BM4ry6fiGy7DezIRWJEgThaFus11CoWA1fTzSzTwcsnUhCmvD2fYWs5H36BXz
-         DGtUqFwwFo0+oWOvRN9pbB4pnEnlUwaVPaMxJnr/xVEYb8p2zdeC/0e2USx1BrVrV0cB
-         97Ig==
-X-Gm-Message-State: AAQBX9cCELke2VpdbOO8s2mWE/sxlYIdmJxWLSljeh1gC3qfSZXNnoiA
-        yHrgciYg5FirJyrs5Z6xC9Q=
-X-Google-Smtp-Source: AKy350ZHcR+qthehrvWOddTp/MfouX/tJnnAMq8wa6jAB/Fcla2by8oFGNX4wJOfl/VcEqw1xEkK8Q==
-X-Received: by 2002:a17:907:d386:b0:87b:dac0:b23b with SMTP id vh6-20020a170907d38600b0087bdac0b23bmr16831917ejc.55.1680002863802;
-        Tue, 28 Mar 2023 04:27:43 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id c19-20020a170906155300b0093ebc654f78sm5091121ejd.25.2023.03.28.04.27.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 04:27:43 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 13:27:41 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] ARM: tegra: Add labels to tegra30.dtsi
-Message-ID: <ZCLPLUFFzzQ0NUoV@orome>
-References: <20230304084319.18424-1-clamor95@gmail.com>
- <20230304084319.18424-2-clamor95@gmail.com>
+        Tue, 28 Mar 2023 07:29:33 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE5683EC;
+        Tue, 28 Mar 2023 04:29:07 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32SBSW2a014183;
+        Tue, 28 Mar 2023 06:28:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680002912;
+        bh=tZlcyEMDq5glYbCySPGUZF2oDnqMwNwb8dvtlXm0xME=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=uCKMtH3PtuevoT7K3mflv1uk3ejd39sKjJQ8TJMiF/OGzrwd7+lrq6ZzUlHwuDoPf
+         99UQ0D9ikoj7VBfKoP2enNbj41VgDF0CwWzRYe+zPmWk7ImMR1iGStfNVMu1nRSyWz
+         KU8pHio0m7V+i5Bsnc7FV6q4J2sWFhwprtiP2zEo=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32SBSWbr042746
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 28 Mar 2023 06:28:32 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 28
+ Mar 2023 06:28:31 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 28 Mar 2023 06:28:31 -0500
+Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32SBSQrK020834;
+        Tue, 28 Mar 2023 06:28:27 -0500
+Message-ID: <08cdd2b7-5152-8dec-aea2-ce286f8b97fb@ti.com>
+Date:   Tue, 28 Mar 2023 16:58:26 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MJ5Vjm57uiN1d04K"
-Content-Disposition: inline
-In-Reply-To: <20230304084319.18424-2-clamor95@gmail.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [EXTERNAL] Re: [PATCH v5 5/5] soc: ti: pruss: Add helper
+ functions to get/set PRUSS_CFG_GPMUX
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        MD Danish Anwar <danishanwar@ti.com>
+CC:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230323062451.2925996-1-danishanwar@ti.com>
+ <20230323062451.2925996-6-danishanwar@ti.com> <20230327210429.GD3158115@p14s>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <20230327210429.GD3158115@p14s>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,48 +80,161 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---MJ5Vjm57uiN1d04K
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 04, 2023 at 10:43:15AM +0200, Svyatoslav Ryhel wrote:
-> From: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
->=20
-> Add phandle names for memory/I2C/SPI/USB/SDMMC controller nodes to allow
-> for cleaner device descriptions.
->=20
-> Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> ---
->  arch/arm/boot/dts/tegra30.dtsi | 36 +++++++++++++++++-----------------
->  1 file changed, 18 insertions(+), 18 deletions(-)
+On 28/03/23 02:34, Mathieu Poirier wrote:
+> On Thu, Mar 23, 2023 at 11:54:51AM +0530, MD Danish Anwar wrote:
+>> From: Tero Kristo <t-kristo@ti.com>
+>>
+>> Add two new helper functions pruss_cfg_get_gpmux() & pruss_cfg_set_gpmux()
+>> to get and set the GP MUX mode for programming the PRUSS internal wrapper
+>> mux functionality as needed by usecases.
+>>
+>> Co-developed-by: Suman Anna <s-anna@ti.com>
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+>> ---
+>>  drivers/soc/ti/pruss.c           | 44 ++++++++++++++++++++++++++++++++
+>>  include/linux/remoteproc/pruss.h | 30 ++++++++++++++++++++++
+>>  2 files changed, 74 insertions(+)
+>>
+>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+>> index ac415442e85b..3aa3c38c6c79 100644
+>> --- a/drivers/soc/ti/pruss.c
+>> +++ b/drivers/soc/ti/pruss.c
+>> @@ -239,6 +239,50 @@ int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
+>>  }
+>>  EXPORT_SYMBOL_GPL(pruss_cfg_xfr_enable);
+>>  
+>> +/**
+>> + * pruss_cfg_get_gpmux() - get the current GPMUX value for a PRU device
+>> + * @pruss: pruss instance
+>> + * @pru_id: PRU identifier (0-1)
+>> + * @mux: pointer to store the current mux value into
+>> + *
+>> + * Return: 0 on success, or an error code otherwise
+>> + */
+>> +int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux)
+>> +{
+>> +	int ret = 0;
+>> +	u32 val;
+>> +
+>> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
+>> +		return -EINVAL;
+>> +
+>> +	ret = pruss_cfg_read(pruss, PRUSS_CFG_GPCFG(pru_id), &val);
+>> +	if (!ret)
+>> +		*mux = (u8)((val & PRUSS_GPCFG_PRU_MUX_SEL_MASK) >>
+>> +			    PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
+> 
+> What happens if @mux is NULL?
 
-This patch by itself only adds labels and isn't useful by itself. If you
-really must have these labels, add them in the same patch that makes use
-of them to demonstrate why you think this is an improvement.
+@mux being null may result in some error here. I will add NULL check for mux
+before storing the value in mux.
 
-Thierry
+I will modify the above if condition to have NULL check for mux as well.
+The if condition will look like below.
 
---MJ5Vjm57uiN1d04K
-Content-Type: application/pgp-signature; name="signature.asc"
+	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS || !mux)
+		return -EINVAL;
 
------BEGIN PGP SIGNATURE-----
+Please let me know if this looks OK.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQizy0ACgkQ3SOs138+
-s6Epcw/+I6jhse64EVfUoKxu5Z7OM2+MicpOkAYQ9COsMPlwmzk5ZTOK+ghZhEa3
-m8CWNMWej6EiyCl61idoIwkDyD4Y7+WlTWcfLbc5NWYdQk1qaVcOUek2fcCLYxDX
-bNCN2GLdK19z7qoaq9I9GLontKnfbWTNh8l9XxvHUgA+1cZ3n03tcnlSzsapZnEK
-fJYfrJn3miYNGO1U7pM1ESpkluCOYbe7KuvW9u1D7IodLANHBIJqotDdSGSh3SKh
-3yr10UMM0IuBy1PHXGevs/Di7rkHwBjabzzb+jzaC8dMiYwgSh0q2iM+TIIH4+Rw
-hfaiYW10E7+ogZ00GtNSLFl6d1CLKZ3mX1UBm5CYj9n2ZX+4LPWlSj+oM6aZAPI7
-fEbfaxQ4+FDu7ENLJiXcl36XJtROLkwae7liui1wbVbYA4navfP/Utoa5L9eDoPz
-Zk0bLFzNu5fvFptA52gy5Y+r35gdh/dNegIeV4E5xiGk5pVPZaX5Y6tq8J0/hWU1
-69UmsElMiv0Af8xad11SCzq/xX7RugVaShiuOsfSiiTPWBVKjmnO6MWFyfrunpwZ
-qyaukK8odh8NNLDNNe0INbr7Vl3DoUJ9BVDiXsVzlQ2TQE9McvvouLj5zV4oO0at
-JEbqrtgqZpWmKRevCuPM6iyg3rwaQKCdfTi97J9pwuVdzUDQqKY=
-=F73r
------END PGP SIGNATURE-----
+> 
+> Thanks,
+> Mathieu
+> 
+> 
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(pruss_cfg_get_gpmux);
+>> +
+>> +/**
+>> + * pruss_cfg_set_gpmux() - set the GPMUX value for a PRU device
+>> + * @pruss: pruss instance
+>> + * @pru_id: PRU identifier (0-1)
+>> + * @mux: new mux value for PRU
+>> + *
+>> + * Return: 0 on success, or an error code otherwise
+>> + */
+>> +int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux)
+>> +{
+>> +	if (mux >= PRUSS_GP_MUX_SEL_MAX ||
+>> +	    pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
+>> +		return -EINVAL;
+>> +
+>> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
+>> +				PRUSS_GPCFG_PRU_MUX_SEL_MASK,
+>> +				(u32)mux << PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
+>> +}
+>> +EXPORT_SYMBOL_GPL(pruss_cfg_set_gpmux);
+>> +
+>>  static void pruss_of_free_clk_provider(void *data)
+>>  {
+>>  	struct device_node *clk_mux_np = data;
+>> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+>> index bb001f712980..42f1586c62ac 100644
+>> --- a/include/linux/remoteproc/pruss.h
+>> +++ b/include/linux/remoteproc/pruss.h
+>> @@ -16,6 +16,24 @@
+>>  
+>>  #define PRU_RPROC_DRVNAME "pru-rproc"
+>>  
+>> +/*
+>> + * enum pruss_gp_mux_sel - PRUSS GPI/O Mux modes for the
+>> + * PRUSS_GPCFG0/1 registers
+>> + *
+>> + * NOTE: The below defines are the most common values, but there
+>> + * are some exceptions like on 66AK2G, where the RESERVED and MII2
+>> + * values are interchanged. Also, this bit-field does not exist on
+>> + * AM335x SoCs
+>> + */
+>> +enum pruss_gp_mux_sel {
+>> +	PRUSS_GP_MUX_SEL_GP = 0,
+>> +	PRUSS_GP_MUX_SEL_ENDAT,
+>> +	PRUSS_GP_MUX_SEL_RESERVED,
+>> +	PRUSS_GP_MUX_SEL_SD,
+>> +	PRUSS_GP_MUX_SEL_MII2,
+>> +	PRUSS_GP_MUX_SEL_MAX,
+>> +};
+>> +
+>>  /*
+>>   * enum pruss_gpi_mode - PRUSS GPI configuration modes, used
+>>   *			 to program the PRUSS_GPCFG0/1 registers
+>> @@ -110,6 +128,8 @@ int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
+>>  int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable);
+>>  int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
+>>  			 bool enable);
+>> +int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux);
+>> +int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux);
+>>  
+>>  #else
+>>  
+>> @@ -152,6 +172,16 @@ static inline int pruss_cfg_xfr_enable(struct pruss *pruss,
+>>  	return ERR_PTR(-EOPNOTSUPP);
+>>  }
+>>  
+>> +static inline int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux)
+>> +{
+>> +	return ERR_PTR(-EOPNOTSUPP);
+>> +}
+>> +
+>> +static inline int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux)
+>> +{
+>> +	return ERR_PTR(-EOPNOTSUPP);
+>> +}
+>> +
+>>  #endif /* CONFIG_TI_PRUSS */
+>>  
+>>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+>> -- 
+>> 2.25.1
+>>
 
---MJ5Vjm57uiN1d04K--
+-- 
+Thanks and Regards,
+Danish.
