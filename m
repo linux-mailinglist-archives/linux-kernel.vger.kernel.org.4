@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6047C6CC7F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B807D6CC7DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232702AbjC1QaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 12:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
+        id S233218AbjC1QZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 12:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbjC1Q3o (ORCPT
+        with ESMTP id S233209AbjC1QZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 12:29:44 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8E0CC13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 09:29:18 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id g9so9539771qvt.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 09:29:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680020957;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pF7n/Eqo2dEZoKzmZtiE3BnURDQ21G0m3HQyJWfxRsU=;
-        b=V3u7TE7LZ8maCIPEsKINGf1if8fTws2/Y7d4jTDkHOvKyU33hdvPtvY9jESgpaWGIF
-         0ARloOvRAPwWhd8EhX6QSOxiVDap2H/3cq4bpwwVHjeaUlOPWOm2inUl+oH8OSDMR5M/
-         SdaLqA2Ipuvpp+3u7qzn2zoHSP8m+cEOrdfCZaC613Te2whCi7g0YBWEToNwmPcwrkzj
-         gfmWX0Rrqrz9dTKco9YZrITp1Rp1BsGmqFkQeVnJTViM0vsaVUd3qrOhs9a2flrtTTXD
-         UWm9G8sP18joTGecb8HPnns6+9aqDoHHIU4w0fgb6jJkAvksMVRsNNCF9eTrObnecZRC
-         ofNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680020957;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pF7n/Eqo2dEZoKzmZtiE3BnURDQ21G0m3HQyJWfxRsU=;
-        b=BVoYGXOhvNumgXKH/tRxyu9H8qXCN3rB0Jz9pqbOq2QIeMWDxK3CeC3cEcrQbWc4ah
-         WenbgjZl17WDBTgxlx5sQcQ0IxJ3zv9D+5BR4UkBgfS3/ndXtF8FV/2XA9zb+aI7JvTt
-         xK7Tftjuv4lUEwFwXT+67WiZtXKWMc1OV8SJ5QOEgbVvgqiy4fBSoxJgMBR9T6TM6lF0
-         OurinLo4B8ycRr0xMCoJPaM0+xZs7pfKb7TP+P2hIZMUdBHt1se5g0zuia4N9UgN9R3K
-         uzrmiN1LeIeRS9LeLAOJJtg0z4ib88CpRDrxEOOiqTZhM08DPjVTWZPM2raWt2I9Felg
-         XJpw==
-X-Gm-Message-State: AAQBX9e1gGPoKXGVqy+50+ig3rk7XSkigRVjWLlRpKZnSt1KeJmwS7PD
-        /sD0jAwr+tUPXVChxbvwVBnCJg==
-X-Google-Smtp-Source: AKy350YGBbT1TG8n/LqQeEQtBdF+No9E41y7r0rqn3z0VXqcthosfKqjIExYf/RSRKbEbAC9B9vQhQ==
-X-Received: by 2002:a05:6214:ac4:b0:56e:a791:37c6 with SMTP id g4-20020a0562140ac400b0056ea79137c6mr31974268qvi.16.1680020957159;
-        Tue, 28 Mar 2023 09:29:17 -0700 (PDT)
-Received: from [172.17.0.3] ([130.44.215.103])
-        by smtp.gmail.com with ESMTPSA id mk5-20020a056214580500b005dd8b93459csm3899644qvb.52.2023.03.28.09.29.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 09:29:16 -0700 (PDT)
-From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
-Date:   Tue, 28 Mar 2023 16:29:09 +0000
-Subject: [PATCH net v2] virtio/vsock: fix leaks due to missing skb owner
+        Tue, 28 Mar 2023 12:25:26 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A7DEB53;
+        Tue, 28 Mar 2023 09:25:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680020718; x=1711556718;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SaaqVoGJRHXzDcbDSy0ZzDlNvUMy2t3he0H/VelSyig=;
+  b=m9L0G9MENhIhqWuh2df/RxByIdiHKS7pqU1e5/K2LuhjuUdmAArP1iHh
+   uBeCNynZwznsw5CIFGND5mXuSrnh7bBMCLFEWtdx4vTK74kXct5jyLjF3
+   FQN5VS4E6JN0a5XMqK+9uk/OtWW0vLjF0RedR0zR8Ky7DhaZw9gfC6QKM
+   I+ywoHs53vE2gOCHb0fCgo/SKfwOHRUNtmu6om5IiZ/MRXz5oGbZTwSZ3
+   keWXG+zE3qLFaCQdWRKr+8NuEtoU+MlZ/NAFrQQE8Xcx8g+otSKvPzCrs
+   HHNC50v6CbrYLBekfx3kbjo0VdNxHaeEbusHp2Mw8xhcFAIzIIIS0BLRD
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="321018544"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="321018544"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 09:25:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="773198759"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="773198759"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 09:25:16 -0700
+Date:   Tue, 28 Mar 2023 09:29:19 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v2 4/8] iommu/vt-d: Reserve RID_PASID from global SVA
+ PASID space
+Message-ID: <20230328092919.372f0545@jacob-builder>
+In-Reply-To: <41d31adf-577e-431c-c400-2708885400c1@linux.intel.com>
+References: <20230327232138.1490712-1-jacob.jun.pan@linux.intel.com>
+        <20230327232138.1490712-5-jacob.jun.pan@linux.intel.com>
+        <41d31adf-577e-431c-c400-2708885400c1@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-vsock-fix-leak-v2-1-f6619972dee0@bytedance.com>
-X-B4-Tracking: v=1; b=H4sIANQVI2QC/3WOTQ6CMBCFr2Jm7RjaBiGuvIdh0ZapNGhrOqRKC
- He3sHHl8v3lewswJU8Ml8MCibJnH0MR8ngAO+hwJ/R90SArqSolG8wc7YjOf/BBekQjLDlRt1L
- rFsrIaCY0SQc7bLNfm0eD8R0oba1XouLt2BsEmqAr5uB5imner2SxR/+oWaBA5agndW5EVburm
- SfqC5VONj6hW9f1C1Y7DNTbAAAA
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cong Wang <xiyou.wangcong@gmail.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,58 +76,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch sets the skb owner in the recv and send path for virtio.
+Hi Baolu,
 
-For the send path, this solves the leak caused when
-virtio_transport_purge_skbs() finds skb->sk is always NULL and therefore
-never matches it with the current socket. Setting the owner upon
-allocation fixes this.
+On Tue, 28 Mar 2023 13:20:19 +0800, Baolu Lu <baolu.lu@linux.intel.com>
+wrote:
 
-For the recv path, this ensures correctness of accounting and also
-correct transfer of ownership in vsock_loopback (when skbs are sent from
-one socket and received by another).
+> On 3/28/23 7:21 AM, Jacob Pan wrote:
+> > On VT-d platforms, RID_PASID is used for DMA request without PASID. We
+> > should not treat RID_PASID special instead let it be allocated from the
+> > global SVA PASID number space.  
+> 
+> It's same to AMD and ARM SMMUv3, right? They also need an explicit
+> reservation of PASID 0.
+> 
+yes, all IOMMU drivers need to do that. I will give it a try but might need
+help to place the call.
 
-Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
-Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-Reported-by: Cong Wang <xiyou.wangcong@gmail.com>
-Link: https://lore.kernel.org/all/ZCCbATwov4U+GBUv@pop-os.localdomain/
----
-Changes in v2:
-- virtio/vsock: add skb_set_owner_r to recv_pkt()
-- Link to v1: https://lore.kernel.org/r/20230327-vsock-fix-leak-v1-1-3fede367105f@bytedance.com
----
- net/vmw_vsock/virtio_transport_common.c | 5 +++++
- 1 file changed, 5 insertions(+)
+> > 
+> > Consequently, for devices also do DMA with PASID, drivers will not worry
+> > about conflicts when it comes to allocating PASIDs for in-kernel DMA.
+> > 
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > ---
+> >   drivers/iommu/intel/iommu.c | 4 ++++
+> >   1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> > index 9f737ef55463..61c06f7ad8f7 100644
+> > --- a/drivers/iommu/intel/iommu.c
+> > +++ b/drivers/iommu/intel/iommu.c
+> > @@ -3956,6 +3956,10 @@ int __init intel_iommu_init(void)
+> >   
+> >   	intel_iommu_enabled = 1;
+> >   
+> > +#ifdef CONFIG_INTEL_IOMMU_SVM  
+> 
+> Do we really need this #ifdef? IOMMU_SVA is selected by INTEL_IOMMU_SVM,
+> right? So if CONFIG_INTEL_IOMMU_SVM is not set,
+> iommu_sva_reserve_pasid() is just a dumb.
+> 
+good catch! will remove
 
-diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-index 957cdc01c8e8..900e5dca05f5 100644
---- a/net/vmw_vsock/virtio_transport_common.c
-+++ b/net/vmw_vsock/virtio_transport_common.c
-@@ -94,6 +94,9 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
- 					 info->op,
- 					 info->flags);
- 
-+	if (info->vsk)
-+		skb_set_owner_w(skb, sk_vsock(info->vsk));
-+
- 	return skb;
- 
- out:
-@@ -1294,6 +1297,8 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
- 		goto free_pkt;
- 	}
- 
-+	skb_set_owner_r(skb, sk);
-+
- 	vsk = vsock_sk(sk);
- 
- 	lock_sock(sk);
+> > +	/* Reserved RID_PASID from the global namespace for legacy DMA
+> > */
+> > +	iommu_sva_reserve_pasid(PASID_RID2PASID, PASID_RID2PASID);
+> > +#endif
+> >   	return 0;
+> >   
+> >   out_free_dmar:  
+> 
+> Best regards,
+> baolu
 
----
-base-commit: e5b42483ccce50d5b957f474fd332afd4ef0c27b
-change-id: 20230327-vsock-fix-leak-b1cef1582aa8
 
-Best regards,
--- 
-Bobby Eshleman <bobby.eshleman@bytedance.com>
+Thanks,
 
+Jacob
