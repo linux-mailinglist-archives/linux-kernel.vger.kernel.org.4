@@ -2,428 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE8B6CC833
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7C56CC83C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 18:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbjC1QjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 12:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
+        id S232851AbjC1Qk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 12:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbjC1QjH (ORCPT
+        with ESMTP id S229806AbjC1QkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 12:39:07 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472B3A5ED
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 09:39:03 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id l39-20020a9d1b2a000000b006a121324abdso5097402otl.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 09:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680021542;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2kBfDOkLpG6hikV608JINDtCSthbfnxHO543G7BGPuA=;
-        b=A/eD/go7ClEtmJWDskIdc1JS8/KEST8EyDb/UxTH6FDcb31TgHBm1lJ4OjzByFFHPZ
-         IklAPlT1eTBjypz3WaJ7Q8/tzc/F3oQU3x9wBWEVsrOb1B2XHi7Gw5qpgxJ5+fdrP2XH
-         EK/m6Bdien2A20Z4Xnrw8woEuD/+UIuf+K+VCyx6MEfl9kTEL1wGawHihSGD16HMKmh9
-         7+xJ/7QDLl1yd+/gW3++Zm6x0qzxCzS0w8ADXydamkElroQLIGv767psVtFsO5XebcIo
-         ZOweBvREUK02KCf3K4pVNLUpVSzyMP+HeyzHsFhiKFEUsaIt80+8mUh8fCYuu687itRe
-         F8vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680021542;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2kBfDOkLpG6hikV608JINDtCSthbfnxHO543G7BGPuA=;
-        b=12eE5q07G7kF1/4EDM8LYi5EibcV6a/2nO2mbjkuLZOuD5mGNvUzZLZ9MtaF9MkNdo
-         2fDXBqRFyxiyduC4ea7VGZiEW8030SLu7K7VwxkezOQ5WdhSdgsFx0YSOHO/j/OVceV6
-         YgF1CB0QnT1VS/UcYTLS3EOdzyHtn9Wh5zTWR1RSgMrwoqWmRdCXpzXu1X1wbVloWeRC
-         i15PVGHb/Tdj8GRIw3aLUI8Hvq/g26m+FFq4hptq4PKAwV/i+uwwTFstxeBnRxIwa12P
-         Uv1QjLQgFSWMq4SIWbUAt/Xgic7HxpDeF8xF1UaySyitisv0q6Q/ndXz0KiJlM8e5mfk
-         7uLQ==
-X-Gm-Message-State: AO0yUKVr/jlkuFNKUqWF/fwPnVwwkEQgvQyls2XTrkfn3GHCfi6IstQC
-        4qd9HSZiI9ZaubV1OrQjDj5/O1JutIHImgXJHaJhvQ==
-X-Google-Smtp-Source: AK7set97hUk9wU6iaSXYhcAwA60MYzw6g1HSCdQc375zwrAyFJv8DGlFFQ52G0vzxqgMFLqP/x9m1PMus1GaxPyuB7A=
-X-Received: by 2002:a05:6830:1c4:b0:69d:66f0:a34e with SMTP id
- r4-20020a05683001c400b0069d66f0a34emr5066206ota.2.1680021542077; Tue, 28 Mar
- 2023 09:39:02 -0700 (PDT)
+        Tue, 28 Mar 2023 12:40:25 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2059.outbound.protection.outlook.com [40.107.94.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3AD976A;
+        Tue, 28 Mar 2023 09:40:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ijjq0m5JNHDKFNUGYmmeNJUPAVrYybndnqXLz+9Z2BDyQHkjml6plh8g0dOVLGNxqx88h0B2CmyXOMiy9pBQ8g934zBOL+9ZpcKCvjGeFxJaWnlHdB7xleUSc/LGducgluQ4CjP1pRBrchNGrZ7bueqZn1HDldgx4ltWbi6+ngaqxPPQg3X7Y1aUsOsFVuAnsnPB1MfTf6pdTfsLRkox5GJqbWLEEEuCFac4guRYuObdGuU9PJo3aYCIRnWXEtsNb3v8b/vV73PM5XAJjurmaS3LMeDDpO+e9Sq26sq2MyfVtZ7jlGlD7SF8vfCtaBBUO58Hvdi0q8sE5BooEMzXig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KDev4h0NnBgmjI2bEQrPsQycTtB9XDfUzzJHeIjxhN0=;
+ b=VsDtUusT0JMNKzXDDGF5oeibLRN+GzroLgilAKzT+yAp336Tt6lgYeYt91yd0bH2VkytuH9EeGYtZhdKzDpTX2sm4MfiLTEoJMMs4UyIFuHQBB9G2zBwYPM/RfPuUDijWy7eKCjYtnR4oTLynpo6JBYNletUH+S1VIOOHCAVVfrKuYhq1E7QaErZgT6bDe9Wsl0cXYOsLxnGF6UgAl5Fo5+B/tA1Rr2NQ9uWhP0kAXSKo6ivpEbF0u+BXD77mDVHyS/VWXO8pJhQkSof0UOz2+wCaYLynVRvZNpHMoI+h0U+/Trv+XLoL7p23jrDosSzaaUWQpi2mYTYMxJQPEL0Fg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KDev4h0NnBgmjI2bEQrPsQycTtB9XDfUzzJHeIjxhN0=;
+ b=PvUAWzflhGE/Ww2Z4xoPfINUG51Z518rHsfJfj2O6mLRmrjddumPQnHh2yg6Zoj1reTGQx3TVvVNclWMwsCn45CJ+S7FS92LxP1VLgw/B5O2S5pxlHQzPvUwMQlobVqqqrKZ4BNraO6xS3YqbMR8kYJcsj2Q8JZP+c8nwTH5lahOReW9dDqzhjLL4MNzxOtJCQP1L7Ho/u5fkmNzAsM1uvGkclKquAWW5iQk3qNyswA52ZiHMfPB60CU1cE4nZSoQOhTZLibm4Dgi3jCqVKoEtLNtUi4olmHTcz4wnaj2kwCJzNlK2VOLgkENZf7JHEo8KQh6Q+E4qRxBNewztYTnA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by SJ2PR12MB8831.namprd12.prod.outlook.com (2603:10b6:a03:4d0::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Tue, 28 Mar
+ 2023 16:40:20 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::d228:dfe5:a8a8:28b3]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::d228:dfe5:a8a8:28b3%5]) with mapi id 15.20.6178.038; Tue, 28 Mar 2023
+ 16:40:20 +0000
+Date:   Tue, 28 Mar 2023 19:40:13 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Hans Schultz <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
+ test
+Message-ID: <ZCMYbRqd+qZaiHfu@shredder>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-7-netdev@kapio-technology.com>
+ <ZBgdAo8mxwnl+pEE@shredder>
+ <87a5zzh65p.fsf@kapio-technology.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a5zzh65p.fsf@kapio-technology.com>
+X-ClientProxiedBy: VI1PR04CA0079.eurprd04.prod.outlook.com
+ (2603:10a6:803:64::14) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 MIME-Version: 1.0
-References: <20230321112742.25255-1-likexu@tencent.com> <CALMp9eT0SrXCLriBN+nBv5fFQQ3n+b4Guq=-yLsFFQjeQ-nczA@mail.gmail.com>
- <e002f554-b69d-cedf-162c-271bc3609a39@gmail.com> <CALMp9eQVnk8gkOpX5AHhaCr8-5Fe=qNuX8PUP1Gv2H5FSYmHSw@mail.gmail.com>
- <cff6147a-9e57-0f8f-9dce-372f3992f17d@gmail.com>
-In-Reply-To: <cff6147a-9e57-0f8f-9dce-372f3992f17d@gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 28 Mar 2023 09:38:50 -0700
-Message-ID: <CALMp9eT9bMGCNan2sQQyJpJvaTqn8hQjuzCASkHWufVtyksD5A@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/pmu: Add Intel PMU supported fixed counters bit mask
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|SJ2PR12MB8831:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4f8aff5b-17e8-45b9-20f5-08db2fab1e64
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ih+joBs4TqRI9LZRyeiHVGEbFP6wzpzxG0RofM9357kUYtmpGxI8tp4JykpITIDD4DX7z0A8Auyp81+k0ziDU5p/ghwxeNtP0BVtFFaqmIuiIwd0xnTLprmpy1MjsdwNyU2HX2UopVKVBn/9xNvrNwiOFCJ8Nct2PBCil0206RwDuh1Y5+z2vVpagIdNHmrxjXo1rNLewQu3+x7eEHy4tfBlUbmHzYvWtDN7RfZIS1MT8EBKUfZyuwmurQkMwR8MAnr7zDotT0Uj/FSOeo0914pJ4ICjl3EbkA4mWJ1uK7TVTR+Ww0IyYd6UzKQPSQ824NuDrBpDFRqbPm+q7M2zY19mTaA9GxoPdbFUcEB9hqkODqN3zVhEG7l1GGDsHDZHsS5XB29pr5QBmSZUeibNsW8Ftc9OeBNHJy3y8SsSnANj1tXF+PrfaD0EXCnnYFiV7FXurvGSJOdMViuQyEnnfXMfYVPb1Im9mk4IhoubI74AFS82xISiP6jM1FBjYTAXAJJYjhMesqfed+U8X2tLxbq3+TApBuNzkPLGSX698nRZxtSHcsLlLBIbU8Mx37Z+oH2h7O4WzHRWqUp1F73ZcwPQ4u2diHO3zbmzw8NzboQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199021)(86362001)(316002)(54906003)(4326008)(66946007)(66556008)(6916009)(66476007)(8676002)(6666004)(478600001)(6486002)(41300700001)(33716001)(8936002)(5660300002)(7416002)(7406005)(2906002)(38100700002)(53546011)(6512007)(26005)(9686003)(6506007)(186003)(83380400001)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lzVoeIUBOrhQrG89RV224Ad5e3602UjhD7evqqKJ9WjHge+p1QBxnQ9yfIBm?=
+ =?us-ascii?Q?XHyCsiw5mXnUTuCYVbHhlVY0lc0AMw5kJliQUT2LHwn1VGcPvb7vt0LMFukR?=
+ =?us-ascii?Q?7g1nlV+MqpbuJ5jCVf0oyfXxG/3IH3DONjCrpQJ3XdBNYv5oYzBJCbIegmYh?=
+ =?us-ascii?Q?IRDTL25S10NYoOTE7WXG71L6e6j9JQdrReWw51UHatuAnszIhkALFRnbAOG/?=
+ =?us-ascii?Q?+DN1Dz3VOgYWSm/6i1sbVJmg7ZHPs7LKnyxbSRvAgMjCXbDOAE0mWDoXaisg?=
+ =?us-ascii?Q?yvGpbBPvbGbrcEt32uG9MJO1KwyNj4aIexLvxp3LtPq24l/95oA5UYnumpY7?=
+ =?us-ascii?Q?sck5JeHJfaVypZRCOuU2w6uwyyA32I6tYGyQgp8K1ZnNKhlTH/sHzI6C60Zy?=
+ =?us-ascii?Q?iBbxtke0FWwZUTlZXQ43rBDJdDU5dvDO16R7z9SYn2/zxgKjS8UUuHfs+buz?=
+ =?us-ascii?Q?6BvNEL4gVwauhKFmwgYnnNy1mKowytZiFmjZUNQy9XAVPhlx0sWhd1heDXhf?=
+ =?us-ascii?Q?Te+SZwOzcreyWWYuFU7uFhIE3ybdHcnVyIpQrQgVJnzm6vzB++x0Gk6WS0ho?=
+ =?us-ascii?Q?EKlHX4OCg9yV9odn9J4BXjYEyMHP6oeJFPiQ7mM3MX4tvWuEtRDoxlmBqznT?=
+ =?us-ascii?Q?9lG8CwHRgR7OIsegHSTz96YvHpbK7UvAMaR0NQ76iC8v6oXd2QW74/yPhbet?=
+ =?us-ascii?Q?HNLCIzFSW5meOAlfmrfchqMqjkuVE4B6lFs6xrA1A+EyhtFqpgyK1LlZe8K+?=
+ =?us-ascii?Q?EwWLjmEIsE3DYTlHVZVcJKtKAWGcXrUZe+N5ibea9XEA4iGf5AnsV4okZBAQ?=
+ =?us-ascii?Q?8+tfUL3XO5ehkMVHPaV9l6oZA5IbBfogXovSHVy0uV/Cl7if8zMVNlfepS+q?=
+ =?us-ascii?Q?25sD5svyd0ZAwLBjYSKEmg6DRv9ZuSQUOLbnEkWTv/01N0Hlv3cSfYq5J5fC?=
+ =?us-ascii?Q?H4T0DmTFq6RBIoOxFmrQUlUsJ6qsEGB3n6q8X5JGdijqTOFPqXWy1OL+7mCa?=
+ =?us-ascii?Q?CnXvNhbua0VX6EJVal5NegVqhXCgVIEBV4reyN8zxJomNqwB9cYuAqLoCPqQ?=
+ =?us-ascii?Q?lPwxQk9KdIQ287Du520BbZKMdW4IMbk0Vz3SJZV+PSVUL8rIA9Y2m1amTIJ5?=
+ =?us-ascii?Q?1jqqm2KtLaIGBg8fdiCANX0AH42CrZh4xGy3MbhC4ElOEjs/xr1KcMFvL2O0?=
+ =?us-ascii?Q?42aAkIJEpYAtAG8DWacm+RHhGmSbNJoMDjkrvWrKbZftsqEfZbmLfO/YglKu?=
+ =?us-ascii?Q?+q6T5y0K4KDjGpJPbkzVc8NVChG7kefAUozQpEJWc9z8N7yFdnx3bdvC7fIJ?=
+ =?us-ascii?Q?+gHlHlJzgeDv8qL2vt9C1TgUuN/TjSNUCGyUrkVG5k7Djacgg0ooDbdrY9Zv?=
+ =?us-ascii?Q?xowZr+4wU7KBdJV+QyGbKksF15pXuZDPtgDvBoFCc3gE92ak4z98DPcY6K2M?=
+ =?us-ascii?Q?iCZc1q3UqCFFB6C/cVO+rlxBe5zlrarEkM8/Lw4ddvoEyzoPlb94k+2oHZ7U?=
+ =?us-ascii?Q?1OzeMhQkNlzc3mV1JAaUtSEDO2vVVoX47j6oH7b/JQCFGEd/UCxRnibh8qqz?=
+ =?us-ascii?Q?NwSbTKJ4SbEzZGJgwd6uih/BLcI85naFDJNzM83a?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f8aff5b-17e8-45b9-20f5-08db2fab1e64
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2023 16:40:20.3379
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jvItlc5wiUQprbBkmyPtHPO5okEzmoN6qPCC1eWrqaZzl6rjRHmWpLJY3HYRzgy/lFFENMfVmuyP1sOMRvpi9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8831
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 3:27=E2=80=AFAM Like Xu <like.xu.linux@gmail.com> w=
-rote:
->
-> On 27/3/2023 10:58 pm, Jim Mattson wrote:
-> > On Mon, Mar 27, 2023 at 12:47=E2=80=AFAM Like Xu <like.xu.linux@gmail.c=
-om> wrote:
-> >>
-> >> On 25/3/2023 7:19 am, Jim Mattson wrote:
-> >>> On Tue, Mar 21, 2023 at 4:28=E2=80=AFAM Like Xu <like.xu.linux@gmail.=
-com> wrote:
-> >>>>
-> >>>> From: Like Xu <likexu@tencent.com>
-> >>>>
-> >>>> Per Intel SDM, fixed-function performance counter 'i' is supported i=
-f:
-> >>>>
-> >>>>           FxCtr[i]_is_supported :=3D ECX[i] || (EDX[4:0] > i);
-> >>>>
-> >>>> which means that the KVM user space can use EDX to limit the number =
-of
-> >>>> fixed counters and at the same time, using ECX to enable part of oth=
-er
-> >>>> KVM supported fixed counters.
-> >>>>
-> >>>> Add a bitmap (instead of always checking the vcpu's CPUIDs) to keep =
-track
-> >>>> of the guest available fixed counters and perform the semantic check=
-s.
-> >>>>
-> >>>> Signed-off-by: Like Xu <likexu@tencent.com>
-> >>>> ---
-> >>>>    arch/x86/include/asm/kvm_host.h |  2 ++
-> >>>>    arch/x86/kvm/pmu.h              |  8 +++++
-> >>>>    arch/x86/kvm/vmx/pmu_intel.c    | 53 +++++++++++++++++++++-------=
------
-> >>>>    3 files changed, 44 insertions(+), 19 deletions(-)
-> >>>>
-> >>>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/=
-kvm_host.h
-> >>>> index a45de1118a42..14689e583127 100644
-> >>>> --- a/arch/x86/include/asm/kvm_host.h
-> >>>> +++ b/arch/x86/include/asm/kvm_host.h
-> >>>> @@ -565,6 +565,8 @@ struct kvm_pmu {
-> >>>>            */
-> >>>>           bool need_cleanup;
-> >>>>
-> >>>> +       DECLARE_BITMAP(supported_fixed_pmc_idx, KVM_PMC_MAX_FIXED);
-> >>>> +
-> >>>>           /*
-> >>>>            * The total number of programmed perf_events and it helps=
- to avoid
-> >>>>            * redundant check before cleanup if guest don't use vPMU =
-at all.
-> >>>> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-> >>>> index be62c16f2265..9f4504e5e9d5 100644
-> >>>> --- a/arch/x86/kvm/pmu.h
-> >>>> +++ b/arch/x86/kvm/pmu.h
-> >>>> @@ -111,6 +111,11 @@ static inline struct kvm_pmc *get_gp_pmc(struct=
- kvm_pmu *pmu, u32 msr,
-> >>>>           return NULL;
-> >>>>    }
-> >>>>
-> >>>> +static inline bool fixed_ctr_is_supported(struct kvm_pmu *pmu, unsi=
-gned int idx)
-> >>>> +{
-> >>>> +       return test_bit(idx, pmu->supported_fixed_pmc_idx);
-> >>>> +}
-> >>>> +
-> >>>>    /* returns fixed PMC with the specified MSR */
-> >>>>    static inline struct kvm_pmc *get_fixed_pmc(struct kvm_pmu *pmu, =
-u32 msr)
-> >>>>    {
-> >>>> @@ -120,6 +125,9 @@ static inline struct kvm_pmc *get_fixed_pmc(stru=
-ct kvm_pmu *pmu, u32 msr)
-> >>>>                   u32 index =3D array_index_nospec(msr - base,
-> >>>>                                                  pmu->nr_arch_fixed_=
-counters);
-> >>>>
-> >>>> +               if (!fixed_ctr_is_supported(pmu, index))
-> >>>> +                       return NULL;
-> >>>> +
-> >>>>                   return &pmu->fixed_counters[index];
-> >>>>           }
-> >>>>
-> >>>> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_int=
-el.c
-> >>>> index e8a3be0b9df9..12f4b2fe7756 100644
-> >>>> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> >>>> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> >>>> @@ -43,13 +43,16 @@ static int fixed_pmc_events[] =3D {1, 0, 7};
-> >>>>    static void reprogram_fixed_counters(struct kvm_pmu *pmu, u64 dat=
-a)
-> >>>>    {
-> >>>>           struct kvm_pmc *pmc;
-> >>>> -       u8 old_fixed_ctr_ctrl =3D pmu->fixed_ctr_ctrl;
-> >>>> +       u8 new_ctrl, old_ctrl, old_fixed_ctr_ctrl =3D pmu->fixed_ctr=
-_ctrl;
-> >>>>           int i;
-> >>>>
-> >>>>           pmu->fixed_ctr_ctrl =3D data;
-> >>>>           for (i =3D 0; i < pmu->nr_arch_fixed_counters; i++) {
-> >>>> -               u8 new_ctrl =3D fixed_ctrl_field(data, i);
-> >>>> -               u8 old_ctrl =3D fixed_ctrl_field(old_fixed_ctr_ctrl,=
- i);
-> >>>> +               if (!fixed_ctr_is_supported(pmu, i))
-> >>>> +                       continue;
-> >>>> +
-> >>>> +               new_ctrl =3D fixed_ctrl_field(data, i);
-> >>>> +               old_ctrl =3D fixed_ctrl_field(old_fixed_ctr_ctrl, i)=
-;
-> >>>>
-> >>>>                   if (old_ctrl =3D=3D new_ctrl)
-> >>>>                           continue;
-> >>>> @@ -125,6 +128,9 @@ static bool intel_is_valid_rdpmc_ecx(struct kvm_=
-vcpu *vcpu, unsigned int idx)
-> >>>>
-> >>>>           idx &=3D ~(3u << 30);
-> >>>>
-> >>>> +       if (fixed && !fixed_ctr_is_supported(pmu, idx))
-> >>>> +               return false;
-> >>>> +
-> >>>>           return fixed ? idx < pmu->nr_arch_fixed_counters
-> >>>>                        : idx < pmu->nr_arch_gp_counters;
-> >>>>    }
-> >>>> @@ -145,7 +151,7 @@ static struct kvm_pmc *intel_rdpmc_ecx_to_pmc(st=
-ruct kvm_vcpu *vcpu,
-> >>>>                   counters =3D pmu->gp_counters;
-> >>>>                   num_counters =3D pmu->nr_arch_gp_counters;
-> >>>>           }
-> >>>> -       if (idx >=3D num_counters)
-> >>>> +       if (idx >=3D num_counters || (fixed && !fixed_ctr_is_support=
-ed(pmu, idx)))
-> >>>>                   return NULL;
-> >>>>           *mask &=3D pmu->counter_bitmask[fixed ? KVM_PMC_FIXED : KV=
-M_PMC_GP];
-> >>>>           return &counters[array_index_nospec(idx, num_counters)];
-> >>>> @@ -500,6 +506,9 @@ static void setup_fixed_pmc_eventsel(struct kvm_=
-pmu *pmu)
-> >>>>           int i;
-> >>>>
-> >>>>           for (i =3D 0; i < pmu->nr_arch_fixed_counters; i++) {
-> >>>> +               if (!fixed_ctr_is_supported(pmu, i))
-> >>>> +                       continue;
-> >>>> +
-> >>>>                   pmc =3D &pmu->fixed_counters[i];
-> >>>>                   event =3D fixed_pmc_events[array_index_nospec(i, s=
-ize)];
-> >>>>                   pmc->eventsel =3D (intel_arch_events[event].unit_m=
-ask << 8) |
-> >>>> @@ -520,6 +529,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *v=
-cpu)
-> >>>>
-> >>>>           pmu->nr_arch_gp_counters =3D 0;
-> >>>>           pmu->nr_arch_fixed_counters =3D 0;
-> >>>> +       bitmap_zero(pmu->supported_fixed_pmc_idx, KVM_PMC_MAX_FIXED)=
-;
-> >>>>           pmu->counter_bitmask[KVM_PMC_GP] =3D 0;
-> >>>>           pmu->counter_bitmask[KVM_PMC_FIXED] =3D 0;
-> >>>>           pmu->version =3D 0;
-> >>>> @@ -551,13 +561,24 @@ static void intel_pmu_refresh(struct kvm_vcpu =
-*vcpu)
-> >>>>           pmu->available_event_types =3D ~entry->ebx &
-> >>>>                                           ((1ull << eax.split.mask_l=
-ength) - 1);
-> >>>>
-> >>>> -       if (pmu->version =3D=3D 1) {
-> >>>> -               pmu->nr_arch_fixed_counters =3D 0;
-> >>>> -       } else {
-> >>>> +       counter_mask =3D ~(BIT_ULL(pmu->nr_arch_gp_counters) - 1);
-> >>>> +       bitmap_set(pmu->all_valid_pmc_idx, 0, pmu->nr_arch_gp_counte=
-rs);
-> >>>> +
-> >>>> +       if (pmu->version > 1) {
-> >>>>                   pmu->nr_arch_fixed_counters =3D
-> >>>> -                       min3(ARRAY_SIZE(fixed_pmc_events),
-> >>>> -                            (size_t) edx.split.num_counters_fixed,
-> >>>> -                            (size_t)kvm_pmu_cap.num_counters_fixed)=
-;
-> >>>> +                       min_t(int, ARRAY_SIZE(fixed_pmc_events),
-> >>>> +                             kvm_pmu_cap.num_counters_fixed);
-> >>>> +               for (i =3D 0; i < pmu->nr_arch_fixed_counters; i++) =
-{
-> >>>> +                       /* FxCtr[i]_is_supported :=3D CPUID.0xA.ECX[=
-i] || (EDX[4:0] > i) */
-> >>>
-> >>> This is true only when pmu->version >=3D 5.
-> >>
-> >> This is true in for "Version 5" section, but not mentioned in the CPUI=
-D.0xA section.
-> >> I would argue that this is a deliberate omission for the instruction i=
-mplementation,
-> >> as it does use the word "version>1" in the near CPUID.0xA.EDX section.
+On Sun, Mar 26, 2023 at 05:41:06PM +0200, Hans Schultz wrote:
+> On Mon, Mar 20, 2023 at 10:44, Ido Schimmel <idosch@nvidia.com> wrote:
+> >> +	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
+> >> +		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
+> >> +	tc_check_packets "dev $swp2 egress" 1 1
+> >> +	check_fail $? "Dynamic FDB entry did not age out"
 > >
-> > Do you have any evidence to support such an argument? The CPUID field
-> > in question was not defined prior to PMU version 5. (Does anyone from
-> > Intel want to chime in?)
-> >
-> >> For virtualised use, this feature offers a kind of flexibility as user=
-s can
-> >> enable part of
-> >> the fixed counters, don't you think? Or maybe you're more looking forw=
-ard to the
-> >> patch set that raises the vPMU version number from 2 to 5, that part o=
-f the code
-> >> was already in my tree some years ago.
-> >
-> > I would not be surprised if a guest OS checked for PMU version 5
-> > before consulting the CPUID fields defined in PMU version 5. Does
-> > Linux even consult the fixed counter bitmask field today?
->
-> Yes, this is how host perf developer do it:
->
->         if (version >=3D 5)
->                 x86_pmu.num_counters_fixed =3D fls(fixed_mask);
->
-> based on real fresh hardware (always marked as the latest version).
->
-> However, our KVM players can construct different valid CPUIDs, as long as=
- the
-> hardware is capable,
-> to emulate some vPMU devices that match the CPUID semantics but do not ex=
-ist in
-> the real world.
->
-> In the virtualisation world, use cases like "version 2 + fixed ctrs bit m=
-ask"
-> are perfectly possible
-> and should work as expected. One more case, if the forth fixed counter or=
- more
-> is enabled in your guest for top-down feature and you may still find the =
-guest's
-> pmu version number is stuck at 2.
-> This naturally does not occur in real hardware but no CPUID semantics her=
-e are
-> broken.
+> > Shouldn't this be check_err()? After the FDB entry was aged you want to
+> > make sure that packets received via $swp1 with SMAC being $mac are no
+> > longer forwarded by the bridge.
+> 
+> I was thinking that check_fail() will pass when tc_check_packets() does
+> not see any packets, thus the test passing here when no packets are forwarded?
 
-This is completely irrelevant to the current discussion. Nowhere is it
-documented that the number of fixed counters has a specific value for
-any given PMU version. However, it *is* documented that the fixed
-counter availability bitmask is introduced in PMU version 5. Surely,
-you understand the difference.
+What do you mean by "I was *thinking*"? How is it possible that you are
+submitting a selftest that you didn't bother running?!
 
-> As I'm sure you've noticed, the logical relationship between CPUID.0xA.EC=
-X and
-> PMU version 5
-> is necessary but not sufficient. Version 5 mush has fixed counters bit ma=
-sk but
-> the reverse is not true.
+I see you trimmed my earlier question: "Does this actually work?"
 
-The reverse most certainly is true. You are, as is your wont, making
-stuff up again.
+I tried it and it passed:
 
->  From the end user's point of view, destroying the flexibility of vHW
-> combinations is a design failure.
->
-> So I think we can implement this feature in guest version 2, what do you =
-think ?
+# ./bridge_locked_port.sh                         
+TEST: Locked port ipv4                                              [ OK ]
+TEST: Locked port ipv6                                              [ OK ]
+TEST: Locked port vlan                                              [ OK ]            
+TEST: Locked port MAB                                               [ OK ]            
+TEST: Locked port MAB roam                                          [ OK ]
+TEST: Locked port MAB configuration                                 [ OK ]
+TEST: Locked port MAB FDB flush                                     [ OK ]
 
-How does the userspace VMM query the capability? Certainly, if
-KVM_GET_SUPPORTED_CPUID returns a PMU version >=3D 5, then this bitmap
-is supported. But for PMU version 2, up until now, the bitmap has not
-been supported.
+And I couldn't understand how that's even possible. Then I realized that
+the entire test is dead code because the patch is missing this
+fundamental hunk:
 
-And do you expect the guest OS to check for the HYPERVISOR bit and the
-KVMKVMKVM signature to determine whether or not this bitmap is
-meaningful for PMU versions < 5?
+```
+diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+index dbc7017fd45d..5bf6b2aa1098 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+@@ -9,6 +9,7 @@ ALL_TESTS="
+        locked_port_mab_roam
+        locked_port_mab_config
+        locked_port_mab_flush
++       locked_port_dyn_fdb
+ "
+ 
+ NUM_NETIFS=4
+```
 
-> >
-> > I'd love to see KVM virtualize PMU version 5!
->
-> Great, I've got you and my plan will cover it.
->
-> >
-> >>>
-> >>>   From the SDM, volume 3, section 20.2.5 Architectural Performance
-> >>> Monitoring Version 5:
-> >>>
-> >>> With Architectural Performance Monitoring Version 5, register
-> >>> CPUID.0AH.ECX indicates Fixed Counter enumeration. It is a bit mask
-> >>> which enumerates the supported Fixed Counters in a processor. If bit
-> >>> 'i' is set, it implies that Fixed Counter 'i' is supported. Software
-> >>> is recommended to use the following logic to check if a Fixed Counter
-> >>> is supported on a given processor: FxCtr[i]_is_supported :=3D ECX[i] =
-||
-> >>> (EDX[4:0] > i);
-> >>>
-> >>> Prior to PMU version 5, all fixed counters from 0 through <number of
-> >>> fixed counters - 1> are supported.
-> >>>
-> >>>> +                       if (!(entry->ecx & BIT_ULL(i) ||
-> >>>> +                             edx.split.num_counters_fixed > i))
-> >>>> +                               continue;
-> >>>> +
-> >>>> +                       set_bit(i, pmu->supported_fixed_pmc_idx);
-> >>>> +                       set_bit(INTEL_PMC_MAX_GENERIC + i, pmu->all_=
-valid_pmc_idx);
-> >>>> +                       pmu->fixed_ctr_ctrl_mask &=3D ~(0xbull << (i=
- * 4));
-> >>>> +                       counter_mask &=3D ~BIT_ULL(INTEL_PMC_MAX_GEN=
-ERIC + i);
-> >>>> +               }
-> >>>>                   edx.split.bit_width_fixed =3D min_t(int, edx.split=
-.bit_width_fixed,
-> >>>>                                                     kvm_pmu_cap.bit_=
-width_fixed);
-> >>>>                   pmu->counter_bitmask[KVM_PMC_FIXED] =3D
-> >>>> @@ -565,10 +586,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *=
-vcpu)
-> >>>>                   setup_fixed_pmc_eventsel(pmu);
-> >>>>           }
-> >>>>
-> >>>> -       for (i =3D 0; i < pmu->nr_arch_fixed_counters; i++)
-> >>>> -               pmu->fixed_ctr_ctrl_mask &=3D ~(0xbull << (i * 4));
-> >>>> -       counter_mask =3D ~(((1ull << pmu->nr_arch_gp_counters) - 1) =
-|
-> >>>> -               (((1ull << pmu->nr_arch_fixed_counters) - 1) << INTE=
-L_PMC_IDX_FIXED));
-> >>>>           pmu->global_ctrl_mask =3D counter_mask;
-> >>>>           pmu->global_ovf_ctrl_mask =3D pmu->global_ctrl_mask
-> >>>>                           & ~(MSR_CORE_PERF_GLOBAL_OVF_CTRL_OVF_BUF =
-|
-> >>>> @@ -585,11 +602,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *=
-vcpu)
-> >>>>                   pmu->raw_event_mask |=3D (HSW_IN_TX|HSW_IN_TX_CHEC=
-KPOINTED);
-> >>>>           }
-> >>>>
-> >>>> -       bitmap_set(pmu->all_valid_pmc_idx,
-> >>>> -               0, pmu->nr_arch_gp_counters);
-> >>>> -       bitmap_set(pmu->all_valid_pmc_idx,
-> >>>> -               INTEL_PMC_MAX_GENERIC, pmu->nr_arch_fixed_counters);
-> >>>> -
-> >>>>           perf_capabilities =3D vcpu_get_perf_capabilities(vcpu);
-> >>>>           if (cpuid_model_is_consistent(vcpu) &&
-> >>>>               (perf_capabilities & PMU_CAP_LBR_FMT))
-> >>>> @@ -605,6 +617,9 @@ static void intel_pmu_refresh(struct kvm_vcpu *v=
-cpu)
-> >>>>                           pmu->pebs_enable_mask =3D counter_mask;
-> >>>>                           pmu->reserved_bits &=3D ~ICL_EVENTSEL_ADAP=
-TIVE;
-> >>>>                           for (i =3D 0; i < pmu->nr_arch_fixed_count=
-ers; i++) {
-> >>>> +                               if (!fixed_ctr_is_supported(pmu, i))
-> >>>> +                                       continue;
-> >>>> +
-> >>>>                                   pmu->fixed_ctr_ctrl_mask &=3D
-> >>>>                                           ~(1ULL << (INTEL_PMC_IDX_F=
-IXED + i * 4));
-> >>>>                           }
-> >>>>
-> >>>> base-commit: d8708b80fa0e6e21bc0c9e7276ad0bccef73b6e7
-> >>>> --
-> >>>> 2.40.0
-> >>>>
+Which tells me that you didn't even try running it once. Now the test
+failed as I expected:
+
+# ./bridge_locked_port.sh                         
+TEST: Locked port ipv4                                              [ OK ]
+TEST: Locked port ipv6                                              [ OK ]
+TEST: Locked port vlan                                              [ OK ]
+TEST: Locked port MAB                                               [ OK ]
+TEST: Locked port MAB roam                                          [ OK ]
+TEST: Locked port MAB configuration                                 [ OK ]            
+TEST: Locked port MAB FDB flush                                     [ OK ]
+TEST: Locked port dyn FDB                                           [FAIL]            
+        Packet not seen on egress after adding dynamic FDB
+
+Fixed by:
+
+```
+@@ -336,7 +337,7 @@ locked_port_dyn_fdb()
+        tc filter add dev $swp2 egress protocol ip pref 1 handle 1 flower \
+                dst_ip 192.0.2.2 ip_proto udp dst_port 12345 action pass
+ 
+-       $MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
++       $MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
+                -a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
+        tc_check_packets "dev $swp2 egress" 1 1
+        check_err $? "Packet not seen on egress after adding dynamic FDB"
+```
+
+Ran it again and it failed because of the second issue I pointed out:
+
+# ./bridge_locked_port.sh 
+TEST: Locked port ipv4                                              [ OK ]
+TEST: Locked port ipv6                                              [ OK ]
+TEST: Locked port vlan                                              [ OK ]
+TEST: Locked port MAB                                               [ OK ]
+TEST: Locked port MAB roam                                          [ OK ]
+TEST: Locked port MAB configuration                                 [ OK ]
+TEST: Locked port MAB FDB flush                                     [ OK ]
+TEST: Locked port dyn FDB                                           [FAIL]
+        Dynamic FDB entry did not age out                                             
+
+Fixed by:
+
+```
+@@ -346,7 +347,7 @@ locked_port_dyn_fdb()
+        $MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
+                -a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
+        tc_check_packets "dev $swp2 egress" 1 1
+-       check_fail $? "Dynamic FDB entry did not age out"
++       check_err $? "Dynamic FDB entry did not age out"
+ 
+        ip link set dev br0 type bridge ageing_time $ageing_time
+        bridge link set dev $swp1 learning off locked off
+```
+
+# ./bridge_locked_port.sh 
+TEST: Locked port ipv4                                              [ OK ]
+TEST: Locked port ipv6                                              [ OK ]
+TEST: Locked port vlan                                              [ OK ]
+TEST: Locked port MAB                                               [ OK ]
+TEST: Locked port MAB roam                                          [ OK ]
+TEST: Locked port MAB configuration                                 [ OK ]
+TEST: Locked port MAB FDB flush                                     [ OK ]
+TEST: Locked port dyn FDB                                           [ OK ]
+
+Sigh
