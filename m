@@ -2,319 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824136CB91D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3C36CB923
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 10:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjC1IOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 04:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
+        id S230171AbjC1IPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 04:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjC1IOF (ORCPT
+        with ESMTP id S229632AbjC1IPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:14:05 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46420B9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:14:03 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id b20so46209689edd.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112; t=1679991242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fdI7wx9n/RqOuCwicWLNyZaYr9uM1xIYll/4/2mTjTY=;
-        b=25ZPENnuKHPwXy4Ubxa5aPXgvvyTX5fAAxLoi0WnY7fmdhy4vcAtQQDVhfY1w1c0xk
-         0ZEnm7CUaFPsYz4Q7RV3D/g7OP1owkCYq/9MY4hi4Zn94Z7NgKowHulFCn3Q0NdXyKbT
-         mAsNq4e1gLwhqJkR+1aqgRT7Y++d2u19/776GozoRVWYGJqL5kACpAAwuaECzwDcEcQi
-         UZgUAB7hXkbmo+sRqekZSiL4ViwSwLmKBw/lUnxaBlCTATiWjoQ8xIkRWvmhMzmRjeK6
-         7nSiOMXC8N7JTSwlcKuvyKPTUrujetOHIGOiImdFF3I8Z7TMcisoak803v79pOO4UHty
-         hz7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679991242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fdI7wx9n/RqOuCwicWLNyZaYr9uM1xIYll/4/2mTjTY=;
-        b=zsbRTz1L5El061edKYsc03r6DXIm1OBFOZ/TXOrbibYX4u7yajmPe/OAHelqO6R0B4
-         DLdBQGda9771AO/Lvbj+jpr5vADYKtBLgasF2vwUt05phmfKZDVLqoqgfkIAOu7AfoeB
-         XIa9R9V42HJ+R1WBy6S+mc8HYd4zZnJHarxP2C9z0GoXOCxBMr2YmQ15RiCEhU3+ikQz
-         G6MlP6TmQZ/deAP9Zq2n3a/AWhCPeFhCbMyFNqjmKzTT8P5P2iy3mQJd1lyKdAIqszph
-         SSZ6SbkvT3i1qy/7SYA7a27CZJLkcx7ho1ALrzt2YtZPSt6+d6Lj6G69AZdYdSfPiDrp
-         t8pA==
-X-Gm-Message-State: AAQBX9czQGTQaYyhmr/z3E/TRPDj6FG8gVdLOSJrGWRn4YCDAbrTNEFz
-        A0nxHoxH0vEcMuRP7SS9u7VkkA==
-X-Google-Smtp-Source: AKy350YFTmqqeRvEA0C5EY5CL4BisrXLAhMemHT46Ct82/K0IBUZHkf62Tvp5w1QS9YncqkBgd8SeA==
-X-Received: by 2002:a17:906:b16:b0:92a:3709:e872 with SMTP id u22-20020a1709060b1600b0092a3709e872mr14916112ejg.19.1679991241567;
-        Tue, 28 Mar 2023 01:14:01 -0700 (PDT)
-Received: from [192.168.0.161] (62-73-72-43.ip.btc-net.bg. [62.73.72.43])
-        by smtp.gmail.com with ESMTPSA id a25-20020a50c319000000b004bc15a440f1sm15699044edb.78.2023.03.28.01.14.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 01:14:01 -0700 (PDT)
-Message-ID: <6d92a9bb-f8ce-3d89-9048-039426480416@blackwall.org>
-Date:   Tue, 28 Mar 2023 11:14:00 +0300
+        Tue, 28 Mar 2023 04:15:20 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B70DA2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 01:15:19 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pm2TZ3syQzgZhV;
+        Tue, 28 Mar 2023 16:12:02 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 28 Mar 2023 16:15:17 +0800
+CC:     <yangyicong@hisilicon.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+        <palmer@rivosinc.com>, <linux-kernel@vger.kernel.org>,
+        <prime.zeng@hisilicon.com>, <linuxarm@huawei.com>
+Subject: Re: [PATCH] cacheinfo: Fix LLC is not exported through sysfs
+To:     Sudeep Holla <sudeep.holla@arm.com>
+References: <20230323122528.16691-1-yangyicong@huawei.com>
+ <7cca5e74-6626-1c8b-9309-47b9f5d4395f@arm.com>
+ <20230324113508.x2rt52aakruwelk3@bogus>
+ <dd475eb6-7a0b-fbb4-316b-1af94c238699@huawei.com>
+ <20230327111527.h46wdd3jva4npksy@bogus>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <6fc284e0-70bb-9bcf-a35c-2701018c85e2@huawei.com>
+Date:   Tue, 28 Mar 2023 16:15:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] net: bonding: avoid use-after-free with
- tx_hashtbl/rx_hashtbl
-Content-Language: en-US
-To:     sujing <sujing@kylinos.cn>, davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        andy@greyhouse.net, j.vosburgh@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230328034037.2076930-1-sujing@kylinos.cn>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20230328034037.2076930-1-sujing@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20230327111527.h46wdd3jva4npksy@bogus>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=3.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 06:40, sujing wrote:
-> In bonding mode 6 (Balance-alb),
-> there are some potential race conditions between the 'bond_close' process
-> and the tx/rx processes that use tx_hashtbl/rx_hashtbl,
-> which may lead to use-after-free.
-
-Potential and may? Have you seen it happen and have a trace?
-
+On 2023/3/27 19:15, Sudeep Holla wrote:
+> On Mon, Mar 27, 2023 at 02:57:07PM +0800, Yicong Yang wrote:
+>> Hi Pierre and Sudeep,
+>>
+>> On 2023/3/24 19:35, Sudeep Holla wrote:
+>>> On Thu, Mar 23, 2023 at 06:58:53PM +0100, Pierre Gondois wrote:
+>>>> Hello Yicong,
+>>>>
+>>>> FWIW, I think the patch is correct and I could reproduce the issue.
+>>>>
+>>>> On 3/23/23 13:25, Yicong Yang wrote:
+>>>>> From: Yicong Yang <yangyicong@hisilicon.com>
+>>>>>
+>>>>> After entering 6.3-rc1 the LLC cacheinfo is not exported on our ACPI
+>>>>> based arm64 server. This is because the LLC cacheinfo is partly reset
+>>>>> when secondary CPUs boot up. On arm64 the primary cpu will allocate
+>>>>> and setup cacheinfo:
+>>>>> init_cpu_topology()
+>>>>>    for_each_possible_cpu()
+>>>>>      fetch_cache_info() // Allocate cacheinfo and init levels
+>>>>> detect_cache_attributes()
+>>>>>    cache_shared_cpu_map_setup()
+>>>>>      if (!last_level_cache_is_valid()) // not valid, setup LLC
+>>>>>        cache_setup_properties() // setup LLC
+>>>>>
+>>>>> On secondary CPU boot up:
+>>>>> detect_cache_attributes()
+>>>>>    populate_cache_leaves()
+>>>>>      get_cache_type() // Get cache type from clidr_el1,
+>>>>>                       // for LLC type=CACHE_TYPE_NOCACHE
+>>>>>    cache_shared_cpu_map_setup()
+>>>>>      if (!last_level_cache_is_valid()) // Valid and won't go to this branch,
+>>>>>                                        // leave LLC's type=CACHE_TYPE_NOCACHE
+>>>>>
+>>>>> The last_level_cache_is_valid() use cacheinfo->{attributes, fw_token} to
+>>>>> test it's valid or not, but populate_cache_leaves() will only reset
+>>>>> LLC's type, so we won't try to re-setup LLC's type and leave it
+>>>>> CACHE_TYPE_NOCACHE and won't export it through sysfs.
+>>>>>
+>>>
+>>> IIUC this is for the case where arch register doesn't report the system level
+>>> cache. I wonder if it makes sense to fix the arch callback to deal with that
+>>> instead of here. I am fine either way, just checking as ideally it is
+>>> something populate_cache_leaves() is messing up.
+>>>
+>>
+>> yes it's right, the LLC information is not provided by the CPU register and can
+>> only be retrieved from PPTT on my machine. Maybe fix the issue first, I don't
+>> know how to make arch callback handle this since arch_topology is also used
+>> other than arm64 which I'm not familiar with.
+>>
 > 
-> For instance, when the bond6 device is in the 'bond_close' process
-> while some backlogged packets from upper level are transmitted
-
-How exactly would that happen? Queues get properly disabled before ndo_stop
-is called.
-
-> to 'bond_start_xmit', there is a spinlock contention between
-> 'tlb_deinitialize' and 'tlb_choose_channel'.
+> I was thinking of something like below.
 > 
-> If 'tlb_deinitialize' preempts the lock before 'tlb_choose_channel',
-> a NULL pointer kernel panic will be triggered.
+> --
+> Regards,
+> Sudeep
 > 
-> Here's the timeline:
+> diff --git i/arch/arm64/kernel/cacheinfo.c w/arch/arm64/kernel/cacheinfo.c
+> index c307f69e9b55..4ef1033fe47e 100644
+> --- i/arch/arm64/kernel/cacheinfo.c
+> +++ w/arch/arm64/kernel/cacheinfo.c
+> @@ -79,12 +79,16 @@ int init_cache_level(unsigned int cpu)
 > 
-> bond_close  ------------------  bond_start_xmit
-> bond_alb_deinitialize  -------  __bond_start_xmit
-> tlb_deinitialize  ------------  bond_alb_xmit
-> spin_lock_bh  ----------------  bond_xmit_alb_slave_get
-> tx_hashtbl = NULL  -----------  tlb_choose_channel
-> spin_unlock_bh  --------------  //wait for spin_lock_bh
-> ------------------------------  spin_lock_bh
-> ------------------------------  __tlb_choose_channel
-> causing kernel panic ========>  tx_hashtbl[hash_index].tx_slave
-> ------------------------------  spin_unlock_bh
-
-I don't see how bond_close() can be called in parallel with bond_start_xmit.
-Tx queues are disabled and there's a synchronize_rcu() before the device's
-ndo_stop is called.
-
-> 
-> Signed-off-by: sujing <sujing@kylinos.cn>
-> ---
->  drivers/net/bonding/bond_alb.c  | 32 +++++++++------------------
->  drivers/net/bonding/bond_main.c | 39 +++++++++++++++++++++++++++------
->  include/net/bond_alb.h          |  5 ++++-
->  3 files changed, 46 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
-> index b9dbad3a8af8..f6ff5ea835c4 100644
-> --- a/drivers/net/bonding/bond_alb.c
-> +++ b/drivers/net/bonding/bond_alb.c
-> @@ -71,7 +71,7 @@ static inline u8 _simple_hash(const u8 *hash_start, int hash_size)
->  
->  /*********************** tlb specific functions ***************************/
->  
-> -static inline void tlb_init_table_entry(struct tlb_client_info *entry, int save_load)
-> +void tlb_init_table_entry(struct tlb_client_info *entry, int save_load)
+>  int populate_cache_leaves(unsigned int cpu)
 >  {
->  	if (save_load) {
->  		entry->load_history = 1 + entry->tx_bytes /
-> @@ -269,8 +269,8 @@ static void rlb_update_entry_from_arp(struct bonding *bond, struct arp_pkt *arp)
->  	spin_unlock_bh(&bond->mode_lock);
->  }
->  
-> -static int rlb_arp_recv(const struct sk_buff *skb, struct bonding *bond,
-> -			struct slave *slave)
-> +int rlb_arp_recv(const struct sk_buff *skb, struct bonding *bond,
-> +		 struct slave *slave)
->  {
->  	struct arp_pkt *arp, _arp;
->  
-> @@ -756,7 +756,7 @@ static void rlb_init_table_entry_src(struct rlb_client_info *entry)
->  	entry->src_next = RLB_NULL_INDEX;
->  }
->  
-> -static void rlb_init_table_entry(struct rlb_client_info *entry)
-> +void rlb_init_table_entry(struct rlb_client_info *entry)
->  {
->  	memset(entry, 0, sizeof(struct rlb_client_info));
->  	rlb_init_table_entry_dst(entry);
-> @@ -874,9 +874,6 @@ static int rlb_initialize(struct bonding *bond)
->  
->  	spin_unlock_bh(&bond->mode_lock);
->  
-> -	/* register to receive ARPs */
-> -	bond->recv_probe = rlb_arp_recv;
-> -
->  	return 0;
->  }
->  
-> @@ -888,7 +885,6 @@ static void rlb_deinitialize(struct bonding *bond)
->  
->  	kfree(bond_info->rx_hashtbl);
->  	bond_info->rx_hashtbl = NULL;
-> -	bond_info->rx_hashtbl_used_head = RLB_NULL_INDEX;
->  
->  	spin_unlock_bh(&bond->mode_lock);
->  }
-> @@ -1303,7 +1299,7 @@ static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
->  
->  /************************ exported alb functions ************************/
->  
-> -int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
-> +int bond_alb_initialize(struct bonding *bond)
->  {
->  	int res;
->  
-> @@ -1311,15 +1307,10 @@ int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
->  	if (res)
->  		return res;
->  
-> -	if (rlb_enabled) {
-> -		res = rlb_initialize(bond);
-> -		if (res) {
-> -			tlb_deinitialize(bond);
-> -			return res;
-> -		}
-> -		bond->alb_info.rlb_enabled = 1;
-> -	} else {
-> -		bond->alb_info.rlb_enabled = 0;
-> +	res = rlb_initialize(bond);
-> +	if (res) {
-> +		tlb_deinitialize(bond);
-> +		return res;
->  	}
->  
->  	return 0;
-> @@ -1327,12 +1318,9 @@ int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
->  
->  void bond_alb_deinitialize(struct bonding *bond)
->  {
-> -	struct alb_bond_info *bond_info = &(BOND_ALB_INFO(bond));
-> -
->  	tlb_deinitialize(bond);
->  
-> -	if (bond_info->rlb_enabled)
-> -		rlb_deinitialize(bond);
-> +	rlb_deinitialize(bond);
->  }
->  
->  static netdev_tx_t bond_do_alb_xmit(struct sk_buff *skb, struct bonding *bond,
-> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> index 236e5219c811..8fcb5d3ac0a2 100644
-> --- a/drivers/net/bonding/bond_main.c
-> +++ b/drivers/net/bonding/bond_main.c
-> @@ -4217,6 +4217,7 @@ static int bond_open(struct net_device *bond_dev)
->  	struct bonding *bond = netdev_priv(bond_dev);
->  	struct list_head *iter;
->  	struct slave *slave;
-> +	int i;
->  
->  	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter) {
->  		bond->rr_tx_counter = alloc_percpu(u32);
-> @@ -4239,11 +4240,29 @@ static int bond_open(struct net_device *bond_dev)
->  	}
->  
->  	if (bond_is_lb(bond)) {
-> -		/* bond_alb_initialize must be called before the timer
-> -		 * is started.
-> -		 */
-> -		if (bond_alb_initialize(bond, (BOND_MODE(bond) == BOND_MODE_ALB)))
-> -			return -ENOMEM;
-> +		struct alb_bond_info *bond_info = &(BOND_ALB_INFO(bond));
+> -       unsigned int level, idx;
+> +       unsigned int hw_lvl, level, idx;
+>         enum cache_type type;
+>         struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
+>         struct cacheinfo *this_leaf = this_cpu_ci->info_list;
+> 
+> -       for (idx = 0, level = 1; level <= this_cpu_ci->num_levels &&
+> +       for (hw_lvl = 0; hw_lvl <= MAX_CACHE_LEVEL; hw_lvl++)
+> +               if (CACHE_TYPE_NOCACHE == get_cache_type(hw_lvl + 1))
+> +                       break;
 > +
-> +		spin_lock_bh(&bond->mode_lock);
-> +
-> +		for (i = 0; i < TLB_HASH_TABLE_SIZE; i++)
-> +			tlb_init_table_entry(&bond_info->tx_hashtbl[i], 0);
-> +
-> +		spin_unlock_bh(&bond->mode_lock);
-> +
-> +		if (BOND_MODE(bond) == BOND_MODE_ALB) {
-> +			bond->alb_info.rlb_enabled = 1;
-> +			spin_lock_bh(&bond->mode_lock);
-> +
-> +			bond_info->rx_hashtbl_used_head = RLB_NULL_INDEX;
-> +			for (i = 0; i < RLB_HASH_TABLE_SIZE; i++)
-> +				rlb_init_table_entry(bond_info->rx_hashtbl + i);
-> +
-> +			spin_unlock_bh(&bond->mode_lock);
-> +			bond->recv_probe = rlb_arp_recv;
-> +		} else {
-> +			bond->alb_info.rlb_enabled = 0;
-> +		}
-> +
->  		if (bond->params.tlb_dynamic_lb || BOND_MODE(bond) == BOND_MODE_ALB)
->  			queue_delayed_work(bond->wq, &bond->alb_work, 0);
->  	}
-> @@ -4279,8 +4298,6 @@ static int bond_close(struct net_device *bond_dev)
->  
->  	bond_work_cancel_all(bond);
->  	bond->send_peer_notif = 0;
-> -	if (bond_is_lb(bond))
-> -		bond_alb_deinitialize(bond);
->  	bond->recv_probe = NULL;
->  
->  	if (bond_uses_primary(bond)) {
-> @@ -5854,6 +5871,8 @@ static void bond_uninit(struct net_device *bond_dev)
->  	struct list_head *iter;
->  	struct slave *slave;
->  
-> +	bond_alb_deinitialize(bond);
-> +
->  	bond_netpoll_cleanup(bond_dev);
->  
->  	/* Release the bonded slaves */
-> @@ -6295,6 +6314,12 @@ static int bond_init(struct net_device *bond_dev)
->  	    bond_dev->addr_assign_type == NET_ADDR_PERM)
->  		eth_hw_addr_random(bond_dev);
->  
-> +	/* bond_alb_initialize must be called before the timer
-> +	 * is started.
-> +	 */
-> +	if (bond_alb_initialize(bond))
-> +		return -ENOMEM;
-> +
->  	return 0;
->  }
->  
-> diff --git a/include/net/bond_alb.h b/include/net/bond_alb.h
-> index 9dc082b2d543..9fd16e20ef82 100644
-> --- a/include/net/bond_alb.h
-> +++ b/include/net/bond_alb.h
-> @@ -150,7 +150,7 @@ struct alb_bond_info {
->  						 */
->  };
->  
-> -int bond_alb_initialize(struct bonding *bond, int rlb_enabled);
-> +int bond_alb_initialize(struct bonding *bond);
->  void bond_alb_deinitialize(struct bonding *bond);
->  int bond_alb_init_slave(struct bonding *bond, struct slave *slave);
->  void bond_alb_deinit_slave(struct bonding *bond, struct slave *slave);
-> @@ -165,5 +165,8 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
->  void bond_alb_monitor(struct work_struct *);
->  int bond_alb_set_mac_address(struct net_device *bond_dev, void *addr);
->  void bond_alb_clear_vlan(struct bonding *bond, unsigned short vlan_id);
-> +int rlb_arp_recv(const struct sk_buff *skb, struct bonding *bond, struct slave *slave);
-> +void tlb_init_table_entry(struct tlb_client_info *entry, int save_load);
-> +void rlb_init_table_entry(struct rlb_client_info *entry);
->  #endif /* _NET_BOND_ALB_H */
->  
 
+We totally skip the system level caches and leaving their ->level initialized
+as 0, then we still cannot get the correct infomation by the PPTT side since
+it uses the ->level to find the cache info:
+drivers/acpi/pptt.c:
+cache_setup_acpi_cpu()
+		[...]
+		found_cache = acpi_find_cache_node(table, acpi_cpu_id,
+						   this_leaf->type,
+						   this_leaf->level, <---- we cannot find it with level 0
+						   &cpu_node);
+
+So I'd prefer the original fixes of mine or by the arch side (if no other
+archs suffer this issue) what about below for arm64 only:
+
+diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinfo.c
+index c307f69e9b55..4801d0ff4ffb 100644
+--- a/arch/arm64/kernel/cacheinfo.c
++++ b/arch/arm64/kernel/cacheinfo.c
+@@ -86,6 +86,13 @@ int populate_cache_leaves(unsigned int cpu)
+
+        for (idx = 0, level = 1; level <= this_cpu_ci->num_levels &&
+             idx < this_cpu_ci->num_leaves; idx++, level++) {
++               /*
++                * This leaf has already been populated, do not reset it since
++                * this could be a system level cache.
++                */
++               if (this_leaf->type != CACHE_TYPE_NOCACHE)
++                       continue;
++
+                type = get_cache_type(level);
+                if (type == CACHE_TYPE_SEPARATE) {
+                        ci_leaf_init(this_leaf++, CACHE_TYPE_DATA, level);
+
+> +       for (idx = 0, level = 1; level <= hw_lvl &&
+>              idx < this_cpu_ci->num_leaves; idx++, level++) {
+>                 type = get_cache_type(level);
+>                 if (type == CACHE_TYPE_SEPARATE) {
+> 
+> .
+> 
