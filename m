@@ -2,74 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000B16CC00B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992C16CC011
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 15:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232563AbjC1NBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 09:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
+        id S232303AbjC1NDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 09:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbjC1NBl (ORCPT
+        with ESMTP id S230093AbjC1NC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:01:41 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAE4AF0A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:01:20 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id n19so6916997wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 06:01:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680008479;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p6F4MCsvT2C8gUcp99pkDHUUGuKfspVbwNGAoaBleYU=;
-        b=FS54iuLIV/siHxesYVQVCWxxAiR29vD+YSeRvlBLKOYKXqt5cjNH6QhhssyXWfmAd6
-         2F+PdbWh35dJAB/n6jrAWrBWwv0Q7phIaQRijZHwfJuW4r5hAaTRWzx+KqMxwAGLds0B
-         WOH+Z9G4MZFfRAHwWoWksVryIrTxS8p2Q+pfL+LSIRQVkj8eEj+vblnfUgVLCBnXW+07
-         T1xg5ZzTMDxVI+xe1Vt/ujbBi6Z+MRKUp1RTmDaVbBzGHa3w2XsBcErJduQTArwBCF0z
-         aTxm2NFk2N1R8WauJrFW/tEkCbPF3z0n5FP6vUYjiGZ7ypFi5AmnhziwqyarQW9XWEUV
-         OEzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680008479;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=p6F4MCsvT2C8gUcp99pkDHUUGuKfspVbwNGAoaBleYU=;
-        b=NWW9iT3pFcAXisVfnCnaJkG63cXSA/ctZSr5lSKmuES8Mcwy53BDNtQ08Ke5BlazOa
-         z9Xwx49VreFTYyTGMM5rTPQMCUwaZoKCemjq9YWoK5EuDegWHooWyK1kKh92th7B61Uh
-         DtrgR7xJ9JvOv72XZbHgQu9kBCONvvuCmjlYXrhnyx3idYQZEMp/pQ96IQlUw1qm+ady
-         FaS7X3PLAVctZlXiARNjm32cuWHZl5435D1poPdnImANIaPhE/0W5zPVJybwzzOnEWuH
-         vaYyvpUoi0iH0O67cH4pSDOzP2hDzMpEA8gIrz1ljM3/8H+gzjhirw05z9dC108qrh+U
-         xxpQ==
-X-Gm-Message-State: AO0yUKWGc+U+KlaZgNKca+OAm0eTzwCEgjeBY6Sq3Ad8w1PliKy+TjhB
-        7CIEa1ogolCtIRYV1wZa/akVRg==
-X-Google-Smtp-Source: AK7set94AVmLDp7FhfkLYgmKmsQOV0yFdLDLs8lyI/GV1MeXd4zV1cvkNUnKZMzy2BVHhZcFPUepMA==
-X-Received: by 2002:a05:600c:4f91:b0:3ee:501f:c795 with SMTP id n17-20020a05600c4f9100b003ee501fc795mr16307924wmq.1.1680008479146;
-        Tue, 28 Mar 2023 06:01:19 -0700 (PDT)
-Received: from localhost ([2a01:e0a:28d:66d0:910e:c4d8:1565:354])
-        by smtp.gmail.com with ESMTPSA id q7-20020a05600c46c700b003ede2c59a54sm6091687wmo.37.2023.03.28.06.01.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 06:01:10 -0700 (PDT)
-Mime-Version: 1.0
+        Tue, 28 Mar 2023 09:02:58 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ABD1BDC;
+        Tue, 28 Mar 2023 06:02:30 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2497E5C0068;
+        Tue, 28 Mar 2023 09:02:27 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 28 Mar 2023 09:02:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1680008547; x=1680094947; bh=RgfOcRz7Y9eemhhj/K9vB90mPZhFUINw5BF
+        WLJTEWvg=; b=XT1bkKRGOh2E/x5JAYAuMLyNiDnIUuvpodvt5driju1aWi80oeN
+        mPc0FqqTR2bqYsXBLvTzWR/01JPImuxllDpvWUHmHHbK6ccdBe4cs1pCTptd/4C6
+        Cai74nhcYmf7d1MGKvueVSauZ1D5LyaEREBsyJy5pKdN0Mv5h1LHjHc3JZKMyOs/
+        1OpH4tfi2KLvjPWyOjiTrRyGnabyS1zzk1qo/3H8c9l6Yc8QNYdFbHLxP/JIH0Xg
+        fjAB+m3OG1Cy4jAsWMBQ3j/3LpGA2tH7LYxwDPG1Pw1E9S54FBLwr+VN/qhb1QzY
+        43YM4j4NrQTCpmO+XA4Ho2pHKstjkg9QQgQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680008547; x=1680094947; bh=RgfOcRz7Y9eemhhj/K9vB90mPZhFUINw5BF
+        WLJTEWvg=; b=Ng4ehF7ju2al1N83yAu1TPFPrqY8x8L44K+/SjGec6oyQfK57hp
+        BAOLQ0pPp1sE0oealjiVsj/Gou+YqDkaT9UZJ0SJGpnQgfQ52iI5RmKL4CRneZL1
+        KTyarNnWIpXVVAJAGXpQNJSmXJUCcQcc9JCfKpzU5YrBxqFR2fA0lMCzDxUuDSyb
+        yMjn2VwXBQDc9MZGRqLd+eFg/8cWcSRjr5aTECiN1I58+CT4zNKyFfwecDrrcu5k
+        L+WZ4ejxgDmPFJyqtcbqQ45pQxwzAlUUwZw9gbdGcpX952vig83kp8ddce4W0/Z0
+        c9EnQ7uUQOH2mRigkfDEIr1RrR9M0Ghg4Pg==
+X-ME-Sender: <xms:YeUiZDu9OG480fT8HAXyiUJiwyAATFHVvxjH3VB-CAFjpZ5PMUZpHA>
+    <xme:YeUiZEewhcybDReytqiXw6s8ezwnOSY7ApkZ9Edsx7gI-RH7AsBnrVtohaavhR7oP
+    E_iA20oDhTblJazl-k>
+X-ME-Received: <xmr:YeUiZGwwIDzGdySRBP3SKo_ItGOA5wjfWoYSHxwydHxCBqvOupm3j-ybPCDBmS-YbuLO>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehgedgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:YeUiZCMSqRV3eaooG1vh72OUOb3OZZBs1PGMZo9g9r4L0XtLzOst5w>
+    <xmx:YeUiZD_vz22qEpX_9pGKYk4PlQSqSh6Tt5h8OlIYeOoF7aFlfvvDvg>
+    <xmx:YeUiZCUUdkNhGjeBz3hWAHzJA5R__gsxJcWyeg1v1L7QnBsYIekjdw>
+    <xmx:Y-UiZGXDEOYvSE_eKUnGgZOtc9OvLtb-xcYXbTgnhv2pd44pm-_4lw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 28 Mar 2023 09:02:23 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: Re: [PATCH v3 0/4] Use dma_default_coherent for devicetree default
+ coherency
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230328074511.GA6188@alpha.franken.de>
+Date:   Tue, 28 Mar 2023 14:02:12 +0100
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        frowand.list@gmail.com
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 28 Mar 2023 15:01:05 +0200
-Message-Id: <CRI1AQ7OIF6F.2G26C7VQKL5P0@burritosblues>
-To:     "Alexandre Belloni" <alexandre.belloni@bootlin.com>
-Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <a.zummo@towertech.it>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <jpanis@baylibre.com>,
-        <jneanne@baylibre.com>, <sterzik@ti.com>, <u-kumar1@ti.com>
-Subject: Re: [PATCH v2 1/3] rtc: tps6594: add driver for TPS6594 PMIC RTC
-From:   "Esteban Blanc" <eblanc@baylibre.com>
-X-Mailer: aerc 0.14.0
-References: <20230328091448.648452-1-eblanc@baylibre.com>
- <20230328091448.648452-2-eblanc@baylibre.com>
- <202303280929448e41808d@mail.local>
-In-Reply-To: <202303280929448e41808d@mail.local>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Message-Id: <9CCE7638-91FE-4B1F-9EAC-17362C041CE9@flygoat.com>
+References: <20230321110813.26808-1-jiaxun.yang@flygoat.com>
+ <20230323072944.GA18524@lst.de>
+ <60D7FE31-D708-4495-949F-3F64DDC11377@flygoat.com>
+ <20230323213930.GA7730@lst.de>
+ <CB41D3AF-20F6-42F3-9168-C0D6E716431A@flygoat.com>
+ <20230328011812.GA21977@lst.de> <20230328074511.GA6188@alpha.franken.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,47 +99,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue Mar 28, 2023 at 11:29 AM CEST, Alexandre Belloni wrote:
-> Hello,
->
-> On 28/03/2023 11:14:46+0200, Esteban Blanc wrote:
-> > +	/* Start rtc */
-> > +	ret =3D regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> > +			      TPS6594_BIT_STOP_RTC);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	mdelay(100);
-> > +
-> > +	/*
-> > +	 * RTC should be running now. Check if this is the case.
-> > +	 * If not it might be a missing oscillator.
-> > +	 */
-> > +	ret =3D regmap_test_bits(tps->regmap, TPS6594_REG_RTC_STATUS,
-> > +			       TPS6594_BIT_RUN);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +	if (ret =3D=3D 0)
-> > +		return -ENODEV;
-> > +
-> > +	/* Stop RTC until first call to `tps6594_rtc_set_time */
-> > +	ret =3D regmap_clear_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> > +				TPS6594_BIT_STOP_RTC);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
->
-> This whole block must not be executed when the RTC is already running,
-> else, you are stopping a perfectly running RTC.
 
-I'm not sure to get your point. You mean that during probe, the driver
-might encounter an RTC device that is already running with a correct
-timestamp? How would this be possible? A previous bootstage or the
-driver was removed then re-inserted again?
 
-Thanks for your time,
+> 2023=E5=B9=B43=E6=9C=8828=E6=97=A5 08:45=EF=BC=8CThomas Bogendoerfer =
+<tsbogend@alpha.franken.de> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Tue, Mar 28, 2023 at 03:18:12AM +0200, Christoph Hellwig wrote:
+>> On Fri, Mar 24, 2023 at 09:17:38AM +0000, Jiaxun Yang wrote:
+>>>>=20
+>>>> Is patch a 6.3 candidate or should all of it go into 6.4?
+>>>=20
+>>> Please leave it for 6.4, as corresponding MIPS arch part will be a =
+part of 6.4.
+>>=20
+>> Ok.  I'll really need review from the MIPS and drivers/of/ =
+maintainers,
+>> through.
 
---=20
-Esteban Blanc
-BayLibre
++cc devicetree foks.
+
+>=20
+> I don't see any MIPS changes in the series besides the ifdef =
+CONFIG_MIPS
+> part in patch 1, which gets removed again in patch 4 (chance to drop
+> that completely ?).
+
+It was suggested by DMA folks to have that patch.
+
+> I've merged the corresponding MIPS patches into mips-next last week.
+
+Thanks
+- Jiaxun
+
+>=20
+> Thomas.
+>=20
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not =
+necessarily a
+> good idea.                                                [ RFC1925, =
+2.3 ]
 
