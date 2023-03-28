@@ -2,200 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46ED46CB548
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 06:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A3F6CB54D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 06:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbjC1EF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 00:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
+        id S232815AbjC1EGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 00:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjC1EFX (ORCPT
+        with ESMTP id S229459AbjC1EGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 00:05:23 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D9CDE
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 21:04:56 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id o11so10468214ple.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Mar 2023 21:04:56 -0700 (PDT)
+        Tue, 28 Mar 2023 00:06:14 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57A3DE;
+        Mon, 27 Mar 2023 21:06:12 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id ek18so44364234edb.6;
+        Mon, 27 Mar 2023 21:06:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679976295;
+        d=gmail.com; s=20210112; t=1679976371;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LErsHmsbRWX1t/tlmcxX2OThlM8pztoVwbQlHV2TBMA=;
-        b=hZz2FWcWLz63/gqfIBEoqW9H85wulv/9+vjqu8L8Iz4De2+0LXj9tHSZm8aEeN6A99
-         +Z/ZKIh8oc6pBnK/P7n1Ozj7MB9pQNsczMe+kaKhyydY6WxzGp2rDAMDTMelshih1B4S
-         fAj6FStGtnQb37wbWEmEPW96SuCH/LUwitCQzoaXmhnYk9uMFaKT1UQnl2IeADXi+z+3
-         Fjzw+TglH9fskNnhCIZK6TRntyWul3lhBtsYgk4cFolT9BISt8fkHEX5fiUK9oHot54Y
-         Gj8qQf7/8jtZGdaUgXyL7Z7wke2jVRQl6Zv4+282jwTuKb8zSkxdIvbrGDl5csiHXyFu
-         GeDA==
+        bh=oDI9x5S91I3YVFHLIUQDSl5pwYy7y0vI8J4VR3cNmtA=;
+        b=aex3Yrg/Zgqv/q4oJydULrECV0VRQxmBcGBvlzqy7giPT0KNqCxtRIO9gLVQdcaF2q
+         X6CCu1FGOM0ppzji2X73IpSzhzIjT57KrsnpQqOWlqoElQEO9GzvGA+3y7at5WzRDsKy
+         pVccKI1j4sj9O1ovhdY3WH3YqH/Ii7MCVtaDLPKJRQ5h1MtjVi3xT9cvMKOAtQANoDzB
+         +snrLTO9DKEaRJU8LfHfz71weUbf3RVfrT5DxiLR+GNTNndWffqva18u53e5GGv/w4Le
+         cAN0QhYKiPKkOBzMYrncmiKYn/y66YTnelkiUP22OceslUGkRbLi8IC2k9ylwUPOxrgX
+         jaqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679976295;
+        d=1e100.net; s=20210112; t=1679976371;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LErsHmsbRWX1t/tlmcxX2OThlM8pztoVwbQlHV2TBMA=;
-        b=fDU0OZV5OorsEu8OcmnQMiLcgkd0u3tR8dyX9Eglo9FrtXNPiNnf3Z1pu6HOIByNr3
-         PAFo3Fuk275FjelHpBIaEj1x7MRGbVdosl8xg0kEMjPyUU0MwLZgit0KidVDN3A0a8I/
-         vDxt5PA/tCN/6G623C9mfpasdFnDye82/UFAbCbu0ZQGse95sko6C3/mrKkD6Scn13dQ
-         znoWsT1hM5FBiyIyp0xBJvnO2GGXI48dTUdLMdAcGfVWrLmf+DnuTakef91UQpQ9O1dA
-         gH74Dt5phEK+2FsGa0a1dyyHBqsvgF2TmkinHWvhGV/jZ1j9ltW5Eo85wGow93zvGWrM
-         WCmA==
-X-Gm-Message-State: AAQBX9d687lQHaO4Ncl3dOqFlSUNmt9BdBR3ef9zf9Ef40fS+tGlAij3
-        R/QIhyS/zP1TMzaJ75EvCDaCbqMCZoOxuYrarlS1
-X-Google-Smtp-Source: AKy350aTVF4mnyqnOsPX/ZPu+50kYzQB8qDW/3m5DGmQ8jXqXkHnQYyqis9JMJNdpaNYVmJxH5/ik9U6PbMpTTBxhR0=
-X-Received: by 2002:a17:902:f693:b0:1a1:8bf0:a75a with SMTP id
- l19-20020a170902f69300b001a18bf0a75amr5015786plg.13.1679976295532; Mon, 27
- Mar 2023 21:04:55 -0700 (PDT)
+        bh=oDI9x5S91I3YVFHLIUQDSl5pwYy7y0vI8J4VR3cNmtA=;
+        b=LkjZg4ZL9LR3L5uDJLi/mIRaWpmZaEca3Zr9bo5iV/rvXbBltown+kmpyrw39kG+mM
+         iN286R42RVm4g4IJpegx8aTCMkTaUOplZEPWDUDAwB7Dbl1TEYQoSYCYs7jVTLP703qR
+         /buGuK7ej7HWME5JPAVqtju/e8HRd6yZJZwslvHvQEECoaOdlw3RTkCvLQprOkF70oWK
+         DUyhbmqfhnx1CNNxF5GfhVoSjSB/ELDjHrk2wkKsa34afb2aNohbzk2D4o5cmwiPTNf+
+         2h0GZDceD7IFVoTxVLFsN1UUceLxARPY+GSdk6h6klDRNsVI2nqoyZbJA4LCRO56jKDg
+         0KTg==
+X-Gm-Message-State: AAQBX9eIKnqefxGpUB1QWPMux2dm/5V1G0A+98xjqAB5M1jR06aigVBz
+        U8ZhmjVifwviuekkkR3VMN/IJQ000b//oMVwzgU=
+X-Google-Smtp-Source: AKy350Zy4YfNXBDnbEAXN4mrQxPhTDk1MN+1EaNG1aUo8NLjCHMUjH40vByu3GdYBYAfOENFwC/wqlz9D0zPmVLrcbw=
+X-Received: by 2002:a17:906:4746:b0:8ab:b606:9728 with SMTP id
+ j6-20020a170906474600b008abb6069728mr7083779ejs.5.1679976371283; Mon, 27 Mar
+ 2023 21:06:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230323053043.35-1-xieyongji@bytedance.com> <20230323053043.35-4-xieyongji@bytedance.com>
- <CACGkMEtH0=vr6JQrqWFZqf4p8bcgeKCr4ipqdBc9nv-st3Pfiw@mail.gmail.com>
- <CACycT3sm1P2qDQTNKp+RLmyd84+v8xwErf_g1SXqiaJDQO8LNg@mail.gmail.com>
- <CACGkMEvhXQ9ve4DQnmVu4hRRbCWM3oesR-=KaLisuyJ4-tyQxg@mail.gmail.com>
- <CACycT3uYbnrQDDbFmwdww8ukMU1t9RsAuutHsFT-UzK9_Mc=Kg@mail.gmail.com> <CACGkMEtRU3qeMazJ2j3u_RC1bUga75Oix0jRJeUJBUF=8QJMgQ@mail.gmail.com>
-In-Reply-To: <CACGkMEtRU3qeMazJ2j3u_RC1bUga75Oix0jRJeUJBUF=8QJMgQ@mail.gmail.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Tue, 28 Mar 2023 12:04:44 +0800
-Message-ID: <CACycT3vCqisBS0OyMsnyrw0i6kWTDqSZ4GQbdoycHz-L3=1Q7Q@mail.gmail.com>
-Subject: Re: [PATCH v4 03/11] virtio-vdpa: Support interrupt affinity
- spreading mechanism
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@lst.de>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20221012233500.156764-1-masahiroy@kernel.org> <ZBovCrMXJk7NPISp@aurel32.net>
+ <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
+ <ZBzAp457rrO52FPy@aurel32.net> <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
+ <CAADnVQLniq_NTN+dayioY76UvJ6Rt88wC31tboQx0UAvMn3Few@mail.gmail.com>
+In-Reply-To: <CAADnVQLniq_NTN+dayioY76UvJ6Rt88wC31tboQx0UAvMn3Few@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 27 Mar 2023 21:05:59 -0700
+Message-ID: <CAEf4BzYFkBp55CkuKgDxgw+zqcZn73AFwFDBDL6F7FAdgEKUcA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of head.o
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Eduard Zingerman <eddyz87@gmail.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:44=E2=80=AFAM Jason Wang <jasowang@redhat.com> w=
-rote:
+On Fri, Mar 24, 2023 at 4:34=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Tue, Mar 28, 2023 at 11:33=E2=80=AFAM Yongji Xie <xieyongji@bytedance.=
-com> wrote:
+> On Fri, Mar 24, 2023 at 4:39=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> =
+wrote:
 > >
-> > On Tue, Mar 28, 2023 at 11:14=E2=80=AFAM Jason Wang <jasowang@redhat.co=
-m> wrote:
+> > (cc BTF list and maintainer)
+> >
+> > On Thu, 23 Mar 2023 at 22:12, Aurelien Jarno <aurelien@aurel32.net> wro=
+te:
 > > >
-> > > On Tue, Mar 28, 2023 at 11:03=E2=80=AFAM Yongji Xie <xieyongji@byteda=
-nce.com> wrote:
-> > > >
-> > > > On Fri, Mar 24, 2023 at 2:28=E2=80=AFPM Jason Wang <jasowang@redhat=
-.com> wrote:
+> > > Hi,
+> > >
+> > > On 2023-03-22 15:51, Ard Biesheuvel wrote:
+> > > > On Tue, 21 Mar 2023 at 23:26, Aurelien Jarno <aurelien@aurel32.net>=
+ wrote:
 > > > > >
-> > > > > On Thu, Mar 23, 2023 at 1:31=E2=80=AFPM Xie Yongji <xieyongji@byt=
-edance.com> wrote:
+> > > > > Hi,
+> > > > >
+> > > > > On 2022-10-13 08:35, Masahiro Yamada wrote:
+> > > > > > In the previous discussion (see the Link tag), Ard pointed out =
+that
+> > > > > > arm/arm64/kernel/head.o does not need any special treatment - t=
+he only
+> > > > > > piece that must appear right at the start of the binary image i=
+s the
+> > > > > > image header which is emitted into .head.text.
 > > > > > >
-> > > > > > To support interrupt affinity spreading mechanism,
-> > > > > > this makes use of group_cpus_evenly() to create
-> > > > > > an irq callback affinity mask for each virtqueue
-> > > > > > of vdpa device. Then we will unify set_vq_affinity
-> > > > > > callback to pass the affinity to the vdpa device driver.
+> > > > > > The linker script does the right thing to do. The build system =
+does
+> > > > > > not need to manipulate the link order of head.o.
 > > > > > >
-> > > > > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> > > > > > Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZK=
+w=3D1F8Uy-uAWGVDm4-CG=3DEuA@mail.gmail.com/
+> > > > > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> > > > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > > > > ---
+> > > > > >
+> > > > > >  scripts/head-object-list.txt | 1 -
+> > > > > >  1 file changed, 1 deletion(-)
+> > > > > >
+> > > > > > diff --git a/scripts/head-object-list.txt b/scripts/head-object=
+-list.txt
+> > > > > > index b16326a92c45..f226e45e3b7b 100644
+> > > > > > --- a/scripts/head-object-list.txt
+> > > > > > +++ b/scripts/head-object-list.txt
+> > > > > > @@ -15,7 +15,6 @@ arch/alpha/kernel/head.o
+> > > > > >  arch/arc/kernel/head.o
+> > > > > >  arch/arm/kernel/head-nommu.o
+> > > > > >  arch/arm/kernel/head.o
+> > > > > > -arch/arm64/kernel/head.o
+> > > > > >  arch/csky/kernel/head.o
+> > > > > >  arch/hexagon/kernel/head.o
+> > > > > >  arch/ia64/kernel/head.o
 > > > > >
-> > > > > Thinking hard of all the logics, I think I've found something int=
-eresting.
+> > > > > This patch causes a significant increase of the arch/arm64/boot/I=
+mage
+> > > > > size. For instance the generic arm64 Debian kernel went from 31 t=
+o 39 MB
+> > > > > after this patch has been applied to the 6.1 stable tree.
 > > > > >
-> > > > > Commit ad71473d9c437 ("virtio_blk: use virtio IRQ affinity") trie=
-s to
-> > > > > pass irq_affinity to transport specific find_vqs().  This seems a
-> > > > > layer violation since driver has no knowledge of
-> > > > >
-> > > > > 1) whether or not the callback is based on an IRQ
-> > > > > 2) whether or not the device is a PCI or not (the details are hid=
-ed by
-> > > > > the transport driver)
-> > > > > 3) how many vectors could be used by a device
-> > > > >
-> > > > > This means the driver can't actually pass a real affinity masks s=
-o the
-> > > > > commit passes a zero irq affinity structure as a hint in fact, so=
- the
-> > > > > PCI layer can build a default affinity based that groups cpus eve=
-nly
-> > > > > based on the number of MSI-X vectors (the core logic is the
-> > > > > group_cpus_evenly). I think we should fix this by replacing the
-> > > > > irq_affinity structure with
-> > > > >
-> > > > > 1) a boolean like auto_cb_spreading
-> > > > >
-> > > > > or
-> > > > >
-> > > > > 2) queue to cpu mapping
+> > > > > In turn this causes issues with some bootloaders, for instance U-=
+Boot on
+> > > > > a Raspberry Pi limits the kernel size to 36 MB.
 > > > > >
 > > > >
-> > > > But only the driver knows which queues are used in the control path
-> > > > which don't need the automatic irq affinity assignment.
+> > > > I cannot reproduce this with mainline
+> > > >
+> > > > With the patch
+> > > >
+> > > > $ size vmlinux
+> > > >    text    data     bss     dec     hex filename
+> > > > 24567309 14752630 621680 39941619 26175f3 vmlinux
+> > > >
+> > > > With the patch reverted
+> > > >
+> > > > $ size vmlinux
+> > > >    text    data     bss     dec     hex filename
+> > > > 24567309 14752694 621680 39941683 2617633 vmlinux
 > > >
-> > > Is this knowledge awarded by the transport driver now?
+> > > I have tried with the current mainline, this is what I get, using GCC=
+ 12.2.0
+> > > and binutils 2.40:
+> > >
+> > >    text    data     bss     dec     hex filename
+> > > 32531655        8192996  621968 41346619        276e63b vmlinux.orig
+> > > 25170610        8192996  621968 33985574        2069426 vmlinux.rever=
+t
+> > >
+> > > > It would help to compare the resulting vmlinux ELF images from both
+> > > > builds to see where the extra space is being allocated
+> > >
+> > > At a first glance, it seems the extra space is allocated in the BTF
+> > > section. I have uploaded the resulting files as well as the config fi=
+le
+> > > I used there:
+> > > https://temp.aurel32.net/linux-arm64-size-head.o.tar.gz
 > > >
 > >
-> > This knowledge is awarded by the device driver rather than the transpor=
-t driver.
+> > Indeed. So we go from
 > >
-> > E.g. virtio-scsi uses:
+> >   [15] .BTF              PROGBITS         ffff8000091d1ff4  011e1ff4
+> >        00000000005093d6  0000000000000000   A       0     0     1
 > >
-> >     struct irq_affinity desc =3D { .pre_vectors =3D 2 }; // vq0 is cont=
-rol
-> > queue, vq1 is event queue
+> > to
+> >
+> >   [15] .BTF              PROGBITS         ffff8000091d1ff4  011e1ff4
+> >        0000000000c0e5eb  0000000000000000   A       0     0     1
+> >
+> > i.e, from 5 MiB to 12+ MiB of BTF metadata.
+> >
+> > To me, it is not clear at all how one would be related to the other,
+> > so it will leave it to the Kbuild and BTF experts to chew on this one.
 >
-> Ok, but it only works as a hint, it's not a real affinity. As replied,
-> we can pass an array of boolean in this case then transport driver
-> knows it doesn't need to use automatic affinity for the first two
-> queues.
+> That's a huge increase.
+> It's not just that commit responsible, but the whole series ?
+> https://lore.kernel.org/lkml/20220906061313.1445810-1-masahiroy@kernel.or=
+g/
+> I'm guessing "Link vmlinux and modules in parallel" is related.
+> I'm not sure what "parallel link" means. Running 'ar' in parallel?
+> I cannot read makefile syntax, so no idea.
 >
+> Jiri, Andrii, Alan, please take a look.
 
-But we don't know whether we would use other fields in structure
-irq_affinity in the future. So a full set should be better?
+So it seems to come from the difference in return type for mm_struct's
+get_unmapped_area callback:
 
-> >
-> > > E.g virtio-blk uses:
-> > >
-> > >         struct irq_affinity desc =3D { 0, };
-> > >
-> > > Atleast we can tell the transport driver which vq requires automatic
-> > > irq affinity.
-> > >
-> >
-> > I think that is what the current implementation does.
-> >
-> > > > So I think the
-> > > > irq_affinity structure can only be created by device drivers and
-> > > > passed to the virtio-pci/virtio-vdpa driver.
-> > >
-> > > This could be not easy since the driver doesn't even know how many
-> > > interrupts will be used by the transport driver, so it can't built th=
-e
-> > > actual affinity structure.
-> > >
-> >
-> > The actual affinity mask is built by the transport driver,
->
-> For PCI yes, it talks directly to the IRQ subsystems.
->
-> > device
-> > driver only passes a hint on which queues don't need the automatic irq
-> > affinity assignment.
->
-> But not for virtio-vDPA since the IRQ needs to be dealt with by the
-> parent driver. For our case, it's the VDUSE where it doesn't need IRQ
-> at all, a queue to cpu mapping is sufficient.
->
 
-The device driver doesn't know whether it is binded to virtio-pci or
-virtio-vdpa. So it should pass a full set needed by the automatic irq
-affinity assignment instead of a subset. Then virtio-vdpa can choose
-to pass a queue to cpu mapping to VDUSE, which is what we do now (use
-set_vq_affinity()).
+struct mm_struct {
+        struct {
+                struct maple_tree mm_mt;
+#ifdef CONFIG_MMU
+                unsigned long (*get_unmapped_area) (struct file *filp,
+                                unsigned long addr, unsigned long len,
+                                unsigned long pgoff, unsigned long flags);
+#endif
 
-Thanks,
-Yongji
+
+It seems that sometimes we have "unsigned long" as return type, but
+sometimes it's just "void". I haven't debugged why this is happening.
+But cc'ing Eduard, just in case it's related to the "unspecified type"
+tracking in pahole, which he recently fixed. There could be some other
+related bug lurking around.
