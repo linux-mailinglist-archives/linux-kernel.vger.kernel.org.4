@@ -2,48 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F306CBC31
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E755E6CBC4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Mar 2023 12:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjC1KNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 06:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45400 "EHLO
+        id S231927AbjC1KOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 06:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjC1KNR (ORCPT
+        with ESMTP id S230413AbjC1KO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 06:13:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B13C1FEC
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:12:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75ACEC14;
-        Tue, 28 Mar 2023 03:13:40 -0700 (PDT)
-Received: from [10.1.33.143] (C02CF1NRLVDN.cambridge.arm.com [10.1.33.143])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A6813F663;
-        Tue, 28 Mar 2023 03:12:55 -0700 (PDT)
-Message-ID: <7981dd12-4e56-a449-980b-52f27279df81@arm.com>
-Date:   Tue, 28 Mar 2023 11:12:54 +0100
+        Tue, 28 Mar 2023 06:14:26 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D761F6A67
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 03:14:25 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SABcMQ024623;
+        Tue, 28 Mar 2023 10:14:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=0Fmmry5YR1A6mSsjoXxgWix7IBTHAR5xItFEU+x7/RU=;
+ b=H+CCGMx6ayQfzwDTxlDBjfNQuem0SDLUMaas+UiCil3Ldxjmpe9Wd2TK80+6RBIQ6mM4
+ 8oGm3qhtpxDrWBAnwDGz1kN/F/i25qgHCvay9V2J/0U8Y/K3FKz5gnIiCxLrGVZSPano
+ re3jkkiDxNlczAfCx4NHj0v5wWi9c2oMk51V3jQpLUSjgsvADSu1lXR9GyWzRsnphYpo
+ ju84Jbnc9mDqv88U9BzaictHxdXbaOYYSSCEZVI18la3+r47M6unFQQpHq1dVk6vvJ8t
+ GZtlf3RBrTcESiQGxEdqOlwMQUQEPEeApPRsWg+JZ6IkZofH0f8Mt+Eb/L5nFbuvd2Ii jQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pkv2ukpq8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 10:14:15 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32S8DufI022532;
+        Tue, 28 Mar 2023 10:14:14 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pkv2ukpp9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 10:14:14 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32RMpFRD002270;
+        Tue, 28 Mar 2023 10:14:12 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3phrk6u9du-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Mar 2023 10:14:12 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32SAE9T423003808
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Mar 2023 10:14:09 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B56202004D;
+        Tue, 28 Mar 2023 10:14:09 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF12020043;
+        Tue, 28 Mar 2023 10:14:06 +0000 (GMT)
+Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.75.27])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 28 Mar 2023 10:14:06 +0000 (GMT)
+Date:   Tue, 28 Mar 2023 15:44:02 +0530
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arch/powerpc/kvm: kvmppc_core_vcpu_create_hv: check for
+ kzalloc failure
+Message-ID: <ZCK96ohvWRY12zZ3@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+References: <20230323074718.2810914-1-kconsul@linux.vnet.ibm.com>
+ <87pm8tcir3.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: What size anonymous folios should we allocate?
-Content-Language: en-US
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <Y/U8bQd15aUO97vS@casper.infradead.org>
- <CAHbLzkrkZmbVMkh-Y-bDxgy0T0ZRRd+T+o5y5-wKmjKmhN0NmA@mail.gmail.com>
- <Y/WRlX+MkmxelNbg@casper.infradead.org>
- <022e1c15-7988-9975-acbc-e661e989ca4a@suse.cz>
- <d347c5b0-0c0f-ae50-9613-2cf962d8676e@arm.com>
- <babd6fcb-0062-0450-99b3-df5a74c2f683@suse.cz>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <babd6fcb-0062-0450-99b3-df5a74c2f683@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87pm8tcir3.fsf@mpe.ellerman.id.au>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fhbdjxMr25THdo9-QsyJ3QPp9NeC2oxd
+X-Proofpoint-ORIG-GUID: tSy5_A9zlgPKTvptuuptKBK2tnTrZ0OJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 clxscore=1015 phishscore=0 impostorscore=0 lowpriorityscore=0
+ bulkscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303280084
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,101 +93,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 16:48, Vlastimil Babka wrote:
-> On 3/27/23 17:30, Ryan Roberts wrote:
->> On 27/03/2023 13:41, Vlastimil Babka wrote:
->>> On 2/22/23 04:52, Matthew Wilcox wrote:
->>>> On Tue, Feb 21, 2023 at 03:05:33PM -0800, Yang Shi wrote:
->>>>
->>>>>> C. We add a new wrinkle to the LRU handling code.  When our scan of the
->>>>>>    active list examines a folio, we look to see how many of the PTEs
->>>>>>    mapping the folio have been accessed.  If it is fewer than half, and
->>>>>>    those half are all in either the first or last half of the folio, we
->>>>>>    split it.  The active half stays on the active list and the inactive
->>>>>>    half is moved to the inactive list.
->>>>>
->>>>> With contiguous PTE, every PTE still maintains its own access bit (but
->>>>> it is implementation defined, some implementations may just set access
->>>>> bit once for one PTE in the contiguous region per arm arm IIUC). But
->>>>> anyway this is definitely feasible.
->>>>
->>>> If a CPU doesn't have separate access bits for PTEs, then we should just
->>>> not use the contiguous bits.  Knowing which parts of the folio are
->>>> unused is more important than using the larger TLB entries.
->>>
->>> Hm but AFAIK the AMD aggregation is transparent, there are no bits. And IIUC
->>> the "Hardware Page Aggregation (HPA)" Ryan was talking about elsewhere in
->>> the thread, that sounds similar. So I IIUC there will be a larger TLB entry
->>> transparently, and then I don't expect the CPU to update individual bits as
->>> that would defeat the purpose. So I'd expect it will either set them all to
->>> active when forming the larger TLB entry, or set them on a single subpage
->>> and leave the rest at whatever state they were. Hm I wonder if the exact
->>> behavior is defined anywhere.
->>
->> For arm64, at least, there are 2 separate mechanisms:
->>
->> "The Contiguous Bit" (D8.6.1 in the Arm ARM) is a bit in the translation table
->> descriptor that SW can set to indicate that a set of adjacent entries are
->> contiguous and have same attributes and permissions etc. It is architectural.
->> The order of the contiguous range is fixed and depends on the base page size
->> that is in use. When in use, HW access and dirty reporting is only done at the
->> granularity of the contiguous block.
->>
->> "HPA" is a micro-architectural feature on some Arm CPUs, which aims to do a
->> similar thing, but is transparent to SW. In this case, the dirty and access bits
->> remain per-page. But when they differ, this affects the performance of the feature.
->>
->> Typically HPA can coalesce up to 4 adjacent entries, whereas for a 4KB base page
->> at least, the contiguous bit applies to 16 adjacent entries.
+On 2023-03-28 20:44:48, Michael Ellerman wrote:
+> Kautuk Consul <kconsul@linux.vnet.ibm.com> writes:
+> > kvmppc_vcore_create() might not be able to allocate memory through
+> > kzalloc. In that case the kvm->arch.online_vcores shouldn't be
+> > incremented.
 > 
-> Hm if it's 4 entries on arm64 and presumably 8 on AMD, maybe we can only
-> care about how actively accessed are the individual "subpages" above that
-> size, to avoid dealing with this uncertainty whether HW tracks them. At such
-> smallish sizes we shouldn't induce massive overhead?
-
-I'm not sure I've fully understood this point. For arm64's HPA, there is no
-"uncertainty [about] whether HW tracks them"; HW will always track access/dirty
-individually for each base page. The problem is the inverse; if SW (or HW) sets
-those bits differently in each page, then TLB coalescing performance may
-decrease. Or are you actually suggesting that SW should always set the bits the
-same for a 4 or 8 page run, and forgo the extra granularity?
-
+> I agree that looks wrong.
 > 
->> I'm hearing that there are workloads where being able to use the contiguous bit
->> really does make a difference, so I would like to explore solutions that can
->> work when we only have access/dirty at the folio level.
+> Have you tried to test what goes wrong if it fails? It looks like it
+> will break the LPCR update, which likely will cause the guest to crash
+> horribly.
+Not sure about LPCR update, but with and without the patch qemu exits
+and so the kvm context is pulled down fine.
 > 
-> And on the higher orders where we have explicit control via bits, we could
-> split the explicitly contiguous mappings once in a while to determine if the
-> sub-folios are still accessed? Although maybe with 16x4kB pages limit it may
-> still be not worth the trouble?
-
-I have a bigger-picture question; why is it useful to split these large folios?
-I think there are 2 potential reasons (but would like to be educated):
-
-1. If a set of sub-pages that were pre-faulted as part of a large folio have
-_never_ been accessed and we are under memory pressure, I guess we would like to
-split the folio and free those pages?
-
-2. If a set of subpages within a folio are cold (but were written in the past)
-and a separate set of subpages within the same folio are hot and we are under
-memory pressure, we would like to swap out the cold pages?
-
-If the first reason is important, I guess we would want to initially map
-non-contig, then only remap as contig once every subpage has been touched at
-least once.
-
-For the second reason, my intuition says that a conceptual single access and
-dirty bit per folio should be sufficient, and folios could be split from
-time-to-time to see if one half is cold?
-
-Thanks,
-Ryan
-
-
-
+> You could use CONFIG_FAIL_SLAB and fail-nth etc. to fail just one
+> allocation for a guest. Or probably easier to just hack the code to fail
+> the 4th time it's called using a static counter.
+I am using live debug and I set the r3 return value to 0x0 after the
+call to kzalloc.
 > 
->> Thanks,
->> Ryan
-> 
+> Doesn't really matter but could be interesting.
+With and without this patch qemu quits with:
+qemu-system-ppc64: kvm_init_vcpu: kvm_get_vcpu failed (0): Cannot allocate memory
 
+That's because qemu will shut down when any vcpu is not able
+to be allocated.
+> 
+> > Add a check for kzalloc failure and return with -ENOMEM from
+> > kvmppc_core_vcpu_create_hv().
+> >
+> > Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+> > ---
+> >  arch/powerpc/kvm/book3s_hv.c | 10 +++++++---
+> >  1 file changed, 7 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
+> > index 6ba68dd6190b..e29ee755c920 100644
+> > --- a/arch/powerpc/kvm/book3s_hv.c
+> > +++ b/arch/powerpc/kvm/book3s_hv.c
+> > @@ -2968,13 +2968,17 @@ static int kvmppc_core_vcpu_create_hv(struct kvm_vcpu *vcpu)
+> >  			pr_devel("KVM: collision on id %u", id);
+> >  			vcore = NULL;
+> >  		} else if (!vcore) {
+> > +			vcore = kvmppc_vcore_create(kvm,
+> > +					id & ~(kvm->arch.smt_mode - 1));
+> 
+> That line doesn't need to be wrapped, we allow 90 columns.
+> 
+> > +			if (unlikely(!vcore)) {
+> > +				mutex_unlock(&kvm->lock);
+> > +				return -ENOMEM;
+> > +			}
+> 
+> Rather than introducing a new return point here, I think it would be
+> preferable to use the existing !vcore case below.
+> 
+> >  			/*
+> >  			 * Take mmu_setup_lock for mutual exclusion
+> >  			 * with kvmppc_update_lpcr().
+> >  			 */
+> > -			err = -ENOMEM;
+> > -			vcore = kvmppc_vcore_create(kvm,
+> > -					id & ~(kvm->arch.smt_mode - 1));
+> 
+> So leave that as is (maybe move the comment down).
+> 
+> And wrap the below in:
+> 
+>  +                      if (vcore) {
+> 
+> >  			mutex_lock(&kvm->arch.mmu_setup_lock);
+> >  			kvm->arch.vcores[core] = vcore;
+> >  			kvm->arch.online_vcores++;
+>  			
+>  			mutex_unlock(&kvm->arch.mmu_setup_lock);
+>  +                      }
+> 		}
+> 	}
+> 
+> Meaning the vcore == NULL case will fall through to here and return via
+> this existing path:
+> 
+> 	mutex_unlock(&kvm->lock);
+> 
+> 	if (!vcore)
+> 		return err;
+> 
+> 
+> cheers
