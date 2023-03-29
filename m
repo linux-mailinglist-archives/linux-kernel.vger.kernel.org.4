@@ -2,75 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 931DB6CD913
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6416CD90A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjC2MFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S229672AbjC2MFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjC2MFV (ORCPT
+        with ESMTP id S229750AbjC2MEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:05:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6D2049F1;
-        Wed, 29 Mar 2023 05:05:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5DAB1FB;
-        Wed, 29 Mar 2023 05:05:53 -0700 (PDT)
-Received: from bogus (unknown [10.57.52.160])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42F203F6C4;
-        Wed, 29 Mar 2023 05:05:06 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 13:04:32 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        vincent.guittot@linaro.org, tarek.el-sherbiny@arm.com,
-        nicola.mazzucato@arm.com, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, wbartczak@marvell.com
-Subject: Re: [PATCH v2 1/3] firmware: arm_scmi: Refactor powercap get/set
- helpers
-Message-ID: <20230329120432.ao36v536sdwqi6e5@bogus>
-References: <20230309140724.2152712-1-cristian.marussi@arm.com>
- <20230309140724.2152712-2-cristian.marussi@arm.com>
- <CAJZ5v0ixFvJ6akSMZmcUsg1n_kufq_WonWhS+ef=ps1FXKqUGQ@mail.gmail.com>
+        Wed, 29 Mar 2023 08:04:48 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFC4C0;
+        Wed, 29 Mar 2023 05:04:47 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: linasend@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id DF14441F98;
+        Wed, 29 Mar 2023 12:04:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1680091486;
+        bh=7wja8b7e1cR7sIIhKDHqBGrFHH4ZjjMoaG3eC2S/l8g=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc;
+        b=LkP9Ew+YkGZHBzX3b2qYbkE7xE0CHA/iZmwS4N+CxN7LgjWneIu9PHW5BFwVvChfx
+         004xcRMCJ9EmycJwq1YC7TsehLfdcq5z0BR/EBb6xlotuU6Dwt0cYsjj+zM0vwYCd4
+         A78F7/TuXmCFRUnvkgv0JTWx+uVVt3dijOdkNp6jva+WSSG/9qlmq9U0n+Ql6E1msi
+         j1md0IBdYgcyQP+ksBGqWNgWgijcaOFAoxdUbyKFzBwWXWLdQNfZKVH8jpJJBJ7V5f
+         bHJtjnH4WBsb9chQsRPvS+4bb4wBvGFK0fH1NtFFZYPMob4Jy9RaaL5b1RzBnHNpMe
+         gAn2Z/VKBNwVQ==
+From:   Asahi Lina <lina@asahilina.net>
+Date:   Wed, 29 Mar 2023 21:04:33 +0900
+Subject: [PATCH v2 1/6] rust: error: Rename to_kernel_errno() -> to_errno()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0ixFvJ6akSMZmcUsg1n_kufq_WonWhS+ef=ps1FXKqUGQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230224-rust-error-v2-1-3900319812da@asahilina.net>
+References: <20230224-rust-error-v2-0-3900319812da@asahilina.net>
+In-Reply-To: <20230224-rust-error-v2-0-3900319812da@asahilina.net>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>
+Cc:     Fox Chen <foxhlchen@gmail.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680091478; l=1196;
+ i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
+ bh=7wja8b7e1cR7sIIhKDHqBGrFHH4ZjjMoaG3eC2S/l8g=;
+ b=kne0zLSHrTRwLBNWWdJZlyhEqojrap6mEiUNwT9Hya5xcb05TI6ZxL69UCWKZQx6xmRUYUVM3
+ Jzl9RWFoI49D0aF6WsvriRs9AcTLEXYceVVElED7tqThMqYoX15j38o
+X-Developer-Key: i=lina@asahilina.net; a=ed25519;
+ pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 07:06:36PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Mar 9, 2023 at 3:09 PM Cristian Marussi
-> <cristian.marussi@arm.com> wrote:
-> >
-> > Refactor SCMI powercap internal get/set helpers.
-> >
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> 
-> I can apply this series if I get an ACK or preferably Reviewed-by:
-> from an SCMI person.
->
+This is kernel code, so specifying "kernel" is redundant. Let's simplify
+things and just call it to_errno().
 
-Sorry, I had looked at this and just delayed asking you about your preference.
-I am fine to take it or else
+Signed-off-by: Asahi Lina <lina@asahilina.net>
+---
+ rust/kernel/error.rs  | 2 +-
+ rust/macros/module.rs | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com> (for SCMI parts)
-
-Please ack 3/3 if you prefer me to take it once you are happy with it.
+diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
+index 5b9751d7ff1d..35894fa35efe 100644
+--- a/rust/kernel/error.rs
++++ b/rust/kernel/error.rs
+@@ -73,7 +73,7 @@ pub struct Error(core::ffi::c_int);
+ 
+ impl Error {
+     /// Returns the kernel error code.
+-    pub fn to_kernel_errno(self) -> core::ffi::c_int {
++    pub fn to_errno(self) -> core::ffi::c_int {
+         self.0
+     }
+ }
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index a7e363c2b044..143336543866 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -258,7 +258,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+                         return 0;
+                     }}
+                     Err(e) => {{
+-                        return e.to_kernel_errno();
++                        return e.to_errno();
+                     }}
+                 }}
+             }}
 
 -- 
-Regards,
-Sudeep
+2.40.0
+
