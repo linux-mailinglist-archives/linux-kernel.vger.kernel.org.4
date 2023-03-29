@@ -2,183 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C471E6CD9D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69AD6CD9DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjC2NBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 09:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
+        id S230074AbjC2NCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 09:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjC2NBq (ORCPT
+        with ESMTP id S229700AbjC2NCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:01:46 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EC9CA;
-        Wed, 29 Mar 2023 06:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680094903; x=1711630903;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M8LKsGXgrEqKUdUv7wna8yZG8GZaTqDF9eASbo6RR20=;
-  b=CWdgPOH2bdOU5xUVqZ48Q0qGQ6waOR3tgi7rGSCjtKECn0CQ8Nf9LG9g
-   WeWBhapWuaAEPdBG/fQSGkQ0RPYq3OxXIeswWrMAyI9r6agxecN+Rr7kX
-   NumRDFgLtyd1YpMXkcbc9Y8Z6/5BNq8I5i+6MLD0K+S0YlCNaFe4wB8yJ
-   M1QYtg1v8P+sb9AOnylEpt2dajgPEIULiCzu/uuS5am24EANbS4VKStaP
-   6cN9iDxxuWkOQy5alNgRkwuf8voS71crP2nGQuJB+9+2hLGhFLK4h5DTG
-   dlYGDXTa2Ejs6s6Z9KseerzjHuhDIJAFmHYVJd0HuKDtnmxJh71zMm0gk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="368638253"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="368638253"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 06:01:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="1014010988"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="1014010988"
-Received: from ostermam-mobl.amr.corp.intel.com (HELO intel.com) ([10.249.32.144])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 06:01:35 -0700
-Date:   Wed, 29 Mar 2023 15:01:10 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andi Shyti <andi.shyti@linux.intel.com>
-Subject: Re: [PATCH v6 0/8] drm/i915: use ref_tracker library for tracking
- wakerefs
-Message-ID: <ZCQ2lr6/ITBdBqce@ashyti-mobl2.lan>
-References: <20230224-track_gt-v6-0-0dc8601fd02f@intel.com>
+        Wed, 29 Mar 2023 09:02:48 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CE2D2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:02:46 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id ix20so14843719plb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:02:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680094966;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VLHjyKqMJYKZrp1MHqySZDYe1F1A7th52vgdpDMrBgU=;
+        b=Ul+omYxuiCtivXL3anxOeWUcNgi8WbSGfCsXE0berdrDDV8kGYycbF2pGlnt610FTH
+         smPW7o01JqgeEtMW2AlL00CQbm3h3uW4p1zSNY+7bjYeMl7FS74HHHMcCDnrgnmkJaWo
+         6fXvOok9ANGXNr0sy3Ul3ifGyXzreKpEWov7T4wgMFdQMyJZrjNWKO0fxbL2gVBots9h
+         NkMZL/8Z3bsBDmNBm5JUoB5tG9GJa4e/FftpGgfUnLG2Nqn6PHh41IwyWScLOR+p6Lye
+         t/f49GSxaSI6JzlYIrNOznA0ueYID05NYgLWODwtpCpgE8hfrB3KU7O54ULKpz+s+H5Y
+         m1OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680094966;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VLHjyKqMJYKZrp1MHqySZDYe1F1A7th52vgdpDMrBgU=;
+        b=7yZ7JpzffP9BLiMabKUE4RBKrrOrFsczDNV8Gkxgcu57ibPZjNor/a6l1DbDPzy9FB
+         LGakwMbp8egq/8trEUOTdXPtvCYY8om6k8z3RcPg0ylwAE4t3nnW8rjSsquM/mLWFLRF
+         0xiIU7UhRy4+Qt42TlR4br9CuKqqm8eM8J5UORYJGHtSIHOUO47LeOQhqoyeSyyjUFoe
+         qvh7+Vuk3U7FgIuBM3P8KvF2Al82kEQSC4pSNeTyrqyOFONpgNXk5LWEXYE0ig9M4DLJ
+         8SfROLyr09IOINIf9Ngf5aNl2z4vbLCVHPneENuXsbmp71vzLoHKMHu3m3Kl5PONLsFA
+         irbA==
+X-Gm-Message-State: AAQBX9eUPgdNaFZTgPI1DsTTL4xvWc0mdqT/EY9A2iKP+3GJXasFn7QN
+        QXMt5k7H6+3tGDBzRP/Jnu05
+X-Google-Smtp-Source: AKy350ZDVjbstg/QL4QGtDnz7jL0TJMSWTa+RY3jeewKPpM7zdgI9KJ7ETXCdwqKv4pyu/kjoFXjxQ==
+X-Received: by 2002:a17:902:ec82:b0:1a1:8d4e:a71d with SMTP id x2-20020a170902ec8200b001a18d4ea71dmr26392325plg.46.1680094965778;
+        Wed, 29 Mar 2023 06:02:45 -0700 (PDT)
+Received: from thinkpad ([117.216.120.213])
+        by smtp.gmail.com with ESMTPSA id e6-20020a170902b78600b0019edb3ae415sm23012008pls.14.2023.03.29.06.02.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 06:02:45 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 18:32:37 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Frank Li <frank.li@nxp.com>
+Cc:     "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "kw@linux.com" <kw@linux.com>, "robh@kernel.org" <robh@kernel.org>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "konrad.dybcio@linaro.org" <konrad.dybcio@linaro.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "quic_krichai@quicinc.com" <quic_krichai@quicinc.com>,
+        "johan+linaro@kernel.org" <johan+linaro@kernel.org>,
+        "steev@kali.org" <steev@kali.org>,
+        "mka@chromium.org" <mka@chromium.org>, Dhruva Gole <d-gole@ti.com>
+Subject: Re: [EXT] [PATCH v3 1/1] PCI: qcom: Add support for system suspend
+ and resume
+Message-ID: <20230329130237.GC5575@thinkpad>
+References: <20230327133824.29136-1-manivannan.sadhasivam@linaro.org>
+ <20230327133824.29136-2-manivannan.sadhasivam@linaro.org>
+ <AM6PR04MB4838C84574BE534DDB0428D0888B9@AM6PR04MB4838.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230224-track_gt-v6-0-0dc8601fd02f@intel.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AM6PR04MB4838C84574BE534DDB0428D0888B9@AM6PR04MB4838.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric, David (Miller),
+On Mon, Mar 27, 2023 at 03:29:54PM +0000, Frank Li wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Sent: Monday, March 27, 2023 8:38 AM
+> > To: lpieralisi@kernel.org; kw@linux.com; robh@kernel.org
+> > Cc: andersson@kernel.org; konrad.dybcio@linaro.org;
+> > bhelgaas@google.com; linux-pci@vger.kernel.org; linux-arm-
+> > msm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > quic_krichai@quicinc.com; johan+linaro@kernel.org; steev@kali.org;
+> > mka@chromium.org; Manivannan Sadhasivam
+> > <manivannan.sadhasivam@linaro.org>; Dhruva Gole <d-gole@ti.com>
+> > Subject: [EXT] [PATCH v3 1/1] PCI: qcom: Add support for system suspend
+> > and resume
+> > 
+> > Caution: EXT Email
+> > 
+> > During the system suspend, vote for minimal interconnect bandwidth and
+> > also turn OFF the resources like clock and PHY if there are no active
+> > devices connected to the controller. For the controllers with active
+> > devices, the resources are kept ON as removing the resources will
+> > trigger access violation during the late end of suspend cycle as kernel
+> > tries to access the config space of PCIe devices to mask the MSIs.
+> 
+> I remember I met similar problem before. It is relate ASPM settings of NVME.
+> NVME try to use L1.2 at suspend to save restore time. 
+> 
+> It should be user decided if PCI enter L1.2( for better resume time) or L2
+> For batter power saving.  If NVME disable ASPM,  NVME driver will free
+> Msi irq before enter suspend,  so not issue access config space by MSI
+> Irq disable function. 
+> 
 
-Could you please check the ref_tracker portion of this series?
+The NVMe driver will only shutdown the device if ASPM is completely disabled in
+the kernel. They also take powerdown path for some Intel platforms though. For
+others, they keep the device in power on state and expect power saving with
+ASPM.
 
-This patch has reached its 6th version, and we need your approval
-to proceed.
+> This is just general comment. It is not specific for this patches.  Many platform
+> Will face the similar problem.  Maybe need better solution to handle
+> L2/L3 for better power saving in future. 
+> 
 
-Thank you,
-Andi
+The only argument I hear from them is that, when the NVMe device gets powered
+down during suspend, then it may detoriate the life time of it as the suspend
+cycle is going to be high.
 
-On Wed, Mar 29, 2023 at 09:24:12AM +0200, Andrzej Hajda wrote:
-> Gently ping for network developers, could you look at ref_tracker patches,
-> as the ref_tracker library was developed for network.
+- Mani
+
+> Frank Li
+>  
+> > 
+> > Also, it is not desirable to put the link into L2/L3 state as that
+> > implies VDD supply will be removed and the devices may go into powerdown
+> > state. This will affect the lifetime of storage devices like NVMe.
+> > 
+> > And finally, during resume, turn ON the resources if the controller was
+> > truly suspended (resources OFF) and update the interconnect bandwidth
+> > based on PCIe Gen speed.
+> > 
+> > Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> > Acked-by: Dhruva Gole <d-gole@ti.com>
+> > Signed-off-by: Manivannan Sadhasivam
+> > <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 62 ++++++++++++++++++++++++++
+> >  1 file changed, 62 insertions(+)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c
+> > b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index a232b04af048..f33df536d9be 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -227,6 +227,7 @@ struct qcom_pcie {
+> >         struct gpio_desc *reset;
+> >         struct icc_path *icc_mem;
+> >         const struct qcom_pcie_cfg *cfg;
+> > +       bool suspended;
+> >  };
+> > 
+> >  #define to_qcom_pcie(x)                dev_get_drvdata((x)->dev)
+> > @@ -1820,6 +1821,62 @@ static int qcom_pcie_probe(struct
+> > platform_device *pdev)
+> >         return ret;
+> >  }
+> > 
+> > +static int qcom_pcie_suspend_noirq(struct device *dev)
+> > +{
+> > +       struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> > +       int ret;
+> > +
+> > +       /*
+> > +        * Set minimum bandwidth required to keep data path functional during
+> > +        * suspend.
+> > +        */
+> > +       ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
+> > +       if (ret) {
+> > +               dev_err(dev, "Failed to set interconnect bandwidth: %d\n", ret);
+> > +               return ret;
+> > +       }
+> > +
+> > +       /*
+> > +        * Turn OFF the resources only for controllers without active PCIe
+> > +        * devices. For controllers with active devices, the resources are kept
+> > +        * ON and the link is expected to be in L0/L1 (sub)states.
+> > +        *
+> > +        * Turning OFF the resources for controllers with active PCIe devices
+> > +        * will trigger access violation during the end of the suspend cycle,
+> > +        * as kernel tries to access the PCIe devices config space for masking
+> > +        * MSIs.
+> > +        *
+> > +        * Also, it is not desirable to put the link into L2/L3 state as that
+> > +        * implies VDD supply will be removed and the devices may go into
+> > +        * powerdown state. This will affect the lifetime of the storage devices
+> > +        * like NVMe.
+> > +        */
+> > +       if (!dw_pcie_link_up(pcie->pci)) {
+> > +               qcom_pcie_host_deinit(&pcie->pci->pp);
+> > +               pcie->suspended = true;
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int qcom_pcie_resume_noirq(struct device *dev)
+> > +{
+> > +       struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> > +       int ret;
+> > +
+> > +       if (pcie->suspended) {
+> > +               ret = qcom_pcie_host_init(&pcie->pci->pp);
+> > +               if (ret)
+> > +                       return ret;
+> > +
+> > +               pcie->suspended = false;
+> > +       }
+> > +
+> > +       qcom_pcie_icc_update(pcie);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> >  static const struct of_device_id qcom_pcie_match[] = {
+> >         { .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
+> >         { .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
+> > @@ -1856,12 +1913,17 @@
+> > DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0302,
+> > qcom_fixup_class);
+> >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1000,
+> > qcom_fixup_class);
+> >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001,
+> > qcom_fixup_class);
+> > 
+> > +static const struct dev_pm_ops qcom_pcie_pm_ops = {
+> > +       NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_suspend_noirq,
+> > qcom_pcie_resume_noirq)
+> > +};
+> > +
+> >  static struct platform_driver qcom_pcie_driver = {
+> >         .probe = qcom_pcie_probe,
+> >         .driver = {
+> >                 .name = "qcom-pcie",
+> >                 .suppress_bind_attrs = true,
+> >                 .of_match_table = qcom_pcie_match,
+> > +               .pm = &qcom_pcie_pm_ops,
+> >         },
+> >  };
+> >  builtin_platform_driver(qcom_pcie_driver);
+> > --
+> > 2.25.1
 > 
-> This is revived patchset improving ref_tracker library and converting
-> i915 internal tracker to ref_tracker.
-> The old thread ended without consensus about small kernel allocations,
-> which are performed under spinlock.
-> I have tried to solve the problem by splitting the calls, but it results
-> in complicated API, so I went back to original solution.
-> If there are better solutions I am glad to discuss them.
-> Meanwhile I send original patchset with addressed remaining comments.
-> 
-> To: Jani Nikula <jani.nikula@linux.intel.com>
-> To: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> To: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> To: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> To: David Airlie <airlied@gmail.com>
-> To: Daniel Vetter <daniel@ffwll.ch>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: Chris Wilson <chris@chris-wilson.co.uk>
-> Cc: netdev@vger.kernel.org
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Andi Shyti <andi.shyti@linux.intel.com>
-> Cc: Das, Nirmoy <nirmoy.das@linux.intel.com>
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> 
-> ---
-> Changes in v6:
-> - rebased to solve minor conflict and allow CI testing
-> - Link to v5: https://lore.kernel.org/r/20230224-track_gt-v5-0-77be86f2c872@intel.com
-> 
-> Changes in v5 (thx Andi for review):
-> - use *_locked convention instead of __*,
-> - improved commit messages,
-> - re-worked i915 patches, squashed separation and conversion patches,
-> - added tags,
-> - Link to v4: https://lore.kernel.org/r/20230224-track_gt-v4-0-464e8ab4c9ab@intel.com
-> 
-> Changes in v4:
-> - split "Separate wakeref tracking" to smaller parts
-> - fixed typos,
-> - Link to v1-v3: https://patchwork.freedesktop.org/series/100327/
-> 
-> ---
-> Andrzej Hajda (7):
->       lib/ref_tracker: add unlocked leak print helper
->       lib/ref_tracker: improve printing stats
->       lib/ref_tracker: add printing to memory buffer
->       lib/ref_tracker: remove warnings in case of allocation failure
->       drm/i915: Correct type of wakeref variable
->       drm/i915: Replace custom intel runtime_pm tracker with ref_tracker library
->       drm/i915: track gt pm wakerefs
-> 
-> Chris Wilson (1):
->       drm/i915/gt: Hold a wakeref for the active VM
-> 
->  drivers/gpu/drm/i915/Kconfig.debug                 |  19 ++
->  drivers/gpu/drm/i915/display/intel_display_power.c |   2 +-
->  drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c     |   7 +-
->  .../drm/i915/gem/selftests/i915_gem_coherency.c    |  10 +-
->  drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c |  14 +-
->  drivers/gpu/drm/i915/gt/intel_breadcrumbs.c        |  13 +-
->  drivers/gpu/drm/i915/gt/intel_breadcrumbs_types.h  |   3 +-
->  drivers/gpu/drm/i915/gt/intel_context.h            |  15 +-
->  drivers/gpu/drm/i915/gt/intel_context_types.h      |   2 +
->  drivers/gpu/drm/i915/gt/intel_engine_pm.c          |  10 +-
->  drivers/gpu/drm/i915/gt/intel_engine_types.h       |   2 +
->  .../gpu/drm/i915/gt/intel_execlists_submission.c   |   2 +-
->  drivers/gpu/drm/i915/gt/intel_gt_pm.c              |  12 +-
->  drivers/gpu/drm/i915/gt/intel_gt_pm.h              |  38 +++-
->  drivers/gpu/drm/i915/gt/intel_gt_pm_debugfs.c      |   4 +-
->  drivers/gpu/drm/i915/gt/selftest_engine_cs.c       |  20 +-
->  drivers/gpu/drm/i915/gt/selftest_gt_pm.c           |   5 +-
->  drivers/gpu/drm/i915/gt/selftest_reset.c           |  10 +-
->  drivers/gpu/drm/i915/gt/selftest_rps.c             |  17 +-
->  drivers/gpu/drm/i915/gt/selftest_slpc.c            |   5 +-
->  drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c  |  11 +-
->  drivers/gpu/drm/i915/i915_driver.c                 |   2 +-
->  drivers/gpu/drm/i915/i915_pmu.c                    |  16 +-
->  drivers/gpu/drm/i915/intel_runtime_pm.c            | 221 ++-------------------
->  drivers/gpu/drm/i915/intel_runtime_pm.h            |  11 +-
->  drivers/gpu/drm/i915/intel_wakeref.c               |   7 +-
->  drivers/gpu/drm/i915/intel_wakeref.h               |  99 ++++++++-
->  include/linux/ref_tracker.h                        |  31 ++-
->  lib/ref_tracker.c                                  | 179 ++++++++++++++---
->  29 files changed, 456 insertions(+), 331 deletions(-)
-> ---
-> base-commit: d4c9fe2c8c9b66c5e5954f6ded7bc934dd6afe3e
-> change-id: 20230224-track_gt-1b3da8bdacd7
-> 
-> Best regards,
-> -- 
-> Andrzej Hajda <andrzej.hajda@intel.com>
+
+-- 
+மணிவண்ணன் சதாசிவம்
