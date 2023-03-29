@@ -2,148 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65BF6CD388
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5316CD393
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjC2HqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 03:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        id S230036AbjC2HrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 03:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjC2HqQ (ORCPT
+        with ESMTP id S229640AbjC2HrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 03:46:16 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6DF3C00;
-        Wed, 29 Mar 2023 00:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1680075974; x=1711611974;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RXE11WAjq7Mq1gQbnjVpv6i2MWcnuFssWTa5BCBjDx8=;
-  b=1DC6efx5OdF3goSGN06HUHKZuKXIPiQhqTznboqxXjBdMZ6tlyjAtCJg
-   cJ1wqPbiWo7DGixzzWN/jR64WkKDF/NGepOuDakLMt4CX4nX5IcDmTUJx
-   ZbjwJyLPc/hYtxCUY82I6SfXlmcV801z2FMNTs9Sidj9HkKEsw8zk2zMN
-   bVxb7EE5/H0GPR6Ps7fQTvQ2dLzIGZiKu4D9HDuWJdpTHHCabmzXPm1k+
-   ErMkB+EaPgWmDExBpHhcAcesmtSIkNFLhVskRrGFftywi3fgeO2niU/kY
-   I2MUEstxaYPszBor3yfSoUovFvwU6n6T2tVj4mAx/AdEmZNm1Thpka0Nq
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,300,1673938800"; 
-   d="asc'?scan'208";a="203958215"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2023 00:46:13 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 29 Mar 2023 00:46:11 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 29 Mar 2023 00:46:09 -0700
-Date:   Wed, 29 Mar 2023 08:45:56 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Alexandre Ghiti <alex@ghiti.fr>
-CC:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, <linux-doc@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -fixes 1/2] riscv: Move early dtb mapping into the fixmap
- region
-Message-ID: <3fbfd976-6a24-44cf-91f2-89cc050b4256@spud>
-References: <20230323163347.182895-1-alexghiti@rivosinc.com>
- <20230323163347.182895-2-alexghiti@rivosinc.com>
- <292617ac-b63b-473d-8d4e-2817d17233a1@spud>
- <b9097be8-b842-5e53-f728-a8cb6251316d@ghiti.fr>
+        Wed, 29 Mar 2023 03:47:16 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D6E211B;
+        Wed, 29 Mar 2023 00:47:15 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32T74G4i019840;
+        Wed, 29 Mar 2023 07:47:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=kIcX0dBKom6AOaVB5KBIqAc4COlmXL2yMEl0MUAWiKw=;
+ b=U7sq/FG5tOvDut0tCxDGQk0jFiScF8PXpplP8oO2GYjpyLLmp0wuKTqN/PLkHP98z6Yo
+ AAGUZxQzPiCziJFmgSA4JwBeuuRTqVWDEtk2r43qtraoQnAd/tDLOZzZmpEVhigFsmOB
+ +E+WzHuL7ZEodTemwuKd7TFXfG6GLWsMKlobKBIbnVxQHLS3AP2mKyHJbAsrDUC8DF7J
+ JNh6V9A49GIDbhquSUpbMEh17OdYTeamGrZupaZzSm7X/2SvAlcTISjB7CtKAku0l8YX
+ Jx4JqR5QemlMo1gmcz7zlpjE3SZBVlFnhyHsGJiT8yidhp3p2ukZi8uBo982WDmZIZhy vQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pkx4tatdw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 07:47:06 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32T7l5ne013145
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 07:47:05 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 29 Mar 2023 00:47:02 -0700
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <linus.walleij@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH v6 0/5] Refactor to support multiple download mode
+Date:   Wed, 29 Mar 2023 13:16:47 +0530
+Message-ID: <1680076012-10785-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mHQtHzilC6ByhlZn"
-Content-Disposition: inline
-In-Reply-To: <b9097be8-b842-5e53-f728-a8cb6251316d@ghiti.fr>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: LOpR2KRacpGMbmMVwk57Pz0_qw0BfzCh
+X-Proofpoint-ORIG-GUID: LOpR2KRacpGMbmMVwk57Pz0_qw0BfzCh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-29_02,2023-03-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ spamscore=0 bulkscore=0 phishscore=0 suspectscore=0 impostorscore=0
+ mlxlogscore=999 lowpriorityscore=0 priorityscore=1501 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303290063
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---mHQtHzilC6ByhlZn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Intention of this series to support multiple download mode and
+only modify the required bits during setting tcsr register.
 
-On Wed, Mar 29, 2023 at 09:36:00AM +0200, Alexandre Ghiti wrote:
-> On 3/27/23 12:37, Conor Dooley wrote:
-> > On Thu, Mar 23, 2023 at 05:33:46PM +0100, Alexandre Ghiti wrote:
+Other download modes are minidump, full dump, both fulldump + minidump, nodump.
 
-> The fix is not wrong, it is just incomplete: it fixes the issue with the
-> not-existing-anymore address but introduces the problem with the possible
-> allocations in the reserved regions (which you explained clearly below,
-> thanks).
+Latest minidump kernel driver patches has been sent here
+https://lore.kernel.org/lkml/1679491817-2498-1-git-send-email-quic_mojha@quicinc.com/
 
-Which to me, makes it wrong ;) It's my own patch I'm dumping on so I
-think I am best qualified to do that!
+Also, this series should be applied on
+https://lore.kernel.org/lkml/1678979666-551-1-git-send-email-quic_mojha@quicinc.com/
 
-> > It would be good to mention that specifically I think, say:
-> >=20
-> > 	riscv establishes 2 virtual mappings:
-> >=20
-> > 	- early_pg_dir maps the kernel which allows to discover the system
-> > 	  memory
-> > 	- swapper_pg_dir installs the final mapping (linear mapping included)
-> >=20
-> > 	We used to map the dtb in early_pg_dir using DTB_EARLY_BASE_VA, and th=
-is
-> > 	mapping was not carried over in swapper_pg_dir. This caused problems
-> > 	for reserved memory, as early_init_fdt_scan_reserved_mem() initialised
-> > 	reserved_mem variables with addresses that lie in the early_pg_dir dtb
-> > 	mapping. When those addresses are reused with swapper_pg_dir, this
-> > 	mapping does not exist and then we trap.
-> > 	The previous "fix" was incorrect as early_init_fdt_scan_reserved_mem()
-> > 	must be called before swapper_pg_dir is set up otherwise we could
-> > 	allocate in reserved memory defined in the dtb.
-> >=20
-> > 	Move the dtb mapping in the fixmap region which is established in
-> > 	early_pg_dir and handed over to swapper_pg_dir.
-> >=20
-> > You need this one too:
-> > Fixes: 922b0375fc93 ("riscv: Fix memblock reservation for device tree b=
-lob")
->=20
-> Not sure this commit is related to this fix and it's hard to find *one*
-> culprit: TBH I only mentioned this one as otherwise I think the right com=
-mit
-> is commit 8f3a2b4a96dc ("RISC-V: Move DT mapping outof fixmap") but that'=
-s a
-> long time ago and the patch won't apply easily, not sure what to do here.
+Changes in v6:
+  - Applied suggested API change(at v4) by [dmitry.baryshkov] 
 
-Yeah, it's hard to say.. I think the one I mentioned above should be
-mentioned though, because that's what (I think) introduced the bug that
-I was fixing in my commit, so if this patch is replacing my fix (which
-it is) then I think it should have a super-set of the Fixes: tags in my
-one.
+Changes in v5: https://lore.kernel.org/lkml/1680017869-22421-1-git-send-email-quic_mojha@quicinc.com/
+  - Tried to fix the issue reported by kernel test robot
+    https://lore.kernel.org/lkml/202303280535.acb66sQT-lkp@intel.com/
 
-> > Thanks for working on this,
->=20
->=20
-> You're welcome, that was fun!
+  - Applied some of the improvement suggested by [Bjorn.andersson]
+ 
+    . Dropped 'both' instead support full,mini or mini,full for setting download
+    mode to collect both minidump and full dump.
+    
+    . logging improvement.
+    
 
-Sounds like masochism to me! ;)
+Changes in v4: https://lore.kernel.org/lkml/1679935281-18445-1-git-send-email-quic_mojha@quicinc.com/
+  - val should be shifted within the function [srinivas.kandagatla]
+    i.e new = (old & ~mask) | (val << ffs(mask) - 1);
+  - Added Acked-by [linus.walleij] on pinctrl change.
 
+Changes in v3 : https://lore.kernel.org/lkml/1679070482-8391-1-git-send-email-quic_mojha@quicinc.com/
+ - Removed [1] from the series and sent as a separate patch[2], although this series
+   should be applied on top [2].
+  [1] https://lore.kernel.org/lkml/1677664555-30191-2-git-send-email-quic_mojha@quicinc.com/
+  [2] https://lore.kernel.org/lkml/1678979666-551-1-git-send-email-quic_mojha@quicinc.com/
+ - Introduce new exported symbol on suggestion from [srinivas.kandagatla]
+ - Use the symbol from drivers/pinctrl/qcom/pinctrl-msm.c.
+ - Addressed comment given by [dmitry.baryshkov]
+ - Converted non-standard Originally-by to Signed-off-by.
 
---mHQtHzilC6ByhlZn
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes in v2: https://lore.kernel.org/lkml/1677664555-30191-1-git-send-email-quic_mojha@quicinc.com/
+ - Addressed comment made by [bjorn]
+ - Added download mask.
+ - Passed download mode as parameter
+ - Accept human accepatable download mode string.
+ - enable = !!dload_mode
+ - Shifted module param callback to somewhere down in
+   the file so that it no longer need to know the
+   prototype of qcom_scm_set_download_mode()
+ - updated commit text.
 
------BEGIN PGP SIGNATURE-----
+Mukesh Ojha (5):
+  firmware: qcom_scm: provide a read-modify-write function
+  pinctrl: qcom: Use qcom_scm_io_update_field()
+  firmware: scm: Modify only the download bits in TCSR register
+  firmware: qcom_scm: Refactor code to support multiple download mode
+  firmware: qcom_scm: Add multiple download mode support
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCPspwAKCRB4tDGHoIJi
-0n4CAQDthtD9EQ0oVsSXbJlZB5gXxT0oxDzOxUW/Gy6acDiNewD/Qdy18eeHVLCP
-ZtZm+663INT/3mXFda24f6EIu8spDAk=
-=7bOX
------END PGP SIGNATURE-----
+ drivers/firmware/Kconfig               | 11 -----
+ drivers/firmware/qcom_scm.c            | 88 ++++++++++++++++++++++++++++++----
+ drivers/pinctrl/qcom/pinctrl-msm.c     | 11 ++---
+ include/linux/firmware/qcom/qcom_scm.h |  2 +
+ 4 files changed, 86 insertions(+), 26 deletions(-)
 
---mHQtHzilC6ByhlZn--
+-- 
+2.7.4
+
