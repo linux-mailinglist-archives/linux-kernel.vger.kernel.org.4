@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA766CD9C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EAF6CD9C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbjC2M57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
+        id S229809AbjC2M55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjC2M5u (ORCPT
+        with ESMTP id S229835AbjC2M5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:57:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDF61717
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:56:45 -0700 (PDT)
+        Wed, 29 Mar 2023 08:57:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A8819B2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:56:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680094604;
+        s=mimecast20190719; t=1680094611;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AarAALbhiwCdePxFbgwikLSSecQrfwKJY2q+EcgoXOI=;
-        b=EIrvsdSRTKH7BcbmCj5tP9sEy5SIgU/dCBuz/CrTkAk8qjk4lzPPjDexYhuWJh8/mHAzO1
-        pU2Yyh6WURDq65sK9OaG0Xd/iHNS1Sf2FuN3q+vvwmlfq6nPNBI5920tN5hK6D17upHwRX
-        8s8dcwUqGQ6p0YZ6mEqjoTmnNfDyl9s=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5nV5Ts2SkJ8UEBvAJl55FmB5KeAii4wSJwG1pfX3s8w=;
+        b=Zggtmc55O2V2DI9SJ2FH0P1FtwxPwL8neh0N6kciH0yUtujQHbsP654Hc8agpBlwWEmPpT
+        jL3b8khbOMnVDq/5rvCmbDefi8ikf/lz6llAk2KYLhi5svjp06PEFk+pgcT9UxzoKckZ4o
+        dKIgRi/HnpCop4SJ8t+MPLquffEzNCo=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-507-6TTYgejiO5Wt9ZoYHNVWjA-1; Wed, 29 Mar 2023 08:56:43 -0400
-X-MC-Unique: 6TTYgejiO5Wt9ZoYHNVWjA-1
-Received: by mail-qt1-f197.google.com with SMTP id p22-20020a05622a00d600b003e38f7f800bso10085894qtw.9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:56:43 -0700 (PDT)
+ us-mta-428-ieF7ZibMOp275gam2_ErIA-1; Wed, 29 Mar 2023 08:56:48 -0400
+X-MC-Unique: ieF7ZibMOp275gam2_ErIA-1
+Received: by mail-qt1-f200.google.com with SMTP id v7-20020a05622a188700b003e0e27bbc2eso10173672qtc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:56:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680094603;
+        d=1e100.net; s=20210112; t=1680094608;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AarAALbhiwCdePxFbgwikLSSecQrfwKJY2q+EcgoXOI=;
-        b=LTLuhO8BifJmksgqMcNM3D1TpxkLRpOmXcOliy5B2vjSNys1AFoep59hIo/OjlXvGJ
-         hby18z2NhUa+u3aELTOgRv4SobscmK2ZWgvfHjOlSmpZsr/CmStZJhmvFFSDqORJ59NK
-         k8Bbv/3a9Pwrpr2Dh+NgLxc0WyrGjC+vBMJMVxgIVxs/yQU/p7UZp29ePNxJpXthJC5c
-         kWhWzDnk5MI847TSsFM+IFBnLZxTrtpBFpKYLtysbpr/O3BXQJDzw+og/lLIJ+97POO/
-         uNN7BLiXRIOCEoNa0Z1ySBgu9ugy9djCYawRkErIQyKqc1ZY8vidRqO6O37LZ5lKAVs5
-         nMVw==
-X-Gm-Message-State: AO0yUKXiVHDBAJnElu7odsUqHQ4gQKqvVqIQVA0AIQhJdyEVsrJXpK7d
-        Ytl1VP7grcgMd5YqsG7IxKqPZdB0G4PmfXkb0WKVdapILkqkpMov7GaKUnLhvqnXZ2nPpAv//DI
-        RFu9xdPF70BDQMV/L7X+iF/oK
-X-Received: by 2002:ac8:5a95:0:b0:3e1:59e8:7437 with SMTP id c21-20020ac85a95000000b003e159e87437mr32925156qtc.0.1680094602652;
-        Wed, 29 Mar 2023 05:56:42 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/lfg19wjU+h28m3jehzaAFckJz1mh+H9hsasvjC7rslxKkdZ+G0cjAjqXoFZ9vnevcwWKHCQ==
-X-Received: by 2002:ac8:5a95:0:b0:3e1:59e8:7437 with SMTP id c21-20020ac85a95000000b003e159e87437mr32925117qtc.0.1680094602334;
-        Wed, 29 Mar 2023 05:56:42 -0700 (PDT)
+        bh=5nV5Ts2SkJ8UEBvAJl55FmB5KeAii4wSJwG1pfX3s8w=;
+        b=wpnNWN3tzxtNWd+itqQOEmKd442v8SbGJQ5U3/2/CkltjAqhLxYpHjFKmYEY8INtaJ
+         8TitGEFEBvfU4eakXLJUwUVOnJ9/agLBxk/sfi6ZE9ImwW2sko71OQGUjvxeE0mIGPA1
+         NdH8pVZPnwc+Gft0WpC2F/9Q+DveDv60oQJWZcToeb/zgIJdiBUfGdwS8un1qgX3Muua
+         M4clZ0+EQghrfajd2tkul5+TJyCSS6oth7zjxkexyrEPe/LK/hXmtugAwnd0YUqA1Jyu
+         FzrhDciJDzAfJUbVHNGZxzmhBmCO2DoASU0v7p0YtxWU9fhDGPMVV9dcTWQqf88zWRXo
+         ziVA==
+X-Gm-Message-State: AO0yUKWD4b0rTy+Q6AcQhgfXZRFWlyjBSOh7NtWH0dv0bDHK8GUtVI2w
+        pKFzHEQL/0FEcSZMFXuDL4yBt/1f2eVIyqWAzxYMG4ucg5YNPhR2u+gVt2mM7/y6iAQ9XHqnfIS
+        yea1Px1cIh0RoqO/wxtzZJqoDHMXo3lBSUr0=
+X-Received: by 2002:a05:622a:647:b0:3bf:d9ee:882d with SMTP id a7-20020a05622a064700b003bfd9ee882dmr31368140qtb.40.1680094608245;
+        Wed, 29 Mar 2023 05:56:48 -0700 (PDT)
+X-Google-Smtp-Source: AK7set83m6ZzVM34kY1u32+kqOBpKNnVee7yjMSmeTfMNGq1oY16x+fOXLrQBMuAPX3spNrTz+DFbQ==
+X-Received: by 2002:a05:622a:647:b0:3bf:d9ee:882d with SMTP id a7-20020a05622a064700b003bfd9ee882dmr31368117qtb.40.1680094607962;
+        Wed, 29 Mar 2023 05:56:47 -0700 (PDT)
 Received: from localhost.localdomain.com ([151.29.151.163])
-        by smtp.gmail.com with ESMTPSA id c23-20020a379a17000000b007436d0e9408sm13527134qke.127.2023.03.29.05.56.37
+        by smtp.gmail.com with ESMTPSA id c23-20020a379a17000000b007436d0e9408sm13527134qke.127.2023.03.29.05.56.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 05:56:42 -0700 (PDT)
+        Wed, 29 Mar 2023 05:56:47 -0700 (PDT)
 From:   Juri Lelli <juri.lelli@redhat.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>,
@@ -78,9 +78,9 @@ Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Sudeep Holla <sudeep.holla@arm.com>,
         Juri Lelli <juri.lelli@redhat.com>
-Subject: [PATCH 5/6] cgroup/cpuset: Free DL BW in case can_attach() fails
-Date:   Wed, 29 Mar 2023 14:55:57 +0200
-Message-Id: <20230329125558.255239-6-juri.lelli@redhat.com>
+Subject: [PATCH 6/6] cgroup/cpuset: Iterate only if DEADLINE tasks are present
+Date:   Wed, 29 Mar 2023 14:55:58 +0200
+Message-Id: <20230329125558.255239-7-juri.lelli@redhat.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230329125558.255239-1-juri.lelli@redhat.com>
 References: <20230329125558.255239-1-juri.lelli@redhat.com>
@@ -96,195 +96,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+update_tasks_root_domain currently iterates over all tasks even if no
+DEADLINE task is present on the cpuset/root domain for which bandwidth
+accounting is being rebuilt. This has been reported to introduce 10+ ms
+delays on suspend-resume operations.
 
-cpuset_can_attach() can fail. Postpone DL BW allocation until all tasks
-have been checked. DL BW is not allocated per-task but as a sum over
-all DL tasks migrating.
+Skip the costly iteration for cpusets that don't contain DEADLINE tasks.
 
-If multiple controllers are attached to the cgroup next to the cuset
-controller a non-cpuset can_attach() can fail. In this case free DL BW
-in cpuset_cancel_attach().
-
-Finally, update cpuset DL task count (nr_deadline_tasks) only in
-cpuset_attach().
-
-Suggested-by: Waiman Long <longman@redhat.com>
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Reported-by: Qais Yousef <qyousef@layalina.io>
+Link: https://lore.kernel.org/lkml/20230206221428.2125324-1-qyousef@layalina.io/
 Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
 ---
- include/linux/sched.h  |  2 +-
- kernel/cgroup/cpuset.c | 55 ++++++++++++++++++++++++++++++++++++++----
- kernel/sched/core.c    | 17 ++-----------
- 3 files changed, 53 insertions(+), 21 deletions(-)
+ kernel/cgroup/cpuset.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 6f3d84e0ed08..50cbbfefbe11 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1847,7 +1847,7 @@ current_restore_flags(unsigned long orig_flags, unsigned long flags)
- }
- 
- extern int cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
--extern int task_can_attach(struct task_struct *p, const struct cpumask *cs_effective_cpus);
-+extern int task_can_attach(struct task_struct *p);
- extern int dl_bw_alloc(int cpu, u64 dl_bw);
- extern void dl_bw_free(int cpu, u64 dl_bw);
- #ifdef CONFIG_SMP
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index eb0854ef9757..f8ebec66da51 100644
+index f8ebec66da51..05c0a1255218 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -198,6 +198,8 @@ struct cpuset {
- 	 * know when to rebuild associated root domain bandwidth information.
- 	 */
- 	int nr_deadline_tasks;
-+	int nr_migrate_dl_tasks;
-+	u64 sum_migrate_dl_bw;
- 
- 	/* Invalid partition error code, not lock protected */
- 	enum prs_errcode prs_err;
-@@ -2464,16 +2466,23 @@ static int fmeter_getrate(struct fmeter *fmp)
- 
- static struct cpuset *cpuset_attach_old_cs;
- 
-+static void reset_migrate_dl_data(struct cpuset *cs)
-+{
-+	cs->nr_migrate_dl_tasks = 0;
-+	cs->sum_migrate_dl_bw = 0;
-+}
-+
- /* Called by cgroups to determine if a cpuset is usable; cpuset_mutex held */
- static int cpuset_can_attach(struct cgroup_taskset *tset)
- {
- 	struct cgroup_subsys_state *css;
--	struct cpuset *cs;
-+	struct cpuset *cs, *oldcs;
+@@ -1092,6 +1092,9 @@ static void dl_update_tasks_root_domain(struct cpuset *cs)
+ 	struct css_task_iter it;
  	struct task_struct *task;
- 	int ret;
  
- 	/* used later by cpuset_attach() */
- 	cpuset_attach_old_cs = task_cs(cgroup_taskset_first(tset, &css));
-+	oldcs = cpuset_attach_old_cs;
- 	cs = css_cs(css);
- 
- 	mutex_lock(&cpuset_mutex);
-@@ -2491,7 +2500,7 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 		goto out_unlock;
- 
- 	cgroup_taskset_for_each(task, css, tset) {
--		ret = task_can_attach(task, cs->effective_cpus);
-+		ret = task_can_attach(task);
- 		if (ret)
- 			goto out_unlock;
- 		ret = security_task_setscheduler(task);
-@@ -2499,11 +2508,31 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 			goto out_unlock;
- 
- 		if (dl_task(task)) {
--			cs->nr_deadline_tasks++;
--			cpuset_attach_old_cs->nr_deadline_tasks--;
-+			cs->nr_migrate_dl_tasks++;
-+			cs->sum_migrate_dl_bw += task->dl.dl_bw;
-+		}
-+	}
++	if (cs->nr_deadline_tasks == 0)
++		return;
 +
-+	if (!cs->nr_migrate_dl_tasks)
-+		goto out_succes;
-+
-+	if (!cpumask_intersects(oldcs->effective_cpus, cs->effective_cpus)) {
-+		int cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
-+
-+		if (unlikely(cpu >= nr_cpu_ids)) {
-+			reset_migrate_dl_data(cs);
-+			ret = -EINVAL;
-+			goto out_unlock;
-+		}
-+
-+		ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
-+		if (ret) {
-+			reset_migrate_dl_data(cs);
-+			goto out_unlock;
- 		}
- 	}
+ 	css_task_iter_start(&cs->css, 0, &it);
  
-+out_succes:
- 	/*
- 	 * Mark attach is in progress.  This makes validate_change() fail
- 	 * changes which zero cpus/mems_allowed.
-@@ -2518,11 +2547,21 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- static void cpuset_cancel_attach(struct cgroup_taskset *tset)
- {
- 	struct cgroup_subsys_state *css;
-+	struct cpuset *cs;
- 
- 	cgroup_taskset_first(tset, &css);
-+	cs = css_cs(css);
- 
- 	mutex_lock(&cpuset_mutex);
--	css_cs(css)->attach_in_progress--;
-+	cs->attach_in_progress--;
-+
-+	if (cs->nr_migrate_dl_tasks) {
-+		int cpu = cpumask_any(cs->effective_cpus);
-+
-+		dl_bw_free(cpu, cs->sum_migrate_dl_bw);
-+		reset_migrate_dl_data(cs);
-+	}
-+
- 	mutex_unlock(&cpuset_mutex);
- }
- 
-@@ -2617,6 +2656,12 @@ static void cpuset_attach(struct cgroup_taskset *tset)
- out:
- 	cs->old_mems_allowed = cpuset_attach_nodemask_to;
- 
-+	if (cs->nr_migrate_dl_tasks) {
-+		cs->nr_deadline_tasks += cs->nr_migrate_dl_tasks;
-+		oldcs->nr_deadline_tasks -= cs->nr_migrate_dl_tasks;
-+		reset_migrate_dl_data(cs);
-+	}
-+
- 	cs->attach_in_progress--;
- 	if (!cs->attach_in_progress)
- 		wake_up(&cpuset_attach_wq);
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index c83dae6b8586..10454980e830 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9269,8 +9269,7 @@ int cpuset_cpumask_can_shrink(const struct cpumask *cur,
- 	return ret;
- }
- 
--int task_can_attach(struct task_struct *p,
--		    const struct cpumask *cs_effective_cpus)
-+int task_can_attach(struct task_struct *p)
- {
- 	int ret = 0;
- 
-@@ -9283,21 +9282,9 @@ int task_can_attach(struct task_struct *p,
- 	 * success of set_cpus_allowed_ptr() on all attached tasks
- 	 * before cpus_mask may be changed.
- 	 */
--	if (p->flags & PF_NO_SETAFFINITY) {
-+	if (p->flags & PF_NO_SETAFFINITY)
- 		ret = -EINVAL;
--		goto out;
--	}
--
--	if (dl_task(p) && !cpumask_intersects(task_rq(p)->rd->span,
--					      cs_effective_cpus)) {
--		int cpu = cpumask_any_and(cpu_active_mask, cs_effective_cpus);
- 
--		if (unlikely(cpu >= nr_cpu_ids))
--			return -EINVAL;
--		ret = dl_bw_alloc(cpu, p->dl.dl_bw);
--	}
--
--out:
- 	return ret;
- }
- 
+ 	while ((task = css_task_iter_next(&it)))
 -- 
 2.39.2
 
