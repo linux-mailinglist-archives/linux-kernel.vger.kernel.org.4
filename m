@@ -2,115 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0A26CD217
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3216CD21C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjC2G2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 02:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
+        id S229664AbjC2Gbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 02:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjC2G2k (ORCPT
+        with ESMTP id S229518AbjC2Gbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 02:28:40 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAE52D48;
-        Tue, 28 Mar 2023 23:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680071318; x=1711607318;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GuGO5s9eIj9SNxl6Nky1S/mvzj2pjVXEbD7qhLrdzag=;
-  b=Y/3BIqAjhrsPs6kKBfHF3ippoUImXmnuLRTbn1RbKMJL+kEnbQq5ncmN
-   0aSMRGdpfBeCa6ygnGl6EFpgOriQSEe7C9HJldiAIvJuddibTbvDjvIgj
-   GGm/awr3rLg13iklewU6/5Efsz3BOyEXrN3gwzCb238YElKcI0uNdyJ2H
-   9RckQNqtFgTyAJL1rK8tmUXaT5IeavvIvqnBaM23N8vkr5mfUywEwr/++
-   H66EylHczcmQQKI+aXDmiWAeez6C9SydlmCVZasC9ApFm2ZcLJX5glEms
-   NFQuvg5Iwd+lmKk4gCV6T8plZZe1AE2V6By3TTinRJGIL9m11wlgfMM+0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="340812838"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="340812838"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 23:28:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="808083289"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="808083289"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by orsmga004.jf.intel.com with ESMTP; 28 Mar 2023 23:28:33 -0700
-Message-ID: <5d22bbeb-8630-9aa2-bc49-32b391ae577e@linux.intel.com>
-Date:   Wed, 29 Mar 2023 14:28:51 +0800
+        Wed, 29 Mar 2023 02:31:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A2F271B;
+        Tue, 28 Mar 2023 23:31:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23823B81EAF;
+        Wed, 29 Mar 2023 06:31:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF2E8C433EF;
+        Wed, 29 Mar 2023 06:31:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680071496;
+        bh=P9/TB1qBMW5QFzAH9SkR4I2Xesn5PxwRRnIYxnPmfQQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kxN82WA16Q0vdI2CREy+FB0eCojo+ECD4jmRMCkIJ8JBd5NEZD5r1+yGk07iPqZ7y
+         M8llyyT2HMSSh46d3lTcd19j2Em47c+W0/aiWu0X+KbyTk9aNjgRXrO3b+OBtJ7Hzh
+         g1SmXvQkn2bPojUuO/LQp3V7PRUglLLOXqXOBE1amh3/K60ODM3rfvFvRXBcgxKQ8h
+         afGT/nkb/yRoRzQ0JAi68hA09R152oYSZjnCDnZPtqVEgtlgREGTqX0VhQa4MxVEnt
+         unlHmMmLEUe4xiOj6KCXyRSWTjVcDjoF4icdv6S/C7zb00BQrcLnjgSU2iaYz4um+b
+         dmRcFPWt6lh2A==
+Message-ID: <7607caa6-d76b-519b-b798-0603b7ea70cc@kernel.org>
+Date:   Wed, 29 Mar 2023 08:31:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     baolu.lu@linux.intel.com, LKML <linux-kernel@vger.kernel.org>,
-        iommu@lists.linux.dev, Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: Re: [PATCH v2 7/8] iommu: Export iommu_get_dma_domain
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] tracing/osnoise: Fix notify new tracing_max_latency
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>
+References: <c22302a7db3cee6bcabf87462ed22a35dd38690f.1679675521.git.bristot@kernel.org>
+ <20230328191613.33ac3f5e@gandalf.local.home>
 Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-References: <20230327232138.1490712-1-jacob.jun.pan@linux.intel.com>
- <20230327232138.1490712-8-jacob.jun.pan@linux.intel.com>
- <e7d53d04-6b7f-05a4-3077-42470c6d2823@linux.intel.com>
- <20230328084855.7b9cd981@jacob-builder>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230328084855.7b9cd981@jacob-builder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20230328191613.33ac3f5e@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 11:48 PM, Jacob Pan wrote:
-> On Tue, 28 Mar 2023 14:04:15 +0800, Baolu Lu<baolu.lu@linux.intel.com>
-> wrote:
+On 3/29/23 01:16, Steven Rostedt wrote:
+> On Fri, 24 Mar 2023 18:51:35 +0100
+> Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
 > 
->> On 3/28/23 7:21 AM, Jacob Pan wrote:
->>> Devices that use ENQCMDS to submit work needs to retrieve its DMA
->>> domain. It can then attach PASID to the DMA domain for shared mapping
->>> (with RID) established by DMA API.
->>>
->>> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
->>> ---
->>>    drivers/iommu/iommu.c | 1 +
->>>    include/linux/iommu.h | 5 +++++
->>>    2 files changed, 6 insertions(+)
->>>
->>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->>> index 10db680acaed..c51d343a75d2 100644
->>> --- a/drivers/iommu/iommu.c
->>> +++ b/drivers/iommu/iommu.c
->>> @@ -2118,6 +2118,7 @@ struct iommu_domain *iommu_get_dma_domain(struct
->>> device *dev) {
->>>    	return dev->iommu_group->default_domain;
->>>    }
->>> +EXPORT_SYMBOL_GPL(iommu_get_dma_domain);
->> Directly exporting this function for external use seems unsafe. If the
->> caller is the kernel driver for this device, it's fine because default
->> domain remains unchanged during the life cycle of the driver. Otherwise,
->> using this function may cause UAF. Keep in mind that group's default
->> domain could be changed through sysfs.
-> don't you have to unload the driver?
+>> timerlat is not reporting a new tracing_max_latency for the thread
+>> latency. Also, the tracer is reporting new max latency on instances
+>> where the tracing is off, creating inconsistencies between the max
+>> reported values in the trace and in the tracing_max_latency. Thus
+>> only report new tracing_max_latency on active tracing instances.
+> 
+> Sounds to me this patch fixes two different bugs. If so, can you please
+> break it up into two different patches?
 
-Yes, of cause.
+Yeah, I was dubious about sending one or two patches when I sent this one... But
+it makes sense making two of them... so I will do.
 
-Hence, the getting domain interfaces are only safe to be used in the
-driver of the device.
+Thanks!
 
-Best regards,
-baolu
+-- Daniel
+
+> Thanks!
+> 
+> -- Steve
+> 
+>>
+>> Fixes: dae181349f1e ("tracing/osnoise: Support a list of trace_array *tr")
+>> Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+>> Cc: Steven Rostedt <rostedt@goodmis.org>
+>> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+>> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+>> ---
+>>  kernel/trace/trace_osnoise.c | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+>> index 210e1f168392..2a1b337ac643 100644
+>> --- a/kernel/trace/trace_osnoise.c
+>> +++ b/kernel/trace/trace_osnoise.c
+>> @@ -1296,7 +1296,7 @@ static void notify_new_max_latency(u64 latency)
+>>  	rcu_read_lock();
+>>  	list_for_each_entry_rcu(inst, &osnoise_instances, list) {
+>>  		tr = inst->tr;
+>> -		if (tr->max_latency < latency) {
+>> +		if (tracer_tracing_is_on(tr) && tr->max_latency < latency) {
+>>  			tr->max_latency = latency;
+>>  			latency_fsnotify(tr);
+>>  		}
+>> @@ -1738,6 +1738,8 @@ static int timerlat_main(void *data)
+>>  
+>>  		trace_timerlat_sample(&s);
+>>  
+>> +		notify_new_max_latency(diff);
+>> +
+>>  		timerlat_dump_stack(time_to_us(diff));
+>>  
+>>  		tlat->tracing_thread = false;
+> 
+
