@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C9B6CD0B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 05:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01D76CD0AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 05:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjC2DbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 23:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
+        id S229754AbjC2DaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 23:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjC2Dak (ORCPT
+        with ESMTP id S230057AbjC2D3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 23:30:40 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDA640FC;
-        Tue, 28 Mar 2023 20:30:20 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id a16so12811068pjs.4;
-        Tue, 28 Mar 2023 20:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680060619;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FtcGDVjaqeuPL/8W91XNPY+pMHVz0BQOB0Aiv4wpJnA=;
-        b=qmpshAbCBfuJyN0nxoS0rwN7HMmcs2sIkK+0M41zIOvabJzUxUNgoXdDRpUhtoQPsY
-         mlp1UhjMk+5sN4t3PsJjmXw8Mb9r/+mCLfdHWU8lfQA874uRhKis1ZmOWyPJizJJQ/V8
-         lHrOaNkRzdQtXMwYzeUhd7lJkL2jbphwXJCp8+G0ZjgWpl+dVts31p5xH9Vu54rPgkGx
-         oYFamu0EjSeoxTzEg3MlHAeDZwSU8kcsrVj1PVbsgwMTEVftnG+C56Cm8Uo1BRBUUCjy
-         AEYx972gwWKdvr7yLiv/2JLzaSVZnFKRw057/fyfYHV454xC6D7WfaL4LxbCuYBM9Gdq
-         1ccw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680060619;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FtcGDVjaqeuPL/8W91XNPY+pMHVz0BQOB0Aiv4wpJnA=;
-        b=bxXEHxIEDsJWZfTTiv4UjjGjWHka3qne+MIz3lSbhbOidopdrWMFXsoUH9RiXkDV3H
-         TPUIBG0mz27ocOr/9Nk+vEHlmTUSg5c1Ox5qRxp2jn21MImtm0FuXFIhbehaUgA/ICBO
-         HoDRJCmADmkGlVFyKbbG6kRXD3gpvohHxeLfUkDtx7n8XEk3tLF7hbpSY0ZPRWSFHqjk
-         mJIJjcsxVLb1uH1VSy9/FcvnywzGnLHDYes4HHRLKYhsl+MwBKcxZOE9HUISfyg9TEiK
-         HHqN1DfWMcVQFA0G7LncrqSeiRGkCrbG4L/9FHwgQGZw3Z53gD02oZXS2yuFuNB+Kjj0
-         7CQw==
-X-Gm-Message-State: AO0yUKXDRFM5l9Q4+AwH95CGRAGktCXdCaFu7lhwYrY7F2HbbJM9F6Mx
-        wCQtn+mq639Jg+c0m9hV7Xw=
-X-Google-Smtp-Source: AK7set+CTVBUTdTSSPwN58myXR04b8IPcF1+KE3BwukRJc4IVqatk69et9J/h/7SjjKJY6HQXGTiRw==
-X-Received: by 2002:a05:6a20:c41f:b0:db:6237:e76 with SMTP id en31-20020a056a20c41f00b000db62370e76mr13881116pzb.15.1680060619295;
-        Tue, 28 Mar 2023 20:30:19 -0700 (PDT)
-Received: from mac.. ([2401:4900:1cb9:b52a:d09c:44e6:8975:d681])
-        by smtp.gmail.com with ESMTPSA id j14-20020aa7800e000000b0062d8e79ea22sm4100116pfi.40.2023.03.28.20.30.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 20:30:18 -0700 (PDT)
-From:   Piyush Thange <pthange19@gmail.com>
-To:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org, shuah@kernel.org,
-        Piyush Thange <pthange19@gmail.com>
-Subject: [PATCH] usb:dwc:core.h Fixed warning of documentation
-Date:   Wed, 29 Mar 2023 08:59:38 +0530
-Message-Id: <20230329032938.225211-1-pthange19@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Tue, 28 Mar 2023 23:29:54 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E0A35A0;
+        Tue, 28 Mar 2023 20:29:52 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32T10d0M030341;
+        Wed, 29 Mar 2023 03:29:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=qMYAKtazM96mw3n7WQj57jjWCtzRMxVdu0bjew/CIUQ=;
+ b=hWnSrtkOyATP2EWkQt/uGjIkjpH4L1+0mzXYUdHHRKEb03/70AFokB30g74ptKEKMnVO
+ 694iGbLXzSQNKlZDwGfxNDHSNk00THNNgibyP0QwkaWQugvidj3u/iKrVDhdfZukkFDZ
+ IE9efFFCgokl2qrxXkj/RIpeWJ0gA3XSEeEBUVJMeF9Nx+0H3788WAq0YRtYe92UG851
+ zNNTSBju8LmQjDu7HzGbEDPnaYJPHARH1Sg7vdFIFi4VEvfBC/OKQctWBkabFY1v6vmB
+ MkvZ9aowTyHr4ZOSA8IroglMa/BiwHjLQW9dueNv10XprlnI9qvQykCYfFkm76GkvrCl LA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pmb8h08g8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 03:29:43 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32T3Th8Y008673
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 03:29:43 GMT
+Received: from hu-cgoldswo-sd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Tue, 28 Mar 2023 20:29:42 -0700
+Date:   Tue, 28 Mar 2023 20:29:41 -0700
+From:   Chris Goldsworthy <quic_cgoldswo@quicinc.com>
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Multi-index entries, clarifying storage overhead with respect to
+ range alignment
+Message-ID: <20230329032731.GA3319@hu-cgoldswo-sd.qualcomm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 1aF1erczc4A0QE5ciVsbovgA7QCO6-hB
+X-Proofpoint-GUID: 1aF1erczc4A0QE5ciVsbovgA7QCO6-hB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ malwarescore=0 priorityscore=1501 impostorscore=0 spamscore=0 phishscore=0
+ lowpriorityscore=0 adultscore=0 bulkscore=0 suspectscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303290027
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While compiling documentation a following warning is generated.
-Function parameter or member 'resume_hs_terminations' not described 
-in 'dwc3'
+Hi Matthew,
 
-One more warning arises in the same file as follows
-Function parameter or member 'gfladj_refclk_lpm_sel' not described 
-in 'dwc3'
+Consider the following excerpt from the Xarray documentation on multi-index
+entries, summarizing the [2^N, 2^(N+1) - 1] alignment requirement for
+utilizing multi-index entries [1]:
 
-I need some insights on this.
+"The current implementation only allows tying ranges which are aligned powers of
+two together; eg indices 64-127 may be tied together, but 2-6 may not be. This
+may save substantial quantities of memory; for example tying 512 entries
+together will save over 4kB."
 
-Signed-off-by: Piyush Thange <pthange19@gmail.com>
----
- drivers/usb/dwc3/core.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Won't we still use multi-index entries for power-of-two ranges that are aligned
+for the size of the range? That is, the range [i, j] satisfies:
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 582ebd9cf9c2..4743e918dcaf 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1098,7 +1098,7 @@ struct dwc3_scratchpad_array {
-  *			change quirk.
-  * @dis_tx_ipgap_linecheck_quirk: set if we disable u2mac linestate
-  *			check during HS transmit.
-- * @resume-hs-terminations: Set if we enable quirk for fixing improper crc
-+ * @resume_hs_terminations: Set if we enable quirk for fixing improper crc
-  *			generation after resume from suspend.
-  * @parkmode_disable_ss_quirk: set if we need to disable all SuperSpeed
-  *			instances in park mode.
--- 
-2.40.0
+	(A): j - i = 2^k for some k and i % 2^k == 0 .
 
+This is more permissive than [2^N, 2^(N+1) - 1] . I'm basing this assumption
+(calling it this as I'm not 100% certain yet) off of the following:
+
+(1) Counting the number of kmem_cache_alloc_lru() calls using ranges satisfying (A)
+whilst varying the starting position.
+
+(2) Walking through xa_store_range(). The call to xas_set_range() [2] sets the
+final xa_shift S that corresponds to the range we want to cover. When calling
+xas_store() [3], inside of which is a call to xas_create() [4], the shift of the
+lowest-level node [5] we allocate is no smaller than S - XA_CHUNK_SHIFT + 1,
+i.e. the entry will still cover multiple entries so long as S is large enough
+(though we still might need multiple entries to do this). This will happen
+despite the alignment of things, based of what happens in xas_store_range(). Let
+me know if I'm misinterpreting something.
+
+Thanks,
+
+Chris.
+
+[1] https://docs.kernel.org/core-api/xarray.html#multi-index-entries
+[2] https://elixir.bootlin.com/linux/latest/source/lib/xarray.c#L1740
+[3] https://elixir.bootlin.com/linux/latest/source/lib/xarray.c#L1741
+[4] https://elixir.bootlin.com/linux/latest/source/lib/xarray.c#L789
+[5] https://elixir.bootlin.com/linux/latest/source/lib/xarray.c#L679
