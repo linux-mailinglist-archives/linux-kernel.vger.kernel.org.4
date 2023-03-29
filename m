@@ -2,66 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12E06CF323
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1984B6CF32A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjC2T21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
+        id S229661AbjC2TaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjC2T20 (ORCPT
+        with ESMTP id S230254AbjC2TaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:28:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50A5131;
-        Wed, 29 Mar 2023 12:28:24 -0700 (PDT)
+        Wed, 29 Mar 2023 15:30:01 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3566E134;
+        Wed, 29 Mar 2023 12:30:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81D8AB82421;
-        Wed, 29 Mar 2023 19:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21567C433EF;
-        Wed, 29 Mar 2023 19:28:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A10CCCE2502;
+        Wed, 29 Mar 2023 19:29:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28172C433D2;
+        Wed, 29 Mar 2023 19:29:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680118102;
-        bh=n2gnevI6MCSN/675S6T68W/22XOQH2Cm/6VpZQ7bCMM=;
+        s=k20201202; t=1680118197;
+        bh=SS/jbk54VmrEOwURrr56BUHIiEK0pT0Kcy1MuoBHTI0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fHlXk9lQvYavvnzWQF7OgR0SKuJB+4dMv71r773TQhCun82s5T54EpLQyluHNx20+
-         fEEmcyIELVY9xo4i0GCBuBWUkWagY6jUypmp1oyvukgBXpxBCrhlKEH8xbp7xBxX8t
-         3lVq5OmY5TBu0k+FgbGhJ1Vn8Q2R8S6w5ARlh0gVYWPXKoIKlz4uU1VaAPhA13lQvu
-         OGHADxSCyhcsESH3uFZyraLPuTfikJN0QhuLQ6T37BEX1LU/vHEME28/8zDG3ZobJm
-         NciIVegdfXMYxQo753c7ynsNpfbNfIdQaNVhukKUyAx5AjCPg9kTOGHYpoP1LKBh93
-         nvKYHhvN93B4w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 542734052D; Wed, 29 Mar 2023 16:28:19 -0300 (-03)
-Date:   Wed, 29 Mar 2023 16:28:19 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org, suzuki.poulose@arm.com,
-        leo.yan@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        will@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, gankulkarni@os.amperecomputing.com,
-        darren@os.amperecomputing.com, James Clark <james.clark@arm.com>
-Subject: Re: [PATCH v8 1/3] perf: cs-etm: Move mapping of Trace ID and cpu
- into helper function
-Message-ID: <ZCSRU8zvjjBHhq+x@kernel.org>
-References: <20230329111422.3693-1-mike.leach@linaro.org>
- <20230329111422.3693-2-mike.leach@linaro.org>
- <ZCQx5HlPnxCIFaNQ@kernel.org>
- <ZCQyNnk/vfHZkSda@kernel.org>
- <CAJ9a7VhhoGoOVL4sqcgpDYnZzzce_2=-wupK8K178tzZnoqrPA@mail.gmail.com>
- <ZCQ7nhrISA+jCfnI@kernel.org>
- <CAJ9a7VhJRnRe0A43=_X463432LvjL=S5buVgeq6rB8K8nDZb6A@mail.gmail.com>
+        b=kb/n4qAYhIUyOBdzzpNs4ykgQjGEAVdRdGcvbna374EyEQRq4Fms13V8tlObKv9N+
+         JFzO2KXkJ0PYwdK5PL29w1caHjZsa1sUSotKtthT82S4SSUxpWmT3UvgtEIjYHpDKV
+         Q6jtZlKYvi6E2VVLMP02coNICSqLYhw9H6STwTvz8emV18IqzBmNr7Va4EkVF3s7vi
+         +6KiSdGG1+uH5TiOqmptekIU9tDzTHScpEOlcIHN+qG6r2Bu6fxzwcWi4v+qLF9Rxr
+         j9BQuQW48H/FK5Mseig+6cAkA63RpagAms39dCA8i+S6xlz/nVP3XuTw01sKYbwOpI
+         UJN6D3Nhju5zg==
+Date:   Wed, 29 Mar 2023 21:29:53 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Peter Rosin <peda@axentia.se>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] dt-bindings: i2c: Drop unneeded quotes
+Message-ID: <ZCSRsWEXIqcV0xC4@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Peter Rosin <peda@axentia.se>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230322173530.3971676-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3/7x2pzW7P4Mq4zG"
 Content-Disposition: inline
-In-Reply-To: <CAJ9a7VhJRnRe0A43=_X463432LvjL=S5buVgeq6rB8K8nDZb6A@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20230322173530.3971676-1-robh@kernel.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,48 +97,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Mar 29, 2023 at 03:47:25PM +0100, Mike Leach escreveu:
-> On Wed, 29 Mar 2023 at 14:22, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >
-> > Em Wed, Mar 29, 2023 at 01:59:10PM +0100, Mike Leach escreveu:
-> > > Sorry - my error.
-> > >
-> > > The same change is made in patch 3/3 of this set.
-> > >
-> > > Looks like I didn't do a patch by patch build check when I was testing yesterday
-> >
-> > np, its fixed now and pushed to tmp.perf-tools-next, please check, will
-> > go to perf-tools-next later today after passing thru my set of container
-> > build tests.
-> >
-> > - Arnaldo
-> 
-> tmp.perf-tools-next - Builds and tests OK
 
-Not here, I'll check after a call:
+--3/7x2pzW7P4Mq4zG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  50     9.90 ubuntu:18.04-x-arm            : FAIL gcc version 7.5.0 (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04)
-    arch/arm/util/cs-etm.c: In function 'cs_etm_save_ete_header':
-    arch/arm/util/cs-etm.c:720:29: error: implicit declaration of function 'coresight_get_trace_id' [-Werror=implicit-function-declaration]
-      data[CS_ETE_TRCTRACEIDR] = coresight_get_trace_id(cpu);
-                                 ^~~~~~~~~~~~~~~~~~~~~~
-    cc1: all warnings being treated as errors
-    /git/perf-6.3.0-rc1/tools/build/Makefile.build:140: recipe for target 'util' failed
-    make[5]: *** [util] Error 2
-    /git/perf-6.3.0-rc1/tools/build/Makefile.build:140: recipe for target 'arm' failed
-    make[4]: *** [arm] Error 2
-    /git/perf-6.3.0-rc1/tools/build/Makefile.build:140: recipe for target 'arch' failed
-    make[3]: *** [arch] Error 2
-  51     9.50 ubuntu:18.04-x-arm64          : FAIL gcc version 7.5.0 (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04)
-    arch/arm64/util/../../arm/util/cs-etm.c: In function 'cs_etm_save_ete_header':
-    arch/arm64/util/../../arm/util/cs-etm.c:720:29: error: implicit declaration of function 'coresight_get_trace_id' [-Werror=implicit-function-declaration]
-      data[CS_ETE_TRCTRACEIDR] = coresight_get_trace_id(cpu);
-                                 ^~~~~~~~~~~~~~~~~~~~~~
-    cc1: all warnings being treated as errors
-    /git/perf-6.3.0-rc1/tools/build/Makefile.build:140: recipe for target 'util' failed
-    make[5]: *** [util] Error 2
-    /git/perf-6.3.0-rc1/tools/build/Makefile.build:140: recipe for target 'arm64' failed
-    make[4]: *** [arm64] Error 2
-    /git/perf-6.3.0-rc1/tools/build/Makefile.build:140: recipe for target 'arch' failed
-    make[3]: *** [arch] Error 2
-  52    19.34 ubuntu:18.04-x-m68k           : Ok   m68k-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+On Wed, Mar 22, 2023 at 12:35:29PM -0500, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Applied to for-next, thanks!
+
+
+--3/7x2pzW7P4Mq4zG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQkka0ACgkQFA3kzBSg
+KbZ7QQ//TjhlV9gpnzQf1R+my8YacgB2isHXPlTUphtT1RhFuCtww7h9lGyoh2iz
+msnIcykv8xVr+nJ1zkALk9reiZQP7DdXSjVYHsCpd7XZyHXwm4PrfBlhoQi6rkeY
+DUDY8mQ5QpFbhG2bbJDFfelYwkc1fwCW/FLew0P7kRudkeb3OVjQq/ABaWVXHZYY
+lF1SUIZKC+bsfeoidJ2oA3DcQ+jeML1BV81SZwDJ1TIbaQLRdcx37l+OlMwYLMXA
+wOdrZmOH3spf3jWoEEKPH5hO48W4AvMujWAqWiShgcCH8S37g34eXxQ7fUOaQrA5
+CupkQ8LBcNbnzLZjsN0nNFZkDYasCLA/aHsAjhhsU+UvR0KWTrp3VOZkQh/YL6Yv
+BWG8K2DDl986q2YZWHdyoALr9aK/PkvqcxH+Bsgu5kAOOOBjaSmCG80jIGUz99XF
+qwthYFsQbNU0W5D2D1bOCesL0ZXWjYHAob8OD65Jdup6IAcfkFbEsFlhFhtEXurD
+QfHepyLM5x4qENtV7M9bGGGaAZwtgW7qYeQgLTKBPQeXy+ZiW10F5t/3y4lfBJ1U
+KFLGQankiD98qmHEwQpVxS8sWNUUTIg1XQlGnoOiiZDKd3NEYSj+Ivu2gt2mEkJq
+Ra3yRf6q1yETdTaNA2ltFSh0wvup3LOQaEFr84Iq9GXiFPTdNec=
+=95C4
+-----END PGP SIGNATURE-----
+
+--3/7x2pzW7P4Mq4zG--
