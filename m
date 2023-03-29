@@ -2,75 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB4B6CECFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8926CED07
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjC2Pdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 11:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S229788AbjC2PeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjC2Pde (ORCPT
+        with ESMTP id S230194AbjC2Pdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:33:34 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15014C30;
-        Wed, 29 Mar 2023 08:33:30 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32T9EBxw021690;
-        Wed, 29 Mar 2023 10:33:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=nKcNlzwm7qE0F3RDbGVCCb1M6tgGymG9oJ9fa9j5Mf8=;
- b=eTlIVmVsKGjq3mnHM6Jr4s9VvJWJcCe3BZ4tu+miceljn7Cs7ndXHSYAvcLHuvLExnnC
- N5AYuTBDGizsaXXuNHKeZIhOYyq888zNB4e3OwoqgdXcSgiMXUBITOqIYt4OGimFZgAN
- yilkDV/p+2APuyiiovGt/RHIDUQbwBxL3omvUJ/dA7xZ8/TqcUab9NVsSn31T63h7blS
- sgk5syUc2BYaochL0WHOhIQjNtfqdgAN1h1IPaePN4XH16qN8KU0bCFQz2NSZ/PMHLuE
- x82dsOVODSu/y5Ho6m9MKRBmi4dTUpv1nzriDtIYAh2p69oEqWCg+2ywzNoUvFF6a1od tw== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pmjghgjaa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Mar 2023 10:33:11 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Wed, 29 Mar
- 2023 10:33:10 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Wed, 29 Mar 2023 10:33:10 -0500
-Received: from [198.61.65.23] (EDIN4L06LR3.ad.cirrus.com [198.61.65.23])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CFE8211D3;
-        Wed, 29 Mar 2023 15:33:08 +0000 (UTC)
-Message-ID: <57c5a3b3-00cd-5b44-02f4-dedabacc7662@opensource.cirrus.com>
-Date:   Wed, 29 Mar 2023 16:33:08 +0100
+        Wed, 29 Mar 2023 11:33:51 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F20859EE;
+        Wed, 29 Mar 2023 08:33:40 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 9F10024E0FC;
+        Wed, 29 Mar 2023 23:33:32 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 29 Mar
+ 2023 23:33:32 +0800
+Received: from localhost.localdomain (113.72.144.76) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 29 Mar
+ 2023 23:33:32 +0800
+From:   Walker Chen <walker.chen@starfivetech.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Walker Chen <walker.chen@starfivetech.com>
+CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v1 0/3] Add TDM audio on StarFive JH7110
+Date:   Wed, 29 Mar 2023 23:33:17 +0800
+Message-ID: <20230329153320.31390-1-walker.chen@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] Asoc: wm_adsp: Add support for loading firmware with
- prefix name
-Content-Language: en-US
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-CC:     <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>
-References: <20230329130525.15830-1-lujianhua000@gmail.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <20230329130525.15830-1-lujianhua000@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: ZcNbkvF3f1WjSY9515Intogj9F5T569W
-X-Proofpoint-ORIG-GUID: ZcNbkvF3f1WjSY9515Intogj9F5T569W
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain
+X-Originating-IP: [113.72.144.76]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,53 +53,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/3/23 14:05, Jianhua Lu wrote:
-> For platform using fdt, system_name is NULL, it doesn't provide
-> a way to load firmware with prefix name, so add it.
+This patchset adds TDM audio driver for the StarFive JH7110 SoC. The
+first patch adds device tree binding for TDM module. The second patch
+adds tdm driver support for JH7110 SoC. The last patch adds device node
+of tdm and sound card to JH7110 dts.
 
-This is intended behavior.
+The series has been tested on the VisionFive 2 boards which equip with
+JH7110 SoC and works normally.
 
-To load per-amp tuning you must know the function of each amp.
-You only know that if you know what hardware platform you are running
-on.
+The last patch should be applied after the following patchset:
+https://lore.kernel.org/all/20230322094820.24738-1-walker.chen@starfivetech.com/
 
-So if system_name is NULL it should fall back to generic firmware.
+Walker Chen (3):
+  dt-bindings: sound: Add TDM for StarFive JH7110
+  ASoC: starfive: Add JH7110 TDM driver
+  riscv: dts: starfive: add tdm node and sound card
 
-> 
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
->   sound/soc/codecs/wm_adsp.c | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
-> 
-> diff --git a/sound/soc/codecs/wm_adsp.c b/sound/soc/codecs/wm_adsp.c
-> index 216120b68b64..17481e42d440 100644
-> --- a/sound/soc/codecs/wm_adsp.c
-> +++ b/sound/soc/codecs/wm_adsp.c
-> @@ -760,6 +760,10 @@ static int wm_adsp_request_firmware_file(struct wm_adsp *dsp,
->   		*filename = kasprintf(GFP_KERNEL, "%s%s-%s-%s-%s.%s", dir, dsp->part,
->   				      dsp->fwf_name, wm_adsp_fw[dsp->fw].file, system_name,
->   				      filetype);
-> +	else if (asoc_component_prefix)
-> +		*filename = kasprintf(GFP_KERNEL, "%s%s-%s-%s-%s.%s", dir, dsp->part,
-> +				      dsp->fwf_name, wm_adsp_fw[dsp->fw].file, asoc_component_prefix,
-> +				      filetype);
->   	else
->   		*filename = kasprintf(GFP_KERNEL, "%s%s-%s-%s.%s", dir, dsp->part, dsp->fwf_name,
->   				      wm_adsp_fw[dsp->fw].file, filetype);
-> @@ -831,6 +835,16 @@ static int wm_adsp_request_firmware_files(struct wm_adsp *dsp,
->   							      NULL, "bin");
->   			return 0;
->   		}
-> +	} else if (asoc_component_prefix) {
-> +		if (!wm_adsp_request_firmware_file(dsp, wmfw_firmware, wmfw_filename,
-> +						   cirrus_dir, NULL,
-> +						   asoc_component_prefix, "wmfw")) {
-> +			adsp_dbg(dsp, "Found '%s'\n", *wmfw_filename);
-> +			wm_adsp_request_firmware_file(dsp, coeff_firmware, coeff_filename,
-> +							      cirrus_dir, NULL,
-> +							      asoc_component_prefix, "bin");
-> +			return 0;
-> +		}
->   	}
->   
->   	if (!wm_adsp_request_firmware_file(dsp, wmfw_firmware, wmfw_filename,
+ .../bindings/sound/starfive,jh7110-tdm.yaml   |  95 +++
+ MAINTAINERS                                   |   6 +
+ .../jh7110-starfive-visionfive-2.dtsi         |  87 +++
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  34 +
+ sound/soc/Kconfig                             |   1 +
+ sound/soc/Makefile                            |   1 +
+ sound/soc/starfive/Kconfig                    |  15 +
+ sound/soc/starfive/Makefile                   |   2 +
+ sound/soc/starfive/jh7110_tdm.c               | 579 ++++++++++++++++++
+ sound/soc/starfive/jh7110_tdm.h               | 155 +++++
+ 10 files changed, 975 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
+ create mode 100644 sound/soc/starfive/Kconfig
+ create mode 100644 sound/soc/starfive/Makefile
+ create mode 100644 sound/soc/starfive/jh7110_tdm.c
+ create mode 100644 sound/soc/starfive/jh7110_tdm.h
+
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+prerequisite-patch-id: c3a6b87df79b338fc97766406d010fedb79ab428
+prerequisite-patch-id: b49509523cf7c098f684647bdc4fdaece48b61bc
+prerequisite-patch-id: 46cc850aa0e9e03ccf5ed23d8458babfca3d71af
+prerequisite-patch-id: a6975e61ee5803fbd74b1c21ab925fd81c3c0eab
+prerequisite-patch-id: ac150a8c622e858e088df8121093d448df49c245
+prerequisite-patch-id: 044263ef2fb9f1e5a586edbf85d5f67814a28430
+prerequisite-patch-id: 89f049f951e5acf75aab92541992f816fd0acc0d
+prerequisite-patch-id: 9f3dbc9073eee89134e68977e941e457593c2757
+prerequisite-patch-id: 8600b156a235be2b3db53be3f834e7a370e2cfb9
+prerequisite-patch-id: 1b2d0982b18da060c82134f05bf3ce16425bac8d
+prerequisite-patch-id: 090ba4b78d47bc19204916e76fdbc70021785388
+prerequisite-patch-id: a5d9e0f7d4f8163f566678894cf693015119f2d9
+prerequisite-patch-id: 4c12d958e3a3d629d86dddb1e4f099d8909393e0
+prerequisite-patch-id: bb939c0c7c26b08addfccd890f9d3974b6eaec53
+prerequisite-patch-id: 8f5c66dfb14403424044192f6fa05b347ad356a7
+prerequisite-patch-id: fd93763b95469912bde9bdfa4cd827c8d5dba9c6
+prerequisite-patch-id: 6987950c2eb4b3773b2df8f7934eff434244aeab
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
+prerequisite-patch-id: e7773c977a7b37692e9792b21cc4f17fa58f9215
+prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
+prerequisite-patch-id: 9f911969d0a550648493952c99096d26e05d4d83
+prerequisite-patch-id: 2ddada18ab6ea5cd1da14212aaf59632f5203d40
+prerequisite-patch-id: 398744c61913c76a35754de867c4f820ca7a8d99
+prerequisite-patch-id: be3d7a6a13098884ec26cd5e543cc95c39045e35
+prerequisite-patch-id: b3ce7955a80d90d992b7d1bca3409f465810b2bb
+prerequisite-patch-id: db2f66860cc5b2fd2f71747c4428287b6e3153fb
+prerequisite-patch-id: 9da71dcd3af4c68da9d855b43aab6927103e7525
+prerequisite-patch-id: 2d9e4f185631549094b6136cf8717a507b68c5bb
+prerequisite-patch-id: bb8e071ed43998874b9d98292c0dcdeedc0760ca
+prerequisite-patch-id: cd0b464336aabfbfad96c1a3595c0f9ce9401638
+prerequisite-patch-id: 24eab3d30274700c2be4727bece743c76d2618bd
+prerequisite-patch-id: 584c256c9acb52ee2773d0c81c3f4977fc18155a
+prerequisite-patch-id: 2bc43b375b470f7e8bbe937b78678ba3856e3b8f
+prerequisite-patch-id: 32deea16304859842af5c2151bc41d91cf6dfc9b
+prerequisite-patch-id: d85dbedbb3b36bbd6806f4eb84a2129c8f8963aa
+prerequisite-patch-id: c0bdbdd3db98f7ebae0661dd331edac2c84c70f8
+prerequisite-patch-id: 6abf359fa445f4104432ddee27044dfbfb128417
+-- 
+2.17.1
+
