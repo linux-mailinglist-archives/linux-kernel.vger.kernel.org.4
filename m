@@ -2,156 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73786CF17A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3A36CF17C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjC2Rwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 13:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47034 "EHLO
+        id S229451AbjC2RyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 13:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjC2Rwk (ORCPT
+        with ESMTP id S229449AbjC2RyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:52:40 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2112.outbound.protection.outlook.com [40.107.212.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8547DDB;
-        Wed, 29 Mar 2023 10:52:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d16Irew6W1OEghtWqn+fmWVBcVhZ6i3CMKshMuTf1s0nYmBo/92NLQcHRU0DM9kpPW4jNRLR9PkV8r6bmplgGsURsjP+Hbug9mjC1/Q0G09nupyESzykI/PEPSf2eep5Dnly7WpTSagMAQ4fcNglixtvmO4/aUd5i3mUEHcv2/z/MUJL2ET9Ym6d01zeUkzO7e2BxOpqPVLI7tUwVcG2K9HkgLHQK9KauzrcuH0T2Ign3Tr9Pj3KMud9cVdIp10F/EX0ZVsR/b57n3WvjI8T8WSRuL4IpeDQGA2C1crptuKDXnZkqBE+J8UyDJcBnU+KXTIZgaqAakr0HA8BXZ+tUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gQYw5sV+9xITwk9YAqAawLpGzscfoz7ir8JOQr21hCs=;
- b=Ay/NMfME7KOHzNhK6uBw84TvLQ+f/ILqEH1KiXBb8b+9CEqo1M+V4vs1jzO6xJYoPIhACJwjNkWyC+ajpUfDfzH7+2Gn620Jf4nylNGARIAEDD54yn0TZ8XSKwOEH/43+eBFQmk39MSKVj+lPmyi7Cecm8GJE7DelLdEao0XJXBtOMzk5iFG7kkxJKWK34w/J5iHUz+/QAF/CduK/fi8DX+EsKxNjl3M5b0w9FW6IH91JXtTonxcqdqHCSERHa3Dmeoo50ZFT+DojpJl0Eh0H4r2NjP4ltPGVsUacQ+E9RlEylneV+3lmUbYr7k+wt9Ha9ISEgCQbDvtlsKpjeST1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Wed, 29 Mar 2023 13:54:18 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCD6DF
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:54:17 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id c29so21312494lfv.3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gQYw5sV+9xITwk9YAqAawLpGzscfoz7ir8JOQr21hCs=;
- b=PZ3JF0sJDwJ2UHJAu/s61HPxgyiZ5Rl4NGxEG1PRXKqYPFNygHkUEpGIMb/7xAnHPErqnlHRMdfcM5Y6zv0UWxTgNcW9OEY38yX1wb9BRsquNI8j//i2TIeuEY+eWSzctPC+JQpjVDYoLPD3/9ePUL7V+Xr4treqI83LwO3khcU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MW3PR13MB4153.namprd13.prod.outlook.com (2603:10b6:303:5c::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Wed, 29 Mar
- 2023 17:52:33 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb%4]) with mapi id 15.20.6222.028; Wed, 29 Mar 2023
- 17:52:33 +0000
-Date:   Wed, 29 Mar 2023 19:52:27 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-bluetooth@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH v2] Bluetooth: 6LoWPAN: Add missing check for
- skb_clone
-Message-ID: <ZCR62737I2hEPoCK@corigine.com>
-References: <20230329020810.32959-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329020810.32959-1-jiasheng@iscas.ac.cn>
-X-ClientProxiedBy: AM9P250CA0001.EURP250.PROD.OUTLOOK.COM
- (2603:10a6:20b:21c::6) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=google.com; s=20210112; t=1680112455; x=1682704455;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j7r474dcwAeSgzFtA0e++9lGH7M7F1P88vLQKvQsNGk=;
+        b=BvTNLj+T6CPVNp/B17LSyz/YfoU50UfKpT8APVBjmijPPh3VFYJahkylhYlXnIk43Q
+         6cHt3gQeVzUk7wTQWXdZeGFnVOKnYd453W3FNjOL5XfQEuLFXvXlYTMUAZ5EpIpxIBlJ
+         fDaArvKVjDUgumVb53IEDTLBhZF/oeW78YWaRHFI5pwZKEa4We2ErPZ+LoZ0Vjz940T4
+         kAjtBW6zReQwLO4VHR+jS19ef74AzyxOc/ftH5A2C/bKM4D032qE+SsBgljcY9ntOfTG
+         pQB7E7k/+is01eN8PhehbkJfo6KvAgVDatZr6icaCIHo2jo2atZLkR6NMRTtgmyzKRGJ
+         f4vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680112455; x=1682704455;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j7r474dcwAeSgzFtA0e++9lGH7M7F1P88vLQKvQsNGk=;
+        b=Kn+aW0l3oiyuIjjbVIKSHnyj6QtW8OtTEaPunX55L+lqKQDka1zOYFPGAJhqXSGTMT
+         5Gdvd37MPO56MGR4gqwKiMfET1k/J0bUQr73Dz5uFKWwyez7kNNvfKv0x7pQb4LJiBrv
+         7qV+Wdb3I5G1bA48UJBI3QAVLhJN/Ig18T9afFmWcp+Ag6pb5ZrUPib8Cax+5cH4NTuc
+         Rwet1Y7QuqazTN/yOt089B/teGBGYeQsDA/TqYaOZWuROZOXuY1wNYwM6xBRSkAGruSy
+         dgLZ2bj4s4N71cwk67jUMUeYlaDHASicRfA3ap5v9tbdJUBgppNXTujPsBZuxuQmEUwT
+         WdMA==
+X-Gm-Message-State: AAQBX9feEX8+MnsexPVmiUxFdLzZG6WGMAeo8YRv3p/TALu+vLFS6dca
+        K9hoyrHsh1K6Q521Q6qS3CLgIpAYDe8ip9HFjU+Mmg==
+X-Google-Smtp-Source: AKy350ZSPh9VmsS6Q/pJBKAbtq5YPvsyHXlILYzOrNSc83L8rkC9PnnTNtcUV7vNWn5zQpAe0CB+yJLGOmLk+fmAX+o=
+X-Received: by 2002:ac2:55a2:0:b0:4ea:f9d4:93a1 with SMTP id
+ y2-20020ac255a2000000b004eaf9d493a1mr6037484lfg.10.1680112455212; Wed, 29 Mar
+ 2023 10:54:15 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW3PR13MB4153:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba202f02-c64a-4f9d-35b6-08db307e5f9a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6FgGRb1e88/eM+uQNb56oCmfwnen0x6loctoaIGmTbsaogYVCharnK0qpA7DbtThl5rSPP5RCmGPH0QwzzcjN4AOd5Q/XICKJ8jDt3Zg89ggI9UgXq+aUBP39Ix+2Eyn8vRcJA2k8xluntL4JovmGScRcQCXybGZ0NRezKsYNAIeGIgtbZR7FIR8z/BVWsjBRZIUTqSu8KcPfl2KdyGX8qIzLF7Hg/G2gaNFJj/WqP1tDNqcttwONRSTrGlt7lU9eTg8jFb5bohUmdi6U3+Bs1ztBoKQqwJ1PIocO5vPljPygR2F52cTSZ091GgEWrmNAv42LfT9Rw3uSGynqGm40hbDZHPlCIBzu7dTbV1N9HtDOh00ZgGNu1ZwCQ8/LuxwS2fA6Kxe3PvYJNkx4rdNO4Doz/PvTanntAr+kN1jcJj4Wf3ek03EHz6trDgQ6trGiJA5Is7k8wZpiYMMNBrlAel4w5MZF3xcjhKeiyYKXSPBXiGmDiV/AidxJ80sV4RbQ24YCSo6Sx1TeBrxLNmalq9Fp8TFrMi3W5hH3lpikxZKnIUDckdbY2F77qEPic11gMQDqbeDKby5BwAvNCMv7n0/oi2MAnMxxaUwhtphROw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(366004)(136003)(39840400004)(376002)(451199021)(6506007)(6512007)(316002)(6486002)(4326008)(6666004)(186003)(66946007)(6916009)(66476007)(8676002)(66556008)(478600001)(41300700001)(7416002)(5660300002)(44832011)(38100700002)(2906002)(36756003)(83380400001)(2616005)(86362001)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8XcidRTpivgH3gj2IeWyVr3wdRY6an3CICqCkJ869pR2CZUfojU6ti9Yjgao?=
- =?us-ascii?Q?iryuLpaeSZdP04UqBHxBhw7CIhOhdKI3ME8bDa23Og/fKUw+NPidNdhoS3Ep?=
- =?us-ascii?Q?Pxz9jSvDHeXP2w4PaIbmgp/ZMLfT9UFUVK2W4PzJLYS/NNkoQTNrHItnWr0+?=
- =?us-ascii?Q?yjIIwn7O/si2/uwRBK4841KLcz+s39MujpN6UYpuDaiYincshY0QpluRa/3y?=
- =?us-ascii?Q?ZwLHdd4ryeOt7U1RJ1wSFNKFNYTBzOxAj4NFHa7v5Gt/bQnw/xe0ZygoNtAA?=
- =?us-ascii?Q?uGogUFQZsSRGpM9+zQMftrIqlVFYsa4WzBs5c/OBpmTQaUqcybgXAiYey5mu?=
- =?us-ascii?Q?X7VPfGpnZFhtQ32mhfmU5IM+JcOP+u/ZbVzi+M051k8xKj9K7yp/ro/Lb47v?=
- =?us-ascii?Q?sGVjE2L64PXkEjv6cLmUFnVtkWvoVyxtsNaRM/3ydLP1WihzCuAZvoDZ6vMh?=
- =?us-ascii?Q?xI966JvucCZTQzSm07/wIcRJh7mUi8o/07DNHcBCwd0UxSWqp7hM8Nxy7w3a?=
- =?us-ascii?Q?Ct0A8ZuH7vp5zL1iPNJI0bOvFPeSp4lHWuyLrai17Ysy1QHXIc5VK90z4xFC?=
- =?us-ascii?Q?0Qnm74cClut1ojcL3akgwx+hk0AvSfikUurm5XhJJtZV6cTm7EFNdyPB1+aJ?=
- =?us-ascii?Q?24z7TJGGzSVR6c+dsMjQ9B8F9n+s28qINFpq1v8PQtdiZAiNUOcrno+A+CbW?=
- =?us-ascii?Q?Xyr/5gpe/QaOXgrvbvIjTYRpQzoTB5Y5pvWLvyDNZDW6ouZer+Fenv+zKzwJ?=
- =?us-ascii?Q?yjcKPqniYLxayYVAn1c+nEs1Z1soDRTvFg+13h8k4j6sIwY/RKq7jeLIk+D/?=
- =?us-ascii?Q?U+kIcsWMu+OvPVwdXAHRn7aMnVgzWp8O1Y5AqVJ7alekRM0qgLmg81VOPwNS?=
- =?us-ascii?Q?pz9OoyMC/W7rSJBJSOT1WoDCu6Cyv0hhrCWY7lHZP69zy1QVJS9nIFWtC7As?=
- =?us-ascii?Q?WXNKRRNIqYrOg/XTmH2BBaAQivdupD0BTVUr1/vmT2gjpFepM0KomiATqzUy?=
- =?us-ascii?Q?loR+Fivuv+/AnOCMN5dFUg6/NotTcqaqFrU3E375zGbMBg5zMLBkb6B0Fw33?=
- =?us-ascii?Q?ufJDeQLF+1cansa0ZJkqMMl7MvH+cvX9sx6ltBcIr8vrGfW/JxEKOLmGKI++?=
- =?us-ascii?Q?vP/KsJz0u8JxW8FoUSn2kh2AdjsUEQ0x4kdTmlJxaE0P5x3a8FSU/a4p78op?=
- =?us-ascii?Q?8jRMJplQ2mb3TAHBtuotWIjkAeikkwUPv0lJAciUl6LlxE2GMGUOGoTNR2hH?=
- =?us-ascii?Q?Ce/m862UogXnPrYdXlFoatn4b0gDIRejA2x6o5b7JMmkaeaPFWsRCsshFhos?=
- =?us-ascii?Q?nnRGZk+XZe3znCE1cqvhjRKW7jzDx4o+VdEhHi9jgOBuCZBENUNI0zUNj15F?=
- =?us-ascii?Q?jTIy9ogKypANgRH91IIKef8LWAiFHljkSv7PLUtgU3RkH5n144z6zBBDmbv5?=
- =?us-ascii?Q?V0RoTp50GFhWmqQXlINGkCnBmbIkw38rwhUPUF2El5C3eRIn/15Eu8uWPzUy?=
- =?us-ascii?Q?HJ7N0IM0802R6bVMPJUvOFJBxhfjQ6Z/Z24Z3peLXfK6tg54tcuJumeRcLyL?=
- =?us-ascii?Q?PUi/kjjSZNR51bpO5bFt+UGdUL7vDRtNPL32amGddgvUZxALb2xaHsh0ShGI?=
- =?us-ascii?Q?VGRpwvtKdvkWzAd4Jci4qT0cgR/YVDoCtsHKxvWJB/HJeSvpssyFvJDd3ayC?=
- =?us-ascii?Q?zOGV/A=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba202f02-c64a-4f9d-35b6-08db307e5f9a
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 17:52:33.2771
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nhc35eE4RQQpiwSNOnY+bvSEgadZZbQhuZgZE3hpRpV+vIz8/l9UbVwy+V8zUouuOIw46IKfiUqzpvcAzFTsUnEYpB6uDaShSgge9oPywcE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR13MB4153
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220722201513.1624158-1-axelrasmussen@google.com>
+ <ZCIEGblnsWHKF8RD@x1n> <CAJHvVcj5ysY-xqKLL8f48-vFhpAB+qf4cN0AesQEd7Kvsi9r_A@mail.gmail.com>
+ <ZCNDxhANoQmgcufM@x1n> <CAJHvVcjU8QRLqFmk5GXbmOJgKp+XyVHMCS0hABtWmHTDuCusLA@mail.gmail.com>
+ <ZCNPFDK0vmzyGIHb@x1n> <CAJHvVciwT0xw3Nu2Fpi-7H9iR92xK7VB31dYLfmJF5K3vQxvFQ@mail.gmail.com>
+ <ZCNrWRKl4nCJX3pg@x1n>
+In-Reply-To: <ZCNrWRKl4nCJX3pg@x1n>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Wed, 29 Mar 2023 10:53:38 -0700
+Message-ID: <CAJHvVch52KG3V6eQY47t2hbJfEczdLgxcg65VWZdzML6bVFXeg@mail.gmail.com>
+Subject: Re: [PATCH] userfaultfd: don't fail on unrecognized features
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 10:08:10AM +0800, Jiasheng Jiang wrote:
-> On Tue, Mar 21, 2023 at 00:09:11AM +0800, Simon Horman wrote:
-> >On Mon, Mar 20, 2023 at 02:31:55PM +0800, Jiasheng Jiang wrote:
-> >> Return the error when send_pkt fails in order to avoid the error being
-> >> overwritten.
-> >> Moreover, remove the redundant 'ret'.
-> >> 
-> >> Fixes: 9c238ca8ec79 ("Bluetooth: 6lowpan: Check transmit errors for multicast packets")
-> >> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > 
-> > I see that the error handling is imperfect - only the most recent
-> > error value is returned.
-> > 
-> > But I think this patch introduces a behavioural change: if
-> > an error occurs then no attempt is made to send the
-> > multicast packet to devices that follow in the list of peers.
-> > 
-> > If so, I'd want to be sure that behaviour is desirable.
-> 
-> I think it's a matter of trade-offs.
-> The original error handling can complete the remaining correct tasks.
-> However, my patch can avoid resource waste, because if the an
-> error occurs, the rest is likely to go wrong.
-> For example, if a memory allocation fails because of the insufficient
-> memory, the next memory allocation will likely fails too.
+On Tue, Mar 28, 2023 at 3:34=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Tue, Mar 28, 2023 at 02:52:35PM -0700, Axel Rasmussen wrote:
+> > I don't see being very strict here as useful. Another example might be
+> > madvise() - for example trying to MADV_PAGEOUT on a kernel that
+> > doesn't support it. There is no way the kernel can proceed here, since
+> > it simply doesn't know how to do what you're asking for. In this case
+> > an error makes sense.
+>
+> IMHO, PAGEOUT is not a great example.  I wished we can have a way to prob=
+e
+> what madvise() the system supports, and I know many people wanted that to=
+o.
+> I even had a feeling that we'll have it some day.
+>
+> So now I'm going back to look at this patch assuming I'm reviewing it, I'=
+m
+> still not convinced the old API needs changing.
+>
+> Userfaultfd allows probing with features=3D0 with/without this patch, so =
+I
+> see this patch as something that doesn't bring a direct functional benefi=
+t,
 
-I see your point.
+The benefit is we combine probing for features and creating a
+userfaultfd into a single step, so userspace doesn't have to open +
+manipulate a userfaultfd twice. In my mind, both approaches achieve
+the same thing, it's just that one requires extra steps to get there.
 
-> Maybe it is better to use different error handlings depending on the
-> type of errors:
-> Immediately return "ENOMEM" errors and continue execute if the other errors occur.
+To me, it's still unclear why there is any harm in supporting the
+simpler way? And, I also don't see any way in which the more complex
+way is better?
 
-Yes, that might be interesting if we can clearly
-differentiate between the two types of errors.
-Yet, it brings complexity.
+> but some kind of api change due to subjective preferences which I cannot
+> say right or wrong.  Now the patch is already merged.  If we need to chan=
+ge
+> either this patch or the man page to make them match again, again I'd
+> prefer we simply revert it to keep everything like before and copy stable=
+.
 
-Given your explanation, perhaps the best idea is the implementation
-provided by this patch.
+I think we need to change documentation either way. But, I think the
+changes needed are actually bigger if we want to revert.
+
+With the simpler behavior, the selftest and the example program in the
+man page are ~correct as-is; otherwise we would need to modify those
+to use the two-step probing method.
+
+(By the way, I am excited about the selftest refactoring you talked
+about! Thanks for doing that work. It definitely needs it, the
+complexity there has gotten significantly worse as we've added more
+things onto it [wp, minor faults].)
+
+I think the man page description of how to use the API is incomplete
+in either case. Right now it sort of alludes to the fact that you can
+probe with features=3D=3D0, but it doesn't explicitly say "you need to
+probe first, then close that userfaultfd and open the real one you
+want to use, with a subset of the features reported in the first
+step". If we want to keep the old behavior, it should be more explicit
+about the steps needed to get a userfaultfd.
+
+You are right that it also doesn't describe "you can just ask for what
+you want, and the kernel tells you what subset it can give you; you
+need to check that the reported features are acceptable" - the new
+behavior. That should be updated.
+
+>
+> Thanks,
+>
+> --
+> Peter Xu
+>
