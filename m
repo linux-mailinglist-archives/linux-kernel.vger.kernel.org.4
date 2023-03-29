@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96326CEC34
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32E36CEC35
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjC2Oxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S230293AbjC2Oxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjC2Oxq (ORCPT
+        with ESMTP id S230249AbjC2Oxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:53:46 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF8A10F9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:53:44 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id y20so20616657lfj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:53:44 -0700 (PDT)
+        Wed, 29 Mar 2023 10:53:48 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7F81AE;
+        Wed, 29 Mar 2023 07:53:47 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id 61-20020a9d02c3000000b0069fe8de3139so8347736otl.1;
+        Wed, 29 Mar 2023 07:53:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680101623; x=1682693623;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mEfOw359GRtKE8JCHIM8Osck0I4+SZuJBzUhnN6nlo8=;
-        b=XjLsCsvn2a3ktcgvoxrI3m6Hds0ImD4++hcwbtY5mAvMFbIWA1qd/u9qZrBYzOUF/9
-         q6a1SeSR4o2oggFekN91HgYcXltH9kFil7hJPOgM7O0Q+f0FEYLjtaJH7E32blYe+SPp
-         aizgMdw/+R/V1Dn3RZZSWl947luOD2oEDYbM+ETcn97+ILXUsu+RHoDgjNfT4OfpNx/v
-         wwXjOxPbzvLokpL57HHdji8y8Gk7A4NnbHmwV/xw6fXV7wGB0RTz4UU2eNtqMgnCdwDA
-         HsBGknsOSkR0xQTcxN0Txg+FL1aRhenfL42rKtq1BsmHtadmhBiklX4RIlPf40Yo4Qw4
-         G19g==
+        d=gmail.com; s=20210112; t=1680101626;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HUAbF6xPpnaApht7x67RotY/bpdH/Tf1G3eD2cyc8F0=;
+        b=ZAV8/O7JwqdsctwR+oxDFJjl7JkT0xjiwpUKAc1PAnqQGj4viWWEcnJG/0Z9WXut14
+         pwpgq3vvsuPKmsFKz3qCBekH4CXPWONs70QxVh8I4Pd5P+akeSOtRqtWjQil3LenEEDo
+         qFnz1h9MIsPpKsne2RGQkS0jt7ptmyuC13GWzjRS2+Gl2qDOxUYCNfU8vtuzgP4UW1gA
+         D077tbthBlvairgPwrtwBxwo3fVOCJ1cp8PHJ5BpgNRwS/HEXwOTpAwruOMtVZTpmrKG
+         xJalmVSv7/algAxVmf2W4+n0wa628dyWEZQTUBtLD5aaQzfBjWPQJh4TF2y5gTXCAvIE
+         809A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680101623; x=1682693623;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mEfOw359GRtKE8JCHIM8Osck0I4+SZuJBzUhnN6nlo8=;
-        b=Tp42lizuR8Bc/iEDXPRTISmNQHFW1scaqzBnuQK3cC3agvn7h+ynr+W6AZc6EpzleQ
-         TXMoGSx99YLzBr4DV2azHJfinwa7ovIZysC4+vEG0AO7bk5RQQ7daqk2nDJrLAr8Il+P
-         m3zgzsZAcFBoi4rXAJF+7bYqE5WOr1PvPaWW+GTNUQJXThn2ZF0x7Gz1ScNprklZyaGx
-         tl1371yh2mKMvCv5bUeojjY8NdVflyGBChYcdDOCOGYrbo2IvBn67+5BZNcWxU0aFgWN
-         IxJ+eDjrOjge8qJz/5arMD1ef6oQWvXAIqMReGUNUxKrESoKxWTBvVouX8rxI+TXJ7Yy
-         MN4A==
-X-Gm-Message-State: AAQBX9cIYPcYqzr9M1eb6/QvmKH5PV/ZNoT6kSYqlVlVBJt+bxhWL/dt
-        Ly+621C/WUG41oi9z4M5oyo=
-X-Google-Smtp-Source: AKy350YdsUKflXAEBl1vJ9VDW1DfapsI013xZTK3XHhLffq3SlUJND31lkuQM3vbpQwCIOiQ/dDjJA==
-X-Received: by 2002:ac2:5989:0:b0:4dd:a025:d87 with SMTP id w9-20020ac25989000000b004dda0250d87mr4805726lfn.0.1680101622641;
-        Wed, 29 Mar 2023 07:53:42 -0700 (PDT)
-Received: from ivan-HLYL-WXX9.. ([178.160.196.94])
-        by smtp.gmail.com with ESMTPSA id b3-20020ac25623000000b004eb0c51780bsm1619723lff.29.2023.03.29.07.53.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 07:53:42 -0700 (PDT)
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, himadrispandya@gmail.com,
-        skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
-Subject: [PATCH] mm: khugepaged: Fix kernel BUG in hpage_collapse_scan_file
-Date:   Wed, 29 Mar 2023 18:53:30 +0400
-Message-Id: <20230329145330.23191-1-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20210112; t=1680101626;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HUAbF6xPpnaApht7x67RotY/bpdH/Tf1G3eD2cyc8F0=;
+        b=7WZ+If2IrIFE4FWkDGeRZy5HXuFAy7w3k7cf/9zWkvQCdp322ZezbNQR13wADgHMhW
+         Mm19VcgCS+DEJt2IFm96VGxpSSR76abdXBen1RHpiduxadMBv8LjwvgiD0cK1K9A0f7N
+         KzvCN6BR/zy1gkS7+ju4m6Njqb2aGqSSjNvFfBr+YY5VVoYeI5v9jYJ0OjG25q1xZYzi
+         2sNNFHch6jNSz0fRZh3L4yS3uIkMSPjSQaWOvNCklmY0WbXnJUsGq1/VIzkGHqpZEnh2
+         rzzQI6yPGwiaEj+SM13zZvFwG40c1aFMn10aHAMvLAwhIFCwWlRdpX3IW6HKYV/zIMwF
+         7+pQ==
+X-Gm-Message-State: AAQBX9fsI63kiuvoezp8FuhWyYZ0S671IWX0AGn7Qn6sowZswSO0Qlfu
+        LnJsyTSTSWOo3KHTUAFClHg=
+X-Google-Smtp-Source: AKy350ZoRTphKvVFMl5GtTPXTy1Qb6aL9bK12jfehzU2n5V4XAZsPrGfXid7dZpcztCeBy4dQpBz4A==
+X-Received: by 2002:a05:6830:1d78:b0:6a1:22fe:2a4b with SMTP id l24-20020a0568301d7800b006a122fe2a4bmr6894580oti.18.1680101626737;
+        Wed, 29 Mar 2023 07:53:46 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id a12-20020a056830008c00b006a11de6cd02sm5453887oto.34.2023.03.29.07.53.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 07:53:46 -0700 (PDT)
+Message-ID: <7bd381da-2d8a-2c81-bc9b-ac0a13f4edb9@gmail.com>
+Date:   Wed, 29 Mar 2023 11:53:42 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 5/6] rust: error: Add a helper to convert a C ERR_PTR
+ to a `Result`
+Content-Language: en-US
+To:     Asahi Lina <lina@asahilina.net>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>
+Cc:     Fox Chen <foxhlchen@gmail.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev
+References: <20230224-rust-error-v2-0-3900319812da@asahilina.net>
+ <20230224-rust-error-v2-5-3900319812da@asahilina.net>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230224-rust-error-v2-5-3900319812da@asahilina.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,86 +84,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reported the following issue:
+On 3/29/23 09:04, Asahi Lina wrote:
+> [...]
+> 
+> diff --git a/rust/helpers.c b/rust/helpers.c
+> index 89f4cd1e0df3..04b9be46e887 100644
+> --- a/rust/helpers.c
+> +++ b/rust/helpers.c
+> @@ -53,6 +53,18 @@ __force void *rust_helper_ERR_PTR(long err)
+>  }
+>  EXPORT_SYMBOL_GPL(rust_helper_ERR_PTR);
+>  
+> +bool rust_helper_IS_ERR(__force const void *ptr)
+> +{
+> +	return IS_ERR(ptr);
+> +}
+> +EXPORT_SYMBOL_GPL(rust_helper_IS_ERR);
+> +
+> +long rust_helper_PTR_ERR(__force const void *ptr)
+> +{
+> +	return PTR_ERR(ptr);
+> +}
+> +EXPORT_SYMBOL_GPL(rust_helper_PTR_ERR);
+> +
+>  /*
+>   * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
+>   * as the Rust `usize` type, so we can use it in contexts where Rust
+> diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
+> index 4f599c4d1752..6b10129075a7 100644
+> --- a/rust/kernel/error.rs
+> +++ b/rust/kernel/error.rs
+> @@ -177,3 +177,52 @@ pub fn to_result(err: core::ffi::c_int) -> Result {
+>          Ok(())
+>      }
+>  }
+> +
+> +/// Transform a kernel "error pointer" to a normal pointer.
+> +///
+> +/// Some kernel C API functions return an "error pointer" which optionally
+> +/// embeds an `errno`. Callers are supposed to check the returned pointer
+> +/// for errors. This function performs the check and converts the "error pointer"
+> +/// to a normal pointer in an idiomatic fashion.
+> +///
+> +/// # Examples
+> +///
+> +/// ```ignore
+> +/// # use kernel::from_err_ptr;
+> +/// # use kernel::bindings;
+> +/// fn devm_platform_ioremap_resource(
+> +///     pdev: &mut PlatformDevice,
+> +///     index: u32,
+> +/// ) -> Result<*mut core::ffi::c_void> {
+> +///     // SAFETY: FFI call.
+> +///     unsafe {
+> +///         from_err_ptr(bindings::devm_platform_ioremap_resource(
+> +///             pdev.to_ptr(),
+> +///             index,
+> +///         ))
+> +///     }
+> +/// }
+> +/// ```
+> +// TODO: Remove `dead_code` marker once an in-kernel client is available.
+> +#[allow(dead_code)]
+> +pub(crate) fn from_err_ptr<T>(ptr: *mut T) -> Result<*mut T> {
+> +    // CAST: Casting a pointer to `*const core::ffi::c_void` is always valid.
+> +    let const_ptr: *const core::ffi::c_void = ptr.cast();
+> +    // SAFETY: The FFI function does not deref the pointer.
+> +    if unsafe { bindings::IS_ERR(const_ptr) } {
+> +        // SAFETY: The FFI function does not deref the pointer.
+> +        let err = unsafe { bindings::PTR_ERR(const_ptr) };
+> +        // CAST: If `IS_ERR()` returns `true`,
+> +        // then `PTR_ERR()` is guaranteed to return a
+> +        // negative value greater-or-equal to `-bindings::MAX_ERRNO`,
+> +        // which always fits in an `i16`, as per the invariant above.
+> +        // And an `i16` always fits in an `i32`. So casting `err` to
+> +        // an `i32` can never overflow, and is always valid.
+> +        //
+> +        // SAFETY: `IS_ERR()` ensures `err` is a
+> +        // negative value greater-or-equal to `-bindings::MAX_ERRNO`.
+> +        #[cfg_attr(CONFIG_ARM, allow(clippy::unnecessary_cast))]
+> +        return Err(Error(err as i32));
+> +    }
+> +    Ok(ptr)
+> +}
+> 
 
-kernel BUG at mm/khugepaged.c:1823!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 5097 Comm: syz-executor220 Not tainted 6.2.0-syzkaller-13154-g857f1268a591 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
-RIP: 0010:collapse_file mm/khugepaged.c:1823 [inline]
-RIP: 0010:hpage_collapse_scan_file+0x67c8/0x7580 mm/khugepaged.c:2233
-Code: 00 00 89 de e8 c9 66 a3 ff 31 ff 89 de e8 c0 66 a3 ff 45 84 f6 0f 85 28 0d 00 00 e8 22 64 a3 ff e9 dc f7 ff ff e8 18 64 a3 ff <0f> 0b f3 0f 1e fa e8 0d 64 a3 ff e9 93 f6 ff ff f3 0f 1e fa 4c 89
-RSP: 0018:ffffc90003dff4e0 EFLAGS: 00010093
-RAX: ffffffff81e95988 RBX: 00000000000001c1 RCX: ffff8880205b3a80
-RDX: 0000000000000000 RSI: 00000000000001c0 RDI: 00000000000001c1
-RBP: ffffc90003dff830 R08: ffffffff81e90e67 R09: fffffbfff1a433c3
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
-R13: ffffc90003dff6c0 R14: 00000000000001c0 R15: 0000000000000000
-FS:  00007fdbae5ee700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fdbae6901e0 CR3: 000000007b2dd000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- madvise_collapse+0x721/0xf50 mm/khugepaged.c:2693
- madvise_vma_behavior mm/madvise.c:1086 [inline]
- madvise_walk_vmas mm/madvise.c:1260 [inline]
- do_madvise+0x9e5/0x4680 mm/madvise.c:1439
- __do_sys_madvise mm/madvise.c:1452 [inline]
- __se_sys_madvise mm/madvise.c:1450 [inline]
- __x64_sys_madvise+0xa5/0xb0 mm/madvise.c:1450
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The 'xas_store' call during page cache scanning can potentially
-translate 'xas' into the error state (with the reproducer provided
-by the syzkaller the error code is -ENOMEM). However, there are no
-further checks after the 'xas_store', and the next call of 'xas_next'
-at the start of the scanning cycle doesn't increase the xa_index,
-and the issue occurs.
-
-This patch will add the xarray state error checking after the
-'xas_store' and the corresponding result error code.
-
-Tested via syzbot.
-
-Reported-by: syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?id=7d6bb3760e026ece7524500fe44fb024a0e959fc
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
----
- mm/khugepaged.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 92e6f56a932d..4d9850d9ea7f 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -55,6 +55,7 @@ enum scan_result {
- 	SCAN_CGROUP_CHARGE_FAIL,
- 	SCAN_TRUNCATED,
- 	SCAN_PAGE_HAS_PRIVATE,
-+	SCAN_STORE_FAILED,
- };
- 
- #define CREATE_TRACE_POINTS
-@@ -1840,6 +1841,15 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 					goto xa_locked;
- 				}
- 				xas_store(&xas, hpage);
-+				if (xas_error(&xas)) {
-+					/* revert shmem_charge performed
-+					 * in the previous condition
-+					 */
-+					mapping->nrpages--;
-+					shmem_uncharge(mapping->host, 1);
-+					result = SCAN_STORE_FAILED;
-+					goto xa_locked;
-+				}
- 				nr_none++;
- 				continue;
- 			}
--- 
-2.34.1
-
+Reviewed-by: Martin Rodriguez Reboredo
