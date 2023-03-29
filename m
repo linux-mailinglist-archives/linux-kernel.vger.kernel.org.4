@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE5F6CF39F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40636CF3A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjC2TuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        id S230104AbjC2TuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbjC2Tt7 (ORCPT
+        with ESMTP id S229819AbjC2TuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:49:59 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC0D6A4B
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:49:37 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id d22so9992513pgw.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:49:37 -0700 (PDT)
+        Wed, 29 Mar 2023 15:50:21 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A1E768B
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:49:55 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id c1so14341012vsk.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:49:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680119288;
+        d=chromium.org; s=google; t=1680119340;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JkwwcSBRqgS30KhR49UM83c3a69MioP60clbUh2HjpA=;
-        b=Vjb3xT/s1/m7g9V+3JodYQd0vQRs0RZgGOezedG8oJudOay6pylk3yYQ2+36Ew/UIb
-         juTMRwfNvT2SCrUDOGBXYX2WfGtnySA1/ElIFRA6/PZ1aW8c0mBQPLG/1HbonvmAuKVG
-         nuqXcKmGBfCFd+ChSg3orAS1fWQva0XBc7rql8PaZSQWvOxbKW2mCTGOVJBfhPPDs4I+
-         oDs22vkzvITKKvdb66iqt7sHk2sh/Dw5IjGWFsr13+Z6j/cSH1OFYWDYq/a+0eDGiSi1
-         bs/aib9lMbj++PKL/Ym1cxuKbiGmWO+xSCPycd19WBQwnO/pZd6zU6iI9pOdvNqn/YaR
-         Bowg==
+        bh=AlsIZeod3ngvlE+hFIn17UzULS/26j1iAdWvld+qR9I=;
+        b=Wf8asQeCEzFQyKJyP7NpPoV7w0C4BybXEk06i1di2v8jRMF962jql2i2Mkt9cOdebq
+         D1P98+lYCVsWY2YGTgC7wJ+tFUVFwX6yJkDsXje1sCwgT9DGvWHD+UbpXl9JsJvpJzvN
+         rYq0plz1aFgNQ2s/FSaRZRTlFFAXTtt0BPGh0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680119288;
+        d=1e100.net; s=20210112; t=1680119340;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JkwwcSBRqgS30KhR49UM83c3a69MioP60clbUh2HjpA=;
-        b=S8K+fl9G8ROnumTBvqOurQdK6rbnZwWp45HDvdmUcSHX/0JH3zlweNfRTvgbdnHJSh
-         UlC1eJqOjQOLYwf5jdnnK1IL8+f7eGm9VbX190GqLuRoxAZDNhvtQRjz9wYL/j8SCl13
-         FzISLVlGSph/ODgoBJWB9E99TyzTlhFZoElA9MTmQpah8ssLKMHNVH3+zdIzK2A7bmb0
-         dSmFmxxFZanxQi+roMZGDMYtncxgnfvs8OEYUcChH6MbsYct48L8i37p+6w97VMxTQ1j
-         vNaNMi9RQrp4/S9LXDrhrDoBolpaEep99pDsn7r/0Flz+xG820CDBPqiTpczWMSaEyxT
-         CpeA==
-X-Gm-Message-State: AAQBX9cUFa7Kn8Aw2/yVzjbbEESzhTZgH7qCXmWlsr5TJwCsD7SbUsaM
-        w2oPJExaf8ODQT4014WJhCFN8oTjE/JIvJMeBPgg1A==
-X-Google-Smtp-Source: AKy350bTWid512og1XEyH8yXn2SeGT0F4JFf7EpVQQuzB+KNlUFsnJWFBZzX5Pz0KWEq5gW8zQNmpFjZE0Q/yTnojJg=
-X-Received: by 2002:a63:5a47:0:b0:513:2523:1b5f with SMTP id
- k7-20020a635a47000000b0051325231b5fmr5501254pgm.3.1680119287530; Wed, 29 Mar
- 2023 12:48:07 -0700 (PDT)
+        bh=AlsIZeod3ngvlE+hFIn17UzULS/26j1iAdWvld+qR9I=;
+        b=cFek97dFItI3AdzF7Jo6qNQoxCNTgpEY9jDoKZKlk3wKk4G2JogWCnMvQnc22zwfvv
+         7FjvxE05RpvtP8mhnNode9J6sCTZx4zVWfe6+SZoLkYCFi2ZbL9a2xeI6d5COkHV6pxv
+         WgOEf6GCMvGEfBEAGc6uk7xXdi9wGt+na0pNwH9YED97yzMrr2+sLVLZXl8H/1fU4Tm8
+         hIf9nz7bs83JwnKwrDNbI8rw6FH0m2C0Bon5IlZ/pDTXWJXOM7Y7n73EnCZLTBq6coKE
+         /NuPnhk2R4PJJhzse9FqFDA1LhoXXz4GPnNWMz4b6feC41E5/H1Kb7OzahAAYtRmuhjn
+         sTaA==
+X-Gm-Message-State: AAQBX9d4lH/V0FXt59E4Hx3VlY4AtYxVNQnCu5f1puhWO3FWI0DCVI84
+        T9ktMFCaDM594bIzCkJmAT5Xy0EjkcN/Xb6Lbcw=
+X-Google-Smtp-Source: AKy350Yh04CnCgO23DQlgwhxgFI7ltdGpLxTCpdq/BOmKQStRml2k2DOLoGGO9Y/ycJmKyu0PA3fGg==
+X-Received: by 2002:a67:b30d:0:b0:426:c681:18e1 with SMTP id a13-20020a67b30d000000b00426c68118e1mr1253110vsm.28.1680119339820;
+        Wed, 29 Mar 2023 12:48:59 -0700 (PDT)
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
+        by smtp.gmail.com with ESMTPSA id w12-20020a9f2c8c000000b00764d172829asm2157222uaj.13.2023.03.29.12.48.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 12:48:58 -0700 (PDT)
+Received: by mail-ua1-f54.google.com with SMTP id h34so12219099uag.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:48:58 -0700 (PDT)
+X-Received: by 2002:ab0:3d89:0:b0:755:9b3:fef8 with SMTP id
+ l9-20020ab03d89000000b0075509b3fef8mr16171362uac.2.1680119338100; Wed, 29 Mar
+ 2023 12:48:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
-In-Reply-To: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 29 Mar 2023 12:47:31 -0700
-Message-ID: <CAGETcx-5a3ZKRiG1MbZaYiJUPVSPH1O18+E-HoTRnAUz0mc07A@mail.gmail.com>
-Subject: Re: [PATCH v2] treewide: Fix instantiation of devices in DT overlays
-To:     geert+renesas@glider.be
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230329110222.RFC.1.I30d8e1ca10cfbe5403884cdd192253a2e063eb9e@changeid>
+In-Reply-To: <20230329110222.RFC.1.I30d8e1ca10cfbe5403884cdd192253a2e063eb9e@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 29 Mar 2023 12:48:45 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UGTZ0UpB2KKdhkuM6fPhMOJTRLzd+X77UcMCo247n6-A@mail.gmail.com>
+Message-ID: <CAD=FV=UGTZ0UpB2KKdhkuM6fPhMOJTRLzd+X77UcMCo247n6-A@mail.gmail.com>
+Subject: Re: [RFC PATCH] regulator: Avoid lockdep reports when resolving supplies
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,158 +79,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 2:30=E2=80=AFAM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
+Hi,
+
+On Wed, Mar 29, 2023 at 11:03=E2=80=AFAM Douglas Anderson <dianders@chromiu=
+m.org> wrote:
 >
-
-I saw all the other replies. Let me give more details on the commit
-text and inline comments so it's clearer and not a "he said he said"
-
-> When loading a DT overlay that creates a device, the device is not
-> instantiated,
-
-IIRC I think the devices are instantiated, but not probed.
-
-> unless the DT overlay is unloaded and reloaded again.
+> An automated bot told me that there was a potential lockdep problem
+> with regulators. This was on the chromeos-5.15 kernel, but I see
+> nothing that would be different downstream compared to upstream. The
+> bot said:
+>   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>   WARNING: possible recursive locking detected
+>   5.15.104-lockdep-17461-gc1e499ed6604 #1 Not tainted
+>   --------------------------------------------
+>   kworker/u16:4/115 is trying to acquire lock:
+>   ffffff8083110170 (regulator_ww_class_mutex){+.+.}-{3:3}, at: create_reg=
+ulator+0x398/0x7ec
 >
-> Saravana explains:
->   Basically for all overlays (I hope the function is only used for
->   overlays) we assume all nodes are NOT devices until they actually
->   get added as a device.
-
-This comment was about what the patch is doing. I think a better
-commit text would be something like below. Feel free to reword as you
-see fit.
-
-After the recent refactor to improve fw_devlink[1], it no longer depends on
-"compatible" property to identify which device tree nodes will
-become struct device. fw_devlink now picks up dangling consumers (consumers
-pointing to descendent device tree nodes of a device that aren't converted
-to child devices) when a device is successfully bound to a driver. See
-__fw_devlink_pickup_dangling_consumers().
-
-However, during DT overlay, a device's device tree node can have sub-nodes
-added/removed without unbinding/rebinding the driver. This difference in
-behavior between the normal device instantiation and probing flow vs the DT
-overlay flow has a bunch of implications that are pointed out elsewhere[2].
-One of them is that the fw_devlink logic to pick up dangling consumers is
-never exercised.
-
-This patch solves the fw_devlink issue by marking all DT nodes added by DT
-overlay with FWNODE_FLAG_NOT_DEVICE (fwnode that won't become device) and
-then clearing the flag when a struct device is actually created for the DT
-node. This way, fw_devlink knows not to have consumers waiting on these
-newly added DT nodes and to propagate the dependency to an ancestor DT node
-that has corresponding struct device.
-
-[1] - https://lore.kernel.org/lkml/20230207014207.1678715-1-saravanak@googl=
-e.com/
-[2] - https://lore.kernel.org/lkml/CAGETcx_bkuFaLCiPrAWCPQz+w79ccDp6=3D9e88=
-1qmK=3Dvx3hBMyg@mail.gmail.com/#t
-
-
-> Based on a patch by Saravana Kannan, which covered only platform and spi
-> devices.
-
-You can keep this in the commit text.
-
-> Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
-> Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=3DrWYnkC=
-Z6z5bGX-wj4w@mail.gmail.com
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Acked-by: Mark Brown <broonie@kernel.org>
+>   but task is already holding lock:
+>   ffffff808378e170 (regulator_ww_class_mutex){+.+.}-{3:3}, at: ww_mutex_t=
+rylock+0x3c/0x7b8
+>
+>   other info that might help us debug this:
+>    Possible unsafe locking scenario:
+>
+>          CPU0
+>          ----
+>     lock(regulator_ww_class_mutex);
+>     lock(regulator_ww_class_mutex);
+>
+>    *** DEADLOCK ***
+>
+>    May be due to missing lock nesting notation
+>
+>   4 locks held by kworker/u16:4/115:
+>    #0: ffffff808006a948 ((wq_completion)events_unbound){+.+.}-{0:0}, at: =
+process_one_work+0x520/0x1348
+>    #1: ffffffc00e0a7cc0 ((work_completion)(&entry->work)){+.+.}-{0:0}, at=
+: process_one_work+0x55c/0x1348
+>    #2: ffffff80828a2260 (&dev->mutex){....}-{3:3}, at: __device_attach_as=
+ync_helper+0xd0/0x2a4
+>    #3: ffffff808378e170 (regulator_ww_class_mutex){+.+.}-{3:3}, at: ww_mu=
+tex_trylock+0x3c/0x7b8
+>
+>   stack backtrace:
+>   CPU: 2 PID: 115 Comm: kworker/u16:4 Not tainted 5.15.104-lockdep-17461-=
+gc1e499ed6604 #1 9292e52fa83c0e23762b2b3aa1bacf5787a4d5da
+>   Hardware name: Google Quackingstick (rev0+) (DT)
+>   Workqueue: events_unbound async_run_entry_fn
+>   Call trace:
+>    dump_backtrace+0x0/0x4ec
+>    show_stack+0x34/0x50
+>    dump_stack_lvl+0xdc/0x11c
+>    dump_stack+0x1c/0x48
+>    __lock_acquire+0x16d4/0x6c74
+>    lock_acquire+0x208/0x750
+>    __mutex_lock_common+0x11c/0x11f8
+>    ww_mutex_lock+0xc0/0x440
+>    create_regulator+0x398/0x7ec
+>    regulator_resolve_supply+0x654/0x7c4
+>    regulator_register_resolve_supply+0x30/0x120
+>    class_for_each_device+0x1b8/0x230
+>    regulator_register+0x17a4/0x1f40
+>    devm_regulator_register+0x60/0xd0
+>    reg_fixed_voltage_probe+0x728/0xaec
+>    platform_probe+0x150/0x1c8
+>    really_probe+0x274/0xa20
+>    __driver_probe_device+0x1dc/0x3f4
+>    driver_probe_device+0x78/0x1c0
+>    __device_attach_driver+0x1ac/0x2c8
+>    bus_for_each_drv+0x11c/0x190
+>    __device_attach_async_helper+0x1e4/0x2a4
+>    async_run_entry_fn+0xa0/0x3ac
+>    process_one_work+0x638/0x1348
+>    worker_thread+0x4a8/0x9c4
+>    kthread+0x2e4/0x3a0
+>    ret_from_fork+0x10/0x20
+>
+> The problem was first reported soon after we made many of the
+> regulators probe asynchronously, though nothing I've seen implies that
+> the problems couldn't have also happened even without that.
+>
+> I haven't personally been able to reproduce the lockdep issue, but the
+> issue does look somewhat legitimate. Specifically, it looks like in
+> regulator_resolve_supply() we are holding a "rdev" lock while calling
+> set_supply() -> create_regulator() which grabs the lock of a
+> _different_ "rdev" (the one for our supply). This is not necessarily
+> safe from a lockdep perspective since there is no documented ordering
+> between these two locks.
+>
+> In reality, we should always be locking a regulator before the
+> supplying regulator, so I don't expect there to be any real deadlocks
+> in practice. However, the regulator framework in general doesn't
+> express this to lockdep.
+>
+> Let's fix the issue by simply grabbing the two locks involved in the
+> same way we grab multiple locks elsewhere in the regulator framework:
+> using the "wound/wait" mechanisms.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 > ---
-> v2:
->   - Add Acked-by,
->   - Drop RFC.
-> ---
->  drivers/bus/imx-weim.c    | 1 +
->  drivers/i2c/i2c-core-of.c | 1 +
->  drivers/of/dynamic.c      | 1 +
->  drivers/of/platform.c     | 1 +
->  drivers/spi/spi.c         | 1 +
->  5 files changed, 5 insertions(+)
+> My knowledge of lockdep is not as strong as it should be and my
+> knowledge of wait-wound locks is not as strong as it should be. That,
+> combined with the fact that I can't actually reproduce the issue, has
+> led me to label this as RFC.
 >
-> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
-> index 36d42484142aede2..898e23a4231400fa 100644
-> --- a/drivers/bus/imx-weim.c
-> +++ b/drivers/bus/imx-weim.c
-> @@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb, =
-unsigned long action,
->                                  "Failed to setup timing for '%pOF'\n", r=
-d->dn);
+> I can at least confirm that my system still boots with this patch
+> applied, but I can't say 100% for sure that this addresses the issue
+> that the bot reported to me. Hopefully others can review and make sure
+> that this seems sensible to them.
 >
->                 if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
-
-It's important this flag clearing is done before the device is added.
-So, can you please add a comment before all these clear flag lines
-that's something like:
-
-/* Clear the flag before adding the device so that fw_devlink doesn't
-skip adding consumers to this device. */
-
-Thanks,
-Saravana
-
-> +                       rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE=
-;
->                         if (!of_platform_device_create(rd->dn, NULL, &pde=
-v->dev)) {
->                                 dev_err(&pdev->dev,
->                                         "Failed to create child device '%=
-pOF'\n",
-> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-> index aa93467784c29c89..303f9003562eed3d 100644
-> --- a/drivers/i2c/i2c-core-of.c
-> +++ b/drivers/i2c/i2c-core-of.c
-> @@ -178,6 +178,7 @@ static int of_i2c_notify(struct notifier_block *nb, u=
-nsigned long action,
->                         return NOTIFY_OK;
->                 }
+> If this looks reasonable, I can land it and see if that prevents the
+> bot from hitting this again.
 >
-> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
->                 client =3D of_i2c_register_device(adap, rd->dn);
->                 if (IS_ERR(client)) {
->                         dev_err(&adap->dev, "failed to create client for =
-'%pOF'\n",
-> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
-> index 07d93753b12f5f4d..e311d406b1705306 100644
-> --- a/drivers/of/dynamic.c
-> +++ b/drivers/of/dynamic.c
-> @@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np)
->         np->sibling =3D np->parent->child;
->         np->parent->child =3D np;
->         of_node_clear_flag(np, OF_DETACHED);
-> +       np->fwnode.flags |=3D FWNODE_FLAG_NOT_DEVICE;
+>  drivers/regulator/core.c | 89 ++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 81 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+> index 1490eb40c973..822fec20d36a 100644
+> --- a/drivers/regulator/core.c
+> +++ b/drivers/regulator/core.c
+> @@ -207,6 +207,76 @@ static void regulator_unlock(struct regulator_dev *r=
+dev)
+>         mutex_unlock(&regulator_nesting_mutex);
 >  }
 >
->  /**
-> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> index b2bd2e783445dd78..17c92cbfb62ee3ef 100644
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -737,6 +737,7 @@ static int of_platform_notify(struct notifier_block *=
-nb,
->                 if (of_node_check_flag(rd->dn, OF_POPULATED))
->                         return NOTIFY_OK;
->
-> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
->                 /* pdev_parent may be NULL when no bus platform device */
->                 pdev_parent =3D of_find_device_by_node(rd->dn->parent);
->                 pdev =3D of_platform_device_create(rd->dn, NULL,
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 8e8af148b1dc371e..66ac67580d2a473b 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -4527,6 +4527,7 @@ static int of_spi_notify(struct notifier_block *nb,=
- unsigned long action,
->                         return NOTIFY_OK;
->                 }
->
-> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
->                 spi =3D of_register_spi_device(ctlr, rd->dn);
->                 put_device(&ctlr->dev);
->
-> --
-> 2.34.1
->
+> +/**
+> + * regulator_lock_two - lock two regulators
+> + * @rdev1:             first regulator
+> + * @rdev2:             second regulator
+> + * @ww_ctx:            w/w mutex acquire context
+> + *
+> + * Locks both rdevs using the regulator_ww_class.
+> + */
+> +static void regulator_lock_two(struct regulator_dev *rdev1,
+> +                              struct regulator_dev *rdev2,
+> +                              struct ww_acquire_ctx *ww_ctx)
+> +{
+> +       struct regulator_dev *tmp;
+> +       int ret;
+> +
+> +       ww_acquire_init(ww_ctx, &regulator_ww_class);
+> +
+> +       /* Try to just grab both of them */
+> +       ret =3D regulator_lock_nested(rdev1, ww_ctx);
+> +       WARN_ON(ret);
+> +       ret =3D regulator_lock_nested(rdev2, ww_ctx);
+> +       if (ret !=3D -EDEADLOCK) {
+> +               WARN_ON(ret);
+> +               goto exit;
+> +       }
+> +
+> +       while (true) {
+> +               /*
+> +                * Start of loop: rdev1 was locked and rdev2 was contende=
+d.
+> +                * Need to unlock rdev1, slowly lock rdev2, then try rdev=
+1
+> +                * again.
+> +                */
+> +               regulator_unlock(rdev1);
+> +
+> +               ww_mutex_lock_slow(&rdev2->mutex, ww_ctx);
+> +               ret =3D regulator_lock_nested(rdev1, ww_ctx);
+
+Doh. I did some more stress testing right after I sent this out and it
+caught a bug where "ref_cnt" was underflowing. I'm fairly certain I
+need a:
+
+  rdev2->ref_cnt++;
+
+...right after the ww_mutex_lock_slow(), since that doesn't increment
+the ref_cnt. I suspect I also need:
+
+  rdev->mutex_owner =3D current;
+
+...though I'm confused because I think some other places don't do
+that. In any case, I'll confirm and do some more stress testing and
+then send out another patch shortly. Sorry for jumping the gun on
+sending the first version.
+
+-Doug
