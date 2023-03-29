@@ -2,200 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F206CEE62
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BCA6CEE64
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjC2QA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S230173AbjC2QAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbjC2P7w (ORCPT
+        with ESMTP id S231638AbjC2P74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:59:52 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46AE525A;
-        Wed, 29 Mar 2023 08:59:21 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1phYCk-0003Pu-2L;
-        Wed, 29 Mar 2023 17:59:19 +0200
-Date:   Wed, 29 Mar 2023 16:59:13 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: [RFC PATCH net-next v3 09/15] net: dsa: mt7530: split-off common
- parts from mt7531_setup
-Message-ID: <8e3a00982abc91dfc724ba1a21cbcd9f865f8650.1680105013.git.daniel@makrotopia.org>
-References: <cover.1680105013.git.daniel@makrotopia.org>
+        Wed, 29 Mar 2023 11:59:56 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74FE59EB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:59:29 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id v1so16288026wrv.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680105565;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zBJkXabIUFXjdoz3ymumlCy03vftbPDEKeNtnyEkrz8=;
+        b=YdpfQk27kKNVYmWdxp/LTVIpL9/Vlb9z8P04OSPiTEBLZiAg8hINsKbJvWjGMQu38+
+         VsF5S6kmYNBG8R3BlrvDWxdd60oHj8KvJ8AtLzOyVpUUPEkp/aqmKIZwITpd9UnZ9hgg
+         tVJLyE2hbIYhPCFHpmFpwBfY/wibcSVGXRPa1fFWkF/SQ68kNXFv2W5TbzGE3Y8w1wA9
+         SKEbKkEptThZMsDVhs7KhfSUnZRwpncmEfxBv+YdKPsNnS65c/BtNfRHLuxL0TlY1LFg
+         9TBqqaVm6LyF8vju9vovFEAZELJVSX9FSL6gAn+pIxeag4Zuis4kiwDebgdTkhfx6oqw
+         URSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680105565;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zBJkXabIUFXjdoz3ymumlCy03vftbPDEKeNtnyEkrz8=;
+        b=5WhSwlwEolZpBVA8irFwGO5sAP5JQCqYgWsTVIkOetrLxRlnvUfnE4LNK6gz+In7yl
+         nkcKgYieAJ/Nhge07FD2Hv9qTqX2LPNBxf8LABNyi51qSduvoKObiXOmJUkv2XCj8+9w
+         zcs+Mg75F6/q/oZeoJ8dNJmF/ZEKinA6AyVuG83pvXzbXft88DaZNDgDOKRFRGtuMNs2
+         wxP9F/Ex5ZnstPRbEf8x60ulRO2jHjqucMSTjOJhJTn7P/c/0SIpzNXjyMYiCtqNHjFM
+         MizE+NxYeae8/tNQCz9QefoBKRVVe7lXh75IKvJIORvnHHXACxQmyxNYSNcmCTBfgbLN
+         q42g==
+X-Gm-Message-State: AAQBX9fDFUj46SiZfO3Q4buisWR35Klzn2S2xLT/kTtHnCD2jV787qVE
+        qWNrEPqK2ppG/d8AH0QvnLptxg==
+X-Google-Smtp-Source: AKy350ZSxEEdqeCzQKvyuviroGk7pylDiYLPqXxp6c6D7Prd4vO3vN5n7oGZ9fbGXUSlETdYe/Wpww==
+X-Received: by 2002:adf:db4b:0:b0:2d9:eb77:90d2 with SMTP id f11-20020adfdb4b000000b002d9eb7790d2mr14716100wrj.70.1680105565439;
+        Wed, 29 Mar 2023 08:59:25 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:7c0e:2838:74e9:d05? ([2a05:6e02:1041:c10:7c0e:2838:74e9:d05])
+        by smtp.googlemail.com with ESMTPSA id q1-20020a5d61c1000000b002e463bd49e3sm506904wrv.66.2023.03.29.08.59.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 08:59:25 -0700 (PDT)
+Message-ID: <c1c0945b-4772-e6b1-e662-d9901d224f6a@linaro.org>
+Date:   Wed, 29 Mar 2023 17:59:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1680105013.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL
+ pointer dereference
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org
+References: <20230329090055.7537-1-rui.zhang@intel.com>
+ <08aee7fe-eddc-7841-2539-16ae43fd8d66@linaro.org>
+ <CAJZ5v0hGnoEhYadoK-KPTvMtvviOrGqbY9jrmOUzTjOGe_rB_A@mail.gmail.com>
+ <016dc073-c9a3-4b96-6c58-7b21e0f998a5@linaro.org>
+ <CAJZ5v0jmo_bj4iMVe9ARei4-oyP3TdD+FXiiu+-g55FqJxLJsg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0jmo_bj4iMVe9ARei4-oyP3TdD+FXiiu+-g55FqJxLJsg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MT7988 shares a significant part of the setup function with MT7531.
-Split-off those parts into a shared function which is going to be used
-also by mt7988_setup.
+On 29/03/2023 16:38, Rafael J. Wysocki wrote:
+> On Wed, Mar 29, 2023 at 4:16 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 29/03/2023 14:06, Rafael J. Wysocki wrote:
+>>> On Wed, Mar 29, 2023 at 11:57 AM Daniel Lezcano
+>>> <daniel.lezcano@linaro.org> wrote:
+>>>>
+>>>> On 29/03/2023 11:00, Zhang Rui wrote:
+>>>>> When the hwmon device node of a thermal zone device is not found,
+>>>>> using hwmon->device causes a kernel NULL pointer dereference.
+>>>>>
+>>>>> Reported-by: Preble Adam C <adam.c.preble@intel.com>
+>>>>> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+>>>>> ---
+>>>>> Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
+>>>>> dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
+>>>>> I'm not sure if the Fix tag applies to such commit or not.
+>>>>
+>>>> Actually it reverts the work done to encapsulate the thermal zone device
+>>>> structure.
+>>>
+>>> So maybe instead of the wholesale switch to using "driver-specific"
+>>> device pointers for printing messages, something like
+>>> thermal_zone_debug/info/warn/error() taking a thermal zone pointer as
+>>> the first argument can be defined?
+>>>
+>>> At least this particular bug could be avoided this way.
+>>
+>> Actually we previously said the thermal_hwmon can be considered as part
+>> of the thermal core code, so we can keep using tz->device.
+>>
+>> I'll drop this change from the series.
+> 
+> But it's there in my thermal branch already.
+> 
+> Do you want to revert the thermal_hwmon.c part of commit dec07d399cc8?
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/dsa/mt7530.c | 99 ++++++++++++++++++++++------------------
- 1 file changed, 55 insertions(+), 44 deletions(-)
+Oh, right. Fair enough.
 
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index f84cbd251d1c1..c9b6b11273683 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -2350,12 +2350,65 @@ mt7530_setup(struct dsa_switch *ds)
- 	return 0;
- }
- 
-+static int
-+mt7531_setup_common(struct dsa_switch *ds)
-+{
-+	struct mt7530_priv *priv = ds->priv;
-+	struct dsa_port *cpu_dp;
-+	int ret, i;
-+
-+	/* BPDU to CPU port */
-+	dsa_switch_for_each_cpu_port(cpu_dp, ds) {
-+		mt7530_rmw(priv, MT7531_CFC, MT7531_CPU_PMAP_MASK,
-+			   BIT(cpu_dp->index));
-+		break;
-+	}
-+	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
-+		   MT753X_BPDU_CPU_ONLY);
-+
-+	/* Enable and reset MIB counters */
-+	mt7530_mib_reset(ds);
-+
-+	for (i = 0; i < MT7530_NUM_PORTS; i++) {
-+		/* Disable forwarding by default on all ports */
-+		mt7530_rmw(priv, MT7530_PCR_P(i), PCR_MATRIX_MASK,
-+			   PCR_MATRIX_CLR);
-+
-+		/* Disable learning by default on all ports */
-+		mt7530_set(priv, MT7530_PSC_P(i), SA_DIS);
-+
-+		mt7530_set(priv, MT7531_DBG_CNT(i), MT7531_DIS_CLR);
-+
-+		if (dsa_is_cpu_port(ds, i)) {
-+			ret = mt753x_cpu_port_enable(ds, i);
-+			if (ret)
-+				return ret;
-+		} else {
-+			mt7530_port_disable(ds, i);
-+
-+			/* Set default PVID to 0 on all user ports */
-+			mt7530_rmw(priv, MT7530_PPBV1_P(i), G0_PORT_VID_MASK,
-+				   G0_PORT_VID_DEF);
-+		}
-+
-+		/* Enable consistent egress tag */
-+		mt7530_rmw(priv, MT7530_PVC_P(i), PVC_EG_TAG_MASK,
-+			   PVC_EG_TAG(MT7530_VLAN_EG_CONSISTENT));
-+	}
-+
-+	/* Flush the FDB table */
-+	ret = mt7530_fdb_cmd(priv, MT7530_FDB_FLUSH, NULL);
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
- static int
- mt7531_setup(struct dsa_switch *ds)
- {
- 	struct mt7530_priv *priv = ds->priv;
- 	struct mt7530_dummy_poll p;
--	struct dsa_port *cpu_dp;
- 	u32 val, id;
- 	int ret, i;
- 
-@@ -2433,44 +2486,7 @@ mt7531_setup(struct dsa_switch *ds)
- 	mt7531_ind_c45_phy_write(priv, MT753X_CTRL_PHY_ADDR, MDIO_MMD_VEND2,
- 				 CORE_PLL_GROUP4, val);
- 
--	/* BPDU to CPU port */
--	dsa_switch_for_each_cpu_port(cpu_dp, ds) {
--		mt7530_rmw(priv, MT7531_CFC, MT7531_CPU_PMAP_MASK,
--			   BIT(cpu_dp->index));
--		break;
--	}
--	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
--		   MT753X_BPDU_CPU_ONLY);
--
--	/* Enable and reset MIB counters */
--	mt7530_mib_reset(ds);
--
--	for (i = 0; i < MT7530_NUM_PORTS; i++) {
--		/* Disable forwarding by default on all ports */
--		mt7530_rmw(priv, MT7530_PCR_P(i), PCR_MATRIX_MASK,
--			   PCR_MATRIX_CLR);
--
--		/* Disable learning by default on all ports */
--		mt7530_set(priv, MT7530_PSC_P(i), SA_DIS);
--
--		mt7530_set(priv, MT7531_DBG_CNT(i), MT7531_DIS_CLR);
--
--		if (dsa_is_cpu_port(ds, i)) {
--			ret = mt753x_cpu_port_enable(ds, i);
--			if (ret)
--				return ret;
--		} else {
--			mt7530_port_disable(ds, i);
--
--			/* Set default PVID to 0 on all user ports */
--			mt7530_rmw(priv, MT7530_PPBV1_P(i), G0_PORT_VID_MASK,
--				   G0_PORT_VID_DEF);
--		}
--
--		/* Enable consistent egress tag */
--		mt7530_rmw(priv, MT7530_PVC_P(i), PVC_EG_TAG_MASK,
--			   PVC_EG_TAG(MT7530_VLAN_EG_CONSISTENT));
--	}
-+	mt7531_setup_common(ds);
- 
- 	/* Setup VLAN ID 0 for VLAN-unaware bridges */
- 	ret = mt7530_setup_vlan0(priv);
-@@ -2480,11 +2496,6 @@ mt7531_setup(struct dsa_switch *ds)
- 	ds->assisted_learning_on_cpu_port = true;
- 	ds->mtu_enforcement_ingress = true;
- 
--	/* Flush the FDB table */
--	ret = mt7530_fdb_cmd(priv, MT7530_FDB_FLUSH, NULL);
--	if (ret < 0)
--		return ret;
--
- 	return 0;
- }
- 
+I think Rui's patch is fine then.
+
+
+>> On the other side, adding more thermal_zone_debug/info.. gives
+>> opportunities to external components of the core thermal framework to
+>> write thermal zone device related message. I'm not sure that is a good
+>> thing, each writer should stay in its namespace, no ?
+> 
+> IMV whoever is allowed to use a thermal zone pointer should also be
+> allowed to print messages related to its use, especially debug ones.
+> 
+> "Encapsulation" means that the members of a thermal zone device object
+> should not be accessed directly by its users other than the core, not
+> that it cannot be used as a message tag.
+
+Actually it is not about the encapsulation but the namespace of the 
+messages. If a driver has an issue, IMO it is better it uses the device 
+related messages and let thermal zone messages to be related to what is 
+happening in the thermal framework, not in the back end.
+
+
+
 -- 
-2.39.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
