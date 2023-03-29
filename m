@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F0E6CD168
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0615C6CD16B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjC2FGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 01:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
+        id S229727AbjC2FHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 01:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjC2FGk (ORCPT
+        with ESMTP id S229566AbjC2FHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 01:06:40 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EE82D48
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 22:06:15 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so14961492pjl.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 22:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680066375;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GjcLq9TYMSCEM1QxXkGT3Sk7emAp6wIFay5f/IdlFCI=;
-        b=K0sDjl31CF3wQLECFV0Z+qXmmfbY6/nvHtwhUV+gdNIgedwU6XnM9SL+lkP0AsQS72
-         h6FxRX1Eba/67jysjsw+a3Yg3lcjnZNMuWL/RMxYWI13y5cB+OWEQQ5vydbpAzqNjOfr
-         b7BgjW9UGv41y2niEKTHlC7uvanY/p4+VdnazRZTgxEnDnuI2QnVTCawr5ErsQq7ZI8k
-         lIYedhZETnOaE3WYyVtJvhXlboS0gTCezU1Pd9aJj7DQehQBnzls4sKZdMakWjKkTLth
-         +8aoJlNSoZ+4tCtPM3zmqdzgfHonxHFdWY5hrfTP0NiwZkAODT53YYfRkVzOwV90Jka/
-         Hw2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680066375;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GjcLq9TYMSCEM1QxXkGT3Sk7emAp6wIFay5f/IdlFCI=;
-        b=cjFaB6r+DCoAnzzKIdPJMlJ22YDgWKxKPOP+2vs2iWjx9taio2qSAGUlKpYEn203ML
-         dUBEV73d2WKSJGIrHp9idtTSfjAKPKjM7NWmItZUp2NR5e1GkeXi5Q0+RBC92o8M2eM2
-         xpZW6fO2s403CsngGQM3bXhbO4wAT6WLgCI1A+BsmzMC0TqfJ0ct2Jnpcsr0wAqkQ1a8
-         pFrsxXyqLokEO/+mCeDNZtBI24heDJX9mKwajaB5VYF8Ls4/JAVwkuRdhFaw1MZlfynL
-         Iw/pzBzKzCIhQrLJkUtUEJKmU/w0RYceMa611A6bcNWqF7a45WeYHsemk+9Q4mjXvJ+F
-         9kmQ==
-X-Gm-Message-State: AAQBX9e5gUa3ShUapsUfwp7QpoBAI32t4nQ9/xeTGwQnmx3S5A/gGWZp
-        JQfeLMwXAceUGp2NvetJo473P56Ado90ADqleWc=
-X-Google-Smtp-Source: AKy350ZTGNkadk5EkErfDhJ6zlZsX/8WZzxktyRHEWZEs7dxg+S3jbdRlD777MfiA6AK1tAh84FLZg==
-X-Received: by 2002:a17:90b:1a88:b0:23e:aba9:d51d with SMTP id ng8-20020a17090b1a8800b0023eaba9d51dmr19242110pjb.7.1680066374750;
-        Tue, 28 Mar 2023 22:06:14 -0700 (PDT)
-Received: from [10.3.144.50] ([61.213.176.7])
-        by smtp.gmail.com with ESMTPSA id dw24-20020a17090b095800b0023cff7e39a6sm463394pjb.22.2023.03.28.22.06.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 22:06:14 -0700 (PDT)
-Message-ID: <1b99542d-f21b-a27b-fc59-d4fe38e893de@bytedance.com>
-Date:   Wed, 29 Mar 2023 13:06:09 +0800
+        Wed, 29 Mar 2023 01:07:50 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE9E2D48;
+        Tue, 28 Mar 2023 22:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680066470; x=1711602470;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=JbHYbDttf7D+bkYuSV1T3QbU8EbIEeJfBKFc3jJbZjU=;
+  b=K7Fh9d/8wypf2E+xoDJKKrc66gHV681EHZT5zSbd9d3P7QeIoT05Xpz3
+   QSy1+oiE3aQ5b20zybs3bBICsY6FxHyDJdZ/AZv05RQZ7xyWE2u/w0XUm
+   XdqQ10KKWstN2iG8scfffNFO8AlhX/pcB49RCHd5I/9YEeX2amzhQFQiL
+   6PsQO/8OGBCn8ZDH0TNDVBemtwbu6Td3lhVJ1iTenK6Ou3sVLdRBya6nc
+   Am4O4dR1d2NcPANm2ZF0Oq6ibt1k8N207yDr7Bk5QuNAWm9h1fIclRnfx
+   JexEvOcqx03qj/6JiKG+RB/Mra4YfWtahIeT9OWsTuUl4l/RSQfcY7G4e
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="321178332"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="321178332"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 22:07:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="827738096"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="827738096"
+Received: from tsennhau-mobl6.gar.corp.intel.com (HELO [10.0.2.15]) ([10.252.49.63])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 22:07:44 -0700
+Message-ID: <1e2d77df-da40-0a06-0401-e15af96fe811@intel.com>
+Date:   Wed, 29 Mar 2023 08:07:42 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: Re: [PATCH V4 2/5] cachefiles: extract ondemand info field from
- cachefiles_object
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jingbo Xu <jefflexu@linux.alibaba.com>, zhujia.zj@bytedance.com
-References: <20230111052515.53941-3-zhujia.zj@bytedance.com>
- <20230111052515.53941-1-zhujia.zj@bytedance.com>
- <132137.1680011908@warthog.procyon.org.uk>
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-In-Reply-To: <132137.1680011908@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH 0/3] perf tools: Address fixes
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+References: <20230316194156.8320-1-adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230316194156.8320-1-adrian.hunter@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,31 +67,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/3/28 21:58, David Howells 写道:
-> Jia Zhu <zhujia.zj@bytedance.com> wrote:
+On 16/03/23 21:41, Adrian Hunter wrote:
+> Hi
 > 
->> @@ -65,10 +71,7 @@ struct cachefiles_object {
->>   	enum cachefiles_content		content_info:8;	/* Info about content presence */
->>   	unsigned long			flags;
->>   #define CACHEFILES_OBJECT_USING_TMPFILE	0		/* Have an unlinked tmpfile */
->> -#ifdef CONFIG_CACHEFILES_ONDEMAND
->> -	int				ondemand_id;
->> -	enum cachefiles_object_state	state;
->> -#endif
->> +	struct cachefiles_ondemand_info	*private;
+> Here are 3 small fixes resulting from a report from a
+> kernel test robot:
 > 
-> Why is this no longer inside "#ifdef CONFIG_CACHEFILES_ONDEMAND"?
+> https://lore.kernel.org/oe-lkp/202303061424.6ad43294-yujie.liu@intel.com
 > 
+> Issues were revealed due to the use of build
+> option:
+> 
+> 	EXTRA_CFLAGS="-fsanitize=undefined -fsanitize=address"
+> 
+> 
+> Adrian Hunter (3):
+>       perf symbols: Fix use-after-free in get_plt_got_name()
+>       perf symbols: Fix unaligned access in get_x86_64_plt_disp()
+>       perf tools: Avoid warning in do_realloc_array_as_needed()
+> 
+>  tools/perf/util/symbol-elf.c | 10 ++++++++--
+>  tools/perf/util/util.c       |  3 ++-
+>  2 files changed, 10 insertions(+), 3 deletions(-)
 
-I'll revise it in next version.
+These seem to be still outstanding.
 
-> Also, please don't call it "private", but rather something like "ondemand" or
-> "ondemand_info".
-
-I'll use @ondemand to replace it.
-Thanks.
-> 
-> David
-> 
