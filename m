@@ -2,399 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F246CD832
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC116CD835
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjC2LIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
+        id S229678AbjC2LKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjC2LIB (ORCPT
+        with ESMTP id S229530AbjC2LK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:08:01 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E92171B
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:07:59 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id e23-20020a25e717000000b00b66ab374ba1so15161350ybh.22
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:07:59 -0700 (PDT)
+        Wed, 29 Mar 2023 07:10:29 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32BE3C3A
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:10:02 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id l27so15246507wrb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:10:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680088078;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qLE8CWrmaNXgXCg2eNFOgeW6xHNyRTGjnMFCzItSd5A=;
-        b=Aob7ge9ZtEBOKmu461YXtMVZ/sAukHmCRbKP6dMeCycttYKk3qU6Jad/XnVJcxhkR9
-         u95tIOinC9eOx8dGDdYDKRGl7xopgJSnwxASP2J09IiR8fhmo1ezd8pvi5ZlRfJncZsX
-         7RaLGXYDz9+K8zMUrZ7YrhP89w+OXWG//7XUS5Zgw7/8Vxol9vXx34ek83kawzepgS38
-         VrcLKQYXJKqliJsKaGOmHuZitygaZDCbRHzkC1hwsVlCNrgbkgczRkxfiyzZ7+i9ETIq
-         CI7cqCgbOc2BoLiCRL6pVTcBRtkbQVGZbIVLjDWmkWX9TW6imq5Xfq1fm1SKjacpLZbA
-         7gCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680088078;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=bytedance.com; s=google; t=1680088201;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qLE8CWrmaNXgXCg2eNFOgeW6xHNyRTGjnMFCzItSd5A=;
-        b=KxEs/KaN076EgEwydDygBj5OMMR1qBIzXFAWgtsCtuEl7BFHbN6K0U1eQpvpUsJcMa
-         Du/+YU4iy6LJoBLYZhaOicpu7fFxkL/HU/oeluoSzJAPFh/T166M8NMgEnKqPCzMEO1h
-         jTBsbk3xIRaIfUTuJe+fQhIXGCbw356oxePlHisSa/RrDsqMT/gJ+lKpwi3qhFkh0Rkz
-         2/cZKB8AAKXonAIsykGPT2AzZDPjoobyWm73kTGvzrcYUeSmxlGg6jDSvfatOhBTAKHs
-         UE1XrsCFU+ftQPYTU9UQpqvb+Xfu/xOf64gRTw/xUbISK/tzOfcNlvbJcGcztXHurbc+
-         lqaQ==
-X-Gm-Message-State: AAQBX9eTGLO7eVIuuGPnqiEDVybnC/cMO3jNr5gbadUk+nciPsHKJ4S7
-        zGojApZjxYZq/O6/p78M2GciQO4DxlSKWSsQ
-X-Google-Smtp-Source: AKy350ZYgvwaYrYxW4St3GTPmqThmwm4W46Naie1JY6mHAA8lhucU4GKj49jr/vcyUgjmMzqOu/vNKKFu4reiR5R
-X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
- (user=sadiyakazi job=sendgmr) by 2002:a25:d7ce:0:b0:b7d:e643:d3c3 with SMTP
- id o197-20020a25d7ce000000b00b7de643d3c3mr2897717ybg.8.1680088078456; Wed, 29
- Mar 2023 04:07:58 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 11:07:22 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230329110723.3458843-1-sadiyakazi@google.com>
-Subject: [PATCH v1] list: test: Test the klist structure
-From:   Sadiya Kazi <sadiyakazi@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, corbet@lwn.net
-Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        bh=6fMyRoI+gDBMSQ1ASPAj5GDfjiLEoGxH9G7/ldjpWq0=;
+        b=Q1JX6+bz61+vh+Vzi+sUwW3yMZkzm75oKFpftOGczVAhMrRDKm0YR/bBqfuht4I4G0
+         yvMwrHoq81CHuHyybcV/HPEQWF0NIdOH7bDzS37+Gr2coehioxNJ8a59CKMBA2XsZp6h
+         8wtpVuc69EPsfRMeKaNWH2Fvmbl9ev5l1PbaHocbOfQ/X0Uwteton/ZLxjXcoCbnErLl
+         w1T0tHaZo9yPx2R7aeax5iKD+dsN1rQq98OVSuy14aEp3lvRsjwMj40Oyit5R9o+8gGr
+         d28N78YHVgGHJNYCrpiy462211GYs3XiGa2aj2RbW3aqBF24wOZBfKJWhajVPZIj/McR
+         iPiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680088201;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6fMyRoI+gDBMSQ1ASPAj5GDfjiLEoGxH9G7/ldjpWq0=;
+        b=h4aAFx31zI7iUvY7W4drn3O5PDHe827jnyizo7AIIV/BilaorGTVkCRrMNKJoWBfbG
+         cZMvm/bXXc0ZxWRFkvCZo6YNBhyXI2heQVHjeo+i5TK4RLgs1/eU9JfBehIa5FE4rzZY
+         CIe20IZaoVgRU1+vGZlWISOQ4GQwtv+SrVgtsSW2dGVNUfiuMPlT2PHIRFvC6B8HDDHc
+         Ij+/29nKftwaD1+VDc4f6ALPfmKH/1eWZd0oNgZWHK/agmsd7OQKpWMabbCuSYh+GSSx
+         AMq7o1qvd8EqSxsdelN4pCDe2HWVftthLNfMsBPlhz21Aen6rvt5rKwPAIbAJrapmkRX
+         Y19Q==
+X-Gm-Message-State: AAQBX9dZxHmOUECJZI+USpSZkXQ70JBzSY/SRdBG6D/F+3Gcnd0f8/l1
+        Xs90hrl3lcrsMn7+HBW9Q/8DAw==
+X-Google-Smtp-Source: AKy350ZMd5xDkTUJpUgfq6tGD1h9j1CDSgZ2snnpFp2odtgk5TA+d4edR7BJm6x3BDtTdIHsEhjZgg==
+X-Received: by 2002:adf:dd4f:0:b0:2cf:ec75:8090 with SMTP id u15-20020adfdd4f000000b002cfec758090mr14969737wrm.14.1680088201184;
+        Wed, 29 Mar 2023 04:10:01 -0700 (PDT)
+Received: from ?IPV6:2a02:6b6a:b566:0:4aac:c45d:f15a:d179? ([2a02:6b6a:b566:0:4aac:c45d:f15a:d179])
+        by smtp.gmail.com with ESMTPSA id i7-20020adffc07000000b002c5706f7c6dsm29908071wrr.94.2023.03.29.04.10.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 04:10:00 -0700 (PDT)
+Message-ID: <8b6eeca2-bc35-6e17-e1e9-27d77565db67@bytedance.com>
+Date:   Wed, 29 Mar 2023 12:09:59 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v17 2/8] cpu/hotplug: Reset task stack state in _cpu_up()
+Content-Language: en-US
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
+        brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <20230328195758.1049469-1-usama.arif@bytedance.com>
+ <20230328195758.1049469-3-usama.arif@bytedance.com>
+In-Reply-To: <20230328195758.1049469-3-usama.arif@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add KUnit tests to the klist linked-list structure.
-These perform testing for different variations of node add
-and node delete in the klist data structure (<linux/klist.h>).
 
-Limitation: Since we use a static global variable, and if
-multiple instances of this test are run concurrently, the test may fail.
 
-Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
----
- lib/list-test.c | 298 +++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 297 insertions(+), 1 deletion(-)
+On 28/03/2023 20:57, Usama Arif wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()")
+> ensured that the shadow call stack was reset and KASAN poisoning removed
+> from a CPU's stack each time that CPU is brought up, not just once.
+> 
+> This is not incorrect. However, with parallel bringup, an architecture
+> may obtain the idle thread for a new CPU from a pre-bringup stage, by
+> calling idle_thread_get() for itself. This would mean that the cleanup
+> in bringup_cpu() would be too late.
+> 
+> Move the SCS/KASAN cleanup to the generic _cpu_up() function instead,
+> which already ensures that the new CPU's stack is available, purely to
+> allow for early failure. This occurs when the CPU to be brought up is
+> in the CPUHP_OFFLINE state, which should correctly do the cleanup any
+> time the CPU has been taken down to the point where such is needed.
+> 
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+> Tested-by: Mark Rutland <mark.rutland@arm.com> [arm64]
 
-diff --git a/lib/list-test.c b/lib/list-test.c
-index d374cf5d1a57..af651cacb8f4 100644
---- a/lib/list-test.c
-+++ b/lib/list-test.c
-@@ -8,6 +8,7 @@
- #include <kunit/test.h>
- 
- #include <linux/list.h>
-+#include <linux/klist.h>
- 
- struct list_test_struct {
- 	int data;
-@@ -1199,6 +1200,301 @@ static struct kunit_suite hlist_test_module = {
- 	.test_cases = hlist_test_cases,
- };
- 
--kunit_test_suites(&list_test_module, &hlist_test_module);
-+
-+struct klist_test_struct {
-+	int data;
-+	struct klist klist;
-+	struct klist_node klist_node;
-+};
-+
-+/* counts the number of nodes*/
-+static int node_count;
-+static struct klist_node *last_node_count;
-+
-+static void check_node(struct klist_node *node_ptr)
-+{
-+	node_count++;
-+	last_node_count = node_ptr;
-+}
-+
-+static void check_delete_node(struct klist_node *node_ptr)
-+{
-+	node_count--;
-+	last_node_count = node_ptr;
-+}
-+
-+static void klist_test_add_tail(struct kunit *test)
-+{
-+	struct klist_node a, b;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, NULL);
-+
-+	klist_add_tail(&a, &mylist);
-+	KUNIT_EXPECT_EQ(test, node_count, 1);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &a);
-+
-+	klist_add_tail(&b, &mylist);
-+	KUNIT_EXPECT_EQ(test, node_count, 2);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &b);
-+
-+	/* should be [list] -> a -> b */
-+	klist_iter_init(&mylist, &i);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+static void klist_test_add_head(struct kunit *test)
-+{
-+	struct klist_node a, b;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, NULL);
-+
-+	klist_add_head(&a, &mylist);
-+	KUNIT_EXPECT_EQ(test, node_count, 1);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &a);
-+
-+	klist_add_head(&b, &mylist);
-+	KUNIT_EXPECT_EQ(test, node_count, 2);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &b);
-+
-+	/* should be [list] -> b -> a */
-+	klist_iter_init(&mylist, &i);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+static void klist_test_add_behind(struct kunit *test)
-+{
-+	struct klist_node a, b, c, d;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, NULL);
-+
-+	klist_add_head(&a, &mylist);
-+	klist_add_head(&b, &mylist);
-+
-+	klist_add_behind(&c, &a);
-+	KUNIT_EXPECT_EQ(test, node_count, 3);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-+
-+	klist_add_behind(&d, &b);
-+	KUNIT_EXPECT_EQ(test, node_count, 4);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
-+
-+	klist_iter_init(&mylist, &i);
-+
-+	/* should be [list] -> b -> d -> a -> c*/
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+static void klist_test_add_before(struct kunit *test)
-+{
-+	struct klist_node a, b, c, d;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, NULL);
-+
-+	klist_add_head(&a, &mylist);
-+	klist_add_head(&b, &mylist);
-+	klist_add_before(&c, &a);
-+	KUNIT_EXPECT_EQ(test, node_count, 3);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-+
-+	klist_add_before(&d, &b);
-+	KUNIT_EXPECT_EQ(test, node_count, 4);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
-+
-+	klist_iter_init(&mylist, &i);
-+
-+	/* should be [list] -> b -> d -> a -> c*/
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+/* Verify that klist_del() delays the deletion of a node until there
-+ * are no other references to it
-+ */
-+static void klist_test_del_refcount_greater_than_zero(struct kunit *test)
-+{
-+	struct klist_node a, b, c, d;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, &check_delete_node);
-+
-+	/* Add nodes a,b,c,d to the list*/
-+	klist_add_tail(&a, &mylist);
-+	klist_add_tail(&b, &mylist);
-+	klist_add_tail(&c, &mylist);
-+	klist_add_tail(&d, &mylist);
-+
-+	klist_iter_init(&mylist, &i);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	/* Advance the iterator to point to node c*/
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-+
-+	/* Try to delete node c while there is a reference to it*/
-+	klist_del(&c);
-+
-+	/*
-+	 * Verify that node c is still attached to the list even after being
-+	 * deleted. Since the iterator still points to c, the reference count is not
-+	 * decreased to 0
-+	 */
-+	KUNIT_EXPECT_TRUE(test, klist_node_attached(&c));
-+
-+	/* Check that node c has not been removed yet*/
-+	KUNIT_EXPECT_EQ(test, node_count, 4);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
-+
-+	klist_iter_exit(&i);
-+
-+	/* Since the iterator is no longer pointing to node c, node c is removed
-+	 * from the list
-+	 */
-+	KUNIT_EXPECT_EQ(test, node_count, 3);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-+
-+}
-+
-+/* Verify that klist_del() deletes a node immediately when there are no
-+ * other references to it.
-+ */
-+static void klist_test_del_refcount_zero(struct kunit *test)
-+{
-+	struct klist_node a, b, c, d;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, &check_delete_node);
-+
-+	/* Add nodes a,b,c,d to the list*/
-+	klist_add_tail(&a, &mylist);
-+	klist_add_tail(&b, &mylist);
-+	klist_add_tail(&c, &mylist);
-+	klist_add_tail(&d, &mylist);
-+	/* Delete node c*/
-+	klist_del(&c);
-+
-+	/* Check that node c is deleted from the list*/
-+	KUNIT_EXPECT_EQ(test, node_count, 3);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-+
-+	/* Should be [list] -> a -> b -> d*/
-+	klist_iter_init(&mylist, &i);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+static void klist_test_remove(struct kunit *test)
-+{
-+	/* This test doesn't check correctness under concurrent access */
-+	struct klist_node a, b, c, d;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, &check_delete_node);
-+
-+	/* Add nodes a,b,c,d to the list*/
-+	klist_add_tail(&a, &mylist);
-+	klist_add_tail(&b, &mylist);
-+	klist_add_tail(&c, &mylist);
-+	klist_add_tail(&d, &mylist);
-+	/* Delete node c*/
-+	klist_remove(&c);
-+
-+	/* Check the nodes in the list*/
-+	KUNIT_EXPECT_EQ(test, node_count, 3);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-+
-+	/* should be [list] -> a -> b -> d*/
-+	klist_iter_init(&mylist, &i);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+static void klist_test_node_attached(struct kunit *test)
-+{
-+	struct klist_node a = {};
-+	struct klist mylist;
-+
-+	klist_init(&mylist, NULL, NULL);
-+
-+	KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
-+	klist_add_head(&a, &mylist);
-+	KUNIT_EXPECT_TRUE(test, klist_node_attached(&a));
-+	klist_del(&a);
-+	KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
-+
-+}
-+
-+static struct kunit_case klist_test_cases[] = {
-+	KUNIT_CASE(klist_test_add_tail),
-+	KUNIT_CASE(klist_test_add_head),
-+	KUNIT_CASE(klist_test_add_behind),
-+	KUNIT_CASE(klist_test_add_before),
-+	KUNIT_CASE(klist_test_del_refcount_greater_than_zero),
-+	KUNIT_CASE(klist_test_del_refcount_zero),
-+	KUNIT_CASE(klist_test_remove),
-+	KUNIT_CASE(klist_test_node_attached),
-+	{},
-+};
-+
-+static struct kunit_suite klist_test_module = {
-+	.name = "klist",
-+	.test_cases = klist_test_cases,
-+};
-+
-+kunit_test_suites(&list_test_module, &hlist_test_module, &klist_test_module);
- 
- MODULE_LICENSE("GPL v2");
--- 
-2.40.0.348.gf938b09366-goog
+Forgot to include my sign-off. Thanks David for pointing it out.
 
+Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+
+> ---
+>   kernel/cpu.c | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> index 6c0a92ca6bb5..43e0a77f21e8 100644
+> --- a/kernel/cpu.c
+> +++ b/kernel/cpu.c
+> @@ -591,12 +591,6 @@ static int bringup_cpu(unsigned int cpu)
+>   	struct task_struct *idle = idle_thread_get(cpu);
+>   	int ret;
+>   
+> -	/*
+> -	 * Reset stale stack state from the last time this CPU was online.
+> -	 */
+> -	scs_task_reset(idle);
+> -	kasan_unpoison_task_stack(idle);
+> -
+>   	/*
+>   	 * Some architectures have to walk the irq descriptors to
+>   	 * setup the vector space for the cpu which comes online.
+> @@ -1383,6 +1377,12 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
+>   			ret = PTR_ERR(idle);
+>   			goto out;
+>   		}
+> +
+> +		/*
+> +		 * Reset stale stack state from the last time this CPU was online.
+> +		 */
+> +		scs_task_reset(idle);
+> +		kasan_unpoison_task_stack(idle);
+>   	}
+>   
+>   	cpuhp_tasks_frozen = tasks_frozen;
