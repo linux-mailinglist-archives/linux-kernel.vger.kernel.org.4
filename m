@@ -2,141 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7D96CD05F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 04:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7966CD061
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 04:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjC2CvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 22:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
+        id S230018AbjC2CxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 22:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjC2CvN (ORCPT
+        with ESMTP id S229519AbjC2CxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 22:51:13 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CBC2D7F;
-        Tue, 28 Mar 2023 19:51:11 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eh3so57549389edb.11;
-        Tue, 28 Mar 2023 19:51:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680058270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dIzil1J+XzZVkE7VYxYF65ET2u5OaR0BuUTGA5SK+3A=;
-        b=lGNK9Nvogi60ODmJUdGqiRoAeG692JLaGSJPxyyPBqDx6p3s8leRhzxDJ+/XjXFa5x
-         lyIVL4hM5fAs8w3aSnbYjP2+Jj+BJXOH0o4vj7p+xw/8UoRy43jp3lBXduKr5WFFi37f
-         z7HOHN6w+6nMgaK7eYnmpvJ5zKSHVPvvv8bgQNaIn7HlmstcUwCZSIX0GG/GtgG4SeYX
-         e1kseVRdrS+IvArSeB3bO3nelYX/jn96Io1Ton3GMjyOg8aI8IzWDhuAK7gLL4/N5LX/
-         J6q6Uger7FaAHkNlVtiVDsSpYhqDka1Gapt89RgNCWfO5oXsaKtqTlRphbV7Z3UskFYI
-         YjXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680058270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dIzil1J+XzZVkE7VYxYF65ET2u5OaR0BuUTGA5SK+3A=;
-        b=45GB1uLwG8mWHI+g4yAJzPq1jWNjo5GMaX7NaO0YPQnebOvqMEN6Hn8G1w6q8TS3yF
-         YH6e7f48tj2sPiG/uQJ5dz84qwT1OpAOpByj/uy7Qd2PZsG0KzhLhgh10Su2KNFrzMRg
-         FUQJCbytR44S9RMW5ODFIAndTUZJp7UtbK97kXjJoK3gVa+Wqn9UmDVMfLPFlqY2cojv
-         3yq5x6S5D2z1I6CKZJIqQrgcTs54lDOTOVjtnUVn5EtjRvKnSfhJO10Td4z/NsYnAGfX
-         N7CzECueZOc+ohMjJiw8qsiYY8bk0szdgtm6l+UyYKmTSdy8KV/UJ5dwyHCGv2etnFxd
-         8/iw==
-X-Gm-Message-State: AAQBX9fX6qux6Lrv9yu9b2hyznpSPFmsEILm4pRcUXqLUV8yaUi3WvkQ
-        R/mI4yWZb9h9wBX4g8nmRwP/OO/QxuKDY/Fl17YHogyhj/hlUQ==
-X-Google-Smtp-Source: AKy350bsrVpBT2/hOrtU+Hcf6gmZmN9zv4UBYcj7fxKuRxjEcKxZzyOpQIU+ffxGL6Wgjcnn1vA4rB+hEVxrZs8F96M=
-X-Received: by 2002:a50:875e:0:b0:501:d2f5:7da9 with SMTP id
- 30-20020a50875e000000b00501d2f57da9mr8498486edv.0.1680058269743; Tue, 28 Mar
- 2023 19:51:09 -0700 (PDT)
+        Tue, 28 Mar 2023 22:53:23 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205A9213B;
+        Tue, 28 Mar 2023 19:53:22 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PmWMJ4ztrz4f3jMF;
+        Wed, 29 Mar 2023 10:53:16 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgC3YiAcqCNk4P4AFw--.7921S4;
+        Wed, 29 Mar 2023 10:53:18 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     djwong@kernel.org, linux-xfs@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, yebin10@huawei.com
+Subject: [PATCH v3] xfs: fix BUG_ON in xfs_getbmap()
+Date:   Wed, 29 Mar 2023 10:52:58 +0800
+Message-Id: <20230329025258.1074860-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20230328120506.375864-1-keguang.zhang@gmail.com>
- <20230328120506.375864-3-keguang.zhang@gmail.com> <168002881746.3753096.11245437677389006840.robh@kernel.org>
-In-Reply-To: <168002881746.3753096.11245437677389006840.robh@kernel.org>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Wed, 29 Mar 2023 10:50:53 +0800
-Message-ID: <CAJhJPsXBsP9akD9x++r7YCs_P-n2SpKJnJcDoJv93_=8+r1C-Q@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: timer: Add Loongson-1 clocksource
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgC3YiAcqCNk4P4AFw--.7921S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFy5Gw1UurWxJr43ZFWUurg_yoW5KF1fpr
+        Z3Gw1UGr4vgr1UZr1DJw1UKw1UWw4xAF4UAr1xXr4rZ3WUCr17tr18KFWFvry7JrW8Xry7
+        Jr4Dtw18t345JaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
+        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
+        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
+        daVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+From: Ye Bin <yebin10@huawei.com>
 
-On Wed, Mar 29, 2023 at 2:52=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
-:
->
->
-> On Tue, 28 Mar 2023 20:05:05 +0800, Keguang Zhang wrote:
-> > Add devicetree binding document for Loongson-1 clocksource.
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> >  .../timer/loongson,ls1x-pwmtimer.yaml         | 48 +++++++++++++++++++
-> >  1 file changed, 48 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls=
-1x-pwmtimer.yaml
-> >
->
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.example.dt=
-s:21:18: fatal error: dt-bindings/clock/loongson,ls1x-clk.h: No such file o=
-r directory
->    21 |         #include <dt-bindings/clock/loongson,ls1x-clk.h>
->       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+There's issue as follows:
+XFS: Assertion failed: (bmv->bmv_iflags & BMV_IF_DELALLOC) != 0, file: fs/xfs/xfs_bmap_util.c, line: 329
+------------[ cut here ]------------
+kernel BUG at fs/xfs/xfs_message.c:102!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 14612 Comm: xfs_io Not tainted 6.3.0-rc2-next-20230315-00006-g2729d23ddb3b-dirty #422
+RIP: 0010:assfail+0x96/0xa0
+RSP: 0018:ffffc9000fa178c0 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff888179a18000
+RDX: 0000000000000000 RSI: ffff888179a18000 RDI: 0000000000000002
+RBP: 0000000000000000 R08: ffffffff8321aab6 R09: 0000000000000000
+R10: 0000000000000001 R11: ffffed1105f85139 R12: ffffffff8aacc4c0
+R13: 0000000000000149 R14: ffff888269f58000 R15: 000000000000000c
+FS:  00007f42f27a4740(0000) GS:ffff88882fc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000b92388 CR3: 000000024f006000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ xfs_getbmap+0x1a5b/0x1e40
+ xfs_ioc_getbmap+0x1fd/0x5b0
+ xfs_file_ioctl+0x2cb/0x1d50
+ __x64_sys_ioctl+0x197/0x210
+ do_syscall_64+0x39/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-This file is contained in commit
-12de2f50244efdbc8e98f89a340255c3c847e1dc, which is already available
-in 6.3-rc4.
+Above issue may happen as follows:
+         ThreadA                       ThreadB
+do_shared_fault
+ __do_fault
+  xfs_filemap_fault
+   __xfs_filemap_fault
+    filemap_fault
+                             xfs_ioc_getbmap -> Without BMV_IF_DELALLOC flag
+			      xfs_getbmap
+			       xfs_ilock(ip, XFS_IOLOCK_SHARED);
+			       filemap_write_and_wait
+ do_page_mkwrite
+  xfs_filemap_page_mkwrite
+   __xfs_filemap_fault
+    xfs_ilock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
+    iomap_page_mkwrite
+     ...
+     xfs_buffered_write_iomap_begin
+      xfs_bmapi_reserve_delalloc -> Allocate delay extent
+                              xfs_ilock_data_map_shared(ip)
+	                      xfs_getbmap_report_one
+			       ASSERT((bmv->bmv_iflags & BMV_IF_DELALLOC) != 0)
+	                        -> trigger BUG_ON
 
-> compilation terminated.
-> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings=
-/timer/loongson,ls1x-pwmtimer.example.dtb] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1512: dt_binding_check] Error 2
->
-> doc reference errors (make refcheckdocs):
->
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202303=
-28120506.375864-3-keguang.zhang@gmail.com
->
-> The base for the series is generally the latest rc1. A different dependen=
-cy
-> should be noted in *this* patch.
->
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->
-> pip3 install dtschema --upgrade
->
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your sch=
-ema.
->
+As xfs_filemap_page_mkwrite() only hold XFS_MMAPLOCK_SHARED lock, there's
+small window mkwrite can produce delay extent after file write in xfs_getbmap().
+To solve above issue, just skip delalloc extents.
 
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/xfs/xfs_bmap_util.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
---=20
-Best regards,
+diff --git a/fs/xfs/xfs_bmap_util.c b/fs/xfs/xfs_bmap_util.c
+index a09dd2606479..f032d3a4b727 100644
+--- a/fs/xfs/xfs_bmap_util.c
++++ b/fs/xfs/xfs_bmap_util.c
+@@ -314,15 +314,13 @@ xfs_getbmap_report_one(
+ 	if (isnullstartblock(got->br_startblock) ||
+ 	    got->br_startblock == DELAYSTARTBLOCK) {
+ 		/*
+-		 * Delalloc extents that start beyond EOF can occur due to
+-		 * speculative EOF allocation when the delalloc extent is larger
+-		 * than the largest freespace extent at conversion time.  These
+-		 * extents cannot be converted by data writeback, so can exist
+-		 * here even if we are not supposed to be finding delalloc
+-		 * extents.
++		 * Take the flush completion as being a point-in-time snapshot
++		 * where there are no delalloc extents, and if any new ones
++		 * have been created racily, just skip them as being 'after'
++		 * the flush and so don't get reported.
+ 		 */
+-		if (got->br_startoff < XFS_B_TO_FSB(ip->i_mount, XFS_ISIZE(ip)))
+-			ASSERT((bmv->bmv_iflags & BMV_IF_DELALLOC) != 0);
++		if (!(bmv->bmv_iflags & BMV_IF_DELALLOC))
++			return 0;
+ 
+ 		p->bmv_oflags |= BMV_OF_DELALLOC;
+ 		p->bmv_block = -2;
+-- 
+2.31.1
 
-Keguang Zhang
