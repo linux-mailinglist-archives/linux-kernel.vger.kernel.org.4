@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8F26CF00A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139706CF00E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjC2RAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 13:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
+        id S231133AbjC2RCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 13:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjC2RAC (ORCPT
+        with ESMTP id S230468AbjC2RCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:00:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B189619B5;
-        Wed, 29 Mar 2023 10:00:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DD82B820CA;
-        Wed, 29 Mar 2023 17:00:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4DDC433EF;
-        Wed, 29 Mar 2023 16:59:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680109198;
-        bh=VdnuvhIM2cRnRHD6OIlrF1vM7Xa/zS4dOr/IjqNNj7k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=WGmVkGJxklNiVx1FInWIqUPg+a4lgK5x2N65ZVa820iEqX8AIhS7d7atd8Myt23wC
-         X2Q0weysAdn2Lbmulawv6SRWEHTu7yONn0ZcgcOp0SRZAvuGDjweZcjPz2VcVse/aP
-         jSdZwBRk93rjHWyWyALcl5jVeV0FahOn/vPHKlBKTtwj0l20pXyoKcibpoI5VgSLyA
-         VNPS5MuyCqgBNAk6ydScLCI8EyYtX+zVGiP3U4/ztRdsOMB6bSo+QCZ91+LOpWuWL5
-         p8YVMnS4tdEHgrPfYrxOyaWfJVbveOrlrj4QubImSg1dOQP65Bu5IQyT3W8cZYj64h
-         X8PZMTiWVlYdg==
-Date:   Wed, 29 Mar 2023 11:59:57 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
-        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
-        ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v4 10/10] PCI: tegra194: add interconnect support in
- Tegra234
-Message-ID: <20230329165957.GA3066317@bhelgaas>
+        Wed, 29 Mar 2023 13:02:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5027019B5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:02:01 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32TExNqX029835;
+        Wed, 29 Mar 2023 17:01:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=fOHY/sITK0CP1NqGzAYTxFUDAvVDj4hr7x88DX7JrHQ=;
+ b=GLrUQYjd6CnsO/Gm4sukD05NJyhsyP3xQKf0OCtJc5whuk7fOsWNHcctI0qGrK4drlgL
+ gNxGtuTro0OBuJvElz0uxoyrJV9hNcE3llYyUnqc6Ed3IfmgE1oHi9OWKhpA0bm6ZEYi
+ t0z+pEML4XAwSnUYk79vN4sNdQltRSricxBC/OoVWAVFZJ/Q3KT6z0bU5WHyQiyKBy4n
+ ZnoOFTXYaz1brOpdPNH4G62VrLxz1jCdMGy/GIc02uCGv/CJYHErwmTKoCBlzxKuuyHU
+ 1gyQJ3iYNE1yVudehuXsdZz9HzL8Ir3vCo7B1A7GYoKjnqedcQQY2fveFXQvSizm3OrN aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmp7j5ypf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 17:01:49 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32TDUUmF011234;
+        Wed, 29 Mar 2023 17:01:49 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmp7j5yn8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 17:01:48 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32SMN18q009613;
+        Wed, 29 Mar 2023 17:01:46 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3phrk6n4js-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 17:01:46 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32TH1iO623724790
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Mar 2023 17:01:44 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3C11F2004B;
+        Wed, 29 Mar 2023 17:01:44 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A914920043;
+        Wed, 29 Mar 2023 17:01:42 +0000 (GMT)
+Received: from li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com (unknown [9.43.61.88])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 29 Mar 2023 17:01:42 +0000 (GMT)
+From:   Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
+To:     Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     abhirupdeb@linux.vnet.ibm.com
+Subject: [PATCH 0/5] staging: r8188eu: code cleanup and coding-style fix patches
+Date:   Wed, 29 Mar 2023 22:31:34 +0530
+Message-Id: <cover.1679988016.git.abhirupdeb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d0e4e2f-a131-ca19-e5ae-ef2349623b39@nvidia.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: FKh5B_6c0vqWNRknlLBPGZHLt3dpP8Nl
+X-Proofpoint-GUID: bAYXVG2_T5Te22YtzEm-UQthH98RGEDR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-29_10,2023-03-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 adultscore=0
+ suspectscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303290133
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 02:44:34PM +0530, Sumit Gupta wrote:
-> On 28/03/23 23:23, Bjorn Helgaas wrote:
-> > > +static void tegra_pcie_icc_set(struct tegra_pcie_dw *pcie)
-> > > +{
-> > > +     struct dw_pcie *pci = &pcie->pci;
-> > > +     u32 val, speed, width;
-> > > +
-> > > +     val = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA);
-> > > +
-> > > +     speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
-> > > +     width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
-> > > +
-> > > +     val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) / BITS_PER_BYTE);
-> > > +
-> > > +     if (icc_set_bw(pcie->icc_path, MBps_to_icc(val), 0))
-> > > +             dev_err(pcie->dev, "can't set bw[%u]\n", val);
-> > > +
-> > > +     clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
-> > 
-> > Array bounds violation; PCI_EXP_LNKSTA_CLS is 0x000f, so possible
-> > speed (CLS) values are 0..0xf and "speed - 1" values are -1..0xe.
-> > 
-> > pcie_gen_freq[] is of size 4 (valid indices 0..3).
-> > 
-> > I see that you're just *moving* this code, but might as well fix it.
-> > 
-> Thank you for the review.
-> Will include the below change in the same patch. Please let me know if any
-> issue.
-> 
->  -       clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
->  +       if (speed && (speed <= ARRAY_SIZE(pcie_gen_freq)))
->  +               clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
->  +       else
->  +               clk_set_rate(pcie->core_clk, pcie_gen_freq[0]);
+This series of patches fixes the coding-style issues
+reported by checkpatch.pl for the staging/r8188eu driver.
 
-I didn't notice that speed is a u32, so -1 is not a possible value.
-Also, it's used earlier for PCIE_SPEED2MBS_ENC(), so you could do
-something like this:
+Abhirup Deb (5):
+  staging: r8188eu: add blank line after declaration
+  staging: r8188eu: refactor block-comments
+  staging: r8188eu: remove redundant else after return
+  staging: r8188eu: Replace "<<" with BIT macro
+  staging: r8188eu: place constants on right side of comparison
 
-  speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val) - 1;
-  if (speed >= ARRAY_SIZE(pcie_gen_freq))
-    speed = 0;
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 61 +++++++-------
+ drivers/staging/r8188eu/hal/rtl8188e_cmd.c    |  2 +-
+ drivers/staging/r8188eu/hal/rtl8188e_dm.c     |  2 +-
+ .../staging/r8188eu/hal/rtl8188e_hal_init.c   | 10 +--
+ drivers/staging/r8188eu/hal/rtl8188eu_xmit.c  |  2 +-
+ drivers/staging/r8188eu/hal/usb_halinit.c     | 23 ++++--
+ drivers/staging/r8188eu/include/ieee80211.h   | 82 +++++++++----------
+ drivers/staging/r8188eu/include/rtw_mlme.h    |  4 +-
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c  |  6 +-
+ 9 files changed, 98 insertions(+), 94 deletions(-)
 
-  val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) /
-	BITS_PER_BYTE);
-  ...
-  clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
+-- 
+2.31.1
+
