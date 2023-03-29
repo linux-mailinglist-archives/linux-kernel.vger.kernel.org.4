@@ -2,52 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4372D6CF3B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7852F6CF3AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjC2TvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S229470AbjC2TvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjC2TvS (ORCPT
+        with ESMTP id S230221AbjC2TvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:51:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661866E8B;
-        Wed, 29 Mar 2023 12:50:52 -0700 (PDT)
+        Wed, 29 Mar 2023 15:51:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9856A74;
+        Wed, 29 Mar 2023 12:50:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4441EB82438;
-        Wed, 29 Mar 2023 19:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D31CBC433D2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62A2261E26;
+        Wed, 29 Mar 2023 19:50:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B1450C4339B;
         Wed, 29 Mar 2023 19:50:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1680119423;
-        bh=TZnuON2ALMaVaJ38tnDMvCxndBybp4aPi0dcrIYjgmw=;
+        bh=2BMeM8dD3hziGXEFErJyFqPV9onZ6X8OoaehGvFbk7A=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jyW9GB/knF2E2BGAy/FeDuny4C+OgyfVr0vYdVhzVUAfclTbbCSprGNX66eQgmvf4
-         wO1F8R74F/DVDty4MPex5UbERwn73zRTbbEplYff5cBr2QobO+KfI6c26aWp3/4ZvE
-         9Qs7koLhvyHGwmQXtDd6gZGdrnD5vkUFjjVHDAtrZ4PeoVpJxAag/Hhy/5m+vGCbGn
-         RH7u8BpT/dNtWLFHTse8u12OBk+EvYnKYzGoIybV6zRjlblLUWKGOR5Y3fgfj7JmdR
-         jh9qE1XHA+VT4AU0ikw6kBJKU91C2yjWbqvh7XnRM6K7mKx+pSa8NPXYD4u1g/DHpj
-         8pZquQf43L7Cw==
+        b=JuSOEnsguHz56oDMcKCeWXRXqi1iFmbhRiTkod5lT612eIYeRuQNdVanAEaMzRcEd
+         9w4M873hYQHRAbtb2gizEuAqh6NezpgtvXW6wlEO7yaLTrQENpEmk63uzuLkcbRvAZ
+         0aHX0i4stFuPY8Y2hfxfeFtkT5qZPEjkw/h64tOT6RrGE/QpHT5hpCtBRi6gbmrdKh
+         E5zCdZu2yhToBrliNxgX9GbxrJcr74A0eDrS3m6RMG/dziwLgma9/IWovNiqW4d3cy
+         y37QjRtBE6ImwpBOGzkkARsno9mJtMX96GfZMls2eZONNgX0G+VbALY2etnBZ00Ydt
+         GjYAMfKey+4sQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BA9C4E21EE4;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 93217E50D75;
         Wed, 29 Mar 2023 19:50:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/1] Bluetooth: btrtl: check for NULL in btrtl_set_quirks()
+Subject: Re: [PATCH v8 0/4] Add WCN6855 Bluetooth support
 From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <168011942375.31352.12731684585593411555.git-patchwork-notify@kernel.org>
+Message-Id: <168011942359.31352.12230106748890164488.git-patchwork-notify@kernel.org>
 Date:   Wed, 29 Mar 2023 19:50:23 +0000
-References: <20230321114826.3544-1-max.chou@realtek.com>
-In-Reply-To: <20230321114826.3544-1-max.chou@realtek.com>
-To:     Max Chou <max.chou@realtek.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alex_lu@realsil.com.cn, hildawu@realtek.com
+References: <20230326233812.28058-1-steev@kali.org>
+In-Reply-To: <20230326233812.28058-1-steev@kali.org>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        sven@svenpeter.dev, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        markpearson@lenovo.com, quic_tjiang@quicinc.com, johan@kernel.org
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -59,23 +65,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to bluetooth/bluetooth-next.git (master)
+This series was applied to bluetooth/bluetooth-next.git (master)
 by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-On Tue, 21 Mar 2023 19:48:26 +0800 you wrote:
-> From: Max Chou <max.chou@realtek.com>
+On Sun, 26 Mar 2023 18:38:08 -0500 you wrote:
+> First things first, I do not have access to the specs nor the schematics, so a
+> lot of this was done via guess work, looking at the acpi tables, and looking at
+> how a similar device (wcn6750) was added.
 > 
-> The btrtl_set_quirks() has accessed btrtl_dev->ic_info->lmp_subver since
-> b8e482d02513. However, if installing a Realtek Bluetooth controller
-> without the driver supported, it will hit the NULL point accessed.
-> 
-> Add a check for NULL to avoid the Kernel Oops.
+> This patchset has 2 patchsets that it depends on, for the bindings so that they
+> pass dtbs_check, as well as adding in the needed regulators to make bluetooth
+> work.
 > 
 > [...]
 
 Here is the summary with links:
-  - [1/1] Bluetooth: btrtl: check for NULL in btrtl_set_quirks()
-    https://git.kernel.org/bluetooth/bluetooth-next/c/dfa0a31c0cee
+  - [v8,1/4] dt-bindings: net: Add WCN6855 Bluetooth
+    https://git.kernel.org/bluetooth/bluetooth-next/c/5c63b28b9107
+  - [v8,2/4] Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6855
+    https://git.kernel.org/bluetooth/bluetooth-next/c/e5a3f2af0036
+  - [v8,3/4] arm64: dts: qcom: sc8280xp: Define uart2
+    (no matching commit)
+  - [v8,4/4] arm64: dts: qcom: sc8280xp-x13s: Add bluetooth
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
