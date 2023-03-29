@@ -2,111 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01856CD4E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5DF6CD4EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjC2Ik6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        id S230481AbjC2Il7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjC2Iky (ORCPT
+        with ESMTP id S230025AbjC2Ily (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:40:54 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AEC12E;
-        Wed, 29 Mar 2023 01:40:48 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id g7so9781378pfu.2;
-        Wed, 29 Mar 2023 01:40:48 -0700 (PDT)
+        Wed, 29 Mar 2023 04:41:54 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A81126
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:41:53 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id b18so18389661ybp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:41:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680079248;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T4nFg4zKMGojw1a9EUgiYrx0HzwuMwAbekbAVn3z66s=;
-        b=V4fUz5/MNZNeW1jMG5OcBY4Tpy3nx8pejz1mjjui8TMA8VFc8VTH90eQvkJxcjRK+q
-         qGiV1pS07CiLbAP1AaqcNcR+CoYmiHz3aZBc6RmMTnufrnZ6yrYnW4l/SIZ90x2tR/yq
-         qqU6ywlIXlm77nooDOXfDuoT3iClb8PMr6I1sD5GBrc4Q6n7UX12trb5um9753Y5CujO
-         +tDQgOFl8OCqHAMWEKeuPO39s8ChLyRfjgHKDCOX05VAKhPocYKkTbV8Op1lo6XSMZdX
-         lWPnb20TOnLVjnx/2CNWpkIL6ykc6HjvCCGA1S2Efsb6Jw5jbbX3GUMSCnZf1kBiJS/e
-         Ik1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680079248;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1680079313;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T4nFg4zKMGojw1a9EUgiYrx0HzwuMwAbekbAVn3z66s=;
-        b=jHysOHPDAAjEPRAn+GAlVPT1bnhfqBLa2pGVdMVLx3cIXCrIxuInhR+b0pHzVWfy1R
-         ks7AEM/ORdcw9vXDUOkkgehPy453XhHNC3DzCKrriT1LP6wtKDmvPippnYgWuZE7+8Qh
-         2ElUzVbGVG/pzeYIItje5Z3ury7BAHhRGh5z0s6rH4JNIOLEO9yZ7kI1LMfbMvoiHoaO
-         zNRCZrFNGT8xtZSs/4HPrd45dpp8Frn5EvAo1mT3fGD7xt9iiuMt3GDF6Ma6wjYVCcpv
-         +bAl5/Zh9okZoQ2vuT/h2Sp6iMCqRLH3nJ+a2yw8ii8E+Znvx4iCnu8CMC6KlnkDYFIT
-         Q8vg==
-X-Gm-Message-State: AAQBX9eQjEPLBjpe7flujq2sqkZds+//OgQ7/8vABshPSK+Sj1/NCE1e
-        sNSOTAsA6QXjmrcRG3iZGQY=
-X-Google-Smtp-Source: AKy350ZeSdakn87GYUZYeIzq/R0++5i4nskJlkhQzoG11bTfiOXNzxI+PTUP/mlACh8Rh4Eqqw7oCA==
-X-Received: by 2002:a62:5254:0:b0:626:286d:b701 with SMTP id g81-20020a625254000000b00626286db701mr17920670pfb.20.1680079247947;
-        Wed, 29 Mar 2023 01:40:47 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-15.three.co.id. [116.206.28.15])
-        by smtp.gmail.com with ESMTPSA id a25-20020a62e219000000b00590ede84b1csm23173046pfi.147.2023.03.29.01.40.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 01:40:47 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 8D8D4106705; Wed, 29 Mar 2023 15:40:44 +0700 (WIB)
-Date:   Wed, 29 Mar 2023 15:40:44 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>, Takashi Iwai <tiwai@suse.de>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [Intel-wired-lan] [REGRESSION] e1000e probe/link detection fails
- since 6.2 kernel
-Message-ID: <ZCP5jOTNypwG4xK6@debian.me>
-References: <87jzz13v7i.wl-tiwai@suse.de>
- <652a9a96-f499-f31f-2a55-3c80b6ac9c75@molgen.mpg.de>
+        bh=we/N4oQDR6XoZiEvq5GnI6M0YFT7oJjEt6185k+IGaY=;
+        b=qFyiav9b1zdKBdgJCfyqcCgfBQBBsA1ndNq+BFIggKyw9cQxX1k9udJayM/p50i3Ov
+         XHgtrpALhf5R3F/4m4bplS/w9Tvv1E9IWQhg33ExSmsRqULE+rAmnl2S48M8xvhdWXW4
+         G4vD2EFmWTLP7+0KSCLYgJ7t8VeDgTjz35ekRb1Rts/9dPllu7Rd2oRy1X2EljuLDaDI
+         9cRQOzYkmNzleaiRqiJpaDqAQgtV11V/IFo10uYG4AKrKOQsnVqFhSW5fShFt+ZAAKIz
+         Vv/ALNRwC+zO+YL6b4j8tE8xMp9X8zOtWRykHa61iPEu9d6RxMwIFKs/hEFt8nYQcKwf
+         IGjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680079313;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=we/N4oQDR6XoZiEvq5GnI6M0YFT7oJjEt6185k+IGaY=;
+        b=sx14SBNL1LWw7nWZfN04nSXlLe/ES1icYe8OmsmN4rVQo19q5q8d94iX2Bgoqe+v2I
+         ip5Eo1ObZbXlFXTPaXyoXqftzLqyL1/6/WJko6/EaDyT8PRVK52fAFuF0YcWzqkuJNXJ
+         NjhY+PWBV9qXyIj1dFWFU6kSdLyzZIAjhc0QsCY5jTlwqqQWMyd18/oshCyVQ2h647J5
+         VFQ4apxhMNYyOPcVoQoHa8PNM3neAhB7u9BChVV8sd4Szrkr+i9GXUX8HbmsvqV5wF35
+         x0dYv4sUfClvo8oOHIq70EMOg07CJhoch6yILwk1KgtsJV18TyI8lhhddXXDUY11596i
+         /bPg==
+X-Gm-Message-State: AAQBX9ft9dXtarjhW0XzGflcb7B85NQZkxwT9ArP9rJ5K4UPdBTMsSc4
+        GPP3zBvBku/gD9ab0XP+OIs4j4JTKKqc+dymuv7pwg==
+X-Google-Smtp-Source: AKy350aor2tRD3I/kJ+6CWloLqkSEKVo/h//FFtfDDrUGgRIOB5h7pz62ZhQRQC3LuXLMNjQOK3qmDTy7PR0MhwWPvs=
+X-Received: by 2002:a05:6902:1586:b0:b23:4649:7ef3 with SMTP id
+ k6-20020a056902158600b00b2346497ef3mr12388881ybu.4.1680079312776; Wed, 29 Mar
+ 2023 01:41:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cyVgV9qP40t8gPzM"
-Content-Disposition: inline
-In-Reply-To: <652a9a96-f499-f31f-2a55-3c80b6ac9c75@molgen.mpg.de>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20230324084127.29362-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230324084127.29362-1-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 29 Mar 2023 10:41:41 +0200
+Message-ID: <CACRpkdYNPNQRC22KD9gK2BwcEYJKc-2OvKmT9kVzTLDpWkK9-g@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,sm8550-lpass-lpi: allow
+ input-enabled and bias-bus-hold
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 24, 2023 at 9:41=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
---cyVgV9qP40t8gPzM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Add missing common pin configuration properties: input-enabled and
+> bias-bus-hold.
+>
+> Fixes: 268e97ccc311 ("dt-bindings: pinctrl: qcom,sm8550-lpass-lpi-pinctrl=
+: add SM8550 LPASS")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> ---
+>
+> Linus, please take it directly.
 
-On Tue, Mar 28, 2023 at 04:39:01PM +0200, Paul Menzel wrote:
-> Does openSUSE Tumbleweed make it easy to bisect the regression at least on
-> =E2=80=9Crc level=E2=80=9D? It be great if narrow it more down, so we kno=
-w it for example
-> regressed in 6.2-rc7.
->=20
+Roger that, patch applied!
 
-Alternatively, can you do bisection using kernel sources from Linus's
-tree (git required)?
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---cyVgV9qP40t8gPzM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCP5hgAKCRD2uYlJVVFO
-oyl2AP4j+bMThihDAhQDsVmg3q4Dgn/R1Tm/T9ALIQekbXtkvwD+IWh8158WgO5h
-qOc7nN3lZwaB/V+HxGXv7L6aRMBQ3A4=
-=4fBA
------END PGP SIGNATURE-----
-
---cyVgV9qP40t8gPzM--
+Yours,
+Linus Walleij
