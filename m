@@ -2,235 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7546CD1C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050236CD1CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjC2Fnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 01:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S229734AbjC2Fqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 01:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjC2Fns (ORCPT
+        with ESMTP id S229532AbjC2Fq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 01:43:48 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F573A8B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 22:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680068623; x=1711604623;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C1fML/7RisxPvrLe5CofxF3dlUzqz7mxCBghMI/fiik=;
-  b=ggocGvsnBNcDss+YPVT1dkocpdh9Z/21wia1N7yTc0hR4XoHVuoc81Q4
-   knxC36pgXnSzlZIbOQuLYfR3phiz5rey9Z+altk1uwhOA8vuX8ToOhCP2
-   ox/txTrU0VNSuCuTT36ZVJMwmAcyrRMNQSDOIiUFrBDMSBw2deQn7Wmrp
-   ZuDnOLya3Q2wweHaXfKN/ALj8K+VX704M5wE9Zvner85EIao8UYYx3nws
-   lUSMAdQAn/J4IcT6Xwp4FM2Ktxcwf7lKJV9n6sc4SBo/17WVNeGhOm5WW
-   qPDczmF84yT7+CT14/Ji6nsY0hZzoYiL+KNF3EVexNIxyRxBjnD2AH3Ks
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="340806863"
-X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
-   d="scan'208";a="340806863"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 22:43:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="808073478"
-X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
-   d="scan'208";a="808073478"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Mar 2023 22:43:39 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1phOaw-000JGq-2F;
-        Wed, 29 Mar 2023 05:43:38 +0000
-Date:   Wed, 29 Mar 2023 13:42:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Janne Grunau <j@jannau.net>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 5/5] soc: apple: mailbox: Rename config symbol to
- APPLE_MAILBOX
-Message-ID: <202303291348.nYR9dkeW-lkp@intel.com>
-References: <20230328-soc-mailbox-v1-5-3953814532fd@marcan.st>
+        Wed, 29 Mar 2023 01:46:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C856A2127;
+        Tue, 28 Mar 2023 22:46:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4361E618A6;
+        Wed, 29 Mar 2023 05:46:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D43EC433D2;
+        Wed, 29 Mar 2023 05:46:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680068784;
+        bh=8fFU5kQOTeWdxd4ArzXKxbPdX+xWPqKjjB5BunJ/kq8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YagHrNkk9RhqYdv9JtmPBrpRhmrJItBxcfMzCp+C+Xii9kTK3UQyw4SIZV0vP5YrJ
+         fzX06H+ru5EhB+2v0+tWWdD4+0rGHtZa37VIdh+uQPo+NS0d2JWO5JyNmqQ8zzwAeK
+         fgNAZEkodp8FJfR/Xkwpl/11SYNumWb21jg2x7Xw=
+Date:   Wed, 29 Mar 2023 07:46:22 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, rafael@kernel.org,
+        christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
+        dave.hansen@linux.intel.com
+Subject: Re: [PATCH 7/7] module: add debug stats to help identify memory
+ pressure
+Message-ID: <ZCPQrouSMQbFc8D0@kroah.com>
+References: <20230329053149.3976378-1-mcgrof@kernel.org>
+ <20230329053149.3976378-8-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328-soc-mailbox-v1-5-3953814532fd@marcan.st>
+In-Reply-To: <20230329053149.3976378-8-mcgrof@kernel.org>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hector,
+On Tue, Mar 28, 2023 at 10:31:49PM -0700, Luis Chamberlain wrote:
+> Loading modules with finit_module() can end up using vmalloc(), vmap()
+> and vmalloc() again, for a total of up to 3 separate allocations in the
+> worse case for a single module. We always kernel_read*() the module,
+> that's a vmalloc(). Then vmap() is used for the module decompression,
+> and if so the last read buffer is freed as we use the now decompressed
+> module buffer to stuff data into our copy module. The last one is
+> specific to architectures but pretty much that's generally a series
+> of vmalloc() for different ELF sections...
+> 
+> Evaluation with new stress-ng module support [1] with just 100 ops
+> us proving that you can end up using GiBs of data easily even if
+> we are trying to be very careful not to load modules which are already
+> loaded. 100 ops seems to resemble the sort of pressure a system with
+> about 400 CPUs can create on modules. Although those issues for so
+> many concurrent loads per CPU is silly and are being fixed, we lack
+> proper tooling to help diagnose easily what happened, when it happened
+> and what likely are the culprits -- userspace or kernel module
+> autoloading.
+> 
+> Provide an initial set of stats for debugfs which let us easily scrape
+> post-boot information about failed loads. This sort of information can
+> be used on production worklaods to try to optimize *avoiding* redundant
+> memory pressure using finit_module().
+> 
+> Screen shot:
+> 
+> root@kmod ~ # cat /sys/kernel/debug/modules/stats
+>            Modules loaded       67
 
-I love your patch! Yet something to improve:
+Is this "loaded now", or "ever successfully loaded"?  As in a
+modprobe/rmmod/modprobe would bump this by 2, right?
 
-[auto build test ERROR on bdfe6de2695c5bccc663a5a7d530f81925d8bc10]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hector-Martin/soc-apple-rtkit-Get-rid-of-apple_rtkit_send_message_wait/20230328-211648
-base:   bdfe6de2695c5bccc663a5a7d530f81925d8bc10
-patch link:    https://lore.kernel.org/r/20230328-soc-mailbox-v1-5-3953814532fd%40marcan.st
-patch subject: [PATCH 5/5] soc: apple: mailbox: Rename config symbol to APPLE_MAILBOX
-config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20230329/202303291348.nYR9dkeW-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d0addf95095d935cdd5940101fbf1b1594b08158
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hector-Martin/soc-apple-rtkit-Get-rid-of-apple_rtkit_send_message_wait/20230328-211648
-        git checkout d0addf95095d935cdd5940101fbf1b1594b08158
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/soc/apple/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303291348.nYR9dkeW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/soc/apple/mailbox.c: In function 'apple_mbox_send':
->> drivers/soc/apple/mailbox.c:151:24: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-     151 |         writeq_relaxed(FIELD_PREP(APPLE_MBOX_MSG1_MSG, msg.msg1),
-         |                        ^~~~~~~~~~
-   drivers/soc/apple/mailbox.c: In function 'apple_mbox_poll_locked':
->> drivers/soc/apple/mailbox.c:188:28: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
-     188 |                 msg.msg1 = FIELD_GET(
-         |                            ^~~~~~~~~
-   cc1: some warnings being treated as errors
+Anyway, minor comment on the code, this looks overall great to me:
 
 
-vim +/FIELD_PREP +151 drivers/soc/apple/mailbox.c
+>         Total module size       11464704
+>       Total mod text size       4194304
+>        Failed kread bytes       890064
+>         Failed kmod bytes       890064
+>       Invalid kread bytes       890064
+>  Invalid decompress bytes       0
+>         Invalid mod bytes       890064
+>          Average mod size       171115
+>     Average mod text size       62602
+> Failed modules:
+>                 kvm_intel
+>                       kvm
+>                 irqbypass
+>          crct10dif_pclmul
+>       ghash_clmulni_intel
+>              sha512_ssse3
+>            sha512_generic
+>               aesni_intel
+>               crypto_simd
+>                    cryptd
+>                     evdev
+>                 serio_raw
+>                virtio_pci
+>                      nvme
+>                 nvme_core
+>     virtio_pci_legacy_dev
+>                    t10_pi
+>            crc64_rocksoft
+>     virtio_pci_modern_dev
+>              crc32_pclmul
+>                    virtio
+>              crc32c_intel
+>               virtio_ring
+>                     crc64
+> 
+> [0] https://github.com/ColinIanKing/stress-ng.git
+> [1] echo 0 > /proc/sys/vm/oom_dump_tasks
+>     ./stress-ng --module 100 --module-name xfs
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>  kernel/module/Kconfig    |  32 +++++++
+>  kernel/module/Makefile   |   4 +
+>  kernel/module/debug.c    |  16 ++++
+>  kernel/module/internal.h |  35 +++++++
+>  kernel/module/main.c     |  45 ++++++++-
+>  kernel/module/stats.c    | 200 +++++++++++++++++++++++++++++++++++++++
+>  kernel/module/tracking.c |   7 +-
+>  7 files changed, 331 insertions(+), 8 deletions(-)
+>  create mode 100644 kernel/module/debug.c
+>  create mode 100644 kernel/module/stats.c
+> 
+> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> index 424b3bc58f3f..fbf7b92cb3d0 100644
+> --- a/kernel/module/Kconfig
+> +++ b/kernel/module/Kconfig
+> @@ -22,6 +22,12 @@ menuconfig MODULES
+>  
+>  if MODULES
+>  
+> +config MODULE_DEBUG
+> +	bool "Module debugging"
+> +	default n
 
-8b654b5034baba0 Hector Martin 2023-03-28   95  
-8b654b5034baba0 Hector Martin 2023-03-28   96  int apple_mbox_send(struct apple_mbox *mbox, const struct apple_mbox_msg msg,
-8b654b5034baba0 Hector Martin 2023-03-28   97  		    bool atomic)
-8b654b5034baba0 Hector Martin 2023-03-28   98  {
-8b654b5034baba0 Hector Martin 2023-03-28   99  	unsigned long flags;
-8b654b5034baba0 Hector Martin 2023-03-28  100  	int ret;
-8b654b5034baba0 Hector Martin 2023-03-28  101  	u32 mbox_ctrl;
-8b654b5034baba0 Hector Martin 2023-03-28  102  	long t;
-8b654b5034baba0 Hector Martin 2023-03-28  103  
-8b654b5034baba0 Hector Martin 2023-03-28  104  	spin_lock_irqsave(&mbox->tx_lock, flags);
-8b654b5034baba0 Hector Martin 2023-03-28  105  	mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->a2i_control);
-8b654b5034baba0 Hector Martin 2023-03-28  106  
-8b654b5034baba0 Hector Martin 2023-03-28  107  	while (mbox_ctrl & mbox->hw->control_full) {
-8b654b5034baba0 Hector Martin 2023-03-28  108  		if (atomic) {
-8b654b5034baba0 Hector Martin 2023-03-28  109  			ret = readl_poll_timeout_atomic(
-8b654b5034baba0 Hector Martin 2023-03-28  110  				mbox->regs + mbox->hw->a2i_control, mbox_ctrl,
-8b654b5034baba0 Hector Martin 2023-03-28  111  				!(mbox_ctrl & mbox->hw->control_full), 100,
-8b654b5034baba0 Hector Martin 2023-03-28  112  				APPLE_MBOX_TX_TIMEOUT * 1000);
-8b654b5034baba0 Hector Martin 2023-03-28  113  
-8b654b5034baba0 Hector Martin 2023-03-28  114  			if (ret) {
-8b654b5034baba0 Hector Martin 2023-03-28  115  				spin_unlock_irqrestore(&mbox->tx_lock, flags);
-8b654b5034baba0 Hector Martin 2023-03-28  116  				return ret;
-8b654b5034baba0 Hector Martin 2023-03-28  117  			}
-8b654b5034baba0 Hector Martin 2023-03-28  118  
-8b654b5034baba0 Hector Martin 2023-03-28  119  			break;
-8b654b5034baba0 Hector Martin 2023-03-28  120  		}
-8b654b5034baba0 Hector Martin 2023-03-28  121  		/*
-8b654b5034baba0 Hector Martin 2023-03-28  122  		 * The interrupt is level triggered and will keep firing as long as the
-8b654b5034baba0 Hector Martin 2023-03-28  123  		 * FIFO is empty. It will also keep firing if the FIFO was empty
-8b654b5034baba0 Hector Martin 2023-03-28  124  		 * at any point in the past until it has been acknowledged at the
-8b654b5034baba0 Hector Martin 2023-03-28  125  		 * mailbox level. By acknowledging it here we can ensure that we will
-8b654b5034baba0 Hector Martin 2023-03-28  126  		 * only get the interrupt once the FIFO has been cleared again.
-8b654b5034baba0 Hector Martin 2023-03-28  127  		 * If the FIFO is already empty before the ack it will fire again
-8b654b5034baba0 Hector Martin 2023-03-28  128  		 * immediately after the ack.
-8b654b5034baba0 Hector Martin 2023-03-28  129  		 */
-8b654b5034baba0 Hector Martin 2023-03-28  130  		if (mbox->hw->has_irq_controls) {
-8b654b5034baba0 Hector Martin 2023-03-28  131  			writel_relaxed(mbox->hw->irq_bit_send_empty,
-8b654b5034baba0 Hector Martin 2023-03-28  132  				       mbox->regs + mbox->hw->irq_ack);
-8b654b5034baba0 Hector Martin 2023-03-28  133  		}
-8b654b5034baba0 Hector Martin 2023-03-28  134  		enable_irq(mbox->irq_send_empty);
-8b654b5034baba0 Hector Martin 2023-03-28  135  		reinit_completion(&mbox->tx_empty);
-8b654b5034baba0 Hector Martin 2023-03-28  136  		spin_unlock_irqrestore(&mbox->tx_lock, flags);
-8b654b5034baba0 Hector Martin 2023-03-28  137  
-8b654b5034baba0 Hector Martin 2023-03-28  138  		t = wait_for_completion_interruptible_timeout(
-8b654b5034baba0 Hector Martin 2023-03-28  139  			&mbox->tx_empty,
-8b654b5034baba0 Hector Martin 2023-03-28  140  			msecs_to_jiffies(APPLE_MBOX_TX_TIMEOUT));
-8b654b5034baba0 Hector Martin 2023-03-28  141  		if (t < 0)
-8b654b5034baba0 Hector Martin 2023-03-28  142  			return t;
-8b654b5034baba0 Hector Martin 2023-03-28  143  		else if (t == 0)
-8b654b5034baba0 Hector Martin 2023-03-28  144  			return -ETIMEDOUT;
-8b654b5034baba0 Hector Martin 2023-03-28  145  
-8b654b5034baba0 Hector Martin 2023-03-28  146  		spin_lock_irqsave(&mbox->tx_lock, flags);
-8b654b5034baba0 Hector Martin 2023-03-28  147  		mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->a2i_control);
-8b654b5034baba0 Hector Martin 2023-03-28  148  	}
-8b654b5034baba0 Hector Martin 2023-03-28  149  
-8b654b5034baba0 Hector Martin 2023-03-28  150  	writeq_relaxed(msg.msg0, mbox->regs + mbox->hw->a2i_send0);
-8b654b5034baba0 Hector Martin 2023-03-28 @151  	writeq_relaxed(FIELD_PREP(APPLE_MBOX_MSG1_MSG, msg.msg1),
-8b654b5034baba0 Hector Martin 2023-03-28  152  		       mbox->regs + mbox->hw->a2i_send1);
-8b654b5034baba0 Hector Martin 2023-03-28  153  
-8b654b5034baba0 Hector Martin 2023-03-28  154  	spin_unlock_irqrestore(&mbox->tx_lock, flags);
-8b654b5034baba0 Hector Martin 2023-03-28  155  
-8b654b5034baba0 Hector Martin 2023-03-28  156  	return 0;
-8b654b5034baba0 Hector Martin 2023-03-28  157  }
-8b654b5034baba0 Hector Martin 2023-03-28  158  EXPORT_SYMBOL(apple_mbox_send);
-8b654b5034baba0 Hector Martin 2023-03-28  159  
-8b654b5034baba0 Hector Martin 2023-03-28  160  static irqreturn_t apple_mbox_send_empty_irq(int irq, void *data)
-8b654b5034baba0 Hector Martin 2023-03-28  161  {
-8b654b5034baba0 Hector Martin 2023-03-28  162  	struct apple_mbox *mbox = data;
-8b654b5034baba0 Hector Martin 2023-03-28  163  
-8b654b5034baba0 Hector Martin 2023-03-28  164  	/*
-8b654b5034baba0 Hector Martin 2023-03-28  165  	 * We don't need to acknowledge the interrupt at the mailbox level
-8b654b5034baba0 Hector Martin 2023-03-28  166  	 * here even if supported by the hardware. It will keep firing but that
-8b654b5034baba0 Hector Martin 2023-03-28  167  	 * doesn't matter since it's disabled at the main interrupt controller.
-8b654b5034baba0 Hector Martin 2023-03-28  168  	 * apple_mbox_send will acknowledge it before enabling
-8b654b5034baba0 Hector Martin 2023-03-28  169  	 * it at the main controller again.
-8b654b5034baba0 Hector Martin 2023-03-28  170  	 */
-8b654b5034baba0 Hector Martin 2023-03-28  171  	spin_lock(&mbox->tx_lock);
-8b654b5034baba0 Hector Martin 2023-03-28  172  	disable_irq_nosync(mbox->irq_send_empty);
-8b654b5034baba0 Hector Martin 2023-03-28  173  	complete(&mbox->tx_empty);
-8b654b5034baba0 Hector Martin 2023-03-28  174  	spin_unlock(&mbox->tx_lock);
-8b654b5034baba0 Hector Martin 2023-03-28  175  
-8b654b5034baba0 Hector Martin 2023-03-28  176  	return IRQ_HANDLED;
-8b654b5034baba0 Hector Martin 2023-03-28  177  }
-8b654b5034baba0 Hector Martin 2023-03-28  178  
-8b654b5034baba0 Hector Martin 2023-03-28  179  static int apple_mbox_poll_locked(struct apple_mbox *mbox)
-8b654b5034baba0 Hector Martin 2023-03-28  180  {
-8b654b5034baba0 Hector Martin 2023-03-28  181  	struct apple_mbox_msg msg;
-8b654b5034baba0 Hector Martin 2023-03-28  182  	int ret = 0;
-8b654b5034baba0 Hector Martin 2023-03-28  183  
-8b654b5034baba0 Hector Martin 2023-03-28  184  	u32 mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->i2a_control);
-8b654b5034baba0 Hector Martin 2023-03-28  185  
-8b654b5034baba0 Hector Martin 2023-03-28  186  	while (!(mbox_ctrl & mbox->hw->control_empty)) {
-8b654b5034baba0 Hector Martin 2023-03-28  187  		msg.msg0 = readq_relaxed(mbox->regs + mbox->hw->i2a_recv0);
-8b654b5034baba0 Hector Martin 2023-03-28 @188  		msg.msg1 = FIELD_GET(
-8b654b5034baba0 Hector Martin 2023-03-28  189  			APPLE_MBOX_MSG1_MSG,
-8b654b5034baba0 Hector Martin 2023-03-28  190  			readq_relaxed(mbox->regs + mbox->hw->i2a_recv1));
-8b654b5034baba0 Hector Martin 2023-03-28  191  
-8b654b5034baba0 Hector Martin 2023-03-28  192  		mbox->rx(mbox, msg, mbox->cookie);
-8b654b5034baba0 Hector Martin 2023-03-28  193  		ret++;
-8b654b5034baba0 Hector Martin 2023-03-28  194  		mbox_ctrl = readl_relaxed(mbox->regs + mbox->hw->i2a_control);
-8b654b5034baba0 Hector Martin 2023-03-28  195  	}
-8b654b5034baba0 Hector Martin 2023-03-28  196  
-8b654b5034baba0 Hector Martin 2023-03-28  197  	/*
-8b654b5034baba0 Hector Martin 2023-03-28  198  	 * The interrupt will keep firing even if there are no more messages
-8b654b5034baba0 Hector Martin 2023-03-28  199  	 * unless we also acknowledge it at the mailbox level here.
-8b654b5034baba0 Hector Martin 2023-03-28  200  	 * There's no race if a message comes in between the check in the while
-8b654b5034baba0 Hector Martin 2023-03-28  201  	 * loop above and the ack below: If a new messages arrives inbetween
-8b654b5034baba0 Hector Martin 2023-03-28  202  	 * those two the interrupt will just fire again immediately after the
-8b654b5034baba0 Hector Martin 2023-03-28  203  	 * ack since it's level triggered.
-8b654b5034baba0 Hector Martin 2023-03-28  204  	 */
-8b654b5034baba0 Hector Martin 2023-03-28  205  	if (mbox->hw->has_irq_controls) {
-8b654b5034baba0 Hector Martin 2023-03-28  206  		writel_relaxed(mbox->hw->irq_bit_recv_not_empty,
-8b654b5034baba0 Hector Martin 2023-03-28  207  			       mbox->regs + mbox->hw->irq_ack);
-8b654b5034baba0 Hector Martin 2023-03-28  208  	}
-8b654b5034baba0 Hector Martin 2023-03-28  209  
-8b654b5034baba0 Hector Martin 2023-03-28  210  	return ret;
-8b654b5034baba0 Hector Martin 2023-03-28  211  }
-8b654b5034baba0 Hector Martin 2023-03-28  212  
+default is always "n", no need to set that specifically.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> +	help
+> +	  Allows to help debug module functionality.
+
+Might want to make this a bit more verbose.
+
+>  config MODULE_FORCE_LOAD
+>  	bool "Forced module loading"
+>  	default n
+> @@ -48,6 +54,8 @@ config MODULE_FORCE_UNLOAD
+>  	  rmmod).  This is mainly for kernel developers and desperate users.
+>  	  If unsure, say N.
+>  
+> +if MODULE_DEBUG
+> +
+>  config MODULE_UNLOAD_TAINT_TRACKING
+>  	bool "Tainted module unload tracking"
+>  	depends on MODULE_UNLOAD
+> @@ -59,6 +67,30 @@ config MODULE_UNLOAD_TAINT_TRACKING
+>  	  page (see bad_page()), the aforementioned details are also
+>  	  shown. If unsure, say N.
+>  
+> +config MODULE_STATS
+> +	bool "Module statistics"
+> +	depends on DEBUG_FS
+> +	default n
+
+Again, already default.
+
+
+> +	help
+> +	  This option allows you to maintain a record of module statistics.
+> +	  For example each all modules size, average size, text size, and
+> +	  failed modules and the size for each of those. For failed
+> +	  modules we keep track of module which failed due to either the
+> +	  existing module taking too long to load or that module already
+> +	  was loaded.
+> +
+> +	  You should enable this if you are debugging production loads
+> +	  and want to see if userspace or the kernel is doing stupid things
+> +	  with loading modules when it shouldn't or if you want to help
+> +	  optimize userspace / kernel space module autoloading schemes.
+> +	  You might want to do this because failed modules tend to use
+> +	  use up significan amount of memory, and so you'd be doing everyone
+> +	  a favor in avoiding these failure proactively.
+> +
+> +	  If unsure, say N.
+> +
+> +endif # MODULE_DEBUG
+> +
+>  config MODVERSIONS
+>  	bool "Module versioning support"
+>  	help
+> diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+> index 5b1d26b53b8d..fe97047f3807 100644
+> --- a/kernel/module/Makefile
+> +++ b/kernel/module/Makefile
+> @@ -20,4 +20,8 @@ obj-$(CONFIG_PROC_FS) += procfs.o
+>  obj-$(CONFIG_SYSFS) += sysfs.o
+>  obj-$(CONFIG_KGDB_KDB) += kdb.o
+>  obj-$(CONFIG_MODVERSIONS) += version.o
+> +
+> +# Link order matters here, keep debug.o first.
+> +obj-$(CONFIG_MODULE_DEBUG) += debug.o
+> +obj-$(CONFIG_MODULE_STATS) += stats.o
+>  obj-$(CONFIG_MODULE_UNLOAD_TAINT_TRACKING) += tracking.o
+> diff --git a/kernel/module/debug.c b/kernel/module/debug.c
+> new file mode 100644
+> index 000000000000..ef580d70b751
+> --- /dev/null
+> +++ b/kernel/module/debug.c
+> @@ -0,0 +1,16 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (C) 2023 Luis Chamberlain <mcgrof@kernel.org>
+> + */
+> +
+> +#include <linux/debugfs.h>
+> +#include "internal.h"
+> +
+> +struct dentry *mod_debugfs_root;
+> +
+> +static int module_debugfs_init(void)
+> +{
+> +	mod_debugfs_root = debugfs_create_dir("modules", NULL);
+> +	return 0;
+> +}
+> +module_init(module_debugfs_init);
+
+Why is this a whole separate file?
+
+And as MODULE_DEBUG does not reference debugfs, yet it still creates the
+debugfs directory here?  Yes, it will just not do anything if debugfs is
+not enabled, but then why is this file here?
+
+> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> index 6ae29bb8836f..a645cb3fafc7 100644
+> --- a/kernel/module/internal.h
+> +++ b/kernel/module/internal.h
+> @@ -143,6 +143,41 @@ static inline bool set_livepatch_module(struct module *mod)
+>  #endif
+>  }
+>  
+> +#ifdef CONFIG_MODULE_STATS
+> +
+> +#define mod_stat_add64(count, var) atomic64_add(count, var)
+> +#define mod_stat_inc(name) atomic_inc(name)
+
+Ok, but:
+
+> +
+> +extern atomic64_t total_mod_size;
+> +extern atomic64_t total_text_size;
+> +extern atomic64_t invalid_kread_bytes;
+> +extern atomic64_t invalid_decompress_bytes;
+> +extern atomic64_t invalid_mod_becoming_bytes;
+> +extern atomic64_t invalid_mod_bytes;
+> +
+> +extern atomic_t modcount;
+> +extern atomic_t failed_kreads;
+> +extern atomic_t failed_decompress;
+> +extern atomic_t failed_load_modules;
+> +struct mod_fail_load {
+> +	struct list_head list;
+> +	char name[MODULE_NAME_LEN];
+> +	atomic_t count;
+> +};
+> +
+> +int try_add_failed_module(const char *name);
+> +
+> +#else
+> +
+> +#define mod_stat_inc64(name)
+> +#define mod_stat_inc(name) atomic_inc(name)
+
+Why do you still increment the variable here if the option is not
+enabled?
+
+Also, didn't we have some sort of "we want to use an atomic variable as
+statistics" type somewhere in the kernel?  Or did that never get
+accepted?
+
+And do all of these really need to be atomic variables?  Don't you have
+locks for some of this to not need the atomic-ness of them?  I guess it
+doesn't matter much as this isn't that fast of a code-path.
+
+thanks,
+
+greg k-h
