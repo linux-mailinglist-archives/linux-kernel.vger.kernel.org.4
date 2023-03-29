@@ -2,141 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACC76CD874
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2916CD879
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjC2L2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S229837AbjC2La6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjC2L2x (ORCPT
+        with ESMTP id S229833AbjC2La4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:28:53 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FEC2109
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680089332; x=1711625332;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=JGMbh0J3Ep4ALl5fvP9kT9Pq4VuAVtH2X+HHgJvfgKY=;
-  b=TGDuu2ZTOju1ra41NqurTVy7llTrCwpk7A6KnmrvyAgGnAJOYAAoVros
-   YZqX7bJ1tb/wLMq4tzXgiA+z1SD2YbJnckpw7DIQnDif1caWbQWBTyoSh
-   xCKx8zE7KYhlI+7k+UZNYOw5Wed0kp3G9YPQDLBT3Gds1SMzuFufGs06m
-   Spq4OnbercGbvKeWxhsoLjic2pazhKyDKaA8ATHJ4WJi9GV5S8wvS/a7e
-   XXgAEgCEmDh2joEs0+uAI1heMukIV+wUJeVFc0qBv7CmuPK6Matg0xv9U
-   UOrP9g7Yl4EmVrLJ5AMT5wzHHzkpCVYtgdZ0CFhbpQIX372K0tBBiDLwq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="342444267"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="342444267"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 04:28:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="634436238"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="634436238"
-Received: from jetten-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.51.146])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 04:28:47 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     =?utf-8?Q?Ma=C3=ADra?= Canal <mcanal@igalia.com>,
-        David Gow <davidgow@google.com>,
-        =?utf-8?Q?Lu=C3=ADs?= Mendes <luis.p.mendes@gmail.com>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?utf-8?Q?Ma=C3=ADra?= Canal <mairacanal@riseup.net>,
-        Arthur Grillo <arthurgrillo@riseup.net>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/2] drm: test: Fix 32-bit issue in drm_buddy_test
-In-Reply-To: <ceb0b1e8-6c7a-8564-156f-fcf0f0e4a95e@igalia.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230329065532.2122295-1-davidgow@google.com>
- <20230329065532.2122295-2-davidgow@google.com>
- <ceb0b1e8-6c7a-8564-156f-fcf0f0e4a95e@igalia.com>
-Date:   Wed, 29 Mar 2023 14:28:45 +0300
-Message-ID: <87fs9n4x02.fsf@intel.com>
+        Wed, 29 Mar 2023 07:30:56 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6D040D9
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:30:53 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id c29so19704398lfv.3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:30:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680089451;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZbkStHhS8RicbgIIuIIrnClWQyhU0ssY7587G4EgzNw=;
+        b=AezqGCBKF8JxwLe6ttFT/yFnOh4FBegYDojNt8VAclL2tZXfcP5EuORMusgm6F5p1U
+         k6b8hqZWPiDnAT0h0AtwvdWXD3jrKt6ckoMP1Ho76vTn0j96UmjyE262J3GoQMUHYTcn
+         REWSxM3kV4aocy28gjxwsvMxIGJffiMp3JmKhfgEZFAwm85IOpbFys8Af0RXC98TQ+YP
+         MM9QFXxzLvogsuF2VLGva0zOlqbUJA4M09v5rQhf/asxYm1Mu+vWzH8OtyNfzaq+vyJX
+         6HPzqBBQ2Vl/h7b2dYJJ8Zo/yTcrujJYgCss6d5aX3f5m1kX/A1hlVqsbjWCYeRCt4YU
+         HkSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680089451;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZbkStHhS8RicbgIIuIIrnClWQyhU0ssY7587G4EgzNw=;
+        b=BeRs2kUUMp/uTZX1ofrjdWqqsu8v916L81ihFR/zWUi/JEcWCBDPn3G25deT7o9fM8
+         Tw8544CTckAej417qsv71OXDrmhMK4AelFZHht5T5iG5F0Z4FhPVm4ovNS/FBrP1L0dX
+         nYChGNFtGN0n3hdqHG/XqL+VFdqEXGu4XA1NIsoN52YSfaC+m7uuRQRCcyvoZRg/awz6
+         fVfVFwCwcYXQCIXJUvfNQjBxK1WlWZUiltlPm3lrgOr166sx7O4oD71HMH/PufTarRm2
+         krzSr5c+6dcMJr732XPVSatY7sPp4NDvNzy1aSOnMNDahl8Z6EjaAbdXqLpqDHtIpReY
+         IhEg==
+X-Gm-Message-State: AAQBX9cs/q8eP1C72lyX5z4vORly3ReDsERsKx0nLw0FRVNLHzYZmjQF
+        hv4oH6FHnMYOkgzUQYUuz3HSMw==
+X-Google-Smtp-Source: AKy350ZV6sDKOCTXP7mZPDivoS4M7xj7kfUle01CK32kBixoCg2P75PVeoCzYNaj3NW9WtiXMPPxQw==
+X-Received: by 2002:ac2:596f:0:b0:4eb:e03:9e6c with SMTP id h15-20020ac2596f000000b004eb0e039e6cmr599912lfp.33.1680089451646;
+        Wed, 29 Mar 2023 04:30:51 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id u3-20020a056512040300b0048b365176d9sm5467581lfk.286.2023.03.29.04.30.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 04:30:51 -0700 (PDT)
+Message-ID: <95b4bd56-b307-6c72-494f-e9b190df8d74@linaro.org>
+Date:   Wed, 29 Mar 2023 13:30:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/7] clk: qcom: add the GPUCC driver for sa8775p
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230328193632.226095-1-brgl@bgdev.pl>
+ <20230328193632.226095-3-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230328193632.226095-3-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023, Ma=C3=ADra Canal <mcanal@igalia.com> wrote:
-> On 3/29/23 03:55, David Gow wrote:
->> The drm_buddy_test KUnit tests verify that returned blocks have sizes
->> which are powers of two using is_power_of_2(). However, is_power_of_2()
->> operations on a 'long', but the block size is a u64. So on systems where
->> long is 32-bit, this can sometimes fail even on correctly sized blocks.
->>=20
->> This only reproduces randomly, as the parameters passed to the buddy
->> allocator in this test are random. The seed 0xb2e06022 reproduced it
->> fine here.
->>=20
->> For now, just hardcode an is_power_of_2() implementation using
->> x & (x - 1).
->>=20
->> Signed-off-by: David Gow <davidgow@google.com>
->
-> As we still didn't consolidate an implementation of is_power_of_2_u64(),
-
-I just cooked up some patches to try to make is_power_of_2() more
-flexible. I only sent them to the "CI trybot" for a quick spin first,
-will post to lkml later. [1]
-
-BR,
-Jani.
 
 
-[1] https://patchwork.freedesktop.org/series/115785/
+On 28.03.2023 21:36, Bartosz Golaszewski wrote:
+> From: Shazad Hussain <quic_shazhuss@quicinc.com>
+> 
+> Add the clock driver for the Qualcomm Graphics Clock control module.
+> 
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+> [Bartosz: make ready for upstream]
+> Co-authored-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+[...]
 
->
-> Reviewed-by: Ma=C3=ADra Canal <mcanal@igalia.com>
->
-> Best Regards,
-> - Ma=C3=ADra Canal
->
->> ---
->>=20
->> There are actually a couple of is_power_of_2_u64() implementations
->> already around in:
->> - drivers/gpu/drm/i915/i915_utils.h
->> - fs/btrfs/misc.h (called is_power_of_two_u64)
->>=20
->> So the ideal thing would be to consolidate these in one place.
->>=20
->>=20
->> ---
->>   drivers/gpu/drm/tests/drm_buddy_test.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/te=
-sts/drm_buddy_test.c
->> index f8ee714df396..09ee6f6af896 100644
->> --- a/drivers/gpu/drm/tests/drm_buddy_test.c
->> +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
->> @@ -89,7 +89,8 @@ static int check_block(struct kunit *test, struct drm_=
-buddy *mm,
->>   		err =3D -EINVAL;
->>   	}
->>=20=20=20
->> -	if (!is_power_of_2(block_size)) {
->> +	/* We can't use is_power_of_2() for a u64 on 32-bit systems. */
->> +	if (block_size & (block_size - 1)) {
->>   		kunit_err(test, "block size not power of two\n");
->>   		err =3D -EINVAL;
->>   	}
+> +/* Need to match the order of clocks in DT binding */
+> +enum {
+> +	DT_IFACE,
+I think it's never used?
 
---=20
-Jani Nikula, Intel Open Source Graphics Center
+[...]
+
+> +static int gpu_cc_sa8775p_probe(struct platform_device *pdev)
+> +{
+> +	struct regmap *regmap;
+> +
+> +	regmap = qcom_cc_map(pdev, &gpu_cc_sa8775p_desc);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	clk_lucid_evo_pll_configure(&gpu_cc_pll0, regmap, &gpu_cc_pll0_config);
+> +	clk_lucid_evo_pll_configure(&gpu_cc_pll1, regmap, &gpu_cc_pll1_config);
+> +
+> +	/*
+> +	 * Keep the clocks always-ON
+> +	 * GPU_CC_CB_CLK
+> +	 */
+> +	regmap_update_bits(regmap, 0x93a4, BIT(0), BIT(0));
+You set it as CRITICAL, this should be unnecessary now.
+
+Konrad
+> +
+> +	return qcom_cc_really_probe(pdev, &gpu_cc_sa8775p_desc, regmap);
+> +}
+> +
+> +static struct platform_driver gpu_cc_sa8775p_driver = {
+> +	.probe = gpu_cc_sa8775p_probe,
+> +	.driver = {
+> +		.name = "gpu_cc-sa8775p",
+> +		.of_match_table = gpu_cc_sa8775p_match_table,
+> +	},
+> +};
+> +
+> +static int __init gpu_cc_sa8775p_init(void)
+> +{
+> +	return platform_driver_register(&gpu_cc_sa8775p_driver);
+> +}
+> +subsys_initcall(gpu_cc_sa8775p_init);
+> +
+> +static void __exit gpu_cc_sa8775p_exit(void)
+> +{
+> +	platform_driver_unregister(&gpu_cc_sa8775p_driver);
+> +}
+> +module_exit(gpu_cc_sa8775p_exit);
+> +
+> +MODULE_DESCRIPTION("SA8775P GPUCC driver");
+> +MODULE_LICENSE("GPL");
