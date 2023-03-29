@@ -2,93 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63C96CF004
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8F26CF00A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjC2Q6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S230379AbjC2RAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 13:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjC2Q6C (ORCPT
+        with ESMTP id S229495AbjC2RAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:58:02 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F3012E;
-        Wed, 29 Mar 2023 09:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=R8xyMlTF2/FzYyTh03m+l1LnTI8sQSiRhFH5N5HuEpA=; b=ijkBTfVvZXrv6nBzfJPXW8aNUp
-        qaivtLM5iW3QischbZkM2AG74yZB/cOKYygm6wv43rNgRkbbUjZQiXr5VoDVkX3cG/OjNq2XqEwaf
-        a/8u2HlEoMobRswu8VKdSnVQFTMbn20ZojCrcQMh9aQZmfbd2fZJYuEDuDpDJ31Tua+c=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1phZ7S-008mlq-78; Wed, 29 Mar 2023 18:57:54 +0200
-Date:   Wed, 29 Mar 2023 18:57:54 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: Re: [RFC PATCH net-next v3 14/15] net: dsa: mt7530: introduce driver
- for MT7988 built-in switch
-Message-ID: <8fe9c1b6-a533-4ad9-8a23-4f16547476ed@lunn.ch>
-References: <cover.1680105013.git.daniel@makrotopia.org>
- <371f0586e257d098993847e71d0c916a03c04191.1680105013.git.daniel@makrotopia.org>
+        Wed, 29 Mar 2023 13:00:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B189619B5;
+        Wed, 29 Mar 2023 10:00:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DD82B820CA;
+        Wed, 29 Mar 2023 17:00:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4DDC433EF;
+        Wed, 29 Mar 2023 16:59:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680109198;
+        bh=VdnuvhIM2cRnRHD6OIlrF1vM7Xa/zS4dOr/IjqNNj7k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WGmVkGJxklNiVx1FInWIqUPg+a4lgK5x2N65ZVa820iEqX8AIhS7d7atd8Myt23wC
+         X2Q0weysAdn2Lbmulawv6SRWEHTu7yONn0ZcgcOp0SRZAvuGDjweZcjPz2VcVse/aP
+         jSdZwBRk93rjHWyWyALcl5jVeV0FahOn/vPHKlBKTtwj0l20pXyoKcibpoI5VgSLyA
+         VNPS5MuyCqgBNAk6ydScLCI8EyYtX+zVGiP3U4/ztRdsOMB6bSo+QCZ91+LOpWuWL5
+         p8YVMnS4tdEHgrPfYrxOyaWfJVbveOrlrj4QubImSg1dOQP65Bu5IQyT3W8cZYj64h
+         X8PZMTiWVlYdg==
+Date:   Wed, 29 Mar 2023 11:59:57 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v4 10/10] PCI: tegra194: add interconnect support in
+ Tegra234
+Message-ID: <20230329165957.GA3066317@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <371f0586e257d098993847e71d0c916a03c04191.1680105013.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <8d0e4e2f-a131-ca19-e5ae-ef2349623b39@nvidia.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> @@ -18,6 +18,7 @@ enum mt753x_id {
->  	ID_MT7530 = 0,
->  	ID_MT7621 = 1,
->  	ID_MT7531 = 2,
-> +	ID_MT7988 = 3,
->  };
->  
->  #define	NUM_TRGMII_CTRL			5
-> @@ -54,11 +55,11 @@ enum mt753x_id {
->  #define  MT7531_MIRROR_PORT_SET(x)	(((x) & MIRROR_MASK) << 16)
->  #define  MT7531_CPU_PMAP_MASK		GENMASK(7, 0)
->  
-> -#define MT753X_MIRROR_REG(id)		(((id) == ID_MT7531) ? \
-> +#define MT753X_MIRROR_REG(id)		((((id) == ID_MT7531) || ((id) == ID_MT7988)) ?	\
->  					 MT7531_CFC : MT7530_MFC)
-> -#define MT753X_MIRROR_EN(id)		(((id) == ID_MT7531) ? \
-> +#define MT753X_MIRROR_EN(id)		((((id) == ID_MT7531) || ((id) == ID_MT7988)) ?	\
->  					 MT7531_MIRROR_EN : MIRROR_EN)
-> -#define MT753X_MIRROR_MASK(id)		(((id) == ID_MT7531) ? \
-> +#define MT753X_MIRROR_MASK(id)		((((id) == ID_MT7531) || ((id) == ID_MT7988)) ?	\
->  					 MT7531_MIRROR_MASK : MIRROR_MASK)
+On Wed, Mar 29, 2023 at 02:44:34PM +0530, Sumit Gupta wrote:
+> On 28/03/23 23:23, Bjorn Helgaas wrote:
+> > > +static void tegra_pcie_icc_set(struct tegra_pcie_dw *pcie)
+> > > +{
+> > > +     struct dw_pcie *pci = &pcie->pci;
+> > > +     u32 val, speed, width;
+> > > +
+> > > +     val = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA);
+> > > +
+> > > +     speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
+> > > +     width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
+> > > +
+> > > +     val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) / BITS_PER_BYTE);
+> > > +
+> > > +     if (icc_set_bw(pcie->icc_path, MBps_to_icc(val), 0))
+> > > +             dev_err(pcie->dev, "can't set bw[%u]\n", val);
+> > > +
+> > > +     clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+> > 
+> > Array bounds violation; PCI_EXP_LNKSTA_CLS is 0x000f, so possible
+> > speed (CLS) values are 0..0xf and "speed - 1" values are -1..0xe.
+> > 
+> > pcie_gen_freq[] is of size 4 (valid indices 0..3).
+> > 
+> > I see that you're just *moving* this code, but might as well fix it.
+> > 
+> Thank you for the review.
+> Will include the below change in the same patch. Please let me know if any
+> issue.
+> 
+>  -       clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+>  +       if (speed && (speed <= ARRAY_SIZE(pcie_gen_freq)))
+>  +               clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+>  +       else
+>  +               clk_set_rate(pcie->core_clk, pcie_gen_freq[0]);
 
-Are there more devices coming soon? I'm just wondering if these should
-change into static inline functions with a switch statement? The
-current code is not going to scale too much more.
+I didn't notice that speed is a u32, so -1 is not a possible value.
+Also, it's used earlier for PCIE_SPEED2MBS_ENC(), so you could do
+something like this:
 
-	Andrew
+  speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val) - 1;
+  if (speed >= ARRAY_SIZE(pcie_gen_freq))
+    speed = 0;
+
+  val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) /
+	BITS_PER_BYTE);
+  ...
+  clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
