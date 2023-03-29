@@ -2,131 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621296CEF7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B5606CEF80
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjC2Qbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S229906AbjC2Qdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbjC2Qbj (ORCPT
+        with ESMTP id S229518AbjC2Qd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:31:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7526EB3;
-        Wed, 29 Mar 2023 09:31:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 29 Mar 2023 12:33:29 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0456A4236;
+        Wed, 29 Mar 2023 09:33:20 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8897BB81E4A;
-        Wed, 29 Mar 2023 16:31:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD9EC433D2;
-        Wed, 29 Mar 2023 16:31:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680107469;
-        bh=k3b3Fe0T8t6/PcyzgMQf12MeXwh+Qk1B1rqKQei5AEE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=PykEtgb+jW+5qbJfga44DjFfiiIN58EAKI5oRPDhsiTR3aVgIN51ES4CIhhhi9Ett
-         4i96MeY1pSx9OdAAQui+kyz2vis5gSYe1wME4/Dpsqi93pMsHp66H4WIjMt4C2sLtZ
-         PBVJpYucYFfTgnX/XZlpKER0xN5Q/mhrm3/A4+SkEHfd0Wi2d5XOOx1ynZc0WOnswu
-         +e4onW0QuTND/zQI6KLiDA4qNeEM62H+oHvlOostDarDby3m8ZDupPRpIvRv2KxgQn
-         535sOW8WGQafHrzWparz2CX3pBLVdzx2YJZJ6hFNYo2jglTTwy6MjElmwVq0kIxSCF
-         7unoKNId+7O1g==
-Date:   Wed, 29 Mar 2023 11:31:07 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Xinghui Li <korantwork@gmail.com>
-Cc:     nirmal.patel@linux.intel.com, kbusch@kernel.org,
-        jonathan.derrick@linux.dev, lpieralisi@kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-Subject: Re: [PATCH v4] PCI: vmd: Add the module param to adjust MSI mode
-Message-ID: <20230329163107.GA3061927@bhelgaas>
+        by ms.lwn.net (Postfix) with ESMTPSA id 7D47537E;
+        Wed, 29 Mar 2023 16:33:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 7D47537E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1680107599; bh=vol0vvvhGjAXnQgJjKN6stpyWJ0f2d8ePSYRTCwAwYA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ihosdN4WItM866ffFQWb3ysY0HQ+4JNv0Ex277nQD7s1iwV7Ulo4JTQlIucat+l6b
+         0pyoIZazWgoW+FW8biDU68LMOFVKxo2ZXDLEbHBSmVI60VgPV+flrRP8TLZ6p8GXS8
+         KNsBbi0iQb73UAuJ9CwRJM6Vw2oZcqVl/JYbG9M5MsCQ3uuth6q20gPlPRKBazMuj6
+         PY0hEe3zL1fgFUsj2Y4WJEu9GXMXjlBTVu5tUd7Hp5/K/GnfLFwYXAEVQVTt+idKh1
+         Adh78kfNcl+tEwXwBTUnLL14XhtMv4xyQo91CLXdMsR/0OjKC04JjaUnBlpFmCTQwW
+         k/qiiTu4H5aOQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Roan van Dijk <roan@protonic.nl>
+Cc:     mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        linux-doc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Roan van Dijk <roan@protonic.nl>
+Subject: Re: [PATCH] ARM: stm32: add initial documentation for STM32MP151
+In-Reply-To: <20230329095600.1355049-1-roan@protonic.nl>
+References: <20230329095600.1355049-1-roan@protonic.nl>
+Date:   Wed, 29 Mar 2023 10:33:18 -0600
+Message-ID: <87ilejjz5d.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEm4hYW3zvte_kdWMFrv-pKVijQaL7KzbE12WHuO14s73ExUbQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 04:57:08PM +0800, Xinghui Li wrote:
-> On Wed, Mar 29, 2023 at 5:34 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > It would also be nice to include a hint about why a user would choose
-> > "on" or "off".  What is the performance effect?  What sort of I/O
-> > scenario would lead you to choose "on" vs "off"?
-> >
-> Before this patch, I sent the patch named :
-> PCI: vmd: Do not disable MSI-X remapping in VMD 28C0 controller
-> (patchwork link:
-> https://patchwork.kernel.org/project/linux-pci/patch/20221222072603.1175248-1-korantwork@gmail.com/)
-> We found the 4k rand read's iops could drop 50% if 4 NVMEs were
-> mounted in one PCIE port with VMD MSI bypass.
-> I suppose this is because the VMD Controller can aggregate interrupts.
-> But those test result is so long that I didn't add them to this patch
-> commit log.
-> If you believe it is necessary, I will try to add some simple instructions
+Roan van Dijk <roan@protonic.nl> writes:
 
-I don't think we need detailed performance numbers, but we need
-something like:
-
-  - "msi_remap=off" improves interrupt handling performance by
-    avoiding the VMD MSI-X domain interrupt handler
-
-  - But "msi_remap=on" is needed when ...?
-
-> > ee81ee84f873 ("PCI: vmd: Disable MSI-X remapping when possible")
-> > suggests that MSI-X remapping (I assume the "msi_remap=on" case):
-> >
-> >   - Limits the number MSI-X vectors available to child devices to the
-> >     number of VMD MSI-X vectors.
-> >
-> >   - Reduces interrupt handling performance because child device
-> >     interrupts have to go through the VMD MSI-X domain interrupt
-> >     handler.
-> >
-> > So I assume "msi_remap=off" would remove that MSI-X vector limit and
-> > improve interrupt handling performance?
-> >
-> > But obviously there's more to consider because those are both good
-> > things and if we could do that all the time, we would.  So there must
-> > be cases where we *have* to remap.  ee81ee84f873 suggests that not all
-> > VMD devices support disabling remap.  There's also a hint that some
-> > virt configs require it.
-> >
-> I used to just want to disable 28C0's VMD MSI bypass by default.
-> But Nirmal suggested the current method by adjusting the param.
-> Because he and other reviewers worry there are some other scenarios we
-> didn't consider.
-> Adding a method to adjust VMD'S MSI-X mode is better.
-
-This commit log doesn't outline any of those other scenarios, and it
-doesn't say anything about when "msi_remap=on" or "msi_remap=off"
-would be necessary or desired, so I have no idea how users are
-supposed to figure out whether or not to use this parameter.
-
-> > This patch doesn't enforce either of those things.  What happens if
-> > the user gets it wrong?
+> This patch adds initial documentation of STM32MP151 microprocessor (MPU)
+> based on Arm Cortex-A7.
 >
-> If I am wrong, please feel free to correct me at any time.
-> I place the "vmd_config_msi_remap_param" that is VMD MSI-X's mode
-> param configuring helper front
-> "vmd_enable_domain". So, It will not change the logic disabling
-> remapping from ee81ee84f873, such as
-> "Currently MSI remapping must be enabled in guest passthrough mode".
-> So, if the user config the wrong type, it will not work, and they can
-> find it by dmesg.
+> Signed-off-by: Roan van Dijk <roan@protonic.nl>
+> ---
+>  .../arm/stm32/stm32mp151-overview.rst         | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 Documentation/arm/stm32/stm32mp151-overview.rst
 
-That's kind of a problem.  I'm not in favor of something failing and
-the user having to debug it via dmesg.  That causes user frustration
-and problem reports.
+You will need to add this new file to .../arm/index.rst or it won't be
+pulled into the docs build (and will add a new warning).
 
-I don't know what "guest passthrough mode" is.  Can you detect that
-automatically?
+Thanks,
 
-Bjorn
+jon
