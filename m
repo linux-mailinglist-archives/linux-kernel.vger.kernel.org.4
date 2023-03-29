@@ -2,103 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BD76CD40F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 711E86CD413
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbjC2IJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
+        id S230141AbjC2IKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjC2IJS (ORCPT
+        with ESMTP id S230037AbjC2IJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:09:18 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FC9210D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:08:55 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so17796014pjt.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680077335;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mVRpG2dAr/nWYNSNRqghl5EEZFHlwrwTvwCgPASuUmU=;
-        b=fjjwB2zFeG+SwWg0X1rPzwBGeccQqbojBL/azxEx/VC8yg0Qm5Sb+t0NfVOmibaucZ
-         xCgCSTAIberX+90M1I05lsnIAWZKnB9rzQvEI+zmLP7W6dQiMeldn5j/30ESU917A/WM
-         M2GmpY7IWQv5hQ/xwVyvv5I7gclcVvyIFEgTQzrHMxoWyew0bdrXRzjjgHy4jT+Wb9xQ
-         jhWoxfiaJE+omv3VTH98A/tO9knUn3mdNKnpogad+NtkOsQmhW0NzBJWE4hOwd3sZ1G2
-         hxIXxoA+eJranOTs/dIbHJr/Ou4JCMK7MpqYQkOj3ZMsr7b/0+6HdBldsI8pWLe8CIwl
-         rgig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680077335;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mVRpG2dAr/nWYNSNRqghl5EEZFHlwrwTvwCgPASuUmU=;
-        b=Fi3bXVVQw16ysTqQf579Q7UthZ5/T5ogHCxTfTN35SazV+6GfLYRZu1Kb3K9DoSsmT
-         NXK+T/GAFijDSUkVVZc/HjQGbBlsw2Ifcz46vZvKUIFVwAkVzVoX+QHsa1nzESaWEOtJ
-         cqrxD3CuC9FhDGQv1ObSs149dltxQHu7CpyaZNrATP9rcootESS/f7yW90ASxYKN8D6g
-         1IFk0pLhzgV7Ky0z6RBKaliA52X8GExtNH39kJo7zrVXUmVoU6pNM/7wQcPf8z2CUZO3
-         IrDOJQSwMieMmJ8Z0tLcwBrPNKLDFQz7g/q+nWSEasVKq5aSWOgypMR9QM0Egtc2BqeD
-         g/mQ==
-X-Gm-Message-State: AAQBX9c/9dKztzojRW6MGOmGyx2ArN1HcQGtKG1mztKM13fDim3on+xC
-        RBz8aSsIvw0XmuzUHkFmmBoXkQ==
-X-Google-Smtp-Source: AKy350YkuPVOI4SkoYUmjVLLsU+g0OQwvsA0hoKkKc7WLUm0Sa5StE4Ydf+KVToEOuvk5LGwIcWN8g==
-X-Received: by 2002:a17:90b:3ece:b0:23f:6edd:41da with SMTP id rm14-20020a17090b3ece00b0023f6edd41damr20304030pjb.29.1680077335048;
-        Wed, 29 Mar 2023 01:08:55 -0700 (PDT)
-Received: from [10.3.144.50] ([61.213.176.11])
-        by smtp.gmail.com with ESMTPSA id b15-20020a17090ae38f00b002369e16b276sm859568pjz.32.2023.03.29.01.08.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 01:08:54 -0700 (PDT)
-Message-ID: <2a39ced1-05f1-d696-1905-4ff5199fa41b@bytedance.com>
-Date:   Wed, 29 Mar 2023 16:08:49 +0800
+        Wed, 29 Mar 2023 04:09:54 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD36468D
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680077384; x=1711613384;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=S3f9fzDNZflV0TRY5V8f5Fbs4mGwGyvypxNPmKhklCI=;
+  b=WdRT+eugJ2SljPgsOWAcz9CQp4HxTqClOcQFPm3wOxvXQeBwAMHxPN9X
+   Wz+wJKazdeKqtEef4AvpA7p3EfYfHoqMiBqu/w4xcgsAxfHvS0a0Q57YJ
+   yCwDE25/oOdCbyulZpB0RHyCEbtSA+Reu7bJDuxTjFeiO5gLCiGVvDT8G
+   iLMyJIjGNNM3M2I/niLz8meJgQMdU3O1v7fXM7lv9HxIVKEIIhbi1vUGY
+   ldXO745/qd7fVfVpficSXy2I3qkQTCBYFWiqtrdwSgIwBxj4C5w9I52IV
+   dY+8m1lIEkp0MU5qRKg+2iOMdsjTYA1cyt8r4jaOVjkFNyYO5sHxlVSQd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="324715981"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="324715981"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 01:09:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="714543464"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="714543464"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2023 01:09:42 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phQsI-000JMK-0o;
+        Wed, 29 Mar 2023 08:09:42 +0000
+Date:   Wed, 29 Mar 2023 16:09:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.03.27b] BUILD SUCCESS
+ 326232a254293c41a88dee2ad0592f413b593be4
+Message-ID: <6423f221.TZ5ox4ghMDFmm8Ws%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [External] Re: [PATCH V4 4/5] cachefiles: narrow the scope of
- triggering EPOLLIN events in ondemand mode
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xin Yin <yinxin.x@bytedance.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>, zhujia.zj@bytedance.com
-References: <20230111052515.53941-5-zhujia.zj@bytedance.com>
- <20230111052515.53941-1-zhujia.zj@bytedance.com>
- <133078.1680013145@warthog.procyon.org.uk>
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-In-Reply-To: <133078.1680013145@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.03.27b
+branch HEAD: 326232a254293c41a88dee2ad0592f413b593be4  tools/nolibc: tests: use volatile to force stack smashing
 
+elapsed time: 753m
 
-在 2023/3/28 22:19, David Howells 写道:
-> Jia Zhu <zhujia.zj@bytedance.com> wrote:
-> 
->> +		if (!xa_empty(xa)) {
->> +			xa_lock(xa);
->> +			xa_for_each_marked(xa, index, req, CACHEFILES_REQ_NEW) {
->> +				if (!cachefiles_ondemand_is_reopening_read(req)) {
->> +					mask |= EPOLLIN;
->> +					break;
->> +				}
->> +			}
->> +			xa_unlock(xa);
->> +		}
-> 
-> I wonder if there's a more efficient way to do this.  I guess it depends on
-> how many reqs you expect to get in a queue.  It might be worth taking the
-> rcu_read_lock before calling xa_lock() and holding it over the whole loop.
-> 
-Thanks for the advice, will use rcu_read_lock（unlock） to replace it.
-> David
-> 
+configs tested: 137
+configs skipped: 14
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r012-20230327   gcc  
+arc                  randconfig-r043-20230326   gcc  
+arc                  randconfig-r043-20230327   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r022-20230326   clang
+arm                  randconfig-r034-20230328   gcc  
+arm                  randconfig-r046-20230326   clang
+arm                  randconfig-r046-20230327   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r001-20230326   clang
+arm64                               defconfig   gcc  
+arm64                randconfig-r021-20230326   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r024-20230326   gcc  
+csky                 randconfig-r026-20230326   gcc  
+hexagon              randconfig-r022-20230327   clang
+hexagon              randconfig-r034-20230326   clang
+hexagon              randconfig-r035-20230328   clang
+hexagon              randconfig-r036-20230327   clang
+hexagon              randconfig-r041-20230326   clang
+hexagon              randconfig-r041-20230327   clang
+hexagon              randconfig-r045-20230326   clang
+hexagon              randconfig-r045-20230327   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230327   gcc  
+i386                          randconfig-a001   gcc  
+i386                 randconfig-a002-20230327   gcc  
+i386                          randconfig-a002   clang
+i386                 randconfig-a003-20230327   gcc  
+i386                          randconfig-a003   gcc  
+i386                 randconfig-a004-20230327   gcc  
+i386                          randconfig-a004   clang
+i386                 randconfig-a005-20230327   gcc  
+i386                          randconfig-a005   gcc  
+i386                 randconfig-a006-20230327   gcc  
+i386                          randconfig-a006   clang
+i386                 randconfig-a011-20230327   clang
+i386                 randconfig-a012-20230327   clang
+i386                 randconfig-a013-20230327   clang
+i386                 randconfig-a014-20230327   clang
+i386                 randconfig-a015-20230327   clang
+i386                 randconfig-a016-20230327   clang
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r006-20230327   gcc  
+ia64                 randconfig-r011-20230327   gcc  
+ia64                 randconfig-r015-20230327   gcc  
+ia64                 randconfig-r032-20230326   gcc  
+ia64                 randconfig-r032-20230328   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r006-20230329   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r002-20230327   gcc  
+loongarch            randconfig-r025-20230326   gcc  
+loongarch            randconfig-r035-20230326   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r006-20230326   gcc  
+m68k                 randconfig-r012-20230326   gcc  
+m68k                 randconfig-r023-20230326   gcc  
+m68k                 randconfig-r031-20230328   gcc  
+microblaze           randconfig-r031-20230327   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r034-20230327   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r001-20230327   gcc  
+openrisc             randconfig-r013-20230327   gcc  
+openrisc             randconfig-r021-20230327   gcc  
+openrisc             randconfig-r025-20230327   gcc  
+parisc       buildonly-randconfig-r001-20230327   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r001-20230326   gcc  
+parisc               randconfig-r003-20230327   gcc  
+parisc               randconfig-r013-20230326   gcc  
+parisc               randconfig-r036-20230328   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r003-20230326   gcc  
+powerpc              randconfig-r003-20230326   clang
+powerpc              randconfig-r033-20230326   clang
+powerpc              randconfig-r035-20230327   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r004-20230327   gcc  
+riscv                randconfig-r016-20230327   clang
+riscv                randconfig-r026-20230327   clang
+riscv                randconfig-r042-20230326   gcc  
+riscv                randconfig-r042-20230327   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r002-20230326   clang
+s390                 randconfig-r014-20230327   clang
+s390                 randconfig-r016-20230326   gcc  
+s390                 randconfig-r024-20230327   clang
+s390                 randconfig-r044-20230326   gcc  
+s390                 randconfig-r044-20230327   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r031-20230326   gcc  
+sparc        buildonly-randconfig-r006-20230327   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r033-20230328   gcc  
+sparc64              randconfig-r036-20230326   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r002-20230327   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230327   gcc  
+x86_64               randconfig-a002-20230327   gcc  
+x86_64               randconfig-a003-20230327   gcc  
+x86_64               randconfig-a004-20230327   gcc  
+x86_64               randconfig-a005-20230327   gcc  
+x86_64               randconfig-a006-20230327   gcc  
+x86_64               randconfig-a011-20230327   clang
+x86_64               randconfig-a012-20230327   clang
+x86_64               randconfig-a013-20230327   clang
+x86_64               randconfig-a014-20230327   clang
+x86_64               randconfig-a015-20230327   clang
+x86_64               randconfig-a016-20230327   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r033-20230327   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
