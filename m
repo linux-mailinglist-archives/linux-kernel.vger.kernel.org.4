@@ -2,134 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0416D6CCFE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 04:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB40D6CCFF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 04:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjC2CTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 22:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        id S229744AbjC2C1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 22:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjC2CTV (ORCPT
+        with ESMTP id S229451AbjC2C1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 22:19:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C693273E;
-        Tue, 28 Mar 2023 19:19:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4B4AB81F94;
-        Wed, 29 Mar 2023 02:19:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B26C433EF;
-        Wed, 29 Mar 2023 02:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680056352;
-        bh=FtQpj8iEUziXDo/mDSXE7qrZrcIgPVB/uYotZNpI5nk=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=R0S/WePl5v3awL048+lqF2jzLgWIJv68pBHoA5Lu31hd1ugG/tKGd8ucFVR2frUMw
-         1uPmbTod+B8vkN1b/7eInyZOnVMyHi6d2b+nhuz/8QQGxlyVJaT5DZZ0h0n24C3lcM
-         Q+uK43vAcSFenqhla0qjJpP5m1ezRNqaW9VDCEwXYwjGKbsejHX63GGT9oD1Cc+8iZ
-         x3M/umenURW9kvh4qsoyGC3ubIH2VJoDwfpW15r2D4AMeWpOmNZ0435dXUEllCvh+5
-         UH1Li/aL9AaxOCMVuA4X+A2N0/0PXbn4NwTAdUg9/Z08GEyWPsBH1+WlP2qxyanyGt
-         kkJ2m3VCMpCmw==
-Message-ID: <c37e1f3a40c404acd81c2c9d5b28b340.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Tue, 28 Mar 2023 22:27:03 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BC1C2728;
+        Tue, 28 Mar 2023 19:27:00 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:60248.2003268682
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 73AE21002BE;
+        Wed, 29 Mar 2023 10:26:54 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id aa981a0edace4612916c58baf46d0016 for nathan@kernel.org;
+        Wed, 29 Mar 2023 10:26:58 CST
+X-Transaction-ID: aa981a0edace4612916c58baf46d0016
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <207dfcfa-0fae-ffaa-3e2d-9dbd944a9ad2@189.cn>
+Date:   Wed, 29 Mar 2023 10:26:53 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <b7977069-4f82-76a1-10c1-b6400862c2c4@gmail.com>
-References: <20230328021912.177301-1-ychuang570808@gmail.com> <20230328021912.177301-9-ychuang570808@gmail.com> <ab4e0bc8834b7e618e9a88ea6a1c30cc.sboyd@kernel.org> <b7977069-4f82-76a1-10c1-b6400862c2c4@gmail.com>
-Subject: Re: [PATCH v6 08/12] arm64: dts: nuvoton: Add initial ma35d1 device tree
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-To:     Jacky Huang <ychuang570808@gmail.com>, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, p.zabel@pengutronix.de,
-        robh+dt@kernel.org
-Date:   Tue, 28 Mar 2023 19:19:10 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v8 2/2] drm: add kms driver for loongson display
+ controller
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Li Yi <liyi@loongson.cn>
+References: <20230320100131.1277034-3-15330273260@189.cn>
+ <202303281754.jWI20j2C-lkp@intel.com>
+ <027cf6d5-6de2-3424-7a81-a43ab689c3d4@189.cn>
+ <20230328170636.GA1986005@dev-arch.thelio-3990X>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <20230328170636.GA1986005@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Jacky Huang (2023-03-28 19:03:24)
-> On 2023/3/29 =E4=B8=8A=E5=8D=88 01:57, Stephen Boyd wrote:
-> > Quoting Jacky Huang (2023-03-27 19:19:08)
-> >> diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi b/arch/arm64/boot=
-/dts/nuvoton/ma35d1.dtsi
-> >> new file mode 100644
-> >> index 000000000000..0740b0b218a7
-> >> --- /dev/null
-> >> +++ b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
-> >> @@ -0,0 +1,231 @@
-[...]
-> >> +
-> >> +               L2_0: l2-cache0 {
-> > Just l2-cache for the node name. Doesn't it go under the cpu0 node as
-> > well?
->=20
-> This describes the level-2 cache which is external to and shared by cpu0 =
 
-> & cpu1.
-> And only level-1 cache is inside of CPU core.
-> L2_0 is must, because both cpu0 and cpu1 has a next-level-cache =3D=20
-> <&L2_0> property.
+On 2023/3/29 01:06, Nathan Chancellor wrote:
+> On Tue, Mar 28, 2023 at 11:22:50PM +0800, Sui Jingfeng wrote:
+>> HI,
+>>
+>> On 2023/3/28 17:27, kernel test robot wrote:
+>>> Hi Sui,
+>>>
+>>> Thank you for the patch! Perhaps something to improve:
+>>>
+>>> [auto build test WARNING on drm-misc/drm-misc-next]
+>>> [also build test WARNING on linus/master v6.3-rc4 next-20230328]
+>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>>> And when submitting patch, we suggest to use '--base' as documented in
+>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>>
+>>> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
+>>> base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+>>> patch link:    https://lore.kernel.org/r/20230320100131.1277034-3-15330273260%40189.cn
+>>> patch subject: [PATCH v8 2/2] drm: add kms driver for loongson display controller
+>>> config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230328/202303281754.jWI20j2C-lkp@intel.com/config)
+>>> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+>>> reproduce (this is a W=1 build):
+>>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>           chmod +x ~/bin/make.cross
+>>>           # https://github.com/intel-lab-lkp/linux/commit/80b4115f44993f4ebf47b1cb9e8f02953575b977
+>>>           git remote add linux-review https://github.com/intel-lab-lkp/linux
+>>>           git fetch --no-tags linux-review Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
+>>>           git checkout 80b4115f44993f4ebf47b1cb9e8f02953575b977
+>>>           # save the config file
+>>>           mkdir build_dir && cp config build_dir/.config
+>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/accel/ drivers/gpu/drm/loongson/ drivers/iio/light/ drivers/media/pci/intel/
+>>>
+>>> If you fix the issue, kindly add following tag where applicable
+>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>> | Link: https://lore.kernel.org/oe-kbuild-all/202303281754.jWI20j2C-lkp@intel.com/
+>>>
+>>> All warnings (new ones prefixed by >>):
+>>>
+>>>>> drivers/gpu/drm/loongson/lsdc_drv.c:232:11: warning: variable 'gpu' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+>>>              else if (descp->chip == CHIP_LS7A2000)
+>>>                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>      drivers/gpu/drm/loongson/lsdc_drv.c:235:7: note: uninitialized use occurs here
+>>>              if (!gpu) {
+>>>                   ^~~
+>>>      drivers/gpu/drm/loongson/lsdc_drv.c:232:7: note: remove the 'if' if its condition is always true
+>>>              else if (descp->chip == CHIP_LS7A2000)
+>>>                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>      drivers/gpu/drm/loongson/lsdc_drv.c:217:21: note: initialize the variable 'gpu' to silence this warning
+>>>              struct pci_dev *gpu;
+>>>                                 ^
+>>>                                  = NULL
+>>>      1 warning generated.
+>>> --
+>> In practice,  either  descp->chip == CHIP_LS7A2000 or descp->chip ==
+>> CHIP_LS7A1000 will be happened at runtime.
+>>
+>> the variable 'gpu' is guaranteed to be initialized when code run at
+>> drivers/gpu/drm/loongson/lsdc_drv.c:235
+>>
+>> This warnning is almost wrong here.
+> Clang's semantic analysis happens before optimizations, meaning it does
+> not perform interprocedural analysis, so it does not have enough
+> information at this point to tell that. Either just initialize gpu to
+> NULL and let the existing 'if (!gpu)' handle it or add a separate else
+> branch that warns about an unhandled chip value so that it is obvious
+> what needs to be done if someone forgets to update this statement when a
+> new chip is supported by this driver.
 
-Ok. The name should just be l2-cache then, not l2-cache0.
+Right,  I overlook the point you mentioned previously.
 
->=20
-> Many identical example of l2-cache node can be found in arm64 dts, such=20
-> as k3-arm642.dtsi,
-> rk3328.dtsi, mt8195.dtsi, etc. Here is just a copy of similar arm64=20
-> multi-core SoCs.
->=20
-> So we would like to keep this unchanged. Is it OK for you? Thanks.
->=20
+And I just have a new idea,  using pci_get_domain_bus_and_slot function
 
-Mostly ok, yes.
+to handle this.  the DC and the GPU have the same pci bus number and  
+domain number.
 
->=20
-> >> +
-> >> +       sys: system-management@40460000 {
-> >> +               compatible =3D "nuvoton,ma35d1-sys", "syscon", "simple=
--mfd";
-> >> +               reg =3D <0x0 0x40460000 0x0 0x200>;
-> >> +
-> >> +               reset: reset-controller {
-> >> +                       compatible =3D "nuvoton,ma35d1-reset";
-> >> +                       #reset-cells =3D <1>;
-> >> +               };
-> >> +       };
-> >> +
-> >> +       clk: clock-controller@40460200 {
-> >> +               compatible =3D "nuvoton,ma35d1-clk", "syscon";
-> >> +               reg =3D <0x00000000 0x40460200 0x0 0x100>;
-> >> +               #clock-cells =3D <1>;
-> >> +               clocks =3D <&clk_hxt>;
-> >> +               nuvoton,sys =3D <&sys>;
-> >> +       };
-> > It looks like the device at 40460000 is a reset and clock controller.
-> > Just make it one node and register the clk or reset device as an
-> > auxiliary device.
->=20
-> 40460000 is for system control registers, including power contrl,=20
-> multifunction pin control,
-> usb phy control, IP reset control, power-on setting information, and=20
-> many other miscellaneous controls.
-> The registers of reset controller is only a subset of system control=20
-> registers.
->=20
-> 40460200 is for clock controller which is independent of the system=20
-> control integration
-> The register base of clock controller is very close to system=20
-> controller, but in fact the two are independent.
+The slot number of the dc and gpu is also same(6), only the function 
+number is different.
 
-What do you use the syscon for then? The clock driver must want to use
-the syscon for something, implying that they are the same device.
+
+For ls7a1000,  what lspci -t -nnn -vvv show is:
+
+-[0000:00]-+-00.0  Loongson Technology LLC Hyper Transport Bridge 
+Controller [0014:7a00]
+
+            ...
+
+            +-06.0  Loongson Technology LLC Vivante GPU (Graphics 
+Processing Unit) [0014:7a15]
+            +-06.1  Loongson Technology LLC DC (Display Controller) 
+[0014:7a06]
+
+            ...
+
+
+For ls7a2000, what lspci -t -nnn -vvv show is:
+
+-[0000:00]-+-00.0  Loongson Technology LLC Hyper Transport Bridge 
+Controller [0014:7a00]
+            +-00.1  Loongson Technology LLC Hyper Transport Bridge 
+Controller [0014:7a10]
+            ...
+            +-06.0  Loongson Technology LLC LoongGPU Device [0014:7a25]
+            +-06.1  Loongson Technology LLC DC (Display Controller) 
+Device [0014:7a36]
+            +-06.2  Loongson Technology LLC Audio Device [0014:7a37]
+
+             ...
+
+So
+
+pdev_gpu = pci_get_domain_bus_and_slot(pci_domain_nr(pdev_dc->bus),
+                            pdev_dc->bus->number,
+                            PCI_DEVFN(6, 0));
+
+
+can help to handle all case, will this be ok?
+
+
+>>>>> drivers/gpu/drm/loongson/lsdc_pll.c:188:14: warning: variable 'diff' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+>>>                                      else if (clock_khz < computed)
+>>>                                               ^~~~~~~~~~~~~~~~~~~~
+>>>      drivers/gpu/drm/loongson/lsdc_pll.c:191:9: note: uninitialized use occurs here
+>>>                                      if (diff < min) {
+>>>                                          ^~~~
+>>>      drivers/gpu/drm/loongson/lsdc_pll.c:188:10: note: remove the 'if' if its condition is always true
+>>>                                      else if (clock_khz < computed)
+>>>                                           ^~~~~~~~~~~~~~~~~~~~~~~~~
+>>>      drivers/gpu/drm/loongson/lsdc_pll.c:177:22: note: initialize the variable 'diff' to silence this warning
+>>>                                      unsigned int diff;
+>>>                                                       ^
+>>>                                                        = 0
+>>>      1 warning generated.
+>> Here the robot is also wrong here in practice,
+>>
+>> because either  if (clock_khz >= computed) or else if (clock_khz < computed)
+>> will be happen.
+>>
+>> 'diff' variable is guaranteed to be initialized.
+> Make that clearer by turning 'else if (clock_khz < computed)' into just
+> 'else' as the warning suggests? I do not see why the condition is
+> specified at all if it is just an 'else' in practice.
+
+Yes, you are right.
+
+The test robot do find something,  i will fix this at next version.
+
+> Cheers,
+> Nathan
+>
+>>> vim +232 drivers/gpu/drm/loongson/lsdc_drv.c
+>>>
+>>>      212	
+>>>      213	static int lsdc_get_dedicated_vram(struct lsdc_device *ldev,
+>>>      214					   const struct lsdc_desc *descp)
+>>>      215	{
+>>>      216		struct drm_device *ddev = &ldev->base;
+>>>      217		struct pci_dev *gpu;
+>>>      218		resource_size_t base, size;
+>>>      219	
+>>>      220		/*
+>>>      221		 * The GPU and display controller in LS7A1000/LS7A2000 are separated
+>>>      222		 * PCIE devices, they are two devices not one. The DC does not has a
+>>>      223		 * dedicate VRAM bar, because the BIOS engineer choose to assign the
+>>>      224		 * VRAM to the GPU device. Sadly, after years application, this form
+>>>      225		 * as a convention for loongson integrated graphics. Bar 2 of the GPU
+>>>      226		 * device contain the base address and size of the VRAM, both the GPU
+>>>      227		 * and the DC can access the on-board VRAM as long as the DMA address
+>>>      228		 * emitted fall in [base, base + size).
+>>>      229		 */
+>>>      230		if (descp->chip == CHIP_LS7A1000)
+>>>      231			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A15, NULL);
+>>>    > 232		else if (descp->chip == CHIP_LS7A2000)
+>>>      233			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A25, NULL);
+>>>      234	
+>>>      235		if (!gpu) {
+>>>      236			drm_warn(ddev, "No GPU device found\n");
+>>>      237			return -ENODEV;
+>>>      238		}
+>>>      239	
+>>>      240		base = pci_resource_start(gpu, 2);
+>>>      241		size = pci_resource_len(gpu, 2);
+>>>      242	
+>>>      243		ldev->vram_base = base;
+>>>      244		ldev->vram_size = size;
+>>>      245	
+>>>      246		drm_info(ddev, "dedicated vram start: 0x%llx, size: %uMB\n",
+>>>      247			 (u64)base, (u32)(size >> 20));
+>>>      248	
+>>>      249		return 0;
+>>>      250	}
+>>>      251	
+>>>
