@@ -2,145 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C196CD71E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA9F6CD723
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjC2J66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S231422AbjC2J7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjC2J65 (ORCPT
+        with ESMTP id S231447AbjC2J7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:58:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530AB19A;
-        Wed, 29 Mar 2023 02:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680083936; x=1711619936;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L329AyF3OgVN9WsY0kOL7oj+CaQXmNshjdDst3A4NC8=;
-  b=LPiiCvEDsDa7Ajl75aAYPrUy51vTISx0HxCwD2fI3hY3eAVmlU4tlP1F
-   IkGHrVUCzKmt1veMHLlgTc2U9Bqnn6FNAchYSNfsLBiXOrdgyQ1nvkcvT
-   b54bOhHz0jJFvvEbB3plSI0BVW8kf4SaiUuMbpYdEYsPyNs/fOccTY8hh
-   kYOLa/M+Sls/8CM79iDeVZwo1op2pbCOqJfGayCgmSX1MerbPCw8r4pM+
-   gR0fweeZ08idY+anbGOXcGZWQloRjeBKWK2ez/JfqT64+Zx4BEMLN2Dl+
-   mouxUJxRbqDSlbEDJ3T5boY2q6sbBR5rxXbR2qm7bhEsjTkevtEkfvsvF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="339557871"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="339557871"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 02:58:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="634415819"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="634415819"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 29 Mar 2023 02:58:51 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1phSZp-000JQ8-0v;
-        Wed, 29 Mar 2023 09:58:45 +0000
-Date:   Wed, 29 Mar 2023 17:58:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zi Yan <zi.yan@sent.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        linux-mm@kvack.org
-Cc:     oe-kbuild-all@lists.linux.dev, Zi Yan <ziy@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 4/7] mm: page_owner: add support for splitting to any
- order in split page_owner.
-Message-ID: <202303291732.7OqWI96E-lkp@intel.com>
-References: <20230329011712.3242298-5-zi.yan@sent.com>
+        Wed, 29 Mar 2023 05:59:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7072944B0;
+        Wed, 29 Mar 2023 02:59:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1B6061C35;
+        Wed, 29 Mar 2023 09:59:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C2FC433D2;
+        Wed, 29 Mar 2023 09:59:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680083946;
+        bh=7+VWB/mt5T/tZPFNs9VwH0Sj1WLPTU8VpwCh7VUS9+s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZDsSU0uQ7wWbhvhOB0X1F9jR5vO6BaiOcCwYT122JKgTHOWTaOytd3z6o/jjsR23Z
+         sf0QQ+4HBOxYPj0stA0mbVfStIcWiH3KBf3Xz3+MOfWU8tgPMlxLUn1QepAFYMpjCy
+         qs3pHYeRg/ZY34KtpqOYWWw4yZqLHRQMEDkeXnG4=
+Date:   Wed, 29 Mar 2023 11:59:03 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Vaibhaav Ram T.L" <vaibhaavram.tl@microchip.com>
+Cc:     arnd@arndb.de, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kumaravel.thiagarajan@microchip.com,
+        tharunkumar.pasumarthi@microchip.com, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v8 char-misc-next 1/5] misc: microchip: pci1xxxx: Fix
+ error handling path in probe function
+Message-ID: <ZCQL55ST2ed3HL5Q@kroah.com>
+References: <20230328144008.4113-1-vaibhaavram.tl@microchip.com>
+ <20230328144008.4113-2-vaibhaavram.tl@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230329011712.3242298-5-zi.yan@sent.com>
+In-Reply-To: <20230328144008.4113-2-vaibhaavram.tl@microchip.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zi,
+On Tue, Mar 28, 2023 at 08:10:04PM +0530, Vaibhaav Ram T.L wrote:
+> From: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+> 
+> Removed unnecessary header files.
 
-Thank you for the patch! Yet something to improve:
+That's not a "fix", it is a cleanup.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.3-rc4 next-20230329]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Fix error handling path in probe function.
+> Add pci_free_irq_vectors and auxiliary_device_delete in 
+> error handling path.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zi-Yan/mm-memcg-use-order-instead-of-nr-in-split_page_memcg/20230329-091809
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230329011712.3242298-5-zi.yan%40sent.com
-patch subject: [PATCH v2 4/7] mm: page_owner: add support for splitting to any order in split page_owner.
-config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20230329/202303291732.7OqWI96E-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/6d1831c0e01a1a742e026454fe6e5643e08c5985
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zi-Yan/mm-memcg-use-order-instead-of-nr-in-split_page_memcg/20230329-091809
-        git checkout 6d1831c0e01a1a742e026454fe6e5643e08c5985
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+All of these should be individual patches, right?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303291732.7OqWI96E-lkp@intel.com/
+And you have trailing whitespace here :(
 
-All errors (new ones prefixed by >>):
+> 
+> Fixes: 393fc2f5948f ("misc: microchip: pci1xxxx: load auxiliary bus driver for the PIO function in the multi-function endpoint of pci1xxxx device.")
 
-   mm/page_owner.c: In function '__split_page_owner':
->> mm/page_owner.c:226:28: error: implicit declaration of function 'lookup_page_ext' [-Werror=implicit-function-declaration]
-     226 |                 page_ext = lookup_page_ext(page + i);
-         |                            ^~~~~~~~~~~~~~~
-   mm/page_owner.c:226:26: warning: assignment to 'struct page_ext *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     226 |                 page_ext = lookup_page_ext(page + i);
-         |                          ^
-   cc1: some warnings being treated as errors
+Is this really a fix of that commit?  What was wrong there, just the
+error handling?
 
+> Reported by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
 
-vim +/lookup_page_ext +226 mm/page_owner.c
+No blank line there please.
 
-   213	
-   214	void __split_page_owner(struct page *page, int old_order, int new_order)
-   215	{
-   216		int i;
-   217		struct page_ext *page_ext = page_ext_get(page);
-   218		struct page_owner *page_owner;
-   219		unsigned int old_nr = 1 << old_order;
-   220		unsigned int new_nr = 1 << new_order;
-   221	
-   222		if (unlikely(!page_ext))
-   223			return;
-   224	
-   225		for (i = 0; i < old_nr; i += new_nr) {
- > 226			page_ext = lookup_page_ext(page + i);
-   227			page_owner = get_page_owner(page_ext);
-   228			page_owner->order = new_order;
-   229		}
-   230		page_ext_put(page_ext);
-   231	}
-   232	
+> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+> Signed-off-by: Vaibhaav Ram T.L <vaibhaavram.tl@microchip.com>
+> ---
+>  drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c | 104 +++++++++---------
+>  1 file changed, 55 insertions(+), 49 deletions(-)
+> 
+> diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
+> index 32af2b14ff34..64302fdfbefc 100644
+> --- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
+> +++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
+> @@ -1,16 +1,15 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -// Copyright (C) 2022 Microchip Technology Inc.
+> +// Copyright (C) 2022-2023 Microchip Technology Inc.
+>  
+> -#include <linux/mfd/core.h>
+> +#include <linux/interrupt.h>
+>  #include <linux/module.h>
+>  #include <linux/pci.h>
+> -#include <linux/spinlock.h>
+> -#include <linux/gpio/driver.h>
+> -#include <linux/interrupt.h>
+> -#include <linux/io.h>
+>  #include <linux/idr.h>
+> +#include <linux/io.h>
+>  #include "mchp_pci1xxxx_gp.h"
+>  
+> +#define PCI_DRIVER_NAME			"PCI1xxxxGP"
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+This is not a "fix" but rather a new change.
+
+All of the changes in here are not related, break this up into "one
+logical change per patch" please.
+
+thanks,
+
+greg k-h
