@@ -2,153 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0D66CD4C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF856CD4B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjC2IhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S231211AbjC2Iet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjC2IhH (ORCPT
+        with ESMTP id S230334AbjC2Ier (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:37:07 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8724494
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:37:03 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 419BC5FD06;
-        Wed, 29 Mar 2023 11:37:01 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1680079021;
-        bh=mKsNAk5/DGfisdq4xh+Klk//35W39m5NPIJzVVuCimY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=RDDBiiKhVJfhYOypMlNNyTitm6+/iUKEn/jGOKyRarwEHZEC2iJjfS8Ah5aiDeD49
-         lJ7ILFyRr4jr2l6oOTUHNXqzrOYs/qeTP9tcgzrxpZtrodfSYyEdmCvsqV7tLz8vaE
-         /KKChUqBwHMvRf5uCrukudvSHhST/DV8evYD7eyfuwbMYsPPupBWjDKmyEwA+ne8xN
-         H5c/HXVsNpyY/j6hjaiws1JNlMsjldtStD06yIiI3/e5LaJArqqPA3bX1xD+hRbrkz
-         e8fL/uQnpu4XoZuu8STC9xGpznXXaBobHIUS/FuLfTNX9EMZl+JixrY1bVCS9XxE5k
-         1pjssiu+j2MHw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 29 Mar 2023 11:37:00 +0300 (MSK)
-Message-ID: <c110bd0f-f25a-a74a-07cb-4c3fdb8ef306@sberdevices.ru>
-Date:   Wed, 29 Mar 2023 11:33:38 +0300
+        Wed, 29 Mar 2023 04:34:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2A910E5;
+        Wed, 29 Mar 2023 01:34:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5502A61B7F;
+        Wed, 29 Mar 2023 08:34:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA8E4C433EF;
+        Wed, 29 Mar 2023 08:34:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680078881;
+        bh=+anbd3/A6zrR8paeDyAzGqJwmuQ3rhLDHCRUEX9PUJM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jA+/s/Wwl0pw6hugM7xg3sS1u/tw8fGDVbP6qPa2+FyXJHSNAhFWz8CVJifaBNwcg
+         KDoDt5KE9bBcLFTNEf7E2oBgIpSCq99mu5Vlm5mZcLMfxjcR4nS735KITFRXagFgEO
+         ATVShgyWiSvMv94AOA/0U0X5llkcw72dppBwW9Y/ZrHMbMhIhmQM2X5bXcs9kiypto
+         bJVGk00UAMID0FDQOADfRoVkw/ESSMcQUNtjtzBbm2BSfrxNRnTE9bh5EmtER34pt1
+         UUHgR8L2mdBrNFOrtWZm5OgHKmAAwArWutc0AK2q1BrH65czlHWvRgsr5D3ax5I//M
+         Rgy8yK5lxyI9A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1phRGi-00065x-NH; Wed, 29 Mar 2023 10:34:56 +0200
+Date:   Wed, 29 Mar 2023 10:34:56 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/5] arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
+Message-ID: <ZCP4MHe+9M24S4nJ@hovoldconsulting.com>
+References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
+ <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
+ <ZCKrXZn7Eu/jvdpG@hovoldconsulting.com>
+ <20230328093853.GA5695@thinkpad>
+ <20230329052600.GA5575@thinkpad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] mtd: rawnand: meson: fix bitmask for length in command
- word
-Content-Language: en-US
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>
-CC:     <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
-        <oxffffaa@gmail.com>
-References: <3794ffbf-dfea-e96f-1f97-fe235b005e19@sberdevices.ru>
- <447abc1b-b4a3-5848-c99a-ecbff11486fe@linaro.org>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <447abc1b-b4a3-5848-c99a-ecbff11486fe@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/29 04:10:00 #21025776
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329052600.GA5575@thinkpad>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 29, 2023 at 10:56:00AM +0530, Manivannan Sadhasivam wrote:
+> On Tue, Mar 28, 2023 at 03:09:03PM +0530, Manivannan Sadhasivam wrote:
+> > On Tue, Mar 28, 2023 at 10:54:53AM +0200, Johan Hovold wrote:
+> > > On Sat, Mar 25, 2023 at 10:22:13PM +0530, Manivannan Sadhasivam wrote:
+> > > > Add missing quirks for the USB DWC3 IP.
+> > > 
+> > > This is not an acceptable commit message generally and certainly not for
+> > > something that you have tagged for stable.
+> > > 
+> > > At a minimum, you need to describe why these are needed and what the
+> > > impact is.
+> > > 
+> > 
+> > I can certainly improve the commit message. But usually the quirks are copied
+> > from the downstream devicetree where qualcomm engineers would've added them
+> > based on the platform requirements.
+> > 
+> > > Also, why are you sending as part of a series purporting to enable
+> > > runtime PM when it appears to be all about optimising specific gadget
+> > > applications?
+> > > 
+> > 
+> > It's not related to this series I agree but just wanted to group it with a
+> > series touching usb so that it won't get lost.
+> > 
+> > I could respin it separately though in v2.
 
+That's also generally best for USB patches as Greg expects series to be
+merged through a single tree.
 
-On 29.03.2023 11:09, Tudor Ambarus wrote:
+> > > Did you confirm that the below makes any sense or has this just been
+> > > copied verbatim from the vendor devicetree (it looks like that)?
+> > > 
+> > 
+> > As you've mentioned, most of the quirks are for gadget mode which is not
+> > supported by the upstream supported boards. So I haven't really tested them but
+> > for I assumed that Qcom engineers did.
+> > 
+> > > The fact that almost none of the qcom SoCs sets these also indicates
+> > > that something is not right here.
+> > > 
+> > > > Cc: stable@vger.kernel.org # 5.20
+> > > > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > > ---
+> > > >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
+> > > >  1 file changed, 14 insertions(+)
+> > > > 
+> > > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > index 0d02599d8867..266a94c712aa 100644
+> > > > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > @@ -3040,6 +3040,13 @@ usb_0_dwc3: usb@a600000 {
+> > > >  				iommus = <&apps_smmu 0x820 0x0>;
+> > > >  				phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
+> > > >  				phy-names = "usb2-phy", "usb3-phy";
+> > > > +				snps,hird-threshold = /bits/ 8 <0x0>;
+> > > > +				snps,usb2-gadget-lpm-disable;
+> > > 
+> > > Here you are disabling LPM for gadget mode, which makes most of the
+> > > other properties entirely pointless.
 > 
+> Checked with Qcom on these quirks. So this one is just disabling lpm for USB2
+> and rest of the quirks below are for SS/SSP modes.
+
+No, snps,hird-threshold is for USB2 LPM and so is
+snps,is-utmi-l1-suspend and snps,has-lpm-erratum as you'll see if you
+look at the implementation.
+
+> > > > +				snps,is-utmi-l1-suspend;
+> > > > +				snps,dis-u1-entry-quirk;
+> > > > +				snps,dis-u2-entry-quirk;
+> > > 
+> > > These appear to be used to optimise certain gadget application and
+> > > likely not something that should be set in a dtsi.
+> > > 
+> > 
+> > I will cross check these with Qcom and respin accordingly.
+> > 
 > 
-> On 3/29/23 08:47, Arseniy Krasnov wrote:
->> Valid mask is 0x3FFF, without this patch the following problems were
->> found:
->>
->> 1) [    0.938914] Could not find a valid ONFI parameter page, trying
->>                   bit-wise majority to recover it
->>    [    0.947384] ONFI parameter recovery failed, aborting
->>
->> 2) Read with disabled ECC mode was broken.
->>
->> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
->> Cc: <Stable@vger.kernel.org>
->> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->> ---
->>  drivers/mtd/nand/raw/meson_nand.c | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->> index a28574c00900..074e14225c06 100644
->> --- a/drivers/mtd/nand/raw/meson_nand.c
->> +++ b/drivers/mtd/nand/raw/meson_nand.c
->> @@ -280,7 +280,7 @@ static void meson_nfc_cmd_access(struct nand_chip *nand, int raw, bool dir,
->>  
->>  	if (raw) {
->>  		len = mtd->writesize + mtd->oobsize;
->> -		cmd = (len & GENMASK(5, 0)) | scrambler | DMA_DIR(dir);
->> +		cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
+> These quirks are needed as per the DWC IP integration with this SoC it seems.
+> But I got the point that these don't add any values for host only
+> configurations. At the same time, these quirks still hold true for the SoC even
+> if not exercised.
 > 
-> What happens when len > GENMASK(13, 0)? Do you check this somewhere?
+> So I think we should keep these in the dtsi itself.
 
-'len' will be trimmed. I'm not sure that this case is possible here, because GENMASK(13, 0)
-is hardware limit for this NAND controller, so 'writesize' and 'oobsize' will be initialized
-to fit this value. Moreover GENMASK(13, 0) is 16Kb - i think it is big enough for single
-read. Also i'm not sure that it is good approach to check 'len' here - we are in the middle
-of NAND read processing.
+Please take a closer look at the quirks you're enabling first. Commit
+729dcffd1ed3 ("usb: dwc3: gadget: Add support for disabling U1 and U2
+entries") which added 
 
-> 
-> Please introduce a macro/field for GENMASK(13, 0), having such mask
-> scattered along the code looks hackish and doesn't help readability.
-> You'll get to use FIELD_PREP as well.
+> > > > +				snps,dis-u1-entry-quirk;
+> > > > +				snps,dis-u2-entry-quirk;
 
-Ack, i'll do it in v3
+explicitly mentions
 
-Thanks, Arseniy
+	Gadget applications may have a requirement to disable the U1 and U2
+	entry based on the usecase.
 
-> 
->>  		writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>  		return;
->>  	}
->> @@ -544,7 +544,7 @@ static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
->>  	if (ret)
->>  		goto out;
->>  
->> -	cmd = NFC_CMD_N2M | (len & GENMASK(5, 0));
->> +	cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
->>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>  
->>  	meson_nfc_drain_cmd(nfc);
->> @@ -568,7 +568,7 @@ static int meson_nfc_write_buf(struct nand_chip *nand, u8 *buf, int len)
->>  	if (ret)
->>  		return ret;
->>  
->> -	cmd = NFC_CMD_M2N | (len & GENMASK(5, 0));
->> +	cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
->>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>  
->>  	meson_nfc_drain_cmd(nfc);
+which sounds like something that needs to be done in a per board dts at
+least.
+
+Perhaps keeping all of these in in the dtsi is correct, but that's going
+to need some more motivation than simply that some vendor does so (as
+they often do all sorts of things they should not).
+
+Johan
