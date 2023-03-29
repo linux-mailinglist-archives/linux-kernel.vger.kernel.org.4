@@ -2,139 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297AC6CD896
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A8A6CD89A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjC2Lhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S229894AbjC2Lim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjC2Lhn (ORCPT
+        with ESMTP id S229459AbjC2Lik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:37:43 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104194233
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:37:41 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id h9so15738351ljq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680089859;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/mPqUZsIheYp4PXF7QUo518QtsktPDNZj6+NdEGhwtc=;
-        b=NpB3I/3t6Lr2Ro2+EJkY6MoU+efyaKtpbJK9meLzt/PnkQ9vfc9GKCjdALUV2XM7tv
-         tBuhn04cg21GiS2DFH5U8oHTeO8uOGuXWiuqRf3OzFUrQoSUeZ06DcuQ+QlL2y4U+gl3
-         uOkXiLElUVfUv+FaFVKv7u/HJDLd7NlNz9PXqLSxs5cQq+Kzel/ytYNTzzDGfXD7+C1i
-         0s5vXwB8fS8D9pp80biD7hzYYp9Jx/CcXaIkTHu2k8l824Laa1blGq2f/Dw7X2jRgwA7
-         NwUfxVEEdJGnFvzA+Ho0dj78IjBb8xQQ3fYA8PHTsbd86od6K8oJtZkk0jlMzQJcVcHa
-         GXiA==
+        Wed, 29 Mar 2023 07:38:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C1F4239
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680089871;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q1A1p8PCdF0q1S8wRRCFgu+yVSOSopNJf06rkPHM6d8=;
+        b=LXtGF7Ja/tGZccMGNtleD65j/M+nSl2YlHrbXhRxisBwdI8SZ9oJAKMAXqb1qonODm+Ooa
+        wHKGKM3+Qpe6k73ncFmyhop+ArdKSAT0lgHcD0I8x+UHofDHH0jAoX2AR+YDiTqAcpV4+N
+        7hS4mfoqJr8SKWYVAq6XDoybeWszI/w=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-663-GdzyEXDQPN6bx4z1tkrJCQ-1; Wed, 29 Mar 2023 07:37:50 -0400
+X-MC-Unique: GdzyEXDQPN6bx4z1tkrJCQ-1
+Received: by mail-lf1-f72.google.com with SMTP id o17-20020a198c11000000b004e8706b0c72so6043632lfd.21
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:37:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680089859;
+        d=1e100.net; s=20210112; t=1680089867;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/mPqUZsIheYp4PXF7QUo518QtsktPDNZj6+NdEGhwtc=;
-        b=oyVkaFZAzBHP6fX/f2QB7CS50cxD9QaG6a8S4La/DNnKbqz2ZssFf1PgbuXUa2gmhR
-         4eEwTJHBRaBEAJmOImz0U011osS/iROma0ID05lwPREOsEGQ7Gp+/F3QR+8jV4aAsGcV
-         b9n9R9/kWaLEAKYJFHcx63WpqUxGXo05KYDIF2HHHPTijl372cSFq3513QYUct5uR8ZA
-         /XQ/+dyuRn6sWmFtUpeB8Fc0FMRgZFGJcAUIxR8i/+JSqUC0PxTC/86dAMZ3Qv0t9f3O
-         VEqqVhWB63Fk/qOi3iJdYV1NzYpiwMUO4NiJgw/d18J9yAEQzX3VA+ZDmjoxxJSLGQn3
-         4W3A==
-X-Gm-Message-State: AAQBX9cpWX0oyZqywt+Iz/g7IjNKfnHTZGgFPHfmTAkMf683kDLB7K8W
-        o8Z4oITTQWveZ8iZqw6aipMY/A==
-X-Google-Smtp-Source: AKy350Y9MsLYN1pnTgHTW80ELhfO9f2kj3EVc9bx5pgZ5cHDPeoOaEuf4c+eqX8TZxSTOejxy/xHDw==
-X-Received: by 2002:a2e:a174:0:b0:299:aa88:8dd8 with SMTP id u20-20020a2ea174000000b00299aa888dd8mr6285200ljl.50.1680089859145;
-        Wed, 29 Mar 2023 04:37:39 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a18-20020a05651c011200b002a483f01d9csm1902273ljb.85.2023.03.29.04.37.37
+        bh=q1A1p8PCdF0q1S8wRRCFgu+yVSOSopNJf06rkPHM6d8=;
+        b=MHoCGSYP0b1tOFmEbyA5ZohXTS2dpmXoipYsL3Lfz954GM8fUsG4k3GUyVF/HYWCdO
+         ndyFNruZBYP+9lMDo2UR+pIU10kYlSwWvk81IZCnpcI5pZMVBcnbbATopvJelqOhgHIr
+         Bdyicfvok4JgobEesc/EbqZ7QaBTRFTflAtMmB8Wd+Q6qztG5kNJgFvOQsRA9AJQJvsU
+         AUNjGuc7JG63tSv19xgnjctLr6QNFBfaEeBTTEafw8bTAD6heNu1v2zcxieh4NW5AUL8
+         Dy8Ikyvhc3MARMeVZ1uCXzq5/CzJP1mwE42w9EBQNmeyUQX5LPkWGM6P0WNLS+T3udD1
+         xwAw==
+X-Gm-Message-State: AAQBX9d8zBUAXDRd00Fw1qHjW9xdAGCK5P/MmzYf46hgYU665Z85zI6e
+        s94uEj5bx72weyX3SSMzEyloAK8DxYp3MPcm+62pZgE/+u+jUnd6pC2WLetSV121Tym8AayNfxe
+        MhD2Eqard9y09hf8R10kCzf/S
+X-Received: by 2002:a19:3810:0:b0:4ea:e695:27 with SMTP id f16-20020a193810000000b004eae6950027mr612606lfa.7.1680089867449;
+        Wed, 29 Mar 2023 04:37:47 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ao9A0bPqAIizKm1+PsgJy0XO+zVMtGXFfqBP1DmwNjqT3QMrBYyUFws0auCPR5nVy52BUk1w==
+X-Received: by 2002:a19:3810:0:b0:4ea:e695:27 with SMTP id f16-20020a193810000000b004eae6950027mr612601lfa.7.1680089867092;
+        Wed, 29 Mar 2023 04:37:47 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id n6-20020a2e7206000000b00295a96a0f6csm5275487ljc.102.2023.03.29.04.37.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 04:37:38 -0700 (PDT)
-Message-ID: <f62c07d4-cda8-9873-8890-3411cd2f3b03@linaro.org>
-Date:   Wed, 29 Mar 2023 13:37:36 +0200
+        Wed, 29 Mar 2023 04:37:46 -0700 (PDT)
+Message-ID: <fd175fb1-0990-fc7a-8697-45dc0d3e6199@redhat.com>
+Date:   Wed, 29 Mar 2023 13:37:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
-Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
- <20230328112210.23089-2-zhuyinbo@loongson.cn>
- <168000761529.3001360.2224316097077012976.robh@kernel.org>
- <8336d5ba-1150-81ca-bd5a-7862bd10ef58@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8336d5ba-1150-81ca-bd5a-7862bd10ef58@loongson.cn>
+ Thunderbird/102.7.1
+Subject: Re: [regression] Bug 217252 - warning: v4l_enum_fmt+0x125a/0x1c20 -
+ Unknown pixelformat 0x00000000
+Content-Language: en-US, nl
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <dc8e5276-ef88-648f-9f0d-10151ea62c90@leemhuis.info>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <dc8e5276-ef88-648f-9f0d-10151ea62c90@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2023 12:39, zhuyinbo wrote:
+Hi,
+
+On 3/29/23 13:25, Linux regression tracking (Thorsten Leemhuis) wrote:
+> Hi, Thorsten here, the Linux kernel's regression tracker.
+> 
+> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> kernel developers don't keep an eye on it, I decided to forward it by mail.
+> 
+> Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
+> not CCed them to mails like this.
+> 
+> Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217252 :
+
+This is fixed by this (pending) patch:
+
+https://lore.kernel.org/linux-media/20230327091051.404184-1-hpa@redhat.com/
+
+Regards,
+
+Hans
+
+
+
+
+> 
+>>  sander44 2023-03-27 12:50:47 UTC
+>>
+>> Hi Kernel Team,
+>>
+>> I try today to rebuild kernel 6.1.21, but i notice error with: v4l2-core.
+>>
+>> [    3.722510] loop17: detected capacity change from 0 to 8
+>> [    3.920014] ------------[ cut here ]------------
+>> [    3.920016] Unknown pixelformat 0x00000000
+>> [    3.920024] WARNING: CPU: 2 PID: 1558 at drivers/media/v4l2-core/v4l2-ioctl.c:1503 v4l_enum_fmt+0x125a/0x1c20
+>> [    3.920030] Modules linked in: [...]
+>> [    3.920097] CPU: 2 PID: 1558 Comm: pipewire Tainted: G     U             6.1.21-1-lowlatency #2
+>> [    3.920099] Hardware name: Intel(R) Client Systems NUC12WSKi7/NUC12WSBi7, BIOS WSADL357.0073.2022.0302.1157 03/02/2022
+>> [    3.920100] RIP: 0010:v4l_enum_fmt+0x125a/0x1c20
+>> [    3.920102] Code: 48 c7 c3 53 29 ca 83 81 fe 64 76 73 64 0f 84 d7 ef ff ff 41 80 7d 0c 00 0f 85 9e ee ff ff 48 c7 c7 5a 37 ca 83 e8 36 9c 48 ff <0f> 0b 48 c7 c2 76 37 ca 83 49 8d 4d 2c 49 8d 7d 0c be 20 00 00 00
+>> [    3.920103] RSP: 0018:ffffa60086907bd8 EFLAGS: 00010246
+>> [    3.920104] RAX: 0000000000000000 RBX: ffffffff83ca33fb RCX: 0000000000000000
+>> [    3.920105] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+>> [    3.920106] RBP: ffffa60086907c08 R08: 0000000000000000 R09: 0000000000000000
+>> [    3.920106] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+>> [    3.920107] R13: ffffa60086907d00 R14: 0000000000000000 R15: ffff98efc87d0018
+>> [    3.920107] FS:  00007f7f99022740(0000) GS:ffff98f347680000(0000) knlGS:0000000000000000
+>> [    3.920108] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> [    3.920109] CR2: 00007ffc3f1c3ff8 CR3: 0000000121ab8006 CR4: 0000000000770ee0
+>> [    3.920110] PKRU: 55555554
+>> [    3.920110] Call Trace:
+>> [    3.920111]  <TASK>
+>> [    3.920114]  __video_do_ioctl+0x1e7/0x590
+>> [    3.920116]  ? __video_do_ioctl+0x1e7/0x590
+>> [    3.920118]  video_usercopy+0x25d/0x820
+>> [    3.920119]  ? v4l_print_control+0x30/0x30
+>> [    3.920121]  video_ioctl2+0x15/0x30
+>> [    3.920122]  v4l2_ioctl+0x69/0xb0
+>> [    3.920124]  __x64_sys_ioctl+0x9f/0xe0
+>> [    3.920126]  do_syscall_64+0x58/0x90
+>> [    3.920128]  ? video_ioctl2+0x15/0x30
+>> [    3.920129]  ? v4l2_ioctl+0x69/0xb0
+>> [    3.920131]  ? exit_to_user_mode_prepare+0x39/0x190
+>> [    3.920133]  ? syscall_exit_to_user_mode+0x29/0x50
+>> [    3.920135]  ? do_syscall_64+0x67/0x90
+>> [    3.920136]  ? syscall_exit_to_user_mode+0x29/0x50
+>> [    3.920137]  ? do_syscall_64+0x67/0x90
+>> [    3.920138]  ? do_syscall_64+0x67/0x90
+>> [    3.920139]  ? do_syscall_64+0x67/0x90
+>> [    3.920140]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> [    3.920142] RIP: 0033:0x7f7f98d1aaff
+>> [    3.920143] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <41> 89 c0 3d 00 f0 ff ff 77 1f 48 8b 44 24 18 64 48 2b 04 25 28 00
+>> [    3.920144] RSP: 002b:00007ffe6fcb2810 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> [    3.920145] RAX: ffffffffffffffda RBX: 0000000000000023 RCX: 00007f7f98d1aaff
+>> [    3.920146] RDX: 000055f9945f309c RSI: ffffffffc0405602 RDI: 0000000000000023
+>> [    3.920147] RBP: 000055f9945f309c R08: 0000000000000000 R09: 0000000000000001
+>> [    3.920147] R10: 0000000000000002 R11: 0000000000000246 R12: 00000000ffffffff
+>> [    3.920148] R13: 0000000000000000 R14: 000000004000015c R15: 000055f9945f2ec8
+>> [    3.920149]  </TASK>
+>> [    3.920150] ---[ end trace 0000000000000000 ]---
+>>
+>> [...]
+> 
+> See the ticket for more details.
+> 
+> Note, to my untrained eyes this looked like something that is caused by
+> the driver, which afaics is uvcvideo. Hope that wasn't a mistake.
 > 
 > 
-> 在 2023/3/28 下午8:57, Rob Herring 写道:
->>
->> On Tue, 28 Mar 2023 19:22:09 +0800, Yinbo Zhu wrote:
->>> Add the Loongson platform spi binding with DT schema format using
->>> json-schema.
->>>
->>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>> ---
->>>   .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
->>>   MAINTAINERS                                   |  6 +++
->>>   2 files changed, 49 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>
->> yamllint warnings/errors:
->>
->> dtschema/dtc warnings/errors:
->> Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
->> FATAL ERROR: Unable to parse input tree
->> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
->> make[1]: *** Waiting for unfinished jobs....
->> make: *** [Makefile:1512: dt_binding_check] Error 2
->>
->> doc reference errors (make refcheckdocs):
->>
->> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230328112210.23089-2-zhuyinbo@loongson.cn
->>
->> The base for the series is generally the latest rc1. A different dependency
->> should be noted in *this* patch.
-> Hi Rob,
+> [TLDR for the rest of this mail: I'm adding this report to the list of
+> tracked Linux kernel regressions; the text you find below is based on a
+> few templates paragraphs you might have encountered already in similar
+> form.]
 > 
-> I'm sorry, actually, I don't know what the specific operation I should 
-> do when I received the check warning
-> from your bot. Does it means that I should add dependency note into this 
-> patch's changelog ? 
-
-Yes, this is explicitly mentioned in the sentence you quoted.
-
-> or something else, I really
-> don't know. Actually, I'm always bothered by these things that how to 
-> resolve the dependency issue for two
-> dependent patches that do not belong to the same series.
-
-Another approach, as Rob suggested last time, would be to just get rid
-of the dependency and open-code the clock IDs...
-
-Best regards,
-Krzysztof
+> BTW, let me use this mail to also add the report to the list of tracked
+> regressions to ensure it's doesn't fall through the cracks:
+> 
+> #regzbot introduced: v5.15..v6.1.21
+> https://bugzilla.kernel.org/show_bug.cgi?id=217252
+> #regzbot title: media: Unknown pixelformat 0x00000000
+> #regzbot ignore-activity
+> 
+> This isn't a regression? This issue or a fix for it are already
+> discussed somewhere else? It was fixed already? You want to clarify when
+> the regression started to happen? Or point out I got the title or
+> something else totally wrong? Then just reply and tell me -- ideally
+> while also telling regzbot about it, as explained by the page listed in
+> the footer of this mail.
+> 
+> Developers: When fixing the issue, remember to add 'Link:' tags pointing
+> to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+> this thread sees some discussion). See page linked in footer for details.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+> 
+> [1] because bugzilla.kernel.org tells users upon registration their
+> "email address will never be displayed to logged out users"
+> 
 
