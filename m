@@ -2,135 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687986CD98E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BB26CD992
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjC2Mrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S229961AbjC2Mse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjC2Mrq (ORCPT
+        with ESMTP id S229745AbjC2Msc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:47:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D5540D9;
-        Wed, 29 Mar 2023 05:47:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C893061C83;
-        Wed, 29 Mar 2023 12:47:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7056EC433D2;
-        Wed, 29 Mar 2023 12:47:42 +0000 (UTC)
-Date:   Wed, 29 Mar 2023 08:47:35 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Vincent Donnefort <vdonnefort@google.com>
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v2 1/2] ring-buffer: Introducing ring-buffer mapping
- functions
-Message-ID: <20230329084735.6c4a9229@rorschach.local.home>
-In-Reply-To: <ZCQtpbyWrjliJkdg@google.com>
-References: <20230322102244.3239740-1-vdonnefort@google.com>
-        <20230322102244.3239740-2-vdonnefort@google.com>
-        <20230328224411.0d69e272@gandalf.local.home>
-        <ZCQCsD9+nNwBYIyH@google.com>
-        <20230329070353.1e1b443b@gandalf.local.home>
-        <ZCQtpbyWrjliJkdg@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 29 Mar 2023 08:48:32 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74473D2;
+        Wed, 29 Mar 2023 05:48:31 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32TCmLGc126220;
+        Wed, 29 Mar 2023 07:48:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680094101;
+        bh=0XtNfurdTc3XNwRGOXx0UmDTXdzjap6YsuID7KhWXow=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=iax35Y902Ng9WO3ijKnk2dy7KSLl983KD0x9U4XtXO4+dAZPSCUGgQdOA210Z8PFi
+         qeTW+qlhgS6mG4B2iVlIka7xKi5mmAN1RyJkykd5HLCJrIPHkgVWaDI9ZymmVzfPnA
+         NR2wqdpDdflERW7ntGRNkc/W8xxRLYejEugTNWFY=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32TCmLCo015862
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 29 Mar 2023 07:48:21 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 29
+ Mar 2023 07:48:21 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 29 Mar 2023 07:48:21 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32TCmLF9046902;
+        Wed, 29 Mar 2023 07:48:21 -0500
+Date:   Wed, 29 Mar 2023 07:48:21 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Apurva Nandan <a-nandan@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] arm64: dts: ti: k3-j721e-main: Switch MAIN R5F
+ clusters to Split-mode
+Message-ID: <20230329124821.snts4npowkwjow3d@fifteen>
+References: <20230329063728.14126-1-a-nandan@ti.com>
+ <20230329063728.14126-2-a-nandan@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230329063728.14126-2-a-nandan@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023 13:23:01 +0100
-Vincent Donnefort <vdonnefort@google.com> wrote:
-
-> On Wed, Mar 29, 2023 at 07:03:53AM -0400, Steven Rostedt wrote:
-> > On Wed, 29 Mar 2023 10:19:44 +0100
-> > Vincent Donnefort <vdonnefort@google.com> wrote:
-> >   
-> > > > I've been playing with this a bit, and I'm thinking, do we need the
-> > > > data_pages[] array on the meta page?
-> > > > 
-> > > > I noticed that I'm not even using it.
-> > > > 
-> > > > Currently, we need to do a ioctl every time we finish with the reader page,
-> > > > and that updates the reader_page in the meta data to point to the next page
-> > > > to read. When do we need to look at the data_start section?    
-> > > 
-> > > This is for non-consuming read, to get all the pages in order.  
-> > 
-> > Yeah, I was trying to see how a non consuming read would work, and was
-> > having issues figuring that out without the tail page being updated.  
+On 12:07-20230329, Apurva Nandan wrote:
+> From: Suman Anna <s-anna@ti.com>
 > 
-> Would the userspace really need to know where is the tail page? It can just stop
-> whenever it finds out a page doesn't have any events, and make sure it does not
-> loop once back to the head?
-
-I'm trying to come up with a possible algorithm that doesn't need
-ioctls. It would need to know if the writer moved or not. Probably need
-a counter that gets incremented every time the writer goes to a new page.
-
-Having the tail page was just a convenient way to know where the end is.
-
+> J721E SoCs have two R5F clusters in the MAIN domain, and both of these
+> are configured for LockStep mode at the moment. Switch both of these R5F
+> clusters to Split mode by default to maximize the number of R5F cores.
+> The MCU R5F cluster continues to be in the preferred LockStep mode.
 > 
-> >   
-> > > 
-> > > If we remove this section we would lose this ability ... but we'd also simplify
-> > > the code by a good order of magnitude (don't need the update ioctl anymore, no
-> > > need to keep those pages in order and everything can fit a 0-order meta-page).
-> > > And the non-consuming read doesn't bring much to the user over the pipe version.
-> > > 
-> > > This will although impact our hypervisor tracing which will only be able to
-> > > expose trace_pipe interfaces. But I don't think it is a problem, all userspace
-> > > tools only relying on consuming read anyway.
-> > > 
-> > > So if you're happy dropping this support, let's get rid of it.  
-> > 
-> > I don't really want to get rid of it, but perhaps break it up where we
-> > don't have it in the first release, but add it in a second one. That will
-> > also make sure that we can expand the API if necessary (one reason I wanted
-> > the "data_start" in the first place).
-> > 
-> > Let's drop it for now, but be able to add it later, an have the current
-> > structure be:  
-> 
-> Ok, I will prepare a V3 accordingly.
-> 
-> > 
-> > struct ring_buffer_meta_page_header {
-> > #if __BITS_PER_LONG == 64
-> > 	__u64	entries;
-> > 	__u64	overrun;
-> > #else
-> > 	__u32	entries;
-> > 	__u32	overrun;
-> > #endif
-> > 	__u32	pages_touched;
-> > 	__u32	meta_page_size;
-> > 	__u32	reader_page;	/* page ID for the reader page */
-> > 	__u32	nr_data_pages;	/* doesn't take into account the reader_page */
-> > };
-> > 
-> > BTW, shouldn't the nr_data_pages take into account the reader page? As it
-> > is part of the array we traverse isn't it?  
-> 
-> It depends if the reader page has ever been swapped out. If yes, the reader
-> would have to start from reader_page and then switch to the data_pages.
-> Which sounds like a fiddly interface for the userspace.
-> 
-> So yeah, consuming-read only feels like a better start.
+> Note that this configuration is the default for remoteproc mode (kernel
+> driver boots the R5F processors). These will be overridden for early-booted
+> remoteprocs through the corresponding IPC-only support in the K3 R5F
+> remoteproc driver.
 > 
 
-I agree. I'd like to get something in that can be extended, but simple
-enough that it's not too much of a barrier wrt getting the API correct.
+This looks like a firmware specific behavior, best done in overlay along
+with any custom memory map controls you may have to do for that specific
+firmware.
 
--- Steve
+If this is indeed a fixes, the commit message needs to clearly indicate
+why this is a fix and use the Fixes tag to propogate the fixes.
+
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+
+
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> index c935622f0102..31dadbdc0d5a 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> @@ -1722,7 +1722,7 @@ watchdog1: watchdog@2210000 {
+>  
+>  	main_r5fss0: r5fss@5c00000 {
+>  		compatible = "ti,j721e-r5fss";
+> -		ti,cluster-mode = <1>;
+> +		ti,cluster-mode = <0>;
+>  		#address-cells = <1>;
+>  		#size-cells = <1>;
+>  		ranges = <0x5c00000 0x00 0x5c00000 0x20000>,
+> @@ -1762,7 +1762,7 @@ main_r5fss0_core1: r5f@5d00000 {
+>  
+>  	main_r5fss1: r5fss@5e00000 {
+>  		compatible = "ti,j721e-r5fss";
+> -		ti,cluster-mode = <1>;
+> +		ti,cluster-mode = <0>;
+>  		#address-cells = <1>;
+>  		#size-cells = <1>;
+>  		ranges = <0x5e00000 0x00 0x5e00000 0x20000>,
+> -- 
+> 2.34.1
+> 
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
