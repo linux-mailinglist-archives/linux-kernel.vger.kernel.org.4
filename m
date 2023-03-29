@@ -2,181 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A946CEEB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4303B6CEECA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjC2QHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
+        id S230057AbjC2QIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbjC2QGn (ORCPT
+        with ESMTP id S229951AbjC2QIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:06:43 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FC07696
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:05:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tb0KCyopHPktLGO4OGN+2znMNVHKCoVsIS5oyNO5HXoG29vNfk2DqDQ/V/ResKaS16RDhs+o44oyyKZqY3J/qSIrCCUmbPi7/Btt7+aOlNIF87th7ZZZg9xjlMeexirKxx+QBH/G5/agdwSr1fOxyiLCZY2qIJX7CPg+ZNlSYd8OQtsII8NKv0BD1MLRYM4+tqWmFBTxbl0Kk7DYTxX7Ts6a9lMlaufH7ZEKF/SrDr+78TVnhg1ECxa8PJ2ostlcPuFjhPE7KiZpPikADLPDaXFMwlhM4s84O1FkFUQtk1A06UOG4eSUuYdWf88Cnh7TirrQIR78ofMbfacGgMj5OQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zqnE0taHUWkP6+PX+BfnDbIblb4eJawDjlifvUW8enY=;
- b=TfSPUtJ+pGwhLop/hN7eqidEFFT7WUq29m2U88YMztH4tg8DPcma/xjFTT6YzJNe+MW6H9OpBhTInbbyjRyq3iq+zUsE7gymwqhcUcjcw6uCndAYPaaW3b7cJVxz4IsqKs/h3zdnlLSsoWEM7jhsBr+jKeoAm7dt4koUWf8uXdgt3CWVogL+D9geksYZKojUjxdyeiHvPDbmtQUYBceb7Wk3iBV7/rVBjih/4rdUyGI5coOCdAqLLfG6G6laEzPis5yDWC5qeqUOKDcumZnU/SI2Li+WeeT4jD+y9S+30B3X9qQignzDtfPdzSSQHH14q9e5p6qauIkrtbCsi8JqQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zqnE0taHUWkP6+PX+BfnDbIblb4eJawDjlifvUW8enY=;
- b=nhFS2mR9b/3WkJc5inZjdTDhm3oChaHW/wi1Lhv81N4l2o5yb4enCHJ7PBEIlWIRF+lWhXbFTKG6/mO3K3Dxe2XSxrKbt6/S+bHImq9jl7i4hM03mfcj5d20w1jlyJB//+F5i6vSmad5V30yaRL0hy6mkbiCVX37YN/0MHkNsz4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- SJ0PR12MB6853.namprd12.prod.outlook.com (2603:10b6:a03:47b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Wed, 29 Mar
- 2023 16:05:00 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%6]) with mapi id 15.20.6222.033; Wed, 29 Mar 2023
- 16:05:00 +0000
-Message-ID: <a848b681-0c24-2676-2f20-03b11fd8dd77@amd.com>
-Date:   Wed, 29 Mar 2023 12:06:18 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] drm/amd/display: Remove unused variable 'scl_enable'
-To:     Caio Novais <caionovais@usp.br>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Wesley Chalmers <Wesley.Chalmers@amd.com>,
-        "Lee, Alvin" <Alvin.Lee2@amd.com>, Jun Lei <Jun.Lei@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        Gabe Teeger <gabe.teeger@amd.com>, Roman Li <roman.li@amd.com>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Deepak R Varma <drv@mailo.com>
-References: <20230328220947.108188-1-caionovais@usp.br>
- <20230328220947.108188-2-caionovais@usp.br>
-Content-Language: en-US
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230328220947.108188-2-caionovais@usp.br>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQXPR0101CA0035.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:15::48) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Wed, 29 Mar 2023 12:08:01 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F50658C;
+        Wed, 29 Mar 2023 09:07:29 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id p204so19941770ybc.12;
+        Wed, 29 Mar 2023 09:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680106012;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J0buJ+bz6nRSi4h6CRlltq38ZsNDLaTAQVOLOp+rT9g=;
+        b=JyWGqb0rnM6Sjmr5Bl4106EruRjN4ZyrC4ulTrvxI++yyUReLhocOWspATt4I43CCk
+         BRYT6OObG7ovMUKxW98BbgWnujPD4HfiHuN6giihag+OTBsYwORn9VrRIB7o9MQAjt2A
+         i3IMvrTFcT/64rg8vRALYA4XWBdb7R25rE3CnvF1uLUH/gUfcp1uW/sCbxsLJ+3En4Bp
+         D3hG4Blfoc7lc8Bm/FBx1EIGRt0MRsO5hs+28NHIokS4xB3CPof3Vp0SigHAuFKMc76R
+         FtvK0HPYfC6os9KTos1h1DXwsb3IAq5R7ZqqLou9tdrySrKEMhWnTh/G7kK/tpeU/xyK
+         Dfjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680106012;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J0buJ+bz6nRSi4h6CRlltq38ZsNDLaTAQVOLOp+rT9g=;
+        b=04FlYSmym6HlAxt1kqo0ObkFpbj5zqtbQ+q9auIDPPJ9g9Uksa9y7VVI+UIEv40xN4
+         Q+rrZ3rDSliiWnjWG2iue63L5WEjXcBQrHnQZBZkUuYS+za4qLqC5+oWhWAAOzz2qmIf
+         y5Ekv77eGQkiYudK6lsjF26/d3vrQ+effm/1bHrgcLgmcwRYuBEV6BNffve/TZlSBbbv
+         NweqfF3mJcIQKbfiABwloONmS0RzpEzJVJzerihfMRHyCa35Y58D1BzaCeflfwfeZPqf
+         8qiBArkXSJwERAGGAZgeLQGmLCfjDBBnXnxUyxigXqn98lwkwQkB/1IOjZwBIJ43BAe1
+         32FA==
+X-Gm-Message-State: AAQBX9elk6Djyfcptq0dha0TiETt+1AWRFA8HyWuGll15iVJ7m+WmMis
+        ux/1b5uloOlFALv732z0kY8=
+X-Google-Smtp-Source: AKy350aB7U4fI6GzSH5WLeQTGvxrYIlnqRkcNF926bpP1fyvjSIzR/JytVOq1d4Psvk6hnLUvCJ6sA==
+X-Received: by 2002:a05:6902:18d3:b0:b76:1f06:5e53 with SMTP id ck19-20020a05690218d300b00b761f065e53mr23550206ybb.42.1680106012248;
+        Wed, 29 Mar 2023 09:06:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:d913:852b:d7c6:7253? ([2600:1700:2442:6db0:d913:852b:d7c6:7253])
+        by smtp.gmail.com with ESMTPSA id 198-20020a250bcf000000b00b7767ca746asm3538614ybl.7.2023.03.29.09.06.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 09:06:51 -0700 (PDT)
+Message-ID: <a2086a3f-e4c7-5bbf-a24c-522d6723a043@gmail.com>
+Date:   Wed, 29 Mar 2023 11:06:50 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|SJ0PR12MB6853:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55a138a0-271b-48f3-2630-08db306f590d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gWz57ZcOMlVeggicd8JKKBP5RhWk5puZ9StOscGp7Vbvskv9QoH9fZ21FN/c0S4FOrR0bHXP1lijexr6cKLpWdaN14ZiHAacYQAiXDwMiyQNUjo3Yu3zb/k/S8w9ehNk9ufYOTE8rWS7QoQ+FnuKPRKlh+Yj69b1/ILtN1IYoToFfZgqIDH32g4Q2Dvpuz/TPkMbnDDHvIWgrFPR4Z+mzdVwjDWbrzL9IdB9CODrIbnlCMsRyv7ct03UIxAiT+40OOoyRyKdcCeRNDq96HN6shMM4fg+dpM7QxEgxO9PrmVOExfF4Bi3pBSly81FB1F+b0IrN4qt+0fyj3RL7yfccNW5A+72Ulw1ZogBY4rpqNPQCTkGAqctvAUrOKXQSITelG7rz5JZabt4j00uYOtoEu7T+ivCIAVdbpzaMYLV8TrQZVLagqmLu2QlU9Ezm2Ew1n1L1+z8m4t6Fs6pq0RqehPfFOzfIvQG1ue/8Fx96xcrjCp4JtLZE54EAJcC38JWJdraO28KOJs5w7KoYT83QXFYEgjBYtWUIeO/M7WQSFd0/LUGpZ0V92JyXZ02D1nKJ5ksoxiHF/+HNkPt/iwCtpMslKffzYOuGIJ9N36fPmDmny7d9E3dL+8s+h2xr10YOjUW4RsnkTCMnNrFake7EQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199021)(66556008)(8936002)(83380400001)(66946007)(31686004)(38100700002)(44832011)(5660300002)(54906003)(2906002)(8676002)(4326008)(41300700001)(66476007)(316002)(478600001)(2616005)(31696002)(6486002)(86362001)(6512007)(186003)(53546011)(6506007)(26005)(6666004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NEw3S0llcGhiT21GbWsxbzlzUDFZbkFMSEpyczNoRlc1dXdIWDJPMzdPenM3?=
- =?utf-8?B?Wm1oNGYwcXdmRVF3Y0VDWWFKNVNSK0tkMWZneHhYdGFoQXFmZ09Jd1VNbGJW?=
- =?utf-8?B?VzB5WmljUUZGMFlQNDBkZ3ZLdnZwWk1SVmZGZ2I1YjFQZFV6ck5GS2VmbHdz?=
- =?utf-8?B?VkhseTVIa0wwQTY1R1FQSUxmNFJxOFBxdlZTRFdqcjd0RmdaM0JuaWRqamUx?=
- =?utf-8?B?UStQWDJBb2o1TFhxbk9FazQ4QTg4Y0lyNnNIaE5rOC9reWNrRnRzUVZ0ejZD?=
- =?utf-8?B?MEFldXVjZDJTazV0S00wbjUzcGJ2SGhHY1VwUmdmVTRrNzI2LzlWQ0hQV1Mx?=
- =?utf-8?B?QVZTMG9uNGZsVkN2QmFzMHpINEZObEFqSlY4UUgyRk0xWndEVjZGeUFIQWNu?=
- =?utf-8?B?ZXZnNUJ3bG9QajRqUHM0WksrVTVZTWNLSGNTNi90SXFYU2RYdVd1dEtVNFRq?=
- =?utf-8?B?azBCMktCaW9lVVl0eGVFUld5dCtxS09wcDRUWXluVm4zVENwVHRUemxsVjFm?=
- =?utf-8?B?QWZud1pybjk2ZmY5QlpxRFZrVWpWa3pmVmIwMHYzbmRLdGlxVGJYUkZTbjVD?=
- =?utf-8?B?M2RLTHdDNVhqWEVsdytKS1NjM3hOMWp6cW5xdkN5NjFTT1piZXVERFZleTJK?=
- =?utf-8?B?Qm1MbFN6SUVybW4renVXNGxoUHdMNUU0WXJFTUVCSDBHd0gwOFVza1QxeUwv?=
- =?utf-8?B?cFNkZzB2b2k4ZFRYZk0vTVBVd2kzeEoyUUpRK1FEc3BkWkw5TG9TUUVBNGFX?=
- =?utf-8?B?My81Y2JacnpxQzZjeVBQbDB0cW9XRmllOVhDWENOY2FSeG1maVdZYi9WUm1R?=
- =?utf-8?B?RVFpNUpVenVNeVZTWVBzeHBSOVlId0J1WTlmQWRObHZkamRwRTZIS2FQZ05n?=
- =?utf-8?B?dHRMYjRiQXI0TEljTmhobEhBRFBxR2RZLy91Q2tNelVGKzhSRSsvczE4KzZQ?=
- =?utf-8?B?SUhRcEhKcHJOTEJkVGxqbWt5VkhwaDRZVFZNeFZLK2s2emt3SjcxQkZPM2Fm?=
- =?utf-8?B?MTJQbzFOeDBqeGhYck8zekVudjYyV0FZVGNtRHl3UmtiVEtRVUpCRm1iSWUz?=
- =?utf-8?B?OHphNFREMnhlZmlxTllRcUdldUVNUHVPR24zVmZPVHRtN3F4QThlaXR5bGpk?=
- =?utf-8?B?TVhLcmJXOU1yenhpUmVhMG8veld3UGdyNmlnbjhuMXJnQ3AwSjhaemFBRTJp?=
- =?utf-8?B?TTc4NkZGMXZPbGptemZxb0hwekdMNFAybUdhWHJmUHAwV2lNRVJnRUtuU2d0?=
- =?utf-8?B?bVRHWlBtcjc5enpwWHRxZWJlTTlMK3BkSTlOUUx1MkZpcjV3V0l1d3hBaGdS?=
- =?utf-8?B?eEdSMjNBSFlORzdnZHJTQ2QreXNFbW0yd1ZzelVmWTdlenQrMHZMZmYrL1kv?=
- =?utf-8?B?eEk4YnpLcFVNTDFyUEpidDFZT0wwNHhlb2l4czBwT0VJeWxJSU41MWRjNERt?=
- =?utf-8?B?TWVmeGJZQmVlVncwRWlRZDhkNXUwRXRBbUp0RG51aGV6RFFzYXV0bGlKQzFY?=
- =?utf-8?B?NVdvOXRuZG9abjVybFg1aytJeW95UERaQTYvSzFEdDdDRWNmaXFndVlsN1RS?=
- =?utf-8?B?NTdtOFpOTmo4NGJqMW9MdkRRWC8rVm44OTZCcGZWVjFKeEc0NGRsVVdTTjlZ?=
- =?utf-8?B?RzgwaWhtNWFOV0dhQlFza3FpQUVSKzArNFMxTmVzMVQzbGtZWE11MlQ1UTBU?=
- =?utf-8?B?ZVFLREtuaW9oallUZE9OV0xPNkRPN2V4bSt3Q0xkVnoyVFNXZkFHQ25hcjE4?=
- =?utf-8?B?bE5Cc0lnem93dTk0eFRQZFJ3YWV1NEw1ZlA5ZU9VQjB1Tm1hSWsyQzdkWFBH?=
- =?utf-8?B?d2UyanRGRXFUVFFCSitBbTRlWnRjcUNYN216OVZlbWp6UU8vVWxWalV6TDNP?=
- =?utf-8?B?RFlXQnhINXk3emlkVFhKbDAvbS8rNzN2bVoyWHVxa2xINWJhUlZicTU1blFq?=
- =?utf-8?B?ci9FeWdlMGVQbzBwb0JvR2w2ZHZMT29ZZEFvQzRHR1UwZG5HV1hhTXhNOFc3?=
- =?utf-8?B?TzFXL3M3MEZhVGJiY25mWllNd0dQSDdVamQvdEd0TTJQa1lSa0JURWxOOG4w?=
- =?utf-8?B?MGg1dis3WkwyRFNOckdYbWwxdWY4eVB2b2ljenRDRXVja3lrcG9lcER3K0tS?=
- =?utf-8?Q?5um85QtjyyKlFs7CofWGVhbA+?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55a138a0-271b-48f3-2630-08db306f590d
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 16:04:59.9445
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1RrdI829wka32hxmr3dYRHS+Ubz+DhzrYKMUR87BWxRqIZl38UV+X/Adju6y3tr7bGih8NaRkXSuUC30j6Cs7w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6853
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] treewide: Fix instantiation of devices in DT overlays
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 18:09, Caio Novais wrote:
-> Compiling AMD GPU drivers displays a warning:
-> 
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_rq_dlg_calc_314.c: In function ‘dml_rq_dlg_get_dlg_params’:
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_rq_dlg_calc_314.c:991:14: warning: variable ‘scl_enable’ set but not used [-Wunused-but-set-variable]
-> 
-> Get rid of it by removing the variable 'scl_enable'.
-> 
-> Signed-off-by: Caio Novais <caionovais@usp.br>
+On 3/24/23 04:30, Geert Uytterhoeven wrote:
+> When loading a DT overlay that creates a device, the device is not
+> instantiated, unless the DT overlay is unloaded and reloaded again.
 
-Applied, thanks!
+Can you elaborate on why this is?  What the relevant code paths are?
 
+> 
+> Saravana explains:
+>   Basically for all overlays (I hope the function is only used for
+>   overlays) we assume all nodes are NOT devices until they actually
+>   get added as a device.
+> 
+> Based on a patch by Saravana Kannan, which covered only platform and spi
+> devices.
+
+
+> 
+> Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
+
+From a quick scan of the fixed commit, I don't see how that commit caused the problem.
+Can you give a quick clue?  (The clue does not need to be added to the commit message,
+but please at least put it below the "---" if there are additional versions of this
+patch.)
+
+> Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=rWYnkCZ6z5bGX-wj4w@mail.gmail.com
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Mark Brown <broonie@kernel.org>
 > ---
->   .../gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c | 2 --
->   1 file changed, 2 deletions(-)
+> v2:
+>   - Add Acked-by,
+>   - Drop RFC.
+> ---
+>  drivers/bus/imx-weim.c    | 1 +
+>  drivers/i2c/i2c-core-of.c | 1 +
+>  drivers/of/dynamic.c      | 1 +
+>  drivers/of/platform.c     | 1 +
+>  drivers/spi/spi.c         | 1 +
+>  5 files changed, 5 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
-> index d1c2693a2e28..ea4eb66066c4 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
-> @@ -988,7 +988,6 @@ static void dml_rq_dlg_get_dlg_params(
->   	double hratio_c;
->   	double vratio_l;
->   	double vratio_c;
-> -	bool scl_enable;
->   
->   	unsigned int swath_width_ub_l;
->   	unsigned int dpte_groups_per_row_ub_l;
-> @@ -1117,7 +1116,6 @@ static void dml_rq_dlg_get_dlg_params(
->   	hratio_c = scl->hscl_ratio_c;
->   	vratio_l = scl->vscl_ratio;
->   	vratio_c = scl->vscl_ratio_c;
-> -	scl_enable = scl->scl_enable;
->   
->   	swath_width_ub_l = rq_dlg_param->rq_l.swath_width_ub;
->   	dpte_groups_per_row_ub_l = rq_dlg_param->rq_l.dpte_groups_per_row_ub;
-
--- 
-Hamza
+> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> index 36d42484142aede2..898e23a4231400fa 100644
+> --- a/drivers/bus/imx-weim.c
+> +++ b/drivers/bus/imx-weim.c
+> @@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+>  				 "Failed to setup timing for '%pOF'\n", rd->dn);
+>  
+>  		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+> +			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>  			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
+>  				dev_err(&pdev->dev,
+>  					"Failed to create child device '%pOF'\n",
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index aa93467784c29c89..303f9003562eed3d 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -178,6 +178,7 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+>  			return NOTIFY_OK;
+>  		}
+>  
+> +		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>  		client = of_i2c_register_device(adap, rd->dn);
+>  		if (IS_ERR(client)) {
+>  			dev_err(&adap->dev, "failed to create client for '%pOF'\n",
+> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> index 07d93753b12f5f4d..e311d406b1705306 100644
+> --- a/drivers/of/dynamic.c
+> +++ b/drivers/of/dynamic.c
+> @@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np)
+>  	np->sibling = np->parent->child;
+>  	np->parent->child = np;
+>  	of_node_clear_flag(np, OF_DETACHED);
+> +	np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
+>  }
+>  
+>  /**
+> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> index b2bd2e783445dd78..17c92cbfb62ee3ef 100644
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -737,6 +737,7 @@ static int of_platform_notify(struct notifier_block *nb,
+>  		if (of_node_check_flag(rd->dn, OF_POPULATED))
+>  			return NOTIFY_OK;
+>  
+> +		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>  		/* pdev_parent may be NULL when no bus platform device */
+>  		pdev_parent = of_find_device_by_node(rd->dn->parent);
+>  		pdev = of_platform_device_create(rd->dn, NULL,
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 8e8af148b1dc371e..66ac67580d2a473b 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -4527,6 +4527,7 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
+>  			return NOTIFY_OK;
+>  		}
+>  
+> +		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>  		spi = of_register_spi_device(ctlr, rd->dn);
+>  		put_device(&ctlr->dev);
+>  
 
