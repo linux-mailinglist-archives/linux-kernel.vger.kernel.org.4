@@ -2,74 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC346CD94B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960456CD94F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjC2MXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        id S230051AbjC2MYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjC2MXJ (ORCPT
+        with ESMTP id S229945AbjC2MYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:23:09 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECE21FDB
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:23:08 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id r29so15461204wra.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:23:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680092587;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EgGgvuGVyNlBdhj243ar9e2FgjTuUms5PNX7LlgANlc=;
-        b=bSnuTSFzUE+tAO+Zg0gsTElr+pCPYU5fbhHM4xF8htQLO3kEqmLKeMZ55SOfjRYNns
-         kGxRhrtTqrmdcShkDnadd+QcHIhdRObEeZTIntzGlnU3zKaxpWl9baX15QqOCDPVG9i5
-         FGXxZWp0O01r9h1WyZX4UniGYbEyxl1vaCbD3RwFvrBRzdUlzOJjlaRbePTAyW1GY6xg
-         fleO1mU4dk8lRXztfeMeVYkmf4+G8Ok47AMxG1oElYCRrLkS4AA/5rBrUFsC9QgBJO7T
-         /B+MmPWhZMfzd1I5rwxRw2hpKe51YPO9ppjs1kh8TEern4sPNNkKp1uGafi5qf12Wf06
-         KCZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680092587;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EgGgvuGVyNlBdhj243ar9e2FgjTuUms5PNX7LlgANlc=;
-        b=2HUE3cHk2zqmmV6Dc7U0TOUvZu8e7yYAZHhiZUaqir8mtZqGUg121Q/NV8wwP8tQGp
-         S4MUKvq3LWwA+lv4yMVqlCsMD+hvp/561BlbHpjraAWLKWlNyicsWx+EUFjTuHYBlSTZ
-         S3sYRvk2OsGTaljlkCg0i8Jk2fCKUHp9U0akgecVVLqAqHSccvHTZuEfB1e65WYYTUsa
-         EHf3AQ/w3iqBjbNK5pbnXCxZui/w0uMzrCPlcUpwi75GtNM93QFRtzK2n7lUvFsJH6KT
-         P3tX77wV84ZlkyndbIHCQOwhB45q1A91q/ZfC1rrpGs7KsMXad/1p3uUC8XWHkaqYRlU
-         S3vw==
-X-Gm-Message-State: AAQBX9cwnxoXEn2fLwVtCTi0lPXgtEo/d9NMw9L11Ed/k99JP8s/DABy
-        KhOTUf8W9ismC0xXM5YPJyU5UEPVGIdu4ZnqtbEL7Q==
-X-Google-Smtp-Source: AKy350b+U9Wdt+IFaashu8uZXI6RPoqXNfXpoenZTc6qE+L+zQMIUUqa4TAiRAvt8zr7cXDgM2skXg==
-X-Received: by 2002:adf:f245:0:b0:2ce:b2ba:9905 with SMTP id b5-20020adff245000000b002ceb2ba9905mr15432436wrp.20.1680092586795;
-        Wed, 29 Mar 2023 05:23:06 -0700 (PDT)
-Received: from google.com (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
-        by smtp.gmail.com with ESMTPSA id k2-20020a5d6e82000000b002c55b0e6ef1sm30448545wrz.4.2023.03.29.05.23.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 05:23:06 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 13:23:01 +0100
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v2 1/2] ring-buffer: Introducing ring-buffer mapping
- functions
-Message-ID: <ZCQtpbyWrjliJkdg@google.com>
-References: <20230322102244.3239740-1-vdonnefort@google.com>
- <20230322102244.3239740-2-vdonnefort@google.com>
- <20230328224411.0d69e272@gandalf.local.home>
- <ZCQCsD9+nNwBYIyH@google.com>
- <20230329070353.1e1b443b@gandalf.local.home>
+        Wed, 29 Mar 2023 08:24:20 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9041FDB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1680092659; x=1711628659;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2dcvqV87tiaXbc2Uo11d6o/I39/nMjI+zlAAi+6Vbgk=;
+  b=FInUpywGyCiBZ6lwRYU4XU5nYC1tlOTMbua079aS+TrqsJQpeTgsh66b
+   Dfy+f95QPCSCIrm+lQNLb8pCo1FV1ChqP4TK8gPc5XP/yd6hharfeAsDi
+   HMjfwS66jpiH/NkyJctfUnUIMCCUdZMPiwmyZy7pPlPAlxz3nKM+GUAI+
+   XbF4el7WN3vy9zMnjRa5ifT/2Um27T933/Flbq1vALOI5wu9PcipGVFO7
+   0dGu+AQOdMzO0v9NIQgx3drTA942A1r/NOz6co1rORmsC2NDqGy6rE/Kh
+   Tv54hPksKwo+cqkK/jNFa8QXQ/FiqiBNCsvgqrWJZcZcLVWmsg+XCDvDR
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,300,1673884800"; 
+   d="scan'208";a="231763314"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 29 Mar 2023 20:24:19 +0800
+IronPort-SDR: nHF0vERJcNn095vMdQeaMZ1UyAnytNlUdIj7IU/0sqp4xPrsdlvAizYrjpd2VW+0pD+BiJyy81
+ wGCPzGXU/PtRdc12DeICoY1TWGkY7ymWp00ZBEfvHlObKFBrbZecAwb/wr32LuGbWUwHXh0R+6
+ lZyoxpFtPt6J4h0oKMr87Tkf3tY7LBoSGQme5edxQl9M2FZdMkkMDnqRdlhjyo7io0QHP9UJkS
+ 3VUQkM5WQS872s8XVlFf7T1jLzw9hc2c/DMGAM0VoFCoQx7NjxK5DFt5kaELZk2LyOPg7m+eLW
+ pPA=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2023 04:40:28 -0700
+IronPort-SDR: 6aq29CGTefEAPaMBNfglIGMxtuPZFqnCwNLWi5Q6hqwTG/U7AXA++IR0GrCqeBgrbRImqXxlkz
+ u0AjFNgA5bjd2i8XDsMmi+GwAm6E21Yw2U9/MyjNKnUoG3MibtdjLwsYkC7j6aMhY01LiQYHCj
+ Q6XPe6oRriLkWnJrZLlfoIdr6b7WTMTjNBrYUHbcNPV2ynZ6lkn2QrunBFJx9G7LdnJ1Kuc/SO
+ Tkw2aZicwCeQPxBCauUlq/6E1jJxBjyhikkh2abV/gHOaBU2lX0kYC0QZauwcCxQMes3PHc21W
+ dWQ=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2023 05:24:19 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Pmm2B5R06z1RtW1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:24:18 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1680092657; x=1682684658; bh=2dcvqV87tiaXbc2Uo11d6o/I39/nMjI+zlA
+        Ai+6Vbgk=; b=aYJDL/Wv2IOTx8UdzJQy6vhK6Cwx6WbFawjWCYauh4DMUjt8PUN
+        9x0lBBLgBT/IjyJZGV1IULqpb87tc8FlfO62FSSzocE5VAR0WX6HRUoEfOG+mAEG
+        rS94t5CfBpzIdV/6jIaxzIRNmFgSzvpryU3Z3Hgv220Wql3f6LJqko6ekzg49x+7
+        qeUNMP4r4fsY+rjt2ddmQ5DpVwco7it1Uwnyd0bFSBOYjcGo49ZkFsBrbmu/9pYw
+        AfMs3umVUAn9mMkkU82WMd1B4ReuDbvk0vLFAQHC/dPMQD3ZYGm0zN4Yjco6S7g1
+        yw6PpaghAYhqlgVGMdPjU7T3BSfmuLdDP4g==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 14movKifG6Bt for <linux-kernel@vger.kernel.org>;
+        Wed, 29 Mar 2023 05:24:17 -0700 (PDT)
+Received: from [10.225.163.116] (unknown [10.225.163.116])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Pmm253ydnz1RtVm;
+        Wed, 29 Mar 2023 05:24:13 -0700 (PDT)
+Message-ID: <03c647ff-3c4f-a810-12c4-06a9dc62c90e@opensource.wdc.com>
+Date:   Wed, 29 Mar 2023 21:24:11 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329070353.1e1b443b@gandalf.local.home>
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v8 1/9] block: Introduce queue limits for copy-offload
+ support
+Content-Language: en-US
+To:     Nitesh Shetty <nj.shetty@samsung.com>
+Cc:     Anuj Gupta <anuj20.g@samsung.com>, Jens Axboe <axboe@kernel.dk>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>, bvanassche@acm.org,
+        hare@suse.de, ming.lei@redhat.com, joshi.k@samsung.com,
+        nitheshshetty@gmail.com, gost.dev@samsung.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
+References: <20230327084103.21601-1-anuj20.g@samsung.com>
+ <CGME20230327084216epcas5p3945507ecd94688c40c29195127ddc54d@epcas5p3.samsung.com>
+ <20230327084103.21601-2-anuj20.g@samsung.com>
+ <e725768d-19f5-a78a-2b05-c0b189624fea@opensource.wdc.com>
+ <20230329104142.GA11932@green5>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230329104142.GA11932@green5>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,74 +115,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 07:03:53AM -0400, Steven Rostedt wrote:
-> On Wed, 29 Mar 2023 10:19:44 +0100
-> Vincent Donnefort <vdonnefort@google.com> wrote:
+On 3/29/23 19:41, Nitesh Shetty wrote:
+>>> +What:		/sys/block/<disk>/queue/copy_max_bytes
+>>> +Date:		November 2022
+>>> +Contact:	linux-block@vger.kernel.org
+>>> +Description:
+>>> +		[RW] While 'copy_max_bytes_hw' is the hardware limit for the
+>>> +		device, 'copy_max_bytes' setting is the software limit.
+>>> +		Setting this value lower will make Linux issue smaller size
+>>> +		copies from block layer.
+>>
+>> 		This is the maximum number of bytes that the block
+>>                 layer will allow for a copy request. Must be smaller than
+>>                 or equal to the maximum size allowed by the hardware indicated
 > 
-> > > I've been playing with this a bit, and I'm thinking, do we need the
-> > > data_pages[] array on the meta page?
-> > > 
-> > > I noticed that I'm not even using it.
-> > > 
-> > > Currently, we need to do a ioctl every time we finish with the reader page,
-> > > and that updates the reader_page in the meta data to point to the next page
-> > > to read. When do we need to look at the data_start section?  
-> > 
-> > This is for non-consuming read, to get all the pages in order.
+> Looks good.  Will update in next version. We took reference from discard. 
 > 
-> Yeah, I was trying to see how a non consuming read would work, and was
-> having issues figuring that out without the tail page being updated.
+>> 		by copy_max_bytes_hw. Write 0 to use the default kernel
+>> 		settings.
+>>
+> 
+> Nack, writing 0 will not set it to default value. (default value is
+> copy_max_bytes = copy_max_bytes_hw)
 
-Would the userspace really need to know where is the tail page? It can just stop
-whenever it finds out a page doesn't have any events, and make sure it does not
-loop once back to the head?
+It is trivial to make it work that way, which would match how max_sectors_kb
+works. Write 0 to return copy_max_bytes being equal to the default
+copy_max_bytes_hw.
 
-> 
-> > 
-> > If we remove this section we would lose this ability ... but we'd also simplify
-> > the code by a good order of magnitude (don't need the update ioctl anymore, no
-> > need to keep those pages in order and everything can fit a 0-order meta-page).
-> > And the non-consuming read doesn't bring much to the user over the pipe version.
-> > 
-> > This will although impact our hypervisor tracing which will only be able to
-> > expose trace_pipe interfaces. But I don't think it is a problem, all userspace
-> > tools only relying on consuming read anyway.
-> > 
-> > So if you're happy dropping this support, let's get rid of it.
-> 
-> I don't really want to get rid of it, but perhaps break it up where we
-> don't have it in the first release, but add it in a second one. That will
-> also make sure that we can expand the API if necessary (one reason I wanted
-> the "data_start" in the first place).
-> 
-> Let's drop it for now, but be able to add it later, an have the current
-> structure be:
-
-Ok, I will prepare a V3 accordingly.
+The other possibility that is also interesting is "write 0 to disable copy
+offload and use emulation". This one may actually be more useful.
 
 > 
-> struct ring_buffer_meta_page_header {
-> #if __BITS_PER_LONG == 64
-> 	__u64	entries;
-> 	__u64	overrun;
-> #else
-> 	__u32	entries;
-> 	__u32	overrun;
-> #endif
-> 	__u32	pages_touched;
-> 	__u32	meta_page_size;
-> 	__u32	reader_page;	/* page ID for the reader page */
-> 	__u32	nr_data_pages;	/* doesn't take into account the reader_page */
-> };
+>>> +
+>>> +
+>>> +What:		/sys/block/<disk>/queue/copy_max_bytes_hw
+>>> +Date:		November 2022
+>>> +Contact:	linux-block@vger.kernel.org
+>>> +Description:
+>>> +		[RO] Devices that support offloading copy functionality may have
+>>> +		internal limits on the number of bytes that can be offloaded
+>>> +		in a single operation. The `copy_max_bytes_hw`
+>>> +		parameter is set by the device driver to the maximum number of
+>>> +		bytes that can be copied in a single operation. Copy
+>>> +		requests issued to the device must not exceed this limit.
+>>> +		A value of 0 means that the device does not
+>>> +		support copy offload.
+>>
+>> 		[RO] This is the maximum number of kilobytes supported in a
+>>                 single data copy offload operation. A value of 0 means that the
+>> 		device does not support copy offload.
+>>
 > 
-> BTW, shouldn't the nr_data_pages take into account the reader page? As it
-> is part of the array we traverse isn't it?
+> Nack, value is in bytes. Same as discard.
 
-It depends if the reader page has ever been swapped out. If yes, the reader
-would have to start from reader_page and then switch to the data_pages.
-Which sounds like a fiddly interface for the userspace.
+Typo. I meant Bytes. Your text is too long an too convoluted, so unclear.
 
-So yeah, consuming-read only feels like a better start.
+-- 
+Damien Le Moal
+Western Digital Research
 
-> 
-> -- Steve
