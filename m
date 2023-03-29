@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEB76CF385
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 360636CF37E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjC2Tqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
+        id S230272AbjC2TqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbjC2Tp4 (ORCPT
+        with ESMTP id S229940AbjC2Tpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:45:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F72126
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:45:54 -0700 (PDT)
+        Wed, 29 Mar 2023 15:45:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A240CA2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:45:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82DCDB82435
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F9BA61E21
         for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 19:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4964CC4339E;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 787B0C43442;
         Wed, 29 Mar 2023 19:45:51 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1phbjy-002RhT-1H;
+        id 1phbjy-002Ri3-1x;
         Wed, 29 Mar 2023 15:45:50 -0400
-Message-ID: <20230329194550.208773263@goodmis.org>
+Message-ID: <20230329194550.418276586@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 29 Mar 2023 15:45:22 -0400
+Date:   Wed, 29 Mar 2023 15:45:23 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
@@ -36,7 +36,7 @@ Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Florent Revest <revest@chromium.org>,
         Will Deacon <will@kernel.org>
-Subject: [for-next][PATCH 06/25] lib/test_fprobe: Add a testcase for skipping exit_handler
+Subject: [for-next][PATCH 07/25] docs: tracing: Update fprobe documentation
 References: <20230329194516.146147554@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,10 +51,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 
-Add a testcase for skipping exit_handler if entry_handler
-returns !0.
+Update fprobe.rst for
+ - the private entry_data argument
+ - the return value of the entry handler
+ - the nr_rethook_node field.
 
-Link: https://lkml.kernel.org/r/167526700658.433354.12922388040490848613.stgit@mhiramat.roam.corp.google.com
+Link: https://lkml.kernel.org/r/167526701579.433354.3057889264263546659.stgit@mhiramat.roam.corp.google.com
 
 Cc: Florent Revest <revest@chromium.org>
 Cc: Mark Rutland <mark.rutland@arm.com>
@@ -62,66 +64,46 @@ Cc: Will Deacon <will@kernel.org>
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- lib/test_fprobe.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ Documentation/trace/fprobe.rst | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/lib/test_fprobe.c b/lib/test_fprobe.c
-index 9fa2ac9eda83..0fe5273e960b 100644
---- a/lib/test_fprobe.c
-+++ b/lib/test_fprobe.c
-@@ -21,6 +21,7 @@ static u32 (*target_nest)(u32 value, u32 (*nest)(u32));
- static unsigned long target_ip;
- static unsigned long target2_ip;
- static unsigned long target_nest_ip;
-+static int entry_return_value;
+diff --git a/Documentation/trace/fprobe.rst b/Documentation/trace/fprobe.rst
+index b64bec1ce144..40dd2fbce861 100644
+--- a/Documentation/trace/fprobe.rst
++++ b/Documentation/trace/fprobe.rst
+@@ -87,14 +87,16 @@ returns as same as unregister_ftrace_function().
+ The fprobe entry/exit handler
+ =============================
  
- static noinline u32 fprobe_selftest_target(u32 value)
- {
-@@ -52,7 +53,7 @@ static notrace int fp_entry_handler(struct fprobe *fp, unsigned long ip,
- 	} else
- 		KUNIT_EXPECT_NULL(current_test, data);
+-The prototype of the entry/exit callback function is as follows:
++The prototype of the entry/exit callback function are as follows:
  
--	return 0;
-+	return entry_return_value;
- }
+ .. code-block:: c
  
- static notrace void fp_exit_handler(struct fprobe *fp, unsigned long ip,
-@@ -205,6 +206,28 @@ static void test_fprobe_nest(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
- }
+- void callback_func(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
++ int entry_callback(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs, void *entry_data);
  
-+static void test_fprobe_skip(struct kunit *test)
-+{
-+	struct fprobe fp = {
-+		.entry_handler = fp_entry_handler,
-+		.exit_handler = fp_exit_handler,
-+	};
+-Note that both entry and exit callbacks have same ptototype. The @entry_ip is
+-saved at function entry and passed to exit handler.
++ void exit_callback(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs, void *entry_data);
 +
-+	current_test = test;
-+	KUNIT_EXPECT_EQ(test, 0, register_fprobe(&fp, "fprobe_selftest_target", NULL));
++Note that the @entry_ip is saved at function entry and passed to exit handler.
++If the entry callback function returns !0, the corresponding exit callback will be cancelled.
+ 
+ @fp
+         This is the address of `fprobe` data structure related to this handler.
+@@ -113,6 +115,12 @@ saved at function entry and passed to exit handler.
+         to use @entry_ip. On the other hand, in the exit_handler, the instruction
+         pointer of @regs is set to the currect return address.
+ 
++@entry_data
++        This is a local storage to share the data between entry and exit handlers.
++        This storage is NULL by default. If the user specify `exit_handler` field
++        and `entry_data_size` field when registering the fprobe, the storage is
++        allocated and passed to both `entry_handler` and `exit_handler`.
 +
-+	entry_return_value = 1;
-+	entry_val = 0;
-+	exit_val = 0;
-+	target(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, 0, exit_val);
-+	KUNIT_EXPECT_EQ(test, 0, fp.nmissed);
-+	entry_return_value = 0;
-+
-+	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
-+}
-+
- static unsigned long get_ftrace_location(void *func)
- {
- 	unsigned long size, addr = (unsigned long)func;
-@@ -234,6 +257,7 @@ static struct kunit_case fprobe_testcases[] = {
- 	KUNIT_CASE(test_fprobe_syms),
- 	KUNIT_CASE(test_fprobe_data),
- 	KUNIT_CASE(test_fprobe_nest),
-+	KUNIT_CASE(test_fprobe_skip),
- 	{}
- };
+ Share the callbacks with kprobes
+ ================================
  
 -- 
 2.39.1
