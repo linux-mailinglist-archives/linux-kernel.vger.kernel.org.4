@@ -2,210 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153D96CEE75
+	by mail.lfdr.de (Postfix) with ESMTP id AA6546CEE77
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjC2QB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S229697AbjC2QCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbjC2QBQ (ORCPT
+        with ESMTP id S230350AbjC2QB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:01:16 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8660361B2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:00:00 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id k15so9556348pgt.10
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680105600;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w4mfqXcQDMgEMpQCXMX8Y+2J6yDMso+bxawxRo1V7AM=;
-        b=IoeJ2hRhQlssC8YSqHzS3rfC3A9OTMPusiqg+SugGI1/VjTOihKklhmgsAt+q62Me+
-         0ajaO36qZXpYrfgNfJUupAT+VNEwm/mxaA5pi4OEfitP2oW35BMdfFboI2nvBRBPfyoC
-         87A0zVLVuVpvjT/ZoYoPLZfMr7dIZ8RE41w4qAl8ObYABbUxmreHfOU48C4cTAqblRde
-         bBvteLztJDp89LaAGRZyxcGEcVTobi1FUByRwex2EiXXsDsnpSXi2Q7fJ3CFNP8zJn+6
-         jOY3ixUYKa+AcrYIKDjjja8lhVYz/pxpNEidIZDdK27hiclc7yKU8RkJuzyZ3ZMj0fVS
-         iusw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680105600;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w4mfqXcQDMgEMpQCXMX8Y+2J6yDMso+bxawxRo1V7AM=;
-        b=vtxNlUBp3+v1e8wmK8gqAFMAVPAXm20NEeFUAVacLHDlN1bOFnqrwnzkGF0txCR+Cx
-         aD2v7ChIKd+gR7+OOk+agW/djmMsEEiA7ji7rKEchFd7w9x30WpNtGZLeuZgaIgSL8wA
-         JDXhAU+G47ab6IJ2noXpLxIp8+GE8GYWGQLn+X9x9JHAjthrfNL0hNXS9537E4Llt1Co
-         7vR83VjnNlVCG/tHUpa5Di11BpwInJIbjgZDP1Apj2VfTXs1VSzAEIn8hG3FUw41VREh
-         aNirACGGP4KqKJalacx9sjStYYsR4fM4PvyJTxRZP2cTuZqFa2OOfIx1wmKL4E/KGfxI
-         orHQ==
-X-Gm-Message-State: AAQBX9catfJdVqGBYVNqHm4mFXrmeagqsgpf3Sb/fm+RYeiX2XvT4qYl
-        ENiqVBSpdWwhKFDMY8WVtTUGF9hJ+lj0k8CIn4k=
-X-Google-Smtp-Source: AKy350bbUeXsaVaGVMrLADFMTlcAvbwonbtuaLJzX0D/4hTRQY54aN2E+BeUy8yI+ufmlJloSvXo7M8yGD2YzbEXtz4=
-X-Received: by 2002:a05:6a00:1a8b:b0:627:d4fa:6a9c with SMTP id
- e11-20020a056a001a8b00b00627d4fa6a9cmr10678222pfv.6.1680105599791; Wed, 29
- Mar 2023 08:59:59 -0700 (PDT)
+        Wed, 29 Mar 2023 12:01:29 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2071.outbound.protection.outlook.com [40.107.93.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C5E6E82;
+        Wed, 29 Mar 2023 09:00:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YwuOYPcqsF1jq+r3Pv4xcn3T6uQ9Vfp+TGeZG7SEHb/qIAXV8gpzMD3NwUHCmCuYa39nEdBwQ1jhbfFg8/bRTnZuwIRDX10cy15gkETOOaHw6K4q6l++glQSPK8mf91B1EB6N5MtSaZqJDBRfftyvYsIk6VvM3lgorhBcKNG/lsIKBgFnK9Vv48+ghFdOkoBWSRX4DMRco2rtYaBt+S02AFwzYD3JOzAcMA6UM8FyvgBElDVl2J6TPKjBRmQ3a4NlORBzpG/qa+UxnmuThEB8q/691RtMSzGXGkHUjlcMAoK0kwicmiI1zQUdjHfMcmdcB91toluHejDE2ClaGqZfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6IzTMCj6XqJuPKvMAINOCQ6Dx1LWIB46PBhf6uZX1m4=;
+ b=Z7d8xoTlzMivbiza1q8rQtStANmBErkzGAvpH7C7TS5JyvzPjM0tRb+GbgFhjMwU+Nl535SI4jm/Y7nOPJlKr4gi6YulB4E9o7BYYDS6g98NFAH5nyvPTmbS/JQAMlRUU2lh9X6slpROQu5ZdHomIDMPMUUPvTzAqq3Wc5wBZ2mcIdfJ/Un2iED5cQLQH9mS2gRy6eu05aDGRXppAIC1QZTnLjtEgdmvKO10Xo1FIkaFjdG8ALuv/MSIKt9bRk9YeuTm6GXC5nqU/YBs+KOIWOSNMAklvU/I4ExUIJ+JNQyTxSa5fMBJlaH+obCOQDloWM0CU7xGd3C/bJPYvnVbHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6IzTMCj6XqJuPKvMAINOCQ6Dx1LWIB46PBhf6uZX1m4=;
+ b=QRVF0USKCbfTCcsy/GwsU9OPp1H30yXsdMJ7g6r7DmAG3jTs3kWdcsq4U+gll/cuFuy+sgDA5Xe3K/H/DVAWmdtp+jVYyRPYFVhgzEtsVfeaZtUhtYHpbRvhU8qS1TDDRYcjrFFdL854b1UHxe3i0HGteKGUJpcLPTvbPBc/1co=
+Received: from BN8PR15CA0057.namprd15.prod.outlook.com (2603:10b6:408:80::34)
+ by DM4PR12MB5054.namprd12.prod.outlook.com (2603:10b6:5:389::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Wed, 29 Mar
+ 2023 16:00:06 +0000
+Received: from BN8NAM11FT112.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:80:cafe::3c) by BN8PR15CA0057.outlook.office365.com
+ (2603:10b6:408:80::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20 via Frontend
+ Transport; Wed, 29 Mar 2023 16:00:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT112.mail.protection.outlook.com (10.13.176.210) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6222.22 via Frontend Transport; Wed, 29 Mar 2023 16:00:05 +0000
+Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 29 Mar
+ 2023 11:00:01 -0500
+Date:   Wed, 29 Mar 2023 17:59:58 +0200
+From:   Robert Richter <rrichter@amd.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bhelgaas@google.com>, <linux-pci@vger.kernel.org>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v2 4/5] cxl/pci: Forward RCH downstream port-detected
+ errors to the CXL.mem dev handler
+Message-ID: <ZCRgfoXxsx8jHVCu@rric.localdomain>
+References: <ZCIPuPM+LZsOFIIZ@rric.localdomain>
+ <20230328172104.GA2897826@bhelgaas>
 MIME-Version: 1.0
-References: <5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com>
-In-Reply-To: <5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 29 Mar 2023 17:59:48 +0200
-Message-ID: <CA+fCnZfVs44zQs1Sg_MXvyGcTHc=aNhx+5R+ku8Nh3yDBb45qg@mail.gmail.com>
-Subject: Re: [BUG] Usersapce MTE error with allocation tag 0 when low on memory
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "surenb@google.com" <surenb@google.com>,
-        "david@redhat.com" <david@redhat.com>,
-        =?UTF-8?B?Q2hpbndlbiBDaGFuZyAo5by16Yym5paHKQ==?= 
-        <chinwen.chang@mediatek.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        =?UTF-8?B?S3Vhbi1ZaW5nIExlZSAo5p2O5Yag56mOKQ==?= 
-        <Kuan-Ying.Lee@mediatek.com>,
-        =?UTF-8?B?Q2FzcGVyIExpICjmnY7kuK3mpq4p?= <casper.li@mediatek.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?UXVuLXdlaSBMaW4gKOael+e+pOW0tCk=?= 
-        <qun-wei.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230328172104.GA2897826@bhelgaas>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT112:EE_|DM4PR12MB5054:EE_
+X-MS-Office365-Filtering-Correlation-Id: c10b1d08-6390-4885-a989-08db306ea9fc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 68/dFVhbT5Pv0chLN0UC68ndbXEQLNDXKQHYhawaqMeBp0h9za3aEZB4KTVwsz4bymBbnfpMV3PsYn6Xjv+jrFF5gGy53ZLHqYS59+wLjMLyq4KZlK7fGovY84yvUKzQa4BHs+8yyYHR7ZvtlwzSNo/V/64hY4T5Y3/UsB3q4ySdZ94KL6XcADe8mOw+Pk0v/UazBRq08IT2eK1QQqr7rLdzVhleGlzoLKsoty/eA5zi58+pKI/HXOoeWU0hl9YmjoEnGTU8OF8BMdq4dEMGW/dkLJCD+7j94I295Vwr31obCYByTUwe/UfpP5BJf4FWJqyda7N/BOrEmTlKTfnF61iFVR/ReV58o3sL1D5uMGsmQkpLNvC0VOhh5S/RAK1k/2oXlltYCzxaTDvzCXrvhb2BsBKvvERAnvo1dQA8kz3ezUpL3KhxU5lvWvZyNqmR+8A/C6B+IvBTRCuCJJNI8hh3CPUIDr3BT6v8a5ihaJ/hwZWYG0VsXT+i6T6eaYfD75g1oY1qa2HQlQdZ0STqm6HNRdEYlReO88pR+cnzrhTuunvUg1qXJYWpH3rtb2dPlmLjzwgTvz54cHF83Pkp8+h3II22eVpmZ+QvNv0FYsguXFCTbu/aqwPgfethDjuZ8BQzM+eJKBJlegJlChJnh24UlpNbGwBDh0X54DORc4xO0uMOW5wJUhCHWmfMX5Bh7l7K2QMidNvt15wFsacXBFoo3311EROSN5uSWn8LCe0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(376002)(346002)(451199021)(36840700001)(40470700004)(46966006)(2906002)(7416002)(8936002)(336012)(5660300002)(426003)(47076005)(82310400005)(36860700001)(356005)(55016003)(40480700001)(7696005)(82740400003)(966005)(40460700003)(81166007)(41300700001)(6916009)(4326008)(8676002)(83380400001)(70206006)(186003)(16526019)(54906003)(316002)(70586007)(26005)(9686003)(53546011)(6666004)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 16:00:05.9032
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c10b1d08-6390-4885-a989-08db306ea9fc
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT112.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5054
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 4:56=E2=80=AFAM 'Qun-wei Lin (=E6=9E=97=E7=BE=A4=E5=
-=B4=B4)' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> Hi,
->
-> We meet the mass MTE errors happened in Android T with kernel-6.1.
->
-> When the system is under memory pressure, the MTE often triggers some
-> error reporting in userspace.
->
-> Like the tombstone below, there are many reports with the acllocation
-> tags of 0:
->
-> Build fingerprint:
-> 'alps/vext_k6897v1_64/k6897v1_64:13/TP1A.220624.014/mp2ofp23:userdebug/
-> dev-keys'
-> Revision: '0'
-> ABI: 'arm64'
-> Timestamp: 2023-03-14 06:39:40.344251744+0800
-> Process uptime: 0s
-> Cmdline: /vendor/bin/hw/camerahalserver
-> pid: 988, tid: 1395, name: binder:988_3  >>>
-> /vendor/bin/hw/camerahalserver <<<
-> uid: 1047
-> tagged_addr_ctrl: 000000000007fff3 (PR_TAGGED_ADDR_ENABLE,
-> PR_MTE_TCF_SYNC, mask 0xfffe)
-> signal 11 (SIGSEGV), code 9 (SEGV_MTESERR), fault addr
-> 0x0d000075f1d8d7f0
->     x0  00000075018d3fb0  x1  00000000c0306201  x2  00000075018d3ae8  x
-> 3  000000000000720c
->     x4  0000000000000000  x5  0000000000000000  x6  00000642000004fe  x
-> 7  0000054600000630
->     x8  00000000fffffff2  x9  b34a1094e7e33c3f  x10
-> 00000075018d3a80  x11 00000075018d3a50
->     x12 ffffff80ffffffd0  x13 0000061e0000072c  x14
-> 0000000000000004  x15 0000000000000000
->     x16 00000077f2dfcd78  x17 00000077da3a8ff0  x18
-> 00000075011bc000  x19 0d000075f1d8d898
->     x20 0d000075f1d8d7f0  x21 0d000075f1d8d910  x22
-> 0000000000000000  x23 00000000fffffff7
->     x24 00000075018d4000  x25 0000000000000000  x26
-> 00000075018d3ff8  x27 00000000000fc000
->     x28 00000000000fe000  x29 00000075018d3b20
->     lr  00000077f2d9f164  sp  00000075018d3ad0  pc  00000077f2d9f134  p
-> st 0000000080001000
->
-> backtrace:
->       #00 pc 000000000005d134  /system/lib64/libbinder.so
-> (android::IPCThreadState::talkWithDriver(bool)+244) (BuildId:
-> 8b5612259e4a42521c430456ec5939c7)
->       #01 pc 000000000005d448  /system/lib64/libbinder.so
-> (android::IPCThreadState::getAndExecuteCommand()+24) (BuildId:
-> 8b5612259e4a42521c430456ec5939c7)
->       #02 pc 000000000005dd64  /system/lib64/libbinder.so
-> (android::IPCThreadState::joinThreadPool(bool)+68) (BuildId:
-> 8b5612259e4a42521c430456ec5939c7)
->       #03 pc 000000000008dba8  /system/lib64/libbinder.so
-> (android::PoolThread::threadLoop()+24) (BuildId:
-> 8b5612259e4a42521c430456ec5939c7)
->       #04 pc 0000000000013440  /system/lib64/libutils.so
-> (android::Thread::_threadLoop(void*)+416) (BuildId:
-> 10aac5d4a671e4110bc00c9b69d83d8a)
->       #05 pc
-> 00000000000c14cc  /apex/com.android.runtime/lib64/bionic/libc.so
-> (__pthread_start(void*)+204) (BuildId:
-> 718ecc04753b519b0f6289a7a2fcf117)
->       #06 pc
-> 0000000000054930  /apex/com.android.runtime/lib64/bionic/libc.so
-> (__start_thread+64) (BuildId: 718ecc04753b519b0f6289a7a2fcf117)
->
-> Memory tags around the fault address (0xd000075f1d8d7f0), one tag per
-> 16 bytes:
->       0x75f1d8cf00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8d000: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8d100: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8d200: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8d300: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8d400: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8d500: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8d600: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->     =3D>0x75f1d8d700: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 [0]
->       0x75f1d8d800: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8d900: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8da00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8db00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8dc00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8dd00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->       0x75f1d8de00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
->
-> Also happens in coredump.
->
-> This problem only occurs when ZRAM is enabled, so we think there are
-> some issues regarding swap in/out.
->
-> Having compared the differences between Kernel-5.15 and Kernel-6.1,
-> We found the order of swap_free() and set_pte_at() is changed in
-> do_swap_page().
->
-> When fault in, do_swap_page() will call swap_free() first:
-> do_swap_page() -> swap_free() -> __swap_entry_free() ->
-> free_swap_slot() -> swapcache_free_entries() -> swap_entry_free() ->
-> swap_range_free() -> arch_swap_invalidate_page() ->
-> mte_invalidate_tags_area() ->  mte_invalidate_tags() -> xa_erase()
->
-> and then call set_pte_at():
-> do_swap_page() -> set_pte_at() -> __set_pte_at() -> mte_sync_tags() ->
-> mte_sync_page_tags() -> mte_restore_tags() -> xa_load()
->
-> This means that the swap slot is invalidated before pte mapping, and
-> this will cause the mte tag in XArray to be released before tag
-> restore.
->
-> After I moved swap_free() to the next line of set_pte_at(), the problem
-> is disappeared.
->
-> We suspect that the following patches, which have changed the order, do
-> not consider the mte tag restoring in page fault flow:
-> https://lore.kernel.org/all/20220131162940.210846-5-david@redhat.com/
->
-> Any suggestion is appreciated.
->
-> Thank you.
+On 28.03.23 12:21:04, Bjorn Helgaas wrote:
+> [+cc linux-pci, more error handling folks; beginning of thread at
+> https://lore.kernel.org/all/20230323213808.398039-1-terry.bowman@amd.com/]
+> 
+> On Mon, Mar 27, 2023 at 11:51:39PM +0200, Robert Richter wrote:
+> > On 24.03.23 17:36:56, Bjorn Helgaas wrote:
+> 
+> > > > The CXL device driver is then responsible to
+> > > > enable error reporting in the RCEC's AER cap
+> > > 
+> > > I don't know exactly what you mean by "error reporting in the RCEC's
+> > > AER cap", but IIUC, for non-Root Port devices, generation of ERR_COR/
+> > > ERR_NONFATAL/ERR_FATAL messages is controlled by the Device Control
+> > > register and should already be enabled by pci_aer_init().
+> > > 
+> > > Maybe you mean setting AER mask/severity specifically for Internal
+> > > Errors?  I'm hoping to get as much of AER management as we can in the
+> > 
+> > Richt, this is implemented in patch #5 in function
+> > rcec_enable_aer_ints().
+> 
+> I think we should add a PCI core interface for this so we can enforce
+> the AER ownership question (all the crud like pcie_aer_is_native()) in
+> one place.
 
-+Peter
+Do you mean, code around functions rcec_enable_aer_ints() should be
+moved to aer.c and the cxl handler then just assumes it is enabled
+already? That looks feasible.
+
+> 
+> > > PCI core and out of drivers, so maybe we need a new PCI interface to
+> > > do that.
+> > > 
+> > > In any event, I assume this sort of configuration would be an
+> > > enumeration-time thing, while *this* patch is a run-time thing, so
+> > > maybe this information belongs with a different patch?
+> > 
+> > Do you mean once a Restricted CXL host (RCH) is detected, the internal
+> > errors should be enabled in the device mask, all this done during
+> > device enumeration? But wouldn't interrupts being enabled then before
+> > the CXL device is ready?
+> 
+> I'm not sure what you mean by "before the CXL device is ready."  What
+> makes a CXL device ready, and how do we know when it is ready?
+
+The cxl_pci driver must be bound to a device which then further
+creates a CXL mem dev. With that binding we can determine the
+connected CXL dports from the cxl endpoints (which are seen as PCIe
+endpoints) to inspect the CXL RAS caps (in the CXL component reg
+space) and the PCIe AER caps (in the RCRB of the dport).
+
+> 
+> pci_aer_init() turns on PCI_EXP_DEVCTL_CERE, PCI_EXP_DEVCTL_FERE, etc
+> as soon as we enumerate the device, before any driver claims the
+> device.  I'm wondering whether we can do this PCI_ERR_COR_INTERNAL and
+> PCI_ERR_UNC_INTN fiddling around the same time?
+
+Yes, if the CXL device is not yet bound, there is no handler attached
+and AER errors are only handled on a PCI level. Though, we need to
+make sure the status is cleared.
+
+> 
+> > > I haven't worked all the way through this, but I thought Sean Kelley's
+> > > and Qiuxu Zhuo's work was along the same line and might cover this,
+> > > e.g.,
+> > > 
+> > >   a175102b0a82 ("PCI/ERR: Recover from RCEC AER errors")
+> > >   579086225502 ("PCI/ERR: Recover from RCiEP AER errors")
+> > >   af113553d961 ("PCI/AER: Add pcie_walk_rcec() to RCEC AER handling")
+> > > 
+> > > But I guess maybe it's not quite the same case?
+> > 
+> > Actually, we use this code to handle errors that are reported to the
+> > RCEC and only implement here the CXL specifics. That is, checking if
+> > the RCEC receives something from a CXL downstream port and forwarding
+> > that to a CXL handler (this patch). The handler then checks the AER
+> > err cap in the RCRB of all CXL downstream ports associated to the RCEC
+> > (not visible in the PCI hierarchy), but discovered through the :00.0
+> > RCiEP (patch #5).
+> 
+> There are two calls to pcie_walk_rcec():
+> 
+>   1) The existing one in find_source_device()
+>   2) The one you add in handle_cxl_error()
+> 
+> Does the call in handle_cxl_error() look at devices that the existing
+> call in find_source_device() does not?  I'm trying to understand why
+> we need both calls.
+
+In case of a dport error, e_info will only contain the RCEC's id after
+running find_source_device(). Thus, only the RCEC's handler would be
+called. The portdrv is already bound to the device and currently
+doesn't have a handler attached.
+
+As described, due to cross dependencies between cxl and the portdrv,
+instead of implementing a handler in the portdrv, we decided to
+forward errors to the CXL endpoint driver and handle it there. So now,
+in handle_cxl_error(), we check if the error source is an RCEC
+attached to a CXL bus and we forward everything directly to the CXL
+endpoint handler. pcie_walk_rcec() is used for that.
+
+> 
+> > > > +static bool is_internal_error(struct aer_err_info *info)
+> > > > +{
+> > > > +	if (info->severity == AER_CORRECTABLE)
+> > > > +		return info->status & PCI_ERR_COR_INTERNAL;
+> > > > +
+> > > > +	return info->status & PCI_ERR_UNC_INTN;
+> > > > +}
+> > > > +
+> > > > +static void handle_cxl_error(struct pci_dev *dev, struct aer_err_info *info)
+> > > > +{
+> > > > +	if (pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC &&
+> > > > +	    is_internal_error(info))
+> > > 
+> > > What's unique about Internal Errors?  I'm trying to figure out why you
+> > > wouldn't do this for *all* CXL errors.
+> > 
+> > Per CXL specification downstream port errors are signaled using
+> > internal errors. 
+> 
+> Maybe a spec reference here to explain is_internal_error()?  Is the
+> point of the check to *exclude* non-internal errors?  Or is basically
+> documentation that there shouldn't ever *be* any non-internal errors?
+> I guess the latter wouldn't make sense because at this point we don't
+> know whether this is a CXL hierarchy.
+
+It is described in CXL 3.0 spec, 12.2.1.1 RCH Downstream Port-detected
+Errors.
+
+We do not handle errors other than internal ones, this is what the
+check is for. In theory, an RCEC could also throw other kind of
+errors. But, as per spec, once internal error are received from the
+RCEC, the CXL dports need to be inspected.
+
+> 
+> > All other errors would be device specific, we cannot
+> > handle that in a generic CXL driver.
+> 
+> I'm missing the point here.  We don't have any device-specific error
+> handling in aer.c; it only connects the generic *reporting* mechanism
+> (AER log registers and Root Port interrupts) to the drivers that do
+> the device-specific things via err_handler hooks.  I assume we want a
+> similar model for CXL.
+
+With device specific I mean implementation defined and not described
+in a specification. The CXL handler is sort of generic as it is
+(solely) implementing the CXL spec. Hope that makes sense.
+
+Thanks,
+
+-Robert
+
