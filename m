@@ -2,118 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C88F6CF588
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BB66CF58A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjC2VrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 17:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        id S229925AbjC2VrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 17:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjC2VrB (ORCPT
+        with ESMTP id S229937AbjC2VrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 17:47:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289CE40DC
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:46:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680126373;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TLdrrjYrVuiWJorDb/815Wq1wAW83zbfu/IRhqAaimY=;
-        b=GDWEDXH8T0x7ENDjBWHR/dFjf0YudTt1/scSY26fC56uJvp1t7/n4pi9Bq/fo43+07hXyK
-        Qk9NcvX7+t/SUEuP5C5zS3bZIwRQ+SdKbUyNGUciOELWy0LVb77rNTTOf6d88eArraUQyi
-        ClWbbsNLWjhMdNCvvXA0fnoiYKLU6bQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-627-yNQhsKoWPqeEYKPyUKxzsw-1; Wed, 29 Mar 2023 17:46:11 -0400
-X-MC-Unique: yNQhsKoWPqeEYKPyUKxzsw-1
-Received: by mail-ed1-f69.google.com with SMTP id a27-20020a50c31b000000b0050047ecf4bfso24219920edb.19
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:46:11 -0700 (PDT)
+        Wed, 29 Mar 2023 17:47:16 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290B95FCD;
+        Wed, 29 Mar 2023 14:47:09 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id i6so21251190ybu.8;
+        Wed, 29 Mar 2023 14:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680126428;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pB+5qmzYeF4gfMXOeV33fr2Zf6v5XzvIxr1hkkgBRCY=;
+        b=TqUeTWMt+zvoZh7VgjNstvdzz3di09QXLIAIDUDqKcsytBx0Con3h/YEyN+tXonV4I
+         bA6edFVySz++7jzTi7SgK8Ze5KXw8sT8dw2Zxesp0jPyuztF3xWWfo6atfeZ+7drBnNX
+         BEV6DUxbFoMN8eYle3VhB6Qb2GvjIWmQqzTL5dXLhskMfD4xv9YgVS1j8EzzDNenXb6Z
+         KYkZu7QAGd716MO1cMHtKgjIbiySwiVCG4pOSc249OHq8LA+ABNXIkgw85ftfyYksat+
+         8P6NWxKbdt/1c7sJtqZa1Gf8DPOf7WhjW0wB1bJBNyhii3fcSvhdFKxkDbeXaVz/SWzf
+         OxgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680126370;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TLdrrjYrVuiWJorDb/815Wq1wAW83zbfu/IRhqAaimY=;
-        b=x3irBDpD7NtBeuaawGbtKpD0KxsKnpV8Hs4kIxQJ0TOcwosikPmbks6Q4wZwUeJ7DF
-         MkWODq8SxAMFzFZfAmXouC2FUXY3vUNTxGXMH4acSa5M5qHo89z5O7XHgaZYPPwJQA+0
-         cPw5iSTptrY58SYuEtmN5WYdwjfMxstId/9bo9bBHVAnwTbOr+dw5dfmBTw4C4wCWbBA
-         hsQZ5xIqSKyWqRcaw/jzPGSm43yjY8sPMY1jaKSeLi3p0xb6njvFsKFwa7d6hOMG6ftJ
-         zswy9CJD6Yrhlt4NaW2u8gNUu8wlI2jVvX+m5d0Vws6VERNxvOECJgV2XODZSNsKHEdr
-         tZ2g==
-X-Gm-Message-State: AAQBX9eqGdNlIca/zjNjXAzB1BrrDDLOfOSL7wZ5xL8pX9JY6iPIuz3j
-        D/frNye+skZStqSGra5eqLuOQe5netjHqPeZjmAdUR4yRo4OvV063lfe/yiw/z2JFkdIMJdCtED
-        sFf+DATA2eV2gicLOxravFAMB
-X-Received: by 2002:a17:907:7f86:b0:926:9c33:ea4 with SMTP id qk6-20020a1709077f8600b009269c330ea4mr23062338ejc.27.1680126370361;
-        Wed, 29 Mar 2023 14:46:10 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZGQUYQJeTXwnRV15le8g2e5F6QxBAZ5bivkYpLnhuEBXno6vpJg9RQt0C5heMRA6NQh8z/2A==
-X-Received: by 2002:a17:907:7f86:b0:926:9c33:ea4 with SMTP id qk6-20020a1709077f8600b009269c330ea4mr23062308ejc.27.1680126369951;
-        Wed, 29 Mar 2023 14:46:09 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id z26-20020a17090674da00b009310d4dece9sm16869157ejl.62.2023.03.29.14.46.09
+        d=1e100.net; s=20210112; t=1680126428;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pB+5qmzYeF4gfMXOeV33fr2Zf6v5XzvIxr1hkkgBRCY=;
+        b=zI/rp1fTE/MX9Ar37xRi9m1w0mBjbEEtSvUy5xKHcfJkHyiJcEvgsHhFIrl6hncb2p
+         RCEPJx8aP3FOBCdvfRKacsdvWCnaRJLKDAJpH9L6VOKNCj0WoLQ+QhgZgN4hYV/10Poe
+         QRVL13VV0lrZqqq1D/Za3o+HE/D1PbadU8mMbgUyh4gwZzF8DA7fQNzQXi9vo8Kx2+wu
+         wBRZTjgvJ+nUBtoece4r6ygjeIOn/Amaq9ydWF0kOLtjSuq0GAuFVHv+cZA6LvuYahU+
+         IpLbaDwQKzgcdMslI4VnlNallj6mJun+8YmHjRSCwM1e7P7jPGS24OQLGfpW39aHi4bO
+         eKPA==
+X-Gm-Message-State: AAQBX9f8g+6v79y28D4knoGItqm5KNKt/dP4QAxo1XZr+ZU4vcjKjUn9
+        fdkqT8qxUdbmosOscNYx9HU=
+X-Google-Smtp-Source: AKy350aC7+F0BTGZwir9fMbQQL4MqV7EQadoU98pfpSMRMcuq4ke9nc1/BtjyZnxtIBExdhqEPrDXQ==
+X-Received: by 2002:a25:ac1b:0:b0:b72:df13:fda with SMTP id w27-20020a25ac1b000000b00b72df130fdamr18541814ybi.42.1680126428064;
+        Wed, 29 Mar 2023 14:47:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e60-20020a25a3c2000000b00b7767ca74a3sm3670713ybi.64.2023.03.29.14.47.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 14:46:09 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 974C8A22B54; Wed, 29 Mar 2023 23:46:08 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>, bpf@vger.kernel.org,
-        Stanislav Fomichev <sdf@google.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
-        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
-        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
-        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
-        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
-        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
-        davem@davemloft.net
-Subject: Re: [xdp-hints] [PATCH bpf RFC-V2 1/5] xdp: rss hash types
- representation
-In-Reply-To: <168010734324.3039990.16454026957159811204.stgit@firesoul>
-References: <168010726310.3039990.2753040700813178259.stgit@firesoul>
- <168010734324.3039990.16454026957159811204.stgit@firesoul>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 29 Mar 2023 23:46:08 +0200
-Message-ID: <87355nnsdb.fsf@toke.dk>
+        Wed, 29 Mar 2023 14:47:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 29 Mar 2023 14:47:05 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/240] 6.2.9-rc1 review
+Message-ID: <430f447d-fb8f-408d-b9f0-28db4556a646@roeck-us.net>
+References: <20230328142619.643313678@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328142619.643313678@linuxfoundation.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jesper Dangaard Brouer <brouer@redhat.com> writes:
+On Tue, Mar 28, 2023 at 04:39:23PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.9 release.
+> There are 240 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
+> Anything received after that time might be too late.
+> 
 
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 7133017bcd74..81d41df30695 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -721,12 +721,14 @@ __bpf_kfunc int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx, u64 *tim
->   * @hash: Return value pointer.
->   *
->   * Return:
-> - * * Returns 0 on success or ``-errno`` on error.
-> + * * Returns (positive) RSS hash **type** on success or ``-errno`` on error.
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 520 pass: 520 fail: 0
 
-This change is going to break any BPF program that does:
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-if (!bpf_xdp_metadata_rx_hash(ctx, &hash))
-  /* do something with hash */
-
-
-so I think adding a second argument is better; that way, at least
-breakage will be explicit instead of being a hidden change in semantics
-(and the CO-RE style checking for kfuncs Alexei introduced should
-trigger correctly).
-
-But really, what we should do anyway is merge this during the -rc phase
-to minimise any breakage :)
-
--Toke
-
+Guenter
