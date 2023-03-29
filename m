@@ -2,170 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678286CD4F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557066CD4F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjC2InT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S231194AbjC2InV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjC2InQ (ORCPT
+        with ESMTP id S229864AbjC2InQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 29 Mar 2023 04:43:16 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2047.outbound.protection.outlook.com [40.107.20.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24B41724;
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641361716;
         Wed, 29 Mar 2023 01:43:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gp2ijfhN6Z4cVgKKlAUUNZT9/mFo7Fo4/lAQkdkyUA6uj+l18OcipZ/imiRB+LH3uoyfoKyvZysw2RhhNigRl4XHpNgpDCplWHgz5ifs2UxSeJvrz8C7EnwWfijQgMQ06AGZKHIPrC/ojF9ekeEuPfXbjzw8Gm8KwSBhvhU3u8ydRq6pcq8+xY55kQPMfivAi5xa0V1GSUQAXOdyTC6OWqymPWlNmHefLx9uZngxUwSPh44Ee1yqUykWuTCFRO0OKg0aglrI57WmZC0xc5cYTgdxeWtslQsJM/WHJfk0kgavkNn338/tcHYN0oCQIptQsslulgqrTNFvYKboQd46Sg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6Zemu+f7/a8qHG9XoopeGe6ggeyYkK4mJOudusJboqM=;
- b=brkOmRUezcGtbtshUATbNXAHbAVF8sltfewDhF867Mytvk8TJbnEzw7LLVScntcHmOkD/hzEMU+hcbcGabBj470lqnuzQhzLjAx3IYZ3wRsqRJ+KZKf5IdBXOjPRElXUi6Nk+G6HoVIlj/Ht6FXa6g3pbXmCKCfDRajZctw9DqsVXnjd83hmEJHUWum4GBQFfOPQLY96WcGP+S+poUCutxQVQhMcjgOCHhzue3Hq8VxkqT2CI+oLWWl1rWFBtxN3w783aCaOyjasCxrjPQ/G7WTiZ2NhlATwvp5KjpYNwNcopKw4hEOuPyZCpaJTnVJJlNBt7q20ajeOMMtRlKueig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6Zemu+f7/a8qHG9XoopeGe6ggeyYkK4mJOudusJboqM=;
- b=MYxAb1GeAj0W3k76s9ZpemCmuBbnsD6SyRKZc/6/sNQSp7tXDfc6Ge7iZCuCv/1+CMiOZ4Fokr27NxXAEIwvKVvWw5C4keL9tUwgiSfy7gzd4xEk3l5LeUcGutwS11NJtFF8xgWzV3I2xCfr8C8j2LTYRhmVSjNpwib0PkO4fv8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from VI1PR08MB4544.eurprd08.prod.outlook.com (2603:10a6:803:100::13)
- by DU0PR08MB7437.eurprd08.prod.outlook.com (2603:10a6:10:354::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.31; Wed, 29 Mar
- 2023 08:43:09 +0000
-Received: from VI1PR08MB4544.eurprd08.prod.outlook.com
- ([fe80::b094:4fd2:abe3:9f08]) by VI1PR08MB4544.eurprd08.prod.outlook.com
- ([fe80::b094:4fd2:abe3:9f08%4]) with mapi id 15.20.6222.033; Wed, 29 Mar 2023
- 08:43:09 +0000
-Message-ID: <dd8c3872-4391-635d-daf4-df2e5c419c24@wolfvision.net>
-Date:   Wed, 29 Mar 2023 10:43:07 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/7] Add timing override to sitronix,st7789v
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>
-References: <20230314115644.3775169-1-gerald.loacker@wolfvision.net>
-From:   Gerald Loacker <gerald.loacker@wolfvision.net>
-Organization: WolfVision GmbH
-In-Reply-To: <20230314115644.3775169-1-gerald.loacker@wolfvision.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR06CA0201.eurprd06.prod.outlook.com
- (2603:10a6:802:2c::22) To VI1PR08MB4544.eurprd08.prod.outlook.com
- (2603:10a6:803:100::13)
+Received: by mail-pf1-x432.google.com with SMTP id u20so9764870pfk.12;
+        Wed, 29 Mar 2023 01:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680079394;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qAkrUB7euHbox3v7PniPVKEwDjGJe30NY4iWbdoH0eQ=;
+        b=irr7FA6utBPpPz/5zJXbIJCT2Q+4ojhBzwGf4kNFvchrW6lv4H9d86AXROqxDEMrVO
+         chkl5Frsv2fKA0ZrHeh/IfpRPEcYYW+vFhOodmsrCxuTnJ6apmKiJMKU4LG2iS+3Z3Vs
+         2TSuO+asfb7cmCsCCiO6u+cyIU1MDcVS1NEJt8IOGhmJRU0iGxSclduXzz9sRHTA6rrw
+         IGlChkjyUbIRugm/X6iRnCljRiZmPNweLgf7Ki0sCM+IdL6QvBwbWUM0FBP5AHsujnbH
+         DuFUdgLFKF//7wfVwTBtdHJaB3dKucztCT+xexWpq7dpw1WVNt5XIdHqKqJ1bLwdoAZh
+         MUJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680079394;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qAkrUB7euHbox3v7PniPVKEwDjGJe30NY4iWbdoH0eQ=;
+        b=yvBmFsJwFNrbMy7YprHVG4ylZgcm9ZReEYM9LqwOF11kBWXWshnnDZZu04wK8tMp7B
+         bl0z+4GSSOHNy5Q5bNgzXNA+CbhG+tRc8+3h+4CQ4nLbSZDbbvAe4VTlbhFz72s9Ara/
+         C0yb2T+ld6CdmMgavnAFkaX5jYX64dOxPJ8oOMIf3V4DBJLLBvgmWSLofMyE8j1Mu/Af
+         7GYdBCGCHykLY6fLuGbGuQrQFn2uusMAt+20EASw08VhVW0rrgr4iRfrAs77MGYzFOHz
+         VtBqQS9fmHC3Ny/I6qe4vYGk+ZSJ4ArUbnLjufTm4+d3GiJLTaoDR39io0au4TM/CIHM
+         61Zg==
+X-Gm-Message-State: AAQBX9c/1e7EJYHVyJjkTg7YZEE7fr10sno1dbCnN99rKLSGYuYhF32b
+        sIPan0XZ+nlhO95WsGxd6h0=
+X-Google-Smtp-Source: AKy350Yi+FDtNs7I7ur07WPq3PMIY+FGuuQTrqAVCmZswBPeFKnK7Y3Ten8e6jx+gYtFseIR6XFIaA==
+X-Received: by 2002:a62:5b44:0:b0:625:4b46:e019 with SMTP id p65-20020a625b44000000b006254b46e019mr1347521pfb.9.1680079393750;
+        Wed, 29 Mar 2023 01:43:13 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-15.three.co.id. [116.206.28.15])
+        by smtp.gmail.com with ESMTPSA id jk1-20020a170903330100b001a1d5d47105sm7445188plb.53.2023.03.29.01.43.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 01:43:13 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id C006B10670B; Wed, 29 Mar 2023 15:43:10 +0700 (WIB)
+Date:   Wed, 29 Mar 2023 15:43:10 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Takashi Iwai <tiwai@suse.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     regressions@lists.linux.dev, intel-wired-lan@lists.osuosl.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION] e1000e probe/link detection fails since 6.2 kernel
+Message-ID: <ZCP6Hhs21zzpzBQE@debian.me>
+References: <87jzz13v7i.wl-tiwai@suse.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR08MB4544:EE_|DU0PR08MB7437:EE_
-X-MS-Office365-Filtering-Correlation-Id: f22de278-99d9-4b8a-ff13-08db30319fb6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YlXYkIC2xDq49v8+Q7Kf/dScGGTrp8Ewbm9OyYrt/H4udQGuHPcU4xyqp9BHl8wBkLeamRMilMFNJKtC9QVFlkTQoulHiooajDiKtLzIIWMYO+dKwZm/sJHos1kF6WZmTpcDwufl1DA7Js++juOeDcw8YPZbEq09nCwph13JBMbiNtni3iCj/VH7tAID7sZ3nBIp/drfr5x4SUbFESQNYtm1M6vTwpnxDwYY37qLOZiVHoCCBgeIvtI558DQfqycMpV3qrtpJVtBT2tUUde2CySwTiYgRWtanvz2gUh05AlsXv2Pgk1aAv4joqCQPWL6YA5VcpJYB0pIHXhvcLJw/3NZ/5Cxig3dWrkde6PmE94B95i4lmZDKqpdyW6eRMgqNRXFpI8LjLg0Vyy4dk5gCBevjS+1lAZnfUxVXyI68HhljVxK/AYWZbEULq5NxUL9C3vffB66OsUeb0ayPPJfHkEh/KZmVFIZ3kypLy7/pCBpDSSSeAlEqQqOwzzm9Yr6U7pci27X2wYIdthdfY5RI1djmvzDi8LKh/i/qAD+j0jZ0b0ZX7rrkT5VXc603N8oJuk+P7s+ngeVfl0fNWeeaynv3KdOziYNerNvbh8Jh8J8sKBFpit+yjw45O9kTb4PO5ue72vvHDFzDnO2l6pdcA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB4544.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(39850400004)(376002)(396003)(136003)(451199021)(7416002)(36916002)(2616005)(8936002)(5660300002)(186003)(6506007)(26005)(36756003)(6512007)(2906002)(107886003)(86362001)(31696002)(44832011)(83380400001)(6486002)(4326008)(8676002)(54906003)(66556008)(66476007)(41300700001)(66946007)(478600001)(38100700002)(316002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L1A1d1NPazNFRVdPNEZIRWNRTGczMS9ZQitPNDVRQWYwamF0MXdIZEtYRnlm?=
- =?utf-8?B?aHhWdFRXc1FEalhmR2RTOTUra2UyYllIc2hVbUVLS1B1VjQ1cTkwRjA4eDRO?=
- =?utf-8?B?MTBLVkk3Qkx0d0tVV1lCdWxBQU53S2RxS2l6QnRjVHFtOFNvem5vRVJKT2NJ?=
- =?utf-8?B?K0FmaC9kVk0yUzY3VGgyTi9BVGY5ZWpuamdZUU1YbzZNb2tSU1Y5ZWpJcE5t?=
- =?utf-8?B?bEhLSFlMU3F2OXhpb3RhcldxUE1EcnNaWDl4dFlqaUJnbjEyUzlBUlBoSEw5?=
- =?utf-8?B?bXBiTEMyeGxRUS9vV2Z5ZHBkb1lVcHZBRzZoZWZvdWhjNXYzYmIzTGNKanZr?=
- =?utf-8?B?dk54Y2JGMjRXdzU1T2lWM2E4akJVYkJCSnNjYnNVdEJvcHZvVFJHdDYwb2tS?=
- =?utf-8?B?MmlKdUpDQXRJemZPMVRYdkFmVG8xUkg2YkJXeHJFL0VTcWwvZElpRzFud2pl?=
- =?utf-8?B?Ri9FMHZqczl6Q28xQ1NRNk5WQnpnQVQvWnU4bjI4MU93aWhQd0ltZUc4VkU5?=
- =?utf-8?B?Um1pVTVKZS9XUHVSOFpzdURtcWdTb09Tanl1OHNBYllwWGk4SEg3T3JaSGg3?=
- =?utf-8?B?NFl6clYxYlVBRmdGR0VBNmdoQVpGemlKRkxlalE3UHBXRWZ1OUNSOGZjTlFz?=
- =?utf-8?B?YjF4NjJUL0IzeXFqSnEvNllBbGhDbkxIZTJLc09xVjRPQjFHRDcvOEE4Qzk1?=
- =?utf-8?B?dUhRY1RGUDRDdGMxTUhCc0Y3V0NvSWJSZ1dROUN3N0pWK0NMODNsTDk3U2pP?=
- =?utf-8?B?UStlcWg0LzNpQytQbmlneEpnOGUvR2l2NVNsS1FHOVM5OHFwM0tMY0U5US9Y?=
- =?utf-8?B?d3Zsa0xPWXBVeHp6bys5UTN1RUZXV2lNa1lUZjJmUElEa2YyeHQ4anlTR2E4?=
- =?utf-8?B?Wko2a0Q4NVZZdXpIOFpOUndCTDBUTWpZdWhack1tZjhpa0FEaVJGTGxvaTQv?=
- =?utf-8?B?bjl4WnlyYnpvaDErL01vWTA4dmxPMkJzenlDcUltdjM1dnBJSDhFR1Q5OElV?=
- =?utf-8?B?SCtBQis5WnNRUityNTFhWEdweHFwNVl2WUJyRjNtdVVRejNWRW5SNmc1M2dO?=
- =?utf-8?B?Y0RVYUROOUZKUkpwbnFQOTVoQzlHV0ttd0FxOVI5UFRGWXFqYmp1bHEyNzVM?=
- =?utf-8?B?SWh2MVZpVTlxNEFXUlRFWFVvZitzamFRQ2JFR05FQWc1elpJMmZBclc5WDNM?=
- =?utf-8?B?Mk5wY3pJWG9SS3JlMTZNM1NXOHVSVE9KWmd5VTM0cDBYZ0R5NFh2ZWdOSWFK?=
- =?utf-8?B?NEtqbm0vQzJ6R0VCR2UvQzY4dm1aR0hrdVlGUXBaTG5SeTNzdjh5UUFnUnZP?=
- =?utf-8?B?MmJuU2JxZVBUdnlIR0dRLzJ4MzNyeW93ZUR1bDR1NXNKdVdmTEJKWjJYcHpj?=
- =?utf-8?B?K1JmUkFnNWpFbVJRc0U5THA4SWU4MGNTN0RFME44QTV6UnFPRmhQT3poelZw?=
- =?utf-8?B?YnFrSE8ySzZVY2FNYjUrTkZyWWRhOS9rU3d2MjdIcSs2blBrT09UWDhVTkZa?=
- =?utf-8?B?cGhlNzVsWEE2b0VQd3lsNXE0UnhYMXFFSmZpaHlyMGNOaU9OOGplZzdDcXAw?=
- =?utf-8?B?bmRESzhvUVJFTTRUcU04TTl1WHhWQ2pLL2hFV0ZQaXBEYXllSW9kTnRaZkh0?=
- =?utf-8?B?MytBVGVKeXZwa3ZqQncxVjR2R25GRktKL1R0RDR1OG1jSEVyZ0o5N3JmM2gw?=
- =?utf-8?B?djZsYmRHbEI4TXZhc1Q4MzVZUDRUR01xWHZPdlpmejNKWi95MW1mV284V2V4?=
- =?utf-8?B?VFUyeForSFh5THUzb1Z3SDkxSkdpd3ZRUVlOaUlxRUUwMjNia3ZzRjdSditQ?=
- =?utf-8?B?cC9NUG9xYzlNMTRTWFRWTXZSWHBIK0svWEF0QUlaR3pJQ0YwWWhVemNMNVFK?=
- =?utf-8?B?SjV6WW5VaG1TN3A5Y1RXcDF5eXVhQ1RMT0NBU3lnUmZMa1VXYnBtNUpEUk5E?=
- =?utf-8?B?OEExVm5aTHRIbzZ1RG5iaHVRa3kxWEtVZnN2NjFWTWNwZ2ZPKzdmYWJWRUJ2?=
- =?utf-8?B?MElJanBrTUpGellVNkVaQzUzWGpGcWFaeDJCemNPOStoY1doS0VoUUdEYS93?=
- =?utf-8?B?Rlp1dFM5SkpQM0JVdDAzdjl3U01taWRVUlBuSXFaNFJpTGY1U3BrYjlWL29G?=
- =?utf-8?B?bU5odGFuUkkrS2pVWTBtSnlCVVBxamtmbXZMd0poQm5QZDg0SStXRzNBenRN?=
- =?utf-8?B?TUE9PQ==?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: f22de278-99d9-4b8a-ff13-08db30319fb6
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR08MB4544.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 08:43:09.5773
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tXGlB2s/Xsz92eJc6kQtYj9Z6PjJBLVhpgBJn01F5+lgmN1gramwqHe8eFANYdmEMFpu8jQ0/u8S1J5NFtA+W2PetxmrO1wJ3RqYbCcFmVc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB7437
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="635VUw/DoI3CBtIu"
+Content-Disposition: inline
+In-Reply-To: <87jzz13v7i.wl-tiwai@suse.de>
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-Besides dt-bindings, there has been no feedback on this series yet. How
-to proceed?
+--635VUw/DoI3CBtIu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For clarification: Besides adjusting panel parameters, we need the
-panel-timing to add a partial display mode later.
+On Tue, Mar 28, 2023 at 02:40:33PM +0200, Takashi Iwai wrote:
+> Hi,
+>=20
+> we've got a regression report for e1000e device on Lenovo T460p since
+> 6.2 kernel (with openSUSE Tumbleweed).  The details are found in
+>   https://bugzilla.opensuse.org/show_bug.cgi?id=3D1209254
+>=20
+> It seems that the driver can't detect the 1000Mbps but only 10/100Mbps
+> link, eventually making the device unusable.
+>=20
+> On 6.1.12:
+> [    5.119117] e1000e: Intel(R) PRO/1000 Network Driver
+> [    5.119120] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+> [    5.121754] e1000e 0000:00:1f.6: Interrupt Throttling Rate (ints/sec) =
+set to dynamic conservative mode
+> [    7.905526] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): Failed t=
+o disable ULP
+> [    7.988925] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): register=
+ed PHC clock
+> [    8.069935] e1000e 0000:00:1f.6 eth0: (PCI Express:2.5GT/s:Width x1) 5=
+0:7b:9d:cf:13:43
+> [    8.069942] e1000e 0000:00:1f.6 eth0: Intel(R) PRO/1000 Network Connec=
+tion
+> [    8.072691] e1000e 0000:00:1f.6 eth0: MAC: 12, PHY: 12, PBA No: 1000FF=
+-0FF
+> [   11.643919] e1000e 0000:00:1f.6 eth0: NIC Link is Up 1000 Mbps Full Du=
+plex, Flow Control: None
+> [   15.437437] e1000e 0000:00:1f.6 eth0: NIC Link is Up 1000 Mbps Full Du=
+plex, Flow Control: None
+>=20
+> On 6.2.4:
+> [    4.344140] e1000e: Intel(R) PRO/1000 Network Driver
+> [    4.344143] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+> [    4.344933] e1000e 0000:00:1f.6: Interrupt Throttling Rate (ints/sec) =
+set to dynamic conservative mode
+> [    7.113334] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): Failed t=
+o disable ULP
+> [    7.201715] e1000e 0000:00:1f.6 0000:00:1f.6 (uninitialized): register=
+ed PHC clock
+> [    7.284038] e1000e 0000:00:1f.6 eth0: (PCI Express:2.5GT/s:Width x1) 5=
+0:7b:9d:cf:13:43
+> [    7.284044] e1000e 0000:00:1f.6 eth0: Intel(R) PRO/1000 Network Connec=
+tion
+> [    7.284125] e1000e 0000:00:1f.6 eth0: MAC: 12, PHY: 12, PBA No: 1000FF=
+-0FF
+> [   10.897973] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Dupl=
+ex, Flow Control: None
+> [   10.897977] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
+> [   14.710059] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Dupl=
+ex, Flow Control: None
+> [   14.710064] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
+> [   59.894807] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Dupl=
+ex, Flow Control: None
+> [   59.894812] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
+> [   63.808662] e1000e 0000:00:1f.6 eth0: NIC Link is Up 10 Mbps Full Dupl=
+ex, Flow Control: None
+> [   63.808668] e1000e 0000:00:1f.6 eth0: 10/100 speed: disabling TSO
+>=20
+> The same problem persists with 6.3-rc3.
+>=20
 
-Regards,
-Gerald
+I'm adding this to regzbot:
 
-Am 14.03.2023 um 12:56 schrieb Gerald Loacker:
-> This patch set adds additional functionality to the sitronix,st7789v
-> driver.
-> 
-> Patches 1,3 and 4 propagate useful flags to the drm subsystem.
-> Patch 2 adds the orientation property.
-> Patch 5 parses the device tree for a panel-timing and makes it possible to
->   override the default timing.
-> Patches 6 and 7 add the new properties to the dt-bindings.
-> 
-> Gerald Loacker (4):
->   drm/panel: sitronix-st7789v: propagate h/v-sync polarity
->   drm/panel: sitronix-st7789v: add bus_flags to connector
->   drm/panel: sitronix-st7789v: parse device tree to override timing mode
->   dt-bindings: display: add panel-timing property to sitronix,st7789v
-> 
-> Michael Riesch (3):
->   drm/panel: sitronix-st7789v: propagate RGB666 format
->   drm/panel: sitronix-st7789v: add panel orientation support
->   dt-bindings: display: add rotation property to sitronix,st7789v
-> 
->  .../display/panel/sitronix,st7789v.yaml       |  19 ++
->  .../gpu/drm/panel/panel-sitronix-st7789v.c    | 204 +++++++++++++++---
->  2 files changed, 191 insertions(+), 32 deletions(-)
-> 
+#regzbot ^introduced: v6.1.12..v6.2.4
+#regzbot: e1000 probe/link detection fails since v6.2
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--635VUw/DoI3CBtIu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCP6HgAKCRD2uYlJVVFO
+o8AHAQDFjzDRV29C1MwVXjNV+kbHZ1vxTvB6tFYmWn0YDTmtkwEAqupmkIIt1wg8
+KgBw0VHxmNcJ4aCYAV9pZe8nMRr9pwg=
+=+9Nm
+-----END PGP SIGNATURE-----
+
+--635VUw/DoI3CBtIu--
