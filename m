@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AE16CD91D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 874A66CD91F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjC2MHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S229500AbjC2MIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjC2MHH (ORCPT
+        with ESMTP id S229529AbjC2MIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:07:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56EE54ED3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:06:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 594AE1FB;
-        Wed, 29 Mar 2023 05:07:38 -0700 (PDT)
-Received: from [10.57.20.1] (unknown [10.57.20.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1205B3F6C4;
-        Wed, 29 Mar 2023 05:06:52 -0700 (PDT)
-Message-ID: <eab64b08-34fb-996c-e57a-8f179c132de5@arm.com>
-Date:   Wed, 29 Mar 2023 13:06:51 +0100
+        Wed, 29 Mar 2023 08:08:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054553C0F;
+        Wed, 29 Mar 2023 05:08:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA7F5B822E4;
+        Wed, 29 Mar 2023 12:08:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26AC6C433D2;
+        Wed, 29 Mar 2023 12:08:07 +0000 (UTC)
+Date:   Wed, 29 Mar 2023 08:07:58 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Vincent Donnefort <vdonnefort@google.com>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v2 1/2] ring-buffer: Introducing ring-buffer mapping
+ functions
+Message-ID: <20230329080758.0e730796@rorschach.local.home>
+In-Reply-To: <20230329070353.1e1b443b@gandalf.local.home>
+References: <20230322102244.3239740-1-vdonnefort@google.com>
+        <20230322102244.3239740-2-vdonnefort@google.com>
+        <20230328224411.0d69e272@gandalf.local.home>
+        <ZCQCsD9+nNwBYIyH@google.com>
+        <20230329070353.1e1b443b@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 6/9] coresight: Store in-connections as well as
- out-connections
-Content-Language: en-US
-To:     Jinlong Mao <quic_jinlmao@quicinc.com>, coresight@lists.linaro.org
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230310160610.742382-1-james.clark@arm.com>
- <20230310160610.742382-7-james.clark@arm.com>
- <b0cf2f22-1824-bb06-1648-3570fd6540a4@quicinc.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <b0cf2f22-1824-bb06-1648-3570fd6540a4@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,77 +49,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 29 Mar 2023 07:03:53 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
+> struct ring_buffer_meta_page_header {
+> #if __BITS_PER_LONG == 64
+> 	__u64	entries;
+> 	__u64	overrun;
+> #else
+> 	__u32	entries;
+> 	__u32	overrun;
+> #endif
+> 	__u32	pages_touched;
+> 	__u32	meta_page_size;
+> 	__u32	reader_page;	/* page ID for the reader page */
+> 	__u32	nr_data_pages;	/* doesn't take into account the reader_page */
+> };
+> 
+> BTW, shouldn't the nr_data_pages take into account the reader page? As it
+> is part of the array we traverse isn't it?
 
-On 14/03/2023 05:35, Jinlong Mao wrote:
-> 
-> On 3/11/2023 12:06 AM, James Clark wrote:
->> This will allow CATU to get its associated ETR in a generic way where
->> currently the enable path has some hard coded searches which avoid
->> the need to store input connections.
->>
->> Signed-off-by: James Clark <james.clark@arm.com>
->> ---
->>   drivers/hwtracing/coresight/coresight-core.c  | 56 +++++++++++++++--
->>   .../hwtracing/coresight/coresight-platform.c  | 61 ++++++++++++++++---
->>   drivers/hwtracing/coresight/coresight-sysfs.c |  1 -
->>   include/linux/coresight.h                     | 25 ++++++++
->>   4 files changed, 130 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/hwtracing/coresight/coresight-core.c
->> b/drivers/hwtracing/coresight/coresight-core.c
->> index f457914e445e..a8ba7493c09a 100644
->> --- a/drivers/hwtracing/coresight/coresight-core.c
->> +++ b/drivers/hwtracing/coresight/coresight-core.c
->> @@ -59,6 +59,7 @@ const u32 coresight_barrier_pkt[4] = {0x7fffffff,
->> 0x7fffffff, 0x7fffffff, 0x7fff
->>   EXPORT_SYMBOL_GPL(coresight_barrier_pkt);
->>     static const struct cti_assoc_op *cti_assoc_ops;
->> +static int coresight_fixup_inputs(struct coresight_device *csdev);
->>     ssize_t coresight_simple_show_pair(struct device *_dev,
->>                     struct device_attribute *attr, char *buf)
->> @@ -1369,6 +1370,35 @@ static int coresight_fixup_orphan_conns(struct
->> coresight_device *csdev)
->>                csdev, coresight_orphan_match);
->>   }
->>   +/*
->> + * Device connections are discovered before one/both devices have
->> been created,
->> + * so inputs must be added later.
->> + */
->> +static int coresight_fixup_inputs(struct coresight_device *csdev)
->> +{
->> +    int i, ret = 0;
->> +    struct coresight_connection *out_conn;
->> +    struct coresight_connection in_conn;
->> +
->> +    for (i = 0; i < csdev->pdata->nr_outconns; i++) {
->> +        out_conn = &csdev->pdata->out_conns[i];
->> +        if (!out_conn->remote_dev || !out_conn->remote_dev->pdata)
->> +            continue;
-> 
-> Hi James,
-> 
-> If out_conn->remote_dev is null here,  the in_conn of
-> out_conn->remote_dev->pdata will never be set.
-> For example, device A is connected to in_port 0 of device B. If device A
-> is probed first, the in_conn of device
-> B will not be set.
-> Do we need to add Defer probe return here ? I tested with defer probe
-> return, it works.
-> 
->         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
->                 out_conn = &csdev->pdata->out_conns[i];
->                 if (!out_conn->remote_dev || !out_conn->remote_dev->pdata)
-> -                       continue;
-> +                        return -EPROBE_DEFER;
-> 
-> Thanks
-> Jinlong Mao
+Ah, I guess nr_data_pages is the length of the index mapping, not the
+array of pages mapped?
 
-I think you are right but I thought that EPROBE_DEFER was too big of a
-change and that it might break something in some unexpected way.
-
-In V3 I used the orphan mechanism for inputs in the same way as outputs
-so the problem should be gone now but without having to defer loading.
-
+-- Steve
