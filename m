@@ -2,81 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B5C6CD5F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B016D6CD5F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjC2JIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S230116AbjC2JJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjC2JIp (ORCPT
+        with ESMTP id S229821AbjC2JJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:08:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD4819BA;
-        Wed, 29 Mar 2023 02:08:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 29 Mar 2023 05:09:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2681FD8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:09:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CEB9B821AC;
-        Wed, 29 Mar 2023 09:08:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 941CFC433EF;
-        Wed, 29 Mar 2023 09:08:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680080922;
-        bh=1bBGA8NktkVBqzjr2FRdql4wXbWDk2rW1T2qFU/H/WY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AJRFZAFAZnYkDvEcmN0A82nvXmRVbfplHCpFLa/vgEDTwGcVsZ8U1S8KGwWS4A2Rk
-         Sd3C0jUyxKTIPcIO9Ed3hC/FRnvPm4L7piw8S4LLuSZOdr8OuoBJ2UHrf/qGkTvpGo
-         oE9dMJM+pXx20guVutDuajtgRwCrtqWoVilzVvj4=
-Date:   Wed, 29 Mar 2023 11:08:39 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v9 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <ZCQAF-nrrsfBtviT@kroah.com>
-References: <20230323071051.2184-1-tony@atomide.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 96720219E1;
+        Wed, 29 Mar 2023 09:09:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680080954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tkDSO9gisUmrfR4J8E3LdwBNX1MJ924+7fjQmWZXwMw=;
+        b=jCamSbJR1rUAnKIHBOk+RFtEqo33kEoBm/NwJcGEWfnbfgXrMOQSVeQQINLNp424BDJ6za
+        aRfmF0WKDAKHF8H2yFeLLBhPB+EK9Gd6WXtROAN6NaBYX7TK6sJ6CsmUgqbIa8o7i/vAsW
+        rzdpTP0YZ4McLGL7GAsRcpRL6LffzRI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680080954;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tkDSO9gisUmrfR4J8E3LdwBNX1MJ924+7fjQmWZXwMw=;
+        b=AkY8Q0vrIeG4HQirxTpgO3S6uSbYGC52hCAJ0SZtTI2NGQB8mqMfqqdz3rBPpnCWLKBTUy
+        aNGyCpyDbsfeRGDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5EC58138FF;
+        Wed, 29 Mar 2023 09:09:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tSksFjoAJGSMegAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 29 Mar 2023 09:09:14 +0000
+Message-ID: <6504a971-cf4b-ac35-4fe9-ee49b984b521@suse.de>
+Date:   Wed, 29 Mar 2023 11:09:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323071051.2184-1-tony@atomide.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
+ clause
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>, liyi <liyi@loongson.cn>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230325074636.136833-1-15330273260@189.cn>
+ <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
+In-Reply-To: <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------xisgQ1LsOp80r1yWF4amrlt0"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 09:10:47AM +0200, Tony Lindgren wrote:
-> --- /dev/null
-> +++ b/drivers/tty/serial/serial_base.c
-> @@ -0,0 +1,142 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------xisgQ1LsOp80r1yWF4amrlt0
+Content-Type: multipart/mixed; boundary="------------7TXW7RLbx04W0AUDsj43WVSy";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Sui Jingfeng <15330273260@189.cn>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, suijingfeng <suijingfeng@loongson.cn>,
+ liyi <liyi@loongson.cn>, Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Message-ID: <6504a971-cf4b-ac35-4fe9-ee49b984b521@suse.de>
+Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
+ clause
+References: <20230325074636.136833-1-15330273260@189.cn>
+ <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
+In-Reply-To: <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
 
-Given that the driver core is "GPL-2.0-only", why is this -or-later?
+--------------7TXW7RLbx04W0AUDsj43WVSy
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Sorry, I have to ask.
+DQoNCkFtIDI5LjAzLjIzIHVtIDExOjA0IHNjaHJpZWIgVGhvbWFzIFppbW1lcm1hbm46DQo+
+IChjYydpbmcgTHVjYXMpDQo+IA0KPiBIaQ0KPiANCj4gQW0gMjUuMDMuMjMgdW0gMDg6NDYg
+c2NocmllYiBTdWkgSmluZ2Zlbmc6DQo+PiDCoCBUaGUgYXNzaWdubWVudCBhbHJlYWR5IGRv
+bmUgaW4gZHJtX2NsaWVudF9idWZmZXJfdm1hcCgpLA0KPj4gwqAganVzdCB0cml2YWwgY2xl
+YW4sIG5vIGZ1bmN0aW9uYWwgY2hhbmdlLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IFN1aSBK
+aW5nZmVuZyA8MTUzMzAyNzMyNjBAMTg5LmNuPg0KPj4gLS0tDQo+PiDCoCBkcml2ZXJzL2dw
+dS9kcm0vZHJtX2ZiZGV2X2dlbmVyaWMuYyB8IDUgKystLS0NCj4+IMKgIDEgZmlsZSBjaGFu
+Z2VkLCAyIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdp
+dCBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZmJkZXZfZ2VuZXJpYy5jIA0KPj4gYi9kcml2ZXJz
+L2dwdS9kcm0vZHJtX2ZiZGV2X2dlbmVyaWMuYw0KPj4gaW5kZXggNGQ2MzI1ZTkxNTY1Li4x
+ZGE0OGU3MWM3ZjEgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2ZiZGV2
+X2dlbmVyaWMuYw0KPj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2RybV9mYmRldl9nZW5lcmlj
+LmMNCj4+IEBAIC0yODIsNyArMjgyLDcgQEAgc3RhdGljIGludCBkcm1fZmJkZXZfZGFtYWdl
+X2JsaXQoc3RydWN0IA0KPj4gZHJtX2ZiX2hlbHBlciAqZmJfaGVscGVyLA0KPj4gwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBkcm1fY2xpcF9yZWN0ICpj
+bGlwKQ0KPj4gwqAgew0KPj4gwqDCoMKgwqDCoCBzdHJ1Y3QgZHJtX2NsaWVudF9idWZmZXIg
+KmJ1ZmZlciA9IGZiX2hlbHBlci0+YnVmZmVyOw0KPj4gLcKgwqDCoCBzdHJ1Y3QgaW9zeXNf
+bWFwIG1hcCwgZHN0Ow0KPj4gK8KgwqDCoCBzdHJ1Y3QgaW9zeXNfbWFwIG1hcDsNCj4+IMKg
+wqDCoMKgwqAgaW50IHJldDsNCj4+IMKgwqDCoMKgwqAgLyoNCj4+IEBAIC0zMDIsOCArMzAy
+LDcgQEAgc3RhdGljIGludCBkcm1fZmJkZXZfZGFtYWdlX2JsaXQoc3RydWN0IA0KPj4gZHJt
+X2ZiX2hlbHBlciAqZmJfaGVscGVyLA0KPj4gwqDCoMKgwqDCoCBpZiAocmV0KQ0KPj4gwqDC
+oMKgwqDCoMKgwqDCoMKgIGdvdG8gb3V0Ow0KPj4gLcKgwqDCoCBkc3QgPSBtYXA7DQo+PiAt
+wqDCoMKgIGRybV9mYmRldl9kYW1hZ2VfYmxpdF9yZWFsKGZiX2hlbHBlciwgY2xpcCwgJmRz
+dCk7DQo+PiArwqDCoMKgIGRybV9mYmRldl9kYW1hZ2VfYmxpdF9yZWFsKGZiX2hlbHBlciwg
+Y2xpcCwgJm1hcCk7DQo+IA0KPiBJIHNlZSB3aGF0IHlvdSdyZSBkb2luZyBhbmQgaXQncyBw
+cm9iYWJseSBjb3JyZWN0IGluIHRoaXMgY2FzZS4NCj4gDQo+IEJ1dCB0aGVyZSdzIGEgbGFy
+Z2VyIGlzc3VlIHdpdGggdGhpcyBpb3N5cyBpbnRlcmZhY2VzLiBTb21ldGltZXMgdGhlIA0K
+PiBhZGRyZXNzIGhhcyB0byBiZSBtb2RpZmllZCAoc2VlIGNhbGxzIG9mIGlvc3lzX21hcF9p
+bmNyKCkpLiBUaGF0IGNhbiANCj4gcHJldmVudCBpbmNvcnJlY3QgdXNlcyBvZiB0aGUgbWFw
+cGluZyBpbiBvdGhlciBwbGFjZXMsIGVzcGVjaWFsbHkgaW4gDQoNCidwcmV2ZW50IGNvcnJl
+Y3QgdXNlcycNCg0KPiB1bm1hcCBjb2RlLg0KPiANCj4gSSB0aGluayBpdCB3b3VsZCBtYWtl
+IHNlbnNlIHRvIGNvbnNpZGVyIGEgc2VwYXJhdGUgc3RydWN0dXJlIGZvciB0aGUgSS9PIA0K
+PiBsb2NhdGlvbi4gVGhlIGJ1ZmZlciBhcyBhIHdob2xlIHdvdWxkIHN0aWxsIGJlIHJlcHJl
+c2VudGVkIGJ5IHN0cnVjdCANCj4gaW9zeXNfbWFwLsKgIEFuZCB0aGF0IG5ldyBzdHJ1Y3R1
+cmUsIGxldCdzIGNhbGwgaXQgc3RydWN0IGlvc3lzX3B0ciwgDQo+IHdvdWxkIHBvaW50IHRv
+IGFuIGFjdHVhbCBsb2NhdGlvbiB3aXRoaW4gdGhlIGJ1ZmZlcidzIG1lbW9yeSByYW5nZS4g
+QSANCj4gZmV3IGxvY2F0aW9ucyBhbmQgaGVscGVycyB3b3VsZCBuZWVkIGNoYW5nZXMsIGJ1
+dCB0aGVyZSBhcmUgbm90IHNvIG1hbnkgDQo+IGNhbGxlcnMgdGhhdCBpdCdzIGFuIGlzc3Vl
+LsKgIFRoaXMgd291bGQgYWxzbyBhbGxvdyBmb3IgYSBmZXcgZGVidWdnaW5nIA0KPiB0ZXN0
+cyB0aGF0IGVuc3VyZSB0aGF0IGlvc3lzX3B0ciBhbHdheXMgb3BlcmF0ZXMgd2l0aGluIHRo
+ZSBib3VuZHMgb2YgYW4gDQo+IGlvc3lzX21hcC4NCj4gDQo+IEkndmUgbG9uZyBjb25zaWRl
+cmVkIHRoaXMgaWRlYSwgYnV0IHRoZXJlIHdhcyBubyBwcmVzc3VyZSB0byB3b3JrIG9uIGl0
+LiANCj4gTWF5YmUgbm93Lg0KPiANCj4gQmVzdCByZWdhcmRzDQo+IFRob21hcw0KPiANCj4+
+IMKgwqDCoMKgwqAgZHJtX2NsaWVudF9idWZmZXJfdnVubWFwKGJ1ZmZlcik7DQo+IA0KDQot
+LSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNF
+IFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5
+IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jD
+pGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
+--------------7TXW7RLbx04W0AUDsj43WVSy--
 
-> +
-> +/*
-> + * Serial core base layer for controllers
-> + *
-> + * The serial core bus manages the serial core controller instances.
+--------------xisgQ1LsOp80r1yWF4amrlt0
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-No copyright notice?  That's fine, but again, I have to ask.
+-----BEGIN PGP SIGNATURE-----
 
-thanks,
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQkADkFAwAAAAAACgkQlh/E3EQov+D7
+Mg/+P3ukqIvb04q4tsxKRQMak9HAPpCGy0bOFPa/kETocKlqn1AyTF+BkfSgopPMG+gGeU576hkY
+ewTnzB7oHVBFfZgbgPoGfUujGRkcWkOoAPc9ax5G1kpdJF9Y4M72lPLcKtHEDO1vHaIwRepXuzz6
+NEjI63AAfGLqepqbj4QExbu0eCb75yRd4UyO5XHkhGPKyIAHu9DuWtisBw6UhRli9PRmlgJbVPnC
+vJzBty5qaUVC3Nn7bzrS8spmSgSNkoe+951FXA71KPbL/YcmJ74q/LTyTdU7hV9F5raxMgogMf4s
+Xd32vqFCEgSxcos8xU5qpKoLbA7pT+pHUNiSKxUurvoKD8yvpuM+1taR+i5tXU9EAeKS5O9oawyd
+KCmtvaFJJUWsTam2M+skMxTPbwYg9F603yPf4oQXdniM7JOXu3vJ4vaU/uzhgAYjCnkQ9W99TQwv
+SkwN2CTZ8MaLdiUHdxdKHvRzooCrE+TwBTCjh7fDrKFhkmMZwOjUdkfhl7ec6yc1Na9D9/FB1Fiu
+2PpD5mb3XQz2z2kzhJgtbYhr/cUbsPq4qA+MwA3yVdLJHIvw0f3n4f0drWv7vFID3WMpGDyJLbo0
+fZ2cg3eoo4prxNOby6FFkr03YdxpFgiawraKcEZI3MA+HVrnVxP+Luqa7Ms302HMP6MlpxqPfe/a
+Cqg=
+=Bmbu
+-----END PGP SIGNATURE-----
 
-greg k-h
+--------------xisgQ1LsOp80r1yWF4amrlt0--
