@@ -2,65 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F096CEBD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158B16CEBDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbjC2OkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
+        id S230160AbjC2OlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjC2Oj5 (ORCPT
+        with ESMTP id S229960AbjC2Okw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:39:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1AABC;
-        Wed, 29 Mar 2023 07:36:58 -0700 (PDT)
+        Wed, 29 Mar 2023 10:40:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DA27684;
+        Wed, 29 Mar 2023 07:37:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 484A061D4E;
-        Wed, 29 Mar 2023 14:36:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A314CC433D2;
-        Wed, 29 Mar 2023 14:36:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A55F1B820FE;
+        Wed, 29 Mar 2023 14:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95671C4339B;
+        Wed, 29 Mar 2023 14:37:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680100614;
-        bh=XTkKPvBNieDl9RE+ktDyCOV9yI/ueyrxbrxjm76EYQs=;
+        s=k20201202; t=1680100649;
+        bh=L1sqLmIkifE2Q8DXW/e/GjzJNlmt1BIwb5AvVrF0wO8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TctY+jPB/3xa2j7YZCroyr0fotSU9F7EJu8GC3R392Ync5I4rrZRahdVOad6ww3dz
-         oCt3oX3wF/WpVf0vQciRPn0n8IEXZXM5T/4aPsYr+PQyIu2saPvtgacdyRVLGe9HBo
-         HVHj88QnuWdkEjelE2lXTl8g76BJ069LVtPt0vSnph+xeYBXgxS5Lh9O93haYsiacE
-         UHEfIqlt2ei0/z02iEpUzZY8HWBLA2xbduECCwEGLoBLrR6HnP1/eITY4anzJfY4XU
-         yCtFfIn3t0zp/YCLmCiHAVFWq/TrXnaBwEe7ZBr4LhQrxayuwrz0Y35Xl6AdmA0We9
-         YVtw0leYx9a6g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1phWvG-0000IY-4t; Wed, 29 Mar 2023 16:37:10 +0200
-Date:   Wed, 29 Mar 2023 16:37:10 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, marijn.suijten@somainline.org,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        b=FCwHJUPMBB2T0IVu3eU/P+W1JqphqMbb768sdao2TORxURk+WeoyQYAVg+Q+drdj1
+         ++BV38HtdQsEpBsufFO+21Lft9t3gt2nXrwkgZ5xbW8gTkacUm5coCLBsxhM+ZQZX6
+         gdq2N3yCkBi+jLr44SLjezXhsXVHBlCqF+omci4nnp9IyDPRjJdE6T0O5MTlBGbrj4
+         rfviN2WlFprK8I0fqoxEg6aINQRa2Xhq5HK5v7PHhvp6HazGoYpPibeGufWErZBEmo
+         8HlHuYfloPLK1SvQcB0mk+5DnvaVNEckdo3PcyEmCp4XZ3MBw4P2M3F02pVdceNWFY
+         T/SvmxtvsrjrA==
+Date:   Wed, 29 Mar 2023 15:37:25 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/msm/adreno: adreno_gpu: Use suspend() instead of
- idle() on load error
-Message-ID: <ZCRNFitcrAeH27Pn@hovoldconsulting.com>
-References: <20230329140445.2180662-1-konrad.dybcio@linaro.org>
+Subject: Re: [PATCH -fixes v2 2/3] riscv: Do not set initial_boot_params to
+ the linear address of the dtb
+Message-ID: <179c38d6-4298-4a16-b0d7-8aee49a91f58@spud>
+References: <20230329081932.79831-1-alexghiti@rivosinc.com>
+ <20230329081932.79831-3-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="UOjzVrvSVXjIViV0"
 Content-Disposition: inline
-In-Reply-To: <20230329140445.2180662-1-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20230329081932.79831-3-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,49 +61,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 04:04:44PM +0200, Konrad Dybcio wrote:
-> If we fail to initialize the GPU for whatever reason (say we don't
-> embed the GPU firmware files in the initrd), the error path involves
-> pm_runtime_put_sync() which then calls idle() instead of suspend().
-> 
-> This is suboptimal, as it means that we're not going through the
-> clean shutdown sequence. With at least A619_holi, this makes the GPU
-> not wake up until it goes through at least one more start-fail-stop
-> cycle. Fix that by using pm_runtime_put_sync_suspend to force a clean
-> shutdown.
 
-This does not sound right. If pm_runtime_put_sync() fails to suspend the
-device when the usage count drops to zero, then you have a bug somewhere
-else.
+--UOjzVrvSVXjIViV0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Also since commit 2c087a336676 ("drm/msm/adreno: Load the firmware
-before bringing up the hardware") the firmware is loaded before even
-hitting these paths so the above description does not sound right in
-that respect either (or is missing some details).
-
-> Test cases:
-> 1. firmware baked into kernel
-> 2. error loading fw in initrd -> load from rootfs at DE start
-> 
-> Both succeed on A619_holi (SM6375) and A630 (SDM845).
-> 
-> Fixes: 0d997f95b70f ("drm/msm/adreno: fix runtime PM imbalance at gpu load")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On Wed, Mar 29, 2023 at 10:19:31AM +0200, Alexandre Ghiti wrote:
+> early_init_dt_verify() is already called in parse_dtb() and since the dtb
+> address does not change anymore (it is now in the fixmap region), no need
+> to reset initial_boot_params by calling early_init_dt_verify() again.
+>=20
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 > ---
->  drivers/gpu/drm/msm/adreno/adreno_device.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> index f61896629be6..59f3302e8167 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> @@ -477,7 +477,7 @@ struct msm_gpu *adreno_load_gpu(struct drm_device *dev)
->  	return gpu;
->  
->  err_put_rpm:
-> -	pm_runtime_put_sync(&pdev->dev);
-> +	pm_runtime_put_sync_suspend(&pdev->dev);
->  err_disable_rpm:
->  	pm_runtime_disable(&pdev->dev);
+>  arch/riscv/kernel/setup.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>=20
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index 542eed85ad2c..a059b73f4ddb 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -278,10 +278,7 @@ void __init setup_arch(char **cmdline_p)
+>  #if IS_ENABLED(CONFIG_BUILTIN_DTB)
+>  	unflatten_and_copy_device_tree();
+>  #else
+> -	if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
+> -		unflatten_device_tree();
 
-Johan
+Silly question maybe, but since it isn't explicitly mentioned, the
+XIP_FIXUP bits no longer matter?
+Also, in related news, I assume you don't have a QEMU setup that can do
+boot an XIP kernel?
+
+Cheers,
+Conor.
+
+> -	else
+> -		pr_err("No DTB found in kernel mappings\n");
+> +	unflatten_device_tree();
+>  #endif
+>  	misc_mem_init();
+> =20
+> --=20
+> 2.37.2
+>=20
+
+--UOjzVrvSVXjIViV0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCRNJQAKCRB4tDGHoIJi
+0gqaAQDSe9gvXHde8jzjSZoWLPBptYoYGaraDZqYua/MYlGe3wEA/9h+58eBSjUH
+4VGr3g5fK9KMQFkCCp3A/kRsgdI7bwM=
+=B9wY
+-----END PGP SIGNATURE-----
+
+--UOjzVrvSVXjIViV0--
