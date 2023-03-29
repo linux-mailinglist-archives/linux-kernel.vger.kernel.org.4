@@ -2,106 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D30A66CD2D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A77F36CD2D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjC2HSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 03:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
+        id S229865AbjC2HTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 03:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjC2HSq (ORCPT
+        with ESMTP id S229852AbjC2HTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 03:18:46 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1B130D5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:18:31 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id d17so14570065wrb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:18:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680074310;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eajfSt8w9ufgtddPRPPD3ycsjjI6dYwIY70vn8OhuP8=;
-        b=JSFX3SUpSO5Pnvj3Bqsee5QeVRvC2/QwIyuCX8YXzGW5i6X0bCAvZLf1SupVEtz9UN
-         gWwlHf96GuuINcA1o7sN3ygP5HYuSo3uU0xg3t2cl3SYta1zrA83TbWB0hvtj5rRA9Sc
-         HV0juj5v3ecuAP/ce0rn4BjDpEVsBrLy1rMJqs8Cfy9vz8lAouIOy71e1tvEvb5a4ffr
-         tTrJzYV969vDjgvXcW8u0u8g863K1CSaP8NmoqUbU3UZi21B+uTtoOR8MMVjlMEkaLGV
-         tjpGeEu8vDUCA8qPVH1YKFk3tYIcTKnUbvoCO34usOfWxaFUV8fnmnDk3hvC+7EoS6xe
-         6Obw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680074310;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eajfSt8w9ufgtddPRPPD3ycsjjI6dYwIY70vn8OhuP8=;
-        b=nmzD6mK3UpClQSQHLpsuJ7Q2t+2+zv4cErOPAxu7vWGhucH12NwXOFJG1pfK7Rjb7s
-         PqVpqEN52JQxhzjh3lvPcX5HnWguMzQrz8+dMtLZai1x1nvztFDEn9z/PPXxxKz9shrO
-         awS8LhLm6GTWwYk7CRI0QMJrMNgUF8xJ/kKVtrU4RKtkIQMeZMVcHH6tlxrRzHaLDI5Z
-         jfytyZPQTpZsLSgObtzVxTQlU+QQ26S8/H6t2yIMfG+mJiEb6bZ08ItopL/7M7CUUC2o
-         bUmRMJzAzSKiQ5WgodAFTTrsyl/T8Wr9lk4m7xnpQyAOFcOD7RcyoHvV85w4jL1Q89iF
-         OzuA==
-X-Gm-Message-State: AAQBX9c9rBVKIGoi4TqQM5b06XZSC0eBkvT1OYkuL+pjNUK5FDYBTV8x
-        U1l7Zj7IBTf0W4h7USqXQLwzxQ==
-X-Google-Smtp-Source: AKy350bo70toYQ1jB282XzP5A8Q0DmRgF0RkhKapiG7TXsz1y7SEzDi3UbCgIf7qeNPJVgxKvgJFNg==
-X-Received: by 2002:adf:ce01:0:b0:2e2:730a:c7de with SMTP id p1-20020adfce01000000b002e2730ac7demr3550893wrn.24.1680074310088;
-        Wed, 29 Mar 2023 00:18:30 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id n12-20020a5d484c000000b002c59f18674asm29503250wrs.22.2023.03.29.00.18.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 00:18:29 -0700 (PDT)
-Message-ID: <e01a753e-aea2-5489-e436-2ec0f3fedb64@linaro.org>
-Date:   Wed, 29 Mar 2023 08:18:27 +0100
+        Wed, 29 Mar 2023 03:19:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83D626AD;
+        Wed, 29 Mar 2023 00:19:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73C1E61AA0;
+        Wed, 29 Mar 2023 07:19:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EAC1C433D2;
+        Wed, 29 Mar 2023 07:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680074371;
+        bh=DJrGjjYVJpklJpi1Yq8f2deLg7xBT/QYXB70zUacqlk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wjl7AZtgidfWsFBwLpkWu6wrTOCYLeiIt/T9ZtM1cHbhm9JBWbILWp+3B0DMqyTAm
+         ZwRHtvM8wy1Wvxx5PdJScuqKzz5BTDDBZ6kC1r1zwo6Rjoy+q2g45h2PVQcU9XoK7c
+         wSNoFuQ2GqjoNIWUhFdCC6H60l9Y+6yZk5Zqf/mZS7Z8aTJoH0uIgz+eCiLD9jlzIO
+         rkuw851jOE6lFcY4HW2xdSjvLlbb9N4DedrBXMwFvir1l+n8LcB/ZDs61qtbq0XmX6
+         /mik1o1PMtNarwUWCvkq0xce+PFK4BErlxMGigSUCUYTeTLnno3D9iMVR9T3QsLqyC
+         6lk1dTHj9Th0w==
+Date:   Wed, 29 Mar 2023 09:19:26 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gscrivan@redhat.com
+Subject: Re: CLONE_INTO_CGROUP probably needs to call controller attach
+ handlers
+Message-ID: <20230329-unripe-imminent-655bed17aad2@brauner>
+References: <20230328153943.op62j3sw7qaixdsq@wittgenstein>
+ <c3d9cf24-1c3a-cda4-5063-6b7d27e9116f@redhat.com>
+ <5937b51b-164a-b6b3-532d-43b46f2d49a2@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH -next] spi: rockchip-sfc: Use
- devm_platform_get_and_ioremap_resource()
-Content-Language: en-US
-To:     "Yang.Lee" <yang.lee@linux.alibaba.com>,
-        broonie <broonie@kernel.org>
-Cc:     heiko <heiko@sntech.de>, linux-spi <linux-spi@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-rockchip <linux-rockchip@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20230328062118.86336-1-yang.lee@linux.alibaba.com>
- <48f1ee32-a030-8188-3a9d-612888b9678f@linaro.org>
- <e6d8f4ce-8b3b-4cce-be94-cd5902c676ae.yang.lee@linux.alibaba.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <e6d8f4ce-8b3b-4cce-be94-cd5902c676ae.yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5937b51b-164a-b6b3-532d-43b46f2d49a2@redhat.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 28, 2023 at 10:48:49PM -0400, Waiman Long wrote:
+> On 3/28/23 21:30, Waiman Long wrote:
+> > On 3/28/23 11:39, Christian Brauner wrote:
+> > > Hey,
+> > > 
+> > > Giuseppe reported that the the affinity mask isn't updated when a
+> > > process is spawned directly into the target cgroup via
+> > > CLONE_INTO_CGROUP. However, migrating a process will cause the affinity
+> > > mask to be updated (see the repro at [1].
+> > > 
+> > > I took a quick look and the issue seems to be that we don't call the
+> > > various attach handlers during CLONE_INTO_CGROUP whereas we do for
+> > > migration. So the solution seems to roughly be that we need to call the
+> > > various attach handlers during CLONE_INTO_CGROUP as well when the
+> > > parent's cgroups is different from the child cgroup. I think we need to
+> > > call all of them, can, cancel and attach.
+> > > 
+> > > The plumbing here might be a bit intricate since the arguments that the
+> > > fork handlers take are different from the attach handlers.
+> > > 
+> > > Christian
+> > > 
+> > > [1]: https://paste.centos.org/view/f434fa1a
+> > > 
+> > I saw that the current cgroup code already have the can_fork, fork and
+> > cancel_fork callbacks. Unfortunately such callbacks are not defined for
+> > cpuset yet. That is why the cpu affinity isn't correctly updated. I can
+> > post a patch to add those callback functions to cpuset which should then
+> > able to correctly address this issue.
+> 
+> Looking further into this issue, I am thinking that forking into a cgroup
+> should be equivalent to write the child pid into the "cgroup.threads" file
+> of the target cgroup. By taking this route, all the existing can_attach,
+> attach and cancel_attach methods can be used. I believe the original fork
+> method is for the limited use case of forking into the same cgroup. So right
+> now, only the pids controller has the fork methods. Otherwise, we will have
+> to modify a number of different controllers to add the necessary fork
+> methods. They will be somewhat similar to the existing attach methods and so
+> it will be a lot of duplication. What do you think about this idea?
 
+The overall plan sounds good to me. I have one comment and question
+about making this equivalent to a write of the child pid into the
+cgroup.threads file.
 
-On 3/29/23 07:06, Yang.Lee wrote:
-> 
-> From:Tudor Ambarus <tudor.ambarus@linaro.org>
-> Send Time:2023年3月28日(星期二) 23:16
->> If I were you I would make a single patch addressing all the drivers
->> from SPI as this is a single logical change. You get extra points as you
->> avoid polluting the log.
-> 
-> First of all, thank you for pointing out this.
-> Because the maintainer list of each SPI driver file is not identical, I am worried about causing trouble for too many people, so I split it into multiple patches based on this.
+The paragraph above seems to imply that CLONE_INTO_CGROUP currently
+isn't equivalent to a write to cgroup.threads. But it's not that
+straightforward. CLONE_INTO_CGROUP needs to handle both threads and
+threadgroups aka being or-ed with CLONE_THREAD or not. It does that in
+cgroup_css_set_fork() when calling
+cgroup_attach_permissions([...] !(kargs->flags & CLONE_THREAD), [...]).
 
-The change is trivial enough to don't bother at all. Here's an example:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=4b23603a251d24022f2fa48ee67610eb245a4115
-> 
->> No, you better use devm_platform_ioremap_resource() as res is not used
->> afterwards. You'll get rid of the local variable too.
-> 
-> It's my bad, I will send a new version.
-> 
-> Regards,
-> Yang Li
-> 
+What it's missing is calling the relevant handlers that would be
+executed in the migration path. They might be different between the
+CLONE_THREAD and !CLONE_THREAD case. But the crux remains that
+CLONE_INTO_CGROUP needs to handle both cases.
+
+So afaict, what you're proposing is equivalent to what I sketched in the
+initial mail? Or is there something else you mean by making this
+equivalent to cgroup.threads that goes beyond adding the missing
+handlers? Just trying to make sure we're not accidently changing
+semantics.
