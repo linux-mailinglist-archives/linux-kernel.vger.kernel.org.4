@@ -2,104 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C729F6CF574
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BA46CF577
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjC2Vit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 17:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        id S229810AbjC2Vkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 17:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjC2Vih (ORCPT
+        with ESMTP id S229517AbjC2Vkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 17:38:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D2A3C03;
-        Wed, 29 Mar 2023 14:38:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65A7F61E62;
-        Wed, 29 Mar 2023 21:38:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09AEC433EF;
-        Wed, 29 Mar 2023 21:38:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680125915;
-        bh=AGrA1K2e8uAf8G6JcgmjmlWnpADwfjGDsG3JBXwDLBw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=mu1TdX5gFoV06ZxjjTwbqPnCHfAVSpymir+63VP6Ao+MeE93jGpvZy0fIbO+76ZVq
-         /GtI2GQmWURJh7wmu6fo+sOEwQrqyP3O2ESo3o3KEcObLxVqNYmW16zAC6oyiPikmd
-         ef9qINVEolGLAZZgDFXtB2eIku+grUWHy5tcj/DftibJMxeI+ZJ2d2GHTIfUU7sLJ/
-         xMYtqnbUS3k6uK0aPSxQhLclT+R+NvHzbCpVvmewrjGfMyjLZxyY5K0tSBicVfc0Oa
-         2RAO/JMWzfypkePqLlfomEII6ftNMfgB91U1EYYxK9dTyushyRE47zkz87yKeCbeD3
-         hbWUj44taG7gw==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 48F8A154047D; Wed, 29 Mar 2023 14:38:35 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 14:38:35 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 3/4] rcu/nocb: Recheck lazy callbacks under the
- ->nocb_lock from shrinker
-Message-ID: <8b93312e-1f66-4558-9add-b7ce1c1d2fc5@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230329160203.191380-1-frederic@kernel.org>
- <20230329160203.191380-4-frederic@kernel.org>
- <8df51703-1ee4-4b7b-9e05-90b3650e8ee7@paulmck-laptop>
- <ZCSsJW67BnGWzNrI@lothringen>
+        Wed, 29 Mar 2023 17:40:33 -0400
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F543C3B;
+        Wed, 29 Mar 2023 14:40:32 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id r14so7062917oiw.12;
+        Wed, 29 Mar 2023 14:40:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680126032;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7/qJzs/hW1pmjhUHORKknf7d39R3TDMqbem1vTF6rpE=;
+        b=upXT3YGycA3MdO2RxV8X0Saw4DfWqH0es4Fa1QRAhlQ10iru6SSaRkdeTGLMKdJJdy
+         Jct5VxIr87A0zwuoQtex6n3XgL+Z8m5plWgVBF6+xEyX7OlMdr43ljCiFUwYqIOdvJO1
+         vkCZ+lvLpzvEWs9U+Mlu2CB19s8sCEEVUzRS91CGiW6BgYXTdB18sTCgbhUTUFN11k7M
+         HMXlkNV9+DT5tczjGPi1S4OQR0gY/f0+g8ext7dERO99kI5E1pKHeEuG9mJQYshoi4Bp
+         MlCHh6GJe3ZdrfhWTyTX+I3kFtBzPIj2U7pg1DRvsWlzMjOWfW199T0/vwUiTCFd+KQl
+         gmEA==
+X-Gm-Message-State: AO0yUKWqlXGiKMaf74jPtZvsL65Beaygk6eMEPxUKyCEaUKDpBZAeNLA
+        ag2FXpzVgNjfsIb+7jo7Gw==
+X-Google-Smtp-Source: AK7set8HqExr54n7KB+fv5GbG1F5mEostBq+sitshFffuWryo7IxT/gigISCoOi3ymblpK2cBSZfTg==
+X-Received: by 2002:a05:6808:984:b0:387:7b92:8b97 with SMTP id a4-20020a056808098400b003877b928b97mr8519158oic.43.1680126031713;
+        Wed, 29 Mar 2023 14:40:31 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n67-20020acabd46000000b0038919e6eb5esm4278794oif.3.2023.03.29.14.40.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 14:40:31 -0700 (PDT)
+Received: (nullmailer pid 112250 invoked by uid 1000);
+        Wed, 29 Mar 2023 21:40:30 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCSsJW67BnGWzNrI@lothringen>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Brenda Streiff <brenda.streiff@ni.com>
+Cc:     Jason Smith <jason.smith@ni.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Gratian Crisan <gratian.crisan@ni.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org
+In-Reply-To: <20230329154235.615349-2-brenda.streiff@ni.com>
+References: <20230329154235.615349-1-brenda.streiff@ni.com>
+ <20230329154235.615349-2-brenda.streiff@ni.com>
+Message-Id: <168012595979.110912.13924121978276239170.robh@kernel.org>
+Subject: Re: [PATCH tty-next 1/2] dt-bindings: serial: ni,ni16650: add
+ bindings
+Date:   Wed, 29 Mar 2023 16:40:30 -0500
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 11:22:45PM +0200, Frederic Weisbecker wrote:
-> On Wed, Mar 29, 2023 at 01:54:20PM -0700, Paul E. McKenney wrote:
-> > On Wed, Mar 29, 2023 at 06:02:02PM +0200, Frederic Weisbecker wrote:
-> > > The ->lazy_len is only checked locklessly. Recheck again under the
-> > > ->nocb_lock to avoid spending more time on flushing/waking if not
-> > > necessary. The ->lazy_len can still increment concurrently (from 1 to
-> > > infinity) but under the ->nocb_lock we at least know for sure if there
-> > > are lazy callbacks at all (->lazy_len > 0).
-> > > 
-> > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > > ---
-> > >  kernel/rcu/tree_nocb.h | 16 ++++++++++++----
-> > >  1 file changed, 12 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> > > index c321fce2af8e..dfa9c10d6727 100644
-> > > --- a/kernel/rcu/tree_nocb.h
-> > > +++ b/kernel/rcu/tree_nocb.h
-> > > @@ -1358,12 +1358,20 @@ lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
-> > >  		if (!rcu_rdp_is_offloaded(rdp))
-> > >  			continue;
-> > >  
-> > > +		if (!READ_ONCE(rdp->lazy_len))
-> > > +			continue;
-> > 
-> > Do you depend on the ordering of the above read of ->lazy_len against
-> > anything in the following, aside from the re-read of ->lazy_len?  (Same
-> > variable, both READ_ONCE() or stronger, so you do get that ordering.)
-> > 
-> > If you do need that ordering, the above READ_ONCE() needs to instead
-> > be smp_load_acquire() or similar.  If you don't need that ordering,
-> > what you have is good.
+
+On Wed, 29 Mar 2023 10:42:34 -0500, Brenda Streiff wrote:
+> Add bindings for the NI 16550 UART.
 > 
-> No ordering dependency intended here. The early ->lazy_len read is really just
-> an optimization here to avoid locking if it *seems* there is nothing to do with
-> this rdp. But what follows doesn't depend on that read.
+> Signed-off-by: Brenda Streiff <brenda.streiff@ni.com>
+> Cc: Gratian Crisan <gratian.crisan@ni.com>
+> Cc: Jason Smith <jason.smith@ni.com>
+> ---
+>  .../bindings/serial/ni,ni16550.yaml           | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/serial/ni,ni16550.yaml
+> 
 
-Full steam ahead with READ_ONCE(), then!  ;-)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-							Thanx, Paul
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.example.dtb: serial@80000000: compatible: ['ni,ni16550', 'ns16550a'] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.example.dtb: serial@80000000: Unevaluated properties are not allowed ('compatible' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.example.dtb: serial@80000000: compatible: 'oneOf' conditional failed, one must be fixed:
+	['ni,ni16550', 'ns16550a'] is too long
+	['ni,ni16550', 'ns16550a'] is too short
+	'ns8250' was expected
+	'ns16450' was expected
+	'ns16550' was expected
+	'ns16550a' was expected
+	'ns16850' was expected
+	'aspeed,ast2400-vuart' was expected
+	'aspeed,ast2500-vuart' was expected
+	'intel,xscale-uart' was expected
+	'mrvl,pxa-uart' was expected
+	'nuvoton,wpcm450-uart' was expected
+	'nuvoton,npcm750-uart' was expected
+	'nvidia,tegra20-uart' was expected
+	'nxp,lpc3220-uart' was expected
+	'ni,ni16550' is not one of ['exar,xr16l2552', 'exar,xr16l2551', 'exar,xr16l2550']
+	'ni,ni16550' is not one of ['altr,16550-FIFO32', 'altr,16550-FIFO64', 'altr,16550-FIFO128', 'fsl,16550-FIFO64', 'fsl,ns16550', 'andestech,uart16550', 'nxp,lpc1850-uart', 'opencores,uart16550-rtlsvn105', 'ti,da830-uart']
+	'ni,ni16550' is not one of ['ns16750', 'cavium,octeon-3860-uart', 'xlnx,xps-uart16550-2.00.b', 'ralink,rt2880-uart']
+	'ni,ni16550' is not one of ['nuvoton,npcm845-uart']
+	'ni,ni16550' is not one of ['ralink,mt7620a-uart', 'ralink,rt3052-uart', 'ralink,rt3883-uart']
+	'ni,ni16550' is not one of ['mediatek,mt7622-btif', 'mediatek,mt7623-btif']
+	'mrvl,mmp-uart' was expected
+	'ni,ni16550' is not one of ['nvidia,tegra30-uart', 'nvidia,tegra114-uart', 'nvidia,tegra124-uart', 'nvidia,tegra210-uart', 'nvidia,tegra186-uart', 'nvidia,tegra194-uart', 'nvidia,tegra234-uart']
+	'ralink,rt2880-uart' was expected
+	'mediatek,mtk-btif' was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/8250.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.example.dtb: serial@80000000: Unevaluated properties are not allowed ('compatible', 'transceiver' were unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/8250.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230329154235.615349-2-brenda.streiff@ni.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
