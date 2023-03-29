@@ -2,163 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461816CD6DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E0B6CD6D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjC2Jsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        id S231159AbjC2Jsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbjC2Jsc (ORCPT
+        with ESMTP id S230481AbjC2Js3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:48:32 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095191990;
-        Wed, 29 Mar 2023 02:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=au9j1RKX6uBNeqzDDu1OuVZGAvYR+PBKjc7fF9etf8g=; b=uQR1dij+ectpu7hzYEJ45EbjLP
-        sQ/NxyhnOmjLTKzzlicb6edwu3KbL2D9pfnGksaT1qEvWY28vo3bmL+uWaB3oSQwJBHho1RPlZ4ZH
-        Yw8gA5FGztN+Szwpc3fs00oAbQIliZ3Fbv7UOaoGaC3gtDXLlZn8VVEPw/bCiIxeBLoWGkWRYPRQm
-        He4yJWhNFMe+Y8c3Gc9d4L5Cebsh0LzVydvvdbW3NeKnckV7xbaXPbHFyoDRBR8+/d1n/4YEKgyBq
-        vHrBAElZLL1vlGjGB3R9dcOLxSE0iVbDHcos/7joOAQS0mcNtMSpCzh7Lq0i6nfx9MJF2UtzEcM6l
-        NH2HaebA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41268)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1phSPd-0008J7-UH; Wed, 29 Mar 2023 10:48:13 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1phSPZ-0007Pv-Qo; Wed, 29 Mar 2023 10:48:09 +0100
-Date:   Wed, 29 Mar 2023 10:48:09 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     "Sit, Michael Wei Hong" <michael.wei.hong.sit@intel.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Ong, Boon Leong" <boon.leong.ong@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Looi, Hong Aun" <hong.aun.looi@intel.com>,
-        "Voon, Weifeng" <weifeng.voon@intel.com>,
-        "Lai, Peter Jun Ann" <peter.jun.ann.lai@intel.com>
-Subject: Re: [PATCH net v3 1/3] net: phylink: add phylink_expects_phy() method
-Message-ID: <ZCQJWcdfmualIjvX@shell.armlinux.org.uk>
-References: <20230324081656.2969663-1-michael.wei.hong.sit@intel.com>
- <20230324081656.2969663-2-michael.wei.hong.sit@intel.com>
- <20230328185720.6239e4a7@kernel.org>
- <ZCP+aIoUTw2laZ3/@shell.armlinux.org.uk>
- <PH0PR11MB7587808A98658C9F075A0C309D899@PH0PR11MB7587.namprd11.prod.outlook.com>
+        Wed, 29 Mar 2023 05:48:29 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3426A130
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:48:27 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VewY84t_1680083303;
+Received: from 30.221.149.47(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VewY84t_1680083303)
+          by smtp.aliyun-inc.com;
+          Wed, 29 Mar 2023 17:48:24 +0800
+Message-ID: <73eb9a5f-8e30-27b9-369e-053389d83f48@linux.alibaba.com>
+Date:   Wed, 29 Mar 2023 17:48:22 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB7587808A98658C9F075A0C309D899@PH0PR11MB7587.namprd11.prod.outlook.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] perf/arm-cmn: Fix and refactor device mapping resource
+To:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
+        ilkka@os.amperecomputing.com
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1676535470-120560-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <20230327140536.GB31752@willie-the-truck>
+ <b90d3b99-a4d2-86f5-be9a-803b33d787b6@arm.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <b90d3b99-a4d2-86f5-be9a-803b33d787b6@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 09:34:05AM +0000, Sit, Michael Wei Hong wrote:
+
+
+在 2023/3/27 下午10:27, Robin Murphy 写道:
+> On 2023-03-27 15:05, Will Deacon wrote:
+>> [+Robin and Ilkka, as they contribute most to this driver]
+>>
+>> On Thu, Feb 16, 2023 at 04:17:50PM +0800, Jing Zhang wrote:
+>>> The devm_platform_ioremap_resource() won't let the platform device
+>>> claim resource when the ACPI companion device has already claimed it.
+>>> If CMN-ANY except CMN600 is ACPI companion device, it will return
+>>> -EBUSY in devm_platform_ioremap_resource(), and the driver cannot be
+>>> successfully installed.
+>>>
+>>> So let ACPI companion device call arm_cmn_acpi_probe and not claim
+>>> resource again. In addition, the arm_cmn_acpi_probe() and
+>>> arm_cmn_of_probe() functions are refactored to make them compatible
+>>> with both CMN600 and CMN-ANY.
 > 
+> No, the whole point of CMN-600 probing being a special case is that the ACPI and DT bindings for CMN-600 are special cases. In ACPI, only ARMHC600 has the two nested memory resources; all the other models should only have one memory resource because one is all that is meaningful. See table 16 the document[1] in where the description of ROOTNODEBASE says "This field is specific to the CMN-600 device object."
 > 
-> > -----Original Message-----
-> > From: Russell King <linux@armlinux.org.uk>
-> > Sent: Wednesday, March 29, 2023 5:01 PM
-> > To: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Sit, Michael Wei Hong <michael.wei.hong.sit@intel.com>;
-> > Giuseppe Cavallaro <peppe.cavallaro@st.com>; Alexandre Torgue
-> > <alexandre.torgue@foss.st.com>; Jose Abreu
-> > <joabreu@synopsys.com>; David S . Miller <davem@davemloft.net>;
-> > Eric Dumazet <edumazet@google.com>; Paolo Abeni
-> > <pabeni@redhat.com>; Maxime Coquelin
-> > <mcoquelin.stm32@gmail.com>; Ong, Boon Leong
-> > <boon.leong.ong@intel.com>; netdev@vger.kernel.org; linux-
-> > stm32@st-md-mailman.stormreply.com; linux-arm-
-> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Looi,
-> > Hong Aun <hong.aun.looi@intel.com>; Voon, Weifeng
-> > <weifeng.voon@intel.com>; Lai, Peter Jun Ann
-> > <peter.jun.ann.lai@intel.com>
-> > Subject: Re: [PATCH net v3 1/3] net: phylink: add
-> > phylink_expects_phy() method
-> > 
-> > On Tue, Mar 28, 2023 at 06:57:20PM -0700, Jakub Kicinski wrote:
-> > > On Fri, 24 Mar 2023 16:16:54 +0800 Michael Sit Wei Hong wrote:
-> > > > Provide phylink_expects_phy() to allow MAC drivers to check if it
-> > is
-> > > > expecting a PHY to attach to. Since fixed-linked setups do not
-> > need
-> > > > to attach to a PHY.
-> > > >
-> > > > Provides a boolean value as to if the MAC should expect a PHY.
-> > > > returns true if a PHY is expected.
-> > > >
-> > > > Signed-off-by: Michael Sit Wei Hong
-> > <michael.wei.hong.sit@intel.com>
-> > >
-> > > Russell, looks good?
-> > 
-> > Not really, given that phylink_attach_phy() will refuse to attach a
-> > PHY
-> > when:
-> > 
-> >         if (WARN_ON(pl->cfg_link_an_mode == MLO_AN_FIXED ||
-> >                     (pl->cfg_link_an_mode == MLO_AN_INBAND &&
-> >                      phy_interface_mode_is_8023z(interface) && !pl-
-> > >sfp_bus)))
-> >                 return -EINVAL;
-> > 
-> > So, if we introduce a helper named "phylink_expects_phy" that
-> > returns true when cfg_link_an_mode == MLO_AN_INBAND and the
-> > interface mode is e.g. 1000base-X, but then someone tries to attach
-> > a PHY, the kernel spits out a warning, backtrace, and a return value
-> > of -EINVAL, things are going to look really rather stupid.
-> > 
-> Should we check for these 3 conditions as well then?
-> (pl->cfg_link_an_mode == MLO_AN_INBAND &&
-> phy_interface_mode_is_8023z(interface) && !pl->sfp_bus)
-> to determine if phylink expects a phy.
+> Similarly in DT, "arm,root-node" is only required for "arm,cmn-600" - it didn't seem worth overcomplicating the schema to actively disallow it for other models, but that is supposed to be implied by its description as "not relevant for newer CMN/CI products".
+> 
+> If you're hitting this because you've written your ACPI DSDT incorrectly, it's a sign that you should fix your DSDT.
+> 
+> Thanks,
+> Robin.
+> 
+> [1] https://developer.arm.com/documentation/den0093/latest/
+> 
 
-If there's a sfp bus, then we don't expect a PHY from the MAC driver
-(as there can only be one PHY attached), and as phylink_expects_phy()
-is for the MAC driver to use, we should be returning false if
-pl->sfp_bus != NULL.
+Hi Robin,
 
-	pl->cfg_link_an_mode == MLO_AN_FIXED ||
-	(pl->cfg_link_an_mode == MLO_AN_INBAND &&
-	 phy_interface_mode_is_8023z(interface))
+Yes, I know what you mean, but if a new CMN PMU device design two resources like CMN600, it will fail to load driver.
+the specification doesn't explicitly forbid giving two ranges for CMN700 although the example shows just one.
+So in our SoC, CMN700 is designed with two resources similar to CMN600, and the overlap of resource addresses makes
+the CMN driver unable to match my CMN700. The error log:
 
-Is true when we're in fixed-link mode, or if we're in in-band mode
-and using 1000base-X or 25000base-X. These are the conditions that
-we don't expect the MAC driver to give us a PHY.
+[  12.016837] arm-cmn ARMHC700:00: can't request region for resource [mem 0x40000000-0x4fffffff]
+[  12.028230] arm-cmn: probe of ARMHC700:00 failed with error -16
+[  12.036832] arm-cmn ARMHC700:01: can't request region for resource [mem 0x40040000000-0x4004fffffff]
+[  12.051289] arm-cmn: probe of ARMHC700:01 failed with error -16
 
-To put that in positive logic, we expect a PHY from the MAC when
-we're in PHY mode, or when we're in in-band mode and using SGMII,
-QSGMII, USXGMII, RGMII, etc.
+So this patch can compatible devices which has two memory resources and one memory resource, why not do it?
 
-The reason for the extra "&& !pl->sfp_bus" in phylink_attach_phy()
-is to allow SFPs to connect to the MAC using inband mode with
-1000base-X and 2500base-X interface modes. These are not for the
-MAC-side of things though.
+I  resend this patch before and add more information about it. This patch still needs to be perfected,
+I will improve it in the next version.
+Link: https://lore.kernel.org/all/1679587838-80000-1-git-send-email-renyu.zj@linux.alibaba.com/
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Thanks,
+Jing
+
+
+>>> Fixes: 61ec1d875812 ("perf/arm-cmn: Demarcate CMN-600 specifics")
+>>> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+>>> ---
+>>>   drivers/perf/arm-cmn.c | 57 ++++++++++++++++++++++++++++++++------------------
+>>>   1 file changed, 37 insertions(+), 20 deletions(-)
+>>>
+>>> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+>>> index 1deb61b..beb3b37 100644
+>>> --- a/drivers/perf/arm-cmn.c
+>>> +++ b/drivers/perf/arm-cmn.c
+>>> @@ -2206,7 +2206,7 @@ static int arm_cmn_discover(struct arm_cmn *cmn, unsigned int rgn_offset)
+>>>       return 0;
+>>>   }
+>>>   -static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+>>> +static int arm_cmn_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+>>>   {
+>>>       struct resource *cfg, *root;
+>>>   @@ -2214,12 +2214,21 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
+>>>       if (!cfg)
+>>>           return -EINVAL;
+>>>   -    root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+>>> -    if (!root)
+>>> -        return -EINVAL;
+>>> +    /* If ACPI defines more than one resource, such as cmn-600, then there may be
+>>> +     * a deviation between ROOTNODEBASE and PERIPHBASE, and ROOTNODEBASE can
+>>> +     * be obtained from the second resource. Otherwise, it can be considered that
+>>> +     * ROOT NODE BASE is PERIPHBASE. This is compatible with cmn-600 and cmn-any.
+>>> +     */
+>>> +    if (pdev->num_resources > 1) {
+>>> +        root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+>>> +        if (!root)
+>>> +            return -EINVAL;
+>>>   -    if (!resource_contains(cfg, root))
+>>> -        swap(cfg, root);
+>>> +        if (!resource_contains(cfg, root))
+>>> +            swap(cfg, root);
+>>> +    } else {
+>>> +        root = cfg;
+>>> +    }
+>>>       /*
+>>>        * Note that devm_ioremap_resource() is dumb and won't let the platform
+>>>        * device claim cfg when the ACPI companion device has already claimed
+>>> @@ -2227,17 +2236,30 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
+>>>        * appropriate name, we don't really need to do it again here anyway.
+>>>        */
+>>>       cmn->base = devm_ioremap(cmn->dev, cfg->start, resource_size(cfg));
+>>> -    if (!cmn->base)
+>>> -        return -ENOMEM;
+>>> +    if (IS_ERR(cmn->base))
+>>> +        return PTR_ERR(cmn->base);
+>>>         return root->start - cfg->start;
+>>>   }
+>>>   -static int arm_cmn600_of_probe(struct device_node *np)
+>>> +static int arm_cmn_of_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+>>>   {
+>>>       u32 rootnode;
+>>> +    int ret;
+>>> +
+>>> +    cmn->base = devm_platform_ioremap_resource(pdev, 0);
+>>> +    if (IS_ERR(cmn->base))
+>>> +        return PTR_ERR(cmn->base);
+>>>   -    return of_property_read_u32(np, "arm,root-node", &rootnode) ?: rootnode;
+>>> +    /* If of_property_read_u32() return EINVAL, it means that device tree has
+>>> +     * not define root-node, and root-node will return 0, which is compatible
+>>> +     * with cmn-600 and cmn-any.
+>>> +     */
+>>> +    ret = of_property_read_u32(pdev->dev.of_node, "arm,root-node", &rootnode);
+>>> +    if (ret == -EINVAL)
+>>> +        return 0;
+>>> +
+>>> +    return rootnode;
+>>>   }
+>>>     static int arm_cmn_probe(struct platform_device *pdev)
+>>> @@ -2255,16 +2277,11 @@ static int arm_cmn_probe(struct platform_device *pdev)
+>>>       cmn->model = (unsigned long)device_get_match_data(cmn->dev);
+>>>       platform_set_drvdata(pdev, cmn);
+>>>   -    if (cmn->model == CMN600 && has_acpi_companion(cmn->dev)) {
+>>> -        rootnode = arm_cmn600_acpi_probe(pdev, cmn);
+>>> -    } else {
+>>> -        rootnode = 0;
+>>> -        cmn->base = devm_platform_ioremap_resource(pdev, 0);
+>>> -        if (IS_ERR(cmn->base))
+>>> -            return PTR_ERR(cmn->base);
+>>> -        if (cmn->model == CMN600)
+>>> -            rootnode = arm_cmn600_of_probe(pdev->dev.of_node);
+>>> -    }
+>>> +    if (has_acpi_companion(cmn->dev))
+>>> +        rootnode = arm_cmn_acpi_probe(pdev, cmn);
+>>> +    else
+>>> +        rootnode = arm_cmn_of_probe(pdev, cmn);
+>>> +
+>>>       if (rootnode < 0)
+>>>           return rootnode;
+>>>   -- 
+>>> 1.8.3.1
+>>>
