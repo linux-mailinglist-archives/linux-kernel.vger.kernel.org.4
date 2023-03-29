@@ -2,57 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F23B6CF61A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 00:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012D26CF61E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 00:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjC2WCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 18:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S230206AbjC2WDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 18:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjC2WCh (ORCPT
+        with ESMTP id S229735AbjC2WD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 18:02:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAF640CB;
-        Wed, 29 Mar 2023 15:02:36 -0700 (PDT)
+        Wed, 29 Mar 2023 18:03:29 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55093211D;
+        Wed, 29 Mar 2023 15:03:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FF0EB82340;
-        Wed, 29 Mar 2023 22:02:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2E3C433D2;
-        Wed, 29 Mar 2023 22:02:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BE1F9CE1AD9;
+        Wed, 29 Mar 2023 22:03:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD06AC433D2;
+        Wed, 29 Mar 2023 22:03:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680127354;
-        bh=OPo9sN5zimeGshEw5ozbepDahpS2FQOu8mYPSuSsopg=;
+        s=k20201202; t=1680127402;
+        bh=A0tV3BERahKWejUelWbXZkkJbjJP/zPU+MZ1Y3XDirQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tasVUR3w/7HbUcUvL71+kUUOR2MiGkb6hDmAOpNYol06pl/SoE9IuDRPp0KFThY9V
-         fveh77XYXgcolVwkJ+lcc6KNHqprlC/97bIAl9y1crNi6vFIRrsJ3vqSc3nevdsgXs
-         ebw7rAEbJ6PwVkQz5fQAeVUP1ORyGCzBLTFgV9JhoTHKqH9sLZN98DvrfDO42PNUxx
-         LQ8iXzXM3eyfRp+1hf6x1EaHv6REJ8kXIi15E2cxN4ggo0Cg1BtsQJniNVlvCUygoZ
-         l4eA3F4v8hxotquzPMr4YsDxWgNxG35HQQUipge4NNqeAnfBnKLW0uj/X1SdaQMxa4
-         /qPjrnWm6XIjA==
-Date:   Thu, 30 Mar 2023 01:02:31 +0300
+        b=Zr10bsBUbEamf4P6I2+fCD28zslCt/G7bCAc3J7eGSJ1guUEn6LBDWpp+OqM/iUS9
+         NrBgS/F4agKgaDfN5FAoIcQQwJxSmGn4lIp0jbat4/apxXLE5cKBXqHh/e0bV6fAWr
+         ck8P/GpGv4LJvZtcQa7G3HZp+9qxGyekXYXVoZR9Qs9Y2B2bDaUrfVJTnKSgPytCEG
+         qm1SmQ5+F0Zu3i+Znp4T6I+QuWd27zpae00IWk6tZRS9Qs1lpLJ2EAvz3OLwcqQsv4
+         lnWOlS9RdwPsV17TNC/rttoCDOFXSrFLmW2rJ43aA9MrGHCEtEJVhiBhH/E2WLcnpi
+         G0jUfhaVW3j0Q==
+Date:   Thu, 30 Mar 2023 01:03:19 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, kanth.ghatraju@oracle.com,
-        konrad.wilk@oracle.com, erpalmer@linux.vnet.ibm.com,
-        coxu@redhat.com, jlee@suse.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v6 0/6] Add CA enforcement keyring restrictions
-Message-ID: <20230329220231.h6afgarrvdlwwdjc@kernel.org>
-References: <20230322161634.2233838-1-eric.snowberg@oracle.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the tpmdd tree
+Message-ID: <20230329220319.sxihrtujnatfzjym@kernel.org>
+References: <20230321115413.106fa139@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322161634.2233838-1-eric.snowberg@oracle.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20230321115413.106fa139@canb.auug.org.au>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,94 +54,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 12:16:28PM -0400, Eric Snowberg wrote:
-> Prior to the introduction of the machine keyring, most distros simply 
-> allowed all keys contained within the platform keyring to be used
-> for both kernel and module verification.  This was done by an out of
-> tree patch.  Some distros took it even further and loaded all these keys
-> into the secondary trusted keyring.  This also allowed the system owner 
-> to add their own key for IMA usage.
+On Tue, Mar 21, 2023 at 11:54:13AM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Each distro contains similar documentation on how to sign kernel modules
-> and enroll the key into the MOK.  The process is fairly straightforward.
-> With the introduction of the machine keyring, the process remains
-> basically the same, without the need for any out of tree patches.
+> After merging the tpmdd tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
 > 
-> The machine keyring allowed distros to eliminate the out of tree patches
-> for kernel module signing.  However, it falls short in allowing the end 
-> user to add their own keys for IMA. Currently, the machine keyring can not 
-> be used as another trust anchor for adding keys to the ima keyring, since 
-> CA enforcement does not currently exist.  This would expand the current 
-> integrity gap. The IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY 
-> Kconfig states that keys may be added to the ima keyrings if the key is 
-> validly signed by a CA cert in the system built-in or secondary trusted 
-> keyring.  Currently, there is not code that enforces the contents of a
-> CA cert.
+> drivers/char/tpm/tpm-chip.c: In function 'tpm_amd_is_rng_defective':
+> drivers/char/tpm/tpm-chip.c:531:15: error: too many arguments to function 'tpm_request_locality'
+>   531 |         ret = tpm_request_locality(chip, 0);
+>       |               ^~~~~~~~~~~~~~~~~~~~
+> drivers/char/tpm/tpm-chip.c:35:12: note: declared here
+>    35 | static int tpm_request_locality(struct tpm_chip *chip)
+>       |            ^~~~~~~~~~~~~~~~~~~~
 > 
-> This series introduces a way to do CA enforcement with the machine
-> keyring.  It introduces three different ways to configure the machine
-> keyring.  New Kconfig options are added to control the types of keys
-> that may be added to it.  The default option allows all MOK keys into the
-> machine keyring.  When CONFIG_INTEGRITY_CA_MACHINE_KEYRING is selected,
-> the X.509 CA bit must be true and the key usage must contain keyCertSign; 
-> any other usage field may also be set.  When
-> CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MAX is also selected, the X.509 CA
-> bit must be true and the key usage must contain keyCertSign. With this
-> option digitialSignature usage may not be set.  If a key doesn't pass 
-> the CA restriction check, instead of going into the machine keyring, it 
-> is added to the platform keyring.  With the ability to configure the
-> machine keyring with CA restrictions, code that prevented the machine
-> keyring from being enabled with
-> IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY has been removed.
+> Caused by commit
 > 
-> Changelog:
-> v6:
-> - No new code changes
-> - Added Reviewed-by and ACKs
-> - Formatting change requested by Jarkko
+>   923c8dfa9a36 ("tpm: fix build break in tpm-chip.c caused by AMD fTPM quirk")
 > 
-> v5:
-> - Removed the Kconfig _MIN Kconfig option and split it into different
->   entries.
-> - Added requested commit message changes
+> I have used the tmpdd tree from next-20230320 for today.
 > 
-> v4:
-> - Removed all code that validated the certificate chain back to the root
->   CA. Now the only restriction is what is initially placed in the
->   machine keyring.
-> - Check and store if the X.509 usage contains digitalSignature
-> - New Kconfig menu item with none, min and max CA restriction on the 
->   machine keyring
-> 
-> v3:
-> - Allow Intermediate CA certs to be enrolled through the MOK. The
->   Intermediate CA cert must contain keyCertSign key usage and have the 
->   CA bit set to true. This was done by removing the self signed
->   requirement.
-> 
-> Eric Snowberg (6):
->   KEYS: Create static version of public_key_verify_signature
->   KEYS: Add missing function documentation
->   KEYS: X.509: Parse Basic Constraints for CA
->   KEYS: X.509: Parse Key Usage
->   KEYS: CA link restriction
->   integrity: machine keyring CA configuration
-> 
->  certs/system_keyring.c                    | 14 +++++--
->  crypto/asymmetric_keys/restrict.c         | 45 ++++++++++++++++++++
->  crypto/asymmetric_keys/x509_cert_parser.c | 50 +++++++++++++++++++++++
->  include/crypto/public_key.h               | 28 +++++++++++++
->  security/integrity/Kconfig                | 23 ++++++++++-
->  security/integrity/digsig.c               |  8 +++-
->  6 files changed, 162 insertions(+), 6 deletions(-)
-> 
-> 
-> base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
 > -- 
-> 2.27.0
-> 
+> Cheers,
+> Stephen Rothwell
 
-I can pick this, and I guess I can add Mimi's tested-by's to all of the
-patches?
+My mistake. I've removed the commit from my tree. Apologies.
 
 BR, Jarkko
