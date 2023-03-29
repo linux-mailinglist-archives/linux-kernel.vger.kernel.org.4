@@ -2,53 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3786CD9B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16D36CD9B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjC2Myb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
+        id S229706AbjC2M5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjC2My3 (ORCPT
+        with ESMTP id S229456AbjC2M5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:54:29 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4A6BA;
-        Wed, 29 Mar 2023 05:54:28 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PmmfC0yY6zKwRQ;
-        Wed, 29 Mar 2023 20:52:03 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 29 Mar 2023 20:54:26 +0800
-CC:     <yangyicong@hisilicon.com>, <mathieu.poirier@linaro.org>,
-        <suzuki.poulose@arm.com>, <corbet@lwn.net>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <helgaas@kernel.org>,
-        <linux-pci@vger.kernel.org>, <prime.zeng@huawei.com>,
-        <linuxarm@huawei.com>
-Subject: Re: [PATCH 3/4] hwtracing: hisi_ptt: Export available filters through
- sysfs
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-References: <20230315094316.26772-1-yangyicong@huawei.com>
- <20230315094316.26772-4-yangyicong@huawei.com>
- <20230328180234.00003421@Huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <08d5c43f-664c-457f-69a1-c6747bb56637@huawei.com>
-Date:   Wed, 29 Mar 2023 20:54:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Wed, 29 Mar 2023 08:57:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFB2125
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680094578;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Bfp+uWRbOwM8a2jDGBZKgrnhrhJwiLY7EtO8YbQJdLo=;
+        b=SmrIqzSxRYXn+p3LnuhTdtMpFEpq3odXtWHwTCxMIeM7+72pj5Oq4CuI6c3rT5HUJ3+DSh
+        9WLcya6pZjfZx/yj2iia08BzMajcQNxhRp+C25FA4bSlBIDZtoab5YbJviE60OG5F2XIX6
+        c86oj7l4I0zUy8t6jTGVIEZnp4iu0Yw=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-586-Cv9l92hFM_6nOJfFfE7M6A-1; Wed, 29 Mar 2023 08:56:17 -0400
+X-MC-Unique: Cv9l92hFM_6nOJfFfE7M6A-1
+Received: by mail-qt1-f197.google.com with SMTP id e4-20020a05622a110400b003e4e915a164so5918477qty.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:56:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680094577;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bfp+uWRbOwM8a2jDGBZKgrnhrhJwiLY7EtO8YbQJdLo=;
+        b=lggYoD8M5xx82RmdxmqzzMe+CcrztsNCdbXez5k2VthFYY2lEIBllio/UwnLp9+gMW
+         nDxu+MlARSzKXOxkaYyrvRK+ARngCEWaGlY1FofwnT/4NnasULBJQuemV9tFEBaiwqHG
+         EmsNXgRBusW3/x5TDcGClUMbelkaACCcno+0H6HhAeiY8QEvu05Ko5RbdPccr9ZgONbg
+         BO6+FBUag74CQUcopwcHP5LWjBlhW5Nj6lM0NcimKu5jHJeje4vL8KweGenPOQGpaGSQ
+         S4mG1wBf8OogoI2aOvJ613Ci1kL3BSxxtKhw10hEXEY6O0RSATolLl2iXt7vrZCy+/AV
+         1O2w==
+X-Gm-Message-State: AAQBX9elbfc4cff0QjYiGLzWccP240TSx69Jdo0vLVtKJUwuglZBvphq
+        doZ3mixvPF9BnSO0a7ozlYU5SGpZ4Lmt0HvLrtzazJO7YAGY5EYmHCa/wbY5/jq0jOLA3EMncOI
+        6MUfHdIa/uE5fa0z3DvNWaFe4
+X-Received: by 2002:ac8:7e96:0:b0:3df:a280:b60f with SMTP id w22-20020ac87e96000000b003dfa280b60fmr3500375qtj.14.1680094576760;
+        Wed, 29 Mar 2023 05:56:16 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZGTLNAqlZFpgluXc9E29WsIGvzo/yoSMfkjUy52AXwYy8t8q4yk5sPGRYXBrERZaZ31OG+dg==
+X-Received: by 2002:ac8:7e96:0:b0:3df:a280:b60f with SMTP id w22-20020ac87e96000000b003dfa280b60fmr3500343qtj.14.1680094576443;
+        Wed, 29 Mar 2023 05:56:16 -0700 (PDT)
+Received: from localhost.localdomain.com ([151.29.151.163])
+        by smtp.gmail.com with ESMTPSA id c23-20020a379a17000000b007436d0e9408sm13527134qke.127.2023.03.29.05.56.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 05:56:16 -0700 (PDT)
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>
+Subject: [PATCH 0/6] sched/deadline: cpuset: Rework DEADLINE bandwidth restoration
+Date:   Wed, 29 Mar 2023 14:55:52 +0200
+Message-Id: <20230329125558.255239-1-juri.lelli@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-In-Reply-To: <20230328180234.00003421@Huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,182 +93,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/29 1:02, Jonathan Cameron wrote:
-> On Wed, 15 Mar 2023 17:43:15 +0800
-> Yicong Yang <yangyicong@huawei.com> wrote:
-> 
->> From: Yicong Yang <yangyicong@hisilicon.com>
->>
->> The PTT can only filter the traced TLP headers by the Root Ports or the
->> Requester ID of the Endpoint, which are located on the same core of the
->> PTT device. The filter value used is derived from the BDF number of the
->> supported Root Port or the Endpoint. It's not friendly enough for the
->> users since it requires the user to be familiar enough with the platform
->> and calculate the filter value manually.
->>
->> This patch export the available filters through sysfs. Each available
->> filters is presented as an individual file with the name of the BDF
->> number of the related PCIe device. The files are created under
->> $(PTT PMU dir)/available_root_port_filters and
->> $(PTT PMU dir)/available_requester_filters respectively. The filter
->> value can be known by reading the related file.
->>
->> Then the users can easily know the available filters for trace and get
->> the filter values without calculating.
->>
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> 
-> Trivial comments only inline.
-> 
-> With those answered / tidied up.
-> 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> 
->> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
->> index 010cdbc3c172..a5cd87edb813 100644
->> --- a/drivers/hwtracing/ptt/hisi_ptt.c
->> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
-> 
-> 
->>
->> +
->> +static int hisi_ptt_init_filter_attributes(struct hisi_ptt *hisi_ptt)
->> +{
->> +	struct hisi_ptt_filter_desc *filter;
->> +	int ret;
->> +
->> +	mutex_lock(&hisi_ptt->filter_lock);
->> +
->> +	list_for_each_entry(filter, &hisi_ptt->port_filters, list) {
->> +		ret = hisi_ptt_create_filter_attr(hisi_ptt, filter);
->> +		if (ret)
->> +			goto err;
->> +	}
->> +
->> +	list_for_each_entry(filter, &hisi_ptt->req_filters, list) {
->> +		ret = hisi_ptt_create_filter_attr(hisi_ptt, filter);
->> +		if (ret)
->> +			goto err;
->> +	}
->> +
->> +	ret = devm_add_action_or_reset(&hisi_ptt->pdev->dev,
->> +				       hisi_ptt_remove_all_filter_attributes,
->> +				       hisi_ptt);
->> +	if (ret)
->> +		goto err;
->> +
->> +	hisi_ptt->sysfs_inited = true;
-> 
-> err:
-> 
->> +	mutex_unlock(&hisi_ptt->filter_lock);
-> 
-> 	return ret;
-> 
-> No need for separate exit block when nothing to do but unlock.
-> 
+Qais reported [1] that iterating over all tasks when rebuilding root
+domains for finding out which ones are DEADLINE and need their bandwidth
+correctly restored on such root domains can be a costly operation (10+
+ms delays on suspend-resume). He proposed we skip rebuilding root
+domains for certain operations, but that approach seemed arch specific
+and possibly prone to errors, as paths that ultimately trigger a rebuild
+might be quite convoluted (thanks Qais for spending time on this!).
 
-ok. will refine here.
+To fix the problem
 
->> +	return 0;
->> +err:
->> +	mutex_unlock(&hisi_ptt->filter_lock);
->> +	return ret;
->> +}
->> +
->>  static void hisi_ptt_update_filters(struct work_struct *work)
->>  {
->>  	struct delayed_work *delayed_work = to_delayed_work(work);
->> @@ -384,8 +517,28 @@ static void hisi_ptt_update_filters(struct work_struct *work)
->>  				continue;
->>  			}
->>  
->> +			filter->name = kstrdup(pci_name(info.pdev), GFP_KERNEL);
->> +			if (!filter->name) {
->> +				pci_err(hisi_ptt->pdev, "failed to add filter %s\n",
->> +					pci_name(info.pdev));
->> +				kfree(filter);
->> +				continue;
->> +			}
->> +
->>  			filter->devid = devid;
->>  			filter->is_port = is_port;
->> +
->> +			/*
->> +			 * If filters' sysfs entries hasn't been initialized, then
->> +			 * we're still at probe stage and leave it to handled by
->> +			 * others.
->> +			 */
->> +			if (hisi_ptt->sysfs_inited &&
-> 
-> Can we move this sysfs_inited check earlier? Seems silly to leave a simple check
-> like that so late.
-> 
+ 01/06 - Rename functions deadline with DEADLINE accounting (cleanup
+         suggested by Qais) - no functional change
+ 02/06 - Bring back cpuset_mutex (so that we have write access to cpusets
+         from scheduler operations - and we also fix some problems
+         associated to percpu_cpuset_rwsem)
+ 03/06 - Keep track of the number of DEADLINE tasks belonging to each cpuset
+ 04/06 - Create DL BW alloc, free & check overflow interface for bulk
+         bandwidth allocation/removal - no functional change 
+ 05/06 - Fix bandwidth allocation handling for cgroup operation
+         involving multiple tasks
+ 06/06 - Use this information to only perform the costly iteration if
+         DEADLINE tasks are actually present in the cpuset for which a
+         corresponding root domain is being rebuilt
 
-maybe move it into the hisi_ptt_create_filter_attr()? will have a check.
-for here we still need to update filter list even if the hisi_ptt's sysfs is not
-initialized yet.
+With respect to the RFC posting [2]
 
->> +			    hisi_ptt_create_filter_attr(hisi_ptt, filter)) {
->> +				kfree(filter);
->> +				continue;
->> +			}
->> +
->>  			list_add_tail(&filter->list, target_list);
->>  
->>  			if (is_port)
->> @@ -394,6 +547,11 @@ static void hisi_ptt_update_filters(struct work_struct *work)
->>  			list_for_each_entry(filter, target_list, list)
->>  				if (filter->devid == devid) {
->>  					list_del(&filter->list);
->> +
->> +					if (hisi_ptt->sysfs_inited)
->> +						hisi_ptt_remove_filter_attr(hisi_ptt, filter);
->> +
->> +					kfree(filter->name);
->>  					kfree(filter);
->>  					break;
->>  				}
->> @@ -486,10 +644,12 @@ static int hisi_ptt_init_filters(struct pci_dev *pdev, void *data)
->>  	 * through the log. Other functions of PTT device are still available.
->>  	 */
->>  	filter = kzalloc(sizeof(*filter), GFP_KERNEL);
->> -	if (!filter) {
->> -		pci_err(hisi_ptt->pdev, "failed to add filter %s\n", pci_name(pdev));
->> -		return -ENOMEM;
->> -	}
->> +	if (!filter)
->> +		goto err_mem;
->> +
->> +	filter->name = kstrdup(pci_name(pdev), GFP_KERNEL);
->> +	if (!filter->name)
->> +		goto err_name;
->>  
->>  	filter->devid = PCI_DEVID(pdev->bus->number, pdev->devfn);
->>  
->> @@ -504,6 +664,11 @@ static int hisi_ptt_init_filters(struct pci_dev *pdev, void *data)
->>  	}
->>  
->>  	return 0;
->> +err_name:
->> +	kfree(filter);
->> +err_mem:
->> +	pci_err(hisi_ptt->pdev, "failed to add filter %s\n", pci_name(pdev));
-> 
-> I'd rather see a message for each of the error paths so we have some information on why.
-> Original message wasn't great for this obviously and perhaps given they are both allocation
-> errors it's not worth splitting them up.
-> 
+ 1 - rename DEADLINE bandwidth accounting functions - Qais
+ 2 - call inc/dec_dl_tasks_cs from switched_{to,from}_dl - Qais
+ 3 - fix DEADLINE bandwidth allocation with multiple tasks - Waiman,
+     contributed by Dietmar
 
-ok, will try to split it and make it more verbosely.
+This set is also available from
 
-Thanks,
-Yicong
+https://github.com/jlelli/linux.git deadline/rework-cpusets
 
->> +	return -ENOMEM;
->>  }
-> 
-> 
-> .
-> 
+Best,
+Juri
+
+1 - https://lore.kernel.org/lkml/20230206221428.2125324-1-qyousef@layalina.io/
+2 - https://lore.kernel.org/lkml/20230315121812.206079-1-juri.lelli@redhat.com/
+
+Dietmar Eggemann (2):
+  sched/deadline: Create DL BW alloc, free & check overflow interface
+  cgroup/cpuset: Free DL BW in case can_attach() fails
+
+Juri Lelli (4):
+  cgroup/cpuset: Rename functions dealing with DEADLINE accounting
+  sched/cpuset: Bring back cpuset_mutex
+  sched/cpuset: Keep track of SCHED_DEADLINE task in cpusets
+  cgroup/cpuset: Iterate only if DEADLINE tasks are present
+
+ include/linux/cpuset.h  |  12 ++-
+ include/linux/sched.h   |   4 +-
+ kernel/cgroup/cgroup.c  |   4 +
+ kernel/cgroup/cpuset.c  | 232 ++++++++++++++++++++++++++--------------
+ kernel/sched/core.c     |  41 ++++---
+ kernel/sched/deadline.c |  67 +++++++++---
+ kernel/sched/sched.h    |   2 +-
+ 7 files changed, 240 insertions(+), 122 deletions(-)
+
+-- 
+2.39.2
+
