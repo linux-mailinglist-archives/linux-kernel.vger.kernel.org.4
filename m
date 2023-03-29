@@ -2,152 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E8F6CD984
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A9C6CD986
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjC2MrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S229672AbjC2MrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjC2MrC (ORCPT
+        with ESMTP id S229920AbjC2MrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:47:02 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4ECA3ABE;
-        Wed, 29 Mar 2023 05:46:57 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PmmWk11rvzKqFG;
-        Wed, 29 Mar 2023 20:46:26 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 29 Mar 2023 20:46:55 +0800
-CC:     <yangyicong@hisilicon.com>, "acme@kernel.org" <acme@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "james.clark@arm.com" <james.clark@arm.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-        "21cnbao@gmail.com" <21cnbao@gmail.com>,
-        "prime.zeng@hisilicon.com" <prime.zeng@hisilicon.com>,
-        "shenyang39@huawei.com" <shenyang39@huawei.com>,
-        "linuxarm@huawei.com" <linuxarm@huawei.com>
-Subject: Re: [PATCH] perf stat: Support per-cluster aggregation
-To:     Namhyung Kim <namhyung@gmail.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>
-References: <20230313085911.61359-1-yangyicong@huawei.com>
- <DM6PR11MB4107255E167D98A000DC49FBDC849@DM6PR11MB4107.namprd11.prod.outlook.com>
- <CAM9d7cgeLdBoniAz64YrzSYKw2Y4ivy5DhEzReEzhm41M-nvSQ@mail.gmail.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <6cd44ff7-d339-d9a4-a134-2b8b9b3dbbfa@huawei.com>
-Date:   Wed, 29 Mar 2023 20:46:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Wed, 29 Mar 2023 08:47:07 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17644201;
+        Wed, 29 Mar 2023 05:47:04 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id p15so19080930ybl.9;
+        Wed, 29 Mar 2023 05:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680094024;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d4LKIkv2jjaqEZGV9hdNc6tEqjwN//q2Vxizmj38FUA=;
+        b=C/FTOzsvLpqVoXeHw2ea3zPblLBmegOph8K5ugkJuMIeVAh+UCRABDUafaz1f7aIY6
+         6uf6Eisxla9gTI1kVxoaNMRvLuZ+886001EChYlz+7QAHyUKtffhSZ+X9AgaV5Dhtt4i
+         cUdoYx3/xC5++3RLFEW4Rn3nqjJISH/yMNBoXQmw5JVhqdMNSGq2uHeW/tSjnSOHMLQa
+         YPEPwgq/aw07Xa5Eb8W/ULtEWEPMWzjvndelcYOIxi6SzYfEpuo/wUlWirjvVu84PMP1
+         vVbBQxeLG0dRy38s+Tx6/biOIJEOPkegxuH0BASHN12MurYJAEfE3M4DGsdnhYNOaZrl
+         ka+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680094024;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d4LKIkv2jjaqEZGV9hdNc6tEqjwN//q2Vxizmj38FUA=;
+        b=OHjyD6SoPlBWaxlf8DY5WWFgtOkShN1AhYYFPL7e4eFE5z5rjYjfgyrH+GWiuM8Ite
+         Z12Dl5yvE3pnIBmiU+MwHVK9WYcS6tE4fNKkQ5Lu2pUWYpE67kzp/EysuNGv3HxUuzME
+         kquZo18bLaOZWjZT2EkMnzq2TKo7DTaNE9VpFfk099sAAEP/10ZBAdLlaJvMwKxLcaUy
+         LCb/CktQembxOvqGhc4NxpmEc5yMqrLcfIYPn1yadw/E1UMIuJxA0GaBleIqi+GsGXZI
+         OWPUNmSJcsPrITSWBXj2ZqEgjNVNTWk7tpor2X27IBOaLJ3c1T1VDok027ENc2pQjxV5
+         J4jg==
+X-Gm-Message-State: AAQBX9c+f2Kx5gfXsyiJdmIfmt5GkjrDAR6asE/t87Wq4xJIoffCe4om
+        SE0j8lCTd6M2br1tu8vGHfw=
+X-Google-Smtp-Source: AKy350YEM1SqgxyCn8Vd3o3g7PhTtI779t7HLSnooS41hqjb0hoQKh7r4DomNpI4mAxy9ATSPaD6CQ==
+X-Received: by 2002:a25:1141:0:b0:b73:f2ab:8c8b with SMTP id 62-20020a251141000000b00b73f2ab8c8bmr2005620ybr.2.1680094023840;
+        Wed, 29 Mar 2023 05:47:03 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x94-20020a25a067000000b00b7767ca74a0sm3424611ybh.61.2023.03.29.05.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 05:47:03 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 29 Mar 2023 05:47:00 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "peter.ganzhorn@gmail.com" <peter.ganzhorn@gmail.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/4] coretemp: Fix spamming of ring buffer
+Message-ID: <aeed703c-5dbb-4a6f-a4d7-3c6a55d99e9e@roeck-us.net>
+References: <CA+3fRbFzq38sQomFM7xJt-UoeLv_ZZbQ2uaHZ+8J_5ntweJ7TA@mail.gmail.com>
+ <7e821f80b7700fcf1fb26f40bde8397f0e5e6d7e.camel@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <CAM9d7cgeLdBoniAz64YrzSYKw2Y4ivy5DhEzReEzhm41M-nvSQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e821f80b7700fcf1fb26f40bde8397f0e5e6d7e.camel@intel.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/29 14:47, Namhyung Kim wrote:
-> Hello,
+On Wed, Mar 29, 2023 at 03:43:58AM +0000, Zhang, Rui wrote:
+> Hi, Peter,
 > 
-> On Fri, Mar 24, 2023 at 11:09 AM Chen, Tim C <tim.c.chen@intel.com> wrote:
->>
->>>
->>> From: Yicong Yang <yangyicong@hisilicon.com>
->>>
->>> Some platforms have 'cluster' topology and CPUs in the cluster will share
->>> resources like L3 Cache Tag (for HiSilicon Kunpeng SoC) or L2 cache (for Intel
->>> Jacobsville). Currently parsing and building cluster topology have been
->>> supported since [1].
->>>
->>> perf stat has already supported aggregation for other topologies like die or
->>> socket, etc. It'll be useful to aggregate per-cluster to find problems like L3T
->>> bandwidth contention or imbalance.
->>>
->>> This patch adds support for "--per-cluster" option for per-cluster aggregation.
->>> Also update the docs and related test. The output will be like:
->>>
->>> [root@localhost tmp]# perf stat -a -e LLC-load --per-cluster -- sleep 5
->>>
->>> Performance counter stats for 'system wide':
->>>
->>> S56-D0-CLS158    4      1,321,521,570      LLC-load
->>> S56-D0-CLS594    4        794,211,453      LLC-load
->>> S56-D0-CLS1030    4             41,623      LLC-load
->>> S56-D0-CLS1466    4             41,646      LLC-load
->>> S56-D0-CLS1902    4             16,863      LLC-load
->>> S56-D0-CLS2338    4             15,721      LLC-load
->>> S56-D0-CLS2774    4             22,671      LLC-load
->>> [...]
->>
->> Overall it looks good.  You can add my reviewed-by.
->>
->> I wonder if we could enhance the help message
->> in perf stat to tell user to refer to
->> /sys/devices/system/cpu/cpuX/topology/*_id
->> to map relevant ids back to overall cpu topology.
->>
->> For example the above example, cluster S56-D0-CLS158  has
->> really heavy load. It took me  a while
->> going through the code to figure out how to find
->> the info that maps cluster id to cpu.
+> CC the list.
 > 
-> Maybe we could enhance the cpu filter to accept something
-> like -C S56-D0-CLS158.
+> On Tue, 2023-03-28 at 22:37 +0200, Peter Ganzhorn wrote:
+> > Dear Mr. Rui,
+> > Dear Mr. Roeck,
+> > 
+> > please consider accepting the attached patches or
+> > modifying the coretemp code to stop spamming my syslog.
+> > I would appreciate it very much if you can accept the patches.
+> > 
+> > coretemp: Improve dynamic changes of TjMax
+> > After introduction of dynamic TjMax changes in commit
+> > c0c67f8761cec1fe36c21d85b1a5400ea7ac30cd
+> > my syslog gets spammed with "TjMax is ... degrees C"
+> > messages.
+> > If TjMax is subject to change at any time, it won't be
+> > set in tdata anymore and re-read every time from MSR.
+> > This causes quite a lot of dev_dbg() messages to be issued.
+> > 
+> > The following patches change the code to read TjMax
+> > from the MSRs into tdata->tjmax (again) but allow for a
+> > dynamic update at any time as well. (Patches 1 and 2)
+> > This way a message will only be issued after actual changes.
+> > Also I replaced the dev_dbg() with dev_notice (Patch 3) and
+> > added a additional dev_notice for the case where TjMax is
+> > set based on assumptions. (Patch 4)
+> > 
+> > 
+> > If you do not want to accept my patches, removing the
+> > dev_dbg() in get_tjmax() would be the most simple
+> > solution I guess.
+> > 
+> Please check if below patch solves your problem or not.
 > 
+> From 9370ee5163a85f65230b5222f1f4dece59ce078a Mon Sep 17 00:00:00 2001
+> From: Zhang Rui <rui.zhang@intel.com>
+> Date: Wed, 29 Mar 2023 11:35:18 +0800
+> Subject: [PATCH] hwmon: (coretemp) Avoid duplicate debug messages
+> 
+> Avoid duplicate dev_dbg messages when tjmax value retrieved from MSR
+> does not change.
+> 
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  drivers/hwmon/coretemp.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+> index 30d77f451937..809456967b50 100644
+> --- a/drivers/hwmon/coretemp.c
+> +++ b/drivers/hwmon/coretemp.c
+> @@ -267,6 +267,7 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
+>  	int err;
+>  	u32 eax, edx;
+>  	u32 val;
+> +	static u32 tjmax;
 
-you mean specified the CPUs by a topology ID like this S56-D0-CLS158
-then we actually filtering the CPUs in the CLS 158?
+That would apply to every instance of this driver, meaning to every
+CPU core. Is that really appropriate ?
 
-> I also wonder what if it runs on an old kernel which doesn't
-> have the cluster_id file.
+Guenter
 
-It should work well but may not be proper for the cluster. There's
-no die topology nor related sysfs attributes on arm64, but --per-die
-works like:
-
-[root@localhost perf]# perf stat -a -e cycles --per-die -- sleep 1
-
- Performance counter stats for 'system wide':
-
-S56-D0         64         12,700,186      cycles
-S7182-D0       64         20,297,320      cycles
-
-       1.003638080 seconds time elapsed
-
-On a legacy kernel without cluster sysfs attributes, the output will be
-look like:
-
-[root@localhost perf]# perf stat -a -e cycles --per-cluster -- sleep 1
-
- Performance counter stats for 'system wide':
-
-S56-D0-CLS-1   64         12,634,251      cycles
-S7182-D0-CLS-1   64         16,348,322      cycles
-
-       1.003696680 seconds time elapsed
-
-The patch just assign -1 to the cluster id. I'll modify this to keep consistence
-with the output of --per-die. Thanks for catching this!
-
-Thanks,
-Yicong
-
-
+>  
+>  	/* use static tjmax once it is set */
+>  	if (tdata->tjmax)
+> @@ -287,7 +288,10 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
+>  		 * will be used
+>  		 */
+>  		if (val) {
+> -			dev_dbg(dev, "TjMax is %d degrees C\n", val);
+> +			if (tjmax != val) {
+> +				dev_dbg(dev, "TjMax is %d degrees C\n", val);
+> +				tjmax = val;
+> +			}
+>  			return val * 1000;
+>  		}
+>  	}
+> -- 
+> 2.25.1
+> 
