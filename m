@@ -2,169 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAB66CF3F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 22:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 027656CF3FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 22:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjC2UBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 16:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
+        id S230078AbjC2UC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 16:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjC2UAz (ORCPT
+        with ESMTP id S229950AbjC2UC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 16:00:55 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209D42697;
-        Wed, 29 Mar 2023 13:00:53 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id l7so15138324pjg.5;
-        Wed, 29 Mar 2023 13:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680120052;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lwysfnQkAd80wlNyJ6XzThTPiLtn2B/tyA3fjQAFkXU=;
-        b=VhGF9AnSesD95PbIw4HKQtmtguZMl7HEDnjXJr5VTDVRIevs+1HBUeQ5jfnJOor6Uk
-         VGnu7EvlPqhvNxv8RZkHktwn+oBeH+Pnnf1g3tb+S0UFbD5H/EVLQ7WSVvtpCJlJD4qF
-         7WQdVImaam9FqrqmDuRw2Sq3cKQbxxS8w6lkd/SzoMxPwFfREAwPn8bPp7a3XoFqAWFt
-         Hd9WBZMtBQzMHWAZlCrnKrd5hwd48+xbCLXjnP7LePyuuo/yjboiAxWuCKIOggXKhNC+
-         AAs/7O15Dtlcb5z865sBl3TbnMRLyLavIcjyeMqUHVcD8RPDq2PxXPvBzBprp/8JgpoG
-         Fulw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680120052;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lwysfnQkAd80wlNyJ6XzThTPiLtn2B/tyA3fjQAFkXU=;
-        b=u8hBHtpYjVs47hCk+1LVfuJnuKsWOLcTNPUrAbIopRGXluDWKZKbGYuRQ0NyXPRTKG
-         He21GhvuYcS5Dsjct0mKw0nlUGv59/eJ4E+yVwjwav0VR8zI8wZeIu6TKxqm0tPx3Ds3
-         SpZcYCqjCDPCvrP0DIMdISdvQU3LjqHWWke+zQtU/vAMjhN3VU+2E6wo1cWoxNsRBd1K
-         VbXlIuOTvUFkjKWLluX5WO+QGtShOfz2jOJtBk//7FYkkskoJxB+csbvQoM2VAd5M/uI
-         owIoNkqhCXPeq0AwXXUjMzWe10Ku+nqR6e/Q0YmONJhwP3mjzfSZkLZfztGIOEwHEUgg
-         N5ng==
-X-Gm-Message-State: AO0yUKWjOOKMQoo0555W3wulzD9HEDKZRQeEXmJHh53Tc1xSzPYMIr8o
-        JnFop5H8ZoP5AXP8QaoYs7Y=
-X-Google-Smtp-Source: AK7set/hUGyEZjDACyGqVfdIw/bpUvUdmMhhbxm3aUkYiMQ4iG1YGdBAY5KP8EqrQQnHaA6jV87MwA==
-X-Received: by 2002:a05:6a20:1321:b0:d4:fd7e:c8b0 with SMTP id g33-20020a056a20132100b000d4fd7ec8b0mr16282702pzh.7.1680120052315;
-        Wed, 29 Mar 2023 13:00:52 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id 23-20020aa79117000000b005a8173829d5sm21406589pfh.66.2023.03.29.13.00.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 13:00:51 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 29 Mar 2023 10:00:50 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
- percpu lock
-Message-ID: <ZCSY8l/jVwszF6iA@slm.duckdns.org>
-References: <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
- <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com>
- <ZB5UalkjGngcBDEJ@slm.duckdns.org>
- <CAJD7tkYhyMkD8SFf8b8L1W9QUrLOdw-HJ2NUbENjw5dgFnH3Aw@mail.gmail.com>
- <CALvZod6rF0D21hcV7xnqD+oRkn=x5NLi5GOkPpyaPa859uDH+Q@mail.gmail.com>
- <CAJD7tkY_ESpMYMw72bsATpp6tPphv8qS6VbfEUjpKZW6vUqQSQ@mail.gmail.com>
- <CALvZod41ecuCKmuFBNtAjoKJjQgWYzoe4_B8zRK37HYk-rYDkA@mail.gmail.com>
- <CAJD7tkZrp=4zWvjE9_010TAG1T_crCbf9P64UzJABspgcrGPKg@mail.gmail.com>
- <ZCSJDpPPOVvBYfOy@slm.duckdns.org>
- <f9b6410-ee17-635f-a35d-559fa0191dc3@google.com>
+        Wed, 29 Mar 2023 16:02:57 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CEE126;
+        Wed, 29 Mar 2023 13:02:50 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.96.253]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MeCxj-1qGP3A1O91-00bHfd; Wed, 29 Mar 2023 22:02:23 +0200
+Received: from localhost.fjasle.eu (kirkenes.fjasle.eu [10.10.0.5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by leknes.fjasle.eu (Postfix) with ESMTPS id 773E53C07B;
+        Wed, 29 Mar 2023 22:02:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1680120141; bh=84G13KGf0S3haP/PaVBEgLLnNP1CV5H5DLxOLq0RpgU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k3BbnXyomrKbcPHOWZe6DJk0K8ksdjAG5NsImVKCrzLyBz73t8cYa/3e0sG3P70/7
+         d3dfnGHPotQOFiJbGS+1lbGqt+fyzFmDcWPF3auLUP2oKlavEmSupHVH2pTHTGufUN
+         uZAAOFSOds1kcndOae7lq+dKnL2NyaQcbFTBcREY=
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+        id E0468210; Wed, 29 Mar 2023 22:02:20 +0200 (CEST)
+Date:   Wed, 29 Mar 2023 22:02:20 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] kbuild: fix package build error due to broken symlinks
+Message-ID: <ZCSZTLjhLshLBKWM@bergen.fjasle.eu>
+References: <20230325141909.2512452-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="1uuWaD320kt9WZSJ"
 Content-Disposition: inline
-In-Reply-To: <f9b6410-ee17-635f-a35d-559fa0191dc3@google.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230325141909.2512452-1-masahiroy@kernel.org>
+X-Operating-System: Debian GNU/Linux 12.0
+Jabber-ID: nicolas@jabber.no
+X-Provags-ID: V03:K1:aFPjbh+dtcyTDl68dBPv2zvHvcV+f9FAJsYe2ScMv9UBkhabhij
+ jykcSk2AfsOWmcGp208BKbQebToKX89Oce8lKH//e9SqB5TVIY2bEqdUKHmE7wSlt8TF/Dt
+ IsWDjJA4Gn8H4AvgWoCcYRArJfoWPokef+rE0x+2n9QsuETvTpUnaUzbmeRTSyLTEtXpXc3
+ 6cK5X0vmf/nwjyt/HfNYA==
+UI-OutboundReport: notjunk:1;M01:P0:Lc0KRV6t7FQ=;TFli5q8I+0u4yI76NlOQRoER2MG
+ UbqFdSTioqrzGxqoB75W6EltW6VUkCx9wALCeXxBmcxvYqcdR7i2YqJ49slufCCH6RnIUD6kd
+ EQ35bLQb1UXPmjAXdZXSaSWtyAsaRqZiv1VtT3x4kyjLPxC3idZuNl+di4L2X0LVkzxT+hp7M
+ cWMbk4vyTNERwZiSQ0tclSavk2uNODnwNZL8sQ/UXLPW3tpBBL2CP6TjtErIhB3OIcGqd6jkb
+ Lp9+/3F2WQjpGQqDLtyd2nxMtPZ0U5j66bcWAfAxRdLEoL0TKtrIpdfBsbJQuk+hj+2YeGZle
+ 61Yc/j9D+5yjb1A4Tq8+8SAGHo6rWaMY2xRgayLx60hk9nMJlT3LVkxOGtfbv5gVxND8nK4rw
+ mP/4HioLYEkqGfqbpAXyLwaQgxu1QlTgyn1Jfdd/IbqlUsCi3iDw86W9SfA1Dv6Ktpb5io1xd
+ warnSPuLpkEozWY6X712FAv092eJC4iSqYSJbiCbQ2CqiTNO37r0H1CPYIUaFzgevxZi1eYhl
+ bHuVrTwvAE3MBCETc5CsMmxO2A2rMVd7EYn8ozM2GupIDioBVsOEoUNukeEsgeeHWxjw5Tngx
+ UFH8s19YmhCMFdLOBVnbNhW3rnOsLs3Thu7GsorMnwcxvVkfWOxlnvjmYwd+K4c5C3BhRxHeK
+ OKRb/PkyO/UtSI7SPuwTrlXLRvC9z6myOXx+oAV8kw==
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Hugh. How have you been?
 
-On Wed, Mar 29, 2023 at 12:22:24PM -0700, Hugh Dickins wrote:
-> Hi Tejun,
-> Butting in here, I'm fascinated.  This is certainly not my area, I know
-> nothing about rstat, but this is the first time I ever heard someone
-> arguing for more disabling of interrupts rather than less.
-> 
-> An interrupt coming in while holding a contended resource can certainly
-> add to latencies, that I accept of course.  But until now, I thought it
-> was agreed best practice to disable irqs only regretfully, when strictly
-> necessary.
-> 
-> If that has changed, I for one want to know about it.  How should we
-> now judge which spinlocks should disable interrupts and which should not?
-> Page table locks are currently my main interest - should those be changed?
+--1uuWaD320kt9WZSJ
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For rstat, it's a simple case because the global lock here wraps around
-per-cpu locks which have to be irq-safe, so the only difference we get
-between making the global irq-unsafe and keeping it so but releasing
-inbetween is:
+On Sat 25 Mar 2023 23:19:09 GMT, Masahiro Yamada wrote:
+> 'make deb-pkg' and 'make rpm-pkg' fail if a broken symlink exists in
+> a dirty source tree. Handle symlinks properly, and also, keep the
+> executable permission.
+>=20
+> Fixes: 05e96e96a315 ("kbuild: use git-archive for source package creation=
+")
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>=20
+>  scripts/package/gen-diff-patch | 36 +++++++++++++++++++++++++---------
+>  1 file changed, 27 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/scripts/package/gen-diff-patch b/scripts/package/gen-diff-pa=
+tch
+> index f842ab50a780..23551de92e1b 100755
+> --- a/scripts/package/gen-diff-patch
+> +++ b/scripts/package/gen-diff-patch
+> @@ -23,16 +23,34 @@ fi
+>  git -C ${srctree} status --porcelain --untracked-files=3Dall |
+>  while read stat path
+>  do
+> -	if [ "${stat}" =3D '??' ]; then
+> -
+> -		if ! diff -u /dev/null "${srctree}/${path}" > .tmp_diff &&
+> -			! head -n1 .tmp_diff | grep -q "Binary files"; then
+> -			{
+> -				echo "--- /dev/null"
+> -				echo "+++ linux/$path"
+> -				cat .tmp_diff | tail -n +3
+> -			} >> ${untracked_patch}
+> +	if [ "${stat}" !=3D '??' ]; then
+> +		continue
+> +	fi
+> +
+> +	if [ -L "${path}" ]; then
+> +		{
+> +			echo "diff --git a/${path} b/${path}"
+> +			echo "new file mode 120000"
+> +			echo "--- /dev/null"
+> +			echo "+++ b/$path"
+> +			echo "@@ -0,0 +1 @@"
+> +			printf "+"; readlink ${path}
 
- Global lock held: G
- IRQ disabled: I
- Percpu lock held: P
- 
-1. IRQ unsafe
+Better quote "${path}"?
 
- GGGGGGGGGGGGGGG~~GGGGG
- IIII IIII IIII ~~ IIII
- PPPP PPPP PPPP ~~ PPPP
+> +			echo '\ No newline at end of file'
+> +		} >> ${untracked_patch}
 
-2. IRQ safe released inbetween cpus
+Here quoting should not be necessary as mkdebian and mkspec give only=20
+save filenames, but for consistency I'd quote ${untracked_patch} as=20
+well.
 
- GGGG GGGG GGGG ~~ GGGG
- IIII IIII IIII ~~ IIII
- PPPP PPPP PPPP ~~ PPPP
+> +	elif ! diff -u /dev/null "${srctree}/${path}" > .tmp_diff &&
+> +	     ! head -n1 .tmp_diff | grep -q "Binary files"; then
+> +		if [ -x ${path} ]; then
 
-#2 seems like the obvious thing to do here given how the lock is used and
-each P section may take a bit of time.
+Same here.
 
-So, in the rstat case, the choice is, at least to me, obvious, but even for
-more generic cases where the bulk of actual work isn't done w/ irq disabled,
-I don't think the picture is as simple as "use the least protected variant
-possible" anymore because the underlying hardware changed.
+> +			mode=3D100755
+> +		else
+> +			mode=3D100644
+>  		fi
+> +		{
+> +			echo "diff --git a/${path} b/${path}"
+> +			echo "new file mode ${mode}"
+> +			echo "--- /dev/null"
+> +			echo "+++ b/$path"
+> +			cat .tmp_diff | tail -n +3
+> +		} >> ${untracked_patch}
 
-For an SMP kernel running on an UP system, "the least protected variant" is
-the obvious choice to make because you don't lose anything by holding a
-spinlock longer than necessary. However, as you increase the number of CPUs,
-there rises a tradeoff between local irq servicing latency and global lock
-contention.
+And possibly here?
 
-Imagine a, say, 128 cpu system with a few cores servicing relatively high
-frequency interrupts. Let's say there's a mildly hot lock. Usually, it shows
-up in the system profile but only just. Let's say something happens and the
-irq rate on those cores went up for some reason to the point where it
-becomes a rather common occurrence when the lock is held on one of those
-cpus, irqs are likely to intervene lengthening how long the lock is held,
-sometimes, signficantly. Now because the lock is on average held for much
-longer, it become a lot hotter as more CPUs would stall on it and depending
-on luck or lack thereof these stalls can span many CPUs on the system for
-quite a while. This is actually something we saw in production.
+>  	fi
+>  done
+> =20
+> --=20
+> 2.34.1
 
-So, in general, there's a trade off between local irq service latency and
-inducing global lock contention when using unprotected locks. With more and
-more CPUs, the balance keeps shifting. The balance still very much depends
-on the specifics of a given lock but yeah I think it's something we need to
-be a lot more careful about now.
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
-Thanks.
+--1uuWaD320kt9WZSJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-tejun
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmQkmUYACgkQB1IKcBYm
+Eml5ew//Wg16jiGOTJdUJ5WhRk1FaKp6WOqDNex6tstFAlYJkC8KzMcsu+BIStyy
+FPoKdcbDTGKRE6YnhaRZs3iVD+wZwLsds1GA2t4hnIWdlZOvkdl7QUeO5t9GARhI
+5leruyIWkzLbp3Kpo62UJMZQzgQ0j1oPaYsE/guNBj5pLvZqvLFgKt6Pbb0STlL2
+skiTaC6gH00iLny/ikMzaFo5ZkOCzhHc7mIdO7S+6cZlDXCa6j4eidRmmHuGx3nl
+B9eCNZ4+X51Y6LhtQIxNxgYVCERdp7ruFLbgk+5AtQFT2rFoOax3alJ4an7gIUAR
+ktXFaxIq/hCGZIYai8mLI4jsUdejEGXgHstpiyWvd5iLXiyvWm67evTPUpKomSEH
+AwxFNvanNMbK6d9KcCUoEa1Wj8I1GIGF0UykG/HRU4kvVQNeLgroj3cfzz8rAYRF
+z6B+QcmGSnCN4bz6KTDPbT9qjtzoyay6MKKYpFzxGDuUglelRL0OLyLPs7WY3GoY
+6LrEorhhBzTOh5Y1ktt4JBKmE8KSVitF/suRFN6SVMJBvaSDZnFbBHyKC5V0RE3E
+KQCkhcnGzRLfTkL06xa6OEmkYkOw18kYGsarIDsF5qupUQccBRVz3+BXpPJfd900
+QWT7rc2pXKtnYwaJ3KI5b46iT2ffbcsvB5U3HbuLC6gWFuJDJ3Q=
+=n7Vx
+-----END PGP SIGNATURE-----
+
+--1uuWaD320kt9WZSJ--
