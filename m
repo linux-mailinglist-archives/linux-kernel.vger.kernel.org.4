@@ -2,190 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB936CD1DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7D56CD1E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjC2F6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 01:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S229811AbjC2GBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 02:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjC2F6D (ORCPT
+        with ESMTP id S229477AbjC2GBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 01:58:03 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E30326A4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 22:58:01 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id f22so9807795plr.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 22:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680069481;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fd1nJiea4bT0nI1496bu6RJpEi0V2ouY5yB3uiUlal4=;
-        b=gCyDUriAVjMLuZL0HLZwk/EYvfUODKTVSMFSygazcYv+ory4nCQI+QBq5VWqCnIkZb
-         xYr4E9BTTfhtxcnS7YUBUeevnSlyqyKamvbo886PEiV587WDJEZxR4acnWLN1Y0lx+3a
-         C9EQnMt3tVoNeFuDO6+HrnjTHpi7rJiCOAQRonvIAMMAs+WSb2S5R7oBrHTSzjqeJFOD
-         Cc9YBBXva/oCLEgJn2nN6fLH+pF6ho5zCBuKIKgBEATYnKphhNq5s+giVWzflm4yd6dh
-         K+eOJTEnU6dbFcxU4Omn6u8MA75+3V00Kn9kh7Mg61r11HJQtMmLKR3dCcCiaKICa2vS
-         jvwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680069481;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Fd1nJiea4bT0nI1496bu6RJpEi0V2ouY5yB3uiUlal4=;
-        b=kMxUnzC8fJc9LgHeLubIrwtLFRaOhfWMVKnFFcTI6e+xSTh7whkvKAi0klVgLYxSm/
-         KZCym68BWfh4k92bJxMtf4VkEEXYbZZHdr3jeJD9l2jL9UP+DWnCCsNY4BjyBSyaSNJp
-         hb9KfoVqQ8R4iczAmKpGDCszfU6j5Z4M1HsE/wAK0KrJJTiLgy4yuFonae55iSYPlZaQ
-         Rg4OWaUVzCyws4fJQky6Y0TXUYSqy9o+3+Mvek59EfNaAHObdRA1oTcZKgx/rkCfcmoP
-         HAw7WxJEIx83Sx0rkyEXgxo7trt70Ozzxwz33tDX7m4EKl9vSSqrnZzpwDLCaKmgKs7R
-         jzNg==
-X-Gm-Message-State: AAQBX9fzhrj3sBjB1PwfdUYy9Zk7txdkjKIZfMJNdEhjhP2rGGVslskh
-        aWLx0vuiRbvoFiEl9kF2qo7H2bg1x0br5f066iA=
-X-Google-Smtp-Source: AKy350ZpTKAg/KUhmxXkQLQ59VtQtefEao/KsENlyHpPTN8xG2EFY24RgY8J6ivbK1p+hAcuQ/4Znw==
-X-Received: by 2002:a17:902:fa43:b0:1a1:a8db:495d with SMTP id lb3-20020a170902fa4300b001a1a8db495dmr13548176plb.4.1680069480957;
-        Tue, 28 Mar 2023 22:58:00 -0700 (PDT)
-Received: from aaron-shen.localdomain (vps-44f54abf.vps.ovh.us. [51.81.202.223])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170902b70200b0019e31e5f7f9sm22146379pls.71.2023.03.28.22.57.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 22:58:00 -0700 (PDT)
-From:   Guiting Shen <aarongt.shen@gmail.com>
-To:     lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Guiting Shen <aarongt.shen@gmail.com>
-Subject: [PATCH] mfd:i2c: remove redundant dev_set_drvdata() function
-Date:   Wed, 29 Mar 2023 13:57:24 +0800
-Message-Id: <20230329055724.43998-1-aarongt.shen@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 29 Mar 2023 02:01:17 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D6126B7;
+        Tue, 28 Mar 2023 23:01:16 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32T611ql038436;
+        Wed, 29 Mar 2023 01:01:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680069661;
+        bh=wt4xSwJPHwVxOeNl90IK8+byuWNvBIrt26I/jQjG7EM=;
+        h=From:To:CC:Subject:Date;
+        b=keala8r/71nsiOuUZhWF0yBddDzie/VV53t/kiCTS+z2pFooKx0pjFE913nYqG9le
+         MzJVPhGo3ITc8UL7XLIgDpkt/t5hKP/Ri8d2SgZIV+qgCCRsGwXMY8Gf3xhcGZO/Wb
+         1QZayNDKMjuvVZ/e4ZGxoLOr5TrSbjCZMm7P8VWQ=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32T611fC050640
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 29 Mar 2023 01:01:01 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 29
+ Mar 2023 01:01:01 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 29 Mar 2023 01:01:01 -0500
+Received: from LT5CD112GSQZ.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32T60wKN006863;
+        Wed, 29 Mar 2023 01:00:58 -0500
+From:   Apurva Nandan <a-nandan@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Apurva Nandan <a-nandan@ti.com>
+Subject: [PATCH v2] arm64: dts: ti: k3-j784s4-evm: Add OSPI0 flash support
+Date:   Wed, 29 Mar 2023 11:30:57 +0530
+Message-ID: <20230329060057.13654-1-a-nandan@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-the i2c_set_clientdata() is the inline function which is
-complemented by the dev_set_drvdata() internally. Do not
-need to use the i2c_set_clientdata() and dev_set_drvdata()
-at the same time.
+Add support for OSPI flash connected to OSPI0 instance through FSS.
+Also enumerate OSPI1 instance in MCU DTSI.
 
-Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
+Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 ---
- drivers/mfd/88pm80x.c       | 1 -
- drivers/mfd/88pm860x-core.c | 1 -
- drivers/mfd/aat2870-core.c  | 2 --
- drivers/mfd/lm3533-core.c   | 2 --
- drivers/mfd/max8907.c       | 2 --
- drivers/mfd/max8925-i2c.c   | 1 -
- drivers/mfd/wm8400-core.c   | 2 --
- drivers/mfd/wm8994-core.c   | 2 --
- 8 files changed, 13 deletions(-)
 
-diff --git a/drivers/mfd/88pm80x.c b/drivers/mfd/88pm80x.c
-index ac4f08565f29..bbc1a87f0c8f 100644
---- a/drivers/mfd/88pm80x.c
-+++ b/drivers/mfd/88pm80x.c
-@@ -74,7 +74,6 @@ int pm80x_init(struct i2c_client *client)
- 	chip->irq = client->irq;
+Changelog:
+- Fixed address 0x0 to 0x00
+- Fixed dtbs_check errors (removed syscon and created simple bus)
+- Fixed whitespace error
+
+ arch/arm64/boot/dts/ti/k3-j784s4-evm.dts      | 45 +++++++++++++++++++
+ .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     | 41 +++++++++++++++++
+ 2 files changed, 86 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+index b9e23697a63b..cc8c2dda7bd2 100644
+--- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
++++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+@@ -141,12 +141,57 @@ J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
+ 	};
+ };
  
- 	chip->dev = &client->dev;
--	dev_set_drvdata(chip->dev, chip);
- 	i2c_set_clientdata(chip->client, chip);
++&wkup_pmx0 {
++	mcu_fss0_ospi0_pins_default: mcu-fss0-ospi0-pins-default {
++		pinctrl-single,pins = <
++			J784S4_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (E32) MCU_OSPI0_CLK */
++			J784S4_WKUP_IOPAD(0x02c, PIN_OUTPUT, 0) /* (A32) MCU_OSPI0_CSn0 */
++			J784S4_WKUP_IOPAD(0x00c, PIN_INPUT, 0) /* (B33) MCU_OSPI0_D0 */
++			J784S4_WKUP_IOPAD(0x010, PIN_INPUT, 0) /* (B32) MCU_OSPI0_D1 */
++			J784S4_WKUP_IOPAD(0x014, PIN_INPUT, 0) /* (C33) MCU_OSPI0_D2 */
++			J784S4_WKUP_IOPAD(0x018, PIN_INPUT, 0) /* (C35) MCU_OSPI0_D3 */
++			J784S4_WKUP_IOPAD(0x01c, PIN_INPUT, 0) /* (D33) MCU_OSPI0_D4 */
++			J784S4_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (D34) MCU_OSPI0_D5 */
++			J784S4_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (E34) MCU_OSPI0_D6 */
++			J784S4_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (E33) MCU_OSPI0_D7 */
++			J784S4_WKUP_IOPAD(0x008, PIN_INPUT, 0) /* (C34) MCU_OSPI0_DQS */
++			J784S4_WKUP_IOPAD(0x03c, PIN_OUTPUT, 6) /* (C32) MCU_OSPI0_CSn3.MCU_OSPI0_ECC_FAIL */
++			J784S4_WKUP_IOPAD(0x038, PIN_OUTPUT, 6) /* (B34) MCU_OSPI0_CSn2.MCU_OSPI0_RESET_OUT0 */
++		>;
++	};
++};
++
+ &main_uart8 {
+ 	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_uart8_pins_default>;
+ };
  
- 	ret = regmap_read(chip->regmap, PM80X_CHIP_ID, &val);
-diff --git a/drivers/mfd/88pm860x-core.c b/drivers/mfd/88pm860x-core.c
-index aabac37c3502..26d1ffefadc1 100644
---- a/drivers/mfd/88pm860x-core.c
-+++ b/drivers/mfd/88pm860x-core.c
-@@ -1166,7 +1166,6 @@ static int pm860x_probe(struct i2c_client *client)
- 	chip->client = client;
- 	i2c_set_clientdata(client, chip);
- 	chip->dev = &client->dev;
--	dev_set_drvdata(chip->dev, chip);
- 
- 	/*
- 	 * Both client and companion client shares same platform driver.
-diff --git a/drivers/mfd/aat2870-core.c b/drivers/mfd/aat2870-core.c
-index f253da5b246b..5ff0f1ed7a15 100644
---- a/drivers/mfd/aat2870-core.c
-+++ b/drivers/mfd/aat2870-core.c
-@@ -345,8 +345,6 @@ static int aat2870_i2c_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	aat2870->dev = &client->dev;
--	dev_set_drvdata(aat2870->dev, aat2870);
--
- 	aat2870->client = client;
- 	i2c_set_clientdata(client, aat2870);
- 
-diff --git a/drivers/mfd/lm3533-core.c b/drivers/mfd/lm3533-core.c
-index 946f94f3a3c3..03830aa4979a 100644
---- a/drivers/mfd/lm3533-core.c
-+++ b/drivers/mfd/lm3533-core.c
-@@ -485,8 +485,6 @@ static int lm3533_device_init(struct lm3533 *lm3533)
- 
- 	lm3533->gpio_hwen = pdata->gpio_hwen;
- 
--	dev_set_drvdata(lm3533->dev, lm3533);
--
- 	if (gpio_is_valid(lm3533->gpio_hwen)) {
- 		ret = devm_gpio_request_one(lm3533->dev, lm3533->gpio_hwen,
- 					GPIOF_OUT_INIT_LOW, "lm3533-hwen");
-diff --git a/drivers/mfd/max8907.c b/drivers/mfd/max8907.c
-index a69b865c6eac..0b8f6c298f97 100644
---- a/drivers/mfd/max8907.c
-+++ b/drivers/mfd/max8907.c
-@@ -201,8 +201,6 @@ static int max8907_i2c_probe(struct i2c_client *i2c)
- 	}
- 
- 	max8907->dev = &i2c->dev;
--	dev_set_drvdata(max8907->dev, max8907);
--
- 	max8907->i2c_gen = i2c;
- 	i2c_set_clientdata(i2c, max8907);
- 	max8907->regmap_gen = devm_regmap_init_i2c(i2c,
-diff --git a/drivers/mfd/max8925-i2c.c b/drivers/mfd/max8925-i2c.c
-index 4057fd15c29e..c8761003c716 100644
---- a/drivers/mfd/max8925-i2c.c
-+++ b/drivers/mfd/max8925-i2c.c
-@@ -172,7 +172,6 @@ static int max8925_probe(struct i2c_client *client)
- 	chip->i2c = client;
- 	chip->dev = &client->dev;
- 	i2c_set_clientdata(client, chip);
--	dev_set_drvdata(chip->dev, chip);
- 	mutex_init(&chip->io_lock);
- 
- 	chip->rtc = i2c_new_dummy_device(chip->i2c->adapter, RTC_I2C_ADDR);
-diff --git a/drivers/mfd/wm8400-core.c b/drivers/mfd/wm8400-core.c
-index 5e1599ac9abc..b572966e1ff6 100644
---- a/drivers/mfd/wm8400-core.c
-+++ b/drivers/mfd/wm8400-core.c
-@@ -54,8 +54,6 @@ static int wm8400_init(struct wm8400 *wm8400,
- 	unsigned int reg;
- 	int ret;
- 
--	dev_set_drvdata(wm8400->dev, wm8400);
--
- 	/* Check that this is actually a WM8400 */
- 	ret = regmap_read(wm8400->regmap, WM8400_RESET_ID, &reg);
- 	if (ret != 0) {
-diff --git a/drivers/mfd/wm8994-core.c b/drivers/mfd/wm8994-core.c
-index c419ab0c0eae..1b769ac3e53b 100644
---- a/drivers/mfd/wm8994-core.c
-+++ b/drivers/mfd/wm8994-core.c
-@@ -320,8 +320,6 @@ static int wm8994_device_init(struct wm8994 *wm8994, int irq)
- 	if (ret != 0)
- 		return ret;
- 
--	dev_set_drvdata(wm8994->dev, wm8994);
--
- 	/* Add the on-chip regulators first for bootstrapping */
- 	ret = mfd_add_devices(wm8994->dev, 0,
- 			      wm8994_regulator_devs,
++&fss {
++	status = "okay";
++};
++
++&ospi0 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
++
++	flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0x0>;
++		spi-tx-bus-width = <8>;
++		spi-rx-bus-width = <8>;
++		spi-max-frequency = <25000000>;
++		cdns,tshsl-ns = <60>;
++		cdns,tsd2d-ns = <60>;
++		cdns,tchsh-ns = <60>;
++		cdns,tslch-ns = <60>;
++		cdns,read-delay = <4>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++	};
++};
++
+ &main_i2c0 {
+ 	status = "okay";
+ 	pinctrl-names = "default";
+diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+index 64bd3dee14aa..f825a8e4b452 100644
+--- a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+@@ -309,4 +309,45 @@ cpts@3d000 {
+ 			ti,cpts-periodic-outputs = <2>;
+ 		};
+ 	};
++
++	fss: bus@47000000 {
++		compatible = "simple-bus";
++		reg = <0x00 0x47000000 0x00 0x100>;
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		ospi0: spi@47040000 {
++			compatible = "ti,am654-ospi", "cdns,qspi-nor";
++			reg = <0x00 0x47040000 0x00 0x100>,
++			      <0x05 0x0000000 0x01 0x0000000>;
++			interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
++			cdns,fifo-depth = <256>;
++			cdns,fifo-width = <4>;
++			cdns,trigger-address = <0x0>;
++			clocks = <&k3_clks 161 7>;
++			assigned-clocks = <&k3_clks 161 7>;
++			assigned-clock-parents = <&k3_clks 161 9>;
++			assigned-clock-rates = <166666666>;
++			power-domains = <&k3_pds 161 TI_SCI_PD_EXCLUSIVE>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		ospi1: spi@47050000 {
++			compatible = "ti,am654-ospi", "cdns,qspi-nor";
++			reg = <0x00 0x47050000 0x00 0x100>,
++			      <0x07 0x0000000 0x01 0x0000000>;
++			interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
++			cdns,fifo-depth = <256>;
++			cdns,fifo-width = <4>;
++			cdns,trigger-address = <0x0>;
++			clocks = <&k3_clks 162 7>;
++			power-domains = <&k3_pds 162 TI_SCI_PD_EXCLUSIVE>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++	};
+ };
 -- 
 2.34.1
 
