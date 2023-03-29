@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E556CD910
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6596CD911
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjC2MFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S229461AbjC2MFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjC2MFH (ORCPT
+        with ESMTP id S230071AbjC2MFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:05:07 -0400
+        Wed, 29 Mar 2023 08:05:20 -0400
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1754B4EC1;
-        Wed, 29 Mar 2023 05:05:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5037344A8;
+        Wed, 29 Mar 2023 05:05:08 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 1A545424D0;
-        Wed, 29 Mar 2023 12:04:58 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 1C55241F46;
+        Wed, 29 Mar 2023 12:05:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1680091502;
-        bh=Z2Msqmu+TDL/Y0kqemtpmsxm6/7qz/c1AG9xBrS/GVA=;
+        s=default; t=1680091506;
+        bh=70azhY624dmqDR1WbAO/UkRG4/uvUwfXnn1O/f8fXaM=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=LgcC9RbcMlP1MIG3M4+1vSvrPC2561Y7xnNXcvGF8kl5gBLmrZuTAFzICs2gk8F9I
-         1IDOMz1otzPrd6sNLh5zALuVGasmJM5TM7vbbiIKnFQgopxpnep80BxsWR6UHV3W9v
-         AXuHq8/2En4kIX6zRy9PIujREUHDndBeGsrQplvEYv9Tr/nCIejII+Apk8WRTZO2x3
-         0m6SRNcNNQKYIhvJyzScDbtooJi4tFx04XtZhmeBuChvjYFs7F8Oym/NsQXS4LgeWD
-         Z7ishp6wiYMZqG4xuAN1vFiJ07KGK2Nu+lTPk2zRfKZJ2MPdLZRQluIIvVd7z3rfJR
-         xEESjrku4pW/w==
+        b=Dcx7JmfYEJOvEoHOUZ0fYa8ZVFzUaYpAK5mmZz51FeSgXeupwRNpt4uhxB3kdh6Kx
+         I3WFNita+VmGIE0BV7TYP1oAJ++hgFK3kCyD/ZIiiVYHgm3eJtTnnGOPvdQNtJvqLx
+         7jbEz+IqnqU8uwkOYIm/cv0zRKszm60IWa1Moh7TW/BS0WcJZZqmR+/PTx+PVKSyz8
+         0EtFdvd7DtDatbAhe+vvqqku9Q3zPI3vUybkdJ19cst5iehOGWYWIvoAoreY2v5n+w
+         0nWp4cKK5IAtscHKfWTEJiuxmVJkmnMBcEWQoeb+43MSQm7f0KdChKYYyD5prnOkp/
+         K9Zfxsz3jgzfw==
 From:   Asahi Lina <lina@asahilina.net>
-Date:   Wed, 29 Mar 2023 21:04:37 +0900
-Subject: [PATCH v2 5/6] rust: error: Add a helper to convert a C ERR_PTR to
- a `Result`
+Date:   Wed, 29 Mar 2023 21:04:38 +0900
+Subject: [PATCH v2 6/6] rust: error: Add from_result() helper
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230224-rust-error-v2-5-3900319812da@asahilina.net>
+Message-Id: <20230224-rust-error-v2-6-3900319812da@asahilina.net>
 References: <20230224-rust-error-v2-0-3900319812da@asahilina.net>
 In-Reply-To: <20230224-rust-error-v2-0-3900319812da@asahilina.net>
 To:     Miguel Ojeda <ojeda@kernel.org>,
@@ -54,11 +53,11 @@ Cc:     Fox Chen <foxhlchen@gmail.com>,
         rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680091478; l=4224;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680091478; l=2445;
  i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=qOm0Nqiw7jlI1w438+NRLYRRJvpIZVUQLi5w4HxGf24=;
- b=lVOZaAXcQ20z1kEBxLI7TArlo/VvpaBP4j7TWhGxiiK4DT7IbyYMONGf6nwTeO6cm/ltdQLmJ
- RMkzsjzmSoyCyPkM/4gpY50WP+qwFE6VRK3bkuDvZxFtMyqf+J7rz4S
+ bh=Ai/iEgQ/fBNHagg7igl9ARuv9+jNWr+C78oJzdHwp1Q=;
+ b=FtgUuaSd6mC3+e/DMioQcQS/rPK7XBseDo6+v/MVJi3rTWw7yGSMv3Q7DU/Oyw7ISdeBXG5+d
+ BPUZKi78hqqB9vP31WhnZuhDT44q/p8pQiS+4Z+ejaIpN6TNuA0Z4Fz
 X-Developer-Key: i=lina@asahilina.net; a=ed25519;
  pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -70,115 +69,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Van Asbroeck <thesven73@gmail.com>
+From: Wedson Almeida Filho <wedsonaf@gmail.com>
 
-Some kernel C API functions return a pointer which embeds an optional
-`errno`. Callers are supposed to check the returned pointer with
-`IS_ERR()` and if this returns `true`, retrieve the `errno` using
-`PTR_ERR()`.
+Add a helper function to easily return C result codes from a Rust function
+that calls functions which return a Result<T>.
 
-Create a Rust helper function to implement the Rust equivalent:
-transform a `*mut T` to `Result<*mut T>`.
+Lina: Imported from rust-for-linux/rust, originally developed by Wedson
+as part of file_operations.rs. Added the allow() flags since there is no
+user in the kernel crate yet and fixed a typo in a comment. Replaced the
+macro with a function taking a closure, per discussion on the ML.
 
-Lina: Imported from rust-for-linux/linux, with subsequent refactoring
-and contributions squashed in and attributed below. Replaced usage of
-from_kernel_errno_unchecked() with an open-coded constructor, since this
-is the only user anyway. Renamed the function to from_err_ptr().
-
-Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 Co-developed-by: Fox Chen <foxhlchen@gmail.com>
 Signed-off-by: Fox Chen <foxhlchen@gmail.com>
-Co-developed-by: Gary Guo <gary@garyguo.net>
-Signed-off-by: Gary Guo <gary@garyguo.net>
-Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
+Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
 Signed-off-by: Asahi Lina <lina@asahilina.net>
 ---
- rust/helpers.c       | 12 ++++++++++++
- rust/kernel/error.rs | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 61 insertions(+)
+ rust/kernel/error.rs | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/rust/helpers.c b/rust/helpers.c
-index 89f4cd1e0df3..04b9be46e887 100644
---- a/rust/helpers.c
-+++ b/rust/helpers.c
-@@ -53,6 +53,18 @@ __force void *rust_helper_ERR_PTR(long err)
- }
- EXPORT_SYMBOL_GPL(rust_helper_ERR_PTR);
- 
-+bool rust_helper_IS_ERR(__force const void *ptr)
-+{
-+	return IS_ERR(ptr);
-+}
-+EXPORT_SYMBOL_GPL(rust_helper_IS_ERR);
-+
-+long rust_helper_PTR_ERR(__force const void *ptr)
-+{
-+	return PTR_ERR(ptr);
-+}
-+EXPORT_SYMBOL_GPL(rust_helper_PTR_ERR);
-+
- /*
-  * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
-  * as the Rust `usize` type, so we can use it in contexts where Rust
 diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-index 4f599c4d1752..6b10129075a7 100644
+index 6b10129075a7..4d8b19d5967d 100644
 --- a/rust/kernel/error.rs
 +++ b/rust/kernel/error.rs
-@@ -177,3 +177,52 @@ pub fn to_result(err: core::ffi::c_int) -> Result {
-         Ok(())
+@@ -226,3 +226,42 @@ pub(crate) fn from_err_ptr<T>(ptr: *mut T) -> Result<*mut T> {
      }
+     Ok(ptr)
  }
 +
-+/// Transform a kernel "error pointer" to a normal pointer.
++/// Calls a closure returning a [`crate::error::Result<T>`] and converts the result to
++/// a C integer result.
 +///
-+/// Some kernel C API functions return an "error pointer" which optionally
-+/// embeds an `errno`. Callers are supposed to check the returned pointer
-+/// for errors. This function performs the check and converts the "error pointer"
-+/// to a normal pointer in an idiomatic fashion.
++/// This is useful when calling Rust functions that return [`crate::error::Result<T>`]
++/// from inside `extern "C"` functions that need to return an integer error result.
++///
++/// `T` should be convertible from an `i16` via `From<i16>`.
 +///
 +/// # Examples
 +///
 +/// ```ignore
-+/// # use kernel::from_err_ptr;
++/// # use kernel::from_result;
 +/// # use kernel::bindings;
-+/// fn devm_platform_ioremap_resource(
-+///     pdev: &mut PlatformDevice,
-+///     index: u32,
-+/// ) -> Result<*mut core::ffi::c_void> {
-+///     // SAFETY: FFI call.
-+///     unsafe {
-+///         from_err_ptr(bindings::devm_platform_ioremap_resource(
-+///             pdev.to_ptr(),
-+///             index,
-+///         ))
-+///     }
++/// unsafe extern "C" fn probe_callback(
++///     pdev: *mut bindings::platform_device,
++/// ) -> core::ffi::c_int {
++///     from_result(|| {
++///         let ptr = devm_alloc(pdev)?;
++///         bindings::platform_set_drvdata(pdev, ptr);
++///         Ok(0)
++///     })
 +/// }
 +/// ```
 +// TODO: Remove `dead_code` marker once an in-kernel client is available.
 +#[allow(dead_code)]
-+pub(crate) fn from_err_ptr<T>(ptr: *mut T) -> Result<*mut T> {
-+    // CAST: Casting a pointer to `*const core::ffi::c_void` is always valid.
-+    let const_ptr: *const core::ffi::c_void = ptr.cast();
-+    // SAFETY: The FFI function does not deref the pointer.
-+    if unsafe { bindings::IS_ERR(const_ptr) } {
-+        // SAFETY: The FFI function does not deref the pointer.
-+        let err = unsafe { bindings::PTR_ERR(const_ptr) };
-+        // CAST: If `IS_ERR()` returns `true`,
-+        // then `PTR_ERR()` is guaranteed to return a
-+        // negative value greater-or-equal to `-bindings::MAX_ERRNO`,
-+        // which always fits in an `i16`, as per the invariant above.
-+        // And an `i16` always fits in an `i32`. So casting `err` to
-+        // an `i32` can never overflow, and is always valid.
-+        //
-+        // SAFETY: `IS_ERR()` ensures `err` is a
-+        // negative value greater-or-equal to `-bindings::MAX_ERRNO`.
-+        #[cfg_attr(CONFIG_ARM, allow(clippy::unnecessary_cast))]
-+        return Err(Error(err as i32));
++pub(crate) fn from_result<T, F>(f: F) -> T
++where
++    T: From<i16>,
++    F: FnOnce() -> Result<T>,
++{
++    match f() {
++        Ok(v) => v,
++        // NO-OVERFLOW: negative `errno`s are no smaller than `-bindings::MAX_ERRNO`,
++        // `-bindings::MAX_ERRNO` fits in an `i16` as per invariant above,
++        // therefore a negative `errno` always fits in an `i16` and will not overflow.
++        Err(e) => T::from(e.to_errno() as i16),
 +    }
-+    Ok(ptr)
 +}
 
 -- 
