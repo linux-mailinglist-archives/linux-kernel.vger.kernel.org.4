@@ -2,171 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEAF6CF123
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D49D6CF12F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjC2Rbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 13:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S229851AbjC2RdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 13:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjC2Rbj (ORCPT
+        with ESMTP id S229615AbjC2RdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:31:39 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27785FE6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:31:26 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id y20so21246157lfj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680111085;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zKUp8oQT2937+iLDgPVmHMrXn9AJqcS/Qo7VP4VGSrc=;
-        b=N4TvfqSwMCVjbDDxy2dbivFCv1ns9kOMPlc9B5Kmc25WwSGhOCDHi0l9gd4u5UHtNZ
-         3FOuQEgFMv1Mi5d75fnCo4VAWlojeZM2kOHCZnunlNdRQ81oxa1c501aYr8JtvPyRpxr
-         5Q2sl7FdhTbqEnoza6Fhrm0UgcZAzrEyp1PuwPJruTiTMhCLLL4zUihCmOgX46SQF7JR
-         yStG0DDIVsfLX+VjLaDsGScIDjSYqMZzCGteWYlOrgpc6X1BRgbdopXFCbYjF5jwl3N7
-         hoDQ1jh4Tl21Bqwb6hNIwyu+GXx1PdxaFXtVLMwYwjYrpAPQJcH4zzdVqJbQbtg1vrBa
-         zW2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680111085;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zKUp8oQT2937+iLDgPVmHMrXn9AJqcS/Qo7VP4VGSrc=;
-        b=kNDUmxu4BffOBbYkN/IHH1ZauVftuPT4uWxKnGPbi0gOgCbyg+xB2cg5mYcVlhKh49
-         dI1fSTpUulai7SB9NH4Lxph5025U91X0UhY7gDB2FxTD94FQRPxtDGZ36VGU3rxwOizV
-         FQZWQgpuGP5Qe/ywrb9dopLAyf1k8ppEg2ii1WdBa/LDSlGzvF201ZTET6n31P5uvKyp
-         7yVedkUz8B2Ee1wwu4exOd9vypUE2CRB6L96hj7xO/bGQ6KQdG3snjGpSzNYKto9XJeE
-         7NLNB3klgpPne1M3GxSU2wYwvKfm159aKYaib5+ttXQOJcmZfO6MJz+ikrGPV6A2VksJ
-         7vXA==
-X-Gm-Message-State: AAQBX9dil1+XC/VGybnGBNehWhDexr3FyOc8JGH2fpkJ7E7AAFcIaz3f
-        h6GbX5OsHdsw1/dBo0dVNrOE1g==
-X-Google-Smtp-Source: AKy350aB0j3c+eGT0mY6Ft1GQFoC5DsZuQx4Y3sE2T8yMJTGK8FwE7Y4b3VTXhlfEqTak5pPqZGpgw==
-X-Received: by 2002:a05:6512:971:b0:4e9:a75b:cccb with SMTP id v17-20020a056512097100b004e9a75bcccbmr5072963lft.28.1680111084835;
-        Wed, 29 Mar 2023 10:31:24 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id m10-20020ac2428a000000b004b6f00832cesm5510541lfh.166.2023.03.29.10.31.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 10:31:24 -0700 (PDT)
-Message-ID: <bc0961f3-5608-eab9-0937-462d498bd6e6@linaro.org>
-Date:   Wed, 29 Mar 2023 19:31:22 +0200
+        Wed, 29 Mar 2023 13:33:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BEB40CF;
+        Wed, 29 Mar 2023 10:33:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6537161DD4;
+        Wed, 29 Mar 2023 17:33:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF137C433EF;
+        Wed, 29 Mar 2023 17:33:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680111183;
+        bh=dGO1QsqKzA7RrfDy8jeeAVnzJLU5EFbv7b204Ar3GqQ=;
+        h=From:Date:Subject:To:Cc:From;
+        b=pwLCQO0LH3nNYFshACHhDINzKxitxH5vlG6RvwUHdzq2tNpXnYTkipD4D/mRtrRla
+         Ow+ckyKq5D8uxk4xVYGhJqVOyoX0pOH8TKm6KLgdfHKU8Zf+F+J9UhmDSqzAVt39Nh
+         wXMxsRI9hzn7V2J5a2xaA5d0Q3z2O7DVL+e6XISex9vP4xZMOK6WT5Et8iatpFwbV/
+         nHsLK+8lf4/dmC3iJldI57HTMHyVysdnBNX/MtYorPTKpvEzTrMrz3I8Owqv4QGbz1
+         +vK6QTnNPRNLu+yQenO7P7K5nwFp1vMHGKuoUgzWU+SM+OXMD+YoNi0Y2KfFI3v3RI
+         ZKACZa75WDHiw==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Wed, 29 Mar 2023 10:32:46 -0700
+Subject: [PATCH wireless-next v2] wifi: iwlwifi: mvm: Use 64-bit division
+ helper in iwl_mvm_get_crosstimestamp_fw()
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/msm/adreno: adreno_gpu: Use suspend() instead of
- idle() on load error
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
-        andersson@kernel.org, agross@kernel.org,
-        marijn.suijten@somainline.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230329140445.2180662-1-konrad.dybcio@linaro.org>
- <ZCRNFitcrAeH27Pn@hovoldconsulting.com>
- <83986fa9-c9eb-ae5a-b239-584092f2cea5@linaro.org>
- <CAF6AEGsYimELcEAs8hdkYqdMzteMwzhPFavvmEUiEFsO01RrrQ@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAF6AEGsYimELcEAs8hdkYqdMzteMwzhPFavvmEUiEFsO01RrrQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230329-iwlwifi-ptp-avoid-64-bit-div-v2-1-22b988eb009b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAD12JGQC/42OQQ6CMBBFr2Jm7RhbCKAr72FYtHSQidiSaVM0h
+ rsLnMDly/v5/38hkjBFuB6+IJQ5cvAr6OMBusH4ByG7lUGfdXEu9AV5HmfuGac0ocmBHVYlWk7
+ oOKPqylrVfV30jYG1wppIaMX4bthKXiYmkk1MQj2/9907zCw0Uozo6Z2gXfXAMQX57K+y2kP/H
+ cgKFRrXONu4qrKdvj1JPI2nIA9ol2X5AechHhrxAAAA
+To:     gregory.greenman@intel.com, kvalo@kernel.org
+Cc:     nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        johannes.berg@intel.com, avraham.stern@intel.com,
+        krishnanand.prabhu@intel.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Arnd Bergmann <arnd@arndb.de>,
+        "kernelci.org bot" <bot@kernelci.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2181; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=dGO1QsqKzA7RrfDy8jeeAVnzJLU5EFbv7b204Ar3GqQ=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCkqZX6GWvNryxRsv37yCpW033bgF/ON20wbTN6YnOvZ9
+ +/etSdGHaUsDGIcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAi0esY/ofca3FqLzue47pj
+ dtf+nncl540/TJ1qrL2KnTV3k7Wzkisjw7rHPCdOGcvlnCvj+KF6+DOD43Fp45WSOrH2ZXtZVfy
+ 8eAE=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is a 64-bit division in iwl_mvm_get_crosstimestamp_fw(), which
+results in a link failure when building 32-bit architectures with clang:
 
+  ld.lld: error: undefined symbol: __udivdi3
+  >>> referenced by ptp.c
+  >>>               drivers/net/wireless/intel/iwlwifi/mvm/ptp.o:(iwl_mvm_phc_get_crosstimestamp) in archive vmlinux.a
 
-On 29.03.2023 19:30, Rob Clark wrote:
-> On Wed, Mar 29, 2023 at 8:48 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->>
->>
->> On 29.03.2023 16:37, Johan Hovold wrote:
->>> On Wed, Mar 29, 2023 at 04:04:44PM +0200, Konrad Dybcio wrote:
->>>> If we fail to initialize the GPU for whatever reason (say we don't
->>>> embed the GPU firmware files in the initrd), the error path involves
->>>> pm_runtime_put_sync() which then calls idle() instead of suspend().
->>>>
->>>> This is suboptimal, as it means that we're not going through the
->>>> clean shutdown sequence. With at least A619_holi, this makes the GPU
->>>> not wake up until it goes through at least one more start-fail-stop
->>>> cycle. Fix that by using pm_runtime_put_sync_suspend to force a clean
->>>> shutdown.
->>>
->>> This does not sound right. If pm_runtime_put_sync() fails to suspend the
->>> device when the usage count drops to zero, then you have a bug somewhere
->>> else.
->> I was surprised to see that it was not called as well, but I wasn't able
->> to track it down before..
->>
->>>
->>> Also since commit 2c087a336676 ("drm/msm/adreno: Load the firmware
->>> before bringing up the hardware") the firmware is loaded before even
->>> hitting these paths so the above description does not sound right in
->>> that respect either (or is missing some details).
->> ..but I did some more digging and I found that the precise "firmware"
->> that fails is the ZAP blob, which is not checked like SQE in the
->> commit you mentioned!
->>
->> Now I don't think that we can easily check for it as-is since
->> zap_shader_load_mdt() does the entire find-load-authenticate
->> dance which is required with secure assets, but it's obviously
->> possible to rip out the find-load part of that and go on from
->> there.
->>
->> Do you think that would be a better solution?
-> 
-> Hmm, to hit this it sounds like you'd need all the fw _except_ the zap
-> in the initrd?
-Correct.
+GCC has optimizations for division by a constant that clang does not
+implement, so this issue is not visible when building with GCC.
 
-Konrad
-> 
-> BR,
-> -R
-> 
->> Konrad
->>
->>>
->>>> Test cases:
->>>> 1. firmware baked into kernel
->>>> 2. error loading fw in initrd -> load from rootfs at DE start
->>>>
->>>> Both succeed on A619_holi (SM6375) and A630 (SDM845).
->>>>
->>>> Fixes: 0d997f95b70f ("drm/msm/adreno: fix runtime PM imbalance at gpu load")
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>> ---
->>>>  drivers/gpu/drm/msm/adreno/adreno_device.c | 2 +-
->>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
->>>> index f61896629be6..59f3302e8167 100644
->>>> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
->>>> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
->>>> @@ -477,7 +477,7 @@ struct msm_gpu *adreno_load_gpu(struct drm_device *dev)
->>>>      return gpu;
->>>>
->>>>  err_put_rpm:
->>>> -    pm_runtime_put_sync(&pdev->dev);
->>>> +    pm_runtime_put_sync_suspend(&pdev->dev);
->>>>  err_disable_rpm:
->>>>      pm_runtime_disable(&pdev->dev);
->>>
->>> Johan
+Use the 64-bit division helper div_u64(), which takes a u64 dividend and
+u32 divisor, which matches this situation and prevents the emission of a
+libcall for the division.
+
+Fixes: 21fb8da6ebe4 ("wifi: iwlwifi: mvm: read synced time from firmware if supported")
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1826
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Link: https://lore.kernel.org/6423173a.620a0220.3d5cc.6358@mx.google.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+Changes in v2:
+- Use division helper div_u64() instead of truncating dividend before
+  division (Johannes).
+- Link to v1: https://lore.kernel.org/r/20230329-iwlwifi-ptp-avoid-64-bit-div-v1-1-ad8db8d66bc2@kernel.org
+---
+ drivers/net/wireless/intel/iwlwifi/mvm/ptp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c b/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c
+index 5c2bfc8ed88d..e89259de6f4c 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c
+@@ -116,7 +116,7 @@ iwl_mvm_get_crosstimestamp_fw(struct iwl_mvm *mvm, u32 *gp2, u64 *sys_time)
+ 
+ 	gp2_10ns = (u64)le32_to_cpu(resp->gp2_timestamp_hi) << 32 |
+ 		le32_to_cpu(resp->gp2_timestamp_lo);
+-	*gp2 = gp2_10ns / 100;
++	*gp2 = div_u64(gp2_10ns, 100);
+ 
+ 	*sys_time = (u64)le32_to_cpu(resp->platform_timestamp_hi) << 32 |
+ 		le32_to_cpu(resp->platform_timestamp_lo);
+
+---
+base-commit: 2af3b2a631b194a43551ce119cb71559d8f6b54b
+change-id: 20230329-iwlwifi-ptp-avoid-64-bit-div-1c4717f73f8a
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
