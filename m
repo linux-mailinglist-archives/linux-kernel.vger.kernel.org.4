@@ -2,157 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C706CD4B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0D66CD4C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbjC2IeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S229836AbjC2IhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjC2IeG (ORCPT
+        with ESMTP id S229570AbjC2IhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:34:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCAA10DB;
-        Wed, 29 Mar 2023 01:33:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C6E8B82103;
-        Wed, 29 Mar 2023 08:33:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F53C433D2;
-        Wed, 29 Mar 2023 08:33:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680078819;
-        bh=WU/YsdWjPFjsmJIbPqeleTMIoAD615nCS44eUp0zb5U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rlruXR3ymsvN9KoqiMA9tR9Lwbb9b83TEZh1tCGum0ywwzVjR6Qlhtq7c69yxy/mk
-         qdJBnQfBEFNCGMhoo6FcSbCM5ywaNQfqRtMK0V0XuwtqZvFK/sAIV44znEqqgo3607
-         gAkzqeFBRcBBHuNTJaV9iFvoWqMiBZRZj5CVlo6o=
-Date:   Wed, 29 Mar 2023 10:33:36 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peter.chen@kernel.org
-Subject: Re: [PATCH v3] usb: gadget: epautoconf: claim smallest endpoints
- first
-Message-ID: <ZCP34MKN3PyOQB6v@kroah.com>
-References: <20230312224836.297793-1-ruslan.bilovol@gmail.com>
+        Wed, 29 Mar 2023 04:37:07 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8724494
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:37:03 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 419BC5FD06;
+        Wed, 29 Mar 2023 11:37:01 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1680079021;
+        bh=mKsNAk5/DGfisdq4xh+Klk//35W39m5NPIJzVVuCimY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=RDDBiiKhVJfhYOypMlNNyTitm6+/iUKEn/jGOKyRarwEHZEC2iJjfS8Ah5aiDeD49
+         lJ7ILFyRr4jr2l6oOTUHNXqzrOYs/qeTP9tcgzrxpZtrodfSYyEdmCvsqV7tLz8vaE
+         /KKChUqBwHMvRf5uCrukudvSHhST/DV8evYD7eyfuwbMYsPPupBWjDKmyEwA+ne8xN
+         H5c/HXVsNpyY/j6hjaiws1JNlMsjldtStD06yIiI3/e5LaJArqqPA3bX1xD+hRbrkz
+         e8fL/uQnpu4XoZuu8STC9xGpznXXaBobHIUS/FuLfTNX9EMZl+JixrY1bVCS9XxE5k
+         1pjssiu+j2MHw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 29 Mar 2023 11:37:00 +0300 (MSK)
+Message-ID: <c110bd0f-f25a-a74a-07cb-4c3fdb8ef306@sberdevices.ru>
+Date:   Wed, 29 Mar 2023 11:33:38 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230312224836.297793-1-ruslan.bilovol@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] mtd: rawnand: meson: fix bitmask for length in command
+ word
+Content-Language: en-US
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>
+CC:     <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
+        <oxffffaa@gmail.com>
+References: <3794ffbf-dfea-e96f-1f97-fe235b005e19@sberdevices.ru>
+ <447abc1b-b4a3-5848-c99a-ecbff11486fe@linaro.org>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <447abc1b-b4a3-5848-c99a-ecbff11486fe@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/29 04:10:00 #21025776
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 06:48:36PM -0400, Ruslan Bilovol wrote:
-> UDC hardware may have endpoints with different maxpacket
-> size. Current endpoint matching code takes first matching
-> endpoint from the list.
+
+
+On 29.03.2023 11:09, Tudor Ambarus wrote:
 > 
-> It's always possible that gadget allocates endpoints for
-> small transfers (maxpacket size) first, then larger ones.
-> That works fine if all matching UDC endpoints have same
-> maxpacket size or are big enough to serve that allocation.
 > 
-> However, some UDCs have first endpoints in the list with
-> bigger maxpacket size, whereas last endpoints are much
-> smaller. In this case endpoint allocation will fail for
-> the gadget (which allocates smaller endpoints first) on
-> final endpoint allocations.
+> On 3/29/23 08:47, Arseniy Krasnov wrote:
+>> Valid mask is 0x3FFF, without this patch the following problems were
+>> found:
+>>
+>> 1) [    0.938914] Could not find a valid ONFI parameter page, trying
+>>                   bit-wise majority to recover it
+>>    [    0.947384] ONFI parameter recovery failed, aborting
+>>
+>> 2) Read with disabled ECC mode was broken.
+>>
+>> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
+>> Cc: <Stable@vger.kernel.org>
+>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>> ---
+>>  drivers/mtd/nand/raw/meson_nand.c | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>> index a28574c00900..074e14225c06 100644
+>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>> @@ -280,7 +280,7 @@ static void meson_nfc_cmd_access(struct nand_chip *nand, int raw, bool dir,
+>>  
+>>  	if (raw) {
+>>  		len = mtd->writesize + mtd->oobsize;
+>> -		cmd = (len & GENMASK(5, 0)) | scrambler | DMA_DIR(dir);
+>> +		cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
+> 
+> What happens when len > GENMASK(13, 0)? Do you check this somewhere?
 
-Note, please use all 72 columns in your changelog text if possible.
+'len' will be trimmed. I'm not sure that this case is possible here, because GENMASK(13, 0)
+is hardware limit for this NAND controller, so 'writesize' and 'oobsize' will be initialized
+to fit this value. Moreover GENMASK(13, 0) is 16Kb - i think it is big enough for single
+read. Also i'm not sure that it is good approach to check 'len' here - we are in the middle
+of NAND read processing.
 
 > 
-> To make endpoint allocation fair, pick up smallest
-> matching endpoints first, leaving bigger ones for
-> heavier applications.
-> 
-> Keel old behavior when "wMaxPacketSize == 0" because
+> Please introduce a macro/field for GENMASK(13, 0), having such mask
+> scattered along the code looks hackish and doesn't help readability.
+> You'll get to use FIELD_PREP as well.
 
-"Keel"?
+Ack, i'll do it in v3
 
-> it's a special case. In this case a gadget driver wants
-> to use a whole available MaxPacketSize of claimed
-> endpoint. Since it doesn't know what MaxPacketSize
-> may be in a particular UDC endpoint, it just
-> relies on epautoconf core and gets what's available
-
-I don't see the wMaxPacketSize == 0 case in the code today, so why are
-you adding that?
-
-And this really isn't "smallest endpoints", it is "find the best fit"
+Thanks, Arseniy
 
 > 
-> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
-> ---
-> 
-> v3: updated commit msg, rebased onto latest gregkh/usb-next
-> v2: rebased onto latest balbi/next branch
-> v1: https://lore.kernel.org/lkml/20200629200551.27040-1-ruslan.bilovol@gmail.com/
-> 
->  drivers/usb/gadget/epautoconf.c | 23 ++++++++++++++++++-----
->  1 file changed, 18 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/epautoconf.c b/drivers/usb/gadget/epautoconf.c
-> index ed5a92c474e5..086bb46e3f5a 100644
-> --- a/drivers/usb/gadget/epautoconf.c
-> +++ b/drivers/usb/gadget/epautoconf.c
-> @@ -66,7 +66,7 @@ struct usb_ep *usb_ep_autoconfig_ss(
->  	struct usb_ss_ep_comp_descriptor *ep_comp
->  )
->  {
-> -	struct usb_ep	*ep;
-> +	struct usb_ep	*ep, *ep_min = NULL;
->  
->  	if (gadget->ops->match_ep) {
->  		ep = gadget->ops->match_ep(gadget, desc, ep_comp);
-> @@ -74,14 +74,27 @@ struct usb_ep *usb_ep_autoconfig_ss(
->  			goto found_ep;
->  	}
->  
-> -	/* Second, look at endpoints until an unclaimed one looks usable */
-> +	/*
-> +	 * Second, look at endpoints until an unclaimed one looks usable.
-> +	 * Try to find one with smallest maxpacket limit, leaving larger
-> +	 * endpoints for heavier applications
-
-What do you mean by "heavier"?
-
-This is a "find the smallest endpoint to fit the request" type of logic,
-right?  If so, please say just that.
-
-
-> +	 */
->  	list_for_each_entry (ep, &gadget->ep_list, ep_list) {
-> -		if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp))
-> -			goto found_ep;
-> +		if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp)) {
-> +			if (desc->wMaxPacketSize == 0)
-> +				goto found_ep;
-> +			else if (!ep_min)
-> +				ep_min = ep;
-> +			else if (ep->maxpacket_limit < ep_min->maxpacket_limit)
-> +				ep_min = ep;
-> +		}
->  	}
->  
->  	/* Fail */
-> -	return NULL;
-> +	if (!ep_min)
-> +		return NULL;
-
-The fail comment should be on the return NULL line, or better yet,
-rewritten to say:
-	/* If we found no endpoint that fits, then fail the request */
-
-
-thanks,
-
-greg k-h
+>>  		writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>  		return;
+>>  	}
+>> @@ -544,7 +544,7 @@ static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
+>>  	if (ret)
+>>  		goto out;
+>>  
+>> -	cmd = NFC_CMD_N2M | (len & GENMASK(5, 0));
+>> +	cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
+>>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>  
+>>  	meson_nfc_drain_cmd(nfc);
+>> @@ -568,7 +568,7 @@ static int meson_nfc_write_buf(struct nand_chip *nand, u8 *buf, int len)
+>>  	if (ret)
+>>  		return ret;
+>>  
+>> -	cmd = NFC_CMD_M2N | (len & GENMASK(5, 0));
+>> +	cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
+>>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>  
+>>  	meson_nfc_drain_cmd(nfc);
