@@ -2,144 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A176CD529
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19596CD52B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbjC2ItL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
+        id S231401AbjC2It2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbjC2Ish (ORCPT
+        with ESMTP id S230371AbjC2ItT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:48:37 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5843C3B;
-        Wed, 29 Mar 2023 01:48:29 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32SNpbU7008579;
-        Wed, 29 Mar 2023 08:48:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=OFlfjRYANz+Cqp4MQubmPGGlSaQQl2KTHyWywJDQfNU=;
- b=McijSEUeV0lrgmWH7bXMe7go7pauLFxxbnmHYFKuJOeSkjcOMqyUxIzGiBhuZdr8yHdz
- s0IGrkVGQTGE2+R4Zhu3ZO1v2cfv56BsdxFeQv/NzxqskIccf5eT4iFleEvN6c7TfVnJ
- ZNI2PBIcSjU/erB6Hluvmc5wenVEpCESqYH+dJtNgsa6WgqKzvXi/lvdBGFuBsYOwhEO
- PqzLf7pwgFWVxrKaS6EQNhkZJ7NnWPJbuUql3YI8Q/d1ijAgbCvG7Chhot6gLSQn1GJS
- tkkY8d3M4pU2x/D6IVJ7CaCp/YKGAFxFGPUTnrvvQRQjZCpTnDBdO5wExvBYc64CRuG+ 2Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pky0xavuh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Mar 2023 08:48:00 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32T8lxwR023421
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Mar 2023 08:47:59 GMT
-Received: from hu-jinlmao-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Wed, 29 Mar 2023 01:47:58 -0700
-From:   Mao Jinlong <quic_jinlmao@quicinc.com>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <coresight@lists.linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>
-Subject: [PATCH v1 8/8] dt-bindings: arm: Add support for TPDM CMB element size
-Date:   Wed, 29 Mar 2023 01:47:44 -0700
-Message-ID: <20230329084744.5705-9-quic_jinlmao@quicinc.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230329084744.5705-1-quic_jinlmao@quicinc.com>
-References: <20230329084744.5705-1-quic_jinlmao@quicinc.com>
+        Wed, 29 Mar 2023 04:49:19 -0400
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5FE40E3;
+        Wed, 29 Mar 2023 01:48:35 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id w9so60278949edc.3;
+        Wed, 29 Mar 2023 01:48:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680079714; x=1682671714;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SDm8xQ8YMwosjStQbaWPeTTcMi1YkbPlJWLg16UcHC0=;
+        b=stWZ4IIMHUXZOC9FN18APhM4IQzcPLwSQmkPl4f9Xq+yNATKFJ9Es3kn0uBpp7AwKz
+         mWO5VylffQHjR2c5sKCdP/ae4EZVPxglKaaqR/lOR4zQZWEOX5Kio7+PJfbp8He5Uw6j
+         TTPbAUWELrM2ynvC0nRx0aVaQDIMdv7WFA2Dcsi3HXDx+9IDmFVzWSWc1bhAKmAEk2ba
+         mXnJqHjOllClVry5VdvV8kPpCJM6sK/AtQAY3QUdTz/+WyYH6vYgVd1SHig9AQFYKxpr
+         lxGtHPwzoYb3elOddmbI8W1XbSLn6WZrRZCfzq/0JXUDQwYp8LbQT3G4JJBirZBhbBX9
+         qiGg==
+X-Gm-Message-State: AAQBX9cMDrzR1U/+l+i+TJXQsdRK1PRKpCkU75Yq/0pAqcitri4E/2GK
+        jjbMVkGlMmB5CrLScpqaAc8=
+X-Google-Smtp-Source: AKy350Y6+mkDmDiT+UUbBaudRPpfXcWsDbLatbNp9joAXGhqiBHUXsSdjjg5QbRTBEvWVWlVt4a8Xw==
+X-Received: by 2002:aa7:cb9a:0:b0:4f9:f45e:c8b3 with SMTP id r26-20020aa7cb9a000000b004f9f45ec8b3mr20012230edt.27.1680079714120;
+        Wed, 29 Mar 2023 01:48:34 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id r12-20020a50c00c000000b00501d2f10d19sm12270461edb.20.2023.03.29.01.48.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 01:48:33 -0700 (PDT)
+Message-ID: <80235479-e410-845b-2e78-75f6a234b740@kernel.org>
+Date:   Wed, 29 Mar 2023 10:48:31 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GLsgeYYQQ4AB4XtBOcZqp0R4KauqzKhs
-X-Proofpoint-ORIG-GUID: GLsgeYYQQ4AB4XtBOcZqp0R4KauqzKhs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-29_02,2023-03-28_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=831
- impostorscore=0 phishscore=0 mlxscore=0 spamscore=0 suspectscore=0
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 clxscore=1015
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303290071
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     "Dae R. Jeong" <threeearcat@gmail.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        duoming@zju.edu.cn, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <ZB6uWm6MbpX+NmE/@dragonet>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: KASAN: use-after-free Read in slip_ioctl
+In-Reply-To: <ZB6uWm6MbpX+NmE/@dragonet>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add property "qcom,cmb-elem-size" to support CMB element for TPDM.
-The associated aggregator will read this size before it is enabled.
-CMB element size currently only supports 8-bit, 32-bit and 64-bit.
+Hi,
 
-Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
----
- .../bindings/arm/qcom,coresight-tpdm.yaml        | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+On 25. 03. 23, 9:18, Dae R. Jeong wrote:
+> We observed a use-after-free in slip_ioctl as attached at the end.
+> 
+> Although I'm not sure that our analysis is correct, it seems that the
+> concurrent execution of slip_ioctl() and slip_close() causes the issue
+> as follows.
+> 
+> CPU1                            CPU2
+> slip_ioctl                      slip_close (via slip_hangup)
+> -----                           -----
+> // Read a non-null value
+> sl = tty->disc_data;
+>                                  // Nullify tty->disc_data and then
+>                                  // unregister sl->dev
+>                                  rcu_assign_pointer(tty->disc_data, NULL);
+>                                  unregister_netdev(sl->dev);
+> // sl is freed in unregister_netdev()
+> if (!sl || sl->magic != SLIP_MAGIC)
+>      return -EINVAL;
+> 
+> I suspect that the two functions can be executed concurrently as I
+> don't see a locking mechanism to prevent this in tty_ioctl(), and that
+> sl is freed in unregister_netdev() as explained in the callstack. But
+> still we need to look into this further.
+> 
+> 
+> Best regards,
+> Dae R. Jeong
+> 
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in slip_ioctl+0x6db/0x7d0 drivers/net/slip/slip.c:1083
+> Read of size 4 at addr ffff88804b856c80 by task syz-executor.0/9106
+> 
+> CPU: 2 PID: 9106 Comm: syz-executor.0 Not tainted 6.0.0-rc7-00166-gf09dbf1cf0d5 #1
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+> Call Trace:
+>   <TASK>
+>   __dump_stack lib/dump_stack.c:88 [inline]
+>   dump_stack_lvl+0x1cf/0x2b7 lib/dump_stack.c:106
+>   print_address_description+0x21/0x470 mm/kasan/report.c:317
+>   print_report+0x108/0x1f0 mm/kasan/report.c:433
+>   kasan_report+0xe5/0x110 mm/kasan/report.c:495
+>   slip_ioctl+0x6db/0x7d0 drivers/net/slip/slip.c:1083
+>   tty_ioctl+0x11e9/0x1a20 drivers/tty/tty_io.c:2787
+>   vfs_ioctl fs/ioctl.c:51 [inline]
+>   __do_sys_ioctl fs/ioctl.c:870 [inline]
+>   __se_sys_ioctl+0x110/0x180 fs/ioctl.c:856
+>   do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+>   do_syscall_64+0x4e/0xa0 arch/x86/entry/common.c:82
+>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x478d29
+> Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007fbbbdfb8be8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 0000000000781408 RCX: 0000000000478d29
+> RDX: 0000000020000040 RSI: 00000000402c542c RDI: 0000000000000003
+> RBP: 00000000f477909a R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000781580
+> r13: 0000000000781414 R14: 0000000000781408 R15: 00007ffcfdc4f040
+>   </TASK>
+> 
+> Allocated by task 9103:
+...
+>   kvzalloc include/linux/slab.h:758 [inline]
+>   alloc_netdev_mqs+0x86/0x1240 net/core/dev.c:10603
+>   sl_alloc drivers/net/slip/slip.c:756 [inline]
+>   slip_open+0x489/0x1240 drivers/net/slip/slip.c:817
+>   tty_ldisc_open+0xb4/0x120 drivers/tty/tty_ldisc.c:433
+>   tty_set_ldisc+0x366/0x860 drivers/tty/tty_ldisc.c:558
+>   tiocsetd drivers/tty/tty_io.c:2433 [inline]
+>   tty_ioctl+0x168f/0x1a20 drivers/tty/tty_io.c:2714
+>   vfs_ioctl fs/ioctl.c:51 [inline]
+...
+> 
+> Freed by task 9105:
+...
+>   kfree+0x108/0x460 mm/slub.c:4567
+>   device_release+0x189/0x220
+>   kobject_cleanup+0x24f/0x360 lib/kobject.c:673
+>   netdev_run_todo+0x14ac/0x15a0 net/core/dev.c:10385
+>   unregister_netdev+0x1e9/0x270 net/core/dev.c:10922
+>   tty_ldisc_hangup+0x224/0x750 drivers/tty/tty_ldisc.c:700
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
-index 283dfb39d46f..c5169de81e58 100644
---- a/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
-@@ -53,6 +53,14 @@ properties:
-     minimum: 32
-     maximum: 64
- 
-+  qcom,cmb-element-size:
-+    description:
-+      Specifies the CMB (Continuous multi-bit) element size supported by
-+      the monitor. The associated aggregator will read this size before it
-+      is enabled. CMB element size currently supports 8-bit, 32-bit, 64-bit.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [8, 32, 64]
-+
-   qcom,dsb_msr_num:
-     description:
-       Specifies the number of DSB(Discrete Single Bit) MSR(mux select register)
-@@ -95,6 +103,12 @@ required:
-   - clocks
-   - clock-names
- 
-+anyOf:
-+  - required:
-+      - qcom,dsb_msr_num
-+  - required:
-+      - qcom,cmb-msr-num
-+
- additionalProperties: false
- 
- examples:
-@@ -105,6 +119,8 @@ examples:
-       reg = <0x0684c000 0x1000>;
- 
-       qcom,dsb-element-size = <32>;
-+      qcom,cmb-element-size = <32>;
-+
-       qcom,dsb_msr_num = <16>;
-       qcom,cmb-msr-num = <6>;
- 
+The question is whether the slip (and at least both ppps too) ldisc 
+should free resources in hangup(). This should be IMO done only in 
+close(). ndcmddcmmms -- sorry, my cat literally stepped in and had to 
+express her opinion too.
+
+As calling hangup() does not guarantee anything from the ldisc/tty POV. 
+While after/during close(), other ldisc ops must not be invoked/running.
+
+>   __tty_hangup+0x5b4/0x870 drivers/tty/tty_io.c:637
+>   tty_vhangup drivers/tty/tty_io.c:707 [inline]
+>   tty_ioctl+0xa7f/0x1a20 drivers/tty/tty_io.c:2718
+>   vfs_ioctl fs/ioctl.c:51 [inline]
+
+
+thanks,
 -- 
-2.39.0
+js
+suse labs
 
