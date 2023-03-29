@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DE36CF25E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA056CF263
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjC2Slh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
+        id S229794AbjC2SmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjC2Slf (ORCPT
+        with ESMTP id S229814AbjC2SmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:41:35 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99544186
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:41:34 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso19497906pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:41:34 -0700 (PDT)
+        Wed, 29 Mar 2023 14:42:20 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541355251
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:42:17 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id ek18so67165332edb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:42:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680115294;
+        d=google.com; s=20210112; t=1680115336;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dxmuN5bOpF+xyVb1w+Z2846HXpRYFN7xoRDxUCB2yvc=;
-        b=ABvWcdvFykAzXLyz/5y8SZIkZFb8EKVvkUCDhyuPtUpUZ3r4b/ameXoQzCbADS13ra
-         Y988u17lGj1a8cpkZnTTwLs7rO7sy2PJIjHXGxsbOvk8qpK8KfPHwRbYK/dRQxXy4sqP
-         dcsEzlTIhoqP+cBCV86poTOie+KuTuCcyfPc+KSVfgXRTluxbS3McJO/ybDZz2thhFy3
-         7TJWUZcSY5DXAIq4pwWMD7ezmVctRj/wZ8Xf1OlUNJnDYww054vCZ/qgsAgZX5RIliGY
-         zdNnIiQwM0AYbFdNu0p0p9EMcTAh36K58c1WZJK00By/JQOAfhKGjg563j6EfmWUYMJ0
-         +UQA==
+        bh=eIBZAFv2wQMorQ5lc8tGcKMX+DgU71oiqiwG/4lRhic=;
+        b=aPynEkp0gt2yrrh6KFRsPFu4+QI+22LUjC71jLtYRdPz3tvtiYrWpQlMXP+93X3yGB
+         FiYhI/lB1nm7o983gXqChQwZJgo7TUHZHozyA54eTsiL7qEpKTDtVNZjtT5OnUGO3FcT
+         /Ghx5u5imvI3Gsd9iJAQJreaU9lhZCpMwvKLL4xwq3MEiupMjCgS2J6LanHI7FZzdNHE
+         DD5BkwhMH87ZYXPw7tl2iLTM3LS+8SO6AidoBxBPFw0iS+D9jzkDX1w9ejhJCbS882ck
+         3Y9hQaaQPnDbj315Xgi6CAnGj+I61uN4wFCd/FWxc6pmq9vBaD7hAvSlXrhKcXQw6j9r
+         0zJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680115294;
+        d=1e100.net; s=20210112; t=1680115336;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dxmuN5bOpF+xyVb1w+Z2846HXpRYFN7xoRDxUCB2yvc=;
-        b=urzaNYDPkyZOZOXcHrKAHRHoQqZcaVRydSWAHGPgphs7SkRQxN0Pf5a5HH6ksZv8e3
-         iXPIQiLiues0KkfeDF6sLHDN/FG3FFt4Qc6jiwp6hIn4aBIiPpowrEVcLAsS4q5G2BNP
-         2P8dTYa1CYFBzE+vomu5uRuQr7xnY02KGQ1ZcSLYE34Yjwk08xbadUJwJs7rBHpKpWBV
-         cNWIlLvHuaEOloYEEcnt/jhYDZNLR4L3Ta97FYlPkX2EK279NisfpHikN7DWID1trvhw
-         KvtCzYTc48k5YHLiuwGyqMn5eZrGGgJPbFIa46DfigQ9Cte2IUjU8bSsKe9hr2maLwc8
-         xWvA==
-X-Gm-Message-State: AAQBX9eUbeKP2CRkzx5YvoS02kP929QwksG7sCoQ2B+V+EZRRa69FA5R
-        UQPtq9N5hai1gKFU7IeHjArR5VL88wFRzXykNFdeVFop
-X-Google-Smtp-Source: AKy350YWBi8e+i2vlNB8rLjeF2Gqd7dRo4lVWB+6YMTd4uiqg9XZrtffvH0BuKPyY/e6tOecaXaDgxhbZAmmVPUNL7M=
-X-Received: by 2002:a17:903:41c6:b0:1a0:7630:8eed with SMTP id
- u6-20020a17090341c600b001a076308eedmr7544643ple.11.1680115293931; Wed, 29 Mar
- 2023 11:41:33 -0700 (PDT)
+        bh=eIBZAFv2wQMorQ5lc8tGcKMX+DgU71oiqiwG/4lRhic=;
+        b=va8GXI7MQzwtnyHv0fXwnRh1zWIEwyXL318V4YIZa9OQx3skZ4ISPhQLNMKtJXGUAE
+         F/yTTmoIpSW7r9uI+ak6Txo8cF61clb+A0QKx3PAce1usMd8YQ//bi329mQdkJjS2qWl
+         hS4SOcJE41R33wyAw7PDQe5FQK45WWSVWIxWMCqQVtcn48KufBIS4++9T5PKZ7cKiYVP
+         V3yDOH5GXR2YZbXKiIzeuHt40q6AAc15CYM3koil3Qug0ZcOV3iTPSOHk5SEfLR8WPQT
+         oAR4jFhjMfQpwKWHmdX9jlIfiQ+GEOpQevbgSE87wVoGVVVMdr4VYb7SaZ4h+88awuVe
+         aonA==
+X-Gm-Message-State: AAQBX9cBJ/fxL/bXzmAtMijzlDCxVbjkYg8xVg6ubSfirkUqv/dwuObM
+        GsvSFO3uxC+YlZBSHz+roGnD/wQfbKrwbvbYhYQ8Sg==
+X-Google-Smtp-Source: AKy350ZwxdVpDFdjfiQjd2T1+2RQI0O05U4sIZAUQmMvbedjibegmVGA6poPnWutEDJaZTCc4OE/bJRiTbzJipp2VXo=
+X-Received: by 2002:a17:906:81da:b0:92f:b329:cb75 with SMTP id
+ e26-20020a17090681da00b0092fb329cb75mr2122145ejx.5.1680115335713; Wed, 29 Mar
+ 2023 11:42:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <dc432429a6d87f197eefb179f26012c6c1ec6cd9.1680114854.git.andreyknvl@google.com>
- <74d26337b2360733956114069e96ff11c296a944.1680114854.git.andreyknvl@google.com>
-In-Reply-To: <74d26337b2360733956114069e96ff11c296a944.1680114854.git.andreyknvl@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 29 Mar 2023 20:41:23 +0200
-Message-ID: <CA+fCnZcNynt_fzhikr4SnQfTqmOWMepg-yhnVQfzE7pn3GAS6g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] arm64: mte: Rename TCO routines
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Weizhao Ouyang <ouyangweizhao@zeku.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>,
-        andrey.konovalov@linux.dev
+References: <20230328221644.803272-1-yosryahmed@google.com>
+ <20230328221644.803272-5-yosryahmed@google.com> <ZCQfZJFufkJ10o01@dhcp22.suse.cz>
+In-Reply-To: <ZCQfZJFufkJ10o01@dhcp22.suse.cz>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 29 Mar 2023 11:41:39 -0700
+Message-ID: <CAJD7tkb-UpKm2QbjYzB=B=oGk6Hyj9cbUviZUPC+7VsvBecH7g@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] cgroup: rstat: add WARN_ON_ONCE() if flushing
+ outside task context
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,31 +83,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 8:37=E2=80=AFPM <andrey.konovalov@linux.dev> wrote:
+On Wed, Mar 29, 2023 at 4:22=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
+e:
 >
-> From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> On Tue 28-03-23 22:16:39, Yosry Ahmed wrote:
+> > rstat flushing is too expensive to perform in irq context.
+> > The previous patch removed the only context that may invoke an rstat
+> > flush from irq context, add a WARN_ON_ONCE() to detect future
+> > violations, or those that we are not aware of.
+> >
+> > Ideally, we wouldn't flush with irqs disabled either, but we have one
+> > context today that does so in mem_cgroup_usage(). Forbid callers from
+> > irq context for now, and hopefully we can also forbid callers with irqs
+> > disabled in the future when we can get rid of this callsite.
 >
-> The TCO related routines are used in uaccess methods and
-> load_unaligned_zeropad() but are unrelated to both even if the naming
-> suggest otherwise.
+> I am sorry to be late to the discussion. I wanted to follow up on
+> Johannes reply in the previous version but you are too fast ;)
 >
-> Improve the readability of the code moving the away from uaccess.h and
-> pre-pending them with "mte".
->
-> Cc: Will Deacon <will@kernel.org>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
->
-> ---
->
-> Chages v1->v2:
-> - Drop __ from mte_disable/enable_tco names, as those functions are to
->   be exported to KASAN code.
+> I do agree that this looks rather arbitrary. You do not explain how the
+> warning actually helps. Is the intention to be really verbose to the
+> kernel log when somebody uses this interface from the IRQ context and
+> get bug reports? What about configurations with panic on warn? Do we
+> really want to crash their systems for something like that?
 
-Hi Catalin and Vincenzo,
+Thanks for taking a look, Michal!
 
-Could you please take a look at this patch and other arm64 parts in
-this series and give your ack if they look good?
+The ultimate goal is not to flush in irq context or with irqs
+disabled, as in some cases it causes irqs to be disabled for a long
+time, as flushing is an expensive operation. The previous patch in the
+series should have removed the only context that flushes in irq
+context, and the purpose of the WARN_ON_ONCE() is to catch future uses
+or uses that we might have missed.
 
-Thank you!
+There is still one code path that flushes with irqs disabled (also
+mem_cgroup_usage()), and we cannot remove this just yet; we need to
+deprecate usage threshold events for root to do that. So we cannot
+enforce not flushing with irqs disabled yet.
+
+So basically the patch is trying to enforce what we have now, not
+flushing in irq context, and hopefully at some point we will also be
+able to enforce not flushing with irqs disabled.
+
+If WARN_ON_ONCE() is the wrong tool for this, please let me know.
+
+>
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > Reviewed-by: Shakeel Butt <shakeelb@google.com>
+> > ---
+> >  kernel/cgroup/rstat.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+> > index d3252b0416b6..c2571939139f 100644
+> > --- a/kernel/cgroup/rstat.c
+> > +++ b/kernel/cgroup/rstat.c
+> > @@ -176,6 +176,8 @@ static void cgroup_rstat_flush_locked(struct cgroup=
+ *cgrp, bool may_sleep)
+> >  {
+> >       int cpu;
+> >
+> > +     /* rstat flushing is too expensive for irq context */
+> > +     WARN_ON_ONCE(!in_task());
+> >       lockdep_assert_held(&cgroup_rstat_lock);
+> >
+> >       for_each_possible_cpu(cpu) {
+> > --
+> > 2.40.0.348.gf938b09366-goog
+>
+> --
+> Michal Hocko
+> SUSE Labs
