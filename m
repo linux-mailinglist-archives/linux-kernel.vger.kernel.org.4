@@ -2,147 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A05C6CEFE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053896CEFE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjC2Qwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
+        id S230452AbjC2QxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjC2Qwp (ORCPT
+        with ESMTP id S230411AbjC2QxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:52:45 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A1E6196
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:52:06 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id x8so11952990qvr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680108726;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TJcSi47EhXNIDZ28a5A+wUVsGYy6JkYPL7x7pr4x14E=;
-        b=WuSoUr/TbmkUjF2NfkFCiLWNR8BN63Wj2yZKpy+M4B64e8/kMV22C47oGxbcMFfC8a
-         u9K2KoG11gGOJV88vDBO0cHYSNjLau+amgIYXgnJy/mkhyPjfbPl1bpR55+gGFA/0T2X
-         Y3lycNnqyZdxaqxkJIKbMiDC1r8Gj8OTmpBMCymksqnij1usKSqpDIrarl3NgzaZfqjV
-         S8/uoEwaxx27oTUV+7urz/oarTKj5kZLJTFUkzuHdx3bRJJLEiJmTH7P8ajdrR5lzv0o
-         t0b5e7GwE3jiwm57u4EC/aaFF4fkZN9gaSFM6g80KTSZHj6RHlq9Xu5MXIUo7DUQPELT
-         BnxA==
+        Wed, 29 Mar 2023 12:53:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CECC658F
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:52:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680108746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=muo9JB5IQhuOp3WxvPbO5lqz9UUu3QBSHBndFfIKJqM=;
+        b=N8jxHOoaSgo/KYQyd1Sdkp/jeSmdRup4wZRuRYnW8/DjLFmgnpGF06bE7L1ObM9z4Zr2YI
+        HERzPK65kF9RLsBEVINQAT2snAeZfyGFG+wWKSFCd1PcWzNhNSii4Qru2egpCToqFtoOtd
+        vYX5mardwmYuClGnYnH6ryYQgCYKs6E=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-288-to8qIw5XNLC4wXtQi1t2Vg-1; Wed, 29 Mar 2023 12:52:25 -0400
+X-MC-Unique: to8qIw5XNLC4wXtQi1t2Vg-1
+Received: by mail-qt1-f199.google.com with SMTP id n10-20020a05622a11ca00b003e4e30c6c98so7895942qtk.19
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:52:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680108726;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TJcSi47EhXNIDZ28a5A+wUVsGYy6JkYPL7x7pr4x14E=;
-        b=qcsRNPCDvUYI1VrecAiNAR0aNMiDTinzPllq3GprRj63+xpzDNC5xg1MbDDH9aN4qq
-         2/k1vOAebsvc81FzfQTgLLO7FSgSPMIAqunYCgJV2t9MLDL5MdkTi43pLRBoiCPtLXQK
-         grygqsIEQFviXXuVzGwmArlACatNaAzM6Ugp6F92cE+W63P3hsvHR9gKIDv4p92niWVF
-         cIv1hv56T9+e/FtKOdG3SqILXZ86jCT6cYKTtTdyJlSKIyzX3Uv657DXFVMu3tVp3c13
-         GtnFFQEJZgOptZgVwFephHo6Rby2TDswnHh/8ndWsv5NHbRUrzHIEN17T990wJiz80Lz
-         XJGw==
-X-Gm-Message-State: AAQBX9ePvLsaKZQ3LUct72QSwROhJvg9EYAxD0U3QCquIpwCJ9d/TEAM
-        YFz/sjkLlK0vgFyNDUcNtk2M2w==
-X-Google-Smtp-Source: AKy350bK7zGq4k69rZlQkPib1d9x8G+KiYL3mTAPdFc8sKo0rQ6LMTYNTi6e9fe7gDD2dheQbUJTQQ==
-X-Received: by 2002:ad4:5949:0:b0:5d5:11b4:ad0 with SMTP id eo9-20020ad45949000000b005d511b40ad0mr31106166qvb.11.1680108726011;
-        Wed, 29 Mar 2023 09:52:06 -0700 (PDT)
-Received: from [172.17.0.3] ([147.160.184.95])
-        by smtp.gmail.com with ESMTPSA id mh2-20020a056214564200b005dd8b934582sm4686029qvb.26.2023.03.29.09.52.05
+        d=1e100.net; s=20210112; t=1680108745;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=muo9JB5IQhuOp3WxvPbO5lqz9UUu3QBSHBndFfIKJqM=;
+        b=xpNOtkgkywp/RQKPaSlQCTBWouvmzzixt2vgJ+ZI90jq334RXY44XjskhYBZR2LN1W
+         Pe62YOdKXgIPB5aQrM2B22mh2s9KIuyz9lplzCJtVD8ILvdCuSapVXzYuizXinKhEgre
+         ydRYpV/ahH4RFvsT2A0hcwaJ1+ZqqfuE0huoNAqEv4DLM9NPJqivwu6Cczkj6svEBhH0
+         xULkw2K0w0SELPq0tFIObKQ8j67t65I8ndrRyikkJjU8nlD9Z9EPLEY4WjzaUJaz2j1h
+         /cELaHde3Zr6r4/qV8iqr2grzME5To35LWdwlaDMeL4D/KHscLiv14I7Da59zdo7Cf8T
+         /YuA==
+X-Gm-Message-State: AAQBX9ehBHspjTxbAnfM/O0PgmT2neYS7CuW0ayTLLIUh56xM5eReIHp
+        r99gH3yOMKXGylKIfQqCl98WBc7h+RePXJ2bwtJ5KfuwPc8Yex8dmPTE3r3CUbE2WfYlRtHGlEM
+        zBrVgtHysYWqztO7xfS8e/bSc
+X-Received: by 2002:a05:6214:e66:b0:583:8e58:6c0f with SMTP id jz6-20020a0562140e6600b005838e586c0fmr29147469qvb.40.1680108744894;
+        Wed, 29 Mar 2023 09:52:24 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bun4cXrzEpCnPiNSCluwNvGX9z2Oj2GOli6rL0A1O/OgPE5/Cg6d1gD+r1Sj89T4hWGd39nQ==
+X-Received: by 2002:a05:6214:e66:b0:583:8e58:6c0f with SMTP id jz6-20020a0562140e6600b005838e586c0fmr29147450qvb.40.1680108744648;
+        Wed, 29 Mar 2023 09:52:24 -0700 (PDT)
+Received: from debian (2a01cb058918ce00e2c03839ebb8a46a.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:e2c0:3839:ebb8:a46a])
+        by smtp.gmail.com with ESMTPSA id r199-20020a37a8d0000000b007467b55e6e3sm14799362qke.89.2023.03.29.09.52.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 09:52:05 -0700 (PDT)
-From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
-Date:   Wed, 29 Mar 2023 16:51:58 +0000
-Subject: [PATCH net v3] virtio/vsock: fix leaks due to missing skb owner
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-vsock-fix-leak-v3-1-292cfc257531@bytedance.com>
-X-B4-Tracking: v=1; b=H4sIAK5sJGQC/32OzQ7CIBCEX8Vwdk2B9M+T72E88LNYUgUDDdo0f
- XcpFxMTPc7szDe7kIjBYiTH3UICJhutd1nw/Y6oQbgrgtVZE1YxXnHWQopejWDsC24oRpBUoaF
- 1x4ToSC5JERFkEE4NW+2TjqME/3QYttQjYPbK7Jk4nMglm4ONkw9zeSXRcvq1mihQ4AY18qalV
- W1Ocp5Q51U8KH8vuMT+I1hGmKahfd8yjVh9I9Z1fQMY3VJGHgEAAA==
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
+        Wed, 29 Mar 2023 09:52:24 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 18:52:20 +0200
+From:   Guillaume Nault <gnault@redhat.com>
+To:     "Drewek, Wojciech" <wojciech.drewek@intel.com>
+Cc:     Andrea Righi <andrea.righi@canonical.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cong Wang <xiyou.wangcong@gmail.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: selftests: net: l2tp.sh regression starting with 6.1-rc1
+Message-ID: <ZCRsxERSZiGf5H5e@debian>
+References: <ZCQt7hmodtUaBlCP@righiandr-XPS-13-7390>
+ <MW4PR11MB57763144FE1BE9756FD3176BFD899@MW4PR11MB5776.namprd11.prod.outlook.com>
+ <ZCRYpDehyDxsrnfi@debian>
+ <MW4PR11MB5776F1B04976CB59D9FE41BFFD899@MW4PR11MB5776.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MW4PR11MB5776F1B04976CB59D9FE41BFFD899@MW4PR11MB5776.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch sets the skb owner in the recv and send path for virtio.
+On Wed, Mar 29, 2023 at 03:39:13PM +0000, Drewek, Wojciech wrote:
+> 
+> 
+> > -----Original Message-----
+> > -MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 2, IPPROTO_L2TP);
+> > -MODULE_ALIAS_NET_PF_PROTO(PF_INET6, IPPROTO_L2TP);
+> > +MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 2, 115 /* IPPROTO_L2TP */);
+> > +MODULE_ALIAS_NET_PF_PROTO(PF_INET6, 115 /* IPPROTO_L2TP */);
+> 
+> Btw, am I blind or the alias with type was wrong the whole time?
+> pf goes first, then proto and type at the end according to the definition of MODULE_ALIAS_NET_PF_PROTO_TYPE
+> and here type (2) is 2nd and proto (115) is 3rd
 
-For the send path, this solves the leak caused when
-virtio_transport_purge_skbs() finds skb->sk is always NULL and therefore
-never matches it with the current socket. Setting the owner upon
-allocation fixes this.
-
-For the recv path, this ensures correctness of accounting and also
-correct transfer of ownership in vsock_loopback (when skbs are sent from
-one socket and received by another).
-
-Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
-Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-Reported-by: Cong Wang <xiyou.wangcong@gmail.com>
-Link: https://lore.kernel.org/all/ZCCbATwov4U+GBUv@pop-os.localdomain/
----
-Changes in v3:
-- virtio/vsock: use skb_set_owner_sk_safe() instead of
-  skb_set_owner_{r,w}
-- virtio/vsock: reject allocating/receiving skb if sk_refcnt==0 and WARN_ONCE
-- Link to v2: https://lore.kernel.org/r/20230327-vsock-fix-leak-v2-1-f6619972dee0@bytedance.com
-
-Changes in v2:
-- virtio/vsock: add skb_set_owner_r to recv_pkt()
-- Link to v1: https://lore.kernel.org/r/20230327-vsock-fix-leak-v1-1-3fede367105f@bytedance.com
----
- net/vmw_vsock/virtio_transport_common.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-index 957cdc01c8e8..c927dc302faa 100644
---- a/net/vmw_vsock/virtio_transport_common.c
-+++ b/net/vmw_vsock/virtio_transport_common.c
-@@ -94,6 +94,11 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
- 					 info->op,
- 					 info->flags);
- 
-+	if (info->vsk && !skb_set_owner_sk_safe(skb, sk_vsock(info->vsk))) {
-+		WARN_ONCE(1, "failed to allocate skb on vsock socket with sk_refcnt == 0\n");
-+		goto out;
-+	}
-+
- 	return skb;
- 
- out:
-@@ -1294,6 +1299,11 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
- 		goto free_pkt;
- 	}
- 
-+	if (!skb_set_owner_sk_safe(skb, sk)) {
-+		WARN_ONCE(1, "receiving vsock socket has sk_refcnt == 0\n");
-+		goto free_pkt;
-+	}
-+
- 	vsk = vsock_sk(sk);
- 
- 	lock_sock(sk);
-
----
-base-commit: e5b42483ccce50d5b957f474fd332afd4ef0c27b
-change-id: 20230327-vsock-fix-leak-b1cef1582aa8
-
-Best regards,
--- 
-Bobby Eshleman <bobby.eshleman@bytedance.com>
+You're not blind :). The MODULE_ALIAS_NET_PF_PROTO_TYPE(...) is indeed
+wrong. Auto-loading the l2tp_ip and l2tp_ip6 modules only worked
+because of the extra MODULE_ALIAS_NET_PF_PROTO() declaration (as
+inet_create() and inet6_create() fallback to "net-pf-%d-proto-%d" if
+"net-pf-%d-proto-%d-type-%d" fails).
 
