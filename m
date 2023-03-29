@@ -2,423 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24106CD635
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B90F6CD639
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjC2JTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
+        id S230312AbjC2JUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjC2JTV (ORCPT
+        with ESMTP id S230218AbjC2JUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:19:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98261FF3;
-        Wed, 29 Mar 2023 02:19:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5430661C11;
-        Wed, 29 Mar 2023 09:19:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B59C433EF;
-        Wed, 29 Mar 2023 09:19:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680081558;
-        bh=+oMibk1h4NtIM9bDaurEsNq4OE6u9Rh8IJ/CWXNT3/k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i7hmJ45ARm58VgntfnEHkUNTHqTKwdLEH7fDbCBlOiKth3YRtD1CWMb0dhvmJZHyG
-         tuekN2dsg4qU4+mOW5eHVkWeWcaUuYfc6vHcvM5LrRHPqNZhLps6gAb63pTq9Nwqu3
-         gwRqIeuysRx6xdym1DIez8n2PA10Gf2cbKVsjasc=
-Date:   Wed, 29 Mar 2023 11:19:16 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v9 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <ZCQClBeEtSLu2X0U@kroah.com>
-References: <20230323071051.2184-1-tony@atomide.com>
+        Wed, 29 Mar 2023 05:20:08 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFA330ED;
+        Wed, 29 Mar 2023 02:20:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ySrzQLXjclJLg1JjYK7jCf+1kKZG10N39gM1j0PDJh4=; b=fppPk4+ooHcyYtNeCJtGo2G/Cl
+        FlILzvi7OMVEPUEVF/ODG593J/XXNPpgrlaOPXgtFT9H4qXwcyLNZtdhTaJeAIrOQY8NyOUtNuGXO
+        5D5z3tXxR/byWRjT0t4cmoNyFd7tx8bU2BP/3DRG+YtFrb9fOQZWvJmrqmBz7lNFlSs7IakXivhKp
+        EXS60iCYqCJ2fzfn/lUdu28W/gu4muzX5MjKiK6Gb05q3V3sNrOivDvooJCn/Qldf4NHusSUvlqsd
+        jP+0N3NMXxkx262VE8scRRhv696g/GYjUjkstNdc/DEaLS3XRC8+ss+dUW1n1hj/BsFERol+gmfNE
+        uSNd0UBw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1phRxx-006oXs-0R;
+        Wed, 29 Mar 2023 09:19:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A8F56300237;
+        Wed, 29 Mar 2023 11:19:35 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7B003262EE26A; Wed, 29 Mar 2023 11:19:35 +0200 (CEST)
+Date:   Wed, 29 Mar 2023 11:19:35 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        song@kernel.org, rppt@kernel.org, willy@infradead.org,
+        vbabka@suse.cz, mhocko@suse.com, dave.hansen@linux.intel.com
+Subject: Re: [PATCH 4/7] sempahore: add a helper for a concurrency limiter
+Message-ID: <20230329091935.GP4253@hirez.programming.kicks-ass.net>
+References: <20230329053149.3976378-1-mcgrof@kernel.org>
+ <20230329053149.3976378-5-mcgrof@kernel.org>
+ <20230329072112.GG4253@hirez.programming.kicks-ass.net>
+ <ZCPuFLDgU5fBFtug@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230323071051.2184-1-tony@atomide.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZCPuFLDgU5fBFtug@bombadil.infradead.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 09:10:47AM +0200, Tony Lindgren wrote:
-> -obj-$(CONFIG_SERIAL_CORE) += serial_core.o
-> +obj-$(CONFIG_SERIAL_CORE) += serial_base.o serial_core.o serial_ctrl.o serial_port.o
+On Wed, Mar 29, 2023 at 12:51:48AM -0700, Luis Chamberlain wrote:
+> On Wed, Mar 29, 2023 at 09:21:12AM +0200, Peter Zijlstra wrote:
+> > On Tue, Mar 28, 2023 at 10:31:46PM -0700, Luis Chamberlain wrote:
+> > > While I looked at re-using the old kernel/kmod.c (now kernel/module/kmod.c)
+> > > concurrency delimiter methodology for another place in the kernel Linus
+> > > noted that this could be simply replaced with a sempahore [0].
+> > > 
+> > > So add that so we we don't re-invent the wheel and make it obvious to use.
+> > > 
+> > > [0] https://lore.kernel.org/all/CAHk-=whkj6=wyi201JXkw9iT_eTUTsSx+Yb9d4OgmZFjDJA18g@mail.gmail.com/
+> > > 
+> > > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> > > ---
+> > >  include/linux/semaphore.h | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/include/linux/semaphore.h b/include/linux/semaphore.h
+> > > index 6694d0019a68..2ecdffdb9814 100644
+> > > --- a/include/linux/semaphore.h
+> > > +++ b/include/linux/semaphore.h
+> > > @@ -28,6 +28,9 @@ struct semaphore {
+> > >  #define DEFINE_SEMAPHORE(name)	\
+> > >  	struct semaphore name = __SEMAPHORE_INITIALIZER(name, 1)
+> > >  
+> > > +#define CONCURRENCY_LIMITER(name, n) \
+> > > +	struct semaphore name = __SEMAPHORE_INITIALIZER(name, n)
+> > > +
+> > 
+> > Why should this live in semaphore.h?
+> 
+> I have no preference, but sharing seems to have been better. Do you
+> have any recommendations?
 
-Why is this 3 new modules and not just all go into serial_base?  What's
-going to auto-load the other modules you created here?  Feels like this
-should all end up in the same .ko as they all depend on each other,
-right?
+Call is DEFINE_SEMAPHORE_N() ?
 
->  
->  obj-$(CONFIG_SERIAL_EARLYCON) += earlycon.o
->  obj-$(CONFIG_SERIAL_EARLYCON_SEMIHOST) += earlycon-semihost.o
-> diff --git a/drivers/tty/serial/serial_base.c b/drivers/tty/serial/serial_base.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/drivers/tty/serial/serial_base.c
-> @@ -0,0 +1,142 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +/*
-> + * Serial core base layer for controllers
-> + *
-> + * The serial core bus manages the serial core controller instances.
-> + */
-> +
-> +#include <linux/container_of.h>
-> +#include <linux/device.h>
-> +#include <linux/module.h>
-> +#include <linux/serial_core.h>
-> +#include <linux/slab.h>
-> +#include <linux/spinlock.h>
-> +
-> +#include "serial_base.h"
-> +
-> +struct serial_base_device {
-> +	struct device dev;
-> +	struct uart_port *port;
-> +};
-> +
-> +#define to_serial_base_device(d) container_of((d), struct serial_base_device, dev)
-> +
-> +struct uart_port *serial_base_get_port(struct device *dev)
-> +{
-> +	struct serial_base_device *sbd;
-> +
-> +	if (!dev)
-> +		return NULL;
-> +
-> +	sbd = to_serial_base_device(dev);
-> +
-> +	/* Check in case serial_core_add_one_port() happened to fail */
-> +	if (!sbd->port->state) {
+Arguably DEFINE_SEMAPHORE() should have the argument, as binary
+semaphores are a special case, but then we gotta go and fix up all
+users.
 
-This is odd, how can it fail and then this function be called after that
-failure?
+/me git-greps a little.. Hmm, not too bad.
 
-> +		dev_warn(dev, "uninitialized serial port?\n");
-> +		return NULL;
-> +	}
-> +
-> +	return sbd->port;
-> +}
-> +EXPORT_SYMBOL_NS(serial_base_get_port, SERIAL_BASE);
-> +
-> +static int serial_base_match(struct device *dev, struct device_driver *drv)
-> +{
-> +	int len = strlen(drv->name);
-> +
-> +	return !strncmp(dev_name(dev), drv->name, len);
-> +}
-> +
-> +static struct bus_type serial_base_bus_type = {
-> +	.name = "serial-base",
-> +	.match = serial_base_match,
-> +};
-> +
-> +int serial_base_driver_register(struct device_driver *driver)
-> +{
-> +	driver->bus = &serial_base_bus_type;
-> +
-> +	return driver_register(driver);
-> +}
-> +EXPORT_SYMBOL_NS(serial_base_driver_register, SERIAL_BASE);
-> +
-> +void serial_base_driver_unregister(struct device_driver *driver)
-> +{
-> +	driver_unregister(driver);
-> +}
-> +EXPORT_SYMBOL_NS(serial_base_driver_unregister, SERIAL_BASE);
-> +
-> +static void serial_base_release(struct device *dev)
-> +{
-> +	struct serial_base_device *sbd = to_serial_base_device(dev);
-> +
-> +	kfree(sbd);
-> +}
-> +
-> +struct device *serial_base_device_add(struct uart_port *port, const char *name,
-> +				      struct device *parent_dev)
-> +{
-> +	struct serial_base_device *sbd;
-> +	int err, id;
-> +
-> +	sbd = kzalloc(sizeof(*sbd), GFP_KERNEL);
-> +	if (!sbd)
-> +		return NULL;
-> +
-> +	device_initialize(&sbd->dev);
-> +	sbd->dev.parent = parent_dev;
-> +	sbd->dev.bus = &serial_base_bus_type;
-> +	sbd->dev.release = &serial_base_release;
-> +
-> +	if (str_has_prefix(name, "ctrl")) {
+How's this?
 
-That's a magic string, shouldn't it be documented somewhere?
+---
+ arch/mips/cavium-octeon/setup.c                               | 2 +-
+ arch/x86/kernel/cpu/intel.c                                   | 2 +-
+ drivers/firmware/efi/runtime-wrappers.c                       | 2 +-
+ drivers/firmware/efi/vars.c                                   | 2 +-
+ drivers/macintosh/adb.c                                       | 2 +-
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c              | 2 +-
+ drivers/platform/x86/intel/ifs/sysfs.c                        | 2 +-
+ drivers/scsi/esas2r/esas2r_ioctl.c                            | 2 +-
+ drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 2 +-
+ include/linux/semaphore.h                                     | 7 +++++--
+ kernel/printk/printk.c                                        | 2 +-
+ net/rxrpc/call_object.c                                       | 6 ++----
+ 12 files changed, 17 insertions(+), 16 deletions(-)
 
-> +		id = port->ctrl_id;
-> +	} else {
-> +		id = port->line;
-> +		sbd->port = port;
-> +	}
-> +
-> +	err = dev_set_name(&sbd->dev, "%s.%s.%d", name, dev_name(port->dev), id);
-> +	if (err)
-> +		goto err_free_dev;
-> +
-> +	err = device_add(&sbd->dev);
-> +	if (err)
-> +		goto err_put_device;
-> +
-> +	return &sbd->dev;
-> +
-> +err_put_device:
-> +	put_device(&sbd->dev);
-> +
-> +err_free_dev:
-> +	kfree(sbd);
-> +
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL_NS(serial_base_device_add, SERIAL_BASE);
-> +
-> +void serial_base_device_remove(struct device *dev)
-> +{
-> +	if (!dev)
-> +		return;
-> +
-> +	device_del(dev);
-> +}
-> +EXPORT_SYMBOL_NS(serial_base_device_remove, SERIAL_BASE);
-> +
-> +static int serial_base_init(void)
-> +{
-> +	return bus_register(&serial_base_bus_type);
-> +}
-> +module_init(serial_base_init);
-> +
-> +static void serial_base_exit(void)
-> +{
-> +	bus_unregister(&serial_base_bus_type);
-> +}
-> +module_exit(serial_base_exit);
-> +
-> +MODULE_AUTHOR("Tony Lindgren <tony@atomide.com>");
-> +MODULE_DESCRIPTION("Serial core bus");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/tty/serial/serial_base.h b/drivers/tty/serial/serial_base.h
-> new file mode 100644
-> --- /dev/null
-> +++ b/drivers/tty/serial/serial_base.h
-> @@ -0,0 +1,21 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +
-> +/* Serial core related functions, serial port device drivers do not need this. */
-> +
-> +struct uart_driver;
-> +struct uart_port;
-> +struct device_driver;
-> +struct device;
-> +
-> +int serial_base_driver_register(struct device_driver *driver);
-> +void serial_base_driver_unregister(struct device_driver *driver);
-> +struct device *serial_base_device_add(struct uart_port *port, const char *name,
-> +				      struct device *parent_dev);
-> +void serial_base_device_remove(struct device *dev);
-> +struct uart_port *serial_base_get_port(struct device *dev);
-> +
-> +int serial_ctrl_register_port(struct uart_driver *drv, struct uart_port *port);
-> +void serial_ctrl_unregister_port(struct uart_driver *drv, struct uart_port *port);
-> +
-> +int serial_core_register_port(struct uart_driver *drv, struct uart_port *port);
-> +void serial_core_unregister_port(struct uart_driver *drv, struct uart_port *port);
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -17,6 +17,7 @@
->  #include <linux/gpio/consumer.h>
->  #include <linux/kernel.h>
->  #include <linux/of.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/proc_fs.h>
->  #include <linux/seq_file.h>
->  #include <linux/device.h>
-> @@ -31,6 +32,8 @@
->  #include <linux/irq.h>
->  #include <linux/uaccess.h>
->  
-> +#include "serial_base.h"
-> +
->  /*
->   * This is used to lock changes in serial line configuration.
->   */
-> @@ -134,9 +137,30 @@ static void __uart_start(struct tty_struct *tty)
->  {
->  	struct uart_state *state = tty->driver_data;
->  	struct uart_port *port = state->uart_port;
-> +	struct device *port_dev;
-> +	int err;
-> +
-> +	if (!port || uart_tx_stopped(port))
-> +		return;
-> +
-> +	port_dev = port->port_dev;
-> +
-> +	/* Increment the runtime PM usage count for the active check below */
-> +	err = pm_runtime_get(port_dev);
-> +	if (err < 0) {
-> +		pm_runtime_put_noidle(port_dev);
-> +		return;
-> +	}
->  
-> -	if (port && !uart_tx_stopped(port))
-> +	/*
-> +	 * Start TX if enabled, and kick runtime PM. If the device is not
-> +	 * enabled, serial_port_runtime_resume() calls start_tx() again
-> +	 * after enabling the device.
-> +	 */
-> +	if (pm_runtime_active(port_dev))
->  		port->ops->start_tx(port);
-> +	pm_runtime_mark_last_busy(port_dev);
-> +	pm_runtime_put_autosuspend(port_dev);
->  }
->  
->  static void uart_start(struct tty_struct *tty)
-> @@ -3036,7 +3060,7 @@ static const struct attribute_group tty_dev_attr_group = {
->  };
->  
->  /**
-> - * uart_add_one_port - attach a driver-defined port structure
-> + * serial_core_add_one_port - attach a driver-defined port structure
->   * @drv: pointer to the uart low level driver structure for this port
->   * @uport: uart port structure to use for this port.
->   *
-> @@ -3046,7 +3070,7 @@ static const struct attribute_group tty_dev_attr_group = {
->   * core driver. The main purpose is to allow the low level uart drivers to
->   * expand uart_port, rather than having yet more levels of structures.
->   */
-> -int uart_add_one_port(struct uart_driver *drv, struct uart_port *uport)
-> +static int serial_core_add_one_port(struct uart_driver *drv, struct uart_port *uport)
->  {
->  	struct uart_state *state;
->  	struct tty_port *port;
-> @@ -3136,10 +3160,9 @@ int uart_add_one_port(struct uart_driver *drv, struct uart_port *uport)
->  
->  	return ret;
->  }
-> -EXPORT_SYMBOL(uart_add_one_port);
->  
->  /**
-> - * uart_remove_one_port - detach a driver defined port structure
-> + * serial_core_remove_one_port - detach a driver defined port structure
->   * @drv: pointer to the uart low level driver structure for this port
->   * @uport: uart port structure for this port
->   *
-> @@ -3148,7 +3171,8 @@ EXPORT_SYMBOL(uart_add_one_port);
->   * This unhooks (and hangs up) the specified port structure from the core
->   * driver. No further calls will be made to the low-level code for this port.
->   */
-> -int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
-> +static int serial_core_remove_one_port(struct uart_driver *drv,
-> +				       struct uart_port *uport)
->  {
->  	struct uart_state *state = drv->state + uport->line;
->  	struct tty_port *port = &state->port;
-> @@ -3205,6 +3229,8 @@ int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
->  	 * Indicate that there isn't a port here anymore.
->  	 */
->  	uport->type = PORT_UNKNOWN;
-> +	uport->port_dev = NULL;
-> +	uport->ctrl_id = -ENODEV;
->  
->  	mutex_lock(&port->mutex);
->  	WARN_ON(atomic_dec_return(&state->refcount) < 0);
-> @@ -3216,7 +3242,6 @@ int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
->  
->  	return ret;
->  }
-> -EXPORT_SYMBOL(uart_remove_one_port);
->  
->  /**
->   * uart_match_port - are the two ports equivalent?
-> @@ -3251,6 +3276,127 @@ bool uart_match_port(const struct uart_port *port1,
->  }
->  EXPORT_SYMBOL(uart_match_port);
->  
-> +/*
-> + * Find a registered serial core controller device if one exists. Returns
-> + * the first device matching the ctrl_id. Caller must hold port_mutex.
-> + */
-> +static struct device *serial_core_ctrl_find(struct uart_driver *drv,
-> +					    struct device *phys_dev,
-> +					    int ctrl_id)
-> +{
-> +	struct uart_state *state;
-> +	int i;
-> +
-> +	if (ctrl_id < 0)
-> +		return NULL;
-
-Why is a negative number special here?
-
-
-> +
-> +	lockdep_assert_held(&port_mutex);
-> +
-> +	for (i = 0; i < drv->nr; i++) {
-> +		state = drv->state + i;
-> +		if (!state->uart_port || !state->uart_port->port_dev)
-> +			continue;
-> +
-> +		if (state->uart_port->dev == phys_dev &&
-> +		    state->uart_port->ctrl_id == ctrl_id)
-> +			return state->uart_port->port_dev->parent;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
-> +static struct device *serial_core_ctrl_device_add(struct uart_port *port)
-> +{
-> +	return serial_base_device_add(port, "ctrl", port->dev);
-> +}
-> +
-> +static int serial_core_port_device_add(struct device *ctrl_dev, struct uart_port *port)
-> +{
-> +	struct device *dev;
-> +
-> +	dev = serial_base_device_add(port, "port", ctrl_dev);
-
-magic strings again :)
-
-Do you really just want two different "types" of devices on this bus,
-controllers and ports?  If so, just do that, don't make the name magic
-here.
-
-Then you can have:
-	serial_base_port_add()
-	serial_base_ctrl_add()
-
-and one cleanup function will still work.
-
-Otherwise this looks good to me, thanks for doing all of this work.
-
-greg k-h
+diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
+index a71727f7a608..794b681433a7 100644
+--- a/arch/mips/cavium-octeon/setup.c
++++ b/arch/mips/cavium-octeon/setup.c
+@@ -72,7 +72,7 @@ extern void pci_console_init(const char *arg);
+ static unsigned long long max_memory = ULLONG_MAX;
+ static unsigned long long reserve_low_mem;
+ 
+-DEFINE_SEMAPHORE(octeon_bootbus_sem);
++DEFINE_BINARY_SEMAPHORE(octeon_bootbus_sem);
+ EXPORT_SYMBOL(octeon_bootbus_sem);
+ 
+ static struct octeon_boot_descriptor *octeon_boot_desc_ptr;
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 291d4167fab8..c1ace4d46c35 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -1177,7 +1177,7 @@ static const struct {
+ static struct ratelimit_state bld_ratelimit;
+ 
+ static unsigned int sysctl_sld_mitigate = 1;
+-static DEFINE_SEMAPHORE(buslock_sem);
++static DEFINE_BINARY_SEMAPHORE(buslock_sem);
+ 
+ #ifdef CONFIG_PROC_SYSCTL
+ static struct ctl_table sld_sysctls[] = {
+diff --git a/drivers/firmware/efi/runtime-wrappers.c b/drivers/firmware/efi/runtime-wrappers.c
+index 1fba4e09cdcf..1139ad6429e7 100644
+--- a/drivers/firmware/efi/runtime-wrappers.c
++++ b/drivers/firmware/efi/runtime-wrappers.c
+@@ -158,7 +158,7 @@ void efi_call_virt_check_flags(unsigned long flags, const char *call)
+  * none of the remaining functions are actually ever called at runtime.
+  * So let's just use a single lock to serialize all Runtime Services calls.
+  */
+-static DEFINE_SEMAPHORE(efi_runtime_lock);
++static DEFINE_BINARY_SEMAPHORE(efi_runtime_lock);
+ 
+ /*
+  * Expose the EFI runtime lock to the UV platform
+diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
+index bd75b87f5fc1..09647e133c5a 100644
+--- a/drivers/firmware/efi/vars.c
++++ b/drivers/firmware/efi/vars.c
+@@ -21,7 +21,7 @@
+ /* Private pointer to registered efivars */
+ static struct efivars *__efivars;
+ 
+-static DEFINE_SEMAPHORE(efivars_lock);
++static DEFINE_BINARY_SEMAPHORE(efivars_lock);
+ 
+ static efi_status_t check_var_size(bool nonblocking, u32 attributes,
+ 				   unsigned long size)
+diff --git a/drivers/macintosh/adb.c b/drivers/macintosh/adb.c
+index 23bd0c77ac1a..c70b18b9f97d 100644
+--- a/drivers/macintosh/adb.c
++++ b/drivers/macintosh/adb.c
+@@ -80,7 +80,7 @@ static struct adb_driver *adb_controller;
+ BLOCKING_NOTIFIER_HEAD(adb_client_list);
+ static int adb_got_sleep;
+ static int adb_inited;
+-static DEFINE_SEMAPHORE(adb_probe_mutex);
++static DEFINE_BINARY_SEMAPHORE(adb_probe_mutex);
+ static int sleepy_trackpad;
+ static int autopoll_devs;
+ int __adb_probe_sync;
+diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
+index 5d1e4fe335aa..0cade1fd266f 100644
+--- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
++++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
+@@ -298,7 +298,7 @@ const u32 dmae_reg_go_c[] = {
+ 
+ /* Global resources for unloading a previously loaded device */
+ #define BNX2X_PREV_WAIT_NEEDED 1
+-static DEFINE_SEMAPHORE(bnx2x_prev_sem);
++static DEFINE_BINARY_SEMAPHORE(bnx2x_prev_sem);
+ static LIST_HEAD(bnx2x_prev_list);
+ 
+ /* Forward declaration */
+diff --git a/drivers/platform/x86/intel/ifs/sysfs.c b/drivers/platform/x86/intel/ifs/sysfs.c
+index ee636a76b083..ee6782cad44f 100644
+--- a/drivers/platform/x86/intel/ifs/sysfs.c
++++ b/drivers/platform/x86/intel/ifs/sysfs.c
+@@ -13,7 +13,7 @@
+  * Protects against simultaneous tests on multiple cores, or
+  * reloading can file while a test is in progress
+  */
+-static DEFINE_SEMAPHORE(ifs_sem);
++static DEFINE_BINARY_SEMAPHORE(ifs_sem);
+ 
+ /*
+  * The sysfs interface to check additional details of last test
+diff --git a/drivers/scsi/esas2r/esas2r_ioctl.c b/drivers/scsi/esas2r/esas2r_ioctl.c
+index e003d923acbf..ca40d32181a7 100644
+--- a/drivers/scsi/esas2r/esas2r_ioctl.c
++++ b/drivers/scsi/esas2r/esas2r_ioctl.c
+@@ -56,7 +56,7 @@ dma_addr_t esas2r_buffered_ioctl_addr;
+ u32 esas2r_buffered_ioctl_size;
+ struct pci_dev *esas2r_buffered_ioctl_pcid;
+ 
+-static DEFINE_SEMAPHORE(buffered_ioctl_semaphore);
++static DEFINE_BINARY_SEMAPHORE(buffered_ioctl_semaphore);
+ typedef int (*BUFFERED_IOCTL_CALLBACK)(struct esas2r_adapter *,
+ 				       struct esas2r_request *,
+ 				       struct esas2r_sg_context *,
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+index cddcd3c596c9..c7093f367f27 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+@@ -149,7 +149,7 @@ static char *g_fragments_base;
+ static char *g_free_fragments;
+ static struct semaphore g_free_fragments_sema;
+ 
+-static DEFINE_SEMAPHORE(g_free_fragments_mutex);
++static DEFINE_BINARY_SEMAPHORE(g_free_fragments_mutex);
+ 
+ static int
+ vchiq_blocking_bulk_transfer(struct vchiq_instance *instance, unsigned int handle, void *data,
+diff --git a/include/linux/semaphore.h b/include/linux/semaphore.h
+index 6694d0019a68..18894bffb3f4 100644
+--- a/include/linux/semaphore.h
++++ b/include/linux/semaphore.h
+@@ -25,8 +25,11 @@ struct semaphore {
+ 	.wait_list	= LIST_HEAD_INIT((name).wait_list),		\
+ }
+ 
+-#define DEFINE_SEMAPHORE(name)	\
+-	struct semaphore name = __SEMAPHORE_INITIALIZER(name, 1)
++#define DEFINE_SEMAPHORE(_name, _n)	\
++	struct semaphore _name = __SEMAPHORE_INITIALIZER(_name, _n)
++
++#define DEFINE_BINARY_SEMAPHORE(_name)	\
++	DEFINE_SEMAPHORE(_name, 1)
+ 
+ static inline void sema_init(struct semaphore *sem, int val)
+ {
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index fd0c9f913940..a3aa21d26de2 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -89,7 +89,7 @@ static DEFINE_MUTEX(console_mutex);
+  * console_sem protects updates to console->seq and console_suspended,
+  * and also provides serialization for console printing.
+  */
+-static DEFINE_SEMAPHORE(console_sem);
++static DEFINE_BINARY_SEMAPHORE(console_sem);
+ HLIST_HEAD(console_list);
+ EXPORT_SYMBOL_GPL(console_list);
+ DEFINE_STATIC_SRCU(console_srcu);
+diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
+index e9f1f49d18c2..3e5cc70884dd 100644
+--- a/net/rxrpc/call_object.c
++++ b/net/rxrpc/call_object.c
+@@ -40,10 +40,8 @@ const char *const rxrpc_call_completions[NR__RXRPC_CALL_COMPLETIONS] = {
+ 
+ struct kmem_cache *rxrpc_call_jar;
+ 
+-static struct semaphore rxrpc_call_limiter =
+-	__SEMAPHORE_INITIALIZER(rxrpc_call_limiter, 1000);
+-static struct semaphore rxrpc_kernel_call_limiter =
+-	__SEMAPHORE_INITIALIZER(rxrpc_kernel_call_limiter, 1000);
++static DEFINE_SEMAPHORE(rxrpc_call_limiter, 1000);
++static DEFINE_SEMAPHORE(rxrpc_kernel_call_limiter, 1000);
+ 
+ void rxrpc_poke_call(struct rxrpc_call *call, enum rxrpc_call_poke_trace what)
+ {
