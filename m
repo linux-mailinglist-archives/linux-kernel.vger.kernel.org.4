@@ -2,104 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957636CF243
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C039B6CF24A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjC2SiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S229825AbjC2SiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjC2Shz (ORCPT
+        with ESMTP id S229682AbjC2SiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:37:55 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3796A5FE1;
-        Wed, 29 Mar 2023 11:37:51 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id r7-20020a17090b050700b002404be7920aso15472217pjz.5;
-        Wed, 29 Mar 2023 11:37:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680115070;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uzLVbqgNBGN+xgE2Mcn5+0Hj/oLlv/psLQjcDCgpQr8=;
-        b=kI+OaINANyKsiK+EWK5+yOqs4+8ljyMo3j6zqxxM9CNCGiuVso5j4vGdrojGjNs0yY
-         0bWcLXqZlHNd5KEaFaq42TZPydl8CX+VZaczevLdxTDrOS+bRtk1uU3ldZcJ5GOoafYt
-         EfJ3UBHdLiykj7ApCxebT76Fae/+kGPt8b03FuNjlP2cQ+kDqjpxVP30APPgIeDDwUAK
-         JUwZpewbV42SJXpI7IZJO7GrUs0qCUeGrPItHGrUZVp9xHlP0F0DVVVfimp2uH4A+9XJ
-         cvYw6G7wBHW7jwMokNIetOkS2+pSnTcBC41bJiINKqOlqkpoX06t8GHNFjgmTOmqgrdj
-         y52A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680115070;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uzLVbqgNBGN+xgE2Mcn5+0Hj/oLlv/psLQjcDCgpQr8=;
-        b=L6fhGbg9CLSQSu6g4jTsUMeukkwe8nfdTKy9YoI4OeizMFiDaprw71uD18gU5fmdV0
-         oPanxmUMEvbtvjewhzGYJoX/QLC2Lw/wVUGj8h9SKdj0eqrb4hvoJrUGAwA4WouEYc2+
-         1Kv1C3aXA2iWDr2c/ZGuSrY3wpM0RdCrxkwTAFLOmrtPmpKAFdTy5sH51lvXFkCANMKg
-         3GYXmlSXb6F7oBm+12Kz0whRbVGz4XQuzag1ZkUFEAcKwvFQzm53nbJEddOczneqeWh7
-         7zO1bvDHynMOXkj9+01CIaStGDIzVbJ+mu2KeaYY/tNMSBWqlYSqVLVgm372a5E+PvJD
-         SwSw==
-X-Gm-Message-State: AAQBX9eM5FG6Pf92rGlZ8esrPgXmI6lOrkC+aLaOoNXDmBtWTC+0WVtC
-        zu0+yAdVfM8BabwuT2hqVgl+xOxYzRs=
-X-Google-Smtp-Source: AKy350ZCdGEv1x3AcKjBXJ46+u7JThYANyD1DbTn65Mw87/MICbj1baTbv665VxjBhy7AVYPa5cehg==
-X-Received: by 2002:a17:90a:4bca:b0:23f:6830:568e with SMTP id u10-20020a17090a4bca00b0023f6830568emr20245502pjl.8.1680115070400;
-        Wed, 29 Mar 2023 11:37:50 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id bf8-20020a170902b90800b001a27ea5cb94sm487166plb.87.2023.03.29.11.37.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 11:37:50 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 29 Mar 2023 08:37:48 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Wed, 29 Mar 2023 14:38:06 -0400
+Received: from out-56.mta1.migadu.com (out-56.mta1.migadu.com [IPv6:2001:41d0:203:375::38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00C859F3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:38:02 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1680115080;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KXwl8tO7n70VCzS+2Z99ZqyN4ebAwCoCQirv2FwloPQ=;
+        b=agGDWJ9xzHKORm0clngE5cybrY2NbiNiuT8Au3+SurJwSKOhd7350jBTyPn/yXpT9rTRV9
+        BE7EEFNPLvmCxOGUcnuqPyNdnpttIko/We2eAOk+kYoVbjy2qrGk3zUJLFwLcwFmSyampp
+        LtPeZOW+QWpuEawW1ooy7OC5yXZRZpE=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-Subject: Re: [PATCH v2 1/4] cgroup/cpuset: Fix partition root's cpuset.cpus
- update bug
-Message-ID: <ZCSFfMeKRNERIBu6@slm.duckdns.org>
-References: <20230317151508.1225282-1-longman@redhat.com>
- <20230317151508.1225282-2-longman@redhat.com>
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Weizhao Ouyang <ouyangweizhao@zeku.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH v2 5/5] kasan: suppress recursive reports for HW_TAGS
+Date:   Wed, 29 Mar 2023 20:37:48 +0200
+Message-Id: <d14417c8bc5eea7589e99381203432f15c0f9138.1680114854.git.andreyknvl@google.com>
+In-Reply-To: <dc432429a6d87f197eefb179f26012c6c1ec6cd9.1680114854.git.andreyknvl@google.com>
+References: <dc432429a6d87f197eefb179f26012c6c1ec6cd9.1680114854.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317151508.1225282-2-longman@redhat.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 11:15:05AM -0400, Waiman Long wrote:
-> It was found that commit 7a2127e66a00 ("cpuset: Call
-> set_cpus_allowed_ptr() with appropriate mask for task") introduced a bug
-> that corrupted "cpuset.cpus" of a partition root when it was updated.
-> 
-> It is because the tmp->new_cpus field of the passed tmp parameter
-> of update_parent_subparts_cpumask() should not be used at all as
-> it contains important cpumask data that should not be overwritten.
-> Fix it by using tmp->addmask instead.
-> 
-> Also update update_cpumask() to make sure that trialcs->cpu_allowed
-> will not be corrupted until it is no longer needed.
-> 
-> Fixes: 7a2127e66a00 ("cpuset: Call set_cpus_allowed_ptr() with appropriate mask for task")
-> Signed-off-by: Waiman Long <longman@redhat.com>
+From: Andrey Konovalov <andreyknvl@google.com>
 
-Applied to cgroup/for-6.3-fixes w/ stable cc'd.
+KASAN suppresses reports for bad accesses done by the KASAN reporting
+code. The reporting code might access poisoned memory for reporting
+purposes.
 
-Thanks.
+Software KASAN modes do this by suppressing reports during reporting
+via current->kasan_depth, the same way they suppress reports during
+accesses to poisoned slab metadata.
 
+Hardware Tag-Based KASAN does not use current->kasan_depth, and instead
+resets pointer tags for accesses to poisoned memory done by the reporting
+code.
+
+Despite that, a recursive report can still happen:
+
+1. On hardware with faulty MTE support. This was observed by Weizhao
+   Ouyang on a faulty hardware that caused memory tags to randomly change
+   from time to time.
+
+2. Theoretically, due to a previous MTE-undetected memory corruption.
+
+A recursive report can happen via:
+
+1. Accessing a pointer with a non-reset tag in the reporting code, e.g.
+   slab->slab_cache, which is what Weizhao Ouyang observed.
+
+2. Theoretically, via external non-annotated routines, e.g. stackdepot.
+
+To resolve this issue, resetting tags for all of the pointers in the
+reporting code and all the used external routines would be impractical.
+
+Instead, disable tag checking done by the CPU for the duration of KASAN
+reporting for Hardware Tag-Based KASAN.
+
+Without this fix, Hardware Tag-Based KASAN reporting code might deadlock.
+
+Fixes: 2e903b914797 ("kasan, arm64: implement HW_TAGS runtime")
+Reported-by: Weizhao Ouyang <ouyangweizhao@zeku.com>
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+
+---
+
+Considering that 1. the bug this patch fixes was only observed on faulty
+MTE hardware, and 2. the patch depends on the other patches in this series,
+I don't think it's worth backporting it into stable.
+
+Changes v1->v2:
+- Disable preemption instead of migration.
+- Fix comment typo.
+---
+ mm/kasan/report.c | 59 ++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 48 insertions(+), 11 deletions(-)
+
+diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+index 89078f912827..892a9dc9d4d3 100644
+--- a/mm/kasan/report.c
++++ b/mm/kasan/report.c
+@@ -72,10 +72,18 @@ static int __init kasan_set_multi_shot(char *str)
+ __setup("kasan_multi_shot", kasan_set_multi_shot);
+ 
+ /*
+- * Used to suppress reports within kasan_disable/enable_current() critical
+- * sections, which are used for marking accesses to slab metadata.
++ * This function is used to check whether KASAN reports are suppressed for
++ * software KASAN modes via kasan_disable/enable_current() critical sections.
++ *
++ * This is done to avoid:
++ * 1. False-positive reports when accessing slab metadata,
++ * 2. Deadlocking when poisoned memory is accessed by the reporting code.
++ *
++ * Hardware Tag-Based KASAN instead relies on:
++ * For #1: Resetting tags via kasan_reset_tag().
++ * For #2: Suppression of tag checks via CPU, see report_suppress_start/end().
+  */
+-static bool report_suppressed(void)
++static bool report_suppressed_sw(void)
+ {
+ #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
+ 	if (current->kasan_depth)
+@@ -84,6 +92,30 @@ static bool report_suppressed(void)
+ 	return false;
+ }
+ 
++static void report_suppress_start(void)
++{
++#ifdef CONFIG_KASAN_HW_TAGS
++	/*
++	 * Disable preemption for the duration of printing a KASAN report, as
++	 * hw_suppress_tag_checks_start() disables checks on the current CPU.
++	 */
++	preempt_disable();
++	hw_suppress_tag_checks_start();
++#else
++	kasan_disable_current();
++#endif
++}
++
++static void report_suppress_stop(void)
++{
++#ifdef CONFIG_KASAN_HW_TAGS
++	hw_suppress_tag_checks_stop();
++	preempt_enable();
++#else
++	kasan_enable_current();
++#endif
++}
++
+ /*
+  * Used to avoid reporting more than one KASAN bug unless kasan_multi_shot
+  * is enabled. Note that KASAN tests effectively enable kasan_multi_shot
+@@ -174,7 +206,7 @@ static void start_report(unsigned long *flags, bool sync)
+ 	/* Do not allow LOCKDEP mangling KASAN reports. */
+ 	lockdep_off();
+ 	/* Make sure we don't end up in loop. */
+-	kasan_disable_current();
++	report_suppress_start();
+ 	spin_lock_irqsave(&report_lock, *flags);
+ 	pr_err("==================================================================\n");
+ }
+@@ -192,7 +224,7 @@ static void end_report(unsigned long *flags, void *addr)
+ 		panic("kasan.fault=panic set ...\n");
+ 	add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
+ 	lockdep_on();
+-	kasan_enable_current();
++	report_suppress_stop();
+ }
+ 
+ static void print_error_description(struct kasan_report_info *info)
+@@ -480,9 +512,13 @@ void kasan_report_invalid_free(void *ptr, unsigned long ip, enum kasan_report_ty
+ 	struct kasan_report_info info;
+ 
+ 	/*
+-	 * Do not check report_suppressed(), as an invalid-free cannot be
+-	 * caused by accessing slab metadata and thus should not be
+-	 * suppressed by kasan_disable/enable_current() critical sections.
++	 * Do not check report_suppressed_sw(), as an invalid-free cannot be
++	 * caused by accessing poisoned memory and thus should not be suppressed
++	 * by kasan_disable/enable_current() critical sections.
++	 *
++	 * Note that for Hardware Tag-Based KASAN, kasan_report_invalid_free()
++	 * is triggered by explicit tag checks and not by the ones performed by
++	 * the CPU. Thus, reporting invalid-free is not suppressed as well.
+ 	 */
+ 	if (unlikely(!report_enabled()))
+ 		return;
+@@ -517,7 +553,7 @@ bool kasan_report(unsigned long addr, size_t size, bool is_write,
+ 	unsigned long irq_flags;
+ 	struct kasan_report_info info;
+ 
+-	if (unlikely(report_suppressed()) || unlikely(!report_enabled())) {
++	if (unlikely(report_suppressed_sw()) || unlikely(!report_enabled())) {
+ 		ret = false;
+ 		goto out;
+ 	}
+@@ -549,8 +585,9 @@ void kasan_report_async(void)
+ 	unsigned long flags;
+ 
+ 	/*
+-	 * Do not check report_suppressed(), as kasan_disable/enable_current()
+-	 * critical sections do not affect Hardware Tag-Based KASAN.
++	 * Do not check report_suppressed_sw(), as
++	 * kasan_disable/enable_current() critical sections do not affect
++	 * Hardware Tag-Based KASAN.
+ 	 */
+ 	if (unlikely(!report_enabled()))
+ 		return;
 -- 
-tejun
+2.25.1
+
