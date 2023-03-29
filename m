@@ -2,115 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A186CD485
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78E16CD488
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbjC2IW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56644 "EHLO
+        id S230372AbjC2IY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjC2IW3 (ORCPT
+        with ESMTP id S230467AbjC2IYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:22:29 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345C826A5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:21:45 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id y15so19092415lfa.7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:21:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680078103;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lRbDqq9vIw03wZ46k1c5GQIbp3MsDcHgKH6HMicJQ34=;
-        b=IJ/6/WiY0gZWjaAE7nBEVUFeVIs5w9JhkhPFNsQilBeSB+Mdgv0G9oEmQvoCvFDnyE
-         T2Etyc52i6erCwh3xFy9fEYifbP7uygmcK7SO2O8IHFFlH7Vh5SNZFMpiFj7o/0B9AXw
-         hP5QmQ+DpdlGWmW+X//hH3I9T9hK/J8oitpJ2BBf0BlilUKMkY22LyezsuKa1qRHk0wK
-         ltXwViei9Pga3C4cEfQeS+gw0WlCFSTxlWXEm+UgxjZHMYdOYmwnsB+X4nPAorc/Ii5G
-         oDOa+aJXNLZO1lNZFZk3t269NLUYYMvAi5DCt7n1FBjnD0uwk2GiMl+KhBuJyM/iuUFe
-         rsqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680078103;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lRbDqq9vIw03wZ46k1c5GQIbp3MsDcHgKH6HMicJQ34=;
-        b=Izigic2Axt0UzrRNyRu9w+Tx/L4wOYsp5ChMeMhTSqxLhbCNxtnyhD0TjyM49C8nfu
-         V7w5QGV4iIYONWBZX97jCYBK7M7hz5ckNYfr2aEF1xZFlpiMJY01/BqEqWlx4VhWgMMy
-         xYgJIbSqxdVs1BbQWuS7UyG4G3ZnEe8iJL7OsUjFDvznfjmwNgK0lxO+C1DzzIiJwuvg
-         1s9W6FXxU1++vXhAC+8clLCMWoSlGvhU4Z/vVcClJrT75/JNOUQl9yKjnVvnAseN4Apj
-         YQ7qxAvptjnoyQLGxoFGHmukhb5Jpmb8KbupHaFw59KX5hBWKw+SsteR1bIgNRfI52+4
-         g8hw==
-X-Gm-Message-State: AAQBX9dAwP+C9B80T4FHuXjznppA0YDdz/+5c8MiwkqC3tUnwKAD20uW
-        W1tpJ6h8V/na4P00bEDr+fUWJg==
-X-Google-Smtp-Source: AKy350a5r26p47bAo38Gr8TFyeJ+va7pWduXVogqgpv/VWEmcGXfuoOBI3kLgpj57CmmcDvG8Cc8IA==
-X-Received: by 2002:ac2:4884:0:b0:4e1:7dd:1142 with SMTP id x4-20020ac24884000000b004e107dd1142mr5766576lfc.51.1680078103481;
-        Wed, 29 Mar 2023 01:21:43 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id d15-20020ac241cf000000b004dc721ea6a1sm5335923lfi.273.2023.03.29.01.21.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 01:21:43 -0700 (PDT)
-Message-ID: <36f75c71-cf5b-7cbd-8eac-8a8f628d1201@linaro.org>
-Date:   Wed, 29 Mar 2023 10:21:41 +0200
+        Wed, 29 Mar 2023 04:24:11 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF6A59FA
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:23:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=nTIJlxppJIAd74PmqdXD5+j2Dw+VegQUjf44O0/+rS0=; b=Z76hMZJagOEcvpbshbhpoxS/yy
+        XFBO9YxpGQikJzgwRKO8U4dAesBwLF4Lc6r4qFZ3hgxXpCx5l5B5CMe/XSOT3s2aa2Osee4rYLMAp
+        aQt+l45Rx77lLOZub51fibyssVu1bYB95GMYQV/U5qsGrk+Mq01R94XvmDfNO9vrPPq4r5HeHq5ZM
+        zDmfx8X94Je5eIYMrLUnVGRicE116K0EEhQZ8fPJc1afy+rDdiVFMjbkEB5YQNni+Ce8D21VziFeY
+        AYEnsSzTthQnjFtz8tDfMPkE92oHyHLPo75uCXnI42JN/quJTWT0rZG/Fix7FINnBoG8U+XkVJ+li
+        4czwBqTA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1phR4n-006nnB-16;
+        Wed, 29 Mar 2023 08:22:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DA3B4300237;
+        Wed, 29 Mar 2023 10:22:35 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BFEEF201D9959; Wed, 29 Mar 2023 10:22:35 +0200 (CEST)
+Date:   Wed, 29 Mar 2023 10:22:35 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Don <joshdon@google.com>
+Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org, efault@gmx.de
+Subject: Re: [PATCH 08/17] sched/fair: Implement an EEVDF like policy
+Message-ID: <20230329082235.GA38236@hirez.programming.kicks-ass.net>
+References: <20230328092622.062917921@infradead.org>
+ <20230328110354.141543852@infradead.org>
+ <CABk29Nt4T67S+L9Qs1qeOUyo5gY1Qy5KuOwuCYNM74E58J81Eg@mail.gmail.com>
+ <20230329080646.GL4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v6 08/12] arm64: dts: nuvoton: Add initial ma35d1 device
- tree
-Content-Language: en-US
-To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230328021912.177301-1-ychuang570808@gmail.com>
- <20230328021912.177301-9-ychuang570808@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230328021912.177301-9-ychuang570808@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329080646.GL4253@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 04:19, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
+On Wed, Mar 29, 2023 at 10:06:46AM +0200, Peter Zijlstra wrote:
+> On Tue, Mar 28, 2023 at 06:26:51PM -0700, Josh Don wrote:
+> > > +static struct sched_entity *pick_eevdf(struct cfs_rq *cfs_rq)
+> > > +{
+> > > +       struct rb_node *node = cfs_rq->tasks_timeline.rb_root.rb_node;
+> > > +       struct sched_entity *curr = cfs_rq->curr;
+> > > +       struct sched_entity *best = NULL;
+> > > +
+> > > +       if (curr && (!curr->on_rq || !entity_eligible(cfs_rq, curr)))
+> > > +               curr = NULL;
+> > > +
+> > > +       while (node) {
+> > > +               struct sched_entity *se = __node_2_se(node);
+> > > +
+> > > +               /*
+> > > +                * If this entity is not eligible, try the left subtree.
+> > > +                */
+> > > +               if (!entity_eligible(cfs_rq, se)) {
+> > > +                       node = node->rb_left;
+> > > +                       continue;
+> > > +               }
+> > > +
+> > > +               /*
+> > > +                * If this entity has an earlier deadline than the previous
+> > > +                * best, take this one. If it also has the earliest deadline
+> > > +                * of its subtree, we're done.
+> > > +                */
+> > > +               if (!best || deadline_gt(deadline, best, se)) {
+> > > +                       best = se;
+> > > +                       if (best->deadline == best->min_deadline)
+> > > +                               break;
+> > 
+> > Isn't it possible to have a child with less vruntime (ie. rb->left)
+> > but with the same deadline? Wouldn't it be preferable to choose the
+> > child instead since the deadlines are equivalent but the child has
+> > received less service time?
 > 
-> Add initial device tree support for Nuvoton ma35d1 SoC, including
-> cpu, clock, reset, and serial controllers.
-> Add reference boards som-256m and iot-512m.
+> Possible, yes I suppose. But given this is ns granular virtual time,
+> somewhat unlikely. You can modify the last (validation) patch and have
+> it detect the case, see if you can trigger it.
 > 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> Doing that will make the pick always do a full decent of the tree
+> through, which is a little more expensive. Not sure it's worth the
+> effort.
 
-
-
-> +	gic: interrupt-controller@50801000 {
-> +		compatible = "arm,gic-400";
-> +		reg =   <0x0 0x50801000 0 0x1000>, /* GICD */
-> +			<0x0 0x50802000 0 0x2000>, /* GICC */
-> +			<0x0 0x50804000 0 0x2000>, /* GICH */
-> +			<0x0 0x50806000 0 0x2000>; /* GICV */
-> +		#interrupt-cells = <3>;
-> +		interrupt-parent = <&gic>;
-> +		interrupt-controller;
-> +		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
-> +			      IRQ_TYPE_LEVEL_HIGH)>;
-> +	};
-> +
-> +	uart0:serial@40700000 {
-
-There is always space after label:.
-
-
-Best regards,
-Krzysztof
+Hmm, maybe not, if there is no smaller-or-equal deadline then the
+min_deadline of the child will be greater and we can terminate the
+decent right there.
 
