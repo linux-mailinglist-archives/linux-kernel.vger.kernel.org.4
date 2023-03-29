@@ -2,178 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9253E6CEC4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DAB6CEC55
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjC2PBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 11:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
+        id S230320AbjC2PEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjC2PBS (ORCPT
+        with ESMTP id S230154AbjC2PD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:01:18 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5932113
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:01:15 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id x20so16437024ljq.9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:01:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680102074;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uGkOiPefovVtTgmI0DGR4n+0i+4dhScH7wTyfGZyKZ4=;
-        b=SbZx/BNv29iJLafH16pVZEH6NzuXGx0/EkmsHJg5oGgkhNyDdyt09RSBTN4LYcBRuP
-         grqHwZEISgRdxBDDokfWKVcUjottoVLqaDkaitFH+NnmGvi/Muekp1G3mb5IygF1TESR
-         Ms4CvR2i0s6AYOzrXehFk8kNV5f1JUVDsYc/Ie2dYX5GTaVe4pouDmvdzJpBW01ooHdk
-         NEdraHc2ngwDVbamZMNVKKnaCpcubm6wisE+kh5OGW1nvA/jnUif5aIgsd51EQ1wPNPY
-         ZcAAU1M+4D8nE0uQOrD7dEcKmAicK0Ly0w0ENcuR0S4mUWuntofVk0pi/VQC8+GljMA/
-         6FQQ==
+        Wed, 29 Mar 2023 11:03:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABD51BC1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:03:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680102191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hlofjauJPlXfYADPzQPDVEUnQC/PDQRHvDqts/6T6UQ=;
+        b=PW6zyBE1P1d2/vI0fDD0+j+6vSdYaqdkDhxyKhqek5wwiT3jPqHoA0D4bH9UgtjGKtcGV4
+        rk9S0wMJldx0wQEs0Mad1vufDxZ+UkcG+ZO/mK2oWAubBu4WAI1Qve1aPEpyjZMufvgg6Y
+        koSRyrNYQ23PhPP/gLZrnLVzf8WgKMY=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-157-38ZlxmNiMOuGbWEYMHgItw-1; Wed, 29 Mar 2023 11:03:07 -0400
+X-MC-Unique: 38ZlxmNiMOuGbWEYMHgItw-1
+Received: by mail-qk1-f200.google.com with SMTP id s21-20020a05620a0bd500b0074234f33f24so7341425qki.3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:03:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680102074;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uGkOiPefovVtTgmI0DGR4n+0i+4dhScH7wTyfGZyKZ4=;
-        b=QbBvsBy8uCr9lJk7CDBEosahc8VpMRpNSXXAPPaKt0hFvIhtg9HaNQnK6BicapH/yK
-         LU1JNmNduEkhdPXVEnBJuBeUMAuhMl8dFCtlGKp65EU4Ll5RGlapltOiHLr8nNqGxa9N
-         6pEo7xJfO+W7RvXad7jBVdVnOwJCxzEuBzUd2dwIyyTvI5uGYHbsgk2zIm9/qVdlTWi+
-         FM20SxwfNht4qKAEdWLUcWrW822LlS20JpFmbLVXrA2TSSMVoP5cbeSP0XkcBtT1lp/Q
-         swJoZYBKRaC1wDRZ8OkpIEGcwipMxmm71aR89NaOG7zIDFVpBQAB3YVNNQxkiUbqNzYT
-         vabw==
-X-Gm-Message-State: AAQBX9drAQvhx7wdQl91tA13RacpRII1FUCnKcBnNOvdFoxNO7uiaTw+
-        KxVp15uuJf0kDuaZufzXXKisnJHQJFI=
-X-Google-Smtp-Source: AKy350bmNjSibzz5IjH+FPLvx4k80sgIsDRNsbkYElca1mk18T7z7nd5kgY0LY9/n5OZPy8CMNf9FA==
-X-Received: by 2002:a2e:80c4:0:b0:295:ba22:360 with SMTP id r4-20020a2e80c4000000b00295ba220360mr7177511ljg.42.1680102073973;
-        Wed, 29 Mar 2023 08:01:13 -0700 (PDT)
-Received: from pc636 (host-90-233-209-50.mobileonline.telia.com. [90.233.209.50])
-        by smtp.gmail.com with ESMTPSA id h26-20020a2e901a000000b00298a7f8c4bfsm4771546ljg.67.2023.03.29.08.01.12
+        d=1e100.net; s=20210112; t=1680102187;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hlofjauJPlXfYADPzQPDVEUnQC/PDQRHvDqts/6T6UQ=;
+        b=frgdJM+QWhymoIcDluYyktLOp6BixcGysGBCvB32qxl8cV9lrKcw/7o2x31AWQiNNP
+         uM09HuXPgyOkQUYJvmn3hSSrbWjkpcHWgRPtqkoHrwjtMPVqkt+JCg9DmwT5vwzaFFxg
+         +VwjoRcXUyP59VdbKuO9qg5uMXEIgXQk2QABMkH6nTkscfYHQtDcF7vefV2ItxWRa292
+         IAl2nUX2tNr8eUfSF6sIE9z3L3vQH8lZR5evw/smquwz9Ie9WJk0/UcQoNZAthhvj3hl
+         ilb9Poz3XKw5srXIyD8dv5f9C20C+vxE7/YK/RlXUaPVWvchy5M0kaF80CcVmtLO4YBu
+         dQKg==
+X-Gm-Message-State: AAQBX9enfgBapBIJYrc/VtfJ/NoeAUqSd5CQG+4ym72xG6M8lNOv3NEP
+        VZqH/napT/iC7gK3KZj10+1MGP1iKfyb+nPcEFN0d49LNuP9ueRoIrSQ7x6upO05LxdvoM2LuD7
+        GKTFDa6Q+PIBgXF8yqz1ohZSt
+X-Received: by 2002:a05:6214:27c1:b0:56e:9ab5:cd9f with SMTP id ge1-20020a05621427c100b0056e9ab5cd9fmr31560868qvb.39.1680102187401;
+        Wed, 29 Mar 2023 08:03:07 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bXCxRiiS8rCjA4Y3Ad7TR+rQzvZr5LeNmaq6ea2t6JngTuQWRCDL7OnMKrZ3QLfPO9P1kkbQ==
+X-Received: by 2002:a05:6214:27c1:b0:56e:9ab5:cd9f with SMTP id ge1-20020a05621427c100b0056e9ab5cd9fmr31560837qvb.39.1680102187167;
+        Wed, 29 Mar 2023 08:03:07 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id q43-20020a05620a2a6b00b0074860fcfc00sm3225464qkp.136.2023.03.29.08.03.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 08:01:13 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Wed, 29 Mar 2023 17:01:11 +0200
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH v3 1/2] mm: vmalloc: Remove a global vmap_blocks xarray
-Message-ID: <ZCRStzHE06l21T0c@pc636>
-References: <20230327170126.406044-1-urezki@gmail.com>
- <132e2d5c-0c1f-4fff-850c-b3fb084455bb@lucifer.local>
+        Wed, 29 Mar 2023 08:03:06 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 08:03:05 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Desnes Nunes <desnesn@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        noreply@ellerman.id.au
+Subject: Re: [PATCH -next] dma-debug: Use %pa to format phys_addr_t
+Message-ID: <2w7rzdbzbii4ewliym6qw4svf2mzptsccz23yms5lsdioflcti@w63kwgzkra6r>
+References: <20230329071405.1568021-1-geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <132e2d5c-0c1f-4fff-850c-b3fb084455bb@lucifer.local>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230329071405.1568021-1-geert+renesas@glider.be>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Lorenzo!
+On Wed, Mar 29, 2023 at 09:14:05AM +0200, Geert Uytterhoeven wrote:
+> On 32-bit without LPAE:
+> 
+>     kernel/dma/debug.c: In function ‘debug_dma_dump_mappings’:
+>     kernel/dma/debug.c:537:7: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 9 has type ‘phys_addr_t’ {aka ‘unsigned int’} [-Wformat=]
+>     kernel/dma/debug.c: In function ‘dump_show’:
+>     kernel/dma/debug.c:568:59: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 11 has type ‘phys_addr_t’ {aka ‘unsigned int’} [-Wformat=]
+> 
+> Fixes: bd89d69a529fbef3 ("dma-debug: add cacheline to user/kernel space dump messages")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/r/202303160548.ReyuTsGD-lkp@intel.com
+> Reported-by: noreply@ellerman.id.au
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  kernel/dma/debug.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
+> index 676142072d997b6a..f190651bcaddc9e9 100644
+> --- a/kernel/dma/debug.c
+> +++ b/kernel/dma/debug.c
+> @@ -534,11 +534,11 @@ void debug_dma_dump_mappings(struct device *dev)
+>  			if (!dev || dev == entry->dev) {
+>  				cln = to_cacheline_number(entry);
+>  				dev_info(entry->dev,
+> -					 "%s idx %d P=%llx N=%lx D=%llx L=%llx cln=%llx %s %s\n",
+> +					 "%s idx %d P=%llx N=%lx D=%llx L=%llx cln=%pa %s %s\n",
+>  					 type2name[entry->type], idx,
+>  					 phys_addr(entry), entry->pfn,
+>  					 entry->dev_addr, entry->size,
+> -					 cln, dir2name[entry->direction],
+> +					 &cln, dir2name[entry->direction],
 
-> >  /*
-> > - * XArray of vmap blocks, indexed by address, to quickly find a vmap block
-> > - * in the free path. Could get rid of this if we change the API to return a
-> > - * "cookie" from alloc, to be passed to free. But no big deal yet.
-> > + * In order to fast access to any "vmap_block" associated with a
-> > + * specific address, we store them into a per-cpu xarray. A hash
-> > + * function is addr_to_vbq() whereas a key is a vb->va->va_start
-> > + * value.
-> > + *
-> > + * Please note, a vmap_block_queue, which is a per-cpu, is not
-> > + * serialized by a raw_smp_processor_id() current CPU, instead
-> > + * it is chosen based on a CPU-index it belongs to, i.e. it is
-> > + * a hash-table.
-> > + *
-> > + * An example:
-> > + *
-> > + *  CPU_1  CPU_2  CPU_0
-> > + *    |      |      |
-> > + *    V      V      V
-> > + * 0     10     20     30     40     50     60
-> > + * |------|------|------|------|------|------|...<vmap address space>
-> > + *   CPU0   CPU1   CPU2   CPU0   CPU1   CPU2
-> > + *
-> > + * - CPU_1 invokes vm_unmap_ram(6), 6 belongs to CPU0 zone, thus
-> > + *   it access: CPU0/INDEX0 -> vmap_blocks -> xa_lock;
-> > + *
-> > + * - CPU_2 invokes vm_unmap_ram(11), 11 belongs to CPU1 zone, thus
-> > + *   it access: CPU1/INDEX1 -> vmap_blocks -> xa_lock;
-> > + *
-> > + * - CPU_0 invokes vm_unmap_ram(20), 20 belongs to CPU2 zone, thus
-> > + *   it access: CPU2/INDEX2 -> vmap_blocks -> xa_lock.
-> >   */
-> 
-> OK so if I understand this correctly, you're overloading the per-CPU
-> vmap_block_queue array to use as a simple hash based on the address and
-> relying on the xa_lock() in xa_insert() to serialise in case of contention?
-> 
-> I like the general heft of your comment but I feel this could be spelled
-> out a little more clearly, something like:-
-> 
->   In order to have fast access to any vmap_block object associated with a
->   specific address, we use a hash.
-> 
->   Rather than waste space on defining a new hash table  we take advantage
->   of the fact we already have a static per-cpu array vmap_block_queue.
-> 
->   This is already used for per-CPU access to the block queue, however we
->   overload this to _also_ act as a vmap_block hash. The hash function is
->   addr_to_vbq() which hashes on vb->va->va_start.
-> 
->   This then uses per_cpu() to lookup the _index_ rather than the
->   _cpu_. Each vmap_block_queue contains an xarray of vmap blocks which are
->   indexed on the same key as the hash (vb->va->va_start).
-> 
->   xarray read acceses are protected by RCU lock and inserts are protected
->   by a spin lock so there is no risk of a race here.
-> 
-/*
- * In order to fast access to any "vmap_block" associated with a
- * specific address, we use a hash.
- *
- * A per-cpu vmap_block_queue is used in both ways, to serialize
- * an access to free block chains among CPUs(alloc path) and it
- * also acts as a vmap_block hash(alloc/free paths). It means we
- * overload it, since we already have the per-cpu array which is
- * used as a hash table.
- *
- * A hash function is addr_to_vbq() which hashes any address to
- * a specific index(in a hash) it belongs to. This then uses a
- * per_cpu() macro to access the array with specific index.
- *
- * An example:
- *
- *  CPU_1  CPU_2  CPU_0
- *    |      |      |
- *    V      V      V
- * 0     10     20     30     40     50     60
- * |------|------|------|------|------|------|...<vmap address space>
- *   CPU0   CPU1   CPU2   CPU0   CPU1   CPU2
- *
- * - CPU_1 invokes vm_unmap_ram(6), 6 belongs to CPU0 zone, thus
- *   it access: CPU0/INDEX0 -> vmap_blocks -> xa_lock;
- *
- * - CPU_2 invokes vm_unmap_ram(11), 11 belongs to CPU1 zone, thus
- *   it access: CPU1/INDEX1 -> vmap_blocks -> xa_lock;
- *
- * - CPU_0 invokes vm_unmap_ram(20), 20 belongs to CPU2 zone, thus
- *   it access: CPU2/INDEX2 -> vmap_blocks -> xa_lock.
- *
- * This technique allows almost remove a lock-contention in locking
- * primitives which protect insert/remove operations.
- */
-Are you find with it?
+Won't this just print out the address of cln declared at the beginning of debug_dma_dump_mappings() each time, instead of the value
+returned from to_cacheline_entry() ?
 
---
-Uladzislau Rezki
+>  					 maperr2str[entry->map_err_type]);
+>  			}
+>  		}
+> @@ -565,13 +565,13 @@ static int dump_show(struct seq_file *seq, void *v)
+>  		list_for_each_entry(entry, &bucket->list, list) {
+>  			cln = to_cacheline_number(entry);
+>  			seq_printf(seq,
+> -				   "%s %s %s idx %d P=%llx N=%lx D=%llx L=%llx cln=%llx %s %s\n",
+> +				   "%s %s %s idx %d P=%llx N=%lx D=%llx L=%llx cln=%pa %s %s\n",
+>  				   dev_driver_string(entry->dev),
+>  				   dev_name(entry->dev),
+>  				   type2name[entry->type], idx,
+>  				   phys_addr(entry), entry->pfn,
+>  				   entry->dev_addr, entry->size,
+> -				   cln, dir2name[entry->direction],
+> +				   &cln, dir2name[entry->direction],
+
+same for dump_show()
+
+>  				   maperr2str[entry->map_err_type]);
+>  		}
+>  		spin_unlock_irqrestore(&bucket->lock, flags);
+> -- 
+> 2.34.1
+> 
 
