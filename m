@@ -2,89 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6876CD238
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB3C6CD23C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjC2GnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 02:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S229671AbjC2Gnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 02:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC2GnI (ORCPT
+        with ESMTP id S229604AbjC2Gno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 02:43:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8FE1722;
-        Tue, 28 Mar 2023 23:43:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 176E561A4F;
-        Wed, 29 Mar 2023 06:43:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A88C4C433D2;
-        Wed, 29 Mar 2023 06:43:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680072186;
-        bh=iwWij85irzDMzCfXOcpjNW3gLpqW6nbVsvgino6SOmU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=i3+rANPe13C+z+HfBKiy99laV8UjrGWB3RgwC6022ya7qqAxZWlnlrOVFhzCSNkMt
-         gJumZFtW4t5s7dBKMMMf/MeJVH/go1HwTszNcYntiQl/u9J626uTHE4xrqGCcUsWUT
-         KbjS13ZmV3erq+w0J7ZvwDMdMoRm1BA3ESz5Tl4fQiABY+Il0Y4oQsFi12UkLT/OFj
-         cL86e6CMHGSoxU+/E5uK8zVWKK2CwF9KO1TEkVLz+HwG1KSKjODB3VasljEHoUvafr
-         oAR977aBGHfSLEbryLrI3t34kw6uaUeMndnNv4N5kUEiRvfhncFPRv/c16KIW7RduD
-         19TgmU4cQdLfA==
-Date:   Wed, 29 Mar 2023 08:43:01 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.cz>
-Cc:     Amir Goldstein <amir73il@gmail.com>,
-        Matthew Bobrowski <repnop@google.com>,
-        linux-kernel@vger.kernel.org,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 0/3] pidfd: add pidfd_prepare()
-Message-ID: <20230329-strenuous-vindicate-214a05c6ea2e@brauner>
+        Wed, 29 Mar 2023 02:43:44 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91D92D5E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 23:43:33 -0700 (PDT)
+X-UUID: 02ede92acdfd11edb6b9f13eb10bd0fe-20230329
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=L8S2VPO1BHTRjj+EeuISd/97JupfkUS9QELUdXcrrDY=;
+        b=oEWctwD61s8RcEOAyiZKLWe2eM0v2GcUvkqL+uc1Hi42r+Pocftr5bUg6uuxsfSOZ7nzlspsrLZbPRBvmmXjyTKzhQHSltFKT1GrgpPO8UV8Ugj1QIzfBEDzpJ7sYg6q7ea7tD3gAESifkxS6QKnE8/z+7PDp4onIZdJu39Hx9Q=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:6b81de52-eaa9-4270-b9fd-e657dab39e8d,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.22,REQID:6b81de52-eaa9-4270-b9fd-e657dab39e8d,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:120426c,CLOUDID:1e7b41f7-ddba-41c3-91d9-10eeade8eac7,B
+        ulkID:230329144329Y8DGHL50,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
+        L:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 02ede92acdfd11edb6b9f13eb10bd0fe-20230329
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 786726925; Wed, 29 Mar 2023 14:43:27 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Wed, 29 Mar 2023 14:43:26 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Wed, 29 Mar 2023 14:43:26 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>
+Subject: [PATCH] drm/mediatek: dp: change the aux retries times when receiving AUX_DEFER
+Date:   Wed, 29 Mar 2023 14:43:23 +0800
+Message-ID: <1680072203-10394-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230327-pidfd-file-api-v1-0-5c0e9a3158e4@kernel.org>
- <20230328154516.5qqt7uoewdzwb37m@wittgenstein>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-On Mon, 27 Mar 2023 20:22:50 +0200, Christian Brauner wrote:
-> This adds the pidfd_prepare() helper which allows the caller to reserve
-> a pidfd number and allocates a new pidfd file that stashes the provided
-> struct pid.
-> 
-> This will allow us to remove places that either open code this
-> functionality e.g., during copy_process() or that currently call
-> pidfd_create() but then have to call close_fd() because there are still
-> failure points after pidfd_create() has been called.
-> 
-> [...]
+DP 1.4a Section 2.8.7.1.5.6.1:
+A DP Source device shall retry at least seven times upon receiving
+AUX_DEFER before giving up the AUX transaction.
 
-Jan, thanks for the reviews.
+The drm_dp_i2c_do_msg() function in the drm_dp_helper.c file will
+judge the status of the msg->reply parameter passed to aux_transfer
+ange-the-aux-retries-times-when-re.patchfor different processing.
 
-I've picked this up now. Please note that this series is considered stable and
-has thus been tagged. The reason is that the SCM_PIDFD work in the networking
-depends wants to depend on this work. So they'll get a stable tag,
+Fixes: f70ac097a2cf ("drm/mediatek: Add MT8195 Embedded DisplayPort driver")
+Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+---
+ drivers/gpu/drm/mediatek/mtk_dp.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-tree: git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git
-branch: pidfd.file.api
-tag: pidfd.file.api.v6.4
+diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
+index 1f94fcc144d3..767b71da31a4 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dp.c
++++ b/drivers/gpu/drm/mediatek/mtk_dp.c
+@@ -806,10 +806,9 @@ static int mtk_dp_aux_wait_for_completion(struct mtk_dp *mtk_dp, bool is_read)
+ }
+ 
+ static int mtk_dp_aux_do_transfer(struct mtk_dp *mtk_dp, bool is_read, u8 cmd,
+-				  u32 addr, u8 *buf, size_t length)
++				  u32 addr, u8 *buf, size_t length, u8 *reply_cmd)
+ {
+ 	int ret;
+-	u32 reply_cmd;
+ 
+ 	if (is_read && (length > DP_AUX_MAX_PAYLOAD_BYTES ||
+ 			(cmd == DP_AUX_NATIVE_READ && !length)))
+@@ -841,10 +840,10 @@ static int mtk_dp_aux_do_transfer(struct mtk_dp *mtk_dp, bool is_read, u8 cmd,
+ 	/* Wait for feedback from sink device. */
+ 	ret = mtk_dp_aux_wait_for_completion(mtk_dp, is_read);
+ 
+-	reply_cmd = mtk_dp_read(mtk_dp, MTK_DP_AUX_P0_3624) &
+-		    AUX_RX_REPLY_COMMAND_AUX_TX_P0_MASK;
++	*reply_cmd = mtk_dp_read(mtk_dp, MTK_DP_AUX_P0_3624) &
++		     AUX_RX_REPLY_COMMAND_AUX_TX_P0_MASK;
+ 
+-	if (ret || reply_cmd) {
++	if (ret) {
+ 		u32 phy_status = mtk_dp_read(mtk_dp, MTK_DP_AUX_P0_3628) &
+ 				 AUX_RX_PHY_STATE_AUX_TX_P0_MASK;
+ 		if (phy_status != AUX_RX_PHY_STATE_AUX_TX_P0_RX_IDLE) {
+@@ -2070,7 +2069,7 @@ static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
+ 		ret = mtk_dp_aux_do_transfer(mtk_dp, is_read, request,
+ 					     msg->address + accessed_bytes,
+ 					     msg->buffer + accessed_bytes,
+-					     to_access);
++					     to_access, &msg->reply);
+ 
+ 		if (ret) {
+ 			drm_info(mtk_dp->drm_dev,
+@@ -2080,7 +2079,6 @@ static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
+ 		accessed_bytes += to_access;
+ 	} while (accessed_bytes < msg->size);
+ 
+-	msg->reply = DP_AUX_NATIVE_REPLY_ACK | DP_AUX_I2C_REPLY_ACK;
+ 	return msg->size;
+ err:
+ 	msg->reply = DP_AUX_NATIVE_REPLY_NACK | DP_AUX_I2C_REPLY_NACK;
+-- 
+2.18.0
 
-[1/3] pid: add pidfd_prepare()
-      commit: 7021c1b14f83d9151ecaf976eaa6c1d5c6bb5dc7
-[2/3] fork: use pidfd_prepare()
-      commit: 761ce43fda7ebcdf1b1aa8e797ec83fae0e34c47
-[3/3] fanotify: use pidfd_prepare()
-      commit: 909939fc167d82cf09cd93ae44e968be916b6e41
-
-Thanks!
-Christian
