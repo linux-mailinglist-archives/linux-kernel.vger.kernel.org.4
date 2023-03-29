@@ -2,189 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1A36CF19A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CA96CF1A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjC2SAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
+        id S229618AbjC2SDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjC2SAp (ORCPT
+        with ESMTP id S229909AbjC2SDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:00:45 -0400
-Received: from CO1PR02CU001.outbound.protection.outlook.com (mail-westus2azon11011004.outbound.protection.outlook.com [52.101.47.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1333C35A5;
-        Wed, 29 Mar 2023 11:00:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZyFG0pZL4EG8OhKtz/mn/0E0q6hpBxA9YepLcQ+jeKugfY7F6Ue0lUDXm1FN49V1r44Hk6WnyY1USVoh8F+jOavLQm0ETFHTYbCtprRM7sqKacAUlf81haEYmTp/el7zZ1B0Pk4eGRZqiFBq3oVXawK3K34ZigxXBXfxSQgg4Af50rnhcyROHm0r8cGUOnZVfeVaiKoqAyl+XWqeipY5Sczu6Yvu82YZlQF9Rh4FG4zEM0N8RwUH1GGCmnVRFhXCM6mxqw5b8uY2ejv9Jg8WPgPRgeEK0nFGi5JJgfOqwKGwPNES/MO5ZjUBkQwN6kjPNWdL0F2kTHy0vPu4/3nl7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c3PNEDIhd20iyy4QccALiqdW4RkoYttGKlmd8lrE338=;
- b=E+4eAlfBkq1R4zIev0UGUca0MsNnlq7C8on4xGYlBTJYNj3CkvutOGhSVzFvUl+uaG0WN9GqXNIzWM+NbDGNq4O6nJ3Bn+e29V2Kbp3qF9mpYYPRA6cvUdT4NHbTfVv/Ajvw4wh7lujejKJZG9E7XvaZM165FRdmPWWv7JFFexKgbC1MuZBiX3wQqCRsq5ABcLqloob+APnP+0xa0h51YajNmqkb+PEm17bRWnXW0yL0mm225bo08EiaRlxZghRXiIB9mVWw35y81h+cWuTywynh3JvED3rx3kjepPFZjwp6+SZN7lK4DllTUmFDI/Gijj3nMvuVhzbnTiyuwFqZJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c3PNEDIhd20iyy4QccALiqdW4RkoYttGKlmd8lrE338=;
- b=Gm3aTHdLlkTmVPkSpis+lZJ3GHrf2IqVhWgq3Bxun9K9hQlaxvnd0A0SITlE25kG9nMtI+1+9XSQTCm5PhZ0DegbX6Wf5BMHu8VPWC/gSjkduuldPe8sXSlNhnAROzrcnX4lUhnlp205BHgxOzERacIBFjiS8nf+nFE2aUZA/Mc=
-Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
- by BN8PR05MB6705.namprd05.prod.outlook.com (2603:10b6:408:58::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Wed, 29 Mar
- 2023 18:00:23 +0000
-Received: from PH0PR05MB8703.namprd05.prod.outlook.com
- ([fe80::5631:475a:58d4:cf66]) by PH0PR05MB8703.namprd05.prod.outlook.com
- ([fe80::5631:475a:58d4:cf66%4]) with mapi id 15.20.6222.029; Wed, 29 Mar 2023
- 18:00:23 +0000
-From:   Ajay Kaher <akaher@vmware.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "chinglinyu@google.com" <chinglinyu@google.com>,
-        Nadav Amit <namit@vmware.com>,
-        Srivatsa Bhat <srivatsab@vmware.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        Tapas Kundu <tkundu@vmware.com>,
-        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
-Subject: Re: [PATCH 0/8] tracing: introducing eventfs
-Thread-Topic: [PATCH 0/8] tracing: introducing eventfs
-Thread-Index: AQHZLoQH5dE+ZQnOVUm4TxmRzoe30q8RMZWAgAFCCQA=
-Date:   Wed, 29 Mar 2023 18:00:22 +0000
-Message-ID: <68D75872-2495-48E6-970F-6A414EEBE3BC@vmware.com>
-References: <1674407228-49109-1-git-send-email-akaher@vmware.com>
- <1674407228-49109-9-git-send-email-akaher@vmware.com>
- <20230328184743.7984463b@gandalf.local.home>
-In-Reply-To: <20230328184743.7984463b@gandalf.local.home>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3654.120.0.1.14)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR05MB8703:EE_|BN8PR05MB6705:EE_
-x-ms-office365-filtering-correlation-id: df1c08aa-6ae3-411e-430d-08db307f77ad
-x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zL5JBHEQdxbMn72nahCtjCYLgcNeXiHKZ6ddLqlbCCfMkLMkLnf2CpMSL+37R15F8a7yHCyzl3uKqydRPKEpBBWvI0oSpBlXBhdJQanm+1qEzz9Mt6nCVpxlwaMpWSNpSUZioq0G5pw9E14gItBx224LkXYRJhXknb9aF8l6oXL653SKQq2usnz8RD0T1xb57fY1jrNSLXmWbpc0W+DOplHu20A8g7WLBwW/n4t731hH6kAOiObk+ZwByYCe0+DxR3p96hG+8VbBKpVwNZsFitop2HGy8gcOwNaV2YZNTmHFvzjS+aWhHq8ARR9GBGVYtGxIa3ypTaFyTqXtulGSVOPmID7ElHSIjC+6EDEqCVx6JFq8HzqIFmQJgB00ykjcGggeBHQokFNKeOvg68VW9HkpnYm8WvYTS8n+H2x0jB/ZJLvkgO+qgLUAdoV/75cbo8ZVK9H5FaAdiEk8ixKJOU0k3QL/KRSkNqoThW+M5DHed/6tl/nIRLZRZQAeSV+Bj3oGMDHf/vyFcSgv6jqXHk2eGL9PiI/8ndP/YMkx4GnmBHAWeyUMb89NIETrGld/ESx4XVV2RN92IAqcFBf1XGbcVGVSALs+qOhxOKxsDb/DD6KXyJAuUwsPH3qW4i0YSSB5tDrl4ebteZUmsljg1g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39860400002)(376002)(136003)(346002)(451199021)(83380400001)(2906002)(8936002)(5660300002)(38070700005)(122000001)(86362001)(33656002)(36756003)(38100700002)(53546011)(26005)(6512007)(4326008)(54906003)(6506007)(64756008)(66446008)(8676002)(6916009)(66946007)(66476007)(66556008)(76116006)(186003)(91956017)(6486002)(71200400001)(478600001)(316002)(2616005)(41300700001)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DzVBR2/9Ue4v7X5+5/1wy5SVw9DgDs+iExJja7YCAHw8Feo5xvlePDidEG+j?=
- =?us-ascii?Q?eA2c8JlqXx9BT/j+GanETn53/JGgaLF5pbrOF2kAJ5h3SFqkzILDH6fOuMeT?=
- =?us-ascii?Q?Dd8Ob8QlMMKr3bdemfvp1857K40mS84G0l8qTStSATOXK6xjDdqosC/EtSX7?=
- =?us-ascii?Q?T3NTJygFQPqCbiDwiHimIFYZ9mdZfUyvZYBYu4H2tDiZU8tcqlJz/AWRKlUs?=
- =?us-ascii?Q?FIbzZyUpgIRH8K5ZtnduCX5JRoHYpv4FjaSwxI50Ywlxy8cQczWFT1I7MVo0?=
- =?us-ascii?Q?uCuO5LoPP5cUcyYmmKVxL6apswuNo0UJ5vErqkrRhHCyP0TByhEHufA+zkcy?=
- =?us-ascii?Q?S9oy+Ioibusq/SZ8djj901VcAZBc4H8RdcU9sQ74la91XfVGY9aH36uHGm+S?=
- =?us-ascii?Q?tJOMcfG7tTgGf2eLMDQq1miv9rq/PkPIrpzMyT0waqfOclE0q4lGOl4f5H2u?=
- =?us-ascii?Q?F94erfweZ5OUGyMn1hFHWiBU614eopGeBWPfQfdSrejjiW28xeKk7b9ChvbA?=
- =?us-ascii?Q?XWctYhUvShFkAWdo2rpLfpIgSBp1LawcA4uc7bgg0188/8T9rjdFIXKiYKHG?=
- =?us-ascii?Q?dUZLII6mkNAmznxuvOmXSMIbzYVpn16bZhJZFpy7nu3W/u69+6t8hds/RTFS?=
- =?us-ascii?Q?VX7EowzHAoCLDvKfs8fFiJ8elxwNoB7uvF8XgF4B58eJPCCIgaLm8JvdKl9r?=
- =?us-ascii?Q?9ZxVM9iiTsSNwZl1+mWkoUwKBrW2HukBUWwnvB6uX5hY0s3qboveSuMnM9aJ?=
- =?us-ascii?Q?ZcuUjWMD4c1nwIM3//HDjcnEuNLBd3DUqs3+7ZLeJyIL8dMWKEvbhWcUZEj/?=
- =?us-ascii?Q?0FXHijtZsLS3VVsAZfAbbsXEqKVnjYfrv2kTXyY2FKbWcW64KAJb59jbTxmd?=
- =?us-ascii?Q?utBhq5X7kMO8rQkOUklCKKeA/9gIW6Z/jkrFJx74rLq9Vg+hgr2xSKzqbeA7?=
- =?us-ascii?Q?pVr0UaHqvSgGD3+fCysGlNK7fyFPi5UjueM3VQ3SrJfC9byjyZY4+54T9rVQ?=
- =?us-ascii?Q?2j0hs6BcWxFXKZvrdmZln8wPvLXPE9ID/RfYVslSg8CVG2vNpiqmPrAWbJug?=
- =?us-ascii?Q?W7zZgYXjS+sU/0mHa3BiRnxeGlsrb6iEYTMWR2CoQ9KIoPDFEaILjBZOdwde?=
- =?us-ascii?Q?uWffc8DSDpPgIMFiWfVQwVBDcc6PEmRNd/oHT81NczPdBpDv/h7U7VPJ2RtX?=
- =?us-ascii?Q?/s5XG+bP/lFCw9MJAuPe9G6NM2/ML2BC9sf7uyHGtnNAWzv0oaBsBXPYWiTQ?=
- =?us-ascii?Q?ZJHGSyqIIpSFYEwcnqitJKZmjDZIKUaO29rePeNNum9aoPUcakOdNJgKgjqY?=
- =?us-ascii?Q?lj/PVN8BMxn1mG7Q9FQDkwot3bvtBeYNxr9Vpf2MntI/DRAC2+yaCfJDYdIo?=
- =?us-ascii?Q?vs1BSXHviQd2uqoGFmCKQaa8GUXmrXD1Lnsl+htsiKWITL7xKLX0vFJtEja2?=
- =?us-ascii?Q?05KZYp7GaAlgJmKr+vTHRZetkHAhffN1L6BRwafSfrOup5WTiY35mRceJHP7?=
- =?us-ascii?Q?bqQS+Ve5+5H01cz22MiMwKsj61MEE9KE7FHlIOvYdQi3/Dg7YeO8SeplBZa9?=
- =?us-ascii?Q?BJC8th/0wUYX0dLhs41ePHk+YmjPzElSh1W/X1La?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <0B141CB4B0B7D4429494213E1B59C60C@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Wed, 29 Mar 2023 14:03:19 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491F8448D
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:03:14 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id o11so15741953ple.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:03:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680112993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6V03Dl7GKwTjxa9/dqCdXpCs+Gb6m3RRjNzTYjm37D0=;
+        b=l0V61rdY6EunnaZNgcI5I4qIULqB1Mxco9TmPp2lGBxTLk8n/qro5xFqvKhiv9fDTk
+         vonJAa95J1P480LcQaaVX64A0Mg4+sMVQWYbBoOKKybFo9RvSk986/Ef44mHE8QZIyqq
+         RrHetPQxoN0HWEe9Qz1+mDXXmC7mmIIIvJK2Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680112993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6V03Dl7GKwTjxa9/dqCdXpCs+Gb6m3RRjNzTYjm37D0=;
+        b=RoK8MKf40VS8s+LJD4V2xGHDnDBsChj1Dv3xqINHMQ1sX2G7iFpxwM3mD5YexwQJQj
+         6nT0eiZi12AHdHuzy78/gqu6TEzXIOtoy/cAP1vV+2GJzy4LbbYMVDzDpch+SWemOWrY
+         567NaScYo77Yfo564TGkE1HBvailWzdEHG9EOSjTQnB3PWifOpeQHGfLFi/94X2d30/x
+         3zgaryhxL8+GdSSlwp/0rpkjZedUbfz0I81weacyBOePrJLtM9xJv8tux8V1sO4e6zdf
+         bWOV0amn+Zitu/DwLoyUeX+yKA9WZQgE1x7Rf7D96Ky4hZpWSHuW//oidqeCxOWCyJjb
+         m7QQ==
+X-Gm-Message-State: AAQBX9fQn8cRyw9K4O51W19ZuFwcZTclgc4yUbwbR8BGFzeQPeaEwDVs
+        LonhsF7Tx0Gz++wDh7pBZ6MybcQF+v9MWECoqcc=
+X-Google-Smtp-Source: AKy350bnfG5iem0ebQXnFMVPUlPd7dY105vs6hteAZisBzoBpTXjSCaYludjlUSZxI8j3ejuxho5vQ==
+X-Received: by 2002:a17:903:189:b0:19c:f476:4793 with SMTP id z9-20020a170903018900b0019cf4764793mr21962896plg.51.1680112993605;
+        Wed, 29 Mar 2023 11:03:13 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:f65f:8d37:f3f6:f4d3])
+        by smtp.gmail.com with ESMTPSA id z1-20020a170902834100b001a1b808c1d8sm14537560pln.245.2023.03.29.11.03.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 11:03:12 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] regulator: Avoid lockdep reports when resolving supplies
+Date:   Wed, 29 Mar 2023 11:02:40 -0700
+Message-Id: <20230329110222.RFC.1.I30d8e1ca10cfbe5403884cdd192253a2e063eb9e@changeid>
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: df1c08aa-6ae3-411e-430d-08db307f77ad
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2023 18:00:22.9781
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: L+qVKxhvrStJOJxm+ny5kWe7kty/L5dk9ZpT7GSTHuiOwnYEHsAliYqrvyJ5ikKV53d2MS6ldEfgcl7R3tjuRQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR05MB6705
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+An automated bot told me that there was a potential lockdep problem
+with regulators. This was on the chromeos-5.15 kernel, but I see
+nothing that would be different downstream compared to upstream. The
+bot said:
+  ============================================
+  WARNING: possible recursive locking detected
+  5.15.104-lockdep-17461-gc1e499ed6604 #1 Not tainted
+  --------------------------------------------
+  kworker/u16:4/115 is trying to acquire lock:
+  ffffff8083110170 (regulator_ww_class_mutex){+.+.}-{3:3}, at: create_regulator+0x398/0x7ec
 
+  but task is already holding lock:
+  ffffff808378e170 (regulator_ww_class_mutex){+.+.}-{3:3}, at: ww_mutex_trylock+0x3c/0x7b8
 
-> On 29-Mar-2023, at 4:17 AM, Steven Rostedt <rostedt@goodmis.org> wrote:
->=20
-> !! External Email
->=20
-> On Sun, 22 Jan 2023 22:37:08 +0530
-> Ajay Kaher <akaher@vmware.com> wrote:
->=20
->> Events Tracing infrastructure contains lot of files, directories
->> (internally in terms of inodes, dentries). And ends up by consuming
->> memory in MBs. We can have multiple events of Events Tracing, which
->> further requires more memory.
->>=20
->> Instead of creating inodes/dentries, eventfs could keep meta-data and
->> skip the creation of inodes/dentries. As and when require, eventfs will
->> create the inodes/dentries only for required files/directories.
->> Also eventfs would delete the inodes/dentries once no more requires
->> but preserve the meta data.
->>=20
->=20
-> Hi Ajay,
->=20
-> Is there going to be any more work on this?
->=20
-> -- Steve
+  other info that might help us debug this:
+   Possible unsafe locking scenario:
 
-Yes, Steve.
+         CPU0
+         ----
+    lock(regulator_ww_class_mutex);
+    lock(regulator_ww_class_mutex);
 
-While running tools/testing/selftests/ftrace/ftracetests got crashes, as yo=
-u also mentioned.
-These crashes are because of lack of synchronisation and bugs in eventfs cl=
-ean up path.
+   *** DEADLOCK ***
 
-Locally I have fixed all these crashes with the help of Alexey.
-I need one internal review round, once done I will post v2.
+   May be due to missing lock nesting notation
 
--Ajay
+  4 locks held by kworker/u16:4/115:
+   #0: ffffff808006a948 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x520/0x1348
+   #1: ffffffc00e0a7cc0 ((work_completion)(&entry->work)){+.+.}-{0:0}, at: process_one_work+0x55c/0x1348
+   #2: ffffff80828a2260 (&dev->mutex){....}-{3:3}, at: __device_attach_async_helper+0xd0/0x2a4
+   #3: ffffff808378e170 (regulator_ww_class_mutex){+.+.}-{3:3}, at: ww_mutex_trylock+0x3c/0x7b8
 
+  stack backtrace:
+  CPU: 2 PID: 115 Comm: kworker/u16:4 Not tainted 5.15.104-lockdep-17461-gc1e499ed6604 #1 9292e52fa83c0e23762b2b3aa1bacf5787a4d5da
+  Hardware name: Google Quackingstick (rev0+) (DT)
+  Workqueue: events_unbound async_run_entry_fn
+  Call trace:
+   dump_backtrace+0x0/0x4ec
+   show_stack+0x34/0x50
+   dump_stack_lvl+0xdc/0x11c
+   dump_stack+0x1c/0x48
+   __lock_acquire+0x16d4/0x6c74
+   lock_acquire+0x208/0x750
+   __mutex_lock_common+0x11c/0x11f8
+   ww_mutex_lock+0xc0/0x440
+   create_regulator+0x398/0x7ec
+   regulator_resolve_supply+0x654/0x7c4
+   regulator_register_resolve_supply+0x30/0x120
+   class_for_each_device+0x1b8/0x230
+   regulator_register+0x17a4/0x1f40
+   devm_regulator_register+0x60/0xd0
+   reg_fixed_voltage_probe+0x728/0xaec
+   platform_probe+0x150/0x1c8
+   really_probe+0x274/0xa20
+   __driver_probe_device+0x1dc/0x3f4
+   driver_probe_device+0x78/0x1c0
+   __device_attach_driver+0x1ac/0x2c8
+   bus_for_each_drv+0x11c/0x190
+   __device_attach_async_helper+0x1e4/0x2a4
+   async_run_entry_fn+0xa0/0x3ac
+   process_one_work+0x638/0x1348
+   worker_thread+0x4a8/0x9c4
+   kthread+0x2e4/0x3a0
+   ret_from_fork+0x10/0x20
 
->=20
->> Tracing events took ~9MB, with this approach it took ~4.5MB
->> for ~10K files/dir.
->>=20
->> [PATCH 1/8]: Introducing struct tracefs_inode
->> [PATCH 2/8]: Adding eventfs-dir-add functions
->> [PATCH 3/8]: Adding eventfs-file-add function
->> [PATCH 4/8]: Adding eventfs-file-directory-remove function
->> [PATCH 5/8]: Adding functions to create-eventfs-files
->> [PATCH 6/8]: Adding eventfs lookup, read, open functions
->> [PATCH 7/8]: Creating tracefs_inode_cache
->> [PATCH 8/8]: Moving tracing events to eventfs
->=20
->=20
-> !! External Email: This email originated from outside of the organization=
-. Do not click links or open attachments unless you recognize the sender.
+The problem was first reported soon after we made many of the
+regulators probe asynchronously, though nothing I've seen implies that
+the problems couldn't have also happened even without that.
+
+I haven't personally been able to reproduce the lockdep issue, but the
+issue does look somewhat legitimate. Specifically, it looks like in
+regulator_resolve_supply() we are holding a "rdev" lock while calling
+set_supply() -> create_regulator() which grabs the lock of a
+_different_ "rdev" (the one for our supply). This is not necessarily
+safe from a lockdep perspective since there is no documented ordering
+between these two locks.
+
+In reality, we should always be locking a regulator before the
+supplying regulator, so I don't expect there to be any real deadlocks
+in practice. However, the regulator framework in general doesn't
+express this to lockdep.
+
+Let's fix the issue by simply grabbing the two locks involved in the
+same way we grab multiple locks elsewhere in the regulator framework:
+using the "wound/wait" mechanisms.
+
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+My knowledge of lockdep is not as strong as it should be and my
+knowledge of wait-wound locks is not as strong as it should be. That,
+combined with the fact that I can't actually reproduce the issue, has
+led me to label this as RFC.
+
+I can at least confirm that my system still boots with this patch
+applied, but I can't say 100% for sure that this addresses the issue
+that the bot reported to me. Hopefully others can review and make sure
+that this seems sensible to them.
+
+If this looks reasonable, I can land it and see if that prevents the
+bot from hitting this again.
+
+ drivers/regulator/core.c | 89 ++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 81 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index 1490eb40c973..822fec20d36a 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -207,6 +207,76 @@ static void regulator_unlock(struct regulator_dev *rdev)
+ 	mutex_unlock(&regulator_nesting_mutex);
+ }
+ 
++/**
++ * regulator_lock_two - lock two regulators
++ * @rdev1:		first regulator
++ * @rdev2:		second regulator
++ * @ww_ctx:		w/w mutex acquire context
++ *
++ * Locks both rdevs using the regulator_ww_class.
++ */
++static void regulator_lock_two(struct regulator_dev *rdev1,
++			       struct regulator_dev *rdev2,
++			       struct ww_acquire_ctx *ww_ctx)
++{
++	struct regulator_dev *tmp;
++	int ret;
++
++	ww_acquire_init(ww_ctx, &regulator_ww_class);
++
++	/* Try to just grab both of them */
++	ret = regulator_lock_nested(rdev1, ww_ctx);
++	WARN_ON(ret);
++	ret = regulator_lock_nested(rdev2, ww_ctx);
++	if (ret != -EDEADLOCK) {
++		WARN_ON(ret);
++		goto exit;
++	}
++
++	while (true) {
++		/*
++		 * Start of loop: rdev1 was locked and rdev2 was contended.
++		 * Need to unlock rdev1, slowly lock rdev2, then try rdev1
++		 * again.
++		 */
++		regulator_unlock(rdev1);
++
++		ww_mutex_lock_slow(&rdev2->mutex, ww_ctx);
++		ret = regulator_lock_nested(rdev1, ww_ctx);
++
++		if (ret == -EDEADLOCK) {
++			/* More contention; swap which needs to be slow */
++			tmp = rdev1;
++			rdev1 = rdev2;
++			rdev2 = tmp;
++		} else {
++			WARN_ON(ret);
++			break;
++		}
++	}
++
++exit:
++	ww_acquire_done(ww_ctx);
++}
++
++/**
++ * regulator_unlock_two - unlock two regulators
++ * @rdev1:		first regulator
++ * @rdev2:		second regulator
++ * @ww_ctx:		w/w mutex acquire context
++ *
++ * The inverse of regulator_lock_two().
++ */
++
++static void regulator_unlock_two(struct regulator_dev *rdev1,
++				 struct regulator_dev *rdev2,
++				 struct ww_acquire_ctx *ww_ctx)
++{
++	regulator_unlock(rdev2);
++	regulator_unlock(rdev1);
++	ww_acquire_fini(ww_ctx);
++}
++
+ static bool regulator_supply_is_couple(struct regulator_dev *rdev)
+ {
+ 	struct regulator_dev *c_rdev;
+@@ -1626,8 +1696,8 @@ static int set_machine_constraints(struct regulator_dev *rdev)
+ 
+ /**
+  * set_supply - set regulator supply regulator
+- * @rdev: regulator name
+- * @supply_rdev: supply regulator name
++ * @rdev: regulator (locked)
++ * @supply_rdev: supply regulator (locked))
+  *
+  * Called by platform initialisation code to set the supply regulator for this
+  * regulator. This ensures that a regulators supply will also be enabled by the
+@@ -1799,6 +1869,8 @@ static struct regulator *create_regulator(struct regulator_dev *rdev,
+ 	struct regulator *regulator;
+ 	int err = 0;
+ 
++	lockdep_assert_held_once(&rdev->mutex.base);
++
+ 	if (dev) {
+ 		char buf[REG_STR_SIZE];
+ 		int size;
+@@ -1826,9 +1898,7 @@ static struct regulator *create_regulator(struct regulator_dev *rdev,
+ 	regulator->rdev = rdev;
+ 	regulator->supply_name = supply_name;
+ 
+-	regulator_lock(rdev);
+ 	list_add(&regulator->list, &rdev->consumer_list);
+-	regulator_unlock(rdev);
+ 
+ 	if (dev) {
+ 		regulator->dev = dev;
+@@ -1994,6 +2064,7 @@ static int regulator_resolve_supply(struct regulator_dev *rdev)
+ {
+ 	struct regulator_dev *r;
+ 	struct device *dev = rdev->dev.parent;
++	struct ww_acquire_ctx ww_ctx;
+ 	int ret = 0;
+ 
+ 	/* No supply to resolve? */
+@@ -2060,23 +2131,23 @@ static int regulator_resolve_supply(struct regulator_dev *rdev)
+ 	 * between rdev->supply null check and setting rdev->supply in
+ 	 * set_supply() from concurrent tasks.
+ 	 */
+-	regulator_lock(rdev);
++	regulator_lock_two(rdev, r, &ww_ctx);
+ 
+ 	/* Supply just resolved by a concurrent task? */
+ 	if (rdev->supply) {
+-		regulator_unlock(rdev);
++		regulator_unlock_two(rdev, r, &ww_ctx);
+ 		put_device(&r->dev);
+ 		goto out;
+ 	}
+ 
+ 	ret = set_supply(rdev, r);
+ 	if (ret < 0) {
+-		regulator_unlock(rdev);
++		regulator_unlock_two(rdev, r, &ww_ctx);
+ 		put_device(&r->dev);
+ 		goto out;
+ 	}
+ 
+-	regulator_unlock(rdev);
++	regulator_unlock_two(rdev, r, &ww_ctx);
+ 
+ 	/*
+ 	 * In set_machine_constraints() we may have turned this regulator on
+@@ -2189,7 +2260,9 @@ struct regulator *_regulator_get(struct device *dev, const char *id,
+ 		return regulator;
+ 	}
+ 
++	regulator_lock(rdev);
+ 	regulator = create_regulator(rdev, dev, id);
++	regulator_unlock(rdev);
+ 	if (regulator == NULL) {
+ 		regulator = ERR_PTR(-ENOMEM);
+ 		module_put(rdev->owner);
+-- 
+2.40.0.348.gf938b09366-goog
 
