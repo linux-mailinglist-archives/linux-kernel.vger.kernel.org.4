@@ -2,109 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4663C6CCEC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 02:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2BD6CCEC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 02:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjC2A1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 20:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+        id S229489AbjC2A2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 20:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjC2A1O (ORCPT
+        with ESMTP id S229452AbjC2A2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 20:27:14 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738921AB
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 17:27:12 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id r11so56725873edd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 17:27:12 -0700 (PDT)
+        Tue, 28 Mar 2023 20:28:37 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C140610EB
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 17:28:35 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id z17so5320403vsf.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 17:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google; t=1680049631;
+        d=google.com; s=20210112; t=1680049715;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dEpY2ODUY5mEqcj9vNQ0ZYZkQmo1P7yFLhuPa4WcepM=;
-        b=SfnATT8MDX4N45OHq834fFTpo5bzClAd9VvPwG/QFM41uPnZ1Nvec8zwAzyYHB8V1U
-         5AvfxRBgtbyHq4hulLOe6wKecl2mWADZWNw2gWPb/pWeF2En4DuJ3w28Ju7mS5HpwpwL
-         vaLOX3x18ByQD5sv1yiZlr/lLpQ4SrByuZASqkwqnL6m+NqERyn/nm424Q5Bcy/gQxiG
-         7P9UvUrsxmuL3mwzfGnhrSHe7NmbBqDq24lA8fTQQGlOS9mHXd64ZNAhUdKIih/qt7St
-         uiGgqgie5BtYzXOkOhHLX1bapebmILjuI4x26PlMAGTgjTZyHFc/OvaowzexvcL6/uh/
-         UPtA==
+        bh=PyqHjtL+rZkr3QGhJXzTG5s8vpvz1mXKLrceNpD1m0E=;
+        b=M9D88JPWAMKk/pgNwzzYgI5z1YNJXtj2tHk9EUoYPep6DDDgRuFEYvODeR83uSatIY
+         VUUbWLmlC1adBiKBFalomI+msFx3OAwmeW/YUIsmvSfwa5jAsmHm926CnzJ6ZrUFtooX
+         6vXPXVDamJUKmhkaqKk6Yj4947AW74g9+PUg1lw1O3zUzjKjObNThCXjKW8wFwEtP9wQ
+         tPRCY+PhQKg3iEOx8vMxZEdu6Zqnwp2rdnjC+DRUXrCfaFpP1KUc8REA1Xt+ZKPzq+iP
+         g8IquFTs/Gg+iMGbfV+lpSU0yjsU/ZOCUOWgDfXZbvH1xE4Sn0vywyYFGYkg+BRRXypG
+         xgCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680049631;
+        d=1e100.net; s=20210112; t=1680049715;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dEpY2ODUY5mEqcj9vNQ0ZYZkQmo1P7yFLhuPa4WcepM=;
-        b=35lEro+LEsyfBLyXH2XSFNvim2cJytw+WVHzFVR63Mz6FkL4khvGpjeNJ8OcmIN3/B
-         frC1QA2Tid9aD9pITxchIwl9k3QNPdpZh4kfXlVFemEIlmXCfGKbwdnrJLg4AYrCPUXw
-         Eda7AEzhV1E2AxCs9grYEWdM++u8rJImF+rkOk4zIsMhf6crk2uRkiWApDZDq+mHhgoT
-         SL9KKR+X+4sbN6zf5CT1Ir//T88Dg36bJaY+7Svk0/BBYRk4GeRImb84qmeqSK2GGC9i
-         BywFLY2oTLSJC5/oPBNtGRSbtUZbgVcUsJq+vwmocNv+zJGYqNrqlj/kOZPFp7UE5Ft7
-         N8IQ==
-X-Gm-Message-State: AAQBX9caseIaEHnvl12Ah0eJXF053pbJdJCQUMJGEqVmyexEzi2eAvdt
-        yZYX06wrVaDY/KKIlfnxqdOWjFgUiX0orwgKwq/9eME4A66WhHPM
-X-Google-Smtp-Source: AKy350a6b0RNSg0qEukxWpVN2dB5p+ti+B0uqThdB7kAShSe5xvwdydY4q/AP6PYlOkUDiuZPxqS5m+rA0BZBXLXUJM=
-X-Received: by 2002:a17:906:524b:b0:877:747d:4a90 with SMTP id
- y11-20020a170906524b00b00877747d4a90mr9121390ejm.14.1680049630974; Tue, 28
- Mar 2023 17:27:10 -0700 (PDT)
+        bh=PyqHjtL+rZkr3QGhJXzTG5s8vpvz1mXKLrceNpD1m0E=;
+        b=c6NS6g9xBi2KOoM0oGkEWZSL9zXKwmh3nChT/sOAIArWyUhN5X2RUqzoVU8IE7IOYN
+         PKWz3I4RVsLC6PCgVFXNnTMWwIVil77daccgcrH5h+7kTdc5Wj6m/5KQxNo3PpmwgHLN
+         myA8MX7/KnuBq47Voo8kNYHzVYfZAsYUlv3hjmQ4QZZvlzNXoPOk7C7bDPqXDKu79bnf
+         fIT6Fxo5yHGvcK/JmAfWNZoVD+eIqOfXSKjCOU41wbQLaE1Uo4eeWNuyTh+D9L41XTpA
+         1r3EC7NLW6W+kPjd1tw6xfq+3MYubDa3TwvTW60VCRVSuGf1ZamIOaxNYLDNtImd85p3
+         lT7A==
+X-Gm-Message-State: AAQBX9euQxH3uX/R3v7g7o655fO2nyA0P1wpXm60eWiMXpbXpMWsYzBB
+        j8wrYyYK6J47DDuMvlwLZ9pBVLpJNtWcvVBihk+vNw==
+X-Google-Smtp-Source: AKy350ZOliy/SrIqb9WDpAtZYeUPgOgFxGeA6z3FKouIkdmj0YFGQzv89AfV53KPpPDZOrknJAXuZ0r2dC4w/giA6Pw=
+X-Received: by 2002:a67:d994:0:b0:423:e694:7a7d with SMTP id
+ u20-20020a67d994000000b00423e6947a7dmr9880934vsj.4.1680049714775; Tue, 28 Mar
+ 2023 17:28:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230326233812.28058-1-steev@kali.org> <20230326233812.28058-5-steev@kali.org>
- <CABBYNZLh2_dKm1ePH3jMY8=EzsbG1TWkTLsgqY1KyFopLNHN6A@mail.gmail.com>
-In-Reply-To: <CABBYNZLh2_dKm1ePH3jMY8=EzsbG1TWkTLsgqY1KyFopLNHN6A@mail.gmail.com>
-From:   Steev Klimaszewski <steev@kali.org>
-Date:   Tue, 28 Mar 2023 19:26:59 -0500
-Message-ID: <CAKXuJqi_DJ1GEP-rurJqJF5EyooNQO=daBOo0dipCGqS8QV=Dg@mail.gmail.com>
-Subject: Re: [PATCH v8 4/4] arm64: dts: qcom: sc8280xp-x13s: Add bluetooth
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>,
-        Johan Hovold <johan@kernel.org>
+References: <20230306224127.1689967-1-vipinsh@google.com> <20230306224127.1689967-17-vipinsh@google.com>
+ <ZCOEiVT31xEPKZ3H@google.com>
+In-Reply-To: <ZCOEiVT31xEPKZ3H@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 28 Mar 2023 17:28:08 -0700
+Message-ID: <CALzav=cKY37njK0=jsw7fiUsqLWVw0ir0LEYr6O=R+NPk2nVHw@mail.gmail.com>
+Subject: Re: [Patch v4 16/18] KVM: x86/mmu: Allocate numa aware page tables
+ during page fault
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luiz,
+On Tue, Mar 28, 2023 at 5:21=E2=80=AFPM David Matlack <dmatlack@google.com>=
+ wrote:
+>
+> On Mon, Mar 06, 2023 at 02:41:25PM -0800, Vipin Sharma wrote:
+> > Allocate page tables on the preferred NUMA node via memory cache during
+> > page faults. If memory cache doesn't have a preferred NUMA node (node
+> > value is set to NUMA_NO_NODE) then fallback to the default logic where
+> > pages are selected based on thread's mempolicy. Also, free NUMA aware
+> > page caches, mmu_shadow_page_cache, when memory shrinker is invoked.
+> >
+> > Allocate root pages based on the current thread's NUMA node as there is
+> > no way to know which will be the ideal NUMA node in long run.
+> >
+> > This commit allocate page tables to be on the same NUMA node as the
+> > physical page pointed by them, even if a vCPU causing page fault is on =
+a
+> > different NUMA node. If memory is not available on the requested NUMA
+> > node then the other nearest NUMA node is selected by default. NUMA awar=
+e
+> > page tables can be beneficial in cases where a thread touches lot of fa=
+r
+> > memory initially and then divide work among multiple threads. VMs
+> > generally take advantage of NUMA architecture for faster memory access
+> > by moving threads to the NUMA node of the memory they are accessing.
+> > This change will help them in accessing pages faster.
+> >
+> > Downside of this change is that an experimental workload can be created
+> > where a guest threads are always accessing remote memory and not the on=
+e
+> > local to them. This will cause performance to degrade compared to VMs
+> > where numa aware page tables are not enabled. Ideally, these VMs when
+> > using non-uniform memory access machine should generally be taking
+> > advantage of NUMA architecture to improve their performance in the firs=
+t
+> > place.
+> >
+> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > ---
+> >  arch/x86/include/asm/kvm_host.h |  2 +-
+> >  arch/x86/kvm/mmu/mmu.c          | 63 ++++++++++++++++++++++++---------
+> >  arch/x86/kvm/mmu/mmu_internal.h | 24 ++++++++++++-
+> >  arch/x86/kvm/mmu/paging_tmpl.h  |  4 +--
+> >  arch/x86/kvm/mmu/tdp_mmu.c      | 14 +++++---
+> >  include/linux/kvm_types.h       |  6 ++++
+> >  virt/kvm/kvm_main.c             |  2 +-
+> >  7 files changed, 88 insertions(+), 27 deletions(-)
+> >
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
+_host.h
+> > index 64de083cd6b9..77d3aa368e5e 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -787,7 +787,7 @@ struct kvm_vcpu_arch {
+> >       struct kvm_mmu *walk_mmu;
+> >
+> >       struct kvm_mmu_memory_cache mmu_pte_list_desc_cache;
+> > -     struct kvm_mmu_memory_cache mmu_shadow_page_cache;
+> > +     struct kvm_mmu_memory_cache mmu_shadow_page_cache[MAX_NUMNODES];
+>
+> I think we need an abstraction for a NUMA-aware mmu cache, since there
+> is more than one by the end of this series.
+>
+> e.g. A wrapper struct (struct kvm_mmu_numa_memory_cache) or make
+> NUMA-awareness an optional feature within kvm_mmu_memory_cache, plus
+> common helper functions for operations like initializing, topping-up,
+> and freeing.
+>
+> I have some ideas I want to try but I ran out of time today.
+>
+> >       struct kvm_mmu_memory_cache mmu_shadowed_info_cache;
+> >       struct kvm_mmu_memory_cache mmu_page_header_cache;
+> >
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index d96afc849ee8..86f0d74d35ed 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -702,7 +702,7 @@ static void mmu_free_sp_memory_cache(struct kvm_mmu=
+_memory_cache *cache)
+> >
+> >  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_i=
+ndirect)
+> >  {
+> > -     int r;
+> > +     int r, nid =3D KVM_MMU_DEFAULT_CACHE_INDEX;
+> >
+> >       /* 1 rmap, 1 parent PTE per level, and the prefetched rmaps. */
+> >       r =3D kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_ca=
+che,
+> > @@ -710,7 +710,16 @@ static int mmu_topup_memory_caches(struct kvm_vcpu=
+ *vcpu, bool maybe_indirect)
+> >       if (r)
+> >               return r;
+> >
+> > -     r =3D mmu_topup_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache=
+, PT64_ROOT_MAX_LEVEL);
+> > +     if (kvm_numa_aware_page_table_enabled(vcpu->kvm)) {
+> > +             for_each_online_node(nid) {
+>
+> Blegh. This is going to potentially waste a lot of memory. Yes the
+> shrinker can free it, but the next fault will re-allocate all the online
+> node caches.
+>
+> The reason we have to top-up all nodes is because KVM tops up caches
+> before faulting in the PFN, and there is concern that changing this will
+> increase the rate of guest page-fault retries [1].
+>
+> I think we should revisit that concern. Can we do any testing to
+> validate that hypothesis? Or can we convince ourselves that re-ordering
+> is ok?
+>
+> [1] https://lore.kernel.org/kvm/CAHVum0cjqsdG2NEjRF3ZRtUY2t2=3DTb9H4OyOz9=
+wpmsrN--Sjhg@mail.gmail.com/
 
-On Tue, Mar 28, 2023 at 5:24=E2=80=AFPM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
->
-> Hi Steev,
->
-> On Sun, Mar 26, 2023 at 4:38=E2=80=AFPM Steev Klimaszewski <steev@kali.or=
-g> wrote:
-> >
-> > The Lenovo Thinkpad X13s has a WCN6855 Bluetooth controller on uart2,
-> > add this.
-> >
-> > Signed-off-by: Steev Klimaszewski <steev@kali.org>
->
-> I would like to merge this set but this one still doesn't have any
-> Signed-off-by other than yours.
->
-> --
-> Luiz Augusto von Dentz
-I don't quite follow - should I be adding others S-o-b?  I know that
-Bjorn had previously sent an R-b, and Johan as well, but since the
-code changed, I didn't bring them forward.  If I'm doing something
-wrong, please let me know!
---steev
+Ah I forgot about patch 18 reducing the default cache size. So at the
+end of this series, even with topping up every node, the maximum
+number of objects per cache will be 4 * num_online_nodes. So only
+hosts with more than 10 online NUMA nodes would have larger caches
+than today (40). That seems more reasonable to me.
