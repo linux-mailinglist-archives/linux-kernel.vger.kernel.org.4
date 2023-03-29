@@ -2,139 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357EE6CCEBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 02:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4663C6CCEC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 02:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjC2AW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 20:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
+        id S229532AbjC2A1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 20:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjC2AWx (ORCPT
+        with ESMTP id S229479AbjC2A1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 20:22:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9654A1737;
-        Tue, 28 Mar 2023 17:22:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3492DB81F81;
-        Wed, 29 Mar 2023 00:22:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C522CC433A7;
-        Wed, 29 Mar 2023 00:22:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680049369;
-        bh=LsCNXXpY1cFgoqXqOINeaOkusUqANiRdFYpk75Ep5Ko=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kohoHxDpAa2IveHTr7jy9tKAbRaVBIuF6zCV3lP6pauXbsIULM4TR8vENRdV+sRxi
-         s5iplqD8Kf9yZuUxFVFKtOP+MzK3P6mQ+plHNV3Pc1W+xW2+wDzKj3kn/InfhxPQsK
-         qHF5hwPbzf6hYqCZkQ1qNCr6cCtoRhmaEbfCKecP408IxUMGZsGvYWXzz4Y1r4iFB1
-         9Xot0ltF4q/FhMB1xgQpe0vZApT+GQgGWH02F44s7TDcmGm8Vjo3ijDdx58KOHKl/9
-         OEFaINyEJDyfWI7phFuz82Mzxc6RoYHFMGbRoekUSjlXIBwyHNiIM0UvnH7TNu3E80
-         Jn7U1RHYAKRxg==
-Received: by mail-ed1-f46.google.com with SMTP id y4so56755915edo.2;
-        Tue, 28 Mar 2023 17:22:49 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eKHwss+occXoM9xv8EadPQtW26OeIzVN2XY2zjcsPsLwHPg0eK
-        y/G3ub58DrCYd8a5V6KmxFzjsFUJHiznFPsRpnQ=
-X-Google-Smtp-Source: AKy350YShqqhafJiKivPvV3UEwHbIXvSZz7vIGbGfm68OD1wOOOEvCMQ8EQ72tLPfqXEpoJkur924JeuV1TKMI9pjxw=
-X-Received: by 2002:a50:a444:0:b0:4fc:6494:81c3 with SMTP id
- v4-20020a50a444000000b004fc649481c3mr8371871edb.1.1680049367907; Tue, 28 Mar
- 2023 17:22:47 -0700 (PDT)
+        Tue, 28 Mar 2023 20:27:14 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738921AB
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 17:27:12 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id r11so56725873edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 17:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google; t=1680049631;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dEpY2ODUY5mEqcj9vNQ0ZYZkQmo1P7yFLhuPa4WcepM=;
+        b=SfnATT8MDX4N45OHq834fFTpo5bzClAd9VvPwG/QFM41uPnZ1Nvec8zwAzyYHB8V1U
+         5AvfxRBgtbyHq4hulLOe6wKecl2mWADZWNw2gWPb/pWeF2En4DuJ3w28Ju7mS5HpwpwL
+         vaLOX3x18ByQD5sv1yiZlr/lLpQ4SrByuZASqkwqnL6m+NqERyn/nm424Q5Bcy/gQxiG
+         7P9UvUrsxmuL3mwzfGnhrSHe7NmbBqDq24lA8fTQQGlOS9mHXd64ZNAhUdKIih/qt7St
+         uiGgqgie5BtYzXOkOhHLX1bapebmILjuI4x26PlMAGTgjTZyHFc/OvaowzexvcL6/uh/
+         UPtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680049631;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dEpY2ODUY5mEqcj9vNQ0ZYZkQmo1P7yFLhuPa4WcepM=;
+        b=35lEro+LEsyfBLyXH2XSFNvim2cJytw+WVHzFVR63Mz6FkL4khvGpjeNJ8OcmIN3/B
+         frC1QA2Tid9aD9pITxchIwl9k3QNPdpZh4kfXlVFemEIlmXCfGKbwdnrJLg4AYrCPUXw
+         Eda7AEzhV1E2AxCs9grYEWdM++u8rJImF+rkOk4zIsMhf6crk2uRkiWApDZDq+mHhgoT
+         SL9KKR+X+4sbN6zf5CT1Ir//T88Dg36bJaY+7Svk0/BBYRk4GeRImb84qmeqSK2GGC9i
+         BywFLY2oTLSJC5/oPBNtGRSbtUZbgVcUsJq+vwmocNv+zJGYqNrqlj/kOZPFp7UE5Ft7
+         N8IQ==
+X-Gm-Message-State: AAQBX9caseIaEHnvl12Ah0eJXF053pbJdJCQUMJGEqVmyexEzi2eAvdt
+        yZYX06wrVaDY/KKIlfnxqdOWjFgUiX0orwgKwq/9eME4A66WhHPM
+X-Google-Smtp-Source: AKy350a6b0RNSg0qEukxWpVN2dB5p+ti+B0uqThdB7kAShSe5xvwdydY4q/AP6PYlOkUDiuZPxqS5m+rA0BZBXLXUJM=
+X-Received: by 2002:a17:906:524b:b0:877:747d:4a90 with SMTP id
+ y11-20020a170906524b00b00877747d4a90mr9121390ejm.14.1680049630974; Tue, 28
+ Mar 2023 17:27:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230328111714.2056-1-zhangqing@loongson.cn> <9817aaa043e9f0ed964bd523773447bd64f6e2c0.camel@xry111.site>
- <1c231587-3b70-22ab-d554-ebe3de407909@loongson.cn>
-In-Reply-To: <1c231587-3b70-22ab-d554-ebe3de407909@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 29 Mar 2023 08:22:37 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5APsBxC8nNa81t3HXum1EU1hOj4S6UC7xLHD7_BCJd7g@mail.gmail.com>
-Message-ID: <CAAhV-H5APsBxC8nNa81t3HXum1EU1hOj4S6UC7xLHD7_BCJd7g@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Add kernel address sanitizer support
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     Xi Ruoyao <xry111@xry111.site>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230326233812.28058-1-steev@kali.org> <20230326233812.28058-5-steev@kali.org>
+ <CABBYNZLh2_dKm1ePH3jMY8=EzsbG1TWkTLsgqY1KyFopLNHN6A@mail.gmail.com>
+In-Reply-To: <CABBYNZLh2_dKm1ePH3jMY8=EzsbG1TWkTLsgqY1KyFopLNHN6A@mail.gmail.com>
+From:   Steev Klimaszewski <steev@kali.org>
+Date:   Tue, 28 Mar 2023 19:26:59 -0500
+Message-ID: <CAKXuJqi_DJ1GEP-rurJqJF5EyooNQO=daBOo0dipCGqS8QV=Dg@mail.gmail.com>
+Subject: Re: [PATCH v8 4/4] arm64: dts: qcom: sc8280xp-x13s: Add bluetooth
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        Johan Hovold <johan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 8:15=E2=80=AFPM Qing Zhang <zhangqing@loongson.cn> =
-wrote:
->
-> Hi, Ruoyao
->
-> On 2023/3/28 =E4=B8=8B=E5=8D=887:39, Xi Ruoyao wrote:
-> > On Tue, 2023-03-28 at 19:17 +0800, Qing Zhang wrote:
-> >
-> > /* snip */
-> >
-> >
-> >> -void * __init relocate_kernel(void)
-> >> +unsigned long __init relocate_kernel(void)
-> >
-> > Why we must modify relocate_kernel for KASAN?
->
-> When the CONFIG_RANDOMIZE_BASE is enabled, the kernel will be updated to
-> a random new address.
-> Kasan needs to call kasan_early_init before start_kernel.
-> There are two situations:
-> 1> After enabling CONFIG_RELOCATABLE, call kasan_early_init.
-> 2> After CONFIG_RELOCATABLE is not enabled, call kasan_early_init.
->
-> In order to prevent code redundancy and semantic problems caused by
-> calling kasan_early_init (before jr a0) at the old PC.
-In my opinion, you can call kasan_early_init before relocate_kernel in
-head.S, then no redundancy.
+Hi Luiz,
 
-Huacai
+On Tue, Mar 28, 2023 at 5:24=E2=80=AFPM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
 >
-> Thanks,
-> -Qing
-> >
-> >>   {
-> >>          unsigned long kernel_length;
-> >>          unsigned long random_offset =3D 0;
-> >>          void *location_new =3D _text; /* Default to original kernel s=
-tart */
-> >> -       void *kernel_entry =3D start_kernel; /* Default to original ke=
-rnel entry point */
-> >>          char *cmdline =3D early_ioremap(fw_arg1, COMMAND_LINE_SIZE); =
-/* Boot command line is passed in fw_arg1 */
-> >>
-> >>          strscpy(boot_command_line, cmdline, COMMAND_LINE_SIZE);
-> >> @@ -190,9 +189,6 @@ void * __init relocate_kernel(void)
-> >>
-> >>                  reloc_offset +=3D random_offset;
-> >>
-> >> -               /* Return the new kernel's entry point */
-> >> -               kernel_entry =3D RELOCATED_KASLR(start_kernel);
-> >> -
-> >>                  /* The current thread is now within the relocated ker=
-nel */
-> >>                  __current_thread_info =3D RELOCATED_KASLR(__current_t=
-hread_info);
-> >>
-> >> @@ -204,7 +200,7 @@ void * __init relocate_kernel(void)
-> >>
-> >>          relocate_absolute(random_offset);
-> >>
-> >> -       return kernel_entry;
-> >> +       return random_offset;
-> >
+> Hi Steev,
 >
+> On Sun, Mar 26, 2023 at 4:38=E2=80=AFPM Steev Klimaszewski <steev@kali.or=
+g> wrote:
+> >
+> > The Lenovo Thinkpad X13s has a WCN6855 Bluetooth controller on uart2,
+> > add this.
+> >
+> > Signed-off-by: Steev Klimaszewski <steev@kali.org>
+>
+> I would like to merge this set but this one still doesn't have any
+> Signed-off-by other than yours.
+>
+> --
+> Luiz Augusto von Dentz
+I don't quite follow - should I be adding others S-o-b?  I know that
+Bjorn had previously sent an R-b, and Johan as well, but since the
+code changed, I didn't bring them forward.  If I'm doing something
+wrong, please let me know!
+--steev
