@@ -2,214 +2,366 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B189F6CDBB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D136CDBC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjC2ONM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S229529AbjC2OQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjC2OMh (ORCPT
+        with ESMTP id S229741AbjC2OQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:12:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732E1527C;
-        Wed, 29 Mar 2023 07:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680099109; x=1711635109;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=WiPTk7KI563Y68xszLLJrx2aUu95QWcyWfl1dvUf8II=;
-  b=Uue3KgfYTR+ZZxexyOBHFvV3ufTHiH66uPfEuqcv9ozYDqn+GyHnBUi1
-   edbgcRWdYJxxX+T0wAOELHj7k4bWdvV3Gt02K55RphPLmpPwA3efQinlq
-   XG56YDDwiARryYSIK5YerMUTy7AvOcpiqiDvjKZc0PlsaN6G4wiwNvrO9
-   M/0h3FL1m33LFRWhWYiKXyFoWgvtG7c9wed9+WgDTxEtbKdwK4faQB7CZ
-   N9GQpDNZ58a98OO1q4SzOHKkxC7t0a0a+Wfg9zbZT69uXwUCG+vPhddmU
-   mkC1kgLh+f5+ylAcm/ijDZgLDOHVwIA8weo9Ra7eOE/1uI72LTmunphbX
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="339612644"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="339612644"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 07:11:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="808226008"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="808226008"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga004.jf.intel.com with ESMTP; 29 Mar 2023 07:11:39 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 29 Mar 2023 07:11:39 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Wed, 29 Mar 2023 07:11:39 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.46) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Wed, 29 Mar 2023 07:11:38 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TrY5wzhFRqHhl4wS61GU8YRUyqJDLSb/HcMgHH9ahgXUXHfHqKM1XeMEidv+Ch1GAHgx+TwYDVF+v3yILb2RRqlymSHDRbXWKEko2hsBTI0RNSQcRwI4TrQZzoU38p3dbaCIX6HSbvJtNzAz7tbv8RpGdHD0qzY1wS3p4WQDzgiyn19yJfwAF5KHPmkrxRKsjLxwtb0aGMKd/cy9P9rlM23jgI2XaWMTxiJv9JtdjpdleBVYxWVRNR3xo/sFpKyugl9cXshwDZMY4tchzNU5lWjmbn1TrY87u1UwcRI+h0ZCqUk9zLgrZed1iKzHi42h1oz1AEamJpGNaL3pQgrFOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WiPTk7KI563Y68xszLLJrx2aUu95QWcyWfl1dvUf8II=;
- b=oJ8F+RzAZkDRwCchTSpfxyLZyLkaBifBPIszzxNkpE25UyGosmy2YT/TyRzYk/dKpJVuapG/5mf//SkXi/BU1JY51zqRKgx1RY/J4vSoK+aLD79OJrA8Cwd0NRkJMilUAz9Qky/WcjCIzTL4rmaRTkAT3hjYHzir+7xHeUxbbHSjmZmVFLSQu5wmH2d+8DqcecX/Xj7lCxscPGmR7RukssPoMNUUfjcg1icMf0WBqk4bcxlkizG+Vrmhv/90nVfZ/VMUzB6lF/4JgXK5qz6C+qgNKghRs+nls0Y/Mq/RzA/V6PPbqjYp3W0Pmn0Fv0n2uwLZGxzQatEFwS8Ji/7Y4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH7PR11MB6605.namprd11.prod.outlook.com (2603:10b6:510:1b0::16)
- by MN6PR11MB8193.namprd11.prod.outlook.com (2603:10b6:208:47a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Wed, 29 Mar
- 2023 14:11:36 +0000
-Received: from PH7PR11MB6605.namprd11.prod.outlook.com
- ([fe80::968d:9383:aae6:175c]) by PH7PR11MB6605.namprd11.prod.outlook.com
- ([fe80::968d:9383:aae6:175c%2]) with mapi id 15.20.6178.037; Wed, 29 Mar 2023
- 14:11:36 +0000
-From:   "Zhang, Rui" <rui.zhang@intel.com>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>
-CC:     "peter.ganzhorn@gmail.com" <peter.ganzhorn@gmail.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/4] coretemp: Fix spamming of ring buffer
-Thread-Topic: [PATCH 0/4] coretemp: Fix spamming of ring buffer
-Thread-Index: AQHZYbU+LMzHZcsD1EaUSEWqRoX2la8RHfUAgACXvACAABegAA==
-Date:   Wed, 29 Mar 2023 14:11:36 +0000
-Message-ID: <51b2d540c174690a8e460ecba53b0195c4b01294.camel@intel.com>
-References: <CA+3fRbFzq38sQomFM7xJt-UoeLv_ZZbQ2uaHZ+8J_5ntweJ7TA@mail.gmail.com>
-         <7e821f80b7700fcf1fb26f40bde8397f0e5e6d7e.camel@intel.com>
-         <aeed703c-5dbb-4a6f-a4d7-3c6a55d99e9e@roeck-us.net>
-In-Reply-To: <aeed703c-5dbb-4a6f-a4d7-3c6a55d99e9e@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.5-0ubuntu1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR11MB6605:EE_|MN6PR11MB8193:EE_
-x-ms-office365-filtering-correlation-id: bbc632f7-bfd5-4327-d077-08db305f81cf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vSvmYsaJ3+LrnIU/QdanNSZM5Dt9cwnZSs/9Hhc3qjtog2gWaMnnp5zyFkJKbrxmq2WztK7nvB9Pec9ZtmJF1X5cgMDFJahZRiK/FXdLjyNQz3E/bWlzPfdnGvslYv5QlwpJ2Mu+pu4sgJBxq0uQAAsudT7aYZwbuCSBqwFlP2/Vfteppss29fXdNpDEhCLqQfT1M6OR80qWJV2oLETJxYGP0CL+x/KQ/KCfRG7KJZUjcEsxvj0Obuo4sWG1pc3HYWHorTieWPxQ6ltGcoUUUHqatVPUwqP+kxJj+7H7FJpQphvw19eue7h8MWlBrcNCmghImnhcIVuF0AVohQkcPZIjkaIlCLngvBF66E8HsFnbq1UmEcmmrtffo26H/1VBLlyWL8lVcrlE2jBXgO80XRVAJFcFh5sDiDLBjwJFB80zgAyWzHolFjaff/gMsVxVEm/lnkFqL/0b9UGehhuw5A4FrmraUlyEJqo/PXcsX7uNYpM9YsIVYgakyWcIyB2nYfmAfbcB3P88BvojNRwvjAuNtnf4QYXWz9WAoBsrIrUJTXgC4p8iHt8htavJvgU1YYBIpA/SyC2bbd3EUx46jUSLOxuWVdg4m949r47DoJJBpWRkFV2RoIkVRhJoe3hP
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6605.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(136003)(376002)(396003)(39860400002)(451199021)(6506007)(26005)(6512007)(83380400001)(53546011)(86362001)(8936002)(38070700005)(2616005)(186003)(82960400001)(71200400001)(2906002)(38100700002)(5660300002)(91956017)(478600001)(4326008)(122000001)(66476007)(66946007)(36756003)(316002)(8676002)(76116006)(64756008)(66446008)(41300700001)(6486002)(66556008)(54906003)(6916009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b29sN0JzUFp1MTJnQkZwdTdpcEtSR25TSkgwTkJ2R1A5azYraHgydm5ESVJF?=
- =?utf-8?B?WnNHNU84VXYzaFVtR2RXQ0tmb2FnOXBuZThNZVZPdVJlcmE1TVQxV0hPRmJM?=
- =?utf-8?B?WWRTbXo5Rmx0QnF0MEd1ZVpKUVo2UUI1WGMrUjY2Qm1kc0p2Z3R5Z1A2M0N5?=
- =?utf-8?B?S3R6bWRDV0VkLzJuMmZpNUFySkdqZ0t5SHVZL2Y2N09lWkQzRUFTY0k1NTVM?=
- =?utf-8?B?TlN2ekpUeEZEVythMEJqcFVOOWh2aGFaS09xRzhkVDZRRk92dTFXQmc4MGVW?=
- =?utf-8?B?S1I2ems1NmlFaFB3NUZkdENyeU5YYnBuTUF1OXI4RDFSMUh5NGZoWjN6Q3lw?=
- =?utf-8?B?SzhDOGI1UUZscHlMdmRkL0t4ZjB2ekRZUUdON3pTWXNXbXB5RnJHYTJFTGxN?=
- =?utf-8?B?MGdNcmg4Yk5BTU5PUEt2eTZBYi9LS1ZKd3hmUGpkVGRlNkV0UU9BelFCSjF2?=
- =?utf-8?B?RWRCK0lDNHNFN1Zkbm1sQVBuR2h0SXE4bVNIbUJvU1AzZDhsRXlBa0xwMlM4?=
- =?utf-8?B?eTVIL3NoQzlpTXVKYVg3ZWJvY2RDMld0RUwxTTFWUFM3Y0FpSm1WRUtxR0Qz?=
- =?utf-8?B?cVhyOW1Cd29tb1loZDZBbHBmOXIzV1dlZEV5V2hzQUJrTXRKVE1qSnExU0ZZ?=
- =?utf-8?B?alRuU1o1R0o2NmRaRGF1am1lMlpzb3p5SlRrUTRudTIvbTBrdmZzK1dHT2Nq?=
- =?utf-8?B?Yy9pNlh5My9KajFQaHV4dzFaWWtTL2Y5QVJBOXN6RGdZUVlvclJrbmlySlZV?=
- =?utf-8?B?ajFDVE9NTCsxK2ZkNDd5cjVzakFMQVlFV0dyckhwamlpR2hPOGpIQjRUbHRm?=
- =?utf-8?B?eFZZajZjeEVpNXNoaUtTUy9rTHBGSGxGZTNBZGF5K0RsSkNYZG5qbHdOd1hB?=
- =?utf-8?B?SldpbThDUG1UbGtDamsydVNMTXVWYjlqcjJzSHNJd0l3bEJPaHhGRGdyN21i?=
- =?utf-8?B?MzAxYWRRUjJYYlVLajZpMFlDMWZDdzNnUGh6ZXNZaWd3TElaVlJMb0hzY3dC?=
- =?utf-8?B?OXd1d3k0dFdlalBSRndRNDZyTjRsMGxNRUVzVVByd0xCZDQvOGRwdmdUT2VP?=
- =?utf-8?B?SGpQalE2Q0kwVk1uSGdHblBUNFJTSlVvbjNsM1BZZ2tpTktCZXlDd2doa1Jq?=
- =?utf-8?B?K1hnNmdKS1ZNU1d6bVBXQXhEUlF3NUd6M05uWUlVbk8zZWQwOUdIZUY0b2JX?=
- =?utf-8?B?M0RlQ0wzRUlZNDEzVXBJNGFKOU1PS3ZPSWo5dTF2RW5WdWVzR2I4TjVkNFBE?=
- =?utf-8?B?SkdTeTJVZ1ZIdndVWU5aMzF1L1dqTjRsdjZtS1k5ZVpJNndPTExSSjROWVJF?=
- =?utf-8?B?elNlL0ZhNHJhQmFuMnNCWEIvd0l5a0tIRG1DL0NJeXRpUXNoTXlna3ZWLytu?=
- =?utf-8?B?WXFkSVlmdmx3dnFiMnBLYlU2YXN2M25PYmxxZFV0OXU2eFovNFgvTDNuaE93?=
- =?utf-8?B?V3VaMzhub0piblY2UkhqMWZxamsvNnFMbjZjMW9yZEJLT2NCTFpvYU9Xb2pW?=
- =?utf-8?B?MHAxNURiS2hDU1FQZnhmbWdwamFYK0FCci9kaU84V3lyTGZ2S1FPNkVZR01G?=
- =?utf-8?B?T0pTL0JSSUF3QkdsRGxmRkltV0ErdEI3bm5nSVBhZmxrUFJPek5leElEcHNH?=
- =?utf-8?B?c1hEVDVZbnFCNEwyejJmRjVwbDhBS3ppUG0xdWl6Wi9wZllERS9XTktjYjRO?=
- =?utf-8?B?c0NBVS9mUjk0bjJRdnVMV1UzREd1VE40emZrSmlJS3M4WWY0OTVuWFhVWmI2?=
- =?utf-8?B?SFZjUHdnbFlTdUQ3eDRNSzVRZjIrQzBMRGNZdmFNdmFxckltZ3NZMHliZGU0?=
- =?utf-8?B?UHJKSE9tbkF3N0RkWlU1VmRNNmdJZ3hqbDBrUHF4YkpKUE1ldVAvRWlGeSsx?=
- =?utf-8?B?SytwNTNKZCsrZFBGM1diNWpTTVIvMVpxQUVOZ1Jab1ZVeXU3QW1BaTZPK1NG?=
- =?utf-8?B?MXc1Mlk4UmFTRzVzTFJEM0Z2dHBzK0VFYlVXeG1Sd2E2aDY5MTRqaUs0ZGZ6?=
- =?utf-8?B?THpCaEFkZ3VBMVJUYXRqTnFhRDlGeFV1aUxGSmY2cHQ4QjQzUEowUUhCVnlH?=
- =?utf-8?B?UmIyanRZTm8xeXp6TzNiMjRKc2FEWTQ3bHgwMUpXZW0yMW9oSkdVZnd3aXow?=
- =?utf-8?Q?Exu1LGpwPlwnc+ZiK0z6XWW3Z?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <61B54872A1DD91438B286BAC0CA461A4@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 29 Mar 2023 10:16:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED98E46BF
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680099243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rVcsMZx5Rih0g+FnCEauXqemLTsCdI2qdzMPCzNchcI=;
+        b=Z3BP9paGZyqg6nbB8lwUEDawA/2KJfFKyHcn7ocr3cGWJLG+AG1CFQTo+YAxFqjdH5y3tO
+        j7SsOVj2ZVysjxS8PKkF4RKEvPr/cxU75OP8fq88tVS3Ok760lrs4QzGnVp/gdsfgSHSWi
+        jfk8rbF7nOfWVDSe1ndTJ5SHSbZXRjU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-56-V5oDxlVNNTObKzDyQaNeTQ-1; Wed, 29 Mar 2023 10:13:59 -0400
+X-MC-Unique: V5oDxlVNNTObKzDyQaNeTQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 02C76101A551;
+        Wed, 29 Mar 2023 14:13:59 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EF6A62027040;
+        Wed, 29 Mar 2023 14:13:56 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [RFC PATCH v2 00/48] splice, net: Replace sendpage with sendmsg(MSG_SPLICE_PAGES)
+Date:   Wed, 29 Mar 2023 15:13:06 +0100
+Message-Id: <20230329141354.516864-1-dhowells@redhat.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6605.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbc632f7-bfd5-4327-d077-08db305f81cf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2023 14:11:36.0651
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: G4JRU/iPCtZy4UQzfR3vaPaFY1A7gOacQdlOgz0fhBHgkBpKGdhFopGviwvev0lZMOwYnTvWsQnEzdfeM4gaeA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR11MB8193
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTAzLTI5IGF0IDA1OjQ3IC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0K
-PiBPbiBXZWQsIE1hciAyOSwgMjAyMyBhdCAwMzo0Mzo1OEFNICswMDAwLCBaaGFuZywgUnVpIHdy
-b3RlOg0KPiA+IEhpLCBQZXRlciwNCj4gPiANCj4gPiBDQyB0aGUgbGlzdC4NCj4gPiANCj4gPiBP
-biBUdWUsIDIwMjMtMDMtMjggYXQgMjI6MzcgKzAyMDAsIFBldGVyIEdhbnpob3JuIHdyb3RlOg0K
-PiA+ID4gRGVhciBNci4gUnVpLA0KPiA+ID4gRGVhciBNci4gUm9lY2ssDQo+ID4gPiANCj4gPiA+
-IHBsZWFzZSBjb25zaWRlciBhY2NlcHRpbmcgdGhlIGF0dGFjaGVkIHBhdGNoZXMgb3INCj4gPiA+
-IG1vZGlmeWluZyB0aGUgY29yZXRlbXAgY29kZSB0byBzdG9wIHNwYW1taW5nIG15IHN5c2xvZy4N
-Cj4gPiA+IEkgd291bGQgYXBwcmVjaWF0ZSBpdCB2ZXJ5IG11Y2ggaWYgeW91IGNhbiBhY2NlcHQg
-dGhlIHBhdGNoZXMuDQo+ID4gPiANCj4gPiA+IGNvcmV0ZW1wOiBJbXByb3ZlIGR5bmFtaWMgY2hh
-bmdlcyBvZiBUak1heA0KPiA+ID4gQWZ0ZXIgaW50cm9kdWN0aW9uIG9mIGR5bmFtaWMgVGpNYXgg
-Y2hhbmdlcyBpbiBjb21taXQNCj4gPiA+IGMwYzY3Zjg3NjFjZWMxZmUzNmMyMWQ4NWIxYTU0MDBl
-YTdhYzMwY2QNCj4gPiA+IG15IHN5c2xvZyBnZXRzIHNwYW1tZWQgd2l0aCAiVGpNYXggaXMgLi4u
-IGRlZ3JlZXMgQyINCj4gPiA+IG1lc3NhZ2VzLg0KPiA+ID4gSWYgVGpNYXggaXMgc3ViamVjdCB0
-byBjaGFuZ2UgYXQgYW55IHRpbWUsIGl0IHdvbid0IGJlDQo+ID4gPiBzZXQgaW4gdGRhdGEgYW55
-bW9yZSBhbmQgcmUtcmVhZCBldmVyeSB0aW1lIGZyb20gTVNSLg0KPiA+ID4gVGhpcyBjYXVzZXMg
-cXVpdGUgYSBsb3Qgb2YgZGV2X2RiZygpIG1lc3NhZ2VzIHRvIGJlIGlzc3VlZC4NCj4gPiA+IA0K
-PiA+ID4gVGhlIGZvbGxvd2luZyBwYXRjaGVzIGNoYW5nZSB0aGUgY29kZSB0byByZWFkIFRqTWF4
-DQo+ID4gPiBmcm9tIHRoZSBNU1JzIGludG8gdGRhdGEtPnRqbWF4IChhZ2FpbikgYnV0IGFsbG93
-IGZvciBhDQo+ID4gPiBkeW5hbWljIHVwZGF0ZSBhdCBhbnkgdGltZSBhcyB3ZWxsLiAoUGF0Y2hl
-cyAxIGFuZCAyKQ0KPiA+ID4gVGhpcyB3YXkgYSBtZXNzYWdlIHdpbGwgb25seSBiZSBpc3N1ZWQg
-YWZ0ZXIgYWN0dWFsIGNoYW5nZXMuDQo+ID4gPiBBbHNvIEkgcmVwbGFjZWQgdGhlIGRldl9kYmco
-KSB3aXRoIGRldl9ub3RpY2UgKFBhdGNoIDMpIGFuZA0KPiA+ID4gYWRkZWQgYSBhZGRpdGlvbmFs
-IGRldl9ub3RpY2UgZm9yIHRoZSBjYXNlIHdoZXJlIFRqTWF4IGlzDQo+ID4gPiBzZXQgYmFzZWQg
-b24gYXNzdW1wdGlvbnMuIChQYXRjaCA0KQ0KPiA+ID4gDQo+ID4gPiANCj4gPiA+IElmIHlvdSBk
-byBub3Qgd2FudCB0byBhY2NlcHQgbXkgcGF0Y2hlcywgcmVtb3ZpbmcgdGhlDQo+ID4gPiBkZXZf
-ZGJnKCkgaW4gZ2V0X3RqbWF4KCkgd291bGQgYmUgdGhlIG1vc3Qgc2ltcGxlDQo+ID4gPiBzb2x1
-dGlvbiBJIGd1ZXNzLg0KPiA+ID4gDQo+ID4gUGxlYXNlIGNoZWNrIGlmIGJlbG93IHBhdGNoIHNv
-bHZlcyB5b3VyIHByb2JsZW0gb3Igbm90Lg0KPiA+IA0KPiA+IEZyb20gOTM3MGVlNTE2M2E4NWY2
-NTIzMGI1MjIyZjFmNGRlY2U1OWNlMDc4YSBNb24gU2VwIDE3IDAwOjAwOjAwDQo+ID4gMjAwMQ0K
-PiA+IEZyb206IFpoYW5nIFJ1aSA8cnVpLnpoYW5nQGludGVsLmNvbT4NCj4gPiBEYXRlOiBXZWQs
-IDI5IE1hciAyMDIzIDExOjM1OjE4ICswODAwDQo+ID4gU3ViamVjdDogW1BBVENIXSBod21vbjog
-KGNvcmV0ZW1wKSBBdm9pZCBkdXBsaWNhdGUgZGVidWcgbWVzc2FnZXMNCj4gPiANCj4gPiBBdm9p
-ZCBkdXBsaWNhdGUgZGV2X2RiZyBtZXNzYWdlcyB3aGVuIHRqbWF4IHZhbHVlIHJldHJpZXZlZCBm
-cm9tDQo+ID4gTVNSDQo+ID4gZG9lcyBub3QgY2hhbmdlLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYt
-Ynk6IFpoYW5nIFJ1aSA8cnVpLnpoYW5nQGludGVsLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVy
-cy9od21vbi9jb3JldGVtcC5jIHwgNiArKysrKy0NCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDUgaW5z
-ZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L2h3bW9uL2NvcmV0ZW1wLmMgYi9kcml2ZXJzL2h3bW9uL2NvcmV0ZW1wLmMNCj4gPiBpbmRleCAz
-MGQ3N2Y0NTE5MzcuLjgwOTQ1Njk2N2I1MCAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2h3bW9u
-L2NvcmV0ZW1wLmMNCj4gPiArKysgYi9kcml2ZXJzL2h3bW9uL2NvcmV0ZW1wLmMNCj4gPiBAQCAt
-MjY3LDYgKzI2Nyw3IEBAIHN0YXRpYyBpbnQgZ2V0X3RqbWF4KHN0cnVjdCB0ZW1wX2RhdGEgKnRk
-YXRhLA0KPiA+IHN0cnVjdCBkZXZpY2UgKmRldikNCj4gPiAgCWludCBlcnI7DQo+ID4gIAl1MzIg
-ZWF4LCBlZHg7DQo+ID4gIAl1MzIgdmFsOw0KPiA+ICsJc3RhdGljIHUzMiB0am1heDsNCj4gDQo+
-IFRoYXQgd291bGQgYXBwbHkgdG8gZXZlcnkgaW5zdGFuY2Ugb2YgdGhpcyBkcml2ZXIsIG1lYW5p
-bmcgdG8gZXZlcnkNCj4gQ1BVIGNvcmUuIElzIHRoYXQgcmVhbGx5IGFwcHJvcHJpYXRlID8NCj4g
-DQo+IEd1ZW50ZXINCj4gDQpHb29kIHBvaW50Lg0KDQpNU1JfSUEzMl9URU1QRVJBVFVSRV9UQVJH
-RVQgaXMgcGFja2FnZSBzY29wZSwgYW5kIHRoZSBjYWNoZWQgdGptYXgNCnNob3VsZCBhbHNvIGJl
-IHBhY2thZ2Ugc2NvcGUsIG9yIGVsc2UgdGhpcyBtZXNzYWdlIGlzIHNob3duIGZvciBlYWNoDQpj
-cHUgd2hlbiB0am1heCBjaGFuZ2VzIGluIG9uZSBwYWNrYWdlLg0KDQpQcmV2aW91c2x5LCB0aGUg
-bWVzc2FnZSBpcyBwcmludGVkIG9ubHkgb25jZSBkdXJpbmcgZHJpdmVyIHByb2JpbmcgdGltZQ0K
-dGh1cyBJJ20gd29uZGVyaW5nIGhvdyB1c2VmdWwgdGhpcyBpcy4NCg0KTWF5YmUgd2UgY2FuIGp1
-c3QgZGVsZXRlIGl0Pw0KDQp0aGFua3MsDQpydWkNCg==
+Hi Willy, Dave, et al.,
+
+[NOTE! This patchset is a work in progress and some modules will not
+ compile with it.]
+
+I've been looking at how to make pipes handle the splicing in of multipage
+folios and also looking to see if I could implement a suggestion from Willy
+that pipe_buffers could perhaps hold a list of pages (which could make
+splicing simpler - an entire splice segment would go in a single
+pipe_buffer).
+
+There are a couple of issues here:
+
+ (1) Gifting/stealing a multipage folio is really tricky.  I think that if
+     a multipage folio if gifted, the gift flag should be quietly dropped.
+     Userspace has no control over what splice() and vmsplice() will see in
+     the pagecache.
+
+ (2) The sendpage op expects to be given a single page and various network
+     protocols just attach that to a socket buffer.
+
+This patchset aims to deal with the second by removing the ->sendpage()
+operation and replacing it with sendmsg() and a new internal flag
+MSG_SPLICE_PAGES.  As sendmsg() takes an I/O iterator, this also affords
+the opportunity to pass a slew of pages in one go, rather than one at a
+time.
+
+If MSG_SPLICE_PAGES is set, the protocol sendmsg() instance will attempt to
+splice the pages out of the buffer, copying into individual fragments those
+that it can't (e.g. because they belong to the slab).
+
+The patchset consists of the following parts:
+
+ (1) A couple of fixes.
+
+ (2) Add an iterator-of-iterators (ITER_ITERLIST).  This allows a network
+     filesystem, say, to glue together buffers described by a number of
+     different iterators.  Sunrpc, for example, can use it to assemble a
+     message consisting of a couple of headers (KVECs), a body (BVEC) and a
+     trailer (KVEC).  It has very limited application, however, as such
+     iterators cannot be copied trivially by "*iter1 = *iter2;".
+
+ (3) Define the MSG_SPLICE_PAGES flag.
+
+ (4) The page_frag_alloc_align() allocator is overhauled:
+
+     (a) Split it out from mm/page_alloc.c into its own file,
+     mm/page_frag_alloc.c.
+
+     (b) Make it use multipage folios rather than compound pages.
+
+     (c) Give it per-cpu buckets to allocate from so no locking is
+     required.
+
+     (d) The netdev_alloc_cache and the napi fragment cache are then cast
+     in terms of this and some private allocators are removed.
+
+     I'm not sure that the existing allocator is 100% multithread safe.
+
+ (5) Implement MSG_SPLICE_PAGES support in TCP.
+
+ (6) Make MSG_SPLICE_PAGES copy unspliceable pages (eg. slab pages).
+
+ (7) Make do_tcp_sendpages() just wrap sendmsg() and then fold it in to its
+     various callers.
+
+ (8) Implement MSG_SPLICE_PAGES support in IP and make udp_sendpage() just
+     a wrapper around sendmsg().
+
+ (9) Make IP/UDP copy unspliceable pages.
+
+(10) Implement MSG_SPLICE_PAGES support in AF_UNIX.
+
+(11) Make AF_UNIX copy unspliceable pages.
+
+(12) Make AF_ALG use netfs_extract_iter_to_sg().
+
+(13) Make AF_ALG implement MSG_SPLICE_PAGES and make af_alg_sendpage() just
+     a wrapper around sendmsg().
+
+(14) Make AF_ALG/hash implement MSG_SPLICE_PAGES.
+
+(15) Rename pipe_to_sendpage() to pipe_to_sendmsg() and make it a wrapper
+     around sendmsg().
+
+(16) Replace splice_to_socket() with an implementation that doesn't use
+     splice_from_pipe() to push one page at a time, but rather something
+     that splices up to 16 pages at once.  This absorbs pipe_to_sendmsg().
+
+(17) Remove sendpage file operation.
+
+(18) Convert siw, ceph, iscsi and tcp_bpf to use sendmsg() instead of
+     tcp_sendpage().
+
+(19) Make skb_send_sock() use sendmsg().
+
+(20) Convert ceph, rds, dlm, sunrpc, nvme, kcm, smc, ocfs2 and drbd to use
+     sendmsg().
+
+(21) Make sunrpc use an iterator-of-iterators to pass through a combination
+     of iterators that cover the marker, header, body and trailer of a
+     message in a single sendmsg.
+
+(22) Make sunrpc delegate copying of unspliceable pages to TCP, so that it
+     can stitch together three ITER_KVECs and an ITER_BVEC into a single
+     ITER_ITERLIST.
+
+(23) Make drbd delegate copying of slab pages to TCP and pass an entire
+     bio's bvec to sendmsg at a time.  Delegate copying of unspliceable
+     pages to TCP.
+
+(24) Remove the sendpage socket operation.
+
+This leaves the implementation of MSG_SPLICE_PAGES in AF_KCM, AF_TLS and
+Chelsio-TLS which I'm going to need help with.  I've killed off all uses of
+kernel_sendpage() and all uses of sendpage_ok() outside of the protocols.
+
+I have tested AF_UNIX splicing - which, surprisingly, seems nearly twice as
+fast - TCP splicing, the siw driver (softIWarp RDMA with nfs and cifs),
+sunrpc (with nfsd) and UDP (using a patched rxrpc).
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-sendpage
+
+David
+
+Changes
+=======
+ver #2)
+ - Overhauled the page_frag_alloc() allocator: large folios and per-cpu.
+   - Got rid of my own zerocopy allocator.
+ - Use iov_iter_extract_pages() rather poking in iter->bvec.
+ - Made page splicing fall back to page copying on a page-by-page basis.
+ - Made splice_to_socket() pass 16 pipe buffers at a time.
+ - Made AF_ALG/hash use finup/digest where possible in sendmsg.
+ - Added an iterator-of-iterators, ITER_ITERLIST.
+ - Made sunrpc use the iterator-of-iterators.
+ - Converted more drivers.
+
+Link: https://lore.kernel.org/r/20230316152618.711970-1-dhowells@redhat.com/ # v1
+
+David Howells (48):
+  netfs: Fix netfs_extract_iter_to_sg() for ITER_UBUF/IOVEC
+  iov_iter: Remove last_offset member
+  iov_iter: Add an iterator-of-iterators
+  net: Declare MSG_SPLICE_PAGES internal sendmsg() flag
+  mm: Move the page fragment allocator from page_alloc.c into its own
+    file
+  mm: Make the page_frag_cache allocator use multipage folios
+  mm: Make the page_frag_cache allocator use per-cpu
+  tcp: Support MSG_SPLICE_PAGES
+  tcp: Make sendmsg(MSG_SPLICE_PAGES) copy unspliceable data
+  tcp: Convert do_tcp_sendpages() to use MSG_SPLICE_PAGES
+  tcp_bpf: Inline do_tcp_sendpages as it's now a wrapper around
+    tcp_sendmsg
+  espintcp: Inline do_tcp_sendpages()
+  tls: Inline do_tcp_sendpages()
+  siw: Inline do_tcp_sendpages()
+  tcp: Fold do_tcp_sendpages() into tcp_sendpage_locked()
+  ip, udp: Support MSG_SPLICE_PAGES
+  ip, udp: Make sendmsg(MSG_SPLICE_PAGES) copy unspliceable data
+  udp: Convert udp_sendpage() to use MSG_SPLICE_PAGES
+  af_unix: Support MSG_SPLICE_PAGES
+  af_unix: Make sendmsg(MSG_SPLICE_PAGES) copy unspliceable data
+  crypto: af_alg: Pin pages rather than ref'ing if appropriate
+  crypto: af_alg: Use netfs_extract_iter_to_sg() to create scatterlists
+  crypto: af_alg: Indent the loop in af_alg_sendmsg()
+  crypto: af_alg: Support MSG_SPLICE_PAGES
+  crypto: af_alg: Convert af_alg_sendpage() to use MSG_SPLICE_PAGES
+  crypto: af_alg/hash: Support MSG_SPLICE_PAGES
+  splice, net: Use sendmsg(MSG_SPLICE_PAGES) rather than ->sendpage()
+  splice: Reimplement splice_to_socket() to pass multiple bufs to
+    sendmsg()
+  Remove file->f_op->sendpage
+  siw: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage to transmit
+  ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
+  iscsi: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
+  iscsi: Assume "sendpage" is okay in iscsi_tcp_segment_map()
+  tcp_bpf: Make tcp_bpf_sendpage() go through
+    tcp_bpf_sendmsg(MSG_SPLICE_PAGES)
+  net: Use sendmsg(MSG_SPLICE_PAGES) not sendpage in skb_send_sock()
+  algif: Remove hash_sendpage*()
+  ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage()
+  rds: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
+  dlm: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
+  sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+  sunrpc: Rely on TCP sendmsg + MSG_SPLICE_PAGES to copy unspliceable
+    data
+  nvme: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+  kcm: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+  smc: Drop smc_sendpage() in favour of smc_sendmsg() + MSG_SPLICE_PAGES
+  ocfs2: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage()
+  drbd: Use sendmsg(MSG_SPLICE_PAGES) rather than sendmsg()
+  drdb: Send an entire bio in a single sendmsg
+  sock: Remove ->sendpage*() in favour of sendmsg(MSG_SPLICE_PAGES)
+
+ Documentation/networking/scaling.rst       |   4 +-
+ crypto/Kconfig                             |   1 +
+ crypto/af_alg.c                            | 194 +++++----------
+ crypto/algif_aead.c                        |  52 ++--
+ crypto/algif_hash.c                        | 171 ++++++-------
+ crypto/algif_rng.c                         |   2 -
+ crypto/algif_skcipher.c                    |  24 +-
+ drivers/block/drbd/drbd_main.c             |  86 +++----
+ drivers/infiniband/sw/siw/siw_qp_tx.c      | 227 ++++-------------
+ drivers/net/ethernet/mediatek/mtk_wed_wo.c |  19 +-
+ drivers/net/ethernet/mediatek/mtk_wed_wo.h |   2 -
+ drivers/nvme/host/tcp.c                    |  63 ++---
+ drivers/nvme/target/tcp.c                  |  69 +++---
+ drivers/scsi/iscsi_tcp.c                   |  31 ++-
+ drivers/scsi/iscsi_tcp.h                   |   2 +-
+ drivers/scsi/libiscsi_tcp.c                |  13 +-
+ drivers/target/iscsi/iscsi_target_util.c   |  14 +-
+ fs/dlm/lowcomms.c                          |  10 +-
+ fs/netfs/iterator.c                        |   2 +-
+ fs/ocfs2/cluster/tcp.c                     | 107 ++++----
+ fs/splice.c                                | 158 +++++++++---
+ include/crypto/if_alg.h                    |   7 +-
+ include/linux/fs.h                         |   3 -
+ include/linux/gfp.h                        |  17 +-
+ include/linux/mm_types.h                   |  13 +-
+ include/linux/net.h                        |   8 -
+ include/linux/socket.h                     |   3 +
+ include/linux/splice.h                     |   2 +
+ include/linux/sunrpc/svc.h                 |  11 +-
+ include/linux/uio.h                        |  18 +-
+ include/net/inet_common.h                  |   2 -
+ include/net/sock.h                         |   6 -
+ include/net/tcp.h                          |   2 -
+ include/net/tls.h                          |   2 +-
+ lib/iov_iter.c                             | 254 ++++++++++++++++++-
+ mm/Makefile                                |   2 +-
+ mm/page_alloc.c                            | 126 ----------
+ mm/page_frag_alloc.c                       | 201 +++++++++++++++
+ net/appletalk/ddp.c                        |   1 -
+ net/atm/pvc.c                              |   1 -
+ net/atm/svc.c                              |   1 -
+ net/ax25/af_ax25.c                         |   1 -
+ net/caif/caif_socket.c                     |   2 -
+ net/can/bcm.c                              |   1 -
+ net/can/isotp.c                            |   1 -
+ net/can/j1939/socket.c                     |   1 -
+ net/can/raw.c                              |   1 -
+ net/ceph/messenger_v1.c                    |  58 ++---
+ net/ceph/messenger_v2.c                    |  89 ++-----
+ net/core/skbuff.c                          |  81 +++---
+ net/core/sock.c                            |  35 +--
+ net/dccp/ipv4.c                            |   1 -
+ net/dccp/ipv6.c                            |   1 -
+ net/ieee802154/socket.c                    |   2 -
+ net/ipv4/af_inet.c                         |  21 --
+ net/ipv4/ip_output.c                       | 104 +++++++-
+ net/ipv4/tcp.c                             | 274 ++++++---------------
+ net/ipv4/tcp_bpf.c                         |  72 +-----
+ net/ipv4/tcp_ipv4.c                        |   1 -
+ net/ipv4/udp.c                             |  54 ----
+ net/ipv4/udp_impl.h                        |   2 -
+ net/ipv4/udplite.c                         |   1 -
+ net/ipv6/af_inet6.c                        |   3 -
+ net/ipv6/raw.c                             |   1 -
+ net/ipv6/tcp_ipv6.c                        |   1 -
+ net/kcm/kcmsock.c                          |  15 +-
+ net/key/af_key.c                           |   1 -
+ net/l2tp/l2tp_ip.c                         |   1 -
+ net/l2tp/l2tp_ip6.c                        |   1 -
+ net/llc/af_llc.c                           |   1 -
+ net/mctp/af_mctp.c                         |   1 -
+ net/mptcp/protocol.c                       |   2 -
+ net/netlink/af_netlink.c                   |   1 -
+ net/netrom/af_netrom.c                     |   1 -
+ net/packet/af_packet.c                     |   2 -
+ net/phonet/socket.c                        |   2 -
+ net/qrtr/af_qrtr.c                         |   1 -
+ net/rds/af_rds.c                           |   1 -
+ net/rds/tcp_send.c                         |  86 +++----
+ net/rose/af_rose.c                         |   1 -
+ net/rxrpc/af_rxrpc.c                       |   1 -
+ net/sctp/protocol.c                        |   1 -
+ net/smc/af_smc.c                           |  29 ---
+ net/smc/smc_stats.c                        |   2 +-
+ net/smc/smc_stats.h                        |   1 -
+ net/smc/smc_tx.c                           |  16 --
+ net/smc/smc_tx.h                           |   2 -
+ net/socket.c                               |  81 +-----
+ net/sunrpc/svcsock.c                       |  83 ++-----
+ net/tipc/socket.c                          |   3 -
+ net/tls/tls_main.c                         |  25 +-
+ net/unix/af_unix.c                         | 254 ++++++++-----------
+ net/vmw_vsock/af_vsock.c                   |   3 -
+ net/x25/af_x25.c                           |   1 -
+ net/xdp/xsk.c                              |   1 -
+ net/xfrm/espintcp.c                        |  10 +-
+ 96 files changed, 1495 insertions(+), 1874 deletions(-)
+ create mode 100644 mm/page_frag_alloc.c
+
