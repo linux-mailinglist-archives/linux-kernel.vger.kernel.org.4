@@ -2,86 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA846CD9BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 386816CD9CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjC2M5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
+        id S229788AbjC2M7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjC2M5N (ORCPT
+        with ESMTP id S229753AbjC2M73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:57:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAE23ABE;
-        Wed, 29 Mar 2023 05:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680094632; x=1711630632;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vwS3X5AtMxUgPOZzP+yLqFDJtD0ZzmPzIp0mK7L6JFc=;
-  b=Iu5YeBtYmX+X58pRVilTnWcVMwKU9k2tedGnbpAQ0p6yfUNT5fqUMX1x
-   DWW2Vr54nqOX4olSqXhp7Sb9+DRiTRXmJnBmC1j/PschrHI9f0qSNZFlB
-   ZPOmKeNN3MfAQnBPeS9YN8Ic0UATKF8ICMeX59ErArjGKfy/R1BH27MG7
-   3WoMcyzw8/HSAm4UTn/HDyWEHtjAzayCMoh0o3beVZl1Yoo1JRAp3Jw0t
-   dGvzdNE30SC6ps5Mt/wjvBaprSHo56wa6qC1Y7IFhqEaR1ljIxb8aLg4o
-   h3BmlD5MHxBkCaeFkrn/I/KGLrzoK6tvszRqQhzcNHq2akiKs7D0BZeBW
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="343286560"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="343286560"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 05:57:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="686813345"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="686813345"
-Received: from ostermam-mobl.amr.corp.intel.com (HELO intel.com) ([10.249.32.144])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 05:57:06 -0700
-Date:   Wed, 29 Mar 2023 14:56:42 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andi Shyti <andi.shyti@linux.intel.com>
-Subject: Re: [PATCH v6 3/8] lib/ref_tracker: add printing to memory buffer
-Message-ID: <ZCQ1ihjfKHR4GRi2@ashyti-mobl2.lan>
-References: <20230224-track_gt-v6-0-0dc8601fd02f@intel.com>
- <20230224-track_gt-v6-3-0dc8601fd02f@intel.com>
+        Wed, 29 Mar 2023 08:59:29 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0B04C09
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:59:12 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id a11so16004919lji.6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680094750;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DN7nLDKC0wq8dGrzJBNXiUHRCnSTtTOjORw0FU5XSS8=;
+        b=jOan5d/H+H/ao9TG7rZDuvTaXYlnqSsbenccBNzTKS//NceetxK8PRWvGUPkmmQCp7
+         vyoVlpl19UsE4PmF7Va6mJkZk6H5ht/69J9dta8ZqjWcnqFh6TUgpdv1b/MezuczWE2A
+         tCvXoqg6J4eBXPqMsiloPoXEKauGQhALHACo3qZbFVOx/QcsN0hd36/oV6BZfhBpngSe
+         jy0L8L/lYHZd4atKvxVOywlEmyrzYUk8IADLVy9q0YX1pKvd5ObCmeXybX+dHpna5ulr
+         cFl1r5ct70si99tEgaOyhUGVJeoQbLAZ35dV6dX/n/3ytS0jnhXGgrsgqlBD+mOxgsVq
+         02FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680094750;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DN7nLDKC0wq8dGrzJBNXiUHRCnSTtTOjORw0FU5XSS8=;
+        b=gJVMVS5tLOK/ZmJK+o1uFZYXU9Z16hXyOoaCDTZNrBRe3Ju3HDLxiHNlzLjGzyceRq
+         Fc/WwVoq8agpjojMYH7oW1TNfmg+iuTnkJlL99hMm4k8EfiCplTzac1l77EGzqCvJfWO
+         C+ODWXYasEC5C0PSbpwJmxrz4SHkni+Ct0+JuJE0vsWnLqPk+7iwb99nyvvl0h/lv6K2
+         Yg8gTkNHIOnuyVcXkxivE5x2M/j36zy1iTA9uF62XhBbEb0lzDVxwS2TqO+RgnfFrGPD
+         CYnBXngQPlztAh3WlUSSV/rPFMwTQgAa9h0Ja0mVR61Tq3lR8OAOcHbo2zOs1MHOm9IM
+         QvTg==
+X-Gm-Message-State: AAQBX9d6C/YpzyBji9y039Ai5kvUoHVe350zQa7a/i80ZCTgs0tNI49S
+        TenmBXSJ1CqpqUFFohTh1u8MQw==
+X-Google-Smtp-Source: AKy350bhOm/sYJy3xwAQ36O7mp2DARw2I2S/mlwa5XlM84lIVivjftmZ/BG1cNMc9bWCts/HJPsPjA==
+X-Received: by 2002:a2e:874e:0:b0:2a2:79e9:decc with SMTP id q14-20020a2e874e000000b002a279e9deccmr5909956ljj.53.1680094750388;
+        Wed, 29 Mar 2023 05:59:10 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id z26-20020a05651c023a00b00295b842c2dbsm5504119ljn.133.2023.03.29.05.59.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 05:59:10 -0700 (PDT)
+Message-ID: <097f4778-9f8e-67a8-85bc-14f4be3dadc0@linaro.org>
+Date:   Wed, 29 Mar 2023 14:59:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224-track_gt-v6-3-0dc8601fd02f@intel.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 1/1] PCI: qcom: Add support for system suspend and
+ resume
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Johan Hovold <johan@kernel.org>
+Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        andersson@kernel.org, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_krichai@quicinc.com,
+        johan+linaro@kernel.org, steev@kali.org, mka@chromium.org,
+        Dhruva Gole <d-gole@ti.com>
+References: <20230327133824.29136-1-manivannan.sadhasivam@linaro.org>
+ <20230327133824.29136-2-manivannan.sadhasivam@linaro.org>
+ <ZCQLWzqKPrusMro+@hovoldconsulting.com> <20230329125232.GB5575@thinkpad>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230329125232.GB5575@thinkpad>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrzej,
 
-On Wed, Mar 29, 2023 at 09:24:14AM +0200, Andrzej Hajda wrote:
-> Similar to stack_(depot|trace)_snprint the patch
-> adds helper to printing stats to memory buffer.
-> It will be helpful in case of debugfs.
+
+On 29.03.2023 14:52, Manivannan Sadhasivam wrote:
+> On Wed, Mar 29, 2023 at 11:56:43AM +0200, Johan Hovold wrote:
+>> On Mon, Mar 27, 2023 at 07:08:24PM +0530, Manivannan Sadhasivam wrote:
+>>> During the system suspend, vote for minimal interconnect bandwidth and
+>>> also turn OFF the resources like clock and PHY if there are no active
+>>> devices connected to the controller. For the controllers with active
+>>> devices, the resources are kept ON as removing the resources will
+>>> trigger access violation during the late end of suspend cycle as kernel
+>>> tries to access the config space of PCIe devices to mask the MSIs.
+>>>
+>>> Also, it is not desirable to put the link into L2/L3 state as that
+>>> implies VDD supply will be removed and the devices may go into powerdown
+>>> state. This will affect the lifetime of storage devices like NVMe.
+>>>
+>>> And finally, during resume, turn ON the resources if the controller was
+>>> truly suspended (resources OFF) and update the interconnect bandwidth
+>>> based on PCIe Gen speed.
+>>>
+>>> Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>>> Acked-by: Dhruva Gole <d-gole@ti.com>
+>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>> ---
+>>>  drivers/pci/controller/dwc/pcie-qcom.c | 62 ++++++++++++++++++++++++++
+>>>  1 file changed, 62 insertions(+)
+>>>
+>>> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+>>> index a232b04af048..f33df536d9be 100644
+>>> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+>>> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+>>> @@ -227,6 +227,7 @@ struct qcom_pcie {
+>>>  	struct gpio_desc *reset;
+>>>  	struct icc_path *icc_mem;
+>>>  	const struct qcom_pcie_cfg *cfg;
+>>> +	bool suspended;
+>>>  };
+>>>  
+>>>  #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
+>>> @@ -1820,6 +1821,62 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>>>  	return ret;
+>>>  }
+>>>  
+>>> +static int qcom_pcie_suspend_noirq(struct device *dev)
+>>> +{
+>>> +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
+>>> +	int ret;
+>>> +
+>>> +	/*
+>>> +	 * Set minimum bandwidth required to keep data path functional during
+>>> +	 * suspend.
+>>> +	 */
+>>> +	ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
+>>
+>> This isn't really the minimum bandwidth you're setting here.
+>>
+>> I think you said off list that you didn't see real impact reducing the
+>> bandwidth, but have you tried requesting the real minimum which would be
+>> kBps_to_icc(1)?
+>>
+>> Doing so works fine here with both the CRD and X13s and may result in
+>> some further power savings.
+>>
 > 
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> No, we shouldn't be setting random value as the bandwidth. Reason is, these
+> values are computed by the bus team based on the requirement of the interconnect
+> paths (clock, voltage etc...) with actual PCIe Gen speeds.
+Should it then be variable, based on the current link gen?
 
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> 
-
-Thanks,
-Andi
+Konrad
+I don't know about
+> the potential implication even if it happens to work.
+> 
+> - Mani
+> 
+>>> +	if (ret) {
+>>> +		dev_err(dev, "Failed to set interconnect bandwidth: %d\n", ret);
+>>> +		return ret;
+>>> +	}
+>>
+>> Johan
+> 
