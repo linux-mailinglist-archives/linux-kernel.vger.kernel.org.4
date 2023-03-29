@@ -2,278 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282DE6CCF40
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 03:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED54F6CCF49
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 03:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjC2BMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 21:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
+        id S229622AbjC2BNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 21:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjC2BMs (ORCPT
+        with ESMTP id S229479AbjC2BNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 21:12:48 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A3C2685
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 18:12:45 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id bi9so18114132lfb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 18:12:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680052363;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bD0WuHcqP0jnnIO4Z4zALTMiyM+BdS1Or/XHCneUJyo=;
-        b=PP5AoEw3qY9FLNfDXALB5T16AgDALGWht16Gax2DfReMMcjQK6ybgazwrEgRO3EALx
-         TCKvNk/f1a4BGLG0tSLayZNqPA4+0BKCVru9vzqn9YOjGGoQm8UVy4iFh++Cx3D2z6dP
-         l7wpp0uryBScnRDjyn7PiuSBLYP36LuPi9dFzkvop19TP1vpL/Joll8uAEkmLa/NwEQ9
-         Bf1G+ejesGbwF2JL+7CEvUPYHDtjA4/JxZSbFMwHcJXCjSn4F+W7X1MTy0obur1NkgpX
-         0EmB3lwdP+n/BNJ/OngJV3RN9517o1ezJQnuRHLbNFSuXivUAJI+Kmj2ugkn0E99MpwS
-         /6cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680052363;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bD0WuHcqP0jnnIO4Z4zALTMiyM+BdS1Or/XHCneUJyo=;
-        b=KJF5EBresgDNJAmkgyY0WqG865s3O2H+POOgO6jf0jvRj72Yi8XDmrEJTwx6uwOuKV
-         fT8o1y4EoSgCwUeleselviKHHIvmWLCAVniK6jM1J43XhJvPuMUuq43Nquq4QeMhDNXK
-         MJ40QtZ+UrDpYeSmYb9pKmPFxgqCowWl12ys0RIEDhnmBP8OIJqcf6FkfF6ePi3f3A53
-         ZNx+dQIyfgg0/tdxaAQqsmri7ckc9fIZCqPCj6yII8ANTg0800kph2bOInj9rz5Cs+3W
-         o2kf/JpomcMGrvnq5seShUyWvjNLLhgOJD0VenignPhTr7wVrDmw251KDB5KDtPfmbPl
-         6Zkw==
-X-Gm-Message-State: AAQBX9c79dDuC65oGpKReZzp3Dd6e4ZnGDmpB1srH7T1ErZJbykGGMaB
-        giFPssaey45xXndUfILK4RmICg==
-X-Google-Smtp-Source: AKy350YJxJitwRKp+/SoxvP/GkKDIa3U96VIE10QYl7FOdWMNj3XVj2T6lVGbXyC/FJT0lsMV0oaBw==
-X-Received: by 2002:ac2:5fa5:0:b0:4dd:9e4a:4c3b with SMTP id s5-20020ac25fa5000000b004dd9e4a4c3bmr4107519lfe.17.1680052363332;
-        Tue, 28 Mar 2023 18:12:43 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id c18-20020a05651221b200b004dc53353d15sm5248519lft.281.2023.03.28.18.12.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 18:12:42 -0700 (PDT)
-Message-ID: <911d3f32-b020-94f7-2ac5-5d72b35ba901@linaro.org>
-Date:   Wed, 29 Mar 2023 03:12:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 00/14] GMU-less A6xx support (A610, A619_holi)
+        Tue, 28 Mar 2023 21:13:52 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813E899;
+        Tue, 28 Mar 2023 18:13:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680052431; x=1711588431;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=q0UpkotgPgcoMqoMjBdYAvB6A4elms44ZdHeK8k1o/g=;
+  b=miQ91j/pLqI7QgHHeu2Chra3cyVAnOOX9WsHpc02ZO7LaineXEl+zkuK
+   Ll3GWg/F79mqRCRrVbpOxsmYhyJV6w568OTFEGab1sig2PIStjFGLpyMZ
+   TGIoe3e3OVoxk1fT2g+/OhVhnXGH6eBcJmxDnZL+SDYopMcgUq8pibGIF
+   dTZNXr/gKMly1qnZzPQmgqep5OV4c9aVZDASFh/eXtFi0+ZqOnGSevDpC
+   FlhEGMCuCEMXZIe/gwl8kI6zevL3jBBfCxbLA3OC+X+5f6WD38h0MbBb6
+   sxChQsmYYgGRqu65hhpynuJE+LdiLdsm/HBlwL8jfaAtlJoXH0R1Pdo3b
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="343154395"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="343154395"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 18:13:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="808015199"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="808015199"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga004.jf.intel.com with ESMTP; 28 Mar 2023 18:13:50 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 28 Mar 2023 18:13:50 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 28 Mar 2023 18:13:50 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Tue, 28 Mar 2023 18:13:50 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Tue, 28 Mar 2023 18:13:49 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cBwEmzP7DKanmjmC2dIZdF8zCDeXkNdbaK1U9RChc8S/McqNH20s09rsr4lcYI525nQFA7PEP7tTNuVEwPB/Ssi1xXpYbkSm0xgPhEikMyJQSpsuzOOioshGnAuYaJJm54IE0BNYfJa8uyba9WaLdabAQw62g+/xuYZYcihjEXH2nPGCoo3l7xCCd0RiuHCaluX1a2vRxoywilTWskM8BwbzG8//awZYDeMoQgNXvJMp4phTUD8z5hnk+2CPIfnJQl1ygXLa94ey77i4OvYLSjF98XAV5Hx0TuKv+3vJwXmUeQN4jr/TuIl9FjBFuZW0S0p6Y3F/5ZmUVyqpLmSzPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q0UpkotgPgcoMqoMjBdYAvB6A4elms44ZdHeK8k1o/g=;
+ b=BRxmkh5gRVTkM1FLQdJyNv3FcYSdpoPuYKqFtHXYZ//MhknDjWJ5jLjoUZNceefIZHz9B0WZQKQ4nBKcXbFqyxHx+Vf9mOXeWnzKTAtbXu2ScyvvmcOYj/BRzXN8s3l51M9rZUY4yRgSQXhd8MyhJW7Dt3jQd9TUc5/IhxyTJdNarFVmA3PIPGNMw5AUgzdVMCXoXN2tRAqFgpvcQyHPo04n850JqynYkcdhdJu4o1WW78P1zdCxh/NizutwqhTzxWH4IM4r0XaCXN+uMyoJKvLfr30tMZo8Qr5gkQWZ820Ie2JN8mz7fWARX8N2V07SWEogyilFA753OlLoa0Uhcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by SJ0PR11MB4845.namprd11.prod.outlook.com (2603:10b6:a03:2d1::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Wed, 29 Mar
+ 2023 01:13:46 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::f403:a0a2:e468:c1e9]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::f403:a0a2:e468:c1e9%6]) with mapi id 15.20.6178.038; Wed, 29 Mar 2023
+ 01:13:45 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>
+CC:     "Christopherson,, Sean" <seanjc@google.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Subject: Re: [PATCH v13 003/113] KVM: TDX: Initialize the TDX module when
+ loading the KVM intel kernel module
+Thread-Topic: [PATCH v13 003/113] KVM: TDX: Initialize the TDX module when
+ loading the KVM intel kernel module
+Thread-Index: AQHZVQwsPOGReWj5Uka2uRq42SaKMa75keeAgAHjHYCAACbFgIAA9iwAgA0+bwCAByfygIAAFPmA
+Date:   Wed, 29 Mar 2023 01:13:45 +0000
+Message-ID: <5896fb851d20de4aab55307a73e2b4a4243ca155.camel@intel.com>
+References: <cover.1678643051.git.isaku.yamahata@intel.com>
+         <44f7fe9f235e29f2193eaac5890a4dede22c324c.1678643052.git.isaku.yamahata@intel.com>
+         <20ebae70fd625f8a0fe87f98c25613a2d4dc5792.camel@intel.com>
+         <20230315072711.GF3922605@ls.amr.corp.intel.com>
+         <8ee89a1376babf0a5dbc2feb614890b7e2ccf2f8.camel@intel.com>
+         <20230316002702.GA197448@ls.amr.corp.intel.com>
+         <3ebe8d34ecf199b924f4892ce911077005526628.camel@intel.com>
+         <20230328235839.GA1069687@ls.amr.corp.intel.com>
+In-Reply-To: <20230328235839.GA1069687@ls.amr.corp.intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230223-topic-gmuwrapper-v4-0-e987eb79d03f@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230223-topic-gmuwrapper-v4-0-e987eb79d03f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SJ0PR11MB4845:EE_
+x-ms-office365-filtering-correlation-id: 8f68b050-f47e-411b-0f7a-08db2ff2d81b
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JQrfkZ75jzSSd06TnGmB4qxRD2HiU0lDQGVsH9Rsw1QQZaEcIzDQGEznAgByjghzR+BgwWvwxNRtNe0h2VXAUa43K25e254Fs0vJqwfojSIymLweb8NHYSPVcUIcrQsjjDwScDMGYNDnJF5AeHjhR0GJTqYApJpmQ5U20q9WHaV7mTXRlB25UfaPrtqPlO49ea5NuW0ep8GaaVcYW5yi7aQEn9Bd4CpTcsDEqnM4MORFQ7PME13kXh7rq5NVFwfgHNtQsvEFrpuqrKSucH4NZtUbAFdozI7GZN7eEPwf5eufTr12fkayC8JaYHUOAJdTS5Akxu6ZTFOOYlToFE8AvEJ0Qbjdg4YJLjAPejXCdei7zyW7FUL0gOa1Kwc1KZN9qzYgfFKtiVK8urHy1vl8BZq6H3Vo63DQ5i+FDsTUVehb5oMFpZfDPl5AKBAhpCS0Qvm5+u5PCN2bjUiYCpxw8X6o4gPPuzWmb1aFiSiQaGdjjLMVVoeJPocF9AUuz9UTFNrU+bLXnb4STzEKK8WUP9Nx2jEkQFWTxq1T2DcRzbzEhOZK34cGljxJmDyYx8b7GoSmYh2nwsg77GAKrv6bEMJeQf37VopCUZPpcvSMsO8N5lDNC4G7heEJ0Grrd75I2h/vLIvMYfRqRgR7KMTmaQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(346002)(366004)(376002)(396003)(136003)(451199021)(6486002)(54906003)(107886003)(478600001)(8936002)(316002)(6506007)(6512007)(71200400001)(26005)(2616005)(64756008)(91956017)(66446008)(66946007)(8676002)(66476007)(6916009)(186003)(76116006)(4326008)(66556008)(41300700001)(122000001)(82960400001)(2906002)(36756003)(38070700005)(38100700002)(5660300002)(86362001)(83380400001)(21314003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Vkd5MTRrMXpOczd3aEFyanlYUUtFTUJJNExFOTBrUnhYcVhadStqbVoyTnc0?=
+ =?utf-8?B?dmx4YURyaURwQWRvMWVCazdNc0R3SDlQdU5ZeGF5c0ZEOXc5SzNuR0ZJclUv?=
+ =?utf-8?B?YSsycVh0dkM4cFNwQVVJclBuNCs0bVRIMGdtV1BYeWVQcGorMmpGTkt1QVNz?=
+ =?utf-8?B?YytZMXB5M3lyZ1RMM2lQR0hFRjJuSDdlY3I0NkppUXh2TjcvdnFrSXlHL3Nu?=
+ =?utf-8?B?SWsxbGkyNVNTamJBbUM4akN6MDZ4SlBGaW5WakNNUVNXZGpDV1p2eFBxNm01?=
+ =?utf-8?B?bi94dWRvUzFoWjV6cnpCZHdrZ3R1SnBEK1htbVc0ZDJsbGdqSXNMdU1lNzgx?=
+ =?utf-8?B?NktERCtweVVZN3ViZXJqZXZFR05JRERzT1B6NlludkRHb3NXQ3FmRmF2YkMx?=
+ =?utf-8?B?ejJqMDRjUHVQRnFNTThmSUpaeGtCSDJ3QldwbHljSU9CcHRrWDQzVnNpS0Vj?=
+ =?utf-8?B?YS9Ga0lNWTZjM3Rja25KQkorWS9GRW8zV0Q3SGsySCt6dkdacFYwWjh3bTdG?=
+ =?utf-8?B?L25YMTBodWVaS0JaNmRNV1htUmVqOHIrVFJLYjUwMU0wQ0hUZE1Mamc2ZUxt?=
+ =?utf-8?B?R0hOYXZuSUtaOFAvS2F3QnA0RU1nNzNYcXp1QWt0RXVDU0lianY5a0ZxRkQr?=
+ =?utf-8?B?L2V1TVlVT3FkbFVvRmhRdzFDSVRmcURIRXczY2pVRFVRR2NSRW1RSFBVU09x?=
+ =?utf-8?B?SWJyNnhqQjFtMnUyZVMzdkNMUEJYYVlSYnFybXNLMUZBNnhtM2JtdDFYYkxG?=
+ =?utf-8?B?TThTMWQ0c2doTVFkVnRyZFZCaXVXTUhFMlhiRUdueityNDFXYXBDT21ZcjZJ?=
+ =?utf-8?B?VDhaQTZUd0J1Q284M1ZnbFdqV014TG1iZU9UUFhDdGp3SGVnZG9OVDk0cmVu?=
+ =?utf-8?B?NGhzNDRUSXlIelREVktJNVJOdjFYNFd3SmtMelh3NDlkRWI5WEU5VENpMEUw?=
+ =?utf-8?B?ZldXZmpvdXdGWXB5TTgwRzEzWEpkbDZxY3I3eTJCK3IxM1JDVDBKWVVNb09q?=
+ =?utf-8?B?c2l4TktjYlN6TTVXVWxTak01ZTFLWlQ0YWg2emIvdGZWd0dmZDhyTVlPUTMx?=
+ =?utf-8?B?Q0lkNTBrZmZDS2dCbEN0OUxtZWdncW5BeWxKYWwrMzU1SHM5ck9GOEZwMkFR?=
+ =?utf-8?B?akd1eDJsZ0xXL1BYcmJOZFBTMkM5T1pzSjB5Vm1XbGRWaG5PeVhIT1hZZTQw?=
+ =?utf-8?B?NzRwQVkvcnhGSk51UHFDbHJxTFltc1Bib2psTkV3c1FIZldRRGsyWmFiT2d2?=
+ =?utf-8?B?WGhpQUlLUXlCSUdDQkZNUGZVUEdaU2JUTGlJekNHRjJLbmkwV1l0RDcrQXd0?=
+ =?utf-8?B?L3BIeWZkeU5EaWU5K3pMMUUzeUd3dzlXM094M1NEdUtGTUlVdkZRMTFnVlFX?=
+ =?utf-8?B?emlyZTh6cFRtbktBNnhkcXhRZENiNDJCNzk2aEZGS1Y4QkdaSllMeDlMcXJD?=
+ =?utf-8?B?N2I5YXFHY0FTZWNmZU91M0dUYzA2QWhNU3lDY3ZWUVQ5S3dvUGFadGhCMnZn?=
+ =?utf-8?B?bUdZc1M5RGJmWVQrOE51cGcyNjFkREJBSC8rVDRWWENtSnNmdGdJVnVTVGRX?=
+ =?utf-8?B?dGxDc2tkZnVsSUtTeW4zNlM1akN2dmV1QWZQY0sxb25NZG1tNmx3aEFWWDNk?=
+ =?utf-8?B?YVlJdzRwSjhZejZOOVgrNldpOFNQT0s5eWdXWURxOWJTUk4vRDhVenlXZnBx?=
+ =?utf-8?B?VXB6RmpZTFZvdHg5MUpoYWhNcWlIc0FZOHd1Q052VitsbnN4NjVuT3hyUys2?=
+ =?utf-8?B?dXVPQyttN1ExTXU2UzVEbENQY1M3STVMRkhxM2xLLzhiL1hqL0ViRjZQRWVi?=
+ =?utf-8?B?OHBMREU5VDE2M3RBd3d3NFQzVTROZzJ5OTlxaHZJQ3JoRDY2S0ZZaTRGYjJQ?=
+ =?utf-8?B?SFNTaFdETTBJTlZxQy9PcjVncnFheDVoVlFmYUlnWldPc2FxQ3gzczVEZ3pE?=
+ =?utf-8?B?Mit6U3JPdTJKWWJ0TEQxbk0zR3VycHVhUnFMS29VZjdGWkdIVFc3anZ5UDhz?=
+ =?utf-8?B?ekpHaWRBcUJjTGhyQlNueDZpSXU3dEUrMTNjWXpzdGE1Z3ZQYW5sK0JDRkdr?=
+ =?utf-8?B?c0dVbTFITFE0UlhhNkY2Q2U4NDlzMHMrWU9id2w0V1VoQVpJV2ZmeEdFVVRx?=
+ =?utf-8?Q?63CyQtJfCurxySZ6Nqihhzo0T?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <71305FFCF29C834F8A9716CBD1B0F3A5@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f68b050-f47e-411b-0f7a-08db2ff2d81b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2023 01:13:45.6831
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FB4b0cGymSiESuZ+GZ/7zSwcCd39X5dwmnb0xB9GkCuZrHsN3WYnfJRh7N3jaIXAwyO5H0gliiDNg09M86/eiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4845
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 14.03.2023 16:28, Konrad Dybcio wrote:
-> v3 -> v4:
-> - Drop the mistakengly-included and wrong A3xx-A5xx bindings changes
-> - Improve bindings commit messages to better explain what GMU Wrapper is
-> - Drop the A680 highest bank bit value adjustment patch
-> - Sort UBWC config variables in a reverse-Christmass-tree fashion [4/14]
-> - Don't alter any UBWC config values in [4/14]
->   - Do so for a619_holi in [8/14]
-> - Rebase on next-20230314 (shouldn't matter at all)
-After Johan's recent runtime PM fix, this kinda broke..
-When entering the error-fail-retry path (e.g. when not embedding
-the firmware in initrd, then starting a DE and letting the kernel
-get the fw from the root partition), the GPU does not wake up fully:
-
-[   24.744344] msm_dpu 5e01000.display-controller: [drm:adreno_wait_ring] *ERROR* timeout waiting for space in ringbuffer 0
-[   25.744343] [drm:a6xx_idle] *ERROR* A619: a6xx_hw_init: timeout waiting for GPU to idle: status 00800005 irq 00800000 rptr/wptr 12/12
-[   25.744401] msm_dpu 5e01000.display-controller: [drm:adreno_load_gpu] *ERROR* gpu hw init failed: -22
-[   25.744494] adreno 5900000.gpu: [drm:a6xx_irq] *ERROR* gpu fault ring 0 fence ffffff00 status 00800005 rb 000c/000c ib1 0000000000000000/0000 ib2 0000000000000000/0000
-[   25.744544] msm_dpu 5e01000.display-controller: [drm:recover_worker] *ERROR* A619: hangcheck recover!
-
-
-Adding a random 1s sleep in hw_init() fixes it. Because of course it does.
-Investigating that, merging this will be suboptimal until then..
-
-Konrad
-> 
-> v3: https://lore.kernel.org/r/20230223-topic-gmuwrapper-v3-0-5be55a336819@linaro.org
-> 
-> v2 -> v3:
-> New dependencies:
-> - https://lore.kernel.org/linux-arm-msm/20230223-topic-opp-v3-0-5f22163cd1df@linaro.org/T/#t
-> - https://lore.kernel.org/linux-arm-msm/20230120172233.1905761-1-konrad.dybcio@linaro.org/
-> 
-> Sidenote: A speedbin rework is in progress, the of_machine_is_compatible
-> calls in A619_holi are ugly (but well, necessary..) but they'll be
-> replaced with socid matching in this or the next kernel cycle.
-> 
-> Due to the new way of identifying GMU wrapper GPUs, configuring 6350
-> to use wrapper would cause the wrong fuse values to be checked, but that
-> will be solved by the conversion + the ultimate goal is to use the GMU
-> whenever possible with the wrapper left for GMU-less Adrenos and early
-> bringup debugging of GMU-equipped ones.
-> 
-> - Ship dt-bindings in this series as we're referencing the compatible now
-> 
-> - "De-staticize" -> "remove static keyword" [3/15]
-> 
-> - Track down all the values in [4/15]
-> 
-> - Add many comments and explanations in [4/15]
-> 
-> - Fix possible return-before-mutex-unlock [5/15]
-> 
-> - Explain the GMU wrapper a bit more in the commit msg [5/15]
-> 
-> - Separate out pm_resume/suspend for GMU-wrapper GPUs to make things
->   cleaner [5/15]
-> 
-> - Don't check if `info` exists, it has to at this point [5/15]
-> 
-> - Assign gpu->info early and clean up following if statements in
->   a6xx_gpu_init [5/15]
-> 
-> - Determine whether we use GMU wrapper based on the GMU compatible
->   instead of a quirk [5/15]
-> 
-> - Use a struct field to annotate whether we're using gmu wrapper so
->   that it can be assigned at runtime (turns out a619 holi-ness cannot
->   be determined by patchid + that will make it easier to test out GMU
->   GPUs without actually turning on the GMU if anybody wants to do so)
->   [5/15]
-> 
-> - Unconditionally hook up gx to the gmu wrapper (otherwise our gpu
->   will not get power) [5/15]
-> 
-> - Don't check for gx domain presence in gmu_wrapper paths, it's
->   guaranteed [5/15]
-> 
-> - Use opp set rate in the gmuwrapper suspend path [5/15]
-> 
-> - Call opp functions on the GPU device and not on the DRM device of
->   mdp4/5/DPU1 half the time (WHOOOOPS!) [5/15]
-> 
-> - Disable the memory clock in a6xx_pm_suspend instead of enabling it
->   (moderate oops) [5/15]
-> 
-> - Call the forgotten clk_bulk_disable_unprepare in a6xx_pm_suspend [5/15]
-> 
-> - Set rate to FMIN (a6xx really doesn't like rate=0 + that's what
->   msm-5.x does anyway) before disabling core clock [5/15]
-> 
-> - pm_runtime_get_sync -> pm_runtime_resume_and_get [5/15]
-> 
-> - Don't annotate no cached BO support with a quirk, as A619_holi is
->   merged into the A619 entry in the big const struct - this means
->   that all GPUs operating in gmu wrapper configuration will be
->   implicitly treated as if they didn't have this feature [7/15]
-> 
-> - Drop OPP rate & icc related patches, they're a part of a separate
->   series now; rebase on it
-> 
-> - Clean up extra parentheses [8/15]
-> 
-> - Identify A619_holi by checking the compatible of its GMU instead
->   of patchlevel [8/15]
-> 
-> - Drop "Fix up A6XX protected registers" - unnecessary, Rob will add
->   a comment explaining why
-> 
-> - Fix existing UBWC values for A680, new patch [10/15]
-> 
-> - Use adreno_is_aXYZ macros in speedbin matching [13/15] - new patch
-> 
-> v2: https://lore.kernel.org/linux-arm-msm/20230214173145.2482651-1-konrad.dybcio@linaro.org/
-> 
-> v1 -> v2:
-> - Fix A630 values in [2/14]
-> - Fix [6/14] for GMU-equipped GPUs
-> 
-> Link to v1: https://lore.kernel.org/linux-arm-msm/20230126151618.225127-1-konrad.dybcio@linaro.org/
-> 
-> This series concludes my couple-weeks-long suffering of figuring out
-> the ins and outs of the "non-standard" A6xx GPUs which feature no GMU.
-> 
-> The GMU functionality is essentially emulated by parting out a
-> "GMU wrapper" region, which is essentially just a register space
-> within the GPU. It's modeled to be as similar to the actual GMU
-> as possible while staying as unnecessary as we can make it - there's
-> no IRQs, communicating with a microcontroller, no RPMh communication
-> etc. etc. I tried to reuse as much code as possible without making
-> a mess where every even line is used for GMU and every odd line is
-> used for GMU wrapper..
-> 
-> This series contains:
-> - plumbing for non-GMU operation, if-ing out GMU calls based on
->   GMU presence
-> - GMU wrapper support
-> - A610 support (w/ speedbin)
-> - A619 support (w/ speedbin)
-> - couple of minor fixes and improvements
-> - VDDCX/VDDGX scaling fix for non-GMU GPUs (concerns more than just
->   A6xx)
-> - Enablement of opp interconnect properties
-> 
-> A619_holi works perfectly fine using the already-present A619 support
-> in mesa. A610 needs more work on that front, but can already replay
-> command traces captures on downstream.
-> 
-> NOTE: the "drm/msm/a6xx: Add support for A619_holi" patch contains
-> two occurences of 0x18 used in place of a register #define, as it's
-> supposed to be RBBM_GPR0_CNTL, but that will only be present after
-> mesa-side changes are merged and headers are synced from there.
-> 
-> Speedbin patches depend on:
-> https://lore.kernel.org/linux-arm-msm/20230120172233.1905761-1-konrad.dybcio@linaro.org/
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> Konrad Dybcio (14):
->       dt-bindings: display/msm: gpu: Document GMU wrapper-equipped A6xx
->       dt-bindings: display/msm/gmu: Add GMU wrapper
->       drm/msm/a6xx: Remove static keyword from sptprac en/disable functions
->       drm/msm/a6xx: Extend and explain UBWC config
->       drm/msm/a6xx: Introduce GMU wrapper support
->       drm/msm/a6xx: Remove both GBIF and RBBM GBIF halt on hw init
->       drm/msm/adreno: Disable has_cached_coherent in GMU wrapper configurations
->       drm/msm/a6xx: Add support for A619_holi
->       drm/msm/a6xx: Add A610 support
->       drm/msm/a6xx: Fix some A619 tunables
->       drm/msm/a6xx: Use "else if" in GPU speedbin rev matching
->       drm/msm/a6xx: Use adreno_is_aXYZ macros in speedbin matching
->       drm/msm/a6xx: Add A619_holi speedbin support
->       drm/msm/a6xx: Add A610 speedbin support
-> 
->  .../devicetree/bindings/display/msm/gmu.yaml       |  49 +-
->  .../devicetree/bindings/display/msm/gpu.yaml       |  57 ++-
->  drivers/gpu/drm/msm/adreno/a6xx_gmu.c              |  57 ++-
->  drivers/gpu/drm/msm/adreno/a6xx_gmu.h              |   2 +
->  drivers/gpu/drm/msm/adreno/a6xx_gpu.c              | 494 ++++++++++++++++++---
->  drivers/gpu/drm/msm/adreno/a6xx_gpu.h              |   1 +
->  drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c        |  14 +-
->  drivers/gpu/drm/msm/adreno/adreno_device.c         |  17 +-
->  drivers/gpu/drm/msm/adreno/adreno_gpu.h            |  33 +-
->  9 files changed, 632 insertions(+), 92 deletions(-)
-> ---
-> base-commit: 647ef0d33d52a103b50469d7109b63d453686c11
-> change-id: 20230223-topic-gmuwrapper-b4fff5fd7789
-> 
-> Best regards,
+PiANCj4gPiA+ICANCj4gPiA+ICsJLyoNCj4gPiA+ICsJICogVERYIHJlcXVpcmVzIHRob3NlIG1l
+dGhvZHMgdG8gZW5hYmxlIFZNWE9OIGJ5DQo+ID4gPiArCSAqIGt2bV9oYXJkd2FyZV9lbmFibGUv
+ZGlzYWJsZV9hbGwoKQ0KPiA+ID4gKwkgKi8NCj4gPiA+ICsJc3RhdGljX2NhbGxfdXBkYXRlKGt2
+bV94ODZfY2hlY2tfcHJvY2Vzc29yX2NvbXBhdGliaWxpdHksDQo+ID4gPiArCQkJICAgb3BzLT5y
+dW50aW1lX29wcy0+Y2hlY2tfcHJvY2Vzc29yX2NvbXBhdGliaWxpdHkpOw0KPiA+ID4gKwlzdGF0
+aWNfY2FsbF91cGRhdGUoa3ZtX3g4Nl9oYXJkd2FyZV9lbmFibGUsDQo+ID4gPiArCQkJICAgb3Bz
+LT5ydW50aW1lX29wcy0+aGFyZHdhcmVfZW5hYmxlKTsNCj4gPiA+ICsJc3RhdGljX2NhbGxfdXBk
+YXRlKGt2bV94ODZfaGFyZHdhcmVfZGlzYWJsZSwNCj4gPiA+ICsJCQkgICBvcHMtPnJ1bnRpbWVf
+b3BzLT5oYXJkd2FyZV9kaXNhYmxlKTsNCj4gPiA+ICAJciA9IG9wcy0+aGFyZHdhcmVfc2V0dXAo
+KTsNCj4gPiA+ICAJaWYgKHIgIT0gMCkNCj4gPiA+ICAJCWdvdG8gb3V0X21tdV9leGl0Ow0KPiA+
+IA0KPiA+IEhtbS4uIEkgdGhpbmsgdGhpcyBpcyB1Z2x5LiAgUGVyaGFwcyB3ZSBzaG91bGQgbmV2
+ZXIgZG8gYW55DQo+ID4gc3RhdGljX2NhbGwoa3ZtX3g4Nl94eHgpKCkgaW4gaGFyZHdhcmVfc2V0
+dXAoKSwgYmVjYXVzZSBoYXJkd2FyZV9zZXR1cCgpIGlzDQo+ID4gY2FsbGVkIGJlZm9yZSBrdm1f
+b3BzX3VwZGF0ZSgpIGFuZCBtYXkgdXBkYXRlIHZlbmRvcidzIGt2bV94ODZfb3BzLg0KPiA+IA0K
+PiA+IFNvIHByb2JhYmx5IHVzZSBoYXJkd2FyZV9lbmFibGVfYWxsKCkgaW4gaGFyZHdhcmVfc2V0
+dXAoKSBpcyBhIGJhZCBpZGVhLg0KPiA+IA0KPiA+IEkgdGhpbmsgd2UgaGF2ZSBiZWxvdyBvcHRp
+b25zIG9uIGhvdyB0byBoYW5kbGU6DQo+ID4gDQo+ID4gMSkgVXNlIFZNWCdzIGt2bV94ODZfb3Bz
+IGRpcmVjdGx5IGluIHRkeF9oYXJkd2FyZV9zZXR1cCgpLiAgRm9yIGluc3RhbmNlLA0KPiA+IHNv
+bWV0aGluZyBsaWtlIGJlbG93Og0KPiA+IA0KPiA+IGludCBfX2luaXQgdGR4X2hhcmR3YXJlX3Nl
+dHVwKHN0cnVjdCBrdm1feDg2X29wcyAqeDg2X29wcykNCj4gPiB7DQo+ID4gCS4uLg0KPiA+IA0K
+PiA+IAljcHVzX3JlYWRfbG9jaygpOw0KPiA+IAlyID0gb25fZWFjaF9jcHUodnRfeDg2X29wcy5o
+YXJkd2FyZV9lbmFibGUsIC4uLik7DQo+ID4gCWlmICghcikNCj4gPiAJCXIgPSB0ZHhfbW9kdWxl
+X3NldHVwKCk7DQo+ID4gCW9uX2VhY2hfY3B1KHZ0X3g4Nl9vcHMuaGFyZHdhcmVfZGlzYWJsZSwg
+Li4uKTsNCj4gPiAJY3B1c19yZWFkX3VubG9jaygpOw0KPiA+IA0KPiA+IAkuLi4NCj4gPiB9DQo+
+ID4gDQo+ID4gQnV0IHRoaXMgZG9lc24ndCBjbGVhbiB1cCBuaWNlbHkgd2hlbiB0aGVyZSdzIHNv
+bWUgcGFydGljdWxhciBjcHVzIGZhaWwgdG8gZG8NCj4gPiBoYXJkd2FyZV9lbmFibGUoKS4gIFRv
+IGNsZWFuIHVwIG5pY2VseSwgd2UgZG8gbmVlZCBhZGRpdGlvbmFsIHRoaW5ncyBzaW1pbGFyIHRv
+DQo+ID4gdGhlIGhhcmR3YXJlX2VuYWJsZV9hbGwoKSBjb2RlIHBhdGg6IGEgcGVyLWNwdSB2YXJp
+YWJsZSBvciBhIGNwdW1hc2tfdCArIGENCj4gPiB3cmFwcGVyIG9mIHZ0X3g4Nl9vcHMtPmhhcmR3
+YXJlX2VuYWJsZSgpIHRvIHRyYWNrIHdoaWNoIGNwdXMgaGF2ZSBkb25lDQo+ID4gaGFyZHdhcmVf
+ZW5hYmxlKCkgc3VjY2Vzc2Z1bGx5Lg0KPiA+IA0KPiA+IDIpIE1vdmUgdGhvc2Ugc3RhdGljX2Nh
+bGxfdXBkYXRlKCkgaW50byB0ZHhfaGFyZHdhcmVfc2V0dXAoKSBzbyB0aGV5IGFyZSBURFgNCj4g
+PiBjb2RlIHNlbGYtY29udGFpbmVkLiAgQnV0IHRoaXMgd291bGQgcmVxdWlyZSBleHBvc2luZyBr
+dm1feDg2X29wcyBhcyBzeW1ib2wsDQo+ID4gd2hpY2ggaXNuJ3QgbmljZSBlaXRoZXIuDQo+ID4g
+DQo+ID4gMykgSW50cm9kdWNlIGFub3RoZXIga3ZtX3g4Nl9pbml0X29wcy0+aGFyZHdhcmVfcG9z
+dF9zZXR1cCgpLCB3aGljaCBpcyBjYWxsZWQNCj4gPiBhZnRlciBrdm1fb3BzX3VwZGF0ZSgpLg0K
+PiA+IA0KPiA+IFBlcnNvbmFsbHksIEkgdGhpbmsgMykgcGVyaGFwcyBpcyB0aGUgbW9zdCBlbGVn
+YW50IG9uZSwgYnV0IG5vdCBzdXJlIHdoZXRoZXINCj4gPiBTZWFuL1Bhb2xvIGhhcyBhbnkgb3Bp
+bmlvbi4NCj4gDQo+IEkgdGhpbmsgd2UgY2FuIHNpbXBseSB1cGRhdGUgdGhlIG9wcyBiZWZvcmUg
+Y2FsbGluZyBoYXJkd2FyZV9lbmFibGUoKSBhbmQNCj4gY2xlYW4gdXAgb3BzIG9uIGZhaWx1cmUu
+DQo+IA0KPiANCg0KVGhpcyBkb2Vzbid0IHdvcmsgYmVjYXVzZSBoYXJkd2FyZV9zZXR1cCgpIG1h
+eSB1cGRhdGUgdmVuZG9yJ3Mga3ZtX3g4Nl9vcHMuDQoNCklmIHlvdSBkbyBrdm1fb3BzX3VwZGF0
+ZSgpIGJlZm9yZSBoYXJkd2FyZV9zZXR1cCgpLCB5b3UgbmVlZCB0byBtYW51YWxseSB1cGRhdGUN
+CnRob3NlIHVwZGF0ZWQgKGluIGhhcmR3YXJlX3NldHVwKCkpIGNhbGxiYWNrcyBhZ2FpbiBhZnRl
+ci4gDQo=
