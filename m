@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27846CF491
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 22:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C496CF492
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 22:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjC2Uc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 16:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
+        id S229647AbjC2Uea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 16:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjC2Uc0 (ORCPT
+        with ESMTP id S229379AbjC2Ue2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 16:32:26 -0400
-Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2112.outbound.protection.outlook.com [40.107.11.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06D14EF2;
-        Wed, 29 Mar 2023 13:32:23 -0700 (PDT)
+        Wed, 29 Mar 2023 16:34:28 -0400
+Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2114.outbound.protection.outlook.com [40.107.10.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520505FC4;
+        Wed, 29 Mar 2023 13:34:25 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C/qMuZQqhjZBlFoLj6pcKx52cszSdIW81V+aGicv9PDZMJXmm7IwE9nR7jKDdnMSP9i2/bmS/WvfhBWaMDsj6j3WcuKf5MOETMrmkAC/gsTEeq+fuEmA46J0cXNOQjNty4yRyBuS0Q1JYq0rfy2VjZSjTtgiqZzGgUMywiuEWP5fLpFV+vK5xo2wLtugX9DDrtT2dMEOFGJTcj3ARPZ/wseyrzN0UJMXaaQsQ6oJNa8oV7PFKa+chTLuxwS8gamCY0fElo3AFda+j3rzV4vnacAKTPVYIlXHSM07MqBAlRQoqd2Kvchp1em7YWD141Oro7IOON/EBSac7Z7sHfC2Wg==
+ b=ZSUqvIMT2OW1MnR0TuhYs9yW774B2K9snII9MeAYIjasgwWgNaVM46Rt4GzvINkthnrPQrFA3igN6a3dnhSUWMuPEdLnoR20AjfXt7wPupg4aV95v7LOQX54h4K7nCL6SgV5Erv/9lZIr5WXHlAoyDdWOQHUOOpKHHqN1LYdohyRAhcLsVDVScCgxSiogO44N5qeGEkD7DMdDN2xcMvbzAcN8WuZF2wkT3xFwsaB+GXamDmFjwVFED8qFCD5h7tOLUKtvXo/AnNGUk8m/XTLskTdvvTq+S1wdAHsfPbUkgzWN8z32egp7rfwR5LbybqaU924spMnZ6N4HITarWnR7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lloiZbO/Vq7bLhXd4POn0fK2jze3RkG8d2zGKK/g4Vo=;
- b=R6iwcYzIHfTp+x4qv/NIPInVjnrR+a2GJ/obJpDu6uZ+snQ6CjPRUkIjbq32HEiM8jujJNicf7yzpUNahpycz8XX5Z+67whwq1h9MhBPE4Jm1rQ85eO/c0bI8qdd/aIhfSOuNh1a83flr3l2aRRtonMFYVNtuVM8AzalzVN7olq59K4PN/k96WFfqZnfsKqWbuZkwkFYhkd2BEfv1n4+iqtT4YVoZc2Y5SwYoetcZadegbGiWGIfQT0KzuhVSDu2gUUTy+SkFNFx192EO0AGvmB6lLvzG2pl+97kM/kwJNMV9k7lTf+nzkAtKGdeQxT7NdmbN4cHyLnQAqtFYKFPdg==
+ bh=wBjhxCBy9NzOtfjP6pUvHkdxuU16C/2eLKC2EcUiMPk=;
+ b=CCnYrjGhWCVuRj7OsrkEAcT6MjynveoI46zNvXVvjfaCumKHPXpLDZZUIts6yGa6OlzKhsNJZ3t9rvF7Q/2Q8AdUsW1/ICX5TpI4zaQVFLxuZ15tKKM2j9UAFOzk1ZmM8eXVBqZBsICAAgMaCDGLGYFqoHLXgYmxdPNBuOtPDOUaMNrHM4lTzI3aG0nZ7XGxbl7hWCHSXOcBCPxFeULX9eHbbQTMhBFRNFH9jWVfD5RBEpmCKvs5U3kjCa0oPa+/D2cFXk4rVc5tryKfnKfadgjGHS+FNgyInC9NFO0LjvaXMWvrmqAv7jZfgA8fZbOLqCwavx28nMrsattWAITvrw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
  dkim=pass header.d=garyguo.net; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lloiZbO/Vq7bLhXd4POn0fK2jze3RkG8d2zGKK/g4Vo=;
- b=Esnpih9zDUGY39PfCRusoK4cHnRoPAKDUMCQnr8+CPYXC15NDY69YZrhFUBnWJ2Hd5bB0P/5MRb/N7ZXEOxfJuCw7t3TnF4hhmQ7kwlYLxvaOIBsRp2h+kq53rI9/YGp0faJUAaclp2IgBwmnWePkNtTpSdd1Iro0ODBoH9qAY4=
+ bh=wBjhxCBy9NzOtfjP6pUvHkdxuU16C/2eLKC2EcUiMPk=;
+ b=oB20h/5ddS0pm2vSG6nnMB7zDZxg2zka8L8t1x1iUqaWDxL4/hEc3PZpq0EanHjLGH/ck/fVhIlK+EgjLJGjopmceLUONIRRoejLA4yTQIMIAVoXPuU5UGMLk9hOWVrPQpMF8AIQD4k5QhNYmwHtR7dAvFBBIQdfFTauCxhJoN0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=garyguo.net;
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
  by LO6P265MB5984.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2a5::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Wed, 29 Mar
- 2023 20:32:21 +0000
+ 2023 20:34:23 +0000
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::2f2a:55d4:ea1d:dece%4]) with mapi id 15.20.6222.035; Wed, 29 Mar 2023
- 20:32:21 +0000
-Date:   Wed, 29 Mar 2023 21:32:20 +0100
+ 20:34:23 +0000
+Date:   Wed, 29 Mar 2023 21:34:21 +0100
 From:   Gary Guo <gary@garyguo.net>
 To:     Asahi Lina <lina@asahilina.net>
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -55,65 +55,64 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Andreas Hindborg <a.hindborg@samsung.com>,
         rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         asahi@lists.linux.dev
-Subject: Re: [PATCH v2 1/6] rust: error: Rename to_kernel_errno() ->
- to_errno()
-Message-ID: <20230329213220.37d9ce85.gary@garyguo.net>
-In-Reply-To: <20230224-rust-error-v2-1-3900319812da@asahilina.net>
+Subject: Re: [PATCH v2 2/6] rust: error: Add Error::to_ptr()
+Message-ID: <20230329213421.7d132f78.gary@garyguo.net>
+In-Reply-To: <20230224-rust-error-v2-2-3900319812da@asahilina.net>
 References: <20230224-rust-error-v2-0-3900319812da@asahilina.net>
-        <20230224-rust-error-v2-1-3900319812da@asahilina.net>
+        <20230224-rust-error-v2-2-3900319812da@asahilina.net>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0664.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:316::8) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-ClientProxiedBy: LO4P123CA0421.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18b::12) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  (2603:10a6:600:253::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO6P265MB5984:EE_
-X-MS-Office365-Filtering-Correlation-Id: b1a28f34-79a2-474c-a6e4-08db3094b2aa
+X-MS-Office365-Filtering-Correlation-Id: 22cc1ce1-7d90-486a-131b-08db3094fb59
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XQz88spiqJEIHvn2BMGxnpihG7F0ekEb3WeSnrsah26kTtaNgLF4iXo6uXWemj3PT3BNGyZgHNHF7PIY31SPANSerfT+VSWxW3ktUBmbtO1cLurIugJjo1DHmEGJC46wfNG0InBtl2LB5lwUBZzMbdS6DSpn5rLs6oh1Lee59ajVNRLaAA8WC77oYOykTHeTz9x1R9ANZyW+MyRQvQfTgqCwAsEPBUQQCLF6A6bEnggtz8cr/HaUemg5/3/zLPh6fXvCrVdlDaV2Qgoq+69CLLcVv3UD0YlVxk2xV6cRPOcLnnYt+LovF1l2/8Sy11I1YCvKMlhEIiROKF8r3vOnDrGzjgabYz8YKm/ZXIMtffnla78COhIGDIOq8OvY35aAie5b9MXGF8DS3515Ht5IpffLRtxV6bI4ny/DwvbTcCQOxVjaoKYL/RZ0c0L3wkEOpCWFARrY0lGUN4uI0NQOgxfSKn3Au3MiASuL/V1Y8d0jL3rtRi1AC2FOh7rr6c93mog+vqwCWZa/qpImuDnbzXoCO3hWjX3w6kx5JmbIpnyI4cizeRaXHMOWOc2UtPZp
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(136003)(39830400003)(396003)(451199021)(6486002)(478600001)(6506007)(6512007)(54906003)(186003)(83380400001)(4326008)(5660300002)(41300700001)(2616005)(8936002)(7416002)(2906002)(1076003)(26005)(316002)(38100700002)(66946007)(66556008)(36756003)(8676002)(66476007)(6916009)(86362001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: aQzlJGQT0PI+oiyYFqJdGfFg0iMpEa7n1Rq3a1M5og8jZGpk+bPzYZatEntxOOzkc9Ac4mCy9/8J3SpqQk5WOb/G1qheh30w0Hin4djwVR1tjIeeHKkchFeRtJWxyYXoybPIXXn5iC4ZSMpO8aZdLKAXm2+oOiJhAG6qxTfRUXBlUvUOoliTQvyl/1zOSFGoVz3COlJQmHBmFraZ+8/EKcrlL5yqhJpAOlLuNu/gZhsO3A+SfytaXWGUE0ctmid+jWkrxwWL4NAePILNZaMhZoiJRsvs8IEdgrHDY2AvCrpVAG2/ET+N9Rz4NT+kzTG9fgeKlDacz3EvFUrMq+9CLvT/oVJCs/fNRElfKqj6tlnutv+1zLyJGW48IdOvNS1VWtOfUKpcnK0rdlBxnqfYRiiU8qmsE01xtlVFdjrKbS7+QMGKr74jYwWpNN4UgPIp82Q4grPsgjX5PGsVKwhZ7dpH8ggvdSa4cqfK4zM4qTyqY/5/pV0G/ek1mtq2LEucWMPwg+QDnF3dPlzRmJkBUHePK0rEbNr4kPeEB28fuFf8By6Kh3yNEmr7SKuRRm6j
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(136003)(39830400003)(396003)(451199021)(6486002)(478600001)(6506007)(6512007)(54906003)(186003)(4326008)(5660300002)(41300700001)(2616005)(8936002)(7416002)(2906002)(1076003)(26005)(316002)(38100700002)(66946007)(66556008)(36756003)(8676002)(66476007)(6916009)(86362001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Zrb3MzaAgi57UhVScQGe8yK/d4HgM3qufw7fIXHjJYLQ5z6AGxIW+8AnueFG?=
- =?us-ascii?Q?1cXE2aX3R5eoS7llh91eap1cQPk5BO3iLAKkZIfQE+QcNI/OhyV4gxM4LIzK?=
- =?us-ascii?Q?bvHlzX0JHJmi1xsoRMB0C/OejSbM/L5V8XO1iOsiskPrY338QAtaNGq97M53?=
- =?us-ascii?Q?j3TltCOIFwBNHsc9tHWJbvuACQC47UN9A+hM3g9tW2V+eff0KsnBnScE/Bd3?=
- =?us-ascii?Q?byQdJ70YvpfDcY88IzrgfElEgDSe5dlsNpN9vfAhveCc4F65+sxPevE7a/6e?=
- =?us-ascii?Q?q81zH+ZKpM+KCnS1UpDzNNoSpwxLxXVK3FXS3j2vud2UdWSMW8nRlD4u2kan?=
- =?us-ascii?Q?Mumiy0+1nTUMpoHZCqjy5NB8V6SoJyJeZDU/2GpNbIBZxM5UfkAOjWAIAGvm?=
- =?us-ascii?Q?JJU8D6diUwWNaNOk/ZJbKGTdVYqp9k8zmUR8PQPa0lQm4sbuvrfZF4bNJIxI?=
- =?us-ascii?Q?Ig/YhFw8jlCheLPiJrkMcFNf5VDKR9DZ7ljGvBJS94yIZBlgabXKeKk5mlke?=
- =?us-ascii?Q?x8rOtsvKFfgQsEV8Z8fcD13xBp1Zopq05srtgZZPBHFj1mLuOC+guXGXVxGr?=
- =?us-ascii?Q?y4Fu398Ywhbbd7BteQLXh8nG+jhvs4CbMdVjLKZzzK6QwuXEexbXo87gqwS+?=
- =?us-ascii?Q?FnSbdMoLEV43Nz8xbP+aWX7001HcGbltS1pN/kB2VfqLnRjxBHKgOT4hCJKK?=
- =?us-ascii?Q?rqUyfCLSTIHfrPDkmqvFC1VJfBetf91ptiOzRm1+CdDXVdIE+1pI8CWm28R4?=
- =?us-ascii?Q?G2gY2a6XxxYj6lqD41gcRPzD6za1z8umxtNIBEZbE6p9vQciuq4r6P5v1y2h?=
- =?us-ascii?Q?l6gkb3eWVLdpiFVQ8ycFCkvoxJ5mmp7r9vSKMNHTZmu7yWeJhPZ4kfDmsfH/?=
- =?us-ascii?Q?CFPYC9hrzTh4AlL07nwFB9rGOx8GS9Gwkwe34KNc+u58XapA2EaVulu5S7HC?=
- =?us-ascii?Q?4dRNlhayIXXxu3Te1vdc+oxiIJfyrunwG+t8NRR1AArYvGIE8CFQS8trB4ch?=
- =?us-ascii?Q?hga3owuEkGr8GjEJr3S/Xn0Y3HfV1ibz3rn4vbuGxW63VvLcdaGS87U8tacH?=
- =?us-ascii?Q?4C8agZ5FWijQTukE+pvsDjhkr/YHvTTEV+UsIRd9V4dFbhD91PvJcyP8/3wo?=
- =?us-ascii?Q?vEmC1UCJi8IqTPph//S5g/Fxlg0a1MscG2ol2H+F9qnZbDKITDUe9DL4OH3A?=
- =?us-ascii?Q?KskyOpl2P1MHWDnq0Fradi10/nQ23eS3n1o7yXOWi+zFCS+3QW2bmOF2ewcN?=
- =?us-ascii?Q?2++ZUyzWGoWJ3JbNDpX++dc00+2dQsHlEO/K8RPYt7E74mxxWnyxpYzECi1J?=
- =?us-ascii?Q?9zYSrj5OklFmmUTx04kfosNPTBlNEVQXQSiAcoLra0MchKQYrT5uRmctkv3/?=
- =?us-ascii?Q?0ivZC5m924pPp/Q9+18atLLoOiVB1buDHRHyXJxQJCW1qqToVaFZgXopD2LO?=
- =?us-ascii?Q?5aYjucmr2QVutmOkd7gHXCrsx/ANI9Mil3RJ9sKWZh0pNKfEPwH1eWYtfmW0?=
- =?us-ascii?Q?rpQbww/rXj6lFmF0UParXmPnleaMCg9Nj0dAZskTiTtCz6I7gNejIx8Ot7WU?=
- =?us-ascii?Q?2R+waE3RbhuBoeHb8JaLV3dvCpt8y4Tm79SKJJ/h?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1heTLHwggZmMnlQcoOvMSszX6JN8MvzL6UEIl+1aJGLrouTivgu1y7y+Bm6S?=
+ =?us-ascii?Q?B3q8Yo5jSgc0MfRIf2iri/+n5tA1jKZtX62L3s28iaFOUwYALFzOF1cdMHbW?=
+ =?us-ascii?Q?c/vFa9uno6iZyjny96TK6BUS5GFBMpeoBfbvWKAXgYptsearMasN2yUb3ogJ?=
+ =?us-ascii?Q?oN9C4v7cG8YJEbT7AfLMDR+GGQ+52gbpiQFXNfMTwDHHxAyUUoKFXpUnt53N?=
+ =?us-ascii?Q?wL3hutcz9ioTdAiUop7D+RddCzzIfia9+FJtVlo3BeOZpSRxvP50HbkCOU7w?=
+ =?us-ascii?Q?hAqIbbdHo2LIZIjOP6Enkp7580RVP71yownYluMJ7zkZQWiCuNiC874cKe09?=
+ =?us-ascii?Q?rsfjR8TpgLZV5JoBosQumvA20eeAyFAVr6C/Yzz9fWZQ85Cc+UCV796AoV2o?=
+ =?us-ascii?Q?ky73EpY+AyzlhGqm9V0+/LABWK730TXFwiM/zDNrLCOOJ+CXnkwEyxhYXXxZ?=
+ =?us-ascii?Q?f6VhJvmv9HA7TyeWMCLr+M1WP+Ewuq4p0+M8rshvQtmj8e603qKg/V3U1Hv5?=
+ =?us-ascii?Q?vbI+WQaYWvI/4M9JG7ahJs8+HUtCIAo9DRaVOjJrM2Yb2ztnrSVKBZ6kkFrP?=
+ =?us-ascii?Q?Joi/SeKnuv36hpOv4BDjBKjus6f3k1iwzXO6FiTQZ1n5I/ailYCymWkkrpaw?=
+ =?us-ascii?Q?PYpr12I5Aq0tiJqext0t+rKqfs6sgA3VhxKJKAUNErO23Quc2YCsKQogdKr4?=
+ =?us-ascii?Q?Vd74JsWqLlZz84Cn0QJda+bcCPihec2glkcdf4crmeqU95phLPJVYJC8c3Qr?=
+ =?us-ascii?Q?K2BQIRqLrGiWDEGXGBAuIL3Gjw7O8IAWdGPF+EXhhY1A20YrRkud66EY5oi1?=
+ =?us-ascii?Q?SDQM2seATiKwA0Bw6qdKLR5lhy4JCrGrFDMRJwacl+Sj6E67alquQEopTjJR?=
+ =?us-ascii?Q?Y9stLdc6DoFVl+6BkQeQwIumdCYDsY2qqqVtL8ESNUR9P14GTQgwktXtpe4v?=
+ =?us-ascii?Q?DUvw2DzZD342DRIWEhJEClYwdwU6ALpdhMbv6lsKsOCkQpBswIPoBEImKUDX?=
+ =?us-ascii?Q?DT4BvwFW44UPNCYee/aVKcUQfZqLBWHKuh/FlYnX1d9qcxzxkTxGcWy+CfYl?=
+ =?us-ascii?Q?XYfIQPLDSavIfzrf9qXB8nMUeIUHifROs2iNtBf9wJMu+EQPDF1G+zkIWySb?=
+ =?us-ascii?Q?vqbCBHiHup8WfsUUx/5hIOrpfGVudGKfekI6QhygExKphF55lPnCLq4ffKED?=
+ =?us-ascii?Q?QxtE58z4+E7ZdFx1/oqhWmtVuvQJfLLYWBelXbgTCi5XczDmAn/ro0tpRjiW?=
+ =?us-ascii?Q?4RxCuYCuoMJGSk1rzj5rAxdKzcUZQ7NpHWYNTx1BXaRA8CsPRImjRfGEBCMt?=
+ =?us-ascii?Q?+1d5ZSSP8nR7cswd/UvQkq3Ar9sGap4G2z9Mlo75RrI3gihclbx000q3eiMu?=
+ =?us-ascii?Q?9qvPkDxIbF1FEeCM+nbIxBFJbKrFV/tRsUVr27VrGe7UDbpwBbWtQLwVsAZG?=
+ =?us-ascii?Q?DGwbiu9+wJloVjrOTKn15gUq+qOCIZEfnts2GeoVDgfZRpUXujY6xPuuwYos?=
+ =?us-ascii?Q?TPJz4J7KK5oiL7ayMjVXxe33MXTDf7H6nogDkLe2TVSfn4nEL8BNQF3c/jBm?=
+ =?us-ascii?Q?5ywWUsKnK5lWlp++iNIbP05Xl9mebRz7ONbC7dkI?=
 X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: b1a28f34-79a2-474c-a6e4-08db3094b2aa
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22cc1ce1-7d90-486a-131b-08db3094fb59
 X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 20:32:21.5140
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 20:34:23.4550
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Dqj8jf1uN6fhHsHCVp1n2dNi4aKO7LPfERXZIBYiOpnYj6fAed6ZzHg4EYIbgplBvpwhp9rj59oRS0MNwRLwbA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: eQseP2is8zidKQMNllE5Ibrc5Wjt4JixI4GxDoLQLDFiZcDe6/jA5PK6JquQCJ/BTipPk5UUBSuqottc1TXZ/w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P265MB5984
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -125,48 +124,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023 21:04:33 +0900
+On Wed, 29 Mar 2023 21:04:34 +0900
 Asahi Lina <lina@asahilina.net> wrote:
 
-> This is kernel code, so specifying "kernel" is redundant. Let's simplify
-> things and just call it to_errno().
+> This is the Rust equivalent to ERR_PTR(), for use in C callbacks.
+> Marked as #[allow(dead_code)] for now, since it does not have any
+> consumers yet.
 > 
 > Signed-off-by: Asahi Lina <lina@asahilina.net>
-
-Thanks Lina for implementing my suggestion.
-
-Reviewed-by: Gary Guo <gary@garyguo.net>
-
 > ---
->  rust/kernel/error.rs  | 2 +-
->  rust/macros/module.rs | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  rust/helpers.c       | 7 +++++++
+>  rust/kernel/error.rs | 7 +++++++
+>  2 files changed, 14 insertions(+)
 > 
+> diff --git a/rust/helpers.c b/rust/helpers.c
+> index 09a4d93f9d62..89f4cd1e0df3 100644
+> --- a/rust/helpers.c
+> +++ b/rust/helpers.c
+> @@ -20,6 +20,7 @@
+>  
+>  #include <linux/bug.h>
+>  #include <linux/build_bug.h>
+> +#include <linux/err.h>
+>  #include <linux/refcount.h>
+>  
+>  __noreturn void rust_helper_BUG(void)
+> @@ -46,6 +47,12 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r)
+>  }
+>  EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
+>  
+> +__force void *rust_helper_ERR_PTR(long err)
+> +{
+> +	return ERR_PTR(err);
+> +}
+> +EXPORT_SYMBOL_GPL(rust_helper_ERR_PTR);
+> +
+>  /*
+>   * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
+>   * as the Rust `usize` type, so we can use it in contexts where Rust
 > diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-> index 5b9751d7ff1d..35894fa35efe 100644
+> index 35894fa35efe..e97e652a1aec 100644
 > --- a/rust/kernel/error.rs
 > +++ b/rust/kernel/error.rs
-> @@ -73,7 +73,7 @@ pub struct Error(core::ffi::c_int);
->  
->  impl Error {
->      /// Returns the kernel error code.
-> -    pub fn to_kernel_errno(self) -> core::ffi::c_int {
-> +    pub fn to_errno(self) -> core::ffi::c_int {
+> @@ -76,6 +76,13 @@ impl Error {
+>      pub fn to_errno(self) -> core::ffi::c_int {
 >          self.0
 >      }
+> +
+> +    /// Returns the error encoded as a pointer.
+> +    #[allow(dead_code)]
+> +    pub(crate) fn to_ptr<T>(self) -> *mut T {
+> +        // SAFETY: Valid as long as self.0 is a valid error
+
+This should be something like "SAFETY: self.0 is a valid error due to
+its invariant."?
+
+Best,
+Gary
+
+> +        unsafe { bindings::ERR_PTR(self.0.into()) as *mut _ }
+> +    }
 >  }
-> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> index a7e363c2b044..143336543866 100644
-> --- a/rust/macros/module.rs
-> +++ b/rust/macros/module.rs
-> @@ -258,7 +258,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
->                          return 0;
->                      }}
->                      Err(e) => {{
-> -                        return e.to_kernel_errno();
-> +                        return e.to_errno();
->                      }}
->                  }}
->              }}
+>  
+>  impl From<AllocError> for Error {
 > 
 
