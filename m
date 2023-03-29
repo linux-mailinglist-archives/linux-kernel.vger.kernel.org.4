@@ -2,117 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A297F6CEE1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69706CEE20
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjC2P4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 11:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
+        id S231215AbjC2P4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjC2Pzl (ORCPT
+        with ESMTP id S231179AbjC2P4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:55:41 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAB36EB7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:54:54 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4A3161BF204;
-        Wed, 29 Mar 2023 15:54:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680105264;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+Ik6VA5/O4bfb2QZv+TNi9tynbKEN1V0x7QzIUnGobU=;
-        b=lmXC+h5NEhVsiPxedwwsWTs9Z+Ajr48MtUDE7kXzzL7GwgKLVy89oRKiaJiKlwH0YEJkqA
-        3wZt0Jqp7r+lRFuWqHci4vbxZ6ZSiz2aPfH62Rgwk8092f2Id7PbiUfLAoXgyrVzSruNOK
-        iJCUqpSLzopMjWFPckrsFjNUJjqV7CopKetKiewnl7FaqyRceu6jZrNI0Db3da7SLznSbt
-        w4qsNVug2xyIsgqpzI5vXE9fWIvp2lDMQu048xgfui50HHBb7WqzkWj7yEmE21Q7g4OBKZ
-        bhl6dbT6+xv2x2WWViroGnrIoeGNT9kguBfov8F8yPCFrvnzxcsF8SpHZnSB0w==
-Date:   Wed, 29 Mar 2023 17:54:21 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     Nicolas Schichan <nschichan@freebox.fr>,
-        <george.kennedy@oracle.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <richard@nod.at>,
-        <s.hauer@pengutronix.de>, <yi.zhang@huawei.com>
-Subject: Re: [PATCH -next v3] ubi: Fix failure attaching when vid_hdr offset
- equals to (sub)page size
-Message-ID: <20230329175421.3bd4906e@xps-13>
-In-Reply-To: <2c2c2ce9-795b-4f76-cde9-db4a4066dcc1@huawei.com>
-References: <20230306013308.3884777-1-chengzhihao1@huawei.com>
-        <20230324161923.1456371-1-nschichan@freebox.fr>
-        <2c2c2ce9-795b-4f76-cde9-db4a4066dcc1@huawei.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 29 Mar 2023 11:56:14 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBAA6A45
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:55:19 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id t4so11030331wra.7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:55:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1680105278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p/ajfvBQTErdVHrQqdHTV8eJEA/8/+bHBYeF2lwVNsg=;
+        b=SOkFAsluPYOQnvWnrI6rJWoGQCnPbGS4aPRnkzovQR9VqxnEUy0RXhloFovA+8rqKn
+         4tjySc4vKqnSmZo2NsDpADZ+2w/ZgOqg3xd6zSCXolYkZB71bMPXl12m/XMQpXnpXGg8
+         I2U55HCmBQ6I+ky0/6zXA2J3/3GxN/VO+1JuWMgBEWf/WA2kIszLZrHji2mLoZ8qBwvz
+         PBxWci7BcAWgM2tfy48tRjM2vYhYj6pWwtXTztz+hkCIknYAP/7cmXy/ZUe4O3RXXPCP
+         1vWBYR/+icccwZHPv5Ds0p/b+hy4Sn4rT0dNNrZgtVPuFGoJRNvEgqG5fD52Iowkd2cI
+         hYuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680105278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p/ajfvBQTErdVHrQqdHTV8eJEA/8/+bHBYeF2lwVNsg=;
+        b=XlpL4gR3AQEfiRYxdVU+mfHWO93qXgcfOenpPLxMNozSN0Vs09VNYC6jgJ0aDUL/T7
+         SsMnDEtXMQ2J3SQ4RgQLCHUox2o85bWC1q7fPKFJGVQ+vIub+bNLQppOQDx2CChonAEF
+         liaxNB2DQLy5Rg7QKVPiVR63PO0bDvvdviG4sUW+vCfQ8OJuwPZnxQ3GqQW50C0cDEFY
+         vy6Qm7U7rp1Rm8HuK/XS/0AFU2/NypCUq421TyEKElZhCps8hJ4ltoXVMGwZxuCONdWu
+         tzkjArPG0Pduo7i6rqEHuEEsN1VOqqRnGT8m1BolN7uI9UVvZD9JIrM9V9jgeez5DBRZ
+         QL8g==
+X-Gm-Message-State: AAQBX9efim9jupfGssOoYBecSoHMLXmrfxT+OPQlcRMrXe6FwbxM78RN
+        VO7NPmc9IhAYgIsqGzZT5R2j2HM39ud4tMCUxFbqpQ==
+X-Google-Smtp-Source: AKy350bZjUGZ5mB8SlUqYKNONLA6YYADNEZJnQbwe5vggCnXNh5UgRb/q95EJp+tyIQuy96P6c2pkQ==
+X-Received: by 2002:adf:ec87:0:b0:2d1:46eb:3f98 with SMTP id z7-20020adfec87000000b002d146eb3f98mr16685731wrn.36.1680105278598;
+        Wed, 29 Mar 2023 08:54:38 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:400::5:e994])
+        by smtp.gmail.com with ESMTPSA id e13-20020a5d4e8d000000b002ceacff44c7sm30650177wru.83.2023.03.29.08.54.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 08:54:38 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 11:54:37 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        surenb@google.com, brauner@kernel.org, chris@chrisdown.name
+Subject: Re: [PATCH v4 3/4] sched/psi: extract update_triggers side effect
+Message-ID: <ZCRfPYKqIJpLxGJM@cmpxchg.org>
+References: <20230329153327.140215-1-cerasuolodomenico@gmail.com>
+ <20230329153327.140215-4-cerasuolodomenico@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329153327.140215-4-cerasuolodomenico@gmail.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Mar 29, 2023 at 05:33:26PM +0200, Domenico Cerasuolo wrote:
+> This change moves update_total flag out of update_triggers function,
+> currently called only in psi_poll_work.
+> In the next patch, update_triggers will be called also in psi_avgs_work,
+> but the total update information is specific to psi_poll_work.
+> Returning update_total value to the caller let us avoid differentiating
+> the implementation of update_triggers for different aggregators.
+> 
+> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 
-chengzhihao1@huawei.com wrote on Sat, 25 Mar 2023 09:02:40 +0800:
-
-> Hi,
-> >  =20
-> >> Following process will make ubi attaching failed since commit
-> >> 1b42b1a36fc946 ("ubi: ensure that VID header offset ... size"):
-> >>
-> >> ID=3D"0xec,0xa1,0x00,0x15" # 128M 128KB 2KB
-> >> modprobe nandsim id_bytes=3D$ID
-> >> flash_eraseall /dev/mtd0
-> >> modprobe ubi mtd=3D"0,2048"  # set vid_hdr offset as 2048 (one page)
-> >> (dmesg):
-> >>    ubi0 error: ubi_attach_mtd_dev [ubi]: VID header offset 2048 too la=
-rge.
-> >>    UBI error: cannot attach mtd0
-> >>    UBI error: cannot initialize UBI, error -22
-> >>
-> >> Rework original solution, the key point is making sure
-> >> 'vid_hdr_shift + UBI_VID_HDR_SIZE < ubi->vid_hdr_alsize',
-> >> so we should check vid_hdr_shift rather not vid_hdr_offset.
-> >> Then, ubi still support (sub)page aligined VID header offset.
-
-					aligned
-
-> >>
-> >> Fixes: 1b42b1a36fc946 ("ubi: ensure that VID header offset ... size")
-
-This commit has been backported to stable, so it is important this fix
-also gets there quickly:
-
-Cc: stable@vger.kernel.org
-
-> >> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> >> ---
-> >>   v2->v3: Use printing format '%zu' for UBI_VID_HDR_SIZE.
-> >>   drivers/mtd/ubi/build.c | 21 +++++++++++++++------
-> >>   1 file changed, 15 insertions(+), 6 deletions(-) =20
-> >=20
-> > [...]
-> >=20
-> > Hello,
-> >=20
-> > Having had the problem, and found this patch as a fix, feel free to
-> > add my:
-> >  =20
->=20
-> Thanks for testing.
->=20
-> > Tested-by: Nicolas Schichan <nschichan@freebox.fr>
-
-Same here.
-
-Tested-by: Miquel Raynal <miquel.raynal@bootlin.com> # v5.10, v4.19
-
-Thanks,
-Miqu=C3=A8l
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
