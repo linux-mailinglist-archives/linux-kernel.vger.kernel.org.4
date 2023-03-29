@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A544D6CCE6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 01:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB136CCE74
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 02:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjC1X7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 19:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S229956AbjC2AB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 20:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjC1X7j (ORCPT
+        with ESMTP id S229779AbjC2AB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 19:59:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC743A8F;
-        Tue, 28 Mar 2023 16:59:16 -0700 (PDT)
+        Tue, 28 Mar 2023 20:01:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF38AF;
+        Tue, 28 Mar 2023 17:01:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D23A6B81D7A;
-        Tue, 28 Mar 2023 23:59:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73EA4C433D2;
-        Tue, 28 Mar 2023 23:59:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BDC2618E5;
+        Wed, 29 Mar 2023 00:01:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE908C433EF;
+        Wed, 29 Mar 2023 00:01:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680047953;
-        bh=5s/jceGBhS3x4pTau5j0F/bp4u/ttUTJOoT4GP/kaDM=;
+        s=k20201202; t=1680048084;
+        bh=RVxXcEiibRebSGr+aKRiwje0chKKQkgOOPr8eSlVSkY=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nzzO98GPpCO3/vxDivRrwZP7vYJ3AhTGjwz49hFyKsvIMC5v4kQ4f1wBqaknH3Wc2
-         86EX97p7MJVPW+tpy9X6ZIPx/FioVMtSSnC6RXYXuyVzhR1/RhRLIIlEbq99ca6zFe
-         PdJb6L9KbxqJFPs96bHOPvXVlYySH+tQYQMS46cXMF/JWtz5X4ltlHVRsfWYHAjdgK
-         DVGxBLRYNT7VrKZt5mcWjn6PAsJbMAIuRJLgpmbv++QWUCuJxXBS7bxYo0oLDjpSIr
-         SqI2tIZW082oufaZLDWOrW/8m3DfpUZzOe949JLCmL4fbITAXcteER5p4OZGINxxB5
-         vE0qHonLLtpZQ==
-Received: by mail-lf1-f51.google.com with SMTP id y15so17969008lfa.7;
-        Tue, 28 Mar 2023 16:59:13 -0700 (PDT)
-X-Gm-Message-State: AAQBX9e9NMt9Yerw5mIJCVRxmJT8/iJ9fDfqfCjWvxpKIEFGOqOWkCWd
-        3wAQ83fApowtmH61xyAlsLIdd2bbuSbMC3T/Vbg=
-X-Google-Smtp-Source: AKy350YbrjYclmVhV0j1n7mZbByxXKtbnVAmnJcTWPqxpv6BuqIqu0kDvRzeody5bGDgfItmFOQpSZTilNi3xkQH2po=
-X-Received: by 2002:ac2:5338:0:b0:4eb:1316:a2e6 with SMTP id
- f24-20020ac25338000000b004eb1316a2e6mr2124951lfh.3.1680047951477; Tue, 28 Mar
- 2023 16:59:11 -0700 (PDT)
+        b=awFjxt5m0rkRkcTeDWE3+14Tkz0Ts+OA3EknP8LyGLYSJKo7krFIZWEkt/fa7t6jW
+         QxwfuThJ/kmJ4Landpwg9VLqnUnT7tGY9Y5MVxEJMQZWjYtEqwd4hutizbqCT6aXS6
+         EwpOxhJfxIuhpGi99UdCv1iphl/Uml/hs3cGcz0ILoc53cwbQxalNiTwc+eOVg3Fss
+         kaAdLvwMDeFOb40RvTGnw/pdg5rubsjNIF3qvm+1GwzMRqdKYpqSHOKqez44Gy7OVP
+         9TZu5SU83+qbpoAxi7zBCDKNnHpJl0V4yXsQtYRb6M+qQajFKYxoMUl29Ms32Xqma8
+         uBWdN0XzJ+Gpw==
+Received: by mail-lf1-f49.google.com with SMTP id h11so11007489lfu.8;
+        Tue, 28 Mar 2023 17:01:24 -0700 (PDT)
+X-Gm-Message-State: AAQBX9ci19N+jOu5gFVsNadSuILBcG+PrLw9rM6qNu7+DGHqohK4DRHG
+        X4u9ocCdGJp9bfO4/KKlxZ6O4j21M6gikWgkCos=
+X-Google-Smtp-Source: AKy350b6mMLErOC4Bt39LRAAoBVZQ1UY0GpckPACTLqkHA0ji0rRxAVibRESZV5L9UB9RCqQS1oIe6imBco637i/Krw=
+X-Received: by 2002:ac2:5dcd:0:b0:4e8:5bed:a051 with SMTP id
+ x13-20020ac25dcd000000b004e85beda051mr5202722lfq.3.1680048082691; Tue, 28 Mar
+ 2023 17:01:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230322064122.2384589-1-yukuai1@huaweicloud.com>
- <20230322064122.2384589-2-yukuai1@huaweicloud.com> <2c2599ec-ac35-6494-aedf-93ecca1969ee@linux.dev>
- <d1d27b2a-96ec-319e-4690-64e781c9a473@huaweicloud.com> <b91ae03a-14d5-11eb-8ec7-3ed91ff2c59e@linux.dev>
- <31e7f59e-579a-7812-632d-059ed0a6d441@huaweicloud.com> <3fc2a539-e4cc-e057-6cf0-da7b3953be6e@linux.dev>
- <3aa073e9-5145-aae2-2201-5ba48c09c693@huaweicloud.com>
-In-Reply-To: <3aa073e9-5145-aae2-2201-5ba48c09c693@huaweicloud.com>
+References: <aa9567fd-38e1-7b9c-b3e1-dc2fdc055da5@molgen.mpg.de>
+ <55e30408-ac63-965f-769f-18be5fd5885c@molgen.mpg.de> <d95aa962-9750-c27c-639a-2362bdb32f41@cloud.ionos.com>
+ <30576384-682c-c021-ff16-bebed8251365@molgen.mpg.de> <cdc0b03c-db53-35bc-2f75-93bbca0363b5@molgen.mpg.de>
+ <bc342de0-98d2-1733-39cd-cc1999777ff3@molgen.mpg.de> <c3390ab0-d038-f1c3-5544-67ae9c8408b1@cloud.ionos.com>
+ <a27c5a64-62bf-592c-e547-1e8e904e3c97@molgen.mpg.de> <6c7008df-942e-13b1-2e70-a058e96ab0e9@cloud.ionos.com>
+ <12f09162-c92f-8fbb-8382-cba6188bfb29@molgen.mpg.de> <6757d55d-ada8-9b7e-b7fd-2071fe905466@cloud.ionos.com>
+ <93d8d623-8aec-ad91-490c-a414c4926fb2@molgen.mpg.de> <0bb7c8d8-6b96-ce70-c5ee-ba414de10561@cloud.ionos.com>
+ <e271e183-20e9-8ca2-83eb-225d4d7ab5db@molgen.mpg.de> <1cdfceb6-f39b-70e1-3018-ea14dbe257d9@cloud.ionos.com>
+ <7733de01-d1b0-e56f-db6a-137a752f7236@molgen.mpg.de> <d92922af-f411-fc53-219f-154de855cd13@cloud.ionos.com>
+ <CAH6h+hf7Y-kurBJG+pnH6WCQiaEK+Jq3KG5JOGnHJ4Uw6AbUjg@mail.gmail.com>
+ <2af18cf7-05eb-f1d1-616a-2c5894d1ac43@linux.dev> <CAH6h+hc8VdpaS2q4ya_ZfqVxWFRsKVCjN-sv73SfeyGomXvjRQ@mail.gmail.com>
+ <CAH6h+hcWfXNpC1Mro3zfzQc8tK142vuaOMELLJL7mg_G+o0fXw@mail.gmail.com>
+In-Reply-To: <CAH6h+hcWfXNpC1Mro3zfzQc8tK142vuaOMELLJL7mg_G+o0fXw@mail.gmail.com>
 From:   Song Liu <song@kernel.org>
-Date:   Tue, 28 Mar 2023 16:58:59 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7c2b4yYbwNcqKW+TBL=QYEzchnVQ4pDLBT-xoBoTvQmg@mail.gmail.com>
-Message-ID: <CAPhsuW7c2b4yYbwNcqKW+TBL=QYEzchnVQ4pDLBT-xoBoTvQmg@mail.gmail.com>
-Subject: Re: [PATCH -next 1/6] Revert "md: unlock mddev before reap
- sync_thread in action_store"
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Guoqing Jiang <guoqing.jiang@linux.dev>, logang@deltatee.com,
-        pmenzel@molgen.mpg.de, agk@redhat.com, snitzer@kernel.org,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        Marc Smith <msmith626@gmail.com>,
-        "yukuai (C)" <yukuai3@huawei.com>
+Date:   Tue, 28 Mar 2023 17:01:09 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6R11y6vETeZ4vmFGmV6DRrj2gwhp1-Nm+csvtHb2nQYg@mail.gmail.com>
+Message-ID: <CAPhsuW6R11y6vETeZ4vmFGmV6DRrj2gwhp1-Nm+csvtHb2nQYg@mail.gmail.com>
+Subject: Re: md_raid: mdX_raid6 looping after sync_action "check" to "idle" transition
+To:     Marc Smith <msmith626@gmail.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Donald Buczek <buczek@molgen.mpg.de>,
+        linux-raid@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        it+raid@molgen.mpg.de
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,82 +76,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 11:32=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> =
-wrote:
+On Thu, Mar 16, 2023 at 8:25=E2=80=AFAM Marc Smith <msmith626@gmail.com> wr=
+ote:
 >
-> Hi,
->
-> =E5=9C=A8 2023/03/23 11:50, Guoqing Jiang =E5=86=99=E9=81=93:
->
-> > Combined your debug patch with above steps. Seems you are
+> On Tue, Mar 14, 2023 at 10:45=E2=80=AFAM Marc Smith <msmith626@gmail.com>=
+ wrote:
 > >
-> > 1. add delay to action_store, so it can't get lock in time.
-> > 2. echo "want_replacement"**triggers md_check_recovery which can grab l=
-ock
-> >      to start sync thread.
-> > 3. action_store finally hold lock to clear RECOVERY_RUNNING in reap syn=
-c
-> > thread.
-> > 4. Then the new added BUG_ON is invoked since RECOVERY_RUNNING is clear=
-ed
-> >      in step 3.
->
-> Yes, this is exactly what I did.
->
-> > sync_thread can be interrupted once MD_RECOVERY_INTR is set which means
-> > the RUNNING
-> > can be cleared, so I am not sure the added BUG_ON is reasonable. And
-> > change BUG_ON
->
-> I think BUG_ON() is reasonable because only md_reap_sync_thread can
-> clear it, md_do_sync will exit quictly if MD_RECOVERY_INTR is set, but
-> md_do_sync should not see that MD_RECOVERY_RUNNING is cleared, otherwise
-> there is no gurantee that only one sync_thread can be in progress.
->
-> > like this makes more sense to me.
+> > On Tue, Mar 14, 2023 at 9:55=E2=80=AFAM Guoqing Jiang <guoqing.jiang@li=
+nux.dev> wrote:
+> > >
+> > >
+> > >
+> > > On 3/14/23 21:25, Marc Smith wrote:
+> > > > On Mon, Feb 8, 2021 at 7:49=E2=80=AFPM Guoqing Jiang
+> > > > <guoqing.jiang@cloud.ionos.com> wrote:
+> > > >> Hi Donald,
+> > > >>
+> > > >> On 2/8/21 19:41, Donald Buczek wrote:
+> > > >>> Dear Guoqing,
+> > > >>>
+> > > >>> On 08.02.21 15:53, Guoqing Jiang wrote:
+> > > >>>>
+> > > >>>> On 2/8/21 12:38, Donald Buczek wrote:
+> > > >>>>>> 5. maybe don't hold reconfig_mutex when try to unregister
+> > > >>>>>> sync_thread, like this.
+> > > >>>>>>
+> > > >>>>>>           /* resync has finished, collect result */
+> > > >>>>>>           mddev_unlock(mddev);
+> > > >>>>>>           md_unregister_thread(&mddev->sync_thread);
+> > > >>>>>>           mddev_lock(mddev);
+> > > >>>>> As above: While we wait for the sync thread to terminate, would=
+n't it
+> > > >>>>> be a problem, if another user space operation takes the mutex?
+> > > >>>> I don't think other places can be blocked while hold mutex, othe=
+rwise
+> > > >>>> these places can cause potential deadlock. Please try above two =
+lines
+> > > >>>> change. And perhaps others have better idea.
+> > > >>> Yes, this works. No deadlock after >11000 seconds,
+> > > >>>
+> > > >>> (Time till deadlock from previous runs/seconds: 1723, 37, 434, 12=
+65,
+> > > >>> 3500, 1136, 109, 1892, 1060, 664, 84, 315, 12, 820 )
+> > > >> Great. I will send a formal patch with your reported-by and tested=
+-by.
+> > > >>
+> > > >> Thanks,
+> > > >> Guoqing
+> > > > I'm still hitting this issue with Linux 5.4.229 -- it looks like 1/=
+2
+> > > > of the patches that supposedly resolve this were applied to the sta=
+ble
+> > > > kernels, however, one was omitted due to a regression:
+> > > > md: don't unregister sync_thread with reconfig_mutex held (upstream
+> > > > commit 8b48ec23cc51a4e7c8dbaef5f34ebe67e1a80934)
+> > > >
+> > > > I don't see any follow-up on the thread from June 8th 2022 asking f=
+or
+> > > > this patch to be dropped from all stable kernels since it caused a
+> > > > regression.
+> > > >
+> > > > The patch doesn't appear to be present in the current mainline kern=
+el
+> > > > (6.3-rc2) either. So I assume this issue is still present there, or=
+ it
+> > > > was resolved differently and I just can't find the commit/patch.
+> > >
+> > > It should be fixed by commit 9dfbdafda3b3"md: unlock mddev before rea=
+p
+> > > sync_thread in action_store".
 > >
-> > +BUG_ON(!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) &&
-> > +!test_bit(MD_RECOVERY_INTR, &mddev->recovery));
+> > Okay, let me try applying that patch... it does not appear to be
+> > present in my 5.4.229 kernel source. Thanks.
 >
-> I think this can be reporduced likewise, md_check_recovery clear
-> MD_RECOVERY_INTR, and new sync_thread triggered by echo
-> "want_replacement" won't set this bit.
->
-> >
-> > I think there might be racy window like you described but it should be
-> > really small, I prefer
-> > to just add a few lines like this instead of revert and introduce new
-> > lock to resolve the same
-> > issue (if it is).
->
-> The new lock that I add in this patchset is just try to synchronize idle
-> and forzen from action_store=EF=BC=88patch 3), I can drop it if you think=
- this
-> is not necessary.
->
-> The main changes is patch 4, new lines is not much and I really don't
-> like to add new flags unless we have to, current code is already hard
-> to understand...
->
-> By the way, I'm concerned that drop the mutex to unregister sync_thread
-> might not be safe, since the mutex protects lots of stuff, and there
-> might exist other implicit dependencies.
->
-> >
-> > TBH, I am reluctant to see the changes in the series, it can only be
-> > considered
-> > acceptable with conditions:
-> >
-> > 1. the previous raid456 bug can be fixed in this way too, hopefully Mar=
-c
-> > or others
-> >      can verify it.
-> > 2. pass all the tests in mdadm
+> Yes, applying this '9dfbdafda3b3 "md: unlock mddev before reap
+> sync_thread in action_store"' patch on top of vanilla 5.4.229 source
+> appears to fix the problem for me -- I can't reproduce the issue with
+> the script, and it's been running for >24 hours now. (Previously I was
+> able to induce the issue within a matter of minutes.)
 
-AFAICT, this set looks like a better solution for this problem. But I agree
-that we need to make sure it fixes the original bug. mdadm tests are not
-in a very good shape at the moment. I will spend more time to look into
-these tests.
+Hi Marc,
+
+Could you please run your reproducer on the md-tmp branch?
+
+https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/log/?h=3Dmd-tmp
+
+This contains a different version of the fix by Yu Kuai.
 
 Thanks,
 Song
