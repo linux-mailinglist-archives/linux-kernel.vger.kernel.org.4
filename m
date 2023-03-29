@@ -2,101 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFE36CDC8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C956CDCC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjC2O2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
+        id S230290AbjC2Ohl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjC2O2b (ORCPT
+        with ESMTP id S230264AbjC2OhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:28:31 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DC0B474
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:21:51 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id i7so19545614ybt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:21:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1680099565;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q4/N2vrJxKSPGNOo4Sdxe+Hpfi1jERAyjrq6Q8qDfAk=;
-        b=E+Xv3lvbzYSO6w0sxubf8tFqaPhuhL0DT/DtwdsUELKN0hN/L0LFwwN91nkb4xMgGE
-         QWrSyk2SZJ0638qc+KCN26yHQaipDrBAA9Dc01zPYIV3sY/5juz+8QCRNNiM+sHS3qGp
-         t/h+yPhXPjqZhPcpbGWbgMXRsFhl3EkQHCp5AK0WeewpRa81XEzgjRZSDBAmUsIjlzZl
-         1NqGnRfyuzMWzQCsBnnFrwsxJTp9kDPZq1TjvjicFGh0ZucARB5wt/SEZzQxLI8pBtGt
-         fKkPXeB83uxyRCoMdKUOF3vcF0E2iVY9nPolxBp7M4x5QpjSyTSBbuPh8tUwAE6srx3m
-         AO3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680099565;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q4/N2vrJxKSPGNOo4Sdxe+Hpfi1jERAyjrq6Q8qDfAk=;
-        b=mgDQbM6s3w9MsLGoX7wGfEJE14PPOlIsn3HxEisZBkZ8UmSfmnAfcJDPu+fBzBVvae
-         tN5UqmadtqogRM7CBgovEs9NiAHNavRnoQqMjZYaMAIQSAMgbMzQ3alZrqrepKq7kh1I
-         CiOLgOvw/zXuU5kIQZYdyxWQUmYru5sGuaIosouDDRQ8ONsUxlDtVrCwzQhWJg9mog4D
-         bHuxMdAnIYvzXnV6rwgwhJ/01omL5RN2mbrywHT8jfzM+aOvh4lY/+o2BFucZkjDtFx/
-         sRSA6U2V5PHLhKl4JGm0PbWeoX0RJxRiPfHcvOOqU/O9JvPWzQUKTtK7vbbyiXNlbqIA
-         eo4A==
-X-Gm-Message-State: AAQBX9dub9+8IYciWCNgh2IB1x7VHDEMBmmGL/8B5TUvuASgy772hoXq
-        oNv3xy7gzUK6JEMAymdvq8I5nKfSSv/PZcL5Be4U
-X-Google-Smtp-Source: AKy350ZXG/6vdtiRwb14rFlkSfYbi/rQ7HyN95sz22NFfzMEzzIVcrSq4Yj28sNoDp2O5+duQn4747E2fbAWADJ+YJg=
-X-Received: by 2002:a05:6902:18c2:b0:b78:5662:d5bb with SMTP id
- ck2-20020a05690218c200b00b785662d5bbmr9370969ybb.3.1680099565020; Wed, 29 Mar
- 2023 07:19:25 -0700 (PDT)
+        Wed, 29 Mar 2023 10:37:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF607AA8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:32:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680100307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k8U3rACF49U6AOCOedOjgERqK5/T1G/mMgCJwPeJvHA=;
+        b=MOQVauwHGk1Z7b4/Zh2dMAUbOPo62JUnS5Lfk6hcU0Onkxhbbyv5SEIAvZ+iCu0+GYdMIg
+        gE3hjaN5sE5fR3l6lPaoXgAsXFFbXjOaGbAsVtNz4p33XA91Nsjvg7X8VIeECRRqmJSNOq
+        s/CrR65tf9w1ruqYPLSmlpL5YiYGB8w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-215-tqUh_sqXPgCPuULRl0SPWg-1; Wed, 29 Mar 2023 10:31:43 -0400
+X-MC-Unique: tqUh_sqXPgCPuULRl0SPWg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B40C5185A791;
+        Wed, 29 Mar 2023 14:31:42 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7024D404DC5C;
+        Wed, 29 Mar 2023 14:31:42 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id A5DD04015571D; Wed, 29 Mar 2023 11:20:21 -0300 (-03)
+Date:   Wed, 29 Mar 2023 11:20:21 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Frederic Weisbecker <fweisbecker@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Leonardo Bras <leobras@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
+Subject: Re: [PATCH 1/2] sched/isolation: Add cpu_is_isolated() API
+Message-ID: <ZCRJJRz01vX8jPjb@tpad>
+References: <20230317134448.11082-1-mhocko@kernel.org>
+ <20230317134448.11082-2-mhocko@kernel.org>
+ <ZBSyaVk919Fi07Wv@tpad>
+ <ZBSy2QZYZRtCNBd8@tpad>
+ <ZBVwlv+Mi+GfR1E3@dhcp22.suse.cz>
+ <ZB4lt3IaPWVmn41n@localhost.localdomain>
+ <ZCFu9jFm/rskeNlM@tpad>
+ <ZCLT8iH2ltmQ40my@dhcp22.suse.cz>
 MIME-Version: 1.0
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de> <83763b78-453d-de21-9b48-1c226afa13a0@web.de>
- <57a97109-7a67-245b-8072-54aec3b5021d@web.de> <CAHC9VhR=yK72JXW3hJR+gUQtGCNpF0Bzk5RDzPZR0MunC84AUQ@mail.gmail.com>
- <CAHC9VhREfdgiCji=uEeCrc4w1kPGfnWGKnJuUYKXwTApdneSjQ@mail.gmail.com>
- <9e8bb69f-99e8-f204-6435-cc6e52816ebf@web.de> <CAHC9VhQfiNd_4uWBmKCC81UnOJb7Y=UFCDMXuqz3=UPr8QtqNw@mail.gmail.com>
- <382bc6d8-7f75-822a-6c36-088b1d2f427a@web.de>
-In-Reply-To: <382bc6d8-7f75-822a-6c36-088b1d2f427a@web.de>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 29 Mar 2023 10:19:14 -0400
-Message-ID: <CAHC9VhRxjJ3WMNc=vwkLKGDjSN8G=P9ykMkYg9dAJs3SaxVYYA@mail.gmail.com>
-Subject: Re: selinux: Adjust implementation of security_get_bools()
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, selinux@vger.kernel.org,
-        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Michal Orzel <michalorzel.eng@gmail.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Ruiqi Gong <gongruiqi1@huawei.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ruiqi Gong <ruiqi.gong@qq.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZCLT8iH2ltmQ40my@dhcp22.suse.cz>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 1:20=E2=80=AFAM Markus Elfring <Markus.Elfring@web.=
-de> wrote:
-> >> Would you like to take advice from another information source
-> >> better into account?
-> >
-> > In this case, I prefer what I suggested.
->
-> What does hinder you to work with more jump labels for improved exception=
- handling?
+On Tue, Mar 28, 2023 at 01:48:02PM +0200, Michal Hocko wrote:
+> On Mon 27-03-23 07:24:54, Marcelo Tosatti wrote:
+> > On Fri, Mar 24, 2023 at 11:35:35PM +0100, Frederic Weisbecker wrote:
+> > > Le Sat, Mar 18, 2023 at 09:04:38AM +0100, Michal Hocko a écrit :
+> > > > On Fri 17-03-23 15:35:05, Marcelo Tosatti wrote:
+> [...]
+> > > > > Actually introducing cpu_is_isolated() seems fine, but it can call
+> > > > > housekeeping_test_cpu(cpu, HK_TYPE_TICK) AFAICS.
+> > > >  
+> > > > This is not really my area. Frederic, could you have a look please?
+> > > 
+> > > The point is to have a function that tells if either nohz_full= or
+> > > isolcpus=[domain] has been passed for the given CPU.
+> > > 
+> > > Because I assumed that both would be interested in avoiding that flush
+> > > noise, wouldn't it be the case?
+> > 
+> > Yes, that is the case. But as a note: for the two main types of
+> > configuration performed (one uses isolcpus=[domain] and the other
+> > cgroups, for isolating processes) nohz_full= is always set.
+> > 
+> > So just testing for nohz_full= would be sufficient (which perhaps would
+> > make the code simpler).
+> 
+> I do not see any mention about that assumption under Documentation/. 
 
-I'm the one who has the responsibility to fix bugs in the code when no
-one else has the time or the desire, I'm also the one who shepherds
-these changes up to Linus and argues for contentious changes which are
-not popular outside the Linux Kernel security community.  Having to do
-this with patches that I find bothersome hinders me in ways which are
-sometimes difficult to explain, but easy to understand if you've ever
-been responsible for maintaining a significant code base.
+Documentation/admin-guide/kernel-per-CPU-kthreads.rst
 
---=20
-paul-moore.com
+SCHED_SOFTIRQ
+-------------
+
+Do all of the following:
+
+1.      Avoid sending scheduler IPIs to the CPU to be de-jittered,
+        for example, ensure that at most one runnable kthread is present
+        on that CPU.  If a thread that expects to run on the de-jittered
+        CPU awakens, the scheduler will send an IPI that can result in
+        a subsequent SCHED_SOFTIRQ.
+2.      CONFIG_NO_HZ_FULL=y and ensure that the CPU to be de-jittered
+        is marked as an adaptive-ticks CPU using the "nohz_full="
+        boot parameter.  This reduces the number of scheduler-clock
+        interrupts that the de-jittered CPU receives, minimizing its
+        chances of being selected to do the load balancing work that
+        runs in SCHED_SOFTIRQ context.
+
+> Is this a best practice documented anywhere or it just happens to be
+> the case with workloads you deal with?
+
+Option 2. However Frederic seems interested in matching the exported
+toggles with the known use-cases classes.
+
+For example, for this guide:
+http://www.comfilewiki.co.kr/en/doku.php?id=comfilepi:improving_real-time_performance:index
+
+Using nohz_full= would be a benefit (and its not being currently set,
+perhaps due to not knowing all the options?).
+
+http://www.comfilewiki.co.kr/en/doku.php?id=comfilepi:improving_real-time_performance:index
+
+
+AFAIU the workloads for which disabling nohz_full= is a benefit are those
+where the switching between nohz full mode and sched tick enabled mode
+and vice-versa (which involve programming the local timer) happens
+often and is therefore avoidable? For example switching between 1
+runnable task and more than 1 runnable task (and vice versa).
+
