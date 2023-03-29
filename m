@@ -2,150 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5986CD1B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587AF6CD1B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjC2Fht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 01:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S229507AbjC2FiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 01:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjC2Fhr (ORCPT
+        with ESMTP id S229530AbjC2FiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 01:37:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8599BDA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 22:37:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680068221;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hla3Qnsgd5UPmON5n9RR870xL1b8aSKIkUrN0GzbMGw=;
-        b=FBRY2eQZl1cbB9zmNhJoEZpGHC4x9SGxUuZlvhzp2eSAwtdYicU1dZQZ5nCmA6nmNcxl+v
-        49+KG5a5D7rsxBopk9TJ15BB3CSZEGkwBsPN5H6tah4RTFN6ia+vS80Zu7IECBo/9wUMZz
-        L7++lFVnlp2v51Lt5EqSu8V1ETLNbq4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-450-QZ9ZqbAGNCyFFHfIOPFqVQ-1; Wed, 29 Mar 2023 01:37:00 -0400
-X-MC-Unique: QZ9ZqbAGNCyFFHfIOPFqVQ-1
-Received: by mail-wm1-f71.google.com with SMTP id d11-20020a05600c34cb00b003ee89ce8cc3so7287099wmq.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 22:36:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680068219;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hla3Qnsgd5UPmON5n9RR870xL1b8aSKIkUrN0GzbMGw=;
-        b=3YpLvAqDGSANKK/dfKwGDxJOzEysKwW8wZvcwfyktcdlHbQEr4KG9TF93j3L3OUY54
-         sQtqhAFPgihnXgOgcUB64JDjR6baaAYexuhrkKVh5zMjBufl7+Ae2eJ+3RufLoSGnGrv
-         zXrxRd2SwDGPNU44YKMJjFRi1smWFO9M/hqY2iq1Xo3fxrC76pGv/hPPavrCbMFAy16q
-         1OtuzLeafWepV1P/XEvqVBZjd/+6vQNtioJVFNBeCiJP4UQAz6jTlE//VhsUeiCl2eHE
-         TL/mkBzst7ILjlBKQm3sNgIow1rZfgFOodlfxE3j6vrXNrP0Au+BDKymdbOH1Imw0HSm
-         WMOw==
-X-Gm-Message-State: AAQBX9ekvkPXeqwIEhXDXnnWGi8R8AB5sxz7IJupNjfwyoxQRBpg9OSW
-        d4uXp5TqWPHkkHupSREsxMKgfG9bRzLfjSsHlJH6C3Ob0KsKITEYRU5Se0wsGgjj1Q3/CLYKBxN
-        vYQYMI3s/JdB/QCJ10WgQFHTN
-X-Received: by 2002:adf:ee0c:0:b0:2d8:908c:8fa0 with SMTP id y12-20020adfee0c000000b002d8908c8fa0mr15090848wrn.9.1680068218834;
-        Tue, 28 Mar 2023 22:36:58 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y06HXL9L5OeExITLNa0kaQS5mr7hukl/oOQCa72DJkzos37Pccw/+PbWD3EAjVhwrN5OJ3XQ==
-X-Received: by 2002:adf:ee0c:0:b0:2d8:908c:8fa0 with SMTP id y12-20020adfee0c000000b002d8908c8fa0mr15090838wrn.9.1680068218505;
-        Tue, 28 Mar 2023 22:36:58 -0700 (PDT)
-Received: from redhat.com ([2.52.18.165])
-        by smtp.gmail.com with ESMTPSA id b9-20020adfde09000000b002daeb108304sm16094294wrm.33.2023.03.28.22.36.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 22:36:57 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 01:36:54 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Albert Huang <huangjie.albert@bytedance.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] virtio_ring: don't update event idx on get_buf
-Message-ID: <20230329013434-mutt-send-email-mst@kernel.org>
-References: <20230325105633.58592-1-huangjie.albert@bytedance.com>
+        Wed, 29 Mar 2023 01:38:09 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48400107;
+        Tue, 28 Mar 2023 22:38:03 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32T3TC8p025806;
+        Wed, 29 Mar 2023 05:37:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=d4fdF3BZtPLjU8XFgyLiilyqhaZsSMcYoJkj/8bWDt8=;
+ b=G0+aanufiL8xSc+OyhqHAKK8dxrDZnBHw/fQsn5bLu4e0d2gpsMMrDO8LZobjro+K9oB
+ hcgsCY+lTHq4Vuh0hKS//JbceoZVq6L2Bq/UFLmKsasws/1uCKBELvS4Ql56lhe9Knsi
+ 2Qkoo5FZvkdsMZCfSlFqohW4sDOONKqd0BPkH11FLpFqsd18hvi0SZb8Z0+rJB/xm9ci
+ gVbtfTkeRzQIbvAJrrOqFB18JDuFuDHNhc7bFjdJJsmZcNjztH16TBrYp4zHICIjfeYb
+ k7ZCathTIWtxBSu0nax0qBvJXURdHSqP6G50CGmzuHW/ifDLnPJeP3I/Y4PRZGweqxym cA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pky702dsn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 05:37:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32T5biHE011929
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 05:37:44 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Tue, 28 Mar 2023 22:37:40 -0700
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH 0/2] Add few device nodes for IPQ9574 SoC
+Date:   Wed, 29 Mar 2023 11:07:24 +0530
+Message-ID: <20230329053726.14860-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230325105633.58592-1-huangjie.albert@bytedance.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: EcgnSPWvgmPFiVDGgP2nvqVRR1IIjHoZ
+X-Proofpoint-GUID: EcgnSPWvgmPFiVDGgP2nvqVRR1IIjHoZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=763 priorityscore=1501 spamscore=0
+ phishscore=0 impostorscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303290044
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 06:56:33PM +0800, Albert Huang wrote:
-> in virtio_net, if we disable the napi_tx, when we triger a tx interrupt,
-> the vq->event_triggered will be set to true. It will no longer be set to
-> false. Unless we explicitly call virtqueue_enable_cb_delayed or
-> virtqueue_enable_cb_prepare.
-> 
-> If we disable the napi_tx, it will only be called when the tx ring
-> buffer is relatively small.
-> 
-> Because event_triggered is true. Therefore, VRING_AVAIL_F_NO_INTERRUPT or
-> VRING_PACKED_EVENT_FLAG_DISABLE will not be set. So we update
-> vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
-> every time we call virtqueue_get_buf_ctx. This will bring more interruptions.
-> 
-> To summarize:
-> 1) event_triggered was set to true in vring_interrupt()
-> 2) after this nothing will happen for virtqueue_disable_cb() so
->    VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
-> 3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
->    then it tries to publish new event
-> 
-> To fix, if event_triggered is set to true, do not update
-> vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
-> 
-> Tested with iperf:
-> iperf3 tcp stream:
-> vm1 -----------------> vm2
-> vm2 just receives tcp data stream from vm1, and sends the ack to vm1,
-> there are many tx interrupts in vm2.
-> but without event_triggered there are just a few tx interrupts.
-> 
-> Fixes: 8d622d21d248 ("virtio: fix up virtio_disable_cb")
-> Signed-off-by: Albert Huang <huangjie.albert@bytedance.com>
-> Message-Id: <20230321085953.24949-1-huangjie.albert@bytedance.com>
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+This series adds the support for QUP peripherals, PRNG, WDT for IPQ9574
+SoC.
 
-dropped for now due to breakage of 9p.
-Pls post v3 with the fix you suggested (moving the check
-of vq->event_triggered).
+This series depends on the below one
+https://lore.kernel.org/linux-arm-msm/20230328102013.21361-2-quic_poovendh@quicinc.com/
 
-> ---
->  drivers/virtio/virtio_ring.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index cbeeea1b0439..1c36fa477966 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -914,7 +914,8 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
->  	/* If we expect an interrupt for the next entry, tell host
->  	 * by writing event index and flush out the write before
->  	 * the read in the next get_buf call. */
-> -	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT))
-> +	if (unlikely(!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT) &&
-> +		     !vq->event_triggered))
->  		virtio_store_mb(vq->weak_barriers,
->  				&vring_used_event(&vq->split.vring),
->  				cpu_to_virtio16(_vq->vdev, vq->last_used_idx));
-> @@ -1744,7 +1745,8 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
->  	 * by writing event index and flush out the write before
->  	 * the read in the next get_buf call.
->  	 */
-> -	if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC)
-> +	if (unlikely(vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC &&
-> +		     !vq->event_triggered))
->  		virtio_store_mb(vq->weak_barriers,
->  				&vq->packed.vring.driver->off_wrap,
->  				cpu_to_le16(vq->last_used_idx));
-> -- 
-> 2.37.0 (Apple Git-136)
+Kathiravan T (2):
+  dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-ipq9574 compatible
+  arm64: dts: qcom: ipq9574: add few device nodes
+
+ .../bindings/watchdog/qcom-wdt.yaml           |   1 +
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts   |  21 ++
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         | 202 ++++++++++++++++++
+ 3 files changed, 224 insertions(+)
+
+-- 
+2.17.1
 
