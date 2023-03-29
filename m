@@ -2,186 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC8D6CD83E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 679866CD842
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjC2LQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
+        id S229724AbjC2LQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjC2LQQ (ORCPT
+        with ESMTP id S229697AbjC2LQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:16:16 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5451C40C4;
-        Wed, 29 Mar 2023 04:16:14 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 92C1532007BE;
-        Wed, 29 Mar 2023 07:16:11 -0400 (EDT)
-Received: from imap43 ([10.202.2.93])
-  by compute5.internal (MEProxy); Wed, 29 Mar 2023 07:16:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1680088571; x=1680174971; bh=EgJegEsODD
-        1iHmXtfNr/Zui5mid78ECp1tcuebLe5MY=; b=aLLP0sO0B2Fm5X9DzOBQJ1YY27
-        jCEYtWdPoDC7yW7oHhQm9k07/k/IkUuBgjJblUCRD3LmMWQlzsGE1hAq5cpKcZAS
-        vm/vwUg99Rtvq1q/mKC5edlcVjtqks29tOeW2kxJM7VUTmWKlu2IzSYEWighJDmO
-        Y/QpebIL9J7F8P5daREGwrwslMgg9KKEbX1NrbGgOoBg9aOWSBnAGEvZIPn+wQ9z
-        DdI2Zkbw50/2MaDuuAUhBKMVR9RZg36wf+v8spbAc0UtqP3pxlKIEoMQcZKkNeai
-        B5YyKn8c4hgX1HtTYjaB2opXLOk7XQVWbks6DPsAZsFCAzgpCYxFaLAig7SA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680088571; x=1680174971; bh=EgJegEsODD1iHmXtfNr/Zui5mid78ECp1tc
-        uebLe5MY=; b=uffdnpnPDByb3kl4Wv6aIyHQddxA1WdzwNzJgD0gKhdR4CoRqyG
-        8QgWk9lKNxkJhctskxPMfpMj5/ukN2lyttiEW3QqqW+nQARsQNfsqUnBVOgVJOol
-        QPVs/u9dG12MMLo5EwSNHPMG/phSIY0eflunYZPWfddBfawnLBU8O7WeNS29sOE3
-        xX65ghEPqiR4uOOFLDXsukY3Qn4aNuCKojfepPpITX7GtokUnwrE1gQgOWf48uVt
-        vjzrDqf1X8zf81mJXhPcUHtrBlosD34Z71Ol9zsmfQPWoE9zrJYNyEZJ4pcvtuss
-        ADEGO/Q/S3nOg5/FeF1fmJQPDnYTf1Nkytw==
-X-ME-Sender: <xms:-h0kZKXBrY-RQOYYcQsk4vIsHrwWPBE25nWvvfT5BL1eYWZuAz_iaw>
-    <xme:-h0kZGnNByuAQdUecu12R_Ig46A39Dowq2kCacgDTK1Vlm3D-WCRLcPzCU8scwMM1
-    Fo0QjHcGcLHCT8-aiU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehiedgfeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfffhffvvefutgesthdtre
-    dtreertdenucfhrhhomheptehlihhsthgrihhruceorghlihhsthgrihhrsegrlhhishht
-    rghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeefffelhfejhfevteelheffueduje
-    eutdfhieegleehffeigefhfefgjeevfeetgeenucffohhmrghinhepghhithhhuhgsrdgt
-    ohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:-h0kZOYjC7dvoQlLAzAjyBgkBX9SAImfA39WEFgnPYK_D1lSrUAI5Q>
-    <xmx:-h0kZBVZ6sLkOMry5DeeDSFBvV-fxUEL0koQjLQVKvBPhVb9lvKU5A>
-    <xmx:-h0kZEmQcBtbWadRgkMnTgcTBLo7X8AYkxBzZc66KgC2ga7MTrbzVQ>
-    <xmx:-x0kZDuOa8VinHerTnXZGpGWO_ijKt2t0x2ptBB7a8ml_0z4hiBGVw>
-Feedback-ID: ifd214418:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 915E42D40090; Wed, 29 Mar 2023 07:16:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-237-g62623e8e3f-fm-20230327.001-g62623e8e
-Mime-Version: 1.0
-Message-Id: <0dcc1aac-9a6a-4d17-be68-a895cb6120da@app.fastmail.com>
-Date:   Wed, 29 Mar 2023 21:15:50 +1000
-From:   Alistair <alistair@alistair23.me>
-To:     ye.xingchen@zte.com.cn, sebastian.reichel@collabora.com,
-        linus.walleij@linaro.org, sre@kernel.org
-Cc:     pali@kernel.org, sravanhome@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: power_supply_show_property Kernel Oops
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 29 Mar 2023 07:16:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C38440EA;
+        Wed, 29 Mar 2023 04:16:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD53161CBB;
+        Wed, 29 Mar 2023 11:16:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD5EBC433D2;
+        Wed, 29 Mar 2023 11:16:24 +0000 (UTC)
+Message-ID: <85268d69-3d3b-2c0f-ba26-073f09052362@xs4all.nl>
+Date:   Wed, 29 Mar 2023 13:16:22 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RESEND PATCH v4 03/21] staging: media: tegra-video: fix
+ .vidioc_enum_fmt_vid_cap to return all formats
+Content-Language: en-US
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>
+References: <20230309144320.2937553-1-luca.ceresoli@bootlin.com>
+ <20230309144320.2937553-4-luca.ceresoli@bootlin.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20230309144320.2937553-4-luca.ceresoli@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+Hi Luca,
 
-I am working on mainlining support for the reMarkable2 eInk tablet.
+I finally found the time to test this series. It looks OK, except for this patch.
+The list of supported formats really has to be the intersection of what the tegra
+supports and what the sensor supports.
 
-I haven an out of tree max77818 power controller [1], [2] and [3] that I
-haven't upstreamed yet, but am using on top of the mainline kernel.
+Otherwise you would advertise pixelformats that cannot be used, and the application
+would have no way of knowing that.
 
-My driver worked with the 6.2 kernel [4], but since rebasing to the 6.3-rc4
-kernel [5] I see this kernel oops:
+This patch needs to be dropped.
 
-```
-[    2.107861] 8<--- cut here ---
-[    2.110964] Unable to handle kernel paging request at virtual address 002080a2 when read
-[    2.119064] [002080a2] *pgd=00000000
-[    2.122675] Internal error: Oops: 5 [#1] SMP ARM
-[    2.127302] Modules linked in:
-[    2.130369] CPU: 1 PID: 49 Comm: kworker/1:2 Not tainted 6.3.0-rc4-00043-ga28b4b2f86cb-dirty #6
-[    2.139079] Hardware name: Freescale i.MX7 Dual (Device Tree)
-[    2.144832] Workqueue: events power_supply_changed_work
-[    2.150081] PC is at string+0x80/0x158
-[    2.153847] LR is at 0xc2826fff
-[    2.156996] pc : [<c0da9314>]    lr : [<c2826fff>]    psr: a0000013
-[    2.163270] sp : f0dadd98  ip : c2827000  fp : f0dadddc
-[    2.168501] r10: c2827000  r9 : c2828000  r8 : c10ec1da
-[    2.173733] r7 : f0dade34  r6 : 00000002  r5 : f0dadd98  r4 : f0daddb0
-[    2.180268] r3 : 002080a2  r2 : c2828000  r1 : 00000000  r0 : c2827000
-[    2.186803] Flags: NzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-[    2.193949] Control: 10c5387d  Table: 8000406a  DAC: 00000051
-[    2.199699] Register r0 information: non-slab/vmalloc memory
-[    2.205371] Register r1 information: NULL pointer
-[    2.210084] Register r2 information: non-slab/vmalloc memory
-[    2.215753] Register r3 information: non-paged memory
-[    2.220814] Register r4 information: 2-page vmalloc region starting at 0xf0dac000 allocated at kernel_
-clone+0xa4/0x360
-[    2.231542] Register r5 information: 2-page vmalloc region starting at 0xf0dac000 allocated at kernel_
-clone+0xa4/0x360
-[    2.242265] Register r6 information: non-paged memory
-[    2.247326] Register r7 information: 2-page vmalloc region starting at 0xf0dac000 allocated at kernel_
-clone+0xa4/0x360
-[    2.258048] Register r8 information: non-slab/vmalloc memory
-[    2.263718] Register r9 information: non-slab/vmalloc memory
-[    2.269387] Register r10 information: non-slab/vmalloc memory
-[    2.275144] Register r11 information: 2-page vmalloc region starting at 0xf0dac000 allocated at kernel_clone+0xa4/0x360
-[    2.285953] Register r12 information: non-slab/vmalloc memory
-[    2.291709] Process kworker/1:2 (pid: 49, stack limit = 0xf6b02a82)
-[    2.297990] Stack: (0xf0dadd98 to 0xf0dae000)
-[    2.302356] dd80:                                                       ffffff04 ffff0a00
-[    2.310546] dda0: f0daddf0 c07b982c ffffff04 ffff0a00 f0dade34 c10ec1d8 c2827000 c0dac10c
-[    2.318735] ddc0: c254b420 ffffff04 ffff0a00 000000b7 f0daddf0 00001000 0000120c ffffff04
-[    2.326924] dde0: ffff0a00 dbe877b2 f0dade38 00001000 00000000 c254b420 c15262e0 0000120c
-[    2.335113] de00: c2827000 c254b400 c11145cc c0dac3e8 0000004d c03363ec 00000001 dbe877b2
-[    2.343302] de20: f0dade30 dbe877b2 c09ca444 c10ec1d8 002080a2 00000000 00000000 dbe877b2
-[    2.351491] de40: ffffff04 0000004d c2827000 c2181000 000004d0 c15250b0 c2827000 c0ea7d94
-[    2.359680] de60: c11145cc c09ca5f8 00000000 00000006 c254b420 c2181000 c254b400 c2827000
-[    2.367869] de80: c0ea7d94 c09ca7d8 c254b420 c2181000 00000000 c10f3358 00000002 00000000
-[    2.376058] dea0: c0ea7d94 c07986e0 00000000 c0ea7d94 c11145cc c0d8f7e8 f0daded0 dbe877b2
-[    2.384247] dec0: c254b420 dbe877b2 c0d8fdf0 c254b420 c2181000 c0d8fe5c c09c88d4 dbe877b2
-[    2.392435] dee0: c254b420 c2822f00 c254b400 00000000 c254b634 c254b5f8 00000000 c254b634
-[    2.400624] df00: c254b400 c254b420 c15a2fa4 00000040 ef7d4880 c09c8af0 c254b5f8 c27f1e00
-[    2.408813] df20: ef7d4880 ef7d7c00 00000000 ef7d7c05 00000040 c013ddb8 c1403d40 c2321100
-[    2.417002] df40: c27f1e00 ef7d4880 ef7d489c c1403d40 c2321100 c27f1e18 00000008 c013ea40
-[    2.425191] df60: c27f1e00 c2620340 f08f1eb8 c27f3880 c2321100 c013ea14 c27f1e00 c2620340
-[    2.433380] df80: f08f1eb8 00000000 00000000 c0146218 c27f3880 c014614c 00000000 00000000
-[    2.441568] dfa0: 00000000 00000000 00000000 c0100170 00000000 00000000 00000000 00000000
-[    2.449756] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    2.457943] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
-[    2.466136]  string from vsnprintf+0x158/0x424
-[    2.470603]  vsnprintf from vscnprintf+0x10/0x24
-[    2.475241]  vscnprintf from sysfs_emit+0x50/0xac
-[    2.479975]  sysfs_emit from power_supply_show_property+0x1d0/0x26c
-[    2.486269]  power_supply_show_property from add_prop_uevent+0x30/0x8c
-[    2.492815]  add_prop_uevent from power_supply_uevent+0xb4/0xe4
-[    2.498753]  power_supply_uevent from dev_uevent+0xc4/0x21c
-[    2.504352]  dev_uevent from kobject_uevent_env+0x1cc/0x510
-[    2.509953]  kobject_uevent_env from power_supply_changed_work+0x7c/0xb4
-[    2.516675]  power_supply_changed_work from process_one_work+0x1e8/0x3e8
-[    2.523396]  process_one_work from worker_thread+0x2c/0x504
-[    2.528986]  worker_thread from kthread+0xcc/0xec
-[    2.533716]  kthread from ret_from_fork+0x14/0x24
-[    2.538443] Exception stack(0xf0dadfb0 to 0xf0dadff8)
-[    2.543505] dfa0:                                     00000000 00000000 00000000 00000000
-[    2.551692] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    2.559879] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    2.566507] Code: e2800001 e150000e e2811001 0a000002 (e4d3c001)
-[    2.572682] ---[ end trace 0000000000000000 ]---
-```
+I'll run this series through my other checks, and I will let you know today if
+anything else needs to be changed.
 
-As it's on a consumer device I don't have a way to connect a debugger. So I'm
-a little stuck on what the problem is. The only related change I see between
-6.2 and 6.3-rc4 is commit a441f3b90a340e5c94df36c33fb7000193ee0aa7
-"power: supply: use sysfs_emit() instead of sprintf() for sysfs show()", but
-that doesn't look like it would cause this oops.
+Regards,
 
-I would really appreciate any help or ideas on what the issue might be or how
-I could fix it
+	Hans
 
-1: https://github.com/alistair23/linux/commit/5f1579e12c35d75529328e84d78b36ac11da8cd4
-2: https://github.com/alistair23/linux/commit/c6383382278c5e594bb889f62dab853da8b73532
-3: https://github.com/alistair23/linux/commit/5d8f2d3a08b8604a0ca5282f2b0aea9ebe7ee5fa
-4: https://github.com/alistair23/linux/tree/rM2-6.2
-5: https://github.com/alistair23/linux/tree/rM2-mainline
+On 09/03/2023 15:43, Luca Ceresoli wrote:
+> The .vidioc_enum_fmt_vid_cap (called tegra_channel_enum_format() here)
+> should return all the supported formats. Instead the current implementation
+> computes the intersection between the formats it supports and those
+> supported by the first subdev in the stream (typically the image sensor).
+> 
+> Remove all the unnecessary logic that supports such algorithm. In order to
+> do this, also change the Tegra210 CSI TPG formats from the current
+> open-coded implementation in vi_tpg_fmts_bitmap_init() to a const array in
+> tegra210.c, just like the one that describes the regular formats.
+> 
+> Fixes: 3d8a97eabef0 ("media: tegra-video: Add Tegra210 Video input driver")
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+> 
+> ---
+> 
+> Changed in v4:
+>  - Added review tags
+> 
+> No changes in v3
+> No changes in v2
+> ---
+>  drivers/staging/media/tegra-video/tegra210.c |   7 +-
+>  drivers/staging/media/tegra-video/vi.c       | 103 +------------------
+>  drivers/staging/media/tegra-video/vi.h       |   4 -
+>  3 files changed, 9 insertions(+), 105 deletions(-)
+> 
+> diff --git a/drivers/staging/media/tegra-video/tegra210.c b/drivers/staging/media/tegra-video/tegra210.c
+> index d58370a84737..eb19dd5107ce 100644
+> --- a/drivers/staging/media/tegra-video/tegra210.c
+> +++ b/drivers/staging/media/tegra-video/tegra210.c
+> @@ -683,8 +683,12 @@ enum tegra210_image_format {
+>  	V4L2_PIX_FMT_##FOURCC,						\
+>  }
+>  
+> -/* Tegra210 supported video formats */
+>  static const struct tegra_video_format tegra210_video_formats[] = {
+> +#if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
+> +	/* VI only support 2 formats in TPG mode */
+> +	TEGRA210_VIDEO_FMT(RAW10,  10, SRGGB10_1X10,      2, T_R16_I,    SRGGB10),
+> +	TEGRA210_VIDEO_FMT(RGB888, 24, RGB888_1X32_PADHI, 4, T_A8B8G8R8, RGBX32),
+> +#else
+>  	/* RAW 8 */
+>  	TEGRA210_VIDEO_FMT(RAW8, 8, SRGGB8_1X8, 1, T_L8, SRGGB8),
+>  	TEGRA210_VIDEO_FMT(RAW8, 8, SGRBG8_1X8, 1, T_L8, SGRBG8),
+> @@ -714,6 +718,7 @@ static const struct tegra_video_format tegra210_video_formats[] = {
+>  	TEGRA210_VIDEO_FMT(YUV422_8, 16, VYUY8_2X8, 2, T_V8_Y8__U8_Y8, YUYV),
+>  	TEGRA210_VIDEO_FMT(YUV422_8, 16, YUYV8_2X8, 2, T_Y8_U8__Y8_V8, VYUY),
+>  	TEGRA210_VIDEO_FMT(YUV422_8, 16, YVYU8_2X8, 2, T_Y8_V8__Y8_U8, UYVY),
+> +#endif
+>  };
+>  
+>  /* Tegra210 VI operations */
+> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+> index 11dd142c98c5..9dba6e97ebdd 100644
+> --- a/drivers/staging/media/tegra-video/vi.c
+> +++ b/drivers/staging/media/tegra-video/vi.c
+> @@ -3,7 +3,6 @@
+>   * Copyright (C) 2020 NVIDIA CORPORATION.  All rights reserved.
+>   */
+>  
+> -#include <linux/bitmap.h>
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/host1x.h>
+> @@ -73,15 +72,6 @@ static int tegra_get_format_idx_by_code(struct tegra_vi *vi,
+>  	return -1;
+>  }
+>  
+> -static u32 tegra_get_format_fourcc_by_idx(struct tegra_vi *vi,
+> -					  unsigned int index)
+> -{
+> -	if (index >= vi->soc->nformats)
+> -		return -EINVAL;
+> -
+> -	return vi->soc->video_formats[index].fourcc;
+> -}
+> -
+>  static const struct tegra_video_format *
+>  tegra_get_format_by_fourcc(struct tegra_vi *vi, u32 fourcc)
+>  {
+> @@ -430,19 +420,12 @@ static int tegra_channel_enum_format(struct file *file, void *fh,
+>  				     struct v4l2_fmtdesc *f)
+>  {
+>  	struct tegra_vi_channel *chan = video_drvdata(file);
+> -	unsigned int index = 0, i;
+> -	unsigned long *fmts_bitmap = chan->tpg_fmts_bitmap;
+> -
+> -	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+> -		fmts_bitmap = chan->fmts_bitmap;
+> +	const struct tegra_vi_soc *soc = chan->vi->soc;
+>  
+> -	if (f->index >= bitmap_weight(fmts_bitmap, MAX_FORMAT_NUM))
+> +	if (f->index >= soc->nformats)
+>  		return -EINVAL;
+>  
+> -	for (i = 0; i < f->index + 1; i++, index++)
+> -		index = find_next_bit(fmts_bitmap, MAX_FORMAT_NUM, index);
+> -
+> -	f->pixelformat = tegra_get_format_fourcc_by_idx(chan->vi, index - 1);
+> +	f->pixelformat = soc->video_formats[f->index].fourcc;
+>  
+>  	return 0;
+>  }
+> @@ -1059,78 +1042,6 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
+>  	return 0;
+>  }
+>  
+> -/* VI only support 2 formats in TPG mode */
+> -static void vi_tpg_fmts_bitmap_init(struct tegra_vi_channel *chan)
+> -{
+> -	int index;
+> -
+> -	bitmap_zero(chan->tpg_fmts_bitmap, MAX_FORMAT_NUM);
+> -
+> -	index = tegra_get_format_idx_by_code(chan->vi,
+> -					     MEDIA_BUS_FMT_SRGGB10_1X10, 0);
+> -	bitmap_set(chan->tpg_fmts_bitmap, index, 1);
+> -
+> -	index = tegra_get_format_idx_by_code(chan->vi,
+> -					     MEDIA_BUS_FMT_RGB888_1X32_PADHI,
+> -					     0);
+> -	bitmap_set(chan->tpg_fmts_bitmap, index, 1);
+> -}
+> -
+> -static int vi_fmts_bitmap_init(struct tegra_vi_channel *chan)
+> -{
+> -	int index, ret, match_code = 0;
+> -	struct v4l2_subdev *subdev;
+> -	struct v4l2_subdev_mbus_code_enum code = {
+> -		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+> -	};
+> -
+> -	bitmap_zero(chan->fmts_bitmap, MAX_FORMAT_NUM);
+> -
+> -	/*
+> -	 * Set the bitmap bits based on all the matched formats between the
+> -	 * available media bus formats of sub-device and the pre-defined Tegra
+> -	 * supported video formats.
+> -	 */
+> -	subdev = tegra_channel_get_remote_source_subdev(chan);
+> -	while (1) {
+> -		ret = v4l2_subdev_call(subdev, pad, enum_mbus_code,
+> -				       NULL, &code);
+> -		if (ret < 0)
+> -			break;
+> -
+> -		index = tegra_get_format_idx_by_code(chan->vi, code.code, 0);
+> -		while (index >= 0) {
+> -			bitmap_set(chan->fmts_bitmap, index, 1);
+> -			if (!match_code)
+> -				match_code = code.code;
+> -			/* look for other formats with same mbus code */
+> -			index = tegra_get_format_idx_by_code(chan->vi,
+> -							     code.code,
+> -							     index + 1);
+> -		}
+> -
+> -		code.index++;
+> -	}
+> -
+> -	/*
+> -	 * Set the bitmap bit corresponding to default tegra video format if
+> -	 * there are no matched formats.
+> -	 */
+> -	if (!match_code) {
+> -		match_code = tegra_default_format.code;
+> -		index = tegra_get_format_idx_by_code(chan->vi, match_code, 0);
+> -		if (WARN_ON(index < 0))
+> -			return -EINVAL;
+> -
+> -		bitmap_set(chan->fmts_bitmap, index, 1);
+> -	}
+> -
+> -	/* initialize channel format to the sub-device active format */
+> -	tegra_channel_set_subdev_active_fmt(chan);
+> -
+> -	return 0;
+> -}
+> -
+>  static void tegra_channel_host1x_syncpts_free(struct tegra_vi_channel *chan)
+>  {
+>  	int i;
+> @@ -1501,7 +1412,6 @@ int tegra_v4l2_nodes_setup_tpg(struct tegra_video_device *vid)
+>  			goto cleanup;
+>  
+>  		v4l2_set_subdev_hostdata(&csi_chan->subdev, vi_chan);
+> -		vi_tpg_fmts_bitmap_init(vi_chan);
+>  		csi_chan = list_next_entry(csi_chan, list);
+>  	}
+>  
+> @@ -1721,13 +1631,6 @@ static int tegra_vi_graph_notify_complete(struct v4l2_async_notifier *notifier)
+>  		goto unregister_video;
+>  	}
+>  
+> -	ret = vi_fmts_bitmap_init(chan);
+> -	if (ret < 0) {
+> -		dev_err(vi->dev,
+> -			"failed to initialize formats bitmap: %d\n", ret);
+> -		goto unregister_video;
+> -	}
+> -
+>  	subdev = tegra_channel_get_remote_csi_subdev(chan);
+>  	if (!subdev) {
+>  		ret = -ENODEV;
+> diff --git a/drivers/staging/media/tegra-video/vi.h b/drivers/staging/media/tegra-video/vi.h
+> index a68e2c02c7b0..183796c8a46a 100644
+> --- a/drivers/staging/media/tegra-video/vi.h
+> +++ b/drivers/staging/media/tegra-video/vi.h
+> @@ -163,8 +163,6 @@ struct tegra_vi_graph_entity {
+>   *
+>   * @ctrl_handler: V4L2 control handler of this video channel
+>   * @syncpt_timeout_retry: syncpt timeout retry count for the capture
+> - * @fmts_bitmap: a bitmap for supported formats matching v4l2 subdev formats
+> - * @tpg_fmts_bitmap: a bitmap for supported TPG formats
+>   * @pg_mode: test pattern generator mode (disabled/direct/patch)
+>   * @notifier: V4L2 asynchronous subdevs notifier
+>   */
+> @@ -205,8 +203,6 @@ struct tegra_vi_channel {
+>  
+>  	struct v4l2_ctrl_handler ctrl_handler;
+>  	unsigned int syncpt_timeout_retry;
+> -	DECLARE_BITMAP(fmts_bitmap, MAX_FORMAT_NUM);
+> -	DECLARE_BITMAP(tpg_fmts_bitmap, MAX_FORMAT_NUM);
+>  	enum tegra_vi_pg_mode pg_mode;
+>  
+>  	struct v4l2_async_notifier notifier;
 
-Alistair
