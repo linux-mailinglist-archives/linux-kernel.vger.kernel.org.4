@@ -2,193 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C90096CF6A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555656CF6AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjC2XAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 19:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
+        id S230209AbjC2XBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 19:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjC2XAW (ORCPT
+        with ESMTP id S229457AbjC2XBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 19:00:22 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC29D4699;
-        Wed, 29 Mar 2023 16:00:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NDF5hj8BDGMD4qxIh985mwaV/AH5sy9XS7UG48Ey3Sf4GgaINL+hztWMJII1g2higdWH6eoCS1TkBmRi6WRzx0SOV69r3mCNx1dF8yWMU0N1qhn7ERlgkXx3bUUncIrytsPH0GstKu/+WtzniaNFyp4q6RwS7tWsdijRtjM538ZXHpkjZVjUR4DdV/8kd/cEgwC2NlKhWObjwPB+rvuM9Wfqc399/qmpjtHVUKPFJ1ISw+vxIfTjNinkfvo/5xiZElpvsNc+rKJkveIT1eUus0l+ncdczf1oYapSbga51YOzLU778GKGRhOEp6tkTb9+CcWZZXgNEPloMiCat9GeJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F65i/CnmezvIfKePWCnnkLjIp+bYiExkhS6ySO1ya+M=;
- b=G/BIQHVHu16TUvTOHERBJD0cNDjgTbNkzJUtsIdc8C4gLOQfeJJ0wn3ITqWAM7JkKSdikjUzXQcmGOksmQNXYKReGHQo02rJY4m8zzR3UEfIk8VLAHi9J3c1HmJ7PxkVYbk+SvWlkFt3/1Qw+gs+QG/c2+tCOuG9JWhiSoT2Lw+RLUZeL3jSSmNN5oHWVzwqcySUD//a2VEyfod8KzjGLZFCtnRVCXZY6gHlg2j5RcqE1Z3AavQeg/JSfq3tiNnjJ3QXyJ4MGxFWjh+dcuQKEkS/yUM8S9jRSzY3kC/a7LQuzSI8i5dKznNiKfjgCnV6KUWWhfN+nzYIjG+7ARaX3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=suse.cz smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F65i/CnmezvIfKePWCnnkLjIp+bYiExkhS6ySO1ya+M=;
- b=fbek3/RGpoHnVnJ0SrKVy2bxepOxiHlSPYjOG/EghObYfHS+XmLajG78U9JksX/E3eQOFe7UvPpcxCfuNmBYAgd+MdIM3lXlTJViYCUAiCIWysAoojToIah+ospKCq7HjVI7lqVcvcE25CozFM6PDS7U2xacQtvXwFr4pS5BVvs=
-Received: from DM6PR06CA0012.namprd06.prod.outlook.com (2603:10b6:5:120::25)
- by SN7PR12MB8434.namprd12.prod.outlook.com (2603:10b6:806:2e6::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Wed, 29 Mar
- 2023 23:00:18 +0000
-Received: from DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:120:cafe::73) by DM6PR06CA0012.outlook.office365.com
- (2603:10b6:5:120::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20 via Frontend
- Transport; Wed, 29 Mar 2023 23:00:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT054.mail.protection.outlook.com (10.13.173.95) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6222.22 via Frontend Transport; Wed, 29 Mar 2023 23:00:17 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 29 Mar
- 2023 18:00:16 -0500
-Date:   Wed, 29 Mar 2023 17:59:58 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-CC:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
-        <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH RFC v8 12/56] x86/sev: Add RMP entry lookup helpers
-Message-ID: <20230329225958.4s3nwcqyjwzydwsf@amd.com>
-References: <20230220183847.59159-1-michael.roth@amd.com>
- <20230220183847.59159-13-michael.roth@amd.com>
- <b48ad925-eff0-8421-730a-6da13bf93ab6@suse.cz>
+        Wed, 29 Mar 2023 19:01:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB38546AF;
+        Wed, 29 Mar 2023 16:01:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFC87B8243B;
+        Wed, 29 Mar 2023 23:01:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71ECFC433D2;
+        Wed, 29 Mar 2023 23:01:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680130909;
+        bh=aUhmYOlJNPE9UBSfWYsXAC0QUzpgCRA5cLcAhflMRgs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kQXMZGKhK3bZUJlUkAI6inUFGy20RLqEOiljUVVekUf6NXW/AdLaRByGMS+3DNJTF
+         tsbwQNiLyqgm3eBNSAJ/XRqeLQNNMNMrjOeegrYcczNGFEhXl42vHKhBVDnywRbK0c
+         HVl3zTHL9q3cS7Ut3ZfN/v3eH9aCNdYVcc1UsHk0QBlHlEh/oDRvjtIgRyimZHfDH5
+         SFTrDiIq1HmyqH1IkTOjnmIZDa616Jhc1uVy1/fC28A2Wj/06cYQzIDhOJhtYxXPpV
+         y17Z91txj/M2jdt8Ibwhp6Wyztz3JUBtvRWLk/QEdw1kxe61WJL7d9PRoE6iePY5sS
+         NrDinURmVCwsQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 2E2061062665; Thu, 30 Mar 2023 01:01:46 +0200 (CEST)
+Date:   Thu, 30 Mar 2023 01:01:46 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 27/38] power: add HAS_IOPORT dependencies
+Message-ID: <20230329230146.pvkfnsoqr6tuuuxf@mercury.elektranox.org>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-28-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qigw7wbrpbhgomf7"
 Content-Disposition: inline
-In-Reply-To: <b48ad925-eff0-8421-730a-6da13bf93ab6@suse.cz>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT054:EE_|SN7PR12MB8434:EE_
-X-MS-Office365-Filtering-Correlation-Id: 386e2420-2963-4438-c419-08db30a95d40
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8+uw6rUbm+26o3aAn9ppZfmNfSIoOrNoLwa5+GtFs6ghcG7NMHOaIeJA/+TzRSQQl9NEcbZjvYZLQRka6G3jOBNmON7xkjaXFOo/YmouydAZ3291KdPWG9GePxSHSOqlA4Q65AwXqhvCoKWoo2EPxa9DgJ8RYGwRluZOH3iFV1NyVlTEHmcWnCS/K5NbO0VertEhJwl88/BOTlpzzloFiHIohMm5UkZTnFCTZX9QVYzr1wC+sKxYo7R8ECxcgOE6xJJvK58AtZsAiSTnSYjq/gwngZf7Drmk03yswHMKnmDnO8u8SiqhkVePGtZJNqld15PvaBPb/lBbVM367AvUxaCETjjBmlTKIydKMa1vQfFUr7Zpjdb4RZzS/vhKuPKTvcb3yPEdKEWMWsYw/brDifnzNkyGnBcTu6cueP5hvRIVL3umv68tUUGbhobBchkehSoB8xnC2aUkKRg/ZiQD6jf4pUSjf2y+zx8TEYHp6P7BJ5KW6p3RNxQtyAXPnvL4MZ3zeMsK3TSozOGQmOVmDgJ5mg53PLAFnqvog8/D4fUNeib6J81QfQeOLJ0xK3ejJgzZik8rzZBxq7kvjOZHYVM6zluCzWoAyl1rFwj0O7v9DfO3G0cc8Bb9KijKJ37Z02j9RFQlO+QDNi9v/RIP05YQOwoeNjK920p93YOpJ9dqO8Jbkle9gCIF2bK3YKCZk9RJ8EfYQ2XMt484QWoH09tQ1ewPXN4twTau1qV8szwX2wf66p9rJAXeEcbJrxak
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(136003)(451199021)(40470700004)(46966006)(36840700001)(5660300002)(7416002)(7406005)(8936002)(6916009)(70586007)(70206006)(316002)(41300700001)(40480700001)(8676002)(54906003)(81166007)(426003)(66899021)(2616005)(2906002)(336012)(4326008)(82740400003)(36860700001)(44832011)(478600001)(40460700003)(356005)(47076005)(36756003)(16526019)(6666004)(82310400005)(966005)(186003)(83380400001)(86362001)(53546011)(1076003)(26005)(36900700001)(309714004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 23:00:17.4407
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 386e2420-2963-4438-c419-08db30a95d40
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8434
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230314121216.413434-28-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 04:28:39PM +0100, Vlastimil Babka wrote:
-> On 2/20/23 19:38, Michael Roth wrote:
-> > From: Brijesh Singh <brijesh.singh@amd.com>
-> > 
-> > The snp_lookup_page_in_rmptable() can be used by the host to read the RMP
-> > entry for a given page. The RMP entry format is documented in AMD PPR, see
-> > https://bugzilla.kernel.org/attachment.cgi?id=296015.
-> > 
-> > Co-developed-by: Ashish Kalra <ashish.kalra@amd.com>
-> > Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> > Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> > Signed-off-by: Michael Roth <michael.roth@amd.com>
-> > ---
-> 
-> > +/*
-> > + * Return 1 if the RMP entry is assigned, 0 if it exists but is not assigned,
-> > + * and -errno if there is no corresponding RMP entry.
-> > + */
-> 
-> Hmm IMHO the kernel's idiomatic way is to return 0 on "success" and I'd
-> assume the more intuitive expectation of success here if the entry is
-> assigned?
 
-In general I'd agree. Here's it's a little awkward though.
-snp_lookup_rmpentry() sort of wants to be a bool, where true indicates
-an assigned entry was found, false indicates no assigned entry.
+--qigw7wbrpbhgomf7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But it also has to deal with error values, so the most direct way to
-encapsulate that is true == 1, false == 0, and < 0 for errors.
+Hi,
 
-Inverting it to align more with kernel expections of 0 == success/true
-gets awkward too, because stuff like:
+On Tue, Mar 14, 2023 at 01:12:05PM +0100, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+>=20
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
 
-  if (snp_lookup_rmpentry(...))
-    //error
+Acked-by: Sebastian Reichel <sre@kernel.org>
 
-still doesn't work the way most other functions written in this way
-would since it could still be "successful" if we were expecting PFN to
-be in shared state. So the return value needs special handling there
-too.
+-- Sebastian
 
-Would it make sense to define it something like this?:
+>  drivers/power/reset/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index 8c87eeda0fec..fff07b2bd77b 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -158,6 +158,7 @@ config POWER_RESET_OXNAS
+>  config POWER_RESET_PIIX4_POWEROFF
+>  	tristate "Intel PIIX4 power-off driver"
+>  	depends on PCI
+> +	depends on HAS_IOPORT
+>  	depends on MIPS || COMPILE_TEST
+>  	help
+>  	  This driver supports powering off a system using the Intel PIIX4
+> --=20
+> 2.37.2
+>=20
 
-  /*
-   * Query information about the RMP entry corresponding to the given
-   * PFN.
-   * 
-   * Returns 0 on success, and -errno if there was a problem accessing
-   * the RMP entry.
-   */
-  int snp_lookup_rmpentry(u64 pfn, int *level, bool *assigned)
+--qigw7wbrpbhgomf7
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> The various callers seem to differ though so I guess it depends on
-> context. Some however don't distinguish their "failure" from an ERR and
-> maybe they should, at least for the purposes of the various printks?
+-----BEGIN PGP SIGNATURE-----
 
-Yes, regardless of what we decide above, the call-sites should properly
-distinguish between failure/assigned/not-assigned and report the
-information accordingly. I'll get those fixed up where needed.
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQkw1kACgkQ2O7X88g7
++pryjg/9EBDNrxN5toE3uocrn9nnnJfVvqmn4QAIN3XdHQwzlP/07e9nGZd2Vcht
+KDFycurrvH6p/N/UhvI3PByHJbGjwHGr0Q/dj7nz8UsQMdEsmwlKpF9ocHG1E1tx
+N0/ezM+YyX+E7lYpe5jgywKS9DMArCbvKa3nTNayJsde4Xb8gklIh6PDDvQZYC/g
+LYm/qj/B3cRjYHjaVsx1tXd7U0MEwY6F1yET45dyxnaXVyUkUBLh4bcKCh1Ol8oO
+MCWyDnwu+mLU7E++Gz5/V2d9KZmiCu2E4ra+LZX5m4y9n8TpLkK0pej9CcqkbHud
+nUbdttl8ceEANfZjbvyCUGyQWcwgYZwlIpluwwj6dIyJx5GkdA89QHS1ArFDYE7y
+bJZfheHnAyv6hscuMCSfjaJoiSBBZVVIUiMkFuwSEmWLEzjzl28s/MpFacGaN9ls
+Ujzah53zrAB38Wnq0+ZmlVEPPZYDKh1vob3qAL5F5TuSzR6yFum9Pl/Q4jqeZJkx
+NeXPUAHhA/SkwCjdJfe2YrR40Tf/QwjJKmwQVnFaiBzu94sMQtfddkfRtkrcdapO
+bJ3hdNuSkaIHJcHdrrLLTVwua0EgnrY5ov5th2RWHSx8IfZnDmcSYBsV0o3Xd15q
+1LovrtDYKTzJKo8UU3/j3DdarmC+HylKhKga+gd9XqauYQuh7dY=
+=e4RC
+-----END PGP SIGNATURE-----
 
-Thanks,
-
--Mike
-
-> 
-> > +int snp_lookup_rmpentry(u64 pfn, int *level)
-> > +{
-> > +	struct rmpentry *e;
-> > +
-> > +	e = __snp_lookup_rmpentry(pfn, level);
-> > +	if (IS_ERR(e))
-> > +		return PTR_ERR(e);
-> > +
-> > +	return !!rmpentry_assigned(e);
-> > +}
-> > +EXPORT_SYMBOL_GPL(snp_lookup_rmpentry);
-> 
+--qigw7wbrpbhgomf7--
