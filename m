@@ -2,76 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD8E6CD5D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7606CD5E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjC2JEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S231472AbjC2JFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjC2JEi (ORCPT
+        with ESMTP id S231452AbjC2JFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:04:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0CB4C26
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:04:19 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E3F5E1FDEE;
-        Wed, 29 Mar 2023 09:04:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680080657; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WI8BEur271kmRLX+iQ3dCgc++8Y7H/Sb22u2MuBKC3U=;
-        b=QSPIpQ5YRhu893vZR0iyN3n0CXQDjeYSRjqwnfEJqEkpgg6IHe01OYUU2E2iOiI4rBIKa2
-        xMmPcsYe4mF3XqlDRB18M0ZLuffljo8b1I1AeYjv+ZgFtRB2qMH5Ms5FQdrqqrkbLL1ed1
-        Hgr3gF/TKhxIlx6ETbIMsW80dIMWaww=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680080657;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WI8BEur271kmRLX+iQ3dCgc++8Y7H/Sb22u2MuBKC3U=;
-        b=Z1HP6E2sFLC8jHRsyFCgM3+K2WnPZN8MticJlPvngve1MhEsveBn3+zQuqqld4AhG08700
-        7okLTzBp+j04HDBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AF2A2138FF;
-        Wed, 29 Mar 2023 09:04:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8lLbKRH/I2SrdwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 29 Mar 2023 09:04:17 +0000
-Message-ID: <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
-Date:   Wed, 29 Mar 2023 11:04:17 +0200
+        Wed, 29 Mar 2023 05:05:21 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063933AA6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:05:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1680080706; x=1711616706;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ODmg3rPRGn4RIKplIt/ZC9RkflToL9LBuluXecNb92w=;
+  b=WASFDijdsO2B4Ra+aEjGEZSEsKqVRH/eJ44iZ8vPtVkolQHNnSaFbsTf
+   M7XD0eEcuPCYBYSnYj+nxO8KGTnVDj7iwBW8HP/qCGeaZkFu0bp6vLV/2
+   DcQr3KdZls4/jDkDnGZDl4lqGVsJfIuoZKPI6MNq5+R2qB8Ua8UweUSIz
+   BJRmznuHW4uKXQ6yfrBlfetEdp/bHMAESpC5Z2adesOrfWX1+yldEle0B
+   h253ipSq/28vcKA2aI53/iWSaewFTQ4Ae+ROH0BtEsK4cMfxfgrM+8WOx
+   hmqOlRBsUeQjFfr9qdw+6IMhEdHOwhKGOiXfiNAfe5NRIsgIX7AAjbpWn
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,300,1673884800"; 
+   d="scan'208";a="231751503"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 29 Mar 2023 17:04:57 +0800
+IronPort-SDR: kRdghMhalo4igv6iIvluGTRz7DxutRf9KbelOo+r1j1KC3fhGTnZJiqn/aucJ2La45SQwk3O19
+ 2hwzREUirih6ogblCLxapCY9CNoAZcrd3q82kQuA21M4/bcjNS/WLVzbKjRIGiXTWJgmXQvz+a
+ TIbSTGkJbu/67WirJcEVmt9lLr6MMe6Y9TPaIFotehzDY6siiiiR/p3Vv6wcxcHseKTXsJHfcT
+ 1HBJNolvFsE+EbX+YbM00gxbPXJJ6G0gvSFcfXxP7wk02ytfqIwVf6F3FD4z6mzKvcW2i8IfEV
+ EgU=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2023 01:21:07 -0700
+IronPort-SDR: lMg56X5sSTNZ7Am4gEAuUW1Zienv/oWgcopUek08ttYG8JrIFe1aMVesHnLHlyRyE3YgnpU7VL
+ GJQSyfQ8X7pHLq2iIOclk/c+5oehvWhDJxmM8hAYkKI4pl4juk8xohGiXB1FncsFF6cDYwAZks
+ 4w+/q3S+XtIO8onDw7awHVkE5h4af/PjLA/uKLyiYMMN59Mjx6y+Qw7GneKrhPPIykuZqyvqFR
+ MzKb9KCQDOc2EM1Fgv8G9ynsLhD+/mDJvwkfve/U270vdyeZ61HBG2dOYbP3Q2YkO1jV2a1gU+
+ DKI=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2023 02:04:58 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Pmgc91756z1RtVp
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:04:56 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1680080695; x=1682672696; bh=ODmg3rPRGn4RIKplIt/ZC9RkflToL9LBulu
+        XecNb92w=; b=ek9+FWZIOUM0j8FYjqIFGu2FNvtxkIuaUDpxJppjKHuxRxiECWQ
+        XX8+9cY4NJDFc1sTz0Kj8xdgnMbR7ze3HQOPBl8wCwLvm7ooyBQdPxzew5n74aAR
+        jLo/gnamAnUNSM3d1agXwx7i5C6tGt/n1KgIdKm37YAYwrZ6tArpEUHgUo0zSrSm
+        i80nEBbcwNLLSaofPCXt52XW3Y9ZN7jlqRvwG3WXHVUDEmT8mKjWJe8pO5rhaUlc
+        EAsZ97xPJtwtkxCBZnIhNor8FWG8jPPbw1Q0EiMXboC6By/Pf5pF8D7UySUycXFP
+        R6qGXT6WTVd5lBncEbrqSHvqIooKkMzF7bw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id BNqzyJhdMPjl for <linux-kernel@vger.kernel.org>;
+        Wed, 29 Mar 2023 02:04:55 -0700 (PDT)
+Received: from [10.225.163.116] (unknown [10.225.163.116])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Pmgc24vbRz1RtVm;
+        Wed, 29 Mar 2023 02:04:50 -0700 (PDT)
+Message-ID: <71d9f461-a708-341f-d012-d142086c026e@opensource.wdc.com>
+Date:   Wed, 29 Mar 2023 18:04:49 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
- clause
+Subject: Re: [PATCH v8 9/9] null_blk: add support for copy offload
 Content-Language: en-US
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        suijingfeng <suijingfeng@loongson.cn>, liyi <liyi@loongson.cn>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230325074636.136833-1-15330273260@189.cn>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230325074636.136833-1-15330273260@189.cn>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------W5PV5cs8SW7uIpRGdJnqPZ9g"
+To:     Anuj Gupta <anuj20.g@samsung.com>, Jens Axboe <axboe@kernel.dk>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     bvanassche@acm.org, hare@suse.de, ming.lei@redhat.com,
+        joshi.k@samsung.com, nitheshshetty@gmail.com, gost.dev@samsung.com,
+        Nitesh Shetty <nj.shetty@samsung.com>,
+        Vincent Fu <vincent.fu@samsung.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
+References: <20230327084103.21601-1-anuj20.g@samsung.com>
+ <CGME20230327084331epcas5p2510ed79d04fe3432c2ec84ce528745c6@epcas5p2.samsung.com>
+ <20230327084103.21601-10-anuj20.g@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230327084103.21601-10-anuj20.g@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,92 +113,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------W5PV5cs8SW7uIpRGdJnqPZ9g
-Content-Type: multipart/mixed; boundary="------------7A3L9aq7RwQin8oMsHpBOdqi";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Sui Jingfeng <15330273260@189.cn>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, suijingfeng <suijingfeng@loongson.cn>,
- liyi <liyi@loongson.cn>, Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Message-ID: <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
-Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
- clause
-References: <20230325074636.136833-1-15330273260@189.cn>
-In-Reply-To: <20230325074636.136833-1-15330273260@189.cn>
+On 3/27/23 17:40, Anuj Gupta wrote:
+> From: Nitesh Shetty <nj.shetty@samsung.com>
+> 
+> Implementaion is based on existing read and write infrastructure.
+> 
+> Suggested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
+> Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
+> Signed-off-by: Vincent Fu <vincent.fu@samsung.com>
+> ---
+>  drivers/block/null_blk/main.c     | 94 +++++++++++++++++++++++++++++++
+>  drivers/block/null_blk/null_blk.h |  7 +++
+>  2 files changed, 101 insertions(+)
+> 
+> diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
+> index 9e6b032c8ecc..84c5fbcd67a5 100644
+> --- a/drivers/block/null_blk/main.c
+> +++ b/drivers/block/null_blk/main.c
+> @@ -1257,6 +1257,81 @@ static int null_transfer(struct nullb *nullb, struct page *page,
+>  	return err;
+>  }
+>  
+> +static inline int nullb_setup_copy_read(struct nullb *nullb,
+> +		struct bio *bio)
+> +{
+> +	struct nullb_copy_token *token = bvec_kmap_local(&bio->bi_io_vec[0]);
+> +
+> +	memcpy(token->subsys, "nullb", 5);
+> +	token->sector_in = bio->bi_iter.bi_sector;
+> +	token->nullb = nullb;
+> +	token->sectors = bio->bi_iter.bi_size >> SECTOR_SHIFT;
+> +
+> +	return 0;
+> +}
+> +
+> +static inline int nullb_setup_copy_write(struct nullb *nullb,
+> +		struct bio *bio, bool is_fua)
+> +{
+> +	struct nullb_copy_token *token = bvec_kmap_local(&bio->bi_io_vec[0]);
+> +	sector_t sector_in, sector_out;
+> +	void *in, *out;
+> +	size_t rem, temp;
+> +	unsigned long offset_in, offset_out;
+> +	struct nullb_page *t_page_in, *t_page_out;
+> +	int ret = -EIO;
+> +
+> +	if (unlikely(memcmp(token->subsys, "nullb", 5)))
+> +		return -EOPNOTSUPP;
+> +	if (unlikely(token->nullb != nullb))
+> +		return -EOPNOTSUPP;
+> +	if (WARN_ON(token->sectors != bio->bi_iter.bi_size >> SECTOR_SHIFT))
+> +		return -EOPNOTSUPP;
 
---------------7A3L9aq7RwQin8oMsHpBOdqi
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+EOPNOTSUPP is strange. These are EINVAL, no ?.
 
-KGNjJ2luZyBMdWNhcykNCg0KSGkNCg0KQW0gMjUuMDMuMjMgdW0gMDg6NDYgc2NocmllYiBT
-dWkgSmluZ2Zlbmc6DQo+ICAgVGhlIGFzc2lnbm1lbnQgYWxyZWFkeSBkb25lIGluIGRybV9j
-bGllbnRfYnVmZmVyX3ZtYXAoKSwNCj4gICBqdXN0IHRyaXZhbCBjbGVhbiwgbm8gZnVuY3Rp
-b25hbCBjaGFuZ2UuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBTdWkgSmluZ2ZlbmcgPDE1MzMw
-MjczMjYwQDE4OS5jbj4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9mYmRldl9n
-ZW5lcmljLmMgfCA1ICsrLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygr
-KSwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0v
-ZHJtX2ZiZGV2X2dlbmVyaWMuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZmJkZXZfZ2VuZXJp
-Yy5jDQo+IGluZGV4IDRkNjMyNWU5MTU2NS4uMWRhNDhlNzFjN2YxIDEwMDY0NA0KPiAtLS0g
-YS9kcml2ZXJzL2dwdS9kcm0vZHJtX2ZiZGV2X2dlbmVyaWMuYw0KPiArKysgYi9kcml2ZXJz
-L2dwdS9kcm0vZHJtX2ZiZGV2X2dlbmVyaWMuYw0KPiBAQCAtMjgyLDcgKzI4Miw3IEBAIHN0
-YXRpYyBpbnQgZHJtX2ZiZGV2X2RhbWFnZV9ibGl0KHN0cnVjdCBkcm1fZmJfaGVscGVyICpm
-Yl9oZWxwZXIsDQo+ICAgCQkJCSBzdHJ1Y3QgZHJtX2NsaXBfcmVjdCAqY2xpcCkNCj4gICB7
-DQo+ICAgCXN0cnVjdCBkcm1fY2xpZW50X2J1ZmZlciAqYnVmZmVyID0gZmJfaGVscGVyLT5i
-dWZmZXI7DQo+IC0Jc3RydWN0IGlvc3lzX21hcCBtYXAsIGRzdDsNCj4gKwlzdHJ1Y3QgaW9z
-eXNfbWFwIG1hcDsNCj4gICAJaW50IHJldDsNCj4gICANCj4gICAJLyoNCj4gQEAgLTMwMiw4
-ICszMDIsNyBAQCBzdGF0aWMgaW50IGRybV9mYmRldl9kYW1hZ2VfYmxpdChzdHJ1Y3QgZHJt
-X2ZiX2hlbHBlciAqZmJfaGVscGVyLA0KPiAgIAlpZiAocmV0KQ0KPiAgIAkJZ290byBvdXQ7
-DQo+ICAgDQo+IC0JZHN0ID0gbWFwOw0KPiAtCWRybV9mYmRldl9kYW1hZ2VfYmxpdF9yZWFs
-KGZiX2hlbHBlciwgY2xpcCwgJmRzdCk7DQo+ICsJZHJtX2ZiZGV2X2RhbWFnZV9ibGl0X3Jl
-YWwoZmJfaGVscGVyLCBjbGlwLCAmbWFwKTsNCg0KSSBzZWUgd2hhdCB5b3UncmUgZG9pbmcg
-YW5kIGl0J3MgcHJvYmFibHkgY29ycmVjdCBpbiB0aGlzIGNhc2UuDQoNCkJ1dCB0aGVyZSdz
-IGEgbGFyZ2VyIGlzc3VlIHdpdGggdGhpcyBpb3N5cyBpbnRlcmZhY2VzLiBTb21ldGltZXMg
-dGhlIA0KYWRkcmVzcyBoYXMgdG8gYmUgbW9kaWZpZWQgKHNlZSBjYWxscyBvZiBpb3N5c19t
-YXBfaW5jcigpKS4gVGhhdCBjYW4gDQpwcmV2ZW50IGluY29ycmVjdCB1c2VzIG9mIHRoZSBt
-YXBwaW5nIGluIG90aGVyIHBsYWNlcywgZXNwZWNpYWxseSBpbiANCnVubWFwIGNvZGUuDQoN
-CkkgdGhpbmsgaXQgd291bGQgbWFrZSBzZW5zZSB0byBjb25zaWRlciBhIHNlcGFyYXRlIHN0
-cnVjdHVyZSBmb3IgdGhlIEkvTyANCmxvY2F0aW9uLiBUaGUgYnVmZmVyIGFzIGEgd2hvbGUg
-d291bGQgc3RpbGwgYmUgcmVwcmVzZW50ZWQgYnkgc3RydWN0IA0KaW9zeXNfbWFwLiAgQW5k
-IHRoYXQgbmV3IHN0cnVjdHVyZSwgbGV0J3MgY2FsbCBpdCBzdHJ1Y3QgaW9zeXNfcHRyLCAN
-CndvdWxkIHBvaW50IHRvIGFuIGFjdHVhbCBsb2NhdGlvbiB3aXRoaW4gdGhlIGJ1ZmZlcidz
-IG1lbW9yeSByYW5nZS4gQSANCmZldyBsb2NhdGlvbnMgYW5kIGhlbHBlcnMgd291bGQgbmVl
-ZCBjaGFuZ2VzLCBidXQgdGhlcmUgYXJlIG5vdCBzbyBtYW55IA0KY2FsbGVycyB0aGF0IGl0
-J3MgYW4gaXNzdWUuICBUaGlzIHdvdWxkIGFsc28gYWxsb3cgZm9yIGEgZmV3IGRlYnVnZ2lu
-ZyANCnRlc3RzIHRoYXQgZW5zdXJlIHRoYXQgaW9zeXNfcHRyIGFsd2F5cyBvcGVyYXRlcyB3
-aXRoaW4gdGhlIGJvdW5kcyBvZiBhbiANCmlvc3lzX21hcC4NCg0KSSd2ZSBsb25nIGNvbnNp
-ZGVyZWQgdGhpcyBpZGVhLCBidXQgdGhlcmUgd2FzIG5vIHByZXNzdXJlIHRvIHdvcmsgb24g
-aXQuIA0KTWF5YmUgbm93Lg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+ICAgDQo+ICAg
-CWRybV9jbGllbnRfYnVmZmVyX3Z1bm1hcChidWZmZXIpOw0KPiAgIA0KDQotLSANClRob21h
-cyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJl
-IFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVy
-ZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhy
-ZXI6IEl2byBUb3Rldg0K
+> +
+> +	sector_in = token->sector_in;
+> +	sector_out = bio->bi_iter.bi_sector;
+> +	rem = token->sectors << SECTOR_SHIFT;
+> +
+> +	spin_lock_irq(&nullb->lock);
+> +	while (rem > 0) {
+> +		temp = min_t(size_t, nullb->dev->blocksize, rem);
+> +		offset_in = (sector_in & SECTOR_MASK) << SECTOR_SHIFT;
+> +		offset_out = (sector_out & SECTOR_MASK) << SECTOR_SHIFT;
+> +
+> +		if (null_cache_active(nullb) && !is_fua)
+> +			null_make_cache_space(nullb, PAGE_SIZE);
+> +
+> +		t_page_in = null_lookup_page(nullb, sector_in, false,
+> +			!null_cache_active(nullb));
+> +		if (!t_page_in)
+> +			goto err;
+> +		t_page_out = null_insert_page(nullb, sector_out,
+> +			!null_cache_active(nullb) || is_fua);
+> +		if (!t_page_out)
+> +			goto err;
+> +
+> +		in = kmap_local_page(t_page_in->page);
+> +		out = kmap_local_page(t_page_out->page);
+> +
+> +		memcpy(out + offset_out, in + offset_in, temp);
+> +		kunmap_local(out);
+> +		kunmap_local(in);
+> +		__set_bit(sector_out & SECTOR_MASK, t_page_out->bitmap);
+> +
+> +		if (is_fua)
+> +			null_free_sector(nullb, sector_out, true);
+> +
+> +		rem -= temp;
+> +		sector_in += temp >> SECTOR_SHIFT;
+> +		sector_out += temp >> SECTOR_SHIFT;
+> +	}
+> +
+> +	ret = 0;
+> +err:
+> +	spin_unlock_irq(&nullb->lock);
+> +	return ret;
+> +}
+> +
+>  static int null_handle_rq(struct nullb_cmd *cmd)
+>  {
+>  	struct request *rq = cmd->rq;
+> @@ -1267,6 +1342,14 @@ static int null_handle_rq(struct nullb_cmd *cmd)
+>  	struct req_iterator iter;
+>  	struct bio_vec bvec;
+>  
+> +	if (rq->cmd_flags & REQ_COPY) {
+> +		if (op_is_write(req_op(rq)))
+> +			return nullb_setup_copy_write(nullb, rq->bio,
+> +						rq->cmd_flags & REQ_FUA);
+> +		else
 
---------------7A3L9aq7RwQin8oMsHpBOdqi--
+No need for this else.
 
---------------W5PV5cs8SW7uIpRGdJnqPZ9g
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> +			return nullb_setup_copy_read(nullb, rq->bio);
+> +	}
+> +
+>  	spin_lock_irq(&nullb->lock);
+>  	rq_for_each_segment(bvec, rq, iter) {
+>  		len = bvec.bv_len;
+> @@ -1294,6 +1377,14 @@ static int null_handle_bio(struct nullb_cmd *cmd)
+>  	struct bio_vec bvec;
+>  	struct bvec_iter iter;
+>  
+> +	if (bio->bi_opf & REQ_COPY) {
+> +		if (op_is_write(bio_op(bio)))
+> +			return nullb_setup_copy_write(nullb, bio,
+> +							bio->bi_opf & REQ_FUA);
+> +		else
 
------BEGIN PGP SIGNATURE-----
+No need for this else.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQj/xEFAwAAAAAACgkQlh/E3EQov+BS
-YA//XXA6CtpPaytAR+InGtHdcCPLHErAhJuRaY9Ze5A9iu3AxbJiNN2HdMFrOa9E2nBuYN9koOgN
-D33d1VwY+TvDSVZnR5A3n6jZrfGwCH2kdlr8kC1WJ29UGsJ+AnoSs1WgBifV5FoYkI80L+nmrEg2
-2rIvFMAlraYnjWtTjDLXDy2zWx3Ju4f90EmOFLTyFSA6SNrlRdyaapu74z0d77wUxuwLbHQoHYIL
-QQFTztg5pDcYyoWbBrk0bsi1SdN4YDsiZvDhWQzTyFBtTe7R93hegBFUWejtgcHD5LqPOFkXoPrT
-BQV3kk03Uweu2xlEfHdonc0t7vLq/0lljES9G8igNJhY2TkOAy0Hm3nScYTsxMASGndyZaKbBJ/q
-bPlHVa6mf96oF7FC+Vc+AKdHH/sbQa6+4iAknlDBep5wY72F2HnlbIj11RHa0vpyKim5PlVq1vF7
-3LsoGwGo+xmG2qokh9E2dEQTCq/lmBJZay8JKc6CLsFo1KGBDBqRzC/yUhwQLG/n5oRY8ARe6hUo
-YFcrXpbhXfocMNf6LX4/qYrV6UYpxnAQpyzbkHf86ggz07DaTI+D6YmLKjU5NvEW76finBkN1Mqk
-ZI/+zH2e+STwBsMCtXbxw/AtbdlMXyNK2TWARRz1EP6NC/4oORe3Yt+u9PHvDTzjS8zbayvE7PJ8
-ORg=
-=vXk4
------END PGP SIGNATURE-----
+> +			return nullb_setup_copy_read(nullb, bio);
+> +	}
+> +
+>  	spin_lock_irq(&nullb->lock);
+>  	bio_for_each_segment(bvec, bio, iter) {
+>  		len = bvec.bv_len;
+> @@ -2146,6 +2237,9 @@ static int null_add_dev(struct nullb_device *dev)
+>  	list_add_tail(&nullb->list, &nullb_list);
+>  	mutex_unlock(&lock);
+>  
+> +	blk_queue_max_copy_sectors_hw(nullb->disk->queue, 1024);
+> +	blk_queue_flag_set(QUEUE_FLAG_COPY, nullb->disk->queue);
 
---------------W5PV5cs8SW7uIpRGdJnqPZ9g--
+This should NOT be unconditionally enabled with a magic value of 1K sectors. The
+max copy sectors needs to be set with a configfs attribute so that we can
+enable/disable the copy offload support, to be able to exercise both block layer
+emulation and native device support.
+
+> +
+>  	pr_info("disk %s created\n", nullb->disk_name);
+>  
+>  	return 0;
+> diff --git a/drivers/block/null_blk/null_blk.h b/drivers/block/null_blk/null_blk.h
+> index eb5972c50be8..94e524e7306a 100644
+> --- a/drivers/block/null_blk/null_blk.h
+> +++ b/drivers/block/null_blk/null_blk.h
+> @@ -67,6 +67,13 @@ enum {
+>  	NULL_Q_MQ	= 2,
+>  };
+>  
+> +struct nullb_copy_token {
+> +	char subsys[5];
+> +	struct nullb *nullb;
+> +	u64 sector_in;
+> +	u64 sectors;
+> +};
+> +
+>  struct nullb_device {
+>  	struct nullb *nullb;
+>  	struct config_item item;
+
+-- 
+Damien Le Moal
+Western Digital Research
+
