@@ -2,54 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342886CD3CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAEC6CD3D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjC2H4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 03:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S230101AbjC2H4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 03:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjC2H4F (ORCPT
+        with ESMTP id S229792AbjC2H4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 03:56:05 -0400
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B4119B;
-        Wed, 29 Mar 2023 00:56:03 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0Vew.zTT_1680076558;
-Received: from 30.240.113.3(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vew.zTT_1680076558)
-          by smtp.aliyun-inc.com;
-          Wed, 29 Mar 2023 15:55:59 +0800
-Message-ID: <7060f009-2964-30af-3d12-2bb3e21b6c1e@linux.alibaba.com>
-Date:   Wed, 29 Mar 2023 15:55:57 +0800
+        Wed, 29 Mar 2023 03:56:42 -0400
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789BC2127
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:56:37 -0700 (PDT)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 304CA10064D8C
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:56:37 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id hQfdpb8YOuioshQfdpodg7; Wed, 29 Mar 2023 07:56:37 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=b4l3XvKx c=1 sm=1 tr=0 ts=6423ef35
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=k__wU0fu6RkA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=d+eF+E8ANnCURjnXP9gSySb7ilKifBaKExn2Bht4pd8=; b=jePc/srXmC13ZHfYuXwqfejDDS
+        npwz9U9tgf3tzbv9BKuEFYLwgZsPq7I+GvDOkH3hqy6Ihq1YVsDFTVKCUYsM8TVsnDydXelU6vet9
+        kX+7SM/supZZVKwwrygoIsBrrp8pb18qqngHNrFzvDWYcOBF87vIcitbp0slB+IBknLI2xiKaH6W0
+        Tdk0MWkEO0qRHq4YicYrxGllZyfA1JZslog4IdOf7S0F1XmVUBNERliFUDF9DaoDcX8+t88TGzMBS
+        IDQZMUHmaL1icSoImho+3Bmv0JkoFH8vJsJXz3npIiTPrKmM5rWhDMLCkQKWdRKwo82U42SNB5umx
+        ytibA0rQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33594 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1phQfb-0006TM-Lo;
+        Wed, 29 Mar 2023 01:56:35 -0600
+Subject: Re: [PATCH 6.2 000/240] 6.2.9-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230328142619.643313678@linuxfoundation.org>
+In-Reply-To: <20230328142619.643313678@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <4e0400e1-08cc-ef8e-5386-6ce5900945f4@w6rz.net>
+Date:   Wed, 29 Mar 2023 00:56:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH RFC 3/4] driver/perf: Add identifier sysfs file for Yitian
- 710 DDR
-Content-Language: en-US
-To:     Jing Zhang <renyu.zj@linux.alibaba.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1679885172-95021-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1679885172-95021-4-git-send-email-renyu.zj@linux.alibaba.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <1679885172-95021-4-git-send-email-renyu.zj@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1phQfb-0006TM-Lo
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:33594
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,65 +94,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/28/23 7:39 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.9 release.
+> There are 240 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.9-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-On 2023/3/27 AM10:46, Jing Zhang wrote:
-> To allow userspace to identify the specific implementation of the device,
-> add an "identifier" sysfs file.
-> 
-> The perf tool can match the Yitian 710 DDR metric through the identifier.
-> 
-> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
-> ---
->  drivers/perf/alibaba_uncore_drw_pmu.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/perf/alibaba_uncore_drw_pmu.c b/drivers/perf/alibaba_uncore_drw_pmu.c
-> index a7689fe..6639a57 100644
-> --- a/drivers/perf/alibaba_uncore_drw_pmu.c
-> +++ b/drivers/perf/alibaba_uncore_drw_pmu.c
-> @@ -236,10 +236,37 @@ static ssize_t ali_drw_pmu_cpumask_show(struct device *dev,
->  	.attrs = ali_drw_pmu_cpumask_attrs,
->  };
->  
-> +static ssize_t ali_drw_pmu_identifier_show(struct device *dev,
-> +					struct device_attribute *attr,
-> +					char *page)
-> +{
-> +	return sysfs_emit(page, "%s\n", "ali_drw_yitian710");
+Tested-by: Ron Economos <re@w6rz.net>
 
-Is it possible to rename identifier as "ali_drw_pmu"? I don't think we need only
-limit alibaba_uncore_drw_pmu to Yitian710 SoC here.
-
-Thank you.
-Shuai
-
-> +}
-> +
-> +static umode_t ali_drw_pmu_identifier_attr_visible(struct kobject *kobj,
-> +						struct attribute *attr, int n)
-> +{
-> +	return attr->mode;
-> +}
-> +
-> +static struct device_attribute ali_drw_pmu_identifier_attr =
-> +	__ATTR(identifier, 0444, ali_drw_pmu_identifier_show, NULL);
-> +
-> +static struct attribute *ali_drw_pmu_identifier_attrs[] = {
-> +	&ali_drw_pmu_identifier_attr.attr,
-> +	NULL,
-> +};
-> +
-> +static const struct attribute_group ali_drw_pmu_identifier_attr_group = {
-> +	.attrs = ali_drw_pmu_identifier_attrs,
-> +	.is_visible = ali_drw_pmu_identifier_attr_visible,
-> +};
-> +
->  static const struct attribute_group *ali_drw_pmu_attr_groups[] = {
->  	&ali_drw_pmu_events_attr_group,
->  	&ali_drw_pmu_cpumask_attr_group,
->  	&ali_drw_pmu_format_group,
-> +	&ali_drw_pmu_identifier_attr_group,
->  	NULL,
->  };
->  
