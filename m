@@ -2,77 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC016CEFB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B8F6CEFB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjC2QqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S230302AbjC2Qqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjC2QqL (ORCPT
+        with ESMTP id S229481AbjC2Qql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:46:11 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F4C527D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:46:07 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54606036bb3so138235487b3.6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:46:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680108366;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PyYGJHwbzUCXb4y32Pa60ou/Hi+y+ZvE44Fz2eCrQLQ=;
-        b=iDGYs//gI2i/1fvcvqQRE2YI543Sc2+B+2QnklKYVuLUjtRJMt2o3Y00AZCjgFWTZM
-         56FWZS7UyGDgHbcKVXF5qvX6xgXmqXLrx+5QMvI92ckqXs8Lnk29jBJNkc0UOw1TRTsm
-         eXTl45FH6e0rDDgoYKFk1I9b0GPTl/dRfb1XzhLt0AqKD2UnqHawwxmiY9EV5eQQFeCC
-         tl0YKv99LFnb9DPRve4MVjIc8yzLTu115MSGmhGjiV0Sqxj7hcvcuEzZYCCoTOb58Ht4
-         q6JyyvonRntR578MnkzpMvGWTCIexQ1kRWjfjAUitjyrw/eOLtxrguF64o6Q/ZHJ8B6e
-         ZYhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680108366;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PyYGJHwbzUCXb4y32Pa60ou/Hi+y+ZvE44Fz2eCrQLQ=;
-        b=oUqgzifrCZgLfwseSekkGvRaxE4ClSfI4DP34PR6uwKmUZRi0c5twKvDFnhGj7xeSm
-         1ne8sUSXu4+jHHfueVDHKbk1REomr6T0c180k6HKWhb4SjtogvIRS6+S4C2sbA3R+5Y6
-         +erc68QyjB1gcKkuGArxScmMteJe3/C6Ideo4162+Q02GijelAMq2KzD+zNF5f6ldG44
-         6TFqoH/73sBwglE9ktI9kSETLhYcXbleN64l5venACfUfrnEzMIvxJFssxEEnR02OIlj
-         1EyItuXlrDoB9pSMhKRpCNQLKycP3MCoRIdLXnDr9w4cHITjF0e/hhq26FGhYi4MPLCj
-         2YrQ==
-X-Gm-Message-State: AAQBX9fETJ0ewqxQKo9+PCv417soNlWTWGoLgWTh7itbBgN8Ym9tQHpM
-        U7u4fJSHDXlekr3HjDRPWNs72BwnGDh2kQD/ZIEvnQ==
-X-Google-Smtp-Source: AKy350aIj9rMEyRSpwht5dqjJJGGj34ioNUDhMROVb71O9JE5qD2Kdevyi040wyXqyVUlTqEGIXnQigg1Ugi71u5cdU=
-X-Received: by 2002:a0d:ec48:0:b0:545:f7cc:f30 with SMTP id
- r8-20020a0dec48000000b00545f7cc0f30mr5126792ywn.0.1680108366530; Wed, 29 Mar
- 2023 09:46:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230328125818.5574-1-jaewon31.kim@samsung.com>
- <CGME20230328125807epcas1p1606c068a9043d6581a1fbdd30e7c53a2@epcms1p6>
- <CABdmKX1J6WzE9CMbRthROgHZLLhXZJBw4iOz-7q+RK5fGpggLA@mail.gmail.com> <20230329031302epcms1p6afc9d9d8e92db6a39c29044606d21afc@epcms1p6>
-In-Reply-To: <20230329031302epcms1p6afc9d9d8e92db6a39c29044606d21afc@epcms1p6>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Wed, 29 Mar 2023 09:45:55 -0700
-Message-ID: <CABdmKX3c+qK6ekhujkH9fo8bNagmd-M=a=ZWF3HOq1C0EzHs8g@mail.gmail.com>
-Subject: Re: [PATCH] dma-buf/heaps: c9e8440eca61 staging: ion: Fix overflow
- and list bugs in system heap:
-To:     jaewon31.kim@samsung.com
-Cc:     "jstultz@google.com" <jstultz@google.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Wed, 29 Mar 2023 12:46:41 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2075.outbound.protection.outlook.com [40.107.8.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18B32D55;
+        Wed, 29 Mar 2023 09:46:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zi+PTXxEeWJDSivFlKwl1rGlSrpbOP0kNX0MC3hL8LpkfC8/kmCjkh9Y9T7l0yIbrM6l460M+jS5vhnFhu0DymnH45AUxl/LglXIEczX1VucLvCjn2aR4F1I0eQW2smOdOXatbYkGpLQi0ILduuawDtf2Kbp5nqBoDTCFFjWhntEcxj7K63/NOj2JWavqZXbh/210hhpjRjKdgo3wRt+Ktqpr3dP7XSUuvDFzw3wOzd0fD+axYuWYHpvimaSo5in5cyvkXEAxV/T0/gyA6fLMaJRKyRkbgl7cihqhVFHZH2T1JOkBBjSTk2iwmzyezZ4EDMRuvUMD0NDHLTYdOWGkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mJ0HF02JpTI1eRc9vD569lbpgElWyA3vpRJd8BZaq9g=;
+ b=ETjM8qNOTVx5VZg8iFD5A6/x0DY1uAV7N+30q1XSfykYZtF+cDXePxjKjEktIuE+zjVWa8PU23Im/jbKwllDHB2XuYEBKIfyl18MMnXazXQRFnGi8KDuK+jp+qe3dpV7WD6eVXPJ2yX1ZMXXi1pLEuItr6GDIVzBXb5mcck5wqdmw316YAUO4e7TtDXJql3j4Jo9HKAb7AXOF4BpyEp1F/PWfzM8kdXjSJk07XsQ1rmmRryCVRum29BMtfKdjBXDcUgv7mpmPv7kHhEj6quCITCvmrrN3ouD6ccVeCSSIikjhTD0b86UUYOY8hyTduJ0/21xP+pHEulX6x/0oaXDig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mJ0HF02JpTI1eRc9vD569lbpgElWyA3vpRJd8BZaq9g=;
+ b=nrpFk2lumgc9Yar6HA7r2JH1L7f4Ao3DfiaCM4W6PHy1gVOGBgl2tTfrRip/mo6ocqWqcyPL3WaNvOdhPscBEeqY1k/wU8uT8IbPe2908azyi98QYqDdWqKV1YfxExHVUl80MhFkgOXCiwvKCY9ySc7eb8trk80AHu0XiXVC67M=
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by PAXPR04MB9351.eurprd04.prod.outlook.com (2603:10a6:102:2b6::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Wed, 29 Mar
+ 2023 16:46:34 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::fb2a:a683:b78e:b9b5]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::fb2a:a683:b78e:b9b5%4]) with mapi id 15.20.6222.034; Wed, 29 Mar 2023
+ 16:46:33 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     Shunsuke Mie <mie@igel.co.jp>
+CC:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, Jon Mason <jdmason@kudzu.us>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        Takanari Hayama <taki@igel.co.jp>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>
+Subject: RE: [EXT] [RFC PATCH 0/4] PCI: endpoint: Introduce a virtio-net EP
+ function
+Thread-Topic: [EXT] [RFC PATCH 0/4] PCI: endpoint: Introduce a virtio-net EP
+ function
+Thread-Index: AQHZN7bpBm+5RmnRNEW5Iyx9WPW3za69bfSAgAXgoQCAAFlCIIAKMSSAgERzOmA=
+Date:   Wed, 29 Mar 2023 16:46:33 +0000
+Message-ID: <AM6PR04MB483881DFA2C35F02011FE74D88899@AM6PR04MB4838.eurprd04.prod.outlook.com>
+References: <20230203100418.2981144-1-mie@igel.co.jp>
+ <HE1PR0401MB2331EAFF5684D60EC565433688D79@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+ <CANXvt5qjDDEK0NB=BWh00-HGU-p+sC=8TyP-oPdccnZxKxZt9w@mail.gmail.com>
+ <HE1PR0401MB2331A8D5C791C34D9C39A62688DB9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+ <796eb893-f7e2-846c-e75f-9a5774089b8e@igel.co.jp>
+In-Reply-To: <796eb893-f7e2-846c-e75f-9a5774089b8e@igel.co.jp>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM6PR04MB4838:EE_|PAXPR04MB9351:EE_
+x-ms-office365-filtering-correlation-id: 2452a26c-4f26-45ab-089c-08db30752793
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zLWvan4D3RtUGjttrj2cil6cTKS5T/rggKF3G8dL6ycIEhNCipVkYFsGzKPYJIoArBlQbw1Zmiu4OkbKakl4ILEXAtl8AR8dOy/n/iB9ejbwL2miRq/raRhqEuqP/uSJKGun+RzbyrkUxdTLdX1/Q+qUXYQvvVfUSDu0hxu+79IryXROoNAvYDmd2i9sOHtq/ifVbrzZkehNila0l2e2criiU4pYHfqYCR7jHSO7wQXX4JdHb9C5VWXZabAoUA3w+2DMe30XMgAlx2LGK9oW2P0I/IfAsf0aydLyRtvEGS29T9TpFkG9hghleg/XKKUcaT4THeQ7DjMpgW0yWf2DRbb3iY4c0G4mp97WCMKENvSER29crkUQdnPFHcNKFnJf30M0cfy+1ZIKcsUT9zP3hvql9T2TOf7ZTkjY9H+jjjLFg6Ja3gFXQNBy3uOTHi7/Q9uqlDMmMoU+QGu+em3aBN4VuCjmqwHdIy4zOkjNo8Kt1d+iFBEkVEMkdCCuob650EIbr7uaW7HBqrcgg2SyGZBoq0sn6NIwbvFGcfw1ugoDWvZGUVMizfZCl3S/RJRnmj9GJ7GSsjdS0Zls6payCjiWycIQ+VqDGVBqMhtUKOdX0aMGXJtSGPxzZfqKsJF1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(346002)(376002)(366004)(451199021)(558084003)(86362001)(38070700005)(122000001)(5660300002)(55236004)(186003)(53546011)(83380400001)(33656002)(9686003)(26005)(6506007)(44832011)(7416002)(52536014)(8936002)(41300700001)(55016003)(71200400001)(76116006)(4326008)(7696005)(6916009)(66556008)(8676002)(2906002)(38100700002)(54906003)(66946007)(316002)(66446008)(66476007)(64756008)(478600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?JdhVldSVsA/h4GCnYCa1D3nc1R96TTMkK0MNgcbCFEZF+BCXBCtxTnj8Lo?=
+ =?iso-8859-2?Q?qve1hNLpz9Ltzgn/n/RCBb+BmAqx46O55EHN5C+amWp+3qO8KK7GAOLznT?=
+ =?iso-8859-2?Q?LEVrZm6glYcjIJnvk2fUJOEaMeF9pxOsbfoveYtIzLwUSwsiMBvSfdcJ/w?=
+ =?iso-8859-2?Q?fsw0NnYiLi2e3zDdHjGuxVclK8Jr+9dsfHt6+Ilk8LVWbeF4fj3dFmp4Dn?=
+ =?iso-8859-2?Q?7CX3Bp7sta2itTdjBLaROl74Ql1aEWvTvrTfEiIdgd8qV0RQgGrRmEWQ2J?=
+ =?iso-8859-2?Q?CA/nbvahmlFWV1tpgTjHO370Qh6GYZ8gTzza7H4X7UtzkKAeSOZJYiXORm?=
+ =?iso-8859-2?Q?NzIZiM6SnRC/GPElvsq6i9RJbwXRIyyuLHXosIJvM+SLAGlpjzw0ItvroA?=
+ =?iso-8859-2?Q?KYvUbCVHjHnd1rzndB3PIWfiHDRNWT586ncmdnY61z4xAhtoPq3k+bHYsQ?=
+ =?iso-8859-2?Q?1nBUd/VMhXxWkMa9Cb7oMr3EkkDeniit9QqsHBUmmNlnlmxTkBf/4RyY/W?=
+ =?iso-8859-2?Q?JP5dV3TloCvjxnFk4RQr0uX8T3mkG66SHG2+mvBBdyXuWYTZXSghASpxk5?=
+ =?iso-8859-2?Q?AcW+a/Gme5XEkbu0JCUh4OihMTuh+Dgu71OO4V8OXaHxE8b4+EKyzyPURF?=
+ =?iso-8859-2?Q?QtHAH2U3dO7IW/PgvXKmlDMFEOm8y7qjhwix8UyILgWF9j6t6z3BuF4tQi?=
+ =?iso-8859-2?Q?CRqGldLVzmpZyRAkzZJE70NrD1emETpy85iS1GvbZQy+mcmE6288dW4uXd?=
+ =?iso-8859-2?Q?blnDJbusWcUCC9rWlhPoQ1/ybVMH16A/VHX69e96i5i9109BIAq8TWfGT5?=
+ =?iso-8859-2?Q?mrmOcZnPODcjIq+HdW4FA4O2v8gnp8maJamlY2PDH8U/q34MXXRXlSss63?=
+ =?iso-8859-2?Q?FwbViyIlNqDw5orhwPtZ7bpvWQ1mtstAqGN69G0W1gGWQqDWYCUQ6QBGtD?=
+ =?iso-8859-2?Q?phl93AmRFjzg7tBAViQ2Z22z7HHLvDdl5ZOo+1TyEMPEy17R8CG8uY2st8?=
+ =?iso-8859-2?Q?jUsEnjXMgiYwENasy+3KFG/Qw+k88bTgDcM8WjdSI7knQOWc2K2vgWRZJ2?=
+ =?iso-8859-2?Q?5Q+j5/UOAZH/uBDpT5yRysln+SOUh/Oe74OM0kgUnWRoyXiaxdHrzvOH9k?=
+ =?iso-8859-2?Q?g+1CukepH2SRPy0hpUICt6Tse1qTcJYuOGnz2XBFFDdpgDYelOGcq222md?=
+ =?iso-8859-2?Q?hgi8+i+omcd9NRvQuH9hE1hNE/j8GOlOeSLqKVd6uGUXCTt5GBmS9AVyAJ?=
+ =?iso-8859-2?Q?Q6iWd1tJ5OdWokY+U+LfTpaeUVcFtyHMB9Xo24THCcCtHET+XxMBKxranB?=
+ =?iso-8859-2?Q?ns2DrSyic/7AknywXSfuHKyX4L50IxfmlTbfAXPqzjfAQ3hbl0X9+e3Wkp?=
+ =?iso-8859-2?Q?yEtd6dMDj/o44y9NHuKHoempQ2vtTJ9XPUr5PfJ9uKag9jZ0XPiNPT3hPp?=
+ =?iso-8859-2?Q?m9oSPvsM/3MP5+19I2d10zRHE1cdaKonZ/5PCKp1MIF1NEPrZGf2eP2SNU?=
+ =?iso-8859-2?Q?wCck0TXO2lQkBXGlBZtmA7FPlVYPLsi9Ot/CkG6CpY4CZ5VvBnl/QXVPuE?=
+ =?iso-8859-2?Q?slEbqLGoXlbkmKIWIBEAau4BVKqoB8qwoi9i0jejFsSEx2FJDSYkfIm6cg?=
+ =?iso-8859-2?Q?qATc8v6cHMfhk=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2452a26c-4f26-45ab-089c-08db30752793
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2023 16:46:33.6147
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uUKHH2uje2OPd2UronKofHczEVrA2uev1KXLj68jZsls9/CFF0ohRuQKnw7hLqv3lxfhSTA7Zp81ev18/VATsg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9351
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,95 +133,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 8:13=E2=80=AFPM Jaewon Kim <jaewon31.kim@samsung.co=
-m> wrote:
->
-> >On Tue, Mar 28, 2023 at 5:58?AM Jaewon Kim <jaewon31.kim@samsung.com> wr=
-ote:
-> >>
-> >> Normal free:212600kB min:7664kB low:57100kB high:106536kB
-> >>   reserved_highatomic:4096KB active_anon:276kB inactive_anon:180kB
-> >>   active_file:1200kB inactive_file:0kB unevictable:2932kB
-> >>   writepending:0kB present:4109312kB managed:3689488kB mlocked:2932kB
-> >>   pagetables:13600kB bounce:0kB free_pcp:0kB local_pcp:0kB
-> >>   free_cma:200844kB
-> >> Out of memory and no killable processes...
-> >> Kernel panic - not syncing: System is deadlocked on memory
-> >>
-> >> An OoM panic was reported, there were only native processes which are
-> >> non-killable as OOM_SCORE_ADJ_MIN.
-> >>
-> >> After looking into the dump, I've found the dma-buf system heap was
-> >> trying to allocate a huge size. It seems to be a signed negative value=
-.
-> >>
-> >> dma_heap_ioctl_allocate(inline)
-> >>     |  heap_allocation =3D 0xFFFFFFC02247BD38 -> (
-> >>     |    len =3D 0xFFFFFFFFE7225100,
-> >>
-> >> Actually the old ion system heap had policy which does not allow that
-> >> huge size with commit c9e8440eca61 ("staging: ion: Fix overflow and li=
-st
-> >> bugs in system heap"). We need this change again. Single allocation
-> >> should not be bigger than half of all memory.
-> >>
-> >> Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
-> >> ---
-> >>  drivers/dma-buf/heaps/system_heap.c | 3 +++
-> >>  1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/hea=
-ps/system_heap.c
-> >> index e8bd10e60998..4c1ef2ecfb0f 100644
-> >> --- a/drivers/dma-buf/heaps/system_heap.c
-> >> +++ b/drivers/dma-buf/heaps/system_heap.c
-> >> @@ -351,6 +351,9 @@ static struct dma_buf *system_heap_allocate(struct=
- dma_heap *heap,
-> >>         struct page *page, *tmp_page;
-> >>         int i, ret =3D -ENOMEM;
-> >>
-> >> +       if (len / PAGE_SIZE > totalram_pages() / 2)
-> >> +               return ERR_PTR(-ENOMEM);
-> >> +
-> >
-> >Instead of policy like that, would __GFP_RETRY_MAYFAIL on the system
-> >heap's LOW_ORDER_GFP flags also avoid the panic, and eventually fail
-> >the allocation request?
->
-> Hello T.J.
->
-> Thank you for your opinion.
-> The __GFP_RETRY_MAYFAIL on LOW_ORDER_GFP seems to work.
->
-> page allocation failure: order:0, mode:0x144dc2(GFP_HIGHUSER|__GFP_RETRY_=
-MAYFAIL|__GFP_COMP|__GFP_ZERO)
-> Node 0 active_anon:120kB inactive_anon:43012kB active_file:36kB inactive_=
-file:788kB
->
-> I tried to test it, and the allocation stopped at very low file cache sit=
-uation without OoM panic
-> as we expected. The phone device was freezing for few seconds though.
->
-> We can avoid OoM panic through either totalram_pages() / 2 check or __GFP=
-_RETRY_MAYFAIL.
->
-> But I think we still need the totalram_pages() / 2 check so that we don't=
- have to suffer
-> the freezing in UX perspective. We may kill some critical processes or us=
-ers' recent apps.
->
-> Regarding __GFP_RETRY_MAYFAIL, I think it will help us avoid OoM panic. B=
-ut I'm worried
-> about low memory devices which still need OoM kill to get memory like in =
-camera scenarios.
->
-> So what do you think?
->
-Hey Jaewon, thanks for checking! The totalram_pages() / 2 just feels
-somewhat arbitrary. On the lowest memory devices I'm aware of that use
-the system heap it would take a single buffer on the order of several
-hundred megabytes to exceed that, so I guess the simple check is fine
-here until someone says they just can't live without a buffer that
-big!
 
-Reviewed-by: T.J. Mercier <tjmercier@google.com>
+>=20
+> On 2023/02/08 1:02, Frank Li wrote:
+
+Did you have chance to improve this?=20
+
+Best regards
+Frank Li=20
