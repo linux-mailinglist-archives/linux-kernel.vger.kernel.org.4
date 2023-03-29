@@ -2,796 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2276D6CDAEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9CD96CDAF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjC2NfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 09:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
+        id S230334AbjC2Nfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 09:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjC2NfQ (ORCPT
+        with ESMTP id S229601AbjC2Nfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:35:16 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A483C11;
-        Wed, 29 Mar 2023 06:35:12 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 08:35:04 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1680096910; bh=eEv0t9qeBuNyXL35ktgEkmY3CiNmiIqFD7Xg42hmzE0=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=FeLOiC4oDGCCLrN6dE6sqgoem8dXnHayqk+yRWvLQEnwOxfaxIjLKND17BsQZR4Bo
-         TuxPotoDQpLsNV/5caolvah/OcW0BQku7iroFX7k0tMKAIss9WalUrGDNU5mR4LqfH
-         EOw8MzOWbpnLVwoXfGyw4XYxfw1YQFO7lfCqwY3I=
-From:   =?UTF-8?Q?Thomas_Wei=C3=9Fschuh_?= <thomas@t-8ch.de>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Armin Wolf <W_Armin@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        Mark Pearson <mpearson-lenovo@squebb.ca>
-Message-ID: <de54f828-e2c6-4c10-92ce-ca86fb5c5fb4@t-8ch.de>
-In-Reply-To: <9f757a7b-6ac9-804a-063f-4cc2c6fc3f54@alu.unizg.hr>
-References: <5059b11b-8b6e-394b-338f-49e1339067fa@alu.unizg.hr> <ZCLPaYGKHlFQGKYQ@kroah.com> <542c13f5-4cdd-7750-f10a-ef64bb7e8faa@alu.unizg.hr> <d011a1d7-34ab-5f54-fcc7-d727abc7ec9b@alu.unizg.hr> <ZCLa3_HnLQA0GQKS@kroah.com> <b50f9460-ac54-e997-f9b9-3c47a9b87aae@alu.unizg.hr> <df26ff45-8933-f2b3-25f4-6ee51ccda7d8@gmx.de> <16862c45-2ffd-a2f2-6719-020c5d515800@alu.unizg.hr> <4f65a23f-4e04-f04f-e56b-230a38ac5ec4@gmx.de> <01e920bc-5882-ba0c-dd15-868bf0eca0b8@alu.unizg.hr> <8b478e6d-7482-2cbb-ee14-b2dc522daf35@alu.unizg.hr> <9f757a7b-6ac9-804a-063f-4cc2c6fc3f54@alu.unizg.hr>
-Subject: Re: [BUG] [BISECTED] [CORRECTION] systemd-devd triggers kernel
- memleak apparently in drivers/core/dd.c: driver_register()
+        Wed, 29 Mar 2023 09:35:40 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C094EEF;
+        Wed, 29 Mar 2023 06:35:32 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 20so16183658lju.0;
+        Wed, 29 Mar 2023 06:35:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680096930;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xs3l8xHeQN0QhWBPHkIY5Muif5eQvC6Mk/I7Rd6Zf28=;
+        b=jZw+rW3YMHX6RRst6QgAfrweHt+DdeVRxGSxoB82qXyjy4Hulym29aWz22gRN4ZMKN
+         YmHKZiy+nHrylSZi8w8FYIy8kUWoR6UNHj/V2iFKvZxuf3xY421uTHK5asEWkrOqC9Qq
+         7Febh7ITJOt92exuBphLlmBlk/6wL9L2E0Uyoaf26ETtFVouypjfCh/Gnvy69BhT0RLv
+         bsqbZvuNAjiQ1JvwxTTCEDMCMd66zJnDLc4BZ9UuXJM6daKHnFANxbzWChBZ/5bv73MA
+         8z6m27+VskjVmjoIaGf/itTfdnNYkH0qkEfqq5Dfb0gfCYPwH1c4+n1QEqLeO9yKFfRS
+         hLHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680096930;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xs3l8xHeQN0QhWBPHkIY5Muif5eQvC6Mk/I7Rd6Zf28=;
+        b=OzAulT3ultrw54pA7DCp7LD0la201oVubLqNVVJdjJyeUl3epnaH6YdYE9IUcx2SvS
+         oRsTHMS9AVy8ccEtDrKCxf205I3ZAqNCvHHEYnHBXCTFroB6TRQv5Y+Hv7Hq7RewKK7A
+         E9jXCmDnUKYBAxbTh6TbYRpNabq3RHOymesesaan+5VK33HcoJsEvRJj4wGYsv7Y0qw0
+         /7bCJKF6LXvlXMLBjNxWLeeywpojX4MvKFNIdiZVazSPIJL380yUyJ6vgCx/w8hCNTqj
+         Voe8UmgqpbPojHDsCbcjdNlfluTwA8lg4ausQodnNsLrbfInOj4I5YLuW8tKUKwpoV7r
+         sDMA==
+X-Gm-Message-State: AAQBX9dZVR5KN2z+aAN6vUI1o/m/qgIEO6RC/YowQYRRK6gk/g0tLSS6
+        3CpkzOPVf9rrN6+74jAB1ZU=
+X-Google-Smtp-Source: AKy350YnGbQP8YaiMjzyUzFBdzeQEwQnIGz0Nf2VO9qfnROC0t2TnJIsAeIH8Jug7Vp/MuoIaA1iiQ==
+X-Received: by 2002:a2e:9593:0:b0:29e:8a51:35d4 with SMTP id w19-20020a2e9593000000b0029e8a5135d4mr5748774ljh.12.1680096930164;
+        Wed, 29 Mar 2023 06:35:30 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id v18-20020a2e9252000000b002934abfb109sm5520370ljg.45.2023.03.29.06.35.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 06:35:29 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 16:35:27 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Joy Chakraborty <joychakr@google.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Subject: Re: [PATCH v4 2/2] spi: dw: Add dma controller capability checks
+Message-ID: <20230329133527.wa7u3osht7tfl47x@mobilestation>
+References: <20230327043405.881645-1-joychakr@google.com>
+ <20230327043405.881645-3-joychakr@google.com>
+ <20230328180338.bpxvjwx4tn4ter3f@mobilestation>
+ <CAOSNQF3r+6Oz=chnA94=4q7pugGFKm2W09ry+pS2F0oe1HZmcA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <de54f828-e2c6-4c10-92ce-ca86fb5c5fb4@t-8ch.de>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOSNQF3r+6Oz=chnA94=4q7pugGFKm2W09ry+pS2F0oe1HZmcA@mail.gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 29, 2023 at 09:26:47AM +0530, Joy Chakraborty wrote:
+> Hi Serge(y),
+> 
+> On Tue, Mar 28, 2023 at 11:33 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+> >
+> > On Mon, Mar 27, 2023 at 04:34:05AM +0000, Joy Chakraborty wrote:
+> > > Check capabilities of DMA controller during init to make sure it is
+> > > capable of handling MEM2DEV for tx channel, DEV2MEM for rx channel
+> > > and store addr_width capabilities to check per transfer to make sure the
+> > > bits/word requirement can be met for that transfer.
+> > >
+> > > Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> > > ---
+> > >  drivers/spi/spi-dw-dma.c | 54 ++++++++++++++++++++++++++++++++--------
+> > >  drivers/spi/spi-dw.h     |  1 +
+> > >  2 files changed, 44 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+> > > index b3a88bb75907..f47483ec369f 100644
+> > > --- a/drivers/spi/spi-dw-dma.c
+> > > +++ b/drivers/spi/spi-dw-dma.c
+> > > @@ -23,6 +23,8 @@
+> > >  #define DW_SPI_TX_BUSY               1
+> > >  #define DW_SPI_TX_BURST_LEVEL        16
+> > >
+> > > +static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes);
+> > > +
+> > >  static bool dw_spi_dma_chan_filter(struct dma_chan *chan, void *param)
+> > >  {
+> > >       struct dw_dma_slave *s = param;
+> > > @@ -72,12 +74,15 @@ static void dw_spi_dma_maxburst_init(struct dw_spi *dws)
+> > >       dw_writel(dws, DW_SPI_DMATDLR, dws->txburst);
+> > >  }
+> > >
+> > > -static void dw_spi_dma_sg_burst_init(struct dw_spi *dws)
+> > > +static int dw_spi_dma_caps_init(struct dw_spi *dws)
+> > >  {
+> >
+> > > +     int ret;
+> > >       struct dma_slave_caps tx = {0}, rx = {0};
+> >
+> > 1. Preserve the reverse xmas tree order please (driver local convention).
+> > 2. The zero-initialization can be dropped since the function will halt
+> > on further procedures if any of the dma_get_slave_caps() calls fail.
+> > Meanwhile if all of them are successfully executed the capability
+> > structures will be sanely initialized.
+> >
+> 
+> Sure, will update
+> 
+> > >
+> > > -     dma_get_slave_caps(dws->txchan, &tx);
+> > > -     dma_get_slave_caps(dws->rxchan, &rx);
+> >
+> > > +     ret = dma_get_slave_caps(dws->txchan, &tx);
+> >         if (ret)
+> >                 return ret;
+> > < newline
+> > > +     ret |= dma_get_slave_caps(dws->rxchan, &rx);
+> > > +     if (ret)
+> > > +             return ret;
+> >
+> > No OR-ing the errnos please. They aren't bitfields.
+> 
+> Sure, I will update this.
 
-Mar 29, 2023 08:31:31 Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr=
->:
+> In this case do you think we need an error print here to differentiate
+> which slave caps failed ?
 
-> Hi, again,
->
-> NOTE: I forgot to rewind to the first bad commit. So please ignore
-> the previous email.
->
-> On 29.3.2023. 15:22, Mirsad Goran Todorovac wrote:
->> Hi, Armin, Mr. Greg,
->> On 29.3.2023. 10:13, Mirsad Goran Todorovac wrote:
->>> On 28.3.2023. 21:55, Armin Wolf wrote:
->>>> Am 28.03.23 um 21:06 schrieb Mirsad Goran Todorovac:
->>>>
->>>>> On 3/28/2023 6:53 PM, Armin Wolf wrote:
->>>>>> =E2=80=A6
->>>>>
->>>>> Hi Armin,
->>>>>
->>>>> I tried your suggestion, and though it is an obvious improvement and =
-a
->>>>> leak fix, this
->>>>> was not the one we were searching for.
->>>>>
->>>>> I tested the following patch:
->>>>>
->>>>> diff --git a/drivers/platform/x86/think-lmi.c
->>>>> b/drivers/platform/x86/think-lmi.c
->>>>> index c816646eb661..1e77ecb0cba8 100644
->>>>> --- a/drivers/platform/x86/think-lmi.c
->>>>> +++ b/drivers/platform/x86/think-lmi.c
->>>>> @@ -929,8 +929,10 @@ static ssize_t current_value_show(struct kobject
->>>>> *kobj, struct kobj_attribute *a
->>>>>
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* validate and split from=
- `item,value` -> `value` */
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 value =3D strpbrk(item, ",=
-");
->>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!value || value =3D=3D item=
- || !strlen(value + 1))
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!value || value =3D=3D item=
- || !strlen(value + 1)) {
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 kfree(item);
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>>
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D sysfs_emit(buf, "%=
-s\n", value + 1);
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(item);
->>>>>
->>>>> (I would also object to the use of strlen() here, for it is inherentl=
-y
->>>>> insecure
->>>>> against SEGFAULT in kernel space.)
->>>>>
->>>>> I still get:
->>>>> [root@pc-mtodorov marvin]# uname -rms
->>>>> Linux 6.3.0-rc4-armin-patch-00025-g3a93e40326c8-dirty x86_64
->>>>> [root@pc-mtodorov marvin]# cat /sys/kernel/debug/kmemleak [edited]
->>>>> unreferenced object 0xffff8eb008ef9260 (size 96):
->>>>> =C2=A0 comm "systemd-udevd", pid 771, jiffies 4294896499 (age 74.880s=
-)
->>>>> =C2=A0 hex dump (first 32 bytes):
->>>>> =C2=A0=C2=A0=C2=A0 53 65 72 69 61 6c 50 6f 72 74 31 41 64 64 72 65 Se=
-rialPort1Addre
->>>>> =C2=A0=C2=A0=C2=A0 73 73 2c 33 46 38 2f 49 52 51 34 3b 5b 4f 70 74 ss=
-,3F8/IRQ4;[Opt
->>>>> =C2=A0 backtrace:
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9eafb26c>] slab_post_alloc_hook+0x8c/0x3=
-e0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9eb02b49>] __kmem_cache_alloc_node+0x1d9=
-/0x2a0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea773c9>] __kmalloc_node_track_caller+0=
-x59/0x180
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea66a1a>] kstrdup+0x3a/0x70
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eef9aa>] tlmi_extract_output_string.is=
-ra.0+0x2a/0x60
->>>>> [think_lmi]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eefb64>] tlmi_setting.constprop.4+0x54=
-/0x90 [think_lmi]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0ef02c1>] tlmi_probe+0x591/0xba0 [think=
-_lmi]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0629c53>] wmi_dev_probe+0x163/0x230 [wm=
-i]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f1987eb>] really_probe+0x17b/0x3d0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ad4>] __driver_probe_device+0x84/0x=
-190
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198c14>] driver_probe_device+0x24/0xc0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ed2>] __driver_attach+0xc2/0x190
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f195ab1>] bus_for_each_dev+0x81/0xd0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197c62>] driver_attach+0x22/0x30
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197354>] bus_add_driver+0x1b4/0x240
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f19a0a2>] driver_register+0x62/0x120
->>>>> unreferenced object 0xffff8eb018ddbb40 (size 64):
->>>>> =C2=A0 comm "systemd-udevd", pid 771, jiffies 4294896528 (age 74.780s=
-)
->>>>> =C2=A0 hex dump (first 32 bytes):
->>>>> =C2=A0=C2=A0=C2=A0 55 53 42 50 6f 72 74 41 63 63 65 73 73 2c 45 6e US=
-BPortAccess,En
->>>>> =C2=A0=C2=A0=C2=A0 61 62 6c 65 64 3b 5b 4f 70 74 69 6f 6e 61 6c 3a ab=
-led;[Optional:
->>>>> =C2=A0 backtrace:
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9eafb26c>] slab_post_alloc_hook+0x8c/0x3=
-e0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9eb02b49>] __kmem_cache_alloc_node+0x1d9=
-/0x2a0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea773c9>] __kmalloc_node_track_caller+0=
-x59/0x180
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea66a1a>] kstrdup+0x3a/0x70
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eef9aa>] tlmi_extract_output_string.is=
-ra.0+0x2a/0x60
->>>>> [think_lmi]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eefb64>] tlmi_setting.constprop.4+0x54=
-/0x90 [think_lmi]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0ef02c1>] tlmi_probe+0x591/0xba0 [think=
-_lmi]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0629c53>] wmi_dev_probe+0x163/0x230 [wm=
-i]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f1987eb>] really_probe+0x17b/0x3d0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ad4>] __driver_probe_device+0x84/0x=
-190
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198c14>] driver_probe_device+0x24/0xc0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ed2>] __driver_attach+0xc2/0x190
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f195ab1>] bus_for_each_dev+0x81/0xd0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197c62>] driver_attach+0x22/0x30
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197354>] bus_add_driver+0x1b4/0x240
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f19a0a2>] driver_register+0x62/0x120
->>>>> unreferenced object 0xffff8eb006fe2b40 (size 64):
->>>>> =C2=A0 comm "systemd-udevd", pid 771, jiffies 4294896542 (age 74.724s=
-)
->>>>> =C2=A0 hex dump (first 32 bytes):
->>>>> =C2=A0=C2=A0=C2=A0 55 53 42 42 49 4f 53 53 75 70 70 6f 72 74 2c 45 US=
-BBIOSSupport,E
->>>>> =C2=A0=C2=A0=C2=A0 6e 61 62 6c 65 64 3b 5b 4f 70 74 69 6f 6e 61 6c na=
-bled;[Optional
->>>>> =C2=A0 backtrace:
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9eafb26c>] slab_post_alloc_hook+0x8c/0x3=
-e0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9eb02b49>] __kmem_cache_alloc_node+0x1d9=
-/0x2a0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea773c9>] __kmalloc_node_track_caller+0=
-x59/0x180
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9ea66a1a>] kstrdup+0x3a/0x70
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eef9aa>] tlmi_extract_output_string.is=
-ra.0+0x2a/0x60
->>>>> [think_lmi]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0eefb64>] tlmi_setting.constprop.4+0x54=
-/0x90 [think_lmi]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0ef02c1>] tlmi_probe+0x591/0xba0 [think=
-_lmi]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffffc0629c53>] wmi_dev_probe+0x163/0x230 [wm=
-i]
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f1987eb>] really_probe+0x17b/0x3d0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ad4>] __driver_probe_device+0x84/0x=
-190
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198c14>] driver_probe_device+0x24/0xc0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f198ed2>] __driver_attach+0xc2/0x190
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f195ab1>] bus_for_each_dev+0x81/0xd0
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197c62>] driver_attach+0x22/0x30
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f197354>] bus_add_driver+0x1b4/0x240
->>>>> =C2=A0=C2=A0=C2=A0 [<ffffffff9f19a0a2>] driver_register+0x62/0x120
->>>>>
->>>>> There are currently 84 wmi_dev_probe leaks, sized mostly 64 bytes, an=
-d
->>>>> one 96 and two 192 bytes.
->>>>>
->>>>> I also cannot figure out the mechanism by which current_value_show()
->>>>> is called, when it is static?
->>>>>
->>>>> Any idea?
->>>>>
->>>>> Thanks.
->>>>>
->>>>> Best regards,
->>>>> Mirsad
->>>>>
->>>> Can you tell me how many BIOS settings think-lmi provides on your mach=
-ine? Because according to the stacktrace,
->>>> the other place where the leak could have occurred is inside tlmi_anal=
-yze(), which calls tlmi_setting().
->>>
->>> Yes, Sir!
->>>
->>> I think these could be the ones you need (totaling 83, which is close t=
-o 82 systemd-udevd leaks):
->>>
->>> [root@pc-mtodorov marvin]# ls -l /sys/devices/virtual/firmware-attribut=
-es/thinklmi/attributes | grep ^d
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 AfterPowerLoss
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 AlarmDate(MM\DD=
-\YYYY)
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 AlarmDayofWeek
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 AlarmTime(HH:MM=
-:SS)
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 ASPMSupport
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 AutomaticBootSe=
-quence
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 BIOSPasswordAtB=
-ootDeviceList
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 BIOSPasswordAtR=
-eboot
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 BIOSPasswordAtU=
-nattendedBoot
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 BootMode
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 BootPriority
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 BootUpNum-LockS=
-tatus
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 C1ESupport
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 CardReader
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 ClearTCGSecurit=
-yFeature
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 ComputraceModul=
-eActivation
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 ConfigurationCh=
-angeDetection
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 ConfigureSATAas
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 CoreMulti-Proce=
-ssing
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 CoverTamperDete=
-cted
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 CSM
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 CStateSupport
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 DeviceGuard
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 DustShieldAlert
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 EISTSupport
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 EnhancedPowerSa=
-vingMode
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 ErrorBootSequen=
-ce
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 Friday
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 FrontUSBPorts
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 HardDiskPre-del=
-ay
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 Intel(R)SGXCont=
-rol
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 InternalSpeaker
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 Monday
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 OnboardAudioCon=
-troller
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 OnboardEthernet=
-Controller
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 OptionKeysDispl=
-ay
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 OptionKeysDispl=
-ayStyle
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 OSOptimizedDefa=
-ults
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 PasswordCountEx=
-ceededError
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 PCIe16xSlotSpee=
-d
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 PCIe1xSlot1Spee=
-d
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 PrimaryBootSequ=
-ence
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 PXEIPV4NetworkS=
-tack
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 PXEIPV6NetworkS=
-tack
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 PXEOptionROM
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 RearUSBPorts
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 RequireAdmin.Pa=
-ss.whenFlashing
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 RequireHDPonSys=
-temBoot
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 SATAController
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 SATADrive1
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 SATADrive2
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 Saturday
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 SecureBoot
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 SecureRollBackP=
-revention
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 SecurityChip
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 SelectActiveVid=
-eo
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 SerialPort1Addr=
-ess
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 SmartUSBProtect=
-ion
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 StartupDeviceMe=
-nuPrompt
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 StartupSequence
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 Sunday
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 Thursday
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 Tuesday
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 TurboMode
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 USBBIOSSupport
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 USBEnumerationD=
-elay
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 USBPort1
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 USBPort2
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 USBPort3
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 USBPort4
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 USBPort5
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 USBPort6
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 USBPort7
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 USBPort8
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 USBPortAccess
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 UserDefinedAlar=
-mTime(HH:MM:SS)
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 VirtualizationT=
-echnology
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 VTdFeature
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 WakefromSerialP=
-ortRing
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 WakeOnLAN
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 WakeUponAlarm
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 Wednesday
->>> drwxr-xr-x 2 root root=C2=A0=C2=A0=C2=A0 0 Mar 29 08:24 WindowsUEFIFirm=
-wareUpdate
->>> [root@pc-mtodorov marvin]# ls -l /sys/devices/virtual/firmware-attribut=
-es/thinklmi/attributes | grep ^d | wc -l
->>> 83
->>> [root@pc-mtodorov marvin]#
->>>
->>>> However, i have no idea on how *info is somehow leaked, it has to happ=
-en inside the for-loop tween the call
->>>> to tlmi_setting() and strreplace(), because otherwise the strings woul=
-d not contain the "/" character.
->>>
->>> I see. It is the line 1404.
->>>
->>>> Can you check if the problem is somehow solved by applying the followi=
-ng commit from the platform-drivers-x86
->>>> for-next branch:
->>>> da62908efe80 ("platform/x86: think-lmi: Properly interpret return valu=
-e of tlmi_setting")
->>>
->>> It could possibly be that. But I do not recall seeing these messages in=
- 6.3-rc3 ...
->>>
->>> ...
->>>
->>> Unfortunately, the build with Thomas' patch you referred to did not wor=
-k:
->>>
->>> unreferenced object 0xffff9dff4d28bbc8 (size 192):
->>> =C2=A0=C2=A0 comm "systemd-udevd", pid 769, jiffies 4294897473 (age 85.=
-700s)
->>> =C2=A0=C2=A0 hex dump (first 32 bytes):
->>> =C2=A0=C2=A0=C2=A0=C2=A0 50 72 69 6d 61 72 79 42 6f 6f 74 53 65 71 75 6=
-5=C2=A0 PrimaryBootSeque
->>> =C2=A0=C2=A0=C2=A0=C2=A0 6e 63 65 2c 4d 2e 32 20 44 72 69 76 65 20 31 3=
-a=C2=A0 nce,M.2 Drive 1:
->>> =C2=A0=C2=A0 backtrace:
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa48fb26c>] slab_post_alloc_hook+0x8c=
-/0x3e0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4902b49>] __kmem_cache_alloc_node+0=
-x1d9/0x2a0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa48773c9>] __kmalloc_node_track_call=
-er+0x59/0x180
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4866a1a>] kstrdup+0x3a/0x70
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc0c7f9aa>] tlmi_extract_output_strin=
-g.isra.0+0x2a/0x60 [think_lmi]
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc0c7fb64>] tlmi_setting.constprop.4+=
-0x54/0x90 [think_lmi]
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc0c802c1>] tlmi_probe+0x591/0xba0 [t=
-hink_lmi]
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc03c9c53>] wmi_dev_probe+0x163/0x230=
- [wmi]
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f987eb>] really_probe+0x17b/0x3d0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f98ad4>] __driver_probe_device+0x8=
-4/0x190
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f98c14>] driver_probe_device+0x24/=
-0xc0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f98ed2>] __driver_attach+0xc2/0x19=
-0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f95ab1>] bus_for_each_dev+0x81/0xd=
-0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f97c62>] driver_attach+0x22/0x30
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f97354>] bus_add_driver+0x1b4/0x24=
-0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f9a0a2>] driver_register+0x62/0x12=
-0
->>> unreferenced object 0xffff9dff4d28a008 (size 192):
->>> =C2=A0=C2=A0 comm "systemd-udevd", pid 769, jiffies 4294897517 (age 85.=
-540s)
->>> =C2=A0=C2=A0 hex dump (first 32 bytes):
->>> =C2=A0=C2=A0=C2=A0=C2=A0 45 72 72 6f 72 42 6f 6f 74 53 65 71 75 65 6e 6=
-3=C2=A0 ErrorBootSequenc
->>> =C2=A0=C2=A0=C2=A0=C2=A0 65 2c 4e 65 74 77 6f 72 6b 20 31 3a 4d 2e 32 2=
-0=C2=A0 e,Network 1:M.2
->>> =C2=A0=C2=A0 backtrace:
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa48fb26c>] slab_post_alloc_hook+0x8c=
-/0x3e0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4902b49>] __kmem_cache_alloc_node+0=
-x1d9/0x2a0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa48773c9>] __kmalloc_node_track_call=
-er+0x59/0x180
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4866a1a>] kstrdup+0x3a/0x70
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc0c7f9aa>] tlmi_extract_output_strin=
-g.isra.0+0x2a/0x60 [think_lmi]
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc0c7fb64>] tlmi_setting.constprop.4+=
-0x54/0x90 [think_lmi]
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc0c802c1>] tlmi_probe+0x591/0xba0 [t=
-hink_lmi]
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffc03c9c53>] wmi_dev_probe+0x163/0x230=
- [wmi]
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f987eb>] really_probe+0x17b/0x3d0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f98ad4>] __driver_probe_device+0x8=
-4/0x190
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f98c14>] driver_probe_device+0x24/=
-0xc0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f98ed2>] __driver_attach+0xc2/0x19=
-0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f95ab1>] bus_for_each_dev+0x81/0xd=
-0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f97c62>] driver_attach+0x22/0x30
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f97354>] bus_add_driver+0x1b4/0x24=
-0
->>> =C2=A0=C2=A0=C2=A0=C2=A0 [<ffffffffa4f9a0a2>] driver_register+0x62/0x12=
-0
->>> [root@pc-mtodorov marvin]# uname -rms
->>> Linux 6.3.0-rc4-armin+tw-patch-00025-g3a93e40326c8-dirty x86_64
->>> [root@pc-mtodorov marvin]#
->>>
->>> What was applied is:
->>>
->>> mtodorov@domac:~/linux/kernel/linux_torvalds$ git diff
->>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/th=
-ink-lmi.c
->>> index c816646eb661..9a3015f43aaf 100644
->>> --- a/drivers/platform/x86/think-lmi.c
->>> +++ b/drivers/platform/x86/think-lmi.c
->>> @@ -929,8 +929,10 @@ static ssize_t current_value_show(struct kobject *=
-kobj, struct kobj_attribute *a
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* validate and split =
-from `item,value` -> `value` */
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 value =3D strpbrk(item=
-, ",");
->>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!value || value =3D=3D item |=
-| !strlen(value + 1))
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!value || value =3D=3D item |=
-| !strlen(value + 1)) {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 kfree(item);
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D sysfs_emit(buf=
-, "%s\n", value + 1);
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(item);
->>> @@ -1380,7 +1382,6 @@ static struct tlmi_pwd_setting *tlmi_create_auth(=
-const char *pwd_type,
->>>
->>> =C2=A0=C2=A0static int tlmi_analyze(void)
->>> =C2=A0=C2=A0{
->>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 acpi_status status;
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int i, ret;
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (wmi_has_guid(LENOV=
-O_SET_BIOS_SETTINGS_GUID) &&
->>> @@ -1417,8 +1418,8 @@ static int tlmi_analyze(void)
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 char *p;
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 tlmi_priv.setting[i] =3D NULL;
->>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 status =3D tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID)=
-;
->>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 if (ACPI_FAILURE(status))
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 ret =3D tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 if (ret)
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- break;
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!item)
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- break;
->>>
->>>
->>>> Also current_value_show() is used by attr_current_val, the __ATTR_RW_M=
-ODE() macro arranges for that.
->>>
->>> Thanks.
->>>
->>> In this build:
->>>
->>> [root@pc-mtodorov marvin]# uname -rms
->>> Linux 6.3.0-rc34tests-00001-g6981739a967c x86_64
->>> [root@pc-mtodorov marvin]#
->>>
->>> ... the bug isn't present, so it might be something added recently:
->>>
->>> commit 8a02d70679fc1c434401863333c8ea7dbf201494
->>> Author: Mark Pearson <mpearson-lenovo@squebb.ca>
->>> Date:=C2=A0=C2=A0 Sun Mar 19 20:32:21 2023 -0400
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0 platform/x86: think-lmi: Add possible_values f=
-or ThinkStation
->>>
->>> commit cf337f27f3bfc4aeab4954c468239fd6233c7638
->>> Author: Mark Pearson <mpearson-lenovo@squebb.ca>
->>> Date:=C2=A0=C2=A0 Sun Mar 19 20:32:20 2023 -0400
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0 platform/x86: think-lmi: only display possible=
-_values if available
->>>
->>> commit 45e21289bfc6e257885514790a8a8887da822d40
->>> Author: Mark Pearson <mpearson-lenovo@squebb.ca>
->>> Date:=C2=A0=C2=A0 Sun Mar 19 20:32:19 2023 -0400
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0 platform/x86: think-lmi: use correct possible_=
-values delimiters
->>>
->>> commit 583329dcf22e568a328a944f20427ccfc95dce01
->>> Author: Mark Pearson <mpearson-lenovo@squebb.ca>
->>> Date:=C2=A0=C2=A0 Sun Mar 19 20:32:18 2023 -0400
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0 platform/x86: think-lmi: add missing type attr=
-ibute
->>>
->>> I have CC:-ed the author of the commits.
->>>
->>> I can try bisect, but only after my day job.
->> I seem to have been right about the culprit commit.
->> Here is the bisect log:
->> mtodorov@domac:~/linux/kernel/linux_torvalds$ git bisect log
->> git bisect start '--' './drivers/platform/x86'
->> # good: [caa0708a81d6a2217c942959ef40d515ec1d3108] bootconfig: Change me=
-ssage if no bootconfig with CONFIG_BOOT_CONFIG_FORCE=3Dy
->> git bisect good caa0708a81d6a2217c942959ef40d515ec1d3108
->> # bad: [8a02d70679fc1c434401863333c8ea7dbf201494] platform/x86: think-lm=
-i: Add possible_values for ThinkStation
->> git bisect bad 8a02d70679fc1c434401863333c8ea7dbf201494
->> # good: [1a0009abfa7893b9cfcd3884658af1cbee6b26ce] platform: mellanox: m=
-lx-platform: Initialize shift variable to 0
->> git bisect good 1a0009abfa7893b9cfcd3884658af1cbee6b26ce
->> # good: [b7c994f8c35e916e27c60803bb21457bc1373500] platform/x86 (gigabyt=
-e-wmi): Add support for A320M-S2H V2
->> git bisect good b7c994f8c35e916e27c60803bb21457bc1373500
->> # good: [45e21289bfc6e257885514790a8a8887da822d40] platform/x86: think-l=
-mi: use correct possible_values delimiters
->> git bisect good 45e21289bfc6e257885514790a8a8887da822d40
->> # good: [cf337f27f3bfc4aeab4954c468239fd6233c7638] platform/x86: think-l=
-mi: only display possible_values if available
->> git bisect good cf337f27f3bfc4aeab4954c468239fd6233c7638
->> # first bad commit: [8a02d70679fc1c434401863333c8ea7dbf201494] platform/=
-x86: think-lmi: Add possible_values for ThinkStation
->> mtodorov@domac:~/linux/kernel/linux_torvalds$
->> Please see below.
->> Apparently, this commit broke something on my Lenovo box:
->> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/thi=
-nk-lmi.c
->> index e190fec26021..3f0641360251 100644
->> --- a/drivers/platform/x86/think-lmi.c
->> +++ b/drivers/platform/x86/think-lmi.c
->> @@ -941,9 +941,6 @@ static ssize_t possible_values_show(struct kobject *=
-kobj, struct kobj_attribute
->> =C2=A0{
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct tlmi_attr_setting *set=
-ting =3D to_tlmi_attr_setting(kobj);
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!tlmi_priv.can_get_bios_select=
-ions)
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 return -EOPNOTSUPP;
->> -
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return sysfs_emit(buf, "%s\n"=
-, setting->possible_values);
->> =C2=A0}
->> @@ -1052,6 +1049,18 @@ static struct kobj_attribute attr_current_val =3D=
- __ATTR_RW_MODE(current_value, 06
->> =C2=A0static struct kobj_attribute attr_type =3D __ATTR_RO(type);
->> +static umode_t attr_is_visible(struct kobject *kobj,
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct attribute *attr, int n)
->> +{
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct tlmi_attr_setting *setting =
-=3D to_tlmi_attr_setting(kobj);
->> +
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* We don't want to display possib=
-le_values attributes if not available */
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if ((attr =3D=3D &attr_possible_va=
-lues.attr) && (!setting->possible_values))
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 return 0;
->> +
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return attr->mode;
->> +}
->> +
->> =C2=A0static struct attribute *tlmi_attrs[] =3D {
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &attr_displ_name.attr,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &attr_current_val.attr,
->> @@ -1061,6 +1070,7 @@ static struct attribute *tlmi_attrs[] =3D {
->> =C2=A0};
->> =C2=A0static const struct attribute_group tlmi_attr_group =3D {
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .is_visible =3D attr_is_visible,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .attrs =3D tlmi_attrs,
->> =C2=A0};
->> Hope this helps narrow down the problem.
->> Best regards,
->> Mirsad
->> Why aren't you looking at the wmi.c driver?=C2=A0 That should be
->>>>>> =E2=80=A6
->
-> mtodorov@domac:~/linux/kernel/linux_torvalds$ git bisect log
-> git bisect start '--' './drivers/platform/x86'
-> # good: [caa0708a81d6a2217c942959ef40d515ec1d3108] bootconfig: Change mes=
-sage if no bootconfig with CONFIG_BOOT_CONFIG_FORCE=3Dy
-> git bisect good caa0708a81d6a2217c942959ef40d515ec1d3108
-> # bad: [8a02d70679fc1c434401863333c8ea7dbf201494] platform/x86: think-lmi=
-: Add possible_values for ThinkStation
-> git bisect bad 8a02d70679fc1c434401863333c8ea7dbf201494
-> # good: [1a0009abfa7893b9cfcd3884658af1cbee6b26ce] platform: mellanox: ml=
-x-platform: Initialize shift variable to 0
-> git bisect good 1a0009abfa7893b9cfcd3884658af1cbee6b26ce
-> # good: [b7c994f8c35e916e27c60803bb21457bc1373500] platform/x86 (gigabyte=
--wmi): Add support for A320M-S2H V2
-> git bisect good b7c994f8c35e916e27c60803bb21457bc1373500
-> # good: [45e21289bfc6e257885514790a8a8887da822d40] platform/x86: think-lm=
-i: use correct possible_values delimiters
-> git bisect good 45e21289bfc6e257885514790a8a8887da822d40
-> # good: [cf337f27f3bfc4aeab4954c468239fd6233c7638] platform/x86: think-lm=
-i: only display possible_values if available
-> git bisect good cf337f27f3bfc4aeab4954c468239fd6233c7638
-> # first bad commit: [8a02d70679fc1c434401863333c8ea7dbf201494] platform/x=
-86: think-lmi: Add possible_values for ThinkStation
-> mtodorov@domac:~/linux/kernel/linux_torvalds$
->
-> So the commit that triggered the bug on the Lenovo desktop box was:
->
-> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/thin=
-k-lmi.c
-> index 3f0641360251..c816646eb661 100644
-> --- a/drivers/platform/x86/think-lmi.c
-> +++ b/drivers/platform/x86/think-lmi.c
-> @@ -1450,6 +1450,26 @@ static int tlmi_analyze(void)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if=
- (ret || !setting->possible_values)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_info("Error retrieving pos=
-sible values for %d : %s\n",
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 i, setti=
-ng->display_name);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 } else {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Older =
-Thinkstations don't support the bios_selections API.
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Instea=
-d they store this as a [Optional:Option1,Option2] section of the
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * name s=
-tring.
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Try an=
-d pull that out if it's available.
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 char *item, *o=
-ptstart, *optend;
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!tlmi_sett=
-ing(setting->index, &item, LENOVO_BIOS_SETTING_GUID)) {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 optstart =3D strstr(item, "[Optional:");
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (optstart) {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 optstart +=3D strlen("[Optional:");
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 optend =3D strstr(optstart, "]");
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 if (optend)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 setting->possible_va=
-lues =3D
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 kstrndup(optstart, optend - optstart,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 GFP_KERNEL);
+No. dw_spi_add_host() will inform (dev_warn()) about the
+DMA-initialization failures. Printing something besides of that
+won't help much since in any case an additional debugging would be
+necessary.
 
-I guess item needs to be freed here.
+> 
+> >
+> > >
+> > >       if (tx.max_sg_burst > 0 && rx.max_sg_burst > 0)
+> > >               dws->dma_sg_burst = min(tx.max_sg_burst, rx.max_sg_burst);
+> > > @@ -87,6 +92,18 @@ static void dw_spi_dma_sg_burst_init(struct dw_spi *dws)
+> > >               dws->dma_sg_burst = rx.max_sg_burst;
+> > >       else
+> > >               dws->dma_sg_burst = 0;
+> > > +
+> > > +     /*
+> > > +      * Assuming both channels belong to the same DMA controller hence the
+> > > +      * address width capabilities most likely would be the same.
+> > > +      */
+> > > +     dws->dma_addr_widths = tx.dst_addr_widths & rx.src_addr_widths;
+> > > +
+> >
+> > > +     if (!(tx.directions & BIT(DMA_MEM_TO_DEV) &&
+> > > +           rx.directions & BIT(DMA_DEV_TO_MEM)))
+> > > +             return -ENXIO;
+> >
+> > Please move this to be right after the capabilities are retrieved.
+> > There is no point in the SG-burst and addr-width data initializations
+> > if a DMA-controller isn't suitable for the Tx/Rx DMAs.
+> 
+> On second thought I see that dma_get_slave_caps already checks if
+> direction exists in dmaengine.c:
+> ...
+> int dma_get_slave_caps(struct dma_chan *chan, struct dma_slave_caps *caps)
+> ...
+>     if (!device->directions)
+>         return -ENXIO;
+> ...
+> But it does not check the capability w.r.t the type of channel i.e.
+> tx/rx , so we can keep this check as well.
 
-(Next week I have access to my Lenovo machine again.
-I'll look at it then if it's not solved.)
+Right. dma_get_slave_caps() doesn't check the particular channel
+dir capability which is essential for us in this case. So please keep the
+directions check here.
 
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 }
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 /*
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * firmware-attributes requires that possible=
-_values are separated by ';' but
->
-> Thousand apologies, once again.
->
-> Best regards,
-> Mirsad
->
-> --
-> Mirsad Todorovac
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb
-> Republic of Croatia, the European Union
->
-> Sistem in=C5=BEenjer
-> Grafi=C4=8Dki fakultet | Akademija likovnih umjetnosti> Sveu=C4=8Dili=C5=
-=A1te u Zagrebu
+> Either Way, in case we keep it I shall move this as you suggested.
 
+Ok. Thanks.
+
+-Serge(y)
+
+> 
+> >
+> > -Serge(y)
+> >
+> > > +
+> > > +     return 0;
+> > >  }
+> > >
+> > >  static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+> > > @@ -95,6 +112,7 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+> > >       struct dw_dma_slave dma_rx = { .src_id = 0 }, *rx = &dma_rx;
+> > >       struct pci_dev *dma_dev;
+> > >       dma_cap_mask_t mask;
+> > > +     int ret = -EBUSY;
+> > >
+> > >       /*
+> > >        * Get pci device for DMA controller, currently it could only
+> > > @@ -124,20 +142,24 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+> > >
+> > >       init_completion(&dws->dma_completion);
+> > >
+> > > -     dw_spi_dma_maxburst_init(dws);
+> > > +     ret = dw_spi_dma_caps_init(dws);
+> > > +     if (ret)
+> > > +             goto free_txchan;
+> > >
+> > > -     dw_spi_dma_sg_burst_init(dws);
+> > > +     dw_spi_dma_maxburst_init(dws);
+> > >
+> > >       pci_dev_put(dma_dev);
+> > >
+> > >       return 0;
+> > > -
+> > > +free_txchan:
+> > > +     dma_release_channel(dws->txchan);
+> > > +     dws->txchan = NULL;
+> > >  free_rxchan:
+> > >       dma_release_channel(dws->rxchan);
+> > >       dws->rxchan = NULL;
+> > >  err_exit:
+> > >       pci_dev_put(dma_dev);
+> > > -     return -EBUSY;
+> > > +     return ret;
+> > >  }
+> > >
+> > >  static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+> > > @@ -163,12 +185,16 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+> > >
+> > >       init_completion(&dws->dma_completion);
+> > >
+> > > -     dw_spi_dma_maxburst_init(dws);
+> > > +     ret = dw_spi_dma_caps_init(dws);
+> > > +     if (ret)
+> > > +             goto free_txchan;
+> > >
+> > > -     dw_spi_dma_sg_burst_init(dws);
+> > > +     dw_spi_dma_maxburst_init(dws);
+> > >
+> > >       return 0;
+> > > -
+> > > +free_txchan:
+> > > +     dma_release_channel(dws->txchan);
+> > > +     dws->txchan = NULL;
+> > >  free_rxchan:
+> > >       dma_release_channel(dws->rxchan);
+> > >       dws->rxchan = NULL;
+> > > @@ -202,8 +228,14 @@ static bool dw_spi_can_dma(struct spi_controller *master,
+> > >                          struct spi_device *spi, struct spi_transfer *xfer)
+> > >  {
+> > >       struct dw_spi *dws = spi_controller_get_devdata(master);
+> > > +     enum dma_slave_buswidth dma_bus_width;
+> > > +
+> > > +     if (xfer->len <= dws->fifo_len)
+> > > +             return false;
+> > > +
+> > > +     dma_bus_width = dw_spi_dma_convert_width(dws->n_bytes);
+> > >
+> > > -     return xfer->len > dws->fifo_len;
+> > > +     return dws->dma_addr_widths & BIT(dma_bus_width);
+> > >  }
+> > >
+> > >  static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
+> > > diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+> > > index 9e8eb2b52d5c..3962e6dcf880 100644
+> > > --- a/drivers/spi/spi-dw.h
+> > > +++ b/drivers/spi/spi-dw.h
+> > > @@ -190,6 +190,7 @@ struct dw_spi {
+> > >       struct dma_chan         *rxchan;
+> > >       u32                     rxburst;
+> > >       u32                     dma_sg_burst;
+> > > +     u32                     dma_addr_widths;
+> > >       unsigned long           dma_chan_busy;
+> > >       dma_addr_t              dma_addr; /* phy address of the Data register */
+> > >       const struct dw_spi_dma_ops *dma_ops;
+> > > --
+> > > 2.40.0.348.gf938b09366-goog
+> > >
+> 
+> Thanks
+> Joy
