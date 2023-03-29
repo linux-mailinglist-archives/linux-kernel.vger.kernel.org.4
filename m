@@ -2,159 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A106CD1ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CC46CD1F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjC2GE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 02:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S229461AbjC2GJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 02:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjC2GE0 (ORCPT
+        with ESMTP id S229379AbjC2GJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 02:04:26 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92671F2;
-        Tue, 28 Mar 2023 23:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aNAy4SkGOGqn/8SCjHiEfeWwyWn89H5Tz+V43gHoZjQ=; b=K/J8IBFH1dwSafahsbzjA5DGva
-        /WZmU+2EOfztohNxfTV71mSWZwFUEPQWarWp1I4Y9h1bgQHBzZocxyKsMbTu0Rr15rE4BzusazLNL
-        ulo/wxJNdrBjYuA5U1G71HRfHCYTugoMIheTjiMlXaYm4QsXjH0yu0CCsqZJsI3m48M/S/z5Ik7ix
-        eCv2yDWywLtzXWLpXXtcBCk71/CkOER1OVgbFISpnKUJ8WG3o1SVTmXUATBKJy8nIVAurxCWVz9hL
-        QGVlnAr6SUc/+wxr/hD3pMsXNL73PVuFH4hpF0xVi/69wdsrmLPeUgOJLZB3XXHQvxllAbTqti8+8
-        X7llhk1A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1phOuz-00Glg9-0h;
-        Wed, 29 Mar 2023 06:04:21 +0000
-Date:   Tue, 28 Mar 2023 23:04:21 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     david@redhat.com, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, rafael@kernel.org,
-        christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
-        dave.hansen@linux.intel.com
-Subject: Re: [PATCH 7/7] module: add debug stats to help identify memory
- pressure
-Message-ID: <ZCPU5T1PD+BwI9ri@bombadil.infradead.org>
-References: <20230329053149.3976378-1-mcgrof@kernel.org>
- <20230329053149.3976378-8-mcgrof@kernel.org>
- <ZCPQrouSMQbFc8D0@kroah.com>
+        Wed, 29 Mar 2023 02:09:36 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FBA2705
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 23:09:36 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id h15so12479226vsh.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 23:09:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680070175;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3rHWukX/982VVQshnDvvj6GQbQddSOFHJAD6q40l/44=;
+        b=U/Z6sFFO6R0vJHqNUEPcvi9b7NUvp4qHegZnaDgoQZvyT1tkGM++PU0cIMKqSo2Kt+
+         FUMiP4y5zhM1i4dGk980Du4MrhPF/hBHjKDv8rQ5S45D0pV37/TIDvt3I/nNgRdFMTd2
+         PZS21xNU6MtvrJK1U5OYOFW68r59gVn3hBJeWHfIa6h8r8MyJC3v/iBw92DxDtAKTzI7
+         QFaaTh3GTf688ZFVsyQopOKW5TIuFSyUjZsy20tWF7eqsJQ5LOuaxpeZThJKBSjC7wS7
+         DvRvnhfWQBf2Q6tM5Hzg+OyYNhqcrYGsJjdpjfp+Ew04h8mcLpILLWlg8AWlUWoyLFJ8
+         JOwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680070175;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3rHWukX/982VVQshnDvvj6GQbQddSOFHJAD6q40l/44=;
+        b=QOX937+KTN4HfG+6tDHGfDngwZNe17k0GFddGJbl0SeJLIgrYUi44zXj/8s+3lEof9
+         VTqRn9xChixnt4eeVOggAKP846+aM6fxw0wecA7PweVcqh1+sQT5lHrbb3a4A/Axo6v1
+         PFqE218oxX4B9mEB7aA1lzQOv40MeWjIWJfVNzYsyXl8XQjKWaZ4ntLSe+oRL0rZhZBF
+         IrHWWWrBYhJ3ZQi9YRqoL/+LkmpeAbKMeNrWmY1lTnC7CN53gz81+7XQY8ebz5HWLzxi
+         TrIkRl38O/Hplkvaq4iu2O6Oq+AStOOTCoXFo/tTbJMyFVHZYxF1/2R5QQSz2deT+pv8
+         hpxg==
+X-Gm-Message-State: AAQBX9djg5+eKZCBDz6+LRbsuzBVVo++PSh7KM43X0pjt0rk2aefcvab
+        KO+SebiwYyxbHH7tT/ylYkfdpUJBBq99yarayOk=
+X-Google-Smtp-Source: AKy350Z/FLpdcWukUmPL6ZQMbnusfiA2jd7H6Z8xHyljDdhkKzWIRBX65TMzX9Gj4sWlOLhpYI2T3nIYd9LYbqgznBc=
+X-Received: by 2002:a67:c38b:0:b0:411:b4c2:c6c0 with SMTP id
+ s11-20020a67c38b000000b00411b4c2c6c0mr10020176vsj.0.1680070174888; Tue, 28
+ Mar 2023 23:09:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCPQrouSMQbFc8D0@kroah.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+Sender: jeffbarman03@gmail.com
+Received: by 2002:ab0:3b49:0:b0:5e4:a16e:f84d with HTTP; Tue, 28 Mar 2023
+ 23:09:34 -0700 (PDT)
+From:   Juliette Morgan <juliettemorgan21@gmail.com>
+Date:   Wed, 29 Mar 2023 08:09:34 +0200
+X-Google-Sender-Auth: TKH9cAAlOQxmFDTsSXVAN8TDPdc
+Message-ID: <CAN2ScKboi9QFc65EKTSDqfkhPjPoC_fsx0n4srr3ZaGUTASHoQ@mail.gmail.com>
+Subject: READ AND REPLY URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_MONEY_PERCENT,UNDISC_MONEY autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e42 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [jeffbarman03[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [jeffbarman03[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  2.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 07:46:22AM +0200, Greg KH wrote:
-> On Tue, Mar 28, 2023 at 10:31:49PM -0700, Luis Chamberlain wrote:
-> > Loading modules with finit_module() can end up using vmalloc(), vmap()
-> > and vmalloc() again, for a total of up to 3 separate allocations in the
-> > worse case for a single module. We always kernel_read*() the module,
-> > that's a vmalloc(). Then vmap() is used for the module decompression,
-> > and if so the last read buffer is freed as we use the now decompressed
-> > module buffer to stuff data into our copy module. The last one is
-> > specific to architectures but pretty much that's generally a series
-> > of vmalloc() for different ELF sections...
-> > 
-> > Evaluation with new stress-ng module support [1] with just 100 ops
-> > us proving that you can end up using GiBs of data easily even if
-> > we are trying to be very careful not to load modules which are already
-> > loaded. 100 ops seems to resemble the sort of pressure a system with
-> > about 400 CPUs can create on modules. Although those issues for so
-> > many concurrent loads per CPU is silly and are being fixed, we lack
-> > proper tooling to help diagnose easily what happened, when it happened
-> > and what likely are the culprits -- userspace or kernel module
-> > autoloading.
-> > 
-> > Provide an initial set of stats for debugfs which let us easily scrape
-> > post-boot information about failed loads. This sort of information can
-> > be used on production worklaods to try to optimize *avoiding* redundant
-> > memory pressure using finit_module().
-> > 
-> > Screen shot:
-> > 
-> > root@kmod ~ # cat /sys/kernel/debug/modules/stats
-> >            Modules loaded       67
-> 
-> Is this "loaded now", or "ever successfully loaded"?  As in a
-> modprobe/rmmod/modprobe would bump this by 2, right?
+Hello Dear God,s Select Good Day,
 
-Ah, the later, so "how modules have I ever loaded". Maybe
+I apologized, If this mail find's you disturbing, It might not be the
+best way to approach you as we have not met before, but due to the
+urgency of my present situation i decided  to communicate this way, so
+please pardon my manna, I am writing this mail to you with heavy tears
+In my eyes and great sorrow in my heart, My Name is Mrs.Juliette
+Morgan, and I am contacting you from my country Norway, I want to tell
+you this because I don't have any other option than to tell you as I
+was touched to open up to you,
 
-Modules ever loaded
+I married to Mr.sami Morgan. Who worked with Norway embassy in Burkina
+Faso for nine years before he died in the year 2020.We were married
+for eleven years without a child He died after a brief illness that
+lasted for only five days. Since his death I decided not to remarry,
+When my late husband was alive he deposited the sum of =E2=82=AC 8.5 Millio=
+n
+Euro (Eight million, Five hundred thousand Euros) in a bank in
+Ouagadougou the capital city of Burkina Faso in west Africa Presently
+this money is still in bank. He made this money available for
+exportation of Gold from Burkina Faso mining.
 
-?
+Recently, My Doctor told me that I would not last for the period of
+seven months due to cancer problem. The one that disturbs me most is
+my stroke sickness.Having known my condition I decided to hand you
+over this money to take care of the less-privileged people, you will
+utilize this money the way I am going to instruct herein.
 
-Will fix the nits, thanks!
+I want you to take 30 Percent of the total money for your personal use
+While 70% of the money will go to charity, people in the street and
+helping the orphanage. I grew up as an Orphan and I don't have any
+body as my family member, just to endeavour that the house of God is
+maintained. Am doing this so that God will forgive my sins and accept
+my soul because these sicknesses have suffered me so much.
 
-> > diff --git a/kernel/module/debug.c b/kernel/module/debug.c
-> 
-> Why is this a whole separate file?
+As soon as I receive your reply I shall give you the contact of the
+bank in Burkina Faso and I will also instruct the Bank Manager to
+issue you an authority letter that will prove you the present
+beneficiary of the money in the bank that is if you assure me that you
+will act accordingly as I Stated herein.
 
-It's just a style preference, no real hard reason other than
-module.c was huge before and now its split up. I find that
-easier to review / manage. Certainly overkill for such as
-simple thing but if its debug I think I rather see that
-then some ifdef eyesore. But that's just preference.
+Always reply to my alternative for security purposes
 
-> And as MODULE_DEBUG does not reference debugfs,
-
-That should be fixed thanks.
-
-> > diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> > index 6ae29bb8836f..a645cb3fafc7 100644
-> > --- a/kernel/module/internal.h
-> > +++ b/kernel/module/internal.h
-> > @@ -143,6 +143,41 @@ static inline bool set_livepatch_module(struct module *mod)
-> >  #endif
-> >  }
-> >  
-> > +#ifdef CONFIG_MODULE_STATS
-> > +
-> > +#define mod_stat_add64(count, var) atomic64_add(count, var)
-> > +#define mod_stat_inc(name) atomic_inc(name)
-> 
-> Ok, but:
-> 
-> > +#define mod_stat_inc(name) atomic_inc(name)
-> 
-> Why do you still increment the variable here if the option is not
-> enabled?
-
-Whoops, will fix!
-
-> Also, didn't we have some sort of "we want to use an atomic variable as
-> statistics" type somewhere in the kernel? 
-
-I didn't get the memo, nor do I recall, so it's not on my radar.
-
-> Or did that never get accepted?
-
-Not sure.
-
-> And do all of these really need to be atomic variables?  Don't you have
-> locks for some of this to not need the atomic-ness of them?  I guess it
-> doesn't matter much as this isn't that fast of a code-path.
-
-That was actually intentional, as this only *grows* I just care its not 0
-so to help divide by the total number of modules to get average module
-length and average module .text length. I used atomics and made it only
-grow precisely to not have to lock anywhere.
-
-  Luis
+Hoping to receive your reply:
+From Mrs.Juliette Morgan,
