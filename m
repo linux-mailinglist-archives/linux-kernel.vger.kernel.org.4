@@ -2,105 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36706CEBD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1BA6CEBD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjC2OjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
+        id S229980AbjC2Ojh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjC2Oi7 (ORCPT
+        with ESMTP id S229942AbjC2OjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:38:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8079AF0A
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:35:38 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680100535;
+        Wed, 29 Mar 2023 10:39:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B47B9ECB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680100506;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=i8HCoWe26WB6mYdY1Qj5FxD340fO9b4OxYYITS6CTEU=;
-        b=h+OmzYbxL4GiZRmmHXw58FkZsn9ciSiEgMvKxCmb94YhWN2ftaTWv946prncpJcBkwBSNr
-        kjIC7Kt8o/EjzSS85itVXvBMEszTvYO1sR+urk8knbLmlGf9lA2/x7D4VlpAHHNctLJ9PJ
-        SbprbnTpEdf9W4a77pT93zK8YDO3f+z725a5s2mOpwrLF54OhdL5CvNr5M2LySOfETWZPr
-        9ure0+iS0ProDo8fIaUTrwMseuUJW8nP+hAoeIHWbJOM8wUtyheHScIXGpOVjy93cIReoc
-        ake0AjHh+D+2rrEoU29vCRQG2ZsP9c5uI14ghvWtbmrZmIzh1c677NKYVGxuBA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680100535;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i8HCoWe26WB6mYdY1Qj5FxD340fO9b4OxYYITS6CTEU=;
-        b=5YCU47N9ZfouEO0MVDVgvYD0fx7wYKzk9kWmsBV/G+RmrqBCwqG7ftpo+jBPcMO0xr3cY1
-        /hxo+YMd4yndHiBg==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: buffer write race: Re: [PATCH printk v1 09/18] printk: nobkl:
- Add print state functions
-In-Reply-To: <ZCRD7oOcTzOM5cXe@alley>
-References: <20230302195618.156940-1-john.ogness@linutronix.de>
- <20230302195618.156940-10-john.ogness@linutronix.de>
- <ZCRD7oOcTzOM5cXe@alley>
-Date:   Wed, 29 Mar 2023 16:39:54 +0206
-Message-ID: <87edp7pqy5.fsf@jogness.linutronix.de>
+        bh=j6Qltz9GS2xYDRDWB9RaugYoeUKsxXmeQuDRMPnbUIY=;
+        b=hd16gSC3d8uVhKHnMIkdTVB7lQ1r97rn/aOl8krdWqa3TIgtsMRJDeuGfqAZMcdOh2ub72
+        HU73HgRJirQPpi+3+tEN89EWQugk3tsZD0uAMvlClEdbOrCkg1HndjFaSFtkRtmkjQyf3Y
+        l35lSn+e7THNAxRupp9CpDO98guW08s=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-213-H0iHVYIrNgqdLy-0xl9CJw-1; Wed, 29 Mar 2023 10:35:00 -0400
+X-MC-Unique: H0iHVYIrNgqdLy-0xl9CJw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 545431C0512F;
+        Wed, 29 Mar 2023 14:34:59 +0000 (UTC)
+Received: from [10.22.34.224] (unknown [10.22.34.224])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CE8FEC15BA0;
+        Wed, 29 Mar 2023 14:34:57 +0000 (UTC)
+Message-ID: <a7c4d685-a68c-5dc9-0911-3df2ce92e09d@redhat.com>
+Date:   Wed, 29 Mar 2023 10:34:57 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/6] sched/deadline: cpuset: Rework DEADLINE bandwidth
+ restoration
+Content-Language: en-US
+To:     Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+References: <20230329125558.255239-1-juri.lelli@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230329125558.255239-1-juri.lelli@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-29, Petr Mladek <pmladek@suse.com> wrote:
->> +/**
->> + * console_can_proceed - Check whether printing can proceed
->> + * @wctxt:	The write context that was handed to the write function
->> + *
->> + * Returns:	True if the state is correct. False if a handover
->> + *		has been requested or if the console was taken
->> + *		over.
->> + *
->> + * Must be invoked after the record was dumped into the assigned record
->> + * buffer
+On 3/29/23 08:55, Juri Lelli wrote:
+> Qais reported [1] that iterating over all tasks when rebuilding root
+> domains for finding out which ones are DEADLINE and need their bandwidth
+> correctly restored on such root domains can be a costly operation (10+
+> ms delays on suspend-resume). He proposed we skip rebuilding root
+> domains for certain operations, but that approach seemed arch specific
+> and possibly prone to errors, as paths that ultimately trigger a rebuild
+> might be quite convoluted (thanks Qais for spending time on this!).
 >
-> The word "after" made me think about possible races when the record
-> buffer is being filled. The owner might loose the lock a hostile
-> way during this action. And we should prevent using the same buffer
-> when the other owner is still modifying the content.
+> To fix the problem
 >
-> It should be safe when the same buffer might be used only by nested
-> contexts. It does not matter if the outer context finishes writing
-> later. The nested context should not need the buffer anymore.
+>   01/06 - Rename functions deadline with DEADLINE accounting (cleanup
+>           suggested by Qais) - no functional change
+>   02/06 - Bring back cpuset_mutex (so that we have write access to cpusets
+>           from scheduler operations - and we also fix some problems
+>           associated to percpu_cpuset_rwsem)
+>   03/06 - Keep track of the number of DEADLINE tasks belonging to each cpuset
+>   04/06 - Create DL BW alloc, free & check overflow interface for bulk
+>           bandwidth allocation/removal - no functional change
+>   05/06 - Fix bandwidth allocation handling for cgroup operation
+>           involving multiple tasks
+>   06/06 - Use this information to only perform the costly iteration if
+>           DEADLINE tasks are actually present in the cpuset for which a
+>           corresponding root domain is being rebuilt
 >
-> But a problem might happen when the same buffer is shared between
-> more non-nested contexts. One context might loose the lock a hostile way.
-> The other context might get the access after the hostile context
-> released the lock.
-
-Hostile takeovers _only occur during panic_.
-
-> NORMAL and PANIC contexts are safe. These priorities have only
-> one context and both have their own buffers.
+> With respect to the RFC posting [2]
 >
-> A problem might be with EMERGENCY contexts. Each CPU might have
-> its own EMERGENCY context. We might prevent this problem if
-> we do not allow to acquire the lock in EMERGENCY (and NORMAL)
-> context when panic() is running or after the first hostile
-> takeover.
+>   1 - rename DEADLINE bandwidth accounting functions - Qais
+>   2 - call inc/dec_dl_tasks_cs from switched_{to,from}_dl - Qais
+>   3 - fix DEADLINE bandwidth allocation with multiple tasks - Waiman,
+>       contributed by Dietmar
+>
+> This set is also available from
+>
+> https://github.com/jlelli/linux.git deadline/rework-cpusets
+>
+> Best,
+> Juri
+>
+> 1 - https://lore.kernel.org/lkml/20230206221428.2125324-1-qyousef@layalina.io/
+> 2 - https://lore.kernel.org/lkml/20230315121812.206079-1-juri.lelli@redhat.com/
+>
+> Dietmar Eggemann (2):
+>    sched/deadline: Create DL BW alloc, free & check overflow interface
+>    cgroup/cpuset: Free DL BW in case can_attach() fails
+>
+> Juri Lelli (4):
+>    cgroup/cpuset: Rename functions dealing with DEADLINE accounting
+>    sched/cpuset: Bring back cpuset_mutex
+>    sched/cpuset: Keep track of SCHED_DEADLINE task in cpusets
+>    cgroup/cpuset: Iterate only if DEADLINE tasks are present
+>
+>   include/linux/cpuset.h  |  12 ++-
+>   include/linux/sched.h   |   4 +-
+>   kernel/cgroup/cgroup.c  |   4 +
+>   kernel/cgroup/cpuset.c  | 232 ++++++++++++++++++++++++++--------------
+>   kernel/sched/core.c     |  41 ++++---
+>   kernel/sched/deadline.c |  67 +++++++++---
+>   kernel/sched/sched.h    |   2 +-
+>   7 files changed, 240 insertions(+), 122 deletions(-)
 
-A hostile takeover means a CPU took ownership with PANIC priority. No
-CPU can steal ownership from the PANIC owner. Once the PANIC owner
-releases ownership, the panic message has been output to the atomic
-consoles. Do we really care what happens after that?
+Other than some minor issues that I have talked in earlier emails, the 
+patch series looks good to me.
 
-John
+You can add my ack once the issues are fixed.
+
+Acked-by: Waiman Long <longman@redhat.com>
+
