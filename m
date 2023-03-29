@@ -2,136 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029956CD460
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC9E6CD45F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbjC2ITp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S230513AbjC2ITc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjC2ITT (ORCPT
+        with ESMTP id S230364AbjC2ITP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:19:19 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E730C49D9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:17:48 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 760C75FD03;
-        Wed, 29 Mar 2023 11:17:36 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1680077856;
-        bh=TFNrgf7o1+rxwIij+MHUfJ7WxvDDW1pBTADC57qaI2s=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=VB7u9kVJZcIDJoyXGqw7psUOhxi8ziD+847dKtMek+9ctJv8ApVqCvNcacbWDg4sC
-         Amylr+2wDqioPjAg3XwiYTtTOygkRsmx4tr0PcXC+C80pNSR7e4YjgkLkLJqh2rD8M
-         xm9i1hsQr68fk3zycTI7gMxR7bIri080G6Xu8QBamfzBzc98aeQLtsnjp0UYfWhwFj
-         7zCUWTO9wfDDbFHEsjKwqgGdb+gVzdCIvVySeRXnf5y4bcL1GKrP+x9S5F5qZuOsd+
-         aSMjHRzZhrbVWTO4U34/XNTqU6UC2D4diW8sP4HntdLJd/7xOrvz5eatdHHDSdaB/N
-         fU2ABBs3fw+2g==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 29 Mar 2023 11:17:35 +0300 (MSK)
-Date:   Wed, 29 Mar 2023 11:17:34 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
-        <oxffffaa@gmail.com>
-Subject: Re: [PATCH v1] mtd: rawnand: meson: fix bitmask for length in
- command word
-Message-ID: <20230329081734.v2kl4okq3ewimvzh@CAB-WSD-L081021>
-References: <d4338bd5-125c-a9e7-cb46-6f5e1da05cfa@sberdevices.ru>
- <CAFBinCB3yuyNJD=7UJ7jzf45Masms_PD4sm42YNjO8M4cr+4wg@mail.gmail.com>
- <fe2ed378-cdac-dbb3-acd2-ff542bd7e887@sberdevices.ru>
- <81632eee-533e-5e44-1520-5321a06c6797@sberdevices.ru>
- <20230328185001.5661132b@xps-13>
- <e8edcbc8-5c72-b29e-21d7-6f4438391924@sberdevices.ru>
- <CAFBinCCCNYJV4RBbM78r3yGPnY4oNKySEFRkzBgUD3xYJGkJmw@mail.gmail.com>
- <2fed42ad-11cb-6199-6adb-d9272209f5e2@sberdevices.ru>
- <20230329093145.52790647@xps-13>
+        Wed, 29 Mar 2023 04:19:15 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DBA4C04
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:17:43 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id q16so19066885lfe.10
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:17:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680077857;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aZeSEMAezPQcLb1lLJsGn1oGXvY3H1ZgCakhIROmykM=;
+        b=j4kJH9oqit1djyWk9BnRKF6szJ4tbZ2O6LwCWfkgnFVO3tW+Qk4/1f2mELIMvD8GlD
+         FkkTBb9HS6aXi/Hab6gCv/TYQuG352A8bLkyOzjiAeCMvR36HUcJBslLn/4GioBbcEPO
+         opWhhcl+Ryj9ed569sIRq2kpHQSs4FIt8pjn5JK4AmdJ/3lk83drQCVsMlOzZVzXoosU
+         a7jPTJP5JrB3pSQwxoQmS94C3IED5XWWpnoS5nGQ46+Mf8nQZNsneXkKXSKBaidU2chj
+         aa66vXtvvu+Ou0XkEY03Qa340Kz+5x4Hdxp+TDv8ah41wzeTxQb+/kVCp/TQkan4jq2Z
+         uNFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680077857;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aZeSEMAezPQcLb1lLJsGn1oGXvY3H1ZgCakhIROmykM=;
+        b=yAG3G631VZW2zRe7mA9HmPY2Gj1UK++T9km1EPy9yroKBncV0JMPZlci1iXNBqYlk1
+         HvLCBiopP4rowytBMCqW860XbM3qpw3rhZyD9umAIXaEoKZE82lBCGtEPRMApjmtPW3m
+         /tYB+Goc4JZCOJc0sX7rPBluJYNvZQ+VNSRDS+V5LTtIKT09096XEYU3DLS5pIzbtc8U
+         LjDl5UUDIZksSc5kpIGgd4T116d7z22muNQjLdAKRmfBg6fbrAIVgJUeaiSJjy+okNJt
+         hgzenISKD64Si44G5NCxI3cRqupYJptBbx0duJ2hxEcSfLs9+/zAWK313LSyVvzJ7ELl
+         Bp2A==
+X-Gm-Message-State: AAQBX9euZ/0leGPGsUc6OZA/kapEUWqGOb5zogmOxAf3pDUuHqgRXcDK
+        lFIXDnenNCOZLriB8VcAAXo4iA==
+X-Google-Smtp-Source: AKy350Z+3FsH4vJkmVHkYStFz/CgCVfA5zD1ravlknUErM3ZBYmshboFIYZSfaWclera6eFJM08tew==
+X-Received: by 2002:a19:a40a:0:b0:4eb:982:adf with SMTP id q10-20020a19a40a000000b004eb09820adfmr3325108lfc.26.1680077856930;
+        Wed, 29 Mar 2023 01:17:36 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id p21-20020ac246d5000000b004e8011cbaa0sm5370655lfo.111.2023.03.29.01.17.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 01:17:36 -0700 (PDT)
+Message-ID: <96bbb16a-1748-c0cb-0fc6-90804eab01c1@linaro.org>
+Date:   Wed, 29 Mar 2023 10:17:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230329093145.52790647@xps-13>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/29 04:10:00 #21025776
-X-KSMG-AntiVirus-Status: Clean, skipped
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v6 04/12] dt-bindings: reset: nuvoton: add binding for
+ ma35d1 IP reset control
+Content-Language: en-US
+To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+References: <20230328021912.177301-1-ychuang570808@gmail.com>
+ <20230328021912.177301-5-ychuang570808@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230328021912.177301-5-ychuang570808@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 09:31:45AM +0200, Miquel Raynal wrote:
-> Hello,
-> 
-> avkrasnov@sberdevices.ru wrote on Wed, 29 Mar 2023 10:12:10 +0300:
-> 
-> > On 28.03.2023 23:25, Martin Blumenstingl wrote:
-> > > Hi Arseniy,
-> > > 
-> > > On Tue, Mar 28, 2023 at 8:39 PM Arseniy Krasnov
-> > > <avkrasnov@sberdevices.ru> wrote:
-> > > [...]  
-> > >>>
-> > >>> By the way any reason not to have Cc'ed stable?  
-> > >>
-> > >> Sorry, what do You mean? I've included linux-mtd mailing lists, there is
-> > >> one more list for mtd reviews? I will appreciate if You can point me  
-> > > "stable" typically refers to the stable tree where fixes for already
-> > > released kernel versions are maintained.
-> > > When Miquel applies the patch it will either land in the next -rc of
-> > > the current development cycle (typically applies to fixes - currently
-> > > 6.3-rc5) or -rc1 of the next kernel version (typically applies to new
-> > > features, cleanups, etc. - currently 6.4-rc1).
-> > > 
-> > > Let's say you are fixing a bug now but want the fix to be included in
-> > > 6.1 LTS (long term stable) or other stable release.
-> > > In this case it's recommended to Cc the maintainers of the stable
-> > > trees as part of your patch, see [0].
-> > > That way once the commit with your fix hits Linus Torvalds linux tree
-> > > it will be backported by the stable team within a few days (assuming
-> > > of course that the patch applies cleanly to older versions, if not
-> > > they're notifying you).
-> > > Note: even without Cc'ing the stable maintainers your commit may be
-> > > backported (semi-automatically) if it has a Fixes tag and the stable
-> > > maintainers find your commit. But my understanding is that it's
-> > > easiest for them if they're explicitly Cc'ed on the patch.
-> > > 
-> > > I hope this makes sense. If not: don't hesitate to ask.  
-> 
-> That is an excellent summary, I should copy/paste it sometimes :)
-> 
+On 28/03/2023 04:19, Jacky Huang wrote:
+> From: Jacky Huang <ychuang3@nuvoton.com>
 
-Finally I fully understand why 'Fixes' tag is so helpful!
-Thank you Martin!
+Subject: drop second/last, redundant "bindings". The "dt-bindings"
+prefix is already stating that these are bindings.
 
-[...]
+This is a friendly reminder during the review process.
 
--- 
-Thank you,
-Dmitry
+It seems my previous comments were not fully addressed. Maybe my
+feedback got lost between the quotes, maybe you just forgot to apply it.
+Please go back to the previous discussion and either implement all
+requested changes or keep discussing them.
+
+Thank you.
+
+> 
+> Add the dt-bindings header for Nuvoton ma35d1, that gets shared
+> between the reset controller and reset references in the dts.
+> Add documentation to describe nuvoton ma35d1 reset driver.
+> 
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> ---
+>  .../bindings/reset/nuvoton,ma35d1-reset.yaml  |  44 +++++++
+>  .../dt-bindings/reset/nuvoton,ma35d1-reset.h  | 108 ++++++++++++++++++
+>  2 files changed, 152 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml
+>  create mode 100644 include/dt-bindings/reset/nuvoton,ma35d1-reset.h
+> 
+> diff --git a/Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml b/Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml
+> new file mode 100644
+> index 000000000000..342717257e5c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/reset/nuvoton,ma35d1-reset.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton MA35D1 Reset Controller
+> +
+> +maintainers:
+> +  - Chi-Fang Li <cfli0@nuvoton.com>
+> +  - Jacky Huang <ychuang3@nuvoton.com>
+> +
+> +description:
+> +  The system reset controller can be used to reset various peripheral
+> +  controllers in MA35D1 SoC.
+> +
+> +properties:
+> +  compatible:
+> +    const: nuvoton,ma35d1-reset
+> +
+> +  '#reset-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - '#reset-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # system reset controller node:
+> +  - |
+> +
+> +    system-management@40460000 {
+> +        compatible = "nuvoton,ma35d1-sys", "syscon", "simple-mfd";
+> +        reg = <0x40460000 0x200>;
+> +
+> +        reset-controller {
+> +            compatible = "nuvoton,ma35d1-reset";
+> +            #reset-cells = <1>;
+
+You do not take any resources here, thus this should be rather part of
+the parent node.
+
+> +        };
+> +    };
+> +...
+> +
+> diff --git a/include/dt-bindings/reset/nuvoton,ma35d1-reset.h b/include/dt-bindings/reset/nuvoton,ma35d1-reset.h
+> new file mode 100644
+> index 000000000000..f3088bc0afec
+> --- /dev/null
+> +++ b/include/dt-bindings/reset/nuvoton,ma35d1-reset.h
+> @@ -0,0 +1,108 @@
+> +/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-2-Clause) */
+
+Weird license, why 2.0+?
+
+You already got here comment about license in previous version of this
+patch.
+
+
+> +/*
+> + * Copyright (C) 2023 Nuvoton Technologies.
+> + * Author: Chi-Fen Li <cfli0@nuvoton.com>
+> + *
+> + * Device Tree binding constants for MA35D1 reset controller.
+> + */
+> +
+> +#ifndef __DT_BINDINGS_RESET_MA35D1_H
+> +#define __DT_BINDINGS_RESET_MA35D1_H
+> +
+> +#define MA35D1_RESET_CHIP	0
+> +#define MA35D1_RESET_CA35CR0	1
+> +#define MA35D1_RESET_CA35CR1	2
+> +#define MA35D1_RESET_CM4	3
+> +#define MA35D1_RESET_PDMA0	4
+> +#define MA35D1_RESET_PDMA1	5
+> +#define MA35D1_RESET_PDMA2	6
+> +#define MA35D1_RESET_PDMA3	7
+> +#define MA35D1_RESET_DISP	9
+> +#define MA35D1_RESET_VCAP0	10
+> +#define MA35D1_RESET_VCAP1	11
+> +#define MA35D1_RESET_GFX	12
+> +#define MA35D1_RESET_VDEC	13
+> +#define MA35D1_RESET_WHC0	14
+> +#define MA35D1_RESET_WHC1	15
+> +#define MA35D1_RESET_GMAC0	16
+> +#define MA35D1_RESET_GMAC1	17
+> +#define MA35D1_RESET_HWSEM	18
+> +#define MA35D1_RESET_EBI	19
+> +#define MA35D1_RESET_HSUSBH0	20
+> +#define MA35D1_RESET_HSUSBH1	21
+> +#define MA35D1_RESET_HSUSBD	22
+> +#define MA35D1_RESET_USBHL	23
+> +#define MA35D1_RESET_SDH0	24
+> +#define MA35D1_RESET_SDH1	25
+> +#define MA35D1_RESET_NAND	26
+> +#define MA35D1_RESET_GPIO	27
+> +#define MA35D1_RESET_MCTLP	28
+> +#define MA35D1_RESET_MCTLC	29
+> +#define MA35D1_RESET_DDRPUB	30
+> +#define MA35D1_RESET_TMR0	34
+> +#define MA35D1_RESET_TMR1	35
+> +#define MA35D1_RESET_TMR2	36
+> +#define MA35D1_RESET_TMR3	37
+> +#define MA35D1_RESET_I2C0	40
+> +#define MA35D1_RESET_I2C1	41
+> +#define MA35D1_RESET_I2C2	42
+> +#define MA35D1_RESET_I2C3	43
+> +#define MA35D1_RESET_QSPI0	44
+> +#define MA35D1_RESET_SPI0	45
+> +#define MA35D1_RESET_SPI1	46
+> +#define MA35D1_RESET_SPI2	47
+> +#define MA35D1_RESET_UART0	48
+> +#define MA35D1_RESET_UART1	49
+> +#define MA35D1_RESET_UART2	50
+> +#define MA35D1_RESET_UAER3	51
+> +#define MA35D1_RESET_UART4	52
+> +#define MA35D1_RESET_UART5	53
+> +#define MA35D1_RESET_UART6	54
+> +#define MA35D1_RESET_UART7	55
+> +#define MA35D1_RESET_CANFD0	56
+> +#define MA35D1_RESET_CANFD1	57
+> +#define MA35D1_RESET_EADC0	60
+
+Why do you have gaps here? These should be IDs, not register offsets.
+
+Best regards,
+Krzysztof
+
