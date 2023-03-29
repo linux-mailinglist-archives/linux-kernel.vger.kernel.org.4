@@ -2,66 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F6D6CEC0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010B36CEC10
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjC2OqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S229677AbjC2OqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjC2Opq (ORCPT
+        with ESMTP id S230356AbjC2OqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:45:46 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75818769B
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:43:31 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id i7so19649770ybt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:43:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680101010;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AZF3AgcFtqgGpO60iEgE/VpjMgkSPsUVITQ8vjVr8tw=;
-        b=bYHVBrYbjFKnwVQc+oSbH0aO1boPvLUHwnJakgPZubdfvnrzgXeWZOrvVbu8fqfPp8
-         PMJ2EIoo4Ryf6hAzSweHqHCs7iLOsu69lUxBkU+yM6Q+hy59Nhjm67PT4HPvpwlqS+nF
-         C78uiy2AEdagKFyXjciEjHqiGI28n5s2Bnu8t9RX5mDICPbIqT3JG9bHzs9OsXHoWWS8
-         SfdgrZcb0o+fLljQPD4/PsGOE4LoGzbSyD6u7Kpr2QHyufPJ/OvhxQ/GvTr07K7IFVyu
-         s+UPbi7PZ0NTNVy/veH8A3qN9ZKfb+Dg9ElP9YbqVLtzfEMh3Xc6De9YhVbLmbWRGoSL
-         YemA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680101010;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AZF3AgcFtqgGpO60iEgE/VpjMgkSPsUVITQ8vjVr8tw=;
-        b=vjG35sussgfPu5mdEJdkKdWYlz6DFMvI3K9GNYkFiVr5SzKcKVt2pxhWDdJ8at/Kgt
-         45M25G7jmSeA2np8CHBsw8b/Tr2A/RQQSakO0zLmusIfGl/WWX7rtb1JqzErQmeIsEA9
-         P1amnN+AoeHLfYfdm4MVt8zmUIk1k2SZXDzMa4BU7zyWfyJdBa/l8psWsVqp+LCQ8xTy
-         Y8kOnKyEz9IibRSDhWYURaLVkuRcxQr2gB/2ZDYLRetZam57D4V2UxX7YVJWXoBHoqwr
-         DjUKUsv2hNlGPBS/UW3gnge2kGdLWmJVS345Dc3Hso+aPlw/2/xj72c+4PFLvt6bYjhf
-         RoLg==
-X-Gm-Message-State: AAQBX9dI1RIt/bDUbQhUC/7x4wB+2sgqZBrar/0I7H12HjI8/JMuzmne
-        l53ESEiyUi5qG56WzrWXCR/j5EfY8g2tpS4x0HYRPw==
-X-Google-Smtp-Source: AKy350bkVJFUGOJ4fGvEYsgcY1FSLfwT3yDuK+YuUkzV6Xv7XLerocMrkLsc9rq8nKymjJM/AyAgSB2kNV5hYHQ1HbI=
-X-Received: by 2002:a05:6902:120c:b0:b74:77fa:581d with SMTP id
- s12-20020a056902120c00b00b7477fa581dmr10308565ybu.4.1680101010667; Wed, 29
- Mar 2023 07:43:30 -0700 (PDT)
+        Wed, 29 Mar 2023 10:46:07 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FB693C0;
+        Wed, 29 Mar 2023 07:43:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680101039; x=1711637039;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mF5KcYfESzULnMbcHpPg9/Y3X1FNg6NDTzgQz7ayaEc=;
+  b=nMByuSNhu5KCr70AFM0k4PV9tT6hInOq9Wds5kSn2a4KZ5ztdxyLypvF
+   pqBx0tNgNIKEhk4qiDYQ7rEBeRUZh1y2WO4zBxdYB118RKbuIaVJ1Bw6M
+   o1LoK7/22yzOgO8peYoPW4fam750R4oxPHqxYwwVd042Ok76QdSYSr3yV
+   1/RiUlZQrCdtBFWxMqhlgfUzHJ9kDO/ZC36WmWkJgUVWWvcrj5o6bEgif
+   fu8VRTvXbnxhFN0Qf3avVopCApzZIXvUFSs5iyabuK0W1G8M9xpEcyqKQ
+   wIUWsBg1+Ln8IHJcQH6f3KcNdChMX7+7ffH7HCiHxMELzwcsyrf3jkP8Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="338393917"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="338393917"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 07:43:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="716906281"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="716906281"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 29 Mar 2023 07:43:54 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1phX1k-00A41k-0n;
+        Wed, 29 Mar 2023 17:43:52 +0300
+Date:   Wed, 29 Mar 2023 17:43:51 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v6 5/5]  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <ZCROpw0il1VQCLPu@smile.fi.intel.com>
+References: <20230307112835.81886-1-okan.sahin@analog.com>
+ <20230307112835.81886-6-okan.sahin@analog.com>
+ <20230315175223.GI9667@google.com>
+ <20230315175257.GJ9667@google.com>
+ <MN2PR03MB5168249900206433A082875EE7889@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <20230329143615.GS2673958@google.com>
 MIME-Version: 1.0
-References: <0dcc1aac-9a6a-4d17-be68-a895cb6120da@app.fastmail.com>
-In-Reply-To: <0dcc1aac-9a6a-4d17-be68-a895cb6120da@app.fastmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 29 Mar 2023 16:43:19 +0200
-Message-ID: <CACRpkdZSJCZZEkD0V_wint+a1XKsbCQFuArFvPdFP8RSDsGLMQ@mail.gmail.com>
-Subject: Re: power_supply_show_property Kernel Oops
-To:     Alistair <alistair@alistair23.me>
-Cc:     ye.xingchen@zte.com.cn, sebastian.reichel@collabora.com,
-        sre@kernel.org, pali@kernel.org, sravanhome@gmail.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329143615.GS2673958@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,39 +90,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 1:16=E2=80=AFPM Alistair <alistair@alistair23.me> w=
-rote:
+On Wed, Mar 29, 2023 at 03:36:15PM +0100, Lee Jones wrote:
+> On Tue, 28 Mar 2023, Sahin, Okan wrote:
+> > >On Wed, 15 Mar 2023, Lee Jones wrote:
+> > >> On Tue, 07 Mar 2023, Okan Sahin wrote:
 
-> [    2.466136]  string from vsnprintf+0x158/0x424
-> [    2.470603]  vsnprintf from vscnprintf+0x10/0x24
-> [    2.475241]  vscnprintf from sysfs_emit+0x50/0xac
-> [    2.479975]  sysfs_emit from power_supply_show_property+0x1d0/0x26c
-> [    2.486269]  power_supply_show_property from add_prop_uevent+0x30/0x8c
-> [    2.492815]  add_prop_uevent from power_supply_uevent+0xb4/0xe4
-> [    2.498753]  power_supply_uevent from dev_uevent+0xc4/0x21c
-> [    2.504352]  dev_uevent from kobject_uevent_env+0x1cc/0x510
-> [    2.509953]  kobject_uevent_env from power_supply_changed_work+0x7c/0x=
-b4
-> [    2.516675]  power_supply_changed_work from process_one_work+0x1e8/0x3=
-e8
-> [    2.523396]  process_one_work from worker_thread+0x2c/0x504
-> [    2.528986]  worker_thread from kthread+0xcc/0xec
-> [    2.533716]  kthread from ret_from_fork+0x14/0x24
-> [    2.538443] Exception stack(0xf0dadfb0 to 0xf0dadff8)
+...
 
-This looks like running a worker before something this worker is accessing
-has been set up.
+> > +static const struct i2c_device_id max77541_i2c_id[] = {
+> > +	{ "max77540", (kernel_ulong_t)&chip[MAX77540] },
+> > +	{ "max77541", (kernel_ulong_t)&chip[MAX77541] },
+> 
+> Just 'MAX77540' is fine.
 
-> As it's on a consumer device I don't have a way to connect a debugger. So=
- I'm
-> a little stuck on what the problem is. The only related change I see betw=
-een
-> 6.2 and 6.3-rc4 is commit a441f3b90a340e5c94df36c33fb7000193ee0aa7
-> "power: supply: use sysfs_emit() instead of sprintf() for sysfs show()", =
-but
-> that doesn't look like it would cause this oops.
+I tend to disagree.
 
-Did you try reverting it?
+There is an error prone approach esp. when we talk with some functions
+that unifies OF/ACPI driver data retrieval with legacy ID tables.
+In such a case the 0 from enum is hard to distinguish from NULL when
+the driver data is not set or not found. On top of that the simple integer
+in the legacy driver data will require additional code to be added in
+the ->probe().
 
-Yours,
-Linus Walleij
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
