@@ -2,101 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB95E6CF0AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B046CF0C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbjC2RJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 13:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
+        id S231584AbjC2RLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 13:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbjC2RJ0 (ORCPT
+        with ESMTP id S231502AbjC2RKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:09:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6E68691;
-        Wed, 29 Mar 2023 10:08:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46295B823EB;
-        Wed, 29 Mar 2023 17:08:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D3FC433EF;
-        Wed, 29 Mar 2023 17:08:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680109696;
-        bh=3nQ3Rw35o9dHhDUM7vmqb4idgnB+u/V0GsVDJC/63+Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=gbl1M8eD9gB2IGQLyuHAaoTzCOIM5aJBK4UNA9a129HfqjIgk5OLT00JsW3LrfMwi
-         BS3wnvrsuGevSBWjhRFM92KYcTUOxGjXeVHURXAWUv/9mnQDB24FCwZImZH2HsARFK
-         IlhvkokEZXN7acrrZk3ygEf1vdRw2NueWhDlGCDj+STh7GnMOqXbmvj5tD1Ysbzyhu
-         lp8ABUqSEQpXusl9+/8zrwUDSE0/ZeQhHMVyH/rDOnH/IcmQua1kH2Fn7QmVJi/aJd
-         bCPHmVxcvMZcLDMOeqQ7VlKVTHgunp5inST5gQp164syoX8E0DdOxpNBNFwNZndVly
-         OgS83RCZj9AFg==
-Date:   Wed, 29 Mar 2023 12:08:14 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Raghavendra, Vignesh" <vigneshr@ti.com>
-Cc:     Siddharth Vadapalli <s-vadapalli@ti.com>, tjoseph@cadence.com,
-        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, nadeem@cadence.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srk@ti.com, nm@ti.com
-Subject: Re: [PATCH v2] PCI: cadence: Fix Gen2 Link Retraining process
-Message-ID: <20230329170814.GA3067800@bhelgaas>
+        Wed, 29 Mar 2023 13:10:34 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BC01BF4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:10:32 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id h14so9692585pgj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680109832;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vDmi5nIzQ70fO+hjyQnBiw9NgsY6gNFOjMjgjeQVLyY=;
+        b=KXcn6zmbpN1M3gcya4O4ccYSiYOSrk7sCFSQ28QSSpmhG6AybjJemKXpkAj4MT0Dhr
+         ywToksTDJF+/QQUfgaEizigYWE+PbHAJlyPL+6ierR+AVCqQ1t0oUeA6VTstfK8FxODV
+         ofYz+eNYRzLMgeVGCcvu0B05EoSEhQCk9HWCFJOxMErywO0TczUw+u77tHfMxS0EjMKH
+         hLNbic8bLfJ4lz2SbU/MOkWzuR733LyncrFdyqhtxOSTvOpaXhQ1jYnd3ovruWm1HytI
+         e81yUWDcbmDLAn8V93ozWx1zcempx0O/RTsLTGtKORwQ06z8RoxGboIj69sjNpZ6M1No
+         6CKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680109832;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vDmi5nIzQ70fO+hjyQnBiw9NgsY6gNFOjMjgjeQVLyY=;
+        b=Zy1ETnrNnBlondDjbTEZJg2Mn2a44ADEVltna2gghQp2m4SrNvL7srGgXzqHBrFnqD
+         4HaEKrO7qm9k5IWscanZ2DSZ03/aVX9WKtxp1D8OAszv7wlz3f3DtpqvGdfoPecFF0qT
+         NA2njteH6fX+m+Py7YlzBy1oSldg76ZDjG0k2ngbUdqPHKP4oMePmPZk/4DZWWyGNwSg
+         rT/8yxmUrH9xzA9NsUEBgHF3rnepMc4RWhZ6xMI1PFvxgq+3bDg3QOTyh3cx7NEVv3sn
+         /lUrqeTRXbWK7WmMM3206qFeNyNMUjFPRrWAlzormIg0v24mCl/93zVRY2imbYhBuDLo
+         HcvQ==
+X-Gm-Message-State: AAQBX9d2fuV6Q2GoTTbNrUFa2n2HkZnPqcxkkI4ZX4E312FhcxDAX+d5
+        g0VqdcISgsigQV5YBZkFLwnl+0hiY/NxUcuy1hk2Zw==
+X-Google-Smtp-Source: AKy350bWZdIG/SMXJ5jjXgQ+jvkVz1QEcKUw/EApMWnq33HK+hbMlilKegbYaO56L4/yrJAlzF34bRvpT1yKWbXyjCQ=
+X-Received: by 2002:a63:444:0:b0:513:6b94:8907 with SMTP id
+ 65-20020a630444000000b005136b948907mr2794117pge.1.1680109831654; Wed, 29 Mar
+ 2023 10:10:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12c89cb8-8cea-df6a-7650-fa3059bf5a5b@ti.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230329-net-ethernet-ti-wformat-v1-1-83d0f799b553@kernel.org>
+In-Reply-To: <20230329-net-ethernet-ti-wformat-v1-1-83d0f799b553@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 29 Mar 2023 10:10:20 -0700
+Message-ID: <CAKwvOdmcpESfN-9X2pzuxyj5q0wkH=kFwhaAhbaEJHwatyQLQA@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: ethernet: ti: Fix format specifier in netcp_create_interface()
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, trix@redhat.com, razor@blackwall.org,
+        kerneljasonxing@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 08:11:25PM +0530, Raghavendra, Vignesh wrote:
-> Hi Lorenzo, Bjorn,
-> 
-> On 3/15/2023 12:38 PM, Siddharth Vadapalli wrote:
-> > The Link Retraining process is initiated to account for the Gen2 defect in
-> > the Cadence PCIe controller in J721E SoC. The errata corresponding to this
-> > is i2085, documented at:
-> > https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
-> > 
-> > The existing workaround implemented for the errata waits for the Data Link
-> > initialization to complete and assumes that the link retraining process
-> > at the Physical Layer has completed. However, it is possible that the
-> > Physical Layer training might be ongoing as indicated by the
-> > PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
-> > 
-> > Fix the existing workaround, to ensure that the Physical Layer training
-> > has also completed, in addition to the Data Link initialization.
-> > 
-> > Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
-> > Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> > Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
-> > ---
-> > Changes from v1:
-> > 1. Collect Reviewed-by tag from Vignesh Raghavendra.
-> > 2. Rebase on next-20230315.
-> > 
-> > v1:
-> > https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com
-> > 
-> >  .../controller/cadence/pcie-cadence-host.c    | 27 +++++++++++++++++++
-> >  1 file changed, 27 insertions(+)
-> 
-> Wondering do one of you be pulling this patch in? This patch was never
-> picked for 6.3-rc1 merge cycle... Just want to make sure
-> pcie-cadence*.c and pci-j721e.c patches have a path to reach pci tree.
+On Wed, Mar 29, 2023 at 8:08=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> After commit 3948b05950fd ("net: introduce a config option to tweak
+> MAX_SKB_FRAGS"), clang warns:
+>
+>   drivers/net/ethernet/ti/netcp_core.c:2085:4: warning: format specifies =
+type 'long' but the argument has type 'int' [-Wformat]
+>                           MAX_SKB_FRAGS);
+>                           ^~~~~~~~~~~~~
+>   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+>           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##=
+__VA_ARGS__)
+>                                                                  ~~~     =
+^~~~~~~~~~~
+>   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_print=
+k_index_wrap'
+>                   _p_func(dev, fmt, ##__VA_ARGS__);                      =
+ \
+>                                ~~~    ^~~~~~~~~~~
+>   include/linux/skbuff.h:352:23: note: expanded from macro 'MAX_SKB_FRAGS=
+'
+>   #define MAX_SKB_FRAGS CONFIG_MAX_SKB_FRAGS
+>                         ^~~~~~~~~~~~~~~~~~~~
+>   ./include/generated/autoconf.h:11789:30: note: expanded from macro 'CON=
+FIG_MAX_SKB_FRAGS'
+>   #define CONFIG_MAX_SKB_FRAGS 17
+>                                ^~
+>   1 warning generated.
+>
+> Follow the pattern of the rest of the tree by changing the specifier to
+> '%u' and casting MAX_SKB_FRAGS explicitly to 'unsigned int', which
+> eliminates the warning.
+>
+> Fixes: 3948b05950fd ("net: introduce a config option to tweak MAX_SKB_FRA=
+GS")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> I am a little confused as to why the solution for this warning is
+> casting to 'unsigned int' rather than just updating all the specifiers
+> to be '%d', as I do not see how MAX_SKB_FRAGS can be any type other than
+> just 'int' but I figured I would be consistent with the other fixes I
+> have seen around this issue.
 
-Yes, Lorenzo or Krzysztof will likely pick this up.  I think Lorenzo
-is out of the office this week.
+MAX_SKB_FRAGS might be defined by Kconfig, see:
+ 352 #define MAX_SKB_FRAGS CONFIG_MAX_SKB_FRAGS
+in include/linux/skbuff.h. The Kconfig is declared in
+net/Kconfig:254.
 
-Drive-by comment: the current patch doesn't seem to give any
-indication to the user when cdns_pcie_host_training_complete() times
-out.  Is that timeout potentially of interest to a user?  Should there
-be a log message there?
+Because integer literals in C are signed, the cast is necessary to
+avoid the format specifier from warning about the wrong signedness.
+It would be preferable to have a `U` suffix on the literal value, then
+the cast would be unnecessary.
 
-Bjorn
+Untested:
+```
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 494a23a976b0..67cb6bfc4056 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -349,7 +349,7 @@ struct sk_buff;
+ # define CONFIG_MAX_SKB_FRAGS 17
+ #endif
+
+-#define MAX_SKB_FRAGS CONFIG_MAX_SKB_FRAGS
++#define MAX_SKB_FRAGS CONFIG_MAX_SKB_FRAGS ## U
+
+ extern int sysctl_max_skb_frags;
+```
+Perhaps other code using MAX_SKB_FRAGS might have to worry about
+signedness and conversions.
+
+But I think what you have is fine for now.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Though the above might be a longer-term solution since this might pop up ag=
+ain.
+
+> ---
+>  drivers/net/ethernet/ti/netcp_core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/ti/netcp_core.c b/drivers/net/ethernet/=
+ti/netcp_core.c
+> index 1bb596a9d8a2..d829113c16ee 100644
+> --- a/drivers/net/ethernet/ti/netcp_core.c
+> +++ b/drivers/net/ethernet/ti/netcp_core.c
+> @@ -2081,8 +2081,8 @@ static int netcp_create_interface(struct netcp_devi=
+ce *netcp_device,
+>         netcp->tx_pool_region_id =3D temp[1];
+>
+>         if (netcp->tx_pool_size < MAX_SKB_FRAGS) {
+> -               dev_err(dev, "tx-pool size too small, must be at least %l=
+d\n",
+> -                       MAX_SKB_FRAGS);
+> +               dev_err(dev, "tx-pool size too small, must be at least %u=
+\n",
+> +                       (unsigned int)MAX_SKB_FRAGS);
+>                 ret =3D -ENODEV;
+>                 goto quit;
+>         }
+>
+> ---
+> base-commit: 3b064f541be822dc095991c6dda20a75eb51db5e
+> change-id: 20230329-net-ethernet-ti-wformat-acaa86350657
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
