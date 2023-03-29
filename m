@@ -2,100 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809A66CD69E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF566CD6A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjC2JiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S230401AbjC2Jjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjC2JiY (ORCPT
+        with ESMTP id S229759AbjC2Jje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:38:24 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730ED2132
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:38:22 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id v48so10896410uad.6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:38:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680082701;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Kdo0962g9qjrK63Wmlr//5n9bFicAZn9s+ZEU+BxU8=;
-        b=q3onjpNwj7m5wtVnisBHU/iaWonRFIgMPOAw3rp3d/782pYTSYBWvY5LfgqPeNm2RN
-         gVM3r5bX4Cpl4OH9hB3g3HXP2qn9+/BjhXM22B5Uj+FxS7Q75IJp3n7osKdseE0QO5pQ
-         nHHtiu4UwkZEi6LvPj3FEaXJU3sWIIiNVhCaduhGxgY6wkgT2nlOK4Bv+4EDPK7JphgV
-         6TFzR7WXUBLKTS2Rud9/ilyyUZFVYeVdrgpK4hrKndbwlAlErwS2/5oGvjlDlKlzyDNx
-         YVqKoKEPhpCnRwt2ETHySzBH9Q2yOCNensInbY8tHBYYCmxSAU/RwWvu6d1qqFQNXFs+
-         8jhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680082701;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5Kdo0962g9qjrK63Wmlr//5n9bFicAZn9s+ZEU+BxU8=;
-        b=SxK2eGdWm1emy/XVf66+o7Ptyu+dSsThpcENWefl3B2fEZQUYmS7V+ecl7Zn+J6b64
-         wpA2whFzJ008x7h718+WrZRdDGYFLFcZBPgYJOMLjekR5Ez/rZNp5Se+K7dGJIR/7Dyz
-         LbqrC1Kc4SmSHD+QSDZeHbh6X0+K+Y0Ebbd9g1QV/qTMd8n/NxLKdx1Y3mA7G2DLz+us
-         h/xaC19n9wsALtTvFBHzd0k7goqNV7rqIyytA6r3xvUJiGUqZsABCOl39kgVWa27/MHj
-         L9u4FjC7/Iuow9wBUO8XUr4J9TYhaOHeXravcZktrMlPzAlCtZ6xBkrjdQRy5G1Yzypu
-         1HlQ==
-X-Gm-Message-State: AAQBX9fDPp3yAFeGygnUWJ45sR0wAQF8HU1eAd3HdevaP1dPOVCxPX+O
-        /U1xjYalkFP5fKFsrFEDY4mRMwAVveg48bYnsrE2dA==
-X-Google-Smtp-Source: AKy350aFwmtLvugVS91SXWv58KL7rNgH36bP8Zd/ssQQS9euHnK+TiBtfXgpvNKAwXuEGqbYg0WQqyzlGYvf7hTsufM=
-X-Received: by 2002:a1f:9f52:0:b0:406:1ef2:7bc7 with SMTP id
- i79-20020a1f9f52000000b004061ef27bc7mr10108602vke.2.1680082701571; Wed, 29
- Mar 2023 02:38:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230329093200.419041-1-colin.i.king@gmail.com>
-In-Reply-To: <20230329093200.419041-1-colin.i.king@gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 29 Mar 2023 15:08:10 +0530
-Message-ID: <CAFA6WYNOzJxwXA_RfAkHxp-w1Pu0UQpeZOoP7tyaGBSeBuERVQ@mail.gmail.com>
-Subject: Re: [PATCH][next] optee: Fix spelling mistake "Unuspported" -> "Unsupported"
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
-        op-tee@lists.trustedfirmware.org, kernel-janitors@vger.kernel.org,
+        Wed, 29 Mar 2023 05:39:34 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CDF2132
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:39:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680082773; x=1711618773;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=rmwWgXx9DUsDkyM6xIc9AQk1bMfFjEwuONpPcP5/qI4=;
+  b=L2tBEFmCafG3bhgpX5gh7ifcpV/V+jerlBUPQTywqQKrbK3hZvqJxBWr
+   3Pz+8fENPXC2g7OwbSRO6oZAgKnkM8N2irU69PuMK+Xb5Qw2wJnX3r5SV
+   0QgF9hmaxyv7o43+eHe2SvsoCdQUoT+x+cgxvbBXVGDOPssX+475c/LAB
+   9Wb7aWITAZTekdfGJQX0XcnfJNUJWi9UBQ2lfJUAfdfzs4Mktb4iSyhn8
+   L8s43d5yBA1kgCoi1ZBrIBDpWwx65nr8/v9i02H55kG5gYiND1XIJHafO
+   NTiB9wH939OU+FQjHE68HRmU0lj3CnbKPzp+EMsBW4I+vg8+9djqAcanF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="342423482"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="342423482"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 02:39:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="858419942"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="858419942"
+Received: from jetten-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.51.146])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 02:39:28 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     David Gow <davidgow@google.com>,
+        =?utf-8?Q?Lu=C3=ADs?= Mendes <luis.p.mendes@gmail.com>,
+        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?utf-8?Q?Ma=C3=ADra?= Canal <mairacanal@riseup.net>,
+        Arthur Grillo <arthurgrillo@riseup.net>
+Cc:     dri-devel@lists.freedesktop.org, David Gow <davidgow@google.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 2/2] drm: test: Fix 32-bit issue in drm_buddy_test
+In-Reply-To: <20230329065532.2122295-2-davidgow@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230329065532.2122295-1-davidgow@google.com>
+ <20230329065532.2122295-2-davidgow@google.com>
+Date:   Wed, 29 Mar 2023 12:39:25 +0300
+Message-ID: <87lejf522a.fsf@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023 at 15:02, Colin Ian King <colin.i.king@gmail.com> wrote:
+On Wed, 29 Mar 2023, David Gow <davidgow@google.com> wrote:
+> The drm_buddy_test KUnit tests verify that returned blocks have sizes
+> which are powers of two using is_power_of_2(). However, is_power_of_2()
+> operations on a 'long', but the block size is a u64. So on systems where
+> long is 32-bit, this can sometimes fail even on correctly sized blocks.
 >
-> There is a spelling mistake in a #error message. Fix it.
-
-Thanks for catching it, it has already been fixed as part of this PR [1].
-
-[1] https://lore.kernel.org/lkml/20230314184441.GA2936721@rayden/T/
-
--Sumit
-
+> This only reproduces randomly, as the parameters passed to the buddy
+> allocator in this test are random. The seed 0xb2e06022 reproduced it
+> fine here.
 >
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> For now, just hardcode an is_power_of_2() implementation using
+> x & (x - 1).
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 > ---
->  drivers/tee/optee/call.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-> index 290b1bb0e9cd..df5fb5410b72 100644
-> --- a/drivers/tee/optee/call.c
-> +++ b/drivers/tee/optee/call.c
-> @@ -488,7 +488,7 @@ static bool is_normal_memory(pgprot_t p)
->  #elif defined(CONFIG_ARM64)
->         return (pgprot_val(p) & PTE_ATTRINDX_MASK) == PTE_ATTRINDX(MT_NORMAL);
->  #else
-> -#error "Unuspported architecture"
-> +#error "Unsupported architecture"
->  #endif
->  }
+> There are actually a couple of is_power_of_2_u64() implementations
+> already around in:
+> - drivers/gpu/drm/i915/i915_utils.h
+> - fs/btrfs/misc.h (called is_power_of_two_u64) 
 >
-> --
-> 2.30.2
+> So the ideal thing would be to consolidate these in one place.
 >
+>
+> ---
+>  drivers/gpu/drm/tests/drm_buddy_test.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
+> index f8ee714df396..09ee6f6af896 100644
+> --- a/drivers/gpu/drm/tests/drm_buddy_test.c
+> +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
+> @@ -89,7 +89,8 @@ static int check_block(struct kunit *test, struct drm_buddy *mm,
+>  		err = -EINVAL;
+>  	}
+>  
+> -	if (!is_power_of_2(block_size)) {
+> +	/* We can't use is_power_of_2() for a u64 on 32-bit systems. */
+> +	if (block_size & (block_size - 1)) {
+
+Then maybe use is_power_of_2_u64() instead?
+
+BR,
+Jani.
+
+>  		kunit_err(test, "block size not power of two\n");
+>  		err = -EINVAL;
+>  	}
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
