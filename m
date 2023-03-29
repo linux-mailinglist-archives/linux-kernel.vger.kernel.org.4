@@ -2,59 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB87F6CF182
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EBD6CF17F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjC2R4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 13:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        id S229605AbjC2RzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 13:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjC2R4q (ORCPT
+        with ESMTP id S229458AbjC2RzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:56:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F16DF
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:56:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680112605; x=1711648605;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Pp/Qh95knNkBXt8Xc7q+8K6Ouqiay7lo9hsjnRe8M6Y=;
-  b=ncGsknBpxj5VJjcpPvGX6CUMHfnBR4wGAY6txSJBV0aG6SFEIrhUVffw
-   cHid0nLevG+VjLwWFDGGzCqHu+vcEgR46NhnM68Am+EpPqjYOrgHf4mom
-   iPUV6JX3e73R3H64Xa8/C/yeXmxtyQbPSLuyecSH+IXIDjvmQ1U/neWYT
-   AQtizXajYL+Yux0coTzSxm9kznaCTOf/+sEvtc04fSFUB601l2QHSDm3q
-   9qneQ/p8MK7RnXGbcNxoZkGHwcSKtKwUccCqm7hctU1DfLsishRofJDHh
-   pyzt9FDAzrZaxPwhTVBjFbJf3f1ruSL2p+xLvvEIe2PHP4tAdbtSbdDfr
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="405905035"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="405905035"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 10:55:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="930419424"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="930419424"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Mar 2023 10:55:10 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pha0m-000Jmg-1k;
-        Wed, 29 Mar 2023 17:55:04 +0000
-Date:   Thu, 30 Mar 2023 01:54:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: arm-linux-gnueabi-ld: error: .btf.vmlinux.bin.o is already in final
- BE8 format
-Message-ID: <202303300146.J8Lk7uAS-lkp@intel.com>
+        Wed, 29 Mar 2023 13:55:05 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBE6A6;
+        Wed, 29 Mar 2023 10:55:04 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id z19so15714634plo.2;
+        Wed, 29 Mar 2023 10:55:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680112503; x=1682704503;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nFMskmbDwPlyi0rZMeVPTGVdXdnjVvoj5ddZvdjzimg=;
+        b=M0oRUUq3AEXq9SjE4Tww/aJLDdp4yDXUCOOuy9Tp4jTCX9DQw0oByObXolZ2A3c4hp
+         qLXpUdZs7hYIqsghvbuZiVhDkkf/EGw815TZl38xuyplkMu0sXKjJKRMqq/Yw4/TJoen
+         mCVemyoH61OHEUgohv3tKTO0En0hUmS/bn7k+2mCnAUeRkX2RdqdH5/3FxzuZMlWpaA/
+         8XFNjSK1Iq2mPNqY3CZ+pazPcCFM1hRG9hUaPKbEUf/QYWKaNdPqUDxlyZgYpsI6v1/C
+         8eOSHYeSu1qNOIyiGiWfRzyql0uQUASdD9OAygLFmy+EklLQo+2D60VHyXv7HwWrCoLr
+         44eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680112503; x=1682704503;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nFMskmbDwPlyi0rZMeVPTGVdXdnjVvoj5ddZvdjzimg=;
+        b=WOgdIG/ukoirQnLtPwK9WCjmeW3U69CcLCv55ooYdSjfSlGSSONTPZU61Pr7akszeV
+         OFh6TZk2Lp7r8+cgJqfwz8oNkBiwsULKi34sMfWfhDvFVH16I7nRih5hs1L7PenZKoVX
+         qQLBea3kgUYXhTTHcGH4CSZAT5YqFlrblE7J1IxYCkQoYsJgKj1TPjzbhf/TU2kJeBFG
+         znzvFjP9HXmrE5AVGwIOYldlO9jVr5gRFiGCf694JoQ5YO2gr9xrewD9d8GTF4yT8Zfz
+         neU160AjD2f5eZmxZsiVEgua76WU+OpgueBOzmL0VLB/0g1GAR5r+B+txSwsGIVRkfJ9
+         e1vw==
+X-Gm-Message-State: AO0yUKW0BwKtig+a/ucGQiGKaoaPsh7QliTgJ0to0YdtaJwWIEA4qkTI
+        WoJWv6PBV8awfGPl0aAMuWU=
+X-Google-Smtp-Source: AK7set8Y6YQ8WF/DlbZ0mclLLM8Wb2iN3vrmxB6+UI99d2kpfyLc27k3rfTfXobkoiYzONoLMI3ohQ==
+X-Received: by 2002:a05:6a20:be10:b0:d8:cb1a:f4e5 with SMTP id ge16-20020a056a20be1000b000d8cb1af4e5mr18322789pzb.23.1680112503609;
+        Wed, 29 Mar 2023 10:55:03 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id j11-20020a62e90b000000b005825b8e0540sm5682278pfh.204.2023.03.29.10.55.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 10:55:02 -0700 (PDT)
+Message-ID: <6c54bcdc-b65b-1738-4d99-51b5d98e996c@gmail.com>
+Date:   Wed, 29 Mar 2023 10:55:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 6.2 000/240] 6.2.9-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230328142619.643313678@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230328142619.643313678@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,37 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On 3/28/23 07:39, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.9 release.
+> There are 240 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.9-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-FYI, the error/warning still remains.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fcd476ea6a888ef6e6627f4c21a2ea8cca3e9312
-commit: 5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3 ARM: rework endianess selection
-date:   12 months ago
-config: arm-randconfig-r023-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300146.J8Lk7uAS-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303300146.J8Lk7uAS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arm-linux-gnueabi-ld: error: .btf.vmlinux.bin.o is already in final BE8 format
-   arm-linux-gnueabi-ld: failed to merge target specific data of file .btf.vmlinux.bin.o
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Florian
+
