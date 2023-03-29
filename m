@@ -2,223 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DDD6CF634
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 00:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 155066CF636
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 00:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjC2WKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 18:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
+        id S230302AbjC2WLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 18:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjC2WKB (ORCPT
+        with ESMTP id S229449AbjC2WLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 18:10:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C456059DA;
-        Wed, 29 Mar 2023 15:09:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EBFCB820F8;
-        Wed, 29 Mar 2023 22:09:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834D0C4339B;
-        Wed, 29 Mar 2023 22:09:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680127769;
-        bh=Pkw+JnlC6QcBvC6P1F68Al5nhlo1P1BkPpRe/KS8NyE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=lBEMRaFdPEO3+9GcLR/ts2W9xwoGi9D+NUoBcP2zQ9THqzbAO0y+qB7+zmosEFz/7
-         4KVb49bU3JsXn1j0xcJLfIO6I5wVYdReixvd0qnwFmBH/gybNaJ9FW01WOSyfIGW/u
-         N1KuR6WIDDyknzMKhR3y88EzySa3JS8Iul0Wk64qkKyala8roZpPJUPLW3cC7rlzJo
-         TMh/Sywy+V22ayxXw+W6YWRSMrZhBeXW8aJQ6M1S8Pwr9/aFKwZO5qDHKKKhzj06Aq
-         IibXSyZp7xtQAizxozaZDcejnuy2YxBnbrDaB6my7Y6+OQlZxrbCuu0rQKkQRW8bxX
-         Qu1b52UGrUqcw==
-Date:   Wed, 29 Mar 2023 17:09:27 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
- error recovery
-Message-ID: <20230329220927.GA3086137@bhelgaas>
+        Wed, 29 Mar 2023 18:11:36 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF33E1FD8;
+        Wed, 29 Mar 2023 15:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680127896; x=1711663896;
+  h=message-id:date:subject:from:to:cc:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=hd8FFbXtg1JBpZQRDfqYJQge/OpcFpiBWjz3v1wTvDs=;
+  b=bZ0TZ5gE947rrKa91V7cTxxx37u7UmG944H3obOOrVheYzZ2LHoGS3yB
+   tja33/K3VQ3PN+f3n2iWPj+Bas5NtW/gmE6M2W3XkM1n/+6RT2kvbn/gr
+   B7rlBzpkBKSvP8JtDvOJl8/h7Q5eg5sIOc7tqu3sOHrZ71pUEwy+sFo3U
+   H+JUPRgqJrSCnoyUSWRIDjVTjAQZCLoPyc1TWGsPTgddAJDvQVVi1TWPR
+   nnfiQ0aTYcRFicBCjGCE6TYhwyyT63GeVhoawMdhos7B70tuWvi2oqS32
+   907OBABEoOb4k5Mbmq7O4efeq5a8W817AbFmTco/xpodiCLHYjfpTj0/K
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="343458092"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="343458092"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 15:11:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="753760660"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="753760660"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga004.fm.intel.com with ESMTP; 29 Mar 2023 15:11:34 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 29 Mar 2023 15:11:34 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 29 Mar 2023 15:11:33 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 29 Mar 2023 15:11:33 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.41) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 29 Mar 2023 15:11:24 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ii1KbE9yPwvLc4PQJ04iYdOrs2x9/9E0wclZ9FsETyGGv6+uYlupI1BQTDVKsbg1wXQKVWvAaDU4WYtD64kkmxPsbBemkyyhIj5X7GF/KIj6xm5Jcn3E+HFxZZUDJFJ8xTTxCaXceZr2jAsYr72C2vsu1nmRHGmMKR5bJ49uY+Oo2igfwJ57kvZOowpfpCWcb1fcMc7LQ2NdFYkfa/pS6bGTSRDu6m6JMvRaskEEO86l6WX5wyvCWaexVVNsaJgzG1qrWckMBjA/66GCMEqU0ccP0bajhKWyxO4bDuG1fICkOC4NS09fghgcnlsTCrN0VqVtD/mz/jSFENWrepy8Lg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hd8FFbXtg1JBpZQRDfqYJQge/OpcFpiBWjz3v1wTvDs=;
+ b=gQj7WewGaoagTe9VLyKowiW5zrk8dAyiew5l4oi3oAYXgqMevZIyBXcBkSxYxo+J+tkVA6n/E28xX6uZUVSkqSRGEfwk73tsNrOvlseqDqVlU0dTzRGfYjzKiS22rbcsvlrqLw8/zJ6sCbhfrBguQfxccU1Rlva5bWBQ3lf3C6+7Hynv+IN1wHrBneeXoxgCYeL4PX65eUwLqQYfHQSTiVdiHRzRKsU9kmN/wvqz45REf4LFVjeMCoZ43mYZw0LoC19uAHwzTtgR3sjSMFLlEhroaBsJFZ8nXHtl1E56BQhEDr17iKJed7Fe87tfdOpFQwlV/Ax4/6ozX2UYX1paOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by BN9PR11MB5354.namprd11.prod.outlook.com (2603:10b6:408:11b::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Wed, 29 Mar
+ 2023 22:11:03 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::d651:ac39:526d:604f]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::d651:ac39:526d:604f%12]) with mapi id 15.20.6222.035; Wed, 29 Mar
+ 2023 22:11:03 +0000
+Message-ID: <444b4a41-2edd-2eb1-70d6-9bd4f70c6c78@intel.com>
+Date:   Wed, 29 Mar 2023 15:10:59 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH V2 7/8] vfio/pci: Support dynamic MSI-x
+Content-Language: en-US
+From:   Reinette Chatre <reinette.chatre@intel.com>
+To:     kernel test robot <lkp@intel.com>, <jgg@nvidia.com>,
+        <yishaih@nvidia.com>, <shameerali.kolothum.thodi@huawei.com>,
+        <kevin.tian@intel.com>, <alex.williamson@redhat.com>
+CC:     <oe-kbuild-all@lists.linux.dev>, <tglx@linutronix.de>,
+        <darwi@linutronix.de>, <kvm@vger.kernel.org>,
+        <dave.jiang@intel.com>, <jing2.liu@intel.com>,
+        <ashok.raj@intel.com>, <fenghua.yu@intel.com>,
+        <tom.zanussi@linux.intel.com>, <linux-kernel@vger.kernel.org>
+References: <419f3ba2f732154d8ae079b3deb02d0fdbe3e258.1680038771.git.reinette.chatre@intel.com>
+ <202303291000.PWFqGCxH-lkp@intel.com>
+ <d3eb55ac-02c1-616b-830d-60ad752f42b4@intel.com>
+In-Reply-To: <d3eb55ac-02c1-616b-830d-60ad752f42b4@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR05CA0032.namprd05.prod.outlook.com
+ (2603:10b6:a03:c0::45) To CY4PR11MB1862.namprd11.prod.outlook.com
+ (2603:10b6:903:124::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230315235449.1279209-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|BN9PR11MB5354:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9b5e8524-46e2-4ce9-4c14-08db30a27bee
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: REzoj6uJAbbSvndsBgd8iB4FgxTqkz6lceS+Uus/M1DuMRh4Xl1U8Y6/RAeaRAWNb/0xHnMF/ak8vTu0D5qbe7K9dBRYUrKxadWtp315w6hvzeHn208nQTx7nqKlmAwpifv0AzCILkq7g7f2p2l4XrcvezTA8aQhlZ1wP5LzWYSGWCv73dA7oabTumN7Z8qm6wNfPjgSrJ4jIHceazML4TZWGM56cyLrzw9PWWYpxgA3H+7dvsSxUJ2whbJ89vUYeOPvOjkMFWque+afEDcmub77n0sp0krelxJSDh9E9TCreiXYyC1rgpZOEl1OB1xuwt6hcYdtSuXopkz6uyT/lIR9noZytr2dGV2aAEpg+W9Hn8IsQ5/vlcLYZXoHapzLUZbhBaMfUDTJhu4VA7VCQeG4KE2lERAru0UuBC+8fcQMkDmA3OJU/7fsX1CLtI+EcurBdwp4KN6YgsLzYMSN21/q1JUdxJWXpEhZGgQbaAm5V2hjzVNW5ALnCTa8zdQ9O9B0oM//sUK1yiRhU2hH8eqTEoXMXOnJX0dZyNhBbEIJRZ5Vpu5KKcFpDjfyDDvlXs1lZF8kGwc8GbxX4ZV/IIknNh+Md2bLRPKz6z+1CfW+raeicz/ZJ+FAsOZaXM63zmfBKn4XwbTW5uygGXpv/w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(366004)(136003)(346002)(396003)(451199021)(26005)(6666004)(82960400001)(53546011)(38100700002)(966005)(6486002)(2616005)(478600001)(186003)(44832011)(5660300002)(2906002)(8936002)(6506007)(7416002)(36756003)(558084003)(316002)(31696002)(4326008)(6512007)(41300700001)(86362001)(66476007)(66946007)(8676002)(66556008)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?REQwZUNEcDByVjJMTHZQNmR3cXUwUmw2N1lPbHZCT0RldzhOZHN5VGQxWjVD?=
+ =?utf-8?B?TGhaUzVNd0prQ2lEQi9nTTh4QjluUWVKOVFKdWJjT0pTMUx4N3dsRnpCRUFt?=
+ =?utf-8?B?WUpmbFMzZ3l6YytwRkJrN1kyK0Q4dkNRNk5CT2ZaRU0wMGJERE1DZUlaSDFT?=
+ =?utf-8?B?dEkrcUdaRXVSRlU5LzZmTGJPSEJjSEJHaUgxMGhEeVh1MW5Kb2ZwY3k5S2Jz?=
+ =?utf-8?B?OFFqTjl5dUYwTVVkVlc1VzJLVnJjQnpwN2FrOHhRTXRxRkpycjlVWkhqNmxt?=
+ =?utf-8?B?bmtsN1NkUDJWNTNuUHBhb0hYaHE3V1NNMWdDUUd3TnFuNys5aXNIQ09Ma04w?=
+ =?utf-8?B?QUhFdDRoelJqV0xTZkxaZFBJQU5KS1lFUnZ0anRHeWJXdmpYNE9VaExzSzJI?=
+ =?utf-8?B?dnAvbEpuWURBN1ovZkNxK0I3SmxjaXE5RXpSc2lRbkZ5UVFtMW9aZTBHTmdX?=
+ =?utf-8?B?bEpjRGVyZkxIZkZhRzd0cGJWY2s2QVpMUWtndWt5bThHZ1J5dWRra2NHOW41?=
+ =?utf-8?B?VENCYVZUVllyaW1aYzlxamdWOGhPeTZBbUs0MlYxbDY2RXhXT2Y1d1hFTlBn?=
+ =?utf-8?B?YURibmgzd1ZadU5vWTBsQ3A5TG5DS2JVZXVkWjQwOVFuUWk1Njlic0JBckh5?=
+ =?utf-8?B?UUR4NGtvcE1vTXhBQnFJaTBNS2dvYXBkTVpOQkpyUTVyTVViNEFZYXBmakhr?=
+ =?utf-8?B?aGxRYm9HSVkwYndpSnQvclZrRnhaSTN4YjJtaG5wdXRJaFJZa0dHNUJKeW9v?=
+ =?utf-8?B?UnM2blJDRUl1VnZwR2hKK2N0Wmx2Y1NnQTgvNzh5b09BTk1VVnhEd3dRYmlP?=
+ =?utf-8?B?bnhKRk4vNmlWL3ZKeDMvR2JoMFRnckMrUkdPTXA5NS9yNHlDWm1aTVFMZkFo?=
+ =?utf-8?B?MTBIRzRuelBWdC9mY0lURzY1RzRRM05paVZCZ3R0M2VaSmQ0VTlnVUoveXZR?=
+ =?utf-8?B?TGlzUjd6Z1craHh1ZHpObHp1T0ZiaWN2RnVTR1BLQkNkT2dGczVnTUV5VUdN?=
+ =?utf-8?B?WnlaVUU4NkhFT2hob3lwL2JabnMzZEJCcDNYeGpVWWFsYVIvbnhvMzFmNlVt?=
+ =?utf-8?B?TFUzL0F2d0F4RHdXSE9TMDJZcmJVSjhlSXNTK0hFZy9FZXl6aEdmWDhYcWdQ?=
+ =?utf-8?B?ZzdhM3ZFaFBMeXF3Smk2cVluMFFRTTB2WW9lMjNYRnVtR1pENHpYZncvWW1N?=
+ =?utf-8?B?bWZmVmN2M0dPMGxiUmgzenNLM1pEN0xIR2UxbEMzZytFSlR3V0ttanpPcmlK?=
+ =?utf-8?B?M2RWWjVNZFZaLzBaZVAyYTJUTEc4b1kya01VTWYvVVVldWJyOW9MUXBzSmo1?=
+ =?utf-8?B?aElmZUJkbFdpT2ZtMCtrcW5WekltdzFNVDhYL1Nqb21EWXVNcVJNbUNSMmha?=
+ =?utf-8?B?cUlKZXczYVFiOXlURzRsQVN5MkNTZDZMZzRkeHdSMVljdnhvTEFKUmZPNlJR?=
+ =?utf-8?B?MklxMmlTWDJIWm9mWGJGYkwxcm1uNy9Zdk1IM1pVb1IvVlJlRUtxeWd2Mk8v?=
+ =?utf-8?B?cWtyUlAyTnZOa3FPOFdGOTNuL1JpTmE0WS9zdndvM1dpTnExcGhIbk9ycnVB?=
+ =?utf-8?B?dGsrMytHMXIranQzb3RoVUpSMURXRFpPRzYxQXkxV0o0d21qWEtTdGtld2J5?=
+ =?utf-8?B?MnNNUHgveWYxNWZGS3ZkaW5MSTlRWTFpUC9ucmVqYTNDM2xRcWhENVJLM2dw?=
+ =?utf-8?B?eHlZWUZXT0dzb3V0YXh5ZFpMZXBlSHprWXhXektZNlNsTnQ3aGlCL0pzUFdS?=
+ =?utf-8?B?VExiNVY5bXdnaURRZWZ3RTRiMjVnMDFldnVzemxmQW9WN1JkS0I5aTR6bDV6?=
+ =?utf-8?B?R2ZWSVlEdmJGWFkzU2ExdTMxQUJuRi9Bc0o4ZTNqUkJBdGNINm4vbkVpSWFC?=
+ =?utf-8?B?RDNIcWhMa1loS0lKMVNPMUVHa2lhV3QyQ2EvUC95N0NSTXphUmk3dEZHTGtz?=
+ =?utf-8?B?TW5jR2U0a2xTRHA3a3drUGh3dXM2M3UzZ1hUL0s3dU5mV2JQNGZ5cUp5SlRW?=
+ =?utf-8?B?dGM5VklPa21JK2U5TVQ5K25TKzN2cDhCLzVZaGR6Z1FVa2tYTzdHQ25YOWky?=
+ =?utf-8?B?clQrdnROSWRqejFIaTVpOXNnMk1KOWpxbHpxK0VqcWVDOWxLLytrS1NaZ20y?=
+ =?utf-8?B?SEhMSjdFLzZoNHM1VU5Qa3N1TGptTzlaMm5GZ0dmUmw3YVFHS2RzN2tqUUhC?=
+ =?utf-8?B?dEE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b5e8524-46e2-4ce9-4c14-08db30a27bee
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 22:11:03.0487
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Hjvg8KYNayd2XcuwTD3TVlivEr9DcRXdAIfnuiJl9m3qXWY1rqb/Hyy0jjeiuwynOsgOwX860j8Q90VVkmgJNhbF37d8IXnrxG5upy1O3gs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5354
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Jonathan, author of 068c29a248b6]
 
-On Wed, Mar 15, 2023 at 04:54:49PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> Commit 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
-> OS owns AER") adds support to clear error status in the Device Status
-> Register(DEVSTA) only if OS owns the AER support. But this change
-> breaks the requirement of the EDR feature which requires OS to cleanup
-> the error registers even if firmware owns the control of AER support.
-> 
-> More details about this requirement can be found in PCIe Firmware
-> specification v3.3, Table 4-6 Interpretation of the _OSC Control Field.
-> If the OS supports the Error Disconnect Recover (EDR) feature and
-> firmware sends the EDR event, then during the EDR recovery window, OS
-> is responsible for the device error recovery and holds the ownership of
-> the following error registers.
-> 
-> • Device Status Register
-> • Uncorrectable Error Status Register
-> • Correctable Error Status Register
-> • Root Error Status Register
-> • RP PIO Status Register
-> 
-> So call pcie_clear_device_status() in edr_handle_event() if the error
-> recovery is successful.
 
-IIUC, after ac1c8e35a326 ("PCI/DPC: Add Error Disconnect Recover (EDR)
-support") appeared in v5.7-rc1, DEVSTA was always cleared in this path:
+On 3/29/2023 7:42 AM, Reinette Chatre wrote:
+> I'll send a separate fix for that.
 
-  edr_handle_event
-    pcie_do_recovery
-      pcie_clear_device_status
+https://lore.kernel.org/lkml/310ecc4815dae4174031062f525245f0755c70e2.1680119924.git.reinette.chatre@intel.com/
 
-After 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
-OS owns AER") appeared in v5.9-rc1, we only clear DEVSTA if the OS
-owns the AER Capability:
-
-  edr_handle_event
-    pcie_do_recovery
-      if (pcie_aer_is_native(dev))      # <-- new test
-        pcie_clear_device_status
-
-So in the case where the OS does *not* own AER, and it receives an EDR
-notification, DEVSTA is not cleared when it should be.  Right?
-
-I assume we should have a Fixes: tag here, since this patch should be
-backported to every kernel that contains 068c29a248b6.  Possibly even
-a stable tag, although it's arguable whether it's "critical" per
-Documentation/process/stable-kernel-rules.rst.
-
-> Reported-by: Tsaur Erwin <erwin.tsaur@intel.com>
-
-I assume this report was internal, and there's no mailing list post or
-bugzilla issue URL we can include here?
-
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> ---
-> 
-> Changes since v1:
->  * Rebased on top of v6.3-rc1.
->  * Fixed a typo in pcie_clear_device_status().
-> 
->  drivers/pci/pcie/edr.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/pci/pcie/edr.c b/drivers/pci/pcie/edr.c
-> index a6b9b479b97a..87734e4c3c20 100644
-> --- a/drivers/pci/pcie/edr.c
-> +++ b/drivers/pci/pcie/edr.c
-> @@ -193,6 +193,7 @@ static void edr_handle_event(acpi_handle handle, u32 event, void *data)
->  	 */
->  	if (estate == PCI_ERS_RESULT_RECOVERED) {
->  		pci_dbg(edev, "DPC port successfully recovered\n");
-> +		pcie_clear_device_status(edev);
-
-It's a little weird to work around a change inside pcie_do_recovery()
-by clearing it here, and that means we clear it twice in the AER
-native case, but I don't see any simpler way to do this, so this seems
-fine as the fix for the current issue.
-
-Question though: in the AER native case, pcie_do_recovery() calls
-both:
-
-  pcie_clear_device_status() and
-  pci_aer_clear_nonfatal_status()
-
-In this patch, you only call pcie_clear_device_status().  Do you care
-about pci_aer_clear_nonfatal_status(), too?
-
-The overall design for clearing status has gotten pretty complicated
-as we've added error handling methods (firmware-first, DPC, EDR), and
-there are so many different places and cases that it's hard to be sure
-we do them all correctly.
-
-I don't really know how to clean this up, so I'm just attaching my
-notes about the current state:
-
-  - AER native handling:
-
-    handle_error_source
-      if (info->severity == AER_CORRECTABLE)
-        clear PCI_ERR_COR_STATUS              <--
-        if (pcie_aer_is_native(dev))
-          pdrv->err_handler->cor_error_detected()
-          pcie_clear_device_status
-            clear PCI_EXP_DEVSTA              <--
-      else
-        pcie_do_recovery
-          pcie_clear_device_status
-            clear PCI_EXP_DEVSTA              <--
-          pci_aer_clear_nonfatal_status
-            clear PCI_ERR_UNCOR_STATUS        <--
-
-  - Firmware-first handling: status is cleared by firmware before
-    event is reported to OS via HEST
-
-  - DPC native handling:
-
-    dpc_handler
-      dpc_process_error
-        if (rp_extensions)
-          dpc_process_rp_pio_error
-            clear PCI_EXP_DPC_RP_PIO_STATUS   <--
-        else if (...)
-          pci_aer_clear_nonfatal_status
-            clear PCI_ERR_UNCOR_STATUS        <--
-          pci_aer_clear_fatal_status
-            clear PCI_ERR_UNCOR_STATUS        <--
-      pcie_do_recovery
-        if (AER native)
-          pcie_clear_device_status
-            clear PCI_EXP_DEVSTA              <--
-          pci_aer_clear_nonfatal_status
-            clear PCI_ERR_UNCOR_STATUS        <--
-
-  - EDR event handling:
-
-    edr_handle_event
-      dpc_process_error
-        if (rp_extensions)
-          dpc_process_rp_pio_error
-            clear PCI_EXP_DPC_RP_PIO_STATUS   <--
-        else if (...)
-          pci_aer_clear_nonfatal_status
-            clear PCI_ERR_UNCOR_STATUS        <--
-          pci_aer_clear_fatal_status
-            clear PCI_ERR_UNCOR_STATUS        <--
-      pci_aer_raw_clear_status
-        clear PCI_ERR_ROOT_STATUS             <--
-        clear PCI_ERR_COR_STATUS              <--
-        clear PCI_ERR_UNCOR_STATUS            <--
-      pcie_do_recovery
-        if (AER native)
-          pcie_clear_device_status
-            clear PCI_EXP_DEVSTA              <--
-          pci_aer_clear_nonfatal_status
-            clear PCI_ERR_UNCOR_STATUS        <--
-      if (PCI_ERS_RESULT_RECOVERED)
-        pcie_clear_device_status
-          clear PCI_EXP_DEVSTA                <--
-
->  		acpi_send_edr_status(pdev, edev, EDR_OST_SUCCESS);
->  	} else {
->  		pci_dbg(edev, "DPC port recovery failed\n");
-> -- 
-> 2.34.1
-> 
+Reinette
