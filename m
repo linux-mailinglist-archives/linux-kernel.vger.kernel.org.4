@@ -2,204 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D806CDA35
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973256CDA3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjC2NPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 09:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S230136AbjC2NQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 09:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjC2NPG (ORCPT
+        with ESMTP id S230125AbjC2NQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:15:06 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2045.outbound.protection.outlook.com [40.107.244.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8E23AB4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:15:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AtwBIoX2D37DW5Sgi9wRDnqb7Vo+MygWpODxSGx1FaBispKJ+VZyYIQxifJ1ehuX4oWUdQFi9YuFk4KCyC+b3UsRrUL27Sq56m3WBiRns3BwyaleqvT0kERGBnzKwhgY9kfRLaRf7zHONtPA6SENWQwPz83BC4yW3Mr7AEijRKeTgyIHSCjI4UlNSGyHPOBlvYmyFItq5+NXsFP9cT6CpdSvmjMjkBCabhTFiZuTlI2qQoOYj6lfTW+wcvrbmqfxysBB8M4pTdgwigYhx0FLgKjeDrkam9aaDgmBC8z+xfjmKH8ps2qlBV30riob4V+compnvjVptNLcyPEvlpEczQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m9OtoTMLsupxOVOe+8qQ1XONW9dnyYnvy0nSOknJ7PQ=;
- b=m39QKEcRWIC/xe+/3ca8lHy9LdJIllTjde9oiGekADvgvxVT4ma0zFZKnN/DH3mVLFFbk7G5VrIpT8BuK4K1ZIJTO3Tmy2OcKqYJi7GqGJ24lsJrADFUIW/1jnmuXS9SkB3qD3TsX0ii+a7raacbEfIg8Jd5FNZmbZFXZYPP1qKfY+QPQVpHePvM3hi/uXo6enfzOa5L6n8B6JtkT0Xqn7KN4Bn/xex+iFfgdH9WH6kOUU6oJUGzINmUJRo/NZ4KeLkcUf7FH/RzuhgmYz+y+Et4YTH45mfhHskW6En8P+DHn/7M3ssBZbDr/zJTvWkuzEwVeLu/FJyZYmlXX+7FKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m9OtoTMLsupxOVOe+8qQ1XONW9dnyYnvy0nSOknJ7PQ=;
- b=fHK9JrS4y6FT85AmasS/Gt37alUombJd6GGl64dhMSU6YwIZcqA3hiFcay4Y2BtOAwKIJDALC7q/rME3f6P1T1UAV5v9gPJoTRpRkqkc8vKFrBu48t1C7DAuydpdgZMW/4dKWrWGe3JM5s9XU24ewmSRcU1wQFKpqk6ocM6F/Gc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM4PR12MB5392.namprd12.prod.outlook.com (2603:10b6:5:39f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Wed, 29 Mar
- 2023 13:15:02 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4624:dc39:943e:6ae]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4624:dc39:943e:6ae%5]) with mapi id 15.20.6222.032; Wed, 29 Mar 2023
- 13:15:02 +0000
-Message-ID: <a1a57732-6b1c-5572-e59f-ca5e33c5a323@amd.com>
-Date:   Wed, 29 Mar 2023 15:14:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] drm: test: Fix 32-bit issue in drm_buddy_test
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
-        David Gow <davidgow@google.com>,
-        =?UTF-8?Q?Lu=c3=ads_Mendes?= <luis.p.mendes@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Arthur Grillo <arthurgrillo@riseup.net>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230329065532.2122295-1-davidgow@google.com>
- <20230329065532.2122295-2-davidgow@google.com>
- <ceb0b1e8-6c7a-8564-156f-fcf0f0e4a95e@igalia.com> <87fs9n4x02.fsf@intel.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <87fs9n4x02.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0125.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:97::20) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Wed, 29 Mar 2023 09:16:20 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690D4423A;
+        Wed, 29 Mar 2023 06:16:17 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32TDG7CO002426;
+        Wed, 29 Mar 2023 08:16:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680095767;
+        bh=Kb+bU9aumKLwGlaVak3k1ORwadD53cqmSrx7lYUvUiA=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=xr1eKtEEK0RNCUip+ccE1hWfqlwzujSfi+6TU1xrNX7H6/uFtlGFJDPz/y2+riI5B
+         aASVj8A97ertKSCqZJPYkiLjcKZmBMQ8z7AxNwE663b1r/XJiTuyftkfPG2xt9MxAT
+         hfFtdouTWjXf+AyY3HZWclwNfsk/QF8/AlMXStNw=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32TDG6xD007358
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 29 Mar 2023 08:16:06 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 29
+ Mar 2023 08:16:06 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 29 Mar 2023 08:16:06 -0500
+Received: from [172.24.218.54] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32TDG0ih031074;
+        Wed, 29 Mar 2023 08:16:01 -0500
+Message-ID: <5382c15d-84dc-2255-8fc5-9192917fd4a5@ti.com>
+Date:   Wed, 29 Mar 2023 18:45:59 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM4PR12MB5392:EE_
-X-MS-Office365-Filtering-Correlation-Id: e6dffee3-e5e4-48d2-59fe-08db30579b18
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /oCntLyk0U5JsAGCVrmrUIsafujDRsUb8+yilF3hjQuTDOrUrqElk5w74uYmRxCwhraWrzoG3d06HdLG2192f5QQ+o293cGWAneW5Aq5sT+K1WDVhO+fPEnSP6fK30oA04g5oFyNPnzCmqYzsDTFJI/YtZR5aucPeKnN+iok+Jxi28W8qcsNCGOAJKG1SWR++Jgvph9Qbdij8O2zY9bMuFoIXxdsAtwlePwbu99NkwE269QQdE0BI69LbZDFKJleDSazpo0fmQgUFKA2FBghuPNWOBZ9TRc6LqiGTwuLtFJu83LNiqpzeAA30/H+9iPyw/4XG/EFI7mKYHPL4T9L+GD/N7xJ1Xr0dt02w09JE8eU6dGXyHLQEo/Oi1u6KV4VKSOXtgfUNPmUCg1AvFN97lt/4ZQPEyOggmD8h4jURXhjKGceqTrTLcghcw7F7hayw4JcuTSHUna/jGcWrZLPDeADHS4DrTyNkopRZjHxJ+XOdzraX7gRw8hWn7uixdLonii9fzxOgOv9cj5yJOEQo8RKsAb4Y2sQBjNNbffvyNPNsyvD4auUTNFVngWcgAj9U9yZSiLpE7voeahBSAx0MlwTh0qNnac2pErf+62tKoICkgIc8u4rYHx/HdWUtTck
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(346002)(396003)(39860400002)(451199021)(316002)(6666004)(478600001)(31686004)(2906002)(66899021)(6486002)(38100700002)(6512007)(6506007)(966005)(53546011)(186003)(66946007)(66556008)(110136005)(2616005)(66476007)(921005)(83380400001)(66574015)(8676002)(4326008)(41300700001)(8936002)(7416002)(5660300002)(86362001)(31696002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z0s2RHhDdHZEcHQ0NVQrTVVWbjgwOHdHYXY3YUUyOTJmbkQ5NVFHekZxMFBH?=
- =?utf-8?B?ZWxpb2M0ZmNMcTF2L0hvYyt1cDBOZzlWRzUyMlZiSGEvNHVwQVovNVhXMVN2?=
- =?utf-8?B?YmpUTGVTdXJiVmdORzJVNjQ5QURvUmVpS0FvVERyQU05NEZlaGVmazlrK1ZO?=
- =?utf-8?B?bUk3V0R2QTE1WThmcXN6K0JSQmFJWDVxZmd0TW8zSFc2TW8zNXM5dWx1czNT?=
- =?utf-8?B?NzhaQm9tVFZCVnA4dHh3WXJaZWhXalViVlQzdFlvV04vTW10QWhjM2NnVGQw?=
- =?utf-8?B?SVI3ejIwbEYwQXZXeXlqc0NJb1JvV0RIeGo2aXlzcmhxQ2JKYWJ1ZVpTVTht?=
- =?utf-8?B?NENQSFU1V2p0UmprNkVtTTBKaCs3MVVaNmlJRGRpNG5RcWFUaTFlamR2VFI5?=
- =?utf-8?B?eUlTaGZBbWY1b05ubm51MjExY2FDa2NCbVhUczRYdDBrUzlTQ3JQOXFiUHpB?=
- =?utf-8?B?ODVUa3dKZCt6a1lqeEZFYzh2UjV1N3hjWlFXMnRYZ0FaanF3NWdSSmtpcS9z?=
- =?utf-8?B?WEgzc0tsTFE1QVpzRkxDeUx5VFBsMnVhT25EQ1VrMWsrRFRLOGN4ZHozQVVP?=
- =?utf-8?B?VDRndzRuM0xmWDNsT052bkxwUDlOdjk0Nk42TzI4cnp3NW1kZWdpK0xMUWZm?=
- =?utf-8?B?a2lxRkZvQzNnRHJhQ1ErOWljWDVTWUhQKzFGTU9hWDZrdWZQeWxBazhtbEpt?=
- =?utf-8?B?MmFkeU1QbHRZVUFxUEM3bURJYVRZbkhuZForWEJsSlhFZjZ1dEVIb2tiU3cv?=
- =?utf-8?B?RUp1dmJQcXVTWS9EMGNnODZWSmgzbUxFSys0ZU9nTGM1bjB4eUZreVh5V1Qr?=
- =?utf-8?B?YnozNWhhL1E4V3JSWVhkbVVjZGxRQUZpZFRwSUx5eURBeEFMTWFNbHMvWXpa?=
- =?utf-8?B?SVFwcXQ2Z2Vham45eHFHMkUyUjlIckNDTnlORW1BQ0JmaTBTQmRaeG83UjQx?=
- =?utf-8?B?WGpOY1NjaVd0OU8rWTcyNUs2Zm9yODNRb2JrVk1NQ1hwcDVBRjNsa09XVW4y?=
- =?utf-8?B?YnFnV0lrU0VJbFpnL25udGhLL2JNNVRFTlhVUndKSmIrL2NLS2t0TXFuaEc1?=
- =?utf-8?B?cnRSbi9qSU1jNE8rSHFCdFRDMWQ4ZXh2S0Y4ZThoOEJCOU9hUXpyRDlqMUw2?=
- =?utf-8?B?WVM1UDRkV1BidVdXNENFdVdsYlQ0bzZWS1V1SWFlaHV0K2Y3T0I2aFVJZ0FF?=
- =?utf-8?B?Q0VGalYvZ1FIUlh6bUNhVXVkVWhNMWl0cmpBQnI3QkdISGlUcWkyZStia2Nz?=
- =?utf-8?B?OEpDSUJWOWg5ZHcvdHRKWE1Hanc0K3NtZDh2NGg3cVRrZ0pWSnZVZEoyeXNp?=
- =?utf-8?B?ME9SckZTVk9BVnprRFM0NEdpd0loaHBLMENPNEt1d0NPdkxEVXY1OGZBckQ4?=
- =?utf-8?B?dEtoNEtYeDJDZzVQUTU4c3pCNXIvWTRiNVNqNXp3RzRXYzQyM3pUUmdwNTFW?=
- =?utf-8?B?OUk0b0UwUDBxazNIejVmdTlqUURMbzRqQ01waUhDUzJJNEpjWTVlUit5WUVk?=
- =?utf-8?B?bW1tOTg4L25XUmVwYWhhNkpEa1lJbTYxS2ppakRjZ3pPNEM2NnlwVTZXbHFs?=
- =?utf-8?B?U2hUMFpsSFVZVlFRalRTdUFmUnVYV3ArcmZBYWFpUDlZa3VKSHBwNWkzcWdI?=
- =?utf-8?B?b3FyWnhVcjFmaTNzWHJhNEtBemwzcVZMWW1WU3QvVkFnM3FiZDBrbVlMQ0NS?=
- =?utf-8?B?Sjk4ZDB6ak42SGxVc1dwV3Y3c2owOUxrYmcxZ24zdWRZcXM4aGpxa1h3TmNY?=
- =?utf-8?B?NjdrSXJ5UlJ5NUpqdnIxdTYyaHBWWTJma2paREdxVHV3UVRaU2FHcEtXSGhz?=
- =?utf-8?B?Qm1kUWZ1ZnZDc3VISE5mZjlrelg4dkluenZ1UzVDbVlMSG04WTdYSThSdU9q?=
- =?utf-8?B?Kzlsbk9TL1p5WWI5eE00TlF6QmRvZnNFd0lodVgvRlo0MXJqejhpWGNITUR5?=
- =?utf-8?B?U0RTVGkramVnR283SWtiUGFTaDdkVVV5ZDVJNDVOOUlJMzdydTFVSFhPZWdi?=
- =?utf-8?B?YVV0OVFMQitJZTRBejBFeldFbnNuOVBNNlpyUTBJSWZNUEdVMUZpUE03M05k?=
- =?utf-8?B?U1oxODM5WTBMenQ3bmpIZ29KQXVkaW95UU8rbzJmMG1YNldzaUhib2xWcUN0?=
- =?utf-8?B?VDdLZy9FYlhWMStPTDh1UmdkSkU5YnpncHZRelFtNlB3eHVlMDRUaG9WMWtF?=
- =?utf-8?Q?nBr+3j8suCxVdWIdMsE1RvhPmBD+6RcOHQKxZyaGKJpt?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6dffee3-e5e4-48d2-59fe-08db30579b18
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 13:15:02.6855
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: k9B824B9nyLHQmaMYzg8ULXDg9QeL5RvvM/gaoPRje+MxLb7+F/wzHeHht1YG3wB
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5392
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 3/3] remoteproc: k3-r5: Use separate compatible string
+ for TI AM62x SoC family
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <andersson@kernel.org>, <devicetree@vger.kernel.org>,
+        <p.zabel@pengutronix.de>, <linux-remoteproc@vger.kernel.org>,
+        <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-anna@ti.com>,
+        <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
+        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>
+References: <20230310162544.3468365-1-devarsht@ti.com>
+ <20230310162544.3468365-4-devarsht@ti.com> <20230317161757.GA2471094@p14s>
+ <f08e550b-2f15-0f84-c0ca-05e0b803481a@kernel.org>
+ <1a24f99a-99c1-bf00-e5e7-1085cfd8faf5@ti.com>
+ <9acd96ab-7987-5cdc-e65b-9f055948eb4f@kernel.org>
+From:   Devarsh Thakkar <devarsht@ti.com>
+In-Reply-To: <9acd96ab-7987-5cdc-e65b-9f055948eb4f@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 29.03.23 um 13:28 schrieb Jani Nikula:
-> On Wed, 29 Mar 2023, Maíra Canal <mcanal@igalia.com> wrote:
->> On 3/29/23 03:55, David Gow wrote:
->>> The drm_buddy_test KUnit tests verify that returned blocks have sizes
->>> which are powers of two using is_power_of_2(). However, is_power_of_2()
->>> operations on a 'long', but the block size is a u64. So on systems where
->>> long is 32-bit, this can sometimes fail even on correctly sized blocks.
->>>
->>> This only reproduces randomly, as the parameters passed to the buddy
->>> allocator in this test are random. The seed 0xb2e06022 reproduced it
->>> fine here.
->>>
->>> For now, just hardcode an is_power_of_2() implementation using
->>> x & (x - 1).
->>>
->>> Signed-off-by: David Gow <davidgow@google.com>
->> As we still didn't consolidate an implementation of is_power_of_2_u64(),
-> I just cooked up some patches to try to make is_power_of_2() more
-> flexible. I only sent them to the "CI trybot" for a quick spin first,
-> will post to lkml later. [1]
+Hi Roger,
 
-In the meantime I'm pushing this to drm-misc-fixes unless somebody has 
-some last second objections.
-
-Christian.
-
->
-> BR,
-> Jani.
->
->
-> [1] https://patchwork.freedesktop.org/series/115785/
->
->> Reviewed-by: Maíra Canal <mcanal@igalia.com>
+On 29/03/23 13:51, Roger Quadros wrote:
+> 
+> 
+> On 28/03/2023 19:08, Devarsh Thakkar wrote:
+>> Hi Roger,
 >>
->> Best Regards,
->> - Maíra Canal
->>
->>> ---
+>> On 28/03/23 13:22, Roger Quadros wrote:
+>>> Hi Devarsh,
 >>>
->>> There are actually a couple of is_power_of_2_u64() implementations
->>> already around in:
->>> - drivers/gpu/drm/i915/i915_utils.h
->>> - fs/btrfs/misc.h (called is_power_of_two_u64)
+>>> On 17/03/2023 18:17, Mathieu Poirier wrote:
+>>>> On Fri, Mar 10, 2023 at 09:55:44PM +0530, Devarsh Thakkar wrote:
+>>>>> AM62 and AM62A SoCs use single core R5F which is a new scenario
+>>>>> different than the one being used with CLUSTER_MODE_SINGLECPU which is
+>>>>> for utilizing a single core from a set of cores available in R5F cluster
+>>>>> present in the SoC.
+>>>>>
+>>>>> To support this single core scenario map it with newly defined
+>>>>> CLUSTER_MODE_SINGLECORE and use it when compatible is set to
+>>>>> ti,am62-r5fss.
+>>>>>
+>>>>> Also set PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE config for
+>>>>> CLUSTER_MODE_SINGLECORE too as it is required by R5 core when it is
+>>>>> being as general purpose core instead of device manager.
+>>>>>
+>>>>> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+>>>>> ---
+>>>>> V2:
+>>>>> - Fix indentation and ordering issues as per review comments
+>>>>> V3:
+>>>>> - Change CLUSTER_MODE_NONE value to -1
+>>>>> V4:
+>>>>> - No change
+>>>>> V5:
+>>>>> - No change (fixing typo in email address)
+>>>>> V6:
+>>>>>      - Use CLUSTER_MODE_SINGLECORE for AM62x
+>>>>>      - Set PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE for single core.
+>>>>> V7:
+>>>>>      - Simplify and rebase on top of base commit "[PATCH v7] remoteproc: k3-r5: Simplify cluster
+>>>>>        mode setting"
+>>>>> ---
+>>>>>    drivers/remoteproc/ti_k3_r5_remoteproc.c | 59 +++++++++++++++++++-----
+>>>>>    1 file changed, 48 insertions(+), 11 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+>>>>> index c2ec0f432921..df32f6bc4325 100644
+>>>>> --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
+>>>>> +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+>>>>> @@ -71,14 +71,16 @@ struct k3_r5_mem {
+>>>>>    /*
+>>>>>     * All cluster mode values are not applicable on all SoCs. The following
+>>>>>     * are the modes supported on various SoCs:
+>>>>> - *   Split mode      : AM65x, J721E, J7200 and AM64x SoCs
+>>>>> - *   LockStep mode   : AM65x, J721E and J7200 SoCs
+>>>>> - *   Single-CPU mode : AM64x SoCs only
+>>>>> + *   Split mode       : AM65x, J721E, J7200 and AM64x SoCs
+>>>>> + *   LockStep mode    : AM65x, J721E and J7200 SoCs
+>>>>> + *   Single-CPU mode  : AM64x SoCs only
+>>>>> + *   Single-Core mode : AM62x, AM62A SoCs
+>>>>>     */
+>>>>>    enum cluster_mode {
+>>>>>        CLUSTER_MODE_SPLIT = 0,
+>>>>>        CLUSTER_MODE_LOCKSTEP,
+>>>>>        CLUSTER_MODE_SINGLECPU,
+>>>>> +    CLUSTER_MODE_SINGLECORE
 >>>
->>> So the ideal thing would be to consolidate these in one place.
+>>> What is the difference in device driver behaviour between
+>>> SINGLECPU and SINGLECORE?
 >>>
->>>
->>> ---
->>>    drivers/gpu/drm/tests/drm_buddy_test.c | 3 ++-
->>>    1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
->>> index f8ee714df396..09ee6f6af896 100644
->>> --- a/drivers/gpu/drm/tests/drm_buddy_test.c
->>> +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
->>> @@ -89,7 +89,8 @@ static int check_block(struct kunit *test, struct drm_buddy *mm,
->>>    		err = -EINVAL;
->>>    	}
->>>    
->>> -	if (!is_power_of_2(block_size)) {
->>> +	/* We can't use is_power_of_2() for a u64 on 32-bit systems. */
->>> +	if (block_size & (block_size - 1)) {
->>>    		kunit_err(test, "block size not power of two\n");
->>>    		err = -EINVAL;
->>>    	}
+>> Yeah there is quite a bit of common code flow between the two but the fundamental difference is that you use CLUSTER_MODE_SINGLECPU when
+> 
+> I still didn't get what is the difference between the two from SW point of view.
+> What happens if you just use CLUSTER_MODE_SINGLECPU for AM62 SoC?
+Talking about mere functionality, I think there are some checks in 
+driver which expect two cores for this (since CLUSTER_MODE_SINGLECPU is 
+to select one out of two cores as mentioned earlier) but if those checks 
+are handled it would be possible to use am64 compatible and achieve the 
+functionality in am62 and I do remember running it with some hacks to 
+bypass those checks during pre-silicon.
 
+But this doesn't seem to be proper way since bindings say 
+CLUSTER_MODE_SINGLECPU is for dual core scenarios as mentioned in 
+DT-binding [1] :
+
+"AM64x SoCs do not support LockStep mode, but rather a new non-safety 
+mode called "Single-CPU" mode, where only Core0 is used, but with 
+ability to use Core1's TCMs as well."
+
+and to use it for single core scenarios would conflict above definition.
+
+I had also discussed this in past offline with Suman who is the author 
+of this driver and we aligned on not using CLUSTER_MODE_SINGLECPU for 
+am62 due to above reasons.
+
+[1]: 
+https://gitlab.com/linux-kernel/linux-next/-/blob/next-20230328/Documentation/devicetree/bindings/remoteproc/ti%2Ck3-r5f-rproc.yaml#L20
+
+Regards
+Devarsh
+
+
+> 
+>> you have two R5F cores but you want to use only single R5F core albeit
+>> with using TCM of both the cores whereas CLUSTER_MODE_SINGLECORE is
+>> for the scenario where you have single core R5F's only.
+>>
+>> Also the bindings for CLUSTER_MODE_SINGLECPU are already upstream so did
+>> not want to break them either : https://gitlab.com/linux-kernel/linux-next/-/blob/next-20230328/Documentation/devicetree/bindings/remoteproc/ti%2Ck3-r5f-rproc.yaml#L20.
+>>
+>> Regards
+>> Devarsh
+>>
+>>> If there is no difference then you should not introduce
+>>> a new enum. >
+>>>>>    };
+>>>>>      /**
+>>>>> @@ -86,11 +88,13 @@ enum cluster_mode {
+>>>>>     * @tcm_is_double: flag to denote the larger unified TCMs in certain modes
+>>>>>     * @tcm_ecc_autoinit: flag to denote the auto-initialization of TCMs for ECC
+>>>>>     * @single_cpu_mode: flag to denote if SoC/IP supports Single-CPU mode
+>>>>> + * @is_single_core: flag to denote if SoC/IP has only single core R5
+>>>>>     */
+>>>>>    struct k3_r5_soc_data {
+>>>>>        bool tcm_is_double;
+>>>>>        bool tcm_ecc_autoinit;
+>>>>>        bool single_cpu_mode;
+>>>>> +    bool is_single_core;
+>>>>>    };
+>>>>>      /**
+>>>>> @@ -838,7 +842,8 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
+>>>>>          core0 = list_first_entry(&cluster->cores, struct k3_r5_core, elem);
+>>>>>        if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
+>>>>> -        cluster->mode == CLUSTER_MODE_SINGLECPU) {
+>>>>> +        cluster->mode == CLUSTER_MODE_SINGLECPU ||
+>>>>> +        cluster->mode == CLUSTER_MODE_SINGLECORE) {
+>>>>>            core = core0;
+>>>>>        } else {
+>>>>>            core = kproc->core;
+>>>>> @@ -877,7 +882,8 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
+>>>>>             * with the bit configured, so program it only on
+>>>>>             * permitted cores
+>>>>>             */
+>>>>> -        if (cluster->mode == CLUSTER_MODE_SINGLECPU) {
+>>>>> +        if (cluster->mode == CLUSTER_MODE_SINGLECPU ||
+>>>>> +            cluster->mode == CLUSTER_MODE_SINGLECORE) {
+>>>>>                set_cfg = PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE;
+>>>>>            } else {
+>>>>>                /*
+>>>>> @@ -1069,6 +1075,7 @@ static void k3_r5_adjust_tcm_sizes(struct k3_r5_rproc *kproc)
+>>>>>          if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
+>>>>>            cluster->mode == CLUSTER_MODE_SINGLECPU ||
+>>>>> +        cluster->mode == CLUSTER_MODE_SINGLECORE ||
+>>>>>            !cluster->soc_data->tcm_is_double)
+>>>>>            return;
+>>>>>    @@ -1145,6 +1152,8 @@ static int k3_r5_rproc_configure_mode(struct k3_r5_rproc *kproc)
+>>>>>        if (cluster->soc_data->single_cpu_mode) {
+>>>>>            mode = cfg & PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE ?
+>>>>>                    CLUSTER_MODE_SINGLECPU : CLUSTER_MODE_SPLIT;
+>>>>> +    } else if (cluster->soc_data->is_single_core) {
+>>>>> +        mode = CLUSTER_MODE_SINGLECORE;
+>>>>
+>>>> I have commented twice on this before - whether it is soc_data->single_cpu_mode or
+>>>> soc_data->is_single_core, I don't want to see them used elsewhere than in a
+>>>> single function.  Either in probe() or another function, use them once to set
+>>>> cluster->mode and never again.
+>>>>
+>>>> I will silently drop any other patchset that doesn't address this.
+>>>>
+>>>>>        } else {
+>>>>>            mode = cfg & PROC_BOOT_CFG_FLAG_R5_LOCKSTEP ?
+>>>>>                    CLUSTER_MODE_LOCKSTEP : CLUSTER_MODE_SPLIT;
+>>>>> @@ -1264,9 +1273,12 @@ static int k3_r5_cluster_rproc_init(struct platform_device *pdev)
+>>>>>                goto err_add;
+>>>>>            }
+>>>>>    -        /* create only one rproc in lockstep mode or single-cpu mode */
+>>>>> +        /* create only one rproc in lockstep, single-cpu or
+>>>>> +         * single core mode
+>>>>> +         */
+>>>>>            if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
+>>>>> -            cluster->mode == CLUSTER_MODE_SINGLECPU)
+>>>>> +            cluster->mode == CLUSTER_MODE_SINGLECPU ||
+>>>>> +            cluster->mode == CLUSTER_MODE_SINGLECORE)
+>>>>>                break;
+>>>>>        }
+>>>>>    @@ -1709,19 +1721,33 @@ static int k3_r5_probe(struct platform_device *pdev)
+>>>>>            /*
+>>>>>             * default to most common efuse configurations - Split-mode on AM64x
+>>>>>             * and LockStep-mode on all others
+>>>>> +         * default to most common efuse configurations -
+>>>>> +         * Split-mode on AM64x
+>>>>> +         * Single core on AM62x
+>>>>> +         * LockStep-mode on all others
+>>>>>             */
+>>>>> -        cluster->mode = data->single_cpu_mode ?
+>>>>> +        if (!data->is_single_core)
+>>>>> +            cluster->mode = data->single_cpu_mode ?
+>>>>>                        CLUSTER_MODE_SPLIT : CLUSTER_MODE_LOCKSTEP;
+>>>>> +        else
+>>>>> +            cluster->mode = CLUSTER_MODE_SINGLECORE;
+>>>>>        }
+>>>>>    -    if (cluster->mode == CLUSTER_MODE_SINGLECPU && !data->single_cpu_mode) {
+>>>>> +    if  ((cluster->mode == CLUSTER_MODE_SINGLECPU && !data->single_cpu_mode) ||
+>>>>> +         (cluster->mode == CLUSTER_MODE_SINGLECORE && !data->is_single_core)) {
+>>>>>            dev_err(dev, "Cluster mode = %d is not supported on this SoC\n", cluster->mode);
+>>>>>            return -EINVAL;
+>>>>>        }
+>>>>>          num_cores = of_get_available_child_count(np);
+>>>>> -    if (num_cores != 2) {
+>>>>> -        dev_err(dev, "MCU cluster requires both R5F cores to be enabled, num_cores = %d\n",
+>>>>> +    if (num_cores != 2 && !data->is_single_core) {
+>>>>> +        dev_err(dev, "MCU cluster requires both R5F cores to be enabled but num_cores is set to = %d\n",
+>>>>> +            num_cores);
+>>>>> +        return -ENODEV;
+>>>>> +    }
+>>>>> +
+>>>>> +    if (num_cores != 1 && data->is_single_core) {
+>>>>> +        dev_err(dev, "SoC supports only single core R5 but num_cores is set to %d\n",
+>>>>>                num_cores);
+>>>>>            return -ENODEV;
+>>>>>        }
+>>>>> @@ -1763,18 +1789,28 @@ static const struct k3_r5_soc_data am65_j721e_soc_data = {
+>>>>>        .tcm_is_double = false,
+>>>>>        .tcm_ecc_autoinit = false,
+>>>>>        .single_cpu_mode = false,
+>>>>> +    .is_single_core = false,
+>>>>>    };
+>>>>>      static const struct k3_r5_soc_data j7200_j721s2_soc_data = {
+>>>>>        .tcm_is_double = true,
+>>>>>        .tcm_ecc_autoinit = true,
+>>>>>        .single_cpu_mode = false,
+>>>>> +    .is_single_core = false,
+>>>>>    };
+>>>>>      static const struct k3_r5_soc_data am64_soc_data = {
+>>>>>        .tcm_is_double = true,
+>>>>>        .tcm_ecc_autoinit = true,
+>>>>>        .single_cpu_mode = true,
+>>>>> +    .is_single_core = false,
+>>>>> +};
+>>>>> +
+>>>>> +static const struct k3_r5_soc_data am62_soc_data = {
+>>>>> +    .tcm_is_double = false,
+>>>>> +    .tcm_ecc_autoinit = true,
+>>>>> +    .single_cpu_mode = false,
+>>>>> +    .is_single_core = true,
+>>>>>    };
+>>>>>      static const struct of_device_id k3_r5_of_match[] = {
+>>>>> @@ -1782,6 +1818,7 @@ static const struct of_device_id k3_r5_of_match[] = {
+>>>>>        { .compatible = "ti,j721e-r5fss", .data = &am65_j721e_soc_data, },
+>>>>>        { .compatible = "ti,j7200-r5fss", .data = &j7200_j721s2_soc_data, },
+>>>>>        { .compatible = "ti,am64-r5fss",  .data = &am64_soc_data, },
+>>>>> +    { .compatible = "ti,am62-r5fss",  .data = &am62_soc_data, },
+>>>>>        { .compatible = "ti,j721s2-r5fss",  .data = &j7200_j721s2_soc_data, },
+>>>>>        { /* sentinel */ },
+>>>>>    };
+>>>>> -- 
+>>>>> 2.34.1
+>>>>>
+>>>
+> 
+> --
+> cheers,
+> -roger
