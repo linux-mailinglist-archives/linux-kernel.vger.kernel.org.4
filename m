@@ -2,141 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6596CD911
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BE56CD908
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjC2MFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S229986AbjC2MEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjC2MFU (ORCPT
+        with ESMTP id S229485AbjC2MEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:05:20 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5037344A8;
-        Wed, 29 Mar 2023 05:05:08 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 1C55241F46;
-        Wed, 29 Mar 2023 12:05:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1680091506;
-        bh=70azhY624dmqDR1WbAO/UkRG4/uvUwfXnn1O/f8fXaM=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=Dcx7JmfYEJOvEoHOUZ0fYa8ZVFzUaYpAK5mmZz51FeSgXeupwRNpt4uhxB3kdh6Kx
-         I3WFNita+VmGIE0BV7TYP1oAJ++hgFK3kCyD/ZIiiVYHgm3eJtTnnGOPvdQNtJvqLx
-         7jbEz+IqnqU8uwkOYIm/cv0zRKszm60IWa1Moh7TW/BS0WcJZZqmR+/PTx+PVKSyz8
-         0EtFdvd7DtDatbAhe+vvqqku9Q3zPI3vUybkdJ19cst5iehOGWYWIvoAoreY2v5n+w
-         0nWp4cKK5IAtscHKfWTEJiuxmVJkmnMBcEWQoeb+43MSQm7f0KdChKYYyD5prnOkp/
-         K9Zfxsz3jgzfw==
-From:   Asahi Lina <lina@asahilina.net>
-Date:   Wed, 29 Mar 2023 21:04:38 +0900
-Subject: [PATCH v2 6/6] rust: error: Add from_result() helper
+        Wed, 29 Mar 2023 08:04:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5320EC9
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:04:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F1741FB;
+        Wed, 29 Mar 2023 05:05:28 -0700 (PDT)
+Received: from [10.57.20.1] (unknown [10.57.20.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED73A3F6C4;
+        Wed, 29 Mar 2023 05:04:42 -0700 (PDT)
+Message-ID: <303e295e-0bdb-c771-3756-ca4c81b4c600@arm.com>
+Date:   Wed, 29 Mar 2023 13:04:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230224-rust-error-v2-6-3900319812da@asahilina.net>
-References: <20230224-rust-error-v2-0-3900319812da@asahilina.net>
-In-Reply-To: <20230224-rust-error-v2-0-3900319812da@asahilina.net>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>
-Cc:     Fox Chen <foxhlchen@gmail.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680091478; l=2445;
- i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=Ai/iEgQ/fBNHagg7igl9ARuv9+jNWr+C78oJzdHwp1Q=;
- b=FtgUuaSd6mC3+e/DMioQcQS/rPK7XBseDo6+v/MVJi3rTWw7yGSMv3Q7DU/Oyw7ISdeBXG5+d
- BPUZKi78hqqB9vP31WhnZuhDT44q/p8pQiS+4Z+ejaIpN6TNuA0Z4Fz
-X-Developer-Key: i=lina@asahilina.net; a=ed25519;
- pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 8/9] coresight: Enable and disable helper devices
+ adjacent to the path
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230310160610.742382-1-james.clark@arm.com>
+ <20230310160610.742382-9-james.clark@arm.com>
+ <ca4dba90-8739-ad73-d3d7-681cf2326643@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <ca4dba90-8739-ad73-d3d7-681cf2326643@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wedson Almeida Filho <wedsonaf@gmail.com>
 
-Add a helper function to easily return C result codes from a Rust function
-that calls functions which return a Result<T>.
 
-Lina: Imported from rust-for-linux/rust, originally developed by Wedson
-as part of file_operations.rs. Added the allow() flags since there is no
-user in the kernel crate yet and fixed a typo in a comment. Replaced the
-macro with a function taking a closure, per discussion on the ML.
+On 17/03/2023 11:04, Suzuki K Poulose wrote:
+> On 10/03/2023 16:06, James Clark wrote:
+>> Currently CATU is the only helper device, and its enable and disable
+>> calls are hard coded. To allow more helper devices to be added in a
+>> generic way, remove these hard coded calls and just enable and disable
+>> all helper devices.
+>>
+>> This has to apply to helpers adjacent to the path, because they will
+>> never be in the path. CATU was already discovered in this way, so
+>> there is no change there.
+>>
+>> One change that is needed is for CATU to call back into ETR to allocate
+>> the buffer. Because the enable call was previously hard coded, it was
+>> done at a point where the buffer was already allocated, but this is no
+>> longer the case.
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-catu.c  | 34 ++++++++--
+>>   drivers/hwtracing/coresight/coresight-core.c  | 68 ++++++++++++++++++-
+>>   .../hwtracing/coresight/coresight-tmc-etr.c   | 28 --------
+>>   include/linux/coresight.h                     |  3 +-
+>>   4 files changed, 99 insertions(+), 34 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-catu.c
+>> b/drivers/hwtracing/coresight/coresight-catu.c
+>> index bc90a03f478f..24a08a2b96b1 100644
+>> --- a/drivers/hwtracing/coresight/coresight-catu.c
+>> +++ b/drivers/hwtracing/coresight/coresight-catu.c
+>> @@ -395,13 +395,32 @@ static inline int catu_wait_for_ready(struct
+>> catu_drvdata *drvdata)
+>>       return coresight_timeout(csa, CATU_STATUS, CATU_STATUS_READY, 1);
+>>   }
+>>   -static int catu_enable_hw(struct catu_drvdata *drvdata, void *data)
+>> +static struct coresight_device *
+>> +catu_get_etr_device(struct coresight_device *csdev)
+>> +{
+>> +    int i;
+>> +    struct coresight_device *tmp;
+>> +
+>> +    for (i = 0; i < csdev->pdata->nr_inconns; i++) {
+>> +        tmp = csdev->pdata->in_conns[i].remote_dev;
+>> +        if (tmp && tmp->type == CORESIGHT_DEV_TYPE_SINK &&
+>> +            tmp->subtype.sink_subtype ==
+>> +                CORESIGHT_DEV_SUBTYPE_SINK_SYSMEM)
+>> +            return tmp;
+>> +    }
+>> +
+>> +    return NULL;
+>> +}
+>> +
+>> +static int catu_enable_hw(struct catu_drvdata *drvdata, enum cs_mode
+>> cs_mode,
+>> +              void *data)
+>>   {
+>>       int rc;
+>>       u32 control, mode;
+>> -    struct etr_buf *etr_buf = data;
+>> +    struct etr_buf *etr_buf = NULL;
+>>       struct device *dev = &drvdata->csdev->dev;
+>>       struct coresight_device *csdev = drvdata->csdev;
+>> +    struct coresight_device *etrdev;
+>>         if (catu_wait_for_ready(drvdata))
+>>           dev_warn(dev, "Timeout while waiting for READY\n");
+>> @@ -416,6 +435,12 @@ static int catu_enable_hw(struct catu_drvdata
+>> *drvdata, void *data)
+>>       if (rc)
+>>           return rc;
+>>   +    etrdev = catu_get_etr_device(csdev);
+>> +    if (etrdev) {
+>> +        etr_buf = tmc_etr_get_buffer(etrdev, cs_mode, data);
+>> +        if (IS_ERR(etr_buf))
+>> +            return PTR_ERR(etr_buf);
+>> +    }
+> 
+> WARN_ON(!etrdev) ? We are not supposed to reach in the first place and
+> return.
+> 
 
-Co-developed-by: Fox Chen <foxhlchen@gmail.com>
-Signed-off-by: Fox Chen <foxhlchen@gmail.com>
-Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-Signed-off-by: Asahi Lina <lina@asahilina.net>
----
- rust/kernel/error.rs | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+I saw there was the pass-through mode below which I thought didn't need
+an ETR device. I think I followed the code through and there was a way
+for it to get there without an ETR in the existing version, but now I'm
+not sure. Or does it still need the ETR device but it just doesn't
+access the buffer?
 
-diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-index 6b10129075a7..4d8b19d5967d 100644
---- a/rust/kernel/error.rs
-+++ b/rust/kernel/error.rs
-@@ -226,3 +226,42 @@ pub(crate) fn from_err_ptr<T>(ptr: *mut T) -> Result<*mut T> {
-     }
-     Ok(ptr)
- }
-+
-+/// Calls a closure returning a [`crate::error::Result<T>`] and converts the result to
-+/// a C integer result.
-+///
-+/// This is useful when calling Rust functions that return [`crate::error::Result<T>`]
-+/// from inside `extern "C"` functions that need to return an integer error result.
-+///
-+/// `T` should be convertible from an `i16` via `From<i16>`.
-+///
-+/// # Examples
-+///
-+/// ```ignore
-+/// # use kernel::from_result;
-+/// # use kernel::bindings;
-+/// unsafe extern "C" fn probe_callback(
-+///     pdev: *mut bindings::platform_device,
-+/// ) -> core::ffi::c_int {
-+///     from_result(|| {
-+///         let ptr = devm_alloc(pdev)?;
-+///         bindings::platform_set_drvdata(pdev, ptr);
-+///         Ok(0)
-+///     })
-+/// }
-+/// ```
-+// TODO: Remove `dead_code` marker once an in-kernel client is available.
-+#[allow(dead_code)]
-+pub(crate) fn from_result<T, F>(f: F) -> T
-+where
-+    T: From<i16>,
-+    F: FnOnce() -> Result<T>,
-+{
-+    match f() {
-+        Ok(v) => v,
-+        // NO-OVERFLOW: negative `errno`s are no smaller than `-bindings::MAX_ERRNO`,
-+        // `-bindings::MAX_ERRNO` fits in an `i16` as per invariant above,
-+        // therefore a negative `errno` always fits in an `i16` and will not overflow.
-+        Err(e) => T::from(e.to_errno() as i16),
-+    }
-+}
+> 
+>>       control |= BIT(CATU_CONTROL_ENABLE);
+>>         if (etr_buf && etr_buf->mode == ETR_MODE_CATU) {
+>> @@ -441,13 +466,14 @@ static int catu_enable_hw(struct catu_drvdata
+>> *drvdata, void *data)
+>>       return 0;
+>>   }
+>>   -static int catu_enable(struct coresight_device *csdev, void *data)
+>> +static int catu_enable(struct coresight_device *csdev, enum cs_mode
+>> mode,
+>> +               void *data)
+>>   {
+>>       int rc;
+>>       struct catu_drvdata *catu_drvdata = csdev_to_catu_drvdata(csdev);
+>>         CS_UNLOCK(catu_drvdata->base);
+>> -    rc = catu_enable_hw(catu_drvdata, data);
+>> +    rc = catu_enable_hw(catu_drvdata, mode, data);
+>>       CS_LOCK(catu_drvdata->base);
+>>       return rc;
+>>   }
+>> diff --git a/drivers/hwtracing/coresight/coresight-core.c
+>> b/drivers/hwtracing/coresight/coresight-core.c
+>> index a8ba7493c09a..3e6ccd9e8d4e 100644
+>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>> @@ -441,6 +441,34 @@ static int coresight_enable_source(struct
+>> coresight_device *csdev,
+>>       return 0;
+>>   }
+>>   +static int coresight_enable_helper(struct coresight_device *csdev,
+>> +                   enum cs_mode mode, void *sink_data)
+> 
+> minor nit: s/sink_data/data/ ? Though it is always either sink_data
+> (perf mode) or NULL (sysfs mode), for the core code it is simply an
+> opaque data.
+> 
 
--- 
-2.40.0
+Done
 
+> Rest looks fine to me.
+> 
+> Suzuki
+> 
+> 
