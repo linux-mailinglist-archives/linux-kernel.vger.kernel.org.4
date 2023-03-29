@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FABF6CD423
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EBD6CD424
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjC2INV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S230011AbjC2INa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjC2INT (ORCPT
+        with ESMTP id S229970AbjC2IN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:13:19 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3512135
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:13:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=W40vDHtoJmObncWgxYoxKYDsKdaYlYAC6KyZk/aXhEM=; b=cGP9/a7d4e0owfavrz97c1MxwJ
-        eB4dcA6xv5FEnRa/jZ2GdG4ULvOzil+V7NCeweB/YWOJqsTvF5ZsVQvPDrvrA1pIiVXU8B//HYxoe
-        aft0CTx754Ibfr/CLms1xs3boxMfUzoPcPuOceCtj9dRsnqca4xU84wDS2jei/k30tiiVB5BhUcie
-        GXFSHF89EmMy/NydvdDhtLqOqBeArAR3uVCYpJp6rn/ymOTqs/H5kM1NySZEKkWQj7+nfgQx1owPp
-        9wYmDuW7DhZhjg3dADtG6t9EXez+y2BhFY/PYn/Kamu1yiPYNsdjYlj76obeb5I5n7wJE7UOoQ8kj
-        RbCngG1A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1phQvC-006na0-18;
-        Wed, 29 Mar 2023 08:12:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Wed, 29 Mar 2023 04:13:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A4626A5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:13:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 41DF8300379;
-        Wed, 29 Mar 2023 10:12:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 207E0200C122E; Wed, 29 Mar 2023 10:12:39 +0200 (CEST)
-Date:   Wed, 29 Mar 2023 10:12:39 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Don <joshdon@google.com>
-Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org, efault@gmx.de
-Subject: Re: [PATCH 08/17] sched/fair: Implement an EEVDF like policy
-Message-ID: <20230329081239.GM4253@hirez.programming.kicks-ass.net>
-References: <20230328092622.062917921@infradead.org>
- <20230328110354.141543852@infradead.org>
- <CABk29Nt4T67S+L9Qs1qeOUyo5gY1Qy5KuOwuCYNM74E58J81Eg@mail.gmail.com>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B00141FDF3;
+        Wed, 29 Mar 2023 08:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680077603; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4uKJsI6kcmXX5PcI4vzLQ7gfadOE59ADRMPHNu9uM4g=;
+        b=KgmXk3WDiPzBXzdj45vKo4Vxz9vi4sI6hNTwjCUsKoQDpB57b7/5//GKc082Or6lCMx/b9
+        ZKDzzzwTxi4ao+87xcxzxrVyODS5gjn/Lku2in5ezddE1za04vzIij6QMQpnfKlTJeGdIU
+        mG87qg70katMuzooi3uJR+33T3GLTfE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A26B0139D3;
+        Wed, 29 Mar 2023 08:13:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CwdQJyPzI2TmWQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 29 Mar 2023 08:13:23 +0000
+Date:   Wed, 29 Mar 2023 10:13:23 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Song Liu <song@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+Message-ID: <ZCPzI3ns2PusACi6@dhcp22.suse.cz>
+References: <20230308094106.227365-1-rppt@kernel.org>
+ <20230308094106.227365-2-rppt@kernel.org>
+ <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
+ <ZB6W1C88TU6CcjJH@kernel.org>
+ <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
+ <ZCKIX3de5AZfGggK@kernel.org>
+ <ZCKZuXxq38obmYpn@dhcp22.suse.cz>
+ <ZCMDmHSqOeCj1EIo@kernel.org>
+ <ZCMGwWmF9MGObSlt@dhcp22.suse.cz>
+ <ZCPoglyi7fDkXKmB@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABk29Nt4T67S+L9Qs1qeOUyo5gY1Qy5KuOwuCYNM74E58J81Eg@mail.gmail.com>
+In-Reply-To: <ZCPoglyi7fDkXKmB@kernel.org>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,33 +75,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 06:26:51PM -0700, Josh Don wrote:
-
-> > @@ -5088,19 +5307,20 @@ dequeue_entity(struct cfs_rq *cfs_rq, st
-> >  static void
-> >  check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
-> >  {
-> > -       unsigned long ideal_runtime, delta_exec;
-> > +       unsigned long delta_exec;
-> >         struct sched_entity *se;
-> >         s64 delta;
-> >
-> > -       /*
-> > -        * When many tasks blow up the sched_period; it is possible that
-> > -        * sched_slice() reports unusually large results (when many tasks are
-> > -        * very light for example). Therefore impose a maximum.
-> > -        */
-> > -       ideal_runtime = min_t(u64, sched_slice(cfs_rq, curr), sysctl_sched_latency);
-> > +       if (sched_feat(EEVDF)) {
-> > +               if (pick_eevdf(cfs_rq) != curr)
-> > +                       goto preempt;
+On Wed 29-03-23 10:28:02, Mike Rapoport wrote:
+> On Tue, Mar 28, 2023 at 05:24:49PM +0200, Michal Hocko wrote:
+> > On Tue 28-03-23 18:11:20, Mike Rapoport wrote:
+> > > On Tue, Mar 28, 2023 at 09:39:37AM +0200, Michal Hocko wrote:
+> > [...]
+> > > > OK, so you want to reduce that direct map fragmentation?
+> > > 
+> > > Yes.
+> > > 
+> > > > Is that a real problem?
+> > > 
+> > > A while ago Intel folks published report [1] that showed better performance
+> > > with large pages in the direct map for majority of benchmarks.
+> > > 
+> > > > My impression is that modules are mostly static thing. BPF
+> > > > might be a different thing though. I have a recollection that BPF guys
+> > > > were dealing with direct map fragmention as well.
+> > > 
+> > > Modules are indeed static, but module_alloc() used by anything that
+> > > allocates code pages, e.g. kprobes, ftrace and BPF. Besides, Thomas
+> > > mentioned that having code in 2M pages reduces iTLB pressure [2], but
+> > > that's not only about avoiding the splits in the direct map but also about
+> > > using large mappings in the modules address space.
+> > > 
+> > > BPF guys suggested an allocator for executable memory [3] mainly because
+> > > they've seen performance improvement of 0.6% - 0.9% in their setups [4].
+> > 
+> > These are fair arguments and it would have been better to have them in
+> > the RFC. Also it is not really clear to me what is the actual benefit of
+> > the unmapping for those usecases. I do get they want to benefit from
+> > caching on the same permission setup but do they need unmapping as well?
 > 
-> This could shortcircuit the loop in pick_eevdf once we find a best
-> that has less vruntime and sooner deadline than curr, since we know
-> we'll never pick curr in that case. Might help performance when we
-> have a large tree for this cfs_rq.
+> The pages allocated with module_alloc() get different permissions depending
+> on whether they belong to text, rodata, data etc. The permissions are
+> updated in both vmalloc address space and in the direct map. The updates to
+> the direct map cause splits of the large pages.
 
-Yeah, one of the things I did consider was having this set cfs_rq->next
-such that the reschedule pick doesn't have to do the pick again. But I
-figured keep things simple for now.
+That much is clear (wouldn't hurt to mention that in the changelog
+though).
 
+> If we cache large pages as
+> unmapped we take out the entire 2M page from the direct map and then
+> if/when it becomes free it can be returned to the direct map as a 2M page.
+> 
+> Generally, the unmapped allocations are intended for use-cases that anyway
+> map the memory elsewhere than direct map and need to modify direct mappings
+> of the memory, be it modules_alloc(), secretmem, PKS page tables or maybe
+> even some of the encrypted VM memory.
+
+I believe we are still not on the same page here. I do understand that
+you want to re-use the caching capability of the unmapped_pages_alloc
+for modules allocations as well. My question is whether module_alloc
+really benefits from the fact that the memory is unmapped?
+
+I guess you want to say that it does because it wouldn't have to change
+the permission for the direct map but I do not see that anywhere in the
+patch... Also consinder the slow path where module_alloc needs to
+allocate a fresh (huge)page and unmap it. Does the overhead of the
+unmapping suits needs of all module_alloc users? Module loader is likely
+not interesting as it tends to be rather static but what about BPF
+programs?
+
+[...]
+> > > I also think vmalloc with unmmapped pages can provide backing pages for
+> > > execmem_alloc() Song proposed.
+> > 
+> > Why would you need to have execmem_alloc have its memory virtually
+> > mapped into vmalloc space?
+> 
+> Currently all the memory allocated for code is managed in a subset of
+> vmalloc() space. The intention of execmem_alloc() was to replace
+> module_alloc() for the code pages, so it's natural that it will use the
+> same virtual ranges.
+
+Ohh, sorry my bad. I have only now realized I have misread and thought
+about secretmem_alloc...
+-- 
+Michal Hocko
+SUSE Labs
