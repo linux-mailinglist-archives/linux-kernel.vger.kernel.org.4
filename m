@@ -2,86 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886E66CEF98
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0CA6CEF9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjC2QjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S230173AbjC2Qjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjC2QjI (ORCPT
+        with ESMTP id S229638AbjC2Qjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:39:08 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF84CF0;
-        Wed, 29 Mar 2023 09:39:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=VsYhrL4QtC5ZNA+kq7n/KEZPoa+gL9m0J5D2VbucwVQ=; b=yydGJAtSK1nqRobhiENbWmwZLY
-        0rux+2yOz3bBQg9V1LLqsADGFqtceIQXhoXO1XvBzI2IB9eLT7PfoOgCEYLyf7uDUKzOZa8poZDii
-        PIlK0ypB1cnReKyhNoMsdZTnyxxREExfqAuWOPoJmBst0iVZsJwDO9SJJAbTF6jUhGJk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1phYpD-008mdt-D6; Wed, 29 Mar 2023 18:39:03 +0200
-Date:   Wed, 29 Mar 2023 18:39:03 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: Re: [RFC PATCH net-next v3 11/15] net: dsa: mt7530: skip locking if
- MDIO bus isn't present
-Message-ID: <022e2a44-31de-4667-9474-6a8518ca030a@lunn.ch>
-References: <cover.1680105013.git.daniel@makrotopia.org>
- <4e6d1cbba2ff16cad5b9ac48ccdf4407f45c7857.1680105013.git.daniel@makrotopia.org>
+        Wed, 29 Mar 2023 12:39:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE9F5A7;
+        Wed, 29 Mar 2023 09:39:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA20A1FB;
+        Wed, 29 Mar 2023 09:40:20 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 124B53F6C4;
+        Wed, 29 Mar 2023 09:39:32 -0700 (PDT)
+Message-ID: <cdede77a-5dc5-8933-a444-a2046b074b12@arm.com>
+Date:   Wed, 29 Mar 2023 18:39:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e6d1cbba2ff16cad5b9ac48ccdf4407f45c7857.1680105013.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 5/6] cgroup/cpuset: Free DL BW in case can_attach() fails
+Content-Language: en-US
+To:     Waiman Long <longman@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+        luca.abeni@santannapisa.it, claudio@evidence.eu.com,
+        tommaso.cucinotta@santannapisa.it, bristot@redhat.com,
+        mathieu.poirier@linaro.org, cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+References: <20230329125558.255239-1-juri.lelli@redhat.com>
+ <20230329125558.255239-6-juri.lelli@redhat.com>
+ <f8dfc30b-5079-2f44-7ab1-42ac25bd48b7@redhat.com>
+ <f8baea06-eeda-439a-3699-1cad7cde659e@redhat.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <f8baea06-eeda-439a-3699-1cad7cde659e@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 04:59:47PM +0100, Daniel Golle wrote:
-> As MT7530 and MT7531 internally use 32-bit wide registers, each access
-> to any register of the switch requires several operations on the MDIO
-> bus. Hence if there is congruent access, e.g. due to PCS or PHY
-> polling, this can mess up and interfere with another ongoing register
-> access sequence.
-> 
-> However, the MDIO bus mutex is only relevant for MDIO-connected
-> switches. Prepare switches which have there registers directly mapped
-> into the SoCs register space via MMIO which do not require such
-> locking. There we can simply use regmap's default locking mechanism.
-> 
-> Hence guard mutex operations to only be performed in case of MDIO
-> connected switches.
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+On 29/03/2023 16:31, Waiman Long wrote:
+> On 3/29/23 10:25, Waiman Long wrote:
+>>
+>> On 3/29/23 08:55, Juri Lelli wrote:
+>>> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+[...]
 
-    Andrew
+>>> @@ -2518,11 +2547,21 @@ static int cpuset_can_attach(struct
+>>> cgroup_taskset *tset)
+>>>   static void cpuset_cancel_attach(struct cgroup_taskset *tset)
+>>>   {
+>>>       struct cgroup_subsys_state *css;
+>>> +    struct cpuset *cs;
+>>>         cgroup_taskset_first(tset, &css);
+>>> +    cs = css_cs(css);
+>>>         mutex_lock(&cpuset_mutex);
+>>> -    css_cs(css)->attach_in_progress--;
+>>> +    cs->attach_in_progress--;
+>>> +
+>>> +    if (cs->nr_migrate_dl_tasks) {
+>>> +        int cpu = cpumask_any(cs->effective_cpus);
+>>> +
+>>> +        dl_bw_free(cpu, cs->sum_migrate_dl_bw);
+>>> +        reset_migrate_dl_data(cs);
+>>> +    }
+>>> +
+> 
+> Another nit that I have is that you may have to record also the cpu
+> where the DL bandwidth is allocated in cpuset_can_attach() and free the
+> bandwidth back into that cpu or there can be an underflow if another cpu
+> is chosen.
+
+Many thanks for the review!
+
+But isn't the DL BW control `struct dl_bw` per `struct root_domain`
+which is per exclusive cpuset. So as long cpu is from
+`cs->effective_cpus` shouldn't this be fine?
+
+
