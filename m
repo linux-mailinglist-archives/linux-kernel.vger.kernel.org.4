@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF346CD7D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C056CD80E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjC2Knr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S229580AbjC2LDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjC2Kni (ORCPT
+        with ESMTP id S229568AbjC2LDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:43:38 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5853C29;
-        Wed, 29 Mar 2023 03:43:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680086617; x=1711622617;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5W+blnKT1Yo9sFK/xzAQKVqqGYFjD25kZeGLG5VryJU=;
-  b=N6MOu08pB4ARFwcJrL4lpT1Q2w8xlBjIO6WwGzKq/Of9aGb4FD2UPgRj
-   mPHuJ5ZGBM5E8OPyXta6pOWl4QZLMJl8tvFIioLFrMxG0yIJJCFaXoX6O
-   zfzPnixGAJaIOZfJovj2NCz9HKk45Sa0+LBFnXP8PNGTJSkMAzNzLP2En
-   nuc3fqxuVp373mAgutZs1aXVyOZYbHLGhtRFaMGtGkcaXz7SHNiu1J3c7
-   oc+pvFG6DMxgbEVN4S+XKLJ7zpZcA8aI3zseoQ/w3IM0O9U8He2CPRwC9
-   tNMb1Ih/7sVnEwjcJ8iSsaqaKtvICJycr1DCQcT8SjKocSvEq/SMHLSlA
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="427117010"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="427117010"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 03:43:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="827845454"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="827845454"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 29 Mar 2023 03:43:34 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 29 Mar 2023 13:43:33 +0300
-Date:   Wed, 29 Mar 2023 13:43:33 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org, vigneshr@ti.com,
-        srk@ti.com, r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: tps6598x: make interrupts optional
-Message-ID: <ZCQWVfyVVecCYHDb@kuha.fi.intel.com>
-References: <20230324131853.41102-1-rogerq@kernel.org>
- <20230324133741.43408-1-rogerq@kernel.org>
- <271f0be0-9cb2-0c74-c112-33020e9a7342@kernel.org>
+        Wed, 29 Mar 2023 07:03:42 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74D940E3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:03:40 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id ew6so61468243edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112; t=1680087819;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WhbbiJ4e+b5CD8Cc7IUFUuG1LQyA1ZawH0b3mjKbWjA=;
+        b=vIEbQUp1Ae1jSXkVEksl8NuRvjoOt/9zkLTtgCkEpxxDzQegdJ6sRYmpyDQsyOQpk/
+         SxZ/6NzDfeTsITBSra50Q1GEllSE/70WyOok7lctCG4OWasrSdqPjCxR2R4IJZ/EKUV8
+         HH4vUqBrzllszumb8VEzoIoz6+1HugUuXidHjUGK5oCDd3SCHT26rw7PHUmE/EiAgjqt
+         kHzBdQYkxQZZu/lgXTtaY15NCMUNeq3RTf52lxMJsMNNP0X1+gg3te9bdAD4aZ9IPVuU
+         5hk55w+RGDCUgzWPejeCLvldTSeb2VZFqME0DTh8AK2FDmutq8rNoL8qXoCTBvPFOFMV
+         FDXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680087819;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WhbbiJ4e+b5CD8Cc7IUFUuG1LQyA1ZawH0b3mjKbWjA=;
+        b=W1eVeYUAo0fHW5RBvlU3z8MXlT3/cu0B69CiPC+IKddwmXDTSxn+6Bi6z/8uP9i7E/
+         +GC/ap0HpYym32W7/4uJk32D4fJfzVtILOwftLhqLY3VhY5aI5kOD5cqPOnMEQJKkchI
+         PDD/QCPeXSJg1zQo13gdzzusLKLlK+G/ordA5ZeYiyhzwb0UxalYsJhq2lANmKqeehnr
+         qz5kk3AVXRiyj8LL3O2uxUUrSBdcsoREXWveUkgiv7Rach2WITf2RKgFP+Kb992gjN5E
+         NL70vu9w3S651t3Tq/bEOxzIaAkcLohtFLED7DSEzJRurCnY5G2z+qE2JcNQN+4BNKlO
+         yrSw==
+X-Gm-Message-State: AAQBX9eRcA+78rGAiFpa+eLJFD6z//63UPWhGnZHK/gljrsAVLoVx5Iz
+        bZe6LmDDBDzmZFQesM9jBWzDCw==
+X-Google-Smtp-Source: AKy350ak9VgusBtqHfKGCN3XpdT6OBjA2Hz6hJLq7hk/S/hf34pTotdEBWM714i92+XHxNyq6WYrPw==
+X-Received: by 2002:a17:906:9485:b0:933:c052:a277 with SMTP id t5-20020a170906948500b00933c052a277mr19912705ejx.12.1680087819244;
+        Wed, 29 Mar 2023 04:03:39 -0700 (PDT)
+Received: from localhost.localdomain (178-133-100-41.mobile.vf-ua.net. [178.133.100.41])
+        by smtp.gmail.com with ESMTPSA id md12-20020a170906ae8c00b008e68d2c11d8sm16406975ejb.218.2023.03.29.04.03.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 04:03:38 -0700 (PDT)
+From:   Andrew Melnychenko <andrew@daynix.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mst@redhat.com, jasowang@redhat.com,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Cc:     yan@daynix.com, yuri.benditovich@daynix.com
+Subject: [RFC PATCH 0/4] eBPF RSS through QMP support.
+Date:   Wed, 29 Mar 2023 13:45:41 +0300
+Message-Id: <20230329104546.108016-1-andrew@daynix.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <271f0be0-9cb2-0c74-c112-33020e9a7342@kernel.org>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 10:05:33AM +0300, Roger Quadros wrote:
-> Hi Heikki & Rob,
-> 
-> On 24/03/2023 15:37, Roger Quadros wrote:
-> > The driver can poll for interrupt status so interrupts
-> > can be optional. It is still recommended to use the
-> > interrupt line. Polling should only be used for debug
-> > and prototyping.
-> > 
-> > Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 2 --
-> >  1 file changed, 2 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-> > index 348a715d61f4..8c2db282735a 100644
-> > --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-> > @@ -35,8 +35,6 @@ properties:
-> >  required:
-> >    - compatible
-> >    - reg
-> > -  - interrupts
-> > -  - interrupt-names
-> >  
-> >  additionalProperties: true
-> >  
-> 
-> We need this patch as well along with the driver changes [1]
-> Could you please Ack. Thanks!
+This series of patches provides the ability to retrieve eBPF program
+through qmp, so management application may load bpf blob with proper capabilities.
+Now, virtio-net devices can accept eBPF programs and maps through properties
+as external file descriptors. Access to the eBPF map is direct through mmap()
+call, so it should not require additional capabilities to bpf* calls.
+eBPF file descriptors can be passed to QEMU from parent process or by unix
+socket with sendfd() qmp command.
 
-I can give my ack FWIW, but we should still wait for Rob.
+Overall, the basic scenario of using the helper looks like this:
+ * Libvirt checks for ebpf_fds property.
+ * Libvirt requests eBPF blob through QMP.
+ * Libvirt loads blob for virtio-net.
+ * Libvirt launches the QEMU with eBPF fds passed.
+ 
+Andrew Melnychenko (4):
+  ebpf: Added eBPF initialization by fds and map update.
+  virtio-net: Added property to load eBPF RSS with fds.
+  ebpf: Added declaration/initialization routines.
+  qmp: Added new command to retrieve eBPF blob.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-thanks,
+ ebpf/ebpf.c                    |  48 +++++++++++++
+ ebpf/ebpf.h                    |  25 +++++++
+ ebpf/ebpf_rss-stub.c           |   6 ++
+ ebpf/ebpf_rss.c                | 124 +++++++++++++++++++++++++++------
+ ebpf/ebpf_rss.h                |  10 +++
+ ebpf/meson.build               |   1 +
+ hw/net/virtio-net.c            |  77 ++++++++++++++++++--
+ include/hw/virtio/virtio-net.h |   1 +
+ monitor/qmp-cmds.c             |  17 +++++
+ qapi/misc.json                 |  25 +++++++
+ 10 files changed, 307 insertions(+), 27 deletions(-)
+ create mode 100644 ebpf/ebpf.c
+ create mode 100644 ebpf/ebpf.h
 
 -- 
-heikki
+2.39.1
+
