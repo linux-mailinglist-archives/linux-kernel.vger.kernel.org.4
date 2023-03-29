@@ -2,87 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010B36CEC10
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EB06CEC16
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjC2OqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S229832AbjC2Osr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjC2OqH (ORCPT
+        with ESMTP id S229704AbjC2OsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:46:07 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FB693C0;
-        Wed, 29 Mar 2023 07:43:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680101039; x=1711637039;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mF5KcYfESzULnMbcHpPg9/Y3X1FNg6NDTzgQz7ayaEc=;
-  b=nMByuSNhu5KCr70AFM0k4PV9tT6hInOq9Wds5kSn2a4KZ5ztdxyLypvF
-   pqBx0tNgNIKEhk4qiDYQ7rEBeRUZh1y2WO4zBxdYB118RKbuIaVJ1Bw6M
-   o1LoK7/22yzOgO8peYoPW4fam750R4oxPHqxYwwVd042Ok76QdSYSr3yV
-   1/RiUlZQrCdtBFWxMqhlgfUzHJ9kDO/ZC36WmWkJgUVWWvcrj5o6bEgif
-   fu8VRTvXbnxhFN0Qf3avVopCApzZIXvUFSs5iyabuK0W1G8M9xpEcyqKQ
-   wIUWsBg1+Ln8IHJcQH6f3KcNdChMX7+7ffH7HCiHxMELzwcsyrf3jkP8Q
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="338393917"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="338393917"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 07:43:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="716906281"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="716906281"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 29 Mar 2023 07:43:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1phX1k-00A41k-0n;
-        Wed, 29 Mar 2023 17:43:52 +0300
-Date:   Wed, 29 Mar 2023 17:43:51 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v6 5/5]  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Message-ID: <ZCROpw0il1VQCLPu@smile.fi.intel.com>
-References: <20230307112835.81886-1-okan.sahin@analog.com>
- <20230307112835.81886-6-okan.sahin@analog.com>
- <20230315175223.GI9667@google.com>
- <20230315175257.GJ9667@google.com>
- <MN2PR03MB5168249900206433A082875EE7889@MN2PR03MB5168.namprd03.prod.outlook.com>
- <20230329143615.GS2673958@google.com>
+        Wed, 29 Mar 2023 10:48:25 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0C11B8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:47:36 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id b7so338081pfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680101256;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vkIx82vxHUxasJUQGPHlcad9JIpsq+cAvDr1GutREnU=;
+        b=w2hGU03ndtZNATot+6jleng8JvxmnajdGyNHS6uO4tn7ZQ4LbqTAhwJ2fD4lzKHm52
+         Vldv8QxUmibNgV6p+bxQmJ1vQK7GPBU6I/wIAmHawV7cf9zt7jRFcPKGr1t0IFi5dDX/
+         SawxTalo5eCK/CGbx4g/m3WKDFK0GUwbeURuiok6t8Kk9cVBITXx3DB7i2/minjhGYVW
+         gU4eSyRc0OJiJ44FoOVUhqbvqBwiumA67wNZCvA8fHpqCne6wChuajU3vPvth6YkP8V4
+         jy5FC2fzuOMP/TX911Gpq+x/Zr5GUoAz1ZGtDzn6NHmyfoUeSwjisLWDwDYQUtf+u6yy
+         j0Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680101256;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vkIx82vxHUxasJUQGPHlcad9JIpsq+cAvDr1GutREnU=;
+        b=IsXCgW8TybDobKV1Zt3gJplfMxRP5Zdhtyymbsfnbvd/ciRts9sY+RhAdc5im3delj
+         YIVA4XUFCQeLrKnwaLwfKeC+F7M1vya071jruB8wskB3PCm0BC1VTBTMm5IlbYhJIoJz
+         JDnBPV9BqcwTQjVWdBUBXcnrXCjvQLJ9Du2JeoDlfj4ORgcZsNaNfXP+inExzJfaUj6c
+         uCE+2DgN3uZUlP/angqCxICYlmQwjGCThjtg+BlYd2Efrh9XSBYkBrM67l9jAN3kv008
+         SQOMA/NQAkUo7IHxiV5pFf82yVS6NQNZ2giJytKxLJ/j/cXQEAfRhifMc2WmPWNcqqJd
+         ngPA==
+X-Gm-Message-State: AAQBX9eOtgrKydMmo+32PsEsAVHLpWNi2A9sksZqw5j1IdasaNT+If1d
+        Mx5GmDNTPr3pTTqDCQlqEnd47J3pf1LY+Pd68XBCnw==
+X-Google-Smtp-Source: AKy350b8EHJoKCyK8Zr0M23UFnC3QLJmNC+h7Va2BvOe0Y6c1aHg5e8SQUnYr7TFmbL5LW+oLTMvEctqsRKad18gX1o=
+X-Received: by 2002:a63:d307:0:b0:50b:dda2:6140 with SMTP id
+ b7-20020a63d307000000b0050bdda26140mr5521846pgg.11.1680101256089; Wed, 29 Mar
+ 2023 07:47:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329143615.GS2673958@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+References: <20230329111422.3693-1-mike.leach@linaro.org> <20230329111422.3693-2-mike.leach@linaro.org>
+ <ZCQx5HlPnxCIFaNQ@kernel.org> <ZCQyNnk/vfHZkSda@kernel.org>
+ <CAJ9a7VhhoGoOVL4sqcgpDYnZzzce_2=-wupK8K178tzZnoqrPA@mail.gmail.com> <ZCQ7nhrISA+jCfnI@kernel.org>
+In-Reply-To: <ZCQ7nhrISA+jCfnI@kernel.org>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Wed, 29 Mar 2023 15:47:25 +0100
+Message-ID: <CAJ9a7VhJRnRe0A43=_X463432LvjL=S5buVgeq6rB8K8nDZb6A@mail.gmail.com>
+Subject: Re: [PATCH v8 1/3] perf: cs-etm: Move mapping of Trace ID and cpu
+ into helper function
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org, suzuki.poulose@arm.com,
+        leo.yan@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        will@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, gankulkarni@os.amperecomputing.com,
+        darren@os.amperecomputing.com, James Clark <james.clark@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,30 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 03:36:15PM +0100, Lee Jones wrote:
-> On Tue, 28 Mar 2023, Sahin, Okan wrote:
-> > >On Wed, 15 Mar 2023, Lee Jones wrote:
-> > >> On Tue, 07 Mar 2023, Okan Sahin wrote:
+On Wed, 29 Mar 2023 at 14:22, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+>
+> Em Wed, Mar 29, 2023 at 01:59:10PM +0100, Mike Leach escreveu:
+> > Sorry - my error.
+> >
+> > The same change is made in patch 3/3 of this set.
+> >
+> > Looks like I didn't do a patch by patch build check when I was testing yesterday
+>
+> np, its fixed now and pushed to tmp.perf-tools-next, please check, will
+> go to perf-tools-next later today after passing thru my set of container
+> build tests.
+>
+> - Arnaldo
 
-...
+tmp.perf-tools-next - Builds and tests OK
 
-> > +static const struct i2c_device_id max77541_i2c_id[] = {
-> > +	{ "max77540", (kernel_ulong_t)&chip[MAX77540] },
-> > +	{ "max77541", (kernel_ulong_t)&chip[MAX77541] },
-> 
-> Just 'MAX77540' is fine.
-
-I tend to disagree.
-
-There is an error prone approach esp. when we talk with some functions
-that unifies OF/ACPI driver data retrieval with legacy ID tables.
-In such a case the 0 from enum is hard to distinguish from NULL when
-the driver data is not set or not found. On top of that the simple integer
-in the legacy driver data will require additional code to be added in
-the ->probe().
+Mike
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK
