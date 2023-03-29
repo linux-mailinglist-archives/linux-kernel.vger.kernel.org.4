@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C11E46CCF7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 03:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C656CCF84
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 03:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjC2B3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 21:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S229786AbjC2BbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 21:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjC2B3W (ORCPT
+        with ESMTP id S229573AbjC2BbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 21:29:22 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC8310CE;
-        Tue, 28 Mar 2023 18:29:21 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id c29so18190060lfv.3;
-        Tue, 28 Mar 2023 18:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680053360;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J2ZBooKTdQvtfMVgnhuwabyGyb9Yl38IXe8xsUOWjvo=;
-        b=d4fhJHyxuZd/FESgSXv9Frj/cenBy44pnYyeOw6RdevGJ5hGaZW/JaUKicQuOjfQOE
-         lCFsXByYHdquLzahDpeA9QnmeJRC/76MAFuAQBWNxTkCto6ZEbFMlFaTXVgxVwCLvJdr
-         vI0Ew3Yq1RMj9N4S9cwC8mTDEFH0zAEZCs1SLQBKU9qjVSCR1jTJhsatv1aViAD00iVo
-         5YXTcgKAzr9Kcd6PIErZ9uEOVZDoIbNeOJM0b2DPfQ+y/r384xf9aCRghXNbB+zEh20p
-         iQIQDm99H0+EKSe+VgCyRu49TSaD23kIXzf1smy0JdsLYMj4ED/HwuUZvcoUApeH1UJl
-         GxYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680053360;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J2ZBooKTdQvtfMVgnhuwabyGyb9Yl38IXe8xsUOWjvo=;
-        b=vbVxTqAHVM7uXdDHxB26MQC0H6/yrWtBZRS+W1DdEiS1Afl2b8BShr2P6qITFZhErX
-         M5dHIzpia/7/ql5vRzSTisCR9Ha2IO5EVjowsTqIlz1QQXUmaOBczum5w7o5ogh0Dglh
-         3Mb7GGGNGOyzE9HdInzErrFkBwBkQJFix/D1MSGzS4DpIv2N1jNt90U7SjHbWkcgJ9ZG
-         +yiH/dQXAhhMt/1NWyB4UlW3OawAfT3HFSR7Q3xcsgo4c3Med+iT0zvuEROJBO5dtBoN
-         sJg9xiEqlxHkVtdGQdZHoxa7IGREVz7GXFQstLY9Oegdu6OGlnMyw4ncR5ASFu/djaMK
-         GoJA==
-X-Gm-Message-State: AAQBX9elGQd3PGVYPbzbk/4WkljT/4TEsOL1JMIC7ngY3dHJtnrnxmic
-        Msz76v1Cflw+rzvc/x1WQUTiZP3ArEQKDQ3KMw==
-X-Google-Smtp-Source: AKy350ZzQ6gSicsuEON4vupXM9weznZXLCWciRrzvubMbpNb8S+dfZUJ6rBtuCKYkjhWaPvZQDMOOlwbKf0pYa1EDys=
-X-Received: by 2002:ac2:5322:0:b0:4eb:93a:41f0 with SMTP id
- f2-20020ac25322000000b004eb093a41f0mr3975535lfh.4.1680053359417; Tue, 28 Mar
- 2023 18:29:19 -0700 (PDT)
+        Tue, 28 Mar 2023 21:31:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8749510E7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 18:30:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680053427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CspT4SBj2OPAfTD4GX2xH3Q/n47a5hkXe6pVA2r6P70=;
+        b=cqR/3z/jV6E7nlWrqMpjJ0LXU8eyWdqLl1SOfFA7czIwSor0TcJsptZmuaUXvq83KPUJJx
+        jvg3AfbzN9U5Bm1ed+8lGOzgyiuUhMHDz5iZ1wODbglVDaIllVIEPNc1uf7gtYb9LUmoCd
+        pcJbT82w19hPaJk0WL1fQGkZwQO4arU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-673-CbtxejbKMCSLt1DqU1M2Lw-1; Tue, 28 Mar 2023 21:30:22 -0400
+X-MC-Unique: CbtxejbKMCSLt1DqU1M2Lw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9F318101A54F;
+        Wed, 29 Mar 2023 01:30:21 +0000 (UTC)
+Received: from [10.22.18.156] (unknown [10.22.18.156])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 12153202701E;
+        Wed, 29 Mar 2023 01:30:21 +0000 (UTC)
+Message-ID: <c3d9cf24-1c3a-cda4-5063-6b7d27e9116f@redhat.com>
+Date:   Tue, 28 Mar 2023 21:30:20 -0400
 MIME-Version: 1.0
-References: <20230328103000.10757-1-powen.kao@mediatek.com>
-In-Reply-To: <20230328103000.10757-1-powen.kao@mediatek.com>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Wed, 29 Mar 2023 09:29:07 +0800
-Message-ID: <CAGaU9a8DyCrUWxYRC=SZ0Qv95qXZPr-dBZGhGfp3xNxB=V4eSA@mail.gmail.com>
-Subject: Re: [PATCH] scsi: ufs: core: Make UFS_MCQ_NUM_DEV_CMD_QUEUES a module parameter
-To:     Po-Wen Kao <powen.kao@mediatek.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, alice.chao@mediatek.com,
-        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
-        cc.chou@mediatek.com, eddie.huang@mediatek.com,
-        mason.zhang@mediatek.com, chaotian.jing@mediatek.com,
-        jiajie.hao@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: CLONE_INTO_CGROUP probably needs to call controller attach
+ handlers
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gscrivan@redhat.com
+References: <20230328153943.op62j3sw7qaixdsq@wittgenstein>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230328153943.op62j3sw7qaixdsq@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Powen,
-
-On Tue, Mar 28, 2023 at 6:38=E2=80=AFPM Po-Wen Kao <powen.kao@mediatek.com>=
- wrote:
+On 3/28/23 11:39, Christian Brauner wrote:
+> Hey,
 >
-> A dedicated queue for dev commands is not mandatory, hence let
-> UFS_MCQ_NUM_DEV_CMD_QUEUES become module parameter `dev_cmd_queues`
-> to allow sharing first hw queue for dev commands.
+> Giuseppe reported that the the affinity mask isn't updated when a
+> process is spawned directly into the target cgroup via
+> CLONE_INTO_CGROUP. However, migrating a process will cause the affinity
+> mask to be updated (see the repro at [1].
 >
-> Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
-> ---
->  drivers/ufs/core/ufs-mcq.c     | 35 +++++++++++++++++++++++++++-------
->  drivers/ufs/core/ufshcd-priv.h |  2 +-
->  drivers/ufs/core/ufshcd.c      |  2 +-
->  3 files changed, 30 insertions(+), 9 deletions(-)
+> I took a quick look and the issue seems to be that we don't call the
+> various attach handlers during CLONE_INTO_CGROUP whereas we do for
+> migration. So the solution seems to roughly be that we need to call the
+> various attach handlers during CLONE_INTO_CGROUP as well when the
+> parent's cgroups is different from the child cgroup. I think we need to
+> call all of them, can, cancel and attach.
+>
+> The plumbing here might be a bit intricate since the arguments that the
+> fork handlers take are different from the attach handlers.
+>
+> Christian
+>
+> [1]: https://paste.centos.org/view/f434fa1a
+>
+I saw that the current cgroup code already have the can_fork, fork and 
+cancel_fork callbacks. Unfortunately such callbacks are not defined for 
+cpuset yet. That is why the cpu affinity isn't correctly updated. I can 
+post a patch to add those callback functions to cpuset which should then 
+able to correctly address this issue.
 
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+Cheers,
+Longman
+
