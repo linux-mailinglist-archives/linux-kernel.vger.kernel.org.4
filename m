@@ -2,134 +2,822 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D3D6CDAE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAAA6CDAE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjC2NbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 09:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S230118AbjC2Nba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 09:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjC2NbP (ORCPT
+        with ESMTP id S229601AbjC2Nb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:31:15 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FF0DC
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:31:13 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id q19so12658382wrc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680096672;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XPcrWC89uyvGiy5iw9GWnI8C+4ORF9dvsNBf+0cB00o=;
-        b=Hu3eJcUJhu3n9dOUB/l/4mCsVOAJ2lOgC5mFMKc9MDJ6N/M8l9GyWP7xvuqS+szrua
-         0u48XlTUYTDEg76d8NHw0kEYFd1LoDUxM6hSiSLf7x0X0QCKCRhwHco+csPg+H/JzOeS
-         OzD49xgQA5L580f0gzaFijeWy5bLEaJQshQNpfYpRyugsfcDBjwRjYANIxSzpF8Y04sg
-         +l4qXyHIqAW+s2gKBB6W6bU7mFeXx9O2kCgp6WWocpl6FRGpjqXvblz0I/ngcyDwE9Pr
-         Zm9JxroLoJW950kT0lMmAn6wjaOW7MeqgTIj4M4rJ5c7nu3ipMmDOXzAKI2pffI+Kz7C
-         DNDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680096672;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XPcrWC89uyvGiy5iw9GWnI8C+4ORF9dvsNBf+0cB00o=;
-        b=J1u1wFsqpP7mfors/g9u1G4fwBFvQdoKiUieHljPo9z5B2h5/N2hQ/ELMn+HpoV03O
-         vbyxPeQeBpmBspV1OTePgHynCDFIBd0UOvVkL15V24aB6qGbau+svGF5A+xYPeQh4sQD
-         J31YXlRtxVt3UO66EUIf4Pd0+psi4Q+I5RwinaP+IaEBga+1TOh4jyWdAHAkOQUDTqQb
-         J/LlZQVBdykIWrPMcnX718fGXjAgZJqjFCXC6saeJM6RFS+w8gQbdMFn6/0OCAr3YP47
-         9k0SYBA34CUsihqLLnhm0Tp26uF4aXIqDKetIUeurUHEr4TmZ3ImCww7v2zpuSNIEBlD
-         0ZYw==
-X-Gm-Message-State: AAQBX9eHiOFR/iebv1erN15F27B7Cxob4yFtvJ3l4R0mJVF0Z1fO4NXW
-        dcUjjlbzDWeih8XAatLlioN5TmxMz/Gs8cv3FDBUWQ==
-X-Google-Smtp-Source: AKy350a4gUYJkkQM96D0mP2b6HwbfXslvkrUItBPYRKXFWdKFxLss9/HjxUZamPMhqyisyz8u1/OUA==
-X-Received: by 2002:a5d:6dcc:0:b0:2ce:ab76:cc8c with SMTP id d12-20020a5d6dcc000000b002ceab76cc8cmr1890261wrz.2.1680096671965;
-        Wed, 29 Mar 2023 06:31:11 -0700 (PDT)
-Received: from google.com (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
-        by smtp.gmail.com with ESMTPSA id b7-20020a5d4d87000000b002c707785da4sm30159594wru.107.2023.03.29.06.31.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 06:31:11 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 14:31:07 +0100
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v2 1/2] ring-buffer: Introducing ring-buffer mapping
- functions
-Message-ID: <ZCQ9m5K34Qa9ZkUd@google.com>
-References: <20230322102244.3239740-1-vdonnefort@google.com>
- <20230322102244.3239740-2-vdonnefort@google.com>
- <20230328224411.0d69e272@gandalf.local.home>
- <ZCQCsD9+nNwBYIyH@google.com>
- <20230329070353.1e1b443b@gandalf.local.home>
- <20230329085106.046a8991@rorschach.local.home>
- <ZCQ2jW5Jl/cWCG7s@google.com>
- <20230329091107.408d63a8@rorschach.local.home>
+        Wed, 29 Mar 2023 09:31:27 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221D549DF;
+        Wed, 29 Mar 2023 06:31:24 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 2A276604F0;
+        Wed, 29 Mar 2023 15:31:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680096681; bh=3Zza+/KBORKaB9QEJCmssrpZyJnBJT0FX8SqqTWyPWk=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=hvO7lRtrbDfbxdNhZO9ol2WqDi7iRxMWnH7jNiheiZjUa1H0lRsldlca0WCAQ0JUH
+         Ok8vOLiPBBKAbgi4pZMZb2ViSGhIOE2R6w3RzNylIea2W/QBZeHUlWtG6/qR/N7E7F
+         z8lw4a/dCK7gu2uZ+8MMiSiV0rwhEQ6SzFF99Jb9Cv1fbAEoDvkF8hBQctYm73eVi5
+         S/FPOob2BQKWDE4Ez+KZqF6lBH+BrrhvzwWvpW2axnkbGwogsP6s66k4WvM6AkgVYN
+         0dGcuMUqalYguTj/jAQ4pTaCVF8M0fvZe89aG+qGs4hFnGP439hT9Gm/yigTAxC8u/
+         7JgzRkDqm1Afw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Q-0zNUn1c48l; Wed, 29 Mar 2023 15:31:17 +0200 (CEST)
+Received: from [10.0.1.78] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id 24FAF604EA;
+        Wed, 29 Mar 2023 15:31:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680096677; bh=3Zza+/KBORKaB9QEJCmssrpZyJnBJT0FX8SqqTWyPWk=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=0Wxomymsavd4PZyyr7YED4d8dP6jNwT64KbQe5R/kO9G4gI+TCdFX1qh1mJa6PHx6
+         VcqsCTG0/GaWsVyiHhd1vFEPNLBS8WHUxPfWwpoVXCROZU542afP4mYYh3iSOBUTFf
+         X2zNdmlUBOMLc7foeVExF9xEzK1SF+A6igrc2V5oaiQY5YGyb7Nt8k82d9Px4OR/Cx
+         Ba8N2yym17vWM6RnFxdVKl824i3bP891hAd0Xyd/P36zcnBLch59AlQNvnfHAVZsWw
+         F6jPqq8t1RikkJeuPDDEJMkfVqMjDF+J3MjeCDhhb8YbuodhIAsQ/MN9RpSGyj3/2Q
+         fpt8ItfWV1xiA==
+Message-ID: <9f757a7b-6ac9-804a-063f-4cc2c6fc3f54@alu.unizg.hr>
+Date:   Wed, 29 Mar 2023 15:31:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329091107.408d63a8@rorschach.local.home>
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [BUG] [BISECTED] [CORRECTION] systemd-devd triggers kernel
+ memleak apparently in drivers/core/dd.c: driver_register()
+Content-Language: en-US
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Armin Wolf <W_Armin@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        Mark Pearson <mpearson-lenovo@squebb.ca>
+References: <5059b11b-8b6e-394b-338f-49e1339067fa@alu.unizg.hr>
+ <ZCLPaYGKHlFQGKYQ@kroah.com>
+ <542c13f5-4cdd-7750-f10a-ef64bb7e8faa@alu.unizg.hr>
+ <d011a1d7-34ab-5f54-fcc7-d727abc7ec9b@alu.unizg.hr>
+ <ZCLa3_HnLQA0GQKS@kroah.com>
+ <b50f9460-ac54-e997-f9b9-3c47a9b87aae@alu.unizg.hr>
+ <df26ff45-8933-f2b3-25f4-6ee51ccda7d8@gmx.de>
+ <16862c45-2ffd-a2f2-6719-020c5d515800@alu.unizg.hr>
+ <4f65a23f-4e04-f04f-e56b-230a38ac5ec4@gmx.de>
+ <01e920bc-5882-ba0c-dd15-868bf0eca0b8@alu.unizg.hr>
+ <8b478e6d-7482-2cbb-ee14-b2dc522daf35@alu.unizg.hr>
+In-Reply-To: <8b478e6d-7482-2cbb-ee14-b2dc522daf35@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 09:11:07AM -0400, Steven Rostedt wrote:
-> On Wed, 29 Mar 2023 14:01:01 +0100
-> Vincent Donnefort <vdonnefort@google.com> wrote:
-> 
-> > > Oh, I guess we should also expose the amount read on the reader page,
-> > > that gets updated on the ioctl. That is, if the first time we read the
-> > > reader page and the page is not full and unmap the pages, and then new
-> > > events were added to the reader page, we should not re-read the events
-> > > that were read previously.
-> > > 
-> > > That is, expose cpu_buffer->reader_page->read  
-> > 
-> > Couldn't it be an issue of updating cpu_buffer->reader_page->read during the
-> > ioctl? I guess we would write the value of the current written events on that
-> > page, hopping for the userspace reader to read it all.
-> > 
-> > But then if new events are written, the reader doesn't need the ioctl to read
-> > them, it can just check the meta->entries field or the commit field in the
-> > reader_page header?
-> > 
-> > So it's much likely cpu_buffer->reader_page->read will go out of sync?
-> 
-> Here's the issue I found during testing:
-> 
-> write 10 events to ring buffer (all go into the reader page)
-> 
-> Run application that maps the pages, and reads the 10 events, and exits.
-> 
-> Write 10 more events to ring buffer (all are appended to the reader page)
-> 
-> Run application that maps the pages and reads 20 events, and exits.
-> 
-> It read the 10 previous events, but should not have. It should have
-> only read the last 10 that were not read previously.
+Hi, again,
 
-I see.
+NOTE: I forgot to rewind to the first bad commit. So please ignore
+the previous email.
 
-We can say we update cpu_buffer->reader_page->read on the get_reader_page ioctl,
-to the most recent value possible, which will have the consequence of actually
-"flushing" those events?
-
-If the reader decides to read events past this value then it just can't expect
-them to not be duplicated?
-
-I suppose it'd be down the reader to store meta->read somehwere?
-
-   prev_read = meta->read
-   ioctl(fd, TRACE_MMAP_IOCTL_GET_READER_PAGE)
-   /* read events from prev_read to meta->read */
-
-
+On 29.3.2023. 15:22, Mirsad Goran Todorovac wrote:
+> Hi, Armin, Mr. Greg,
 > 
-> -- Steve
+> On 29.3.2023. 10:13, Mirsad Goran Todorovac wrote:
+>> On 28.3.2023. 21:55, Armin Wolf wrote:
+>>> Am 28.03.23 um 21:06 schrieb Mirsad Goran Todorovac:
+>>>
+>>>> On 3/28/2023 6:53 PM, Armin Wolf wrote:
+>>>>> Am 28.03.23 um 14:44 schrieb Mirsad Todorovac:
+>>>>>
+>>>>>> On 3/28/23 14:17, Greg Kroah-Hartman wrote:
+>>>>>>> On Tue, Mar 28, 2023 at 02:08:06PM +0200, Mirsad Todorovac wrote:
+>>>>>>>> On 3/28/23 13:59, Mirsad Todorovac wrote:
+>>>>>>>>
+>>>>>>>>> On 3/28/23 13:28, Greg Kroah-Hartman wrote:
+>>>>>>>>>> On Tue, Mar 28, 2023 at 01:13:33PM +0200, Mirsad Todorovac wrote:
+>>>>>>>>>>> Hi all,
+>>>>>>>>>>>
+>>>>>>>>>>> Here is another kernel memory leak report, just as I thought we
+>>>>>>>>>>> have done with
+>>>>>>>>>>> them by the xhci patch by Mathias.
+>>>>>>>>>>>
+>>>>>>>>>>> The memory leaks were caught on an AlmaLinux 8.7 (CentOS) fork
+>>>>>>>>>>> system, running
+>>>>>>>>>>> on a Lenovo desktop box (see lshw.txt) and the newest Linux
+>>>>>>>>>>> kernel 6.3-rc4 commit
+>>>>>>>>>>> g3a93e40326c8 with Mathias' patch for a xhci systemd-devd
+>>>>>>>>>>> triggered leak.
+>>>>>>>>>>>
+>>>>>>>>>>>           See:
+>>>>>>>>>>> <20230327095019.1017159-1-mathias.nyman@linux.intel.com> on LKML.
+>>>>>>>>>>>
+>>>>>>>>>>> This leak is also systemd-devd triggered, except for the
+>>>>>>>>>>> memstick_check() leaks
+>>>>>>>>>>> which I was unable to bisect due to the box not booting older
+>>>>>>>>>>> kernels (work in
+>>>>>>>>>>> progress).
+>>>>>>>>>>>
+>>>>>>>>>>> unreferenced object 0xffff88ad12392710 (size 96):
+>>>>>>>>>>>     comm "systemd-udevd", pid 735, jiffies 4294896759 (age
+>>>>>>>>>>> 2257.568s)
+>>>>>>>>>>>     hex dump (first 32 bytes):
+>>>>>>>>>>>       53 65 72 69 61 6c 50 6f 72 74 31 41 64 64 72 65
+>>>>>>>>>>> SerialPort1Addre
+>>>>>>>>>>>       73 73 2c 33 46 38 2f 49 52 51 34 3b 5b 4f 70 74
+>>>>>>>>>>> ss,3F8/IRQ4;[Opt
+>>>>>>>>>>>     backtrace:
+>>>>>>>>>>>       [<ffffffffae8fb26c>] slab_post_alloc_hook+0x8c/0x3e0
+>>>>>>>>>>>       [<ffffffffae902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
+>>>>>>>>>>>       [<ffffffffae8773c9>] __kmalloc_node_track_caller+0x59/0x180
+>>>>>>>>>>>       [<ffffffffae866a1a>] kstrdup+0x3a/0x70
+>>>>>>>>>>>       [<ffffffffc0d839aa>]
+>>>>>>>>>>> tlmi_extract_output_string.isra.0+0x2a/0x60 [think_lmi]
+>>>>>>>>>>>       [<ffffffffc0d83b64>] tlmi_setting.constprop.4+0x54/0x90
+>>>>>>>>>>> [think_lmi]
+>>>>>>>>>>>       [<ffffffffc0d842b1>] tlmi_probe+0x591/0xba0 [think_lmi]
+>>>>>>>>>>>       [<ffffffffc051dc53>] wmi_dev_probe+0x163/0x230 [wmi]
+>>>>>>>>>>
+>>>>> Hi,
+>>>>>
+>>>>> this "SerialPort1Address" string looks like a BIOS setup option, and
+>>>>> indeed think_lmi allows for
+>>>>> changing BIOS setup options over sysfs. While looking at
+>>>>> current_value_show() in think-lmi.c, i noticed
+>>>>> that "item" holds a string which is allocated with kstrdup(), so it
+>>>>> has to be freed using kfree().
+>>>>> This however does not happen if strbrk() fails, so maybe the memory
+>>>>> leak is caused by this?
+>>>>>
+>>>>> Armin Wolf
+>>>>
+>>>> Hi Armin,
+>>>>
+>>>> I tried your suggestion, and though it is an obvious improvement and a
+>>>> leak fix, this
+>>>> was not the one we were searching for.
+>>>>
+>>>> I tested the following patch:
+>>>>
+>>>> diff --git a/drivers/platform/x86/think-lmi.c
+>>>> b/drivers/platform/x86/think-lmi.c
+>>>> index c816646eb661..1e77ecb0cba8 100644
+>>>> --- a/drivers/platform/x86/think-lmi.c
+>>>> +++ b/drivers/platform/x86/think-lmi.c
+>>>> @@ -929,8 +929,10 @@ static ssize_t current_value_show(struct kobject
+>>>> *kobj, struct kobj_attribute *a
+>>>>
+>>>>         /* validate and split from `item,value` -> `value` */
+>>>>         value = strpbrk(item, ",");
+>>>> -       if (!value || value == item || !strlen(value + 1))
+>>>> +       if (!value || value == item || !strlen(value + 1)) {
+>>>> +               kfree(item);
+>>>>                 return -EINVAL;
+>>>> +       }
+>>>>
+>>>>         ret = sysfs_emit(buf, "%s\n", value + 1);
+>>>>         kfree(item);
+>>>>
+>>>> (I would also object to the use of strlen() here, for it is inherently
+>>>> insecure
+>>>> against SEGFAULT in kernel space.)
+>>>>
+>>>> I still get:
+>>>> [root@pc-mtodorov marvin]# uname -rms
+>>>> Linux 6.3.0-rc4-armin-patch-00025-g3a93e40326c8-dirty x86_64
+>>>> [root@pc-mtodorov marvin]# cat /sys/kernel/debug/kmemleak [edited]
+>>>> unreferenced object 0xffff8eb008ef9260 (size 96):
+>>>>   comm "systemd-udevd", pid 771, jiffies 4294896499 (age 74.880s)
+>>>>   hex dump (first 32 bytes):
+>>>>     53 65 72 69 61 6c 50 6f 72 74 31 41 64 64 72 65 SerialPort1Addre
+>>>>     73 73 2c 33 46 38 2f 49 52 51 34 3b 5b 4f 70 74 ss,3F8/IRQ4;[Opt
+>>>>   backtrace:
+>>>>     [<ffffffff9eafb26c>] slab_post_alloc_hook+0x8c/0x3e0
+>>>>     [<ffffffff9eb02b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
+>>>>     [<ffffffff9ea773c9>] __kmalloc_node_track_caller+0x59/0x180
+>>>>     [<ffffffff9ea66a1a>] kstrdup+0x3a/0x70
+>>>>     [<ffffffffc0eef9aa>] tlmi_extract_output_string.isra.0+0x2a/0x60
+>>>> [think_lmi]
+>>>>     [<ffffffffc0eefb64>] tlmi_setting.constprop.4+0x54/0x90 [think_lmi]
+>>>>     [<ffffffffc0ef02c1>] tlmi_probe+0x591/0xba0 [think_lmi]
+>>>>     [<ffffffffc0629c53>] wmi_dev_probe+0x163/0x230 [wmi]
+>>>>     [<ffffffff9f1987eb>] really_probe+0x17b/0x3d0
+>>>>     [<ffffffff9f198ad4>] __driver_probe_device+0x84/0x190
+>>>>     [<ffffffff9f198c14>] driver_probe_device+0x24/0xc0
+>>>>     [<ffffffff9f198ed2>] __driver_attach+0xc2/0x190
+>>>>     [<ffffffff9f195ab1>] bus_for_each_dev+0x81/0xd0
+>>>>     [<ffffffff9f197c62>] driver_attach+0x22/0x30
+>>>>     [<ffffffff9f197354>] bus_add_driver+0x1b4/0x240
+>>>>     [<ffffffff9f19a0a2>] driver_register+0x62/0x120
+>>>> unreferenced object 0xffff8eb018ddbb40 (size 64):
+>>>>   comm "systemd-udevd", pid 771, jiffies 4294896528 (age 74.780s)
+>>>>   hex dump (first 32 bytes):
+>>>>     55 53 42 50 6f 72 74 41 63 63 65 73 73 2c 45 6e USBPortAccess,En
+>>>>     61 62 6c 65 64 3b 5b 4f 70 74 69 6f 6e 61 6c 3a abled;[Optional:
+>>>>   backtrace:
+>>>>     [<ffffffff9eafb26c>] slab_post_alloc_hook+0x8c/0x3e0
+>>>>     [<ffffffff9eb02b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
+>>>>     [<ffffffff9ea773c9>] __kmalloc_node_track_caller+0x59/0x180
+>>>>     [<ffffffff9ea66a1a>] kstrdup+0x3a/0x70
+>>>>     [<ffffffffc0eef9aa>] tlmi_extract_output_string.isra.0+0x2a/0x60
+>>>> [think_lmi]
+>>>>     [<ffffffffc0eefb64>] tlmi_setting.constprop.4+0x54/0x90 [think_lmi]
+>>>>     [<ffffffffc0ef02c1>] tlmi_probe+0x591/0xba0 [think_lmi]
+>>>>     [<ffffffffc0629c53>] wmi_dev_probe+0x163/0x230 [wmi]
+>>>>     [<ffffffff9f1987eb>] really_probe+0x17b/0x3d0
+>>>>     [<ffffffff9f198ad4>] __driver_probe_device+0x84/0x190
+>>>>     [<ffffffff9f198c14>] driver_probe_device+0x24/0xc0
+>>>>     [<ffffffff9f198ed2>] __driver_attach+0xc2/0x190
+>>>>     [<ffffffff9f195ab1>] bus_for_each_dev+0x81/0xd0
+>>>>     [<ffffffff9f197c62>] driver_attach+0x22/0x30
+>>>>     [<ffffffff9f197354>] bus_add_driver+0x1b4/0x240
+>>>>     [<ffffffff9f19a0a2>] driver_register+0x62/0x120
+>>>> unreferenced object 0xffff8eb006fe2b40 (size 64):
+>>>>   comm "systemd-udevd", pid 771, jiffies 4294896542 (age 74.724s)
+>>>>   hex dump (first 32 bytes):
+>>>>     55 53 42 42 49 4f 53 53 75 70 70 6f 72 74 2c 45 USBBIOSSupport,E
+>>>>     6e 61 62 6c 65 64 3b 5b 4f 70 74 69 6f 6e 61 6c nabled;[Optional
+>>>>   backtrace:
+>>>>     [<ffffffff9eafb26c>] slab_post_alloc_hook+0x8c/0x3e0
+>>>>     [<ffffffff9eb02b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
+>>>>     [<ffffffff9ea773c9>] __kmalloc_node_track_caller+0x59/0x180
+>>>>     [<ffffffff9ea66a1a>] kstrdup+0x3a/0x70
+>>>>     [<ffffffffc0eef9aa>] tlmi_extract_output_string.isra.0+0x2a/0x60
+>>>> [think_lmi]
+>>>>     [<ffffffffc0eefb64>] tlmi_setting.constprop.4+0x54/0x90 [think_lmi]
+>>>>     [<ffffffffc0ef02c1>] tlmi_probe+0x591/0xba0 [think_lmi]
+>>>>     [<ffffffffc0629c53>] wmi_dev_probe+0x163/0x230 [wmi]
+>>>>     [<ffffffff9f1987eb>] really_probe+0x17b/0x3d0
+>>>>     [<ffffffff9f198ad4>] __driver_probe_device+0x84/0x190
+>>>>     [<ffffffff9f198c14>] driver_probe_device+0x24/0xc0
+>>>>     [<ffffffff9f198ed2>] __driver_attach+0xc2/0x190
+>>>>     [<ffffffff9f195ab1>] bus_for_each_dev+0x81/0xd0
+>>>>     [<ffffffff9f197c62>] driver_attach+0x22/0x30
+>>>>     [<ffffffff9f197354>] bus_add_driver+0x1b4/0x240
+>>>>     [<ffffffff9f19a0a2>] driver_register+0x62/0x120
+>>>>
+>>>> There are currently 84 wmi_dev_probe leaks, sized mostly 64 bytes, and
+>>>> one 96 and two 192 bytes.
+>>>>
+>>>> I also cannot figure out the mechanism by which current_value_show()
+>>>> is called, when it is static?
+>>>>
+>>>> Any idea?
+>>>>
+>>>> Thanks.
+>>>>
+>>>> Best regards,
+>>>> Mirsad
+>>>>
+>>> Can you tell me how many BIOS settings think-lmi provides on your machine? Because according to the stacktrace,
+>>> the other place where the leak could have occurred is inside tlmi_analyze(), which calls tlmi_setting().
+>>
+>> Yes, Sir!
+>>
+>> I think these could be the ones you need (totaling 83, which is close to 82 systemd-udevd leaks):
+>>
+>> [root@pc-mtodorov marvin]# ls -l /sys/devices/virtual/firmware-attributes/thinklmi/attributes | grep ^d
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 AfterPowerLoss
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 AlarmDate(MM\DD\YYYY)
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 AlarmDayofWeek
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 AlarmTime(HH:MM:SS)
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 ASPMSupport
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 AutomaticBootSequence
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 BIOSPasswordAtBootDeviceList
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 BIOSPasswordAtReboot
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 BIOSPasswordAtUnattendedBoot
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 BootMode
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 BootPriority
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 BootUpNum-LockStatus
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 C1ESupport
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 CardReader
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 ClearTCGSecurityFeature
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 ComputraceModuleActivation
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 ConfigurationChangeDetection
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 ConfigureSATAas
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 CoreMulti-Processing
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 CoverTamperDetected
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 CSM
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 CStateSupport
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 DeviceGuard
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 DustShieldAlert
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 EISTSupport
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 EnhancedPowerSavingMode
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 ErrorBootSequence
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 Friday
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 FrontUSBPorts
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 HardDiskPre-delay
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 Intel(R)SGXControl
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 InternalSpeaker
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 Monday
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 OnboardAudioController
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 OnboardEthernetController
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 OptionKeysDisplay
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 OptionKeysDisplayStyle
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 OSOptimizedDefaults
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 PasswordCountExceededError
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 PCIe16xSlotSpeed
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 PCIe1xSlot1Speed
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 PrimaryBootSequence
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 PXEIPV4NetworkStack
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 PXEIPV6NetworkStack
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 PXEOptionROM
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 RearUSBPorts
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 RequireAdmin.Pass.whenFlashing
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 RequireHDPonSystemBoot
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 SATAController
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 SATADrive1
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 SATADrive2
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 Saturday
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 SecureBoot
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 SecureRollBackPrevention
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 SecurityChip
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 SelectActiveVideo
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 SerialPort1Address
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 SmartUSBProtection
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 StartupDeviceMenuPrompt
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 StartupSequence
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 Sunday
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 Thursday
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 Tuesday
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 TurboMode
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 USBBIOSSupport
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 USBEnumerationDelay
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 USBPort1
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 USBPort2
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 USBPort3
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 USBPort4
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 USBPort5
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 USBPort6
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 USBPort7
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 USBPort8
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 USBPortAccess
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 UserDefinedAlarmTime(HH:MM:SS)
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 VirtualizationTechnology
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 VTdFeature
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 WakefromSerialPortRing
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 WakeOnLAN
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 WakeUponAlarm
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 Wednesday
+>> drwxr-xr-x 2 root root    0 Mar 29 08:24 WindowsUEFIFirmwareUpdate
+>> [root@pc-mtodorov marvin]# ls -l /sys/devices/virtual/firmware-attributes/thinklmi/attributes | grep ^d | wc -l
+>> 83
+>> [root@pc-mtodorov marvin]#
+>>
+>>> However, i have no idea on how *info is somehow leaked, it has to happen inside the for-loop tween the call
+>>> to tlmi_setting() and strreplace(), because otherwise the strings would not contain the "/" character.
+>>
+>> I see. It is the line 1404.
+>>
+>>> Can you check if the problem is somehow solved by applying the following commit from the platform-drivers-x86
+>>> for-next branch:
+>>> da62908efe80 ("platform/x86: think-lmi: Properly interpret return value of tlmi_setting")
+>>
+>> It could possibly be that. But I do not recall seeing these messages in 6.3-rc3 ...
+>>
+>> ...
+>>
+>> Unfortunately, the build with Thomas' patch you referred to did not work:
+>>
+>> unreferenced object 0xffff9dff4d28bbc8 (size 192):
+>>    comm "systemd-udevd", pid 769, jiffies 4294897473 (age 85.700s)
+>>    hex dump (first 32 bytes):
+>>      50 72 69 6d 61 72 79 42 6f 6f 74 53 65 71 75 65  PrimaryBootSeque
+>>      6e 63 65 2c 4d 2e 32 20 44 72 69 76 65 20 31 3a  nce,M.2 Drive 1:
+>>    backtrace:
+>>      [<ffffffffa48fb26c>] slab_post_alloc_hook+0x8c/0x3e0
+>>      [<ffffffffa4902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
+>>      [<ffffffffa48773c9>] __kmalloc_node_track_caller+0x59/0x180
+>>      [<ffffffffa4866a1a>] kstrdup+0x3a/0x70
+>>      [<ffffffffc0c7f9aa>] tlmi_extract_output_string.isra.0+0x2a/0x60 [think_lmi]
+>>      [<ffffffffc0c7fb64>] tlmi_setting.constprop.4+0x54/0x90 [think_lmi]
+>>      [<ffffffffc0c802c1>] tlmi_probe+0x591/0xba0 [think_lmi]
+>>      [<ffffffffc03c9c53>] wmi_dev_probe+0x163/0x230 [wmi]
+>>      [<ffffffffa4f987eb>] really_probe+0x17b/0x3d0
+>>      [<ffffffffa4f98ad4>] __driver_probe_device+0x84/0x190
+>>      [<ffffffffa4f98c14>] driver_probe_device+0x24/0xc0
+>>      [<ffffffffa4f98ed2>] __driver_attach+0xc2/0x190
+>>      [<ffffffffa4f95ab1>] bus_for_each_dev+0x81/0xd0
+>>      [<ffffffffa4f97c62>] driver_attach+0x22/0x30
+>>      [<ffffffffa4f97354>] bus_add_driver+0x1b4/0x240
+>>      [<ffffffffa4f9a0a2>] driver_register+0x62/0x120
+>> unreferenced object 0xffff9dff4d28a008 (size 192):
+>>    comm "systemd-udevd", pid 769, jiffies 4294897517 (age 85.540s)
+>>    hex dump (first 32 bytes):
+>>      45 72 72 6f 72 42 6f 6f 74 53 65 71 75 65 6e 63  ErrorBootSequenc
+>>      65 2c 4e 65 74 77 6f 72 6b 20 31 3a 4d 2e 32 20  e,Network 1:M.2
+>>    backtrace:
+>>      [<ffffffffa48fb26c>] slab_post_alloc_hook+0x8c/0x3e0
+>>      [<ffffffffa4902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
+>>      [<ffffffffa48773c9>] __kmalloc_node_track_caller+0x59/0x180
+>>      [<ffffffffa4866a1a>] kstrdup+0x3a/0x70
+>>      [<ffffffffc0c7f9aa>] tlmi_extract_output_string.isra.0+0x2a/0x60 [think_lmi]
+>>      [<ffffffffc0c7fb64>] tlmi_setting.constprop.4+0x54/0x90 [think_lmi]
+>>      [<ffffffffc0c802c1>] tlmi_probe+0x591/0xba0 [think_lmi]
+>>      [<ffffffffc03c9c53>] wmi_dev_probe+0x163/0x230 [wmi]
+>>      [<ffffffffa4f987eb>] really_probe+0x17b/0x3d0
+>>      [<ffffffffa4f98ad4>] __driver_probe_device+0x84/0x190
+>>      [<ffffffffa4f98c14>] driver_probe_device+0x24/0xc0
+>>      [<ffffffffa4f98ed2>] __driver_attach+0xc2/0x190
+>>      [<ffffffffa4f95ab1>] bus_for_each_dev+0x81/0xd0
+>>      [<ffffffffa4f97c62>] driver_attach+0x22/0x30
+>>      [<ffffffffa4f97354>] bus_add_driver+0x1b4/0x240
+>>      [<ffffffffa4f9a0a2>] driver_register+0x62/0x120
+>> [root@pc-mtodorov marvin]# uname -rms
+>> Linux 6.3.0-rc4-armin+tw-patch-00025-g3a93e40326c8-dirty x86_64
+>> [root@pc-mtodorov marvin]#
+>>
+>> What was applied is:
+>>
+>> mtodorov@domac:~/linux/kernel/linux_torvalds$ git diff
+>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+>> index c816646eb661..9a3015f43aaf 100644
+>> --- a/drivers/platform/x86/think-lmi.c
+>> +++ b/drivers/platform/x86/think-lmi.c
+>> @@ -929,8 +929,10 @@ static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *a
+>>
+>>          /* validate and split from `item,value` -> `value` */
+>>          value = strpbrk(item, ",");
+>> -       if (!value || value == item || !strlen(value + 1))
+>> +       if (!value || value == item || !strlen(value + 1)) {
+>> +               kfree(item);
+>>                  return -EINVAL;
+>> +       }
+>>
+>>          ret = sysfs_emit(buf, "%s\n", value + 1);
+>>          kfree(item);
+>> @@ -1380,7 +1382,6 @@ static struct tlmi_pwd_setting *tlmi_create_auth(const char *pwd_type,
+>>
+>>   static int tlmi_analyze(void)
+>>   {
+>> -       acpi_status status;
+>>          int i, ret;
+>>
+>>          if (wmi_has_guid(LENOVO_SET_BIOS_SETTINGS_GUID) &&
+>> @@ -1417,8 +1418,8 @@ static int tlmi_analyze(void)
+>>                  char *p;
+>>
+>>                  tlmi_priv.setting[i] = NULL;
+>> -               status = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
+>> -               if (ACPI_FAILURE(status))
+>> +               ret = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
+>> +               if (ret)
+>>                          break;
+>>                  if (!item)
+>>                          break;
+>>
+>>
+>>> Also current_value_show() is used by attr_current_val, the __ATTR_RW_MODE() macro arranges for that.
+>>
+>> Thanks.
+>>
+>> In this build:
+>>
+>> [root@pc-mtodorov marvin]# uname -rms
+>> Linux 6.3.0-rc34tests-00001-g6981739a967c x86_64
+>> [root@pc-mtodorov marvin]#
+>>
+>> ... the bug isn't present, so it might be something added recently:
+>>
+>> commit 8a02d70679fc1c434401863333c8ea7dbf201494
+>> Author: Mark Pearson <mpearson-lenovo@squebb.ca>
+>> Date:   Sun Mar 19 20:32:21 2023 -0400
+>>
+>>      platform/x86: think-lmi: Add possible_values for ThinkStation
+>>
+>> commit cf337f27f3bfc4aeab4954c468239fd6233c7638
+>> Author: Mark Pearson <mpearson-lenovo@squebb.ca>
+>> Date:   Sun Mar 19 20:32:20 2023 -0400
+>>
+>>      platform/x86: think-lmi: only display possible_values if available
+>>
+>> commit 45e21289bfc6e257885514790a8a8887da822d40
+>> Author: Mark Pearson <mpearson-lenovo@squebb.ca>
+>> Date:   Sun Mar 19 20:32:19 2023 -0400
+>>
+>>      platform/x86: think-lmi: use correct possible_values delimiters
+>>
+>> commit 583329dcf22e568a328a944f20427ccfc95dce01
+>> Author: Mark Pearson <mpearson-lenovo@squebb.ca>
+>> Date:   Sun Mar 19 20:32:18 2023 -0400
+>>
+>>      platform/x86: think-lmi: add missing type attribute
+>>
+>> I have CC:-ed the author of the commits.
+>>
+>> I can try bisect, but only after my day job.
+> 
+> I seem to have been right about the culprit commit.
+> 
+> Here is the bisect log:
+> 
+> mtodorov@domac:~/linux/kernel/linux_torvalds$ git bisect log
+> git bisect start '--' './drivers/platform/x86'
+> # good: [caa0708a81d6a2217c942959ef40d515ec1d3108] bootconfig: Change message if no bootconfig with CONFIG_BOOT_CONFIG_FORCE=y
+> git bisect good caa0708a81d6a2217c942959ef40d515ec1d3108
+> # bad: [8a02d70679fc1c434401863333c8ea7dbf201494] platform/x86: think-lmi: Add possible_values for ThinkStation
+> git bisect bad 8a02d70679fc1c434401863333c8ea7dbf201494
+> # good: [1a0009abfa7893b9cfcd3884658af1cbee6b26ce] platform: mellanox: mlx-platform: Initialize shift variable to 0
+> git bisect good 1a0009abfa7893b9cfcd3884658af1cbee6b26ce
+> # good: [b7c994f8c35e916e27c60803bb21457bc1373500] platform/x86 (gigabyte-wmi): Add support for A320M-S2H V2
+> git bisect good b7c994f8c35e916e27c60803bb21457bc1373500
+> # good: [45e21289bfc6e257885514790a8a8887da822d40] platform/x86: think-lmi: use correct possible_values delimiters
+> git bisect good 45e21289bfc6e257885514790a8a8887da822d40
+> # good: [cf337f27f3bfc4aeab4954c468239fd6233c7638] platform/x86: think-lmi: only display possible_values if available
+> git bisect good cf337f27f3bfc4aeab4954c468239fd6233c7638
+> # first bad commit: [8a02d70679fc1c434401863333c8ea7dbf201494] platform/x86: think-lmi: Add possible_values for ThinkStation
+> mtodorov@domac:~/linux/kernel/linux_torvalds$
+> 
+> Please see below.
+> 
+> Apparently, this commit broke something on my Lenovo box:
+> 
+> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+> index e190fec26021..3f0641360251 100644
+> --- a/drivers/platform/x86/think-lmi.c
+> +++ b/drivers/platform/x86/think-lmi.c
+> @@ -941,9 +941,6 @@ static ssize_t possible_values_show(struct kobject *kobj, struct kobj_attribute
+>   {
+>          struct tlmi_attr_setting *setting = to_tlmi_attr_setting(kobj);
+> 
+> -       if (!tlmi_priv.can_get_bios_selections)
+> -               return -EOPNOTSUPP;
+> -
+>          return sysfs_emit(buf, "%s\n", setting->possible_values);
+>   }
+> 
+> @@ -1052,6 +1049,18 @@ static struct kobj_attribute attr_current_val = __ATTR_RW_MODE(current_value, 06
+> 
+>   static struct kobj_attribute attr_type = __ATTR_RO(type);
+> 
+> +static umode_t attr_is_visible(struct kobject *kobj,
+> +                                            struct attribute *attr, int n)
+> +{
+> +       struct tlmi_attr_setting *setting = to_tlmi_attr_setting(kobj);
+> +
+> +       /* We don't want to display possible_values attributes if not available */
+> +       if ((attr == &attr_possible_values.attr) && (!setting->possible_values))
+> +               return 0;
+> +
+> +       return attr->mode;
+> +}
+> +
+>   static struct attribute *tlmi_attrs[] = {
+>          &attr_displ_name.attr,
+>          &attr_current_val.attr,
+> @@ -1061,6 +1070,7 @@ static struct attribute *tlmi_attrs[] = {
+>   };
+> 
+>   static const struct attribute_group tlmi_attr_group = {
+> +       .is_visible = attr_is_visible,
+>          .attrs = tlmi_attrs,
+>   };
+> 
+> Hope this helps narrow down the problem.
+> 
+> Best regards,
+> Mirsad
+> 
+>>>>>>>>>> Why aren't you looking at the wmi.c driver?  That should be
+>>>>>>>>>> where the
+>>>>>>>>>> issue is, not the driver core, right?
+>>>>>>>>>>
+>>>>>>>>>> thanks,
+>>>>>>>>>>
+>>>>>>>>>> greg k-h
+>>>>>>>>>
+>>>>>>>>> Hi, Mr. Greg,
+>>>>>>>>>
+>>>>>>>>> Thanks for the quick reply.
+>>>>>>>>>
+>>>>>>>>> I have added CC: for additional developers per
+>>>>>>>>> drivers/platform/x86/wmi.c,
+>>>>>>>>> however, this seems to me like hieroglyphs. There is nothing
+>>>>>>>>> obvious, but
+>>>>>>>>> I had not noticed it with v6.3-rc3?
+>>>>>>>>>
+>>>>>>>>> Maybe, there seems to be something off:
+>>>>>>>>>
+>>>>>>>>>       949 static int wmi_dev_probe(struct device *dev)
+>>>>>>>>>       950 {
+>>>>>>>>>       951         struct wmi_block *wblock = dev_to_wblock(dev);
+>>>>>>>>>       952         struct wmi_driver *wdriver =
+>>>>>>>>> drv_to_wdrv(dev->driver);
+>>>>>>>>>       953         int ret = 0;
+>>>>>>>>>       954         char *buf;
+>>>>>>>>>       955
+>>>>>>>>>       956         if (ACPI_FAILURE(wmi_method_enable(wblock, true)))
+>>>>>>>>>       957                 dev_warn(dev, "failed to enable device
+>>>>>>>>> -- probing anyway\n");
+>>>>>>>>>       958
+>>>>>>>>>       959         if (wdriver->probe) {
+>>>>>>>>>       960                 ret = wdriver->probe(dev_to_wdev(dev),
+>>>>>>>>>       961 find_guid_context(wblock, wdriver));
+>>>>>>>>>       962                 if (ret != 0)
+>>>>>>>>>       963                         goto probe_failure;
+>>>>>>>>>       964         }
+>>>>>>>>>       965
+>>>>>>>>>       966         /* driver wants a character device made */
+>>>>>>>>>       967         if (wdriver->filter_callback) {
+>>>>>>>>>       968                 /* check that required buffer size
+>>>>>>>>> declared by driver or MOF */
+>>>>>>>>>       969                 if (!wblock->req_buf_size) {
+>>>>>>>>>       970 dev_err(&wblock->dev.dev,
+>>>>>>>>>       971                                 "Required buffer size
+>>>>>>>>> not set\n");
+>>>>>>>>>       972                         ret = -EINVAL;
+>>>>>>>>>       973                         goto probe_failure;
+>>>>>>>>>       974                 }
+>>>>>>>>>       975
+>>>>>>>>>       976                 wblock->handler_data =
+>>>>>>>>> kmalloc(wblock->req_buf_size,
+>>>>>>>>>       977 GFP_KERNEL);
+>>>>>>>>>       978                 if (!wblock->handler_data) {
+>>>>>>>>>       979                         ret = -ENOMEM;
+>>>>>>>>>       980                         goto probe_failure;
+>>>>>>>>>       981                 }
+>>>>>>>>>       982
+>>>>>>>>>       983                 buf = kasprintf(GFP_KERNEL, "wmi/%s",
+>>>>>>>>> wdriver->driver.name);
+>>>>>>>>>       984                 if (!buf) {
+>>>>>>>>>       985                         ret = -ENOMEM;
+>>>>>>>>>       986                         goto probe_string_failure;
+>>>>>>>>>       987                 }
+>>>>>>>>>       988                 wblock->char_dev.minor =
+>>>>>>>>> MISC_DYNAMIC_MINOR;
+>>>>>>>>>       989                 wblock->char_dev.name = buf;
+>>>>>>>>>       990                 wblock->char_dev.fops = &wmi_fops;
+>>>>>>>>>       991                 wblock->char_dev.mode = 0444;
+>>>>>>>>>       992                 ret = misc_register(&wblock->char_dev);
+>>>>>>>>>       993                 if (ret) {
+>>>>>>>>>       994                         dev_warn(dev, "failed to
+>>>>>>>>> register char dev: %d\n", ret);
+>>>>>>>>>       995                         ret = -ENOMEM;
+>>>>>>>>>       996                         goto probe_misc_failure;
+>>>>>>>>>       997                 }
+>>>>>>>>>       998         }
+>>>>>>>>>       999
+>>>>>>>>>      1000         set_bit(WMI_PROBED, &wblock->flags);
+>>>>>>>>>      1001         return 0;
+>>>>>>>>>      1002
+>>>>>>>>>      1003 probe_misc_failure:
+>>>>>>>>>      1004         kfree(buf);
+>>>>>>>>>      1005 probe_string_failure:
+>>>>>>>>>      1006         kfree(wblock->handler_data);
+>>>>>>>>>      1007 probe_failure:
+>>>>>>>>>      1008         if (ACPI_FAILURE(wmi_method_enable(wblock,
+>>>>>>>>> false)))
+>>>>>>>>>      1009                 dev_warn(dev, "failed to disable
+>>>>>>>>> device\n");
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> char *buf is passed to kfree(buf) uninitialised if
+>>>>>>>>> wdriver->filter_callback
+>>>>>>>>> is not set.
+>>>>>>>>>
+>>>>>>>>> It seems like a logical error per se, but I don't believe this is
+>>>>>>>>> the cause
+>>>>>>>>> of the leak?
+>>>>>>>>
+>>>>>>>> CORRECTION:
+>>>>>>>>
+>>>>>>>> I overlooked the "return 0" in line 1001.
+>>>>>>>
+>>>>>>> Yeah, and the memory looks to be freed properly in the
+>>>>>>> wmi_dev_remove()
+>>>>>>> callback, right?
+>>>>>>
+>>>>>> It would appear so. To verify that:
+>>>>>>
+>>>>>> Alloc:
+>>>>>> 976        wblock->handler_data = kmalloc(wblock->req_buf_size,
+>>>>>>                            GFP_KERNEL);
+>>>>>>         <check>
+>>>>>>
+>>>>>> 983        buf = kasprintf(GFP_KERNEL, "wmi/%s", wdriver->driver.name);
+>>>>>>         <check>
+>>>>>> 989        wblock->char_dev.name = buf;
+>>>>>>
+>>>>>> In lines 1022-1023:
+>>>>>>
+>>>>>> 1022        kfree(wblock->char_dev.name);
+>>>>>> 1023        kfree(wblock->handler_data);
+>>>>>>
+>>>>>>>> This is why I don't think things should be rushed, but analysed
+>>>>>>>> with clear and
+>>>>>>>> cold head. And with as many eyes as possible :)
+>>>>>>>>
+>>>>>>>> The driver stuff is my long-term research interest. To state the
+>>>>>>>> obvious,
+>>>>>>>> the printing and multimedia education and industry in general
+>>>>>>>> would benefit from
+>>>>>>>> the open-source drivers for many instruments that still work, but
+>>>>>>>> are obsoleted
+>>>>>>>> by the producer and require unsupported versions of the OS.
+>>>>>>>>
+>>>>>>>> Thank you again for reviewing the bug report, however, ATM I do
+>>>>>>>> not think I have
+>>>>>>>> what it takes to hunt down the memleak. :-/
+>>>>>>>
+>>>>>>> Do you have a reproducer that you can use to show the problem better?
+>>>>>>
+>>>>>> Unfortunately, the problem doesn't seem to appear during the run of
+>>>>>> a particular
+>>>>>> test, but immediately on startup of the OS. This makes it awkward to
+>>>>>> pinpoint the
+>>>>>> exact service that triggered memory leaks. But they would appear to
+>>>>>> have to do
+>>>>>> with the initialisation of the USB devices, wouldn't they?
+>>>>>>
+>>>>>> There seem to be strings:
+>>>>>>
+>>>>>> "USBPortAccess,Enabled;[Optional:"
+>>>>>> "USBBIOSSupport,Enabled;[Optional"
+>>>>>> "USBEnumerationDelay,Disabled;[Op"
+>>>>>>
+>>>>>> This seems to be happening during USB initialisation and before any
+>>>>>> services.
+>>>>>> But I might as well be wrong.
+>>>>>>
+>>>>>>> Or can you test kernel patches to verify the problem is fixed or
+>>>>>>> not if
+>>>>>>> we send you patches to test?
+>>>>>>
+>>>>>> Certainly, Lord willing, I can test the patches in the same
+>>>>>> environment that
+>>>>>> mainfeted the bug (or memleak).
+
+mtodorov@domac:~/linux/kernel/linux_torvalds$ git bisect log
+git bisect start '--' './drivers/platform/x86'
+# good: [caa0708a81d6a2217c942959ef40d515ec1d3108] bootconfig: Change message if no bootconfig with CONFIG_BOOT_CONFIG_FORCE=y
+git bisect good caa0708a81d6a2217c942959ef40d515ec1d3108
+# bad: [8a02d70679fc1c434401863333c8ea7dbf201494] platform/x86: think-lmi: Add possible_values for ThinkStation
+git bisect bad 8a02d70679fc1c434401863333c8ea7dbf201494
+# good: [1a0009abfa7893b9cfcd3884658af1cbee6b26ce] platform: mellanox: mlx-platform: Initialize shift variable to 0
+git bisect good 1a0009abfa7893b9cfcd3884658af1cbee6b26ce
+# good: [b7c994f8c35e916e27c60803bb21457bc1373500] platform/x86 (gigabyte-wmi): Add support for A320M-S2H V2
+git bisect good b7c994f8c35e916e27c60803bb21457bc1373500
+# good: [45e21289bfc6e257885514790a8a8887da822d40] platform/x86: think-lmi: use correct possible_values delimiters
+git bisect good 45e21289bfc6e257885514790a8a8887da822d40
+# good: [cf337f27f3bfc4aeab4954c468239fd6233c7638] platform/x86: think-lmi: only display possible_values if available
+git bisect good cf337f27f3bfc4aeab4954c468239fd6233c7638
+# first bad commit: [8a02d70679fc1c434401863333c8ea7dbf201494] platform/x86: think-lmi: Add possible_values for ThinkStation
+mtodorov@domac:~/linux/kernel/linux_torvalds$
+
+So the commit that triggered the bug on the Lenovo desktop box was:
+
+diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+index 3f0641360251..c816646eb661 100644
+--- a/drivers/platform/x86/think-lmi.c
++++ b/drivers/platform/x86/think-lmi.c
+@@ -1450,6 +1450,26 @@ static int tlmi_analyze(void)
+                         if (ret || !setting->possible_values)
+                                 pr_info("Error retrieving possible values for %d : %s\n",
+                                                 i, setting->display_name);
++               } else {
++                       /*
++                        * Older Thinkstations don't support the bios_selections API.
++                        * Instead they store this as a [Optional:Option1,Option2] section of the
++                        * name string.
++                        * Try and pull that out if it's available.
++                        */
++                       char *item, *optstart, *optend;
++
++                       if (!tlmi_setting(setting->index, &item, LENOVO_BIOS_SETTING_GUID)) {
++                               optstart = strstr(item, "[Optional:");
++                               if (optstart) {
++                                       optstart += strlen("[Optional:");
++                                       optend = strstr(optstart, "]");
++                                       if (optend)
++                                               setting->possible_values =
++                                                       kstrndup(optstart, optend - optstart,
++                                                                       GFP_KERNEL);
++                               }
++                       }
+                 }
+                 /*
+                  * firmware-attributes requires that possible_values are separated by ';' but
+
+Thousand apologies, once again.
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
