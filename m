@@ -2,155 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92556CED5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961AE6CED5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjC2PtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 11:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
+        id S229961AbjC2Pt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjC2PtA (ORCPT
+        with ESMTP id S229810AbjC2Pt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:49:00 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974FB468B
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:48:59 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id a21so9449443ljq.10
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:48:59 -0700 (PDT)
+        Wed, 29 Mar 2023 11:49:27 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70664EE6;
+        Wed, 29 Mar 2023 08:49:25 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id jy12so338453plb.8;
+        Wed, 29 Mar 2023 08:49:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680104938;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8jD8NVqtsPudciwhm8Tk75NT4wlLoElkTtYals9Zh3s=;
-        b=PKp8ZyPYUiw16H1l/Agu1Uq/X0RhJ79mp3NP7m0jlPV/StUndLoQ357goARYFgOX4F
-         QrlJRI8G2izmMQ/gHL21qr1I6bKibkBLgoNaNcIIJveQRYu5Xq5R/mgu+zTeA2ztD5G5
-         6JSm8iy20Z5prXFolUXL8ZOsMtmdGrbabURIklMpJVYndk6txmfVSk4Ov2XBQ99X+iiB
-         1CGIqAzaO7+S1XY2n4JMrmnp3vhjhroT6PX081yUUnqBul8g0L3mxoK0nzg8HhbfLsFg
-         5MQEtKVlHQrk+luDabREpnLgOI/CLsO9jH96uEt2pTty3ZacA54NZi89k0HSzMYtKbvJ
-         jPAw==
+        d=gmail.com; s=20210112; t=1680104965;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+vL/Z2hUHOoRNlZ8vK1peaG8u3Hz3sYl8UlPc5uVwYo=;
+        b=b3Vl4oK8IImeQKY80tYxKC8IbJrOpjTAU8OSMK8zTlThaX1Tmx2ZT6ZdO/wWRHrZZV
+         0GgbMPHw9ztqIrW5OimlCMppP/IB2rlEJP9ZNNUC392AfLAuGp7rbzpimRVsr0qPxMHd
+         7R9SnUt0zQiR1sX9EbIurdPC7d7xcHj/P7F8XW8G0n8IpO+qDzzN10eMqaaxEbIdQbRG
+         vNKowQmJZ+w5mbMMxib8k57gfmR9hn2+Y0xIXlMeTY/QHfflUt2q8MbHPzoXTd3fweNQ
+         +dXS89GUFJnTiM0ubBM83msg/CyYiNy3nyw/Q8fSJJwEX3yB5HgeKKb8SaqW3LSYPr+5
+         Yn6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680104938;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8jD8NVqtsPudciwhm8Tk75NT4wlLoElkTtYals9Zh3s=;
-        b=ZjQEr4PvxLHI/mbYNlvesyYYCLP9oKIjXZtBKLp+EBUYULzt6Rh3mASmmyxjZRzufX
-         bCQVVsWCa37DQiZRcCOgMM+FaozFoj9hOcLYOjTF0qmEHW78vmhDlsztGDAuPEo5+uYT
-         yJdrydV55GSMUGQViR/EyQnqaHBtc2f7Mcx2Uf70usN2/67Psi5KutPnvjhpnbkbHdxo
-         Iv5OMuwYtKt4L4NVPPKcnZsmXw7KDn8Yx/WvfIKmG5hjA2DhL6LsdrwM/BZCWLGxNaFt
-         TQhkj3f9plr+03mypULXCdUy3XB1OQWI607pt/C3sNbWDwZ6RMD4EXWZIJERwx3MdCWu
-         7ECA==
-X-Gm-Message-State: AAQBX9e/e/PGtQT3wTdHg4hTgqlMgBXoVV6J+G9bYe1Zoy4RT2kXr/9+
-        Ab3SjJMLknSFo0rDENjs8YPdRw==
-X-Google-Smtp-Source: AKy350bZwb0nN1eKm+plrJvvRh6qWAf4xzfzhIpDrFsv1Xnvma4OkZ7P9lJEitJzajVJLNdExNnbaw==
-X-Received: by 2002:a2e:8604:0:b0:290:5166:7c28 with SMTP id a4-20020a2e8604000000b0029051667c28mr7077535lji.20.1680104937770;
-        Wed, 29 Mar 2023 08:48:57 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id u14-20020a2e854e000000b00299ab2475ebsm5546763ljj.1.2023.03.29.08.48.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 08:48:57 -0700 (PDT)
-Message-ID: <83986fa9-c9eb-ae5a-b239-584092f2cea5@linaro.org>
-Date:   Wed, 29 Mar 2023 17:48:55 +0200
+        d=1e100.net; s=20210112; t=1680104965;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+vL/Z2hUHOoRNlZ8vK1peaG8u3Hz3sYl8UlPc5uVwYo=;
+        b=L4D+tW2S700bGotfvB/TJAa5ZZR45hxJNsem1ZWYyY2Z6Qfhxneb9VZcEunXTxQrTv
+         Rn8dLjEVUdvEETSg2bWXG14W0HuHdwSwadV20FxLp9oh4q3ER9wRYg8xLJfg+b+QVE91
+         dpik8UNu6e2TduuQVTxf90YqDrC/XQXoukMBOyp5X9hUfgq4Hy1mIPTDA8CGB1Ca9gA/
+         maV7tbWZP4yt+7uPAPq+L7TMj0cG0cG/k4+kVrIzNLqr3EXx43uvmxBFBZpUKW9qfjxj
+         mFjUaBYjmH6Xcf3A9UP22G9tDBYxFpdgkw22CPKfDKIO6fdMmUmxVgJ8IeYXv4MaJvkb
+         j3Jg==
+X-Gm-Message-State: AO0yUKX7XiYzZiH9mJf7rE2VVl/w7XPhuVO1bUGsu4zJnnTCVgR1tvP2
+        B5Ca3XWfP/CIvCSG+0WG8mc=
+X-Google-Smtp-Source: AK7set++hCqmKovdelYiJ5+jJFzodnQekyeY7x/9RhGU2tIB+qRGmT1PcNtVFnyvuqMh+sEPgj3cAw==
+X-Received: by 2002:a05:6a20:1e4d:b0:da:f525:e629 with SMTP id cy13-20020a056a201e4d00b000daf525e629mr17412798pzb.53.1680104964912;
+        Wed, 29 Mar 2023 08:49:24 -0700 (PDT)
+Received: from Gentoo (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id u15-20020a62ed0f000000b0062a474cd46asm12813979pfh.137.2023.03.29.08.49.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 08:49:24 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 23:49:17 +0800
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: Re: [PATCH] Asoc: wm_adsp: Add support for loading firmware with
+ prefix name
+Message-ID: <ZCRd/Uph/BY6tkc/@Gentoo>
+References: <20230329130525.15830-1-lujianhua000@gmail.com>
+ <20230329140524.GU68926@ediswmail.ad.cirrus.com>
+ <ZCRNRhI3+6jUbqvy@Gentoo>
+ <51cdc8df-9472-a604-3cca-ebaa7ae5d899@opensource.cirrus.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/msm/adreno: adreno_gpu: Use suspend() instead of
- idle() on load error
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, marijn.suijten@somainline.org,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230329140445.2180662-1-konrad.dybcio@linaro.org>
- <ZCRNFitcrAeH27Pn@hovoldconsulting.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZCRNFitcrAeH27Pn@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <51cdc8df-9472-a604-3cca-ebaa7ae5d899@opensource.cirrus.com>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 29.03.2023 16:37, Johan Hovold wrote:
-> On Wed, Mar 29, 2023 at 04:04:44PM +0200, Konrad Dybcio wrote:
->> If we fail to initialize the GPU for whatever reason (say we don't
->> embed the GPU firmware files in the initrd), the error path involves
->> pm_runtime_put_sync() which then calls idle() instead of suspend().
->>
->> This is suboptimal, as it means that we're not going through the
->> clean shutdown sequence. With at least A619_holi, this makes the GPU
->> not wake up until it goes through at least one more start-fail-stop
->> cycle. Fix that by using pm_runtime_put_sync_suspend to force a clean
->> shutdown.
+On Wed, Mar 29, 2023 at 04:38:07PM +0100, Richard Fitzgerald wrote:
+> On 29/3/23 15:37, Jianhua Lu wrote:
+> > On Wed, Mar 29, 2023 at 02:05:24PM +0000, Charles Keepax wrote:
+> >>
+> >> This direction seems slightly problematic, especially in the
+> >> context of amps (which I presume this relates to, please let know
+> >> if that is wrong). It would probably be better to be fixing
+> >> things up such that the amp in question sets system_name when
+> >> registered through DT. Generally speaking the idea is the amp
+> > I also consider setting system_name when registered by DT, but I don't
+> > known setting what name to it. Card name or something else?
 > 
-> This does not sound right. If pm_runtime_put_sync() fails to suspend the
-> device when the usage count drops to zero, then you have a bug somewhere
-> else.
-I was surprised to see that it was not called as well, but I wasn't able
-to track it down before..
-
+> It just has to be a unique string.
+> The normal process is that Cirrus would release the firmware with the
+> correct name for the platform, so the system-name matches the string in
+> those release firmware files.
 > 
-> Also since commit 2c087a336676 ("drm/msm/adreno: Load the firmware
-> before bringing up the hardware") the firmware is loaded before even
-> hitting these paths so the above description does not sound right in
-> that respect either (or is missing some details).
-..but I did some more digging and I found that the precise "firmware"
-that fails is the ZAP blob, which is not checked like SQE in the
-commit you mentioned!
-
-Now I don't think that we can easily check for it as-is since
-zap_shader_load_mdt() does the entire find-load-authenticate
-dance which is required with secure assets, but it's obviously
-possible to rip out the find-load part of that and go on from
-there.
-
-Do you think that would be a better solution?
-
-Konrad
-
+> Do you have an official firmware for your platform?
+My device is Xiaomi Pad 5 Pro, vendor releases wmfw firmware with
+default name, coeff firmware with prefix name(TL, TR and BL, BR....),
+don't contain a unique string in firmware name.
 > 
->> Test cases:
->> 1. firmware baked into kernel
->> 2. error loading fw in initrd -> load from rootfs at DE start
->>
->> Both succeed on A619_holi (SM6375) and A630 (SDM845).
->>
->> Fixes: 0d997f95b70f ("drm/msm/adreno: fix runtime PM imbalance at gpu load")
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/gpu/drm/msm/adreno/adreno_device.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
->> index f61896629be6..59f3302e8167 100644
->> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
->> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
->> @@ -477,7 +477,7 @@ struct msm_gpu *adreno_load_gpu(struct drm_device *dev)
->>  	return gpu;
->>  
->>  err_put_rpm:
->> -	pm_runtime_put_sync(&pdev->dev);
->> +	pm_runtime_put_sync_suspend(&pdev->dev);
->>  err_disable_rpm:
->>  	pm_runtime_disable(&pdev->dev);
-> 
-> Johan
+> >>
+> >> Thanks,
+> >> Charles
