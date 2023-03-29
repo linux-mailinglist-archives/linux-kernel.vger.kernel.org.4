@@ -2,111 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467DC6CEC42
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713336CEC47
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjC2O4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
+        id S230305AbjC2O6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjC2O4r (ORCPT
+        with ESMTP id S229525AbjC2O6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:56:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BE712E;
-        Wed, 29 Mar 2023 07:56:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80B28B8235D;
-        Wed, 29 Mar 2023 14:56:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F10C433EF;
-        Wed, 29 Mar 2023 14:56:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680101804;
-        bh=FCJy/eYSZT7WLb3OmK/7JeXcs8+xQniddc7s7LZp8ko=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CZlNV5JjqH5js/0zQleguzsHeOZkCCPx4jL1M1Y+jBMvpkJ4pvL277nYQ+sGqk2qe
-         4SaOYNFvs/9Q1inf4qDJfx7hQm/4FWZBnQmLbmWFUT0wJMyIn4+rKAXCYtcjlQ9aU7
-         hxzUqHVtVqo/g8ej+ooE9wQEZLslhGn/LFd1FTmo7Sf3inqF9thLJG03Q5QP9aTTcA
-         kXSEAnyKzL9TY/Byv0OpBztC1Dr/4gmr1gxviXXlcVI3HSXvpgxVqXW9JpiNslorVN
-         aYU/dPg06KkIG7Vp45x9JNFH3sEjPCwTKgqEm7NCm1aogS8QwJ58wrn5IJMJQ8mGC7
-         mt4VfNjupKBug==
-Date:   Wed, 29 Mar 2023 15:56:36 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v6 5/5]  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Message-ID: <20230329145636.GV2673958@google.com>
-References: <20230307112835.81886-1-okan.sahin@analog.com>
- <20230307112835.81886-6-okan.sahin@analog.com>
- <20230315175223.GI9667@google.com>
- <20230315175257.GJ9667@google.com>
- <MN2PR03MB5168249900206433A082875EE7889@MN2PR03MB5168.namprd03.prod.outlook.com>
- <20230329143615.GS2673958@google.com>
- <ZCROpw0il1VQCLPu@smile.fi.intel.com>
+        Wed, 29 Mar 2023 10:58:51 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED71A2113;
+        Wed, 29 Mar 2023 07:58:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680101930; x=1711637930;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=GN23CeAT5EHQB/8GlHtyJojqMc0q6OVj81+ZN6OvJJQ=;
+  b=ZJ4gTLhHrB3HW+UnKQODjaISXRYwurbb+Ik73D1X67KvUTfAgqo1SGiU
+   A4Hyk5RQW8q8ymMbAtSkpXQHLwYjVXk4gShiDkKqrSH6LCe5LPd3EMH/n
+   GdTpDrH9GskFRrsQ/1KMpz6w7OCk/ltdKI4d7yOvLNzmGXR7qT2uD/tnf
+   KQJLUW784t5j+3fNRvatfoz/UtJiPIGH1DRCkXQHJbYiK5AOHYdF28GZS
+   0ZTkl/FZGSexY6GX3BiKPZELsCi50fyGmsunnCRuqG7WElMQfcmbhRBVZ
+   iyGlcDDL6nt7XrpXGNML2ts3dwGrwD83rqw6PEboOaiQPb6id2xTd20Lh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="368667517"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="368667517"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 07:58:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="716908627"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="716908627"
+Received: from allenhsi-mobl1.amr.corp.intel.com ([10.212.70.154])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 07:58:49 -0700
+Message-ID: <e208af4cc343901ac5d9a0e5b4f21923623b266f.camel@linux.intel.com>
+Subject: Re: [PATCH v2 10/15] crypto: iaa - Add per-cpu workqueue table with
+ rebalancing
+From:   Tom Zanussi <tom.zanussi@linux.intel.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     herbert@gondor.apana.org.au, fenghua.yu@intel.com,
+        vkoul@kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org
+Date:   Wed, 29 Mar 2023 09:58:48 -0500
+In-Reply-To: <20230329075149.2736-1-hdanton@sina.com>
+References: <20230328153535.126223-1-tom.zanussi@linux.intel.com>
+         <20230329075149.2736-1-hdanton@sina.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCROpw0il1VQCLPu@smile.fi.intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023, Andy Shevchenko wrote:
+SGkgSGlsbGYsCgpPbiBXZWQsIDIwMjMtMDMtMjkgYXQgMTU6NTEgKzA4MDAsIEhpbGxmIERhbnRv
+biB3cm90ZToKPiBPbiAyOCBNYXIgMjAyMyAxMDozNTozMCAtMDUwMCBUb20gWmFudXNzaQo+IDx0
+b20uemFudXNzaUBsaW51eC5pbnRlbC5jb20+Cj4gPiArLyoKPiA+ICsgKiBHaXZlbiBhIGNwdSwg
+ZmluZCB0aGUgY2xvc2VzdCBJQUEgaW5zdGFuY2UuwqAgVGhlIGlkZWEgaXMgdG8gdHJ5Cj4gPiB0
+bwo+ID4gKyAqIGNob29zZSB0aGUgbW9zdCBhcHByb3ByaWF0ZSBJQUEgaW5zdGFuY2UgZm9yIGEg
+Y2FsbGVyIGFuZAo+ID4gc3ByZWFkCj4gPiArICogYXZhaWxhYmxlIHdvcmtxdWV1ZXMgYXJvdW5k
+IHRvIGNsaWVudHMuCj4gPiArICovCj4gPiArc3RhdGljIGlubGluZSBpbnQgY3B1X3RvX2lhYShp
+bnQgY3B1KQo+ID4gK3sKPiA+ICvCoMKgwqDCoMKgwqDCoGludCBub2RlLCBuX2NwdXMgPSAwLCB0
+ZXN0X2NwdSwgaWFhID0gMDsKPiA+ICvCoMKgwqDCoMKgwqDCoGludCBucl9pYWFfcGVyX25vZGUs
+IG5yX2NvcmVzX3Blcl9pYWE7Cj4gPiArwqDCoMKgwqDCoMKgwqBjb25zdCBzdHJ1Y3QgY3B1bWFz
+ayAqbm9kZV9jcHVzOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKCFucl9ub2RlcykKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiA+ICsKPiA+ICvCoMKg
+wqDCoMKgwqDCoG5yX2lhYV9wZXJfbm9kZSA9IG5yX2lhYSAvIG5yX25vZGVzOwo+ID4gK8KgwqDC
+oMKgwqDCoMKgaWYgKCFucl9pYWFfcGVyX25vZGUpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgcmV0dXJuIDA7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBucl9jb3Jlc19wZXJf
+aWFhID0gbnJfY3B1c19wZXJfbm9kZSAvIG5yX2lhYV9wZXJfbm9kZTsKPiA+ICsKPiA+ICvCoMKg
+wqDCoMKgwqDCoGZvcl9lYWNoX29ubGluZV9ub2RlKG5vZGUpIHsKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBub2RlX2NwdXMgPSBjcHVtYXNrX29mX25vZGUobm9kZSk7Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKCFjcHVtYXNrX3Rlc3RfY3B1KGNwdSwg
+bm9kZV9jcHVzKSkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgY29udGludWU7Cj4gCj4gY3B1X3RvX25vZGUoY3B1KSB3b3JrcyBmb3IgeW91LgoKWWVz
+LCB0aGFua3MgZm9yIHBvaW50aW5nIHRoYXQgb3V0LgoKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBmb3JfZWFjaF9jcHUodGVzdF9jcHUsIG5vZGVfY3B1cykgewo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoKG5fY3B1
+cyAlIG5yX2NwdXNfcGVyX25vZGUpID09IDApCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpYWEgPSBub2RlICogbnJfaWFh
+X3Blcl9ub2RlOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBpZiAodGVzdF9jcHUgPT0gY3B1KQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGlhYTsKPiAK
+PiBHaXZlbiBucl9pYWFfcGVyX25vZGUsIHdoeSByb3VuZCByb2Jpbi1pbmcgZXZlcnkgaWFhIGlu
+IHRoZSBub2RlIG5vdAo+IHdvcms/CgpUcnVlLCB3ZSBzaG91bGQgYmUgYWJsZSB0byBzaW1wbGlm
+eSB0aGlzLCB3aWxsIGRvIGZvciB0aGUgbmV4dCB2ZXJzaW9uLgoKVGhhbmtzLAoKVG9tCgoKPiA+
+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbl9j
+cHVzKys7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGlmICgobl9jcHVzICUgY3B1c19wZXJfaWFhKSA9PSAwKQo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWFhKys7
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gK8KgwqDCoMKgwqDCoMKg
+fQo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIC0xOwo+ID4gK30KCg==
 
-> On Wed, Mar 29, 2023 at 03:36:15PM +0100, Lee Jones wrote:
-> > On Tue, 28 Mar 2023, Sahin, Okan wrote:
-> > > >On Wed, 15 Mar 2023, Lee Jones wrote:
-> > > >> On Tue, 07 Mar 2023, Okan Sahin wrote:
->
-> ...
->
-> > > +static const struct i2c_device_id max77541_i2c_id[] = {
-> > > +	{ "max77540", (kernel_ulong_t)&chip[MAX77540] },
-> > > +	{ "max77541", (kernel_ulong_t)&chip[MAX77541] },
-> >
-> > Just 'MAX77540' is fine.
->
-> I tend to disagree.
->
-> There is an error prone approach esp. when we talk with some functions
-> that unifies OF/ACPI driver data retrieval with legacy ID tables.
-> In such a case the 0 from enum is hard to distinguish from NULL when
-> the driver data is not set or not found. On top of that the simple integer
-> in the legacy driver data will require additional code to be added in
-> the ->probe().
-
-Use a !0 enum?
-
-The extra handling is expected and normal.
-
---
-Lee Jones [李琼斯]
