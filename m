@@ -2,93 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6746CD7C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7AD6CD7C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjC2Kdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
+        id S231158AbjC2Ket (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 06:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjC2Kdf (ORCPT
+        with ESMTP id S231184AbjC2Ke3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:33:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD336422C;
-        Wed, 29 Mar 2023 03:33:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1154961C36;
-        Wed, 29 Mar 2023 10:32:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7F03C4339B;
-        Wed, 29 Mar 2023 10:32:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680085964;
-        bh=vOYzi7+hcrsUCs2akSC8CMn6+Kisn3S6b62l189uz+E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YVeEcyKDS5PnyOWRVI5S+hVao9X9AT3TdMiTGVrzB6m8Shf1WrV/2hPTFyuIgynrA
-         dGAhql7lqrx070bz7/0bfKTMCvIBSh6pnd9+PhsQvE+ra7C2UsrPBeVomDERrMUXG5
-         Ce6ou4DnDAPgcU3D15fa3Xb7HTXSev/fR/5x6Xb0yWiV6aK4ZQyCL1KA7P3zSYIVO6
-         F3vWjsKT4lV8qKAYVbGFtebfHex3aQq7zhZ62FkhODiy6NoZgtdKPfDdasJAPNYjdp
-         DxOHH4bTzeUMpbR7+Z9fMyyYwyYoD+NiEDZzx/EFZXrREvmEd9EuAzuk6fO5jpvrGy
-         3bbn8hIzqx7sw==
-Date:   Wed, 29 Mar 2023 13:32:40 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     saeedm@nvidia.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, richardcochran@gmail.com,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH 2/2] net/mlx5e: Fix missing error code in
- mlx5e_rx_reporter_err_icosq_cqe_recover()
-Message-ID: <20230329103240.GK831478@unreal>
-References: <20230324025541.38458-1-jiapeng.chong@linux.alibaba.com>
- <20230324025541.38458-2-jiapeng.chong@linux.alibaba.com>
+        Wed, 29 Mar 2023 06:34:29 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2492A49D0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:34:15 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l7so13621211pjg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google; t=1680086054;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+G0x4df8nN5k7A1CedGNXaYeU9br6DP1S70P25KOU3Q=;
+        b=leicsZUabtl/b04clZPzdxhIVtE92NjsAby5skkmC4BOrHrwDbqMDxyNy7EYxS/KMO
+         pEfo1a6DcBrFeFSzXBkyZigB2nsKXlYpwMHc+X552mssmZFgNZuHXRal13MypE8FXa+q
+         0R2JXsv0JPohslv6/ObMVaQDVHWIAAa3gwQ6Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680086054;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+G0x4df8nN5k7A1CedGNXaYeU9br6DP1S70P25KOU3Q=;
+        b=VRf3kvar/EcSxtuTkIV2lFH25k+saGwW8zOlp7R3Cp6+cEP9cnE0lLOvAllYyn5rd/
+         CSJayCcHJ56hsdpCYNNZ5eA6NLctEPdLA+i4xS3MPhDkYrGEk86+x7suPEqLc1wrFn/B
+         fyrzjSrTFYUJKHCHqOE8WYMF0ziCnNdg0CKUG5xumvKzTKr5d2knAGccPZ/Vw0lNoDE1
+         Q1fvu+FhNqFT5oUT845mqyX6G2Soc7SQRSVdMEyAArcA3tGqQ0h4EFq4MzMN/PT9tVTD
+         wIyR0gTXuXJnxveJlYwTWvYHlO7Znrl5XFj/jcBSEEhXJig5l1zPx/xQPSYRAEkMgqxd
+         xxjw==
+X-Gm-Message-State: AAQBX9c2L8wIbj4A+BZXS8LIJY9JolXZEvjzpmBZTkxgVd5hKRg+Of6w
+        FGNMx2U2IRCnEE4IR+e4kMSKlg==
+X-Google-Smtp-Source: AKy350Z7IkUvnWfi8bjLMEeSSg/1XJxBZz8APPh8P42x16gp4l7TciaEW0XJpMJcStPFJvhfLDdnIQ==
+X-Received: by 2002:a17:90a:1de:b0:234:b964:5703 with SMTP id 30-20020a17090a01de00b00234b9645703mr20022640pjd.18.1680086054136;
+        Wed, 29 Mar 2023 03:34:14 -0700 (PDT)
+Received: from 67ca92301206 (124-148-239-102.tpgi.com.au. [124.148.239.102])
+        by smtp.gmail.com with ESMTPSA id lt15-20020a17090b354f00b0023b2bc8ebc4sm1160182pjb.9.2023.03.29.03.34.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 03:34:13 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 10:34:05 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/224] 6.1.22-rc1 review
+Message-ID: <20230329103405.GA8@67ca92301206>
+References: <20230328142617.205414124@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230324025541.38458-2-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230328142617.205414124@linuxfoundation.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 10:55:41AM +0800, Jiapeng Chong wrote:
-> The error code is missing in this code scenario, add the error code
-> '-EINVAL' to the return value 'err'.
+On Tue, Mar 28, 2023 at 04:39:56PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.22 release.
+> There are 224 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c:105 mlx5e_tx_reporter_err_cqe_recover() warn: missing error code 'err'.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4600
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c
-> index 44c1926843a1..5e2e2449668d 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c
-> @@ -101,8 +101,10 @@ static int mlx5e_tx_reporter_err_cqe_recover(void *ctx)
->  		goto out;
->  	}
->  
-> -	if (state != MLX5_SQC_STATE_ERR)
-> +	if (state != MLX5_SQC_STATE_ERR) {
-> +		err = -EINVAL;
+> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
+> Anything received after that time might be too late.
 
-Same comment as for patch #1.
+Hi Greg,
 
->  		goto out;
-> +	}
->  
->  	mlx5e_tx_disable_queue(sq->txq);
->  
-> -- 
-> 2.20.1.7.g153144c
-> 
+6.1.22-rc1 tested.
+
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Alder Lake x86_64 (nuc12 i7-1260P)
+
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
