@@ -2,177 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F646CEFA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62EE6CEFAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjC2QmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
+        id S229827AbjC2Qnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjC2QmJ (ORCPT
+        with ESMTP id S229750AbjC2Qn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:42:09 -0400
-Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-cusazon11020027.outbound.protection.outlook.com [52.101.61.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D305B93;
-        Wed, 29 Mar 2023 09:42:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n9HcDjEcolXq19bVvFozy0ZnygJ43niMrsaZvSTT7dXWb5/SqlAUDLYDop11lCjCp9dRH9gOaSB3oQafstEoDtNZ3MTxV+C18shv0MvADb2FBh9lX5f+ynbES4LXfZV18MNsbqqEK1J4hqbfvXPuClWi4sK2jCRyvgqyMafKfZ/72pzGuUhcWxK5tnPHadYglBD0k35DcxvAoeY1EsG1e+Ast4eiSID5RiZFbezIhX4gd4S182auMK4PgeZJcfKXh+u53Gb0Od/Vna1Z/PgKgCbiQ9my2Kc2m5l3uqhErTMVTfRVtSxvWZqLI247d6gZ3l7Tb4xWQFxMwBA+uJBfhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7OEUPE7rJduWcLILEN1rWX8CbjNaJfNF8Pop6rR8kSI=;
- b=Hl3aDbc/F/T5g7C69x+Y3CRucP+JFJ6E2KY5FnurFtGvn0Y23uCdj4qzfMFEYJKsygCeg9VkE5WMzpg6kZlIYGSMBI7298ZITUSs/KNJ06URfvl12JAeVm8JuecTt5yQK2bokKvQ/GYJtoUGssSp1t4gRsiWgFY/8J5VDavxoBISbkEfBW17nrAtD0Kld0coi5J6ck6eeEfZMrH8l87hEhWhGGJP4rA91rJLH7V5rOrzqoTBrMaFf5psJYVd4MtWOFBHQJNV9xa1SJ9jd3AISiAYmFS9Xj4KDk6w43PItIQFDuhUWhjm8k+f/yKfx2LgbWRiEimEjYq7zEHtJuJLfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7OEUPE7rJduWcLILEN1rWX8CbjNaJfNF8Pop6rR8kSI=;
- b=bACF8obJxVM8b2v7UrLBZ4lm9j74ro1ftQhQBybOVnhOvbTVwAvP+ZTylZKmIkSutoH4LAkfiVBF9m1Y5gq78jPIH8nCh9rCUZiSh5j5DX3djBoABGAYk3OsKYfaSkDRlWwnh+yTKoeSxgGy9l+HNZzI8oIla7UaV8uA8ynp74g=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by BY5PR21MB1378.namprd21.prod.outlook.com (2603:10b6:a03:239::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.12; Wed, 29 Mar
- 2023 16:41:59 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c%7]) with mapi id 15.20.6277.010; Wed, 29 Mar 2023
- 16:41:59 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Dexuan Cui <decui@microsoft.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Jake Oshins <jakeo@microsoft.com>,
-        "kuba@kernel.org" <kuba@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "saeedm@nvidia.com" <saeedm@nvidia.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Long Li <longli@microsoft.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>
-CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [PATCH 5/6] PCI: hv: Add a per-bus mutex state_lock
-Thread-Topic: [PATCH 5/6] PCI: hv: Add a per-bus mutex state_lock
-Thread-Index: AQHZYTE1pEQ7gkU7iEqSar775+Y63q8R92Vw
-Date:   Wed, 29 Mar 2023 16:41:59 +0000
-Message-ID: <BYAPR21MB1688790C39FEC18826449AFDD7899@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20230328045122.25850-1-decui@microsoft.com>
- <20230328045122.25850-6-decui@microsoft.com>
-In-Reply-To: <20230328045122.25850-6-decui@microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=d326267c-94e2-4182-a6ec-05deec9dfec8;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-03-29T16:38:28Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|BY5PR21MB1378:EE_
-x-ms-office365-filtering-correlation-id: 98f2b520-1822-49c3-c558-08db307483f9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6uznTUJ3q+uS+gNLFJfFe7utwNkrUKu9czazbK8cfhNOpy1wfSDlGDUkvPWCXv05BYgfieOHHOVpoU6GRYJ145rcvzUZDON7AYANnCzTUwcIVf7yEffqaSw8Qu3kyk0tO+104zSab9QdU0jiT6suLmdqV7n+v5weH/B+dlqSMmTJu6QwRX0nwyyjb/xAUIFrBpO2jltzNQajeV2VE+ATl9HOlPQmER9eMmrvo94YypWz2EBgR6EORfmAOIBQ7KjUITDi97bfHh4XpQs6tvG9MCjiJZMHfBABbYaRM9krZ2ggWGHIXE5F9IQpbcJvJheH9nG9BdOT8++oRPbeCyGT9q0Z1H/VoWSnqu/Ntf/odOrrJchr1telFASS6yUB0ee223rle8FE4AJdjAvjXzA+bueT7ON0VVjGyjaIS1KFOTQ1Q1TMkuFj+07bI4T7Ij9EKsYqmQouwSyPv4cGKkyHhbNgghsvAGmhL7O34yeB95SB9HGmAfZweUr7ZX9rThrteCw598h8bdxfQEhi88gxeioanTqV5J57lAXOts3q96dyX96sb01pRlwQrWI7yvshjc7/HkJ922RqCCfe8dYM/5HLg+EWx55e6vRCHibvfo/trV9w9Kek6cnlS3agF7IJtr0yjGk0B0xGU2ynoOlsSnZbllQcuLNp08yF9s5nXznoG989NxEfgtbRQulImIs/
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(366004)(396003)(39860400002)(451199021)(83380400001)(76116006)(86362001)(33656002)(4326008)(122000001)(921005)(4744005)(7416002)(5660300002)(8936002)(38100700002)(38070700005)(64756008)(66446008)(66476007)(66556008)(82960400001)(82950400001)(41300700001)(52536014)(8676002)(66946007)(55016003)(26005)(9686003)(6506007)(54906003)(8990500004)(2906002)(7696005)(71200400001)(478600001)(10290500003)(316002)(110136005)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZXra0IxbiskzTF3o8OrnWF0YVamVE2yrbmp72nNYPqrhHFRUaVecoHb6iWvz?=
- =?us-ascii?Q?XiR63nCtzkC0Lw6+fceS0/0DUQbUT6QodcMpsDOfkr6KNPDA6wXx4uj2CRaZ?=
- =?us-ascii?Q?Q3yObLl3o8sp1L9f784BGcuN1Ddyu+hmB3iiiyrumxa6uNrjMGZp3OqhR7oD?=
- =?us-ascii?Q?2edAImaWbegH9oNHGglgfoX0KhVDvFP/8lcazN5gHEpOf+PZxclQ49G1h7s0?=
- =?us-ascii?Q?vu/B9gNd48IIrcp5Q7lsU4Q4ccyaH4akXm0x8EMpCfc5NCUG4hgj3xnqBJuh?=
- =?us-ascii?Q?Ijw1Vcen4bALJG+F5gBScLZQ5KmYslZp2CHXqEQthESrr54estSZHn1lPq+a?=
- =?us-ascii?Q?bru9BG+Rd5wESlnxWZoe2Kgef1ZZ9iSW5+PjgJhcq37aZUbEnhs8M8P+aCfJ?=
- =?us-ascii?Q?WAIvyj1R3a1eETS5Ezq7pAwT5G04lCuT3LPv/Uh/+iS49W57HPv95qIfRrpA?=
- =?us-ascii?Q?xv5LKNeBIWzE0KFJbX8B0pcUKC+MgCAnBEOCh6hw0SghboK0oGoTj4BqvcPa?=
- =?us-ascii?Q?+N7Fa/w8UItvRRWJcMAWvdE+g6pYGrl6qPhe1I8ciRqYi2Wnd/iYCMigOwiO?=
- =?us-ascii?Q?VIbHNcHcFsok6Mba18UBC1MKEMPqOz7el0TeHUtUDpC/VFf3uGqMt9sXHh9u?=
- =?us-ascii?Q?T6Uw2PKvlwk5wAy0fOs9ZTqmRLZ9FCTPqg+vTznGx852HkiuMz+fcuRxjA+9?=
- =?us-ascii?Q?kQ6Vnf4nymZvWy+h1xSn+gHWQ+M7jdPoIEaCyPwImSBeM0/230zF2JId72Q+?=
- =?us-ascii?Q?mY1Q2SDOAOsJ3fSSolFNpkMlfHS/6L4iyE2vzWglkQTPCsCpF7pzG2iokAZG?=
- =?us-ascii?Q?U/V2Bl/ya+DzYK819gZHFcjB5F838Ikeu/XfVPnVhxcH6Tdd35+MKdErvFRC?=
- =?us-ascii?Q?g9fwbTU7iXG2TreBHP9hmTUP1B+sHjuSflz4UL3QuNXvBQcxtGTYlm0kNM1e?=
- =?us-ascii?Q?2i25dFDvAdREmQmRg+oz95DAb2p7n87DZhJyDq86FVavewB0TRLmleyqRfRB?=
- =?us-ascii?Q?bJIjwcQGi1jQRiUnUNTkDrSTJXo2yjsroNAA98xan3cCNS8RJFxpppYIGvny?=
- =?us-ascii?Q?O5vhBles/5fw82cpsNxLgb/MIbjTbzXkA2ux+PVQYmhVnantI6geS1sICnwG?=
- =?us-ascii?Q?pyNg56ZwVkVONwgB0DXaFUgjYLtGoih3D6u3xXSVEvC2pQIEa7CHAZdltsIt?=
- =?us-ascii?Q?qc4NOhurp/hoWy7Xp/0DIU6w8K8SV+fTOqkvDPTvnCNbmwZvuMdOz5Q6Ebhr?=
- =?us-ascii?Q?mpseQLSLnzTWU22Bw9wW/+8IWF0T/eegE3tVWn4wyzukZOBMj/MhPKIUaWZm?=
- =?us-ascii?Q?dRX3T7jkj+u7p673nejqxYbakcwBB5gZa/eG1f4qYE3JaZVJ2NSpdL8fodVg?=
- =?us-ascii?Q?Hf3uCFCnuuReUGsZ1DcH4sCi//oFl2FwNB4N98484GO17SbJg1z1F+K/cpHd?=
- =?us-ascii?Q?qx/g4jzWeWAYchtdYVZq/ZFkNne/C6VUKo2tAwhEGixrTwLWKHnJJrQSC6Ty?=
- =?us-ascii?Q?NM12fwPnrSiPpXXIGEOHXmjNaGo7jQlJFJwLONU6LcUxskxNu9O0yXuZJyYY?=
- =?us-ascii?Q?KGolwF7hZo4zRZW7fM3i3w1fvf+0hS0FtmlJ9/+uMHfNF5Ou2zM75cFLz3GB?=
- =?us-ascii?Q?oA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 29 Mar 2023 12:43:29 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB2C46AC;
+        Wed, 29 Mar 2023 09:43:27 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 0B164604EF;
+        Wed, 29 Mar 2023 18:43:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680108206; bh=XAfqU+2ECVlLAnB9ptFM/m0416xktbuZ+dEHC1VmtNA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=2BBnESqw6fzJGuoFXTF+z009y0itELitbJXOT768NxiBWrVNhdCpfO+EeRTSNZriY
+         AC+vtp3oNy9eUVVF5nVPbZDz1tk1lLSSI4+YTYySNom82JdURH2CK6HASxQdYRywNA
+         +bkAkpydjgkLuX6EWVWmGBPumwKg+RBfbJ5RcuFf6Xlz+oYdrcHMAuSCXkljluQiEd
+         BcpaZ1bfb8CQCfKTNzMaQnAIcwNNwTjGHo+5xlrC+2JNH8EdFCpcP8PAumgVJ4CJGA
+         mDYqtOxR+h0jrYae2cLGHHeeTqUxK8dv4n7vJ4AqCm+Y8lwQ1C1dm5pzG0+Wsqlql2
+         uEeIsGACr0L0Q==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1RfS9nBdcp0P; Wed, 29 Mar 2023 18:43:23 +0200 (CEST)
+Received: from [10.0.1.78] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id 250A1604EA;
+        Wed, 29 Mar 2023 18:43:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680108203; bh=XAfqU+2ECVlLAnB9ptFM/m0416xktbuZ+dEHC1VmtNA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ia96eRbQODgmaZjUdjsvmZLSG76V3a5G0MUqRW1OjBrbPLzkrp/P3DfHk8HsxilIN
+         FrEz2sYD1fomh4ZlyB8fBKPjnLIaHeONunT8eqygGaUUL95tdYHS7/pilSRcGPgyQk
+         jtNRoVbjgJwBHpew2awpMOVQUuVjGozwX7QUQ0/6WUP0HdE4U4AI1KEH7a3etEjgKb
+         MB7mlSxPPRTe/LH6CW1o5xA4Zh4eIHKBD129wP36g+pD2dOO0z14yGHSFnpLV2M5OY
+         PxYetZpkmTa3eQn7aTvHvSYiXzUCqi60qWAe1z+14DmLydTQKChEMSVJ9ixRBLepvF
+         Eha3VSXgbns8g==
+Message-ID: <9fa34eb2-d119-9039-6db7-edfd0ee406f9@alu.unizg.hr>
+Date:   Wed, 29 Mar 2023 18:43:22 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98f2b520-1822-49c3-c558-08db307483f9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2023 16:41:59.1360
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nLSP43VeZptUTJnMJNGhegptjpCNrZDNjgd8lDZCgQT8SbkZJlxiOFjCCyxwqP3ascrqyPE9VMfsErPULgxYtZCZ2nXvlB8oBObqHG+I0ek=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR21MB1378
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [BUG] [BISECTED] [CORRECTION] systemd-devd triggers kernel
+ memleak apparently in drivers/core/dd.c: driver_register()
+Content-Language: en-US
+To:     Mark Pearson <mpearson-lenovo@squebb.ca>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>
+Cc:     Armin Wolf <W_Armin@gmx.de>, Greg KH <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>
+References: <5059b11b-8b6e-394b-338f-49e1339067fa@alu.unizg.hr>
+ <ZCLPaYGKHlFQGKYQ@kroah.com>
+ <542c13f5-4cdd-7750-f10a-ef64bb7e8faa@alu.unizg.hr>
+ <d011a1d7-34ab-5f54-fcc7-d727abc7ec9b@alu.unizg.hr>
+ <ZCLa3_HnLQA0GQKS@kroah.com>
+ <b50f9460-ac54-e997-f9b9-3c47a9b87aae@alu.unizg.hr>
+ <df26ff45-8933-f2b3-25f4-6ee51ccda7d8@gmx.de>
+ <16862c45-2ffd-a2f2-6719-020c5d515800@alu.unizg.hr>
+ <4f65a23f-4e04-f04f-e56b-230a38ac5ec4@gmx.de>
+ <01e920bc-5882-ba0c-dd15-868bf0eca0b8@alu.unizg.hr>
+ <8b478e6d-7482-2cbb-ee14-b2dc522daf35@alu.unizg.hr>
+ <9f757a7b-6ac9-804a-063f-4cc2c6fc3f54@alu.unizg.hr>
+ <de54f828-e2c6-4c10-92ce-ca86fb5c5fb4@t-8ch.de>
+ <6a5dc4de-b315-1e6d-e5e2-5b95521a37c7@alu.unizg.hr>
+ <2c1d0b9b-0e71-b616-6486-52e741d25afb@redhat.com>
+ <9c142ac2-9340-4a9b-8541-99f613772340@app.fastmail.com>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <9c142ac2-9340-4a9b-8541-99f613772340@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dexuan Cui <decui@microsoft.com> Sent: Monday, March 27, 2023 9:51 PM
->=20
+On 29.3.2023. 18:24, Mark Pearson wrote:
+> Hi
+> 
+> On Wed, Mar 29, 2023, at 11:46 AM, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 3/29/23 16:18, Mirsad Goran Todorovac wrote:
+>>> On 29.3.2023. 15:35, Thomas Weißschuh wrote:
+>>>>
+>>>> Mar 29, 2023 08:31:31 Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>:
+>>>>
+> <snip>
+>>>
+>>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+>>> index c816646eb661..e8c28f4f5a71 100644
+>>> --- a/drivers/platform/x86/think-lmi.c
+>>> +++ b/drivers/platform/x86/think-lmi.c
+>>> @@ -1469,6 +1469,7 @@ static int tlmi_analyze(void)
+>>>                                                          kstrndup(optstart, optend - optstart,
+>>>                                                                          GFP_KERNEL);
+>>>                                  }
+>>> +                               kfree(item);
+>>>                          }
+>>>                  }
+>>>                  /*
+>>>
+>>> You were 3 minutes faster ;-)
+>>>
+>>> The build with this patch is finished. Apparently, that was the culprit, for now
+> <snip>
+>>>
+>>>
+>>> So, the "tlmi_setting" memory leak appears to be fixed by this diff.
+>>>
+> My only concern here is it looks like I was dumb and used the variable name 'item' twice in the same function. I guess the compiler is smart enough to handle it but I'd like to change the name to make it clearer which 'item' is being freed in each context.
+> 
+> In that block I would change it to be:
+> char *optitem, *optstart, *optend;
+> and fix all the pieces in the block to then be correct too (with the needed free)
+> 
+>>> The next step is to add Armin-suggested patch:
+>>>
+>>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+>>> index c816646eb661..1e77ecb0cba8 100644
+>>> --- a/drivers/platform/x86/think-lmi.c
+>>> +++ b/drivers/platform/x86/think-lmi.c
+>>> @@ -929,8 +929,10 @@ static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *a
+>>>
+>>>          /* validate and split from `item,value` -> `value` */
+>>>          value = strpbrk(item, ",");
+>>> -       if (!value || value == item || !strlen(value + 1))
+>>> +       if (!value || value == item || !strlen(value + 1)) {
+>>> +               kfree(item);
+>>>                  return -EINVAL;
+>>> +       }
+>>>
+>>>          ret = sysfs_emit(buf, "%s\n", value + 1);
+>>>          kfree(item);
+>>>
+> This looks good to me - thank you!
+> 
+>>> and Thomas' correction for the return type of the tlmi_setting() function:
+>>>
+>>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+>>> index 86b33b74519be..c924e9e4a6a5b 100644
+>>> --- a/drivers/platform/x86/think-lmi.c
+>>> +++ b/drivers/platform/x86/think-lmi.c
+>>> @@ -1353,7 +1353,6 @@ static struct tlmi_pwd_setting *tlmi_create_auth(const char *pwd_type,
+>>>
+>>>   static int tlmi_analyze(void)
+>>>   {
+>>> -       acpi_status status;
+>>>          int i, ret;
+>>>
+>>>          if (wmi_has_guid(LENOVO_SET_BIOS_SETTINGS_GUID) &&
+>>> @@ -1390,8 +1389,8 @@ static int tlmi_analyze(void)
+>>>                  char *p;
+>>>
+>>>                  tlmi_priv.setting[i] = NULL;
+>>> -               status = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
+>>> -               if (ACPI_FAILURE(status))
+>>> +               ret = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
+>>> +               if (ret)
+>>>                          break;
+>>>                  if (!item)
+>>>                          break;
+>>>
+>>> A build on top of 6.3-rc4+ fcd476ea6a88 commit is on the way, with all three included.
+>>
+>> Good work on catching these issues, thank you all for your work on this.
+>>
+> Seconded - thank you for flagging and catching this. These were my mistakes :(
 
-[snip]
+Armin's hint was the largest part of the catch. I did not even suspect think-lmi.c,
+to be honest ...
 
-> @@ -3945,20 +3962,26 @@ static int hv_pci_resume(struct hv_device *hdev)
->  	if (ret)
->  		goto out;
->=20
-> +	mutex_lock(&hbus->state_lock);
-> +
->  	ret =3D hv_pci_enter_d0(hdev);
->  	if (ret)
->  		goto out;
+Apparently, the three patches together do not raise any new issues on my box, but of
+course, proper testing and peer review is required.
 
-Shouldn't this be goto release_state_lock?
+Best regards,
+Mirsad
 
->=20
->  	ret =3D hv_send_resources_allocated(hdev);
->  	if (ret)
-> -		goto out;
-> +		goto release_state_lock;
->=20
->  	prepopulate_bars(hbus);
->=20
->  	hv_pci_restore_msi_state(hbus);
->=20
->  	hbus->state =3D hv_pcibus_installed;
-> +	mutex_unlock(&hbus->state_lock);
->  	return 0;
-> +
-> +release_state_lock:
-> +	mutex_unlock(&hbus->state_lock);
->  out:
->  	vmbus_close(hdev->channel);
->  	return ret;
-> --
-> 2.25.1
+>> I assume that these fixes will be posted as a proper 3 patch
+>> patch-series (one patch per fix) once you are done testing?
+>>
+> Let me know if you are happy to propose the changes as a patch-series. If you don't have time I can help and get these in ASAP as I was the original culprit.
+> 
+> Happy to help out with testing too as I have access to HW. Let me know.
+> 
+> Mark
+
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
