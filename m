@@ -2,105 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0CA6CEF9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B9B6CEF9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjC2Qjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        id S230185AbjC2QkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjC2Qjh (ORCPT
+        with ESMTP id S230175AbjC2QkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:39:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE9F5A7;
-        Wed, 29 Mar 2023 09:39:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA20A1FB;
-        Wed, 29 Mar 2023 09:40:20 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 124B53F6C4;
-        Wed, 29 Mar 2023 09:39:32 -0700 (PDT)
-Message-ID: <cdede77a-5dc5-8933-a444-a2046b074b12@arm.com>
-Date:   Wed, 29 Mar 2023 18:39:23 +0200
+        Wed, 29 Mar 2023 12:40:06 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6269310F;
+        Wed, 29 Mar 2023 09:40:05 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 9F7FD378;
+        Wed, 29 Mar 2023 16:40:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 9F7FD378
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1680108004; bh=paGh1OeGW3r8EjzTZ/oNzuANG8Gctu13IsDhEUo9Lz0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Ai8x34f6qzOursoDarnQXytXyMVdCGws5ssISKVbIiqqkkM4QvqPyUZZQG8Xpj8Yr
+         RC8Fp4XjE09jV9aeYx4udQHkL7h+cGIcQ8RBfw0YJ5N+GOUy72zhCqFV6M6Q6ifjwa
+         27fICtx0yA3vfb3C2PVos7XM3NenB5sDzC2pJ1T5hIluiiWxPJqCwcECLJNhFhRPLo
+         Yiqzi4/M/SmalW8TUC+T9YmXFWSzhKcI9ktSSNpGLslZ+oxCN/y/ERQelb2qC3U9+u
+         pA1sZuUW3J4xZttzkdFq/FkItKg2si2w1R2lZYI/wiljQ3JyQ+HodAwI1IC2bst2Zd
+         t/zsmfcay7Y+w==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Alexey Dobriyan <adobriyan@gmail.com>, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH v2] ELF: document some de-facto PT_* ABI quirks
+In-Reply-To: <c4233c97-306c-4db8-9667-34fc31ec4aed@p183>
+References: <2acb586c-08a9-42d9-a41e-7986cc1383ea@p183>
+ <e262ea00-a027-9073-812e-7e034d75e718@infradead.org>
+ <c4233c97-306c-4db8-9667-34fc31ec4aed@p183>
+Date:   Wed, 29 Mar 2023 10:40:03 -0600
+Message-ID: <87edp7jyu4.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 5/6] cgroup/cpuset: Free DL BW in case can_attach() fails
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-        luca.abeni@santannapisa.it, claudio@evidence.eu.com,
-        tommaso.cucinotta@santannapisa.it, bristot@redhat.com,
-        mathieu.poirier@linaro.org, cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230329125558.255239-1-juri.lelli@redhat.com>
- <20230329125558.255239-6-juri.lelli@redhat.com>
- <f8dfc30b-5079-2f44-7ab1-42ac25bd48b7@redhat.com>
- <f8baea06-eeda-439a-3699-1cad7cde659e@redhat.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <f8baea06-eeda-439a-3699-1cad7cde659e@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2023 16:31, Waiman Long wrote:
-> On 3/29/23 10:25, Waiman Long wrote:
->>
->> On 3/29/23 08:55, Juri Lelli wrote:
->>> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Alexey Dobriyan <adobriyan@gmail.com> writes:
 
-[...]
+> Turns out rules about PT_INTERP, PT_GNU_STACK and PT_GNU_PROPERTY
+> program headers are slightly different.
+>
+> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+> ---
+>
+> 	v2: integrate into documentation build system
+>
+>  Documentation/ELF/ELF.rst   |   32 ++++++++++++++++++++++++++++++++
+>  Documentation/ELF/index.rst |   10 ++++++++++
+>  Documentation/index.rst     |    1 +
+>  3 files changed, 43 insertions(+)
 
->>> @@ -2518,11 +2547,21 @@ static int cpuset_can_attach(struct
->>> cgroup_taskset *tset)
->>>   static void cpuset_cancel_attach(struct cgroup_taskset *tset)
->>>   {
->>>       struct cgroup_subsys_state *css;
->>> +    struct cpuset *cs;
->>>         cgroup_taskset_first(tset, &css);
->>> +    cs = css_cs(css);
->>>         mutex_lock(&cpuset_mutex);
->>> -    css_cs(css)->attach_in_progress--;
->>> +    cs->attach_in_progress--;
->>> +
->>> +    if (cs->nr_migrate_dl_tasks) {
->>> +        int cpu = cpumask_any(cs->effective_cpus);
->>> +
->>> +        dl_bw_free(cpu, cs->sum_migrate_dl_bw);
->>> +        reset_migrate_dl_data(cs);
->>> +    }
->>> +
-> 
-> Another nit that I have is that you may have to record also the cpu
-> where the DL bandwidth is allocated in cpuset_can_attach() and free the
-> bandwidth back into that cpu or there can be an underflow if another cpu
-> is chosen.
+I really don't want to add another top-level directory for a single
+short file ... I'm trying to have fewer of those directories, not more.
 
-Many thanks for the review!
+This is essentially use-space ABI information; I think you should really
+just drop a file into Documentation/userspace-api/.
 
-But isn't the DL BW control `struct dl_bw` per `struct root_domain`
-which is per exclusive cpuset. So as long cpu is from
-`cs->effective_cpus` shouldn't this be fine?
+Thanks,
 
-
+jon
