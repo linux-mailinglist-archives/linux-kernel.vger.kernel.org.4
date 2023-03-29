@@ -2,202 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB846CD133
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 06:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EA86CD134
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 06:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjC2Eba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 00:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S229704AbjC2EeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 00:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjC2Eb2 (ORCPT
+        with ESMTP id S229457AbjC2EeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 00:31:28 -0400
-Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDBC210C;
-        Tue, 28 Mar 2023 21:31:25 -0700 (PDT)
-Received: from [10.128.10.193] (unknown [117.133.56.22])
-        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 42A495801FC;
-        Wed, 29 Mar 2023 12:31:15 +0800 (CST)
-Message-ID: <115b1771-8204-749a-0a93-7835e74ea6ba@sangfor.com.cn>
-Date:   Wed, 29 Mar 2023 12:31:13 +0800
+        Wed, 29 Mar 2023 00:34:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D676E26A5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 21:33:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680064397;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rRwu3ztVYvKt4K2vX6rUuVGMO2e8UGV6paC6FMa9y/I=;
+        b=EZKIkkMoJ0GaZMw4y/DjaDKx4jTvTpYUTuvwMNG/lzv16uJIA3wRrJZlppl5hQg70zFVaj
+        uhMlrp1wUt1J6tpq/RJwifnaeEzaccbihd8rYISOD0aRIJ+Gy6okItp5nKVjxRBnsVPgA6
+        N5ZgFY68GkMqAT8eF+AF/1gPJplCkww=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-12-9eGy4BwpN02NIhmiOtAIWw-1; Wed, 29 Mar 2023 00:33:11 -0400
+X-MC-Unique: 9eGy4BwpN02NIhmiOtAIWw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A2AE80C8C2;
+        Wed, 29 Mar 2023 04:33:11 +0000 (UTC)
+Received: from localhost (ovpn-12-137.pek2.redhat.com [10.72.12.137])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2B428C15BA0;
+        Wed, 29 Mar 2023 04:33:09 +0000 (UTC)
+Date:   Wed, 29 Mar 2023 12:33:05 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH v3 1/2] mm: vmalloc: Remove a global vmap_blocks xarray
+Message-ID: <ZCO/gTgw9PUuU+mG@MiWiFi-R3L-srv>
+References: <20230327170126.406044-1-urezki@gmail.com>
+ <ZCJd//IM6FGkbVTJ@MiWiFi-R3L-srv>
+ <ZCLex4BPPtosouvd@pc636>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v8 7/8] LoongArch: ftrace: Enable
- HAVE_FUNCTION_GRAPH_RETVAL
-Content-Language: en-US
-To:     Qing Zhang <zhangqing@loongson.cn>, mhiramat@kernel.org,
-        rostedt@goodmis.org, linux@armlinux.org.uk, mark.rutland@arm.com,
-        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, mingo@redhat.com,
-        peterz@infradead.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com
-Cc:     linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230328134319.2185812-1-pengdonglin@sangfor.com.cn>
- <20230328134319.2185812-8-pengdonglin@sangfor.com.cn>
- <28389252-4611-977f-ab80-baeca99d9080@loongson.cn>
-From:   Donglin Peng <pengdonglin@sangfor.com.cn>
-In-Reply-To: <28389252-4611-977f-ab80-baeca99d9080@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCTxlMVkMaGhkaGE5CTk1KS1UTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpKS0hKTFVKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OlE6ITo4Hj0PTEstSjoqPUgu
-        VilPCz5VSlVKTUNLS01PSUxNTU9MVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFMQ09PNwY+
-X-HM-Tid: 0a872ba266f92eb7kusn42a495801fc
-X-HM-MType: 1
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCLex4BPPtosouvd@pc636>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/29 12:08, Qing Zhang wrote:
-> Hi, Donglin
-> 
-> On 2023/3/28 下午9:43, Donglin Peng wrote:
->> The commit d4815c5d1bbd ("function_graph: Support recording and
->> printing the return value of function") laid the groundwork for the
->> for the funcgraph-retval, and this modification makes it available
->> on the LoongArch platform.
->>
->> We introduce a new structure called fgraph_ret_regs for the LoongArch
->> platform to hold return registers and the frame pointer. We then fill
->> its content in the return_to_handler and pass its address to the
->> function ftrace_return_to_handler to record the return value.
->>
->> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
->> ---
->> v8:
->>   - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
->> ---
->>   arch/loongarch/Kconfig              |  1 +
->>   arch/loongarch/include/asm/ftrace.h | 18 ++++++++++++++++++
->>   arch/loongarch/kernel/mcount.S      |  6 ++++--
->>   arch/loongarch/kernel/mcount_dyn.S  |  7 ++++---
->>   4 files changed, 27 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->> index 7fd51257e0ed..4bf60132869b 100644
->> --- a/arch/loongarch/Kconfig
->> +++ b/arch/loongarch/Kconfig
->> @@ -99,6 +99,7 @@ config LOONGARCH
->>       select HAVE_FAST_GUP
->>       select HAVE_FTRACE_MCOUNT_RECORD
->>       select HAVE_FUNCTION_ARG_ACCESS_API
->> +    select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
->>       select HAVE_FUNCTION_GRAPH_TRACER
->>       select HAVE_FUNCTION_TRACER
->>       select HAVE_GENERIC_VDSO
->> diff --git a/arch/loongarch/include/asm/ftrace.h 
->> b/arch/loongarch/include/asm/ftrace.h
->> index 3418d32d4fc7..433c6218888b 100644
->> --- a/arch/loongarch/include/asm/ftrace.h
->> +++ b/arch/loongarch/include/asm/ftrace.h
->> @@ -63,4 +63,22 @@ void ftrace_graph_func(unsigned long ip, unsigned 
->> long parent_ip,
->>   #endif /* CONFIG_FUNCTION_TRACER */
->> +#ifndef __ASSEMBLY__
->> +struct fgraph_ret_regs {
->> +    unsigned long a0;
->> +    unsigned long a1;
->> +    unsigned long fp;
->> +};
-> 
-> This overall looks good, but some places need attention:
-> 
-> This will need to be padded to 16 bytes, as within the kernel,
-> loongarch requires the SP to be aligned to 16 bytes at all time.
-> Please can you add an `__unused/padding` field to ensure.
+On 03/28/23 at 02:34pm, Uladzislau Rezki wrote:
+......  
+> > > @@ -2003,8 +2037,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+> > >  	bitmap_set(vb->used_map, 0, (1UL << order));
+> > >  	INIT_LIST_HEAD(&vb->free_list);
+> > >  
+> > > -	vb_idx = addr_to_vb_idx(va->va_start);
+> > > -	err = xa_insert(&vmap_blocks, vb_idx, vb, gfp_mask);
+> > > +	vbq = addr_to_vbq(va->va_start);
+> > > +	err = xa_insert(&vbq->vmap_blocks, va->va_start, vb, gfp_mask);
+> > 
+> > Using va->va_start as index to access xarray may cost extra memory.
+> > Imagine we got a virtual address at VMALLOC_START, its region is
+> > [VMALLOC_START, VMALLOC_START+4095]. In the xarray, its sequence order
+> > is 0. While with va->va_start, it's 0xffffc90000000000UL on x86_64 with
+> > level4 paging mode. That means for the first page size vmalloc area,
+> > storing it into xarray need about 10 levels of xa_node, just for the one
+> > page size. With the old addr_to_vb_idx(), its index is 0. Only one level
+> > height is needed. One xa_node is about 72bytes, it could take more time
+> > and memory to access va->va_start. Not sure if my understanding is correct.
+> > 
+> > static unsigned long addr_to_vb_idx(unsigned long addr)
+> > {
+> >         addr -= VMALLOC_START & ~(VMAP_BLOCK_SIZE-1);
+> >         addr /= VMAP_BLOCK_SIZE;
+> >         return addr;
+> > }
+> > 
+> If the size of array depends on index "length", then, indeed it will require
+> more memory. From the other hand we can keep the old addr_to_vb_idx() function 
+> in order to "cut" a va->va_start index.
 
-Thank you for pointing out this issue, and I will fix it.
-
->> +
->> +static inline unsigned long fgraph_ret_regs_return_value(struct 
->> fgraph_ret_regs *ret_regs)
->> +{
->> +    return ret_regs->a0;
->> +}
->> +
->> +static inline unsigned long fgraph_ret_regs_frame_pointer(struct 
->> fgraph_ret_regs *ret_regs)
->> +{
->> +    return ret_regs->fp;
->> +}
->> +#endif
->> +
->>   #endif /* _ASM_LOONGARCH_FTRACE_H */
->> diff --git a/arch/loongarch/kernel/mcount.S 
->> b/arch/loongarch/kernel/mcount.S
->> index 8cdc1563cd33..3e405c0212c0 100644
->> --- a/arch/loongarch/kernel/mcount.S
->> +++ b/arch/loongarch/kernel/mcount.S
->> @@ -79,10 +79,12 @@ SYM_FUNC_START(ftrace_graph_caller)
->>   SYM_FUNC_END(ftrace_graph_caller)
->>   SYM_FUNC_START(return_to_handler)
->> -    PTR_ADDI    sp, sp, -2 * SZREG
->> +    PTR_ADDI    sp, sp, -3 * SZREG
-> As above, this will need to be padded to keep the stack aligned to 16
-> bytes.
->      PTR_ADDI    sp, sp, -4 * SZREG
-
-Thanks.
-
-> 
->>       PTR_S        a0, sp, 0
->>       PTR_S        a1, sp, SZREG
->> +    PTR_S        zero, sp, 2 * SZREG
->> +    move        a0, sp
->>       bl        ftrace_return_to_handler
->>       /* Restore the real parent address: a0 -> ra */
->> @@ -90,7 +92,7 @@ SYM_FUNC_START(return_to_handler)
->>       PTR_L        a0, sp, 0
->>       PTR_L        a1, sp, SZREG
->> -    PTR_ADDI    sp, sp, 2 * SZREG
->> +    PTR_ADDI    sp, sp, 3 * SZREG
->>       jr        ra
->>   SYM_FUNC_END(return_to_handler)
->>   #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
->> diff --git a/arch/loongarch/kernel/mcount_dyn.S 
->> b/arch/loongarch/kernel/mcount_dyn.S
->> index bbabf06244c2..ab85a953c6d3 100644
->> --- a/arch/loongarch/kernel/mcount_dyn.S
->> +++ b/arch/loongarch/kernel/mcount_dyn.S
->> @@ -131,18 +131,19 @@ SYM_CODE_END(ftrace_graph_caller)
->>   SYM_CODE_START(return_to_handler)
->>       /* Save return value regs */
->> -    PTR_ADDI     sp, sp, -2 * SZREG
->> +    PTR_ADDI     sp, sp, -3 * SZREG
-> as above.
-
-Thanks.
-
-> 
-> Thanks,
-> - Qing
->>       PTR_S        a0, sp, 0
->>       PTR_S        a1, sp, SZREG
->> +    PTR_S        zero, sp, 2 * SZREG
->> -    move        a0, zero
->> +    move        a0, sp
->>       bl        ftrace_return_to_handler
->>       move        ra, a0
->>       /* Restore return value regs */
->>       PTR_L        a0, sp, 0
->>       PTR_L        a1, sp, SZREG
->> -    PTR_ADDI     sp, sp, 2 * SZREG
->> +    PTR_ADDI     sp, sp, 3 * SZREG
->>       jr        ra
->>   SYM_CODE_END(return_to_handler)
->>
-> 
+Yeah, the extra 10 levels of xa_node is unnecessary if we keep the old
+addr_to_vb_idx(). And the prolonged path will cost more time to reach the 
+wanted leaf node. E.g on x86_64 with 4 level paging mode, vmalloc area
+is 32TB. With the old calculation, its index range is [0, 8M], 4 level
+heights of xa_node at most is enough to cover.
 
