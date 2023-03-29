@@ -2,125 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3386CD351
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE426CD2EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjC2HfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 03:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
+        id S229977AbjC2HYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 03:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjC2HeV (ORCPT
+        with ESMTP id S229972AbjC2HYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 03:34:21 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2309C618C
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:31:52 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 99F6320008;
-        Wed, 29 Mar 2023 07:31:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680075110;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y5Tz+W9L5sIsVCnWkSfJ3WHW6H3+KUzYvv4GXzZD7MA=;
-        b=AqBaobXJksPG1S257DuMCuggbk3BSsTl842Ld5g4y3m4Qx3qZVsb4EwOdr0NHIioQwW4lk
-        lrQWv35/JL7ihJLLf6xXaVbdunE3un7PGWueSNJ1zpd2HcqtQQlK+0MWlcbOVU7aCh8fv2
-        DeCL+/b13ZV3O79ygOjLUr0hJI0nMqwTC52mJbBypIS6Q30CV5LKWbL+o0SjfwOA44SrFP
-        ZamVMaCVq0gMaGXfmPLSuxQ79n1gK1ChR3NkpzrjLVaeP/k7tY9AjJRgWVKoiUSK4qmFYW
-        LGmSnbovVrimfYUCheZggtBxKHD+F2KEiSpBAKAIMQw9RlU0bqoZQ9o2CUgYFA==
-Date:   Wed, 29 Mar 2023 09:31:45 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
-        <oxffffaa@gmail.com>
-Subject: Re: [PATCH v1] mtd: rawnand: meson: fix bitmask for length in
- command word
-Message-ID: <20230329093145.52790647@xps-13>
-In-Reply-To: <2fed42ad-11cb-6199-6adb-d9272209f5e2@sberdevices.ru>
-References: <d4338bd5-125c-a9e7-cb46-6f5e1da05cfa@sberdevices.ru>
-        <CAFBinCB3yuyNJD=7UJ7jzf45Masms_PD4sm42YNjO8M4cr+4wg@mail.gmail.com>
-        <fe2ed378-cdac-dbb3-acd2-ff542bd7e887@sberdevices.ru>
-        <81632eee-533e-5e44-1520-5321a06c6797@sberdevices.ru>
-        <20230328185001.5661132b@xps-13>
-        <e8edcbc8-5c72-b29e-21d7-6f4438391924@sberdevices.ru>
-        <CAFBinCCCNYJV4RBbM78r3yGPnY4oNKySEFRkzBgUD3xYJGkJmw@mail.gmail.com>
-        <2fed42ad-11cb-6199-6adb-d9272209f5e2@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 29 Mar 2023 03:24:17 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C081BF6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:24:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680074654; x=1711610654;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ggmwxoc7/dils5MWJi70ypc6lFx8cadwyL7s3JUR9cA=;
+  b=dPLqZ93q/44tUma7uapeVHve6LICMIcBKF5uBV9No+MIZaMY/7Kwguj0
+   zxJdV1bm1dvtygN6+syq5BNVzJTnqqWoshA/d8lQHBCoxkrm0E+Vp2Al0
+   l5G466JquhoFlhKyKlOJ2JIQc5rKWk//QvyAbcE58PCPhKPTAKnBkLsLM
+   dmMgxx/3YMU5HPHqpTK1XKYuLK+JFOe7XB+rITuyUVLp9LdQS4QCLPyoR
+   XkV+bseLAtTbWbfGetBsWs1SVG2RwVZ0FAlvsvavdel1IpeZk1tF3nKAT
+   F2hPPjiYUyCd+VMCsZQ1+E7wIkMTlzi9o4dpIbxJYv4MAnDZTBcxOYpdK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="405745830"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="405745830"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 00:24:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="684160540"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="684160540"
+Received: from liuzhao-optiplex-7080.sh.intel.com ([10.239.160.112])
+  by orsmga002.jf.intel.com with ESMTP; 29 Mar 2023 00:24:09 -0700
+From:   Zhao Liu <zhao1.liu@linux.intel.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>
+Subject: [PATCH v2 0/9] drm/i915: Replace kmap_atomic() with kmap_local_page()
+Date:   Wed, 29 Mar 2023 15:32:11 +0800
+Message-Id: <20230329073220.3982460-1-zhao1.liu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Zhao Liu <zhao1.liu@intel.com>
 
-avkrasnov@sberdevices.ru wrote on Wed, 29 Mar 2023 10:12:10 +0300:
+Hi list,
 
-> On 28.03.2023 23:25, Martin Blumenstingl wrote:
-> > Hi Arseniy,
-> >=20
-> > On Tue, Mar 28, 2023 at 8:39=E2=80=AFPM Arseniy Krasnov
-> > <avkrasnov@sberdevices.ru> wrote:
-> > [...] =20
-> >>>
-> >>> By the way any reason not to have Cc'ed stable? =20
-> >>
-> >> Sorry, what do You mean? I've included linux-mtd mailing lists, there =
-is
-> >> one more list for mtd reviews? I will appreciate if You can point me =
-=20
-> > "stable" typically refers to the stable tree where fixes for already
-> > released kernel versions are maintained.
-> > When Miquel applies the patch it will either land in the next -rc of
-> > the current development cycle (typically applies to fixes - currently
-> > 6.3-rc5) or -rc1 of the next kernel version (typically applies to new
-> > features, cleanups, etc. - currently 6.4-rc1).
-> >=20
-> > Let's say you are fixing a bug now but want the fix to be included in
-> > 6.1 LTS (long term stable) or other stable release.
-> > In this case it's recommended to Cc the maintainers of the stable
-> > trees as part of your patch, see [0].
-> > That way once the commit with your fix hits Linus Torvalds linux tree
-> > it will be backported by the stable team within a few days (assuming
-> > of course that the patch applies cleanly to older versions, if not
-> > they're notifying you).
-> > Note: even without Cc'ing the stable maintainers your commit may be
-> > backported (semi-automatically) if it has a Fixes tag and the stable
-> > maintainers find your commit. But my understanding is that it's
-> > easiest for them if they're explicitly Cc'ed on the patch.
-> >=20
-> > I hope this makes sense. If not: don't hesitate to ask. =20
+Sorry for a long delay since v1 [1]. This patchset is based on 197b6b6
+(Linux 6.3-rc4).
 
-That is an excellent summary, I should copy/paste it sometimes :)
+Welcome and thanks for your review and comments!
 
->=20
-> Hello! Thanks for this detailed explanation, that really helps!
 
-So IOW, I am asking you to send a v2 with an additional line in the
-commit, right next "Fixes":
+# Purpose of this patchset
 
-Cc: stable@vger.kernel.org
+The purpose of this pacthset is to replace all uses of kmap_atomic() in
+i915 with kmap_local_page() because the use of kmap_atomic() is being
+deprecated in favor of kmap_local_page()[1]. And 92b64bd (mm/highmem:
+add notes about conversions from kmap{,_atomic}()) has declared the
+deprecation of kmap_atomic().
 
-Thanks,
-Miqu=C3=A8l
+
+# Motivation for deprecating kmap_atomic() and using kmap_local_page()
+
+The main difference between atomic and local mappings is that local
+mappings doesn't disable page faults or preemption (the preemption is
+disabled for !PREEMPT_RT case, otherwise it only disables migration).
+
+With kmap_local_page(), we can avoid the often unwanted side effect of
+unnecessary page faults and preemption disables.
+
+
+# Patch summary
+
+Patch 1, 4-6 and 8-9 replace kamp_atomic()/kunmap_atomic() with
+        kmap_local_page()/kunmap_local() directly. With thses local
+        mappings, the page faults and preemption are allowed.
+
+Patch 2 and 7 use memcpy_from_page() and memcpy_to_page() to replace
+        kamp_atomic()/kunmap_atomic(). These two variants of memcpy()
+        are based on the local mapping, so page faults and preemption
+        are also allowed in these two interfaces.
+
+Patch 3 replaces kamp_atomic()/kunmap_atomic() with kmap_local_page()/
+        kunmap_local() and also diable page fault since the for special
+        handling (pls see the commit message).
+
+
+# Changes since v1
+
+* Dropped hot plug related description in commit message since it has
+  nothing to do with kmap_local_page().
+* Emphasized the motivation for using kmap_local_page() in commit
+  message.
+* Rebased patch 1 on f47e630 (drm/i915/gem: Typecheck page lookups) to
+  keep the "idx" variable of type pgoff_t here.
+* Used memcpy_from_page() and memcpy_to_page() to replace
+  kmap_local_page() + memcpy() in patch 2.
+
+
+# Reference
+
+[1]: https://lore.kernel.org/lkml/20221017093726.2070674-1-zhao1.liu@linux.intel.com/
+[1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
+---
+Zhao Liu (9):
+  drm/i915: Use kmap_local_page() in gem/i915_gem_object.c
+  drm/i915: Use memcpy_[from/to]_page() in gem/i915_gem_pyhs.c
+  drm/i915: Use kmap_local_page() in gem/i915_gem_shmem.c
+  drm/i915: Use kmap_local_page() in gem/selftests/huge_pages.c
+  drm/i915: Use kmap_local_page() in gem/selftests/i915_gem_coherency.c
+  drm/i915: Use kmap_local_page() in gem/selftests/i915_gem_context.c
+  drm/i915: Use memcpy_from_page() in gt/uc/intel_uc_fw.c
+  drm/i915: Use kmap_local_page() in i915_cmd_parser.c
+  drm/i915: Use kmap_local_page() in gem/i915_gem_execbuffer.c
+
+ drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c       | 10 +++++-----
+ drivers/gpu/drm/i915/gem/i915_gem_object.c           |  8 +++-----
+ drivers/gpu/drm/i915/gem/i915_gem_phys.c             | 10 ++--------
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c            |  6 ++++--
+ drivers/gpu/drm/i915/gem/selftests/huge_pages.c      |  6 +++---
+ .../gpu/drm/i915/gem/selftests/i915_gem_coherency.c  | 12 ++++--------
+ .../gpu/drm/i915/gem/selftests/i915_gem_context.c    |  8 ++++----
+ drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c             |  5 +----
+ drivers/gpu/drm/i915/i915_cmd_parser.c               |  4 ++--
+ 9 files changed, 28 insertions(+), 41 deletions(-)
+
+-- 
+2.34.1
+
