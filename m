@@ -2,94 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5934F6CF558
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8512C6CF564
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjC2V1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 17:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S229570AbjC2V3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 17:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjC2V1M (ORCPT
+        with ESMTP id S229462AbjC2V3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 17:27:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA529FB;
-        Wed, 29 Mar 2023 14:27:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49EB361E1A;
-        Wed, 29 Mar 2023 21:27:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959CEC4339B;
-        Wed, 29 Mar 2023 21:27:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680125230;
-        bh=AS0hMPzODy4Xc1L29bhWgg84MiUUzESVyfIE6SFTowE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=HByzCpkd+4vCITgt+uRrRp8rFQqgl4QLr74RtztpdlJXSIXL90mhxK5ZUgC+W5QVo
-         GCQcOXgWNihEYMQuQYFdsbWJRMGxIR2/JS2q4fm9I8R8zyoqdAtTyy8OpXLpIJ9UU4
-         gNsCi4N0mM/KKLyLLo0lVb/TEm9QO3VfPJ1CFmdwIM7HwCLaZAglZ9EU3UBcMePND7
-         WAiRIddD0YoYDodbhjwH7uPRXmjdss2HkzIjJoFyDhsKrigKxchMltrCgNf69ZEfZX
-         ss+jmE3cwyhkySqpd4uei37AXKtgenN66eZJJ+T5UiUFBisZwcAbZQgjsbSvPhlIMv
-         VEwDhc+n11bnQ==
-Message-ID: <2f4967f2a079e23b2b8a6013012c66e0.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Wed, 29 Mar 2023 17:29:43 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B391991
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:29:41 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id f188so2728968ybb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:29:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680125380;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=D3yNkZuxjV5q0QNma+hUnaAvguI9Ie4RgLhWd7LHbVA=;
+        b=AImXvj1NQS9c8BamFFYhp04cM70SunPi5pDHllZqHMIu4PZpFwi/1m2QWuUVsTtszG
+         jlpiqEph7Zj7mUdW8UztovQ6t2mQbW8YeQAFDgWHcJCZsCdGrLObp/ZstX09+PLzvKgv
+         +VML+6Bh1hmcZCdZ1CWnsjiZmToaXWJHkoS4B39yCOLW/lyo2t97+IJz+8NPwHWcSKr7
+         ZP+bRiH2AQXS/vyVdIknjlWZXOjKMx8Qeb2+PX7y6OxaJj3MyYwA8lx8FsrKrXziQLZG
+         hQ6if1KKoeLTX+VjGvq7HrxciZVLYvcYNF9GIrTUVq7FNbnoyRpqGGUOGO5kS4yqEkh6
+         w2wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680125380;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D3yNkZuxjV5q0QNma+hUnaAvguI9Ie4RgLhWd7LHbVA=;
+        b=hXbg5zWddMVFKvYibHaEJHhwc1XFmSA8k1EBmR0m/jKqBIBaZ7S/pLe4Bxxx200Wwu
+         3EGodj6uUBW6yFcj33jEFf3LmcvPvwS633od26U2AWNyFrHCOPUVPhW4+HwtoHPmprkK
+         MpW1NWw6vjgRiVboCN+YzYxlM6afoRdel5h97yC66jV1R0gN0tiNACzh7m1axz35fPz5
+         KM0Ony+TzgeSfhEHXduVp9J6kbl7d9DwqYEi9IAYixxLFKw37rLFVyLnRX1dA7FHYZoJ
+         SvEnBG9MBA2gRX1DH7qo/OC1VjJ3CQ7n8qsOoqYYr6AtgiNqiUieP5qtH3sosr+8md0P
+         e8dg==
+X-Gm-Message-State: AAQBX9cEW/r/qTiO4Xaz+/EkUsDYUBRVLzOLCEBmxOr6jxVgE8nxFPZN
+        pkSAT9qTIVzqupjvf9DekIPOG27/ZH2MVTIp96kdGw==
+X-Google-Smtp-Source: AKy350bX//N2Pe5TyFJXCG2bqMqJRp0gtN7CBEweO9QG3wRnDcPzL3DlZZlu4GqCC9Kh42BeFl97vzthCV5oQ0kEaus=
+X-Received: by 2002:a05:6902:1549:b0:b77:be38:6406 with SMTP id
+ r9-20020a056902154900b00b77be386406mr10732365ybu.9.1680125380407; Wed, 29 Mar
+ 2023 14:29:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230329204632.lsiiqf42hrwmn6xm@pengutronix.de>
-References: <20221026151812.1042052-1-u.kleine-koenig@pengutronix.de> <4d8d412a33a7d63f2ffe6a13194375ed.sboyd@kernel.org> <20230329204632.lsiiqf42hrwmn6xm@pengutronix.de>
-Subject: Re: [PATCH v4] clk: expand clk_ignore_unused mechanism to keep only a few clks on
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        linux-doc@vger.kernel.org
-To:     Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Date:   Wed, 29 Mar 2023 14:27:08 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230329-topic-adreno_opp-v1-0-24d34ac6f007@linaro.org> <20230329-topic-adreno_opp-v1-2-24d34ac6f007@linaro.org>
+In-Reply-To: <20230329-topic-adreno_opp-v1-2-24d34ac6f007@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 30 Mar 2023 00:29:29 +0300
+Message-ID: <CAA8EJprbBHTco078ix5=4OrxFm9cLVi0AbhCRVfr=-O2S0V2CQ@mail.gmail.com>
+Subject: Re: [PATCH 2/4] arm64: dts: qcom: msm8996: Pass VDDMX to gpu in power-domains
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vivek Gautam <vivek.gautam@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Uwe Kleine-K=C3=B6nig (2023-03-29 13:46:32)
-> > > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> > > index c3c3f8c07258..356119a7e5fe 100644
-> > > --- a/drivers/clk/clk.c
-> > > +++ b/drivers/clk/clk.c
-> > > [...]
-> > > @@ -1352,12 +1354,17 @@ static void __init clk_disable_unused_subtree=
-(struct clk_core *core)
-> > >          * back to .disable
-> > >          */
-> > >         if (clk_core_is_enabled(core)) {
-> > > -               trace_clk_disable(core);
-> > > -               if (core->ops->disable_unused)
-> > > -                       core->ops->disable_unused(core->hw);
-> > > -               else if (core->ops->disable)
-> > > -                       core->ops->disable(core->hw);
-> > > -               trace_clk_disable_complete(core);
-> > > +               if (clk_unused_keep_on) {
-> > > +                       pr_warn("Keep unused clk \"%s\" on\n", core->=
-name);
-> > > +                       clk_unused_keep_on -=3D 1;
-> > > +               } else {
-> > > +                       trace_clk_disable(core);
-> >=20
-> > We have trace_clk_disable() here. Can you have this tracepoint print to
-> > the kernel log and watch over serial console? That would be faster than
-> > bisecting.
->=20
-> Well no, that doesn't work for all the problems where
-> clk_ignore_unused=3D7 could be useful. Consider that e.g. you know that
-> eth0 is broken, but with clk_ignore_unused is works. So one of the (say)
-> 25 nominally unused clks are required for eth0. But it's not possible to
-> test the network after each of the 25 clk_disable()s. Unless I'm missing
-> something and you can hook a userspace action on a trace line?!
+On Wed, 29 Mar 2023 at 22:17, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+> Since power-domains is used for perf_level pm_genpd scaling, it's only
+> fitting that we pass a power domain that's actually supposed to be
+> scaled (and not only turned on/off) to the GPU. While we don't quite
+> support CPR3 yet, the next best thing we can do is pass VDDMX, so that
+> we're at least guaranteed a reasonable vote on the memory side of
+> things. Do so and leave a note mentioning CPR3 PD should be used here
+> instead when support is added.
+>
+> Fixes: 69cc3114ab0f ("arm64: dts: Add Adreno GPU definitions")
+> Fixes: 3f65d51e9e22 ("arm64: dts: qcom: msm8996: Make GPU node control GPU_GX GDSC")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/msm8996.dtsi | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> index 4661a556772e..4dd37f72e018 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> @@ -1228,7 +1228,8 @@ gpu: gpu@b00000 {
+>                         interconnects = <&bimc MASTER_GRAPHICS_3D &bimc SLAVE_EBI_CH0>;
+>                         interconnect-names = "gfx-mem";
+>
+> -                       power-domains = <&mmcc GPU_GX_GDSC>;
+> +                       /* TODO: also scale VDDGFX with CPR3 */
+> +                       power-domains = <&rpmpd MSM8996_VDDMX>;
+>                         iommus = <&adreno_smmu 0>;
+>
+>                         nvmem-cells = <&speedbin_efuse>;
+> @@ -2254,7 +2255,13 @@ adreno_smmu: iommu@b40000 {
+>                                  <&mmcc GPU_AHB_CLK>;
+>                         clock-names = "bus", "iface";
+>
+> -                       power-domains = <&mmcc GPU_GDSC>;
+> +                       /*
+> +                        * We need both GPU_GDSC and GPU_GX_GDSC to be on, but the
+> +                        * power-domains entry under gpu is occupied by the scaled
+> +                        * voltage domain. Since GPU_GDSC is a parent of GX_GDSC,
+> +                        * we can simply pass GX here to turn them both on!
+> +                        */
 
-In that case it sounds like you want to compile the kernel with the
-support for enabling clks from debugfs. Can you use that?
+Ugh. You can pass GX and VDDMX to the gpu. Let me send the patch
+supporting that.
+
+> +                       power-domains = <&mmcc GPU_GX_GDSC>;
+>                 };
+>
+>                 venus: video-codec@c00000 {
+>
+> --
+> 2.40.0
+>
+
+
+-- 
+With best wishes
+Dmitry
