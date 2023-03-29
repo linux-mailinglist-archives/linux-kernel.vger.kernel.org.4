@@ -2,144 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FE56CD8FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355F76CD901
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjC2L7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
+        id S229919AbjC2MAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjC2L7q (ORCPT
+        with ESMTP id S229942AbjC2L77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:59:46 -0400
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DCF4699;
-        Wed, 29 Mar 2023 04:59:27 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R561e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0Vewpuqu_1680091161;
-Received: from 30.221.149.47(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vewpuqu_1680091161)
-          by smtp.aliyun-inc.com;
-          Wed, 29 Mar 2023 19:59:24 +0800
-Message-ID: <1a2f9946-6800-fd58-2e93-8de4aaa0d2c6@linux.alibaba.com>
-Date:   Wed, 29 Mar 2023 19:59:21 +0800
+        Wed, 29 Mar 2023 07:59:59 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EBF46B3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:59:38 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id b20so62211053edd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:59:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680091177;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZnY05NtEWyHjR6iocxGjNb46QdSIoEtvVmzDgLL6/nY=;
+        b=Ag5n18VWAKaUlomjRZXe632B0aFi2u1C4ikX3hvGzajvS/m7OCRCytzktbRJdBEKWt
+         Jc6Zf6DmPZ5KZ5ih/dAX/A4yQMywipE/ZEQRj0LT+4V0xUb0AmO/JYXNbGfDcs1D8loD
+         VmcXQWYNcSsTDk5eZNSAIyWlBib+L4mqKo3bZO1HmTehUGIq8rM4Ezoqn0xLmwbe/TTp
+         42tm/niSvSb+5vUNSAkQTZ/EnXVL1VpBJjBEnuY2ayyWkVV+nRUl2oY20o3UA1VBGrLm
+         Qz+sw2MCblrO1ywqqHdYINqm2GqW2COHNDPfNpfKWS2ssDIlrzjydjKTwwyYBb/7aM07
+         IWrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680091177;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZnY05NtEWyHjR6iocxGjNb46QdSIoEtvVmzDgLL6/nY=;
+        b=y6rLrujHTuzKJx7T0NxpG7koiL+MTKkUJrM3eU7uXI6vEqgpGEeFjLjRycl2uMIx5o
+         nwdk3YodptjqKlp//+Uifa3XVqOQowIZt4+2jeg5IVmXhn8to9aeVg9aYZGgTVE9hhpT
+         Mi3RJQuLaCRUzuNZ1AGPr1QhjV1/VVnQYp7+j0fO1wzn1S8ZfGho2lhBq4Dbc/Ctcrv1
+         1QO1I1LIG/87Go0Yo9tN3Mb60BqgegNsk1ROpLJ9q2MOOXLxJR2OhkClnjAr0qf+c7h0
+         RSKABovaIz7NIhWrh4I8UoHMRnb88RqM88zXIyUKpvo02jgsvk0ithgTqTZk6otr/YBc
+         cW8Q==
+X-Gm-Message-State: AAQBX9ejkNLZkXFSZQBUe3551rOjXWDHdWYSIX0YRPIv8dwH1aaBuiSQ
+        m340YqaLgWeJgMmA7O8CL/89wSsRFfpwmqc7Ba8=
+X-Google-Smtp-Source: AKy350ZnnTQ02Xom5stHiVAsWVUGwgg16p325cQZphgoapnEbfdZPsr7VsQfDm/wYgQjV9geQiEcrAZqkFkVIxbNz7g=
+X-Received: by 2002:a50:a444:0:b0:4fc:6494:81c3 with SMTP id
+ v4-20020a50a444000000b004fc649481c3mr9152472edb.1.1680091176707; Wed, 29 Mar
+ 2023 04:59:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH RFC 0/4] Add JSON metrics for arm CMN and Yitian710 DDR
-To:     Ian Rogers <irogers@google.com>
-Cc:     John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1679885172-95021-1-git-send-email-renyu.zj@linux.alibaba.com>
- <CAP-5=fVitwxZwjkv0F98gHiYV9GBvmPq6LgcLTccQbogKmMhPA@mail.gmail.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <CAP-5=fVitwxZwjkv0F98gHiYV9GBvmPq6LgcLTccQbogKmMhPA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:640c:34b:b0:1be:bc76:f97a with HTTP; Wed, 29 Mar 2023
+ 04:59:34 -0700 (PDT)
+Reply-To: georgebrown0004@gmail.com
+From:   george brown <crepinak.vainqueur@gmail.com>
+Date:   Wed, 29 Mar 2023 13:59:34 +0200
+Message-ID: <CAHwNn8LJ7vyztrFTNhn_4bWEkVp4MRig=druy5mvX-Q5L2cfpg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Ahoj
 
+Vol=C3=A1m sa George Brown, povolan=C3=ADm som pr=C3=A1vnik. Chcem v=C3=A1m=
+ pon=C3=BAknu=C5=A5
+najbli=C5=BE=C5=A1=C3=AD pr=C3=ADbuzn=C3=BD m=C3=B4jho klienta. Zded=C3=ADt=
+e sumu (8,5 mili=C3=B3na dol=C3=A1rov)
+dol=C3=A1rov, ktor=C3=A9 m=C3=B4j klient nechal v banke pred svojou smr=C5=
+=A5ou.
 
-在 2023/3/28 上午12:51, Ian Rogers 写道:
-> On Sun, Mar 26, 2023 at 7:46 PM Jing Zhang <renyu.zj@linux.alibaba.com> wrote:
->>
->> Hi all,
->>
->> I add an identifier sysfs file for the yitian710 SoC DDR and arm CMN to
->> allow userspace to identify the specific implementation of the device,
->> so that the perf tool can match the corresponding uncore events and
->> metrics through the identifier. Then added several general CMN700 metrics
->> and yitian710 soc DDR metrics.
-> 
-> Thanks!
-> 
->> Since the eventid of cmn700 events is different from other events, it
->> can't be specified by "EventCode" or "ConfigCode", so in the cmn.json
->> file of cmn700, no "EventCode" and "ConfigCode" are added for these
->> events. For example, the eventid of "arm_cmn_0/hnf_sf_hit is/":
->> cat /sys/bus/event_source/devices/arm_cmn_0/events/hnf_sf_hit
->> type=0x5,eventid=0x6
-> 
-> This is done to add descriptions to the events? We can add encodings
-> to jevents.py and the event parsing to handle the names eventid and
-> type.
-> 
+M=C3=B4j klient je ob=C4=8Dan va=C5=A1ej krajiny, ktor=C3=BD zomrel pri aut=
+onehode so
+svojou man=C5=BEelkou
+a jedin=C3=BD syn. Budem ma=C5=A5 n=C3=A1rok na 50 % z celkov=C3=A9ho fondu=
+, zatia=C4=BE =C4=8Do 50 % =C3=A1no
+by=C5=A5 pre teba.
+Pros=C3=ADm, kontaktujte m=C3=B4j s=C3=BAkromn=C3=BD e-mail tu pre =C4=8Fal=
+=C5=A1ie podrobnosti:
+georgebrown0004@gmail.com
 
-Ok, I will try it.
-
->> In addition, both cmn700 and ddr PMU can count the information in a die,
->> but the same SoC can also be configured with different numbers of dies,
->> so it is dificult to design a general expression to obtain metrics in
->> different dies. The current yitian710 ddr bandwidth metric describes the
->> sum of all dies bandwidth. I would like to ask you, is there any general
->> expression can obtain metrics for die? Add an option to specify die?
-> 
-> So hopefully the logic for this is getting clearer in the
-> perf-tools-next branch. When perf stat runs it will aggregate in a
-> number of different ways, if you pass -A it will remove the
-> aggregation, but you can also use --per-socket, per-die, .. The
-> metrics take the individual counter values, say instructions and
-> cycles and produce a metric like IPC. By default all the instruction
-> counts are aggregated together, the cycles are aggregated together and
-> then the metric produced on the two aggregated values. When -A or
-> --per-die are passed, the appropriate amount of aggregation should be
-> done then the metric computed multiple times.
-> 
-
-Thanks! It is helpful. It solved my problem.
-
-Thanks,
-Jing
-
-> Are you asking for a way in a metric to take counts from one die and
-> use them in the other's metric? For example, reads on one die are
-> writes on the other? This is possible as we have all the counts in the
-> tool. I've thought about this in the context of some metrics we have
-> for AMD, but there is no support for this in the tool currently.
-> 
-> Thanks,
-> Ian
-> 
->> Thanks,
->> Jing
->>
->> Jing Zhang (4):
->>   driver/perf: Add identifier sysfs file for CMN
->>   perf vendor events: Add JSON metrics for cmn700
->>   driver/perf: Add identifier sysfs file for Yitian 710 DDR
->>   perf vendor events: Add JSON metrics for Yitian 710 DDR
->>
->>  drivers/perf/alibaba_uncore_drw_pmu.c              |  27 ++
->>  drivers/perf/arm-cmn.c                             |  43 +++
->>  .../pmu-events/arch/arm64/arm/cmn700/sys/cmn.json  | 188 +++++++++++
->>  .../arch/arm64/arm/cmn700/sys/metrics.json         |  74 ++++
->>  .../arm64/freescale/yitian710/sys/ali_drw.json     | 373 +++++++++++++++++++++
->>  .../arm64/freescale/yitian710/sys/metrics.json     |  20 ++
->>  tools/perf/pmu-events/jevents.py                   |   2 +
->>  7 files changed, 727 insertions(+)
->>  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cmn700/sys/cmn.json
->>  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cmn700/sys/metrics.json
->>  create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/ali_drw.json
->>  create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
->>
->> --
->> 1.8.3.1
->>
+Mnohokr=C3=A1t =C4=8Fakujem vopred,
+p=C3=A1n George Brown,
