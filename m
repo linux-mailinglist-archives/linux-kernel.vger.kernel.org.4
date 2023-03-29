@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FB96CD93E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C626CD94A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjC2MRQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 08:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
+        id S229667AbjC2MWU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 08:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjC2MRP (ORCPT
+        with ESMTP id S229481AbjC2MWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:17:15 -0400
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05041BC5;
-        Wed, 29 Mar 2023 05:17:13 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id ek18so62406514edb.6;
-        Wed, 29 Mar 2023 05:17:13 -0700 (PDT)
+        Wed, 29 Mar 2023 08:22:18 -0400
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A12740CA;
+        Wed, 29 Mar 2023 05:22:10 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id er13so21452244edb.9;
+        Wed, 29 Mar 2023 05:22:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680092232;
+        d=1e100.net; s=20210112; t=1680092529;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DShqxr4qsaywny3Edkqb64hMKKyKlgUunkfAdtTqeEc=;
-        b=Jg+ir531VFweKkumDnhkFc0FgE/i8LG3z9wAp8FiaHOYpoAz6PPKLtFlVkctn666M0
-         c0G5BBRsqnFWabM354ykVCD/EGJe9kAza5gHYgiUEyDUjx4mC1g//cyy//E94kxCnk65
-         zGKWYWc65G/CZsznkhT6V429LAsNVUqH5l9eOVN+b+Gwkq927eaYrxOhDlQcPT9xwNwi
-         0ro1aeHBapOknESw+zA5+pJPy1oFKUNa56/nkXxWvSz59HnErRwIshiqC33yK2cQWwiC
-         WBVZLMoChGOyJAu66j6suqxT7kFxaU+pGq/6sApxwYPhwtp/noLyT98Uju8VYMPNtsRr
-         sn0g==
-X-Gm-Message-State: AAQBX9fkfTZPTwpZf74dGL7EaB95EMe2ZTYHs0sHUIhJsMpKep/9l0Kp
-        qIIlwu58Yh0Y85i4eJK4SyG8sHmenE1i2Y9ftQU=
-X-Google-Smtp-Source: AKy350a42BNZly7NT1YAwXG/xznlsRLm0qlSStJr0m15aL3s8F1xXbZi14AmXLyXGBW3zFxuIWjdqfACe78pd+6oxxo=
-X-Received: by 2002:a17:907:d02:b0:931:6921:bdbb with SMTP id
- gn2-20020a1709070d0200b009316921bdbbmr9258696ejc.2.1680092232323; Wed, 29 Mar
- 2023 05:17:12 -0700 (PDT)
+        bh=z4mZrQlf3YJwoCwklWtY3hmHdlb3tmR5YNWYXn4LhmY=;
+        b=X34+ERBJUGWhVax7iuzRkVxpd6l4ze1WbE4jp1q663jMVzR4PIVzRpWwYFyv6FI2dI
+         7Ul5e+FgfiwXQUsDEyAQRKkYU7cweuonMPb8ocHcm2jEf11L+v1Xh/ml43ACnGBU03uw
+         ERvrBqSN4UmVdJxcfHLMHQiDkG7jpIORu0mxQrqbjXxZCXch7hR8ji4bQJ3wpjzj+M7G
+         ELMAeLToN9nYQTPE0bapLm9uqMZ3NxMAkfGSfgrC9oawQa6oPg4AhpxqG7kW8NxVD4fC
+         qoh8hj1iqHjEssz8wQ0OmMeZDeoAedXudihQR4uZLaK1LHg4OVdC9nfIPd78w102bBBv
+         9oQw==
+X-Gm-Message-State: AAQBX9fwvBLMEy+PgxdRdLRDNhcWo57qzr3NNQ6Sp7JzAJyMx3hETplN
+        IVCmdFf5f8AFbxeE1EK4S0Y9kOQdbZPwoGNIWx8=
+X-Google-Smtp-Source: AKy350YTEp8XKGvQ2ZwiDLz/Z1QGJxtivd7JRPsJPOxHEPSr1hbP+zORqJ0wyv5n3aOleGLm9/6aONyncAT0R2Decsw=
+X-Received: by 2002:a50:9fe3:0:b0:502:62ba:865b with SMTP id
+ c90-20020a509fe3000000b0050262ba865bmr809569edf.3.1680092528650; Wed, 29 Mar
+ 2023 05:22:08 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
- <20230207051105.11575-16-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0iidC0LxqpE60J5HHQhvv8iHjMGdxM89-7p-QQE99qVEQ@mail.gmail.com> <20230328234119.GA8958@ranerica-svr.sc.intel.com>
-In-Reply-To: <20230328234119.GA8958@ranerica-svr.sc.intel.com>
+ <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0hxKg_u4GKMkdGEp-JbvnymEtxSZT7fB2kbhWoQFSK1fw@mail.gmail.com> <20230329001536.GG8958@ranerica-svr.sc.intel.com>
+In-Reply-To: <20230329001536.GG8958@ranerica-svr.sc.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 29 Mar 2023 14:17:01 +0200
-Message-ID: <CAJZ5v0jgSObZnVHJed_qPtGLcryZsTpysVHFgFdZNzYOuhbc2Q@mail.gmail.com>
-Subject: Re: [PATCH v3 15/24] thermal: intel: hfi: Report the IPC class score
- of a CPU
+Date:   Wed, 29 Mar 2023 14:21:57 +0200
+Message-ID: <CAJZ5v0iHJrXDU=C0oaf-3DJfatWGj4No_J1rwN6PCpRTZMXqyA@mail.gmail.com>
+Subject: Re: [PATCH v3 21/24] thermal: intel: hfi: Implement model-specific
+ checks for task classification
 To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
@@ -78,16 +78,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 1:30 AM Ricardo Neri
+On Wed, Mar 29, 2023 at 2:04 AM Ricardo Neri
 <ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> On Mon, Mar 27, 2023 at 06:50:13PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Mar 27, 2023 at 07:03:08PM +0200, Rafael J. Wysocki wrote:
 > > On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
 > > <ricardo.neri-calderon@linux.intel.com> wrote:
 > > >
-> > > Implement the arch_get_ipcc_score() interface of the scheduler. Use the
-> > > performance capabilities of the extended Hardware Feedback Interface table
-> > > as the IPC score.
+> > > In Alder Lake and Raptor Lake, the result of thread classification is more
+> > > accurate when only one SMT sibling is busy. Classification results for
+> > > class 2 and 3 are always reliable.
+> > >
+> > > To avoid unnecessary migrations, only update the class of a task if it has
+> > > been the same during 4 consecutive user ticks.
 > > >
 > > > Cc: Ben Segall <bsegall@google.com>
 > > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -111,100 +114,79 @@ On Wed, Mar 29, 2023 at 1:30 AM Ricardo Neri
 > > >  * None
 > > >
 > > > Changes since v1:
-> > >  * Adjusted the returned HFI class (which starts at 0) to match the
-> > >    scheduler IPCC class (which starts at 1). (PeterZ)
-> > >  * Used the new interface names.
+> > >  * Adjusted the result the classification of Intel Thread Director to start
+> > >    at class 1. Class 0 for the scheduler means that the task is
+> > >    unclassified.
+> > >  * Used the new names of the IPC classes members in task_struct.
+> > >  * Reworked helper functions to use sched_smt_siblings_idle() to query
+> > >    the idle state of the SMT siblings of a CPU.
 > > > ---
-> > >  arch/x86/include/asm/topology.h   |  2 ++
-> > >  drivers/thermal/intel/intel_hfi.c | 27 +++++++++++++++++++++++++++
-> > >  2 files changed, 29 insertions(+)
+> > >  drivers/thermal/intel/intel_hfi.c | 60 ++++++++++++++++++++++++++++++-
+> > >  1 file changed, 59 insertions(+), 1 deletion(-)
 > > >
-> > > diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-> > > index ffcdac3f398f..c4fcd9c3c634 100644
-> > > --- a/arch/x86/include/asm/topology.h
-> > > +++ b/arch/x86/include/asm/topology.h
-> > > @@ -229,8 +229,10 @@ void init_freq_invariance_cppc(void);
-> > >
-> > >  #if defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL)
-> > >  void intel_hfi_update_ipcc(struct task_struct *curr);
-> > > +unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu);
-> > >
-> > >  #define arch_update_ipcc intel_hfi_update_ipcc
-> > > +#define arch_get_ipcc_score intel_hfi_get_ipcc_score
-> > >  #endif /* defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL) */
-> > >
-> > >  #endif /* _ASM_X86_TOPOLOGY_H */
 > > > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> > > index 530dcf57e06e..fa9b4a678d92 100644
+> > > index 35d947f47550..fdb53e4cabc1 100644
 > > > --- a/drivers/thermal/intel/intel_hfi.c
 > > > +++ b/drivers/thermal/intel/intel_hfi.c
-> > > @@ -206,6 +206,33 @@ void intel_hfi_update_ipcc(struct task_struct *curr)
-> > >         curr->ipcc = msr.split.classid + 1;
-> > >  }
+> > > @@ -40,6 +40,7 @@
+> > >  #include <linux/workqueue.h>
 > > >
-> > > +unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu)
+> > >  #include <asm/msr.h>
+> > > +#include <asm/intel-family.h>
+> > >
+> > >  #include "../thermal_core.h"
+> > >  #include "intel_hfi.h"
+> > > @@ -209,9 +210,64 @@ static int __percpu *hfi_ipcc_scores;
+> > >   */
+> > >  #define HFI_UNCLASSIFIED_DEFAULT 1
+> > >
+> > > +#define CLASS_DEBOUNCER_SKIPS 4
+> > > +
+> > > +/**
+> > > + * debounce_and_update_class() - Process and update a task's classification
+> > > + *
+> > > + * @p:         The task of which the classification will be updated
+> > > + * @new_ipcc:  The new IPC classification
+> > > + *
+> > > + * Update the classification of @p with the new value that hardware provides.
+> > > + * Only update the classification of @p if it has been the same during
+> > > + * CLASS_DEBOUNCER_SKIPS consecutive ticks.
+> > > + */
+> > > +static void debounce_and_update_class(struct task_struct *p, u8 new_ipcc)
 > > > +{
-> > > +       unsigned short hfi_class;
-> >
-> > It looks like the variable above is only used to save a subtraction or
-> > addition of 1 to something going forward.
-> >
-> > > +       int *scores;
+> > > +       u16 debounce_skip;
 > > > +
-> > > +       if (cpu < 0 || cpu >= nr_cpu_ids)
-> > > +               return -EINVAL;
-> > > +
-> > > +       if (ipcc == IPC_CLASS_UNCLASSIFIED)
-> > > +               return -EINVAL;
+> > > +       /* The class of @p changed. Only restart the debounce counter. */
+> > > +       if (p->ipcc_tmp != new_ipcc) {
+> > > +               p->ipcc_cntr = 1;
+> > > +               goto out;
+> > > +       }
 > > > +
 > > > +       /*
-> > > +        * Scheduler IPC classes start at 1. HFI classes start at 0.
-> > > +        * See note intel_hfi_update_ipcc().
+> > > +        * The class of @p did not change. Update it if it has been the same
+> > > +        * for CLASS_DEBOUNCER_SKIPS user ticks.
 > > > +        */
-> > > +       hfi_class = ipcc - 1;
+> > > +       debounce_skip = p->ipcc_cntr + 1;
+> > > +       if (debounce_skip < CLASS_DEBOUNCER_SKIPS)
+> > > +               p->ipcc_cntr++;
+> > > +       else
+> > > +               p->ipcc = new_ipcc;
 > > > +
-> > > +       if (hfi_class >= hfi_features.nr_classes)
-> >
-> > Personally, I would do
-> >
-> > if (ipcc >= hfi_features.nr_classes + 1)
-> >
-> > here and ->
-> >
-> > > +               return -EINVAL;
-> > > +
-> > > +       scores = per_cpu_ptr(hfi_ipcc_scores, cpu);
-> > > +       if (!scores)
-> > > +               return -ENODEV;
-> > > +
-> >
-> > -> scores[ipcc - 1]
->
-> Sure, I can get rid of hfi_class.
->
-> >
-> > below.
-> >
-> > > +       return READ_ONCE(scores[hfi_class]);
-> >
-> > And why does this need to use READ_ONCE()?
->
-> This is the corresponding read of the WRITE_ONCE in patch 13. The CPU
-> handling the HFI interrupt, very likely a different CPU, updates
-> scores[hfi_class]. My intention is to let that write to complete before
-> reading the score here.
-
-However, READ_ONCE()/WRITE_ONCE() only affect compiler optimizations
-AFAICS.  What if the CPUs running the code reorder the instructions?
-
-In any case, IMV the reason why READ_ONCE() is used needs to be clear
-to the reviewers from the patch itself (and to a casual reader of the
-code from the code itself).
-
-> >
+> > > +out:
+> > > +       p->ipcc_tmp = new_ipcc;
 > > > +}
-> > > +
-> > >  static int alloc_hfi_ipcc_scores(void)
-> > >  {
-> > >         if (!cpu_feature_enabled(X86_FEATURE_ITD))
-> > > --
+> >
+> > Why does the code above belong to the Intel HFI driver?  It doesn't
+> > look like there is anything driver-specific in it.
+>
+> That is a good point. This post-processing is specific to the
+> implementation of IPCC classes using Intel Thread Director.
+
+Well, the implementation-specific part is the processor model check
+whose only contribution is to say whether or not the classification is
+valid.  The rest appears to be fairly generic to me.
+
+> Maybe a new file called drivers/thermal/intel/intel_itd.c would be better?
+
+So which part of this code other than the processor model check
+mentioned above is Intel-specific?
