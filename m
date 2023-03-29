@@ -2,122 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC986CD0B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 05:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57426CD0BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 05:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjC2DeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 23:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        id S229563AbjC2Deg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 23:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjC2DeE (ORCPT
+        with ESMTP id S229610AbjC2Dee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 23:34:04 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DEC212E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:33:37 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id u10so13659826plz.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:33:37 -0700 (PDT)
+        Tue, 28 Mar 2023 23:34:34 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C11726AE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:34:33 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so17240853pjp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:34:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680060817;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4+TATKpiI/m1aX5zcJcBfi55zhCtiMGHrjCscJ6PomI=;
-        b=FPQnW38S34g0z1Q8kz48ty65k3Dmp9KRwwUAJ3ICuzTupops2Y0vhQPj8dbDjn9vKi
-         iNDOhiAeln7aJ65JQ9U+d26Sd1cDXR2jOoVIv26/o1QGpr3sPDd9mqyPHJDEwAioixC5
-         CwcTzAdsTGmgzcytp/Ffm4OtWMpm/5vaZ6pzLNr54NaV5gTP4WZzh53gL4DV+sAKRa/v
-         mAIfV2Xrma2bNgN1io+rzkRF515BrMN2C/avD8RajwuVyVRePzG7JIUxJk3Q65YqAtHV
-         2ZT93IG49MkUilPM+5/nCt1QvDqpj13u+mmZZYF+FqNSUNyZrGr1kHBl3y4CeCS5ZCdW
-         hUmA==
+        d=linaro.org; s=google; t=1680060872;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lrPg+XcugayUBQdJZA8GlLCHOjk+HPNQA9l1wxAz9XU=;
+        b=oJldNef8Y32GaZkojlBXY8Ne5qhhM7OYnEHZ9LMVhUylSArWs7nJWX7w70BHaLK0z0
+         iqDe9BnG7NW0W0a2PZled8J/32shF0vpEWxosW9v/C77RKGFAzXDico8x5t5u3L13+1q
+         e4sp1DY2wWO0WY7o3b+lYXwFY4696pCaCRA/3hnrNqS0ZI58jny4nbbFioC4TdbfBzb8
+         3ihHvZb85BawvCWKxPVKEIRcrDEIZ1XtnqTD0XF/YFODfUkveZTI469LK4pf6woK22q9
+         /TclUJh4nae9n3OOBCaSyo9j2nmokoHwr7lvJLGUTxWGXcrfg8vy1xmiDdS93XhnhxEK
+         2Oyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680060817;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4+TATKpiI/m1aX5zcJcBfi55zhCtiMGHrjCscJ6PomI=;
-        b=tJjysckH4HdvYSgT68rknKHFzrTAli+kdVaTT58C0+aZg/h0CH4xpeuQch3U0wDFPX
-         DUwWTzYWew5AdzWX0aN/Zvj7MZnFsqLoFcmYD7MpLaK38WSjwcULqmBr7QP8/YUp5dQi
-         jERxolvV5UwU/8+cbSBuxlKsZ9TmuFLDI4VrOkDIsOvmQbfJa2diwbWx3M+V9/6mO8Jt
-         qDRFvaEZe4zopFpfvoRU98hdrCYbyQDlT8XMjNJjKavUmjGfdrkIH0F4GnxprqvBGf7t
-         bxWtq1jnVGfDAkmiOgNhpBw3b3bmBCaICVpZePlIZKLpkQr5QkVzR8Nj9b/7trqHWGWl
-         gRDw==
-X-Gm-Message-State: AAQBX9esIl5IkVYnzFRmovpjrYb7im1gPGY9Y9SMafTY+gNvkHKsxbad
-        zAojEm3CT41flvZ75dqZ1BxAtRHolkFbQrLU+yk=
-X-Google-Smtp-Source: AKy350avfa0gKz4Zd6gsYPNpRBHU5Bq4LY4VQkUnGwedVUVb52Mza3ZZUfXF1Abdzp/MXze4iNGrjw==
-X-Received: by 2002:a17:903:743:b0:1a1:cd69:d301 with SMTP id kl3-20020a170903074300b001a1cd69d301mr15834742plb.68.1680060817286;
-        Tue, 28 Mar 2023 20:33:37 -0700 (PDT)
-Received: from [10.3.144.50] ([61.213.176.7])
-        by smtp.gmail.com with ESMTPSA id k16-20020a63f010000000b004fbd021bad6sm20505062pgh.38.2023.03.28.20.33.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 20:33:36 -0700 (PDT)
-Message-ID: <a9952336-4648-16be-532a-37fd52d67b27@bytedance.com>
-Date:   Wed, 29 Mar 2023 11:33:32 +0800
+        d=1e100.net; s=20210112; t=1680060872;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lrPg+XcugayUBQdJZA8GlLCHOjk+HPNQA9l1wxAz9XU=;
+        b=H490W44U3vR7r0EVZjyOhhgyXPRAegLzHPeR0Lmh3gviTyjhN6Do0CthKTuqKlmsry
+         18JzyjaUvW8bQ7hSVRBP3/ofxtVqOpaa9sYDuMFrE5uWyW0YoM+CPcilhU9SNJjRrwGZ
+         l527wy3HcjntQnXwBkzFR2jJIsBvtrYWJ7TSF+3IFYeNBo4F1N25kEUJ5+PuY1oL+C9U
+         Wn/C/yHmpcHzSedwN4/SGHhH87TsqWtL26zvURXk+fYgmGNZQhtX7IYTQ947Uf7wRwRU
+         G/sdiZIJewFJXhhLkRGWGqS/JNO9RV//u2HMHC/Ptc/eyAN9ADpnEsvp+yqEYWHnGA5A
+         Ktxg==
+X-Gm-Message-State: AAQBX9ejYzr7f7rpWqeit+Gh6PFAZ/5hj6mfirNDAbtt4l31gcj+Af1o
+        a38DrGZiQ5i6rjFbPdfFEx3O/pleTx0cKSGHSRM=
+X-Google-Smtp-Source: AKy350Zcf1qWpx9bh/5skLSyvbqEr3AICEnYsjvkYnCs70Cd4uZYr/L0UsgaxcWWxbkcCr4w30fI6A==
+X-Received: by 2002:a17:90b:4b43:b0:23b:4bf6:bbed with SMTP id mi3-20020a17090b4b4300b0023b4bf6bbedmr19446957pjb.24.1680060872613;
+        Tue, 28 Mar 2023 20:34:32 -0700 (PDT)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id bc9-20020a170902930900b001a20b31a23fsm10109449plb.293.2023.03.28.20.34.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 20:34:31 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 11:34:24 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/2] Resolve MPM register space situation
+Message-ID: <20230329033424.GA3554086@dragon>
+References: <20230328-topic-msgram_mpm-v1-0-1b788a5f5a33@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: Re: [PATCH V4 1/5] cachefiles: introduce object ondemand state
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xin Yin <yinxin.x@bytedance.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>
-References: <20230111052515.53941-2-zhujia.zj@bytedance.com>
- <20230111052515.53941-1-zhujia.zj@bytedance.com>
- <131869.1680011531@warthog.procyon.org.uk>
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-In-Reply-To: <131869.1680011531@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328-topic-msgram_mpm-v1-0-1b788a5f5a33@linaro.org>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-Thanks for reviewing.
+On Tue, Mar 28, 2023 at 12:02:51PM +0200, Konrad Dybcio wrote:
+> The MPM (and some other things, irrelevant to this patchset) resides
+> (as far as the ARM cores are concerned, anyway) in a MMIO-mapped region
+> that's a portion of the RPM (low-power management core)'s RAM, known
+> as the RPM Message RAM. Representing this relation in the Device Tree
+> creates some challenges, as one would either have to treat a memory
+> region as a bus, map nodes in a way such that their reg-s would be
+> overlapping, or supply the nodes with a slice of that region.
+> 
+> This series implements the third option, by adding a qcom,rpm-msg-ram
+> property, which has been used for some drivers poking into this region
+> before. Bindings ABI compatibility is preserved through keeping the
+> "normal" (a.k.a read the reg property and map that region) way of
+> passing the register space.
 
-在 2023/3/28 21:52, David Howells 写道:
-> Jia Zhu <zhujia.zj@bytedance.com> wrote:
-> 
->> +enum cachefiles_object_state {
->> +	CACHEFILES_ONDEMAND_OBJSTATE_close, /* Anonymous fd closed by daemon or initial state */
->> +	CACHEFILES_ONDEMAND_OBJSTATE_open, /* Anonymous fd associated with object is available */
-> 
-> That looks weird.  Maybe make them all-lowercase?
+I have to admit that I wasn't aware of it, this message RAM is also
+accessed by cores like modem, ADSP etc.  I agree in principle this is
+a good change!
 
-I'll revise it in next version.
-> 
->> @@ -296,6 +302,21 @@ extern void cachefiles_ondemand_clean_object(struct cachefiles_object *object);
->>   extern int cachefiles_ondemand_read(struct cachefiles_object *object,
->>   				    loff_t pos, size_t len);
->>   
->> +#define CACHEFILES_OBJECT_STATE_FUNCS(_state)	\
->> +static inline bool								\
->> +cachefiles_ondemand_object_is_##_state(const struct cachefiles_object *object) \
->> +{												\
->> +	return object->state == CACHEFILES_ONDEMAND_OBJSTATE_##_state; \
->> +}												\
->> +												\
->> +static inline void								\
->> +cachefiles_ondemand_set_object_##_state(struct cachefiles_object *object) \
->> +{												\
->> +	object->state = CACHEFILES_ONDEMAND_OBJSTATE_##_state; \
->> +}
->> +
->> +CACHEFILES_OBJECT_STATE_FUNCS(open);
->> +CACHEFILES_OBJECT_STATE_FUNCS(close);
-> 
-> Or just get rid of the macroisation?  If there are only two states, it doesn't
-> save you that much and it means that "make TAGS" won't generate refs for those
-> functions and grep won't find them.
+Shawn
 
-Actually there is one more state <reopening> will be introduced in
-patch3 and 30+ loc for repeated functions will be added if we drop the 
-macro.
-Shall I keep using the macro or replace it?
-> David
+> 
+> Example representation with this patchset:
+> 
+> / {
+> 	[...]
+> 
+> 	mpm: interrupt-controller {
+> 		compatible = "qcom,mpm";
+> 		qcom,rpm-msg-ram = <&apss_mpm>;
+> 		[...]
+> 	};
+> 
+> 	[...]
+> 
+> 	soc: soc@0 {
+> 		[...]
+> 
+> 		rpm_msg_ram: sram@45f0000 {
+> 			compatible = "qcom,rpm-msg-ram", "mmio-sram";
+> 			reg = <0 0x045f0000 0 0x7000>;
+> 			#address-cells = <1>;
+> 			#size-cells = <1>;
+> 			ranges = <0 0x0 0x045f0000 0x7000>;
+> 
+> 			apss_mpm: sram@1b8 {
+> 				reg = <0x1b8 0x48>;
+> 			};
+> 		};
+> 	};
+> };
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+> Konrad Dybcio (2):
+>       dt-bindings: interrupt-controller: mpm: Allow passing reg through phandle
+>       irqchip: irq-qcom-mpm: Support passing a slice of SRAM as reg space
+> 
+>  .../bindings/interrupt-controller/qcom,mpm.yaml    |  6 ++++-
+>  drivers/irqchip/irq-qcom-mpm.c                     | 30 ++++++++++++++++++----
+>  2 files changed, 30 insertions(+), 6 deletions(-)
+> ---
+> base-commit: a6faf7ea9fcb7267d06116d4188947f26e00e57e
+> change-id: 20230328-topic-msgram_mpm-c688be3bc294
+> 
+> Best regards,
+> -- 
+> Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
