@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB366CD0DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 05:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A226CD0E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 05:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjC2DxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 23:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
+        id S229831AbjC2DxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 23:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjC2DxA (ORCPT
+        with ESMTP id S229821AbjC2DxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 23:53:00 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C928D30F5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:52:33 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id j24so14277013wrd.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:52:33 -0700 (PDT)
+        Tue, 28 Mar 2023 23:53:05 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5719B1A2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:53:04 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id h15so12292212vsh.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:53:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680061952;
+        d=linaro.org; s=google; t=1680061983;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sxGaqLyKO1TN0pSBe4xZ3Bl0DqqI6clzZtcK/yjTF7U=;
-        b=Bg6O58r7hoxolYUP1MmFER3k3jKGZGxL4khw0OL6OElNmfbPi6G/IugpY79p8r2NQC
-         Ix0IOyILyuOfKT8r1+tse0+BW5VOKD3SofIWK50yyjF1ywrvY8OcMsjZ8LXGGn2AQuKh
-         7PgD69LIPjUrG1SS98FPfbhCpqqodi2fWRwda0BvQ70uKepeVqvqSxDUOdSTc49Qt0mf
-         sQYFY1V+gHsec7OuksjC6rBWNtM0Yv89y6wXTFkKW/X31UHnJOHoi95A7mFLwjmzBhWp
-         EoMUvqJGe8dyTgmuAi9r3TxKdWq7eW85N2jRTDGnaqKvkfD+Fw1fofX8OYvMvh3I5WvZ
-         ME4g==
+        bh=mWG1N+zyaRXNS817+JxirvhNvLjC8z+Uk0Ll74FpTtU=;
+        b=pvHY/1n4hHCEbNAON5jo7vyuLegwBqPFqb9c/kgyowAK5i42qsCes+B3pOvh0PbHA3
+         BdmNOGgfFeqYXf1FoFv/e1GaQLS7nqhjgZvxHPmp5fL641e48tuIEuRNPx8u0HvGM7KC
+         QrPuchp7bA1lr3jWAQ/L4Eo4AaUVUaUzqRXKErUbZb5DxE1iseekeMJA68u0VZ7QwLXR
+         o7Ne8h1VtdlgpXguGB3Jc9izi9F5vjJz/BNO7vLv55l/16kpOwNbCqz6UptuOfGBgo9r
+         WA7kjgtDjmNeeKtI6qdV8cDYP9lJrPc1LGpKX71sEqlrEmKidev251sWzk3FWn35rzh5
+         J+PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680061952;
+        d=1e100.net; s=20210112; t=1680061983;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sxGaqLyKO1TN0pSBe4xZ3Bl0DqqI6clzZtcK/yjTF7U=;
-        b=L1okUIUTelEwRpR9X6RDAW1Y2/CVMWok1M3dfrFEqewpEwIST1wmmFFGOBHCR58kIv
-         ho1ejJuFwQ8Elvfta3SWxEW1+RbDfHRe5HQvJf7cQb1cBKtTeLdcPFYl87WMzoE7kHpe
-         flgS83MLklZFmo3DdWnTqqxbllAqCxJY14jepdosunU5EYJZu3oMUHm6We618c60rZ/7
-         X6fNiqF3ZuhjqbS66/oeU8/0La1I99Nyyu+MeCuOb/4oXTf5AKo6r6zMJRbW/18KBBeh
-         Ve9VDt9yUB26psMqvoCgZiDyeyv5xZ01saACwog3NkL6jvBLHBzWxTo5SDn9hSq53WFs
-         NATA==
-X-Gm-Message-State: AAQBX9fUoVRur7cn+MxYrfg03Q4j8y3ohzfPoRlHU8LreTMV31FDhvss
-        kOdjuRlxulGrVSyNsvaS9K9BcZT5a4NAJcxIVLK0XLzbLLImTjbc2a0=
-X-Google-Smtp-Source: AKy350ZJEKNgAfeLl8iFYh0WtB68/u80mVXbwZzO4ynTLgaC60l429Z+cbqfWCRLLGb09urTuZTRPLBtBV3NpOHVPk8=
-X-Received: by 2002:adf:db4b:0:b0:2ce:ac97:6f51 with SMTP id
- f11-20020adfdb4b000000b002ceac976f51mr2959523wrj.13.1680061952265; Tue, 28
- Mar 2023 20:52:32 -0700 (PDT)
+        bh=mWG1N+zyaRXNS817+JxirvhNvLjC8z+Uk0Ll74FpTtU=;
+        b=acT4EnCiDk79+/4ihw/r7/7E6JQM79NMNi3Grk+ULHPk9KfuGGtKu1m61TKIzKFAM9
+         qkn1WXt+9P4nhvVhwnc2I4TCXMpn/0ZdjbFCbbiuF/EL5kSnj4PXlDLZacThY+M5h8C3
+         CVF6+9VS9kK2UpBnoQGjrcAgYaSHZ/6zWG4zq08e2EeqOlPhNHk0CAt7tESLRxXQ685b
+         2aNcNjEO3ysCvps0KJ8UcWz15EMeGAqAJVSBpW4BfRcXeYqns/COeNnMEQ/eloRl3J5O
+         vvMwZeX2dKO7PS1QO/Ecirl6sILz+ELnPmuZLh/OgapqnkaZJgv8t47FqIeyBYsBLs5m
+         WPJQ==
+X-Gm-Message-State: AAQBX9e9O57QJP5g6AVYyUvRvpUszoUeGrmAnKqz4ZIRRwEhxj8astqB
+        AicK9UyEiO2AeCt45qFYOJcLLArMc3XW4Li4VOl+jA==
+X-Google-Smtp-Source: AKy350aU50RVFZwttkiznb4TqjRW56mfkqxoDmdI47ILe63HR7eFdwYFMitFAU0jBASctzs7c53Pae55m+izMgm35nQ=
+X-Received: by 2002:a67:c802:0:b0:416:2ad3:35ba with SMTP id
+ u2-20020a67c802000000b004162ad335bamr10503427vsk.1.1680061983310; Tue, 28 Mar
+ 2023 20:53:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230327115642.1610-1-cuiyunhui@bytedance.com> <d7111158-7e17-4c88-a8c1-a568db5891fa@spud>
-In-Reply-To: <d7111158-7e17-4c88-a8c1-a568db5891fa@spud>
-From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Date:   Wed, 29 Mar 2023 11:52:21 +0800
-Message-ID: <CAEEQ3wkKr9NhKwo0O3D=pfi80j7-cup3VgaWuk8vdk87=ryy6g@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH] riscv/fault: Dump user opcode bytes on
- fatal faults
-To:     Conor Dooley <conor@kernel.org>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+References: <20230328142602.660084725@linuxfoundation.org>
+In-Reply-To: <20230328142602.660084725@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 29 Mar 2023 09:22:52 +0530
+Message-ID: <CA+G9fYvzm5iZFkSVoswK_XN5SB7-k803_RgAdM2crrwMRLDWiQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/146] 5.15.105-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -70,71 +72,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
-
-On Wed, Mar 29, 2023 at 1:03=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
-
-> riscv/fault: Dump user opcode bytes on fatal faults
+On Tue, 28 Mar 2023 at 20:37, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> I think you can drop the /fault, we don't usually use prefixes that like
-> for RISC-V.
+> This is the start of the stable review cycle for the 5.15.105 release.
+> There are 146 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-ok, i'll update it on v2
-
-
-> > In this way, we found the problem: in the system bringup , it is
-> > precisely that we have not enabled the floating point function.
+> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
+> Anything received after that time might be too late.
 >
-> What do you mean by that "have not enabled the floating point function"?
-
-The related cpu feature(COMPAT_HWCAP_ISA_F) is not enabled in the
-riscv_fill_hwcap function interface.
-
-
-> > So when an exception occurs, it is necessary to dump the instruction
-> > that caused the exception, like x86/fault (ba54d856a9d8).
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.105-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
 >
-> That's not the usual format for referring to commits, checkpatch should
-> complain about that.
-
-ok, i'll update it on v2.
-
-> >
-> > Logs:
-> > [    0.822481] Run /init as init process
-> > [    0.837569] init[1]: unhandled signal 4 code 0x1 at 0x000000000005e0=
-28 in bb[10000+5fe000]
-> > [    0.932292] CPU: 0 PID: 1 Comm: init Not tainted 5.14.0-rc4-00048-g4=
-a843c9043e8-dirty #138
+> thanks,
 >
-> 5.14-rc4?, oof! Need to get yourself onto a released, LTS kernel I
-> think!
-
-Just a print,v6.3-rc1 also has this problem.
-
->
-> Anyway, this patch doesn't apply to either riscv/for-next, riscv/fixes
-> or v6.3-rc1. What is the appropriate base to apply this patch?
-
-ok, i'll update it on v2.
+> greg k-h
 
 
-> > [    0.936073]  s2 : 0000000000000000 s3 : 0000000000000000 s4 : 000000=
-0000000000
-> > [    0.936495]  s5 : 0000000000000000 s6 : 0000000000000000 s7 : 000000=
-0000000000
-> > [    0.936947]  s8 : 0000000000000000 s9 : 0000000000000000 s10: 000000=
-0000000000
-> > [    0.937487]  s11: 0000000000d14980 t3 : 0000000000000000 t4 : 000000=
-0000000000
-> > [    0.937954]  t5 : 0000000000000000 t6 : 0000000000000000
-> > [    0.938510] status: 0000000200000020 badaddr: 00000000f0028053 cause=
-: 0000000000000002
->
-> I have no idea what the significance of this particular backtrace is,
-> could you elaborate on what this is demonstrating? (and drop the leading
-> [###] too as it doesn't exactly add anything!
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-The current call trace does not show the instruction that caused the
-exception. ok, I'll remove it on v2.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.15.105-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: ea115396267e89b54136b19bb93bd16781a9d033
+* git describe: v5.15.104-147-gea115396267e
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.104-147-gea115396267e
+
+## Test Regressions (compared to v5.15.104)
+
+## Metric Regressions (compared to v5.15.104)
+
+## Test Fixes (compared to v5.15.104)
+
+## Metric Fixes (compared to v5.15.104)
+
+## Test result summary
+total: 141325, pass: 115971, fail: 3742, skip: 21383, xfail: 229
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 115 total, 114 passed, 1 failed
+* arm64: 42 total, 42 passed, 0 failed
+* i386: 33 total, 31 passed, 2 failed
+* mips: 27 total, 26 passed, 1 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 27 total, 26 passed, 1 failed
+* riscv: 11 total, 11 passed, 0 failed
+* s390: 12 total, 11 passed, 1 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 36 total, 36 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
