@@ -2,102 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2C76CEEC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF58E6CEEBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjC2QIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S231344AbjC2QHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjC2QHy (ORCPT
+        with ESMTP id S230350AbjC2QGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:07:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D6461AB
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680105928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BK4E10sij+UjBr4h6hMh56nRJwsX+E/yiWATUoPCWNU=;
-        b=A1Z6QAD8mwzAEuiqGjwBXcJt8T04RhYf9xMsoFjxa+MzOOW8peDIivymCBWgZEoaOJcn5Z
-        pZYFEqDcPQoAlBqfHLa5VICq3Xu47kDfo8TKcSxUuU2OYCjfJdtwBVBmo3Zp0PRXsk9h9P
-        nsMnS89Toz/40Jz6CmRKuIycXBikYPA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-5kwB7d74P1WUzrrEszAoSw-1; Wed, 29 Mar 2023 12:05:22 -0400
-X-MC-Unique: 5kwB7d74P1WUzrrEszAoSw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8C33E855315;
-        Wed, 29 Mar 2023 16:05:21 +0000 (UTC)
-Received: from [10.22.34.224] (unknown [10.22.34.224])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 73F48492B00;
-        Wed, 29 Mar 2023 16:05:20 +0000 (UTC)
-Message-ID: <0eae9e7c-8bfc-6e89-c4ad-e1cd40ec03b5@redhat.com>
-Date:   Wed, 29 Mar 2023 12:05:20 -0400
+        Wed, 29 Mar 2023 12:06:47 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6E665BE;
+        Wed, 29 Mar 2023 09:06:02 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id eg48so65316238edb.13;
+        Wed, 29 Mar 2023 09:06:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680105931;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oXQRlBCYnqGo9Fi48YDM5Iz/n3EKV6wgfQDls4v49ZQ=;
+        b=ZP8azEYR3T/kmocgq8bSZlNTouSdAv0pqNbONNvK6pjIOYfvW0EWRaDVO44E5sowbA
+         4MGZKJiXz7VE108ciJQNXn5/hHquTqMqhb6tRaq9zC55es7aV4eyXx5sWcvFrwBw8u31
+         DcptBNfTU6x5mTKuHF7vCiSdOphP7f1dZ5xyT7jA8pE036EK0r7Mwyj+wpf0qOtr4/dO
+         PtsdhtBZV/jUZWdd6KSP5EkVxa9qFL2fQNK4V/Imeno6KN+BWXvR2ysex446RXd1SjcJ
+         RuPjjhn8s3ln2xq7NpQb+o1cGn+mn2pwwyW/FTHZVbW4BbukRommLkvptqsBpXQc4gTR
+         WTBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680105931;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oXQRlBCYnqGo9Fi48YDM5Iz/n3EKV6wgfQDls4v49ZQ=;
+        b=Bbh9UL2Re6XbSbaYcMh3fAwCaCC1EP33Yp8IXh7/JfAGGVEqF3VQQoEAVXKAdKsq3V
+         /rWzdv9nDVKZXSsueEXewWP1uS/3EohRrzfjgFrmKcvbwtoquM3ggKo8YWDfvkQFkmfj
+         nvSFp4JxMgKklXpPaw/rhFFPonVbP2DTarrC3UgQuDaxieh/DGpYs2hFJh/jOjkaZ0gW
+         JY6FfdUxs0gj0kIysxHYoasIE6vKyeB8BJyEp8oWpdJa8iPdjcrUuRJALNKemtck2ALM
+         7QJHaxYiUYAFXsGFIgDL7SQK8stCdT0WdOzkm23414I8VsQPZhy1tnkJJW1ZME4PrIg8
+         eedw==
+X-Gm-Message-State: AAQBX9fezxGL/+NnpystWuV1EgrAhMw9/cNKlAir6oDjKlGpOwm71qz0
+        wMPhanEUiNvMNJuyWrzKxzw=
+X-Google-Smtp-Source: AKy350Y0SxvEseTuQQeEwplPrjnDboy+i5rUViT0BUXK5Dv5qulkowom3JNTJJ/XP46pJIz4L/hzEA==
+X-Received: by 2002:a17:906:f1c7:b0:933:c474:420b with SMTP id gx7-20020a170906f1c700b00933c474420bmr20841888ejb.19.1680105930843;
+        Wed, 29 Mar 2023 09:05:30 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id l19-20020a170906079300b00932ed432475sm15417251ejc.124.2023.03.29.09.05.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 09:05:30 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Anup Patel <anup@brainfault.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>
+Cc:     sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-tegra@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH 15/19] cpufreq: sun50i: Add explicit include for cpu.h
+Date:   Wed, 29 Mar 2023 18:05:27 +0200
+Message-ID: <2672894.mvXUDI8C0e@jernej-laptop>
+In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-15-581e2605fe47@kernel.org>
+References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
+ <20230329-dt-cpu-header-cleanups-v1-15-581e2605fe47@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6/7] cgroup/cpuset: Protect DL BW data against parallel
- cpuset_attach()
-Content-Language: en-US
-To:     Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        luca.abeni@santannapisa.it, claudio@evidence.eu.com,
-        tommaso.cucinotta@santannapisa.it, bristot@redhat.com,
-        mathieu.poirier@linaro.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230329125558.255239-1-juri.lelli@redhat.com>
- <20230329160240.2093277-1-longman@redhat.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230329160240.2093277-1-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/23 12:02, Waiman Long wrote:
-> It is possible to have parallel attach operations to the same cpuset in
-> progress. To avoid possible corruption of single set of DL BW data in
-> the cpuset structure, we have to disallow parallel attach operations if
-> DL tasks are present. Attach operations can still proceed in parallel
-> as long as no DL tasks are involved.
->
-> This patch also stores the CPU where DL BW is allocated and free that BW
-> back to the same CPU in case cpuset_can_attach() is called.
->
-> Signed-off-by: Waiman Long <longman@redhat.com>
+Dne sreda, 29. marec 2023 ob 17:52:12 CEST je Rob Herring napisal(a):
+> Removing the include of cpu.h from of_device.h causes an error:
+>=20
+> drivers/cpufreq/sun50i-cpufreq-nvmem.c:42:19: error: implicit declaration=
+ of
+> function =E2=80=98get_cpu_device=E2=80=99; did you mean =E2=80=98get_devi=
+ce=E2=80=99?
+> [-Werror=3Dimplicit-function-declaration]
+>=20
+> As of_device.h is not otherwise needed, it can be replaced with of.h
+> (also implicitly included).
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Juri, this patch is an addendum to your series to address the issues 
-that I found from the cpuset point of view.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Cheers,
-Longman
+Best regards,
+Jernej
+
 
