@@ -2,118 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78E16CD488
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8416CD490
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjC2IY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S230313AbjC2I1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbjC2IYL (ORCPT
+        with ESMTP id S229491AbjC2I1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:24:11 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF6A59FA
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:23:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=nTIJlxppJIAd74PmqdXD5+j2Dw+VegQUjf44O0/+rS0=; b=Z76hMZJagOEcvpbshbhpoxS/yy
-        XFBO9YxpGQikJzgwRKO8U4dAesBwLF4Lc6r4qFZ3hgxXpCx5l5B5CMe/XSOT3s2aa2Osee4rYLMAp
-        aQt+l45Rx77lLOZub51fibyssVu1bYB95GMYQV/U5qsGrk+Mq01R94XvmDfNO9vrPPq4r5HeHq5ZM
-        zDmfx8X94Je5eIYMrLUnVGRicE116K0EEhQZ8fPJc1afy+rDdiVFMjbkEB5YQNni+Ce8D21VziFeY
-        AYEnsSzTthQnjFtz8tDfMPkE92oHyHLPo75uCXnI42JN/quJTWT0rZG/Fix7FINnBoG8U+XkVJ+li
-        4czwBqTA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1phR4n-006nnB-16;
-        Wed, 29 Mar 2023 08:22:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DA3B4300237;
-        Wed, 29 Mar 2023 10:22:35 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BFEEF201D9959; Wed, 29 Mar 2023 10:22:35 +0200 (CEST)
-Date:   Wed, 29 Mar 2023 10:22:35 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Don <joshdon@google.com>
-Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org, efault@gmx.de
-Subject: Re: [PATCH 08/17] sched/fair: Implement an EEVDF like policy
-Message-ID: <20230329082235.GA38236@hirez.programming.kicks-ass.net>
-References: <20230328092622.062917921@infradead.org>
- <20230328110354.141543852@infradead.org>
- <CABk29Nt4T67S+L9Qs1qeOUyo5gY1Qy5KuOwuCYNM74E58J81Eg@mail.gmail.com>
- <20230329080646.GL4253@hirez.programming.kicks-ass.net>
+        Wed, 29 Mar 2023 04:27:46 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D38C0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:27:44 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id h11so12142806lfu.8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:27:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680078462;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wbhe9hg1I6LvxpxedrR12rYja/vRqqHKoCKBslpfp1I=;
+        b=FWR3HQIOrf/IQsG4evaTwNexMPVEA5BU/WcbyN4YYLGt/tyOnnRpl9O3xWbq8QKlDN
+         xXif2VfhN4Qbg+HKfohY8nGZ9/Rhe4/uHFQo+WAo2bS0fDqKkPLnrLYZu3dZBsbsO57B
+         1d1cbmG3SUZ3pFkObae4yzZPMgjWPnfWjmaVXLl/i0Tmfidx/SX7qXg/ZsN5o5/cc7U9
+         icyny4yBjvBpa8DILyBBv3Q7QDJxrI9I6nalMlHnVFOCnwBG96GARhv9trGyyzFgsIHm
+         zTIpINrI0wRz4k+WCwFcUZPCIqBN+ZO1dztBHHpb6sVd3b4zU9cj0Peeiu9Iz5bY+VAp
+         pO0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680078462;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wbhe9hg1I6LvxpxedrR12rYja/vRqqHKoCKBslpfp1I=;
+        b=o2BD4qOy3uyNwVdZoPBrClKdPGzdbzqSvA/0V10zDyz0dn5QrZdm/MuWrZRYeZPP0w
+         2usGWjKzAkOBv1Fq1itvdweg0eEBUlX+I5mjuaL2Ns+ZoGvB2Je7dvAnQBYvDX3z+rGm
+         sjlyOWynt5APHvCNXXWJkWOV6eMpK6HDhc9/63xFq49YQNdE+kptLtPtkz6zuGPJ0qZ7
+         MCrnaWr+ebXVUPx7G9UN3+OgP7bxhYIslH8HjQITiMOyB+MNTks2gR5ErhU9p3DPBqQ+
+         3HLcdm9hLybdeAlqXnuedNIdilgc/873gOgG0uU7Ee9rq9E89x+MtJck6lwzVLBBn2HW
+         LKJA==
+X-Gm-Message-State: AAQBX9cDjsHRHphFsObNeyuqOTjC1EJHXMLka6/NFQPmfUgVE5M2jVMp
+        5npNin+C5o++uW5tBJULDwR+Tw==
+X-Google-Smtp-Source: AKy350bjG3/pXSTDfNanMwnVXqyNAwWDXddDh6/IiFo/cOEiwPPzTDmeuhEA6XNsF0m8TUTKQnOpiQ==
+X-Received: by 2002:ac2:5a0a:0:b0:4d9:8773:7d76 with SMTP id q10-20020ac25a0a000000b004d987737d76mr5116478lfn.11.1680078462268;
+        Wed, 29 Mar 2023 01:27:42 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id f24-20020ac25338000000b004e8448de1c0sm5430462lfh.10.2023.03.29.01.27.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 01:27:41 -0700 (PDT)
+Message-ID: <863d5a85-3399-5a43-b755-1316e3adcfec@linaro.org>
+Date:   Wed, 29 Mar 2023 10:27:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329080646.GL4253@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: interrupt-controller: mpm: Allow passing
+ reg through phandle
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawn.guo@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230328-topic-msgram_mpm-v1-0-1b788a5f5a33@linaro.org>
+ <20230328-topic-msgram_mpm-v1-1-1b788a5f5a33@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230328-topic-msgram_mpm-v1-1-1b788a5f5a33@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 10:06:46AM +0200, Peter Zijlstra wrote:
-> On Tue, Mar 28, 2023 at 06:26:51PM -0700, Josh Don wrote:
-> > > +static struct sched_entity *pick_eevdf(struct cfs_rq *cfs_rq)
-> > > +{
-> > > +       struct rb_node *node = cfs_rq->tasks_timeline.rb_root.rb_node;
-> > > +       struct sched_entity *curr = cfs_rq->curr;
-> > > +       struct sched_entity *best = NULL;
-> > > +
-> > > +       if (curr && (!curr->on_rq || !entity_eligible(cfs_rq, curr)))
-> > > +               curr = NULL;
-> > > +
-> > > +       while (node) {
-> > > +               struct sched_entity *se = __node_2_se(node);
-> > > +
-> > > +               /*
-> > > +                * If this entity is not eligible, try the left subtree.
-> > > +                */
-> > > +               if (!entity_eligible(cfs_rq, se)) {
-> > > +                       node = node->rb_left;
-> > > +                       continue;
-> > > +               }
-> > > +
-> > > +               /*
-> > > +                * If this entity has an earlier deadline than the previous
-> > > +                * best, take this one. If it also has the earliest deadline
-> > > +                * of its subtree, we're done.
-> > > +                */
-> > > +               if (!best || deadline_gt(deadline, best, se)) {
-> > > +                       best = se;
-> > > +                       if (best->deadline == best->min_deadline)
-> > > +                               break;
-> > 
-> > Isn't it possible to have a child with less vruntime (ie. rb->left)
-> > but with the same deadline? Wouldn't it be preferable to choose the
-> > child instead since the deadlines are equivalent but the child has
-> > received less service time?
+On 28/03/2023 12:02, Konrad Dybcio wrote:
+> Due to the wild nature of the Qualcomm RPM Message RAM, we can't really
+> use 'reg' to point to the MPM's slice of Message RAM without cutting into
+> an already-defined RPM MSG RAM node used for GLINK and SMEM.
 > 
-> Possible, yes I suppose. But given this is ns granular virtual time,
-> somewhat unlikely. You can modify the last (validation) patch and have
-> it detect the case, see if you can trigger it.
+> Document passing the register space as a slice of SRAM through the
+> qcom,rpm-msg-ram property. This also makes 'reg' no longer required.
 > 
-> Doing that will make the pick always do a full decent of the tree
-> through, which is a little more expensive. Not sure it's worth the
-> effort.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../devicetree/bindings/interrupt-controller/qcom,mpm.yaml          | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+> index 509d20c091af..77fe5e0b378f 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+> @@ -30,6 +30,11 @@ properties:
+>      description:
+>        Specifies the base address and size of vMPM registers in RPM MSG RAM.
+>  
+> +  qcom,rpm-msg-ram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Phandle to the APSS MPM slice of the RPM Message RAM
+> +
+>    interrupts:
+>      maxItems: 1
+>      description:
+> @@ -64,7 +69,6 @@ properties:
+>  
+>  required:
+>    - compatible
+> -  - reg
 
-Hmm, maybe not, if there is no smaller-or-equal deadline then the
-min_deadline of the child will be greater and we can terminate the
-decent right there.
+Either:
+1. make reg deprecated and require qcom,rpm-msg-ram
+or
+2. you need oneOf:required for reg and qcom,rpm-msg-ram
+
+>    - interrupts
+>    - mboxes
+>    - interrupt-controller
+> 
+
+Best regards,
+Krzysztof
 
