@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FFE46CD197
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DEF6CD19C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjC2FcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 01:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
+        id S229786AbjC2FcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 01:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjC2FcE (ORCPT
+        with ESMTP id S229753AbjC2FcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 01:32:04 -0400
+        Wed, 29 Mar 2023 01:32:05 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD333C20;
-        Tue, 28 Mar 2023 22:31:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC6D3C27;
+        Tue, 28 Mar 2023 22:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=KLOfytIcH4rEmrgbqWZrqXW6JlCkVbvgRIm3hytVuTY=; b=SKXkmQeCEpgQZFnKkN5jdqmQYh
-        40jq1pxRb3voL7778sBrMGEoSewmZSXoGUfZrB6wUK5nKoXSPw36MkaWBrYWszHlUIQqwXVVCUVCt
-        IyMnqjGzt8GX8Pu2hFTRLiM0viFXqDvIkhHt5owme+jhbjQXGSDIqF7lbmtoaiS4lp5XhenvJfNrW
-        ThblqC87znpBanq7PlA3vgqizKFHQmVFE+ZetKq2g+VimLRHoX9DXwbJdX8iXGmYqq7civwLsSvTc
-        xgRc2rPq21dHnPvqDjXbbuIMsPnhrVCqtKXJOHk8DUupKVu2uwUCWdD8gQdFl8khfl+eycLmOdtcK
-        Kfh2WKIA==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=gd8HbSo5xrQsR5kA4HVA4gKzlE/8w/S5arnYzQjZrxg=; b=xGWh2JgKRYwpppiRzsWetlki5t
+        SVeBNZzs7bh2gAzAdY3c4dPLIqKQ56oSDKzinEazY6EhcXBffYAE1BcrA4RD1I8UB8UxwhlyXHxmK
+        E/JKeSfdBahNY/fWI+b38Kf0WHEmp5qRM+J5c2Tc9/0JMZB29rDgeZCoKqc2+pse21WP1cvPGgv2j
+        +TS3Aw0BoqVz0XL2rSKX9QyduwIqa0AUcLUQCZUPeNvFM4L5JQcEMNtqv0yXiYcXImRcc4tRvL5c5
+        GbPvsKhY/FQ4y+Bc0G6I1sdi/F3VcHfN6n+zJlt617XOG53+obPbnyIdgO6d3lukOl04AKooj4asy
+        zW1gZagw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1phOPW-00GgRQ-1m;
+        id 1phOPW-00GgRS-1v;
         Wed, 29 Mar 2023 05:31:50 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     david@redhat.com, patches@lists.linux.dev,
@@ -39,10 +39,12 @@ Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
         peterz@infradead.org, song@kernel.org, rppt@kernel.org,
         willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
         dave.hansen@linux.intel.com, mcgrof@kernel.org
-Subject: [PATCH 0/7] module: avoid userspace pressure on unwanted allocations
-Date:   Tue, 28 Mar 2023 22:31:42 -0700
-Message-Id: <20230329053149.3976378-1-mcgrof@kernel.org>
+Subject: [PATCH 1/7] module: move finished_loading()
+Date:   Tue, 28 Mar 2023 22:31:43 -0700
+Message-Id: <20230329053149.3976378-2-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230329053149.3976378-1-mcgrof@kernel.org>
+References: <20230329053149.3976378-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
@@ -56,56 +58,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch set addresses a fix to the vmap allocation presure issues which
-David Hildenbrand had reported last year in October. While at it,
-I've simplified the kmod concurrency delimiter using Linus' suggestion,
-and added debugfs stats to help us keep sane in doing analysis for memory
-pressure issues on the finit_module() side of things. That should *also*
-help do an empirical evaluation of module .text sizes *actually* present
-on systems, given userspace makes it a bit tricky to get that right.
+This has no functional change, just moves a routine earlier
+as we'll make use of it next.
 
-All this would not have been possible without stress-ng and Colin Ian King's
-help to getting a modules ops in shape so to reproduce a situation only
-reported so far on a system with over 400 CPUs.
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ kernel/module/main.c | 42 +++++++++++++++++++++---------------------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
 
-I *think* the degugfs stats *should* probably be used to help identify
-areas where we perhaps need *more work* to try to mitigate vmalloc()
-space, as in the worst case we can end up using vmap space 3 times for
-a single module, two just as big as the module, and if you are enabling
-compression one with the compressed module size. That's significant memory
-pressure on vmalloc() / vmap() space.
-
-If you'd like to give this a spin this is available on my branch based on
-modules-next 20230328-module-alloc-opts [2].
-
-[0] https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
-[1] https://github.com/ColinIanKing/stress-ng
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230328-module-alloc-opts
-
-Luis Chamberlain (7):
-  module: move finished_loading()
-  module: extract patient module check into helper
-  module: avoid allocation if module is already present and ready
-  sempahore: add a helper for a concurrency limiter
-  modules/kmod: replace implementation with a sempahore
-  debugfs: add debugfs_create_atomic64_t for atomic64_t
-  module: add debug stats to help identify memory pressure
-
- fs/debugfs/file.c         |  36 +++++++
- include/linux/debugfs.h   |   2 +
- include/linux/semaphore.h |   3 +
- kernel/module/Kconfig     |  32 ++++++
- kernel/module/Makefile    |   4 +
- kernel/module/debug.c     |  16 +++
- kernel/module/internal.h  |  35 +++++++
- kernel/module/kmod.c      |  26 ++---
- kernel/module/main.c      | 164 ++++++++++++++++++++-----------
- kernel/module/stats.c     | 200 ++++++++++++++++++++++++++++++++++++++
- kernel/module/tracking.c  |   7 +-
- 11 files changed, 445 insertions(+), 80 deletions(-)
- create mode 100644 kernel/module/debug.c
- create mode 100644 kernel/module/stats.c
-
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 5cc21083af04..af58e63e5daf 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2442,27 +2442,6 @@ static int post_relocation(struct module *mod, const struct load_info *info)
+ 	return module_finalize(info->hdr, info->sechdrs, mod);
+ }
+ 
+-/* Is this module of this name done loading?  No locks held. */
+-static bool finished_loading(const char *name)
+-{
+-	struct module *mod;
+-	bool ret;
+-
+-	/*
+-	 * The module_mutex should not be a heavily contended lock;
+-	 * if we get the occasional sleep here, we'll go an extra iteration
+-	 * in the wait_event_interruptible(), which is harmless.
+-	 */
+-	sched_annotate_sleep();
+-	mutex_lock(&module_mutex);
+-	mod = find_module_all(name, strlen(name), true);
+-	ret = !mod || mod->state == MODULE_STATE_LIVE
+-		|| mod->state == MODULE_STATE_GOING;
+-	mutex_unlock(&module_mutex);
+-
+-	return ret;
+-}
+-
+ /* Call module constructors. */
+ static void do_mod_ctors(struct module *mod)
+ {
+@@ -2626,6 +2605,27 @@ static int may_init_module(void)
+ 	return 0;
+ }
+ 
++/* Is this module of this name done loading?  No locks held. */
++static bool finished_loading(const char *name)
++{
++	struct module *mod;
++	bool ret;
++
++	/*
++	 * The module_mutex should not be a heavily contended lock;
++	 * if we get the occasional sleep here, we'll go an extra iteration
++	 * in the wait_event_interruptible(), which is harmless.
++	 */
++	sched_annotate_sleep();
++	mutex_lock(&module_mutex);
++	mod = find_module_all(name, strlen(name), true);
++	ret = !mod || mod->state == MODULE_STATE_LIVE
++		|| mod->state == MODULE_STATE_GOING;
++	mutex_unlock(&module_mutex);
++
++	return ret;
++}
++
+ /*
+  * We try to place it in the list now to make sure it's unique before
+  * we dedicate too many resources.  In particular, temporary percpu
 -- 
 2.39.2
 
