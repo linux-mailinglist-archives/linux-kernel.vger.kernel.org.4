@@ -2,157 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE6F6CD9AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AB06CD9AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjC2MxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
+        id S229999AbjC2MxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjC2MxA (ORCPT
+        with ESMTP id S230041AbjC2MxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:53:00 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FAA171E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:52:40 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id u10so14791097plz.7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:52:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680094360;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BCg5KJ4aalw7URIKrf7Z4sofbQeaUPjVmaP5ALWxTDs=;
-        b=uc/smf75hOiBcv8M0SvwePw5cx0uJrFhFREYa3QnbjQweT+tT0N/lAZ6GjIDbUUz8J
-         Y6Hf6FsLe40uu+TRcuvMHjSVsPPZ947gwS388R3Gv5WkKiC3S3C7uIKDmzZ+hX/AIqLm
-         pa3g48gCxq75i9rpLp1XXAmPYLeZYpJdxgToPPAJ924VyB/hDRYyJXNeE8ZL25dCcnjD
-         73ijlxhBl2u6i8ebVY51ytUUGV6RRuKyEE5zoHhHZ/BGHLrSIqUBB/22cbD1fs0P9FRQ
-         lGMKOCy8K7ePN6jfnGCUTwJja+W4yys0pE9uNEkKC+FpXnPTd9giZZ+dveJejpnxZoZd
-         2pYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680094360;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BCg5KJ4aalw7URIKrf7Z4sofbQeaUPjVmaP5ALWxTDs=;
-        b=dgajH+OW+V4JJOLX5ycZ2AFpzEnCKlyQvrYEKfZqONeuiEPkahpkrExFLZmAuUEPZo
-         g9j93RgYtR3EAWTPnvtwBRqc+UbjorZGDLpygbyV3UW2tbiuHCYx5ew56MFO4M9V2NQw
-         c3kX4D0cPaF2k3+rZdP6d1Nbu77+BjVkdixrw1BhvU9HMtL4LNnzkNKF6MsWMqyXhPQE
-         YnNsfEPnTVWdUYPqOY0Cgw4nHnBZdTj+i5Gb7Xrj7IzDHtUhQfFd03Mvo2EOPk6kC09E
-         EQm0QvdHm+8Hn1plrEH9kinku9P7xyl0x4GjLRoVBJZgwV09fWnZB26aA1nMROF5IXmQ
-         srag==
-X-Gm-Message-State: AAQBX9c5qtDOUmRGKN6MkWaxo32FI0VHf9hgM7wgw0AISyBaAIC7+A4v
-        BAKY4xTLBL7EPoYnFfWwiyY8
-X-Google-Smtp-Source: AKy350bFB8wusqWw92UFGnEQW85Vvmw7xBP5dHUfXM0saPSOd8IKOX0TsqTF6VTQK3aYyjuLY89paA==
-X-Received: by 2002:a17:90b:1c08:b0:23d:44c6:745a with SMTP id oc8-20020a17090b1c0800b0023d44c6745amr21267829pjb.2.1680094360105;
-        Wed, 29 Mar 2023 05:52:40 -0700 (PDT)
-Received: from thinkpad ([117.216.120.213])
-        by smtp.gmail.com with ESMTPSA id u13-20020a17090a450d00b0023fa2773aa5sm1355951pjg.26.2023.03.29.05.52.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 05:52:39 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 18:22:32 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org,
-        mka@chromium.org, Dhruva Gole <d-gole@ti.com>
-Subject: Re: [PATCH v3 1/1] PCI: qcom: Add support for system suspend and
- resume
-Message-ID: <20230329125232.GB5575@thinkpad>
-References: <20230327133824.29136-1-manivannan.sadhasivam@linaro.org>
- <20230327133824.29136-2-manivannan.sadhasivam@linaro.org>
- <ZCQLWzqKPrusMro+@hovoldconsulting.com>
+        Wed, 29 Mar 2023 08:53:04 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0201995;
+        Wed, 29 Mar 2023 05:52:53 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32TCqlcA081914;
+        Wed, 29 Mar 2023 07:52:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680094367;
+        bh=zP5BfIGnutLpqxW5V6JihFcPhaZFsIfsz6a+ooGrPBM=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=yBX3z2119+h6WuSw73T6DtmcZJN2728JC8Ym87T4ikcP0wxd/x25wFl3nDN7nCpS3
+         M7cxd1glw3Y8WVH60R3R7GyqN7BxNUEMRcylXghd6BGF8WhpSN8k5iBIk83yyiBLut
+         ZnnDfEZtrzl4Pbp+/4DZXpCLD/gpujGv6IK88/Ok=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32TCql8a028407
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 29 Mar 2023 07:52:47 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 29
+ Mar 2023 07:52:47 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 29 Mar 2023 07:52:47 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32TCqlWs007089;
+        Wed, 29 Mar 2023 07:52:47 -0500
+Date:   Wed, 29 Mar 2023 07:52:47 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Hari Nagalla <hnagalla@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] arm64: dts: ti: k3-j784s4-main: Add MAIN domain R5F
+ cluster nodes
+Message-ID: <20230329125247.w45k5fjzmcgjdyso@delicate>
+References: <20230329093627.30719-1-hnagalla@ti.com>
+ <20230329093627.30719-2-hnagalla@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCQLWzqKPrusMro+@hovoldconsulting.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230329093627.30719-2-hnagalla@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 11:56:43AM +0200, Johan Hovold wrote:
-> On Mon, Mar 27, 2023 at 07:08:24PM +0530, Manivannan Sadhasivam wrote:
-> > During the system suspend, vote for minimal interconnect bandwidth and
-> > also turn OFF the resources like clock and PHY if there are no active
-> > devices connected to the controller. For the controllers with active
-> > devices, the resources are kept ON as removing the resources will
-> > trigger access violation during the late end of suspend cycle as kernel
-> > tries to access the config space of PCIe devices to mask the MSIs.
-> > 
-> > Also, it is not desirable to put the link into L2/L3 state as that
-> > implies VDD supply will be removed and the devices may go into powerdown
-> > state. This will affect the lifetime of storage devices like NVMe.
-> > 
-> > And finally, during resume, turn ON the resources if the controller was
-> > truly suspended (resources OFF) and update the interconnect bandwidth
-> > based on PCIe Gen speed.
-> > 
-> > Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > Acked-by: Dhruva Gole <d-gole@ti.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/pci/controller/dwc/pcie-qcom.c | 62 ++++++++++++++++++++++++++
-> >  1 file changed, 62 insertions(+)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > index a232b04af048..f33df536d9be 100644
-> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > @@ -227,6 +227,7 @@ struct qcom_pcie {
-> >  	struct gpio_desc *reset;
-> >  	struct icc_path *icc_mem;
-> >  	const struct qcom_pcie_cfg *cfg;
-> > +	bool suspended;
-> >  };
-> >  
-> >  #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
-> > @@ -1820,6 +1821,62 @@ static int qcom_pcie_probe(struct platform_device *pdev)
-> >  	return ret;
-> >  }
-> >  
-> > +static int qcom_pcie_suspend_noirq(struct device *dev)
-> > +{
-> > +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-> > +	int ret;
-> > +
-> > +	/*
-> > +	 * Set minimum bandwidth required to keep data path functional during
-> > +	 * suspend.
-> > +	 */
-> > +	ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
+On 04:36-20230329, Hari Nagalla wrote:
+> The J784S4 SoCs have 4 dual-core Arm Cortex-R5F processor (R5FSS)
+> subsystems/clusters. One R5F cluster (MCU_R5FSS0) is present within
+> the MCU domain, and the remaining three clusters are present in the
+> MAIN domain (MAIN_R5FSS0, MAIN_R5FSS1 & MAIN_R5FSS2). The functionality
+> of the R5FSS is same as the R5FSS functionality on earlier K3 platform
+> device J721S2. Each of the R5FSS can be configured at boot time to be
+> either run in a LockStep mode or in an Asymmetric Multi Processing (AMP)
+> fashion in Split-mode. These subsystems have 64 KB each Tightly-Coupled
+> Memory (TCM) internal memories for each core split between two banks -
+> ATCM and BTCM (further interleaved into two banks). There are some IP
+> integration differences from standard Arm R5 clusters such as the absence
+> of an ACP port, presence of an additional TI-specific Region Address
+> Translater (RAT) module for translating 32-bit CPU addresses into
+> larger system bus addresses etc.
 > 
-> This isn't really the minimum bandwidth you're setting here.
+> Add the DT nodes for these three MAIN domain R5F cluster/subsystems,
+> the two R5F cores are each added as child nodes to the corresponding
+> main cluster node. The clusters are configured to run in LockStep
+> mode by default, with the ATCMs enabled to allow the R5 cores to execute
+> code from DDR with boot-strapping code from ATCM. The inter-processor
+> communication between the main A72 cores and these processors is
+> achieved through shared memory and Mailboxes.
 > 
-> I think you said off list that you didn't see real impact reducing the
-> bandwidth, but have you tried requesting the real minimum which would be
-> kBps_to_icc(1)?
-> 
-> Doing so works fine here with both the CRD and X13s and may result in
-> some further power savings.
-> 
+> The following firmware names are used by default for these cores, and
+> can be overridden in a board dts file if needed:
+>     MAIN R5FSS0 Core0: j784s4-main-r5f0_0-fw (both in LockStep and Split modes)
+>     MAIN R5FSS0 Core1: j784s4-main-r5f0_1-fw (needed only in Split mode)
+>     MAIN R5FSS1 Core0: j784s4-main-r5f1_0-fw (both in LockStep and Split modes)
+>     MAIN R5FSS1 Core1: j784s4-main-r5f1_1-fw (needed only in Split mode)
+>     MAIN R5FSS2 Core0: j784s4-main-r5f2_0-fw (both in LockStep and Split modes)
+>     MAIN R5FSS2 Core1: j784s4-main-r5f2_1-fw (needed only in Split mode)
 
-No, we shouldn't be setting random value as the bandwidth. Reason is, these
-values are computed by the bus team based on the requirement of the interconnect
-paths (clock, voltage etc...) with actual PCIe Gen speeds. I don't know about
-the potential implication even if it happens to work.
+Why are the patches split up into main and mcu - if you are adding r5f
+cores, do them as a single patch.
 
-- Mani
-
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to set interconnect bandwidth: %d\n", ret);
-> > +		return ret;
-> > +	}
 > 
-> Johan
+> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 128 +++++++++++++++++++++
+>  1 file changed, 128 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+> index 8c1474a7bd0f..53d337ea35fb 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+> @@ -1024,4 +1024,132 @@
+>  		bosch,mram-cfg = <0x00 128 64 64 64 64 32 32>;
+>  		status = "disabled";
+>  	};
+> +
+> +	main_r5fss0: r5fss@5c00000 {
+> +		compatible = "ti,j721s2-r5fss";
+> +		ti,cluster-mode = <1>;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0x5c00000 0x00 0x5c00000 0x20000>,
+> +			 <0x5d00000 0x00 0x5d00000 0x20000>;
+> +		power-domains = <&k3_pds 336 TI_SCI_PD_EXCLUSIVE>;
+> +
+> +		main_r5fss0_core0: r5f@5c00000 {
+> +			compatible = "ti,j721s2-r5f";
+> +			reg = <0x5c00000 0x00010000>,
+> +			      <0x5c10000 0x00010000>;
+> +			reg-names = "atcm", "btcm";
+> +			ti,sci = <&sms>;
+> +			ti,sci-dev-id = <339>;
+> +			ti,sci-proc-ids = <0x06 0xff>;
+> +			resets = <&k3_reset 339 1>;
+> +			firmware-name = "j784s4-main-r5f0_0-fw";
+> +			ti,atcm-enable = <1>;
+> +			ti,btcm-enable = <1>;
+> +			ti,loczrama = <1>;
+> +			status = "disabled";
+
+Why are these disabled by default?
+
+> +		};
+> +
+> +		main_r5fss0_core1: r5f@5d00000 {
+> +			compatible = "ti,j721s2-r5f";
+> +			reg = <0x5d00000 0x00010000>,
+> +			      <0x5d10000 0x00010000>;
+> +			reg-names = "atcm", "btcm";
+> +			ti,sci = <&sms>;
+> +			ti,sci-dev-id = <340>;
+> +			ti,sci-proc-ids = <0x07 0xff>;
+> +			resets = <&k3_reset 340 1>;
+> +			firmware-name = "j784s4-main-r5f0_1-fw";
+> +			ti,atcm-enable = <1>;
+> +			ti,btcm-enable = <1>;
+> +			ti,loczrama = <1>;
+> +			status = "disabled";
+> +		};
+> +
+> +	};
+> +
+> +	main_r5fss1: r5fss@5e00000 {
+> +		compatible = "ti,j721s2-r5fss";
+> +		ti,cluster-mode = <1>;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0x5e00000 0x00 0x5e00000 0x20000>,
+> +			 <0x5f00000 0x00 0x5f00000 0x20000>;
+> +		power-domains = <&k3_pds 337 TI_SCI_PD_EXCLUSIVE>;
+> +
+> +		main_r5fss1_core0: r5f@5e00000 {
+> +			compatible = "ti,j721s2-r5f";
+> +			reg = <0x5e00000 0x00010000>,
+> +			      <0x5e10000 0x00010000>;
+> +			reg-names = "atcm", "btcm";
+> +			ti,sci = <&sms>;
+> +			ti,sci-dev-id = <341>;
+> +			ti,sci-proc-ids = <0x08 0xff>;
+> +			resets = <&k3_reset 341 1>;
+> +			firmware-name = "j784s4-main-r5f1_0-fw";
+> +			ti,atcm-enable = <1>;
+> +			ti,btcm-enable = <1>;
+> +			ti,loczrama = <1>;
+> +			status = "disabled";
+> +		};
+> +
+> +		main_r5fss1_core1: r5f@5f00000 {
+> +			compatible = "ti,j721s2-r5f";
+> +			reg = <0x5f00000 0x00010000>,
+> +			      <0x5f10000 0x00010000>;
+> +			reg-names = "atcm", "btcm";
+> +			ti,sci = <&sms>;
+> +			ti,sci-dev-id = <342>;
+> +			ti,sci-proc-ids = <0x09 0xff>;
+> +			resets = <&k3_reset 342 1>;
+> +			firmware-name = "j784s4-main-r5f1_1-fw";
+> +			ti,atcm-enable = <1>;
+> +			ti,btcm-enable = <1>;
+> +			ti,loczrama = <1>;
+> +			status = "disabled";
+> +		};
+> +	};
+> +
+> +	main_r5fss2: r5fss@5900000 {
+> +		compatible = "ti,j721s2-r5fss";
+> +		ti,cluster-mode = <1>;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0x5900000 0x00 0x5900000 0x20000>,
+> +			 <0x5a00000 0x00 0x5a00000 0x20000>;
+> +		power-domains = <&k3_pds 338 TI_SCI_PD_EXCLUSIVE>;
+> +
+> +		main_r5fss2_core0: r5f@5900000 {
+> +			compatible = "ti,j721s2-r5f";
+> +			reg = <0x5900000 0x00010000>,
+> +			      <0x5910000 0x00010000>;
+> +			reg-names = "atcm", "btcm";
+> +			ti,sci = <&sms>;
+> +			ti,sci-dev-id = <343>;
+> +			ti,sci-proc-ids = <0x0a 0xff>;
+> +			resets = <&k3_reset 343 1>;
+> +			firmware-name = "j784s4-main-r5f2_0-fw";
+> +			ti,atcm-enable = <1>;
+> +			ti,btcm-enable = <1>;
+> +			ti,loczrama = <1>;
+> +			status = "disabled";
+> +		};
+> +
+> +		main_r5fss2_core1: r5f@5a00000 {
+> +			compatible = "ti,j721s2-r5f";
+> +			reg = <0x5a00000 0x00010000>,
+> +			      <0x5a10000 0x00010000>;
+> +			reg-names = "atcm", "btcm";
+> +			ti,sci = <&sms>;
+> +			ti,sci-dev-id = <344>;
+> +			ti,sci-proc-ids = <0x0b 0xff>;
+> +			resets = <&k3_reset 344 1>;
+> +			firmware-name = "j784s4-main-r5f2_1-fw";
+> +			ti,atcm-enable = <1>;
+> +			ti,btcm-enable = <1>;
+> +			ti,loczrama = <1>;
+> +			status = "disabled";
+> +
+> +		};
+> +	};
+>  };
+> -- 
+> 2.17.1
+> 
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
