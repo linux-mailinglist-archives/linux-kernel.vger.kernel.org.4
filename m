@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609126CD222
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EBE6CD22C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjC2Ghs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 02:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S229705AbjC2Gkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 02:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjC2Ghq (ORCPT
+        with ESMTP id S229590AbjC2Gkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 02:37:46 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E25A2D4D;
-        Tue, 28 Mar 2023 23:37:45 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32T6bcQ3102626;
-        Wed, 29 Mar 2023 01:37:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680071858;
-        bh=x+EGfwgO9aghxjxrSWU4sfCF07paK9IYcru8c4BG+84=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=rnOqFkIvASzkaWBiTWykszttaAFlkZ8wM0TmK62EaT/RED2Mo2QwHuxJ/uktGmtI6
-         GmCgCOXQdBbZPDzCBaewcZRYhmaEuGwOBeDw6WgWJbQmClUDhukc86o09drI5tejhQ
-         dKVctZQLzpuj6j5AW6fsaC7jM6YD3hS8M1vFQ/wI=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32T6bc5i008917
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 29 Mar 2023 01:37:38 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 29
- Mar 2023 01:37:37 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 29 Mar 2023 01:37:37 -0500
-Received: from LT5CD112GSQZ.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32T6bTgm072630;
-        Wed, 29 Mar 2023 01:37:35 -0500
-From:   Apurva Nandan <a-nandan@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Apurva Nandan <a-nandan@ti.com>
-Subject: [PATCH 2/2] arm64: dts: ti: k3-j7200-main: Switch MAIN R5F cluster to Split-mode
-Date:   Wed, 29 Mar 2023 12:07:28 +0530
-Message-ID: <20230329063728.14126-3-a-nandan@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230329063728.14126-1-a-nandan@ti.com>
-References: <20230329063728.14126-1-a-nandan@ti.com>
+        Wed, 29 Mar 2023 02:40:43 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695F0183
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 23:40:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=bp2oMfQvdpfgL+bw/t6/ET9O4Xp
+        sb1NY92VJliw+S7w=; b=RxyhuWsXKrtXlpT7D0AKfoJiQQumEatJPpXrayV7Vf+
+        SCkiCDDZB8zpK0N05igqaRd0fX9FWLw1puxMWJLd52CvBeCeWPxThyiIWuhuBPN0
+        QjrCOC2SHErx/onZzzCedM3UYU3OHHz9QWNibNRK6YjTbCvv6ure8uZMmJEXsOsU
+        =
+Received: (qmail 456570 invoked from network); 29 Mar 2023 08:40:30 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Mar 2023 08:40:30 +0200
+X-UD-Smtp-Session: l3s3148p1@IB9oQAT4vKsujnv6
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     netdev@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net v4] smsc911x: only update stats when interface is up
+Date:   Wed, 29 Mar 2023 08:40:10 +0200
+Message-Id: <20230329064010.24657-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suman Anna <s-anna@ti.com>
+Otherwise the clocks are not enabled and reading registers will OOPS.
+Copy the behaviour from Renesas SH_ETH and use a custom flag because
+using netif_running() is racy. A generic solution still needs to be
+implemented. Tested on a Renesas APE6-EK.
 
-J7200 SoCs has a R5F cluster in each of the MAIN and MCU domains, and both
-of these are configured for LockStep mode at the moment. Switch the MAIN
-R5F cluster to Split mode by default to maximize the number of R5F cores.
-The MCU R5F cluster continues to be in the preferred LockStep mode.
-
-Note that this configuration is the default for remoteproc mode (kernel
-driver boots the R5F processors). These will be overridden for early-booted
-remoteprocs through the corresponding IPC-only support in the K3 R5F
-remoteproc driver.
-
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+Fixes: 1e30b8d755b8 ("net: smsc911x: Make Runtime PM handling more fine-grained")
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-index 138381f43ce4..573a7f949b1d 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-@@ -797,7 +797,7 @@ watchdog1: watchdog@2210000 {
+Changes since v3:
+* broken out of a patch series
+* don't use netif_running() but a custom flag
+
+ drivers/net/ethernet/smsc/smsc911x.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/smsc/smsc911x.c b/drivers/net/ethernet/smsc/smsc911x.c
+index a690d139e177..af96986cbc88 100644
+--- a/drivers/net/ethernet/smsc/smsc911x.c
++++ b/drivers/net/ethernet/smsc/smsc911x.c
+@@ -140,6 +140,8 @@ struct smsc911x_data {
  
- 	main_r5fss0: r5fss@5c00000 {
- 		compatible = "ti,j7200-r5fss";
--		ti,cluster-mode = <1>;
-+		ti,cluster-mode = <0>;
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		ranges = <0x5c00000 0x00 0x5c00000 0x20000>,
+ 	/* clock */
+ 	struct clk *clk;
++
++	bool is_open;
+ };
+ 
+ /* Easy access to information */
+@@ -1738,6 +1740,8 @@ static int smsc911x_open(struct net_device *dev)
+ 	smsc911x_reg_write(pdata, TX_CFG, TX_CFG_TX_ON_);
+ 
+ 	netif_start_queue(dev);
++	pdata->is_open = true;
++
+ 	return 0;
+ 
+ irq_stop_out:
+@@ -1778,6 +1782,8 @@ static int smsc911x_stop(struct net_device *dev)
+ 		dev->phydev = NULL;
+ 	}
+ 	netif_carrier_off(dev);
++	pdata->is_open = false;
++
+ 	pm_runtime_put(dev->dev.parent);
+ 
+ 	SMSC_TRACE(pdata, ifdown, "Interface stopped");
+@@ -1841,8 +1847,12 @@ smsc911x_hard_start_xmit(struct sk_buff *skb, struct net_device *dev)
+ static struct net_device_stats *smsc911x_get_stats(struct net_device *dev)
+ {
+ 	struct smsc911x_data *pdata = netdev_priv(dev);
+-	smsc911x_tx_update_txcounters(dev);
+-	dev->stats.rx_dropped += smsc911x_reg_read(pdata, RX_DROP);
++
++	if (pdata->is_open) {
++		smsc911x_tx_update_txcounters(dev);
++		dev->stats.rx_dropped += smsc911x_reg_read(pdata, RX_DROP);
++	}
++
+ 	return &dev->stats;
+ }
+ 
 -- 
-2.34.1
+2.30.2
 
