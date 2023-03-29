@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E316CD957
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4442C6CD958
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjC2M0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S229776AbjC2M1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjC2M0q (ORCPT
+        with ESMTP id S229508AbjC2M1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:26:46 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A921FDB;
-        Wed, 29 Mar 2023 05:26:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680092805; x=1711628805;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=OgXKX8f5LtCP6F/FCEPIp0Qcorekvwc2ZSrKnL0cKeY=;
-  b=Z62vlp1Yr2LN9WrknpHw8gWZAogOrSxJMYuCBx4uoYhHoTy0t5tKvhG3
-   HgijylMset3TNnGhq4OFsP9clWtBRz6FvwWIu3BbYmqmSGnYKG8VDnQGh
-   x56f2D7O8nK1C6tXoK2mQEHJLrXyn7sp6BdOdanQ84x70IV5Z62/sx1DX
-   sp0Jh5mc1QkoNzuuEXf+C8ubpqNp5q4NL6POvsWdrIMs1k+ceuozReCu3
-   hQAkPgF80Q4Pv+iSHwgdkAPphtieqrcHDX1A+KciUJQjkFpEDyUPoI83f
-   D6eQepRhhB7yNO+TeZ2zuSI2UKfxnF2MP7SMW3RvD0J3hgUVlt47+eYJ4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="329328841"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="329328841"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 05:26:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="684248568"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="684248568"
-Received: from juhuangx-mobl1.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.255.30.109])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 05:26:43 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2 -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL pointer dereference
-Date:   Wed, 29 Mar 2023 20:26:29 +0800
-Message-Id: <20230329122629.3614-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 29 Mar 2023 08:27:38 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC6D30FF
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:27:36 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso11328493wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:27:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680092855;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K9utD/b0dx3Ld9K9PQeMcjphZnAINU+9inEgYyc+570=;
+        b=q9JhWLQtoVBQ8ZY8ontuf+BPWOWLuklLYmdoKdddmdqzR6QAAoE4F82Wp2wt+zVgnF
+         ilaHku5vFkl7+gTWWkMK698wnObj1zjh5xGlmgkAesIXx4zrB5zwVM5lagBCsgQWfF2l
+         kb+VttJV2uTb1Uies+Zl/nQPpewB1g7gV9LAeTP/o4bLdtCV2nnwB7oBqwRZYRSIIVcv
+         coH4cRk19j3QT8+qM3mkMfDpMRAG37VoKRC7rKJyzLYlgUKrsztscyiV5Zly1VoLdo6R
+         y+a8m/XxCy0s564Itj4CLwngUTmtAsZ//u+qMdP0QIv9S7+kT3qyZRxfg3kUrTC7BnfX
+         WAug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680092855;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K9utD/b0dx3Ld9K9PQeMcjphZnAINU+9inEgYyc+570=;
+        b=cPsRGxwW5jCzMl/q7pJ25z7EsUSJhUuxkKY8E/BZawO2je7FFWc97kZHIarjKU9Mi1
+         QP97OTYPIWzYUMN46dPQCyNe/OKIrGNUVFhd4UjGi+ZbwAMsJwsoZB0afAYvI3090l1X
+         m3yGiU6HnzwHblDWpLNl3sE5Ksy5epiy41s7TOZ1CtmyiuYCJcCSKhsKeLzC3tf5cS1z
+         EVTFiVWJnfoJwRcwtxDiReUxqY/zRLu1HQi/e6pzmhHQMqPQlP8qfsnEc3NUUtAolgpr
+         Na+gA94kC18ayZw2qDPTFv1WXUik93HoSD31bsJPzGz6Kbk3fpmD8udNN3GuJ1bxXD+S
+         RSXw==
+X-Gm-Message-State: AO0yUKVRCtO8zXcCCYs9vP+l005H2J3KbwQG6i1NvqVhqQ1UaWHi27GX
+        tPfwLSkyFaek6mxh31mIt15Oqg==
+X-Google-Smtp-Source: AK7set9HNMY1Yo3GoPuBErduWgXXAzG5IN+i0ixsLBCno+3Nj1yvZIZpxXgqgnQ+u503ICN6qaN82g==
+X-Received: by 2002:a7b:cb95:0:b0:3ed:3033:496d with SMTP id m21-20020a7bcb95000000b003ed3033496dmr14569206wmi.0.1680092855006;
+        Wed, 29 Mar 2023 05:27:35 -0700 (PDT)
+Received: from google.com (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
+        by smtp.gmail.com with ESMTPSA id l32-20020a05600c1d2000b003f0321c22basm640348wms.12.2023.03.29.05.27.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 05:27:34 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 13:27:30 +0100
+From:   Vincent Donnefort <vdonnefort@google.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v2 1/2] ring-buffer: Introducing ring-buffer mapping
+ functions
+Message-ID: <ZCQussSh5h/GSwh6@google.com>
+References: <20230322102244.3239740-1-vdonnefort@google.com>
+ <20230322102244.3239740-2-vdonnefort@google.com>
+ <20230328224411.0d69e272@gandalf.local.home>
+ <ZCQCsD9+nNwBYIyH@google.com>
+ <20230329070353.1e1b443b@gandalf.local.home>
+ <20230329080758.0e730796@rorschach.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329080758.0e730796@rorschach.local.home>
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the hwmon device node of a thermal zone device is not found,
-using hwmon->device causes a kernel NULL pointer dereference.
+On Wed, Mar 29, 2023 at 08:07:58AM -0400, Steven Rostedt wrote:
+> On Wed, 29 Mar 2023 07:03:53 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > struct ring_buffer_meta_page_header {
+> > #if __BITS_PER_LONG == 64
+> > 	__u64	entries;
+> > 	__u64	overrun;
+> > #else
+> > 	__u32	entries;
+> > 	__u32	overrun;
+> > #endif
+> > 	__u32	pages_touched;
+> > 	__u32	meta_page_size;
+> > 	__u32	reader_page;	/* page ID for the reader page */
+> > 	__u32	nr_data_pages;	/* doesn't take into account the reader_page */
+> > };
+> > 
+> > BTW, shouldn't the nr_data_pages take into account the reader page? As it
+> > is part of the array we traverse isn't it?
+> 
+> Ah, I guess nr_data_pages is the length of the index mapping, not the
+> array of pages mapped?
 
-Skip removing hwmon device for thermal zones without hwmon device, and
-fix the kernel NULL pointer dereference when hwmon device is not found.
+Yes correct, data_pages[nr_data_pages] and the reader_page being excluded...
+which might not be the easiest interface, as the size of the buffer to read
+depends on if the reader_page has data to be read or not.
 
-Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
-Reported-by: Preble Adam C <adam.c.preble@intel.com>
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
-v1 -> v2
-   Add check for devices without hwmon device.
-   Use pr_debug instead of dev_dbg.
----
- drivers/thermal/thermal_hwmon.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-index c59db17dddd6..1cdee2ee8d4d 100644
---- a/drivers/thermal/thermal_hwmon.c
-+++ b/drivers/thermal/thermal_hwmon.c
-@@ -226,10 +226,12 @@ void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
- 	struct thermal_hwmon_device *hwmon;
- 	struct thermal_hwmon_temp *temp;
- 
-+	if (tz->tzp && tz->tzp->no_hwmon)
-+		return;
-+
- 	hwmon = thermal_hwmon_lookup_by_type(tz);
- 	if (unlikely(!hwmon)) {
--		/* Should never happen... */
--		dev_dbg(hwmon->device, "hwmon device lookup failed!\n");
-+		pr_debug("hwmon device lookup failed!\n");
- 		return;
- 	}
- 
--- 
-2.25.1
-
+> 
+> -- Steve
