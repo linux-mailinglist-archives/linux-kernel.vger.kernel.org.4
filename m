@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DC16CF37B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8D26CF384
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjC2TqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S230520AbjC2Tqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjC2Tpx (ORCPT
+        with ESMTP id S230052AbjC2Tp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:45:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93F9139
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:45:52 -0700 (PDT)
+        Wed, 29 Mar 2023 15:45:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83DE1711
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:45:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48D2361E27
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B414861E2D
         for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 19:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D789C433A1;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED4AC433D2;
         Wed, 29 Mar 2023 19:45:52 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1phbjz-002Rjk-0i;
+        id 1phbjz-002RkJ-1O;
         Wed, 29 Mar 2023 15:45:51 -0400
-Message-ID: <20230329194551.039752631@goodmis.org>
+Message-ID: <20230329194551.245078704@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 29 Mar 2023 15:45:26 -0400
+Date:   Wed, 29 Mar 2023 15:45:27 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "Tobin C. Harding" <me@tobin.cc>, Shuah Khan <shuah@kernel.org>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        Ross Zwisler <zwisler@google.com>
-Subject: [for-next][PATCH 10/25] tools/kvm_stat: use canonical ftrace path
+        Beau Belgrave <beaub@linux.microsoft.com>
+Subject: [for-next][PATCH 11/25] tracing: Add "fields" option to show raw trace event fields
 References: <20230329194516.146147554@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,51 +48,318 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ross Zwisler <zwisler@google.com>
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
+The hex, raw and bin formats come from the old PREEMPT_RT patch set
+latency tracer. That actually gave real alternatives to reading the ascii
+buffer. But they have started to bit rot and they do not give a good
+representation of the tracing data.
 
-But, from Documentation/trace/ftrace.rst:
+Add "fields" option that will read the trace event fields and parse the
+data from how the fields are defined:
 
-  Before 4.1, all ftrace tracing control files were within the debugfs
-  file system, which is typically located at /sys/kernel/debug/tracing.
-  For backward compatibility, when mounting the debugfs file system,
-  the tracefs file system will be automatically mounted at:
+With "fields" = 0 (default)
 
-  /sys/kernel/debug/tracing
+ echo 1 > events/sched/sched_switch/enable
+ cat trace
+         <idle>-0       [003] d..2.   540.078653: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=kworker/3:1 next_pid=83 next_prio=120
+     kworker/3:1-83      [003] d..2.   540.078860: sched_switch: prev_comm=kworker/3:1 prev_pid=83 prev_prio=120 prev_state=I ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] d..2.   540.206423: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=sshd next_pid=807 next_prio=120
+            sshd-807     [003] d..2.   540.206531: sched_switch: prev_comm=sshd prev_pid=807 prev_prio=120 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [001] d..2.   540.206597: sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=kworker/u16:4 next_pid=58 next_prio=120
+   kworker/u16:4-58      [001] d..2.   540.206617: sched_switch: prev_comm=kworker/u16:4 prev_pid=58 prev_prio=120 prev_state=I ==> next_comm=bash next_pid=830 next_prio=120
+            bash-830     [001] d..2.   540.206678: sched_switch: prev_comm=bash prev_pid=830 prev_prio=120 prev_state=R ==> next_comm=kworker/u16:4 next_pid=58 next_prio=120
+   kworker/u16:4-58      [001] d..2.   540.206696: sched_switch: prev_comm=kworker/u16:4 prev_pid=58 prev_prio=120 prev_state=I ==> next_comm=bash next_pid=830 next_prio=120
+            bash-830     [001] d..2.   540.206713: sched_switch: prev_comm=bash prev_pid=830 prev_prio=120 prev_state=R ==> next_comm=kworker/u16:4 next_pid=58 next_prio=120
 
-A comment in kvm_stat still refers to this older debugfs path, so let's
-update it to avoid confusion.
+ echo 1 > options/fields
+           <...>-998     [002] d..2.   538.643732: sched_switch: next_prio=0x78 (120) next_pid=0x0 (0) next_comm=swapper/2 prev_state=0x20 (32) prev_prio=0x78 (120) prev_pid=0x3e6 (998) prev_comm=trace-cmd
+          <idle>-0       [001] d..2.   538.643806: sched_switch: next_prio=0x78 (120) next_pid=0x33e (830) next_comm=bash prev_state=0x0 (0) prev_prio=0x78 (120) prev_pid=0x0 (0) prev_comm=swapper/1
+            bash-830     [001] d..2.   538.644106: sched_switch: next_prio=0x78 (120) next_pid=0x3a (58) next_comm=kworker/u16:4 prev_state=0x0 (0) prev_prio=0x78 (120) prev_pid=0x33e (830) prev_comm=bash
+   kworker/u16:4-58      [001] d..2.   538.644130: sched_switch: next_prio=0x78 (120) next_pid=0x33e (830) next_comm=bash prev_state=0x80 (128) prev_prio=0x78 (120) prev_pid=0x3a (58) prev_comm=kworker/u16:4
+            bash-830     [001] d..2.   538.644180: sched_switch: next_prio=0x78 (120) next_pid=0x3a (58) next_comm=kworker/u16:4 prev_state=0x0 (0) prev_prio=0x78 (120) prev_pid=0x33e (830) prev_comm=bash
+   kworker/u16:4-58      [001] d..2.   538.644185: sched_switch: next_prio=0x78 (120) next_pid=0x33e (830) next_comm=bash prev_state=0x80 (128) prev_prio=0x78 (120) prev_pid=0x3a (58) prev_comm=kworker/u16:4
+            bash-830     [001] d..2.   538.644204: sched_switch: next_prio=0x78 (120) next_pid=0x0 (0) next_comm=swapper/1 prev_state=0x1 (1) prev_prio=0x78 (120) prev_pid=0x33e (830) prev_comm=bash
+          <idle>-0       [003] d..2.   538.644211: sched_switch: next_prio=0x78 (120) next_pid=0x327 (807) next_comm=sshd prev_state=0x0 (0) prev_prio=0x78 (120) prev_pid=0x0 (0) prev_comm=swapper/3
+            sshd-807     [003] d..2.   538.644340: sched_switch: next_prio=0x78 (120) next_pid=0x0 (0) next_comm=swapper/3 prev_state=0x1 (1) prev_prio=0x78 (120) prev_pid=0x327 (807) prev_comm=sshd
 
-Link: https://lkml.kernel.org/r/20230313211746.1541525-3-zwisler@kernel.org
+It traces the data safely without using the trace print formatting.
 
-Cc: "Tobin C. Harding" <me@tobin.cc>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
+Link: https://lore.kernel.org/linux-trace-kernel/20230328145156.497651be@gandalf.local.home
+
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Tycho Andersen <tycho@tycho.pizza>
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
-Signed-off-by: Ross Zwisler <zwisler@google.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Beau Belgrave <beaub@linux.microsoft.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- tools/kvm/kvm_stat/kvm_stat | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/trace/ftrace.rst |   6 ++
+ kernel/trace/trace.c           |   7 +-
+ kernel/trace/trace.h           |   2 +
+ kernel/trace/trace_output.c    | 168 +++++++++++++++++++++++++++++++++
+ kernel/trace/trace_output.h    |   2 +
+ 5 files changed, 183 insertions(+), 2 deletions(-)
 
-diff --git a/tools/kvm/kvm_stat/kvm_stat b/tools/kvm/kvm_stat/kvm_stat
-index 6f28180ffeea..15bf00e79e3f 100755
---- a/tools/kvm/kvm_stat/kvm_stat
-+++ b/tools/kvm/kvm_stat/kvm_stat
-@@ -627,7 +627,7 @@ class TracepointProvider(Provider):
-         name)'.
+diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+index b927fb2b94dc..aaebb821912e 100644
+--- a/Documentation/trace/ftrace.rst
++++ b/Documentation/trace/ftrace.rst
+@@ -1027,6 +1027,7 @@ To see what is available, simply cat the file::
+ 	nohex
+ 	nobin
+ 	noblock
++	nofields
+ 	trace_printk
+ 	annotate
+ 	nouserstacktrace
+@@ -1110,6 +1111,11 @@ Here are the available options:
+   block
+ 	When set, reading trace_pipe will not block when polled.
  
-         All available events have directories under
--        /sys/kernel/debug/tracing/events/ which export information
-+        /sys/kernel/tracing/events/ which export information
-         about the specific event. Therefore, listing the dirs gives us
-         a list of all available events.
++  fields
++	Print the fields as described by their types. This is a better
++	option than using hex, bin or raw, as it gives a better parsing
++	of the content of the event.
++
+   trace_printk
+ 	Can disable trace_printk() from writing into the buffer.
  
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 937e9676dfd4..076d893d2965 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -3726,7 +3726,7 @@ __find_next_entry(struct trace_iterator *iter, int *ent_cpu,
+ #define STATIC_FMT_BUF_SIZE	128
+ static char static_fmt_buf[STATIC_FMT_BUF_SIZE];
+ 
+-static char *trace_iter_expand_format(struct trace_iterator *iter)
++char *trace_iter_expand_format(struct trace_iterator *iter)
+ {
+ 	char *tmp;
+ 
+@@ -4446,8 +4446,11 @@ static enum print_line_t print_trace_fmt(struct trace_iterator *iter)
+ 	if (trace_seq_has_overflowed(s))
+ 		return TRACE_TYPE_PARTIAL_LINE;
+ 
+-	if (event)
++	if (event) {
++		if (tr->trace_flags & TRACE_ITER_FIELDS)
++			return print_event_fields(iter, event);
+ 		return event->funcs->trace(iter, sym_flags, event);
++	}
+ 
+ 	trace_seq_printf(s, "Unknown type %d\n", entry->type);
+ 
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 616e1aa1c4da..79bdefe9261b 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -619,6 +619,7 @@ bool trace_is_tracepoint_string(const char *str);
+ const char *trace_event_format(struct trace_iterator *iter, const char *fmt);
+ void trace_check_vprintf(struct trace_iterator *iter, const char *fmt,
+ 			 va_list ap) __printf(2, 0);
++char *trace_iter_expand_format(struct trace_iterator *iter);
+ 
+ int trace_empty(struct trace_iterator *iter);
+ 
+@@ -1199,6 +1200,7 @@ extern int trace_get_user(struct trace_parser *parser, const char __user *ubuf,
+ 		C(HEX,			"hex"),			\
+ 		C(BIN,			"bin"),			\
+ 		C(BLOCK,		"block"),		\
++		C(FIELDS,		"fields"),		\
+ 		C(PRINTK,		"trace_printk"),	\
+ 		C(ANNOTATE,		"annotate"),		\
+ 		C(USERSTACKTRACE,	"userstacktrace"),	\
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index bd475a00f96d..780c6971c944 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -808,6 +808,174 @@ EXPORT_SYMBOL_GPL(unregister_trace_event);
+  * Standard events
+  */
+ 
++static void print_array(struct trace_iterator *iter, void *pos,
++			struct ftrace_event_field *field)
++{
++	int offset;
++	int len;
++	int i;
++
++	offset = *(int *)pos & 0xffff;
++	len = *(int *)pos >> 16;
++
++	if (field)
++		offset += field->offset;
++
++	if (offset + len >= iter->ent_size) {
++		trace_seq_puts(&iter->seq, "<OVERFLOW>");
++		return;
++	}
++
++	for (i = 0; i < len; i++, pos++) {
++		if (i)
++			trace_seq_putc(&iter->seq, ',');
++		trace_seq_printf(&iter->seq, "%02x", *(unsigned char *)pos);
++	}
++}
++
++static void print_fields(struct trace_iterator *iter, struct trace_event_call *call,
++			 struct list_head *head)
++{
++	struct ftrace_event_field *field;
++	int offset;
++	int len;
++	int ret;
++	void *pos;
++
++	list_for_each_entry(field, head, link) {
++		trace_seq_printf(&iter->seq, " %s=", field->name);
++		if (field->offset + field->size > iter->ent_size) {
++			trace_seq_puts(&iter->seq, "<OVERFLOW>");
++			continue;
++		}
++		pos = (void *)iter->ent + field->offset;
++
++		switch (field->filter_type) {
++		case FILTER_COMM:
++		case FILTER_STATIC_STRING:
++			trace_seq_printf(&iter->seq, "%.*s", field->size, (char *)pos);
++			break;
++		case FILTER_RDYN_STRING:
++		case FILTER_DYN_STRING:
++			offset = *(int *)pos & 0xffff;
++			len = *(int *)pos >> 16;
++
++			if (field->filter_type == FILTER_RDYN_STRING)
++				offset += field->offset;
++
++			if (offset + len >= iter->ent_size) {
++				trace_seq_puts(&iter->seq, "<OVERFLOW>");
++				break;
++			}
++			pos = (void *)iter->ent + offset;
++			trace_seq_printf(&iter->seq, "%.*s", len, (char *)pos);
++			break;
++		case FILTER_PTR_STRING:
++			if (!iter->fmt_size)
++				trace_iter_expand_format(iter);
++			pos = *(void **)pos;
++			ret = strncpy_from_kernel_nofault(iter->fmt, pos,
++							  iter->fmt_size);
++			if (ret < 0)
++				trace_seq_printf(&iter->seq, "(0x%px)", pos);
++			else
++				trace_seq_printf(&iter->seq, "(0x%px:%s)",
++						 pos, iter->fmt);
++			break;
++		case FILTER_TRACE_FN:
++			pos = *(void **)pos;
++			trace_seq_printf(&iter->seq, "%pS", pos);
++			break;
++		case FILTER_CPU:
++		case FILTER_OTHER:
++			switch (field->size) {
++			case 1:
++				if (isprint(*(char *)pos)) {
++					trace_seq_printf(&iter->seq, "'%c'",
++						 *(unsigned char *)pos);
++				}
++				trace_seq_printf(&iter->seq, "(%d)",
++						 *(unsigned char *)pos);
++				break;
++			case 2:
++				trace_seq_printf(&iter->seq, "0x%x (%d)",
++						 *(unsigned short *)pos,
++						 *(unsigned short *)pos);
++				break;
++			case 4:
++				/* dynamic array info is 4 bytes */
++				if (strstr(field->type, "__data_loc")) {
++					print_array(iter, pos, NULL);
++					break;
++				}
++
++				if (strstr(field->type, "__rel_loc")) {
++					print_array(iter, pos, field);
++					break;
++				}
++
++				trace_seq_printf(&iter->seq, "0x%x (%d)",
++						 *(unsigned int *)pos,
++						 *(unsigned int *)pos);
++				break;
++			case 8:
++				trace_seq_printf(&iter->seq, "0x%llx (%lld)",
++						 *(unsigned long long *)pos,
++						 *(unsigned long long *)pos);
++				break;
++			default:
++				trace_seq_puts(&iter->seq, "<INVALID-SIZE>");
++				break;
++			}
++			break;
++		default:
++			trace_seq_puts(&iter->seq, "<INVALID-TYPE>");
++		}
++	}
++	trace_seq_putc(&iter->seq, '\n');
++}
++
++enum print_line_t print_event_fields(struct trace_iterator *iter,
++				     struct trace_event *event)
++{
++	struct trace_event_call *call;
++	struct list_head *head;
++
++	/* ftrace defined events have separate call structures */
++	if (event->type <= __TRACE_LAST_TYPE) {
++		bool found = false;
++
++		down_read(&trace_event_sem);
++		list_for_each_entry(call, &ftrace_events, list) {
++			if (call->event.type == event->type) {
++				found = true;
++				break;
++			}
++			/* No need to search all events */
++			if (call->event.type > __TRACE_LAST_TYPE)
++				break;
++		}
++		up_read(&trace_event_sem);
++		if (!found) {
++			trace_seq_printf(&iter->seq, "UNKNOWN TYPE %d\n", event->type);
++			goto out;
++		}
++	} else {
++		call = container_of(event, struct trace_event_call, event);
++	}
++	head = trace_get_fields(call);
++
++	trace_seq_printf(&iter->seq, "%s:", trace_event_name(call));
++
++	if (head && !list_empty(head))
++		print_fields(iter, call, head);
++	else
++		trace_seq_puts(&iter->seq, "No fields found\n");
++
++ out:
++	return trace_handle_return(&iter->seq);
++}
++
+ enum print_line_t trace_nop_print(struct trace_iterator *iter, int flags,
+ 				  struct trace_event *event)
+ {
+diff --git a/kernel/trace/trace_output.h b/kernel/trace/trace_output.h
+index 4c954636caf0..dca40f1f1da4 100644
+--- a/kernel/trace/trace_output.h
++++ b/kernel/trace/trace_output.h
+@@ -19,6 +19,8 @@ seq_print_ip_sym(struct trace_seq *s, unsigned long ip,
+ extern void trace_seq_print_sym(struct trace_seq *s, unsigned long address, bool offset);
+ extern int trace_print_context(struct trace_iterator *iter);
+ extern int trace_print_lat_context(struct trace_iterator *iter);
++extern enum print_line_t print_event_fields(struct trace_iterator *iter,
++					    struct trace_event *event);
+ 
+ extern void trace_event_read_lock(void);
+ extern void trace_event_read_unlock(void);
 -- 
 2.39.1
