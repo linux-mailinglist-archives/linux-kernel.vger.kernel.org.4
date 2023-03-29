@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DEE6CD7D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF346CD7D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjC2KmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
+        id S230348AbjC2Knr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 06:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjC2KmA (ORCPT
+        with ESMTP id S230231AbjC2Kni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:42:00 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F9E2135;
-        Wed, 29 Mar 2023 03:41:55 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso11135916wms.1;
-        Wed, 29 Mar 2023 03:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680086514;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EC9tkwmc75gH+H4hmPLG9arYbdYTuVC7oSrQJMaQnv4=;
-        b=Cc2dmxbQ/7I1964fGShEZ3shF85jMjOc1v14qFyDLTLhqAOSisK8qbpY59K3FmbXGY
-         8UkcjrFtVEsov7au6iHkR7dZb/q3OTVkTeqNscYkpePzZaHOl/Edrp9GF1lm2uMe5KMk
-         Ye7x6u2c727j7gfKY8HM7MnP+FIQspJXmxjkSsaLSi85BQqOPjc+QlaUhoQxEnG2Qz6y
-         fqZCaUmjF+FWoZ1LZCykZvg8l175DTJLZDzOOpJOdHZSMb+L4bsAr717KbuIgx465TNc
-         oXF6hY2OWmjXmJ+3LVBLqsbUuLLuchA5k7Hj1WsG/8eSoZIy06u5B//RA6tsoLrRTZKt
-         ctXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680086514;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EC9tkwmc75gH+H4hmPLG9arYbdYTuVC7oSrQJMaQnv4=;
-        b=KznW5cFUK2kJZrrruQDsjaPgluj13dP04OhFBQWnk0Ufwtl1JVUIAvEPYNu9DLJVgz
-         q9jvT35R3PVFDHNfL002kj/gce+P/D8CbFR4dE3S2O9A7GGE+OuKDq1oxq4vISTsKZRg
-         HmiUuZzTP87CDLJjzBnIuOr285M80yesP22jm1d0co5ERW+DT6cIfAsMnwC8PqH4ItCP
-         TFGFuqST6/Y4Q0AXtjBUB3McZ8pqv8OyBj7l84r2rvAmN7DQGfQ71QryNRv+Xrxld+i7
-         k1M6QxVh+bOX9e/0tqabvTrVM2at6ubGPKvS0O88WK5dEFiDY32RJ+AgreS0bBD3+ucJ
-         atUA==
-X-Gm-Message-State: AO0yUKWcDjhT3boip3cLhPqcz8CLPgT2QoHOKQh+Ih4mukphljvATn2e
-        aIXbZpkrJbs+9jrBj0ZD2O4=
-X-Google-Smtp-Source: AK7set9MejkHT15VJJ8MLManRzjpXvMRuJPfIzaBWi3Mz4d8r2iGuZRrpmASD5IG5FD1prYen7xdxw==
-X-Received: by 2002:a05:600c:114f:b0:3ed:5eed:555d with SMTP id z15-20020a05600c114f00b003ed5eed555dmr13741150wmz.10.1680086513662;
-        Wed, 29 Mar 2023 03:41:53 -0700 (PDT)
-Received: from [192.168.42.225] ([81.95.8.244])
-        by smtp.gmail.com with ESMTPSA id n2-20020a05600c4f8200b003ef5e5f93f5sm1926412wmq.19.2023.03.29.03.41.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 03:41:52 -0700 (PDT)
-Message-ID: <0e863367-5b24-9559-f782-4d3e5dc06961@gmail.com>
-Date:   Wed, 29 Mar 2023 12:41:52 +0200
+        Wed, 29 Mar 2023 06:43:38 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5853C29;
+        Wed, 29 Mar 2023 03:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680086617; x=1711622617;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5W+blnKT1Yo9sFK/xzAQKVqqGYFjD25kZeGLG5VryJU=;
+  b=N6MOu08pB4ARFwcJrL4lpT1Q2w8xlBjIO6WwGzKq/Of9aGb4FD2UPgRj
+   mPHuJ5ZGBM5E8OPyXta6pOWl4QZLMJl8tvFIioLFrMxG0yIJJCFaXoX6O
+   zfzPnixGAJaIOZfJovj2NCz9HKk45Sa0+LBFnXP8PNGTJSkMAzNzLP2En
+   nuc3fqxuVp373mAgutZs1aXVyOZYbHLGhtRFaMGtGkcaXz7SHNiu1J3c7
+   oc+pvFG6DMxgbEVN4S+XKLJ7zpZcA8aI3zseoQ/w3IM0O9U8He2CPRwC9
+   tNMb1Ih/7sVnEwjcJ8iSsaqaKtvICJycr1DCQcT8SjKocSvEq/SMHLSlA
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="427117010"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="427117010"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 03:43:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="827845454"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="827845454"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 29 Mar 2023 03:43:34 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 29 Mar 2023 13:43:33 +0300
+Date:   Wed, 29 Mar 2023 13:43:33 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org, vigneshr@ti.com,
+        srk@ti.com, r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: tps6598x: make interrupts optional
+Message-ID: <ZCQWVfyVVecCYHDb@kuha.fi.intel.com>
+References: <20230324131853.41102-1-rogerq@kernel.org>
+ <20230324133741.43408-1-rogerq@kernel.org>
+ <271f0be0-9cb2-0c74-c112-33020e9a7342@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH RESEND 2/6] dt-bindings: memory-controllers:
- mediatek,smi-larb: add mt8365
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230207-iommu-support-v1-0-4a902f9aa412@baylibre.com>
- <20230207-iommu-support-v1-2-4a902f9aa412@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230207-iommu-support-v1-2-4a902f9aa412@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <271f0be0-9cb2-0c74-c112-33020e9a7342@kernel.org>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/29/23 11:52, Alexandre Mergnat wrote:
-> Add binding description for mediatek,mt8365-smi-larb
+On Wed, Mar 29, 2023 at 10:05:33AM +0300, Roger Quadros wrote:
+> Hi Heikki & Rob,
 > 
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
-> ---
->   .../devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml     | 4 ++++
->   1 file changed, 4 insertions(+)
+> On 24/03/2023 15:37, Roger Quadros wrote:
+> > The driver can poll for interrupt status so interrupts
+> > can be optional. It is still recommended to use the
+> > interrupt line. Polling should only be used for debug
+> > and prototyping.
+> > 
+> > Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> > ---
+> >  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 2 --
+> >  1 file changed, 2 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> > index 348a715d61f4..8c2db282735a 100644
+> > --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> > @@ -35,8 +35,6 @@ properties:
+> >  required:
+> >    - compatible
+> >    - reg
+> > -  - interrupts
+> > -  - interrupt-names
+> >  
+> >  additionalProperties: true
+> >  
 > 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
-> index 5f4ac3609887..aee7f6cf1300 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
-> @@ -34,6 +34,10 @@ properties:
->             - const: mediatek,mt7623-smi-larb
->             - const: mediatek,mt2701-smi-larb
->   
-> +      - items:
-> +          - const: mediatek,mt8365-smi-larb
-> +          - const: mediatek,mt8186-smi-larb
-> +
->     reg:
->       maxItems: 1
->   
-> 
+> We need this patch as well along with the driver changes [1]
+> Could you please Ack. Thanks!
+
+I can give my ack FWIW, but we should still wait for Rob.
+
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+thanks,
+
+-- 
+heikki
