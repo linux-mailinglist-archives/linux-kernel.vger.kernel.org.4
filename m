@@ -2,178 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BF06CF391
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153116CF394
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjC2TrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
+        id S231286AbjC2Tri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjC2TqX (ORCPT
+        with ESMTP id S230459AbjC2TrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:46:23 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3476EAD
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:46:04 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id m16so487072ybk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680119164;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uw+Hse+KJzv0y2FSFqFqsApOoihx38C1GEdX++8T4mU=;
-        b=Ls7zjQJXIsTIXK8xa12UAtG31viT2wzMU0YcliPrqQwfiS28W+VSdxEZCOHXi+RobD
-         XJ9KXSPw5B0DaQod948Mcm4Qe5V/oKODzQN0VNyyLUo34I+uIejSXd7Yil7OLKaWM3Ic
-         mDCDMu1lQm16AhfKyfawdB1xpJL3jxmlF2mcmnpp67Oe1PKzWojDN94zz1dBnpaD/F8n
-         73x1wO5Vu7TyBgqnybHaJwRlqGhN+FyoVNHwCokw5NLLun+bYLCaC9NxH5xxs6OuvGfj
-         eKXowAHQQsuzG8s8sypYOTlw9Ob3IXxmPcPDbdi07zqSSX5gApCeN57e0aEDnXq8mZNE
-         yCnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680119164;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Uw+Hse+KJzv0y2FSFqFqsApOoihx38C1GEdX++8T4mU=;
-        b=lMy/98tpcURGwp7K6tpy14JNkRMKjJI7lU8RPX5FfiUwvlazNKHXvuhDI3ttf8DSrs
-         vKOwjQiOw0y64reh+/vywSAmMlt7aqMpr5KREkEPiPjz3YNqkoNCjx6HfasUk5gKUDwo
-         NLO7q+I8agyImwqvINFdXA/2TNG5WR1buHtMKMF3OwUCVp1e2piqOzK48iStOnJqyhKj
-         dguVJxPRcgbmgEIBmRtv093QDmnAQ8Jw23mmtW2K3wkRJg4InaVp599zNcPH7N1SD4s3
-         504d4jxhdDaLg2RukovNaQAwDFscAGw67TDPycZYXrHk4qbXmNzK8rfGWWZEqTiDQ8Wt
-         QcGQ==
-X-Gm-Message-State: AAQBX9egu/G2kLyD1M+T6jKOf8+OHCqgernvnPt/rq3IhvcRIYcJeayi
-        90nJB70hf/NM7MeTg8i1pdfsxe1lyyulpCOYzQA8MQ==
-X-Google-Smtp-Source: AKy350Ylj3nNZ+UsrhOAFg1PNOleWiB7Ukh6l+gs8gz1nByk+hbUAS4yZ4upJ6ElCZNHNv03bHuKs6bpr3HesgeAprk=
-X-Received: by 2002:a05:6902:a8c:b0:b7b:fb15:8685 with SMTP id
- cd12-20020a0569020a8c00b00b7bfb158685mr7538197ybb.9.1680119163802; Wed, 29
- Mar 2023 12:46:03 -0700 (PDT)
+        Wed, 29 Mar 2023 15:47:21 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1197ED1;
+        Wed, 29 Mar 2023 12:46:13 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 78BFA32007F1;
+        Wed, 29 Mar 2023 15:46:11 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 29 Mar 2023 15:46:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1680119171; x=1680205571; bh=zo
+        jQa1YLfWakbyG6by6LrH71dsPpXEzFqhE+LyL8iNE=; b=f94NQcHS7VQkFwhd2T
+        lQmPb/+vs32rNGXlq8MK65yIssXnmd7EmKp+o/fL01cI0ueUUZ9vYhypWMA1T0rB
+        jCDrorQRxAG03EWO6IunfBk66GlAxo4S6MeNZwpEVYBjXBy+J0f+G+xau2ojokju
+        ZSSX0vwaqQh1dLcVHFBpcOZlVMpUeab5LYVEAEEGPjV2SrSGY9fVeFvObpnOyd0M
+        vqgNJRgHx3phaHNOIS3hW4/ghEghuyZYhkxqYFKyQ15VSyk1CMbLoXbr3va0iCEt
+        CDZOFluulLlgjhBzjYrX8HGEZ912MpH/WzdOW4qN/6KZ6Ap3B+mIfuG5CxSlWge8
+        7B0g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680119171; x=1680205571; bh=zojQa1YLfWakb
+        yG6by6LrH71dsPpXEzFqhE+LyL8iNE=; b=fu8eitjJyrwP8Dm2aWwPOnMFuesE7
+        IvCqhd9eduPE7dKnPswR8K9JADc/nTiA9hL0aaPZxt2BcXUhU3b15xsCgrvX2PCc
+        yDWM43mhtALwBlI6Y56e2iQ20CjGrgPHV7pPNPAtT/z9qzZCnmZmFyzjub0B8iDN
+        9Lxu+0TfzEOTULOEnu9mIQIA9niIWO9sszInE06a6PGvtTGxbbDF1Bg5Ur+eHcXj
+        T3ZuI0zTfUG0mMakfBv9trI65wO8syiqyLcqHwu/NSVBYF0O67476B/ot2hrPA/6
+        CJjLZCX/9bi1nHv0EySZqdq/VdGPgsgEzelieKImuNJ5AbWok53xftUOQ==
+X-ME-Sender: <xms:gpUkZAQvLCQskVD20nQyHx97BwU8jejN8-2xyh66OY7_I4czTEbSWA>
+    <xme:gpUkZNy4szB7l33j11gvKjWuc77tAfd41f8hYWdm630RZmAcn_rUl3kgOYxAt_PZY
+    ayTewqoQr-lYmxecdM>
+X-ME-Received: <xmr:gpUkZN21y14C_7xnOwqXxBC0Vd0oQpp9sGs7Zwjy3m0KTCxPzd1xsWumGw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehiedgudegfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnheptdelkeejiedufedvhfeiffetlefhiedvleeigfeiuefghfdvleeiffej
+    ieegteejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
+    tghh
+X-ME-Proxy: <xmx:g5UkZEBpwPSEZ_8uEFhbK1MofzLIozz1zdNDcuvuk_srfLeWZ6OzqQ>
+    <xmx:g5UkZJgUwNdYM1HRkmgIZbZlFSBNil6tmi1ffKI2r188jCYr7hhZtA>
+    <xmx:g5UkZArxT7xn2Tmoo5oOug5xquSGRfJTe_7S3Ho2yZ7wvmhxprjRpQ>
+    <xmx:g5UkZMTMqIuUPOQPjOfr1WGA1wHIZ8OMuAbxrPeH4SkG1bjabdOjlg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 29 Mar 2023 15:46:10 -0400 (EDT)
+Date:   Wed, 29 Mar 2023 21:46:09 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <20230329194609.7u2hgidxdk34emsf@penduick>
+References: <ZBtPhoelZo4U5jwC@kroah.com>
+ <20230323101216.w56kz3rudlj23vab@houat>
+ <ZBwoRgc2ICBJX/Lq@kroah.com>
+ <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
+ <20230323122925.kqdnomr7i46qnyo4@houat>
+ <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
+ <20230323163639.xtwpid2uunwnzai4@houat>
+ <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
+ <20230324123157.bbwvfq4gsxnlnfwb@houat>
+ <20230325175044.7bee9e7d@jic23-huawei>
 MIME-Version: 1.0
-References: <20230329140445.2180662-1-konrad.dybcio@linaro.org>
- <ZCRNFitcrAeH27Pn@hovoldconsulting.com> <83986fa9-c9eb-ae5a-b239-584092f2cea5@linaro.org>
-In-Reply-To: <83986fa9-c9eb-ae5a-b239-584092f2cea5@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 29 Mar 2023 22:45:52 +0300
-Message-ID: <CAA8EJpohEo+kMw7fx5112m+z7JHSLDmsqOL4T7hmyvr2fPP8vQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/adreno: adreno_gpu: Use suspend() instead of
- idle() on load error
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
-        andersson@kernel.org, agross@kernel.org,
-        marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l6s2nrpwzcaaz3jq"
+Content-Disposition: inline
+In-Reply-To: <20230325175044.7bee9e7d@jic23-huawei>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023 at 18:48, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 29.03.2023 16:37, Johan Hovold wrote:
-> > On Wed, Mar 29, 2023 at 04:04:44PM +0200, Konrad Dybcio wrote:
-> >> If we fail to initialize the GPU for whatever reason (say we don't
-> >> embed the GPU firmware files in the initrd), the error path involves
-> >> pm_runtime_put_sync() which then calls idle() instead of suspend().
-> >>
-> >> This is suboptimal, as it means that we're not going through the
-> >> clean shutdown sequence. With at least A619_holi, this makes the GPU
-> >> not wake up until it goes through at least one more start-fail-stop
-> >> cycle. Fix that by using pm_runtime_put_sync_suspend to force a clean
-> >> shutdown.
-> >
-> > This does not sound right. If pm_runtime_put_sync() fails to suspend the
-> > device when the usage count drops to zero, then you have a bug somewhere
-> > else.
-> I was surprised to see that it was not called as well, but I wasn't able
-> to track it down before..
 
-Could you please check that it's autosuspend who kicks in? In other
-words, if we disable autosuspend, the pm_runtime_put_sync is enough()?
+--l6s2nrpwzcaaz3jq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-That would probably mean that we lack some kind of reset in the hw_init path.
+On Sat, Mar 25, 2023 at 05:50:44PM +0000, Jonathan Cameron wrote:
+> On Fri, 24 Mar 2023 13:31:57 +0100
+> Maxime Ripard <maxime@cerno.tech> wrote:
+>=20
+> > On Fri, Mar 24, 2023 at 08:11:52AM +0200, Matti Vaittinen wrote:
+> > > On 3/23/23 18:36, Maxime Ripard wrote: =20
+> > > > On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote: =
+=20
+> > > > > On 3/23/23 14:29, Maxime Ripard wrote: =20
+> > > > > > On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
+> > > > > >=20
+> > > > > > This is the description of what was happening:
+> > > > > > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiy=
+tl@houat/ =20
+> > > > >=20
+> > > > > Thanks Maxime. Do I read this correcty. The devm_ unwinding not b=
+eing done
+> > > > > when root_device_register() is used is not because root_device_un=
+register()
+> > > > > would not trigger the unwinding - but rather because DRM code on =
+top of this
+> > > > > device keeps the refcount increased? =20
+> > > >=20
+> > > > There's a difference of behaviour between a root_device and any dev=
+ice
+> > > > with a bus: the root_device will only release the devm resources wh=
+en
+> > > > it's freed (in device_release), but a bus device will also do it in
+> > > > device_del (through bus_remove_device() -> device_release_driver() =
+->
+> > > > device_release_driver_internal() -> __device_release_driver() ->
+> > > > device_unbind_cleanup(), which are skipped (in multiple places) if
+> > > > there's no bus and no driver attached to the device).
+> > > >=20
+> > > > It does affect DRM, but I'm pretty sure it will affect any framework
+> > > > that deals with device hotplugging by deferring the framework struc=
+ture
+> > > > until the last (userspace) user closes its file descriptor. So I'd
+> > > > assume that v4l2 and cec at least are also affected, and most likely
+> > > > others. =20
+> > >=20
+> > > Thanks for the explanation and patience :)
+> > >  =20
+> > > >  =20
+> > > > > If this is the case, then it sounds like a DRM specific issue to =
+me. =20
+> > > >=20
+> > > > I mean, I guess. One could also argue that it's because IIO doesn't
+> > > > properly deal with hotplugging. =20
+> > >=20
+> > > I must say I haven't been testing the IIO registration API. I've only=
+ tested
+> > > the helper API which is not backed up by any "IIO device". (This is f=
+ine for
+> > > the helper because it must by design be cleaned-up only after the
+> > > IIO-deregistration).
+> > >=20
+> > > After your explanation here, I am not convinced IIO wouldn't see the =
+same
+> > > issue if I was testing the devm_iio_device_alloc() & co. =20
+> >=20
+> > It depends really. The issue DRM is trying to solve is that, when a
+> > device is gone, some application might still have an open FD and could
+> > still poke into the kernel, while all the resources would have been
+> > free'd if it was using devm.
+> >=20
+> > So everything is kept around until the last fd is closed, so you still
+> > have a reference to the device (even though it's been removed from its
+> > bus) until that time.
+> >=20
+> > It could be possible that IIO just doesn't handle that case at all. I
+> > guess most of the devices aren't hotpluggable, and there's not much to
+> > interact with from a userspace PoV iirc, so it might be why.
+>=20
+> Lars-Peter Clausen (IIRC) fixed up the IIO handling of the similar cases a
+> long time ago now. It's simpler that for some other subsystems as we don't
+> have as many interdependencies as occur in DRM etc.
+>=20
+> I 'think' we are fine in general with the IIO approach to this (I think we
+> did have one report of a theoretical race condition in the remove path th=
+at
+> was never fully addressed).
+>=20
+> For IIO we also have fds that can be open but all accesses to them are pr=
+oxied
+> through the IIO core and one of the things iio_device_unregister() or the=
+ devm
+> equivalent does is to set indio_dev->info =3D NULL  (+ wake up anyone wai=
+ting on
+> data etc). Alongside removing the callbacks, that is also used as a flag
+> to indicate the device has gone.
 
-On the other hand, I do not know how the device will react to the
-error-in-the-middle state. Modems for example, can enter the state
-where you can not properly turn it off once it starts the boot
-process.
+Sorry if it came as trying to put IIO under a bad light, it certainly
+wasn't my intention. I was trying to come up with possible explanations
+as to why IIO's design was simpler than DRM is :)
 
-And if we remember the efforts that Akhil has put into making sure
-that the GPU is properly reset in case of an _error_, it might be
-nearly impossible to shut it down in a proper way.
+> Note that we keep a reference to the struct indio_dev->dev (rather that t=
+he
+> underlying device) so that is not freed until the last fd is closed.
+> Thus, although devm unwinding has occurred that doesn't mean all the data
+> that was allocated with devm_xx calls is cleared up immediately.
 
-Thus said, I think that unless there is an obvious way to restart the
-init process, Korad's pm_runtime_put_sync_suspend() looks like a
-correct fix to me.
+I'm not sure I get that part though. devm unwinding can happen even if the =
+refcount is > 1
 
-> > Also since commit 2c087a336676 ("drm/msm/adreno: Load the firmware
-> > before bringing up the hardware") the firmware is loaded before even
-> > hitting these paths so the above description does not sound right in
-> > that respect either (or is missing some details).
-> ..but I did some more digging and I found that the precise "firmware"
-> that fails is the ZAP blob, which is not checked like SQE in the
-> commit you mentioned!
->
-> Now I don't think that we can easily check for it as-is since
-> zap_shader_load_mdt() does the entire find-load-authenticate
-> dance which is required with secure assets, but it's obviously
-> possible to rip out the find-load part of that and go on from
-> there.
+Maxime
 
-Yes, I think we should load all firmware early. ZAP shader is a bit
-unique since the DT can override the name, but it might be nice to
-check for its presence earlier.
+--l6s2nrpwzcaaz3jq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-At the same time it probably should not stop us from fixing the idle()
-vs suspend() bug.
+-----BEGIN PGP SIGNATURE-----
 
->
-> Do you think that would be a better solution?
->
-> Konrad
->
-> >
-> >> Test cases:
-> >> 1. firmware baked into kernel
-> >> 2. error loading fw in initrd -> load from rootfs at DE start
-> >>
-> >> Both succeed on A619_holi (SM6375) and A630 (SDM845).
-> >>
-> >> Fixes: 0d997f95b70f ("drm/msm/adreno: fix runtime PM imbalance at gpu load")
-> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >> ---
-> >>  drivers/gpu/drm/msm/adreno/adreno_device.c | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> >> index f61896629be6..59f3302e8167 100644
-> >> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-> >> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> >> @@ -477,7 +477,7 @@ struct msm_gpu *adreno_load_gpu(struct drm_device *dev)
-> >>      return gpu;
-> >>
-> >>  err_put_rpm:
-> >> -    pm_runtime_put_sync(&pdev->dev);
-> >> +    pm_runtime_put_sync_suspend(&pdev->dev);
-> >>  err_disable_rpm:
-> >>      pm_runtime_disable(&pdev->dev);
-> >
-> > Johan
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZCSVgQAKCRDj7w1vZxhR
+xaenAP950SFm/YscP/OZNbX+eEpJynPuAwfDyd1PtJuqNfChOQD+LJmD189z9X+y
+U5CselZugPJllYdyXVUeK0Apq+k7KAE=
+=+cge
+-----END PGP SIGNATURE-----
 
-
-
--- 
-With best wishes
-Dmitry
+--l6s2nrpwzcaaz3jq--
