@@ -2,111 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5366CD3E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DCC6CD3E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjC2IDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S229787AbjC2IDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjC2IC6 (ORCPT
+        with ESMTP id S229615AbjC2IDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:02:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3431BFB
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:02:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 29 Mar 2023 04:03:06 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFAF3C1D;
+        Wed, 29 Mar 2023 01:03:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17102B81ADA
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0902FC433D2;
-        Wed, 29 Mar 2023 08:02:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680076974;
-        bh=92TAbqWARXeujUx3JkwuNmKYR3DjPGLIhIOnKSx3mpg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hA0X1vVfmB6PTFroH5fIUajvrFvPW7/4V1OzE58pVDoViEAq4MMhFMcCITGr9/ZBx
-         O5wXJBH67X8+23zbSvNdt2XtsQArIH0tL7zQwJfG0eZPOybQOskXcTYp9br6vpO606
-         U24LeJkIp+DqPp9CMZjCPmX6d+PHZda8ufgoVjejP3ki3NGyi3u4FpFdnX8bDXHlq/
-         52X/gLoXIvzvpRNcDTRRlraRp0o+AN1IxlDFBaeDQl3WZNd6SN8qilKnjA7BXmEN1C
-         JxdDttsCSLghrxLhzZJCaPz1+1MSNHRUbieMfcyKcdPiR6W6NVpjsfNTW2FZnO5BVp
-         Z8bV/CUymVw7A==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Miaohe Lin <linmiaohe@huawei.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        NARIBAYASHI Akira <a.naribayashi@fujitsu.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: compaction: remove incorrect #ifdef checks
-Date:   Wed, 29 Mar 2023 10:02:41 +0200
-Message-Id: <20230329080248.2543492-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A91031FE0C;
+        Wed, 29 Mar 2023 08:03:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680076983; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=XkIlKbNA1TkczV1RQwGRPvUdSOv/P1LFG2UzjXLvDSU=;
+        b=l686GUWRSYDUHgUznltiyuVdym2edkLnSc7FQgWFkIM47r7WpN2eCj0rOSOWAOPRzKIbcn
+        MzsbTQUYdGLGBtUVfeL7hzX+43Sf0U78MmmZWgWiwD85yibarwgOUC4rWn+AtBS3389qCJ
+        o3va+i7x9e5FYkdI02qO0JklhX3jyjI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5602A139D3;
+        Wed, 29 Mar 2023 08:03:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gP+dE7fwI2QLVAAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 29 Mar 2023 08:03:03 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>, Wei Liu <wei.liu@kernel.org>,
+        Paul Durrant <paul@xen.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        xen-devel@lists.xenproject.org, Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH v3] xen/netback: use same error messages for same errors
+Date:   Wed, 29 Mar 2023 10:02:59 +0200
+Message-Id: <20230329080259.14823-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Issue the same error message in case an illegal page boundary crossing
+has been detected in both cases where this is tested.
 
-Without CONFIG_SYSCTL, the compiler warns about a few unused functions:
-
-mm/compaction.c:3076:12: error: 'proc_dointvec_minmax_warn_RT_change' defined but not used [-Werror=unused-function]
-mm/compaction.c:2780:12: error: 'sysctl_compaction_handler' defined but not used [-Werror=unused-function]
-mm/compaction.c:2750:12: error: 'compaction_proactiveness_sysctl_handler' defined but not used [-Werror=unused-function]
-
-The #ifdef is actually not necessary here, as the alternative
-register_sysctl_init() stub function does not use its argument, which
-lets the compiler drop the rest implicitly, while avoiding the warning.
-
-Fixes: c521126610c3 ("mm: compaction: move compaction sysctl to its own file")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Suggested-by: Jan Beulich <jbeulich@suse.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
 ---
- mm/compaction.c | 4 ----
- 1 file changed, 4 deletions(-)
+V2:
+- new patch
+V3:
+- modify message text (Jan Beulich)
+---
+ drivers/net/xen-netback/netback.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 3dfdb84b9c98..c8bcdea15f5f 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -3092,7 +3092,6 @@ static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
- 	return ret;
- }
+diff --git a/drivers/net/xen-netback/netback.c b/drivers/net/xen-netback/netback.c
+index 9ca4b69d3b39..dbaead243737 100644
+--- a/drivers/net/xen-netback/netback.c
++++ b/drivers/net/xen-netback/netback.c
+@@ -996,10 +996,8 @@ static void xenvif_tx_build_gops(struct xenvif_queue *queue,
  
--#ifdef CONFIG_SYSCTL
- static struct ctl_table vm_compaction[] = {
- 	{
- 		.procname	= "compact_memory",
-@@ -3130,7 +3129,6 @@ static struct ctl_table vm_compaction[] = {
- 	},
- 	{ }
- };
--#endif
- 
- static int __init kcompactd_init(void)
- {
-@@ -3147,9 +3145,7 @@ static int __init kcompactd_init(void)
- 
- 	for_each_node_state(nid, N_MEMORY)
- 		kcompactd_run(nid);
--#ifdef CONFIG_SYSCTL
- 	register_sysctl_init("vm", vm_compaction);
--#endif
- 	return 0;
- }
- subsys_initcall(kcompactd_init)
+ 		/* No crossing a page as the payload mustn't fragment. */
+ 		if (unlikely((txreq.offset + txreq.size) > XEN_PAGE_SIZE)) {
+-			netdev_err(queue->vif->dev,
+-				   "txreq.offset: %u, size: %u, end: %lu\n",
+-				   txreq.offset, txreq.size,
+-				   (unsigned long)(txreq.offset&~XEN_PAGE_MASK) + txreq.size);
++			netdev_err(queue->vif->dev, "Cross page boundary, txreq.offset: %u, size: %u\n",
++				   txreq.offset, txreq.size);
+ 			xenvif_fatal_tx_err(queue->vif);
+ 			break;
+ 		}
 -- 
-2.39.2
+2.35.3
 
