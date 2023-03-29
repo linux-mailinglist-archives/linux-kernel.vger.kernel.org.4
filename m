@@ -2,102 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE706CD5A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7006CD599
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjC2I4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        id S230116AbjC2I4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbjC2Izk (ORCPT
+        with ESMTP id S231358AbjC2IzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:55:40 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93E64EEB
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:55:12 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id m2so14846574wrh.6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680080112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k+n7kTmZSLyy6JZOnafgLqENkBorz7cVoGb/c2ijGPg=;
-        b=vZZKjgfgUkaAmm9eDa/n0yIPp/jvrZ8rqxyyVarmS9MeQTQuWX+9QtAws347nXlLsq
-         9hIswfhbaOqCvvgku69nubwSIS2vxcyy3NpfkWJAcG33bZLRAatBAyrLEy8u5n1P0kjF
-         +TSopNQpv4t5BvVsIwJxFsHvTqaZhHGrt7q0fqKnfMHiWCpFM3frNvSDSddWylBvplRE
-         xnm64vTf5/2nwhoboYtoz7sZ/o0wrtlty5pr6e3Zut4ZD1DqgKZUejA47I8IX3mTygjM
-         QwC5E+Hk3i8USpOCzXSWDpilwCpimYsxnwl7FOoB1RYDbjKxZ13PfNVusfiGkBDfgNh0
-         EC+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680080112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k+n7kTmZSLyy6JZOnafgLqENkBorz7cVoGb/c2ijGPg=;
-        b=imx8OBbt2Y72OHIxx5DWZAC1FlZRfiTtSNq8mnjexa2sHf+okU6jgt0ESShbjAEC4g
-         Hb3iBZzFnnxVgvoIsP3plP/f9VmLzb0AZvITPASCjRzjTefARBEhMTM/Oy4zWtkt0yGX
-         MtzpGHJWuTT9DXRnLbFHWxkx/cHihiR8ZmKYRnZcshjGnnLd3yrXIW1jFNdjLZXT+aw/
-         7joOg4l6gqzMyx9F6h95DC6De/Ffygz/xxyNMGX1sPXpimbG4kkYNxNfa3Kk2AjuPpey
-         HZG+U5liv40GE7zENyx5agdB9i1oqvq0hi/yMPO9uOI2KW/BLXVtxr6eOQAvDCvMRXbq
-         E54w==
-X-Gm-Message-State: AAQBX9fynQnmVfTCPA+iT915NtTnhLUMFyoc7rTzOjsFNYxvICjk97lM
-        vSbZ2P5Qoiom7cZVEoPtQl/Z3g==
-X-Google-Smtp-Source: AKy350beAHR2vBXDYS1dhRBIKKbrEnZiLQ/0TwuX8udPaiMplnlJkeIrKmdL2bitTYxYcDqOr5pgGw==
-X-Received: by 2002:a05:6000:114f:b0:2ce:e571:5cc3 with SMTP id d15-20020a056000114f00b002cee5715cc3mr1068616wrx.28.1680080112211;
-        Wed, 29 Mar 2023 01:55:12 -0700 (PDT)
-Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id f9-20020adff989000000b002cea392f000sm29571964wrr.69.2023.03.29.01.55.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 01:55:11 -0700 (PDT)
-From:   amergnat@baylibre.com
-Date:   Wed, 29 Mar 2023 10:54:38 +0200
-Subject: [PATCH v3 17/17] arm64: dts: mediatek: Add CPU Idle support
+        Wed, 29 Mar 2023 04:55:23 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DFF4C0D;
+        Wed, 29 Mar 2023 01:55:08 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PmgN42vb1z6J7wy;
+        Wed, 29 Mar 2023 16:54:28 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 29 Mar
+ 2023 09:55:05 +0100
+Date:   Wed, 29 Mar 2023 09:55:04 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        <linux-cxl@vger.kernel.org>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <will@kernel.org>, <dan.j.williams@intel.com>,
+        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Dave Jiang" <dave.jiang@intel.com>
+Subject: Re: [PATCH v2 2/5] perf: Allow a PMU to have a parent.
+Message-ID: <20230329095504.0000411f@Huawei.com>
+In-Reply-To: <ZCLI9A40PJsyqAmq@kroah.com>
+References: <20230324171313.18448-1-Jonathan.Cameron@huawei.com>
+        <20230324171313.18448-3-Jonathan.Cameron@huawei.com>
+        <f8123e7c-36a6-a302-1101-e778622dc997@linux.intel.com>
+        <20230328115444.000036ea@Huawei.com>
+        <ZCLI9A40PJsyqAmq@kroah.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230203-evk-board-support-v3-17-0003e80e0095@baylibre.com>
-References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
-In-Reply-To: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?utf-8?q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2606; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=aEgSs34mkL8gqjkYVK8GMwDs4v5ClGcJt3CH4UkG4Lo=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkI/zcm57eLBHsA1qwn3qogPxQmbXLdagGVtEIgyHC
- A29k4fmJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCP83AAKCRArRkmdfjHURbQOEA
- CuU6n9SXlN0b8BAXdY3HrfCBV6LkNvTlxVo3DJ4CPxk/rVU6JdnNLmC5HgOG3cpN8++XvhibH9jO+8
- mh3hExwx6XxEo1HDXphJlS/9KH1hfRQgjvqRXCVZlSczl878fNxY3FVX1frfoEpTTJ55tJNZdCVo+a
- /MxH0lbca8RH6DEJVdjJs8L5a5FftxtsbMY/Y8FJjIf934MXMHQznJJC9P+SyKHWUuNx1/W3Y9drAz
- o4uDE8UZRg+xyL7QTi7Px5EzGoehViSW+1/Kavlap2mq6kM4IhEJUINhuXLaf/NtpIG4WqVFwNJe+W
- 7yDVgM81dDUOug9HBWDq7P7cUKFw5lrW6utoY4wT+Z3TwKqpTr9yTZCMwSrVfKqvHzMQk+jrx6pxhb
- eas0/9+WEFrE/pOvy1UyYqsYjs/HzDMacXrO/8ecEUdgEzWxVt7vEhrlnBG1LjwhBw65sqUmj9LUbd
- B2hmFzlEjxGz7shN6W6n4I7MviMnRXFJR2XWIu/bmlzZLMZf1Y4eYWw/1immWUBjVJ+lk//FQkUbHQ
- nfOPre2roDA4sCR37ocJIm1/Hp/bG478zGFLSAFbjun+1wzvGDLJTzK6Jd7zr+ZTxW8LBfqtFgvF0s
- 3HPh3Gx1WxpQ42/QAfObOir5xPQ0Lqp+jP/Ccx4M7WfBqrLYfQEW252gVOHw==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,94 +59,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+On Tue, 28 Mar 2023 13:01:08 +0200
+Greg KH <gregkh@linuxfoundation.org> wrote:
 
-MT8365 has 3 CPU Idle states:
-- MCDI_CPU. (Multi-Core-Deep-Idle)
-- MCDI_CLUSTER.
-- DPIDLE. (Deep-Idle)
+> On Tue, Mar 28, 2023 at 11:54:44AM +0100, Jonathan Cameron wrote:
+> > On Mon, 27 Mar 2023 13:04:08 -0400
+> > "Liang, Kan" <kan.liang@linux.intel.com> wrote:
+> >   
+> > > On 2023-03-24 1:13 p.m., Jonathan Cameron wrote:  
+> > > > Some PMUs have well defined parents such as PCI devices.
+> > > > As the device_initialize() and device_add() are all within
+> > > > pmu_dev_alloc() which is called from perf_pmu_register()
+> > > > there is no opportunity to set the parent from within a driver.
+> > > > 
+> > > > Add a struct device *parent field to struct pmu and use that
+> > > > to set the parent.    
+> > > 
+> > > Why we want a PMU parent? Maybe I missed it. I don't see that the parent
+> > > is used anywhere.  
+> > 
+> > This allows you to identify the association between PMU and the hardware related
+> > device that is providing it by looking at the directory structure in sysfs rather
+> > than putting them directly under /sys/devices.
+> > 
+> > ls -l /sys/bus/event_sources/devices/
+> > 
+> > ... armv8_pmuv3_0 -> ../../../devices/arm8_pmuv3_0
+> > ... breakpoint -> ../../../devices/breakpoint
+> > ... cpmu0 -> ../../../devices/pci0000:0c/0000:0c:00.0/0000:0d:00.0/cpmu0/cpmu0
+> > etc
+> > 
+> > (the first cpmu0 is the parent registered as a child of the PCI EP and used for
+> >  driver binding).  So it's of use to userspace rather than in the kernel driver
+> > itself.
+> > 
+> > Note that almost nothing is normally in the top level /sys/devices other than
+> > event_sources - because nearly all other struct device instances created by
+> > subsystems have parents assigned.
+> > 
+> > On my system
+> > 
+> > ls /sys/devices
+> > 
+> > armv8_pmuv3_0	LNXSYSTEM:00	pci0000:0c	pnp0		system		uprobe
+> > breakpoint	pci0000:00	platform	software	tracepoint	virtual
+> > 
+> > +CC Greg KH for input on whether / why this make sense.  
+> 
+> That doesn't make sense, nothing should be in /sys/devices/ EXCEPT the
+> root device of busses.  Everything else is wrong and should have their
+> code fixed up (i.e. "breakpoint", "software", etc.)
 
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8365.dtsi | 35 ++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+Thanks Greg.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-index 959d8533c24c..b5f5c77f7f84 100644
---- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-@@ -112,6 +112,7 @@ cpu0: cpu@0 {
- 			reg = <0x0>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
-+			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -131,6 +132,7 @@ cpu1: cpu@1 {
- 			reg = <0x1>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
-+			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -150,6 +152,7 @@ cpu2: cpu@2 {
- 			reg = <0x2>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
-+			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -169,6 +172,7 @@ cpu3: cpu@3 {
- 			reg = <0x3>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
-+			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -182,6 +186,37 @@ cpu3: cpu@3 {
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-+		idle-states {
-+			entry-method = "psci";
-+
-+			CPU_MCDI: cpu-mcdi {
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x00010001>;
-+				entry-latency-us = <300>;
-+				exit-latency-us = <200>;
-+				min-residency-us = <1000>;
-+			};
-+
-+			CLUSTER_MCDI: cluster-mcdi {
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x01010001>;
-+				entry-latency-us = <350>;
-+				exit-latency-us = <250>;
-+				min-residency-us = <1200>;
-+			};
-+
-+			CLUSTER_DPIDLE: cluster-dpidle {
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x01010004>;
-+				entry-latency-us = <300>;
-+				exit-latency-us = <800>;
-+				min-residency-us = <3300>;
-+			};
-+		};
-+
- 		l2: l2-cache {
- 			compatible = "cache";
- 			cache-level = <2>;
+I was thinking to cycle back round to that once I'd got agreement on 'some' devices,
+but great to have clarity from the start that these should all have
+parents.
 
--- 
-2.25.1
+For a few cases the parent is not immediately obvious but we'll figure it out.
+
+Jonathan
+
+
+> 
+> thanks,
+> 
+> greg k-h
 
