@@ -2,140 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BA46CF577
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231456CF57B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjC2Vkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 17:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
+        id S229745AbjC2VoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 17:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjC2Vkd (ORCPT
+        with ESMTP id S229531AbjC2VoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 17:40:33 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F543C3B;
-        Wed, 29 Mar 2023 14:40:32 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id r14so7062917oiw.12;
-        Wed, 29 Mar 2023 14:40:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680126032;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7/qJzs/hW1pmjhUHORKknf7d39R3TDMqbem1vTF6rpE=;
-        b=upXT3YGycA3MdO2RxV8X0Saw4DfWqH0es4Fa1QRAhlQ10iru6SSaRkdeTGLMKdJJdy
-         Jct5VxIr87A0zwuoQtex6n3XgL+Z8m5plWgVBF6+xEyX7OlMdr43ljCiFUwYqIOdvJO1
-         vkCZ+lvLpzvEWs9U+Mlu2CB19s8sCEEVUzRS91CGiW6BgYXTdB18sTCgbhUTUFN11k7M
-         HMXlkNV9+DT5tczjGPi1S4OQR0gY/f0+g8ext7dERO99kI5E1pKHeEuG9mJQYshoi4Bp
-         MlCHh6GJe3ZdrfhWTyTX+I3kFtBzPIj2U7pg1DRvsWlzMjOWfW199T0/vwUiTCFd+KQl
-         gmEA==
-X-Gm-Message-State: AO0yUKWqlXGiKMaf74jPtZvsL65Beaygk6eMEPxUKyCEaUKDpBZAeNLA
-        ag2FXpzVgNjfsIb+7jo7Gw==
-X-Google-Smtp-Source: AK7set8HqExr54n7KB+fv5GbG1F5mEostBq+sitshFffuWryo7IxT/gigISCoOi3ymblpK2cBSZfTg==
-X-Received: by 2002:a05:6808:984:b0:387:7b92:8b97 with SMTP id a4-20020a056808098400b003877b928b97mr8519158oic.43.1680126031713;
-        Wed, 29 Mar 2023 14:40:31 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n67-20020acabd46000000b0038919e6eb5esm4278794oif.3.2023.03.29.14.40.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 14:40:31 -0700 (PDT)
-Received: (nullmailer pid 112250 invoked by uid 1000);
-        Wed, 29 Mar 2023 21:40:30 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Brenda Streiff <brenda.streiff@ni.com>
-Cc:     Jason Smith <jason.smith@ni.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Gratian Crisan <gratian.crisan@ni.com>,
+        Wed, 29 Mar 2023 17:44:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8FE40DC;
+        Wed, 29 Mar 2023 14:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680126256; x=1711662256;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1887wZTzP8ET7u0wKkq/ED3uz/APO7su2aHaXdEaid8=;
+  b=DajTOv6q9OpTgXAcESYLiURixsZAeufSG0LMBUJKvMrGX72FZvzxWV70
+   ZD7pCwNERZ6HiCZknaTftaH99p6WW20xH1WjavpKLTeRmLMmLBjxOfT0+
+   NNnQBWgUwulZbeNbwyGY24zI6EunkPYFZyhclj87HYDisjoNZ/tcdJ8xs
+   /NP3V+U86nq4nce6ui6kvZroHPeHzEDRikaqpodQVKNSxThM6eDrPhHP6
+   TM/ig6qKOqjnVlE+/urvyJsulVVXHLIWhqxHFXCyXNdZEPNwOeIlN1dLl
+   YOy4noKgcrT9YsBAWPmzfS8qOBdM6xyUaZchCW61XYgys1LctiF9p+d7D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="427280363"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="427280363"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 14:44:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="828046918"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="828046918"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Mar 2023 14:44:14 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phdaX-000JzN-2k;
+        Wed, 29 Mar 2023 21:44:13 +0000
+Date:   Thu, 30 Mar 2023 05:43:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Maxime Ripard <maxime@cerno.tech>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org
-In-Reply-To: <20230329154235.615349-2-brenda.streiff@ni.com>
-References: <20230329154235.615349-1-brenda.streiff@ni.com>
- <20230329154235.615349-2-brenda.streiff@ni.com>
-Message-Id: <168012595979.110912.13924121978276239170.robh@kernel.org>
-Subject: Re: [PATCH tty-next 1/2] dt-bindings: serial: ni,ni16650: add
- bindings
-Date:   Wed, 29 Mar 2023 16:40:30 -0500
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH 1/2] drivers: base: Add basic devm tests for root devices
+Message-ID: <202303300531.8jq5jsDC-lkp@intel.com>
+References: <20230329-kunit-devm-inconsistencies-test-v1-1-c33127048375@cerno.tech>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329-kunit-devm-inconsistencies-test-v1-1-c33127048375@cerno.tech>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Maxime,
 
-On Wed, 29 Mar 2023 10:42:34 -0500, Brenda Streiff wrote:
-> Add bindings for the NI 16550 UART.
-> 
-> Signed-off-by: Brenda Streiff <brenda.streiff@ni.com>
-> Cc: Gratian Crisan <gratian.crisan@ni.com>
-> Cc: Jason Smith <jason.smith@ni.com>
-> ---
->  .../bindings/serial/ni,ni16550.yaml           | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/serial/ni,ni16550.yaml
-> 
+I love your patch! Perhaps something to improve:
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+[auto build test WARNING on a6faf7ea9fcb7267d06116d4188947f26e00e57e]
 
-yamllint warnings/errors:
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drivers-base-Add-basic-devm-tests-for-root-devices/20230330-034149
+base:   a6faf7ea9fcb7267d06116d4188947f26e00e57e
+patch link:    https://lore.kernel.org/r/20230329-kunit-devm-inconsistencies-test-v1-1-c33127048375%40cerno.tech
+patch subject: [PATCH 1/2] drivers: base: Add basic devm tests for root devices
+config: arc-randconfig-r043-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300531.8jq5jsDC-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a6c0627f4059cf0565eec2bb99fc7453e20b5c51
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Maxime-Ripard/drivers-base-Add-basic-devm-tests-for-root-devices/20230330-034149
+        git checkout a6c0627f4059cf0565eec2bb99fc7453e20b5c51
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.example.dtb: serial@80000000: compatible: ['ni,ni16550', 'ns16550a'] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.example.dtb: serial@80000000: Unevaluated properties are not allowed ('compatible' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.example.dtb: serial@80000000: compatible: 'oneOf' conditional failed, one must be fixed:
-	['ni,ni16550', 'ns16550a'] is too long
-	['ni,ni16550', 'ns16550a'] is too short
-	'ns8250' was expected
-	'ns16450' was expected
-	'ns16550' was expected
-	'ns16550a' was expected
-	'ns16850' was expected
-	'aspeed,ast2400-vuart' was expected
-	'aspeed,ast2500-vuart' was expected
-	'intel,xscale-uart' was expected
-	'mrvl,pxa-uart' was expected
-	'nuvoton,wpcm450-uart' was expected
-	'nuvoton,npcm750-uart' was expected
-	'nvidia,tegra20-uart' was expected
-	'nxp,lpc3220-uart' was expected
-	'ni,ni16550' is not one of ['exar,xr16l2552', 'exar,xr16l2551', 'exar,xr16l2550']
-	'ni,ni16550' is not one of ['altr,16550-FIFO32', 'altr,16550-FIFO64', 'altr,16550-FIFO128', 'fsl,16550-FIFO64', 'fsl,ns16550', 'andestech,uart16550', 'nxp,lpc1850-uart', 'opencores,uart16550-rtlsvn105', 'ti,da830-uart']
-	'ni,ni16550' is not one of ['ns16750', 'cavium,octeon-3860-uart', 'xlnx,xps-uart16550-2.00.b', 'ralink,rt2880-uart']
-	'ni,ni16550' is not one of ['nuvoton,npcm845-uart']
-	'ni,ni16550' is not one of ['ralink,mt7620a-uart', 'ralink,rt3052-uart', 'ralink,rt3883-uart']
-	'ni,ni16550' is not one of ['mediatek,mt7622-btif', 'mediatek,mt7623-btif']
-	'mrvl,mmp-uart' was expected
-	'ni,ni16550' is not one of ['nvidia,tegra30-uart', 'nvidia,tegra114-uart', 'nvidia,tegra124-uart', 'nvidia,tegra210-uart', 'nvidia,tegra186-uart', 'nvidia,tegra194-uart', 'nvidia,tegra234-uart']
-	'ralink,rt2880-uart' was expected
-	'mediatek,mtk-btif' was expected
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/8250.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/ni,ni16550.example.dtb: serial@80000000: Unevaluated properties are not allowed ('compatible', 'transceiver' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/8250.yaml
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303300531.8jq5jsDC-lkp@intel.com/
 
-doc reference errors (make refcheckdocs):
+All warnings (new ones prefixed by >>):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230329154235.615349-2-brenda.streiff@ni.com
+>> drivers/base/test/.kunitconfig: warning: ignored by one of the .gitignore files
+   drivers/clk/.kunitconfig: warning: ignored by one of the .gitignore files
+   drivers/gpu/drm/tests/.kunitconfig: warning: ignored by one of the .gitignore files
+   drivers/gpu/drm/vc4/tests/.kunitconfig: warning: ignored by one of the .gitignore files
+   drivers/hid/.kunitconfig: warning: ignored by one of the .gitignore files
+   fs/ext4/.kunitconfig: warning: ignored by one of the .gitignore files
+   fs/fat/.kunitconfig: warning: ignored by one of the .gitignore files
+   kernel/kcsan/.kunitconfig: warning: ignored by one of the .gitignore files
+   lib/kunit/.kunitconfig: warning: ignored by one of the .gitignore files
+   mm/kfence/.kunitconfig: warning: ignored by one of the .gitignore files
+   net/sunrpc/.kunitconfig: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/.gitignore: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/Makefile: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/config: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/settings: warning: ignored by one of the .gitignore files
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
