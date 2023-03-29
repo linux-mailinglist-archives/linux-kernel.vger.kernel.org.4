@@ -2,87 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27786CF1B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294D36CF1B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjC2SGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
+        id S230011AbjC2SHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjC2SF7 (ORCPT
+        with ESMTP id S229618AbjC2SHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:05:59 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BA165B0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:05:56 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-17aaa51a911so17086358fac.5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:05:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google; t=1680113156;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dogo3BF2L9vBC4AT6xgMxoTJFXvXmfhOs0Wm2IXvUoA=;
-        b=L0HwYwO3L/MNP7MmWs2RcJbpPDw4+LjAB6LZUkRjGQGTcOAeJV74uov52Ekfpp5dmx
-         s9lGs7hbWkvuFTUwneVaHXamZVEnm4xDfnGAUPal58PW25X0ImisVK6cetvN9lnDxxpB
-         S14152RBp3zDsK3rafFd6eeNnYPrDzXt3KSOf/f8/tH+QAuum8S3zUYAVtXz29+H3Ysr
-         +JJmJ+SZm+bax72OFXXBsTF/JNpymn0AgJeQej1Hzg2/4mgEwTNsa5oo41F6HWUq2+Kg
-         AkSmdqdvYDrjPRkHg8UO1RD3UssIXsf/yezuTeWy91kkBOGVueLttPUm9Jmt2+Nf3SDi
-         QqWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680113156;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Dogo3BF2L9vBC4AT6xgMxoTJFXvXmfhOs0Wm2IXvUoA=;
-        b=euyqP31zjzQctkcu6efVJRXXqnC1+9cz0mg8VWFqk08XmcqOq5Qa6iFQU4jqkscWPM
-         DVNHLghz578XgIuWJZu8sUa3csenhV84Z+Dbk45Y1JTxYfy/36vig28MLZ7JcoztE8hI
-         q3mhtNYMbL0FJDxsFe9VCz/QRMqNX4K8gSERwv23Q6Wcm/7SYFvY6BE3kDWalWiaQMVt
-         OYIvpsz2uKqxfZpqc/dnu/8fm86u9YDq1NlldDABaAd3qJNRIK41hFF12lSJAfHYlnwZ
-         zSEn6n3XAWVDQedF/0auUfSdI9Bj5hFyMowt5k1PCdD1PTdiwldCo++KkwzUkZK+mpWc
-         aH3w==
-X-Gm-Message-State: AAQBX9cTxGin2MD1GVcCeNh0s37eIVYKQpPg3wq+ITCsUn0N5fVRHz+p
-        BOF+5IND8MpIeA6o7D3Rm0ifiA==
-X-Google-Smtp-Source: AKy350Y5nATzpWAejjs20Se142ta9u/ME/7RWzY7Q28O0MbOueyG/JtjDWUShvoc2IoJ5SkqvG6ZWg==
-X-Received: by 2002:a05:6871:282:b0:177:a8a8:65c with SMTP id i2-20020a056871028200b00177a8a8065cmr13194714oae.4.1680113155874;
-        Wed, 29 Mar 2023 11:05:55 -0700 (PDT)
-Received: from ARCHaio.localdomain ([2804:1b3:a2c0:c911:919f:bd20:4f2a:8383])
-        by smtp.gmail.com with ESMTPSA id yo7-20020a05687c018700b001777244e3f9sm12098767oab.8.2023.03.29.11.05.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 11:05:55 -0700 (PDT)
-From:   Caio Novais <caionovais@usp.br>
-To:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Wesley Chalmers <Wesley.Chalmers@amd.com>,
-        "Lee, Alvin" <Alvin.Lee2@amd.com>, Jun Lei <Jun.Lei@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Caio Novais <caionovais@usp.br>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        Gabe Teeger <gabe.teeger@amd.com>, Roman Li <roman.li@amd.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH v2 2/2] drm/amd/display: Mark function 'optc3_wait_drr_doublebuffer_pending_clear' as static
-Date:   Wed, 29 Mar 2023 15:05:34 -0300
-Message-Id: <20230329180534.99151-3-caionovais@usp.br>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230329180534.99151-1-caionovais@usp.br>
-References: <20230329180534.99151-1-caionovais@usp.br>
+        Wed, 29 Mar 2023 14:07:06 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC564202
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:07:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1680113222;
+        bh=I4q7sVbxbsxOMp0vkF/MeXrHQ6uqvJkviKOKeFjHrfk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TIqWUHkjbjh6h9OjIsmolNu50RL/AKrShDWb4n2drSrT7AuimZA6vRS1nU/DIgjYs
+         EIe9Kv3ZMPIji6Wiof/skGqIBZb7b1TYpjOOiDQVKx7VtWcJSOMS9jFmbLk+PhAEXJ
+         bNKYr3qbJJwUfInNFf5Pu555zu0ptcYSBYg3Uc90bRtNd02m8QGoA41ORUb1eWZmXJ
+         BzglBirg2WKQiqu0pU2OmBL7OuCc17NWeC4PL0bRl47z6OkBTifdAAj/4PPNA288ry
+         TUo4RXwQMQoSQFpf19hznfh8hkj+iYB+2oTpQnASL4ZwO3fQGPExyYO3ApnvAlcOvh
+         psxFXmMhD5wDQ==
+Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Pmvdf0r0DztPN;
+        Wed, 29 Mar 2023 14:07:02 -0400 (EDT)
+Message-ID: <474f934d-6c13-6755-fa7a-6116b3159301@efficios.com>
+Date:   Wed, 29 Mar 2023 14:07:15 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: rq lock contention due to commit af7f588d8f73
+Content-Language: en-US
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
+References: <20230327080502.GA570847@ziqianlu-desk2>
+ <b5e09943-36e6-c89b-4701-5af6408223e8@efficios.com>
+ <20230327140425.GA1090@ziqianlu-desk2>
+ <fc66a0a9-aeb3-cc80-83fb-a5c02ee898ca@efficios.com>
+ <20230328065809.GB4899@ziqianlu-desk2>
+ <c481529e-43d4-a5ce-58ca-12e8ea36aa38@efficios.com>
+ <20230329074549.GA65916@ziqianlu-desk2>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20230329074549.GA65916@ziqianlu-desk2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,30 +57,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compiling AMD GPU drivers displays a warning:
+On 2023-03-29 03:45, Aaron Lu wrote:
+> On Tue, Mar 28, 2023 at 08:39:41AM -0400, Mathieu Desnoyers wrote:
+>> On 2023-03-28 02:58, Aaron Lu wrote:
+>>> On Mon, Mar 27, 2023 at 03:57:43PM -0400, Mathieu Desnoyers wrote:
+>>>> I've just resuscitated my per-runqueue concurrency ID cache patch from an older
+>>>> patchset, and posted it as RFC. So far it passed one round of rseq selftests. Can
+>>>> you test it in your environment to see if I'm on the right track ?
+>>>>
+>>>> https://lore.kernel.org/lkml/20230327195318.137094-1-mathieu.desnoyers@efficios.com/
+>>>
+>>> There are improvements with this patch.
+>>>
+>>> When running the client side sysbench with nr_thread=56, the lock contention
+>>> is gone%; with nr_thread=224(=nr_cpu of this machine), the lock contention
+>>> dropped from 75% to 27%.
+>>
+>> This is a good start!
+>>
+>> Can you compare this with Peter's approach to modify init/Kconfig, make
+>> SCHED_MM_CID a bool, and set it =n in the kernel config ?
+>>
+>> I just want to see what baseline we should compare against.
+>>
+>> Another test we would want to try here: there is an arbitrary choice for the
+>> runqueue cache array size in my own patch:
+>>
+>> kernel/sched/sched.h:
+>> # define RQ_CID_CACHE_SIZE    8
+>>
+>> Can you try changing this value for 16 or 32 instead and see if it helps?
+> 
+> I tried 32. The short answer is: for nr_thread=224 case, using a larger
+> value doesn't show obvious difference.
+> 
+> Here is more detailed info.
+> 
+> During a 5 minutes run, I captued 5s perf every 30 seconds. To avoid
+> getting too huge data recorded by perf since this machine has 224 cpus,
+> I picked 4 cpus of each node when doing perf record and here are the results:
+> 
+> Your RFC patch that did mm_cid rq cache:
+> node0_1.profile:    26.07%    26.06%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_2.profile:    28.38%    28.37%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_3.profile:    25.44%    25.44%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_4.profile:    16.14%    16.13%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_5.profile:    15.17%    15.16%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_6.profile:     5.23%     5.23%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_7.profile:     2.64%     2.64%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_8.profile:     2.87%     2.87%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_9.profile:     2.73%     2.73%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_1.profile:    23.78%    23.77%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_2.profile:    25.11%    25.10%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_3.profile:    21.97%    21.95%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_4.profile:    19.37%    19.35%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_5.profile:    18.85%    18.84%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_6.profile:    11.22%    11.20%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_7.profile:     1.65%     1.64%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_8.profile:     1.68%     1.67%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_9.profile:     1.57%     1.56%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> 
+> Changing RQ_CID_CACHE_SIZE to 32:
+> node0_1.profile:    29.25%    29.24%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_2.profile:    26.87%    26.87%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_3.profile:    24.23%    24.23%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_4.profile:    17.31%    17.30%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_5.profile:     3.61%     3.60%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_6.profile:     2.60%     2.59%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_7.profile:     1.77%     1.77%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_8.profile:     2.14%     2.13%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node0_9.profile:     2.20%     2.20%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_1.profile:    27.25%    27.24%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_2.profile:    25.12%    25.11%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_3.profile:    25.27%    25.26%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_4.profile:    19.48%    19.47%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_5.profile:    10.21%    10.20%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_6.profile:     3.01%     3.00%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_7.profile:     1.47%     1.47%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_8.profile:     1.52%     1.51%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> node1_9.profile:     1.58%     1.56%  [kernel.vmlinux]        [k] native_queued_spin_lock_slowpath
+> 
+> This workload has a characteristic that in the initial ~2 minutes, it has
+> more wakeups and task migrations and that probably can explain why lock
+> contention dropped in later profiles.
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for ‘optc3_wait_drr_doublebuffer_pending_clear’ [-Wmissing-prototypes]
+Yeah my RFC patch adds a rq lock on try to wakeup migrations, which I 
+suspect is causing this performance regression.
 
-Get rid of it by marking the function as static
+I've come up with a design for an alternative scheme which should be 
+much more lightweight locking-wise. I'll see if I can make it work and 
+let you know when I have something to test.
 
-Signed-off-by: Caio Novais <caionovais@usp.br>
----
- drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c
-index 08b92715e2e6..c95f000b63b2 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c
-@@ -291,7 +291,7 @@ static void optc3_set_timing_double_buffer(struct timing_generator *optc, bool e
- 		   OTG_DRR_TIMING_DBUF_UPDATE_MODE, mode);
- }
- 
--void optc3_wait_drr_doublebuffer_pending_clear(struct timing_generator *optc)
-+static void optc3_wait_drr_doublebuffer_pending_clear(struct timing_generator *optc)
- {
- 	struct optc *optc1 = DCN10TG_FROM_TG(optc);
- 
+Mathieu
+
+
 -- 
-2.40.0
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
