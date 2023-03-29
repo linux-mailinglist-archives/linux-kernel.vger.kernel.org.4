@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADE36CD89E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20646CD89F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjC2Lkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
+        id S229901AbjC2Lkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjC2Lko (ORCPT
+        with ESMTP id S229675AbjC2Lkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:40:44 -0400
+        Wed, 29 Mar 2023 07:40:45 -0400
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419239E;
-        Wed, 29 Mar 2023 04:40:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1D410F;
+        Wed, 29 Mar 2023 04:40:44 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 31D284247C;
-        Wed, 29 Mar 2023 11:40:36 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 44AE54249C;
+        Wed, 29 Mar 2023 11:40:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1680090039;
-        bh=sgkJirkqva0+PxNuqlvJAdh/8AuGnLCXCYPdCELUlwo=;
-        h=From:Subject:Date:To:Cc;
-        b=uifV4TGE4jPUce3MH0xUpkihM9a6blY7pA0w4nuRwCaPdTtmzVfuyZzz+XAy4sgf7
-         3SP9PWvGMVJx9mXxuN9qJucuYn0hyvJj4Z4RiaFVuzsPV6SCIt396KgRS33KW5TMgk
-         AmP08hvqlKjBdTEpHWPYDcJKLjyc4Jwbzu4kb9Q0E919BeW3bh825uXmVrKprPO0Ge
-         T78jgzSxe3ycFXi2l1xmMBNahsA/CHH5UCWkc3DboTGhET0xxXdZjXMVzqSsIz5rIo
-         PtPUhD3RmuKo5vdQKhE13TP93OFLTCDDDbrfNS7FKIwGbDDObX6JO29d5Ef6SrT/O7
-         kIXJ3myU9t5AQ==
+        s=default; t=1680090042;
+        bh=op/MvH8FI1eaZn0mWBwxw30yZPebXAjGRe5pwINXIX8=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc;
+        b=laM3guzYqlofOX5ArDj2VyS20jgM0Qpgg/W59vG5AGtywZDLVZjOCijiR2coy9inm
+         c14QXgDrgQkrL1BNEeRbNdKAEJHOyawQD4EM+712HlfHYAt2r9JB47S0bI9FQiyuDf
+         KGMdf5EFwOLL3lJeZXqyCxxsSMedkIviJSQvObVeSQ7YVIkfxTdpVG4naOv7nSxz/U
+         qwS7Oz2/phkSCUNAvZS4Qn5xtIqeLdxehwj/md1KOqmC8JiQEk8p+LfHxYZrJS589U
+         7aq/+bq0Gif9tem6BiEnD2OmGuU559GWWEkhvJ0lW3ptGATcpZYCX748wH1tURj1xE
+         0cWgbRYWAxGIQ==
 From:   Asahi Lina <lina@asahilina.net>
-Subject: [PATCH 0/2] rust: Add uapi crate
-Date:   Wed, 29 Mar 2023 20:40:17 +0900
-Message-Id: <20230329-rust-uapi-v1-0-ee78f2933726@asahilina.net>
+Date:   Wed, 29 Mar 2023 20:40:18 +0900
+Subject: [PATCH 1/2] rust: uapi: Add UAPI crate
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKIjJGQC/x2N0QqDMAxFf0XyvDKNFdb9yvAhrZkGRpVEx0D89
- 1UfD/cc7g7GKmzwrHZQ/orJnAs0twrSRHlkJ0NhwBrbusXgdLPVbbSIewTvseFA3YBQ/EjGLir
- lNJ1F9PfLlTmtn3NflN/yu75e/XH8AZU0bYh7AAAA
+Message-Id: <20230329-rust-uapi-v1-1-ee78f2933726@asahilina.net>
+References: <20230329-rust-uapi-v1-0-ee78f2933726@asahilina.net>
+In-Reply-To: <20230329-rust-uapi-v1-0-ee78f2933726@asahilina.net>
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -50,11 +49,11 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
         asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680090036; l=1778;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680090036; l=4678;
  i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=sgkJirkqva0+PxNuqlvJAdh/8AuGnLCXCYPdCELUlwo=;
- b=JAcBC6InJetx1oLYXbylVQ6zXKv9RfrKEn2QqgZdQHk+Hl+tXDUGrONRmBYZgzAXNfUiEqbyH
- 3SRCJz6L1WMDOz0AlTX8hP5En++UM7F5E5e6xAYz7VWKLK1EndDLDX2
+ bh=op/MvH8FI1eaZn0mWBwxw30yZPebXAjGRe5pwINXIX8=;
+ b=+TFoSsDQaePj1U3bW/UnEdo6ELlQoPqtT4aoKzc4FE4Sn8CAhFJAAs/MrR/8IxUzOVBI0JkmP
+ WVdnwWnUzeYCzwUdeiSYgcwi+MkNxI7yyaDHKE9fEAiG1/eZH87fDSy
 X-Developer-Key: i=lina@asahilina.net; a=ed25519;
  pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -66,44 +65,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In general, direct bindgen bindings for C kernel APIs are not intended
-to be used by drivers outside of the `kernel` crate. However, some
-drivers do need to interact directly with UAPI definitions to implement
-userspace APIs.
+This crate mirrors the `bindings` crate, but will contain only UAPI
+bindings. Unlike the bindings crate, drivers may directly use this crate
+if they have to interface with userspace.
 
-Instead of making this an exception to the use of the `bindings` crate,
-introduce a new `uapi` crate that will contain only these publicly
-usable definitions. The build logic mirrors the `bindings` crate, but
-there is no helper support since UAPIs are only intended to contain
-constant and type definitions, not function prototypes.
+Initially, just bind the generic ioctl stuff.
 
-In the future, we would like to extend this to also auto-derive and
-validate certain safety properties for UAPI structure definitions, such
-as that they are safely castable to/from "bag of bits" buffers.
-
-The first patch introduces the `uapi` crate proper and stands on its own,
-while the second patch modifies the ioctl crate (which I sent as a
-separate series) to use the new crate. Miguel: if/once everything looks
-good, feel free to merge just patch #1 and I can squash #2 into the ioctl
-crate, or you can squash it yourself, or just merge both series in
-sequence, whatever works ^^
+In the future, we would also like to add additional checks to ensure
+that all types exposed by this crate satisfy UAPI-safety guarantees
+(that is, they are safely castable to/from a "bag of bits").
 
 Signed-off-by: Asahi Lina <lina@asahilina.net>
 ---
-Asahi Lina (2):
-      rust: uapi: Add UAPI crate
-      rust: ioctl: Move to the uapi crate
  rust/.gitignore         |  1 +
  rust/Makefile           | 18 ++++++++++++++++--
- rust/kernel/ioctl.rs    | 32 ++++++++++++++++----------------
  rust/kernel/lib.rs      |  1 +
  rust/uapi/lib.rs        | 27 +++++++++++++++++++++++++++
  rust/uapi/uapi_helper.h |  9 +++++++++
- 6 files changed, 70 insertions(+), 18 deletions(-)
----
-base-commit: 5aa20836252a607ce5d3fa96f9807b56e9f6b1ca
-change-id: 20230329-rust-uapi-894421e9a5d2
+ 5 files changed, 54 insertions(+), 2 deletions(-)
 
-Thank you,
-~~ Lina
+diff --git a/rust/.gitignore b/rust/.gitignore
+index 168cb26a31b9..21552992b401 100644
+--- a/rust/.gitignore
++++ b/rust/.gitignore
+@@ -2,6 +2,7 @@
+ 
+ bindings_generated.rs
+ bindings_helpers_generated.rs
++uapi_generated.rs
+ exports_*_generated.h
+ doc/
+ test/
+diff --git a/rust/Makefile b/rust/Makefile
+index f88d108fbef0..59a327f0fa1a 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -16,6 +16,9 @@ obj-$(CONFIG_RUST) += alloc.o bindings.o kernel.o
+ always-$(CONFIG_RUST) += exports_alloc_generated.h exports_bindings_generated.h \
+     exports_kernel_generated.h
+ 
++always-$(CONFIG_RUST) += uapi/uapi_generated.rs
++obj-$(CONFIG_RUST) += uapi.o
++
+ ifdef CONFIG_RUST_BUILD_ASSERT_ALLOW
+ obj-$(CONFIG_RUST) += build_error.o
+ else
+@@ -288,6 +291,12 @@ $(obj)/bindings/bindings_generated.rs: $(src)/bindings/bindings_helper.h \
+     $(src)/bindgen_parameters FORCE
+ 	$(call if_changed_dep,bindgen)
+ 
++$(obj)/uapi/uapi_generated.rs: private bindgen_target_flags = \
++    $(shell grep -v '^\#\|^$$' $(srctree)/$(src)/bindgen_parameters)
++$(obj)/uapi/uapi_generated.rs: $(src)/uapi/uapi_helper.h \
++    $(src)/bindgen_parameters FORCE
++	$(call if_changed_dep,bindgen)
++
+ # See `CFLAGS_REMOVE_helpers.o` above. In addition, Clang on C does not warn
+ # with `-Wmissing-declarations` (unlike GCC), so it is not strictly needed here
+ # given it is `libclang`; but for consistency, future Clang changes and/or
+@@ -388,10 +397,15 @@ $(obj)/bindings.o: $(src)/bindings/lib.rs \
+     $(obj)/bindings/bindings_helpers_generated.rs FORCE
+ 	$(call if_changed_dep,rustc_library)
+ 
++$(obj)/uapi.o: $(src)/uapi/lib.rs \
++    $(obj)/compiler_builtins.o \
++    $(obj)/uapi/uapi_generated.rs FORCE
++	$(call if_changed_dep,rustc_library)
++
+ $(obj)/kernel.o: private rustc_target_flags = --extern alloc \
+-    --extern build_error --extern macros --extern bindings
++    --extern build_error --extern macros --extern bindings --extern uapi
+ $(obj)/kernel.o: $(src)/kernel/lib.rs $(obj)/alloc.o $(obj)/build_error.o \
+-    $(obj)/libmacros.so $(obj)/bindings.o FORCE
++    $(obj)/libmacros.so $(obj)/bindings.o $(obj)/uapi.o FORCE
+ 	$(call if_changed_dep,rustc_library)
+ 
+ endif # CONFIG_RUST
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 7610b18ee642..63f796781b7c 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -43,6 +43,7 @@ pub mod types;
+ #[doc(hidden)]
+ pub use bindings;
+ pub use macros;
++pub use uapi;
+ 
+ #[doc(hidden)]
+ pub use build_error::build_error;
+diff --git a/rust/uapi/lib.rs b/rust/uapi/lib.rs
+new file mode 100644
+index 000000000000..29f69f3a52de
+--- /dev/null
++++ b/rust/uapi/lib.rs
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! UAPI Bindings.
++//!
++//! Contains the bindings generated by `bindgen` for UAPI interfaces.
++//!
++//! This crate may be used directly by drivers that need to interact with
++//! userspace APIs.
++
++#![no_std]
++#![feature(core_ffi_c)]
++// See <https://github.com/rust-lang/rust-bindgen/issues/1651>.
++#![cfg_attr(test, allow(deref_nullptr))]
++#![cfg_attr(test, allow(unaligned_references))]
++#![cfg_attr(test, allow(unsafe_op_in_unsafe_fn))]
++#![allow(
++    clippy::all,
++    missing_docs,
++    non_camel_case_types,
++    non_upper_case_globals,
++    non_snake_case,
++    improper_ctypes,
++    unreachable_pub,
++    unsafe_op_in_unsafe_fn
++)]
++
++include!(concat!(env!("OBJTREE"), "/rust/uapi/uapi_generated.rs"));
+diff --git a/rust/uapi/uapi_helper.h b/rust/uapi/uapi_helper.h
+new file mode 100644
+index 000000000000..301f5207f023
+--- /dev/null
++++ b/rust/uapi/uapi_helper.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Header that contains the headers for which Rust UAPI bindings
++ * will be automatically generated by `bindgen`.
++ *
++ * Sorted alphabetically.
++ */
++
++#include <uapi/asm-generic/ioctl.h>
+
+-- 
+2.40.0
 
