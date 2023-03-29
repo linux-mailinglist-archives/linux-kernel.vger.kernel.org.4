@@ -2,60 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0A86CF68D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 00:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681DB6CF690
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 00:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjC2Wqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 18:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
+        id S230230AbjC2Wrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 18:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjC2Wqa (ORCPT
+        with ESMTP id S229525AbjC2Wrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 18:46:30 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83806DF
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 15:46:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680129988; x=1711665988;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C13Rk/Z50L3VJ+1mQDtBV+nVXakCeh0jzOipkvHHL0w=;
-  b=iPaYAxY0gRd81m59nIJymwWEKjCrzHSxu6e82S/uP7J4sPWxHz0zY6wV
-   xJVuqlBVqmZu9tC4nAWsBRIn6RdxoPFhOLt4Q25nehoIayIjijBeMPTMe
-   nJ9M481LbWkSbIvwsk44NO+iNVCqNLICRK8su7GZOrUfzDRbqCsjZ4kw/
-   tpBZHSb9ohO/cvJ1zE1OVyu9bDkstdw/EETWkn/CgAsjkjYMrOHlEvnm5
-   j00YdddU4BlYwiMxyc2tPRCehHH7peaYcadxpid6ThmuxYtV39nwIkVjZ
-   FgJQrtL1ep3RGGiz1k5J7JwCne6FTmrkE92GRf5kcabzcN68uPvJQhso7
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="368791032"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="368791032"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 15:46:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="684467222"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="684467222"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 29 Mar 2023 15:46:15 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pheYY-000K1K-35;
-        Wed, 29 Mar 2023 22:46:14 +0000
-Date:   Thu, 30 Mar 2023 06:45:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Vineet Gupta <vgupta@kernel.org>
-Subject: drivers/scsi/megaraid.c:4470:26: sparse: sparse: incorrect type in
- argument 1 (different address spaces)
-Message-ID: <202303300602.tuYKjvUe-lkp@intel.com>
+        Wed, 29 Mar 2023 18:47:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD4D10C3;
+        Wed, 29 Mar 2023 15:47:39 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 513A36603170;
+        Wed, 29 Mar 2023 23:47:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680130058;
+        bh=GlKdC9Vyz/FZyEE9Yl5UDhAdLZpTF5B1FyIJmbb/pKc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ceUCbbVSvDwE3eakCvEsLwfxmXkLU3nNSUBRF4Y/Uia+HfB+A+0YFfuwfrkPQO4/d
+         szdElL7MtJ2lMHb5+aLbEQeVb5YQqFu0vyiMrZqOhe7XIADYMEzyKq1eJYbXX3uHv5
+         Jx7pXFp437rkTKfCB31YpIDwb84sm9Io79m+9HT4MCsrZg5O6k+B1gx+9hfsDJceJE
+         TEt2PtP8SnI4CEh2k843ui3hF703oye54WOoAjqVOyDHiv7ytLzyySqkNWR1aVNmsc
+         2uldq2549jhRG7baycnOxCEKIl7oshZWNeaTAP4D9Yrjvcx+ZVrckxgzfQobm6kX7u
+         e4P8Z6kzTL1TA==
+Received: by mercury (Postfix, from userid 1000)
+        id 67C701062665; Thu, 30 Mar 2023 00:47:36 +0200 (CEST)
+Date:   Thu, 30 Mar 2023 00:47:36 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Alistair <alistair@alistair23.me>, ye.xingchen@zte.com.cn,
+        pali@kernel.org, sravanhome@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: power_supply_show_property Kernel Oops
+Message-ID: <20230329224736.qzidpkzkdth2lvuq@mercury.elektranox.org>
+References: <0dcc1aac-9a6a-4d17-be68-a895cb6120da@app.fastmail.com>
+ <CACRpkdZSJCZZEkD0V_wint+a1XKsbCQFuArFvPdFP8RSDsGLMQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qzkccpmqhu6ctnn7"
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <CACRpkdZSJCZZEkD0V_wint+a1XKsbCQFuArFvPdFP8RSDsGLMQ@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,128 +58,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ffe78bbd512166e0ef1cc4858010b128c510ed7d
-commit: c44f15c1c09481d50fd33478ebb5b8284f8f5edb arc: iounmap() arg is volatile
-date:   5 months ago
-config: arc-randconfig-s031-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300602.tuYKjvUe-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c44f15c1c09481d50fd33478ebb5b8284f8f5edb
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c44f15c1c09481d50fd33478ebb5b8284f8f5edb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash drivers/isdn/hardware/mISDN/ drivers/scsi/ scripts/
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303300602.tuYKjvUe-lkp@intel.com/
+--qzkccpmqhu6ctnn7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/scsi/megaraid.c:4470:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/scsi/megaraid.c:4470:26: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/scsi/megaraid.c:4470:26: sparse:     got void *
-   drivers/scsi/megaraid.c:4529:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/scsi/megaraid.c:4529:26: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/scsi/megaraid.c:4529:26: sparse:     got void *
---
-   drivers/isdn/hardware/mISDN/hfcmulti.c:452:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   drivers/isdn/hardware/mISDN/hfcmulti.c:452:22: sparse:     expected unsigned int [usertype] value
-   drivers/isdn/hardware/mISDN/hfcmulti.c:452:22: sparse:     got restricted __le32 [usertype]
-   drivers/isdn/hardware/mISDN/hfcmulti.c:457:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [usertype] @@
-   drivers/isdn/hardware/mISDN/hfcmulti.c:457:22: sparse:     expected unsigned short [usertype] value
-   drivers/isdn/hardware/mISDN/hfcmulti.c:457:22: sparse:     got restricted __le16 [usertype]
-   drivers/isdn/hardware/mISDN/hfcmulti.c:472:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] val @@     got restricted __le32 [usertype] @@
-   drivers/isdn/hardware/mISDN/hfcmulti.c:472:17: sparse:     expected unsigned int [usertype] val
-   drivers/isdn/hardware/mISDN/hfcmulti.c:472:17: sparse:     got restricted __le32 [usertype]
-   drivers/isdn/hardware/mISDN/hfcmulti.c:472:17: sparse: sparse: cast from restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:472:17: sparse: sparse: cast from restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:472:17: sparse: sparse: cast from restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:472:17: sparse: sparse: cast from restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:478:17: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] val @@     got restricted __le16 [usertype] @@
-   drivers/isdn/hardware/mISDN/hfcmulti.c:478:17: sparse:     expected unsigned short [usertype] val
-   drivers/isdn/hardware/mISDN/hfcmulti.c:478:17: sparse:     got restricted __le16 [usertype]
-   drivers/isdn/hardware/mISDN/hfcmulti.c:478:17: sparse: sparse: cast from restricted __le16
-   drivers/isdn/hardware/mISDN/hfcmulti.c:478:17: sparse: sparse: cast from restricted __le16
-   drivers/isdn/hardware/mISDN/hfcmulti.c:496:32: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:496:32: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:496:32: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:496:32: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:496:32: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:496:32: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:501:32: sparse: sparse: cast to restricted __le16
-   drivers/isdn/hardware/mISDN/hfcmulti.c:501:32: sparse: sparse: cast to restricted __le16
-   drivers/isdn/hardware/mISDN/hfcmulti.c:501:32: sparse: sparse: cast to restricted __le16
-   drivers/isdn/hardware/mISDN/hfcmulti.c:501:32: sparse: sparse: cast to restricted __le16
-   drivers/isdn/hardware/mISDN/hfcmulti.c:518:25: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:518:25: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:518:25: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:518:25: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:518:25: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:518:25: sparse: sparse: cast to restricted __le32
-   drivers/isdn/hardware/mISDN/hfcmulti.c:524:25: sparse: sparse: cast to restricted __le16
-   drivers/isdn/hardware/mISDN/hfcmulti.c:524:25: sparse: sparse: cast to restricted __le16
-   drivers/isdn/hardware/mISDN/hfcmulti.c:524:25: sparse: sparse: cast to restricted __le16
-   drivers/isdn/hardware/mISDN/hfcmulti.c:524:25: sparse: sparse: cast to restricted __le16
->> drivers/isdn/hardware/mISDN/hfcmulti.c:1092:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/isdn/hardware/mISDN/hfcmulti.c:1092:26: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/isdn/hardware/mISDN/hfcmulti.c:1092:26: sparse:     got void *
+Hi,
 
-vim +4470 drivers/scsi/megaraid.c
+On Wed, Mar 29, 2023 at 04:43:19PM +0200, Linus Walleij wrote:
+> On Wed, Mar 29, 2023 at 1:16=E2=80=AFPM Alistair <alistair@alistair23.me>=
+ wrote:
+>=20
+> > [    2.466136]  string from vsnprintf+0x158/0x424
+> > [    2.470603]  vsnprintf from vscnprintf+0x10/0x24
+> > [    2.475241]  vscnprintf from sysfs_emit+0x50/0xac
+> > [    2.479975]  sysfs_emit from power_supply_show_property+0x1d0/0x26c
+> > [    2.486269]  power_supply_show_property from add_prop_uevent+0x30/0x=
+8c
+> > [    2.492815]  add_prop_uevent from power_supply_uevent+0xb4/0xe4
+> > [    2.498753]  power_supply_uevent from dev_uevent+0xc4/0x21c
+> > [    2.504352]  dev_uevent from kobject_uevent_env+0x1cc/0x510
+> > [    2.509953]  kobject_uevent_env from power_supply_changed_work+0x7c/=
+0xb4
+> > [    2.516675]  power_supply_changed_work from process_one_work+0x1e8/0=
+x3e8
+> > [    2.523396]  process_one_work from worker_thread+0x2c/0x504
+> > [    2.528986]  worker_thread from kthread+0xcc/0xec
+> > [    2.533716]  kthread from ret_from_fork+0x14/0x24
+> > [    2.538443] Exception stack(0xf0dadfb0 to 0xf0dadff8)
+>=20
+> This looks like running a worker before something this worker is
+> accessing has been set up.
+>=20
+> > As it's on a consumer device I don't have a way to connect a debugger. =
+So I'm
+> > a little stuck on what the problem is. The only related change I see be=
+tween
+> > 6.2 and 6.3-rc4 is commit a441f3b90a340e5c94df36c33fb7000193ee0aa7
+> > "power: supply: use sysfs_emit() instead of sprintf() for sysfs show()"=
+, but
+> > that doesn't look like it would cause this oops.
+>=20
+> Did you try reverting it?
 
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4443  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4444  	pci_set_drvdata(pdev, host);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4445  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4446  	mega_create_proc_entry(hba_count, mega_proc_dir_entry);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4447  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4448  	error = scsi_add_host(host, &pdev->dev);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4449  	if (error)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4450  		goto out_free_mbox;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4451  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4452  	scsi_scan_host(host);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4453  	hba_count++;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4454  	return 0;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4455  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4456   out_free_mbox:
-ec090ef8cd1c23 Suraj Upadhyay 2020-07-29  4457  	dma_free_coherent(&adapter->dev->dev, sizeof(mbox64_t),
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4458  			  adapter->una_mbox64, adapter->una_mbox64_dma);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4459   out_free_irq:
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4460  	free_irq(adapter->host->irq, adapter);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4461   out_free_scb_list:
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4462  	kfree(adapter->scb_list);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4463   out_free_cmd_buffer:
-ec090ef8cd1c23 Suraj Upadhyay 2020-07-29  4464  	dma_free_coherent(&adapter->dev->dev, MEGA_BUFFER_SIZE,
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4465  			  adapter->mega_buffer, adapter->buf_dma_handle);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4466   out_host_put:
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4467  	scsi_host_put(host);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4468   out_iounmap:
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4469  	if (flag & BOARD_MEMMAP)
-^1da177e4c3f41 Linus Torvalds 2005-04-16 @4470  		iounmap((void *)mega_baseport);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4471   out_release_region:
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4472  	if (flag & BOARD_MEMMAP)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4473  		release_mem_region(tbase, 128);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4474  	else
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4475  		release_region(mega_baseport, 16);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4476   out_disable_device:
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4477  	pci_disable_device(pdev);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4478   out:
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4479  	return error;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4480  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4481  
+Does not look like a race condition with a worker to me. The patch
+adds a couple of properties to the power-supply in an incorrect way.
+I did not look deeply, but it's at least missing an update to
+power_supply_attrs. I guess you were 'lucky' that it did not crash
+with v6.2.
 
-:::::: The code at line 4470 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+None of the extra properties are acceptable upstream btw.:
 
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+POWER_SUPPLY_PROP_CURRENT_MAX2:
+    The driver seems to use CURRENT_MAX2 for input current;
+    POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT should be used for that
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+POWER_SUPPLY_PROP_CHARGER_MODE:
+    OTG should be handled via a regulator
+
+POWER_SUPPLY_PROP_STATUS_EX:
+    Use extcon for connectors
+
+Greetings,
+
+-- Sebastian
+
+--qzkccpmqhu6ctnn7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQkv/8ACgkQ2O7X88g7
++poDug//Y4VmYx0Yo+rmeruHUGilW77ymPfnckdCSKkZrxvwZj1w5zKbOpsg3Twv
+14lqZ1y18QfGyNsq77YKNjgllBAfiZ0buzzozWtvm7xYoFXU92IP6ruc4oBfRR+Q
+IJLzg9BAvxFfa8f201BdbPWBoyeuJc28j48eGPzGyA2LW/Sol5nSukFuZXD8T5eD
+uCdp/Hv2DDBo/jHL7Yj8c7jQWhWQasDAHZdqqDfUO4mRk2bNBODxBj5AkmnYWiOT
+Kd8TnOelr+t0SsfkN8Pwp5OcwVJ60FHRcXTpuS5+1Vjijn+MAFFXgNMvYSXAAve/
+QlfGJ48v163eHffjeMplwt5COKLyDFxJXskvCInS+nVsEjSneIkDf6GC640DT7qq
+fu6RBTXBYYsx2b4c7AG3VGHuHp5sswQ6CJY+ApeLkqkL6PSiJjjwzuRu6R6QYFyA
+qWDtua86lLYFFYk8sEaAGDwF7lVFE+1wbCtgMxso0jN1Ddfyz1tmQGCXNcFtnlTg
+0I4fzTUGZSIAv6eW3cGplTr4SV3pA5PzVMStU8PhTKHWaIlXHFJoSl6AfosMQPpR
+1S0ynp71ftwL2tfPswEjUCrwEBYfwiG1ByzfOF4fDhlRyz6i1mi1bLWZ+ASf6pgZ
+DqAsUIDTuY6vWhiYhnCWeFUYY4BwyU324cBq5w9VbDTemL7F0q0=
+=wWQb
+-----END PGP SIGNATURE-----
+
+--qzkccpmqhu6ctnn7--
