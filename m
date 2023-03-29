@@ -2,154 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4F96CD86B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5806CD86E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjC2L0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S229812AbjC2L1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjC2L0A (ORCPT
+        with ESMTP id S229804AbjC2L1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:26:00 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A972A211C;
-        Wed, 29 Mar 2023 04:25:58 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1phTwC-0005Ou-SA; Wed, 29 Mar 2023 13:25:56 +0200
-Message-ID: <dc8e5276-ef88-648f-9f0d-10151ea62c90@leemhuis.info>
-Date:   Wed, 29 Mar 2023 13:25:56 +0200
+        Wed, 29 Mar 2023 07:27:09 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0135F40C1;
+        Wed, 29 Mar 2023 04:27:07 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id o11so14605058ple.1;
+        Wed, 29 Mar 2023 04:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680089227;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+TJ7G4hDq7xlIKwrJ26zDgbgCqK0df5mOLaISK4RvPQ=;
+        b=E/GNLde/fMrKMo4evZ443LzqX0eL2H6xJ3nuu3lKPpNyJ1FN6hY7yVVgE8Ogd2DABU
+         8hZkvqBsBn7gNPUWe69BBhz3XPn24VxOdONNMYzhhEWCzAqEfXb3+KrMNhQY8hIrfF2p
+         USfJobgzAsQ9Ys+ao7JrDZQ/4QKZyrfEjdZrlWOAXALmVkcZrSUrPnKdzAxxM2IF62QX
+         Qni6MaPHGw2glKCDwg/8MBpfrpd/rgX9qptROvGiMkqSTo9adO0KEX+mkgf9isGKVW+n
+         Udf0h72r9m9/EGkqvT3d1OvYNhHL0aYIzP8T2A2OPT2F5gsetCKZ6It3rYKeltc9Hj8m
+         TWyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680089227;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+TJ7G4hDq7xlIKwrJ26zDgbgCqK0df5mOLaISK4RvPQ=;
+        b=PU7kitNw2X/9+FMHqTOH6O5foOjJahecqzCiN8tKpS4sWGIRkTo7Sif9ZiNKnpUI8Z
+         uOG9+VdzdITucBORaXfD+iHtqQYGi6y5CafcToM2m5ELpGSyUUlZv2ITxEoL7BagIkBq
+         p1HQEcEHUwKVlrdHYxpiAX70ehJwbVSpNmF1kLWGzY+kUCaYQ/eDQpujtGcQgm1tP4bl
+         1MqyZvUPsB1EO4Uy2iOLHlH51mn9h1BoSkZj4r4OJ4ZDXiO2Ip9WM+BHStwz66eTEBuo
+         M4gOqqAulHZ1JAS2D+HfI2iBEa5aaodhIUUJ+gg/cOaFNuRPU39MJrVD4aqCdPTx1qtP
+         hUaw==
+X-Gm-Message-State: AAQBX9e3zfbvQi5HeKdBWw8HbCL+JN9lGm5MhU48fcFn0XkP5IRxKZ06
+        /XPR3FSz1q3aRtfPcwOdcLg=
+X-Google-Smtp-Source: AKy350ZhS4ZCfAYnVovoXsl7zcwpyMZ+lKrgxSrjdByHbi+fNZT4F8FLvooQN9mN9oefzIHGOAXAwA==
+X-Received: by 2002:a17:90a:18e:b0:23b:2c51:6e7 with SMTP id 14-20020a17090a018e00b0023b2c5106e7mr20068281pjc.21.1680089227092;
+        Wed, 29 Mar 2023 04:27:07 -0700 (PDT)
+Received: from CloudiRingWorld ([60.186.165.89])
+        by smtp.gmail.com with ESMTPSA id pj7-20020a17090b4f4700b00231227781d5sm1240666pjb.2.2023.03.29.04.27.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 04:27:06 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 19:27:04 +0800
+From:   Kloudifold <cloudifold.3125@gmail.com>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fbdev@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev,
+        linux-staging@lists.linux.dev, alison.schofield@intel.com
+Subject: [PATCH v6] staging: sm750: Rename sm750_hw_cursor_* functions to
+ snake_case
+Message-ID: <ZCQeyWW3+d7+qT+b@CloudiRingWorld>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217252 - warning: v4l_enum_fmt+0x125a/0x1c20 -
- Unknown pixelformat 0x00000000
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680089158;40ffb739;
-X-HE-SMSGID: 1phTwC-0005Ou-SA
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=4.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
+sm750 driver has sm750_hw_cursor_* functions, which are named in
+camelcase. Rename them to snake case to follow the function naming
+convention.
 
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developers don't keep an eye on it, I decided to forward it by mail.
+- sm750_hw_cursor_setSize  => sm750_hw_cursor_set_size
+- sm750_hw_cursor_setPos   => sm750_hw_cursor_set_pos
+- sm750_hw_cursor_setColor => sm750_hw_cursor_set_color
+- sm750_hw_cursor_setData  => sm750_hw_cursor_set_data
+- sm750_hw_cursor_setData2 => sm750_hw_cursor_set_data2
 
-Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
-not CCed them to mails like this.
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
+Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
 
-Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217252 :
+---
+Changes in v6:
+- Include missed recipients in v5, no functional change to the code
 
->  sander44 2023-03-27 12:50:47 UTC
-> 
-> Hi Kernel Team,
-> 
-> I try today to rebuild kernel 6.1.21, but i notice error with: v4l2-core.
-> 
-> [    3.722510] loop17: detected capacity change from 0 to 8
-> [    3.920014] ------------[ cut here ]------------
-> [    3.920016] Unknown pixelformat 0x00000000
-> [    3.920024] WARNING: CPU: 2 PID: 1558 at drivers/media/v4l2-core/v4l2-ioctl.c:1503 v4l_enum_fmt+0x125a/0x1c20
-> [    3.920030] Modules linked in: [...]
-> [    3.920097] CPU: 2 PID: 1558 Comm: pipewire Tainted: G     U             6.1.21-1-lowlatency #2
-> [    3.920099] Hardware name: Intel(R) Client Systems NUC12WSKi7/NUC12WSBi7, BIOS WSADL357.0073.2022.0302.1157 03/02/2022
-> [    3.920100] RIP: 0010:v4l_enum_fmt+0x125a/0x1c20
-> [    3.920102] Code: 48 c7 c3 53 29 ca 83 81 fe 64 76 73 64 0f 84 d7 ef ff ff 41 80 7d 0c 00 0f 85 9e ee ff ff 48 c7 c7 5a 37 ca 83 e8 36 9c 48 ff <0f> 0b 48 c7 c2 76 37 ca 83 49 8d 4d 2c 49 8d 7d 0c be 20 00 00 00
-> [    3.920103] RSP: 0018:ffffa60086907bd8 EFLAGS: 00010246
-> [    3.920104] RAX: 0000000000000000 RBX: ffffffff83ca33fb RCX: 0000000000000000
-> [    3.920105] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-> [    3.920106] RBP: ffffa60086907c08 R08: 0000000000000000 R09: 0000000000000000
-> [    3.920106] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> [    3.920107] R13: ffffa60086907d00 R14: 0000000000000000 R15: ffff98efc87d0018
-> [    3.920107] FS:  00007f7f99022740(0000) GS:ffff98f347680000(0000) knlGS:0000000000000000
-> [    3.920108] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    3.920109] CR2: 00007ffc3f1c3ff8 CR3: 0000000121ab8006 CR4: 0000000000770ee0
-> [    3.920110] PKRU: 55555554
-> [    3.920110] Call Trace:
-> [    3.920111]  <TASK>
-> [    3.920114]  __video_do_ioctl+0x1e7/0x590
-> [    3.920116]  ? __video_do_ioctl+0x1e7/0x590
-> [    3.920118]  video_usercopy+0x25d/0x820
-> [    3.920119]  ? v4l_print_control+0x30/0x30
-> [    3.920121]  video_ioctl2+0x15/0x30
-> [    3.920122]  v4l2_ioctl+0x69/0xb0
-> [    3.920124]  __x64_sys_ioctl+0x9f/0xe0
-> [    3.920126]  do_syscall_64+0x58/0x90
-> [    3.920128]  ? video_ioctl2+0x15/0x30
-> [    3.920129]  ? v4l2_ioctl+0x69/0xb0
-> [    3.920131]  ? exit_to_user_mode_prepare+0x39/0x190
-> [    3.920133]  ? syscall_exit_to_user_mode+0x29/0x50
-> [    3.920135]  ? do_syscall_64+0x67/0x90
-> [    3.920136]  ? syscall_exit_to_user_mode+0x29/0x50
-> [    3.920137]  ? do_syscall_64+0x67/0x90
-> [    3.920138]  ? do_syscall_64+0x67/0x90
-> [    3.920139]  ? do_syscall_64+0x67/0x90
-> [    3.920140]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> [    3.920142] RIP: 0033:0x7f7f98d1aaff
-> [    3.920143] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <41> 89 c0 3d 00 f0 ff ff 77 1f 48 8b 44 24 18 64 48 2b 04 25 28 00
-> [    3.920144] RSP: 002b:00007ffe6fcb2810 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> [    3.920145] RAX: ffffffffffffffda RBX: 0000000000000023 RCX: 00007f7f98d1aaff
-> [    3.920146] RDX: 000055f9945f309c RSI: ffffffffc0405602 RDI: 0000000000000023
-> [    3.920147] RBP: 000055f9945f309c R08: 0000000000000000 R09: 0000000000000001
-> [    3.920147] R10: 0000000000000002 R11: 0000000000000246 R12: 00000000ffffffff
-> [    3.920148] R13: 0000000000000000 R14: 000000004000015c R15: 000055f9945f2ec8
-> [    3.920149]  </TASK>
-> [    3.920150] ---[ end trace 0000000000000000 ]---
->
-> [...]
+Changes in v5:
+- Include missed recipients in v4, no functional change to the code
 
-See the ticket for more details.
+Changes in v4:
+- Update the commit msg (Deepak)
+- Use tabs replace 8 spaces
 
-Note, to my untrained eyes this looked like something that is caused by
-the driver, which afaics is uvcvideo. Hope that wasn't a mistake.
+This v4 patch was prompted by 2 errors, 2 warnings and 1 checks reported
+by the scripts/checkpatch.pl, which detected the style problem.
 
+Changes in v3:
+- Add this changelog (Philipp)
+- Move lkp tags and link to the correct location in commit log (Alison)
+- Update the commit msg (Philip)
+- Update the commit log (Bagas, Julia)
 
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
+Changes in v2:
+- Use new function names in call sites (LKP)
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
+ drivers/staging/sm750fb/sm750.c        | 22 +++++++++++-----------
+ drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
+ drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
+ 3 files changed, 24 insertions(+), 24 deletions(-)
 
-#regzbot introduced: v5.15..v6.1.21
-https://bugzilla.kernel.org/show_bug.cgi?id=217252
-#regzbot title: media: Unknown pixelformat 0x00000000
-#regzbot ignore-activity
+diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
+index effc7fcc3..5d7249e82 100644
+--- a/drivers/staging/sm750fb/sm750.c
++++ b/drivers/staging/sm750fb/sm750.c
+@@ -121,14 +121,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
+ 
+ 	sm750_hw_cursor_disable(cursor);
+ 	if (fbcursor->set & FB_CUR_SETSIZE)
+-		sm750_hw_cursor_setSize(cursor,
+-					fbcursor->image.width,
+-					fbcursor->image.height);
++		sm750_hw_cursor_set_size(cursor,
++					 fbcursor->image.width,
++					 fbcursor->image.height);
+ 
+ 	if (fbcursor->set & FB_CUR_SETPOS)
+-		sm750_hw_cursor_setPos(cursor,
+-				       fbcursor->image.dx - info->var.xoffset,
+-				       fbcursor->image.dy - info->var.yoffset);
++		sm750_hw_cursor_set_pos(cursor,
++					fbcursor->image.dx - info->var.xoffset,
++					fbcursor->image.dy - info->var.yoffset);
+ 
+ 	if (fbcursor->set & FB_CUR_SETCMAP) {
+ 		/* get the 16bit color of kernel means */
+@@ -142,14 +142,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
+ 		     ((info->cmap.green[fbcursor->image.bg_color] & 0xfc00) >> 5) |
+ 		     ((info->cmap.blue[fbcursor->image.bg_color] & 0xf800) >> 11);
+ 
+-		sm750_hw_cursor_setColor(cursor, fg, bg);
++		sm750_hw_cursor_set_color(cursor, fg, bg);
+ 	}
+ 
+ 	if (fbcursor->set & (FB_CUR_SETSHAPE | FB_CUR_SETIMAGE)) {
+-		sm750_hw_cursor_setData(cursor,
+-					fbcursor->rop,
+-					fbcursor->image.data,
+-					fbcursor->mask);
++		sm750_hw_cursor_set_data(cursor,
++					 fbcursor->rop,
++					 fbcursor->image.data,
++					 fbcursor->mask);
+ 	}
+ 
+ 	if (fbcursor->enable)
+diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
+index 43e6f52c2..ff643e33f 100644
+--- a/drivers/staging/sm750fb/sm750_cursor.c
++++ b/drivers/staging/sm750fb/sm750_cursor.c
+@@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
+ 	poke32(HWC_ADDRESS, 0);
+ }
+ 
+-void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
++void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
+ {
+ 	cursor->w = w;
+ 	cursor->h = h;
+ }
+ 
+-void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
++void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
+ {
+ 	u32 reg;
+ 
+@@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
+ 	poke32(HWC_LOCATION, reg);
+ }
+ 
+-void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
++void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
+ {
+ 	u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
+ 		HWC_COLOR_12_2_RGB565_MASK;
+@@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
+ 	poke32(HWC_COLOR_3, 0xffe0);
+ }
+ 
+-void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+-			     const u8 *pcol, const u8 *pmsk)
++void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
++			      const u8 *pcol, const u8 *pmsk)
+ {
+ 	int i, j, count, pitch, offset;
+ 	u8 color, mask, opr;
+@@ -132,8 +132,8 @@ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+ 	}
+ }
+ 
+-void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
+-			      const u8 *pcol, const u8 *pmsk)
++void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
++			       const u8 *pcol, const u8 *pmsk)
+ {
+ 	int i, j, count, pitch, offset;
+ 	u8 color, mask;
+diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
+index b59643dd6..88fa02f63 100644
+--- a/drivers/staging/sm750fb/sm750_cursor.h
++++ b/drivers/staging/sm750fb/sm750_cursor.h
+@@ -5,11 +5,11 @@
+ /* hw_cursor_xxx works for voyager,718 and 750 */
+ void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
+ void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
+-void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
+-void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
+-void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
+-void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+-			     const u8 *data, const u8 *mask);
+-void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
++void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
++void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y);
++void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg);
++void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
+ 			      const u8 *data, const u8 *mask);
++void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
++			       const u8 *data, const u8 *mask);
+ #endif
+-- 
+2.40.0
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-[1] because bugzilla.kernel.org tells users upon registration their
-"email address will never be displayed to logged out users"
