@@ -2,156 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDB26CD964
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 038016CD966
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjC2Mek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S229700AbjC2MfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjC2Meh (ORCPT
+        with ESMTP id S229486AbjC2MfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:34:37 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747349C9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:34:36 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id q7-20020a05600c46c700b003ef6e809574so6219682wmo.4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680093275;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7k3Pknpt+FEvPFnkTWZnOtAOiCcWdoby7FCUyoCPirk=;
-        b=eSTGarnH/zmuvSNqMiK+j3gUub4rdGlUmgMXGMZSB22aaAjp3aVRN/rirW64CE1pw7
-         LmSkOZTkhgJ8KuBU4Q55udhOd6+/1Ifum5Z8t+uFsbHueg5TsR9ggN30Bl4DdelXSpZA
-         LfKP/JNmNGkLwOokH+4tvwlvCXd6kVjDaVTBfJ+8FA2FjVZrclXbUVSFxmvkui2fZ5lT
-         EI2iefa6zWJbr3TgvdTOT5U/bVnmAnNFE4VvD7YOPsiAMnjvN2tGweJnxGVPD2XJ5qxj
-         rVonai3gldWgqeFtq3fbqj8AYIg8uiMtokiW7E/Y4QR6hmS9yaZTkGlZu1ZT6TkhGbcX
-         Fo+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680093275;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7k3Pknpt+FEvPFnkTWZnOtAOiCcWdoby7FCUyoCPirk=;
-        b=JaAdqZ3UMeKS4SwW2R9WhrjdTlZOM/fLaza+o49dVzmkz87VwRI40v3/4Zd/6mIVzG
-         tIdvYd+qWEoShw/0J2SKhTl6OxJ/WP9+6znoDgQjV4UpBk7GHjYP4bXL0e42QRmgFD3F
-         LRXOJ9x1NNQZa3psfwXdpAQi+v/ztKC10e1u4zOOziDzYwSXxnb8JJC3C4xoM3yakOf/
-         lDkUDOENbFdmJiB/UqzDbpRBR2gsYkb2OTRl4u2kbMfKYMkg6DqoE8xb0Epc9iOwzh5Q
-         dEiNpQWghiDfHrnv18ki3D8VNKBxdnoxeen5XQCnjo7FkMvT+Y5JVIiaxKORCGVnSXQ5
-         LbZg==
-X-Gm-Message-State: AO0yUKX8JbrKs/TrdmFl13p3vXbn3vhSaZxFmIt5KxH8g/xir3PPdETj
-        viRF92OEWMH5BvUqyNllFkA=
-X-Google-Smtp-Source: AK7set9CwcmF1pMBPEcBJD7EKQVp+E6VRC0xGZObxJ2FH27ScUsoi1HLiTGPjJXd0Fet7MkW06Qd1Q==
-X-Received: by 2002:a05:600c:21d8:b0:3ed:2b49:eefc with SMTP id x24-20020a05600c21d800b003ed2b49eefcmr15666798wmj.3.1680093274790;
-        Wed, 29 Mar 2023 05:34:34 -0700 (PDT)
-Received: from dev-dsk-krckatom-1b-7b393aa4.eu-west-1.amazon.com (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id b39-20020a05600c4aa700b003ed29189777sm2167726wmp.47.2023.03.29.05.34.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 Mar 2023 05:34:34 -0700 (PDT)
-From:   tomas.krcka@gmail.com
-To:     will@kernel.org
-Cc:     Tomas Krcka <krckatom@amazon.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iommu/arm-smmu-v3: Acknowledge pri/event queue overflow if any
-Date:   Wed, 29 Mar 2023 12:34:19 +0000
-Message-Id: <20230329123420.34641-1-tomas.krcka@gmail.com>
+        Wed, 29 Mar 2023 08:35:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A414201;
+        Wed, 29 Mar 2023 05:35:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680093305; x=1711629305;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2l2hmoiUE09lV8CvoAEQLjTkPM9/Sd/B1b4VpgazUKw=;
+  b=FFMHuGILZ9hfaqhmy1i3kJBj52qLKCp3hOxV2SJ/o07krVXEL8nGZpx0
+   pu8sFLQljqo2/PzN38xhwgpI6GEbn4se4AU9snyAfUMm1lh2B6TFF75zB
+   ZV6IJcEhnBXE/XFWCouYJ2BQgx/lagVQc2i4iLtIu4vXhkDq3Q6+YIktA
+   v9wdfGpRW41z8hrqX6Vb4VT7LDWEhNTKslzXVJzib2byVyKlWVFL8hId7
+   TZYTtNBUj2g+Gn7rC7RHHTvRrVRzJCQp8HW1z4ey2q3QyJp92+SWKt9Vd
+   3MtJCX4y1TtNc+qHEl3nj2xV9aX5TyXoX59vBikvRArfiDnVixKP2bRDA
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,300,1673938800"; 
+   d="scan'208";a="207245760"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2023 05:35:04 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 29 Mar 2023 05:35:03 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Wed, 29 Mar 2023 05:35:01 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <corbet@lwn.net>
+CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] docs: driver-api: firmware_loader: fix missing argument in usage example
+Date:   Wed, 29 Mar 2023 13:34:26 +0100
+Message-ID: <20230329123425.4177084-1-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1832; i=conor.dooley@microchip.com; h=from:subject; bh=2l2hmoiUE09lV8CvoAEQLjTkPM9/Sd/B1b4VpgazUKw=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCkqBgHV8VeF9GISglz9q7cxRUhbTowSeSSvJOMefmpLysrd lnc6SlkYxDgYZMUUWRJv97VIrf/jssO55y3MHFYmkCEMXJwCMJHuFkaGDWKBWVX+B8ITZFsOnbAI1v +480H9+yks/kXVrLk6n/adZ2SY49edx3p9U7eB7e4io12LRZQT4zWXyRhImjUtY1BIvcUNAA==
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tomas Krcka <krckatom@amazon.de>
+By the time firmware-upload support landed in commit 97730bbb242c
+("firmware_loader: Add firmware-upload support"), the arguments for
+firmware_upload_register() had changed, and while this is automagically
+represented in the kernel doc bits, the usage example was not kept in
+sync.
+Add the missing argument as per the driver.
 
-When an overflow occurs in the PRI queue, the SMMU toggles the overflow
-flag in the PROD register. To exit the overflow condition, the PRI thread
-is supposed to acknowledge it by toggling this flag in the CONS register.
-Unacknowledged overflow causes the queue to stop adding anything new.
-
-Currently, the priq thread always writes the CONS register back to the
-SMMU after clearing the queue.
-
-The writeback is not necessary if the OVFLG in the PROD register has not
-been changed, no overflow has occured.
-
-This commit checks the difference of the overflow flag between CONS and
-PROD register. If it's different, toggles the OVACKFLG flag in the CONS
-register and write it to the SMMU.
-
-The situation is similar for the event queue.
-The acknowledge register is also toggled after clearing the event
-queue but never propagated to the hardware. This would only be done the
-next time when executing evtq thread.
-
-Unacknowledged event queue overflow doesn't affect the event
-queue, because the SMMU still adds elements to that queue when the
-overflow condition is active.
-But it feel nicer to keep SMMU in sync when possible, so use the same
-way here as well.
-
-Signed-off-by: Tomas Krcka <krckatom@amazon.de>
+Fixes: 97730bbb242c ("firmware_loader: Add firmware-upload support")
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+From skimming the threads adding this stuff, looks like THIS_MODULE was
+always needed, so either I'm missing something or the doc stuff wasn't
+matching in any of the submitted versions.
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index f2425b0f0cd6..7614739ea2c1 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -152,6 +152,18 @@ static void queue_inc_cons(struct arm_smmu_ll_queue *q)
- 	q->cons = Q_OVF(q->cons) | Q_WRP(q, cons) | Q_IDX(q, cons);
- }
+CC: Jonathan Corbet <corbet@lwn.net>
+CC: Russ Weight <russell.h.weight@intel.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Tianfei zhang <tianfei.zhang@intel.com>
+CC: Luis Chamberlain <mcgrof@kernel.org>
+CC: linux-doc@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+---
+ Documentation/driver-api/firmware/fw_upload.rst | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/driver-api/firmware/fw_upload.rst b/Documentation/driver-api/firmware/fw_upload.rst
+index 76922591e446..edf1d0c5e7c3 100644
+--- a/Documentation/driver-api/firmware/fw_upload.rst
++++ b/Documentation/driver-api/firmware/fw_upload.rst
+@@ -57,7 +57,8 @@ function calls firmware_upload_unregister() such as::
+ 		len = (truncate) ? truncate - fw_name : strlen(fw_name);
+ 		sec->fw_name = kmemdup_nul(fw_name, len, GFP_KERNEL);
  
-+static void queue_sync_cons_ovf(struct arm_smmu_queue *q)
-+{
-+	struct arm_smmu_ll_queue *llq = &q->llq;
-+
-+	if (likely(Q_OVF(llq->prod) == Q_OVF(llq->cons)))
-+		return;
-+
-+	llq->cons = Q_OVF(llq->prod) | Q_WRP(llq, llq->cons) |
-+		      Q_IDX(llq, llq->cons);
-+	queue_sync_cons_out(q);
-+}
-+
- static int queue_sync_prod_in(struct arm_smmu_queue *q)
- {
- 	u32 prod;
-@@ -1577,8 +1589,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, void *dev)
- 	} while (!queue_empty(llq));
- 
- 	/* Sync our overflow flag, as we believe we're up to speed */
--	llq->cons = Q_OVF(llq->prod) | Q_WRP(llq, llq->cons) |
--		    Q_IDX(llq, llq->cons);
-+	queue_sync_cons_ovf(q);
- 	return IRQ_HANDLED;
- }
- 
-@@ -1636,9 +1647,7 @@ static irqreturn_t arm_smmu_priq_thread(int irq, void *dev)
- 	} while (!queue_empty(llq));
- 
- 	/* Sync our overflow flag, as we believe we're up to speed */
--	llq->cons = Q_OVF(llq->prod) | Q_WRP(llq, llq->cons) |
--		      Q_IDX(llq, llq->cons);
--	queue_sync_cons_out(q);
-+	queue_sync_cons_ovf(q);
- 	return IRQ_HANDLED;
- }
- 
+-		fwl = firmware_upload_register(sec->dev, sec->fw_name, &m10bmc_ops, sec);
++		fwl = firmware_upload_register(THIS_MODULE, sec->dev, sec->fw_name,
++					       &m10bmc_ops, sec);
+ 		if (IS_ERR(fwl)) {
+ 			dev_err(sec->dev, "Firmware Upload driver failed to start\n");
+ 			kfree(sec->fw_name);
 -- 
 2.39.2
 
