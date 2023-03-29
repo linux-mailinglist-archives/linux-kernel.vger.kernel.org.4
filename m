@@ -2,193 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED10C6CD64F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54856CD652
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjC2JY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
+        id S230280AbjC2JZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjC2JYz (ORCPT
+        with ESMTP id S230161AbjC2JZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:24:55 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB70211D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:24:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2AFZRsvHurvK7J8T5nxjzsB48UuQApENM6LGQRgbzck=; b=UzZFYlk2Yz391/yrjHv+ArgARg
-        4FfDjCHx/oYovCA1kiC72ptnZpHBJlawn718aFvilwid8nK4sNXnVJxMw7stkPjp3skl85Hjhokta
-        WBwkptvbIMMccWpgLhfAJiWUJwm1lDiExyySU7qvJkeJsV2dTAzhRtRqiniT58pJ9oR44vGo2qf1D
-        Kg5ooaZbbFtLW+RLdUdB3Bgd51FK/YkHsb8dxZiWlsNX5NHB1RuMY4Uew3A7De1ugM75/njJHUA3S
-        YYZDMrpq7jSej4vvqsZYzT91FkHy0twWh549Nw2ijR4Vd4V1BRjkjbyol95F10HdusXx2XVadIm2s
-        AiLE68kQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1phS2l-006ob9-2n;
-        Wed, 29 Mar 2023 09:24:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B76E73000E6;
-        Wed, 29 Mar 2023 11:24:33 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8E57F201D9955; Wed, 29 Mar 2023 11:24:33 +0200 (CEST)
-Date:   Wed, 29 Mar 2023 11:24:33 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Pengfei Xu <pengfei.xu@intel.com>
-Cc:     tglx@linutronix.de, songliubraving@fb.com,
-        linux-kernel@vger.kernel.org, frederic@kernel.org,
-        heng.su@intel.com, lkp@intel.com,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [Syzkaller & bisect] There is "soft lockup in
- sys_perf_event_open" BUG in v6.3-rc4 kernel
-Message-ID: <20230329092433.GA83892@hirez.programming.kicks-ass.net>
-References: <ZCP8vkW6xeQJIMLs@xpf.sh.intel.com>
+        Wed, 29 Mar 2023 05:25:07 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBFF30D8;
+        Wed, 29 Mar 2023 02:25:05 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32T9IH3g023884;
+        Wed, 29 Mar 2023 09:24:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=FnliORwFo6RM4w2NuP/huI2taPY0SuqrkgBObjK8CWw=;
+ b=HowNSw1YjDkLIMi+qs5WO8p3X7h9orncq8r6Vcs8H9Q5O09yOmhi/yzPTdbJE4+Ur4kW
+ k52xk1BvYtoCxwaAxV7CKGvZrpw60QLDzoNJ30/rCG5e7ffMtI6mcyHNDsioGyu6icut
+ nRhflyT1MmfrpI5ZlF3Iz1bDzQNWiF1uhAqnFRx+XjIbAmoej1TRKGpEsYMVDjcxLMhy
+ gaHjOFpng5tyU7969DsR9NOFtQzKObqKmgBuh88fQs5/oSN2e8I3g2WBaBePY9xuWyt/
+ hLXx6dq5beUuuU4b2p7216vv08yu21XpkUN6/tIbaTpPLBLCeTsgFMv/k3waWlVaoqLb oA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pm5v1smhj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 09:24:52 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32T9OpHt011030
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 09:24:51 GMT
+Received: from [10.216.46.184] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 29 Mar
+ 2023 02:24:46 -0700
+Message-ID: <41d84c24-a363-7f73-1590-c23cc2ecbdc5@quicinc.com>
+Date:   Wed, 29 Mar 2023 14:54:43 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCP8vkW6xeQJIMLs@xpf.sh.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1 4/4] clk: qcom: lpasscc-sc7280: Remove qdsp6ss clock
+ registration
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <broonie@kernel.org>,
+        <konrad.dybcio@somainline.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mturquette@baylibre.com>,
+        <quic_plai@quicinc.com>, <quic_rohkumar@quicinc.com>,
+        <quic_visr@quicinc.com>, <robh+dt@kernel.org>,
+        <swboyd@chromium.org>
+References: <20230327163249.1081824-1-quic_mohs@quicinc.com>
+ <20230327163249.1081824-5-quic_mohs@quicinc.com>
+ <f2fa0b0813b26c0eb1893ef4c4c4c672.sboyd@kernel.org>
+From:   Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+In-Reply-To: <f2fa0b0813b26c0eb1893ef4c4c4c672.sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jC5ZuTD7YUZz5u_kg7swU-UawilAtR4t
+X-Proofpoint-ORIG-GUID: jC5ZuTD7YUZz5u_kg7swU-UawilAtR4t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-29_03,2023-03-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ bulkscore=0 mlxscore=0 impostorscore=0 spamscore=0 adultscore=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303290077
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 04:54:22PM +0800, Pengfei Xu wrote:
 
-> "
-> 79df45731da68772d2285265864a52c900b8c65f
-> perf/core: Allow ftrace for functions in kernel/event/core.c
-> "
-> After reverted above commit on top of tip tag perf-core-2021-10-31, this issue
-> was gone.
+On 3/29/2023 8:41 AM, Stephen Boyd wrote:
+> Quoting Mohammad Rafi Shaik (2023-03-27 09:32:49)
+>> diff --git a/drivers/clk/qcom/lpasscc-sc7280.c b/drivers/clk/qcom/lpasscc-sc7280.c
+>> index 48432010ce24..4719e3fa8b05 100644
+>> --- a/drivers/clk/qcom/lpasscc-sc7280.c
+>> +++ b/drivers/clk/qcom/lpasscc-sc7280.c
+>> @@ -121,17 +67,10 @@ static int lpass_cc_sc7280_probe(struct platform_device *pdev)
+>>                  goto destroy_pm_clk;
+>>          }
+>>   
+>> -       lpass_regmap_config.name = "qdsp6ss";
+>> -       desc = &lpass_qdsp6ss_sc7280_desc;
+>> -
+>> -       ret = qcom_cc_probe_by_index(pdev, 0, desc);
+>> -       if (ret)
+>> -               goto destroy_pm_clk;
+>> -
+>>          lpass_regmap_config.name = "top_cc";
+>>          desc = &lpass_cc_top_sc7280_desc;
+>>   
+>> -       ret = qcom_cc_probe_by_index(pdev, 1, desc);
+>> +       ret = qcom_cc_probe_by_index(pdev, 0, desc);
+> Instead of changing the binding, it may be better to leave it as is and
+> ignore the first reg property in the driver. Then you don't need any DTS
+> patch or binding patch. You can just have this one patch. After that you
+> can introduce a new compatible string for the proper design and make it
+> have only a single reg property and deprecate the old binding. The
+> driver can then pick index 0 if the new compatible is present.
 
-Glorious recursion... Song, I'm tempted to indeed revert that patch
-again.
+Thanks for comment,
 
-> [   24.618533] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=330 'systemd'
-> [   56.504281] watchdog: BUG: soft lockup - CPU#0 stuck for 26s! [repro:516]
-> [   56.507013] Modules linked in:
-> [   56.507699] irq event stamp: 684720
-> [   56.508318] hardirqs last  enabled at (684719): [<ffffffff8107247c>] __text_poke+0x2ec/0x4e0
-> [   56.509577] hardirqs last disabled at (684720): [<ffffffff82f937a3>] sysvec_apic_timer_interrupt+0x13/0xe0
-> [   56.510993] softirqs last  enabled at (472178): [<ffffffff82fb71a9>] __do_softirq+0x2d9/0x3c3
-> [   56.512283] softirqs last disabled at (472151): [<ffffffff811266f4>] irq_exit_rcu+0xc4/0x100
-> [   56.513543] CPU: 0 PID: 516 Comm: repro Not tainted 6.3.0-rc4-197b6b60ae7b+ #1
-> [   56.514647] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> [   56.516213] RIP: 0010:debug_lockdep_rcu_enabled+0x0/0x40
-> [   56.517098] Code: c7 c7 a3 d6 96 83 e8 4f 0e 00 00 65 c7 05 e4 c3 08 7d 00 00 00 00 eb ba 66 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 <f3> 0f 1e fa 8b 05 be 65 0d 01 85 c0 74 2b 8b 05 4c cd 0d 01 85 c0
-> [   56.519522] RSP: 0018:ffffc90000fbb260 EFLAGS: 00000246
-> [   56.520439] RAX: 0000000000000000 RBX: ffff888014599aa8 RCX: ffffffff81353c4d
-> [   56.521513] RDX: 0000000000000000 RSI: ffff888013bc4680 RDI: 0000000000000002
-> [   56.522585] RBP: ffffc90000fbb2a8 R08: ffffc90000fbb820 R09: ffffc90000fbb818
-> [   56.523683] R10: ffffc90000fbb7f0 R11: 0000000000000000 R12: ffffc90000fbb2b8
-> [   56.524766] R13: fffffffffffffdff R14: 0000000000000000 R15: ffffffff81353960
-> [   56.525841] FS:  00007fe17f501740(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-> [   56.527044] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   56.527977] CR2: 00007ffd57376000 CR3: 000000000af0a003 CR4: 0000000000770ef0
-> [   56.529038] PKRU: 55555554
-> [   56.529543] Call Trace:
-> [   56.530040]  <TASK>
-> [   56.530496]  ? arch_ftrace_ops_list_func+0x1b6/0x360
-> [   56.531339]  ? perf_trace_buf_alloc+0x41/0x110
-> [   56.532148]  ? perf_swevent_get_recursion_context+0x4/0xe0
-> [   56.533132]  ? perf_tp_event+0x164/0x880
-> [   56.533853]  ftrace_call+0x5/0x44
-> [   56.534612]  ? write_comp_data+0x2f/0x90
-> [   56.535444]  ? perf_trace_buf_alloc+0x2a/0x110
-> [   56.536301]  ? perf_swevent_get_recursion_context+0x9/0xe0
-> [   56.537201]  ? write_comp_data+0x2f/0x90
-> [   56.537958]  perf_swevent_get_recursion_context+0x9/0xe0
-> [   56.538848]  perf_trace_buf_alloc+0x41/0x110
-> [   56.539644]  ? perf_swevent_get_recursion_context+0x9/0xe0
-> [   56.540564]  ? perf_trace_buf_alloc+0x41/0x110
-> [   56.541415]  ? __pfx_perf_swevent_event+0x10/0x10
-> [   56.542233]  perf_ftrace_function_call+0x28f/0x340
-> [   56.543070]  ? __sanitizer_cov_trace_pc+0x25/0x60
-> [   56.544273]  ? arch_ftrace_ops_list_func+0x2c6/0x360
-> [   56.545328]  ? __pfx_perf_ftrace_function_call+0x10/0x10
-> [   56.546221]  arch_ftrace_ops_list_func+0x2c6/0x360
-> [   56.547029]  ? perf_tp_event+0x164/0x880
-> [   56.547774]  ? __pfx_perf_swevent_event+0x10/0x10
-> [   56.548730]  ftrace_call+0x5/0x44
-> [   56.549407]  ? __sanitizer_cov_trace_pc+0x25/0x60
-> [   56.550239]  ? write_comp_data+0x2f/0x90
-> [   56.551228]  ? perf_swevent_event+0x5/0x170
-> [   56.552001]  ? write_comp_data+0x2f/0x90
-> [   56.552767]  perf_swevent_event+0x5/0x170
-> [   56.553500]  perf_tp_event+0x164/0x880
-> [   56.554219]  ? perf_swevent_event+0x5/0x170
-> [   56.554959]  ? perf_tp_event+0x164/0x880
-> [   56.555959]  ? arch_ftrace_ops_list_func+0x2c6/0x360
-> [   56.556843]  ? write_comp_data+0x2f/0x90
-> [   56.557646]  ? __sanitizer_cov_trace_pc+0x25/0x60
-> [   56.558541]  ? arch_ftrace_ops_list_func+0x207/0x360
-> [   56.559393]  ? perf_ftrace_function_call+0x2d2/0x340
-> [   56.560256]  ? perf_tp_event+0x4/0x880
-> [   56.561026]  ? _raw_spin_lock+0x4/0x50
-> [   56.561723]  ? __get_locked_pte+0x96/0xe0
-> [   56.562493]  ? ftrace_call+0x5/0x44
-> [   56.563335]  ? write_comp_data+0x2f/0x90
-> [   56.564308]  ? _raw_spin_lock+0x4/0x50
-> [   56.564988]  ? __get_locked_pte+0x96/0xe0
-> [   56.565708]  perf_ftrace_function_call+0x2d2/0x340
-> [   56.566516]  ? perf_tp_event+0x9/0x880
-> [   56.567223]  ? perf_ftrace_function_call+0x2d2/0x340
-> [   56.568079]  ? perf_tp_event+0x9/0x880
-> [   56.568741]  ? perf_ftrace_function_call+0x2d2/0x340
-> [   56.570049]  ? 0xffffffffa02010b1
-> [   56.570919]  0xffffffffa02010b1
-> [   56.571678]  ? ftrace_call+0x5/0x44
-> [   56.572420]  ? pmd_page_vaddr+0x2b/0x80
-> [   56.573193]  ? _raw_spin_lock+0x9/0x50
-> [   56.573987]  _raw_spin_lock+0x9/0x50
-> [   56.574672]  __get_locked_pte+0x96/0xe0
-> [   56.575411]  ? _raw_spin_lock+0x9/0x50
-> [   56.576100]  ? __get_locked_pte+0x96/0xe0
-> [   56.576924]  ? __pfx__regmap_raw_write_impl+0x10/0x10
-> [   56.577816]  __text_poke+0xf4/0x4e0
-> [   56.578489]  ? __pfx__regmap_raw_write_impl+0x10/0x10
-> [   56.579399]  ? __pfx_text_poke_memcpy+0x10/0x10
-> [   56.580134]  ? lock_is_held_type+0xe6/0x140
-> [   56.580902]  ? __pfx__regmap_raw_write_impl+0x10/0x10
-> [   56.581822]  text_poke+0x3a/0x60
-> [   56.582538]  text_poke_bp_batch+0x94/0x310
-> [   56.583263]  ? text_poke_bp_batch+0x5/0x310
-> [   56.584081]  ? __pfx_virtblk_update_cache_mode+0x10/0x10
-> [   56.585069]  text_poke_queue+0x93/0xb0
-> [   56.585874]  ftrace_replace_code+0x12a/0x1b0
-> [   56.586789]  ftrace_modify_all_code+0x1b9/0x2a0
-> [   56.587701]  arch_ftrace_update_code+0xd/0x20
-> [   56.588468]  ftrace_startup_enable+0x67/0xa0
-> [   56.589291]  ftrace_startup+0x124/0x200
-> [   56.590082]  register_ftrace_function_nolock+0x43/0x90
-> [   56.590991]  register_ftrace_function+0x1eb/0x280
-> [   56.591873]  ? __sanitizer_cov_trace_switch+0x57/0xa0
-> [   56.592835]  perf_ftrace_event_register+0xcd/0xf0
-> [   56.593735]  perf_trace_event_init+0x98/0x4b0
-> [   56.594639]  perf_trace_init+0xde/0x170
-> [   56.595449]  perf_tp_event_init+0x60/0xa0
-> [   56.596216]  perf_try_init_event+0x88/0x280
-> [   56.597094]  perf_event_alloc+0xe25/0x1c00
-> [   56.597900]  ? perf_event_alloc+0x5/0x1c00
-> [   56.598846]  __do_sys_perf_event_open+0x3b6/0x1910
-> [   56.600490]  __x64_sys_perf_event_open+0x2f/0x40
-> [   56.601330]  do_syscall_64+0x3b/0x90
-> [   56.602067]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> [   56.602902] RIP: 0033:0x7fe17f62659d
-> [   56.603610] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d d3 08 0d 00 f7 d8 64 89 01 48
-> [   56.606099] RSP: 002b:00007ffd572b7f58 EFLAGS: 00000206 ORIG_RAX: 000000000000012a
-> [   56.607348] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe17f62659d
-> [   56.608429] RDX: 0000000000000000 RSI: 00000000ffffffff RDI: 0000000020000100
-> [   56.609512] RBP: 00007ffd572b7f70 R08: 0000000000000000 R09: 00007ffd572b7f70
-> [   56.610604] R10: 00000000ffffffff R11: 0000000000000206 R12: 0000000000401180
-> [   56.611719] R13: 00007ffd572b8090 R14: 0000000000000000 R15: 0000000000000000
-> [   56.613326]  </TASK>
+The main issue with sc7280.dtsi file.
+
+Required to upstream remoteproc_adsp node for audioreach adsp based 
+solution.
+The base address for remoteproc_adsp dts node is 0x3000000.
+
+Please refer below link audioreach dts patch:
+https://patchwork.kernel.org/project/linux-arm-msm/patch/1675700201-12890-4-git-send-email-quic_srivasam@quicinc.com/
+
+remoteproc_adsp: remoteproc@3000000 {
+             compatible = "qcom,sc7280-adsp-pil";
+             reg = <0 0x03000000 0 0x5000>, <0 0x0355b000 0 0x10>;
+             reg-names = "qdsp6ss_base", "lpass_efuse";
+
+and in sc7280.dtsi lpasscc node base address also same.
+
+lpasscc: lpasscc@3000000 {
+             compatible = "qcom,sc7280-lpasscc";
+             reg = <0 0x03000000 0 0x40>,
+                       <0 0x03c04000 0 0x4>,
+
+In single dtsi file should not have same physical address node.
+Required to sort the nodes based on physical address.
+
+As the qdsp6ss clocks are being enabled in remoteproc driver,
+removing the qdsp6ss reg region from lpasscc in sc7280.dtsi.
