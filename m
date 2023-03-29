@@ -2,109 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B256CD539
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2196CD53D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjC2Iv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S231310AbjC2Ivk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbjC2IvJ (ORCPT
+        with ESMTP id S231273AbjC2IvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:51:09 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80852685
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:50:46 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-53d277c1834so280548557b3.10
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:50:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680079845;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B/cLIW46SmIRvY4RiouMRQ/RQJOiGzxyqmPyutTg+zA=;
-        b=QhOBzkThcCEEP2ZCg5zliykwCig0tej4mEtO5cAaTlCJE7r/I4bMQ4iBSSpjrhnae0
-         L2LF5rs7cU1RatgupQufqFqIBeFvIlZv+NuT+sHNQjGGOFQ+1hgE49sNPzLCJxCdOSUP
-         3GiHOBNJ4kNxbuv07uuvTShV166HoyO9x4tjK8dsgQhMHDuFGpYKNYzU6v85fOH0nA8N
-         BTRDzTAcMumMh174PCFF3cgm5M/IFBYKvPVZzaqtHkv13p8pYzObR23/QK9kSAbFoS1V
-         agkIoyxZgi5fPU94wcu6PdvvGt682AWB+XwG0s6houGBOcUHyk/TLJjCvaFXua8JDf+Q
-         vvdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680079845;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B/cLIW46SmIRvY4RiouMRQ/RQJOiGzxyqmPyutTg+zA=;
-        b=09Q/r2NHn5xkS6AzvIeLbFqR/gPstUi7vE74B3fXeZOvMtH31Td0els2+ZOquRwhLe
-         zAPsGyl2zr1iEntS6f7EIJv/SJahGmilXYBkS8Ut4EsQig8xmk43L9pUxv5fBHnc9WxL
-         je1LaheKVpYDKQOz0BfXHuzAi4CyWvGE95BM384aANYjkA/jfYrxOq6hng3BaONmRcqf
-         HkIrmSYYQiyD1bXevGCtPAeC5L1r/8WPNL83MisT+fKIukKhiYJibx3QDes7jEj6dfQ7
-         UkY0pfCM06mkdcr2XJ8em16LQtVbIwWGHkKBZNqJCb+2v4/AsA2wfMaw8iSEYOAr/Cdg
-         TGjQ==
-X-Gm-Message-State: AAQBX9cGwDrINkW2c7pl6LfWopS1pxh6tBd4W9GV/8rQpV0e2eUaytLm
-        Wlmf8sMNkxoZK2DwEaEPYkuqThMkSwG8NsOQsTZhlw==
-X-Google-Smtp-Source: AKy350YTOjcMWaqS3odZ4BorOYs3mIxmhScLtgIMGEm9pyUKhYrReflkix3snorSrRrckz5gmqV7SwVJyJWO3XKBcJ8=
-X-Received: by 2002:a81:a709:0:b0:545:4133:fc40 with SMTP id
- e9-20020a81a709000000b005454133fc40mr8817132ywh.9.1680079845742; Wed, 29 Mar
- 2023 01:50:45 -0700 (PDT)
+        Wed, 29 Mar 2023 04:51:17 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9710540EE;
+        Wed, 29 Mar 2023 01:51:00 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PmgGd4tJvzrYYB;
+        Wed, 29 Mar 2023 16:49:45 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 29 Mar
+ 2023 16:50:53 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-ext4@vger.kernel.org>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yangerkun@huawei.com>,
+        <yukuai3@huawei.com>, <libaokun1@huawei.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v3] ext4: fix race between writepages and remount
+Date:   Wed, 29 Mar 2023 16:50:36 +0800
+Message-ID: <20230329085036.2755843-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20230323173019.3706069-1-dianders@chromium.org>
- <CACRpkdaGpaiOVjEN6Ftq5=-yuAyD0xb7OcvtEsoqbTzias-xxw@mail.gmail.com> <CAD=FV=W6QKfQxGcSrQdgp4VHYxfk7aYZOkYx4ve7QSpoZ-LM=A@mail.gmail.com>
-In-Reply-To: <CAD=FV=W6QKfQxGcSrQdgp4VHYxfk7aYZOkYx4ve7QSpoZ-LM=A@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 29 Mar 2023 10:50:34 +0200
-Message-ID: <CACRpkdaUZbyEfkcHsNuQ=KhyuiKpunZJgvrnq90kQK8Z2V4jtg@mail.gmail.com>
-Subject: Re: [PATCH 00/14] Control Quad SPI pinctrl better on Qualcomm Chromebooks
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-gpio@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Rajesh Patil <rajpat@codeaurora.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 11:51=E2=80=AFPM Doug Anderson <dianders@chromium.o=
-rg> wrote:
+We got a WARNING in ext4_add_complete_io:
+==================================================================
+ WARNING: at fs/ext4/page-io.c:231 ext4_put_io_end_defer+0x182/0x250
+ CPU: 10 PID: 77 Comm: ksoftirqd/10 Tainted: 6.3.0-rc2 #85
+ RIP: 0010:ext4_put_io_end_defer+0x182/0x250 [ext4]
+ [...]
+ Call Trace:
+  <TASK>
+  ext4_end_bio+0xa8/0x240 [ext4]
+  bio_endio+0x195/0x310
+  blk_update_request+0x184/0x770
+  scsi_end_request+0x2f/0x240
+  scsi_io_completion+0x75/0x450
+  scsi_finish_command+0xef/0x160
+  scsi_complete+0xa3/0x180
+  blk_complete_reqs+0x60/0x80
+  blk_done_softirq+0x25/0x40
+  __do_softirq+0x119/0x4c8
+  run_ksoftirqd+0x42/0x70
+  smpboot_thread_fn+0x136/0x3c0
+  kthread+0x140/0x1a0
+  ret_from_fork+0x2c/0x50
+==================================================================
 
-> 1. Mark could land the SPI patch at any time, assuming he's OK with
-> it. It can land totally independently.
+Above issue may happen as follows:
 
-OK this happened.
+            cpu1                        cpu2
+----------------------------|----------------------------
+mount -o dioread_lock
+ext4_writepages
+ ext4_do_writepages
+  *if (ext4_should_dioread_nolock(inode))*
+    // rsv_blocks is not assigned here
+                                 mount -o remount,dioread_nolock
+  ext4_journal_start_with_reserve
+   __ext4_journal_start
+    __ext4_journal_start_sb
+     jbd2__journal_start
+      *if (rsv_blocks)*
+        // h_rsv_handle is not initialized here
+  mpage_map_and_submit_extent
+    mpage_map_one_extent
+      dioread_nolock = ext4_should_dioread_nolock(inode)
+      if (dioread_nolock && (map->m_flags & EXT4_MAP_UNWRITTEN))
+        mpd->io_submit.io_end->handle = handle->h_rsv_handle
+        ext4_set_io_unwritten_flag
+          io_end->flag |= EXT4_IO_END_UNWRITTEN
+      // now io_end->handle is NULL but has EXT4_IO_END_UNWRITTEN flag
 
-> Option A:
->
-> 3. You land the pinctrl and binding patches in an immutable branch and
-> merge into pinctrl.
->
-> 4. Bjorn merges the immutable branch into the Qulacomm tree and places
-> the last 3 dts patches atop.
+scsi_finish_command
+ scsi_io_completion
+  scsi_io_completion_action
+   scsi_end_request
+    blk_update_request
+     req_bio_endio
+      bio_endio
+       bio->bi_end_io  > ext4_end_bio
+        ext4_put_io_end_defer
+	 ext4_add_complete_io
+	  // trigger WARN_ON(!io_end->handle && sbi->s_journal);
 
-Looks most appetizing.
+The immediate cause of this problem is that ext4_should_dioread_nolock()
+function returns inconsistent values in the ext4_do_writepages() and
+mpage_map_one_extent(). There are four conditions in this function that
+can be changed at mount time to cause this problem. These four conditions
+can be divided into two categories:
 
-I have applied patches 6,7,8 to this immutable branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/lo=
-g/?h=3Dib-qcom-quad-spi
+    (1) journal_data and EXT4_EXTENTS_FL, which can be changed by ioctl
+    (2) DELALLOC and DIOREAD_NOLOCK, which can be changed by remount
 
-and I merged that into my "devel" branch for v6.4.
+The two in the first category have been fixed by commit c8585c6fcaf2
+("ext4: fix races between changing inode journal mode and ext4_writepages")
+and commit cb85f4d23f79 ("ext4: fix race between writepages and enabling
+EXT4_EXTENTS_FL") respectively.
 
-Bjorn can grab the branch if he wants it.
+Two cases in the other category have not yet been fixed, and the above
+issue is caused by this situation. We refer to the fix for the first
+category, when applying options during remount, we grab s_writepages_rwsem
+to avoid racing with writepages ops to trigger this problem.
 
-Yours,
-Linus Walleij
+Fixes: 6b523df4fb5a ("ext4: use transaction reservation for extent conversion in ext4_end_io")
+Cc: stable@vger.kernel.org
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+V1->V2:
+	Grab s_writepages_rwsem unconditionally during remount.
+	Remove patches 1,2 that are no longer needed.
+V2->V3:
+	Also grab s_writepages_rwsem when restoring options.
+
+ fs/ext4/ext4.h  |  3 ++-
+ fs/ext4/super.c | 12 ++++++++++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+index 9b2cfc32cf78..5f5ee0c20673 100644
+--- a/fs/ext4/ext4.h
++++ b/fs/ext4/ext4.h
+@@ -1703,7 +1703,8 @@ struct ext4_sb_info {
+ 
+ 	/*
+ 	 * Barrier between writepages ops and changing any inode's JOURNAL_DATA
+-	 * or EXTENTS flag.
++	 * or EXTENTS flag or between writepages ops and changing DELALLOC or
++	 * DIOREAD_NOLOCK mount options on remount.
+ 	 */
+ 	struct percpu_rw_semaphore s_writepages_rwsem;
+ 	struct dax_device *s_daxdev;
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index e6d84c1e34a4..8396da483c17 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -6403,7 +6403,16 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+ 
+ 	}
+ 
++	/*
++	 * Changing the DIOREAD_NOLOCK or DELALLOC mount options may cause
++	 * two calls to ext4_should_dioread_nolock() to return inconsistent
++	 * values, triggering WARN_ON in ext4_add_complete_io(). we grab
++	 * here s_writepages_rwsem to avoid race between writepages ops and
++	 * remount.
++	 */
++	percpu_down_write(&sbi->s_writepages_rwsem);
+ 	ext4_apply_options(fc, sb);
++	percpu_up_write(&sbi->s_writepages_rwsem);
+ 
+ 	if ((old_opts.s_mount_opt & EXT4_MOUNT_JOURNAL_CHECKSUM) ^
+ 	    test_opt(sb, JOURNAL_CHECKSUM)) {
+@@ -6614,6 +6623,7 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+ 	return 0;
+ 
+ restore_opts:
++	percpu_down_write(&sbi->s_writepages_rwsem);
+ 	sb->s_flags = old_sb_flags;
+ 	sbi->s_mount_opt = old_opts.s_mount_opt;
+ 	sbi->s_mount_opt2 = old_opts.s_mount_opt2;
+@@ -6622,6 +6632,8 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+ 	sbi->s_commit_interval = old_opts.s_commit_interval;
+ 	sbi->s_min_batch_time = old_opts.s_min_batch_time;
+ 	sbi->s_max_batch_time = old_opts.s_max_batch_time;
++	percpu_up_write(&sbi->s_writepages_rwsem);
++
+ 	if (!test_opt(sb, BLOCK_VALIDITY) && sbi->s_system_blks)
+ 		ext4_release_system_zone(sb);
+ #ifdef CONFIG_QUOTA
+-- 
+2.31.1
+
