@@ -2,123 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435C56CCF4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 03:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5896CCF4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 03:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjC2BOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 21:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
+        id S229479AbjC2BOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 21:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjC2BOd (ORCPT
+        with ESMTP id S229456AbjC2BOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Mar 2023 21:14:33 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FEDE1;
-        Tue, 28 Mar 2023 18:14:20 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PmT934wYpz4f43Nx;
-        Wed, 29 Mar 2023 09:14:15 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgC3YiDnkCNkRbL8Fg--.2035S3;
-        Wed, 29 Mar 2023 09:14:17 +0800 (CST)
-Subject: Re: [PATCH v2 0/5] md: fix uaf for sync_thread
-To:     Song Liu <song@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, agk@redhat.com,
-        snitzer@kernel.org, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230315061810.653263-1-yukuai1@huaweicloud.com>
- <e1a5fe1c-ea3d-adef-62ec-3b30bedbe4f8@molgen.mpg.de>
- <606b1388-10e7-a0ae-f314-52274b0942dd@deltatee.com>
- <d0dfd5ad-12d4-c6d1-68b2-a112d3f3c163@huaweicloud.com>
- <CAPhsuW6iuoAu=QBrvz8QvEZ3PtEjj=MKdVAbihZ88Dkj3_h-nw@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <2de7665b-b6a9-fe23-6a36-0d8ff2626b15@huaweicloud.com>
-Date:   Wed, 29 Mar 2023 09:14:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A126CCE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 18:14:20 -0700 (PDT)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PmT5L4xL9zgZQS;
+        Wed, 29 Mar 2023 09:11:02 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 29 Mar 2023 09:14:17 +0800
+Subject: Re: [PATCH v2] mtd: ubi: eba.c: fix return value overwrite issue in
+ try_write_vid_and_data()
+To:     Wang YanQing <udknight@gmail.com>, <richard@nod.at>,
+        <miquel.raynal@bootlin.com>, <bbrezillon@kernel.org>,
+        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230328153534.GA12409@udknight>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <8f312163-f809-9271-3f1d-792d23d1bdfa@huawei.com>
+Date:   Wed, 29 Mar 2023 09:14:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <CAPhsuW6iuoAu=QBrvz8QvEZ3PtEjj=MKdVAbihZ88Dkj3_h-nw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgC3YiDnkCNkRbL8Fg--.2035S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww48XF1Dtw1xtF48ZF4xZwb_yoW8tr4Upa
-        y3KaySyw4kJw1Iyr18tr1I9w1IkryrXrWDJrWrG34rA3s8Xw1ftF47trWDCFyv9F4xWw4a
-        va1Yq3yq9a90v3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+In-Reply-To: <20230328153534.GA12409@udknight>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Song!
+> The commit 2d78aee426d8 ("UBI: simplify LEB write and atomic LEB change code")
+> adds helper function, try_write_vid_and_data(), to simplify the code, but this
+> helper function has bug, it will return 0 (success) when ubi_io_write_vid_hdr()
+> or the ubi_io_write_data() return error number (-EIO, etc), because the return
+> value of ubi_wl_put_peb() will overwrite the original return value.
+> 
+> This issue will cause unexpected data loss issue, because the caller of this
+> function and UBIFS willn't know the data is lost.
+> 
+> Fixes: 2d78aee426d8 ("UBI: simplify LEB write and atomic LEB change code")
+> 
+> Signed-off-by: Wang YanQing <udknight@gmail.com>
+> ---
+>   Changes v1-v2:
+>   1: add error code in warning message, suggested by Zhihao Cheng
+>   
+>   drivers/mtd/ubi/eba.c | 19 ++++++++++++++-----
+>   1 file changed, 14 insertions(+), 5 deletions(-)
+> 
 
-在 2023/03/29 7:31, Song Liu 写道:
-> On Wed, Mar 15, 2023 at 6:26 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> Hi,
->>
->> 在 2023/03/16 6:55, Logan Gunthorpe 写道:
-> [...]
->>> I was going to try and confirm that no new regressions were introduced
->>> by Yu's patches, but seems the tests are getting worse. I tried running
->>> the tests on the current md-next branch and found that one of the early
->>> tests, 00raid5-zero, hangs indefinitely. I quickly ran the same test on
-> 
-> I am not able to repro the issue with 00raid5-zero. (I did a rebase before
-> running the test, so that might be the reason).
-> 
->>> v6.3-rc2 and found that it runs just fine there. So it looks like
->>> there's already a regression in md-next that is not part of this series
->>> and I don't have the time to dig into the root cause right now.
->>>
->>> Yu's patches don't apply cleanly to v6.3-rc2 and I can't run the tests
->>> against md-next; so I didn't bother running them, but I did do a quick
->>> review. The locking changes make sense to me so it might be worth
->>> merging for correctness. However, I'm not entirely sure it's the best
->>> solution -- the md thread stuff seems like a bit of a mess and passing
->>> an mddev to thread functions that were not related to the mddev to get a
->>> lock seems to just make the mess a bit worse.
->>>
->>> For example, it seems a bit ugly to me for the lock mddev->thread_lock
->>> to protect the access of a pointer in struct r5l_log. Just spit-balling,
->>> but perhaps RCU would be more appropriate here. Then md_wakeup_thread()
->>> would just need to hold the RCU read lock when dereferencing, and
->>> md_unregister_thread() would just need to synchronize_rcu() before
->>> stopping and freeing the thread. This has the benefit of not requiring
->>> the mddev object for every md_thread and would probably require a lot
->>> less churn than the current patches.
->>
->> Thanks for your suggestion, this make sense to me. I'll try to use rcu.
-> 
-> Yu Kuai, do you plan to resend the set with Logan suggestions?
+Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
 
-Yes, of course, it's just some other problems is triggered while I'm
-testing the patchset, I'll resend the set once all tests is passed.
-
-Thanks,
-Kuai
-> 
-> Thanks,
-> Song
-> .
+> diff --git a/drivers/mtd/ubi/eba.c b/drivers/mtd/ubi/eba.c
+> index 09c408c..4e1d807 100644
+> --- a/drivers/mtd/ubi/eba.c
+> +++ b/drivers/mtd/ubi/eba.c
+> @@ -946,7 +946,7 @@ static int try_write_vid_and_data(struct ubi_volume *vol, int lnum,
+>   				  int offset, int len)
+>   {
+>   	struct ubi_device *ubi = vol->ubi;
+> -	int pnum, opnum, err, vol_id = vol->vol_id;
+> +	int pnum, opnum, err, err2, vol_id = vol->vol_id;
+>   
+>   	pnum = ubi_wl_get_peb(ubi);
+>   	if (pnum < 0) {
+> @@ -981,10 +981,19 @@ static int try_write_vid_and_data(struct ubi_volume *vol, int lnum,
+>   out_put:
+>   	up_read(&ubi->fm_eba_sem);
+>   
+> -	if (err && pnum >= 0)
+> -		err = ubi_wl_put_peb(ubi, vol_id, lnum, pnum, 1);
+> -	else if (!err && opnum >= 0)
+> -		err = ubi_wl_put_peb(ubi, vol_id, lnum, opnum, 0);
+> +	if (err && pnum >= 0) {
+> +		err2 = ubi_wl_put_peb(ubi, vol_id, lnum, pnum, 1);
+> +		if (err2) {
+> +			ubi_warn(ubi, "failed to return physical eraseblock %d, error %d",
+> +				 pnum, err2);
+> +		}
+> +	} else if (!err && opnum >= 0) {
+> +		err2 = ubi_wl_put_peb(ubi, vol_id, lnum, opnum, 0);
+> +		if (err2) {
+> +			ubi_warn(ubi, "failed to return physical eraseblock %d, error %d",
+> +				 opnum, err2);
+> +		}
+> +	}
+>   
+>   	return err;
+>   }
 > 
 
