@@ -2,118 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAEC6CD3D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD5D6CD3D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjC2H4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 03:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S229916AbjC2H7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 03:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjC2H4m (ORCPT
+        with ESMTP id S229654AbjC2H7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 03:56:42 -0400
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789BC2127
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:56:37 -0700 (PDT)
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 304CA10064D8C
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:56:37 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id hQfdpb8YOuioshQfdpodg7; Wed, 29 Mar 2023 07:56:37 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=b4l3XvKx c=1 sm=1 tr=0 ts=6423ef35
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=k__wU0fu6RkA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=d+eF+E8ANnCURjnXP9gSySb7ilKifBaKExn2Bht4pd8=; b=jePc/srXmC13ZHfYuXwqfejDDS
-        npwz9U9tgf3tzbv9BKuEFYLwgZsPq7I+GvDOkH3hqy6Ihq1YVsDFTVKCUYsM8TVsnDydXelU6vet9
-        kX+7SM/supZZVKwwrygoIsBrrp8pb18qqngHNrFzvDWYcOBF87vIcitbp0slB+IBknLI2xiKaH6W0
-        Tdk0MWkEO0qRHq4YicYrxGllZyfA1JZslog4IdOf7S0F1XmVUBNERliFUDF9DaoDcX8+t88TGzMBS
-        IDQZMUHmaL1icSoImho+3Bmv0JkoFH8vJsJXz3npIiTPrKmM5rWhDMLCkQKWdRKwo82U42SNB5umx
-        ytibA0rQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33594 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1phQfb-0006TM-Lo;
-        Wed, 29 Mar 2023 01:56:35 -0600
-Subject: Re: [PATCH 6.2 000/240] 6.2.9-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230328142619.643313678@linuxfoundation.org>
-In-Reply-To: <20230328142619.643313678@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <4e0400e1-08cc-ef8e-5386-6ce5900945f4@w6rz.net>
-Date:   Wed, 29 Mar 2023 00:56:32 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 29 Mar 2023 03:59:01 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD9F210D
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:59:00 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id bi9so19008065lfb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680076739;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JhUeJU6e4h9PitXkQe9MfipgTdaNoe9G7C662XIORfM=;
+        b=NlS/k/gyKOpyGz4+n2dMHIv5Jyl5X0BUWman6JDHpG5pL/V9m3XN7KqKkZcQiYffYF
+         pYZwXz//KXBnXxhR+VP2YV4/VGQNt8AoW/Ar+WrbuzXfCS4cx9REG/xdtmcxDtFqpvtI
+         UPcxSLbU/vsMu4bKc8gLObJSZbeA9I+siU4PlXG5JKdKbfwnTdy4k1tK8d5J+sjYH8l0
+         klNL9UxtSg5IQKr6I1C2wu3s+ik9ffYX8NBI/KD2nPyyLAB8Pwi5zqOxLQnpMI6CjuEK
+         VFfBufv+QdE1Ul/x+Qdw2CeP0Rm287S584hTA6bS6ft0+Un03enQEJu29BzO65tKlw8f
+         dwtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680076739;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JhUeJU6e4h9PitXkQe9MfipgTdaNoe9G7C662XIORfM=;
+        b=N6Io9Dg/MRMPhT5yM+M8qm69WfLrz4TMjkk05Ue81f1ZRhTDiWV4fRz5QmzoBx6Jws
+         SkSMw8/Glkd+qrqW6wM80muBwl/DdHhXX86Y2iNsKlQ2+qmDJRVZ1xBf3N8InaiaV+Am
+         sgKhnJvei4QC6V1ab/lXPvUg3PkC2CgfibAolq4f4DoLxlTST2v5Wf4xzh03WSNpi0ll
+         9I7Gsee3d+AjysvOtcD8GvAWc5ALLqj6Ms/N0Ak0S7YYTACImDxSGgZM1+Myd9OGRBq1
+         hkHPWvRoaqYngzJJn2k1AnCRHAjf7hr/LQclHYQyK5Nuk3UlHbsB3myQvm46jIA5Cf+s
+         ptQw==
+X-Gm-Message-State: AAQBX9djWzieShT3y2kY3tI1oSuLlK/F/9ctdifImrOPkah6AXSAwecj
+        rF3sUyPXDmYCEFdUdftsFFJNvQ==
+X-Google-Smtp-Source: AKy350b+22Kn5HHx0uKk+5FJ3GJSg9tKTqXFD4BKu62/Z2qhoT6gF4mFK69Es0wrx/7N5SnIZDK8DA==
+X-Received: by 2002:ac2:4859:0:b0:4e8:487a:7c34 with SMTP id 25-20020ac24859000000b004e8487a7c34mr5663278lfy.12.1680076738773;
+        Wed, 29 Mar 2023 00:58:58 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id m19-20020a195213000000b004eaf393dc46sm3194558lfb.249.2023.03.29.00.58.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 00:58:58 -0700 (PDT)
+Message-ID: <3fbb78e9-a450-3741-070b-2caedbaa47a5@linaro.org>
+Date:   Wed, 29 Mar 2023 09:58:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: mediatek: deprecate custom
+ drive strength property
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230327-cleanup-pinctrl-binding-v1-0-b695e32e4f2e@baylibre.com>
+ <20230327-cleanup-pinctrl-binding-v1-1-b695e32e4f2e@baylibre.com>
+ <334089fd-f0e8-bf63-5100-d8632c478ccc@collabora.com>
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1phQfb-0006TM-Lo
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:33594
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <334089fd-f0e8-bf63-5100-d8632c478ccc@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 7:39 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.9 release.
-> There are 240 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.9-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 28/03/2023 15:41, AngeloGioacchino Del Regno wrote:
+> Il 28/03/23 15:06, Alexandre Mergnat ha scritto:
+>> Deprecate mediatek,drive-strength-adv which shall not exist, that was an
+>> unnecessary property that leaked upstream from downstream kernels and
+>> there's no reason to use it.
+>>
+>> The generic property drive-strength-microamp should be used instead.
+>>
+>> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+>> ---
+>>   .../devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml      | 8 ++++++--
+>>   .../devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml      | 6 +++++-
+>>   2 files changed, 11 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
+>> index c30cd0d010dd..b82a066b91ec 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
+> 
+> Thanks for doing MT8183!!!
+> 
+>> @@ -110,8 +110,13 @@ patternProperties:
+>>             drive-strength:
+> 
+> ..snip..
+> 
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+>> index 4b96884a1afc..347f533776ba 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+>> @@ -91,8 +91,13 @@ patternProperties:
+>>   
+>>             input-schmitt-disable: true
+>>   
+>> +          drive-strength-microamp:
+>> +            enum: [125, 250, 500, 1000]
+>> +
+>>             mediatek,drive-strength-adv:
+>> +            deprecated: true
+> 
+> In the case of MT8365, since there's *no* devicetree using this property, *at all*,
+> I think you can even just entirely remove this block, as that should not be
+> considered an ABI breakage in that case.
+> 
+> Krzysztof, can you please confirm?
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+If it is defined as ABI in a released kernel, then should be rather
+deprecated.
 
-Tested-by: Ron Economos <re@w6rz.net>
+Best regards,
+Krzysztof
 
