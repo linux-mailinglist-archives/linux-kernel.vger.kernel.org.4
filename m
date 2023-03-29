@@ -2,197 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AC46CF318
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1AB6CF31E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjC2TYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
+        id S230307AbjC2TYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjC2TYJ (ORCPT
+        with ESMTP id S229817AbjC2TYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:24:09 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2047.outbound.protection.outlook.com [40.107.223.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE27F4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:24:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XVHjQjl4TA1SFj90mWAFw6xvDglAeGqFCj15AAwikjXZb7Fpu9IZbwxG1I8axEkYo/28ahl3qFUFXWCYEY/NaEBA/zBQtYxiRaxd0P35l0oFXL0V0e6V9Wg1p9xQKU3x8QGHVd1D8Nifhwq2eUZ4wtzW2oH638UGb2UaPY2yweeQni+7dSmlk2sQF7WdTFbIdmyBj/WrzptPRzYoUZHbyIP+4u2fCmZGhudD78T5T+ePGftcA1nJuaBE985lkI/kDXDVNqPaiyAuAPqOhvDfoAt1u1BmMHe7Jem+rBRXfCq1Tkkp23mqIXRWrG6Gcb9YD7LdOLSIx+MkikYIofXYEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T2Rf0SsrFXgeICi41HYk50gWJrRT6PX5k4NTo7AQwqg=;
- b=jGeZ9xqfGfD+6hEN4zXT8EkY26mHv5ZeFwV1X+7FZYp3Arun7Qy2Ai5gk8L41FWHcAX95TcWREpQJz2MpCT3d0TvduK+Y3ItnuU+OtpbIO3XCHAsLsmiHpLKZavBNQlyGj3yIeKhemr76oYVTTsjpcyIA61ra2Dy0ryNgW2+Dy7IAc4EKkCYPbD7J3DXV1FjSFGNaKq9MR+c7JdygYm8WNJEiR4OvexWTBTos5kyMAzJ33rsQz6Mwe65LCM+qCqip4XAUcDUMeaq4sswdJu2nsKejm/rAZbo0u2PNJm0HjLtcOcUhNOceHYfpykQrkKpmCbV8pA0NQES/cI1CoknFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T2Rf0SsrFXgeICi41HYk50gWJrRT6PX5k4NTo7AQwqg=;
- b=GiTfzAmDH+HizZ+rRlctcQjfcGQd+94kRTZsGHKWCO8pkJbaNvePWoVNg9cgXO5WqfJArYDNx/uN+tkhoJpEj5hG4hpJIZZif0yqh19/Mkx6Hmx0x2BjGCBQqbHQTbv/fv2ex57w10e6zmVK7Y8tBCKFgHzVyatSmCZojn3RZPk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DM4PR12MB5939.namprd12.prod.outlook.com (2603:10b6:8:6a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.32; Wed, 29 Mar
- 2023 19:24:05 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::f4d:82d0:c8c:bebe]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::f4d:82d0:c8c:bebe%2]) with mapi id 15.20.6222.028; Wed, 29 Mar 2023
- 19:24:05 +0000
-Message-ID: <70291f94-1fcf-175c-fc18-e9b656f55af3@amd.com>
-Date:   Wed, 29 Mar 2023 14:24:02 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: Panic starting 6.2.x and later 6.1.x kernels
-Content-Language: en-US
-To:     David R <david@unsolicited.net>, Borislav Petkov <bp@alien8.de>,
-        Gabriel David <ultracoolguy@disroot.org>,
-        eric.devolder@oracle.com
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kishon Vijay Abraham I <kvijayab@amd.com>
-References: <943d2445-84df-d939-f578-5d8240d342cc@unsolicited.net>
- <20230327074952.GAZCFKoDOiJUdtse2H@fat_crate.local>
- <e8d15248-e694-79d7-da9c-b4485b471e14@unsolicited.net>
- <4c660f0f-2845-0e02-ccf9-619958e24236@unsolicited.net>
- <20230328142014.GCZCL3nkW5Qx5jhfsB@fat_crate.local>
- <57385475-c289-356f-d696-fc6decce1390@unsolicited.net>
- <20230328171057.GDZCMfobguhGUFiUuh@fat_crate.local>
- <9ed16be4-051d-c20f-0410-b8a973c4c09e@disroot.org>
- <20230329103943.GAZCQVb1n3tKlGOAWI@fat_crate.local>
- <20230329161450.GDZCRj+rz9lTEZFNBz@fat_crate.local>
- <f033acad-593c-a741-8f4f-a9962eb8aab9@unsolicited.net>
- <e8fd7cdf-b6a5-1c7d-bd08-0d60a1c10495@amd.com>
- <eaa97a25-27b2-187c-1db2-9c56e35d3463@unsolicited.net>
- <b65c4f1f-4990-f7ce-e4c0-85912d187eaf@amd.com>
- <a0ca1e4e-891c-273d-e2d8-eeb9fc4d0c77@unsolicited.net>
- <e4a6e5bb-d014-aa55-5eee-65f1c5f59875@amd.com>
- <7218e006-9f4f-a9bc-cdd2-a595a8e64ede@unsolicited.net>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <7218e006-9f4f-a9bc-cdd2-a595a8e64ede@unsolicited.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH2PR20CA0013.namprd20.prod.outlook.com
- (2603:10b6:610:58::23) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Wed, 29 Mar 2023 15:24:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883D1183;
+        Wed, 29 Mar 2023 12:24:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 226C3B82421;
+        Wed, 29 Mar 2023 19:24:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F9BCC4339B;
+        Wed, 29 Mar 2023 19:24:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680117867;
+        bh=Yj5CWkJU2gvuxeAY0aIxYuYvi2UBA2ZtNvQ63ELK7qw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JgJ+TBEpSL+zxwfV51IJHTcGmsTT0MVxHdayLaAVhGt7xeP7HYGh4gE5TrOQpAKyd
+         TLeKnpfCleqLnMlNWGAR6v3qdvCZKss6XyD3+NARWrU7gIAy6CGOFau2PgE7DrneIf
+         5x80Sw/+FIsITc42deSJcR+MaaMyqq2VRQx5nQ6VMLYNKVdW+FiTMbWmj41ff+opg4
+         31wWY1dAI397Ss9epIjgnKaUzcfEFyRr6r8aauY6MO4P10WQGi9byLV9Sn+Qgq+Mht
+         k4HFmahLqXtmZQifwKyFAdCk1+8xYw25sTsG7FhTJ7CBXJ4Sb90LWamWfDrQRPpfCc
+         J5AZEzc3YQjXg==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH] fs: consolidate dt_type() helper definitions
+Date:   Wed, 29 Mar 2023 15:24:23 -0400
+Message-Id: <20230329192425.194793-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM4PR12MB5939:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f62822b-3c3c-46f0-7962-08db308b290b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pfe/rVakFFQPsXVYqSBPg3FKS1fU5J6D6UlIWW+a5jGwsEIiGnOyMx1ptx3zTuMW4bU3Y6z1Fdcz3Z4EStZDz0JYZBc9QEALelEHr95NWkiwmf85Gr2WrNgdYl9u7b3j6s7+CCCw8n0XejdPimOpxAcw1boXgDwNZ8u9ZFy35oJYgbAq9KW+zhfk6DPLgTffMqTqXmNkHHk2sGc04lO8wxLHR3CpFqIEJGBxCg5iYiAjT0JuScV5K+z0pzMDklQw8iazDWREhGiyujmoKm9WxvAb4xJxwVShGLwY/IS5CwUx4/ntfCoC23TDW2zPyRrxlR7u1PZ39hBCoNQhHZdlsphYdUCoVqe2sntLEZgBstDle4CHiiJY1LOfDCrL+FiaLi9fGRvxn8Gm5+x0gxzt8dQB2rAJ5tAJG7I4KGiHncrkbMCg1oY87LP9EuPQgX2qNv3jBLTiFroaWb3bsDOq1kiVwXwNg65OO+kl7twwQlZkljuqC7y9SRhz6/6sKLsnfOoYV0r2sK1rJEMlCTVNjd7FMyDtberJMuScNDncX0bvsVksYPS2+dSHYpVxTPrObmB+2p+GGbyJKTRiUFw14vf4ujKO1Gaika3OOFmrXBWv6pfh/Nx1/2Fk40U0mS6ZiPJlHvI3q0kL7taAi/BjxRUxxV9izX2GDKE1YFFBW5dgb/EkMB/wRXVlM7bzsoeu
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(376002)(396003)(346002)(39860400002)(451199021)(31696002)(36756003)(86362001)(2906002)(38100700002)(31686004)(53546011)(2616005)(6666004)(6486002)(966005)(6512007)(83380400001)(316002)(5660300002)(66556008)(478600001)(4326008)(66476007)(54906003)(66946007)(110136005)(8676002)(186003)(26005)(6506007)(41300700001)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUNkOWVoS1ZmTGxva1NURUgyTGwxYkJLYkNtdkpsdDdqVjAwY0hjM1hVTURZ?=
- =?utf-8?B?VE5BSzI5VFpXclZBRnlMa0VXbHZxazloOU9KTkVZNjdpQmJhdDI4VnFtQjd5?=
- =?utf-8?B?Y285ZW43eGM1ek8vejdINXQ1d1lRb3lsaDdIcXFjUFF3RnJsaEErdzNsRkEr?=
- =?utf-8?B?TWk3SEY5VmkwQk55NUxxWnk0RFczczMyQ1VEOGlkYWNabWZLSGtBbjlidm42?=
- =?utf-8?B?UENpdFZYRUhjbEhuSktrUFYveDdvUjlXSE1XUjdTV2FmaGF3dm5ycU1BamJO?=
- =?utf-8?B?SVczNlhaaTRsRmNoT0FWMjJXbEZFdjBtTkFBVHJNclQyTUlFQXdsOEZPcDBW?=
- =?utf-8?B?V0pFTlY1bndVRyt1dXNtVEtjZkVud2x4RkJvS0lqckZLbWNFZ2ZJazVHdG1Y?=
- =?utf-8?B?WTA2WHdCVUorSEYvSE9XeW9SZi9mOTdYZmYzTHB4ZXBkTXg3NkR4eEFFa2l1?=
- =?utf-8?B?ZERYTFVJbkZpZ2J1T055OXlxY0F2aXpNemZvRVZySVdpZkdhNGgrS0I2cEcx?=
- =?utf-8?B?RWo0czNHTVBKNXBmbGZpNCsweXJHMEhaaWY5NHZCVUh1Y2gyUWI1NHVUZy9L?=
- =?utf-8?B?L3NPa2xycytDZkJLbmJId2dRSEtRbWFMQkRJSUdmaVBQbHFJZmNlQTYzVk1q?=
- =?utf-8?B?Y2labUthcGVLdFltbDFvSnNXT3V0ZlU1UEp6ektiNDZ3UTd5c1BxY2JNWGZZ?=
- =?utf-8?B?THpjYVdYV05MOG05TUtxbTVQYWFYMHV4ZG1JY2VEK1FLWVRDa3Q2Q3NkWGVt?=
- =?utf-8?B?bnNwOEx6YytjUmZpczNRMzltYm1ieGxJRGRmTWFjSFJLTDZXNW5yaVEwUkhw?=
- =?utf-8?B?TVNYVHpFeDBhUEVJNXZuSCt6L0haMHljMitvVkNlSnNnL0pJMk5FeUM2cjE2?=
- =?utf-8?B?dENjS2tuK1UrTFpXL0FOVGJoWGNxdE9SUjdKV3ZNd2EzamU3eWxsQ1NCNzZB?=
- =?utf-8?B?R3dNN2pMS1JrQ3dkcHJLdlVJVnFsQ1hmWStaMi9hQVlMbG9UMGU2K0xzTklW?=
- =?utf-8?B?SzdEc01zcG1Qb2Y5cDFjalBUWEhvZnVlVFBOblB4SlcySUtZcXd0dUxjL2hF?=
- =?utf-8?B?TldvNXYvSk55WHdoeHhxV0FPY1lzWmxXRFNjRWdOWWNyaE95azVodlJiY2Js?=
- =?utf-8?B?dzdyWW5TT1RTU0hacTQ1ZVU1VktrTkt2emlFUHlEY21aYWZPZ3oxckUxUjM4?=
- =?utf-8?B?TDBHSmNXaG9HZVh5bk5MME4wMTBPc2k3N3VqSzlJT0tieVB5NTE1ZG5iUENT?=
- =?utf-8?B?bzl5cVRKQVozZ3Q3WFJLMmFHUExSaXIyc1Zmd2FnbnZYMDlib25ZVFZVeWpP?=
- =?utf-8?B?b3FnRDE3RnNMZk1OZDFtNWV0UE14OHNFU3IzNGVCUTZoK0dHTnh3eHJRc0RL?=
- =?utf-8?B?WllmOG02Z1oxcUplOGtSRGhDRzlDQjlNUTNSTm5jcWhINXdBMTBGMlpGbEJM?=
- =?utf-8?B?eXN0cEMwUUZzZFYyOXZEM1RzNjdFSS81K0NSb2hDZzFobXdlOWN6RitjNFJP?=
- =?utf-8?B?ZXBoYnlOVWovMm1pZzlKaDBPRFI0WGpzakpoWHRqaDNMSXdTYXZoRmg3b3Qv?=
- =?utf-8?B?ZTVaT1FiRGE5bTJWeitPWlkxTE55Y0NWTThMODY4UEh2eURoVGxlSnZLRENk?=
- =?utf-8?B?bGJINUNUVUxhNHc4cmpQOXZuWCt0WGJiL1J5cW1JUFIrbUpNZ3RMblJXblRB?=
- =?utf-8?B?RXp4c2ZVR0ZydWJEN3d2OTNKZGY1ajB4NmNhQUpEOWRCM1IyMFVSUUo2czhB?=
- =?utf-8?B?NUVEMU10bHFWRkt1T08vQ2RwdFhDL0YyazEwVW9MN0xtS1ZaWk5BK0JXUWVI?=
- =?utf-8?B?dlhERkxWUHEvYmd1eXZjdThuZlpjNmpIZFpTRjJBbE1ib3BkSmsvWExjdEda?=
- =?utf-8?B?UnlZVHk2eUFJNE9qQUJSOGNsQVNFeGVsS0l4c1BzZjFxcXlJb0FRSVNPYWdK?=
- =?utf-8?B?MXh4dGgyUjMwVjVpM1c4VFlJOG5nYlZmeUZDNG15dU5Za0l2M1ZPTFVjaitx?=
- =?utf-8?B?R2hxRmgrWGVYTWJNcmFRL1JkbVM5ci85VnFxQmM0MW1HeE1mYmwwL0lONVdn?=
- =?utf-8?B?UC80d1BkL25VZ2xTVGp5eGsrejZRNThhZThTYnFvWTlsbHRodDd4TFdvb0VL?=
- =?utf-8?Q?v/p7UIWQKZtemG8FnT/gF9tY5?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f62822b-3c3c-46f0-7962-08db308b290b
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 19:24:05.1853
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HPS0p0WZvxb8jSAfG6hxyN4FJSfdzAiuZCPvd+alvE8yaBbG0dfq2HSTksUe8XY63ZS7YE3lmJ96ymf0ZtHhZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5939
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/2023 14:20, David R wrote:
-> On 29/03/2023 20:17, Limonciello, Mario wrote:
->> On 3/29/2023 14:14, David R wrote:
->>> I note that 6.2.8 still has:
->>>
->>> static bool __init acpi_is_processor_usable(u32 lapic_flags)
->>> {
->>>          if (lapic_flags & ACPI_MADT_ENABLED)
->>>                  return true;
->>>
->>>          if (acpi_support_online_capable && (lapic_flags & 
->>> ACPI_MADT_ONLINE_CAPABLE))
->>>                  return true;
->>>
->>>          return false;
->>> }
->>>
->>> The flag getting set to false won't help unless the patch I tried 
->>> previously is applied ?
->>>
->>> diff 
->>> <https://lore.kernel.org/all/20230327191026.3454-2-eric.devolder@oracle.com/#iZ31arch:x86:kernel:acpi:boot.c> --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c index 1c38174b5f01..7b5b8ed018b0 100644 --- a/arch/x86/kernel/acpi/boot.c +++ b/arch/x86/kernel/acpi/boot.c @@ -193,7 +193,13 @@ static bool __init acpi_is_processor_usable(u32 lapic_flags)       if (lapic_flags & ACPI_MADT_ENABLED)
->>>           return true;
->>>   - if (acpi_support_online_capable && (lapic_flags & 
->>> ACPI_MADT_ONLINE_CAPABLE)) + /* + * Prior to MADT.revision 5, the 
->>> presence of the Local x2/APIC + * structure _implicitly_ noted a 
->>> possible hotpluggable cpu. + * Starting with MADT.revision 5, the 
->>> Online Capable bit + * _explicitly_ indicates a hotpluggable cpu. + 
->>> */ + if (!acpi_support_online_capable || (lapic_flags & 
->>> ACPI_MADT_ONLINE_CAPABLE))           return true;
->>>         return false;
->>> -- 
->>>
->>
->> You mean specifically this change:
->> https://lore.kernel.org/all/20230327191026.3454-2-eric.devolder@oracle.com/
->>
->> Yes; I suppose that still makes sense.
->>
-> Yes, that's the one.
-> 
-> But the fact that  that one worked own its own implies that my system 
-> never had the flag set in the first place?
-> 
-> David
+There are 4 functions named dt_type() in the kernel. Consolidate the 3
+that are basically identical into one helper function in fs.h that
+takes a umode_t argument. The v9fs helper is renamed to distinguish it
+from the others.
 
-Right - your BIOS doesn't support MADT revision 5 which was introduced 
-as part of ACPI 6.3.
+Cc: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+ fs/9p/vfs_dir.c    | 6 +++---
+ fs/configfs/dir.c  | 8 +-------
+ fs/kernfs/dir.c    | 8 +-------
+ fs/libfs.c         | 9 ++-------
+ include/linux/fs.h | 6 ++++++
+ 5 files changed, 13 insertions(+), 24 deletions(-)
 
-If you haven't already you should add a Tested-by tag for Eric's patch.
+diff --git a/fs/9p/vfs_dir.c b/fs/9p/vfs_dir.c
+index 3d74b04fe0de..80b331f7f446 100644
+--- a/fs/9p/vfs_dir.c
++++ b/fs/9p/vfs_dir.c
+@@ -41,12 +41,12 @@ struct p9_rdir {
+ };
+ 
+ /**
+- * dt_type - return file type
++ * v9fs_dt_type - return file type
+  * @mistat: mistat structure
+  *
+  */
+ 
+-static inline int dt_type(struct p9_wstat *mistat)
++static inline int v9fs_dt_type(struct p9_wstat *mistat)
+ {
+ 	unsigned long perm = mistat->mode;
+ 	int rettype = DT_REG;
+@@ -128,7 +128,7 @@ static int v9fs_dir_readdir(struct file *file, struct dir_context *ctx)
+ 			}
+ 
+ 			over = !dir_emit(ctx, st.name, strlen(st.name),
+-					 v9fs_qid2ino(&st.qid), dt_type(&st));
++					 v9fs_qid2ino(&st.qid), v9fs_dt_type(&st));
+ 			p9stat_free(&st);
+ 			if (over)
+ 				return 0;
+diff --git a/fs/configfs/dir.c b/fs/configfs/dir.c
+index 4afcbbe63e68..43863a1696eb 100644
+--- a/fs/configfs/dir.c
++++ b/fs/configfs/dir.c
+@@ -1599,12 +1599,6 @@ static int configfs_dir_close(struct inode *inode, struct file *file)
+ 	return 0;
+ }
+ 
+-/* Relationship between s_mode and the DT_xxx types */
+-static inline unsigned char dt_type(struct configfs_dirent *sd)
+-{
+-	return (sd->s_mode >> 12) & 15;
+-}
+-
+ static int configfs_readdir(struct file *file, struct dir_context *ctx)
+ {
+ 	struct dentry *dentry = file->f_path.dentry;
+@@ -1654,7 +1648,7 @@ static int configfs_readdir(struct file *file, struct dir_context *ctx)
+ 		name = configfs_get_name(next);
+ 		len = strlen(name);
+ 
+-		if (!dir_emit(ctx, name, len, ino, dt_type(next)))
++		if (!dir_emit(ctx, name, len, ino, dt_type(next->s_mode)))
+ 			return 0;
+ 
+ 		spin_lock(&configfs_dirent_lock);
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index ef00b5fe8cee..0b7e9b8ee93e 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -1748,12 +1748,6 @@ int kernfs_rename_ns(struct kernfs_node *kn, struct kernfs_node *new_parent,
+ 	return error;
+ }
+ 
+-/* Relationship between mode and the DT_xxx types */
+-static inline unsigned char dt_type(struct kernfs_node *kn)
+-{
+-	return (kn->mode >> 12) & 15;
+-}
+-
+ static int kernfs_dir_fop_release(struct inode *inode, struct file *filp)
+ {
+ 	kernfs_put(filp->private_data);
+@@ -1831,7 +1825,7 @@ static int kernfs_fop_readdir(struct file *file, struct dir_context *ctx)
+ 	     pos;
+ 	     pos = kernfs_dir_next_pos(ns, parent, ctx->pos, pos)) {
+ 		const char *name = pos->name;
+-		unsigned int type = dt_type(pos);
++		unsigned int type = dt_type(pos->mode);
+ 		int len = strlen(name);
+ 		ino_t ino = kernfs_ino(pos);
+ 
+diff --git a/fs/libfs.c b/fs/libfs.c
+index 4eda519c3002..d0f0cdae9ff7 100644
+--- a/fs/libfs.c
++++ b/fs/libfs.c
+@@ -174,12 +174,6 @@ loff_t dcache_dir_lseek(struct file *file, loff_t offset, int whence)
+ }
+ EXPORT_SYMBOL(dcache_dir_lseek);
+ 
+-/* Relationship between i_mode and the DT_xxx types */
+-static inline unsigned char dt_type(struct inode *inode)
+-{
+-	return (inode->i_mode >> 12) & 15;
+-}
+-
+ /*
+  * Directory is locked and all positive dentries in it are safe, since
+  * for ramfs-type trees they can't go away without unlink() or rmdir(),
+@@ -206,7 +200,8 @@ int dcache_readdir(struct file *file, struct dir_context *ctx)
+ 
+ 	while ((next = scan_positives(cursor, p, 1, next)) != NULL) {
+ 		if (!dir_emit(ctx, next->d_name.name, next->d_name.len,
+-			      d_inode(next)->i_ino, dt_type(d_inode(next))))
++			      d_inode(next)->i_ino,
++			      dt_type(d_inode(next)->i_mode)))
+ 			break;
+ 		ctx->pos++;
+ 		p = &next->d_child;
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index c85916e9f7db..777a3641fc5d 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2885,6 +2885,12 @@ extern void iterate_supers(void (*)(struct super_block *, void *), void *);
+ extern void iterate_supers_type(struct file_system_type *,
+ 			        void (*)(struct super_block *, void *), void *);
+ 
++/* Relationship between i_mode and the DT_xxx types */
++static inline unsigned char dt_type(umode_t mode)
++{
++	return (mode >> 12) & 15;
++}
++
+ extern int dcache_dir_open(struct inode *, struct file *);
+ extern int dcache_dir_close(struct inode *, struct file *);
+ extern loff_t dcache_dir_lseek(struct file *, loff_t, int);
+-- 
+2.39.2
 
-I think both mine and his coupled together should cover both of these 
-possible areas of breakage.
