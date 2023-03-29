@@ -2,55 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B0E6CEE5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844326CEE5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjC2QAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
+        id S230361AbjC2QAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjC2P72 (ORCPT
+        with ESMTP id S230001AbjC2P7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:59:28 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BF06A6F;
-        Wed, 29 Mar 2023 08:58:56 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1phYCM-0003O6-1l;
-        Wed, 29 Mar 2023 17:58:54 +0200
-Date:   Wed, 29 Mar 2023 16:58:50 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: [RFC PATCH net-next v3 07/15] net: dsa: mt7530: introduce
- mt7530_probe_common helper function
-Message-ID: <d5147ef8738c1425fdd4fb351c1f3d98786fc19f.1680105013.git.daniel@makrotopia.org>
-References: <cover.1680105013.git.daniel@makrotopia.org>
+        Wed, 29 Mar 2023 11:59:31 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D066585;
+        Wed, 29 Mar 2023 08:58:58 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2CBDA219FB;
+        Wed, 29 Mar 2023 15:58:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680105537; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=laCTMVv10tir+5LCK7bZIg6RxS0xYCgupvb50S/b4XY=;
+        b=Vl2TDvex2fX+V/qOfl0Xk9vDM3ikifOzUk6sEr0WIzpohvYYkvFLW+6qBu+RlI035Az2QO
+        Bg4vs8RqNGMdJ7g7ivHKAcgIhtsY1zKezQDQyUbKkOeL8fq/lKChGvk9VCPFR40TGr8YMU
+        k0NaJphuGjbyfnmWQTPsdyb4/FmBbbU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 00BBA138FF;
+        Wed, 29 Mar 2023 15:58:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qZMgAEFgJGQEaAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 29 Mar 2023 15:58:56 +0000
+Date:   Wed, 29 Mar 2023 17:58:56 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2 5/9] memcg: replace stats_flush_lock with an atomic
+Message-ID: <ZCRgQHtDuWN6xp7z@dhcp22.suse.cz>
+References: <20230328221644.803272-1-yosryahmed@google.com>
+ <20230328221644.803272-6-yosryahmed@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1680105013.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20230328221644.803272-6-yosryahmed@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,146 +72,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move commonly used parts from mt7530_probe into new mt7530_probe_common
-helper function which will be used by both, mt7530_probe and the
-to-be-introduced mt7988_probe.
+On Tue 28-03-23 22:16:40, Yosry Ahmed wrote:
+> As Johannes notes in [1], stats_flush_lock is currently used to:
+> (a) Protect updated to stats_flush_threshold.
+> (b) Protect updates to flush_next_time.
+> (c) Serializes calls to cgroup_rstat_flush() based on those ratelimits.
+> 
+> However:
+> 
+> 1. stats_flush_threshold is already an atomic
+> 
+> 2. flush_next_time is not atomic. The writer is locked, but the reader
+>    is lockless. If the reader races with a flush, you could see this:
+> 
+>                                         if (time_after(jiffies, flush_next_time))
+>         spin_trylock()
+>         flush_next_time = now + delay
+>         flush()
+>         spin_unlock()
+>                                         spin_trylock()
+>                                         flush_next_time = now + delay
+>                                         flush()
+>                                         spin_unlock()
+> 
+>    which means we already can get flushes at a higher frequency than
+>    FLUSH_TIME during races. But it isn't really a problem.
+> 
+>    The reader could also see garbled partial updates, so it needs at
+>    least READ_ONCE and WRITE_ONCE protection.
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/dsa/mt7530.c | 86 ++++++++++++++++++++++------------------
- 1 file changed, 47 insertions(+), 39 deletions(-)
+Just a nit. Sounds more serious than it is actually. This would only
+happen if compiler decides to split the write.
 
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index 221d56cf9e710..32875762b3d96 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -3145,44 +3145,47 @@ static const struct of_device_id mt7530_of_match[] = {
- MODULE_DEVICE_TABLE(of, mt7530_of_match);
- 
- static int
--mt7530_probe(struct mdio_device *mdiodev)
-+mt7530_probe_common(struct mt7530_priv *priv)
- {
--	static struct regmap_config *regmap_config;
--	struct mt7530_priv *priv;
--	struct device_node *dn;
--	int ret;
--
--	dn = mdiodev->dev.of_node;
--
--	priv = devm_kzalloc(&mdiodev->dev, sizeof(*priv), GFP_KERNEL);
--	if (!priv)
--		return -ENOMEM;
-+	struct device *dev = priv->dev;
-+	struct device_node *dn = dev->of_node;
- 
--	priv->ds = devm_kzalloc(&mdiodev->dev, sizeof(*priv->ds), GFP_KERNEL);
-+	priv->ds = devm_kzalloc(dev, sizeof(*priv->ds), GFP_KERNEL);
- 	if (!priv->ds)
- 		return -ENOMEM;
- 
--	priv->ds->dev = &mdiodev->dev;
-+	priv->ds->dev = dev;
- 	priv->ds->num_ports = MT7530_NUM_PORTS;
- 
- 	/* Use medatek,mcm property to distinguish hardware type that would
--	 * casues a little bit differences on power-on sequence.
-+	 * cause a little bit differences on power-on sequence.
-+	 * Note MCM that indicates switch works as the remote standalone
-+	 * integrated circuit so the GPIO pin would be used to complete
-+	 * the reset, otherwise memory-mapped register accessing used
-+	 * through syscon provides in the case of MCM.
- 	 */
- 	priv->mcm = of_property_read_bool(dn, "mediatek,mcm");
- 	if (priv->mcm) {
--		dev_info(&mdiodev->dev, "MT7530 adapts as multi-chip module\n");
-+		dev_dbg(dev, "MT7530 adapts as multi-chip module\n");
- 
--		priv->rstc = devm_reset_control_get(&mdiodev->dev, "mcm");
-+		priv->rstc = devm_reset_control_get(dev, "mcm");
- 		if (IS_ERR(priv->rstc)) {
--			dev_err(&mdiodev->dev, "Couldn't get our reset line\n");
-+			dev_err(dev, "Couldn't get our reset line\n");
- 			return PTR_ERR(priv->rstc);
- 		}
-+	} else {
-+		priv->reset = devm_gpiod_get_optional(dev, "reset",
-+						      GPIOD_OUT_LOW);
-+		if (IS_ERR(priv->reset)) {
-+			dev_err(dev, "Couldn't get our reset line\n");
-+			return PTR_ERR(priv->reset);
-+		}
- 	}
- 
- 	/* Get the hardware identifier from the devicetree node.
- 	 * We will need it for some of the clock and regulator setup.
- 	 */
--	priv->info = of_device_get_match_data(&mdiodev->dev);
-+	priv->info = of_device_get_match_data(dev);
- 	if (!priv->info)
- 		return -EINVAL;
- 
-@@ -3196,6 +3199,32 @@ mt7530_probe(struct mdio_device *mdiodev)
- 		return -EINVAL;
- 
- 	priv->id = priv->info->id;
-+	priv->dev = dev;
-+	priv->ds->priv = priv;
-+	priv->ds->ops = &mt7530_switch_ops;
-+	mutex_init(&priv->reg_mutex);
-+	dev_set_drvdata(dev, priv);
-+
-+	return 0;
-+}
-+
-+static int
-+mt7530_probe(struct mdio_device *mdiodev)
-+{
-+	static struct regmap_config *regmap_config;
-+	struct mt7530_priv *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(&mdiodev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->bus = mdiodev->bus;
-+	priv->dev = &mdiodev->dev;
-+
-+	ret = mt7530_probe_common(priv);
-+	if (ret)
-+		return ret;
- 
- 	if (priv->id == ID_MT7530) {
- 		priv->core_pwr = devm_regulator_get(&mdiodev->dev, "core");
-@@ -3207,27 +3236,6 @@ mt7530_probe(struct mdio_device *mdiodev)
- 			return PTR_ERR(priv->io_pwr);
- 	}
- 
--	/* Not MCM that indicates switch works as the remote standalone
--	 * integrated circuit so the GPIO pin would be used to complete
--	 * the reset, otherwise memory-mapped register accessing used
--	 * through syscon provides in the case of MCM.
--	 */
--	if (!priv->mcm) {
--		priv->reset = devm_gpiod_get_optional(&mdiodev->dev, "reset",
--						      GPIOD_OUT_LOW);
--		if (IS_ERR(priv->reset)) {
--			dev_err(&mdiodev->dev, "Couldn't get our reset line\n");
--			return PTR_ERR(priv->reset);
--		}
--	}
--
--	priv->bus = mdiodev->bus;
--	priv->dev = &mdiodev->dev;
--	priv->ds->priv = priv;
--	priv->ds->ops = &mt7530_switch_ops;
--	mutex_init(&priv->reg_mutex);
--	dev_set_drvdata(&mdiodev->dev, priv);
--
- 	regmap_config = devm_kzalloc(&mdiodev->dev, sizeof(*regmap_config),
- 				     GFP_KERNEL);
- 	if (!regmap_config)
+> 3. Serializing cgroup_rstat_flush() calls against the ratelimit
+>    factors is currently broken because of the race in 2. But the race
+>    is actually harmless, all we might get is the occasional earlier
+>    flush. If there is no delta, the flush won't do much. And if there
+>    is, the flush is justified.
+> 
+> So the lock can be removed all together. However, the lock also served
+> the purpose of preventing a thundering herd problem for concurrent
+> flushers, see [2]. Use an atomic instead to serve the purpose of
+> unifying concurrent flushers.
+> 
+> [1]https://lore.kernel.org/lkml/20230323172732.GE739026@cmpxchg.org/
+> [2]https://lore.kernel.org/lkml/20210716212137.1391164-2-shakeelb@google.com/
+> 
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+
+Acked-by: Michal Hocko <mhocko@suse.com>
+
+> ---
+>  mm/memcontrol.c | 18 +++++++++++-------
+>  1 file changed, 11 insertions(+), 7 deletions(-)
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index ff39f78f962e..65750f8b8259 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -585,8 +585,8 @@ mem_cgroup_largest_soft_limit_node(struct mem_cgroup_tree_per_node *mctz)
+>   */
+>  static void flush_memcg_stats_dwork(struct work_struct *w);
+>  static DECLARE_DEFERRABLE_WORK(stats_flush_dwork, flush_memcg_stats_dwork);
+> -static DEFINE_SPINLOCK(stats_flush_lock);
+>  static DEFINE_PER_CPU(unsigned int, stats_updates);
+> +static atomic_t stats_flush_ongoing = ATOMIC_INIT(0);
+>  static atomic_t stats_flush_threshold = ATOMIC_INIT(0);
+>  static u64 flush_next_time;
+>  
+> @@ -636,15 +636,19 @@ static inline void memcg_rstat_updated(struct mem_cgroup *memcg, int val)
+>  
+>  static void __mem_cgroup_flush_stats(void)
+>  {
+> -	unsigned long flag;
+> -
+> -	if (!spin_trylock_irqsave(&stats_flush_lock, flag))
+> +	/*
+> +	 * We always flush the entire tree, so concurrent flushers can just
+> +	 * skip. This avoids a thundering herd problem on the rstat global lock
+> +	 * from memcg flushers (e.g. reclaim, refault, etc).
+> +	 */
+> +	if (atomic_read(&stats_flush_ongoing) ||
+> +	    atomic_xchg(&stats_flush_ongoing, 1))
+>  		return;
+>  
+> -	flush_next_time = jiffies_64 + 2*FLUSH_TIME;
+> +	WRITE_ONCE(flush_next_time, jiffies_64 + 2*FLUSH_TIME);
+>  	cgroup_rstat_flush_atomic(root_mem_cgroup->css.cgroup);
+>  	atomic_set(&stats_flush_threshold, 0);
+> -	spin_unlock_irqrestore(&stats_flush_lock, flag);
+> +	atomic_set(&stats_flush_ongoing, 0);
+>  }
+>  
+>  void mem_cgroup_flush_stats(void)
+> @@ -655,7 +659,7 @@ void mem_cgroup_flush_stats(void)
+>  
+>  void mem_cgroup_flush_stats_ratelimited(void)
+>  {
+> -	if (time_after64(jiffies_64, flush_next_time))
+> +	if (time_after64(jiffies_64, READ_ONCE(flush_next_time)))
+>  		mem_cgroup_flush_stats();
+>  }
+>  
+> -- 
+> 2.40.0.348.gf938b09366-goog
+
 -- 
-2.39.2
-
+Michal Hocko
+SUSE Labs
