@@ -2,129 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5DC6CD74E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9B76CD751
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjC2KHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S230132AbjC2KJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 06:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjC2KHt (ORCPT
+        with ESMTP id S229660AbjC2KI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:07:49 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92198B5;
-        Wed, 29 Mar 2023 03:07:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D3E70CE1FD3;
-        Wed, 29 Mar 2023 10:07:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D5C4C433EF;
-        Wed, 29 Mar 2023 10:07:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680084464;
-        bh=jxsrRCmaqY1PZygl7A7OWDWEQs91XASFaSIP4jc/LyM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rcFrOTMN0AG2eJC7VzghJ8ZwGIZcMLBSZvPeWvL+7Cjb9gFOKi/pYTguQ83mPS4Fj
-         vqMKcF9EJ0mZotczB/I6jW1VZR0hQnQxOExV88C0f/i4P5sX4O6i65CDNPkCcx/Ven
-         LAhEhg0cWQ9+iB3T3QP58PSAnsPPJjqoaXGeCxXk=
-Date:   Wed, 29 Mar 2023 12:07:42 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        devicetree@vger.kernel.org, andrew@aj.id.au, joel@jms.id.au,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        arnd@arndb.de
-Subject: Re: [PATCH v3 1/4] eeprom: ee1004: Enable devices on multiple busses
-Message-ID: <ZCQN7uq7Y3xFY1od@kroah.com>
-References: <20230322140348.569397-1-eajames@linux.ibm.com>
- <20230322140348.569397-2-eajames@linux.ibm.com>
+        Wed, 29 Mar 2023 06:08:58 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2081.outbound.protection.outlook.com [40.107.22.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAE11724;
+        Wed, 29 Mar 2023 03:08:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a1fWtb9g573lEuecAScAhalz9julKz3PZhD8MJyAIlCcyqxGat+kSr7mYdVZQh04XaDBIAGJjDz0OwEj0YQuPutlsBsq7jhFILMyzkXyaYbBfimjOdHyDj8HWCoAVQ1+5gr2/tLXKq5FGOlIucqk3ys+v2WyudMq3WLseichsvIiT9GlR7RzprlrbVyu4gVomEUx+E0xMAGoLqwlv6VukDzQL577v+6a6R7aTDxRbc4/BUmg1+3VpK5EhkaBiktH6soi2iBeYdNSsCBiRGK9jx1hnAKwqN+DddpqGJNh+aNCDQwZB9PKL+i4OOH1NvsuJ6VDOGDtFYaC2LXDJaBKtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vp/bCG9xm4RF47OTdoWyFGudWge75Pgk2qC0U7Tbs/U=;
+ b=hjUM77EugJBaz2lMh8X9N9D/3A2r8XzKzRjrC7ueNiep4nowEtpOgluceq8DltFqDLCwE00CnA7+5Pt6Fm5SqouAKrKlyC8D995Wz3HBT5XfsMvefjhclJWB+fCPdKb8du3AYJzowkggnW1t9scMyrjJcdu4HGNWq4arRMSoyerWj0gNBWiCkLlOtMfzedTMb0t4401nNglwj1wuJnSvJ9YoQ9r1bjM+hYKhCwt2M1813tTKhxTBvLOSMIFAh9Jz9rpZpgNahzzcjJ9nl3+Ik/VcfAfaXUo0IZml6JGcwx5sF4W+YX91OSps9j53EF8MzqvLSECEhzXjIP7FMAKwNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vp/bCG9xm4RF47OTdoWyFGudWge75Pgk2qC0U7Tbs/U=;
+ b=IdQbqB8GQ9gog6rtMrCUgiezZfAL8GPYMzb3yBer4Gl2kbss0GeeL4l5z7h34/H2/LpkX/UJ6AWPoRNtzbtcMJiNBshc304MP0pF1zVwGpCYlhk6roBwhnvP3kzGzx1WkFGALJNioL/lNmS22Ez+hdGYVx2dGredaGUhI5YPEQk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
+ by PAVPR08MB9651.eurprd08.prod.outlook.com (2603:10a6:102:31b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Wed, 29 Mar
+ 2023 10:08:53 +0000
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::6f4d:f868:c89:4db1]) by DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::6f4d:f868:c89:4db1%5]) with mapi id 15.20.6222.033; Wed, 29 Mar 2023
+ 10:08:53 +0000
+Message-ID: <d5a31f75-eb93-0ff2-cd5b-19cdec58e103@wolfvision.net>
+Date:   Wed, 29 Mar 2023 12:08:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 7/7] dt-bindings: display: add panel-timing property to
+ sitronix,st7789v
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Rob Herring <robh@kernel.org>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20230314115644.3775169-1-gerald.loacker@wolfvision.net>
+ <20230314115644.3775169-8-gerald.loacker@wolfvision.net>
+ <20230316215735.GA3940832-robh@kernel.org>
+ <dd26836f-d54c-65d1-0acc-8a09745bb066@wolfvision.net>
+ <20230329091636.mu6ml3gvw5mvkhm4@penduick>
+Content-Language: en-US
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+Organization: WolfVision GmbH
+In-Reply-To: <20230329091636.mu6ml3gvw5mvkhm4@penduick>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR06CA0155.eurprd06.prod.outlook.com
+ (2603:10a6:803:a0::48) To DU0PR08MB9155.eurprd08.prod.outlook.com
+ (2603:10a6:10:416::5)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322140348.569397-2-eajames@linux.ibm.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|PAVPR08MB9651:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35aa7471-7e3b-4251-23a8-08db303d99cd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fiU9aPwfOWijZvgRLyUxwRXLig3j5qqa/GFjkDAPaoE6paZVEAsIh7RP9rT1zy9sDN0x7GzeRrrvrumHk211a0AJwLdI2FSyrc98/VHwf8Q6g4qnsqSv+6OvN0cJhfLCZ0HL15spyb0AqrMnUBvIosHFFU34Yzib2xZLiU4HhUYlrFkVbk2ZAXHmHiC1UwWN4JXjosC1uAMSQFMt1BezYTtiiwEy+hPF7f0It8bddKA67WkARRG/LBA1tV2GgKgiVeKfzf1vAK54ZGYC+dnmMxMdvRujtz5Qkq1ZU2Wd16DFgD+W0CSbDXBe5YqFnoeovlS/hJHPxl/EMk2R9WSxBO486U3beDLO6prssOqbrt6kyU7iG7EGddCSMunJfCtXjOom6PJeeJtiWET7NJgNzfzAfi8JBY2VXjjWqNypW7AceUvVQIUfeLvr9MhURviQ7aWTluA7DwsCYn1i2jHtOttOXxFs+qMxeemLmtrGybrAJFAwwCfTSsdJ3sQKQwk1GY1hc8VzvWP6haice1bLTqMuLFwCLwno7P1bUtElpDgM7cMx9S1B2G9iIupzudVR4abgbUPD2ksM7lAXyWwoxXWtGaHZ+7uamHxho2sUNoGlfNX1Q7oqhmdBjA4US2UrFChu54zwgKm+13+1NPXvnA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39850400004)(366004)(346002)(396003)(376002)(451199021)(478600001)(54906003)(36916002)(86362001)(2616005)(26005)(6512007)(31686004)(53546011)(6506007)(316002)(38100700002)(31696002)(6486002)(66899021)(66946007)(6916009)(4326008)(66476007)(186003)(66556008)(7416002)(83380400001)(41300700001)(8936002)(8676002)(2906002)(5660300002)(36756003)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFRURHNNU29Lc2gyZGdFM2Q5K3pUNjRMV1pFZlpiMHMzbVJQQ0FqV2JIM0ls?=
+ =?utf-8?B?YU5BMnhjVFBtWnJEZFdrZXg2KzZjSkp4aUV4SjhNaC80WU9Zc0w2MWgvZW1D?=
+ =?utf-8?B?cGp2YndVbm1kMFVRY0FiMll4cElVN1l3UFplcWp2WUFsWDRwN1ZCNFdqR29J?=
+ =?utf-8?B?b2FMYzhvMUVlMUF1V2VKUU9vcHVjcFliNVNMdHl1SzhkTVpKNzc2bWJFeVd1?=
+ =?utf-8?B?NGM5MDNkaS95VGpCTlNPMWVoQnhvTEhocVkxRGVhYmx0MzNEN214ZEc3Sm5M?=
+ =?utf-8?B?L0laNjVuM0l6cXlaWnp3RkhoSGNNOFAvbE5tQXphWm5jbkxtcWR0OWFOd3FB?=
+ =?utf-8?B?ZDgrWXdBa2M4bGlRdUpBbkdRUVNuamNRMEJFUDNtRlVtMElJMWY0aE9md0RR?=
+ =?utf-8?B?L3NCelZrRWswWVVHeVNlWmhvRHFEbDdTdlZxd2toelNRbFR5SkV6bkQ4R0hq?=
+ =?utf-8?B?OXp1TTBYRWlSN1laanVCNFh6WlBZMVMrZklleHYwMzBwWVltcFNQRCtINlNW?=
+ =?utf-8?B?Q1NKcDE0YlhDRm9FYnpwbUxIdXhYbFJ5Y3dnd29FY3ZHdFNCNzBmWUp2Tzcy?=
+ =?utf-8?B?NXR3UTlMVWtXRTFBWGd0K3pLc283L2VnQmNKWXZqMTNac1lGa0JqN1B3ZzZZ?=
+ =?utf-8?B?OGl6clRiWVd5aDhBZmVtSGNuaG9Od0sxSnk5Q0luTVJnR0ZqWXI4SmVET0d3?=
+ =?utf-8?B?MVZRV240cG1FanhFRzJVL3F4QURma25TZTBCQnpDTkE5S1JwejBlWWFBR09m?=
+ =?utf-8?B?c3hyWVl3WHFHdElDOUtpcW9oR0xvMkUxVXJrQUlLYnM1cElLWXdleVZZbTN0?=
+ =?utf-8?B?NHJuaDJIK1QzVkdjclVVb1k1Ykd3RGdwQjljMWxtci9MRWVKS3NzVE9MOFF5?=
+ =?utf-8?B?YURRaDJHZWRLQW5zOWNzV1NSWlBNTTZEQlhob2ZVS1ZUcGYwQzNqbTJ4SW9u?=
+ =?utf-8?B?dVhSTW1hUzRlWWovNW0yRktOVkp2WEhHSk4ydUUzU01VQ2hjQlB3RzNsVzVl?=
+ =?utf-8?B?Z2J4ZTFFaFJzZ0J4ak4vdW16djBkbnJuY0REMml4ZUhVV2JBTk0wR1BnY2Vq?=
+ =?utf-8?B?cHAxMWZnQ1JJSWdyamhLdUNyT1RUeTMzSUNRVElNMWxwb2lHNytvNmFaQXpy?=
+ =?utf-8?B?ckh5YTY1MkpwN001UmJmKy9YS2JEb1B3aDFwTDVsbmx5STl0YkV4NUw0dmx5?=
+ =?utf-8?B?bFZmSVIzNkZ0REJ0UTdRU1ZZbi9QSEdVWmhXWmlIdFdnYjZEQWRpV0tLS0xi?=
+ =?utf-8?B?K0NkZXBKcW5jaTQwOWNvN2NVT0k3WTkwdm82bU54NUVRVThyM05vdFlHWEVL?=
+ =?utf-8?B?MkgrZk9Vc2RVZkdsTmI1bEFuNDA5TzhveFRERy9yZmxzQUcycGN5NTMvYzR4?=
+ =?utf-8?B?Tlk0SllPMHBhOTJKVjhrTERMeS9NcmxRTVZJUGhmZ0pBUkRmOUozK2RqRjcz?=
+ =?utf-8?B?ZDFUcmVIclMzR1orVEZoZUFDUEovQXBwTTU2UEphUG5KS0NlOTJMVWlJZS9Q?=
+ =?utf-8?B?WG4rWElEbjNYeTNIM0hhV3JKdnJSZkJmbDlIejJOckFiL2JwbVNWYXpYaWx6?=
+ =?utf-8?B?emM1c1kxOU1VME5kNGZUbWNvVXdmcVlxazdTSmNMaWpqTVZwckJuQmdpaEJs?=
+ =?utf-8?B?bUk4a3pncWhwcmNIVzB3dWVCcGVvUUx3dWFJeUZQc3RTMUlmVm5zUnhab21J?=
+ =?utf-8?B?K3FMNENrOVdQWDNITm9xcFlSanNDWUhuS2QzQkN5U0xZcFVseSsvNE15Mlpy?=
+ =?utf-8?B?RkQ1aVlYM25tYlZKNDVEbjNRNWR3Nms4SURwaXU5cTE3YmxUNHRyc1F1eE5I?=
+ =?utf-8?B?LzRURlYzU01rT0ZSTUQ5SjJqZ3AzR2NGMkZMbkVDalRScDUyMGlFNzViYVhl?=
+ =?utf-8?B?UzVxdmdGbnU3Y1E1N2tmTWgybDNpbVpvRlBOcVdmckFpdEtTd244RDc5aFZX?=
+ =?utf-8?B?ZzBReml0WWg5RUR1QUVzVWYzbFpDYVZuRVBPUVZnMTRyRFZ4V2orVG40WjNM?=
+ =?utf-8?B?QzBVQ3ZWWDR4K1YveHczR0c1eXB3UGxmRnZFeVlqS3NGYVZrbFRDbHFOM0Js?=
+ =?utf-8?B?aWl6SEsxR3hrT2ZsYi9LTXBNZFlzSTBCdGdnMkZyY1E3dFpIaEl0bHRldkNX?=
+ =?utf-8?B?R0gzVGRteDhSS21QZFN2NERkRm5aVS9URmRZelVPT0dSa1VGY0dJRmNKWGl3?=
+ =?utf-8?B?Vmc9PQ==?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35aa7471-7e3b-4251-23a8-08db303d99cd
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 10:08:53.5689
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bMCTc5/cyzw9HBLGzmFStNyHcwUQvbCAo4DShgmwsPKusWHZ1/yk/p0iul8gMAr0dazfrkTTOw+rPugl1Fc5qRXSHdmfcZ2qPjZh4q1wAl4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9651
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 09:03:45AM -0500, Eddie James wrote:
-> The driver previously prevented probing devices on more than one
-> bus due to locking constraints with the special page addresses. This
-> constraint can be removed by allocating a reference-counted bus
-> structure containing the lock, rather than using global variables.
+Hi Maxime,
+
+On 3/29/23 11:16, Maxime Ripard wrote:
+> On Thu, Mar 16, 2023 at 11:29:53PM +0100, Michael Riesch wrote:
+>> Hi Rob,
+>>
+>> On 3/16/23 22:57, Rob Herring wrote:
+>>> On Tue, Mar 14, 2023 at 12:56:44PM +0100, Gerald Loacker wrote:
+>>>> The sitronix-st7789v driver now considers the panel-timing property.
+>>>
+>>> I read the patch for that and still don't know 'why'. Commit messages 
+>>> should answer why.
+>>>
+>>>> Add the property to the documentation.
+>>>
+>>> We generally don't put timings in DT for panels. Why is this one 
+>>> special?
+>>
+>> For now, having the timings in the device tree allows for setting the
+>> hsync/vsync/de polarity.
+>>
+>> As a next step, we aim to implement the partial mode feature of this
+>> panel. It is possible to use only a certain region of the panel, which
+>> is helpful e.g., when a part of the panel is occluded and should not be
+>> considered by DRM. We thought that this could be specified as timing in DT.
+>>
+>> (The hactive and vactive properties serve as dimensions of this certain
+>> region, of course. We still need to specify somehow the position of the
+>> region. Maybe with additional properties hactive-start and vactive-start?)
+>>
+>> What do you think about that?
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
-> Changes since v2:
->  - Remove of_device.h include
-> 
->  drivers/misc/eeprom/ee1004.c | 174 +++++++++++++++++++++--------------
->  1 file changed, 105 insertions(+), 69 deletions(-)
-> 
-> diff --git a/drivers/misc/eeprom/ee1004.c b/drivers/misc/eeprom/ee1004.c
-> index c8c6deb7ed89..0aed5760e370 100644
-> --- a/drivers/misc/eeprom/ee1004.c
-> +++ b/drivers/misc/eeprom/ee1004.c
-> @@ -9,9 +9,11 @@
->   * Copyright (C) 2008 Wolfram Sang, Pengutronix
->   */
->  
-> +#include <linux/err.h>
->  #include <linux/i2c.h>
->  #include <linux/init.h>
->  #include <linux/kernel.h>
-> +#include <linux/list.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
-> @@ -31,20 +33,24 @@
->   * over performance.
->   */
->  
-> -#define EE1004_ADDR_SET_PAGE		0x36
-> +#define EE1004_ADDR_SET_PAGE0		0x36
-> +#define EE1004_ADDR_SET_PAGE1		0x37
->  #define EE1004_NUM_PAGES		2
->  #define EE1004_PAGE_SIZE		256
->  #define EE1004_PAGE_SHIFT		8
->  #define EE1004_EEPROM_SIZE		(EE1004_PAGE_SIZE * EE1004_NUM_PAGES)
->  
-> -/*
-> - * Mutex protects ee1004_set_page and ee1004_dev_count, and must be held
-> - * from page selection to end of read.
-> - */
-> -static DEFINE_MUTEX(ee1004_bus_lock);
-> -static struct i2c_client *ee1004_set_page[EE1004_NUM_PAGES];
-> -static unsigned int ee1004_dev_count;
-> -static int ee1004_current_page;
-> +struct ee1004_bus {
-> +	struct kref kref;
-> +	struct list_head list;
-> +	struct mutex lock;
-> +	struct i2c_adapter *adapter;
-> +	struct i2c_client *set_page_clients[EE1004_NUM_PAGES];
-> +	int page;
-> +};
-> +
-> +static LIST_HEAD(ee1004_busses);
-> +static DEFINE_MUTEX(ee1004_busses_lock);
+> I don't see why we would need the device tree to support that. What you
+> described is essentially what overscan is for HDMI/analog output, and we
+> already have everything to deal with overscan properly in KMS.
 
-This really looks like you are just emulating a tiny portion of the
-driver core (busses, lists of busses, reference counting, etc.)
+Thanks for your response, but I am afraid I don't quite follow.
 
-Why not just use an aux device instead and get all of that logic "for
-free" in a way that will be properly shown to userspace?  Right now it
-has no idea what is happening here with individual portions of the
-device and the like.
+How are we supposed to expose control over the hsync/vsync/data enable
+polarity? I only know that the display controller and the panel need to
+agree on a setting that works for both. What is the canonical way to do
+this?
 
-Please look into that instead of this hand-rolled device model.
+A different question is the partial mode, for which (IIUC) you suggest
+the overscan feature. As I have never heard of this before, it would be
+very nice if you could point me to some examples. Where would the
+effective resolution be set in this case?
 
-thanks,
+We thought that this should enter the device tree as in our case the
+display is partially occluded due to hardware constraints. For the user
+there is only one reasonable configuration.
 
-greg k-h
+Alternatively, we could follow a different approach and handle a
+separate compatible in the panel driver. Would this be acceptable for
+mainline inclusion?
+
+Best regards,
+Michael
