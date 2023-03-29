@@ -2,128 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56106CEC65
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BDC6CEC67
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjC2PIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 11:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
+        id S230419AbjC2PIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjC2PIK (ORCPT
+        with ESMTP id S229525AbjC2PIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:08:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5331BD7;
-        Wed, 29 Mar 2023 08:08:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1A00B81B8D;
-        Wed, 29 Mar 2023 15:08:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2ED3C433EF;
-        Wed, 29 Mar 2023 15:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680102483;
-        bh=sqyJuVOPn12HXs42svFyLzzMir/9VKtRH5dGYB/kq/A=;
-        h=From:Date:Subject:To:Cc:From;
-        b=ecM66mq11hK3JVb5LbtYd2UcdYMEaT6WOpUIGju10bPLRuZXUoC5+7LFGLHf61/Rm
-         NBDC6y1FYpYt7WDsCrzCRpaBwelMHT0bgO4DnKq+eN7UoNsjAwHYbpwxnx47BqZ/Su
-         cpLJJyVI4h2wWNG14Ev1nNF8qXOyjjKG0MEbJsHOnSplHXSJsl7IuMls/Ygurb6gMC
-         SMjgQkDSI1rgxI4sF49G0e2XL+r09bzGzL4CnDNt7mFrtKUApvSQsR4VbJJWa8JKw2
-         vdOrxQ6R6Q09fZfv/0al2y21rmlN9bEai1TLGwsuNCOBt27DTyI2mPIyOiJvg1/J/l
-         /GGSXAtiXQnVQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Wed, 29 Mar 2023 08:08:01 -0700
-Subject: [PATCH net-next] net: ethernet: ti: Fix format specifier in
- netcp_create_interface()
+        Wed, 29 Mar 2023 11:08:42 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E05840D9
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:08:23 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id m2so16084538wrh.6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680102502;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cLqJhQMaFDVDwir91iG5u9uTplZGw8VD4gR41F8nB1k=;
+        b=KhvUbJT4Av7xzTMbSWNOO1siZ0qNc+lIz9Lt48+ImwgXApDJw9+g+VMgMWVuVOCUfB
+         +4QM8tSCHX7sovgz1XmVWkPQhBrYi/bfd/6HddiRQvQ2AS23lQf84eJBz89GMhPN2xKm
+         eKEOvYUJECI5OxN8GRnKuKOaldUtW1GOWdNgPF3q922ey1Xxsg+/Mzi+d9TXlk4lRp4b
+         v/gcVm9QYfF/rj0xlAvglj3AV5LQlv+VZnuGj3jJwzjDyabWiwT4PgfoHXdK4W/p1GF8
+         sKt5FVZrxiM1cCr6LkchYzJwMUKpdE9FxAeC3pPXPuAIvVy4Vbo00tlbsc1t3a3+mZVl
+         kk2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680102502;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cLqJhQMaFDVDwir91iG5u9uTplZGw8VD4gR41F8nB1k=;
+        b=N1aBvrK+kXVOi38vwWF7N88CXb1ykungeClQOHR9mAzuu8gq4vQdVC6yVpwpVKNanJ
+         gfPLDHdDPa3zwRWgT7t01IEPxkupLB1TSiYS6R56E02EJnl2kNbVMoGx7Gbr9P6vIGfp
+         GiWAWZoK8KYTcuONLGqyEtvKHZtK1OyPc4tTlwvjqKjpVmHPSXEGQ7k29ZTRizWIKqIe
+         IgZNVYM0aaGjoSFLeYM5cust/06rE86KzAARePiXlx0t6jD92r1RaqQ1DiS6STQDCpKa
+         +VxgC+L+PK+w24pZtSYyCMBNlhqrYmGztcMGEh8ywpIMqAQA4vsBor5MpYRpx6qZxSq6
+         CPUQ==
+X-Gm-Message-State: AAQBX9fD9rhy5fnjdW1gl5PKDwuWtDSTOIS98QP9caE88/VerFS+c7c8
+        CyG9N4hgyBiQA3Bziyjk49yx7Q==
+X-Google-Smtp-Source: AKy350bDav8MHFZ7bINEHrERRe/L0sIk0whGqY5osDPnWzGNlG1THJmIYgUxk+Dc0oXbNARD7NRi4w==
+X-Received: by 2002:adf:e90b:0:b0:2d4:751d:675b with SMTP id f11-20020adfe90b000000b002d4751d675bmr15047399wrm.35.1680102502068;
+        Wed, 29 Mar 2023 08:08:22 -0700 (PDT)
+Received: from google.com (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
+        by smtp.gmail.com with ESMTPSA id a7-20020adff7c7000000b002c70ce264bfsm30710058wrq.76.2023.03.29.08.08.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 08:08:21 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 16:08:17 +0100
+From:   Vincent Donnefort <vdonnefort@google.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v2 1/2] ring-buffer: Introducing ring-buffer mapping
+ functions
+Message-ID: <ZCRUYQHORVund9PC@google.com>
+References: <20230322102244.3239740-2-vdonnefort@google.com>
+ <20230328224411.0d69e272@gandalf.local.home>
+ <ZCQCsD9+nNwBYIyH@google.com>
+ <20230329070353.1e1b443b@gandalf.local.home>
+ <20230329085106.046a8991@rorschach.local.home>
+ <ZCQ2jW5Jl/cWCG7s@google.com>
+ <20230329091107.408d63a8@rorschach.local.home>
+ <ZCQ9m5K34Qa9ZkUd@google.com>
+ <20230329093602.2b3243f0@rorschach.local.home>
+ <ZCRDXaTVfNwxdRJZ@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230329-net-ethernet-ti-wformat-v1-1-83d0f799b553@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFBUJGQC/x2NSwrDMAxErxK0rsC1Sfq5SulCcZVaizhFFmkg5
- O61u5vH8GZ2KKzCBe7dDsqrFFlyhfOpg5govxnlVRm888EFf8PMhmyJtQUT/E6LzmRIkeg6hN4
- N/QWqPVJhHJVyTM2fqRhrKz7Kk2z/ywe0kcybwfM4fuMEsgGMAAAA
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        razor@blackwall.org, kerneljasonxing@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2668; i=nathan@kernel.org;
- h=from:subject:message-id; bh=sqyJuVOPn12HXs42svFyLzzMir/9VKtRH5dGYB/kq/A=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCkqIUEb55980mla2v5HXet9VBKL975fT6fvv5d29ZNYk
- soyzz3tHaUsDGIcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiG6sYGS6/PJbdt6nv6u9a
- 7XvB99JdxeYFtS/efudjJqOriOW/8z4M/6yqXKrWPQg7JhvKk1aZ/0Tu38+q1JgVL/Q8nRQUbJe
- 85gUA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCRDXaTVfNwxdRJZ@google.com>
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 3948b05950fd ("net: introduce a config option to tweak
-MAX_SKB_FRAGS"), clang warns:
+On Wed, Mar 29, 2023 at 02:55:41PM +0100, Vincent Donnefort wrote:
+> On Wed, Mar 29, 2023 at 09:36:46AM -0400, Steven Rostedt wrote:
+> > On Wed, 29 Mar 2023 14:31:07 +0100
+> > Vincent Donnefort <vdonnefort@google.com> wrote:
+> > 
+> > > We can say we update cpu_buffer->reader_page->read on the get_reader_page ioctl,
+> > > to the most recent value possible, which will have the consequence of actually
+> > > "flushing" those events?
+> > 
+> > Yes. It should be no different than doing a normal read of the
+> > trace_pipe_raw file, which does the same.
+> > 
+> > > 
+> > > If the reader decides to read events past this value then it just can't expect
+> > > them to not be duplicated?
+> > > 
+> > > I suppose it'd be down the reader to store meta->read somehwere?
+> > > 
+> > >    prev_read = meta->read
+> > >    ioctl(fd, TRACE_MMAP_IOCTL_GET_READER_PAGE)
+> > >    /* read events from prev_read to meta->read */
+> > 
+> > Yes, in fact it shouldn't need to call the ioctl until after it read it.
+> > 
+> > Maybe, we should have the ioctl take a parameter of how much was read?
+> > To prevent races?
+> 
+> Races would only be with other consuming readers. In that case we'd probably
+> have many other problems anyway as I suppose nothing would prevent another one
+> of swapping the page while our userspace reader is still processing it?
+> 
+> I don't know if this is worth splitting the ABI between the meta-page and the
+> ioctl parameters for this?
+> 
+> Or maybe we should say the meta-page contains things modified by the writer and
+> parameters modified by the reader are passed by the get_reader_page ioctl i.e.
+> the reader page ID and cpu_buffer->reader_page->read? (for the hyp tracing, we
+> have up to 4 registers for the HVC which would replace in our case the ioctl)
 
-  drivers/net/ethernet/ti/netcp_core.c:2085:4: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                          MAX_SKB_FRAGS);
-                          ^~~~~~~~~~~~~
-  include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-          dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                 ~~~     ^~~~~~~~~~~
-  include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                  _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                               ~~~    ^~~~~~~~~~~
-  include/linux/skbuff.h:352:23: note: expanded from macro 'MAX_SKB_FRAGS'
-  #define MAX_SKB_FRAGS CONFIG_MAX_SKB_FRAGS
-                        ^~~~~~~~~~~~~~~~~~~~
-  ./include/generated/autoconf.h:11789:30: note: expanded from macro 'CONFIG_MAX_SKB_FRAGS'
-  #define CONFIG_MAX_SKB_FRAGS 17
-                               ^~
-  1 warning generated.
+Or we can keep everything in the meta-page but update the "reader bits" only
+during the get_reader_page ioctl.
 
-Follow the pattern of the rest of the tree by changing the specifier to
-'%u' and casting MAX_SKB_FRAGS explicitly to 'unsigned int', which
-eliminates the warning.
+I can prepare something around those lines for the v3.
 
-Fixes: 3948b05950fd ("net: introduce a config option to tweak MAX_SKB_FRAGS")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-I am a little confused as to why the solution for this warning is
-casting to 'unsigned int' rather than just updating all the specifiers
-to be '%d', as I do not see how MAX_SKB_FRAGS can be any type other than
-just 'int' but I figured I would be consistent with the other fixes I
-have seen around this issue.
----
- drivers/net/ethernet/ti/netcp_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/ti/netcp_core.c b/drivers/net/ethernet/ti/netcp_core.c
-index 1bb596a9d8a2..d829113c16ee 100644
---- a/drivers/net/ethernet/ti/netcp_core.c
-+++ b/drivers/net/ethernet/ti/netcp_core.c
-@@ -2081,8 +2081,8 @@ static int netcp_create_interface(struct netcp_device *netcp_device,
- 	netcp->tx_pool_region_id = temp[1];
- 
- 	if (netcp->tx_pool_size < MAX_SKB_FRAGS) {
--		dev_err(dev, "tx-pool size too small, must be at least %ld\n",
--			MAX_SKB_FRAGS);
-+		dev_err(dev, "tx-pool size too small, must be at least %u\n",
-+			(unsigned int)MAX_SKB_FRAGS);
- 		ret = -ENODEV;
- 		goto quit;
- 	}
-
----
-base-commit: 3b064f541be822dc095991c6dda20a75eb51db5e
-change-id: 20230329-net-ethernet-ti-wformat-acaa86350657
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+> 
+> > 
+> > That is, it should pass in the page->commit that it used to to read the
+> > pages.
+> > 
+> > -- Steve
