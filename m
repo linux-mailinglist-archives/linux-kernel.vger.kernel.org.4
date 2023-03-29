@@ -2,48 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E376CF14A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0516CF173
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjC2Rnj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 13:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
+        id S229691AbjC2Rvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 13:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC2Rni (ORCPT
+        with ESMTP id S229650AbjC2Rvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:43:38 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2760B5254;
-        Wed, 29 Mar 2023 10:43:36 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id aafa1b008520eda2; Wed, 29 Mar 2023 19:43:35 +0200
-Received: from kreacher.localnet (unknown [213.134.183.20])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 859211FA13B8;
-        Wed, 29 Mar 2023 19:43:34 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL pointer dereference
-Date:   Wed, 29 Mar 2023 19:43:33 +0200
-Message-ID: <12190090.O9o76ZdvQC@kreacher>
-In-Reply-To: <5b084360-898b-aad0-0b8e-33acc585d71d@linaro.org>
-References: <20230329090055.7537-1-rui.zhang@intel.com> <CAJZ5v0iMAT_1cQorTqK4xRTjD3a_s=Vf3OJYy3hi7=pAekLv+g@mail.gmail.com> <5b084360-898b-aad0-0b8e-33acc585d71d@linaro.org>
+        Wed, 29 Mar 2023 13:51:41 -0400
+X-Greylist: delayed 462 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Mar 2023 10:51:32 PDT
+Received: from forward500a.mail.yandex.net (forward500a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d500])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB911FC0;
+        Wed, 29 Mar 2023 10:51:32 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net [IPv6:2a02:6b8:c1f:5e51:0:640:23ee:0])
+        by forward500a.mail.yandex.net (Yandex) with ESMTP id 9980C5EEAE;
+        Wed, 29 Mar 2023 20:43:46 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id dhMcaO4DV4Y0-RpmWL4SQ;
+        Wed, 29 Mar 2023 20:43:45 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1680111825;
+        bh=+6hq+ziRMggGufmRgWE7w5d122tdGKys5kWzuZKVUlY=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=ocAFkHsKYq8hDDFbwOSDcQx9ejam55BOvIe2gdGzNi5HwmrEEMlYgq2q60zb06+5p
+         OxL/e8/xRGTmNB+nfCI3Sokiy9iscLolRhuUUZ9W/hBjqyEnqDSZZVl3U38LBVg1Op
+         NxTgxhatiACTTX/30DtkJgcbsT4eTpL2sU9ewG7M=
+Authentication-Results: mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <0994ea3a-e197-e938-6eab-72433d6547fd@yandex.ru>
+Date:   Wed, 29 Mar 2023 22:43:38 +0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.183.20
-X-CLIENT-HOSTNAME: 213.134.183.20
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehiedguddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthhqredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeekieelheffleefgffgtdejvdektedtjeefveeugeefvdfhgfduueetiefgieelteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeefrddvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeefrddvtddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
- pdhrtghpthhtoheprhgrfhgrvghlrdhjrdifhihsohgtkhhisehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 6.0.y / 6.1.y] x86/split_lock: Add sysctl to control the
+ misery mode
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, Greg KH <greg@kroah.com>,
+        stable@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, fenghua.yu@intel.com,
+        joshua@froggi.es, pgofman@codeweavers.com, pavel@denx.de,
+        pgriffais@valvesoftware.com, zfigura@codeweavers.com,
+        cristian.ciocaltea@collabora.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andre Almeida <andrealmeid@igalia.com>
+References: <20221218234400.795055-1-gpiccoli@igalia.com>
+ <Y6A6Q57/qz7w7cxM@kroah.com>
+ <Y6BD9W7hk4CjhSdh@hirez.programming.kicks-ass.net>
+ <3ff9f56c-479b-2dbd-9ee6-c7d00c7bd285@igalia.com>
+ <ZCRx8YaAt7ybDlLM@google.com>
+From:   stsp <stsp2@yandex.ru>
+In-Reply-To: <ZCRx8YaAt7ybDlLM@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,97 +69,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, March 29, 2023 6:18:31 PM CEST Daniel Lezcano wrote:
-> On 29/03/2023 18:03, Rafael J. Wysocki wrote:
-> > On Wed, Mar 29, 2023 at 5:59 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 29/03/2023 16:38, Rafael J. Wysocki wrote:
-> >>> On Wed, Mar 29, 2023 at 4:16 PM Daniel Lezcano
-> >>> <daniel.lezcano@linaro.org> wrote:
-> >>>>
-> >>>> On 29/03/2023 14:06, Rafael J. Wysocki wrote:
-> >>>>> On Wed, Mar 29, 2023 at 11:57 AM Daniel Lezcano
-> >>>>> <daniel.lezcano@linaro.org> wrote:
-> >>>>>>
-> >>>>>> On 29/03/2023 11:00, Zhang Rui wrote:
-> >>>>>>> When the hwmon device node of a thermal zone device is not found,
-> >>>>>>> using hwmon->device causes a kernel NULL pointer dereference.
-> >>>>>>>
-> >>>>>>> Reported-by: Preble Adam C <adam.c.preble@intel.com>
-> >>>>>>> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> >>>>>>> ---
-> >>>>>>> Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
-> >>>>>>> dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
-> >>>>>>> I'm not sure if the Fix tag applies to such commit or not.
-> >>>>>>
-> >>>>>> Actually it reverts the work done to encapsulate the thermal zone device
-> >>>>>> structure.
-> >>>>>
-> >>>>> So maybe instead of the wholesale switch to using "driver-specific"
-> >>>>> device pointers for printing messages, something like
-> >>>>> thermal_zone_debug/info/warn/error() taking a thermal zone pointer as
-> >>>>> the first argument can be defined?
-> >>>>>
-> >>>>> At least this particular bug could be avoided this way.
-> >>>>
-> >>>> Actually we previously said the thermal_hwmon can be considered as part
-> >>>> of the thermal core code, so we can keep using tz->device.
-> >>>>
-> >>>> I'll drop this change from the series.
-> >>>
-> >>> But it's there in my thermal branch already.
-> >>>
-> >>> Do you want to revert the thermal_hwmon.c part of commit dec07d399cc8?
-> >>
-> >> Oh, right. Fair enough.
-> >>
-> >> I think Rui's patch is fine then.
-> > 
-> > I guess you mean the $subject one, that is:
-> > 
-> > https://patchwork.kernel.org/project/linux-pm/patch/20230329090055.7537-1-rui.zhang@intel.com
-> 
-> Correct
-> 
-> > What about the message printed when temp is NULL.  Should the original
-> > form of it be restored too?
-> 
-> Yes, you are right, for the sake of consistency we should restore also 
-> this one.
+Hi Sean, thanks for a head-up!
 
-So I'm going to apply the appended patch.
+29.03.2023 22:14, Sean Christopherson пишет:
+> Resurrecting this thread with a concrete use case.
+> dosemu2, which uses KVM to accelerate DOS emulation (stating the obvious), ran
+> into a problem where the hardcoded (prior to this patch) behavior will effectively
+> hang userspace if the 10ms sleep is interrupted, e.g. by a periodic SIGALRM[*].
 
-Please let me know if there are any concerns regarding it.
+Yes, and we also created a ready-to-use
+host test-case with no dosemu2 involved.
 
----
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH] thermal: thermal_hwmon: Revert recent message adjustment
+> Alternatively, we could try to figure out a way to ensure forward progress without
+> letting userpace run an end-around on the enforced misery, but backporting this
+> patch to stable kernels seems easier.
+>
+> Stas, do you happen to know what the oldest stable kernel your users use, i.e.
+> how far back this backport would need to go?
+It seems, the "broken" code was added by
+the patch b041b525dab95 which is "described"
+as v5.18-rc4-1-gb041b525dab9.
+So I guess the answer would be "down to 5.18".
 
-For the sake of consistency, revert the second part of the
-thermal_hwmon.c hunk from commit dec07d399cc8 ("thermal: Don't use
-'device' internal thermal zone structure field") after the first
-part of it has been reverted.
-
-Link: https://lore.kernel.org/linux-pm/5b084360-898b-aad0-0b8e-33acc585d71d@linaro.org
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_hwmon.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Index: linux-pm/drivers/thermal/thermal_hwmon.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_hwmon.c
-+++ linux-pm/drivers/thermal/thermal_hwmon.c
-@@ -236,7 +236,7 @@ void thermal_remove_hwmon_sysfs(struct t
- 	temp = thermal_hwmon_lookup_temp(hwmon, tz);
- 	if (unlikely(!temp)) {
- 		/* Should never happen... */
--		dev_dbg(hwmon->device, "temperature input lookup failed!\n");
-+		dev_dbg(&tz->device, "temperature input lookup failed!\n");
- 		return;
- 	}
- 
-
-
+Of course I don't believe the patch you
+mention, is a real solution. Its good for
+-stable, but something else needs to be
+developed in the future.
 
