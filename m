@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FDD6CEE9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD336CEE98
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjC2QFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
+        id S229649AbjC2QEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbjC2QEk (ORCPT
+        with ESMTP id S231582AbjC2QEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:04:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2DE4C16;
-        Wed, 29 Mar 2023 09:03:46 -0700 (PDT)
+        Wed, 29 Mar 2023 12:04:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF252558E;
+        Wed, 29 Mar 2023 09:03:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDF39B82380;
-        Wed, 29 Mar 2023 16:02:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABE73C433A1;
-        Wed, 29 Mar 2023 16:02:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F88461DAA;
+        Wed, 29 Mar 2023 16:02:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC75C4339C;
+        Wed, 29 Mar 2023 16:02:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680105733;
-        bh=qp5qTHymeNKXf/igbwuWFINn/OHqxS5wqWdXe8S1EME=;
+        s=k20201202; t=1680105735;
+        bh=+h4XK6+UI6FKKHszmm1wj9jmGuHr+bG0mxcM6PK0eo8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mM1UAcjeDDMImv5k9KeshViE+mnte2MLkwfhDMuMk3mam4OB+U+s9icDSTJiY6tj2
-         mpV0By8nybN+Dgd8/UsXyNaX0vKIF6Wsj1oYa1nO7Ro+o3qlvIQ6RmJP0DQBtpP2Vm
-         lINjK5j4VPanlu31F6MfIammRNoXjwvehMtGoBzrQPEQMKVN2HJjL/Go+QZeE+JOA3
-         BCfSnQzEC4MnFn0lZJ3KjD6gofBMB+dceLNEydiTGDxuzL4Bk0Tus2PSqy3dsyVrDv
-         GcLelC4UmxcmsywSnqEBIBbrM36mqdisHzvvceK86rBfsbDqZxqwPAgzhp18r48E2m
-         VsKkc1l1zbseA==
+        b=We6SppzsOzlK2//1daxu59Df7ANxDJyMznwP+OkNrFmQmFcLdYSH8atr1ezJd2MQj
+         WGhWJt5bkH3VrhROVfbJh02EKGkS4HvFe7yGH7qz1L3O1hPSNGdLY0xegZuyYPbhO4
+         HFJ39S8in9KjgKsomrNfCm6kkGsr3ndqR6XGOtnZzBDu5NF8SysXHICJOoLTeTUZlf
+         t8uQZIL7RyPCnaGpbfjU1TLNYO2Hj0+jgz4c93W2sJu3rtVZTMLioZzU+iPZjGmRfC
+         D6tzE56MJESRUNbCdPEERhTIsa0krSKTMJRV4SDPnbDJ+cY+nwa+73GhrVeGcZadG2
+         6mVRYA++CYdug==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -40,9 +40,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Neeraj Upadhyay <quic_neeraju@quicinc.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH 2/4] rcu/nocb: Fix shrinker race against callback enqueuer
-Date:   Wed, 29 Mar 2023 18:02:01 +0200
-Message-Id: <20230329160203.191380-3-frederic@kernel.org>
+Subject: [PATCH 3/4] rcu/nocb: Recheck lazy callbacks under the ->nocb_lock from shrinker
+Date:   Wed, 29 Mar 2023 18:02:02 +0200
+Message-Id: <20230329160203.191380-4-frederic@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230329160203.191380-1-frederic@kernel.org>
 References: <20230329160203.191380-1-frederic@kernel.org>
@@ -57,46 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The shrinker resets the lazy callbacks counter in order to trigger the
-pending lazy queue flush though the rcuog kthread. The counter reset is
-protected by the ->nocb_lock against concurrent accesses...except
-for one of them. Here is a list of existing synchronized readers/writer:
-
-1) The first lazy enqueuer (incrementing ->lazy_len to 1) does so under
-   ->nocb_lock and ->nocb_bypass_lock.
-
-2) The further lazy enqueuers (incrementing ->lazy_len above 1) do so
-   under ->nocb_bypass_lock _only_.
-
-3) The lazy flush checks and resets to 0 under ->nocb_lock and
-	->nocb_bypass_lock.
-
-The shrinker protects its ->lazy_len reset against cases 1) and 3) but
-not against 2). As such, setting ->lazy_len to 0 under the ->nocb_lock
-may be cancelled right away by an overwrite from an enqueuer, leading
-rcuog to ignore the flush.
-
-To avoid that, use the proper bypass flush API which takes care of all
-those details.
+The ->lazy_len is only checked locklessly. Recheck again under the
+->nocb_lock to avoid spending more time on flushing/waking if not
+necessary. The ->lazy_len can still increment concurrently (from 1 to
+infinity) but under the ->nocb_lock we at least know for sure if there
+are lazy callbacks at all (->lazy_len > 0).
 
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- kernel/rcu/tree_nocb.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/rcu/tree_nocb.h | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index 1a86883902ce..c321fce2af8e 100644
+index c321fce2af8e..dfa9c10d6727 100644
 --- a/kernel/rcu/tree_nocb.h
 +++ b/kernel/rcu/tree_nocb.h
-@@ -1364,7 +1364,7 @@ lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+@@ -1358,12 +1358,20 @@ lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+ 		if (!rcu_rdp_is_offloaded(rdp))
  			continue;
  
- 		rcu_nocb_lock_irqsave(rdp, flags);
--		WRITE_ONCE(rdp->lazy_len, 0);
-+		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, false));
++		if (!READ_ONCE(rdp->lazy_len))
++			continue;
++
++		rcu_nocb_lock_irqsave(rdp, flags);
++		/*
++		 * Recheck under the nocb lock. Since we are not holding the bypass
++		 * lock we may still race with increments from the enqueuer but still
++		 * we know for sure if there is at least one lazy callback.
++		 */
+ 		_count = READ_ONCE(rdp->lazy_len);
+-
+-		if (_count == 0)
++		if (!_count) {
++			rcu_nocb_unlock_irqrestore(rdp, flags);
+ 			continue;
+-
+-		rcu_nocb_lock_irqsave(rdp, flags);
++		}
+ 		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, false));
  		rcu_nocb_unlock_irqrestore(rdp, flags);
  		wake_nocb_gp(rdp, false);
- 		sc->nr_to_scan -= _count;
 -- 
 2.34.1
 
