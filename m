@@ -2,144 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1356C6CEF04
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6981D6CEEFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjC2QQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S229614AbjC2QPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjC2QP6 (ORCPT
+        with ESMTP id S229458AbjC2QPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:15:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E115FC2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:14:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680106478;
+        Wed, 29 Mar 2023 12:15:15 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1706B6192
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:14:56 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 86FC91EC0420;
+        Wed, 29 Mar 2023 18:14:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680106494;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eyuZmyKTv1NKroiSP9E43EgXTfIl/At4weexpT2NlGU=;
-        b=bi1cYZPlpjfDGYeFHHTFlHP7bYF83uQtkLpgiiSFaVXaqZ9GG0Xr9hsxuvTGEdxrnN0CKI
-        712NUUqjaG/X9bBduBf47RgGeDTq30Ocl3DY1JteJ60ewP+pPA4Imdn0SmWLWidPtx+Cnb
-        j3e6/xNN3qpxx9wE/sCkusOd+/dg44I=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-308-C2lr0zE3MAeJrpBTPlYIEg-1; Wed, 29 Mar 2023 12:14:35 -0400
-X-MC-Unique: C2lr0zE3MAeJrpBTPlYIEg-1
-Received: by mail-ed1-f71.google.com with SMTP id h11-20020a0564020e8b00b004e59d4722a3so22981917eda.6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:14:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680106474;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eyuZmyKTv1NKroiSP9E43EgXTfIl/At4weexpT2NlGU=;
-        b=uBzQgIoY5NMAQ2nDzPZRQu4gEmSSp6SxZSkLQhqD+YOCpfVJNKauZwHFWHUJSJkkcd
-         1IEDqPW0PsWiBZVY1DhhEls4W4uLAHdbD7gaL/Dg2YCDwKdQTmo6ENCEH87CKKv5RkG0
-         ZMbm39rMQE7BARdqwLveqweO7VcpH0tWhR38Agsgfekeeb91tcA0WVEH+zXwzJe/p6Fv
-         8GUSJMi5RR08LXJegqIsegzJ1zzTjvTHGxFk/i2OhwMNqFbI5k2stBkOpbTgVT322QbI
-         4UgHAl2S32PHEt232ltmUWsDYAMs88ATuxA3wJZqgY3MVe39mKpYuThYAxIrYe18+9je
-         vo5w==
-X-Gm-Message-State: AAQBX9fS4iguZ9s9Vv8ASBJw+I7xpItG3nj+ljtUJXjgA/qOhpcGc1Fq
-        kMj8XudPCN1+1QHU9JOivTUgr5R/FiRAnKwWOddOKr73YwPoLcY+ZoF8k9xwBBp/peKVISEbLds
-        sUwOwQtrwXTGYkqCWmnf+HSMj
-X-Received: by 2002:a17:906:9411:b0:925:1d1d:6825 with SMTP id q17-20020a170906941100b009251d1d6825mr21570213ejx.42.1680106474351;
-        Wed, 29 Mar 2023 09:14:34 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YWn1fLYGN+5GeSKK1DW+HePeJbJT5ZwcOpb0zI8ZYIwSr/zNcckx2CqhPDc0EazVwOjtorMw==
-X-Received: by 2002:a17:906:9411:b0:925:1d1d:6825 with SMTP id q17-20020a170906941100b009251d1d6825mr21570188ejx.42.1680106473980;
-        Wed, 29 Mar 2023 09:14:33 -0700 (PDT)
-Received: from [192.168.42.100] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id e19-20020a170906c01300b009373f1b5c4esm12603786ejz.161.2023.03.29.09.14.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 09:14:33 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <193501d0-094a-cc5a-c3ae-4553a56e3a3a@redhat.com>
-Date:   Wed, 29 Mar 2023 18:14:32 +0200
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=nAUesMmre4/tzbwJOOD2y6yVmZ8S9h3LZUKfsP6doTY=;
+        b=Sy4n/ZVgA8AibrafZfa5MrYT6x4MgTh2KfdGp6tpvKchCUkEU9MBvlYyJHAAjJWxOG0diH
+        +ZRtPzyXfoRzbzaLildWyPEhPDSppkJ6v+0vcY1dLfZTwHuVJGH0Tu0fkP5w9Xnyk1cMzu
+        wQT1YsMKyCM3oopPz2gCeBcHIofhZWg=
+Date:   Wed, 29 Mar 2023 18:14:50 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Gabriel David <ultracoolguy@disroot.org>,
+        David R <david@unsolicited.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kishon Vijay Abraham I <kvijayab@amd.com>
+Subject: Re: Panic starting 6.2.x and later 6.1.x kernels
+Message-ID: <20230329161450.GDZCRj+rz9lTEZFNBz@fat_crate.local>
+References: <943d2445-84df-d939-f578-5d8240d342cc@unsolicited.net>
+ <20230327074952.GAZCFKoDOiJUdtse2H@fat_crate.local>
+ <e8d15248-e694-79d7-da9c-b4485b471e14@unsolicited.net>
+ <4c660f0f-2845-0e02-ccf9-619958e24236@unsolicited.net>
+ <20230328142014.GCZCL3nkW5Qx5jhfsB@fat_crate.local>
+ <57385475-c289-356f-d696-fc6decce1390@unsolicited.net>
+ <20230328171057.GDZCMfobguhGUFiUuh@fat_crate.local>
+ <9ed16be4-051d-c20f-0410-b8a973c4c09e@disroot.org>
+ <20230329103943.GAZCQVb1n3tKlGOAWI@fat_crate.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     brouer@redhat.com, netdev@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dave Taht <dave.taht@gmail.com>
-Subject: Re: [PATCH net-next] net/core: add optional threading for backlog
- processing
-Content-Language: en-US
-To:     Felix Fietkau <nbd@nbd.name>, Jakub Kicinski <kuba@kernel.org>
-References: <20230324171314.73537-1-nbd@nbd.name>
- <20230324102038.7d91355c@kernel.org>
- <2d251879-1cf4-237d-8e62-c42bb4feb047@nbd.name>
-In-Reply-To: <2d251879-1cf4-237d-8e62-c42bb4feb047@nbd.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230329103943.GAZCQVb1n3tKlGOAWI@fat_crate.local>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Gabriel and David,
 
-On 24/03/2023 18.35, Felix Fietkau wrote:
-> On 24.03.23 18:20, Jakub Kicinski wrote:
->> On Fri, 24 Mar 2023 18:13:14 +0100 Felix Fietkau wrote:
->>> When dealing with few flows or an imbalance on CPU utilization, static RPS
->>> CPU assignment can be too inflexible. Add support for enabling threaded NAPI
->>> for backlog processing in order to allow the scheduler to better balance
->>> processing. This helps better spread the load across idle CPUs.
->>
->> Can you explain the use case a little bit more?
-> 
-> I'm primarily testing this on routers with 2 or 4 CPUs and limited 
-> processing power, handling routing/NAT. RPS is typically needed to 
-> properly distribute the load across all available CPUs. When there is 
-> only a small number of flows that are pushing a lot of traffic, a static 
-> RPS assignment often leaves some CPUs idle, whereas others become a 
-> bottleneck by being fully loaded. Threaded NAPI reduces this a bit, but 
-> CPUs can become bottlenecked and fully loaded by a NAPI thread alone.
-> 
-> Making backlog processing threaded helps split up the processing work 
-> even more and distribute it onto remaining idle CPUs.
-> 
-> It can basically be used to make RPS a bit more dynamic and 
-> configurable, because you can assign multiple backlog threads to a set 
-> of CPUs and selectively steer packets from specific devices / rx queues 
-> to them and allow the scheduler to take care of the rest.
-> 
+can you both pls do:
 
-My experience with RPS was that it was too slow on the RX-CPU.  Meaning
-that it doesn't really scale, because the RX-CPU becomes the scaling
-bottleneck. (My data is old and it might scale differently on your ARM
-boards).
+# acpidump -n MADT
 
-This is why I/we created the XDP "cpumap".  It also creates a kernel
-threaded model via a kthread on "map-configured" CPUs.  It scales
-significantly better than RPS, but it doesn't handle flows and packet
-Out-of-Order (OoO) situations automatically like RPS.  That is left up
-to the BPF-programmer.  The kernel samples/bpf xdp_redirect_cpu[0] have
-code that shows strategies of load-balancing flows.
+as root and dump the output here?
 
-The project xdp-cpumap-tc[1] runs in production (3 ISPs using this) and
-works in concert with netstack Traffic Control (TC) for scaling
-bandwidth shaping at the ISPs.  OoO is solved by redirecting all
-customers IPs to the same TX/egress CPU. As the README[1] describes it
-is recommended to reduce the number of RX-CPUs processing packets, and
-have more TX-CPUs that basically runs netstack/TC.  One ISP with
-2x25Gbit/s is using 2 CPUs for RX and 6 CPUs for TX.
+Thx.
 
---Jesper
+-- 
+Regards/Gruss,
+    Boris.
 
-[0] 
-https://github.com/torvalds/linux/blob/master/samples/bpf/xdp_redirect_cpu.bpf.c
-[1] https://github.com/xdp-project/xdp-cpumap-tc
-
+https://people.kernel.org/tglx/notes-about-netiquette
