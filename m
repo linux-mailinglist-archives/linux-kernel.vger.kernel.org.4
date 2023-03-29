@@ -2,191 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C626CD94A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC346CD94B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjC2MWU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 08:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
+        id S230038AbjC2MXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjC2MWS (ORCPT
+        with ESMTP id S229481AbjC2MXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:22:18 -0400
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A12740CA;
-        Wed, 29 Mar 2023 05:22:10 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id er13so21452244edb.9;
-        Wed, 29 Mar 2023 05:22:10 -0700 (PDT)
+        Wed, 29 Mar 2023 08:23:09 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECE21FDB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:23:08 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id r29so15461204wra.13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:23:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680092587;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EgGgvuGVyNlBdhj243ar9e2FgjTuUms5PNX7LlgANlc=;
+        b=bSnuTSFzUE+tAO+Zg0gsTElr+pCPYU5fbhHM4xF8htQLO3kEqmLKeMZ55SOfjRYNns
+         kGxRhrtTqrmdcShkDnadd+QcHIhdRObEeZTIntzGlnU3zKaxpWl9baX15QqOCDPVG9i5
+         FGXxZWp0O01r9h1WyZX4UniGYbEyxl1vaCbD3RwFvrBRzdUlzOJjlaRbePTAyW1GY6xg
+         fleO1mU4dk8lRXztfeMeVYkmf4+G8Ok47AMxG1oElYCRrLkS4AA/5rBrUFsC9QgBJO7T
+         /B+MmPWhZMfzd1I5rwxRw2hpKe51YPO9ppjs1kh8TEern4sPNNkKp1uGafi5qf12Wf06
+         KCZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680092529;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z4mZrQlf3YJwoCwklWtY3hmHdlb3tmR5YNWYXn4LhmY=;
-        b=X34+ERBJUGWhVax7iuzRkVxpd6l4ze1WbE4jp1q663jMVzR4PIVzRpWwYFyv6FI2dI
-         7Ul5e+FgfiwXQUsDEyAQRKkYU7cweuonMPb8ocHcm2jEf11L+v1Xh/ml43ACnGBU03uw
-         ERvrBqSN4UmVdJxcfHLMHQiDkG7jpIORu0mxQrqbjXxZCXch7hR8ji4bQJ3wpjzj+M7G
-         ELMAeLToN9nYQTPE0bapLm9uqMZ3NxMAkfGSfgrC9oawQa6oPg4AhpxqG7kW8NxVD4fC
-         qoh8hj1iqHjEssz8wQ0OmMeZDeoAedXudihQR4uZLaK1LHg4OVdC9nfIPd78w102bBBv
-         9oQw==
-X-Gm-Message-State: AAQBX9fwvBLMEy+PgxdRdLRDNhcWo57qzr3NNQ6Sp7JzAJyMx3hETplN
-        IVCmdFf5f8AFbxeE1EK4S0Y9kOQdbZPwoGNIWx8=
-X-Google-Smtp-Source: AKy350YTEp8XKGvQ2ZwiDLz/Z1QGJxtivd7JRPsJPOxHEPSr1hbP+zORqJ0wyv5n3aOleGLm9/6aONyncAT0R2Decsw=
-X-Received: by 2002:a50:9fe3:0:b0:502:62ba:865b with SMTP id
- c90-20020a509fe3000000b0050262ba865bmr809569edf.3.1680092528650; Wed, 29 Mar
- 2023 05:22:08 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680092587;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EgGgvuGVyNlBdhj243ar9e2FgjTuUms5PNX7LlgANlc=;
+        b=2HUE3cHk2zqmmV6Dc7U0TOUvZu8e7yYAZHhiZUaqir8mtZqGUg121Q/NV8wwP8tQGp
+         S4MUKvq3LWwA+lv4yMVqlCsMD+hvp/561BlbHpjraAWLKWlNyicsWx+EUFjTuHYBlSTZ
+         S3sYRvk2OsGTaljlkCg0i8Jk2fCKUHp9U0akgecVVLqAqHSccvHTZuEfB1e65WYYTUsa
+         EHf3AQ/w3iqBjbNK5pbnXCxZui/w0uMzrCPlcUpwi75GtNM93QFRtzK2n7lUvFsJH6KT
+         P3tX77wV84ZlkyndbIHCQOwhB45q1A91q/ZfC1rrpGs7KsMXad/1p3uUC8XWHkaqYRlU
+         S3vw==
+X-Gm-Message-State: AAQBX9cwnxoXEn2fLwVtCTi0lPXgtEo/d9NMw9L11Ed/k99JP8s/DABy
+        KhOTUf8W9ismC0xXM5YPJyU5UEPVGIdu4ZnqtbEL7Q==
+X-Google-Smtp-Source: AKy350b+U9Wdt+IFaashu8uZXI6RPoqXNfXpoenZTc6qE+L+zQMIUUqa4TAiRAvt8zr7cXDgM2skXg==
+X-Received: by 2002:adf:f245:0:b0:2ce:b2ba:9905 with SMTP id b5-20020adff245000000b002ceb2ba9905mr15432436wrp.20.1680092586795;
+        Wed, 29 Mar 2023 05:23:06 -0700 (PDT)
+Received: from google.com (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
+        by smtp.gmail.com with ESMTPSA id k2-20020a5d6e82000000b002c55b0e6ef1sm30448545wrz.4.2023.03.29.05.23.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 05:23:06 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 13:23:01 +0100
+From:   Vincent Donnefort <vdonnefort@google.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v2 1/2] ring-buffer: Introducing ring-buffer mapping
+ functions
+Message-ID: <ZCQtpbyWrjliJkdg@google.com>
+References: <20230322102244.3239740-1-vdonnefort@google.com>
+ <20230322102244.3239740-2-vdonnefort@google.com>
+ <20230328224411.0d69e272@gandalf.local.home>
+ <ZCQCsD9+nNwBYIyH@google.com>
+ <20230329070353.1e1b443b@gandalf.local.home>
 MIME-Version: 1.0
-References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
- <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0hxKg_u4GKMkdGEp-JbvnymEtxSZT7fB2kbhWoQFSK1fw@mail.gmail.com> <20230329001536.GG8958@ranerica-svr.sc.intel.com>
-In-Reply-To: <20230329001536.GG8958@ranerica-svr.sc.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 29 Mar 2023 14:21:57 +0200
-Message-ID: <CAJZ5v0iHJrXDU=C0oaf-3DJfatWGj4No_J1rwN6PCpRTZMXqyA@mail.gmail.com>
-Subject: Re: [PATCH v3 21/24] thermal: intel: hfi: Implement model-specific
- checks for task classification
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329070353.1e1b443b@gandalf.local.home>
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 2:04 AM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
->
-> On Mon, Mar 27, 2023 at 07:03:08PM +0200, Rafael J. Wysocki wrote:
-> > On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
-> > <ricardo.neri-calderon@linux.intel.com> wrote:
-> > >
-> > > In Alder Lake and Raptor Lake, the result of thread classification is more
-> > > accurate when only one SMT sibling is busy. Classification results for
-> > > class 2 and 3 are always reliable.
-> > >
-> > > To avoid unnecessary migrations, only update the class of a task if it has
-> > > been the same during 4 consecutive user ticks.
-> > >
-> > > Cc: Ben Segall <bsegall@google.com>
-> > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> > > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > Cc: Len Brown <len.brown@intel.com>
-> > > Cc: Lukasz Luba <lukasz.luba@arm.com>
-> > > Cc: Mel Gorman <mgorman@suse.de>
-> > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > > Cc: Tim C. Chen <tim.c.chen@intel.com>
-> > > Cc: Valentin Schneider <vschneid@redhat.com>
-> > > Cc: x86@kernel.org
-> > > Cc: linux-pm@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > > ---
-> > > Changes since v2:
-> > >  * None
-> > >
-> > > Changes since v1:
-> > >  * Adjusted the result the classification of Intel Thread Director to start
-> > >    at class 1. Class 0 for the scheduler means that the task is
-> > >    unclassified.
-> > >  * Used the new names of the IPC classes members in task_struct.
-> > >  * Reworked helper functions to use sched_smt_siblings_idle() to query
-> > >    the idle state of the SMT siblings of a CPU.
-> > > ---
-> > >  drivers/thermal/intel/intel_hfi.c | 60 ++++++++++++++++++++++++++++++-
-> > >  1 file changed, 59 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> > > index 35d947f47550..fdb53e4cabc1 100644
-> > > --- a/drivers/thermal/intel/intel_hfi.c
-> > > +++ b/drivers/thermal/intel/intel_hfi.c
-> > > @@ -40,6 +40,7 @@
-> > >  #include <linux/workqueue.h>
-> > >
-> > >  #include <asm/msr.h>
-> > > +#include <asm/intel-family.h>
-> > >
-> > >  #include "../thermal_core.h"
-> > >  #include "intel_hfi.h"
-> > > @@ -209,9 +210,64 @@ static int __percpu *hfi_ipcc_scores;
-> > >   */
-> > >  #define HFI_UNCLASSIFIED_DEFAULT 1
-> > >
-> > > +#define CLASS_DEBOUNCER_SKIPS 4
-> > > +
-> > > +/**
-> > > + * debounce_and_update_class() - Process and update a task's classification
-> > > + *
-> > > + * @p:         The task of which the classification will be updated
-> > > + * @new_ipcc:  The new IPC classification
-> > > + *
-> > > + * Update the classification of @p with the new value that hardware provides.
-> > > + * Only update the classification of @p if it has been the same during
-> > > + * CLASS_DEBOUNCER_SKIPS consecutive ticks.
-> > > + */
-> > > +static void debounce_and_update_class(struct task_struct *p, u8 new_ipcc)
-> > > +{
-> > > +       u16 debounce_skip;
-> > > +
-> > > +       /* The class of @p changed. Only restart the debounce counter. */
-> > > +       if (p->ipcc_tmp != new_ipcc) {
-> > > +               p->ipcc_cntr = 1;
-> > > +               goto out;
-> > > +       }
-> > > +
-> > > +       /*
-> > > +        * The class of @p did not change. Update it if it has been the same
-> > > +        * for CLASS_DEBOUNCER_SKIPS user ticks.
-> > > +        */
-> > > +       debounce_skip = p->ipcc_cntr + 1;
-> > > +       if (debounce_skip < CLASS_DEBOUNCER_SKIPS)
-> > > +               p->ipcc_cntr++;
-> > > +       else
-> > > +               p->ipcc = new_ipcc;
-> > > +
-> > > +out:
-> > > +       p->ipcc_tmp = new_ipcc;
-> > > +}
-> >
-> > Why does the code above belong to the Intel HFI driver?  It doesn't
-> > look like there is anything driver-specific in it.
->
-> That is a good point. This post-processing is specific to the
-> implementation of IPCC classes using Intel Thread Director.
+On Wed, Mar 29, 2023 at 07:03:53AM -0400, Steven Rostedt wrote:
+> On Wed, 29 Mar 2023 10:19:44 +0100
+> Vincent Donnefort <vdonnefort@google.com> wrote:
+> 
+> > > I've been playing with this a bit, and I'm thinking, do we need the
+> > > data_pages[] array on the meta page?
+> > > 
+> > > I noticed that I'm not even using it.
+> > > 
+> > > Currently, we need to do a ioctl every time we finish with the reader page,
+> > > and that updates the reader_page in the meta data to point to the next page
+> > > to read. When do we need to look at the data_start section?  
+> > 
+> > This is for non-consuming read, to get all the pages in order.
+> 
+> Yeah, I was trying to see how a non consuming read would work, and was
+> having issues figuring that out without the tail page being updated.
 
-Well, the implementation-specific part is the processor model check
-whose only contribution is to say whether or not the classification is
-valid.  The rest appears to be fairly generic to me.
+Would the userspace really need to know where is the tail page? It can just stop
+whenever it finds out a page doesn't have any events, and make sure it does not
+loop once back to the head?
 
-> Maybe a new file called drivers/thermal/intel/intel_itd.c would be better?
+> 
+> > 
+> > If we remove this section we would lose this ability ... but we'd also simplify
+> > the code by a good order of magnitude (don't need the update ioctl anymore, no
+> > need to keep those pages in order and everything can fit a 0-order meta-page).
+> > And the non-consuming read doesn't bring much to the user over the pipe version.
+> > 
+> > This will although impact our hypervisor tracing which will only be able to
+> > expose trace_pipe interfaces. But I don't think it is a problem, all userspace
+> > tools only relying on consuming read anyway.
+> > 
+> > So if you're happy dropping this support, let's get rid of it.
+> 
+> I don't really want to get rid of it, but perhaps break it up where we
+> don't have it in the first release, but add it in a second one. That will
+> also make sure that we can expand the API if necessary (one reason I wanted
+> the "data_start" in the first place).
+> 
+> Let's drop it for now, but be able to add it later, an have the current
+> structure be:
 
-So which part of this code other than the processor model check
-mentioned above is Intel-specific?
+Ok, I will prepare a V3 accordingly.
+
+> 
+> struct ring_buffer_meta_page_header {
+> #if __BITS_PER_LONG == 64
+> 	__u64	entries;
+> 	__u64	overrun;
+> #else
+> 	__u32	entries;
+> 	__u32	overrun;
+> #endif
+> 	__u32	pages_touched;
+> 	__u32	meta_page_size;
+> 	__u32	reader_page;	/* page ID for the reader page */
+> 	__u32	nr_data_pages;	/* doesn't take into account the reader_page */
+> };
+> 
+> BTW, shouldn't the nr_data_pages take into account the reader page? As it
+> is part of the array we traverse isn't it?
+
+It depends if the reader page has ever been swapped out. If yes, the reader
+would have to start from reader_page and then switch to the data_pages.
+Which sounds like a fiddly interface for the userspace.
+
+So yeah, consuming-read only feels like a better start.
+
+> 
+> -- Steve
