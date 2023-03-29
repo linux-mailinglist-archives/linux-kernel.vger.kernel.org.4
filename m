@@ -2,91 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1DFC6CF560
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5934F6CF558
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjC2V1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 17:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
+        id S229767AbjC2V1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 17:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjC2V13 (ORCPT
+        with ESMTP id S229462AbjC2V1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 17:27:29 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365AC2681;
-        Wed, 29 Mar 2023 14:27:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=vTEx1qGiRwHQqbRWZ0F0YVEXYMez6RiJLOH+5aThdgE=;
-        t=1680125246; x=1681334846; b=spE3Mu/tZJZwbguWhNkhb04F/VyzKMs5S+EnC7HG/oatr8H
-        Q1q+8HkkN1+FqeaVED8hlbN6/oYYLNep3P7v6UjYf0aQk6j34UzBQC2Ta6PF3PDP5Pj9y+rWUCsJH
-        TxuD/FFgojsMo0V90ZL2wB5TIplvpE0rrKHEYW5HB9jnlShnNIGqxHMoIX74EhGwQPUb0Q5Bix4dR
-        9KvWWFRQW8D8DcRU7JILoU62inBy57SWX+T6vyISIYskWAdKSxgpIrRc8y2HzgEEb6sJHO+PIe+qO
-        ZfJkxJ9lyVP2HcNWY5JdtLw55pt1Yy19tWE5Qnf1LmXMmzRKUXCOvQySu29Qh0Yw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1phdJz-000F4W-1q;
-        Wed, 29 Mar 2023 23:27:07 +0200
-Message-ID: <fbad112793615840745195e54eed98634233c415.camel@sipsolutions.net>
-Subject: Re: [PATCH 3/5] net: rfkill-gpio: Add explicit include for of.h
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devicetree@vger.kernel.org
-Date:   Wed, 29 Mar 2023 23:27:05 +0200
-In-Reply-To: <20230329-acpi-header-cleanup-v1-3-8dc5cd3c610e@kernel.org>
-References: <20230329-acpi-header-cleanup-v1-0-8dc5cd3c610e@kernel.org>
-         <20230329-acpi-header-cleanup-v1-3-8dc5cd3c610e@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 29 Mar 2023 17:27:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA529FB;
+        Wed, 29 Mar 2023 14:27:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49EB361E1A;
+        Wed, 29 Mar 2023 21:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959CEC4339B;
+        Wed, 29 Mar 2023 21:27:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680125230;
+        bh=AS0hMPzODy4Xc1L29bhWgg84MiUUzESVyfIE6SFTowE=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=HByzCpkd+4vCITgt+uRrRp8rFQqgl4QLr74RtztpdlJXSIXL90mhxK5ZUgC+W5QVo
+         GCQcOXgWNihEYMQuQYFdsbWJRMGxIR2/JS2q4fm9I8R8zyoqdAtTyy8OpXLpIJ9UU4
+         gNsCi4N0mM/KKLyLLo0lVb/TEm9QO3VfPJ1CFmdwIM7HwCLaZAglZ9EU3UBcMePND7
+         WAiRIddD0YoYDodbhjwH7uPRXmjdss2HkzIjJoFyDhsKrigKxchMltrCgNf69ZEfZX
+         ss+jmE3cwyhkySqpd4uei37AXKtgenN66eZJJ+T5UiUFBisZwcAbZQgjsbSvPhlIMv
+         VEwDhc+n11bnQ==
+Message-ID: <2f4967f2a079e23b2b8a6013012c66e0.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230329204632.lsiiqf42hrwmn6xm@pengutronix.de>
+References: <20221026151812.1042052-1-u.kleine-koenig@pengutronix.de> <4d8d412a33a7d63f2ffe6a13194375ed.sboyd@kernel.org> <20230329204632.lsiiqf42hrwmn6xm@pengutronix.de>
+Subject: Re: [PATCH v4] clk: expand clk_ignore_unused mechanism to keep only a few clks on
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        linux-doc@vger.kernel.org
+To:     Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Date:   Wed, 29 Mar 2023 14:27:08 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-29 at 16:20 -0500, Rob Herring wrote:
-> With linux/acpi.h no longer implicitly including of.h, add an explicit
-> include of of.h to fix the following error:
+Quoting Uwe Kleine-K=C3=B6nig (2023-03-29 13:46:32)
+> > > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> > > index c3c3f8c07258..356119a7e5fe 100644
+> > > --- a/drivers/clk/clk.c
+> > > +++ b/drivers/clk/clk.c
+> > > [...]
+> > > @@ -1352,12 +1354,17 @@ static void __init clk_disable_unused_subtree=
+(struct clk_core *core)
+> > >          * back to .disable
+> > >          */
+> > >         if (clk_core_is_enabled(core)) {
+> > > -               trace_clk_disable(core);
+> > > -               if (core->ops->disable_unused)
+> > > -                       core->ops->disable_unused(core->hw);
+> > > -               else if (core->ops->disable)
+> > > -                       core->ops->disable(core->hw);
+> > > -               trace_clk_disable_complete(core);
+> > > +               if (clk_unused_keep_on) {
+> > > +                       pr_warn("Keep unused clk \"%s\" on\n", core->=
+name);
+> > > +                       clk_unused_keep_on -=3D 1;
+> > > +               } else {
+> > > +                       trace_clk_disable(core);
+> >=20
+> > We have trace_clk_disable() here. Can you have this tracepoint print to
+> > the kernel log and watch over serial console? That would be faster than
+> > bisecting.
 >=20
-> net/rfkill/rfkill-gpio.c:181:21: error: implicit declaration of function =
-'of_match_ptr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Well no, that doesn't work for all the problems where
+> clk_ignore_unused=3D7 could be useful. Consider that e.g. you know that
+> eth0 is broken, but with clk_ignore_unused is works. So one of the (say)
+> 25 nominally unused clks are required for eth0. But it's not possible to
+> test the network after each of the 25 clk_disable()s. Unless I'm missing
+> something and you can hook a userspace action on a trace line?!
 
-Sounds good!
-
-Acked-by: Johannes Berg <johannes@sipsolutions.net>
-
-I'm happy with Rafael taking the entire series, there's nothing here
-that I expect to conflict, and anyway it'd be trivial.
-
-Thanks,
-johannes
+In that case it sounds like you want to compile the kernel with the
+support for enabling clks from debugfs. Can you use that?
