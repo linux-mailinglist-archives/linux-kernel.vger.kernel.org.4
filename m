@@ -2,244 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4066CD886
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6717F6CD884
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjC2LdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
+        id S229867AbjC2LdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjC2LdX (ORCPT
+        with ESMTP id S229775AbjC2LdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:33:23 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F136F420A
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:33:21 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id z17so6393459vsf.4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:33:21 -0700 (PDT)
+        Wed, 29 Mar 2023 07:33:14 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CD740F1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:33:12 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id h25so19690375lfv.6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:33:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680089600;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SF/7j55UEdwdSXvasixqoGihgaHirKQA0NtfPSsjePs=;
-        b=pCNX3/Yu/50sQOqRr5BINMneZYH3wyRUQLPOOvlPqgFajfFcGtClNdcsP3GYhnzJjg
-         2Hkz0Su1o5TgIiSVRAsp0Pch484EKaUpcbyZKhwJ6b2RjkPqlFKSp/jGdL/oY29wy5u8
-         eRFp5IvtPO2sW3cycxELkaBypLN46x3Q5aCaUCcSZEC13qo2Pszg3asI7Hwc7sMhMV8n
-         tgPjAmawprHvFMbQ/pdgBNbwcftuw6BObXno3lpYdZT+XaCrByOFM3HjcIJ4iESlEnPF
-         QjgJ0fnPoRcPOKoAgeceonM/kLtD+m3UB5ugdLTcL/5VzjOQvVYVcrO5Ux0S7t04G3CG
-         yeIg==
+        d=linaro.org; s=google; t=1680089591;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sohlc8aRdt0ptQ3unHlw5QOmftyBVVlEC9VNICwLo1w=;
+        b=RQ1HZFubaw3Kwxfm/62gAa93r2wx/Vqmsa/0FzpPQNvdjH1lIynHB0C625AWRk/XYB
+         o9gnX+QmtJ9YUjH2tkx8GgM5DwohBvDHfE7+psBcI7/LA4PKncHMGfd+TSHDVoWRJx8O
+         CI+kuQ8odWQe4lk2Hlst0rDS6seABNQkmoqXlt3QBlbAg/Xdq8dGfbj8q7trmrQiCCrE
+         kPt5w2ObOKUgD0HGk9T7VOY4gURn6FZFzVRQqnh6DTJCn0ylCnZkWfijC6pGs+Bj3HCr
+         Y0kqamI7syOBe46m60O+uLtwsk4BYVEUvqmRoYdFXetRVfqSBAAnVhNO1CvnB7CfJEcW
+         uN+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680089600;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SF/7j55UEdwdSXvasixqoGihgaHirKQA0NtfPSsjePs=;
-        b=1T3KecrBxFZ+iA7coeyqWBZ00bZ1vq12bKPCTmAh0PkLdZPG6dsHszzlWhtjtlG5CJ
-         dr/Dsiu5pv88OZ1sE+06JZWGIB8rj7f79UkBfRlR8Nxy5ylJwXmYJqiJji0Hgg8nCoXs
-         dsn6v7TAvgvBGNg91P5BXNa8cY/KW5rD734K85G8h2bpdEPgQY+Iz35KxiefPAwhWTxw
-         vfsLFtquqAUT1lhxpBDA6qApG7mjnINSlB2q2weJdgknkwMzWCFbDBq8DFHnrjBeuO84
-         lFI1mMgOYgb3HZ20rSgApm1fOpABO0yi3UsWBEsXT8SZfYCCHZIzgJ2uYt2vOgxDstwB
-         HV9Q==
-X-Gm-Message-State: AAQBX9ccoX92W87ST5XLX3C60EgD3Ssb99ujqivGOU3TD/bjcX3n5Vuy
-        rHoYmv8pDOLOOzbvheTMpZVUkeF5WTusUD2oAiG+Mg==
-X-Google-Smtp-Source: AKy350bBhGHrs3ynZf0/Rz9pwcG7/7XtjGgmO9YzmKGO2m5PM4IVco6Z3jyYmBnFCd6noLy27PmaLSsAWNXecFevUxU=
-X-Received: by 2002:a67:e01e:0:b0:425:d4de:718a with SMTP id
- c30-20020a67e01e000000b00425d4de718amr10384367vsl.1.1680089600529; Wed, 29
- Mar 2023 04:33:20 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680089591;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sohlc8aRdt0ptQ3unHlw5QOmftyBVVlEC9VNICwLo1w=;
+        b=p6f/G6zlx5yTjjN0YqPyx0F6rOUdlFXVaFG8yo2+VvY/XA0t1E0IdHCv0O5S4huSBl
+         vL57ASr2Gy5r0j0juB4OvUMwnCwXkpLsu3J7s7xEYIohk1EHsw0NfP1ha9HVbjTBzdPN
+         M38yB63sx6U3ynPNaq28soK0Xs782LlVVmLqNzAMyLtOhJX8kzppkZ6ewYWEz9MiJpjF
+         W3DbfBuTi4TJ+4ilKTOi5cC6mKsbjtP+xXSC0gDr2E/rX9+vzIeVLfKyzkGL9c6ycQj4
+         3LQPekWRs5urXv3NuDs5hII7Xr2ydRDsr25M+C5LCAxngBbQtX80Y6Rry+LUMGVw6VJ4
+         HEqg==
+X-Gm-Message-State: AAQBX9f1M7uH8hIwVtxxMWw0dM4zZriwEP4tssrNu6TGYAG5MnradOA6
+        ti2TPoHAm5gSdg+eMNJd8KBt1w==
+X-Google-Smtp-Source: AKy350ajcJzhIh0qFeuqDCAoDEJi8t7QXDzrgy34sATyGDAdmmbqC6g3CxoIxWcZ48SqVnGaZ4q1AA==
+X-Received: by 2002:ac2:4c95:0:b0:4d7:58c8:5f44 with SMTP id d21-20020ac24c95000000b004d758c85f44mr6528158lfl.12.1680089591160;
+        Wed, 29 Mar 2023 04:33:11 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id m18-20020a195212000000b004e95f53adc7sm5445662lfb.27.2023.03.29.04.33.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 04:33:10 -0700 (PDT)
+Message-ID: <b520f8c8-5ab6-79f6-7eef-28f6f14f536e@linaro.org>
+Date:   Wed, 29 Mar 2023 13:33:09 +0200
 MIME-Version: 1.0
-References: <20230328142617.205414124@linuxfoundation.org>
-In-Reply-To: <20230328142617.205414124@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 29 Mar 2023 17:03:09 +0530
-Message-ID: <CA+G9fYv6nfabJATopiXEOY-wMGXVTggzHsmHHUu5_k7y0kD4bg@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/224] 6.1.22-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 5/7] arm64: dts: qcom: sa8775p: add the pcie smmu node
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230328193632.226095-1-brgl@bgdev.pl>
+ <20230328193632.226095-6-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230328193632.226095-6-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023 at 20:26, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.22 release.
-> There are 224 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.22-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+On 28.03.2023 21:36, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> Add the PCIe SMMU node for sa8775p platforms.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 74 +++++++++++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> index 2343df7e0ea4..9ab630c7d81b 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> @@ -809,6 +809,80 @@ apps_smmu: iommu@15000000 {
+>  				     <GIC_SPI 891 IRQ_TYPE_LEVEL_HIGH>;
+>  		};
+>  
+> +		pcie_smmu: iommu@15200000 {
+> +			compatible = "qcom,sa8775p-smmu-500", "qcom,smmu-500", "arm,mmu-500";
+> +			reg = <0x0 0x15200000 0x0 0x800000>;
+> +			#iommu-cells = <2>;
+> +			#global-interrupts = <2>;
+> +
+> +			interrupts = <GIC_SPI 920 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 921 IRQ_TYPE_LEVEL_HIGH>,
+That's a lot of interrupts!
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-## Build
-* kernel: 6.1.22-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.1.y
-* git commit: e6bbee2ba76fd6c97025903e3b04b1461f02e8af
-* git describe: v6.1.21-225-ge6bbee2ba76f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
-1-225-ge6bbee2ba76f
-
-## Test Regressions (compared to v6.1.21)
-
-## Metric Regressions (compared to v6.1.21)
-
-## Test Fixes (compared to v6.1.21)
-
-## Metric Fixes (compared to v6.1.21)
-
-## Test result summary
-total: 164164, pass: 145146, fail: 4467, skip: 14236, xfail: 315
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 148 passed, 1 failed
-* arm64: 51 total, 50 passed, 1 failed
-* i386: 39 total, 36 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 36 passed, 2 failed
-* riscv: 16 total, 15 passed, 1 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 44 total, 44 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Konrad
+> +				     <GIC_SPI 925 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 926 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 927 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 928 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 950 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 951 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 952 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 953 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 954 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 955 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 956 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 957 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 958 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 885 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 886 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 887 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 888 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 820 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 822 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 823 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 842 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 843 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 844 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 845 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 846 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 847 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 848 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 849 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 802 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 803 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 804 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 805 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 806 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 807 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 808 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 809 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 810 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 812 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 813 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 814 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 836 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 837 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 838 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 839 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 854 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 855 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 790 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 791 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 792 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 793 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 794 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 795 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 796 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 639 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 640 IRQ_TYPE_LEVEL_HIGH>;
+> +		};
+> +
+>  		intc: interrupt-controller@17a00000 {
+>  			compatible = "arm,gic-v3";
+>  			reg = <0x0 0x17a00000 0x0 0x10000>,     /* GICD */
