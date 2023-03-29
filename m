@@ -2,114 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9FD6CF4DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 22:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580336CF4E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 22:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjC2Uy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 16:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
+        id S229975AbjC2U4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 16:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjC2UyX (ORCPT
+        with ESMTP id S229475AbjC2U4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 16:54:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CD710FB;
-        Wed, 29 Mar 2023 13:54:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 29 Mar 2023 16:56:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBD210FA
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 13:55:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680123350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Nte51xjXiIM8Lvgz0EuSk0mf1Y4mOMuFslnvcEmaPvU=;
+        b=gdnmDalkEm8C8unwHbT7UEs1M7JvGfYcOqoZftcYXutX9KUJ+x3AHM+XeXNyza3pKjvvVV
+        nhVadv23DdAuGUyW2qsvYIHM0/wtKhIhnV/3R/ZaPr0rZ3+u5+8hCdhTYYSQwjPmGx6LIr
+        dfoSC6+/hFuPC9m3ru0iWgdQR4qmmhc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-158-WRpWoYE3NUiF0AduRmvItQ-1; Wed, 29 Mar 2023 16:55:46 -0400
+X-MC-Unique: WRpWoYE3NUiF0AduRmvItQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9653F61E27;
-        Wed, 29 Mar 2023 20:54:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB292C433D2;
-        Wed, 29 Mar 2023 20:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680123261;
-        bh=AbVWsfd24flX0NPK7NPatY9+8fT6TeXiEaIfWJAqTIM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=M/MwojbQOjIFYA215EwwrbyaIYUfgtTlJvfup4puyu0OpeSoE84RHFBW4HmnMEI0t
-         lFUexgCWABLMPBoMerI0L163fWcVNtSSkr0UJCv3OYVS0z3FPK3qeHbIwuxH616Yxs
-         M7imhua9aINkFUuh9Nzwemsp2ELRtBrpohR+DWto+mHzJfBBh0Nr1+IZvTG91OPLuq
-         gbG56QSj7i8lTGtLQ3k+j8djUIrN3GXhOGbIvMq2QKoDNjeVeomQgQKM8p7YsPPpBc
-         D7RFRQAwvyNK+wC5JCAojVDqhRqsZzLZOCn0QiMJgclaKds/zGXufDwgfRBsoARlvH
-         7WGflIt3350JA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 7C9FA154047D; Wed, 29 Mar 2023 13:54:20 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 13:54:20 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 3/4] rcu/nocb: Recheck lazy callbacks under the
- ->nocb_lock from shrinker
-Message-ID: <8df51703-1ee4-4b7b-9e05-90b3650e8ee7@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230329160203.191380-1-frederic@kernel.org>
- <20230329160203.191380-4-frederic@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0975485A588;
+        Wed, 29 Mar 2023 20:55:46 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.39])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6584A40BC797;
+        Wed, 29 Mar 2023 20:55:45 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Lee Jones <lee@kernel.org>, Chen-Yu Tsai <wens@csie.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] mfd: axp20x: Fix axp288 writable-ranges
+Date:   Wed, 29 Mar 2023 22:55:44 +0200
+Message-Id: <20230329205544.1051393-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329160203.191380-4-frederic@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 06:02:02PM +0200, Frederic Weisbecker wrote:
-> The ->lazy_len is only checked locklessly. Recheck again under the
-> ->nocb_lock to avoid spending more time on flushing/waking if not
-> necessary. The ->lazy_len can still increment concurrently (from 1 to
-> infinity) but under the ->nocb_lock we at least know for sure if there
-> are lazy callbacks at all (->lazy_len > 0).
-> 
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> ---
->  kernel/rcu/tree_nocb.h | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index c321fce2af8e..dfa9c10d6727 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -1358,12 +1358,20 @@ lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
->  		if (!rcu_rdp_is_offloaded(rdp))
->  			continue;
->  
-> +		if (!READ_ONCE(rdp->lazy_len))
-> +			continue;
+Register AXP288_POWER_REASON is writable and needs to be written
+to reset the reset- / power-on-reason bits.
 
-Do you depend on the ordering of the above read of ->lazy_len against
-anything in the following, aside from the re-read of ->lazy_len?  (Same
-variable, both READ_ONCE() or stronger, so you do get that ordering.)
+Add it to the axp288 writable-ranges so that the extcon-axp288
+driver can properly clear the reset- / power-on-reason bits.
 
-If you do need that ordering, the above READ_ONCE() needs to instead
-be smp_load_acquire() or similar.  If you don't need that ordering,
-what you have is good.
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/mfd/axp20x.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +		rcu_nocb_lock_irqsave(rdp, flags);
-> +		/*
-> +		 * Recheck under the nocb lock. Since we are not holding the bypass
-> +		 * lock we may still race with increments from the enqueuer but still
-> +		 * we know for sure if there is at least one lazy callback.
-> +		 */
->  		_count = READ_ONCE(rdp->lazy_len);
-> -
-> -		if (_count == 0)
-> +		if (!_count) {
-> +			rcu_nocb_unlock_irqrestore(rdp, flags);
->  			continue;
-> -
-> -		rcu_nocb_lock_irqsave(rdp, flags);
-> +		}
->  		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, false));
->  		rcu_nocb_unlock_irqrestore(rdp, flags);
->  		wake_nocb_gp(rdp, false);
-> -- 
-> 2.34.1
-> 
+diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+index 01a6bbb6d266..7720ac15c7d4 100644
+--- a/drivers/mfd/axp20x.c
++++ b/drivers/mfd/axp20x.c
+@@ -119,6 +119,7 @@ static const struct regmap_access_table axp22x_volatile_table = {
+ 
+ /* AXP288 ranges are shared with the AXP803, as they cover the same range */
+ static const struct regmap_range axp288_writeable_ranges[] = {
++	regmap_reg_range(AXP288_POWER_REASON, AXP288_POWER_REASON),
+ 	regmap_reg_range(AXP20X_DATACACHE(0), AXP20X_IRQ6_STATE),
+ 	regmap_reg_range(AXP20X_DCDC_MODE, AXP288_FG_TUNE5),
+ };
+-- 
+2.39.1
+
