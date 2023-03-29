@@ -2,98 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800BC6CF6BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6902D6CF6C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjC2XNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 19:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S229592AbjC2XPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 19:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjC2XNB (ORCPT
+        with ESMTP id S229456AbjC2XPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 19:13:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD8C5272;
-        Wed, 29 Mar 2023 16:12:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 826D161E83;
-        Wed, 29 Mar 2023 23:12:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC724C433D2;
-        Wed, 29 Mar 2023 23:12:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680131550;
-        bh=32FitxRKOssuC97chejLqod317YrSMh58RaYfXFLdv0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=kYR4CQQ45Mnpf2V9SZpFQTMq//6AVkFTtaWDBjZwnGUK2PjlcyQ/uoJN01UdOwLsg
-         X1q3JXP6eZmEsOSFrcOZZNKseOZL7Y3luMl3WRyz40fTyNqQZovd/GjwFFJedn/MKy
-         Wavj+BPt7DP7u+/d03Oy8J3yjAApP1/UElFqGj50aoUbsWUuQ1ZRzTz4sSipZM/cAn
-         qB2OUlFr4XthIJWwoG1RB3uNsjH0S8bd3paQhWzNz28rL+N9gDNRyq0ocQR09sqBXF
-         HKcvvVMAxdbNXTuYLfKlvsoEOSnl+TP2h0oaaRojJMSXn3JyqrqLuuHXU3BoTXxZhx
-         BHc3tP1ERflFA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 6105D154047D; Wed, 29 Mar 2023 16:12:30 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 16:12:30 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 4/4] rcu/nocb: Make shrinker to iterate only NOCB CPUs
-Message-ID: <84fd8b61-b6db-4b8e-ac02-89e00b267e77@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230329160203.191380-1-frederic@kernel.org>
- <20230329160203.191380-5-frederic@kernel.org>
- <519aadf0-6acd-43c0-89cf-caab9e229a46@paulmck-laptop>
- <ZCSvKOJqhejuW09u@lothringen>
+        Wed, 29 Mar 2023 19:15:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BC43596
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 16:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680131654;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RDa5o+kZyCZFoDwvixD+yMC8DGY8pjS5wLyVr2om2qE=;
+        b=hshW0keDAhAaXayV6NI88ssrjo0Vez0mgIXhMusnMF0hDfkp4iNOKl+DNePWaotbTbD97E
+        BCNvTs7xXa/LrmwvFK6oDfFV56h/pLnf8PZmzxBsiImSz/GjpyqSARVf8omgw2iHOt5x17
+        HIYFCxgIeF3JPB8IdFfUGa50C27fBCk=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-351-JxTlfr55MAyL1UdCIIrung-1; Wed, 29 Mar 2023 19:14:13 -0400
+X-MC-Unique: JxTlfr55MAyL1UdCIIrung-1
+Received: by mail-qv1-f69.google.com with SMTP id dl18-20020ad44e12000000b005a4d5420bc6so7375280qvb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 16:14:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680131652;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RDa5o+kZyCZFoDwvixD+yMC8DGY8pjS5wLyVr2om2qE=;
+        b=s8tBlAPAUNYKNXrpPppxoI2VzGe1aUub0ZIBMlvmeWibSUjBnV9wKnHLT2/kRUJ8E+
+         cdQO4+LtffOdTREc9D4FNVzd3ij7bJ3xxhnVrphnvNnzJOJDJSTmXTRH+NCCqrPkQGOO
+         Rsh+/ZL9eMlB8Q/HU8V8QYkD3UkrlB7ZCvn40XvVllHSxtZmaoWGZR7tmY9GID0gXAV7
+         Bf3uNpjT5/2AehUHjzW7o9CdDr3eBuzJDxYkAfAjKxRX6B4BRKzQRkfCijLovVe5Hhqx
+         nLY4wPUgo8LN8rXhUSo7yu2i5QCioJ3Znm18UOhyil64WkjF4yfPDJ6A95ve8F2KJt2Q
+         fJ/g==
+X-Gm-Message-State: AO0yUKXhwA0PB/0v9bTKNpSBO+W+8Jj/siFKKAGNtwb+K1QYYn+UpsSC
+        YgHyNIb12elw8gX+fVKjTJP4YaRf39f61ZXMlWmC6El7rh1+BvmluUVEVARHW23r4FgWNL576vO
+        BmuxkYAowV+6dVjDboE9KsijN
+X-Received: by 2002:a05:622a:53:b0:3bf:c3e8:c19b with SMTP id y19-20020a05622a005300b003bfc3e8c19bmr39717914qtw.22.1680131652538;
+        Wed, 29 Mar 2023 16:14:12 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9FAlt8CkZ7gP0dtRURdKafeSyXrPgA0ctSwHl2YRdMc9jHIn4kx1HtMkkz0/D/w1j49owN7A==
+X-Received: by 2002:a05:622a:53:b0:3bf:c3e8:c19b with SMTP id y19-20020a05622a005300b003bfc3e8c19bmr39717885qtw.22.1680131652329;
+        Wed, 29 Mar 2023 16:14:12 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id x16-20020ae9e910000000b007435a646354sm12246105qkf.0.2023.03.29.16.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 16:14:12 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     bskeggs@redhat.com, kherbst@redhat.com, lyude@redhat.com,
+        airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/nouveau/svm: remove unused ret variable
+Date:   Wed, 29 Mar 2023 19:14:07 -0400
+Message-Id: <20230329231407.1816570-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCSvKOJqhejuW09u@lothringen>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 11:35:36PM +0200, Frederic Weisbecker wrote:
-> On Wed, Mar 29, 2023 at 01:58:06PM -0700, Paul E. McKenney wrote:
-> > On Wed, Mar 29, 2023 at 06:02:03PM +0200, Frederic Weisbecker wrote:
-> > > Callbacks can only be queued as lazy on NOCB CPUs, therefore iterating
-> > > over the NOCB mask is enough for both counting and scanning. Just lock
-> > > the mostly uncontended barrier mutex on counting as well in order to
-> > > keep rcu_nocb_mask stable.
-> > > 
-> > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > 
-> > Looks plausible.  ;-)
-> > 
-> > What are you doing to test this?  For that matter, what should rcutorture
-> > be doing to test this?  My guess is that the current callback flooding in
-> > rcu_torture_fwd_prog_cr() should do the trick, but figured I should ask.
-> 
-> All I did was to trigger these shrinker callbacks through debugfs
-> (https://docs.kernel.org/admin-guide/mm/shrinker_debugfs.html)
-> 
-> But rcutorture isn't testing it because:
-> 
-> - No torture config has CONFIG_RCU_LAZY
-> - rcutorture doesn't do any lazy call_rcu() (always calls hurry for the
->   main RCU flavour).
-> 
-> And I suspect rcutorture isn't ready for accepting the lazy delay, that would
-> require some special treatment.
+clang with W=1 reports
+drivers/gpu/drm/nouveau/nouveau_svm.c:929:6: error: variable
+  'ret' set but not used [-Werror,-Wunused-but-set-variable]
+        int ret;
+            ^
+This variable is not used so remove it.
 
-All fair points!
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/nouveau/nouveau_svm.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-And yes, any non-lazy callback would delazify everything, so as it
-is currently constituted, it would not be testing very much of the
-lazy-callback state space.
+diff --git a/drivers/gpu/drm/nouveau/nouveau_svm.c b/drivers/gpu/drm/nouveau/nouveau_svm.c
+index a74ba8d84ba7..e072d610f2f9 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_svm.c
++++ b/drivers/gpu/drm/nouveau/nouveau_svm.c
+@@ -926,15 +926,14 @@ nouveau_pfns_map(struct nouveau_svmm *svmm, struct mm_struct *mm,
+ 		 unsigned long addr, u64 *pfns, unsigned long npages)
+ {
+ 	struct nouveau_pfnmap_args *args = nouveau_pfns_to_args(pfns);
+-	int ret;
+ 
+ 	args->p.addr = addr;
+ 	args->p.size = npages << PAGE_SHIFT;
+ 
+ 	mutex_lock(&svmm->mutex);
+ 
+-	ret = nvif_object_ioctl(&svmm->vmm->vmm.object, args,
+-				struct_size(args, p.phys, npages), NULL);
++	nvif_object_ioctl(&svmm->vmm->vmm.object, args,
++			  struct_size(args, p.phys, npages), NULL);
+ 
+ 	mutex_unlock(&svmm->mutex);
+ }
+-- 
+2.27.0
 
-							Thanx, Paul
