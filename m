@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7341C6CD6FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5A66CD6F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbjC2Jwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
+        id S231264AbjC2Jwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbjC2Jwg (ORCPT
+        with ESMTP id S231180AbjC2Jwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 29 Mar 2023 05:52:36 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D647F2D57
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:52:34 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id d17so14991690wrb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:52:34 -0700 (PDT)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D49A4200
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:52:35 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r29so14979004wra.13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:52:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680083553;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680083554;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lRWy59m9AcnRjc2fmHsxRpHlVgHZhVLnEx85hZ46BJw=;
-        b=HGsZcS3nbA0Q7VTarfFbDHUm3xAerDi9I5AK/zBHDyjPM1VZSCpsS2OHluTIknkQKc
-         ZXX7P5O7JjlIZA0RDfKKT4ij4yziAhuxfAB73x9+yjznWX+iD4tmWNSpghKrxTgL+9y4
-         45Zz92JHQgjA9WC8DCDYSkhhBkGKV8P+UbJ+T7S7rfZayxtS7CCZx8PC50pQHwWB01j2
-         K9VJbuyqqtkhCGYmkFRI+UzdnZ1KDIryBrwSw9+I2wjrF5ydUqbnue6SbEhm2K/1Mmfi
-         dv/CcCABRFtr+ZVbVP2cXEHtNoDF0B1OVI+1X0Ml7pThYTD8ApgrPpCbB3a02tsqb7Tc
-         brng==
+        bh=j5WwEAxGItsIpKUuUB3hcC/UquIk1bCmeeOB6uO9lrU=;
+        b=tkneNf34o5trlHedcbEJBG1C/G/seUDMlCP15KhCrgv2UFRQTD0plONLuU+K4ZOqXK
+         dc3Efji/EyVqO+RjidCTgeM8nSmo98t9eZ9sk79vZr7LFgbaFeE3H67pzOlmos4qNmY7
+         OrcZVPc4E+NXKqwod5EMLGPw6zX2ihgjC6KPZtkuR72lVzrGk9AyfqzkDBuUz6phdaji
+         Er7A//QzcZfxj3Dnp5n9XNVRekELt3dVu0gpAYO4odWpZ5zwpWRppRNZ9lMyadQJ0r60
+         1XP5mx2utIcO0dn6/63TFIew2Ycs5HtcrW1o+v2g+rMXga6jZ4es039/szYRIVs9GijG
+         gf8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680083553;
+        d=1e100.net; s=20210112; t=1680083554;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lRWy59m9AcnRjc2fmHsxRpHlVgHZhVLnEx85hZ46BJw=;
-        b=pfAWd9L9Tm5sm5EEUT2WvLudmzrhTbl99PA329SPal38qE+0yC3zQ2ygveM8R1cKLC
-         Yqo7NWiA3HcH5tIDnkJeaKSt9Rdp3A3D62aI6IuzxoBlEt5+khGa12im+4U2Dk6zxjiZ
-         cn9/y5RA05OWdt5MmdCLS3Tn3HdjFLr16TjLt4ydPHnK5/wwR92IqByKiugwRA7Ap2rn
-         Am+rlT6dUGjf/XKqBnqob406R77Apt4AUX7uzdW6uDMI73eLe4XmQrLJc6p4Zpc2NqRM
-         UZI7JBc+VQlwkTEjcT4ShTSsFGkJBPND9/+dmJDsMCvaTUnqSmXRLdr8dwwdgvkGgagE
-         zV0w==
-X-Gm-Message-State: AAQBX9eDsyMMmc2fWiPGQAU9FpCfFIcO0jPPtmx+gRr2dClXT5jSBVUE
-        rjWKRhYn70dA0DEyRajBY3laCk8s11oIdI3H8kE=
-X-Google-Smtp-Source: AKy350b0g044+MfIMYFBIarz3KOgjOGcfcYYACpoeHBupriobhjpp8ueHWz/AvH4sKT3Vf7PUgpPAg==
-X-Received: by 2002:adf:ef91:0:b0:2ce:a697:75c7 with SMTP id d17-20020adfef91000000b002cea69775c7mr15074416wro.33.1680083553394;
-        Wed, 29 Mar 2023 02:52:33 -0700 (PDT)
+        bh=j5WwEAxGItsIpKUuUB3hcC/UquIk1bCmeeOB6uO9lrU=;
+        b=lWM07YV1UnV6SjhmWBKZ588EpZ8JPkPM2VJe3fjB473wcJN5A6OC1Lf2AHXv5B2xvi
+         hNj+QFvXxg32HrR/6prqYqHad1X7PmyAijxCEUZAsvHf4fOJUa7+RVc00ehOBcfxfbH6
+         HPyEJd7Dopg26V0/QkamDQieJtpallXIgwxV8I+YdVUnh7kxHaxA7zOrFf4rKcgu8nE1
+         N63AZcmmdUiFuX4kfSAHdtty5e4x6/u86p7mBft8f0uggmaBwydntHHAy2Gx+Fjl6p6d
+         KN9yb0YcSVM88t526ZeghgzJY+jn4x9phh92ndk0WaxPJAPyFSXHcr8WnowUl2ZIilNH
+         8D7A==
+X-Gm-Message-State: AAQBX9dz4NWkuh+ktXAnBjJ9BZZ8QWHBoSrj9w/2409aG3XHxN1oTAAI
+        08cQCKX2W/iOHGVKdWvJbkrAGME1D54M8c+xkJQ=
+X-Google-Smtp-Source: AKy350byewSo7u029DsdGaH9KBuORmJdnk4e7uKUa4N0kYNWx8PgX4NtzFGwssEsCdZFFLDX+1+mcg==
+X-Received: by 2002:a5d:414e:0:b0:2d7:531f:b15 with SMTP id c14-20020a5d414e000000b002d7531f0b15mr13224681wrq.42.1680083554206;
+        Wed, 29 Mar 2023 02:52:34 -0700 (PDT)
 Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id a18-20020a5d4d52000000b002d1e49cff35sm29667158wru.40.2023.03.29.02.52.32
+        by smtp.googlemail.com with ESMTPSA id a18-20020a5d4d52000000b002d1e49cff35sm29667158wru.40.2023.03.29.02.52.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 29 Mar 2023 02:52:33 -0700 (PDT)
 From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Wed, 29 Mar 2023 11:52:20 +0200
-Subject: [PATCH RESEND 1/6] dt-bindings: memory-controllers:
- mediatek,smi-common: add mt8365
+Date:   Wed, 29 Mar 2023 11:52:21 +0200
+Subject: [PATCH RESEND 2/6] dt-bindings: memory-controllers:
+ mediatek,smi-larb: add mt8365
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230207-iommu-support-v1-1-4a902f9aa412@baylibre.com>
+Message-Id: <20230207-iommu-support-v1-2-4a902f9aa412@baylibre.com>
 References: <20230207-iommu-support-v1-0-4a902f9aa412@baylibre.com>
 In-Reply-To: <20230207-iommu-support-v1-0-4a902f9aa412@baylibre.com>
 To:     Yong Wu <yong.wu@mediatek.com>,
@@ -71,19 +71,19 @@ Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Alexandre Mergnat <amergnat@baylibre.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=913; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=2lmQpBSfKmkj53baZh+RDOWdyXIwY8mMHHkJ6yWng4A=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkJApf/J4/8wpCXgD5rDw3NQgdD8grhM9Af9YbqxIy
- yEBp/raJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCQKXwAKCRArRkmdfjHURVC8EA
- CI4QEuomNhbASJLZdi5d/r5EegnsYbWHR8rkXNntq59Qwx/6Twleypy6HYlGUsG3WBFPio9aLGR8d5
- qMIChp6WqHEhdHWALqAILvjPM1Zi9FsvlEJCrzbqrkVcOE8L1MGpWwnGGJ8nV9fh6gGLJYdMzKFVOR
- bL0I6eaA54G3qtVqefcr7FnZHypqktPUkbw6F5e5u7a+zFne1k7SF+wJ9Ytu32qTcld4lpZ0OBxOdj
- EFVrFNQOLNsnIXT0b/ZsHtZVdyYDMJwLJBuHKvIoc/75hZEZN1i4fRSolP5KUCbsk66cvYUD5V4t/+
- i9GwcjvDR/LCi31daJLpX9watDEQuK22QfgOfh0X8lXekA2GL8FX5DAalJK0ArIXp+Vs9lQ8UNpLmJ
- 8fQdTiUKkK0lf+d4a8zlzIGn0iHT881mGYd/TyWbddIxGIrEezUsZ5Dy3j39OGvR7DWllONgmfeR7H
- 9QCIFZTfye7OXr8EmL8oZOkO9/cQC3lFpKdsH8zQ0bsPYjBvFyZFXL+5dSe4leNcc7QzlTMrHVOaYW
- CqN0xEsw2eY7vXsrNnCsp59zKI+o6g8vS1AXJAoYGnp1EvMiICLb8e8qp/zCKqla1PFG3Y1aWckrOU
- H7rUOpBDVsekJIG7DwOhuxiWb83tJQGD4iuhirFOwx9UnTpyEcW58f/amJkA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=895; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=NVbTKEoEUh603XA7uYARxuPDAu5UoEtf9xrwI1znpgE=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkJApffBpaxAKuc7aTZi+s2URLQXTX+8hl3dvRDFh+
+ 5WJNvVGJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCQKXwAKCRArRkmdfjHURZSPEA
+ CNaXGxjj4cgfKrhuxRg6JRYJVaqabu/st50LIHZ+IM8roj+B8U3RpyI6Tg5kYXr+xSZAabcCB6g/S5
+ tCWz8XkHw77IHJRhDU8cv3L372cVCL4i8mO4rbHHpLnQccQl5GlU+qdS1aiCgEHHRQSyx9L9uhUL+r
+ 8hGrhoM9JCx33yQAcjZvuUYNsSS07Vf5p/IV3v7J7NXwhEdjnqGjPfb2mura9Ja7hZV/Mj/yjNbz5Y
+ fzEyFl0XLl1efv+n43Xp+cBMJ+bG/uLaRW5Py6MuS0P1TLEKvtWq92LTD0JX61P0jaUmu2U+OXfbFA
+ SwcqrL4noGm1WBO5NWl4/FdWvK34W2dFZ9Z/em2OSCNlEYmMIZc5JJAroJujDuobm7VROwuEw9mAby
+ L7iVjb8N/sify3HVbuV/H2LXa5vXBpoBc+dAWzqD6jZ7VVeP74Zl/sc7dz3NG4WJK9WdJOPz1VrNP0
+ Ii6ohnjnZ3rUeCcYBrPE7YvGMBl/2LXh6ALtf1uGkl8fkIk8/hGWOWtqSi5K3Fm3Wy9bb3y6D55QIG
+ gV0p0NQ7NY44zfNy60uxoTdBW8NQcvtIFGrH6ZTHj9NABvr9NzUkafxzv1e6eqVxgiX2B0XFVXqGvc
+ ApAIJii3ESgbaJT5D/8Vn13UfSrbHvdE0Hkm0FerG6q0X5nRAdsyFM9xMduw==
 X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
  fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
 X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -95,24 +95,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding description for mediatek,mt8365-smi-common
+Add binding description for mediatek,mt8365-smi-larb
 
 Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 ---
- .../devicetree/bindings/memory-controllers/mediatek,smi-common.yaml   | 4 ++++
+ .../devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml     | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-index a8fda30cccbb..d599a190952f 100644
---- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-@@ -49,6 +49,10 @@ properties:
-           - const: mediatek,mt7623-smi-common
-           - const: mediatek,mt2701-smi-common
+diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+index 5f4ac3609887..aee7f6cf1300 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+@@ -34,6 +34,10 @@ properties:
+           - const: mediatek,mt7623-smi-larb
+           - const: mediatek,mt2701-smi-larb
  
 +      - items:
-+          - const: mediatek,mt8365-smi-common
-+          - const: mediatek,mt8186-smi-common
++          - const: mediatek,mt8365-smi-larb
++          - const: mediatek,mt8186-smi-larb
 +
    reg:
      maxItems: 1
