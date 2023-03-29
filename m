@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413846CEBF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819116CEBEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjC2Oni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjC2OnO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230251AbjC2OnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 29 Mar 2023 10:43:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B007272A0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680100783;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eOGvCBK3xTc7UhN8iQW8f99rBt5fCj0lar0/GGKSAUo=;
-        b=H1gL32Xd8l9r+stE1zqaSSIkEvool+TK9K3ywF5RPyJqZ4sgmRtPTgRVYnmlMTGYU/8nou
-        8Olg5i+vH8R7M1uuLjxAiD5odE14uqNlBNiK7W8L7rnAQzOAyH6DFlZh0/s476DBoVL3yC
-        XRVleiX1YtKOUEaKP7JcDg7WRS3eQ6M=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-OX_M3mnhOyOLIjTwhOpgsw-1; Wed, 29 Mar 2023 10:39:40 -0400
-X-MC-Unique: OX_M3mnhOyOLIjTwhOpgsw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 52F783C10ED2;
-        Wed, 29 Mar 2023 14:39:38 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 900FA2166B33;
-        Wed, 29 Mar 2023 14:39:34 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <e128356a-f56f-4c02-7437-dfea38e4194b@suse.de>
-References: <e128356a-f56f-4c02-7437-dfea38e4194b@suse.de> <20230329141354.516864-1-dhowells@redhat.com> <20230329141354.516864-49-dhowells@redhat.com>
-To:     Hannes Reinecke <hare@suse.de>
-cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
-        linux-sctp@vger.kernel.org, linux-afs@lists.infradead.org,
-        rds-devel@oss.oracle.com, linux-x25@vger.kernel.org,
-        dccp@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-wpan@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Al Viro <viro@zeniv.linux.org.uk>, linux-hams@vger.kernel.org,
-        mptcp@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <brauner@kernel.org>, netdev@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        tipc-discussion@lists.sourceforge.net,
-        linux-crypto@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        bpf@vger.kernel.org, Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [RFC PATCH v2 48/48] sock: Remove ->sendpage*() in favour of sendmsg(MSG_SPLICE_PAGES)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230118AbjC2Om7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Mar 2023 10:42:59 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAD772A4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:40:30 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso11612323wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:40:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680100829;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y3ixFB+QbvxNuTUQ+9uGUyxwBpcWsdgUOQuT9hmx8Eo=;
+        b=ZzeMNASizro0DCX9uwISypPThwqsFl+cZwUJb8YUGxhfjqQ8/SxCcOk4qmwsNlo7M0
+         Qz1+Y8FmONI+a4poP0M1zVB2a/cEzzF7AtV1P5lvNYmDErZSNxXnqTcaA8GhSzfcVihx
+         58mjP5NpqgHxxd64VKl2DGbMalfctzr89HlxdyTxyq/1sEGjBmnuHkSWh030Dx4VS3yg
+         s4vwc5NymraZRVuMhF4zS7TaOHTnhLyDO3zH+FvtLKu65GRLqns/Q3aI4Ot51yb5xa4r
+         PmVfoG/WLHCUJS6abadujM0+aaT7LdWwsyVIPuZIIjjEZSYVYurISPrR4rt0nP3J77zc
+         TDpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680100829;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y3ixFB+QbvxNuTUQ+9uGUyxwBpcWsdgUOQuT9hmx8Eo=;
+        b=JYQoD/p42oPihDTeC+AZvVHGICJrsz4ZS+BcgTGLe+BqOmaKWYWHwXv2nnfHH3peml
+         Vcuic4760yw+PKoNnJukveJDX7mjMK/0mpyuysq1wPZ2O29uX8fAPm1b34rv45scaeJ1
+         YDpKF2/L4Egpz5cGGlRsDshjhErFmUD1VScSQQS17OEu+RXD+0lZqI0cd+wQcBoq91MX
+         kfrmA4dc9IuYHwKhioWq7nVTzQnlTrTh0/uUaYPNCC53PzamZlxc1InLyRQXSMcZt8NJ
+         77SZ+kA1Bl8TV/mEFUqzrJ1dJ+/y8wFKhwE/q/734s3nVMpWZmPoDiobLtJihObk6IMR
+         RwKg==
+X-Gm-Message-State: AO0yUKXJhujDLJLCzRExTtzwb4IInrQuoJJUN4Rt6JiTFrFhSo0caCkH
+        s+J6Q0gnU//qTYyGPG+HI3VMFLyq4oGV6u9E9GkZyA==
+X-Google-Smtp-Source: AK7set/r5FDsIfVCcTouvt4BuewvjeXCoqh4AN0X/5B2UlHmX8Zjsb8G5Xepj+i2tfuaC8Pr0yg3CQAFxmFa2VYAUTc=
+X-Received: by 2002:a1c:7714:0:b0:3ee:3e07:5d35 with SMTP id
+ t20-20020a1c7714000000b003ee3e075d35mr4552357wmi.3.1680100828896; Wed, 29 Mar
+ 2023 07:40:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <518630.1680100773.1@warthog.procyon.org.uk>
-Date:   Wed, 29 Mar 2023 15:39:33 +0100
-Message-ID: <518631.1680100773@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230329081932.79831-1-alexghiti@rivosinc.com>
+ <20230329081932.79831-4-alexghiti@rivosinc.com> <381c2753-cbcc-40a0-bcb2-67d18e367822@spud>
+In-Reply-To: <381c2753-cbcc-40a0-bcb2-67d18e367822@spud>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Wed, 29 Mar 2023 16:40:18 +0200
+Message-ID: <CAHVXubhVGR1vjqFVv1vuDGDMSiG0JBpKtRZnzgzpa9VBK+BuNw@mail.gmail.com>
+Subject: Re: [PATCH -fixes v2 3/3] riscv: No need to relocate the dtb as it
+ lies in the fixmap region
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,35 +75,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hannes Reinecke <hare@suse.de> wrote:
+On Wed, Mar 29, 2023 at 3:56=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> On Wed, Mar 29, 2023 at 10:19:32AM +0200, Alexandre Ghiti wrote:
+> > We used to access the dtb via its linear mapping address but now that t=
+he
+> > dtb early mapping was moved in the fixmap region, we can keep using thi=
+s
+> > address since it is present in swapper_pg_dir, and remove the dtb
+> > relocation.
+> >
+> > Note that the relocation was wrong anyway since early_memremap() is
+> > restricted to 256K whereas the maximum fdt size is 2MB.
+>
+> So, should this be marked as a fix, and backported along with 1/3?
 
-> > [!] Note: This is a work in progress.  At the moment, some things won't
-> >      build if this patch is applied.  nvme, kcm, smc, tls.
+Hmmm the whole series should be backported, it does not make sense to
+move the dtb mapping and keep accessing it using its linear mapping
+address since it could fail for the exact reason the relocation was
+implemented in the first place and the relocation is wrong.
 
-Actually, that needs updating.  nvme and smc now build.
+Maybe we should simply add a "Cc: stable@vger.kernel.org" on all the patche=
+s?
 
-> Weelll ... what happens to consumers of kernel_sendpage()?
-> (Let's call them nvme ...)
-> Should they be moved over, too?
+> Either way,
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>
+> And from v1 (although I didn't actually send it for idk what reason):
+> Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
-Patch 42 should address NVMe, I think.  I can't test it, though, as I don't
-have hardware.
+Thanks!
 
-There should be no callers of kernel_sendmsg() by the end of this patchset,
-and the only remaining implementors of sendpage are Chelsio-TLS, AF_TLS and
-AF_KCM, which as stated in the cover, aren't yet converted and won't build.
-
-> Or what is the general consensus here?
-> 
-> (And what do we do with TLS? It does have a ->sendpage() version, too ...)
-
-I know.  There are three things left that I need to tackle, but I'd like to
-get opinions on some of the other bits and I might need some help with AF_TLS
-and AF_KCM.
-
-That said, should I just remove tls_sw_do_sendpage() since presumably the data
-is going to get copied(?) and encrypted and the source pages aren't going to
-be held onto?
-
-David
-
+>
+> Thanks,
+> Conor.
+>
+> >
+> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > ---
+> >  arch/riscv/mm/init.c | 21 ++-------------------
+> >  1 file changed, 2 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> > index fb78d6bbabae..0f14f4a8d179 100644
+> > --- a/arch/riscv/mm/init.c
+> > +++ b/arch/riscv/mm/init.c
+> > @@ -249,25 +249,8 @@ static void __init setup_bootmem(void)
+> >        * early_init_fdt_reserve_self() since __pa() does
+> >        * not work for DTB pointers that are fixmap addresses
+> >        */
+> > -     if (!IS_ENABLED(CONFIG_BUILTIN_DTB)) {
+> > -             /*
+> > -              * In case the DTB is not located in a memory region we w=
+on't
+> > -              * be able to locate it later on via the linear mapping a=
+nd
+> > -              * get a segfault when accessing it via __va(dtb_early_pa=
+).
+> > -              * To avoid this situation copy DTB to a memory region.
+> > -              * Note that memblock_phys_alloc will also reserve DTB re=
+gion.
+> > -              */
+> > -             if (!memblock_is_memory(dtb_early_pa)) {
+> > -                     size_t fdt_size =3D fdt_totalsize(dtb_early_va);
+> > -                     phys_addr_t new_dtb_early_pa =3D memblock_phys_al=
+loc(fdt_size, PAGE_SIZE);
+> > -                     void *new_dtb_early_va =3D early_memremap(new_dtb=
+_early_pa, fdt_size);
+> > -
+> > -                     memcpy(new_dtb_early_va, dtb_early_va, fdt_size);
+> > -                     early_memunmap(new_dtb_early_va, fdt_size);
+> > -                     _dtb_early_pa =3D new_dtb_early_pa;
+> > -             } else
+> > -                     memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_=
+early_va));
+> > -     }
+> > +     if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
+> > +             memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va=
+));
+> >
+> >       dma_contiguous_reserve(dma32_phys_limit);
+> >       if (IS_ENABLED(CONFIG_64BIT))
+> > --
+> > 2.37.2
+> >
