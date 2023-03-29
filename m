@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF026CEEDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA126CEF2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjC2QJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
+        id S229755AbjC2QVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjC2QJR (ORCPT
+        with ESMTP id S229487AbjC2QVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:09:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E982B5B81;
+        Wed, 29 Mar 2023 12:21:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A46710D8;
+        Wed, 29 Mar 2023 09:21:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 490751FB;
+        Wed, 29 Mar 2023 09:09:32 -0700 (PDT)
+Received: from [192.168.1.158] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C0C63F6C4;
         Wed, 29 Mar 2023 09:08:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81054B82371;
-        Wed, 29 Mar 2023 16:08:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2FA9C4339B;
-        Wed, 29 Mar 2023 16:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680106081;
-        bh=enJerK8BV7TZcY8hMulDr/MyR3IQQzJAjpyRyNFFxhA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qHYPFeccmSp7OVMJy6eS/srYMyeAsSwJIF+hYqDCY7yjvT/T8dihBnPwVB9uy231m
-         SNfiI4re5lYCyFHWzblb0eqL+5qTvbgDUCgwwNl+WAsz/mqD3TTbuB6cm3NgRAnoRH
-         dy3bsTFgrobDT3RtmnZ9QHwJENdrUQXhW/t/tpEwTge74oZ5lzzDqQMeASNKFaaxo0
-         CHkolqcKbXrKfNmlWOIWV8mVNWPZKAt1gvHXcj22tSW2cLQTfHNxBzj7MwWE7AyADP
-         Vk4WFBNzn7Tw088XEbmNN8HEMedIPn09Wa7lILbBT5aGLKwPD61A9AhPga1wsEs3yv
-         YUMFNtbv/7Blg==
-Date:   Wed, 29 Mar 2023 18:07:58 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 1/4] rcu/nocb: Protect lazy shrinker against concurrent
- (de-)offloading
-Message-ID: <ZCRiXrQQRNy2aJAS@lothringen>
-References: <20230322194456.2331527-1-frederic@kernel.org>
- <20230322194456.2331527-2-frederic@kernel.org>
- <c614c542-f2b5-4b39-bbc4-ae5f0a125c81@paulmck-laptop>
- <ZB4fhA1BafN7h2N3@localhost.localdomain>
- <ae1cb391-aeed-4587-8d9d-50909c918fb1@paulmck-laptop>
- <ZCCknqnceazfyzvr@localhost.localdomain>
- <dd853e13-ffcd-4579-adad-80b014e906ef@paulmck-laptop>
+Message-ID: <64db6d95-8aca-48cc-80e1-e68211922071@arm.com>
+Date:   Wed, 29 Mar 2023 17:08:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dd853e13-ffcd-4579-adad-80b014e906ef@paulmck-laptop>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [BUG] perf: No samples found when using kcore + coresight
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>, Yang Shi <shy828301@gmail.com>
+Cc:     linux-perf-users@vger.kernel.org,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        coresight@lists.linaro.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mathieu.poirier@linaro.org, adrian.hunter@intel.com,
+        Jiri Olsa <jolsa@kernel.org>, acme@redhat.com,
+        mike.leach@linaro.org, Will Deacon <will@kernel.org>,
+        suzuki.poulose@arm.com
+References: <CAHbLzkrJQTrYBtPkf=jf3OpQ-yBcJe7XkvQstX9j2frz4WF-SQ@mail.gmail.com>
+ <8ca2b07e-674e-afb6-ff12-87504f51f252@arm.com>
+ <CAHbLzkpf4RUZugKdn-uXC5m3RpAQH5aDmRXdsxPZi0Cbf-yiyw@mail.gmail.com>
+ <CAHbLzkq_7aXcys1cpgGFsfMDDDKMsT3e7zdNW=0jAkw7kBtJ0Q@mail.gmail.com>
+ <20230309113851.GF19253@leoy-yangtze.lan>
+ <CAHbLzkpvLHnyL5J5kB_ke3CWVq2=MOEdEQsGex56+Esfgqh1=g@mail.gmail.com>
+ <20230313121420.GB2426758@leoy-yangtze.lan>
+ <CAHbLzkpZjrd401DEKnnCNMdra0f6kGRe1Nh_rTovNTmyD8aBpg@mail.gmail.com>
+ <20230314003610.GD2426758@leoy-yangtze.lan>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20230314003610.GD2426758@leoy-yangtze.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 02:45:18PM -0700, Paul E. McKenney wrote:
-> On Sun, Mar 26, 2023 at 10:01:34PM +0200, Frederic Weisbecker wrote:
-> > > > > >  	/* Snapshot count of all CPUs */
-> > > > > >  	for_each_possible_cpu(cpu) {
-> > > > > >  		struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
-> > > > > > -		int _count = READ_ONCE(rdp->lazy_len);
-> > > > > > +		int _count;
-> > > > > > +
-> > > > > > +		if (!rcu_rdp_is_offloaded(rdp))
-> > > > > > +			continue;
-> > > > > 
-> > > > > If the CPU is offloaded, isn't ->lazy_len guaranteed to be zero?
-> > > > > 
-> > > > > Or can it contain garbage after a de-offloading operation?
-> > > > 
-> > > > If it's deoffloaded, ->lazy_len is indeed (supposed to be) guaranteed to be zero.
-> > > > Bypass is flushed and disabled atomically early on de-offloading and the
-> > > > flush resets ->lazy_len.
-> > > 
-> > > Whew!  At the moment, I don't feel strongly about whether or not
-> > > the following code should (1) read the value, (2) warn on non-zero,
-> > > (3) assume zero without reading, or (4) some other option that is not
-> > > occurring to me.  Your choice!
-> > 
-> > (2) looks like a good idea!
-> 
-> Sounds good to me!
 
-So since we now iterate rcu_nocb_mask after the patchset, there is no more
-deoffloaded rdp to check. Meanwhile I put a WARN in the new series making
-sure that an rdp in rcu_nocb_mask is also offloaded (heh!)
+
+On 14/03/2023 00:36, Leo Yan wrote:
+> On Mon, Mar 13, 2023 at 11:15:44AM -0700, Yang Shi wrote:
+> 
+> [...]
+> 
+>>> Just a quick summary, here we have two issues:
+>>>
+>>> - With command:
+>>>   perf record -e cs_etm/@tmc_etf63/k --kcore --per-thread \
+>>>   -- taskset --cpu-list 1 uname",
+>>>
+>>>   perf doesn't enable "text poke" attribution.
+>>
+>> No, it enables "text poke" and perf fails to decode coresight trace
+>> data too. It doesn't matter whether "--kcore" is after or before "-e
+>> cs/etm/@tmc_etf63/k".
+> 
+> Understand now.  Thanks for correction, if so we can ignore this one.
+> 
+> Leo
+
+To me it looks like it's only --per-thread and --kcore together that
+cause the issue. I can't see if that was mentioned previously in this
+thread.
+
+If it is --per-thread that's causing the issue then I think I have an
+idea why it might be. There are some assumptions and different paths
+taken in decoding in that mode that aren't correct. It causes some other
+issues to do with ordering and timestamps as well and I wanted to fix it
+previously. I wouldn't say that the text-poke change has caused a
+regression, as decoding in this mode was always a bit buggy.
+
+Maybe this is another reason to fix it properly.
