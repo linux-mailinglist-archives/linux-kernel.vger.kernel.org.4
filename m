@@ -2,199 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA836CED1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6076CECF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjC2Pgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 11:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
+        id S229839AbjC2PdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjC2Pgn (ORCPT
+        with ESMTP id S229603AbjC2PdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:36:43 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3115B92;
-        Wed, 29 Mar 2023 08:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680104180; x=1711640180;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BNS1M2RM9Rk4Uy0VwUr2zlDcBxvRJk8YLS721HVn1hw=;
-  b=VIc42Cdm5Mv3wFxK0YCbZAmEiJkFPbgjWn70DKpMyfDiM2CUyG1aFU0b
-   nX5VjNVylMfOeSHYtxbdcYlXrauacQ2C4KOmo5KnNCgCjdMgZ6/UiRLPu
-   b4Li6ptXA0yJesfcCYgkSb4++vBBt1CIL7LDCXXm9J0Y5VCOj1COMqQ8V
-   TSYoenCpOi9ahfJ9VbLjY1IMQ3phje9o4BtniLsLdhoP1K5rsJto5YkZd
-   sHf1UcVxROP+B7UHeex/zlZOAM4h1J/wJ2lwF7srt9hDqxQ8gfz02FA0T
-   053f5ckw9jyEhlbAgDxzBYKCwJl7s49VwDbOTy0DgiwOSiDW4crMfDwqH
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="340935255"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="340935255"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 08:31:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="677812139"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="677812139"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 29 Mar 2023 08:30:58 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1phXlK-000JfU-0G;
-        Wed, 29 Mar 2023 15:30:58 +0000
-Date:   Wed, 29 Mar 2023 23:30:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anuj Gupta <anuj20.g@samsung.com>, Jens Axboe <axboe@kernel.dk>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, bvanassche@acm.org, hare@suse.de,
-        ming.lei@redhat.com, damien.lemoal@opensource.wdc.com,
-        anuj20.g@samsung.com, joshi.k@samsung.com, nitheshshetty@gmail.com,
-        gost.dev@samsung.com, Nitesh Shetty <nj.shetty@samsung.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v8 4/9] fs, block: copy_file_range for def_blk_ops for
- direct block device.
-Message-ID: <202303292349.ED70Fxdw-lkp@intel.com>
-References: <20230327084103.21601-5-anuj20.g@samsung.com>
+        Wed, 29 Mar 2023 11:33:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1614215;
+        Wed, 29 Mar 2023 08:32:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 193CDB8236F;
+        Wed, 29 Mar 2023 15:32:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18CE3C433EF;
+        Wed, 29 Mar 2023 15:32:36 +0000 (UTC)
+Date:   Wed, 29 Mar 2023 11:32:34 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Vincent Donnefort <vdonnefort@google.com>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v2 1/2] ring-buffer: Introducing ring-buffer mapping
+ functions
+Message-ID: <20230329113234.3285209c@gandalf.local.home>
+In-Reply-To: <ZCRDXaTVfNwxdRJZ@google.com>
+References: <20230322102244.3239740-1-vdonnefort@google.com>
+        <20230322102244.3239740-2-vdonnefort@google.com>
+        <20230328224411.0d69e272@gandalf.local.home>
+        <ZCQCsD9+nNwBYIyH@google.com>
+        <20230329070353.1e1b443b@gandalf.local.home>
+        <20230329085106.046a8991@rorschach.local.home>
+        <ZCQ2jW5Jl/cWCG7s@google.com>
+        <20230329091107.408d63a8@rorschach.local.home>
+        <ZCQ9m5K34Qa9ZkUd@google.com>
+        <20230329093602.2b3243f0@rorschach.local.home>
+        <ZCRDXaTVfNwxdRJZ@google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327084103.21601-5-anuj20.g@samsung.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anuj,
+On Wed, 29 Mar 2023 14:55:41 +0100
+Vincent Donnefort <vdonnefort@google.com> wrote:
 
-Thank you for the patch! Yet something to improve:
+> > Yes, in fact it shouldn't need to call the ioctl until after it read it.
+> > 
+> > Maybe, we should have the ioctl take a parameter of how much was read?
+> > To prevent races?  
+> 
+> Races would only be with other consuming readers. In that case we'd probably
+> have many other problems anyway as I suppose nothing would prevent another one
+> of swapping the page while our userspace reader is still processing it?
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on device-mapper-dm/for-next linus/master v6.3-rc4 next-20230329]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I'm not worried about user space readers. I'm worried about writers, as
+the ioctl will update the reader_page->read = reader_page->commit. The time
+that the reader last read and stopped and then called the ioctl, a writer
+could fill the page, then the ioctl may even swap the page. By passing in
+the read amount, the ioctl will know if it needs to keep the same page or
+not.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anuj-Gupta/block-Add-copy-offload-support-infrastructure/20230329-162018
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20230327084103.21601-5-anuj20.g%40samsung.com
-patch subject: [PATCH v8 4/9] fs, block: copy_file_range for def_blk_ops for direct block device.
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20230329/202303292349.ED70Fxdw-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/61819d260936954ddd6688548f074e7063dcf39e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anuj-Gupta/block-Add-copy-offload-support-infrastructure/20230329-162018
-        git checkout 61819d260936954ddd6688548f074e7063dcf39e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> 
+> I don't know if this is worth splitting the ABI between the meta-page and the
+> ioctl parameters for this?
+> 
+> Or maybe we should say the meta-page contains things modified by the writer and
+> parameters modified by the reader are passed by the get_reader_page ioctl i.e.
+> the reader page ID and cpu_buffer->reader_page->read? (for the hyp tracing, we
+> have up to 4 registers for the HVC which would replace in our case the ioctl)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303292349.ED70Fxdw-lkp@intel.com/
+I don't think we need the reader_page id, as that should never move without
+reader involvement. If there's more than one reader, that's up to the
+readers to keep track of each other, not the kernel.
 
-All errors (new ones prefixed by >>):
+Which BTW, the more I look at doing this without ioctls, I think we may
+need to update things slightly different.
 
-   ld: vmlinux.o: in function `generic_copy_file_checks':
->> fs/read_write.c:1453: undefined reference to `I_BDEV'
+I would keep the current approach, but for clarification of terminology, we
+have:
+
+meta_data - the data that holds information that is shared between user and
+	kernel space.
+
+data_pages - this is a separate mapping that holds the mapped ring buffer
+	pages. In user space, this is one contiguous array and also holds
+	the reader page.
+
+data_index - This is an array of what the writer sees. It maps the index
+	into data_pages[] of where to find the mapped pages. It does not
+	contain the reader page. We currently map this with the meta_data,
+	but that's not a requirement (although we may continue to do so).
+
+I'm thinking that we make the data_index[] elements into a structure:
+
+struct trace_map_data_index {
+	int		idx;	/* index into data_pages[] */
+	int		cnt;	/* counter updated by writer */
+};
+
+The cnt is initialized to zero when initially mapped.
+
+Instead of having the bpage->id = index into data_pages[], have it equal
+the index into data_index[].
+
+The cpu_buffer->reader_page->id = -1;
+
+meta_data->reader_page = index into data_pages[] of reader page
+
+The swapping of the header page would look something like this:
+
+static inline void
+rb_meta_page_head_swap(struct ring_buffer_per_cpu *cpu_buffer)
+{
+	struct ring_buffer_meta_page *meta = cpu_buffer->meta_page;
+	int head_page;
+
+	if (!READ_ONCE(cpu_buffer->mapped))
+		return;
+
+	head_page = meta->data_pages[meta->hdr.data_page_head];
+	meta->data_pages[meta->hdr.data_page_head] = meta->hdr.reader_page;
+	meta->hdr.reader_page = head_page;
+	meta->data_pages[head_page]->id = -1;
+}
+
+As hdr.data_page_head would be an index into data_index[] and not
+data_pages[].
+
+The fact that bpage->id points to the data_index[] and not the data_pages[]
+means that the writer can easily get to that index, and modify the count.
+That way, in rb_tail_page_update() (between cmpxchgs) we can do something
+like:
+
+	if (cpu_buffer->mapped) {
+		meta = cpu_buffer->meta_page;
+		meta->data_index[next_page->id].cnt++;
+	}
+
+And this will allow the reader to know if the current page it is on just
+got overwritten by the writer, by doing:
+
+	prev_id = meta->data_index[this_page].cnt;
+	smp_rmb();
+	read event (copy it, whatever)
+	smp_rmb();
+	if (prev_id != meta->data_index[this_page].cnt)
+		/* read data may be corrupted, abort it */
 
 
-vim +1453 fs/read_write.c
+Does this make sense?
 
-  1398	
-  1399	/*
-  1400	 * Performs necessary checks before doing a file copy
-  1401	 *
-  1402	 * Can adjust amount of bytes to copy via @req_count argument.
-  1403	 * Returns appropriate error code that caller should return or
-  1404	 * zero in case the copy should be allowed.
-  1405	 */
-  1406	static int generic_copy_file_checks(struct file *file_in, loff_t pos_in,
-  1407					    struct file *file_out, loff_t pos_out,
-  1408					    size_t *req_count, unsigned int flags)
-  1409	{
-  1410		struct inode *inode_in = file_inode(file_in);
-  1411		struct inode *inode_out = file_inode(file_out);
-  1412		uint64_t count = *req_count;
-  1413		loff_t size_in;
-  1414		int ret;
-  1415	
-  1416		ret = generic_file_rw_checks(file_in, file_out);
-  1417		if (ret)
-  1418			return ret;
-  1419	
-  1420		/*
-  1421		 * We allow some filesystems to handle cross sb copy, but passing
-  1422		 * a file of the wrong filesystem type to filesystem driver can result
-  1423		 * in an attempt to dereference the wrong type of ->private_data, so
-  1424		 * avoid doing that until we really have a good reason.
-  1425		 *
-  1426		 * nfs and cifs define several different file_system_type structures
-  1427		 * and several different sets of file_operations, but they all end up
-  1428		 * using the same ->copy_file_range() function pointer.
-  1429		 */
-  1430		if (flags & COPY_FILE_SPLICE) {
-  1431			/* cross sb splice is allowed */
-  1432		} else if (file_out->f_op->copy_file_range) {
-  1433			if (file_in->f_op->copy_file_range !=
-  1434			    file_out->f_op->copy_file_range)
-  1435				return -EXDEV;
-  1436		} else if (file_inode(file_in)->i_sb != file_inode(file_out)->i_sb) {
-  1437			return -EXDEV;
-  1438		}
-  1439	
-  1440		/* Don't touch certain kinds of inodes */
-  1441		if (IS_IMMUTABLE(inode_out))
-  1442			return -EPERM;
-  1443	
-  1444		if (IS_SWAPFILE(inode_in) || IS_SWAPFILE(inode_out))
-  1445			return -ETXTBSY;
-  1446	
-  1447		/* Ensure offsets don't wrap. */
-  1448		if (pos_in + count < pos_in || pos_out + count < pos_out)
-  1449			return -EOVERFLOW;
-  1450	
-  1451		/* Shorten the copy to EOF */
-  1452		if (S_ISBLK(inode_in->i_mode))
-> 1453			size_in = bdev_nr_bytes(I_BDEV(file_in->f_mapping->host));
-  1454		else
-  1455			size_in = i_size_read(inode_in);
-  1456	
-  1457		if (pos_in >= size_in)
-  1458			count = 0;
-  1459		else
-  1460			count = min(count, size_in - (uint64_t)pos_in);
-  1461	
-  1462		ret = generic_write_check_limits(file_out, pos_out, &count);
-  1463		if (ret)
-  1464			return ret;
-  1465	
-  1466		/* Don't allow overlapped copying within the same file. */
-  1467		if (inode_in == inode_out &&
-  1468		    pos_out + count > pos_in &&
-  1469		    pos_out < pos_in + count)
-  1470			return -EINVAL;
-  1471	
-  1472		*req_count = count;
-  1473		return 0;
-  1474	}
-  1475	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+-- Steve
