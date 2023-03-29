@@ -2,119 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422746CF01E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301A06CF068
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjC2RGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 13:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        id S231398AbjC2RHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 13:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjC2RF6 (ORCPT
+        with ESMTP id S231237AbjC2RHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:05:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33701449A;
-        Wed, 29 Mar 2023 10:05:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE28E61DC6;
-        Wed, 29 Mar 2023 17:05:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF38C433D2;
-        Wed, 29 Mar 2023 17:05:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680109556;
-        bh=T8fWhplWPwZ4OAqvqYb8gn/VvxXqZQz97l6qax8Uj7g=;
-        h=From:Date:Subject:To:Cc:From;
-        b=hmanBQH2TMYgNyzPakCCdf9Vpmc2yZbH/90wWZQ+yRhqDxy8ni75gnIbnheY+EJef
-         Q7TV1K1uGDRUKacpZMlbtIZ3XCMgZYAKJ+wvBTIz9irP1HXsG3w32RxqlucQy7/t+l
-         lin6oHBx62zHTxjoOC7F1MyAW/AJP7Fdddf6vbUYD4X3SonPCKR/HXCMuAk+n6KXF4
-         KrozPxbuiiKMa6YngzOO0Qyc1jnxjpVjoaOZ4AGp/0Ut7Paca3EZpvwZFxInuW7SRk
-         xKWE3QvW+Dw/7+a+ldHPVNLUQAnAfeVUEdGsZzox2BJKR+h+0sQOnLO+k1pjk5chRY
-         TKN66xj6UQj6g==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Wed, 29 Mar 2023 10:05:44 -0700
-Subject: [PATCH wireless-next] wifi: iwlwifi: mvm: Avoid 64-bit division in
- iwl_mvm_get_crosstimestamp_fw()
+        Wed, 29 Mar 2023 13:07:15 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3F3728A;
+        Wed, 29 Mar 2023 10:06:57 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32TDTk6R009203;
+        Wed, 29 Mar 2023 10:06:45 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=mcTr6C/VINCIhh/n2bFcYfbZySHmKBzy5wGzLXUqooY=;
+ b=iJo+W/Dvt5j4KOIbYp7CHnI0AnUXazbuiy3/JzwA868IawSvjg/Dex7jQd4CKGPEMkVi
+ v7zmiOunY5aFZm4YTsW4tPoIwZJ0U3F8bHbmUNaMiOw5so14XLvvFgejo8hnzyCNrcCy
+ 7CpuDdIawHbPc5g8HFzZfqLmhae3ds33jRJQgAfgozNP1yTve9BQoqsUJEfArJgbld6h
+ 59P5qZeRp4ayqcMgLxjbDKDYwDi/5/jZlvFYrithspHKnjhiRouyOVrX3rbUDS1EVB1S
+ URVnCeOdwvF7v8lkU3w2GcEU2oJR7f7mZwLTg6nv+b56Bu64gOtP5Z8lmt/VTDHJR+5T UQ== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3pmdqhkqs9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 10:06:45 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 29 Mar
+ 2023 10:06:43 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 29 Mar 2023 10:06:43 -0700
+Received: from hyd1425.marvell.com (unknown [10.29.37.83])
+        by maili.marvell.com (Postfix) with ESMTP id CA0DD3F704E;
+        Wed, 29 Mar 2023 10:06:40 -0700 (PDT)
+From:   Sai Krishna <saikrishnag@marvell.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
+        <richardcochran@gmail.com>
+CC:     Sai Krishna <saikrishnag@marvell.com>
+Subject: [net PATCH 0/7] octeontx2: Miscellaneous fixes
+Date:   Wed, 29 Mar 2023 22:36:12 +0530
+Message-ID: <20230329170619.183064-1-saikrishnag@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230329-iwlwifi-ptp-avoid-64-bit-div-v1-1-ad8db8d66bc2@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAOdvJGQC/x2NQQqDMBAAvyJ77oIaadp+pXiIcVMXbAzZkAji3
- xt7HAZmDhCKTAKv5oBImYU3X6G7NWAX4z+EPFeGvu1Vq/onclkLO8aQApq88Yz3ASdOOHPGzg6
- 6004r9zBQE5MRwikab5cr8jWSKF4iRHK8/79vKBxpJRH0tCcYz/MHJo1DDpYAAAA=
-To:     gregory.greenman@intel.com, kvalo@kernel.org
-Cc:     nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        johannes.berg@intel.com, avraham.stern@intel.com,
-        krishnanand.prabhu@intel.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Arnd Bergmann <arnd@arndb.de>,
-        "kernelci.org bot" <bot@kernelci.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2173; i=nathan@kernel.org;
- h=from:subject:message-id; bh=T8fWhplWPwZ4OAqvqYb8gn/VvxXqZQz97l6qax8Uj7g=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCkq+Z8LY5R4Zhl+kzx7097ULsrCx6khcu6LA/Vai7dn2
- LgXrZ7VUcrCIMbBICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbyaS/D/6S05Gc5R7PWHD4n
- /c76AfsNz7VqB5O8q4vO5k2Z0HT42HFGhp5iLfktC3dI9rBknItMn/AzbZOpCmOLzyKG7zWyfcV
- yvAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: L3Vm8IAtLGKAWxcxv4pp0bmAlWPUMAdT
+X-Proofpoint-GUID: L3Vm8IAtLGKAWxcxv4pp0bmAlWPUMAdT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-29_10,2023-03-28_02,2023-02-09_01
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a 64-bit division in iwl_mvm_get_crosstimestamp_fw(), which
-results in a link failure when building 32-bit architectures with clang:
+This patchset includes following fixes.
 
-  ld.lld: error: undefined symbol: __udivdi3
-  >>> referenced by ptp.c
-  >>>               drivers/net/wireless/intel/iwlwifi/mvm/ptp.o:(iwl_mvm_phc_get_crosstimestamp) in archive vmlinux.a
-
-GCC has optimizations for division by a constant that clang does not
-implement, so this issue is not visible when building with GCC.
-
-Using div_u64() would resolve this issue, but Arnd points out that this
-can be quite expensive and the timestamp is being read at nanosecond
-granularity. Nick pointed out that the result of this division is being
-stored to a 32-bit type anyways, so truncate gp2_10ns first then do the
-division, which elides the need for libcalls.
-
-Fixes: 21fb8da6ebe4 ("wifi: iwlwifi: mvm: read synced time from firmware if supported")
-Reported-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1826
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Link: https://lore.kernel.org/6423173a.620a0220.3d5cc.6358@mx.google.com/
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/net/wireless/intel/iwlwifi/mvm/ptp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c b/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c
-index 5c2bfc8ed88d..cdd6d69c5b68 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c
-@@ -116,7 +116,7 @@ iwl_mvm_get_crosstimestamp_fw(struct iwl_mvm *mvm, u32 *gp2, u64 *sys_time)
+Patch #1 Fix for the race condition while updating APR table 
  
- 	gp2_10ns = (u64)le32_to_cpu(resp->gp2_timestamp_hi) << 32 |
- 		le32_to_cpu(resp->gp2_timestamp_lo);
--	*gp2 = gp2_10ns / 100;
-+	*gp2 = (u32)gp2_10ns / 100;
- 
- 	*sys_time = (u64)le32_to_cpu(resp->platform_timestamp_hi) << 32 |
- 		le32_to_cpu(resp->platform_timestamp_lo);
+Patch #2 Fix for bit positions in NPC, MCAM table entries
 
----
-base-commit: 2af3b2a631b194a43551ce119cb71559d8f6b54b
-change-id: 20230329-iwlwifi-ptp-avoid-64-bit-div-1c4717f73f8a
+Patch #3 Fix driver crash resulting from invalid interface type
+information retrieved from firmware
 
-Best regards,
+Patch #4 Fix incorrect mask used while installing filters inlovling
+fragmented packets
+
+Patch #5 Fixes for NPC field hash extract w.r.t IPV6 hash reduction,
+         IPV6 filed hash configuration, parser confiuration destination 
+         address hash.
+
+Patch #6 Fix for skipping mbox initialization for PFs disabled by firmware.
+
+Patch #7 Fix disabling packet I/O in case of mailbox timeout.
+
+Geetha sowjanya (1):
+  octeontx2-af: Secure APR table update with the lock
+
+Hariprasad Kelam (1):
+  octeontx2-af: Add validation for lmac type
+
+Ratheesh Kannoth (3):
+  octeontx2-af: Fix start and end bit for scan config
+  octeontx2-af: Fix issues with NPC field hash extract
+  octeontx2-af: Skip PFs if not enabled
+
+Subbaraya Sundeep (1):
+  octeontx2-pf: Disable packet I/O for graceful exit
+
+Suman Ghosh (1):
+  octeontx2-af: Update correct mask to filter IPv4 fragments
+
+ .../net/ethernet/marvell/octeontx2/af/cgx.c   |   7 +
+ .../net/ethernet/marvell/octeontx2/af/mbox.c  |   5 +-
+ .../net/ethernet/marvell/octeontx2/af/mbox.h  |  19 ++-
+ .../net/ethernet/marvell/octeontx2/af/rvu.c   |  38 +++++-
+ .../ethernet/marvell/octeontx2/af/rvu_cn10k.c |   8 +-
+ .../marvell/octeontx2/af/rvu_npc_fs.c         |  28 ++--
+ .../marvell/octeontx2/af/rvu_npc_fs.h         |   4 +
+ .../marvell/octeontx2/af/rvu_npc_hash.c       | 125 ++++++++++--------
+ .../marvell/octeontx2/af/rvu_npc_hash.h       |  10 +-
+ .../marvell/octeontx2/nic/otx2_common.h       |   4 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  11 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_tc.c  |   2 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_vf.c  |   8 +-
+ 13 files changed, 181 insertions(+), 88 deletions(-)
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
+2.25.1
 
