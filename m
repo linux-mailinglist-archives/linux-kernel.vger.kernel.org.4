@@ -2,157 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E116CF5A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9486CF5AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjC2VwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 17:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
+        id S230179AbjC2Vwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 17:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjC2VwI (ORCPT
+        with ESMTP id S229991AbjC2Vwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 17:52:08 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0DC527E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:51:58 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so6990762wmq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:51:58 -0700 (PDT)
+        Wed, 29 Mar 2023 17:52:38 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4566195
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:52:27 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54196bfcd5fso165900057b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:52:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user; t=1680126716;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mR/Zj1PB00aaXey9QznQEyL9cgsnbEviFfaDBojU/PA=;
-        b=X0RSiXgHE7YkzJiBvPfuECvjvZh/j9OCTlp5vS9G1kUZuHyE1mJThY46uxE8TkBE8F
-         26YKvU03kRSEEbihp0nG/r6HBhciobPuGf3L9XG5lP7LIGmFx1xuZOCywjcKmPOmTu8N
-         GYJA3eb2b0Q6VlUVpDCKV/9pvTj9LkixTX22pUdw50wCneJbfivXkkSI84dON9P5F9zR
-         aPsg4Jeh3iGHabX4d9hb5dRKHYvbcqGCgHjWCSflhUWkYsO9R2cu9K7Yx5HZpgAK9C+P
-         FR/T+Ct46EkosCoWvECTXbDfM4FfGO3jzQMNS58kzGepVwnhUrHOmPZqrc1qrzv6vlJT
-         efvQ==
+        d=google.com; s=20210112; t=1680126746;
+        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CsFO/UcDyqF5hzYyaOpux0kSInGSNXB7fWOr/Mojtdc=;
+        b=RHxHrD0riHQdNklAwbOyOVwMytX1Zqo4yL4S28/sbh6YsGl3q09hPtWIUDRbdZr9ge
+         rgU4I6Ln1QlZaq7jeYhT3hOzGtJwdorkfUBHDkIXV2DJ0tzCFN/N4umhnogf4N+OcQL4
+         TfjA3qSdao6/K6doCajwtW7tly3qsDVnoh8E14Ga3rEveQXWEBcQIyd/W46QOcOVdWTY
+         pCthXDCjjmoI3+xsjKACJfQWXu4fLyBQDLQIVaK/CoS+6mj3NZM37nUrhMu3ad8JFeZm
+         wZNlQDVTLRDobPBGxfA2OAZ0N/IbVDrNFcI217dNNH2JYWvcdvwN/JS+GalbnM9rvp3r
+         oUaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680126716;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mR/Zj1PB00aaXey9QznQEyL9cgsnbEviFfaDBojU/PA=;
-        b=u/1rQ0JYlU8xJCNAJHINjrlY/dtUH2urM/NndTwwFUyAN1jXFOouW7u4nxj7w3gt3M
-         7Np7FygGWu2svg8lZccLKo7BMyEvZ6h2dlnvTfbk+vprSP8FxxqRnMfGDBwTaORrH3FC
-         WNeyPq24+z7ll6S7u3ikHoxqJCy3PwUnZ0MGR4OnDDhdlV22xwQu7cpGnSSpMZ5in6RO
-         WvNwxQfNhXPGgqu2L/6953fR0yCTn3YfoCng9Qzu3xZQ5GUCgbFA145dJG+mX2mEcKTg
-         omcNG9dMBgraMIfh1n7FNtwFp+vyNWufAFeGCE3CYLWIoW+UaRv9ZJeOXQZWJSxR+kyy
-         /h8w==
-X-Gm-Message-State: AO0yUKVC4nC4T5+QmOlF0pvmNdbiVe++Fay3Gy5qp8c3dPbT/adoUkhj
-        K+30DbsGaXge4HDf9ou4RuQWIw==
-X-Google-Smtp-Source: AK7set8QoMq1gGRgzzGqEiUi0STo43D8VYRH41LQHDT7NbD/gZR3RJOV/DBadJ5PrJGjWGmEaVtwcg==
-X-Received: by 2002:a7b:c413:0:b0:3ee:4531:8448 with SMTP id k19-20020a7bc413000000b003ee45318448mr17263952wmi.39.1680126716518;
-        Wed, 29 Mar 2023 14:51:56 -0700 (PDT)
-Received: from smtpclient.apple (global-5-144.n-2.net.cam.ac.uk. [131.111.5.144])
-        by smtp.gmail.com with ESMTPSA id a18-20020a1cf012000000b003ed4f6c6234sm3437896wmb.23.2023.03.29.14.51.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 Mar 2023 14:51:55 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH 08/21] riscv: dma-mapping: only invalidate after DMA, not
- flush
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <20230327121317.4081816-9-arnd@kernel.org>
-Date:   Wed, 29 Mar 2023 22:51:54 +0100
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-oxnas@groups.io, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <837F1B2F-7090-4F9F-A894-594ACF6A8DB2@jrtc27.com>
-References: <20230327121317.4081816-1-arnd@kernel.org>
- <20230327121317.4081816-9-arnd@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1680126746;
+        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CsFO/UcDyqF5hzYyaOpux0kSInGSNXB7fWOr/Mojtdc=;
+        b=4DvMTsVlkiGL6oaYtPr4p8n4vT8mTwZFOXeiljFcCnxmjc4z3LjATtaHsj1Aecz3x2
+         ucOKGPTwaiXs0DcXgVtxpbOCZ/n+wPvC5rNrASmLIb9b6g9Qg9rH5sG+feWXMAU/WPfv
+         vz73IpYKTyVtUsbtIxQlksGVAarYyhhxPsSwBwR9KRlKOisgj2pR0aPkfvsymwuElHc4
+         5OVGq7OIHaXzJIc63FItZz1ilOL9BjY7l+DWfLHhHCHuxq44hKk3pThzePcMo2tKj+zF
+         Lt8lytSkNyWtcvml50RrFyO9nuTNgHRscSw5kIkgX8voCrdg0wSRrKIFT/RF09Sj03WQ
+         SkRw==
+X-Gm-Message-State: AAQBX9eXGgD0CEuDzdJiJU1WHC3rDnl/VJXb8l3XGeEiZqYAI3LBG2YG
+        JKr/fJAg53jeg/bySsp375SLGcFJN4z6i00=
+X-Google-Smtp-Source: AKy350YKLD0cYnhPAs3bUyHqq7zxakvTmmcso2sSBuLkCH7jFi1VvPjsAnG4V9XxwVaWzeCZqxDyYEFYB8svaNg=
+X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
+ (user=rdbabiera job=sendgmr) by 2002:a05:6902:168d:b0:b26:47f3:6cb with SMTP
+ id bx13-20020a056902168d00b00b2647f306cbmr10969166ybb.4.1680126746160; Wed,
+ 29 Mar 2023 14:52:26 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 21:51:59 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Message-ID: <20230329215159.2046932-1-rdbabiera@google.com>
+Subject: [PATCH v1] usb: typec: altmodes/displayport: Fix configure initial
+ pin assignment
+From:   RD Babiera <rdbabiera@google.com>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.5 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27 Mar 2023, at 13:13, Arnd Bergmann <arnd@kernel.org> wrote:
->=20
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> No other architecture intentionally writes back dirty cache lines into
-> a buffer that a device has just finished writing into. If the cache is
-> clean, this has no effect at all, but if a cacheline in the buffer has
-> actually been written by the CPU,  there is a drive bug that is likely
-> made worse by overwriting that buffer.
+While determining the initial pin assignment to be sent in the configure
+message, using the DP_PIN_ASSIGN_DP_ONLY_MASK mask causes the DFP_U to
+send both Pin Assignment C and E when both are supported by the DFP_U and
+UFP_U. The spec (Table 5-7 DFP_U Pin Assignment Selection Mandates,
+VESA DisplayPort Alt Mode Standard v2.0) indicates that the DFP_U never
+selects Pin Assignment E when Pin Assignment C is offered.
 
-FYI [1] proposed this same change a while ago but its justification was
-flawed (which was my objection at the time, not the diff itself).
+Update the DP_PIN_ASSIGN_DP_ONLY_MASK conditional to intially select only
+Pin Assignment C if it is available.
 
-Jess
+Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
+Cc: stable@vger.kernel.org
+Signed-off-by: RD Babiera <rdbabiera@google.com>
+---
+ drivers/usb/typec/altmodes/displayport.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-[1] =
-https://lore.kernel.org/all/20220818165105.99746-1-s.miroshnichenko@yadro.=
-com
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index 662cd043b50e..8f3e884222ad 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -112,8 +112,12 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
+ 		if (dp->data.status & DP_STATUS_PREFER_MULTI_FUNC &&
+ 		    pin_assign & DP_PIN_ASSIGN_MULTI_FUNC_MASK)
+ 			pin_assign &= DP_PIN_ASSIGN_MULTI_FUNC_MASK;
+-		else if (pin_assign & DP_PIN_ASSIGN_DP_ONLY_MASK)
++		else if (pin_assign & DP_PIN_ASSIGN_DP_ONLY_MASK) {
+ 			pin_assign &= DP_PIN_ASSIGN_DP_ONLY_MASK;
++			/* Default to pin assign C if available */
++			if (pin_assign & BIT(DP_PIN_ASSIGN_C))
++				pin_assign = BIT(DP_PIN_ASSIGN_C);
++		}
+ 
+ 		if (!pin_assign)
+ 			return -EINVAL;
 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> arch/riscv/mm/dma-noncoherent.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/riscv/mm/dma-noncoherent.c =
-b/arch/riscv/mm/dma-noncoherent.c
-> index d919efab6eba..640f4c496d26 100644
-> --- a/arch/riscv/mm/dma-noncoherent.c
-> +++ b/arch/riscv/mm/dma-noncoherent.c
-> @@ -42,7 +42,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t =
-size,
-> 		break;
-> 	case DMA_FROM_DEVICE:
-> 	case DMA_BIDIRECTIONAL:
-> -		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-> +		ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
-> 		break;
-> 	default:
-> 		break;
-> --=20
-> 2.39.2
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+base-commit: 97318d6427f62b723c89f4150f8f48126ef74961
+-- 
+2.40.0.348.gf938b09366-goog
 
