@@ -2,267 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC426CDB1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4908D6CDB22
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjC2NrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 09:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        id S229999AbjC2Nse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 09:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbjC2NrO (ORCPT
+        with ESMTP id S229544AbjC2Nsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:47:14 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E436D1FCA
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680097632; x=1711633632;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ewl5JoHt9JT7wNP3tMvVmPjNenOQ8vgDP1BjfKxI6cE=;
-  b=af6R5JAgwiKyhwSmNcn9huaQRKLQZFSyDT8BZhH++Thm7ud5Ggj420Jo
-   lfYd7uPwVY/DmRzsmDds4uO4Hzh7ayQvDE6TAfq5OnZNeoI3qRJlXiCZc
-   h0c1kxm81LHMkjOBYLDZXLEVkZ2hwDNxtc3+T31QZbrDuZ2DvoKzTWk+f
-   loim+Ziieb+nIITGHFEhnztW0/yJGe+qNfTcqZRRNMk0uQueBhuu7BiDF
-   xcok8yUrftpOlpwxiavEB+BaQ2w7Dm4mCss1wB2846+GOM1lsdkXZNOqA
-   HLBy8GWW3dyrUZPcmoFzmb2fWBLo2vQ64IaP+jaaSaWY3tD2i8keJ9sdl
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="403506251"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="403506251"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 06:47:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="677783395"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="677783395"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga007.jf.intel.com with ESMTP; 29 Mar 2023 06:47:09 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] iommu/vt-d: Fix an IOMMU perfmon warning when CPU hotplug
-Date:   Wed, 29 Mar 2023 21:47:21 +0800
-Message-Id: <20230329134721.469447-4-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230329134721.469447-1-baolu.lu@linux.intel.com>
-References: <20230329134721.469447-1-baolu.lu@linux.intel.com>
+        Wed, 29 Mar 2023 09:48:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D884EFB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:47:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680097650;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0WaGawcRlLjgjbqbLfH4brTMhieMGCOaue1qd648kpQ=;
+        b=ZEysvv2pQdy8fScpPiK2dPpdsOcZmmP2Fz1Yknx1DdGTVssEY+vw/rSL81+DACuVvWuTV3
+        tjC7dvSe8FCIf+aZ+j1hIeD0a5gn20V1+kEW9BLhBisIRvaqKxeHe4SUAFVo6yQ4M5YM+a
+        KYfUOQxKinsi/d443U3U3uUYL0yZvlc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-593-Wpg4RePnPNeynyhr05NUgg-1; Wed, 29 Mar 2023 09:47:29 -0400
+X-MC-Unique: Wpg4RePnPNeynyhr05NUgg-1
+Received: by mail-ed1-f70.google.com with SMTP id p36-20020a056402502400b004bb926a3d54so22301501eda.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:47:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680097646; x=1682689646;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0WaGawcRlLjgjbqbLfH4brTMhieMGCOaue1qd648kpQ=;
+        b=nmna8Ao9M6dNvWxycGJDrvLjHA3mD3WadqKpOoU01JNF0mXfkzaN9UXQAtTB11RkdD
+         1vtbHSZBG2QdSZPAGCK3WdjK32tc/iOmb/Ytp2QD+WGV4zj6SfXrTF71HlC69u+YGSVT
+         qzXFZ+CReQA/xGdubiAkkWp6RYaJC+malRQiD2DM55rwMk0gCl/M6VGP/YqURpmGxTIi
+         jaKBP0hqDsTTREcjffmumgpZ/8kxEPwJckn2jWQTuFGtl5byq1ApDJyq9T0+UR+uSerD
+         tbeC/oP9lje60MieQwTd+C6spQcUWAr+hq9vN87L1tmKaA2ypwjUf2pXRMovd/LxyK1R
+         1DUw==
+X-Gm-Message-State: AAQBX9e/0l/8iG5pYCcfeKeoX+6NLMBc47ODnNpESjMI08Ob7vPlWsC3
+        B5glh2H9m88xayxS+UUn5O4zAt5X6JONrZM3sT+oHBx/G657w8laUSnzxMtHBOd1ijvEJni5S9B
+        QCmwYnsZsVMJqYJf7muYx0mPC
+X-Received: by 2002:a05:6402:45:b0:4fc:c644:6141 with SMTP id f5-20020a056402004500b004fcc6446141mr20578421edu.0.1680097645874;
+        Wed, 29 Mar 2023 06:47:25 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ahTfMAGWoqyXG20wsWX1BRxAlLAjMIZlvjxIF6/FUi/EGrdh3ViA6rXIAt5l+CP4h8W7y0HQ==
+X-Received: by 2002:a05:6402:45:b0:4fc:c644:6141 with SMTP id f5-20020a056402004500b004fcc6446141mr20578389edu.0.1680097645482;
+        Wed, 29 Mar 2023 06:47:25 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id v6-20020a50d086000000b004fb00831851sm16943477edd.66.2023.03.29.06.47.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 06:47:24 -0700 (PDT)
+Message-ID: <244097d2-3d14-6031-7733-62be75036d88@redhat.com>
+Date:   Wed, 29 Mar 2023 15:47:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Lee Jones <joneslee@google.com>
+References: <20211208015236.1616697-1-seanjc@google.com>
+ <20211208015236.1616697-8-seanjc@google.com>
+ <1548c1a4-4681-4d98-ee43-44bc97b3bdee@linaro.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 07/26] KVM: VMX: Move preemption timer <=> hrtimer
+ dance to common x86
+In-Reply-To: <1548c1a4-4681-4d98-ee43-44bc97b3bdee@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On 3/29/23 14:34, Tudor Ambarus wrote:
+> This patch fixes the bug reported at:
+> LINK:
+> https://syzkaller.appspot.com/bug?id=489beb3d76ef14cc6cd18125782dc6f86051a605
+> 
+> One may find the strace at:
+> LINK:https://syzkaller.appspot.com/text?tag=CrashLog&x=1798b54ec80000
+> and the c reproducer at:
+> LINK:https://syzkaller.appspot.com/text?tag=ReproC&x=10365781c80000
+> 
+> Since I've no experience with kvm, it would be helpful if one of you can
+> provide some guidance. Do you think it is worth to backport this patch
+> to stable (together with its prerequisite patches), or shall I try to
+> get familiar with the code and try to provide a less invasive fix?
 
-A warning can be triggered when hotplug CPU 0.
-$ echo 0 > /sys/devices/system/cpu/cpu0/online
+I think it is enough to fix the conflicts in vmx_pre_block and
+vmx_post_block, there are no prerequisites:
 
- ------------[ cut here ]------------
- Voluntary context switch within RCU read-side critical section!
- WARNING: CPU: 0 PID: 19 at kernel/rcu/tree_plugin.h:318
-          rcu_note_context_switch+0x4f4/0x580
- RIP: 0010:rcu_note_context_switch+0x4f4/0x580
- Call Trace:
-  <TASK>
-  ? perf_event_update_userpage+0x104/0x150
-  __schedule+0x8d/0x960
-  ? perf_event_set_state.part.82+0x11/0x50
-  schedule+0x44/0xb0
-  schedule_timeout+0x226/0x310
-  ? __perf_event_disable+0x64/0x1a0
-  ? _raw_spin_unlock+0x14/0x30
-  wait_for_completion+0x94/0x130
-  __wait_rcu_gp+0x108/0x130
-  synchronize_rcu+0x67/0x70
-  ? invoke_rcu_core+0xb0/0xb0
-  ? __bpf_trace_rcu_stall_warning+0x10/0x10
-  perf_pmu_migrate_context+0x121/0x370
-  iommu_pmu_cpu_offline+0x6a/0xa0
-  ? iommu_pmu_del+0x1e0/0x1e0
-  cpuhp_invoke_callback+0x129/0x510
-  cpuhp_thread_fun+0x94/0x150
-  smpboot_thread_fn+0x183/0x220
-  ? sort_range+0x20/0x20
-  kthread+0xe6/0x110
-  ? kthread_complete_and_exit+0x20/0x20
-  ret_from_fork+0x1f/0x30
-  </TASK>
- ---[ end trace 0000000000000000 ]---
-
-The synchronize_rcu() will be invoked in the perf_pmu_migrate_context(),
-when migrating a PMU to a new CPU. However, the current for_each_iommu()
-is within RCU read-side critical section.
-
-Two methods were considered to fix the issue.
-- Use the dmar_global_lock to replace the RCU read lock when going
-  through the drhd list. But it triggers a lockdep warning.
-- Use the cpuhp_setup_state_multi() to set up a dedicated state for each
-  IOMMU PMU. The lock can be avoided.
-
-The latter method is implemented in this patch. Since each IOMMU PMU has
-a dedicated state, add cpuhp_node and cpu in struct iommu_pmu to track
-the state. The state can be dynamically allocated now. Remove the
-CPUHP_AP_PERF_X86_IOMMU_PERF_ONLINE.
-
-Fixes: 46284c6ceb5e ("iommu/vt-d: Support cpumask for IOMMU perfmon")
-Reported-by: Ammy Yi <ammy.yi@intel.com>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Link: https://lore.kernel.org/r/20230328182028.1366416-1-kan.liang@linux.intel.com
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- include/linux/cpuhotplug.h    |  1 -
- drivers/iommu/intel/iommu.h   |  2 ++
- drivers/iommu/intel/perfmon.c | 68 ++++++++++++++++++++++-------------
- 3 files changed, 46 insertions(+), 25 deletions(-)
-
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index c6fab004104a..5b2f8147d1ae 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -218,7 +218,6 @@ enum cpuhp_state {
- 	CPUHP_AP_PERF_X86_CQM_ONLINE,
- 	CPUHP_AP_PERF_X86_CSTATE_ONLINE,
- 	CPUHP_AP_PERF_X86_IDXD_ONLINE,
--	CPUHP_AP_PERF_X86_IOMMU_PERF_ONLINE,
- 	CPUHP_AP_PERF_S390_CF_ONLINE,
- 	CPUHP_AP_PERF_S390_SF_ONLINE,
- 	CPUHP_AP_PERF_ARM_CCI_ONLINE,
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index d6df3b865812..694ab9b7d3e9 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -641,6 +641,8 @@ struct iommu_pmu {
- 	DECLARE_BITMAP(used_mask, IOMMU_PMU_IDX_MAX);
- 	struct perf_event	*event_list[IOMMU_PMU_IDX_MAX];
- 	unsigned char		irq_name[16];
-+	struct hlist_node	cpuhp_node;
-+	int			cpu;
- };
- 
- #define IOMMU_IRQ_ID_OFFSET_PRQ		(DMAR_UNITS_SUPPORTED)
-diff --git a/drivers/iommu/intel/perfmon.c b/drivers/iommu/intel/perfmon.c
-index e17d9743a0d8..cf43e798eca4 100644
---- a/drivers/iommu/intel/perfmon.c
-+++ b/drivers/iommu/intel/perfmon.c
-@@ -773,19 +773,34 @@ static void iommu_pmu_unset_interrupt(struct intel_iommu *iommu)
- 	iommu->perf_irq = 0;
- }
- 
--static int iommu_pmu_cpu_online(unsigned int cpu)
-+static int iommu_pmu_cpu_online(unsigned int cpu, struct hlist_node *node)
- {
-+	struct iommu_pmu *iommu_pmu = hlist_entry_safe(node, typeof(*iommu_pmu), cpuhp_node);
-+
- 	if (cpumask_empty(&iommu_pmu_cpu_mask))
- 		cpumask_set_cpu(cpu, &iommu_pmu_cpu_mask);
- 
-+	if (cpumask_test_cpu(cpu, &iommu_pmu_cpu_mask))
-+		iommu_pmu->cpu = cpu;
-+
- 	return 0;
- }
- 
--static int iommu_pmu_cpu_offline(unsigned int cpu)
-+static int iommu_pmu_cpu_offline(unsigned int cpu, struct hlist_node *node)
- {
--	struct dmar_drhd_unit *drhd;
--	struct intel_iommu *iommu;
--	int target;
-+	struct iommu_pmu *iommu_pmu = hlist_entry_safe(node, typeof(*iommu_pmu), cpuhp_node);
-+	int target = cpumask_first(&iommu_pmu_cpu_mask);
-+
-+	/*
-+	 * The iommu_pmu_cpu_mask has been updated when offline the CPU
-+	 * for the first iommu_pmu. Migrate the other iommu_pmu to the
-+	 * new target.
-+	 */
-+	if (target < nr_cpu_ids && target != iommu_pmu->cpu) {
-+		perf_pmu_migrate_context(&iommu_pmu->pmu, cpu, target);
-+		iommu_pmu->cpu = target;
-+		return 0;
-+	}
- 
- 	if (!cpumask_test_and_clear_cpu(cpu, &iommu_pmu_cpu_mask))
- 		return 0;
-@@ -795,45 +810,50 @@ static int iommu_pmu_cpu_offline(unsigned int cpu)
- 	if (target < nr_cpu_ids)
- 		cpumask_set_cpu(target, &iommu_pmu_cpu_mask);
- 	else
--		target = -1;
-+		return 0;
- 
--	rcu_read_lock();
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 0718658268fe..895069038856 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7577,17 +7577,11 @@ static int vmx_pre_block(struct kvm_vcpu *vcpu)
+  	if (pi_pre_block(vcpu))
+  		return 1;
+  
+-	if (kvm_lapic_hv_timer_in_use(vcpu))
+-		kvm_lapic_switch_to_sw_timer(vcpu);
 -
--	for_each_iommu(iommu, drhd) {
--		if (!iommu->pmu)
--			continue;
--		perf_pmu_migrate_context(&iommu->pmu->pmu, cpu, target);
--	}
--	rcu_read_unlock();
-+	perf_pmu_migrate_context(&iommu_pmu->pmu, cpu, target);
-+	iommu_pmu->cpu = target;
- 
- 	return 0;
- }
- 
- static int nr_iommu_pmu;
-+static enum cpuhp_state iommu_cpuhp_slot;
- 
- static int iommu_pmu_cpuhp_setup(struct iommu_pmu *iommu_pmu)
- {
- 	int ret;
- 
--	if (nr_iommu_pmu++)
--		return 0;
-+	if (!nr_iommu_pmu) {
-+		ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
-+					      "driver/iommu/intel/perfmon:online",
-+					      iommu_pmu_cpu_online,
-+					      iommu_pmu_cpu_offline);
-+		if (ret < 0)
-+			return ret;
-+		iommu_cpuhp_slot = ret;
-+	}
- 
--	ret = cpuhp_setup_state(CPUHP_AP_PERF_X86_IOMMU_PERF_ONLINE,
--				"driver/iommu/intel/perfmon:online",
--				iommu_pmu_cpu_online,
--				iommu_pmu_cpu_offline);
--	if (ret)
--		nr_iommu_pmu = 0;
-+	ret = cpuhp_state_add_instance(iommu_cpuhp_slot, &iommu_pmu->cpuhp_node);
-+	if (ret) {
-+		if (!nr_iommu_pmu)
-+			cpuhp_remove_multi_state(iommu_cpuhp_slot);
-+		return ret;
-+	}
-+	nr_iommu_pmu++;
- 
--	return ret;
-+	return 0;
- }
- 
- static void iommu_pmu_cpuhp_free(struct iommu_pmu *iommu_pmu)
- {
-+	cpuhp_state_remove_instance(iommu_cpuhp_slot, &iommu_pmu->cpuhp_node);
+  	return 0;
+  }
+  
+  static void vmx_post_block(struct kvm_vcpu *vcpu)
+  {
+-	if (kvm_x86_ops.set_hv_timer)
+-		kvm_lapic_switch_to_hv_timer(vcpu);
+-
+  	pi_post_block(vcpu);
+  }
+  
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index fcfa3fedf84f..4eca3ec38afd 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10022,12 +10022,28 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+  
+  static inline int vcpu_block(struct kvm *kvm, struct kvm_vcpu *vcpu)
+  {
++	bool hv_timer;
 +
- 	if (--nr_iommu_pmu)
- 		return;
- 
--	cpuhp_remove_state(CPUHP_AP_PERF_X86_IOMMU_PERF_ONLINE);
-+	cpuhp_remove_multi_state(iommu_cpuhp_slot);
- }
- 
- void iommu_pmu_register(struct intel_iommu *iommu)
--- 
-2.34.1
+  	if (!kvm_arch_vcpu_runnable(vcpu) &&
+  	    (!kvm_x86_ops.pre_block || static_call(kvm_x86_pre_block)(vcpu) == 0)) {
++		/*
++		 * Switch to the software timer before halt-polling/blocking as
++		 * the guest's timer may be a break event for the vCPU, and the
++		 * hypervisor timer runs only when the CPU is in guest mode.
++		 * Switch before halt-polling so that KVM recognizes an expired
++		 * timer before blocking.
++		 */
++		hv_timer = kvm_lapic_hv_timer_in_use(vcpu);
++		if (hv_timer)
++			kvm_lapic_switch_to_sw_timer(vcpu);
++
+  		srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
+  		kvm_vcpu_block(vcpu);
+  		vcpu->srcu_idx = srcu_read_lock(&kvm->srcu);
+  
++		if (hv_timer)
++			kvm_lapic_switch_to_hv_timer(vcpu);
++
+  		if (kvm_x86_ops.post_block)
+  			static_call(kvm_x86_post_block)(vcpu);
+  
+@@ -10266,6 +10282,11 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+  			r = -EINTR;
+  			goto out;
+  		}
++		/*
++		 * It should be impossible for the hypervisor timer to be in
++		 * use before KVM has ever run the vCPU.
++		 */
++		WARN_ON_ONCE(kvm_lapic_hv_timer_in_use(vcpu));
+  		kvm_vcpu_block(vcpu);
+  		if (kvm_apic_accept_events(vcpu) < 0) {
+  			r = 0;
+
+The fix is due to the second "if" changing from
+kvm_x86_ops.set_hv_timer to hv_timer.
+
+Paolo
 
