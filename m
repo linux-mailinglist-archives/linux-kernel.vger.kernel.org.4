@@ -2,139 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F056CF14D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E376CF14A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjC2RoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 13:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        id S229773AbjC2Rnj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 13:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjC2RoT (ORCPT
+        with ESMTP id S229456AbjC2Rni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:44:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392FC59E5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:43:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680111817;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dNiOEETt5ceepAWfcz8ECfQ8OGyjPyRpc2CWu+K0Sd4=;
-        b=PZpbwvFH9veQkgEXtvQ5HCjuinul9iQJCR2THwyNT2lg7RFDnfBY91xdn8AC3cNHSP+jzr
-        AO8D8zlEpSY7WSCeO5HT66miJX6gnOGxABO+MwBTgHn5+t4Gf6kPmfCJslCreYdzbw6JxB
-        Sr5p770cv2iXHRKWDMqvZGcrb2Ankmc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-439-g2rJpyJjMyW__HbcjQzbpQ-1; Wed, 29 Mar 2023 13:43:33 -0400
-X-MC-Unique: g2rJpyJjMyW__HbcjQzbpQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 29 Mar 2023 13:43:38 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2760B5254;
+        Wed, 29 Mar 2023 10:43:36 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id aafa1b008520eda2; Wed, 29 Mar 2023 19:43:35 +0200
+Received: from kreacher.localnet (unknown [213.134.183.20])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6263C85C069;
-        Wed, 29 Mar 2023 17:43:33 +0000 (UTC)
-Received: from [10.22.34.224] (unknown [10.22.34.224])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 135E71121331;
-        Wed, 29 Mar 2023 17:43:32 +0000 (UTC)
-Message-ID: <47d478a9-9730-eda8-e4dd-c848f01c0834@redhat.com>
-Date:   Wed, 29 Mar 2023 13:43:32 -0400
+        by v370.home.net.pl (Postfix) with ESMTPSA id 859211FA13B8;
+        Wed, 29 Mar 2023 19:43:34 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL pointer dereference
+Date:   Wed, 29 Mar 2023 19:43:33 +0200
+Message-ID: <12190090.O9o76ZdvQC@kreacher>
+In-Reply-To: <5b084360-898b-aad0-0b8e-33acc585d71d@linaro.org>
+References: <20230329090055.7537-1-rui.zhang@intel.com> <CAJZ5v0iMAT_1cQorTqK4xRTjD3a_s=Vf3OJYy3hi7=pAekLv+g@mail.gmail.com> <5b084360-898b-aad0-0b8e-33acc585d71d@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: CLONE_INTO_CGROUP probably needs to call controller attach
- handlers
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gscrivan@redhat.com
-References: <20230328153943.op62j3sw7qaixdsq@wittgenstein>
- <c3d9cf24-1c3a-cda4-5063-6b7d27e9116f@redhat.com>
- <5937b51b-164a-b6b3-532d-43b46f2d49a2@redhat.com>
- <ZCRQsAoe1lN1qCiB@cmpxchg.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZCRQsAoe1lN1qCiB@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.183.20
+X-CLIENT-HOSTNAME: 213.134.183.20
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehiedguddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthhqredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeekieelheffleefgffgtdejvdektedtjeefveeugeefvdfhgfduueetiefgieelteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeefrddvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeefrddvtddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+ pdhrtghpthhtoheprhgrfhgrvghlrdhjrdifhihsohgtkhhisehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/23 10:52, Johannes Weiner wrote:
-> On Tue, Mar 28, 2023 at 10:48:49PM -0400, Waiman Long wrote:
->> On 3/28/23 21:30, Waiman Long wrote:
->>> On 3/28/23 11:39, Christian Brauner wrote:
->>>> Hey,
->>>>
->>>> Giuseppe reported that the the affinity mask isn't updated when a
->>>> process is spawned directly into the target cgroup via
->>>> CLONE_INTO_CGROUP. However, migrating a process will cause the affinity
->>>> mask to be updated (see the repro at [1].
->>>>
->>>> I took a quick look and the issue seems to be that we don't call the
->>>> various attach handlers during CLONE_INTO_CGROUP whereas we do for
->>>> migration. So the solution seems to roughly be that we need to call the
->>>> various attach handlers during CLONE_INTO_CGROUP as well when the
->>>> parent's cgroups is different from the child cgroup. I think we need to
->>>> call all of them, can, cancel and attach.
->>>>
->>>> The plumbing here might be a bit intricate since the arguments that the
->>>> fork handlers take are different from the attach handlers.
->>>>
->>>> Christian
->>>>
->>>> [1]: https://paste.centos.org/view/f434fa1a
->>>>
->>> I saw that the current cgroup code already have the can_fork, fork and
->>> cancel_fork callbacks. Unfortunately such callbacks are not defined for
->>> cpuset yet. That is why the cpu affinity isn't correctly updated. I can
->>> post a patch to add those callback functions to cpuset which should then
->>> able to correctly address this issue.
->> Looking further into this issue, I am thinking that forking into a cgroup
->> should be equivalent to write the child pid into the "cgroup.threads" file
->> of the target cgroup. By taking this route, all the existing can_attach,
->> attach and cancel_attach methods can be used. I believe the original fork
->> method is for the limited use case of forking into the same cgroup. So right
->> now, only the pids controller has the fork methods. Otherwise, we will have
->> to modify a number of different controllers to add the necessary fork
->> methods. They will be somewhat similar to the existing attach methods and so
->> it will be a lot of duplication. What do you think about this idea?
-> That's what I thought at first too, but then I had some doubts.
->
-> The callback is called 'attach', but it's historically implemented
-> when moving an established task between two cgroups. Many controllers
-> use it to move state between groups (memcg, pids, cpuset). So in
-> practice it isn't the natural fit that its name would suggest, and it
-> would require reworking those controllers to handle both scenarios:
-> moving tasks between groups, and new tasks attaching to a cgroup.
->
-> Now I'm thinking it probably makes more sense to keep using attach for
-> moving between groups, and fork for being born into a cgroup. That's
-> what the pid controller does, and it handles CLONE_INTO_CGROUP fine.
->
-> There is naturally some overlap between the two operations. But it
-> seems cleaner to me to use common helpers for that, as opposed to
-> having both attach and fork callbacks handling forks.
+On Wednesday, March 29, 2023 6:18:31 PM CEST Daniel Lezcano wrote:
+> On 29/03/2023 18:03, Rafael J. Wysocki wrote:
+> > On Wed, Mar 29, 2023 at 5:59 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> On 29/03/2023 16:38, Rafael J. Wysocki wrote:
+> >>> On Wed, Mar 29, 2023 at 4:16 PM Daniel Lezcano
+> >>> <daniel.lezcano@linaro.org> wrote:
+> >>>>
+> >>>> On 29/03/2023 14:06, Rafael J. Wysocki wrote:
+> >>>>> On Wed, Mar 29, 2023 at 11:57 AM Daniel Lezcano
+> >>>>> <daniel.lezcano@linaro.org> wrote:
+> >>>>>>
+> >>>>>> On 29/03/2023 11:00, Zhang Rui wrote:
+> >>>>>>> When the hwmon device node of a thermal zone device is not found,
+> >>>>>>> using hwmon->device causes a kernel NULL pointer dereference.
+> >>>>>>>
+> >>>>>>> Reported-by: Preble Adam C <adam.c.preble@intel.com>
+> >>>>>>> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> >>>>>>> ---
+> >>>>>>> Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
+> >>>>>>> dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
+> >>>>>>> I'm not sure if the Fix tag applies to such commit or not.
+> >>>>>>
+> >>>>>> Actually it reverts the work done to encapsulate the thermal zone device
+> >>>>>> structure.
+> >>>>>
+> >>>>> So maybe instead of the wholesale switch to using "driver-specific"
+> >>>>> device pointers for printing messages, something like
+> >>>>> thermal_zone_debug/info/warn/error() taking a thermal zone pointer as
+> >>>>> the first argument can be defined?
+> >>>>>
+> >>>>> At least this particular bug could be avoided this way.
+> >>>>
+> >>>> Actually we previously said the thermal_hwmon can be considered as part
+> >>>> of the thermal core code, so we can keep using tz->device.
+> >>>>
+> >>>> I'll drop this change from the series.
+> >>>
+> >>> But it's there in my thermal branch already.
+> >>>
+> >>> Do you want to revert the thermal_hwmon.c part of commit dec07d399cc8?
+> >>
+> >> Oh, right. Fair enough.
+> >>
+> >> I think Rui's patch is fine then.
+> > 
+> > I guess you mean the $subject one, that is:
+> > 
+> > https://patchwork.kernel.org/project/linux-pm/patch/20230329090055.7537-1-rui.zhang@intel.com
+> 
+> Correct
+> 
+> > What about the message printed when temp is NULL.  Should the original
+> > form of it be restored too?
+> 
+> Yes, you are right, for the sake of consistency we should restore also 
+> this one.
 
-I was thinking along the line of using common helpers for doing fork and 
-attach. However, the expected method function prototypes are quite 
-different. For example,
+So I'm going to apply the appended patch.
 
-int (*can_attach)(struct cgroup_taskset *tset);
-int (*can_fork)(struct task_struct *task, css_set *cset);
+Please let me know if there are any concerns regarding it.
 
-We need to make them more similar before we can use common helpers. I 
-can take a look at that.
+---
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Subject: [PATCH] thermal: thermal_hwmon: Revert recent message adjustment
 
-Thanks,
-Longman
+For the sake of consistency, revert the second part of the
+thermal_hwmon.c hunk from commit dec07d399cc8 ("thermal: Don't use
+'device' internal thermal zone structure field") after the first
+part of it has been reverted.
+
+Link: https://lore.kernel.org/linux-pm/5b084360-898b-aad0-0b8e-33acc585d71d@linaro.org
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_hwmon.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: linux-pm/drivers/thermal/thermal_hwmon.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_hwmon.c
++++ linux-pm/drivers/thermal/thermal_hwmon.c
+@@ -236,7 +236,7 @@ void thermal_remove_hwmon_sysfs(struct t
+ 	temp = thermal_hwmon_lookup_temp(hwmon, tz);
+ 	if (unlikely(!temp)) {
+ 		/* Should never happen... */
+-		dev_dbg(hwmon->device, "temperature input lookup failed!\n");
++		dev_dbg(&tz->device, "temperature input lookup failed!\n");
+ 		return;
+ 	}
+ 
+
+
 
