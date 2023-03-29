@@ -2,98 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7D06CD42E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CF66CD434
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjC2IOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
+        id S230367AbjC2IPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjC2IOP (ORCPT
+        with ESMTP id S230422AbjC2IPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:14:15 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E656F44A7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:14:09 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id bi9so19052884lfb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680077648;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6epDWvuA89IZftBOHmpRGI6nNmDhKZVL9v8m3KDYPMY=;
-        b=KyikktgcRn+2oLGotGbR3cLkZ5AoQE+pkPvCnBj+4WY0K3ggGHjzQk/VtduH8nikOC
-         rQqW1+1hJgYQh8xAZJN8Dyy2BZfTEvVObFm6cJO09yfEXm3JuVrgqaJfmNFK8rg0B9mk
-         gptmmjRJL85VZ3IXZJUBSxECR68U+xspO1AjK16C20bavkiaI4+pyyQ7PiKCWGhdsnz7
-         O9AZ3qWGnBEEVWMKWItA2msmnJCOViSe1ohnukmns8rfK5CtcWHiYkyPXmUaKejBSBqV
-         /amR1c7K1TMpJgA00IPaWJ2mfcOgsI6aN5a7V4OWd5OnjO9StMQHbtX2DiJp5OFsxNMF
-         kSDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680077648;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6epDWvuA89IZftBOHmpRGI6nNmDhKZVL9v8m3KDYPMY=;
-        b=e/OidKROlIwDFhpkkh8KtS9FRfXsoSccfAgyNjwBUKkVzqFd3ud8xD+7x3xYIMEsB0
-         bFJRfo/kyisUm3W4M3pOyaplDdjDec/Bt3Mnk+Vw87hXt25HKWMsaQ2oJvsIvLnXHLpt
-         7rsQ5oWWDchsJTJl/bAajmYBA6cSKIrxvm1VAvu9zQgMxjVtfgifRdn3p2jLS+PTojJ0
-         kGzfIWP5s+WvLdNsorumbJpzT4WC5oWetSGRESy6Gzy2J0riWLKaSXw4WzznVVTtGVCZ
-         yQ6n2aLq0Kru/ch2H6K3WWiCSgQBl/QulfkIc+OX9ZfVtDHuoo+kDZ+4LaflywGPuYH5
-         ABKw==
-X-Gm-Message-State: AAQBX9dhiXLtlyjA7QFcHwN7JtwHYecl10FBP5mBsXabBpE1z2zeLbNb
-        40rAIVleOpcSTxIfgKzXP0ZZvQ==
-X-Google-Smtp-Source: AKy350ZWrzkfe66KC35c/EV/QpRnsJJJywHJ1ynk7vqTGq6hgUz6/3XMtXOvRUqooYqyqbvxk5ZCDg==
-X-Received: by 2002:ac2:5ddb:0:b0:4de:d16f:3938 with SMTP id x27-20020ac25ddb000000b004ded16f3938mr5731648lfq.53.1680077648225;
-        Wed, 29 Mar 2023 01:14:08 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m15-20020a056512014f00b004d0b1327b75sm5405102lfo.61.2023.03.29.01.14.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 01:14:07 -0700 (PDT)
-Message-ID: <3e907d9a-cfb9-343a-bca1-9de773c98724@linaro.org>
-Date:   Wed, 29 Mar 2023 10:14:06 +0200
+        Wed, 29 Mar 2023 04:15:09 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B31F49CA;
+        Wed, 29 Mar 2023 01:15:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680077702; x=1711613702;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QbNn2qOdg3KN2SXSyc2jEkL22WW9OfBopNhlEH8Wr1k=;
+  b=m+5cFkWLoIgxpE8+ewVGgpYXkIAGtVmvTybqGQCs4R72yFZ1hHMEiQFd
+   k6WRLEtm/99juU6HZ0N/WbVDycCNw2An6V+KhbbmMbI8fGNKPlnEUEfUK
+   EMYqDvOjXoUIUe2ktMsLaLdB2BWWmrsghoiUD+u3cICIkVi23t9/L76e0
+   GJaNRs5xYPKqfHm1sQMdx0JeR7zWQTaF76yxnnVXTclMO49L8GfBjx3OQ
+   by8S3byLtMRoRz+cUtuLqS4TO+4WrkjItWA4XsY+8RcDst8gW1cZWw3ji
+   tPluX2QDKpiwzB+ttAEWFqfqslP5QLJZPI67wuGKnTYB3ZABpOTnVIPiz
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,300,1673938800"; 
+   d="asc'?scan'208";a="144444774"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2023 01:15:00 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 29 Mar 2023 01:14:59 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 29 Mar 2023 01:14:57 -0700
+Date:   Wed, 29 Mar 2023 09:14:44 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Alexandre Ghiti <alex@ghiti.fr>
+CC:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, <linux-doc@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -fixes 2/2] riscv: Do not set initial_boot_params to the
+ linear address of the dtb
+Message-ID: <234aaac9-d5d0-427f-8666-7f257d385358@spud>
+References: <20230323163347.182895-1-alexghiti@rivosinc.com>
+ <20230323163347.182895-3-alexghiti@rivosinc.com>
+ <831ec4a4-694b-4ace-9500-9b2189a7f16d@spud>
+ <08c3a597-0950-9756-9665-c017942de81f@ghiti.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v6 03/12] dt-bindings: clock: nuvoton: add binding for
- ma35d1 clock controller
-Content-Language: en-US
-To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230328021912.177301-1-ychuang570808@gmail.com>
- <20230328021912.177301-4-ychuang570808@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230328021912.177301-4-ychuang570808@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="R/pXHIszXQL98hTd"
+Content-Disposition: inline
+In-Reply-To: <08c3a597-0950-9756-9665-c017942de81f@ghiti.fr>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 04:19, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
-> 
-> Add the dt-bindings header for Nuvoton ma35d1, that gets shared
-> between the clock controller and clock references in the dts.
-> Add documentation to describe nuvoton ma35d1 clock driver.
-> 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
+--R/pXHIszXQL98hTd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, Mar 29, 2023 at 10:09:13AM +0200, Alexandre Ghiti wrote:
+> On 3/27/23 13:16, Conor Dooley wrote:
+> > On Thu, Mar 23, 2023 at 05:33:47PM +0100, Alexandre Ghiti wrote:
+> > > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> > > index 542eed85ad2c..a059b73f4ddb 100644
+> > > --- a/arch/riscv/kernel/setup.c
+> > > +++ b/arch/riscv/kernel/setup.c
+> > > @@ -278,10 +278,7 @@ void __init setup_arch(char **cmdline_p)
+> > >   #if IS_ENABLED(CONFIG_BUILTIN_DTB)
+> > >   	unflatten_and_copy_device_tree();
+> > >   #else
+> > > -	if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
+>=20
+> > btw, how come it is safe now to drop this? This feels like a separate
+> > change that should be its own commit, no?
+>=20
+>=20
+> It is safe because early_init_dt_verify is already called in parse_dtb and
 
-Best regards,
-Krzysztof
+Yah, that's what I figured. Cool.
 
+> since the dtb address does not change anymore, no need to reset
+> initial_boot_params. So I'll split this one, thanks.
+
+Worth noting the point at which this became redundant in your commit
+message when you do.
+
+Thanks,
+Conor.
+
+
+--R/pXHIszXQL98hTd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCPzdAAKCRB4tDGHoIJi
+0rSKAP9Ntw+oq3rTUBam25Gv5Uu4LY+aMFWlek/LTpoJTOruNwEA/55TL5zj0G8R
+KShM5nzDlD9LAQb+NVa8Vu2dNaukUA4=
+=2iF6
+-----END PGP SIGNATURE-----
+
+--R/pXHIszXQL98hTd--
