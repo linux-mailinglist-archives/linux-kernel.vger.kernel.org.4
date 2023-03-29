@@ -2,202 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0E26CD3FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB02E6CD3F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjC2IGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        id S230144AbjC2IF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbjC2IG2 (ORCPT
+        with ESMTP id S229656AbjC2IF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:06:28 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0484223
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:06:19 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id er13so18827830edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:06:19 -0700 (PDT)
+        Wed, 29 Mar 2023 04:05:57 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298BE272A
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:05:56 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id c29so19068488lfv.3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680077178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pgTEvOUqu+byIlNns2PeM/+eklWaDNG6sL3F+Izsnuo=;
-        b=78B+nejVnS9usHWPg0iqljIaK4pxCQzU1+8yHfJq6bvLatsVHbSasFqcUXDAi1w5ty
-         ru6zbvClprRaH6/+61fnfwiWn6Lnt4yCrkUjxEfT9d2AanAzELr4mM8xWdV5scUE0ucB
-         ELWD4r4l6HdyvxOsGNVTOK1rE2t8JO/6sZJR7NvuODLSotPDvmafMutvEUGT7OSU9L3S
-         nayxjkorDtR+YqpRJ9A31V4yJvw82utxCeqHx5lFS+EMO8sDLIlo9DinRejrMiNbXD9S
-         i4Vaheq/9S0knMn8t8VT3MRxm+2Vp1+ViLuycFVSBFcHnBJa6IJNLol+bZGWy4KJ+5Ym
-         rx+A==
+        d=linaro.org; s=google; t=1680077154;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xjsCaclLV54PUQBCXvfqXG6NcxhUWOzoT0j7GVU3LHk=;
+        b=JkmUi/idGnZvhQNNVFQ7LPjDya7OX27oIez1Vy/KArqlD2gs4p2XgvA00bVLlcf99Z
+         l4wL8KOOW+E93PtjJb0N04FOA2nNBjDKmyf+B2tZjNp3OAEmTyTwp/nywhSfX447hpeo
+         d7VervBxS2h7/XvEORlYL/N/4BB7+Syt3OnzrNOIAHgi9pp2Bh6V0yx2/kNmeqYMd8I/
+         IvEnvR6a2E2O4kETdWhIisP2FpqqeBc6IC+Xcxq9Gom6QnN3UTfFcYDORtJ1EYe02ZuH
+         Z84+BfgZGmTlnNOsK787ZAU0GNVkQeWTtZiDavAxGJwjJNYv6uQqd/+sFOPhB3R5zkEd
+         XNzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680077178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pgTEvOUqu+byIlNns2PeM/+eklWaDNG6sL3F+Izsnuo=;
-        b=R3+ixqx73406MCKkP+xucIoiOjGWM3D1WT0ogumQ14KV7VUYNCCbDT4NDEP8w4RhUP
-         WDSf5bn9Xay7ZcY9Hrc90fJO7kgpGV9AXXrgI9wuxU1eBPgfCWii0htg6KXYjHnxIAbu
-         ZAGxGdlOSfjw2aGxqOexCADXu/3A6+luXXppWNsnEv4GOVqxR8uf1QzPAOsNa+hCcCcG
-         XV8j7/fq/OGOaFuZmpzsKK6w0RbZdmm6eVuJlcXK/1TJoVrnqziiMbLWAEkKqAipmGT1
-         mreBR+czsLBnkB/bfaS/dKyRkbfueMYERJ0dQ9aVXX/i0MwNKv2BywKINsHL7Pp9O+v0
-         eF8Q==
-X-Gm-Message-State: AAQBX9f5+DBKb54DWLapOh/Ppw1d2mb/4mIO6hl4i4j/6IwhfsC2ko0F
-        fg9kxkASlY2reREh+otEXW5I8ElQRx8nR9uu7kc02w==
-X-Google-Smtp-Source: AKy350YCm9Z8/PIeUFOKRay3tHd8uEY3gEm45xBRMugyFV6UFUnNJW6cauEggJeb48L7uR904b/TwctWGwwl+7M3Ehs=
-X-Received: by 2002:a17:907:d687:b0:93d:a14f:c9b4 with SMTP id
- wf7-20020a170907d68700b0093da14fc9b4mr9282057ejc.2.1680077178000; Wed, 29 Mar
- 2023 01:06:18 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680077154;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xjsCaclLV54PUQBCXvfqXG6NcxhUWOzoT0j7GVU3LHk=;
+        b=N368xGhG9J418Rnc/zJZuMrKxfnM+qxlxSr+AYQLePU7e7YyuGVKDwFcYUL1yZH4o3
+         2w+MI5D3YWFvgqsnDNONL/jJN/S0iQijkmpSGfalNy61Ifgf2x33X2BjC1jxwo3SZ0NQ
+         tSRomwmQnq6+8FGN+AuHiKeGKaxIdKmoRMDaDdGgi26kFB+0FEkR4fobTjoylnIqPjjD
+         4yTDC9cIFopaZUYHT7gxVTi182n1h74pWpCM0voQQ563XXpoikgfdsRfoQSnGvA74TzH
+         +G8gQZR/TL8d16hMDcc0IjH2VyKqQ2Zy6MxUm65s+iwReBG2TWkNnACtLdG3iOic+Hdh
+         sX8Q==
+X-Gm-Message-State: AAQBX9c4QBHd1WzBsSVuf1ssl1E6paqJOIZjdUGQjPsjacwS4ZRHvZ38
+        AA5NVd8oeXtFnEO4FJJq3xHdCw==
+X-Google-Smtp-Source: AKy350ZHmWuIA0HL6qbVF9DdPRUk6J/Ib7EpPBBdbwXuprkVuitGJ+/S4yTzEeLzd8KdLZvgYbrtKw==
+X-Received: by 2002:ac2:530d:0:b0:4e9:a9e6:2752 with SMTP id c13-20020ac2530d000000b004e9a9e62752mr5597821lfh.22.1680077154459;
+        Wed, 29 Mar 2023 01:05:54 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id s8-20020a19ad48000000b004dc83d04840sm5325670lfd.79.2023.03.29.01.05.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 01:05:54 -0700 (PDT)
+Message-ID: <3850df80-d3e9-00a8-df4a-fddd86706373@linaro.org>
+Date:   Wed, 29 Mar 2023 10:05:53 +0200
 MIME-Version: 1.0
-References: <20230307163413.143334-1-bchihi@baylibre.com> <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
- <CAGuA+ooi7Kx05gagLzXAN3upDiSqDUNOM_djYdGftw6ogVx5gw@mail.gmail.com>
- <CAGuA+oqDPPYFJef_8=YrOpHQNVJ3xgm_zXS6fq_HG2Jy_6t-Zg@mail.gmail.com>
- <CAGXv+5EZPWohGN5CaEiqVrM4MyAar3cPEUhHtGY_9wTJSJNVFQ@mail.gmail.com>
- <CAGuA+oqF4jFMyEo09VDmCf-_7g0ua3XDKDAJ+t3Gat14pDM9NA@mail.gmail.com> <CAGXv+5GGO76H9Z-X=3nhtmSyp7uhuUF4DE0T527M5z+SBX482Q@mail.gmail.com>
-In-Reply-To: <CAGXv+5GGO76H9Z-X=3nhtmSyp7uhuUF4DE0T527M5z+SBX482Q@mail.gmail.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 29 Mar 2023 10:05:41 +0200
-Message-ID: <CAGuA+or4CvyZVNuMu9tOvpoZ5nJimbp7=KX-85FiF4ghaownAg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Add LVTS support for mt8192
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
+Content-Language: en-US
+To:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        Mark Brown <broonie@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
+ <20230328112210.23089-2-zhuyinbo@loongson.cn>
+ <168000761529.3001360.2224316097077012976.robh@kernel.org>
+ <4ed4e0b6-63a8-a5b1-fed9-64a6d036459b@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4ed4e0b6-63a8-a5b1-fed9-64a6d036459b@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen-Yu,
+On 29/03/2023 03:12, zhuyinbo wrote:
+> This patch need depend on
+> https://lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+> then the spi yaml file will build successful. That changelog had record it.
 
-On Tue, Mar 28, 2023 at 5:12=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> w=
-rote:
->
-> On Tue, Mar 28, 2023 at 8:21=E2=80=AFAM Balsam CHIHI <bchihi@baylibre.com=
-> wrote:
-> >
-> > On Sat, Mar 25, 2023 at 5:33=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.or=
-g> wrote:
-> > >
-> > > On Wed, Mar 22, 2023 at 8:48=E2=80=AFPM Balsam CHIHI <bchihi@baylibre=
-.com> wrote:
-> > > >
-> > > > Hi Chen-Yu,
-> > > >
-> > > > I suspect the bug comes from incorrect calibration data offsets for=
- AP
-> > > > Domain because you confirm that MCU Domain probe runs without issue=
-s.
-> > > > Is it possible to test something for us to confirm this theory (i
-> > > > don't have an mt8192 board on hand now), when you have the time of
-> > > > course?
-> > > > We would like to test AP Domain's calibration data offsets with a
-> > > > working one, for example :
-> > > >
-> > > >  static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] =3D =
-{
-> > > >                 {
-> > > > -               .cal_offset =3D { 0x25, 0x28 },
-> > > > +               .cal_offset =3D { 0x04, 0x04 },
-> > > >                 .lvts_sensor =3D {
-> > > >                         { .dt_id =3D MT8192_AP_VPU0 },
-> > > >                         { .dt_id =3D MT8192_AP_VPU1 }
-> > > > @@ -1336,7 +1336,7 @@ static const struct lvts_ctrl_data
-> > > > mt8192_lvts_ap_data_ctrl[] =3D {
-> > > >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
-> > > >         },
-> > > >         {
-> > > > -               .cal_offset =3D { 0x2e, 0x31 },
-> > > > +               .cal_offset =3D { 0x04, 0x04 },
-> > > >                 .lvts_sensor =3D {
-> > > >                         { .dt_id =3D MT8192_AP_GPU0 },
-> > > >                         { .dt_id =3D MT8192_AP_GPU1 }
-> > > > @@ -1346,7 +1346,7 @@ static const struct lvts_ctrl_data
-> > > > mt8192_lvts_ap_data_ctrl[] =3D {
-> > > >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
-> > > >         },
-> > > >         {
-> > > > -               .cal_offset =3D { 0x37, 0x3a },
-> > > > +               .cal_offset =3D { 0x04, 0x04 },
-> > > >                 .lvts_sensor =3D {
-> > > >                         { .dt_id =3D MT8192_AP_INFRA },
-> > > >                         { .dt_id =3D MT8192_AP_CAM },
-> > > > @@ -1356,7 +1356,7 @@ static const struct lvts_ctrl_data
-> > > > mt8192_lvts_ap_data_ctrl[] =3D {
-> > > >                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
-> > > >         },
-> > > >         {
-> > > > -               .cal_offset =3D { 0x40, 0x43, 0x46 },
-> > > > +               .cal_offset =3D { 0x04, 0x04, 0x04 },
-> > > >                 .lvts_sensor =3D {
-> > > >                         { .dt_id =3D MT8192_AP_MD0 },
-> > > >                         { .dt_id =3D MT8192_AP_MD1 },
-> > > >
-> > > > This example is tested and works for mt8195,
-> > > > (all sensors use the same calibration data offset for testing purpo=
-ses).
-> > > >
-> > > > Thank you in advance for your help.
-> > >
-> > > The MCU ones are still tripping though. If I change all of them to 0x=
-04,
-> > > then nothing trips. There's also a bug in the interrupt handling code
-> > > that needs to be dealt with.
-> > >
-> > > AFAICT the calibration data is stored differently. If you look at Chr=
-omeOS's
-> > > downstream v5.10 driver, you'll see mt6873_efuse_to_cal_data() for MT=
-8192,
-> > > and mt8195_efuse_to_cal_data() for MT8195. The difference sums up to:
-> > > MT8195 has all data sequentially stored, while MT8192 has most data s=
-tored
-> > > in lower 24 bits of each 32-bit word, and the highest 8 bits are then=
- used
-> > > to pack data for the remaining sensors.
-> > >
-> > > Regards
-> > > ChenYu
-> >
-> > Hi Chen-Yu Tsai,
-> >
-> > Thank you very much for helping me testing this suggestion.
-> >
-> > Indeed, calibration data is stored differently in the mt8192 compared t=
-o mt8195.
-> > So, the mt8192's support will be delayed for now, to allow further debu=
-gging.
-> >
-> > In the mean time, we will only continue to upstream the remaining
-> > mt8195's source code, so it will get full LVTS support.
-> > A new series will be submitted soon.
-> >
-> > Would you please point me out to the bug in interrupt handling code?
->
-> I just sent out two patches and CC-ed you on them. They are here just in =
-case:
->
-> https://lore.kernel.org/linux-pm/20230328031037.1361048-1-wenst@chromium.=
-org/
-> https://lore.kernel.org/linux-pm/20230328031017.1360976-1-wenst@chromium.=
-org/
-
-Well received. I'm testing it.
-Thanks!
+Thus it cannot be merged now. Do not resend it till dependency hits
+mainline (since you decided not to go with Rob's advice).
 
 Best regards,
-Balsam
+Krzysztof
 
->
-> ChenYu
