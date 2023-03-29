@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1996CEFAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 477896CEFB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjC2Qov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
+        id S229930AbjC2Qp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbjC2Qop (ORCPT
+        with ESMTP id S229733AbjC2Qpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:44:45 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F03E46AC;
-        Wed, 29 Mar 2023 09:44:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=OhiuGHeCY6mb/VmM9pba3c4hvDQmt4O9Ky61+mVEOwk=; b=eWu+51WoLOq0vVZsd+3V0xa2jK
-        oOut7+dM/ujZkhoVXuWyL30qr5aHHQm64/eiEDYiFQ2geOo/BA2VpSLfDgxWR++aYRZxrpcadrevs
-        XwY1I+hpueS0a1Fy5BsaHFu7/Tw99gsBi9ZGFsMGRZA348uwtzIXqvytn4hmZkvKuE54=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1phYuc-008mg8-7K; Wed, 29 Mar 2023 18:44:38 +0200
-Date:   Wed, 29 Mar 2023 18:44:38 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: Re: [RFC PATCH net-next v3 12/15] net: dsa: mt7530: add support for
- single-chip reset line
-Message-ID: <452c4d28-dc1b-4726-9bec-7065032de119@lunn.ch>
-References: <cover.1680105013.git.daniel@makrotopia.org>
- <0f696278bd8d13121a500f80cfe2f806debe4da5.1680105013.git.daniel@makrotopia.org>
+        Wed, 29 Mar 2023 12:45:54 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A1661A7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:45:39 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so16741958pjl.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680108339;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NSTv8w+x28I1WDmCVWEDRLYoLR2cDzb0186a8FLurx4=;
+        b=dSYxlNDK1NqRNMYGUGkpA95ddaseQfjn/gnK7uqCGJhIU6mlUVPbLmBJtS/qMTaVXu
+         A6/7VWPhL289CK6nQarYHj4OQRtxFxDP3vYDNY4c4hDT19XuIssgi6QXs96N8ttqGH3E
+         RH/XGVNcdQI/i1Y3o0kvVoZg+5A3tkZB+Ip9b9whNxbe2IH5AqMlffY6XpT4pDiSBI8k
+         sWEvMLEC/by4qdkqJngWQOJrNENWHP1q5GQkKko6H3cYlvAqYfcXeSZk92N8yiPFMCbr
+         9ZuXvDGHEaZD7THihNYeWS0UT3LTg5KiyoBP05pXKKl4L8GIMFKKaotylq/NvWJU0ukD
+         +bCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680108339;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NSTv8w+x28I1WDmCVWEDRLYoLR2cDzb0186a8FLurx4=;
+        b=yKFDyt9qu78zB7IV92vfwTL45mmLWC1jMMMJxDolIS4s5iAPzb2LJ4YMbvAjQc52i6
+         fhzVR+rPyQlFPUddELoIxqgOYQIUlpXS9hhbN2L6VFylW6qmBxEq0ig9Xrg640YCArKU
+         hV9GYXVrGGE7EMVzUO9tf3S/Ay1SmScnHNPfBYQMF321lQl+wEQZqrwRLBdLDuHF45z7
+         /YgHVrGr8fZhJ2y897huqsKs4yksgy1fD0s3/pW3bjp1hCfnPuTxADupyCFCsNWsdpnK
+         hN+k3ezZ/FyTihvWyvc5E59TrDlIn6lTflnX21/GAfXR6n1Oe/xQJBWO33GwXvo7ln4G
+         30eA==
+X-Gm-Message-State: AAQBX9f/QK3aC9nYbQUwnEjLTnouvhgxMcoOgGYXap3SvZuujhpQHQeV
+        T6nGG3+yZz1aKDI9broR81RWRx6NndY=
+X-Google-Smtp-Source: AKy350bJhWWQPp9q3ay511eks1a81Ls879IR4XBP/I2D54VE1a+dEj/euERRcS0YD+Jq6QOSmJ7cNw==
+X-Received: by 2002:a17:90b:4a50:b0:240:59e8:6dad with SMTP id lb16-20020a17090b4a5000b0024059e86dadmr17592292pjb.25.1680108339132;
+        Wed, 29 Mar 2023 09:45:39 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:c3f5:d0ba:53b0:fcda])
+        by smtp.gmail.com with ESMTPSA id ca14-20020a17090af30e00b002353082958csm1647395pjb.10.2023.03.29.09.45.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 09:45:38 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PULL 0/2] Xtensa fixes for v6.3
+Date:   Wed, 29 Mar 2023 09:45:27 -0700
+Message-Id: <20230329164527.2996022-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f696278bd8d13121a500f80cfe2f806debe4da5.1680105013.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,
+        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 05:00:06PM +0100, Daniel Golle wrote:
-> Similar to multi-chip-module MT7530 also MT7988 uses an internal
-> reset line instead of using an optional reset GPIO like it is the
-> case for external MT7530 and MT7531 ICs.
-> Add support for internal but non-MCM reset line in preparation for
-> adding support for MT7988.
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
->  drivers/net/dsa/mt7530.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index c6fad2d156160..fd55ddc2d1eb3 100644
-> --- a/drivers/net/dsa/mt7530.c
-> +++ b/drivers/net/dsa/mt7530.c
-> @@ -3066,6 +3066,12 @@ mt7530_probe_common(struct mt7530_priv *priv)
->  			dev_err(dev, "Couldn't get our reset line\n");
->  			return PTR_ERR(priv->rstc);
->  		}
-> +	} else if (!priv->bus) {
+Hi Linus,
 
-!priv->bus is being used as a proxy here for MT7988. Maybe it would be
-better to unconditionally use devm_reset_control_get_optional()? Or
-move the reset out of mt7530_probe_common() because it is not
-actually common?
+please pull the following fixes for the Xtensa architecture.
 
-	Andrew
+The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+
+are available in the Git repository at:
+
+  https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20230327
+
+for you to fetch changes up to e313de5b5b04176f28384b45ebebd552c0c7dae3:
+
+  MAINTAINERS: xtensa: drop linux-xtensa@linux-xtensa.org mailing list (2023-03-24 05:30:56 -0700)
+
+----------------------------------------------------------------
+Xtensa fixes for v6.3:
+
+- fix KASAN report in show_stack
+- drop linux-xtensa mailing list from the MAINTAINERS file
+
+----------------------------------------------------------------
+Max Filippov (2):
+      xtensa: fix KASAN report for show_stack
+      MAINTAINERS: xtensa: drop linux-xtensa@linux-xtensa.org mailing list
+
+ MAINTAINERS                |  2 --
+ arch/xtensa/kernel/traps.c | 16 ++++++++++++----
+ 2 files changed, 12 insertions(+), 6 deletions(-)
+
+-- 
+Thanks.
+-- Max
