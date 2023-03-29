@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7852F6CF3AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE586CF3B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbjC2TvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
+        id S229564AbjC2Tvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjC2TvR (ORCPT
+        with ESMTP id S230334AbjC2Tvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:51:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9856A74;
-        Wed, 29 Mar 2023 12:50:49 -0700 (PDT)
+        Wed, 29 Mar 2023 15:51:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609947DA0;
+        Wed, 29 Mar 2023 12:51:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62A2261E26;
-        Wed, 29 Mar 2023 19:50:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B1450C4339B;
-        Wed, 29 Mar 2023 19:50:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1A97B82435;
+        Wed, 29 Mar 2023 19:50:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A242C433D2;
+        Wed, 29 Mar 2023 19:50:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680119423;
-        bh=2BMeM8dD3hziGXEFErJyFqPV9onZ6X8OoaehGvFbk7A=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JuSOEnsguHz56oDMcKCeWXRXqi1iFmbhRiTkod5lT612eIYeRuQNdVanAEaMzRcEd
-         9w4M873hYQHRAbtb2gizEuAqh6NezpgtvXW6wlEO7yaLTrQENpEmk63uzuLkcbRvAZ
-         0aHX0i4stFuPY8Y2hfxfeFtkT5qZPEjkw/h64tOT6RrGE/QpHT5hpCtBRi6gbmrdKh
-         E5zCdZu2yhToBrliNxgX9GbxrJcr74A0eDrS3m6RMG/dziwLgma9/IWovNiqW4d3cy
-         y37QjRtBE6ImwpBOGzkkARsno9mJtMX96GfZMls2eZONNgX0G+VbALY2etnBZ00Ydt
-         GjYAMfKey+4sQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 93217E50D75;
-        Wed, 29 Mar 2023 19:50:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1680119445;
+        bh=DdQ/InU+JW6FxMcEa544An9vo1GjuN7pFdS9qPTwzR0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FBi6j/qw9eZ7S+XE7GyglFFe6nIcEepVGw/DOcSKnd/j6Eb3QlyQfhm366ogCr3qH
+         lYYkW+fqmZskhWF23oz88zeyfcXxvMECpRZI7H1w6HCyVu/uy+ZfeQletZYWD44Fol
+         shTvFUmhzCoHQfD0bjlXxZVwWhVJJBWPHRBCSFH/5lIVlpt5NzaEzsqdVOZrF2E614
+         1Qn11Ot6C1/KDBrSVTqLu07QFFa7KjVVM4kMUvgZIt++hX+lqrFSZYFiyhVfUgNNfD
+         efRwFGaND95MyeCelC4PyYTjsbka4+J+SGj4ayMKgROGEKMi3EFs4rq/Onk7QDvpKh
+         vpET/yHmUU+wQ==
+Date:   Wed, 29 Mar 2023 21:50:42 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Benjamin Bara <bbara93@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>, rafael.j.wysocki@intel.com,
+        dmitry.osipenko@collabora.com, jonathanh@nvidia.com,
+        richard.leitner@linux.dev, treding@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] i2c: core: run atomic i2c xfer when !preemptible
+Message-ID: <ZCSWkhyQjnzByDoR@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Benjamin Bara <bbara93@gmail.com>, Lee Jones <lee@kernel.org>,
+        rafael.j.wysocki@intel.com, dmitry.osipenko@collabora.com,
+        jonathanh@nvidia.com, richard.leitner@linux.dev, treding@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>, stable@vger.kernel.org
+References: <20230327-tegra-pmic-reboot-v3-0-3c0ee3567e14@skidata.com>
+ <20230327-tegra-pmic-reboot-v3-2-3c0ee3567e14@skidata.com>
+ <ZCGuMzmS0Lz5WX2/@ninjato>
+ <CAJpcXm6bt100442y8ajz7kR0nF3Gm9PVVwo3EKVBDC4Pmd-7Ag@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v8 0/4] Add WCN6855 Bluetooth support
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <168011942359.31352.12230106748890164488.git-patchwork-notify@kernel.org>
-Date:   Wed, 29 Mar 2023 19:50:23 +0000
-References: <20230326233812.28058-1-steev@kali.org>
-In-Reply-To: <20230326233812.28058-1-steev@kali.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        sven@svenpeter.dev, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        markpearson@lenovo.com, quic_tjiang@quicinc.com, johan@kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VVeP+HbfnOeUVDlq"
+Content-Disposition: inline
+In-Reply-To: <CAJpcXm6bt100442y8ajz7kR0nF3Gm9PVVwo3EKVBDC4Pmd-7Ag@mail.gmail.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -63,35 +69,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
+--VVeP+HbfnOeUVDlq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 26 Mar 2023 18:38:08 -0500 you wrote:
-> First things first, I do not have access to the specs nor the schematics, so a
-> lot of this was done via guess work, looking at the acpi tables, and looking at
-> how a similar device (wcn6750) was added.
-> 
-> This patchset has 2 patchsets that it depends on, for the bindings so that they
-> pass dtbs_check, as well as adding in the needed regulators to make bluetooth
-> work.
-> 
-> [...]
+On Mon, Mar 27, 2023 at 06:23:24PM +0200, Benjamin Bara wrote:
+> On Mon, 27 Mar 2023 at 16:54, Wolfram Sang <wsa@kernel.org> wrote:
+> > For the !CONFIG_PREEMPT_COUNT case, preemptible() is defined 0. So,
+> > don't we lose the irqs_disabled() check in that case?
+>=20
+> Thanks for the feedback!
+> PREEMPT_COUNT is selected by PREEMPTION, so I guess in the case of
+> !PREEMPT_COUNT,
+> we should be atomic (anyways)?
 
-Here is the summary with links:
-  - [v8,1/4] dt-bindings: net: Add WCN6855 Bluetooth
-    https://git.kernel.org/bluetooth/bluetooth-next/c/5c63b28b9107
-  - [v8,2/4] Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6855
-    https://git.kernel.org/bluetooth/bluetooth-next/c/e5a3f2af0036
-  - [v8,3/4] arm64: dts: qcom: sc8280xp: Define uart2
-    (no matching commit)
-  - [v8,4/4] arm64: dts: qcom: sc8280xp-x13s: Add bluetooth
-    (no matching commit)
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Could you make sure please? Asking Peter Zijlstra might be a good idea.
+He helped me with the current implementation.
 
 
+--VVeP+HbfnOeUVDlq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQklpIACgkQFA3kzBSg
+KbYNNA/+Lc8HqdBhMVtjtKZDd3Km+SqobG8vzuo0octKy5b3E6mK3/y6ZdGssoBs
+EBZ30DQ1H3dBfNsLFz4Ydy2Dir2SLgcxBKT3IPp6bTzjheXumCjCMTa65N8jmBX2
+zX2eu9mVBv5XZAZ1pVzeZVK9EVUU2u/stFuknIg8Cmk+jEgaNCxkKsCnPbnL2l/a
+lKzps+mfNQWI+Tda5XdBPmLP0gtcHvqQpAJ2SRvDwtf03w+YLY4dJ2jN6IhuwSGO
+fisy58cwOPwgen46mk3BLPoEftAw9Ss7smkGmQOb8QY6ZWBo1d2KaxOnaY325kI7
+oGqqtJP1lWinThlqmEhNfUnqJpDrSySgisyT1NKJ6b60Wr0u9BbM8rkfclpnnzyY
+QGZW7lfL4EFzKKbMq1GQiMCDn3tN9nR35W9KtqXPM7i3urOHKWQ3/3dFjcv69Tuk
+QU79XKhnrzEhb43YAhzpfYb8QMB4YdahH78/PhDrwTsfZodqN5yNJeAvx70XiCYp
+3J9jrzmwKquFhz/too/2CLjsiJHie9tcwQZthiV/9+NsulXGg4E0Kv9XKKINB4+e
+condSDcIwRbw0c0T5V5GSHILnNptQywbPoU8npgThFQGsJX4dluRv9+SD4K4hwsf
+qOPVXjiwt+UIZPyz3qW0dHp+dD4TgwmyuH3rl7HAZyk4Csiu/Vw=
+=JbH5
+-----END PGP SIGNATURE-----
+
+--VVeP+HbfnOeUVDlq--
