@@ -2,148 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781166CED11
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB4B6CECFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjC2Pef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 11:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S230177AbjC2Pdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjC2PeR (ORCPT
+        with ESMTP id S229556AbjC2Pde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:34:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7A03C20
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 08:33:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680104005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NeCkkPoa7tXS33oTjWiTv3O34+xg2iZRZ8XP3QkDkJA=;
-        b=clByEt798/zYg+AoqcEvCZZHseCF3s3Vo+ygY9LcxITx5PLLksqZaKz0+5SBYqLR5vsWW3
-        Lr0FqMoA1uCZgmLF9NECrBbpQIYOHiVZC5PWZQXghGV3W7/RNsVRcaMM/2g19Z7o1vgf2U
-        EcNf68uL0h1MJTcH1bEP8rvR3yNcRTA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-341-EMw0FyvuP6ivsPNFD8FRkA-1; Wed, 29 Mar 2023 11:33:20 -0400
-X-MC-Unique: EMw0FyvuP6ivsPNFD8FRkA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C594438149D4;
-        Wed, 29 Mar 2023 15:32:55 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB1F41121330;
-        Wed, 29 Mar 2023 15:32:53 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <SA0PR15MB391946EE72BC969337CF695299899@SA0PR15MB3919.namprd15.prod.outlook.com>
-References: <SA0PR15MB391946EE72BC969337CF695299899@SA0PR15MB3919.namprd15.prod.outlook.com> <20230329141354.516864-1-dhowells@redhat.com> <20230329141354.516864-31-dhowells@redhat.com>
-To:     Bernard Metzler <BMT@zurich.ibm.com>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Tom Talpey <tom@talpey.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 30/48] siw: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage to transmit
+        Wed, 29 Mar 2023 11:33:34 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15014C30;
+        Wed, 29 Mar 2023 08:33:30 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32T9EBxw021690;
+        Wed, 29 Mar 2023 10:33:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=nKcNlzwm7qE0F3RDbGVCCb1M6tgGymG9oJ9fa9j5Mf8=;
+ b=eTlIVmVsKGjq3mnHM6Jr4s9VvJWJcCe3BZ4tu+miceljn7Cs7ndXHSYAvcLHuvLExnnC
+ N5AYuTBDGizsaXXuNHKeZIhOYyq888zNB4e3OwoqgdXcSgiMXUBITOqIYt4OGimFZgAN
+ yilkDV/p+2APuyiiovGt/RHIDUQbwBxL3omvUJ/dA7xZ8/TqcUab9NVsSn31T63h7blS
+ sgk5syUc2BYaochL0WHOhIQjNtfqdgAN1h1IPaePN4XH16qN8KU0bCFQz2NSZ/PMHLuE
+ x82dsOVODSu/y5Ho6m9MKRBmi4dTUpv1nzriDtIYAh2p69oEqWCg+2ywzNoUvFF6a1od tw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pmjghgjaa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 10:33:11 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Wed, 29 Mar
+ 2023 10:33:10 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Wed, 29 Mar 2023 10:33:10 -0500
+Received: from [198.61.65.23] (EDIN4L06LR3.ad.cirrus.com [198.61.65.23])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CFE8211D3;
+        Wed, 29 Mar 2023 15:33:08 +0000 (UTC)
+Message-ID: <57c5a3b3-00cd-5b44-02f4-dedabacc7662@opensource.cirrus.com>
+Date:   Wed, 29 Mar 2023 16:33:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <522641.1680103968.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 29 Mar 2023 16:32:48 +0100
-Message-ID: <522642.1680103968@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] Asoc: wm_adsp: Add support for loading firmware with
+ prefix name
+Content-Language: en-US
+To:     Jianhua Lu <lujianhua000@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+CC:     <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>
+References: <20230329130525.15830-1-lujianhua000@gmail.com>
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <20230329130525.15830-1-lujianhua000@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: ZcNbkvF3f1WjSY9515Intogj9F5T569W
+X-Proofpoint-ORIG-GUID: ZcNbkvF3f1WjSY9515Intogj9F5T569W
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bernard Metzler <BMT@zurich.ibm.com> wrote:
+On 29/3/23 14:05, Jianhua Lu wrote:
+> For platform using fdt, system_name is NULL, it doesn't provide
+> a way to load firmware with prefix name, so add it.
 
-> > When transmitting data, call down into TCP using a single sendmsg with
-> > MSG_SPLICE_PAGES to indicate that content should be spliced rather tha=
-n
-> > performing several sendmsg and sendpage calls to transmit header, data
-> > pages and trailer.
-> > =
+This is intended behavior.
 
-> > To make this work, the data is assembled in a bio_vec array and attach=
-ed to
-> > a BVEC-type iterator.  The header and trailer (if present) are copied =
-into
-> > page fragments that can be freed with put_page().
-> =
+To load per-amp tuning you must know the function of each amp.
+You only know that if you know what hardware platform you are running
+on.
 
-> I like it a lot if it still keeps zero copy sendpage() semantics for
-> the cases the driver can make use of data transfers w/o copy. =
+So if system_name is NULL it should fall back to generic firmware.
 
-> Is 'msg.msg_flags |=3D MSG_SPLICE_PAGES' doing that magic?
-
-Yes.  MSG_SPLICE_PAGES indicates that you want the socket to retain your
-buffer and pass it directly to the device.  Note that it's just a hint,
-however, pages that are unspliceable (eg. they belong to the slab) will ge=
-t
-copied into a page fragment instead.  Further, if the device cannot suppor=
-t a
-vector, then the hint can be ignored and all the data can be copied as nor=
-mal.
-
-> 'splicing' suggest just merging pages to me.
-
-'splicing' as in what the splice system call does.
-
-Unfortunately, MSG_ZEROCOPY is already a (different) thing.
-
-> It would simplify the transmit code path substantially, also getting
-> rid of kmap_local_page()/kunmap_local() sequences for multi-fragment
-> sendmsg()'s.
-
-If the ITER_ITERLIST iterator is accepted, then siw would be able to do mi=
-x
-KVEC and BVEC iterators, e.g. what I did for sunrpc here:
-
-	https://lore.kernel.org/linux-fsdevel/20230329141354.516864-42-dhowells@r=
-edhat.com/T/#u
-
-This means that in siw_tx_hdt() where I made it copy data into page fragme=
-nts
-using page_frag_memdup() and attach that to a bvec:
-
-	hdr_len =3D c_tx->ctrl_len - c_tx->ctrl_sent;
-	h =3D page_frag_memdup(NULL, hdr, hdr_len, GFP_NOFS, ULONG_MAX);
-	if (!h)
-		goto done;
-	bvec_set_virt(&bvec[0], h, hdr_len);
-	seg =3D 1;
-
-it can just set up a kvec instead.
-
-Unfortunately, it's not so easy to get rid of all of the kmap'ing as we ne=
-ed
-to do some of it to do the hashing.
-
-David
-
+> 
+> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> ---
+>   sound/soc/codecs/wm_adsp.c | 14 ++++++++++++++
+>   1 file changed, 14 insertions(+)
+> 
+> diff --git a/sound/soc/codecs/wm_adsp.c b/sound/soc/codecs/wm_adsp.c
+> index 216120b68b64..17481e42d440 100644
+> --- a/sound/soc/codecs/wm_adsp.c
+> +++ b/sound/soc/codecs/wm_adsp.c
+> @@ -760,6 +760,10 @@ static int wm_adsp_request_firmware_file(struct wm_adsp *dsp,
+>   		*filename = kasprintf(GFP_KERNEL, "%s%s-%s-%s-%s.%s", dir, dsp->part,
+>   				      dsp->fwf_name, wm_adsp_fw[dsp->fw].file, system_name,
+>   				      filetype);
+> +	else if (asoc_component_prefix)
+> +		*filename = kasprintf(GFP_KERNEL, "%s%s-%s-%s-%s.%s", dir, dsp->part,
+> +				      dsp->fwf_name, wm_adsp_fw[dsp->fw].file, asoc_component_prefix,
+> +				      filetype);
+>   	else
+>   		*filename = kasprintf(GFP_KERNEL, "%s%s-%s-%s.%s", dir, dsp->part, dsp->fwf_name,
+>   				      wm_adsp_fw[dsp->fw].file, filetype);
+> @@ -831,6 +835,16 @@ static int wm_adsp_request_firmware_files(struct wm_adsp *dsp,
+>   							      NULL, "bin");
+>   			return 0;
+>   		}
+> +	} else if (asoc_component_prefix) {
+> +		if (!wm_adsp_request_firmware_file(dsp, wmfw_firmware, wmfw_filename,
+> +						   cirrus_dir, NULL,
+> +						   asoc_component_prefix, "wmfw")) {
+> +			adsp_dbg(dsp, "Found '%s'\n", *wmfw_filename);
+> +			wm_adsp_request_firmware_file(dsp, coeff_firmware, coeff_filename,
+> +							      cirrus_dir, NULL,
+> +							      asoc_component_prefix, "bin");
+> +			return 0;
+> +		}
+>   	}
+>   
+>   	if (!wm_adsp_request_firmware_file(dsp, wmfw_firmware, wmfw_filename,
