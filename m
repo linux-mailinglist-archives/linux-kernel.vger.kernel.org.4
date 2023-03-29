@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696B36CD8D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01ECF6CD8D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjC2LyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
+        id S229981AbjC2Lyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjC2LyM (ORCPT
+        with ESMTP id S229973AbjC2Ly0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:54:12 -0400
+        Wed, 29 Mar 2023 07:54:26 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74997469C
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:54:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1510246BB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:54:11 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8251C2F4;
-        Wed, 29 Mar 2023 04:54:50 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A04DAD7;
+        Wed, 29 Mar 2023 04:54:55 -0700 (PDT)
 Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 75FEC3F6C4;
-        Wed, 29 Mar 2023 04:54:04 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0E2463F6C4;
+        Wed, 29 Mar 2023 04:54:08 -0700 (PDT)
 From:   James Clark <james.clark@arm.com>
 To:     coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
         mike.leach@linaro.org, suzuki.poulose@arm.com
@@ -32,9 +32,9 @@ Cc:     James Clark <james.clark@arm.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v3 04/13] coresight: Rename connection members to make the direction explicit
-Date:   Wed, 29 Mar 2023 12:53:17 +0100
-Message-Id: <20230329115329.2747724-5-james.clark@arm.com>
+Subject: [PATCH v3 05/13] coresight: Dynamically add connections
+Date:   Wed, 29 Mar 2023 12:53:18 +0100
+Message-Id: <20230329115329.2747724-6-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230329115329.2747724-1-james.clark@arm.com>
 References: <20230329115329.2747724-1-james.clark@arm.com>
@@ -49,360 +49,328 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When input connections are added they will use the same connection
-object as the output so parent and child could be misinterpreted. Making
-the direction unambiguous in the names should improve readability.
+Add a function for adding connections dynamically. This also removes
+the 1:1 mapping between port number and the index into the connections
+array. The only place this mapping was used was in the warning for
+duplicate output ports, which has been replaced by a search. Other
+uses of the port number already use the port member variable.
+
+Being able to dynamically add connections will allow other devices like
+CTI to re-use the connection mechanism despite not having explicit
+connections described in the DT.
+
+The connections array is now no longer sparse, so child_fwnode doesn't
+need to be checked as all connections have a target node. Because the
+array is no longer sparse, the high in and out port numbers are required
+for the refcount arrays. But these will also be removed in a later
+commit when the refcount is made a property of the connection.
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- drivers/hwtracing/coresight/coresight-core.c  | 53 +++++++++----------
- .../hwtracing/coresight/coresight-platform.c  | 30 +++++------
- drivers/hwtracing/coresight/coresight-sysfs.c | 10 ++--
- .../hwtracing/coresight/coresight-tmc-etr.c   |  2 +-
- include/linux/coresight.h                     | 18 +++----
- 5 files changed, 56 insertions(+), 57 deletions(-)
+ drivers/hwtracing/coresight/coresight-core.c  |  23 ++--
+ .../hwtracing/coresight/coresight-platform.c  | 112 +++++++++---------
+ include/linux/coresight.h                     |   7 +-
+ 3 files changed, 68 insertions(+), 74 deletions(-)
 
 diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-index 617be08883da..f3abe6ad0b8f 100644
+index f3abe6ad0b8f..bfe1b93aca4e 100644
 --- a/drivers/hwtracing/coresight/coresight-core.c
 +++ b/drivers/hwtracing/coresight/coresight-core.c
-@@ -120,8 +120,8 @@ static int coresight_find_link_inport(struct coresight_device *csdev,
+@@ -397,9 +397,9 @@ static void coresight_disable_link(struct coresight_device *csdev,
+ 	link_subtype = csdev->subtype.link_subtype;
  
- 	for (i = 0; i < parent->pdata->nr_outconns; i++) {
- 		conn = &parent->pdata->out_conns[i];
--		if (conn->child_dev == csdev)
--			return conn->child_port;
-+		if (conn->dest_dev == csdev)
-+			return conn->dest_port;
+ 	if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG) {
+-		nr_conns = csdev->pdata->nr_inconns;
++		nr_conns = csdev->pdata->high_inport;
+ 	} else if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT) {
+-		nr_conns = csdev->pdata->nr_outconns;
++		nr_conns = csdev->pdata->high_outport;
+ 	} else {
+ 		nr_conns = 1;
  	}
- 
- 	dev_err(&csdev->dev, "couldn't find inport, parent: %s, child: %s\n",
-@@ -138,8 +138,8 @@ static int coresight_find_link_outport(struct coresight_device *csdev,
- 
- 	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
- 		conn = &csdev->pdata->out_conns[i];
--		if (conn->child_dev == child)
--			return conn->outport;
-+		if (conn->dest_dev == child)
-+			return conn->src_port;
- 	}
- 
- 	dev_err(&csdev->dev, "couldn't find outport, parent: %s, child: %s\n",
-@@ -606,7 +606,7 @@ coresight_find_enabled_sink(struct coresight_device *csdev)
- 	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
- 		struct coresight_device *child_dev;
- 
--		child_dev = csdev->pdata->out_conns[i].child_dev;
-+		child_dev = csdev->pdata->out_conns[i].dest_dev;
- 		if (child_dev)
- 			sink = coresight_find_enabled_sink(child_dev);
- 		if (sink)
-@@ -722,7 +722,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
- 	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
- 		struct coresight_device *child;
- 
--		child = csdev->pdata->out_conns[i].child_dev;
-+		child = csdev->pdata->out_conns[i].dest_dev;
- 		if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
- 			if (!coresight_get_ref(child))
- 				goto err;
-@@ -733,7 +733,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
- 	for (i--; i >= 0; i--) {
- 		struct coresight_device *child;
- 
--		child = csdev->pdata->out_conns[i].child_dev;
-+		child = csdev->pdata->out_conns[i].dest_dev;
- 		if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
- 			coresight_put_ref(child);
- 	}
-@@ -752,7 +752,7 @@ static void coresight_drop_device(struct coresight_device *csdev)
- 	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
- 		struct coresight_device *child;
- 
--		child = csdev->pdata->out_conns[i].child_dev;
-+		child = csdev->pdata->out_conns[i].dest_dev;
- 		if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
- 			coresight_put_ref(child);
- 	}
-@@ -794,7 +794,7 @@ static int _coresight_build_path(struct coresight_device *csdev,
- 	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
- 		struct coresight_device *child_dev;
- 
--		child_dev = csdev->pdata->out_conns[i].child_dev;
-+		child_dev = csdev->pdata->out_conns[i].dest_dev;
- 		if (child_dev &&
- 		    _coresight_build_path(child_dev, sink, path) == 0) {
- 			found = true;
-@@ -964,7 +964,7 @@ coresight_find_sink(struct coresight_device *csdev, int *depth)
- 		struct coresight_device *child_dev, *sink = NULL;
- 		int child_depth = curr_depth;
- 
--		child_dev = csdev->pdata->out_conns[i].child_dev;
-+		child_dev = csdev->pdata->out_conns[i].dest_dev;
- 		if (child_dev)
- 			sink = coresight_find_sink(child_dev, &child_depth);
- 
-@@ -1337,12 +1337,12 @@ static int coresight_orphan_match(struct device *dev, void *data)
+@@ -1336,9 +1336,6 @@ static int coresight_orphan_match(struct device *dev, void *data)
+ 	for (i = 0; i < i_csdev->pdata->nr_outconns; i++) {
  		conn = &i_csdev->pdata->out_conns[i];
  
- 		/* Skip the port if FW doesn't describe it */
--		if (!conn->child_fwnode)
-+		if (!conn->dest_fwnode)
- 			continue;
+-		/* Skip the port if FW doesn't describe it */
+-		if (!conn->dest_fwnode)
+-			continue;
  		/* We have found at least one orphan connection */
--		if (conn->child_dev == NULL) {
-+		if (conn->dest_dev == NULL) {
+ 		if (conn->dest_dev == NULL) {
  			/* Does it match this newly added device? */
--			if (conn->child_fwnode == csdev->dev.fwnode) {
-+			if (conn->dest_fwnode == csdev->dev.fwnode) {
- 				ret = coresight_make_links(i_csdev,
- 							   conn, csdev);
- 				if (ret)
-@@ -1377,13 +1377,12 @@ static int coresight_fixup_device_conns(struct coresight_device *csdev)
+@@ -1377,8 +1374,6 @@ static int coresight_fixup_device_conns(struct coresight_device *csdev)
  	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
  		struct coresight_connection *conn = &csdev->pdata->out_conns[i];
  
--		if (!conn->child_fwnode)
-+		if (!conn->dest_fwnode)
- 			continue;
--		conn->child_dev =
--			coresight_find_csdev_by_fwnode(conn->child_fwnode);
--		if (conn->child_dev && conn->child_dev->has_conns_grp) {
--			ret = coresight_make_links(csdev, conn,
--						   conn->child_dev);
-+		conn->dest_dev =
-+			coresight_find_csdev_by_fwnode(conn->dest_fwnode);
-+		if (conn->dest_dev && conn->dest_dev->has_conns_grp) {
-+			ret = coresight_make_links(csdev, conn, conn->dest_dev);
- 			if (ret)
- 				break;
- 		} else {
-@@ -1414,10 +1413,10 @@ static int coresight_remove_match(struct device *dev, void *data)
+-		if (!conn->dest_fwnode)
+-			continue;
+ 		conn->dest_dev =
+ 			coresight_find_csdev_by_fwnode(conn->dest_fwnode);
+ 		if (conn->dest_dev && conn->dest_dev->has_conns_grp) {
+@@ -1413,7 +1408,7 @@ static int coresight_remove_match(struct device *dev, void *data)
  	for (i = 0; i < iterator->pdata->nr_outconns; i++) {
  		conn = &iterator->pdata->out_conns[i];
  
--		if (conn->child_dev == NULL || conn->child_fwnode == NULL)
-+		if (conn->dest_dev == NULL || conn->dest_fwnode == NULL)
+-		if (conn->dest_dev == NULL || conn->dest_fwnode == NULL)
++		if (conn->dest_dev == NULL)
  			continue;
  
--		if (csdev->dev.fwnode == conn->child_fwnode) {
-+		if (csdev->dev.fwnode == conn->dest_fwnode) {
- 			iterator->orphan = true;
- 			coresight_remove_links(iterator, conn);
- 			/*
-@@ -1425,8 +1424,8 @@ static int coresight_remove_match(struct device *dev, void *data)
- 			 * device acquired in parsing the connections from
- 			 * platform data.
- 			 */
--			fwnode_handle_put(conn->child_fwnode);
--			conn->child_fwnode = NULL;
-+			fwnode_handle_put(conn->dest_fwnode);
-+			conn->dest_fwnode = NULL;
- 			/* No need to continue */
- 			break;
- 		}
-@@ -1552,15 +1551,15 @@ void coresight_release_platform_data(struct coresight_device *csdev,
- 
- 	for (i = 0; i < pdata->nr_outconns; i++) {
- 		/* If we have made the links, remove them now */
--		if (csdev && conns[i].child_dev)
-+		if (csdev && conns[i].dest_dev)
- 			coresight_remove_links(csdev, &conns[i]);
- 		/*
+ 		if (csdev->dev.fwnode == conn->dest_fwnode) {
+@@ -1450,7 +1445,7 @@ static void coresight_remove_conns(struct coresight_device *csdev)
+ 	 * doesn't have at least one input port, there is no point
+ 	 * in searching all the devices.
+ 	 */
+-	if (csdev->pdata->nr_inconns)
++	if (csdev->pdata->high_inport)
+ 		bus_for_each_dev(&coresight_bustype, NULL,
+ 				 csdev, coresight_remove_match);
+ }
+@@ -1557,10 +1552,8 @@ void coresight_release_platform_data(struct coresight_device *csdev,
  		 * Drop the refcount and clear the handle as this device
  		 * is going away
  		 */
--		if (conns[i].child_fwnode) {
--			fwnode_handle_put(conns[i].child_fwnode);
--			pdata->out_conns[i].child_fwnode = NULL;
-+		if (conns[i].dest_fwnode) {
-+			fwnode_handle_put(conns[i].dest_fwnode);
-+			pdata->out_conns[i].dest_fwnode = NULL;
- 		}
+-		if (conns[i].dest_fwnode) {
+-			fwnode_handle_put(conns[i].dest_fwnode);
+-			pdata->out_conns[i].dest_fwnode = NULL;
+-		}
++		fwnode_handle_put(conns[i].dest_fwnode);
++		pdata->out_conns[i].dest_fwnode = NULL;
  	}
  	if (csdev)
+ 		coresight_remove_conns_sysfs_group(csdev);
+@@ -1586,9 +1579,9 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+ 		link_subtype = desc->subtype.link_subtype;
+ 
+ 		if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG)
+-			nr_refcnts = desc->pdata->nr_inconns;
++			nr_refcnts = desc->pdata->high_inport;
+ 		else if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT)
+-			nr_refcnts = desc->pdata->nr_outconns;
++			nr_refcnts = desc->pdata->high_outport;
+ 	}
+ 
+ 	refcnts = kcalloc(nr_refcnts, sizeof(*refcnts), GFP_KERNEL);
 diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
-index ed865e0621a9..566cc99a2c34 100644
+index 566cc99a2c34..80ed2e74620b 100644
 --- a/drivers/hwtracing/coresight/coresight-platform.c
 +++ b/drivers/hwtracing/coresight/coresight-platform.c
-@@ -252,13 +252,13 @@ static int of_coresight_parse_endpoint(struct device *dev,
- 		}
+@@ -19,22 +19,44 @@
+ #include <asm/smp_plat.h>
  
- 		conn = &pdata->out_conns[endpoint.port];
--		if (conn->child_fwnode) {
-+		if (conn->dest_fwnode) {
- 			dev_warn(dev, "Duplicate output port %d\n",
- 				 endpoint.port);
- 			ret = -EINVAL;
+ #include "coresight-priv.h"
++
+ /*
+- * coresight_alloc_conns: Allocate connections record for each output
+- * port from the device.
++ * Add an entry to the connection list and assign @conn's contents to it.
++ *
++ * If the output port is already assigned on this device, return -EINVAL
+  */
+-static int coresight_alloc_conns(struct device *dev,
+-				 struct coresight_platform_data *pdata)
++int coresight_add_out_conn(struct device *dev,
++			   struct coresight_platform_data *pdata,
++			   const struct coresight_connection *new_conn)
+ {
+-	if (pdata->nr_outconns) {
+-		pdata->out_conns = devm_kcalloc(dev, pdata->nr_outconns,
+-					    sizeof(*pdata->out_conns), GFP_KERNEL);
+-		if (!pdata->out_conns)
+-			return -ENOMEM;
++	int i;
++	struct coresight_connection *conn;
++
++	/*
++	 * Warn on any existing duplicate output port.
++	 */
++	for (i = 0; i < pdata->nr_outconns; ++i) {
++		conn = &pdata->out_conns[i];
++		/* Output == -1 means ignore the port for example for helpers */
++		if (conn->src_port != -1 &&
++		    conn->src_port == new_conn->src_port) {
++			dev_warn(dev, "Duplicate output port %d\n",
++				 conn->src_port);
++			return -EINVAL;
++		}
+ 	}
+ 
++	pdata->nr_outconns++;
++	pdata->out_conns =
++		devm_krealloc_array(dev, pdata->out_conns, pdata->nr_outconns,
++				    sizeof(*pdata->out_conns), GFP_KERNEL);
++	if (!pdata->out_conns)
++		return -ENOMEM;
++
++	pdata->out_conns[pdata->nr_outconns - 1] = *new_conn;
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(coresight_add_out_conn);
+ 
+ static struct device *
+ coresight_find_device_by_fwnode(struct fwnode_handle *fwnode)
+@@ -224,7 +246,7 @@ static int of_coresight_parse_endpoint(struct device *dev,
+ 	struct device_node *rep = NULL;
+ 	struct device *rdev = NULL;
+ 	struct fwnode_handle *rdev_fwnode;
+-	struct coresight_connection *conn;
++	struct coresight_connection conn = {};
+ 
+ 	do {
+ 		/* Parse the local port details */
+@@ -251,14 +273,7 @@ static int of_coresight_parse_endpoint(struct device *dev,
  			break;
  		}
--		conn->outport = endpoint.port;
-+		conn->src_port = endpoint.port;
+ 
+-		conn = &pdata->out_conns[endpoint.port];
+-		if (conn->dest_fwnode) {
+-			dev_warn(dev, "Duplicate output port %d\n",
+-				 endpoint.port);
+-			ret = -EINVAL;
+-			break;
+-		}
+-		conn->src_port = endpoint.port;
++		conn.src_port = endpoint.port;
  		/*
  		 * Hold the refcount to the target device. This could be
  		 * released via:
-@@ -267,8 +267,8 @@ static int of_coresight_parse_endpoint(struct device *dev,
+@@ -267,8 +282,14 @@ static int of_coresight_parse_endpoint(struct device *dev,
  		 * 2) While removing the target device via
  		 *    coresight_remove_match()
  		 */
--		conn->child_fwnode = fwnode_handle_get(rdev_fwnode);
--		conn->child_port = rendpoint.port;
-+		conn->dest_fwnode = fwnode_handle_get(rdev_fwnode);
-+		conn->dest_port = rendpoint.port;
+-		conn->dest_fwnode = fwnode_handle_get(rdev_fwnode);
+-		conn->dest_port = rendpoint.port;
++		conn.dest_fwnode = fwnode_handle_get(rdev_fwnode);
++		conn.dest_port = rendpoint.port;
++
++		ret = coresight_add_out_conn(dev, pdata, &conn);
++		if (ret) {
++			fwnode_handle_put(conn.dest_fwnode);
++			return ret;
++		}
  		/* Connection record updated */
  	} while (0);
  
-@@ -649,8 +649,8 @@ static int acpi_coresight_parse_link(struct acpi_device *adev,
+@@ -289,16 +310,12 @@ static int of_get_coresight_platform_data(struct device *dev,
+ 	struct device_node *node = dev->of_node;
  
- 	dir = fields[3].integer.value;
- 	if (dir == ACPI_CORESIGHT_LINK_MASTER) {
--		conn->outport = fields[0].integer.value;
--		conn->child_port = fields[1].integer.value;
-+		conn->src_port = fields[0].integer.value;
-+		conn->dest_port = fields[1].integer.value;
- 		rdev = coresight_find_device_by_fwnode(&r_adev->fwnode);
- 		if (!rdev)
- 			return -EPROBE_DEFER;
-@@ -662,14 +662,14 @@ static int acpi_coresight_parse_link(struct acpi_device *adev,
- 		 * 2) While removing the target device via
- 		 *    coresight_remove_match().
- 		 */
--		conn->child_fwnode = fwnode_handle_get(&r_adev->fwnode);
-+		conn->dest_fwnode = fwnode_handle_get(&r_adev->fwnode);
- 	} else if (dir == ACPI_CORESIGHT_LINK_SLAVE) {
- 		/*
- 		 * We are only interested in the port number
- 		 * for the input ports at this component.
- 		 * Store the port number in child_port.
- 		 */
--		conn->child_port = fields[0].integer.value;
-+		conn->dest_port = fields[0].integer.value;
- 	} else {
- 		/* Invalid direction */
- 		return -EINVAL;
-@@ -718,11 +718,11 @@ static int acpi_coresight_parse_graph(struct acpi_device *adev,
+ 	/* Get the number of input and output port for this component */
+-	of_coresight_get_ports(node, &pdata->nr_inconns, &pdata->nr_outconns);
++	of_coresight_get_ports(node, &pdata->high_inport, &pdata->high_outport);
+ 
+ 	/* If there are no output connections, we are done */
+-	if (!pdata->nr_outconns)
++	if (!pdata->high_outport)
+ 		return 0;
+ 
+-	ret = coresight_alloc_conns(dev, pdata);
+-	if (ret)
+-		return ret;
+-
+ 	parent = of_coresight_get_output_ports_node(node);
+ 	/*
+ 	 * If the DT uses obsoleted bindings, the ports are listed
+@@ -688,7 +705,7 @@ static int acpi_coresight_parse_graph(struct acpi_device *adev,
+ {
+ 	int rc, i, nlinks;
+ 	const union acpi_object *graph;
+-	struct coresight_connection *conns, *ptr;
++	struct coresight_connection conn, zero_conn = {};
+ 
+ 	pdata->nr_inconns = pdata->nr_outconns = 0;
+ 	graph = acpi_get_coresight_graph(adev);
+@@ -699,30 +716,23 @@ static int acpi_coresight_parse_graph(struct acpi_device *adev,
+ 	if (!nlinks)
+ 		return 0;
+ 
+-	/*
+-	 * To avoid scanning the table twice (once for finding the number of
+-	 * output links and then later for parsing the output links),
+-	 * cache the links information in one go and then later copy
+-	 * it to the pdata.
+-	 */
+-	conns = devm_kcalloc(&adev->dev, nlinks, sizeof(*conns), GFP_KERNEL);
+-	if (!conns)
+-		return -ENOMEM;
+-	ptr = conns;
+ 	for (i = 0; i < nlinks; i++) {
+ 		const union acpi_object *link = &graph->package.elements[3 + i];
+ 		int dir;
+ 
+-		dir = acpi_coresight_parse_link(adev, link, ptr);
++		conn = zero_conn;
++		dir = acpi_coresight_parse_link(adev, link, &conn);
+ 		if (dir < 0)
  			return dir;
  
  		if (dir == ACPI_CORESIGHT_LINK_MASTER) {
--			if (ptr->outport >= pdata->nr_outconns)
--				pdata->nr_outconns = ptr->outport + 1;
-+			if (ptr->src_port >= pdata->nr_outconns)
-+				pdata->nr_outconns = ptr->src_port + 1;
- 			ptr++;
+-			if (ptr->src_port >= pdata->nr_outconns)
+-				pdata->nr_outconns = ptr->src_port + 1;
+-			ptr++;
++			if (conn.src_port >= pdata->high_outport)
++				pdata->high_outport = conn.src_port + 1;
++			rc = coresight_add_out_conn(&adev->dev, pdata, &conn);
++			if (rc)
++				return rc;
  		} else {
--			WARN_ON(pdata->nr_inconns == ptr->child_port + 1);
-+			WARN_ON(pdata->nr_inconns == ptr->dest_port + 1);
+-			WARN_ON(pdata->nr_inconns == ptr->dest_port + 1);
++			WARN_ON(pdata->high_inport == conn.dest_port + 1);
  			/*
  			 * We do not track input port connections for a device.
  			 * However we need the highest port number described,
-@@ -730,8 +730,8 @@ static int acpi_coresight_parse_graph(struct acpi_device *adev,
+@@ -730,25 +740,11 @@ static int acpi_coresight_parse_graph(struct acpi_device *adev,
  			 * record for an output connection. Hence, do not move
  			 * the ptr for input connections
  			 */
--			if (ptr->child_port >= pdata->nr_inconns)
--				pdata->nr_inconns = ptr->child_port + 1;
-+			if (ptr->dest_port >= pdata->nr_inconns)
-+				pdata->nr_inconns = ptr->dest_port + 1;
+-			if (ptr->dest_port >= pdata->nr_inconns)
+-				pdata->nr_inconns = ptr->dest_port + 1;
++			if (conn.dest_port >= pdata->high_inport)
++				pdata->high_inport = conn.dest_port + 1;
  		}
  	}
  
-@@ -741,10 +741,10 @@ static int acpi_coresight_parse_graph(struct acpi_device *adev,
- 
- 	/* Copy the connection information to the final location */
- 	for (i = 0; conns + i < ptr; i++) {
--		int port = conns[i].outport;
-+		int port = conns[i].src_port;
- 
- 		/* Duplicate output port */
--		WARN_ON(pdata->out_conns[port].child_fwnode);
-+		WARN_ON(pdata->out_conns[port].dest_fwnode);
- 		pdata->out_conns[port] = conns[i];
- 	}
- 
-diff --git a/drivers/hwtracing/coresight/coresight-sysfs.c b/drivers/hwtracing/coresight/coresight-sysfs.c
-index 34d2a2d31d00..a4a8e8e642e8 100644
---- a/drivers/hwtracing/coresight/coresight-sysfs.c
-+++ b/drivers/hwtracing/coresight/coresight-sysfs.c
-@@ -150,11 +150,11 @@ int coresight_make_links(struct coresight_device *orig,
- 
- 	do {
- 		outs = devm_kasprintf(&orig->dev, GFP_KERNEL,
--				      "out:%d", conn->outport);
-+				      "out:%d", conn->src_port);
- 		if (!outs)
- 			break;
- 		ins = devm_kasprintf(&target->dev, GFP_KERNEL,
--				     "in:%d", conn->child_port);
-+				     "in:%d", conn->dest_port);
- 		if (!ins)
- 			break;
- 		link = devm_kzalloc(&orig->dev,
-@@ -178,7 +178,7 @@ int coresight_make_links(struct coresight_device *orig,
- 		 * Install the device connection. This also indicates that
- 		 * the links are operational on both ends.
- 		 */
--		conn->child_dev = target;
-+		conn->dest_dev = target;
- 		return 0;
- 	} while (0);
- 
-@@ -198,9 +198,9 @@ void coresight_remove_links(struct coresight_device *orig,
- 
- 	coresight_remove_sysfs_link(conn->link);
- 
--	devm_kfree(&conn->child_dev->dev, conn->link->target_name);
-+	devm_kfree(&conn->dest_dev->dev, conn->link->target_name);
- 	devm_kfree(&orig->dev, conn->link->orig_name);
- 	devm_kfree(&orig->dev, conn->link);
- 	conn->link = NULL;
--	conn->child_dev = NULL;
-+	conn->dest_dev = NULL;
+-	rc = coresight_alloc_conns(&adev->dev, pdata);
+-	if (rc)
+-		return rc;
+-
+-	/* Copy the connection information to the final location */
+-	for (i = 0; conns + i < ptr; i++) {
+-		int port = conns[i].src_port;
+-
+-		/* Duplicate output port */
+-		WARN_ON(pdata->out_conns[port].dest_fwnode);
+-		pdata->out_conns[port] = conns[i];
+-	}
+-
+-	devm_kfree(&adev->dev, conns);
+ 	return 0;
  }
-diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-index 4711dfa7418c..61234cb8052a 100644
---- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
-+++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-@@ -782,7 +782,7 @@ tmc_etr_get_catu_device(struct tmc_drvdata *drvdata)
- 		return NULL;
  
- 	for (i = 0; i < etr->pdata->nr_outconns; i++) {
--		tmp = etr->pdata->out_conns[i].child_dev;
-+		tmp = etr->pdata->out_conns[i].dest_dev;
- 		if (tmp && coresight_is_catu_device(tmp))
- 			return tmp;
- 	}
 diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-index daf392fcb67a..b6f444804bf3 100644
+index b6f444804bf3..ccbc5eafcb6b 100644
 --- a/include/linux/coresight.h
 +++ b/include/linux/coresight.h
-@@ -164,18 +164,18 @@ struct coresight_desc {
- 
- /**
-  * struct coresight_connection - representation of a single connection
-- * @outport:	a connection's output port number.
-- * @child_port:	remote component's port number @output is connected to.
-- * @chid_fwnode: remote component's fwnode handle.
-- * @child_dev:	a @coresight_device representation of the component
--		connected to @outport.
-+ * @src_port:	a connection's output port number.
-+ * @dest_port:	destination's input port number @src_port is connected to.
-+ * @dest_fwnode: destination component's fwnode handle.
-+ * @dest_dev:	a @coresight_device representation of the component
-+		connected to @src_port. NULL until the device is created
-  * @link: Representation of the connection as a sysfs link.
+@@ -104,9 +104,11 @@ union coresight_dev_subtype {
+  *
+  * @nr_inconns: Number of elements for the input connections.
+  * @nr_outconns: Number of elements for the output connections.
+- * @out_conns:	Sparse array of nr_outconns connections from this component.
++ * @out_conns:	Array of nr_outconns connections from this component.
   */
- struct coresight_connection {
--	int outport;
--	int child_port;
--	struct fwnode_handle *child_fwnode;
--	struct coresight_device *child_dev;
-+	int src_port;
-+	int dest_port;
-+	struct fwnode_handle *dest_fwnode;
-+	struct coresight_device *dest_dev;
- 	struct coresight_sysfs_link *link;
- };
+ struct coresight_platform_data {
++	int high_inport;
++	int high_outport;
+ 	int nr_inconns;
+ 	int nr_outconns;
+ 	struct coresight_connection *out_conns;
+@@ -609,5 +611,8 @@ static inline void coresight_write64(struct coresight_device *csdev, u64 val, u3
+ extern int coresight_get_cpu(struct device *dev);
  
+ struct coresight_platform_data *coresight_get_platform_data(struct device *dev);
++int coresight_add_out_conn(struct device *dev,
++			   struct coresight_platform_data *pdata,
++			   const struct coresight_connection *new_conn);
+ 
+ #endif		/* _LINUX_COREISGHT_H */
 -- 
 2.34.1
 
