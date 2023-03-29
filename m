@@ -2,102 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153116CF394
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE5F6CF39F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjC2Tri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
+        id S230401AbjC2TuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbjC2TrV (ORCPT
+        with ESMTP id S230002AbjC2Tt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:47:21 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1197ED1;
-        Wed, 29 Mar 2023 12:46:13 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 78BFA32007F1;
-        Wed, 29 Mar 2023 15:46:11 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 29 Mar 2023 15:46:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1680119171; x=1680205571; bh=zo
-        jQa1YLfWakbyG6by6LrH71dsPpXEzFqhE+LyL8iNE=; b=f94NQcHS7VQkFwhd2T
-        lQmPb/+vs32rNGXlq8MK65yIssXnmd7EmKp+o/fL01cI0ueUUZ9vYhypWMA1T0rB
-        jCDrorQRxAG03EWO6IunfBk66GlAxo4S6MeNZwpEVYBjXBy+J0f+G+xau2ojokju
-        ZSSX0vwaqQh1dLcVHFBpcOZlVMpUeab5LYVEAEEGPjV2SrSGY9fVeFvObpnOyd0M
-        vqgNJRgHx3phaHNOIS3hW4/ghEghuyZYhkxqYFKyQ15VSyk1CMbLoXbr3va0iCEt
-        CDZOFluulLlgjhBzjYrX8HGEZ912MpH/WzdOW4qN/6KZ6Ap3B+mIfuG5CxSlWge8
-        7B0g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680119171; x=1680205571; bh=zojQa1YLfWakb
-        yG6by6LrH71dsPpXEzFqhE+LyL8iNE=; b=fu8eitjJyrwP8Dm2aWwPOnMFuesE7
-        IvCqhd9eduPE7dKnPswR8K9JADc/nTiA9hL0aaPZxt2BcXUhU3b15xsCgrvX2PCc
-        yDWM43mhtALwBlI6Y56e2iQ20CjGrgPHV7pPNPAtT/z9qzZCnmZmFyzjub0B8iDN
-        9Lxu+0TfzEOTULOEnu9mIQIA9niIWO9sszInE06a6PGvtTGxbbDF1Bg5Ur+eHcXj
-        T3ZuI0zTfUG0mMakfBv9trI65wO8syiqyLcqHwu/NSVBYF0O67476B/ot2hrPA/6
-        CJjLZCX/9bi1nHv0EySZqdq/VdGPgsgEzelieKImuNJ5AbWok53xftUOQ==
-X-ME-Sender: <xms:gpUkZAQvLCQskVD20nQyHx97BwU8jejN8-2xyh66OY7_I4czTEbSWA>
-    <xme:gpUkZNy4szB7l33j11gvKjWuc77tAfd41f8hYWdm630RZmAcn_rUl3kgOYxAt_PZY
-    ayTewqoQr-lYmxecdM>
-X-ME-Received: <xmr:gpUkZN21y14C_7xnOwqXxBC0Vd0oQpp9sGs7Zwjy3m0KTCxPzd1xsWumGw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehiedgudegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnheptdelkeejiedufedvhfeiffetlefhiedvleeigfeiuefghfdvleeiffej
-    ieegteejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:g5UkZEBpwPSEZ_8uEFhbK1MofzLIozz1zdNDcuvuk_srfLeWZ6OzqQ>
-    <xmx:g5UkZJgUwNdYM1HRkmgIZbZlFSBNil6tmi1ffKI2r188jCYr7hhZtA>
-    <xmx:g5UkZArxT7xn2Tmoo5oOug5xquSGRfJTe_7S3Ho2yZ7wvmhxprjRpQ>
-    <xmx:g5UkZMTMqIuUPOQPjOfr1WGA1wHIZ8OMuAbxrPeH4SkG1bjabdOjlg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Mar 2023 15:46:10 -0400 (EDT)
-Date:   Wed, 29 Mar 2023 21:46:09 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <20230329194609.7u2hgidxdk34emsf@penduick>
-References: <ZBtPhoelZo4U5jwC@kroah.com>
- <20230323101216.w56kz3rudlj23vab@houat>
- <ZBwoRgc2ICBJX/Lq@kroah.com>
- <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
- <20230323122925.kqdnomr7i46qnyo4@houat>
- <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
- <20230323163639.xtwpid2uunwnzai4@houat>
- <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
- <20230324123157.bbwvfq4gsxnlnfwb@houat>
- <20230325175044.7bee9e7d@jic23-huawei>
+        Wed, 29 Mar 2023 15:49:59 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC0D6A4B
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:49:37 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id d22so9992513pgw.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680119288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JkwwcSBRqgS30KhR49UM83c3a69MioP60clbUh2HjpA=;
+        b=Vjb3xT/s1/m7g9V+3JodYQd0vQRs0RZgGOezedG8oJudOay6pylk3yYQ2+36Ew/UIb
+         juTMRwfNvT2SCrUDOGBXYX2WfGtnySA1/ElIFRA6/PZ1aW8c0mBQPLG/1HbonvmAuKVG
+         nuqXcKmGBfCFd+ChSg3orAS1fWQva0XBc7rql8PaZSQWvOxbKW2mCTGOVJBfhPPDs4I+
+         oDs22vkzvITKKvdb66iqt7sHk2sh/Dw5IjGWFsr13+Z6j/cSH1OFYWDYq/a+0eDGiSi1
+         bs/aib9lMbj++PKL/Ym1cxuKbiGmWO+xSCPycd19WBQwnO/pZd6zU6iI9pOdvNqn/YaR
+         Bowg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680119288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JkwwcSBRqgS30KhR49UM83c3a69MioP60clbUh2HjpA=;
+        b=S8K+fl9G8ROnumTBvqOurQdK6rbnZwWp45HDvdmUcSHX/0JH3zlweNfRTvgbdnHJSh
+         UlC1eJqOjQOLYwf5jdnnK1IL8+f7eGm9VbX190GqLuRoxAZDNhvtQRjz9wYL/j8SCl13
+         FzISLVlGSph/ODgoBJWB9E99TyzTlhFZoElA9MTmQpah8ssLKMHNVH3+zdIzK2A7bmb0
+         dSmFmxxFZanxQi+roMZGDMYtncxgnfvs8OEYUcChH6MbsYct48L8i37p+6w97VMxTQ1j
+         vNaNMi9RQrp4/S9LXDrhrDoBolpaEep99pDsn7r/0Flz+xG820CDBPqiTpczWMSaEyxT
+         CpeA==
+X-Gm-Message-State: AAQBX9cUFa7Kn8Aw2/yVzjbbEESzhTZgH7qCXmWlsr5TJwCsD7SbUsaM
+        w2oPJExaf8ODQT4014WJhCFN8oTjE/JIvJMeBPgg1A==
+X-Google-Smtp-Source: AKy350bTWid512og1XEyH8yXn2SeGT0F4JFf7EpVQQuzB+KNlUFsnJWFBZzX5Pz0KWEq5gW8zQNmpFjZE0Q/yTnojJg=
+X-Received: by 2002:a63:5a47:0:b0:513:2523:1b5f with SMTP id
+ k7-20020a635a47000000b0051325231b5fmr5501254pgm.3.1680119287530; Wed, 29 Mar
+ 2023 12:48:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l6s2nrpwzcaaz3jq"
-Content-Disposition: inline
-In-Reply-To: <20230325175044.7bee9e7d@jic23-huawei>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
+In-Reply-To: <240155f20aae47e9f7461e2b7416120ba6238886.1679650087.git.geert+renesas@glider.be>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 29 Mar 2023 12:47:31 -0700
+Message-ID: <CAGETcx-5a3ZKRiG1MbZaYiJUPVSPH1O18+E-HoTRnAUz0mc07A@mail.gmail.com>
+Subject: Re: [PATCH v2] treewide: Fix instantiation of devices in DT overlays
+To:     geert+renesas@glider.be
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,128 +81,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 24, 2023 at 2:30=E2=80=AFAM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
 
---l6s2nrpwzcaaz3jq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I saw all the other replies. Let me give more details on the commit
+text and inline comments so it's clearer and not a "he said he said"
 
-On Sat, Mar 25, 2023 at 05:50:44PM +0000, Jonathan Cameron wrote:
-> On Fri, 24 Mar 2023 13:31:57 +0100
-> Maxime Ripard <maxime@cerno.tech> wrote:
->=20
-> > On Fri, Mar 24, 2023 at 08:11:52AM +0200, Matti Vaittinen wrote:
-> > > On 3/23/23 18:36, Maxime Ripard wrote: =20
-> > > > On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote: =
-=20
-> > > > > On 3/23/23 14:29, Maxime Ripard wrote: =20
-> > > > > > On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
-> > > > > >=20
-> > > > > > This is the description of what was happening:
-> > > > > > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiy=
-tl@houat/ =20
-> > > > >=20
-> > > > > Thanks Maxime. Do I read this correcty. The devm_ unwinding not b=
-eing done
-> > > > > when root_device_register() is used is not because root_device_un=
-register()
-> > > > > would not trigger the unwinding - but rather because DRM code on =
-top of this
-> > > > > device keeps the refcount increased? =20
-> > > >=20
-> > > > There's a difference of behaviour between a root_device and any dev=
-ice
-> > > > with a bus: the root_device will only release the devm resources wh=
-en
-> > > > it's freed (in device_release), but a bus device will also do it in
-> > > > device_del (through bus_remove_device() -> device_release_driver() =
-->
-> > > > device_release_driver_internal() -> __device_release_driver() ->
-> > > > device_unbind_cleanup(), which are skipped (in multiple places) if
-> > > > there's no bus and no driver attached to the device).
-> > > >=20
-> > > > It does affect DRM, but I'm pretty sure it will affect any framework
-> > > > that deals with device hotplugging by deferring the framework struc=
-ture
-> > > > until the last (userspace) user closes its file descriptor. So I'd
-> > > > assume that v4l2 and cec at least are also affected, and most likely
-> > > > others. =20
-> > >=20
-> > > Thanks for the explanation and patience :)
-> > >  =20
-> > > >  =20
-> > > > > If this is the case, then it sounds like a DRM specific issue to =
-me. =20
-> > > >=20
-> > > > I mean, I guess. One could also argue that it's because IIO doesn't
-> > > > properly deal with hotplugging. =20
-> > >=20
-> > > I must say I haven't been testing the IIO registration API. I've only=
- tested
-> > > the helper API which is not backed up by any "IIO device". (This is f=
-ine for
-> > > the helper because it must by design be cleaned-up only after the
-> > > IIO-deregistration).
-> > >=20
-> > > After your explanation here, I am not convinced IIO wouldn't see the =
-same
-> > > issue if I was testing the devm_iio_device_alloc() & co. =20
-> >=20
-> > It depends really. The issue DRM is trying to solve is that, when a
-> > device is gone, some application might still have an open FD and could
-> > still poke into the kernel, while all the resources would have been
-> > free'd if it was using devm.
-> >=20
-> > So everything is kept around until the last fd is closed, so you still
-> > have a reference to the device (even though it's been removed from its
-> > bus) until that time.
-> >=20
-> > It could be possible that IIO just doesn't handle that case at all. I
-> > guess most of the devices aren't hotpluggable, and there's not much to
-> > interact with from a userspace PoV iirc, so it might be why.
->=20
-> Lars-Peter Clausen (IIRC) fixed up the IIO handling of the similar cases a
-> long time ago now. It's simpler that for some other subsystems as we don't
-> have as many interdependencies as occur in DRM etc.
->=20
-> I 'think' we are fine in general with the IIO approach to this (I think we
-> did have one report of a theoretical race condition in the remove path th=
-at
-> was never fully addressed).
->=20
-> For IIO we also have fds that can be open but all accesses to them are pr=
-oxied
-> through the IIO core and one of the things iio_device_unregister() or the=
- devm
-> equivalent does is to set indio_dev->info =3D NULL  (+ wake up anyone wai=
-ting on
-> data etc). Alongside removing the callbacks, that is also used as a flag
-> to indicate the device has gone.
+> When loading a DT overlay that creates a device, the device is not
+> instantiated,
 
-Sorry if it came as trying to put IIO under a bad light, it certainly
-wasn't my intention. I was trying to come up with possible explanations
-as to why IIO's design was simpler than DRM is :)
+IIRC I think the devices are instantiated, but not probed.
 
-> Note that we keep a reference to the struct indio_dev->dev (rather that t=
-he
-> underlying device) so that is not freed until the last fd is closed.
-> Thus, although devm unwinding has occurred that doesn't mean all the data
-> that was allocated with devm_xx calls is cleared up immediately.
+> unless the DT overlay is unloaded and reloaded again.
+>
+> Saravana explains:
+>   Basically for all overlays (I hope the function is only used for
+>   overlays) we assume all nodes are NOT devices until they actually
+>   get added as a device.
 
-I'm not sure I get that part though. devm unwinding can happen even if the =
-refcount is > 1
+This comment was about what the patch is doing. I think a better
+commit text would be something like below. Feel free to reword as you
+see fit.
 
-Maxime
+After the recent refactor to improve fw_devlink[1], it no longer depends on
+"compatible" property to identify which device tree nodes will
+become struct device. fw_devlink now picks up dangling consumers (consumers
+pointing to descendent device tree nodes of a device that aren't converted
+to child devices) when a device is successfully bound to a driver. See
+__fw_devlink_pickup_dangling_consumers().
 
---l6s2nrpwzcaaz3jq
-Content-Type: application/pgp-signature; name="signature.asc"
+However, during DT overlay, a device's device tree node can have sub-nodes
+added/removed without unbinding/rebinding the driver. This difference in
+behavior between the normal device instantiation and probing flow vs the DT
+overlay flow has a bunch of implications that are pointed out elsewhere[2].
+One of them is that the fw_devlink logic to pick up dangling consumers is
+never exercised.
 
------BEGIN PGP SIGNATURE-----
+This patch solves the fw_devlink issue by marking all DT nodes added by DT
+overlay with FWNODE_FLAG_NOT_DEVICE (fwnode that won't become device) and
+then clearing the flag when a struct device is actually created for the DT
+node. This way, fw_devlink knows not to have consumers waiting on these
+newly added DT nodes and to propagate the dependency to an ancestor DT node
+that has corresponding struct device.
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZCSVgQAKCRDj7w1vZxhR
-xaenAP950SFm/YscP/OZNbX+eEpJynPuAwfDyd1PtJuqNfChOQD+LJmD189z9X+y
-U5CselZugPJllYdyXVUeK0Apq+k7KAE=
-=+cge
------END PGP SIGNATURE-----
+[1] - https://lore.kernel.org/lkml/20230207014207.1678715-1-saravanak@googl=
+e.com/
+[2] - https://lore.kernel.org/lkml/CAGETcx_bkuFaLCiPrAWCPQz+w79ccDp6=3D9e88=
+1qmK=3Dvx3hBMyg@mail.gmail.com/#t
 
---l6s2nrpwzcaaz3jq--
+
+> Based on a patch by Saravana Kannan, which covered only platform and spi
+> devices.
+
+You can keep this in the commit text.
+
+> Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
+> Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=3DrWYnkC=
+Z6z5bGX-wj4w@mail.gmail.com
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> ---
+> v2:
+>   - Add Acked-by,
+>   - Drop RFC.
+> ---
+>  drivers/bus/imx-weim.c    | 1 +
+>  drivers/i2c/i2c-core-of.c | 1 +
+>  drivers/of/dynamic.c      | 1 +
+>  drivers/of/platform.c     | 1 +
+>  drivers/spi/spi.c         | 1 +
+>  5 files changed, 5 insertions(+)
+>
+> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> index 36d42484142aede2..898e23a4231400fa 100644
+> --- a/drivers/bus/imx-weim.c
+> +++ b/drivers/bus/imx-weim.c
+> @@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb, =
+unsigned long action,
+>                                  "Failed to setup timing for '%pOF'\n", r=
+d->dn);
+>
+>                 if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+
+It's important this flag clearing is done before the device is added.
+So, can you please add a comment before all these clear flag lines
+that's something like:
+
+/* Clear the flag before adding the device so that fw_devlink doesn't
+skip adding consumers to this device. */
+
+Thanks,
+Saravana
+
+> +                       rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE=
+;
+>                         if (!of_platform_device_create(rd->dn, NULL, &pde=
+v->dev)) {
+>                                 dev_err(&pdev->dev,
+>                                         "Failed to create child device '%=
+pOF'\n",
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index aa93467784c29c89..303f9003562eed3d 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -178,6 +178,7 @@ static int of_i2c_notify(struct notifier_block *nb, u=
+nsigned long action,
+>                         return NOTIFY_OK;
+>                 }
+>
+> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+>                 client =3D of_i2c_register_device(adap, rd->dn);
+>                 if (IS_ERR(client)) {
+>                         dev_err(&adap->dev, "failed to create client for =
+'%pOF'\n",
+> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> index 07d93753b12f5f4d..e311d406b1705306 100644
+> --- a/drivers/of/dynamic.c
+> +++ b/drivers/of/dynamic.c
+> @@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np)
+>         np->sibling =3D np->parent->child;
+>         np->parent->child =3D np;
+>         of_node_clear_flag(np, OF_DETACHED);
+> +       np->fwnode.flags |=3D FWNODE_FLAG_NOT_DEVICE;
+>  }
+>
+>  /**
+> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> index b2bd2e783445dd78..17c92cbfb62ee3ef 100644
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -737,6 +737,7 @@ static int of_platform_notify(struct notifier_block *=
+nb,
+>                 if (of_node_check_flag(rd->dn, OF_POPULATED))
+>                         return NOTIFY_OK;
+>
+> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+>                 /* pdev_parent may be NULL when no bus platform device */
+>                 pdev_parent =3D of_find_device_by_node(rd->dn->parent);
+>                 pdev =3D of_platform_device_create(rd->dn, NULL,
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 8e8af148b1dc371e..66ac67580d2a473b 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -4527,6 +4527,7 @@ static int of_spi_notify(struct notifier_block *nb,=
+ unsigned long action,
+>                         return NOTIFY_OK;
+>                 }
+>
+> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+>                 spi =3D of_register_spi_device(ctlr, rd->dn);
+>                 put_device(&ctlr->dev);
+>
+> --
+> 2.34.1
+>
