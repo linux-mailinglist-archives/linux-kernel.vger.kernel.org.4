@@ -2,106 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E056CD140
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 06:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5996CD142
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 06:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjC2Eue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 00:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S229804AbjC2Ewh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 00:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC2Euc (ORCPT
+        with ESMTP id S229549AbjC2Ewf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 00:50:32 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209662D46;
-        Tue, 28 Mar 2023 21:50:30 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1680065428;
-        bh=3uDKL3dxAD8wUGaHcCtXGJ0ik0XhHCgJ0XsIoOMR6mg=;
-        h=From:Date:Subject:To:Cc:From;
-        b=bsYwTtfS+4xkWfPFqC/VUCJHKjRkhFCGJa9s8462OKpDQOGfGablzqi7G1aSPs2qq
-         xH4JGx04WWJFBXkIv86/0xZEVopT3qol6ylsVdkPNVTf7ghf0yiQB2R8NAP+TTAwyY
-         4qJKH1QB5MUYwxaUEFn9+s0cJuhmbeBoBg47j4PQ=
-Date:   Wed, 29 Mar 2023 04:50:25 +0000
-Subject: [PATCH] platform/x86: think-lmi: Remove unnecessary casts for
- attributes
+        Wed, 29 Mar 2023 00:52:35 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73072D46;
+        Tue, 28 Mar 2023 21:52:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680065554; x=1711601554;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=7VVjAO7IWVyVYsb4cMvODMGsMKqTrcHRHz8e1YbJYkg=;
+  b=dMpSVQ01MtSdcu7XTGKWvyKUGws6rI9OR+4Jc4n3/fjza6qEGYIiS9HP
+   URD6EgAqAXhyNhvp7QFE18P/oLSIK0f0DuftRUbzqUmNh9tUFbHrxEKSR
+   RiuMDUR7RIcCUgja4cXKK+JjEzNKSxJWkiTnCM4CXb8723Ua/JloaWwMu
+   38lOMGp5LAaxnwMscGInkt/TcVZmrqWjC7IgfBc6Z72bQ+WFniQv5lifD
+   QPXxNO/dE9Ry8huOChtDskSpnh3qNLp+q5aoB6Qa142OkUla2L/Mw3qBH
+   jOwosi5NFexTmn8J/kKy0OwCwe5JrV3Kt1M/6kX3PtxWyyipCN2ueZDMU
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="405717449"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="405717449"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 21:52:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="930157132"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="930157132"
+Received: from tsennhau-mobl6.gar.corp.intel.com (HELO [10.0.2.15]) ([10.252.49.63])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 21:52:30 -0700
+Message-ID: <67d81a70-1adc-dad4-4592-5e7d67e6c926@intel.com>
+Date:   Wed, 29 Mar 2023 07:52:29 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230329-think-lmi-attrs-v1-1-5794f2367cc2@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAJDDI2QC/x2N0QrCMAwAf2Xk2cDsJrP+iviQbtEGa5SmijD27
- wYf7+C4FYyrsMGpW6HyR0ye6rDfdTBn0hujLM4Q+jD0Q4jYsugdy0OQWquGMY6U0nSYOB7Bq0T
- GmCrpnL3TdykuX5Wv8v1vzpdt+wFpjO6TdgAAAA==
-To:     Mark Pearson <markpearson@lenovo.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680065425; l=1970;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=3uDKL3dxAD8wUGaHcCtXGJ0ik0XhHCgJ0XsIoOMR6mg=;
- b=VLmT86d5sNkUhvSPhj+1JdaQQqAB7clQbigXTWogDddXcTmRsmJVLQ8BL/b79XBx3jqBPxDaP
- SPk90swaAUFCYYddQGWptkFLOYldeyfQx+s3teWsmFooWrN8KSPdJ0M
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH v1] perf symbol: Avoid use after free
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230328234413.1081014-1-irogers@google.com>
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230328234413.1081014-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These casts are unnecessary and could break if structure layouts are
-randomized or implementation details change.
-Use the proper syntax that works without casts.
+On 29/03/23 02:44, Ian Rogers wrote:
+> If demangling succeeds then sym_name is set to the demangled string
+> that is freed. Rather than test if sym_name is empty and possibly
+> use-after-free on the return path, expand out the alternatives.
 
-Also remove some unnecessary braces that checkpatch complains about.
+Looks the same as:
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/platform/x86/think-lmi.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+https://lore.kernel.org/linux-perf-users/20230316194156.8320-2-adrian.hunter@intel.com/
 
-diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-index c816646eb661..02bfd6e3fed2 100644
---- a/drivers/platform/x86/think-lmi.c
-+++ b/drivers/platform/x86/think-lmi.c
-@@ -862,19 +862,18 @@ static umode_t auth_attr_is_visible(struct kobject *kobj,
- 	struct tlmi_pwd_setting *setting = to_tlmi_pwd_setting(kobj);
- 
- 	/* We only want to display level and index settings on HDD/NVMe */
--	if ((attr == (struct attribute *)&auth_index) ||
--			(attr == (struct attribute *)&auth_level)) {
-+	if (attr == &auth_index.attr || attr == &auth_level.attr) {
- 		if ((setting == tlmi_priv.pwd_hdd) || (setting == tlmi_priv.pwd_nvme))
- 			return attr->mode;
- 		return 0;
- 	}
- 
- 	/* We only display certificates on Admin account, if supported */
--	if ((attr == (struct attribute *)&auth_certificate) ||
--			(attr == (struct attribute *)&auth_signature) ||
--			(attr == (struct attribute *)&auth_save_signature) ||
--			(attr == (struct attribute *)&auth_cert_thumb) ||
--			(attr == (struct attribute *)&auth_cert_to_password)) {
-+	if (attr == &auth_certificate.attr ||
-+	    attr == &auth_signature.attr ||
-+	    attr == &auth_save_signature.attr ||
-+	    attr == &auth_cert_thumb.attr ||
-+	    attr == &auth_cert_to_password.attr) {
- 		if ((setting == tlmi_priv.pwd_admin) && tlmi_priv.certificate_support)
- 			return attr->mode;
- 		return 0;
-
----
-base-commit: fcd476ea6a888ef6e6627f4c21a2ea8cca3e9312
-change-id: 20230329-think-lmi-attrs-994abb757e98
-
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/symbol-elf.c | 18 ++++++++++--------
+>  1 file changed, 10 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+> index c0a2de42c51b..b7e3e492bff3 100644
+> --- a/tools/perf/util/symbol-elf.c
+> +++ b/tools/perf/util/symbol-elf.c
+> @@ -577,15 +577,17 @@ static bool get_plt_got_name(GElf_Shdr *shdr, size_t i,
+>  	/* Get the associated symbol */
+>  	gelf_getsym(di->dynsym_data, vr->sym_idx, &sym);
+>  	sym_name = elf_sym__name(&sym, di->dynstr_data);
+> -	demangled = demangle_sym(di->dso, 0, sym_name);
+> -	if (demangled != NULL)
+> -		sym_name = demangled;
+> -
+> -	snprintf(buf, buf_sz, "%s@plt", sym_name);
+> -
+> -	free(demangled);
+> +	if (*sym_name == '\0')
+> +		return false;
+>  
+> -	return *sym_name;
+> +	demangled = demangle_sym(di->dso, 0, sym_name);
+> +	if (demangled != NULL) {
+> +		snprintf(buf, buf_sz, "%s@plt", demangled);
+> +		free(demangled);
+> +	} else {
+> +		snprintf(buf, buf_sz, "%s@plt", sym_name);
+> +	}
+> +	return true;
+>  }
+>  
+>  static int dso__synthesize_plt_got_symbols(struct dso *dso, Elf *elf,
 
