@@ -2,363 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F366CD5FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2476CD607
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbjC2JJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
+        id S229987AbjC2JMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjC2JJo (ORCPT
+        with ESMTP id S229550AbjC2JL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:09:44 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC521FCC;
-        Wed, 29 Mar 2023 02:09:42 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id kc4so14281097plb.10;
-        Wed, 29 Mar 2023 02:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680080981;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WX0Lf5LGFdqWbC/ra4jNX89UpPA5rFly0rlv9bpAKjA=;
-        b=XQ5HcOldITya5MZELl8ZXCK/dvsBWRo1s2CYeDEpqxEFZk/ajpMDdNQK9euhc4Crp5
-         fB/iqXrHbHxYy1IDwXA8gUzqXcaPNid5oKfhC6/XkQr5bYgN0I5VvhcNZjQ6R/CR+TPP
-         9VMBiYgudoCfhCeIQH/0QxUuPnhmc3X7Y90gzOcTRUjoErXnfzXAKJN1Tbpz1o2OTNEz
-         PNrcEZ9e6hU5F8RjKFdByZ/FS8USB5LestYgsvxKEfAKqVmhWwYGXDtqWXAqyoABU1ry
-         ZGTX5EvccOp0IqmXV89Fxba2/PgFp1VkHda+uGcOkVgXBMH97VUhLENKzuNSfJBcvQNf
-         uTrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680080981;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WX0Lf5LGFdqWbC/ra4jNX89UpPA5rFly0rlv9bpAKjA=;
-        b=7PeheZfQX25OptcGbHFJHs2Fb8Nc3bHtrETtRn/E9sE4Yj9QuxPiYSOcnRvOg/8EUT
-         RdDgxbagN019npKdVAYqx8arfgesdwg7rRO+GgYufI6TSSpi/oA7x391QdQoHIQbq0fd
-         FxLJOXahHNn3SxY3sgfagp/JUOhJw4NV30zCKt5HzS5TsVExn7PULBQoRTaX9UhJ+fpP
-         elEv7IoZ7aTyJnmuxZYA0urMRN8BKs9eb51InW2pJv6oad2mBDyMShKDZzcxdsI8xGun
-         Sn+ILc3jnpat2nrq6tsMoEiMhiSf6wa1U1PjYVbbUWfTn8B/LZLO/qsA+kyAYNn7jkjJ
-         CjNg==
-X-Gm-Message-State: AAQBX9deBsJGFsrravzCJH3WG5/CVipokrP1pX/xtIHopYOFVsDdx8Zh
-        9uSLA8lJm2WNGNFEPb0llQU=
-X-Google-Smtp-Source: AKy350bmUGQ9il6UtZ8dv5/gettbZTwcb0+UsBF45V94ajvfEsCmSOPss2tr31dDaV/HttV/WG5HZg==
-X-Received: by 2002:a17:90a:4bca:b0:234:b4a7:2abd with SMTP id u10-20020a17090a4bca00b00234b4a72abdmr22031800pjl.12.1680080981371;
-        Wed, 29 Mar 2023 02:09:41 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-15.three.co.id. [116.206.28.15])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170902ee5500b0019aafc422fcsm22482389plo.240.2023.03.29.02.09.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 02:09:41 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 2B9EA1064B9; Wed, 29 Mar 2023 16:09:38 +0700 (WIB)
-Date:   Wed, 29 Mar 2023 16:09:38 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jeffrey Kardatzke <jkardatzke@chromium.org>,
-        op-tee@lists.trustedfirmware.org
-Cc:     Jeffrey Kardatzke <jkardatzke@google.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12] tee: optee: Add SMC for loading OP-TEE image
-Message-ID: <ZCQAUukSQlwXLRfP@debian.me>
-References: <20230327093538.v12.1.I8e7f9b01d9ac940507d78e15368e200a6a69bedb@changeid>
+        Wed, 29 Mar 2023 05:11:59 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D0E1FCC
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:11:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1680081033; i=efault@gmx.de;
+        bh=MkXuNaDdTzeDhkon9ThvAyVzhJg4CJFvHqeU4r+hClA=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=a+o02BcCs+wMV4fBzI+BhRQWlAi55YubLQvgJ2VmVFpbxmXLMG4D3I8DFrjZB40Fs
+         2tKjRhJgPHVabZ2HtF/Er/5RWpoLraeQuogdPVGO3tsesgl4E6AbM0KAuDs0wWXRJt
+         37cetG33qyOEeYSbN8f5/I6M4aw79T9iKgSbx+iRlEp2Cxy4XB+tJlTBtUFgr+7z/P
+         o1kLd0/PtRw09njw7SMc3Rx5mqxoH/Tin4mR9q+6mSzpNjPa1C0Qai1++81JP6EIzz
+         CxdepMYHhl9amJbkjrI+TsBy5SobVZHfeg3fFsP/8J6ZZlmkkTx5OnJOZqW/kA4JDa
+         ZQckzxPAAizZA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from homer.fritz.box ([212.114.172.248]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M26vL-1pjvrU1dIP-002W8S; Wed, 29
+ Mar 2023 11:10:33 +0200
+Message-ID: <7577c8e361ee311d019f40b8921099f3e9aa2d23.camel@gmx.de>
+Subject: Re: [PATCH 15/17] [RFC] sched/eevdf: Sleeper bonus
+From:   Mike Galbraith <efault@gmx.de>
+To:     Peter Zijlstra <peterz@infradead.org>, mingo@kernel.org,
+        vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org
+Date:   Wed, 29 Mar 2023 11:10:28 +0200
+In-Reply-To: <20230328110354.641979416@infradead.org>
+References: <20230328092622.062917921@infradead.org>
+         <20230328110354.641979416@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MxOSWRWz2X7VZ/Ep"
-Content-Disposition: inline
-In-Reply-To: <20230327093538.v12.1.I8e7f9b01d9ac940507d78e15368e200a6a69bedb@changeid>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:8UqFTJsrcYhtrS49VQXp9NezjmUydinXlO8kKaaBo/sVhX9sb1P
+ t2hgltS1kyBfzVqo8SOfrkvGDeg96tH5f8VlCU8PsIQXNKbPFJFoW4PHZfWrD9MLOPgcKuY
+ yR9L1WDXuFR2HXPsgM9XG8+DSDbOdPEyTMNtFvwydtypNbrakHc/PGNXR1g7pEf31ya+UgO
+ 2O01jHNcuk4nQYTziTQiQ==
+UI-OutboundReport: notjunk:1;M01:P0:KFsDQfFgc0k=;wZK8t2QfLzYRBkNytyj9JL7nHvX
+ hxKOenhQ6nM2RBJ7lXycD2LlyG026MnF1ssJDuEYfyOD3i6D80J/n1wRborcH9rVA60D8BSmN
+ 2eVhsZuZ/UsIjl4aMu/CGSKXSuULFytarMEuxMxge8aeuv078U8Hy2Xa39qSveadUNhyp4sYN
+ 1TB1ZVmklhlPjSzI792GodxYXTUu900oeWB1vLDDjs0pv29ZyNPzI4qvJ0JRKjMtivU7YeeiW
+ 7uSWFG06RiSsMpmwdwSwNCbp97DBTNyCVlFPl1oa78iGzvfXwRLPXY1khukhqEwcaPDc5AEZa
+ uRSJ8JQnMfwlQkJ4Ieonai6XjOb5/vBqPKoFZ0yZLPWH4LzbNNJLGWLPkuJCTpt50J7i0HI0H
+ nxavLsdEaJ/CT4kO9Xst34g0w9v21LDKEiD2S97S78LFtx7Q9pjL1jj+98QLs+S1W1WiwUpRs
+ eMW+J+UjzQZuXp6u45RKJoGsFwrLpgTY0c5Neu/YC03weH+xWJ2j+zjuLiHa8E9/raeqQeuMg
+ VsNyPYpGtHbe4ylQPBrRfjTTuSne9NYsNxhSznFuolI5qMCjuUgFmN2p88EN8XJfx+gsn/v/s
+ C9Ywb5a/+G3MAvR4+YpzpMZJZ/5jtjSOmxfmVr9BLvi8ug5CXAFZ1Xe9iskwC7hy81ekzIxfQ
+ bSajOix+Ty8v08zQ75VSHjrlLo+b2gWw4pd+l3KydCKJEVcfDzQtUD+1ldyK36NafXAdVoFEA
+ 5nO2a+8/jCw92QeQ+wH3gsWpe1fl6dhBlMyzZ+caDtHVIt+CfH8XCr3mOHj6CK89pC/BL2w9T
+ kLNzGo2srNSgo0EIUg//KkeO8C9a0meGnqqVc77FMOEsOHq+ToILaWryI60i4fjlDsnj90spc
+ xNek4gbaiFJCIsT6cVSNuix7iA9A009jTkdK8U/A6RbgmZQttO8ugfHWYNBrk9dDz8dRggmek
+ D5E8ln+yna4wzzLMxxdzd87bbQA=
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2023-03-28 at 11:26 +0200, Peter Zijlstra wrote:
+> Add a sleeper bonus hack, but keep it default disabled. This should
+> allow easy testing if regressions are due to this.
+>
+> Specifically; this 'restores' performance for things like starve and
+> stress-futex, stress-nanosleep that rely on sleeper bonus to compete
+> against an always running parent (the fair 67%/33% split vs the
+> 50%/50% bonus thing).
+>
+> OTOH this completely destroys latency and hackbench (as in 5x worse).
 
---MxOSWRWz2X7VZ/Ep
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I profiled that again, but numbers were still.. not so lovely.
 
-On Mon, Mar 27, 2023 at 09:35:53AM -0700, Jeffrey Kardatzke wrote:
-> Adds an SMC call that will pass an OP-TEE binary image to EL3 and
-> instruct it to load it as the BL32 payload. This works in conjunction
-> with a feature added to Trusted Firmware for ARMv8 and above
-> architectures that supports this.
->=20
-> The main purpose of this change is to facilitate updating the OP-TEE
-> component on devices via a rootfs change rather than having to do a
-> firmware update. Further details are linked to in the Kconfig file.
->=20
-> Signed-off-by: Jeffrey Kardatzke <jkardatzke@chromium.org>
-> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-> Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
-> ---
->=20
-> Changes in v12:
-> - Fixed checkpatch strict issues
->=20
-> Changes in v11:
-> - Fixed typo in tee.rst documentation
->=20
-> Changes in v10:
-> - Fixed tee.rst documentation formatting
->=20
-> Changes in v9:
-> - Add CPU hotplug callback to init on all cores at startup
->=20
-> Changes in v8:
-> - Renamed params and fixed alignment issue
->=20
-> Changes in v7:
-> - Added documentation to Documentation/staging/tee.rst
->=20
-> Changes in v6:
-> - Expanded Kconfig documentation
->=20
-> Changes in v5:
-> - Renamed config option
-> - Added runtime warning when config is used
->=20
-> Changes in v4:
-> - Update commit message
-> - Added more documentation
-> - Renamed config option, added ARM64 dependency
->=20
-> Changes in v3:
-> - Removed state tracking for driver reload
-> - Check UID of service to verify it needs image load
->=20
-> Changes in v2:
-> - Fixed compile issue when feature is disabled
-> - Addressed minor comments
-> - Added state tracking for driver reload
->=20
->  Documentation/staging/tee.rst |  41 ++++++++++
->  drivers/tee/optee/Kconfig     |  17 +++++
->  drivers/tee/optee/optee_msg.h |  12 +++
->  drivers/tee/optee/optee_smc.h |  24 ++++++
->  drivers/tee/optee/smc_abi.c   | 137 ++++++++++++++++++++++++++++++++++
->  5 files changed, 231 insertions(+)
->=20
-> diff --git a/Documentation/staging/tee.rst b/Documentation/staging/tee.rst
-> index 498343c7ab08..b11e9053bc99 100644
-> --- a/Documentation/staging/tee.rst
-> +++ b/Documentation/staging/tee.rst
-> @@ -214,6 +214,47 @@ call is done from the thread assisting the interrupt=
- handler. This is a
->  building block for OP-TEE OS in secure world to implement the top half a=
-nd
->  bottom half style of device drivers.
-> =20
-> +OPTEE_INSECURE_LOAD_IMAGE Kconfig option
-> +----------------------------------------
-> +
-> +The OPTEE_INSECURE_LOAD_IMAGE Kconfig option enables the ability to load=
- the
-> +BL32 OP-TEE image from the kernel after the kernel boots, rather than lo=
-ading
-> +it from the firmware before the kernel boots. This also requires enablin=
-g the
-> +corresponding option in Trusted Firmware for Arm. The documentation there
-> +explains the security threat associated with enabling this as well as
-> +mitigations at the firmware and platform level.
-> +https://trustedfirmware-a.readthedocs.io/en/latest/threat_model/threat_m=
-odel.html
+Point of this post is the sleeper/hog split business anyway.  I've been
+running your patches on my desktop box and cute as button little rpi4b
+since they appeared, and poking at them looking for any desktop deltas
+and have noticed jack diddly spit.
 
-For consistency to the rest of doc, the reference link should be put
-separately in "References" section:
+A lot of benchmarks will notice both distribution and ctx deltas, but
+humans.. the numbers I've seen so far say that's highly unlikely.
 
----- >8 ----
-diff --git a/Documentation/staging/tee.rst b/Documentation/staging/tee.rst
-index b11e9053bc9934..97758855156aa6 100644
---- a/Documentation/staging/tee.rst
-+++ b/Documentation/staging/tee.rst
-@@ -220,10 +220,9 @@ OPTEE_INSECURE_LOAD_IMAGE Kconfig option
- The OPTEE_INSECURE_LOAD_IMAGE Kconfig option enables the ability to load t=
-he
- BL32 OP-TEE image from the kernel after the kernel boots, rather than load=
-ing
- it from the firmware before the kernel boots. This also requires enabling =
-the
--corresponding option in Trusted Firmware for Arm. The documentation there
--explains the security threat associated with enabling this as well as
--mitigations at the firmware and platform level.
--https://trustedfirmware-a.readthedocs.io/en/latest/threat_model/threat_mod=
-el.html
-+corresponding option in Trusted Firmware for Arm. The Trusted Firmare
-+documentation [8] explains the security threat associated with enabling th=
-is as
-+well as mitigations at the firmware and platform level.
-=20
- There are additional attack vectors/mitigations for the kernel that should=
- be
- addressed when using this option.
-@@ -350,3 +349,5 @@ References
- [6] include/linux/psp-tee.h
-=20
- [7] drivers/tee/amdtee/amdtee_if.h
-+
-+[8] https://trustedfirmware-a.readthedocs.io/en/latest/threat_model/threat=
-_model.html
+A couple perf sched lat summaries below for insomniacs.
 
-> +
-> +There are additional attack vectors/mitigations for the kernel that shou=
-ld be
-> +addressed when using this option.
-> +
-> +1. Boot chain security.
-> +   Attack vector: Replace the OP-TEE OS image in the rootfs to gain cont=
-rol of
-> +   the system.
-> +   Mitigation: There must be boot chain security that verifies the kerne=
-l and
-> +   rootfs, otherwise an attacker can modify the loaded OP-TEE binary by
-> +   modifying it in the rootfs.
-> +2. Alternate boot modes.
-> +   Attack vector: Using an alternate boot mode (i.e. recovery mode), the=
- OP-TEE
-> +   driver isn't loaded, leaving the SMC hole open.
-> +   Mitigation: If there are alternate methods of booting the device, suc=
-h as a
-> +   recovery mode, it should be ensured that the same mitigations are app=
-lied in
-> +   that mode.
-> +3. Attacks prior to SMC invocation.
-> +   Attack vector: Code that is executed prior to issuing the SMC call to=
- load
-> +   OP-TEE can be exploited to then load an alternate OS image.
-> +   Mitigation: The OP-TEE driver must be loaded before any potential att=
-ack
-> +   vectors are opened up. This should include mounting of any modifiable
-> +   filesystems, opening of network ports or communicating with external =
-devices
-> +   (e.g. USB).
-> +4. Blocking SMC call to load OP-TEE.
-> +   Attack vector: Prevent the driver from being probed, so the SMC call =
-to load
-> +   OP-TEE isn't executed when desired, leaving it open to being executed=
- later
-> +   and loading a modified OS.
-> +   Mitigation: It is recommended to build the OP-TEE driver as an includ=
-ed
-> +   driver rather than a module to prevent exploits that may cause the mo=
-dule to
-> +   not be loaded.
-> +
+Load is chrome playing BigBuckBunny (for the zillionth time), which on
+this box as I set resolution/size wants ~35% of the box vs 8ms run 1ms
+sleep massive_intr, 1 thread per CPU (profiles at ~91%), as a hog-ish
+but not absurdly so competitor.
 
-I think attack vectors and mitigations can be sub bullets:
+perf.data.stable.full sort=3Dmax - top 10 summary
+ -------------------------------------------------------------------------=
+----------------------------------
+  Task                  |   Runtime ms  | Switches | Avg delay ms    | Max=
+ delay ms    | Sum delay ms     |
+ -------------------------------------------------------------------------=
+----------------------------------
+  chrome:(7)            |   6274.683 ms |    63604 | avg:   0.172 ms | max=
+:  41.796 ms | sum:10930.150 ms |
+  massive_intr:(8)      |1673597.295 ms |   762617 | avg:   0.709 ms | max=
+:  40.383 ms | sum:540374.853 ms |
+  X:2476                |  86498.438 ms |   129657 | avg:   0.259 ms | max=
+:  36.157 ms | sum:33588.933 ms |
+  dav1d-worker:(8)      | 162369.504 ms |   411962 | avg:   0.682 ms | max=
+:  30.648 ms | sum:280864.249 ms |
+  ThreadPoolForeg:(13)  |  21177.187 ms |    60907 | avg:   0.401 ms | max=
+:  30.424 ms | sum:24412.770 ms |
+  gmain:(3)             |     95.617 ms |     3552 | avg:   0.755 ms | max=
+:  26.365 ms | sum: 2680.738 ms |
+  llvmpipe-0:(2)        |  24602.666 ms |    30828 | avg:   1.278 ms | max=
+:  23.590 ms | sum:39408.811 ms |
+  llvmpipe-2:(2)        |  27707.699 ms |    29226 | avg:   1.236 ms | max=
+:  23.579 ms | sum:36126.717 ms |
+  llvmpipe-7:(2)        |  34437.755 ms |    27017 | avg:   1.097 ms | max=
+:  23.545 ms | sum:29634.448 ms |
+  llvmpipe-5:(2)        |  24533.947 ms |    28503 | avg:   1.375 ms | max=
+:  22.995 ms | sum:39191.132 ms |
+ -------------------------------------------------------------------------=
+----------------------------------
+  TOTAL:                |2314609.811 ms |  2473891 | 96.4% util, 27.7% GUI=
+   41.796 ms |   1361629.825 ms |
+ -------------------------------------------------------------------------=
+----------------------------------
 
----- >8 ----
-diff --git a/Documentation/staging/tee.rst b/Documentation/staging/tee.rst
-index 97758855156aa6..b17eb9772230db 100644
---- a/Documentation/staging/tee.rst
-+++ b/Documentation/staging/tee.rst
-@@ -228,31 +228,41 @@ There are additional attack vectors/mitigations for t=
-he kernel that should be
- addressed when using this option.
-=20
- 1. Boot chain security.
--   Attack vector: Replace the OP-TEE OS image in the rootfs to gain contro=
-l of
--   the system.
--   Mitigation: There must be boot chain security that verifies the kernel =
-and
--   rootfs, otherwise an attacker can modify the loaded OP-TEE binary by
--   modifying it in the rootfs.
-+
-+   * Attack vector: Replace the OP-TEE OS image in the rootfs to gain cont=
-rol of
-+     the system.
-+
-+   * Mitigation: There must be boot chain security that verifies the kerne=
-l and
-+     rootfs, otherwise an attacker can modify the loaded OP-TEE binary by
-+     modifying it in the rootfs.
- 2. Alternate boot modes.
--   Attack vector: Using an alternate boot mode (i.e. recovery mode), the O=
-P-TEE
--   driver isn't loaded, leaving the SMC hole open.
--   Mitigation: If there are alternate methods of booting the device, such =
-as a
--   recovery mode, it should be ensured that the same mitigations are appli=
-ed in
--   that mode.
-+
-+   * Attack vector: Using an alternate boot mode (i.e. recovery mode), the
-+     OP-TEE driver isn't loaded, leaving the SMC hole open.
-+
-+   * Mitigation: If there are alternate methods of booting the device, suc=
-h as
-+     a recovery mode, it should be ensured that the same mitigations are
-+     applied in that mode.
-+
- 3. Attacks prior to SMC invocation.
--   Attack vector: Code that is executed prior to issuing the SMC call to l=
-oad
--   OP-TEE can be exploited to then load an alternate OS image.
--   Mitigation: The OP-TEE driver must be loaded before any potential attack
--   vectors are opened up. This should include mounting of any modifiable
--   filesystems, opening of network ports or communicating with external de=
-vices
--   (e.g. USB).
-+
-+   * Attack vector: Code that is executed prior to issuing the SMC call to=
- load
-+     OP-TEE can be exploited to then load an alternate OS image.
-+
-+   * Mitigation: The OP-TEE driver must be loaded before any potential att=
-ack
-+     vectors are opened up. This should include mounting of any modifiable
-+     filesystems, opening of network ports or communicating with external
-+     devices (e.g. USB).
-+
- 4. Blocking SMC call to load OP-TEE.
--   Attack vector: Prevent the driver from being probed, so the SMC call to=
- load
--   OP-TEE isn't executed when desired, leaving it open to being executed l=
-ater
--   and loading a modified OS.
--   Mitigation: It is recommended to build the OP-TEE driver as an included
--   driver rather than a module to prevent exploits that may cause the modu=
-le to
--   not be loaded.
-+
-+   * Attack vector: Prevent the driver from being probed, so the SMC call =
-to
-+     load OP-TEE isn't executed when desired, leaving it open to being exe=
-cuted
-+     later and loading a modified OS.
-+
-+   * Mitigation: It is recommended to build the OP-TEE driver as builtin
-+     driver rather than as a module to prevent exploits that may cause the
-+     module to not be loaded.
-=20
- AMD-TEE driver
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+perf.data.eevdf.full sort=3Dmax - top 10 summary
+ -------------------------------------------------------------------------=
+----------------------------------
+  Task                  |   Runtime ms  | Switches | Avg delay ms    | Max=
+ delay ms    | Sum delay ms     |
+ -------------------------------------------------------------------------=
+----------------------------------
+  chrome:(8)            |   6329.996 ms |    80080 | avg:   0.193 ms | max=
+:  28.835 ms | sum:15432.012 ms |
+  ThreadPoolForeg:(20)  |  20477.539 ms |   158457 | avg:   0.265 ms | max=
+:  25.708 ms | sum:42003.063 ms |
+  dav1d-worker:(8)      | 168022.569 ms |  1090719 | avg:   0.366 ms | max=
+:  24.786 ms | sum:398971.023 ms |
+  massive_intr:(8)      |1736052.944 ms |   721103 | avg:   0.658 ms | max=
+:  23.427 ms | sum:474493.391 ms |
+  llvmpipe-5:(2)        |  22970.555 ms |    31184 | avg:   1.448 ms | max=
+:  22.465 ms | sum:45148.667 ms |
+  llvmpipe-3:(2)        |  22803.121 ms |    31688 | avg:   1.436 ms | max=
+:  22.076 ms | sum:45516.196 ms |
+  llvmpipe-0:(2)        |  22050.612 ms |    33580 | avg:   1.397 ms | max=
+:  22.007 ms | sum:46898.028 ms |
+  VizCompositorTh:5538  |  90856.230 ms |    91865 | avg:   0.605 ms | max=
+:  21.702 ms | sum:55542.418 ms |
+  llvmpipe-1:(2)        |  22866.426 ms |    32870 | avg:   1.390 ms | max=
+:  20.732 ms | sum:45690.066 ms |
+  llvmpipe-2:(2)        |  22672.646 ms |    32319 | avg:   1.415 ms | max=
+:  20.647 ms | sum:45731.838 ms |
+ -------------------------------------------------------------------------=
+----------------------------------
+  TOTAL:                |2332092.393 ms |  3449563 | 97.1% util, 25.6% GUI=
+   28.835 ms |   1570459.986 ms |
+ -------------------------------------------------------------------------=
+----------------------------------
+ vs stable                                    1.394  distribution delta.. =
+meaningless            1.153
 
-Or due to tabular nature of additional attacks list above, reST tables
-should fit.
 
-Thanks.
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---MxOSWRWz2X7VZ/Ep
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCQATgAKCRD2uYlJVVFO
-o41aAQCAs2tatAtShAXDFJ3K+G5VE/mgoIg0QjBX/MAZFy7fgAD/cl+sFphWGzsO
-YokNGRdF5yiATUz4Fx+EgIvaq7OHqgw=
-=IlQx
------END PGP SIGNATURE-----
-
---MxOSWRWz2X7VZ/Ep--
