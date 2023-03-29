@@ -2,155 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEAF6CF710
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BFA6CF73F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbjC2X1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 19:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S230199AbjC2XdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 19:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjC2X1k (ORCPT
+        with ESMTP id S229525AbjC2XdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 19:27:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371A51BCD;
-        Wed, 29 Mar 2023 16:27:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C20DE61E90;
-        Wed, 29 Mar 2023 23:27:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF961C433EF;
-        Wed, 29 Mar 2023 23:27:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680132458;
-        bh=va7d2GLw1gA/1mUq8elp7JWAd8lhqItS9Egqxi+FOis=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cSCuYQqsQL7EeGLKDZsKHIqRpjXtodrv003f6xzz5XrVPEdJdcujCAxyRV1/mAwrN
-         9Nqz6Oex7zqdB5ExLj53TEPIZNa8KjvoxSm+E3tvfBiBzTLQm3mfLKOjVwuLwNoY9M
-         3X+5doH5ew4C9yGwBBvRvos6WLnGIEptr3gzNHl9MLNCDqa44yQeh15R8AETuhBg8r
-         lsUcFMKlR37plEdlCioPZO5OBt9IAt3uhWBredAw+FVfeXohzPHq7wUxMocNIKy7fn
-         5Fgrl/BOA/etfDdwb6dZazyo89jxjdVHAnc7HNYfKmfg3OHHyq+FicI5vDY5gft7HG
-         bMH0BB1knqMbA==
-Date:   Thu, 30 Mar 2023 02:27:35 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Eric Snowberg <eric.snowberg@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "pvorel@suse.cz" <pvorel@suse.cz>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        "erpalmer@linux.vnet.ibm.com" <erpalmer@linux.vnet.ibm.com>,
-        "coxu@redhat.com" <coxu@redhat.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v5 5/6] KEYS: CA link restriction
-Message-ID: <20230329232735.dvmxvwis2psbvyw5@kernel.org>
-References: <20230302164652.83571-1-eric.snowberg@oracle.com>
- <20230302164652.83571-6-eric.snowberg@oracle.com>
- <ZAz8QlynTSMD7kuE@kernel.org>
- <07FFED83-501D-418C-A4BB-862A547DD7B0@oracle.com>
- <20230320182822.6xyh6ibatrz5yrhb@kernel.org>
- <84d46fb108f6ce2a322b6486529fc6dd0f8deea5.camel@linux.ibm.com>
+        Wed, 29 Mar 2023 19:33:03 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AEB5257;
+        Wed, 29 Mar 2023 16:33:01 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id c18so16450921ple.11;
+        Wed, 29 Mar 2023 16:33:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680132781;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6UqQPNvzkss1LbgIQ4B7N84vGNBYynu9RnkZNtN4TIw=;
+        b=U3I9pq60QeWrgwytzJFP7H4m5JL68HfMhTvMVt1ylcg7zv5QUQvRKe6ZXdJ4NeLpfg
+         TPxoX+MgPSeNZrDBXiKaUqbhqanTRrcQY0Ut6Tlein6CgJwQabMn/UyiITbQxs4nBYjI
+         w+YBfj/f9DFoOhO04t43+TYMYoL2BO1P1YZGCpjXqy6dRVy2rxAS6OfUU7Kn0v76K7Zy
+         UDVZzYCfbWAcVQ14EQfy+0b1uVNew/hlTkOOfJ0SVxawKyQ7pPhYaV1zVZKaaqRMTjSm
+         jbsLWxM5F5kKA37MFPg4QnKOTkuh2928QZLYPLZXHER6oKJsAE2FEl+sISyeYjIdFdoC
+         mYAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680132781;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6UqQPNvzkss1LbgIQ4B7N84vGNBYynu9RnkZNtN4TIw=;
+        b=CCARyMxj1TDtWjPw3PZhp4GDSZ940Q8FTcS8B62dG+m9eIAkfY8wRxt64glep33I33
+         WWTsr4U4IdWfTh8t3Zqs4Xxf0CwIgUYIXG3i5XeNVLv0z1juGFe3vPMNY4AxwWQK9k6m
+         9vy+DqkH8XvKYJRNE0qUDMQv1QudKAuOIkU3gM444E+u365pqSrhi75sbW2REHIFmGmk
+         ustv8PA5bPxBctXHiNL0gnW2cZO1Ka74QP6P8Hi5MhTKJBi495IkZUMRPmpkFXO/wSOY
+         e7nSFMPWa6Sc1hxYCMdqrt6fHvLJTZgcqpgavBn/LBFHpWxU62QdZkHLqqyy5yhspl8a
+         7okA==
+X-Gm-Message-State: AAQBX9diXATSs7/i20bgVBwk/CFQx0tPanGtHXYCOQi32xCe2Hn/AMHA
+        kLLWiRhrzCcdfDNr1B3jaRo=
+X-Google-Smtp-Source: AKy350YWk9gKD6cYAGzYcktMbjE5pp/EGxRP14zqjzWWVzJ7+eE9ThgbS86fxS2eONurCzxuUST03A==
+X-Received: by 2002:a17:902:eccd:b0:19b:64bb:d546 with SMTP id a13-20020a170902eccd00b0019b64bbd546mr4542228plh.18.1680132780934;
+        Wed, 29 Mar 2023 16:33:00 -0700 (PDT)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id g6-20020a1709026b4600b001a19cf1b37esm23492704plt.40.2023.03.29.16.32.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 16:33:00 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 16:32:58 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCH v13 018/113] KVM: x86, tdx: Make KVM_CAP_MAX_VCPUS
+ backend specific
+Message-ID: <20230329233258.GC1108448@ls.amr.corp.intel.com>
+References: <cover.1678643051.git.isaku.yamahata@intel.com>
+ <87f6baf8419103077f0a42859a0a847c695f5f59.1678643052.git.isaku.yamahata@intel.com>
+ <20230325201326.00002d4d@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <84d46fb108f6ce2a322b6486529fc6dd0f8deea5.camel@linux.ibm.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230325201326.00002d4d@gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 04:35:33PM -0400, Mimi Zohar wrote:
-> On Mon, 2023-03-20 at 20:28 +0200, Jarkko Sakkinen wrote:
-> > On Mon, Mar 20, 2023 at 05:35:05PM +0000, Eric Snowberg wrote:
-> > > 
-> > > 
-> > > > On Mar 11, 2023, at 3:10 PM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > 
-> > > > On Thu, Mar 02, 2023 at 11:46:51AM -0500, Eric Snowberg wrote:
-> > > >> Add a new link restriction.  Restrict the addition of keys in a keyring
-> > > >> based on the key to be added being a CA.
-> > > >> 
-> > > >> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> > > >> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > >> ---
-> > > >> crypto/asymmetric_keys/restrict.c | 38 +++++++++++++++++++++++++++++++
-> > > >> include/crypto/public_key.h       | 15 ++++++++++++
-> > > >> 2 files changed, 53 insertions(+)
-> > > >> 
-> > > >> diff --git a/crypto/asymmetric_keys/restrict.c b/crypto/asymmetric_keys/restrict.c
-> > > >> index 6b1ac5f5896a..48457c6f33f9 100644
-> > > >> --- a/crypto/asymmetric_keys/restrict.c
-> > > >> +++ b/crypto/asymmetric_keys/restrict.c
-> > > >> @@ -108,6 +108,44 @@ int restrict_link_by_signature(struct key *dest_keyring,
-> > > >> 	return ret;
-> > > >> }
-> > > >> 
-> > > >> +/**
-> > > >> + * restrict_link_by_ca - Restrict additions to a ring of CA keys
-> > > >> + * @dest_keyring: Keyring being linked to.
-> > > >> + * @type: The type of key being added.
-> > > >> + * @payload: The payload of the new key.
-> > > >> + * @trust_keyring: Unused.
-> > > >> + *
-> > > >> + * Check if the new certificate is a CA. If it is a CA, then mark the new
-> > > >> + * certificate as being ok to link.
-> > > >> + *
-> > > >> + * Returns 0 if the new certificate was accepted, -ENOKEY if the
-> > > >> + * certificate is not a CA. -ENOPKG if the signature uses unsupported
-> > > >> + * crypto, or some other error if there is a matching certificate but
-> > > >> + * the signature check cannot be performed.
-> > > >> + */
-> > > >> +int restrict_link_by_ca(struct key *dest_keyring,
-> > > >> +			const struct key_type *type,
-> > > >> +			const union key_payload *payload,
-> > > >> +			struct key *trust_keyring)
-> > > >> +{
-> > > >> +	const struct public_key *pkey;
-> > > >> +
-> > > >> +	if (type != &key_type_asymmetric)
-> > > >> +		return -EOPNOTSUPP;
-> > > >> +
-> > > >> +	pkey = payload->data[asym_crypto];
-> > > >> +	if (!pkey)
-> > > >> +		return -ENOPKG;
-> > > >> +	if (!test_bit(KEY_EFLAG_CA, &pkey->key_eflags))
-> > > >> +		return -ENOKEY;
-> > > >> +	if (!test_bit(KEY_EFLAG_KEYCERTSIGN, &pkey->key_eflags))
-> > > >> +		return -ENOKEY;
-> > > >> +	if (test_bit(KEY_EFLAG_DIGITALSIG, &pkey->key_eflags))
-> > > >> +		return -ENOKEY;
-> > > > 
-> > > > nit: would be more readable, if conditions were separated by
-> > > > empty lines.
-> > > 
-> > > Ok, I will make this change in the next round.  Thanks.
-> > 
-> > Cool! Mimi have you tested these patches with IMA applied?
+On Sat, Mar 25, 2023 at 08:13:26PM +0200,
+Zhi Wang <zhi.wang.linux@gmail.com> wrote:
+
+> On Sun, 12 Mar 2023 10:55:42 -0700
+> isaku.yamahata@intel.com wrote:
 > 
-> Yes, it's working as expected.
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > TDX has its own limitation on the maximum number of vcpus that the guest
+> > can accommodate.  Allow x86 kvm backend to implement its own KVM_ENABLE_CAP
+> > handler and implement TDX backend for KVM_CAP_MAX_VCPUS.  user space VMM,
+> > e.g. qemu, can specify its value instead of KVM_MAX_VCPUS.
+> > 
+> 
+> I think enabling the cap here is actually "configuring the cap". KVM_CAP_MAX
+> _VCPUS is actually always enabled whether userspace enables it or not. It
+> would be nice to configure of the max VCPUS in kvm_arch_vm_ioctl() where
+> routines of configuring a VM should belong. E.g. KVM_SET_MAX_VCPUS.
 
-Thank you. Please check that I filled additional tags correctly:
+I'm not sure I understand your point.  Although KVM_ENABLE_CAP sounds like
+only on/off feature, but it isn't. It's also used to set parameters. For
+example, KVM_CAP_MAX_VCPU_ID.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/
-
-I will then put these also to my 'next' branch and they will get mirrored
-to linux-next.
-
-BR, Jarkko
+KVM_SET_XXX is for run time feature. But the maxium number of vcpus is not
+runtime changable. Set it at vm creation.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
