@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1666CF2AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64AF6CF2AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjC2TDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        id S230052AbjC2TDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjC2TDf (ORCPT
+        with ESMTP id S230038AbjC2TDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:03:35 -0400
-Received: from mail.unsolicited.net (mail.unsolicited.net [IPv6:2001:8b0:15df::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1085510F
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=unsolicited.net; s=one; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=HnV79gu95lUPgUmqw+07JddaddjA/bndfTVVFuNZmaY=; b=PVbeqFoiNXXnu+tDOXyEaSuNkz
-        jLXyeFpqVJRsZfGtb4sJE19nd4jH+42L4hH1vcw4dBqJEcdTHMphE2Eco8bTaDpXZb5UPcHeyDK4B
-        QO/kkuFA1LlrNU48rYd3vIZEL7hxWBpgFpod5OWfcGQZg8gewR/iob75VCHP6jCg/68pd1B06RT8T
-        W4n7g5bMQ/Auq1Kr59rYSJ8PtBoQVlRrfTM1xQ41ajSzhCc6P7VTTdvrNKxt+XU7rTBJLwChhuDXU
-        1qN5csj8i1N9NBA+dU4HVf1dChvRXnOYOYPmAJpCPDYdEb5rLW2fas1mc68G+21F/jiiVFAqxYEWh
-        kdhdK1tw==;
-Message-ID: <eaa97a25-27b2-187c-1db2-9c56e35d3463@unsolicited.net>
-Date:   Wed, 29 Mar 2023 20:03:25 +0100
+        Wed, 29 Mar 2023 15:03:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEC71BEC;
+        Wed, 29 Mar 2023 12:03:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D881261DF4;
+        Wed, 29 Mar 2023 19:03:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F66C4339C;
+        Wed, 29 Mar 2023 19:03:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680116625;
+        bh=YGgwaQb1Yr5alEBeh50oaFn8YhIPQRRHYUsEM/NJD3o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=P2lmP8E33IXjzH4K/gd1MewJa5cVRw06HgrDUFB8rL+9UUFDaxSX79kGtHk15qHfn
+         +AwnoYTQBJ/Fmq9qyUoqwY5uO7vhVqhVwIwsssSN36Yx1Fe4kLS6uSB2Bdi+yGyoXp
+         +1yjYxdMyzRnXwkd20epYnEARRcYGiCp8pAOhzokhfC3/VHMkKsQsxf54yq0d4USwd
+         8Qw+FGDGlFfaSh47rGbT8hCClgnnu3NTb+hyqEvS2eMDfxx31h4wbbIDB3TiPbTIam
+         jcQOW6J9fNlXYb5A4gCakILz3mNRadydpZ8ucamPdndMjbpnY9809tMjYE65hkhFN9
+         /jjSO07Lvxl3g==
+Received: by mail-lj1-f181.google.com with SMTP id e9so1969009ljq.4;
+        Wed, 29 Mar 2023 12:03:45 -0700 (PDT)
+X-Gm-Message-State: AAQBX9eslECyDJW4PHzFT9rZZNQWFmXi87YoL/EkYly07tkAk5N7tDzw
+        MRvm61g4XmRtUDhswzYbAQKHc0G1QEnkxkSJd8o=
+X-Google-Smtp-Source: AKy350axvSqGy7GyrH8RKgEAR0+nNstDei6hLLlElkZD93z6FpVGXFrT2U64o7wib0jSGOlS/1QRWOI3Dofy8a+cm0s=
+X-Received: by 2002:a2e:6a0d:0:b0:295:93eb:e790 with SMTP id
+ f13-20020a2e6a0d000000b0029593ebe790mr6348106ljc.5.1680116623266; Wed, 29 Mar
+ 2023 12:03:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: Panic starting 6.2.x and later 6.1.x kernels
-Content-Language: en-GB
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Gabriel David <ultracoolguy@disroot.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kishon Vijay Abraham I <kvijayab@amd.com>
-References: <943d2445-84df-d939-f578-5d8240d342cc@unsolicited.net>
- <20230327074952.GAZCFKoDOiJUdtse2H@fat_crate.local>
- <e8d15248-e694-79d7-da9c-b4485b471e14@unsolicited.net>
- <4c660f0f-2845-0e02-ccf9-619958e24236@unsolicited.net>
- <20230328142014.GCZCL3nkW5Qx5jhfsB@fat_crate.local>
- <57385475-c289-356f-d696-fc6decce1390@unsolicited.net>
- <20230328171057.GDZCMfobguhGUFiUuh@fat_crate.local>
- <9ed16be4-051d-c20f-0410-b8a973c4c09e@disroot.org>
- <20230329103943.GAZCQVb1n3tKlGOAWI@fat_crate.local>
- <20230329161450.GDZCRj+rz9lTEZFNBz@fat_crate.local>
- <f033acad-593c-a741-8f4f-a9962eb8aab9@unsolicited.net>
- <e8fd7cdf-b6a5-1c7d-bd08-0d60a1c10495@amd.com>
-From:   David R <david@unsolicited.net>
-In-Reply-To: <e8fd7cdf-b6a5-1c7d-bd08-0d60a1c10495@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de> <6ee3b703-2161-eacd-c12f-7fa3bedf82dc@web.de>
+ <49adf0c8-825a-018f-6d95-ce613944fc9b@web.de> <CAPhsuW7JZDps_fTHyCabjfG4YjzDVEW_41u6d+9mdc2CAJv_Kw@mail.gmail.com>
+ <2fbfc20a-71ee-ddaa-19d8-7beed559b491@web.de>
+In-Reply-To: <2fbfc20a-71ee-ddaa-19d8-7beed559b491@web.de>
+From:   Song Liu <song@kernel.org>
+Date:   Wed, 29 Mar 2023 12:03:30 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6pEK6mQbo=F7DWPhCW1ePkKP2WM8saoeAfMOCSF3CdOA@mail.gmail.com>
+Message-ID: <CAPhsuW6pEK6mQbo=F7DWPhCW1ePkKP2WM8saoeAfMOCSF3CdOA@mail.gmail.com>
+Subject: Re: [0/2] md/raid: Adjustments for two function implementations
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     kernel-janitors@vger.kernel.org, linux-raid@vger.kernel.org,
+        Coly Li <colyli@suse.de>, Jens Axboe <axboe@kernel.dk>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Maciej Trela <Maciej.Trela@intel.com>,
+        Neil Brown <neilb@suse.de>, Shaohua Li <shli@fb.com>,
+        cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,URI_DOTEDU autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2023 18:51, Limonciello, Mario wrote:
-> APIC @ 0x0000000000000000
->>      0000: 41 50 49 43 DE 00 00 00 03 AC 41 4C 41 53 4B 41 
->> APIC......ALASKA
->>      0010: 41 20 4D 20 49 20 00 00 09 20 07 01 41 4D 49 20  A M I ... 
->> ..AMI
->>      0020: 13 00 01 00 00 00 E0 FE 01 00 00 00 00 08 01 00 
->> ................
->>      0030: 01 00 00 00 00 08 02 01 01 00 00 00 00 08 03 02 
->> ................
->>      0040: 01 00 00 00 00 08 04 03 01 00 00 00 00 08 05 08 
->> ................
->>      0050: 01 00 00 00 00 08 06 09 01 00 00 00 00 08 07 0A 
->> ................
->>      0060: 01 00 00 00 00 08 08 0B 01 00 00 00 00 08 09 00 
->> ................
->>      0070: 00 00 00 00 00 08 0A 00 00 00 00 00 00 08 0B 00 
->> ................
->>      0080: 00 00 00 00 00 08 0C 00 00 00 00 00 00 08 0D 00 
->> ................
->>      0090: 00 00 00 00 00 08 0E 00 00 00 00 00 00 08 0F 00 
->> ................
->>      00A0: 00 00 00 00 00 08 10 00 00 00 00 00 04 06 FF 05 
->> ................
->>      00B0: 00 01 01 0C 09 00 00 00 C0 FE 00 00 00 00 01 0C 
->> ................
->>      00C0: 0A 00 00 10 C0 FE 18 00 00 00 02 0A 00 00 02 00 
->> ................
->>      00D0: 00 00 00 00 02 0A 00 09 09 00 00 00 0F 00 ..............
->>
->>
->> Cheers
->> David
->>
+On Tue, Mar 28, 2023 at 10:32=E2=80=AFPM Markus Elfring <Markus.Elfring@web=
+.de> wrote:
 >
-> Can you guys have a try with this patch to see if it helps the situation?
+> >>   raid1: Fix exception handling in setup_conf()
+> >>   raid10: Fix exception handling in setup_conf()
+> >
+> > The two functions look good to me as-is. I don't think anything is
+> > broken except that the code analysis tool complains. I don't think
+> > it is necessary to make these changes.
 >
-> https://lore.kernel.org/linux-pm/20230329174536.6931-1-mario.limonciello@amd.com/T/#u 
->
->
-> Thanks,
+> Will development interests ever grow also for advice from another informa=
+tion source?
+> https://wiki.sei.cmu.edu/confluence/display/c/MEM12-C.+Consider+using+a+g=
+oto+chain+when+leaving+a+function+on+error+when+using+and+releasing+resourc=
+es#MEM12C.Considerusingagotochainwhenleavingafunctiononerrorwhenusingandrel=
+easingresources-CompliantSolution%28POSIX,GotoChain%29
 
-Your patch on top of 6.2.8 brought the crash back I'm afraid.
+While I understand "goto chain" is a good pattern for error handling, I am
+not convinced it is a better approach here. Specifically, the goto chain is=
+ so
+long that it is hard to maintain. This also adds overhead for users of
+git-blame. Therefore, I would rather keep these two functions as-is.
 
-Cheers
-David
+Thanks,
+Song
