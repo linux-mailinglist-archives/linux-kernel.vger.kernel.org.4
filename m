@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522CA6CD406
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529166CD405
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjC2IHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
+        id S230364AbjC2IHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjC2IHS (ORCPT
+        with ESMTP id S230322AbjC2IHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:07:18 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5B346B7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:07:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IDnt3D2HeZGvIjp2uGrcXnR7O5XwpWGHuKgH2haISbg=; b=LcZ3ybjvR/BoKVBCrqDlEwyudI
-        e/7zT6pvibcVXkfpdWRKksU0DzKoolffPZ0bGjpjE2ofjpKCLe5m2uPB9EY/swc/cCqCm7Hfdd6Vj
-        kfk8sPTi2WKtaWZHNbWPYPI0GCS4yYa0DxetQH3mCG3H4kd1dDfEp+KeGZd5esFLs+TIlwn84fV/T
-        YNQX+UmyZunDyVtLy27hTPSBQilgI6a9Dpw4XecZP9eiZd04AV4LwoTam3ZrUpI8zsmfHP32Y7m+W
-        +UByYZhFfNK0xPv6P5SNsUrfcQ2ZinsN/A1J0fYRNqpmlLoWSqrPemgfnW0hlPR+JGx/Vw9lAVSpq
-        Gsf4PEDA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1phQpT-006nTy-2J;
-        Wed, 29 Mar 2023 08:06:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id ABCBA3002A3;
-        Wed, 29 Mar 2023 10:06:46 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8A4342CC7A025; Wed, 29 Mar 2023 10:06:46 +0200 (CEST)
-Date:   Wed, 29 Mar 2023 10:06:46 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Don <joshdon@google.com>
-Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org, efault@gmx.de
-Subject: Re: [PATCH 08/17] sched/fair: Implement an EEVDF like policy
-Message-ID: <20230329080646.GL4253@hirez.programming.kicks-ass.net>
-References: <20230328092622.062917921@infradead.org>
- <20230328110354.141543852@infradead.org>
- <CABk29Nt4T67S+L9Qs1qeOUyo5gY1Qy5KuOwuCYNM74E58J81Eg@mail.gmail.com>
+        Wed, 29 Mar 2023 04:07:05 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDCD46A2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:06:57 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id g19so5934856lfr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:06:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680077215;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q1B67J8gc4+AuTWTqETyIHhrBOAuRe35VhFxvqLjDEU=;
+        b=fLPOUJWhzzC2KI/yC/5VsJ0MXKjS0kzYppqsyEY8/shH84cZy9qI1yOWHiciGwe0za
+         7sAGTNIf+qU/AaCE/HEKdX0Oi6LLNJ5GWKWgcQcUZFc1V4ncLMtYI34ERpc7l5So4+g4
+         AoWSt4bpVn82JOt2fZDBYlPpVCgmR/YvEj3pQ5vY+2btnHifoTsGKhfo7VWkSLhwFa37
+         z3XLYWBbOWv5rRzRJoMRwBrSeSyQmwdJ4VabK/ogYs+i2RvHqhtPTPByNd5j62TdBvza
+         nXEshmXzM8fi2C74KI+8xTzcHES84FIjLq14PBzsGsKaxvVKPIpPM4N9n3oihOzUZ3v+
+         pgAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680077215;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q1B67J8gc4+AuTWTqETyIHhrBOAuRe35VhFxvqLjDEU=;
+        b=jAUpy4Irqvetr7ooriEgg1DAmiZ1xGj/owGxySS/ex+OiOZk4l+ax6a/6UeLs8twR+
+         FEtbPLtIYcOgJD7xu/VHe+vCrD7Y/2VmSnx5SGSXIgSiQ6hOzdDltyfrw5y1dxZNB+xk
+         ftt26KKNxOYL+duux3fJk81qWgWLRWGoMhOVAR9Z+WkM25dgmn7O7o9nXO5b62pCEzMJ
+         UwhWkq9HFj2ZKSqLENwk2wkBQQNHapDpDcThaBjvylbR10i1K3wKiTrxTZqo+KjiYN4t
+         9Kg3RsmlbY7x6XDik375t2ihEoKpLfJbMVHbw407cZcVa5IDqcP2J5W4uIEWTYEd2T1G
+         rdgQ==
+X-Gm-Message-State: AAQBX9fEZs3gKDB5m5GQqzYPDgJNBGHhpupD2MuVEweCN0HjilhzmQLH
+        R8S4BMwFwRyIwMRm5G5XRBzxBg==
+X-Google-Smtp-Source: AKy350aUrqG6jCXqhdKHl6Tm6UNGJQGaAWiRJBE3fc5dr3mS3Um+pf752ukWqJWIV+t2UaqmS4qVpA==
+X-Received: by 2002:ac2:4a71:0:b0:4dd:a02c:9c0f with SMTP id q17-20020ac24a71000000b004dda02c9c0fmr5290737lfp.10.1680077215583;
+        Wed, 29 Mar 2023 01:06:55 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q12-20020ac25a0c000000b004d7d13387b5sm5302901lfn.116.2023.03.29.01.06.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 01:06:55 -0700 (PDT)
+Message-ID: <def2ccc8-abb2-2786-fc67-fb71f1c8e3b0@linaro.org>
+Date:   Wed, 29 Mar 2023 10:06:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABk29Nt4T67S+L9Qs1qeOUyo5gY1Qy5KuOwuCYNM74E58J81Eg@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
+ <20230328112210.23089-2-zhuyinbo@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230328112210.23089-2-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 06:26:51PM -0700, Josh Don wrote:
-> > +static struct sched_entity *pick_eevdf(struct cfs_rq *cfs_rq)
-> > +{
-> > +       struct rb_node *node = cfs_rq->tasks_timeline.rb_root.rb_node;
-> > +       struct sched_entity *curr = cfs_rq->curr;
-> > +       struct sched_entity *best = NULL;
-> > +
-> > +       if (curr && (!curr->on_rq || !entity_eligible(cfs_rq, curr)))
-> > +               curr = NULL;
-> > +
-> > +       while (node) {
-> > +               struct sched_entity *se = __node_2_se(node);
-> > +
-> > +               /*
-> > +                * If this entity is not eligible, try the left subtree.
-> > +                */
-> > +               if (!entity_eligible(cfs_rq, se)) {
-> > +                       node = node->rb_left;
-> > +                       continue;
-> > +               }
-> > +
-> > +               /*
-> > +                * If this entity has an earlier deadline than the previous
-> > +                * best, take this one. If it also has the earliest deadline
-> > +                * of its subtree, we're done.
-> > +                */
-> > +               if (!best || deadline_gt(deadline, best, se)) {
-> > +                       best = se;
-> > +                       if (best->deadline == best->min_deadline)
-> > +                               break;
+On 28/03/2023 13:22, Yinbo Zhu wrote:
+> Add the Loongson platform spi binding with DT schema format using
+> json-schema.
 > 
-> Isn't it possible to have a child with less vruntime (ie. rb->left)
-> but with the same deadline? Wouldn't it be preferable to choose the
-> child instead since the deadlines are equivalent but the child has
-> received less service time?
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+>  .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
 
-Possible, yes I suppose. But given this is ns granular virtual time,
-somewhat unlikely. You can modify the last (validation) patch and have
-it detect the case, see if you can trigger it.
+You decided not to use Rob's advice, thus this patch cannot be applied
+now. Wait for the merge window to finish (so dependency is in mainline)
+and send the patch then. Not earlier.
 
-Doing that will make the pick always do a full decent of the tree
-through, which is a little more expensive. Not sure it's worth the
-effort.
+Best regards,
+Krzysztof
 
-> > +               }
-> > +
-> > +               /*
-> > +                * If the earlest deadline in this subtree is in the fully
-> > +                * eligible left half of our space, go there.
-> > +                */
-> > +               if (node->rb_left &&
-> > +                   __node_2_se(node->rb_left)->min_deadline == se->min_deadline) {
-> > +                       node = node->rb_left;
-> > +                       continue;
-> > +               }
-> > +
-> > +               node = node->rb_right;
-> > +       }
-> > +
-> > +       if (!best || (curr && deadline_gt(deadline, best, curr)))
-> > +               best = curr;
-> > +
-> > +       if (unlikely(!best)) {
-> > +               struct sched_entity *left = __pick_first_entity(cfs_rq);
-> > +               if (left) {
-> > +                       pr_err("EEVDF scheduling fail, picking leftmost\n");
-> > +                       return left;
-> > +               }
-> > +       }
-> > +
-> > +       return best;
-> > +}
