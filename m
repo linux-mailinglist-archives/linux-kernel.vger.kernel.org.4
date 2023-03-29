@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79A66CF7BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C49C6CF7C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjC2Xva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 19:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S231280AbjC2Xx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 19:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbjC2Xv2 (ORCPT
+        with ESMTP id S231197AbjC2Xx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 19:51:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8C96A4B;
-        Wed, 29 Mar 2023 16:51:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77DD5B8254C;
-        Wed, 29 Mar 2023 23:51:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACFAC433D2;
-        Wed, 29 Mar 2023 23:51:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680133872;
-        bh=7ElFoE31725KSNz+HDjH2Kw8s9/BtuFeSmEahIQeCbM=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=kROvDFb7+tlRm4nqrKdYOylWlqz+yaimCEYYmrqPZQwHV2VcceJxzc9QtG72Vlmzn
-         UqVb/JpQTRcO/TuFzTQXuiwUX6O9lMg4bEx/ktYh+M/hX8P+gl8Voa7TIMGubNZidh
-         TSXwfUOfHEnCWV5ZpNKOpUSxF9FcNh2vzgH82KgREB3RF0O7hczieSomrwOCYHov3h
-         ScA63tRWD735GDMYKJ8Fqj1JqNWsZVlmfodEbnoiIGIgA4na+yRBTGfGdGyJPone0u
-         1f5ViufGQuyxhAm/QVPFrS5TXGdm9ER+BIMJDw75eUAHIQ/nFb8IWLf/4z+XOLIhVk
-         jdQ2bGTyuscYw==
-Date:   Thu, 30 Mar 2023 01:51:08 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH v5 0/3] Add the clock stretching i2c property
-Message-ID: <20230329235108.iwrk2m6ozsi3bsyh@intel.intel>
-References: <20230317233338.424864-1-andi.shyti@kernel.org>
- <ZCSMQ223Org0nYCI@shikoro>
+        Wed, 29 Mar 2023 19:53:28 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF091FD2;
+        Wed, 29 Mar 2023 16:53:27 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id EB2DC68C7B; Thu, 30 Mar 2023 01:53:22 +0200 (CEST)
+Date:   Thu, 30 Mar 2023 01:53:22 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Pankaj Raghav <p.raghav@samsung.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@lst.de>, martin@omnibond.com,
+        axboe@kernel.dk, minchan@kernel.org, akpm@linux-foundation.org,
+        hubcap@omnibond.com, viro@zeniv.linux.org.uk,
+        senozhatsky@chromium.org, brauner@kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        mcgrof@kernel.org, linux-block@vger.kernel.org,
+        gost.dev@samsung.com, linux-mm@kvack.org, devel@lists.orangefs.org
+Subject: Re: [PATCH 1/5] zram: remove the call to page_endio in the bio
+ end_io handler
+Message-ID: <20230329235322.GA1891@lst.de>
+References: <20230328112716.50120-1-p.raghav@samsung.com> <CGME20230328112718eucas1p214a859cfb3d7b45523356bcc16c373b1@eucas1p2.samsung.com> <20230328112716.50120-2-p.raghav@samsung.com> <ZCMFcTHkTe/1WapL@casper.infradead.org> <5865a840-cb5e-ead1-f168-100869081f84@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZCSMQ223Org0nYCI@shikoro>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <5865a840-cb5e-ead1-f168-100869081f84@samsung.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
-
-On Wed, Mar 29, 2023 at 09:06:43PM +0200, Wolfram Sang wrote:
+On Tue, Mar 28, 2023 at 06:17:11PM +0200, Pankaj Raghav wrote:
+> >>  	if (!parent)
+> >> -		bio->bi_end_io = zram_page_end_io;
+> >> +		bio->bi_end_io = zram_read_end_io;
+> > 
+> > Can we just do:
+> > 
+> > 	if (!parent)
+> > 		bio->bi_end_io = bio_put;
+> > 
 > 
-> > The DTS schema has been applied in commit c83dd2cb836e ("schemas:
-> > i2c: Add the clock stretching property").
+> Looks neat. I will wait for Christoph to comment whether just a bio_put() call
+> is enough in this case for non-chained bios before making this change for the
+> next version.
+
+It is enough in the sense of keeping the previous behavior there.
+It is not enough in the sense that the code is still broken as the
+callers is never notified of the read completion.  So I think for the
+purpose of your series we're fine and can go ahead with this version
+for now.
+
 > 
-> Everyone, A general remark: If bindings for the dtschema are added,
-> please include the linux-i2c mailing list. This binding is OK, but it
-> would be good to have the discussion also here for additional input.
-
-Thanks for letting me know. It's actually my mistake, as I didn't
-check how to properly distribute the patch to all relevant
-parties.
-
-Regarding dtschema patches, they are typically submitted as
-GitHub pull requests. How should I send it to the linux-i2c?
-Should I also send it to the mailing list like any other patch?
-(This might make the code review process somewhat confusing,
-though).
-
-Thanks,
-Andi
+> Thanks.
+---end quoted text---
