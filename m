@@ -2,149 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309FE6CD4C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486AD6CD4CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjC2Ig7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
+        id S231197AbjC2Ihd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbjC2Ig4 (ORCPT
+        with ESMTP id S231169AbjC2Iha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:36:56 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2DF126
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:36:55 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id e11so15237441lji.8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:36:55 -0700 (PDT)
+        Wed, 29 Mar 2023 04:37:30 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF1846A3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:37:17 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54184571389so280183857b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 01:37:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680079013;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M/xTfrQqdPOr1VUHDT+Xi7DQz6WS1kxLC72o+Ktlx4I=;
-        b=p2o7LkjvWeqhqR1RKjzxBfXlcfSihucbat9diMVrvSv1WD6n2m2KAqwcWb80HfmP+y
-         lKhKbl4FsRTq/u4Q8GMBGoqANkJseRef84IcyepO7CqkYgr0M7QHDfwWuHZAkQ5gWQYB
-         tWrCJFcdSjk2I4Vumg3FQ3x5dXkH2Ht8KE/rp7R+LqZ7YBsH+AOoDX4A8NqXoE4FoqRC
-         micX1WTx9Kreb0JbAF+IBhITjORuKQY3d0iO4edSlYrEn1Y2XJtCuxhmxn/mh5P0xNDB
-         Dq6xvvB1EsWvD8vwLF/by8C5BkOptxQlTaz4eXg8q+DVcqxgAk3bhvuz8thicLLxm+mO
-         aNKQ==
+        d=linaro.org; s=google; t=1680079036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fEEjt5KTOiMxdxcRezWpGMm6v+AEsQGVPozQ3NTxWGQ=;
+        b=RyxRU52zrMaY1+rCiw2RsrCGt9/viM3/l3sfw4JQCjh/8bpNfF7lm5FztCSqWhgmdf
+         ssDYQ6iDt8NQablYueMCScBaQNhiokwb0JUI/pUrlXqHvMXCupxNmWWheju/N6FIvc/P
+         HTbInlTEaEK9sK04pzgm1v5UnAqcTGRl7sAr45kkgbFRRvwvsqEnzSyb0A6K9b3q6dKr
+         R/EjzL7WFDTFJv47uBKGwjutYgjEQptSHSmDXIeuDeoqdQXPsE1L5NVsYJX1vvf0/qBm
+         hq8CvAowe7oUE6hVym2BqUo35uDTr+VJ99EVE8AoaIE2TYRC/aNHoX/W6jcj/M0Uqm0Y
+         wQlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680079013;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M/xTfrQqdPOr1VUHDT+Xi7DQz6WS1kxLC72o+Ktlx4I=;
-        b=I36Bl9H59cBuL6DEUJXRgjXklRHQ7ZlJ3YkgVe1p/49GbMo5zGeGyGDnve60NJDqHH
-         bwVN9UMZiY9aYFoG8JGHMTZS7VzEwAis4Hw3nq39AuMRbom/PRHI+P+8RG6Y7QZr5moS
-         DWfUQ3PHAZvIYVZqPdYz4tfUT9hvng+jbb1DBrtWxgXPj9SlC0np1cSGDIOngUCEMTeI
-         cFflOb4ho7GcL7ddYMhurfMAFEJmUEM5aGwqgnszfVv2o7UWeSF0qXWSOiWgKAFuclHJ
-         VMpvgbwzMkhG/BldoC2PdkXUvsuZfHUcdGpCjiecWghShcxBqBOApShbYcz5o8RVaXRh
-         r6Ow==
-X-Gm-Message-State: AAQBX9eYkNARdyNH16zAmb2Tx49PJ89cmMqMhdcsPq7W1OCMVA9sIJ4X
-        HUZSV09VoRo4avs3koSuTIMXHw==
-X-Google-Smtp-Source: AKy350au2Z3WXceuIA+YYWZfaLMQVGEW7Enc0KrPMuuwmNNa7EeF+qBAEs5vHu4zkzvycHr2enqaEg==
-X-Received: by 2002:a2e:a48e:0:b0:290:8289:8cba with SMTP id h14-20020a2ea48e000000b0029082898cbamr434794lji.8.1680079013617;
-        Wed, 29 Mar 2023 01:36:53 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id n1-20020ac24901000000b004eb0c18efc2sm1712311lfi.221.2023.03.29.01.36.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 01:36:53 -0700 (PDT)
-Message-ID: <b66f708c-5369-c1c9-5506-c609a245bf4c@linaro.org>
-Date:   Wed, 29 Mar 2023 10:36:52 +0200
+        d=1e100.net; s=20210112; t=1680079036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fEEjt5KTOiMxdxcRezWpGMm6v+AEsQGVPozQ3NTxWGQ=;
+        b=U24NMLjilBoM/2uBXTcy7/FDNlGF+QK08YHZfYExM8sMHhuhNwNfgF9bX216ca+KMd
+         F1OZ+Buea+9WF2udPNoHeK3D6matpM7sVhiyhWuGzCFIb/8z0XP4Pl+Z/evGKH0B3IAw
+         c+lgbIqAN4uSWSV15ezdfFgG2p1ALQnA7vLSXpThkMy1PgweHtc/XihvP6CBR73Bykl7
+         GGXHaCgJFl2KQLjrOImTfxArrqyzx4tpSUfxhTEDCa+ekUKppNMM6fKpbbX2OJPz8iSH
+         JprewSlfJmn4GaT13BEwqomiWw/1rgQaoOWbTYx1MfpFJo26TU5SNuxA7kkYFTm+XJAo
+         /HAg==
+X-Gm-Message-State: AAQBX9eMVD3U1wvYcGW+a62TGw9EnUwqA3weERm5jXi+Fno3eBxU/rdJ
+        jZIjdX3Sn+O/QSVvM7bTW8oddN8eHChINpqGzjXnDg==
+X-Google-Smtp-Source: AKy350bwKhACZ5LjWDNs8HRhrB7fLtOYZiPiILPtu5+aF4SvdFnw0KrxlhqAmKxWV8fUa8xzRfUKXoUyKG2s33koCf8=
+X-Received: by 2002:a81:eb02:0:b0:545:883a:544d with SMTP id
+ n2-20020a81eb02000000b00545883a544dmr9195077ywm.9.1680079036640; Wed, 29 Mar
+ 2023 01:37:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 1/2] ARM: dts: aspeed: greatlakes: Add gpio names
-Content-Language: en-US
-To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, patrick@stwcx.xyz,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20230329083235.24123-1-Delphine_CC_Chiu@Wiwynn.com>
- <20230329083235.24123-2-Delphine_CC_Chiu@Wiwynn.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230329083235.24123-2-Delphine_CC_Chiu@Wiwynn.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230325154711.2419569-1-xiang.ye@intel.com> <20230325154711.2419569-5-xiang.ye@intel.com>
+In-Reply-To: <20230325154711.2419569-5-xiang.ye@intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 29 Mar 2023 10:37:05 +0200
+Message-ID: <CACRpkdbDmPpKFVxmn1ntKJWr5_mraKuafuTgJtgBU+39PxEYgg@mail.gmail.com>
+Subject: Re: [PATCH v7 4/6] gpio: Add support for Intel LJCA USB GPIO driver
+To:     Ye Xiang <xiang.ye@intel.com>, Marc Zyngier <maz@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2023 10:32, Delphine CC Chiu wrote:
-> From: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-> 
-> Add GPIO names for SOC lines.
-> 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-> ---
->  .../dts/aspeed-bmc-facebook-greatlakes.dts    | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
-> index 8c05bd56ce1e..59819115c39d 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
-> @@ -238,4 +238,53 @@
->  &gpio0 {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_gpiu1_default &pinctrl_gpiu7_default>;
-> +	status = "okay";
+Hi Ye,
 
-Was it disabled before?
+thanks for your patch!
 
-> +	gpio-line-names =
-> +	/*A0-A7*/ "","","","","","","","",
-> +	/*B0-B7*/ "power-bmc-nic","presence-ocp-debug",
-> +		  "power-bmc-slot1","power-bmc-slot2",
-> +		  "power-bmc-slot3","power-bmc-slot4","","",
-> +	/*C0-C7*/ "presence-ocp-nic","","","reset-cause-nic-primary",
-> +		  "reset-cause-nic-secondary","","","",
-> +	/*D0-D7*/ "","","","","","","","",
-> +	/*E0-E7*/ "","","","","","","","",
-> +	/*F0-F7*/ "slot1-bmc-reset-button","slot2-bmc-reset-button",
-> +		  "slot3-bmc-reset-button","slot4-bmc-reset-button",
-> +		  "","","","presence-emmc",
-> +	/*G0-G7*/ "","","","","","","","",
-> +	/*H0-H7*/ "","","","",
-> +		  "presence-mb-slot1","presence-mb-slot2",
-> +		  "presence-mb-slot3","presence-mb-slot4",
-> +	/*I0-I7*/ "","","","","","","bb-bmc-button","",
-> +	/*J0-J7*/ "","","","","","","","",
-> +	/*K0-K7*/ "","","","","","","","",
-> +	/*L0-L7*/ "","","","","","","","",
-> +	/*M0-M7*/ "","power-nic-bmc-enable","","usb-bmc-enable","","reset-cause-usb-hub","","",
-> +	/*N0-N7*/ "","","","","bmc-ready","","","",
-> +	/*O0-O7*/ "","","","","","","fan0-bmc-cpld-enable","fan1-bmc-cpld-enable",
-> +	/*P0-P7*/ "fan2-bmc-cpld-enable","fan3-bmc-cpld-enable",
-> +		  "reset-cause-pcie-slot1","reset-cause-pcie-slot2",
-> +		  "reset-cause-pcie-slot3","reset-cause-pcie-slot4","","",
-> +	/*Q0-Q7*/ "","","","","","","","",
-> +	/*R0-R7*/ "","","","","","","","",
-> +	/*S0-S7*/ "","","power-p5v-usb","presence-bmc-tpm","","","","",
-> +	/*T0-T7*/ "","","","","","","","",
-> +	/*U0-U7*/ "","","","","","","","GND",
-> +	/*V0-V7*/ "bmc-slot1-ac-button","bmc-slot2-ac-button",
-> +		  "bmc-slot3-ac-button","bmc-slot4-ac-button",
-> +		  "","","","",
-> +	/*W0-W7*/ "","","","","","","","",
-> +	/*X0-X7*/ "","","","","","","","",
-> +	/*Y0-Y7*/ "","","","reset-cause-emmc","","","","",
-> +	/*Z0-Z7*/ "","","","","","","","";
-> +};
+On Sat, Mar 25, 2023 at 4:48=E2=80=AFPM Ye Xiang <xiang.ye@intel.com> wrote=
+:
+
+> This patch implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
+> device named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA
+> GPIO module with specific protocol through interfaces exported by LJCA US=
+B
+> driver.
+>
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+
+Lots of improvements! here are some comments:
+
+> @@ -1253,6 +1253,18 @@ config GPIO_KEMPLD
+>           This driver can also be built as a module. If so, the module wi=
+ll be
+>           called gpio-kempld.
+>
+> +config GPIO_LJCA
+> +       tristate "INTEL La Jolla Cove Adapter GPIO support"
+> +       depends on USB_LJCA
+> +       select GPIOLIB_IRQCHIP
+> +       default USB_LJCA
+> +       help
+> +         Select this option to enable GPIO driver for the INTEL
+> +         La Jolla Cove Adapter (LJCA) board.
 > +
-> +&gpio1 {
-> +	status = "okay";
+> +         This driver can also be built as a module. If so, the module
+> +         will be called gpio-ljca.
 
-Same question...
-Best regards,
-Krzysztof
+The GPIO Kconfig has a separate submenu for USB expanders, so
+put this Kconfig in that submenu. This makes the choice come in
+a more logical spot and not appear on configs that don't even
+have USB.
 
+(...)
+> +       DECLARE_BITMAP(unmasked_irqs, LJCA_MAX_GPIO_NUM);
+> +       DECLARE_BITMAP(enabled_irqs, LJCA_MAX_GPIO_NUM);
+> +       DECLARE_BITMAP(reenable_irqs, LJCA_MAX_GPIO_NUM);
+> +       u8 *connect_mode;
+> +       /* mutex to protect irq bus */
+> +       struct mutex irq_lock;
+(...)
+
+With IRQ code like this from a USB callback:
+
+> +static void ljca_gpio_event_cb(void *context, u8 cmd, const void *evt_da=
+ta, int len)
+> +{
+> +       const struct gpio_packet *packet =3D evt_data;
+> +       struct ljca_gpio_dev *ljca_gpio =3D context;
+> +       int i;
+> +       int irq;
+> +
+> +       if (cmd !=3D LJCA_GPIO_INT_EVENT)
+> +               return;
+> +
+> +       for (i =3D 0; i < packet->num; i++) {
+> +               irq =3D irq_find_mapping(ljca_gpio->gc.irq.domain, packet=
+->item[i].index);
+> +               if (!irq) {
+> +                       dev_err(ljca_gpio->gc.parent, "gpio_id %u does no=
+t mapped to IRQ yet\n",
+> +                               packet->item[i].index);
+> +                       return;
+> +               }
+> +
+> +               generic_handle_domain_irq(ljca_gpio->gc.irq.domain, irq);
+> +               set_bit(packet->item[i].index, ljca_gpio->reenable_irqs);
+> +       }
+> +
+> +       schedule_work(&ljca_gpio->work);
+> +}
+
+I don't feel comfortable merging this unless Marc Zyngier has looked at the
+code first, so please CC him on this patch next time.
+
+> +static const struct irq_chip ljca_gpio_irqchip =3D {
+> +       .name =3D "ljca-irq",
+> +       .irq_mask =3D ljca_irq_mask,
+> +       .irq_unmask =3D ljca_irq_unmask,
+> +       .irq_set_type =3D ljca_irq_set_type,
+> +       .irq_bus_lock =3D ljca_irq_bus_lock,
+> +       .irq_bus_sync_unlock =3D ljca_irq_bus_unlock,
+> +       .flags =3D IRQCHIP_IMMUTABLE,
+> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
+> +};
+
+Thanks for fixing the immutable irq chip!
+
+> +       ljca_gpio->auxdev =3D auxdev;
+> +       ljca_gpio->gc.direction_input =3D ljca_gpio_direction_input;
+> +       ljca_gpio->gc.direction_output =3D ljca_gpio_direction_output;
+
+Can you implement .get_direction()?
+
+It's scanned on probe to determine the initial state of each
+line so it is very nice to have.
+
+Yours,
+Linus Walleij
