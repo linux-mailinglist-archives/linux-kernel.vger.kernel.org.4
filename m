@@ -2,66 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A966CD7D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 577F66CD7D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjC2KlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
+        id S230192AbjC2KlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 06:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjC2KlH (ORCPT
+        with ESMTP id S230167AbjC2KlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:41:07 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4193C21;
-        Wed, 29 Mar 2023 03:41:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1680086463; x=1711622463;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VdBcrgySIdL/WPuWoMsxsQA2x/dh18nj8WQEpF5gTGI=;
-  b=a0uJ16ebyQ1ZJIxTWv3xl2pplSXsBP7wax0oCRMWzHB5Oaeu9OLAOLYN
-   RDHFsyilkjZJVM97i6JtRgpRN+SDqPBAOptHSoheqU+xjtC03fEPmrqUh
-   KRmnpDCyRreI8X3TqFsPBRLp1aSCk/m56YFkFqlP3T0ydn6e1lznYG+Od
-   c+2eMKriIHH+EHs2InLmETxrrkvWyoBXBlhn4qEk+RTzZB23Oc9mTyWVT
-   x+YyyFIeibnEfQjNjf5s2kJO5t/tR6HPqUDbKYzzYacFwAlROrDEVkAfa
-   xPLONHH+PXiv1beZW1uYZynEaKejU74iPEGgLtTzCC/Jlr8LinCHA+6y5
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,300,1673938800"; 
-   d="asc'?scan'208";a="203988039"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2023 03:41:02 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 29 Mar 2023 03:40:59 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 29 Mar 2023 03:40:56 -0700
-Date:   Wed, 29 Mar 2023 11:40:43 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>
-Subject: Re: [PATCH 6.1 000/224] 6.1.22-rc1 review
-Message-ID: <fc8625b8-ce07-4089-8d03-512914aa1bad@spud>
-References: <20230328142617.205414124@linuxfoundation.org>
+        Wed, 29 Mar 2023 06:41:13 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3BB3C2B;
+        Wed, 29 Mar 2023 03:41:12 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id q7-20020a05600c46c700b003ef6e809574so5987743wmo.4;
+        Wed, 29 Mar 2023 03:41:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680086471;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SgpY1YthWT3xIQhWwfucwfDtAT6rdZEh8Ao3ZU56Ods=;
+        b=i/2YE1oqVWapZMKkxbz+mbhQ2V5yDDdXydRYWyJXBCK7x1R43vgwgZ5KYHZkF1ByA7
+         QU0ivFZ6NdMog8ERoltE4D7fkriQupBkzPBMlUFC0vWzWYZP4mr5qP/cTjAOCdjzDVEm
+         A5JknFQYA9O6X92dh5xfe9Cn1OkU4WJU8jYjWzrPzwV8E272luJ8CAah6NlSAKULrP28
+         d6UYwY2iOg8NXsdKLiNstV2Fg4ro97GO/oLIpCNrKvdZ0BaWsdWtAKpacFuYmSOCDkmu
+         kts09u1BcAo9J7s2PdqS9WckayVIqcc1EY3z9so+K7zcfGW+ERwKv0zlFKlDHXw8QVIH
+         gs1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680086471;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SgpY1YthWT3xIQhWwfucwfDtAT6rdZEh8Ao3ZU56Ods=;
+        b=WQe+vxyldPHeFGVeT13sWUvyDSmjy2fvQ+ehtosAqzXUUBjuBMqI+Hu8Ifq9TQEE9O
+         +Of++EzaXcrk5n0oH0vPX0vZ+ZIQsJ0noXRrbmgoygz8mYFGH+2MSAqwQyIlOtTHu7H2
+         5Cr5dC8HaCh/E2samYMi3EzCI9kncjyF/SDF8/CKjRGpWZvXtvIg6QvoiCexKSiiskif
+         OXKXEB9IqA81xUNlZSLFkjIAjVhg4/ta6abdqbiLsmlD+gLt3H+/aMSo6YM5H/tF+Ox1
+         FsJwXqg+woPBtzxTP38nh6YVN6iiFNHJNNkEekiqkIPc0WLua61q0TKnyoKKKzsX4HED
+         WZmQ==
+X-Gm-Message-State: AO0yUKU36L803VN9o4vj76JPq0MlJbQfcjkvfK7/x9CMdlrzzhkTgzt9
+        BficCSPd86Xzi7Er89KRCFM=
+X-Google-Smtp-Source: AK7set/gT5l6g7eCFe8SN97XIH3TnyaG+4JmZEjJXvbkpsWqRF5Cq3gw8GYvkBpmrWMxkXKOvEgfsw==
+X-Received: by 2002:a7b:cc82:0:b0:3eb:42fc:fb30 with SMTP id p2-20020a7bcc82000000b003eb42fcfb30mr14934639wma.32.1680086470913;
+        Wed, 29 Mar 2023 03:41:10 -0700 (PDT)
+Received: from [192.168.42.225] ([81.95.8.244])
+        by smtp.gmail.com with ESMTPSA id n19-20020a7bcbd3000000b003ef684c5e32sm1732903wmi.48.2023.03.29.03.41.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 03:41:10 -0700 (PDT)
+Message-ID: <d1dc242d-c381-3307-b939-7bc35c6ce55b@gmail.com>
+Date:   Wed, 29 Mar 2023 12:41:09 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gry5cg9km3M0xT/2"
-Content-Disposition: inline
-In-Reply-To: <20230328142617.205414124@linuxfoundation.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH RESEND 1/6] dt-bindings: memory-controllers:
+ mediatek,smi-common: add mt8365
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230207-iommu-support-v1-0-4a902f9aa412@baylibre.com>
+ <20230207-iommu-support-v1-1-4a902f9aa412@baylibre.com>
+Content-Language: en-US
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230207-iommu-support-v1-1-4a902f9aa412@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,28 +83,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---gry5cg9km3M0xT/2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Tue, Mar 28, 2023 at 04:39:56PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.22 release.
-> There are 224 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
 
-Looks grand on our RISC-V stuff, thanks.
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+On 3/29/23 11:52, Alexandre Mergnat wrote:
+> Add binding description for mediatek,mt8365-smi-common
+> 
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
---gry5cg9km3M0xT/2
-Content-Type: application/pgp-signature; name="signature.asc"
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCQVqwAKCRB4tDGHoIJi
-0iOxAQCab9SurRZBZIuLt6aBKrvXH3xW0zTSp3rRTtrvjc3PFwEApJuDc7pVVvFH
-6FOEiPQkOGlYDkMcO0r+ra5XMIIPIQQ=
-=PXbV
------END PGP SIGNATURE-----
-
---gry5cg9km3M0xT/2--
+> ---
+>   .../devicetree/bindings/memory-controllers/mediatek,smi-common.yaml   | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> index a8fda30cccbb..d599a190952f 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> @@ -49,6 +49,10 @@ properties:
+>             - const: mediatek,mt7623-smi-common
+>             - const: mediatek,mt2701-smi-common
+>   
+> +      - items:
+> +          - const: mediatek,mt8365-smi-common
+> +          - const: mediatek,mt8186-smi-common
+> +
+>     reg:
+>       maxItems: 1
+>   
+> 
