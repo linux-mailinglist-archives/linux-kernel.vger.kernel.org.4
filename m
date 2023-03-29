@@ -2,151 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99E96CF3D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAEB6CF3DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjC2T6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S231171AbjC2T6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjC2T6G (ORCPT
+        with ESMTP id S230199AbjC2T6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:58:06 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206361BD8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:58:06 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id E1EBC3200902;
-        Wed, 29 Mar 2023 15:58:04 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 29 Mar 2023 15:58:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1680119884; x=1680206284; bh=2U
-        pu4KS/HglgZqR5QPgAuFmmlBS7eNJtiUFPyeWRlVg=; b=ji4rtCkiOQkBU+MsPc
-        TZUZ27CAkQZLcaYtr4LvaerHn0KLrfz7wsUxjDfb06+6AUEcmCai/nmbD849mds6
-        pAyXoiBRd0Y0oHnAuL5j35CnwuuTf1KWDR9KtLgsiL+US8VKk8PZlC3w028BvYee
-        fw/luSJ3pPsxM80NwyQPF/Y1E8aa0WGQRxS/GnoLtjWssvxZH6lV39nD9jL4H3Dc
-        QhaXiSq5CwoRd5/uRjl/S/x78e/OKbLdRPcoKljYa0Yu1bBTNu3VTR6uWGO06zvq
-        /CU1/fqNelBCrC0+ZysF316g3fe2RfhRb9NX0zncglvh/dree6R/86/9W12jJICU
-        qAaQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680119884; x=1680206284; bh=2Upu4KS/HglgZ
-        qR5QPgAuFmmlBS7eNJtiUFPyeWRlVg=; b=SrDiGXfwY6CSrYJm1C4SYYpl4AR0e
-        ZlN+XAsubo35P8rS2DUAkRhc8yh7hRuXYfg+x2F35AjBrhE5UJgPiiRMmeLh7rQZ
-        oLryKLu+yN5kDNVLTZd0FFWjocCi88QB9HBT2GM5OSQvYbKL+j3EzIL8ndh1a9RZ
-        RCTNRfczpXW8+GPLrpa/J4vWxHGUl9LmGxmG0iH2oTYj7GRdhVmDV96cA4D2xcur
-        Zte73guvCKL0ieYsH1BTuKydJO35kW+X2Oe+KTW4dqTbFsKc5DNABD1+7Je7r8Xk
-        QjfEi6zOXYPQgNjUOSxfvL9MbYHm066MaeaouIbPtRxqH6h6ojO4G2NaQ==
-X-ME-Sender: <xms:TJgkZDyVPGfArwiyhiO_4YqU0eeRmpLEjai9C8t6o3NLBS24P4wJvw>
-    <xme:TJgkZLSOJUZWrPXjNWZYbOi0uwvXn6X1mdT1nMDvlzdPaBjC5h8SaBcyCV0N9ZD0v
-    vuKtSMOy0IslKDWEHE>
-X-ME-Received: <xmr:TJgkZNXSgzlyzDj2S-lMse_divkUXcVSRyaHxxyRQgQJLzCCEZctCggl8Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehiedgudeghecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepgfduhedttdegudffuefgvefhveejtdevgeegteejudeuueefvdfgkedv
-    uddvhfffnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:TJgkZNiOy0NNiLs6jtU-UqbKfEJgy2XisDuW_MGv49iIEMGCFijEXA>
-    <xmx:TJgkZFCmZfvFNwjrQbIO2ZsG7T9h4ThbAbbXR59M_iDxHF7jeR32Tw>
-    <xmx:TJgkZGJMWpD0ZAktr1H51Na3VEl8mVHib3hm093mPvxZMPsfSkV1bg>
-    <xmx:TJgkZJsVwqQYWDouSV7NWKgcQHah2zmnUbTLMTaI32Lv0ZwIlcl74g>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Mar 2023 15:58:03 -0400 (EDT)
-Date:   Wed, 29 Mar 2023 21:58:02 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Roman Beranek <romanberanek@icloud.com>
-Cc:     Frank Oltmanns <frank@oltmanns.dev>, Chen-Yu Tsai <wens@csie.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
- TCON0_DCLK_REG
-Message-ID: <20230329195802.veybo3367zifw77n@penduick>
-References: <20230320161636.24411-1-romanberanek@icloud.com>
- <87wn356ni4.fsf@oltmanns.dev>
- <20230327202045.ceeqqwjug4ktxtsf@penduick>
- <CRHKFX934UA0.1MCKCD8SJSPIE@iMac.local>
+        Wed, 29 Mar 2023 15:58:41 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF6A5FFE
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:58:33 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-54184571389so314052257b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:58:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1680119912;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e4EJkdGyxMVcGxifO1qafyN9ve0DpJKcD1zNZPvkoOQ=;
+        b=X7Pqfv0UK+v9i1cGCHrYEiTNG6rNWMy3nKSoSP69TUwEbb/VWxwJVWvgxXWGmfs0Ap
+         y9phc0S0DAoRi77m3KGFUynMRyqcy59esvGK2+OUdkAQwkwL+sitXQu+ABjPu61jJ3IN
+         fCySkM3AHpmLiN2nDRaI4fqn1aiywYTNjl09Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680119912;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e4EJkdGyxMVcGxifO1qafyN9ve0DpJKcD1zNZPvkoOQ=;
+        b=XV+KEXETAWARSTp4QP7j6KFepAi6MrmS8Vyfl0KwohozrCPOKD9eHtasvS5I7t2aF8
+         vEkatTnmL52iL3YAhfl1dtra955+ktbyvLbS/c7TDZzv92ZTSjTSgQjXKQE0atinf97M
+         PfRo9xZAJPcgx6zWTtxjExRMdfRwktREbV8jofGZ7BFbR4E8K0dnsjQWRJjHvUJEdtdN
+         RINw2LyLRr/tr1geiAGCJF6+bQ7GRfaQq7rmdm5kOlG0AFvZHhfClbii4njdaZrgpDNg
+         Zat5fqSg14IGmMfTknPWqVhNxkmlhFp1QwZ07QYLAo3XB8Cc3Ynyw4A2p7BF9QZHDzuW
+         Uu0A==
+X-Gm-Message-State: AAQBX9elwsyUIlJphbNx0/29aqITJ9NyGbbN+Oilv1jz5nqQSYQ5oOvM
+        KfpzKbZVyNXCtJ/GRnY2ziicrxJPTJKj2IVuSv5qH6SnJL483r6ZGSc=
+X-Google-Smtp-Source: AKy350Zxl1w9uKQOFJbJozgdk2onV0JTPFVvHfQK6FKbD2iD8tQ3HNsJrLn371sk+ohcuprwiigk4AQFfG32UhEiIkY=
+X-Received: by 2002:a81:e308:0:b0:532:e887:2c23 with SMTP id
+ q8-20020a81e308000000b00532e8872c23mr10210700ywl.9.1680119912635; Wed, 29 Mar
+ 2023 12:58:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jhubbfpnry7jtl6t"
-Content-Disposition: inline
-In-Reply-To: <CRHKFX934UA0.1MCKCD8SJSPIE@iMac.local>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230328121609.68105dd5@canb.auug.org.au> <4fd06223-e307-50e6-f4ec-40ca34fc1a4b@gmail.com>
+In-Reply-To: <4fd06223-e307-50e6-f4ec-40ca34fc1a4b@gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 29 Mar 2023 15:58:20 -0400
+Message-ID: <CAEXW_YRMjXpRoss_cgF_mghseZbY-86UouDmcLbVW-oOpZ_D2A@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rcu tree with the rdma tree
+To:     Bob Pearson <rpearsonhpe@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---jhubbfpnry7jtl6t
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Mar 28, 2023 at 01:48:33AM +0200, Roman Beranek wrote:
-> On Mon Mar 27, 2023 at 10:20 PM CEST, Maxime Ripard wrote:
+On Tue, Mar 28, 2023 at 12:38=E2=80=AFPM Bob Pearson <rpearsonhpe@gmail.com=
+> wrote:
+>
+> On 3/27/23 20:16, Stephen Rothwell wrote:
+> > Hi all,
 > >
-> > On Sat, Mar 25, 2023 at 12:40:04PM +0100, Frank Oltmanns wrote:
-> > > Claiming to set the divider to a different value (bpp / lanes) than w=
-hat we=E2=80=99re actually using in
-> > > the end (SUN6I_DSIO_TCON_DIV) is somehow bugging me. I feel like the =
-proposal that I submitted is
-> > > more direct: <https://lore.kernel.org/all/20230319160704.9858-2-frank=
-@oltmanns.dev/>
+> > FIXME: Add owner of second tree to To:
+> >        Add author(s)/SOB of conflicting commits.
 > >
-> > Yeah, this patch looks better to me too: it's simpler, more straightfor=
-ward. If Roman can confirm it
-> > works with his testing, I'll be happy to merge it.
+> > Today's linux-next merge of the rcu tree got a conflict in:
 > >
->=20
-> So I've just found out that my understanding of what sun4i_dotclock is
-> was wrong the whole time. I treated it as a virtual clock representing
-> the true CRTC pixel clock and only coincidentally also matching what
-> A64 Reference Manual labels as TCON0 data clock (a coincidence to which
-> DSI is an exception).
->=20
-> Now that I finally see dotclock as 'what could dclk be an abbreviation
-> to', I to agree that it's not only straightforward but also correct to
-> keep the divider at 4 and adjust the rate as is done it the patch Frank
-> submitted.
->=20
-> In order to preserve semantic correctness however, I propose to preface
-> the change with a patch that renames sun4i_dotclock and tcon-pixel-clock
-> such that dot/pixel is replaced with d/data. What do you think?
+> >   drivers/infiniband/sw/rxe/rxe_mr.c
+> >
+> > between commit:
+> >
+> >   5bf944f24129 ("RDMA/rxe: Add error messages")
+> >
+> > from the rdma tree and commit:
+> >
+> >   330f72b82ab0 ("RDMA/rxe: Rename kfree_rcu() to kvfree_rcu_mightsleep(=
+)")
+> >
+> > from the rcu tree.
+> >
+> > I fixed it up (the code modified by the latter was moved by the former,
+> > so I used this files from the former and applied the following merge fi=
+x
+> > patch) and can carry the fix as necessary. This is now fixed as far as
+> > linux-next is concerned, but any non trivial conflicts should be mentio=
+ned
+> > to your upstream maintainer when your tree is submitted for merging.
+> > You may also want to consider cooperating with the maintainer of the
+> > conflicting tree to minimise any particularly complex conflicts.
+> >
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Tue, 28 Mar 2023 12:12:24 +1100
+> > Subject: [PATCH] fixup for "RDMA/rxe: Add error messages"
+> >
+> > interacting with "RDMA/rxe: Rename kfree_rcu() to kvfree_rcu_mightsleep=
+()"
+> >
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/infiniband/sw/rxe/rxe_verbs.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.c b/drivers/infiniband=
+/sw/rxe/rxe_verbs.c
+> > index 84b53c070fc5..bbdfbff5c752 100644
+> > --- a/drivers/infiniband/sw/rxe/rxe_verbs.c
+> > +++ b/drivers/infiniband/sw/rxe/rxe_verbs.c
+> > @@ -1341,7 +1341,7 @@ static int rxe_dereg_mr(struct ib_mr *ibmr, struc=
+t ib_udata *udata)
+> >       if (cleanup_err)
+> >               rxe_err_mr(mr, "cleanup failed, err =3D %d", cleanup_err)=
+;
+> >
+> > -     kfree_rcu(mr);
+> > +     kfree(mr);
+> >       return 0;
+> >
+> >  err_out:
+>
+> Thanks, I thought we had already done this. If not then we should. This i=
+s the correct fix
+> for that rcu mightsleep business.
+>
+> Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+>
 
-I don't think it's exposed to the userspace in any way so it makes sense to=
- me
+Bob, could you please squash Jon's diff into your original patch
+("RDMA/rxe: Add error messages".) before you send your pull request
+for 6.4? Then I can just drop my patch.
 
-Maxime
+That will be best. WDYT?
 
---jhubbfpnry7jtl6t
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZCSYSgAKCRDj7w1vZxhR
-xQgyAP4iRhVGZNaSGJ5BGI2H6CXWA1Oi2JNtRr4PQZ4IkSWWIwD/Zqs+v+sDPinR
-jz7XAk8q+wY/CSPp0d7d34Th7Zj6qgQ=
-=KqnG
------END PGP SIGNATURE-----
-
---jhubbfpnry7jtl6t--
+- Joel
