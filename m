@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CC66CD159
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 06:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15556CD15E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 06:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjC2E6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 00:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
+        id S229755AbjC2E7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 00:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjC2E6n (ORCPT
+        with ESMTP id S229452AbjC2E7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 00:58:43 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEC62723
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 21:58:40 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id q19so11256231wrc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 21:58:40 -0700 (PDT)
+        Wed, 29 Mar 2023 00:59:43 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE672723
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 21:59:41 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id d11-20020a05600c3acb00b003ef6e6754c5so5205695wms.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 21:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680065919;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680065980;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZSs9kTLEr3gcw2nAKoZU9JNtCpmjcd0KenqM1ZfQgo4=;
-        b=lO1y4yq1PwBxe+8AJb6u6BDoMPFaCMy/BL0GvwPGmyd2EIze0IcibTOK/QPflRVmnA
-         hFY/Ukba0Dp3YB+iOiOOfTTbrDUDqxk57w8qLlZaBwAVPw6orKn+jDfJTUabT0vjO0Gs
-         MfPreJqaqCjbjpaep9XRh3Fz1bImQeDyizQ6Au5kaxkj2sVzhTrc2F4yTwlM9Y6JNti6
-         3AGBBA0b/J0E8pFGlRtm4995Qb3cbWvFO5oIp26KsHCaNh2+toBq9Ct/1yIrbic4HaBy
-         WkA3LLbqfJ8UkkYCF0H5KXjY5f/NBPGG0LChQRG7/6oYxj54WKXo7p7eTNs+mi7QSLNx
-         xG8Q==
+        bh=l2nyBWkEl893cb8p3Xcv9ddibZeqm3dx5h/n4mJzM0I=;
+        b=a+A3vmtN33rV7G2K+kBT5+09RNfw/x9RSy+q2X3PBbr29xgkn5AQt12Fbediy1rrcC
+         iHU5gwK6JXKuap5Q1K7ZWEHCpYah/bxgqzwBr1yWkZ7mh7r58y1ARcbbZcV8tzEpyFZf
+         VDgXJr/tDJG2F0g9ahkj0NkZFJvy+ATuc/EtdJZvDtU/skKpBzTkNMEHgFcM7dZ0S8Er
+         0eHpqVt7Wim1e1rCAGgxA04h6ZrRWhIYTlP6NK+v9auLZyoJkLfTpVcTWrSdLfMq4V8r
+         hjcdeqmxZeOMiEHhoNumsB/hafrv2w9DmhB2P7mDfgctEKEXOeNUvMmKfuAJRA7CSlDX
+         2FeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680065919;
+        d=1e100.net; s=20210112; t=1680065980;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZSs9kTLEr3gcw2nAKoZU9JNtCpmjcd0KenqM1ZfQgo4=;
-        b=XXG6HSVjcLBiMpu5RLzsYUH9Nyo4plspnYjvc9Jj3B6FMxEk2K3WTAjn1o7BJ7essb
-         YkqUXIjMFlClsQTqTmd43vSIx67faA4uE4g88AqSGmvEO2pdbhqV1S8Sen1CXOT2uUow
-         azixHeSArgWQyEceA0eOJqeUl3G3m/C8kKLalwNhtpo8tEAjICEjfM/HowV4qjKKf+ki
-         5NQVL5y5iTq1/K6bRkHxvEAI/8lso6nVVnmhZ1/kL2o/i8k8fotIAziuC7dzOj2y2iQ2
-         qjDuE6fro681d7IAwCkYnh/8RigdTpBU32Lkc6Q8gWOQ5pTkFprTlMNxNSBB0RLKKnTb
-         f/rA==
-X-Gm-Message-State: AAQBX9ciJdZ+JQVWN+EI7QRVc9HQCiTkY2SZBZJrjGhRgbh4yAeZPHb0
-        NBSdGzeLOtvafq4hpsz/LTSdZQ==
-X-Google-Smtp-Source: AKy350Z51j1bBKrXk97y5JX1wSgTTowVMS1BaZOjNaHlHomGdJnrKLmbOfwk1rsbLBsYnb7mc20NEQ==
-X-Received: by 2002:adf:eace:0:b0:2cf:e3d0:2a43 with SMTP id o14-20020adfeace000000b002cfe3d02a43mr16161943wrn.4.1680065919124;
-        Tue, 28 Mar 2023 21:58:39 -0700 (PDT)
+        bh=l2nyBWkEl893cb8p3Xcv9ddibZeqm3dx5h/n4mJzM0I=;
+        b=m3F7axumW1QXQ/2zAlisehYwotoK9/eOoXgal6MMG9NInYbqk2htMbMeQPd99gk0yf
+         y4oNsuzyA5YuTqs0EoriS3G0G4WniT7RArhc3H6vsf1dbHtihzYQcloau9ZHUo1l9wE3
+         LupAn0sT1mADh5oU7rWo4bQUg5DKVQmLue4I3D8EE/5576YkiFnT2SjpQq9/rntUypzV
+         YeI5xg2qAj1hbm8H42XLIMkntQqqslRkCOw0Lly2oCCDZPtuOCdGN/PdMohy7hv6L3oq
+         WDXaR3PS2sCYhcAvc94IJYQPLjuUDtGdaNsv7HboIsoWzUxK/Q7Z7owPRs6q8X6xbU80
+         N+2g==
+X-Gm-Message-State: AO0yUKWxBmkxpBPOgnmMmppkHbXHn/V19RqsZXtEHJUv8t6O4vTEWgLQ
+        c2mIHl19CkXrK0k/EfZO0T6Trg==
+X-Google-Smtp-Source: AK7set/hrrFzd6yhsYIengKEXesiDvT2OHC1fUfzzUtI8h99/a73zFv/Utk9ctYdbI75FCHmhSsncw==
+X-Received: by 2002:a05:600c:209:b0:3ee:282d:1016 with SMTP id 9-20020a05600c020900b003ee282d1016mr13218010wmi.25.1680065980323;
+        Tue, 28 Mar 2023 21:59:40 -0700 (PDT)
 Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id p12-20020a5d48cc000000b002d431f61b18sm27284287wrs.103.2023.03.28.21.58.38
+        by smtp.gmail.com with ESMTPSA id q18-20020a7bce92000000b003ef71d541cbsm842566wmj.1.2023.03.28.21.59.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 21:58:38 -0700 (PDT)
+        Tue, 28 Mar 2023 21:59:39 -0700 (PDT)
 From:   Alexandre Ghiti <alexghiti@rivosinc.com>
 To:     Nick Desaulniers <ndesaulniers@google.com>,
         =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
@@ -61,14 +61,15 @@ To:     Nick Desaulniers <ndesaulniers@google.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-kbuild@vger.kernel.org
-Cc:     Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>
-Subject: [PATCH v9 5/6] riscv: Check relocations at compile time
-Date:   Wed, 29 Mar 2023 06:53:28 +0200
-Message-Id: <20230329045329.64565-6-alexghiti@rivosinc.com>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH v9 6/6] riscv: Use --emit-relocs in order to move .rela.dyn in init
+Date:   Wed, 29 Mar 2023 06:53:29 +0200
+Message-Id: <20230329045329.64565-7-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230329045329.64565-1-alexghiti@rivosinc.com>
 References: <20230329045329.64565-1-alexghiti@rivosinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
@@ -79,98 +80,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Ghiti <alex@ghiti.fr>
+To circumvent an issue where placing the relocations inside the init
+sections produces empty relocations, use --emit-relocs. But to avoid
+carrying those relocations in vmlinux, use an intermediate
+vmlinux.relocs file which is a copy of vmlinux *before* stripping its
+relocations.
 
-Relocating kernel at runtime is done very early in the boot process, so
-it is not convenient to check for relocations there and react in case a
-relocation was not expected.
-
-There exists a script in scripts/ that extracts the relocations from
-vmlinux that is then used at postlink to check the relocations.
-
-Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
-Reviewed-by: Anup Patel <anup@brainfault.org>
+Suggested-by: Björn Töpel <bjorn@kernel.org>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 ---
- arch/riscv/Makefile.postlink     | 36 ++++++++++++++++++++++++++++++++
- arch/riscv/tools/relocs_check.sh | 26 +++++++++++++++++++++++
- 2 files changed, 62 insertions(+)
- create mode 100644 arch/riscv/Makefile.postlink
- create mode 100755 arch/riscv/tools/relocs_check.sh
+ arch/riscv/Makefile          |  2 +-
+ arch/riscv/Makefile.postlink | 13 +++++++++++++
+ arch/riscv/boot/Makefile     |  7 +++++++
+ 3 files changed, 21 insertions(+), 1 deletion(-)
 
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 860b09e409c7..7dc6904a6836 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -8,7 +8,7 @@
+ 
+ OBJCOPYFLAGS    := -O binary
+ ifeq ($(CONFIG_RELOCATABLE),y)
+-	LDFLAGS_vmlinux += -shared -Bsymbolic -z notext -z norelro
++	LDFLAGS_vmlinux += -shared -Bsymbolic -z notext -z norelro --emit-relocs
+ 	KBUILD_CFLAGS += -fPIE
+ endif
+ ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
 diff --git a/arch/riscv/Makefile.postlink b/arch/riscv/Makefile.postlink
-new file mode 100644
-index 000000000000..d5de8d520d3e
---- /dev/null
+index d5de8d520d3e..a46fc578b30b 100644
+--- a/arch/riscv/Makefile.postlink
 +++ b/arch/riscv/Makefile.postlink
-@@ -0,0 +1,36 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# ===========================================================================
-+# Post-link riscv pass
-+# ===========================================================================
-+#
-+# Check that vmlinux relocations look sane
-+
-+PHONY := __archpost
-+__archpost:
-+
-+-include include/config/auto.conf
-+include $(srctree)/scripts/Kbuild.include
-+
-+quiet_cmd_relocs_check = CHKREL  $@
-+cmd_relocs_check = 							\
-+	$(CONFIG_SHELL) $(srctree)/arch/riscv/tools/relocs_check.sh "$(OBJDUMP)" "$(NM)" "$@"
-+
-+# `@true` prevents complaint when there is nothing to be done
-+
-+vmlinux: FORCE
-+	@true
+@@ -15,12 +15,25 @@ quiet_cmd_relocs_check = CHKREL  $@
+ cmd_relocs_check = 							\
+ 	$(CONFIG_SHELL) $(srctree)/arch/riscv/tools/relocs_check.sh "$(OBJDUMP)" "$(NM)" "$@"
+ 
 +ifdef CONFIG_RELOCATABLE
-+	$(call if_changed,relocs_check)
++quiet_cmd_cp_vmlinux_relocs = CPREL   vmlinux.relocs
++cmd_cp_vmlinux_relocs = cp vmlinux vmlinux.relocs
++
++quiet_cmd_relocs_strip = STRIPREL $@
++cmd_relocs_strip = $(OBJCOPY)   --remove-section='.rel.*'       \
++                                --remove-section='.rel__*'      \
++                                --remove-section='.rela.*'      \
++                                --remove-section='.rela__*' $@
 +endif
 +
-+%.ko: FORCE
-+	@true
+ # `@true` prevents complaint when there is nothing to be done
+ 
+ vmlinux: FORCE
+ 	@true
+ ifdef CONFIG_RELOCATABLE
+ 	$(call if_changed,relocs_check)
++	$(call if_changed,cp_vmlinux_relocs)
++	$(call if_changed,relocs_strip)
+ endif
+ 
+ %.ko: FORCE
+diff --git a/arch/riscv/boot/Makefile b/arch/riscv/boot/Makefile
+index c72de7232abb..22b13947bd13 100644
+--- a/arch/riscv/boot/Makefile
++++ b/arch/riscv/boot/Makefile
+@@ -33,7 +33,14 @@ $(obj)/xipImage: vmlinux FORCE
+ 
+ endif
+ 
++ifdef CONFIG_RELOCATABLE
++vmlinux.relocs: vmlinux
++	@ (! [ -f vmlinux.relocs ] && echo "vmlinux.relocs can't be found, please remove vmlinux and try again") || true
 +
-+clean:
-+	@true
-+
-+PHONY += FORCE clean
-+
-+FORCE:
-+
-+.PHONY: $(PHONY)
-diff --git a/arch/riscv/tools/relocs_check.sh b/arch/riscv/tools/relocs_check.sh
-new file mode 100755
-index 000000000000..baeb2e7b2290
---- /dev/null
-+++ b/arch/riscv/tools/relocs_check.sh
-@@ -0,0 +1,26 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Based on powerpc relocs_check.sh
-+
-+# This script checks the relocations of a vmlinux for "suspicious"
-+# relocations.
-+
-+if [ $# -lt 3 ]; then
-+        echo "$0 [path to objdump] [path to nm] [path to vmlinux]" 1>&2
-+        exit 1
-+fi
-+
-+bad_relocs=$(
-+${srctree}/scripts/relocs_check.sh "$@" |
-+	# These relocations are okay
-+	#	R_RISCV_RELATIVE
-+	grep -F -w -v 'R_RISCV_RELATIVE'
-+)
-+
-+if [ -z "$bad_relocs" ]; then
-+	exit 0
-+fi
-+
-+num_bad=$(echo "$bad_relocs" | wc -l)
-+echo "WARNING: $num_bad bad relocations"
-+echo "$bad_relocs"
++$(obj)/Image: vmlinux.relocs FORCE
++else
+ $(obj)/Image: vmlinux FORCE
++endif
+ 	$(call if_changed,objcopy)
+ 
+ $(obj)/Image.gz: $(obj)/Image FORCE
 -- 
 2.37.2
 
