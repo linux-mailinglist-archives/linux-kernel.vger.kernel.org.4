@@ -2,168 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF546CEFED
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78976CEFEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjC2QzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
+        id S230359AbjC2QzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjC2QzB (ORCPT
+        with ESMTP id S229488AbjC2QzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 29 Mar 2023 12:55:01 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8943255BB
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:54:54 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3e390e23f83so341921cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:54:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680108893;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6mmMTcKbNFZJ+ADW94MCmFYakixmyIY5T+sGgFQVqJY=;
-        b=EcvUtO42jTnqBkvpZAcPDRX1B/EBgeIHIvGlYQxBY9ZpicDaqou6cUmnVTgvVlrkuT
-         34nkDwRTApfZRQfmmpXskr3uYUE3mfpGxAAolVUJxfAP3MYo9aFBD2kDCVpUwe7mt+bY
-         agwP1g9K5cHbZldk8q82nVJkXZwLdLl+Yo+zmFryh42iqo2u61fy1gqnWYo1CW2vx7zG
-         V3pBuL3iZiTrxZSk1nCdqEAb2T8su9Pl5+fmoyj9INWPh5VgvnRRCJD3KS88j2HXTFuQ
-         vyGAUsDslmzrJwu765Hv54PjFJdloMIn+Iz0lRb96Oz9rEvgegkhtCA1ThQDmXg0wAeU
-         taEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680108893;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6mmMTcKbNFZJ+ADW94MCmFYakixmyIY5T+sGgFQVqJY=;
-        b=FWjiaggmvuLr8GmU1IqHG7IdrfDhH/QcczEhzK4mYU8Bx2dIYHtSOdIYKunsfs6MFw
-         1Bk9cWQsexqQBxc7FEDVmYJ4NXiebxtltywZKtwL0jpR0jUPU+GrocaEsZuJuRGFflm9
-         knA/zDABXdY0sChpiqNtGZw/1bAIBcQSfaJpv2GE+h2QMll4M89dEuG+bxALx2cDbfIW
-         V8dT5z8ZObMGy3W88X2ZGslbvbv69R7YIrdDfpKFe80xYbgShZ7f13szztWPtmNx182U
-         sDiEqqZsMmye15av8ce6KThire8YZW6GgLgBm3XYzlPzXAasp7GSu5lhKpK9ciJDgbk5
-         VozA==
-X-Gm-Message-State: AAQBX9f1EBGCWxTWuSft+P+lucRgdlNGg8nusR1mfoR4v3cP0CzlkrrZ
-        yKhLxMH0tGprlbPtT+OhOoK1PZLVn8EjjYat2eSdSg==
-X-Google-Smtp-Source: AKy350aZEuGOkGAUo3/PlvmvlZZ+e7ire4m+tofzP4fSUzLBgqwscgupalCGJKg/ccutDUs+9sYPCXIF0zSlFtAKH3c=
-X-Received: by 2002:ac8:5916:0:b0:3e3:86d0:4f02 with SMTP id
- 22-20020ac85916000000b003e386d04f02mr368594qty.11.1680108893525; Wed, 29 Mar
- 2023 09:54:53 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B9D1709
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:54:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B9F561DA0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 16:54:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E6DC433D2;
+        Wed, 29 Mar 2023 16:54:48 +0000 (UTC)
+Date:   Wed, 29 Mar 2023 17:54:45 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Qun-wei Lin =?utf-8?B?KOael+e+pOW0tCk=?= 
+        <Qun-wei.Lin@mediatek.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "surenb@google.com" <surenb@google.com>,
+        "david@redhat.com" <david@redhat.com>,
+        Chinwen Chang =?utf-8?B?KOW8temMpuaWhyk=?= 
+        <chinwen.chang@mediatek.com>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        Kuan-Ying Lee =?utf-8?B?KOadjuWGoOepjik=?= 
+        <Kuan-Ying.Lee@mediatek.com>,
+        Casper Li =?utf-8?B?KOadjuS4reamrik=?= <casper.li@mediatek.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Steven Price <steven.price@arm.com>
+Subject: Re: [BUG] Usersapce MTE error with allocation tag 0 when low on
+ memory
+Message-ID: <ZCRtVW9Q0WOKEQVX@arm.com>
+References: <5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com>
 MIME-Version: 1.0
-References: <202303222158.8975b36d-oliver.sang@intel.com> <CAP-5=fV3x_=6JqVsX8Z_+5bz67de_5JcWX-1B=So18wpMK3r=A@mail.gmail.com>
- <ZCPX5bYv0zK+/a6u@xsang-OptiPlex-9020>
-In-Reply-To: <ZCPX5bYv0zK+/a6u@xsang-OptiPlex-9020>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 29 Mar 2023 09:54:39 -0700
-Message-ID: <CAP-5=fVV-3jYnJsrLZjqoJz3DzmT4b5t==Y3joC0NHgpz-qp-w@mail.gmail.com>
-Subject: Re: [acme:tmp.perf-tools-next] [perf build] a980755beb: perf-sanity-tests.perf.make.fail
-To:     Oliver Sang <oliver.sang@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andres Freund <andres@anarazel.de>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Stephane Eranian <eranian@google.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Tom Rix <trix@redhat.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com>
+X-Spam-Status: No, score=-3.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:17=E2=80=AFPM Oliver Sang <oliver.sang@intel.com=
-> wrote:
->
-> hi Ian,
->
-> On Wed, Mar 22, 2023 at 09:03:28AM -0700, Ian Rogers wrote:
-> > On Wed, Mar 22, 2023 at 7:20=E2=80=AFAM kernel test robot <oliver.sang@=
-intel.com> wrote:
-> > >
-> > >
-> > > Greeting,
-> > >
-> > > FYI, we noticed perf-sanity-tests.perf.make.fail due to commit (built=
- with gcc-11):
-> > >
-> > > commit: a980755beb5aca9002e1c95ba519b83a44242b5b ("perf build: Make B=
-UILD_BPF_SKEL default, rename to NO_BPF_SKEL")
-> > > https://git.kernel.org/cgit/linux/kernel/git/acme/linux.git tmp.perf-=
-tools-next
-> > >
-> > > in testcase: perf-sanity-tests
-> > > version: perf-x86_64-e8d018dd0257-1_20230320
-> > > with following parameters:
-> > >
-> > >         perf_compiler: clang
-> > >
-> > > [   98.290078][  T246] make perf failed
-> >
-> > Hi Oliver,
-> >
-> > Could we add NO_BPF_SKEL=3D1 to the build flags? The idea with changing
-> > the default is that is what most users want and so we want the BPF
-> > skeleton to be opt-out rather than opt-in.
->
-> Thanks a lot for guidance!
->
-> I added NO_BPF_SKEL=3D1 then make perf can pass upon this commit.
-> I also tried to add BUILD_BPF_SKEL=3D1 while make perf for parent, it wil=
-l fail.
->
-> since you said in commit message
-> "BPF skeleton support is now key to a number of perf features."
-> we will start to fix make issue.
->
-> Thanks!
++ Steven Price who added the MTE swap support.
 
-This is great Oliver, many thanks!
-Ian
-
-> >
-> > Thanks,
-> > Ian
-> >
-> > >
-> > > To reproduce:
-> > >
-> > >         git clone https://github.com/intel/lkp-tests.git
-> > >         cd lkp-tests
-> > >         sudo bin/lkp install job.yaml           # job file is attache=
-d in this email
-> > >         bin/lkp split-job --compatible job.yaml # generate the yaml f=
-ile for lkp run
-> > >         sudo bin/lkp run generated-yaml-file
-> > >
-> > >         # if come across any failure that blocks the test,
-> > >         # please remove ~/.lkp and /lkp dir to run from a clean state=
-.
-> > >
-> > >
-> > >
-> > > --
-> > > 0-DAY CI Kernel Test Service
-> > > https://github.com/intel/lkp-tests
-> > >
-> > >
-> >
+On Wed, Mar 29, 2023 at 02:55:49AM +0000, Qun-wei Lin (林群崴) wrote:
+> Hi,
+> 
+> We meet the mass MTE errors happened in Android T with kernel-6.1.
+> 
+> When the system is under memory pressure, the MTE often triggers some
+> error reporting in userspace.
+> 
+> Like the tombstone below, there are many reports with the acllocation
+> tags of 0:
+> 
+> Build fingerprint:
+> 'alps/vext_k6897v1_64/k6897v1_64:13/TP1A.220624.014/mp2ofp23:userdebug/
+> dev-keys'
+> Revision: '0'
+> ABI: 'arm64'
+> Timestamp: 2023-03-14 06:39:40.344251744+0800
+> Process uptime: 0s
+> Cmdline: /vendor/bin/hw/camerahalserver
+> pid: 988, tid: 1395, name: binder:988_3  >>>
+> /vendor/bin/hw/camerahalserver <<<
+> uid: 1047
+> tagged_addr_ctrl: 000000000007fff3 (PR_TAGGED_ADDR_ENABLE,
+> PR_MTE_TCF_SYNC, mask 0xfffe)
+> signal 11 (SIGSEGV), code 9 (SEGV_MTESERR), fault addr
+> 0x0d000075f1d8d7f0
+>     x0  00000075018d3fb0  x1  00000000c0306201  x2  00000075018d3ae8  x
+> 3  000000000000720c
+>     x4  0000000000000000  x5  0000000000000000  x6  00000642000004fe  x
+> 7  0000054600000630
+>     x8  00000000fffffff2  x9  b34a1094e7e33c3f  x10
+> 00000075018d3a80  x11 00000075018d3a50
+>     x12 ffffff80ffffffd0  x13 0000061e0000072c  x14
+> 0000000000000004  x15 0000000000000000
+>     x16 00000077f2dfcd78  x17 00000077da3a8ff0  x18
+> 00000075011bc000  x19 0d000075f1d8d898
+>     x20 0d000075f1d8d7f0  x21 0d000075f1d8d910  x22
+> 0000000000000000  x23 00000000fffffff7
+>     x24 00000075018d4000  x25 0000000000000000  x26
+> 00000075018d3ff8  x27 00000000000fc000
+>     x28 00000000000fe000  x29 00000075018d3b20
+>     lr  00000077f2d9f164  sp  00000075018d3ad0  pc  00000077f2d9f134  p
+> st 0000000080001000
+> 
+> backtrace:
+>       #00 pc 000000000005d134  /system/lib64/libbinder.so
+> (android::IPCThreadState::talkWithDriver(bool)+244) (BuildId:
+> 8b5612259e4a42521c430456ec5939c7)
+>       #01 pc 000000000005d448  /system/lib64/libbinder.so
+> (android::IPCThreadState::getAndExecuteCommand()+24) (BuildId:
+> 8b5612259e4a42521c430456ec5939c7)
+>       #02 pc 000000000005dd64  /system/lib64/libbinder.so
+> (android::IPCThreadState::joinThreadPool(bool)+68) (BuildId:
+> 8b5612259e4a42521c430456ec5939c7)
+>       #03 pc 000000000008dba8  /system/lib64/libbinder.so
+> (android::PoolThread::threadLoop()+24) (BuildId:
+> 8b5612259e4a42521c430456ec5939c7)
+>       #04 pc 0000000000013440  /system/lib64/libutils.so
+> (android::Thread::_threadLoop(void*)+416) (BuildId:
+> 10aac5d4a671e4110bc00c9b69d83d8a)
+>       #05 pc
+> 00000000000c14cc  /apex/com.android.runtime/lib64/bionic/libc.so
+> (__pthread_start(void*)+204) (BuildId:
+> 718ecc04753b519b0f6289a7a2fcf117)
+>       #06 pc
+> 0000000000054930  /apex/com.android.runtime/lib64/bionic/libc.so
+> (__start_thread+64) (BuildId: 718ecc04753b519b0f6289a7a2fcf117)
+> 
+> Memory tags around the fault address (0xd000075f1d8d7f0), one tag per
+> 16 bytes:
+>       0x75f1d8cf00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8d000: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8d100: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8d200: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8d300: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8d400: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8d500: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8d600: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>     =>0x75f1d8d700: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 [0]
+>       0x75f1d8d800: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8d900: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8da00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8db00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8dc00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8dd00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+>       0x75f1d8de00: 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+> 
+> Also happens in coredump.
+> 
+> This problem only occurs when ZRAM is enabled, so we think there are
+> some issues regarding swap in/out.
+> 
+> Having compared the differences between Kernel-5.15 and Kernel-6.1,
+> We found the order of swap_free() and set_pte_at() is changed in
+> do_swap_page().
+> 
+> When fault in, do_swap_page() will call swap_free() first:
+> do_swap_page() -> swap_free() -> __swap_entry_free() ->
+> free_swap_slot() -> swapcache_free_entries() -> swap_entry_free() ->
+> swap_range_free() -> arch_swap_invalidate_page() ->
+> mte_invalidate_tags_area() ->  mte_invalidate_tags() -> xa_erase()
+> 
+> and then call set_pte_at():
+> do_swap_page() -> set_pte_at() -> __set_pte_at() -> mte_sync_tags() ->
+> mte_sync_page_tags() -> mte_restore_tags() -> xa_load()
+> 
+> This means that the swap slot is invalidated before pte mapping, and
+> this will cause the mte tag in XArray to be released before tag
+> restore.
+> 
+> After I moved swap_free() to the next line of set_pte_at(), the problem
+> is disappeared.
+> 
+> We suspect that the following patches, which have changed the order, do
+> not consider the mte tag restoring in page fault flow:
+> https://lore.kernel.org/all/20220131162940.210846-5-david@redhat.com/
+> 
+> Any suggestion is appreciated.
+> 
+> Thank you.
