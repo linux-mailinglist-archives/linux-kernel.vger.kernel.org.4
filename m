@@ -2,181 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B5A6CD8F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3C56CD8F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjC2L6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
+        id S229572AbjC2L6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjC2L6t (ORCPT
+        with ESMTP id S229717AbjC2L6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:58:49 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528D94213;
-        Wed, 29 Mar 2023 04:58:39 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1phURo-0004gv-U9; Wed, 29 Mar 2023 13:58:37 +0200
-Message-ID: <1f0c87f4-22dc-d8bd-c625-f82d4c8e0d34@leemhuis.info>
-Date:   Wed, 29 Mar 2023 13:58:36 +0200
+        Wed, 29 Mar 2023 07:58:50 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7ADEA;
+        Wed, 29 Mar 2023 04:58:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 89907219D6;
+        Wed, 29 Mar 2023 11:58:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680091123; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yUxNSXHNGER+MCVZDyDV8l5ua3h1BaSz76WjsL0+L3s=;
+        b=Y9IuGtiVAXDxMAHsM6cj7w2mYq2eAbOAWUcGbhruEFj1/tTjy0ED7NrMdnGwksKxLWnPdS
+        2XErqMm71eFEKSjeeww8JCt/gvAo3MxStIDeQ1v26jeQkUL5w58Wj50wWGD35gsly/pJ7o
+        eNf2oLyQeU11xKNm9lcEWC8qojyK8Qs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F463138FF;
+        Wed, 29 Mar 2023 11:58:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ecknG/MnJGRBXwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 29 Mar 2023 11:58:43 +0000
+Date:   Wed, 29 Mar 2023 13:58:43 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2 3/9] memcg: do not flush stats in irq context
+Message-ID: <ZCQn86f7sxBt6tyN@dhcp22.suse.cz>
+References: <20230328221644.803272-1-yosryahmed@google.com>
+ <20230328221644.803272-4-yosryahmed@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [regression] Bug 217252 - warning: v4l_enum_fmt+0x125a/0x1c20 -
- Unknown pixelformat 0x00000000
-Content-Language: en-US, de-DE
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <dc8e5276-ef88-648f-9f0d-10151ea62c90@leemhuis.info>
- <fd175fb1-0990-fc7a-8697-45dc0d3e6199@redhat.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <fd175fb1-0990-fc7a-8697-45dc0d3e6199@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680091119;3055a410;
-X-HE-SMSGID: 1phURo-0004gv-U9
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328221644.803272-4-yosryahmed@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.03.23 13:37, Hans de Goede wrote:
+On Tue 28-03-23 22:16:38, Yosry Ahmed wrote:
+> Currently, the only context in which we can invoke an rstat flush from
+> irq context is through mem_cgroup_usage() on the root memcg when called
+> from memcg_check_events(). An rstat flush is an expensive operation that
+> should not be done in irq context, so do not flush stats and use the
+> stale stats in this case.
 > 
-> On 3/29/23 13:25, Linux regression tracking (Thorsten Leemhuis) wrote:
->> Hi, Thorsten here, the Linux kernel's regression tracker.
->>
->> I noticed a regression report in bugzilla.kernel.org. As many (most?)
->> kernel developers don't keep an eye on it, I decided to forward it by mail.
->>
->> Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
->> not CCed them to mails like this.
->>
->> Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217252 :
+> Arguably, usage threshold events are not reliable on the root memcg
+> anyway since its usage is ill-defined.
 > 
-> This is fixed by this (pending) patch:
-> 
-> https://lore.kernel.org/linux-media/20230327091051.404184-1-hpa@redhat.com/
+> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+> Suggested-by: Shakeel Butt <shakeelb@google.com>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 
-Thx for letting me know! I looked for "Unknown pixelformat 0x00000000"
-on lore, but that "0x00000000" was too much. :-( Whatever, happens. :-D
+Acked-by: Michal Hocko <mhocko@suse.com>
 
-#regzbot fix: media: v4l2-core: v4l2-ioctl: Printing log with dev_warn()
-when the pixelformat is unknown
+> ---
+>  mm/memcontrol.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index c3b6aae78901..ff39f78f962e 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -3669,7 +3669,21 @@ static unsigned long mem_cgroup_usage(struct mem_cgroup *memcg, bool swap)
+>  	unsigned long val;
+>  
+>  	if (mem_cgroup_is_root(memcg)) {
+> -		mem_cgroup_flush_stats();
+> +		/*
+> +		 * We can reach here from irq context through:
+> +		 * uncharge_batch()
+> +		 * |--memcg_check_events()
+> +		 *    |--mem_cgroup_threshold()
+> +		 *       |--__mem_cgroup_threshold()
+> +		 *          |--mem_cgroup_usage
+> +		 *
+> +		 * rstat flushing is an expensive operation that should not be
+> +		 * done from irq context; use stale stats in this case.
+> +		 * Arguably, usage threshold events are not reliable on the root
+> +		 * memcg anyway since its usage is ill-defined.
+> +		 */
+> +		if (in_task())
+> +			mem_cgroup_flush_stats();
+>  		val = memcg_page_state(memcg, NR_FILE_PAGES) +
+>  			memcg_page_state(memcg, NR_ANON_MAPPED);
+>  		if (swap)
+> -- 
+> 2.40.0.348.gf938b09366-goog
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
->>>  sander44 2023-03-27 12:50:47 UTC
->>>
->>> Hi Kernel Team,
->>>
->>> I try today to rebuild kernel 6.1.21, but i notice error with: v4l2-core.
->>>
->>> [    3.722510] loop17: detected capacity change from 0 to 8
->>> [    3.920014] ------------[ cut here ]------------
->>> [    3.920016] Unknown pixelformat 0x00000000
->>> [    3.920024] WARNING: CPU: 2 PID: 1558 at drivers/media/v4l2-core/v4l2-ioctl.c:1503 v4l_enum_fmt+0x125a/0x1c20
->>> [    3.920030] Modules linked in: [...]
->>> [    3.920097] CPU: 2 PID: 1558 Comm: pipewire Tainted: G     U             6.1.21-1-lowlatency #2
->>> [    3.920099] Hardware name: Intel(R) Client Systems NUC12WSKi7/NUC12WSBi7, BIOS WSADL357.0073.2022.0302.1157 03/02/2022
->>> [    3.920100] RIP: 0010:v4l_enum_fmt+0x125a/0x1c20
->>> [    3.920102] Code: 48 c7 c3 53 29 ca 83 81 fe 64 76 73 64 0f 84 d7 ef ff ff 41 80 7d 0c 00 0f 85 9e ee ff ff 48 c7 c7 5a 37 ca 83 e8 36 9c 48 ff <0f> 0b 48 c7 c2 76 37 ca 83 49 8d 4d 2c 49 8d 7d 0c be 20 00 00 00
->>> [    3.920103] RSP: 0018:ffffa60086907bd8 EFLAGS: 00010246
->>> [    3.920104] RAX: 0000000000000000 RBX: ffffffff83ca33fb RCX: 0000000000000000
->>> [    3.920105] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
->>> [    3.920106] RBP: ffffa60086907c08 R08: 0000000000000000 R09: 0000000000000000
->>> [    3.920106] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
->>> [    3.920107] R13: ffffa60086907d00 R14: 0000000000000000 R15: ffff98efc87d0018
->>> [    3.920107] FS:  00007f7f99022740(0000) GS:ffff98f347680000(0000) knlGS:0000000000000000
->>> [    3.920108] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>> [    3.920109] CR2: 00007ffc3f1c3ff8 CR3: 0000000121ab8006 CR4: 0000000000770ee0
->>> [    3.920110] PKRU: 55555554
->>> [    3.920110] Call Trace:
->>> [    3.920111]  <TASK>
->>> [    3.920114]  __video_do_ioctl+0x1e7/0x590
->>> [    3.920116]  ? __video_do_ioctl+0x1e7/0x590
->>> [    3.920118]  video_usercopy+0x25d/0x820
->>> [    3.920119]  ? v4l_print_control+0x30/0x30
->>> [    3.920121]  video_ioctl2+0x15/0x30
->>> [    3.920122]  v4l2_ioctl+0x69/0xb0
->>> [    3.920124]  __x64_sys_ioctl+0x9f/0xe0
->>> [    3.920126]  do_syscall_64+0x58/0x90
->>> [    3.920128]  ? video_ioctl2+0x15/0x30
->>> [    3.920129]  ? v4l2_ioctl+0x69/0xb0
->>> [    3.920131]  ? exit_to_user_mode_prepare+0x39/0x190
->>> [    3.920133]  ? syscall_exit_to_user_mode+0x29/0x50
->>> [    3.920135]  ? do_syscall_64+0x67/0x90
->>> [    3.920136]  ? syscall_exit_to_user_mode+0x29/0x50
->>> [    3.920137]  ? do_syscall_64+0x67/0x90
->>> [    3.920138]  ? do_syscall_64+0x67/0x90
->>> [    3.920139]  ? do_syscall_64+0x67/0x90
->>> [    3.920140]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>> [    3.920142] RIP: 0033:0x7f7f98d1aaff
->>> [    3.920143] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <41> 89 c0 3d 00 f0 ff ff 77 1f 48 8b 44 24 18 64 48 2b 04 25 28 00
->>> [    3.920144] RSP: 002b:00007ffe6fcb2810 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
->>> [    3.920145] RAX: ffffffffffffffda RBX: 0000000000000023 RCX: 00007f7f98d1aaff
->>> [    3.920146] RDX: 000055f9945f309c RSI: ffffffffc0405602 RDI: 0000000000000023
->>> [    3.920147] RBP: 000055f9945f309c R08: 0000000000000000 R09: 0000000000000001
->>> [    3.920147] R10: 0000000000000002 R11: 0000000000000246 R12: 00000000ffffffff
->>> [    3.920148] R13: 0000000000000000 R14: 000000004000015c R15: 000055f9945f2ec8
->>> [    3.920149]  </TASK>
->>> [    3.920150] ---[ end trace 0000000000000000 ]---
->>>
->>> [...]
->>
->> See the ticket for more details.
->>
->> Note, to my untrained eyes this looked like something that is caused by
->> the driver, which afaics is uvcvideo. Hope that wasn't a mistake.
->>
->>
->> [TLDR for the rest of this mail: I'm adding this report to the list of
->> tracked Linux kernel regressions; the text you find below is based on a
->> few templates paragraphs you might have encountered already in similar
->> form.]
->>
->> BTW, let me use this mail to also add the report to the list of tracked
->> regressions to ensure it's doesn't fall through the cracks:
->>
->> #regzbot introduced: v5.15..v6.1.21
->> https://bugzilla.kernel.org/show_bug.cgi?id=217252
->> #regzbot title: media: Unknown pixelformat 0x00000000
->> #regzbot ignore-activity
->>
->> This isn't a regression? This issue or a fix for it are already
->> discussed somewhere else? It was fixed already? You want to clarify when
->> the regression started to happen? Or point out I got the title or
->> something else totally wrong? Then just reply and tell me -- ideally
->> while also telling regzbot about it, as explained by the page listed in
->> the footer of this mail.
->>
->> Developers: When fixing the issue, remember to add 'Link:' tags pointing
->> to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
->> this thread sees some discussion). See page linked in footer for details.
->>
->> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->> --
->> Everything you wanna know about Linux kernel regression tracking:
->> https://linux-regtracking.leemhuis.info/about/#tldr
->> If I did something stupid, please tell me, as explained on that page.
->>
->> [1] because bugzilla.kernel.org tells users upon registration their
->> "email address will never be displayed to logged out users"
->>
-> 
-> 
-> 
+-- 
+Michal Hocko
+SUSE Labs
