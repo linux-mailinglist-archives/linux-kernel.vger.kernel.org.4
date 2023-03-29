@@ -2,73 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0870D6CEE83
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F32D6CEEAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbjC2QC5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 12:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
+        id S231518AbjC2P7m convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 11:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbjC2QCI (ORCPT
+        with ESMTP id S231245AbjC2P7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:02:08 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5417D89
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:01:01 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id ja10so15366317plb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:01:01 -0700 (PDT)
+        Wed, 29 Mar 2023 11:59:09 -0400
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A496A54;
+        Wed, 29 Mar 2023 08:58:34 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id eh3so65215889edb.11;
+        Wed, 29 Mar 2023 08:58:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680105349;
+        d=1e100.net; s=20210112; t=1680105487;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=62ZIWkSy5tZoUHv/2BRxXjvjKExsY1hv+Zfd9ZYJQ4E=;
-        b=2MEU70XefJK3C8FyXYeyt367e76Rt4jtvGCce3bEpIUAtb8/S0J06BW33PqDZi50qC
-         vg+m144bx1REqg9k09EHUOtkXpikupSwumg8aHMWvCLpG8x+G5KUDPeAj4jkSJktl2xg
-         /E23CpJ1ipIiw/HwNa68MIHPwyDzcL4SgRDp00W30SW7LRQz4/I1uws+Gc7dDD9n36Kt
-         JnOSYqrEyW/2z/z6OC6fCCuY3vH36BM30qRPWbFbiyVh0y1k/5ZIb6t9DcP9QQcCZGWF
-         IbqA9dL8LasCYPfJpAP1Y9gk0xrfSL7TJ77NE0hOkwIeH9EAZvfKShtsCIMDZlWSEqWY
-         fyIw==
-X-Gm-Message-State: AAQBX9cZf7dlw/vQHEWJNCUfAGTWDkMPJpRPbuOdb45yi6Jjan7vWsOl
-        7/NnkeihJl0kijLokeFYSdhFNCTGB5eED9drOrHjvg==
-X-Google-Smtp-Source: AKy350aLDH5YR9t419L5OiinTR+6vLBCDmWiJH85fFWabTVqFHlXOqvkdPLNLHEa0183i9K3F9W0CuWctZ/RgFAniww=
-X-Received: by 2002:a17:902:c3c6:b0:1a1:b318:2776 with SMTP id
- j6-20020a170902c3c600b001a1b3182776mr7729184plj.0.1680105349103; Wed, 29 Mar
- 2023 08:55:49 -0700 (PDT)
+        bh=mzq+vIJia6Oe7/D+Sh+wrCg8ai+vibYcP9Z6Z0Gi+ds=;
+        b=dPIuDM8VjmyvDyonAgBZIaxnHgv4uo1h98NX225Q0Vo3m92jZQGJTE/qwJLvpdlqvn
+         2rMvxwXLkbnDmfb/eC2FJC3M/8kYg9b6UmDcNc3RPTyGicrO3lQ2IdEbUgYI5E//fd4M
+         IRaCn1vZfRfy+dp+XfRQE5O4k1BaB2i+lIPPr77PsaXuNTijzC7eyUztZ7PUVLOeURyS
+         555piq7an4q1dPZpfDovAKJIWuEL+hTh+HjiD6MOkOSWRtY4WfrqK5mGVJ+h2WqncSsq
+         H+NvGJPuIfxg2AWilgPGqD4lAdzjXNqVzGRDblemqT2Qj/IhGg5uky/hZ9vFSTBTJiW0
+         kfOg==
+X-Gm-Message-State: AAQBX9fjqPktmrtUFqX7oT3pZpUk33yXbJ7XBVNdWa6G4s8BIcB3DKOz
+        ngcqP4c2ipcZek1393OWDPB04k9kxo3s+TBNe04=
+X-Google-Smtp-Source: AKy350boHE0zfBloqdcSNGmzBqUXXsRddCRy/sa5FfObdnxpOzEYGDjWB1IEyEgnL1SIEdbf4Xnc903CLkgoiq3GKuI=
+X-Received: by 2002:a50:d49e:0:b0:502:148d:9e1e with SMTP id
+ s30-20020a50d49e000000b00502148d9e1emr9950905edi.3.1680105487384; Wed, 29 Mar
+ 2023 08:58:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230325060828.2662773-1-rppt@kernel.org> <20230325060828.2662773-3-rppt@kernel.org>
-In-Reply-To: <20230325060828.2662773-3-rppt@kernel.org>
-From:   Justin Forbes <jforbes@fedoraproject.org>
-Date:   Wed, 29 Mar 2023 10:55:37 -0500
-Message-ID: <CAFxkdAr5C7ggZ+WdvDbsfmwuXujT_z_x3qcUnhnCn-WrAurvgA@mail.gmail.com>
-Subject: Re: [PATCH v3 02/14] arm64: drop ranges in definition of ARCH_FORCE_MAX_ORDER
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Rich Felker <dalias@libc.org>,
+References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org> <20230329-dt-cpu-header-cleanups-v1-14-581e2605fe47@kernel.org>
+In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-14-581e2605fe47@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 29 Mar 2023 17:57:56 +0200
+Message-ID: <CAJZ5v0iBjt6Rms1QznB7LLvq5S2GcQRBmSXmT30rswTHtD7s8g@mail.gmail.com>
+Subject: Re: [PATCH 14/19] cpufreq: Adjust includes to remove of_device.h
+To:     Rob Herring <robh@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Zi Yan <ziy@nvidia.com>, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mm@kvack.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Anup Patel <anup@brainfault.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,56 +100,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 1:09 AM Mike Rapoport <rppt@kernel.org> wrote:
+On Wed, Mar 29, 2023 at 5:53 PM Rob Herring <robh@kernel.org> wrote:
 >
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> Now that of_cpu_device_node_get() is defined in of.h, of_device.h is just
+> implicitly including other includes, and is no longer needed. Adjust the
+> include files with what was implicitly included by of_device.h (cpu.h and
+> of.h) and drop including of_device.h.
 >
-> It is not a good idea to change fundamental parameters of core memory
-> management. Having predefined ranges suggests that the values within
-> those ranges are sensible, but one has to *really* understand
-> implications of changing MAX_ORDER before actually amending it and
-> ranges don't help here.
->
-> Drop ranges in definition of ARCH_FORCE_MAX_ORDER and make its prompt
-> visible only if EXPERT=y
-
-I do not like suddenly hiding this behind EXPERT for a couple of
-reasons.  Most importantly, it will silently change the config for
-users building with an old kernel config.  If a user has for instance
-"13" set and building with 4K pages, as is the current configuration
-for Fedora and RHEL aarch64 builds, an oldconfig build will now set it
-to 10 with no indication that it is doing so.  And while I think that
-10 is a fine default for many aarch64 users, there are valid reasons
-for choosing other values. Putting this behind expert makes it much
-less obvious that this is an option.
-
-Justin
-
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  arch/arm64/Kconfig | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> Please ack and I will take the series via the DT tree.
+
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+
+> ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 -
+>  drivers/cpufreq/kirkwood-cpufreq.c   | 2 +-
+>  drivers/cpufreq/maple-cpufreq.c      | 2 +-
+>  drivers/cpufreq/pmac32-cpufreq.c     | 2 +-
+>  drivers/cpufreq/pmac64-cpufreq.c     | 2 +-
+>  drivers/cpufreq/qcom-cpufreq-hw.c    | 4 ++--
+>  drivers/cpufreq/spear-cpufreq.c      | 2 +-
+>  drivers/cpufreq/tegra124-cpufreq.c   | 1 -
+>  drivers/cpufreq/tegra20-cpufreq.c    | 2 +-
+>  include/linux/cpufreq.h              | 1 -
+>  10 files changed, 8 insertions(+), 11 deletions(-)
 >
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index e60baf7859d1..7324032af859 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -1487,11 +1487,9 @@ config XEN
->  # 16K |       27          |      14      |       13        |         11         |
->  # 64K |       29          |      16      |       13        |         13         |
->  config ARCH_FORCE_MAX_ORDER
-> -       int "Maximum zone order" if ARM64_4K_PAGES || ARM64_16K_PAGES
-> +       int "Maximum zone order" if EXPERT && (ARM64_4K_PAGES || ARM64_16K_PAGES)
->         default "13" if ARM64_64K_PAGES
-> -       range 11 13 if ARM64_16K_PAGES
->         default "11" if ARM64_16K_PAGES
-> -       range 10 15 if ARM64_4K_PAGES
->         default "10"
->         help
->           The kernel memory allocator divides physically contiguous memory
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index e85703651098..f9675e1a8529 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -6,7 +6,6 @@
+>
+>  #include <linux/err.h>
+>  #include <linux/of.h>
+> -#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>
+>  #include "cpufreq-dt.h"
+> diff --git a/drivers/cpufreq/kirkwood-cpufreq.c b/drivers/cpufreq/kirkwood-cpufreq.c
+> index 70ad8fe1d78b..95588101efbd 100644
+> --- a/drivers/cpufreq/kirkwood-cpufreq.c
+> +++ b/drivers/cpufreq/kirkwood-cpufreq.c
+> @@ -9,7 +9,7 @@
+>  #include <linux/module.h>
+>  #include <linux/clk.h>
+>  #include <linux/cpufreq.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/io.h>
+>  #include <asm/proc-fns.h>
+> diff --git a/drivers/cpufreq/maple-cpufreq.c b/drivers/cpufreq/maple-cpufreq.c
+> index 28d346062166..f9306410a07f 100644
+> --- a/drivers/cpufreq/maple-cpufreq.c
+> +++ b/drivers/cpufreq/maple-cpufreq.c
+> @@ -23,7 +23,7 @@
+>  #include <linux/completion.h>
+>  #include <linux/mutex.h>
+>  #include <linux/time.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>
+>  #define DBG(fmt...) pr_debug(fmt)
+>
+> diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
+> index 4b8ee2014da6..a28716d8fc54 100644
+> --- a/drivers/cpufreq/pmac32-cpufreq.c
+> +++ b/drivers/cpufreq/pmac32-cpufreq.c
+> @@ -23,7 +23,7 @@
+>  #include <linux/init.h>
+>  #include <linux/device.h>
+>  #include <linux/hardirq.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>
+>  #include <asm/machdep.h>
+>  #include <asm/irq.h>
+> diff --git a/drivers/cpufreq/pmac64-cpufreq.c b/drivers/cpufreq/pmac64-cpufreq.c
+> index ba9c31d98bd6..2cd2b06849a2 100644
+> --- a/drivers/cpufreq/pmac64-cpufreq.c
+> +++ b/drivers/cpufreq/pmac64-cpufreq.c
+> @@ -21,7 +21,7 @@
+>  #include <linux/init.h>
+>  #include <linux/completion.h>
+>  #include <linux/mutex.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>
+>  #include <asm/machdep.h>
+>  #include <asm/irq.h>
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 2f581d2d617d..df165a078d14 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -11,8 +11,8 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> -#include <linux/of_address.h>
+> -#include <linux/of_platform.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+>  #include <linux/pm_opp.h>
+>  #include <linux/pm_qos.h>
+>  #include <linux/slab.h>
+> diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
+> index c6fdf019dbde..78b875db6b66 100644
+> --- a/drivers/cpufreq/spear-cpufreq.c
+> +++ b/drivers/cpufreq/spear-cpufreq.c
+> @@ -18,7 +18,7 @@
+>  #include <linux/err.h>
+>  #include <linux/init.h>
+>  #include <linux/module.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+> diff --git a/drivers/cpufreq/tegra124-cpufreq.c b/drivers/cpufreq/tegra124-cpufreq.c
+> index 7a1ea6fdcab6..312ca5ddc6c4 100644
+> --- a/drivers/cpufreq/tegra124-cpufreq.c
+> +++ b/drivers/cpufreq/tegra124-cpufreq.c
+> @@ -11,7 +11,6 @@
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> -#include <linux/of_device.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_opp.h>
+> diff --git a/drivers/cpufreq/tegra20-cpufreq.c b/drivers/cpufreq/tegra20-cpufreq.c
+> index ab7ac7df9e62..5d1f5f87e46d 100644
+> --- a/drivers/cpufreq/tegra20-cpufreq.c
+> +++ b/drivers/cpufreq/tegra20-cpufreq.c
+> @@ -12,7 +12,7 @@
+>  #include <linux/err.h>
+>  #include <linux/init.h>
+>  #include <linux/module.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_opp.h>
+>  #include <linux/types.h>
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 65623233ab2f..3ac4a10d4651 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -15,7 +15,6 @@
+>  #include <linux/kobject.h>
+>  #include <linux/notifier.h>
+>  #include <linux/of.h>
+> -#include <linux/of_device.h>
+>  #include <linux/pm_opp.h>
+>  #include <linux/pm_qos.h>
+>  #include <linux/spinlock.h>
+>
 > --
-> 2.35.1
->
+> 2.39.2
 >
