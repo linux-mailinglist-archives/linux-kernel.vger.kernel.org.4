@@ -2,152 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9E36CF0BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB95E6CF0AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbjC2RKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 13:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
+        id S231551AbjC2RJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 13:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbjC2RKP (ORCPT
+        with ESMTP id S231454AbjC2RJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:10:15 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A8165AF;
-        Wed, 29 Mar 2023 10:09:30 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32TFobCb032164;
-        Wed, 29 Mar 2023 10:09:23 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=BlWiti7aiJ9pMybHjerR+p6XbcoliBYcRK+PVTNGv5s=;
- b=ATnMGW4C628CKzUGKGwnLUPdcmkBCWSVeKcKZ1JxEwwroVoKxjDfzO/yjNDY22khH+2v
- B6T74NVptB1sUdl9DH1GwIRMXNerywTF6FBc79Y5VysX4huv0paveGi6rTd2Au3wnS8O
- 3xBkPS7zpQRvttBu9lVL7zNos+p7HFEiq+F4Q/uE673a5SsmXvqCHSfcXrUyy0CBaZXx
- +HjTA4N7E2BkPJ+iBTFOLidGortls55kJYIZAODs1ejrjZsCLWlKUawTqwpTEDq39E/7
- 6l8CZulbjEMjb2UL1cCzy2ITq+aJwc7hpmiDXspZcQlZdK3WUV+fHwbzwCa8bobsD46A bA== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3pmhc4a0jv-13
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 29 Mar 2023 10:09:23 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 29 Mar
- 2023 10:07:08 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Wed, 29 Mar 2023 10:07:08 -0700
-Received: from hyd1425.marvell.com (unknown [10.29.37.83])
-        by maili.marvell.com (Postfix) with ESMTP id 73EEA3F704C;
-        Wed, 29 Mar 2023 10:07:05 -0700 (PDT)
-From:   Sai Krishna <saikrishnag@marvell.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
-        <richardcochran@gmail.com>
-CC:     Subbaraya Sundeep <sbhatta@marvell.com>,
-        Sai Krishna <saikrishnag@marvell.com>
-Subject: [net PATCH 7/7] octeontx2-pf: Disable packet I/O for graceful exit
-Date:   Wed, 29 Mar 2023 22:36:19 +0530
-Message-ID: <20230329170619.183064-8-saikrishnag@marvell.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230329170619.183064-1-saikrishnag@marvell.com>
-References: <20230329170619.183064-1-saikrishnag@marvell.com>
+        Wed, 29 Mar 2023 13:09:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6E68691;
+        Wed, 29 Mar 2023 10:08:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46295B823EB;
+        Wed, 29 Mar 2023 17:08:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D3FC433EF;
+        Wed, 29 Mar 2023 17:08:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680109696;
+        bh=3nQ3Rw35o9dHhDUM7vmqb4idgnB+u/V0GsVDJC/63+Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=gbl1M8eD9gB2IGQLyuHAaoTzCOIM5aJBK4UNA9a129HfqjIgk5OLT00JsW3LrfMwi
+         BS3wnvrsuGevSBWjhRFM92KYcTUOxGjXeVHURXAWUv/9mnQDB24FCwZImZH2HsARFK
+         IlhvkokEZXN7acrrZk3ygEf1vdRw2NueWhDlGCDj+STh7GnMOqXbmvj5tD1Ysbzyhu
+         lp8ABUqSEQpXusl9+/8zrwUDSE0/ZeQhHMVyH/rDOnH/IcmQua1kH2Fn7QmVJi/aJd
+         bCPHmVxcvMZcLDMOeqQ7VlKVTHgunp5inST5gQp164syoX8E0DdOxpNBNFwNZndVly
+         OgS83RCZj9AFg==
+Date:   Wed, 29 Mar 2023 12:08:14 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Raghavendra, Vignesh" <vigneshr@ti.com>
+Cc:     Siddharth Vadapalli <s-vadapalli@ti.com>, tjoseph@cadence.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, nadeem@cadence.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srk@ti.com, nm@ti.com
+Subject: Re: [PATCH v2] PCI: cadence: Fix Gen2 Link Retraining process
+Message-ID: <20230329170814.GA3067800@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: wSBnIlf5MciGRqLFY8xDQsziAqetcQ6P
-X-Proofpoint-GUID: wSBnIlf5MciGRqLFY8xDQsziAqetcQ6P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-29_10,2023-03-28_02,2023-02-09_01
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12c89cb8-8cea-df6a-7650-fa3059bf5a5b@ti.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Subbaraya Sundeep <sbhatta@marvell.com>
+On Wed, Mar 29, 2023 at 08:11:25PM +0530, Raghavendra, Vignesh wrote:
+> Hi Lorenzo, Bjorn,
+> 
+> On 3/15/2023 12:38 PM, Siddharth Vadapalli wrote:
+> > The Link Retraining process is initiated to account for the Gen2 defect in
+> > the Cadence PCIe controller in J721E SoC. The errata corresponding to this
+> > is i2085, documented at:
+> > https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
+> > 
+> > The existing workaround implemented for the errata waits for the Data Link
+> > initialization to complete and assumes that the link retraining process
+> > at the Physical Layer has completed. However, it is possible that the
+> > Physical Layer training might be ongoing as indicated by the
+> > PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
+> > 
+> > Fix the existing workaround, to ensure that the Physical Layer training
+> > has also completed, in addition to the Data Link initialization.
+> > 
+> > Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
+> > Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> > Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+> > ---
+> > Changes from v1:
+> > 1. Collect Reviewed-by tag from Vignesh Raghavendra.
+> > 2. Rebase on next-20230315.
+> > 
+> > v1:
+> > https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com
+> > 
+> >  .../controller/cadence/pcie-cadence-host.c    | 27 +++++++++++++++++++
+> >  1 file changed, 27 insertions(+)
+> 
+> Wondering do one of you be pulling this patch in? This patch was never
+> picked for 6.3-rc1 merge cycle... Just want to make sure
+> pcie-cadence*.c and pci-j721e.c patches have a path to reach pci tree.
 
-At the stage of enabling packet I/O in otx2_open, If mailbox
-timeout occurs then interface ends up in down state where as
-hardware packet I/O is enabled. Hence disable packet I/O also
-before bailing out. This patch also free the LMTST per cpu structure
-on teardown, if the lmt_info pointer is not NULL.
+Yes, Lorenzo or Krzysztof will likely pick this up.  I think Lorenzo
+is out of the office this week.
 
-Fixes: 1ea0166da050 ("octeontx2-pf: Fix the device state on error")
-Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
-Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
-Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
----
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c | 11 ++++++++++-
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c |  8 +++++---
- 2 files changed, 15 insertions(+), 4 deletions(-)
+Drive-by comment: the current patch doesn't seem to give any
+indication to the user when cdns_pcie_host_training_complete() times
+out.  Is that timeout potentially of interest to a user?  Should there
+be a log message there?
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-index 179433d0a54a..52a57d2493dc 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-@@ -1835,13 +1835,22 @@ int otx2_open(struct net_device *netdev)
- 		otx2_dmacflt_reinstall_flows(pf);
- 
- 	err = otx2_rxtx_enable(pf, true);
--	if (err)
-+	/* If a mbox communication error happens at this point then interface
-+	 * will end up in a state such that it is in down state but hardware
-+	 * mcam entries are enabled to receive the packets. Hence disable the
-+	 * packet I/O.
-+	 */
-+	if (err == EIO)
-+		goto err_disable_rxtx;
-+	else if (err)
- 		goto err_tx_stop_queues;
- 
- 	otx2_do_set_rx_mode(pf);
- 
- 	return 0;
- 
-+err_disable_rxtx:
-+	otx2_rxtx_enable(pf, false);
- err_tx_stop_queues:
- 	netif_tx_stop_all_queues(netdev);
- 	netif_carrier_off(netdev);
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-index ab126f8706c7..6ab4780f12fd 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-@@ -621,7 +621,7 @@ static int otx2vf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 
- 	err = otx2vf_realloc_msix_vectors(vf);
- 	if (err)
--		goto err_mbox_destroy;
-+		goto err_detach_rsrc;
- 
- 	err = otx2_set_real_num_queues(netdev, qcount, qcount);
- 	if (err)
-@@ -709,7 +709,8 @@ static int otx2vf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- err_ptp_destroy:
- 	otx2_ptp_destroy(vf);
- err_detach_rsrc:
--	free_percpu(vf->hw.lmt_info);
-+	if (vf->hw.lmt_info)
-+		free_percpu(vf->hw.lmt_info);
- 	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
- 		qmem_free(vf->dev, vf->dync_lmt);
- 	otx2_detach_resources(&vf->mbox);
-@@ -763,7 +764,8 @@ static void otx2vf_remove(struct pci_dev *pdev)
- 	otx2_shutdown_tc(vf);
- 	otx2vf_disable_mbox_intr(vf);
- 	otx2_detach_resources(&vf->mbox);
--	free_percpu(vf->hw.lmt_info);
-+	if (vf->hw.lmt_info)
-+		free_percpu(vf->hw.lmt_info);
- 	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
- 		qmem_free(vf->dev, vf->dync_lmt);
- 	otx2vf_vfaf_mbox_destroy(vf);
--- 
-2.25.1
-
+Bjorn
