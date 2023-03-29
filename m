@@ -2,186 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66E56CD2DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18866CD2DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjC2HX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 03:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
+        id S229995AbjC2HXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 03:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjC2HXY (ORCPT
+        with ESMTP id S229977AbjC2HXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 03:23:24 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0563C0E;
-        Wed, 29 Mar 2023 00:23:22 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PmdH90fdTz17P4q;
-        Wed, 29 Mar 2023 15:20:05 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 29 Mar 2023 15:23:20 +0800
-Message-ID: <7410b9be-da2d-57e0-c4f8-19900df2c440@huawei.com>
-Date:   Wed, 29 Mar 2023 15:23:19 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] ext4: only update i_reserved_data_blocks on successful
- block allocation
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20230325063443.1839558-1-libaokun1@huawei.com>
- <20230327124700.mnldh4sosp3ptbls@quack3>
- <a4ee8f3e-9428-ebb1-c0b4-9348075902b6@huawei.com>
- <20230328100037.vy23wsnl437ujdoh@quack3>
+        Wed, 29 Mar 2023 03:23:39 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2060.outbound.protection.outlook.com [40.107.223.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373C33C32
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:23:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S+kDgn0xqsPCrbNgOtfQTvgH2VBQiMsjjbxAI6w1uHA4Z8FMd2iyycsrmk6Llyegwm/t8KfaTlu5bJaN7BMtYH2gLzxJprpbRIhHvLy9soxdMZA/pQ79nfeEUCwUtJ5P6Mqr5TfFqRr5xZZbn9zhSe10Z2lrJXI4sa0AzvxXixglotvyHdR427kXiVRgfrJtvUrjRadQ5rkt3aeNWTufOPGPvu6Kfep7E6qdDm1N4FVzTGabnVLS1w6SgKQwjHn4s93xd4AVlf6W9XzdtUZ9NFNqlBAvIvKGU70YwZC8n4Bl9Y8bBRso1ZxH+Fl3DZrFqChKLXD6OWhF5/3dyNpUWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wpXR4q7quq8TmpS5/Cf0tdhC/3X/2DjSAKBVYg6H2hc=;
+ b=lUNKfyW+ETfXahH6FVcKtGOPf9wtNQ9/umJo4BZDHycrinnyJPmNGwAIHLBmErM51K1Bv0OycN/19a9xATVgEku/+cr8Wc0Z9QdXE+lf6WJETbKCUeJEZImIiWAeLHCBEwIrwf+V//1JHSbSoVWX79+VAq6WP0YCdq3jYEw5uQZp0SdqQ0ePWr7uVPendeE0Rhl1VfFYNs1abgYSPIeCWfhDi9wDi1f6cV2Y73jvZh1rM7MU6UVuWc5P4jtGIEVBeorW3hZLfS5J+7D6P2TLzGWcXANh4N8+ECzks30/tPWBP995fPPPdCu9km5IvyOVA1fPKynLR/ATzFr6Lfr8Vw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wpXR4q7quq8TmpS5/Cf0tdhC/3X/2DjSAKBVYg6H2hc=;
+ b=D42Xhq6jY+wFaqFHCmG3nDyNK7ONQ8uU4zLAtTiSyU8XX4JOlkhKwYiFK0OUotxzZZkbyYsthWcuXpKwpNzoNjUT7QiltyqLlYqJ8zC0YJb0/DfP4asbrgpBrCW2+K6MdL68dlIud54b8xrjJ7D6iQK0QQLGvZmR2GHL48JD5ZA=
+Received: from BYAPR12MB3527.namprd12.prod.outlook.com (2603:10b6:a03:13c::12)
+ by IA0PR12MB8975.namprd12.prod.outlook.com (2603:10b6:208:48f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Wed, 29 Mar
+ 2023 07:23:30 +0000
+Received: from BYAPR12MB3527.namprd12.prod.outlook.com
+ ([fe80::1cfe:18af:21d3:923a]) by BYAPR12MB3527.namprd12.prod.outlook.com
+ ([fe80::1cfe:18af:21d3:923a%7]) with mapi id 15.20.6178.038; Wed, 29 Mar 2023
+ 07:23:29 +0000
+From:   "Yang, WenYou" <WenYou.Yang@amd.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "Quan, Evan" <Evan.Quan@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "bp@suse.de" <bp@suse.de>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "Phillips, Kim" <kim.phillips@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Liang, Richard qi" <Richardqi.Liang@amd.com>,
+        "Li, Ying" <YING.LI@amd.com>, "Liu, Kun" <Kun.Liu2@amd.com>,
+        "gpiccoli@igalia.com" <gpiccoli@igalia.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3 1/2] cpu/smt: add a notifier to notify the SMT changes
+Thread-Topic: [PATCH v3 1/2] cpu/smt: add a notifier to notify the SMT changes
+Thread-Index: AQHZYeESu1Z/BgjKTUGFWIVG6kMXya8RV0EAgAAB2QA=
+Date:   Wed, 29 Mar 2023 07:23:29 +0000
+Message-ID: <BYAPR12MB352749E2864A87C3C32B7D0FFD899@BYAPR12MB3527.namprd12.prod.outlook.com>
+References: <20230329015149.870132-1-WenYou.Yang@amd.com>
+ <20230329015149.870132-2-WenYou.Yang@amd.com>
+ <20230329071014.GC7701@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230329071014.GC7701@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230328100037.vy23wsnl437ujdoh@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-03-29T07:23:25Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=7a527b93-5dc7-46bd-93f4-3ec83c984a16;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR12MB3527:EE_|IA0PR12MB8975:EE_
+x-ms-office365-filtering-correlation-id: 372c7e14-0a60-4cb7-8dd9-08db30267e9f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Hx7Cz8NCZl+J2Uj32o7siu/Z7gRSgv/IuMXoxrhVOTv0TaDk4SPbAiys/IrOm/+45LmIktWJ7i9f765YcncGZNOSvCWPZnV7uAlVm/0BzDbVBdzu+yVWcnpmZ2AP0MNQUddHV+z6v9oo/zUvVyUTLbHArEe1CyUuU9uHX8FVn10EwxDyne5UEGX5zrQTxXRqlP0JSjb8hnDkhUyzj2VEPQixIPYBw3DVWa7zNmjJTBhv1B1I/AJgMgzdwNjfYaoM1sSE10GB8c22oLdt6xDW7/wMKsUNQTlLs4ZWJ150ZNzC4zIDzGRUGHqCyCVfUCF48+uTRM7DZRfeS6lwSkPIaZzmgGFZLDjISR3rO+ISA0ubb1SAhC+9PG7d80GTIpMn7K/No2zL1oJBg5lkPCqBYeHJ96MdCYncr1dBJ8wwW+iqGr6a9ak7xe3GBqGBJ+pDdgfzreYO4lzCD1x0xQNKawHS6vjtRtiaRk9MS5D4CbNy5oloiJJsGmDC1X8yRCNq+UmgifGzITkY2TJqJk+widhWg6/vVTQB40B2m0HIhwZF/eMzO3rSP2tmtcMKM97l5VR1H3+FrH5YooWql9ZaC/XvoUQoZn4Smb7IxAGTff/lSqXoOS6KB/H2sB2zcDW7
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3527.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(366004)(346002)(396003)(39860400002)(451199021)(71200400001)(478600001)(33656002)(83380400001)(186003)(53546011)(9686003)(55016003)(38100700002)(38070700005)(86362001)(122000001)(7696005)(26005)(6506007)(8676002)(76116006)(66446008)(66556008)(64756008)(6916009)(4326008)(66946007)(66476007)(8936002)(52536014)(2906002)(41300700001)(54906003)(316002)(5660300002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WKSbHHQOTz43VF9noUcUyhFyV+ApeDs1m1xL+teHsyFofzCs0Cch4ET6wVNI?=
+ =?us-ascii?Q?lyycfv0ofc0RwnwBDKIOj6nB4bV7Oqwj+K8isDL2Mh3N48hVyy1GK3ynYm8G?=
+ =?us-ascii?Q?cF8BMUwHFP8leMeiFpxsKHHJP83DxDLndbtveffgX8y2TmZ93w20hjtftHsb?=
+ =?us-ascii?Q?oTxTZ/59fWWYt/SutbLLRydFNauHfLdjbazdXC2t8s9E2/OfHWeVwWTH2X1A?=
+ =?us-ascii?Q?0As6QC11WYZ/httqsCKPhwi5vex7jTqRrxU9GWDSa0Fw20UGJ/G/MGTEBc71?=
+ =?us-ascii?Q?cXk5+iTtWEbn37ajfB14VKyhjBBBXFe8JHTI6QfrUj8y3srMkdGb6Dey4UfD?=
+ =?us-ascii?Q?FlXIlmzNYZqKqisaIETlHzedCcB2qwLX9ZwJ3oj/bOpq8kGIpXr9z3WXt7hB?=
+ =?us-ascii?Q?YQQ17SO6EdgS83pDJXOVwSkntWsHyOKGE605YeOp3gFe/VlrJHg7LLxVwTnB?=
+ =?us-ascii?Q?SQeagLzmAZcDGuSVgkpSXN4zlmFsHCL1Sm1OuhB431SVQBRB5QU1vLdiJXGK?=
+ =?us-ascii?Q?c07YseGnjtSNscuc+sKNlZErfQjQuP1nQGzssap9rhnhQ9zG1dzIkY+kzUas?=
+ =?us-ascii?Q?GtoFhxYooy/z9HHSIV5yL+DYzGcMsW5x7RLx24ZeafDvWI4nefQZ+bi+sebU?=
+ =?us-ascii?Q?DDKYJSbAcncfBwZyq4ROrA+6uj3MK2GxVXp5zlVX7hhEphSM9xqcxAsJFLDu?=
+ =?us-ascii?Q?BYUhPPG3p3eYwAaDPkcsbz0eOVzv1g4V/mLLPhruQBoZrt5pFZINxu94z8d0?=
+ =?us-ascii?Q?V9SzlrXnnFjriQ8DkY0wQ21gtYb/Jq7bKlVgyfyI+yRnBJrCAiSKa1MsjeTO?=
+ =?us-ascii?Q?j1v7UvrYcmvB835iaBQGbpQ9n9pw2BgZDcQbKez8qp1KxQFT5O6bhkoCZe2x?=
+ =?us-ascii?Q?710ay9aiCak2Bqx5YrTsrtL3NXWORr+lGkab7O8OURdx1Hn3YEawuWcidr3b?=
+ =?us-ascii?Q?ePAPHTsJhAVvqWWaSTQ2T5hpTJMt1471V0qBQcCsVoAtu6cUwfcCZiVACgZs?=
+ =?us-ascii?Q?z36jXH4mqVfhZoPRaDWGV6z+3o6X9bpmqajfFfp8840ymiTK50WIqY94HYcl?=
+ =?us-ascii?Q?ZfOOr4McNqk+A7nNYHB5zz5pvKC/tFAdPQa93Eg8b6qGTlyU/RROKtILSDwR?=
+ =?us-ascii?Q?4sMwXgo/JdyjJ6wrqYLAlFZVRfUTyB0pUKVhlu3eKISl4eNd/koewwelDYUK?=
+ =?us-ascii?Q?8XKlMIQkYmAijZrqSaKfhE4Zb1VCTnFYqhIC0ALz9frAJ0IwlF4xwVlpJjST?=
+ =?us-ascii?Q?BX8l/2xcW/2SCCC7J5c3WK3WuiMmZ17qnKrt+UxQFgk06Hn6Ykq49n80BG5A?=
+ =?us-ascii?Q?XNw5bbNB2fdO/16GRPt0V2USWy0K6/cfhf+W3ijhv9w6K3Ri06HknPevX6Iy?=
+ =?us-ascii?Q?vEg4C8YbttLrKA7ZhlT4RNDoQC9+pnobV6dTIclCWDRt5pPaiWGhXL5votp9?=
+ =?us-ascii?Q?HMBTt+PCl9gn0Iy0rtfJGO8GsPuKlhXJv2IrZ1aNqeTcKlgmfkGpeatesKls?=
+ =?us-ascii?Q?xFfos74Gf2v2/Ff5OlLpzd+DM9VSGhmwHNjvLo0PqdHoyCIpOH5ne3ACzAIy?=
+ =?us-ascii?Q?seQkzGyyeOOrCYnBzwY=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3527.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 372c7e14-0a60-4cb7-8dd9-08db30267e9f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2023 07:23:29.3708
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BQKBWgxU4ATkMtJRMLmZ+eh5Wb9DRtyVJRsug49P5wFGwS4oBPVuXu5N0WDO4uG2jNvAs+xO0LAYDtpPwcYJ4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8975
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/28 18:00, Jan Kara wrote:
-> On Mon 27-03-23 21:09:42, Baokun Li wrote:
->> On 2023/3/27 20:47, Jan Kara wrote:
->>> On Sat 25-03-23 14:34:43, Baokun Li wrote:
->>>> In our fault injection test, we create an ext4 file, migrate it to
->>>> non-extent based file, then punch a hole and finally trigger a WARN_ON
->>>> in the ext4_da_update_reserve_space():
->>>>
->>>> EXT4-fs warning (device sda): ext4_da_update_reserve_space:369:
->>>> ino 14, used 11 with only 10 reserved data blocks
->>>>
->>>> When writing back a non-extent based file, if we enable delalloc, the
->>>> number of reserved blocks will be subtracted from the number of blocks
->>>> mapped by ext4_ind_map_blocks(), and the extent status tree will be
->>>> updated. We update the extent status tree by first removing the old
->>>> extent_status and then inserting the new extent_status. If the block range
->>>> we remove happens to be in an extent, then we need to allocate another
->>>> extent_status with ext4_es_alloc_extent().
->>>>
->>>>          use old    to remove   to add new
->>>>       |----------|------------|------------|
->>>>                 old extent_status
->>>>
->>>> The problem is that the allocation of a new extent_status failed due to a
->>>> fault injection, and __es_shrink() did not get free memory, resulting in
->>>> a return of -ENOMEM. Then do_writepages() retries after receiving -ENOMEM,
->>>> we map to the same extent again, and the number of reserved blocks is again
->>>> subtracted from the number of blocks in that extent. Since the blocks in
->>>> the same extent are subtracted twice, we end up triggering WARN_ON at
->>>> ext4_da_update_reserve_space() because used > ei->i_reserved_data_blocks.
->>> Hum, but this second call to ext4_map_blocks() should find already allocated
->>> blocks in the indirect block and thus should not be subtracting
->>> ei->i_reserved_data_blocks for the second time. What am I missing?
->>>
->>> 								Honza
->>>
->> ext4_map_blocks
->>    1. Lookup extent status tree firstly
->>         goto found;
->>    2. get the block without requesting a new file system block.
->> found:
->>    3. ceate and map the block
->>
->> When we call ext4_map_blocks() for the second time, we directly find the
->> corresponding blocks in the extent status tree, and then go directly to step
->> 3,
->> because our flag is brand new and therefore does not contain EXT4_MAP_MAPPED
->> but contains EXT4_GET_BLOCKS_CREATE, thus subtracting
->> ei->i_reserved_data_blocks
->> for the second time.
-> Ah, I see. Thanks for explanation. But then the problem is deeper than just
-> a mismatch in number of reserved delalloc block. The problem really is that
-> if extent status tree update fails, we have inconsistency between what is
-> stored in the extent status tree and what is stored on disk. And that can
-> cause even data corruption issues in some cases.
-The scenario we encountered was this:
-```
-write:
-     ext4_es_insert_delayed_block
-     [0/16) 576460752303423487 (U,D)
-writepages:
-     alloc lblk 11 pblk 35328
-     [0/16) 576460752303423487 (U,D)
-     -- remove block 11 from extent
-       [0/11) 576460752303423487 (U,D,R)  +  (Newly allocated)[12/4) 
-549196775151 (U,D,R)
-       --Failure to allocate memory for a new extent will undo as:
-             [0/16) 576460752303423487 (U,D,R)
-     -- if success insert block 11 to extent status tree
-       [0/11) 576460752303423487 (U,D,R) + (Newly allocated)[11/1) 35328 
-(W) + [12/4) 549196775151 (U,D,R)
+[AMD Official Use Only - General]
 
-U: UNWRITTEN
-D: DELAYED
-W: WRITTEN
-R: REFERENCED
-```
+Hi Peter,
 
-When we fail to allocate a new extent, we don't map buffer and we don't do
-io_submit, so why is the extent tree in memory inconsistent with the one
-stored on disk? Am I missing something?
+Thank you for your review.
 
-I would appreciate it if you could explain under what cases and what kind of
-data corruption issues can be caused.
->
-> So I think we rather need to work on handling of errors in extent status
-> tree operations. In the extent status tree, we have extents which we can
-> just drop without issues and extents we must not drop - this depends on the
-> extent's status - currently ext4_es_is_delayed() extents must stay, others
-> may be dropped but I'd wrap the decision in a helper function.
->
-> I'm currently inclined towards the following:
->
-> 1) Removal must never fail. If we need to split extent, we use GFP_NOFAIL
-> if we cannot just drop the second part of the split extent in case of
-> allocation failure.
->
-> 2) Similarly if inserting extent that cannot be dropped, we use GFP_NOFAIL.
->
-> 3) We do not try to "undo" failed operations like we currently do - with
-> the above rules we never loose information that cannot be restored.
+The purpose of the patch set is to improve the performance when playing gam=
+e for some AMD APUs with SMT enabled/disabled.
 
-Totally agree!
+When change the SMT state on the fly through " echo on/off > /sys/devices/s=
+ystem/cpu/smt/control", the kernel needs to send a message to notify PMFW t=
+o adjust a variable's value, which impacts the performance.
 
-This solution looks very effective and clear, I will try to implement it.
+Best Regards,
+Wenyou
 
-Thank you very much for your suggestion!
-
->
-> And this should also fix the problem you've hit because in case of
-> allocation failure we may just end up with removed extent from the extent
-> status tree and thus we refetch info from the disk and find out blocks are
-> already allocated.
->
-> 								Honza
-Reloading extent tree from disk I don't quite understand here, how do we 
-handle
-reserved blocks? could you explain it in more detail?
-
-Logically, I think it is still necessary to update 
-i_reserved_data_blocks only after
-a successful allocation. This is also done in ext4_ext_map_blocks().
-
-Thanks again!
--- 
-With Best Regards,
-Baokun Li
-.
+> -----Original Message-----
+> From: Peter Zijlstra <peterz@infradead.org>
+> Sent: Wednesday, March 29, 2023 3:10 PM
+> To: Yang, WenYou <WenYou.Yang@amd.com>
+> Cc: Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian
+> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; Quan, Evan
+> <Evan.Quan@amd.com>; Limonciello, Mario <Mario.Limonciello@amd.com>;
+> bp@suse.de; jpoimboe@kernel.org; Phillips, Kim <kim.phillips@amd.com>;
+> tglx@linutronix.de; Yuan, Perry <Perry.Yuan@amd.com>; Liang, Richard qi
+> <Richardqi.Liang@amd.com>; Li, Ying <YING.LI@amd.com>; Liu, Kun
+> <Kun.Liu2@amd.com>; gpiccoli@igalia.com; amd-gfx@lists.freedesktop.org;
+> linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v3 1/2] cpu/smt: add a notifier to notify the SMT cha=
+nges
+>=20
+> Caution: This message originated from an External Source. Use proper caut=
+ion
+> when opening attachments, clicking links, or responding.
+>=20
+>=20
+> On Wed, Mar 29, 2023 at 09:51:48AM +0800, Wenyou Yang wrote:
+> > Add the notifier chain to notify the cpu SMT status changes
+> >
+>=20
+> Why!?!? What's the purpose of all this? IIRC this doesn't trigger if you =
+manually
+> disable all the siblings. And because you didn't tell us why you need thi=
+s I can't
+> tell you if that matters or not :/
