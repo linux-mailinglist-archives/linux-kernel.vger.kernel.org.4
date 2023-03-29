@@ -2,73 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973256CDA3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B736CDA41
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjC2NQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 09:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
+        id S230150AbjC2NQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 09:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjC2NQU (ORCPT
+        with ESMTP id S230132AbjC2NQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:16:20 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690D4423A;
+        Wed, 29 Mar 2023 09:16:21 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12CB26BA;
         Wed, 29 Mar 2023 06:16:17 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32TDG7CO002426;
-        Wed, 29 Mar 2023 08:16:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680095767;
-        bh=Kb+bU9aumKLwGlaVak3k1ORwadD53cqmSrx7lYUvUiA=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=xr1eKtEEK0RNCUip+ccE1hWfqlwzujSfi+6TU1xrNX7H6/uFtlGFJDPz/y2+riI5B
-         aASVj8A97ertKSCqZJPYkiLjcKZmBMQ8z7AxNwE663b1r/XJiTuyftkfPG2xt9MxAT
-         hfFtdouTWjXf+AyY3HZWclwNfsk/QF8/AlMXStNw=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32TDG6xD007358
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 29 Mar 2023 08:16:06 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 29
- Mar 2023 08:16:06 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 29 Mar 2023 08:16:06 -0500
-Received: from [172.24.218.54] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32TDG0ih031074;
-        Wed, 29 Mar 2023 08:16:01 -0500
-Message-ID: <5382c15d-84dc-2255-8fc5-9192917fd4a5@ti.com>
-Date:   Wed, 29 Mar 2023 18:45:59 +0530
+Received: by mail-ed1-x530.google.com with SMTP id t10so62976096edd.12;
+        Wed, 29 Mar 2023 06:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680095776;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DwJSuS4piQ0HvL3T/KfLrqCp6d69uaw8sTU8PI6GsgM=;
+        b=oY29iafcZxccEXftwGIHucchBe9ICOpxvmRfOfNuKMYrSKsDEmRZ5mEuMY0RE0ExzF
+         8khFSxbQ0T8ZoVvWE8F6cT5X6Agy/k0x6rLp/pP0cSQ6mAA0AW50wf1NEilY7UjjS5jA
+         MUexSxVKHzJp2ea2UwWJSVcxoHw7CaqzRL4FDtNMT9LS2FuwvgqSvAOAFlQZbEKC1DQt
+         vcGxA9w45RVS6dlRKkxvlrM7TSnjilAi26ImckecdXCCNInnGauI7bdb2ncmv6u+OYiJ
+         Ycyh0+xpJlG00utpiNW7Tue+q/aakjlT+ALdUJIdFQps1pZlMcq6jJdHeeNKl8aKuZOB
+         pRpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680095776;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DwJSuS4piQ0HvL3T/KfLrqCp6d69uaw8sTU8PI6GsgM=;
+        b=IWf5+MSEY4cTp8ef7va00SnumEfTwtaA2vr1EHFKACdEdCeaRHjbJbQLMrRr0raeg+
+         S4HL2mQhCs19sNZLpGZVmsrvFuSdKK5miJKk++DkOkOB1jiFP+2fV4clSt7zyaWzpgyq
+         T8645gP6uUldptVuVfoH07O+9jYFLFKLTmMp7hdIZJbM/JyBXvM8d5bprjm9fChqIFW4
+         wefw/bV1uX5jXDHr41h0/g09p3oOfB28r0hBSrMN8eDPWZYSPcJuttFs/8VOUKrRgwh+
+         9BZz37Osdbu0CTWBOAvhzwvSFAmIksBqis/duyC8Xbx8ufIbrBmrW40dVOR7oxNzrvWN
+         GOUg==
+X-Gm-Message-State: AAQBX9cL50XNkjBhtrHsOyg8K8kokfFRGFPykc4Rh3jQqpxpRrR26S3+
+        QwEN1iADtDh6mWMhsG8lKOg=
+X-Google-Smtp-Source: AKy350YBH5qAE1fkenQg1U0S5e4LDdNYrwGApTKD39ArcdtBQoAhuP36DflVgKsH9UcWDuS3pH+iqw==
+X-Received: by 2002:a17:906:6449:b0:8eb:d3a5:b9f0 with SMTP id l9-20020a170906644900b008ebd3a5b9f0mr19623080ejn.67.1680095776017;
+        Wed, 29 Mar 2023 06:16:16 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id c19-20020a170906155300b0093ebc654f78sm6376241ejd.25.2023.03.29.06.16.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 06:16:15 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 16:16:13 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND net-next v4 3/3] net: dsa: rzn1-a5psw: add vlan
+ support
+Message-ID: <20230329131613.zg4whzzoa4yna7lh@skbuf>
+References: <20230324220042.rquucjt7dctn7xno@skbuf>
+ <20230314163651.242259-1-clement.leger@bootlin.com>
+ <20230314163651.242259-1-clement.leger@bootlin.com>
+ <20230314163651.242259-4-clement.leger@bootlin.com>
+ <20230314163651.242259-4-clement.leger@bootlin.com>
+ <20230314233454.3zcpzhobif475hl2@skbuf>
+ <20230315155430.5873cdb6@fixe.home>
+ <20230324220042.rquucjt7dctn7xno@skbuf>
+ <20230328104429.5d2e475a@fixe.home>
+ <20230328104429.5d2e475a@fixe.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 3/3] remoteproc: k3-r5: Use separate compatible string
- for TI AM62x SoC family
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <andersson@kernel.org>, <devicetree@vger.kernel.org>,
-        <p.zabel@pengutronix.de>, <linux-remoteproc@vger.kernel.org>,
-        <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <s-anna@ti.com>,
-        <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
-        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>
-References: <20230310162544.3468365-1-devarsht@ti.com>
- <20230310162544.3468365-4-devarsht@ti.com> <20230317161757.GA2471094@p14s>
- <f08e550b-2f15-0f84-c0ca-05e0b803481a@kernel.org>
- <1a24f99a-99c1-bf00-e5e7-1085cfd8faf5@ti.com>
- <9acd96ab-7987-5cdc-e65b-9f055948eb4f@kernel.org>
-From:   Devarsh Thakkar <devarsht@ti.com>
-In-Reply-To: <9acd96ab-7987-5cdc-e65b-9f055948eb4f@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+In-Reply-To: <20230328104429.5d2e475a@fixe.home>
+ <20230328104429.5d2e475a@fixe.home>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,267 +97,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
-
-On 29/03/23 13:51, Roger Quadros wrote:
+On Tue, Mar 28, 2023 at 10:44:29AM +0200, Clément Léger wrote:
+> > And, I guess, if BIT(port) is unset in VLAN_IN_MODE_ENA, then untagged
+> > packets will not see any hit in the VLAN resolution table.
+> > But, if VLAN_IN_MODE_ENA contains BIT(port) and VLAN_IN_MODE is set to,
+> > say, TAG_ALWAYS for BIT(port), then all frames (including untagged
+> > frames) will get encapsulated in the VLAN from SYSTEM_TAGINFO[port].
+> > In that case, the packets will always hit the VLAN resolution table
+> > (assuming that the VID from $SYSTEM_TAGINFO[port] was installed there),
 > 
+> Yes, indeed and when adding a PVID, the documentation states that the
+> port must also be a member of the VLAN ID when vlan verification is
+> enabled:
 > 
-> On 28/03/2023 19:08, Devarsh Thakkar wrote:
->> Hi Roger,
->>
->> On 28/03/23 13:22, Roger Quadros wrote:
->>> Hi Devarsh,
->>>
->>> On 17/03/2023 18:17, Mathieu Poirier wrote:
->>>> On Fri, Mar 10, 2023 at 09:55:44PM +0530, Devarsh Thakkar wrote:
->>>>> AM62 and AM62A SoCs use single core R5F which is a new scenario
->>>>> different than the one being used with CLUSTER_MODE_SINGLECPU which is
->>>>> for utilizing a single core from a set of cores available in R5F cluster
->>>>> present in the SoC.
->>>>>
->>>>> To support this single core scenario map it with newly defined
->>>>> CLUSTER_MODE_SINGLECORE and use it when compatible is set to
->>>>> ti,am62-r5fss.
->>>>>
->>>>> Also set PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE config for
->>>>> CLUSTER_MODE_SINGLECORE too as it is required by R5 core when it is
->>>>> being as general purpose core instead of device manager.
->>>>>
->>>>> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
->>>>> ---
->>>>> V2:
->>>>> - Fix indentation and ordering issues as per review comments
->>>>> V3:
->>>>> - Change CLUSTER_MODE_NONE value to -1
->>>>> V4:
->>>>> - No change
->>>>> V5:
->>>>> - No change (fixing typo in email address)
->>>>> V6:
->>>>>      - Use CLUSTER_MODE_SINGLECORE for AM62x
->>>>>      - Set PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE for single core.
->>>>> V7:
->>>>>      - Simplify and rebase on top of base commit "[PATCH v7] remoteproc: k3-r5: Simplify cluster
->>>>>        mode setting"
->>>>> ---
->>>>>    drivers/remoteproc/ti_k3_r5_remoteproc.c | 59 +++++++++++++++++++-----
->>>>>    1 file changed, 48 insertions(+), 11 deletions(-)
->>>>>
->>>>> diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
->>>>> index c2ec0f432921..df32f6bc4325 100644
->>>>> --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
->>>>> +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
->>>>> @@ -71,14 +71,16 @@ struct k3_r5_mem {
->>>>>    /*
->>>>>     * All cluster mode values are not applicable on all SoCs. The following
->>>>>     * are the modes supported on various SoCs:
->>>>> - *   Split mode      : AM65x, J721E, J7200 and AM64x SoCs
->>>>> - *   LockStep mode   : AM65x, J721E and J7200 SoCs
->>>>> - *   Single-CPU mode : AM64x SoCs only
->>>>> + *   Split mode       : AM65x, J721E, J7200 and AM64x SoCs
->>>>> + *   LockStep mode    : AM65x, J721E and J7200 SoCs
->>>>> + *   Single-CPU mode  : AM64x SoCs only
->>>>> + *   Single-Core mode : AM62x, AM62A SoCs
->>>>>     */
->>>>>    enum cluster_mode {
->>>>>        CLUSTER_MODE_SPLIT = 0,
->>>>>        CLUSTER_MODE_LOCKSTEP,
->>>>>        CLUSTER_MODE_SINGLECPU,
->>>>> +    CLUSTER_MODE_SINGLECORE
->>>
->>> What is the difference in device driver behaviour between
->>> SINGLECPU and SINGLECORE?
->>>
->> Yeah there is quite a bit of common code flow between the two but the fundamental difference is that you use CLUSTER_MODE_SINGLECPU when
+> In addition, if VLAN verification is enabled for a port (see Section
+> 4.4.5, VLAN_VERIFY — Verify VLAN Domain), the VLAN id used for
+> insertion (SYSTEM_TAGINFO[n]) must also be configured in the global
+> VLAN resolution table (see Section 4.4.51, VLAN_RES_TABLE[n] — 32 VLAN
+> Domain Entries (n = 0..31)), to ensure the switch accepts frames, which
+> contain the inserted tag.
+
+Ok. Is VLAN verification also bypassed by the MGMTFWD mechanism of
+PATTERN_CTRL, or only the FDB table lookup? Asking for my general
+knowledge; I don't think the answer will be useful to the current state
+of the driver.
+
+> > There is simply no way this can work if the MAC Address Lookup table is
+> > VLAN-unaware. What should have happened is that swp0 should have not
+> > been able to find the FDB entry towards swp3, because swp0 is standalone,
+> > and swp3 is under a bridge.
 > 
-> I still didn't get what is the difference between the two from SW point of view.
-> What happens if you just use CLUSTER_MODE_SINGLECPU for AM62 SoC?
-Talking about mere functionality, I think there are some checks in 
-driver which expect two cores for this (since CLUSTER_MODE_SINGLECPU is 
-to select one out of two cores as mentioned earlier) but if those checks 
-are handled it would be possible to use am64 compatible and achieve the 
-functionality in am62 and I do remember running it with some hacks to 
-bypass those checks during pre-silicon.
+> Ok got it !
 
-But this doesn't seem to be proper way since bindings say 
-CLUSTER_MODE_SINGLECPU is for dual core scenarios as mentioned in 
-DT-binding [1] :
+So after learning about the MGMTFWD action of the pattern matching
+engine: the case described above should work. Maybe all hope is not
+lost.
 
-"AM64x SoCs do not support LockStep mode, but rather a new non-safety 
-mode called "Single-CPU" mode, where only Core0 is used, but with 
-ability to use Core1's TCMs as well."
+Although, small note, MGMTFWD is incompatible with RX filtering (IFF_UNICAST_FLT).
+Since you tell the switch to send all traffic received on standalone
+ports to the CPU and bypass the MAC table, then you can no longer tell
+it which addresses you are interested in seeing, and you cannot use the
+MAC table as an accelerator to selectively drop them.
 
-and to use it for single core scenarios would conflict above definition.
+Interesting hardware design, and interesting how the past few years of
+changes made to the DSA framework don't seem to help it...
 
-I had also discussed this in past offline with Suman who is the author 
-of this driver and we aligned on not using CLUSTER_MODE_SINGLECPU for 
-am62 due to above reasons.
-
-[1]: 
-https://gitlab.com/linux-kernel/linux-next/-/blob/next-20230328/Documentation/devicetree/bindings/remoteproc/ti%2Ck3-r5f-rproc.yaml#L20
-
-Regards
-Devarsh
-
-
+> > Okay. Disabling address learning on standalone ports should help with
+> > some use cases, like when all ports are standalone and there is no
+> > bridging offload.
 > 
->> you have two R5F cores but you want to use only single R5F core albeit
->> with using TCM of both the cores whereas CLUSTER_MODE_SINGLECORE is
->> for the scenario where you have single core R5F's only.
->>
->> Also the bindings for CLUSTER_MODE_SINGLECPU are already upstream so did
->> not want to break them either : https://gitlab.com/linux-kernel/linux-next/-/blob/next-20230328/Documentation/devicetree/bindings/remoteproc/ti%2Ck3-r5f-rproc.yaml#L20.
->>
->> Regards
->> Devarsh
->>
->>> If there is no difference then you should not introduce
->>> a new enum. >
->>>>>    };
->>>>>      /**
->>>>> @@ -86,11 +88,13 @@ enum cluster_mode {
->>>>>     * @tcm_is_double: flag to denote the larger unified TCMs in certain modes
->>>>>     * @tcm_ecc_autoinit: flag to denote the auto-initialization of TCMs for ECC
->>>>>     * @single_cpu_mode: flag to denote if SoC/IP supports Single-CPU mode
->>>>> + * @is_single_core: flag to denote if SoC/IP has only single core R5
->>>>>     */
->>>>>    struct k3_r5_soc_data {
->>>>>        bool tcm_is_double;
->>>>>        bool tcm_ecc_autoinit;
->>>>>        bool single_cpu_mode;
->>>>> +    bool is_single_core;
->>>>>    };
->>>>>      /**
->>>>> @@ -838,7 +842,8 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
->>>>>          core0 = list_first_entry(&cluster->cores, struct k3_r5_core, elem);
->>>>>        if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
->>>>> -        cluster->mode == CLUSTER_MODE_SINGLECPU) {
->>>>> +        cluster->mode == CLUSTER_MODE_SINGLECPU ||
->>>>> +        cluster->mode == CLUSTER_MODE_SINGLECORE) {
->>>>>            core = core0;
->>>>>        } else {
->>>>>            core = kproc->core;
->>>>> @@ -877,7 +882,8 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
->>>>>             * with the bit configured, so program it only on
->>>>>             * permitted cores
->>>>>             */
->>>>> -        if (cluster->mode == CLUSTER_MODE_SINGLECPU) {
->>>>> +        if (cluster->mode == CLUSTER_MODE_SINGLECPU ||
->>>>> +            cluster->mode == CLUSTER_MODE_SINGLECORE) {
->>>>>                set_cfg = PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE;
->>>>>            } else {
->>>>>                /*
->>>>> @@ -1069,6 +1075,7 @@ static void k3_r5_adjust_tcm_sizes(struct k3_r5_rproc *kproc)
->>>>>          if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
->>>>>            cluster->mode == CLUSTER_MODE_SINGLECPU ||
->>>>> +        cluster->mode == CLUSTER_MODE_SINGLECORE ||
->>>>>            !cluster->soc_data->tcm_is_double)
->>>>>            return;
->>>>>    @@ -1145,6 +1152,8 @@ static int k3_r5_rproc_configure_mode(struct k3_r5_rproc *kproc)
->>>>>        if (cluster->soc_data->single_cpu_mode) {
->>>>>            mode = cfg & PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE ?
->>>>>                    CLUSTER_MODE_SINGLECPU : CLUSTER_MODE_SPLIT;
->>>>> +    } else if (cluster->soc_data->is_single_core) {
->>>>> +        mode = CLUSTER_MODE_SINGLECORE;
->>>>
->>>> I have commented twice on this before - whether it is soc_data->single_cpu_mode or
->>>> soc_data->is_single_core, I don't want to see them used elsewhere than in a
->>>> single function.  Either in probe() or another function, use them once to set
->>>> cluster->mode and never again.
->>>>
->>>> I will silently drop any other patchset that doesn't address this.
->>>>
->>>>>        } else {
->>>>>            mode = cfg & PROC_BOOT_CFG_FLAG_R5_LOCKSTEP ?
->>>>>                    CLUSTER_MODE_LOCKSTEP : CLUSTER_MODE_SPLIT;
->>>>> @@ -1264,9 +1273,12 @@ static int k3_r5_cluster_rproc_init(struct platform_device *pdev)
->>>>>                goto err_add;
->>>>>            }
->>>>>    -        /* create only one rproc in lockstep mode or single-cpu mode */
->>>>> +        /* create only one rproc in lockstep, single-cpu or
->>>>> +         * single core mode
->>>>> +         */
->>>>>            if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
->>>>> -            cluster->mode == CLUSTER_MODE_SINGLECPU)
->>>>> +            cluster->mode == CLUSTER_MODE_SINGLECPU ||
->>>>> +            cluster->mode == CLUSTER_MODE_SINGLECORE)
->>>>>                break;
->>>>>        }
->>>>>    @@ -1709,19 +1721,33 @@ static int k3_r5_probe(struct platform_device *pdev)
->>>>>            /*
->>>>>             * default to most common efuse configurations - Split-mode on AM64x
->>>>>             * and LockStep-mode on all others
->>>>> +         * default to most common efuse configurations -
->>>>> +         * Split-mode on AM64x
->>>>> +         * Single core on AM62x
->>>>> +         * LockStep-mode on all others
->>>>>             */
->>>>> -        cluster->mode = data->single_cpu_mode ?
->>>>> +        if (!data->is_single_core)
->>>>> +            cluster->mode = data->single_cpu_mode ?
->>>>>                        CLUSTER_MODE_SPLIT : CLUSTER_MODE_LOCKSTEP;
->>>>> +        else
->>>>> +            cluster->mode = CLUSTER_MODE_SINGLECORE;
->>>>>        }
->>>>>    -    if (cluster->mode == CLUSTER_MODE_SINGLECPU && !data->single_cpu_mode) {
->>>>> +    if  ((cluster->mode == CLUSTER_MODE_SINGLECPU && !data->single_cpu_mode) ||
->>>>> +         (cluster->mode == CLUSTER_MODE_SINGLECORE && !data->is_single_core)) {
->>>>>            dev_err(dev, "Cluster mode = %d is not supported on this SoC\n", cluster->mode);
->>>>>            return -EINVAL;
->>>>>        }
->>>>>          num_cores = of_get_available_child_count(np);
->>>>> -    if (num_cores != 2) {
->>>>> -        dev_err(dev, "MCU cluster requires both R5F cores to be enabled, num_cores = %d\n",
->>>>> +    if (num_cores != 2 && !data->is_single_core) {
->>>>> +        dev_err(dev, "MCU cluster requires both R5F cores to be enabled but num_cores is set to = %d\n",
->>>>> +            num_cores);
->>>>> +        return -ENODEV;
->>>>> +    }
->>>>> +
->>>>> +    if (num_cores != 1 && data->is_single_core) {
->>>>> +        dev_err(dev, "SoC supports only single core R5 but num_cores is set to %d\n",
->>>>>                num_cores);
->>>>>            return -ENODEV;
->>>>>        }
->>>>> @@ -1763,18 +1789,28 @@ static const struct k3_r5_soc_data am65_j721e_soc_data = {
->>>>>        .tcm_is_double = false,
->>>>>        .tcm_ecc_autoinit = false,
->>>>>        .single_cpu_mode = false,
->>>>> +    .is_single_core = false,
->>>>>    };
->>>>>      static const struct k3_r5_soc_data j7200_j721s2_soc_data = {
->>>>>        .tcm_is_double = true,
->>>>>        .tcm_ecc_autoinit = true,
->>>>>        .single_cpu_mode = false,
->>>>> +    .is_single_core = false,
->>>>>    };
->>>>>      static const struct k3_r5_soc_data am64_soc_data = {
->>>>>        .tcm_is_double = true,
->>>>>        .tcm_ecc_autoinit = true,
->>>>>        .single_cpu_mode = true,
->>>>> +    .is_single_core = false,
->>>>> +};
->>>>> +
->>>>> +static const struct k3_r5_soc_data am62_soc_data = {
->>>>> +    .tcm_is_double = false,
->>>>> +    .tcm_ecc_autoinit = true,
->>>>> +    .single_cpu_mode = false,
->>>>> +    .is_single_core = true,
->>>>>    };
->>>>>      static const struct of_device_id k3_r5_of_match[] = {
->>>>> @@ -1782,6 +1818,7 @@ static const struct of_device_id k3_r5_of_match[] = {
->>>>>        { .compatible = "ti,j721e-r5fss", .data = &am65_j721e_soc_data, },
->>>>>        { .compatible = "ti,j7200-r5fss", .data = &j7200_j721s2_soc_data, },
->>>>>        { .compatible = "ti,am64-r5fss",  .data = &am64_soc_data, },
->>>>> +    { .compatible = "ti,am62-r5fss",  .data = &am62_soc_data, },
->>>>>        { .compatible = "ti,j721s2-r5fss",  .data = &j7200_j721s2_soc_data, },
->>>>>        { /* sentinel */ },
->>>>>    };
->>>>> -- 
->>>>> 2.34.1
->>>>>
->>>
+> Based on my previous comment, if I remove standalone ports from the
+> flooding mask, disable learning on them and if the port is fast aged
+> when leaving a bridge, it seems correct to assume this port will never
+> receive nor forward packets from other port and also thanks to the
+> matching rule we set for standalone ports, it will only send packets to
+> CPU port. Based on that I think I can say that the port will be truly
+> standalone. This also allows to keep the full 32 VLANs available for
+> stadnard operations.
+
+Seems correct.
+
+> > > Does this means I don't have to be extra careful when programming it ?  
+> > 
+> > Actually, no :) you still do.
+> > 
+> > What I don't think will work in your current setup of the hardware is this:
+> > 
+> >  br0  (standalone)
+> >   |      |
+> >  swp0   swp1
+> > 
+> > ip link add br0 type bridge vlan_filtering 1 && ip link set br0 up
+> > ip link set swp0 master br0 && ip link set swp0 up
+> > bridge vlan add dev swp0 vid 100
+> > bridge fdb add 00:01:02:03:04:05 dev swp0 master static
+> > 
+> > and then connect a station to swp1 and send a packet with
+> > { MAC DA 00:01:02:03:04:05, VID 100 }. It should only reach the CPU port
+> > of the switch, but it also leaks to swp0, am I right?
 > 
-> --
-> cheers,
-> -roger
+> Actually, it won't leak to swp0 since, since we enable a specific
+> matching rule (MGMTFWD) for the standalone ports which ensure all the
+> lookup is bypassed and that the trafic coming from these ports is only
+> forwarded to the CPU port (see my comment at the end of this mail).
+
+I agree, this makes sense.
+
+> > I think the UCAST_DEFAULT_MASK/MCAST_DEFAULT_MASK/BCAST_DEFAULT_MASK
+> > flooding destination masks are useless, because they are not keyed per
+> > source port, but global.
+> > 
+> > - each port under a bridge which is currently VLAN-unaware should use
+> >   the same technique as for standalone ports, which is to set
+> >   SYSTEM_TAGINFO[port] to a reserved value, common for all ports under
+> >   the same bridge. That value can even be the standalone PVID of the
+> >   first port that joined the VLAN-unaware bridge. This way, you would
+> >   need to reserve no more than 4 VLANs, and you would keep reusing them
+> >   also for VLAN-unaware bridging.
+> 
+> However I did not thought about this part :) Indeed makes sense and
+> allows to use only 4 VLAN at most out of the 32s. By the way, this
+> bridge supports only a single bridge due to some registers being common
+> to all ports and not per bridge (flooding for instance...).
+
+I searched to see whether it is possible to control the flooding per
+VLAN, in the off-chance that we decided to support multiple VLAN-unaware
+bridges by allocating one VLAN per bridge. It looks like VLAN_RES_TABLE[n]
+doesn't support this. Frames classified to a VLAN which don't hit any
+entry in the MAC table are flooded to all ports in that VLAN. Strange!
+
+I think this might be the actual insurmountable reason why the driver
+will never get support for multiple bridges. It would be good to even
+add a comment about this in the next patch set, so that any Renesas
+hardware design engineers who might be reading will take note.
+
+> After thinking about the current mechasnim, let me summarize why I
+> think it almost matches what you described in this last paragraph:
+> 
+> - Port is set to match a specific matching rule which will enforce port
+>   to CPU forwarding only based on the MGMTFWD bit of PATTERN_CTRL which
+>   states the following: "When set, the frame is forwarded to the
+>   management port only (suppressing destination address lookup)"
+> 
+> This means that for the "port to CPU" path when in standalone mode, we
+> are fine. Regarding the other "CPU to port" path only:
+> 
+> - Learning will be disabled when leaving the bridge. This will allow
+>   not to have any new forwarding entries in the MAC lookup table.
+> 
+> - Port is fast aged which means it won't be targeted for packet
+>   forwarding.
+> 
+> - We remove the port from the flooding mask which means it won't be
+>   flooded after being removed from the port.
+> 
+> Based on that, the port should not be the target of any forward packet
+> from the other ports. Note that anyway, even if using per-port VLAN for
+> standalone mode, we would also end up needing to disable learning,
+> fast-age the port and disable flooding (at least from my understanding
+> if we want the port to be truly isolated).
+> 
+> Tell me if it makes sense.
+
+This makes sense.
+
+However, I still spotted a bug and I don't know where to mention it
+better, so I'll mention it here:
+
+a5psw_port_vlan_add()
+
+	if (pvid) {
+		a5psw_reg_rmw(a5psw, A5PSW_VLAN_IN_MODE_ENA, BIT(port),
+			      BIT(port));
+		a5psw_reg_writel(a5psw, A5PSW_SYSTEM_TAGINFO(port), vid);
+	}
+
+You don't want a5psw_port_vlan_add() to change VLAN_IN_MODE_ENA, because
+port_vlan_add() will be called even for VLAN-unaware bridges, and you
+want all traffic to be forwarded as if untagged, and not according to
+the PVID. In other words, in a setup like this:
+
+ip link add br0 type bridge vlan_filtering 0 && ip link set br0 up
+ip link set swp0 master br0 && ip link set swp0 up
+ip link set swp1 master br0 && ip link set swp1 up
+bridge vlan del dev swp1 vid 1
+
+forwarding should still take place with no issues, because the entire
+VLAN table is bypassed by the software bridge when vlan_filtering=0, and
+the hardware accelerator should replicate that behavior.
+
+I suspect that the PVID handling in a5psw_port_vlan_del() is also
+incorrect:
+
+	/* Disable PVID if the vid is matching the port one */
+	if (vid == a5psw_reg_readl(a5psw, A5PSW_SYSTEM_TAGINFO(port)))
+		a5psw_reg_rmw(a5psw, A5PSW_VLAN_IN_MODE_ENA, BIT(port), 0);
+
+VLAN-aware bridge ports without a PVID should drop untagged and VID-0-tagged
+packets. However, as per your own comments:
+
+| > What does it mean to disable PVID?
+| 
+| It means it disable the input tagging of packets with this PVID.
+| Incoming packets will not be modified and passed as-is.
+
+so this is not what happens.
