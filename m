@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7B46CEDD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2246CEDB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbjC2Pxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 11:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        id S231232AbjC2PxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjC2PxO (ORCPT
+        with ESMTP id S230498AbjC2Pw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:53:14 -0400
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78ABA10F0;
-        Wed, 29 Mar 2023 08:53:08 -0700 (PDT)
-Received: by mail-oo1-f48.google.com with SMTP id p2-20020a056820044200b0053e5914a50fso1233252oou.2;
-        Wed, 29 Mar 2023 08:53:08 -0700 (PDT)
+        Wed, 29 Mar 2023 11:52:56 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB00526F;
+        Wed, 29 Mar 2023 08:52:50 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id bm2so11933321oib.4;
+        Wed, 29 Mar 2023 08:52:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680105188;
+        d=1e100.net; s=20210112; t=1680105169;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/qOq2NGpUAbxXp1g8F5WR4fkX2S7bH0m0xxnMP60FJ8=;
-        b=XkouJt2RhMRBqqeek+OXcgxC+1hWWNASgQzUkUrKoEW7RtA/WdqoU9GOtiIPVKFXzo
-         sBR6a4W4Zg6cbvEQ+qWh7bZegVwFBM6n9Owe45S6Q6P6hWPvp3obfuLoT67jYsQBFKeV
-         878ZISfyJATV4JVdqnktH5ike1z0F6kW2n/V8xVVZojnqFQg7fybDDiFr5EvI+c2iPLI
-         ET/ngT7/4A+GtqxM0OJI2IRCf829K+Ce4ULfrXfIcagQgEyJYtgE/yn1/RHhzxBlPb1q
-         JFnUbKrm/5/2aEZG1nJEuTi/QovIOEErBbtPcvx7nDQGRA3mSdh5UvqbUn0lszjGWp7i
-         Qrmw==
-X-Gm-Message-State: AO0yUKXFNw29Se3D8m+XmEmCBSVbCPVMp5j7I7F5Xr3/H7FMbu9q1Oxf
-        IyQfINoGWPSRPoPP/+l7rA==
-X-Google-Smtp-Source: AK7set+oji6+6UZVdlF32jW97Cd5wKPzdK3BfB/MTFUCEZ/Z55TdZpfcLorcJt7g+5txg06Aa2xkVA==
-X-Received: by 2002:a4a:3797:0:b0:538:1e63:1725 with SMTP id r145-20020a4a3797000000b005381e631725mr10070334oor.4.1680105187664;
-        Wed, 29 Mar 2023 08:53:07 -0700 (PDT)
+        bh=UL9zh/S00J+cmPfrAtv4vflOTxQVISfijtGfdl2R3L0=;
+        b=2GqYyDasVdp/d4qbKmAOFqsFPZSzX5fckvQYEsoNS98Mgb3oc8V2Z0uwhphSSzdisi
+         CG7L20Wh2/vqvvRSk6KqHfh6cMXBr+CKhQvW1NEEFtuadvCdtGTWF3wBoFADNzdnw4fV
+         5sjZDwAmrJOwj3MjGIJ5WH1ACBZ0HP7XisLzfh+aHyjee1j01PWn/+CbU1ezatMt9qZM
+         NLZtDhbiXoix9K5VTMiIkuCw8HX9V42RQ6Jos1D5MCDYoNOyS2fNk0WMgfoTucaFgYK5
+         1q+1q7r71yJmu2k6CTKRDCESzsERW/NboaSjuoInZtF5+ftUTKyLRjc3OLqiJAXUQOkx
+         sUEQ==
+X-Gm-Message-State: AAQBX9espMAlD35h2SCtd8sHALKdMISL4xOmKdCDX4Ig+9BSogrzZV0P
+        arZ0IAK+Yvvf7olqNRx/Gw==
+X-Google-Smtp-Source: AKy350YWPg6naXojJ+dh5QDGD5h6eaepx41Bc/m1xdmR3LQVsEP9dglulW7uPvOZ4q19z4rMeJNnvA==
+X-Received: by 2002:a05:6808:4da:b0:386:9883:ca9d with SMTP id a26-20020a05680804da00b003869883ca9dmr1291968oie.2.1680105169571;
+        Wed, 29 Mar 2023 08:52:49 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s9-20020a4a9689000000b005255e556399sm13966954ooi.43.2023.03.29.08.53.05
+        by smtp.gmail.com with ESMTPSA id v184-20020acadec1000000b003871471f894sm10161090oig.27.2023.03.29.08.52.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 08:53:07 -0700 (PDT)
-Received: (nullmailer pid 3198063 invoked by uid 1000);
+        Wed, 29 Mar 2023 08:52:49 -0700 (PDT)
+Received: (nullmailer pid 3198065 invoked by uid 1000);
         Wed, 29 Mar 2023 15:52:45 -0000
 From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 29 Mar 2023 10:51:58 -0500
-Subject: [PATCH 01/19] of: Make devtree_lock declaration private
+Date:   Wed, 29 Mar 2023 10:51:59 -0500
+Subject: [PATCH 02/19] of: Move of_device_(add|register|unregister) to
+ of_platform.h
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230329-dt-cpu-header-cleanups-v1-1-581e2605fe47@kernel.org>
+Message-Id: <20230329-dt-cpu-header-cleanups-v1-2-581e2605fe47@kernel.org>
 References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
 In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
 To:     "David S. Miller" <davem@davemloft.net>,
@@ -95,79 +96,58 @@ Cc:     sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-tegra@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org
 X-Mailer: b4 0.13-dev
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sparc is the only place devtree_lock is used outside of drivers/of/.
-Move the devtree_lock declaration into of_private.h and Sparc's prom.h
-so pulling in spinlock.h to of.h can be avoided for everything besides
-Sparc.
+As of_device_(add|register|unregister) functions work on struct
+platform_device, they should be declared in of_platform.h instead.
+
+This move is transparent for now as both headers include each other.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/sparc/include/asm/prom.h | 3 +++
- drivers/of/of_private.h       | 1 +
- include/linux/of.h            | 2 --
- 3 files changed, 4 insertions(+), 2 deletions(-)
+ include/linux/of_device.h   | 4 ----
+ include/linux/of_platform.h | 5 +++++
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/sparc/include/asm/prom.h b/arch/sparc/include/asm/prom.h
-index 587edb8b5a65..8184575b1336 100644
---- a/arch/sparc/include/asm/prom.h
-+++ b/arch/sparc/include/asm/prom.h
-@@ -19,11 +19,14 @@
- #include <linux/mutex.h>
- #include <linux/atomic.h>
- #include <linux/irqdomain.h>
-+#include <linux/spinlock.h>
+diff --git a/include/linux/of_device.h b/include/linux/of_device.h
+index f4b57614979d..e4aa61cb2bd0 100644
+--- a/include/linux/of_device.h
++++ b/include/linux/of_device.h
+@@ -26,10 +26,6 @@ static inline int of_driver_match_device(struct device *dev,
+ 	return of_match_device(drv->of_match_table, dev) != NULL;
+ }
  
- #define of_compat_cmp(s1, s2, l)	strncmp((s1), (s2), (l))
- #define of_prop_cmp(s1, s2)		strcasecmp((s1), (s2))
- #define of_node_cmp(s1, s2)		strcmp((s1), (s2))
+-extern int of_device_add(struct platform_device *pdev);
+-extern int of_device_register(struct platform_device *ofdev);
+-extern void of_device_unregister(struct platform_device *ofdev);
+-
+ extern const void *of_device_get_match_data(const struct device *dev);
  
-+extern raw_spinlock_t devtree_lock;
+ extern ssize_t of_device_modalias(struct device *dev, char *str, ssize_t len);
+diff --git a/include/linux/of_platform.h b/include/linux/of_platform.h
+index d15b6cd5e1c3..8ac5cb933dc3 100644
+--- a/include/linux/of_platform.h
++++ b/include/linux/of_platform.h
+@@ -52,6 +52,11 @@ extern const struct of_device_id of_default_bus_match_table[];
+ extern struct platform_device *of_device_alloc(struct device_node *np,
+ 					 const char *bus_id,
+ 					 struct device *parent);
 +
- struct of_irq_controller {
- 	unsigned int	(*irq_build)(struct device_node *, unsigned int, void *);
- 	void		*data;
-diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
-index fb6792d381a6..b57f1014e419 100644
---- a/drivers/of/of_private.h
-+++ b/drivers/of/of_private.h
-@@ -38,6 +38,7 @@ struct alias_prop {
- #define OF_ROOT_NODE_SIZE_CELLS_DEFAULT 1
- 
- extern struct mutex of_mutex;
-+extern raw_spinlock_t devtree_lock;
- extern struct list_head aliases_lookup;
- extern struct kset *of_kset;
- 
-diff --git a/include/linux/of.h b/include/linux/of.h
-index 0af611307db2..36cf94596eba 100644
---- a/include/linux/of.h
-+++ b/include/linux/of.h
-@@ -16,7 +16,6 @@
- #include <linux/errno.h>
- #include <linux/kobject.h>
- #include <linux/mod_devicetable.h>
--#include <linux/spinlock.h>
- #include <linux/topology.h>
- #include <linux/notifier.h>
- #include <linux/property.h>
-@@ -145,7 +144,6 @@ extern struct device_node *of_root;
- extern struct device_node *of_chosen;
- extern struct device_node *of_aliases;
- extern struct device_node *of_stdout;
--extern raw_spinlock_t devtree_lock;
- 
- /*
-  * struct device_node flag descriptions
++extern int of_device_add(struct platform_device *pdev);
++extern int of_device_register(struct platform_device *ofdev);
++extern void of_device_unregister(struct platform_device *ofdev);
++
+ #ifdef CONFIG_OF
+ extern struct platform_device *of_find_device_by_node(struct device_node *np);
+ #else
 
 -- 
 2.39.2
