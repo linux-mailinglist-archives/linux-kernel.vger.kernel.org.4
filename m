@@ -2,244 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A226CD0E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 05:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B5A6CD0E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 05:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjC2DxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 23:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
+        id S229837AbjC2Dyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 23:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjC2DxF (ORCPT
+        with ESMTP id S229600AbjC2Dym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 23:53:05 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5719B1A2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:53:04 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id h15so12292212vsh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:53:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680061983;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mWG1N+zyaRXNS817+JxirvhNvLjC8z+Uk0Ll74FpTtU=;
-        b=pvHY/1n4hHCEbNAON5jo7vyuLegwBqPFqb9c/kgyowAK5i42qsCes+B3pOvh0PbHA3
-         BdmNOGgfFeqYXf1FoFv/e1GaQLS7nqhjgZvxHPmp5fL641e48tuIEuRNPx8u0HvGM7KC
-         QrPuchp7bA1lr3jWAQ/L4Eo4AaUVUaUzqRXKErUbZb5DxE1iseekeMJA68u0VZ7QwLXR
-         o7Ne8h1VtdlgpXguGB3Jc9izi9F5vjJz/BNO7vLv55l/16kpOwNbCqz6UptuOfGBgo9r
-         WA7kjgtDjmNeeKtI6qdV8cDYP9lJrPc1LGpKX71sEqlrEmKidev251sWzk3FWn35rzh5
-         J+PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680061983;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mWG1N+zyaRXNS817+JxirvhNvLjC8z+Uk0Ll74FpTtU=;
-        b=acT4EnCiDk79+/4ihw/r7/7E6JQM79NMNi3Grk+ULHPk9KfuGGtKu1m61TKIzKFAM9
-         qkn1WXt+9P4nhvVhwnc2I4TCXMpn/0ZdjbFCbbiuF/EL5kSnj4PXlDLZacThY+M5h8C3
-         CVF6+9VS9kK2UpBnoQGjrcAgYaSHZ/6zWG4zq08e2EeqOlPhNHk0CAt7tESLRxXQ685b
-         2aNcNjEO3ysCvps0KJ8UcWz15EMeGAqAJVSBpW4BfRcXeYqns/COeNnMEQ/eloRl3J5O
-         vvMwZeX2dKO7PS1QO/Ecirl6sILz+ELnPmuZLh/OgapqnkaZJgv8t47FqIeyBYsBLs5m
-         WPJQ==
-X-Gm-Message-State: AAQBX9e9O57QJP5g6AVYyUvRvpUszoUeGrmAnKqz4ZIRRwEhxj8astqB
-        AicK9UyEiO2AeCt45qFYOJcLLArMc3XW4Li4VOl+jA==
-X-Google-Smtp-Source: AKy350aU50RVFZwttkiznb4TqjRW56mfkqxoDmdI47ILe63HR7eFdwYFMitFAU0jBASctzs7c53Pae55m+izMgm35nQ=
-X-Received: by 2002:a67:c802:0:b0:416:2ad3:35ba with SMTP id
- u2-20020a67c802000000b004162ad335bamr10503427vsk.1.1680061983310; Tue, 28 Mar
- 2023 20:53:03 -0700 (PDT)
+        Tue, 28 Mar 2023 23:54:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C207B2D74;
+        Tue, 28 Mar 2023 20:54:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C3C3B81EA9;
+        Wed, 29 Mar 2023 03:54:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF15C433EF;
+        Wed, 29 Mar 2023 03:54:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680062079;
+        bh=g3DYPi7TNL9lI7pPX5PFoUhZaJYFzaWu32tV23c823o=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=PulJjnFqoGXXJ8X81nR24DWvKb98rjEUx0py2KLQBHnymD9QHQ6lAG1OheoJwgHkT
+         M+7ooWPnirh8nW6wTdZ/+/nQNNyPQXDpx1OJMCQAGfn3LhaLeANYhviCkEiba3BG44
+         +/hjR9CB4EdAd/iJvoU8BMoe4Ycq82SkQ4lcxAsX37E9lMqQx3noibMO701/8fi0/6
+         wxwNZg4xDjd4YyYwYZtwP3sw8hCC60THxCGmUAv6RbCu7j6Oq3wGrKdzkFH1asah3G
+         MAPx4rgnHiH0HFPBFw5hcBip46KLxcAxP67Ih8MBydqIkOFwbRxMo2umIxbfvB4GTC
+         N6nyzmwooqdlg==
+Message-ID: <b816411c301e2b3afe9c3df36728f946.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230328142602.660084725@linuxfoundation.org>
-In-Reply-To: <20230328142602.660084725@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 29 Mar 2023 09:22:52 +0530
-Message-ID: <CA+G9fYvzm5iZFkSVoswK_XN5SB7-k803_RgAdM2crrwMRLDWiQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/146] 5.15.105-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <dd7940fd-bf63-552c-6e2e-05eff5fdb636@gmail.com>
+References: <20230328021912.177301-1-ychuang570808@gmail.com> <20230328021912.177301-9-ychuang570808@gmail.com> <ab4e0bc8834b7e618e9a88ea6a1c30cc.sboyd@kernel.org> <b7977069-4f82-76a1-10c1-b6400862c2c4@gmail.com> <c37e1f3a40c404acd81c2c9d5b28b340.sboyd@kernel.org> <129cf4b6-b3b5-2a12-5911-37e70a624812@gmail.com> <e5221cd020bc60513df6a1c1859e1acc.sboyd@kernel.org> <ad908782-8291-4240-d88e-61dff5a05ef7@gmail.com> <1d379f28f54fd025f687bfcb71e4bae5.sboyd@kernel.org> <dd7940fd-bf63-552c-6e2e-05eff5fdb636@gmail.com>
+Subject: Re: [PATCH v6 08/12] arm64: dts: nuvoton: Add initial ma35d1 device tree
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+To:     Jacky Huang <ychuang570808@gmail.com>, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, p.zabel@pengutronix.de,
+        robh+dt@kernel.org
+Date:   Tue, 28 Mar 2023 20:54:36 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023 at 20:37, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.105 release.
-> There are 146 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.105-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Quoting Jacky Huang (2023-03-28 20:43:23)
+> On 2023/3/29 =E4=B8=8A=E5=8D=88 11:25, Stephen Boyd wrote:
+> > Quoting Jacky Huang (2023-03-28 20:13:11)
+> >> I may not explain clearly enough. The lock/unlock register of system
+> >> controller is more like
+> >> a kind of write protection for specific registers, rather than
+> >> preventing hetero-core CPU access.
+> >> In many different IP of ma35d1 contain write protected registers.
+> >> In fact, ma35d1 has a "hardware semaphore" IP, and we have implemented
+> >> the driver in drivers/hwspinlock.
+> >> Even the control register of "hardware semaphore" is also write protec=
+ted.
+> > What's the need to lock and unlock the registers? Is some other
+> > processor also writing to the registers that we need to synchronize
+> > against? Or is Linux the only entity reading and writing the registers?
+> > I'm wondering if we should simply unlock the registers and never lock
+> > them.
 
+Can you answer this question?
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> >
+> >> So, should we implement a system controller driver to provide
+> >> register_unlock() function?
+> >> Is it OK to have such a driver in drivers/mfd?
+> >> Or, just use syscon in device tree for those devices that have write
+> >> protect registers.
+> >>
+> > The hwspinlock framework doesn't require there to be another entity
+> > accessing some resource. It's there to implement hardware locks. I don't
+> > see why it can't be used here.
+>=20
+> The current usage of register lock/unlock protect is as the following cod=
+e:
+>=20
+> static void ma35d1_unlock_regs(struct ma35d1_clk_pll *pll)
+> {
+>  =C2=A0=C2=A0 =C2=A0int ret;
+>=20
+>  =C2=A0=C2=A0 =C2=A0do {
+>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 regmap_write(pll->regmap, REG_SYS_=
+RLKTZNS, 0x59);
+>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 regmap_write(pll->regmap, REG_SYS_=
+RLKTZNS, 0x16);
+>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 regmap_write(pll->regmap, REG_SYS_=
+RLKTZNS, 0x88);
+>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 regmap_read(pll->regmap, REG_SYS_R=
+LKTZNS, &ret);
+>  =C2=A0=C2=A0 =C2=A0} while (ret =3D=3D 0);
+> }
+>=20
+> static void ma35d1_lock_regs(struct ma35d1_clk_pll *pll)
+> {
+>  =C2=A0=C2=A0 =C2=A0regmap_write(pll->regmap, REG_SYS_RLKTZNS, 0x0);
+> }
+>=20
+> And the following code is to unlock registers for write and then lock aga=
+in.
+>=20
+>  =C2=A0=C2=A0=C2=A0 ma35d1_unlock_regs(pll);
+>  =C2=A0=C2=A0 =C2=A0writel_relaxed(reg_ctl[0], pll->ctl0_base);
+>  =C2=A0=C2=A0 =C2=A0writel_relaxed(reg_ctl[1], pll->ctl1_base);
+>  =C2=A0=C2=A0 =C2=A0writel_relaxed(reg_ctl[2], pll->ctl2_base);
+>  =C2=A0=C2=A0 =C2=A0ma35d1_lock_regs(pll);
+>=20
+> The above code is from the clk-ma35d1-pll.c from this patchset.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Yeah I understand that you write some registers in the syscon to lock
+the registers.
 
-## Build
-* kernel: 5.15.105-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: ea115396267e89b54136b19bb93bd16781a9d033
-* git describe: v5.15.104-147-gea115396267e
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.104-147-gea115396267e
+>=20
+> We just employ regmap mechansim for the access to REG_SYS_RLKTZNS registe=
+r.
+> Is this implementation OK for you?=C2=A0 Thank you.
+>=20
 
-## Test Regressions (compared to v5.15.104)
-
-## Metric Regressions (compared to v5.15.104)
-
-## Test Fixes (compared to v5.15.104)
-
-## Metric Fixes (compared to v5.15.104)
-
-## Test result summary
-total: 141325, pass: 115971, fail: 3742, skip: 21383, xfail: 229
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 115 total, 114 passed, 1 failed
-* arm64: 42 total, 42 passed, 0 failed
-* i386: 33 total, 31 passed, 2 failed
-* mips: 27 total, 26 passed, 1 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 27 total, 26 passed, 1 failed
-* riscv: 11 total, 11 passed, 0 failed
-* s390: 12 total, 11 passed, 1 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 36 total, 36 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+No. Why can't that be a hwspinlock? Or why can't it be unlocked all the
+time and rely on software spinlocks in the kernel to prevent concurrent
+access to the registers accessed by a driver, like a lock for the clk
+registers and a lock for the reset registers, etc. Or if no two clks or
+resets exist within one 32-bit word then no lock is necessary.
