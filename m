@@ -2,77 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C816CF704
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B9C6CF70B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjC2XZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 19:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
+        id S231200AbjC2X07 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 19:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjC2XZk (ORCPT
+        with ESMTP id S230434AbjC2X05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 19:25:40 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE9D1FFF;
-        Wed, 29 Mar 2023 16:25:36 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id k15so10283266pgt.10;
-        Wed, 29 Mar 2023 16:25:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680132336;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nK1gMxVBx5URWr0R/hSicMEBUWBlQ/5D6tw4DTkFIrM=;
-        b=X90H/nlN6lbaQSZZqPd3D7vr7hn2hfhdfaa3Ol+II9lB7idhD3brdKKOlgRAy+82NF
-         SFS3YBcC+oZB94X+BVj72wObVHoLIqR1uuVceqc+lKBUHo/eY0SAl27yupki21ub5wSa
-         mwba2ifv0Y35ArZpwzzVSlbvEuUo+ddOrnTZx3+4xH+tXHAFa6F4ZEEjQfA48+44M0K5
-         K+Vg5w/j9eCEkYwqAFwe9vv/wdoHC9Gd2tFiDL4cU2Q35XhFq/nv9M5BPfs+OYaxsP5B
-         XuS+R3dLsAhemT89bSXcehE8aCFFlIYA8I3B4wqK0vAEuvBcJG878fk1lIXusW1a9E3K
-         boxw==
+        Wed, 29 Mar 2023 19:26:57 -0400
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B0F1BCD;
+        Wed, 29 Mar 2023 16:26:52 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id m6-20020a05600c3b0600b003ee6e324b19so10680585wms.1;
+        Wed, 29 Mar 2023 16:26:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680132336;
+        d=1e100.net; s=20210112; t=1680132411; x=1682724411;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nK1gMxVBx5URWr0R/hSicMEBUWBlQ/5D6tw4DTkFIrM=;
-        b=RD/dx8d7IzsUf3JM/wITWw7aDoi1qFjrE2J4i5g66aECglDDjd0ZQjrsp/R9ZtJcAr
-         VP9ir2DotI+BzZgAMt7OB5ZZkLpnMmxScH0Hj3gvCd3MUS8/8SJ9x/fJKFEOf5y0aBsJ
-         mCgaaoFjnDwL6oHNnmbjlYuZLTlkUj6W4EVlLPWt3CTGO1AEg7m2jQDThB/t03xbMlpC
-         sH7fx04ZKAfrTQST9jMK+Wy2vfvefkjNHkJ+QkalvWotZtCj73h9pIh3lo2HwOFNincO
-         Ef3zYqNmoQEOZxfg5qUUe5W1lZ/MqiKU6Sxqw5N8BC1sfQQfN3yBs27FxTIpoQ5GlABO
-         wFOA==
-X-Gm-Message-State: AAQBX9eOREqs/R1qbNySXwQulf1rxPnGSo/REqRIxaRRfuynCoRFJyrq
-        iKXR2KNjrtn5T8z6GvjVGJc3WARm6eeb5/6uvYE=
-X-Google-Smtp-Source: AKy350aCmP8NknsbQwxR+TYbr9LXnYcWFTKr/g7+N8z+9ir6hvEhnEU5Pc7Xtv49cAnW8W+g4CBBJ7O006VZbPM6u/E=
-X-Received: by 2002:a05:6a00:a14:b0:625:66a9:c393 with SMTP id
- p20-20020a056a000a1400b0062566a9c393mr11221253pfh.0.1680132335805; Wed, 29
- Mar 2023 16:25:35 -0700 (PDT)
+        bh=XK678Ukzjb3nFvbqNIdWj4JdVI46X8Fv4m3Xr+xukQM=;
+        b=j97w50nTAsedMV5VKamHaVsNePVwKN7VwMF8YdSp06ZDOmsd1kT5UNL1hfbZ43kKmb
+         Mb0sl+EsjItYpC9GSsY26u76HU/SGa9QkAkU0umgk7UZNXp5FY9wVTVPHnIJ75H2eQjU
+         +iaVm/2C9yjhybZBIPWhVJVoYJpeMBb4vz2jNfC4IG2eOQVAMc3jK4BNGKGItTGjpc/o
+         0k+zq5ADbR00NsbgnBLImQaWp/TzxOsHyr+abQXWAgrKHdS2ziH1rk8aMjgnGwpg721N
+         IidLLY5LgY/IeBmqLH+5zMysB3jPSjWzK18bxQsaXzlpQu7ZBgX8P1nCsB6GSraNQ3Nf
+         FEZw==
+X-Gm-Message-State: AO0yUKUJF54SAU2Hr7fMYB0jmat8r/sNtd7h0o2WL/f1CQj+B7w8rLfR
+        n4SlgQyGiptyecq6c7HNEFgD8jouW7W2b0d38j8=
+X-Google-Smtp-Source: AK7set8gUEJPIOwAxcBoJMe1TIjsSIoK2LeJtrsQFxTLmv2CJ7QsCWtO344nFOyoQySbrV/SfZKVkSXb3rxoAg50Fbk=
+X-Received: by 2002:a7b:c4c6:0:b0:3ee:1afc:c15 with SMTP id
+ g6-20020a7bc4c6000000b003ee1afc0c15mr16000818wmk.33.1680132410988; Wed, 29
+ Mar 2023 16:26:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHbLzkrJQTrYBtPkf=jf3OpQ-yBcJe7XkvQstX9j2frz4WF-SQ@mail.gmail.com>
- <8ca2b07e-674e-afb6-ff12-87504f51f252@arm.com> <CAHbLzkpf4RUZugKdn-uXC5m3RpAQH5aDmRXdsxPZi0Cbf-yiyw@mail.gmail.com>
- <CAHbLzkq_7aXcys1cpgGFsfMDDDKMsT3e7zdNW=0jAkw7kBtJ0Q@mail.gmail.com>
- <20230309113851.GF19253@leoy-yangtze.lan> <CAHbLzkpvLHnyL5J5kB_ke3CWVq2=MOEdEQsGex56+Esfgqh1=g@mail.gmail.com>
- <20230313121420.GB2426758@leoy-yangtze.lan> <CAHbLzkpZjrd401DEKnnCNMdra0f6kGRe1Nh_rTovNTmyD8aBpg@mail.gmail.com>
- <20230314003610.GD2426758@leoy-yangtze.lan> <64db6d95-8aca-48cc-80e1-e68211922071@arm.com>
-In-Reply-To: <64db6d95-8aca-48cc-80e1-e68211922071@arm.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 29 Mar 2023 16:25:24 -0700
-Message-ID: <CAHbLzkoFkxpLuaW93nPrxxvtuHiRmObOnZfRY9YPXcGumzv33A@mail.gmail.com>
-Subject: Re: [BUG] perf: No samples found when using kcore + coresight
-To:     James Clark <james.clark@arm.com>
-Cc:     Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        coresight@lists.linaro.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mathieu.poirier@linaro.org, adrian.hunter@intel.com,
-        Jiri Olsa <jolsa@kernel.org>, acme@redhat.com,
-        mike.leach@linaro.org, Will Deacon <will@kernel.org>,
-        suzuki.poulose@arm.com, yang@os.amperecomputing.com
+References: <20230328060038.2346935-1-zangchunxin@lixiang.com>
+In-Reply-To: <20230328060038.2346935-1-zangchunxin@lixiang.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 29 Mar 2023 16:26:38 -0700
+Message-ID: <CAM9d7ciEhoSLcYjWa81E1eXtq8HRSvQLQZzzFWqJvMjbW1_hjQ@mail.gmail.com>
+Subject: Re: [PATCH v4] perf sched: Fix sched latency analysis incorrect
+To:     Chunxin Zang <zangchunxin@lixiang.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jerry Zhou <zhouchunhua@lixiang.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,47 +60,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 9:08=E2=80=AFAM James Clark <james.clark@arm.com> w=
-rote:
->
->
->
-> On 14/03/2023 00:36, Leo Yan wrote:
-> > On Mon, Mar 13, 2023 at 11:15:44AM -0700, Yang Shi wrote:
-> >
-> > [...]
-> >
-> >>> Just a quick summary, here we have two issues:
-> >>>
-> >>> - With command:
-> >>>   perf record -e cs_etm/@tmc_etf63/k --kcore --per-thread \
-> >>>   -- taskset --cpu-list 1 uname",
-> >>>
-> >>>   perf doesn't enable "text poke" attribution.
-> >>
-> >> No, it enables "text poke" and perf fails to decode coresight trace
-> >> data too. It doesn't matter whether "--kcore" is after or before "-e
-> >> cs/etm/@tmc_etf63/k".
-> >
-> > Understand now.  Thanks for correction, if so we can ignore this one.
-> >
-> > Leo
->
-> To me it looks like it's only --per-thread and --kcore together that
-> cause the issue. I can't see if that was mentioned previously in this
-> thread.
+Hello,
 
-If "--pre-thread" is not passed in, perf record failed with "failed to
-mmap with 12 (Cannot allocate memory)". Sorry for not mentioning this
-in the first place. I was quite focused on --kcore and didn't realize
-they may be related.
+On Mon, Mar 27, 2023 at 11:01 PM Chunxin Zang <zangchunxin@lixiang.com> wrote:
+>
+> 'perf sched latency' is incorrect to get process schedule latency
+> when it used 'sched:sched_wakeup' to analysis perf.data.
+>
+> Because 'perf record' prefer use 'sched:sched_waking' to
+> 'sched:sched_wakeup' since commit d566a9c2d482 ("perf sched: Prefer
+> sched_waking event when it exists"). It's very reasonable to
+> evaluate process schedule latency.
+>
+> Similarly, update sched latency/map/replay to use sched_waking events.
+>
+> Signed-off-by: Chunxin Zang <zangchunxin@lixiang.com>
+> Signed-off-by: Jerry Zhou <zhouchunhua@lixiang.com>
 
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+
+Thanks,
+Namhyung
+
+
+> ---
 >
-> If it is --per-thread that's causing the issue then I think I have an
-> idea why it might be. There are some assumptions and different paths
-> taken in decoding in that mode that aren't correct. It causes some other
-> issues to do with ordering and timestamps as well and I wanted to fix it
-> previously. I wouldn't say that the text-poke change has caused a
-> regression, as decoding in this mode was always a bit buggy.
+>         changelogs in v4:
+>         1) disable to process wakeup event if wakingup event is found.
 >
-> Maybe this is another reason to fix it properly.
+>         changelogs in v3:
+>         1) fix non-ASCII characters in commit log.
+>
+>         changelogs in v2:
+>         1) fix email address disappearing in 'signed off by'
+>
+>  tools/perf/builtin-sched.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+> index 86e18575c9be..ec443df8e05c 100644
+> --- a/tools/perf/builtin-sched.c
+> +++ b/tools/perf/builtin-sched.c
+> @@ -1516,6 +1516,14 @@ static int process_sched_wakeup_event(struct perf_tool *tool,
+>         return 0;
+>  }
+>
+> +static int process_sched_wakeup_ignore(struct perf_tool *tool __maybe_unused,
+> +                                     struct evsel *evsel __maybe_unused,
+> +                                     struct perf_sample *sample __maybe_unused,
+> +                                     struct machine *machine __maybe_unused)
+> +{
+> +       return 0;
+> +}
+> +
+>  union map_priv {
+>         void    *ptr;
+>         bool     color;
+> @@ -1816,10 +1824,11 @@ static int perf_sched__process_comm(struct perf_tool *tool __maybe_unused,
+>
+>  static int perf_sched__read_events(struct perf_sched *sched)
+>  {
+> -       const struct evsel_str_handler handlers[] = {
+> +       struct evsel_str_handler handlers[] = {
+>                 { "sched:sched_switch",       process_sched_switch_event, },
+>                 { "sched:sched_stat_runtime", process_sched_runtime_event, },
+>                 { "sched:sched_wakeup",       process_sched_wakeup_event, },
+> +               { "sched:sched_waking",       process_sched_wakeup_event, },
+>                 { "sched:sched_wakeup_new",   process_sched_wakeup_event, },
+>                 { "sched:sched_migrate_task", process_sched_migrate_task_event, },
+>         };
+> @@ -1839,6 +1848,10 @@ static int perf_sched__read_events(struct perf_sched *sched)
+>
+>         symbol__init(&session->header.env);
+>
+> +       /* prefer sched_waking if it is captured */
+> +       if (evlist__find_tracepoint_by_name(session->evlist, "sched:sched_waking"))
+> +               handlers[2].handler = process_sched_wakeup_ignore;
+> +
+>         if (perf_session__set_tracepoints_handlers(session, handlers))
+>                 goto out_delete;
+>
+> --
+> 2.25.1
+>
+> 声明：这封邮件只允许文件接收者阅读，有很高的机密性要求。禁止其他人使用、打开、复制或转发里面的任何内容。如果本邮件错误地发给了你，请联系邮件发出者并删除这个文件。机密及法律的特权并不因为误发邮件而放弃或丧失。任何提出的观点或意见只属于作者的个人见解，并不一定代表本公司。
