@@ -2,99 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C466CD2DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A66E56CD2DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjC2HXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 03:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
+        id S229946AbjC2HX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 03:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjC2HXS (ORCPT
+        with ESMTP id S229916AbjC2HXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 03:23:18 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99E051BF6;
-        Wed, 29 Mar 2023 00:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=k1+81
-        /LRc+QPaXuwviz1ZmJdBJ9jC4z0SLIYlLcZv/k=; b=Q3Uk9BKqp9bm4WreWBohS
-        3UY8tW52mSI2m0XIzrh4xHhEO7e2msTRdPViif9KUd3UALF07sfOMTOKWIji5gWm
-        nR6y/r9LK5UXkOxuX+tlrxUDwX25v2aj5pkAEbWl/+AInzV9sDoaFcBOJPP+0eCJ
-        ynQdZfOL9hxWPqfKfifmnk=
-Received: from VM-0-27-ubuntu.. (unknown [43.134.191.38])
-        by zwqz-smtp-mta-g1-3 (Coremail) with SMTP id _____wA3TzdD5yNk5z4EAA--.1365S2;
-        Wed, 29 Mar 2023 15:22:45 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     mani@kernel.org
-Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] bus: mhi: pci_generic: Add Foxconn T99W510
-Date:   Wed, 29 Mar 2023 15:22:39 +0800
-Message-Id: <20230329072239.93632-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 29 Mar 2023 03:23:24 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0563C0E;
+        Wed, 29 Mar 2023 00:23:22 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PmdH90fdTz17P4q;
+        Wed, 29 Mar 2023 15:20:05 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 29 Mar 2023 15:23:20 +0800
+Message-ID: <7410b9be-da2d-57e0-c4f8-19900df2c440@huawei.com>
+Date:   Wed, 29 Mar 2023 15:23:19 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] ext4: only update i_reserved_data_blocks on successful
+ block allocation
+To:     Jan Kara <jack@suse.cz>
+CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
+        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>
+References: <20230325063443.1839558-1-libaokun1@huawei.com>
+ <20230327124700.mnldh4sosp3ptbls@quack3>
+ <a4ee8f3e-9428-ebb1-c0b4-9348075902b6@huawei.com>
+ <20230328100037.vy23wsnl437ujdoh@quack3>
+Content-Language: en-US
+From:   Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <20230328100037.vy23wsnl437ujdoh@quack3>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wA3TzdD5yNk5z4EAA--.1365S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uw1UZr1DCw1Duw1DWFWxJFb_yoW8CF1UpF
-        savryUta1kJFWYkFsrJrWDXas8JanxCry3KFn7Gw1Y9r4vyayYqrs7Gry29Fy3Kas8Xr43
-        tFy8uFWUW3WqyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEgAwnUUUUU=
-X-Originating-IP: [43.134.191.38]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiNQlBZGI0cAnPYAABsY
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Foxconn T99W510 device is designed based on Qualcomm
-SDX24. Add 3 variants for different potential customer.
+On 2023/3/28 18:00, Jan Kara wrote:
+> On Mon 27-03-23 21:09:42, Baokun Li wrote:
+>> On 2023/3/27 20:47, Jan Kara wrote:
+>>> On Sat 25-03-23 14:34:43, Baokun Li wrote:
+>>>> In our fault injection test, we create an ext4 file, migrate it to
+>>>> non-extent based file, then punch a hole and finally trigger a WARN_ON
+>>>> in the ext4_da_update_reserve_space():
+>>>>
+>>>> EXT4-fs warning (device sda): ext4_da_update_reserve_space:369:
+>>>> ino 14, used 11 with only 10 reserved data blocks
+>>>>
+>>>> When writing back a non-extent based file, if we enable delalloc, the
+>>>> number of reserved blocks will be subtracted from the number of blocks
+>>>> mapped by ext4_ind_map_blocks(), and the extent status tree will be
+>>>> updated. We update the extent status tree by first removing the old
+>>>> extent_status and then inserting the new extent_status. If the block range
+>>>> we remove happens to be in an extent, then we need to allocate another
+>>>> extent_status with ext4_es_alloc_extent().
+>>>>
+>>>>          use old    to remove   to add new
+>>>>       |----------|------------|------------|
+>>>>                 old extent_status
+>>>>
+>>>> The problem is that the allocation of a new extent_status failed due to a
+>>>> fault injection, and __es_shrink() did not get free memory, resulting in
+>>>> a return of -ENOMEM. Then do_writepages() retries after receiving -ENOMEM,
+>>>> we map to the same extent again, and the number of reserved blocks is again
+>>>> subtracted from the number of blocks in that extent. Since the blocks in
+>>>> the same extent are subtracted twice, we end up triggering WARN_ON at
+>>>> ext4_da_update_reserve_space() because used > ei->i_reserved_data_blocks.
+>>> Hum, but this second call to ext4_map_blocks() should find already allocated
+>>> blocks in the indirect block and thus should not be subtracting
+>>> ei->i_reserved_data_blocks for the second time. What am I missing?
+>>>
+>>> 								Honza
+>>>
+>> ext4_map_blocks
+>>    1. Lookup extent status tree firstly
+>>         goto found;
+>>    2. get the block without requesting a new file system block.
+>> found:
+>>    3. ceate and map the block
+>>
+>> When we call ext4_map_blocks() for the second time, we directly find the
+>> corresponding blocks in the extent status tree, and then go directly to step
+>> 3,
+>> because our flag is brand new and therefore does not contain EXT4_MAP_MAPPED
+>> but contains EXT4_GET_BLOCKS_CREATE, thus subtracting
+>> ei->i_reserved_data_blocks
+>> for the second time.
+> Ah, I see. Thanks for explanation. But then the problem is deeper than just
+> a mismatch in number of reserved delalloc block. The problem really is that
+> if extent status tree update fails, we have inconsistency between what is
+> stored in the extent status tree and what is stored on disk. And that can
+> cause even data corruption issues in some cases.
+The scenario we encountered was this:
+```
+write:
+     ext4_es_insert_delayed_block
+     [0/16) 576460752303423487 (U,D)
+writepages:
+     alloc lblk 11 pblk 35328
+     [0/16) 576460752303423487 (U,D)
+     -- remove block 11 from extent
+       [0/11) 576460752303423487 (U,D,R)  +  (Newly allocated)[12/4) 
+549196775151 (U,D,R)
+       --Failure to allocate memory for a new extent will undo as:
+             [0/16) 576460752303423487 (U,D,R)
+     -- if success insert block 11 to extent status tree
+       [0/11) 576460752303423487 (U,D,R) + (Newly allocated)[11/1) 35328 
+(W) + [12/4) 549196775151 (U,D,R)
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/bus/mhi/host/pci_generic.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+U: UNWRITTEN
+D: DELAYED
+W: WRITTEN
+R: REFERENCED
+```
 
-diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-index 91d02f84ba21..db0a0b062d8e 100644
---- a/drivers/bus/mhi/host/pci_generic.c
-+++ b/drivers/bus/mhi/host/pci_generic.c
-@@ -363,6 +363,15 @@ static const struct mhi_controller_config modem_foxconn_sdx55_config = {
- 	.event_cfg = mhi_foxconn_sdx55_events,
- };
- 
-+static const struct mhi_pci_dev_info mhi_foxconn_sdx24_info = {
-+	.name = "foxconn-sdx24",
-+	.config = &modem_foxconn_sdx55_config,
-+	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
-+	.dma_data_width = 32,
-+	.mru_default = 32768,
-+	.sideband_wake = false,
-+};
-+
- static const struct mhi_pci_dev_info mhi_foxconn_sdx55_info = {
- 	.name = "foxconn-sdx55",
- 	.fw = "qcom/sdx55m/sbl1.mbn",
-@@ -587,6 +596,15 @@ static const struct pci_device_id mhi_pci_id_table[] = {
- 	/* T99W373 (sdx62) */
- 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0d9),
- 		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
-+	/* T99W510 (sdx24), variant 1 */
-+	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0f0),
-+		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx24_info },
-+	/* T99W510 (sdx24), variant 2 */
-+	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0f1),
-+		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx24_info },
-+	/* T99W510 (sdx24), variant 3 */
-+	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0f2),
-+		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx24_info },
- 	/* MV31-W (Cinterion) */
- 	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00b3),
- 		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
+When we fail to allocate a new extent, we don't map buffer and we don't do
+io_submit, so why is the extent tree in memory inconsistent with the one
+stored on disk? Am I missing something?
+
+I would appreciate it if you could explain under what cases and what kind of
+data corruption issues can be caused.
+>
+> So I think we rather need to work on handling of errors in extent status
+> tree operations. In the extent status tree, we have extents which we can
+> just drop without issues and extents we must not drop - this depends on the
+> extent's status - currently ext4_es_is_delayed() extents must stay, others
+> may be dropped but I'd wrap the decision in a helper function.
+>
+> I'm currently inclined towards the following:
+>
+> 1) Removal must never fail. If we need to split extent, we use GFP_NOFAIL
+> if we cannot just drop the second part of the split extent in case of
+> allocation failure.
+>
+> 2) Similarly if inserting extent that cannot be dropped, we use GFP_NOFAIL.
+>
+> 3) We do not try to "undo" failed operations like we currently do - with
+> the above rules we never loose information that cannot be restored.
+
+Totally agree!
+
+This solution looks very effective and clear, I will try to implement it.
+
+Thank you very much for your suggestion!
+
+>
+> And this should also fix the problem you've hit because in case of
+> allocation failure we may just end up with removed extent from the extent
+> status tree and thus we refetch info from the disk and find out blocks are
+> already allocated.
+>
+> 								Honza
+Reloading extent tree from disk I don't quite understand here, how do we 
+handle
+reserved blocks? could you explain it in more detail?
+
+Logically, I think it is still necessary to update 
+i_reserved_data_blocks only after
+a successful allocation. This is also done in ext4_ext_map_blocks().
+
+Thanks again!
 -- 
-2.34.1
-
+With Best Regards,
+Baokun Li
+.
