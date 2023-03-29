@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4826CD5E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4C46CD5E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbjC2JFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
+        id S231404AbjC2JFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjC2JEn (ORCPT
+        with ESMTP id S230508AbjC2JEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:04:43 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4196310C0;
-        Wed, 29 Mar 2023 02:04:37 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x3so60293517edb.10;
-        Wed, 29 Mar 2023 02:04:37 -0700 (PDT)
+        Wed, 29 Mar 2023 05:04:44 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC7535A1;
+        Wed, 29 Mar 2023 02:04:38 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id i5so60587581eda.0;
+        Wed, 29 Mar 2023 02:04:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680080676;
+        d=gmail.com; s=20210112; t=1680080677;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AmA1pqJOyOb2cR7V74kR64IR6Xx2k2cxNLkEbR3rMXM=;
-        b=FVJ/5YauamJ6U6iOQs9roy5sKS0qDMHGt0OvI8eBFgY9RIpRlkxf3KsjRPMsSW41cz
-         5RKAycWDx0/9Jh9vJTJxJyGN9O67fUrtoPCY6eb8I5HyMINfSrZvbzxcKHykOm/m8MVa
-         3H4jKRrDMUf60B4uyMaIi7K8f0MFdpHTkdZw+TrwruOk1HJhHoPs65SNj+n/9refWZ7k
-         QFHXxyG8m5Huh3+6oDYyV677SV7g5r1dS2LFUGplSj/IzBTaIPy85CNd8xozDwpbbb75
-         BfyxuIX26oHz+4gS5Y3pBgt9U6jdTpoXXPCuYpC1PzGCh3LHCxVC6d88Jk5ZgQRRf8ab
-         IJMw==
+        bh=Bt3pFcNmven8aszzUXY021Or+hkjFjt51HvtYlhXRTU=;
+        b=ocCTEOOTta43yM9bjytpG/xXuVfjSG6fLnOBLBSNhz0J8LYV/C50WleDq4MNmn2abF
+         JacSQcvcxZsSzGi4Lv9uKW18u58dNuzzSUlTUpZlm18FDci9Xjb5ukdJ+jDpP4CssSxx
+         FC9hcsmACfZCLZ1ehi75tEkWT2a/rzFdannZDhDV9Zxb4p9jNA2kAywWRso/3BZh/bPr
+         2nLTUgNPR+OUCk0IwbMYnT1cenuq6NuGISu8JMAi8DCp62Mw0wCGM3iknLJ7GnwoW5JZ
+         YLxa0H8Et9SUQVJWV9NniCFBK1EJwc+CCf1bVDqscVqt7MVX7OMDZdYPQQX2g5JLE21v
+         hWNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680080676;
+        d=1e100.net; s=20210112; t=1680080677;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AmA1pqJOyOb2cR7V74kR64IR6Xx2k2cxNLkEbR3rMXM=;
-        b=le8YoShSI3XzlrtG/b41+EByu3xKM1fym07D0uwa9IpEEjNyggJQc3Q0c/LkNs1Z7W
-         PAxmUwxXdZKCRAooB6vYzMUEiOE/W6xxBHM73VzLolc5wFYdmA7zgP3Imq7rNCMZdNZJ
-         uW/dIgu6juGjI0e8z6HbZRl+EvYpynxozcLRReHjAr6Jv4Wcxt5wwG7K0Jd5/806IPsk
-         Iap+w57GBg7AUkc99+/iQ8puTOWgnwfFGsTFPHRKFiA6exQWOGifeWy8kdL9xQb03PDx
-         6CJIQnIC0nngAFvHpPYBBIAKe9VayVl3tKKhpK2dkhbXmQmJouPX0/Ncf9F5k6dIkeaB
-         BzKA==
-X-Gm-Message-State: AAQBX9eaSH0bRhNQEh1lc1AZdIth4+xIS/btWa4ufyfG7ag6DXWtJgW6
-        T1KDrXKwFv8VaU4O4AmX2GA=
-X-Google-Smtp-Source: AKy350ZIBRKInUSM9Rx3wY46if9XU9amzDEMk9tHwDFrjeL46KDedicWzC2oVl5OWHZAH3h6aNL8Pg==
-X-Received: by 2002:a17:906:b2d2:b0:93e:fa12:aa1a with SMTP id cf18-20020a170906b2d200b0093efa12aa1amr17924410ejb.1.1680080675859;
-        Wed, 29 Mar 2023 02:04:35 -0700 (PDT)
+        bh=Bt3pFcNmven8aszzUXY021Or+hkjFjt51HvtYlhXRTU=;
+        b=p/nho7RqG5HgCHfuZ08y7Bi+ub3NOPeGZNGACTm4qDT/ruDvGtbUhsDeafGXN1/uMU
+         CP+k72iHqYbCc3IN8qkeGeZU6LSQczJuQjqiCPgUQYz9dDXRcErgItU2mevwbgoAaQBb
+         dznJvB6E9m5xxz4vlrfjVClyn6Nqxh9MlITgtKIJwxdsZ0KukTEn7mF6qgZQ3HumfSFy
+         2o1FZhF8pobsDYAWWR8r+YRYzxZmmL9PDM3DFNo+X8iA6iMFiSTsc45a5Q8VLEzR8Pb1
+         AM1bojuR0PtjR+cyMZmjchbwiAY+a3Nc2um50/wHW6D/Xr/d3NjylI7Jgo4namG6YnGt
+         P1LA==
+X-Gm-Message-State: AAQBX9fett5AOZlRxdeiO8pe0u9GODVNAw50aqxfWsmUK2kBZ8KWisgs
+        ELi5Z7DqCeaKD7iYvm0ew/Q=
+X-Google-Smtp-Source: AKy350aBAWqF+LjiRsrY7PmsuATukmUG9f5LmaTxiMQapBXR/uzdxOwKaIJzOBL/TQI5p0ezJ/hhFQ==
+X-Received: by 2002:a17:906:a887:b0:939:e7d6:7c52 with SMTP id ha7-20020a170906a88700b00939e7d67c52mr18927345ejb.20.1680080676659;
+        Wed, 29 Mar 2023 02:04:36 -0700 (PDT)
 Received: from xeon.. ([188.163.112.76])
         by smtp.gmail.com with ESMTPSA id n3-20020a170906088300b009327ed171f2sm15437127eje.129.2023.03.29.02.04.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 02:04:35 -0700 (PDT)
+        Wed, 29 Mar 2023 02:04:36 -0700 (PDT)
 From:   Svyatoslav Ryhel <clamor95@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -60,9 +60,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Dmitry Osipenko <digetx@gmail.com>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/4] ARM: tegra: asus-tf101: fix accelerometer mount matrix
-Date:   Wed, 29 Mar 2023 12:04:02 +0300
-Message-Id: <20230329090403.5274-4-clamor95@gmail.com>
+Subject: [PATCH v3 4/4] ARM: tegra30: peripherals: add 266.5MHz nodes
+Date:   Wed, 29 Mar 2023 12:04:03 +0300
+Message-Id: <20230329090403.5274-5-clamor95@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230329090403.5274-1-clamor95@gmail.com>
 References: <20230329090403.5274-1-clamor95@gmail.com>
@@ -78,33 +78,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Accelerometer mount matrix used in tf101 downstream is inverted.
-This new matrix was generated on actual device using calibration
-script, like on other transformers.
+LG Optimus Vu (p895) and Optimus 4X HD (p880) have 266.5MHz RAM
+clock and require this entry to work with it correctly.
 
-Tested-by: Robert Eckelmann <longnoserob@gmail.com>
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
- arch/arm/boot/dts/tegra20-asus-tf101.dts | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../arm/boot/dts/tegra30-peripherals-opp.dtsi | 20 +++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra20-asus-tf101.dts b/arch/arm/boot/dts/tegra20-asus-tf101.dts
-index 7b2969656ec9..dcb231f6e42d 100644
---- a/arch/arm/boot/dts/tegra20-asus-tf101.dts
-+++ b/arch/arm/boot/dts/tegra20-asus-tf101.dts
-@@ -577,9 +577,9 @@ accelerometer@f {
- 					vdd-supply = <&vdd_1v8_sys>;
- 					vddio-supply = <&vdd_1v8_sys>;
- 
--					mount-matrix =	 "1",  "0",  "0",
--							 "0",  "1",  "0",
--							 "0",  "0",  "1";
-+					mount-matrix =	"-1",  "0",  "0",
-+							 "0", "-1",  "0",
-+							 "0",  "0", "-1";
- 				};
- 			};
+diff --git a/arch/arm/boot/dts/tegra30-peripherals-opp.dtsi b/arch/arm/boot/dts/tegra30-peripherals-opp.dtsi
+index d100a1a8b705..a2d557155114 100644
+--- a/arch/arm/boot/dts/tegra30-peripherals-opp.dtsi
++++ b/arch/arm/boot/dts/tegra30-peripherals-opp.dtsi
+@@ -210,6 +210,20 @@ opp-204000000-1250 {
+ 			opp-suspend;
  		};
+ 
++		opp-266500000-1000 {
++			opp-microvolt = <1000000 1000000 1350000>;
++			opp-hz = /bits/ 64 <266500000>;
++			opp-supported-hw = <0x0007>;
++			required-opps = <&core_opp_1000>;
++		};
++
++		opp-266500000-1250 {
++			opp-microvolt = <1250000 1250000 1350000>;
++			opp-hz = /bits/ 64 <266500000>;
++			opp-supported-hw = <0x0008>;
++			required-opps = <&core_opp_1250>;
++		};
++
+ 		opp-333500000-1000 {
+ 			opp-microvolt = <1000000 1000000 1350000>;
+ 			opp-hz = /bits/ 64 <333500000>;
+@@ -424,6 +438,12 @@ opp-204000000 {
+ 			opp-suspend;
+ 		};
+ 
++		opp-266500000 {
++			opp-hz = /bits/ 64 <266500000>;
++			opp-supported-hw = <0x000F>;
++			opp-peak-kBps = <2132000>;
++		};
++
+ 		opp-333500000 {
+ 			opp-hz = /bits/ 64 <333500000>;
+ 			opp-supported-hw = <0x000F>;
 -- 
 2.37.2
 
