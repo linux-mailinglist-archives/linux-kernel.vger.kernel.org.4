@@ -2,154 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371F46CD935
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46B06CD936
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjC2MPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
+        id S230037AbjC2MPT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 08:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjC2MOz (ORCPT
+        with ESMTP id S230030AbjC2MPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:14:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91864449A;
-        Wed, 29 Mar 2023 05:14:51 -0700 (PDT)
+        Wed, 29 Mar 2023 08:15:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9CE4C00;
+        Wed, 29 Mar 2023 05:15:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51BA6B820CA;
-        Wed, 29 Mar 2023 12:14:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1B7C433D2;
-        Wed, 29 Mar 2023 12:14:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680092089;
-        bh=Cq96Ecr1uXjVoaJWJyUxPHu037nrWz83m8M9Gjo4M0w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KGfQ19JB/t5T8xfel5ekL7rIPIqjuGdUbpHu2TvFVfDJqzFnbriKg5iK3wfxALI59
-         5LyiLESlpTzJHFW/8lt+018tzaD7vZPajHSzbIU/DEnaaeuEg4k4RCEEfRugFAgOYR
-         m4DqhUtYK/1puiYULG8SOL55Wo0xxlZ0S513YrqIOLShG+zrSOD7j4MR7Fy5CLAsOW
-         nn4Qqp5Qeh+Rgu7KnCNo6kX6DX82G9OqAuv4aGfxbXXRpuHiefLuICveefVRrgufMz
-         KWcn2gniTr4BpCa5KHKzopGOqsKdRWruD0kdqIg9k6ZIVu2LqL7myHVVmrQ8JoGoPD
-         zDQW2N2v6MA6A==
-Date:   Wed, 29 Mar 2023 14:14:40 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Anuj Gupta <anuj20.g@samsung.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, bvanassche@acm.org,
-        hare@suse.de, ming.lei@redhat.com,
-        damien.lemoal@opensource.wdc.com, joshi.k@samsung.com,
-        nitheshshetty@gmail.com, gost.dev@samsung.com,
-        Nitesh Shetty <nj.shetty@samsung.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v8 4/9] fs, block: copy_file_range for def_blk_ops for
- direct block device.
-Message-ID: <20230329-glitter-drainpipe-bdf9d3876ac4@brauner>
-References: <20230327084103.21601-1-anuj20.g@samsung.com>
- <CGME20230327084244epcas5p1b0ede867e558ff6faf258de3656a8aa4@epcas5p1.samsung.com>
- <20230327084103.21601-5-anuj20.g@samsung.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C32D9B820CA;
+        Wed, 29 Mar 2023 12:15:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B40CCC433EF;
+        Wed, 29 Mar 2023 12:15:03 +0000 (UTC)
+Date:   Wed, 29 Mar 2023 08:14:54 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 09/10] tracing/probes: Add fprobe events for tracing
+ function entry and exit.
+Message-ID: <20230329081454.05133571@rorschach.local.home>
+In-Reply-To: <167526703341.433354.12634235635015890994.stgit@mhiramat.roam.corp.google.com>
+References: <167526695292.433354.8949652607331707144.stgit@mhiramat.roam.corp.google.com>
+        <167526703341.433354.12634235635015890994.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230327084103.21601-5-anuj20.g@samsung.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 02:10:52PM +0530, Anuj Gupta wrote:
-> From: Nitesh Shetty <nj.shetty@samsung.com>
+On Thu,  2 Feb 2023 00:57:13 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
-> For direct block device opened with O_DIRECT, use copy_file_range to
-> issue device copy offload, and fallback to generic_copy_file_range incase
-> device copy offload capability is absent.
-> Modify checks to allow bdevs to use copy_file_range.
+> Add fprobe events for tracing function entry and exit instead of kprobe
+> events. With this change, we can continue to trace function entry/exit
+> even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
+> CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+> it is not available if the architecture only supports
+> CONFIG_DYNAMIC_FTRACE_WITH_ARGS. And that means kprobe events can not
+> probe function entry/exit effectively on such architecture.
+> But this can be solved if the dynamic events supports fprobe events.
 > 
-> Suggested-by: Ming Lei <ming.lei@redhat.com>
-> Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
-> Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
-> ---
->  block/blk-lib.c        | 22 ++++++++++++++++++++++
->  block/fops.c           | 20 ++++++++++++++++++++
->  fs/read_write.c        | 11 +++++++++--
->  include/linux/blkdev.h |  3 +++
->  4 files changed, 54 insertions(+), 2 deletions(-)
+> The fprobe event is a new dynamic events which is only for the function
+> (symbol) entry and exit. This event accepts non register fetch arguments
+> so that user can trace the function arguments and return values.
 > 
-> diff --git a/block/blk-lib.c b/block/blk-lib.c
-> index a21819e59b29..c288573c7e77 100644
-> --- a/block/blk-lib.c
-> +++ b/block/blk-lib.c
-> @@ -475,6 +475,28 @@ static inline bool blk_check_copy_offload(struct request_queue *q_in,
->  	return blk_queue_copy(q_in) && blk_queue_copy(q_out);
->  }
->  
-> +int blkdev_copy_offload(struct block_device *bdev_in, loff_t pos_in,
-> +		      struct block_device *bdev_out, loff_t pos_out, size_t len,
-> +		      cio_iodone_t end_io, void *private, gfp_t gfp_mask)
-> +{
-> +	struct request_queue *in_q = bdev_get_queue(bdev_in);
-> +	struct request_queue *out_q = bdev_get_queue(bdev_out);
-> +	int ret = -EINVAL;
 
-Why initialize to -EINVAL if blk_copy_sanity_check() initializes it
-right away anyway?
+Hi Masami,
 
-> +	bool offload = false;
+After applying this patch I get a bunch of these:
 
-Same thing with initializing offload.
+/work/git/linux-trace.git/kernel/trace/trace_fprobe.c:117:1: error: redefinition of ‘fetch_store_strlen_user’
+  117 | fetch_store_strlen_user(unsigned long addr)
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from /work/git/linux-trace.git/kernel/trace/trace_fprobe.c:16:
+/work/git/linux-trace.git/kernel/trace/trace_probe_kernel.h:15:1: note: previous definition of ‘fetch_store_strlen_user’ with type ‘int(long unsigned int)’
+   15 | fetch_store_strlen_user(unsigned long addr)
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+/work/git/linux-trace.git/kernel/trace/trace_fprobe.c: In function ‘fetch_store_strlen_user’:
+/work/git/linux-trace.git/kernel/trace/trace_fprobe.c:119:16: error: implicit declaration of function ‘kern_fetch_store_strlen_user’; did you mean ‘fetch_store_strlen_user’? [-Werror=implicit-function-declaration]
+  119 |         return kern_fetch_store_strlen_user(addr);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                fetch_store_strlen_user
+/work/git/linux-trace.git/kernel/trace/trace_fprobe.c: At top level:
+/work/git/linux-trace.git/kernel/trace/trace_fprobe.c:124:1: error: redefinition of ‘fetch_store_strlen’
+  124 | fetch_store_strlen(unsigned long addr)
+      | ^~~~~~~~~~~~~~~~~~
+/work/git/linux-trace.git/kernel/trace/trace_probe_kernel.h:32:1: note: previous definition of ‘fetch_store_strlen’ with type ‘int(long unsigned int)’
+   32 | fetch_store_strlen(unsigned long addr)
+      | ^~~~~~~~~~~~~~~~~~
+/work/git/linux-trace.git/kernel/trace/trace_fprobe.c: In function ‘fetch_store_strlen’:
+/work/git/linux-trace.git/kernel/trace/trace_fprobe.c:126:16: error: implicit declaration of function ‘kern_fetch_store_strlen’; did you mean ‘fetch_store_strlen’? [-Werror=implicit-function-declaration]
+  126 |         return kern_fetch_store_strlen(addr);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~
+      |                fetch_store_strlen
 
-> +
-> +	ret = blk_copy_sanity_check(bdev_in, pos_in, bdev_out, pos_out, len);
-> +	if (ret)
-> +		return ret;
-> +
-> +	offload = blk_check_copy_offload(in_q, out_q);
-> +	if (offload)
-> +		ret = __blk_copy_offload(bdev_in, pos_in, bdev_out, pos_out,
-> +				len, end_io, private, gfp_mask);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(blkdev_copy_offload);
-> +
->  /*
->   * @bdev_in:	source block device
->   * @pos_in:	source offset
-> diff --git a/block/fops.c b/block/fops.c
-> index d2e6be4e3d1c..3b7c05831d5c 100644
-> --- a/block/fops.c
-> +++ b/block/fops.c
-> @@ -611,6 +611,25 @@ static ssize_t blkdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
->  	return ret;
->  }
->  
-> +static ssize_t blkdev_copy_file_range(struct file *file_in, loff_t pos_in,
-> +				struct file *file_out, loff_t pos_out,
-> +				size_t len, unsigned int flags)
-> +{
-> +	struct block_device *in_bdev = I_BDEV(bdev_file_inode(file_in));
-> +	struct block_device *out_bdev = I_BDEV(bdev_file_inode(file_out));
-> +	int comp_len = 0;
-> +
-> +	if ((file_in->f_iocb_flags & IOCB_DIRECT) &&
-> +		(file_out->f_iocb_flags & IOCB_DIRECT))
-> +		comp_len = blkdev_copy_offload(in_bdev, pos_in, out_bdev,
-> +				 pos_out, len, NULL, NULL, GFP_KERNEL);
-> +	if (comp_len != len)
-> +		comp_len = generic_copy_file_range(file_in, pos_in + comp_len,
-> +			file_out, pos_out + comp_len, len - comp_len, flags);
 
-I'm not deeply familiar with this code but this looks odd. It at least
-seems possible that comp_len could be -EINVAL and len 20 at which point
-you'd be doing len - comp_len aka 20 - 22 = -2 in generic_copy_file_range().
+Can you rebase it on the latest changes (on top of trace/for-next)?
+
+BTW, I've applied patches 1-8 and I'm currently running them through my
+tests. So if you do rebase, just send patches 9 and 10. I'm hoping to
+post a for-next series later today, that will include those other
+patches.
+
+-- Steve
