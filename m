@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15556CD15E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 06:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BF36CD14C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 06:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjC2E7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 00:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
+        id S229877AbjC2Eyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 00:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjC2E7n (ORCPT
+        with ESMTP id S229664AbjC2Eyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 00:59:43 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE672723
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 21:59:41 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id d11-20020a05600c3acb00b003ef6e6754c5so5205695wms.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 21:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680065980;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l2nyBWkEl893cb8p3Xcv9ddibZeqm3dx5h/n4mJzM0I=;
-        b=a+A3vmtN33rV7G2K+kBT5+09RNfw/x9RSy+q2X3PBbr29xgkn5AQt12Fbediy1rrcC
-         iHU5gwK6JXKuap5Q1K7ZWEHCpYah/bxgqzwBr1yWkZ7mh7r58y1ARcbbZcV8tzEpyFZf
-         VDgXJr/tDJG2F0g9ahkj0NkZFJvy+ATuc/EtdJZvDtU/skKpBzTkNMEHgFcM7dZ0S8Er
-         0eHpqVt7Wim1e1rCAGgxA04h6ZrRWhIYTlP6NK+v9auLZyoJkLfTpVcTWrSdLfMq4V8r
-         hjcdeqmxZeOMiEHhoNumsB/hafrv2w9DmhB2P7mDfgctEKEXOeNUvMmKfuAJRA7CSlDX
-         2FeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680065980;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l2nyBWkEl893cb8p3Xcv9ddibZeqm3dx5h/n4mJzM0I=;
-        b=m3F7axumW1QXQ/2zAlisehYwotoK9/eOoXgal6MMG9NInYbqk2htMbMeQPd99gk0yf
-         y4oNsuzyA5YuTqs0EoriS3G0G4WniT7RArhc3H6vsf1dbHtihzYQcloau9ZHUo1l9wE3
-         LupAn0sT1mADh5oU7rWo4bQUg5DKVQmLue4I3D8EE/5576YkiFnT2SjpQq9/rntUypzV
-         YeI5xg2qAj1hbm8H42XLIMkntQqqslRkCOw0Lly2oCCDZPtuOCdGN/PdMohy7hv6L3oq
-         WDXaR3PS2sCYhcAvc94IJYQPLjuUDtGdaNsv7HboIsoWzUxK/Q7Z7owPRs6q8X6xbU80
-         N+2g==
-X-Gm-Message-State: AO0yUKWxBmkxpBPOgnmMmppkHbXHn/V19RqsZXtEHJUv8t6O4vTEWgLQ
-        c2mIHl19CkXrK0k/EfZO0T6Trg==
-X-Google-Smtp-Source: AK7set/hrrFzd6yhsYIengKEXesiDvT2OHC1fUfzzUtI8h99/a73zFv/Utk9ctYdbI75FCHmhSsncw==
-X-Received: by 2002:a05:600c:209:b0:3ee:282d:1016 with SMTP id 9-20020a05600c020900b003ee282d1016mr13218010wmi.25.1680065980323;
-        Tue, 28 Mar 2023 21:59:40 -0700 (PDT)
-Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id q18-20020a7bce92000000b003ef71d541cbsm842566wmj.1.2023.03.28.21.59.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 21:59:39 -0700 (PDT)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kbuild@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH v9 6/6] riscv: Use --emit-relocs in order to move .rela.dyn in init
-Date:   Wed, 29 Mar 2023 06:53:29 +0200
-Message-Id: <20230329045329.64565-7-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230329045329.64565-1-alexghiti@rivosinc.com>
-References: <20230329045329.64565-1-alexghiti@rivosinc.com>
+        Wed, 29 Mar 2023 00:54:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7E135A1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 21:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680065631;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S01Y/zhEA4qaJvTIo0c2m8xjYqU32cqDPsOeaeS0mgQ=;
+        b=Lao4UjVED30bgIn+zqQ6a5ZVmya9Zsr7ZOX/qalszyQLDJFNQnTNXY5IJma57xzxaBjivz
+        yNIGeW+s/t3DxJ6QcyGVNx2GTkmUOzlS0cxX6083crZDCS8RlkJ7yjiUa8AYxYeINUSssY
+        GD5ibchMiVA+QjnBkdMhBcOZK0dmUiI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-271-Ii-LZ0zMOzmqRxZZOA6_Ig-1; Wed, 29 Mar 2023 00:53:50 -0400
+X-MC-Unique: Ii-LZ0zMOzmqRxZZOA6_Ig-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 418F6101A531;
+        Wed, 29 Mar 2023 04:53:49 +0000 (UTC)
+Received: from localhost (ovpn-12-137.pek2.redhat.com [10.72.12.137])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D181B1121331;
+        Wed, 29 Mar 2023 04:53:36 +0000 (UTC)
+Date:   Wed, 29 Mar 2023 12:53:33 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v8 0/4] convert read_kcore(), vread() to use iterators
+Message-ID: <ZCPETTt8g6+kL5GX@MiWiFi-R3L-srv>
+References: <cover.1679566220.git.lstoakes@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1679566220.git.lstoakes@gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,83 +67,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To circumvent an issue where placing the relocations inside the init
-sections produces empty relocations, use --emit-relocs. But to avoid
-carrying those relocations in vmlinux, use an intermediate
-vmlinux.relocs file which is a copy of vmlinux *before* stripping its
-relocations.
+On 03/23/23 at 10:15am, Lorenzo Stoakes wrote:
+> While reviewing Baoquan's recent changes to permit vread() access to
+> vm_map_ram regions of vmalloc allocations, Willy pointed out [1] that it
+> would be nice to refactor vread() as a whole, since its only user is
+> read_kcore() and the existing form of vread() necessitates the use of a
+> bounce buffer.
+> 
+> This patch series does exactly that, as well as adjusting how we read the
+> kernel text section to avoid the use of a bounce buffer in this case as
+> well.
+> 
+> This has been tested against the test case which motivated Baoquan's
+> changes in the first place [2] which continues to function correctly, as do
+> the vmalloc self tests.
+> 
+> [1] https://lore.kernel.org/all/Y8WfDSRkc%2FOHP3oD@casper.infradead.org/
+> [2] https://lore.kernel.org/all/87ilk6gos2.fsf@oracle.com/T/#u
 
-Suggested-by: Björn Töpel <bjorn@kernel.org>
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
- arch/riscv/Makefile          |  2 +-
- arch/riscv/Makefile.postlink | 13 +++++++++++++
- arch/riscv/boot/Makefile     |  7 +++++++
- 3 files changed, 21 insertions(+), 1 deletion(-)
+The whole series looks good to me.
 
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 860b09e409c7..7dc6904a6836 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -8,7 +8,7 @@
- 
- OBJCOPYFLAGS    := -O binary
- ifeq ($(CONFIG_RELOCATABLE),y)
--	LDFLAGS_vmlinux += -shared -Bsymbolic -z notext -z norelro
-+	LDFLAGS_vmlinux += -shared -Bsymbolic -z notext -z norelro --emit-relocs
- 	KBUILD_CFLAGS += -fPIE
- endif
- ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
-diff --git a/arch/riscv/Makefile.postlink b/arch/riscv/Makefile.postlink
-index d5de8d520d3e..a46fc578b30b 100644
---- a/arch/riscv/Makefile.postlink
-+++ b/arch/riscv/Makefile.postlink
-@@ -15,12 +15,25 @@ quiet_cmd_relocs_check = CHKREL  $@
- cmd_relocs_check = 							\
- 	$(CONFIG_SHELL) $(srctree)/arch/riscv/tools/relocs_check.sh "$(OBJDUMP)" "$(NM)" "$@"
- 
-+ifdef CONFIG_RELOCATABLE
-+quiet_cmd_cp_vmlinux_relocs = CPREL   vmlinux.relocs
-+cmd_cp_vmlinux_relocs = cp vmlinux vmlinux.relocs
-+
-+quiet_cmd_relocs_strip = STRIPREL $@
-+cmd_relocs_strip = $(OBJCOPY)   --remove-section='.rel.*'       \
-+                                --remove-section='.rel__*'      \
-+                                --remove-section='.rela.*'      \
-+                                --remove-section='.rela__*' $@
-+endif
-+
- # `@true` prevents complaint when there is nothing to be done
- 
- vmlinux: FORCE
- 	@true
- ifdef CONFIG_RELOCATABLE
- 	$(call if_changed,relocs_check)
-+	$(call if_changed,cp_vmlinux_relocs)
-+	$(call if_changed,relocs_strip)
- endif
- 
- %.ko: FORCE
-diff --git a/arch/riscv/boot/Makefile b/arch/riscv/boot/Makefile
-index c72de7232abb..22b13947bd13 100644
---- a/arch/riscv/boot/Makefile
-+++ b/arch/riscv/boot/Makefile
-@@ -33,7 +33,14 @@ $(obj)/xipImage: vmlinux FORCE
- 
- endif
- 
-+ifdef CONFIG_RELOCATABLE
-+vmlinux.relocs: vmlinux
-+	@ (! [ -f vmlinux.relocs ] && echo "vmlinux.relocs can't be found, please remove vmlinux and try again") || true
-+
-+$(obj)/Image: vmlinux.relocs FORCE
-+else
- $(obj)/Image: vmlinux FORCE
-+endif
- 	$(call if_changed,objcopy)
- 
- $(obj)/Image.gz: $(obj)/Image FORCE
--- 
-2.37.2
+Reviewed-by: Baoquan He <bhe@redhat.com>
 
