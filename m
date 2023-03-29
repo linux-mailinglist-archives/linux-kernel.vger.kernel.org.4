@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC516CEF27
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565986CEED6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjC2QUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S229802AbjC2QJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjC2QUn (ORCPT
+        with ESMTP id S230384AbjC2QIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:20:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AE3A6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:20:02 -0700 (PDT)
+        Wed, 29 Mar 2023 12:08:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F16B5BBF
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:07:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680106801;
+        s=mimecast20190719; t=1680106011;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WhrreSkv0vZH0WLUdB+/3ln6MeZlFYYMu2CO+omtwhg=;
-        b=Jqn3DS9eJgueAkYapzKwmrLFfwRl0UyJCm81EsOuJv3W3d8hzVxUt1tv+lmFUiuQ0hKPAo
-        DqJxRG5nXOsJDANN7isEBmbgo6U16xHeuLjSVT/HSGL51cbJ9lDtBAmfPlD6Ud7ht58g1a
-        SPFQDVM/C9ucT5sW0yKsYIrL5laWumE=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-kzIRubjmMW2NbTqoE9cOMQ-1; Wed, 29 Mar 2023 12:03:25 -0400
-X-MC-Unique: kzIRubjmMW2NbTqoE9cOMQ-1
-Received: by mail-qt1-f199.google.com with SMTP id y10-20020a05622a164a00b003e38e0a3cc3so10506808qtj.14
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:03:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680105805;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WhrreSkv0vZH0WLUdB+/3ln6MeZlFYYMu2CO+omtwhg=;
-        b=z2bYWwZWE08HtUwK5dPm++jsA+tHjLrK1Zs0EJLdKunXiPV/WvMXCVvy+pQ9kVOhUJ
-         8Fyl0T4RDCY+I+SQ6rF7ZhVEJljDIVI/Cb6mLRyyGapQ3od5lFMXujGRUTj8+aCPuljj
-         Ak4QashARWZEObWIisQEseycwysfRznVLFMTIuy7lmtAo5drt3Rj7ZXJBA6NNuh2/QhG
-         9T+ONYdqqEGOoYACOlUlgZxjW4IRPKsL8/8H86jfPvD+I96q2GFvyz1njiJBlfTxSshe
-         qSm637PQZGojmdxR5FKR1428M/v9g08tQdz/WdhtF6zzVumpCRjUw0EyrnyUBAtdWDsK
-         i+NQ==
-X-Gm-Message-State: AO0yUKVIFGGalhMEZX89YhxgxTzyLcav8Mz3k7YhT2Ipmnaa7B3HG54c
-        EbmagCKaLq8vyH2/pTfxXyOviewUgm8S/6InYheW8/1oyy2EkuU0Ro62W4wV8OfI/s3oUdTG1qP
-        fJMkcl/kQumIPZWweXyvVmrTM
-X-Received: by 2002:ac8:58c3:0:b0:3e4:6329:448e with SMTP id u3-20020ac858c3000000b003e46329448emr35810481qta.16.1680105805161;
-        Wed, 29 Mar 2023 09:03:25 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/FoJCjgeNDT4rElGSF+Zl8YAW9TnymsfzUzUHuClJUBQwdLVEZBocjmA0YXTyxGB7KC7JO9Q==
-X-Received: by 2002:ac8:58c3:0:b0:3e4:6329:448e with SMTP id u3-20020ac858c3000000b003e46329448emr35810447qta.16.1680105804906;
-        Wed, 29 Mar 2023 09:03:24 -0700 (PDT)
-Received: from step1.redhat.com (host-82-57-51-130.retail.telecomitalia.it. [82.57.51.130])
-        by smtp.gmail.com with ESMTPSA id d184-20020a3768c1000000b0074688c36facsm13206442qkc.56.2023.03.29.09.03.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 09:03:24 -0700 (PDT)
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [PATCH] vdpa_sim_net: complete the initialization before register the device
-Date:   Wed, 29 Mar 2023 18:03:21 +0200
-Message-Id: <20230329160321.187176-1-sgarzare@redhat.com>
-X-Mailer: git-send-email 2.39.2
+         in-reply-to:in-reply-to:references:references;
+        bh=9PZc/wL1SaOvzMH0Hm9CmGIiBNNws8MikE2aRTtEWQ4=;
+        b=SWXlczAqVRRnbWY10kNgZB7xcZwjhfmYshLwr1itEKclU8XYjw+WpdY9pKIXXfTwcu2aab
+        C/M0mKf+wVxshZIR2VW9LBR1fpg0K6RJHzGFt+/S8KrzAxyca3M31+6GFzgUvo1wX9vt95
+        BG6wbcPEC0aWrmKQva+A9dS0WCa54Uo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-70-m06UBDt5NEeHbLQfow7d0g-1; Wed, 29 Mar 2023 12:03:36 -0400
+X-MC-Unique: m06UBDt5NEeHbLQfow7d0g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8EBAE8030D3;
+        Wed, 29 Mar 2023 16:03:35 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.161])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 82BCEC15BA0;
+        Wed, 29 Mar 2023 16:03:31 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 29 Mar 2023 18:03:27 +0200 (CEST)
+Date:   Wed, 29 Mar 2023 18:03:23 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, avagin@gmail.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, krisman@collabora.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Corbet <corbet@lwn.net>, shuah <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, tongtiangen@huawei.com,
+        Robin Murphy <robin.murphy@arm.com>,
+        Gregory Price <gregory.price@memverge.com>
+Subject: Re: [PATCH v14 1/4] asm-generic,arm64: create task variant of
+ access_ok
+Message-ID: <20230329160322.GA4477@redhat.com>
+References: <20230328164811.2451-1-gregory.price@memverge.com>
+ <20230328164811.2451-2-gregory.price@memverge.com>
+ <20230329151515.GA913@redhat.com>
+ <9a456346-e207-44e1-873e-40d21334e01b@app.fastmail.com>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a456346-e207-44e1-873e-40d21334e01b@app.fastmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -79,64 +78,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initialization must be completed before calling _vdpa_register_device()
-since it can connect the device to the vDPA bus, so requests can arrive
-after that call.
+On 03/29, Arnd Bergmann wrote:
+>
+> On Wed, Mar 29, 2023, at 17:15, Oleg Nesterov wrote:
+> >
+> > This look as if access_ok() or __access_ok() doesn't depend on task, but
+> > this is not true in general. Say, TASK_SIZE_MAX can check is_32bit_task()
+> > test_thread_flag(TIF_32BIT...) and this uses "current".
+> >
+> > Again, we probably do not care, but I don't like the fact task_access_ok()
+> > looks as if task_access_ok(task) returns the same result as "task" calling
+> > access_ok().
+>
+> I think the idea of TASK_SIZE_MAX is that it is a compile-time constant and in fact independent of current, while TASK_SIZE
+> takes TIF_32BIT into account.
 
-So for example vdpasim_net_work(), which uses the net->*_stats variables,
-can be scheduled before they are initialized.
+Say, arch/loongarch defines TASK_SIZE which depends on test_thread_flag(TIF_32BIT_ADDR)
+but it doesn't define TASK_SIZE_MAX, so __access_ok() will use TASK_SIZE.
 
-Let's move _vdpa_register_device() to the end of vdpasim_net_dev_add()
-and add a comment to avoid future issues.
-
-Fixes: 0899774cb360 ("vdpa_sim_net: vendor satistics")
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
----
-
-Notes:
-    I don't have a reproducer, but I became aware of this problem while
-    I was changing the buffer allocation.
-    
-    In the block device, as soon as the device is registered, the driver
-    sends several requests, and I guess this might happen for the net
-    device as well.
-    
-    Thanks,
-    Stefano
-
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-index 862f405362de..dfe2ce341803 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-@@ -466,16 +466,21 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
- 
- 	vdpasim_net_setup_config(simdev, config);
- 
--	ret = _vdpa_register_device(&simdev->vdpa, VDPASIM_NET_VQ_NUM);
--	if (ret)
--		goto reg_err;
--
- 	net = sim_to_net(simdev);
- 
- 	u64_stats_init(&net->tx_stats.syncp);
- 	u64_stats_init(&net->rx_stats.syncp);
- 	u64_stats_init(&net->cq_stats.syncp);
- 
-+	/*
-+	 * Initialization must be completed before this call, since it can
-+	 * connect the device to the vDPA bus, so requests can arrive after
-+	 * this call.
-+	 */
-+	ret = _vdpa_register_device(&simdev->vdpa, VDPASIM_NET_VQ_NUM);
-+	if (ret)
-+		goto reg_err;
-+
- 	return 0;
- 
- reg_err:
--- 
-2.39.2
+Oleg.
 
