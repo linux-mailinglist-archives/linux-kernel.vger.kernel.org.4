@@ -2,104 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A438F6CD7A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC486CD7AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbjC2K1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
+        id S230401AbjC2Kah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 06:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjC2K1d (ORCPT
+        with ESMTP id S229456AbjC2Kaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:27:33 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AE3125;
-        Wed, 29 Mar 2023 03:27:32 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so5799772wmq.3;
-        Wed, 29 Mar 2023 03:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680085651;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bf3058/knQ0tFWmfPZfCyE9CWSx0vTUnHs2fjB/KymA=;
-        b=SRm5l+xoouFUwc/HhzgIa6DAkMoKhJcUyDR0D0R3x+zdtiAfng1p+AO/dWn/e+9vNw
-         /SaomAk8+yu+hwqM9AtZcEUf3H/w5Yqdj9XpyMUaQUu1DRoyjHQQDjFKpVVpDl90qCCN
-         5ghgcfI3oZoA2jfuNt//uMd61CTsm5EysUWqBrBcf46l0/m+K0/oK1Nz5e3f/iJXIx3q
-         Q+BWHcfkwqqrkqg/ukt9w0nCypdxVl6uCRqaoxuzKhMHM3EuW0+oYntXLCnfEAKIgRN1
-         D5Xboz3IxJrtsVEaPVAl9H2I1J2j0LuWJEoFdwLKTv/pd5b5+4r6bEOVFZOFhHbunKhT
-         ahgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680085651;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bf3058/knQ0tFWmfPZfCyE9CWSx0vTUnHs2fjB/KymA=;
-        b=b0f84KKgb3kqc5fpzCAMlTLaeIMW5ymsH4chc7DIB2iqDkAs4/0wwA92sgXYK04lts
-         t841IHQ4wlnUFZovZ9zYgKnzbGbsmvieTGkoIx+9dRZbGHJyQmZW+5aJjU8Uj0pjdy1F
-         d+2QdX+HUAJu6ICfVqTr4SG1JA7r3RTPW7vMPnY26yxCsUQ4FQaati2Aw9FovoPvvIRm
-         fg9wq2s4E1sbvnP/C5ttgzzP5Nsb9zy1X2H0E3tNAJN8xfV9Z+T/qvk9+pkhO9v/xL9S
-         db6NlKNZ/V9VdhFvsbmteH+LKt5zMYVxiafl2sTnyamB7j+iA5ji/FPHQTqiPXqvJORz
-         /lmA==
-X-Gm-Message-State: AAQBX9fswi/FgR7ev6pLDMPGV7aiHMN6XLvpQUbN+v3IxAzXX26LLSLl
-        AjknBEb+XlAEilbzvzNqRKQ=
-X-Google-Smtp-Source: AKy350aGhZYrMYVU5tSUM4mkZxfaDXPRFSfr27ptUeJw0v34q88f53TVJeg9baQ9z6YwvA49wTCBiw==
-X-Received: by 2002:a05:600c:28d:b0:3ed:3268:5f35 with SMTP id 13-20020a05600c028d00b003ed32685f35mr1426339wmk.18.1680085650933;
-        Wed, 29 Mar 2023 03:27:30 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05600c444d00b003ee8ab8d6cfsm1886094wmn.21.2023.03.29.03.27.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 03:27:30 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 13:27:27 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        dmaengine@vger.kernel.org
-Subject: Re: [PATCH 1/2] dmaengine: mv_xor_v2: Fix an error code.
-Message-ID: <16cfc681-7a08-4160-bd69-4c8b59774688@kili.mountain>
-References: <201170dff832a3c496d125772e10070cd834ebf2.1679814350.git.christophe.jaillet@wanadoo.fr>
+        Wed, 29 Mar 2023 06:30:35 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C65C01BFC;
+        Wed, 29 Mar 2023 03:30:33 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxE4RIEyRkxbcTAA--.30276S3;
+        Wed, 29 Mar 2023 18:30:32 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuRDEyRkAFMQAA--.46922S3;
+        Wed, 29 Mar 2023 18:30:31 +0800 (CST)
+Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
+ <20230328112210.23089-2-zhuyinbo@loongson.cn>
+ <def2ccc8-abb2-2786-fc67-fb71f1c8e3b0@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <006e2640-3321-3797-c5cc-726b8ee9d6d7@loongson.cn>
+Date:   Wed, 29 Mar 2023 18:30:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201170dff832a3c496d125772e10070cd834ebf2.1679814350.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <def2ccc8-abb2-2786-fc67-fb71f1c8e3b0@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxHuRDEyRkAFMQAA--.46922S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrKr15CFWkAF1xKFyfWw4xtFb_yoW3Wwc_tF
+        40y34Duw18JFn7Jayvqr47Gr95K398J34UGaykJr17X34YvrWfCr95GrySkr1fXrW8GF4Y
+        9ryru3y0kr1a9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        27CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
+        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
+        AFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
+        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
+        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UC_M3UUUUU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 09:06:37AM +0200, Christophe JAILLET wrote:
-> If the probe is deferred, -EPROBE_DEFER should be returned, not
-> +EPROBE_DEFER.
-> 
-> Fixes: 3cd2c313f1d6 ("dmaengine: mv_xor_v2: Fix clock resource by adding a register clock")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/dma/mv_xor_v2.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dma/mv_xor_v2.c b/drivers/dma/mv_xor_v2.c
-> index 89790beba305..0991b8265829 100644
-> --- a/drivers/dma/mv_xor_v2.c
-> +++ b/drivers/dma/mv_xor_v2.c
-> @@ -752,7 +752,7 @@ static int mv_xor_v2_probe(struct platform_device *pdev)
->  
->  	xor_dev->clk = devm_clk_get(&pdev->dev, NULL);
->  	if (PTR_ERR(xor_dev->clk) == -EPROBE_DEFER) {
-> -		ret = EPROBE_DEFER;
-> +		ret = -EPROBE_DEFER;
->  		goto disable_reg_clk;
 
-Heh.  Looking through the Smatch results, I don't think this actually
-affects runtime because driver_probe_device() checks for both positive
-and negatives.  People shouldn't be returning positives, of course, but
-it appears there is a work around for bugs built in already.
 
-regards,
-dan carpenter
+在 2023/3/29 下午4:06, Krzysztof Kozlowski 写道:
+> On 28/03/2023 13:22, Yinbo Zhu wrote:
+>> Add the Loongson platform spi binding with DT schema format using
+>> json-schema.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>>   .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
+>>   MAINTAINERS                                   |  6 +++
+> 
+> You decided not to use Rob's advice, thus this patch cannot be applied
+> now. Wait for the merge window to finish (so dependency is in mainline)
+> and send the patch then. Not earlier.
+> 
+> Best regards,
+> Krzysztof
+> I'm sorry, I didn't understand Rob's suggestion in fact. I'll ask Rob
+what I should do
+later. If it did really no good solution, I will postpone my patch until the
+dependent patch is merged into the mainline.
+
+Thanks.
 
