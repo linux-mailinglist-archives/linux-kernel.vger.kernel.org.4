@@ -2,66 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBF96CEF44
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819A06CEF47
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjC2QYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
+        id S229887AbjC2QYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjC2QYU (ORCPT
+        with ESMTP id S229864AbjC2QYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:24:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA50618E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:24:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FB0B61D9A
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 16:24:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75AFBC433EF;
-        Wed, 29 Mar 2023 16:24:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680107042;
-        bh=ZfDCTUE3oR1CBgAqgNY9DNOMOsUvZeRr63AGfwcjHi4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UycVgPSI2wjGSFkb5+6sqhBd51FDvviejCHPRnkkAFSOqBgkaVwTcKAOM1S6Lq/Hq
-         YCLPPaS47IUFM3q2Ao94CpryVBWqDIOEBaykNg/9/btd2pwR69SDa+pCH+3u+b+7R/
-         OuoOuOUtCvEKEHZFz+HGIuBOzeUIsFajRwLoz0KpLuWUwoff6DzZ0H/KKqVioQnURb
-         QNd7w5l8VlIy17ib4up8TbNu02ALoERJk5ZEbpcQqQqb83DRztWbLXUzyfgjmxccTG
-         n9NQkJrkomxFOxB4839oMGl+QERKTZ08GaLUbdYcJ7f8txJbR6ehDWBkJdcVEtQiF+
-         0xe86mrC6P3VA==
-Date:   Wed, 29 Mar 2023 09:24:00 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 5/5] objtool: Add "missing __noreturn" warning
-Message-ID: <20230329162400.nimzdxjwd6isddux@treble>
-References: <cover.1679932620.git.jpoimboe@kernel.org>
- <4f22aa05702ca037630fa6c1f7fd54d13914a631.1679932620.git.jpoimboe@kernel.org>
- <alpine.LSU.2.21.2303281110100.14873@pobox.suse.cz>
+        Wed, 29 Mar 2023 12:24:42 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920016585;
+        Wed, 29 Mar 2023 09:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=tWoMYM5phXzU4e6j6m4FzuuaA8OIJOcaPtVysKi+Wi8=; b=rPqbIHYBvr2qKuT39QG9t5A+nh
+        LoVA9JPJ+af+lEKf3Li6mLRQwqPkod6xDzzeshmBBlBmvIForigitzR7gUYxDOQ5P1qvuY9Zh8cwk
+        7dZxlfaeOErWT8apIofVUuuNZPCnoqFGvQkhS4OyjgWVbMLlVrX/UtUt9vlNsPPJyvzM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1phYaz-008mSg-0a; Wed, 29 Mar 2023 18:24:21 +0200
+Date:   Wed, 29 Mar 2023 18:24:21 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: Re: [RFC PATCH net-next v3 03/15] net: dsa: mt7530: use regmap to
+ access switch register space
+Message-ID: <7eb07ed2-2b1c-44fa-b029-0ecad7872fd2@lunn.ch>
+References: <cover.1680105013.git.daniel@makrotopia.org>
+ <754322262cd754aee5916954b8e651989b229a09.1680105013.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.2303281110100.14873@pobox.suse.cz>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <754322262cd754aee5916954b8e651989b229a09.1680105013.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:10:48AM +0200, Miroslav Benes wrote:
-> >  		WARN_FUNC("unreachable instruction", insn->sec, insn->offset);
-> > -		return 1;
-> 
-> I knew I should have read the whole set first...
+Thanks for splitting this patchset up. This is much easier to review.
 
-Oops, guess that is in the wrong patch.
+> +static u32
+> +mt7530_mii_read(struct mt7530_priv *priv, u32 reg)
+> +{
+> +	int ret;
+> +	u32 val;
+> +
+> +	ret = regmap_read(priv->regmap, reg, &val);
+> +	if (ret) {
+> +		dev_err(priv->dev,
+> +			"failed to read mt7530 register\n");
+> +		return ret;
 
--- 
-Josh
+This is a u32 function. ret should be negative on error, which is
+going to be turned positive in order to return a u32. So you probably
+want to make this an int function.
+
+     Andrew
+
