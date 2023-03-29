@@ -2,38 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3EB6CD1F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA9C6CD1F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjC2GMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 02:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S229553AbjC2GNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 02:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjC2GMU (ORCPT
+        with ESMTP id S229546AbjC2GND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 02:12:20 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2ACC435A1;
-        Tue, 28 Mar 2023 23:12:05 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 32T6BwOJ009459;
-        Wed, 29 Mar 2023 08:11:58 +0200
-Date:   Wed, 29 Mar 2023 08:11:58 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] tools/nolibc: validate C99 compatibility
-Message-ID: <ZCPWrrrlVRsaVIsl@1wt.eu>
-References: <20230328-nolibc-c99-v1-1-a8302fb19f19@weissschuh.net>
- <ZCPJm/Nb2AGlJqXg@1wt.eu>
- <2be5dd3f-d4ca-499a-9f7e-3113b4f04412@t-8ch.de>
+        Wed, 29 Mar 2023 02:13:03 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB231FE0;
+        Tue, 28 Mar 2023 23:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680070382; x=1711606382;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oxmXk/Jf6fYFdSfm6pbGui75cwVHE+ozCDImWBIUPGg=;
+  b=NpDTAfXY4jHN7yqqkox92fI2O+yl7QiWl8zEHtpfe4CyPo93BO76S92S
+   ZmoYMJB+Kml7fljNmuGpf9G8OqzfymjBV6bhUzgK9WH5IUAgAUz5Ky06r
+   OxvLyokMH+VQp/hqz0jktRs4fj+0LNf8FbxsVl7DHiIwklvG3xotH1UO6
+   LtPbC0xeymhz1KGYNgt6AQYw9gvA3Pj2s98+43aPASmJcg3e4jpiIyhX/
+   ColLTn1qWMqzfu6jWJLNS2EQIipdZsqX9rydchxKNtYN1n4ZaNRlBrIBE
+   cUz6+HDO23p9rWTJcIDubRPN1+yzfBzlNn+0ScP2QXPSTnE4OUSt4VErQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="329254925"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="329254925"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 23:13:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="661476319"
+X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
+   d="scan'208";a="661476319"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga006.jf.intel.com with ESMTP; 28 Mar 2023 23:12:56 -0700
+Message-ID: <709827a9-da98-1751-c69c-e2b883784093@linux.intel.com>
+Date:   Wed, 29 Mar 2023 14:13:14 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2be5dd3f-d4ca-499a-9f7e-3113b4f04412@t-8ch.de>
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, LKML <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux.dev, Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>
+Subject: Re: [PATCH v2 4/8] iommu/vt-d: Reserve RID_PASID from global SVA
+ PASID space
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
+References: <20230327232138.1490712-1-jacob.jun.pan@linux.intel.com>
+ <20230327232138.1490712-5-jacob.jun.pan@linux.intel.com>
+ <41d31adf-577e-431c-c400-2708885400c1@linux.intel.com>
+ <20230328092919.372f0545@jacob-builder>
+ <20230328135200.139f280a@jacob-builder>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230328135200.139f280a@jacob-builder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,70 +79,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 05:35:33AM +0000, Thomas Weißschuh wrote:
-> Hi Willy,
+On 3/29/23 4:52 AM, Jacob Pan wrote:
+> On Tue, 28 Mar 2023 09:29:19 -0700, Jacob Pan
+> <jacob.jun.pan@linux.intel.com>  wrote:
 > 
-> On 2023-03-29 07:16:11+0200, Willy Tarreau wrote:
-> > On Tue, Mar 28, 2023 at 09:07:35PM +0000, Thomas Weißschuh wrote:
-> > > Most of the code was migrated to C99-conformant __asm__ statements
-> > > before. It seems string.h was missed.
-> > > 
-> > > Fix string.h and also validate during build that nolibc stays within
-> > > C99.
-> > 
-> > I'm all for improving portability, however I have a concern with building
-> > the test case with -std=c99 which is that it might hide some c99-only
-> > stuff that we'd introduce by accident in the nolibc's code, and I'd
-> > rather not do that because it will mean changing build options for some
-> > external programs using it if it happens. However I totally agree with
-> > you that we need to make sure that there's no build issues with c99
-> > compilers. Modern compilers are c99-compatible but generally come with
-> > GNU extensions and I understand why you're interested in switching to
-> > std=c99 in order to drop some of these like "asm". Should we have two
-> > build targets, the default one and a c99 one ? Maybe. The build is so
-> > small and quick that nobody will care, so we could definitely imagine
-> > building the two versions. Maybe you have a better idea ?
-> 
-> I'm not sure I understand.
-> Do you want to stay compatible with c89/gnu89?
+>>>> On VT-d platforms, RID_PASID is used for DMA request without PASID. We
+>>>> should not treat RID_PASID special instead let it be allocated from
+>>>> the global SVA PASID number space.
+>>> It's same to AMD and ARM SMMUv3, right? They also need an explicit
+>>> reservation of PASID 0.
+>>>    
+>> yes, all IOMMU drivers need to do that. I will give it a try but might
+>> need help to place the call.
+> It might be simpler to just let SVA code allocate from 1 up instead of 0
+> (as is in the current code). Global PASID allocator would still allow the
+> full range from 0 to max. Then there is no change to architectures that
+> don't support non-zero RID_PASID. For VT-d, it would still work in the
+> future when we have nonzero RID_PASID. is that reasonable?
 
-At least with gnu89, yes, since it's been used by default by a wide
-range of compilers.
+Yes. It's reasonable from the status quo.
 
-> If so we could use that baseline standard instead of -std=c99.
-
-The only thing is that c99 is both more permissive and more restrictive
-than gnu89 since (as you noticed) gnu89 allows for example "asm" instead
-of "__asm__".
-
-> Without specifying a standard we get whatever the compiler uses as
-> default which is probably much newer than c99.
-
-Yes but do we really care ? I think we want at least some gnuXX
-(which gcc does by default) and some c99 for those who don't want to
-depend on gnuXX. Diversity in tests provides faster reports than
-forcing everyone to the same set. By keeping the default build option,
-a backwards-compatibility test is just a matter of setting CC= with the
-relevant compiler to confirm it's still OK, without being fooled by the
-fact that a standard other than the default was used.
-
-> Having two targets seems to be easy to do but I'm not sure what the
-> advantage would be over compiling once against the intended baseline
-> standard.
-
-We're providing a set of includes to be used by userland so there isn't
-a single intended baseline standard. I'm not advocating for supporting
-everything on earth at all, but at least it should work with native
-compilers currently found in distros or on the kernel.org crosstools,
-and with some older toolchains that are used once in a while to rebuild
-a few compact tools. For example I've used this codebase to build a
-recovery kernel+tools in the past, which fits everything in a 1MB
-binary, and that's the type of thing where you know that it's not always
-easy nor relevant to port the code to newer compilers, so if it used to
-work on gcc 4.7 you'll just reuse that one if you still have it. My
-position regarding older tools is: we don't make particular efforts to
-test them, but we at least do not try hard to evince them either as
-long as it's not necessary.
-
-Thanks,
-Willy
+Best regards,
+baolu
