@@ -2,83 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AAF6CD96C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8990D6CD96D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjC2Mgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
+        id S229664AbjC2Mgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjC2Mgg (ORCPT
+        with ESMTP id S229549AbjC2Mgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:36:36 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43C73C31
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:36:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1680093395; x=1711629395;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:mime-version:
-   content-transfer-encoding;
-  bh=9BIVQAV7qt8Ug8zbs5YPptmgYpUt2pDKa6KaSVzh8Lo=;
-  b=a9038OSkNjt2qA4a+dva/dEyJjc5lAa/96U0RXkxx4Az5ZUpHrVmLpRl
-   Kx8LjCD81FXKlFfdvs5ZKm5flcWPE61sFVean7AzqAuO0CHNYWXcN88j7
-   N5R47ekTCwHgttdCZBmwJ/19IaOu3YifZEw/Ni9b7IQbtWyspWmZuyRlM
-   4=;
-X-IronPort-AV: E=Sophos;i="5.98,300,1673913600"; 
-   d="scan'208";a="1117495953"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-fad5e78e.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 12:36:28 +0000
-Received: from EX19D020EUA004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-m6i4x-fad5e78e.us-west-2.amazon.com (Postfix) with ESMTPS id 2FBF7A02EB;
-        Wed, 29 Mar 2023 12:36:28 +0000 (UTC)
-Received: from EX19D030EUC004.ant.amazon.com (10.252.61.164) by
- EX19D020EUA004.ant.amazon.com (10.252.50.56) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 29 Mar 2023 12:36:27 +0000
-Received: from EX19D030EUC004.ant.amazon.com (10.252.61.164) by
- EX19D030EUC004.ant.amazon.com (10.252.61.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
- Wed, 29 Mar 2023 12:36:26 +0000
-Received: from EX19D030EUC004.ant.amazon.com ([fe80::f98a:db18:b0eb:477]) by
- EX19D030EUC004.ant.amazon.com ([fe80::f98a:db18:b0eb:477%3]) with mapi id
- 15.02.1118.026; Wed, 29 Mar 2023 12:36:26 +0000
-From:   "Krcka, Tomas" <krckatom@amazon.de>
-To:     Will Deacon <will@kernel.org>
-CC:     "Krcka, Tomas" <krckatom@amazon.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        "Shameer Kolothum" <shameerali.kolothum.thodi@huawei.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iommu/arm-smmu-v3: Fix event queue overflow
- acknowledgment
-Thread-Topic: [PATCH] iommu/arm-smmu-v3: Fix event queue overflow
- acknowledgment
-Thread-Index: AQHZYjsUJTyLbHuMvUep4ekJH0WoLQ==
-Date:   Wed, 29 Mar 2023 12:36:26 +0000
-Message-ID: <BD6629C9-7E59-43B1-BE58-F6799E0FBC5E@amazon.com>
-References: <20230308092048.71390-1-krckatom@amazon.de>
- <20230327121234.GA31342@willie-the-truck>
- <8845FA6A-45F1-4090-B4A2-C0C28F709095@amazon.com>
- <20230328115613.GB1159@willie-the-truck>
-In-Reply-To: <20230328115613.GB1159@willie-the-truck>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.1.213.23]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C71BB1ED14D3C5439E0FD0B680DF4439@amazon.com>
+        Wed, 29 Mar 2023 08:36:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 432204201
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:36:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4045A1FB;
+        Wed, 29 Mar 2023 05:37:36 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE0543F6C4;
+        Wed, 29 Mar 2023 05:36:49 -0700 (PDT)
+Message-ID: <76939bf6-1d9d-5f8f-f15c-f03b2322d684@arm.com>
+Date:   Wed, 29 Mar 2023 14:36:44 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH] sched/fair: Make tg->load_avg per node
+Content-Language: en-US
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Nitin Tekchandani <nitin.tekchandani@intel.com>,
+        Waiman Long <longman@redhat.com>,
+        Yu Chen <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
+References: <20230327053955.GA570404@ziqianlu-desk2>
+ <943d44f7-1fa9-8545-dc1d-890e4dd20854@arm.com>
+ <20230328125624.GA6130@ziqianlu-desk2>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230328125624.GA6130@ziqianlu-desk2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,98 +57,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/03/2023 14:56, Aaron Lu wrote:
+> Hi Dietmar,
+> 
+> Thanks for taking a look.
+> 
+> On Tue, Mar 28, 2023 at 02:09:39PM +0200, Dietmar Eggemann wrote:
+>> On 27/03/2023 07:39, Aaron Lu wrote:
 
+[...]
 
-> On 28. Mar 2023, at 13:56, Will Deacon <will@kernel.org> wrote:
-> =
+> Did you test with a v6.3-rc based kernel?
+> I encountered another problem on those kernels and had to temporarily use
+> a v6.2 based kernel, maybe you have to do the same:
+> https://lore.kernel.org/lkml/20230327080502.GA570847@ziqianlu-desk2/
 
-> =
+No, I'm also on v6.2.
 
-> On Tue, Mar 28, 2023 at 07:13:52AM +0000, Krcka, Tomas wrote:
->> =
+>> Is your postgres/sysbench running in a cgroup with cpu controller
+>> attached? Mine isn't.
+> 
+> Yes, I had postgres and sysbench running in the same cgroup with cpu
+> controller enabled. docker created the cgroup directory under
+> /sys/fs/cgroup/system.slice/docker-XXX and cgroup.controllers has cpu
+> there.
 
->>> On 27. Mar 2023, at 14:12, Will Deacon <will@kernel.org> wrote:
->>> =
+I'm running postgresql service directly on the machine. I boot now with
+'cgroup_no_v1=all systemd.unified_cgroup_hierarchy=1' so I can add the
+cpu controller to:
 
->>> =
+  system.slice/system-postgresql.slice/postgresql@11-main.service
 
->>> On Wed, Mar 08, 2023 at 09:20:47AM +0000, Tomas Krcka wrote:
->>>> When an overflow occurs in the event queue, the SMMU toggles overflow
->>>> flag OVFLG in the PROD register.
->>>> The evtq thread is supposed to acknowledge the overflow flag by toggli=
-ng
->>>> flag OVACKFLG in the CONS register, otherwise the overflow condition is
->>>> still active (OVFLG !=3D OVACKFLG).
->>>> =
+where the 96 postgres threads run and to
 
->>>> Currently the acknowledge register is toggled after clearing the event
->>>> queue but is never propagated to the hardware. It would be done next
->>>> time when executing evtq thread.
->>>> =
+  user.slice/user-1005.slice/session-4.scope
 
->>>> The SMMU still adds elements to the queue when the overflow condition =
-is
->>>> active but any subsequent overflow information after clearing the event
->>>> queue will be lost.
->>>> =
+where the 96 sysbench threads run.
 
->>>> This change keeps the SMMU in sync as it's expected by design.
->>>> =
+Checked with systemd-cgls and `cat /sys/kernel/debug/sched/debug` that
+those threads are really running there.
 
->>>> Signed-off-by: Tomas Krcka <krckatom@amazon.de>
->>>> Suggested-by: KarimAllah Ahmed <karahmed@amazon.de>
->>>> ---
->>>> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 1 +
->>>> 1 file changed, 1 insertion(+)
->>>> =
+Still not seeing `update_load_avg` or `update_cfs_group` in perf report,
+only some very low values for `update_blocked_averages`.
 
->>>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iom=
-mu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>> index f2425b0f0cd6..acc1ff5ff69b 100644
->>>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>> @@ -1579,6 +1579,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq,=
- void *dev)
->>>>     /* Sync our overflow flag, as we believe we're up to speed */
->>>>     llq->cons =3D Q_OVF(llq->prod) | Q_WRP(llq, llq->cons) |
->>>>                 Q_IDX(llq, llq->cons);
->>>> +     queue_sync_cons_out(q);
->>>>     return IRQ_HANDLED;
->>>> }
->>> =
+Also added CFS BW throttling to both cgroups. No change.
 
->>> I think I probably did mean to have something like this, but can we
->>> only do the actual h/w update if overflow has occurred? Otherwise I thi=
-nk
->>> we're pointlessly writing back the same value most of the time.
->>> =
+Then I moved session-4.scope's shell into `postgresql@11-main.service`
+so that `postgres` and `sysbench` threads run in the same cgroup.
 
->>> Will
->> =
+Didn't change much.
 
->> Yes, we can, but then same applies for the priq as well, there we also w=
-rite back
->> every time.
-> =
+>> Maybe I'm doing something else differently?
+> 
+> Maybe, you didn't mention how you started postgres, if you start it from
+> the same session as sysbench and if autogroup is enabled, then all those
+> tasks would be in the same autogroup taskgroup then it should have the
+> same effect as my setup.
 
-> Sure, feel free to update both.
-> =
+This should be now close to my setup running `postgres` and `sysbench`
+in `postgresql@11-main.service`.
 
+> Anyway, you can try the following steps to see if you can reproduce this
+> problem on your Arm64 server:
+> 
+> 1 docker pull postgres
+> 2 sudo docker run --rm --name postgres-instance -e POSTGRES_PASSWORD=mypass -e POSTGRES_USER=sbtest -d postgres -c shared_buffers=80MB -c max_connections=250
+> 3 go inside the container
+>   sudo docker exec -it $the_just_started_container_id bash
+> 4 install sysbench inside container
+>   apt update and apt install sysbench
+> 5 prepare
+>   root@container:/# sysbench --db-driver=pgsql --pgsql-user=sbtest --pgsql_password=mypass --pgsql-db=sbtest --pgsql-port=5432 --tables=16 --table-size=10000 --threads=224 --time=60 --report-interval=2 /usr/share/sysbench/oltp_read_only.lua prepare
+> 6 run
+>   root@container:/# sysbench --db-driver=pgsql --pgsql-user=sbtest --pgsql_password=mypass --pgsql-db=sbtest --pgsql-port=5432 --tables=16 --table-size=10000 --threads=224 --time=60 --report-interval=2 /usr/share/sysbench/oltp_read_only.lua run
 
-OK, I sent it as new patch: https://lore.kernel.org/lkml/20230329123420.346=
-41-1-tomas.krcka@gmail.com
+I would have to find time to learn how to set up docker on my machine
+... But I use very similar values for the setup and sysbench test.
 
+> Note that I used 224 threads where this problem is visible. I also tried
+> 96 and update_cfs_group() and update_load_avg() cost about 1% cycles then.
 
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
-
+True, I was hopping to see at least the 1% ;-)
