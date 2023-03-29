@@ -2,128 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103D66CD7CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84966CD7CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjC2Kj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
+        id S230054AbjC2Kjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 06:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjC2Kj0 (ORCPT
+        with ESMTP id S230075AbjC2Kjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:39:26 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 184472135;
-        Wed, 29 Mar 2023 03:39:23 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8BxMI9aFSRk_LgTAA--.30514S3;
-        Wed, 29 Mar 2023 18:39:22 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxLL5WFSRkhVQQAA--.12361S3;
-        Wed, 29 Mar 2023 18:39:21 +0800 (CST)
-Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
-To:     Rob Herring <robh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, zhuyinbo@loongson.cn
-References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
- <20230328112210.23089-2-zhuyinbo@loongson.cn>
- <168000761529.3001360.2224316097077012976.robh@kernel.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <8336d5ba-1150-81ca-bd5a-7862bd10ef58@loongson.cn>
-Date:   Wed, 29 Mar 2023 18:39:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 29 Mar 2023 06:39:51 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653BD2135
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:39:50 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CB9541EC064E;
+        Wed, 29 Mar 2023 12:39:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680086387;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tBSgGfmxjj+m3c/5I3P3uRFAoHIgEnW4i2QN89gLAaM=;
+        b=TgHvjHxwrt5zuFHJnf9uk1q+uCoTX+OqzahzTwsN5BUH7r4Px2PdGytyCsrqWWQN7n7DgH
+        s+AKg/CTDvtoYjVQEcqok53KtHcjdhwZVOuDRBVok1oB6f5MnxH1Bng9dbKguQ6ZUZaICe
+        u0WghcTF6AVbVoPCiqysGMRttBen+Vg=
+Date:   Wed, 29 Mar 2023 12:39:43 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Gabriel David <ultracoolguy@disroot.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David R <david@unsolicited.net>,
+        Kishon Vijay Abraham I <kvijayab@amd.com>
+Subject: Re: Panic starting 6.2.x and later 6.1.x kernels
+Message-ID: <20230329103943.GAZCQVb1n3tKlGOAWI@fat_crate.local>
+References: <943d2445-84df-d939-f578-5d8240d342cc@unsolicited.net>
+ <20230327074952.GAZCFKoDOiJUdtse2H@fat_crate.local>
+ <e8d15248-e694-79d7-da9c-b4485b471e14@unsolicited.net>
+ <4c660f0f-2845-0e02-ccf9-619958e24236@unsolicited.net>
+ <20230328142014.GCZCL3nkW5Qx5jhfsB@fat_crate.local>
+ <57385475-c289-356f-d696-fc6decce1390@unsolicited.net>
+ <20230328171057.GDZCMfobguhGUFiUuh@fat_crate.local>
+ <9ed16be4-051d-c20f-0410-b8a973c4c09e@disroot.org>
 MIME-Version: 1.0
-In-Reply-To: <168000761529.3001360.2224316097077012976.robh@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxLL5WFSRkhVQQAA--.12361S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7KrWxXw45tr45Cr48KF43Awb_yoW8tr4rpw
-        45CwsakF4DZr17J393J3srJw15Xr93XFW3tFW7Kr9Fy3Z0qa4ftw4SgrykuF47ur4fGFy7
-        Za40k34fKa48ZF7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
-        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
-        c4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8AuctUUUUU==
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <9ed16be4-051d-c20f-0410-b8a973c4c09e@disroot.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 28, 2023 at 09:26:16PM -0400, Gabriel David wrote:
+> 
+> On 3/28/23 1:10 PM, Borislav Petkov wrote:
+> > On Tue, Mar 28, 2023 at 04:06:41PM +0100, David R wrote:
+> > > Yes, that patch fixes it also. By all means add my tested by:
+> > Ok, thanks for checking. That issue is still weird, tho, and we don't have
+> > an idea why that happens.
+> > 
+> > If you could test your original, failing kernel with "nointremap" on the
+> > command line, that would be cool.
+> > 
+> > Thx.
+> > 
+> I have the same problem, and while I haven't tested the commit you mentioned
+> earlier, `nointremap` on the failing kernels(6.1.x and 6.2.3) worked.
+> 
+> So far, apart from this mail thread I've found this reddit thread with the
+> issue https://reddit.com/r/archlinux/comments/11ux6uh/stuck_at_loading_initial_ramdisk/
+> , and to them updating the BIOS worked. However, to me it didn't. Another
+> thing is that David, that person, and me all use 1st gen Ryzen processors(in
+> my case, a Ryzen 3 1200).
 
+Yeah, this looks like something's borked with interrupt remapping and
+timer interrupt when the code looks at that online capable bit. I guess
+interrupt remapping doesn't consider that bit and still remaps to cores
+which are now *not* onlined, leading to the panic.
 
-在 2023/3/28 下午8:57, Rob Herring 写道:
-> 
-> On Tue, 28 Mar 2023 19:22:09 +0800, Yinbo Zhu wrote:
->> Add the Loongson platform spi binding with DT schema format using
->> json-schema.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
->>   MAINTAINERS                                   |  6 +++
->>   2 files changed, 49 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
-> FATAL ERROR: Unable to parse input tree
-> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1512: dt_binding_check] Error 2
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230328112210.23089-2-zhuyinbo@loongson.cn
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-Hi Rob,
+But this is all conjecture of me trying to connect the IO-APIC
+observation to this online capable bit.
 
-I'm sorry, actually, I don't know what the specific operation I should 
-do when I received the check warning
-from your bot. Does it means that I should add dependency note into this 
-patch's changelog ? or something else, I really
-don't know. Actually, I'm always bothered by these things that how to 
-resolve the dependency issue for two
-dependent patches that do not belong to the same series.
+And, ofcourse, I cannot trigger it:
 
-Thanks.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
+[    0.000000] Linux version 6.1.21 (root@epic) (gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2) #1 SMP PREEMPT_DYNAMIC Wed Mar 29 12:00:57 CEST 2023
 
+...
+
+[    0.200425] smpboot: CPU0: AMD EPYC 7251 8-Core Processor (family: 0x17, model: 0x1, stepping: 0x2)
+
+...
+
+[    4.019751] AMD-Vi: Interrupt remapping enabled
+
+So it looks like only some Zen1 client BIOSes are b0rked. Which is
+swell, again. ;-\
+
+But let's wait for tglx to look at this first.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
