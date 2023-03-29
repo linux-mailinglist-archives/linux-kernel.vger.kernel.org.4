@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43F76CF01A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 422746CF01E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbjC2RFm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 13:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
+        id S231176AbjC2RGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 13:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjC2RFi (ORCPT
+        with ESMTP id S229638AbjC2RF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:05:38 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D6230C2;
-        Wed, 29 Mar 2023 10:05:37 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id ew6so66054812edb.7;
-        Wed, 29 Mar 2023 10:05:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680109536;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=62e4+lmBq/lhs+cZOFYzhKCQ2kaGBP2Gx8PsA2GJi24=;
-        b=brwTXAhpSqTEZUTTq2fbdAOQgP2fNMAkrmXFGqBFPZvgUtoV1PaGW3Du4zTljiTFKq
-         N9DMw3kUENKj2MHsqhBn2YgWGanXtLgNwGHJudL8pvy6Jv98YYsOF4pP2oQ/p5QA8fZN
-         hK/g/OZqVXkBarjZHKozBlBwZ/RMiSPv7Ymfo7LEMPLry7wd+mXNNiZxN6eledtMgJU+
-         0aYPT+cKYzfGbapbk/6Vk5hMTLWnagjgoAswIBFvAeJ42XogID7gAbP7SYynmvFE/g9Q
-         uN3S+V5oG4pDvGWfXEIsdBKP1pSTlXjXmBUkmsC8OPMse/OeMvu9bRS9BjqFwLasY4KA
-         vDUA==
-X-Gm-Message-State: AAQBX9d/zrUAnNeI3v2IObhpku0I7pfKwrzVp5WIJisnWoXNZ5CZ2cd+
-        tUoUjGP8FOXMWPppL4I9GseXixie03d2Ip/pkNFWHGYG
-X-Google-Smtp-Source: AKy350aHcjL7yz7Sbh4G6+sP7BBKgi6D6567dXMKOJGqJ8hG0xKM6j5+g367Xq7mJFaE2+NGl/RrLB2bq74A7x/17vg=
-X-Received: by 2002:a17:907:160e:b0:946:a095:b314 with SMTP id
- hb14-20020a170907160e00b00946a095b314mr3933611ejc.2.1680109536322; Wed, 29
- Mar 2023 10:05:36 -0700 (PDT)
+        Wed, 29 Mar 2023 13:05:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33701449A;
+        Wed, 29 Mar 2023 10:05:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE28E61DC6;
+        Wed, 29 Mar 2023 17:05:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF38C433D2;
+        Wed, 29 Mar 2023 17:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680109556;
+        bh=T8fWhplWPwZ4OAqvqYb8gn/VvxXqZQz97l6qax8Uj7g=;
+        h=From:Date:Subject:To:Cc:From;
+        b=hmanBQH2TMYgNyzPakCCdf9Vpmc2yZbH/90wWZQ+yRhqDxy8ni75gnIbnheY+EJef
+         Q7TV1K1uGDRUKacpZMlbtIZ3XCMgZYAKJ+wvBTIz9irP1HXsG3w32RxqlucQy7/t+l
+         lin6oHBx62zHTxjoOC7F1MyAW/AJP7Fdddf6vbUYD4X3SonPCKR/HXCMuAk+n6KXF4
+         KrozPxbuiiKMa6YngzOO0Qyc1jnxjpVjoaOZ4AGp/0Ut7Paca3EZpvwZFxInuW7SRk
+         xKWE3QvW+Dw/7+a+ldHPVNLUQAnAfeVUEdGsZzox2BJKR+h+0sQOnLO+k1pjk5chRY
+         TKN66xj6UQj6g==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Wed, 29 Mar 2023 10:05:44 -0700
+Subject: [PATCH wireless-next] wifi: iwlwifi: mvm: Avoid 64-bit division in
+ iwl_mvm_get_crosstimestamp_fw()
 MIME-Version: 1.0
-References: <20230329090055.7537-1-rui.zhang@intel.com> <77da9d68-3cb2-f765-21d2-e427776dca44@linaro.org>
-In-Reply-To: <77da9d68-3cb2-f765-21d2-e427776dca44@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 29 Mar 2023 19:05:25 +0200
-Message-ID: <CAJZ5v0jwrMKMSzVWkzSLBwWZGp0H0-GvnK+gPDtHEsw2XD8KKg@mail.gmail.com>
-Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL
- pointer dereference
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230329-iwlwifi-ptp-avoid-64-bit-div-v1-1-ad8db8d66bc2@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAOdvJGQC/x2NQQqDMBAAvyJ77oIaadp+pXiIcVMXbAzZkAji3
+ xt7HAZmDhCKTAKv5oBImYU3X6G7NWAX4z+EPFeGvu1Vq/onclkLO8aQApq88Yz3ASdOOHPGzg6
+ 6004r9zBQE5MRwikab5cr8jWSKF4iRHK8/79vKBxpJRH0tCcYz/MHJo1DDpYAAAA=
+To:     gregory.greenman@intel.com, kvalo@kernel.org
+Cc:     nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        johannes.berg@intel.com, avraham.stern@intel.com,
+        krishnanand.prabhu@intel.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Arnd Bergmann <arnd@arndb.de>,
+        "kernelci.org bot" <bot@kernelci.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2173; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=T8fWhplWPwZ4OAqvqYb8gn/VvxXqZQz97l6qax8Uj7g=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCkq+Z8LY5R4Zhl+kzx7097ULsrCx6khcu6LA/Vai7dn2
+ LgXrZ7VUcrCIMbBICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbyaS/D/6S05Gc5R7PWHD4n
+ /c76AfsNz7VqB5O8q4vO5k2Z0HT42HFGhp5iLfktC3dI9rBknItMn/AzbZOpCmOLzyKG7zWyfcV
+ yvAA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 6:03 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 29/03/2023 11:00, Zhang Rui wrote:
-> > When the hwmon device node of a thermal zone device is not found,
-> > using hwmon->device causes a kernel NULL pointer dereference.
-> >
-> > Reported-by: Preble Adam C <adam.c.preble@intel.com>
-> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
->
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+There is a 64-bit division in iwl_mvm_get_crosstimestamp_fw(), which
+results in a link failure when building 32-bit architectures with clang:
 
-Applied, thanks!
+  ld.lld: error: undefined symbol: __udivdi3
+  >>> referenced by ptp.c
+  >>>               drivers/net/wireless/intel/iwlwifi/mvm/ptp.o:(iwl_mvm_phc_get_crosstimestamp) in archive vmlinux.a
 
-> > ---
-> > Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
-> > dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
-> > I'm not sure if the Fix tag applies to such commit or not.
-> > ---
-> >   drivers/thermal/thermal_hwmon.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-> > index c59db17dddd6..261743f461be 100644
-> > --- a/drivers/thermal/thermal_hwmon.c
-> > +++ b/drivers/thermal/thermal_hwmon.c
-> > @@ -229,7 +229,7 @@ void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
-> >       hwmon = thermal_hwmon_lookup_by_type(tz);
-> >       if (unlikely(!hwmon)) {
-> >               /* Should never happen... */
-> > -             dev_dbg(hwmon->device, "hwmon device lookup failed!\n");
-> > +             dev_dbg(&tz->device, "hwmon device lookup failed!\n");
-> >               return;
-> >       }
-> >
->
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+GCC has optimizations for division by a constant that clang does not
+implement, so this issue is not visible when building with GCC.
+
+Using div_u64() would resolve this issue, but Arnd points out that this
+can be quite expensive and the timestamp is being read at nanosecond
+granularity. Nick pointed out that the result of this division is being
+stored to a 32-bit type anyways, so truncate gp2_10ns first then do the
+division, which elides the need for libcalls.
+
+Fixes: 21fb8da6ebe4 ("wifi: iwlwifi: mvm: read synced time from firmware if supported")
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1826
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Link: https://lore.kernel.org/6423173a.620a0220.3d5cc.6358@mx.google.com/
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/net/wireless/intel/iwlwifi/mvm/ptp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c b/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c
+index 5c2bfc8ed88d..cdd6d69c5b68 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/ptp.c
+@@ -116,7 +116,7 @@ iwl_mvm_get_crosstimestamp_fw(struct iwl_mvm *mvm, u32 *gp2, u64 *sys_time)
+ 
+ 	gp2_10ns = (u64)le32_to_cpu(resp->gp2_timestamp_hi) << 32 |
+ 		le32_to_cpu(resp->gp2_timestamp_lo);
+-	*gp2 = gp2_10ns / 100;
++	*gp2 = (u32)gp2_10ns / 100;
+ 
+ 	*sys_time = (u64)le32_to_cpu(resp->platform_timestamp_hi) << 32 |
+ 		le32_to_cpu(resp->platform_timestamp_lo);
+
+---
+base-commit: 2af3b2a631b194a43551ce119cb71559d8f6b54b
+change-id: 20230329-iwlwifi-ptp-avoid-64-bit-div-1c4717f73f8a
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
