@@ -2,151 +2,687 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1BA6CEBD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C416CEBD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjC2Ojh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S230079AbjC2OjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjC2OjP (ORCPT
+        with ESMTP id S229842AbjC2OjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:39:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B47B9ECB
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:35:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680100506;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j6Qltz9GS2xYDRDWB9RaugYoeUKsxXmeQuDRMPnbUIY=;
-        b=hd16gSC3d8uVhKHnMIkdTVB7lQ1r97rn/aOl8krdWqa3TIgtsMRJDeuGfqAZMcdOh2ub72
-        HU73HgRJirQPpi+3+tEN89EWQugk3tsZD0uAMvlClEdbOrCkg1HndjFaSFtkRtmkjQyf3Y
-        l35lSn+e7THNAxRupp9CpDO98guW08s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-213-H0iHVYIrNgqdLy-0xl9CJw-1; Wed, 29 Mar 2023 10:35:00 -0400
-X-MC-Unique: H0iHVYIrNgqdLy-0xl9CJw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 545431C0512F;
-        Wed, 29 Mar 2023 14:34:59 +0000 (UTC)
-Received: from [10.22.34.224] (unknown [10.22.34.224])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CE8FEC15BA0;
-        Wed, 29 Mar 2023 14:34:57 +0000 (UTC)
-Message-ID: <a7c4d685-a68c-5dc9-0911-3df2ce92e09d@redhat.com>
-Date:   Wed, 29 Mar 2023 10:34:57 -0400
+        Wed, 29 Mar 2023 10:39:00 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E2C6A58
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:35:39 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id ay14so11489139uab.13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680100538;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wTrNRGVARgBnBzVRFhUueIk7piH/+dqqbCEZuPraabA=;
+        b=cPD6ReD27vmgJUTSFQKStcnFZdaVptoOE8WVi1gBXFA3+rIDeG2nV/CwinYJC/3YiG
+         OcrutgSYphjSBbiYNxfut4QPubuPxbWYAE7kpiBGIPdtugX9bqcDBOU4VtDEuDIU4QSt
+         owaedFVe/JdJC4uDNSH+9qE96ya/MXCDHjiASrQ23PI2LvaFRGNs91Yspvaj7+ZzIh5M
+         LdG05AKp2alDTprXy7VbevvVTP82Z6Z0k7t5ytRF6nyqBzr+Jh2NhtiXR48n9tU2fAkl
+         CD5TjoGO7/P2srXUeh1mqTezVVktmgXZfuGM00p8bJ+EDhRr8LjG3kMo9TTgoUp/7kpw
+         VoWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680100538;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wTrNRGVARgBnBzVRFhUueIk7piH/+dqqbCEZuPraabA=;
+        b=1MWmWnLjBQiSqFkl4Kaxpmn0B/IQNuCwW3Re6phyXvF1EArljD64VAb5TuDPPWWrrC
+         yokeIb/Hu1UpeD1MUkuSwsqCekx13toaEHzoXTzNvRPskJD2CrcQBRXn/VaNmpwHOpdR
+         gRaZMAFbsn2gKJQJYMaSyb2ahb9x1DCQRc1vF1nPzFc36vPLJrABbXXRzYie6rZoJvAh
+         nN5Ivp54VSgAJDvu3aRwjbswXxefIF9Lr5FMOyn/jXHmrMipY+vIqWmX91SQj7gWjK0m
+         1SG7md2l07bYxMGhlXZ/k7RKLLZC2i6vaXiFPA3dohQ8p4j4fiTmyfkV0h9CN/w0OgWm
+         g2JQ==
+X-Gm-Message-State: AAQBX9fnAYvJiUxS45AcIXmWurTDR8SEAHRVvJJCz87DkLZP66Z0kw1S
+        tkj/Fd/QRou4A/zGr8FcXIaIBvryskzNxLZPEDT1aA==
+X-Google-Smtp-Source: AKy350ZVw+P392sX9uHY7tc9gPKYBXtUOvGBqgNJKRtnxWHfSkyobWO2IniFuMWW52RyfZdu20r6WNfQwDiHE05DE6I=
+X-Received: by 2002:ab0:2019:0:b0:765:8f29:d679 with SMTP id
+ v25-20020ab02019000000b007658f29d679mr1478570uak.1.1680100537507; Wed, 29 Mar
+ 2023 07:35:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/6] sched/deadline: cpuset: Rework DEADLINE bandwidth
- restoration
-Content-Language: en-US
-To:     Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230329125558.255239-1-juri.lelli@redhat.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230329125558.255239-1-juri.lelli@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230328092622.062917921@infradead.org> <20230328110354.141543852@infradead.org>
+In-Reply-To: <20230328110354.141543852@infradead.org>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 29 Mar 2023 16:35:25 +0200
+Message-ID: <CAKfTPtDDBVD_N6NgBYi_5iArDXd4iL0-ddQZDKGzzLAD-2AUXg@mail.gmail.com>
+Subject: Re: [PATCH 08/17] sched/fair: Implement an EEVDF like policy
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, corbet@lwn.net, qyousef@layalina.io,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net, pjt@google.com,
+        pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org, efault@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/23 08:55, Juri Lelli wrote:
-> Qais reported [1] that iterating over all tasks when rebuilding root
-> domains for finding out which ones are DEADLINE and need their bandwidth
-> correctly restored on such root domains can be a costly operation (10+
-> ms delays on suspend-resume). He proposed we skip rebuilding root
-> domains for certain operations, but that approach seemed arch specific
-> and possibly prone to errors, as paths that ultimately trigger a rebuild
-> might be quite convoluted (thanks Qais for spending time on this!).
+On Tue, 28 Mar 2023 at 13:06, Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> To fix the problem
+> Where CFS is currently a WFQ based scheduler with only a single knob,
+> the weight. The addition of a second, latency oriented parameter,
+> makes something like WF2Q or EEVDF based a much better fit.
 >
->   01/06 - Rename functions deadline with DEADLINE accounting (cleanup
->           suggested by Qais) - no functional change
->   02/06 - Bring back cpuset_mutex (so that we have write access to cpusets
->           from scheduler operations - and we also fix some problems
->           associated to percpu_cpuset_rwsem)
->   03/06 - Keep track of the number of DEADLINE tasks belonging to each cpuset
->   04/06 - Create DL BW alloc, free & check overflow interface for bulk
->           bandwidth allocation/removal - no functional change
->   05/06 - Fix bandwidth allocation handling for cgroup operation
->           involving multiple tasks
->   06/06 - Use this information to only perform the costly iteration if
->           DEADLINE tasks are actually present in the cpuset for which a
->           corresponding root domain is being rebuilt
+> Specifically, EEVDF does EDF like scheduling in the left half of the
+> tree -- those entities that are owed service. Except because this is a
+> virtual time scheduler, the deadlines are in virtual time as well,
+> which is what allows over-subscription.
 >
-> With respect to the RFC posting [2]
+> EEVDF has two parameters:
 >
->   1 - rename DEADLINE bandwidth accounting functions - Qais
->   2 - call inc/dec_dl_tasks_cs from switched_{to,from}_dl - Qais
->   3 - fix DEADLINE bandwidth allocation with multiple tasks - Waiman,
->       contributed by Dietmar
+>  - weight, or time-slope; which is mapped to nice just as before
+>  - relative deadline; which is related to slice length and mapped
+>    to the new latency nice.
 >
-> This set is also available from
->
-> https://github.com/jlelli/linux.git deadline/rework-cpusets
->
-> Best,
-> Juri
->
-> 1 - https://lore.kernel.org/lkml/20230206221428.2125324-1-qyousef@layalina.io/
-> 2 - https://lore.kernel.org/lkml/20230315121812.206079-1-juri.lelli@redhat.com/
->
-> Dietmar Eggemann (2):
->    sched/deadline: Create DL BW alloc, free & check overflow interface
->    cgroup/cpuset: Free DL BW in case can_attach() fails
->
-> Juri Lelli (4):
->    cgroup/cpuset: Rename functions dealing with DEADLINE accounting
->    sched/cpuset: Bring back cpuset_mutex
->    sched/cpuset: Keep track of SCHED_DEADLINE task in cpusets
->    cgroup/cpuset: Iterate only if DEADLINE tasks are present
->
->   include/linux/cpuset.h  |  12 ++-
->   include/linux/sched.h   |   4 +-
->   kernel/cgroup/cgroup.c  |   4 +
->   kernel/cgroup/cpuset.c  | 232 ++++++++++++++++++++++++++--------------
->   kernel/sched/core.c     |  41 ++++---
->   kernel/sched/deadline.c |  67 +++++++++---
->   kernel/sched/sched.h    |   2 +-
->   7 files changed, 240 insertions(+), 122 deletions(-)
+> Basically, by setting a smaller slice, the deadline will be earlier
+> and the task will be more eligible and ran earlier.
 
-Other than some minor issues that I have talked in earlier emails, the 
-patch series looks good to me.
+IIUC how it works, Vd = ve + r / wi
 
-You can add my ack once the issues are fixed.
+So for a same weight, the vd will be earlier but it's no more alway
+true for different weight
 
-Acked-by: Waiman Long <longman@redhat.com>
-
+>
+> Preemption (both tick and wakeup) is driven by testing against a fresh
+> pick. Because the tree is now effectively an interval tree, and the
+> selection is no longer 'leftmost', over-scheduling is less of a
+> problem.
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  include/linux/sched.h   |    4
+>  kernel/sched/debug.c    |    6
+>  kernel/sched/fair.c     |  324 +++++++++++++++++++++++++++++++++++++++++-------
+>  kernel/sched/features.h |    3
+>  kernel/sched/sched.h    |    1
+>  5 files changed, 293 insertions(+), 45 deletions(-)
+>
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -548,6 +548,9 @@ struct sched_entity {
+>         /* For load-balancing: */
+>         struct load_weight              load;
+>         struct rb_node                  run_node;
+> +       u64                             deadline;
+> +       u64                             min_deadline;
+> +
+>         struct list_head                group_node;
+>         unsigned int                    on_rq;
+>
+> @@ -556,6 +559,7 @@ struct sched_entity {
+>         u64                             vruntime;
+>         u64                             prev_sum_exec_runtime;
+>         s64                             vlag;
+> +       u64                             slice;
+>
+>         u64                             nr_migrations;
+>
+> --- a/kernel/sched/debug.c
+> +++ b/kernel/sched/debug.c
+> @@ -535,9 +535,13 @@ print_task(struct seq_file *m, struct rq
+>         else
+>                 SEQ_printf(m, " %c", task_state_to_char(p));
+>
+> -       SEQ_printf(m, " %15s %5d %9Ld.%06ld %9Ld %5d ",
+> +       SEQ_printf(m, "%15s %5d %9Ld.%06ld %c %9Ld.%06ld %9Ld.%06ld %9Ld.%06ld %9Ld %5d ",
+>                 p->comm, task_pid_nr(p),
+>                 SPLIT_NS(p->se.vruntime),
+> +               entity_eligible(cfs_rq_of(&p->se), &p->se) ? 'E' : 'N',
+> +               SPLIT_NS(p->se.deadline),
+> +               SPLIT_NS(p->se.slice),
+> +               SPLIT_NS(p->se.sum_exec_runtime),
+>                 (long long)(p->nvcsw + p->nivcsw),
+>                 p->prio);
+>
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -47,6 +47,7 @@
+>  #include <linux/psi.h>
+>  #include <linux/ratelimit.h>
+>  #include <linux/task_work.h>
+> +#include <linux/rbtree_augmented.h>
+>
+>  #include <asm/switch_to.h>
+>
+> @@ -347,6 +348,16 @@ static u64 __calc_delta(u64 delta_exec,
+>         return mul_u64_u32_shr(delta_exec, fact, shift);
+>  }
+>
+> +/*
+> + * delta /= w
+> + */
+> +static inline u64 calc_delta_fair(u64 delta, struct sched_entity *se)
+> +{
+> +       if (unlikely(se->load.weight != NICE_0_LOAD))
+> +               delta = __calc_delta(delta, NICE_0_LOAD, &se->load);
+> +
+> +       return delta;
+> +}
+>
+>  const struct sched_class fair_sched_class;
+>
+> @@ -691,11 +702,62 @@ u64 avg_vruntime(struct cfs_rq *cfs_rq)
+>
+>  /*
+>   * lag_i = S - s_i = w_i * (V - v_i)
+> + *
+> + * However, since V is approximated by the weighted average of all entities it
+> + * is possible -- by addition/removal/reweight to the tree -- to move V around
+> + * and end up with a larger lag than we started with.
+> + *
+> + * Limit this to either double the slice length with a minimum of TICK_NSEC
+> + * since that is the timing granularity.
+> + *
+> + * EEVDF gives the following limit for a steady state system:
+> + *
+> + *   -r_max < lag < max(r_max, q)
+> + *
+> + * XXX could add max_slice to the augmented data to track this.
+>   */
+>  void update_entity_lag(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>  {
+> +       s64 lag, limit;
+> +
+>         SCHED_WARN_ON(!se->on_rq);
+> -       se->vlag = avg_vruntime(cfs_rq) - se->vruntime;
+> +       lag = avg_vruntime(cfs_rq) - se->vruntime;
+> +
+> +       limit = calc_delta_fair(max_t(u64, 2*se->slice, TICK_NSEC), se);
+> +       se->vlag = clamp(lag, -limit, limit);
+> +}
+> +
+> +/*
+> + * Entity is eligible once it received less service than it ought to have,
+> + * eg. lag >= 0.
+> + *
+> + * lag_i = S - s_i = w_i*(V - v_i)
+> + *
+> + * lag_i >= 0 -> V >= v_i
+> + *
+> + *     \Sum (v_i - v)*w_i
+> + * V = ------------------ + v
+> + *          \Sum w_i
+> + *
+> + * lag_i >= 0 -> \Sum (v_i - v)*w_i >= (v_i - v)*(\Sum w_i)
+> + *
+> + * Note: using 'avg_vruntime() > se->vruntime' is inacurate due
+> + *       to the loss in precision caused by the division.
+> + */
+> +int entity_eligible(struct cfs_rq *cfs_rq, struct sched_entity *se)
+> +{
+> +       struct sched_entity *curr = cfs_rq->curr;
+> +       s64 avg = cfs_rq->avg_vruntime;
+> +       long load = cfs_rq->avg_load;
+> +
+> +       if (curr && curr->on_rq) {
+> +               unsigned long weight = scale_load_down(curr->load.weight);
+> +
+> +               avg += entity_key(cfs_rq, curr) * weight;
+> +               load += weight;
+> +       }
+> +
+> +       return avg >= entity_key(cfs_rq, se) * load;
+>  }
+>
+>  static u64 __update_min_vruntime(struct cfs_rq *cfs_rq, u64 vruntime)
+> @@ -714,8 +776,8 @@ static u64 __update_min_vruntime(struct
+>
+>  static void update_min_vruntime(struct cfs_rq *cfs_rq)
+>  {
+> +       struct sched_entity *se = __pick_first_entity(cfs_rq);
+>         struct sched_entity *curr = cfs_rq->curr;
+> -       struct rb_node *leftmost = rb_first_cached(&cfs_rq->tasks_timeline);
+>
+>         u64 vruntime = cfs_rq->min_vruntime;
+>
+> @@ -726,9 +788,7 @@ static void update_min_vruntime(struct c
+>                         curr = NULL;
+>         }
+>
+> -       if (leftmost) { /* non-empty tree */
+> -               struct sched_entity *se = __node_2_se(leftmost);
+> -
+> +       if (se) {
+>                 if (!curr)
+>                         vruntime = se->vruntime;
+>                 else
+> @@ -745,18 +805,50 @@ static inline bool __entity_less(struct
+>         return entity_before(__node_2_se(a), __node_2_se(b));
+>  }
+>
+> +#define deadline_gt(field, lse, rse) ({ (s64)((lse)->field - (rse)->field) > 0; })
+> +
+> +static inline void __update_min_deadline(struct sched_entity *se, struct rb_node *node)
+> +{
+> +       if (node) {
+> +               struct sched_entity *rse = __node_2_se(node);
+> +               if (deadline_gt(min_deadline, se, rse))
+> +                       se->min_deadline = rse->min_deadline;
+> +       }
+> +}
+> +
+> +/*
+> + * se->min_deadline = min(se->deadline, left->min_deadline, right->min_deadline)
+> + */
+> +static inline bool min_deadline_update(struct sched_entity *se, bool exit)
+> +{
+> +       u64 old_min_deadline = se->min_deadline;
+> +       struct rb_node *node = &se->run_node;
+> +
+> +       se->min_deadline = se->deadline;
+> +       __update_min_deadline(se, node->rb_right);
+> +       __update_min_deadline(se, node->rb_left);
+> +
+> +       return se->min_deadline == old_min_deadline;
+> +}
+> +
+> +RB_DECLARE_CALLBACKS(static, min_deadline_cb, struct sched_entity,
+> +                    run_node, min_deadline, min_deadline_update);
+> +
+>  /*
+>   * Enqueue an entity into the rb-tree:
+>   */
+>  static void __enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>  {
+>         avg_vruntime_add(cfs_rq, se);
+> -       rb_add_cached(&se->run_node, &cfs_rq->tasks_timeline, __entity_less);
+> +       se->min_deadline = se->deadline;
+> +       rb_add_augmented_cached(&se->run_node, &cfs_rq->tasks_timeline,
+> +                               __entity_less, &min_deadline_cb);
+>  }
+>
+>  static void __dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>  {
+> -       rb_erase_cached(&se->run_node, &cfs_rq->tasks_timeline);
+> +       rb_erase_augmented_cached(&se->run_node, &cfs_rq->tasks_timeline,
+> +                                 &min_deadline_cb);
+>         avg_vruntime_sub(cfs_rq, se);
+>  }
+>
+> @@ -780,6 +872,97 @@ static struct sched_entity *__pick_next_
+>         return __node_2_se(next);
+>  }
+>
+> +static struct sched_entity *pick_cfs(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+> +{
+> +       struct sched_entity *left = __pick_first_entity(cfs_rq);
+> +
+> +       /*
+> +        * If curr is set we have to see if its left of the leftmost entity
+> +        * still in the tree, provided there was anything in the tree at all.
+> +        */
+> +       if (!left || (curr && entity_before(curr, left)))
+> +               left = curr;
+> +
+> +       return left;
+> +}
+> +
+> +/*
+> + * Earliest Eligible Virtual Deadline First
+> + *
+> + * In order to provide latency guarantees for different request sizes
+> + * EEVDF selects the best runnable task from two criteria:
+> + *
+> + *  1) the task must be eligible (must be owed service)
+> + *
+> + *  2) from those tasks that meet 1), we select the one
+> + *     with the earliest virtual deadline.
+> + *
+> + * We can do this in O(log n) time due to an augmented RB-tree. The
+> + * tree keeps the entries sorted on service, but also functions as a
+> + * heap based on the deadline by keeping:
+> + *
+> + *  se->min_deadline = min(se->deadline, se->{left,right}->min_deadline)
+> + *
+> + * Which allows an EDF like search on (sub)trees.
+> + */
+> +static struct sched_entity *pick_eevdf(struct cfs_rq *cfs_rq)
+> +{
+> +       struct rb_node *node = cfs_rq->tasks_timeline.rb_root.rb_node;
+> +       struct sched_entity *curr = cfs_rq->curr;
+> +       struct sched_entity *best = NULL;
+> +
+> +       if (curr && (!curr->on_rq || !entity_eligible(cfs_rq, curr)))
+> +               curr = NULL;
+> +
+> +       while (node) {
+> +               struct sched_entity *se = __node_2_se(node);
+> +
+> +               /*
+> +                * If this entity is not eligible, try the left subtree.
+> +                */
+> +               if (!entity_eligible(cfs_rq, se)) {
+> +                       node = node->rb_left;
+> +                       continue;
+> +               }
+> +
+> +               /*
+> +                * If this entity has an earlier deadline than the previous
+> +                * best, take this one. If it also has the earliest deadline
+> +                * of its subtree, we're done.
+> +                */
+> +               if (!best || deadline_gt(deadline, best, se)) {
+> +                       best = se;
+> +                       if (best->deadline == best->min_deadline)
+> +                               break;
+> +               }
+> +
+> +               /*
+> +                * If the earlest deadline in this subtree is in the fully
+> +                * eligible left half of our space, go there.
+> +                */
+> +               if (node->rb_left &&
+> +                   __node_2_se(node->rb_left)->min_deadline == se->min_deadline) {
+> +                       node = node->rb_left;
+> +                       continue;
+> +               }
+> +
+> +               node = node->rb_right;
+> +       }
+> +
+> +       if (!best || (curr && deadline_gt(deadline, best, curr)))
+> +               best = curr;
+> +
+> +       if (unlikely(!best)) {
+> +               struct sched_entity *left = __pick_first_entity(cfs_rq);
+> +               if (left) {
+> +                       pr_err("EEVDF scheduling fail, picking leftmost\n");
+> +                       return left;
+> +               }
+> +       }
+> +
+> +       return best;
+> +}
+> +
+>  #ifdef CONFIG_SCHED_DEBUG
+>  struct sched_entity *__pick_last_entity(struct cfs_rq *cfs_rq)
+>  {
+> @@ -822,17 +1005,6 @@ long calc_latency_offset(int prio)
+>  }
+>
+>  /*
+> - * delta /= w
+> - */
+> -static inline u64 calc_delta_fair(u64 delta, struct sched_entity *se)
+> -{
+> -       if (unlikely(se->load.weight != NICE_0_LOAD))
+> -               delta = __calc_delta(delta, NICE_0_LOAD, &se->load);
+> -
+> -       return delta;
+> -}
+> -
+> -/*
+>   * The idea is to set a period in which each task runs once.
+>   *
+>   * When there are too many tasks (sched_nr_latency) we have to stretch
+> @@ -897,6 +1069,38 @@ static u64 sched_slice(struct cfs_rq *cf
+>         return slice;
+>  }
+>
+> +/*
+> + * XXX: strictly: vd_i += N*r_i/w_i such that: vd_i > ve_i
+> + * this is probably good enough.
+> + */
+> +static void update_deadline(struct cfs_rq *cfs_rq, struct sched_entity *se)
+> +{
+> +       if ((s64)(se->vruntime - se->deadline) < 0)
+> +               return;
+> +
+> +       if (sched_feat(EEVDF)) {
+> +               /*
+> +                * For EEVDF the virtual time slope is determined by w_i (iow.
+> +                * nice) while the request time r_i is determined by
+> +                * latency-nice.
+> +                */
+> +               se->slice = se->latency_offset;
+> +       } else {
+> +               /*
+> +                * When many tasks blow up the sched_period; it is possible
+> +                * that sched_slice() reports unusually large results (when
+> +                * many tasks are very light for example). Therefore impose a
+> +                * maximum.
+> +                */
+> +               se->slice = min_t(u64, sched_slice(cfs_rq, se), sysctl_sched_latency);
+> +       }
+> +
+> +       /*
+> +        * EEVDF: vd_i = ve_i + r_i / w_i
+> +        */
+> +       se->deadline = se->vruntime + calc_delta_fair(se->slice, se);
+> +}
+> +
+>  #include "pelt.h"
+>  #ifdef CONFIG_SMP
+>
+> @@ -1029,6 +1233,7 @@ static void update_curr(struct cfs_rq *c
+>         schedstat_add(cfs_rq->exec_clock, delta_exec);
+>
+>         curr->vruntime += calc_delta_fair(delta_exec, curr);
+> +       update_deadline(cfs_rq, curr);
+>         update_min_vruntime(cfs_rq);
+>
+>         if (entity_is_task(curr)) {
+> @@ -4796,6 +5001,7 @@ static inline bool entity_is_long_sleepe
+>  static void
+>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>  {
+> +       u64 vslice = calc_delta_fair(se->slice, se);
+>         u64 vruntime = avg_vruntime(cfs_rq);
+>         s64 lag = 0;
+>
+> @@ -4834,9 +5040,9 @@ place_entity(struct cfs_rq *cfs_rq, stru
+>                  */
+>                 load = cfs_rq->avg_load;
+>                 if (curr && curr->on_rq)
+> -                       load += curr->load.weight;
+> +                       load += scale_load_down(curr->load.weight);
+>
+> -               lag *= load + se->load.weight;
+> +               lag *= load + scale_load_down(se->load.weight);
+>                 if (WARN_ON_ONCE(!load))
+>                         load = 1;
+>                 lag = div_s64(lag, load);
+> @@ -4877,6 +5083,19 @@ place_entity(struct cfs_rq *cfs_rq, stru
+>         }
+>
+>         se->vruntime = vruntime;
+> +
+> +       /*
+> +        * When joining the competition; the exisiting tasks will be,
+> +        * on average, halfway through their slice, as such start tasks
+> +        * off with half a slice to ease into the competition.
+> +        */
+> +       if (sched_feat(PLACE_DEADLINE_INITIAL) && initial)
+> +               vslice /= 2;
+> +
+> +       /*
+> +        * EEVDF: vd_i = ve_i + r_i/w_i
+> +        */
+> +       se->deadline = se->vruntime + vslice;
+>  }
+>
+>  static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
+> @@ -5088,19 +5307,20 @@ dequeue_entity(struct cfs_rq *cfs_rq, st
+>  static void
+>  check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+>  {
+> -       unsigned long ideal_runtime, delta_exec;
+> +       unsigned long delta_exec;
+>         struct sched_entity *se;
+>         s64 delta;
+>
+> -       /*
+> -        * When many tasks blow up the sched_period; it is possible that
+> -        * sched_slice() reports unusually large results (when many tasks are
+> -        * very light for example). Therefore impose a maximum.
+> -        */
+> -       ideal_runtime = min_t(u64, sched_slice(cfs_rq, curr), sysctl_sched_latency);
+> +       if (sched_feat(EEVDF)) {
+> +               if (pick_eevdf(cfs_rq) != curr)
+> +                       goto preempt;
+> +
+> +               return;
+> +       }
+>
+>         delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
+> -       if (delta_exec > ideal_runtime) {
+> +       if (delta_exec > curr->slice) {
+> +preempt:
+>                 resched_curr(rq_of(cfs_rq));
+>                 /*
+>                  * The current task ran long enough, ensure it doesn't get
+> @@ -5124,7 +5344,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq
+>         if (delta < 0)
+>                 return;
+>
+> -       if (delta > ideal_runtime)
+> +       if (delta > curr->slice)
+>                 resched_curr(rq_of(cfs_rq));
+>  }
+>
+> @@ -5179,17 +5399,20 @@ wakeup_preempt_entity(struct sched_entit
+>  static struct sched_entity *
+>  pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+>  {
+> -       struct sched_entity *left = __pick_first_entity(cfs_rq);
+> -       struct sched_entity *se;
+> +       struct sched_entity *left, *se;
+>
+> -       /*
+> -        * If curr is set we have to see if its left of the leftmost entity
+> -        * still in the tree, provided there was anything in the tree at all.
+> -        */
+> -       if (!left || (curr && entity_before(curr, left)))
+> -               left = curr;
+> +       if (sched_feat(EEVDF)) {
+> +               /*
+> +                * Enabling NEXT_BUDDY will affect latency but not fairness.
+> +                */
+> +               if (sched_feat(NEXT_BUDDY) &&
+> +                   cfs_rq->next && entity_eligible(cfs_rq, cfs_rq->next))
+> +                       return cfs_rq->next;
+> +
+> +               return pick_eevdf(cfs_rq);
+> +       }
+>
+> -       se = left; /* ideally we run the leftmost entity */
+> +       se = left = pick_cfs(cfs_rq, curr);
+>
+>         /*
+>          * Avoid running the skip buddy, if running something else can
+> @@ -6284,13 +6507,12 @@ static inline void unthrottle_offline_cf
+>  static void hrtick_start_fair(struct rq *rq, struct task_struct *p)
+>  {
+>         struct sched_entity *se = &p->se;
+> -       struct cfs_rq *cfs_rq = cfs_rq_of(se);
+>
+>         SCHED_WARN_ON(task_rq(p) != rq);
+>
+>         if (rq->cfs.h_nr_running > 1) {
+> -               u64 slice = sched_slice(cfs_rq, se);
+>                 u64 ran = se->sum_exec_runtime - se->prev_sum_exec_runtime;
+> +               u64 slice = se->slice;
+>                 s64 delta = slice - ran;
+>
+>                 if (delta < 0) {
+> @@ -8010,7 +8232,19 @@ static void check_preempt_wakeup(struct
+>         if (cse_is_idle != pse_is_idle)
+>                 return;
+>
+> -       update_curr(cfs_rq_of(se));
+> +       cfs_rq = cfs_rq_of(se);
+> +       update_curr(cfs_rq);
+> +
+> +       if (sched_feat(EEVDF)) {
+> +               /*
+> +                * XXX pick_eevdf(cfs_rq) != se ?
+> +                */
+> +               if (pick_eevdf(cfs_rq) == pse)
+> +                       goto preempt;
+> +
+> +               return;
+> +       }
+> +
+>         if (wakeup_preempt_entity(se, pse) == 1) {
+>                 /*
+>                  * Bias pick_next to pick the sched entity that is
+> @@ -8256,7 +8490,7 @@ static void yield_task_fair(struct rq *r
+>
+>         clear_buddies(cfs_rq, se);
+>
+> -       if (curr->policy != SCHED_BATCH) {
+> +       if (sched_feat(EEVDF) || curr->policy != SCHED_BATCH) {
+>                 update_rq_clock(rq);
+>                 /*
+>                  * Update run-time statistics of the 'current'.
+> @@ -8269,6 +8503,8 @@ static void yield_task_fair(struct rq *r
+>                  */
+>                 rq_clock_skip_update(rq);
+>         }
+> +       if (sched_feat(EEVDF))
+> +               se->deadline += calc_delta_fair(se->slice, se);
+>
+>         set_skip_buddy(se);
+>  }
+> @@ -12012,8 +12248,8 @@ static void rq_offline_fair(struct rq *r
+>  static inline bool
+>  __entity_slice_used(struct sched_entity *se, int min_nr_tasks)
+>  {
+> -       u64 slice = sched_slice(cfs_rq_of(se), se);
+>         u64 rtime = se->sum_exec_runtime - se->prev_sum_exec_runtime;
+> +       u64 slice = se->slice;
+>
+>         return (rtime * min_nr_tasks > slice);
+>  }
+> @@ -12728,7 +12964,7 @@ static unsigned int get_rr_interval_fair
+>          * idle runqueue:
+>          */
+>         if (rq->cfs.load.weight)
+> -               rr_interval = NS_TO_JIFFIES(sched_slice(cfs_rq_of(se), se));
+> +               rr_interval = NS_TO_JIFFIES(se->slice);
+>
+>         return rr_interval;
+>  }
+> --- a/kernel/sched/features.h
+> +++ b/kernel/sched/features.h
+> @@ -13,6 +13,7 @@ SCHED_FEAT(GENTLE_FAIR_SLEEPERS, true)
+>   * sleep+wake cycles. EEVDF placement strategy #1, #2 if disabled.
+>   */
+>  SCHED_FEAT(PLACE_LAG, true)
+> +SCHED_FEAT(PLACE_DEADLINE_INITIAL, true)
+>
+>  /*
+>   * Prefer to schedule the task we woke last (assuming it failed
+> @@ -103,3 +104,5 @@ SCHED_FEAT(LATENCY_WARN, false)
+>
+>  SCHED_FEAT(ALT_PERIOD, true)
+>  SCHED_FEAT(BASE_SLICE, true)
+> +
+> +SCHED_FEAT(EEVDF, true)
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -3316,5 +3316,6 @@ static inline void switch_mm_cid(struct
+>  #endif
+>
+>  extern u64 avg_vruntime(struct cfs_rq *cfs_rq);
+> +extern int entity_eligible(struct cfs_rq *cfs_rq, struct sched_entity *se);
+>
+>  #endif /* _KERNEL_SCHED_SCHED_H */
+>
+>
