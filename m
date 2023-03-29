@@ -2,128 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3C56CD8F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4C96CD8FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjC2L6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
+        id S229988AbjC2L7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjC2L6u (ORCPT
+        with ESMTP id S229796AbjC2L64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:58:50 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7ADEA;
-        Wed, 29 Mar 2023 04:58:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 89907219D6;
-        Wed, 29 Mar 2023 11:58:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680091123; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yUxNSXHNGER+MCVZDyDV8l5ua3h1BaSz76WjsL0+L3s=;
-        b=Y9IuGtiVAXDxMAHsM6cj7w2mYq2eAbOAWUcGbhruEFj1/tTjy0ED7NrMdnGwksKxLWnPdS
-        2XErqMm71eFEKSjeeww8JCt/gvAo3MxStIDeQ1v26jeQkUL5w58Wj50wWGD35gsly/pJ7o
-        eNf2oLyQeU11xKNm9lcEWC8qojyK8Qs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F463138FF;
-        Wed, 29 Mar 2023 11:58:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ecknG/MnJGRBXwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 29 Mar 2023 11:58:43 +0000
-Date:   Wed, 29 Mar 2023 13:58:43 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v2 3/9] memcg: do not flush stats in irq context
-Message-ID: <ZCQn86f7sxBt6tyN@dhcp22.suse.cz>
-References: <20230328221644.803272-1-yosryahmed@google.com>
- <20230328221644.803272-4-yosryahmed@google.com>
+        Wed, 29 Mar 2023 07:58:56 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4288A4219;
+        Wed, 29 Mar 2023 04:58:54 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=wuzongyong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VewkHe8_1680091126;
+Received: from L-PF27918B-1352.localdomain(mailfrom:wuzongyong@linux.alibaba.com fp:SMTPD_---0VewkHe8_1680091126)
+          by smtp.aliyun-inc.com;
+          Wed, 29 Mar 2023 19:58:51 +0800
+From:   Wu Zongyong <wuzongyong@linux.alibaba.com>
+To:     sdonthineni@nvidia.com, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        wllenyj@linux.alibaba.com, wutu.xq2@linux.alibaba.com,
+        gerry@linux.alibaba.com
+Subject: [RFC PATCH] PCI: avoid SBR for NVIDIA T4
+Date:   Wed, 29 Mar 2023 19:58:45 +0800
+Message-Id: <388bc353a5f88edb502ec04c0dc53ab62a526020.1680090885.git.wuzongyong@linux.alibaba.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328221644.803272-4-yosryahmed@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 28-03-23 22:16:38, Yosry Ahmed wrote:
-> Currently, the only context in which we can invoke an rstat flush from
-> irq context is through mem_cgroup_usage() on the root memcg when called
-> from memcg_check_events(). An rstat flush is an expensive operation that
-> should not be done in irq context, so do not flush stats and use the
-> stale stats in this case.
-> 
-> Arguably, usage threshold events are not reliable on the root memcg
-> anyway since its usage is ill-defined.
-> 
-> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
-> Suggested-by: Shakeel Butt <shakeelb@google.com>
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Acked-by: Shakeel Butt <shakeelb@google.com>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Secondary bus reset will fail if NVIDIA T4 card is direct attached to a
+root port.
+So avoid to do bus reset,  pci_parent_bus_reset() works nomarlly.
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+Maybe NVIDIA guys can do some detailed explanation abount the SBR
+behaviour of GPUs.
 
-> ---
->  mm/memcontrol.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index c3b6aae78901..ff39f78f962e 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -3669,7 +3669,21 @@ static unsigned long mem_cgroup_usage(struct mem_cgroup *memcg, bool swap)
->  	unsigned long val;
->  
->  	if (mem_cgroup_is_root(memcg)) {
-> -		mem_cgroup_flush_stats();
-> +		/*
-> +		 * We can reach here from irq context through:
-> +		 * uncharge_batch()
-> +		 * |--memcg_check_events()
-> +		 *    |--mem_cgroup_threshold()
-> +		 *       |--__mem_cgroup_threshold()
-> +		 *          |--mem_cgroup_usage
-> +		 *
-> +		 * rstat flushing is an expensive operation that should not be
-> +		 * done from irq context; use stale stats in this case.
-> +		 * Arguably, usage threshold events are not reliable on the root
-> +		 * memcg anyway since its usage is ill-defined.
-> +		 */
-> +		if (in_task())
-> +			mem_cgroup_flush_stats();
->  		val = memcg_page_state(memcg, NR_FILE_PAGES) +
->  			memcg_page_state(memcg, NR_ANON_MAPPED);
->  		if (swap)
-> -- 
-> 2.40.0.348.gf938b09366-goog
+Signed-off-by: Wu Zongyong <wuzongyong@linux.alibaba.com>
+---
+ drivers/pci/quirks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 44cab813bf95..be86b93b9e38 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -3618,7 +3618,7 @@ static void quirk_no_bus_reset(struct pci_dev *dev)
+  */
+ static void quirk_nvidia_no_bus_reset(struct pci_dev *dev)
+ {
+-	if ((dev->device & 0xffc0) == 0x2340)
++	if ((dev->device & 0xffc0) == 0x2340 || dev->device == 0x1eb8)
+ 		quirk_no_bus_reset(dev);
+ }
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_NVIDIA, PCI_ANY_ID,
 -- 
-Michal Hocko
-SUSE Labs
+2.34.3
+
