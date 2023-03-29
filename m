@@ -2,175 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABEC6CDA0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E3B6CDA11
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjC2NG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 09:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
+        id S230090AbjC2NHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 09:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjC2NGx (ORCPT
+        with ESMTP id S229720AbjC2NHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:06:53 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2066.outbound.protection.outlook.com [40.107.100.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392FB423F;
-        Wed, 29 Mar 2023 06:06:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kkwOYgfAu5b8DEBBBfrXA7lnopkQ3MAL3nrkLbDaLdyv0PhVZsdjadIXQ/QNvkq90MY3yI7grk6Q0HLF6ehcNCzyC9gArC5F71B/ReqV6yrhsIrtyxq93ws8PprCPAHcQrScdNnhjgnxZ39NERDGvI02JEdlzxYoGk1pKPlfH54SaAvRA5hTpksBNaWEXbtPCxmDFtsEHEzMgtbI02c46+G7mdX+FLspr3e3NOH3B+pB8zr7fIFM6kMJfXWgq/efWKtSeFrta70a1Xr+dgUWepN+kKV0Y40Eh498vxw9wMYpAzQysxWfm6jkumTQH6Vjyt3YflulDiyQlau/TWMPsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SP/ptodZyzeFAqJI7ogkwb9lm+GLHr350gJr+feW6ns=;
- b=WxY62OBTJc4Q4NM/VabJP5zSWU477urxHJRi7QGhUtoreryAS0GEdo/Hrbs2wScQEL3KZGT4VNCTyBqt4gOJsiy8hTtAa4i6QIn+dC1xAAXD/Osa94dByY3X5ieKrJFskcREUSEF5vtM1kHSO72TeMxOxaGQ5xfzGryDJsm1XT7B9VKHrskarWNiKGbuP9ArRGGstyFxinmnbls33Vkx8jMECst2xVpOjkbN12AeqKeNEymwz5jIerxd6EpTdyDbN15zdLlnb7WFQ1DF26l5i26A06hPqzMTO9NL3UaoJWnjXQxO19c4hC0IBLexU93uKfu1Zh6W731dMdR5K7ar2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SP/ptodZyzeFAqJI7ogkwb9lm+GLHr350gJr+feW6ns=;
- b=D5mH1aVseqBtwHLcTsdsd2COx+T0h4X2mr+Xg5WFifisZ3RBKcEjgvToX2c/CntTduYXxl4bJJ+1vMH3Mc+MXGEikXqVX4A6Aauk7cPHvzHfeKACd3DZmZZ60WI00uhI1Fu5iVK4sSB/Ng2sUy569K6ODQX2/RLHXEL8jjijo5o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
- by DM4PR12MB8557.namprd12.prod.outlook.com (2603:10b6:8:18b::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Wed, 29 Mar
- 2023 13:06:13 +0000
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::8511:7da:3d1e:4db0]) by BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::8511:7da:3d1e:4db0%6]) with mapi id 15.20.6222.035; Wed, 29 Mar 2023
- 13:06:12 +0000
-Message-ID: <41839138-3d85-ea82-7832-5da5f9addeb1@amd.com>
-Date:   Wed, 29 Mar 2023 08:06:10 -0500
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH] docs/sp_SP: Remove ZERO WIDTH SPACE in
- memory-barriers.txt
-Content-Language: en-US
-To:     Akira Yokosawa <akiyks@gmail.com>, Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <c38176c7-c30a-4c2c-3516-8d3be1c267dc@gmail.com>
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-In-Reply-To: <c38176c7-c30a-4c2c-3516-8d3be1c267dc@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA1P222CA0080.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:35e::17) To BL1PR12MB5874.namprd12.prod.outlook.com
- (2603:10b6:208:396::17)
+        Wed, 29 Mar 2023 09:07:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3611A4C28;
+        Wed, 29 Mar 2023 06:06:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 11359219A6;
+        Wed, 29 Mar 2023 13:06:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1680095196; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vuqiwL5WOHhi9vY4nLsSMA4hwqodR1/I22u11aU6o8o=;
+        b=3XzsDcmRODNZh63PhpIc8D2uvzhHz2mBrGx8DYc1FZJSY45CKVPBtD5WcjVu6JgZ5D8An7
+        9cVDmfWVkGW/sApFemF2uumxnK82oO+oQ2lMhYjzqX/i143P5CX/gB8xrLFGoHoKIIItwG
+        2S/FvxFeO1IYFCeAzEV3jw1dlt2JwCU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1680095196;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vuqiwL5WOHhi9vY4nLsSMA4hwqodR1/I22u11aU6o8o=;
+        b=NhrqOAitaVTTwcKrGvNi5GrfzJdBMgw6wu/78KlHqBwG4N/S6gBAWv6WHGhu28z6ygpQaL
+        ljG7HUQmlN0VS5DQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F3471139D3;
+        Wed, 29 Mar 2023 13:06:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9vVWO9s3JGQEBwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 29 Mar 2023 13:06:35 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 75A4DA071E; Wed, 29 Mar 2023 15:06:35 +0200 (CEST)
+Date:   Wed, 29 Mar 2023 15:06:35 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, yukuai3@huawei.com, stable@vger.kernel.org
+Subject: Re: [PATCH v3] ext4: fix race between writepages and remount
+Message-ID: <20230329130635.utcb3mzekp5izu3q@quack3>
+References: <20230329085036.2755843-1-libaokun1@huawei.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5874:EE_|DM4PR12MB8557:EE_
-X-MS-Office365-Filtering-Correlation-Id: 106b0ac5-eed2-4eff-dfcf-08db30565f3a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M6zu7KLXMGt9grvLmyo4WRQ5LBkE0wzYdQOS8EXfeMCiIkV8/wg4O/W2cz6gIMPwCCt3ABueI87athKUe9HLn5uQRXVzIhmW01FhYAG6hSKU4cDjYrrH0WIwAye+kVitBTGHIt/C5wV94tup95Vikp7SousfNMolqZU5le3ymWAR1c/aWLmuAJrbXMzK9VkEjDnYPeidcZljA51PMd+Gbog/OGPxjHDGKRiBC2sm0CI6U3vKBtK9axMrbiX9tzWvm43n4nIJKDQ4Jj4PKIbOVPjArpvnBoKtLMtw7aWJ7/n6YbLjl7/6AzIW/9OhEuU9bbQlEgMbwB/cFbf+odAvV5YXHSXzJcI/mOjABt6VcRE/4iwCs2FY0a+f2/IjRrAKdYEKom1/BKweVY6EcZKgWhCB3e4SSIOaQUPEmFHDP+7rdJMlT+3/XhYzQug0nbvWlIN+GOKn8amXhOni7TwVNhcYk6SLlpeuLJA5Zd9ZPqShflt1X3Fs1mH4frh5ypeixevuxcuauVrsV7yxZ57BmOiCSangsQkm4JQU4RdMy6GuESWcwYuF9yoUex49uFmhMcMmJE03AfrDtYXarTeCH4/utyfWbeoCPAMWr4SF9hayZNWfdP0gk/LZ2OtYa6YZ0CZMRRhSfVlBzbprifohJA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(366004)(346002)(376002)(451199021)(66574015)(83380400001)(2906002)(44832011)(8936002)(5660300002)(38100700002)(36756003)(86362001)(31696002)(316002)(53546011)(8676002)(6506007)(6512007)(4326008)(110136005)(66476007)(66556008)(66946007)(186003)(6486002)(31686004)(41300700001)(478600001)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NldMeHc3TnVsZzNmb2k0THJ5TS8wQVVTVDFQOXRXWlVlZmNHMEV5Qk54K3Z3?=
- =?utf-8?B?dUhac0oxVWZQdmk0aDByQXAzR2w1QTNpckJvNlg5TmttNXBsWUoyR2hrMkNh?=
- =?utf-8?B?dXdWRndTZy9PZFVwNE9qY0Q2WnFmeWp1c2FqRXdwYmJTeDVXS1lUYk5QZm1N?=
- =?utf-8?B?R0xTVWt4Kzd4Z3JSajBYRThyYm5ITXB3QmpRQ0UzbjFHMm1IL2tYRlVOWVlu?=
- =?utf-8?B?clFBNnd5ayttY0ZoRlU1dDRGcVEzVW5VVXJSTkoxVjFHKy9wM09BQ2ZHWm9s?=
- =?utf-8?B?NTl4Z21kSHRXQjJYM05ScW5PWGhGZ0RhL3V6T005aHJjNm45VEJvRzRBY1A5?=
- =?utf-8?B?SHVZaFZJdGsvdG1RSDBwQkJJMzZtTXlialFRajZadkRmRWpZM3FUZmRndXNQ?=
- =?utf-8?B?MjZhSkI0M2pnTW9leVNSbitjVzNVczA4dTJJVzFPUEN0SFlFbENlQmE0Uis5?=
- =?utf-8?B?ZW8xTGNuQnMwVDlxUTh6Q3lBWVdwREw4QTBVTWlSRUpRYmpEd1hSNi9UNUl1?=
- =?utf-8?B?NGlJek0wc3Uwci9KUTUyb0d3TUdkVG1tajl5NFk0WldhVG1WeWZDN2luZHZj?=
- =?utf-8?B?SGJKT0pRekJIL1B5NE9WN1gwbGZCRWJIdmxQSUl2aXVZZW5zeGx5bk84dTZy?=
- =?utf-8?B?MnNtdHlQRXVOQkw2WlVvQnorbnhNSmlIbXlnZVN0MkhCakRMVm5FZS9wNVNU?=
- =?utf-8?B?Qk1RWlV0QXlaQ3Iwa0VIL3lGTi9EaDBIWmR4Q1RuenJ1bm10Vk9nNWRmSWFa?=
- =?utf-8?B?clRnTVZucTZKWk4xMUZac1FTWWpBUXVyWVV5NFV6ckRrazl0UTZoWTVwRzFE?=
- =?utf-8?B?bzlXMHE1WStFZGFwOHRRTEdoTXVGMWVJMU15NnB3d2RIeFIyMU16ZHlVUWZj?=
- =?utf-8?B?QWVmempObXQzY0ZNWUozTzFqTkJTby9aS2ZDQ3RNZEFCTlgrMDVoQ05UL2pR?=
- =?utf-8?B?MWdKL0ZhOHM3S0JYankrOWdyTnpoRDlnMmlteDhNU1VZQVE0T2I2NVY4cG1K?=
- =?utf-8?B?MUIzeUFYRWZSdmlCNi9WQzY5QThuUU5SWFlxVzY5VEhlZ1NlTkUrekxjZXJp?=
- =?utf-8?B?Z1FITlBzU2ZxRnBlRFVKVVFlcUJUWGNBYmFjTm1KVXBZdCtNc1lQZG1seHVq?=
- =?utf-8?B?VVF0RHhTcGx0eVB3aTBNeXBHRTNFOWtaMUhRbUh5ZGFCMzFvbFp5TmliWjlI?=
- =?utf-8?B?UHY5NDVlc3pxSG5zMVlrZXg1V1U3ZEdHVFlXc0Ntckh0V1BOY2RESnJscDdx?=
- =?utf-8?B?RFN6TDZuK2RjMG9IbG85RUk4aFhORHBjRThDbXh6VzZ1cUVBbFVJQWJBL2hI?=
- =?utf-8?B?L1lYb0JheTBNem5oZkxkNmg2a0NlM3VPVHVZUFNhTlZzV2U0KytXMmpRb0dy?=
- =?utf-8?B?Rm00RFE2WWRUZGcwQ1JURngwcTUvaW41QzVoVlJmcXZPd0V4Y09hYUlsQjBp?=
- =?utf-8?B?c0lPSnczZkpuVU83ZzRyS3dUc2l4SkVSK01OSmovanRVZUlxRVFhTm5UK0dG?=
- =?utf-8?B?SlRTZGxQWkt1R0paS1RYeHBsYjEzY2tKQnlORnRGVEd0WTFVa2N6TlYwcHJk?=
- =?utf-8?B?RVUwL0VPZnk4OXQ2Smk1akpvdjRWMWFTTmNqbmhrc3dTaVJEeVZSV0g5ZFha?=
- =?utf-8?B?b1NHa1ArYk5GK04wRitjQzBadEpUdUs3T243WHZld3JpR01tdDZmYVd4SGVS?=
- =?utf-8?B?OTMrM3QrZzRSMzBvR1YzMlVPNHAzU0R4S0lsdEZYUzc0bUNlSGZydlNSYWRh?=
- =?utf-8?B?cUtSc2pDczYxejV2ZVlNUFA4NlVvTFgxZTFBWnEwVE41cWNzVmpVeHh6enk3?=
- =?utf-8?B?cVdxUnpJbFRhVnp0UHFubDgvbGk4SEcweHNrWnM2cExic0M5TjYrQnRLYzM5?=
- =?utf-8?B?VFdReGFBWFhnWml1U01VL2xvMVBYcWxTbDNOeVRMbDZ6V0NwbjZPallweTJJ?=
- =?utf-8?B?NFFJQmVRMHNLcUVhcHRtRjE3dmVlTHhVbm5zV2pLSDV5WnJxY0swUTZrQnlN?=
- =?utf-8?B?NFZ2Mmw3QnNaZXZLRjl0Yjl1NzEzdHpHWGpxc0JLVHRCUnZzUGNGTDkvOS9v?=
- =?utf-8?B?V0duVkxWYkJudDUwWXZrWUtDQmlHNVlaa2xRL25jTHJSeCtvc2p3Y1IvU29F?=
- =?utf-8?B?NVlsNlcwQVVqbkVneTNOMU9rU3lSM1VLdnNHdUF0NGNkR09OYTF4NEQ3T20v?=
- =?utf-8?Q?sbJdVePgvhHNvQFW88/iEZ8r5CWGDkUW7R7swJ/ISCjQ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 106b0ac5-eed2-4eff-dfcf-08db30565f3a
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 13:06:12.8088
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: brALiIcedKb3ymryPi4S1rJrByK6kPV7Hii6R34JGYinb0LcSJdnD6kbzQlh168nP6D2AqAsdL7ULEaUvDBUhQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8557
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329085036.2755843-1-libaokun1@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/23 12:22 AM, Akira Yokosawa wrote:
-> As this file is included literally, ZERO WIDTH SPACE causes
-> "make pdfdocs" to emit messages which read:
+On Wed 29-03-23 16:50:36, Baokun Li wrote:
+> We got a WARNING in ext4_add_complete_io:
+> ==================================================================
+>  WARNING: at fs/ext4/page-io.c:231 ext4_put_io_end_defer+0x182/0x250
+>  CPU: 10 PID: 77 Comm: ksoftirqd/10 Tainted: 6.3.0-rc2 #85
+>  RIP: 0010:ext4_put_io_end_defer+0x182/0x250 [ext4]
+>  [...]
+>  Call Trace:
+>   <TASK>
+>   ext4_end_bio+0xa8/0x240 [ext4]
+>   bio_endio+0x195/0x310
+>   blk_update_request+0x184/0x770
+>   scsi_end_request+0x2f/0x240
+>   scsi_io_completion+0x75/0x450
+>   scsi_finish_command+0xef/0x160
+>   scsi_complete+0xa3/0x180
+>   blk_complete_reqs+0x60/0x80
+>   blk_done_softirq+0x25/0x40
+>   __do_softirq+0x119/0x4c8
+>   run_ksoftirqd+0x42/0x70
+>   smpboot_thread_fn+0x136/0x3c0
+>   kthread+0x140/0x1a0
+>   ret_from_fork+0x2c/0x50
+> ==================================================================
 > 
->   Missing character: There is no ​ (U+200B) in font DejaVu Sans Mono/OT:script=latn;language=dflt;!
->   Missing character: There is no ​ (U+200B) in font DejaVu Sans Mono/OT:script=latn;language=dflt;!
+> Above issue may happen as follows:
 > 
-> U+200B (ZERO WIDTH SPADE) has no effect in literal blocks.
-> Remove them and get rid of those noises.
+>             cpu1                        cpu2
+> ----------------------------|----------------------------
+> mount -o dioread_lock
+> ext4_writepages
+>  ext4_do_writepages
+>   *if (ext4_should_dioread_nolock(inode))*
+>     // rsv_blocks is not assigned here
+>                                  mount -o remount,dioread_nolock
+>   ext4_journal_start_with_reserve
+>    __ext4_journal_start
+>     __ext4_journal_start_sb
+>      jbd2__journal_start
+>       *if (rsv_blocks)*
+>         // h_rsv_handle is not initialized here
+>   mpage_map_and_submit_extent
+>     mpage_map_one_extent
+>       dioread_nolock = ext4_should_dioread_nolock(inode)
+>       if (dioread_nolock && (map->m_flags & EXT4_MAP_UNWRITTEN))
+>         mpd->io_submit.io_end->handle = handle->h_rsv_handle
+>         ext4_set_io_unwritten_flag
+>           io_end->flag |= EXT4_IO_END_UNWRITTEN
+>       // now io_end->handle is NULL but has EXT4_IO_END_UNWRITTEN flag
 > 
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> Cc: Carlos Bilbao <carlos.bilbao@amd.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
+> scsi_finish_command
+>  scsi_io_completion
+>   scsi_io_completion_action
+>    scsi_end_request
+>     blk_update_request
+>      req_bio_endio
+>       bio_endio
+>        bio->bi_end_io  > ext4_end_bio
+>         ext4_put_io_end_defer
+> 	 ext4_add_complete_io
+> 	  // trigger WARN_ON(!io_end->handle && sbi->s_journal);
+> 
+> The immediate cause of this problem is that ext4_should_dioread_nolock()
+> function returns inconsistent values in the ext4_do_writepages() and
+> mpage_map_one_extent(). There are four conditions in this function that
+> can be changed at mount time to cause this problem. These four conditions
+> can be divided into two categories:
+> 
+>     (1) journal_data and EXT4_EXTENTS_FL, which can be changed by ioctl
+>     (2) DELALLOC and DIOREAD_NOLOCK, which can be changed by remount
+> 
+> The two in the first category have been fixed by commit c8585c6fcaf2
+> ("ext4: fix races between changing inode journal mode and ext4_writepages")
+> and commit cb85f4d23f79 ("ext4: fix race between writepages and enabling
+> EXT4_EXTENTS_FL") respectively.
+> 
+> Two cases in the other category have not yet been fixed, and the above
+> issue is caused by this situation. We refer to the fix for the first
+> category, when applying options during remount, we grab s_writepages_rwsem
+> to avoid racing with writepages ops to trigger this problem.
+> 
+> Fixes: 6b523df4fb5a ("ext4: use transaction reservation for extent conversion in ext4_end_io")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+
+Looks good. Nice that you've spotted also the restore options case. Feel
+free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
-> Hi,
+> V1->V2:
+> 	Grab s_writepages_rwsem unconditionally during remount.
+> 	Remove patches 1,2 that are no longer needed.
+> V2->V3:
+> 	Also grab s_writepages_rwsem when restoring options.
 > 
-> Offending commit is 259b007f5729 ("docs/sp_SP: Add memory-barriers.txt
-> Spanish translation") merged into v6.2.
-> As this is not a bug fix, I'm not putting a Fixes: tag.
+>  fs/ext4/ext4.h  |  3 ++-
+>  fs/ext4/super.c | 12 ++++++++++++
+>  2 files changed, 14 insertions(+), 1 deletion(-)
 > 
-> Note: It might be hard for human eyes to see where the removed
-> ZERO WIDTH SPACEs were. :-)
-> 
->         Thanks, Akira
-
-Good catch, Akira! Acked-by: Carlos Bilbao <carlos.bilbao@amd.com>
-
-> --
->  Documentation/translations/sp_SP/memory-barriers.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/translations/sp_SP/memory-barriers.txt b/Documentation/translations/sp_SP/memory-barriers.txt
-> index f62bd797216d..27097a808c88 100644
-> --- a/Documentation/translations/sp_SP/memory-barriers.txt
-> +++ b/Documentation/translations/sp_SP/memory-barriers.txt
-> @@ -604,7 +604,7 @@ READ_ONCE() para DEC Alpha, lo que significa que las únicas personas que
->  necesitan prestar atención a esta sección son aquellas que trabajan en el
->  código específico de la arquitectura DEC Alpha y aquellas que trabajan en
->  READ_ONCE() por dentro. Para aquellos que lo necesitan, y para aquellos que
-> -estén interesados ​​desde un punto de vista histórico, aquí está la historia
-> +estén interesados desde un punto de vista histórico, aquí está la historia
->  de las barreras de dependencia de dirección.
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index 9b2cfc32cf78..5f5ee0c20673 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -1703,7 +1703,8 @@ struct ext4_sb_info {
 >  
->  [!] Si bien las dependencias de direcciones se observan tanto en carga a
+>  	/*
+>  	 * Barrier between writepages ops and changing any inode's JOURNAL_DATA
+> -	 * or EXTENTS flag.
+> +	 * or EXTENTS flag or between writepages ops and changing DELALLOC or
+> +	 * DIOREAD_NOLOCK mount options on remount.
+>  	 */
+>  	struct percpu_rw_semaphore s_writepages_rwsem;
+>  	struct dax_device *s_daxdev;
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index e6d84c1e34a4..8396da483c17 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -6403,7 +6403,16 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+>  
+>  	}
+>  
+> +	/*
+> +	 * Changing the DIOREAD_NOLOCK or DELALLOC mount options may cause
+> +	 * two calls to ext4_should_dioread_nolock() to return inconsistent
+> +	 * values, triggering WARN_ON in ext4_add_complete_io(). we grab
+> +	 * here s_writepages_rwsem to avoid race between writepages ops and
+> +	 * remount.
+> +	 */
+> +	percpu_down_write(&sbi->s_writepages_rwsem);
+>  	ext4_apply_options(fc, sb);
+> +	percpu_up_write(&sbi->s_writepages_rwsem);
+>  
+>  	if ((old_opts.s_mount_opt & EXT4_MOUNT_JOURNAL_CHECKSUM) ^
+>  	    test_opt(sb, JOURNAL_CHECKSUM)) {
+> @@ -6614,6 +6623,7 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+>  	return 0;
+>  
+>  restore_opts:
+> +	percpu_down_write(&sbi->s_writepages_rwsem);
+>  	sb->s_flags = old_sb_flags;
+>  	sbi->s_mount_opt = old_opts.s_mount_opt;
+>  	sbi->s_mount_opt2 = old_opts.s_mount_opt2;
+> @@ -6622,6 +6632,8 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+>  	sbi->s_commit_interval = old_opts.s_commit_interval;
+>  	sbi->s_min_batch_time = old_opts.s_min_batch_time;
+>  	sbi->s_max_batch_time = old_opts.s_max_batch_time;
+> +	percpu_up_write(&sbi->s_writepages_rwsem);
+> +
+>  	if (!test_opt(sb, BLOCK_VALIDITY) && sbi->s_system_blks)
+>  		ext4_release_system_zone(sb);
+>  #ifdef CONFIG_QUOTA
+> -- 
+> 2.31.1
 > 
-> base-commit: 4f1bb0386dfc0bda78ddad0e4fb3cd519b2886ab
-
-Thanks,
-Carlos
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
