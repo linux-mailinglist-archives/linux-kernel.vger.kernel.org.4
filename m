@@ -2,187 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA11C6CF358
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D522E6CF353
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjC2TmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        id S229825AbjC2Tly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjC2Tlw (ORCPT
+        with ESMTP id S230056AbjC2Tlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:41:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A0C526F
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680118865;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=np8vWIlQ+v2ijN50x+Ku8EC8uzXFlwApSDs6+DUB4YQ=;
-        b=CTHj+5ulom0yej5fV4YO9JqbNsAlBhnM2EUIdOx7Kv796juvQ+n8OoNQU+2Iz3ZoQ1IewL
-        ts5kvV4yUHBoOtF+3bubi+HEEVkBqb4MRs6F6wYwkOoGY9SXaO0EhuGWCJ/5k0YN9gSKTp
-        r8uajItW2UJcEDiLVI85NfH0w0rHf58=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-356-jrKBRIuuMf6AsKMH6CSPew-1; Wed, 29 Mar 2023 15:41:04 -0400
-X-MC-Unique: jrKBRIuuMf6AsKMH6CSPew-1
-Received: by mail-qv1-f72.google.com with SMTP id l18-20020ad44bd2000000b005a9cf5f609eso7122771qvw.15
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:41:04 -0700 (PDT)
+        Wed, 29 Mar 2023 15:41:47 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBDA7AA3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:41:31 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id q16so21637731lfe.10
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680118890;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cbt8RYRsNXhKllEm2l6/c935b1na6Cv5pr1oMZejEYk=;
+        b=KhLdI9Au0OcebER4ZU5rq4XlGeI89RYyfLhrCHjSFyGHdxItZaKqMD32y2oZwO6yeX
+         vmTgj7IZElzl7aQ9hvY+b4mvUuhYX5rppPS2UT9nVZDJGM462queAt7cHtRmPMjoRWWN
+         tLNSrZlqht0VGQKX/cNw/fgJKAskYkMMDuzHpnv5YbCP5ykkofXLeRzO6t3Tzcj681CI
+         Vw3GtCMROp2+MM/KOHNLN71DutQFlT38bGI1LnGRP3JpxSH4I12q7+NfK5aDnWkvvbCv
+         +cjhnqb0yn6oKgcNArilmgUgAEsWPy4BhudjMRi/k68PWi9xTxcOBXZAobd4yh2EmKBL
+         qPug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680118863; x=1682710863;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=np8vWIlQ+v2ijN50x+Ku8EC8uzXFlwApSDs6+DUB4YQ=;
-        b=KDSEhhE/u2q3Jw6uAPo5S5UW7m37RSDJcjlOqfpFtTDNRSJu9zVgGjqsjfl9hYZxde
-         4YstxKYwvdiPJ2A2jfRDWo76UqRuYBhiUA/fKj0FIKAz6faFfpb5fphCIU0dw0FkNFIG
-         2vhuL7uam0MCkhhbRKuFb5EzD/BpAsV8hoGv1PHGZRTgrSNDxk1IJR1GS/xYZ58U7vOE
-         mGphOBYl6smGNCyOw3a7aM8M/lb2VICqk+OOd64ehEkj/N+T/BB//yxQyjQzBhQh/mDu
-         lPqbU+ftsF+MnSqKa5ymk6e8ZUsmtfYwHiiQS9jPsEOcAFnCjGY8r2+HmR692wypfrx2
-         tDOQ==
-X-Gm-Message-State: AAQBX9f5C50jUH146hs0WgqjmpLsRRJ5JjhMhycRVebvdfYVMnYh34rX
-        aM2yn8TLjUwA2DR2lfiztctDhUPimFJuJsYGuIgpinWp2g4ch0aHismi6e1n1SyWHJLhdo0PaOQ
-        hiNV7pwdoWLOODoGO7WT/DdCn
-X-Received: by 2002:a05:6214:409:b0:56c:222d:427a with SMTP id z9-20020a056214040900b0056c222d427amr32374991qvx.1.1680118863439;
-        Wed, 29 Mar 2023 12:41:03 -0700 (PDT)
-X-Google-Smtp-Source: AKy350beCRIu7VzJno1QTnNsCw1pZmRV6igDjjS/pY6b+5FxGAYv86IgYq9XMU67rDUGaXNwUgQxCw==
-X-Received: by 2002:a05:6214:409:b0:56c:222d:427a with SMTP id z9-20020a056214040900b0056c222d427amr32374970qvx.1.1680118863150;
-        Wed, 29 Mar 2023 12:41:03 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id 123-20020a370581000000b007456df35859sm14434041qkf.74.2023.03.29.12.41.01
+        d=1e100.net; s=20210112; t=1680118890;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cbt8RYRsNXhKllEm2l6/c935b1na6Cv5pr1oMZejEYk=;
+        b=PkfUH8JknGGLUirLPkfzdC2xO/JLPcwP8vPSvrNVMXZ1vUotpvK9iaLp2UMhGRp/EQ
+         i4cWa0czKIfVTG4Ce2N7lllyWprF2J2OuklgOcF2vsOwLF+k0YKQRTbYKm71+cO64/68
+         IuXBEexXy075ehmPpfiOh86OCjUtt39EIR82OKOQ6NB8sbyqwyVzLGSNEKLS30UfllsG
+         4909oXi0dWLq93Z9RVE0VN7ChlqK4W7i3iHNYFTPh0Wj/kvZSMKDEPn2k7O3kyizKlD1
+         kuOB8DKrKOfvJd6Zxm5ldLW5dHdwBdhev1IPlKVfNnl0khS/Z4+JMRCP6K+VdExsM6iQ
+         cfIw==
+X-Gm-Message-State: AAQBX9d5HOMf6sVvi+3Tcy2HQi3mvcqR8oVVowoA99jCXlNnaIxk6CKz
+        eGRJXbGugM+sC1r0WJUFAi9g2GYlp8s1sRrxIsc=
+X-Google-Smtp-Source: AKy350ZKgmPGGLfaVshnM25rJBESXaQ7TB/BO1HogkxbQYLi/glHQpFHiSzC4tr5WMZAhM/TbgGXtg==
+X-Received: by 2002:a05:6512:312c:b0:4db:25bb:ff0b with SMTP id p12-20020a056512312c00b004db25bbff0bmr1224944lfd.2.1680118889820;
+        Wed, 29 Mar 2023 12:41:29 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id q22-20020ac25296000000b004eae672e96bsm3955048lfm.255.2023.03.29.12.41.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 12:41:02 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 15:41:01 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] userfaultfd: don't fail on unrecognized features
-Message-ID: <ZCSUTSbAcwBINiNk@x1n>
-References: <20220722201513.1624158-1-axelrasmussen@google.com>
- <ZCIEGblnsWHKF8RD@x1n>
- <CAJHvVcj5ysY-xqKLL8f48-vFhpAB+qf4cN0AesQEd7Kvsi9r_A@mail.gmail.com>
- <ZCNDxhANoQmgcufM@x1n>
- <CAJHvVcjU8QRLqFmk5GXbmOJgKp+XyVHMCS0hABtWmHTDuCusLA@mail.gmail.com>
- <ZCNPFDK0vmzyGIHb@x1n>
- <CAJHvVciwT0xw3Nu2Fpi-7H9iR92xK7VB31dYLfmJF5K3vQxvFQ@mail.gmail.com>
- <ZCNrWRKl4nCJX3pg@x1n>
- <CAJHvVch52KG3V6eQY47t2hbJfEczdLgxcg65VWZdzML6bVFXeg@mail.gmail.com>
+        Wed, 29 Mar 2023 12:41:29 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v3 0/6] Sony SDM845 panel and remoteproc enablement
+Date:   Wed, 29 Mar 2023 21:41:17 +0200
+Message-Id: <20230313-topic-tama_disp-v3-0-2b1567c039d7@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJHvVch52KG3V6eQY47t2hbJfEczdLgxcg65VWZdzML6bVFXeg@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAF2UJGQC/3WNQQ6CMBAAv0L27JrSqhhP/MMQs5QtbIItaZFoC
+ H+3cvc4k0xmhcRROMGtWCHyIkmCz2AOBdiBfM8oXWbQShtlSoNzmMTiTE96dJImdOZKZXlxZ90
+ 5yFVLibGN5O2QO/8axyynyE7e++beZB4kzSF+9uuif/b/YNGo0FRs2bqTqSpVj+IphmOIPTTbt
+ n0BUMVii8QAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680118888; l=2208;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=jy9fJvfWwS1V31GRDu+r4uQToIEw/SFIAP+9psSKVdk=;
+ b=e/OgvB58S/2sqwVed4d/Hfrk8pbcXFiUhuPX2d5w/8Is/ymPSZOwBGp/vKiVNLlDsWHJO69X5ldH
+ xvz52o35BIP4RAKCKZIJ+2b4hYJQmZ/0eFffc9mtwfX4egfNJJ1f
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 10:53:38AM -0700, Axel Rasmussen wrote:
-> On Tue, Mar 28, 2023 at 3:34 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Tue, Mar 28, 2023 at 02:52:35PM -0700, Axel Rasmussen wrote:
-> > > I don't see being very strict here as useful. Another example might be
-> > > madvise() - for example trying to MADV_PAGEOUT on a kernel that
-> > > doesn't support it. There is no way the kernel can proceed here, since
-> > > it simply doesn't know how to do what you're asking for. In this case
-> > > an error makes sense.
-> >
-> > IMHO, PAGEOUT is not a great example.  I wished we can have a way to probe
-> > what madvise() the system supports, and I know many people wanted that too.
-> > I even had a feeling that we'll have it some day.
-> >
-> > So now I'm going back to look at this patch assuming I'm reviewing it, I'm
-> > still not convinced the old API needs changing.
-> >
-> > Userfaultfd allows probing with features=0 with/without this patch, so I
-> > see this patch as something that doesn't bring a direct functional benefit,
-> 
-> The benefit is we combine probing for features and creating a
-> userfaultfd into a single step, so userspace doesn't have to open +
-> manipulate a userfaultfd twice. In my mind, both approaches achieve
-> the same thing, it's just that one requires extra steps to get there.
-> 
-> To me, it's still unclear why there is any harm in supporting the
-> simpler way? And, I also don't see any way in which the more complex
-> way is better?
+v2 -> v3:
+- Fix pinctrl-n / -names ordering [1/6], [2/6]
+- Drop unnecessary #-cells [1/6]
+- Drop GPIO52 (it's apparently some LCD mode, single vs dual port,
+  not sure how real it is considering it came from messy downstream
+  code and not touching it at all does not seem to break anything) [1/6]
+- Use interrupts-extended instead of interrupt-parent+interrupts [2/6]
 
-Because that's what the man page says? :)
+2/6 is still a total OF abuse and very RFC-ish, pending comments or ideas!
 
-> 
-> > but some kind of api change due to subjective preferences which I cannot
-> > say right or wrong.  Now the patch is already merged.  If we need to change
-> > either this patch or the man page to make them match again, again I'd
-> > prefer we simply revert it to keep everything like before and copy stable.
-> 
-> I think we need to change documentation either way. But, I think the
-> changes needed are actually bigger if we want to revert.
+v2: https://lore.kernel.org/r/20230313-topic-tama_disp-v2-0-37ececf43770@linaro.org
 
-IIUC the man page doesn't need to update if we revert this patch.
+v1 -> v2:
+- Drop akatsuki touch panel as Marijn figures out some sleep-related
+  things
+- No more dependencies, the panel driver has been merged into drm-misc
+  next
+- "*-pin" { -> "*-pins {"
+- treset-gpios -> touch-reset-gpios
+- Drop "Don't use 0x in unit address" (solved)
+- Drop IPA & modem, this keeps crashing for some reason..
 
-The man page described clearly on what will happen if we pass in feature
-bits that are not supported:
+2/7 is a total OF abuse and very RFC-ish..
 
-       To enable userfaultfd features the application should set a bit
-       corresponding to each feature it wants to enable in the features
-       field.  If the kernel supports all the requested features it will
-       enable them.  Otherwise it will zero out the returned uffdio_api
-       structure and return EINVAL.
+v1: https://lore.kernel.org/lkml/20220930191049.123256-2-konrad.dybcio@somainline.org/
 
-> With the simpler behavior, the selftest and the example program in the
-> man page are ~correct as-is; otherwise we would need to modify those
-> to use the two-step probing method.
-> 
-> (By the way, I am excited about the selftest refactoring you talked
-> about! Thanks for doing that work. It definitely needs it, the
-> complexity there has gotten significantly worse as we've added more
-> things onto it [wp, minor faults].)
+This series enables display and touch panel on XZ2/XZ2c devices
+equipped with a JDI panel with a TD4353 driver IC and just
+touch panel for all XZ3 phones. It also enables the remote
+processors, GPU&GMU and GPI DMA on all Tama devices.
 
-I'll definitely copy you when I post it.  It growed a bit larger than I
-thought, it'll be great if you can help have a look.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (6):
+      arm64: dts: qcom: sdm845-tama: Add display nodes
+      [RFC] arm64: dts: qcom: sdm845-tama: Add Synaptics Touchscreen
+      arm64: dts: qcom: sdm845-tama: Add regulator-system-load to l14a/l28a
+      arm64: dts: qcom: sdm845-tama: Enable remoteprocs
+      arm64: dts: qcom: sdm845-tama: Enable GPU
+      arm64: dts: qcom: sdm845-tama: Enable GPI_DMA0/1
 
-In the test cases I added an UFFDIO_API test to be the 1st one and that's
-why I found this issue.  To let all tests pass currently I'll need to
-revert this patch.  If you want we can move the discussion there when I
-post it, I think that may need to be the 1st patch for the test suite
-change and to let current test suite pass.
+ .../dts/qcom/sdm845-sony-xperia-tama-akari.dts     |   4 +
+ .../dts/qcom/sdm845-sony-xperia-tama-akatsuki.dts  |  47 ++++-
+ .../dts/qcom/sdm845-sony-xperia-tama-apollo.dts    |   6 +
+ .../boot/dts/qcom/sdm845-sony-xperia-tama.dtsi     | 199 ++++++++++++++++++++-
+ 4 files changed, 253 insertions(+), 3 deletions(-)
+---
+base-commit: 198925fae644b0099b66fac1d972721e6e563b17
+change-id: 20230313-topic-tama_disp-f38a116f52df
 
-> I think the man page description of how to use the API is incomplete
-> in either case. Right now it sort of alludes to the fact that you can
-> probe with features==0, but it doesn't explicitly say "you need to
-> probe first, then close that userfaultfd and open the real one you
-> want to use, with a subset of the features reported in the first
-> step". If we want to keep the old behavior, it should be more explicit
-> about the steps needed to get a userfaultfd.
-
-To tell the truth, if I'm going to change the API anyway, I'll simply add a
-UFFDIO_FEATURES ioctl() returning the supported features, that'll be much,
-much easier than either the old one or the one this patch proposed, IMHO.
-Then we keep all the rest untouched.  That should work perfectly and
-that'll not require open()/close() duplications either.
-
-But as I mentioned before, I don't think UFFDIO_FEATURES justifies itself
-either much on being worthwhile because it introduces a new ioctl without
-any major benefit.  At least we'll need to keep the old behavior still
-working.
-
-> 
-> You are right that it also doesn't describe "you can just ask for what
-> you want, and the kernel tells you what subset it can give you; you
-> need to check that the reported features are acceptable" - the new
-> behavior. That should be updated.
-
+Best regards,
 -- 
-Peter Xu
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
