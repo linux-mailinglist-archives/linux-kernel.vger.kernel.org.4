@@ -2,197 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473BA6CDCB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399416CDD5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjC2Ofs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
+        id S230173AbjC2OiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjC2OfY (ORCPT
+        with ESMTP id S230214AbjC2Ohy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:35:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818E46A48;
-        Wed, 29 Mar 2023 07:31:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C8D9E1FDD7;
-        Wed, 29 Mar 2023 14:23:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680099832; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 29 Mar 2023 10:37:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A1C7EC7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:33:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680100359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JgAqhks0C3IN4+lfZvuY0gbFhTkXdOVc3wNxYkO+XwE=;
-        b=VHJy/t4VnSzbZ4tzrhebOifyuC6pGjl5TQIz/eVAhtxXjcdr04nTTT8d+loIHlGU27b+2j
-        CSu6s44u+410mCUI1AS93mzHeTuhgDd5WeETx5FLlNVkwySfxchYWlJ1RLdkFjFZotLzG/
-        coolDxdnh26L8KxKvBfdG8ioSVVkkIQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680099832;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JgAqhks0C3IN4+lfZvuY0gbFhTkXdOVc3wNxYkO+XwE=;
-        b=47xCWD44CmYf+Mf1uCacEcx5m0liEJt4VEk696Atou5kYSzLvIRfiSd0oiNW0K9PV3jU3L
-        lxDHHZyHaPhoaJCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=kx85hyXfvvLNqL0NEid1RaaN8H67N4c0vjreeRx/a58=;
+        b=L2FF+0rsww92VtjezKNPM9i+GRmsRJIg4pCNaGXArTsrPGEaXF0XIqYeG45cxiRRqMIM+l
+        8zJKIJkyQ49N8d5XrMxU2rr38SvEkCkSH03vBQwswmnHZzM/2K+4LnUtF/FeyrKAcduo0T
+        d0fxOQ0qKZNXQCUzqc9uelE8lQGr4HU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-81-0dop_cEXNCS7w8AzU7mZlQ-1; Wed, 29 Mar 2023 10:26:16 -0400
+X-MC-Unique: 0dop_cEXNCS7w8AzU7mZlQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 63D1E138FF;
-        Wed, 29 Mar 2023 14:23:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vQXSFvhJJGTPMwAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 29 Mar 2023 14:23:52 +0000
-Message-ID: <e128356a-f56f-4c02-7437-dfea38e4194b@suse.de>
-Date:   Wed, 29 Mar 2023 16:23:51 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C234A185A7AC;
+        Wed, 29 Mar 2023 14:24:18 +0000 (UTC)
+Received: from [10.22.34.224] (unknown [10.22.34.224])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B1302166B33;
+        Wed, 29 Mar 2023 14:24:14 +0000 (UTC)
+Message-ID: <1d08d661-fbd1-bd94-d6f0-94941ba7a0e2@redhat.com>
+Date:   Wed, 29 Mar 2023 10:24:14 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH v2 48/48] sock: Remove ->sendpage*() in favour of
- sendmsg(MSG_SPLICE_PAGES)
-To:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
-        linux-sctp@vger.kernel.org, linux-afs@lists.infradead.org,
-        rds-devel@oss.oracle.com, linux-x25@vger.kernel.org,
-        dccp@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-wpan@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Al Viro <viro@zeniv.linux.org.uk>, linux-hams@vger.kernel.org,
-        mptcp@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <brauner@kernel.org>, netdev@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        tipc-discussion@lists.sourceforge.net,
-        linux-crypto@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        bpf@vger.kernel.org, Linus Torvalds <torvalds@linux-foundation.org>
-References: <20230329141354.516864-1-dhowells@redhat.com>
- <20230329141354.516864-49-dhowells@redhat.com>
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 4/6] sched/deadline: Create DL BW alloc, free & check
+ overflow interface
 Content-Language: en-US
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20230329141354.516864-49-dhowells@redhat.com>
+To:     Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+References: <20230329125558.255239-1-juri.lelli@redhat.com>
+ <20230329125558.255239-5-juri.lelli@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230329125558.255239-5-juri.lelli@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/23 16:13, David Howells wrote:
-> [!] Note: This is a work in progress.  At the moment, some things won't
->      build if this patch is applied.  nvme, kcm, smc, tls.
-> 
-> Remove ->sendpage() and ->sendpage_locked().  sendmsg() with
-> MSG_SPLICE_PAGES should be used instead.  This allows multiple pages and
-> multipage folios to be passed through.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for net/can
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: bpf@vger.kernel.org
-> cc: dccp@vger.kernel.org
-> cc: linux-afs@lists.infradead.org
-> cc: linux-arm-msm@vger.kernel.org
-> cc: linux-can@vger.kernel.org
-> cc: linux-crypto@vger.kernel.org
-> cc: linux-doc@vger.kernel.org
-> cc: linux-hams@vger.kernel.org
-> cc: linux-kernel@vger.kernel.org
-> cc: linux-rdma@vger.kernel.org
-> cc: linux-sctp@vger.kernel.org
-> cc: linux-wpan@vger.kernel.org
-> cc: linux-x25@vger.kernel.org
-> cc: mptcp@lists.linux.dev
-> cc: netdev@vger.kernel.org
-> cc: rds-devel@oss.oracle.com
-> cc: tipc-discussion@lists.sourceforge.net
-> cc: virtualization@lists.linux-foundation.org
+
+On 3/29/23 08:55, Juri Lelli wrote:
+> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+>
+> Rework the existing dl_cpu_busy() interface which offers DL BW overflow
+> checking and per-task DL BW allocation.
+>
+> Add dl_bw_free() as an interface to be able to free DL BW.
+> It will be used to allow freeing of the DL BW request done during
+> cpuset_can_attach() in case multiple controllers are attached to the
+> cgroup next to the cpuset controller and one of the non-cpuset
+> can_attach() fails.
+>
+> dl_bw_alloc() (and dl_bw_free()) now take a `u64 dl_bw` parameter
+> instead of `struct task_struct *p` used in dl_cpu_busy().  This allows
+> to allocate DL BW for a set of tasks too rater than only for a single
+Typo: "rater" => "rather"
+> task.
+>
+> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
 > ---
->   Documentation/networking/scaling.rst |   4 +-
->   crypto/af_alg.c                      |  29 ------
->   crypto/algif_aead.c                  |  22 +----
->   crypto/algif_rng.c                   |   2 -
->   crypto/algif_skcipher.c              |  14 ---
->   include/linux/net.h                  |   8 --
->   include/net/inet_common.h            |   2 -
->   include/net/sock.h                   |   6 --
->   net/appletalk/ddp.c                  |   1 -
->   net/atm/pvc.c                        |   1 -
->   net/atm/svc.c                        |   1 -
->   net/ax25/af_ax25.c                   |   1 -
->   net/caif/caif_socket.c               |   2 -
->   net/can/bcm.c                        |   1 -
->   net/can/isotp.c                      |   1 -
->   net/can/j1939/socket.c               |   1 -
->   net/can/raw.c                        |   1 -
->   net/core/sock.c                      |  35 +------
->   net/dccp/ipv4.c                      |   1 -
->   net/dccp/ipv6.c                      |   1 -
->   net/ieee802154/socket.c              |   2 -
->   net/ipv4/af_inet.c                   |  21 ----
->   net/ipv4/tcp.c                       |  34 -------
->   net/ipv4/tcp_bpf.c                   |  21 +---
->   net/ipv4/tcp_ipv4.c                  |   1 -
->   net/ipv4/udp.c                       |  22 -----
->   net/ipv4/udp_impl.h                  |   2 -
->   net/ipv4/udplite.c                   |   1 -
->   net/ipv6/af_inet6.c                  |   3 -
->   net/ipv6/raw.c                       |   1 -
->   net/ipv6/tcp_ipv6.c                  |   1 -
->   net/key/af_key.c                     |   1 -
->   net/l2tp/l2tp_ip.c                   |   1 -
->   net/l2tp/l2tp_ip6.c                  |   1 -
->   net/llc/af_llc.c                     |   1 -
->   net/mctp/af_mctp.c                   |   1 -
->   net/mptcp/protocol.c                 |   2 -
->   net/netlink/af_netlink.c             |   1 -
->   net/netrom/af_netrom.c               |   1 -
->   net/packet/af_packet.c               |   2 -
->   net/phonet/socket.c                  |   2 -
->   net/qrtr/af_qrtr.c                   |   1 -
->   net/rds/af_rds.c                     |   1 -
->   net/rose/af_rose.c                   |   1 -
->   net/rxrpc/af_rxrpc.c                 |   1 -
->   net/sctp/protocol.c                  |   1 -
->   net/socket.c                         |  48 ---------
->   net/tipc/socket.c                    |   3 -
->   net/unix/af_unix.c                   | 139 ---------------------------
->   net/vmw_vsock/af_vsock.c             |   3 -
->   net/x25/af_x25.c                     |   1 -
->   net/xdp/xsk.c                        |   1 -
->   52 files changed, 9 insertions(+), 447 deletions(-)
-> 
-Weelll ... what happens to consumers of kernel_sendpage()?
-(Let's call them nvme ...)
-Should they be moved over, too?
-
-Or what is the general consensus here?
-
-(And what do we do with TLS? It does have a ->sendpage() version, too ...)
-
-Cheers,
-
-Hannes
+>   include/linux/sched.h   |  2 ++
+>   kernel/sched/core.c     |  4 ++--
+>   kernel/sched/deadline.c | 53 +++++++++++++++++++++++++++++++----------
+>   kernel/sched/sched.h    |  2 +-
+>   4 files changed, 45 insertions(+), 16 deletions(-)
+>
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 6d654eb4cabd..6f3d84e0ed08 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -1848,6 +1848,8 @@ current_restore_flags(unsigned long orig_flags, unsigned long flags)
+>   
+>   extern int cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
+>   extern int task_can_attach(struct task_struct *p, const struct cpumask *cs_effective_cpus);
+> +extern int dl_bw_alloc(int cpu, u64 dl_bw);
+> +extern void dl_bw_free(int cpu, u64 dl_bw);
+>   #ifdef CONFIG_SMP
+>   extern void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask);
+>   extern int set_cpus_allowed_ptr(struct task_struct *p, const struct cpumask *new_mask);
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 179266ff653f..c83dae6b8586 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -9294,7 +9294,7 @@ int task_can_attach(struct task_struct *p,
+>   
+>   		if (unlikely(cpu >= nr_cpu_ids))
+>   			return -EINVAL;
+> -		ret = dl_cpu_busy(cpu, p);
+> +		ret = dl_bw_alloc(cpu, p->dl.dl_bw);
+>   	}
+>   
+>   out:
+> @@ -9579,7 +9579,7 @@ static void cpuset_cpu_active(void)
+>   static int cpuset_cpu_inactive(unsigned int cpu)
+>   {
+>   	if (!cpuhp_tasks_frozen) {
+> -		int ret = dl_cpu_busy(cpu, NULL);
+> +		int ret = dl_bw_check_overflow(cpu);
+>   
+>   		if (ret)
+>   			return ret;
+> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> index 8f92f0f87383..5b6965e0e537 100644
+> --- a/kernel/sched/deadline.c
+> +++ b/kernel/sched/deadline.c
+> @@ -3057,26 +3057,38 @@ int dl_cpuset_cpumask_can_shrink(const struct cpumask *cur,
+>   	return ret;
+>   }
+>   
+> -int dl_cpu_busy(int cpu, struct task_struct *p)
+> +enum dl_bw_request {
+> +	dl_bw_req_check_overflow = 0,
+> +	dl_bw_req_alloc,
+> +	dl_bw_req_free
+> +};
+> +
+> +static int dl_bw_manage(enum dl_bw_request req, int cpu, u64 dl_bw)
+>   {
+> -	unsigned long flags, cap;
+> +	unsigned long flags;
+>   	struct dl_bw *dl_b;
+> -	bool overflow;
+> +	bool overflow = 0;
+>   
+>   	rcu_read_lock_sched();
+>   	dl_b = dl_bw_of(cpu);
+>   	raw_spin_lock_irqsave(&dl_b->lock, flags);
+> -	cap = dl_bw_capacity(cpu);
+> -	overflow = __dl_overflow(dl_b, cap, 0, p ? p->dl.dl_bw : 0);
+>   
+> -	if (!overflow && p) {
+> -		/*
+> -		 * We reserve space for this task in the destination
+> -		 * root_domain, as we can't fail after this point.
+> -		 * We will free resources in the source root_domain
+> -		 * later on (see set_cpus_allowed_dl()).
+> -		 */
+> -		__dl_add(dl_b, p->dl.dl_bw, dl_bw_cpus(cpu));
+> +	if (req == dl_bw_req_free) {
+> +		__dl_sub(dl_b, dl_bw, dl_bw_cpus(cpu));
+> +	} else {
+> +		unsigned long cap = dl_bw_capacity(cpu);
+> +
+> +		overflow = __dl_overflow(dl_b, cap, 0, dl_bw);
+> +
+> +		if (req == dl_bw_req_alloc && !overflow) {
+> +			/*
+> +			 * We reserve space in the destination
+> +			 * root_domain, as we can't fail after this point.
+> +			 * We will free resources in the source root_domain
+> +			 * later on (see set_cpus_allowed_dl()).
+> +			 */
+> +			__dl_add(dl_b, dl_bw, dl_bw_cpus(cpu));
+> +		}
+>   	}
+>   
+>   	raw_spin_unlock_irqrestore(&dl_b->lock, flags);
+> @@ -3084,6 +3096,21 @@ int dl_cpu_busy(int cpu, struct task_struct *p)
+>   
+>   	return overflow ? -EBUSY : 0;
+>   }
+> +
+> +int dl_bw_check_overflow(int cpu)
+> +{
+> +	return dl_bw_manage(dl_bw_req_check_overflow, cpu, 0);
+> +}
+> +
+> +int dl_bw_alloc(int cpu, u64 dl_bw)
+> +{
+> +	return dl_bw_manage(dl_bw_req_alloc, cpu, dl_bw);
+> +}
+> +
+> +void dl_bw_free(int cpu, u64 dl_bw)
+> +{
+> +	dl_bw_manage(dl_bw_req_free, cpu, dl_bw);
+> +}
+>   #endif
+>   
+>   #ifdef CONFIG_SCHED_DEBUG
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 060616944d7a..81ecfd1a1a48 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -330,7 +330,7 @@ extern void __getparam_dl(struct task_struct *p, struct sched_attr *attr);
+>   extern bool __checkparam_dl(const struct sched_attr *attr);
+>   extern bool dl_param_changed(struct task_struct *p, const struct sched_attr *attr);
+>   extern int  dl_cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
+> -extern int  dl_cpu_busy(int cpu, struct task_struct *p);
+> +extern int  dl_bw_check_overflow(int cpu);
+>   
+>   #ifdef CONFIG_CGROUP_SCHED
+>   
 
