@@ -2,139 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8990D6CD96D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694EA6CD971
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjC2Mgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
+        id S229749AbjC2Mhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjC2Mgx (ORCPT
+        with ESMTP id S229549AbjC2Mhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:36:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 432204201
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:36:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4045A1FB;
-        Wed, 29 Mar 2023 05:37:36 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE0543F6C4;
-        Wed, 29 Mar 2023 05:36:49 -0700 (PDT)
-Message-ID: <76939bf6-1d9d-5f8f-f15c-f03b2322d684@arm.com>
-Date:   Wed, 29 Mar 2023 14:36:44 +0200
+        Wed, 29 Mar 2023 08:37:47 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7991E40CB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:37:45 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id r11so62635118edd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1680093464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gHb6wEI0W+Q8XNFleXC4qtIxQ5KFkUssnbzkaSWTwt0=;
+        b=HG/XVNTljst0PoADYJ9a1oe2fUatY94AsdKpMHxxOpv6UuoHB6hvijDjhYLE9/25rs
+         152++Pjka5+uGRovDxe9lV+rhf8++TfTk52B//EwPFKlZ8SzAWjTwNLluSshW2RDWPnd
+         srv2pNMrlqDFWWsC173i94ItNlYGVLs5iGdN6EW6KPfp4NGuo04lpjR216LCgKHkG6hm
+         tt8ytMaBacnj2KHpooUNXKvXT476qhRY2eCUHq0XSDr3E6V5f2UW8KmHuS4qM5P/vnYo
+         c7iIw+AdSJaMxFaBxtnvEUmWHYQAhPvuAHIixL2EwShp2QWod24RpXn2eN7OXg5nz4PP
+         a8fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680093464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gHb6wEI0W+Q8XNFleXC4qtIxQ5KFkUssnbzkaSWTwt0=;
+        b=Bs61N+NUDAgmBG2yKfhalTCY0dJumUmOBq95hoER1IJliiX3o6jDWY6iXGLKSPWEhs
+         LcfQzpu/MQuif3JwQCjOkFxI/ygtFon4ruUdSo0PgzB+FR0reB6k+d43PoTXTsZwYvCP
+         4pB2ei8zv13UcpREMCrAYCqq+cyxifreKcpznpHb9+WMklQi3zEp5+5HMli02vYLZ4r4
+         VM7/bjhaZ6BrcV/dtvvZnZipdjwhWpwyCktXlBhJJ9N1cZVISS8JrmWseW1D7tK4OdxJ
+         oYfHj+mukzCvSW7ApF0DvWQqcS+gr9ekjKGqRw+hpu5i7eAJgX0GP8WmHLbcpBF8JCbl
+         /LXw==
+X-Gm-Message-State: AAQBX9d87ZPd4AZeH99tpZPm8WxyZhrNeY2nSv7dItkKMjbuqTQlONlu
+        1EPnjHj/Pn9dUSeF8pgzWstyu0TDHXX4RclWGwi5/A==
+X-Google-Smtp-Source: AKy350aDBwtiG5kWGJciArmsYca1qFgzqg6C3cxeEPeZkvx1P1YMyQqnsAGHM99S4BjGebJTBNJNFDacA5sFHwR7yCY=
+X-Received: by 2002:a17:907:d687:b0:93d:a14f:c9b4 with SMTP id
+ wf7-20020a170907d68700b0093da14fc9b4mr9691718ejc.2.1680093463969; Wed, 29 Mar
+ 2023 05:37:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] sched/fair: Make tg->load_avg per node
-Content-Language: en-US
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Nitin Tekchandani <nitin.tekchandani@intel.com>,
-        Waiman Long <longman@redhat.com>,
-        Yu Chen <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
-References: <20230327053955.GA570404@ziqianlu-desk2>
- <943d44f7-1fa9-8545-dc1d-890e4dd20854@arm.com>
- <20230328125624.GA6130@ziqianlu-desk2>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230328125624.GA6130@ziqianlu-desk2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
+ <20221129161134.2672474-5-Naresh.Solanki@9elements.com> <20221129163427.dxnqfay6ur6mvivu@pengutronix.de>
+ <d2d54a34-56dc-df83-5fde-ad0a9a73a9e0@roeck-us.net> <77c5a9e2-ce25-df19-1eba-ba4808bbeb9d@9elements.com>
+In-Reply-To: <77c5a9e2-ce25-df19-1eba-ba4808bbeb9d@9elements.com>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Wed, 29 Mar 2023 18:07:34 +0530
+Message-ID: <CABqG17h1112TsJ_JtxZkLrObz0v-5dq_6B86RYA_T6efW14t1Q@mail.gmail.com>
+Subject: Re: [PATCH v8 4/4] hwmon: (max6639) Add pwm support
+To:     Guenter Roeck <linux@roeck-us.net>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-pwm@vger.kernel.org, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 14:56, Aaron Lu wrote:
-> Hi Dietmar,
-> 
-> Thanks for taking a look.
-> 
-> On Tue, Mar 28, 2023 at 02:09:39PM +0200, Dietmar Eggemann wrote:
->> On 27/03/2023 07:39, Aaron Lu wrote:
+Hi Rob, Guenter,
 
-[...]
+I need your inputs & direction on the next step for max6639 driver.
+I'm willing to work & implement changes.
 
-> Did you test with a v6.3-rc based kernel?
-> I encountered another problem on those kernels and had to temporarily use
-> a v6.2 based kernel, maybe you have to do the same:
-> https://lore.kernel.org/lkml/20230327080502.GA570847@ziqianlu-desk2/
+Thank you for your time and consideration.
 
-No, I'm also on v6.2.
+Regards,
+Naresh Solanki
 
->> Is your postgres/sysbench running in a cgroup with cpu controller
->> attached? Mine isn't.
-> 
-> Yes, I had postgres and sysbench running in the same cgroup with cpu
-> controller enabled. docker created the cgroup directory under
-> /sys/fs/cgroup/system.slice/docker-XXX and cgroup.controllers has cpu
-> there.
+Regards,
+Naresh Solanki
 
-I'm running postgresql service directly on the machine. I boot now with
-'cgroup_no_v1=all systemd.unified_cgroup_hierarchy=1' so I can add the
-cpu controller to:
 
-  system.slice/system-postgresql.slice/postgresql@11-main.service
 
-where the 96 postgres threads run and to
+9elements GmbH, Kortumstra=C3=9Fe 19-21, 44787 Bochum, Germany
+Email:  naresh.solanki@9elements.com
+Mobile:  +91 9538631477
 
-  user.slice/user-1005.slice/session-4.scope
+Sitz der Gesellschaft: Bochum
+Handelsregister: Amtsgericht Bochum, HRB 17519
+Gesch=C3=A4ftsf=C3=BChrung: Sebastian Deutsch, Eray Basar
 
-where the 96 sysbench threads run.
+Datenschutzhinweise nach Art. 13 DSGVO
 
-Checked with systemd-cgls and `cat /sys/kernel/debug/sched/debug` that
-those threads are really running there.
 
-Still not seeing `update_load_avg` or `update_cfs_group` in perf report,
-only some very low values for `update_blocked_averages`.
-
-Also added CFS BW throttling to both cgroups. No change.
-
-Then I moved session-4.scope's shell into `postgresql@11-main.service`
-so that `postgres` and `sysbench` threads run in the same cgroup.
-
-Didn't change much.
-
->> Maybe I'm doing something else differently?
-> 
-> Maybe, you didn't mention how you started postgres, if you start it from
-> the same session as sysbench and if autogroup is enabled, then all those
-> tasks would be in the same autogroup taskgroup then it should have the
-> same effect as my setup.
-
-This should be now close to my setup running `postgres` and `sysbench`
-in `postgresql@11-main.service`.
-
-> Anyway, you can try the following steps to see if you can reproduce this
-> problem on your Arm64 server:
-> 
-> 1 docker pull postgres
-> 2 sudo docker run --rm --name postgres-instance -e POSTGRES_PASSWORD=mypass -e POSTGRES_USER=sbtest -d postgres -c shared_buffers=80MB -c max_connections=250
-> 3 go inside the container
->   sudo docker exec -it $the_just_started_container_id bash
-> 4 install sysbench inside container
->   apt update and apt install sysbench
-> 5 prepare
->   root@container:/# sysbench --db-driver=pgsql --pgsql-user=sbtest --pgsql_password=mypass --pgsql-db=sbtest --pgsql-port=5432 --tables=16 --table-size=10000 --threads=224 --time=60 --report-interval=2 /usr/share/sysbench/oltp_read_only.lua prepare
-> 6 run
->   root@container:/# sysbench --db-driver=pgsql --pgsql-user=sbtest --pgsql_password=mypass --pgsql-db=sbtest --pgsql-port=5432 --tables=16 --table-size=10000 --threads=224 --time=60 --report-interval=2 /usr/share/sysbench/oltp_read_only.lua run
-
-I would have to find time to learn how to set up docker on my machine
-... But I use very similar values for the setup and sysbench test.
-
-> Note that I used 224 threads where this problem is visible. I also tried
-> 96 and update_cfs_group() and update_load_avg() cost about 1% cycles then.
-
-True, I was hopping to see at least the 1% ;-)
+On Tue, 6 Dec 2022 at 23:15, Naresh Solanki
+<naresh.solanki@9elements.com> wrote:
+>
+> Hi Guenter, Rob
+>
+> On 29-11-2022 10:11 pm, Guenter Roeck wrote:
+> > On 11/29/22 08:34, Uwe Kleine-K=C3=B6nig wrote:
+> >> On Tue, Nov 29, 2022 at 05:11:34PM +0100, Naresh Solanki wrote:
+> >>> Add pwm support for max6639. Also configure pwm fan speed based on pw=
+m
+> >>> provided in DT.
+> >>
+> >> Did you do anything to resolve the questions I had in reply to v5? If
+> >> yes, I must have missed it.
+> >>
+> >
+> > I don't see a response to my concerns either, especially regarding fan =
+mode
+> > (dc vs. pwm) in the bindings. For that reason, I won't even look at the
+> > series.
+> Best I can think of regulator with voltage control. Because as per my
+> understanding, DC control fan essentially control DC voltage on negative
+> pin of fan.
+>
+>
+> Regards,
+> Naresh
+> >
+> > Guenter
+> >
+> >> Note that maintainer time is scarce and with sending new versions of a
+> >> patch with no sign that you improved in the aspects that were critized
+> >> before, you're burning that scarce time and loosing the good will of t=
+he
+> >> responsible maintainers.
+> >>
+> >> Best regards
+> >> Uwe
+> >>
+> >
