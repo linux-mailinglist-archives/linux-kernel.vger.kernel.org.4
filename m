@@ -2,325 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463486CF190
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 19:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96576CF198
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjC2R73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 13:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S229846AbjC2SAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjC2R70 (ORCPT
+        with ESMTP id S229829AbjC2SAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:59:26 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372A54202
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:59:22 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id l12so16613161wrm.10
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:59:22 -0700 (PDT)
+        Wed, 29 Mar 2023 14:00:04 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0149A618E
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:59:45 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id kq3so15675441plb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:59:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680112760;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OJ9nha7AgNmpmpnP4RutaTZzBRrwel6kV4lGuwfHlf8=;
-        b=aLjxdVe/40YaHJHwB6i2tMNnpYc9l4e81zyuv2IPGWApYcCl/erSxKBA2of1bZBHSZ
-         UXzeAjnb1qRkpNRTSjcO0qJ1SrrLsImL1FV2ltdJA66H0R9FFrnTOlufw5jfVbbWj4ls
-         AahADSqGwloxFoHk+PS66/3/6lM0SD9rW8QvEuMILlXm3F8tanC8E2ZjxUCFFanEpa7r
-         YEfVQbaqrqtzv7TfZbLbHdIpq/9Q4+QCC2q5QqBrZXEyPISFLZoBYpL5SzNUlScgqutK
-         F4OpjyeZCMugC0eWcNDcDKMkzY4EXZP0Fshf/4PPBcbQ1PkXLJXg8EIFw4hOJBeVgRjh
-         BX3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680112760;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1680112785;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OJ9nha7AgNmpmpnP4RutaTZzBRrwel6kV4lGuwfHlf8=;
-        b=HJA6tWSA1UpDUL+hVjC8BQF8nml9f7k+haBQsrvL0o8tO3DC4IAgxYX6xirFOL/kKd
-         3JEc/RCTaVk9ZpiwGNdBcfWNFgf9UEYvp/9Xr8sSN9coGNietjnhXyufwaAhnK3ni98L
-         6P0ceaA4ey06bvMUt38Igxw+TOVFc3UWTSyRnqdoE1NmGpjWThd//Ahp/m+VYNSvxs0/
-         AXLWeK8E3hoBWzvUfZ8tb+1FuClRjVQxcLs59TTZetdnlP2Er4Eaxemx8QUhVqdyDRIa
-         lv6z0BaVC1/vE1xFUAoUD8Yje+0q6jJ2SE0sLitLI1PgGtoD0pW+0ckXbB3dWE9O+iBp
-         GZvQ==
-X-Gm-Message-State: AAQBX9cig3B++9SA0gnW+2GVJ5puiIRcic6KLd6yT2TTvZ3GnmTwNGKK
-        nFTb1vR/FHaJPBJjo+9yFTao0bG4GVqqQgj1BQDyuQ==
-X-Google-Smtp-Source: AKy350akP4/NQIx5w9BQvswFfGlbVMz6q4mb9WlohNsWv2IEhZG0HeS9p9EvXUCf7t0U8BCXIWGxBfe111LBZrdT+R0=
-X-Received: by 2002:adf:ec82:0:b0:2d4:167e:854d with SMTP id
- z2-20020adfec82000000b002d4167e854dmr4219882wrn.2.1680112760643; Wed, 29 Mar
- 2023 10:59:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230323062451.2925996-1-danishanwar@ti.com> <20230323062451.2925996-2-danishanwar@ti.com>
- <20230327205841.GA3158115@p14s> <9d4c7762-615b-0fbd-76d2-87156e691928@ti.com>
-In-Reply-To: <9d4c7762-615b-0fbd-76d2-87156e691928@ti.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Wed, 29 Mar 2023 11:59:09 -0600
-Message-ID: <CANLsYkx6Nkrc_qSVWe53bhm9GjTDzXydiaxCB=_nL2R7ppu-qw@mail.gmail.com>
-Subject: Re: [EXTERNAL] Re: [PATCH v5 1/5] soc: ti: pruss: Add
- pruss_get()/put() API
-To:     Md Danish Anwar <a0501179@ti.com>
-Cc:     MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        bh=/ATAQe7qivttkaF6z/d0hrLKosZU1JWYo/P3cLZVbkw=;
+        b=NEdOUx/javmB9kDa7FGeUc51U/Wn0STrKWBa4uDg3vm2+W9FVlVH1+/ZMb1zTGKdDj
+         d3KLDNLFiScX2SoDgiYm71CYQHSrFsT80Vwc5DPAARaURlvkxOnL/I2SpNS/7RjVoq7M
+         jjBHG4IkvUpJrr88X3pQ1Wfo+pEhSovMq/MTY7fiCKb7Nr6D9uNLsLzURn6rQVZeGbce
+         2RLnovtWpOUC6EB7GYynif//9myEVnFqbAQ6SEV67g2Ps9E2dBH1Zb7EzSix25ynrfat
+         k7WO6rSP3p9XcTqrR8xuaSeMtQV/wtnrluHPs9zpByqTym6w08+dV+DrUSg5AioJPwMA
+         gXXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680112785;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/ATAQe7qivttkaF6z/d0hrLKosZU1JWYo/P3cLZVbkw=;
+        b=UDm3Ahv0yOrGqBHwB8FN2ZiVE8NSBAcrzUnQjl98jQvqA7zFVfMDmWRxyEHpz83LuY
+         22Q0kdINemAk/+eZxV2rVsWRt9vahj4XlodtqE2/w7NeByyBUvSBHMssrC35+VIVJ+IL
+         sJRpAHnajQ61+eWaVw3uQFdAMKZ2rMvZtcen0Qo2erx7HkIE+mgAcQ5swK6QunG+NQbB
+         Igq/yNRAZPCOfYVO2fQi13aavRT1KEqUnjqKeVDSpV/uoseUYTBpHB/N0T/1QDxpLdze
+         8ypH2B+gGvFsA5J9o9JWSrr+XceUOiYeYKG70iLSke/7iw/JsQteyhP7NpfnR9mLFMka
+         GoHg==
+X-Gm-Message-State: AO0yUKUZCV3fqlS260EQmsG6cRYo5mRmSWsyM74RBI7gHO8u6FGh4uZT
+        LIurb9mnr55X803imcZUN0d69Q==
+X-Google-Smtp-Source: AK7set8WybREuJ/MU50NhWHApZc7Q738Nt6HMrkX3X3+yzmaIkDHQziymzMOq45dYkW+fnJxn7v6Yw==
+X-Received: by 2002:a05:6a20:21d5:b0:de:247e:d1fe with SMTP id p21-20020a056a2021d500b000de247ed1femr20032034pzb.1.1680112785240;
+        Wed, 29 Mar 2023 10:59:45 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id y13-20020aa7804d000000b00592626fe48csm6374660pfm.122.2023.03.29.10.59.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 10:59:44 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 10:59:44 -0700 (PDT)
+X-Google-Original-Date: Wed, 29 Mar 2023 10:59:40 PDT (-0700)
+Subject:     Re: [PATCH v8 0/1] riscv: Allow to downgrade paging mode from the command line
+In-Reply-To: <20230228154629.240541-1-alexghiti@rivosinc.com>
+CC:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Conor Dooley <conor@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>, bjorn@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, alexghiti@rivosinc.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     alexghiti@rivosinc.com
+Message-ID: <mhng-4507ad68-27bd-4d29-bb72-8d8f5bc27e34@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 at 23:42, Md Danish Anwar <a0501179@ti.com> wrote:
+On Tue, 28 Feb 2023 07:46:28 PST (-0800), alexghiti@rivosinc.com wrote:
+> This new version gets rid of the limitation that prevented KASAN kernels
+> to use the newly introduced parameters.
 >
-> Hi Mathieu,
+> While looking into KASLR, I fell onto commit aacd149b6238 ("arm64: head:
+> avoid relocating the kernel twice for KASLR"): it allows to use the fdt
+> functions very early in the boot process with KASAN enabled by simply
+> compiling a new version of those functions without instrumentation.
 >
-> On 28/03/23 02:28, Mathieu Poirier wrote:
-> > Hi Danish
-> >
-> > On Thu, Mar 23, 2023 at 11:54:47AM +0530, MD Danish Anwar wrote:
-> >> From: Tero Kristo <t-kristo@ti.com>
-> >>
-> >> Add two new get and put API, pruss_get() and pruss_put() to the
-> >> PRUSS platform driver to allow client drivers to request a handle
-> >> to a PRUSS device. This handle will be used by client drivers to
-> >> request various operations of the PRUSS platform driver through
-> >> additional API that will be added in the following patches.
-> >>
-> >> The pruss_get() function returns the pruss handle corresponding
-> >> to a PRUSS device referenced by a PRU remoteproc instance. The
-> >> pruss_put() is the complimentary function to pruss_get().
-> >>
-> >> Co-developed-by: Suman Anna <s-anna@ti.com>
-> >> Signed-off-by: Suman Anna <s-anna@ti.com>
-> >> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> >> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> >> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> >> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> >> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> >> Reviewed-by: Roger Quadros <rogerq@kernel.org>
-> >> ---
-> >>  drivers/remoteproc/pru_rproc.c                |  2 +-
-> >>  drivers/soc/ti/pruss.c                        | 60 ++++++++++++++++++-
-> >>  .../{pruss_driver.h => pruss_internal.h}      |  7 ++-
-> >>  include/linux/remoteproc/pruss.h              | 19 ++++++
-> >>  4 files changed, 83 insertions(+), 5 deletions(-)
-> >>  rename include/linux/{pruss_driver.h => pruss_internal.h} (90%)
-> >>
-> >> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-> >> index b76db7fa693d..4ddd5854d56e 100644
-> >> --- a/drivers/remoteproc/pru_rproc.c
-> >> +++ b/drivers/remoteproc/pru_rproc.c
-> >> @@ -19,7 +19,7 @@
-> >>  #include <linux/of_device.h>
-> >>  #include <linux/of_irq.h>
-> >>  #include <linux/remoteproc/pruss.h>
-> >> -#include <linux/pruss_driver.h>
-> >> +#include <linux/pruss_internal.h>
-> >>  #include <linux/remoteproc.h>
-> >>
-> >>  #include "remoteproc_internal.h"
-> >> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-> >> index 6882c86b3ce5..6c2bb02a521d 100644
-> >> --- a/drivers/soc/ti/pruss.c
-> >> +++ b/drivers/soc/ti/pruss.c
-> >> @@ -6,6 +6,7 @@
-> >>   * Author(s):
-> >>   *  Suman Anna <s-anna@ti.com>
-> >>   *  Andrew F. Davis <afd@ti.com>
-> >> + *  Tero Kristo <t-kristo@ti.com>
-> >>   */
-> >>
-> >>  #include <linux/clk-provider.h>
-> >> @@ -16,8 +17,9 @@
-> >>  #include <linux/of_address.h>
-> >>  #include <linux/of_device.h>
-> >>  #include <linux/pm_runtime.h>
-> >> -#include <linux/pruss_driver.h>
-> >> +#include <linux/pruss_internal.h>
-> >>  #include <linux/regmap.h>
-> >> +#include <linux/remoteproc.h>
-> >>  #include <linux/slab.h>
-> >>
-> >>  /**
-> >> @@ -30,6 +32,62 @@ struct pruss_private_data {
-> >>      bool has_core_mux_clock;
-> >>  };
-> >>
-> >> +/**
-> >> + * pruss_get() - get the pruss for a given PRU remoteproc
-> >> + * @rproc: remoteproc handle of a PRU instance
-> >> + *
-> >> + * Finds the parent pruss device for a PRU given the @rproc handle of the
-> >> + * PRU remote processor. This function increments the pruss device's refcount,
-> >> + * so always use pruss_put() to decrement it back once pruss isn't needed
-> >> + * anymore.
-> >> + *
-> >> + * Return: pruss handle on success, and an ERR_PTR on failure using one
-> >> + * of the following error values
-> >> + *    -EINVAL if invalid parameter
-> >> + *    -ENODEV if PRU device or PRUSS device is not found
-> >> + */
-> >> +struct pruss *pruss_get(struct rproc *rproc)
-> >> +{
-> >> +    struct pruss *pruss;
-> >> +    struct device *dev;
-> >> +    struct platform_device *ppdev;
-> >> +
-> >> +    if (IS_ERR_OR_NULL(rproc))
-> >> +            return ERR_PTR(-EINVAL);
-> >> +
-> >
-> > There is no guarantee that @rproc is valid without calling rproc_get_by_handle()
-> > or pru_rproc_get().
-> >
+> I had to change the handling of the command line parsing to make the
+> code self-contained in kernel/pi/cmd_early.c to avoid calling too many
+> __pi prefixed functions from outside this file.
 >
-> Here in this API, we are checking if rproc is NULL or not. Also we are checking
-> is_pru_rproc() to make sure this rproc is pru-rproc only and not some other rproc.
+> I'll use this approach like arm64 to handle the extraction of the random
+> seedi from the device tree for KASLR.
 >
-> This API will be called from driver (icssg_prueth.c) which I'll post once this
-> series is merged.
->
-> In the driver we are doing,
->
->         prueth->pru[slice] = pru_rproc_get(np, pru, &pruss_id);
->
->         pruss = pruss_get(prueth->pru[slice]);
->
-> So, before calling pruss_get() we are in fact calling pru_rproc_get() to make
-> sure it's a valid rproc.
->
+> base-commit: eb9be8310c58 ("RISC-V: add a spin_shadow_stack declaration")
 
-You are doing the right thing but because pruss_get() is exported
-globally, other people eventually using the interface may not be so
-rigorous.  Add a comment to the pruss_get() function documentation
-clearly mentioning it is expected the caller will have done a
-pru_rproc_get() on @rproc.
+I have that in my tree, I'm still getting a bunch of boot failures 
+though.  I can try to get a list if you're not seeing any, but I'm kind 
+of stuck on some other stuff for a bit...
 
-> I think in this API, these two checks (NULL check and is_pru_rproc) should be
-> OK as the driver is already calling pru_rproc_get() before this API.
+> v8:
+> - Fix LLVM ld warning by moving the section .init.sdata from
+>   kernel/pi/string.c into the newly created section .init.pidata
 >
-> The only way to get a "pru-rproc" is by calling pru_rproc_get(), now the check
-> is_pru_rproc() will only be true if it is a "pru-rproc" implying
-> pru_rproc_get() was called before calling this API.
+> v7:
+> - Rebased on top of for-next which introduces lots of errors (thanks to
+>   the patchwork CI)
+> - Add __NO_FORTIFY to avoid undefined __pi_fortify_panic
+> - Add an alias to our newly introduced strlen
+> - Remove __init as sections are already prefixed in the Makefile
+> - Introduce new section for kernel/pi/string.c to quiet the following
+>   warnings (once we have all the string functions, we'll be able to get
+>   rid of this):
 >
-> Please let me know if this is OK or if any change is required.
+> warning: orphan section `.init__bug_table' from `arch/riscv/kernel/pi/string.pi.o' being placed in section `.init__bug_table'
+> warning: orphan section `.init.srodata.cst8' from `arch/riscv/kernel/pi/string.pi.o' being placed in section `.init.srodata.cst8'
 >
-> >> +    dev = &rproc->dev;
-> >> +
-> >> +    /* make sure it is PRU rproc */
-> >> +    if (!dev->parent || !is_pru_rproc(dev->parent))
-> >> +            return ERR_PTR(-ENODEV);
-> >> +
-> >> +    ppdev = to_platform_device(dev->parent->parent);
-> >> +    pruss = platform_get_drvdata(ppdev);
-> >> +    if (!pruss)
-> >> +            return ERR_PTR(-ENODEV);
-> >> +
-> >> +    get_device(pruss->dev);
-> >> +
-> >> +    return pruss;
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(pruss_get);
-> >> +
-> >> +/**
-> >> + * pruss_put() - decrement pruss device's usecount
-> >> + * @pruss: pruss handle
-> >> + *
-> >> + * Complimentary function for pruss_get(). Needs to be called
-> >> + * after the PRUSS is used, and only if the pruss_get() succeeds.
-> >> + */
-> >> +void pruss_put(struct pruss *pruss)
-> >> +{
-> >> +    if (IS_ERR_OR_NULL(pruss))
-> >> +            return;
-> >> +
-> >> +    put_device(pruss->dev);
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(pruss_put);
-> >> +
-> >>  static void pruss_of_free_clk_provider(void *data)
-> >>  {
-> >>      struct device_node *clk_mux_np = data;
-> >> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_internal.h
-> >> similarity index 90%
-> >> rename from include/linux/pruss_driver.h
-> >> rename to include/linux/pruss_internal.h
-> >> index ecfded30ed05..8f91cb164054 100644
-> >> --- a/include/linux/pruss_driver.h
-> >> +++ b/include/linux/pruss_internal.h
-> >> @@ -6,9 +6,10 @@
-> >>   *  Suman Anna <s-anna@ti.com>
-> >>   */
-> >>
-> >> -#ifndef _PRUSS_DRIVER_H_
-> >> -#define _PRUSS_DRIVER_H_
-> >> +#ifndef _PRUSS_INTERNAL_H_
-> >> +#define _PRUSS_INTERNAL_H_
-> >>
-> >> +#include <linux/remoteproc/pruss.h>
-> >>  #include <linux/types.h>
-> >>
-> >>  /*
-> >> @@ -51,4 +52,4 @@ struct pruss {
-> >>      struct clk *iep_clk_mux;
-> >>  };
-> >>
-> >> -#endif      /* _PRUSS_DRIVER_H_ */
-> >> +#endif      /* _PRUSS_INTERNAL_H_ */
-> >> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
-> >> index 039b50d58df2..93a98cac7829 100644
-> >> --- a/include/linux/remoteproc/pruss.h
-> >> +++ b/include/linux/remoteproc/pruss.h
-> >> @@ -4,12 +4,14 @@
-> >>   *
-> >>   * Copyright (C) 2015-2022 Texas Instruments Incorporated - http://www.ti.com
-> >>   *  Suman Anna <s-anna@ti.com>
-> >> + *  Tero Kristo <t-kristo@ti.com>
-> >>   */
-> >>
-> >>  #ifndef __LINUX_PRUSS_H
-> >>  #define __LINUX_PRUSS_H
-> >>
-> >>  #include <linux/device.h>
-> >> +#include <linux/err.h>
-> >>  #include <linux/types.h>
-> >>
-> >>  #define PRU_RPROC_DRVNAME "pru-rproc"
-> >> @@ -44,6 +46,23 @@ enum pru_ctable_idx {
-> >>
-> >>  struct device_node;
-> >>  struct rproc;
-> >> +struct pruss;
-> >> +
-> >> +#if IS_ENABLED(CONFIG_TI_PRUSS)
-> >> +
-> >> +struct pruss *pruss_get(struct rproc *rproc);
-> >> +void pruss_put(struct pruss *pruss);
-> >> +
-> >> +#else
-> >> +
-> >> +static inline struct pruss *pruss_get(struct rproc *rproc)
-> >> +{
-> >> +    return ERR_PTR(-EOPNOTSUPP);
-> >> +}
-> >> +
-> >> +static inline void pruss_put(struct pruss *pruss) { }
-> >> +
-> >> +#endif /* CONFIG_TI_PRUSS */
-> >>
-> >>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
-> >>
-> >> --
-> >> 2.25.1
-> >>
+> v6:
+> - Fix llvm warning by forward declaring set_satp_mode_from_cmdline
 >
-> --
-> Thanks and Regards,
-> Danish.
+> v5:
+> - Handle null command line, Thanks Björn!
+> - Add RB/TB from Björn
+>
+> v4:
+> - Introduce pi/ for KASAN to work
+>
+> v3:
+> - Massage commit log to make no4lvl clearer, as asked by Conor
+> - Add a note to kernel-parameters.txt regarding the impossibility to use
+>   those parameters when KASAN is enabled, as suggested by Conor
+> - Add RB from Björn
+>
+> v2:
+> - Honor CMDLINE_EXTEND and CMDLINE_FORCE as noticed by Björn
+>
+>
+> Alexandre Ghiti (1):
+>   riscv: Allow to downgrade paging mode from the command line
+>
+>  .../admin-guide/kernel-parameters.txt         |  5 +-
+>  arch/riscv/kernel/Makefile                    |  2 +
+>  arch/riscv/kernel/pi/Makefile                 | 37 +++++++++++
+>  arch/riscv/kernel/pi/cmdline_early.c          | 62 +++++++++++++++++++
+>  arch/riscv/kernel/vmlinux.lds.S               |  8 +++
+>  arch/riscv/lib/memcpy.S                       |  2 +
+>  arch/riscv/lib/memmove.S                      |  2 +
+>  arch/riscv/lib/strlen.S                       |  1 +
+>  arch/riscv/mm/init.c                          | 36 +++++++++--
+>  9 files changed, 148 insertions(+), 7 deletions(-)
+>  create mode 100644 arch/riscv/kernel/pi/Makefile
+>  create mode 100644 arch/riscv/kernel/pi/cmdline_early.c
