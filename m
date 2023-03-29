@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6D36CDB6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773836CDB7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjC2OC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
+        id S229796AbjC2OGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjC2OC5 (ORCPT
+        with ESMTP id S229553AbjC2OGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:02:57 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B9349C7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:02:30 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id fb38so10354869pfb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:02:30 -0700 (PDT)
+        Wed, 29 Mar 2023 10:06:01 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA55440F8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:04:52 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id bi9so20338752lfb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:04:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680098549;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sqFkGHmM/dJ9kF1cZmCY3mrpL1ZG3gGE12XFAvwXSFw=;
-        b=HisIVLRzBGWL4CTLcww9FAC1lhsk226n5Y41WJOtDooXQq5Mt/FuBCKZVe9LKUHeM6
-         KOjnzJ4IF7WbCVXkRHYxkA//f8+WyCeVttTF9wSXc8bvBigOfPbV1+XPtgi8osHoF3vT
-         ViY41U4S0hj29xCR1WWWk0ylrPzTtxBJuKvE3lIoZsH/a+WTP7ataKW+30i2GU2P0VIf
-         Ec1hToZP79eigouQgKZOtwmzWnIdUv3Kse1/UH7G4912tD+dqaTgL6LLMQvBlPJgu80+
-         W8wnUbhCXgxrv5Drk5Bo+c7eo6PXXTTvkuh0u6pt6ouCK3CyI/cUYVisjMuwhJAkUbVt
-         xcTQ==
+        d=linaro.org; s=google; t=1680098688;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RHJ0WvwFhiwkNTXEVFAcPy6OADOzAA2uvcs+k52iD3M=;
+        b=BVWxz02BP62xHNvQqVawNsr8/34+J8NWKHuzN6MPcgZdTfCDdxWgtB/bRHjQHDLYpa
+         8y4U3Ktra2AcImTgh7g9x+808EFuitW3L2kKfw8kqmdWNc58ySzVoa83d6wEY8VHio6E
+         AqxwvtzXiD9jvDp4f59y8HlrK2tnynYGSvhH0TfOndIdBF4oX1yloBovV8Ml5qk4tyNm
+         Juq82SBIFpKv0zlGiuT5fCdOiA8689mtzuGQOrFi+gzImO6l0ZJA8c4IoQQyUb72dPG0
+         M97dP58+YmQcnKNItNAho3iXUafJ6//KvH0pFgRgFa0nxfPM/ysTmv9Y2HZ05jm2RsoN
+         C+oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680098549;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sqFkGHmM/dJ9kF1cZmCY3mrpL1ZG3gGE12XFAvwXSFw=;
-        b=j4etMBuk8ORjcbhVqJDvm1xWt2mY/yqX8QyVWlPzyUeO/Ucd/wrJLVRMv3A+yWOxjX
-         dm8942G0/tJbRhrOdTnXxe7YMc4oJQd8cyQDU6F7zzn1O9GHJwOB2dPg40ln42SB+6vX
-         S5fmz/SHndbMdb0+92XNfAECCgPSIkl83pgE31FLcHwzWnsHdoMJI2zPYqKZRkYEiUiV
-         x1nmeFetlSNzGjF26WKEkEjCgwvE9u5/F/LrqozMJkwKKs9kXA1s2l/V/KrkQ/rbXYqE
-         8NTg3cVQACX6iRtUWiRwkSTHGM6uoLtAeTuLfB3mSH5sXAlhWwHY/nC8KchkIOIYKDSl
-         XAEA==
-X-Gm-Message-State: AAQBX9ep43bspq71NdBibVVHf88b45b0+2aUPzwuLTkHzcNH4qTK84p8
-        Loiye8ZFg5LidBugf1iaCClTpw==
-X-Google-Smtp-Source: AKy350aIQGtdpdkmlvis3jdpff7WI8LKw5KfGcE0+/FdziyL8/vsa6HJF3dMnqGEngmO2GEwEv/E+A==
-X-Received: by 2002:a62:cfc1:0:b0:625:ebc3:b26c with SMTP id b184-20020a62cfc1000000b00625ebc3b26cmr15854390pfg.22.1680098549382;
-        Wed, 29 Mar 2023 07:02:29 -0700 (PDT)
-Received: from C02G705SMD6V.bytedance.net ([61.213.176.14])
-        by smtp.gmail.com with ESMTPSA id y17-20020aa78051000000b006288ca3cadfsm5399468pfm.35.2023.03.29.07.02.26
+        d=1e100.net; s=20210112; t=1680098688;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RHJ0WvwFhiwkNTXEVFAcPy6OADOzAA2uvcs+k52iD3M=;
+        b=uDd/Wq+y5nIYOox8SMaw0uKvf89lU3+pmnwWKkefF8fT6s3wwxwRFhHvuxvGpVLGTn
+         8HpkmgFb6kwQotnR0QutTUg/J8nDAaHY1gXBYR8fTcCP630HNolqn/zJMrZASHA0oZJi
+         NAjALbCv4ILI1Fsu5vseGDShcMpHXkgyMTMmFJtOp0tD89BDZe3pI/97gOl6nTaOtReE
+         kMXeT7muc4JxnUZlrI2rU/Z7+2iABVty6FuND6l1ukSlNaQqUUbtwGAhV0P7LUxi2iaZ
+         h3iCLAURmG9ZtopzSgcUjURz9SscJkQcWU0twz2C0B+SP3EnE+oVUmBOkcDSo/MO0GjT
+         N/2w==
+X-Gm-Message-State: AAQBX9ciCGp6S8hjwfZQl/hAMmQsYpUtQzseKkAQQVXjSq9lg/Q8BupX
+        KLt7xXCiGD+z66mDaFbXDkbx8A==
+X-Google-Smtp-Source: AKy350bZjIkvOV30egQBp76DByMuaZbSmTJ1/6zX+9+rZEZvIkolNPlHLICPA3fsY5DWKnVOqEqpzg==
+X-Received: by 2002:ac2:4889:0:b0:4e0:61a6:c158 with SMTP id x9-20020ac24889000000b004e061a6c158mr5775860lfc.36.1680098688469;
+        Wed, 29 Mar 2023 07:04:48 -0700 (PDT)
+Received: from localhost.localdomain (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id f21-20020ac251b5000000b004eaf2207a33sm3501083lfk.223.2023.03.29.07.04.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 07:02:28 -0700 (PDT)
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-To:     dhowells@redhat.com, linux-cachefs@redhat.com
-Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        jefflexu@linux.alibaba.com, hsiangkao@linux.alibaba.com,
-        yinxin.x@bytedance.com, Jia Zhu <zhujia.zj@bytedance.com>
-Subject: [PATCH V5 5/5] cachefiles: add restore command to recover inflight ondemand read requests
-Date:   Wed, 29 Mar 2023 22:01:55 +0800
-Message-Id: <20230329140155.53272-6-zhujia.zj@bytedance.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20230329140155.53272-1-zhujia.zj@bytedance.com>
-References: <20230329140155.53272-1-zhujia.zj@bytedance.com>
+        Wed, 29 Mar 2023 07:04:48 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/msm/adreno: adreno_gpu: Use suspend() instead of idle() on load error
+Date:   Wed, 29 Mar 2023 16:04:44 +0200
+Message-Id: <20230329140445.2180662-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -72,82 +80,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, in ondemand read scenario, if the anonymous fd was closed by
-user daemon, inflight and subsequent read requests would return EIO.
-As long as the device connection is not released, user daemon can hold
-and restore inflight requests by setting the request flag to
-CACHEFILES_REQ_NEW.
+If we fail to initialize the GPU for whatever reason (say we don't
+embed the GPU firmware files in the initrd), the error path involves
+pm_runtime_put_sync() which then calls idle() instead of suspend().
 
-Suggested-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
-Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+This is suboptimal, as it means that we're not going through the
+clean shutdown sequence. With at least A619_holi, this makes the GPU
+not wake up until it goes through at least one more start-fail-stop
+cycle. Fix that by using pm_runtime_put_sync_suspend to force a clean
+shutdown.
+
+Test cases:
+1. firmware baked into kernel
+2. error loading fw in initrd -> load from rootfs at DE start
+
+Both succeed on A619_holi (SM6375) and A630 (SDM845).
+
+Fixes: 0d997f95b70f ("drm/msm/adreno: fix runtime PM imbalance at gpu load")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- fs/cachefiles/daemon.c   |  1 +
- fs/cachefiles/internal.h |  3 +++
- fs/cachefiles/ondemand.c | 23 +++++++++++++++++++++++
- 3 files changed, 27 insertions(+)
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
-index 86892f471e761..b0f4dd6384128 100644
---- a/fs/cachefiles/daemon.c
-+++ b/fs/cachefiles/daemon.c
-@@ -77,6 +77,7 @@ static const struct cachefiles_daemon_cmd cachefiles_daemon_cmds[] = {
- 	{ "tag",	cachefiles_daemon_tag		},
- #ifdef CONFIG_CACHEFILES_ONDEMAND
- 	{ "copen",	cachefiles_ondemand_copen	},
-+	{ "restore",	cachefiles_ondemand_restore	},
- #endif
- 	{ "",		NULL				}
- };
-diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-index 26e5f8f123ef1..4a87c9d714a94 100644
---- a/fs/cachefiles/internal.h
-+++ b/fs/cachefiles/internal.h
-@@ -303,6 +303,9 @@ extern ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
- extern int cachefiles_ondemand_copen(struct cachefiles_cache *cache,
- 				     char *args);
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+index f61896629be6..59f3302e8167 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_device.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+@@ -477,7 +477,7 @@ struct msm_gpu *adreno_load_gpu(struct drm_device *dev)
+ 	return gpu;
  
-+extern int cachefiles_ondemand_restore(struct cachefiles_cache *cache,
-+					char *args);
-+
- extern int cachefiles_ondemand_init_object(struct cachefiles_object *object);
- extern void cachefiles_ondemand_clean_object(struct cachefiles_object *object);
+ err_put_rpm:
+-	pm_runtime_put_sync(&pdev->dev);
++	pm_runtime_put_sync_suspend(&pdev->dev);
+ err_disable_rpm:
+ 	pm_runtime_disable(&pdev->dev);
  
-diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
-index 8e130de952f7d..b8fbbb1961bbc 100644
---- a/fs/cachefiles/ondemand.c
-+++ b/fs/cachefiles/ondemand.c
-@@ -182,6 +182,29 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
- 	return ret;
- }
- 
-+int cachefiles_ondemand_restore(struct cachefiles_cache *cache, char *args)
-+{
-+	struct cachefiles_req *req;
-+
-+	XA_STATE(xas, &cache->reqs, 0);
-+
-+	if (!test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags))
-+		return -EOPNOTSUPP;
-+
-+	/*
-+	 * Reset the requests to CACHEFILES_REQ_NEW state, so that the
-+	 * requests have been processed halfway before the crash of the
-+	 * user daemon could be reprocessed after the recovery.
-+	 */
-+	xas_lock(&xas);
-+	xas_for_each(&xas, req, ULONG_MAX)
-+		xas_set_mark(&xas, CACHEFILES_REQ_NEW);
-+	xas_unlock(&xas);
-+
-+	wake_up_all(&cache->daemon_pollwq);
-+	return 0;
-+}
-+
- static int cachefiles_ondemand_get_fd(struct cachefiles_req *req)
- {
- 	struct cachefiles_object *object;
 -- 
-2.20.1
+2.40.0
 
