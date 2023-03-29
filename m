@@ -2,222 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAB66CF4BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 22:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4950B6CF4C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 22:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjC2UvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 16:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
+        id S229835AbjC2Uvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 16:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjC2Uu7 (ORCPT
+        with ESMTP id S229475AbjC2Uvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 16:50:59 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17E44C20
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 13:50:58 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-17aeb49429eso17615219fac.6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 13:50:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680123058;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RKZ8GqIMOOJV+XfNmnVFARmYio/PItz2BJFiPWuDGSY=;
-        b=fuwFruqEcX0EYq8qW6g2AP0E1DdtapZohNO+DyP5pc2AtlzNd+22EhRcbUCquzkJ3o
-         9ondMX7B4/3ZlXi7I1DArJceyY1jenpceRPefus+ASy+K2c7ia1aRS+3GzdLuDLHet1U
-         F6iVGJEG/6ESVX7B6CewSuvp/TU0ln1xflg/CG0u1DtVzsJv4KXpUiAbewa/6jLmFtR7
-         93JhXLtQy9slp+aO4ZIZt/xVi4QHSC1FP06khiuaejykUfbuzanPPHtrNpN2clyhn0dA
-         2cUOWey18Xu74TMH3p2Lj7rAKAoiMWGv/hVjxs8TKjFO25Ldubc50fMD3E1uNFy/6puf
-         xkSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680123058;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RKZ8GqIMOOJV+XfNmnVFARmYio/PItz2BJFiPWuDGSY=;
-        b=Lhrm+9zKi7wVnRTp/lMt05mzyV1SJgWQCciqmQxjvWWzfSME3474GlAWghSOpDKXII
-         K8oXJpzEv0kWnryoZnHB8Grb+pcfG7jJ+GYoJtyCtPYQHVcAzYco1KkvtrQV/WC6xKpl
-         fZ3iSdwfylk27VOi5afYWNOZt6azk/cSUSIiK2KZmSRR93Yn5j8WoEfgBjm0jqD2GMAe
-         yF/t5eg8HZQfgbyF//3Iue/8hNSI84jz9RdOKC2sY9cvhhT0t9awDICDkYYqGjKcR7RW
-         rsgwOG2LypTRlcKUOG4FCbA2Fdr6bb9GTTcvEKCuGYqNe2m3F0u2J9jcecFwmCCsjTox
-         B5mw==
-X-Gm-Message-State: AAQBX9fB0YOu9JNxg5Rx/cDiad8gPHe/YxaxBxgKNTU2eG19e+Dvo6IR
-        FlLKkUThP1kU5WpioNVRMuYMAbMyQYX832kbob4o8Q==
-X-Google-Smtp-Source: AKy350Y+kAtx1gY4HjjthjqP/HTIyk6FRS2h6MQd7ks70ztqf/xhYrlb+0Xf4oPw8b2Z8bGuN54EYWb9wk9wLqT0PE8=
-X-Received: by 2002:a05:6870:8897:b0:17e:6e31:9aa4 with SMTP id
- m23-20020a056870889700b0017e6e319aa4mr7972519oam.6.1680123057921; Wed, 29 Mar
- 2023 13:50:57 -0700 (PDT)
+        Wed, 29 Mar 2023 16:51:45 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAD834C13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 13:51:43 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:36106.2084148567
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 0E05D1002AA;
+        Thu, 30 Mar 2023 04:51:41 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id f17e6a1ddc374f8faad910570955c89e for l.stach@pengutronix.de;
+        Thu, 30 Mar 2023 04:51:42 CST
+X-Transaction-ID: f17e6a1ddc374f8faad910570955c89e
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Sui Jingfeng <suijingfeng@loongson.cn>
+Subject: [PATCH v3 0/6] drm/etnaviv: add pci device driver support
+Date:   Thu, 30 Mar 2023 04:51:23 +0800
+Message-Id: <20230329205129.1513734-1-15330273260@189.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230326092208.13613-1-laoar.shao@gmail.com> <ZCHSOxto9DlEzVy9@google.com>
- <CALOAHbBJEXdR4Myk1zrgFDf9UJYu2-3tbjz0ETNvK3WamD5sFg@mail.gmail.com>
- <ZCMgpRtT6ywmtALi@google.com> <CALOAHbCc843AGvVftCumnNgM87NzqAYpPcPEj0i+aQ5QEOUW7Q@mail.gmail.com>
-In-Reply-To: <CALOAHbCc843AGvVftCumnNgM87NzqAYpPcPEj0i+aQ5QEOUW7Q@mail.gmail.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 29 Mar 2023 13:50:45 -0700
-Message-ID: <CAKH8qBuRS5mp5akkT-sQHHdnnjWZYKehppgO5D1vE5rhYPuo8Q@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 8:03=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
-wrote:
->
-> On Wed, Mar 29, 2023 at 1:15=E2=80=AFAM Stanislav Fomichev <sdf@google.co=
-m> wrote:
-> >
-> > On 03/28, Yafang Shao wrote:
-> > > On Tue, Mar 28, 2023 at 1:28=E2=80=AFAM Stanislav Fomichev <sdf@googl=
-e.com> wrote:
-> > > >
-> > > > On 03/26, Yafang Shao wrote:
-> > > > > Currently only CAP_SYS_ADMIN can iterate BPF object IDs and conve=
-rt
-> > > IDs
-> > > > > to FDs, that's intended for BPF's security model[1]. Not only doe=
-s it
-> > > > > prevent non-privilidged users from getting other users' bpf progr=
-am,
-> > > but
-> > > > > also it prevents the user from iterating his own bpf objects.
-> > > >
-> > > > > In container environment, some users want to run bpf programs in =
-their
-> > > > > containers. These users can run their bpf programs under CAP_BPF =
-and
-> > > > > some other specific CAPs, but they can't inspect their bpf progra=
-ms
-> > > in a
-> > > > > generic way. For example, the bpftool can't be used as it require=
-s
-> > > > > CAP_SYS_ADMIN. That is very inconvenient.
-> > > >
-> > > > > Without CAP_SYS_ADMIN, the only way to get the information of a b=
-pf
-> > > object
-> > > > > which is not created by the process itself is with SCM_RIGHTS, th=
-at
-> > > > > requires each processes which created bpf object has to implement=
- a
-> > > unix
-> > > > > domain socket to share the fd of a bpf object between different
-> > > > > processes, that is really trivial and troublesome.
-> > > >
-> > > > > Hence we need a better mechanism to get bpf object info without
-> > > > > CAP_SYS_ADMIN.
-> > > >
-> > > > [..]
-> > > >
-> > > > > BPF namespace is introduced in this patchset with an attempt to r=
-emove
-> > > > > the CAP_SYS_ADMIN requirement. The user can create bpf map, prog =
-and
-> > > > > link in a specific bpf namespace, then these bpf objects will not=
- be
-> > > > > visible to the users in a different bpf namespace. But these bpf
-> > > > > objects are visible to its parent bpf namespace, so the sys admin=
- can
-> > > > > still iterate and inspect them.
-> > > >
-> > > > Does it essentially mean unpriv bpf?
-> >
-> > > Right. With CAP_BPF and some other CAPs enabled.
-> >
-> > > > Can I, as a non-root, create
-> > > > a new bpf namespace and start loading/attaching progs?
-> >
-> > > No, you can't create a new bpf namespace as a non-root, see also
-> > > copy_namespaces().
-> > > In the container environment, new namespaces are always created by
-> > > containered, which is started by root.
-> >
-> > Are you talking about "if (!ns_capable(user_ns, CAP_SYS_ADMIN))" part
-> > from copy_namespaces? Isn't it trivially bypassed with a new user
-> > namespace?
-> >
-> > IIUC, I can create a new user namespace which gives me CAP_SYS_ADMIN
-> > in this particular user-ns. Then I can go on and create a new bpf
-> > namespace (with CAP_BPF) and go wild? I won't see anything from the
-> > other namespaces, but I'll be able to load/attach bpf programs?
-> >
->
-> I don't think so. If you create a new userspace, and give the process
-> the CAP_BPF or CAP_SYS_ADMIN in this new user namespace but not the
-> initial namespace, you can't do that. Because currently only CAP_BPF
-> or CAP_SYS_ADMIN in the init user namespace can load/attach bpf
-> programs.
->
-> > > > Maybe add a paragraph about now vs whatever you're proposing.
-> >
-> > > What I'm proposing in this patchset is to put bpf objects (map, prog,
-> > > link, and btf) into the bpf namespace. Next step I will put bpffs int=
-o
-> > > the bpf namespace as well.
-> > > That said, I'm trying to put  all the objects created in bpf into the
-> > > bpf namespace. Below is a simple paragraph to illustrate it.
-> >
-> > > Regarding the unpriv user with CAP_BPF enabled,
-> > >                                                               Now | F=
-uture
-> > > ---------------------------------------------------------------------=
----
-> > > Iterate his BPF IDs                                | N   |  Y  |
-> > > Iterate others' BPF IDs                          | N   |  N  |
-> > > Convert his BPF IDs to FDs                  | N   |  Y  |
-> > > Convert others' BPF IDs to FDs            | N   |  N  |
-> > > Get others' object info from pinned file  | Y(*) | N  |
-> > > ---------------------------------------------------------------------=
----
-> >
-> > > (*) It can be improved by,
-> > >       1). Different containers has different bpffs
-> > >       2). Setting file permission
-> > >       That's not perfect, for example, if one single user has two bpf
-> > > instances, but we don't want them to inspect each other.
-> >
-> > I think the question here is what happens to the existing
-> > capable(CAP_BPF) checks? Do they become ns_capable(CAP_BPF) eventually?
-> >
->
-> They won't become ns_capable(CAP_BPF). If it becomes
-> ns_capable(CAP_BPF), it will really go wild then.
->
-> > And if not, I don't think it integrates well with the user namespaces?
-> >
->
-> IIUC, it is the CAP_BPF which doesn't integrate with the user
-> namespaces, right?
+From: Sui Jingfeng <suijingfeng@loongson.cn>
 
-Yeah. And it's probably fine if we don't, I just wanted to see some
-explanation on the long-term plan.
-If the purpose is to have a bpf namespace and use it for pure
-isolation purposes, let's state it clearly in the cover letter.
-Otherwise it's not clear whether it's only about isolation or
-potentially allowing CAP_BPF in user namespaces.
-Maybe clone(CLONE_NEWBPF|CLONE_NEWUSER) should return an explicit
-error? (or maybe it already does, haven't looked at the patches)
+  There is a Vivante GC1000(v5037) in LS2K1000 and LS7A1000, the gpu is a
+  PCI device and it has 2D and 3D core in the same gpu device. Therefore,
+  this patch trying to add PCI device driver support on the great works
+  already done by etnaviv folks.
 
-One other question I have is: should init bpf namespace see
-everything? Otherwise it might be hard to chase down the namespaces
-that loaded some BPF program...
+  LS7A1000 is a bridge chip for LS3A5000(4 core 2.5Ghz loongarch cpu) and
+  LS3A4000(4 core 1.8gHz Mips64r5 cpu), While LS2K1000 is just a slow SoC
+  (2 core 1.0Ghz mips64r2). Loongson CPU support cached coherent caching
+  mode, both the GPU and DC device snoop CPU cache by default firmware
+  configuration.
 
+Sui Jingfeng (6):
+  drm/etnaviv: add a dedicate function to register irq handler for the
+    gpu
+  drm/etnaviv: add a dedicate function to get clock
+  drm/etnaviv: add dedicate functions to create and destroy platform
+    device
+  drm/etnaviv: add helpers for private data construction and destruction
+  drm/etnaviv: expand driver support for the pci devices
+  drm/etnaviv: allow usperspace create cached coherent bo
 
+ drivers/gpu/drm/etnaviv/Makefile            |   1 +
+ drivers/gpu/drm/etnaviv/etnaviv_drv.c       | 183 +++++++++++++------
+ drivers/gpu/drm/etnaviv/etnaviv_drv.h       |   7 +
+ drivers/gpu/drm/etnaviv/etnaviv_gem.c       |  22 ++-
+ drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |   9 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c       | 185 ++++++++++++++------
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.h       |  13 ++
+ drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c   |  88 ++++++++++
+ drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h   |  10 ++
+ include/uapi/drm/etnaviv_drm.h              |  11 +-
+ 10 files changed, 415 insertions(+), 114 deletions(-)
+ create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
+ create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h
 
+-- 
+2.25.1
 
-> --
-> Regards
-> Yafang
