@@ -2,80 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47ED06CCFC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 04:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88A16CCFC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 04:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjC2CDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 22:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
+        id S229811AbjC2CEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 22:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjC2CD3 (ORCPT
+        with ESMTP id S229659AbjC2CEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 22:03:29 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E491BFC;
-        Tue, 28 Mar 2023 19:03:28 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so14635326pjt.5;
-        Tue, 28 Mar 2023 19:03:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680055408;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p7SiNS5Tt8HG7sS+rmjltvOQvXGDc1Jn3ZRR7zsPOBU=;
-        b=GyfPKUNjby+p9RTdGu6xQ/gPzYa7haQKt9nCxpw7OhlklYTw3S3lDNqj0fqALWq20i
-         6D0UsSCf4FI9heZNLCRlVrxXnJ4OUwtca+8DAri/Ez125hxUmrXU6GZXhPhgnc8cShIt
-         +PEBkMYxrOQyS79zLjYjia+RLpzfDxuVwE4484cATm+Sb6IjSAKQfwOhpqdLdbDz9kUO
-         mKzFTuvafFv7nlKCg4DIylFn6jNbL3LQTc/WhFpA8nKIXHW/XTMbNnskCVL8yrQWqtIJ
-         QXTprbc8GiRObrDU+V9ywIvjy+p4DM5N3MZufErAevwQYZbppSgmHobK1wT0qJtJNydF
-         2e4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680055408;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p7SiNS5Tt8HG7sS+rmjltvOQvXGDc1Jn3ZRR7zsPOBU=;
-        b=YarIzOB/GBMogQdLYbanzXW4GIA3qy0hDwWh0b+/susqidadCkFPbhULcF1/Avhzo5
-         d9Z6wqTfVfKwd6iBr8NvWqQgsZg7OBuNYZcov/TdcUe5plCKYgKXwwfuAe6TjY7C4jr+
-         vBLgbBrmleGElX+w1TCR8T+1xXund7ZKoiY55hHFNs5tmzE16K3rr8o+0BpARzXKo4gR
-         SVEBbWbsWTey/JEtHuk/PF1JP0x+M5A61Idj8X2Xpk/jrBMJyswODVAcV84RVFeVD1cI
-         xagtrXmozfl3v73YJ+KLwbUMyk6NyfaOYwhz0EZKQsvqApP7rsLOjLcSYu3J65hqBHgx
-         96tw==
-X-Gm-Message-State: AAQBX9c3xRoCaeD84JVlaG2lCK7/bCIeLQzJg2oT/cfc+JUqyKmcIACG
-        PAWmMI1LT6/2bu26c51/eFw=
-X-Google-Smtp-Source: AKy350Zpgds9UeOT2MW92TTkVp6A2fhLrdm1OHYX0Es+2/MxXjDidNkhAwPpY0BATp4GzAHfTzZfcw==
-X-Received: by 2002:a17:903:120b:b0:1a0:42d4:e38a with SMTP id l11-20020a170903120b00b001a042d4e38amr22998051plh.11.1680055407730;
-        Tue, 28 Mar 2023 19:03:27 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id s14-20020a170902b18e00b001a1ccb37847sm17583175plr.146.2023.03.28.19.03.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 19:03:27 -0700 (PDT)
-Message-ID: <b7977069-4f82-76a1-10c1-b6400862c2c4@gmail.com>
-Date:   Wed, 29 Mar 2023 10:03:24 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v6 08/12] arm64: dts: nuvoton: Add initial ma35d1 device
- tree
+        Tue, 28 Mar 2023 22:04:50 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D357A30EF;
+        Tue, 28 Mar 2023 19:04:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680055489; x=1711591489;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=2NuAb4/Xr2Lnz56Kr7PIRwkh7X6/tjUudJiJZzKfDYU=;
+  b=R1dznFZPdiayFDRVCFCKu+Hfh9yvwkod1xsWyrlyib1qAyFKdd+diXNY
+   uPHvmVSmguV5G/4quoPy4eqdNQp3e6CnkPJbidTzbUzMHTfE8SIM7q/dM
+   iqKGT652l5qKZO8d7dYXTSwxHQSJ3Kh184IXukqD3f+RAf5g3HC5eQ+Jl
+   +YpAAPqKEsolDA5fMuAVoy5GpD5kEAUl9MRU3o5IE/0drJwCoi6ZkR5CA
+   GrEkCQ7k6W1JsSI6ihE+0RH8OTD/vUreQSyDgpARG4WzQrWdljSOGzCNm
+   xdx44GSiafwWu4PwwvNyL5EfNlgclFdV9HljcIAh/ktlZUM6wvWXMwfPN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="329211072"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="329211072"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 19:04:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="684095893"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="684095893"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga002.jf.intel.com with ESMTP; 28 Mar 2023 19:04:48 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 28 Mar 2023 19:04:48 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 28 Mar 2023 19:04:47 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Tue, 28 Mar 2023 19:04:47 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.106)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Tue, 28 Mar 2023 19:04:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mBegDeIWSq3xmfpxsZutVn13CAa6nbYRUKj6aeVrmnsYYTv6obVcVJ0wmIErx2altGDEMqKgSXuBOa0Vk4t/w9zFoxHji+pJ4LpQp8PuV17UQ4L0BoNox8YmW6QvKDdY1+oNQpLlmp3EM2BCbh9T10ymY0VwgphsLpjJGv9Vpja5N/scZ/2VVBQE9sX2Y+T/m3945SAIHKwphqPa3qSRl4ZO9SLf0zGno0iUnAZWRfjnCi0FWVPM0lke7M3rBnx1L1Fm6rXlv8UCSnL+ZzimV0LbGpz8fg4BNjnCFlD+RyxDE3VYDXJTbd/K4ZiEKhVypQbgpEwcug4bh5I2wPZjsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IxpfiQZVICeW7wSl5vW2dqcRnSdyJiTQSdTfSNK61+M=;
+ b=cFb6hKft9ATLFFAq+h1TeVm64DhnhM4FFKwd+pbg1e8Hd/8yeZcbVeAuVp/Ck0szBqefHBwPn1cL0GaaRkbPjqjPE905x8urXVJ7XCMQeWcRaWglf3U1i/WYPybtl4ZW5IkXG3K+O93ukQnTpOfNcTdscrQvqgbkiNq8XFGig4oZcuTlApMa0KE0eS8wMQ9Jz5sYSBT9KY4yh6iHSdWRL00on8k1u8I38odGG33TkX5o8OD8TDs/FAwJY2fJogO2BEalVTSW1xU0qzm/QsMB+nUSLS1BtiQ9a1/GeE+Kfw3JOn32EP28dWdbUeWJ4ZPIqodSLYPGHi0h55uLPW/RHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com (2603:10b6:208:3d7::17)
+ by DM4PR11MB6480.namprd11.prod.outlook.com (2603:10b6:8:8d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Wed, 29 Mar
+ 2023 02:04:45 +0000
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::4381:c78f:bb87:3a37]) by IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::4381:c78f:bb87:3a37%3]) with mapi id 15.20.6222.034; Wed, 29 Mar 2023
+ 02:04:44 +0000
+Message-ID: <1a58df0c-7732-6563-6369-6e3cae5c1214@intel.com>
+Date:   Tue, 28 Mar 2023 19:05:05 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 0/3] Add descriptor definitions for a few new DSA
+ operations
 Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, p.zabel@pengutronix.de,
-        robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230328021912.177301-1-ychuang570808@gmail.com>
- <20230328021912.177301-9-ychuang570808@gmail.com>
- <ab4e0bc8834b7e618e9a88ea6a1c30cc.sboyd@kernel.org>
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <ab4e0bc8834b7e618e9a88ea6a1c30cc.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+To:     Vinod Koul <vkoul@kernel.org>, Dave Jiang <dave.jiang@intel.com>
+CC:     <dmaengine@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20230303213413.3357431-1-fenghua.yu@intel.com>
+From:   Fenghua Yu <fenghua.yu@intel.com>
+In-Reply-To: <20230303213413.3357431-1-fenghua.yu@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY3PR05CA0010.namprd05.prod.outlook.com
+ (2603:10b6:a03:254::15) To IA1PR11MB6097.namprd11.prod.outlook.com
+ (2603:10b6:208:3d7::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR11MB6097:EE_|DM4PR11MB6480:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2dc34b6d-74e1-4aa9-ba31-08db2ff9f73a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rZOMKTeqGYswQXWkoX1lhjZY0iNZpm2FwvDTSzl71/qHx8H5jn40dIgC+/MipHWmvKh7o5Qvto1CPUMicH0f4SPefQIinjgVlEKXUhA/hUBcIMvRl5N8/qFRpg5JbUNiPQwKk78AEIvdTFUZFVrBikYeGrgwqIdyH6j4DrS5UPxrEH2yv6uuvtxMo1SVmLza6/Sl8lQtsepvkZJPtwNBGczYqEPflBQsQlhO4/UUiMWO3GTUdjC1haOF7cMtx/gD9s/9ndXJCRl+TM6z008AKF1e+b5+dWBQUQXNjKqxzoKZYnmlHLkswft/TajSeagGV4DPf5vLIRzdQj2GIYNwKTUdgyE+QT7ns757/X75lRj3JvNFVeIvwhOcH6ZKI0aX1kIrIps3YnJjR/nN5dZ1SyQ/s7IBEJWAHismVMuM8yG71004/ME6UcUSTLdMOr1fJEWTjc3n1qGyWFl/r7snSzeA52MbzJsPyNX8SV1XlOh1BQSWCKMDyYN60pxjzsmqLiIh7P0JOIrWt1oa8Pg31r8RDjsfFX3FLPo85j8F8OARV5Jh9kVEGeUW/eA7GLbeI2/4Q939X0g67xw+oO8M9o0qTyBFgBOL+uDDN0cpirfoHibgNy7XuLHeYTkS2okfeQ9d9mE3CdyjLftOfAJ55Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6097.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(346002)(39860400002)(376002)(366004)(451199021)(6666004)(53546011)(6506007)(6512007)(26005)(6486002)(31686004)(6636002)(110136005)(316002)(478600001)(186003)(66476007)(66946007)(8676002)(66556008)(2616005)(41300700001)(8936002)(5660300002)(4326008)(2906002)(4744005)(44832011)(82960400001)(38100700002)(86362001)(31696002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UmprV3UyTS96bkNSaXRnTDgvaTNwNGc3RitNd3hKUCtlbHArZ0RPcTBVcEFM?=
+ =?utf-8?B?K3c0MXdjRDVZbmlQT1Erc1ZZZ0xDS1kzVitNWGVSaXJTOEVaV3c3bnZ4V2Nr?=
+ =?utf-8?B?UThZUDQwYVdON1NuVWducXE3RE5aQzgyaEQ0aGtTRDg0RkU0dzUyWkhZNlVw?=
+ =?utf-8?B?SGlBM3BYU0ovVVZ1SCszVWcraytVL3BxUDduQ3JJYURKUkVjcHVQQkxRTkRW?=
+ =?utf-8?B?ZFJrbFRGM3hNSzBWZXUzVkpvRGFtZG5SMVE2OVp4L3lUWTVsUGt6UW5PRC9a?=
+ =?utf-8?B?S1B0L3RLaHBPZXdqUGpGaGRPN1JYbVVXZmZxMjFwWU82UnJGMFV3NDB2T05a?=
+ =?utf-8?B?V1NHa3BxNUNWWjZwa3dtRnFDWFNHOU1MQjR3TFBBZnlOa2RMTjlFTElkSDZF?=
+ =?utf-8?B?dUxRRzV4NSs1Q25pT0pOSU1Rb0FZd21qMkJKdFk1NzNyQUk0MEVLZmc4SXdK?=
+ =?utf-8?B?ckhyTzd2TXlCbFc4VDZra2dIemZveUxqUmJsYXRLdVlwN01rdlp3ZGlJcmcz?=
+ =?utf-8?B?SXQwL0hyMk1KNm1Mdno1b2FmY2lSNU85UUxCZ2VOLytUQUhzaUdBRCthdlA1?=
+ =?utf-8?B?cGdic1FyV21rc21tQy9PRlZvRmtTYUYyaEdzRlpQdzVyVXFGaXUxamttWGlM?=
+ =?utf-8?B?dHg0R1hROHlHanowZXpRU3dTSU5TQTZUclhjT29nYk8xYkZ2VlFXV1htcEdG?=
+ =?utf-8?B?Rm9KNUk0UDJyQ0Q2YUcrc1dNRjUwOHhLc2N0b3FoRHBIWHU4Smg1Y1BCTDN4?=
+ =?utf-8?B?SlB6enFSbS82Z2x4SWdOLzQ4OWgxR0FEcVlOZ0V2YzhYUWNlRUxHaUFYazg5?=
+ =?utf-8?B?b3hUT2ZOTFVsVGx5UHp0cWJHdjFHVXB6VjVPbWNjRS8veVdFSDFrR1gxNVc3?=
+ =?utf-8?B?WFJ0bEdiSWZvYzI1cFRQTkhudlNrWHVIY3V5dzRXcmpadWJQdVl4K1JuZ1h2?=
+ =?utf-8?B?TVEya1hQVVF2d1JPeTVsbityRUxKQ3FTUi9aQWJUY0hvSEMybDJkOFFHRHlK?=
+ =?utf-8?B?aGdTQTF0aElyN0pYRDlhNFpORzI5K0pieHRUOU9ScEZnTVE4ZlJia3JpdjlK?=
+ =?utf-8?B?TGpGbmVlR0NVeCtiSFdwdkxXeFFVcm9YQ2tXaWY0OU9icEp1bjFNd2NJVXJV?=
+ =?utf-8?B?WjlEUTNVMW4xZlNla1pWK1FBTGsrdG5yMktVTXgxOUFXa2lNYUhxSzBobjc5?=
+ =?utf-8?B?THhqUHhTL29mN0VtRW1VSlBaOTVTckhucXh2VzlZOHRPMnNuTGNnai9jeVV6?=
+ =?utf-8?B?WXI5UGtSSFNaY2xobG12T3FHaTg2UVJDZU9DVncxUjFVRVA0a3IvbGdHVldM?=
+ =?utf-8?B?M2xiL1FveUkzcjhaU3hDMG02bWFpU1ptMHYxbEhscW1ZNmRQRjh6ejMrVUJZ?=
+ =?utf-8?B?Q0xhZG1jRnFEc0p5dTdOeE5LTzFBay9pT0lhWnJaVkdxaUZ4THZOaTFISWQy?=
+ =?utf-8?B?VnA5Z241Nng0T2kzTlRZRURKZURqWE1TKzFqeVVXVkpaelQ0bEROcGgwWXRC?=
+ =?utf-8?B?UDhnNmc2TG1jUXZNSnpkejF5MmFyV1VTOEZQanN1OHFjd1htQzZpaTlHVGRi?=
+ =?utf-8?B?WG5kckwvUE84RnVSV3FBRW4yaFBEdjZxNVVlaTRFa0VFS3hkODlCSG1XREJh?=
+ =?utf-8?B?NWtVelMwTTFTSnJUQkRJVStMY1k1b1F3bjIrUEF0NHplcE96YU9GMnY1YXFm?=
+ =?utf-8?B?OU0raGdpUmRxN3lNYXZyZU5yUml3RVRCUGN4ck5BZXlEMzRqZmhCVm5keEdN?=
+ =?utf-8?B?dTlMYnBJUkMzc1R4VU80M1dwU1B0SitXaUZINnBJcWxBU0pVWk1SR2xzdHUy?=
+ =?utf-8?B?SFE3T3UvVWtlZW9EUy9ZZ1l5RHpRTGpzWDN0QXJObEJMQjJDVG12NTVYT2FG?=
+ =?utf-8?B?UkdrV0lsd2xraDhZa2lGTXpwa2xCMnVVYUFpNVpvTlZ6YzUrWUZsUFRoUTAv?=
+ =?utf-8?B?UklnYkNnUUJZUXdycHY4OE52cjBqTlNlQjFtL0dzUFlLRlkvbEJCd3Q5SmRC?=
+ =?utf-8?B?aWdubG1pVE9QajNBOVg1VFdvWTRmdUxzUi9mczAzTGFDVXlOdTRhWFVKYmNu?=
+ =?utf-8?B?emUwajBsQkxyNW9qcWdSUnFSMTkwSG45SDZDWmRSK1VFcDZrMllTM0hXa3Nm?=
+ =?utf-8?Q?v+rLk6G5B65SNjLTmGqR6UQgq?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2dc34b6d-74e1-4aa9-ba31-08db2ff9f73a
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6097.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 02:04:44.7766
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JcCpiyYmorkU5FymoJUkDM7hjUr2QTk8w1bJPqRYn+d+ZjQimYTyllzWVWV5mVN5vcBBncgupQF7qRMY9NZN1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6480
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,172 +161,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Stephen,
+Hi, Vinod,
 
+On 3/3/23 13:34, Fenghua Yu wrote:
+> A few new DSA operations are introduced [1]:
+> 1. Memory fill with 16 bytes of pattern.
+> 2. Translation fetch.
+> 3. Data Integrity Extension (DIX) generate.
+> 
+> This series adds descriptor definitions for the new DSA operations.
+> With the definitions, user can issue the DSA operations to optimize
+> corresponding transactions.
 
-Thanks for your advice.
+Any comment on this patch set? Will you pick it up? This can be applied 
+cleanly to upstream kernel.
 
+Thank you very much!
 
-On 2023/3/29 上午 01:57, Stephen Boyd wrote:
-> Quoting Jacky Huang (2023-03-27 19:19:08)
->> diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
->> new file mode 100644
->> index 000000000000..0740b0b218a7
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
->> @@ -0,0 +1,231 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (C) 2023 Nuvoton Technology Corp.
->> + * Author: Shan-Chun Hung <schung@nuvoton.com>
->> + *         Jacky huang <ychuang3@nuvoton.com>
->> + */
->> +
->> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->> +#include <dt-bindings/input/input.h>
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
->> +#include <dt-bindings/reset/nuvoton,ma35d1-reset.h>
->> +
->> +/ {
->> +       compatible = "nuvoton,ma35d1";
->> +       interrupt-parent = <&gic>;
->> +       #address-cells = <2>;
->> +       #size-cells = <2>;
->> +
->> +       cpus {
->> +               #address-cells = <2>;
->> +               #size-cells = <0>;
->> +
->> +               cpu0: cpu@0 {
->> +                       device_type = "cpu";
->> +                       compatible = "arm,cortex-a35";
->> +                       reg = <0x0 0x0>;
->> +                       enable-method = "psci";
->> +                       next-level-cache = <&L2_0>;
->> +               };
->> +
->> +               cpu1: cpu@1 {
->> +                       device_type = "cpu";
->> +                       compatible = "arm,cortex-a35";
->> +                       reg = <0x0 0x1>;
->> +                       enable-method = "psci";
->> +                       next-level-cache = <&L2_0>;
->> +               };
->> +
->> +               L2_0: l2-cache0 {
-> Just l2-cache for the node name. Doesn't it go under the cpu0 node as
-> well?
-
-This describes the level-2 cache which is external to and shared by cpu0 
-& cpu1.
-And only level-1 cache is inside of CPU core.
-L2_0 is must, because both cpu0 and cpu1 has a next-level-cache = 
-<&L2_0> property.
-
-Many identical example of l2-cache node can be found in arm64 dts, such 
-as k3-arm642.dtsi,
-rk3328.dtsi, mt8195.dtsi, etc. Here is just a copy of similar arm64 
-multi-core SoCs.
-
-So we would like to keep this unchanged. Is it OK for you? Thanks.
-
-
->> +                       compatible = "cache";
->> +                       cache-level = <2>;
->> +               };
->> +       };
->> +
->> +       psci {
->> +               compatible = "arm,psci-0.2";
->> +               method = "smc";
->> +       };
->> +
->> +       timer {
->> +               compatible = "arm,armv8-timer";
->> +               interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) |
->> +                             IRQ_TYPE_LEVEL_LOW)>, /* Physical Secure */
->> +                            <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) |
->> +                             IRQ_TYPE_LEVEL_LOW)>, /* Physical Non-Secure */
->> +                            <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) |
->> +                             IRQ_TYPE_LEVEL_LOW)>, /* Virtual */
->> +                            <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) |
->> +                             IRQ_TYPE_LEVEL_LOW)>; /* Hypervisor */
->> +               clock-frequency = <12000000>;
-> Remove this property. The frequency should be read by the driver.
-
-I will remove it.
-
->> +               interrupt-parent = <&gic>;
->> +       };
-> Please create an 'soc' node for the SoC to hold all the nodes that have
-> a reg property.
-
-OK, we will use soc node in the next version.
-
->> +
->> +       sys: system-management@40460000 {
->> +               compatible = "nuvoton,ma35d1-sys", "syscon", "simple-mfd";
->> +               reg = <0x0 0x40460000 0x0 0x200>;
->> +
->> +               reset: reset-controller {
->> +                       compatible = "nuvoton,ma35d1-reset";
->> +                       #reset-cells = <1>;
->> +               };
->> +       };
->> +
->> +       clk: clock-controller@40460200 {
->> +               compatible = "nuvoton,ma35d1-clk", "syscon";
->> +               reg = <0x00000000 0x40460200 0x0 0x100>;
->> +               #clock-cells = <1>;
->> +               clocks = <&clk_hxt>;
->> +               nuvoton,sys = <&sys>;
->> +       };
-> It looks like the device at 40460000 is a reset and clock controller.
-> Just make it one node and register the clk or reset device as an
-> auxiliary device.
-
-40460000 is for system control registers, including power contrl, 
-multifunction pin control,
-usb phy control, IP reset control, power-on setting information, and 
-many other miscellaneous controls.
-The registers of reset controller is only a subset of system control 
-registers.
-
-40460200 is for clock controller which is independent of the system 
-control integration
-The register base of clock controller is very close to system 
-controller, but in fact the two are independent.
-
-
->> +
->> +       gic: interrupt-controller@50801000 {
->> +               compatible = "arm,gic-400";
->> +               reg =   <0x0 0x50801000 0 0x1000>, /* GICD */
->> +                       <0x0 0x50802000 0 0x2000>, /* GICC */
->> +                       <0x0 0x50804000 0 0x2000>, /* GICH */
->> +                       <0x0 0x50806000 0 0x2000>; /* GICV */
->> +               #interrupt-cells = <3>;
->> +               interrupt-parent = <&gic>;
->> +               interrupt-controller;
->> +               interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
->> +                             IRQ_TYPE_LEVEL_HIGH)>;
->> +       };
->> +
->> +       uart0:serial@40700000 {
-> Add a space after :
-
-I will fix it. Thank you.
-
->> +               compatible = "nuvoton,ma35d1-uart";
->> +               reg = <0x0 0x40700000 0x0 0x100>;
->> +               interrupts = <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>;
->> +               clocks = <&clk UART0_GATE>;
->> +               status = "disabled";
->> +       };
-
-
-Best regards,
-Jacky Huang
-
-
+-Fenghua
