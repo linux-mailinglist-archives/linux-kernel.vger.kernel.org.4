@@ -2,198 +2,399 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3756CD82D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F246CD832
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjC2LGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S229676AbjC2LIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjC2LGq (ORCPT
+        with ESMTP id S229661AbjC2LIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:06:46 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8F046B4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:06:17 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id t14so15645861ljd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:06:17 -0700 (PDT)
+        Wed, 29 Mar 2023 07:08:01 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E92171B
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:07:59 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id e23-20020a25e717000000b00b66ab374ba1so15161350ybh.22
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:07:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680087973;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=etQbhrM6MU2XcAvOg/pcuO+n7EAOZrzaAg4KJ9fc/1U=;
-        b=L598pYGTk5dQhsP3xakAE1nlbw8icPPUU4fLZTviNSmBOZM47k89eqjMRZSHQI+lJ5
-         r8+UK5FbcFLnnqcfKNAKorjXAJ9DQW77M9f8fkrvF0AVJWZ7rgljGmysBLJj8zTKEVJE
-         wwSx/MyYlxxvnaTLBPNsmLytw7JGs60cNvcCij2wD9wAtpfBHA2AFFNvTlWlgt/zJjxd
-         XjjzRoht2fDeTwKAH3ayCLe0UqKoO+v5RRIOX1pT2NZZwg9R5xOu4AGOPZm+GpNzgLQI
-         AoZKvlW1VYvDsouInb2j3aZCiHTJSwNP3cTImHOQqUvHBWiUwtL57WyRlHBmYrfWAwa3
-         QDEg==
+        d=google.com; s=20210112; t=1680088078;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qLE8CWrmaNXgXCg2eNFOgeW6xHNyRTGjnMFCzItSd5A=;
+        b=Aob7ge9ZtEBOKmu461YXtMVZ/sAukHmCRbKP6dMeCycttYKk3qU6Jad/XnVJcxhkR9
+         u95tIOinC9eOx8dGDdYDKRGl7xopgJSnwxASP2J09IiR8fhmo1ezd8pvi5ZlRfJncZsX
+         7RaLGXYDz9+K8zMUrZ7YrhP89w+OXWG//7XUS5Zgw7/8Vxol9vXx34ek83kawzepgS38
+         VrcLKQYXJKqliJsKaGOmHuZitygaZDCbRHzkC1hwsVlCNrgbkgczRkxfiyzZ7+i9ETIq
+         CI7cqCgbOc2BoLiCRL6pVTcBRtkbQVGZbIVLjDWmkWX9TW6imq5Xfq1fm1SKjacpLZbA
+         7gCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680087973;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=etQbhrM6MU2XcAvOg/pcuO+n7EAOZrzaAg4KJ9fc/1U=;
-        b=TTbTz+A8ccRawHtQMpzmxtUPlRYFIDejkFlbicPXw07IqvLxe20vGFBZwgiwODETA9
-         s6DOKNYwV3MyAMdoJcxg/yQV9Aj5Ji+V295aNrPk7DocW7CvCcRDcdtD44pKA2V7ldtY
-         iYP/jYrToPDpZfuKfWkeuUqDkyMxgchbNCrAQG7NPCjDDhmgn8poa9uXgdd0KjvH4Yfl
-         WEl/oyAFqshGw+Ev46HeQBCSNd04rOR1ZSkrCq6lOBJrc+qEZj92dZ53/ZQ+thEvFydD
-         gJZB9+rI+OVu55dFqRjWSmVnQIAymLRIYKuHWxvkwtxlnUnvL4Lipwxjqp4Xn3UR2t6f
-         tiyQ==
-X-Gm-Message-State: AAQBX9dKLKSvQBfOFnoJzfEgwcWSfvvRzvC/owV/LgrdTJB/m+0Eetgy
-        VFEe6ukiPtvS6cVmvSsic9A9+Q==
-X-Google-Smtp-Source: AKy350b+/6URBf3qxA94iYZXtupPRGRA1fBUy1YSTEaHaifqR95Qb3k0SvhFQZErzc8p36ToU28zJw==
-X-Received: by 2002:a2e:9997:0:b0:29e:5dc2:903a with SMTP id w23-20020a2e9997000000b0029e5dc2903amr6754833lji.23.1680087973255;
-        Wed, 29 Mar 2023 04:06:13 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id e4-20020ac25464000000b004d58e782886sm5419690lfn.303.2023.03.29.04.06.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 04:06:12 -0700 (PDT)
-Message-ID: <c42b8c24-2159-64ae-d36c-92c69274f24f@linaro.org>
-Date:   Wed, 29 Mar 2023 13:06:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] irqchip: irq-qcom-mpm: Support passing a slice of
- SRAM as reg space
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230328-topic-msgram_mpm-v1-0-1b788a5f5a33@linaro.org>
- <20230328-topic-msgram_mpm-v1-2-1b788a5f5a33@linaro.org>
- <20230329034958.GC3554086@dragon>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230329034958.GC3554086@dragon>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1680088078;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qLE8CWrmaNXgXCg2eNFOgeW6xHNyRTGjnMFCzItSd5A=;
+        b=KxEs/KaN076EgEwydDygBj5OMMR1qBIzXFAWgtsCtuEl7BFHbN6K0U1eQpvpUsJcMa
+         Du/+YU4iy6LJoBLYZhaOicpu7fFxkL/HU/oeluoSzJAPFh/T166M8NMgEnKqPCzMEO1h
+         jTBsbk3xIRaIfUTuJe+fQhIXGCbw356oxePlHisSa/RrDsqMT/gJ+lKpwi3qhFkh0Rkz
+         2/cZKB8AAKXonAIsykGPT2AzZDPjoobyWm73kTGvzrcYUeSmxlGg6jDSvfatOhBTAKHs
+         UE1XrsCFU+ftQPYTU9UQpqvb+Xfu/xOf64gRTw/xUbISK/tzOfcNlvbJcGcztXHurbc+
+         lqaQ==
+X-Gm-Message-State: AAQBX9eTGLO7eVIuuGPnqiEDVybnC/cMO3jNr5gbadUk+nciPsHKJ4S7
+        zGojApZjxYZq/O6/p78M2GciQO4DxlSKWSsQ
+X-Google-Smtp-Source: AKy350ZYgvwaYrYxW4St3GTPmqThmwm4W46Naie1JY6mHAA8lhucU4GKj49jr/vcyUgjmMzqOu/vNKKFu4reiR5R
+X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
+ (user=sadiyakazi job=sendgmr) by 2002:a25:d7ce:0:b0:b7d:e643:d3c3 with SMTP
+ id o197-20020a25d7ce000000b00b7de643d3c3mr2897717ybg.8.1680088078456; Wed, 29
+ Mar 2023 04:07:58 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 11:07:22 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Message-ID: <20230329110723.3458843-1-sadiyakazi@google.com>
+Subject: [PATCH v1] list: test: Test the klist structure
+From:   Sadiya Kazi <sadiyakazi@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, corbet@lwn.net
+Cc:     Sadiya Kazi <sadiyakazi@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add KUnit tests to the klist linked-list structure.
+These perform testing for different variations of node add
+and node delete in the klist data structure (<linux/klist.h>).
 
+Limitation: Since we use a static global variable, and if
+multiple instances of this test are run concurrently, the test may fail.
 
-On 29.03.2023 05:49, Shawn Guo wrote:
-> On Tue, Mar 28, 2023 at 12:02:53PM +0200, Konrad Dybcio wrote:
->> The MPM hardware is accessible to us from the ARM CPUs through a shared
->> memory region (RPM MSG RAM) that's also concurrently accessed by other
->> kinds of cores on the system (like modem, ADSP etc.). Modeling this
->> relation in a (somewhat) sane manner in the device tree basically
->> requires us to either present the MPM as a child of said memory region
->> (which makes little sense, as a mapped memory carveout is not a bus),
->> define nodes which bleed their register spaces into one another, or
->> passing their slice of the MSG RAM through some kind of a property.
->>
->> Go with the third option and add a way to map a region passed through
->> the "qcom,rpm-msg-ram" property as our register space.
->>
->> The current way of using 'reg' is preserved for ABI reasons.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/irqchip/irq-qcom-mpm.c | 30 +++++++++++++++++++++++++-----
->>  1 file changed, 25 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/irqchip/irq-qcom-mpm.c b/drivers/irqchip/irq-qcom-mpm.c
->> index d30614661eea..6fe59f4deef4 100644
->> --- a/drivers/irqchip/irq-qcom-mpm.c
->> +++ b/drivers/irqchip/irq-qcom-mpm.c
->> @@ -14,6 +14,7 @@
->>  #include <linux/mailbox_client.h>
->>  #include <linux/module.h>
->>  #include <linux/of.h>
->> +#include <linux/of_address.h>
->>  #include <linux/of_device.h>
->>  #include <linux/platform_device.h>
->>  #include <linux/pm_domain.h>
->> @@ -322,8 +323,10 @@ static int qcom_mpm_init(struct device_node *np, struct device_node *parent)
->>  	struct device *dev = &pdev->dev;
->>  	struct irq_domain *parent_domain;
->>  	struct generic_pm_domain *genpd;
->> +	struct device_node *msgram_np;
->>  	struct qcom_mpm_priv *priv;
->>  	unsigned int pin_cnt;
->> +	struct resource res;
->>  	int i, irq;
->>  	int ret;
->>  
->> @@ -374,9 +377,21 @@ static int qcom_mpm_init(struct device_node *np, struct device_node *parent)
->>  
->>  	raw_spin_lock_init(&priv->lock);
->>  
->> -	priv->base = devm_platform_ioremap_resource(pdev, 0);
->> -	if (IS_ERR(priv->base))
->> -		return PTR_ERR(priv->base);
->> +	/* If we have a handle to an RPM message ram partition, use it. */
->> +	msgram_np = of_parse_phandle(np, "qcom,rpm-msg-ram", 0);
->> +	if (msgram_np) {
->> +		ret = of_address_to_resource(msgram_np, 0, &res);
->> +		/* Don't use devm_ioremap_resource, as we're accessing a shared region. */
->> +		priv->base = ioremap(res.start, resource_size(&res));
-> 
-> Are you suggesting that other cores/drivers will also need to access
-> the mpm slice below?
-> 
-> 	apss_mpm: sram@1b8 {
-> 		reg = <0x1b8 0x48>;
-> 	};
-Yes, the RPM M3 core. Other slices may be accessed
-by any core at any time.
+Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+---
+ lib/list-test.c | 298 +++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 297 insertions(+), 1 deletion(-)
 
-Konrad
-> 
-> Shawn
-> 
->> +		of_node_put(msgram_np);
->> +		if (IS_ERR(priv->base))
->> +			return PTR_ERR(priv->base);
->> +	} else {
->> +		/* Otherwise, fall back to simple MMIO. */
->> +		priv->base = devm_platform_ioremap_resource(pdev, 0);
->> +		if (IS_ERR(priv->base))
->> +			return PTR_ERR(priv->base);
->> +	}
->>  
->>  	for (i = 0; i < priv->reg_stride; i++) {
->>  		qcom_mpm_write(priv, MPM_REG_ENABLE, i, 0);
->> @@ -387,8 +402,10 @@ static int qcom_mpm_init(struct device_node *np, struct device_node *parent)
->>  	}
->>  
->>  	irq = platform_get_irq(pdev, 0);
->> -	if (irq < 0)
->> -		return irq;
->> +	if (irq < 0) {
->> +		ret = irq;
->> +		goto unmap_base;
->> +	}
->>  
->>  	genpd = &priv->genpd;
->>  	genpd->flags = GENPD_FLAG_IRQ_SAFE;
->> @@ -451,6 +468,9 @@ static int qcom_mpm_init(struct device_node *np, struct device_node *parent)
->>  	mbox_free_channel(priv->mbox_chan);
->>  remove_genpd:
->>  	pm_genpd_remove(genpd);
->> +unmap_base:
->> +	if (res.start)
->> +		iounmap(priv->base);
->>  	return ret;
->>  }
->>  
->>
->> -- 
->> 2.40.0
->>
+diff --git a/lib/list-test.c b/lib/list-test.c
+index d374cf5d1a57..af651cacb8f4 100644
+--- a/lib/list-test.c
++++ b/lib/list-test.c
+@@ -8,6 +8,7 @@
+ #include <kunit/test.h>
+ 
+ #include <linux/list.h>
++#include <linux/klist.h>
+ 
+ struct list_test_struct {
+ 	int data;
+@@ -1199,6 +1200,301 @@ static struct kunit_suite hlist_test_module = {
+ 	.test_cases = hlist_test_cases,
+ };
+ 
+-kunit_test_suites(&list_test_module, &hlist_test_module);
++
++struct klist_test_struct {
++	int data;
++	struct klist klist;
++	struct klist_node klist_node;
++};
++
++/* counts the number of nodes*/
++static int node_count;
++static struct klist_node *last_node_count;
++
++static void check_node(struct klist_node *node_ptr)
++{
++	node_count++;
++	last_node_count = node_ptr;
++}
++
++static void check_delete_node(struct klist_node *node_ptr)
++{
++	node_count--;
++	last_node_count = node_ptr;
++}
++
++static void klist_test_add_tail(struct kunit *test)
++{
++	struct klist_node a, b;
++	struct klist mylist;
++	struct klist_iter i;
++
++	node_count = 0;
++	klist_init(&mylist, &check_node, NULL);
++
++	klist_add_tail(&a, &mylist);
++	KUNIT_EXPECT_EQ(test, node_count, 1);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &a);
++
++	klist_add_tail(&b, &mylist);
++	KUNIT_EXPECT_EQ(test, node_count, 2);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &b);
++
++	/* should be [list] -> a -> b */
++	klist_iter_init(&mylist, &i);
++
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
++	KUNIT_EXPECT_NULL(test, klist_next(&i));
++
++	klist_iter_exit(&i);
++
++}
++
++static void klist_test_add_head(struct kunit *test)
++{
++	struct klist_node a, b;
++	struct klist mylist;
++	struct klist_iter i;
++
++	node_count = 0;
++	klist_init(&mylist, &check_node, NULL);
++
++	klist_add_head(&a, &mylist);
++	KUNIT_EXPECT_EQ(test, node_count, 1);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &a);
++
++	klist_add_head(&b, &mylist);
++	KUNIT_EXPECT_EQ(test, node_count, 2);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &b);
++
++	/* should be [list] -> b -> a */
++	klist_iter_init(&mylist, &i);
++
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
++	KUNIT_EXPECT_NULL(test, klist_next(&i));
++
++	klist_iter_exit(&i);
++
++}
++
++static void klist_test_add_behind(struct kunit *test)
++{
++	struct klist_node a, b, c, d;
++	struct klist mylist;
++	struct klist_iter i;
++
++	node_count = 0;
++	klist_init(&mylist, &check_node, NULL);
++
++	klist_add_head(&a, &mylist);
++	klist_add_head(&b, &mylist);
++
++	klist_add_behind(&c, &a);
++	KUNIT_EXPECT_EQ(test, node_count, 3);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
++
++	klist_add_behind(&d, &b);
++	KUNIT_EXPECT_EQ(test, node_count, 4);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
++
++	klist_iter_init(&mylist, &i);
++
++	/* should be [list] -> b -> d -> a -> c*/
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
++	KUNIT_EXPECT_NULL(test, klist_next(&i));
++
++	klist_iter_exit(&i);
++
++}
++
++static void klist_test_add_before(struct kunit *test)
++{
++	struct klist_node a, b, c, d;
++	struct klist mylist;
++	struct klist_iter i;
++
++	node_count = 0;
++	klist_init(&mylist, &check_node, NULL);
++
++	klist_add_head(&a, &mylist);
++	klist_add_head(&b, &mylist);
++	klist_add_before(&c, &a);
++	KUNIT_EXPECT_EQ(test, node_count, 3);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
++
++	klist_add_before(&d, &b);
++	KUNIT_EXPECT_EQ(test, node_count, 4);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
++
++	klist_iter_init(&mylist, &i);
++
++	/* should be [list] -> b -> d -> a -> c*/
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
++	KUNIT_EXPECT_NULL(test, klist_next(&i));
++
++	klist_iter_exit(&i);
++
++}
++
++/* Verify that klist_del() delays the deletion of a node until there
++ * are no other references to it
++ */
++static void klist_test_del_refcount_greater_than_zero(struct kunit *test)
++{
++	struct klist_node a, b, c, d;
++	struct klist mylist;
++	struct klist_iter i;
++
++	node_count = 0;
++	klist_init(&mylist, &check_node, &check_delete_node);
++
++	/* Add nodes a,b,c,d to the list*/
++	klist_add_tail(&a, &mylist);
++	klist_add_tail(&b, &mylist);
++	klist_add_tail(&c, &mylist);
++	klist_add_tail(&d, &mylist);
++
++	klist_iter_init(&mylist, &i);
++
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
++	/* Advance the iterator to point to node c*/
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
++
++	/* Try to delete node c while there is a reference to it*/
++	klist_del(&c);
++
++	/*
++	 * Verify that node c is still attached to the list even after being
++	 * deleted. Since the iterator still points to c, the reference count is not
++	 * decreased to 0
++	 */
++	KUNIT_EXPECT_TRUE(test, klist_node_attached(&c));
++
++	/* Check that node c has not been removed yet*/
++	KUNIT_EXPECT_EQ(test, node_count, 4);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
++
++	klist_iter_exit(&i);
++
++	/* Since the iterator is no longer pointing to node c, node c is removed
++	 * from the list
++	 */
++	KUNIT_EXPECT_EQ(test, node_count, 3);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
++
++}
++
++/* Verify that klist_del() deletes a node immediately when there are no
++ * other references to it.
++ */
++static void klist_test_del_refcount_zero(struct kunit *test)
++{
++	struct klist_node a, b, c, d;
++	struct klist mylist;
++	struct klist_iter i;
++
++	node_count = 0;
++	klist_init(&mylist, &check_node, &check_delete_node);
++
++	/* Add nodes a,b,c,d to the list*/
++	klist_add_tail(&a, &mylist);
++	klist_add_tail(&b, &mylist);
++	klist_add_tail(&c, &mylist);
++	klist_add_tail(&d, &mylist);
++	/* Delete node c*/
++	klist_del(&c);
++
++	/* Check that node c is deleted from the list*/
++	KUNIT_EXPECT_EQ(test, node_count, 3);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
++
++	/* Should be [list] -> a -> b -> d*/
++	klist_iter_init(&mylist, &i);
++
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
++	KUNIT_EXPECT_NULL(test, klist_next(&i));
++
++	klist_iter_exit(&i);
++
++}
++
++static void klist_test_remove(struct kunit *test)
++{
++	/* This test doesn't check correctness under concurrent access */
++	struct klist_node a, b, c, d;
++	struct klist mylist;
++	struct klist_iter i;
++
++	node_count = 0;
++	klist_init(&mylist, &check_node, &check_delete_node);
++
++	/* Add nodes a,b,c,d to the list*/
++	klist_add_tail(&a, &mylist);
++	klist_add_tail(&b, &mylist);
++	klist_add_tail(&c, &mylist);
++	klist_add_tail(&d, &mylist);
++	/* Delete node c*/
++	klist_remove(&c);
++
++	/* Check the nodes in the list*/
++	KUNIT_EXPECT_EQ(test, node_count, 3);
++	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
++
++	/* should be [list] -> a -> b -> d*/
++	klist_iter_init(&mylist, &i);
++
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
++	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
++	KUNIT_EXPECT_NULL(test, klist_next(&i));
++
++	klist_iter_exit(&i);
++
++}
++
++static void klist_test_node_attached(struct kunit *test)
++{
++	struct klist_node a = {};
++	struct klist mylist;
++
++	klist_init(&mylist, NULL, NULL);
++
++	KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
++	klist_add_head(&a, &mylist);
++	KUNIT_EXPECT_TRUE(test, klist_node_attached(&a));
++	klist_del(&a);
++	KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
++
++}
++
++static struct kunit_case klist_test_cases[] = {
++	KUNIT_CASE(klist_test_add_tail),
++	KUNIT_CASE(klist_test_add_head),
++	KUNIT_CASE(klist_test_add_behind),
++	KUNIT_CASE(klist_test_add_before),
++	KUNIT_CASE(klist_test_del_refcount_greater_than_zero),
++	KUNIT_CASE(klist_test_del_refcount_zero),
++	KUNIT_CASE(klist_test_remove),
++	KUNIT_CASE(klist_test_node_attached),
++	{},
++};
++
++static struct kunit_suite klist_test_module = {
++	.name = "klist",
++	.test_cases = klist_test_cases,
++};
++
++kunit_test_suites(&list_test_module, &hlist_test_module, &klist_test_module);
+ 
+ MODULE_LICENSE("GPL v2");
+-- 
+2.40.0.348.gf938b09366-goog
+
