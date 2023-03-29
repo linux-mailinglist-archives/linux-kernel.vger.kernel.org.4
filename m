@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9486CF5AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8056CF5AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjC2Vwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 17:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S230091AbjC2Vw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 17:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjC2Vwi (ORCPT
+        with ESMTP id S230076AbjC2VwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 17:52:38 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4566195
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:52:27 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54196bfcd5fso165900057b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:52:27 -0700 (PDT)
+        Wed, 29 Mar 2023 17:52:17 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79CC526F;
+        Wed, 29 Mar 2023 14:52:09 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id e65so21193463ybh.10;
+        Wed, 29 Mar 2023 14:52:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680126746;
-        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CsFO/UcDyqF5hzYyaOpux0kSInGSNXB7fWOr/Mojtdc=;
-        b=RHxHrD0riHQdNklAwbOyOVwMytX1Zqo4yL4S28/sbh6YsGl3q09hPtWIUDRbdZr9ge
-         rgU4I6Ln1QlZaq7jeYhT3hOzGtJwdorkfUBHDkIXV2DJ0tzCFN/N4umhnogf4N+OcQL4
-         TfjA3qSdao6/K6doCajwtW7tly3qsDVnoh8E14Ga3rEveQXWEBcQIyd/W46QOcOVdWTY
-         pCthXDCjjmoI3+xsjKACJfQWXu4fLyBQDLQIVaK/CoS+6mj3NZM37nUrhMu3ad8JFeZm
-         wZNlQDVTLRDobPBGxfA2OAZ0N/IbVDrNFcI217dNNH2JYWvcdvwN/JS+GalbnM9rvp3r
-         oUaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680126746;
-        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=gmail.com; s=20210112; t=1680126729;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CsFO/UcDyqF5hzYyaOpux0kSInGSNXB7fWOr/Mojtdc=;
-        b=4DvMTsVlkiGL6oaYtPr4p8n4vT8mTwZFOXeiljFcCnxmjc4z3LjATtaHsj1Aecz3x2
-         ucOKGPTwaiXs0DcXgVtxpbOCZ/n+wPvC5rNrASmLIb9b6g9Qg9rH5sG+feWXMAU/WPfv
-         vz73IpYKTyVtUsbtIxQlksGVAarYyhhxPsSwBwR9KRlKOisgj2pR0aPkfvsymwuElHc4
-         5OVGq7OIHaXzJIc63FItZz1ilOL9BjY7l+DWfLHhHCHuxq44hKk3pThzePcMo2tKj+zF
-         Lt8lytSkNyWtcvml50RrFyO9nuTNgHRscSw5kIkgX8voCrdg0wSRrKIFT/RF09Sj03WQ
-         SkRw==
-X-Gm-Message-State: AAQBX9eXGgD0CEuDzdJiJU1WHC3rDnl/VJXb8l3XGeEiZqYAI3LBG2YG
-        JKr/fJAg53jeg/bySsp375SLGcFJN4z6i00=
-X-Google-Smtp-Source: AKy350YKLD0cYnhPAs3bUyHqq7zxakvTmmcso2sSBuLkCH7jFi1VvPjsAnG4V9XxwVaWzeCZqxDyYEFYB8svaNg=
-X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
- (user=rdbabiera job=sendgmr) by 2002:a05:6902:168d:b0:b26:47f3:6cb with SMTP
- id bx13-20020a056902168d00b00b2647f306cbmr10969166ybb.4.1680126746160; Wed,
- 29 Mar 2023 14:52:26 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 21:51:59 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230329215159.2046932-1-rdbabiera@google.com>
-Subject: [PATCH v1] usb: typec: altmodes/displayport: Fix configure initial
- pin assignment
-From:   RD Babiera <rdbabiera@google.com>
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.5 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        bh=Wh1B0599Qis1A5KRvW2arbaj6Q9+dYZeQ7c/+45Fju4=;
+        b=mtkw9BQf6FvMVy9xBbTWd93wXY0IItrzV2y964p++mrHIFjo15Zv7JN5y8/1+D9gh8
+         p9uGmphy+0pCwvrTL5J5p64f7DjUOXu/HAJcpaJvDirbgpq9JpUDJzuHP4TOTqVsAM7f
+         vUfRIClDh3hmT3//D6WcGPrURMJVbzDQgbHEbPUDzlNQLm0e7HASKgnaUoTvqKU3AZgI
+         zdC/25qFvMopr08kp/eorb1Tqb5Kp7s+pcSjQJFkCqDI5WmxXZRW7w+iRalol62Rx5O1
+         BmLdZXyVfx3QjjAkngWamJDrKo0uXVukIdzraQ+cJJT7koDFIdXIFQPa2tKGyTEn+iFC
+         Qdjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680126729;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wh1B0599Qis1A5KRvW2arbaj6Q9+dYZeQ7c/+45Fju4=;
+        b=GVXB+NlZpYSMPyAonPra2/2w44xIj4zf0xYgRKGiQfgGZQaaoUnIWbu4lF1ovnJ0ZV
+         8WOCjFyL1sdZTRvCyf4Zw+Kae+G/VhhbV8FFoszZPUose3gHMcxMkF9/AN38F3arBaZE
+         Pb/5B0IXPsvSmW9gLFOZlYymDodLJp0b2xfe1a+UxBnzdtlNpdZqchN2+dBRCq3D5dxg
+         t9c/P0OBOnlmybH+cxaE6rk7j7ijY7iXDkjOBs8agNGvh4upajd9Nbp456Lkj43k4+s4
+         Ah4WDv8CXo0krxEOsN1zlR8iaWsE73ygCEThYqEXyM6HLVoULnfIKpbP2Wiu8p8ryXfM
+         sPYw==
+X-Gm-Message-State: AAQBX9fydOPpgnvwJcPBfYdbkJb3mQ6BsZOVJHfNj5dYUXAvVKGelFRJ
+        s7YJUGNllh/88Y6mMIzBjf0=
+X-Google-Smtp-Source: AKy350bi4OXB1GzOB9yXEI/9SI7hN/blDYvOoj9AynOzMz7+0VnDJGXWeYDXayBQznPtopkd6xXdQg==
+X-Received: by 2002:a25:f826:0:b0:b6d:5e86:7ed2 with SMTP id u38-20020a25f826000000b00b6d5e867ed2mr18841698ybd.36.1680126729127;
+        Wed, 29 Mar 2023 14:52:09 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v130-20020a252f88000000b00b7767ca7490sm3721007ybv.45.2023.03.29.14.52.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 14:52:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 29 Mar 2023 14:52:07 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
+        wim@linux-watchdog.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 2/2] dt-bindings: watchdog: rockchip: Add
+ rockchip,rk3588-wdt string
+Message-ID: <b3bfec84-b8b4-437c-82e8-37c6812deeeb@roeck-us.net>
+References: <20230328210048.195124-1-shreeya.patel@collabora.com>
+ <20230328210048.195124-3-shreeya.patel@collabora.com>
+ <157937fd-0af7-4ff5-8430-2f956c7aafba@roeck-us.net>
+ <4256207.ejJDZkT8p0@diego>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4256207.ejJDZkT8p0@diego>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While determining the initial pin assignment to be sent in the configure
-message, using the DP_PIN_ASSIGN_DP_ONLY_MASK mask causes the DFP_U to
-send both Pin Assignment C and E when both are supported by the DFP_U and
-UFP_U. The spec (Table 5-7 DFP_U Pin Assignment Selection Mandates,
-VESA DisplayPort Alt Mode Standard v2.0) indicates that the DFP_U never
-selects Pin Assignment E when Pin Assignment C is offered.
+On Wed, Mar 29, 2023 at 03:04:52PM +0200, Heiko Stübner wrote:
+> Hi Guenter,
+> 
+> Am Mittwoch, 29. März 2023, 14:47:34 CEST schrieb Guenter Roeck:
+> > On Wed, Mar 29, 2023 at 02:30:48AM +0530, Shreeya Patel wrote:
+> > > Add rockchip,rk3588-wdt compatible string.
+> > > 
+> > > Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> > 
+> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> just the usual question who is expected to pick up the binding patch?
+> Should I just take it together with the dts-patch or do we wait for
+> a watchdog-maintainer to pick up the binding alone?
 
-Update the DP_PIN_ASSIGN_DP_ONLY_MASK conditional to intially select only
-Pin Assignment C if it is available.
 
-Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
-Cc: stable@vger.kernel.org
-Signed-off-by: RD Babiera <rdbabiera@google.com>
----
- drivers/usb/typec/altmodes/displayport.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+I am ok with you taking both patches.
 
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index 662cd043b50e..8f3e884222ad 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -112,8 +112,12 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
- 		if (dp->data.status & DP_STATUS_PREFER_MULTI_FUNC &&
- 		    pin_assign & DP_PIN_ASSIGN_MULTI_FUNC_MASK)
- 			pin_assign &= DP_PIN_ASSIGN_MULTI_FUNC_MASK;
--		else if (pin_assign & DP_PIN_ASSIGN_DP_ONLY_MASK)
-+		else if (pin_assign & DP_PIN_ASSIGN_DP_ONLY_MASK) {
- 			pin_assign &= DP_PIN_ASSIGN_DP_ONLY_MASK;
-+			/* Default to pin assign C if available */
-+			if (pin_assign & BIT(DP_PIN_ASSIGN_C))
-+				pin_assign = BIT(DP_PIN_ASSIGN_C);
-+		}
- 
- 		if (!pin_assign)
- 			return -EINVAL;
+FTR:
 
-base-commit: 97318d6427f62b723c89f4150f8f48126ef74961
--- 
-2.40.0.348.gf938b09366-goog
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
+Guenter
