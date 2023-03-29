@@ -2,69 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C780F6CD9A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D496CD9A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjC2MwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
+        id S229605AbjC2MwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjC2MwP (ORCPT
+        with ESMTP id S229853AbjC2MwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 29 Mar 2023 08:52:15 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BD61707;
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22635F4;
         Wed, 29 Mar 2023 05:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680094328; x=1711630328;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JYQNzSG0sA9n+CdvfVfHs6vcGajSiMyhZ3Q5AzZfSCo=;
-  b=RRTHrU/oFSs89W/43FaVNfM+usW/H0ELylUqieByxM3kZVGaRQqSKrSD
-   43acC61kD9OMsclr+oh3pg71PodKFMWWOlXhMKGAgzGcdgSUdlD4BxR1R
-   9/+8t3dcasdqlAMkjZk7VzCTHj6jZ61bEaCT7+QqC5WLsVsPmeH18viBq
-   xlFBhm0JgiiyA0DRgkwRNC6AaELDRtmHDwChsr3x+1KMwQxXRDhz6+VjH
-   QTILU4en0hPT6am7NsgAR6usnVw/XbQF3inaCrE6Qpe2+gidj4NIPRbqh
-   Ed1+PyeLHLPAGpBH8kgJ8bH+iagvhaCFx5MdwIRVtMewbKYXRRG8qUXuW
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="324769433"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="324769433"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 05:52:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="677768924"
-X-IronPort-AV: E=Sophos;i="5.98,300,1673942400"; 
-   d="scan'208";a="677768924"
-Received: from ostermam-mobl.amr.corp.intel.com (HELO intel.com) ([10.249.32.144])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 05:52:02 -0700
-Date:   Wed, 29 Mar 2023 14:51:37 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andi Shyti <andi.shyti@linux.intel.com>
-Subject: Re: [PATCH v6 2/8] lib/ref_tracker: improve printing stats
-Message-ID: <ZCQ0WSnZ9L2NFsvA@ashyti-mobl2.lan>
-References: <20230224-track_gt-v6-0-0dc8601fd02f@intel.com>
- <20230224-track_gt-v6-2-0dc8601fd02f@intel.com>
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PmmbV20k2zKwQ9;
+        Wed, 29 Mar 2023 20:49:42 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 29 Mar 2023 20:52:05 +0800
+CC:     <yangyicong@hisilicon.com>, <mathieu.poirier@linaro.org>,
+        <suzuki.poulose@arm.com>, <corbet@lwn.net>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <helgaas@kernel.org>,
+        <linux-pci@vger.kernel.org>, <prime.zeng@huawei.com>,
+        <linuxarm@huawei.com>
+Subject: Re: [PATCH 2/4] hwtracing: hisi_ptt: Add support for dynamically
+ updating the filter list
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+References: <20230315094316.26772-1-yangyicong@huawei.com>
+ <20230315094316.26772-3-yangyicong@huawei.com>
+ <20230328175153.00002938@Huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <d22fd364-bff3-0ece-ad53-1d6f910f9f52@huawei.com>
+Date:   Wed, 29 Mar 2023 20:52:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224-track_gt-v6-2-0dc8601fd02f@intel.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <20230328175153.00002938@Huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,122 +56,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrzej,
+On 2023/3/29 0:51, Jonathan Cameron wrote:
+> On Wed, 15 Mar 2023 17:43:14 +0800
+> Yicong Yang <yangyicong@huawei.com> wrote:
+> 
+>> From: Yicong Yang <yangyicong@hisilicon.com>
+>>
+>> The PCIe devices supported by the PTT trace can be removed/rescanned by
+>> hotplug or through sysfs.  Add support for dynamically updating the
+>> available filter list by registering a PCI bus notifier block. Then user
+>> can always get latest information about available tracing filters and
+>> driver can block the invalid filters of which related devices no longer
+>> exist in the system.
+>>
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+>> ---
+> 
+> Just a few trivial comments on this.
+> 
+> With those tidied up
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-[...]
+Thanks for the comment, will fix in next version.
 
-> -void ref_tracker_dir_print_locked(struct ref_tracker_dir *dir,
-> -				  unsigned int display_limit)
-> +struct ref_tracker_dir_stats {
-> +	int total;
-> +	int count;
-> +	struct {
-> +		depot_stack_handle_t stack_handle;
-> +		unsigned int count;
-> +	} stacks[];
-> +};
-> +
-> +static struct ref_tracker_dir_stats *
-> +ref_tracker_get_stats(struct ref_tracker_dir *dir, unsigned int limit)
->  {
-> +	struct ref_tracker_dir_stats *stats;
->  	struct ref_tracker *tracker;
-> -	unsigned int i = 0;
->  
-> -	lockdep_assert_held(&dir->lock);
-> +	stats = kmalloc(struct_size(stats, stacks, limit),
-> +			GFP_NOWAIT | __GFP_NOWARN);
-> +	if (!stats)
-> +		return ERR_PTR(-ENOMEM);
-> +	stats->total = 0;
-> +	stats->count = 0;
->  
->  	list_for_each_entry(tracker, &dir->list, head) {
-> -		if (i < display_limit) {
-> -			pr_err("leaked reference.\n");
-> -			if (tracker->alloc_stack_handle)
-> -				stack_depot_print(tracker->alloc_stack_handle);
-> -			i++;
-> -		} else {
-> -			break;
-> +		depot_stack_handle_t stack = tracker->alloc_stack_handle;
-> +		int i;
-> +
-> +		++stats->total;
-> +		for (i = 0; i < stats->count; ++i)
-> +			if (stats->stacks[i].stack_handle == stack)
-> +				break;
-> +		if (i >= limit)
-> +			continue;
-> +		if (i >= stats->count) {
-> +			stats->stacks[i].stack_handle = stack;
-> +			stats->stacks[i].count = 0;
-> +			++stats->count;
->  		}
-> +		++stats->stacks[i].count;
-> +	}
-> +
-> +	return stats;
-> +}
-> +
-> +void ref_tracker_dir_print_locked(struct ref_tracker_dir *dir,
-> +				  unsigned int display_limit)
-> +{
-> +	struct ref_tracker_dir_stats *stats;
-> +	unsigned int i = 0, skipped;
-> +	depot_stack_handle_t stack;
-> +	char *sbuf;
-> +
-> +	lockdep_assert_held(&dir->lock);
-> +
-> +	if (list_empty(&dir->list))
-> +		return;
-> +
-> +	stats = ref_tracker_get_stats(dir, display_limit);
-> +	if (IS_ERR(stats)) {
-> +		pr_err("%s@%pK: couldn't get stats, error %pe\n",
-> +		       dir->name, dir, stats);
-> +		return;
->  	}
-> +
-> +	sbuf = kmalloc(STACK_BUF_SIZE, GFP_NOWAIT | __GFP_NOWARN);
-> +
-> +	for (i = 0, skipped = stats->total; i < stats->count; ++i) {
-> +		stack = stats->stacks[i].stack_handle;
-> +		if (sbuf && !stack_depot_snprint(stack, sbuf, STACK_BUF_SIZE, 4))
-> +			sbuf[0] = 0;
-> +		pr_err("%s@%pK has %d/%d users at\n%s\n", dir->name, dir,
-> +		       stats->stacks[i].count, stats->total, sbuf);
-> +		skipped -= stats->stacks[i].count;
-> +	}
-> +
-> +	if (skipped)
-> +		pr_err("%s@%pK skipped reports about %d/%d users.\n",
-> +		       dir->name, dir, skipped, stats->total);
-> +
-> +	kfree(sbuf);
-> +
-> +	kfree(stats);
+> 
+> 
+> 
+> ...
+> 
+>> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
+>> index 0a10c7ec46ad..010cdbc3c172 100644
+>> --- a/drivers/hwtracing/ptt/hisi_ptt.c
+>> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
+> 
+>> +/*
+>> + * A PCI bus notifier is used here for dynamically updating the filter
+>> + * list.
+>> + */
+>> +static int hisi_ptt_notifier_call(struct notifier_block *nb, unsigned long action,
+>> +				  void *data)
+>> +{
+>> +	struct hisi_ptt *hisi_ptt = container_of(nb, struct hisi_ptt, hisi_ptt_nb);
+>> +	struct hisi_ptt_filter_update_info info;
+>> +	struct device *dev = data;
+>> +	struct pci_dev *pdev = to_pci_dev(dev);
+> 
+> This local variable doesn't add anything over
+> 
+> 	info.pdev = to_pci_dev(dev);
+> 
 
-There's a chance of confusion here because
-ref_tracker_get_stats() might need a ref_tracker_put_stats() to
-go with it.
+ok, will drop it.
 
-When you allocate in one function and free in another without a
-clear pair (get/put, alloc/free, etc.), it can be hard to notice
-and could lead to mistakes.
+> 
+> 
+>> +
+>> +	info.pdev = pdev;
+>> +
+>> +	switch (action) {
+>> +	case BUS_NOTIFY_ADD_DEVICE:
+>> +		info.is_add = true;
+>> +		break;
+>> +	case BUS_NOTIFY_DEL_DEVICE:
+>> +		info.is_add = false;
+>> +		break;
+>> +	default:
+>> +		return 0;
+>> +	}
+>> +
+>> +	hisi_ptt_update_fifo_in(hisi_ptt, &info);
+>> +
+>> +	return 0;
+>> +}
+>> +
+> 
+>> diff --git a/drivers/hwtracing/ptt/hisi_ptt.h b/drivers/hwtracing/ptt/hisi_ptt.h
+>> index 5beb1648c93a..b1ba638fe7ea 100644
+>> --- a/drivers/hwtracing/ptt/hisi_ptt.h
+>> +++ b/drivers/hwtracing/ptt/hisi_ptt.h
+>> @@ -11,12 +11,15 @@
+> 
+>>  /**
+>>   * struct hisi_ptt_pmu_buf - Descriptor of the AUX buffer of PTT trace
+>>   * @length:   size of the AUX buffer
+>> @@ -170,10 +188,15 @@ struct hisi_ptt_pmu_buf {
+>>   * @lower_bdf:    the lower BDF range of the PCI devices managed by this PTT device
+>>   * @port_filters: the filter list of root ports
+>>   * @req_filters:  the filter list of requester ID
+>> + * @filter_lock:  lock to protect the filters
+>>   * @port_mask:    port mask of the managed root ports
+>> + * @work:         delayed work for filter updating
+>> + * @filter_update_lock: spinlock to protect the filter update fifo
+>> + * @filter_update_fifo: fifo of the filters waiting to update the filter list
+>>   */
+>>  struct hisi_ptt {
+>>  	struct hisi_ptt_trace_ctrl trace_ctrl;
+>> +	struct notifier_block hisi_ptt_nb;
+> 
+> Docs update for this one?
+> 
 
-But in this simple situation, it's not a big problem, and I'm not
-sure if having the put side is really needed.
-
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> 
+sorry for missing this. will fix.
 
 Thanks,
-Andi
+Yicong
 
->  }
->  EXPORT_SYMBOL(ref_tracker_dir_print_locked);
->  
+>>  	struct hlist_node hotplug_node;
+>>  	struct pmu hisi_ptt_pmu;
+>>  	void __iomem *iobase;
+>> @@ -192,7 +215,19 @@ struct hisi_ptt {
+>>  	 */
+>>  	struct list_head port_filters;
+>>  	struct list_head req_filters;
+>> +	struct mutex filter_lock;
+>>  	u16 port_mask;
+>> +
+>> +	/*
+>> +	 * We use a delayed work here to avoid indefinitely waiting for
+>> +	 * the hisi_ptt->mutex which protecting the filter list. The
+>> +	 * work will be delayed only if the mutex can not be held,
+>> +	 * otherwise no delay will be applied.
+>> +	 */
+>> +	struct delayed_work work;
+>> +	spinlock_t filter_update_lock;
+>> +	DECLARE_KFIFO(filter_update_kfifo, struct hisi_ptt_filter_update_info,
+>> +		      HISI_PTT_FILTER_UPDATE_FIFO_SIZE);
+>>  };
+>>  
+>>  #define to_hisi_ptt(pmu) container_of(pmu, struct hisi_ptt, hisi_ptt_pmu)
 > 
-> -- 
-> 2.34.1
+> .
+> 
