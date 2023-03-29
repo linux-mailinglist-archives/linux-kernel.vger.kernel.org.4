@@ -2,160 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0699E6CD8A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 995AB6CD8A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjC2Lkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
+        id S229861AbjC2Llf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjC2Lks (ORCPT
+        with ESMTP id S229647AbjC2Lle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:40:48 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F3A449A;
-        Wed, 29 Mar 2023 04:40:47 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 558A7424A5;
-        Wed, 29 Mar 2023 11:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1680090045;
-        bh=36jyt17+gpMhtBUVGOnMVEqQehMLVw5t+BF+sC4kAO8=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=KPAnbJo8Tq/Bj92pG1Isa8rQKjE9Iqk0vQqsUPpIhachljQJImGeJzRfySV62vase
-         0FbEB2LyLTN98m/ukAUNt/bmQecQ7++tp37YQaaQF303uaoBuFpkJRtFcMDQHJiBJi
-         n1HGe+HyBRLZcl2sGo/y23Gd1//ncThaGaatsLA9mALLs9y/4NQyEkGM6KWDZ0uOLX
-         UTj0Fr1LmeP+2LykGDPYF6RKF7A6LwV0JxJSnD5WZaQ+JKcgwkr+Mno1I5XSk5LMGZ
-         EbtfHMdG+vXhu2Le+VmQOoity6dhyDT0bfI3CaU+dBLCoPP0yUN4SOKDVdyyO1GHmv
-         Mqj8+KNQnK1ZA==
-From:   Asahi Lina <lina@asahilina.net>
-Date:   Wed, 29 Mar 2023 20:40:19 +0900
-Subject: [PATCH 2/2] rust: ioctl: Move to the uapi crate
+        Wed, 29 Mar 2023 07:41:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190434226
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680090046;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gxc02lB4ReHZJCVlVCYTPAsHaTYfjuyyUkDtNRC+vns=;
+        b=IRhvEtlVkyJzVXNspjIjKbJQgjnUY8Ixo26jq22vBk7i/20da8LBHSPg7yi7vZa4gjfzbG
+        jMdQJmBMwrpLNuj2ei5L2VxE5MwlxibzvmJwYbXeRe4qt1e603fOH6SspolpDBeSTG4Siz
+        JlI9VG8iKKESAculfvGNkUmD93l4bnA=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-372-4kpOkKmqPZ2DPwg6htPrDg-1; Wed, 29 Mar 2023 07:40:45 -0400
+X-MC-Unique: 4kpOkKmqPZ2DPwg6htPrDg-1
+Received: by mail-ed1-f69.google.com with SMTP id r19-20020a50aad3000000b005002e950cd3so22207626edc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:40:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680090044;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gxc02lB4ReHZJCVlVCYTPAsHaTYfjuyyUkDtNRC+vns=;
+        b=5d2iBxnJYtfM6eGrFuApBB8l4eYhwcd0qD6Zkm5eCiS0qoUMddNOGvLcOP+AcxEe2e
+         ZIveWtir5Ga9ZxSb30bjoLX33Q1i1Vk65H05dk2lOAiYZ4g9s+9UmhGKhxtEkpcx8tjd
+         KDI7Lg1LqzvlEE5CpxCdbV7SmFSJkaXelhrAdVbc7oq5Rlw9X8QgWs4GRpG7ZUfFstfm
+         xcMr9+nsZLRZt1W3GUX70GmuAne6Ud7+Ezh27Enry9c3ezQ75nK3abzDLnLEGWtpAcyt
+         2C2aPxfMNVtWuxXOp4rtvlhZ/xmIKkFSHw9Tr2kD3AOhwWXrm6eOrw8yGqQ9E8O4BtsJ
+         Db2g==
+X-Gm-Message-State: AAQBX9cU2Y2Lpi0LL2YXOEu14JULlygMGy30H3zOyzfV4H2tX6nIxZXU
+        sDcAAAnxlOa1o5+nXRZ0ELaEMU/q1XBcxJhzFI4Tk8Nl/E9ib+uNGOfR9WiTInfL4IpWhaB5HWU
+        Fz9eNcyUv6TsfEF6nURBt1Eo=
+X-Received: by 2002:a17:906:5acf:b0:8b1:7684:dfab with SMTP id x15-20020a1709065acf00b008b17684dfabmr22972779ejs.38.1680090044125;
+        Wed, 29 Mar 2023 04:40:44 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aEz9DwwYv9nDpq3n9IzUtlPhBnia/H7+vRksj6SvClDW2OK44VDqv9cJnSNi01Cuk7b4qD+Q==
+X-Received: by 2002:a17:906:5acf:b0:8b1:7684:dfab with SMTP id x15-20020a1709065acf00b008b17684dfabmr22972754ejs.38.1680090043759;
+        Wed, 29 Mar 2023 04:40:43 -0700 (PDT)
+Received: from ?IPV6:2001:67c:1220:8b4:7c:5b35:3b22:9bb9? ([2001:67c:1220:8b4:7c:5b35:3b22:9bb9])
+        by smtp.gmail.com with ESMTPSA id qq24-20020a17090720d800b008df7d2e122dsm16303445ejb.45.2023.03.29.04.40.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 04:40:43 -0700 (PDT)
+Message-ID: <9dec8409-6e69-4f14-dcd8-9f47e088ce17@redhat.com>
+Date:   Wed, 29 Mar 2023 13:40:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH bpf-next] kallsyms: move module-related functions under
+ correct configs
+Content-Language: en-US
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
+References: <20230327161251.1129511-1-vmalik@redhat.com>
+ <ZCHWtptOwPPtUe+u@bombadil.infradead.org>
+ <c076e249-705a-e1bb-c657-f80cd4f2145b@redhat.com>
+ <ZCHuU4Wui7Dwmdm2@bombadil.infradead.org>
+ <bfaefad6-692f-e687-ad55-05a43aa54883@iogearbox.net>
+From:   Viktor Malik <vmalik@redhat.com>
+In-Reply-To: <bfaefad6-692f-e687-ad55-05a43aa54883@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230329-rust-uapi-v1-2-ee78f2933726@asahilina.net>
-References: <20230329-rust-uapi-v1-0-ee78f2933726@asahilina.net>
-In-Reply-To: <20230329-rust-uapi-v1-0-ee78f2933726@asahilina.net>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680090036; l=3405;
- i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=36jyt17+gpMhtBUVGOnMVEqQehMLVw5t+BF+sC4kAO8=;
- b=nfZZd5UugBCJimQIF7tuA5PmeTswIM2a3l93eYTyrBNnpczR4cUCJ2lZUU/rtF2f2DzVoYUUd
- 5PcEeiYQVXfBCBwFrOxAsN2Ylw9JJ8m0Y1YLNgb8qasKBPd5/8YlbmV
-X-Developer-Key: i=lina@asahilina.net; a=ed25519;
- pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we have the uapi crate, this abstraction can use that instead
-of bindings.
+On 3/28/23 10:23, Daniel Borkmann wrote:
+> On 3/27/23 9:28 PM, Luis Chamberlain wrote:
+>> On Mon, Mar 27, 2023 at 08:20:56PM +0200, Viktor Malik wrote:
+>>> On 3/27/23 19:47, Luis Chamberlain wrote:
+>>>> On Mon, Mar 27, 2023 at 06:12:51PM +0200, Viktor Malik wrote:
+>>>>> Functions for searching module kallsyms should have non-empty
+>>>>> definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
+>>>>> only CONFIG_MODULES check was used for many of these, which may have
+>>>>> caused complilation errors on some configs.
+>>>>>
+>>>>> This patch moves all relevant functions under the correct configs.
+>>>>>
+>>>>> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+>>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>> Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
+>>>>
+>>>> Thanks Viktor!  Does this fix something from an existing commit? If so
+>>>> which one?  The commit log should mention it.
+>>>
+>>> Ah, right, I forgot about that. The commit log is missing:
+>>>
+>>> Fixes: bd5314f8dd2d ("kallsyms, bpf: Move find_kallsyms_symbol_value out of internal header")
+>>>
+>>> I can post v2 but I'm also fine with maintainers applying the tag.
+>>
+>> That patch went through the bpf tree so its fix can go throug that tree.
+>> So up to Daniel if he wants a new patch.
+> 
+> Fixing up is fine with me. Viktor, which config combinations did you test for this
+> patch and under which architectures?
+> 
+> I suspect kbuild bot might still complain. For example, your patch moves
+> dereference_module_function_descriptor() stub definition under !CONFIG_MODULES ||
+> !CONFIG_KALLSYMS. Looking at ppc's dereference_module_function_descriptor()
+> implementation (!CONFIG_PPC64_ELF_ABI_V2 case), it's build under CONFIG_MODULES,
+> so you'll have two different implementations of the functions, the generic one
+> then w/o __weak attribute.
 
-Signed-off-by: Asahi Lina <lina@asahilina.net>
----
- rust/kernel/ioctl.rs | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+Right, I didn't notice this one, thanks. Looks like
+dereference_module_function_descriptor will need to stay in the original
+place (under CONFIG_MODULES only). I'll cross-compile for arches that
+redefine this function (powerpc, ia64, parisc) with relevant config
+combinations and submit v2. The rest of the functions don't have
+arch-dependent implementations, so they should be fine.
 
-diff --git a/rust/kernel/ioctl.rs b/rust/kernel/ioctl.rs
-index b2076113b6a8..007437959395 100644
---- a/rust/kernel/ioctl.rs
-+++ b/rust/kernel/ioctl.rs
-@@ -10,40 +10,40 @@ use crate::build_assert;
- /// Build an ioctl number, analogous to the C macro of the same name.
- #[inline(always)]
- const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
--    build_assert!(dir <= bindings::_IOC_DIRMASK);
--    build_assert!(ty <= bindings::_IOC_TYPEMASK);
--    build_assert!(nr <= bindings::_IOC_NRMASK);
--    build_assert!(size <= (bindings::_IOC_SIZEMASK as usize));
-+    build_assert!(dir <= uapi::_IOC_DIRMASK);
-+    build_assert!(ty <= uapi::_IOC_TYPEMASK);
-+    build_assert!(nr <= uapi::_IOC_NRMASK);
-+    build_assert!(size <= (uapi::_IOC_SIZEMASK as usize));
- 
--    (dir << bindings::_IOC_DIRSHIFT)
--        | (ty << bindings::_IOC_TYPESHIFT)
--        | (nr << bindings::_IOC_NRSHIFT)
--        | ((size as u32) << bindings::_IOC_SIZESHIFT)
-+    (dir << uapi::_IOC_DIRSHIFT)
-+        | (ty << uapi::_IOC_TYPESHIFT)
-+        | (nr << uapi::_IOC_NRSHIFT)
-+        | ((size as u32) << uapi::_IOC_SIZESHIFT)
- }
- 
- /// Build an ioctl number for an argumentless ioctl.
- #[inline(always)]
- pub const fn _IO(ty: u32, nr: u32) -> u32 {
--    _IOC(bindings::_IOC_NONE, ty, nr, 0)
-+    _IOC(uapi::_IOC_NONE, ty, nr, 0)
- }
- 
- /// Build an ioctl number for an read-only ioctl.
- #[inline(always)]
- pub const fn _IOR<T>(ty: u32, nr: u32) -> u32 {
--    _IOC(bindings::_IOC_READ, ty, nr, core::mem::size_of::<T>())
-+    _IOC(uapi::_IOC_READ, ty, nr, core::mem::size_of::<T>())
- }
- 
- /// Build an ioctl number for an write-only ioctl.
- #[inline(always)]
- pub const fn _IOW<T>(ty: u32, nr: u32) -> u32 {
--    _IOC(bindings::_IOC_WRITE, ty, nr, core::mem::size_of::<T>())
-+    _IOC(uapi::_IOC_WRITE, ty, nr, core::mem::size_of::<T>())
- }
- 
- /// Build an ioctl number for a read-write ioctl.
- #[inline(always)]
- pub const fn _IOWR<T>(ty: u32, nr: u32) -> u32 {
-     _IOC(
--        bindings::_IOC_READ | bindings::_IOC_WRITE,
-+        uapi::_IOC_READ | uapi::_IOC_WRITE,
-         ty,
-         nr,
-         core::mem::size_of::<T>(),
-@@ -52,20 +52,20 @@ pub const fn _IOWR<T>(ty: u32, nr: u32) -> u32 {
- 
- /// Get the ioctl direction from an ioctl number.
- pub const fn _IOC_DIR(nr: u32) -> u32 {
--    (nr >> bindings::_IOC_DIRSHIFT) & bindings::_IOC_DIRMASK
-+    (nr >> uapi::_IOC_DIRSHIFT) & uapi::_IOC_DIRMASK
- }
- 
- /// Get the ioctl type from an ioctl number.
- pub const fn _IOC_TYPE(nr: u32) -> u32 {
--    (nr >> bindings::_IOC_TYPESHIFT) & bindings::_IOC_TYPEMASK
-+    (nr >> uapi::_IOC_TYPESHIFT) & uapi::_IOC_TYPEMASK
- }
- 
- /// Get the ioctl number from an ioctl number.
- pub const fn _IOC_NR(nr: u32) -> u32 {
--    (nr >> bindings::_IOC_NRSHIFT) & bindings::_IOC_NRMASK
-+    (nr >> uapi::_IOC_NRSHIFT) & uapi::_IOC_NRMASK
- }
- 
- /// Get the ioctl size from an ioctl number.
- pub const fn _IOC_SIZE(nr: u32) -> usize {
--    ((nr >> bindings::_IOC_SIZESHIFT) & bindings::_IOC_SIZEMASK) as usize
-+    ((nr >> uapi::_IOC_SIZESHIFT) & uapi::_IOC_SIZEMASK) as usize
- }
+> 
+> Also small nit, please fix the patch up wrt indentation to align with kernel coding
+> style.
 
--- 
-2.40.0
+Ok, will do.
+
+Thanks,
+Viktor
+
+> 
+> Thanks,
+> Daniel
+> 
 
