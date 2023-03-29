@@ -2,185 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3926CD790
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EF56CD793
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbjC2KWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
+        id S231538AbjC2KXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 06:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjC2KWj (ORCPT
+        with ESMTP id S229603AbjC2KXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:22:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326DB211F
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:22:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4AD3B82229
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:22:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E27C433EF;
-        Wed, 29 Mar 2023 10:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680085355;
-        bh=4sX9XMtD+21BEY/67X7zCOxUYjEltxNobcQGjkEiXrA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vE0HJVu3ScGlr172U+cNj2zPRte8lGkhi2zjsq0loRUCnaG78WocF2HjRRQwz5YEj
-         RYCmDF0LLuDm3zkgCe1AEeF6UWZD9NwLgCgC9jk8B6DYsy9MhtR60mPCv6xbCtD9ff
-         m/JAkC+ppdL8r7bIXYVufm96DRWDMeTQb8c5TgPs=
-Date:   Wed, 29 Mar 2023 12:22:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Russ Weight <russell.h.weight@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v5] firmware_loader: Add debug message with checksum for
- FW file
-Message-ID: <ZCQRad48nMs0TEAk@kroah.com>
-References: <20230317224729.1025879-1-amadeuszx.slawinski@linux.intel.com>
+        Wed, 29 Mar 2023 06:23:14 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637321991
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:23:10 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id y19so8966180pgk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:23:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1680085389;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lRXvVjCt5CgRtnPCELX2ysNWqd55c6EfIdDskRFfoOQ=;
+        b=fdJlPYm3uFhEVmwI6e8y1w2//oOg3rTwoINYzpSQBzoTuiXPYcY5Boltm5DbB+QjMW
+         5GQXxUEyvsOJASaSgZL+kQH8p7GbtUvNEi3lZlNeHPuYV8Wlp6y0l10cuEZHnd1KJkLL
+         MduaeMpgMmnvyVPQ8kU+I2I7pjHzl56rqegT4PJKcUMPaRmOKun1ZAfqBBpgow3aGByg
+         +XP+0RFSuz5tNOg+z0jMT5dy+5TLzLqLm4HNdNBayx6zLTTRm9W76CcH8hQA1yTm6Z3B
+         /HEp8o9FavltqXiUPRpXDgs1NzrQDqAO3l4wljKOnxIPIuSBRrnkb7KFC1QCm1aJMICW
+         9K3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680085389;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lRXvVjCt5CgRtnPCELX2ysNWqd55c6EfIdDskRFfoOQ=;
+        b=PNmHLejGpS4Iq6VZ3UZMxiIfoNJUmL50N4xzbr62fKjuSlscFa9R7KqGBiA3YGxNVz
+         wL7Z6Vf2Qeba9n80s8l4E87G4ELEf2qjB6NqnDo2oBdau0bkP6CiwN4slUu8YCKu1N+n
+         FQpXx+kSsHaQGEt0qhAWjZB2KRqkUwSaHDEZdXQjwhBoazBdqQnHtqJtQWp9RKZYlaAq
+         q41KvUkukvDxznSkRmvWUvVIqyVRL1FsMHQkkRpoR+UzQ26miZsO13VxVy64ky2zcAR4
+         +DILfdR9JuLRzSy1xJhxcM4gO/Oprv3aWq01tO8wwmRSTIXCsNzR+bfaur2wsIDacH43
+         8r5A==
+X-Gm-Message-State: AAQBX9cKpbuFGwkqDQxg+1XcNgggfj91w2dg1TfFteMMnEHpquLx8oAj
+        J1jfOrTdUBAcbnFKPvY3IWXaQMywlKbQ6o8giRA=
+X-Google-Smtp-Source: AKy350aMJ3UgosDpevtbOA0YSySqSCJdvY1FokuzjqO9ol2EuG1Izo3701El3y/1Qq7Ohummu1Q0bw==
+X-Received: by 2002:a62:18d5:0:b0:625:ff85:21ec with SMTP id 204-20020a6218d5000000b00625ff8521ecmr17895331pfy.26.1680085389512;
+        Wed, 29 Mar 2023 03:23:09 -0700 (PDT)
+Received: from C02FG34NMD6R.bytedance.net ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id s17-20020a62e711000000b00575d1ba0ecfsm22759931pfh.133.2023.03.29.03.23.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 03:23:08 -0700 (PDT)
+From:   Albert Huang <huangjie.albert@bytedance.com>
+To:     Jason Wang <jasowang@redhat.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>
+Cc:     "huangjie.albert" <huangjie.albert@bytedance.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] virtio_ring: interrupt disable flag updated to vq even with event_triggered is set
+Date:   Wed, 29 Mar 2023 18:23:00 +0800
+Message-Id: <20230329102300.61000-1-huangjie.albert@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230317224729.1025879-1-amadeuszx.slawinski@linux.intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 11:47:29PM +0100, Amadeusz Sławiński wrote:
-> Enable dynamic-debug logging of firmware filenames and SHA256 checksums
-> to clearly identify the firmware files that are loaded by the system.
-> 
-> Example output:
-> [   34.944619] firmware_class:_request_firmware: i915 0000:00:02.0: Loaded FW: i915/kbl_dmc_ver1_04.bin, sha256: 2cde41c3e5ad181423bcc3e98ff9c49f743c88f18646af4d0b3c3a9664b831a1
-> [   48.155884] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/cnl/dsp_basefw.bin, sha256: 43f6ac1b066e9bd0423d914960fbbdccb391af27d2b1da1085eee3ea8df0f357
-> [   49.579540] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/rt274-tplg.bin, sha256: 4b3580da96dc3d2c443ba20c6728d8b665fceb3ed57223c3a57582bbad8e2413
-> [   49.798196] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/hda-8086280c-tplg.bin, sha256: 5653172579b2be1b51fd69f5cf46e2bac8d63f2a1327924311c13b2f1fe6e601
-> [   49.859627] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/dmic-tplg.bin, sha256: 00fb7fbdb74683333400d7e46925dae60db448b88638efcca0b30215db9df63f
-> 
-> Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-> ---
-> 
-> Changes in v5:
->  * remove unnecessary select in Kconfig (Greg)
-> 
-> Changes in v4:
->  * update menuconfig prompt and help message (Russ)
-> 
-> Changes in v3:
->  * add DYNAMIC_DEBUG and FW_LOADER as dependencies before option can be
-> enabled (kernel test robot)
-> 
-> Changes in v2:
->  * allocate buffers (Greg)
->  * introduce CONFIG_ option to allow for CONFIG_CRYPTO and CONFIG_CRYPTO_SHA256
-> dependencies without introducing circular dependency (Greg)
->  * add new line between includes and function name (Cezary)
-> 
-> ---
->  drivers/base/firmware_loader/Kconfig | 12 +++++++
->  drivers/base/firmware_loader/main.c  | 48 +++++++++++++++++++++++++++-
->  2 files changed, 59 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/firmware_loader/Kconfig b/drivers/base/firmware_loader/Kconfig
-> index 5166b323a0f8..0cabc783d67a 100644
-> --- a/drivers/base/firmware_loader/Kconfig
-> +++ b/drivers/base/firmware_loader/Kconfig
-> @@ -24,6 +24,18 @@ config FW_LOADER
->  	  You also want to be sure to enable this built-in if you are going to
->  	  enable built-in firmware (CONFIG_EXTRA_FIRMWARE).
->  
-> +config FW_LOADER_DEBUG
-> +	bool "Log filenames and checksums for loaded firmware"
-> +	depends on DYNAMIC_DEBUG
-> +	depends on FW_LOADER
-> +	depends on CRYPTO
-> +	depends on CRYPTO_SHA256
-> +	default FW_LOADER
-> +	help
-> +	  Select this option to use dynamic debug to log firmware filenames and
-> +	  SHA256 checksums to the kernel log for each firmware file that is
-> +	  loaded.
-> +
->  if FW_LOADER
->  
->  config FW_LOADER_PAGED_BUF
-> diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-> index 017c4cdb219e..b2c292ca95e8 100644
-> --- a/drivers/base/firmware_loader/main.c
-> +++ b/drivers/base/firmware_loader/main.c
-> @@ -791,6 +791,50 @@ static void fw_abort_batch_reqs(struct firmware *fw)
->  	mutex_unlock(&fw_lock);
->  }
->  
-> +#if defined(CONFIG_FW_LOADER_DEBUG)
-> +#include <crypto/hash.h>
-> +#include <crypto/sha2.h>
-> +
-> +static void fw_log_firmware_info(const struct firmware *fw, const char *name, struct device *device)
-> +{
-> +	struct shash_desc *shash;
-> +	struct crypto_shash *alg;
-> +	u8 *sha256buf;
-> +	char *outbuf;
-> +
-> +	alg = crypto_alloc_shash("sha256", 0, 0);
-> +	if (!alg)
-> +		return;
-> +
-> +	sha256buf = kmalloc(SHA256_DIGEST_SIZE, GFP_KERNEL);
-> +	outbuf = kmalloc(SHA256_BLOCK_SIZE + 1, GFP_KERNEL);
-> +	shash = kmalloc(sizeof(*shash) + crypto_shash_descsize(alg), GFP_KERNEL);
-> +	if (!sha256buf || !outbuf || !shash)
-> +		goto out_free;
-> +
-> +	shash->tfm = alg;
-> +
-> +	if (crypto_shash_digest(shash, fw->data, fw->size, sha256buf) < 0)
-> +		goto out_shash;
-> +
-> +	for (int i = 0; i < SHA256_DIGEST_SIZE; i++)
-> +		sprintf(&outbuf[i * 2], "%02x", sha256buf[i]);
-> +	outbuf[SHA256_BLOCK_SIZE] = 0;
-> +	dev_dbg(device, "Loaded FW: %s, sha256: %s\n", name, outbuf);
-> +
-> +out_shash:
-> +	crypto_free_shash(alg);
-> +out_free:
-> +	kfree(shash);
-> +	kfree(outbuf);
-> +	kfree(sha256buf);
-> +}
-> +#else
-> +static void fw_log_firmware_info(const struct firmware *fw, const char *name,
-> +				 struct device *device)
-> +{}
-> +#endif
-> +
->  /* called from request_firmware() and request_firmware_work_func() */
->  static int
->  _request_firmware(const struct firmware **firmware_p, const char *name,
-> @@ -861,11 +905,13 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
->  	revert_creds(old_cred);
->  	put_cred(kern_cred);
->  
-> - out:
-> +out:
+From: "huangjie.albert" <huangjie.albert@bytedance.com>
 
-Nit, this change shouldn't have been needed.  But it cleans up the file,
-so I'll take it :)
+in virtio_net, if we disable the napi_tx, when we triger a tx interrupt,
+the vq->event_triggered will be set to true. It will no longer be set to
+false. Unless we explicitly call virtqueue_enable_cb_delayed or
+virtqueue_enable_cb_prepare.
 
-thanks,
+If we disable the napi_tx, it will only be called when the tx ring
+buffer is relatively small.
 
-greg k-h
+Because event_triggered is true. Therefore, VRING_AVAIL_F_NO_INTERRUPT or
+VRING_PACKED_EVENT_FLAG_DISABLE will not be set. So we update
+vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
+every time we call virtqueue_get_buf_ctx.This bring more interruptions.
+
+To summarize:
+1) event_triggered was set to true in vring_interrupt()
+2) after this nothing will happen for virtqueue_disable_cb() so
+   VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
+3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
+   then it tries to publish new event
+
+To fix:
+update VRING_AVAIL_F_NO_INTERRUPT or VRING_PACKED_EVENT_FLAG_DISABLE to vq
+when we call virtqueue_disable_cb even the event_triggered is set to true.
+
+Tested with iperf:
+iperf3 tcp stream:
+vm1 -----------------> vm2
+vm2 just receives tcp data stream from vm1, and sends the ack to vm1,
+there are many tx interrupts in vm2.
+but without event_triggered there are just a few tx interrupts.
+
+v2->v3:
+-update the interrupt disable flag even with the event_triggered is set,
+-instead of checking whether event_triggered is set in
+-virtqueue_get_buf_ctx_{packed/split}, will cause the drivers  which have
+-not called virtqueue_{enable/disable}_cb to miss notifications.
+
+v3->v4:
+-remove change for
+-"if (vq->packed.event_flags_shadow != VRING_PACKED_EVENT_FLAG_DISABLE)"
+-in virtqueue_disable_cb_packed
+
+Fixes: 8d622d21d248 ("virtio: fix up virtio_disable_cb")
+Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+---
+ drivers/virtio/virtio_ring.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index cbeeea1b0439..ec7ab8e04846 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -931,6 +931,14 @@ static void virtqueue_disable_cb_split(struct virtqueue *_vq)
+ 
+ 	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)) {
+ 		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
++
++		/*
++		 * If device triggered an event already it won't trigger one again:
++		 * no need to disable.
++		 */
++		if (vq->event_triggered)
++			return;
++
+ 		if (vq->event)
+ 			/* TODO: this is a hack. Figure out a cleaner value to write. */
+ 			vring_used_event(&vq->split.vring) = 0x0;
+@@ -1761,6 +1769,14 @@ static void virtqueue_disable_cb_packed(struct virtqueue *_vq)
+ 
+ 	if (vq->packed.event_flags_shadow != VRING_PACKED_EVENT_FLAG_DISABLE) {
+ 		vq->packed.event_flags_shadow = VRING_PACKED_EVENT_FLAG_DISABLE;
++
++		/*
++		 * If device triggered an event already it won't trigger one again:
++		 * no need to disable.
++		 */
++		if (vq->event_triggered)
++			return;
++
+ 		vq->packed.vring.driver->flags =
+ 			cpu_to_le16(vq->packed.event_flags_shadow);
+ 	}
+@@ -2462,12 +2478,6 @@ void virtqueue_disable_cb(struct virtqueue *_vq)
+ {
+ 	struct vring_virtqueue *vq = to_vvq(_vq);
+ 
+-	/* If device triggered an event already it won't trigger one again:
+-	 * no need to disable.
+-	 */
+-	if (vq->event_triggered)
+-		return;
+-
+ 	if (vq->packed_ring)
+ 		virtqueue_disable_cb_packed(_vq);
+ 	else
+-- 
+2.20.1
+
