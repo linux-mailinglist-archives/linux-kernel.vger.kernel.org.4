@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FE36CDAFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CBB6CDB01
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjC2Nh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 09:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        id S230392AbjC2Nho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 09:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjC2NhQ (ORCPT
+        with ESMTP id S230387AbjC2Nhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:37:16 -0400
+        Wed, 29 Mar 2023 09:37:36 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB615527E;
-        Wed, 29 Mar 2023 06:37:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930BD5261;
+        Wed, 29 Mar 2023 06:37:19 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0AFBD6602EDC;
-        Wed, 29 Mar 2023 14:37:08 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 61FB06602EDC;
+        Wed, 29 Mar 2023 14:37:17 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680097029;
-        bh=jw6n+X+JHIaas8VBWE1sZxdqpL6FC797U9ot+cYY+c8=;
+        s=mail; t=1680097038;
+        bh=Ram8hwcMQYU/0Y3uvt0yjRCZRpaM7nzONKbQLQWbWI0=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kusL0qH2YilLjFOM2MOtUxR0rkYp6n1cS8Yc9B3IOosrc9qh4oXLQZP8zfcibVcQI
-         6kgfffMPIyhpJ0VSZMPr9ACbmE17HrjqlFcWetJDQ7zI2SycAYbNYux03qaMOiQ4h2
-         9ebJjsTjGlMPLnfSrW1BMKEO3EyU/2lisGOh9I7cl576tCoJPXVm+O4+km3Q/k/6rI
-         ojgmlbk+GkiRLfExXUsaRVh+qgdfoEMzZZiJif7EBADJytjQMEZG5KY7Z8ra0VUyTa
-         qy0wqTGZIStsY6A6/jlS4VHW60U1yDwpImBRYDR0xLWbkOYjpyeoFVkUaErXop6AU5
-         6kxGImSRVmWGA==
-Message-ID: <54441f6a-cdb7-eb49-bca6-59aa9e828160@collabora.com>
-Date:   Wed, 29 Mar 2023 15:37:06 +0200
+        b=YxYE7q5uwQClIQ45BtRf1pdYfW8Zl46PogBT6b/OH11BRek8KgSfA/3rLM7zTH4Pe
+         TurdfeZfAOGEMdwMHBEvCSJPezhk0F1GZuaqUDSzWEU9UBykpDP+r1IhmeZHrBfGXe
+         kW3kQGEvXusUmOF9/JRz/emFXlr35ml83WcvBeQ4iptHL2l7yF8Gkxvq6MFKByzNsz
+         X8DPKskSLCxV2sUCo3G2WL+fw6bn5/eXUml2VuMJHcOgOhHMq9nFnWjbDMx76BxITN
+         txvohPxxncgLuCtaTtxa7lDziir+RNDU3KkP0VFLTwOet2kl6DpT9iRonz2vzX8DgL
+         78NhHdv/TgD7Q==
+Message-ID: <66432e8d-197e-f325-c935-b4076ebbd408@collabora.com>
+Date:   Wed, 29 Mar 2023 15:37:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH RESEND 5/6] arm64: dts: mediatek: add larb support for
+Subject: Re: [PATCH RESEND 6/6] arm64: dts: mediatek: add iommu support for
  mt8365 SoC
 Content-Language: en-US
 To:     Alexandre Mergnat <amergnat@baylibre.com>,
@@ -49,10 +49,10 @@ To:     Alexandre Mergnat <amergnat@baylibre.com>,
 Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20230207-iommu-support-v1-0-4a902f9aa412@baylibre.com>
- <20230207-iommu-support-v1-5-4a902f9aa412@baylibre.com>
+ <20230207-iommu-support-v1-6-4a902f9aa412@baylibre.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230207-iommu-support-v1-5-4a902f9aa412@baylibre.com>
+In-Reply-To: <20230207-iommu-support-v1-6-4a902f9aa412@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -65,11 +65,11 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 29/03/23 11:52, Alexandre Mergnat ha scritto:
-> Local arbiter (LARB) is a component of Smart Multimedia Interface (SMI),
-> used to help the memory management (IOMMU).
-> This patch add 4 LARBs and 2 clocks for the larb1 and larb3 support.
+> Add iommu support in the SoC DTS using the 4 local arbiters (LARBs)
 > 
 > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
 
