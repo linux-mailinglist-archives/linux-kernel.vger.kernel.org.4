@@ -2,62 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7D56CD1E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2379E6CD1E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 08:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjC2GBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 02:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S229518AbjC2GBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 02:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjC2GBR (ORCPT
+        with ESMTP id S229646AbjC2GBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 02:01:17 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D6126B7;
-        Tue, 28 Mar 2023 23:01:16 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32T611ql038436;
-        Wed, 29 Mar 2023 01:01:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680069661;
-        bh=wt4xSwJPHwVxOeNl90IK8+byuWNvBIrt26I/jQjG7EM=;
-        h=From:To:CC:Subject:Date;
-        b=keala8r/71nsiOuUZhWF0yBddDzie/VV53t/kiCTS+z2pFooKx0pjFE913nYqG9le
-         MzJVPhGo3ITc8UL7XLIgDpkt/t5hKP/Ri8d2SgZIV+qgCCRsGwXMY8Gf3xhcGZO/Wb
-         1QZayNDKMjuvVZ/e4ZGxoLOr5TrSbjCZMm7P8VWQ=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32T611fC050640
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 29 Mar 2023 01:01:01 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 29
- Mar 2023 01:01:01 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 29 Mar 2023 01:01:01 -0500
-Received: from LT5CD112GSQZ.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32T60wKN006863;
-        Wed, 29 Mar 2023 01:00:58 -0500
-From:   Apurva Nandan <a-nandan@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Apurva Nandan <a-nandan@ti.com>
-Subject: [PATCH v2] arm64: dts: ti: k3-j784s4-evm: Add OSPI0 flash support
-Date:   Wed, 29 Mar 2023 11:30:57 +0530
-Message-ID: <20230329060057.13654-1-a-nandan@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 29 Mar 2023 02:01:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927C3358B;
+        Tue, 28 Mar 2023 23:01:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2B40B8200F;
+        Wed, 29 Mar 2023 06:01:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B197C433D2;
+        Wed, 29 Mar 2023 06:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680069685;
+        bh=VmpSqDmABCdiRrhZPUIC9g9iH1F5K/OB3bj4hj2T7/o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N74FlaxeHd/XcyD7wDsFfAHp0QgMR2u7iZIxzF23eyiHhxGjhPQWvYV1DaLXxy7h4
+         7AVj7yPVkaGJJBmCEdl9Y56TUUSnvEnU0EbpO5uiBkElFdwNxfdMRXCrisPUX57uZQ
+         Ef8m9Yol6pZMQI2tW2kE2gTREaSGYa5NeFO+J0mY=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] pktcdvd: simplify the class_pktcdvd logic
+Date:   Wed, 29 Mar 2023 08:01:21 +0200
+Message-Id: <20230329060121.2688338-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3437; i=gregkh@linuxfoundation.org; h=from:subject; bh=VmpSqDmABCdiRrhZPUIC9g9iH1F5K/OB3bj4hj2T7/o=; b=owGbwMvMwCRo6H6F97bub03G02pJDCnKV/RezPS67rU91M9H6m9HdO636N1HBSzZtt3fYXo29 exzq+ezO2JZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAid6UY5uf4uO7a4XXz8Lv8 CvmU9GbJ+f9l8hnmyi1a8rn2kv+8l3IVDsqTZkQ/2bXMDwA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,133 +50,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for OSPI flash connected to OSPI0 instance through FSS.
-Also enumerate OSPI1 instance in MCU DTSI.
+There is no need to dynamically create and destory the class_pktcdvd
+structure, just make it static and remove the memory allocation logic
+which simplifies and cleans up the logic a lot.
 
-Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+Cc: linux-block@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
+Note: I would like to take this through the driver-core tree as I have
+later struct class cleanups that depend on this change being made to the
+tree if that's ok with the maintainer of this file.
 
-Changelog:
-- Fixed address 0x0 to 0x00
-- Fixed dtbs_check errors (removed syscon and created simple bus)
-- Fixed whitespace error
+ drivers/block/pktcdvd.c | 40 ++++++++++++----------------------------
+ 1 file changed, 12 insertions(+), 28 deletions(-)
 
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts      | 45 +++++++++++++++++++
- .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     | 41 +++++++++++++++++
- 2 files changed, 86 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-index b9e23697a63b..cc8c2dda7bd2 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-@@ -141,12 +141,57 @@ J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
- 	};
- };
+diff --git a/drivers/block/pktcdvd.c b/drivers/block/pktcdvd.c
+index ba9bbdef9ef5..79af8a59142e 100644
+--- a/drivers/block/pktcdvd.c
++++ b/drivers/block/pktcdvd.c
+@@ -100,7 +100,8 @@ static struct mutex ctl_mutex;	/* Serialize open/close/setup/teardown */
+ static mempool_t psd_pool;
+ static struct bio_set pkt_bio_set;
  
-+&wkup_pmx0 {
-+	mcu_fss0_ospi0_pins_default: mcu-fss0-ospi0-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (E32) MCU_OSPI0_CLK */
-+			J784S4_WKUP_IOPAD(0x02c, PIN_OUTPUT, 0) /* (A32) MCU_OSPI0_CSn0 */
-+			J784S4_WKUP_IOPAD(0x00c, PIN_INPUT, 0) /* (B33) MCU_OSPI0_D0 */
-+			J784S4_WKUP_IOPAD(0x010, PIN_INPUT, 0) /* (B32) MCU_OSPI0_D1 */
-+			J784S4_WKUP_IOPAD(0x014, PIN_INPUT, 0) /* (C33) MCU_OSPI0_D2 */
-+			J784S4_WKUP_IOPAD(0x018, PIN_INPUT, 0) /* (C35) MCU_OSPI0_D3 */
-+			J784S4_WKUP_IOPAD(0x01c, PIN_INPUT, 0) /* (D33) MCU_OSPI0_D4 */
-+			J784S4_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (D34) MCU_OSPI0_D5 */
-+			J784S4_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (E34) MCU_OSPI0_D6 */
-+			J784S4_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (E33) MCU_OSPI0_D7 */
-+			J784S4_WKUP_IOPAD(0x008, PIN_INPUT, 0) /* (C34) MCU_OSPI0_DQS */
-+			J784S4_WKUP_IOPAD(0x03c, PIN_OUTPUT, 6) /* (C32) MCU_OSPI0_CSn3.MCU_OSPI0_ECC_FAIL */
-+			J784S4_WKUP_IOPAD(0x038, PIN_OUTPUT, 6) /* (B34) MCU_OSPI0_CSn2.MCU_OSPI0_RESET_OUT0 */
-+		>;
-+	};
-+};
-+
- &main_uart8 {
- 	status = "okay";
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&main_uart8_pins_default>;
- };
+-static struct class	*class_pktcdvd = NULL;    /* /sys/class/pktcdvd */
++/* /sys/class/pktcdvd */
++static struct class	class_pktcdvd;
+ static struct dentry	*pkt_debugfs_root = NULL; /* /sys/kernel/debug/pktcdvd */
  
-+&fss {
-+	status = "okay";
-+};
-+
-+&ospi0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
-+
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0x0>;
-+		spi-tx-bus-width = <8>;
-+		spi-rx-bus-width = <8>;
-+		spi-max-frequency = <25000000>;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <4>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+	};
-+};
-+
- &main_i2c0 {
- 	status = "okay";
- 	pinctrl-names = "default";
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-index 64bd3dee14aa..f825a8e4b452 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-@@ -309,4 +309,45 @@ cpts@3d000 {
- 			ti,cpts-periodic-outputs = <2>;
- 		};
- 	};
-+
-+	fss: bus@47000000 {
-+		compatible = "simple-bus";
-+		reg = <0x00 0x47000000 0x00 0x100>;
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		ospi0: spi@47040000 {
-+			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-+			reg = <0x00 0x47040000 0x00 0x100>,
-+			      <0x05 0x0000000 0x01 0x0000000>;
-+			interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
-+			cdns,fifo-depth = <256>;
-+			cdns,fifo-width = <4>;
-+			cdns,trigger-address = <0x0>;
-+			clocks = <&k3_clks 161 7>;
-+			assigned-clocks = <&k3_clks 161 7>;
-+			assigned-clock-parents = <&k3_clks 161 9>;
-+			assigned-clock-rates = <166666666>;
-+			power-domains = <&k3_pds 161 TI_SCI_PD_EXCLUSIVE>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		ospi1: spi@47050000 {
-+			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-+			reg = <0x00 0x47050000 0x00 0x100>,
-+			      <0x07 0x0000000 0x01 0x0000000>;
-+			interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
-+			cdns,fifo-depth = <256>;
-+			cdns,fifo-width = <4>;
-+			cdns,trigger-address = <0x0>;
-+			clocks = <&k3_clks 162 7>;
-+			power-domains = <&k3_pds 162 TI_SCI_PD_EXCLUSIVE>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+	};
+ /* forward declaration */
+@@ -315,8 +316,8 @@ static const struct attribute_group *pkt_groups[] = {
+ 
+ static void pkt_sysfs_dev_new(struct pktcdvd_device *pd)
+ {
+-	if (class_pktcdvd) {
+-		pd->dev = device_create_with_groups(class_pktcdvd, NULL,
++	if (class_is_registered(&class_pktcdvd)) {
++		pd->dev = device_create_with_groups(&class_pktcdvd, NULL,
+ 						    MKDEV(0, 0), pd, pkt_groups,
+ 						    "%s", pd->name);
+ 		if (IS_ERR(pd->dev))
+@@ -326,7 +327,7 @@ static void pkt_sysfs_dev_new(struct pktcdvd_device *pd)
+ 
+ static void pkt_sysfs_dev_remove(struct pktcdvd_device *pd)
+ {
+-	if (class_pktcdvd)
++	if (class_is_registered(&class_pktcdvd))
+ 		device_unregister(pd->dev);
+ }
+ 
+@@ -338,11 +339,6 @@ static void pkt_sysfs_dev_remove(struct pktcdvd_device *pd)
+                      device_map     show mappings
+  *******************************************************************/
+ 
+-static void class_pktcdvd_release(struct class *cls)
+-{
+-	kfree(cls);
+-}
+-
+ static ssize_t device_map_show(const struct class *c, const struct class_attribute *attr,
+ 			       char *data)
+ {
+@@ -405,35 +401,23 @@ static struct attribute *class_pktcdvd_attrs[] = {
  };
+ ATTRIBUTE_GROUPS(class_pktcdvd);
+ 
++static struct class class_pktcdvd = {
++	.name		= DRIVER_NAME,
++	.class_groups	= class_pktcdvd_groups,
++};
++
+ static int pkt_sysfs_init(void)
+ {
+-	int ret = 0;
+-
+ 	/*
+ 	 * create control files in sysfs
+ 	 * /sys/class/pktcdvd/...
+ 	 */
+-	class_pktcdvd = kzalloc(sizeof(*class_pktcdvd), GFP_KERNEL);
+-	if (!class_pktcdvd)
+-		return -ENOMEM;
+-	class_pktcdvd->name = DRIVER_NAME;
+-	class_pktcdvd->class_release = class_pktcdvd_release;
+-	class_pktcdvd->class_groups = class_pktcdvd_groups;
+-	ret = class_register(class_pktcdvd);
+-	if (ret) {
+-		kfree(class_pktcdvd);
+-		class_pktcdvd = NULL;
+-		pr_err("failed to create class pktcdvd\n");
+-		return ret;
+-	}
+-	return 0;
++	return class_register(&class_pktcdvd);
+ }
+ 
+ static void pkt_sysfs_cleanup(void)
+ {
+-	if (class_pktcdvd)
+-		class_destroy(class_pktcdvd);
+-	class_pktcdvd = NULL;
++	class_unregister(&class_pktcdvd);
+ }
+ 
+ /********************************************************************
 -- 
-2.34.1
+2.40.0
 
