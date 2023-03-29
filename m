@@ -2,75 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA786CF4B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 22:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAB66CF4BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 22:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjC2Usc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 16:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
+        id S229708AbjC2UvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 16:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjC2UsW (ORCPT
+        with ESMTP id S229623AbjC2Uu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 16:48:22 -0400
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF9844B8;
-        Wed, 29 Mar 2023 13:48:22 -0700 (PDT)
-Received: by mail-pf1-f177.google.com with SMTP id b7so1038187pfv.2;
-        Wed, 29 Mar 2023 13:48:22 -0700 (PDT)
+        Wed, 29 Mar 2023 16:50:59 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17E44C20
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 13:50:58 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-17aeb49429eso17615219fac.6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 13:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680123058;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RKZ8GqIMOOJV+XfNmnVFARmYio/PItz2BJFiPWuDGSY=;
+        b=fuwFruqEcX0EYq8qW6g2AP0E1DdtapZohNO+DyP5pc2AtlzNd+22EhRcbUCquzkJ3o
+         9ondMX7B4/3ZlXi7I1DArJceyY1jenpceRPefus+ASy+K2c7ia1aRS+3GzdLuDLHet1U
+         F6iVGJEG/6ESVX7B6CewSuvp/TU0ln1xflg/CG0u1DtVzsJv4KXpUiAbewa/6jLmFtR7
+         93JhXLtQy9slp+aO4ZIZt/xVi4QHSC1FP06khiuaejykUfbuzanPPHtrNpN2clyhn0dA
+         2cUOWey18Xu74TMH3p2Lj7rAKAoiMWGv/hVjxs8TKjFO25Ldubc50fMD3E1uNFy/6puf
+         xkSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680122902;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzpgvE6nKQNuR4O/KkAOD/tL9byNb1qJHAAmJlyDmXs=;
-        b=XEx9li+LOz+eBHn0gDdwnF/1MApOjVSzol7kkYjRzAxEhXqMwUhuWLj3HNoyDfMslF
-         5D5+/tWhYsn8nVJSFgiKWIbHy7RBPudDteg6tseVbDxqhi+3cTZtuZYNDKHMLVAxG9H0
-         EYSd1oI8e+up3PpWf7+4UqTSztPR8764d/W3FzDDjhsvuhyQLopkKOPj3/uwJ873rYpa
-         jK7b2z/Jc7PpS7DVTkZ+sMlp97HrC/OVMQylq3G3djwtCQiLgxIGb7KuTSA2uF8ipzoq
-         FWh/D4rg5GNiN10zDOT22ZrX9XILOvL8jILwkwHY0uwot8DuccjsATQkWcTOzOS7+XDL
-         xaGw==
-X-Gm-Message-State: AAQBX9ew3JYsFruCwqDmq+JhY/G3UgX1X6hgqgBWhw0kiZln5preOim8
-        +PWoD5FOXBmo41VJxBEDw0c=
-X-Google-Smtp-Source: AKy350bbqWlYjE+fXIlgWV7IZ86U6AitGIoUAUVrIh21So7TSrCV9nr+UuZrx6rHfXtVafWgqnhmHw==
-X-Received: by 2002:aa7:9908:0:b0:5a8:a0df:a624 with SMTP id z8-20020aa79908000000b005a8a0dfa624mr18118299pff.22.1680122901632;
-        Wed, 29 Mar 2023 13:48:21 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:c058:cec1:e4c9:184e? ([2620:15c:211:201:c058:cec1:e4c9:184e])
-        by smtp.gmail.com with ESMTPSA id h3-20020aa786c3000000b005a9cb8edee3sm23352538pfo.85.2023.03.29.13.48.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 13:48:21 -0700 (PDT)
-Message-ID: <c3860fdc-9018-bb8b-e1e7-def3da77dc42@acm.org>
-Date:   Wed, 29 Mar 2023 13:48:19 -0700
+        d=1e100.net; s=20210112; t=1680123058;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RKZ8GqIMOOJV+XfNmnVFARmYio/PItz2BJFiPWuDGSY=;
+        b=Lhrm+9zKi7wVnRTp/lMt05mzyV1SJgWQCciqmQxjvWWzfSME3474GlAWghSOpDKXII
+         K8oXJpzEv0kWnryoZnHB8Grb+pcfG7jJ+GYoJtyCtPYQHVcAzYco1KkvtrQV/WC6xKpl
+         fZ3iSdwfylk27VOi5afYWNOZt6azk/cSUSIiK2KZmSRR93Yn5j8WoEfgBjm0jqD2GMAe
+         yF/t5eg8HZQfgbyF//3Iue/8hNSI84jz9RdOKC2sY9cvhhT0t9awDICDkYYqGjKcR7RW
+         rsgwOG2LypTRlcKUOG4FCbA2Fdr6bb9GTTcvEKCuGYqNe2m3F0u2J9jcecFwmCCsjTox
+         B5mw==
+X-Gm-Message-State: AAQBX9fB0YOu9JNxg5Rx/cDiad8gPHe/YxaxBxgKNTU2eG19e+Dvo6IR
+        FlLKkUThP1kU5WpioNVRMuYMAbMyQYX832kbob4o8Q==
+X-Google-Smtp-Source: AKy350Y+kAtx1gY4HjjthjqP/HTIyk6FRS2h6MQd7ks70ztqf/xhYrlb+0Xf4oPw8b2Z8bGuN54EYWb9wk9wLqT0PE8=
+X-Received: by 2002:a05:6870:8897:b0:17e:6e31:9aa4 with SMTP id
+ m23-20020a056870889700b0017e6e319aa4mr7972519oam.6.1680123057921; Wed, 29 Mar
+ 2023 13:50:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/2] scsi: ufs: mcq: 2 minor cleanups
-Content-Language: en-US
-To:     Avri Altman <avri.altman@wdc.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230329101303.18377-1-avri.altman@wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230329101303.18377-1-avri.altman@wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230326092208.13613-1-laoar.shao@gmail.com> <ZCHSOxto9DlEzVy9@google.com>
+ <CALOAHbBJEXdR4Myk1zrgFDf9UJYu2-3tbjz0ETNvK3WamD5sFg@mail.gmail.com>
+ <ZCMgpRtT6ywmtALi@google.com> <CALOAHbCc843AGvVftCumnNgM87NzqAYpPcPEj0i+aQ5QEOUW7Q@mail.gmail.com>
+In-Reply-To: <CALOAHbCc843AGvVftCumnNgM87NzqAYpPcPEj0i+aQ5QEOUW7Q@mail.gmail.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Wed, 29 Mar 2023 13:50:45 -0700
+Message-ID: <CAKH8qBuRS5mp5akkT-sQHHdnnjWZYKehppgO5D1vE5rhYPuo8Q@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
+        jolsa@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/23 03:13, Avri Altman wrote:
-> 2 (untested) minor mcq cleanups.
+On Tue, Mar 28, 2023 at 8:03=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
+wrote:
+>
+> On Wed, Mar 29, 2023 at 1:15=E2=80=AFAM Stanislav Fomichev <sdf@google.co=
+m> wrote:
+> >
+> > On 03/28, Yafang Shao wrote:
+> > > On Tue, Mar 28, 2023 at 1:28=E2=80=AFAM Stanislav Fomichev <sdf@googl=
+e.com> wrote:
+> > > >
+> > > > On 03/26, Yafang Shao wrote:
+> > > > > Currently only CAP_SYS_ADMIN can iterate BPF object IDs and conve=
+rt
+> > > IDs
+> > > > > to FDs, that's intended for BPF's security model[1]. Not only doe=
+s it
+> > > > > prevent non-privilidged users from getting other users' bpf progr=
+am,
+> > > but
+> > > > > also it prevents the user from iterating his own bpf objects.
+> > > >
+> > > > > In container environment, some users want to run bpf programs in =
+their
+> > > > > containers. These users can run their bpf programs under CAP_BPF =
+and
+> > > > > some other specific CAPs, but they can't inspect their bpf progra=
+ms
+> > > in a
+> > > > > generic way. For example, the bpftool can't be used as it require=
+s
+> > > > > CAP_SYS_ADMIN. That is very inconvenient.
+> > > >
+> > > > > Without CAP_SYS_ADMIN, the only way to get the information of a b=
+pf
+> > > object
+> > > > > which is not created by the process itself is with SCM_RIGHTS, th=
+at
+> > > > > requires each processes which created bpf object has to implement=
+ a
+> > > unix
+> > > > > domain socket to share the fd of a bpf object between different
+> > > > > processes, that is really trivial and troublesome.
+> > > >
+> > > > > Hence we need a better mechanism to get bpf object info without
+> > > > > CAP_SYS_ADMIN.
+> > > >
+> > > > [..]
+> > > >
+> > > > > BPF namespace is introduced in this patchset with an attempt to r=
+emove
+> > > > > the CAP_SYS_ADMIN requirement. The user can create bpf map, prog =
+and
+> > > > > link in a specific bpf namespace, then these bpf objects will not=
+ be
+> > > > > visible to the users in a different bpf namespace. But these bpf
+> > > > > objects are visible to its parent bpf namespace, so the sys admin=
+ can
+> > > > > still iterate and inspect them.
+> > > >
+> > > > Does it essentially mean unpriv bpf?
+> >
+> > > Right. With CAP_BPF and some other CAPs enabled.
+> >
+> > > > Can I, as a non-root, create
+> > > > a new bpf namespace and start loading/attaching progs?
+> >
+> > > No, you can't create a new bpf namespace as a non-root, see also
+> > > copy_namespaces().
+> > > In the container environment, new namespaces are always created by
+> > > containered, which is started by root.
+> >
+> > Are you talking about "if (!ns_capable(user_ns, CAP_SYS_ADMIN))" part
+> > from copy_namespaces? Isn't it trivially bypassed with a new user
+> > namespace?
+> >
+> > IIUC, I can create a new user namespace which gives me CAP_SYS_ADMIN
+> > in this particular user-ns. Then I can go on and create a new bpf
+> > namespace (with CAP_BPF) and go wild? I won't see anything from the
+> > other namespaces, but I'll be able to load/attach bpf programs?
+> >
+>
+> I don't think so. If you create a new userspace, and give the process
+> the CAP_BPF or CAP_SYS_ADMIN in this new user namespace but not the
+> initial namespace, you can't do that. Because currently only CAP_BPF
+> or CAP_SYS_ADMIN in the init user namespace can load/attach bpf
+> programs.
+>
+> > > > Maybe add a paragraph about now vs whatever you're proposing.
+> >
+> > > What I'm proposing in this patchset is to put bpf objects (map, prog,
+> > > link, and btf) into the bpf namespace. Next step I will put bpffs int=
+o
+> > > the bpf namespace as well.
+> > > That said, I'm trying to put  all the objects created in bpf into the
+> > > bpf namespace. Below is a simple paragraph to illustrate it.
+> >
+> > > Regarding the unpriv user with CAP_BPF enabled,
+> > >                                                               Now | F=
+uture
+> > > ---------------------------------------------------------------------=
+---
+> > > Iterate his BPF IDs                                | N   |  Y  |
+> > > Iterate others' BPF IDs                          | N   |  N  |
+> > > Convert his BPF IDs to FDs                  | N   |  Y  |
+> > > Convert others' BPF IDs to FDs            | N   |  N  |
+> > > Get others' object info from pinned file  | Y(*) | N  |
+> > > ---------------------------------------------------------------------=
+---
+> >
+> > > (*) It can be improved by,
+> > >       1). Different containers has different bpffs
+> > >       2). Setting file permission
+> > >       That's not perfect, for example, if one single user has two bpf
+> > > instances, but we don't want them to inspect each other.
+> >
+> > I think the question here is what happens to the existing
+> > capable(CAP_BPF) checks? Do they become ns_capable(CAP_BPF) eventually?
+> >
+>
+> They won't become ns_capable(CAP_BPF). If it becomes
+> ns_capable(CAP_BPF), it will really go wild then.
+>
+> > And if not, I don't think it integrates well with the user namespaces?
+> >
+>
+> IIUC, it is the CAP_BPF which doesn't integrate with the user
+> namespaces, right?
 
-I cannot test this series. I hope someone else can.
+Yeah. And it's probably fine if we don't, I just wanted to see some
+explanation on the long-term plan.
+If the purpose is to have a bpf namespace and use it for pure
+isolation purposes, let's state it clearly in the cover letter.
+Otherwise it's not clear whether it's only about isolation or
+potentially allowing CAP_BPF in user namespaces.
+Maybe clone(CLONE_NEWBPF|CLONE_NEWUSER) should return an explicit
+error? (or maybe it already does, haven't looked at the patches)
 
-Thanks,
+One other question I have is: should init bpf namespace see
+everything? Otherwise it might be hard to chase down the namespaces
+that loaded some BPF program...
 
-Bart.
 
+
+
+> --
+> Regards
+> Yafang
