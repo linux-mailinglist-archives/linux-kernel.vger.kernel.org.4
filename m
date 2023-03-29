@@ -2,115 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6AE6CDAA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06B46CDAAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjC2NXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 09:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51838 "EHLO
+        id S230290AbjC2NYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 09:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbjC2NXr (ORCPT
+        with ESMTP id S230325AbjC2NXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:23:47 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2108.outbound.protection.outlook.com [40.107.243.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1698749C3;
-        Wed, 29 Mar 2023 06:23:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kzn9zMRy/j/4FmyQINVwyyiOd1qnyu1MZZnH59x6jiYKxrdHPzbTifQ4LxnMPn96PZonyKnZnO7b7A4WpaC8EZ9AC/3aF7W3cGMwLwb/6sftGgTvUzuGQcF2fwxdItm1Dke/GDJBMmwISeSi27i6jZocarrgFKJGU+n/IHeAy1/vkMBLqUzasZ4YjFaSV5A61PH4dqslb5HM+QN4p6XF/0go6DELVijpcz7xnzWYgSa17NKaBxBw4hLZbSJinoy/gqySE3M+1jinYe7BasFYaSyVeXRcf7gM/EnX8/P4xf5bfYVEZX+R32qx1q/gZ4I/r+Iz5wX0BNx7J7zOkummLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B6VTIB+A04Sdz1FWBTxIcWIjO51fdwqVXH5nZ7DZMDw=;
- b=BaadVxRwWezcKiAYt1DA1g0nqyHQMok2z/MW9aaaBbybFyK+/yqei6M3unGdaRh8XwWG16vMJrE6IJdCTaL/rGvDEfpwNiYI5lBrjdSQRyKaxqC4ohk/HkUDGSqHen9EZGZwULy5igxpjz424DME6UY1MY/MSswIFmmVNIe4341xY6aN80Dat1D0WCe/wOrLipOIyVkbHdpVgz5e9Ca4aQ1dQmnZcqTvrgbuGd45bus1QBP1As2gl2A8sSeBqhfv8C7GJTbuzrEzG1eKQF2oQbZon+GWxS94kbzR73Dq6RV0sG21S2uB0EsuVepscZ0ovaByWGC7AzXkmtIe8GYedg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Wed, 29 Mar 2023 09:23:55 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397115257
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:23:51 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so16126506pjt.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:23:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B6VTIB+A04Sdz1FWBTxIcWIjO51fdwqVXH5nZ7DZMDw=;
- b=JcXK8AylX+8ObT3KkYchXaWnqbk5/31xrssSYHgQoRGsLbGG6QqkxdTVhgqOrqetn1WHwD5H6ubhiT7CSN6vB05Rdxbo+6X9lPiL2jWWOICduToDt+GGxOix/5Y7jsOEkXHxBqLXhYrWvYWgtSzHY478/vLrc+EzLN3Zazf1muQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5777.namprd13.prod.outlook.com (2603:10b6:510:118::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Wed, 29 Mar
- 2023 13:23:38 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb%4]) with mapi id 15.20.6222.028; Wed, 29 Mar 2023
- 13:23:38 +0000
-Date:   Wed, 29 Mar 2023 15:23:29 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
-        petrm@nvidia.com, leon@kernel.org, shayagr@amazon.com,
-        wsa+renesas@sang-engineering.com, yangyingliang@huawei.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] net: ksz884x: remove unused change variable
-Message-ID: <ZCQ70Rb311WzqPIJ@corigine.com>
-References: <20230329125929.1808420-1-trix@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329125929.1808420-1-trix@redhat.com>
-X-ClientProxiedBy: AM0PR04CA0118.eurprd04.prod.outlook.com
- (2603:10a6:208:55::23) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1680096231;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FCUGbgE2LvNcR7hLPqcrIx6jkWOTrrbsJMaWnGrYcZ4=;
+        b=KOcZAsDTxZl7koKyj6wYIlCsU6ulFQUfwnmbNVoN9FKVwVCSKoe3HauI0NUqCmMrIL
+         NFiVp/FgPcd3DpbvHxDD6Ka9Rvw+t4iQGO/foZVud5a9L1mBMOYDCO6fV832Rp6aR1Po
+         2W0mIUYKldNX0sdCy7nuawQ5Ke/Lt0DcFnCh9+wZD2CCM7ZpAc4WKkZB93ZqcudJLK9Z
+         YaAoEjRhcjcA/uUpXnTfJaqpHANKcQoZUbrWpfO1MV7C16ZBktngQNLB3hqSiYM0MYOI
+         lRiQB3uTaYWtMcX25ZgK2+fD7n0GR6TAtchS6oZFtVD75ICQ/aFME3UuBwP3lENXxJXU
+         3k+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680096231;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FCUGbgE2LvNcR7hLPqcrIx6jkWOTrrbsJMaWnGrYcZ4=;
+        b=6V+yrtiIIwCRqBuvoUJrM8XaeAgiel3g7C9tw/BMy/0oauWUfcAZ/lEPNVx9gx0Bdn
+         s57M6ZkaL5di01hGCIBPoGCRPmwrxy4dYExs4Zt9J/2dx9AMvMwdhucjy88+AZnPEDEn
+         lyCdr+yyM9UtVPClTp35UKVE7YbrLuDv2erheZD0YrE76HAkEM8vxN04Sxz1BuRhOfBP
+         k7GiALFAH5I1AzvPIBOrWydVwPDCaACGpV0afU9dLR1E2wJHgTgfizt3WK5kFBuWmRHj
+         S8ygOr+N80TJMOicvfv6M49xz6Mbk0E1qcesi0DyvJa7v7RiCVaAicSHx+dXWGwlPciJ
+         RkEA==
+X-Gm-Message-State: AO0yUKWBeteMTU0QgB/78TN2zi2DZBsBsRvpe7CJtLclNOfm0TTldlF1
+        sG+p9TFj0BWfD7AlGdt6eZvV
+X-Google-Smtp-Source: AK7set9i8PpqmejhrZD8QpXUtYVJK4X7NibCw11JissA18lCRfqRt0POdmynhT5zRtEgfPgNAtN61g==
+X-Received: by 2002:a05:6a20:b288:b0:dd:9848:a1a8 with SMTP id ei8-20020a056a20b28800b000dd9848a1a8mr16627275pzb.16.1680096230581;
+        Wed, 29 Mar 2023 06:23:50 -0700 (PDT)
+Received: from thinkpad ([117.216.120.213])
+        by smtp.gmail.com with ESMTPSA id g7-20020aa78187000000b0062d8107b3c8sm6140226pfi.42.2023.03.29.06.23.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 06:23:50 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 18:53:43 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     andersson@kernel.org, Thinh.Nguyen@synopsys.com,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/5] arm64: dts: qcom: sc8280xp: Add missing dwc3 quirks
+Message-ID: <20230329132343.GD5575@thinkpad>
+References: <20230325165217.31069-1-manivannan.sadhasivam@linaro.org>
+ <20230325165217.31069-2-manivannan.sadhasivam@linaro.org>
+ <ZCKrXZn7Eu/jvdpG@hovoldconsulting.com>
+ <20230328093853.GA5695@thinkpad>
+ <20230329052600.GA5575@thinkpad>
+ <ZCP4MHe+9M24S4nJ@hovoldconsulting.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5777:EE_
-X-MS-Office365-Filtering-Correlation-Id: f583a2f6-37e6-4c24-2ec4-08db3058ce4f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DUSV3J2zWt7v8RCLsVupKb96LZnsaAtkjeYv3WEquBkDJMe8YPoudWNUH2zFg/xiEXEy6yTE6U4XXiup/fLSxC0th+0zHR9Sl3Gt7sOLCsk8K+82aliU+rpBj561XQMIYejc6TX++3qQRgnPU+vkgsjIdeYe0S4A/cL354OxYoOHibGLt6IKaz5svaXjUeqOKwPDmC93tSL8yxj06zEBsGykmShZd9ZXo1lyQ8nLUdo8/1tXB8TeAVM5hnPHJIoT7sEL6MJTGdESIY2ZxQ0o/GV5mxMQyqH0OvQTsLZLfcDjGWLwr3+7rjo60CK0BoHP0OWTCb5sbfUhUAmakwf7oL8kJ+a3xKZcP+t7RfgNax8pLvGzKqPwHloHlC/5YTPabMp/6yUOML8nfeOnUFiU+L/WEDgWHiIbb6uWuweSabGBNM0z1/4zDGFWjMWug3kDXrydYxlgrM/LtkPxC6okmFqyiFYVyM6O5vpZgmtIqo+a4Z7D5GA0H+O0ogxNmM4BZsFXB19ZqmMRq/67n/+eC+e0+YR5XLmTYBPDwBOghs56rAntMZeJRVTNP5rMwzEzopX+MdBlIp27gDV2DNX+pvmREG3u82P2tvSU62WFYvE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39840400004)(366004)(136003)(376002)(396003)(451199021)(4744005)(2906002)(44832011)(38100700002)(4326008)(41300700001)(8936002)(7416002)(5660300002)(86362001)(36756003)(6916009)(316002)(478600001)(6666004)(6486002)(6512007)(6506007)(66556008)(8676002)(66476007)(66946007)(186003)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bXhhr5T8hnRyXVj7vurWstaFxudXtMYre4EDVYzz4Dcw7upyc+qqWQi071wd?=
- =?us-ascii?Q?pgiGY2uWAiIoDDzgH8fV+Yc1CjBjjuqX+yxYVBmA/UXx46r0jam3B79hVHGx?=
- =?us-ascii?Q?oNcqvTLCK0+vPa7WSnPYCMUhFIhE3JgaKRkOAZWs8/QNrw9c5WSMg+h2qSP9?=
- =?us-ascii?Q?eFAOvBldy/vkydQI3fgtoCoDpc7M+wG1QyPUe6MJlutWUCXp3BqUnwc2e2m6?=
- =?us-ascii?Q?t2VFDoiMemH0ITBLIsT8mRcpLUVZaoQ12izQUZsUgTtHhUNBF5co1gfothXm?=
- =?us-ascii?Q?/HjGavjxi0PuVYuQzHf3sSXvNue5xH4tuvnzgbxJ1a6AqiEWRjhyMPre8C90?=
- =?us-ascii?Q?OychksWDXz9KK/fQQPXcUzCAeC1NmalMx0n6v5KjRhRaqWD2892DTIDj7AgZ?=
- =?us-ascii?Q?S1xnz4YuBXVTC7JDL6HbABpUDW8C7dzspobsqjhRKfny8V0NzHui99NsYSdz?=
- =?us-ascii?Q?+9Pu2hGY16GcJaLCncxlX7+E+ZWxH/T2CwduAy0ry93LSrxnXJGIx8pxuW38?=
- =?us-ascii?Q?f3kB+HeRhNjq9hq0ZiOgQ8G5yMhnMswxLKp+l7jn/anHklrKrSPRD53O/bJF?=
- =?us-ascii?Q?6xcgd9V1ULcF23qEglAgXNerMYzR1GB99S2OII/iaaAqCRhGVO/K0vMlZKqU?=
- =?us-ascii?Q?NM+MRT0pmCUBVLRHodIJIc+2Djb/OVJWWX0ZVHkwTxbtLl2wFD9hBVEDZHpq?=
- =?us-ascii?Q?JgZP1jiHWhd5cRCzlB8Br55JaOblqLf3JLdN6M0ok3S7UPuDmxQbdOX6t82S?=
- =?us-ascii?Q?rs3MBGApmGahqTNc6+kewzSudrCyrOHgHfWHq+PnY6m6/ISKRUx22bJABnwX?=
- =?us-ascii?Q?6nM2rnnp4aivh/UTXOTmWVBs5BHeQfbDOlE1FLrOsb8YvEhfw3xSaqTa1UR/?=
- =?us-ascii?Q?yMFL7jERQGivhExbNhEQ/ysMrZhph/N+Louc6CYhXknw2aA7D7q+FQXKlr8p?=
- =?us-ascii?Q?lcZKj/rTT0DFxPDD43TCSXYXhjOUtuDLknZrTF2HxjOb3BhDf19MjVfxN0sx?=
- =?us-ascii?Q?3a6QeborQRZr1vKTQtDtKVhntqJvtxWv2easyr9qdesCFhQO/GMdCrLgJUDH?=
- =?us-ascii?Q?lu9Z9LEPBiEk08sYzKWNj1D/RXF61/wF6TqEP6jssc2FGtDu8MQHSIe4+c3A?=
- =?us-ascii?Q?VWK/TgTQtXEBQBYfNPk7AAcHLq/VkvPI8x7WlLVrRSXDB25bxBuC5gif0Ysr?=
- =?us-ascii?Q?n/fmJ+jo9Jwwiac7WcHNhAB8pvRD25OHJiJaP1OjHlJ6aJZc/xN/7f+DW6lF?=
- =?us-ascii?Q?I1e/xmrl09EXylQPZZfPJ0wtbXXeOp6TyTX1m+dTwoTSx9EB1D3vcPWj2pzH?=
- =?us-ascii?Q?k/jDXUNAkev5if5EYz3SbgGMQLT8K562c8ubCxYtE0Qa6BHugMZYjzmkt6jj?=
- =?us-ascii?Q?FJWaVqujRr+69xnC0eJHcU0y2THcrF70K6PYBhxMM0DPpzVVFbA+xiLXDjat?=
- =?us-ascii?Q?2AyzQ01Au8gDjGH7ba3VMV8leUrTnMYdTIKxnVvQ5JqZB60rA26jIat2crgU?=
- =?us-ascii?Q?k5eQoldt4K1m2gEtkItDy8UsuOedZvxm1AQBnBWuOeB6EL8eeidczTMoi3Km?=
- =?us-ascii?Q?L6VxdrH0pKUIaY6QOAKDm8wHp4MrPuU6Ymb5iJZTx6/PDwgNbKpLrhNU6XyM?=
- =?us-ascii?Q?+SbZ8JkP1b+iqheB2wCzufpscS7AzQXJGBmhEGotvl9J4FzuNUz6rO56zg7v?=
- =?us-ascii?Q?8W24aw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f583a2f6-37e6-4c24-2ec4-08db3058ce4f
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 13:23:38.2819
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: urjkq/diLyr6riLPIwupm2Udne6XFVUmIDN/pclw7xoJbNlW+RYnKKSc/VlqbKKyvjpsJLgoup4mgsFxmBc6HafxqUQih7IthJG9oGhmli8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5777
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZCP4MHe+9M24S4nJ@hovoldconsulting.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,15 +81,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 08:59:29AM -0400, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/net/ethernet/micrel/ksz884x.c:3216:6: error: variable
->   'change' set but not used [-Werror,-Wunused-but-set-variable]
->         int change = 0;
->             ^
-> This variable is not used so remove it.
+On Wed, Mar 29, 2023 at 10:34:56AM +0200, Johan Hovold wrote:
+> On Wed, Mar 29, 2023 at 10:56:00AM +0530, Manivannan Sadhasivam wrote:
+> > On Tue, Mar 28, 2023 at 03:09:03PM +0530, Manivannan Sadhasivam wrote:
+> > > On Tue, Mar 28, 2023 at 10:54:53AM +0200, Johan Hovold wrote:
+> > > > On Sat, Mar 25, 2023 at 10:22:13PM +0530, Manivannan Sadhasivam wrote:
+> > > > > Add missing quirks for the USB DWC3 IP.
+> > > > 
+> > > > This is not an acceptable commit message generally and certainly not for
+> > > > something that you have tagged for stable.
+> > > > 
+> > > > At a minimum, you need to describe why these are needed and what the
+> > > > impact is.
+> > > > 
+> > > 
+> > > I can certainly improve the commit message. But usually the quirks are copied
+> > > from the downstream devicetree where qualcomm engineers would've added them
+> > > based on the platform requirements.
+> > > 
+> > > > Also, why are you sending as part of a series purporting to enable
+> > > > runtime PM when it appears to be all about optimising specific gadget
+> > > > applications?
+> > > > 
+> > > 
+> > > It's not related to this series I agree but just wanted to group it with a
+> > > series touching usb so that it won't get lost.
+> > > 
+> > > I could respin it separately though in v2.
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> That's also generally best for USB patches as Greg expects series to be
+> merged through a single tree.
+> 
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Ok, good to know.
 
+> > > > Did you confirm that the below makes any sense or has this just been
+> > > > copied verbatim from the vendor devicetree (it looks like that)?
+> > > > 
+> > > 
+> > > As you've mentioned, most of the quirks are for gadget mode which is not
+> > > supported by the upstream supported boards. So I haven't really tested them but
+> > > for I assumed that Qcom engineers did.
+> > > 
+> > > > The fact that almost none of the qcom SoCs sets these also indicates
+> > > > that something is not right here.
+> > > > 
+> > > > > Cc: stable@vger.kernel.org # 5.20
+> > > > > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> > > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > > > ---
+> > > > >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
+> > > > >  1 file changed, 14 insertions(+)
+> > > > > 
+> > > > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > > index 0d02599d8867..266a94c712aa 100644
+> > > > > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > > > @@ -3040,6 +3040,13 @@ usb_0_dwc3: usb@a600000 {
+> > > > >  				iommus = <&apps_smmu 0x820 0x0>;
+> > > > >  				phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
+> > > > >  				phy-names = "usb2-phy", "usb3-phy";
+> > > > > +				snps,hird-threshold = /bits/ 8 <0x0>;
+> > > > > +				snps,usb2-gadget-lpm-disable;
+> > > > 
+> > > > Here you are disabling LPM for gadget mode, which makes most of the
+> > > > other properties entirely pointless.
+> > 
+> > Checked with Qcom on these quirks. So this one is just disabling lpm for USB2
+> > and rest of the quirks below are for SS/SSP modes.
+> 
+> No, snps,hird-threshold is for USB2 LPM and so is
+> snps,is-utmi-l1-suspend and snps,has-lpm-erratum as you'll see if you
+> look at the implementation.
+> 
+
+Correct me if I'm wrong. When I look into the code, "snps,is-utmi-l1-suspend"
+and "snps,hird-threshold" are used independently of the LPM mode atleast in one
+place:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c#n2867
+
+But I could be completely wrong here as my understanding of the usb stack is not
+that great.
+
+> > > > > +				snps,is-utmi-l1-suspend;
+> > > > > +				snps,dis-u1-entry-quirk;
+> > > > > +				snps,dis-u2-entry-quirk;
+> > > > 
+> > > > These appear to be used to optimise certain gadget application and
+> > > > likely not something that should be set in a dtsi.
+> > > > 
+> > > 
+> > > I will cross check these with Qcom and respin accordingly.
+> > > 
+> > 
+> > These quirks are needed as per the DWC IP integration with this SoC it seems.
+> > But I got the point that these don't add any values for host only
+> > configurations. At the same time, these quirks still hold true for the SoC even
+> > if not exercised.
+> > 
+> > So I think we should keep these in the dtsi itself.
+> 
+> Please take a closer look at the quirks you're enabling first. Commit
+> 729dcffd1ed3 ("usb: dwc3: gadget: Add support for disabling U1 and U2
+> entries") which added 
+> 
+> > > > > +				snps,dis-u1-entry-quirk;
+> > > > > +				snps,dis-u2-entry-quirk;
+> 
+> explicitly mentions
+> 
+> 	Gadget applications may have a requirement to disable the U1 and U2
+> 	entry based on the usecase.
+> 
+> which sounds like something that needs to be done in a per board dts at
+> least.
+> 
+
+Going by this commit message it sounds like it. But...
+
+> Perhaps keeping all of these in in the dtsi is correct, but that's going
+> to need some more motivation than simply that some vendor does so (as
+> they often do all sorts of things they should not).
+> 
+
+If you read my last reply one more time, I didn't reason it based on the vendor
+code.
+
+But I hear a contradict reply from Qcom saying that these properties are
+required as a part of the DWC3 IP integration with the SoC. I need to recheck
+with them again tomorrow.
+
+Also, if these properties are application specific then they shouldn't be in
+devicetree atleast :/
+
+- Mani
+
+- Mani
+
+> Johan
+
+-- 
+மணிவண்ணன் சதாசிவம்
