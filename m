@@ -2,269 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822EF6CD9E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4C46CD9EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbjC2NES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 09:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S230094AbjC2NFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 09:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjC2NEQ (ORCPT
+        with ESMTP id S229739AbjC2NFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:04:16 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3540B3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:04:13 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id e11so16012736lji.8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 06:04:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680095052;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gK6jCpWS6XZzlwCBse9a1W1MSJWJSORYpFBcbQQ1ryM=;
-        b=ObzUHix/WjxC5bQHVz7xyD1NBSbC4zo49uWu6QPiVZ7UtnZfWb5nkb5lMS0iV+5ku2
-         LLNlJmq5Qs7R/GFGebZ5QpON/BhCjAYrT0WyYY40IEjicb/EvwKRJMIbZAudrRP4OyvI
-         CMiDupUrEtE7wTQ4xRnUEIpf6cG4pSgWU5x7HB8XlN2pENAU2A/AcVYtlRufwLOwSg2i
-         kdAqP5LZiUM9i8N5NmOv4hXYuvNrj/g7o7oj8ROeWLNp8tYkCg/7nKATBLbNjLpUTfov
-         ZsDOzEf4P8ehqnJyUmMFivv/mgyBjRdWI37V77tT9c1jss9nYhBn3CUWLvSk0hO9zSlP
-         ibtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680095052;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gK6jCpWS6XZzlwCBse9a1W1MSJWJSORYpFBcbQQ1ryM=;
-        b=LN7rgEyEtGPQCejke1l9fboHYSCxQdok2vDEvKUfAgLx7WJHYH5nLIBQoCOWSka8+t
-         rhswD0X9G9X5nyHT0xjhilUgPbowRgx/gYCVxG4Ot7fspRvmQEdoQ4Xf7NqhX0IFXWPF
-         LUmEICZ1iMeVgNL2RfRSPtgcZJ2zS+kUtrAYBjutEVXc7iRxO3aWNmkZRoH03sysnrWp
-         0l7vNlUICdmNnE/MXIgdgzM2Bda0Se96/bq2ifYfSmjrinbyPxAGHN2cwnH5IVGZ5PLi
-         8dNomi6LbzrjzPxs6/iwFiudZbgs73JitybKFNuloE00rHqpUudxMk3YM3/84d1bBu6y
-         Hp9w==
-X-Gm-Message-State: AAQBX9e6/zIv0yGNlmV97ZAmQJ0TzI/CA7Lh/8pP2YrdVAzB6L3ZIVln
-        TVYVC9Ugccgu0mzZ1/OqGpweUA==
-X-Google-Smtp-Source: AKy350ZDSe2usqvbDxH0GB/1U1JaD7v7CuKSwNu6clb8QTqhBF3xT0WcREkdQgAOd0io9ri98s2gWw==
-X-Received: by 2002:a2e:320a:0:b0:298:b03d:5715 with SMTP id y10-20020a2e320a000000b00298b03d5715mr6306176ljy.25.1680095052252;
-        Wed, 29 Mar 2023 06:04:12 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id a18-20020a05651c011200b002a483f01d9csm1929207ljb.85.2023.03.29.06.04.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 06:04:11 -0700 (PDT)
-Message-ID: <4518f47f-fde7-be87-6cc0-a034d76e886c@linaro.org>
-Date:   Wed, 29 Mar 2023 15:04:10 +0200
+        Wed, 29 Mar 2023 09:05:09 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48414D2;
+        Wed, 29 Mar 2023 06:05:07 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pmmjr17whz9v7bT;
+        Wed, 29 Mar 2023 20:55:12 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCXFABgNyRk2AzcAQ--.1625S2;
+        Wed, 29 Mar 2023 14:04:43 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
+Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v9 0/4] evm: Do HMAC of multiple per LSM xattrs for new inodes
+Date:   Wed, 29 Mar 2023 15:04:11 +0200
+Message-Id: <20230329130415.2312521-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [EXT] [PATCH v3 1/1] PCI: qcom: Add support for system suspend
- and resume
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Frank Li <frank.li@nxp.com>
-Cc:     "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "kw@linux.com" <kw@linux.com>, "robh@kernel.org" <robh@kernel.org>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_krichai@quicinc.com" <quic_krichai@quicinc.com>,
-        "johan+linaro@kernel.org" <johan+linaro@kernel.org>,
-        "steev@kali.org" <steev@kali.org>,
-        "mka@chromium.org" <mka@chromium.org>, Dhruva Gole <d-gole@ti.com>
-References: <20230327133824.29136-1-manivannan.sadhasivam@linaro.org>
- <20230327133824.29136-2-manivannan.sadhasivam@linaro.org>
- <AM6PR04MB4838C84574BE534DDB0428D0888B9@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <20230329130237.GC5575@thinkpad>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230329130237.GC5575@thinkpad>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwCXFABgNyRk2AzcAQ--.1625S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3ur48CFyUKrW8Ar1DCFW3Jrb_yoWkCFWfpF
+        WUK3WYkrn8AFWUGrWfAa1xuw4SgrWrGrZrGFZ3Jryjy3Z8Wr1xtrySyry5Ca4rXrZ5JFWv
+        qa17Arn8urn0y37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+        0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+        F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+        kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+        xVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa
+        73UjIFyTuYvjxUxo7KDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4tPOgABsA
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
+One of the major goals of LSM stacking is to run multiple LSMs side by side
+without interfering with each other. The ultimate decision will depend on
+individual LSM decision.
 
-On 29.03.2023 15:02, Manivannan Sadhasivam wrote:
-> On Mon, Mar 27, 2023 at 03:29:54PM +0000, Frank Li wrote:
->>
->>
->>> -----Original Message-----
->>> From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>> Sent: Monday, March 27, 2023 8:38 AM
->>> To: lpieralisi@kernel.org; kw@linux.com; robh@kernel.org
->>> Cc: andersson@kernel.org; konrad.dybcio@linaro.org;
->>> bhelgaas@google.com; linux-pci@vger.kernel.org; linux-arm-
->>> msm@vger.kernel.org; linux-kernel@vger.kernel.org;
->>> quic_krichai@quicinc.com; johan+linaro@kernel.org; steev@kali.org;
->>> mka@chromium.org; Manivannan Sadhasivam
->>> <manivannan.sadhasivam@linaro.org>; Dhruva Gole <d-gole@ti.com>
->>> Subject: [EXT] [PATCH v3 1/1] PCI: qcom: Add support for system suspend
->>> and resume
->>>
->>> Caution: EXT Email
->>>
->>> During the system suspend, vote for minimal interconnect bandwidth and
->>> also turn OFF the resources like clock and PHY if there are no active
->>> devices connected to the controller. For the controllers with active
->>> devices, the resources are kept ON as removing the resources will
->>> trigger access violation during the late end of suspend cycle as kernel
->>> tries to access the config space of PCIe devices to mask the MSIs.
->>
->> I remember I met similar problem before. It is relate ASPM settings of NVME.
->> NVME try to use L1.2 at suspend to save restore time. 
->>
->> It should be user decided if PCI enter L1.2( for better resume time) or L2
->> For batter power saving.  If NVME disable ASPM,  NVME driver will free
->> Msi irq before enter suspend,  so not issue access config space by MSI
->> Irq disable function. 
->>
-> 
-> The NVMe driver will only shutdown the device if ASPM is completely disabled in
-> the kernel. They also take powerdown path for some Intel platforms though. For
-> others, they keep the device in power on state and expect power saving with
-> ASPM.
-> 
->> This is just general comment. It is not specific for this patches.  Many platform
->> Will face the similar problem.  Maybe need better solution to handle
->> L2/L3 for better power saving in future. 
->>
-> 
-> The only argument I hear from them is that, when the NVMe device gets powered
-> down during suspend, then it may detoriate the life time of it as the suspend
-> cycle is going to be high.
-I think I asked that question before, but.. Do we know what Windows/macOS do?
+Several changes need to be made to the LSM infrastructure to be able to
+support that. This patch set tackles one of them: gives to each LSM the
+ability to specify one or multiple xattrs to be set at inode creation
+time and, at the same time, gives to EVM the ability to access all those
+xattrs and calculate the HMAC on them.
 
-Konrad
-> 
-> - Mani
-> 
->> Frank Li
->>  
->>>
->>> Also, it is not desirable to put the link into L2/L3 state as that
->>> implies VDD supply will be removed and the devices may go into powerdown
->>> state. This will affect the lifetime of storage devices like NVMe.
->>>
->>> And finally, during resume, turn ON the resources if the controller was
->>> truly suspended (resources OFF) and update the interconnect bandwidth
->>> based on PCIe Gen speed.
->>>
->>> Suggested-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
->>> Acked-by: Dhruva Gole <d-gole@ti.com>
->>> Signed-off-by: Manivannan Sadhasivam
->>> <manivannan.sadhasivam@linaro.org>
->>> ---
->>>  drivers/pci/controller/dwc/pcie-qcom.c | 62 ++++++++++++++++++++++++++
->>>  1 file changed, 62 insertions(+)
->>>
->>> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c
->>> b/drivers/pci/controller/dwc/pcie-qcom.c
->>> index a232b04af048..f33df536d9be 100644
->>> --- a/drivers/pci/controller/dwc/pcie-qcom.c
->>> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
->>> @@ -227,6 +227,7 @@ struct qcom_pcie {
->>>         struct gpio_desc *reset;
->>>         struct icc_path *icc_mem;
->>>         const struct qcom_pcie_cfg *cfg;
->>> +       bool suspended;
->>>  };
->>>
->>>  #define to_qcom_pcie(x)                dev_get_drvdata((x)->dev)
->>> @@ -1820,6 +1821,62 @@ static int qcom_pcie_probe(struct
->>> platform_device *pdev)
->>>         return ret;
->>>  }
->>>
->>> +static int qcom_pcie_suspend_noirq(struct device *dev)
->>> +{
->>> +       struct qcom_pcie *pcie = dev_get_drvdata(dev);
->>> +       int ret;
->>> +
->>> +       /*
->>> +        * Set minimum bandwidth required to keep data path functional during
->>> +        * suspend.
->>> +        */
->>> +       ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
->>> +       if (ret) {
->>> +               dev_err(dev, "Failed to set interconnect bandwidth: %d\n", ret);
->>> +               return ret;
->>> +       }
->>> +
->>> +       /*
->>> +        * Turn OFF the resources only for controllers without active PCIe
->>> +        * devices. For controllers with active devices, the resources are kept
->>> +        * ON and the link is expected to be in L0/L1 (sub)states.
->>> +        *
->>> +        * Turning OFF the resources for controllers with active PCIe devices
->>> +        * will trigger access violation during the end of the suspend cycle,
->>> +        * as kernel tries to access the PCIe devices config space for masking
->>> +        * MSIs.
->>> +        *
->>> +        * Also, it is not desirable to put the link into L2/L3 state as that
->>> +        * implies VDD supply will be removed and the devices may go into
->>> +        * powerdown state. This will affect the lifetime of the storage devices
->>> +        * like NVMe.
->>> +        */
->>> +       if (!dw_pcie_link_up(pcie->pci)) {
->>> +               qcom_pcie_host_deinit(&pcie->pci->pp);
->>> +               pcie->suspended = true;
->>> +       }
->>> +
->>> +       return 0;
->>> +}
->>> +
->>> +static int qcom_pcie_resume_noirq(struct device *dev)
->>> +{
->>> +       struct qcom_pcie *pcie = dev_get_drvdata(dev);
->>> +       int ret;
->>> +
->>> +       if (pcie->suspended) {
->>> +               ret = qcom_pcie_host_init(&pcie->pci->pp);
->>> +               if (ret)
->>> +                       return ret;
->>> +
->>> +               pcie->suspended = false;
->>> +       }
->>> +
->>> +       qcom_pcie_icc_update(pcie);
->>> +
->>> +       return 0;
->>> +}
->>> +
->>>  static const struct of_device_id qcom_pcie_match[] = {
->>>         { .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
->>>         { .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
->>> @@ -1856,12 +1913,17 @@
->>> DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0302,
->>> qcom_fixup_class);
->>>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1000,
->>> qcom_fixup_class);
->>>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001,
->>> qcom_fixup_class);
->>>
->>> +static const struct dev_pm_ops qcom_pcie_pm_ops = {
->>> +       NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_suspend_noirq,
->>> qcom_pcie_resume_noirq)
->>> +};
->>> +
->>>  static struct platform_driver qcom_pcie_driver = {
->>>         .probe = qcom_pcie_probe,
->>>         .driver = {
->>>                 .name = "qcom-pcie",
->>>                 .suppress_bind_attrs = true,
->>>                 .of_match_table = qcom_pcie_match,
->>> +               .pm = &qcom_pcie_pm_ops,
->>>         },
->>>  };
->>>  builtin_platform_driver(qcom_pcie_driver);
->>> --
->>> 2.25.1
->>
-> 
+The first problem that this patch set addresses is to make the
+inode_init_security hook definition suitable to use with EVM which, unlike
+other LSMs, needs to have visibility of all xattrs and not only the one
+that the LSM infrastructure passes to the LSM to be set.
+
+The solution is to replace in the inode_init_security definition the
+name/value/len parameters with the beginning of the array containing all
+xattrs set by LSMs. Due to security_old_inode_init_security() API
+limitation of setting only one xattr, it has been dropped and the remaining
+users, ocfs2 and reiserfs, switch to security_inode_init_security().
+However, due to the complexity of the changes required to fully exploit the
+ability of security_inode_init_security() to set multiple xattrs, those
+users can still set only one xattr (the first set in the xattr array) where
+previously they called security_old_inode_init_security().
+
+Furthermore, while EVM is invoked unlike before, its xattr will not be set
+as it would not be the first set in the xattr array, or if it is the first,
+there would not be protected xattrs to calculate the HMAC on.
+
+Reiserfs, regardless of the switch had anyway another problem: it was
+setting xattrs without the security prefix in the xattr name. That has been
+solved too, by writing the full xattr name in a temporary buffer, before
+passing it to the function which actually writes the xattr.
+
+The second problem this patch set addresses is the limitation of the
+call_int_hook() of stopping the loop when the return value from a hook
+implementation is not zero. Unfortunately, for the inode_init_security hook
+it is a legitimate case to return -EOPNOTSUPP, but this would not
+necessarily mean that there is an error to report to the LSM infrastructure
+but just that an LSM does not will to set an xattr. Other LSMs should be
+still consulted as well.
+
+The solution for this specific case is to replace the call_int_hook() with
+the loop itself, so that -EOPNOTSUPP can be ignored. In addition, the
+default return value of inode_init_security had also to be changed to
+-EOPNOTSUPP, so that the whole security_inode_init_security() does not fail
+due to BPF LSM returning zero and not providing an xattr.
+
+Next, this patch set removes the limitation of creating only two xattrs,
+one by an active LSM and another by EVM. This patch set extends the
+reservation mechanism of the LSM infrastructure, to allow each LSM to
+request one or multiple xattrs. While this could potentially lead to
+reaching the filesystem limits of number/size of the xattrs, it seems not
+an issue that need to be solved by the LSM infrastructure but by the
+filesystems themselves. Currently, if the limit is reached, the only
+workaround would be to use fewer LSMs.
+
+The reservation mechanism concept would have made it very easy for LSMs to
+position themselves correctly in the xattr array, as the LSM infrastructure
+at initialization time changes the number of xattrs requested by each LSM
+with an offset.
+
+However, this opens for the possibility of having gaps in the xattr array,
+due to the fact that an LSM can request xattr slots to the LSM
+infrastructure but not fill them (if it was loaded but not initialized).
+
+Instead, the decision was to add an additional parameter to the
+inode_init_security_hook, the number of filled slots in the xattr array,
+which each LSM is expected to update for each xattr it provides. In this
+way, the next LSM starts to fill after the last filled slot, regardless of
+whether previous LSMs were initialized or not. SELinux, Smack and EVM have
+been updated to use this new mechanism.
+
+Finally, this patch set modifies the evm_inode_init_security() definition
+to be compatible with the inode_init_security hook definition and adds
+support for scanning the whole xattr array and for calculating the HMAC
+on all xattrs provided by LSMs.
+
+This patch set has been tested by introducing several instances of a
+TestLSM (some providing an xattr, some not, one with a wrong implementation
+to see how the LSM infrastructure handles it, one providing multiple xattrs
+and another providing an xattr but in a disabled state). The patch is not
+included in this set but it is available here:
+
+https://github.com/robertosassu/linux/commit/8fba3224e3f7698114ae721fb8e899d322cc1f4c
+
+The test, added to ima-evm-utils, is available here:
+
+https://github.com/robertosassu/ima-evm-utils/blob/evm-multiple-lsms-v9-devel-v2/tests/evm_multiple_lsms.test
+
+The test takes a UML kernel built by Github Actions and launches it several
+times, each time with a different combination of LSMs and filesystems (ext4,
+reiserfs, ocfs2). After boot, it first checks that there is an xattr for each
+LSM providing it (for reiserfs and ocfs2 just the first LSM), and then (for
+ext4) calculates the HMAC in user space and compares it with the HMAC
+calculated by EVM in kernel space.
+
+A test report can be obtained here:
+
+https://github.com/robertosassu/ima-evm-utils/actions/runs/4553749294/jobs/8030902168
+
+The patch set has been tested with both the SElinux and Smack test suites.
+Below, there is the summary of the test results:
+
+SELinux Test Suite result (without patches):
+All tests successful.
+Files=76, Tests=1357, 229 wallclock secs ( 0.45 usr  0.12 sys + 12.76 cusr 16.03 csys = 29.36 CPU)
+Result: PASS
+
+SELinux Test Suite result (with patches):
+All tests successful.
+Files=76, Tests=1357, 231 wallclock secs ( 0.48 usr  0.11 sys + 12.44 cusr 16.21 csys = 29.24 CPU)
+Result: PASS
+
+Smack Test Suite result (without patches):
+95 Passed, 0 Failed, 100% Success rate
+
+Smack Test Suite result (with patches):
+95 Passed, 0 Failed, 100% Success rate
+
+Changelog
+
+v8:
+- Add a new reiserfs patch to write the full xattr name
+- Add num_filled_xattrs parameter to inode_init_security hook (suggested by
+  Paul) and evm_inode_init_security()
+- Change default return value of inode_init_security hook to -EOPNOTSUPP
+- Rename lbs_xattr field of lsm_blob_sizes to lbs_xattr_count
+- Introduce lsm_find_xattr_slot() helper
+- Rename lsm_xattr parameter of evm_init_hmac() to xattrs
+- Retrieve the EVM xattr slot with lsm_find_xattr_slot() and double check
+  with the xattr array terminator
+- Remove security_check_compact_filled_xattrs() (suggested by Paul)
+- Update security_inode_init_security() documentation
+- Ensure that inode_init_security hook incremented the number of filled
+  slots if it returned zero
+- Ensure that xattr name and value are non-NULL in the filled slots
+- Add the xattr name assignment after the xattr value one (suggested by
+  Paul)
+- Drop patches 1 - 3 (already in lsm/next)
+
+v7:
+- Add a patch dependency comment in patch 1 (suggested by Mimi)
+- Restore check of -EOPNOTSUPP status in ocfs2_mknod() and ocfs2_symlink()
+  (reported by Mimi)
+- Add explanation in evm_inode_init_security() why walking through the
+  xattrs array is safe (suggested by Mimi)
+- Document the lbs_xattr field of struct lsm_blob_sizes (suggested by
+  Casey)
+- Move documentation changes of the inode_init_security hook to security.c,
+  after LSM documentation reorganization by Paul
+- Use attributes in plural form in the description of the xattrs parameter
+  of smack_inode_init_security()
+- Check xattr name instead of xattr value in evm_inode_init_security(),
+  for consistency with evm_init_hmac(); equivalent, since
+  security_check_compact_filled_xattrs() rejects xattrs with xattr name
+  NULL and value not NULL, and viceversa
+
+v6:
+- Add a comment in Smack to introduce its xattrs (suggested by Casey)
+- Document the overloaded meaning of -EOPNOTSUPP in
+  security_inode_init_security() (suggested by Mimi)
+
+v5:
+- Modify the cover letter to explain that the goal of this patch set is
+  supporting multiple per LSM xattrs in EVM, and not moving IMA and EVM to
+  the LSM infrastructure (suggested by Mimi)
+- Remove references in the patches description about moving IMA and EVM
+  to the LSM infrastructure (suggested by Mimi)
+- Explain that the additional EVM invocation due to the switch to
+  security_inode_init_security() will not cause the EVM xattr to be added
+  (suggested by Mimi)
+
+v4:
+- Remove patch to call reiserfs_security_free(), already queued
+- Switch ocfs2 and reiserfs to security_inode_init_security() (suggested by
+  Mimi)
+- Remove security_old_inode_init_security() (suggested by Paul)
+- Rename security_check_compact_xattrs() to
+  security_check_compact_filled_xattrs() and add function description
+  (suggested by Mimi)
+- Rename checked_xattrs parameter of security_check_compact_filled_xattrs()
+  to num_filled_xattrs (suggested by Mimi)
+- Rename cur_xattrs variable in security_inode_init_security() to
+  num_filled_xattrs (suggested by Mimi)
+
+v3:
+- Don't free the xattr name in reiserfs_security_free()
+- Don't include fs_data parameter in inode_init_security hook
+- Don't change evm_inode_init_security(), as it will be removed if EVM is
+  stacked
+- Fix inode_init_security hook documentation
+- Drop lsm_find_xattr_slot(), use simple xattr reservation mechanism and
+  introduce security_check_compact_xattrs() to compact the xattr array
+- Don't allocate xattr array if LSMs didn't reserve any xattr
+- Return zero if initxattrs() is not provided to
+  security_inode_init_security(), -EOPNOTSUPP if value is not provided to
+  security_old_inode_init_security()
+- Request LSMs to fill xattrs if only value (not the triple) is provided to
+  security_old_inode_init_security(), to avoid unnecessary memory
+  allocation
+
+v2:
+- rewrite selinux_old_inode_init_security() to use
+  security_inode_init_security()
+- add lbs_xattr field to lsm_blob_sizes structure, to give the ability to
+  LSMs to reserve slots in the xattr array (suggested by Casey)
+- add new parameter base_slot to inode_init_security hook definition
+
+v1:
+- add calls to reiserfs_security_free() and initialize sec->value to NULL
+  (suggested by Tetsuo and Mimi)
+- change definition of inode_init_security hook, replace the name, value
+  and len triple with the xattr array (suggested by Casey)
+- introduce lsm_find_xattr_slot() helper for LSMs to find an unused slot in
+  the passed xattr array
+
+Roberto Sassu (4):
+  reiserfs: Add security prefix to xattr name in
+    reiserfs_security_write()
+  security: Allow all LSMs to provide xattrs for inode_init_security
+    hook
+  evm: Align evm_inode_init_security() definition with LSM
+    infrastructure
+  evm: Support multiple LSMs providing an xattr
+
+ fs/reiserfs/xattr_security.c        |  8 ++-
+ include/linux/evm.h                 | 14 +++--
+ include/linux/lsm_hook_defs.h       |  6 +-
+ include/linux/lsm_hooks.h           | 14 +++++
+ security/integrity/evm/evm.h        |  4 +-
+ security/integrity/evm/evm_crypto.c | 11 +++-
+ security/integrity/evm/evm_main.c   | 41 ++++++++++---
+ security/security.c                 | 94 ++++++++++++++++++++++-------
+ security/selinux/hooks.c            | 18 +++---
+ security/smack/smack_lsm.c          | 33 ++++++----
+ 10 files changed, 179 insertions(+), 64 deletions(-)
+
+-- 
+2.25.1
+
