@@ -2,150 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F806CEFB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09966CEFBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjC2QrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S230355AbjC2QrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjC2QrS (ORCPT
+        with ESMTP id S230347AbjC2QrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:47:18 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A5C525E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:47:17 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54574d6204aso160441337b3.15
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680108436;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XhJ2KAFNUebvt6cQMDTLf5QYVLkhRGTjjjB4Lv8Q8Pw=;
-        b=Nwnor0fuwBFL6HswHVDb9zq4uqB8N0vyANtOGoursE/xCXttz4V6jsoxjL4SKGjtcU
-         vM08UOGTQy3ImsotSEpEn8ev+cnvKUAvL56SaS8B8FBrIaQIcJJDDjylIjDObxUSVj3m
-         /QZ2b+8/qsofV6UllwSgZtticUjx9NgZ0p3PXNaUQQJNdVnoAIr1IyMyMkDLhy+jZkvd
-         3nt/k1QOxZXpVzmtl9BOim/yPZvH5Vvs4toGP76nX15+oc8clHEikoh1Mn2zLLjO+KnC
-         Nb14v+ooTd2RMCQTcprG20lhhxICTFeqHyl2aaxr+1MLBrctSNDVouYcDHucWdrm7uP3
-         p9iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680108436;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XhJ2KAFNUebvt6cQMDTLf5QYVLkhRGTjjjB4Lv8Q8Pw=;
-        b=doU2l7isxRMCV0207S5MptPNQlvU5/SQJe216KLKjBGiFQz8YVIfKzLCp5PFn269Vh
-         gpRw7nxj7uQwJx0MOrut3BMSeY+JgSSMMsMFpk1fPB/Xh+mWk+98PxE+4uG0FxigyREx
-         HT/55IXH0JzKvFZVmqjyJqg1oPxv/EqIYwqEF4Z1habfz0WHV/7F13dfq9EMa1CdXTIf
-         9sDGrGr9hxf00p3JcR/eDCIGeccu65gMoxUhkiwJmWeajd9H74gG40bEBy0hSwn6pwPt
-         zlQzUr32VGVpKHwaw/zCtnQIiZmfQJXLpv+RETFnWp4CvvNfn9g1HlnWl5wSyn5elo/a
-         LDXQ==
-X-Gm-Message-State: AAQBX9eIcCBMQM0UU+kXTV1O8A3Mhlae8mFQiBzDWD5x3bQShn+YqVH9
-        Y99ajbITL3janGBRJaMci2EUw5jOttE=
-X-Google-Smtp-Source: AKy350aIOO/FRysptnp/XYsHQcm9j9T0hsEhp7XgPOREaWpwy9KrpbLjRF48BgXvySig/ZWmHz4PQEOOPoU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:b94:b0:541:698b:7bdb with SMTP id
- ck20-20020a05690c0b9400b00541698b7bdbmr1769126ywb.2.1680108436600; Wed, 29
- Mar 2023 09:47:16 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 09:47:15 -0700
-In-Reply-To: <38601264-1957-579f-f156-c782bb9826cc@amd.com>
-Mime-Version: 1.0
-References: <20230206060545.628502-1-manali.shukla@amd.com>
- <20230206060545.628502-3-manali.shukla@amd.com> <ZB4AOaLRwSB0ClIH@google.com> <38601264-1957-579f-f156-c782bb9826cc@amd.com>
-Message-ID: <ZCRrk0qsdv7rYqFq@google.com>
-Subject: Re: [RFC PATCH kernel 2/2] KVM: SEV: PreventHostIBS enablement for
- SEV-ES and SNP guest
-From:   Sean Christopherson <seanjc@google.com>
-To:     Manali Shukla <manali.shukla@amd.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, jolsa@kernel.org,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com,
-        jpoimboe@kernel.org, pawan.kumar.gupta@linux.intel.com,
-        babu.moger@amd.com, sandipan.das@amd.com, jmattson@google.com,
-        thomas.lendacky@amd.com, nikunj@amd.com, ravi.bangoria@amd.com,
-        eranian@google.com, irogers@google.com, kvm@vger.kernel.org,
-        x86@kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 29 Mar 2023 12:47:22 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320D95276;
+        Wed, 29 Mar 2023 09:47:21 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id C6C5837E;
+        Wed, 29 Mar 2023 16:47:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C6C5837E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1680108441; bh=gGKcyO5IJvGdKPUHgKqWzXoBTk0DhP0TVnP6Gp+Ugus=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=sixA2vqVXrcdX2X+YAJM18lhWFqKVTPDhRua9B1KErOmcaYrxv9mHu20Ovz3wln4N
+         Ghos+FY7cYJk1xXAn7nDbd66b31MP66QG1bK0yR+d7NdAbjezM8w6LLbQZxgGboA93
+         9he4YJv0YPzbr0Ugr9OQ6bZNPIHUSBWtf55DQeEu3WvtpLVEV566K0q418FDHa1/Mi
+         faDHnmc2euKTU3oT6k3WbPjSRE/vzqDbECnABkuxa9idUrHqXZo88JAChBmt/pkKHp
+         HqX5fLcgbGlETUTsn/UG1sRPe3l1iFmVCw2O02I6SlN0971E300y7f+6FOS6icjyf/
+         PyKzKrEC4EPjQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>,
+        Akira Yokosawa <akiyks@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs/sp_SP: Remove ZERO WIDTH SPACE in memory-barriers.txt
+In-Reply-To: <41839138-3d85-ea82-7832-5da5f9addeb1@amd.com>
+References: <c38176c7-c30a-4c2c-3516-8d3be1c267dc@gmail.com>
+ <41839138-3d85-ea82-7832-5da5f9addeb1@amd.com>
+Date:   Wed, 29 Mar 2023 10:47:19 -0600
+Message-ID: <87a5zvjyi0.fsf@meer.lwn.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023, Manali Shukla wrote:
-> On 3/25/2023 1:25 AM, Sean Christopherson wrote:
-> > On Mon, Feb 06, 2023, Manali Shukla wrote:
-> >> -	if (sev_es_guest(vcpu->kvm))
-> >> +	if (sev_es_guest(vcpu->kvm)) {
-> >> +		bool ibs_fetch_active, ibs_op_active;
-> >> +		u64 ibs_fetch_ctl, ibs_op_ctl;
-> >> +
-> >> +		if (svm->prevent_hostibs_enabled) {
-> >> +			/*
-> >> +			 * With PreventHostIBS enabled, IBS profiling cannot
-> >> +			 * be active when VMRUN is executed. Disable IBS before
-> >> +			 * executing VMRUN and, because of a race condition,
-> >> +			 * enable the PreventHostIBS window if IBS profiling was
-> >> +			 * active.
-> > 
-> > And the race can't be fixed because...?
-> 
-> Race can not be fixed because VALID and ENABLE bit for IBS_FETCH_CTL and IBS_OP_CTL
-> are contained in their same resepective MSRs. Due to this reason following scenario can
-> be generated:
-> Read IBS_FETCH_CTL (IbsFetchEn bit is 1 and IBSFetchVal bit is 0)
-> Write IBS_FETCH_CTL (IbsFetchEn is 0 now)
-> Imagine in between Read and Write, IBSFetchVal changes to 1. Write to IBS_FETCH_CTL will
-> clear the IBSFetchVal bit. When STGI is executed after VMEXIT, the NMI is taken and check for
-> valid mask will fail and generate Dazed and Confused NMI messages.
-> Please refer to cover letter for more details.
+Carlos Bilbao <carlos.bilbao@amd.com> writes:
 
-I understand the race, I'm asking why this series doesn't fix the race.  Effectively
-suppressing potentially unexpected NMIs because PreventHostIBS was enable is ugly.
+> On 3/29/23 12:22 AM, Akira Yokosawa wrote:
+>> As this file is included literally, ZERO WIDTH SPACE causes
+>> "make pdfdocs" to emit messages which read:
+>>=20
+>>   Missing character: There is no =E2=80=8B (U+200B) in font DejaVu Sans =
+Mono/OT:script=3Dlatn;language=3Ddflt;!
+>>   Missing character: There is no =E2=80=8B (U+200B) in font DejaVu Sans =
+Mono/OT:script=3Dlatn;language=3Ddflt;!
+>>=20
+>> U+200B (ZERO WIDTH SPADE) has no effect in literal blocks.
+>> Remove them and get rid of those noises.
+>>=20
+>> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+>> Cc: Carlos Bilbao <carlos.bilbao@amd.com>
+>> Cc: Jonathan Corbet <corbet@lwn.net>
+>> ---
+>> Hi,
+>>=20
+>> Offending commit is 259b007f5729 ("docs/sp_SP: Add memory-barriers.txt
+>> Spanish translation") merged into v6.2.
+>> As this is not a bug fix, I'm not putting a Fixes: tag.
+>>=20
+>> Note: It might be hard for human eyes to see where the removed
+>> ZERO WIDTH SPACEs were. :-)
+>>=20
+>>         Thanks, Akira
+>
+> Good catch, Akira! Acked-by: Carlos Bilbao <carlos.bilbao@amd.com>
 
-> >> +			 */
-> >> +			ibs_fetch_active =
-> >> +				amd_disable_ibs_fetch(&ibs_fetch_ctl);
-> >> +			ibs_op_active =
-> >> +				amd_disable_ibs_op(&ibs_op_ctl);
-> >> +
-> >> +			amd_prevent_hostibs_window(ibs_fetch_active ||
-> >> +						   ibs_op_active);
-> >> +		}
-> >> +
-> >>  		__svm_sev_es_vcpu_run(svm, spec_ctrl_intercepted);
-> >> -	else
-> >> +
-> >> +		if (svm->prevent_hostibs_enabled) {
-> >> +			if (ibs_fetch_active)
-> >> +				amd_restore_ibs_fetch(ibs_fetch_ctl);
-> >> +
-> >> +			if (ibs_op_active)
-> >> +				amd_restore_ibs_op(ibs_op_ctl);
-> > 
-> > IIUC, this adds up to 2 RDMSRs and 4 WRMSRs to the VMRUN path.  Blech.  There's
-> > gotta be a better way to implement this.  
-> 
-> I will try to find a better way to implement this.
-> 
-> > Like PeterZ said, this is basically
-> > exclude_guest.
-> 
-> As I mentioned before, exclude_guest lets the profiler decide whether it wants to trace the guest
-> data or not, whereas PreventHostIBS lets the owner of the guest decide whether host can trace guest's
-> data or not.
+Carlos, when you put an Acked-by in the middle of a line like that, b4
+no longer sees it.
 
-PreventHostIBS is purely an enforcement, it does not actually do anything to
-disable tracing of the guest.  What PeterZ and I are complaining about is that
-instead of integrating this feature with exclude_guest, e.g. finding a way to
-make guest tracing mutually exclusive with KVM_RUN so that PreventHostIBS can be
-contexted switched according, this series instead backdoors into perf to forcefully
-disable tracing.
+Anyway, I've applied the patch, thanks.
 
-In other words, please try to create a sane contract between userspace, perf, and
-KVM, e.g. disallow tracing a guest with PreventHostIBS at some level instead of
-silently toggling tracing around VMRUN.
+jon
