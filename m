@@ -2,141 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB5456CD852
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC3B6CD853
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjC2LTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
+        id S229748AbjC2LTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjC2LTC (ORCPT
+        with ESMTP id S229665AbjC2LTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:19:02 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EA34481
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:18:49 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id s20so15672595ljp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:18:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680088728;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aumpSLpdIfLau4SMf/sV4ChK4mZM2lEguzptioMGQ4U=;
-        b=uFwVrsI6SSC2d9PykTW4cU7uDFJl43V+qNoP5Mu9QsCHu21y6cgb5yiaCUIA8gcaE6
-         jjUixrJNaWA1Cj+Nmuvxm26mz/COosJGIcydHRU5IXxvq7hB8lFlte0K+AiRc89sH5vZ
-         R7KEWf9G/LC/tLe122uw/eB1mbeS+uaBQFi1yCdDM+apYT2Z7ca2ENnNyIBDDQIAE8JV
-         +lxiLDOGiQZqygnP33zQAp+4hlaecddzfea4juzVcxvG1X54WucAwLCDvYYRKgoa7K3N
-         3ZTvWzmgYW5m9I2iOHEy8Qy6GVl9d2U3LtxcOGI8AlkIeKPyeVHUmiJA2pj46nT0rvPP
-         jrTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680088728;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aumpSLpdIfLau4SMf/sV4ChK4mZM2lEguzptioMGQ4U=;
-        b=KF/RdhR3am83h/A3XOFM5xsEOdUy7n7gWAgN6ZO1v7cezmduaPA/S6BoxlVftqdOw7
-         T28S/SVKL7mfc/dU/2EDH2wmTypUpnS6TxGLcLu6LWWxajggso144LDzD1La44re4ZUR
-         aH32CQQShsa41bLtGMvBAUl4J+CZSXLWnjJ2XNTEpQkXCA7PwilfOx2Nymou2OxdVv+q
-         VrWIMnbXc1xUhrod4YLiXROsy2WrfgbunUIk8691cehXSAbUzHwZ6H3m5H29dzUKRxSI
-         134PhUleRdkhU1alHbmGONGU1T5BgL4c8evTkU3BP2B+KJqpBw9HJ4coqDNg+LojZUgf
-         tv+Q==
-X-Gm-Message-State: AAQBX9fjjWGVGDPeL7Loac/v0XsJF34NI30JK59VlXP1ACq5mAvToRFa
-        jTUT1AmhcGBcoHNtI92ns0O8lQ==
-X-Google-Smtp-Source: AKy350Y+FUEY3T5G6lVTIZU60xd7NyIE28Cebhu9hQFEyNetn4hH5Q2gpXeT36vTCVqan1zZiOD9Tw==
-X-Received: by 2002:a2e:3011:0:b0:298:b338:f5db with SMTP id w17-20020a2e3011000000b00298b338f5dbmr5451392ljw.52.1680088728062;
-        Wed, 29 Mar 2023 04:18:48 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id u9-20020a2e8449000000b00293534d9760sm5490627ljh.127.2023.03.29.04.18.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 04:18:47 -0700 (PDT)
-Message-ID: <09f50ca6-3480-0c8d-9494-35893393d205@linaro.org>
-Date:   Wed, 29 Mar 2023 13:18:46 +0200
+        Wed, 29 Mar 2023 07:19:36 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7263AB8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=ileIkfmdnMy/56ic43iEWAbjiYmiGoaU3VQE/Y3cqAg=; b=gr9/E8pZqbhqiYDFGxPWEfMFpX
+        Jnq15hdxqRt+/AVKdTaX0L/C2YNzfxaYQZjaGd9OZrIFvir20ydz3/kVcUtFXE/CGFArtBvD/VA/r
+        V8V/2MWFgAEC3dJrxUddNXBoSKxGRXBv8uIk8YWdsNAF/z4EEcI9tfbtxbnGcm4FD8IKrEAzrMBnf
+        4TBsJbhAERlu2yw0tYI9koz/bZ9HAWSZVqy12DfIvcUN9Sqq3lh8A1Lv/qU94wOgmL0P9oeqMad49
+        706a+dbkxfDuSnzUosevxH8twwrwXTh0W22Wn4mmPfysXa075e+dCyS9JF7/wYh/zK8MxkEDnSlup
+        xsLqmM+s4+1dAQ23PcCZwMrx+TkhTvKEERu6au2PMRgpTHNhVJOAYiLFsx8QIHi+Djp4u0pG6jbjU
+        uH+E4jTU9dSlfSS++Gep+1pjNwkCVJlL46Gx/T1J0nAOok9GF5bPWoW6LQh0Qn21UQHYFy6X+1JZ3
+        aRcCmxjtJ88ApqewZeex1MWe8Ebd3qVtwE9YDMASV/0lmTZ6yZ55ByVTzSR2p7TRmHFMetm9RWDb7
+        PAV3TohNZrGSmIa0vSy96qss3ENioYATrpMRTUv4SvmRQQDQvTPyrsr1Jfm8RvqhbyyY90Bf478b6
+        8FOkbqikwL49KjWu6RCjiH8dByNLlJAcGuKmctKyQ=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jeff Layton <jlayton@kernel.org>, lucho@ionkov.net,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Amir Goldstein <amir73il@gmail.com>,
+        Pankaj Raghav <p.raghav@samsung.com>
+Subject: Re: 9p caching with cache=loose and cache=fscache
+Date:   Wed, 29 Mar 2023 13:19:08 +0200
+Message-ID: <2322056.HEUtEhvpMu@silver>
+In-Reply-To: <ZCNlWnQTbWoBBPd2@codewreck.org>
+References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org>
+ <ZCMmrnmZFcH65Orp@bombadil.infradead.org> <ZCNlWnQTbWoBBPd2@codewreck.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: interrupt-controller: mpm: Allow passing
- reg through phandle
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230328-topic-msgram_mpm-v1-0-1b788a5f5a33@linaro.org>
- <20230328-topic-msgram_mpm-v1-1-1b788a5f5a33@linaro.org>
- <863d5a85-3399-5a43-b755-1316e3adcfec@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <863d5a85-3399-5a43-b755-1316e3adcfec@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wednesday, March 29, 2023 12:08:26 AM CEST Dominique Martinet wrote:
+> Luis Chamberlain wrote on Tue, Mar 28, 2023 at 10:41:02AM -0700:
+> > >   "To speedup things you can also consider to use e.g. cache=loose instead.
+> > 
+> > My experience is that cache=loose is totally useless.
+> 
+> If the fs you mount isn't accessed by the host while the VM is up, and
+> isn't shared with another guest (e.g. "exclusive share"), you'll get
+> what you expect.
+> 
+> I have no idea what people use qemu's virtfs for but this is apparently
+> common enough that it was recommended before without anyone complaining
+> since that started being recommended in 2011[1] until now?
+> 
+> [1] https://wiki.qemu.org/index.php?title=Documentation/9psetup&diff=2178&oldid=2177
+> 
+> (now I'm not arguing it should be recommended, my stance as a 9p
+> maintainer is that the default should be used unless you know what
+> you're doing, so the new code should just remove the 'cache=none'
+> altogether as that's the default.
+> With the new cache models Eric is preparing comes, we'll get a new safe
+> default that will likely be better than cache=none, there is no reason
+> to explicitly recommend the historic safe model as the default has
+> always been on the safe side and we have no plan of changing that.)
+
+It's not that I receive a lot of feedback for what people use 9p for, nor am I
+QEMU's 9p maintainer for a long time, but so far contributors cared more about
+performance and other issues than propagating changes host -> guest without
+reboot/remount/drop_caches. At least they did not care enough to work on
+patches.
+
+Personally I also use cache=loose and only need to push changes host->guest
+once in a while.
+
+> > >    That will deploy a filesystem cache on guest side and reduces the amount of
+> > >    9p requests to hosts. As a consequence however guest might not see file
+> > >    changes performed on host side *at* *all*
+> > 
+> > I think that makes it pretty useless, aren't most setups on the guest read-only?
+> > 
+> > It is not about "may not see", just won't. For example I modified the
+> > Makefile and compiled a full kernel and even with those series of
+> > changes, the guest *minutes later* never saw any updates.
+> 
+> read-only on the guest has nothing to do with it, nor has time.
+> 
+> If the directory is never accessed on the guest before the kernel has
+> been built, you'll be able to make install on the guest -- once, even if
+> the build was done after the VM booted and fs mounted.
+> 
+> After it's been read once, it'll stay in cache until memory pressure (or
+> an admin action like umount/mount or sysctl vm.drop_caches=3) clears it.
+> 
+> I believe that's why it appeared to work until you noticed the issue and
+> had to change the mount option -- I'd expect in most case you'll run
+> make install once and reboot/kexec into the new kernel.
+> 
+> It's not safe for your usecase and cache=none definitely sounds better
+> to me, but people should use defaults make their own informed decision.
+
+It appears to me that read-only seems not to be the average use case for 9p,
+at least from the command lines I received. It is often used in combination
+with overlayfs though.
+
+I (think) the reason why cache=loose was recommended as default option on the
+QEMU wiki page ages ago, was because of its really poor performance at that
+point. I would personally not go that far and discourage people from using
+cache=loose in general, as long as they get informed about the consequences.
+You still get a great deal of performance boost, the rest is for each
+individual to decide.
+
+Considering that Eric already has patches for revalidating the cache in the
+works, I think the changes I made on the other QEMU wiki page are appropriate,
+including the word "might" as it's soon only a matter of kernel version.
+
+> >>   In the above example the folder /home/guest/9p_setup/ shared of the
+> >>   host is shared with the folder /tmp/shared on the guest. We use no
+> >>   cache because current caching mechanisms need more work and the
+> >>   results are not what you would expect."
+> >
+> > I got a wiki account now and I was the one who had clarified this.
+> 
+> Thanks for helping making this clearer.
+
+Yep, and thanks for making a wiki account and improving the content there
+directly. Always appreciated!
 
 
-On 29.03.2023 10:27, Krzysztof Kozlowski wrote:
-> On 28/03/2023 12:02, Konrad Dybcio wrote:
->> Due to the wild nature of the Qualcomm RPM Message RAM, we can't really
->> use 'reg' to point to the MPM's slice of Message RAM without cutting into
->> an already-defined RPM MSG RAM node used for GLINK and SMEM.
->>
->> Document passing the register space as a slice of SRAM through the
->> qcom,rpm-msg-ram property. This also makes 'reg' no longer required.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  .../devicetree/bindings/interrupt-controller/qcom,mpm.yaml          | 6 +++++-
->>  1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
->> index 509d20c091af..77fe5e0b378f 100644
->> --- a/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
->> +++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
->> @@ -30,6 +30,11 @@ properties:
->>      description:
->>        Specifies the base address and size of vMPM registers in RPM MSG RAM.
->>  
->> +  qcom,rpm-msg-ram:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description:
->> +      Phandle to the APSS MPM slice of the RPM Message RAM
->> +
->>    interrupts:
->>      maxItems: 1
->>      description:
->> @@ -64,7 +69,6 @@ properties:
->>  
->>  required:
->>    - compatible
->> -  - reg
-> 
-> Either:
-> 1. make reg deprecated and require qcom,rpm-msg-ram
-> or
-> 2. you need oneOf:required for reg and qcom,rpm-msg-ram
-Right, let's go with 1.
 
-Konrad
-> 
->>    - interrupts
->>    - mboxes
->>    - interrupt-controller
->>
-> 
-> Best regards,
-> Krzysztof
-> 
