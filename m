@@ -2,88 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501EC6CF372
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AB76CF373
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjC2TpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
+        id S229944AbjC2Tpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjC2To7 (ORCPT
+        with ESMTP id S229556AbjC2Tpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:44:59 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9235B90;
-        Wed, 29 Mar 2023 12:44:42 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-17997ccf711so17441632fac.0;
-        Wed, 29 Mar 2023 12:44:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680119075;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gw4BTbq/GKEHZpknHsWKDHl2LDWv94M+hU6ER2t+0i0=;
-        b=qAfe8epRU9bO9aRwl9zLOvj5KJhwhk0onBok+LhJt99dJnSi4wd2vUUW35ym0jv/NH
-         uvgGaaewqlXl6q1jKhdRJUkGhtD0lyiAt0pIStsQuVFrFy2f8OiFheaM/mNc+LbeO4iq
-         pD8FCR3NDUucK+J0Snq6XpxGe3bW35IGcG5qZ+0HuBN4UA5vYSTUMlkqEsarLX4ytifm
-         gCl1WVJ2t1HDAnNhKKkGgeaaSgOT6YjJkBG4IszYHKD8J03PH1rbmKoqbKymyuzQrnJ6
-         xpNoRw2ofybvE8D2pKOor9Ja5/NO5KYfG6mMuyZWb62AgWXOGVYihOEWAfQiCfM7UUAR
-         90wg==
-X-Gm-Message-State: AAQBX9fNUNOuxg+/MGGtJjeb7HsH/Y5yxXPmikqKgX0t2M5N/bXWHEoc
-        TXZPIpLuPaCjg5VsdcEBug==
-X-Google-Smtp-Source: AK7set+O9Odhp1fWLs2DYIMjVAxvfspb1xzgtELXVpLM0P2qPRhdawCZdo1a7m777DWX9U02hiRWpw==
-X-Received: by 2002:a05:6870:65a5:b0:17a:c102:b449 with SMTP id fp37-20020a05687065a500b0017ac102b449mr12497538oab.59.1680119075716;
-        Wed, 29 Mar 2023 12:44:35 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id tk6-20020a05687189c600b0017703cd8ff6sm12085149oab.7.2023.03.29.12.44.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 12:44:35 -0700 (PDT)
-Received: (nullmailer pid 4097012 invoked by uid 1000);
-        Wed, 29 Mar 2023 19:44:34 -0000
-Date:   Wed, 29 Mar 2023 14:44:34 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Michael Srba <Michael.Srba@seznam.cz>,
-        Harigovindan P <harigovi@codeaurora.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] dt-bindings: display: panel-simple: merge Innolux
- p120zdg-bf1
-Message-ID: <20230329194434.GA4096624-robh@kernel.org>
-References: <20230326155425.91181-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230326155425.91181-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Wed, 29 Mar 2023 15:45:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51773A2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:45:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF2E861CEA
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 19:45:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E09CC433EF;
+        Wed, 29 Mar 2023 19:45:50 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1phbjx-002Re8-0V;
+        Wed, 29 Mar 2023 15:45:49 -0400
+Message-ID: <20230329194516.146147554@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Wed, 29 Mar 2023 15:45:16 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [for-next][PATCH 00/25] tracing: Updates for 6.4
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 05:54:20PM +0200, Krzysztof Kozlowski wrote:
-> There is nothing special in Innolux p120zdg-bf1 panel, so just like
-> other Innolux panels it can be made part of panel-simple.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../display/panel/innolux,p120zdg-bf1.yaml    | 43 -------------------
->  .../bindings/display/panel/panel-simple.yaml  |  2 +
->  2 files changed, 2 insertions(+), 43 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.yaml
+  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+trace/for-next
 
-Series applied to drm-misc-next.
+Head SHA1: 88fe1ec75fcb296579e05eaf3807da3ee83137e4
 
-Rob
+
+Beau Belgrave (12):
+      tracing/user_events: Split header into uapi and kernel
+      tracing/user_events: Track fork/exec/exit for mm lifetime
+      tracing/user_events: Use remote writes for event enablement
+      tracing/user_events: Fixup enable faults asyncly
+      tracing/user_events: Add ioctl for disabling addresses
+      tracing/user_events: Update self-tests to write ABI
+      tracing/user_events: Add ABI self-test
+      tracing/user_events: Use write ABI in example
+      tracing/user_events: Update documentation for ABI
+      tracing/user_events: Charge event allocs to cgroups
+      tracing/user_events: Limit global user_event count
+      tracing/user_events: Align structs with tabs for readability
+
+Masami Hiramatsu (Google) (7):
+      fprobe: Pass entry_data to handlers
+      lib/test_fprobe: Add private entry_data testcases
+      fprobe: Add nr_maxactive to specify rethook_node pool size
+      lib/test_fprobe: Add a test case for nr_maxactive
+      fprobe: Skip exit_handler if entry_handler returns !0
+      lib/test_fprobe: Add a testcase for skipping exit_handler
+      docs: tracing: Update fprobe documentation
+
+Ross Zwisler (3):
+      selftests: use canonical ftrace path
+      leaking_addresses: also skip canonical ftrace path
+      tools/kvm_stat: use canonical ftrace path
+
+Steven Rostedt (Google) (3):
+      tracing: Add "fields" option to show raw trace event fields
+      tracing/user_events: Use print_format_fields() for trace output
+      tracing: Unbreak user events
+
+----
+ Documentation/trace/fprobe.rst                    |  16 +-
+ Documentation/trace/ftrace.rst                    |   6 +
+ Documentation/trace/user_events.rst               | 167 ++--
+ fs/exec.c                                         |   2 +
+ include/linux/fprobe.h                            |  10 +-
+ include/linux/sched.h                             |   5 +
+ include/linux/user_events.h                       | 101 ++-
+ include/uapi/linux/user_events.h                  |  81 ++
+ kernel/exit.c                                     |   2 +
+ kernel/fork.c                                     |   2 +
+ kernel/trace/Kconfig                              |   6 +-
+ kernel/trace/bpf_trace.c                          |  17 +-
+ kernel/trace/fprobe.c                             |  32 +-
+ kernel/trace/trace.c                              |   7 +-
+ kernel/trace/trace.h                              |   2 +
+ kernel/trace/trace_events_user.c                  | 932 +++++++++++++++++-----
+ kernel/trace/trace_output.c                       | 168 ++++
+ kernel/trace/trace_output.h                       |   2 +
+ lib/test_fprobe.c                                 | 105 ++-
+ samples/fprobe/fprobe_example.c                   |   7 +-
+ samples/user_events/example.c                     |  45 +-
+ scripts/leaking_addresses.pl                      |   1 +
+ tools/kvm/kvm_stat/kvm_stat                       |   2 +-
+ tools/testing/selftests/mm/protection_keys.c      |   4 +-
+ tools/testing/selftests/user_events/Makefile      |   2 +-
+ tools/testing/selftests/user_events/abi_test.c    | 226 ++++++
+ tools/testing/selftests/user_events/dyn_test.c    |   2 +-
+ tools/testing/selftests/user_events/ftrace_test.c | 162 ++--
+ tools/testing/selftests/user_events/perf_test.c   |  39 +-
+ 29 files changed, 1692 insertions(+), 461 deletions(-)
+ create mode 100644 include/uapi/linux/user_events.h
+ create mode 100644 tools/testing/selftests/user_events/abi_test.c
