@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319FD6CDB61
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2CE6CDB72
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjC2OCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        id S230408AbjC2ODP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjC2OCW (ORCPT
+        with ESMTP id S230121AbjC2ODJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:02:22 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E8E4C1C
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:01:59 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so16251909pjz.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:01:59 -0700 (PDT)
+        Wed, 29 Mar 2023 10:03:09 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA20469C
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:02:17 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id b7so239799pfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 07:02:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680098519;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+t+rqepYDiPCeucRwMGif55QGbm9o8+zPctzSfAB80U=;
-        b=i86veqBnDoigJJiVx28C2dy2G9XN+6v4XIy8vWr19qwezqy4lmNfvb+M35MDPFXpe8
-         VsEXhCWWC5nFZKYf/n4mL+fXaPtb9lEc7RtQ6k4gra8g48qjyn+2ha7fa9FDXhCDN6hi
-         x3YdNPXWQRHms6ouL0kgVgslYOVsdr6fKKdnCsZG7NmiPhXAhFRXWRAhAcRJaOXaB5zv
-         QvuP7Av6kK8z6yYIEV70DY07BrglUWW+Ep11oOTS5+dvAYOqS4KXfc/pICdhDDN4g3L+
-         Kah4r38GUt6ptCnbFgMf3lDtM9s6pH5yR0HmPWxVkcDDPxjiU2eHpdyOYgo4yrN6OfxR
-         nr5g==
+        d=bytedance.com; s=google; t=1680098536;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iyRNuAUEDwU7cFP/FwiLl7ToUiN3TCE52oxG0Yaf7cc=;
+        b=iQ4wh80Kq03ysjTxXIDtcgtYgWFf6onO3QJVR/Nz97PoDHP60/cNowM16zO+Dqsw+9
+         pNmJwbEaF/x0ErB8rjPHZTcgPOf9AKZQ0k8yRx5q71DyNpzpYXDyERVEHz2raK6RmGnf
+         Zp3xhYFnWawNieU/+GcGMMBAIAEP+/Rx5XMwnHE8JMxdZq91ivCusm9hYMc+qQKPYyLk
+         mAQi/PcSWscDwgpGp61vKmgEfO702Xp8XOm2D2v0w9wHWXVAzRlf+aWEcDe0D9KmRXpw
+         GM8XTzTGXfugqVUWjbMWKLhTN8xyIDwb2ZZQCG3KsTvVIrCIpWlpxNdtuCS8lq/S0ObG
+         qZRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680098519;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+t+rqepYDiPCeucRwMGif55QGbm9o8+zPctzSfAB80U=;
-        b=Zh5PLFV2lGxMAjMsQwUhxjoRSUMwp4TWJ6jkI4BZ2bXgn2purm7Z0410U0E7oC7f4/
-         2ddYfiyTPhds5oNaEBJpFcv81BQJ1b0iovT4S83SbwwJFc+0SDRfJGjSsl7btJh9iJTd
-         A7ZcNVQ5fP2FSBDm0oAM6yCQ+bLZISPacgvBwueO/e0VAWYMU0qj0ef5iqDbkrrlIBkG
-         8AL89nNE76rvtuaWLpgTCAWR5v0CqUFP96ySgLfjXaO3kfEHcNew3EpUKbhrcsg047JA
-         sXw4wAliPRPt/sg6a34Lc3hLK32UDE3dveNoIMdpcAbbzOnMbksijmGXELMW5zPRiN/E
-         YYsw==
-X-Gm-Message-State: AO0yUKXWPwpSt4uegEOuHtb/sANzBbUWR7Hw0Z+WEmHNrvp8rTezzDFk
-        Cb0VR4yvvQ1HwZI1Di0n9Brk
-X-Google-Smtp-Source: AK7set9wQikTSV1pgs3dy6STodYlwf25gv+l3pyiPdbF2QYVGcKDUJ3vgqvGI1rALG4VDgx9tbdNeA==
-X-Received: by 2002:a05:6a20:b29f:b0:cc:a8d7:ad7e with SMTP id ei31-20020a056a20b29f00b000cca8d7ad7emr15656875pzb.60.1680098518618;
-        Wed, 29 Mar 2023 07:01:58 -0700 (PDT)
-Received: from thinkpad ([117.216.120.213])
-        by smtp.gmail.com with ESMTPSA id 16-20020aa79250000000b005e4d8c6168csm23034693pfp.210.2023.03.29.07.01.54
+        d=1e100.net; s=20210112; t=1680098536;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iyRNuAUEDwU7cFP/FwiLl7ToUiN3TCE52oxG0Yaf7cc=;
+        b=0v1LNq4ncsld/flUJ9lsXb/TTpl7NvUL7nCMv6eXSP2fi0XCqD+I6UPDOt2P54Wokc
+         8qRPEt6vP4DURusV6tJXpNae7QkD38UBd6g8fBiMy/aDMDOiXpw2OfPd1i/7jDbEyjXk
+         CrUIDaNHTGhGmX9qRiMEUrtMp1FaKNGgGwujB/Xl2uM6K3ByfMfrlmqvdpF00EabFLma
+         hvdE01qGt0N4WHGqut/bhMIwLSWa0zg3W+kj7CrQcvZmlcCcuXdU0oNunNPFUJMqK+Du
+         F49E6wPWw7vaULR/LJoNsDmEdyOSwokfbSdY4zPjd0/fjfotR865dD+rVyVr24e/ajW4
+         lONQ==
+X-Gm-Message-State: AO0yUKUTfbmlLy4zWJ0Tdw8eE3sln6zCeJ6KZVBMM3KBRjBa3B0lO/iu
+        QV7frxyQ6I2R/DW3apoVrl4j/Q==
+X-Google-Smtp-Source: AKy350YWKcU5Tz0vDx13KeDsTJuXEcbEEysoKSFRGlDMpHfxoiSVpaPxA8XEoRCVcz3K1tRN6s+6Sg==
+X-Received: by 2002:aa7:95a4:0:b0:626:dc8:b004 with SMTP id a4-20020aa795a4000000b006260dc8b004mr19577552pfk.26.1680098536504;
+        Wed, 29 Mar 2023 07:02:16 -0700 (PDT)
+Received: from C02G705SMD6V.bytedance.net ([61.213.176.14])
+        by smtp.gmail.com with ESMTPSA id y17-20020aa78051000000b006288ca3cadfsm5399468pfm.35.2023.03.29.07.02.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 07:01:58 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 19:31:50 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org,
-        mka@chromium.org, Dhruva Gole <d-gole@ti.com>
-Subject: Re: [PATCH v3 1/1] PCI: qcom: Add support for system suspend and
- resume
-Message-ID: <20230329140150.GE5575@thinkpad>
-References: <20230327133824.29136-1-manivannan.sadhasivam@linaro.org>
- <20230327133824.29136-2-manivannan.sadhasivam@linaro.org>
- <ZCQLWzqKPrusMro+@hovoldconsulting.com>
- <20230329125232.GB5575@thinkpad>
- <ZCQ69xyQ4mwTow1W@hovoldconsulting.com>
+        Wed, 29 Mar 2023 07:02:16 -0700 (PDT)
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+To:     dhowells@redhat.com, linux-cachefs@redhat.com
+Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        jefflexu@linux.alibaba.com, hsiangkao@linux.alibaba.com,
+        yinxin.x@bytedance.com, Jia Zhu <zhujia.zj@bytedance.com>
+Subject: [PATCH V5 1/5] cachefiles: introduce object ondemand state
+Date:   Wed, 29 Mar 2023 22:01:51 +0800
+Message-Id: <20230329140155.53272-2-zhujia.zj@bytedance.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+In-Reply-To: <20230329140155.53272-1-zhujia.zj@bytedance.com>
+References: <20230329140155.53272-1-zhujia.zj@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCQ69xyQ4mwTow1W@hovoldconsulting.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -81,69 +72,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 03:19:51PM +0200, Johan Hovold wrote:
-> On Wed, Mar 29, 2023 at 06:22:32PM +0530, Manivannan Sadhasivam wrote:
-> > On Wed, Mar 29, 2023 at 11:56:43AM +0200, Johan Hovold wrote:
-> > > On Mon, Mar 27, 2023 at 07:08:24PM +0530, Manivannan Sadhasivam wrote:
->  
-> > > > +static int qcom_pcie_suspend_noirq(struct device *dev)
-> > > > +{
-> > > > +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-> > > > +	int ret;
-> > > > +
-> > > > +	/*
-> > > > +	 * Set minimum bandwidth required to keep data path functional during
-> > > > +	 * suspend.
-> > > > +	 */
-> > > > +	ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
-> > > 
-> > > This isn't really the minimum bandwidth you're setting here.
-> > > 
-> > > I think you said off list that you didn't see real impact reducing the
-> > > bandwidth, but have you tried requesting the real minimum which would be
-> > > kBps_to_icc(1)?
-> > > 
-> > > Doing so works fine here with both the CRD and X13s and may result in
-> > > some further power savings.
-> > > 
-> > 
-> > No, we shouldn't be setting random value as the bandwidth. Reason is, these
-> > values are computed by the bus team based on the requirement of the interconnect
-> > paths (clock, voltage etc...) with actual PCIe Gen speeds. I don't know about
-> > the potential implication even if it happens to work.
-> 
-> Why would you need PCIe gen1 speed during suspend?
-> 
+Previously, @ondemand_id field was used not only to identify ondemand
+state of the object, but also to represent the index of the xarray.
+This commit introduces @state field to decouple the role of @ondemand_id
+and adds helpers to access it.
 
-That's what the suggestion I got from Qcom PCIe team. But I didn't compare the
-value you added during icc support patch with downstream. More below...
+Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+---
+ fs/cachefiles/internal.h | 21 +++++++++++++++++++++
+ fs/cachefiles/ondemand.c | 21 +++++++++------------
+ 2 files changed, 30 insertions(+), 12 deletions(-)
 
-> These numbers are already somewhat random as, for example, the vendor
-> driver is requesting 500 kBps (800 peak) during runtime, while we are
-> now requesting five times that during suspend (the vendor driver gets a
-> away with 0).
-> 
-
-Hmm, then I should've asked you this question when you added icc support.
-I thought you inherited those values from downstream but apparently not.
-Even in downstream they are using different bw votes for different platforms.
-I will touch base with PCIe and ICC teams to find out the actual value that
-needs to be used.
-
-Regarding 0 icc vote, downstream puts all the devices in D3Cold (poweroff)
-state during suspend. So for them 0 icc vote will work but not for us as we need
-to keep the device and link intact.
-
-- Mani
-
-> Sure, this indicates that the interconnect driver is broken and we
-> should indeed be using values that at least makes some sense (and
-> eventually fix the interconnect driver).
-> 
-> Just not sure that you need to request that much bandwidth during
-> suspend (e.g. for just a couple of register accesses).
-> 
-> Johan
-
+diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
+index 2ad58c4652084..00beedeaec183 100644
+--- a/fs/cachefiles/internal.h
++++ b/fs/cachefiles/internal.h
+@@ -44,6 +44,11 @@ struct cachefiles_volume {
+ 	struct dentry			*fanout[256];	/* Fanout subdirs */
+ };
+ 
++enum cachefiles_object_state {
++	CACHEFILES_ONDEMAND_OBJSTATE_CLOSE, /* Anonymous fd closed by daemon or initial state */
++	CACHEFILES_ONDEMAND_OBJSTATE_OPEN, /* Anonymous fd associated with object is available */
++};
++
+ /*
+  * Backing file state.
+  */
+@@ -62,6 +67,7 @@ struct cachefiles_object {
+ #define CACHEFILES_OBJECT_USING_TMPFILE	0		/* Have an unlinked tmpfile */
+ #ifdef CONFIG_CACHEFILES_ONDEMAND
+ 	int				ondemand_id;
++	enum cachefiles_object_state	state;
+ #endif
+ };
+ 
+@@ -296,6 +302,21 @@ extern void cachefiles_ondemand_clean_object(struct cachefiles_object *object);
+ extern int cachefiles_ondemand_read(struct cachefiles_object *object,
+ 				    loff_t pos, size_t len);
+ 
++#define CACHEFILES_OBJECT_STATE_FUNCS(_state, _STATE)	\
++static inline bool								\
++cachefiles_ondemand_object_is_##_state(const struct cachefiles_object *object) \
++{												\
++	return object->state == CACHEFILES_ONDEMAND_OBJSTATE_##_STATE; \
++}												\
++												\
++static inline void								\
++cachefiles_ondemand_set_object_##_state(struct cachefiles_object *object) \
++{												\
++	object->state = CACHEFILES_ONDEMAND_OBJSTATE_##_STATE; \
++}
++
++CACHEFILES_OBJECT_STATE_FUNCS(open, OPEN);
++CACHEFILES_OBJECT_STATE_FUNCS(close, CLOSE);
+ #else
+ static inline ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
+ 					char __user *_buffer, size_t buflen)
+diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
+index 0254ed39f68ce..90456b8a4b3e0 100644
+--- a/fs/cachefiles/ondemand.c
++++ b/fs/cachefiles/ondemand.c
+@@ -15,6 +15,7 @@ static int cachefiles_ondemand_fd_release(struct inode *inode,
+ 
+ 	xa_lock(&cache->reqs);
+ 	object->ondemand_id = CACHEFILES_ONDEMAND_ID_CLOSED;
++	cachefiles_ondemand_set_object_close(object);
+ 
+ 	/*
+ 	 * Flush all pending READ requests since their completion depends on
+@@ -176,6 +177,8 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
+ 		set_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &cookie->flags);
+ 	trace_cachefiles_ondemand_copen(req->object, id, size);
+ 
++	cachefiles_ondemand_set_object_open(req->object);
++
+ out:
+ 	complete(&req->done);
+ 	return ret;
+@@ -363,7 +366,8 @@ static int cachefiles_ondemand_send_req(struct cachefiles_object *object,
+ 		/* coupled with the barrier in cachefiles_flush_reqs() */
+ 		smp_mb();
+ 
+-		if (opcode != CACHEFILES_OP_OPEN && object->ondemand_id <= 0) {
++		if (opcode != CACHEFILES_OP_OPEN &&
++			!cachefiles_ondemand_object_is_open(object)) {
+ 			WARN_ON_ONCE(object->ondemand_id == 0);
+ 			xas_unlock(&xas);
+ 			ret = -EIO;
+@@ -430,18 +434,11 @@ static int cachefiles_ondemand_init_close_req(struct cachefiles_req *req,
+ 					      void *private)
+ {
+ 	struct cachefiles_object *object = req->object;
+-	int object_id = object->ondemand_id;
+ 
+-	/*
+-	 * It's possible that object id is still 0 if the cookie looking up
+-	 * phase failed before OPEN request has ever been sent. Also avoid
+-	 * sending CLOSE request for CACHEFILES_ONDEMAND_ID_CLOSED, which means
+-	 * anon_fd has already been closed.
+-	 */
+-	if (object_id <= 0)
++	if (!cachefiles_ondemand_object_is_open(object))
+ 		return -ENOENT;
+ 
+-	req->msg.object_id = object_id;
++	req->msg.object_id = object->ondemand_id;
+ 	trace_cachefiles_ondemand_close(object, &req->msg);
+ 	return 0;
+ }
+@@ -460,7 +457,7 @@ static int cachefiles_ondemand_init_read_req(struct cachefiles_req *req,
+ 	int object_id = object->ondemand_id;
+ 
+ 	/* Stop enqueuing requests when daemon has closed anon_fd. */
+-	if (object_id <= 0) {
++	if (!cachefiles_ondemand_object_is_open(object)) {
+ 		WARN_ON_ONCE(object_id == 0);
+ 		pr_info_once("READ: anonymous fd closed prematurely.\n");
+ 		return -EIO;
+@@ -485,7 +482,7 @@ int cachefiles_ondemand_init_object(struct cachefiles_object *object)
+ 	 * creating a new tmpfile as the cache file. Reuse the previously
+ 	 * allocated object ID if any.
+ 	 */
+-	if (object->ondemand_id > 0)
++	if (cachefiles_ondemand_object_is_open(object))
+ 		return 0;
+ 
+ 	volume_key_size = volume->key[0] + 1;
 -- 
-மணிவண்ணன் சதாசிவம்
+2.20.1
+
