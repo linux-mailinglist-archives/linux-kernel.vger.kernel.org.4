@@ -2,150 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C734B6CEF8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BC66CEF91
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjC2Qf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
+        id S229820AbjC2Qhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjC2QfX (ORCPT
+        with ESMTP id S229436AbjC2Qhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:35:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FAC61A9;
-        Wed, 29 Mar 2023 09:35:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 817C5B8237A;
-        Wed, 29 Mar 2023 16:35:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35CEAC433A4;
-        Wed, 29 Mar 2023 16:35:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680107717;
-        bh=9Qz5EAmCOL+i+u0TEzl9COJMOzeqVFdc0yFKt5x5s1c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Go7xWPDCKBNfq4Ytevsuw8fdbZYMfquPT5WqMXt5jkfMK8rHWFAEMXPniq6MkRxKV
-         pLRo7kbE/bB1NJOgdSiyzoVxcXmmp9YrZQUo/elIokZSlkTDOrFxfyyPUfYsJ3PE6y
-         fCRzRWzPNDaaLUIzpH4XbarDbFqfYLzCkdQZZ9X3pys1e3P/jPVhlyPrXq0SA99WDw
-         ic9mE49NIASEX2Iz6XnIQRV85YQ1Aqq3gRNlJnJ32hBSXTIrMVUi2ya7R2inE8BnQH
-         kS3QNRQ0Xu3dLJh3+Y7JU6pDt0pR3yi3LZZBToP9Gga9ARu/UZVO8KG74Jiz3SjmrR
-         JsYF7Zrj3jGmg==
-Date:   Wed, 29 Mar 2023 17:35:12 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Wed, 29 Mar 2023 12:37:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBD79E
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680107808;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ldMAeFakoVxongrnXNG07Qemx9ue6UmllaaxOMmybkQ=;
+        b=cVI51QotQMAOPNVLuZiOThk8TSBmCRchz5J/ED5AZZF3kItdNiVI+h7eCdVaMIQDck+OUB
+        MY/2GHIGjK9eaGXbkc80UHV1l4csrUSMFdZenCsKQ1cTnHRPj7fepRnNchId5OS8kErOZd
+        tUL6QJipt4nOYKxALP1dljyQF+bArEY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-340-8StVgzusNfKMn6vZWc-NYg-1; Wed, 29 Mar 2023 12:36:47 -0400
+X-MC-Unique: 8StVgzusNfKMn6vZWc-NYg-1
+Received: by mail-wm1-f69.google.com with SMTP id i4-20020a05600c354400b003ef649aa8c7so6787774wmq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:36:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680107806;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ldMAeFakoVxongrnXNG07Qemx9ue6UmllaaxOMmybkQ=;
+        b=WLK/sCGGCwvBEkqTa8VfLHHQQJeTb4/qQVeySpgkL9ehDOvNCWVxLQ3jRWpdlEkCPQ
+         C3avDgOk4dXUj5h4MrkkP51/2ZfJprCTRSmtyPWvLNU7FMBIxdAIY0IYpCqPIh6xXZDt
+         jShLnp2aqjebFJSAkB2EiHInpYfXLtxBEP5aQGztpeboL5TtwtBF2dSjxFFDvtCS/bj/
+         suJdhZ+jp5rlGDi+gU6Jnbl7k1pDD4Zq72oR2Gtb1SAsQj2b41m0pStGwOMtru9sNSvl
+         D27H7Tf+AuO2MiiSXlLXPyufCMPYjz49cD6sGNGLtChKsbzjSYIcJsDj6+hoV5I9Txv7
+         yKDg==
+X-Gm-Message-State: AAQBX9ejFeNNeSJ8KPa+M2l2eJSlB2g1WDdFxKMwrV4bxSDtlRFFDci0
+        qjCwvrv4XECHRSSiGKDlZ9lOvMu81fA6VDq9AJoDMkcb4X0qBaF0+z72ZRU51Ko8Rc36zM13AJR
+        SQrqWgDoZgDBQp/Lo+QueVk+5
+X-Received: by 2002:adf:decf:0:b0:2cf:f30f:cc04 with SMTP id i15-20020adfdecf000000b002cff30fcc04mr14240678wrn.27.1680107805854;
+        Wed, 29 Mar 2023 09:36:45 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Z5BstaP0SIWlL7B+yT9cBx93Rz7ef9lbximjW91GJq3IF02TSPgsvVmlwSCFY8rhw/kJXS8w==
+X-Received: by 2002:adf:decf:0:b0:2cf:f30f:cc04 with SMTP id i15-20020adfdecf000000b002cff30fcc04mr14240665wrn.27.1680107805520;
+        Wed, 29 Mar 2023 09:36:45 -0700 (PDT)
+Received: from redhat.com ([2.52.18.165])
+        by smtp.gmail.com with ESMTPSA id v7-20020a5d4b07000000b002c56af32e8csm30386163wrq.35.2023.03.29.09.36.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 09:36:45 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 12:36:41 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Albert Huang <huangjie.albert@bytedance.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -fixes v2 2/3] riscv: Do not set initial_boot_params to
- the linear address of the dtb
-Message-ID: <5f01d8ec-553b-4954-a72d-de212230be96@spud>
-References: <20230329081932.79831-1-alexghiti@rivosinc.com>
- <20230329081932.79831-3-alexghiti@rivosinc.com>
- <179c38d6-4298-4a16-b0d7-8aee49a91f58@spud>
- <CAHVXubh9t7VuM337Br-4y7zJp1msr6+bAtr1eVLc+P50V9Bikg@mail.gmail.com>
+Subject: Re: [PATCH v4] virtio_ring: interrupt disable flag updated to vq
+ even with event_triggered is set
+Message-ID: <20230329123444-mutt-send-email-mst@kernel.org>
+References: <20230329102300.61000-1-huangjie.albert@bytedance.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kjAfQifgMlHd6Dn/"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHVXubh9t7VuM337Br-4y7zJp1msr6+bAtr1eVLc+P50V9Bikg@mail.gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230329102300.61000-1-huangjie.albert@bytedance.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 29, 2023 at 06:23:00PM +0800, Albert Huang wrote:
+> From: "huangjie.albert" <huangjie.albert@bytedance.com>
+> 
+> in virtio_net, if we disable the napi_tx, when we triger a tx interrupt,
+> the vq->event_triggered will be set to true. It will no longer be set to
+> false. Unless we explicitly call virtqueue_enable_cb_delayed or
+> virtqueue_enable_cb_prepare.
+> 
+> If we disable the napi_tx, it will only be called when the tx ring
+> buffer is relatively small.
+> 
+> Because event_triggered is true. Therefore, VRING_AVAIL_F_NO_INTERRUPT or
+> VRING_PACKED_EVENT_FLAG_DISABLE will not be set. So we update
+> vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
+> every time we call virtqueue_get_buf_ctx.This bring more interruptions.
+> 
+> To summarize:
+> 1) event_triggered was set to true in vring_interrupt()
+> 2) after this nothing will happen for virtqueue_disable_cb() so
+>    VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
+> 3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
+>    then it tries to publish new event
+> 
+> To fix:
+> update VRING_AVAIL_F_NO_INTERRUPT or VRING_PACKED_EVENT_FLAG_DISABLE to vq
+> when we call virtqueue_disable_cb even the event_triggered is set to true.
+> 
+> Tested with iperf:
+> iperf3 tcp stream:
+> vm1 -----------------> vm2
+> vm2 just receives tcp data stream from vm1, and sends the ack to vm1,
+> there are many tx interrupts in vm2.
+> but without event_triggered there are just a few tx interrupts.
+> 
+> v2->v3:
+> -update the interrupt disable flag even with the event_triggered is set,
+> -instead of checking whether event_triggered is set in
+> -virtqueue_get_buf_ctx_{packed/split}, will cause the drivers  which have
+> -not called virtqueue_{enable/disable}_cb to miss notifications.
+> 
+> v3->v4:
+> -remove change for
+> -"if (vq->packed.event_flags_shadow != VRING_PACKED_EVENT_FLAG_DISABLE)"
+> -in virtqueue_disable_cb_packed
+> 
+> Fixes: 8d622d21d248 ("virtio: fix up virtio_disable_cb")
+> Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
 
---kjAfQifgMlHd6Dn/
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Patch is ok so I rewrote the commit log and applied.
+Please do not add signed-off-by tags by others -
+read up what this tag means.
+I also rewrote your Signed-off-by to have your name
+formatted same as in email - hope that is ok.
 
-On Wed, Mar 29, 2023 at 04:52:45PM +0200, Alexandre Ghiti wrote:
-> On Wed, Mar 29, 2023 at 4:37=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
-> >
-> > On Wed, Mar 29, 2023 at 10:19:31AM +0200, Alexandre Ghiti wrote:
-> > > early_init_dt_verify() is already called in parse_dtb() and since the=
- dtb
-> > > address does not change anymore (it is now in the fixmap region), no =
-need
-> > > to reset initial_boot_params by calling early_init_dt_verify() again.
-> > >
-> > > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > > ---
-> > >  arch/riscv/kernel/setup.c | 5 +----
-> > >  1 file changed, 1 insertion(+), 4 deletions(-)
-> > >
-> > > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> > > index 542eed85ad2c..a059b73f4ddb 100644
-> > > --- a/arch/riscv/kernel/setup.c
-> > > +++ b/arch/riscv/kernel/setup.c
-> > > @@ -278,10 +278,7 @@ void __init setup_arch(char **cmdline_p)
-> > >  #if IS_ENABLED(CONFIG_BUILTIN_DTB)
-> > >       unflatten_and_copy_device_tree();
-> > >  #else
-> > > -     if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
-> > > -             unflatten_device_tree();
-> >
-> > Silly question maybe, but since it isn't explicitly mentioned, the
-> > XIP_FIXUP bits no longer matter?
->=20
-> The XIP_FIXUP is only needed when translating virtual to physical
-> addresses, but that does not mean I did not break it, I haven't
-> considered XIP at all...
 
-So, what currently happens is that, during early boot, we call
-parse_dtb() right at the beginning of setup_arch().
-That calls early_init_dt_scan(dtb_early_pa), which in turn calls
-early_init_dt_verify(dtb_early_pa).
+> ---
+>  drivers/virtio/virtio_ring.c | 22 ++++++++++++++++------
+>  1 file changed, 16 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index cbeeea1b0439..ec7ab8e04846 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -931,6 +931,14 @@ static void virtqueue_disable_cb_split(struct virtqueue *_vq)
+>  
+>  	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)) {
+>  		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
+> +
+> +		/*
+> +		 * If device triggered an event already it won't trigger one again:
+> +		 * no need to disable.
+> +		 */
+> +		if (vq->event_triggered)
+> +			return;
+> +
+>  		if (vq->event)
+>  			/* TODO: this is a hack. Figure out a cleaner value to write. */
+>  			vring_used_event(&vq->split.vring) = 0x0;
+> @@ -1761,6 +1769,14 @@ static void virtqueue_disable_cb_packed(struct virtqueue *_vq)
+>  
+>  	if (vq->packed.event_flags_shadow != VRING_PACKED_EVENT_FLAG_DISABLE) {
+>  		vq->packed.event_flags_shadow = VRING_PACKED_EVENT_FLAG_DISABLE;
+> +
+> +		/*
+> +		 * If device triggered an event already it won't trigger one again:
+> +		 * no need to disable.
+> +		 */
+> +		if (vq->event_triggered)
+> +			return;
+> +
+>  		vq->packed.vring.driver->flags =
+>  			cpu_to_le16(vq->packed.event_flags_shadow);
+>  	}
+> @@ -2462,12 +2478,6 @@ void virtqueue_disable_cb(struct virtqueue *_vq)
+>  {
+>  	struct vring_virtqueue *vq = to_vvq(_vq);
+>  
+> -	/* If device triggered an event already it won't trigger one again:
+> -	 * no need to disable.
+> -	 */
+> -	if (vq->event_triggered)
+> -		return;
+> -
+>  	if (vq->packed_ring)
+>  		virtqueue_disable_cb_packed(_vq);
+>  	else
+> -- 
+> 2.20.1
 
-Here, relatively late during boot, we are coming along and calling the
-function again. This existed prior to the XIP stuff landing, but the
-specific XIP_FIXUP handling looks to be the fallout from:
-https://lore.kernel.org/linux-riscv/82a05081-5662-c787-44e4-d480774ce31c@gh=
-iti.fr/
-
-The check in the first place was added by Anup's move away from fixmap
-for dtb stuff, which makes me wonder - should this actually be part of
-1/3? Something, something we no longer need to do this because these
-addresses no longer change as per 1/3?
-
-> > Also, in related news, I assume you don't have a QEMU setup that can do
-> > boot an XIP kernel?
->=20
-> I haven't booted a XIP kernel for a long time now, here are my notes
-> from that time:
-> https://github.com/AlexGhiti/alexghiti.github.io/blob/main/xip/XIP.md
-
-Right, I'll have to get around to trying that. We never put any
-investment into QEMU internally, nor run any CI against it, so the HSS
-doesn't actually work in QEMU anymore.
-Assertion failures due to missing peripheral emulation :(
-Probably don't need the HSS though and can do a direct kernel boot, I'll
-have to see if that works for this XIP stuff, I know it does for regular
-kernels.
-
-Cheers,
-Conor.
-
---kjAfQifgMlHd6Dn/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCRowAAKCRB4tDGHoIJi
-0ha3AQDqn5pBsE36Dp/vUjZCUYNwqjpdLvfFR9ru62ASV7a8CwEAgUXOc+FcR+Ok
-bwGeyZ4aob+H7tDntX3k8QaoUhlvkAE=
-=idAD
------END PGP SIGNATURE-----
-
---kjAfQifgMlHd6Dn/--
