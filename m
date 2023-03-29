@@ -2,129 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39C16CD906
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3278B6CD909
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjC2MDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S229994AbjC2MEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjC2MDQ (ORCPT
+        with ESMTP id S229870AbjC2MEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:03:16 -0400
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D78268B;
-        Wed, 29 Mar 2023 05:03:13 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VewkIyt_1680091388;
-Received: from 30.221.149.47(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VewkIyt_1680091388)
-          by smtp.aliyun-inc.com;
-          Wed, 29 Mar 2023 20:03:09 +0800
-Message-ID: <e60d5073-b7bb-f475-8ce5-fa04ac0926f5@linux.alibaba.com>
-Date:   Wed, 29 Mar 2023 20:03:08 +0800
+        Wed, 29 Mar 2023 08:04:47 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1613EC0;
+        Wed, 29 Mar 2023 05:04:44 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: linasend@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id DAB2E41F46;
+        Wed, 29 Mar 2023 12:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1680091482;
+        bh=Yfc+fy732lyQt6gGO91ACOiJTuz48vubsBwwxur11wo=;
+        h=From:Subject:Date:To:Cc;
+        b=RZsZOcVUZ0d9GrN3HSV+yS/VF+QXLp1kfu39MoxlhGN/tRe9g3HF5clXxWd5+sQ1D
+         6l/135hq9v87EpOrWZAlv0m2h4hNj0X2TnveirP86Yjxzdz5c0dJI+q8PrdBfvm9op
+         54Tfj5rPOtnfESJG8aOIewkmrt4YRKHP076/w6cHbUYHfCzhqXJMewFvU5EJeluIX/
+         frhEMujTHtLk8RNStmsrS7EdwqCyjyew9dPZGXZbT8IQr0O2rUfcr35BPvS767ZOHJ
+         xEwO8iFFUJVccSY7IspXmc2U/qNwlZIgSxHD8HyhoHImm8ke6w3DQ4iIkMbJQeV1ud
+         sNpQKnmR3sEtQ==
+From:   Asahi Lina <lina@asahilina.net>
+Subject: [PATCH v2 0/6] rust: error: Add missing wrappers to convert
+ to/from kernel error codes
+Date:   Wed, 29 Mar 2023 21:04:32 +0900
+Message-Id: <20230224-rust-error-v2-0-3900319812da@asahilina.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH RFC 3/4] driver/perf: Add identifier sysfs file for Yitian
- 710 DDR
-To:     Shuai Xue <xueshuai@linux.alibaba.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1679885172-95021-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1679885172-95021-4-git-send-email-renyu.zj@linux.alibaba.com>
- <7060f009-2964-30af-3d12-2bb3e21b6c1e@linux.alibaba.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <7060f009-2964-30af-3d12-2bb3e21b6c1e@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFApJGQC/22NywrCMBBFf0WydkoeYltX/od0MY0TMyCpTGpQS
+ v/dtGuX514OZ1GZhCmry2FRQoUzT6mCPR6Uj5geBHyvrKy2Tlt7AnnnGUhkEgi2a00Yfa/boKo
+ wYiYYBZOPm1LOjQPxZrteQoE/e+c2VI6c50m+e7aYbf1bKAY0hC702GPXOu2umDHykxM2iWY1r
+ Ov6A000rsTDAAAA
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>
+Cc:     Fox Chen <foxhlchen@gmail.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680091478; l=2539;
+ i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
+ bh=Yfc+fy732lyQt6gGO91ACOiJTuz48vubsBwwxur11wo=;
+ b=8VE+1hLmLEQnXlFMHNZhxNihXuC0OkabmAzruuyZSoUBNOiSuZ+ZUQRAg8jRCuemCmMlA2u6y
+ Q+qrzSX3jGGCk8KWS1XACLzHsbSjen8KmmkIl+iBu49gaX4kKzYyUO5
+X-Developer-Key: i=lina@asahilina.net; a=ed25519;
+ pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi everyone!
 
+This series is part of the set of dependencies for the drm/asahi
+Apple M1/M2 GPU driver.
 
-在 2023/3/29 下午3:55, Shuai Xue 写道:
-> 
-> 
-> On 2023/3/27 AM10:46, Jing Zhang wrote:
->> To allow userspace to identify the specific implementation of the device,
->> add an "identifier" sysfs file.
->>
->> The perf tool can match the Yitian 710 DDR metric through the identifier.
->>
->> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
->> ---
->>  drivers/perf/alibaba_uncore_drw_pmu.c | 27 +++++++++++++++++++++++++++
->>  1 file changed, 27 insertions(+)
->>
->> diff --git a/drivers/perf/alibaba_uncore_drw_pmu.c b/drivers/perf/alibaba_uncore_drw_pmu.c
->> index a7689fe..6639a57 100644
->> --- a/drivers/perf/alibaba_uncore_drw_pmu.c
->> +++ b/drivers/perf/alibaba_uncore_drw_pmu.c
->> @@ -236,10 +236,37 @@ static ssize_t ali_drw_pmu_cpumask_show(struct device *dev,
->>  	.attrs = ali_drw_pmu_cpumask_attrs,
->>  };
->>  
->> +static ssize_t ali_drw_pmu_identifier_show(struct device *dev,
->> +					struct device_attribute *attr,
->> +					char *page)
->> +{
->> +	return sysfs_emit(page, "%s\n", "ali_drw_yitian710");
-> 
-> Is it possible to rename identifier as "ali_drw_pmu"? I don't think we need only
-> limit alibaba_uncore_drw_pmu to Yitian710 SoC here.
-> 
+It adds a bunch of missing wrappers in kernel::error, which are useful
+to convert to/from kernel error codes. Since these will be used by many
+abstractions coming up soon, I think it makes sense to merge them as
+soon as possible instead of bundling them with the first user. Hence,
+they have allow() tags to silence dead code warnings. These can be
+removed as soon as the first user is in the kernel crate.
 
-Ok, I will rename it as "ali_drw_pmu".
+Getting this in first allows the subsequent abstractions to be merged in
+any order, so we don't have to worry about piecewise rebasing and fixing
+conflicts in the Error wrappers. See [1] for a complete tree with the DRM
+abstractions and all other miscellaneous work-in-progress prerequisites
+rebased on top of mainline.
 
-Thanks,
-Jing
+Most of these have been extracted from the rust-for-linux/rust branch,
+with author attribution to the first/primary author and Co-developed-by:
+for everyone else who touched the code.
 
-> Thank you.
-> Shuai
-> 
->> +}
->> +
->> +static umode_t ali_drw_pmu_identifier_attr_visible(struct kobject *kobj,
->> +						struct attribute *attr, int n)
->> +{
->> +	return attr->mode;
->> +}
->> +
->> +static struct device_attribute ali_drw_pmu_identifier_attr =
->> +	__ATTR(identifier, 0444, ali_drw_pmu_identifier_show, NULL);
->> +
->> +static struct attribute *ali_drw_pmu_identifier_attrs[] = {
->> +	&ali_drw_pmu_identifier_attr.attr,
->> +	NULL,
->> +};
->> +
->> +static const struct attribute_group ali_drw_pmu_identifier_attr_group = {
->> +	.attrs = ali_drw_pmu_identifier_attrs,
->> +	.is_visible = ali_drw_pmu_identifier_attr_visible,
->> +};
->> +
->>  static const struct attribute_group *ali_drw_pmu_attr_groups[] = {
->>  	&ali_drw_pmu_events_attr_group,
->>  	&ali_drw_pmu_cpumask_attr_group,
->>  	&ali_drw_pmu_format_group,
->> +	&ali_drw_pmu_identifier_attr_group,
->>  	NULL,
->>  };
->>  
+Attribution changes:
+- One of the patches had Miguel's old email in the tags, updated that per
+  his request.
+- Wedson's email changed from @google.com to @gmail.com (I understand
+  this is the current one).
+
+Sven: There is one patch from you in this series, do you want to send it
+yourself directly? I understand Wedson and Miguel are okay with me
+sending stuff on their behalf.
+
+[1] https://github.com/Rust-for-Linux/linux/pull/969/commits
+
+Signed-off-by: Asahi Lina <lina@asahilina.net>
+---
+Changes in v2:
+- Removed the redundant _kernel from various function names.
+- Replaced the from_result!{} macro with a from_result() function taking a closure.
+- Link to v1: https://lore.kernel.org/r/20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net
+
+---
+Asahi Lina (2):
+      rust: error: Rename to_kernel_errno() -> to_errno()
+      rust: error: Add Error::to_ptr()
+
+Miguel Ojeda (1):
+      rust: error: Add Error::from_errno()
+
+Sven Van Asbroeck (1):
+      rust: error: Add a helper to convert a C ERR_PTR to a `Result`
+
+Wedson Almeida Filho (2):
+      rust: error: Add to_result() helper
+      rust: error: Add from_result() helper
+ rust/helpers.c        |  19 ++++++++
+ rust/kernel/error.rs  | 126 +++++++++++++++++++++++++++++++++++++++++++++++++-
+ rust/macros/module.rs |   2 +-
+ 3 files changed, 145 insertions(+), 2 deletions(-)
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230224-rust-error-f2871fbc907f
+
+Thank you,
+~~ Lina
+
