@@ -2,155 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A2F6CF2FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B306CF304
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjC2TSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
+        id S229462AbjC2TU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbjC2TRx (ORCPT
+        with ESMTP id S229530AbjC2TUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:17:53 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F906A4D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:17:43 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id s20so17278049ljp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680117461;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PkKk7Qpt0miI3NiUcSnncqHdyr3DuNCBLMRDZMN+mTU=;
-        b=enBcjGxxUnor9oWLRKL39mGkXt0uM4ukXO4TmIUsx8QDTVJHE+WtDZJp8K6XZtoUsO
-         TtPTRxWK2LFhLrFf4LbFuqwmGw457e0bhK7OydymVlxIrOBf48dOQvOGlTqCzguFflOD
-         YeyL8hWsKo5R0OyIMLU63dzzDWsGQ+Ham8ad67fdl6G+QEbuZp79MnA80woYVwVd5fMF
-         r1slPiC7RNS6x3IwlPQqR7CVKKBuK5VloT4SKHBNqUs9EGlMN7THx2mC1SdSaBCajuH1
-         uUWVG2VleI+tiKgTLS7u+YD4KkyBxjGZqlhzYA8LomlrT+FeMM+t5OxMTSNk6FtSYYEN
-         ZvRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680117461;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PkKk7Qpt0miI3NiUcSnncqHdyr3DuNCBLMRDZMN+mTU=;
-        b=uosC5AlU0ZS0VvS/1IIz1TfUmfjST8mmLdmZuYQinxG+N/D2iWigaoUDJcHcs89RV0
-         TstvepobDX+2uoIqsEz53MbQRFnYDIcq3LLJ1COKgYRAdOd0jU7m556JmNd1cRduHM92
-         9OUOblaSoeOYF1cSeLyVaLl2WNabu+gEgH24kWkIpVq78KIPTIAI2RXdytgFFOhyje4o
-         jZrWNyVYBCAU0ZY6k6/aZ8EK6gQFcUN7+nExt+1R9aG71KaudpQcRQocmOlwxkrcE4Kw
-         8ecM8RjbUzZm1/VMEyWifwf1ECj0qA3h0+neERI4yzFeceVFwwkOTYkfbGG30xOs5v5L
-         hyKg==
-X-Gm-Message-State: AAQBX9cS/gtdo2XpNR7mtL20FWEMekQPiIsoS+jMUNOQO23ag4A1Pn7G
-        L+xPCiULEy3Qq8aGKzkI4Aa5rw==
-X-Google-Smtp-Source: AKy350Ys71TFalUqyX/0rCk+E386hQB0F1YvA98ANc8+ixU1OZVN8vyGzE0saNWdDU0GDay7QHZOGA==
-X-Received: by 2002:a2e:9bcf:0:b0:29e:a3a0:ee2f with SMTP id w15-20020a2e9bcf000000b0029ea3a0ee2fmr5997809ljj.30.1680117461681;
-        Wed, 29 Mar 2023 12:17:41 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id f4-20020a2e3804000000b0029ad1fc89b3sm5189658lja.60.2023.03.29.12.17.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 12:17:41 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 29 Mar 2023 21:17:31 +0200
-Subject: [PATCH 4/4] arm64: dts: qcom: msm8916: Improve GPU OPP table
+        Wed, 29 Mar 2023 15:20:24 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653D7CD;
+        Wed, 29 Mar 2023 12:20:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CCFC2CE203F;
+        Wed, 29 Mar 2023 19:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D720C433EF;
+        Wed, 29 Mar 2023 19:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680117620;
+        bh=zxUdS6x70bXxHp+LpWOEwRUsuM0jXMnYbrJmytRDx2c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ANeZTHfskWwHRXECZQ1jalC1ZrldxttXyFMXm4KJ/8lJBtXsBhVCbLj1/DiKiM4Tl
+         c4e1HpYmMLaFqL83AJxq1VIs0AS+xjDwUPSgIuRcFEhu1u7pSegHQbJy0PBF7P0paZ
+         L3+Lj9du9Aa7Upbx2DzLsV6hLRkdT+NY2P8W/dLcXGFTK4Pa7phPVGbFLA806I8kf5
+         5diPmV9PthgjDQZzwpB58Ma5n6I7kNEgO5kkJ0Het7P/9DTsbn5gmCV9HS0cHN6bmY
+         ozNJ1+QHJrkLuxF+QltMdCL6DAN/4mDgbYKmePfM+ccwiOoMZ3u+I7i7Hpm0Eu1QpH
+         1e7stoN7dqfjA==
+Date:   Wed, 29 Mar 2023 21:20:17 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     ye.xingchen@zte.com.cn
+Cc:     kdasu.kdev@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        f.fainelli@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: brcmstb: use devm_platform_ioremap_resource_byname()
+Message-ID: <ZCSPcaEo5UTNqHsD@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, ye.xingchen@zte.com.cn,
+        kdasu.kdev@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        f.fainelli@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <202303211944063761253@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230329-topic-adreno_opp-v1-4-24d34ac6f007@linaro.org>
-References: <20230329-topic-adreno_opp-v1-0-24d34ac6f007@linaro.org>
-In-Reply-To: <20230329-topic-adreno_opp-v1-0-24d34ac6f007@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vivek Gautam <vivek.gautam@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Stephen Boyd <sboyd@codeaurora.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680117452; l=1898;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=JPOS4C7Jq8MAmse1/02vKyaIWx2AGQSTrD2cYU4Vq9M=;
- b=lR/hlBWa2ERR2A1gCrnw36uoxaK8g9TG5iXuPzYclbj1Ce9GkiXJWntiYjP8oOqkHpGQkzk4jdjf
- xNIJmF5aCXtrCkWWqIkgo6zRBmnrYl36cNeRr/WMJC811dC8QWzk
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="U2prXR+fQOg+6R2M"
+Content-Disposition: inline
+In-Reply-To: <202303211944063761253@zte.com.cn>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add required-opps to ensure reasonable power domain levels are voted
-for (currently we've been piggybacking off of miracles and MDP
-votes), add missing frequencies and add newlines between each
-subnode.
 
-Fixes: 61b83be9117c ("arm64: dts: qcom: msm8916: Add gpu support")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/msm8916.dtsi | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+--U2prXR+fQOg+6R2M
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-index 639b158b4fbe..13bd0c647c1d 100644
---- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-@@ -1287,18 +1287,31 @@ gpu@1c00000 {
- 			    <&gcc GCC_BIMC_GFX_CLK>,
- 			    <&gcc GCC_BIMC_GPU_CLK>,
- 			    <&gcc GFX3D_CLK_SRC>;
--			power-domains = <&gcc OXILI_GDSC>;
-+			power-domains = <&rpmpd MSM8916_VDDCX>;
- 			operating-points-v2 = <&gpu_opp_table>;
- 			iommus = <&gpu_iommu 1>, <&gpu_iommu 2>;
- 
- 			gpu_opp_table: opp-table {
- 				compatible = "operating-points-v2";
- 
-+				opp-27000000 {
-+					opp-hz = /bits/ 64 <27000000>;
-+					required-opps = <&rpmpd_opp_svs_krait>;
-+				};
-+
-+				opp-200000000 {
-+					opp-hz = /bits/ 64 <200000000>;
-+					required-opps = <&rpmpd_opp_svs_soc>;
-+				};
-+
-+				opp-310000000 {
-+					opp-hz = /bits/ 64 <310000000>;
-+					required-opps = <&rpmpd_opp_nom>;
-+				};
-+
- 				opp-400000000 {
- 					opp-hz = /bits/ 64 <400000000>;
--				};
--				opp-19200000 {
--					opp-hz = /bits/ 64 <19200000>;
-+					required-opps = <&rpmpd_opp_super_turbo>;
- 				};
- 			};
- 		};
-@@ -1368,6 +1381,7 @@ gpu_iommu: iommu@1f08000 {
- 			clocks = <&gcc GCC_SMMU_CFG_CLK>,
- 				 <&gcc GCC_GFX_TCU_CLK>;
- 			clock-names = "iface", "bus";
-+			power-domains = <&gcc OXILI_GDSC>;
- 			qcom,iommu-secure-id = <18>;
- 
- 			/* GFX3D_USER */
+On Tue, Mar 21, 2023 at 07:44:06PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+>=20
+> Convert platform_get_resource_byname(),devm_ioremap_resource() to a single
+> call to devm_platform_ioremap_resource_byname(), as this is exactly what
+> this function does.
+>=20
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
 
--- 
-2.40.0
+Applied to for-next, thanks!
 
+
+--U2prXR+fQOg+6R2M
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQkj3AACgkQFA3kzBSg
+KbY7cw//bgfY6lokYylgDKF+dtqrjhOlMJ5i4I5LnEqB0kvA/H9fmdviRExgNncx
+7VjA9fS9/LnfawSos3G/0iizTvwv1NLgEPO1yH/tTapA+iOsE0r7jRSLkzstOkNU
+wWHXvbxDHVw5OWi9uTQtP7BXyFyhST6FddO6+tUhtHsdLQDbv2VIiYXBcPE9WM5p
+C8TJSPS5Vwe4sbxyRrmVgTxgraa9JkewOd4p+3DALR/hfTuGvOe4NWVuadkJNthN
+SaGCb0eDyD0Ukh7HXVSC6CXWvVm+drPwuZ/HojZFpKtukJJanjH4B8FXGU8Hp5L9
+atBMDh3mKZ+GLDjCx1DgX4j2Tr6cwglKxuyen18Hkg56OsddWdDdybKn4QxzK4FW
+AD6xLDvVKZ4D6IF/lKLt6UhVeFudG1mFPFsULUPABeun7RYCLyt8SL7DQMwI1n2i
+ACMCQ5R4yiO1NzgjsvRrGIUNKzGWxxikLIbBvmNiAeREugvLjnAkEfDH0/PCHChx
+Ud6SB0WWC3Vquol/mgX4CAhDMcCuo1dutmfJTmt34dt1RHtoAYWWeRaIQ+3tpRdz
+EeXeRA3OLTu2/KnrrF/W1Hjy2lPLNn5J+C1cY/HmxrqsronURQGBqklO25AMiGQ1
+7nti8AtBYRiCEsPalz2g160walS6DbU2fmnQM1cWddJflck7oDs=
+=I62Y
+-----END PGP SIGNATURE-----
+
+--U2prXR+fQOg+6R2M--
