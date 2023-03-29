@@ -2,260 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76DA16CF34E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1235E6CF341
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjC2Tky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
+        id S229677AbjC2Tjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjC2TkQ (ORCPT
+        with ESMTP id S229610AbjC2Tjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:40:16 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280425252
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:40:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680118812; x=1711654812;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=P1DmTNslo8gkHsYsg+1bShdtrm2fk5Kfm7ob24luDX0=;
-  b=SdLCcH1VPj+uz71LCuSqwRhC36nVtC0fJoFraDkfkgWLdYp1wlbBuCcT
-   +USq8eJXFdQBb015WyfP4Ctk4IDPXjq3d9F3PSmoYCbgUb9jf3DaxtDQ5
-   JYeI1ICy0AdWQcXTwZSVFjvAjg0MXS3lNQ7MO+ob4Fu0Vv8PA3EK3B9hZ
-   hy0r7LoagpApJGdcWEvC7ewP9M/CA5PqFyUNWVBCWCgT3RzCbBLMU3MgD
-   KwEnIsw9b7Nyg7/RprpCr8OAgzbk8htc3FunbL61+KT2JoM6Ir1kv6z7X
-   R5fx7goV3vi+0igqlcfTN7SSH117sltgJRIXOsevKKYeJvhzD1SR/OGdo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="343430128"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="343430128"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 12:40:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="677905146"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="677905146"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 29 Mar 2023 12:40:10 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1phbeU-000Jsv-0j;
-        Wed, 29 Mar 2023 19:40:10 +0000
-Date:   Thu, 30 Mar 2023 03:39:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-at91/pm.c:775:30: sparse: sparse: incorrect type in
- assignment (different address spaces)
-Message-ID: <202303300305.M1gA53WC-lkp@intel.com>
-MIME-Version: 1.0
+        Wed, 29 Mar 2023 15:39:44 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2094.outbound.protection.outlook.com [40.107.220.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5094ED4;
+        Wed, 29 Mar 2023 12:39:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C6zyh4bImEv2LmxVVo2DvKAZRHaUdDeFsvM7kBfYnc7ivnHs5vaqZi0nbLfgdyEwyuFwjG0Ev19vwxv8HhGYCcYUYX6FO9Ptkq3p1R2/G/Ror5J0+Xf9eTQUERr4JlGN1sHHVSmxgfHiCDGwc8ZtXCPL7xcdwfHwIqltuRhi7oFE1SKXwS3KZtGiZTl0haeWAx02uKLv2ZTo0tUO/+xsRKM8QZVH25T6qd5zmANBpGvJchIsxYivBi9pMXTSZbG1FfUT1bwu8zhvprKFt5q+bI0t+6AK+iSLgPGrSXRCrN0nvkJBPg1S2XIq2EeevZ3McPDKJt+zAivRLRd3rrkDjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NM0ArS2HRYc4a1ewmxqhVYNSI1GP0OU36wxzyKIWQo4=;
+ b=jlSgTyUt2N6TEp2cT4TyqAFCVgKg9gQiLzUO3WZ2y5ER5G+Mwem2wzn30AwN+wOuwMA11P+OXpsndGlVK4aRIbvvWdNfU0JS7QSYL5aPGPimCCWhV1/IdYg5Hy3sB1NuBg/3rWCc4YWmo12tCtnYfH1/OMpOAntRffhZM2i5Jiqi5cU6ytA/Zy2B6WGgplalcMQBdxIeRkK7YsLarGLk9Q/NfJiOwuBPz3rBJQvzWZQ+1IdGSWtcUpXvsDtB9YSVNx4+SPld9fJT4RGIHp0YFnzuUNwVW/JzkgvO6MXYKp+FoF25sRFX1ljDFftP+YYxTnf9A0N9gokqvuUIEisPPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NM0ArS2HRYc4a1ewmxqhVYNSI1GP0OU36wxzyKIWQo4=;
+ b=tHl5JX+glGM/Xf01HqBtMUcj9O2F5k4PChxBe5rqcRb5WkVv7XdcQCO0914humMto9R7SanvxUybePNttYEdCnDKwIyqBkodZU+dYRyxY8xwTJDhUQrzartht5fRnIoFKhDa0yOgx4uwzpoYBKIiwQdnRom/vArQtprOaabZoRY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MW3PR13MB4108.namprd13.prod.outlook.com (2603:10b6:303:5b::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Wed, 29 Mar
+ 2023 19:39:39 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::c506:5243:557e:82cb]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::c506:5243:557e:82cb%4]) with mapi id 15.20.6222.028; Wed, 29 Mar 2023
+ 19:39:38 +0000
+Date:   Wed, 29 Mar 2023 21:39:30 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Karsten Keil <isdn@linux-pingi.de>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] mISDN: remove unneeded mISDN_class_release()
+Message-ID: <ZCST8vuQDEo9GhsS@corigine.com>
+References: <20230329060127.2688492-1-gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230329060127.2688492-1-gregkh@linuxfoundation.org>
+Organisation: Horms Solutions BV
+X-ClientProxiedBy: AM0PR10CA0036.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:150::16) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW3PR13MB4108:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a51eb69-cf07-4521-6ccc-08db308d5545
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yvu/L90jHn+A6t8t5cxCBEatFqnPRHbJ0IvZ6vqc/tbaGMzXpUfKBPmwVhTkNl+OE3vZRoZz+3NgzsUp5PMC+gCdUmM46IPWqDZcKiWBmq+e8cVfckyn9mKi0IZMl2VyrloK8ihYKpjJgsgHzctXZsbCcRgooW7iKk/fJCNvEg97wy8/O1NngW5F7jbyZkCKsX+o2LQYM+NmyUIcTc3rRVRFR5zWVBAPMoIXfl9q3MkxHHB/NHOuoEQt8NNnpifQd26D9zMDtYjYKKQ6SzSRIMtvSHsgUTVUC7r2VKOruGYs4y0oLsHOvFja+RJR74C0Yh636oC3K6UuHvGMkgX/X4JjxeTarnOTXP42iawbXBAWKXJg8KLA67cqP1LnGo/Xm5Y4dqzL+ZfuCNkxh7bKyWKhDWN9sqpvm4BOUxoBwUM/zxMlhgwuuMdf8YX0PPWKpAJLgiJ1NHaBtv4fR0WC52fjvjWgNzvKxXe/mRPIJc1FTAfiWGtb/yu8VADBbtUe729MLVrXaKwthh6EZt8vtYYJuryyjzsPakZtqpzTgPhXyY/wu3Hxz1WBQqTH030N
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(376002)(346002)(396003)(366004)(136003)(451199021)(6666004)(38100700002)(6486002)(2616005)(478600001)(186003)(44832011)(5660300002)(8936002)(2906002)(6506007)(36756003)(316002)(6512007)(4326008)(41300700001)(6916009)(86362001)(66946007)(66476007)(8676002)(66556008)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bvERThQ0A3ZYsHYyouq/wOIeFxtFq6I8rm9RS32eW5SkTeQpWKs2uvicht4h?=
+ =?us-ascii?Q?iJg+WJYlzPGY6NT4Xba7S6bu+fphZSWjNfud4uz5xalCyuDhW4LoT4llQyNP?=
+ =?us-ascii?Q?LdMiGBbGjdbaBlAwUVxt1HuCx2sQToGc5DJL2oz0Je7cxWKl5XfVcbfNNH2y?=
+ =?us-ascii?Q?u9wa2XIXXZWb2mJh5iyjSbkxvz7ZELW8yfCvY4Nhu3PZ+BKMZuKO0clKIsqi?=
+ =?us-ascii?Q?UZEJ42Xjci4CYgbUbZbzkzhAHkFjXYFQSo5RmApRlESoXsY07zhOxh1CA3qz?=
+ =?us-ascii?Q?qaZTC2wTe4ES/sEyCd/jU/V2M8RAPnh6rGKqIvZy9f5oN+jjfcPeBGaz2tx2?=
+ =?us-ascii?Q?LoqiVI0gn+7/RKBA8cEMfQP4ZSGwKhiR/epNEYgPXttjIevJhGbyzPE7BEec?=
+ =?us-ascii?Q?cYPx4dlOIS8OnKzHZnXFLAzq0cRiBu4kCaG2Tunk85MLW1oLsoJJ7bDiklgJ?=
+ =?us-ascii?Q?6pzV6XD0VnDyYmmnns67Teh2g1i6WS2erS9OB416wzMmudIP32lnwsN7OZBf?=
+ =?us-ascii?Q?4qlnFd+wrHViBBgE8WLdFVe8LCGdJ+bAaxUFnq4CyE6lyLxElNa+uo8HFw54?=
+ =?us-ascii?Q?GO58jr/NCHQ3A0LOlpATVdWENK5CyS2cYmxpuPIkAmjvOiOnAkB/RXcfA+cm?=
+ =?us-ascii?Q?Jipw7dx7gqlG+LD9TkVjop4054kCN18fjrik9n65Y9ClYPJWwik2IcvEvEHb?=
+ =?us-ascii?Q?6THJM35vuaNlApNSUTzwIeKz5wLh+HmYJfik5c4DYnr6URPH4G+Ixv6y019s?=
+ =?us-ascii?Q?pEDAcqLNvrUXuc7tLdMjJg++PfwwF59fo/birdzrP7loD/+7Rz/2tCPnmBRQ?=
+ =?us-ascii?Q?gRPLWs4qYTNIcmRcjdn+gQYMPeqAON2o4EvkKjh4E8pCSKbunv4Hrc0B0RYU?=
+ =?us-ascii?Q?5b0kAsg0A+7RmZcsOUdSrAQUeP5yDE8mhRww8LCQdxqqnNyK3BtDls/39noR?=
+ =?us-ascii?Q?+Rfxft8inEmyRkr3nqiTE1wm9nq1XkTLwENzE54nwaAcE37nFRVclXCxwJxS?=
+ =?us-ascii?Q?BlEkMnAL9KLHKouEwg0ATx9YLyZBPLu4aWZImTFpoMQzxbUU3bqKrYUVauKb?=
+ =?us-ascii?Q?ZD7zFu09tyCNPSzYU9i/1903tPiTeyOFhIN4P2ycPtf6Yjywd+ueXvoBoTz0?=
+ =?us-ascii?Q?NEvfTdxOUbdQF4s43FeoC/KHf0d2tIZ1MWGDY2bdR2FhgwnMNxpEw7P1rLGH?=
+ =?us-ascii?Q?laf0QpE11wyQYdtXrdVXdkjQmOe3Lqw5IM3IaRO0rF7KE0DvU1hF1zmi1nQ4?=
+ =?us-ascii?Q?4NKM+/M8LrL+rm7x+8QJz9GOP3m9Q2YTGHGb0Htvo6s/vOE03x3MSkNgEteG?=
+ =?us-ascii?Q?Qm4cgFQjV/dYnn5JtOkm6nF81UvdfwCD2cvI+jwYZV1306RzU2pKAhxaMqC/?=
+ =?us-ascii?Q?OCPVFSgya6T5Z8UdCcZbeTYIzBDvw09Cjpy4WDS/rbuiupy2lROnvjPpwYHq?=
+ =?us-ascii?Q?b5o4vp8BGvV5BExC6rBa6fCStH1dUfCTaDAlY7Hsl80ozckziADAK7tO2lw2?=
+ =?us-ascii?Q?jfDhEk3dtGaV+rFEPh49cj641BpCFKWLPrKAzPjNGkVhw9oBMBwa9H+UIWP7?=
+ =?us-ascii?Q?r/BclE8W0jlvktlt/xqqi6Rl1S0K12hUOrJ1jN11enTDBm7XuOvIrHfIvix2?=
+ =?us-ascii?Q?o9NwESEWRaiwWs17tIASG0JlKdcS70MDsTREQf4qDd5dEDmkKQ0By8f+FYHE?=
+ =?us-ascii?Q?cQoLUw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a51eb69-cf07-4521-6ccc-08db308d5545
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 19:39:38.6039
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: klsF3v3d3IwdBnVTsqQz9z0yUj0PX0sd20RKC+PvEb+7VGuD+5oSisBoiVBYoH5lA4EgloIT6j5AG4DJOYB31AhwWyz3CgzAv8gZWHw62Kc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR13MB4108
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Wed, Mar 29, 2023 at 08:01:27AM +0200, Greg Kroah-Hartman wrote:
+> The mISDN_class_release() is not needed at all, as the class structure
+> is static, and it does not actually do anything either, so it is safe to
+> remove as struct class does not require a release callback.
+> 
+> Cc: Karsten Keil <isdn@linux-pingi.de>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+> Note: I would like to take this through the driver-core tree as I have
+> later struct class cleanups that depend on this change being made to the
+> tree if that's ok with the maintainer of this file.
+> 
+>  drivers/isdn/mISDN/core.c | 6 ------
+>  1 file changed, 6 deletions(-)
 
-First bad commit (maybe != root cause):
+I assume this will hit the following in drivers/base/class.c:class_release():
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ffe78bbd512166e0ef1cc4858010b128c510ed7d
-commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
-date:   12 months ago
-config: arm-randconfig-s043-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300305.M1gA53WC-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-at91/ arch/arm/mach-sti/ drivers/dma/ drivers/gpu/drm/ drivers/irqchip/ drivers/mmc/host/ drivers/remoteproc/ kernel/futex/ sound/atmel/
+        if (class->class_release)
+                class->class_release(class);
+        else
+		pr_debug("class '%s' does not have a release() function, "
+		"be careful\n", class->name);
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303300305.M1gA53WC-lkp@intel.com/
+So I also assume that you are being careful :)
 
-sparse warnings: (new ones prefixed by >>)
->> arch/arm/mach-at91/pm.c:775:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void ( *static [assigned] [toplevel] at91_suspend_sram_fn )( ... ) @@     got void [noderef] __iomem * @@
-   arch/arm/mach-at91/pm.c:775:30: sparse:     expected void ( *static [assigned] [toplevel] at91_suspend_sram_fn )( ... )
-   arch/arm/mach-at91/pm.c:775:30: sparse:     got void [noderef] __iomem *
---
->> arch/arm/mach-sti/platsmp.c:44:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile *p @@     got unsigned int [noderef] [usertype] __iomem *static [toplevel] cpu_strt_ptr @@
-   arch/arm/mach-sti/platsmp.c:44:9: sparse:     expected void volatile *p
-   arch/arm/mach-sti/platsmp.c:44:9: sparse:     got unsigned int [noderef] [usertype] __iomem *static [toplevel] cpu_strt_ptr
---
-   kernel/futex/waitwake.c: note: in included file (through kernel/futex/futex.h):
->> arch/arm/include/asm/futex.h:146:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *ptr @@     got unsigned int [noderef] [usertype] __user *uaddr @@
-   arch/arm/include/asm/futex.h:146:17: sparse:     expected void const *ptr
-   arch/arm/include/asm/futex.h:146:17: sparse:     got unsigned int [noderef] [usertype] __user *uaddr
-   arch/arm/include/asm/futex.h:149:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *ptr @@     got unsigned int [noderef] [usertype] __user *uaddr @@
-   arch/arm/include/asm/futex.h:149:17: sparse:     expected void const *ptr
-   arch/arm/include/asm/futex.h:149:17: sparse:     got unsigned int [noderef] [usertype] __user *uaddr
-   arch/arm/include/asm/futex.h:152:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *ptr @@     got unsigned int [noderef] [usertype] __user *uaddr @@
-   arch/arm/include/asm/futex.h:152:17: sparse:     expected void const *ptr
-   arch/arm/include/asm/futex.h:152:17: sparse:     got unsigned int [noderef] [usertype] __user *uaddr
-   arch/arm/include/asm/futex.h:155:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *ptr @@     got unsigned int [noderef] [usertype] __user *uaddr @@
-   arch/arm/include/asm/futex.h:155:17: sparse:     expected void const *ptr
-   arch/arm/include/asm/futex.h:155:17: sparse:     got unsigned int [noderef] [usertype] __user *uaddr
-   arch/arm/include/asm/futex.h:158:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *ptr @@     got unsigned int [noderef] [usertype] __user *uaddr @@
-   arch/arm/include/asm/futex.h:158:17: sparse:     expected void const *ptr
-   arch/arm/include/asm/futex.h:158:17: sparse:     got unsigned int [noderef] [usertype] __user *uaddr
-   kernel/futex/waitwake.c:262:33: sparse: sparse: context imbalance in 'futex_wake_op' - different lock contexts for basic block
-   kernel/futex/waitwake.c:328:6: sparse: sparse: context imbalance in 'futex_wait_queue' - unexpected unlock
-   kernel/futex/waitwake.c:449:36: sparse: sparse: context imbalance in 'futex_wait_multiple_setup' - unexpected unlock
---
->> drivers/dma/ste_dma40_ll.c:342:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/dma/ste_dma40_ll.c:342:9: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/dma/ste_dma40_ll.c:342:9: sparse:     got unsigned int *
-   drivers/dma/ste_dma40_ll.c:343:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/dma/ste_dma40_ll.c:343:9: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/dma/ste_dma40_ll.c:343:9: sparse:     got unsigned int *
-   drivers/dma/ste_dma40_ll.c:344:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/dma/ste_dma40_ll.c:344:9: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/dma/ste_dma40_ll.c:344:9: sparse:     got unsigned int *
-   drivers/dma/ste_dma40_ll.c:345:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/dma/ste_dma40_ll.c:345:9: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/dma/ste_dma40_ll.c:345:9: sparse:     got unsigned int *
-   drivers/dma/ste_dma40_ll.c:355:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/dma/ste_dma40_ll.c:355:9: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/dma/ste_dma40_ll.c:355:9: sparse:     got unsigned int *
-   drivers/dma/ste_dma40_ll.c:356:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/dma/ste_dma40_ll.c:356:9: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/dma/ste_dma40_ll.c:356:9: sparse:     got unsigned int *
-   drivers/dma/ste_dma40_ll.c:357:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/dma/ste_dma40_ll.c:357:9: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/dma/ste_dma40_ll.c:357:9: sparse:     got unsigned int *
-   drivers/dma/ste_dma40_ll.c:358:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/dma/ste_dma40_ll.c:358:9: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/dma/ste_dma40_ll.c:358:9: sparse:     got unsigned int *
---
->> drivers/dma/ste_dma40.c:1389:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/dma/ste_dma40.c:1389:28: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/dma/ste_dma40.c:1389:28: sparse:     got unsigned int *
-   drivers/dma/ste_dma40.c:1405:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/dma/ste_dma40.c:1405:27: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/dma/ste_dma40.c:1405:27: sparse:     got unsigned int *
->> drivers/dma/ste_dma40.c:3564:25: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *lcpa_base @@     got void [noderef] __iomem * @@
-   drivers/dma/ste_dma40.c:3564:25: sparse:     expected void *lcpa_base
-   drivers/dma/ste_dma40.c:3564:25: sparse:     got void [noderef] __iomem *
->> drivers/dma/ste_dma40.c:3580:38: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *base @@     got void [noderef] __iomem * @@
-   drivers/dma/ste_dma40.c:3580:38: sparse:     expected void *base
-   drivers/dma/ste_dma40.c:3580:38: sparse:     got void [noderef] __iomem *
-   drivers/dma/ste_dma40.c:3663:40: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *iomem_cookie @@     got void *base @@
-   drivers/dma/ste_dma40.c:3663:40: sparse:     expected void volatile [noderef] __iomem *iomem_cookie
-   drivers/dma/ste_dma40.c:3663:40: sparse:     got void *base
-   drivers/dma/ste_dma40.c:3679:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *iomem_cookie @@     got void *lcpa_base @@
-   drivers/dma/ste_dma40.c:3679:29: sparse:     expected void volatile [noderef] __iomem *iomem_cookie
-   drivers/dma/ste_dma40.c:3679:29: sparse:     got void *lcpa_base
---
->> drivers/irqchip/irq-rda-intc.c:96:51: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void *host_data @@     got void [noderef] __iomem *static [assigned] [toplevel] rda_intc_base @@
-   drivers/irqchip/irq-rda-intc.c:96:51: sparse:     expected void *host_data
-   drivers/irqchip/irq-rda-intc.c:96:51: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] rda_intc_base
---
->> drivers/irqchip/irq-bcm7120-l2.c:193:38: sparse: sparse: cast removes address space '__iomem' of expression
->> drivers/irqchip/irq-bcm7120-l2.c:193:38: sparse: sparse: cast removes address space '__iomem' of expression
---
->> drivers/remoteproc/st_remoteproc.c:98:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *va @@     got void [noderef] __iomem * @@
-   drivers/remoteproc/st_remoteproc.c:98:12: sparse:     expected void *va
-   drivers/remoteproc/st_remoteproc.c:98:12: sparse:     got void [noderef] __iomem *
-   drivers/remoteproc/st_remoteproc.c:114:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *iomem_cookie @@     got void *va @@
-   drivers/remoteproc/st_remoteproc.c:114:20: sparse:     expected void volatile [noderef] __iomem *iomem_cookie
-   drivers/remoteproc/st_remoteproc.c:114:20: sparse:     got void *va
---
->> drivers/remoteproc/omap_remoteproc.c:1338:47: sparse: sparse: Using plain integer as NULL pointer
---
->> drivers/mmc/host/wmt-sdmmc.c:242:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int @@     got restricted __be32 [usertype] @@
-   drivers/mmc/host/wmt-sdmmc.c:242:39: sparse:     expected unsigned int
-   drivers/mmc/host/wmt-sdmmc.c:242:39: sparse:     got restricted __be32 [usertype]
---
->> sound/atmel/ac97c.c:99:62: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted snd_pcm_format_t [usertype] pcm_format @@     got unsigned long long [usertype] cur_format @@
-   sound/atmel/ac97c.c:99:62: sparse:     expected restricted snd_pcm_format_t [usertype] pcm_format
-   sound/atmel/ac97c.c:99:62: sparse:     got unsigned long long [usertype] cur_format
-   sound/atmel/ac97c.c:118:62: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted snd_pcm_format_t [usertype] pcm_format @@     got unsigned long long [usertype] cur_format @@
-   sound/atmel/ac97c.c:118:62: sparse:     expected restricted snd_pcm_format_t [usertype] pcm_format
-   sound/atmel/ac97c.c:118:62: sparse:     got unsigned long long [usertype] cur_format
->> sound/atmel/ac97c.c:166:26: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] cur_format @@     got restricted snd_pcm_format_t @@
-   sound/atmel/ac97c.c:166:26: sparse:     expected unsigned long long [usertype] cur_format
-   sound/atmel/ac97c.c:166:26: sparse:     got restricted snd_pcm_format_t
-   sound/atmel/ac97c.c:180:26: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] cur_format @@     got restricted snd_pcm_format_t @@
-   sound/atmel/ac97c.c:180:26: sparse:     expected unsigned long long [usertype] cur_format
-   sound/atmel/ac97c.c:180:26: sparse:     got restricted snd_pcm_format_t
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-vim +775 arch/arm/mach-at91/pm.c
-
-fbc7edca5a7dd4 Alexandre Belloni  2015-09-30  740  
-d2e46790559676 Alexandre Belloni  2015-01-15  741  static void __init at91_pm_sram_init(void)
-d2e46790559676 Alexandre Belloni  2015-01-15  742  {
-d2e46790559676 Alexandre Belloni  2015-01-15  743  	struct gen_pool *sram_pool;
-d2e46790559676 Alexandre Belloni  2015-01-15  744  	phys_addr_t sram_pbase;
-d2e46790559676 Alexandre Belloni  2015-01-15  745  	unsigned long sram_base;
-d2e46790559676 Alexandre Belloni  2015-01-15  746  	struct device_node *node;
-4a031f7dbe497a Alexandre Belloni  2015-03-03  747  	struct platform_device *pdev = NULL;
-d2e46790559676 Alexandre Belloni  2015-01-15  748  
-4a031f7dbe497a Alexandre Belloni  2015-03-03  749  	for_each_compatible_node(node, NULL, "mmio-sram") {
-4a031f7dbe497a Alexandre Belloni  2015-03-03  750  		pdev = of_find_device_by_node(node);
-4a031f7dbe497a Alexandre Belloni  2015-03-03  751  		if (pdev) {
-4a031f7dbe497a Alexandre Belloni  2015-03-03  752  			of_node_put(node);
-4a031f7dbe497a Alexandre Belloni  2015-03-03  753  			break;
-4a031f7dbe497a Alexandre Belloni  2015-03-03  754  		}
-d2e46790559676 Alexandre Belloni  2015-01-15  755  	}
-d2e46790559676 Alexandre Belloni  2015-01-15  756  
-d2e46790559676 Alexandre Belloni  2015-01-15  757  	if (!pdev) {
-d2e46790559676 Alexandre Belloni  2015-01-15  758  		pr_warn("%s: failed to find sram device!\n", __func__);
-4a031f7dbe497a Alexandre Belloni  2015-03-03  759  		return;
-d2e46790559676 Alexandre Belloni  2015-01-15  760  	}
-d2e46790559676 Alexandre Belloni  2015-01-15  761  
-73858173593c31 Vladimir Zapolskiy 2015-09-04  762  	sram_pool = gen_pool_get(&pdev->dev, NULL);
-d2e46790559676 Alexandre Belloni  2015-01-15  763  	if (!sram_pool) {
-d2e46790559676 Alexandre Belloni  2015-01-15  764  		pr_warn("%s: sram pool unavailable!\n", __func__);
-f87a4f022c44e5 yu kuai            2020-06-04  765  		goto out_put_device;
-d2e46790559676 Alexandre Belloni  2015-01-15  766  	}
-d2e46790559676 Alexandre Belloni  2015-01-15  767  
-5726a8b9686348 Wenyou Yang        2015-03-09  768  	sram_base = gen_pool_alloc(sram_pool, at91_pm_suspend_in_sram_sz);
-d2e46790559676 Alexandre Belloni  2015-01-15  769  	if (!sram_base) {
-5726a8b9686348 Wenyou Yang        2015-03-09  770  		pr_warn("%s: unable to alloc sram!\n", __func__);
-f87a4f022c44e5 yu kuai            2020-06-04  771  		goto out_put_device;
-d2e46790559676 Alexandre Belloni  2015-01-15  772  	}
-d2e46790559676 Alexandre Belloni  2015-01-15  773  
-d2e46790559676 Alexandre Belloni  2015-01-15  774  	sram_pbase = gen_pool_virt_to_phys(sram_pool, sram_base);
-5726a8b9686348 Wenyou Yang        2015-03-09 @775  	at91_suspend_sram_fn = __arm_ioremap_exec(sram_pbase,
-5726a8b9686348 Wenyou Yang        2015-03-09  776  					at91_pm_suspend_in_sram_sz, false);
-5726a8b9686348 Wenyou Yang        2015-03-09  777  	if (!at91_suspend_sram_fn) {
-d94e688cae5661 Wenyou Yang        2015-03-09  778  		pr_warn("SRAM: Could not map\n");
-f87a4f022c44e5 yu kuai            2020-06-04  779  		goto out_put_device;
-d94e688cae5661 Wenyou Yang        2015-03-09  780  	}
-d94e688cae5661 Wenyou Yang        2015-03-09  781  
-5726a8b9686348 Wenyou Yang        2015-03-09  782  	/* Copy the pm suspend handler to SRAM */
-5726a8b9686348 Wenyou Yang        2015-03-09  783  	at91_suspend_sram_fn = fncpy(at91_suspend_sram_fn,
-5726a8b9686348 Wenyou Yang        2015-03-09  784  			&at91_pm_suspend_in_sram, at91_pm_suspend_in_sram_sz);
-f87a4f022c44e5 yu kuai            2020-06-04  785  	return;
-f87a4f022c44e5 yu kuai            2020-06-04  786  
-f87a4f022c44e5 yu kuai            2020-06-04  787  out_put_device:
-f87a4f022c44e5 yu kuai            2020-06-04  788  	put_device(&pdev->dev);
-f87a4f022c44e5 yu kuai            2020-06-04  789  	return;
-d2e46790559676 Alexandre Belloni  2015-01-15  790  }
-d2e46790559676 Alexandre Belloni  2015-01-15  791  
-
-:::::: The code at line 775 was first introduced by commit
-:::::: 5726a8b9686348e8d203f1bbf9d5fc1bb5899518 ARM: at91/pm: rename function name: at91_slow_clock() --> at91_pm_suspend_sram_fn()
-
-:::::: TO: Wenyou Yang <wenyou.yang@atmel.com>
-:::::: CC: Nicolas Ferre <nicolas.ferre@atmel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> diff --git a/drivers/isdn/mISDN/core.c b/drivers/isdn/mISDN/core.c
+> index f5989c9907ee..ab8513a7acd5 100644
+> --- a/drivers/isdn/mISDN/core.c
+> +++ b/drivers/isdn/mISDN/core.c
+> @@ -152,17 +152,11 @@ static int mISDN_uevent(const struct device *dev, struct kobj_uevent_env *env)
+>  	return 0;
+>  }
+>  
+> -static void mISDN_class_release(struct class *cls)
+> -{
+> -	/* do nothing, it's static */
+> -}
+> -
+>  static struct class mISDN_class = {
+>  	.name = "mISDN",
+>  	.dev_uevent = mISDN_uevent,
+>  	.dev_groups = mISDN_groups,
+>  	.dev_release = mISDN_dev_release,
+> -	.class_release = mISDN_class_release,
+>  };
+>  
+>  static int
+> -- 
+> 2.40.0
+> 
