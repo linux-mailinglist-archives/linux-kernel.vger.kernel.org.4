@@ -2,115 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833BC6CD7FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE546CD7F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjC2Kzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
+        id S229493AbjC2KzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 06:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjC2Kzb (ORCPT
+        with ESMTP id S229462AbjC2KzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:55:31 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31EF23C32
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:55:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=eeKNNTaluB3jSL4ect8rCFF9mBvDp31l7Qb11QUW504=; b=OYVD1jd3ZMstpRUlyLr8dYIkqo
-        luefwzcNrQ2RfrHlZoaLYqYNhaA3MPMxnkaPoonRLKI3mWN64SrR+b0S5xKA4ycw+ohKO3I39L75E
-        3jnzLZvN7tPmK4nUZJ6VX5VzVumBgl5nGTvyCniX1VeVdbk4SXPe/WderSkqQxmuRW6eFyYrPw1Ln
-        pgEgeNCY6GL7wk9YVyJCx6SKfOq3ghMSjqJywtM9IVyODmLDFE2Rp0Q8fz0cSJjG98TRjFB0lIXVY
-        CgdwvmPsvrDDAXtKSQnD+eFDhgURGzpcfns+b+U4qfn7ATD8EFK9+JdL9dJZvsGZAF9+t9u/a8jM2
-        P2xMzaCA==;
-Received: from [177.34.168.16] (helo=[192.168.0.3])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1phTSH-000aFq-J7; Wed, 29 Mar 2023 12:55:01 +0200
-Message-ID: <ceb0b1e8-6c7a-8564-156f-fcf0f0e4a95e@igalia.com>
-Date:   Wed, 29 Mar 2023 07:54:56 -0300
+        Wed, 29 Mar 2023 06:55:14 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9D91FC3;
+        Wed, 29 Mar 2023 03:55:11 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso11157720wms.1;
+        Wed, 29 Mar 2023 03:55:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680087310;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BxWVSYNg3x9Lr51Q6bn5n72HMeWHBmcsrPZstVqCyrs=;
+        b=VByNFV754kE/eZ25qMrcu38DuGFTX/xp6ub/tU5fe0hFGPJ1aemzBDNAEjfKi9vYcJ
+         /nTqcFmhbNwmMDhoHAEPDVZbUcnAUU3NYchYF6spapngQYwqAUI+6qTIGOprLVBRcp/+
+         QMmfzCEE0c4jKkwGX1Yzu2es6052pBefuK3fkYPndyOJxxWeKxD79y1ArMxF3wovBKEE
+         wkRxDmDejC299H96F8ULKImKCv11Rd3iL139pvb6ey++pdb8w95pAmv4DuDKAgtQ+A6O
+         aXLF8ukAMlAZBXbnFMSYGUE0BH79pHeLLXs9NYdtAxL83DPPOA46RvmQh+9RJGnAk0eo
+         d0ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680087310;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BxWVSYNg3x9Lr51Q6bn5n72HMeWHBmcsrPZstVqCyrs=;
+        b=duMp7mkvutkkQU43/jjglL3Vh7Whm0mJ5ylt69gOm2eyRcm8jWsYuLFSpdMheFYVlC
+         0Z9+R3/inlbuDxoO4XEfFC/hm2oeYhdhhVprkzW3pHdGxfmZN0evL+8pZ3RK68JHKwaY
+         Ya3JQ2bsoMfqL9ltdqA1jLehkCALg0z+EUTQz1dq9Tr/32uouY5oJKPgz9fwL0U7JFgX
+         cLfSFjSxyhBQWDaF7Gmf40PBLJ0UEuwMdQyez3eGDE7sxpHl3Hp8diAW2ssqYvTemIr7
+         3i68x7AAnqZWhFogHDESMpeyv5kE+rLDkmB8+GxAlEQUjx8W1KryLUDIBfmOYu24NvKu
+         G2Eg==
+X-Gm-Message-State: AAQBX9dYSNuAu6iRpguD3sbGYOiCjEsLmifeG0L5JMsYxY+kLu6d+Np5
+        bE0D7SPGapJ9EyekMNUFxTA=
+X-Google-Smtp-Source: AKy350ZJu7jp4nxoNA3PBt3BQ1lskpGA2HTjnMYG3XSyNpuQ7wI1e+c6pBNkeN/aR69zppzW9k/gMQ==
+X-Received: by 2002:a05:600c:3c94:b0:3ef:6989:19ef with SMTP id bg20-20020a05600c3c9400b003ef698919efmr1458736wmb.13.1680087310085;
+        Wed, 29 Mar 2023 03:55:10 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003ee1e07a14asm1940538wmq.45.2023.03.29.03.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 03:55:09 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 13:55:05 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Subject: Re: [PATCH 1/2] dmaengine: mv_xor_v2: Fix an error code.
+Message-ID: <73af278e-1fc7-43fb-87b9-f107ae533266@kili.mountain>
+References: <201170dff832a3c496d125772e10070cd834ebf2.1679814350.git.christophe.jaillet@wanadoo.fr>
+ <e53e6f9a-09a9-42e4-8e81-dfe2ad2813ad@kili.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] drm: test: Fix 32-bit issue in drm_buddy_test
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        =?UTF-8?Q?Lu=c3=ads_Mendes?= <luis.p.mendes@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Arthur Grillo <arthurgrillo@riseup.net>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230329065532.2122295-1-davidgow@google.com>
- <20230329065532.2122295-2-davidgow@google.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
-In-Reply-To: <20230329065532.2122295-2-davidgow@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e53e6f9a-09a9-42e4-8e81-dfe2ad2813ad@kili.mountain>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/23 03:55, David Gow wrote:
-> The drm_buddy_test KUnit tests verify that returned blocks have sizes
-> which are powers of two using is_power_of_2(). However, is_power_of_2()
-> operations on a 'long', but the block size is a u64. So on systems where
-> long is 32-bit, this can sometimes fail even on correctly sized blocks.
-> 
-> This only reproduces randomly, as the parameters passed to the buddy
-> allocator in this test are random. The seed 0xb2e06022 reproduced it
-> fine here.
-> 
-> For now, just hardcode an is_power_of_2() implementation using
-> x & (x - 1).
-> 
-> Signed-off-by: David Gow <davidgow@google.com>
+A bunch of false positives could be silenced by changing the assign
+and return hooks to check for unsigned types:
 
-As we still didn't consolidate an implementation of is_power_of_2_u64(),
+static void match_assign(struct expression *expr)
+{
+        if (expr_unsigned(expr->left))
+                return;
+        warn_on_positive_error(expr->right);
+}
 
-Reviewed-by: Maíra Canal <mcanal@igalia.com>
+static void match_return(struct expression *expr)
+{
+        struct symbol *type;
 
-Best Regards,
-- Maíra Canal
+        type = cur_func_return_type();
+        if (type_unsigned(type))
+                return;
 
-> ---
-> 
-> There are actually a couple of is_power_of_2_u64() implementations
-> already around in:
-> - drivers/gpu/drm/i915/i915_utils.h
-> - fs/btrfs/misc.h (called is_power_of_two_u64)
-> 
-> So the ideal thing would be to consolidate these in one place.
-> 
-> 
-> ---
->   drivers/gpu/drm/tests/drm_buddy_test.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
-> index f8ee714df396..09ee6f6af896 100644
-> --- a/drivers/gpu/drm/tests/drm_buddy_test.c
-> +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-> @@ -89,7 +89,8 @@ static int check_block(struct kunit *test, struct drm_buddy *mm,
->   		err = -EINVAL;
->   	}
->   
-> -	if (!is_power_of_2(block_size)) {
-> +	/* We can't use is_power_of_2() for a u64 on 32-bit systems. */
-> +	if (block_size & (block_size - 1)) {
->   		kunit_err(test, "block size not power of two\n");
->   		err = -EINVAL;
->   	}
+        warn_on_positive_error(expr);
+}
+
+regards,
+dan carpenter
