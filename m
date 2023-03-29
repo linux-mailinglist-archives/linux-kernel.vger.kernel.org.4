@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD176CD0F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 05:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A444D6CD0F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 05:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjC2D4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 23:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S229886AbjC2D5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 23:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjC2D4D (ORCPT
+        with ESMTP id S229803AbjC2D5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 23:56:03 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2221730E9;
-        Tue, 28 Mar 2023 20:56:01 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PmXgv0ZWnzgZXD;
-        Wed, 29 Mar 2023 11:52:43 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 29 Mar 2023 11:55:58 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <anshuman.khandual@arm.com>, <linux-doc@vger.kernel.org>
-CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
-        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
-        <darren@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
-        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
-        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
-        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
-        <linux-s390@vger.kernel.org>, Barry Song <21cnbao@gmail.com>,
-        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
-        <prime.zeng@hisilicon.com>, <Jonathan.Cameron@Huawei.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-Subject: [PATCH v8 2/2] arm64: support batched/deferred tlb shootdown during page reclamation
-Date:   Wed, 29 Mar 2023 11:55:12 +0800
-Message-ID: <20230329035512.57392-3-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20230329035512.57392-1-yangyicong@huawei.com>
-References: <20230329035512.57392-1-yangyicong@huawei.com>
+        Tue, 28 Mar 2023 23:57:04 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44CF3A8F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:56:59 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id cf7so17800836ybb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 20:56:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680062219;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4ao2+adQnR6/po/E00/h2Hap8rN3GiJWX7nV/sFbf/k=;
+        b=g3HWh7TIfO1AsxRD5Lo1r1xRuSLxWc/2B9BbHSCe/vkMc2KWAMnOoSzMlkYUcG5Par
+         TOldYTyCKgMiIA//gOVSW2FpeMgjNzlae8qxIgd51GKa035K4Fy7ZRNDyTiqGmvskrUV
+         0eNm3E5alaTM7jVNkTKDnZtRyCRa91i/h5yPF51CIbX38iM0fBSpLoFwm0zGuiVZxfYt
+         EL+eenE/EOJljjcmZaG1IUPy2cBQ2lEiVPhrEO9iq7xaH63aealcC+EHgUgjcTCUFoLJ
+         PWDU2ZIEmc/Ir/hruOMUwp433yMpHx8a76uh5RgQlYE1lQRAuS1oqfXCFStt5fRrW8rG
+         El/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680062219;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4ao2+adQnR6/po/E00/h2Hap8rN3GiJWX7nV/sFbf/k=;
+        b=m0fMzkzwMnP5MNxWqKotU35lxYhCM8a0wIkHTEgyEm6aFRdlqNfg7w/Jlpu/vg7Qty
+         kOVWtXZ0AM+ji1sigucbd21MFVQ85E1YmqQJlSDN6FeWXTErxabVMeFJUOwGnPUra/Am
+         4ji5aMOh1pRA//0TpY4x9G+2J0kNUD8eDRUnbWlMGRoX3p7iPK5LiWl6G47FkSHRgBnR
+         5cyO+gEGXcOp2EoRl/CYMfl906HKWkxhS3XrppM81+uh1d1TDky8eWKTGyh6vONFVVwc
+         DSWCoFZFxp4ppT4nFR1Z1Xho6EaIAqtHE0ZQG15oTDh8eu496Z23cIjWoK8FGoKasjJc
+         42+Q==
+X-Gm-Message-State: AAQBX9cqvxBL+n5Sw+e78DD3ZjCcYJp2Vy6f578NucPHZ5I1uRMFiyrW
+        olAH9HJ9kJoybudJsoMLkLNh63C4SYsnvzgul39JNg==
+X-Google-Smtp-Source: AKy350Zhit2F5VO/z/xZyBcGuBBBbw4hkgqbhERv+PcdEqWJ934Geek4oudvFSIJ6WtOEEWLLxZ+w8I3cR8nmIQHArY=
+X-Received: by 2002:a25:d7ce:0:b0:b7d:e643:d3c3 with SMTP id
+ o197-20020a25d7ce000000b00b7de643d3c3mr2138538ybg.8.1680062218889; Tue, 28
+ Mar 2023 20:56:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230327043405.881645-1-joychakr@google.com> <20230327043405.881645-3-joychakr@google.com>
+ <20230328180338.bpxvjwx4tn4ter3f@mobilestation>
+In-Reply-To: <20230328180338.bpxvjwx4tn4ter3f@mobilestation>
+From:   Joy Chakraborty <joychakr@google.com>
+Date:   Wed, 29 Mar 2023 09:26:47 +0530
+Message-ID: <CAOSNQF3r+6Oz=chnA94=4q7pugGFKm2W09ry+pS2F0oe1HZmcA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] spi: dw: Add dma controller capability checks
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,370 +72,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Barry Song <v-songbaohua@oppo.com>
+Hi Serge(y),
 
-on x86, batched and deferred tlb shootdown has lead to 90%
-performance increase on tlb shootdown. on arm64, HW can do
-tlb shootdown without software IPI. But sync tlbi is still
-quite expensive.
+On Tue, Mar 28, 2023 at 11:33=E2=80=AFPM Serge Semin <fancer.lancer@gmail.c=
+om> wrote:
+>
+> On Mon, Mar 27, 2023 at 04:34:05AM +0000, Joy Chakraborty wrote:
+> > Check capabilities of DMA controller during init to make sure it is
+> > capable of handling MEM2DEV for tx channel, DEV2MEM for rx channel
+> > and store addr_width capabilities to check per transfer to make sure th=
+e
+> > bits/word requirement can be met for that transfer.
+> >
+> > Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> > ---
+> >  drivers/spi/spi-dw-dma.c | 54 ++++++++++++++++++++++++++++++++--------
+> >  drivers/spi/spi-dw.h     |  1 +
+> >  2 files changed, 44 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+> > index b3a88bb75907..f47483ec369f 100644
+> > --- a/drivers/spi/spi-dw-dma.c
+> > +++ b/drivers/spi/spi-dw-dma.c
+> > @@ -23,6 +23,8 @@
+> >  #define DW_SPI_TX_BUSY               1
+> >  #define DW_SPI_TX_BURST_LEVEL        16
+> >
+> > +static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes);
+> > +
+> >  static bool dw_spi_dma_chan_filter(struct dma_chan *chan, void *param)
+> >  {
+> >       struct dw_dma_slave *s =3D param;
+> > @@ -72,12 +74,15 @@ static void dw_spi_dma_maxburst_init(struct dw_spi =
+*dws)
+> >       dw_writel(dws, DW_SPI_DMATDLR, dws->txburst);
+> >  }
+> >
+> > -static void dw_spi_dma_sg_burst_init(struct dw_spi *dws)
+> > +static int dw_spi_dma_caps_init(struct dw_spi *dws)
+> >  {
+>
+> > +     int ret;
+> >       struct dma_slave_caps tx =3D {0}, rx =3D {0};
+>
+> 1. Preserve the reverse xmas tree order please (driver local convention).
+> 2. The zero-initialization can be dropped since the function will halt
+> on further procedures if any of the dma_get_slave_caps() calls fail.
+> Meanwhile if all of them are successfully executed the capability
+> structures will be sanely initialized.
+>
 
-Even running a simplest program which requires swapout can
-prove this is true,
- #include <sys/types.h>
- #include <unistd.h>
- #include <sys/mman.h>
- #include <string.h>
+Sure, will update
 
- int main()
- {
- #define SIZE (1 * 1024 * 1024)
-         volatile unsigned char *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
-                                          MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+> >
+> > -     dma_get_slave_caps(dws->txchan, &tx);
+> > -     dma_get_slave_caps(dws->rxchan, &rx);
+>
+> > +     ret =3D dma_get_slave_caps(dws->txchan, &tx);
+>         if (ret)
+>                 return ret;
+> < newline
+> > +     ret |=3D dma_get_slave_caps(dws->rxchan, &rx);
+> > +     if (ret)
+> > +             return ret;
+>
+> No OR-ing the errnos please. They aren't bitfields.
 
-         memset(p, 0x88, SIZE);
+Sure, I will update this.
+In this case do you think we need an error print here to differentiate
+which slave caps failed ?
 
-         for (int k = 0; k < 10000; k++) {
-                 /* swap in */
-                 for (int i = 0; i < SIZE; i += 4096) {
-                         (void)p[i];
-                 }
+>
+> >
+> >       if (tx.max_sg_burst > 0 && rx.max_sg_burst > 0)
+> >               dws->dma_sg_burst =3D min(tx.max_sg_burst, rx.max_sg_burs=
+t);
+> > @@ -87,6 +92,18 @@ static void dw_spi_dma_sg_burst_init(struct dw_spi *=
+dws)
+> >               dws->dma_sg_burst =3D rx.max_sg_burst;
+> >       else
+> >               dws->dma_sg_burst =3D 0;
+> > +
+> > +     /*
+> > +      * Assuming both channels belong to the same DMA controller hence=
+ the
+> > +      * address width capabilities most likely would be the same.
+> > +      */
+> > +     dws->dma_addr_widths =3D tx.dst_addr_widths & rx.src_addr_widths;
+> > +
+>
+> > +     if (!(tx.directions & BIT(DMA_MEM_TO_DEV) &&
+> > +           rx.directions & BIT(DMA_DEV_TO_MEM)))
+> > +             return -ENXIO;
+>
+> Please move this to be right after the capabilities are retrieved.
+> There is no point in the SG-burst and addr-width data initializations
+> if a DMA-controller isn't suitable for the Tx/Rx DMAs.
 
-                 /* swap out */
-                 madvise(p, SIZE, MADV_PAGEOUT);
-         }
- }
+On second thought I see that dma_get_slave_caps already checks if
+direction exists in dmaengine.c:
+...
+int dma_get_slave_caps(struct dma_chan *chan, struct dma_slave_caps *caps)
+...
+    if (!device->directions)
+        return -ENXIO;
+...
+But it does not check the capability w.r.t the type of channel i.e.
+tx/rx , so we can keep this check as well.
+Either Way, in case we keep it I shall move this as you suggested.
 
-Perf result on snapdragon 888 with 8 cores by using zRAM
-as the swap block device.
+>
+> -Serge(y)
+>
+> > +
+> > +     return 0;
+> >  }
+> >
+> >  static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws=
+)
+> > @@ -95,6 +112,7 @@ static int dw_spi_dma_init_mfld(struct device *dev, =
+struct dw_spi *dws)
+> >       struct dw_dma_slave dma_rx =3D { .src_id =3D 0 }, *rx =3D &dma_rx=
+;
+> >       struct pci_dev *dma_dev;
+> >       dma_cap_mask_t mask;
+> > +     int ret =3D -EBUSY;
+> >
+> >       /*
+> >        * Get pci device for DMA controller, currently it could only
+> > @@ -124,20 +142,24 @@ static int dw_spi_dma_init_mfld(struct device *de=
+v, struct dw_spi *dws)
+> >
+> >       init_completion(&dws->dma_completion);
+> >
+> > -     dw_spi_dma_maxburst_init(dws);
+> > +     ret =3D dw_spi_dma_caps_init(dws);
+> > +     if (ret)
+> > +             goto free_txchan;
+> >
+> > -     dw_spi_dma_sg_burst_init(dws);
+> > +     dw_spi_dma_maxburst_init(dws);
+> >
+> >       pci_dev_put(dma_dev);
+> >
+> >       return 0;
+> > -
+> > +free_txchan:
+> > +     dma_release_channel(dws->txchan);
+> > +     dws->txchan =3D NULL;
+> >  free_rxchan:
+> >       dma_release_channel(dws->rxchan);
+> >       dws->rxchan =3D NULL;
+> >  err_exit:
+> >       pci_dev_put(dma_dev);
+> > -     return -EBUSY;
+> > +     return ret;
+> >  }
+> >
+> >  static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *=
+dws)
+> > @@ -163,12 +185,16 @@ static int dw_spi_dma_init_generic(struct device =
+*dev, struct dw_spi *dws)
+> >
+> >       init_completion(&dws->dma_completion);
+> >
+> > -     dw_spi_dma_maxburst_init(dws);
+> > +     ret =3D dw_spi_dma_caps_init(dws);
+> > +     if (ret)
+> > +             goto free_txchan;
+> >
+> > -     dw_spi_dma_sg_burst_init(dws);
+> > +     dw_spi_dma_maxburst_init(dws);
+> >
+> >       return 0;
+> > -
+> > +free_txchan:
+> > +     dma_release_channel(dws->txchan);
+> > +     dws->txchan =3D NULL;
+> >  free_rxchan:
+> >       dma_release_channel(dws->rxchan);
+> >       dws->rxchan =3D NULL;
+> > @@ -202,8 +228,14 @@ static bool dw_spi_can_dma(struct spi_controller *=
+master,
+> >                          struct spi_device *spi, struct spi_transfer *x=
+fer)
+> >  {
+> >       struct dw_spi *dws =3D spi_controller_get_devdata(master);
+> > +     enum dma_slave_buswidth dma_bus_width;
+> > +
+> > +     if (xfer->len <=3D dws->fifo_len)
+> > +             return false;
+> > +
+> > +     dma_bus_width =3D dw_spi_dma_convert_width(dws->n_bytes);
+> >
+> > -     return xfer->len > dws->fifo_len;
+> > +     return dws->dma_addr_widths & BIT(dma_bus_width);
+> >  }
+> >
+> >  static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
+> > diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+> > index 9e8eb2b52d5c..3962e6dcf880 100644
+> > --- a/drivers/spi/spi-dw.h
+> > +++ b/drivers/spi/spi-dw.h
+> > @@ -190,6 +190,7 @@ struct dw_spi {
+> >       struct dma_chan         *rxchan;
+> >       u32                     rxburst;
+> >       u32                     dma_sg_burst;
+> > +     u32                     dma_addr_widths;
+> >       unsigned long           dma_chan_busy;
+> >       dma_addr_t              dma_addr; /* phy address of the Data regi=
+ster */
+> >       const struct dw_spi_dma_ops *dma_ops;
+> > --
+> > 2.40.0.348.gf938b09366-goog
+> >
 
- ~ # perf record taskset -c 4 ./a.out
- [ perf record: Woken up 10 times to write data ]
- [ perf record: Captured and wrote 2.297 MB perf.data (60084 samples) ]
- ~ # perf report
- # To display the perf.data header info, please use --header/--header-only options.
- # To display the perf.data header info, please use --header/--header-only options.
- #
- #
- # Total Lost Samples: 0
- #
- # Samples: 60K of event 'cycles'
- # Event count (approx.): 35706225414
- #
- # Overhead  Command  Shared Object      Symbol
- # ........  .......  .................  .............................................................................
- #
-    21.07%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irq
-     8.23%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
-     6.67%  a.out    [kernel.kallsyms]  [k] filemap_map_pages
-     6.16%  a.out    [kernel.kallsyms]  [k] __zram_bvec_write
-     5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
-     3.71%  a.out    [kernel.kallsyms]  [k] _raw_spin_lock
-     3.49%  a.out    [kernel.kallsyms]  [k] memset64
-     1.63%  a.out    [kernel.kallsyms]  [k] clear_page
-     1.42%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock
-     1.26%  a.out    [kernel.kallsyms]  [k] mod_zone_state.llvm.8525150236079521930
-     1.23%  a.out    [kernel.kallsyms]  [k] xas_load
-     1.15%  a.out    [kernel.kallsyms]  [k] zram_slot_lock
-
-ptep_clear_flush() takes 5.36% CPU in the micro-benchmark
-swapping in/out a page mapped by only one process. If the
-page is mapped by multiple processes, typically, like more
-than 100 on a phone, the overhead would be much higher as
-we have to run tlb flush 100 times for one single page.
-Plus, tlb flush overhead will increase with the number
-of CPU cores due to the bad scalability of tlb shootdown
-in HW, so those ARM64 servers should expect much higher
-overhead.
-
-Further perf annonate shows 95% cpu time of ptep_clear_flush
-is actually used by the final dsb() to wait for the completion
-of tlb flush. This provides us a very good chance to leverage
-the existing batched tlb in kernel. The minimum modification
-is that we only send async tlbi in the first stage and we send
-dsb while we have to sync in the second stage.
-
-With the above simplest micro benchmark, collapsed time to
-finish the program decreases around 5%.
-
-Typical collapsed time w/o patch:
- ~ # time taskset -c 4 ./a.out
- 0.21user 14.34system 0:14.69elapsed
-w/ patch:
- ~ # time taskset -c 4 ./a.out
- 0.22user 13.45system 0:13.80elapsed
-
-Also, Yicong Yang added the following observation.
-	Tested with benchmark in the commit on Kunpeng920 arm64 server,
-	observed an improvement around 12.5% with command
-	`time ./swap_bench`.
-		w/o		w/
-	real	0m13.460s	0m11.771s
-	user	0m0.248s	0m0.279s
-	sys	0m12.039s	0m11.458s
-
-	Originally it's noticed a 16.99% overhead of ptep_clear_flush()
-	which has been eliminated by this patch:
-
-	[root@localhost yang]# perf record -- ./swap_bench && perf report
-	[...]
-	16.99%  swap_bench  [kernel.kallsyms]  [k] ptep_clear_flush
-
-It is tested on 4,8,128 CPU platforms and shows to be beneficial on
-large systems but may not have improvement on small systems like on
-a 4 CPU platform. So make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends
-on CONFIG_EXPERT for this stage and make this disabled on systems
-with less than 8 CPUs. User can modify this threshold according to
-their own platforms by CONFIG_NR_CPUS_FOR_BATCHED_TLB.
-
-Also this patch improve the performance of page migration. Using pmbench
-and tries to migrate the pages of pmbench between node 0 and node 1 for
-20 times, this patch decrease the time used more than 50% and saved the
-time used by ptep_clear_flush().
-
-This patch extends arch_tlbbatch_add_mm() to take an address of the
-target page to support the feature on arm64. Also rename it to
-arch_tlbbatch_add_pending() to better match its function since we
-don't need to handle the mm on arm64 and add_mm is not proper.
-add_pending will make sense to both as on x86 we're pending the
-TLB flush operations while on arm64 we're pending the synchronize
-operations.
-
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Nadav Amit <namit@vmware.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-Tested-by: Xin Hao <xhao@linux.alibaba.com>
-Tested-by: Punit Agrawal <punit.agrawal@bytedance.com>
-Signed-off-by: Barry Song <v-songbaohua@oppo.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- .../features/vm/TLB/arch-support.txt          |  2 +-
- arch/arm64/Kconfig                            |  6 +++
- arch/arm64/include/asm/tlbbatch.h             | 12 +++++
- arch/arm64/include/asm/tlbflush.h             | 52 ++++++++++++++++++-
- arch/x86/include/asm/tlbflush.h               |  5 +-
- include/linux/mm_types_task.h                 |  4 +-
- mm/rmap.c                                     | 12 +++--
- 7 files changed, 81 insertions(+), 12 deletions(-)
- create mode 100644 arch/arm64/include/asm/tlbbatch.h
-
-diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
-index 7f049c251a79..76208db88f3b 100644
---- a/Documentation/features/vm/TLB/arch-support.txt
-+++ b/Documentation/features/vm/TLB/arch-support.txt
-@@ -9,7 +9,7 @@
-     |       alpha: | TODO |
-     |         arc: | TODO |
-     |         arm: | TODO |
--    |       arm64: | N/A  |
-+    |       arm64: |  ok  |
-     |        csky: | TODO |
-     |     hexagon: | TODO |
-     |        ia64: | TODO |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 1023e896d46b..93b5f5f989a1 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -95,6 +95,7 @@ config ARM64
- 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
- 	select ARCH_SUPPORTS_NUMA_BALANCING
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
-+	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH if EXPERT
- 	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
- 	select ARCH_WANT_DEFAULT_BPF_JIT
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-@@ -275,6 +276,11 @@ config ARM64_CONT_PMD_SHIFT
- 	default 5 if ARM64_16K_PAGES
- 	default 4
- 
-+config ARM64_NR_CPUS_FOR_BATCHED_TLB
-+	int "Threshold to enable batched TLB flush"
-+	default 8
-+	depends on ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
-+
- config ARCH_MMAP_RND_BITS_MIN
- 	default 14 if ARM64_64K_PAGES
- 	default 16 if ARM64_16K_PAGES
-diff --git a/arch/arm64/include/asm/tlbbatch.h b/arch/arm64/include/asm/tlbbatch.h
-new file mode 100644
-index 000000000000..fedb0b87b8db
---- /dev/null
-+++ b/arch/arm64/include/asm/tlbbatch.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ARCH_ARM64_TLBBATCH_H
-+#define _ARCH_ARM64_TLBBATCH_H
-+
-+struct arch_tlbflush_unmap_batch {
-+	/*
-+	 * For arm64, HW can do tlb shootdown, so we don't
-+	 * need to record cpumask for sending IPI
-+	 */
-+};
-+
-+#endif /* _ARCH_ARM64_TLBBATCH_H */
-diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
-index 412a3b9a3c25..41a763cf8c1b 100644
---- a/arch/arm64/include/asm/tlbflush.h
-+++ b/arch/arm64/include/asm/tlbflush.h
-@@ -254,17 +254,23 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
- 	dsb(ish);
- }
- 
--static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-+static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
- 					 unsigned long uaddr)
- {
- 	unsigned long addr;
- 
- 	dsb(ishst);
--	addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
-+	addr = __TLBI_VADDR(uaddr, ASID(mm));
- 	__tlbi(vale1is, addr);
- 	__tlbi_user(vale1is, addr);
- }
- 
-+static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-+					 unsigned long uaddr)
-+{
-+	return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
-+}
-+
- static inline void flush_tlb_page(struct vm_area_struct *vma,
- 				  unsigned long uaddr)
- {
-@@ -272,6 +278,48 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
- 	dsb(ish);
- }
- 
-+#ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
-+
-+static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-+{
-+	/*
-+	 * TLB batched flush is proved to be beneficial for systems with large
-+	 * number of CPUs, especially system with more than 8 CPUs. TLB shutdown
-+	 * is cheap on small systems which may not need this feature. So use
-+	 * a threshold for enabling this to avoid potential side effects on
-+	 * these platforms.
-+	 */
-+	if (num_online_cpus() < CONFIG_ARM64_NR_CPUS_FOR_BATCHED_TLB)
-+		return false;
-+
-+	/*
-+	 * TLB flush deferral is not required on systems, which are affected with
-+	 * ARM64_WORKAROUND_REPEAT_TLBI, as __tlbi()/__tlbi_user() implementation
-+	 * will have two consecutive TLBI instructions with a dsb(ish) in between
-+	 * defeating the purpose (i.e save overall 'dsb ish' cost).
-+	 */
-+#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
-+	if (unlikely(cpus_have_const_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
-+		return false;
-+#endif
-+
-+	return true;
-+}
-+
-+static inline void arch_tlbbatch_add_pending(struct arch_tlbflush_unmap_batch *batch,
-+					     struct mm_struct *mm,
-+					     unsigned long uaddr)
-+{
-+	__flush_tlb_page_nosync(mm, uaddr);
-+}
-+
-+static inline void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
-+{
-+	dsb(ish);
-+}
-+
-+#endif /* CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH */
-+
- /*
-  * This is meant to avoid soft lock-ups on large TLB flushing ranges and not
-  * necessarily a performance improvement.
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 8a497d902c16..15cada9635c1 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -263,8 +263,9 @@ static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
- 	return atomic64_inc_return(&mm->context.tlb_gen);
- }
- 
--static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
--					struct mm_struct *mm)
-+static inline void arch_tlbbatch_add_pending(struct arch_tlbflush_unmap_batch *batch,
-+					     struct mm_struct *mm,
-+					     unsigned long uaddr)
- {
- 	inc_mm_tlb_gen(mm);
- 	cpumask_or(&batch->cpumask, &batch->cpumask, mm_cpumask(mm));
-diff --git a/include/linux/mm_types_task.h b/include/linux/mm_types_task.h
-index 5414b5c6a103..aa44fff8bb9d 100644
---- a/include/linux/mm_types_task.h
-+++ b/include/linux/mm_types_task.h
-@@ -52,8 +52,8 @@ struct tlbflush_unmap_batch {
- #ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
- 	/*
- 	 * The arch code makes the following promise: generic code can modify a
--	 * PTE, then call arch_tlbbatch_add_mm() (which internally provides all
--	 * needed barriers), then call arch_tlbbatch_flush(), and the entries
-+	 * PTE, then call arch_tlbbatch_add_pending() (which internally provides
-+	 * all needed barriers), then call arch_tlbbatch_flush(), and the entries
- 	 * will be flushed on all CPUs by the time that arch_tlbbatch_flush()
- 	 * returns.
- 	 */
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 38ccb700748c..a4e2c16a1a72 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -641,12 +641,13 @@ void try_to_unmap_flush_dirty(void)
- #define TLB_FLUSH_BATCH_PENDING_LARGE			\
- 	(TLB_FLUSH_BATCH_PENDING_MASK / 2)
- 
--static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
-+static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable,
-+				      unsigned long uaddr)
- {
- 	struct tlbflush_unmap_batch *tlb_ubc = &current->tlb_ubc;
- 	int batch, nbatch;
- 
--	arch_tlbbatch_add_mm(&tlb_ubc->arch, mm);
-+	arch_tlbbatch_add_pending(&tlb_ubc->arch, mm, uaddr);
- 	tlb_ubc->flush_required = true;
- 
- 	/*
-@@ -724,7 +725,8 @@ void flush_tlb_batched_pending(struct mm_struct *mm)
- 	}
- }
- #else
--static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
-+static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable,
-+				      unsigned long uaddr)
- {
- }
- 
-@@ -1575,7 +1577,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval), address);
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
-@@ -1956,7 +1958,7 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval), address);
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
--- 
-2.24.0
-
+Thanks
+Joy
