@@ -2,178 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78D06CEECE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF026CEEDA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbjC2QIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S230304AbjC2QJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjC2QIY (ORCPT
+        with ESMTP id S229827AbjC2QJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:08:24 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9204EE3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:07:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e/hjzYa0lg22yk9nudWpaat/k6vT5B9K4OsI6/mU8Mgy8MKevF/rwTTp8UeK8pBa5Ul9OcQJMoejGAgF7AvU4YlM+Mf8ytdZf6ysZXVoezmMXkuicM9HhG4WRPwijFVuBaCxE2+8fzRF2OzLBJwH3uDzMytfnA5fx8Y3oDoYGVKJlk4EwN0w1wUWUATnGRoyvPFaK1acvINY8oOs8AHIWSTOoIVaQs5yoUG7CIYHIm11LTU+Is7CYMLXS0GPbuY19O0A6fEoGA974rGiDW+FhLRUWF1FEShCRA7QoSKmtmT41xuzzxCdzeCOLrWIuM3j0CAAd6S3P4q+69FWsVeV0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cSFNW5/iy3IqzMtqxLLMdgcYI0DEp9x+YdHiVh292XA=;
- b=Av/GXGb3J0herrWI2hVoWO8PKi3b8Jmk7Y5VWqHHwpaHn7Y6NLMlgCa/j4G57PZoAfJn2+Lh5e3NEnpmA3W9bxnfirmT+684oWIHCCNAxMW0/RlSTK06CmRxEHqPEPpO4toJBIxfyz36OWvZq6UVJdBqxo9YJ33LlGaLw23dvHtIh0QPZmh0Pn5vL9PDesH35VBFj8ylzsib12EWVbWYebZ+ccdx4QXL6LKIrqKKxA4CFQLOAtbSeFDG3XwRBpzyBs3HkdwL4egCVVTyQ6NIYEb8olhjrVnQ5jSEpyNJGOzvyHXgmcBE1a0KtS519uRN02tlQV+zFhclRZ7VzPjbiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cSFNW5/iy3IqzMtqxLLMdgcYI0DEp9x+YdHiVh292XA=;
- b=vILaDK2j+cngLlZdFB2vv2R4y9DdmUFbKmqnFOt33cTnKHY9nchx28uJsFDS3S1qBQLDkrJd0jxWBG6r5NgpjwY6CJT8wQQ8MbzH9bcNT9oioMpxQgFUn0RyCQhy+rw3Ow5XLIx96U+0tVZ+jiFWEFcc6cwhp22KVVushM3pEWA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- SJ0PR12MB6853.namprd12.prod.outlook.com (2603:10b6:a03:47b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Wed, 29 Mar
- 2023 16:06:38 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%6]) with mapi id 15.20.6222.033; Wed, 29 Mar 2023
- 16:06:38 +0000
-Message-ID: <fba14fea-787b-c5b2-a72a-ab802f76b3f7@amd.com>
-Date:   Wed, 29 Mar 2023 12:07:56 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] drm/amd/display: Add previous prototype to
- 'optc3_wait_drr_doublebuffer_pending_clear'
-Content-Language: en-US
-To:     Caio Novais <caionovais@usp.br>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Wesley Chalmers <Wesley.Chalmers@amd.com>,
-        "Lee, Alvin" <Alvin.Lee2@amd.com>, Jun Lei <Jun.Lei@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        Gabe Teeger <gabe.teeger@amd.com>, Roman Li <roman.li@amd.com>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Deepak R Varma <drv@mailo.com>
-References: <20230328220947.108188-1-caionovais@usp.br>
- <20230328220947.108188-3-caionovais@usp.br>
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230328220947.108188-3-caionovais@usp.br>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQXPR0101CA0029.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:15::42) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Wed, 29 Mar 2023 12:09:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E982B5B81;
+        Wed, 29 Mar 2023 09:08:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81054B82371;
+        Wed, 29 Mar 2023 16:08:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2FA9C4339B;
+        Wed, 29 Mar 2023 16:08:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680106081;
+        bh=enJerK8BV7TZcY8hMulDr/MyR3IQQzJAjpyRyNFFxhA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qHYPFeccmSp7OVMJy6eS/srYMyeAsSwJIF+hYqDCY7yjvT/T8dihBnPwVB9uy231m
+         SNfiI4re5lYCyFHWzblb0eqL+5qTvbgDUCgwwNl+WAsz/mqD3TTbuB6cm3NgRAnoRH
+         dy3bsTFgrobDT3RtmnZ9QHwJENdrUQXhW/t/tpEwTge74oZ5lzzDqQMeASNKFaaxo0
+         CHkolqcKbXrKfNmlWOIWV8mVNWPZKAt1gvHXcj22tSW2cLQTfHNxBzj7MwWE7AyADP
+         Vk4WFBNzn7Tw088XEbmNN8HEMedIPn09Wa7lILbBT5aGLKwPD61A9AhPga1wsEs3yv
+         YUMFNtbv/7Blg==
+Date:   Wed, 29 Mar 2023 18:07:58 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 1/4] rcu/nocb: Protect lazy shrinker against concurrent
+ (de-)offloading
+Message-ID: <ZCRiXrQQRNy2aJAS@lothringen>
+References: <20230322194456.2331527-1-frederic@kernel.org>
+ <20230322194456.2331527-2-frederic@kernel.org>
+ <c614c542-f2b5-4b39-bbc4-ae5f0a125c81@paulmck-laptop>
+ <ZB4fhA1BafN7h2N3@localhost.localdomain>
+ <ae1cb391-aeed-4587-8d9d-50909c918fb1@paulmck-laptop>
+ <ZCCknqnceazfyzvr@localhost.localdomain>
+ <dd853e13-ffcd-4579-adad-80b014e906ef@paulmck-laptop>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|SJ0PR12MB6853:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7068e712-64f1-4099-43b5-08db306f93f2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y+WxI/2tNDhz7oneE57UJA1xEc0h/1opvAOtw/PZXSuz/5CF7yXbJLq6+DsCgFsl3oRFAuFHw3R2st32nkEU/wmKlSTnpzx9R6dqzGDfA7jIUohAJZ8qY37q0e+r6YURIGwBOqOj1JZg8EAJo8mcVJzvbrl3Gh+AXHKPueZdwQ7vwta078HCp9R0x0cCy00LPMQFNIIwXbJ8borvcnxZOKFUFs+OSURi+wQHAeN+5iYHg8cApMJFvJs5/UQKPpuf1AutNivGGl9xlnQ5sDz9fpFIBu3m5niYEAkQLx3gK+DtzJkozyNtvxuDHZLKYiqPOnLmQ8HVbsb+7wi28O4Vzlh/aHi5K6cfBCuRHvHX/uPs2tVYpzfvpKK1rO3XPKbWDTIwYo8/LwNueKhi96DgdnYVJrS4ukuz8IYhww5sC6u/q1py9GYi7umHZvdfi24VcpD8kaa2GbgupNKQwBHjqC53fLFr4OGNNJf/xBvbpwtD4YWwpYES5LsBCpilWcILBf7vPv2I+N/HSo+BMH9KUK91HqYtK8wKYYG/jsJoS744Nm/WBSTnXaUbrD/hzGGI1gm+LYu6Acm/nkeR+Yq0JlMEAr+Y2GxQbA5hjzMMT9xbyJPFvqPIeuGt9SXzjpsAVyoOusI/6XZ/me3V33ykig==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199021)(66556008)(8936002)(83380400001)(66946007)(31686004)(38100700002)(44832011)(5660300002)(54906003)(2906002)(8676002)(4326008)(41300700001)(66476007)(316002)(478600001)(2616005)(31696002)(6486002)(86362001)(6512007)(186003)(53546011)(6506007)(26005)(6666004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cDJJelBZZ1hGS2VXVG9vWDJwWSthL1NkdUtlN1VZbWRsaXE5dlpHQ212UEVi?=
- =?utf-8?B?MTR0NFBvMmVkSmhXdFNuVjBuWFFMYkZNUWZzSkd3cXlYRjlQTVQ3UyszR3VS?=
- =?utf-8?B?cGhEcEkvZW5yZnRRcU96SUJlMkpsTkZOUFdiVDJORmZONXlkU0lyQm5KRXJY?=
- =?utf-8?B?SjFIbVJxRiszeVJJTnRqb2hycWpHdGIzZnp1Q3l2OTM4TkEyZitEbE1wazJ5?=
- =?utf-8?B?R2Z5dVlOSkM0bVh6aFRWd3ZzcmY0V3dOVm96RS9yOXZ5QzdtYms3bVp2N091?=
- =?utf-8?B?VVRDak1FRWV6aU9jYkI2STZ0N3h3K3JseG5xNk42UjBZNjR6M2U4aFFiUThG?=
- =?utf-8?B?VlgwUm1iWnEzcE9XUS8wZ1R3Qkk5bkxBSEwrYjNCVU5ST2k5NGEvSGx0TFFn?=
- =?utf-8?B?KzZpL0hDUGg5YlRpYUhNVnlyUGpGL2tPQkFXRGoraXZvOHVEUmsvaEMwb2lu?=
- =?utf-8?B?cm9IQll5MmxRbjZ5S3JuTFhncFA2VVMrbVAvdEcrTkE2RjNQM2NYOVhha250?=
- =?utf-8?B?RTZjNUZ2RTJKYUNVR2twMy9OcXF6VVJMOU90ZGdqaU56NWFQeW16NS9OQnNX?=
- =?utf-8?B?QW44N2RGQTFwY0JIZEpjUFQwNkxvRDc5Rit1TSsvT0o4TE9iNFBRcjRkOEZv?=
- =?utf-8?B?L2Z0emxJUHRNcHY1TmR2NmQ4K0ZkNTM2ZXZQMHpEbUJMNStqUHdIcHRJREJl?=
- =?utf-8?B?U29XNmJTWjdaUy9XZ3R4NitONUhCd1pIL3NUeXBXQkhuVlk0akMxUnB1RmtO?=
- =?utf-8?B?cnlDZzlBbUpWN0V2eTJrTEpSOTBEVkc4NzBaQzlzMi9IVEJpQXZ6eFBJaWNt?=
- =?utf-8?B?ZXFMS0Y4Q1ozOENRcjB6WEREMk80M3VlcmVmSGVyQzlXaTArV2xjODNxUUdu?=
- =?utf-8?B?ay9jZnhIYThsSWFDWFFaeTc1TFlXUExtTEtSajZDZGduNmgrdTgzdDBpYXhu?=
- =?utf-8?B?ZGlPdjBvQVlhbWpiZlNuWHk1cHVrN1h6Z1psa20rUzVDS0IvZFVhVGVOR3px?=
- =?utf-8?B?d2o1OXd0ZVZWdkdyVWZtbUNMODBqRVcrcEtlTkRiNlU4SnV4elFQZWdFRmtn?=
- =?utf-8?B?VGVhSlR0MElQbkhsZVp6SCtQby9jREpEV0RnYTloLzZNallWTi9YVHBKNnhX?=
- =?utf-8?B?UXpkdWFJQmdRSFhkWWNsWnpKaUVYbFIwbjZCa05mZmllRDE1WkVEa3dQbXYy?=
- =?utf-8?B?QmtBTGhNMzdrTXJIRHNhWC9xbG9saC9TQWxGRFdod1BvR1hweHJKbWlFdk5k?=
- =?utf-8?B?OGY0Ny9qQjBFYTZrSzhVSnJFMFVBSE9udnI1VFJnV2tERkRSNnROellIWkZo?=
- =?utf-8?B?N21tdWw4ajlCdFd4bkZTMzNNSGdBcEgweXBwMEdjZGZMaHh3Ym9YR3ZkODFS?=
- =?utf-8?B?N1JycWtyNHBxcFVBSmFQd0RkaVZwYlprSFRJRmdHYW9LRzlXTzJ2UVFIVmpC?=
- =?utf-8?B?Mm85dmx3YURyMlNpYjkyNFNna1dDYXZFVnFsUlI2b0tBT3UzMmkyRW0vNzN1?=
- =?utf-8?B?clRqbGxqOHNhQlV4aWdTZUtMOTcxemVtdjVrRUlEcWk0bEdzemJ2RjlBTDVi?=
- =?utf-8?B?dWlGTmROcUx5NXlrUUVHWm5ITlpyMjBoNFN4T3Q3YVc1YkFPenBNeXBIODRk?=
- =?utf-8?B?QlR6MGpHbFJuUFpqYzZra2F6NXBrVXp4NU9iclBSbVprZjNydEhzN2RwKzVp?=
- =?utf-8?B?eW9SV0dCdlpGcndodFpwVE9kM0lVbm1Xcllib3VIZWFYNkFUZzNaZHFpRVgy?=
- =?utf-8?B?VzlEYnE2TWhuVHg0OHIzZ205UVVMYXV5c1VYeGQ3QllqM2dqcGh5TkFTaHlR?=
- =?utf-8?B?SFN4VFNWWXI0OXlKYTJGVmRSVndSclRiZld2dWliUmtoR0JwbE9FczlzV0Vy?=
- =?utf-8?B?WXhKRW1UMnM4em9pVHVGS0tPaXlvaFZpcityMW00WFMwZG9MRTIrZXZzejRS?=
- =?utf-8?B?ajcxbDNXOWdLWW5CM0tqRVlkRnBOWWtvNmowVHlrcE9QZjlLSXRSeXNJMldC?=
- =?utf-8?B?YktLTGFPMnpIRzNMR0pQdHRiU2Fud3l1VEcvdmQyWHI2dVJoYzRvZkRLaTl4?=
- =?utf-8?B?OFd6QjZyYWpRZW9XeEllVEZLZVlmWGNxTkZsQzIvaGpXMWtyZkJyS2dJWWln?=
- =?utf-8?Q?Z/eKtPYiK95sPHlnWTpQeoAas?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7068e712-64f1-4099-43b5-08db306f93f2
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 16:06:38.6950
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YNtchfnCwrG/qP3thYmgWvEuhADna15wLXNGa1hPZCOawBjnd8gSb6buEWcVUN+qFObUZ+iI2A4/F+9ZfsJaCw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6853
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dd853e13-ffcd-4579-adad-80b014e906ef@paulmck-laptop>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/28/23 18:09, Caio Novais wrote:
-> Compiling AMD GPU drivers displays a warning:
+On Sun, Mar 26, 2023 at 02:45:18PM -0700, Paul E. McKenney wrote:
+> On Sun, Mar 26, 2023 at 10:01:34PM +0200, Frederic Weisbecker wrote:
+> > > > > >  	/* Snapshot count of all CPUs */
+> > > > > >  	for_each_possible_cpu(cpu) {
+> > > > > >  		struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+> > > > > > -		int _count = READ_ONCE(rdp->lazy_len);
+> > > > > > +		int _count;
+> > > > > > +
+> > > > > > +		if (!rcu_rdp_is_offloaded(rdp))
+> > > > > > +			continue;
+> > > > > 
+> > > > > If the CPU is offloaded, isn't ->lazy_len guaranteed to be zero?
+> > > > > 
+> > > > > Or can it contain garbage after a de-offloading operation?
+> > > > 
+> > > > If it's deoffloaded, ->lazy_len is indeed (supposed to be) guaranteed to be zero.
+> > > > Bypass is flushed and disabled atomically early on de-offloading and the
+> > > > flush resets ->lazy_len.
+> > > 
+> > > Whew!  At the moment, I don't feel strongly about whether or not
+> > > the following code should (1) read the value, (2) warn on non-zero,
+> > > (3) assume zero without reading, or (4) some other option that is not
+> > > occurring to me.  Your choice!
+> > 
+> > (2) looks like a good idea!
 > 
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for ‘optc3_wait_drr_doublebuffer_pending_clear’ [-Wmissing-prototypes]
-> 
-> Get rid of it by adding a function prototype
-> 
-> 'optc3_wait_drr_doublebuffer_pending_clear(struct timing_generator *optc)' on drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.h
-> 
-> Signed-off-by: Caio Novais <caionovais@usp.br>
-> ---
->   drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.h | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.h b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.h
-> index fb06dc9a4893..2e3ba6e2f336 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.h
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.h
-> @@ -331,6 +331,8 @@ void optc3_lock_doublebuffer_enable(struct timing_generator *optc);
->   
->   void optc3_lock_doublebuffer_disable(struct timing_generator *optc);
->   
-> +void optc3_wait_drr_doublebuffer_pending_clear(struct timing_generator *optc);
+> Sounds good to me!
 
-I would prefer if you marked the function as static instead, since it is
-only used in dcn30_optc.c.
-
-> +
->   void optc3_set_drr_trigger_window(struct timing_generator *optc,
->   		uint32_t window_start, uint32_t window_end);
->   
-
--- 
-Hamza
-
+So since we now iterate rcu_nocb_mask after the patchset, there is no more
+deoffloaded rdp to check. Meanwhile I put a WARN in the new series making
+sure that an rdp in rcu_nocb_mask is also offloaded (heh!)
