@@ -2,148 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA576CD066
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 04:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E80B6CD069
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 04:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjC2C5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 22:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
+        id S230042AbjC2C6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 22:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjC2C5O (ORCPT
+        with ESMTP id S229477AbjC2C57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 22:57:14 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403632685;
-        Tue, 28 Mar 2023 19:57:12 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 8A5EE24E207;
-        Wed, 29 Mar 2023 10:57:03 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 29 Mar
- 2023 10:57:03 +0800
-Received: from [192.168.120.42] (171.223.208.138) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 29 Mar
- 2023 10:57:02 +0800
-Message-ID: <f8be0cf7-fe78-7e63-7fbc-78d083a9f186@starfivetech.com>
-Date:   Wed, 29 Mar 2023 10:57:00 +0800
+        Tue, 28 Mar 2023 22:57:59 -0400
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4147D1FD2;
+        Tue, 28 Mar 2023 19:57:58 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VeuzJcJ_1680058673;
+Received: from 30.97.56.166(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VeuzJcJ_1680058673)
+          by smtp.aliyun-inc.com;
+          Wed, 29 Mar 2023 10:57:54 +0800
+Message-ID: <2e3c20e0-a0be-eaf3-b288-c3c8fa31d1fa@linux.alibaba.com>
+Date:   Wed, 29 Mar 2023 10:57:53 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [net-next v9 5/6] net: stmmac: Add glue layer for StarFive JH7110
- SoC
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH V5 16/16] block: ublk_drv: apply io_uring FUSED_CMD for
+ supporting zero copy
 Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>
-References: <20230328062009.25454-1-samin.guo@starfivetech.com>
- <20230328062009.25454-6-samin.guo@starfivetech.com>
- <20230328191716.18a302a1@kernel.org>
-From:   Guo Samin <samin.guo@starfivetech.com>
-In-Reply-To: <20230328191716.18a302a1@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Bernd Schubert <bschubert@ddn.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org, Stefan Hajnoczi <stefanha@redhat.com>,
+        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Dan Williams <dan.j.williams@intel.com>
+References: <20230328150958.1253547-1-ming.lei@redhat.com>
+ <20230328150958.1253547-17-ming.lei@redhat.com>
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+In-Reply-To: <20230328150958.1253547-17-ming.lei@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Re: [net-next v9 5/6] net: stmmac: Add glue layer for StarFive JH7110 SoC
-From: Jakub Kicinski <kuba@kernel.org>
-to: Samin Guo <samin.guo@starfivetech.com>
-data: 2023/3/29
-
-> On Tue, 28 Mar 2023 14:20:08 +0800 Samin Guo wrote:
->> This adds StarFive dwmac driver support on the StarFive JH7110 SoC.
->>
->> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
->> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
->> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+On 2023/3/28 23:09, Ming Lei wrote:
+> Apply io_uring fused command for supporting zero copy:
 > 
-> Excellent, now it applies cleanly :)
-> 
-> Our clang build with W=1 complains that:
-> 
-> drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c:37:2: warning: variable 'rate' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->         default:
->         ^~~~~~~
-> drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c:42:36: note: uninitialized use occurs here
->         err = clk_set_rate(dwmac->clk_tx, rate);
->                                           ^~~~
-> drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c:24:20: note: initialize the variable 'rate' to silence this warning
->         unsigned long rate;
->                           ^
->                            = 0
-> 
-> 
-> not sure how you prefer to fix this. Maybe return early?
 
-Hi Jakub,
+[...]
 
-Sorry, gcc I used does not report this error (:, and clang compile checks are more stringent.
-Also, if return early at default node, Arun Ramadoss doesn't think it's a good idea because the function is a void type.
+>  
+> @@ -1374,7 +1533,12 @@ static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+>  	if (!ubq || ub_cmd->q_id != ubq->q_id)
+>  		goto out;
+>  
+> -	if (ubq->ubq_daemon && ubq->ubq_daemon != current)
+> +	/*
+> +	 * The fused command reads the io buffer data structure only, so it
+> +	 * is fine to be issued from other context.
+> +	 */
+> +	if ((ubq->ubq_daemon && ubq->ubq_daemon != current) &&
+> +			(cmd_op != UBLK_IO_FUSED_SUBMIT_IO))
+>  		goto out;
+>  
 
-I think I can initialize the value of rate first by clk_get_rate (Intel did the same <dwmac-intel-plat.c: kmb_eth_fix_mac_speed >),
-like this:
+Hi Ming,
 
+What is your use case that fused io_uring cmd is issued from another thread?
+I think it is good practice to operate one io_uring instance in one thread
+only.
 
-static void starfive_dwmac_fix_mac_speed(void *priv, unsigned int speed)
-{
-        struct starfive_dwmac *dwmac = priv;
-        unsigned long rate;
-        int err;
-
-	rate = clk_get_rate(dwmac->tx_clk);
-
-        switch (speed) {
-        case SPEED_1000:
-                rate = 125000000;
-                break;
-        case SPEED_100:
-                rate = 25000000;
-                break;
-        case SPEED_10:
-                rate = 2500000;
-                break;
-        default:
-                dev_err(dwmac->dev, "invalid speed %u\n", speed);
-                break;
-        }   
-
-        err = clk_set_rate(dwmac->clk_tx, rate);
-        if (err)
-                dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
-}
-
-What do you think?
-
-
-Best regards,
-Samin
+Regards,
+Zhang
