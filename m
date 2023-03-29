@@ -2,124 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295196CD7E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10926CD7F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjC2Ksf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S229500AbjC2KxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 06:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjC2Ksd (ORCPT
+        with ESMTP id S229470AbjC2KxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:48:33 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3C731BF0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:48:30 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:48250.1027552899
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id DF30A10029C;
-        Wed, 29 Mar 2023 18:48:28 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id 29ed5fd3609e43b184df0070a4571f07 for tzimmermann@suse.de;
-        Wed, 29 Mar 2023 18:48:29 CST
-X-Transaction-ID: 29ed5fd3609e43b184df0070a4571f07
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <daf5bc36-0deb-631d-dfaf-396113d3d1d8@189.cn>
-Date:   Wed, 29 Mar 2023 18:48:27 +0800
+        Wed, 29 Mar 2023 06:53:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FB51FDA
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:52:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680087142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vt4GbeiJahK3rYATBBFKElTyofWu9KBjUwoqXIAEnS0=;
+        b=QXyCgCqGBj+8siJwRYwWP3yPzSuorPHZBKwbdJltraaYsp2Tizm/PJ2EVldXYQ5x/3ISzZ
+        9WV/nEkLMAjnyGDAmAnYGvuM0Ul7wXTPUfy5g/ZFh+H8aMfDtLkSfG2eR0JiU8rUlT1pJM
+        nN6c/ljA1W60cNZhhoZb+uPjj1XupmE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-176-Y6_TOEgZN4umpv5DAoQyUg-1; Wed, 29 Mar 2023 06:52:19 -0400
+X-MC-Unique: Y6_TOEgZN4umpv5DAoQyUg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B7131C07822;
+        Wed, 29 Mar 2023 10:52:18 +0000 (UTC)
+Received: from ovpn-8-26.pek2.redhat.com (ovpn-8-26.pek2.redhat.com [10.72.8.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5CB7718EC2;
+        Wed, 29 Mar 2023 10:52:10 +0000 (UTC)
+Date:   Wed, 29 Mar 2023 18:52:06 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Bernd Schubert <bschubert@ddn.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org, Stefan Hajnoczi <stefanha@redhat.com>,
+        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Dan Williams <dan.j.williams@intel.com>, ming.lei@redhat.com
+Subject: Re: [PATCH V5 16/16] block: ublk_drv: apply io_uring FUSED_CMD for
+ supporting zero copy
+Message-ID: <ZCQYVhStekJXpvK1@ovpn-8-26.pek2.redhat.com>
+References: <20230328150958.1253547-1-ming.lei@redhat.com>
+ <20230328150958.1253547-17-ming.lei@redhat.com>
+ <2e3c20e0-a0be-eaf3-b288-c3c8fa31d1fa@linux.alibaba.com>
+ <ZCP+L0ADCxHo5vSg@ovpn-8-26.pek2.redhat.com>
+ <08b047a8-c577-a717-81a8-db8fca8ebab6@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
- clause
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, liyi <liyi@loongson.cn>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230325074636.136833-1-15330273260@189.cn>
- <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
-Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <08b047a8-c577-a717-81a8-db8fca8ebab6@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 29, 2023 at 06:01:16PM +0800, Ziyang Zhang wrote:
+> On 2023/3/29 17:00, Ming Lei wrote:
+> > On Wed, Mar 29, 2023 at 10:57:53AM +0800, Ziyang Zhang wrote:
+> >> On 2023/3/28 23:09, Ming Lei wrote:
+> >>> Apply io_uring fused command for supporting zero copy:
+> >>>
+> >>
+> >> [...]
+> >>
+> >>>  
+> >>> @@ -1374,7 +1533,12 @@ static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+> >>>  	if (!ubq || ub_cmd->q_id != ubq->q_id)
+> >>>  		goto out;
+> >>>  
+> >>> -	if (ubq->ubq_daemon && ubq->ubq_daemon != current)
+> >>> +	/*
+> >>> +	 * The fused command reads the io buffer data structure only, so it
+> >>> +	 * is fine to be issued from other context.
+> >>> +	 */
+> >>> +	if ((ubq->ubq_daemon && ubq->ubq_daemon != current) &&
+> >>> +			(cmd_op != UBLK_IO_FUSED_SUBMIT_IO))
+> >>>  		goto out;
+> >>>  
+> >>
+> >> Hi Ming,
+> >>
+> >> What is your use case that fused io_uring cmd is issued from another thread?
+> >> I think it is good practice to operate one io_uring instance in one thread
+> >> only.
+> > 
+> > So far we limit io command has to be issued from the queue context,
+> > which is still not friendly from userspace viewpoint, the reason is
+> > that we can't get io_uring exit notification and ublk's use case is
+> > very special since the queued io command may not be completed forever,
+> 
+> OK, so UBLK_IO_FUSED_SUBMIT_IO is guaranteed to be completed because it is
+> not queued. FETCH_REQ and COMMIT_AMD_FETCH are queued io commands and could
+> not be completed forever so they have to be issued from ubq_daemon. Right?
 
-On 2023/3/29 17:04, Thomas Zimmermann wrote:
-> (cc'ing Lucas)
->
-> Hi
->
-> Am 25.03.23 um 08:46 schrieb Sui Jingfeng:
->>   The assignment already done in drm_client_buffer_vmap(),
->>   just trival clean, no functional change.
->>
->> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->> ---
->>   drivers/gpu/drm/drm_fbdev_generic.c | 5 ++---
->>   1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
->> b/drivers/gpu/drm/drm_fbdev_generic.c
->> index 4d6325e91565..1da48e71c7f1 100644
->> --- a/drivers/gpu/drm/drm_fbdev_generic.c
->> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
->> @@ -282,7 +282,7 @@ static int drm_fbdev_damage_blit(struct 
->> drm_fb_helper *fb_helper,
->>                    struct drm_clip_rect *clip)
->>   {
->>       struct drm_client_buffer *buffer = fb_helper->buffer;
->> -    struct iosys_map map, dst;
->> +    struct iosys_map map;
->>       int ret;
->>         /*
->> @@ -302,8 +302,7 @@ static int drm_fbdev_damage_blit(struct 
->> drm_fb_helper *fb_helper,
->>       if (ret)
->>           goto out;
->>   -    dst = map;
->> -    drm_fbdev_damage_blit_real(fb_helper, clip, &dst);
->> +    drm_fbdev_damage_blit_real(fb_helper, clip, &map);
->
-> I see what you're doing and it's probably correct in this case.
->
-> But there's a larger issue with this iosys interfaces. Sometimes the 
-> address has to be modified (see calls of iosys_map_incr()). That can 
-> prevent incorrect uses of the mapping in other places, especially in 
-> unmap code.
->
-> I think it would make sense to consider a separate structure for the 
-> I/O location. The buffer as a whole would still be represented by 
-> struct iosys_map.  And that new structure, let's call it struct 
-> iosys_ptr, would point to an actual location within the buffer's 
-> memory range. A few locations and helpers would need changes, but 
-> there are not so many callers that it's an issue.  This would also 
-> allow for a few debugging tests that ensure that iosys_ptr always 
-> operates within the bounds of an iosys_map.
->
-> I've long considered this idea, but there was no pressure to work on 
-> it. Maybe now.
->
-Ok. that's fine then.
+Yeah, any io command should be issued from ubq daemon context.
 
-> Best regards
-> Thomas
->
->>         drm_client_buffer_vunmap(buffer);
->
+> 
+> BTW, maybe NEED_GET_DATA can be issued from other context...
+
+So far it won't be supported.
+
+As I mentioned in the link, if io_uring can provide io_uring exit
+callback, we may relax this limit.
+
+> 
+> > see:
+> > 
+> > https://lore.kernel.org/linux-fsdevel/ZBxTdCj60+s1aZqA@ovpn-8-16.pek2.redhat.com/
+> > 
+> > I remember that people raised concern about this implementation.
+> > 
+> > But for normal IO, it could be issued from io wq simply because of
+> > link(dependency) or whatever, and userspace is still allowed to submit
+> > io from another pthread via same io_uring ctx.
+> 
+> Yes, we can submit to the same ctx from different pthread but lock may be required.
+
+Right.
+
+> IMO, users may only choose ubq_daemon as the only submitter.
+
+At least any io command should be issued from ubq daemon now, but normal
+io can be issued from any context.
+
+
+Thanks,
+Ming
+
