@@ -2,90 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BF36CD14C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 06:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9204F6CD147
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 06:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjC2Eyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 00:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
+        id S229842AbjC2EyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 00:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjC2Eyk (ORCPT
+        with ESMTP id S229675AbjC2EyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 00:54:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7E135A1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 21:53:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680065631;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S01Y/zhEA4qaJvTIo0c2m8xjYqU32cqDPsOeaeS0mgQ=;
-        b=Lao4UjVED30bgIn+zqQ6a5ZVmya9Zsr7ZOX/qalszyQLDJFNQnTNXY5IJma57xzxaBjivz
-        yNIGeW+s/t3DxJ6QcyGVNx2GTkmUOzlS0cxX6083crZDCS8RlkJ7yjiUa8AYxYeINUSssY
-        GD5ibchMiVA+QjnBkdMhBcOZK0dmUiI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-271-Ii-LZ0zMOzmqRxZZOA6_Ig-1; Wed, 29 Mar 2023 00:53:50 -0400
-X-MC-Unique: Ii-LZ0zMOzmqRxZZOA6_Ig-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 29 Mar 2023 00:54:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2BC3AA2;
+        Tue, 28 Mar 2023 21:54:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 418F6101A531;
-        Wed, 29 Mar 2023 04:53:49 +0000 (UTC)
-Received: from localhost (ovpn-12-137.pek2.redhat.com [10.72.12.137])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D181B1121331;
-        Wed, 29 Mar 2023 04:53:36 +0000 (UTC)
-Date:   Wed, 29 Mar 2023 12:53:33 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v8 0/4] convert read_kcore(), vread() to use iterators
-Message-ID: <ZCPETTt8g6+kL5GX@MiWiFi-R3L-srv>
-References: <cover.1679566220.git.lstoakes@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E23861A55;
+        Wed, 29 Mar 2023 04:54:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 181D5C433D2;
+        Wed, 29 Mar 2023 04:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680065654;
+        bh=LIS7zJz90cEjLNZjPPsW13H2Bm79KhPrHCbBLaDIygk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EIBb9vmTKbNd8JZraTMtu9YRJzCkLv0giiCVXRHmhRjOXXk0JlcpeI6eb+rB1wmpa
+         aU+a5QBLzaoffHAg+/W+h9eHEy3QMvMtlZcoNiKpl7p+YNBrFI9fgh0G3Y+0Ex+mAZ
+         3MvN0053bWgFGyccsEoedcqYD0de68QK5LHRVwlo=
+Date:   Wed, 29 Mar 2023 06:54:11 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dennis Zhou <dennis@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mmc: allow mmc to block wait_for_device_probe()
+Message-ID: <ZCPEcxueuGUaRNOP@kroah.com>
+References: <20230328223740.69446-1-dennis@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1679566220.git.lstoakes@gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230328223740.69446-1-dennis@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/23/23 at 10:15am, Lorenzo Stoakes wrote:
-> While reviewing Baoquan's recent changes to permit vread() access to
-> vm_map_ram regions of vmalloc allocations, Willy pointed out [1] that it
-> would be nice to refactor vread() as a whole, since its only user is
-> read_kcore() and the existing form of vread() necessitates the use of a
-> bounce buffer.
+On Tue, Mar 28, 2023 at 03:37:40PM -0700, Dennis Zhou wrote:
+> I've been hitting a failed data device lookup when using dm-verity and a
+> root device on an emmc partition. This is because there is a race where
+> dm-verity is looking for a data device, but the partitions on the emmc
+> device haven't been probed yet.
 > 
-> This patch series does exactly that, as well as adjusting how we read the
-> kernel text section to avoid the use of a bounce buffer in this case as
-> well.
+> Initially I looked at solving this by changing devt_from_devname() to
+> look for partitions, but it seems there is legacy reasons and issues due
+> to dm.
 > 
-> This has been tested against the test case which motivated Baoquan's
-> changes in the first place [2] which continues to function correctly, as do
-> the vmalloc self tests.
+> MMC uses 2 levels of probing. The first to handle initializing the
+> host and the second to iterate attached devices. The second is done by
+> a workqueue item. However, this paradigm makes wait_for_device_probe()
+> useless as a barrier for when we can assume attached devices have been
+> probed.
 > 
-> [1] https://lore.kernel.org/all/Y8WfDSRkc%2FOHP3oD@casper.infradead.org/
-> [2] https://lore.kernel.org/all/87ilk6gos2.fsf@oracle.com/T/#u
+> This patch fixes this by exposing 2 methods inc/dec_probe_count() to
+> allow device drivers that do asynchronous probing to delay waiters on
+> wait_for_device_probe() so that when they are released, they can assume
+> attached devices have been probed.
 
-The whole series looks good to me.
+Please no.  For 2 reasons:
+  - the api names you picked here do not make much sense from a global
+    namespace standpoint.  Always try to do "noun/verb" as well, so if
+    we really wanted to do this it would be "driver_probe_incrememt()"
+    or something like that.
+ - drivers and subsystems should not be messing around with the probe
+   count as it's a hack in the first place to get around other issues.
+   Please let's not make it worse and make a formal api for it and allow
+   anyone to mess with it.
 
-Reviewed-by: Baoquan He <bhe@redhat.com>
+Why can't you just use normal deferred probing for this?
 
+thanks,
+
+greg k-h
