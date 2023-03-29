@@ -2,137 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1417A6CF1E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C891C6CF1E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbjC2SMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
+        id S229459AbjC2SLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjC2SMM (ORCPT
+        with ESMTP id S229569AbjC2SLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:12:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D336A44
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:11:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680113390;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H8vliQ1ONvrTK4LTfw9x6DXO/qnrs4SgkkW8WifHRpE=;
-        b=JFWWNQyhZ3sft7xKrxptJ749a5TkK8nN03SdEkpwnDnJVlld5avqyWoq+29NMkk/GNNXbt
-        Fkhfp+6FvvekkoIUc29yU5fg+Ex18MIgd2MRpJj94+156DU8IkrFBlbcOJlBdHNYSZELGX
-        /JdDX2n9Jfsw+3KWYBkH9ZoAt5a+v2Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-323-BA8Ormx2Nd6GNGSaMivOkg-1; Wed, 29 Mar 2023 14:09:47 -0400
-X-MC-Unique: BA8Ormx2Nd6GNGSaMivOkg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 81F31811E7C;
-        Wed, 29 Mar 2023 18:09:44 +0000 (UTC)
-Received: from [10.22.34.224] (unknown [10.22.34.224])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0DE05202701E;
-        Wed, 29 Mar 2023 18:09:43 +0000 (UTC)
-Message-ID: <b7ad39b1-c615-3ebc-6980-d9db0f2ab0a0@redhat.com>
-Date:   Wed, 29 Mar 2023 14:09:42 -0400
+        Wed, 29 Mar 2023 14:11:14 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD7B4214
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:10:48 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5456249756bso308304067b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:10:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1680113440;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s36Q4sLQX/3/tv2niFl6Gc9T++Xctk19QhnwqMt3BVM=;
+        b=eDsYeqiG8GB4aZVHJzDU7byR1P1jPt7YE7V+7LrQkBjkHGKR65terpAGMEbNbrpWtc
+         GbKOZDyCq7ZL/+Zsg31N3BVfxEvsJ1GDaWJFB38pSjVUW4/6WGSR96i/6pIpJUY1T9+N
+         2W7sklR7qOx9HkWIJmhgVq8bUgKpEeVJ7TTmU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680113440;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s36Q4sLQX/3/tv2niFl6Gc9T++Xctk19QhnwqMt3BVM=;
+        b=cxRWUsrqD3spjhfKMuk8puwr11LnPLGAQK85WDBmPewl60DsphdCHf8Jk+lUVlYt1W
+         MuLcaULgEv7RU8Szle/UuIUeiqc0fdnqoSu9U80uGDfzmsB3hXNd/+5Y9pXlQ2Jc/2in
+         x1qmbE2KBaIY47f+B7lm+gB8IrfPDy19mlgrojB3sX+KteBDDvMX8q+y4kGjLGR1Amty
+         zfL6SmDz9cS0hKQpyTAGDJnvuPbOsljdJ2zf9UWvJDlAYywedVRry/U4zU5Wb0NU5HyR
+         NGC/uA2TvA8WTK6JFzuLqdO2boLANS/PoZSorEYULif7E7EsjxMe07LHBbEAb3ng2Wja
+         iQvQ==
+X-Gm-Message-State: AAQBX9fqmG3wUWD62SLyBX1q4cTkHjY9BrDJT5xznbhgE8sQIPgMOpHq
+        AnHu9wkqKF2lZAWRU4/XuBbznxPLAxRqkdLaVgICAg==
+X-Google-Smtp-Source: AKy350bTV90Nmmdqq5XdDMT52Ufu5ut5fzXMHi+iq0KHhNlusnr1XWTmvpO5LoXs+iXfO3xl7HbVrgeRFLebGR+jpH0=
+X-Received: by 2002:a81:ac46:0:b0:544:6828:3c09 with SMTP id
+ z6-20020a81ac46000000b0054468283c09mr10157919ywj.0.1680113440045; Wed, 29 Mar
+ 2023 11:10:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5/6] cgroup/cpuset: Free DL BW in case can_attach() fails
-Content-Language: en-US
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-        luca.abeni@santannapisa.it, claudio@evidence.eu.com,
-        tommaso.cucinotta@santannapisa.it, bristot@redhat.com,
-        mathieu.poirier@linaro.org, cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230329125558.255239-1-juri.lelli@redhat.com>
- <20230329125558.255239-6-juri.lelli@redhat.com>
- <f8dfc30b-5079-2f44-7ab1-42ac25bd48b7@redhat.com>
- <f8baea06-eeda-439a-3699-1cad7cde659e@redhat.com>
- <cdede77a-5dc5-8933-a444-a2046b074b12@arm.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <cdede77a-5dc5-8933-a444-a2046b074b12@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230218111712.2380225-1-treapking@chromium.org>
+In-Reply-To: <20230218111712.2380225-1-treapking@chromium.org>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Wed, 29 Mar 2023 23:40:28 +0530
+Message-ID: <CAMty3ZD3SY-WCtYK0dexdLxCk8d+2tJ=D9xb5uR06jPGCd=56g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] Add generic-display-mux driver and bindings
+To:     Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        chrome-platform@lists.linux.dev,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/23 12:39, Dietmar Eggemann wrote:
-> On 29/03/2023 16:31, Waiman Long wrote:
->> On 3/29/23 10:25, Waiman Long wrote:
->>> On 3/29/23 08:55, Juri Lelli wrote:
->>>> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> [...]
+On Sat, Feb 18, 2023 at 4:47=E2=80=AFPM Pin-yen Lin <treapking@chromium.org=
+> wrote:
 >
->>>> @@ -2518,11 +2547,21 @@ static int cpuset_can_attach(struct
->>>> cgroup_taskset *tset)
->>>>    static void cpuset_cancel_attach(struct cgroup_taskset *tset)
->>>>    {
->>>>        struct cgroup_subsys_state *css;
->>>> +    struct cpuset *cs;
->>>>          cgroup_taskset_first(tset, &css);
->>>> +    cs = css_cs(css);
->>>>          mutex_lock(&cpuset_mutex);
->>>> -    css_cs(css)->attach_in_progress--;
->>>> +    cs->attach_in_progress--;
->>>> +
->>>> +    if (cs->nr_migrate_dl_tasks) {
->>>> +        int cpu = cpumask_any(cs->effective_cpus);
->>>> +
->>>> +        dl_bw_free(cpu, cs->sum_migrate_dl_bw);
->>>> +        reset_migrate_dl_data(cs);
->>>> +    }
->>>> +
->> Another nit that I have is that you may have to record also the cpu
->> where the DL bandwidth is allocated in cpuset_can_attach() and free the
->> bandwidth back into that cpu or there can be an underflow if another cpu
->> is chosen.
-> Many thanks for the review!
+> This series is developed for and tested on MT8173 board, and the layout i=
+s:
 >
-> But isn't the DL BW control `struct dl_bw` per `struct root_domain`
-> which is per exclusive cpuset. So as long cpu is from
-> `cs->effective_cpus` shouldn't this be fine?
+>                                   /-- anx7688
+> -- MT8173 HDMI bridge -- GPIO mux
+>                                   \-- native HDMI
 
-Sorry for my ignorance on how the deadline bandwidth operation work. I 
-check the bandwidth code and find that we are storing the bandwidth 
-information in the root domain, not on the cpu. That shouldn't be a 
-concern then.
+What is the part number of this GPIO mux? Does mux gpio interrupt
+based and able to switch output HDMI and DP. If so, how this gpio
+interrupt is different than the HPD in native HDMI? I mean does HPD
+have any detection bottlenecks with mux gpio interrupt?
 
-However, I still have some question on how that works when dealing with 
-cpuset. First of all, not all the CPUs in a given root domains are in 
-the cpuset. So there may be enough bandwidth on the root domain, but it 
-doesn't mean there will be enough bandwidth in the set of CPUs in a 
-particular cpuset. Secondly, how do you deal with isolated CPUs that do 
-not have a corresponding root domain? It is now possible to create a 
-cpuset with isolated CPUs.
+I do have GPIO Mux that input DSI and two outputs DMD/HDMI Input and
+HDMI Out. 2x1 with 1x2 mux.
 
-Cheers,
-Longman
+I'm thinking having a generic mux to select the specific out number of
+outputs with associated interface outputs can be a viable solution to
+address all use cases here.
 
+Thanks,
+Jagan.
