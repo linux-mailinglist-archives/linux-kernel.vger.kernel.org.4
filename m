@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0306CF1AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEE66CF1BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjC2SFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S230077AbjC2SII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjC2SFA (ORCPT
+        with ESMTP id S229846AbjC2SIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:05:00 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFF449EC
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:04:54 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id q19so13576132wrc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:04:54 -0700 (PDT)
+        Wed, 29 Mar 2023 14:08:06 -0400
+Received: from mail-ed1-x563.google.com (mail-ed1-x563.google.com [IPv6:2a00:1450:4864:20::563])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE654214
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:08:05 -0700 (PDT)
+Received: by mail-ed1-x563.google.com with SMTP id h8so66787353ede.8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:08:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680113093;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KtcfMeR6JsK/ohHsKigxpHUI7/Wye0XruGbtWcUv7Oc=;
-        b=K/7LvcqNZLihJNNDYkxGRe7xK0ljMFDUuttYBiPZCAN75UiCaONgiHQxYkVhWMY2kg
-         lKCHhLrKkMcCBNU+1CL93NvVZapruIeA6ioQG+fV3hls6jGfzavHSmCupF6PIHNTqTVv
-         vTz+hYdlyakKrsi8T9EFgqnxO7DF4opGJNE0zhFVnFg+HJVir3qTBq0eaP3QZoha6kY5
-         52nNtvxgzg6uaP7eeE4duX5jEOZ1iqxuRABd72MVlXbzpkFn/7cWXljP+aoi5pHDe4Yd
-         hAuU0QPlo2byQJ06BRZWVmGod0KwyvPOVmx+yrOhVwpvShlxVEd953vHBpZgo3H9cV5U
-         mNaw==
+        d=dectris.com; s=google; t=1680113283;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uP7fzXbhXSN7Ty9wbiAQl7kbA4rMdsvSYTII18zPk8s=;
+        b=ATX9XU+HBGGxsEECzUbAvUJoaUp7fq2m3zz/b//YJQdB8nYjBPfmBGsBIZy1VWA69C
+         HOtLiGMDFXtrp251BUC8uuI+jqfbkWpuxkWx5tJXdgaKHq+0vY+RTekviWenFhZzOEmT
+         Ue0TkmuDkXwGCwu3JHikcDTFc0InRXv47WCKw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680113093;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KtcfMeR6JsK/ohHsKigxpHUI7/Wye0XruGbtWcUv7Oc=;
-        b=gnmKkbNUNRX0TmuwToFdUoR2ZqSDnMiAeSsF3RtaDhApJ88EpruK5PqOznxA9pz9rh
-         alM4tc9Bu3yK2h0UxRrAkpQ0XX8RVfcf+ce8XBtWLUYgdzLg9MoS84fzmxgC2pAF7isW
-         KxqfLfvkdIZc/TxOGks+jHk8PPCgeG5mQcw0BExHXvQ6esqEHMTe+iZeWJ18nOw3brnV
-         HjPyaDJYcQnvnkeM47ald7wu7JLiygo+FldG4XdHPo1qC3Lmj5GKvv96sQobM/G9ASWU
-         9WlSPwP3WpsmogToabFHlPOD0RGztNMSPU23KNJWBCGvqd5iWQtrA5REMnx6do499HlC
-         ugXQ==
-X-Gm-Message-State: AAQBX9cYaoaokD7rIYZK9QAAR4W4TCQPTc/jj8C43NbQNVYonIVGsQsb
-        meCP10JBDWjlvQ/e3/oqKgCRvVHcBV9WdgYipxPh5A==
-X-Google-Smtp-Source: AKy350apuid2c1v0d8ghzoDWeoKrqmDRDu9lZcUXGbMQYG7R5i/8vpaOWW8MowDPvQ1geBytZHu1YfNNKktLGYH5NMo=
-X-Received: by 2002:adf:f14b:0:b0:2e4:abb1:3e87 with SMTP id
- y11-20020adff14b000000b002e4abb13e87mr42744wro.2.1680113092851; Wed, 29 Mar
- 2023 11:04:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230323062451.2925996-1-danishanwar@ti.com> <20230323062451.2925996-6-danishanwar@ti.com>
- <20230327210429.GD3158115@p14s> <08cdd2b7-5152-8dec-aea2-ce286f8b97fb@ti.com>
-In-Reply-To: <08cdd2b7-5152-8dec-aea2-ce286f8b97fb@ti.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Wed, 29 Mar 2023 12:04:42 -0600
-Message-ID: <CANLsYkwO62JH0TgOLwt08n8WdM_KsNYBCvUBOEsaxikJRfut0A@mail.gmail.com>
-Subject: Re: [EXTERNAL] Re: [PATCH v5 5/5] soc: ti: pruss: Add helper
- functions to get/set PRUSS_CFG_GPMUX
-To:     Md Danish Anwar <a0501179@ti.com>
-Cc:     MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1680113283;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uP7fzXbhXSN7Ty9wbiAQl7kbA4rMdsvSYTII18zPk8s=;
+        b=WmpcRWm6IpR+k+8JElzmNvmWkx4jH3c4FG5aXpATaqXDevHOuTD4kLo3tgw2M3N+Fv
+         Dy1QTlns1RufDoCaB3TCQUV8nL3bDsPkf87pyFHb6ldBaFwFdr2Qd9QmlctMI0tRBevS
+         n5Vjvi6YmBF73Nh4ar6YtfxLpAy8Mbnc00nX40SZH+xCo7J+kVDhjjN1IgU36lSDPVfX
+         +JcQV+ZMZObUgkjOla2V9yUglfh8Vf1wi+NKB8TJs3xTfc2K/dQFHWxVchKi+IFWvHhd
+         cTamHmEzKSq/LNNkHAQcd730AyvsJTrP6Q7eIJb0eb3yFzvdn1fRJgFyvm7KNbM7LTG2
+         nj+Q==
+X-Gm-Message-State: AAQBX9dsODqnGpOYpu3L0tr4hjVJ9WQudyOSSKdqqfy22tbW5CHanpI+
+        1QDKQZyP2beVQ1ax/xTmtt/aQnus86YKjqCXNzwAVqa4yYYf
+X-Google-Smtp-Source: AKy350YvWlz1e2WjuGCn/zBJU22CORmNL2L0daOgmAIK1LGoOSmFs9rLKhk0fTclz8aZ+4FYU54u7vUoR8BQ
+X-Received: by 2002:a17:907:d386:b0:87b:dac0:b23b with SMTP id vh6-20020a170907d38600b0087bdac0b23bmr22156821ejc.55.1680113283167;
+        Wed, 29 Mar 2023 11:08:03 -0700 (PDT)
+Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
+        by smtp-relay.gmail.com with ESMTPS id m10-20020a1709066d0a00b00920438f59b3sm12072998ejr.154.2023.03.29.11.08.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 11:08:03 -0700 (PDT)
+X-Relaying-Domain: dectris.com
+From:   Kal Conley <kal.conley@dectris.com>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
+Cc:     Kal Conley <kal.conley@dectris.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH bpf-next v2 01/10] selftests: xsk: Add xskxceiver.h dependency to Makefile
+Date:   Wed, 29 Mar 2023 20:04:53 +0200
+Message-Id: <20230329180502.1884307-2-kal.conley@dectris.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230329180502.1884307-1-kal.conley@dectris.com>
+References: <20230329180502.1884307-1-kal.conley@dectris.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -77,170 +83,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023 at 05:28, Md Danish Anwar <a0501179@ti.com> wrote:
->
->
->
-> On 28/03/23 02:34, Mathieu Poirier wrote:
-> > On Thu, Mar 23, 2023 at 11:54:51AM +0530, MD Danish Anwar wrote:
-> >> From: Tero Kristo <t-kristo@ti.com>
-> >>
-> >> Add two new helper functions pruss_cfg_get_gpmux() & pruss_cfg_set_gpmux()
-> >> to get and set the GP MUX mode for programming the PRUSS internal wrapper
-> >> mux functionality as needed by usecases.
-> >>
-> >> Co-developed-by: Suman Anna <s-anna@ti.com>
-> >> Signed-off-by: Suman Anna <s-anna@ti.com>
-> >> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> >> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> >> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> >> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> >> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> >> Reviewed-by: Roger Quadros <rogerq@kernel.org>
-> >> ---
-> >>  drivers/soc/ti/pruss.c           | 44 ++++++++++++++++++++++++++++++++
-> >>  include/linux/remoteproc/pruss.h | 30 ++++++++++++++++++++++
-> >>  2 files changed, 74 insertions(+)
-> >>
-> >> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-> >> index ac415442e85b..3aa3c38c6c79 100644
-> >> --- a/drivers/soc/ti/pruss.c
-> >> +++ b/drivers/soc/ti/pruss.c
-> >> @@ -239,6 +239,50 @@ int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(pruss_cfg_xfr_enable);
-> >>
-> >> +/**
-> >> + * pruss_cfg_get_gpmux() - get the current GPMUX value for a PRU device
-> >> + * @pruss: pruss instance
-> >> + * @pru_id: PRU identifier (0-1)
-> >> + * @mux: pointer to store the current mux value into
-> >> + *
-> >> + * Return: 0 on success, or an error code otherwise
-> >> + */
-> >> +int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux)
-> >> +{
-> >> +    int ret = 0;
-> >> +    u32 val;
-> >> +
-> >> +    if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
-> >> +            return -EINVAL;
-> >> +
-> >> +    ret = pruss_cfg_read(pruss, PRUSS_CFG_GPCFG(pru_id), &val);
-> >> +    if (!ret)
-> >> +            *mux = (u8)((val & PRUSS_GPCFG_PRU_MUX_SEL_MASK) >>
-> >> +                        PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
-> >
-> > What happens if @mux is NULL?
->
-> @mux being null may result in some error here. I will add NULL check for mux
-> before storing the value in mux.
->
+xskxceiver depends on xskxceiver.h so tell make about it.
 
-It will result in a kernel panic.
+Signed-off-by: Kal Conley <kal.conley@dectris.com>
+---
+ tools/testing/selftests/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I will modify the above if condition to have NULL check for mux as well.
-> The if condition will look like below.
->
->         if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS || !mux)
->                 return -EINVAL;
->
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 4a8ef118fd9d..223be997f15d 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -612,7 +612,7 @@ $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+ 
+-$(OUTPUT)/xskxceiver: xskxceiver.c $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
++$(OUTPUT)/xskxceiver: xskxceiver.c xskxceiver.h $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+ 
+-- 
+2.39.2
 
-That will be fine.
-
-> Please let me know if this looks OK.
->
-> >
-> > Thanks,
-> > Mathieu
-> >
-> >
-> >> +    return ret;
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(pruss_cfg_get_gpmux);
-> >> +
-> >> +/**
-> >> + * pruss_cfg_set_gpmux() - set the GPMUX value for a PRU device
-> >> + * @pruss: pruss instance
-> >> + * @pru_id: PRU identifier (0-1)
-> >> + * @mux: new mux value for PRU
-> >> + *
-> >> + * Return: 0 on success, or an error code otherwise
-> >> + */
-> >> +int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux)
-> >> +{
-> >> +    if (mux >= PRUSS_GP_MUX_SEL_MAX ||
-> >> +        pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
-> >> +            return -EINVAL;
-> >> +
-> >> +    return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
-> >> +                            PRUSS_GPCFG_PRU_MUX_SEL_MASK,
-> >> +                            (u32)mux << PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(pruss_cfg_set_gpmux);
-> >> +
-> >>  static void pruss_of_free_clk_provider(void *data)
-> >>  {
-> >>      struct device_node *clk_mux_np = data;
-> >> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
-> >> index bb001f712980..42f1586c62ac 100644
-> >> --- a/include/linux/remoteproc/pruss.h
-> >> +++ b/include/linux/remoteproc/pruss.h
-> >> @@ -16,6 +16,24 @@
-> >>
-> >>  #define PRU_RPROC_DRVNAME "pru-rproc"
-> >>
-> >> +/*
-> >> + * enum pruss_gp_mux_sel - PRUSS GPI/O Mux modes for the
-> >> + * PRUSS_GPCFG0/1 registers
-> >> + *
-> >> + * NOTE: The below defines are the most common values, but there
-> >> + * are some exceptions like on 66AK2G, where the RESERVED and MII2
-> >> + * values are interchanged. Also, this bit-field does not exist on
-> >> + * AM335x SoCs
-> >> + */
-> >> +enum pruss_gp_mux_sel {
-> >> +    PRUSS_GP_MUX_SEL_GP = 0,
-> >> +    PRUSS_GP_MUX_SEL_ENDAT,
-> >> +    PRUSS_GP_MUX_SEL_RESERVED,
-> >> +    PRUSS_GP_MUX_SEL_SD,
-> >> +    PRUSS_GP_MUX_SEL_MII2,
-> >> +    PRUSS_GP_MUX_SEL_MAX,
-> >> +};
-> >> +
-> >>  /*
-> >>   * enum pruss_gpi_mode - PRUSS GPI configuration modes, used
-> >>   *                   to program the PRUSS_GPCFG0/1 registers
-> >> @@ -110,6 +128,8 @@ int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
-> >>  int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable);
-> >>  int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
-> >>                       bool enable);
-> >> +int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux);
-> >> +int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux);
-> >>
-> >>  #else
-> >>
-> >> @@ -152,6 +172,16 @@ static inline int pruss_cfg_xfr_enable(struct pruss *pruss,
-> >>      return ERR_PTR(-EOPNOTSUPP);
-> >>  }
-> >>
-> >> +static inline int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux)
-> >> +{
-> >> +    return ERR_PTR(-EOPNOTSUPP);
-> >> +}
-> >> +
-> >> +static inline int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux)
-> >> +{
-> >> +    return ERR_PTR(-EOPNOTSUPP);
-> >> +}
-> >> +
-> >>  #endif /* CONFIG_TI_PRUSS */
-> >>
-> >>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
-> >> --
-> >> 2.25.1
-> >>
->
-> --
-> Thanks and Regards,
-> Danish.
