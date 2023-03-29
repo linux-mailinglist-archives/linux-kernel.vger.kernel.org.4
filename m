@@ -2,71 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96576CF198
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F4F6CF19B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjC2SAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
+        id S229845AbjC2SA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjC2SAE (ORCPT
+        with ESMTP id S229915AbjC2SAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:00:04 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0149A618E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:59:45 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id kq3so15675441plb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:59:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1680112785;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/ATAQe7qivttkaF6z/d0hrLKosZU1JWYo/P3cLZVbkw=;
-        b=NEdOUx/javmB9kDa7FGeUc51U/Wn0STrKWBa4uDg3vm2+W9FVlVH1+/ZMb1zTGKdDj
-         d3KLDNLFiScX2SoDgiYm71CYQHSrFsT80Vwc5DPAARaURlvkxOnL/I2SpNS/7RjVoq7M
-         jjBHG4IkvUpJrr88X3pQ1Wfo+pEhSovMq/MTY7fiCKb7Nr6D9uNLsLzURn6rQVZeGbce
-         2RLnovtWpOUC6EB7GYynif//9myEVnFqbAQ6SEV67g2Ps9E2dBH1Zb7EzSix25ynrfat
-         k7WO6rSP3p9XcTqrR8xuaSeMtQV/wtnrluHPs9zpByqTym6w08+dV+DrUSg5AioJPwMA
-         gXXA==
+        Wed, 29 Mar 2023 14:00:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966073C03
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:00:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680112803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Ex4qAQI8jFlphiortwiuaSdJ0uJRftZB4Xwk8I+YtM=;
+        b=ZiYLq3+5yRNeM5XskRLfi31HyfqY+ah9iB+lohhNJCgM4xQgKfYCsZUeazxQ7e0nLvXyLN
+        dzPNBz4La7v/QqqS41q4rNsjuXwjoiz7YrJMxmTX1v4pEWwZA2ppawYZqw0e2Ps008f8XW
+        UYMaeO0i2xPk1F3lNV5ZqKGSdCJd6Zk=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-639-I54TSJM6POuJH7ctpjgggg-1; Wed, 29 Mar 2023 14:00:02 -0400
+X-MC-Unique: I54TSJM6POuJH7ctpjgggg-1
+Received: by mail-ed1-f70.google.com with SMTP id i22-20020a05640242d600b004f5962985f4so23813939edc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:00:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680112785;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/ATAQe7qivttkaF6z/d0hrLKosZU1JWYo/P3cLZVbkw=;
-        b=UDm3Ahv0yOrGqBHwB8FN2ZiVE8NSBAcrzUnQjl98jQvqA7zFVfMDmWRxyEHpz83LuY
-         22Q0kdINemAk/+eZxV2rVsWRt9vahj4XlodtqE2/w7NeByyBUvSBHMssrC35+VIVJ+IL
-         sJRpAHnajQ61+eWaVw3uQFdAMKZ2rMvZtcen0Qo2erx7HkIE+mgAcQ5swK6QunG+NQbB
-         Igq/yNRAZPCOfYVO2fQi13aavRT1KEqUnjqKeVDSpV/uoseUYTBpHB/N0T/1QDxpLdze
-         8ypH2B+gGvFsA5J9o9JWSrr+XceUOiYeYKG70iLSke/7iw/JsQteyhP7NpfnR9mLFMka
-         GoHg==
-X-Gm-Message-State: AO0yUKUZCV3fqlS260EQmsG6cRYo5mRmSWsyM74RBI7gHO8u6FGh4uZT
-        LIurb9mnr55X803imcZUN0d69Q==
-X-Google-Smtp-Source: AK7set8WybREuJ/MU50NhWHApZc7Q738Nt6HMrkX3X3+yzmaIkDHQziymzMOq45dYkW+fnJxn7v6Yw==
-X-Received: by 2002:a05:6a20:21d5:b0:de:247e:d1fe with SMTP id p21-20020a056a2021d500b000de247ed1femr20032034pzb.1.1680112785240;
-        Wed, 29 Mar 2023 10:59:45 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id y13-20020aa7804d000000b00592626fe48csm6374660pfm.122.2023.03.29.10.59.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 10:59:44 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 10:59:44 -0700 (PDT)
-X-Google-Original-Date: Wed, 29 Mar 2023 10:59:40 PDT (-0700)
-Subject:     Re: [PATCH v8 0/1] riscv: Allow to downgrade paging mode from the command line
-In-Reply-To: <20230228154629.240541-1-alexghiti@rivosinc.com>
-CC:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Conor Dooley <conor@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>, bjorn@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, alexghiti@rivosinc.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     alexghiti@rivosinc.com
-Message-ID: <mhng-4507ad68-27bd-4d29-bb72-8d8f5bc27e34@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        d=1e100.net; s=20210112; t=1680112801;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Ex4qAQI8jFlphiortwiuaSdJ0uJRftZB4Xwk8I+YtM=;
+        b=ysIGE2eHx5Ga3RQiEdR50ienZhaBescIsKQiP9C93RkxSXWjOxM2EbqhboIkUXYsns
+         n/6RyTbGsEh3nb0yBGMOw4yckGn965xVNgs2OO8dA7T4yxXF3BuNvMkBHgwVCJDtKhnR
+         CXuS28ZhQDJqnnw11O/WVfY1dtZwNh2pM9N1hm3iW7jLDVl3FZGA6RNW/QzdaOyDgdTq
+         uUIiMsth25PuR0B1b88ltw4yVdaDF8fjxb9Uy75YCiXvqDhCb9KAcMNffYTvStL2Yae4
+         hNsBRRJmxAbDl2UGxOD4YiuTVjoCYPxMKhUkxPkgaA2KbJkM03JzU6UY8whK+R5bWxym
+         34AQ==
+X-Gm-Message-State: AAQBX9dfnU8oSg6DKbGZxkexwaL6oy8RT9I595d4vgiCIsR5ITA4Vouh
+        UlVG6zWd5JTIWKcYbz5RcuryfNnFNhst9hT716fANPmsjvcj/CQKRT8bzn0Z0KP2dPE6NhosAFn
+        +cZF8zZ6abk+tH/PYScgYORRu
+X-Received: by 2002:a05:6402:1841:b0:4fc:782c:dca3 with SMTP id v1-20020a056402184100b004fc782cdca3mr20131453edy.28.1680112801222;
+        Wed, 29 Mar 2023 11:00:01 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y43ETxBXALjoHl1MnyGSZbIV9TyYcmvZo2zPeWa/8U1bkANiEzdQlN1uO708Vi3zg4Z4PtFg==
+X-Received: by 2002:a05:6402:1841:b0:4fc:782c:dca3 with SMTP id v1-20020a056402184100b004fc782cdca3mr20131432edy.28.1680112800940;
+        Wed, 29 Mar 2023 11:00:00 -0700 (PDT)
+Received: from [192.168.42.100] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id u2-20020a50a402000000b004c4eed3fe20sm17426270edb.5.2023.03.29.10.59.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 11:00:00 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <e0363f67-34d9-103f-eac7-e3ab71f87c0b@redhat.com>
+Date:   Wed, 29 Mar 2023 19:59:59 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net
+Subject: Re: [PATCH bpf RFC-V2 1/5] xdp: rss hash types representation
+Content-Language: en-US
+To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>
+References: <168010726310.3039990.2753040700813178259.stgit@firesoul>
+ <168010734324.3039990.16454026957159811204.stgit@firesoul>
+In-Reply-To: <168010734324.3039990.16454026957159811204.stgit@firesoul>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,77 +90,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Feb 2023 07:46:28 PST (-0800), alexghiti@rivosinc.com wrote:
-> This new version gets rid of the limitation that prevented KASAN kernels
-> to use the newly introduced parameters.
->
-> While looking into KASLR, I fell onto commit aacd149b6238 ("arm64: head:
-> avoid relocating the kernel twice for KASLR"): it allows to use the fdt
-> functions very early in the boot process with KASAN enabled by simply
-> compiling a new version of those functions without instrumentation.
->
-> I had to change the handling of the command line parsing to make the
-> code self-contained in kernel/pi/cmd_early.c to avoid calling too many
-> __pi prefixed functions from outside this file.
->
-> I'll use this approach like arm64 to handle the extraction of the random
-> seedi from the device tree for KASLR.
->
-> base-commit: eb9be8310c58 ("RISC-V: add a spin_shadow_stack declaration")
 
-I have that in my tree, I'm still getting a bunch of boot failures 
-though.  I can try to get a list if you're not seeing any, but I'm kind 
-of stuck on some other stuff for a bit...
 
-> v8:
-> - Fix LLVM ld warning by moving the section .init.sdata from
->   kernel/pi/string.c into the newly created section .init.pidata
->
-> v7:
-> - Rebased on top of for-next which introduces lots of errors (thanks to
->   the patchwork CI)
-> - Add __NO_FORTIFY to avoid undefined __pi_fortify_panic
-> - Add an alias to our newly introduced strlen
-> - Remove __init as sections are already prefixed in the Makefile
-> - Introduce new section for kernel/pi/string.c to quiet the following
->   warnings (once we have all the string functions, we'll be able to get
->   rid of this):
->
-> warning: orphan section `.init__bug_table' from `arch/riscv/kernel/pi/string.pi.o' being placed in section `.init__bug_table'
-> warning: orphan section `.init.srodata.cst8' from `arch/riscv/kernel/pi/string.pi.o' being placed in section `.init.srodata.cst8'
->
-> v6:
-> - Fix llvm warning by forward declaring set_satp_mode_from_cmdline
->
-> v5:
-> - Handle null command line, Thanks Björn!
-> - Add RB/TB from Björn
->
-> v4:
-> - Introduce pi/ for KASAN to work
->
-> v3:
-> - Massage commit log to make no4lvl clearer, as asked by Conor
-> - Add a note to kernel-parameters.txt regarding the impossibility to use
->   those parameters when KASAN is enabled, as suggested by Conor
-> - Add RB from Björn
->
-> v2:
-> - Honor CMDLINE_EXTEND and CMDLINE_FORCE as noticed by Björn
->
->
-> Alexandre Ghiti (1):
->   riscv: Allow to downgrade paging mode from the command line
->
->  .../admin-guide/kernel-parameters.txt         |  5 +-
->  arch/riscv/kernel/Makefile                    |  2 +
->  arch/riscv/kernel/pi/Makefile                 | 37 +++++++++++
->  arch/riscv/kernel/pi/cmdline_early.c          | 62 +++++++++++++++++++
->  arch/riscv/kernel/vmlinux.lds.S               |  8 +++
->  arch/riscv/lib/memcpy.S                       |  2 +
->  arch/riscv/lib/memmove.S                      |  2 +
->  arch/riscv/lib/strlen.S                       |  1 +
->  arch/riscv/mm/init.c                          | 36 +++++++++--
->  9 files changed, 148 insertions(+), 7 deletions(-)
->  create mode 100644 arch/riscv/kernel/pi/Makefile
->  create mode 100644 arch/riscv/kernel/pi/cmdline_early.c
+On 29/03/2023 18.29, Jesper Dangaard Brouer wrote:
+> The RSS hash type specifies what portion of packet data NIC hardware used
+> when calculating RSS hash value. The RSS types are focused on Internet
+> traffic protocols at OSI layers L3 and L4. L2 (e.g. ARP) often get hash
+> value zero and no RSS type. For L3 focused on IPv4 vs. IPv6, and L4
+> primarily TCP vs UDP, but some hardware supports SCTP.
+> 
+> Hardware RSS types are differently encoded for each hardware NIC. Most
+> hardware represent RSS hash type as a number. Determining L3 vs L4 often
+> requires a mapping table as there often isn't a pattern or sorting
+> according to ISO layer.
+> 
+> The patch introduce a XDP RSS hash type (xdp_rss_hash_type) that can both
+> be seen as a number that is ordered according by ISO layer, and can be bit
+> masked to separate IPv4 and IPv6 types for L4 protocols. Room is available
+> for extending later while keeping these properties. This maps and unifies
+> difference to hardware specific hashes.
+> 
+> This proposal change the kfunc API bpf_xdp_metadata_rx_hash() to return
+> this RSS hash type on success.
+> 
+> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> ---
+>   include/net/xdp.h |   76 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+>   net/core/xdp.c    |    4 ++-
+>   2 files changed, 79 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index 5393b3ebe56e..1b2b17625c26 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -8,6 +8,7 @@
+>   
+>   #include <linux/skbuff.h> /* skb_shared_info */
+>   #include <uapi/linux/netdev.h>
+> +#include <linux/bitfield.h>
+>   
+>   /**
+>    * DOC: XDP RX-queue information
+> @@ -396,6 +397,81 @@ XDP_METADATA_KFUNC_xxx
+>   MAX_XDP_METADATA_KFUNC,
+>   };
+>   
+> +/* For partitioning of xdp_rss_hash_type */
+> +#define RSS_L3		GENMASK(2,0) /* 3-bits = values between 1-7 */
+> +#define L4_BIT		BIT(3)       /* 1-bit - L4 indication */
+> +#define RSS_L4_IPV4	GENMASK(6,4) /* 3-bits */
+> +#define RSS_L4_IPV6	GENMASK(9,7) /* 3-bits */
+> +#define RSS_L4		GENMASK(9,3) /* = 7-bits - covering L4 IPV4+IPV6 */
+> +#define L4_IPV6_EX_BIT	BIT(9)       /* 1-bit - L4 IPv6 with Extension hdr */
+> +				     /* 11-bits in total */
+
+Please ignore above lines in review ... they should have been deleted,
+the new partitioning uses the enum/defines below.
+
+> +
+> +/* Lower 4-bits value of xdp_rss_hash_type */
+> +enum xdp_rss_L4 {
+> +	XDP_RSS_L4_MASK		= GENMASK(3,0), /* 4-bits = values between 0-15 */
+> +	XDP_RSS_L4_NONE		= 0, /* Not L4 based hash */
+> +	XDP_RSS_L4_ANY		= 1, /* L4 based hash but protocol unknown */
+> +	XDP_RSS_L4_TCP		= 2,
+> +	XDP_RSS_L4_UDP		= 3,
+> +	XDP_RSS_L4_SCTP		= 4,
+> +	XDP_RSS_L4_IPSEC	= 5, /* L4 based hash include IPSEC SPI */
+> +/*
+> + RFC: We don't care about vasting space, then we could just store the
+> + protocol number (8-bits) directly. See /etc/protocols
+> +	XDP_RSS_L4_TCP		= 6,
+> +	XDP_RSS_L4_UDP		= 17,
+> +	XDP_RSS_L4_SCTP		= 132,
+> +	XDP_RSS_L4_IPSEC_ESP	= 50, // Issue: mlx5 didn't say ESP or AH
+> +	XDP_RSS_L4_IPSEC_AH	= 51, // both ESP+AH just include SPI in hash
+> + */
+> +};
+> +
+> +/* Values shifted for use in xdp_rss_hash_type */
+> +enum xdp_rss_L3 {
+> +	XDP_RSS_L3_MASK		= GENMASK(5,4), /* 2-bits = values between 1-3 */
+> +	XDP_RSS_L3_IPV4		= FIELD_PREP_CONST(XDP_RSS_L3_MASK, 1),
+> +	XDP_RSS_L3_IPV6		= FIELD_PREP_CONST(XDP_RSS_L3_MASK, 2),
+> +};
+> +
+> +/* Bits shifted for use in xdp_rss_hash_type */
+> +enum xdp_rss_bit {
+> +	XDP_RSS_BIT_MASK	= GENMASK(7,6), /* 2-bits */
+> +	/* IPv6 Extension Hdr */
+> +	XDP_RSS_BIT_EX = FIELD_PREP_CONST(XDP_RSS_BIT_MASK, BIT(0)),
+> +	/* XDP_RSS_BIT_VLAN ??? = FIELD_PREP_CONST(XDP_RSS_BIT_MASK, BIT(1)), */
+> +};
+> +
+> +/* RSS hash type combinations used for driver HW mapping */
+> +enum xdp_rss_hash_type {
+> +	XDP_RSS_TYPE_NONE            = 0,
+> +	XDP_RSS_TYPE_L2              = XDP_RSS_TYPE_NONE,
+> +
+> +	XDP_RSS_TYPE_L3_MASK         = XDP_RSS_L3_MASK,
+> +	XDP_RSS_TYPE_L3_IPV4         = XDP_RSS_L3_IPV4,
+> +	XDP_RSS_TYPE_L3_IPV6         = XDP_RSS_L3_IPV6,
+> +	XDP_RSS_TYPE_L3_IPV6_EX      = XDP_RSS_L3_IPV6 | XDP_RSS_BIT_EX,
+> +
+> +	XDP_RSS_TYPE_L4_MASK         = XDP_RSS_L4_MASK,
+> +	XDP_RSS_TYPE_L4_ANY          = XDP_RSS_L4_ANY,
+> +	XDP_RSS_TYPE_L4_IPV4_TCP     = XDP_RSS_L3_IPV4 | XDP_RSS_L4_TCP,
+> +	XDP_RSS_TYPE_L4_IPV4_UDP     = XDP_RSS_L3_IPV4 | XDP_RSS_L4_UDP,
+> +	XDP_RSS_TYPE_L4_IPV4_SCTP    = XDP_RSS_L3_IPV4 | XDP_RSS_L4_SCTP,
+> +
+> +	XDP_RSS_TYPE_L4_IPV6_TCP     = XDP_RSS_L3_IPV6 | XDP_RSS_L4_TCP,
+> +	XDP_RSS_TYPE_L4_IPV6_UDP     = XDP_RSS_L3_IPV6 | XDP_RSS_L4_UDP,
+> +	XDP_RSS_TYPE_L4_IPV6_SCTP    = XDP_RSS_L3_IPV6 | XDP_RSS_L4_UDP,
+> +
+> +	XDP_RSS_TYPE_L4_IPV6_TCP_EX  = XDP_RSS_TYPE_L4_IPV6_TCP |XDP_RSS_BIT_EX,
+> +	XDP_RSS_TYPE_L4_IPV6_UDP_EX  = XDP_RSS_TYPE_L4_IPV6_UDP |XDP_RSS_BIT_EX,
+> +	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP|XDP_RSS_BIT_EX,
+> +};
+> +#undef RSS_L3
+> +#undef L4_BIT
+> +#undef RSS_L4_IPV4
+> +#undef RSS_L4_IPV6
+> +#undef RSS_L4
+> +#undef L4_IPV6_EX_BIT
+
+All the undef's are also unncecessary now.
+
+> +
+>   #ifdef CONFIG_NET
+>   u32 bpf_xdp_metadata_kfunc_id(int id);
+>   bool bpf_dev_bound_kfunc_id(u32 btf_id);
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index 7133017bcd74..81d41df30695 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -721,12 +721,14 @@ __bpf_kfunc int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx, u64 *tim
+>    * @hash: Return value pointer.
+>    *
+>    * Return:
+> - * * Returns 0 on success or ``-errno`` on error.
+> + * * Returns (positive) RSS hash **type** on success or ``-errno`` on error.
+> + * * ``enum xdp_rss_hash_type`` : RSS hash type
+>    * * ``-EOPNOTSUPP`` : means device driver doesn't implement kfunc
+>    * * ``-ENODATA``    : means no RX-hash available for this frame
+>    */
+>   __bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *hash)
+>   {
+> +	BTF_TYPE_EMIT(enum xdp_rss_hash_type);
+>   	return -EOPNOTSUPP;
+>   }
+>   
+> 
+> 
+
