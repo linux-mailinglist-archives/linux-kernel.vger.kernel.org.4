@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A9C6CD986
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200356CD98D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjC2MrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
+        id S229948AbjC2Mro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjC2MrH (ORCPT
+        with ESMTP id S229944AbjC2Mrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:47:07 -0400
+        Wed, 29 Mar 2023 08:47:40 -0400
 Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17644201;
-        Wed, 29 Mar 2023 05:47:04 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id p15so19080930ybl.9;
-        Wed, 29 Mar 2023 05:47:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751B140CE;
+        Wed, 29 Mar 2023 05:47:37 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id f188so660166ybb.3;
+        Wed, 29 Mar 2023 05:47:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680094024;
+        d=gmail.com; s=20210112; t=1680094056;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=d4LKIkv2jjaqEZGV9hdNc6tEqjwN//q2Vxizmj38FUA=;
-        b=C/FTOzsvLpqVoXeHw2ea3zPblLBmegOph8K5ugkJuMIeVAh+UCRABDUafaz1f7aIY6
-         6uf6Eisxla9gTI1kVxoaNMRvLuZ+886001EChYlz+7QAHyUKtffhSZ+X9AgaV5Dhtt4i
-         cUdoYx3/xC5++3RLFEW4Rn3nqjJISH/yMNBoXQmw5JVhqdMNSGq2uHeW/tSjnSOHMLQa
-         YPEPwgq/aw07Xa5Eb8W/ULtEWEPMWzjvndelcYOIxi6SzYfEpuo/wUlWirjvVu84PMP1
-         vVbBQxeLG0dRy38s+Tx6/biOIJEOPkegxuH0BASHN12MurYJAEfE3M4DGsdnhYNOaZrl
-         ka+w==
+        bh=Xb99Pt1hWl4SYTj2pTt8Ket8kJPM1kuDudhRju4oMSo=;
+        b=lI1jIvz1wOnUinOR2XKz81YqAn/LewjZQIdo6TayUXQ2JWK9zZ7GyaQ3prfQpUNSZM
+         tweWuGKncTlhlL/I6jjyyBf52a5l8tSYgCXxlibfVEkyz+5iQG5WFua1qY3ImLmT8jNW
+         HkJ3nz5Ql74zz3ABgv6LrsjPlUc70WFywxVDBMyio9LL/H1KVQa+QwIl+eKYbqK9a+9x
+         yWSYAFm1JKqKB0N10aKibTw64LT4cAcOUwAUplZ346OzDKdXXenv4nHM8EDEXO01789B
+         yt8r2JptMfJc6SJsPDdf7jnNSWaa2OcTPrxeqFBVSH6kAxqmnuxYx/YtP1rxtiieVtRc
+         70kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680094024;
+        d=1e100.net; s=20210112; t=1680094056;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=d4LKIkv2jjaqEZGV9hdNc6tEqjwN//q2Vxizmj38FUA=;
-        b=OHjyD6SoPlBWaxlf8DY5WWFgtOkShN1AhYYFPL7e4eFE5z5rjYjfgyrH+GWiuM8Ite
-         Z12Dl5yvE3pnIBmiU+MwHVK9WYcS6tE4fNKkQ5Lu2pUWYpE67kzp/EysuNGv3HxUuzME
-         kquZo18bLaOZWjZT2EkMnzq2TKo7DTaNE9VpFfk099sAAEP/10ZBAdLlaJvMwKxLcaUy
-         LCb/CktQembxOvqGhc4NxpmEc5yMqrLcfIYPn1yadw/E1UMIuJxA0GaBleIqi+GsGXZI
-         OWPUNmSJcsPrITSWBXj2ZqEgjNVNTWk7tpor2X27IBOaLJ3c1T1VDok027ENc2pQjxV5
-         J4jg==
-X-Gm-Message-State: AAQBX9c+f2Kx5gfXsyiJdmIfmt5GkjrDAR6asE/t87Wq4xJIoffCe4om
-        SE0j8lCTd6M2br1tu8vGHfw=
-X-Google-Smtp-Source: AKy350YEM1SqgxyCn8Vd3o3g7PhTtI779t7HLSnooS41hqjb0hoQKh7r4DomNpI4mAxy9ATSPaD6CQ==
-X-Received: by 2002:a25:1141:0:b0:b73:f2ab:8c8b with SMTP id 62-20020a251141000000b00b73f2ab8c8bmr2005620ybr.2.1680094023840;
-        Wed, 29 Mar 2023 05:47:03 -0700 (PDT)
+        bh=Xb99Pt1hWl4SYTj2pTt8Ket8kJPM1kuDudhRju4oMSo=;
+        b=qJj/5mEWkmdStTgBudzjkQ7oKBc5Kh0KMx5F9WJymownl9Ir4YwzOJX17CVyvbinoV
+         NIX1oAjNO3z+mArdZeRwkvxIi1UbT3yGwQZ0E+8jPYcc0rNYJYN5pf7Rna43/5OTI84w
+         xDSIpOQ07Kay05/c4cSA88f6N9Ld/egRv4D5kE47tL+1WMR+8aYmepS/D1MvWkVKpoxk
+         bPcn21eUa5Q44oByhC6fl78Fy+qASqz6WA+38ExoOCFHJNnIYJy/zxBce+Q1Xa4WhxKh
+         hUwlsT8b9C6opIzKO1XaDrZcvSNGEKWCacTPdL1prAMZu4qkhZlCGSBTb/mTfCw8nVB0
+         lWng==
+X-Gm-Message-State: AAQBX9cuKG3fsp3mrpxAEZvEbCBARo13qgC5d8HQDrFENpVjsiOLdmWY
+        tOyA+MpLx3QGuChvrMZlI2w=
+X-Google-Smtp-Source: AKy350bdEGZMDJpYSMuq9BOMZO56hoZIdt+J3okid1AES5sc6vMNacBimV7YbYHIobiway90BPZy7g==
+X-Received: by 2002:a05:6902:1201:b0:b72:4127:68a with SMTP id s1-20020a056902120100b00b724127068amr24732924ybu.19.1680094056338;
+        Wed, 29 Mar 2023 05:47:36 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x94-20020a25a067000000b00b7767ca74a0sm3424611ybh.61.2023.03.29.05.47.02
+        by smtp.gmail.com with ESMTPSA id p142-20020a25d894000000b00b7767ca746fsm3454472ybg.12.2023.03.29.05.47.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 05:47:03 -0700 (PDT)
+        Wed, 29 Mar 2023 05:47:36 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 29 Mar 2023 05:47:00 -0700
+Date:   Wed, 29 Mar 2023 05:47:34 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "peter.ganzhorn@gmail.com" <peter.ganzhorn@gmail.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/4] coretemp: Fix spamming of ring buffer
-Message-ID: <aeed703c-5dbb-4a6f-a4d7-3c6a55d99e9e@roeck-us.net>
-References: <CA+3fRbFzq38sQomFM7xJt-UoeLv_ZZbQ2uaHZ+8J_5ntweJ7TA@mail.gmail.com>
- <7e821f80b7700fcf1fb26f40bde8397f0e5e6d7e.camel@intel.com>
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jamie@jamieiles.com,
+        heiko@sntech.de, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 2/2] dt-bindings: watchdog: rockchip: Add
+ rockchip,rk3588-wdt string
+Message-ID: <157937fd-0af7-4ff5-8430-2f956c7aafba@roeck-us.net>
+References: <20230328210048.195124-1-shreeya.patel@collabora.com>
+ <20230328210048.195124-3-shreeya.patel@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7e821f80b7700fcf1fb26f40bde8397f0e5e6d7e.camel@intel.com>
+In-Reply-To: <20230328210048.195124-3-shreeya.patel@collabora.com>
 X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
         FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
@@ -75,86 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 03:43:58AM +0000, Zhang, Rui wrote:
-> Hi, Peter,
+On Wed, Mar 29, 2023 at 02:30:48AM +0530, Shreeya Patel wrote:
+> Add rockchip,rk3588-wdt compatible string.
 > 
-> CC the list.
-> 
-> On Tue, 2023-03-28 at 22:37 +0200, Peter Ganzhorn wrote:
-> > Dear Mr. Rui,
-> > Dear Mr. Roeck,
-> > 
-> > please consider accepting the attached patches or
-> > modifying the coretemp code to stop spamming my syslog.
-> > I would appreciate it very much if you can accept the patches.
-> > 
-> > coretemp: Improve dynamic changes of TjMax
-> > After introduction of dynamic TjMax changes in commit
-> > c0c67f8761cec1fe36c21d85b1a5400ea7ac30cd
-> > my syslog gets spammed with "TjMax is ... degrees C"
-> > messages.
-> > If TjMax is subject to change at any time, it won't be
-> > set in tdata anymore and re-read every time from MSR.
-> > This causes quite a lot of dev_dbg() messages to be issued.
-> > 
-> > The following patches change the code to read TjMax
-> > from the MSRs into tdata->tjmax (again) but allow for a
-> > dynamic update at any time as well. (Patches 1 and 2)
-> > This way a message will only be issued after actual changes.
-> > Also I replaced the dev_dbg() with dev_notice (Patch 3) and
-> > added a additional dev_notice for the case where TjMax is
-> > set based on assumptions. (Patch 4)
-> > 
-> > 
-> > If you do not want to accept my patches, removing the
-> > dev_dbg() in get_tjmax() would be the most simple
-> > solution I guess.
-> > 
-> Please check if below patch solves your problem or not.
-> 
-> From 9370ee5163a85f65230b5222f1f4dece59ce078a Mon Sep 17 00:00:00 2001
-> From: Zhang Rui <rui.zhang@intel.com>
-> Date: Wed, 29 Mar 2023 11:35:18 +0800
-> Subject: [PATCH] hwmon: (coretemp) Avoid duplicate debug messages
-> 
-> Avoid duplicate dev_dbg messages when tjmax value retrieved from MSR
-> does not change.
-> 
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  drivers/hwmon/coretemp.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index 30d77f451937..809456967b50 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -267,6 +267,7 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
->  	int err;
->  	u32 eax, edx;
->  	u32 val;
-> +	static u32 tjmax;
-
-That would apply to every instance of this driver, meaning to every
-CPU core. Is that really appropriate ?
-
-Guenter
-
+> diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> index 92df6e453f64..e7a87ce94772 100644
+> --- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> @@ -29,6 +29,7 @@ properties:
+>                - rockchip,rk3368-wdt
+>                - rockchip,rk3399-wdt
+>                - rockchip,rk3568-wdt
+> +              - rockchip,rk3588-wdt
+>                - rockchip,rv1108-wdt
+>            - const: snps,dw-wdt
 >  
->  	/* use static tjmax once it is set */
->  	if (tdata->tjmax)
-> @@ -287,7 +288,10 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
->  		 * will be used
->  		 */
->  		if (val) {
-> -			dev_dbg(dev, "TjMax is %d degrees C\n", val);
-> +			if (tjmax != val) {
-> +				dev_dbg(dev, "TjMax is %d degrees C\n", val);
-> +				tjmax = val;
-> +			}
->  			return val * 1000;
->  		}
->  	}
 > -- 
-> 2.25.1
+> 2.30.2
 > 
