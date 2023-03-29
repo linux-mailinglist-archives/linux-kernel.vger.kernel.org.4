@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 396A56CF1B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27786CF1B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjC2SFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
+        id S230017AbjC2SGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjC2SFv (ORCPT
+        with ESMTP id S229951AbjC2SF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:05:51 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CA04201
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:05:50 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-17ebba88c60so17093591fac.3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:05:50 -0700 (PDT)
+        Wed, 29 Mar 2023 14:05:59 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BA165B0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:05:56 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-17aaa51a911so17086358fac.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google; t=1680113150;
+        d=usp.br; s=usp-google; t=1680113156;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dENL6Fxh5VQz27gw9oq+gG40WY6+FnIBbbcwaGKgL9s=;
-        b=qNdPr3T0VVdr5XsrImYxl6M5mYISWBJYMUVpySQaJmLrp1n0HEXIkbs7mD+7nCUiSp
-         ENNG3tu4CDNcZ+DpyTBJZDFodUGb4K1yFLrp60aoqGfGdvW0Dmsvq1k9HJ/N6Z5QvPTu
-         Ygb3up24v4GYEu7cvd4/V5uZkfb8Wb5oms7YjPsS3nlLz0oF80AVbw7Zt5p/KBGcfFnC
-         NNaFo4Eu+4dGrn1PHgq8lAQ/pNE5MYd5pAmX0OXfbRy3u8sH3JC2mgZq+BceIbzvN1PE
-         zmWe0CAElijV4k+CORZ8rpFYnUpxNihjsnBZOXRTPW3RoWA8x511sKffG1CbXwVUXlRd
-         TvIg==
+        bh=Dogo3BF2L9vBC4AT6xgMxoTJFXvXmfhOs0Wm2IXvUoA=;
+        b=L0HwYwO3L/MNP7MmWs2RcJbpPDw4+LjAB6LZUkRjGQGTcOAeJV74uov52Ekfpp5dmx
+         s9lGs7hbWkvuFTUwneVaHXamZVEnm4xDfnGAUPal58PW25X0ImisVK6cetvN9lnDxxpB
+         S14152RBp3zDsK3rafFd6eeNnYPrDzXt3KSOf/f8/tH+QAuum8S3zUYAVtXz29+H3Ysr
+         +JJmJ+SZm+bax72OFXXBsTF/JNpymn0AgJeQej1Hzg2/4mgEwTNsa5oo41F6HWUq2+Kg
+         AkSmdqdvYDrjPRkHg8UO1RD3UssIXsf/yezuTeWy91kkBOGVueLttPUm9Jmt2+Nf3SDi
+         QqWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680113150;
+        d=1e100.net; s=20210112; t=1680113156;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dENL6Fxh5VQz27gw9oq+gG40WY6+FnIBbbcwaGKgL9s=;
-        b=gsZedmrwJJOHfmXdjNSFnA19TMqvpWAUT1uH34rgqNdi22XUK1I3LmRdWJtauZW7ma
-         cubpLP7LigP3MtbHrtE+Qk3xXNA8/J2TZC0yFE1OyqUN0iljdEXixyYegX5bub9lidK7
-         HDmukom6Y+IkbwK9+g6NU04h0CqxdZxKasPkF04RtkKq1kbEEzsnRw6D8DpL/FRhhFEN
-         sbKi8M7e4lSoYZ/fCZBY9FlQZCk7t/a8o2750vpGU69RVlwUKtr+RivQ8Gmuy5TR10fU
-         vBsBDKOYWB0Rrximsyzv+RsCuxlEUdY1VqqFjbvahqq/PZDZwSKGFmM0FxhQvZJ+dUhw
-         avng==
-X-Gm-Message-State: AO0yUKWwOqy/5JQBJKclIJZ0XdNg9M93Mj5NRhbi68VZmqw4zmUfcuQN
-        SuHNw67ehnzpWi1nNopHy8Qimw==
-X-Google-Smtp-Source: AKy350ZFzKCHQwib2AWl++pfIuersKFdWtVFGHv0D3aPWMLgI8OfejXGuKK3kkzECOOmF8Pq50ZmJw==
-X-Received: by 2002:a05:6870:1d1:b0:17e:c403:a046 with SMTP id n17-20020a05687001d100b0017ec403a046mr12133932oad.12.1680113149906;
-        Wed, 29 Mar 2023 11:05:49 -0700 (PDT)
+        bh=Dogo3BF2L9vBC4AT6xgMxoTJFXvXmfhOs0Wm2IXvUoA=;
+        b=euyqP31zjzQctkcu6efVJRXXqnC1+9cz0mg8VWFqk08XmcqOq5Qa6iFQU4jqkscWPM
+         DVNHLghz578XgIuWJZu8sUa3csenhV84Z+Dbk45Y1JTxYfy/36vig28MLZ7JcoztE8hI
+         q3mhtNYMbL0FJDxsFe9VCz/QRMqNX4K8gSERwv23Q6Wcm/7SYFvY6BE3kDWalWiaQMVt
+         OYIvpsz2uKqxfZpqc/dnu/8fm86u9YDq1NlldDABaAd3qJNRIK41hFF12lSJAfHYlnwZ
+         zSEn6n3XAWVDQedF/0auUfSdI9Bj5hFyMowt5k1PCdD1PTdiwldCo++KkwzUkZK+mpWc
+         aH3w==
+X-Gm-Message-State: AAQBX9cTxGin2MD1GVcCeNh0s37eIVYKQpPg3wq+ITCsUn0N5fVRHz+p
+        BOF+5IND8MpIeA6o7D3Rm0ifiA==
+X-Google-Smtp-Source: AKy350Y5nATzpWAejjs20Se142ta9u/ME/7RWzY7Q28O0MbOueyG/JtjDWUShvoc2IoJ5SkqvG6ZWg==
+X-Received: by 2002:a05:6871:282:b0:177:a8a8:65c with SMTP id i2-20020a056871028200b00177a8a8065cmr13194714oae.4.1680113155874;
+        Wed, 29 Mar 2023 11:05:55 -0700 (PDT)
 Received: from ARCHaio.localdomain ([2804:1b3:a2c0:c911:919f:bd20:4f2a:8383])
-        by smtp.gmail.com with ESMTPSA id yo7-20020a05687c018700b001777244e3f9sm12098767oab.8.2023.03.29.11.05.44
+        by smtp.gmail.com with ESMTPSA id yo7-20020a05687c018700b001777244e3f9sm12098767oab.8.2023.03.29.11.05.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 11:05:49 -0700 (PDT)
+        Wed, 29 Mar 2023 11:05:55 -0700 (PDT)
 From:   Caio Novais <caionovais@usp.br>
 To:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
@@ -72,9 +72,9 @@ Cc:     Harry Wentland <harry.wentland@amd.com>,
         Gabe Teeger <gabe.teeger@amd.com>, Roman Li <roman.li@amd.com>,
         =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
         Deepak R Varma <drv@mailo.com>
-Subject: [PATCH v2 1/2] drm/amd/display: Remove unused variable 'scl_enable'
-Date:   Wed, 29 Mar 2023 15:05:33 -0300
-Message-Id: <20230329180534.99151-2-caionovais@usp.br>
+Subject: [PATCH v2 2/2] drm/amd/display: Mark function 'optc3_wait_drr_doublebuffer_pending_clear' as static
+Date:   Wed, 29 Mar 2023 15:05:34 -0300
+Message-Id: <20230329180534.99151-3-caionovais@usp.br>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230329180534.99151-1-caionovais@usp.br>
 References: <20230329180534.99151-1-caionovais@usp.br>
@@ -92,36 +92,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Compiling AMD GPU drivers displays a warning:
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_rq_dlg_calc_314.c: In function ‘dml_rq_dlg_get_dlg_params’:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_rq_dlg_calc_314.c:991:14: warning: variable ‘scl_enable’ set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for ‘optc3_wait_drr_doublebuffer_pending_clear’ [-Wmissing-prototypes]
 
-Get rid of it by removing the variable 'scl_enable'.
+Get rid of it by marking the function as static
 
 Signed-off-by: Caio Novais <caionovais@usp.br>
 ---
- .../gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
-index d1c2693a2e28..ea4eb66066c4 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
-@@ -988,7 +988,6 @@ static void dml_rq_dlg_get_dlg_params(
- 	double hratio_c;
- 	double vratio_l;
- 	double vratio_c;
--	bool scl_enable;
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c
+index 08b92715e2e6..c95f000b63b2 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c
+@@ -291,7 +291,7 @@ static void optc3_set_timing_double_buffer(struct timing_generator *optc, bool e
+ 		   OTG_DRR_TIMING_DBUF_UPDATE_MODE, mode);
+ }
  
- 	unsigned int swath_width_ub_l;
- 	unsigned int dpte_groups_per_row_ub_l;
-@@ -1117,7 +1116,6 @@ static void dml_rq_dlg_get_dlg_params(
- 	hratio_c = scl->hscl_ratio_c;
- 	vratio_l = scl->vscl_ratio;
- 	vratio_c = scl->vscl_ratio_c;
--	scl_enable = scl->scl_enable;
+-void optc3_wait_drr_doublebuffer_pending_clear(struct timing_generator *optc)
++static void optc3_wait_drr_doublebuffer_pending_clear(struct timing_generator *optc)
+ {
+ 	struct optc *optc1 = DCN10TG_FROM_TG(optc);
  
- 	swath_width_ub_l = rq_dlg_param->rq_l.swath_width_ub;
- 	dpte_groups_per_row_ub_l = rq_dlg_param->rq_l.dpte_groups_per_row_ub;
 -- 
 2.40.0
 
