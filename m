@@ -2,112 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EB36CF795
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037E56CF798
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjC2Xj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 19:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
+        id S230385AbjC2XmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 19:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjC2Xj0 (ORCPT
+        with ESMTP id S229449AbjC2XmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 19:39:26 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D8B4200;
-        Wed, 29 Mar 2023 16:39:25 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id w9so69817759edc.3;
-        Wed, 29 Mar 2023 16:39:25 -0700 (PDT)
+        Wed, 29 Mar 2023 19:42:05 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DC04C13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 16:42:02 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id cn12so13397244qtb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 16:42:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680133164;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hqEPbtG5TnzsvZer03neXKsYACOyDSZeEW5I6AIlmNs=;
-        b=IY7w1l4YmObaNWVkpPgYdEfMcpT1ctYp3obMhWv0Xm8cynVdixd1VHjN/sLeq3PUw1
-         bjfEK/H7cwZa0RY2LfGBfdxZLNRt6UKYrjtBdGGBj72xrzFkYrHJG73e4Lf3G7GRSSSN
-         iydWFvu+eQeZdGEvm9h1cAmk/R2RX2wNvUh/A/FnGXsCc6gA08vWFMKpmheVYBYknisf
-         NauiJiDkgebaoLSbaCAD4Sdyvg2dbsvwcr/UnZTSdBgUGzIpgT5Y22/OiJ/KHcrbqHDW
-         seGT3qo84j6Y5p6L2b8JgEMtnND5l0hxD6X9dMnYBbXIuWa0uVIVH5xeD7QyafhkPTgZ
-         66BA==
+        d=ziepe.ca; s=google; t=1680133321;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M7C+py6MtCoeCMOtw25BrlCO3RIdyKIetyPlMUWcAxQ=;
+        b=or5zOdb0THcrHSRrNF/aWpqr5y5XACt17c51B2fuOW5sIxoj2mxKk9QPCHXd0weuMi
+         hnjPrhDD9X00VxhDRyGWzEdQaeUnYGGNVBIvm9NdJ0z50h4PG9uK/AbqfIt+KuEViqwk
+         JMM5cDJ2p6Ibr/BwfCk3C1SKBmRh1EslZACPJQ899Ch1m4XCYwbv+spFie8OO9H1NGMd
+         dSWXfMR537z5wT9f+bGJgtTobSqzNyVbAqczhBYbiJ434wSDGKN+LAwp1+ntSjG3vP2F
+         N7qWsyB3f+eC4E5HMMZTbKMLErH/sElNNBOzKtXz/YGwiDkAtAAhK+4KWLoTciVd0//H
+         yxpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680133164;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hqEPbtG5TnzsvZer03neXKsYACOyDSZeEW5I6AIlmNs=;
-        b=QCoYM4D1OjZ0PHekwZphE3Gr/PsAnsewpo8nhZDLNzpgGxF7vd+WAzwMBXPY8Z3egv
-         7e9U6nkDacRWrcPzPbEifpDMzzoM0VGYAei1uxsIFQuizuTw6Fk5T4MTa7w89LaGlbh/
-         n8X+SYFkbma5z3YLOeihK/RrB7FL36TLZjIa/GSDvr9Ea1MwngTfTWsvdygJzIuDhycf
-         XU7GeBYjMWGhtiWCcmN2/tMTn62xgostS+OVzzSXHKjhgnqit2ocLOonWLD51FQfIHx3
-         8dWhj9eG1zmhGvmSkl93NFf/+izweTE7kxIlRpIgXFg6fWmMLMCgSPpiT8ooiLtvFdK+
-         k8fg==
-X-Gm-Message-State: AAQBX9eLRcWBBlAN0qLiep8S0Z7QnsoHV7hedhGLcJqtFcWatEvKGuFi
-        g/UB1mhTvvbP79fiMmmOzW99UAvi0s81zw==
-X-Google-Smtp-Source: AKy350ZjdxbO/H7VX8W5FkfHtneSxJsIufYC0g+yX+AZB7YVyuK4+pY4dNSjcNWr0lwU7Ja1ZJwweA==
-X-Received: by 2002:a17:907:98ce:b0:931:de86:1879 with SMTP id kd14-20020a17090798ce00b00931de861879mr23877693ejc.9.1680133163858;
-        Wed, 29 Mar 2023 16:39:23 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e11:1404:8860:cab:2031:9769:deea])
-        by smtp.gmail.com with ESMTPSA id u17-20020a170906409100b009338ad391b9sm14513791ejj.213.2023.03.29.16.39.23
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 29 Mar 2023 16:39:23 -0700 (PDT)
-From:   technoboy85@gmail.com
-To:     rust-for-linux@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Matteo Croce <teknoraver@meta.com>
-Subject: [PATCH] rust: fix bindgen arguments
-Date:   Thu, 30 Mar 2023 01:39:21 +0200
-Message-Id: <20230329233921.16729-1-technoboy85@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        d=1e100.net; s=20210112; t=1680133321;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M7C+py6MtCoeCMOtw25BrlCO3RIdyKIetyPlMUWcAxQ=;
+        b=M7I5IGS/k/P9tAbhojzBTmM9Q5h4IkItA3lDo0vgN/2FuqxX7wk7BYBq8LQDdIhWIS
+         rfd563ytSvIFPEUqEeASKNuaUROuP4Cq+5owAqpP/big55wO8TzC+8ljBX4F6CXYHnvf
+         yZIypVva/U9ggakpI81Sd5gNX4CNwdXlcMHnlsA5++nYY4WBWwIhLzqNW36IHUB7eTEY
+         lLHfTsBvlLqU/1Fq9lbTyAeuiQdg5Zeqz5RQ2L4eEJvGiuQM5xSmAfx6LELoFEdEaQ56
+         uN40lpODHtcR7q+Z4tayIyReNA+i3KWwoJWQmfrLefwVg2USABewy3pkGIg9cuE8URyC
+         IhWw==
+X-Gm-Message-State: AO0yUKUhF8K6wPQppeCLGBpafb+8r7Vn8Vkyr60veKW7OrYkwVFt9rnq
+        DnE34chl8HY/oMl6Rlf0R6PQzf2tdEclP8U6pKg=
+X-Google-Smtp-Source: AK7set/r+pGsJrPMn0D9D6pkZb7SUCn2k/XDNs/gApUMrPEx0RFz+B78D/mL8S9HzmDoO+y4IPCuSQ==
+X-Received: by 2002:a05:622a:1ba3:b0:3e3:98b5:69c2 with SMTP id bp35-20020a05622a1ba300b003e398b569c2mr26020425qtb.62.1680133321368;
+        Wed, 29 Mar 2023 16:42:01 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id h22-20020ac85056000000b003d5aae2182dsm8863730qtm.29.2023.03.29.16.42.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 16:42:00 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1phfQW-004hQQ-86;
+        Wed, 29 Mar 2023 20:42:00 -0300
+Date:   Wed, 29 Mar 2023 20:42:00 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Steven Price <steven.price@arm.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v2] iommu/rockchip: Add missing set_platform_dma_ops
+ callback
+Message-ID: <ZCTMyHifYJfGZqRg@ziepe.ca>
+References: <20230324111127.221640-1-steven.price@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324111127.221640-1-steven.price@arm.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matteo Croce <teknoraver@meta.com>
+On Fri, Mar 24, 2023 at 11:11:27AM +0000, Steven Price wrote:
+> Similar to exynos, we need a set_platform_dma_ops() callback for proper
+> operation on ARM 32 bit after recent changes in the IOMMU framework
+> (detach ops removal). But also the use of a NULL domain is confusing.
+> 
+> Rework the code to have a singleton rk_identity_domain which is assigned
+> to domain when using an identity mapping rather than "detaching". This
+> makes the code easier to reason about.
+> 
+> Signed-off-by: Steven Price <steven.price@arm.com>
+> ---
+> Changes since v1[1]:
+> 
+>  * Reworked the code to avoid a NULL domain, instead a singleton
+>    rk_identity_domain is used instead. The 'detach' language is no
+>    longer used.
+> 
+> [1] https://lore.kernel.org/r/20230315164152.333251-1-steven.price%40arm.com
+> 
+>  drivers/iommu/rockchip-iommu.c | 50 ++++++++++++++++++++++++++--------
+>  1 file changed, 39 insertions(+), 11 deletions(-)
 
-bindgen renamed some arguments to be more inclusive.
-Detect if bindgen uses the new syntax and use it,
-otherwise fallback to the previous one.
+Aside from the pm stuff this looks OK to me
 
-Signed-off-by: Matteo Croce <teknoraver@meta.com>
----
- rust/Makefile | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-diff --git a/rust/Makefile b/rust/Makefile
-index ff70c4c916f8..3a4971d84b63 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -68,6 +68,11 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
- 		--crate-name $(subst rustdoc-,,$@) \
- 		@$(objtree)/include/generated/rustc_cfg $<
- 
-+bindgen-list = $(shell if $(BINDGEN) --help |grep -q -- --allowlist;			\
-+	then echo "--blocklist-type '.*' --allowlist-var '' --allowlist-function";	\
-+	else echo "--blacklist-type '.*' --whitelist-var '' --whitelist-function";	\
-+	fi)
-+
- # The `html_logo_url` and `html_favicon_url` forms of the `doc` attribute
- # can be used to specify a custom logo. However:
- #   - The given value is used as-is, thus it cannot be relative or a local file
-@@ -300,8 +305,7 @@ $(obj)/bindings/bindings_generated.rs: $(src)/bindings/bindings_helper.h \
- # given it is `libclang`; but for consistency, future Clang changes and/or
- # a potential future GCC backend for `bindgen`, we disable it too.
- $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_flags = \
--    --blacklist-type '.*' --whitelist-var '' \
--    --whitelist-function 'rust_helper_.*'
-+    $(bindgen-list) 'rust_helper_.*'
- $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_cflags = \
-     -I$(objtree)/$(obj) -Wno-missing-prototypes -Wno-missing-declarations
- $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_extra = ; \
--- 
-2.40.0
-
+Thanks,
+Jason
