@@ -2,48 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CB16CD905
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A39C16CD906
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjC2MCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
+        id S229968AbjC2MDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjC2MCg (ORCPT
+        with ESMTP id S229485AbjC2MDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:02:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE03BC0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 05:02:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA80A1FB;
-        Wed, 29 Mar 2023 05:03:18 -0700 (PDT)
-Received: from [10.57.20.1] (unknown [10.57.20.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5514B3F6C4;
-        Wed, 29 Mar 2023 05:02:33 -0700 (PDT)
-Message-ID: <d55db287-52ca-1e25-6275-73c5bbee6e54@arm.com>
-Date:   Wed, 29 Mar 2023 13:02:31 +0100
+        Wed, 29 Mar 2023 08:03:16 -0400
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D78268B;
+        Wed, 29 Mar 2023 05:03:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VewkIyt_1680091388;
+Received: from 30.221.149.47(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VewkIyt_1680091388)
+          by smtp.aliyun-inc.com;
+          Wed, 29 Mar 2023 20:03:09 +0800
+Message-ID: <e60d5073-b7bb-f475-8ce5-fa04ac0926f5@linux.alibaba.com>
+Date:   Wed, 29 Mar 2023 20:03:08 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-From:   James Clark <james.clark@arm.com>
-Subject: Re: [PATCH v2 5/9] coresight: Dynamically add connections
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH RFC 3/4] driver/perf: Add identifier sysfs file for Yitian
+ 710 DDR
+To:     Shuai Xue <xueshuai@linux.alibaba.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
         Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230310160610.742382-1-james.clark@arm.com>
- <20230310160610.742382-6-james.clark@arm.com>
- <c468a656-036f-df45-0c5e-034a73ed727a@arm.com>
-Content-Language: en-US
-In-Reply-To: <c468a656-036f-df45-0c5e-034a73ed727a@arm.com>
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1679885172-95021-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1679885172-95021-4-git-send-email-renyu.zj@linux.alibaba.com>
+ <7060f009-2964-30af-3d12-2bb3e21b6c1e@linux.alibaba.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <7060f009-2964-30af-3d12-2bb3e21b6c1e@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,113 +59,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 16/03/2023 17:12, Suzuki K Poulose wrote:
-> On 10/03/2023 16:06, James Clark wrote:
->> Add a function for adding connections dynamically. This also removes
->> the 1:1 mapping between port number and the index into the connections
->> array. The only place this mapping was used was in the warning for
->> duplicate output ports, which has been replaced by a search. Other
->> uses of the port number already use the port member variable.
+在 2023/3/29 下午3:55, Shuai Xue 写道:
+> 
+> 
+> On 2023/3/27 AM10:46, Jing Zhang wrote:
+>> To allow userspace to identify the specific implementation of the device,
+>> add an "identifier" sysfs file.
 >>
->> Being able to dynamically add connections will allow other devices like
->> CTI to re-use the connection mechanism despite not having explicit
->> connections described in the DT.
+>> The perf tool can match the Yitian 710 DDR metric through the identifier.
 >>
->> Signed-off-by: James Clark <james.clark@arm.com>
+>> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
 >> ---
->>   .../hwtracing/coresight/coresight-platform.c  | 77 ++++++++++++++-----
->>   include/linux/coresight.h                     |  7 +-
->>   2 files changed, 64 insertions(+), 20 deletions(-)
+>>  drivers/perf/alibaba_uncore_drw_pmu.c | 27 +++++++++++++++++++++++++++
+>>  1 file changed, 27 insertions(+)
 >>
->> diff --git a/drivers/hwtracing/coresight/coresight-platform.c
->> b/drivers/hwtracing/coresight/coresight-platform.c
->> index c77238cdf448..16553f7dde12 100644
->> --- a/drivers/hwtracing/coresight/coresight-platform.c
->> +++ b/drivers/hwtracing/coresight/coresight-platform.c
->> @@ -27,8 +27,9 @@ static int coresight_alloc_conns(struct device *dev,
->>                    struct coresight_platform_data *pdata)
->>   {
->>       if (pdata->nr_outconns) {
->> -        pdata->out_conns = devm_kcalloc(dev, pdata->nr_outconns,
->> -                        sizeof(*pdata->out_conns), GFP_KERNEL);
->> +        pdata->out_conns = devm_krealloc_array(
->> +            dev, pdata->out_conns, pdata->nr_outconns,
-> 
-> super minor nit:
->         pdata->out_conns = devm_krealloc_array(dev,
-> 
-
-This is actually clang-format's doing when using the kernel rules in the
-root of the repo. I started using it because of some other style
-comments I got before. Not sure if this time it's just done something
-bad or it's technically ok.
-
-I formatted everything in V3 with it so it should at least all be
-consistent.
-
->        
->> +            sizeof(*pdata->out_conns), GFP_KERNEL | __GFP_ZERO);
->>           if (!pdata->out_conns)
->>               return -ENOMEM;
->>       }
->> @@ -36,6 +37,48 @@ static int coresight_alloc_conns(struct device *dev,
->>       return 0;
->>   }
->>   +/*
->> + * Add a connection in the first free slot, or realloc
->> + * if there is no space. @conn's contents is copied into the new slot.
->> + *
->> + * If the output port is already assigned on this device, return -EINVAL
->> + */
->> +int coresight_add_conn(struct device *dev,
->> +               struct coresight_platform_data *pdata,
->> +               const struct coresight_connection *conn)
+>> diff --git a/drivers/perf/alibaba_uncore_drw_pmu.c b/drivers/perf/alibaba_uncore_drw_pmu.c
+>> index a7689fe..6639a57 100644
+>> --- a/drivers/perf/alibaba_uncore_drw_pmu.c
+>> +++ b/drivers/perf/alibaba_uncore_drw_pmu.c
+>> @@ -236,10 +236,37 @@ static ssize_t ali_drw_pmu_cpumask_show(struct device *dev,
+>>  	.attrs = ali_drw_pmu_cpumask_attrs,
+>>  };
+>>  
+>> +static ssize_t ali_drw_pmu_identifier_show(struct device *dev,
+>> +					struct device_attribute *attr,
+>> +					char *page)
 >> +{
->> +    int ret;
->> +    struct coresight_connection *free_conn = NULL;
->> +    struct coresight_connection *i;
+>> +	return sysfs_emit(page, "%s\n", "ali_drw_yitian710");
+> 
+> Is it possible to rename identifier as "ali_drw_pmu"? I don't think we need only
+> limit alibaba_uncore_drw_pmu to Yitian710 SoC here.
+> 
+
+Ok, I will rename it as "ali_drw_pmu".
+
+Thanks,
+Jing
+
+> Thank you.
+> Shuai
+> 
+>> +}
 >> +
->> +    /*
->> +     * Search for a free slot, and while looking for one, warn
->> +     * on any existing duplicate output port.
->> +     */
->> +    for (i = pdata->out_conns; i < pdata->out_conns +
->> pdata->nr_outconns;
->> +         ++i) {
-> 
-> minor nit: I see why you have gone against using "i" as index into
-> the array. But I think having that as the index is still better
-> readable.
->     for (i = 0; i < pdata->nr_outconns; i++) {
->         struct coresight_connection *c = &pdata->out_conns[i];
-> >> +        if (i->remote_fwnode && conn->port != -1 &&
->> +            i->port == conn->port) {
->> +            dev_warn(dev, "Duplicate output port %d\n", i->port);
->> +            return -EINVAL;
->> +        }
->> +        if (!i->remote_fwnode && !free_conn)
->> +            free_conn = i;
->> +    }
+>> +static umode_t ali_drw_pmu_identifier_attr_visible(struct kobject *kobj,
+>> +						struct attribute *attr, int n)
+>> +{
+>> +	return attr->mode;
+>> +}
 >> +
->> +    if (!free_conn) {
-> 
-> and:
->     /* No free slots */
->     if (i == pdata->nr_outconns) {
-> 
->> +        pdata->nr_outconns++;
->> +        ret = coresight_alloc_conns(dev, pdata);
->> +        if (ret)
->> +            return ret;
->> +        free_conn = &pdata->out_conns[pdata->nr_outconns - 1];
->> +    }
+>> +static struct device_attribute ali_drw_pmu_identifier_attr =
+>> +	__ATTR(identifier, 0444, ali_drw_pmu_identifier_show, NULL);
 >> +
-> 
-> and:
->     pdata->out_conns[i] = *conn;
-> 
-> > Otherwise looks good to me.
-> 
-> Suzuki
-> 
-> 
+>> +static struct attribute *ali_drw_pmu_identifier_attrs[] = {
+>> +	&ali_drw_pmu_identifier_attr.attr,
+>> +	NULL,
+>> +};
+>> +
+>> +static const struct attribute_group ali_drw_pmu_identifier_attr_group = {
+>> +	.attrs = ali_drw_pmu_identifier_attrs,
+>> +	.is_visible = ali_drw_pmu_identifier_attr_visible,
+>> +};
+>> +
+>>  static const struct attribute_group *ali_drw_pmu_attr_groups[] = {
+>>  	&ali_drw_pmu_events_attr_group,
+>>  	&ali_drw_pmu_cpumask_attr_group,
+>>  	&ali_drw_pmu_format_group,
+>> +	&ali_drw_pmu_identifier_attr_group,
+>>  	NULL,
+>>  };
+>>  
