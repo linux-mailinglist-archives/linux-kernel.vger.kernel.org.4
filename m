@@ -2,76 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AB66CF1DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530506CF1AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjC2SIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
+        id S229931AbjC2SFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjC2SIV (ORCPT
+        with ESMTP id S229618AbjC2SFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:08:21 -0400
-Received: from mail-ed1-x563.google.com (mail-ed1-x563.google.com [IPv6:2a00:1450:4864:20::563])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7514665BA
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:08:11 -0700 (PDT)
-Received: by mail-ed1-x563.google.com with SMTP id cn12so66821725edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:08:11 -0700 (PDT)
+        Wed, 29 Mar 2023 14:05:48 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF3B4202
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:05:44 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-17ac5ee3f9cso17068258fac.12
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:05:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680113291;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PPoyIAdL7R3dFOvlNYTf6qBsx+voZAd+nmyiSJz/hmk=;
-        b=iNQKUbUQv4rmNqH8vbFGuMkYVHzB8ujbeimo9lcg0Az7EyrB4qgnb7XilOT1DDchLc
-         EdokyaKindLWKbyYSvJQ7AvPuU2muF1ShsPqgqMvJad6ioy93reX3YZnxHDCtX7k6pi+
-         MaIwjg3GMpKAP8DSMYACvTdfiVekzB4Of66oM=
+        d=usp.br; s=usp-google; t=1680113144;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6gvT2+hYG9YTsl59VNP7YaGR4GU2t1ElrBSXIbGw5O0=;
+        b=kum9hvQcJhQxvpZnLYfOsayFZbt/VJU/E8QmI/FIu3qMvXugcvzTrzukVbwWYZru4/
+         C+0mvS9A67oTlla//Huq7cuFre670IMG6AFC2RtylU9iDiTK6WLRYLMekcoVvginbNWc
+         PHjukN1WGzYslWrF2Q168ZlsNpt42XRqpaBvxEZQRi3q4YuQu/HeFyCivAgpw9ROsT+t
+         zVxuBem744WeDhCdq598jerLE4uVCRltzfF5QNfoVbdc86ewcvrebF9Dffju+Lm+3uo9
+         XjVTfXTOSFSc0Q0HrgqTfZbR2rCCNvvRrCbHBz6e3OCMj+GtCo9qf8OUVa103E/i/vwe
+         3mfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680113291;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PPoyIAdL7R3dFOvlNYTf6qBsx+voZAd+nmyiSJz/hmk=;
-        b=nJDkhQ9WqAvqQ9fBO20TrH8d7S4y2SLszgqB9fppDbvfOrMOAX7pjPkmCMJ8kD279N
-         xq3yOt83sVgBTQehFthj2z4A2r2Ng7yBAMCWE0wHYPRh7hnx+NzQTM/qjZAcrLgFgv52
-         sPWOHIJiHThi4gRPyuJFwLfjWyN/bXbmLKTHLxwIPgOU0kSfEZa9gAOlwbPg0kvCmQrr
-         PuwVZBWUp0tZ2B3ueMM3dW4m4ygfqVaUs4frf9ZiieYXdz1gEYFJ1WMJ95qRWqYF52wK
-         pVZQy3VN4NNKftTbaLsQOuZjNCrTObcBN2BjdeEHzZY09nBODs4QQlmSx4ff4kFZoygk
-         blIg==
-X-Gm-Message-State: AAQBX9cW9THhex9ToKWI8wXcKlU5QbH//3w1ghNI6T3utfAsO1d2C+vO
-        Jzdkvr3i0wu+FsfNPAD8qc2SCxVxD7T9ujquO+KcKdAzXCBC
-X-Google-Smtp-Source: AKy350ZQMWCGePKnVaO5B7F0bPYL4LdNVb+jsAYGhBNUPtXHcN9KN5VYh5ajl9dihSeTQKLUlVpPrE2PSGNc
-X-Received: by 2002:a17:907:7fa3:b0:8f0:143d:ee34 with SMTP id qk35-20020a1709077fa300b008f0143dee34mr3429202ejc.1.1680113291130;
-        Wed, 29 Mar 2023 11:08:11 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id m10-20020a1709066d0a00b00920438f59b3sm12072998ejr.154.2023.03.29.11.08.10
+        d=1e100.net; s=20210112; t=1680113144;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6gvT2+hYG9YTsl59VNP7YaGR4GU2t1ElrBSXIbGw5O0=;
+        b=EttKAbeC29IibVDYD6eMw6AU++cWLF17UsH5cg0LItJGmYxhnyor7fRxRYoYw54pQD
+         JrN8gx5eqb9mSfoXaHZwwSJ4CRu6+QRAkGEyU+7XbZw31gK+f08p/9Z45CycJCy75th/
+         z2HHnS4XlUN2J1ACnZtxQJmYsH2AWpekB5XSxuJYLWrlKXuta6V3IJyU8+rY5wTAd/x1
+         XtgXG7o9EYkVyj/Qq+j560uMme4+tl0V7/iYJYUi9mZQYflgknhjdq0Qer83X1f0NGGf
+         J+HI+f+hr2gyRs5IAxw0a7SKGG3zYa5APNsbMzzrEMutLXCM9FxAac0VpoJoS4Djp1S1
+         HdnA==
+X-Gm-Message-State: AAQBX9cDDC9dWn8UAfTfFlNP4kWg8YA9iIHg9Ndt5PfogOk+76yDu/Br
+        S1wpNoK6f9uRIkKFSC0qsn+O+Q==
+X-Google-Smtp-Source: AKy350YNgr/qkdBS4RnMoR+3Rtoz5LaA3HHitm3EVEE3vqnDKuJ6lb1ITT2IwvnEMsF0rJG2pjwNwQ==
+X-Received: by 2002:a05:6870:9592:b0:17c:ae2:85af with SMTP id k18-20020a056870959200b0017c0ae285afmr12600042oao.34.1680113143872;
+        Wed, 29 Mar 2023 11:05:43 -0700 (PDT)
+Received: from ARCHaio.localdomain ([2804:1b3:a2c0:c911:919f:bd20:4f2a:8383])
+        by smtp.gmail.com with ESMTPSA id yo7-20020a05687c018700b001777244e3f9sm12098767oab.8.2023.03.29.11.05.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 11:08:11 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Wed, 29 Mar 2023 11:05:43 -0700 (PDT)
+From:   Caio Novais <caionovais@usp.br>
+To:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 10/10] selftests: xsk: Add tests for 8K and 9K frame sizes
-Date:   Wed, 29 Mar 2023 20:05:02 +0200
-Message-Id: <20230329180502.1884307-11-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230329180502.1884307-1-kal.conley@dectris.com>
-References: <20230329180502.1884307-1-kal.conley@dectris.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Wesley Chalmers <Wesley.Chalmers@amd.com>,
+        "Lee, Alvin" <Alvin.Lee2@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Caio Novais <caionovais@usp.br>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
+        Gabe Teeger <gabe.teeger@amd.com>, Roman Li <roman.li@amd.com>,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH v2 0/2] drm/amd/display: Remove a unused variable and mark a function as static
+Date:   Wed, 29 Mar 2023 15:05:32 -0300
+Message-Id: <20230329180534.99151-1-caionovais@usp.br>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -83,78 +86,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests:
-- RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
-- UNALIGNED_9K_FRAME_SIZE: frame_size=9000 (unaligned)
+This patchset removes one unused variable and mark a function as static.
 
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- tools/testing/selftests/bpf/xskxceiver.c | 25 ++++++++++++++++++++++++
- tools/testing/selftests/bpf/xskxceiver.h |  2 ++
- 2 files changed, 27 insertions(+)
+Caio Novais (2):
+  drm/amd/display: Remove unused variable 'scl_enable'
+  drm/amd/display: Mark function
+    'optc3_wait_drr_doublebuffer_pending_clear' as static
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index f73bc6ff5c3d..fb5ba225b652 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1841,6 +1841,17 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
- 		testapp_validate_traffic(test);
- 		break;
-+	case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 8192;
-+		test->ifobj_rx->umem->frame_size = 8192;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_RX_POLL:
- 		test->ifobj_rx->use_poll = true;
- 		test_spec_set_name(test, "POLL_RX");
-@@ -1905,6 +1916,20 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		if (!testapp_unaligned(test))
- 			return;
- 		break;
-+	case TEST_TYPE_UNALIGNED_9K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "UNALIGNED_9K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 9000;
-+		test->ifobj_rx->umem->frame_size = 9000;
-+		test->ifobj_tx->umem->unaligned_mode = true;
-+		test->ifobj_rx->umem->unaligned_mode = true;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		test->ifobj_rx->pkt_stream->use_addr_for_fill = true;
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_HEADROOM:
- 		testapp_headroom(test);
- 		break;
-diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-index 919327807a4e..7f52f737f5e9 100644
---- a/tools/testing/selftests/bpf/xskxceiver.h
-+++ b/tools/testing/selftests/bpf/xskxceiver.h
-@@ -69,12 +69,14 @@ enum test_mode {
- enum test_type {
- 	TEST_TYPE_RUN_TO_COMPLETION,
- 	TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
-+	TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
- 	TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
- 	TEST_TYPE_RX_POLL,
- 	TEST_TYPE_TX_POLL,
- 	TEST_TYPE_POLL_RXQ_TMOUT,
- 	TEST_TYPE_POLL_TXQ_TMOUT,
- 	TEST_TYPE_UNALIGNED,
-+	TEST_TYPE_UNALIGNED_9K_FRAME,
- 	TEST_TYPE_ALIGNED_INV_DESC,
- 	TEST_TYPE_ALIGNED_INV_DESC_2K_FRAME,
- 	TEST_TYPE_UNALIGNED_INV_DESC,
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c               | 2 +-
+ .../gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c | 2 --
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
 -- 
-2.39.2
+2.40.0
 
