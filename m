@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED73D6CEDBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7B46CEDD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjC2Px1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 11:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
+        id S231303AbjC2Pxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjC2Pwy (ORCPT
+        with ESMTP id S230110AbjC2PxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:52:54 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2430F4699;
-        Wed, 29 Mar 2023 08:52:48 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-177ca271cb8so16672938fac.2;
-        Wed, 29 Mar 2023 08:52:48 -0700 (PDT)
+        Wed, 29 Mar 2023 11:53:14 -0400
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78ABA10F0;
+        Wed, 29 Mar 2023 08:53:08 -0700 (PDT)
+Received: by mail-oo1-f48.google.com with SMTP id p2-20020a056820044200b0053e5914a50fso1233252oou.2;
+        Wed, 29 Mar 2023 08:53:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680105167;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=myNahkzgyzJXsmSpdQrVTovV/3CgUWg7sSEu7RQwjG0=;
-        b=ngkOe9Z72mD8HC3/d2+1lk6z5+1V3QH4z5Irmiw976IM9bZPBQplBzSPx7vlr2paUY
-         Clgj2oaSX5WoSz/FJwpGektZCJMLkk8f6m6mfApZl8ZCzVGHkQO+HPE6qcNLhWap3pxw
-         KVRIkh/+fBn/VQDZbHTZjV8exMsuEsUQoSQ7AMQaqlAyKJlE2GSbJ0X9f1zkGZkWLp38
-         o7ZyJ87yM6sBSTpvbVNoA9Xod9aa7ER/8aRt2r2FREwn0ep2Ad/gn24mkEgrqJ6rqNJv
-         24y5hhgMPM33ytXJo1uiC4wz/ujfuTYToh6t/sc+HX0C03pxr8RV0uZwDz3rUTY0IBqg
-         wwiQ==
-X-Gm-Message-State: AAQBX9fiK+xxJYUIlNLZJ3aJ0ZLOqsKxq9STe1oLv4TSHb4uIiMhWKpo
-        Y17BHifALbbc2iEB7vxMGw==
-X-Google-Smtp-Source: AK7set9u04Mn8XGtckt02xXgvmDdYPAodmqaRmO7QbQsn4pMne9ZnJvBTvxw9bjwWx1vNoyCfeyKQg==
-X-Received: by 2002:a05:6870:eca0:b0:177:baf4:5b10 with SMTP id eo32-20020a056870eca000b00177baf45b10mr12821109oab.31.1680105167283;
-        Wed, 29 Mar 2023 08:52:47 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680105188;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/qOq2NGpUAbxXp1g8F5WR4fkX2S7bH0m0xxnMP60FJ8=;
+        b=XkouJt2RhMRBqqeek+OXcgxC+1hWWNASgQzUkUrKoEW7RtA/WdqoU9GOtiIPVKFXzo
+         sBR6a4W4Zg6cbvEQ+qWh7bZegVwFBM6n9Owe45S6Q6P6hWPvp3obfuLoT67jYsQBFKeV
+         878ZISfyJATV4JVdqnktH5ike1z0F6kW2n/V8xVVZojnqFQg7fybDDiFr5EvI+c2iPLI
+         ET/ngT7/4A+GtqxM0OJI2IRCf829K+Ce4ULfrXfIcagQgEyJYtgE/yn1/RHhzxBlPb1q
+         JFnUbKrm/5/2aEZG1nJEuTi/QovIOEErBbtPcvx7nDQGRA3mSdh5UvqbUn0lszjGWp7i
+         Qrmw==
+X-Gm-Message-State: AO0yUKXFNw29Se3D8m+XmEmCBSVbCPVMp5j7I7F5Xr3/H7FMbu9q1Oxf
+        IyQfINoGWPSRPoPP/+l7rA==
+X-Google-Smtp-Source: AK7set+oji6+6UZVdlF32jW97Cd5wKPzdK3BfB/MTFUCEZ/Z55TdZpfcLorcJt7g+5txg06Aa2xkVA==
+X-Received: by 2002:a4a:3797:0:b0:538:1e63:1725 with SMTP id r145-20020a4a3797000000b005381e631725mr10070334oor.4.1680105187664;
+        Wed, 29 Mar 2023 08:53:07 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id hv12-20020a056870f98c00b00176209a6d6asm11896178oab.10.2023.03.29.08.52.45
+        by smtp.gmail.com with ESMTPSA id s9-20020a4a9689000000b005255e556399sm13966954ooi.43.2023.03.29.08.53.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 08:52:46 -0700 (PDT)
-Received: (nullmailer pid 3198060 invoked by uid 1000);
+        Wed, 29 Mar 2023 08:53:07 -0700 (PDT)
+Received: (nullmailer pid 3198063 invoked by uid 1000);
         Wed, 29 Mar 2023 15:52:45 -0000
 From:   Rob Herring <robh@kernel.org>
-Subject: [PATCH 00/19] DT header disentangling, part 1
-Date:   Wed, 29 Mar 2023 10:51:57 -0500
-Message-Id: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
+Date:   Wed, 29 Mar 2023 10:51:58 -0500
+Subject: [PATCH 01/19] of: Make devtree_lock declaration private
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJ1eJGQC/x2NywoCMQwAf2XJ2UBtER+/Ih7SNNpCqaWxi7Dsv
- xs8zsAwG6iMIgq3ZYMha9HybgbHwwKcqb0ESzIG73xwwV8xfZD7xCyUZCBXoTa7Ip+jpAu7GE4
- eLI6kgnFQ42x5m7Wa7EOe5fu/3R/7/gPTb5swfQAAAA==
+Message-Id: <20230329-dt-cpu-header-cleanups-v1-1-581e2605fe47@kernel.org>
+References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
+In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
 To:     "David S. Miller" <davem@davemloft.net>,
         Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
@@ -106,100 +105,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the first of a series of clean-ups to disentangle the DT 
-includes. There's a decade plus old comment in of_device.h:
-
- #include <linux/of_platform.h> /* temporary until merge */
-
-Who's this Grant person that wrote this? ;)
-
-It gets better. of_device.h also pulls in of.h, and of_platform.h 
-includes of_device.h. So naturally, drivers include all combinations of 
-those 3 headers and sometimes they actually need them. 
-
-I started on fixing this years ago, but just dropping the circular 
-includes and fixing all the fallout was massive and didn't sit well. 
-Pulling in of_device.h in all the drivers that happen to call only
-of_device_get_match_data/of_match_device didn't seem great when the rest 
-of of_device.h would never be needed. of_device.h being everything that 
-works on a struct device is not a great split because several types of 
-users deal with struct device. The better split seems to be by user 
-(subsys driver vs. consumer) which several subsystems now do. For 
-of_device.h, the users can primarily be split between bus 
-implementations and device drivers. Device drivers also typically need 
-of.h to read properties. So let's move of_device.h towards just bus 
-related functions and move device driver related functions to of.h.
-
-This series is just the first step. It makes a couple of clean-ups to 
-replace some includes with forward declarations. It moves 
-of_device_get_match_data() and of_cpu_device_node_get() to of.h. The 
-former move is transparent for now and preparation for the next series.
-The last part of the series updates drivers using 
-of_cpu_device_node_get() and/or relying on the implicit cpu.h include 
-which is removed in the last patch.
+Sparc is the only place devtree_lock is used outside of drivers/of/.
+Move the devtree_lock declaration into of_private.h and Sparc's prom.h
+so pulling in spinlock.h to of.h can be avoided for everything besides
+Sparc.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
-Rob Herring (19):
-      of: Make devtree_lock declaration private
-      of: Move of_device_(add|register|unregister) to of_platform.h
-      of: Move of_device_get_match_data() declaration
-      of: Move CPU node related functions to their own file
-      of: Drop unnecessary includes in headers
-      ARM: sunxi: Drop of_device.h include
-      ARM: cpuidle: Drop of_device.h include
-      riscv: Add explicit include for cpu.h
-      riscv: cacheinfo: Adjust includes to remove of_device.h
-      cacheinfo: Adjust includes to remove of_device.h
-      clocksource: ingenic: Add explicit include for cpuhotplug.h
-      thermal: cpuidle_cooling: Adjust includes to remove of_device.h
-      soc: mediatek: mtk-svs: Add explicit include for cpu.h
-      cpufreq: Adjust includes to remove of_device.h
-      cpufreq: sun50i: Add explicit include for cpu.h
-      cpuidle: Adjust includes to remove of_device.h
-      irqchip: loongson-eiointc: Add explicit include for cpuhotplug.h
-      OPP: Adjust includes to remove of_device.h
-      of: Drop cpu.h include from of_device.h
+ arch/sparc/include/asm/prom.h | 3 +++
+ drivers/of/of_private.h       | 1 +
+ include/linux/of.h            | 2 --
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
- arch/arm/kernel/cpuidle.c              |   1 -
- arch/arm/mach-sunxi/mc_smp.c           |   1 -
- arch/riscv/kernel/cacheinfo.c          |   1 -
- arch/riscv/kernel/setup.c              |   2 +-
- arch/sparc/include/asm/prom.h          |   3 +
- drivers/base/cacheinfo.c               |   2 +-
- drivers/clocksource/ingenic-timer.c    |   3 +-
- drivers/cpufreq/cpufreq-dt-platdev.c   |   1 -
- drivers/cpufreq/kirkwood-cpufreq.c     |   2 +-
- drivers/cpufreq/maple-cpufreq.c        |   2 +-
- drivers/cpufreq/pmac32-cpufreq.c       |   2 +-
- drivers/cpufreq/pmac64-cpufreq.c       |   2 +-
- drivers/cpufreq/qcom-cpufreq-hw.c      |   4 +-
- drivers/cpufreq/spear-cpufreq.c        |   2 +-
- drivers/cpufreq/sun50i-cpufreq-nvmem.c |   3 +-
- drivers/cpufreq/tegra124-cpufreq.c     |   1 -
- drivers/cpufreq/tegra20-cpufreq.c      |   2 +-
- drivers/cpuidle/cpuidle-psci.c         |   1 -
- drivers/cpuidle/cpuidle-qcom-spm.c     |   3 +-
- drivers/cpuidle/cpuidle-riscv-sbi.c    |   2 +-
- drivers/cpuidle/dt_idle_states.c       |   1 -
- drivers/irqchip/irq-loongson-eiointc.c |   5 +-
- drivers/of/Makefile                    |   2 +-
- drivers/of/base.c                      | 187 -----------------------------
- drivers/of/cpu.c                       | 210 +++++++++++++++++++++++++++++++++
- drivers/of/of_private.h                |   1 +
- drivers/opp/of.c                       |   2 +-
- drivers/soc/mediatek/mtk-svs.c         |   1 +
- drivers/thermal/cpuidle_cooling.c      |   3 +-
- include/linux/cpufreq.h                |   1 -
- include/linux/of.h                     |  28 +++--
- include/linux/of_device.h              |  24 +---
- include/linux/of_platform.h            |  10 +-
- 33 files changed, 261 insertions(+), 254 deletions(-)
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230329-dt-cpu-header-cleanups-c7bed8c0b352
+diff --git a/arch/sparc/include/asm/prom.h b/arch/sparc/include/asm/prom.h
+index 587edb8b5a65..8184575b1336 100644
+--- a/arch/sparc/include/asm/prom.h
++++ b/arch/sparc/include/asm/prom.h
+@@ -19,11 +19,14 @@
+ #include <linux/mutex.h>
+ #include <linux/atomic.h>
+ #include <linux/irqdomain.h>
++#include <linux/spinlock.h>
+ 
+ #define of_compat_cmp(s1, s2, l)	strncmp((s1), (s2), (l))
+ #define of_prop_cmp(s1, s2)		strcasecmp((s1), (s2))
+ #define of_node_cmp(s1, s2)		strcmp((s1), (s2))
+ 
++extern raw_spinlock_t devtree_lock;
++
+ struct of_irq_controller {
+ 	unsigned int	(*irq_build)(struct device_node *, unsigned int, void *);
+ 	void		*data;
+diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
+index fb6792d381a6..b57f1014e419 100644
+--- a/drivers/of/of_private.h
++++ b/drivers/of/of_private.h
+@@ -38,6 +38,7 @@ struct alias_prop {
+ #define OF_ROOT_NODE_SIZE_CELLS_DEFAULT 1
+ 
+ extern struct mutex of_mutex;
++extern raw_spinlock_t devtree_lock;
+ extern struct list_head aliases_lookup;
+ extern struct kset *of_kset;
+ 
+diff --git a/include/linux/of.h b/include/linux/of.h
+index 0af611307db2..36cf94596eba 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -16,7 +16,6 @@
+ #include <linux/errno.h>
+ #include <linux/kobject.h>
+ #include <linux/mod_devicetable.h>
+-#include <linux/spinlock.h>
+ #include <linux/topology.h>
+ #include <linux/notifier.h>
+ #include <linux/property.h>
+@@ -145,7 +144,6 @@ extern struct device_node *of_root;
+ extern struct device_node *of_chosen;
+ extern struct device_node *of_aliases;
+ extern struct device_node *of_stdout;
+-extern raw_spinlock_t devtree_lock;
+ 
+ /*
+  * struct device_node flag descriptions
 
-Best regards,
 -- 
-Rob Herring <robh@kernel.org>
+2.39.2
 
