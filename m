@@ -2,119 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77F36CD2D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0CC6CD2D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjC2HTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 03:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        id S229728AbjC2HVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 03:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjC2HTd (ORCPT
+        with ESMTP id S229500AbjC2HVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 03:19:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83D626AD;
-        Wed, 29 Mar 2023 00:19:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73C1E61AA0;
-        Wed, 29 Mar 2023 07:19:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EAC1C433D2;
-        Wed, 29 Mar 2023 07:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680074371;
-        bh=DJrGjjYVJpklJpi1Yq8f2deLg7xBT/QYXB70zUacqlk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wjl7AZtgidfWsFBwLpkWu6wrTOCYLeiIt/T9ZtM1cHbhm9JBWbILWp+3B0DMqyTAm
-         ZwRHtvM8wy1Wvxx5PdJScuqKzz5BTDDBZ6kC1r1zwo6Rjoy+q2g45h2PVQcU9XoK7c
-         wSNoFuQ2GqjoNIWUhFdCC6H60l9Y+6yZk5Zqf/mZS7Z8aTJoH0uIgz+eCiLD9jlzIO
-         rkuw851jOE6lFcY4HW2xdSjvLlbb9N4DedrBXMwFvir1l+n8LcB/ZDs61qtbq0XmX6
-         /mik1o1PMtNarwUWCvkq0xce+PFK4BErlxMGigSUCUYTeTLnno3D9iMVR9T3QsLqyC
-         6lk1dTHj9Th0w==
-Date:   Wed, 29 Mar 2023 09:19:26 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gscrivan@redhat.com
-Subject: Re: CLONE_INTO_CGROUP probably needs to call controller attach
- handlers
-Message-ID: <20230329-unripe-imminent-655bed17aad2@brauner>
-References: <20230328153943.op62j3sw7qaixdsq@wittgenstein>
- <c3d9cf24-1c3a-cda4-5063-6b7d27e9116f@redhat.com>
- <5937b51b-164a-b6b3-532d-43b46f2d49a2@redhat.com>
+        Wed, 29 Mar 2023 03:21:43 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC04C5;
+        Wed, 29 Mar 2023 00:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TigSEg1djEXPrkuxPW2lyV2vRmsAR0uM58cPep7eGHs=; b=ObN04MAy6fhCJk24L8ngDoXvMu
+        nvkYITrwohLM7kYn3MXEIUjcG7ORTAtlI2QgHVdv1vSRyMlkYRJqGvXhKZUaLPf+CsyITZbhDV4Ih
+        /AYbnQy1jDHS6D4I3GAOrxhcBndmdNFmVAznHtq+h/skdTYYNTvO15l7AbuNZwdt7nc2fLaS+0LK8
+        FD3eIfo6Q+znZLU2e+F/8CHxA1NTqtMOX+A3kMj/b4RR+CQ1nggTsS/aiHGlc8mxhTF8WzsR/CuFv
+        f7A9Ym6NlMNB4Ho2wBZ9Gphb37kBMCyC11jdRhxaUpLpCSiNWDeRkH9kR3kaRHQBMA5XjfvbWO/TH
+        jzinN9aw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1phQ7O-006msJ-22;
+        Wed, 29 Mar 2023 07:21:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 89D5C3002A3;
+        Wed, 29 Mar 2023 09:21:12 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2C6962CBE6E9B; Wed, 29 Mar 2023 09:21:12 +0200 (CEST)
+Date:   Wed, 29 Mar 2023 09:21:12 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        song@kernel.org, rppt@kernel.org, willy@infradead.org,
+        vbabka@suse.cz, mhocko@suse.com, dave.hansen@linux.intel.com
+Subject: Re: [PATCH 4/7] sempahore: add a helper for a concurrency limiter
+Message-ID: <20230329072112.GG4253@hirez.programming.kicks-ass.net>
+References: <20230329053149.3976378-1-mcgrof@kernel.org>
+ <20230329053149.3976378-5-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5937b51b-164a-b6b3-532d-43b46f2d49a2@redhat.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230329053149.3976378-5-mcgrof@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 10:48:49PM -0400, Waiman Long wrote:
-> On 3/28/23 21:30, Waiman Long wrote:
-> > On 3/28/23 11:39, Christian Brauner wrote:
-> > > Hey,
-> > > 
-> > > Giuseppe reported that the the affinity mask isn't updated when a
-> > > process is spawned directly into the target cgroup via
-> > > CLONE_INTO_CGROUP. However, migrating a process will cause the affinity
-> > > mask to be updated (see the repro at [1].
-> > > 
-> > > I took a quick look and the issue seems to be that we don't call the
-> > > various attach handlers during CLONE_INTO_CGROUP whereas we do for
-> > > migration. So the solution seems to roughly be that we need to call the
-> > > various attach handlers during CLONE_INTO_CGROUP as well when the
-> > > parent's cgroups is different from the child cgroup. I think we need to
-> > > call all of them, can, cancel and attach.
-> > > 
-> > > The plumbing here might be a bit intricate since the arguments that the
-> > > fork handlers take are different from the attach handlers.
-> > > 
-> > > Christian
-> > > 
-> > > [1]: https://paste.centos.org/view/f434fa1a
-> > > 
-> > I saw that the current cgroup code already have the can_fork, fork and
-> > cancel_fork callbacks. Unfortunately such callbacks are not defined for
-> > cpuset yet. That is why the cpu affinity isn't correctly updated. I can
-> > post a patch to add those callback functions to cpuset which should then
-> > able to correctly address this issue.
+On Tue, Mar 28, 2023 at 10:31:46PM -0700, Luis Chamberlain wrote:
+> While I looked at re-using the old kernel/kmod.c (now kernel/module/kmod.c)
+> concurrency delimiter methodology for another place in the kernel Linus
+> noted that this could be simply replaced with a sempahore [0].
 > 
-> Looking further into this issue, I am thinking that forking into a cgroup
-> should be equivalent to write the child pid into the "cgroup.threads" file
-> of the target cgroup. By taking this route, all the existing can_attach,
-> attach and cancel_attach methods can be used. I believe the original fork
-> method is for the limited use case of forking into the same cgroup. So right
-> now, only the pids controller has the fork methods. Otherwise, we will have
-> to modify a number of different controllers to add the necessary fork
-> methods. They will be somewhat similar to the existing attach methods and so
-> it will be a lot of duplication. What do you think about this idea?
+> So add that so we we don't re-invent the wheel and make it obvious to use.
+> 
+> [0] https://lore.kernel.org/all/CAHk-=whkj6=wyi201JXkw9iT_eTUTsSx+Yb9d4OgmZFjDJA18g@mail.gmail.com/
+> 
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>  include/linux/semaphore.h | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/include/linux/semaphore.h b/include/linux/semaphore.h
+> index 6694d0019a68..2ecdffdb9814 100644
+> --- a/include/linux/semaphore.h
+> +++ b/include/linux/semaphore.h
+> @@ -28,6 +28,9 @@ struct semaphore {
+>  #define DEFINE_SEMAPHORE(name)	\
+>  	struct semaphore name = __SEMAPHORE_INITIALIZER(name, 1)
+>  
+> +#define CONCURRENCY_LIMITER(name, n) \
+> +	struct semaphore name = __SEMAPHORE_INITIALIZER(name, n)
+> +
 
-The overall plan sounds good to me. I have one comment and question
-about making this equivalent to a write of the child pid into the
-cgroup.threads file.
-
-The paragraph above seems to imply that CLONE_INTO_CGROUP currently
-isn't equivalent to a write to cgroup.threads. But it's not that
-straightforward. CLONE_INTO_CGROUP needs to handle both threads and
-threadgroups aka being or-ed with CLONE_THREAD or not. It does that in
-cgroup_css_set_fork() when calling
-cgroup_attach_permissions([...] !(kargs->flags & CLONE_THREAD), [...]).
-
-What it's missing is calling the relevant handlers that would be
-executed in the migration path. They might be different between the
-CLONE_THREAD and !CLONE_THREAD case. But the crux remains that
-CLONE_INTO_CGROUP needs to handle both cases.
-
-So afaict, what you're proposing is equivalent to what I sketched in the
-initial mail? Or is there something else you mean by making this
-equivalent to cgroup.threads that goes beyond adding the missing
-handlers? Just trying to make sure we're not accidently changing
-semantics.
+Why should this live in semaphore.h?
