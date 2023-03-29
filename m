@@ -2,54 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC606CF63A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 00:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B276CF626
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 00:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjC2WQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 18:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
+        id S229784AbjC2WIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 18:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjC2WP7 (ORCPT
+        with ESMTP id S229564AbjC2WIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 18:15:59 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F8D4ED4;
-        Wed, 29 Mar 2023 15:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gMQbwbQvnYou5tX0hVPmxBnpsbNNqz1dO1zb952RlkU=; b=L98UqyshiA6YAC7C4S7gY/vVMw
-        LTGZFL0SXjA1Hx2f+a9NBJuC34t/ViAgWR+ovrJt7sYKdIc2gIE6KKTHtNGUY7us21wt7Uh6oWA4w
-        LzM8e9HU62bp+U1f3XzELkazJSPDND3N7rI0q/vvQ5imJUbJtxLGR5hejINZFlt4upr7eB93WIG9G
-        P4sOp67ZExFmQ8SrVz1sgehIKLtEiqwzI0+Sat61PN6mmeTJJrEaof7ZlUpP7xG4cn6jLlH16/1xf
-        K/OpZJJgZVN/U0/+t9X6gSFGJCblLGqqP0+0jBTiH2ZA3b19o598aHhSusXFt70p3Pdo0H9HuFIz8
-        n//D/9Rg==;
-Received: from p200300ccff069c001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff06:9c00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1phe5B-0005pM-6M; Thu, 30 Mar 2023 00:15:53 +0200
-Received: from andi by aktux with local (Exim 4.96)
-        (envelope-from <andreas@kemnade.info>)
-        id 1phe5A-00DoYV-2N;
-        Thu, 30 Mar 2023 00:15:52 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@kernel.org, Tony Lindgren <tony@atomide.com>
-Cc:     Andrew Davis <afd@ti.com>, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v2] dt-bindings: omap: Convert omap.txt to yaml
-Date:   Thu, 30 Mar 2023 00:07:20 +0200
-Message-Id: <20230329220720.3292481-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
+        Wed, 29 Mar 2023 18:08:11 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20618.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::618])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4094229;
+        Wed, 29 Mar 2023 15:08:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L1qtCSyyHv1AVHOdiAYbyYMceA9fUYI+bYdHMlwov5w84ln5593aaJLZZqjuR+zcCAONhHXOoB/8u9JuKnqe3zepeu7uNTj3qgVZS1ES2Eeo7qoMiHJjFDguKWWJ4AgW2mE280PMkbgEiyaiLr7N+f8xQohcYzdPRTAHNObPwiWBeGMsxklDgwzDcG8SkTpGFDl0+0gbaRdTJ+1VXCXU93YXdFqWkvDAdrz3wyWt7ZpxLOCCNJOD8Pf1tKUmfOmRNuux6cpZPFZzggSn1DbVef5/ggWiDDLfpoXUsm3JynwGpvxsQ1flc+/6LYuneLan/amzvRltLo564fRhjaG9oQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u8xon/bf5t0RuHSZQpL5d8CofRgbT7+W1aboC5FV0RY=;
+ b=YFUiL332On4nkSYgBN/5AKtPGfA9jLQG+TXrtrq0VmiLpfXZutRTMLfQ7zuEGKcY8VNISNU+/Uf8RtN3B7RLFmgX0jPGChcrl4oMfMgDVB+trpiQDsT7SZlDsIFDJOceBZG4So+XlJjvbhfK+z9D/IfSzTi/9pzWCHTarT50Ec/nNwwtLzrlvuovWfli3jVDz0m1mRC8tmACS/ER2GCENryu29cSKUqLBvm5K19o2ytKka+gT1gqPi9JDrWktzxZWimLAgI1ScmItkxiP5BT74loEorwpomhc/0OqAAPVoanzT1Xws3gpNy5EPkm3nvZTcJi8YvV4x8WbSkts3u7Mg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=semihalf.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u8xon/bf5t0RuHSZQpL5d8CofRgbT7+W1aboC5FV0RY=;
+ b=CsAdBrPjs/pQprQ/NntJzgUAhx6Wb12s4ywBYp2VFaI8fd0WIsEE8s6tcLk+62Sv6OHxs43c0swO2+l6xevHeZvKHAhA0gC32xeP+mUak+25EqYc66aKO0zD9pax83lN06l0AX/y2OUUEcV1HwNDqhubaJmgoXfGb19MgXrIIIA=
+Received: from BN0PR02CA0026.namprd02.prod.outlook.com (2603:10b6:408:e4::31)
+ by IA0PR12MB8253.namprd12.prod.outlook.com (2603:10b6:208:402::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Wed, 29 Mar
+ 2023 22:08:07 +0000
+Received: from BL02EPF000145BA.namprd05.prod.outlook.com
+ (2603:10b6:408:e4:cafe::bf) by BN0PR02CA0026.outlook.office365.com
+ (2603:10b6:408:e4::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.43 via Frontend
+ Transport; Wed, 29 Mar 2023 22:08:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF000145BA.mail.protection.outlook.com (10.167.241.210) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6222.35 via Frontend Transport; Wed, 29 Mar 2023 22:08:07 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 29 Mar
+ 2023 17:08:05 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     =?UTF-8?q?Jan=20D=C4=85bro=C5=9B?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Mark Hasemeyer <markhas@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        <linux-crypto@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+CC:     Felix Held <Felix.Held@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v7 0/6] Use CCP driver to handle PSP I2C arbitration
+Date:   Wed, 29 Mar 2023 17:07:46 -0500
+Message-ID: <20230329220753.7741-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF000145BA:EE_|IA0PR12MB8253:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4cee4512-29bb-49ba-2aa0-08db30a21375
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vCpIyGznbXGd8yMWmcf1a8VWu97NhUA0q9daWVIQsqWKptqeGksonQg4O9vJkGIKHqJm164DuKCP63dE6rcOEjJlJroVQj4unQi/c3WfU9oxlUYTcI7rZfxC6BGgMIOgNCBuyR4RgDJ0JfYscapFFRoX1bhEsrdCKkD7lXSMsKz9N+9yxX7HU58JGFu6cvJPSsQ4RTcCZJVS7Z6zsLX/gjDeF2kGclCuC/BxOozhJXsnmIryRbjdxqQBM0/B7aNxeo8hVZK1F/s4aWIKlrrdJEIeCjAaLIp/jVxbT37Pxn32vyJptgxd60fWhZFwlahRkBkXmEj58WSnfZq73+K6OIYm7nlfgj+6vLwR4NLu4QmwsjbOq1CXYbOWIvOLgu9Y/R6TXZEfbRcN0fMwukxzi3wCI0sDE2nBWxYzM72eDQ+myn4aeiYyiHb3PFucW7oXgV2ZJ0n7BT9/dMKlbBXsKDavsYalKu+hztL/tFftbeUUKRfurUPznVw7PAhUac94Rs7CUtOUFG2NAGLuQuKDywddBVbm37ylB1xkmlaWAb8C3mDeTau23LDkk8Lb9h1+T8Saj47QDRtUPWIjkfmDYrM7t59LPFNHZSDd2syvbXl9XrWGKXUOw7OmYDSVpRdMCvb9EzrPuEtwckVNbL8YvQdW8N1/JWx4WtWou19YKGoQv7V2qsaNdP04WkAWJTw+mzlU1OhJkO0lO0WNG6sqmJIg+4pxu4naq8WGhaoyROQ=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(39860400002)(396003)(451199021)(40470700004)(36840700001)(46966006)(47076005)(40460700003)(5660300002)(4744005)(44832011)(2616005)(336012)(426003)(41300700001)(8936002)(54906003)(83380400001)(36860700001)(478600001)(2906002)(6666004)(26005)(1076003)(70206006)(70586007)(8676002)(316002)(4326008)(16526019)(7696005)(186003)(110136005)(40480700001)(36756003)(81166007)(356005)(86362001)(82310400005)(82740400003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 22:08:07.2025
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4cee4512-29bb-49ba-2aa0-08db30a21375
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145BA.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8253
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,188 +102,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Davis <afd@ti.com>
 
-Convert omap.txt to yaml.
+The CCP driver now has symbols that can be used by i2c-designware-amdpsp
+to handle the communication regarding i2c arbitration with the PSP for
+both Cezanne and Mendocino based designs.
 
-Signed-off-by: Andrew Davis <afd@ti.com>
-[various cleanup, adding OpenPandora,Epson Moverio BT-200]
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
-Changes in V2:
-- renamed file
-- fixed gta04
-- added Openpandora, Epson Moverio BT-200
-- drop example
-- remove descriptions if just reformatting the name
+Utilize those symbols.
 
- Documentation/devicetree/bindings/arm/ti.yaml | 157 ++++++++++++++++++
- 1 file changed, 157 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/ti.yaml
+Mario Limonciello (6):
+  crypto: ccp: Drop extra doorbell checks
+  crypto: ccp: Bump up doorbell debug message to error
+  crypto: ccp: Return doorbell status code as an argument
+  crypto: ccp: Use lower 8 bytes to communicate with doorbell command
+    register
+  i2c: designware: Use PCI PSP driver for communication
+  i2c: designware: Add doorbell support for Mendocino
 
-diff --git a/Documentation/devicetree/bindings/arm/ti.yaml b/Documentation/devicetree/bindings/arm/ti.yaml
-new file mode 100644
-index 000000000000..735e3f0e8143
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/ti.yaml
-@@ -0,0 +1,157 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/ti.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Texas Instruments OMAP SoC architecture
-+
-+maintainers:
-+  - Tony Lindgren <tony@atomide.com>
-+
-+description: Platforms based on Texas Instruments OMAP SoC architecture.
-+
-+properties:
-+  $nodename:
-+    const: '/'
-+  compatible:
-+    oneOf:
-+
-+      - description: TI OMAP2420 SoC based platforms
-+        items:
-+          - enum:
-+              - ti,omap2420-h4
-+              - nokia,n800
-+              - nokia,n810
-+              - nokia,n810-wimax
-+          - const: ti,omap2420
-+          - const: ti,omap2
-+
-+      - description: TI OMAP2430 SoC based platforms
-+        items:
-+          - enum:
-+              - ti,omap2430-sdp # TI OMAP2430 SDP
-+          - const: ti,omap2430
-+          - const: ti,omap2
-+
-+      - description: TI OMAP3430 SoC based platforms
-+        items:
-+          - enum:
-+              - logicpd,dm3730-som-lv-devkit  # LogicPD Zoom OMAP35xx SOM-LV Development Kit
-+              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom OMAP35xx Torpedo Development Kit
-+              - ti,omap3430-sdp
-+              - ti,omap3-beagle
-+              - compulab,omap3-cm-t3530
-+              - timll,omap3-devkit8000
-+              - ti,omap3-evm                  # TI OMAP35XX EVM (TMDSEVM3530)
-+              - ti,omap3-ldp                  # TI OMAP3430 LDP (Zoom1 Labrador)
-+              - nokia,omap3-n900
-+              - openpandora,omap3-pandora-600mhz
-+          - const: ti,omap3430
-+          - const: ti,omap3
-+
-+      - description: TI OMAP3630 SoC based platforms
-+        items:
-+          - enum:
-+              - logicpd,dm3730-som-lv-devkit  # LogicPD Zoom DM3730 SOM-LV Development Kit
-+              - logicpd,dm3730-torpedo-devkit # LogicPD Zoom DM3730 Torpedo + Wireless Development Kit
-+              - ti,omap3-beagle-xm
-+              - compulab,omap3-cm-t3730
-+              - amazon,omap3-echo             # Amazon Echo (first generation)
-+              - ti,omap3-evm-37xx             # TI OMAP37XX EVM (TMDSEVM3730)
-+              - goldelico,gta04
-+              - nokia,omap3-n9
-+              - nokia,omap3-n950
-+              - lg,omap3-sniper               # LG Optimus Black
-+              - ti,omap3-zoom3
-+              - openpandora,omap3-pandora-1ghz
-+          - const: ti,omap3630
-+          - const: ti,omap3
-+
-+      - description: TI AM35 SoC based platforms
-+        items:
-+          - enum:
-+              - teejet,mt_ventoux
-+              - ti,am3517-craneboard     # TI AM3517 CraneBoard (TMDSEVM3517)
-+              - ti,am3517-evm            # TI AM3517 EVM (AM3517/05 TMDSEVM3517)
-+              - compulab,omap3-sbc-t3517 # CompuLab SBC-T3517 with CM-T3517
-+          - const: ti,am3517
-+          - const: ti,omap3
-+
-+      - description: TI OMAP4430 SoC based platforms
-+        items:
-+          - enum:
-+              - motorola,droid4         # Motorola Droid 4 XT894
-+              - motorola,droid-bionic   # Motorola Droid Bionic XT875
-+              - amazon,omap4-kc1        # Amazon Kindle Fire (first generation)
-+              - ti,omap4-panda
-+              - ti,omap4-sdp
-+          - const: ti,omap4430
-+          - const: ti,omap4
-+
-+      - description: TI OMAP4460 SoC based platforms
-+        items:
-+          - enum:
-+              - ti,omap4-panda-es
-+              - epson,epson,embt2ws    # Epson Moverio BT-200
-+          - const: ti,omap4460
-+          - const: ti,omap4
-+
-+      - description: TI OMAP5 SoC based platforms
-+        items:
-+          - enum:
-+              - compulab,omap5-cm-t54
-+              - isee,omap5-igep0050
-+              - ti,omap5-uevm
-+          - const: ti,omap5
-+
-+      - description: TI AM33 SoC based platforms
-+        items:
-+          - enum:
-+              - ti,am335x-bone
-+              - compulab,cm-t335
-+              - ti,am335x-evm
-+              - ti,am335x-evmsk
-+              - bosch,am335x-guardian
-+              - ti,am3359-icev2
-+              - novatech,am335x-lxm  # NovaTech OrionLXm
-+              - moxa,uc-2101
-+              - moxa,uc-8100-me-t
-+              - gumstix,am335x-pepper
-+              - tcl,am335x-sl50      # Toby Churchill SL50 Series
-+          - pattern: '^ti,am33(5[1246789]|xx)$' # ti,am33xx is legacy please use full SoC name
-+
-+      - description: TI AM43 SoC based platforms
-+        items:
-+          - enum:
-+              - compulab,am437x-cm-t43
-+              - ti,am437x-gp-evm
-+              - ti,am437x-idk-evm
-+              - ti,am437x-sk-evm
-+          - pattern: '^ti,am4372[26789]$'
-+          - const: ti,am43
-+
-+      - description: TI AM57 SoC based platforms
-+        items:
-+          - enum:
-+              - beagle,am5729-beagleboneai
-+              - compulab,cl-som-am57x
-+              - ti,am5718-idk
-+              - ti,am5728-idk
-+              - ti,am5748-idk
-+          - pattern: '^ti,am57[0124][689]$'
-+          - const: ti,am57
-+
-+      - description: TI DRA7 SoC based platforms
-+        items:
-+          - enum:
-+              - ti,dra718-evm
-+              - ti,dra722-evm
-+              - ti,dra742-evm
-+              - ti,dra762-evm
-+          - pattern: '^ti,dra7[12456][024568p]$'
-+          - const: ti,dra7
-+
-+additionalProperties: true
-+
-+...
+ drivers/crypto/ccp/platform-access.c        |  31 +--
+ drivers/i2c/busses/Kconfig                  |   4 +-
+ drivers/i2c/busses/i2c-designware-amdpsp.c  | 199 +++++---------------
+ drivers/i2c/busses/i2c-designware-core.h    |   1 -
+ drivers/i2c/busses/i2c-designware-platdrv.c |   1 -
+ include/linux/psp-platform-access.h         |   5 +-
+ 6 files changed, 62 insertions(+), 179 deletions(-)
+
+
+base-commit: 9117e682b8b79f7b5e2517fd28d42757d3e8b860
 -- 
-2.30.2
+2.34.1
 
