@@ -2,149 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC116CD835
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF88F6CD839
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjC2LKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
+        id S229485AbjC2LOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjC2LK3 (ORCPT
+        with ESMTP id S229470AbjC2LO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:10:29 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32BE3C3A
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:10:02 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id l27so15246507wrb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:10:02 -0700 (PDT)
+        Wed, 29 Mar 2023 07:14:28 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9E53C3A
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:14:27 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id r11so15230652wrr.12
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:14:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680088201;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6fMyRoI+gDBMSQ1ASPAj5GDfjiLEoGxH9G7/ldjpWq0=;
-        b=Q1JX6+bz61+vh+Vzi+sUwW3yMZkzm75oKFpftOGczVAhMrRDKm0YR/bBqfuht4I4G0
-         yvMwrHoq81CHuHyybcV/HPEQWF0NIdOH7bDzS37+Gr2coehioxNJ8a59CKMBA2XsZp6h
-         8wtpVuc69EPsfRMeKaNWH2Fvmbl9ev5l1PbaHocbOfQ/X0Uwteton/ZLxjXcoCbnErLl
-         w1T0tHaZo9yPx2R7aeax5iKD+dsN1rQq98OVSuy14aEp3lvRsjwMj40Oyit5R9o+8gGr
-         d28N78YHVgGHJNYCrpiy462211GYs3XiGa2aj2RbW3aqBF24wOZBfKJWhajVPZIj/McR
-         iPiQ==
+        d=linaro.org; s=google; t=1680088466;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kcF0vX8j8gqWH3Qe03F1mOXxKH3Dih4Bs0j11Tzpjbo=;
+        b=CqtWfSA0HALwgFr3US5SPtV4WTVD8MrH6cLx8wHXzh3tnzeet1qd2KiWvrHn8n+GKb
+         JeQiOhybZTrUMrETQIqsTgV6BXwYXaHKXuD6AjLcFnOlcpWau3a38xNF5aCj0d+Dgqal
+         787y/V5xfOmzgxeU9Nzwg0fP5pskAakWQFy2Qb+mVET7X5aX3RhaZS0iF2OeQIoZv/BP
+         RixWO032QlUy7U6Mn9m5Ixm7jI+DggEFAtq/n5qucER7y9nsiaq7mm0nDf0twJrPry1W
+         UOfKThT8RaimVyatAY882OCvpRQs6PKPcS1PD11H7Yc70EpdpLaYigt0aUEj9+zVB8Ft
+         Y4tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680088201;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6fMyRoI+gDBMSQ1ASPAj5GDfjiLEoGxH9G7/ldjpWq0=;
-        b=h4aAFx31zI7iUvY7W4drn3O5PDHe827jnyizo7AIIV/BilaorGTVkCRrMNKJoWBfbG
-         cZMvm/bXXc0ZxWRFkvCZo6YNBhyXI2heQVHjeo+i5TK4RLgs1/eU9JfBehIa5FE4rzZY
-         CIe20IZaoVgRU1+vGZlWISOQ4GQwtv+SrVgtsSW2dGVNUfiuMPlT2PHIRFvC6B8HDDHc
-         Ij+/29nKftwaD1+VDc4f6ALPfmKH/1eWZd0oNgZWHK/agmsd7OQKpWMabbCuSYh+GSSx
-         AMq7o1qvd8EqSxsdelN4pCDe2HWVftthLNfMsBPlhz21Aen6rvt5rKwPAIbAJrapmkRX
-         Y19Q==
-X-Gm-Message-State: AAQBX9dZxHmOUECJZI+USpSZkXQ70JBzSY/SRdBG6D/F+3Gcnd0f8/l1
-        Xs90hrl3lcrsMn7+HBW9Q/8DAw==
-X-Google-Smtp-Source: AKy350ZMd5xDkTUJpUgfq6tGD1h9j1CDSgZ2snnpFp2odtgk5TA+d4edR7BJm6x3BDtTdIHsEhjZgg==
-X-Received: by 2002:adf:dd4f:0:b0:2cf:ec75:8090 with SMTP id u15-20020adfdd4f000000b002cfec758090mr14969737wrm.14.1680088201184;
-        Wed, 29 Mar 2023 04:10:01 -0700 (PDT)
-Received: from ?IPV6:2a02:6b6a:b566:0:4aac:c45d:f15a:d179? ([2a02:6b6a:b566:0:4aac:c45d:f15a:d179])
-        by smtp.gmail.com with ESMTPSA id i7-20020adffc07000000b002c5706f7c6dsm29908071wrr.94.2023.03.29.04.10.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 04:10:00 -0700 (PDT)
-Message-ID: <8b6eeca2-bc35-6e17-e1e9-27d77565db67@bytedance.com>
-Date:   Wed, 29 Mar 2023 12:09:59 +0100
+        d=1e100.net; s=20210112; t=1680088466;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kcF0vX8j8gqWH3Qe03F1mOXxKH3Dih4Bs0j11Tzpjbo=;
+        b=MoZLgDpbwXvFQfpiMD05fFuu+hZLthyzlddd8duQy08oxb9+oYSmpTwwhfAVUtCOXt
+         aIHCGxSyAXDN5Fcxfx23CN2LYC7FyMy8cYupcgCAs/HyN1qsy0LT6wP7y2+GiVkuNh1O
+         mDINv6lpVwAortFEirfmFMYCrLqClxmN1JgwKJ0LsdpysGSc4Cq59W4pKCOmac+qV6Bh
+         +5rmV05u1qloccarwbNmS/OgnAnfrtcY5szS+PHs7enDCpq6crn0lqrdBlTgQ/H5KDrG
+         e28goJOXHqWheRkx2bh1vfMbJ4UDL56gVoDKv3VaPoHqmm0tXLRikjMWHFUDrBxYGox4
+         rSqA==
+X-Gm-Message-State: AAQBX9dcpsNluZX4VVwVngh5gkxF5jCm0lkL+M3X511L59GxqsZHUQKl
+        HzdG3lxk1geuv+eZV87KmNG5aw==
+X-Google-Smtp-Source: AKy350ZwYFFQU329m4ivgWvusumP663lpxpwBKfi5CMKQa2WHao1B/T4u3EW5VhN5eZvjO+v4BgLeQ==
+X-Received: by 2002:adf:e242:0:b0:2cf:e15b:c1c5 with SMTP id bl2-20020adfe242000000b002cfe15bc1c5mr14341071wrb.22.1680088465952;
+        Wed, 29 Mar 2023 04:14:25 -0700 (PDT)
+Received: from linaro.org (host86-131-79-192.range86-131.btcentralplus.com. [86.131.79.192])
+        by smtp.gmail.com with ESMTPSA id m6-20020a056000008600b002cde25fba30sm30067163wrx.1.2023.03.29.04.14.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 04:14:25 -0700 (PDT)
+From:   Mike Leach <mike.leach@linaro.org>
+To:     linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org, acme@kernel.org,
+        suzuki.poulose@arm.com
+Cc:     leo.yan@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        will@kernel.org, john.garry@huawei.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, gankulkarni@os.amperecomputing.com,
+        darren@os.amperecomputing.com, Mike Leach <mike.leach@linaro.org>
+Subject: [PATCH v8 0/3] perf: cs-etm: Update perf to handle new Coresight Trace ID
+Date:   Wed, 29 Mar 2023 12:14:19 +0100
+Message-Id: <20230329111422.3693-1-mike.leach@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v17 2/8] cpu/hotplug: Reset task stack state in _cpu_up()
-Content-Language: en-US
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
-        brgerst@gmail.com
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>,
-        Mark Rutland <mark.rutland@arm.com>
-References: <20230328195758.1049469-1-usama.arif@bytedance.com>
- <20230328195758.1049469-3-usama.arif@bytedance.com>
-In-Reply-To: <20230328195758.1049469-3-usama.arif@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The original method for allocating trace source ID values to sources was
+to use a fixed algorithm for CPU based sources of (cpu_num * 2 + 0x10).
+The STM was allocated ID 0x1.
 
+This mechanism is broken for systems with more than 47 cores.
 
-On 28/03/2023 20:57, Usama Arif wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
-> 
-> Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()")
-> ensured that the shadow call stack was reset and KASAN poisoning removed
-> from a CPU's stack each time that CPU is brought up, not just once.
-> 
-> This is not incorrect. However, with parallel bringup, an architecture
-> may obtain the idle thread for a new CPU from a pre-bringup stage, by
-> calling idle_thread_get() for itself. This would mean that the cleanup
-> in bringup_cpu() would be too late.
-> 
-> Move the SCS/KASAN cleanup to the generic _cpu_up() function instead,
-> which already ensures that the new CPU's stack is available, purely to
-> allow for early failure. This occurs when the CPU to be brought up is
-> in the CPUHP_OFFLINE state, which should correctly do the cleanup any
-> time the CPU has been taken down to the point where such is needed.
-> 
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-> Tested-by: Mark Rutland <mark.rutland@arm.com> [arm64]
+The kernel related patches the provide a fixed Trace ID allocation mechanism
+are now upstreamed.
 
-Forgot to include my sign-off. Thanks David for pointing it out.
+This patchset updates the perf code to handle the changes to the trace ID
+notification mechanism that now uses the PERF_RECORD_AUX_OUTPUT_HW_ID
+packet to set Trace ID in the perf ETM decoders.
 
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+Applies to perf/core 
 
-> ---
->   kernel/cpu.c | 12 ++++++------
->   1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index 6c0a92ca6bb5..43e0a77f21e8 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -591,12 +591,6 @@ static int bringup_cpu(unsigned int cpu)
->   	struct task_struct *idle = idle_thread_get(cpu);
->   	int ret;
->   
-> -	/*
-> -	 * Reset stale stack state from the last time this CPU was online.
-> -	 */
-> -	scs_task_reset(idle);
-> -	kasan_unpoison_task_stack(idle);
-> -
->   	/*
->   	 * Some architectures have to walk the irq descriptors to
->   	 * setup the vector space for the cpu which comes online.
-> @@ -1383,6 +1377,12 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
->   			ret = PTR_ERR(idle);
->   			goto out;
->   		}
-> +
-> +		/*
-> +		 * Reset stale stack state from the last time this CPU was online.
-> +		 */
-> +		scs_task_reset(idle);
-> +		kasan_unpoison_task_stack(idle);
->   	}
->   
->   	cpuhp_tasks_frozen = tasks_frozen;
+Changes since v7:
+Split from original patchset [1] to be sent separately as kernel related
+patches are now upstream.
+
+[1] https://lore.kernel.org/linux-arm-kernel/20230116124928.5440-1-mike.leach@linaro.org/
+
+Mike Leach (3):
+  perf: cs-etm: Move mapping of Trace ID and cpu into helper function
+  perf: cs-etm: Update record event to use new Trace ID protocol
+  perf: cs-etm: Handle PERF_RECORD_AUX_OUTPUT_HW_ID packet
+
+ tools/include/linux/coresight-pmu.h           |  47 ++-
+ tools/perf/arch/arm/util/cs-etm.c             |  21 +-
+ .../perf/util/cs-etm-decoder/cs-etm-decoder.c |   7 +
+ tools/perf/util/cs-etm.c                      | 326 +++++++++++++++---
+ tools/perf/util/cs-etm.h                      |  14 +-
+ 5 files changed, 350 insertions(+), 65 deletions(-)
+
+-- 
+2.32.0
+
