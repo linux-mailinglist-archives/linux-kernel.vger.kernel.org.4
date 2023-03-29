@@ -2,178 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3B96CD806
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0591F6CD7FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjC2K7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
+        id S229514AbjC2K4D convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 06:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjC2K66 (ORCPT
+        with ESMTP id S229458AbjC2K4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:58:58 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD64A19BB
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:58:55 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id DA0455FD1C;
-        Wed, 29 Mar 2023 13:58:52 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1680087532;
-        bh=2RiAZcjm7f7fZ6eDOOysdqaLXhVvLMfLn4XnqyG2nKM=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=MEnJ+y7qM8X68v4BX902DNuyddPZX+zOuwWBOqRh8gxt7xxAJa/dG8X/L2L+WrwI3
-         Z2CGIP3E+n3mAj/+o+GINFap/38+X/sSR84fmAe9WS0q6rbfhoIN5ioFURiQMNqM4S
-         1EezKrN/EoeXdL4uo3IJQgD5LEiJuDX/aWs6AGYjO754F4rZtz7YIqXbvkX2hTClV/
-         O1Rpc4VeDLhR76pKJaMy2eM39AnuaKCAZsekaAY8etg9b9ikLYQjJnQGmMDnuXrp/9
-         dyGl8hPkWnBxJtfLi80MKXafN3VUw+R2EzbJvJ39IsraJN6SfQ0hmCbilGyVbbMKMC
-         zWmbmkZedjxpw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 29 Mar 2023 13:58:51 +0300 (MSK)
-Message-ID: <f3dfc075-08e2-36a8-1526-e2bbd6eb110f@sberdevices.ru>
-Date:   Wed, 29 Mar 2023 13:55:29 +0300
+        Wed, 29 Mar 2023 06:56:02 -0400
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4601FDA;
+        Wed, 29 Mar 2023 03:56:01 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id eh3so61360827edb.11;
+        Wed, 29 Mar 2023 03:56:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680087360;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=60MFOnOMzhKutMqhUhC/XDEFJcDrJox6s7Cc5/xbTOU=;
+        b=5/wgTTYLagH3fdNOkK/D2Nd11ZF1NXbr9JqTn7w6nGi0QZRRrhF45yF5rfB9Ap3C5C
+         veB729RXyJtd9Pv/6p/mDL0kbyyI8KFQesBcCDTvFKdSAEYvGrFxVRIc1a/VOLSAxbaw
+         M8A1HunOHfsFyrdj6xXBYnLrvE0IrLfpvaA6QNfK1ZkBNqx7/saWT/7ZN4cdVMdvG3EA
+         NhTOV+mxQO8mkIw+hFbeDBZ89udO8uLZdELudyv0EBlxPN6tk5/WmyujddBNPszR3tw2
+         BnY4y2pLwcgm3MmA4J25ooVCeMUGm0FBkrmJ4M22t7CMza+k3/fCDdDJdj3QiEsFDcs6
+         WQXw==
+X-Gm-Message-State: AAQBX9cbMFWbNWvmliZdAG+/wtqZZAX3D4hxmoG23cYYAQdYa+AZKT8F
+        liq1fgCSZagrUMujm1PCoi4MmiEpL+ASkoC/kh0=
+X-Google-Smtp-Source: AKy350ZroOYiUyj3bHI+fbjU8MrFNJ7zh+fyN1BgN6AQd9U5ZmfpZPI7EkeJLNi2YORdQgB+WBGrPaY0bXYwl15FyL0=
+X-Received: by 2002:a17:907:160e:b0:946:a095:b314 with SMTP id
+ hb14-20020a170907160e00b00946a095b314mr3284928ejc.2.1680087359772; Wed, 29
+ Mar 2023 03:55:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] mtd: rawnand: meson: fix bitmask for length in command
- word
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
-        <oxffffaa@gmail.com>
-References: <3794ffbf-dfea-e96f-1f97-fe235b005e19@sberdevices.ru>
- <447abc1b-b4a3-5848-c99a-ecbff11486fe@linaro.org>
- <c110bd0f-f25a-a74a-07cb-4c3fdb8ef306@sberdevices.ru>
- <20230329110054.68455418@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230329110054.68455418@xps-13>
+References: <20230329090055.7537-1-rui.zhang@intel.com> <08aee7fe-eddc-7841-2539-16ae43fd8d66@linaro.org>
+In-Reply-To: <08aee7fe-eddc-7841-2539-16ae43fd8d66@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 29 Mar 2023 12:55:47 +0200
+Message-ID: <CAJZ5v0hasj4-XmWTGPehqQFW91WG+n5LgEhMp=ziXL=C7mv9nQ@mail.gmail.com>
+Subject: Re: [PATCH -next] thermal/drivers/thermal_hwmon: Fix a kernel NULL
+ pointer dereference
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/29 07:09:00 #21026578
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 29.03.2023 12:00, Miquel Raynal wrote:
-> Hi Arseniy,
-> 
-> avkrasnov@sberdevices.ru wrote on Wed, 29 Mar 2023 11:33:38 +0300:
-> 
->> On 29.03.2023 11:09, Tudor Ambarus wrote:
->>>
->>>
->>> On 3/29/23 08:47, Arseniy Krasnov wrote:  
->>>> Valid mask is 0x3FFF, without this patch the following problems were
->>>> found:
->>>>
->>>> 1) [    0.938914] Could not find a valid ONFI parameter page, trying
->>>>                   bit-wise majority to recover it
->>>>    [    0.947384] ONFI parameter recovery failed, aborting
->>>>
->>>> 2) Read with disabled ECC mode was broken.
->>>>
->>>> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
->>>> Cc: <Stable@vger.kernel.org>
->>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>>> ---
->>>>  drivers/mtd/nand/raw/meson_nand.c | 6 +++---
->>>>  1 file changed, 3 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->>>> index a28574c00900..074e14225c06 100644
->>>> --- a/drivers/mtd/nand/raw/meson_nand.c
->>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
->>>> @@ -280,7 +280,7 @@ static void meson_nfc_cmd_access(struct nand_chip *nand, int raw, bool dir,
->>>>  
->>>>  	if (raw) {
->>>>  		len = mtd->writesize + mtd->oobsize;
->>>> -		cmd = (len & GENMASK(5, 0)) | scrambler | DMA_DIR(dir);
->>>> +		cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);  
->>>
->>> What happens when len > GENMASK(13, 0)? Do you check this somewhere?  
->>
->> 'len' will be trimmed. I'm not sure that this case is possible here, because GENMASK(13, 0)
->> is hardware limit for this NAND controller, so 'writesize' and 'oobsize' will be initialized
->> to fit this value. Moreover GENMASK(13, 0) is 16Kb - i think it is big enough for single
->> read. Also i'm not sure that it is good approach to check 'len' here - we are in the middle
->> of NAND read processing.
-> 
-> No, you should check the page size will not exceed this limit in the
-> attach hook, likely.
-> 
-> You should also refuse exec_op operations with a data length bigger
-> than 16k (either with a manual check in your own parser or just by
-> providing the max size to the parser table, depending on what's used).
+On Wed, Mar 29, 2023 at 11:57 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 29/03/2023 11:00, Zhang Rui wrote:
+> > When the hwmon device node of a thermal zone device is not found,
+> > using hwmon->device causes a kernel NULL pointer dereference.
+> >
+> > Reported-by: Preble Adam C <adam.c.preble@intel.com>
+> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> > ---
+> > Fixes: dec07d399cc8 ("thermal: Don't use 'device' internal thermal zone structure field")
+> > dec07d399cc8 is a commit in the linux-next branch of linux-pm repo.
+> > I'm not sure if the Fix tag applies to such commit or not.
+>
+> Actually it reverts the work done to encapsulate the thermal zone device
+> structure.
+>
+> > ---
+> >   drivers/thermal/thermal_hwmon.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+> > index c59db17dddd6..261743f461be 100644
+> > --- a/drivers/thermal/thermal_hwmon.c
+> > +++ b/drivers/thermal/thermal_hwmon.c
+> > @@ -229,7 +229,7 @@ void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
+> >       hwmon = thermal_hwmon_lookup_by_type(tz);
+> >       if (unlikely(!hwmon)) {
+> >               /* Should never happen... */
+> > -             dev_dbg(hwmon->device, "hwmon device lookup failed!\n");
+> > +             dev_dbg(&tz->device, "hwmon device lookup failed!\n");
+>
+> As it 'Should never happen', I would replace that by:
+>
+>         if (WARN_ON(!hwmon))
+>                 /* Should never happen... */
+>                 return;
 >
 
- 
-Ok, I see.
+Or just use pr_debug() instead of dev_dbg().
 
-Thanks, Arseniy
-
->>
->>>
->>> Please introduce a macro/field for GENMASK(13, 0), having such mask
->>> scattered along the code looks hackish and doesn't help readability.
->>> You'll get to use FIELD_PREP as well.  
->>
->> Ack, i'll do it in v3
->>
->> Thanks, Arseniy
->>
->>>   
->>>>  		writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>  		return;
->>>>  	}
->>>> @@ -544,7 +544,7 @@ static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
->>>>  	if (ret)
->>>>  		goto out;
->>>>  
->>>> -	cmd = NFC_CMD_N2M | (len & GENMASK(5, 0));
->>>> +	cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
->>>>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>  
->>>>  	meson_nfc_drain_cmd(nfc);
->>>> @@ -568,7 +568,7 @@ static int meson_nfc_write_buf(struct nand_chip *nand, u8 *buf, int len)
->>>>  	if (ret)
->>>>  		return ret;
->>>>  
->>>> -	cmd = NFC_CMD_M2N | (len & GENMASK(5, 0));
->>>> +	cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
->>>>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>  
->>>>  	meson_nfc_drain_cmd(nfc);  
-> 
-> 
-> Thanks,
-> Miquèl
+>
+> >               return;
+> >       }
+> >
