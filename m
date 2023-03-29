@@ -2,166 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB136CCE74
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 02:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024726CCE77
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 02:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjC2AB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 20:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
+        id S229910AbjC2AE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 20:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjC2AB0 (ORCPT
+        with ESMTP id S230006AbjC2AE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 20:01:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF38AF;
-        Tue, 28 Mar 2023 17:01:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BDC2618E5;
-        Wed, 29 Mar 2023 00:01:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE908C433EF;
-        Wed, 29 Mar 2023 00:01:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680048084;
-        bh=RVxXcEiibRebSGr+aKRiwje0chKKQkgOOPr8eSlVSkY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=awFjxt5m0rkRkcTeDWE3+14Tkz0Ts+OA3EknP8LyGLYSJKo7krFIZWEkt/fa7t6jW
-         QxwfuThJ/kmJ4Landpwg9VLqnUnT7tGY9Y5MVxEJMQZWjYtEqwd4hutizbqCT6aXS6
-         EwpOxhJfxIuhpGi99UdCv1iphl/Uml/hs3cGcz0ILoc53cwbQxalNiTwc+eOVg3Fss
-         kaAdLvwMDeFOb40RvTGnw/pdg5rubsjNIF3qvm+1GwzMRqdKYpqSHOKqez44Gy7OVP
-         9TZu5SU83+qbpoAxi7zBCDKNnHpJl0V4yXsQtYRb6M+qQajFKYxoMUl29Ms32Xqma8
-         uBWdN0XzJ+Gpw==
-Received: by mail-lf1-f49.google.com with SMTP id h11so11007489lfu.8;
-        Tue, 28 Mar 2023 17:01:24 -0700 (PDT)
-X-Gm-Message-State: AAQBX9ci19N+jOu5gFVsNadSuILBcG+PrLw9rM6qNu7+DGHqohK4DRHG
-        X4u9ocCdGJp9bfO4/KKlxZ6O4j21M6gikWgkCos=
-X-Google-Smtp-Source: AKy350b6mMLErOC4Bt39LRAAoBVZQ1UY0GpckPACTLqkHA0ji0rRxAVibRESZV5L9UB9RCqQS1oIe6imBco637i/Krw=
-X-Received: by 2002:ac2:5dcd:0:b0:4e8:5bed:a051 with SMTP id
- x13-20020ac25dcd000000b004e85beda051mr5202722lfq.3.1680048082691; Tue, 28 Mar
- 2023 17:01:22 -0700 (PDT)
+        Tue, 28 Mar 2023 20:04:56 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EE21A2;
+        Tue, 28 Mar 2023 17:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680048295; x=1711584295;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=yRvu8GhEdtw5dS1b4qEk1Wt2dMUKhKDgF3IxIuzb0+g=;
+  b=Kxn7z/xkKOo+Frct8SiNxvpeEeE3CGYb8hptViEtxKCVOYlSUO+hzocY
+   dAv+4cAE3Rt77d+FewLMkf77SjLOBg8xJXZAhUniKiIxFv/+se9rHfCGm
+   8LOGYR8i3L3qx4I0++IzNI+UBT/aSzfEVlfkqVXpMG7Gbam3s64YDlN7w
+   RuNAl4DNfDyJM+UoSLs3dUIffQcYO/KIsRk0tI8Yx3qdbGs0QvJwT2Jqy
+   I1HXdU08T7yIb4VnfmUVHHTYLKnq6yDgBP4MrAYeDXwPUM2+yex1n1FWh
+   NyeSrT47FLDjTJULwsMhek43gUi2I4cqoBq+ptSnsIncQHQ4aBXSyqnQj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="427005709"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="427005709"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 17:04:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="686618348"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="686618348"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Mar 2023 17:04:54 -0700
+Date:   Tue, 28 Mar 2023 17:15:36 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v3 21/24] thermal: intel: hfi: Implement model-specific
+ checks for task classification
+Message-ID: <20230329001536.GG8958@ranerica-svr.sc.intel.com>
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0hxKg_u4GKMkdGEp-JbvnymEtxSZT7fB2kbhWoQFSK1fw@mail.gmail.com>
 MIME-Version: 1.0
-References: <aa9567fd-38e1-7b9c-b3e1-dc2fdc055da5@molgen.mpg.de>
- <55e30408-ac63-965f-769f-18be5fd5885c@molgen.mpg.de> <d95aa962-9750-c27c-639a-2362bdb32f41@cloud.ionos.com>
- <30576384-682c-c021-ff16-bebed8251365@molgen.mpg.de> <cdc0b03c-db53-35bc-2f75-93bbca0363b5@molgen.mpg.de>
- <bc342de0-98d2-1733-39cd-cc1999777ff3@molgen.mpg.de> <c3390ab0-d038-f1c3-5544-67ae9c8408b1@cloud.ionos.com>
- <a27c5a64-62bf-592c-e547-1e8e904e3c97@molgen.mpg.de> <6c7008df-942e-13b1-2e70-a058e96ab0e9@cloud.ionos.com>
- <12f09162-c92f-8fbb-8382-cba6188bfb29@molgen.mpg.de> <6757d55d-ada8-9b7e-b7fd-2071fe905466@cloud.ionos.com>
- <93d8d623-8aec-ad91-490c-a414c4926fb2@molgen.mpg.de> <0bb7c8d8-6b96-ce70-c5ee-ba414de10561@cloud.ionos.com>
- <e271e183-20e9-8ca2-83eb-225d4d7ab5db@molgen.mpg.de> <1cdfceb6-f39b-70e1-3018-ea14dbe257d9@cloud.ionos.com>
- <7733de01-d1b0-e56f-db6a-137a752f7236@molgen.mpg.de> <d92922af-f411-fc53-219f-154de855cd13@cloud.ionos.com>
- <CAH6h+hf7Y-kurBJG+pnH6WCQiaEK+Jq3KG5JOGnHJ4Uw6AbUjg@mail.gmail.com>
- <2af18cf7-05eb-f1d1-616a-2c5894d1ac43@linux.dev> <CAH6h+hc8VdpaS2q4ya_ZfqVxWFRsKVCjN-sv73SfeyGomXvjRQ@mail.gmail.com>
- <CAH6h+hcWfXNpC1Mro3zfzQc8tK142vuaOMELLJL7mg_G+o0fXw@mail.gmail.com>
-In-Reply-To: <CAH6h+hcWfXNpC1Mro3zfzQc8tK142vuaOMELLJL7mg_G+o0fXw@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 28 Mar 2023 17:01:09 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6R11y6vETeZ4vmFGmV6DRrj2gwhp1-Nm+csvtHb2nQYg@mail.gmail.com>
-Message-ID: <CAPhsuW6R11y6vETeZ4vmFGmV6DRrj2gwhp1-Nm+csvtHb2nQYg@mail.gmail.com>
-Subject: Re: md_raid: mdX_raid6 looping after sync_action "check" to "idle" transition
-To:     Marc Smith <msmith626@gmail.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Donald Buczek <buczek@molgen.mpg.de>,
-        linux-raid@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        it+raid@molgen.mpg.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0hxKg_u4GKMkdGEp-JbvnymEtxSZT7fB2kbhWoQFSK1fw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 8:25=E2=80=AFAM Marc Smith <msmith626@gmail.com> wr=
-ote:
->
-> On Tue, Mar 14, 2023 at 10:45=E2=80=AFAM Marc Smith <msmith626@gmail.com>=
- wrote:
+On Mon, Mar 27, 2023 at 07:03:08PM +0200, Rafael J. Wysocki wrote:
+> On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
+> <ricardo.neri-calderon@linux.intel.com> wrote:
 > >
-> > On Tue, Mar 14, 2023 at 9:55=E2=80=AFAM Guoqing Jiang <guoqing.jiang@li=
-nux.dev> wrote:
-> > >
-> > >
-> > >
-> > > On 3/14/23 21:25, Marc Smith wrote:
-> > > > On Mon, Feb 8, 2021 at 7:49=E2=80=AFPM Guoqing Jiang
-> > > > <guoqing.jiang@cloud.ionos.com> wrote:
-> > > >> Hi Donald,
-> > > >>
-> > > >> On 2/8/21 19:41, Donald Buczek wrote:
-> > > >>> Dear Guoqing,
-> > > >>>
-> > > >>> On 08.02.21 15:53, Guoqing Jiang wrote:
-> > > >>>>
-> > > >>>> On 2/8/21 12:38, Donald Buczek wrote:
-> > > >>>>>> 5. maybe don't hold reconfig_mutex when try to unregister
-> > > >>>>>> sync_thread, like this.
-> > > >>>>>>
-> > > >>>>>>           /* resync has finished, collect result */
-> > > >>>>>>           mddev_unlock(mddev);
-> > > >>>>>>           md_unregister_thread(&mddev->sync_thread);
-> > > >>>>>>           mddev_lock(mddev);
-> > > >>>>> As above: While we wait for the sync thread to terminate, would=
-n't it
-> > > >>>>> be a problem, if another user space operation takes the mutex?
-> > > >>>> I don't think other places can be blocked while hold mutex, othe=
-rwise
-> > > >>>> these places can cause potential deadlock. Please try above two =
-lines
-> > > >>>> change. And perhaps others have better idea.
-> > > >>> Yes, this works. No deadlock after >11000 seconds,
-> > > >>>
-> > > >>> (Time till deadlock from previous runs/seconds: 1723, 37, 434, 12=
-65,
-> > > >>> 3500, 1136, 109, 1892, 1060, 664, 84, 315, 12, 820 )
-> > > >> Great. I will send a formal patch with your reported-by and tested=
--by.
-> > > >>
-> > > >> Thanks,
-> > > >> Guoqing
-> > > > I'm still hitting this issue with Linux 5.4.229 -- it looks like 1/=
-2
-> > > > of the patches that supposedly resolve this were applied to the sta=
-ble
-> > > > kernels, however, one was omitted due to a regression:
-> > > > md: don't unregister sync_thread with reconfig_mutex held (upstream
-> > > > commit 8b48ec23cc51a4e7c8dbaef5f34ebe67e1a80934)
-> > > >
-> > > > I don't see any follow-up on the thread from June 8th 2022 asking f=
-or
-> > > > this patch to be dropped from all stable kernels since it caused a
-> > > > regression.
-> > > >
-> > > > The patch doesn't appear to be present in the current mainline kern=
-el
-> > > > (6.3-rc2) either. So I assume this issue is still present there, or=
- it
-> > > > was resolved differently and I just can't find the commit/patch.
-> > >
-> > > It should be fixed by commit 9dfbdafda3b3"md: unlock mddev before rea=
-p
-> > > sync_thread in action_store".
+> > In Alder Lake and Raptor Lake, the result of thread classification is more
+> > accurate when only one SMT sibling is busy. Classification results for
+> > class 2 and 3 are always reliable.
 > >
-> > Okay, let me try applying that patch... it does not appear to be
-> > present in my 5.4.229 kernel source. Thanks.
->
-> Yes, applying this '9dfbdafda3b3 "md: unlock mddev before reap
-> sync_thread in action_store"' patch on top of vanilla 5.4.229 source
-> appears to fix the problem for me -- I can't reproduce the issue with
-> the script, and it's been running for >24 hours now. (Previously I was
-> able to induce the issue within a matter of minutes.)
+> > To avoid unnecessary migrations, only update the class of a task if it has
+> > been the same during 4 consecutive user ticks.
+> >
+> > Cc: Ben Segall <bsegall@google.com>
+> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > Cc: Len Brown <len.brown@intel.com>
+> > Cc: Lukasz Luba <lukasz.luba@arm.com>
+> > Cc: Mel Gorman <mgorman@suse.de>
+> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > Cc: Valentin Schneider <vschneid@redhat.com>
+> > Cc: x86@kernel.org
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > ---
+> > Changes since v2:
+> >  * None
+> >
+> > Changes since v1:
+> >  * Adjusted the result the classification of Intel Thread Director to start
+> >    at class 1. Class 0 for the scheduler means that the task is
+> >    unclassified.
+> >  * Used the new names of the IPC classes members in task_struct.
+> >  * Reworked helper functions to use sched_smt_siblings_idle() to query
+> >    the idle state of the SMT siblings of a CPU.
+> > ---
+> >  drivers/thermal/intel/intel_hfi.c | 60 ++++++++++++++++++++++++++++++-
+> >  1 file changed, 59 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> > index 35d947f47550..fdb53e4cabc1 100644
+> > --- a/drivers/thermal/intel/intel_hfi.c
+> > +++ b/drivers/thermal/intel/intel_hfi.c
+> > @@ -40,6 +40,7 @@
+> >  #include <linux/workqueue.h>
+> >
+> >  #include <asm/msr.h>
+> > +#include <asm/intel-family.h>
+> >
+> >  #include "../thermal_core.h"
+> >  #include "intel_hfi.h"
+> > @@ -209,9 +210,64 @@ static int __percpu *hfi_ipcc_scores;
+> >   */
+> >  #define HFI_UNCLASSIFIED_DEFAULT 1
+> >
+> > +#define CLASS_DEBOUNCER_SKIPS 4
+> > +
+> > +/**
+> > + * debounce_and_update_class() - Process and update a task's classification
+> > + *
+> > + * @p:         The task of which the classification will be updated
+> > + * @new_ipcc:  The new IPC classification
+> > + *
+> > + * Update the classification of @p with the new value that hardware provides.
+> > + * Only update the classification of @p if it has been the same during
+> > + * CLASS_DEBOUNCER_SKIPS consecutive ticks.
+> > + */
+> > +static void debounce_and_update_class(struct task_struct *p, u8 new_ipcc)
+> > +{
+> > +       u16 debounce_skip;
+> > +
+> > +       /* The class of @p changed. Only restart the debounce counter. */
+> > +       if (p->ipcc_tmp != new_ipcc) {
+> > +               p->ipcc_cntr = 1;
+> > +               goto out;
+> > +       }
+> > +
+> > +       /*
+> > +        * The class of @p did not change. Update it if it has been the same
+> > +        * for CLASS_DEBOUNCER_SKIPS user ticks.
+> > +        */
+> > +       debounce_skip = p->ipcc_cntr + 1;
+> > +       if (debounce_skip < CLASS_DEBOUNCER_SKIPS)
+> > +               p->ipcc_cntr++;
+> > +       else
+> > +               p->ipcc = new_ipcc;
+> > +
+> > +out:
+> > +       p->ipcc_tmp = new_ipcc;
+> > +}
+> 
+> Why does the code above belong to the Intel HFI driver?  It doesn't
+> look like there is anything driver-specific in it.
 
-Hi Marc,
+That is a good point. This post-processing is specific to the
+implementation of IPCC classes using Intel Thread Director.
 
-Could you please run your reproducer on the md-tmp branch?
-
-https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/log/?h=3Dmd-tmp
-
-This contains a different version of the fix by Yu Kuai.
-
-Thanks,
-Song
+Maybe a new file called drivers/thermal/intel/intel_itd.c would be better?
