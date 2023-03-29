@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDDE6CEE14
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EC56CEE10
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbjC2PyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 11:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        id S231420AbjC2PyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjC2PxR (ORCPT
+        with ESMTP id S230216AbjC2PxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:53:17 -0400
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4674690;
-        Wed, 29 Mar 2023 08:53:15 -0700 (PDT)
-Received: by mail-oo1-f43.google.com with SMTP id g21-20020a4ad855000000b0053e563c2f72so1297458oov.6;
-        Wed, 29 Mar 2023 08:53:15 -0700 (PDT)
+        Wed, 29 Mar 2023 11:53:15 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15DA40C6;
+        Wed, 29 Mar 2023 08:53:12 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17e140619fdso16642603fac.11;
+        Wed, 29 Mar 2023 08:53:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680105194;
+        d=1e100.net; s=20210112; t=1680105192;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tOFzIiTcs5glICtXCi7orAKYw6mLzzis64IJ8Etn534=;
-        b=byTZkCQOSIodXP6io1Hl5ciSQS+SwO6jQ8x2IRozl22iN+KZHnaEq4DyyYsZUEanN6
-         QGkppXsiBvu/8IHpmv2H2aQMwutbzgXpF3seS9wzC5dMKh2MUcI8nmuRiunVczSWgfFH
-         giDPH+hT4co3L8lVSH/mB7lyTBAFNN9v+e4eApFlPlgGDxSzCeQx8HE5EItkhmx3anmj
-         yhAtA6VxG13yAD/yzfbY8Vsi19GYoGF5ztFiFekFB+N5IFNyM8vIvxLKPytSKETUNepO
-         wptnL734zHvQNToZ7Ayl09bNNJuqh5fHrrM+vNvHuI7fcOurZB6ucgIPcLRONAxqUKQr
-         ButQ==
-X-Gm-Message-State: AO0yUKVxMOHJrRcDf1CIoefEKZwb5Tv5HhpsF5ODofoVIza4IN2mk+a7
-        vzQVP2LddqstxKI+Edre1g==
-X-Google-Smtp-Source: AK7set9MAD4tg5pc/rHdBuixw1K3iao0K53LrjqhMjiHjl+aL1ahzPwsk7GYhgXBJpfdS1Uabklemg==
-X-Received: by 2002:a4a:41cb:0:b0:537:ad3c:d74f with SMTP id x194-20020a4a41cb000000b00537ad3cd74fmr9577499ooa.9.1680105194254;
-        Wed, 29 Mar 2023 08:53:14 -0700 (PDT)
+        bh=WurTN6TQClVnhKzRVCxCDshUnc0lAKMY5Mp4cC77h0Y=;
+        b=LlWJo46yvB038RnEgWmvn45mZ3/O9Q7tYsM3LVJ24jytgUQMTHtoFQ7GW4KdxLpF5h
+         wYoix5ONNLlZ7YXeM90uhPEj2Kf/B8I0EFb3EqQDyuVrCZdDEoCU6ls5e+sO49A0Wdar
+         syTuIGDMTZuA0jx+XoQTk+bhYkiVYkZAEPo2DSHaQ6UQnV1bbOZF2Do+7AWbweN7Gntp
+         2kDfa/71jaXZ+DYNb4wmDSlB5z7ZrR4FJnMFuj7rmKVbN5MyVz5nFqdWMoPoXUuyw0BQ
+         U1cvQ5gu55cSOfzJjP1iS62GRWr+NII7K2Kzt1fXALEN/HwkyilOOvXfV3ek92XGGZrC
+         o0fw==
+X-Gm-Message-State: AAQBX9ewO/D0ndZVfbJHh/jYn4i/LYOwyFf6eb90Yw0k3u3uvuIqwU9W
+        nCyrYTquEeROCk2VvP0vEg==
+X-Google-Smtp-Source: AKy350Zo9NclgwNBZoANioCGcuLyMicsG3a/5+eN9bgHMpdMdqlYEHn7LZHT8hqlsIh4r2ZmsXlMnw==
+X-Received: by 2002:a05:6870:2194:b0:17e:cb7:29c0 with SMTP id l20-20020a056870219400b0017e0cb729c0mr13838293oae.13.1680105192039;
+        Wed, 29 Mar 2023 08:53:12 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q125-20020a4a4b83000000b0051ffe0fe11bsm14001119ooa.6.2023.03.29.08.53.12
+        by smtp.gmail.com with ESMTPSA id aw8-20020a0568707f8800b001762d1bf6a9sm11897731oac.45.2023.03.29.08.53.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 08:53:13 -0700 (PDT)
-Received: (nullmailer pid 3198073 invoked by uid 1000);
+        Wed, 29 Mar 2023 08:53:11 -0700 (PDT)
+Received: (nullmailer pid 3198075 invoked by uid 1000);
         Wed, 29 Mar 2023 15:52:45 -0000
 From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 29 Mar 2023 10:52:03 -0500
-Subject: [PATCH 06/19] ARM: sunxi: Drop of_device.h include
+Date:   Wed, 29 Mar 2023 10:52:04 -0500
+Subject: [PATCH 07/19] ARM: cpuidle: Drop of_device.h include
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230329-dt-cpu-header-cleanups-v1-6-581e2605fe47@kernel.org>
+Message-Id: <20230329-dt-cpu-header-cleanups-v1-7-581e2605fe47@kernel.org>
 References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
 In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
 To:     "David S. Miller" <davem@davemloft.net>,
@@ -113,21 +113,21 @@ Signed-off-by: Rob Herring <robh@kernel.org>
 ---
 Please ack and I will take the series via the DT tree.
 ---
- arch/arm/mach-sunxi/mc_smp.c | 1 -
+ arch/arm/kernel/cpuidle.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/mach-sunxi/mc_smp.c b/arch/arm/mach-sunxi/mc_smp.c
-index 26cbce135338..cb63921232a6 100644
---- a/arch/arm/mach-sunxi/mc_smp.c
-+++ b/arch/arm/mach-sunxi/mc_smp.c
-@@ -19,7 +19,6 @@
- #include <linux/irqchip/arm-gic.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
--#include <linux/of_device.h>
- #include <linux/smp.h>
+diff --git a/arch/arm/kernel/cpuidle.c b/arch/arm/kernel/cpuidle.c
+index 437ff39f7808..fba1f8bb03b5 100644
+--- a/arch/arm/kernel/cpuidle.c
++++ b/arch/arm/kernel/cpuidle.c
+@@ -5,7 +5,6 @@
  
- #include <asm/cacheflush.h>
+ #include <linux/cpuidle.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <asm/cpuidle.h>
+ 
+ extern struct of_cpuidle_method __cpuidle_method_of_table[];
 
 -- 
 2.39.2
