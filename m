@@ -2,154 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575B46CEEE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F59F6CEEA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjC2QMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
+        id S229888AbjC2QF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjC2QMN (ORCPT
+        with ESMTP id S231402AbjC2QEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:12:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0691C1BEF
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:10:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680106203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GdNce1OaiYHGRSBqnplg9LW3FvXe3v9Sj0lSo9jGEts=;
-        b=JTiLIjKBXwQhXakkcluuQn0T3glnernO2eppPPuSYPtG3vfydgxWHbrEyreFK9K75DJ45g
-        qlmuPdv4tQ7eaQedEJQYQKEp/vWobWvNGQWKRY/gjM/lKUlcBnIi/7DXndrEb7Y+rSDz3v
-        5cKVA97rTxod78ah0KMllxP+4RWS4+Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-70-8Bgv-gTXP4SCXryUdo8LqA-1; Wed, 29 Mar 2023 12:03:14 -0400
-X-MC-Unique: 8Bgv-gTXP4SCXryUdo8LqA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 433FB3C0D85F;
-        Wed, 29 Mar 2023 16:03:13 +0000 (UTC)
-Received: from llong.com (unknown [10.22.34.224])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B00C0202701F;
-        Wed, 29 Mar 2023 16:03:11 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        luca.abeni@santannapisa.it, claudio@evidence.eu.com,
-        tommaso.cucinotta@santannapisa.it, bristot@redhat.com,
-        mathieu.poirier@linaro.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH 6/7] cgroup/cpuset: Protect DL BW data against parallel cpuset_attach()
-Date:   Wed, 29 Mar 2023 12:02:40 -0400
-Message-Id: <20230329160240.2093277-1-longman@redhat.com>
-In-Reply-To: <20230329125558.255239-1-juri.lelli@redhat.com>
-References: <20230329125558.255239-1-juri.lelli@redhat.com>
+        Wed, 29 Mar 2023 12:04:46 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40500469E;
+        Wed, 29 Mar 2023 09:03:59 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1phYGD-0003Yb-19;
+        Wed, 29 Mar 2023 18:02:54 +0200
+Date:   Wed, 29 Mar 2023 17:02:47 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: [RFC PATCH net-next v3 15/15] dt-bindings: net: dsa:
+ mediatek,mt7530: add mediatek,mt7988-switch
+Message-ID: <9b504e3e88807bfb62022c0877451933d30abeb5.1680105013.git.daniel@makrotopia.org>
+References: <cover.1680105013.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1680105013.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is possible to have parallel attach operations to the same cpuset in
-progress. To avoid possible corruption of single set of DL BW data in
-the cpuset structure, we have to disallow parallel attach operations if
-DL tasks are present. Attach operations can still proceed in parallel
-as long as no DL tasks are involved.
+Add documentation for the built-in switch which can be found in the
+MediaTek MT7988 SoC.
 
-This patch also stores the CPU where DL BW is allocated and free that BW
-back to the same CPU in case cpuset_can_attach() is called.
-
-Signed-off-by: Waiman Long <longman@redhat.com>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- kernel/cgroup/cpuset.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ .../bindings/net/dsa/mediatek,mt7530.yaml     | 26 +++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 05c0a1255218..555a6b1a2b76 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -199,6 +199,7 @@ struct cpuset {
- 	 */
- 	int nr_deadline_tasks;
- 	int nr_migrate_dl_tasks;
-+	int dl_bw_cpu;
- 	u64 sum_migrate_dl_bw;
+diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+index 5ae9cd8f99a24..15953f0e9d1a6 100644
+--- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+@@ -11,16 +11,23 @@ maintainers:
+   - Landen Chao <Landen.Chao@mediatek.com>
+   - DENG Qingfang <dqfext@gmail.com>
+   - Sean Wang <sean.wang@mediatek.com>
++  - Daniel Golle <daniel@makrotopia.org>
  
- 	/* Invalid partition error code, not lock protected */
-@@ -2502,6 +2503,16 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 	if (cpumask_empty(cs->effective_cpus))
- 		goto out_unlock;
+ description: |
+-  There are two versions of MT7530, standalone and in a multi-chip module.
++  There are three versions of MT7530, standalone, in a multi-chip module and
++  built-into a SoC.
  
-+	/*
-+	 * If there is another parallel attach operations in progress for
-+	 * the same cpuset, the single set of DL data there may get
-+	 * incorrectly overwritten. So parallel operations are not allowed
-+	 * if DL tasks are present.
-+	 */
-+	ret = -EBUSY;
-+	if (cs->nr_migrate_dl_tasks)
-+		goto out_unlock;
+   MT7530 is a part of the multi-chip module in MT7620AN, MT7620DA, MT7620DAN,
+   MT7620NN, MT7621AT, MT7621DAT, MT7621ST and MT7623AI SoCs.
+ 
++  The MT7988 SoC comes a built-in switch similar to MT7531 as well as 4 Gigabit
++  Ethernet PHYs and the switch registers are directly mapped into SoC's memory
++  map rather than using MDIO. It comes with an internally connected 10G CPU port
++  and 4 user ports connected to the built-in Gigabit Ethernet PHYs.
 +
- 	cgroup_taskset_for_each(task, css, tset) {
- 		ret = task_can_attach(task);
- 		if (ret)
-@@ -2511,6 +2522,9 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 			goto out_unlock;
+   MT7530 in MT7620AN, MT7620DA, MT7620DAN and MT7620NN SoCs has got 10/100 PHYs
+   and the switch registers are directly mapped into SoC's memory map rather than
+-  using MDIO. The DSA driver currently doesn't support this.
++  using MDIO. The DSA driver currently doesn't support MT7620 variants.
  
- 		if (dl_task(task)) {
-+			if (cs->attach_in_progress)
-+				goto out_unlock;
+   There is only the standalone version of MT7531.
+ 
+@@ -81,6 +88,10 @@ properties:
+           Multi-chip module MT7530 in MT7621AT, MT7621DAT and MT7621ST SoCs
+         const: mediatek,mt7621
+ 
++      - description:
++          Built-in switch of the MT7988 SoC
++        const: mediatek,mt7988-switch
 +
- 			cs->nr_migrate_dl_tasks++;
- 			cs->sum_migrate_dl_bw += task->dl.dl_bw;
- 		}
-@@ -2533,6 +2547,7 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 			reset_migrate_dl_data(cs);
- 			goto out_unlock;
- 		}
-+		cs->dl_bw_cpu = cpu;
- 	}
+   reg:
+     maxItems: 1
  
- out_succes:
-@@ -2559,9 +2574,7 @@ static void cpuset_cancel_attach(struct cgroup_taskset *tset)
- 	cs->attach_in_progress--;
+@@ -268,6 +279,17 @@ allOf:
+       required:
+         - mediatek,mcm
  
- 	if (cs->nr_migrate_dl_tasks) {
--		int cpu = cpumask_any(cs->effective_cpus);
--
--		dl_bw_free(cpu, cs->sum_migrate_dl_bw);
-+		dl_bw_free(cs->dl_bw_cpu, cs->sum_migrate_dl_bw);
- 		reset_migrate_dl_data(cs);
- 	}
++  - if:
++      properties:
++        compatible:
++          const: mediatek,mt7988-switch
++    then:
++      $ref: "#/$defs/mt7530-dsa-port"
++      properties:
++        gpio-controller: false
++        mediatek,mcm: false
++        reset-names: false
++
+ unevaluatedProperties: false
  
+ examples:
 -- 
-2.31.1
+2.39.2
 
