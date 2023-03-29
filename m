@@ -2,102 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61336CF7CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE82E6CF7D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbjC2Xzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 19:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
+        id S231307AbjC2X4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 19:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjC2Xzq (ORCPT
+        with ESMTP id S229649AbjC2X4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 19:55:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA7159EF
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 16:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680134102;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YDvzU53CPeswLit/FMHu3YOxwiNaBZwdjQxKehJieKw=;
-        b=M4SuFubxzbQ1GDT8aKx1QmIIYx2Luv02KE16TChtGPwnmK5AIr6ZgrD9ahggesiKOpCA/C
-        bIBAON2s2KGzwPlVKqSxTYLD//3+KjMlpjTmtaMnThH7wyYEEmnrZKkauJpksr+3gW66mF
-        GEbSd3AC/nM3SBJ2HaHPl6LjlNmyggA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-658-gjbwPLEMPuu8BeS56HR0nQ-1; Wed, 29 Mar 2023 19:54:56 -0400
-X-MC-Unique: gjbwPLEMPuu8BeS56HR0nQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C88EE3C0DDA1;
-        Wed, 29 Mar 2023 23:54:55 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.161])
-        by smtp.corp.redhat.com (Postfix) with SMTP id AFE50492C3E;
-        Wed, 29 Mar 2023 23:54:51 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 30 Mar 2023 01:54:48 +0200 (CEST)
-Date:   Thu, 30 Mar 2023 01:54:43 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Gregory Price <gregory.price@memverge.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Gregory Price <gourry.memverge@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, avagin@gmail.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, krisman@collabora.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jonathan Corbet <corbet@lwn.net>, shuah <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, tongtiangen@huawei.com,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH v14 1/4] asm-generic,arm64: create task variant of
- access_ok
-Message-ID: <20230329235442.GA10790@redhat.com>
-References: <20230328164811.2451-1-gregory.price@memverge.com>
- <20230328164811.2451-2-gregory.price@memverge.com>
- <20230329151515.GA913@redhat.com>
- <9a456346-e207-44e1-873e-40d21334e01b@app.fastmail.com>
- <20230329160322.GA4477@redhat.com>
- <ZCO20bzX/IB8J6Gp@memverge.com>
- <20230329171322.GB4477@redhat.com>
- <ZCPOpClZ3hOQCs7a@memverge.com>
- <20230329175850.GA8425@redhat.com>
- <ZCQMsWNfkMJ0xHSy@memverge.com>
+        Wed, 29 Mar 2023 19:56:38 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649A859DA;
+        Wed, 29 Mar 2023 16:56:37 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id d8so10331730pgm.3;
+        Wed, 29 Mar 2023 16:56:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680134197;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5We3k9UA49v5O3fyX9LJ8ISvv6lxMpEYgfyeu3RPTdw=;
+        b=TJogS+i7Hup52eD4lclymJO8wexA4nvo15fSnj4DOfS4KX0tpIKIadJhRLuB6ZRG0a
+         5DkfbzSLEeDv/jJmK5pZmaNJWZ/umlyh438nKK/riR/SwqRDlx0oZQNELDLV2syVG4BQ
+         uBlbbVLtwp7EaLDpe2JNwimuZXn4kv+5B4NWqH8U1bIr4wkiV4O/FLfFqd8n1cxAA5bZ
+         sRYUGIHJehZ1K8t5S6Cu+o2qUPbyx5rt1eMGScHG3SP60BYT/c2QgRXjTszBch/u8Yis
+         fzAf999PMOddT+6Vs51YLaZeQf+zqkwyUGInAX0Q2jhLtZoZUDX69T999G2H3nm+PF/u
+         tZxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680134197;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5We3k9UA49v5O3fyX9LJ8ISvv6lxMpEYgfyeu3RPTdw=;
+        b=Gn0z81UnZ8W4x6qylzgSaZk0PvG722dOwJ/4qJ2srkddFOMCx6eVQ68jDXl4pUBTMG
+         zrrgNV9+9I4tGEnp3vyopgcsjBuYFRK15PE7MxiLTbMjz40jQ/Pj7IU5UvVJlf9rk6hM
+         ZNVRVlXW/xfau0q5Rn4Ta2Ndi+ISMH5qYx8mjqlIcXmKSX35JMLSeRjCqulSwklFOTi3
+         gIeNvSqqMbnUtOchZ3OfQkNRaX6NU68YTq0MgHV7Oet8iauIQOynEhGAb/FNUrs9Rvkr
+         f82reC5V1Hr/zAKG/skKUZRjw9VlBuUSSwXKhUpDkCRO6OJeEtzJWg1QZTeXvQw8OE0L
+         /VXQ==
+X-Gm-Message-State: AAQBX9eWRbWIveWUIObmz6U9jIjqmzj9Nh2SuKj7I7vT6H81Y+agArZv
+        oG+zNjaNGBKjRuLpinqZ0O/tBPACDkw=
+X-Google-Smtp-Source: AKy350abUW8wlAg+HfwnumJri20NeizgyBjSjdfHF+ZypoyjDOV2g5TUcnvmW4/Jz47cg+uqgX3ZkQ==
+X-Received: by 2002:a62:63c2:0:b0:62d:8376:3712 with SMTP id x185-20020a6263c2000000b0062d83763712mr9450878pfb.28.1680134196727;
+        Wed, 29 Mar 2023 16:56:36 -0700 (PDT)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id d9-20020aa78e49000000b005cd81a74821sm19824926pfr.152.2023.03.29.16.56.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 16:56:36 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 16:56:34 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>,
+        Chao Gao <chao.gao@intel.com>
+Subject: Re: [PATCH v13 039/113] KVM: x86/mmu: Assume guest MMIOs are shared
+Message-ID: <20230329235634.GA1112017@ls.amr.corp.intel.com>
+References: <cover.1678643051.git.isaku.yamahata@intel.com>
+ <80912a430d4642acf85c454e97c8320f96e4b737.1678643052.git.isaku.yamahata@intel.com>
+ <ZCJTUIJsaJDNjcPP@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZCQMsWNfkMJ0xHSy@memverge.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZCJTUIJsaJDNjcPP@yilunxu-OptiPlex-7050>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/29, Gregory Price wrote:
->
-> Last note on this before I push up another patch set.
->
-> The change from __get_user to get_user also introduces a call to
-> might_fault() which adds a larger callstack for every syscall /
-> dispatch.  This turns into a might_sleep and might_reschedule, which
-> represent a very different pattern of execution from before.
+On Tue, Mar 28, 2023 at 10:39:12AM +0800,
+Xu Yilun <yilun.xu@intel.com> wrote:
 
-might_fault() is nop unless CONFIG_PROVE_LOCKING || DEBUG_ATOMIC_SLEEP.
+> On 2023-03-12 at 10:56:03 -0700, isaku.yamahata@intel.com wrote:
+> > From: Chao Gao <chao.gao@intel.com>
+> > 
+> > Current TD guest doesn't invoke MAP_GPA to convert MMIO range to shared
+> > before accessing it. It implies that current TD guest assumes MMIOs are
+> > shared.
+> > 
+> > When TD tries to access assigned device's MMIO as shared, an EPT violation
+> 
+> Seems the patch is dealing with emulated MMIO, not assigned device's MMIO.
 
-Again, I won't really argue with task_access_ok(). Just I am not sure
-2/4 gives enough justification for this new helper with unclear semantics
-(until we ensure that access_ok() doesn't depend on current).
+That's right. Here I'm discussing about virtual device. Will drop "assigned"
+word.
 
-Oleg.
 
+> > is raised first. kvm_mem_is_private() checks the page shared or private
+> > attribute against the access type (shared bit in GPA). Then since no
+> > MAP_GPA is called for the MMIO, KVM thinks the MMIO is private and refuses
+> > shared access and doesn't set up shared EPT. Then KVM returns to TD and TD
+> > just retries and this causes an infinite loop.
+> > 
+> > Instead of requiring guest to invoke MAP_GPA for MMIOs, assume guest MMIOs
+> > are shared in KVM as well and don't expect explicit calls of MAP_GAP for
+> > guest MMIOs (i.e., GPAs either have no kvm_memory_slot or are backed by
+> > host MMIOs). So, allow shared access to guest MMIOs and move the page type
+> > check after the corresponding pfn is available.
+> 
+> Didn't see the movement.
+> 
+> Seems the commit message needs update.
+
+Will update.
+
+
+> > Signed-off-by: Chao Gao <chao.gao@intel.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 5883ab95ff07..ce8a896a3cfa 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -4314,7 +4314,12 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+> >  			return RET_PF_EMULATE;
+> >  	}
+> >  
+> > -	if (fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn))
+> > +	/*
+> > +	 * !fault->slot means MMIO.  Don't require explicit GPA conversion for
+> > +	 * MMIO because MMIO is assigned at the boot time.
+> > +	 */
+> > +	if (fault->slot &&
+> 
+> This only exempts emulated MMIO, how about the passthrough device's MMIO?
+
+This patch is for virtual MMIO.  If physical device is assigned to shared
+region, KVM memory slot is assigned.  EPT entry is setup to point to the HPA.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
