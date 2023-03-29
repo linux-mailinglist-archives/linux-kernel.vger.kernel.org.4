@@ -2,377 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17116CF6C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB91C6CF6C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjC2XRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 19:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
+        id S229525AbjC2XRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 19:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjC2XR1 (ORCPT
+        with ESMTP id S229917AbjC2XRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 19:17:27 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305B055A3;
-        Wed, 29 Mar 2023 16:17:25 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso4802020pjc.1;
-        Wed, 29 Mar 2023 16:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680131844;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HudZuGPc7Nc3ie2KaSEypjt1nT+Q1pzjGNODaR9GZ9w=;
-        b=hmGmAGWiG6uVQ/NncB1GQujdOZ2T2X0x8ptijQ7uIh9NiJm9uOrl7Gkj+xn8Jo2xmL
-         iSQaEMWt1olNmtMau8ZT3Rxt1YkUUBq5KXdC1Knke5guq0M/qk4rnSucxzRfG2UxYRM/
-         xnx73UZ9aByejlC7yz1semcVKy6pa/3HqlPz2ojSpZUxdPFl6YvkO366h89RZJLWt7bI
-         AzURhY+fbhPUXET+uUb+51jHBFLI5ilpw48SWBGg01DBwQsnfBArSKF+AeP3xpw6l9cw
-         q27gmxNBNtixeY45K02L1kLnNWqDZFi3mFRvCAT6bCJfW876m4LWCjVOEnBRzNPQxhIy
-         s0NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680131844;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HudZuGPc7Nc3ie2KaSEypjt1nT+Q1pzjGNODaR9GZ9w=;
-        b=LXyor97e4a8QY9KKxfelCUP0xJj7Cad+48HwMrXAKSg64IIZkkQfWRWhZ+LG8smk5G
-         KzNy/mG/FQBFZSSAlGGhWdifasKnI4jc4R9C6fQ6Ll7avj9OU9GJWhNaPpeqkP37bOWu
-         iRj2GGZM9KmDdnVIwWzrvG7Y6KWYorHiRs7GCLctfxjsrNQViydx7Z1kTjZCO7BMivH4
-         WSMKHatE7CeCr92bj/4HwxmyUcs8jM5qPX80CNRVotx2t3Wz8O3Hn+VhlLme5KhbH5ei
-         ImRhbGUMgm63Dh9vVNGZ9yQUbEe313fA3tC8yyrzyBemXKlH6iOTnX5rk1MqdXJjbzFo
-         HoZA==
-X-Gm-Message-State: AAQBX9cNFmAj5/3S22qw8hNuP2vEGKWd4SHTEEgZLIpia2BMJXvohpl7
-        DB1rwipo8mOSBh/VxTJFYW8=
-X-Google-Smtp-Source: AKy350YIZo1WXbOyOcwwkRwe3p+NVMDKtEAq5FvI4gJ4UjeosUA3wJH7IVbBLHKHPGv1dp96aVQVBw==
-X-Received: by 2002:a17:902:e54c:b0:1a0:65ae:df18 with SMTP id n12-20020a170902e54c00b001a065aedf18mr22468289plf.55.1680131844349;
-        Wed, 29 Mar 2023 16:17:24 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id c24-20020a170902849800b0019f27fd7cecsm23526071plo.197.2023.03.29.16.17.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 16:17:23 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 16:17:22 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v13 016/113] KVM: TDX: x86: Add ioctl to get TDX
- systemwide parameters
-Message-ID: <20230329231722.GA1108448@ls.amr.corp.intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
- <cb0ae8b4941aaa45e1e5856dde644f9b2f53d9a6.1678643052.git.isaku.yamahata@intel.com>
- <20230325104306.00004585@gmail.com>
+        Wed, 29 Mar 2023 19:17:45 -0400
+Received: from dispatch1-us1.ppe-hosted.com (dispatch1-us1.ppe-hosted.com [148.163.129.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23375FE8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 16:17:34 -0700 (PDT)
+X-Virus-Scanned: Proofpoint Essentials engine
+Received: from mail3.candelatech.com (mail2.candelatech.com [208.74.158.173])
+        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id C42A1C40067;
+        Wed, 29 Mar 2023 23:17:31 +0000 (UTC)
+Received: from [192.168.1.115] (unknown [98.97.35.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail3.candelatech.com (Postfix) with ESMTPSA id E7D5C13C2B0;
+        Wed, 29 Mar 2023 16:17:29 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail3.candelatech.com E7D5C13C2B0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=candelatech.com;
+        s=default; t=1680131851;
+        bh=LS3MKLWJd4mb/vj5so6zIWCqxhs9UCjfJNfmEm+z63A=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=gmoVy/lqIaVvnAC+w93vZ19p89ZJosatdIFXRYbvPBJf/sHEZsbTOQLWkuR3NdSTZ
+         25ajfHOwtFpV1RM+8thfcST1Zz5vxX97iUCIKvDhSaL2PVAV0lT3zOJvY1VP4OX65x
+         3SX+lnB3H8ZM2x9EwW35bqrzPT6sDInk0HOfxpr8=
+Subject: Re: [PATCH 5.4 182/389] PCI/portdrv: Dont disable AER reporting in
+ get_port_device_capability()
+From:   Ben Greear <greearb@candelatech.com>
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, bjorn@helgaas.com,
+        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+        Stefan Roese <sr@denx.de>, Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Yao Hongbo <yaohongbo@linux.alibaba.com>,
+        Naveen Naidu <naveennaidu479@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+References: <20220823080115.331990024@linuxfoundation.org>
+ <20220823080123.228828362@linuxfoundation.org>
+ <CABhMZUVycsyy76j2Z=K+C6S1fwtzKE1Lx2povXKfB80o9g0MtQ@mail.gmail.com>
+ <YwXH/l37HaYQD66B@kroah.com>
+ <47b775c5-57fa-5edf-b59e-8a9041ffbee7@candelatech.com>
+ <20220830205832.g3lyysmgkarijkvj@pali>
+ <00735f18-11f9-c6c6-4abf-002d378957df@candelatech.com>
+ <20220830215532.6nnl6d4cfg55dmcl@pali>
+ <370dee6c-919a-2f98-1404-a3feda14d1ba@candelatech.com>
+Organization: Candela Technologies
+Message-ID: <9dfa04c4-e0cc-f265-5935-254f43db931b@candelatech.com>
+Date:   Wed, 29 Mar 2023 16:17:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230325104306.00004585@gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <370dee6c-919a-2f98-1404-a3feda14d1ba@candelatech.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-MW
+Content-Transfer-Encoding: 8bit
+X-MDID: 1680131853-JyskUiQsUrIm
+X-MDID-O: us5;ut7;1680131853;JyskUiQsUrIm;<greearb@candelatech.com>;66c7af989e59a0657cb045da8e674f5e
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 10:43:06AM +0200,
-Zhi Wang <zhi.wang.linux@gmail.com> wrote:
-
-> On Sun, 12 Mar 2023 10:55:40 -0700
-> isaku.yamahata@intel.com wrote:
+On 8/30/22 3:16 PM, Ben Greear wrote:
+> On 8/30/22 2:55 PM, Pali Rohár wrote:
+>> On Tuesday 30 August 2022 14:28:14 Ben Greear wrote:
+>>> On 8/30/22 1:58 PM, Pali Rohár wrote:
+>>>> On Tuesday 30 August 2022 13:47:48 Ben Greear wrote:
+>>>>> On 8/23/22 11:41 PM, Greg Kroah-Hartman wrote:
+>>>>>> On Tue, Aug 23, 2022 at 07:20:14AM -0500, Bjorn Helgaas wrote:
+>>>>>>> On Tue, Aug 23, 2022, 6:35 AM Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>>>>> wrote:
+>>>>>>>
+>>>>>>>> From: Stefan Roese <sr@denx.de>
+>>>>>>>>
+>>>>>>>> [ Upstream commit 8795e182b02dc87e343c79e73af6b8b7f9c5e635 ]
+>>>>>>>>
+>>>>>>>
+>>>>>>> There's an open regression related to this commit:
+>>>>>>>
+>>>>>>> https://bugzilla.kernel.org/show_bug.cgi?id=216373
+>>>>>>
+>>>>>> This is already in the following released stable kernels:
+>>>>>>     5.10.137 5.15.61 5.18.18 5.19.2
+>>>>>>
+>>>>>> I'll go drop it from the 4.19 and 5.4 queues, but when this gets
+>>>>>> resolved in Linus's tree, make sure there's a cc: stable on the fix so
+>>>>>> that we know to backport it to the above branches as well.  Or at the
+>>>>>> least, a "Fixes:" tag.
+>>>>>
+>>>>> This is still in 5.19.5.  We saw some funny iwlwifi crashes in 5.19.3+
+>>>>> that we did not see in 5.19.0+.  I just bisected the scary looking AER errors to this
+>>>>> patch, though I do not know for certain if it causes the iwlwifi related crashes yet.
+>>>>>
+>>>>> In general, from reading the commit msg, this patch doesn't seem to be a great candidate
+>>>>> for stable in general.  Does it fix some important problem?
+>>>>>
+>>>>> In case it helps, here is example of what I see in dmesg.  The kernel crashes in iwlwifi
+>>>>> had to do with rx messages from the firmware, and some warnings lead me to believe that
+>>>>> pci messages were slow coming back and/or maybe duplicated.  So maybe this AER patch changes
+>>>>> timing or otherwise screws up the PCI adapter boards we use...
+>>>>
+>>>>   From that log I have feeling that issue is in that intel wifi card and
+>>>> it was there also before that commit. Card is crashing (or something
+>>>> other happens on PCIe bus) and because kernel had disabled Error
+>>>> Reporting for this card, nobody spotted any issue. And that commit just
+>>>> opened eye to kernel to see those errors.
+>>>>
+>>>> I think this issue should be reported to intel wifi card developers,
+>>>> maybe they comment it, why card is reporting errors.
+>>>
+>>> My main concern is not that AER messages started showing up, but that there
+>>> started being kernel NPE and WARNINGS showing up sometime after 5.19.0.
+>>>
+>>> Possibly this AER thing is mis-direction and the real bug is elsewhere,
+>>> but since the bugzilla also indicated (different) driver crashes, then
+>>> I am suspicious this changes things more significantly, at least in a subset
+>>> of hardware out there.
+>>
+>> Yea, of course, this is something needed to investigate.
+>>
+>> Anyway, do you see driver crashes? Or just these AER errors? And are
+>> your PCIe cards working, or after seeing these messages in dmesg they
+>> stopped working? It is needed to know if you are just spammed by tons of
+>> lines in dmesg and otherwise everything works. Or if after AER errors
+>> your PCIe devices stop working and rebooting system is required.
 > 
-> Does this have to be a new generic ioctl with a dedicated new x86_ops? SNP
-> does not use it at all and all the system-scoped ioctl of SNP going through
-> the CCP driver. So getting system-scope information of TDX/SNP will end up
-> differently.
+> We did see higher frequency of weird crashes (accessing null-ish pointer) after upgrading to 5.19.3,
+> I am building kernel now with 5.19.5 and that AER patch reverted.  We will
+> test to see if that solves the crashes.
 > 
-> Any thought, Sean? Moving getting SNP system-wide information to
-> KVM dev ioctl seems not ideal and TDX does not have a dedicated driver like
-> CCP. Maybe make this ioctl TDX-specific? KVM_TDX_DEV_OP?
+>>> Also, any idea what this error in my logs is actually indicating?
+>>
+>> Your PCIe controller received non-fatal, but uncorrected error. There is
+>> also indication of Unsupported Request Completion Status. Unsupported
+>> Request is generated by PCIe device when controller / host / kernel try
+>> to do something which is not supported by device; pretty generic error.
+>> PCIe base spec describe lot of scenarios when card should return this
+>> error. Maybe some more detailed information are in TLP Header hexdump,
+>> but I cannot decode it now.
+>>
+>> Basically it is PCIe card driver who could know how fatal it is that
+>> issue and how to recover from it. But as you can see intel wifi driver
+>> does not implement that callback.
 
-We only need global parameters of the TDX module, and we don't interact with TDX
-module at this point.  One alternative is to export those parameters via sysfs.
-Also the existence of the sysfs node indicates that the TDX module is
-loaded(initialized?) or not in addition to boot log.  Thus we can drop system
-scope one.
-What do you think?
+Hello,
 
-Regarding to other TDX KVM specific ioctls (KVM_TDX_INIT_VM, KVM_TDX_INIT_VCPU,
-KVM_TDX_INIT_MEM_REGION, and KVM_TDX_FINALIZE_VM), they are specific to KVM.  So
-I don't think it can be split out to independent driver.
+I notice this patch appears to be in 6.2.6 kernel, and my kernel logs are
+full of spam and system is unstable.  Possibly the unstable part is related
+to something else, but the log spam is definitely extreme.
+
+These systems are fairly stable on 5.19-ish kernels without the patch in
+question.
+
+Any suggested cures for this other than reverting the patch?
+
+Here is sample of the spam:
+
+[ 1675.547023] pcieport 0000:03:02.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1675.556851] pcieport 0000:03:02.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1675.563904] pcieport 0000:03:02.0:    [20] UnsupReq               (First)
+[ 1675.569398] pcieport 0000:03:02.0: AER:   TLP Header: 34000000 05001f10 00000000 88c888c8
+[ 1675.576296] iwlwifi 0000:05:00.0: AER: can't recover (no error_detected callback)
+[ 1675.576302] pcieport 0000:03:02.0: AER: device recovery failed
+[ 1675.576303] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:02.0
+[ 1675.576317] pcieport 0000:03:02.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1675.586144] pcieport 0000:03:02.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1675.593196] pcieport 0000:03:02.0:    [20] UnsupReq               (First)
+[ 1675.598691] pcieport 0000:03:02.0: AER:   TLP Header: 34000000 05001f10 00000000 88c888c8
+[ 1675.605584] iwlwifi 0000:05:00.0: AER: can't recover (no error_detected callback)
+[ 1675.605588] pcieport 0000:03:02.0: AER: device recovery failed
+[ 1676.497155] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:02.0
+[ 1676.497174] pcieport 0000:03:02.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1676.507015] pcieport 0000:03:02.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1676.514091] pcieport 0000:03:02.0:    [20] UnsupReq               (First)
+[ 1676.519599] pcieport 0000:03:02.0: AER:   TLP Header: 34000000 05001f10 00000000 88c888c8
+[ 1676.526491] iwlwifi 0000:05:00.0: AER: can't recover (no error_detected callback)
+[ 1676.526516] pcieport 0000:03:02.0: AER: device recovery failed
+[ 1676.526517] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:02.0
+[ 1676.526531] pcieport 0000:03:02.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1676.536367] pcieport 0000:03:02.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1676.543440] pcieport 0000:03:02.0:    [20] UnsupReq               (First)
+[ 1676.548936] pcieport 0000:03:02.0: AER:   TLP Header: 34000000 05001f10 00000000 88c888c8
+[ 1676.555830] iwlwifi 0000:05:00.0: AER: can't recover (no error_detected callback)
+[ 1676.555850] pcieport 0000:03:02.0: AER: device recovery failed
+[ 1676.555851] pcieport 0000:00:1c.0: AER: Multiple Uncorrected (Non-Fatal) error received: 0000:03:02.0
+[ 1676.555955] pcieport 0000:03:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1676.565792] pcieport 0000:03:01.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1676.572846] pcieport 0000:03:01.0:    [20] UnsupReq               (First)
+[ 1676.578344] pcieport 0000:03:01.0: AER:   TLP Header: 34000000 04001f10 00000000 88c888c8
+[ 1676.585268] pcieport 0000:03:02.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1676.595105] pcieport 0000:03:02.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1676.602162] pcieport 0000:03:02.0:    [20] UnsupReq               (First)
+[ 1676.607655] pcieport 0000:03:02.0: AER:   TLP Header: 34000000 05001f10 00000000 88c888c8
+[ 1676.614538] pcieport 0000:03:02.0: AER:   Error of this Agent is reported first
+[ 1676.620566] pcieport 0000:03:03.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1676.630398] pcieport 0000:03:03.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1676.637454] pcieport 0000:03:03.0:    [20] UnsupReq               (First)
+[ 1676.642945] pcieport 0000:03:03.0: AER:   TLP Header: 34000000 06001f10 00000000 88c888c8
+[ 1676.649840] pcieport 0000:03:05.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1676.659681] pcieport 0000:03:05.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1676.666738] pcieport 0000:03:05.0:    [20] UnsupReq               (First)
+[ 1676.672253] pcieport 0000:03:05.0: AER:   TLP Header: 34000000 07001f10 00000000 88c888c8
+[ 1676.679172] pcieport 0000:03:07.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1676.689002] pcieport 0000:03:07.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1676.696055] pcieport 0000:03:07.0:    [20] UnsupReq               (First)
+[ 1676.701550] pcieport 0000:03:07.0: AER:   TLP Header: 34000000 08001f10 00000000 88c888c8
+[ 1676.708461] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
+[ 1676.708467] pcieport 0000:03:01.0: AER: device recovery failed
+[ 1676.708480] iwlwifi 0000:05:00.0: AER: can't recover (no error_detected callback)
+[ 1676.708483] pcieport 0000:03:02.0: AER: device recovery failed
+[ 1676.708496] iwlwifi 0000:06:00.0: AER: can't recover (no error_detected callback)
+[ 1676.708499] pcieport 0000:03:03.0: AER: device recovery failed
+[ 1676.708511] iwlwifi 0000:07:00.0: AER: can't recover (no error_detected callback)
+[ 1676.708515] pcieport 0000:03:05.0: AER: device recovery failed
+[ 1676.708541] iwlwifi 0000:08:00.0: AER: can't recover (no error_detected callback)
+[ 1676.708544] pcieport 0000:03:07.0: AER: device recovery failed
+[ 1676.893674] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:02.0
+[ 1676.893692] pcieport 0000:03:02.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1676.903527] pcieport 0000:03:02.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1676.910584] pcieport 0000:03:02.0:    [20] UnsupReq               (First)
+[ 1676.916098] pcieport 0000:03:02.0: AER:   TLP Header: 34000000 05001f10 00000000 88c888c8
+[ 1676.923010] iwlwifi 0000:05:00.0: AER: can't recover (no error_detected callback)
+[ 1676.923018] pcieport 0000:03:02.0: AER: device recovery failed
+[ 1676.923018] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:02.0
+[ 1676.923046] pcieport 0000:03:02.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1676.932876] pcieport 0000:03:02.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1676.939929] pcieport 0000:03:02.0:    [20] UnsupReq               (First)
+[ 1676.945425] pcieport 0000:03:02.0: AER:   TLP Header: 34000000 05001f10 00000000 88c888c8
+[ 1676.952319] iwlwifi 0000:05:00.0: AER: can't recover (no error_detected callback)
+[ 1676.952325] pcieport 0000:03:02.0: AER: device recovery failed
+[ 1676.952325] pcieport 0000:00:1c.0: AER: Multiple Uncorrected (Non-Fatal) error received: 0000:03:02.0
+[ 1676.952462] pcieport 0000:03:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1676.962292] pcieport 0000:03:01.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1676.969347] pcieport 0000:03:01.0:    [20] UnsupReq               (First)
+[ 1676.974839] pcieport 0000:03:01.0: AER:   TLP Header: 34000000 04001f10 00000000 88c888c8
+[ 1676.981734] pcieport 0000:03:02.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1676.991560] pcieport 0000:03:02.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1676.998614] pcieport 0000:03:02.0:    [20] UnsupReq               (First)
+[ 1677.004107] pcieport 0000:03:02.0: AER:   TLP Header: 34000000 05001f10 00000000 88c888c8
+[ 1677.010991] pcieport 0000:03:02.0: AER:   Error of this Agent is reported first
+[ 1677.017014] pcieport 0000:03:03.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1677.026841] pcieport 0000:03:03.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1677.033894] pcieport 0000:03:03.0:    [20] UnsupReq               (First)
+[ 1677.039390] pcieport 0000:03:03.0: AER:   TLP Header: 34000000 06001f10 00000000 88c888c8
+[ 1677.046292] pcieport 0000:03:05.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1677.056118] pcieport 0000:03:05.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1677.063174] pcieport 0000:03:05.0:    [20] UnsupReq               (First)
+[ 1677.068667] pcieport 0000:03:05.0: AER:   TLP Header: 34000000 07001f10 00000000 88c888c8
+[ 1677.075575] pcieport 0000:03:07.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 1677.085402] pcieport 0000:03:07.0:   device [10b5:8619] error status/mask=00100000/00000000
+[ 1677.092457] pcieport 0000:03:07.0:    [20] UnsupReq               (First)
+[ 1677.097951] pcieport 0000:03:07.0: AER:   TLP Header: 34000000 08001f10 00000000 88c888c8
+[ 1677.104844] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
+[ 1677.104849] pcieport 0000:03:01.0: AER: device recovery failed
+[ 1677.104881] iwlwifi 0000:05:00.0: AER: can't recover (no error_detected callback)
+[ 1677.104884] pcieport 0000:03:02.0: AER: device recovery failed
+[ 1677.104908] iwlwifi 0000:06:00.0: AER: can't recover (no error_detected callback)
+[ 1677.104911] pcieport 0000:03:03.0: AER: device recovery failed
+[ 1677.104938] iwlwifi 0000:07:00.0: AER: can't recover (no error_detected callback)
+[ 1677.104943] pcieport 0000:03:05.0: AER: device recovery failed
+[ 1677.104968] iwlwifi 0000:08:00.0: AER: can't recover (no error_detected callback)
+[ 1677.104971] pcieport 0000:03:07.0: AER: device recovery failed
+
 
 Thanks,
+Ben
 
-> > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> > 
-> > Implement a system-scoped ioctl to get system-wide parameters for TDX.
-> > 
-> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > ---
-> >  arch/x86/include/asm/kvm-x86-ops.h    |  1 +
-> >  arch/x86/include/asm/kvm_host.h       |  1 +
-> >  arch/x86/include/uapi/asm/kvm.h       | 48 +++++++++++++++++++++++++
-> >  arch/x86/kvm/vmx/main.c               |  2 ++
-> >  arch/x86/kvm/vmx/tdx.c                | 51 +++++++++++++++++++++++++++
-> >  arch/x86/kvm/vmx/x86_ops.h            |  2 ++
-> >  arch/x86/kvm/x86.c                    |  6 ++++
-> >  tools/arch/x86/include/uapi/asm/kvm.h | 48 +++++++++++++++++++++++++
-> >  8 files changed, 159 insertions(+)
-> > 
-> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> > index eac4b65d1b01..b46dcac078b2 100644
-> > --- a/arch/x86/include/asm/kvm-x86-ops.h
-> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> > @@ -117,6 +117,7 @@ KVM_X86_OP(enter_smm)
-> >  KVM_X86_OP(leave_smm)
-> >  KVM_X86_OP(enable_smi_window)
-> >  #endif
-> > +KVM_X86_OP_OPTIONAL(dev_mem_enc_ioctl)
-> >  KVM_X86_OP_OPTIONAL(mem_enc_ioctl)
-> >  KVM_X86_OP_OPTIONAL(mem_enc_register_region)
-> >  KVM_X86_OP_OPTIONAL(mem_enc_unregister_region)
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index 00c25f6ab871..49e3ca89aced 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1719,6 +1719,7 @@ struct kvm_x86_ops {
-> >  	void (*enable_smi_window)(struct kvm_vcpu *vcpu);
-> >  #endif
-> >  
-> > +	int (*dev_mem_enc_ioctl)(void __user *argp);
-> >  	int (*mem_enc_ioctl)(struct kvm *kvm, void __user *argp);
-> >  	int (*mem_enc_register_region)(struct kvm *kvm, struct kvm_enc_region *argp);
-> >  	int (*mem_enc_unregister_region)(struct kvm *kvm, struct kvm_enc_region *argp);
-> > diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-> > index 6afbfbb32d56..af4c5bd0af1c 100644
-> > --- a/arch/x86/include/uapi/asm/kvm.h
-> > +++ b/arch/x86/include/uapi/asm/kvm.h
-> > @@ -562,4 +562,52 @@ struct kvm_pmu_event_filter {
-> >  #define KVM_X86_DEFAULT_VM	0
-> >  #define KVM_X86_PROTECTED_VM	1
-> >  
-> > +/* Trust Domain eXtension sub-ioctl() commands. */
-> > +enum kvm_tdx_cmd_id {
-> > +	KVM_TDX_CAPABILITIES = 0,
-> > +
-> > +	KVM_TDX_CMD_NR_MAX,
-> > +};
-> > +
-> > +struct kvm_tdx_cmd {
-> > +	/* enum kvm_tdx_cmd_id */
-> > +	__u32 id;
-> > +	/* flags for sub-commend. If sub-command doesn't use this, set zero. */
-> > +	__u32 flags;
-> > +	/*
-> > +	 * data for each sub-command. An immediate or a pointer to the actual
-> > +	 * data in process virtual address.  If sub-command doesn't use it,
-> > +	 * set zero.
-> > +	 */
-> > +	__u64 data;
-> > +	/*
-> > +	 * Auxiliary error code.  The sub-command may return TDX SEAMCALL
-> > +	 * status code in addition to -Exxx.
-> > +	 * Defined for consistency with struct kvm_sev_cmd.
-> > +	 */
-> > +	__u64 error;
-> > +	/* Reserved: Defined for consistency with struct kvm_sev_cmd. */
-> > +	__u64 unused;
-> > +};
-> > +
-> > +struct kvm_tdx_cpuid_config {
-> > +	__u32 leaf;
-> > +	__u32 sub_leaf;
-> > +	__u32 eax;
-> > +	__u32 ebx;
-> > +	__u32 ecx;
-> > +	__u32 edx;
-> > +};
-> > +
-> > +struct kvm_tdx_capabilities {
-> > +	__u64 attrs_fixed0;
-> > +	__u64 attrs_fixed1;
-> > +	__u64 xfam_fixed0;
-> > +	__u64 xfam_fixed1;
-> > +
-> > +	__u32 nr_cpuid_configs;
-> > +	__u32 padding;
-> > +	struct kvm_tdx_cpuid_config cpuid_configs[0];
-> > +};
-> > +
-> >  #endif /* _ASM_X86_KVM_H */
-> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> > index c8548004802a..6a5d0c7a2950 100644
-> > --- a/arch/x86/kvm/vmx/main.c
-> > +++ b/arch/x86/kvm/vmx/main.c
-> > @@ -201,6 +201,8 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
-> >  	.complete_emulated_msr = kvm_complete_insn_gp,
-> >  
-> >  	.vcpu_deliver_sipi_vector = kvm_vcpu_deliver_sipi_vector,
-> > +
-> > +	.dev_mem_enc_ioctl = tdx_dev_ioctl,
-> >  };
-> >  
-> >  struct kvm_x86_init_ops vt_init_ops __initdata = {
-> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> > index e9b7aa5654e9..b59d3081d061 100644
-> > --- a/arch/x86/kvm/vmx/tdx.c
-> > +++ b/arch/x86/kvm/vmx/tdx.c
-> > @@ -21,6 +21,57 @@ int tdx_hardware_enable(void)
-> >  	return tdx_cpu_enable();
-> >  }
-> >  
-> > +int tdx_dev_ioctl(void __user *argp)
-> > +{
-> > +	struct kvm_tdx_capabilities __user *user_caps;
-> > +	const struct tdsysinfo_struct *tdsysinfo;
-> > +	struct kvm_tdx_capabilities caps;
-> > +	struct kvm_tdx_cmd cmd;
-> > +
-> > +	BUILD_BUG_ON(sizeof(struct kvm_tdx_cpuid_config) !=
-> > +		     sizeof(struct tdx_cpuid_config));
-> > +
-> > +	if (copy_from_user(&cmd, argp, sizeof(cmd)))
-> > +		return -EFAULT;
-> > +	if (cmd.flags || cmd.error || cmd.unused)
-> > +		return -EINVAL;
-> > +	/*
-> > +	 * Currently only KVM_TDX_CAPABILITIES is defined for system-scoped
-> > +	 * mem_enc_ioctl().
-> > +	 */
-> > +	if (cmd.id != KVM_TDX_CAPABILITIES)
-> > +		return -EINVAL;
-> > +
-> > +	tdsysinfo = tdx_get_sysinfo();
-> > +	if (!tdsysinfo)
-> > +		return -ENOTSUPP;
-> > +
-> > +	user_caps = (void __user *)cmd.data;
-> > +	if (copy_from_user(&caps, user_caps, sizeof(caps)))
-> > +		return -EFAULT;
-> > +
-> > +	if (caps.nr_cpuid_configs < tdsysinfo->num_cpuid_config)
-> > +		return -E2BIG;
-> > +
-> > +	caps = (struct kvm_tdx_capabilities) {
-> > +		.attrs_fixed0 = tdsysinfo->attributes_fixed0,
-> > +		.attrs_fixed1 = tdsysinfo->attributes_fixed1,
-> > +		.xfam_fixed0 = tdsysinfo->xfam_fixed0,
-> > +		.xfam_fixed1 = tdsysinfo->xfam_fixed1,
-> > +		.nr_cpuid_configs = tdsysinfo->num_cpuid_config,
-> > +		.padding = 0,
-> > +	};
-> > +
-> > +	if (copy_to_user(user_caps, &caps, sizeof(caps)))
-> > +		return -EFAULT;
-> > +	if (copy_to_user(user_caps->cpuid_configs, &tdsysinfo->cpuid_configs,
-> > +			 tdsysinfo->num_cpuid_config *
-> > +			 sizeof(struct tdx_cpuid_config)))
-> > +		return -EFAULT;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int __init tdx_module_setup(void)
-> >  {
-> >  	const struct tdsysinfo_struct *tdsysinfo;
-> > diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> > index b2c74c1b5bbd..78c5537e23a1 100644
-> > --- a/arch/x86/kvm/vmx/x86_ops.h
-> > +++ b/arch/x86/kvm/vmx/x86_ops.h
-> > @@ -141,10 +141,12 @@ void vmx_setup_mce(struct kvm_vcpu *vcpu);
-> >  int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
-> >  int tdx_hardware_enable(void);
-> >  bool tdx_is_vm_type_supported(unsigned long type);
-> > +int tdx_dev_ioctl(void __user *argp);
-> >  #else
-> >  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -ENOSYS; }
-> >  static inline int tdx_hardware_enable(void) { return -EOPNOTSUPP; }
-> >  static inline bool tdx_is_vm_type_supported(unsigned long type) { return false; }
-> > +static inline int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; };
-> >  #endif
-> >  
-> >  #endif /* __KVM_X86_VMX_X86_OPS_H */
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 27ab684f8374..a3dc32e33aca 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -4718,6 +4718,12 @@ long kvm_arch_dev_ioctl(struct file *filp,
-> >  		r = kvm_x86_dev_has_attr(&attr);
-> >  		break;
-> >  	}
-> > +	case KVM_MEMORY_ENCRYPT_OP:
-> > +		r = -EINVAL;
-> > +		if (!kvm_x86_ops.dev_mem_enc_ioctl)
-> > +			goto out;
-> > +		r = static_call(kvm_x86_dev_mem_enc_ioctl)(argp);
-> > +		break;
-> >  	default:
-> >  		r = -EINVAL;
-> >  		break;
-> > diff --git a/tools/arch/x86/include/uapi/asm/kvm.h b/tools/arch/x86/include/uapi/asm/kvm.h
-> > index 6afbfbb32d56..af4c5bd0af1c 100644
-> > --- a/tools/arch/x86/include/uapi/asm/kvm.h
-> > +++ b/tools/arch/x86/include/uapi/asm/kvm.h
-> > @@ -562,4 +562,52 @@ struct kvm_pmu_event_filter {
-> >  #define KVM_X86_DEFAULT_VM	0
-> >  #define KVM_X86_PROTECTED_VM	1
-> >  
-> > +/* Trust Domain eXtension sub-ioctl() commands. */
-> > +enum kvm_tdx_cmd_id {
-> > +	KVM_TDX_CAPABILITIES = 0,
-> > +
-> > +	KVM_TDX_CMD_NR_MAX,
-> > +};
-> > +
-> > +struct kvm_tdx_cmd {
-> > +	/* enum kvm_tdx_cmd_id */
-> > +	__u32 id;
-> > +	/* flags for sub-commend. If sub-command doesn't use this, set zero. */
-> > +	__u32 flags;
-> > +	/*
-> > +	 * data for each sub-command. An immediate or a pointer to the actual
-> > +	 * data in process virtual address.  If sub-command doesn't use it,
-> > +	 * set zero.
-> > +	 */
-> > +	__u64 data;
-> > +	/*
-> > +	 * Auxiliary error code.  The sub-command may return TDX SEAMCALL
-> > +	 * status code in addition to -Exxx.
-> > +	 * Defined for consistency with struct kvm_sev_cmd.
-> > +	 */
-> > +	__u64 error;
-> > +	/* Reserved: Defined for consistency with struct kvm_sev_cmd. */
-> > +	__u64 unused;
-> > +};
-> > +
-> > +struct kvm_tdx_cpuid_config {
-> > +	__u32 leaf;
-> > +	__u32 sub_leaf;
-> > +	__u32 eax;
-> > +	__u32 ebx;
-> > +	__u32 ecx;
-> > +	__u32 edx;
-> > +};
-> > +
-> > +struct kvm_tdx_capabilities {
-> > +	__u64 attrs_fixed0;
-> > +	__u64 attrs_fixed1;
-> > +	__u64 xfam_fixed0;
-> > +	__u64 xfam_fixed1;
-> > +
-> > +	__u32 nr_cpuid_configs;
-> > +	__u32 padding;
-> > +	struct kvm_tdx_cpuid_config cpuid_configs[0];
-> > +};
-> > +
-> >  #endif /* _ASM_X86_KVM_H */
-> 
 
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
