@@ -2,269 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CACE36CF279
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6B26CF281
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjC2Stl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
+        id S229902AbjC2SxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjC2Stg (ORCPT
+        with ESMTP id S229519AbjC2SxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:49:36 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8C74C3B;
-        Wed, 29 Mar 2023 11:49:33 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 974CB604EA;
-        Wed, 29 Mar 2023 20:49:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680115770; bh=2FY09q7X5ToUe7Y8QK9XX6aJPiKbJHxiEsM6S9PavgQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cfeomEXZkwlXxKgjlypsMgNX/1ZVTiH12GBclQuGyuX0KTnPXTE1iZiKwUxdMVuKt
-         Aow4ooYmRqLRjEvOydxM7PkVLHzlHYoeXKNGExzEeyEbfxy/B/me/o54VNQ+Dbssyq
-         LZw4s/3pDnSG0KVfOvxztTj246VJLpfr/sRN2w1ugO7+ZiDvAPNPhHB0XtXpfY0R8H
-         4Dt57P7QG64GQGKe5Qz4L6hDlJmnYNVyNzgf66zV7uhUk6Kr2gA5oYTxnZq3Cmh7Lc
-         gC0/i2c8tAlhQGUpjQP9L9PNOtqlsZSlP3XGnqQ8ti3UKpQUyPQI7gZV0YjHmDt7W3
-         fN6lx6TSuPxrQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YOTInEUCGIbY; Wed, 29 Mar 2023 20:49:28 +0200 (CEST)
-Received: from [10.0.1.78] (grf-nat.grf.hr [161.53.83.23])
-        by domac.alu.hr (Postfix) with ESMTPSA id A7F18604EF;
-        Wed, 29 Mar 2023 20:49:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680115768; bh=2FY09q7X5ToUe7Y8QK9XX6aJPiKbJHxiEsM6S9PavgQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UyCJZwgXzPOJvhvX/9JzYJl5ICtoqeeKWooL+wTEM1FOtJG9nCHL4YPavGI6IcQPu
-         2EPGojmuXjLV3LlSOjk5mkYvvwm8p7ohfzq3By/v+Nmbs+80Ho/Jaep8VtA2YZpj7B
-         pyZupCRMJJ2vz1/MGfsP8UvLGiVqFzK04H7dbJ07bRXIBaW0IPYuqNA4KkHiv5Gy9X
-         G6+vHPKrHk52RzteZXOWeI1CW7iUjqNIJrIaUv36BHKPCkewoUv26fFTDw2GzEaeqG
-         Je4SJSiyPegEmIaR33l7dIhZ7BeHHaTgOWXxFQoAmWDbC4NSREErkqZjDtTiUYv1B7
-         8zDeZI/X5tV8w==
-Message-ID: <4dc118c2-0dde-bd5e-ea41-427ed33e4545@alu.unizg.hr>
-Date:   Wed, 29 Mar 2023 20:49:27 +0200
+        Wed, 29 Mar 2023 14:53:07 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B2559EA;
+        Wed, 29 Mar 2023 11:53:05 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso19531006pjb.3;
+        Wed, 29 Mar 2023 11:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680115984;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Iy+lCmVSfuCqZYe5m364REzCKXPfLlS/vXZ6Sv33Scc=;
+        b=mOxPMiQc+w/5rfTRi9mFKJkmmWrWC+fsE86SxcySPbUJ/wuSW6AldTRs3OGXZtwHWv
+         n75hgfb8Jx+JCDbIxrNwCNhfHbchPfWDoQgDmRZL3hRgD1A1QjHOFPi/idbqob30n3+o
+         RfxqdtblWXtXCCQwP77ubsHpTykfAuRiiY2lmCEIRhp/1xZEWZJAWmKKb366YikERsZy
+         b49+3GyAT5iO8CVbUWnbgaKvTSxLC1ZUui2x/A7empu+BSJ09ps4+rHLpazMy4Z/WTbC
+         7GovkOPkWDIYzMqS73vSWspbX6vZMVT+mWaCOhZRpJ0uPCggyCfuI4KlNvWHIo+z094h
+         3zKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680115984;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Iy+lCmVSfuCqZYe5m364REzCKXPfLlS/vXZ6Sv33Scc=;
+        b=OiCOgpSwKRPXnJdl/k74jw/fxsccj83OVUE6IQJo/PRmjtvM8A1TE/4K+AUeRYTSHP
+         bOLXbodQmU6ftTXcBddXOMbvoDOkf4TKvEvfKoTG4UXlku4YuQCxFPKpz3yONGrl51+G
+         Y13+4n18kBhl1+Yk8w2GU3bq+rpKoE/46rTRMH+aBkEYG1gxT6YSKofHACELqNt/uKGh
+         uE38U8MKg2ykE67rNoaEs7VLznoXXRz6xYQzZEtsvQY8yggOEn3Eq0kCj7K1fJup+4cG
+         WTIrD7cP+czk1V/wBz33JQ0oEk0H6TcM49sv868pJmriLLXoTao/JToQyJWSpH9shz1b
+         A3tw==
+X-Gm-Message-State: AAQBX9fM25QTDwrSu5o12/ZWqihxmP0qMNm8oQP1do76wMhqqgMbR/6W
+        6Nea1e/s61SFZsCVY3CtNQ8=
+X-Google-Smtp-Source: AKy350YM1IDiFMeIxntBJ5tUubr/59hvq1vaUMPy4AplOEpt3OuDM5rihLjPuie4/yTJFSttNogBlw==
+X-Received: by 2002:a17:903:743:b0:1a1:cd69:d301 with SMTP id kl3-20020a170903074300b001a1cd69d301mr17833746plb.68.1680115984286;
+        Wed, 29 Mar 2023 11:53:04 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id g6-20020a1709026b4600b001a19cf1b37esm23311756plt.40.2023.03.29.11.53.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 11:53:03 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 29 Mar 2023 08:53:02 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+Message-ID: <ZCSJDpPPOVvBYfOy@slm.duckdns.org>
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com>
+ <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
+ <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com>
+ <ZB5UalkjGngcBDEJ@slm.duckdns.org>
+ <CAJD7tkYhyMkD8SFf8b8L1W9QUrLOdw-HJ2NUbENjw5dgFnH3Aw@mail.gmail.com>
+ <CALvZod6rF0D21hcV7xnqD+oRkn=x5NLi5GOkPpyaPa859uDH+Q@mail.gmail.com>
+ <CAJD7tkY_ESpMYMw72bsATpp6tPphv8qS6VbfEUjpKZW6vUqQSQ@mail.gmail.com>
+ <CALvZod41ecuCKmuFBNtAjoKJjQgWYzoe4_B8zRK37HYk-rYDkA@mail.gmail.com>
+ <CAJD7tkZrp=4zWvjE9_010TAG1T_crCbf9P64UzJABspgcrGPKg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [BUG] [RFC] systemd-devd triggers kernel memleak apparently in
- drivers/core/dd.c: driver_register()
-Content-Language: en-US
-To:     Mark Pearson <mpearson-lenovo@squebb.ca>,
-        Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>
-Cc:     Armin Wolf <W_Armin@gmx.de>, Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>
-References: <5059b11b-8b6e-394b-338f-49e1339067fa@alu.unizg.hr>
- <ZCLPaYGKHlFQGKYQ@kroah.com>
- <542c13f5-4cdd-7750-f10a-ef64bb7e8faa@alu.unizg.hr>
- <d011a1d7-34ab-5f54-fcc7-d727abc7ec9b@alu.unizg.hr>
- <ZCLa3_HnLQA0GQKS@kroah.com>
- <b50f9460-ac54-e997-f9b9-3c47a9b87aae@alu.unizg.hr>
- <df26ff45-8933-f2b3-25f4-6ee51ccda7d8@gmx.de>
- <16862c45-2ffd-a2f2-6719-020c5d515800@alu.unizg.hr>
- <4f65a23f-4e04-f04f-e56b-230a38ac5ec4@gmx.de>
- <01e920bc-5882-ba0c-dd15-868bf0eca0b8@alu.unizg.hr>
- <8b478e6d-7482-2cbb-ee14-b2dc522daf35@alu.unizg.hr>
- <9f757a7b-6ac9-804a-063f-4cc2c6fc3f54@alu.unizg.hr>
- <de54f828-e2c6-4c10-92ce-ca86fb5c5fb4@t-8ch.de>
- <6a5dc4de-b315-1e6d-e5e2-5b95521a37c7@alu.unizg.hr>
- <2c1d0b9b-0e71-b616-6486-52e741d25afb@redhat.com>
- <9c142ac2-9340-4a9b-8541-99f613772340@app.fastmail.com>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <9c142ac2-9340-4a9b-8541-99f613772340@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJD7tkZrp=4zWvjE9_010TAG1T_crCbf9P64UzJABspgcrGPKg@mail.gmail.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.3.2023. 18:24, Mark Pearson wrote:
-> Hi
-> 
-> On Wed, Mar 29, 2023, at 11:46 AM, Hans de Goede wrote:
->> Hi,
->>
->> On 3/29/23 16:18, Mirsad Goran Todorovac wrote:
->>> On 29.3.2023. 15:35, Thomas Weißschuh wrote:
->>>>
->>>> Mar 29, 2023 08:31:31 Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>:
->>>>
-> <snip>
->>>
->>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
->>> index c816646eb661..e8c28f4f5a71 100644
->>> --- a/drivers/platform/x86/think-lmi.c
->>> +++ b/drivers/platform/x86/think-lmi.c
->>> @@ -1469,6 +1469,7 @@ static int tlmi_analyze(void)
->>>                                                          kstrndup(optstart, optend - optstart,
->>>                                                                          GFP_KERNEL);
->>>                                  }
->>> +                               kfree(item);
->>>                          }
->>>                  }
->>>                  /*
->>>
->>> You were 3 minutes faster ;-)
->>>
->>> The build with this patch is finished. Apparently, that was the culprit, for now
-> <snip>
->>>
->>>
->>> So, the "tlmi_setting" memory leak appears to be fixed by this diff.
->>>
-> My only concern here is it looks like I was dumb and used the variable name 'item' twice in the same function. I guess the compiler is smart enough to handle it but I'd like to change the name to make it clearer which 'item' is being freed in each context.
-> 
-> In that block I would change it to be:
-> char *optitem, *optstart, *optend;
-> and fix all the pieces in the block to then be correct too (with the needed free)
-> 
->>> The next step is to add Armin-suggested patch:
->>>
->>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
->>> index c816646eb661..1e77ecb0cba8 100644
->>> --- a/drivers/platform/x86/think-lmi.c
->>> +++ b/drivers/platform/x86/think-lmi.c
->>> @@ -929,8 +929,10 @@ static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *a
->>>
->>>          /* validate and split from `item,value` -> `value` */
->>>          value = strpbrk(item, ",");
->>> -       if (!value || value == item || !strlen(value + 1))
->>> +       if (!value || value == item || !strlen(value + 1)) {
->>> +               kfree(item);
->>>                  return -EINVAL;
->>> +       }
->>>
->>>          ret = sysfs_emit(buf, "%s\n", value + 1);
->>>          kfree(item);
->>>
-> This looks good to me - thank you!
-> 
->>> and Thomas' correction for the return type of the tlmi_setting() function:
->>>
->>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
->>> index 86b33b74519be..c924e9e4a6a5b 100644
->>> --- a/drivers/platform/x86/think-lmi.c
->>> +++ b/drivers/platform/x86/think-lmi.c
->>> @@ -1353,7 +1353,6 @@ static struct tlmi_pwd_setting *tlmi_create_auth(const char *pwd_type,
->>>
->>>   static int tlmi_analyze(void)
->>>   {
->>> -       acpi_status status;
->>>          int i, ret;
->>>
->>>          if (wmi_has_guid(LENOVO_SET_BIOS_SETTINGS_GUID) &&
->>> @@ -1390,8 +1389,8 @@ static int tlmi_analyze(void)
->>>                  char *p;
->>>
->>>                  tlmi_priv.setting[i] = NULL;
->>> -               status = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
->>> -               if (ACPI_FAILURE(status))
->>> +               ret = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
->>> +               if (ret)
->>>                          break;
->>>                  if (!item)
->>>                          break;
->>>
->>> A build on top of 6.3-rc4+ fcd476ea6a88 commit is on the way, with all three included.
->>
->> Good work on catching these issues, thank you all for your work on this.
->>
-> Seconded - thank you for flagging and catching this. These were my mistakes :(
-> 
->> I assume that these fixes will be posted as a proper 3 patch
->> patch-series (one patch per fix) once you are done testing?
->>
-> Let me know if you are happy to propose the changes as a patch-series. If you don't have time I can help and get these in ASAP as I was the original culprit.
-> 
-> Happy to help out with testing too as I have access to HW. Let me know.
-> 
-> Mark
+Hello, Yosry.
 
-Here is the patch proposal according to what Mark advised (using different name for optitem):
+On Mon, Mar 27, 2023 at 04:23:13PM -0700, Yosry Ahmed wrote:
+> Tejun, if having the lock be non-irq is a non-starter for you, I can
 
-diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-index c816646eb661..ab17254781c4 100644
---- a/drivers/platform/x86/think-lmi.c
-+++ b/drivers/platform/x86/think-lmi.c
-@@ -929,8 +929,10 @@ static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *a
+This is an actual hazard. We see in prod these unprotected locks causing
+very big spikes in tail latencies and they can be tricky to root cause too
+and given the way rstat lock is used it's highly likely to be involved in
+those scenarios with the proposed change, so it's gonna be a nack from my
+end.
 
-         /* validate and split from `item,value` -> `value` */
-         value = strpbrk(item, ",");
--       if (!value || value == item || !strlen(value + 1))
-+       if (!value || value == item || !strlen(value + 1)) {
-+               kfree(item);
-                 return -EINVAL;
-+       }
+> send a patch that instead gives up the lock and reacquires it at every
+> CPU boundary unconditionally -- or perhaps every N CPU boundaries to
+> avoid excessively releasing and reacquiring the lock.
 
-         ret = sysfs_emit(buf, "%s\n", value + 1);
-         kfree(item);
-@@ -1380,7 +1382,6 @@ static struct tlmi_pwd_setting *tlmi_create_auth(const char *pwd_type,
+I'd just do the simple thing and see whether there's any perf penalty before
+making it complicated. I'd be pretty surprised if unlocking and relocking
+the same spinlock adds any noticeable overhead here.
 
-  static int tlmi_analyze(void)
-  {
--       acpi_status status;
-         int i, ret;
-
-         if (wmi_has_guid(LENOVO_SET_BIOS_SETTINGS_GUID) &&
-@@ -1417,8 +1418,8 @@ static int tlmi_analyze(void)
-                 char *p;
-
-                 tlmi_priv.setting[i] = NULL;
--               status = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
--               if (ACPI_FAILURE(status))
-+               ret = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
-+               if (ret)
-                         break;
-                 if (!item)
-                         break;
-@@ -1457,10 +1458,10 @@ static int tlmi_analyze(void)
-                          * name string.
-                          * Try and pull that out if it's available.
-                          */
--                       char *item, *optstart, *optend;
-+                       char *optitem, *optstart, *optend;
-
--                       if (!tlmi_setting(setting->index, &item, LENOVO_BIOS_SETTING_GUID)) {
--                               optstart = strstr(item, "[Optional:");
-+                       if (!tlmi_setting(setting->index, &optitem, LENOVO_BIOS_SETTING_GUID)) {
-+                               optstart = strstr(optitem, "[Optional:");
-                                 if (optstart) {
-                                         optstart += strlen("[Optional:");
-                                         optend = strstr(optstart, "]");
-@@ -1469,6 +1470,7 @@ static int tlmi_analyze(void)
-                                                         kstrndup(optstart, optend - optstart,
-                                                                         GFP_KERNEL);
-                                 }
-+                               kfree(optitem);
-                         }
-                 }
-                 /*
-
-I have tested it, but without a few blunders of my own.
-I guess "nobody wins them all".
-
-Best regards,
-Mirsad
+Thanks.
 
 -- 
-Mirsad Todorovac
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb
-Republic of Croatia, the European Union
-
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
+tejun
