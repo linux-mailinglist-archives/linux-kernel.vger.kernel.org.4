@@ -2,75 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782BC6CD739
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC3C6CD73C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbjC2KDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
+        id S231488AbjC2KDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 06:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjC2KDl (ORCPT
+        with ESMTP id S231438AbjC2KDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:03:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2824219A;
-        Wed, 29 Mar 2023 03:03:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B178161C2E;
-        Wed, 29 Mar 2023 10:03:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0982C433EF;
-        Wed, 29 Mar 2023 10:03:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680084217;
-        bh=4dKTj8NkljpvIB3DLLAn5YLXV7ZuAu3YUNT8GNWZbSs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Sd8UlwVEpeP+G3O2JRhvqW2CATLA+j+BRhXRKe7IRbgqtS43HV/CrlRe8TfLfFgUx
-         //qsOT2PDUxyeBeZiBJezl8hzIc4ffn2d8WOpu6ORwacIcdGNpDVKtv5n6KtlFNYRp
-         xu/Iw0ZlumEv2R7zZOszTJgYkfjRZK9rEhoneQ5g=
-Date:   Wed, 29 Mar 2023 12:03:34 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Vaibhaav Ram T.L" <vaibhaavram.tl@microchip.com>
-Cc:     arnd@arndb.de, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kumaravel.thiagarajan@microchip.com,
-        tharunkumar.pasumarthi@microchip.com, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH v8 char-misc-next 0/5] Fix error handling in probe
-Message-ID: <ZCQM9t5v2Dcet3gP@kroah.com>
-References: <20230328144008.4113-1-vaibhaavram.tl@microchip.com>
+        Wed, 29 Mar 2023 06:03:49 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E954490
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:03:47 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id l10-20020a056e0205ca00b00322fdda7261so9782988ils.6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:03:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680084227; x=1682676227;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Cdo+FJ+hnOxvR2ATSEhcdhm77Y9ERKu4XhwzioM3xNs=;
+        b=HtG7v+QOQZc4Bsr2jmJnj/9OEWdIOpwhA7Joj0mBNRVpATDDO3nQvl093X0WiGsOLr
+         6ZpQR8StHEtwrwiXYfcYcItBo2B2dG6FuUOj0djwVDc2UbrfYlDt+DGSSj1dIIUzEqVU
+         MjV2Z+25i5dMiC+iVeYrvQsRMI8nijaZxpr0nz3ogdG+b8VPOo/+EpEAxOb+GwWtcfOP
+         8Xd8YZzyFM8d5sk6cuVq81e2LK8R9oQGg3WCZcEsMBpS/2dKXsx6Mo0MYJT8Yt/MRTAy
+         4MpK8V2iDPocpLlZy7IKDUx7tedZOLxNsn6tf0w46ypt82k7elRDdId5ke6+flVXTyTa
+         RE/g==
+X-Gm-Message-State: AO0yUKVaXwWQPyXvaedPFQJmD2r4HGZVUtZ6ouuIAOsVizm7W/WwCseB
+        1yqivgcZFhyc1tDbNuqAM+dux12L1g7RaFnTzFatp1MEBCGx
+X-Google-Smtp-Source: AK7set+0iHf8fHLMGTtxqUc6hVGUISfAeEpSctCBGunKPKyuF+AMFYrdXy7FwFuslBISoNpqyoVxCoa5JXhOiukq+g//u1NH4ZRT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328144008.4113-1-vaibhaavram.tl@microchip.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:83d9:0:b0:745:b287:c281 with SMTP id
+ u25-20020a5d83d9000000b00745b287c281mr7192438ior.2.1680084226930; Wed, 29 Mar
+ 2023 03:03:46 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 03:03:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008a040605f80717b3@google.com>
+Subject: [syzbot] Monthly bluetooth report
+From:   syzbot <syzbot+lista37ea1d82518ef3e82b4@syzkaller.appspotmail.com>
+To:     johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 08:10:03PM +0530, Vaibhaav Ram T.L wrote:
-> From: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-> 
-> Microchip's pci1xxxx is an unmanaged PCIe3.1a switch for consumer,
-> industrial, and automotive applications. This switch integrates OTP
-> and EEPROM to enable customization of the part in the field. First 
-> patch provides fix for error handling in the probe function of 
-> mchp_pci1xxxx_gp driver. Remaining patches add the OTP/EEPROM driver 
-> for the switch.
-> 
-> Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-> Signed-off-by: Vaibhaav Ram T.L <vaibhaavram.tl@microchip.com>
+Hello bluetooth maintainers/developers,
 
+This is a 30-day syzbot report for the bluetooth subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/bluetooth
 
-Why are there signed-off-by for the 00/XX patch?
+During the period, 2 new issues were detected and 0 were fixed.
+In total, 30 issues are still open and 47 have been fixed so far.
 
-And the subject doesn't make sense to me.
+Some of the still happening issues:
 
-thanks,
+Crashes Repro Title
+5798    Yes   possible deadlock in rfcomm_sk_state_change
+              https://syzkaller.appspot.com/bug?extid=d7ce59b06b3eb14fd218
+2690    Yes   WARNING in hci_conn_timeout
+              https://syzkaller.appspot.com/bug?extid=2446dd3cb07277388db6
+1046    Yes   INFO: task can't die in __lock_sock
+              https://syzkaller.appspot.com/bug?extid=7d51f807c81b190a127d
+272     Yes   possible deadlock in sco_conn_del
+              https://syzkaller.appspot.com/bug?extid=b825d87fe2d043e3e652
+182     No    KASAN: slab-use-after-free Read in hci_conn_hash_flush
+              https://syzkaller.appspot.com/bug?extid=8bb72f86fc823817bc5d
+111     No    possible deadlock in rfcomm_dlc_exists
+              https://syzkaller.appspot.com/bug?extid=b69a625d06e8ece26415
+45      Yes   WARNING in call_timer_fn
+              https://syzkaller.appspot.com/bug?extid=6fb78d577e89e69602f9
+18      Yes   WARNING: ODEBUG bug in put_device
+              https://syzkaller.appspot.com/bug?extid=a9290936c6e87b3dc3c2
 
-greg k-h
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
