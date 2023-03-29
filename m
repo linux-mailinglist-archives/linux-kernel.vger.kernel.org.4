@@ -2,112 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDDC6CDA8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201616CDA90
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 15:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjC2NUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 09:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
+        id S230290AbjC2NUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 09:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbjC2NUW (ORCPT
+        with ESMTP id S230237AbjC2NU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:20:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C060F524C;
-        Wed, 29 Mar 2023 06:20:14 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 29 Mar 2023 09:20:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1935598;
+        Wed, 29 Mar 2023 06:20:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F132660316F;
-        Wed, 29 Mar 2023 14:20:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680096013;
-        bh=+Gb3T+OEiFKZw1D3ileVDi0PJW+B0xgdY2yBBexB2kQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EQg2hrbHd2UgsF/MuOS04eS04qrxSgCIoOjtW8jKFlx6/tXsYGNgqrroAbdITFtv5
-         qwnUi5sMeEeiQJ4K41mPAMBFa5BPAJ39958ujfG5/R/YyF3XpH6OlB1rUuM2JKXJDf
-         vgX3uCLdhBCwEGWlBfAIcelGLe+aLRcW8kfk30iu6efnqmSLbPm1vBqHCxahExt4Lw
-         jKDi9xDAb7WBo0LeXc9ZsiAZAtNAptf/kblThg2ZhQ8NhVrbphFU+rJs9O9SvZIOIA
-         HLNGS/jb/AaIfWwWHJjE/GXmgOqTwsCKXTG3G/x6UlVwqJFxlRS9IO3Z7L0DTnC+eZ
-         oGGEzMKOIKdFA==
-Message-ID: <f963453f-ef7e-1bec-66ae-4bb0354914c8@collabora.com>
-Date:   Wed, 29 Mar 2023 15:20:10 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CE7861D1E;
+        Wed, 29 Mar 2023 13:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C577C433D2;
+        Wed, 29 Mar 2023 13:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680096018;
+        bh=Vp7Tk9FZto6rCmf812cmUkq4T6NxSn9CdcRG6uBna6Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IPx1XTCJhoNO96hDi+jLdysiRWDplquD4sU4MIQ8fKqJiKaYpNwXU2HwTFzzubRW+
+         ZrrFDHqCBLPAem8lJd7TNN3wbHYNJsbrRHw3tE4/C4lbXLaWKjYlvN+uIsa46jEG4Y
+         Pw7wEr4MJE7sXLiN0SBA1A86QzWC1JHBtSOa93ZHY7lva2afGbwDMTWgmUWsyROQrx
+         9+d299HDPbTpo+JQRpr6J97CPXN4bIuzYOS8kxdv9NaTxTtaRNyLDJZ8yBPLzdI+Xh
+         ih86RP5992Z5ewvhn1eotK+nwJM0YJbcYdaqPLzkWwv37IEHzIx4ZKi0WyLoXVo/oX
+         UZt8EdHH4oslg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5F5A84052D; Wed, 29 Mar 2023 10:20:16 -0300 (-03)
+Date:   Wed, 29 Mar 2023 10:20:16 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, James Clark <james.clark@arm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Andres Freund <andres@anarazel.de>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v1 0/6] config file/command line for objdump & addr2line
+Message-ID: <ZCQ7EG1+/emX0ZZW@kernel.org>
+References: <20230328235543.1082207-1-irogers@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 07/17] arm64: dts: mediatek: add mt6357 PMIC support
- for mt8365-evk
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>
-References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
- <20230203-evk-board-support-v3-7-0003e80e0095@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230203-evk-board-support-v3-7-0003e80e0095@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230328235543.1082207-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/03/23 10:54, Alexandre Mergnat ha scritto:
-> This power management system chip integration helps to manage regulators
-> and keys.
+Em Tue, Mar 28, 2023 at 04:55:37PM -0700, Ian Rogers escreveu:
+> Allow objdump to be set as a perf config file variable. As previously
+> objdump was set via the command line, the string was owned by
+> argv. Now the string must be strdup-ed, so the corresponding logic
+> needs changing with an annotation_options__init/exit.
+
+ui/gtk/annotate.c: In function ‘symbol__gtk_annotate’:
+ui/gtk/annotate.c:177:44: error: ‘annotation__default_options’ undeclared (first use in this function); did you mean ‘annotation_options’?
+  177 |         err = symbol__annotate(ms, evsel, &annotation__default_options, NULL);
+      |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                            annotation_options
+ui/gtk/annotate.c:177:44: note: each undeclared identifier is reported only once for each function it appears in
+make[6]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.build:97: ui/gtk/annotate.o] Error 1
+make[6]: *** Waiting for unfinished jobs....
+
+
+I'll fix this later...
+
+- Arnaldo
+ 
+> Add command line and config file options for addr2line, set in
+> symbol_conf for convenience. This doesn't allow the setting of
+> llvm-addr2line due to a bug, but could in the future.
 > 
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 8 ++++++++
->   1 file changed, 8 insertions(+)
+> Ian Rogers (6):
+>   perf annotate: Delete session for debug builds
+>   perf report: Additional config warnings
+>   perf annotate: Add init/exit to annotation_options remove default
+>   perf annotate: Own objdump_path and disassembler_style strings
+>   perf annotate: Allow objdump to be set in perfconfig
+>   perf symbol: Add command line support for addr2line path
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> index fc7f6d8ae173..2f88562c638a 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> @@ -12,6 +12,7 @@
->   #include <dt-bindings/input/input.h>
->   #include <dt-bindings/pinctrl/mt8365-pinfunc.h>
->   #include "mt8365.dtsi"
-> +#include "mt6357.dtsi"
->   
->   / {
->   	model = "MediaTek MT8365 Open Platform EVK";
-> @@ -96,6 +97,13 @@ &i2c0 {
->   	#size-cells = <0>;
->   };
->   
-> +&mt6357_pmic {
-> +	interrupt-parent = <&pio>;
-> +	interrupts = <145 IRQ_TYPE_LEVEL_HIGH>;
+>  tools/perf/Documentation/perf-annotate.txt |  3 ++
+>  tools/perf/Documentation/perf-config.txt   |  8 +++-
+>  tools/perf/Documentation/perf-report.txt   |  3 ++
+>  tools/perf/Documentation/perf-top.txt      |  6 +++
+>  tools/perf/arch/common.c                   |  4 +-
+>  tools/perf/arch/common.h                   |  2 +-
+>  tools/perf/builtin-annotate.c              | 42 +++++++++++++-------
+>  tools/perf/builtin-report.c                | 35 ++++++++++++++---
+>  tools/perf/builtin-top.c                   | 27 +++++++++++--
+>  tools/perf/util/annotate.c                 | 45 +++++++++++++++++-----
+>  tools/perf/util/annotate.h                 |  9 +++--
+>  tools/perf/util/srcline.c                  | 26 ++++++++-----
+>  tools/perf/util/symbol_conf.h              |  1 +
+>  13 files changed, 163 insertions(+), 48 deletions(-)
+> 
+> -- 
+> 2.40.0.348.gf938b09366-goog
+> 
 
-Please... use:
-	interrupts-extended = <&pio 145 IRQ_TYPE_LEVEL_HIGH>;
+-- 
 
-Cheers,
-Angelo
-
-
+- Arnaldo
