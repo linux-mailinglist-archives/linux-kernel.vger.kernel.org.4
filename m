@@ -2,183 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FEC6CEE40
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B616B6CEE35
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjC2P73 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 11:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
+        id S229960AbjC2P66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbjC2P6l (ORCPT
+        with ESMTP id S231193AbjC2P6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:58:41 -0400
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810866587;
-        Wed, 29 Mar 2023 08:58:15 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id y4so65359373edo.2;
-        Wed, 29 Mar 2023 08:58:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680105444;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CiLLqeasGYV72OnUftYDwpJH98iYFk7qhLz9/jkuOco=;
-        b=P2R1YuyAb87qWxIKj5SHleGjHxMuG9THUIj3EholHXCotvZ0OFUTBc8i4j4VspJHes
-         8PxWZjhanW8Cyzysa9GSUTgk3FTfp59Wv8RvDpaZjXev5aD0WBZrsVrhT4gC0gHcWv0y
-         eHjk/+7E9/VaMqb9cygNpY4sIlLC9RpuT8rD/l3/ekYhDaFzzs78wT468STfag0Qydh/
-         kdVZj6kDlgJ8eA9OTBWnHKwNzmszPTxm/LOESqmHRHPKLcA0jio0U/YyxyJjRRMeInC9
-         1QU7XGjFF4c/I4uvMDKc2YzVKz24qMaC1QoJJiIN4XMy4Lcas/v1sTBAim/J/lE0wMdu
-         1y+A==
-X-Gm-Message-State: AAQBX9cjezcxdzWX+Al/WXUj3rXn0t68kPdH115Fao4+AX3k3VTbnkcG
-        alRCPsAvIGnhMMPAwz6eYbTcZz2g1V2RpbE3Yws=
-X-Google-Smtp-Source: AKy350bpppzhtgK7epjSXQz3h0DFNSdZnWNofTwOprIA61Xay8SqtY2fCtP8X1SqYIkDWIEHDZMZthJxQAfHpdrMVVg=
-X-Received: by 2002:a50:cc94:0:b0:4fb:c8e3:1ae2 with SMTP id
- q20-20020a50cc94000000b004fbc8e31ae2mr10233137edi.3.1680105443653; Wed, 29
- Mar 2023 08:57:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org> <20230329-dt-cpu-header-cleanups-v1-16-581e2605fe47@kernel.org>
-In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-16-581e2605fe47@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 29 Mar 2023 17:57:12 +0200
-Message-ID: <CAJZ5v0iFMOWMuG1t4gwzF=m-kfonj4ni9+zciRHDzqFcTGaYpw@mail.gmail.com>
-Subject: Re: [PATCH 16/19] cpuidle: Adjust includes to remove of_device.h
-To:     Rob Herring <robh@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        Wed, 29 Mar 2023 11:58:37 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCBB61AF;
+        Wed, 29 Mar 2023 08:58:10 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1phYAv-0003K3-0f;
+        Wed, 29 Mar 2023 17:57:25 +0200
+Date:   Wed, 29 Mar 2023 16:57:21 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: [RFC PATCH net-next v3 01/15] net: dsa: mt7530: refactor SGMII PCS
+ creation
+Message-ID: <921a8076420545206612e873753edfd0868e7a36.1680105013.git.daniel@makrotopia.org>
+References: <cover.1680105013.git.daniel@makrotopia.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1680105013.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 5:52 PM Rob Herring <robh@kernel.org> wrote:
->
-> Now that of_cpu_device_node_get() is defined in of.h, of_device.h is just
-> implicitly including other includes, and is no longer needed. Adjust the
-> include files with what was implicitly included by of_device.h (cpu.h,
-> cpuhotplug.h, of.h, and of_platform.h) and drop including of_device.h.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Please ack and I will take the series via the DT tree.
+Instead of macro templates use a dedidated function and allocated
+regmap_config when creating the regmaps for the pcs-mtk-lynxi
+instances.
+This is in preparation to switching to use unlocked regmap accessors
+and have regmap's locking API handle locking for us.
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ drivers/net/dsa/mt7530.c | 74 +++++++++++++++++++++++++++-------------
+ 1 file changed, 50 insertions(+), 24 deletions(-)
 
-> ---
->  drivers/cpuidle/cpuidle-psci.c      | 1 -
->  drivers/cpuidle/cpuidle-qcom-spm.c  | 3 +--
->  drivers/cpuidle/cpuidle-riscv-sbi.c | 2 +-
->  drivers/cpuidle/dt_idle_states.c    | 1 -
->  4 files changed, 2 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> index 6de027f9f6f5..bf68920d038a 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -16,7 +16,6 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> -#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/psci.h>
->  #include <linux/pm_domain.h>
-> diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-> index c6e2e91bb4c3..1fc9968eae19 100644
-> --- a/drivers/cpuidle/cpuidle-qcom-spm.c
-> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-> @@ -11,8 +11,7 @@
->  #include <linux/io.h>
->  #include <linux/slab.h>
->  #include <linux/of.h>
-> -#include <linux/of_address.h>
-> -#include <linux/of_device.h>
-> +#include <linux/of_platform.h>
->  #include <linux/err.h>
->  #include <linux/platform_device.h>
->  #include <linux/cpuidle.h>
-> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> index be383f4b6855..ae0b838a0634 100644
-> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> @@ -8,6 +8,7 @@
->
->  #define pr_fmt(fmt) "cpuidle-riscv-sbi: " fmt
->
-> +#include <linux/cpuhotplug.h>
->  #include <linux/cpuidle.h>
->  #include <linux/cpumask.h>
->  #include <linux/cpu_pm.h>
-> @@ -15,7 +16,6 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> -#include <linux/of_device.h>
->  #include <linux/slab.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
-> diff --git a/drivers/cpuidle/dt_idle_states.c b/drivers/cpuidle/dt_idle_states.c
-> index 02aa0b39af9d..12fec92a85fd 100644
-> --- a/drivers/cpuidle/dt_idle_states.c
-> +++ b/drivers/cpuidle/dt_idle_states.c
-> @@ -14,7 +14,6 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> -#include <linux/of_device.h>
->
->  #include "dt_idle_states.h"
->
->
-> --
-> 2.39.2
->
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index a0d99af897ace..9b88ce5cee5bd 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -2926,26 +2926,56 @@ static const struct regmap_bus mt7531_regmap_bus = {
+ 	.reg_update_bits = mt7530_regmap_update_bits,
+ };
+ 
+-#define MT7531_PCS_REGMAP_CONFIG(_name, _reg_base) \
+-	{				\
+-		.name = _name,		\
+-		.reg_bits = 16,		\
+-		.val_bits = 32,		\
+-		.reg_stride = 4,	\
+-		.reg_base = _reg_base,	\
+-		.max_register = 0x17c,	\
+-	}
+-
+-static const struct regmap_config mt7531_pcs_config[] = {
+-	MT7531_PCS_REGMAP_CONFIG("port5", MT7531_SGMII_REG_BASE(5)),
+-	MT7531_PCS_REGMAP_CONFIG("port6", MT7531_SGMII_REG_BASE(6)),
+-};
++static int
++mt7531_create_sgmii(struct mt7530_priv *priv)
++{
++	struct regmap_config *mt7531_pcs_config[2];
++	struct phylink_pcs *pcs;
++	struct regmap *regmap;
++	int i, ret = 0;
++
++	for (i = 0; i < 2; i++) {
++		mt7531_pcs_config[i] = devm_kzalloc(priv->dev,
++						    sizeof(struct regmap_config),
++						    GFP_KERNEL);
++		if (!mt7531_pcs_config[i]) {
++			ret = -ENOMEM;
++			break;
++		}
++
++		mt7531_pcs_config[i]->name = i ? "port6" : "port5";
++		mt7531_pcs_config[i]->reg_bits = 16;
++		mt7531_pcs_config[i]->val_bits = 32;
++		mt7531_pcs_config[i]->reg_stride = 4;
++		mt7531_pcs_config[i]->reg_base = MT7531_SGMII_REG_BASE(5 + i);
++		mt7531_pcs_config[i]->max_register = 0x17c;
++
++		regmap = devm_regmap_init(priv->dev,
++					  &mt7531_regmap_bus, priv,
++					  mt7531_pcs_config[i]);
++		if (IS_ERR(regmap)) {
++			ret = PTR_ERR(regmap);
++			break;
++		}
++		pcs = mtk_pcs_lynxi_create(priv->dev, regmap,
++					   MT7531_PHYA_CTRL_SIGNAL3, 0);
++		if (!pcs) {
++			ret = -ENXIO;
++			break;
++		}
++		priv->ports[5 + i].sgmii_pcs = pcs;
++	}
++
++	if (ret && i)
++		mtk_pcs_lynxi_destroy(priv->ports[5].sgmii_pcs);
++
++	return ret;
++}
+ 
+ static int
+ mt753x_setup(struct dsa_switch *ds)
+ {
+ 	struct mt7530_priv *priv = ds->priv;
+-	struct regmap *regmap;
+ 	int i, ret;
+ 
+ 	/* Initialise the PCS devices */
+@@ -2967,15 +2997,11 @@ mt753x_setup(struct dsa_switch *ds)
+ 	if (ret && priv->irq)
+ 		mt7530_free_irq_common(priv);
+ 
+-	if (priv->id == ID_MT7531)
+-		for (i = 0; i < 2; i++) {
+-			regmap = devm_regmap_init(ds->dev,
+-						  &mt7531_regmap_bus, priv,
+-						  &mt7531_pcs_config[i]);
+-			priv->ports[5 + i].sgmii_pcs =
+-				mtk_pcs_lynxi_create(ds->dev, regmap,
+-						     MT7531_PHYA_CTRL_SIGNAL3, 0);
+-		}
++	if (priv->id == ID_MT7531) {
++		ret = mt7531_create_sgmii(priv);
++		if (ret && priv->irq)
++			mt7530_free_irq_common(priv);
++	}
+ 
+ 	return ret;
+ }
+-- 
+2.39.2
+
