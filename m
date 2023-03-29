@@ -2,127 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9D56CD87E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A856A6CD87F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjC2LcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S229851AbjC2Lca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjC2LcE (ORCPT
+        with ESMTP id S229451AbjC2Lc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:32:04 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C3A3C3A
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:32:02 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id e11so15685591lji.8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680089520;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2+DmZREGJLvaG78XJWbtpreueoMcEnxDx6Pkz53TmMI=;
-        b=HBGugAGCH0yFGhYG/IU6OtOsjloJCctl2WSqcVIi4FVXDRDmRXKgXpFd/o5uub0NlM
-         TEcIdA0+m1OLMdYGUeG/Vm4YRYD+GP7YsBCSmdURJ8cvkSGJEec9M0qHEAfyrYL0iM5l
-         5Ra88t81JFGoQElR1kPZWszDrF6VfW1wiz6GHv3VDzbtUvo18jrBF9gw7SIZcfvJkLoI
-         PSHWQLIKEqN538/iuldEzqxpP31Ty4REom33rt8oOEMg7t18TsE0r1sqA+g8IQAJrf+N
-         DlM3Iit9oDWTBLeIUuFC1HyzodoZeUDju2yBGviTF8ZQ/SgAjSjc6D9v+5yTlvjNKX47
-         QIgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680089520;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+DmZREGJLvaG78XJWbtpreueoMcEnxDx6Pkz53TmMI=;
-        b=TRPwS9GsDgRRr08tEeLhs1YNyEgZ0Qrkb6F13LNq1U4WsNnddcRBZ5Rot5UFOWFsJx
-         zr1lMRQcunZwpppzaqmaOXSW4MOypmHlA9aZUtIHRJcEzYBnkhgQ5P1/CZhC7uHHNiSk
-         e9phk7WbPjwmSz6LHbxDZ2Pqm6lHqhrT5+XjTXt0+wsYn7tr2vTWfKGQZhhwtEDcksLZ
-         YJGN7HbffnPPN8lI3yU7UHguIxuJJHOniW4AiFKSapb5o0nRWnZsk0PQ9vN6eOh6xQfD
-         47mcGXjsM4s3qSLfDdAyDvWNWQDf8Fv/p4HPNGuXm6M8lGoZKxSsZHGpUPl/GnjDGPM7
-         VuPw==
-X-Gm-Message-State: AAQBX9cOvYTUdCzH/7mdM3TneKpi/J3UHyeadThOOJDtZd2WE5XBd1MS
-        vXQCioqEFjSCd8n0BRmHPH3M0Q==
-X-Google-Smtp-Source: AKy350YE88S5jvIQZVnuVpOQq2nScq3LFKtzJGssAQyWtRjo20ViDGBKbgJ3z8i5HVZH0KqvlDK8+A==
-X-Received: by 2002:a2e:b162:0:b0:299:d0b5:cdce with SMTP id a2-20020a2eb162000000b00299d0b5cdcemr6524373ljm.44.1680089520380;
-        Wed, 29 Mar 2023 04:32:00 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id y26-20020a2e321a000000b002934febffe4sm5454811ljy.128.2023.03.29.04.31.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 04:32:00 -0700 (PDT)
-Message-ID: <ab09d5eb-b303-bfa4-4f35-283ab30ffed2@linaro.org>
-Date:   Wed, 29 Mar 2023 13:31:58 +0200
+        Wed, 29 Mar 2023 07:32:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230853C24
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 04:32:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 441EB61CCA
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:32:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2502C433D2;
+        Wed, 29 Mar 2023 11:32:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680089544;
+        bh=g+bWYP2kmf5ZYSDx4o/Kl40M5wU8ZiJuFCe2pEPBl7Q=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=lxCWixa7cyoadUchVEFh4bWRx33ZF/mDjPz03y8ssHd8QjNZwFWQOuUS44OeJrz0q
+         YkHZXQ5xK7cw2bWffeI/PY1XrPPeQI2C8Nv8YbhhRCFW+7DD4dcQzhZCac1vYip4t2
+         BgXq1BpLNvmt6pQtRddlJHswU105nExI8g5vxpNCRFxsDdSG/phn6V8oKcAO4Ei+ad
+         71AzcO7y1x+t+fqXPXFATi2WkAV4+Cc/epSYi5GzzOWYh8+Up/2EBSqiMZzq9Tyry5
+         OfOWFRK0CWOm5Jl60XZKDjIN01KeH9M6mH3p/oYWm8j+Pz2VLwek6FtpkwQmu/9Y0W
+         n3E0O0zXnyYxQ==
+Message-ID: <6f89f0ac34956e7f527c7efa3d162b4a1f5ea71a.camel@kernel.org>
+Subject: Re: 9p caching with cache=loose and cache=fscache
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Josef Bacik <josef@toxicpanda.com>, lucho@ionkov.net,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Amir Goldstein <amir73il@gmail.com>,
+        Pankaj Raghav <p.raghav@samsung.com>
+Date:   Wed, 29 Mar 2023 07:32:22 -0400
+In-Reply-To: <2322056.HEUtEhvpMu@silver>
+References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org>
+         <ZCMmrnmZFcH65Orp@bombadil.infradead.org> <ZCNlWnQTbWoBBPd2@codewreck.org>
+         <2322056.HEUtEhvpMu@silver>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 6/7] arm64: dts: qcom: sa8775p: add the GPU clock
- controller node
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230328193632.226095-1-brgl@bgdev.pl>
- <20230328193632.226095-7-brgl@bgdev.pl>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230328193632.226095-7-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2023-03-29 at 13:19 +0200, Christian Schoenebeck wrote:
+> On Wednesday, March 29, 2023 12:08:26 AM CEST Dominique Martinet wrote:
+> > Luis Chamberlain wrote on Tue, Mar 28, 2023 at 10:41:02AM -0700:
+> > > >   "To speedup things you can also consider to use e.g. cache=3Dloos=
+e instead.
+> > >=20
+> > > My experience is that cache=3Dloose is totally useless.
+> >=20
+> > If the fs you mount isn't accessed by the host while the VM is up, and
+> > isn't shared with another guest (e.g. "exclusive share"), you'll get
+> > what you expect.
+> >=20
+> > I have no idea what people use qemu's virtfs for but this is apparently
+> > common enough that it was recommended before without anyone complaining
+> > since that started being recommended in 2011[1] until now?
+> >=20
+> > [1] https://wiki.qemu.org/index.php?title=3DDocumentation/9psetup&diff=
+=3D2178&oldid=3D2177
+> >=20
+> > (now I'm not arguing it should be recommended, my stance as a 9p
+> > maintainer is that the default should be used unless you know what
+> > you're doing, so the new code should just remove the 'cache=3Dnone'
+> > altogether as that's the default.
+> > With the new cache models Eric is preparing comes, we'll get a new safe
+> > default that will likely be better than cache=3Dnone, there is no reaso=
+n
+> > to explicitly recommend the historic safe model as the default has
+> > always been on the safe side and we have no plan of changing that.)
+>=20
+> It's not that I receive a lot of feedback for what people use 9p for, nor=
+ am I
+> QEMU's 9p maintainer for a long time, but so far contributors cared more =
+about
+> performance and other issues than propagating changes host -> guest witho=
+ut
+> reboot/remount/drop_caches. At least they did not care enough to work on
+> patches.
+>=20
+> Personally I also use cache=3Dloose and only need to push changes host->g=
+uest
+> once in a while.
+>=20
+> > > >    That will deploy a filesystem cache on guest side and reduces th=
+e amount of
+> > > >    9p requests to hosts. As a consequence however guest might not s=
+ee file
+> > > >    changes performed on host side *at* *all*
+> > >=20
+> > > I think that makes it pretty useless, aren't most setups on the guest=
+ read-only?
+> > >=20
+> > > It is not about "may not see", just won't. For example I modified the
+> > > Makefile and compiled a full kernel and even with those series of
+> > > changes, the guest *minutes later* never saw any updates.
+> >=20
+> > read-only on the guest has nothing to do with it, nor has time.
+> >=20
+> > If the directory is never accessed on the guest before the kernel has
+> > been built, you'll be able to make install on the guest -- once, even i=
+f
+> > the build was done after the VM booted and fs mounted.
+> >=20
+> > After it's been read once, it'll stay in cache until memory pressure (o=
+r
+> > an admin action like umount/mount or sysctl vm.drop_caches=3D3) clears =
+it.
+> >=20
+> > I believe that's why it appeared to work until you noticed the issue an=
+d
+> > had to change the mount option -- I'd expect in most case you'll run
+> > make install once and reboot/kexec into the new kernel.
+> >=20
+> > It's not safe for your usecase and cache=3Dnone definitely sounds bette=
+r
+> > to me, but people should use defaults make their own informed decision.
+>=20
+> It appears to me that read-only seems not to be the average use case for =
+9p,
+> at least from the command lines I received. It is often used in combinati=
+on
+> with overlayfs though.
+>=20
+> I (think) the reason why cache=3Dloose was recommended as default option =
+on the
+> QEMU wiki page ages ago, was because of its really poor performance at th=
+at
+> point. I would personally not go that far and discourage people from usin=
+g
+> cache=3Dloose in general, as long as they get informed about the conseque=
+nces.
+> You still get a great deal of performance boost, the rest is for each
+> individual to decide.
+>=20
+> Considering that Eric already has patches for revalidating the cache in t=
+he
+> works, I think the changes I made on the other QEMU wiki page are appropr=
+iate,
+> including the word "might" as it's soon only a matter of kernel version.
+>=20
+> > > >   In the above example the folder /home/guest/9p_setup/ shared of t=
+he
+> > > >   host is shared with the folder /tmp/shared on the guest. We use n=
+o
+> > > >   cache because current caching mechanisms need more work and the
+> > > >   results are not what you would expect."
+> > >=20
+> > > I got a wiki account now and I was the one who had clarified this.
+> >=20
+> > Thanks for helping making this clearer.
+>=20
+> Yep, and thanks for making a wiki account and improving the content there
+> directly. Always appreciated!
+>=20
 
+Catching up on this thread.
 
-On 28.03.2023 21:36, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Add the GPUCC node for sa8775p platforms.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> index 9ab630c7d81b..4c45ad1cc7ff 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> @@ -591,6 +591,18 @@ tcsr_mutex: hwlock@1f40000 {
->  			#hwlock-cells = <1>;
->  		};
->  
-> +		gpucc: clock-controller@3d90000 {
-> +			compatible = "qcom,sa8775p-gpucc";
-> +			reg = <0x0 0x03d90000 0x0 0xa000>;
-> +			clocks = <&gcc GCC_GPU_CFG_AHB_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_GPU_GPLL0_CLK_SRC>,
-> +				 <&gcc GCC_GPU_GPLL0_DIV_CLK_SRC>;
-Without the first clock, as pointed out in the clk review:
+Getting cache coherency right on a network filesystem is quite
+difficult. It's always a balance between correctness and performance.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Some protocols (e.g. CIFS and Ceph) take a very heavy-handed approach to
+try ensure that the caches are always coherent. Basically, these clients
+are only allowed to cache when the server grants permission for it. That
+can have a negative effect on performance, of course.
 
-(that also makes it compatible with the generic gpucc bindings!)
+NFS as a protocol is more "loose", but we've generally beat its cache
+coherency mechanisms into shape over the years, so you don't see these
+sorts of problems there as much. FWIW, NFS uses a sliding time window to
+revalidate the cache, such that it'll revalidate frequently when an
+inodes is changing frequently, but less so when it's more stable.
 
-Konrad
-> +			#clock-cells = <1>;
-> +			#reset-cells = <1>;
-> +			#power-domain-cells = <1>;
-> +		};
-> +
->  		pdc: interrupt-controller@b220000 {
->  			compatible = "qcom,sa8775p-pdc", "qcom,pdc";
->  			reg = <0x0 0x0b220000 0x0 0x30000>,
+9P I haven't worked with as much, but it sounds like it doesn't try to
+keep caches coherent (at least not with cache=3Dloose).
+
+Probably the simplest solution here is to simply unmount/mount before
+you have the clients call "make modules_install && make install". That
+should ensure that the client doesn't have any stale data in the cache=20
+when the time comes to do the reads. A full reboot shouldn't be
+required.
+
+--=20
+Jeff Layton <jlayton@kernel.org>
