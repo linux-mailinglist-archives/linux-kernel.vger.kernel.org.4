@@ -2,86 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3C06CF3EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEDE6CF3E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjC2T7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        id S229845AbjC2T70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjC2T7g (ORCPT
+        with ESMTP id S229481AbjC2T7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:59:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8531BD8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680119923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ecTnf3KeDQi7q3K7p6hKfLoadym9ahVP+2pdGSG48Gg=;
-        b=SIz0GYgC/UBfEHpqZmFeonUyy87DQpjMfJH6RWNW5HEMjKf+wa1wjP0UX4zSMnMq9ooTkr
-        uO6VGKm1SVPqbXUEcop1GJ1c+4lAQAhnurmU/Uglnn2fyXzpMzwNhl1I1DX3VFL8QZ/CeI
-        e8fGCi+u56Rc9/rG8qEeHDrdwDbu4gs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-176-gz5LOUmVOWWK5Iep8J-iEg-1; Wed, 29 Mar 2023 15:58:40 -0400
-X-MC-Unique: gz5LOUmVOWWK5Iep8J-iEg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 29 Mar 2023 15:59:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEBF61AD;
+        Wed, 29 Mar 2023 12:59:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79BCA185A78B;
-        Wed, 29 Mar 2023 19:58:39 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 06C82C15BA0;
-        Wed, 29 Mar 2023 19:58:36 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <6F2985FF-2474-4F36-BD94-5F8E97E46AC2@oracle.com>
-References: <6F2985FF-2474-4F36-BD94-5F8E97E46AC2@oracle.com> <20230329141354.516864-1-dhowells@redhat.com> <20230329141354.516864-41-dhowells@redhat.com>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 40/48] sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6667961DAD;
+        Wed, 29 Mar 2023 19:59:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE040C433EF;
+        Wed, 29 Mar 2023 19:59:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680119957;
+        bh=tucWIjvVAY6oYmk4WMzNkOOTjS2GDIhv/FrLw7TTJI4=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=g84JxOb1v1QRnnQ3CSRXVAy8A5VZF5jYLQ2TE3FSXTjF6/z3gyFEjKCiLgzOr2PFQ
+         i0O4QUT0rJoNRMiIEOZyYaGvV2p+/0YmJERhxCO+qiIRxbmU+nUzBdHs+4z5S3rYcX
+         jVpIKnBVNq3HqnbbwjriwLP06JHLo4wIanEP7lxSmzP4uDP4WhqmqXj2ENZIg6UV8X
+         5NyUOWJTuN9MyuW4cYqkm8yQlXVld6uEl/lai5PGMyiQ2JeI4x1Gm8I8i1YlfDFj4n
+         Cqyr/9T7ztYJmjOUn0mPxxclaQ4/EzrUT/JCsSIxht8QzRA4w2IS6Wf2AXyM19rT0V
+         ATrVCz2q0La+A==
+Message-ID: <343f23076b328089f59820d98cd29dac.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <535891.1680119916.1@warthog.procyon.org.uk>
-Date:   Wed, 29 Mar 2023 20:58:36 +0100
-Message-ID: <535892.1680119916@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230117135459.16868-6-ansuelsmth@gmail.com>
+References: <20230117135459.16868-1-ansuelsmth@gmail.com> <20230117135459.16868-6-ansuelsmth@gmail.com>
+Subject: Re: [PATCH v3 5/6] clk: qcom: clk-rcg2: introduce support for multiple conf for same freq
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Robert Marko <robimarko@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 29 Mar 2023 12:59:15 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chuck,
+Quoting Christian Marangi (2023-01-17 05:54:58)
+> diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
+> index 01581f4d2c39..18f4f7b59f36 100644
+> --- a/drivers/clk/qcom/clk-rcg.h
+> +++ b/drivers/clk/qcom/clk-rcg.h
+> @@ -15,6 +25,8 @@ struct freq_tbl {
+>         u8 pre_div;
+>         u16 m;
+>         u16 n;
+> +       int confs_num;
+> +       const struct freq_conf *confs;
 
-Do you have a simple AF_TLS test to hand?
-
-David
-
+This design is uncommon. I suggest you have a different clk_ops
+structure and/or entire clk_rcg (clk_rcg_fm?) that does things
+differently. Then we don't have to worry that all the other rcg2 clks
+(of which there are many) could be broken by this patch.
