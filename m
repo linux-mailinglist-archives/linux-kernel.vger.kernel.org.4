@@ -2,139 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0BF6CCF30
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 03:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35736CCF37
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 03:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjC2BC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Mar 2023 21:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47648 "EHLO
+        id S229669AbjC2BJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Mar 2023 21:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjC2BC4 (ORCPT
+        with ESMTP id S229493AbjC2BJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Mar 2023 21:02:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9F9272E;
-        Tue, 28 Mar 2023 18:02:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22318B81F81;
-        Wed, 29 Mar 2023 01:02:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D30C4C433EF;
-        Wed, 29 Mar 2023 01:02:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680051766;
-        bh=ESosFi3s37lb372D9H7OIW0PzbS2SAzMSzj4OGLIkD4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Fgbo7i1Wcvok25OISExRLb88d/V7WdhbQBkmbaS8hQhob38S2A1s01QCy5gKt8bPW
-         6q0DPLHL8Qx6mESu+tmuKwQPcNNM7oA4r8gM3cx46yUIY3vSnbuBJ88nY9/otx7AkA
-         9zh+Tno26DPXfKODb3CV3ZbH7ctVe4LUQeUt6b7TBEPe7RSTcrQj8T4g8Nm8my5lm0
-         jcUohizO97uhcYznxfBCygchjSPhaxTbYjTPSikk2lwil99YtaLi7wvbMtuqXE0rzV
-         oE9VSVljG2bd1A95n+1q5KpPOxNf9wUMVCSqDf9iIWtpBg/pz+lUp2mA/b/Lpr2Lnb
-         ijOV/uQjJ5V7w==
-Date:   Tue, 28 Mar 2023 18:02:46 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Ye Bin <yebin@huaweicloud.com>
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yebin10@huawei.com
-Subject: Re: [PATCH v2] xfs: fix BUG_ON in xfs_getbmap()
-Message-ID: <20230329010246.GA4126677@frogsfrogsfrogs>
-References: <20230328142129.2636535-1-yebin@huaweicloud.com>
+        Tue, 28 Mar 2023 21:09:38 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3561FE9;
+        Tue, 28 Mar 2023 18:09:37 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so14531137pjl.4;
+        Tue, 28 Mar 2023 18:09:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680052177; x=1682644177;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rrHmZ9KeqMwcEfZQAmDICbY5pMTadE3RCEsUwj0C8ZA=;
+        b=Ga4K5TN2AUAffev3UvwTLNSZGK9/7ioRyZBBW9AAV1hKFgfajBHEi5HXeoHsplaZTf
+         /yoUJ4/R22maWQYyOFRkRQPpGBLj0P0SR9NLK94t6z3Gm2NXXyD2mfB32s8KaSCKv2JD
+         jY0nLg3jNVrpSIluaI34tVrE7HuMnApxJwQF9Gt37T/traPGUqAjuz6M6QsNZpH4QmUm
+         r61IjQQqNkYnbF1QVX8AnSq06tWrU7qS8hUCyR/EE2akfk/dqzl8daZd3hCKVTDDeEu2
+         mT8bx+5TO1MZ2wqWfngLWK0fQFj8BKaoCwFNjd1tBwxZ7tUW1KldztcSgXCcbTniA0FQ
+         vvtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680052177; x=1682644177;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rrHmZ9KeqMwcEfZQAmDICbY5pMTadE3RCEsUwj0C8ZA=;
+        b=Wv8mE0Wg/od7xhVCt+lvq0K0YAHyJq99kBH+L8+syhVqpllp2yrtvlTM9aTCc70Rfe
+         GeWKCJdUiEx8EiNi57HuwsZBM7c5jcOQEs9L2TmYrC1DAkX8Gz272q1bAayqQhTx4FHq
+         Dg5h9+4KpsJrAK5zQx1bM37zsmXTuxBNuLrsIoK054Ive+1xyb4gWLny+ymGHECMrf7J
+         sy50xjraPogX1k5YlBAGPNOFUGJmynlMax7VLg60SlTMFFksiYls0Y2YRmVQKzBwt3cI
+         /ljYZyWYHfPNz8Z1chA/M2oY6xJur26apHSUcJxNmiSdfq45knYUw7XP6dB82DjTA/5n
+         svFg==
+X-Gm-Message-State: AAQBX9dfVikUDz2hrwi4NrnpwBCD/pR5+rEZjPGvzu22t2xySLKP9CxY
+        7geGhMpjHO/Q5Xw85hCA4oHnZgRXlCM=
+X-Google-Smtp-Source: AKy350ZyapWAKd4r51e2CPtGHPVUH757kF8rYkoC9VCVAVxJc5UcTeTcotvbAo4plSqSZwSserLk5w==
+X-Received: by 2002:a17:903:11d2:b0:1a1:bff4:4a06 with SMTP id q18-20020a17090311d200b001a1bff44a06mr22531010plh.24.1680052176887;
+        Tue, 28 Mar 2023 18:09:36 -0700 (PDT)
+Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id d2-20020a170902b70200b0019e31e5f7f9sm21762127pls.71.2023.03.28.18.09.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 18:09:36 -0700 (PDT)
+Message-ID: <9f9c61d0-ee89-fcd7-3df5-dd0264651960@gmail.com>
+Date:   Tue, 28 Mar 2023 18:09:34 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328142129.2636535-1-yebin@huaweicloud.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 5.15 000/146] 5.15.105-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230328142602.660084725@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230328142602.660084725@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 10:21:29PM +0800, Ye Bin wrote:
-> From: Ye Bin <yebin10@huawei.com>
-> 
-> There's issue as follows:
-> XFS: Assertion failed: (bmv->bmv_iflags & BMV_IF_DELALLOC) != 0, file: fs/xfs/xfs_bmap_util.c, line: 329
-> ------------[ cut here ]------------
-> kernel BUG at fs/xfs/xfs_message.c:102!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 14612 Comm: xfs_io Not tainted 6.3.0-rc2-next-20230315-00006-g2729d23ddb3b-dirty #422
-> RIP: 0010:assfail+0x96/0xa0
-> RSP: 0018:ffffc9000fa178c0 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff888179a18000
-> RDX: 0000000000000000 RSI: ffff888179a18000 RDI: 0000000000000002
-> RBP: 0000000000000000 R08: ffffffff8321aab6 R09: 0000000000000000
-> R10: 0000000000000001 R11: ffffed1105f85139 R12: ffffffff8aacc4c0
-> R13: 0000000000000149 R14: ffff888269f58000 R15: 000000000000000c
-> FS:  00007f42f27a4740(0000) GS:ffff88882fc00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000b92388 CR3: 000000024f006000 CR4: 00000000000006e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  xfs_getbmap+0x1a5b/0x1e40
->  xfs_ioc_getbmap+0x1fd/0x5b0
->  xfs_file_ioctl+0x2cb/0x1d50
->  __x64_sys_ioctl+0x197/0x210
->  do_syscall_64+0x39/0xb0
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> Above issue may happen as follows:
->          ThreadA                       ThreadB
-> do_shared_fault
->  __do_fault
->   xfs_filemap_fault
->    __xfs_filemap_fault
->     filemap_fault
->                              xfs_ioc_getbmap -> Without BMV_IF_DELALLOC flag
-> 			      xfs_getbmap
-> 			       xfs_ilock(ip, XFS_IOLOCK_SHARED);
-> 			       filemap_write_and_wait
->  do_page_mkwrite
->   xfs_filemap_page_mkwrite
->    __xfs_filemap_fault
->     xfs_ilock(XFS_I(inode), XFS_MMAPLOCK_SHARED);
->     iomap_page_mkwrite
->      ...
->      xfs_buffered_write_iomap_begin
->       xfs_bmapi_reserve_delalloc -> Allocate delay extent
->                               xfs_ilock_data_map_shared(ip)
-> 	                      xfs_getbmap_report_one
-> 			       ASSERT((bmv->bmv_iflags & BMV_IF_DELALLOC) != 0)
-> 	                        -> trigger BUG_ON
-> 
-> As xfs_filemap_page_mkwrite() only hold XFS_MMAPLOCK_SHARED lock, there's
-> small window mkwrite can produce delay extent after file write in xfs_getbmap().
-> To solve above issue, just skip delalloc extents.
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> ---
->  fs/xfs/xfs_bmap_util.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/xfs/xfs_bmap_util.c b/fs/xfs/xfs_bmap_util.c
-> index a09dd2606479..d2a109ceb922 100644
-> --- a/fs/xfs/xfs_bmap_util.c
-> +++ b/fs/xfs/xfs_bmap_util.c
-> @@ -322,7 +322,8 @@ xfs_getbmap_report_one(
->  		 * extents.
->  		 */
->  		if (got->br_startoff < XFS_B_TO_FSB(ip->i_mount, XFS_ISIZE(ip)))
-> -			ASSERT((bmv->bmv_iflags & BMV_IF_DELALLOC) != 0);
-> +			if (!(bmv->bmv_iflags & BMV_IF_DELALLOC))
-> +				return 0;
 
-Why only hide the delalloc mapping if it's below EOF?
 
---D
-
->  
->  		p->bmv_oflags |= BMV_OF_DELALLOC;
->  		p->bmv_block = -2;
-> -- 
-> 2.31.1
+On 3/28/2023 7:41 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.105 release.
+> There are 146 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
+> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.105-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
