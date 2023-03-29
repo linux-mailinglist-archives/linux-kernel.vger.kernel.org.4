@@ -2,139 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3278B6CD909
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 931DB6CD913
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 14:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjC2MEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 08:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
+        id S229957AbjC2MFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 08:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjC2MEr (ORCPT
+        with ESMTP id S229652AbjC2MFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 08:04:47 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1613EC0;
-        Wed, 29 Mar 2023 05:04:44 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id DAB2E41F46;
-        Wed, 29 Mar 2023 12:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1680091482;
-        bh=Yfc+fy732lyQt6gGO91ACOiJTuz48vubsBwwxur11wo=;
-        h=From:Subject:Date:To:Cc;
-        b=RZsZOcVUZ0d9GrN3HSV+yS/VF+QXLp1kfu39MoxlhGN/tRe9g3HF5clXxWd5+sQ1D
-         6l/135hq9v87EpOrWZAlv0m2h4hNj0X2TnveirP86Yjxzdz5c0dJI+q8PrdBfvm9op
-         54Tfj5rPOtnfESJG8aOIewkmrt4YRKHP076/w6cHbUYHfCzhqXJMewFvU5EJeluIX/
-         frhEMujTHtLk8RNStmsrS7EdwqCyjyew9dPZGXZbT8IQr0O2rUfcr35BPvS767ZOHJ
-         xEwO8iFFUJVccSY7IspXmc2U/qNwlZIgSxHD8HyhoHImm8ke6w3DQ4iIkMbJQeV1ud
-         sNpQKnmR3sEtQ==
-From:   Asahi Lina <lina@asahilina.net>
-Subject: [PATCH v2 0/6] rust: error: Add missing wrappers to convert
- to/from kernel error codes
-Date:   Wed, 29 Mar 2023 21:04:32 +0900
-Message-Id: <20230224-rust-error-v2-0-3900319812da@asahilina.net>
+        Wed, 29 Mar 2023 08:05:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6D2049F1;
+        Wed, 29 Mar 2023 05:05:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5DAB1FB;
+        Wed, 29 Mar 2023 05:05:53 -0700 (PDT)
+Received: from bogus (unknown [10.57.52.160])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42F203F6C4;
+        Wed, 29 Mar 2023 05:05:06 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 13:04:32 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        vincent.guittot@linaro.org, tarek.el-sherbiny@arm.com,
+        nicola.mazzucato@arm.com, souvik.chakravarty@arm.com,
+        wleavitt@marvell.com, wbartczak@marvell.com
+Subject: Re: [PATCH v2 1/3] firmware: arm_scmi: Refactor powercap get/set
+ helpers
+Message-ID: <20230329120432.ao36v536sdwqi6e5@bogus>
+References: <20230309140724.2152712-1-cristian.marussi@arm.com>
+ <20230309140724.2152712-2-cristian.marussi@arm.com>
+ <CAJZ5v0ixFvJ6akSMZmcUsg1n_kufq_WonWhS+ef=ps1FXKqUGQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFApJGQC/22NywrCMBBFf0WydkoeYltX/od0MY0TMyCpTGpQS
- v/dtGuX514OZ1GZhCmry2FRQoUzT6mCPR6Uj5geBHyvrKy2Tlt7AnnnGUhkEgi2a00Yfa/boKo
- wYiYYBZOPm1LOjQPxZrteQoE/e+c2VI6c50m+e7aYbf1bKAY0hC702GPXOu2umDHykxM2iWY1r
- Ov6A000rsTDAAAA
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>
-Cc:     Fox Chen <foxhlchen@gmail.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, Asahi Lina <lina@asahilina.net>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680091478; l=2539;
- i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=Yfc+fy732lyQt6gGO91ACOiJTuz48vubsBwwxur11wo=;
- b=8VE+1hLmLEQnXlFMHNZhxNihXuC0OkabmAzruuyZSoUBNOiSuZ+ZUQRAg8jRCuemCmMlA2u6y
- Q+qrzSX3jGGCk8KWS1XACLzHsbSjen8KmmkIl+iBu49gaX4kKzYyUO5
-X-Developer-Key: i=lina@asahilina.net; a=ed25519;
- pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0ixFvJ6akSMZmcUsg1n_kufq_WonWhS+ef=ps1FXKqUGQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi everyone!
+On Mon, Mar 27, 2023 at 07:06:36PM +0200, Rafael J. Wysocki wrote:
+> On Thu, Mar 9, 2023 at 3:09 PM Cristian Marussi
+> <cristian.marussi@arm.com> wrote:
+> >
+> > Refactor SCMI powercap internal get/set helpers.
+> >
+> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> 
+> I can apply this series if I get an ACK or preferably Reviewed-by:
+> from an SCMI person.
+>
 
-This series is part of the set of dependencies for the drm/asahi
-Apple M1/M2 GPU driver.
+Sorry, I had looked at this and just delayed asking you about your preference.
+I am fine to take it or else
 
-It adds a bunch of missing wrappers in kernel::error, which are useful
-to convert to/from kernel error codes. Since these will be used by many
-abstractions coming up soon, I think it makes sense to merge them as
-soon as possible instead of bundling them with the first user. Hence,
-they have allow() tags to silence dead code warnings. These can be
-removed as soon as the first user is in the kernel crate.
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com> (for SCMI parts)
 
-Getting this in first allows the subsequent abstractions to be merged in
-any order, so we don't have to worry about piecewise rebasing and fixing
-conflicts in the Error wrappers. See [1] for a complete tree with the DRM
-abstractions and all other miscellaneous work-in-progress prerequisites
-rebased on top of mainline.
+Please ack 3/3 if you prefer me to take it once you are happy with it.
 
-Most of these have been extracted from the rust-for-linux/rust branch,
-with author attribution to the first/primary author and Co-developed-by:
-for everyone else who touched the code.
-
-Attribution changes:
-- One of the patches had Miguel's old email in the tags, updated that per
-  his request.
-- Wedson's email changed from @google.com to @gmail.com (I understand
-  this is the current one).
-
-Sven: There is one patch from you in this series, do you want to send it
-yourself directly? I understand Wedson and Miguel are okay with me
-sending stuff on their behalf.
-
-[1] https://github.com/Rust-for-Linux/linux/pull/969/commits
-
-Signed-off-by: Asahi Lina <lina@asahilina.net>
----
-Changes in v2:
-- Removed the redundant _kernel from various function names.
-- Replaced the from_result!{} macro with a from_result() function taking a closure.
-- Link to v1: https://lore.kernel.org/r/20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net
-
----
-Asahi Lina (2):
-      rust: error: Rename to_kernel_errno() -> to_errno()
-      rust: error: Add Error::to_ptr()
-
-Miguel Ojeda (1):
-      rust: error: Add Error::from_errno()
-
-Sven Van Asbroeck (1):
-      rust: error: Add a helper to convert a C ERR_PTR to a `Result`
-
-Wedson Almeida Filho (2):
-      rust: error: Add to_result() helper
-      rust: error: Add from_result() helper
- rust/helpers.c        |  19 ++++++++
- rust/kernel/error.rs  | 126 +++++++++++++++++++++++++++++++++++++++++++++++++-
- rust/macros/module.rs |   2 +-
- 3 files changed, 145 insertions(+), 2 deletions(-)
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230224-rust-error-f2871fbc907f
-
-Thank you,
-~~ Lina
-
+-- 
+Regards,
+Sudeep
