@@ -2,70 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C49C6CF7C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61336CF7CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 01:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbjC2Xx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 19:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S231292AbjC2Xzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 19:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbjC2Xx2 (ORCPT
+        with ESMTP id S230474AbjC2Xzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 19:53:28 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF091FD2;
-        Wed, 29 Mar 2023 16:53:27 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id EB2DC68C7B; Thu, 30 Mar 2023 01:53:22 +0200 (CEST)
-Date:   Thu, 30 Mar 2023 01:53:22 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Christoph Hellwig <hch@lst.de>, martin@omnibond.com,
-        axboe@kernel.dk, minchan@kernel.org, akpm@linux-foundation.org,
-        hubcap@omnibond.com, viro@zeniv.linux.org.uk,
-        senozhatsky@chromium.org, brauner@kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        mcgrof@kernel.org, linux-block@vger.kernel.org,
-        gost.dev@samsung.com, linux-mm@kvack.org, devel@lists.orangefs.org
-Subject: Re: [PATCH 1/5] zram: remove the call to page_endio in the bio
- end_io handler
-Message-ID: <20230329235322.GA1891@lst.de>
-References: <20230328112716.50120-1-p.raghav@samsung.com> <CGME20230328112718eucas1p214a859cfb3d7b45523356bcc16c373b1@eucas1p2.samsung.com> <20230328112716.50120-2-p.raghav@samsung.com> <ZCMFcTHkTe/1WapL@casper.infradead.org> <5865a840-cb5e-ead1-f168-100869081f84@samsung.com>
+        Wed, 29 Mar 2023 19:55:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA7159EF
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 16:55:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680134102;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YDvzU53CPeswLit/FMHu3YOxwiNaBZwdjQxKehJieKw=;
+        b=M4SuFubxzbQ1GDT8aKx1QmIIYx2Luv02KE16TChtGPwnmK5AIr6ZgrD9ahggesiKOpCA/C
+        bIBAON2s2KGzwPlVKqSxTYLD//3+KjMlpjTmtaMnThH7wyYEEmnrZKkauJpksr+3gW66mF
+        GEbSd3AC/nM3SBJ2HaHPl6LjlNmyggA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-gjbwPLEMPuu8BeS56HR0nQ-1; Wed, 29 Mar 2023 19:54:56 -0400
+X-MC-Unique: gjbwPLEMPuu8BeS56HR0nQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C88EE3C0DDA1;
+        Wed, 29 Mar 2023 23:54:55 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.161])
+        by smtp.corp.redhat.com (Postfix) with SMTP id AFE50492C3E;
+        Wed, 29 Mar 2023 23:54:51 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 30 Mar 2023 01:54:48 +0200 (CEST)
+Date:   Thu, 30 Mar 2023 01:54:43 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Gregory Price <gregory.price@memverge.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, avagin@gmail.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, krisman@collabora.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Corbet <corbet@lwn.net>, shuah <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, tongtiangen@huawei.com,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v14 1/4] asm-generic,arm64: create task variant of
+ access_ok
+Message-ID: <20230329235442.GA10790@redhat.com>
+References: <20230328164811.2451-1-gregory.price@memverge.com>
+ <20230328164811.2451-2-gregory.price@memverge.com>
+ <20230329151515.GA913@redhat.com>
+ <9a456346-e207-44e1-873e-40d21334e01b@app.fastmail.com>
+ <20230329160322.GA4477@redhat.com>
+ <ZCO20bzX/IB8J6Gp@memverge.com>
+ <20230329171322.GB4477@redhat.com>
+ <ZCPOpClZ3hOQCs7a@memverge.com>
+ <20230329175850.GA8425@redhat.com>
+ <ZCQMsWNfkMJ0xHSy@memverge.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5865a840-cb5e-ead1-f168-100869081f84@samsung.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZCQMsWNfkMJ0xHSy@memverge.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 06:17:11PM +0200, Pankaj Raghav wrote:
-> >>  	if (!parent)
-> >> -		bio->bi_end_io = zram_page_end_io;
-> >> +		bio->bi_end_io = zram_read_end_io;
-> > 
-> > Can we just do:
-> > 
-> > 	if (!parent)
-> > 		bio->bi_end_io = bio_put;
-> > 
-> 
-> Looks neat. I will wait for Christoph to comment whether just a bio_put() call
-> is enough in this case for non-chained bios before making this change for the
-> next version.
+On 03/29, Gregory Price wrote:
+>
+> Last note on this before I push up another patch set.
+>
+> The change from __get_user to get_user also introduces a call to
+> might_fault() which adds a larger callstack for every syscall /
+> dispatch.  This turns into a might_sleep and might_reschedule, which
+> represent a very different pattern of execution from before.
 
-It is enough in the sense of keeping the previous behavior there.
-It is not enough in the sense that the code is still broken as the
-callers is never notified of the read completion.  So I think for the
-purpose of your series we're fine and can go ahead with this version
-for now.
+might_fault() is nop unless CONFIG_PROVE_LOCKING || DEBUG_ATOMIC_SLEEP.
 
-> 
-> Thanks.
----end quoted text---
+Again, I won't really argue with task_access_ok(). Just I am not sure
+2/4 gives enough justification for this new helper with unclear semantics
+(until we ensure that access_ok() doesn't depend on current).
+
+Oleg.
+
