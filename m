@@ -2,63 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7115C6CD47E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464FC6CD47D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 10:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjC2IWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 04:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
+        id S231173AbjC2IWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 04:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjC2IWU (ORCPT
+        with ESMTP id S231152AbjC2IWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:22:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CC055AA;
-        Wed, 29 Mar 2023 01:21:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77C1361B6F;
-        Wed, 29 Mar 2023 08:21:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 660B2C433EF;
-        Wed, 29 Mar 2023 08:21:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680078077;
-        bh=L7M8cQ0jg7DMH500oLLnbXfvL+QBd7BT7CRReV2qpqU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VmaPjIjyUp1XvwifPDmAvv2blfzbm8MAMNkRMiP6JqYMtp6VWdYGRxZoV10oX0Zwd
-         m3XlQYMGhtRONXhB+cwoguuy4Hg6m0ZypRVuEQcyRv8fKkoOAQ9ilw/CwND9AcBAKo
-         fEupgqGvtUI/mehRBFRpqLo7mW57sjbb4R21MZaLAt04ZxyBYp9SdtFQukjFif4O0/
-         6bIfg2Nn/Z2hjjT9bbaGBgO6P16TCjXyYeWajLPJuDfzVR8n+4vW9ZVHo31PYzAEM1
-         oRJVsYtlpoirb+aFqJSQqidB45fgrLBQHCYzxXLESYfod9u+dc/rgHDqy0FuhyTdki
-         25EED9IyJ5xAQ==
-Message-ID: <9acd96ab-7987-5cdc-e65b-9f055948eb4f@kernel.org>
-Date:   Wed, 29 Mar 2023 11:21:11 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v7 3/3] remoteproc: k3-r5: Use separate compatible string
- for TI AM62x SoC family
+        Wed, 29 Mar 2023 04:22:18 -0400
+Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021026.outbound.protection.outlook.com [52.101.62.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E13B5B82;
+        Wed, 29 Mar 2023 01:21:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nxzlDAXKT8Jyv1QYdXvE2WKnvmvVHBTjaJ8L7u+VSLXQalfE+jX8qHtv2k5jRccK+mQOPjqMBFgzAEtpmRyUiAdMF7Ppm+9ocRXP1wab9c6PawNmp/SJF/bu7l28j0xkGvvw1lWAzblzsc5wrwtd1Rb2BgMWMfcQYlafkU0Wz31c6fckVqgx5RXMtjPQPGCL4qabiqobcGbgxDuCUZ19zIpUVVJvK/tzSVIBCSpaEtuQYiXoN+PVzwlANuAybz6A2ghw9Haa5MUx6FlpWyvuklGlupAfD87cq+L9fDWLq75JiXLKG7BpbwmxiLtanc2h5+jxLhx0KrqnDkKTegGciQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+i4kCWKvgSVf0AOw9WBGGh7yOWARMa275NXQbjbxoMU=;
+ b=afrbOixHY/Wn37tSepYAaWK8x94Xo8yBx1hZQtDguFnW8aHgw6U8HmQCV5cFxT8z2PSt5/mCWEsz+bEKJPFtC30sGu3aYoo6Gz3w9WtUO1qYklCUZZt+7iNOMkz1rwxXX9v/lSLbRz+fJaf0sBCoKeax6Yn9CcihRvxWCATGHITuqIW8tJkMSuJhkqq4IPzXsFCuofKkSJ+Wo5l2ENq7dhldTjzzpIyQierC74ap1InqFy+9F9k5DbqMU1pxJU0VIJV4y3gZ/DLw1Vy7t6B1ztCoHtqHrqHdQbDFCYF8LoFCN6hsJXOJfePymC+/DSIG1iJENXF0ua/LOYGp+GxTIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+i4kCWKvgSVf0AOw9WBGGh7yOWARMa275NXQbjbxoMU=;
+ b=b0RlnQyx1nrVWDrspw3o/Fj9eM7S1y8CEU8DB12Mnxqj2aFXRKeAMMgIEiPJfsEasiMHJwy67Feuy4fwKPuGZrOaCdo58UIV4V1TH6lQ/ov/oo3qlXGuiJvgIpwpJkZvPp8h/Js/MpMwIt789FizwK5qZQnJEPNZ6OOwoiQiCd8=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by SN6PR2101MB1358.namprd21.prod.outlook.com (2603:10b6:805:107::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.5; Wed, 29 Mar
+ 2023 08:21:15 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::2e52:d6aa:9a99:500a]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::2e52:d6aa:9a99:500a%5]) with mapi id 15.20.6277.010; Wed, 29 Mar 2023
+ 08:21:15 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Long Li <longli@microsoft.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Jake Oshins <jakeo@microsoft.com>,
+        "kuba@kernel.org" <kuba@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "saeedm@nvidia.com" <saeedm@nvidia.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>
+CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH 1/6] PCI: hv: fix a race condition bug in
+ hv_pci_query_relations()
+Thread-Topic: [PATCH 1/6] PCI: hv: fix a race condition bug in
+ hv_pci_query_relations()
+Thread-Index: AQHZYTEw5EIgYDC+IUOtVNpvTo0Kxa8QZ0BAgAD9eoA=
+Date:   Wed, 29 Mar 2023 08:21:14 +0000
+Message-ID: <SA1PR21MB13356B7C8DD4DA9CC20A880ABF899@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20230328045122.25850-1-decui@microsoft.com>
+ <20230328045122.25850-2-decui@microsoft.com>
+ <PH7PR21MB32632E889A7F589C32FE51EDCE889@PH7PR21MB3263.namprd21.prod.outlook.com>
+In-Reply-To: <PH7PR21MB32632E889A7F589C32FE51EDCE889@PH7PR21MB3263.namprd21.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Devarsh Thakkar <devarsht@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     andersson@kernel.org, devicetree@vger.kernel.org,
-        p.zabel@pengutronix.de, linux-remoteproc@vger.kernel.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s-anna@ti.com, hnagalla@ti.com,
-        praneeth@ti.com, nm@ti.com, vigneshr@ti.com, a-bhatia1@ti.com,
-        j-luthra@ti.com
-References: <20230310162544.3468365-1-devarsht@ti.com>
- <20230310162544.3468365-4-devarsht@ti.com> <20230317161757.GA2471094@p14s>
- <f08e550b-2f15-0f84-c0ca-05e0b803481a@kernel.org>
- <1a24f99a-99c1-bf00-e5e7-1085cfd8faf5@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <1a24f99a-99c1-bf00-e5e7-1085cfd8faf5@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=90dfa640-62da-43df-b474-aa70d6393cab;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-03-28T16:46:18Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|SN6PR2101MB1358:EE_
+x-ms-office365-filtering-correlation-id: d2502342-feba-4e15-a150-08db302e9030
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8De/SFVB5HPsZnbTZxRY7aedKoj3th48ijOWS6G2VdaKEreeRcV+ditDZXHGuRkCMeqr1n+SO0oAyKMfFhoPJU42NwTCX1Q/y8OHAJENR/YxcmMpmF6+zm4FuhGCEvGQSK7KiFKqPM4OoIZcfhMAcMYVDhvwO06eRaJnfLag/IR1dADfqVyymIdkIRzYFK8jwlqBIUUBncG3+yyVXN6c3uyPCCuDJfSNJSqM8gB+dWqt1fniQlpC0hwLcMjSIaEVKNb4vzFRrtgpqidewtxXErzF3FF3xW4QpUxqcNIxZQ/eNzk6b1nDISaZrkuW64vND55vRM8b45D4Fx90MOifKRaVLLGKY/zCrr4ILqsc/+SahyN5tkNhQHfpFtv8D5XLku0G7TEWjehQ9igsyHT/KkaXu0blD/71kLtHo/ODeLZv8QjWMI1625f7ywsxBczGirpo1ezVPwTemmP6b4KoC3BFKAbcjeRMYjgB8gKiy4Pc7/dpjky4C/8HB2CQc8rvEUlXMfe8B4pOR9RWmQ4/Wr+FuE5KzFSbF+tz7xHQWAcjxHAZ0GNEudYbP3VaLGT+kleu1bHvV9twUjaPykV8+2yc2Hq/9kZsIupfhUgpq9Dypd45BKPayVu2rRzhFJFadkLw6dCrCbUHH1rFl3ODMxouP/Bm6NP3VSijserSJRAha6wv5vmN3KnsV6ZdUySw
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(136003)(366004)(396003)(346002)(451199021)(478600001)(5660300002)(64756008)(66476007)(66446008)(66946007)(76116006)(66556008)(10290500003)(4326008)(316002)(921005)(52536014)(82950400001)(82960400001)(122000001)(7416002)(41300700001)(8936002)(186003)(54906003)(26005)(83380400001)(7696005)(8676002)(9686003)(71200400001)(110136005)(6506007)(55016003)(38070700005)(8990500004)(33656002)(38100700002)(86362001)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6HvROvVUHOOq6SnpUtfYj3R/KrrG0E1LHj51QF4YbIzZD1VoN/0UIfH7UhQ4?=
+ =?us-ascii?Q?HxaaHFhA/sIti6UfroQt5/iEp1ZFW732KcW77vD47Jl14RhOQocxmK3tfFVi?=
+ =?us-ascii?Q?kOK8kpNU1W0an8U2bT5REQvo/vrAbRoc99GSO635YLbdY72wluBCvmA3j3M/?=
+ =?us-ascii?Q?Q6GeARqvcKyOE6hv7MW2olOrxNtpJ+0gjD7LtRlePXlSvxuqOH/nnqOFA4TZ?=
+ =?us-ascii?Q?XrBYxNENeSN/2bXqqWe9fvanEcnSmD2EslFLFN5WpKL7BwxsaTlJcdpOWPRL?=
+ =?us-ascii?Q?TujwQ4FyU6o93PgDuYhcypvD0is/Hy8POi1GKQW+4OGQRiL5ghwjNAxGcKKB?=
+ =?us-ascii?Q?rg7n4g4PnxHbFyWYKCPdHP3VQrLHuMVvCmRX3tHE1uUEacUM0wMiZ8J+Dh0W?=
+ =?us-ascii?Q?m2SB+0Tp+rH9DGU1c8kjMdnkWyJ3DJzdWsPAEwoJM9ax3wh2rln/F2DTxRi1?=
+ =?us-ascii?Q?SgNU4hd0eYjenhUjyh5qRpnajBGtiCS6dPBPa/7Igf+ozdJF8iYCeUEALQhi?=
+ =?us-ascii?Q?A5NHFAVpAeHcZ3YtBZhzaq3xdl0ekD8G+EF04gjwHSaOXwpQ5n+3Yyx3GX21?=
+ =?us-ascii?Q?//K5FNnPOZREOGBg6xmF9BAs0eCcf3JPl5R7r6fdrc6PYE2ruK2wvzLdPGPS?=
+ =?us-ascii?Q?AjHsufQK9KwEFkxARxsJQVH/hVm48AJFZ2idzkImoHvdZEktcCFxQEYuRCsl?=
+ =?us-ascii?Q?mKTGQ3XgcaNz2IWZWWYWSqCIzkZjHuCBcKErSdaD7YawNcarocI4A5OBJrZ+?=
+ =?us-ascii?Q?MHaSjm9h6a1UuLwF4ZeG/qAHLQi4WF6vvnFoAnPuC74gjDAWVZmNpXlGyVpW?=
+ =?us-ascii?Q?wZH3TdEINPOJW7OYRCceuZ4OZHSRGhng9yC49tf7Xrnku7mGE8QLBI1kfsQO?=
+ =?us-ascii?Q?la44eD91Vn8MpFMaozl1oGklyFSv3Rcq+tCNTAFloonCBhWWlVQzNtHlK0/4?=
+ =?us-ascii?Q?whVMG3SHE83m46HPrgA/P6FT8HUUWULLUarLVRLZ/Pzw/HV9313qjxv/eMxe?=
+ =?us-ascii?Q?chnpV7CRAU77z472g6P47BbOn0E8GLqv1Ulyw1/i75Dz2XCBLzL473Qk4Iaj?=
+ =?us-ascii?Q?f4K0QfKB+4BkIgssxjlsK6TJL8v51eRiia951yqV3CH5l4Eef+khaFCrJlMR?=
+ =?us-ascii?Q?US1dwhv42BTPPzWhMrSDmv6sJZnbyVkiwDtiiQW8CUhwwaiAl8O7k6XVQV02?=
+ =?us-ascii?Q?J/gfPsUvRA2BklSd1KXkWTro3EPcWxenb+0My0Yc0ASJwSDM3RZNUZbFLbHo?=
+ =?us-ascii?Q?IgUEteJpWrnfJ4SQTC9Uii7ecHOsCHvHeDSaVfXyI0WRv58zLrNzScL85DdM?=
+ =?us-ascii?Q?KEurhWHJZtwFtu0WsvxWXMw/rdGedLwcjg0YM3PJULmvm7cCJMt12qv+6QP4?=
+ =?us-ascii?Q?JBoGUYA5kFHWd2raJW2SdCzHm3Y0W08znQDwuwV9FNc2DzDRLYE3hqzi1X6Z?=
+ =?us-ascii?Q?iwvvFjNxFvFwECQXQaGZZaBrbzpTh/hwIEW/x9SFJr1+3E89RXk/NRbyoy9Q?=
+ =?us-ascii?Q?W5AFmifYvMdp60jYQh/kBoRYKI/UKzXskj7cm5Cbbo5cts2XCPdiTMVXBdsm?=
+ =?us-ascii?Q?LZgmWG1sBArQPHMb4UGC+zPbqiQt1rQIoGgKQOm3?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2502342-feba-4e15-a150-08db302e9030
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2023 08:21:14.8658
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: O7mrIwHVtmikXvbq4wgaxYZxpoMCeBRks6Livw8gJziIUKEIuxGliK09c1ZDiqMglxctD2vcusJUsuXEDv5ndg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR2101MB1358
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,236 +139,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> From: Long Li <longli@microsoft.com>
+> Sent: Tuesday, March 28, 2023 9:49 AM
+> > --- a/drivers/pci/controller/pci-hyperv.c
+> > +++ b/drivers/pci/controller/pci-hyperv.c
+> > @@ -3308,6 +3308,19 @@ static int hv_pci_query_relations(struct
+> hv_device
+> > *hdev)
+> >  	if (!ret)
+> >  		ret =3D wait_for_response(hdev, &comp);
+> >
+> > +	/*
+> > +	 * In the case of fast device addition/removal, it's possible that
+> > +	 * vmbus_sendpacket() or wait_for_response() returns -ENODEV but
+> > we
+> > +	 * already got a PCI_BUS_RELATIONS* message from the host and the
+> > +	 * channel callback already scheduled a work to hbus->wq, which can
+> > be
+> > +	 * running survey_child_resources() -> complete(&hbus-
+> > >survey_event),
+> > +	 * even after hv_pci_query_relations() exits and the stack variable
+> > +	 * 'comp' is no longer valid. This can cause a strange hang issue
+> > +	 * or sometimes a page fault. Flush hbus->wq before we exit from
+> > +	 * hv_pci_query_relations() to avoid the issues.
+> > +	 */
+> > +	flush_workqueue(hbus->wq);
+>=20
+> Is it possible for PCI_BUS_RELATIONS to be scheduled arrive after calling
+> flush_workqueue(hbus->wq)?
 
+It's possible, but that doesn't matter:
 
-On 28/03/2023 19:08, Devarsh Thakkar wrote:
-> Hi Roger,
-> 
-> On 28/03/23 13:22, Roger Quadros wrote:
->> Hi Devarsh,
->>
->> On 17/03/2023 18:17, Mathieu Poirier wrote:
->>> On Fri, Mar 10, 2023 at 09:55:44PM +0530, Devarsh Thakkar wrote:
->>>> AM62 and AM62A SoCs use single core R5F which is a new scenario
->>>> different than the one being used with CLUSTER_MODE_SINGLECPU which is
->>>> for utilizing a single core from a set of cores available in R5F cluster
->>>> present in the SoC.
->>>>
->>>> To support this single core scenario map it with newly defined
->>>> CLUSTER_MODE_SINGLECORE and use it when compatible is set to
->>>> ti,am62-r5fss.
->>>>
->>>> Also set PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE config for
->>>> CLUSTER_MODE_SINGLECORE too as it is required by R5 core when it is
->>>> being as general purpose core instead of device manager.
->>>>
->>>> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
->>>> ---
->>>> V2:
->>>> - Fix indentation and ordering issues as per review comments
->>>> V3:
->>>> - Change CLUSTER_MODE_NONE value to -1
->>>> V4:
->>>> - No change
->>>> V5:
->>>> - No change (fixing typo in email address)
->>>> V6:
->>>>     - Use CLUSTER_MODE_SINGLECORE for AM62x
->>>>     - Set PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE for single core.
->>>> V7:
->>>>     - Simplify and rebase on top of base commit "[PATCH v7] remoteproc: k3-r5: Simplify cluster
->>>>       mode setting"
->>>> ---
->>>>   drivers/remoteproc/ti_k3_r5_remoteproc.c | 59 +++++++++++++++++++-----
->>>>   1 file changed, 48 insertions(+), 11 deletions(-)
->>>>
->>>> diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
->>>> index c2ec0f432921..df32f6bc4325 100644
->>>> --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
->>>> +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
->>>> @@ -71,14 +71,16 @@ struct k3_r5_mem {
->>>>   /*
->>>>    * All cluster mode values are not applicable on all SoCs. The following
->>>>    * are the modes supported on various SoCs:
->>>> - *   Split mode      : AM65x, J721E, J7200 and AM64x SoCs
->>>> - *   LockStep mode   : AM65x, J721E and J7200 SoCs
->>>> - *   Single-CPU mode : AM64x SoCs only
->>>> + *   Split mode       : AM65x, J721E, J7200 and AM64x SoCs
->>>> + *   LockStep mode    : AM65x, J721E and J7200 SoCs
->>>> + *   Single-CPU mode  : AM64x SoCs only
->>>> + *   Single-Core mode : AM62x, AM62A SoCs
->>>>    */
->>>>   enum cluster_mode {
->>>>       CLUSTER_MODE_SPLIT = 0,
->>>>       CLUSTER_MODE_LOCKSTEP,
->>>>       CLUSTER_MODE_SINGLECPU,
->>>> +    CLUSTER_MODE_SINGLECORE
->>
->> What is the difference in device driver behaviour between
->> SINGLECPU and SINGLECORE?
->>
-> Yeah there is quite a bit of common code flow between the two but the fundamental difference is that you use CLUSTER_MODE_SINGLECPU when
+hv_pci_query_relations() is called only once, and it sets hbus->survey_even=
+t
+to point to the stack variable 'comp'. The first survey_child_resources()
+calls complete() for the 'comp' and sets hbus->survey_event to NULL.
 
-I still didn't get what is the difference between the two from SW point of view.
-What happens if you just use CLUSTER_MODE_SINGLECPU for AM62 SoC?
+When the second survey_child_resources() is called, hbus->survey_event
+is NULL, so survey_child_resources() returns immediately.
 
-> you have two R5F cores but you want to use only single R5F core albeit
-> with using TCM of both the cores whereas CLUSTER_MODE_SINGLECORE is
-> for the scenario where you have single core R5F's only.
-> 
-> Also the bindings for CLUSTER_MODE_SINGLECPU are already upstream so did
-> not want to break them either : https://gitlab.com/linux-kernel/linux-next/-/blob/next-20230328/Documentation/devicetree/bindings/remoteproc/ti%2Ck3-r5f-rproc.yaml#L20.
-> 
-> Regards
-> Devarsh
-> 
->> If there is no difference then you should not introduce
->> a new enum. >
->>>>   };
->>>>     /**
->>>> @@ -86,11 +88,13 @@ enum cluster_mode {
->>>>    * @tcm_is_double: flag to denote the larger unified TCMs in certain modes
->>>>    * @tcm_ecc_autoinit: flag to denote the auto-initialization of TCMs for ECC
->>>>    * @single_cpu_mode: flag to denote if SoC/IP supports Single-CPU mode
->>>> + * @is_single_core: flag to denote if SoC/IP has only single core R5
->>>>    */
->>>>   struct k3_r5_soc_data {
->>>>       bool tcm_is_double;
->>>>       bool tcm_ecc_autoinit;
->>>>       bool single_cpu_mode;
->>>> +    bool is_single_core;
->>>>   };
->>>>     /**
->>>> @@ -838,7 +842,8 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
->>>>         core0 = list_first_entry(&cluster->cores, struct k3_r5_core, elem);
->>>>       if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
->>>> -        cluster->mode == CLUSTER_MODE_SINGLECPU) {
->>>> +        cluster->mode == CLUSTER_MODE_SINGLECPU ||
->>>> +        cluster->mode == CLUSTER_MODE_SINGLECORE) {
->>>>           core = core0;
->>>>       } else {
->>>>           core = kproc->core;
->>>> @@ -877,7 +882,8 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
->>>>            * with the bit configured, so program it only on
->>>>            * permitted cores
->>>>            */
->>>> -        if (cluster->mode == CLUSTER_MODE_SINGLECPU) {
->>>> +        if (cluster->mode == CLUSTER_MODE_SINGLECPU ||
->>>> +            cluster->mode == CLUSTER_MODE_SINGLECORE) {
->>>>               set_cfg = PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE;
->>>>           } else {
->>>>               /*
->>>> @@ -1069,6 +1075,7 @@ static void k3_r5_adjust_tcm_sizes(struct k3_r5_rproc *kproc)
->>>>         if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
->>>>           cluster->mode == CLUSTER_MODE_SINGLECPU ||
->>>> +        cluster->mode == CLUSTER_MODE_SINGLECORE ||
->>>>           !cluster->soc_data->tcm_is_double)
->>>>           return;
->>>>   @@ -1145,6 +1152,8 @@ static int k3_r5_rproc_configure_mode(struct k3_r5_rproc *kproc)
->>>>       if (cluster->soc_data->single_cpu_mode) {
->>>>           mode = cfg & PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE ?
->>>>                   CLUSTER_MODE_SINGLECPU : CLUSTER_MODE_SPLIT;
->>>> +    } else if (cluster->soc_data->is_single_core) {
->>>> +        mode = CLUSTER_MODE_SINGLECORE;
->>>
->>> I have commented twice on this before - whether it is soc_data->single_cpu_mode or
->>> soc_data->is_single_core, I don't want to see them used elsewhere than in a
->>> single function.  Either in probe() or another function, use them once to set
->>> cluster->mode and never again.
->>>
->>> I will silently drop any other patchset that doesn't address this.
->>>
->>>>       } else {
->>>>           mode = cfg & PROC_BOOT_CFG_FLAG_R5_LOCKSTEP ?
->>>>                   CLUSTER_MODE_LOCKSTEP : CLUSTER_MODE_SPLIT;
->>>> @@ -1264,9 +1273,12 @@ static int k3_r5_cluster_rproc_init(struct platform_device *pdev)
->>>>               goto err_add;
->>>>           }
->>>>   -        /* create only one rproc in lockstep mode or single-cpu mode */
->>>> +        /* create only one rproc in lockstep, single-cpu or
->>>> +         * single core mode
->>>> +         */
->>>>           if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
->>>> -            cluster->mode == CLUSTER_MODE_SINGLECPU)
->>>> +            cluster->mode == CLUSTER_MODE_SINGLECPU ||
->>>> +            cluster->mode == CLUSTER_MODE_SINGLECORE)
->>>>               break;
->>>>       }
->>>>   @@ -1709,19 +1721,33 @@ static int k3_r5_probe(struct platform_device *pdev)
->>>>           /*
->>>>            * default to most common efuse configurations - Split-mode on AM64x
->>>>            * and LockStep-mode on all others
->>>> +         * default to most common efuse configurations -
->>>> +         * Split-mode on AM64x
->>>> +         * Single core on AM62x
->>>> +         * LockStep-mode on all others
->>>>            */
->>>> -        cluster->mode = data->single_cpu_mode ?
->>>> +        if (!data->is_single_core)
->>>> +            cluster->mode = data->single_cpu_mode ?
->>>>                       CLUSTER_MODE_SPLIT : CLUSTER_MODE_LOCKSTEP;
->>>> +        else
->>>> +            cluster->mode = CLUSTER_MODE_SINGLECORE;
->>>>       }
->>>>   -    if (cluster->mode == CLUSTER_MODE_SINGLECPU && !data->single_cpu_mode) {
->>>> +    if  ((cluster->mode == CLUSTER_MODE_SINGLECPU && !data->single_cpu_mode) ||
->>>> +         (cluster->mode == CLUSTER_MODE_SINGLECORE && !data->is_single_core)) {
->>>>           dev_err(dev, "Cluster mode = %d is not supported on this SoC\n", cluster->mode);
->>>>           return -EINVAL;
->>>>       }
->>>>         num_cores = of_get_available_child_count(np);
->>>> -    if (num_cores != 2) {
->>>> -        dev_err(dev, "MCU cluster requires both R5F cores to be enabled, num_cores = %d\n",
->>>> +    if (num_cores != 2 && !data->is_single_core) {
->>>> +        dev_err(dev, "MCU cluster requires both R5F cores to be enabled but num_cores is set to = %d\n",
->>>> +            num_cores);
->>>> +        return -ENODEV;
->>>> +    }
->>>> +
->>>> +    if (num_cores != 1 && data->is_single_core) {
->>>> +        dev_err(dev, "SoC supports only single core R5 but num_cores is set to %d\n",
->>>>               num_cores);
->>>>           return -ENODEV;
->>>>       }
->>>> @@ -1763,18 +1789,28 @@ static const struct k3_r5_soc_data am65_j721e_soc_data = {
->>>>       .tcm_is_double = false,
->>>>       .tcm_ecc_autoinit = false,
->>>>       .single_cpu_mode = false,
->>>> +    .is_single_core = false,
->>>>   };
->>>>     static const struct k3_r5_soc_data j7200_j721s2_soc_data = {
->>>>       .tcm_is_double = true,
->>>>       .tcm_ecc_autoinit = true,
->>>>       .single_cpu_mode = false,
->>>> +    .is_single_core = false,
->>>>   };
->>>>     static const struct k3_r5_soc_data am64_soc_data = {
->>>>       .tcm_is_double = true,
->>>>       .tcm_ecc_autoinit = true,
->>>>       .single_cpu_mode = true,
->>>> +    .is_single_core = false,
->>>> +};
->>>> +
->>>> +static const struct k3_r5_soc_data am62_soc_data = {
->>>> +    .tcm_is_double = false,
->>>> +    .tcm_ecc_autoinit = true,
->>>> +    .single_cpu_mode = false,
->>>> +    .is_single_core = true,
->>>>   };
->>>>     static const struct of_device_id k3_r5_of_match[] = {
->>>> @@ -1782,6 +1818,7 @@ static const struct of_device_id k3_r5_of_match[] = {
->>>>       { .compatible = "ti,j721e-r5fss", .data = &am65_j721e_soc_data, },
->>>>       { .compatible = "ti,j7200-r5fss", .data = &j7200_j721s2_soc_data, },
->>>>       { .compatible = "ti,am64-r5fss",  .data = &am64_soc_data, },
->>>> +    { .compatible = "ti,am62-r5fss",  .data = &am62_soc_data, },
->>>>       { .compatible = "ti,j721s2-r5fss",  .data = &j7200_j721s2_soc_data, },
->>>>       { /* sentinel */ },
->>>>   };
->>>> -- 
->>>> 2.34.1
->>>>
->>
+According to my test, after hv_pci_enter_d0() posts PCI_BUS_D0ENTRY,
+the guest receives a second PCI_BUS_RELATIONS2 message, which is
+the same as the first PCI_BUS_RELATIONS2 message, which is basically
+a no-op in pci_devices_present_work(), especially with the
+newly-introduced per-hbus state_lock mutex.
 
---
-cheers,
--roger
