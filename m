@@ -2,191 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BC66CEF91
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33DD6CEF94
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjC2Qhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S230090AbjC2Qhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjC2Qhc (ORCPT
+        with ESMTP id S230048AbjC2Qhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:37:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBD79E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:36:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680107808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ldMAeFakoVxongrnXNG07Qemx9ue6UmllaaxOMmybkQ=;
-        b=cVI51QotQMAOPNVLuZiOThk8TSBmCRchz5J/ED5AZZF3kItdNiVI+h7eCdVaMIQDck+OUB
-        MY/2GHIGjK9eaGXbkc80UHV1l4csrUSMFdZenCsKQ1cTnHRPj7fepRnNchId5OS8kErOZd
-        tUL6QJipt4nOYKxALP1dljyQF+bArEY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-340-8StVgzusNfKMn6vZWc-NYg-1; Wed, 29 Mar 2023 12:36:47 -0400
-X-MC-Unique: 8StVgzusNfKMn6vZWc-NYg-1
-Received: by mail-wm1-f69.google.com with SMTP id i4-20020a05600c354400b003ef649aa8c7so6787774wmq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:36:46 -0700 (PDT)
+        Wed, 29 Mar 2023 12:37:43 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7EB4C3E
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:37:40 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso19118911pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:37:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680107860;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OoXdOK1goXOGy6MZ8rknbj6m2i3M9YHQmrM9+mBU2UY=;
+        b=Dnlj0NaO3jozqwAh888qho/XSqr/vyYPK9vAM54KCcu3e3R/+b/dEK0Qlo8b+bwQX/
+         u7X5PKRrX+obOv0vY5JHQF/M3Kdthnk5pUvVYWNz3Qbcemvcx2Tunt+7/Xivla6yVv5L
+         r9WE0wtG4leCyiolHaF3X3WpyrASgW/xfdlK5LB20hifgvDcIDWrQlTrSqLIkuDrN8Pz
+         8Ma2AEAqDME474EQ9knNF12Mv33uxmKnh7e0xtwfNdz/rPUBeJFUXYMt3EomEdY03Ffy
+         Zt8duwuHkvpYGS+YtUh+f1csmn/hZ7AS8H8aq/caDBsX2kv0zkGCbj7hDD4V2ADqLMCB
+         CCew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680107806;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ldMAeFakoVxongrnXNG07Qemx9ue6UmllaaxOMmybkQ=;
-        b=WLK/sCGGCwvBEkqTa8VfLHHQQJeTb4/qQVeySpgkL9ehDOvNCWVxLQ3jRWpdlEkCPQ
-         C3avDgOk4dXUj5h4MrkkP51/2ZfJprCTRSmtyPWvLNU7FMBIxdAIY0IYpCqPIh6xXZDt
-         jShLnp2aqjebFJSAkB2EiHInpYfXLtxBEP5aQGztpeboL5TtwtBF2dSjxFFDvtCS/bj/
-         suJdhZ+jp5rlGDi+gU6Jnbl7k1pDD4Zq72oR2Gtb1SAsQj2b41m0pStGwOMtru9sNSvl
-         D27H7Tf+AuO2MiiSXlLXPyufCMPYjz49cD6sGNGLtChKsbzjSYIcJsDj6+hoV5I9Txv7
-         yKDg==
-X-Gm-Message-State: AAQBX9ejFeNNeSJ8KPa+M2l2eJSlB2g1WDdFxKMwrV4bxSDtlRFFDci0
-        qjCwvrv4XECHRSSiGKDlZ9lOvMu81fA6VDq9AJoDMkcb4X0qBaF0+z72ZRU51Ko8Rc36zM13AJR
-        SQrqWgDoZgDBQp/Lo+QueVk+5
-X-Received: by 2002:adf:decf:0:b0:2cf:f30f:cc04 with SMTP id i15-20020adfdecf000000b002cff30fcc04mr14240678wrn.27.1680107805854;
-        Wed, 29 Mar 2023 09:36:45 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z5BstaP0SIWlL7B+yT9cBx93Rz7ef9lbximjW91GJq3IF02TSPgsvVmlwSCFY8rhw/kJXS8w==
-X-Received: by 2002:adf:decf:0:b0:2cf:f30f:cc04 with SMTP id i15-20020adfdecf000000b002cff30fcc04mr14240665wrn.27.1680107805520;
-        Wed, 29 Mar 2023 09:36:45 -0700 (PDT)
-Received: from redhat.com ([2.52.18.165])
-        by smtp.gmail.com with ESMTPSA id v7-20020a5d4b07000000b002c56af32e8csm30386163wrq.35.2023.03.29.09.36.44
+        d=1e100.net; s=20210112; t=1680107860;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OoXdOK1goXOGy6MZ8rknbj6m2i3M9YHQmrM9+mBU2UY=;
+        b=r5jfuAEom5Gyoj1kLrYvqhbtupkEPVvlOFw/EzMl8A38R6zCFFM9FqMd4bz7orJIOf
+         Eh8WmOVIumKh2tApRHiHYB3WPvrsHbOZbzxMBSXS318EY3lmjv0iMg82DldQ5J8B88/2
+         aQ37BBT3e4ZiYQogk/np6GocQBrvaHL+w4aexAeKN7QC4Fi3aMjnpFPNHg1aK6pectjN
+         XZYU0ykJfR2GJ8nm/fNPCmW5xgUOgoG5RN0rNKmCYwnpwN8zBGsgCjjG8OchXATA8N0I
+         47r8tJj9DV3IdEFJr4lTqW7zSO5Yc3cjkZnrUPMIfrVyzBEik90wuIEGUXW+rq44HKPO
+         neug==
+X-Gm-Message-State: AAQBX9cMPPHr0wj/pj8QUUr2Ij9c9a8b+l/AVWeabrvGdE9GXIXK/nkM
+        pTbVSXnBB6fLGVlCV0t0VLuo
+X-Google-Smtp-Source: AKy350aCjpdIf4TPenzEjeGnTEkM9ymR9mj602qgyVc2HTWndzL4dALVGtahR9nVk0sOtZ/wl7qC9g==
+X-Received: by 2002:a17:903:210d:b0:1a0:53b3:ee87 with SMTP id o13-20020a170903210d00b001a053b3ee87mr15138590ple.62.1680107859849;
+        Wed, 29 Mar 2023 09:37:39 -0700 (PDT)
+Received: from thinkpad ([117.216.120.213])
+        by smtp.gmail.com with ESMTPSA id g24-20020a170902869800b001a20b30e8b0sm11527315plo.243.2023.03.29.09.37.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 09:36:45 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 12:36:41 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Albert Huang <huangjie.albert@bytedance.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] virtio_ring: interrupt disable flag updated to vq
- even with event_triggered is set
-Message-ID: <20230329123444-mutt-send-email-mst@kernel.org>
-References: <20230329102300.61000-1-huangjie.albert@bytedance.com>
+        Wed, 29 Mar 2023 09:37:39 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 22:07:31 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_krichai@quicinc.com, johan+linaro@kernel.org, steev@kali.org,
+        mka@chromium.org, Dhruva Gole <d-gole@ti.com>
+Subject: Re: [PATCH v3 1/1] PCI: qcom: Add support for system suspend and
+ resume
+Message-ID: <20230329163731.GF5575@thinkpad>
+References: <20230327133824.29136-1-manivannan.sadhasivam@linaro.org>
+ <20230327133824.29136-2-manivannan.sadhasivam@linaro.org>
+ <ZCQLWzqKPrusMro+@hovoldconsulting.com>
+ <20230329125232.GB5575@thinkpad>
+ <ZCQ69xyQ4mwTow1W@hovoldconsulting.com>
+ <20230329140150.GE5575@thinkpad>
+ <ZCROTyuxZ+dkrnx8@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230329102300.61000-1-huangjie.albert@bytedance.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZCROTyuxZ+dkrnx8@hovoldconsulting.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 06:23:00PM +0800, Albert Huang wrote:
-> From: "huangjie.albert" <huangjie.albert@bytedance.com>
+On Wed, Mar 29, 2023 at 04:42:23PM +0200, Johan Hovold wrote:
+> On Wed, Mar 29, 2023 at 07:31:50PM +0530, Manivannan Sadhasivam wrote:
+> > On Wed, Mar 29, 2023 at 03:19:51PM +0200, Johan Hovold wrote:
+> > > On Wed, Mar 29, 2023 at 06:22:32PM +0530, Manivannan Sadhasivam wrote:
 > 
-> in virtio_net, if we disable the napi_tx, when we triger a tx interrupt,
-> the vq->event_triggered will be set to true. It will no longer be set to
-> false. Unless we explicitly call virtqueue_enable_cb_delayed or
-> virtqueue_enable_cb_prepare.
+> > > Why would you need PCIe gen1 speed during suspend?
+> > 
+> > That's what the suggestion I got from Qcom PCIe team. But I didn't compare the
+> > value you added during icc support patch with downstream. More below...
+> > 
+> > > These numbers are already somewhat random as, for example, the vendor
+> > > driver is requesting 500 kBps (800 peak) during runtime, while we are
+> > > now requesting five times that during suspend (the vendor driver gets a
+> > > away with 0).
+> > 
+> > Hmm, then I should've asked you this question when you added icc support.
+> > I thought you inherited those values from downstream but apparently not.
+> > Even in downstream they are using different bw votes for different platforms.
+> > I will touch base with PCIe and ICC teams to find out the actual value that
+> > needs to be used.
 > 
-> If we disable the napi_tx, it will only be called when the tx ring
-> buffer is relatively small.
-> 
-> Because event_triggered is true. Therefore, VRING_AVAIL_F_NO_INTERRUPT or
-> VRING_PACKED_EVENT_FLAG_DISABLE will not be set. So we update
-> vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
-> every time we call virtqueue_get_buf_ctx.This bring more interruptions.
-> 
-> To summarize:
-> 1) event_triggered was set to true in vring_interrupt()
-> 2) after this nothing will happen for virtqueue_disable_cb() so
->    VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
-> 3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
->    then it tries to publish new event
-> 
-> To fix:
-> update VRING_AVAIL_F_NO_INTERRUPT or VRING_PACKED_EVENT_FLAG_DISABLE to vq
-> when we call virtqueue_disable_cb even the event_triggered is set to true.
-> 
-> Tested with iperf:
-> iperf3 tcp stream:
-> vm1 -----------------> vm2
-> vm2 just receives tcp data stream from vm1, and sends the ack to vm1,
-> there are many tx interrupts in vm2.
-> but without event_triggered there are just a few tx interrupts.
-> 
-> v2->v3:
-> -update the interrupt disable flag even with the event_triggered is set,
-> -instead of checking whether event_triggered is set in
-> -virtqueue_get_buf_ctx_{packed/split}, will cause the drivers  which have
-> -not called virtqueue_{enable/disable}_cb to miss notifications.
-> 
-> v3->v4:
-> -remove change for
-> -"if (vq->packed.event_flags_shadow != VRING_PACKED_EVENT_FLAG_DISABLE)"
-> -in virtqueue_disable_cb_packed
-> 
-> Fixes: 8d622d21d248 ("virtio: fix up virtio_disable_cb")
-> Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> We discussed things at length at the time, but perhaps it was before you
+> joined to project.
 
-Patch is ok so I rewrote the commit log and applied.
-Please do not add signed-off-by tags by others -
-read up what this tag means.
-I also rewrote your Signed-off-by to have your name
-formatted same as in email - hope that is ok.
+Yeah, could be.
 
-
-> ---
->  drivers/virtio/virtio_ring.c | 22 ++++++++++++++++------
->  1 file changed, 16 insertions(+), 6 deletions(-)
+> As I alluded to above, we should not play the game of
+> using arbitrary numbers but instead fix the interconnect driver so that
+> it can map the interconnect values in kBps to something that makes sense
+> for the Qualcomm hardware. Anything else is not acceptable for upstream.
 > 
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index cbeeea1b0439..ec7ab8e04846 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -931,6 +931,14 @@ static void virtqueue_disable_cb_split(struct virtqueue *_vq)
->  
->  	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)) {
->  		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
-> +
-> +		/*
-> +		 * If device triggered an event already it won't trigger one again:
-> +		 * no need to disable.
-> +		 */
-> +		if (vq->event_triggered)
-> +			return;
-> +
->  		if (vq->event)
->  			/* TODO: this is a hack. Figure out a cleaner value to write. */
->  			vring_used_event(&vq->split.vring) = 0x0;
-> @@ -1761,6 +1769,14 @@ static void virtqueue_disable_cb_packed(struct virtqueue *_vq)
->  
->  	if (vq->packed.event_flags_shadow != VRING_PACKED_EVENT_FLAG_DISABLE) {
->  		vq->packed.event_flags_shadow = VRING_PACKED_EVENT_FLAG_DISABLE;
-> +
-> +		/*
-> +		 * If device triggered an event already it won't trigger one again:
-> +		 * no need to disable.
-> +		 */
-> +		if (vq->event_triggered)
-> +			return;
-> +
->  		vq->packed.vring.driver->flags =
->  			cpu_to_le16(vq->packed.event_flags_shadow);
->  	}
-> @@ -2462,12 +2478,6 @@ void virtqueue_disable_cb(struct virtqueue *_vq)
->  {
->  	struct vring_virtqueue *vq = to_vvq(_vq);
->  
-> -	/* If device triggered an event already it won't trigger one again:
-> -	 * no need to disable.
-> -	 */
-> -	if (vq->event_triggered)
-> -		return;
-> -
->  	if (vq->packed_ring)
->  		virtqueue_disable_cb_packed(_vq);
->  	else
-> -- 
-> 2.20.1
 
+Agree. I've started the discussion regarding this and will get back once I have
+answers.
+
+- Mani
+
+> Johan
+
+-- 
+மணிவண்ணன் சதாசிவம்
