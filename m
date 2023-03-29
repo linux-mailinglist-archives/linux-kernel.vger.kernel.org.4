@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA426CD1A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7338A6CD19D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjC2FcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 01:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
+        id S229810AbjC2FcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 01:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjC2FcG (ORCPT
+        with ESMTP id S229755AbjC2FcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 01:32:06 -0400
+        Wed, 29 Mar 2023 01:32:05 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97C53C04;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536603C29;
         Tue, 28 Mar 2023 22:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=4WklghmhRoXLW11BvhMQXmcUtv91pDbajk9xVWUSoKw=; b=Rc1W4XBsmzSM4fsephNuxA5+Hc
-        hN1F7QwRigICSNV8c1+dRaLlmHSl15upfOraFBq7OwpG+Irgc3a7wongSfIqAiZZfSOn9Vsx1o0J4
-        LQXqgi70HEADX3OtaFpqZPnDiPLnoNMo1bW9+0Uh/P8BBqyznnMRKUmfZrU49Pb7DA5POilNBpkbE
-        OhzYrkOlMapvraFlDXnKzTlsgNgPpRBElg4Ini3Te0CJpdITvxeakGC1tf+zXJvpBOWnRn+z0YUHg
-        w9LEXdbu+FKrCjDM1jpzTRuCtqNiEhzDAzbDQB+ZOFhsRGAege8eJEtU1q3Ewz1uUm3tlCAcO86kL
-        /ZFLa/6Q==;
+        bh=9aCwO6lydcYrtyg5yPLXnIQyE+LoOte6FX6HU5bmimM=; b=wRqNpi2g15Ano4d7S1D1Se8pFe
+        rx5M2O1Oylzh0O3wIDwg5BZf5hYJHEZ4wPOlQT1a/cw9WGV4lbuzzH3WstC9eh95IXhDd/nqi7S+S
+        SFQFG/EjhJzTx7CJXXzo8zx4qEijzU2qxBpNccJBe709o2dplGwgg3D94qIg+svDQ1qh/h/Qv4HuW
+        VxbOuAJqab03K+uJZLBZZzHPknX+5nXLKzGD7VI9droyfDnQ8ZfZ5YS/sPGgUYNx6lCil+4rNyXfd
+        5PlNA67XBZ4kedjsm+pbkJ7idlMJ0AYK1mNpQyGKJNfsQhIm3llHEAfEAMvgImFfmCkuNtHVzGrJh
+        NWs6awpQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1phOPW-00GgRm-2Z;
+        id 1phOPW-00GgRq-2i;
         Wed, 29 Mar 2023 05:31:50 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     david@redhat.com, patches@lists.linux.dev,
@@ -39,9 +39,9 @@ Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
         peterz@infradead.org, song@kernel.org, rppt@kernel.org,
         willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
         dave.hansen@linux.intel.com, mcgrof@kernel.org
-Subject: [PATCH 5/7] modules/kmod: replace implementation with a sempahore
-Date:   Tue, 28 Mar 2023 22:31:47 -0700
-Message-Id: <20230329053149.3976378-6-mcgrof@kernel.org>
+Subject: [PATCH 6/7] debugfs: add debugfs_create_atomic64_t for atomic64_t
+Date:   Tue, 28 Mar 2023 22:31:48 -0700
+Message-Id: <20230329053149.3976378-7-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230329053149.3976378-1-mcgrof@kernel.org>
 References: <20230329053149.3976378-1-mcgrof@kernel.org>
@@ -58,77 +58,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplfy the concurrency delimiter we user for kmod with the semaphore.
-I had used the kmod strategy to try to implement a similar concurrency
-delimiter for the kernel_read*() calls from the finit_module() path
-so to reduce vmalloc() memory pressure. That effort didn't provid yet
-conclusive results, but one thing that did became clear is we can use
-the suggested alternative solution with semaphores which Linus hinted
-at instead of using the atomic / wait strategy.
-
-I've stress tested this with kmod test 0008:
-
-time /data/linux-next/tools/testing/selftests/kmod/kmod.sh -t 0008
-
-And I get only a *slight* delay. That delay however is small, a few
-seconds for a full test loop run that runs 150 times, for about ~30-40
-seconds. The small delay is worth the simplfication IMHO.
+Sometimes you want to add debugfs entries for atomic counters which
+can be pretty large using atomic64_t. Add support for these.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/kmod.c | 26 +++++++-------------------
- 1 file changed, 7 insertions(+), 19 deletions(-)
+ fs/debugfs/file.c       | 36 ++++++++++++++++++++++++++++++++++++
+ include/linux/debugfs.h |  2 ++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/kernel/module/kmod.c b/kernel/module/kmod.c
-index b717134ebe17..fd7c461387f8 100644
---- a/kernel/module/kmod.c
-+++ b/kernel/module/kmod.c
-@@ -40,8 +40,7 @@
-  * effect. Systems like these are very unlikely if modules are enabled.
-  */
- #define MAX_KMOD_CONCURRENT 50
--static atomic_t kmod_concurrent_max = ATOMIC_INIT(MAX_KMOD_CONCURRENT);
--static DECLARE_WAIT_QUEUE_HEAD(kmod_wq);
-+static CONCURRENCY_LIMITER(kmod_concurrent_max, MAX_KMOD_CONCURRENT);
- 
- /*
-  * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads
-@@ -148,29 +147,18 @@ int __request_module(bool wait, const char *fmt, ...)
- 	if (ret)
- 		return ret;
- 
--	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
--		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
--				    atomic_read(&kmod_concurrent_max),
--				    MAX_KMOD_CONCURRENT, module_name);
--		ret = wait_event_killable_timeout(kmod_wq,
--						  atomic_dec_if_positive(&kmod_concurrent_max) >= 0,
--						  MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
--		if (!ret) {
--			pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
--					    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
--			return -ETIME;
--		} else if (ret == -ERESTARTSYS) {
--			pr_warn_ratelimited("request_module: sigkill sent for modprobe %s, giving up", module_name);
--			return ret;
--		}
-+	ret = down_timeout(&kmod_concurrent_max, MAX_KMOD_ALL_BUSY_TIMEOUT);
-+	if (ret) {
-+		pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
-+				    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
-+		return ret;
- 	}
- 
- 	trace_module_request(module_name, wait, _RET_IP_);
- 
- 	ret = call_modprobe(module_name, wait ? UMH_WAIT_PROC : UMH_WAIT_EXEC);
- 
--	atomic_inc(&kmod_concurrent_max);
--	wake_up(&kmod_wq);
-+	up(&kmod_concurrent_max);
- 
- 	return ret;
+diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
+index 1f971c880dde..76d923503861 100644
+--- a/fs/debugfs/file.c
++++ b/fs/debugfs/file.c
+@@ -780,6 +780,42 @@ void debugfs_create_atomic_t(const char *name, umode_t mode,
  }
+ EXPORT_SYMBOL_GPL(debugfs_create_atomic_t);
+ 
++static int debugfs_atomic64_t_set(void *data, u64 val)
++{
++	atomic64_set((atomic64_t *)data, val);
++	return 0;
++}
++static int debugfs_atomic64_t_get(void *data, u64 *val)
++{
++	*val = atomic64_read((atomic64_t *)data);
++	return 0;
++}
++DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t, debugfs_atomic64_t_get,
++			debugfs_atomic64_t_set, "%lld\n");
++DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t_ro, debugfs_atomic64_t_get, NULL,
++			"%lld\n");
++DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t_wo, NULL, debugfs_atomic64_t_set,
++			"%lld\n");
++
++/**
++ * debugfs_create_atomic64_t - create a debugfs file that is used to read and
++ * write an atomic64_t value
++ * @name: a pointer to a string containing the name of the file to create.
++ * @mode: the permission that the file should have
++ * @parent: a pointer to the parent dentry for this file.  This should be a
++ *          directory dentry if set.  If this parameter is %NULL, then the
++ *          file will be created in the root of the debugfs filesystem.
++ * @value: a pointer to the variable that the file should read to and write
++ *         from.
++ */
++void debugfs_create_atomic64_t(const char *name, umode_t mode,
++			     struct dentry *parent, atomic64_t *value)
++{
++	debugfs_create_mode_unsafe(name, mode, parent, value, &fops_atomic64_t,
++				   &fops_atomic64_t_ro, &fops_atomic64_t_wo);
++}
++EXPORT_SYMBOL_GPL(debugfs_create_atomic64_t);
++
+ ssize_t debugfs_read_file_bool(struct file *file, char __user *user_buf,
+ 			       size_t count, loff_t *ppos)
+ {
+diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
+index ea2d919fd9c7..f5cc613a545e 100644
+--- a/include/linux/debugfs.h
++++ b/include/linux/debugfs.h
+@@ -136,6 +136,8 @@ void debugfs_create_size_t(const char *name, umode_t mode,
+ 			   struct dentry *parent, size_t *value);
+ void debugfs_create_atomic_t(const char *name, umode_t mode,
+ 			     struct dentry *parent, atomic_t *value);
++void debugfs_create_atomic64_t(const char *name, umode_t mode,
++			       struct dentry *parent, atomic64_t *value);
+ void debugfs_create_bool(const char *name, umode_t mode, struct dentry *parent,
+ 			 bool *value);
+ void debugfs_create_str(const char *name, umode_t mode,
 -- 
 2.39.2
 
