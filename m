@@ -2,313 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218F06CD64E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED10C6CD64F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjC2JYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S230115AbjC2JY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjC2JYd (ORCPT
+        with ESMTP id S229549AbjC2JYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:24:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5056269E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680081825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=mYk5Vd+Cw2j906cJQiXMpCJj7sRVVRcz7eKjR8ZmdUk=;
-        b=fzNArQizBXnBqvEYCXTSHvjZmrYsBlOKOi+2e4edG18VRA2XvrKj4q5u0r18A9WFdsUXPp
-        sEAR4bU5aTqXC1WtLCs9C92/vI5y2RcjDNG02DzY2EV+caIUbYIM8ruOF4Kar23K+9to5I
-        5ZFJzbmDAXh8jBtOQBhg3wnF/4rLNW8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-331-qpnBuqA9MkWXxD_4wo8ZNg-1; Wed, 29 Mar 2023 05:23:44 -0400
-X-MC-Unique: qpnBuqA9MkWXxD_4wo8ZNg-1
-Received: by mail-wm1-f69.google.com with SMTP id ay37-20020a05600c1e2500b003ee69edec16so8544940wmb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:23:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680081823;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mYk5Vd+Cw2j906cJQiXMpCJj7sRVVRcz7eKjR8ZmdUk=;
-        b=fa2T+IM1BJfFmOquNjA6BkYOKMlp0vvexpJGN7uno0UpNWHmJzGg+y28eFJNUuHVBb
-         4hglPOoUIODfTmd1GeXZfAczQEpkRm09WQ/ZWTErhC4yPdUtobFB6jDZqp6gnRS7EqaW
-         s6MAbuVTxUtO+LSfuTKPXtOeRIzM8i0ZTHHD4Zi6peaQBN5oe91kfJBzj8ckbX9Vfips
-         yD7o8f91ywHl8Fe+XPD8l9hvEAg4QxkBP8nYLWe6Ue70JrMVMDyj3RZeyeSkJa21n6Qv
-         0d0O7vF9xwvXUbrFLMauNbOY7jfLiAGPlionNTt9gZ2WDHtEKIc4/M5ZC+gvxxe5Og55
-         4cbg==
-X-Gm-Message-State: AAQBX9e8oMI0J16OuJ9z5WQdl0FEpMcmtauXnyeeN4ee/magkCrGW9TP
-        8JriaFXYjGIXHoAas30fStr0rR1j7wQtkzDd+TRJS45DMs0OwVfwGRssJTlKzRNDzzWMSsUIX80
-        LnrDkFbdLRXB2eUQwUOb9c1+vPj1tNEalaa4bBK5IA+6GApYNzaS/z9jUUV7iK+gFgm9h8nncoo
-        UAlZcEIqw=
-X-Received: by 2002:a1c:4c11:0:b0:3ef:6ea4:a675 with SMTP id z17-20020a1c4c11000000b003ef6ea4a675mr8271713wmf.36.1680081822790;
-        Wed, 29 Mar 2023 02:23:42 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YTIyv31nTZptEcX2RsNGbTwhTNTBAHponC3oHY6a+YXFKPgSWGFARGvtpGsKg6qg5oGHwhXw==
-X-Received: by 2002:a1c:4c11:0:b0:3ef:6ea4:a675 with SMTP id z17-20020a1c4c11000000b003ef6ea4a675mr8271689wmf.36.1680081822369;
-        Wed, 29 Mar 2023 02:23:42 -0700 (PDT)
-Received: from minerva.redhat.com (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l7-20020a05600c4f0700b003ef5deb4188sm1672219wmq.17.2023.03.29.02.23.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 02:23:42 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        linux-kselftest@vger.kernel.org,
-        Enric Balletbo i Serra <eballetb@redhat.com>,
-        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Subject: [PATCH] Input: Add KUnit tests for some of the input core helper functions
-Date:   Wed, 29 Mar 2023 11:23:31 +0200
-Message-Id: <20230329092332.2143623-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.40.0
+        Wed, 29 Mar 2023 05:24:55 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB70211D
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:24:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2AFZRsvHurvK7J8T5nxjzsB48UuQApENM6LGQRgbzck=; b=UzZFYlk2Yz391/yrjHv+ArgARg
+        4FfDjCHx/oYovCA1kiC72ptnZpHBJlawn718aFvilwid8nK4sNXnVJxMw7stkPjp3skl85Hjhokta
+        WBwkptvbIMMccWpgLhfAJiWUJwm1lDiExyySU7qvJkeJsV2dTAzhRtRqiniT58pJ9oR44vGo2qf1D
+        Kg5ooaZbbFtLW+RLdUdB3Bgd51FK/YkHsb8dxZiWlsNX5NHB1RuMY4Uew3A7De1ugM75/njJHUA3S
+        YYZDMrpq7jSej4vvqsZYzT91FkHy0twWh549Nw2ijR4Vd4V1BRjkjbyol95F10HdusXx2XVadIm2s
+        AiLE68kQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1phS2l-006ob9-2n;
+        Wed, 29 Mar 2023 09:24:36 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B76E73000E6;
+        Wed, 29 Mar 2023 11:24:33 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8E57F201D9955; Wed, 29 Mar 2023 11:24:33 +0200 (CEST)
+Date:   Wed, 29 Mar 2023 11:24:33 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Pengfei Xu <pengfei.xu@intel.com>
+Cc:     tglx@linutronix.de, songliubraving@fb.com,
+        linux-kernel@vger.kernel.org, frederic@kernel.org,
+        heng.su@intel.com, lkp@intel.com,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [Syzkaller & bisect] There is "soft lockup in
+ sys_perf_event_open" BUG in v6.3-rc4 kernel
+Message-ID: <20230329092433.GA83892@hirez.programming.kicks-ass.net>
+References: <ZCP8vkW6xeQJIMLs@xpf.sh.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCP8vkW6xeQJIMLs@xpf.sh.intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The input subsystem doesn't currently have any unit tests, let's add a
-CONFIG_INPUT_KUNIT_TEST option that builds a test suite to be executed
-with the KUnit test infrastructure.
+On Wed, Mar 29, 2023 at 04:54:22PM +0800, Pengfei Xu wrote:
 
-For now, only three tests were added for some of the input core helper
-functions that are trivial to test:
+> "
+> 79df45731da68772d2285265864a52c900b8c65f
+> perf/core: Allow ftrace for functions in kernel/event/core.c
+> "
+> After reverted above commit on top of tip tag perf-core-2021-10-31, this issue
+> was gone.
 
-  * input_test_polling: set/get poll interval and set-up a poll handler.
+Glorious recursion... Song, I'm tempted to indeed revert that patch
+again.
 
-  * input_test_timestamp: set/get input event timestamps.
-
-  * input_test_match_device_id: match a device by bus, vendor, product
-                                and events that is capable of handling.
-
-But having the minimal KUnit support allows to add more tests and suites
-as follow-up changes. The tests can be run with the following command:
-
-  $ ./tools/testing/kunit/kunit.py run \
-    --kunitconfig=drivers/input/tests/.kunitconfig
-
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
-
- drivers/input/Kconfig            |  12 +++
- drivers/input/Makefile           |   1 +
- drivers/input/tests/Makefile     |   3 +
- drivers/input/tests/input_test.c | 144 +++++++++++++++++++++++++++++++
- 4 files changed, 160 insertions(+)
- create mode 100644 drivers/input/tests/Makefile
- create mode 100644 drivers/input/tests/input_test.c
-
-diff --git a/drivers/input/Kconfig b/drivers/input/Kconfig
-index e2752f7364bc..e094e5bbaa0c 100644
---- a/drivers/input/Kconfig
-+++ b/drivers/input/Kconfig
-@@ -166,6 +166,18 @@ config INPUT_EVBUG
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called evbug.
- 
-+config INPUT_KUNIT_TEST
-+	tristate "KUnit tests for Input" if !KUNIT_ALL_TESTS
-+	depends on INPUT && KUNIT=y
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Say Y here if you want to build the KUnit tests for the input
-+	  subsystem. For more information about KUnit and unit tests in
-+	  general, please refer to the KUnit documentation in
-+	  Documentation/dev-tools/kunit/.
-+
-+	  If in doubt, say "N".
-+
- config INPUT_APMPOWER
- 	tristate "Input Power Event -> APM Bridge" if EXPERT
- 	depends on INPUT && APM_EMULATION
-diff --git a/drivers/input/Makefile b/drivers/input/Makefile
-index 2266c7d010ef..c78753274921 100644
---- a/drivers/input/Makefile
-+++ b/drivers/input/Makefile
-@@ -26,6 +26,7 @@ obj-$(CONFIG_INPUT_JOYSTICK)	+= joystick/
- obj-$(CONFIG_INPUT_TABLET)	+= tablet/
- obj-$(CONFIG_INPUT_TOUCHSCREEN)	+= touchscreen/
- obj-$(CONFIG_INPUT_MISC)	+= misc/
-+obj-$(CONFIG_INPUT_KUNIT_TEST)	+= tests/
- 
- obj-$(CONFIG_INPUT_APMPOWER)	+= apm-power.o
- 
-diff --git a/drivers/input/tests/Makefile b/drivers/input/tests/Makefile
-new file mode 100644
-index 000000000000..90cf954181bc
---- /dev/null
-+++ b/drivers/input/tests/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_INPUT_KUNIT_TEST) += input_test.o
-diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/input_test.c
-new file mode 100644
-index 000000000000..25bbf51b5c87
---- /dev/null
-+++ b/drivers/input/tests/input_test.c
-@@ -0,0 +1,144 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit test for the input core.
-+ *
-+ * Copyright (c) 2023 Red Hat Inc
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/input.h>
-+
-+#include <kunit/test.h>
-+
-+#define POLL_INTERVAL 100
-+
-+static int input_test_init(struct kunit *test)
-+{
-+	struct input_dev *input_dev;
-+	int ret;
-+
-+	input_dev = input_allocate_device();
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, input_dev);
-+
-+	input_dev->name = "Test input device";
-+	input_dev->id.bustype = BUS_VIRTUAL;
-+	input_dev->id.vendor = 1;
-+	input_dev->id.product = 1;
-+	input_dev->id.version = 1;
-+	input_set_capability(input_dev, EV_KEY, BTN_LEFT);
-+	input_set_capability(input_dev, EV_KEY, BTN_RIGHT);
-+
-+	ret = input_register_device(input_dev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	test->priv = input_dev;
-+
-+	return 0;
-+}
-+
-+static void input_test_exit(struct kunit *test)
-+{
-+	struct input_dev *input_dev = test->priv;
-+
-+	input_unregister_device(input_dev);
-+}
-+
-+static void input_test_poll(struct input_dev *input) { }
-+
-+static void input_test_polling(struct kunit *test)
-+{
-+	struct input_dev *input_dev = test->priv;
-+	int ret;
-+
-+	ret = input_get_poll_interval(input_dev);
-+	KUNIT_ASSERT_EQ(test, ret, -EINVAL);
-+
-+	ret = input_setup_polling(input_dev, input_test_poll);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	input_set_poll_interval(input_dev, POLL_INTERVAL);
-+
-+	ret = input_get_poll_interval(input_dev);
-+	KUNIT_ASSERT_EQ(test, ret, POLL_INTERVAL);
-+}
-+
-+static void input_test_timestamp(struct kunit *test)
-+{
-+	const ktime_t invalid_timestamp = ktime_set(0, 0);
-+	struct input_dev *input_dev = test->priv;
-+	ktime_t *timestamp, time;
-+	int ret;
-+
-+	timestamp = input_get_timestamp(input_dev);
-+	time = timestamp[INPUT_CLK_MONO];
-+
-+	ret = ktime_compare(time, invalid_timestamp);
-+	KUNIT_ASSERT_EQ(test, ret, 1);
-+
-+	time = ktime_get();
-+	input_set_timestamp(input_dev, time);
-+
-+	timestamp = input_get_timestamp(input_dev);
-+	KUNIT_ASSERT_EQ(test, ktime_compare(timestamp[INPUT_CLK_MONO],
-+					    time), 0);
-+}
-+
-+static void input_test_match_device_id(struct kunit *test)
-+{
-+	struct input_dev *input_dev = test->priv;
-+	struct input_device_id id;
-+
-+	id.flags = INPUT_DEVICE_ID_MATCH_BUS;
-+	id.bustype = BUS_VIRTUAL;
-+	KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-+
-+	id.bustype = BUS_I2C;
-+	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-+
-+	id.flags = INPUT_DEVICE_ID_MATCH_VENDOR;
-+	id.vendor = 1;
-+	KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-+
-+	id.vendor = 2;
-+	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-+
-+	id.flags = INPUT_DEVICE_ID_MATCH_PRODUCT;
-+	id.product = 1;
-+	KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-+
-+	id.product = 2;
-+	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-+
-+	id.flags = INPUT_DEVICE_ID_MATCH_VERSION;
-+	id.version = 1;
-+	KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-+
-+	id.version = 2;
-+	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-+
-+	id.flags = INPUT_DEVICE_ID_MATCH_EVBIT;
-+	__set_bit(EV_KEY, id.evbit);
-+	KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-+
-+	__set_bit(EV_ABS, id.evbit);
-+	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-+}
-+
-+static struct kunit_case input_tests[] = {
-+	KUNIT_CASE(input_test_polling),
-+	KUNIT_CASE(input_test_timestamp),
-+	KUNIT_CASE(input_test_match_device_id),
-+	{ /* sentinel */ }
-+};
-+
-+static struct kunit_suite input_test_suite = {
-+	.name = "input_core",
-+	.init = input_test_init,
-+	.exit = input_test_exit,
-+	.test_cases = input_tests,
-+};
-+
-+kunit_test_suite(input_test_suite);
-+
-+MODULE_AUTHOR("Javier Martinez Canillas <javierm@redhat.com>");
-+MODULE_LICENSE("GPL");
-
-base-commit: 3a93e40326c8f470e71d20b4c42d36767450f38f
--- 
-2.40.0
-
+> [   24.618533] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=330 'systemd'
+> [   56.504281] watchdog: BUG: soft lockup - CPU#0 stuck for 26s! [repro:516]
+> [   56.507013] Modules linked in:
+> [   56.507699] irq event stamp: 684720
+> [   56.508318] hardirqs last  enabled at (684719): [<ffffffff8107247c>] __text_poke+0x2ec/0x4e0
+> [   56.509577] hardirqs last disabled at (684720): [<ffffffff82f937a3>] sysvec_apic_timer_interrupt+0x13/0xe0
+> [   56.510993] softirqs last  enabled at (472178): [<ffffffff82fb71a9>] __do_softirq+0x2d9/0x3c3
+> [   56.512283] softirqs last disabled at (472151): [<ffffffff811266f4>] irq_exit_rcu+0xc4/0x100
+> [   56.513543] CPU: 0 PID: 516 Comm: repro Not tainted 6.3.0-rc4-197b6b60ae7b+ #1
+> [   56.514647] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> [   56.516213] RIP: 0010:debug_lockdep_rcu_enabled+0x0/0x40
+> [   56.517098] Code: c7 c7 a3 d6 96 83 e8 4f 0e 00 00 65 c7 05 e4 c3 08 7d 00 00 00 00 eb ba 66 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 <f3> 0f 1e fa 8b 05 be 65 0d 01 85 c0 74 2b 8b 05 4c cd 0d 01 85 c0
+> [   56.519522] RSP: 0018:ffffc90000fbb260 EFLAGS: 00000246
+> [   56.520439] RAX: 0000000000000000 RBX: ffff888014599aa8 RCX: ffffffff81353c4d
+> [   56.521513] RDX: 0000000000000000 RSI: ffff888013bc4680 RDI: 0000000000000002
+> [   56.522585] RBP: ffffc90000fbb2a8 R08: ffffc90000fbb820 R09: ffffc90000fbb818
+> [   56.523683] R10: ffffc90000fbb7f0 R11: 0000000000000000 R12: ffffc90000fbb2b8
+> [   56.524766] R13: fffffffffffffdff R14: 0000000000000000 R15: ffffffff81353960
+> [   56.525841] FS:  00007fe17f501740(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+> [   56.527044] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   56.527977] CR2: 00007ffd57376000 CR3: 000000000af0a003 CR4: 0000000000770ef0
+> [   56.529038] PKRU: 55555554
+> [   56.529543] Call Trace:
+> [   56.530040]  <TASK>
+> [   56.530496]  ? arch_ftrace_ops_list_func+0x1b6/0x360
+> [   56.531339]  ? perf_trace_buf_alloc+0x41/0x110
+> [   56.532148]  ? perf_swevent_get_recursion_context+0x4/0xe0
+> [   56.533132]  ? perf_tp_event+0x164/0x880
+> [   56.533853]  ftrace_call+0x5/0x44
+> [   56.534612]  ? write_comp_data+0x2f/0x90
+> [   56.535444]  ? perf_trace_buf_alloc+0x2a/0x110
+> [   56.536301]  ? perf_swevent_get_recursion_context+0x9/0xe0
+> [   56.537201]  ? write_comp_data+0x2f/0x90
+> [   56.537958]  perf_swevent_get_recursion_context+0x9/0xe0
+> [   56.538848]  perf_trace_buf_alloc+0x41/0x110
+> [   56.539644]  ? perf_swevent_get_recursion_context+0x9/0xe0
+> [   56.540564]  ? perf_trace_buf_alloc+0x41/0x110
+> [   56.541415]  ? __pfx_perf_swevent_event+0x10/0x10
+> [   56.542233]  perf_ftrace_function_call+0x28f/0x340
+> [   56.543070]  ? __sanitizer_cov_trace_pc+0x25/0x60
+> [   56.544273]  ? arch_ftrace_ops_list_func+0x2c6/0x360
+> [   56.545328]  ? __pfx_perf_ftrace_function_call+0x10/0x10
+> [   56.546221]  arch_ftrace_ops_list_func+0x2c6/0x360
+> [   56.547029]  ? perf_tp_event+0x164/0x880
+> [   56.547774]  ? __pfx_perf_swevent_event+0x10/0x10
+> [   56.548730]  ftrace_call+0x5/0x44
+> [   56.549407]  ? __sanitizer_cov_trace_pc+0x25/0x60
+> [   56.550239]  ? write_comp_data+0x2f/0x90
+> [   56.551228]  ? perf_swevent_event+0x5/0x170
+> [   56.552001]  ? write_comp_data+0x2f/0x90
+> [   56.552767]  perf_swevent_event+0x5/0x170
+> [   56.553500]  perf_tp_event+0x164/0x880
+> [   56.554219]  ? perf_swevent_event+0x5/0x170
+> [   56.554959]  ? perf_tp_event+0x164/0x880
+> [   56.555959]  ? arch_ftrace_ops_list_func+0x2c6/0x360
+> [   56.556843]  ? write_comp_data+0x2f/0x90
+> [   56.557646]  ? __sanitizer_cov_trace_pc+0x25/0x60
+> [   56.558541]  ? arch_ftrace_ops_list_func+0x207/0x360
+> [   56.559393]  ? perf_ftrace_function_call+0x2d2/0x340
+> [   56.560256]  ? perf_tp_event+0x4/0x880
+> [   56.561026]  ? _raw_spin_lock+0x4/0x50
+> [   56.561723]  ? __get_locked_pte+0x96/0xe0
+> [   56.562493]  ? ftrace_call+0x5/0x44
+> [   56.563335]  ? write_comp_data+0x2f/0x90
+> [   56.564308]  ? _raw_spin_lock+0x4/0x50
+> [   56.564988]  ? __get_locked_pte+0x96/0xe0
+> [   56.565708]  perf_ftrace_function_call+0x2d2/0x340
+> [   56.566516]  ? perf_tp_event+0x9/0x880
+> [   56.567223]  ? perf_ftrace_function_call+0x2d2/0x340
+> [   56.568079]  ? perf_tp_event+0x9/0x880
+> [   56.568741]  ? perf_ftrace_function_call+0x2d2/0x340
+> [   56.570049]  ? 0xffffffffa02010b1
+> [   56.570919]  0xffffffffa02010b1
+> [   56.571678]  ? ftrace_call+0x5/0x44
+> [   56.572420]  ? pmd_page_vaddr+0x2b/0x80
+> [   56.573193]  ? _raw_spin_lock+0x9/0x50
+> [   56.573987]  _raw_spin_lock+0x9/0x50
+> [   56.574672]  __get_locked_pte+0x96/0xe0
+> [   56.575411]  ? _raw_spin_lock+0x9/0x50
+> [   56.576100]  ? __get_locked_pte+0x96/0xe0
+> [   56.576924]  ? __pfx__regmap_raw_write_impl+0x10/0x10
+> [   56.577816]  __text_poke+0xf4/0x4e0
+> [   56.578489]  ? __pfx__regmap_raw_write_impl+0x10/0x10
+> [   56.579399]  ? __pfx_text_poke_memcpy+0x10/0x10
+> [   56.580134]  ? lock_is_held_type+0xe6/0x140
+> [   56.580902]  ? __pfx__regmap_raw_write_impl+0x10/0x10
+> [   56.581822]  text_poke+0x3a/0x60
+> [   56.582538]  text_poke_bp_batch+0x94/0x310
+> [   56.583263]  ? text_poke_bp_batch+0x5/0x310
+> [   56.584081]  ? __pfx_virtblk_update_cache_mode+0x10/0x10
+> [   56.585069]  text_poke_queue+0x93/0xb0
+> [   56.585874]  ftrace_replace_code+0x12a/0x1b0
+> [   56.586789]  ftrace_modify_all_code+0x1b9/0x2a0
+> [   56.587701]  arch_ftrace_update_code+0xd/0x20
+> [   56.588468]  ftrace_startup_enable+0x67/0xa0
+> [   56.589291]  ftrace_startup+0x124/0x200
+> [   56.590082]  register_ftrace_function_nolock+0x43/0x90
+> [   56.590991]  register_ftrace_function+0x1eb/0x280
+> [   56.591873]  ? __sanitizer_cov_trace_switch+0x57/0xa0
+> [   56.592835]  perf_ftrace_event_register+0xcd/0xf0
+> [   56.593735]  perf_trace_event_init+0x98/0x4b0
+> [   56.594639]  perf_trace_init+0xde/0x170
+> [   56.595449]  perf_tp_event_init+0x60/0xa0
+> [   56.596216]  perf_try_init_event+0x88/0x280
+> [   56.597094]  perf_event_alloc+0xe25/0x1c00
+> [   56.597900]  ? perf_event_alloc+0x5/0x1c00
+> [   56.598846]  __do_sys_perf_event_open+0x3b6/0x1910
+> [   56.600490]  __x64_sys_perf_event_open+0x2f/0x40
+> [   56.601330]  do_syscall_64+0x3b/0x90
+> [   56.602067]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> [   56.602902] RIP: 0033:0x7fe17f62659d
+> [   56.603610] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d d3 08 0d 00 f7 d8 64 89 01 48
+> [   56.606099] RSP: 002b:00007ffd572b7f58 EFLAGS: 00000206 ORIG_RAX: 000000000000012a
+> [   56.607348] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe17f62659d
+> [   56.608429] RDX: 0000000000000000 RSI: 00000000ffffffff RDI: 0000000020000100
+> [   56.609512] RBP: 00007ffd572b7f70 R08: 0000000000000000 R09: 00007ffd572b7f70
+> [   56.610604] R10: 00000000ffffffff R11: 0000000000000206 R12: 0000000000401180
+> [   56.611719] R13: 00007ffd572b8090 R14: 0000000000000000 R15: 0000000000000000
+> [   56.613326]  </TASK>
