@@ -2,42 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EDA6CDB8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 359E66CDBA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 16:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjC2OIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 10:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S230271AbjC2OLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 10:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjC2OIX (ORCPT
+        with ESMTP id S230171AbjC2OKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:08:23 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9489C59F7;
-        Wed, 29 Mar 2023 07:07:18 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1phWSB-0004ZJ-HZ; Wed, 29 Mar 2023 16:07:07 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     palmer@dabbelt.com
-Cc:     paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        conor.dooley@microchip.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        christoph.muellner@vrull.eu, heiko@sntech.de,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>
-Subject: [PATCH v4 4/4] RISC-V: crypto: add accelerated GCM GHASH implementation
-Date:   Wed, 29 Mar 2023 16:06:42 +0200
-Message-Id: <20230329140642.2186644-5-heiko.stuebner@vrull.eu>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230329140642.2186644-1-heiko.stuebner@vrull.eu>
-References: <20230329140642.2186644-1-heiko.stuebner@vrull.eu>
+        Wed, 29 Mar 2023 10:10:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B6355A4;
+        Wed, 29 Mar 2023 07:10:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680099011; x=1711635011;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=54TwdqI2jO0fD5SczmgJpyLhNeumpJSC1ZS+7HlXaF4=;
+  b=Ijctlcwa4HfpYhsBm+c2ZHpX3kWWI0k8xeFrqDzGruLaEed1GeE0UpTK
+   K381/zlCDGhQFnuPAy4sJxBCDPdR4+cejaRrDDYoly2KiHgG6pG4b+ppQ
+   X8PPOta35kENgB7Y+zaQ89UrQLL+MICplaRh5ppU0AXt7i4rVBH5MltP7
+   HOM6nCW50z+360nDQ1lxodSOU6PUGXtHXOlXIuNdWmP0Hgp7mYuCuBBee
+   6nuXdiiXAnydg3U7W4DFRKGmIZvEA9pNgNSRAw50cxol5ramjM2sKbB73
+   JK2PsyrAdd+lwPfu3/EG3qTJGdGfPFIUCc8BpeAgTa2lKIOvA2BM47oMH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="324789527"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="324789527"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 07:08:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="795245926"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="795245926"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 29 Mar 2023 07:07:54 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phWSv-000Jba-1B;
+        Wed, 29 Mar 2023 14:07:53 +0000
+Date:   Wed, 29 Mar 2023 22:07:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anuj Gupta <anuj20.g@samsung.com>, Jens Axboe <axboe@kernel.dk>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, bvanassche@acm.org, hare@suse.de,
+        ming.lei@redhat.com, damien.lemoal@opensource.wdc.com,
+        anuj20.g@samsung.com, joshi.k@samsung.com, nitheshshetty@gmail.com,
+        gost.dev@samsung.com, Nitesh Shetty <nj.shetty@samsung.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v8 4/9] fs, block: copy_file_range for def_blk_ops for
+ direct block device.
+Message-ID: <202303292151.7DDOUCIt-lkp@intel.com>
+References: <20230327084103.21601-5-anuj20.g@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327084103.21601-5-anuj20.g@samsung.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,991 +78,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+Hi Anuj,
 
-With different sets of available extensions a number of different
-implementation variants are possible. Quite a number of them are already
-implemented in openSSL or are in the process of being implemented, so pick
-the relevant openSSL coden and add suitable glue code similar to arm64 and
-powerpc to use it for kernel-specific cryptography.
+Thank you for the patch! Yet something to improve:
 
-The prioritization of the algorithms follows the ifdef chain for the
-assembly callbacks done in openssl but here algorithms will get registered
-separately so that all of them can be part of the crypto selftests.
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on device-mapper-dm/for-next linus/master v6.3-rc4 next-20230329]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The crypto subsystem will select the most performant of all registered
-algorithms on the running system but will selftest all registered ones.
+url:    https://github.com/intel-lab-lkp/linux/commits/Anuj-Gupta/block-Add-copy-offload-support-infrastructure/20230329-162018
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20230327084103.21601-5-anuj20.g%40samsung.com
+patch subject: [PATCH v8 4/9] fs, block: copy_file_range for def_blk_ops for direct block device.
+config: loongarch-randconfig-r001-20230329 (https://download.01.org/0day-ci/archive/20230329/202303292151.7DDOUCIt-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/61819d260936954ddd6688548f074e7063dcf39e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Anuj-Gupta/block-Add-copy-offload-support-infrastructure/20230329-162018
+        git checkout 61819d260936954ddd6688548f074e7063dcf39e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash
 
-In a first step this adds scalar variants using the Zbc, Zbb and
-possible Zbkb (bitmanip crypto extension) and the perl implementation
-stems from openSSL pull request on
-    https://github.com/openssl/openssl/pull/20078
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303292151.7DDOUCIt-lkp@intel.com/
 
-Co-developed-by: Christoph Müllner <christoph.muellner@vrull.eu>
-Signed-off-by: Christoph Müllner <christoph.muellner@vrull.eu>
-Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
----
- arch/riscv/crypto/Kconfig              |  13 +
- arch/riscv/crypto/Makefile             |  14 +
- arch/riscv/crypto/ghash-riscv64-glue.c | 258 ++++++++++++++++
- arch/riscv/crypto/ghash-riscv64-zbc.pl | 400 +++++++++++++++++++++++++
- arch/riscv/crypto/riscv.pm             | 231 ++++++++++++++
- 5 files changed, 916 insertions(+)
- create mode 100644 arch/riscv/crypto/ghash-riscv64-glue.c
- create mode 100644 arch/riscv/crypto/ghash-riscv64-zbc.pl
- create mode 100644 arch/riscv/crypto/riscv.pm
+All errors (new ones prefixed by >>):
 
-diff --git a/arch/riscv/crypto/Kconfig b/arch/riscv/crypto/Kconfig
-index 10d60edc0110..cd2237923e68 100644
---- a/arch/riscv/crypto/Kconfig
-+++ b/arch/riscv/crypto/Kconfig
-@@ -2,4 +2,17 @@
- 
- menu "Accelerated Cryptographic Algorithms for CPU (riscv)"
- 
-+config CRYPTO_GHASH_RISCV64
-+	tristate "Hash functions: GHASH"
-+	depends on 64BIT && RISCV_ISA_ZBC
-+	select CRYPTO_HASH
-+	select CRYPTO_LIB_GF128MUL
-+	help
-+	  GCM GHASH function (NIST SP800-38D)
-+
-+	  Architecture: riscv64 using one of:
-+	  - Zbc extension
-+	  - Zbc + Zbb extensions
-+	  - Zbc + Zbkb extensions
-+
- endmenu
-diff --git a/arch/riscv/crypto/Makefile b/arch/riscv/crypto/Makefile
-index b3b6332c9f6d..0a158919e9da 100644
---- a/arch/riscv/crypto/Makefile
-+++ b/arch/riscv/crypto/Makefile
-@@ -2,3 +2,17 @@
- #
- # linux/arch/riscv/crypto/Makefile
- #
-+
-+obj-$(CONFIG_CRYPTO_GHASH_RISCV64) += ghash-riscv64.o
-+ghash-riscv64-y := ghash-riscv64-glue.o
-+ifdef CONFIG_RISCV_ISA_ZBC
-+ghash-riscv64-y += ghash-riscv64-zbc.o
-+endif
-+
-+quiet_cmd_perlasm = PERLASM $@
-+      cmd_perlasm = $(PERL) $(<) void $(@)
-+
-+$(obj)/ghash-riscv64-zbc.S: $(src)/ghash-riscv64-zbc.pl
-+	$(call cmd,perlasm)
-+
-+clean-files += ghash-riscv64-zbc.S
-diff --git a/arch/riscv/crypto/ghash-riscv64-glue.c b/arch/riscv/crypto/ghash-riscv64-glue.c
-new file mode 100644
-index 000000000000..5ab704c49539
---- /dev/null
-+++ b/arch/riscv/crypto/ghash-riscv64-glue.c
-@@ -0,0 +1,258 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * RISC-V optimized GHASH routines
-+ *
-+ * Copyright (C) 2023 VRULL GmbH
-+ * Author: Heiko Stuebner <heiko.stuebner@vrull.eu>
-+ */
-+
-+#include <linux/types.h>
-+#include <linux/err.h>
-+#include <linux/crypto.h>
-+#include <linux/module.h>
-+#include <asm/simd.h>
-+#include <crypto/ghash.h>
-+#include <crypto/internal/hash.h>
-+#include <crypto/internal/simd.h>
-+
-+/* Zbc (optional with zbkb improvements) */
-+void gcm_ghash_rv64i_zbc(u64 Xi[2], const u128 Htable[16],
-+			 const u8 *inp, size_t len);
-+void gcm_ghash_rv64i_zbc__zbkb(u64 Xi[2], const u128 Htable[16],
-+			       const u8 *inp, size_t len);
-+
-+struct riscv64_ghash_ctx {
-+	void (*ghash_func)(u64 Xi[2], const u128 Htable[16],
-+			   const u8 *inp, size_t len);
-+
-+	/* key used by vector asm */
-+	u128 htable[16];
-+	/* key used by software fallback */
-+	be128 key;
-+};
-+
-+struct riscv64_ghash_desc_ctx {
-+	u64 shash[2];
-+	u8 buffer[GHASH_DIGEST_SIZE];
-+	int bytes;
-+};
-+
-+static int riscv64_ghash_init(struct shash_desc *desc)
-+{
-+	struct riscv64_ghash_desc_ctx *dctx = shash_desc_ctx(desc);
-+
-+	dctx->bytes = 0;
-+	memset(dctx->shash, 0, GHASH_DIGEST_SIZE);
-+	return 0;
-+}
-+
-+#ifdef CONFIG_RISCV_ISA_ZBC
-+
-+#define RISCV64_ZBC_SETKEY(VARIANT, GHASH)				\
-+void gcm_init_rv64i_ ## VARIANT(u128 Htable[16], const u64 Xi[2]);	\
-+static int riscv64_zbc_ghash_setkey_ ## VARIANT(struct crypto_shash *tfm,	\
-+					   const u8 *key,		\
-+					   unsigned int keylen)		\
-+{									\
-+	struct riscv64_ghash_ctx *ctx = crypto_tfm_ctx(crypto_shash_tfm(tfm)); \
-+	const u64 k[2] = { cpu_to_be64(((const u64 *)key)[0]),		\
-+			   cpu_to_be64(((const u64 *)key)[1]) };	\
-+									\
-+	if (keylen != GHASH_BLOCK_SIZE)					\
-+		return -EINVAL;						\
-+									\
-+	memcpy(&ctx->key, key, GHASH_BLOCK_SIZE);			\
-+	gcm_init_rv64i_ ## VARIANT(ctx->htable, k);			\
-+									\
-+	ctx->ghash_func = gcm_ghash_rv64i_ ## GHASH;			\
-+									\
-+	return 0;							\
-+}
-+
-+static int riscv64_zbc_ghash_update(struct shash_desc *desc,
-+			   const u8 *src, unsigned int srclen)
-+{
-+	unsigned int len;
-+	struct riscv64_ghash_ctx *ctx = crypto_tfm_ctx(crypto_shash_tfm(desc->tfm));
-+	struct riscv64_ghash_desc_ctx *dctx = shash_desc_ctx(desc);
-+
-+	if (dctx->bytes) {
-+		if (dctx->bytes + srclen < GHASH_DIGEST_SIZE) {
-+			memcpy(dctx->buffer + dctx->bytes, src,
-+				srclen);
-+			dctx->bytes += srclen;
-+			return 0;
-+		}
-+		memcpy(dctx->buffer + dctx->bytes, src,
-+			GHASH_DIGEST_SIZE - dctx->bytes);
-+
-+		ctx->ghash_func(dctx->shash, ctx->htable,
-+				dctx->buffer, GHASH_DIGEST_SIZE);
-+
-+		src += GHASH_DIGEST_SIZE - dctx->bytes;
-+		srclen -= GHASH_DIGEST_SIZE - dctx->bytes;
-+		dctx->bytes = 0;
-+	}
-+	len = srclen & ~(GHASH_DIGEST_SIZE - 1);
-+
-+	if (len) {
-+		gcm_ghash_rv64i_zbc(dctx->shash, ctx->htable,
-+				src, len);
-+		src += len;
-+		srclen -= len;
-+	}
-+
-+	if (srclen) {
-+		memcpy(dctx->buffer, src, srclen);
-+		dctx->bytes = srclen;
-+	}
-+	return 0;
-+}
-+
-+static int riscv64_zbc_ghash_final(struct shash_desc *desc, u8 *out)
-+{
-+	int i;
-+	struct riscv64_ghash_ctx *ctx = crypto_tfm_ctx(crypto_shash_tfm(desc->tfm));
-+	struct riscv64_ghash_desc_ctx *dctx = shash_desc_ctx(desc);
-+
-+	if (dctx->bytes) {
-+		for (i = dctx->bytes; i < GHASH_DIGEST_SIZE; i++)
-+			dctx->buffer[i] = 0;
-+		ctx->ghash_func(dctx->shash, ctx->htable,
-+				dctx->buffer, GHASH_DIGEST_SIZE);
-+		dctx->bytes = 0;
-+	}
-+	memcpy(out, dctx->shash, GHASH_DIGEST_SIZE);
-+	return 0;
-+}
-+
-+RISCV64_ZBC_SETKEY(zbc, zbc);
-+struct shash_alg riscv64_zbc_ghash_alg = {
-+	.digestsize = GHASH_DIGEST_SIZE,
-+	.init = riscv64_ghash_init,
-+	.update = riscv64_zbc_ghash_update,
-+	.final = riscv64_zbc_ghash_final,
-+	.setkey = riscv64_zbc_ghash_setkey_zbc,
-+	.descsize = sizeof(struct riscv64_ghash_desc_ctx)
-+		    + sizeof(struct ghash_desc_ctx),
-+	.base = {
-+		 .cra_name = "ghash",
-+		 .cra_driver_name = "riscv64_zbc_ghash",
-+		 .cra_priority = 250,
-+		 .cra_blocksize = GHASH_BLOCK_SIZE,
-+		 .cra_ctxsize = sizeof(struct riscv64_ghash_ctx),
-+		 .cra_module = THIS_MODULE,
-+	},
-+};
-+
-+RISCV64_ZBC_SETKEY(zbc__zbb, zbc);
-+struct shash_alg riscv64_zbc_zbb_ghash_alg = {
-+	.digestsize = GHASH_DIGEST_SIZE,
-+	.init = riscv64_ghash_init,
-+	.update = riscv64_zbc_ghash_update,
-+	.final = riscv64_zbc_ghash_final,
-+	.setkey = riscv64_zbc_ghash_setkey_zbc__zbb,
-+	.descsize = sizeof(struct riscv64_ghash_desc_ctx)
-+		    + sizeof(struct ghash_desc_ctx),
-+	.base = {
-+		 .cra_name = "ghash",
-+		 .cra_driver_name = "riscv64_zbc_zbb_ghash",
-+		 .cra_priority = 251,
-+		 .cra_blocksize = GHASH_BLOCK_SIZE,
-+		 .cra_ctxsize = sizeof(struct riscv64_ghash_ctx),
-+		 .cra_module = THIS_MODULE,
-+	},
-+};
-+
-+RISCV64_ZBC_SETKEY(zbc__zbkb, zbc__zbkb);
-+struct shash_alg riscv64_zbc_zbkb_ghash_alg = {
-+	.digestsize = GHASH_DIGEST_SIZE,
-+	.init = riscv64_ghash_init,
-+	.update = riscv64_zbc_ghash_update,
-+	.final = riscv64_zbc_ghash_final,
-+	.setkey = riscv64_zbc_ghash_setkey_zbc__zbkb,
-+	.descsize = sizeof(struct riscv64_ghash_desc_ctx)
-+		    + sizeof(struct ghash_desc_ctx),
-+	.base = {
-+		 .cra_name = "ghash",
-+		 .cra_driver_name = "riscv64_zbc_zbkb_ghash",
-+		 .cra_priority = 252,
-+		 .cra_blocksize = GHASH_BLOCK_SIZE,
-+		 .cra_ctxsize = sizeof(struct riscv64_ghash_ctx),
-+		 .cra_module = THIS_MODULE,
-+	},
-+};
-+
-+#endif /* CONFIG_RISCV_ISA_ZBC */
-+
-+#define RISCV64_DEFINED_GHASHES		7
-+
-+static struct shash_alg *riscv64_ghashes[RISCV64_DEFINED_GHASHES];
-+static int num_riscv64_ghashes;
-+
-+static int __init riscv64_ghash_register(struct shash_alg *ghash)
-+{
-+	int ret;
-+
-+	ret = crypto_register_shash(ghash);
-+	if (ret < 0) {
-+		int i;
-+
-+		for (i = num_riscv64_ghashes - 1; i >= 0 ; i--)
-+			crypto_unregister_shash(riscv64_ghashes[i]);
-+
-+		num_riscv64_ghashes = 0;
-+
-+		return ret;
-+	}
-+
-+	pr_debug("Registered RISC-V ghash %s\n", ghash->base.cra_driver_name);
-+	riscv64_ghashes[num_riscv64_ghashes] = ghash;
-+	num_riscv64_ghashes++;
-+	return 0;
-+}
-+
-+static int __init riscv64_ghash_mod_init(void)
-+{
-+	int ret = 0;
-+
-+#ifdef CONFIG_RISCV_ISA_ZBC
-+	if (riscv_isa_extension_available(NULL, ZBC)) {
-+		ret = riscv64_ghash_register(&riscv64_zbc_ghash_alg);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (riscv_isa_extension_available(NULL, ZBB)) {
-+			ret = riscv64_ghash_register(&riscv64_zbc_zbb_ghash_alg);
-+			if (ret < 0)
-+				return ret;
-+		}
-+
-+		if (riscv_isa_extension_available(NULL, ZBKB)) {
-+			ret = riscv64_ghash_register(&riscv64_zbc_zbkb_ghash_alg);
-+			if (ret < 0)
-+				return ret;
-+		}
-+	}
-+#endif
-+
-+	return 0;
-+}
-+
-+static void __exit riscv64_ghash_mod_fini(void)
-+{
-+	int i;
-+
-+	for (i = num_riscv64_ghashes - 1; i >= 0 ; i--)
-+		crypto_unregister_shash(riscv64_ghashes[i]);
-+
-+	num_riscv64_ghashes = 0;
-+}
-+
-+module_init(riscv64_ghash_mod_init);
-+module_exit(riscv64_ghash_mod_fini);
-+
-+MODULE_DESCRIPTION("GSM GHASH (accelerated)");
-+MODULE_AUTHOR("Heiko Stuebner <heiko.stuebner@vrull.eu>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS_CRYPTO("ghash");
-diff --git a/arch/riscv/crypto/ghash-riscv64-zbc.pl b/arch/riscv/crypto/ghash-riscv64-zbc.pl
-new file mode 100644
-index 000000000000..691231ffa11c
---- /dev/null
-+++ b/arch/riscv/crypto/ghash-riscv64-zbc.pl
-@@ -0,0 +1,400 @@
-+#! /usr/bin/env perl
-+# Copyright 2022 The OpenSSL Project Authors. All Rights Reserved.
-+#
-+# Licensed under the Apache License 2.0 (the "License").  You may not use
-+# this file except in compliance with the License.  You can obtain a copy
-+# in the file LICENSE in the source distribution or at
-+# https://www.openssl.org/source/license.html
-+
-+use strict;
-+use warnings;
-+
-+use FindBin qw($Bin);
-+use lib "$Bin";
-+use lib "$Bin/../../perlasm";
-+use riscv;
-+
-+# $output is the last argument if it looks like a file (it has an extension)
-+# $flavour is the first argument if it doesn't look like a file
-+my $output = $#ARGV >= 0 && $ARGV[$#ARGV] =~ m|\.\w+$| ? pop : undef;
-+my $flavour = $#ARGV >= 0 && $ARGV[0] !~ m|\.| ? shift : undef;
-+
-+$output and open STDOUT,">$output";
-+
-+my $code=<<___;
-+.text
-+___
-+
-+################################################################################
-+# void gcm_init_rv64i_zbc(u128 Htable[16], const u64 H[2]);
-+# void gcm_init_rv64i_zbc__zbb(u128 Htable[16], const u64 H[2]);
-+# void gcm_init_rv64i_zbc__zbkb(u128 Htable[16], const u64 H[2]);
-+#
-+# input:  H: 128-bit H - secret parameter E(K, 0^128)
-+# output: Htable: Preprocessed key data for gcm_gmult_rv64i_zbc* and
-+#                 gcm_ghash_rv64i_zbc*
-+#
-+# All callers of this function revert the byte-order unconditionally
-+# on little-endian machines. So we need to revert the byte-order back.
-+# Additionally we reverse the bits of each byte.
-+
-+{
-+my ($Htable,$H,$VAL0,$VAL1,$TMP0,$TMP1,$TMP2) = ("a0","a1","a2","a3","t0","t1","t2");
-+
-+$code .= <<___;
-+.p2align 3
-+.globl gcm_init_rv64i_zbc
-+.type gcm_init_rv64i_zbc,\@function
-+gcm_init_rv64i_zbc:
-+    ld      $VAL0,0($H)
-+    ld      $VAL1,8($H)
-+    @{[brev8_rv64i   $VAL0, $TMP0, $TMP1, $TMP2]}
-+    @{[brev8_rv64i   $VAL1, $TMP0, $TMP1, $TMP2]}
-+    @{[sd_rev8_rv64i $VAL0, $Htable, 0, $TMP0]}
-+    @{[sd_rev8_rv64i $VAL1, $Htable, 8, $TMP0]}
-+    ret
-+.size gcm_init_rv64i_zbc,.-gcm_init_rv64i_zbc
-+___
-+}
-+
-+{
-+my ($Htable,$H,$VAL0,$VAL1,$TMP0,$TMP1,$TMP2) = ("a0","a1","a2","a3","t0","t1","t2");
-+
-+$code .= <<___;
-+.p2align 3
-+.globl gcm_init_rv64i_zbc__zbb
-+.type gcm_init_rv64i_zbc__zbb,\@function
-+gcm_init_rv64i_zbc__zbb:
-+    ld      $VAL0,0($H)
-+    ld      $VAL1,8($H)
-+    @{[brev8_rv64i $VAL0, $TMP0, $TMP1, $TMP2]}
-+    @{[brev8_rv64i $VAL1, $TMP0, $TMP1, $TMP2]}
-+    @{[rev8 $VAL0, $VAL0]}
-+    @{[rev8 $VAL1, $VAL1]}
-+    sd      $VAL0,0($Htable)
-+    sd      $VAL1,8($Htable)
-+    ret
-+.size gcm_init_rv64i_zbc__zbb,.-gcm_init_rv64i_zbc__zbb
-+___
-+}
-+
-+{
-+my ($Htable,$H,$TMP0,$TMP1) = ("a0","a1","t0","t1");
-+
-+$code .= <<___;
-+.p2align 3
-+.globl gcm_init_rv64i_zbc__zbkb
-+.type gcm_init_rv64i_zbc__zbkb,\@function
-+gcm_init_rv64i_zbc__zbkb:
-+    ld      $TMP0,0($H)
-+    ld      $TMP1,8($H)
-+    @{[brev8 $TMP0, $TMP0]}
-+    @{[brev8 $TMP1, $TMP1]}
-+    @{[rev8 $TMP0, $TMP0]}
-+    @{[rev8 $TMP1, $TMP1]}
-+    sd      $TMP0,0($Htable)
-+    sd      $TMP1,8($Htable)
-+    ret
-+.size gcm_init_rv64i_zbc__zbkb,.-gcm_init_rv64i_zbc__zbkb
-+___
-+}
-+
-+################################################################################
-+# void gcm_gmult_rv64i_zbc(u64 Xi[2], const u128 Htable[16]);
-+# void gcm_gmult_rv64i_zbc__zbkb(u64 Xi[2], const u128 Htable[16]);
-+#
-+# input:  Xi: current hash value
-+#         Htable: copy of H
-+# output: Xi: next hash value Xi
-+#
-+# Compute GMULT (Xi*H mod f) using the Zbc (clmul) and Zbb (basic bit manip)
-+# extensions. Using the no-Karatsuba approach and clmul for the final reduction.
-+# This results in an implementation with minimized number of instructions.
-+# HW with clmul latencies higher than 2 cycles might observe a performance
-+# improvement with Karatsuba. HW with clmul latencies higher than 6 cycles
-+# might observe a performance improvement with additionally converting the
-+# reduction to shift&xor. For a full discussion of this estimates see
-+# https://github.com/riscv/riscv-crypto/blob/master/doc/supp/gcm-mode-cmul.adoc
-+{
-+my ($Xi,$Htable,$x0,$x1,$y0,$y1) = ("a0","a1","a4","a5","a6","a7");
-+my ($z0,$z1,$z2,$z3,$t0,$t1,$polymod) = ("t0","t1","t2","t3","t4","t5","t6");
-+
-+$code .= <<___;
-+.p2align 3
-+.globl gcm_gmult_rv64i_zbc
-+.type gcm_gmult_rv64i_zbc,\@function
-+gcm_gmult_rv64i_zbc:
-+    # Load Xi and bit-reverse it
-+    ld        $x0, 0($Xi)
-+    ld        $x1, 8($Xi)
-+    @{[brev8_rv64i $x0, $z0, $z1, $z2]}
-+    @{[brev8_rv64i $x1, $z0, $z1, $z2]}
-+
-+    # Load the key (already bit-reversed)
-+    ld        $y0, 0($Htable)
-+    ld        $y1, 8($Htable)
-+
-+    # Load the reduction constant
-+    la        $polymod, Lpolymod
-+    lbu       $polymod, 0($polymod)
-+
-+    # Multiplication (without Karatsuba)
-+    @{[clmulh $z3, $x1, $y1]}
-+    @{[clmul  $z2, $x1, $y1]}
-+    @{[clmulh $t1, $x0, $y1]}
-+    @{[clmul  $z1, $x0, $y1]}
-+    xor       $z2, $z2, $t1
-+    @{[clmulh $t1, $x1, $y0]}
-+    @{[clmul  $t0, $x1, $y0]}
-+    xor       $z2, $z2, $t1
-+    xor       $z1, $z1, $t0
-+    @{[clmulh $t1, $x0, $y0]}
-+    @{[clmul  $z0, $x0, $y0]}
-+    xor       $z1, $z1, $t1
-+
-+    # Reduction with clmul
-+    @{[clmulh $t1, $z3, $polymod]}
-+    @{[clmul  $t0, $z3, $polymod]}
-+    xor       $z2, $z2, $t1
-+    xor       $z1, $z1, $t0
-+    @{[clmulh $t1, $z2, $polymod]}
-+    @{[clmul  $t0, $z2, $polymod]}
-+    xor       $x1, $z1, $t1
-+    xor       $x0, $z0, $t0
-+
-+    # Bit-reverse Xi back and store it
-+    @{[brev8_rv64i $x0, $z0, $z1, $z2]}
-+    @{[brev8_rv64i $x1, $z0, $z1, $z2]}
-+    sd        $x0, 0($Xi)
-+    sd        $x1, 8($Xi)
-+    ret
-+.size gcm_gmult_rv64i_zbc,.-gcm_gmult_rv64i_zbc
-+___
-+}
-+
-+{
-+my ($Xi,$Htable,$x0,$x1,$y0,$y1) = ("a0","a1","a4","a5","a6","a7");
-+my ($z0,$z1,$z2,$z3,$t0,$t1,$polymod) = ("t0","t1","t2","t3","t4","t5","t6");
-+
-+$code .= <<___;
-+.p2align 3
-+.globl gcm_gmult_rv64i_zbc__zbkb
-+.type gcm_gmult_rv64i_zbc__zbkb,\@function
-+gcm_gmult_rv64i_zbc__zbkb:
-+    # Load Xi and bit-reverse it
-+    ld        $x0, 0($Xi)
-+    ld        $x1, 8($Xi)
-+    @{[brev8  $x0, $x0]}
-+    @{[brev8  $x1, $x1]}
-+
-+    # Load the key (already bit-reversed)
-+    ld        $y0, 0($Htable)
-+    ld        $y1, 8($Htable)
-+
-+    # Load the reduction constant
-+    la        $polymod, Lpolymod
-+    lbu       $polymod, 0($polymod)
-+
-+    # Multiplication (without Karatsuba)
-+    @{[clmulh $z3, $x1, $y1]}
-+    @{[clmul  $z2, $x1, $y1]}
-+    @{[clmulh $t1, $x0, $y1]}
-+    @{[clmul  $z1, $x0, $y1]}
-+    xor       $z2, $z2, $t1
-+    @{[clmulh $t1, $x1, $y0]}
-+    @{[clmul  $t0, $x1, $y0]}
-+    xor       $z2, $z2, $t1
-+    xor       $z1, $z1, $t0
-+    @{[clmulh $t1, $x0, $y0]}
-+    @{[clmul  $z0, $x0, $y0]}
-+    xor       $z1, $z1, $t1
-+
-+    # Reduction with clmul
-+    @{[clmulh $t1, $z3, $polymod]}
-+    @{[clmul  $t0, $z3, $polymod]}
-+    xor       $z2, $z2, $t1
-+    xor       $z1, $z1, $t0
-+    @{[clmulh $t1, $z2, $polymod]}
-+    @{[clmul  $t0, $z2, $polymod]}
-+    xor       $x1, $z1, $t1
-+    xor       $x0, $z0, $t0
-+
-+    # Bit-reverse Xi back and store it
-+    @{[brev8  $x0, $x0]}
-+    @{[brev8  $x1, $x1]}
-+    sd        $x0, 0($Xi)
-+    sd        $x1, 8($Xi)
-+    ret
-+.size gcm_gmult_rv64i_zbc__zbkb,.-gcm_gmult_rv64i_zbc__zbkb
-+___
-+}
-+
-+################################################################################
-+# void gcm_ghash_rv64i_zbc(u64 Xi[2], const u128 Htable[16],
-+#                          const u8 *inp, size_t len);
-+# void gcm_ghash_rv64i_zbc__zbkb(u64 Xi[2], const u128 Htable[16],
-+#                                const u8 *inp, size_t len);
-+#
-+# input:  Xi: current hash value
-+#         Htable: copy of H
-+#         inp: pointer to input data
-+#         len: length of input data in bytes (mutiple of block size)
-+# output: Xi: Xi+1 (next hash value Xi)
-+{
-+my ($Xi,$Htable,$inp,$len,$x0,$x1,$y0,$y1) = ("a0","a1","a2","a3","a4","a5","a6","a7");
-+my ($z0,$z1,$z2,$z3,$t0,$t1,$polymod) = ("t0","t1","t2","t3","t4","t5","t6");
-+
-+$code .= <<___;
-+.p2align 3
-+.globl gcm_ghash_rv64i_zbc
-+.type gcm_ghash_rv64i_zbc,\@function
-+gcm_ghash_rv64i_zbc:
-+    # Load Xi and bit-reverse it
-+    ld        $x0, 0($Xi)
-+    ld        $x1, 8($Xi)
-+    @{[brev8_rv64i $x0, $z0, $z1, $z2]}
-+    @{[brev8_rv64i $x1, $z0, $z1, $z2]}
-+
-+    # Load the key (already bit-reversed)
-+    ld        $y0, 0($Htable)
-+    ld        $y1, 8($Htable)
-+
-+    # Load the reduction constant
-+    la        $polymod, Lpolymod
-+    lbu       $polymod, 0($polymod)
-+
-+Lstep:
-+    # Load the input data, bit-reverse them, and XOR them with Xi
-+    ld        $t0, 0($inp)
-+    ld        $t1, 8($inp)
-+    add       $inp, $inp, 16
-+    add       $len, $len, -16
-+    @{[brev8_rv64i $t0, $z0, $z1, $z2]}
-+    @{[brev8_rv64i $t1, $z0, $z1, $z2]}
-+    xor       $x0, $x0, $t0
-+    xor       $x1, $x1, $t1
-+
-+    # Multiplication (without Karatsuba)
-+    @{[clmulh $z3, $x1, $y1]}
-+    @{[clmul  $z2, $x1, $y1]}
-+    @{[clmulh $t1, $x0, $y1]}
-+    @{[clmul  $z1, $x0, $y1]}
-+    xor       $z2, $z2, $t1
-+    @{[clmulh $t1, $x1, $y0]}
-+    @{[clmul  $t0, $x1, $y0]}
-+    xor       $z2, $z2, $t1
-+    xor       $z1, $z1, $t0
-+    @{[clmulh $t1, $x0, $y0]}
-+    @{[clmul  $z0, $x0, $y0]}
-+    xor       $z1, $z1, $t1
-+
-+    # Reduction with clmul
-+    @{[clmulh $t1, $z3, $polymod]}
-+    @{[clmul  $t0, $z3, $polymod]}
-+    xor       $z2, $z2, $t1
-+    xor       $z1, $z1, $t0
-+    @{[clmulh $t1, $z2, $polymod]}
-+    @{[clmul  $t0, $z2, $polymod]}
-+    xor       $x1, $z1, $t1
-+    xor       $x0, $z0, $t0
-+
-+    # Iterate over all blocks
-+    bnez      $len, Lstep
-+
-+    # Bit-reverse final Xi back and store it
-+    @{[brev8_rv64i $x0, $z0, $z1, $z2]}
-+    @{[brev8_rv64i $x1, $z0, $z1, $z2]}
-+    sd        $x0, 0($Xi)
-+    sd        $x1, 8($Xi)
-+    ret
-+.size gcm_ghash_rv64i_zbc,.-gcm_ghash_rv64i_zbc
-+___
-+}
-+
-+{
-+my ($Xi,$Htable,$inp,$len,$x0,$x1,$y0,$y1) = ("a0","a1","a2","a3","a4","a5","a6","a7");
-+my ($z0,$z1,$z2,$z3,$t0,$t1,$polymod) = ("t0","t1","t2","t3","t4","t5","t6");
-+
-+$code .= <<___;
-+.p2align 3
-+.globl gcm_ghash_rv64i_zbc__zbkb
-+.type gcm_ghash_rv64i_zbc__zbkb,\@function
-+gcm_ghash_rv64i_zbc__zbkb:
-+    # Load Xi and bit-reverse it
-+    ld        $x0, 0($Xi)
-+    ld        $x1, 8($Xi)
-+    @{[brev8  $x0, $x0]}
-+    @{[brev8  $x1, $x1]}
-+
-+    # Load the key (already bit-reversed)
-+    ld        $y0, 0($Htable)
-+    ld        $y1, 8($Htable)
-+
-+    # Load the reduction constant
-+    la        $polymod, Lpolymod
-+    lbu       $polymod, 0($polymod)
-+
-+Lstep_zkbk:
-+    # Load the input data, bit-reverse them, and XOR them with Xi
-+    ld        $t0, 0($inp)
-+    ld        $t1, 8($inp)
-+    add       $inp, $inp, 16
-+    add       $len, $len, -16
-+    @{[brev8  $t0, $t0]}
-+    @{[brev8  $t1, $t1]}
-+    xor       $x0, $x0, $t0
-+    xor       $x1, $x1, $t1
-+
-+    # Multiplication (without Karatsuba)
-+    @{[clmulh $z3, $x1, $y1]}
-+    @{[clmul  $z2, $x1, $y1]}
-+    @{[clmulh $t1, $x0, $y1]}
-+    @{[clmul  $z1, $x0, $y1]}
-+    xor       $z2, $z2, $t1
-+    @{[clmulh $t1, $x1, $y0]}
-+    @{[clmul  $t0, $x1, $y0]}
-+    xor       $z2, $z2, $t1
-+    xor       $z1, $z1, $t0
-+    @{[clmulh $t1, $x0, $y0]}
-+    @{[clmul  $z0, $x0, $y0]}
-+    xor       $z1, $z1, $t1
-+
-+    # Reduction with clmul
-+    @{[clmulh $t1, $z3, $polymod]}
-+    @{[clmul  $t0, $z3, $polymod]}
-+    xor       $z2, $z2, $t1
-+    xor       $z1, $z1, $t0
-+    @{[clmulh $t1, $z2, $polymod]}
-+    @{[clmul  $t0, $z2, $polymod]}
-+    xor       $x1, $z1, $t1
-+    xor       $x0, $z0, $t0
-+
-+    # Iterate over all blocks
-+    bnez      $len, Lstep_zkbk
-+
-+    # Bit-reverse final Xi back and store it
-+    @{[brev8  $x0, $x0]}
-+    @{[brev8  $x1, $x1]}
-+    sd $x0,  0($Xi)
-+    sd $x1,  8($Xi)
-+    ret
-+.size gcm_ghash_rv64i_zbc__zbkb,.-gcm_ghash_rv64i_zbc__zbkb
-+___
-+}
-+
-+$code .= <<___;
-+.p2align 3
-+Lbrev8_const:
-+    .dword  0xAAAAAAAAAAAAAAAA
-+    .dword  0xCCCCCCCCCCCCCCCC
-+    .dword  0xF0F0F0F0F0F0F0F0
-+.size Lbrev8_const,.-Lbrev8_const
-+
-+Lpolymod:
-+    .byte 0x87
-+.size Lpolymod,.-Lpolymod
-+___
-+
-+print $code;
-+
-+close STDOUT or die "error closing STDOUT: $!";
-diff --git a/arch/riscv/crypto/riscv.pm b/arch/riscv/crypto/riscv.pm
-new file mode 100644
-index 000000000000..b0c786a13ca0
---- /dev/null
-+++ b/arch/riscv/crypto/riscv.pm
-@@ -0,0 +1,231 @@
-+#! /usr/bin/env perl
-+# Copyright 2023 The OpenSSL Project Authors. All Rights Reserved.
-+#
-+# Licensed under the Apache License 2.0 (the "License").  You may not use
-+# this file except in compliance with the License.  You can obtain a copy
-+# in the file LICENSE in the source distribution or at
-+# https://www.openssl.org/source/license.html
-+
-+use strict;
-+use warnings;
-+
-+# Set $have_stacktrace to 1 if we have Devel::StackTrace
-+my $have_stacktrace = 0;
-+if (eval {require Devel::StackTrace;1;}) {
-+    $have_stacktrace = 1;
-+}
-+
-+my @regs = map("x$_",(0..31));
-+# Mapping from the RISC-V psABI ABI mnemonic names to the register number.
-+my @regaliases = ('zero','ra','sp','gp','tp','t0','t1','t2','s0','s1',
-+    map("a$_",(0..7)),
-+    map("s$_",(2..11)),
-+    map("t$_",(3..6))
-+);
-+
-+my %reglookup;
-+@reglookup{@regs} = @regs;
-+@reglookup{@regaliases} = @regs;
-+
-+# Takes a register name, possibly an alias, and converts it to a register index
-+# from 0 to 31
-+sub read_reg {
-+    my $reg = lc shift;
-+    if (!exists($reglookup{$reg})) {
-+        my $trace = "";
-+        if ($have_stacktrace) {
-+            $trace = Devel::StackTrace->new->as_string;
-+        }
-+        die("Unknown register ".$reg."\n".$trace);
-+    }
-+    my $regstr = $reglookup{$reg};
-+    if (!($regstr =~ /^x([0-9]+)$/)) {
-+        my $trace = "";
-+        if ($have_stacktrace) {
-+            $trace = Devel::StackTrace->new->as_string;
-+        }
-+        die("Could not process register ".$reg."\n".$trace);
-+    }
-+    return $1;
-+}
-+
-+# Helper functions
-+
-+sub brev8_rv64i {
-+    # brev8 without `brev8` instruction (only in Zbkb)
-+    # Bit-reverses the first argument and needs two scratch registers
-+    my $val = shift;
-+    my $t0 = shift;
-+    my $t1 = shift;
-+    my $brev8_const = shift;
-+    my $seq = <<___;
-+        la      $brev8_const, Lbrev8_const
-+
-+        ld      $t0, 0($brev8_const)  # 0xAAAAAAAAAAAAAAAA
-+        slli    $t1, $val, 1
-+        and     $t1, $t1, $t0
-+        and     $val, $val, $t0
-+        srli    $val, $val, 1
-+        or      $val, $t1, $val
-+
-+        ld      $t0, 8($brev8_const)  # 0xCCCCCCCCCCCCCCCC
-+        slli    $t1, $val, 2
-+        and     $t1, $t1, $t0
-+        and     $val, $val, $t0
-+        srli    $val, $val, 2
-+        or      $val, $t1, $val
-+
-+        ld      $t0, 16($brev8_const) # 0xF0F0F0F0F0F0F0F0
-+        slli    $t1, $val, 4
-+        and     $t1, $t1, $t0
-+        and     $val, $val, $t0
-+        srli    $val, $val, 4
-+        or      $val, $t1, $val
-+___
-+    return $seq;
-+}
-+
-+sub sd_rev8_rv64i {
-+    # rev8 without `rev8` instruction (only in Zbb or Zbkb)
-+    # Stores the given value byte-reversed and needs one scratch register
-+    my $val = shift;
-+    my $addr = shift;
-+    my $off = shift;
-+    my $tmp = shift;
-+    my $off0 = ($off + 0);
-+    my $off1 = ($off + 1);
-+    my $off2 = ($off + 2);
-+    my $off3 = ($off + 3);
-+    my $off4 = ($off + 4);
-+    my $off5 = ($off + 5);
-+    my $off6 = ($off + 6);
-+    my $off7 = ($off + 7);
-+    my $seq = <<___;
-+        sb      $val, $off7($addr)
-+        srli    $tmp, $val, 8
-+        sb      $tmp, $off6($addr)
-+        srli    $tmp, $val, 16
-+        sb      $tmp, $off5($addr)
-+        srli    $tmp, $val, 24
-+        sb      $tmp, $off4($addr)
-+        srli    $tmp, $val, 32
-+        sb      $tmp, $off3($addr)
-+        srli    $tmp, $val, 40
-+        sb      $tmp, $off2($addr)
-+        srli    $tmp, $val, 48
-+        sb      $tmp, $off1($addr)
-+        srli    $tmp, $val, 56
-+        sb      $tmp, $off0($addr)
-+___
-+    return $seq;
-+}
-+
-+# Scalar crypto instructions
-+
-+sub aes64ds {
-+    # Encoding for aes64ds rd, rs1, rs2 instruction on RV64
-+    #                XXXXXXX_ rs2 _ rs1 _XXX_ rd  _XXXXXXX
-+    my $template = 0b0011101_00000_00000_000_00000_0110011;
-+    my $rd = read_reg shift;
-+    my $rs1 = read_reg shift;
-+    my $rs2 = read_reg shift;
-+    return ".word ".($template | ($rs2 << 20) | ($rs1 << 15) | ($rd << 7));
-+}
-+
-+sub aes64dsm {
-+    # Encoding for aes64dsm rd, rs1, rs2 instruction on RV64
-+    #                XXXXXXX_ rs2 _ rs1 _XXX_ rd  _XXXXXXX
-+    my $template = 0b0011111_00000_00000_000_00000_0110011;
-+    my $rd = read_reg shift;
-+    my $rs1 = read_reg shift;
-+    my $rs2 = read_reg shift;
-+    return ".word ".($template | ($rs2 << 20) | ($rs1 << 15) | ($rd << 7));
-+}
-+
-+sub aes64es {
-+    # Encoding for aes64es rd, rs1, rs2 instruction on RV64
-+    #                XXXXXXX_ rs2 _ rs1 _XXX_ rd  _XXXXXXX
-+    my $template = 0b0011001_00000_00000_000_00000_0110011;
-+    my $rd = read_reg shift;
-+    my $rs1 = read_reg shift;
-+    my $rs2 = read_reg shift;
-+    return ".word ".($template | ($rs2 << 20) | ($rs1 << 15) | ($rd << 7));
-+}
-+
-+sub aes64esm {
-+    # Encoding for aes64esm rd, rs1, rs2 instruction on RV64
-+    #                XXXXXXX_ rs2 _ rs1 _XXX_ rd  _XXXXXXX
-+    my $template = 0b0011011_00000_00000_000_00000_0110011;
-+    my $rd = read_reg shift;
-+    my $rs1 = read_reg shift;
-+    my $rs2 = read_reg shift;
-+    return ".word ".($template | ($rs2 << 20) | ($rs1 << 15) | ($rd << 7));
-+}
-+
-+sub aes64im {
-+    # Encoding for aes64im rd, rs1 instruction on RV64
-+    #                XXXXXXXXXXXX_ rs1 _XXX_ rd  _XXXXXXX
-+    my $template = 0b001100000000_00000_001_00000_0010011;
-+    my $rd = read_reg shift;
-+    my $rs1 = read_reg shift;
-+    return ".word ".($template | ($rs1 << 15) | ($rd << 7));
-+}
-+
-+sub aes64ks1i {
-+    # Encoding for aes64ks1i rd, rs1, rnum instruction on RV64
-+    #                XXXXXXXX_rnum_ rs1 _XXX_ rd  _XXXXXXX
-+    my $template = 0b00110001_0000_00000_001_00000_0010011;
-+    my $rd = read_reg shift;
-+    my $rs1 = read_reg shift;
-+    my $rnum = shift;
-+    return ".word ".($template | ($rnum << 20) | ($rs1 << 15) | ($rd << 7));
-+}
-+
-+sub aes64ks2 {
-+    # Encoding for aes64ks2 rd, rs1, rs2 instruction on RV64
-+    #                XXXXXXX_ rs2 _ rs1 _XXX_ rd  _XXXXXXX
-+    my $template = 0b0111111_00000_00000_000_00000_0110011;
-+    my $rd = read_reg shift;
-+    my $rs1 = read_reg shift;
-+    my $rs2 = read_reg shift;
-+    return ".word ".($template | ($rs2 << 20) | ($rs1 << 15) | ($rd << 7));
-+}
-+
-+sub brev8 {
-+    # brev8 rd, rs
-+    my $template = 0b011010000111_00000_101_00000_0010011;
-+    my $rd = read_reg shift;
-+    my $rs = read_reg shift;
-+    return ".word ".($template | ($rs << 15) | ($rd << 7));
-+}
-+
-+sub clmul {
-+    # Encoding for clmul rd, rs1, rs2 instruction on RV64
-+    #                XXXXXXX_ rs2 _ rs1 _XXX_ rd  _XXXXXXX
-+    my $template = 0b0000101_00000_00000_001_00000_0110011;
-+    my $rd = read_reg shift;
-+    my $rs1 = read_reg shift;
-+    my $rs2 = read_reg shift;
-+    return ".word ".($template | ($rs2 << 20) | ($rs1 << 15) | ($rd << 7));
-+}
-+
-+sub clmulh {
-+    # Encoding for clmulh rd, rs1, rs2 instruction on RV64
-+    #                XXXXXXX_ rs2 _ rs1 _XXX_ rd  _XXXXXXX
-+    my $template = 0b0000101_00000_00000_011_00000_0110011;
-+    my $rd = read_reg shift;
-+    my $rs1 = read_reg shift;
-+    my $rs2 = read_reg shift;
-+    return ".word ".($template | ($rs2 << 20) | ($rs1 << 15) | ($rd << 7));
-+}
-+
-+sub rev8 {
-+    # Encoding for rev8 rd, rs instruction on RV64
-+    #               XXXXXXXXXXXXX_ rs  _XXX_ rd  _XXXXXXX
-+    my $template = 0b011010111000_00000_101_00000_0010011;
-+    my $rd = read_reg shift;
-+    my $rs = read_reg shift;
-+    return ".word ".($template | ($rs << 15) | ($rd << 7));
-+}
-+
-+1;
+   loongarch64-linux-ld: fs/read_write.o: in function `.L633':
+>> read_write.c:(.text+0x42e0): undefined reference to `I_BDEV'
+
 -- 
-2.39.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
