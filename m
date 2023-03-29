@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565196CEEFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1356C6CEF04
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 18:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjC2QOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 12:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S229766AbjC2QQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 12:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjC2QOR (ORCPT
+        with ESMTP id S229793AbjC2QP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:14:17 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7A391
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:13:53 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id eg48so65419158edb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1680106428;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gtjxQHAVek0fiDihNzOSf3NaXNmJd/De8NendcDYUPk=;
-        b=k28XzCid+7iUXtTh/dchprDhZiqSwP8dxu8iur2QRSpMiYUk12TjRWp8zU8ORY/kGs
-         azyNeWhWn0agjKGu5ccPzx/2gfydwcRsd9xLg+3iOidLzoCWOPGQjPl+uVovkEy+SBZN
-         jTKChsEbfxVTPueR7b2nUkUEhcSRtwwEzrhiOBiIiJtwV1x3x7EXqQd8WLidIiM8FQoL
-         lscVasViBlWqp5x4/x7wmayFBeiffJMaeQA0z9Gx6zRk6jWKGz8WGKCK8OLjo6+D3FgH
-         kpZoopNMzuQqWVutWjNOMFs/HhafXyv5YUgIwIySPyIqvalyn38siCmMnQdrEsj0ZKOk
-         asLA==
+        Wed, 29 Mar 2023 12:15:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E115FC2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:14:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680106478;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eyuZmyKTv1NKroiSP9E43EgXTfIl/At4weexpT2NlGU=;
+        b=bi1cYZPlpjfDGYeFHHTFlHP7bYF83uQtkLpgiiSFaVXaqZ9GG0Xr9hsxuvTGEdxrnN0CKI
+        712NUUqjaG/X9bBduBf47RgGeDTq30Ocl3DY1JteJ60ewP+pPA4Imdn0SmWLWidPtx+Cnb
+        j3e6/xNN3qpxx9wE/sCkusOd+/dg44I=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-308-C2lr0zE3MAeJrpBTPlYIEg-1; Wed, 29 Mar 2023 12:14:35 -0400
+X-MC-Unique: C2lr0zE3MAeJrpBTPlYIEg-1
+Received: by mail-ed1-f71.google.com with SMTP id h11-20020a0564020e8b00b004e59d4722a3so22981917eda.6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 09:14:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680106428;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gtjxQHAVek0fiDihNzOSf3NaXNmJd/De8NendcDYUPk=;
-        b=mdm39lHxA9UrmGFjELrBysz92aq4Yd5OewE8IXZAPtvLEk6n8Nn5FbJDfHx+by7264
-         ZxmoDpckN6GrRxQxKwKxnWXFwCV/VLh1hccUMSOy5el8YVwA/sHX+Jhqz/kGcomqbutA
-         n6mpAJBXZOXclGmMBzFtTjcBdBrfeoWSwBNTpQcgwltTeIK4N/Heqy0ISgEWuAQh8iJg
-         Sodu5wkN3IZr9v0WkzVzaKwJ3vLoyN0CMww6qr/TZIOZBo2aDQNju8/pv3EGZNHC0CnE
-         CB6Oo16c/NXOCLN7y3WIosYErKY+oLkaxvYo3i/PyzJP7EdpRR30COaZnY3831Tmkrr7
-         7NFA==
-X-Gm-Message-State: AAQBX9dd6s24tEJm0Iyme9gS0OkCNMdfQF8xdevo8yQj5GFf+3FwDdH+
-        JFsgJKn9G6vuiskGgjXoE61pig==
-X-Google-Smtp-Source: AKy350aU6kbpNKNBJhpDB/9HwORB2YuC0CreY/Vy8r9hC6aQhd3aRcQS3q24bC38jAzcspqNgOmSIA==
-X-Received: by 2002:a17:906:fc1e:b0:92b:f3c3:7c5f with SMTP id ov30-20020a170906fc1e00b0092bf3c37c5fmr19153435ejb.53.1680106428043;
-        Wed, 29 Mar 2023 09:13:48 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:400::5:e994])
-        by smtp.gmail.com with ESMTPSA id xo20-20020a170907bb9400b0093f0fbebfc2sm6211220ejc.144.2023.03.29.09.13.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 09:13:47 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 12:13:46 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        surenb@google.com, brauner@kernel.org, chris@chrisdown.name
-Subject: Re: [PATCH v4 4/4] sched/psi: allow unprivileged polling of N*2s
- period
-Message-ID: <ZCRjulHDZN3U5bUY@cmpxchg.org>
-References: <20230329153327.140215-1-cerasuolodomenico@gmail.com>
- <20230329153327.140215-5-cerasuolodomenico@gmail.com>
+        d=1e100.net; s=20210112; t=1680106474;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eyuZmyKTv1NKroiSP9E43EgXTfIl/At4weexpT2NlGU=;
+        b=uBzQgIoY5NMAQ2nDzPZRQu4gEmSSp6SxZSkLQhqD+YOCpfVJNKauZwHFWHUJSJkkcd
+         1IEDqPW0PsWiBZVY1DhhEls4W4uLAHdbD7gaL/Dg2YCDwKdQTmo6ENCEH87CKKv5RkG0
+         ZMbm39rMQE7BARdqwLveqweO7VcpH0tWhR38Agsgfekeeb91tcA0WVEH+zXwzJe/p6Fv
+         8GUSJMi5RR08LXJegqIsegzJ1zzTjvTHGxFk/i2OhwMNqFbI5k2stBkOpbTgVT322QbI
+         4UgHAl2S32PHEt232ltmUWsDYAMs88ATuxA3wJZqgY3MVe39mKpYuThYAxIrYe18+9je
+         vo5w==
+X-Gm-Message-State: AAQBX9fS4iguZ9s9Vv8ASBJw+I7xpItG3nj+ljtUJXjgA/qOhpcGc1Fq
+        kMj8XudPCN1+1QHU9JOivTUgr5R/FiRAnKwWOddOKr73YwPoLcY+ZoF8k9xwBBp/peKVISEbLds
+        sUwOwQtrwXTGYkqCWmnf+HSMj
+X-Received: by 2002:a17:906:9411:b0:925:1d1d:6825 with SMTP id q17-20020a170906941100b009251d1d6825mr21570213ejx.42.1680106474351;
+        Wed, 29 Mar 2023 09:14:34 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YWn1fLYGN+5GeSKK1DW+HePeJbJT5ZwcOpb0zI8ZYIwSr/zNcckx2CqhPDc0EazVwOjtorMw==
+X-Received: by 2002:a17:906:9411:b0:925:1d1d:6825 with SMTP id q17-20020a170906941100b009251d1d6825mr21570188ejx.42.1680106473980;
+        Wed, 29 Mar 2023 09:14:33 -0700 (PDT)
+Received: from [192.168.42.100] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id e19-20020a170906c01300b009373f1b5c4esm12603786ejz.161.2023.03.29.09.14.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 09:14:33 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <193501d0-094a-cc5a-c3ae-4553a56e3a3a@redhat.com>
+Date:   Wed, 29 Mar 2023 18:14:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329153327.140215-5-cerasuolodomenico@gmail.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dave Taht <dave.taht@gmail.com>
+Subject: Re: [PATCH net-next] net/core: add optional threading for backlog
+ processing
+Content-Language: en-US
+To:     Felix Fietkau <nbd@nbd.name>, Jakub Kicinski <kuba@kernel.org>
+References: <20230324171314.73537-1-nbd@nbd.name>
+ <20230324102038.7d91355c@kernel.org>
+ <2d251879-1cf4-237d-8e62-c42bb4feb047@nbd.name>
+In-Reply-To: <2d251879-1cf4-237d-8e62-c42bb4feb047@nbd.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,157 +89,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 05:33:27PM +0200, Domenico Cerasuolo wrote:
-> PSI offers 2 mechanisms to get information about a specific resource
-> pressure. One is reading from /proc/pressure/<resource>, which gives
-> average pressures aggregated every 2s. The other is creating a pollable
-> fd for a specific resource and cgroup.
+
+On 24/03/2023 18.35, Felix Fietkau wrote:
+> On 24.03.23 18:20, Jakub Kicinski wrote:
+>> On Fri, 24 Mar 2023 18:13:14 +0100 Felix Fietkau wrote:
+>>> When dealing with few flows or an imbalance on CPU utilization, static RPS
+>>> CPU assignment can be too inflexible. Add support for enabling threaded NAPI
+>>> for backlog processing in order to allow the scheduler to better balance
+>>> processing. This helps better spread the load across idle CPUs.
+>>
+>> Can you explain the use case a little bit more?
 > 
-> The trigger creation requires CAP_SYS_RESOURCE, and gives the
-> possibility to pick specific time window and threshold, spawing an RT
-> thread to aggregate the data.
+> I'm primarily testing this on routers with 2 or 4 CPUs and limited 
+> processing power, handling routing/NAT. RPS is typically needed to 
+> properly distribute the load across all available CPUs. When there is 
+> only a small number of flows that are pushing a lot of traffic, a static 
+> RPS assignment often leaves some CPUs idle, whereas others become a 
+> bottleneck by being fully loaded. Threaded NAPI reduces this a bit, but 
+> CPUs can become bottlenecked and fully loaded by a NAPI thread alone.
 > 
-> Systemd would like to provide containers the option to monitor pressure
-> on their own cgroup and sub-cgroups. For example, if systemd launches a
-> container that itself then launches services, the container should have
-> the ability to poll() for pressure in individual services. But neither
-> the container nor the services are privileged.
+> Making backlog processing threaded helps split up the processing work 
+> even more and distribute it onto remaining idle CPUs.
 > 
-> This patch implements a mechanism to allow unprivileged users to create
-> pressure triggers. The difference with privileged triggers creation is
-> that unprivileged ones must have a time window that's a multiple of 2s.
-> This is so that we can avoid unrestricted spawning of rt threads, and
-> use instead the same aggregation mechanism done for the averages, which
-> runs independently of any triggers.
+> It can basically be used to make RPS a bit more dynamic and 
+> configurable, because you can assign multiple backlog threads to a set 
+> of CPUs and selectively steer packets from specific devices / rx queues 
+> to them and allow the scheduler to take care of the rest.
 > 
-> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 
-Overall it looks good to me. Thanks for adding the comment on the
-privilege check, it's much easier to understand now.
+My experience with RPS was that it was too slow on the RX-CPU.  Meaning
+that it doesn't really scale, because the RX-CPU becomes the scaling
+bottleneck. (My data is old and it might scale differently on your ARM
+boards).
 
-A few nitpicks below:
+This is why I/we created the XDP "cpumap".  It also creates a kernel
+threaded model via a kthread on "map-configured" CPUs.  It scales
+significantly better than RPS, but it doesn't handle flows and packet
+Out-of-Order (OoO) situations automatically like RPS.  That is left up
+to the BPF-programmer.  The kernel samples/bpf xdp_redirect_cpu[0] have
+code that shows strategies of load-balancing flows.
 
-> @@ -151,6 +151,9 @@ struct psi_trigger {
->  
->  	/* Deferred event(s) from previous ratelimit window */
->  	bool pending_event;
-> +
-> +	/* Used to differentiate destruction action*/
-> +	enum psi_aggregators aggregator;
->  };
+The project xdp-cpumap-tc[1] runs in production (3 ISPs using this) and
+works in concert with netstack Traffic Control (TC) for scaling
+bandwidth shaping at the ISPs.  OoO is solved by redirecting all
+customers IPs to the same TX/egress CPU. As the README[1] describes it
+is recommended to reduce the number of RX-CPUs processing packets, and
+have more TX-CPUs that basically runs netstack/TC.  One ISP with
+2x25Gbit/s is using 2 CPUs for RX and 6 CPUs for TX.
 
-The comment is a bit mysterious. How about
+--Jesper
 
-	/* Trigger type - PSI_AVGS for unprivileged, PSI_POLL for RT */
+[0] 
+https://github.com/torvalds/linux/blob/master/samples/bpf/xdp_redirect_cpu.bpf.c
+[1] https://github.com/xdp-project/xdp-cpumap-tc
 
-> @@ -186,9 +186,9 @@ static void group_init(struct psi_group *group)
->  		seqcount_init(&per_cpu_ptr(group->pcpu, cpu)->seq);
->  	group->avg_last_update = sched_clock();
->  	group->avg_next_update = group->avg_last_update + psi_period;
-> -	INIT_DELAYED_WORK(&group->avgs_work, psi_avgs_work);
->  	mutex_init(&group->avgs_lock);
-> -	/* Init trigger-related members */
-> +
-> +	/* Init rtpoll trigger-related members */
->  	atomic_set(&group->rtpoll_scheduled, 0);
->  	mutex_init(&group->rtpoll_trigger_lock);
->  	INIT_LIST_HEAD(&group->rtpoll_triggers);
-> @@ -197,6 +197,11 @@ static void group_init(struct psi_group *group)
->  	init_waitqueue_head(&group->rtpoll_wait);
->  	timer_setup(&group->rtpoll_timer, poll_timer_fn, 0);
->  	rcu_assign_pointer(group->rtpoll_task, NULL);
-> +
-> +	/* Init avg trigger-related members */
-> +	INIT_LIST_HEAD(&group->avg_triggers);
-> +	memset(group->avg_nr_triggers, 0, sizeof(group->avg_nr_triggers));
-> +	INIT_DELAYED_WORK(&group->avgs_work, psi_avgs_work);
->  }
-
-Can you move those above the rtpoll inits?
-
-It helps with navigating the code and spotting missing inits when the
-init sequence follows the order of the struct members.
-
-> @@ -430,21 +435,25 @@ static u64 window_update(struct psi_window *win, u64 now, u64 value)
->  	return growth;
->  }
->  
-> -static u64 update_triggers(struct psi_group *group, u64 now, bool *update_total)
-> +static u64 update_triggers(struct psi_group *group, u64 now, bool *update_total,
-> +						   enum psi_aggregators aggregator)
->  {
->  	struct psi_trigger *t;
-> -	u64 *total = group->total[PSI_POLL];
-> +	u64 *total = group->total[aggregator];
-> +	struct list_head *triggers = aggregator == PSI_AVGS ? &group->avg_triggers
-> +			: &group->rtpoll_triggers;
-> +	u64 *aggregator_total = aggregator == PSI_AVGS ? group->avg_total : group->rtpoll_total;
->  	*update_total = false;
-
-These lines are a bit too long. When the init part gets that long,
-it's preferable to move it outside of the decl block:
-
-	if (aggregator == PSI_AVGS) {
-		triggers = &group->avg_triggers;
-		aggregator_total = group->avg_total;
-	} else {
-		triggers = &group->rtpoll_triggers;
-		aggregator_total = group->rtpoll_total;
-	}
-
-> @@ -1357,22 +1389,26 @@ void psi_trigger_destroy(struct psi_trigger *t)
->  		u64 period = ULLONG_MAX;
->  
->  		list_del(&t->node);
-> -		group->rtpoll_nr_triggers[t->state]--;
-> -		if (!group->rtpoll_nr_triggers[t->state])
-> -			group->rtpoll_states &= ~(1 << t->state);
-> -		/* reset min update period for the remaining triggers */
-> -		list_for_each_entry(tmp, &group->rtpoll_triggers, node)
-> -			period = min(period, div_u64(tmp->win.size,
-> -					UPDATES_PER_WINDOW));
-> -		group->rtpoll_min_period = period;
-> -		/* Destroy rtpoll_task when the last trigger is destroyed */
-> -		if (group->rtpoll_states == 0) {
-> -			group->rtpoll_until = 0;
-> -			task_to_destroy = rcu_dereference_protected(
-> -					group->rtpoll_task,
-> -					lockdep_is_held(&group->rtpoll_trigger_lock));
-> -			rcu_assign_pointer(group->rtpoll_task, NULL);
-> -			del_timer(&group->rtpoll_timer);
-> +		if (t->aggregator == PSI_AVGS) {
-> +			group->avg_nr_triggers[t->state]--;
-> +		} else {
-> +			group->rtpoll_nr_triggers[t->state]--;
-> +			if (!group->rtpoll_nr_triggers[t->state])
-> +				group->rtpoll_states &= ~(1 << t->state);
-> +			/* reset min update period for the remaining triggers */
-> +			list_for_each_entry(tmp, &group->rtpoll_triggers, node)
-> +				period = min(period, div_u64(tmp->win.size,
-> +						UPDATES_PER_WINDOW));
-> +			group->rtpoll_min_period = period;
-> +			/* Destroy rtpoll_task when the last trigger is destroyed */
-> +			if (group->rtpoll_states == 0) {
-> +				group->rtpoll_until = 0;
-> +				task_to_destroy = rcu_dereference_protected(
-> +						group->rtpoll_task,
-> +						lockdep_is_held(&group->rtpoll_trigger_lock));
-> +				rcu_assign_pointer(group->rtpoll_task, NULL);
-> +				del_timer(&group->rtpoll_timer);
-
-These lines are quite long too, we usually shoot for a line length of
-80 characters. Can you do
-
-		if (t->aggregator == PSI_AVGS) {
-			group->avg_nr_triggers[t->state]--;
-			return;
-		}
-
-		/* Else, it's an rtpoll trigger */
-		group->rtpoll_nr_triggers[t->state]--;
-		...
-
-With that, please add
-
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
