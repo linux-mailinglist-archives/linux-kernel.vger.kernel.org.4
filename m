@@ -2,90 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACB66CEC56
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5C46CEC59
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 17:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjC2PFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 11:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
+        id S230354AbjC2PGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 11:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjC2PFI (ORCPT
+        with ESMTP id S229854AbjC2PGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:05:08 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C393AB4;
-        Wed, 29 Mar 2023 08:05:02 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id b18so19721478ybp.1;
-        Wed, 29 Mar 2023 08:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680102301;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IbthZAg2EI6S7hVKN4zQsrXR4eiiYbr1ymfLGy5VzFk=;
-        b=O5b3QarlhM2wVotMDKJUIS9Ke9T+0xCUt+Firm4XuSeUk+ujnTGb8urU0KFo8uZmBM
-         i2AJTxnng7A+PGuSX8Ie/c1+e13XP/7vwk6ggHZh4iWh6Zxo5r/m+eo06fvF1ihMfHf9
-         eSiz6oVNMU8aboEpamh6FZ1vip17ca6B5bDUUlKuINTJ7HL9+JGDT5Ws9SQ1LA57zyLI
-         RvK7NxzJ1fR2gca5un2xJYkhBUmesWtP+RMuJW9R21aVXOhV4olFh6KMyyW01NiYvjNF
-         kc6DiySPtYSASr44CsUvHPhW6pqdc3BYm64nW9fHf+OxZ2seO6ZBclngdyL2pf2nkQP4
-         MdRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680102301;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IbthZAg2EI6S7hVKN4zQsrXR4eiiYbr1ymfLGy5VzFk=;
-        b=Y74PINxgQ4TjgqJ3bWtqq5tKoElRtt/XvnNBZv3XW4H8lk0WfUHJF4tGrPMfK8NDAU
-         XWDuFnuaySmxM43rHcIyMmtiGRYCdWllSLY9aUyOmRKRyVgK54eliorjBMGWUo5zEZ2y
-         zLDQduXeBNpbs5+xVezQC+OIbdMXF3VJXNDJ1X/jMtOutRaefe7gEKByh/Mnap+7hw1h
-         yKr7zLxEyj8ePo3nRTb8RPHAW3ocBHjaAnJG1HmllWqSftYdrmcWrBfoJmZ8KusNDB4L
-         cRe4QeVMbRAF6KjxvQedeorhgcXSb9yysFHRX+ecPQQDd89mGpaNDYF0GSZ6HD3C0pyk
-         u2vw==
-X-Gm-Message-State: AAQBX9cQwQrEQxK9CVmygj4sO3mo/RzqxFd106l7iyvPVMhZByGBMlgc
-        /owJYBFK9tEydmVBTnFPzfap1feM4AZ2HAR+ydQ=
-X-Google-Smtp-Source: AKy350bX9861FLdgC2783Ji32zVywDnx4KhoXmIAZH6o1cbNCCb8RVfB1pT+qcgCDnwsz6YsabM/NughBZ3ZsnXR2kU=
-X-Received: by 2002:a05:6902:1004:b0:b75:968e:f282 with SMTP id
- w4-20020a056902100400b00b75968ef282mr12771867ybt.11.1680102301286; Wed, 29
- Mar 2023 08:05:01 -0700 (PDT)
+        Wed, 29 Mar 2023 11:06:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFE93C1E;
+        Wed, 29 Mar 2023 08:06:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67A1D61D6D;
+        Wed, 29 Mar 2023 15:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28642C433EF;
+        Wed, 29 Mar 2023 15:06:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680102373;
+        bh=5vjINNeKe6LiQmi33iXc8oeTqq9Ju4aWWGikWY46LX0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T3L0kzPOYcISf2hQru30jp3nqSOsML9n7nxJXTRKCsmM325BTEgdUgGTTdKXq9ACB
+         nejfaSLtVvX0PbrYWO3EZGE3OcPxbSC7CELGE/dOupr44RQRqSJ63N0dKvQBFc8AZ9
+         b6UQs8mDb5LVd1h4m9soDbPGAEOE+aSuYtraelvJIBePUTNzz/tm2oErLly1dtVzfV
+         EAxsdJ6aijQG5BHYFX0mS4PpBYKtg7T8Uc/+VolQnVjV/rUc1wBMqtyQCYc6NpOA0d
+         sb2R1/supusKN+77bFDe7s+PQT7rDlTPFRRSmEs7zPZKeNR/4bHH1TwGUtTlSCuvLJ
+         Itni8mXraPbfg==
+Date:   Wed, 29 Mar 2023 16:06:05 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v6 5/5]  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <20230329150605.GW2673958@google.com>
+References: <20230307112835.81886-1-okan.sahin@analog.com>
+ <20230307112835.81886-6-okan.sahin@analog.com>
+ <20230315175223.GI9667@google.com>
+ <20230315175257.GJ9667@google.com>
+ <MN2PR03MB5168249900206433A082875EE7889@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <20230329143615.GS2673958@google.com>
+ <ZCROpw0il1VQCLPu@smile.fi.intel.com>
+ <20230329145636.GV2673958@google.com>
 MIME-Version: 1.0
-References: <20230224-rust-error-v2-0-3900319812da@asahilina.net>
- <20230224-rust-error-v2-1-3900319812da@asahilina.net> <0849f870-2d95-8c3a-c7dc-2b18dcee4c65@gmail.com>
-In-Reply-To: <0849f870-2d95-8c3a-c7dc-2b18dcee4c65@gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 29 Mar 2023 17:04:50 +0200
-Message-ID: <CANiq72ko9tY4dsK9Srte2oYQp8G=PMyLDTOR33-yNTVXmfyzeA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] rust: error: Rename to_kernel_errno() -> to_errno()
-To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc:     Asahi Lina <lina@asahilina.net>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Fox Chen <foxhlchen@gmail.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230329145636.GV2673958@google.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 4:47=E2=80=AFPM Martin Rodriguez Reboredo
-<yakoyoku@gmail.com> wrote:
+On Wed, 29 Mar 2023, Lee Jones wrote:
+
+> On Wed, 29 Mar 2023, Andy Shevchenko wrote:
 >
-> Reviewed-by: Martin Rodriguez Reboredo
+> > On Wed, Mar 29, 2023 at 03:36:15PM +0100, Lee Jones wrote:
+> > > On Tue, 28 Mar 2023, Sahin, Okan wrote:
+> > > > >On Wed, 15 Mar 2023, Lee Jones wrote:
+> > > > >> On Tue, 07 Mar 2023, Okan Sahin wrote:
+> >
+> > ...
+> >
+> > > > +static const struct i2c_device_id max77541_i2c_id[] = {
+> > > > +	{ "max77540", (kernel_ulong_t)&chip[MAX77540] },
+> > > > +	{ "max77541", (kernel_ulong_t)&chip[MAX77541] },
+> > >
+> > > Just 'MAX77540' is fine.
+> >
+> > I tend to disagree.
+> >
+> > There is an error prone approach esp. when we talk with some functions
+> > that unifies OF/ACPI driver data retrieval with legacy ID tables.
+> > In such a case the 0 from enum is hard to distinguish from NULL when
+> > the driver data is not set or not found. On top of that the simple integer
+> > in the legacy driver data will require additional code to be added in
+> > the ->probe().
+>
+> Use a !0 enum?
+>
+> The extra handling is expected and normal.
 
-These (in the different patches) are supposed to have
-<yakoyoku@gmail.com> email when I take them, right? (no need to resend
-them)
+I've always disliked mixing platform initialisation strategies.  Passing
+pointers to MFD structs through I2C/Device Tree registration opens the
+doors to all sorts of funky interlaced nonsense.
 
-Cheers,
-Miguel
+Pass the device ID and then match in C-code please.
+
+--
+Lee Jones [李琼斯]
