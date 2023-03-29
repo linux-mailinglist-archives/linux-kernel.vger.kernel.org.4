@@ -2,171 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466886CD340
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBD46CD345
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjC2HcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 03:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41704 "EHLO
+        id S229874AbjC2Hd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 03:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjC2Hbv (ORCPT
+        with ESMTP id S230055AbjC2HdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 03:31:51 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711853C0F
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:29:04 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id ix20so14119221plb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:29:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680074932;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=22LODKDRCsluZyudoWo7KCI2qd/LFxfCN6vG8QOiOSk=;
-        b=fGAozHrFoYPurbj60xdYlQnOAY75ZTkmq8ngaA32cd30xXzluTIP0WD9dDvmvjK9De
-         ZkXEmY5ZjUgBvGlyeV1jdOxSYk1E3kGHhDRganjXAN3jpyUNlC9lh6a3/1yi1XECJHOt
-         o7XqTTA4z6BP8IaqbgBYqNf4xuXWBMK6PGKgkZuPOeT6u/U5ZlPFgFaECUWl+shoY2N+
-         yobMxgqGgI5QW5DYrZSIOBtjZFC5Al52e3zgaZXE9LYIxgYm0Pvn3qqwrgHEGvZ9v1n8
-         cLCJj6Ejja2W6nVPrWCWZNGey9BIhP46k/8Yx9Bfdca2HfW3zAUmHBelGnVkoDN4oSzu
-         6BgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680074932;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=22LODKDRCsluZyudoWo7KCI2qd/LFxfCN6vG8QOiOSk=;
-        b=T8Xx4nquFAUOg2ppJ/dH2MA8tA8WqAwa0nMzvxXBSuon44bZNRpzoYGF9F95pcevh9
-         3QYqF14o07l/Q6uQd3c3mc3X6WSv/gGw4ECN0rwqJOLu4MdkvSZ/Qb3R36VbSRnPxHoE
-         4swej0GMaNEf+HChkC7gNQFIGuGrPCfc0v6SGJ8YYyTfh5ne3i6Ba6BDF5YGF2BodNOJ
-         7YvDdPuVaw0jNau8TbPifu8wiR+mO2lzNkbMj52CO0ScA5LW91gNMwSkjXVK2dxf7WK9
-         3ObMUJouRv1BoXtwbk5D+rjkZ3EFIVHQDwBuA1lKHzukFMsGuGjd4jva9bplloNHrBk7
-         tMTQ==
-X-Gm-Message-State: AAQBX9c7rF1Otof8TrvlxO+2W+79nLl6a7LWwxaYou9ePDF6HVXolsPO
-        t4ewOsoU5fUpRQYbDSitWGOtfQ==
-X-Google-Smtp-Source: AKy350bWyw8+NmBKn1QTp1cmoKHcb9kyFRxvwq87osgdfS7AGYGF989Dc1ln6TxkQfe7dwuBaVnNzg==
-X-Received: by 2002:a17:90b:1e49:b0:233:76bd:9faa with SMTP id pi9-20020a17090b1e4900b0023376bd9faamr20794160pjb.47.1680074931997;
-        Wed, 29 Mar 2023 00:28:51 -0700 (PDT)
-Received: from C02FG34NMD6R.bytedance.net ([139.177.225.235])
-        by smtp.gmail.com with ESMTPSA id u21-20020a17090ae01500b002369d3b282csm748463pjy.40.2023.03.29.00.28.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 00:28:51 -0700 (PDT)
-From:   Albert Huang <huangjie.albert@bytedance.com>
-To:     Jason Wang <jasowang@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>
-Cc:     "huangjie.albert" <huangjie.albert@bytedance.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] virtio_ring: interrupt disable flag updated to vq even with event_triggered is set
-Date:   Wed, 29 Mar 2023 15:28:41 +0800
-Message-Id: <20230329072841.45304-1-huangjie.albert@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+        Wed, 29 Mar 2023 03:33:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E0455AF;
+        Wed, 29 Mar 2023 00:30:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41B55B820CE;
+        Wed, 29 Mar 2023 07:30:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42865C433EF;
+        Wed, 29 Mar 2023 07:30:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680075002;
+        bh=iT6N+zCmgn0spjn9/Vsnh4EyZ9uBCU0NzjjY9gDxoto=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i3UvGSFQc7kks2U+f2KLbiQXAuInjV9SfUzsOe7uCf8rIq7pvVZMnfn+lW0g4Xr5/
+         agH8qqxVRc+ZR9ugdETBE6BwXcvUBsULENNSJEYgP7WDm2ltRXGsXbY3oQqEyIk+xb
+         8FWo9dmxbyoFR3bxM3tFZ3GUm6P1BSb5trEP481lennYyLAtWwBl1yDEVHnc/RUJgv
+         4ystEKchIq1kxD3pa2HAzugZIlls3QjHBDA++gpUtgDtHKHV4zg4WUsOtyOFAu2EhD
+         764FYUVtGLw2S7Tgz9DvNi7uW0wvIFz/ap7RSQOoDSCD9/j+9DWwFFBHr3ELVENf7r
+         x1uLo1MoLmzfg==
+Date:   Wed, 29 Mar 2023 10:29:57 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Veerasenareddy Burru <vburru@marvell.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Abhijit Ayarekar <aayarekar@marvell.com>,
+        Sathesh B Edara <sedara@marvell.com>,
+        Satananda Burla <sburla@marvell.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [EXT] Re: [PATCH net-next v4 6/8] octeon_ep: support
+ asynchronous notifications
+Message-ID: <20230329072957.GF831478@unreal>
+References: <20230322091958.13103-1-vburru@marvell.com>
+ <20230322091958.13103-7-vburru@marvell.com>
+ <20230323103900.GC36557@unreal>
+ <MN2PR18MB2430BA163B1FC69EEB39EE75CC879@MN2PR18MB2430.namprd18.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MN2PR18MB2430BA163B1FC69EEB39EE75CC879@MN2PR18MB2430.namprd18.prod.outlook.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "huangjie.albert" <huangjie.albert@bytedance.com>
+On Thu, Mar 23, 2023 at 05:24:55PM +0000, Veerasenareddy Burru wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Leon Romanovsky <leon@kernel.org>
+> > Sent: Thursday, March 23, 2023 3:39 AM
+> > To: Veerasenareddy Burru <vburru@marvell.com>
+> > Cc: netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Abhijit Ayarekar
+> > <aayarekar@marvell.com>; Sathesh B Edara <sedara@marvell.com>;
+> > Satananda Burla <sburla@marvell.com>; linux-doc@vger.kernel.org; David S.
+> > Miller <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>;
+> > Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>
+> > Subject: [EXT] Re: [PATCH net-next v4 6/8] octeon_ep: support
+> > asynchronous notifications
+> > 
+> > External Email
+> > 
+> > ----------------------------------------------------------------------
+> > On Wed, Mar 22, 2023 at 02:19:55AM -0700, Veerasenareddy Burru wrote:
+> > > Add asynchronous notification support to the control mailbox.
+> > >
+> > > Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
+> > > Signed-off-by: Abhijit Ayarekar <aayarekar@marvell.com>
+> > > ---
+> > > v3 -> v4:
+> > >  * 0005-xxx.patch in v3 is 0006-xxx.patch in v4.
+> > >  * addressed review comments
+> > >    https://urldefense.proofpoint.com/v2/url?u=https-
+> > 3A__lore.kernel.org_all_Y-2B0J94sowllCe5Gs-
+> > 40boxer_&d=DwIBAg&c=nKjWec2b6R0mOyPaz7xtfQ&r=XkP_75lnbPIeeucsP
+> > X36ZgjiMqEKttwZfwNyWMCLjT0&m=5CnsD-
+> > SX6ZoW98szwM0k4IXgNC3wY0EwCQHxDKGyNIRUJxdaNe3zorLcOhc9iU6d&s
+> > =k73McQSsjbjj87VbCCB8EFFtGWtksMIGhn15RK12XF8&e=
+> > >    - fixed rct violation.
+> > >    - process_mbox_notify() now returns void.
+> > >
+> > > v2 -> v3:
+> > >  * no change
+> > >
+> > > v1 -> v2:
+> > >  * no change
+> > >
+> > >  .../marvell/octeon_ep/octep_ctrl_net.c        | 29 +++++++++++++++++++
+> > >  1 file changed, 29 insertions(+)
+> > >
+> > > diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_net.c
+> > > b/drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_net.c
+> > > index cef4bc3b1ec0..465eef2824e3 100644
+> > > --- a/drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_net.c
+> > > +++ b/drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_net.c
+> > > @@ -271,6 +271,33 @@ static void process_mbox_resp(struct
+> > octep_device *oct,
+> > >  	}
+> > >  }
+> > >
+> > > +static int process_mbox_notify(struct octep_device *oct,
+> > > +			       struct octep_ctrl_mbox_msg *msg) {
+> > > +	struct net_device *netdev = oct->netdev;
+> > > +	struct octep_ctrl_net_f2h_req *req;
+> > > +
+> > > +	req = (struct octep_ctrl_net_f2h_req *)msg->sg_list[0].msg;
+> > > +	switch (req->hdr.s.cmd) {
+> > > +	case OCTEP_CTRL_NET_F2H_CMD_LINK_STATUS:
+> > > +		if (netif_running(netdev)) {
+> > > +			if (req->link.state) {
+> > > +				dev_info(&oct->pdev->dev,
+> > "netif_carrier_on\n");
+> > > +				netif_carrier_on(netdev);
+> > > +			} else {
+> > > +				dev_info(&oct->pdev->dev,
+> > "netif_carrier_off\n");
+> > > +				netif_carrier_off(netdev);
+> > > +			}
+> > 
+> > Shouldn't netdev changes be protected by some lock?
+> > Is is safe to get event from FW and process it as is?
+> > 
+> > Thanks
+> 
+> Thanks for the kind feedback.
+> I do not see netif_carrier_on/off require any protection. I referred few other drivers and do not see such protection used for carrier on/off.
+> Please suggest if I am missing something here.
 
-in virtio_net, if we disable the napi_tx, when we triger a tx interrupt,
-the vq->event_triggered will be set to true. It will no longer be set to
-false. Unless we explicitly call virtqueue_enable_cb_delayed or
-virtqueue_enable_cb_prepare.
+I see that Dave already applied your v5. I think that you are missing context in which you
+are running FW commands. They run independently from netdev and makes netif_running() check
+to be racy.
 
-If we disable the napi_tx, it will only be called when the tx ring
-buffer is relatively small.
+Thanks
 
-Because event_triggered is true. Therefore, VRING_AVAIL_F_NO_INTERRUPT or
-VRING_PACKED_EVENT_FLAG_DISABLE will not be set. So we update
-vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
-every time we call virtqueue_get_buf_ctx.This bring more interruptions.
-
-To summarize:
-1) event_triggered was set to true in vring_interrupt()
-2) after this nothing will happen for virtqueue_disable_cb() so
-   VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
-3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
-   then it tries to publish new event
-
-To fix:
-update VRING_AVAIL_F_NO_INTERRUPT or VRING_PACKED_EVENT_FLAG_DISABLE to vq
-when we call virtqueue_disable_cb even the event_triggered is set to true.
-
-Tested with iperf:
-iperf3 tcp stream:
-vm1 -----------------> vm2
-vm2 just receives tcp data stream from vm1, and sends the ack to vm1,
-there are many tx interrupts in vm2.
-but without event_triggered there are just a few tx interrupts.
-
-v2->v3:
--update the interrupt disable flag even with the event_triggered is set,
--instead of checking whether event_triggered is set in
--virtqueue_get_buf_ctx_{packed/split}, will cause the drivers  which have
--not called virtqueue_{enable/disable}_cb to miss notifications.
-
-Fixes: 8d622d21d248 ("virtio: fix up virtio_disable_cb")
-Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Signed-off-by: Jason Wang <jasowang@redhat.com>
----
- drivers/virtio/virtio_ring.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index 307e139cb11d..ad74463a48ee 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -812,6 +812,14 @@ static void virtqueue_disable_cb_split(struct virtqueue *_vq)
- 
- 	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)) {
- 		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
-+
-+		/*
-+		 * If device triggered an event already it won't trigger one again:
-+		 * no need to disable.
-+		 */
-+		if (vq->event_triggered)
-+			return;
-+
- 		if (vq->event)
- 			/* TODO: this is a hack. Figure out a cleaner value to write. */
- 			vring_used_event(&vq->split.vring) = 0x0;
-@@ -1544,8 +1552,16 @@ static void virtqueue_disable_cb_packed(struct virtqueue *_vq)
- {
- 	struct vring_virtqueue *vq = to_vvq(_vq);
- 
--	if (vq->packed.event_flags_shadow != VRING_PACKED_EVENT_FLAG_DISABLE) {
-+	if (!(vq->packed.event_flags_shadow & VRING_PACKED_EVENT_FLAG_DISABLE)) {
- 		vq->packed.event_flags_shadow = VRING_PACKED_EVENT_FLAG_DISABLE;
-+
-+		/*
-+		 * If device triggered an event already it won't trigger one again:
-+		 * no need to disable.
-+		 */
-+		if (vq->event_triggered)
-+			return;
-+
- 		vq->packed.vring.driver->flags =
- 			cpu_to_le16(vq->packed.event_flags_shadow);
- 	}
-@@ -2063,12 +2079,6 @@ void virtqueue_disable_cb(struct virtqueue *_vq)
- {
- 	struct vring_virtqueue *vq = to_vvq(_vq);
- 
--	/* If device triggered an event already it won't trigger one again:
--	 * no need to disable.
--	 */
--	if (vq->event_triggered)
--		return;
--
- 	if (vq->packed_ring)
- 		virtqueue_disable_cb_packed(_vq);
- 	else
--- 
-2.31.1
-
+> 
