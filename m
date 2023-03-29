@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8B76CF245
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957636CF243
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjC2SiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S229507AbjC2SiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjC2SiF (ORCPT
+        with ESMTP id S229661AbjC2Shz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:38:05 -0400
-Received: from out-10.mta1.migadu.com (out-10.mta1.migadu.com [IPv6:2001:41d0:203:375::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F571FDA
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:38:01 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1680115080;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4IBB0t30IQWFgjzMoDMwNtgr4khYAd9V6YJirYANKJw=;
-        b=QgAd4ttXeu2KtUbjd+eYGisjZq9ioQEf7KHQO41mUQEncgqcvFT0kMtVWTnVhTvqO39dCs
-        qnfT8VmxT5x2t4jFNaIYtC86D2toghjLwz4S6LnFhsQ33dWNChtMewppVDGTmO1JwwMcY9
-        /ZquEfYJhPqccz/gfQ0PZ1hFiaHWscc=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Wed, 29 Mar 2023 14:37:55 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3796A5FE1;
+        Wed, 29 Mar 2023 11:37:51 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id r7-20020a17090b050700b002404be7920aso15472217pjz.5;
+        Wed, 29 Mar 2023 11:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680115070;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uzLVbqgNBGN+xgE2Mcn5+0Hj/oLlv/psLQjcDCgpQr8=;
+        b=kI+OaINANyKsiK+EWK5+yOqs4+8ljyMo3j6zqxxM9CNCGiuVso5j4vGdrojGjNs0yY
+         0bWcLXqZlHNd5KEaFaq42TZPydl8CX+VZaczevLdxTDrOS+bRtk1uU3ldZcJ5GOoafYt
+         EfJ3UBHdLiykj7ApCxebT76Fae/+kGPt8b03FuNjlP2cQ+kDqjpxVP30APPgIeDDwUAK
+         JUwZpewbV42SJXpI7IZJO7GrUs0qCUeGrPItHGrUZVp9xHlP0F0DVVVfimp2uH4A+9XJ
+         cvYw6G7wBHW7jwMokNIetOkS2+pSnTcBC41bJiINKqOlqkpoX06t8GHNFjgmTOmqgrdj
+         y52A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680115070;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uzLVbqgNBGN+xgE2Mcn5+0Hj/oLlv/psLQjcDCgpQr8=;
+        b=L6fhGbg9CLSQSu6g4jTsUMeukkwe8nfdTKy9YoI4OeizMFiDaprw71uD18gU5fmdV0
+         oPanxmUMEvbtvjewhzGYJoX/QLC2Lw/wVUGj8h9SKdj0eqrb4hvoJrUGAwA4WouEYc2+
+         1Kv1C3aXA2iWDr2c/ZGuSrY3wpM0RdCrxkwTAFLOmrtPmpKAFdTy5sH51lvXFkCANMKg
+         3GYXmlSXb6F7oBm+12Kz0whRbVGz4XQuzag1ZkUFEAcKwvFQzm53nbJEddOczneqeWh7
+         7zO1bvDHynMOXkj9+01CIaStGDIzVbJ+mu2KeaYY/tNMSBWqlYSqVLVgm372a5E+PvJD
+         SwSw==
+X-Gm-Message-State: AAQBX9eM5FG6Pf92rGlZ8esrPgXmI6lOrkC+aLaOoNXDmBtWTC+0WVtC
+        zu0+yAdVfM8BabwuT2hqVgl+xOxYzRs=
+X-Google-Smtp-Source: AKy350ZCdGEv1x3AcKjBXJ46+u7JThYANyD1DbTn65Mw87/MICbj1baTbv665VxjBhy7AVYPa5cehg==
+X-Received: by 2002:a17:90a:4bca:b0:23f:6830:568e with SMTP id u10-20020a17090a4bca00b0023f6830568emr20245502pjl.8.1680115070400;
+        Wed, 29 Mar 2023 11:37:50 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id bf8-20020a170902b90800b001a27ea5cb94sm487166plb.87.2023.03.29.11.37.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 11:37:50 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 29 Mar 2023 08:37:48 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Weizhao Ouyang <ouyangweizhao@zeku.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v2 4/5] kasan, arm64: add arch_suppress_tag_checks_start/stop
-Date:   Wed, 29 Mar 2023 20:37:47 +0200
-Message-Id: <7ad5e5a9db79e3aba08d8f43aca24350b04080f6.1680114854.git.andreyknvl@google.com>
-In-Reply-To: <dc432429a6d87f197eefb179f26012c6c1ec6cd9.1680114854.git.andreyknvl@google.com>
-References: <dc432429a6d87f197eefb179f26012c6c1ec6cd9.1680114854.git.andreyknvl@google.com>
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Juri Lelli <juri.lelli@redhat.com>
+Subject: Re: [PATCH v2 1/4] cgroup/cpuset: Fix partition root's cpuset.cpus
+ update bug
+Message-ID: <ZCSFfMeKRNERIBu6@slm.duckdns.org>
+References: <20230317151508.1225282-1-longman@redhat.com>
+ <20230317151508.1225282-2-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317151508.1225282-2-longman@redhat.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+On Fri, Mar 17, 2023 at 11:15:05AM -0400, Waiman Long wrote:
+> It was found that commit 7a2127e66a00 ("cpuset: Call
+> set_cpus_allowed_ptr() with appropriate mask for task") introduced a bug
+> that corrupted "cpuset.cpus" of a partition root when it was updated.
+> 
+> It is because the tmp->new_cpus field of the passed tmp parameter
+> of update_parent_subparts_cpumask() should not be used at all as
+> it contains important cpumask data that should not be overwritten.
+> Fix it by using tmp->addmask instead.
+> 
+> Also update update_cpumask() to make sure that trialcs->cpu_allowed
+> will not be corrupted until it is no longer needed.
+> 
+> Fixes: 7a2127e66a00 ("cpuset: Call set_cpus_allowed_ptr() with appropriate mask for task")
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-Add two new tagging-related routines arch_suppress_tag_checks_start/stop
-that suppress MTE tag checking via the TCO register.
+Applied to cgroup/for-6.3-fixes w/ stable cc'd.
 
-These rouines are used in the next patch.
+Thanks.
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- arch/arm64/include/asm/memory.h | 2 ++
- mm/kasan/kasan.h                | 2 ++
- 2 files changed, 4 insertions(+)
-
-diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-index faf42bff9a60..05e42bd3555f 100644
---- a/arch/arm64/include/asm/memory.h
-+++ b/arch/arm64/include/asm/memory.h
-@@ -264,6 +264,8 @@ static inline const void *__tag_set(const void *addr, u8 tag)
- #define arch_enable_tag_checks_sync()		mte_enable_kernel_sync()
- #define arch_enable_tag_checks_async()		mte_enable_kernel_async()
- #define arch_enable_tag_checks_asymm()		mte_enable_kernel_asymm()
-+#define arch_suppress_tag_checks_start()	mte_enable_tco()
-+#define arch_suppress_tag_checks_stop()		mte_disable_tco()
- #define arch_force_async_tag_fault()		mte_check_tfsr_exit()
- #define arch_get_random_tag()			mte_get_random_tag()
- #define arch_get_mem_tag(addr)			mte_get_mem_tag(addr)
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index a1613f5d7608..f5e4f5f2ba20 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -398,6 +398,8 @@ static inline const void *arch_kasan_set_tag(const void *addr, u8 tag)
- #define hw_enable_tag_checks_sync()		arch_enable_tag_checks_sync()
- #define hw_enable_tag_checks_async()		arch_enable_tag_checks_async()
- #define hw_enable_tag_checks_asymm()		arch_enable_tag_checks_asymm()
-+#define hw_suppress_tag_checks_start()		arch_suppress_tag_checks_start()
-+#define hw_suppress_tag_checks_stop()		arch_suppress_tag_checks_stop()
- #define hw_force_async_tag_fault()		arch_force_async_tag_fault()
- #define hw_get_random_tag()			arch_get_random_tag()
- #define hw_get_mem_tag(addr)			arch_get_mem_tag(addr)
 -- 
-2.25.1
-
+tejun
