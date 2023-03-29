@@ -2,78 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C266CD15F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 06:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F0E6CD168
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 07:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjC2E7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 00:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
+        id S229757AbjC2FGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 01:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjC2E7n (ORCPT
+        with ESMTP id S229529AbjC2FGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 00:59:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5040273E;
-        Tue, 28 Mar 2023 21:59:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DA3EB81BD2;
-        Wed, 29 Mar 2023 04:59:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD21C433EF;
-        Wed, 29 Mar 2023 04:59:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680065978;
-        bh=VyIflVYAjyIL5MoWA1Yn7cwvosZyO5A3cGssRTvK1ls=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PMO3JRjuntfa6092bvweVA6gESQcQKflaFhlMhABpqD1bYr+ZI4jXbr3Sz8eFEK6v
-         X5GK2F9v1w1yXrnK+p4cEihTOs6UrOFi23O7lYMr+AZ25M1cfhRUzsTEeuFFKoJ+aH
-         0MaYepierb85W9WH2+p2bmLG8+dKSCjBwfSwZDvo=
-Date:   Wed, 29 Mar 2023 06:59:36 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Joseph Lutz <joseph.lutz@novatechautomation.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: drivers/usb/class/usbtmc.c
-Message-ID: <ZCPFuJnQ6BbF4n6o@kroah.com>
-References: <DS7PR07MB775169F24942174F54B4246494889@DS7PR07MB7751.namprd07.prod.outlook.com>
+        Wed, 29 Mar 2023 01:06:40 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EE82D48
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 22:06:15 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so14961492pjl.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Mar 2023 22:06:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1680066375;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GjcLq9TYMSCEM1QxXkGT3Sk7emAp6wIFay5f/IdlFCI=;
+        b=K0sDjl31CF3wQLECFV0Z+qXmmfbY6/nvHtwhUV+gdNIgedwU6XnM9SL+lkP0AsQS72
+         h6FxRX1Eba/67jysjsw+a3Yg3lcjnZNMuWL/RMxYWI13y5cB+OWEQQ5vydbpAzqNjOfr
+         b7BgjW9UGv41y2niEKTHlC7uvanY/p4+VdnazRZTgxEnDnuI2QnVTCawr5ErsQq7ZI8k
+         lIYedhZETnOaE3WYyVtJvhXlboS0gTCezU1Pd9aJj7DQehQBnzls4sKZdMakWjKkTLth
+         +8aoJlNSoZ+4tCtPM3zmqdzgfHonxHFdWY5hrfTP0NiwZkAODT53YYfRkVzOwV90Jka/
+         Hw2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680066375;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GjcLq9TYMSCEM1QxXkGT3Sk7emAp6wIFay5f/IdlFCI=;
+        b=cjFaB6r+DCoAnzzKIdPJMlJ22YDgWKxKPOP+2vs2iWjx9taio2qSAGUlKpYEn203ML
+         dUBEV73d2WKSJGIrHp9idtTSfjAKPKjM7NWmItZUp2NR5e1GkeXi5Q0+RBC92o8M2eM2
+         xpZW6fO2s403CsngGQM3bXhbO4wAT6WLgCI1A+BsmzMC0TqfJ0ct2Jnpcsr0wAqkQ1a8
+         pFrsxXyqLokEO/+mCeDNZtBI24heDJX9mKwajaB5VYF8Ls4/JAVwkuRdhFaw1MZlfynL
+         Iw/pzBzKzCIhQrLJkUtUEJKmU/w0RYceMa611A6bcNWqF7a45WeYHsemk+9Q4mjXvJ+F
+         9kmQ==
+X-Gm-Message-State: AAQBX9e5gUa3ShUapsUfwp7QpoBAI32t4nQ9/xeTGwQnmx3S5A/gGWZp
+        JQfeLMwXAceUGp2NvetJo473P56Ado90ADqleWc=
+X-Google-Smtp-Source: AKy350ZTGNkadk5EkErfDhJ6zlZsX/8WZzxktyRHEWZEs7dxg+S3jbdRlD777MfiA6AK1tAh84FLZg==
+X-Received: by 2002:a17:90b:1a88:b0:23e:aba9:d51d with SMTP id ng8-20020a17090b1a8800b0023eaba9d51dmr19242110pjb.7.1680066374750;
+        Tue, 28 Mar 2023 22:06:14 -0700 (PDT)
+Received: from [10.3.144.50] ([61.213.176.7])
+        by smtp.gmail.com with ESMTPSA id dw24-20020a17090b095800b0023cff7e39a6sm463394pjb.22.2023.03.28.22.06.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 22:06:14 -0700 (PDT)
+Message-ID: <1b99542d-f21b-a27b-fc59-d4fe38e893de@bytedance.com>
+Date:   Wed, 29 Mar 2023 13:06:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: Re: [PATCH V4 2/5] cachefiles: extract ondemand info field from
+ cachefiles_object
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jingbo Xu <jefflexu@linux.alibaba.com>, zhujia.zj@bytedance.com
+References: <20230111052515.53941-3-zhujia.zj@bytedance.com>
+ <20230111052515.53941-1-zhujia.zj@bytedance.com>
+ <132137.1680011908@warthog.procyon.org.uk>
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+In-Reply-To: <132137.1680011908@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DS7PR07MB775169F24942174F54B4246494889@DS7PR07MB7751.namprd07.prod.outlook.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 06:23:31PM +0000, Joseph Lutz wrote:
-> I am having some issues with the kernel driver "drivers/usb/class/usbtmc.c". I am trying to figure out who I can contact that would have information about how this driver is working.
 
-Hi,
 
-First off, please do not send html email, the mailing lists reject it
-(as you found out), and it will not get to anyone.
-
-> The script ./scripts/get_maintainer.pl drivers/usb/class/usbtmc.c​ gives me the following addresses which is why I am writing to you.
+在 2023/3/28 21:58, David Howells 写道:
+> Jia Zhu <zhujia.zj@bytedance.com> wrote:
 > 
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
-> linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-> linux-kernel@vger.kernel.org (open list)
+>> @@ -65,10 +71,7 @@ struct cachefiles_object {
+>>   	enum cachefiles_content		content_info:8;	/* Info about content presence */
+>>   	unsigned long			flags;
+>>   #define CACHEFILES_OBJECT_USING_TMPFILE	0		/* Have an unlinked tmpfile */
+>> -#ifdef CONFIG_CACHEFILES_ONDEMAND
+>> -	int				ondemand_id;
+>> -	enum cachefiles_object_state	state;
+>> -#endif
+>> +	struct cachefiles_ondemand_info	*private;
 > 
-> I am not certain whether I should be communicating with these email addresses or if I should be communicating with the individuals on the github sight. https://github.com/dpenkler/linux-usbtmc
+> Why is this no longer inside "#ifdef CONFIG_CACHEFILES_ONDEMAND"?
+> 
 
-If you look at the git history for the driver in the kernel, you will
-see Dave Penkler <dpenkler@gmail.com> as a probably good contact.
+I'll revise it in next version.
 
-So try resending your message, with the information you had before about
-the problem you are seeing, to the lists and to Dave and in non-html
-format and we can go from there.
+> Also, please don't call it "private", but rather something like "ondemand" or
+> "ondemand_info".
 
-thanks,
-
-greg k-h
+I'll use @ondemand to replace it.
+Thanks.
+> 
+> David
+> 
