@@ -2,77 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465B46CF2BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAC36CF2BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjC2THd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
+        id S230114AbjC2TIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjC2THb (ORCPT
+        with ESMTP id S229885AbjC2TH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:07:31 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CE610F
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:07:30 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17997ccf711so17321978fac.0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:07:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112; t=1680116849;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JaUT1tU388H4Iiw0YwVhlOiRQVGRnO0sCIgxdGFYzBo=;
-        b=nUlU/uciYcc2nv9mdkYyaCMr60EMZ1HGpA7A0QKmRdrrp6agIwsXY1XTsd1/lvA14s
-         n0BCUy7aZ41IQbWv57XAc3DUffF6hG3lKjKgiJLi67bjFuqtctp4DJ0jnz0+kxzoj6F8
-         0TgAE2tmSpqbcZ2HpBYrtlR5i7HArV06QxVTlZqvpBF3PcNeaMRVRQJOodE0UZq9QHHG
-         yvRQC3z5hvVTIaqV8RfXNoiPCXQhAFuBfhH1s5GjyMg/OwxAvPhZbMw54MoQioTws6Kb
-         57rl9VZDhrvJpwGEGQ+ia0F5VXwvUNh2HRJOUC6X1wfPQWCBpKvFmvFbYy2NKlAjnWcx
-         qBFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680116849;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JaUT1tU388H4Iiw0YwVhlOiRQVGRnO0sCIgxdGFYzBo=;
-        b=muqZj4QUgrjk4RswsROTnOQMR/tFKjMJ3PHo3dv+xfm4WdrBzKwmUa5QXNLHoZdcFm
-         XUMUnAn7NREcUxucTeFzQ1R6O37EFxsgyqthwAsadC6NHHBIo9pRxy7DuXkMHUju1rQm
-         RCiPgaU79pDgBCVPswTAHShDJdxQOFztymc1OanhwZLOR6CC1t5E23KpaW/G2vfSCmds
-         2odZKjCptK40a5BVwvx6ISi1+bE7/bUEXJh0D7GHVyyjfDUF5MuxP2tiH+jYwo81KCSJ
-         xY6a/U7F2P8jasYSl4gvlKaLRTlImOrJU0xtQSxGlbw0Epn2I0lYhYgfNl/byev+zz+U
-         9bTQ==
-X-Gm-Message-State: AAQBX9fZFaXwwupm4lI1AA0MnH+oEbuhKtzYCGQPKXAMRtilJld4f1GL
-        UDH+pHXq5Nt9YZpXvv6r/A+OrA==
-X-Google-Smtp-Source: AK7set8Y4L9H1obAoZ4wkF+dwXU27OfB8gALFoZq/Ka3R4cGwzO1ALkhor5m4gXJaNG8m39DV7j8fg==
-X-Received: by 2002:a05:6870:206:b0:176:7d5d:f02a with SMTP id j6-20020a056870020600b001767d5df02amr14203363oad.11.1680116849050;
-        Wed, 29 Mar 2023 12:07:29 -0700 (PDT)
-Received: from ?IPV6:2804:14d:5c5e:4698:675:778:777c:5b6b? ([2804:14d:5c5e:4698:675:778:777c:5b6b])
-        by smtp.gmail.com with ESMTPSA id ui4-20020a0568714e0400b001718e65a5d0sm11984951oab.57.2023.03.29.12.07.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 12:07:28 -0700 (PDT)
-Message-ID: <b4d93f31-846f-3391-db5d-db8682ac3c34@mojatatu.com>
-Date:   Wed, 29 Mar 2023 16:07:24 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Wed, 29 Mar 2023 15:07:57 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2077.outbound.protection.outlook.com [40.107.223.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709A81BEC
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:07:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c4+7L81h3B9grksht70m48c08sg7LQz+kktTYi9OKnimSOec1rdtsS6ML9uPC1JZP99+4tec6EMdX3z87JuujNy7fkQHcF8sHZqSn9USfwXq09uQG9v/6h57XKO08fUdlUDZqA13jvi186w2jUHxKX4T7c3xvBTvKuAm3JmnNKrXVMyjYefMdBoqk8OyHF56tu78keYJyc3B7ObE0CBdEOdt12Yqo7FMNpdRb7d7Z+5AklYM/qFg+epU5W2grS92KtWbod49hz85+1qZC9emLWJbO/8yWkej0Y60RMMjMwJbtogNWYE9Nv7LWWd8+ajFcKayqf+w7KjogTQHPRIdxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Edws7ATZK23GlUSxp2doGMbjXGWVaJeTC2+rvTuqKQI=;
+ b=gGTImFPUK9sEvQ4XbaImLmr1AjyYmJZrNJDrH/gMPrUexALbOyGmECq/6vGR8z+vKX2UjE6shRjFP90oNRv4a4jBIO/ac69s4NGSa1fijMVrnEIoNXIEK3tD2LA3jN4BugVDzN9CucVoAvVySYN09dNL/1VwdUMn5DZhhr6ocKhS/Op5/+inTuOzNcDeOCN8SFc2IMaSzQLAGjKKV4QjJwKu+Mp4UVwaVzbKKVGDiP674X2jXhulPFbrnpQaZ0Xa44/gb8Fx/l5rZIXpdLW3XjP7lNxcdfvdJ3axredKjjvq0PeYPipW/M4fxttUMp0g9omrwivh3eI0q7cxwLIzOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Edws7ATZK23GlUSxp2doGMbjXGWVaJeTC2+rvTuqKQI=;
+ b=gNA+k1yKGQ/cLBtaeEF9dg4pADJ292QVtJzbTgWeizCjVf5Zhrf0QRyif5Njtfwz/zQFdwm8TdtW8t0uw5m4H0Q7JXDPQAkPYm6klybkoOiYFAJlQdmfExhJg8ebZ3vTsHDA5d4yS5LSJsTbYSEdl4wra775BAWmL2ozY6W+pMk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by SN7PR12MB7252.namprd12.prod.outlook.com (2603:10b6:806:2ac::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20; Wed, 29 Mar
+ 2023 19:07:50 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f4d:82d0:c8c:bebe]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f4d:82d0:c8c:bebe%2]) with mapi id 15.20.6222.028; Wed, 29 Mar 2023
+ 19:07:50 +0000
+Message-ID: <b65c4f1f-4990-f7ce-e4c0-85912d187eaf@amd.com>
+Date:   Wed, 29 Mar 2023 14:07:47 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [syzbot] [net?] KASAN: slab-use-after-free Write in
- mini_qdisc_pair_swap
+Subject: Re: Panic starting 6.2.x and later 6.1.x kernels
 Content-Language: en-US
-To:     Seth Forshee <sforshee@digitalocean.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     syzbot <syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com>,
-        davem@davemloft.net, edumazet@google.com, jhs@mojatatu.com,
-        jiri@resnulli.us, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
-References: <0000000000006cf87705f79acf1a@google.com>
- <20230328184733.6707ef73@kernel.org> <ZCOylfbhuk0LeVff@do-x1extreme>
-From:   Pedro Tammela <pctammela@mojatatu.com>
-In-Reply-To: <ZCOylfbhuk0LeVff@do-x1extreme>
+To:     David R <david@unsolicited.net>, Borislav Petkov <bp@alien8.de>,
+        Gabriel David <ultracoolguy@disroot.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kishon Vijay Abraham I <kvijayab@amd.com>
+References: <943d2445-84df-d939-f578-5d8240d342cc@unsolicited.net>
+ <20230327074952.GAZCFKoDOiJUdtse2H@fat_crate.local>
+ <e8d15248-e694-79d7-da9c-b4485b471e14@unsolicited.net>
+ <4c660f0f-2845-0e02-ccf9-619958e24236@unsolicited.net>
+ <20230328142014.GCZCL3nkW5Qx5jhfsB@fat_crate.local>
+ <57385475-c289-356f-d696-fc6decce1390@unsolicited.net>
+ <20230328171057.GDZCMfobguhGUFiUuh@fat_crate.local>
+ <9ed16be4-051d-c20f-0410-b8a973c4c09e@disroot.org>
+ <20230329103943.GAZCQVb1n3tKlGOAWI@fat_crate.local>
+ <20230329161450.GDZCRj+rz9lTEZFNBz@fat_crate.local>
+ <f033acad-593c-a741-8f4f-a9962eb8aab9@unsolicited.net>
+ <e8fd7cdf-b6a5-1c7d-bd08-0d60a1c10495@amd.com>
+ <eaa97a25-27b2-187c-1db2-9c56e35d3463@unsolicited.net>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <eaa97a25-27b2-187c-1db2-9c56e35d3463@unsolicited.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH2PR05CA0028.namprd05.prod.outlook.com (2603:10b6:610::41)
+ To MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SN7PR12MB7252:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec153154-3529-479d-7b6a-08db3088e3e3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SX8SpF7HXZTBLG59nuYO0kcHTo0y0ZdD/AFhYfOB1KXqu98oh3kBgemgB+ca8KALLLbuF2r+Z3Rr5JxN6oZW5ycyZWboBiN+N+1LMBdA/HFvPHErArz0JEJZQZHWkhwXipVqVx0SGT/NCS8nVtPXLZt8Ow/7/rQZUxhVR1DZyUblAsV/jTnaJ5YyKJ+PHM638L6prXAuJUqGF9OKpPdqDAtbO5UUk5ZBKLHCtKtXml5UeUN4nN/oja8ZLKlzg4gZsMC3ZQjlwcLF1T2Ju/Y4BoQxAACb+Y385eGwYxqjgBKu+1+NxGiNpQ220OPO/ktfJiNOzP3mFK1pkCH+jb2GPi9k0ueMF3u4wOyFEq3h3UWTHMQnpY3JXapp2hmO7cettWhGfT6/ZWxV3ixj7VWTg1PQ6cjH2FJm9m6KSR4DFUTrltpG69HnZgQtPQHRzCzmqfxlouu7I5SI8i3LeN9yLUU+3f5B6pyTn4gsyLgGRxI+Y8hPsgrQYrAxeV/jnEawYtnejnmofzrypSSJKAVsEJjQtP+TVfIKNp5rTG0J6BmKCl60Co+yEv6IPpXDZwXnMvUdMp8K3Zx9mwmYlQZ541cLR1KTunhxtQvBj135N3zETFa4xIPLtcpGTF+156U8/x7X5pJpo7BbxOxAqpd7jw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(39860400002)(396003)(366004)(376002)(451199021)(478600001)(54906003)(6666004)(110136005)(966005)(6486002)(316002)(186003)(2616005)(26005)(31686004)(6512007)(6506007)(53546011)(4326008)(66476007)(66556008)(66946007)(38100700002)(41300700001)(2906002)(8676002)(8936002)(31696002)(86362001)(5660300002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UHM0WkVEcWFQZUNobXBwM1FTbFhCZ0EzRHhjbm1qWnVLek1HRGdMUDAxM3dn?=
+ =?utf-8?B?Vi9DNloyTnpxVTJrM3pSMmYwWGhZQWVYMnBiWTUwT1I4SVFwdEFNSjFxZ3g0?=
+ =?utf-8?B?dHRBNVI1OVh1QnZrTXlvNy80UVVYemxEalh4NFhNdnY4Wnp5TFFpWDdsTysv?=
+ =?utf-8?B?SHIwb0c1YXpCVjRBRFcwc2pWZkwxc3FCT283WlN1VEN6S2hkSFRUaXpWL1Nj?=
+ =?utf-8?B?YmZlVm1MZVVpMHVTaFg3cjVHTlRhejZnN0trNGRncE0zSktGNmpWSnMvbHAr?=
+ =?utf-8?B?eDhEUTd5TW05M282djQwV2lBcE4xZ09qRGxRWjZxUU9vdFZteTZ6N1ZQQkVS?=
+ =?utf-8?B?aGR5eHJSdUdWd2NqMDVHNkN0dlIzY0M5RTVSZFpMcGdqelJ1K2JsNUxZWmhF?=
+ =?utf-8?B?ZG80ZTdmbmFxZ05NMHJVbDZQSlU0U05qZnYxbm45RnpaR2NLY21YSEpWSnlU?=
+ =?utf-8?B?WU84OG5pR3k1by9VU3BFZ2tkNXNFdzYvK2tOQTI3NHZwVjVSM0VWK2cxOElq?=
+ =?utf-8?B?UUlvR1dFeWs0SlhYcm9qK3I5dVAyaDZmdGs5dmlIdzg5UGhkelJKc3FpWHho?=
+ =?utf-8?B?OTRuVzF1aVIxY3BidElheEY1eVUxaXAvTENpako3ZDFOWDI5TXhiYno2US9l?=
+ =?utf-8?B?TER0SWJodS8yUTkxRW50aXJNR3pFRjUyb0V0VDVMWm03eW9DU0xwQVNzLzl2?=
+ =?utf-8?B?MlNwaUFINUNRQzJIVkVFQkl0ZUY5eGEyQXNXUGNmUnFCTEVVMTFrKzdxcGcw?=
+ =?utf-8?B?Sm5YZ1I1d293TTZLNEJLT1lVRlNPRTJHMHVFSU5jSFk1WFA3aGNQV1lrQm11?=
+ =?utf-8?B?TVZ3d1d4VmRja2xlVWVYMmw4NSs2ZUxkazA1aXFzV29BYjNNeXUvSXQyejFY?=
+ =?utf-8?B?cFFEQmR6dXdoSEFNUm5pOWVMN05NVVVKV0RIT3M0b3RadkgwMERuMkw4M2ta?=
+ =?utf-8?B?blJjVFRrOXRIR2RrVjV6dzhDM2xRTkRYaTliWVZyWnV4bHB6WEdIeCs4VllX?=
+ =?utf-8?B?bUdnOWI1ZytibEZUUjBlbmJEdG9seE5rYm90WGJiWnlEK3pCVzNaWDN2RHAr?=
+ =?utf-8?B?OGZRUGowRTgzN2lMMkZvTnU1M0xJR3FHb0xWYWh1anVndjBwOE5JdzVmblRk?=
+ =?utf-8?B?aEVIN1M0aDFKZm03UHNYN0MrTTJ6cnE5SzJpRXg2VENIMHYrWGhxUHV3OUFl?=
+ =?utf-8?B?eGtsK2VtV3dmbG9ob2c1dnBuMXlHdG1LTmU0TkRFYndFQ2hmUGFURG15Uncv?=
+ =?utf-8?B?aGFZMVZOdXdmYWFXeml2WFZjakFWK3RmWE1taTloYkZDK3ZZbW5OK1UvcjJw?=
+ =?utf-8?B?eE5oY2d1bVZLZjZmNlJrSHBMQ2kyNm91eWFuR3kyclRTaFFwb2Z6N2lPSWlh?=
+ =?utf-8?B?a29QNnUwREFLQjFGZWF2SHdtT3JkWFB5SnN5VHl1dnNvdmltZUozakZuc2Ew?=
+ =?utf-8?B?Nk8yUkIrMVo4ZEFTUjNjT1NHSmJGM2w3R1VWWGwxTkhnZUIvYUVZUGZSUzQv?=
+ =?utf-8?B?ekoxNzd1YnBSZ0MzTGkxU1VNSzJudnVMSHhub0JFQWJFWTB5Vm44MEYzdk91?=
+ =?utf-8?B?OGVWVHh3NVl2TGQyb3NzNVR4dEY1YW5zMFFib0ZmUktkWXp0K3lDSFlSOW03?=
+ =?utf-8?B?eWJLM2NzeitrUTFVL1UwL3FIaVFZN2toNjFBSXRZNnQ1a3RCRHl2c3ZBQXBM?=
+ =?utf-8?B?algwckU1M2dWUHVnMi91RnFHYUxKVUxCdFdnd1VVcGFHWVJyR3FkZllnYkRD?=
+ =?utf-8?B?QlNUT3JqUUFEZmU4ZEgrdVhxSGV3MS8vdkJMdHV0RjUwMTF6UHZoSitUR1gr?=
+ =?utf-8?B?VE9KUlRFK0FiWVNwWktyTW1Ndklqb2NwM3RNYzBycjY1SEhKak1BMmJvYTFK?=
+ =?utf-8?B?Z0ljV3VvSzY1UGcxYWRFTE5heHd5TG5KbGFocmdkUjFyQTZ6VW1tY0RHZXdq?=
+ =?utf-8?B?TG96WFJJVGFOT05OYUo5WU5MY0RoU01aZU9SMG5FaDdFZG92Tm1qSnhwMGp1?=
+ =?utf-8?B?WkR4V2ZpKzMwVnZxeU1YaisvU1k4cUU0UG9MQXJBbk5YS0ltMGxTR0RIWmY2?=
+ =?utf-8?B?a2pCaGdCTE14M2UzdFpaKzNpSlEwUEh1ajhScnBrbjh4WTNNcXl2Y3VQVGta?=
+ =?utf-8?Q?37aQL/p1QamMR2Y79avkjk7qs?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec153154-3529-479d-7b6a-08db3088e3e3
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 19:07:50.1603
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ywPzdQu4B3+CaK1uQgjP/SyngvrZUqyWvlDfaqFSGOnKFO1SXEL+AelBcoIHUtu8+WX74mSPZ/IS52UfZ2ZkfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7252
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,132 +137,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2023 00:37, Seth Forshee wrote:
-> On Tue, Mar 28, 2023 at 06:47:33PM -0700, Jakub Kicinski wrote:
->> Seth, does this looks related to commit 267463823adb ("net: sch:
->> eliminate unnecessary RCU waits in mini_qdisc_pair_swap()")
->> by any chance?
+On 3/29/2023 14:03, David R wrote:
+> On 29/03/2023 18:51, Limonciello, Mario wrote:
+>> APIC @ 0x0000000000000000
+>>>      0000: 41 50 49 43 DE 00 00 00 03 AC 41 4C 41 53 4B 41 
+>>> APIC......ALASKA
+>>>      0010: 41 20 4D 20 49 20 00 00 09 20 07 01 41 4D 49 20  A M I ... 
+>>> ..AMI
+>>>      0020: 13 00 01 00 00 00 E0 FE 01 00 00 00 00 08 01 00 
+>>> ................
+>>>      0030: 01 00 00 00 00 08 02 01 01 00 00 00 00 08 03 02 
+>>> ................
+>>>      0040: 01 00 00 00 00 08 04 03 01 00 00 00 00 08 05 08 
+>>> ................
+>>>      0050: 01 00 00 00 00 08 06 09 01 00 00 00 00 08 07 0A 
+>>> ................
+>>>      0060: 01 00 00 00 00 08 08 0B 01 00 00 00 00 08 09 00 
+>>> ................
+>>>      0070: 00 00 00 00 00 08 0A 00 00 00 00 00 00 08 0B 00 
+>>> ................
+>>>      0080: 00 00 00 00 00 08 0C 00 00 00 00 00 00 08 0D 00 
+>>> ................
+>>>      0090: 00 00 00 00 00 08 0E 00 00 00 00 00 00 08 0F 00 
+>>> ................
+>>>      00A0: 00 00 00 00 00 08 10 00 00 00 00 00 04 06 FF 05 
+>>> ................
+>>>      00B0: 00 01 01 0C 09 00 00 00 C0 FE 00 00 00 00 01 0C 
+>>> ................
+>>>      00C0: 0A 00 00 10 C0 FE 18 00 00 00 02 0A 00 00 02 00 
+>>> ................
+>>>      00D0: 00 00 00 00 02 0A 00 09 09 00 00 00 0F 00 ..............
+>>>
+>>>
+>>> Cheers
+>>> David
+>>>
+>>
+>> Can you guys have a try with this patch to see if it helps the situation?
+>>
+>> https://lore.kernel.org/linux-pm/20230329174536.6931-1-mario.limonciello@amd.com/T/#u
+>>
+>> Thanks,
 > 
-> I don't see how it could be. The memory being written is part of the
-> qdisc private memory, and tc_new_tfilter() takes a reference to the
-> qdisc. If that memory has been freed doesn't it mean that something has
-> done an unbalanced qdisc_put()?
+> Your patch on top of 6.2.8 brought the crash back I'm afraid.
 > 
+> Cheers
+> David
 
-Reverting Seth's patches (85c0c3eb9a66 and 267463823adb) leads to these 
-traces with the reproducer:
-[   52.704956][    C0] ------------[ cut here ]------------
-[   52.705568][    C0] ODEBUG: free active (active state 1) object:0
-[   52.706542][    C0] WARNING: CPU: 0 PID: 0 at lib/debugobjects.c0
-[   52.707283][    C0] Modules linked in:
-[   52.707602][    C0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0
-[   52.708304][    C0] Hardware name: QEMU Standard PC (i440FX + PI4
-[   52.709032][    C0] RIP: 0010:debug_print_object+0x196/0x290
-[   52.709509][    C0] Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85e
-[   52.711011][    C0] RSP: 0018:ffffc90000007cd0 EFLAGS: 00010282
-[   52.711510][    C0] RAX: 0000000000000000 RBX: 0000000000000003 0
-[   52.712125][    C0] RDX: ffffffff8c495800 RSI: ffffffff814b96d7 1
-[   52.712748][    C0] RBP: 0000000000000001 R08: 0000000000000001 0
-[   52.713370][    C0] R10: 0000000000000000 R11: 203a47554245444f 0
-[   52.713983][    C0] R13: ffffffff8aa6e960 R14: 0000000000000000 8
-[   52.714609][    C0] FS:  0000000000000000(0000) GS:ffff8881f5a000
-[   52.715356][    C0] CS:  0010 DS: 0000 ES: 0000 CR0: 000000008003
-[   52.715863][    C0] CR2: 000055914686f020 CR3: 000000011e856000 0
-[   52.716486][    C0] Call Trace:
-[   52.716742][    C0]  <IRQ>
-[   52.716969][    C0]  debug_check_no_obj_freed+0x302/0x420
-[   52.717423][    C0]  slab_free_freelist_hook+0xec/0x1c0
-[   52.717848][    C0]  ? rcu_core+0x818/0x1930
-[   52.718204][    C0]  __kmem_cache_free+0xaf/0x2e0
-[   52.718590][    C0]  rcu_core+0x818/0x1930
-[   52.718938][    C0]  ? rcu_report_dead+0x610/0x610
-[   52.719328][    C0]  __do_softirq+0x1d4/0x8ef
-[   52.719689][    C0]  __irq_exit_rcu+0x11d/0x190
-[   52.720062][    C0]  irq_exit_rcu+0x9/0x20
-[   52.720402][    C0]  sysvec_apic_timer_interrupt+0x97/0xc0
-[   52.720842][    C0]  </IRQ>
-[   52.721070][    C0]  <TASK>
-[   52.721300][    C0]  asm_sysvec_apic_timer_interrupt+0x1a/0x20
-[   52.721779][    C0] RIP: 0010:default_idle+0xf/0x20
-[   52.722172][    C0] Code: 89 07 49 c7 c0 08 00 00 00 4d 29 c8 4c5
-[   52.723631][    C0] RSP: 0018:ffffffff8c407e30 EFLAGS: 00000202
-[   52.724096][    C0] RAX: 000000000007897f RBX: 0000000000000000 6
-[   52.724702][    C0] RDX: 0000000000000000 RSI: 0000000000000001 0
-[   52.725335][    C0] RBP: ffffffff8c495800 R08: 0000000000000001 b
-[   52.725957][    C0] R10: ffffed103eb46d95 R11: 0000000000000000 0
-[   52.726550][    C0] R13: 0000000000000000 R14: ffffffff8e7834d0 0
-[   52.727162][    C0]  ? ct_kernel_exit+0x1d6/0x240
-[   52.727542][    C0]  default_idle_call+0x67/0xa0
-[   52.727912][    C0]  do_idle+0x31e/0x3e0
-[   52.728241][    C0]  ? arch_cpu_idle_exit+0x30/0x30
-[   52.728635][    C0]  cpu_startup_entry+0x18/0x20
-[   52.729006][    C0]  rest_init+0x16d/0x2b0
-[   52.729338][    C0]  ? regulator_has_full_constraints+0x9/0x20
-[   52.729815][    C0]  ? trace_init_perf_perm_irq_work_exit+0x20/00
-[   52.730309][    C0]  arch_call_rest_init+0x13/0x30
-[   52.730703][    C0]  start_kernel+0x352/0x4c0
-[   52.731087][    C0]  secondary_startup_64_no_verify+0xce/0xdb
-[   52.731611][    C0]  </TASK>
-[   52.731870][    C0] Kernel panic - not syncing: kernel: panic_on.
-[   52.732445][    C0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0
-[   52.733140][    C0] Hardware name: QEMU Standard PC (i440FX + PI4
-[   52.733867][    C0] Call Trace:
-[   52.734143][    C0]  <IRQ>
-[   52.734380][    C0]  dump_stack_lvl+0xd9/0x150
-[   52.734769][    C0]  panic+0x684/0x730
-[   52.735082][    C0]  ? panic_smp_self_stop+0x90/0x90
-[   52.735322][    C0]  ? show_trace_log_lvl+0x285/0x390
-[   52.735322][    C0]  ? debug_print_object+0x196/0x290
-[   52.735322][    C0]  check_panic_on_warn+0xb1/0xc0
-[   52.735322][    C0]  __warn+0xf2/0x390
-[   52.735322][    C0]  ? debug_print_object+0x196/0x290
-[   52.735322][    C0]  report_bug+0x2dd/0x500
-[   52.735322][    C0]  handle_bug+0x3c/0x70
-[   52.735322][    C0]  exc_invalid_op+0x18/0x50
-[   52.735322][    C0]  asm_exc_invalid_op+0x1a/0x20
-[   52.735322][    C0] RIP: 0010:debug_print_object+0x196/0x290
-[   52.735322][    C0] Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85e
-[   52.735322][    C0] RSP: 0018:ffffc90000007cd0 EFLAGS: 00010282
-[   52.735322][    C0] RAX: 0000000000000000 RBX: 0000000000000003 0
-[   52.735322][    C0] RDX: ffffffff8c495800 RSI: ffffffff814b96d7 1
-[   52.735322][    C0] RBP: 0000000000000001 R08: 0000000000000001 0
-[   52.735322][    C0] R10: 0000000000000000 R11: 203a47554245444f 0
-[   52.735322][    C0] R13: ffffffff8aa6e960 R14: 0000000000000000 8
-[   52.735322][    C0]  ? __warn_printk+0x187/0x310
-[   52.735322][    C0]  debug_check_no_obj_freed+0x302/0x420
-[   52.735322][    C0]  slab_free_freelist_hook+0xec/0x1c0
-[   52.735322][    C0]  ? rcu_core+0x818/0x1930
-[   52.735322][    C0]  __kmem_cache_free+0xaf/0x2e0
-[   52.735322][    C0]  rcu_core+0x818/0x1930
-[   52.735322][    C0]  ? rcu_report_dead+0x610/0x610
-[   52.735322][    C0]  __do_softirq+0x1d4/0x8ef
-[   52.735322][    C0]  __irq_exit_rcu+0x11d/0x190
-[   52.735322][    C0]  irq_exit_rcu+0x9/0x20
-[   52.735322][    C0]  sysvec_apic_timer_interrupt+0x97/0xc0
-[   52.735322][    C0]  </IRQ>
-[   52.735322][    C0]  <TASK>
-[   52.735322][    C0]  asm_sysvec_apic_timer_interrupt+0x1a/0x20
-[   52.735322][    C0] RIP: 0010:default_idle+0xf/0x20
-[   52.735322][    C0] Code: 89 07 49 c7 c0 08 00 00 00 4d 29 c8 4c5
-[   52.735322][    C0] RSP: 0018:ffffffff8c407e30 EFLAGS: 00000202
-[   52.735322][    C0] RAX: 000000000007897f RBX: 0000000000000000 6
-[   52.735322][    C0] RDX: 0000000000000000 RSI: 0000000000000001 0
-[   52.735322][    C0] RBP: ffffffff8c495800 R08: 0000000000000001 b
-[   52.735322][    C0] R10: ffffed103eb46d95 R11: 0000000000000000 0
-[   52.735322][    C0] R13: 0000000000000000 R14: ffffffff8e7834d0 0
-[   52.735322][    C0]  ? ct_kernel_exit+0x1d6/0x240
-[   52.735322][    C0]  default_idle_call+0x67/0xa0
-[   52.735322][    C0]  do_idle+0x31e/0x3e0
-[   52.735322][    C0]  ? arch_cpu_idle_exit+0x30/0x30
-[   52.735322][    C0]  cpu_startup_entry+0x18/0x20
-[   52.735322][    C0]  rest_init+0x16d/0x2b0
-[   52.735322][    C0]  ? regulator_has_full_constraints+0x9/0x20
-[   52.735322][    C0]  ? trace_init_perf_perm_irq_work_exit+0x20/00
-[   52.735322][    C0]  arch_call_rest_init+0x13/0x30
-[   52.735322][    C0]  start_kernel+0x352/0x4c0
-[   52.735322][    C0]  secondary_startup_64_no_verify+0xce/0xdb
-[   52.735322][    C0]  </TASK>
-[   52.735322][    C0] Kernel Offset: disabled
-[   52.735322][    C0] Rebooting in 86400 seconds..
+Humm.  In that case I'm a bit worried there is some conflicting patches 
+that caused this result.  Could you try with both
 
-
+e2869bd7af60 and aa06e20f1be6 reverted?  If that also fails, I think a 
+more complicated bisect removing those commits is needed.
