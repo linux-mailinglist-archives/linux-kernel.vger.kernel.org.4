@@ -2,77 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41FE6CD33B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C006CD33E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 09:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjC2H3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 03:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S229798AbjC2HbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 03:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjC2H3B (ORCPT
+        with ESMTP id S229567AbjC2Haq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 03:29:01 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D703AAB
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tyigenNRL14flZba6FvHZXgEG9vHkKSt7KxbjM+DuTs=; b=oqQY51vI4/3eZ0wAtGSwp5PRTb
-        FaZJL1ktgh3QUOFihyHXC1lLxciVFBG8UThHJV66xh7fdom+B3vt3wNxJtZsHSVda5tDlIEr/YTdd
-        yDOaAbb3AZDwADL2i3j6Yd8SWAmIKEgcYj87i7RmjcMHHPUT6tXSG3jDKGqtinom/BKwMNP19Dkry
-        aLEYGpTSCrVlBtjSzwAxPZhHyY3IjSYDyCkHlSSnB0IpVh7ONLpHbw88jniIMM1rEQc4VYS3l34uo
-        JbuR0xKgOZZaUXG23mVMXnXERrS8oF9VnxRP/FFxPUv8Nj/bcgeZLux7+nY87PKmGdHWsWOIqMLh5
-        pAEcJ2+g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1phQCs-006muq-0s;
-        Wed, 29 Mar 2023 07:26:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D1CBC3000E6;
-        Wed, 29 Mar 2023 09:26:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BCCC52CC6DE9A; Wed, 29 Mar 2023 09:26:53 +0200 (CEST)
-Date:   Wed, 29 Mar 2023 09:26:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] objtool: Add per-function rate limiting for
- unreachable warnings
-Message-ID: <20230329072653.GI4253@hirez.programming.kicks-ass.net>
-References: <cover.1679932620.git.jpoimboe@kernel.org>
- <b21f7791b30c54cf8c4d0f489decdc4a47a18963.1679932620.git.jpoimboe@kernel.org>
- <20230328081105.GD4253@hirez.programming.kicks-ass.net>
- <20230328202205.cfd7hvpj74rv7ry4@treble>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328202205.cfd7hvpj74rv7ry4@treble>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 29 Mar 2023 03:30:46 -0400
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB3E448B
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 00:28:30 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VevwF9d_1680074851;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VevwF9d_1680074851)
+          by smtp.aliyun-inc.com;
+          Wed, 29 Mar 2023 15:27:32 +0800
+Message-ID: <1680074823.805977-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH v3] virtio_ring: interrupt disable flag updated to vq even with event_triggered is set
+Date:   Wed, 29 Mar 2023 15:27:03 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Albert Huang <huangjie.albert@bytedance.com>
+Cc:     "huangjie.albert" <huangjie.albert@bytedance.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>
+References: <20230325105633.58592-1-huangjie.albert@bytedance.com>
+ <ZCJNTBQLZeyLBKKB@codewreck.org>
+ <CACGkMEt29t9CK2Muiuyb1s6p2AzgcMiD_z0NVFn1d+KEqBydug@mail.gmail.com>
+ <CABKxMyPwuRb6p-oHxcQDhRtJv04=NDWvosNAp=epgvdrfCeveg@mail.gmail.com>
+ <CACGkMEuukvjXBTDX2K9YLYmpHsqK96AiMK39gbm3+f_+kUydMQ@mail.gmail.com>
+ <CABKxMyN0598wA6wHv5GkZC14znwp=OPo7u71_BizJfR+gUx4_w@mail.gmail.com>
+ <20230329012908-mutt-send-email-mst@kernel.org>
+ <20230329072135.44757-1-huangjie.albert@bytedance.com>
+In-Reply-To: <20230329072135.44757-1-huangjie.albert@bytedance.com>
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 01:22:05PM -0700, Josh Poimboeuf wrote:
-> On Tue, Mar 28, 2023 at 10:11:05AM +0200, Peter Zijlstra wrote:
-> > On Mon, Mar 27, 2023 at 09:00:47AM -0700, Josh Poimboeuf wrote:
-> > > Unreachable instruction warnings are rate limited to once per object
-> > > file.  That no longer makes sense for vmlinux validation, which might
-> > > have other unreachable instructions lurking in other places.  Change it
-> > > to once per function.
-> > 
-> > Do we want a negative option to disable this? --no-ratelimit or such?
-> 
-> Per-function rate-limiting is almost always the right thing, personally
-> I don't envision needing to disable it.
+Maybe one new thread is better.
 
-Ok, fair enough. I'll let you know if I ever come across the need to
-disable it :-)
+Thanks.
+
+On Wed, 29 Mar 2023 15:21:35 +0800, Albert Huang <huangjie.albert@bytedance.com> wrote:
+> From: "huangjie.albert" <huangjie.albert@bytedance.com>
+>
+> in virtio_net, if we disable the napi_tx, when we triger a tx interrupt,
+> the vq->event_triggered will be set to true. It will no longer be set to
+> false. Unless we explicitly call virtqueue_enable_cb_delayed or
+> virtqueue_enable_cb_prepare.
+>
+> If we disable the napi_tx, it will only be called when the tx ring
+> buffer is relatively small.
+>
+> Because event_triggered is true. Therefore, VRING_AVAIL_F_NO_INTERRUPT or
+> VRING_PACKED_EVENT_FLAG_DISABLE will not be set. So we update
+> vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
+> every time we call virtqueue_get_buf_ctx.This bring more interruptions.
+>
+> To summarize:
+> 1) event_triggered was set to true in vring_interrupt()
+> 2) after this nothing will happen for virtqueue_disable_cb() so
+>    VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
+> 3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
+>    then it tries to publish new event
+>
+> To fix:
+> update VRING_AVAIL_F_NO_INTERRUPT or VRING_PACKED_EVENT_FLAG_DISABLE to vq
+> when we call virtqueue_disable_cb even the event_triggered is set to true.
+>
+> Tested with iperf:
+> iperf3 tcp stream:
+> vm1 -----------------> vm2
+> vm2 just receives tcp data stream from vm1, and sends the ack to vm1,
+> there are many tx interrupts in vm2.
+> but without event_triggered there are just a few tx interrupts.
+>
+> v2->v3:
+> -update the interrupt disable flag even with the event_triggered is set,
+> -instead of checking whether event_triggered is set in
+> -virtqueue_get_buf_ctx_{packed/split}, will cause the drivers  which have
+> -not called virtqueue_{enable/disable}_cb to miss notifications.
+>
+> Fixes: 8d622d21d248 ("virtio: fix up virtio_disable_cb")
+> Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+>  drivers/virtio/virtio_ring.c | 24 +++++++++++++++++-------
+>  1 file changed, 17 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 307e139cb11d..ad74463a48ee 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -812,6 +812,14 @@ static void virtqueue_disable_cb_split(struct virtqueue *_vq)
+>
+>  	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)) {
+>  		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
+> +
+> +		/*
+> +		 * If device triggered an event already it won't trigger one again:
+> +		 * no need to disable.
+> +		 */
+> +		if (vq->event_triggered)
+> +			return;
+> +
+>  		if (vq->event)
+>  			/* TODO: this is a hack. Figure out a cleaner value to write. */
+>  			vring_used_event(&vq->split.vring) = 0x0;
+> @@ -1544,8 +1552,16 @@ static void virtqueue_disable_cb_packed(struct virtqueue *_vq)
+>  {
+>  	struct vring_virtqueue *vq = to_vvq(_vq);
+>
+> -	if (vq->packed.event_flags_shadow != VRING_PACKED_EVENT_FLAG_DISABLE) {
+> +	if (!(vq->packed.event_flags_shadow & VRING_PACKED_EVENT_FLAG_DISABLE)) {
+>  		vq->packed.event_flags_shadow = VRING_PACKED_EVENT_FLAG_DISABLE;
+> +
+> +		/*
+> +		 * If device triggered an event already it won't trigger one again:
+> +		 * no need to disable.
+> +		 */
+> +		if (vq->event_triggered)
+> +			return;
+> +
+>  		vq->packed.vring.driver->flags =
+>  			cpu_to_le16(vq->packed.event_flags_shadow);
+>  	}
+> @@ -2063,12 +2079,6 @@ void virtqueue_disable_cb(struct virtqueue *_vq)
+>  {
+>  	struct vring_virtqueue *vq = to_vvq(_vq);
+>
+> -	/* If device triggered an event already it won't trigger one again:
+> -	 * no need to disable.
+> -	 */
+> -	if (vq->event_triggered)
+> -		return;
+> -
+>  	if (vq->packed_ring)
+>  		virtqueue_disable_cb_packed(_vq);
+>  	else
+> --
+> 2.31.1
+>
