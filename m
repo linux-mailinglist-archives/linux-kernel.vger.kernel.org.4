@@ -2,97 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD096CF554
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DFC6CF560
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjC2VYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 17:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S229525AbjC2V1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 17:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjC2VYC (ORCPT
+        with ESMTP id S229462AbjC2V13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 17:24:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B84E768A;
-        Wed, 29 Mar 2023 14:23:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7A5661E4C;
-        Wed, 29 Mar 2023 21:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA47FC433EF;
-        Wed, 29 Mar 2023 21:22:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680124968;
-        bh=BQEBTl7sXemlMssTlUV/AZAbpGbpWsqCBRUJdakEeN8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FAb5FXtoTcApyMuwm4dPst2MLgRDCinX4ahQVoFRA3pUPBjHgw3XnquAuICIoc+OP
-         +6tG6uvJ+f6CwIsn8HRjnO/G9f9aiob2twzKgCBe7fTiDNJOoDOeD0vSErFdsAgD8I
-         yZ7wamVfA19W9XtbM6s8U5X0tkOUp8y4BRER/iMDQYSLt98ZOh4hA1fn+DEZHWl2CV
-         0achyBigD3KdyOZ8h5e66M902Jc1gr2OhuDepLXELHoyN2AbAW0ZT6jt/vRNsys0tm
-         4SaFHjE4VL9+9+lZQydpmgpc8tAJWqNWDgUGmUAhp+xalQDpQNpgXh7UiyNzpT01lS
-         4fE8qfdnroPGQ==
-Date:   Wed, 29 Mar 2023 23:22:45 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 3/4] rcu/nocb: Recheck lazy callbacks under the
- ->nocb_lock from shrinker
-Message-ID: <ZCSsJW67BnGWzNrI@lothringen>
-References: <20230329160203.191380-1-frederic@kernel.org>
- <20230329160203.191380-4-frederic@kernel.org>
- <8df51703-1ee4-4b7b-9e05-90b3650e8ee7@paulmck-laptop>
+        Wed, 29 Mar 2023 17:27:29 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365AC2681;
+        Wed, 29 Mar 2023 14:27:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=vTEx1qGiRwHQqbRWZ0F0YVEXYMez6RiJLOH+5aThdgE=;
+        t=1680125246; x=1681334846; b=spE3Mu/tZJZwbguWhNkhb04F/VyzKMs5S+EnC7HG/oatr8H
+        Q1q+8HkkN1+FqeaVED8hlbN6/oYYLNep3P7v6UjYf0aQk6j34UzBQC2Ta6PF3PDP5Pj9y+rWUCsJH
+        TxuD/FFgojsMo0V90ZL2wB5TIplvpE0rrKHEYW5HB9jnlShnNIGqxHMoIX74EhGwQPUb0Q5Bix4dR
+        9KvWWFRQW8D8DcRU7JILoU62inBy57SWX+T6vyISIYskWAdKSxgpIrRc8y2HzgEEb6sJHO+PIe+qO
+        ZfJkxJ9lyVP2HcNWY5JdtLw55pt1Yy19tWE5Qnf1LmXMmzRKUXCOvQySu29Qh0Yw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1phdJz-000F4W-1q;
+        Wed, 29 Mar 2023 23:27:07 +0200
+Message-ID: <fbad112793615840745195e54eed98634233c415.camel@sipsolutions.net>
+Subject: Re: [PATCH 3/5] net: rfkill-gpio: Add explicit include for of.h
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-acpi@vger.kernel.org,
+        devicetree@vger.kernel.org
+Date:   Wed, 29 Mar 2023 23:27:05 +0200
+In-Reply-To: <20230329-acpi-header-cleanup-v1-3-8dc5cd3c610e@kernel.org>
+References: <20230329-acpi-header-cleanup-v1-0-8dc5cd3c610e@kernel.org>
+         <20230329-acpi-header-cleanup-v1-3-8dc5cd3c610e@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8df51703-1ee4-4b7b-9e05-90b3650e8ee7@paulmck-laptop>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 01:54:20PM -0700, Paul E. McKenney wrote:
-> On Wed, Mar 29, 2023 at 06:02:02PM +0200, Frederic Weisbecker wrote:
-> > The ->lazy_len is only checked locklessly. Recheck again under the
-> > ->nocb_lock to avoid spending more time on flushing/waking if not
-> > necessary. The ->lazy_len can still increment concurrently (from 1 to
-> > infinity) but under the ->nocb_lock we at least know for sure if there
-> > are lazy callbacks at all (->lazy_len > 0).
-> > 
-> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > ---
-> >  kernel/rcu/tree_nocb.h | 16 ++++++++++++----
-> >  1 file changed, 12 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> > index c321fce2af8e..dfa9c10d6727 100644
-> > --- a/kernel/rcu/tree_nocb.h
-> > +++ b/kernel/rcu/tree_nocb.h
-> > @@ -1358,12 +1358,20 @@ lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
-> >  		if (!rcu_rdp_is_offloaded(rdp))
-> >  			continue;
-> >  
-> > +		if (!READ_ONCE(rdp->lazy_len))
-> > +			continue;
-> 
-> Do you depend on the ordering of the above read of ->lazy_len against
-> anything in the following, aside from the re-read of ->lazy_len?  (Same
-> variable, both READ_ONCE() or stronger, so you do get that ordering.)
-> 
-> If you do need that ordering, the above READ_ONCE() needs to instead
-> be smp_load_acquire() or similar.  If you don't need that ordering,
-> what you have is good.
+On Wed, 2023-03-29 at 16:20 -0500, Rob Herring wrote:
+> With linux/acpi.h no longer implicitly including of.h, add an explicit
+> include of of.h to fix the following error:
+>=20
+> net/rfkill/rfkill-gpio.c:181:21: error: implicit declaration of function =
+'of_match_ptr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-No ordering dependency intended here. The early ->lazy_len read is really just
-an optimization here to avoid locking if it *seems* there is nothing to do with
-this rdp. But what follows doesn't depend on that read.
+Sounds good!
 
-Thanks.
+Acked-by: Johannes Berg <johannes@sipsolutions.net>
+
+I'm happy with Rafael taking the entire series, there's nothing here
+that I expect to conflict, and anyway it'd be trivial.
+
+Thanks,
+johannes
