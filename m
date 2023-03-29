@@ -2,160 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B856CD8D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30C26CD8ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 13:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjC2LyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 07:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
+        id S229379AbjC2L5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 07:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjC2LyJ (ORCPT
+        with ESMTP id S229572AbjC2L5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:54:09 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4A84203;
-        Wed, 29 Mar 2023 04:54:03 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R421e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VewpsNi_1680090837;
-Received: from 30.221.149.47(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VewpsNi_1680090837)
-          by smtp.aliyun-inc.com;
-          Wed, 29 Mar 2023 19:53:58 +0800
-Message-ID: <8ba831ae-4568-32af-3fd1-fd51a7c13dcd@linux.alibaba.com>
-Date:   Wed, 29 Mar 2023 19:53:56 +0800
+        Wed, 29 Mar 2023 07:57:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2826A4C33;
+        Wed, 29 Mar 2023 04:56:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3DF99219D6;
+        Wed, 29 Mar 2023 11:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680090965; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MgoqW9i5PP+a88cpUieall/Y5VXNVR+ZmdLSTwQcCUk=;
+        b=gPDY7Zoa+PX03ws7DqJY76AlRsJnW8njixlmMYQFSry0Sm7LYXBffaSrEiEddrRh93lQ4b
+        ta0+tMP2rFqm3q5t+9Dfe+XUHMrnimp8Y7siBb2qRrh+CyK+th4RsUG//OZ8FQ4e5R54q8
+        ObR9oKGkhhZrGoyU+nMqPxNH4q//bhU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2CAA5138FF;
+        Wed, 29 Mar 2023 11:56:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KZZ/ClUnJGSOXQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 29 Mar 2023 11:56:05 +0000
+Date:   Wed, 29 Mar 2023 13:56:04 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2 2/9] memcg: rename mem_cgroup_flush_stats_"delayed" to
+ "ratelimited"
+Message-ID: <ZCQnVNH9NMg4D9TB@dhcp22.suse.cz>
+References: <20230328221644.803272-1-yosryahmed@google.com>
+ <20230328221644.803272-3-yosryahmed@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH RFC 1/4] driver/perf: Add identifier sysfs file for CMN
-To:     John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1679885172-95021-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1679885172-95021-2-git-send-email-renyu.zj@linux.alibaba.com>
- <72246c5e-6ba5-098b-a979-e90738cc7509@oracle.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <72246c5e-6ba5-098b-a979-e90738cc7509@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328221644.803272-3-yosryahmed@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/3/27 下午3:55, John Garry 写道:
-> On 27/03/2023 03:46, Jing Zhang wrote:
->> To allow userspace to identify the specific implementation of the device,
->> add an "identifier" sysfs file.
->>
->> The perf tool can match the arm CMN metric through the identifier.
->>
->> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
->> ---
->>   drivers/perf/arm-cmn.c | 43 +++++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 43 insertions(+)
->>
->> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
->> index c968986..0c138ad 100644
->> --- a/drivers/perf/arm-cmn.c
->> +++ b/drivers/perf/arm-cmn.c
->> @@ -1168,10 +1168,53 @@ static ssize_t arm_cmn_cpumask_show(struct device *dev,
->>       .attrs = arm_cmn_cpumask_attrs,
->>   };
->>   +static ssize_t arm_cmn_identifier_show(struct device *dev,
->> +        struct device_attribute *attr, char *buf)
->> +{
->> +    struct arm_cmn *cmn = to_cmn(dev_get_drvdata(dev));
->> +    if (cmn->model == CMN700) {
->> +        return sysfs_emit(buf, "%s\n", "CMN700");
+On Tue 28-03-23 22:16:37, Yosry Ahmed wrote:
+> mem_cgroup_flush_stats_delayed() suggests his is using a delayed_work,
+> but this is actually sometimes flushing directly from the callsite.
 > 
-> Is it possible to have a pointer to this string in struct arm_cmn, such that we don't have to do this model to identifier lookup here? If-else chains like this are not scalable.
+> What it's doing is ratelimited calls. A better name would be
+> mem_cgroup_flush_stats_ratelimited().
 > 
-Will do.
+> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 
-> BTW, does this HW have some HW identifier register, like iidr? I think that using that may be preferable.
+Acked-by: Michal Hocko <mhocko@suse.com>
+
+> ---
+>  include/linux/memcontrol.h | 4 ++--
+>  mm/memcontrol.c            | 2 +-
+>  mm/workingset.c            | 2 +-
+>  3 files changed, 4 insertions(+), 4 deletions(-)
 > 
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index b6eda2ab205d..ac3f3b3a45e2 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -1037,7 +1037,7 @@ static inline unsigned long lruvec_page_state_local(struct lruvec *lruvec,
+>  }
+>  
+>  void mem_cgroup_flush_stats(void);
+> -void mem_cgroup_flush_stats_delayed(void);
+> +void mem_cgroup_flush_stats_ratelimited(void);
+>  
+>  void __mod_memcg_lruvec_state(struct lruvec *lruvec, enum node_stat_item idx,
+>  			      int val);
+> @@ -1535,7 +1535,7 @@ static inline void mem_cgroup_flush_stats(void)
+>  {
+>  }
+>  
+> -static inline void mem_cgroup_flush_stats_delayed(void)
+> +static inline void mem_cgroup_flush_stats_ratelimited(void)
+>  {
+>  }
+>  
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 0205e58ea430..c3b6aae78901 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -653,7 +653,7 @@ void mem_cgroup_flush_stats(void)
+>  		__mem_cgroup_flush_stats();
+>  }
+>  
+> -void mem_cgroup_flush_stats_delayed(void)
+> +void mem_cgroup_flush_stats_ratelimited(void)
+>  {
+>  	if (time_after64(jiffies_64, flush_next_time))
+>  		mem_cgroup_flush_stats();
+> diff --git a/mm/workingset.c b/mm/workingset.c
+> index 00c6f4d9d9be..af862c6738c3 100644
+> --- a/mm/workingset.c
+> +++ b/mm/workingset.c
+> @@ -462,7 +462,7 @@ void workingset_refault(struct folio *folio, void *shadow)
+>  
+>  	mod_lruvec_state(lruvec, WORKINGSET_REFAULT_BASE + file, nr);
+>  
+> -	mem_cgroup_flush_stats_delayed();
+> +	mem_cgroup_flush_stats_ratelimited();
+>  	/*
+>  	 * Compare the distance to the existing workingset size. We
+>  	 * don't activate pages that couldn't stay resident even if
+> -- 
+> 2.40.0.348.gf938b09366-goog
 
-I didn't find the relevant identifier register.
-
-Do Illka and Robin know that there is such a register that can identify different CMN versions? Looking forward to your suggestions.
-
-
->> +    }
->> +    else if (cmn->model == CMN650) {
->> +        return sysfs_emit(buf, "%s\n", "CMN650");
-> 
-> I'd use lowercase names
-> 
-Ok.
-
->> +    }
->> +    else if (cmn->model == CMN600) {
->> +        return sysfs_emit(buf, "%s\n", "CMN600");
->> +    }
->> +    else if (cmn->model == CI700) {
->> +        return sysfs_emit(buf, "%s\n", "CI700");
->> +    }
->> +    return sysfs_emit(buf, "%s\n", "UNKNOWN");
-> 
-> can we have a "is_visble" attr to just no show this when unknown?
-> 
-
-Ok.
-
->> +}
->> +
->> +static umode_t arm_cmn_identifier_attr_visible(struct kobject *kobj,
->> +        struct attribute *attr, int n)
->> +{
->> +    struct device *dev = kobj_to_dev(kobj);
->> +    struct arm_cmn *cmn = to_cmn(dev_get_drvdata(dev));
->> +    if (cmn->model <= 0)
->> +        return 0;
->> +    return attr->mode;
->> +};
->> +
->> +static struct device_attribute arm_cmn_identifier_attr =
->> +__ATTR(identifier, 0444, arm_cmn_identifier_show, NULL);
->> +
->> +static struct attribute *arm_cmn_identifier_attrs[] = {
->> +    &arm_cmn_identifier_attr.attr,
->> +    NULL,
-> 
-> nit: no need for trailing ',' on a sentinel
-> 
-
-Ok, Will do.
-
->> +};
->> +
->> +static struct attribute_group arm_cmn_identifier_attr_group = {
->> +    .attrs = arm_cmn_identifier_attrs,
->> +    .is_visible = arm_cmn_identifier_attr_visible,
->> +};
->> +
->>   static const struct attribute_group *arm_cmn_attr_groups[] = {
->>       &arm_cmn_event_attrs_group,
->>       &arm_cmn_format_attrs_group,
->>       &arm_cmn_cpumask_attr_group,
->> +    &arm_cmn_identifier_attr_group,
->>       NULL
->>   };
->>   
+-- 
+Michal Hocko
+SUSE Labs
