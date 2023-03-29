@@ -2,70 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929486CD671
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86BD6CD676
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 11:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjC2Jac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 05:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
+        id S230209AbjC2Jbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 05:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjC2Jaa (ORCPT
+        with ESMTP id S229449AbjC2Jbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:30:30 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8731E19A4;
-        Wed, 29 Mar 2023 02:30:29 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id d11-20020a05600c3acb00b003ef6e6754c5so5572757wms.5;
-        Wed, 29 Mar 2023 02:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680082228;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1lEaDc8be8FkWi1HX0iSofPQaKiEa8pAZUfrsxxjcSw=;
-        b=FCR79EhyW0vJpHBYVKlPW8vXWhRAihkRSI0u4tf7VDEIDF7RSF3B2bJXqAywT69v72
-         meKdvUnF+HCW5+Bqf/2fqch6RTAdmaRS8grsaLPzlZ/RbhskfugKDh7RtxikBZmCQQGF
-         Z6DaRvzRiaDxk3OSWzx/ArjH9MqFrNhMiiIeOiEgQ7XI7VmML6U5HqK6/F4ZPg43Q2fD
-         gSMO+OWlcHYoGlBwUpXakZ/yUVg1C1SJWkSt0Txi+jHvcAEGMXsT2BJwybKYUAbqHlXN
-         EAh+UxqQCU1/CzGu1fGjNRBu7r0QGULKp/iDtEtAAVkPqDmVe9tA9rNEeypYzinW8MJk
-         Bi/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680082228;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1lEaDc8be8FkWi1HX0iSofPQaKiEa8pAZUfrsxxjcSw=;
-        b=2cu5oXdlQ4ABJiO7bkXjHUo6T1k8er/kyuPrxy7oMqHjAtdFucfl8l1lvb6X3GXB7B
-         Lw1tvME25Ic3QAqWPIgy+C1hPYoxJiZsg2dFd9jWxXQggEqx2SamvUgtUfmU86oufnf5
-         rs3rWj7LXKcFiAdbR2GdRRvuShgXT9RPn7nVak95qnaIjAGjBWXMRVsapRBy+GNo8pwq
-         3WPHXAsIbou27O67J56JB6yyN3ff8tzreXGKaKzqbmg6JXQjcX8mby81TY16Fxz9C8H+
-         +y/yywe/K8PtNgs+DUGgwun7q3OXIUtu/nxoo0Z8O+va6jTZX5g+WkftyMbqC1pHaOLW
-         6pfw==
-X-Gm-Message-State: AO0yUKXYxiOpQ8RUHJSD9VANMvIa0axiUytWyTUUTkoKdqulqZKpWLsP
-        4HA8T3Dc2/+i2cSQLQsMlOc=
-X-Google-Smtp-Source: AK7set8icXlaIt2CvY3lleghHnnb5TGOj1bkw4TJVx7xOyJ8D/nA/R6NaqroGfmG6xJJgjVkcL3yJg==
-X-Received: by 2002:a1c:4c0d:0:b0:3eb:2e32:72c3 with SMTP id z13-20020a1c4c0d000000b003eb2e3272c3mr15711230wmf.22.1680082227927;
-        Wed, 29 Mar 2023 02:30:27 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id a13-20020a05600c224d00b003edef091b17sm1573356wmm.37.2023.03.29.02.30.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 02:30:27 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] drm/msm/mdss: Fix spelling mistake "Unuspported" -> "Unsupported"
-Date:   Wed, 29 Mar 2023 10:30:26 +0100
-Message-Id: <20230329093026.418847-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 29 Mar 2023 05:31:46 -0400
+Received: from outbound-smtp39.blacknight.com (outbound-smtp39.blacknight.com [46.22.139.222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FFE19A4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 02:31:44 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp39.blacknight.com (Postfix) with ESMTPS id 7337A1F5D
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 10:31:42 +0100 (IST)
+Received: (qmail 27444 invoked from network); 29 Mar 2023 09:31:42 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 29 Mar 2023 09:31:42 -0000
+Date:   Wed, 29 Mar 2023 10:31:40 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Alexander Halbuer <halbuer@sra.uni-hannover.de>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: reduce lock contention of pcp buffer refill
+Message-ID: <20230329093140.xds6mc3bax5xzaft@techsingularity.net>
+References: <20230201162549.68384-1-halbuer@sra.uni-hannover.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20230201162549.68384-1-halbuer@sra.uni-hannover.de>
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,26 +42,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dev_error message. Fix it.
+On Wed, Feb 01, 2023 at 05:25:49PM +0100, Alexander Halbuer wrote:
+> The `rmqueue_bulk` function batches the allocation of multiple elements to
+> refill the per-CPU buffers into a single hold of the zone lock. Each
+> element is allocated and checked using the `check_pcp_refill` function.
+> The check touches every related struct page which is especially expensive
+> for higher order allocations (huge pages). This patch reduces the time
+> holding the lock by moving the check out of the critical section similar
+> to the `rmqueue_buddy` function which allocates a single element.
+> Measurements of parallel allocation-heavy workloads show a reduction of
+> the average huge page allocation latency of 50 percent for two cores and
+> nearly 90 percent for 24 cores.
+> 
+> Signed-off-by: Alexander Halbuer <halbuer@sra.uni-hannover.de>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/gpu/drm/msm/msm_mdss.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
 
-diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
-index c15d1e2dc718..7cb301854e64 100644
---- a/drivers/gpu/drm/msm/msm_mdss.c
-+++ b/drivers/gpu/drm/msm/msm_mdss.c
-@@ -274,7 +274,7 @@ static int msm_mdss_enable(struct msm_mdss *msm_mdss)
- 		msm_mdss_setup_ubwc_dec_40(msm_mdss);
- 		break;
- 	default:
--		dev_err(msm_mdss->dev, "Unuspported UBWC decoder version %x\n",
-+		dev_err(msm_mdss->dev, "Unsupported UBWC decoder version %x\n",
- 			msm_mdss->mdss_data->ubwc_dec_version);
- 		dev_err(msm_mdss->dev, "HW_REV: 0x%x\n",
- 			readl_relaxed(msm_mdss->mmio + HW_REV));
+Minor comments only.
+
+> ---
+>  mm/page_alloc.c | 22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 0745aedebb37..4b80438b1f59 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3119,6 +3119,8 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+>  {
+>  	unsigned long flags;
+>  	int i, allocated = 0;
+> +	struct list_head *prev_tail = list->prev;
+> +	struct page *pos, *n;
+>  
+>  	spin_lock_irqsave(&zone->lock, flags);
+>  	for (i = 0; i < count; ++i) {
+> @@ -3127,9 +3129,6 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+>  		if (unlikely(page == NULL))
+>  			break;
+>  
+> -		if (unlikely(check_pcp_refill(page, order)))
+> -			continue;
+> -
+>  		/*
+>  		 * Split buddy pages returned by expand() are received here in
+>  		 * physical page order. The page is added to the tail of
+> @@ -3141,7 +3140,6 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+>  		 * pages are ordered properly.
+>  		 */
+>  		list_add_tail(&page->pcp_list, list);
+> -		allocated++;
+>  		if (is_migrate_cma(get_pcppage_migratetype(page)))
+>  			__mod_zone_page_state(zone, NR_FREE_CMA_PAGES,
+>  					      -(1 << order));
+
+As a side-effect, the NR_FREE_CMA_PAGES accounting does not drift when bad
+pages are found. It's rarely an issue and when it is an issue, corruption
+due to a use-after-free has occurred and the system is already potentially
+screwed. It's not enough to justify a patch split or -stable backport
+and probably existed forever. I don't remember the last time these checks
+actually caught corruption of struct pages although years ago I was told
+it often found problems.
+
+> @@ -3155,6 +3153,22 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+>  	 */
+>  	__mod_zone_page_state(zone, NR_FREE_PAGES, -(i << order));
+>  	spin_unlock_irqrestore(&zone->lock, flags);
+> +
+> +	/*
+> +	 * Pages are appended to the pcp list without checking to reduce the
+> +	 * time holding the zone lock. Checking the appended pages happens right
+> +	 * after the critical section while still holding the pcp lock.
+> +	 */
+> +	pos = list_first_entry(prev_tail, struct page, pcp_list);
+> +	list_for_each_entry_safe_from(pos, n, list, pcp_list) {
+> +		if (unlikely(check_pcp_refill(pos, order))) {
+> +			list_del(&pos->pcp_list);
+> +			continue;
+> +		}
+> +
+> +		allocated++;
+> +	}
+> +
+
+Minor nit and not important for this patch but the list is traversed
+even if check_pcp_refill does nothing but return false. The associated
+helpers like check_pcp_refill under CONFIG_DEBUG_VM would need a helper
+to determine if the list traversal is necessary. Maybe the compiler can
+figure it out but I doubt it due to static branches.
+
+Secondly, this does not kill the patch but the performance benefit is likely
+artificial or limited in most cases. It specifically affects the case where
+a buddy allocation such as THP or HugeTLBFS is happening in parallel with
+allocations that are refilling the PCP lists. The most likely time that
+this would happen is during early init of a memory-intensive parallelised
+application. While the init phase *can* be critical when the primary
+metric is "Time before a application is warmed up", it's not common.
+Even if the patch is taking care of a corner case, it's still justified.
+
 -- 
-2.30.2
-
+Mel Gorman
+SUSE Labs
