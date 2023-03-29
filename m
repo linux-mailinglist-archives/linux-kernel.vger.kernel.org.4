@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C716CF2C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE526CF2CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 21:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjC2TIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 15:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
+        id S230159AbjC2TKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 15:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjC2TIr (ORCPT
+        with ESMTP id S230147AbjC2TKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:08:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066A265A1;
-        Wed, 29 Mar 2023 12:08:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C9C3B823F4;
-        Wed, 29 Mar 2023 19:08:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00FC3C433EF;
-        Wed, 29 Mar 2023 19:08:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680116924;
-        bh=A4IDqMJGl5AYIYk31Ydlh53Pr0qz6PWFFTBuq+yeYzQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mq7MEMaHjIXDfOeVdj/el5/Le7a3W0xDXQ9YPROC6QOyWy53D9nRFoSAxdhVaj1gC
-         srAUq1EspJYzkIJyor2ync+lr8EP1gnbWW7Nf1PUcAsT8a6xij8KVhmEOkemi7QTFo
-         d1EjiqBfEfopq75+yQRIZG/57yi5LuYhkKwVjteEFpvwSa5kwVr+UtxTqERlMdNafi
-         vHwEeyfaCCSlaLL6QQwKI8aML75p3SPljvECGIm4AU0BTcHvauIK0uRRbEEdO+eflT
-         Z52nZzYIPDndqyejxXkgiCi9foJJMt9wbTTHRiOTEbs/nzCA4BCehvzkxsy5On/W+D
-         1r6EV2eaRLoWw==
-Date:   Wed, 29 Mar 2023 21:08:41 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH v5 3/3] i2c: mpc: Use i2c-scl-clk-low-timeout-us i2c
- property
-Message-ID: <ZCSMue5X5eknSbUP@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-References: <20230317233338.424864-1-andi.shyti@kernel.org>
- <20230317233338.424864-4-andi.shyti@kernel.org>
+        Wed, 29 Mar 2023 15:10:16 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799CD1994
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:10:15 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id 128so4232848qkf.9
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 12:10:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=omnibond-com.20210112.gappssmtp.com; s=20210112; t=1680117014;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pvuwFXbgUAZbOJPeg//uwBjMCt7EFsCpzym2Ulfy8+Y=;
+        b=ebtARkhWyJHfb4xtYmoYLGrX90kc/jqbKsnTc1bFtUGbeXJTTtNSjWPR/37szx/txC
+         HSK5H/HTOxvPW/DiblqMtvOIpwMd8KJMsw1Yrs44z/1hzgwbP/BeOHDbFz5apnBTrbpL
+         9xMWAlkZ1hlrdu7JYlxAnGZu2sdiaP5L9M6tuvAqST9HmN+Xo8ZbZPu1cbZH2fDDxMMp
+         RNR0rco3qMLpRaOrC4bpW4AixtA46YIItjBLMPwTA2K4hehu6SOF4jHGMGoJSREa9atw
+         /D43mJK5uSjS3KTSTM7H4HFaxALEIBTlBWYpk56E7grKxlsje3B5HOWznCjKAZqya0AN
+         Wgrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680117014;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pvuwFXbgUAZbOJPeg//uwBjMCt7EFsCpzym2Ulfy8+Y=;
+        b=vqg9cvUCmR3Bkn8hzHTPs0hdi/E4qWNWBP4iGhRjIdwpce1umErEFxtt/Iy6c9bSQ0
+         i9SCHiP2xO+OI+xZGQRLGhbaS0h+tGA+oOlw5INPOa11dkh6cAAikrQYkaszJvlWf8z9
+         Td7a4D6SeBLoxCj2he9GX/u5i7IJWpYNB+l2dK69av9ZAgQfSI8oaZd/guHcCQXT8gT8
+         AXtm4ZplM5MZtzW3iU2H0TBp/65w8mnaoW4hbOzwOl0je2jrNyVlbhgOuQ4bmbWub9wx
+         +6UB5snwXb5kXedWAUIf4WtfVNt3BjYd/5fz77yLX1VOQ8VwWYuuqn3GBgGKJtf+Ye24
+         yEcw==
+X-Gm-Message-State: AO0yUKXTLqKUTl1m8TAItNFEk4DBb6LQiKfP/D3wWdcFqc/bXSlavqK+
+        As9FvZ2ZWqDonsaT2nuNtXtwFYHlbPfv7Lu5zGxiaA==
+X-Google-Smtp-Source: AK7set/Yb2wuao9kPPFNja0Rt/lA/InUM3qkLAM9YZSn3q+PyxYrIVFQqkC65KODw3TvQ6tAHSedKs/4ZupBKHOYc20=
+X-Received: by 2002:a05:620a:4154:b0:745:32ab:4d2a with SMTP id
+ k20-20020a05620a415400b0074532ab4d2amr4017411qko.14.1680117014615; Wed, 29
+ Mar 2023 12:10:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MbDBiQBNZCb7QcSk"
-Content-Disposition: inline
-In-Reply-To: <20230317233338.424864-4-andi.shyti@kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230328112716.50120-1-p.raghav@samsung.com> <CGME20230328112718eucas1p263dacecb2a59f5fce510f81685f9d497@eucas1p2.samsung.com>
+ <20230328112716.50120-3-p.raghav@samsung.com> <ZCMF+QjynkdSHbn0@casper.infradead.org>
+ <970b8475-a52e-9adc-65cf-5a95220bd35b@samsung.com>
+In-Reply-To: <970b8475-a52e-9adc-65cf-5a95220bd35b@samsung.com>
+From:   Mike Marshall <hubcap@omnibond.com>
+Date:   Wed, 29 Mar 2023 15:10:03 -0400
+Message-ID: <CAOg9mSRqNJUmKWaAkZZ_h1T_n1PDN2oPGHfH0z+vfGTUZD=Yow@mail.gmail.com>
+Subject: Re: [PATCH 2/5] orangefs: use folios in orangefs_readahead
+To:     Pankaj Raghav <p.raghav@samsung.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, martin@omnibond.com,
+        axboe@kernel.dk, minchan@kernel.org, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, senozhatsky@chromium.org,
+        brauner@kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, mcgrof@kernel.org,
+        linux-block@vger.kernel.org, gost.dev@samsung.com,
+        linux-mm@kvack.org, devel@lists.orangefs.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I thought telling you that I tested it was good :-) ...
 
---MbDBiQBNZCb7QcSk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please do put a tested-by me in there...
 
-On Sat, Mar 18, 2023 at 12:33:38AM +0100, Andi Shyti wrote:
-> "fsl,timeout" is marked as deprecated and replaced by the
-> "i2c-scl-clk-low-timeout-us" i2c property.
->=20
-> Use this latter and, in case it is missing, for back
-> compatibility, check whether we still have "fsl,timeout" defined.
->=20
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+-Mike
 
-Applied to for-next, thanks!
-
-
---MbDBiQBNZCb7QcSk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQkjLkACgkQFA3kzBSg
-KbbyRA/+LEfiOPgB0L8+ZgIkyh9QNWQRBDJHUMy9u+LKdL5IUclcfflIBnolCKT/
-o5lF0TW/7ToDAVY+j7212sS1dh0ci6At3XkAvoFh2XWW9nk24+emJAN3c/MklnDm
-Q29xcSq+aAcXpn7DLK+Qx2Pe9qROsaU0BbeU2dFiKEi6E8Q0iB9ewxn55zHUcvGG
-N3ddbPdOLL07b4lQLkCQxGLNM4b0GenqOnL6G4xRxZYyWiPRsJw9cQLPWsljNcRP
-677MvTHFyAo2mlejywXvuv2cTXPP32V+O8fwK+AIOVfxxB9Tmo3qt0SfXti4jMZS
-spLLrgfizDBRR9UtY0EoynD6J+p/jrCdRvYqA9T8Dvs/WyVGHO5aLVYvVlSKij3O
-Sd+LNkQI695Omy96T0E8y1XU4AxrPNsbN+NKy1wHNCPo7Ji2RpWZiWPHSXcpm8xj
-wdyHa9i/wzJlCOTu67mc/bgOiH0aZNlUnbXK+WVaPaxwDrhJvUZcDZPF62rr4dJg
-NCB6xOE7ymPykCEclAFxUs9DU75AXPQVxyDm3sC86RXWB8nUNw5qLHWuO6fe11ZA
-tln2FSQkJLdoOgkmiwoH+IxC9/Tpk0htUVx1uynEmKhQCix/ShrBSWD5yvh5lbWj
-gwOmeUh1XWKAdwa2F/pOGe3/o4qjIb7P2V60vt+j2GoK2xQHRnQ=
-=bQ7g
------END PGP SIGNATURE-----
-
---MbDBiQBNZCb7QcSk--
+On Tue, Mar 28, 2023 at 12:02=E2=80=AFPM Pankaj Raghav <p.raghav@samsung.co=
+m> wrote:
+>
+> On 2023-03-28 17:21, Matthew Wilcox wrote:
+> > On Tue, Mar 28, 2023 at 01:27:13PM +0200, Pankaj Raghav wrote:
+> >> Convert orangefs_readahead() from using struct page to struct folio.
+> >> This conversion removes the call to page_endio() which is soon to be
+> >> removed, and simplifies the final page handling.
+> >>
+> >> The page error flags is not required to be set in the error case as
+> >> orangefs doesn't depend on them.
+> >>
+> >> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+> >
+> > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> >
+> > Shouldn't Mike's tested-by be in here?
+>
+> I mentioned that he tested in my cover letter as I didn't receive a Teste=
+d-by
+> tag from him.
