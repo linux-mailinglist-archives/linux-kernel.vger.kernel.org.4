@@ -2,180 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5466CF69E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 00:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C894F6CF6A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 00:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjC2W4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 18:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
+        id S230367AbjC2W6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 18:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjC2W4T (ORCPT
+        with ESMTP id S229603AbjC2W6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 18:56:19 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652A03C11;
-        Wed, 29 Mar 2023 15:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680130578; x=1711666578;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UMadLe8/Q98PSmEX0kA8aCgiUC6P+hNGYoBK15brJ8o=;
-  b=lAOqjGZzAFiKdk5J+NpU4m6567tGXrQ1n/xa9OvTgYc5lagW387VFAs5
-   iBgLvGXEucF7+RbducB5t6GydibWVFtKTDRr9kuK5cCs2mHuznBALBj1s
-   b5MOXdk3WB1/ChoVpsZbO7ERRo+0+Pmmekn8TQ1OnfvJJgFQPyGQ/wxSX
-   +zC+HmQnL+ubFUD38cSHiUwmsLD57rAhWsbK9hZd9CtgyjRHJ7eLVPzYd
-   6BbECC2B5DUqwkKPobZC5iw5dV24ZNoVcsjVLTFsLj1NOg12JGVoIaxye
-   ItuNbdhMEG/H4bu0d6balqVoW3eZ5w6A8IH86VyHOpwHRUMGU2CK6CpIa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="339741330"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="339741330"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 15:56:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="858672261"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="858672261"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2023 15:56:16 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pheiF-000K24-1B;
-        Wed, 29 Mar 2023 22:56:15 +0000
-Date:   Thu, 30 Mar 2023 06:56:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dennis Zhou <dennis@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dennis Zhou <dennis@kernel.org>
-Subject: Re: [PATCH] mmc: inline the first mmc_scan() on mmc_start_host()
-Message-ID: <202303300639.UEUl5xWY-lkp@intel.com>
-References: <20230329202148.71107-1-dennis@kernel.org>
+        Wed, 29 Mar 2023 18:58:45 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF3346AF;
+        Wed, 29 Mar 2023 15:58:44 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C6F386603170;
+        Wed, 29 Mar 2023 23:58:42 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680130722;
+        bh=y7U48RuXUJqEQN0UfcMmQ5lXGvZsqyULU9S+62lSVS0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EQz/cV4BLcpkSriuwlm9SUZ9nNVaOujc2k6wwcJNp8RAu/9dvIL9yY0fj1AFr5U5l
+         fleApFlh/ENyGxmSf3d/VVK8OIyRX5//vRYtKLYATv5qB+bb41JQ7bAn+hNPcKVdu4
+         IOQxyIdJVHXsLST2R4wyy9sWFLRh/oZ5+EgYFx916Ua8f8m1FYnaJ3eo+ELklk78Zl
+         WRIk30HCy8GtMY7LuZpyJrTCV+QNAGReKx6eYotwh9o9ZNAnpLhMQRm2h0ALLcpA6O
+         KNrw9SG/RvvpPyzD4476Cp0knWgZEg/VBQwQu6nPzRv0UDre20oi7b7xwhVMI5elXc
+         Drxbbb5YUWHAw==
+Received: by mercury (Postfix, from userid 1000)
+        id 1BFFE1062665; Thu, 30 Mar 2023 00:58:40 +0200 (CEST)
+Date:   Thu, 30 Mar 2023 00:58:40 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hermes Zhang <chenhuiz@axis.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Davis <afd@ti.com>, linux-kernel@vger.kernel.org,
+        kernel@axis.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] power: supply: bq256xx: Apply TS_IGNORE from
+ devicetree
+Message-ID: <20230329225840.26op4wdgi5cgtpkj@mercury.elektranox.org>
+References: <20230323072347.438932-1-chenhuiz@axis.com>
+ <20230323072347.438932-2-chenhuiz@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xroj6drwz4f3vnyk"
 Content-Disposition: inline
-In-Reply-To: <20230329202148.71107-1-dennis@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230323072347.438932-2-chenhuiz@axis.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dennis,
 
-I love your patch! Perhaps something to improve:
+--xroj6drwz4f3vnyk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on ulf-hansson-mmc-mirror/next]
-[also build test WARNING on linus/master v6.3-rc4 next-20230329]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hi,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dennis-Zhou/mmc-inline-the-first-mmc_scan-on-mmc_start_host/20230330-042213
-base:   https://git.linaro.org/people/ulf.hansson/mmc-mirror.git next
-patch link:    https://lore.kernel.org/r/20230329202148.71107-1-dennis%40kernel.org
-patch subject: [PATCH] mmc: inline the first mmc_scan() on mmc_start_host()
-config: arm-randconfig-r046-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300639.UEUl5xWY-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d2de7314d2198df0c7a452546af0c15799b2d864
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dennis-Zhou/mmc-inline-the-first-mmc_scan-on-mmc_start_host/20230330-042213
-        git checkout d2de7314d2198df0c7a452546af0c15799b2d864
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/mmc/core/
+On Thu, Mar 23, 2023 at 03:23:47PM +0800, Hermes Zhang wrote:
+> TS_IGNORE is default off in bq256xx chip. For some HW which doesn't have
+> the NTC, we need to set TS_IGNORE to 1 to make the charge work. The new
+> "ti,no-thermistor" is introduced to toggle it.
+>=20
+> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+> ---
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303300639.UEUl5xWY-lkp@intel.com/
+Does not apply, please rebase against latest power-supply for-next
+branch.
 
-All warnings (new ones prefixed by >>):
+-- Sebastian
 
->> drivers/mmc/core/core.c:2202:6: warning: no previous prototype for '__mmc_rescan' [-Wmissing-prototypes]
-    2202 | void __mmc_rescan(struct mmc_host *host)
-         |      ^~~~~~~~~~~~
+> Notes:
+>     v2: change property name to ti,no-thermistor
+>    =20
+>     v3: drop "|" in property description
+>=20
+>  drivers/power/supply/bq256xx_charger.c | 28 ++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/suppl=
+y/bq256xx_charger.c
+> index 9cf4936440c9..cacaae1d559b 100644
+> --- a/drivers/power/supply/bq256xx_charger.c
+> +++ b/drivers/power/supply/bq256xx_charger.c
+> @@ -41,6 +41,9 @@
+>  #define BQ256XX_IINDPM_MAX_uA		3200000
+>  #define BQ256XX_IINDPM_DEF_uA		2400000
+> =20
+> +#define BQ256XX_TS_IGNORE		BIT(6)
+> +#define BQ256XX_TS_IGNORE_SHIFT		6
+> +
+>  #define BQ256XX_VINDPM_MASK		GENMASK(3, 0)
+>  #define BQ256XX_VINDPM_STEP_uV		100000
+>  #define BQ256XX_VINDPM_OFFSET_uV	3900000
+> @@ -153,6 +156,7 @@
+>   * @vindpm: input voltage limit
+>   * @ichg_max: maximum fast charge current
+>   * @vbatreg_max: maximum charge voltage
+> + * @ts_ignore: TS_IGNORE flag
+>   */
+>  struct bq256xx_init_data {
+>  	u32 ichg;
+> @@ -163,6 +167,7 @@ struct bq256xx_init_data {
+>  	u32 vindpm;
+>  	u32 ichg_max;
+>  	u32 vbatreg_max;
+> +	bool ts_ignore;
+>  };
+> =20
+>  /**
+> @@ -259,6 +264,7 @@ struct bq256xx_device {
+>   * @bq256xx_set_iterm: pointer to instance specific set_iterm function
+>   * @bq256xx_set_iprechg: pointer to instance specific set_iprechg functi=
+on
+>   * @bq256xx_set_vindpm: pointer to instance specific set_vindpm function
+> + * @bq256xx_set_ts_ignore: pointer to instance specific set_ts_ignore fu=
+nction
+>   *
+>   * @bq256xx_def_ichg: default ichg value in microamps
+>   * @bq256xx_def_iindpm: default iindpm value in microamps
+> @@ -290,6 +296,7 @@ struct bq256xx_chip_info {
+>  	int (*bq256xx_set_iterm)(struct bq256xx_device *bq, int iterm);
+>  	int (*bq256xx_set_iprechg)(struct bq256xx_device *bq, int iprechg);
+>  	int (*bq256xx_set_vindpm)(struct bq256xx_device *bq, int vindpm);
+> +	int (*bq256xx_set_ts_ignore)(struct bq256xx_device *bq, bool ts_ignore);
+> =20
+>  	int bq256xx_def_ichg;
+>  	int bq256xx_def_iindpm;
+> @@ -670,6 +677,12 @@ static int bq25601d_set_chrg_volt(struct bq256xx_dev=
+ice *bq, int vbatreg)
+>  						BQ256XX_VBATREG_BIT_SHIFT);
+>  }
+> =20
+> +static int bq256xx_set_ts_ignore(struct bq256xx_device *bq, bool ts_igno=
+re)
+> +{
+> +	return regmap_update_bits(bq->regmap, BQ256XX_INPUT_CURRENT_LIMIT,
+> +				BQ256XX_TS_IGNORE, (ts_ignore ? 1 : 0) << BQ256XX_TS_IGNORE_SHIFT);
+> +}
+> +
+>  static int bq256xx_get_prechrg_curr(struct bq256xx_device *bq)
+>  {
+>  	unsigned int prechg_and_term_curr_lim;
+> @@ -1279,6 +1292,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_get_iterm =3D bq256xx_get_term_curr,
+>  		.bq256xx_get_iprechg =3D bq256xx_get_prechrg_curr,
+>  		.bq256xx_get_vindpm =3D bq256xx_get_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D NULL,
+> =20
+>  		.bq256xx_set_ichg =3D bq256xx_set_ichg_curr,
+>  		.bq256xx_set_iindpm =3D bq256xx_set_input_curr_lim,
+> @@ -1316,6 +1330,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D NULL,
+> =20
+>  		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1346,6 +1361,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D NULL,
+> =20
+>  		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1376,6 +1392,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D NULL,
+> =20
+>  		.bq256xx_def_ichg =3D BQ2560X_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1406,6 +1423,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq256xx_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq256xx_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D bq256xx_set_ts_ignore,
+> =20
+>  		.bq256xx_def_ichg =3D BQ25611D_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1436,6 +1454,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq25618_619_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq25618_619_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D bq256xx_set_ts_ignore,
+> =20
+>  		.bq256xx_def_ichg =3D BQ25618_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1466,6 +1485,7 @@ static const struct bq256xx_chip_info bq256xx_chip_=
+info_tbl[] =3D {
+>  		.bq256xx_set_iterm =3D bq25618_619_set_term_curr,
+>  		.bq256xx_set_iprechg =3D bq25618_619_set_prechrg_curr,
+>  		.bq256xx_set_vindpm =3D bq256xx_set_input_volt_lim,
+> +		.bq256xx_set_ts_ignore =3D bq256xx_set_ts_ignore,
+> =20
+>  		.bq256xx_def_ichg =3D BQ25618_ICHG_DEF_uA,
+>  		.bq256xx_def_iindpm =3D BQ256XX_IINDPM_DEF_uA,
+> @@ -1582,6 +1602,12 @@ static int bq256xx_hw_init(struct bq256xx_device *=
+bq)
+>  	if (ret)
+>  		return ret;
+> =20
+> +	if (bq->chip_info->bq256xx_set_ts_ignore) {
+> +		ret =3D bq->chip_info->bq256xx_set_ts_ignore(bq, bq->init_data.ts_igno=
+re);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	power_supply_put_battery_info(bq->charger, bat_info);
+> =20
+>  	return 0;
+> @@ -1616,6 +1642,8 @@ static int bq256xx_parse_dt(struct bq256xx_device *=
+bq,
+>  	if (ret)
+>  		bq->init_data.iindpm =3D bq->chip_info->bq256xx_def_iindpm;
+> =20
+> +	bq->init_data.ts_ignore =3D device_property_read_bool(bq->dev, "ti,no-t=
+hermistor");
+> +
+>  	return 0;
+>  }
+> =20
+> --=20
+> 2.30.2
+>=20
 
+--xroj6drwz4f3vnyk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-vim +/__mmc_rescan +2202 drivers/mmc/core/core.c
+-----BEGIN PGP SIGNATURE-----
 
-  2201	
-> 2202	void __mmc_rescan(struct mmc_host *host)
-  2203	{
-  2204		int i;
-  2205	
-  2206		if (host->rescan_disable)
-  2207			return;
-  2208	
-  2209		/* If there is a non-removable card registered, only scan once */
-  2210		if (!mmc_card_is_removable(host) && host->rescan_entered)
-  2211			return;
-  2212		host->rescan_entered = 1;
-  2213	
-  2214		if (host->trigger_card_event && host->ops->card_event) {
-  2215			mmc_claim_host(host);
-  2216			host->ops->card_event(host);
-  2217			mmc_release_host(host);
-  2218			host->trigger_card_event = false;
-  2219		}
-  2220	
-  2221		/* Verify a registered card to be functional, else remove it. */
-  2222		if (host->bus_ops)
-  2223			host->bus_ops->detect(host);
-  2224	
-  2225		host->detect_change = 0;
-  2226	
-  2227		/* if there still is a card present, stop here */
-  2228		if (host->bus_ops != NULL)
-  2229			goto out;
-  2230	
-  2231		mmc_claim_host(host);
-  2232		if (mmc_card_is_removable(host) && host->ops->get_cd &&
-  2233				host->ops->get_cd(host) == 0) {
-  2234			mmc_power_off(host);
-  2235			mmc_release_host(host);
-  2236			goto out;
-  2237		}
-  2238	
-  2239		/* If an SD express card is present, then leave it as is. */
-  2240		if (mmc_card_sd_express(host)) {
-  2241			mmc_release_host(host);
-  2242			goto out;
-  2243		}
-  2244	
-  2245		for (i = 0; i < ARRAY_SIZE(freqs); i++) {
-  2246			unsigned int freq = freqs[i];
-  2247			if (freq > host->f_max) {
-  2248				if (i + 1 < ARRAY_SIZE(freqs))
-  2249					continue;
-  2250				freq = host->f_max;
-  2251			}
-  2252			if (!mmc_rescan_try_freq(host, max(freq, host->f_min)))
-  2253				break;
-  2254			if (freqs[i] <= host->f_min)
-  2255				break;
-  2256		}
-  2257	
-  2258		/*
-  2259		 * Ignore the command timeout errors observed during
-  2260		 * the card init as those are excepted.
-  2261		 */
-  2262		host->err_stats[MMC_ERR_CMD_TIMEOUT] = 0;
-  2263		mmc_release_host(host);
-  2264	
-  2265	 out:
-  2266		if (host->caps & MMC_CAP_NEEDS_POLL)
-  2267			mmc_schedule_delayed_work(&host->detect, HZ);
-  2268	}
-  2269	
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQkwpcACgkQ2O7X88g7
++po4ZA//WTfB+7L6lPnP4bLUiZeBkgF/ej0grZzJtg6bxpKU2IestEF2zvn6159o
+ol+ndgwWUNjmb9PI+OhcP12pOn+rD/rpIpN5hCtPghVUyXjb7SrsX4Tvr/E/9ugm
+my5ikJOCoIpDmRdju+GN/GwOLZjxHuxcOfF09Dzni4VWsOyOnDXAfNLlctPDV/1w
++2rqcXLtxnQcp6bgc3eJ1QKKOnclfhO979+SBpwYfCVBjsiebP2vsqps00oVYmvh
+b3F5h3WQeUL8dbhwdJr8VhvfXfT7GGKdFZVI8LZvOggUrgHUQV7Oxd4YgLlxPEaz
+XC9+1qrKjO1GCiujrspRwK8h/l62nI+3G/cT/KnutfHUO0kEYwKluwBEjwdFSwhr
+OQoIVuazwtFIzhAHm5/gRhf3iCIMDp84JtbEDYMCINiTrr4omS5Dh9Svk0BUET/m
+ZqlahY73Q43wUz0136eKdzALbjMi6YO5jhdiQ4Y5++/YPPdqqKLErsH/rwCTK8j2
+fTwR7iU8SItNY5xuVY+9td83t2rfbog09Ua6Rpk2gz/5q6hE5L/ds/WQebwp7Vzt
+JxzhqIpENUx8cBSh4ZFhNUwSwQ1/Kw2JyOunGSEUUX9VSkU4xjEMD1lDXKi7ARrj
+igH544WtMs8A0iJ38dSp2Xei2kQ0+kiwWvU1rXQrgfPX3MAmIqc=
+=DA45
+-----END PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--xroj6drwz4f3vnyk--
