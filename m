@@ -2,143 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970C06CF274
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EE56CF273
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 20:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjC2Ss6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 14:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
+        id S229851AbjC2Ss5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 14:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjC2Ssz (ORCPT
+        with ESMTP id S229486AbjC2Ssx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:48:55 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9264C3A
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:48:54 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id u20so10929275pfk.12
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:48:54 -0700 (PDT)
+        Wed, 29 Mar 2023 14:48:53 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7BB4C3A
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:48:51 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w9so67259666edc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 11:48:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680115734;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mU/Jc0gXgHaKy6uBEAxI8FhgmA9MJxxnsTJvuJaE4Nk=;
-        b=rMvP09cVkpjy0ICtdAjusbVIBflBABMCJ0gdgTU1tkbXKR/bLgByF0KcTXx1btkpjb
-         SgiT9etHZM8ZGIT90dBWjKAz08CCQ6Hs0IPcSTCT+ONxRbtLFjzVczoibWFJZCP4KRTk
-         pfmjlABeetRZVyNrdRj0+dVppABLEMqCdMXtycE2tLVHfA8fENXQFRzM2gLpLd+OUnFS
-         qmNl6tOWXurPRxgS8m4lIAppssohoH+k2o3XhiEr6LmrrCUwG0SrpJKM5C+/Qrm4DcRp
-         khfJDiWKp+bzwFrSmg6zx4lkBa1fuKjrJXGxuwo0QPPhUsAs7xnx17I2FU19heVWnKa2
-         cLdg==
+        d=gmail.com; s=20210112; t=1680115730;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GrKgNBdgVGDd5tuVm5wP/QWfKRU7XwBSou05qKklH3k=;
+        b=Q8B3J857qhjR2TSPbJ1IJc6AAGDDCJRITn7O9RBll+yoLHHqTAfQeLs1CutVvnaRk+
+         w3pcaW+fhER4vIQa7gwgHeHXo1+ijAKhfYhPMpXsTMT1mNCFRYPcJjdt4vlPoJGl9JAn
+         sgDwzuDzJBIzHxwb3lEiW4tTyYBBJKDFFg6G+l/F27R+DmfM9r98Zkh28N7o40XxNpY+
+         bvBMoGsRKqixep5wRcgokXu402Q0l/sPF3Up7deagSnLguMdWcEtq+5GOy5eb4G0/Ye2
+         fHSuulIFU5ix8lkw4hCK/sycBVePrhVHTSU4Fb1x1SoX1tt9qSHS2uD9iWCRscv511Hs
+         dTHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680115734;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mU/Jc0gXgHaKy6uBEAxI8FhgmA9MJxxnsTJvuJaE4Nk=;
-        b=VA8wz2mphljnbA95YyC+7iiaWZuk4qiANGnUpNnPC906Jwzwu7CJysHGqA9Zu0xKeO
-         Iv/fcFUSUiieoqzQhw4yrpb89nz0KaB0XtVrwV++/ei59/e3LKewqfHmkvLta7vDauJa
-         6NXhlJ+ZemB+BtmnTTmnG98hCOC3fT3YzgJZkFCoRR7jDZmBzStaC7+MsjKkSSH1kuAR
-         UYfg864xSob6ZaW7salHr343zLK3pBQWwJc1wJ4Gu+BuZV56AIJWcdiDUenpvkLcgWbD
-         vyMDkxhks7ftOhnIqT09U4qGnPvMmJFNqfPbefq89bZCPShYzwUssED7k97xWVb3E3+1
-         ISDg==
-X-Gm-Message-State: AAQBX9ciB9jyRfcnrAXhHafokWDOKSx6d2nUydTe7eOjWFe1G/2xESK5
-        3oBePJ1b9UnPyom7vS4GVZmx1JoHM0fdjejUlHPz2Q==
-X-Google-Smtp-Source: AKy350Z07Nnk7MEnLbohzkV7bbjziztwC3QSGFPfhks5MwyVeikATF/kKxlPhxxdoupXc62ZmUsZFGQU26AxTQmGtJg=
-X-Received: by 2002:a63:ef0e:0:b0:513:86ef:f080 with SMTP id
- u14-20020a63ef0e000000b0051386eff080mr973876pgh.9.1680115733737; Wed, 29 Mar
- 2023 11:48:53 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680115730;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GrKgNBdgVGDd5tuVm5wP/QWfKRU7XwBSou05qKklH3k=;
+        b=LN/bn3gWxjS7PnOjtsR+HbjoMBPhCydBE++9TPA9dR3gzMF7OABJRPacyz/ngf0xfx
+         hwxKMQ98z4fNBHFcxLvSSHND3cTBn3BG7kA1eAyDY64z54Z7DPMQOPp3tyvge2RGCPje
+         EUBoFEEOjLP1I4cXFwK0VCrTDv75UcWZhP2ZwTEge3HtxZJVT0Bb1IBmiYAIcESMh35L
+         iODfncQhn/eYImsF1dldbd6OdrV9OPMpzI4rd667rksn/dhX9t8mT7Pg20HhKTYeHMQQ
+         QYciK+Hq91EfX3OjdCFVsoMNNh8T1T95FMpAZ5nUaVenbtWmmqSnV8h10HTODyUzkdSH
+         jcIg==
+X-Gm-Message-State: AAQBX9ebIzYCP0kVdljHT9yhjk/74Onprk7zShduHYxoqq7dyL1Eskmh
+        +j3R6oIP+CVBDn+x+Sz3FX8=
+X-Google-Smtp-Source: AKy350Z17p+zY9Y3XDg1dbwXrWoAxNYu5kA+LGkZtazrsFODsTnCrhNL91vsa/MRE1g5Ap9lhF2JVQ==
+X-Received: by 2002:a05:6402:2811:b0:502:92d:4f51 with SMTP id h17-20020a056402281100b00502092d4f51mr24946261ede.1.1680115729529;
+        Wed, 29 Mar 2023 11:48:49 -0700 (PDT)
+Received: from [192.168.0.103] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id r17-20020a50aad1000000b005024459f431sm4008559edc.70.2023.03.29.11.48.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 11:48:48 -0700 (PDT)
+Message-ID: <e6da0b51-7912-8b8b-4e34-6ca4bafe0384@gmail.com>
+Date:   Wed, 29 Mar 2023 20:48:47 +0200
 MIME-Version: 1.0
-References: <20230328092622.062917921@infradead.org> <20230328110354.141543852@infradead.org>
- <CABk29Nt4T67S+L9Qs1qeOUyo5gY1Qy5KuOwuCYNM74E58J81Eg@mail.gmail.com>
- <20230329080646.GL4253@hirez.programming.kicks-ass.net> <20230329082235.GA38236@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230329082235.GA38236@hirez.programming.kicks-ass.net>
-From:   Josh Don <joshdon@google.com>
-Date:   Wed, 29 Mar 2023 11:48:41 -0700
-Message-ID: <CABk29NstO+-=T-91fc7rNRYNSgP5=+SGvGEFxejrS7qPsMOKbQ@mail.gmail.com>
-Subject: Re: [PATCH 08/17] sched/fair: Implement an EEVDF like policy
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org, efault@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/5] staging: r8188eu: code cleanup and coding-style fix
+ patches
+To:     Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+References: <cover.1679988016.git.abhirupdeb@linux.vnet.ibm.com>
+Content-Language: en-US
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <cover.1679988016.git.abhirupdeb@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 1:22=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Wed, Mar 29, 2023 at 10:06:46AM +0200, Peter Zijlstra wrote:
-> > On Tue, Mar 28, 2023 at 06:26:51PM -0700, Josh Don wrote:
-> > > > +static struct sched_entity *pick_eevdf(struct cfs_rq *cfs_rq)
-> > > > +{
-> > > > +       struct rb_node *node =3D cfs_rq->tasks_timeline.rb_root.rb_=
-node;
-> > > > +       struct sched_entity *curr =3D cfs_rq->curr;
-> > > > +       struct sched_entity *best =3D NULL;
-> > > > +
-> > > > +       if (curr && (!curr->on_rq || !entity_eligible(cfs_rq, curr)=
-))
-> > > > +               curr =3D NULL;
-> > > > +
-> > > > +       while (node) {
-> > > > +               struct sched_entity *se =3D __node_2_se(node);
-> > > > +
-> > > > +               /*
-> > > > +                * If this entity is not eligible, try the left sub=
-tree.
-> > > > +                */
-> > > > +               if (!entity_eligible(cfs_rq, se)) {
-> > > > +                       node =3D node->rb_left;
-> > > > +                       continue;
-> > > > +               }
-> > > > +
-> > > > +               /*
-> > > > +                * If this entity has an earlier deadline than the =
-previous
-> > > > +                * best, take this one. If it also has the earliest=
- deadline
-> > > > +                * of its subtree, we're done.
-> > > > +                */
-> > > > +               if (!best || deadline_gt(deadline, best, se)) {
-> > > > +                       best =3D se;
-> > > > +                       if (best->deadline =3D=3D best->min_deadlin=
-e)
-> > > > +                               break;
-> > >
-> > > Isn't it possible to have a child with less vruntime (ie. rb->left)
-> > > but with the same deadline? Wouldn't it be preferable to choose the
-> > > child instead since the deadlines are equivalent but the child has
-> > > received less service time?
-> >
-> > Possible, yes I suppose. But given this is ns granular virtual time,
-> > somewhat unlikely. You can modify the last (validation) patch and have
-> > it detect the case, see if you can trigger it.
+On 3/29/23 19:01, Abhirup Deb wrote:
+> This series of patches fixes the coding-style issues
+> reported by checkpatch.pl for the staging/r8188eu driver.
+> 
+> Abhirup Deb (5):
+>    staging: r8188eu: add blank line after declaration
+>    staging: r8188eu: refactor block-comments
+>    staging: r8188eu: remove redundant else after return
+>    staging: r8188eu: Replace "<<" with BIT macro
+>    staging: r8188eu: place constants on right side of comparison
+> 
+>   drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 61 +++++++-------
+>   drivers/staging/r8188eu/hal/rtl8188e_cmd.c    |  2 +-
+>   drivers/staging/r8188eu/hal/rtl8188e_dm.c     |  2 +-
+>   .../staging/r8188eu/hal/rtl8188e_hal_init.c   | 10 +--
+>   drivers/staging/r8188eu/hal/rtl8188eu_xmit.c  |  2 +-
+>   drivers/staging/r8188eu/hal/usb_halinit.c     | 23 ++++--
+>   drivers/staging/r8188eu/include/ieee80211.h   | 82 +++++++++----------
+>   drivers/staging/r8188eu/include/rtw_mlme.h    |  4 +-
+>   drivers/staging/r8188eu/os_dep/ioctl_linux.c  |  6 +-
+>   9 files changed, 98 insertions(+), 94 deletions(-)
+> 
 
-Agreed on unlikely, was just checking my understanding here, since
-this becomes a question of tradeoff (likelihood of decent vs the ideal
-scheduling decision). Leaving as-is seems fine, with potentially a
-short comment.
 
-> > Doing that will make the pick always do a full decent of the tree
-> > through, which is a little more expensive. Not sure it's worth the
-> > effort.
->
-> Hmm, maybe not, if there is no smaller-or-equal deadline then the
-> min_deadline of the child will be greater and we can terminate the
-> decent right there.
->
+Hi,
+
+sorry this driver was deleted: Please read:
+https://lore.kernel.org/linux-staging/92a9442a-cece-4179-fbdc-3c9188da073e@redhat.com/
+
+Please also check on which tree you are working on. This seems to be the 
+wrong one.
+
+If you need support I will help you.
+
+Thanks for your support.
+
+Bye Philipp
