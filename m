@@ -2,332 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC0F6CF4F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E33D66CF4FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 23:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjC2VCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 17:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S230072AbjC2VDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 17:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjC2VCt (ORCPT
+        with ESMTP id S229602AbjC2VDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 17:02:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C874C22
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:02:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680123728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p/gAyKsbcYAmql6gQCi7mrnJqGJrh4mY0IHWHb0hHQw=;
-        b=f8XeReDnQSpuWv2khRccnAaKDE267bAwaJZ1OmW8rUpedHdWC5tiThxd6fceVLDQhPztCr
-        ogl1tRJb5aiwbjz9k7zMvrPleH0CiEuoK7bZjIlIodHlyIdvhKeDwnaA8+mMMespGB+F7r
-        7VhkQbsTpQ+6iB1Eggye5TC3opIEUu0=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-46-FTS8xbOGOISVQvfxwYFxRg-1; Wed, 29 Mar 2023 17:02:06 -0400
-X-MC-Unique: FTS8xbOGOISVQvfxwYFxRg-1
-Received: by mail-ed1-f69.google.com with SMTP id fi8-20020a056402550800b004a26cc7f6cbso23996758edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:02:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680123725;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p/gAyKsbcYAmql6gQCi7mrnJqGJrh4mY0IHWHb0hHQw=;
-        b=ec8mPnqirxGMi2INkzBAAXRjjeC4OyRN9Yxklh3bn3Y4gll20mO/+NUR4ghX7qTa3e
-         fqwzMR6pGj+3789CTGxLi+yz2na5FP0lZVhQP1bHs4j8+2GsnYWNPfOpa1CPtARE97le
-         ITb3MhLht2D65v2SzW8aR0zIcs6AGRHxQNQSnqW/K6UaS+HU+4kDqN5jR99uGwAW4kRZ
-         4aU1xD/eim7QlkY/ykjXMxKrfkXz3j1ncPppTuyKm26VhfCCDJGZC9ZRuL5XIS1uU0YB
-         9XxtE/0UfGEdZbS7Pb/yW7U1U/UVSTmJqY+R0fZRMFW1jjcTv0GdThLwn73qK/wOQZ+6
-         hP+w==
-X-Gm-Message-State: AAQBX9czDjyUT3uPK4inO1qs9/eIylj4sFcgjNX/pdosvRJzgGMfuVy2
-        VfH5RHAuLNjRS1qeOWTDDxBRPK46NBx0OVETEUrwkF+dnHC4K1XMvNib9N0WW3tqnLikoLQJ0hv
-        8jsaI9mR74JpPwSy/BKaMeUgqFA8uvZAxvB24m7PO
-X-Received: by 2002:a17:907:6b8e:b0:8d7:edbc:a7b6 with SMTP id rg14-20020a1709076b8e00b008d7edbca7b6mr2389699ejc.2.1680123725311;
-        Wed, 29 Mar 2023 14:02:05 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bkKECxx31XV8EMnzwJEVU3Yd1nzb4cO0O6UeSIu/Ml4eJoNDyaYddS+3Uog+NjNHQMdwgKioYSQo3s2ImtmpY=
-X-Received: by 2002:a17:907:6b8e:b0:8d7:edbc:a7b6 with SMTP id
- rg14-20020a1709076b8e00b008d7edbca7b6mr2389691ejc.2.1680123725010; Wed, 29
- Mar 2023 14:02:05 -0700 (PDT)
+        Wed, 29 Mar 2023 17:03:39 -0400
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1899F
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 14:03:36 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 3638 invoked from network); 29 Mar 2023 23:03:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1680123811; bh=2BooZedm2mYU1eSgFeu3gvu/Vm00TPwyU1q5ew0wI88=;
+          h=From:To:Subject;
+          b=WLEXLiU9tCerjsLudAoVhqPLPRUfFYA36Qq7lackobZ2DTPHTsnxVOVBV3Y7njNbH
+           rMFaz/sTiZIHZJvfGsulS7riqX3oo37a9XP9YzxFOJy3w9enLocKkQEn32cY4LSj4W
+           hzgAvIWSIyZ76zcIre24gIhXdyjGsSfCbUZ5AQ78=
+Received: from 79.184.247.17.ipv4.supernova.orange.pl (HELO LAPTOP-OLEK.home) (olek2@wp.pl@[79.184.247.17])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <tsbogend@alpha.franken.de>; 29 Mar 2023 23:03:31 +0200
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     tsbogend@alpha.franken.de, olek2@wp.pl, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: lantiq: remove unused function declaration
+Date:   Wed, 29 Mar 2023 23:03:28 +0200
+Message-Id: <20230329210328.9320-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230329092332.2143623-1-javierm@redhat.com>
-In-Reply-To: <20230329092332.2143623-1-javierm@redhat.com>
-From:   Enric Balletbo i Serra <eballetb@redhat.com>
-Date:   Wed, 29 Mar 2023 23:01:54 +0200
-Message-ID: <CALE0LRupieFVeiH7J8DHEko0kyCRdBPavskQkcmZVN0ggATG6A@mail.gmail.com>
-Subject: Re: [PATCH] Input: Add KUnit tests for some of the input core helper functions
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        linux-kselftest@vger.kernel.org, David Gow <davidgow@google.com>,
-        kunit-dev@googlegroups.com,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: dcd83bcf63fe89efd577f040785c58ef
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000B [ARO0]                               
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+The removed function declaration is a leftover of the old gphy firmware
+loader, that has been removed in d5103604f78e1afc29e586785af540c82b573f3a.
 
-Many thanks for the patch and to work on this.
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+---
+ arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h | 3 ---
+ 1 file changed, 3 deletions(-)
 
-
-On Wed, Mar 29, 2023 at 11:23=E2=80=AFAM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> The input subsystem doesn't currently have any unit tests, let's add a
-> CONFIG_INPUT_KUNIT_TEST option that builds a test suite to be executed
-> with the KUnit test infrastructure.
->
-> For now, only three tests were added for some of the input core helper
-> functions that are trivial to test:
->
->   * input_test_polling: set/get poll interval and set-up a poll handler.
->
->   * input_test_timestamp: set/get input event timestamps.
->
->   * input_test_match_device_id: match a device by bus, vendor, product
->                                 and events that is capable of handling.
->
-> But having the minimal KUnit support allows to add more tests and suites
-> as follow-up changes. The tests can be run with the following command:
->
->   $ ./tools/testing/kunit/kunit.py run \
->     --kunitconfig=3Ddrivers/input/tests/.kunitconfig
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-
-I'll let other more experienced people comment on the kunit tests. In
-my opinion it's a starting point and after applying your patch and
-giving a try I can confirm that it works as expected, so just wanted
-to give my.
-
-Tested-by: Enric Balletbo i Serra <eballetbo@redhat.com>
-
-Thanks,
-  Enric
-
-> ---
->
->  drivers/input/Kconfig            |  12 +++
->  drivers/input/Makefile           |   1 +
->  drivers/input/tests/Makefile     |   3 +
->  drivers/input/tests/input_test.c | 144 +++++++++++++++++++++++++++++++
->  4 files changed, 160 insertions(+)
->  create mode 100644 drivers/input/tests/Makefile
->  create mode 100644 drivers/input/tests/input_test.c
->
-> diff --git a/drivers/input/Kconfig b/drivers/input/Kconfig
-> index e2752f7364bc..e094e5bbaa0c 100644
-> --- a/drivers/input/Kconfig
-> +++ b/drivers/input/Kconfig
-> @@ -166,6 +166,18 @@ config INPUT_EVBUG
->           To compile this driver as a module, choose M here: the
->           module will be called evbug.
->
-> +config INPUT_KUNIT_TEST
-> +       tristate "KUnit tests for Input" if !KUNIT_ALL_TESTS
-> +       depends on INPUT && KUNIT=3Dy
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         Say Y here if you want to build the KUnit tests for the input
-> +         subsystem. For more information about KUnit and unit tests in
-> +         general, please refer to the KUnit documentation in
-> +         Documentation/dev-tools/kunit/.
-> +
-> +         If in doubt, say "N".
-> +
->  config INPUT_APMPOWER
->         tristate "Input Power Event -> APM Bridge" if EXPERT
->         depends on INPUT && APM_EMULATION
-> diff --git a/drivers/input/Makefile b/drivers/input/Makefile
-> index 2266c7d010ef..c78753274921 100644
-> --- a/drivers/input/Makefile
-> +++ b/drivers/input/Makefile
-> @@ -26,6 +26,7 @@ obj-$(CONFIG_INPUT_JOYSTICK)  +=3D joystick/
->  obj-$(CONFIG_INPUT_TABLET)     +=3D tablet/
->  obj-$(CONFIG_INPUT_TOUCHSCREEN)        +=3D touchscreen/
->  obj-$(CONFIG_INPUT_MISC)       +=3D misc/
-> +obj-$(CONFIG_INPUT_KUNIT_TEST) +=3D tests/
->
->  obj-$(CONFIG_INPUT_APMPOWER)   +=3D apm-power.o
->
-> diff --git a/drivers/input/tests/Makefile b/drivers/input/tests/Makefile
-> new file mode 100644
-> index 000000000000..90cf954181bc
-> --- /dev/null
-> +++ b/drivers/input/tests/Makefile
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +obj-$(CONFIG_INPUT_KUNIT_TEST) +=3D input_test.o
-> diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/input=
-_test.c
-> new file mode 100644
-> index 000000000000..25bbf51b5c87
-> --- /dev/null
-> +++ b/drivers/input/tests/input_test.c
-> @@ -0,0 +1,144 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test for the input core.
-> + *
-> + * Copyright (c) 2023 Red Hat Inc
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/input.h>
-> +
-> +#include <kunit/test.h>
-> +
-> +#define POLL_INTERVAL 100
-> +
-> +static int input_test_init(struct kunit *test)
-> +{
-> +       struct input_dev *input_dev;
-> +       int ret;
-> +
-> +       input_dev =3D input_allocate_device();
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, input_dev);
-> +
-> +       input_dev->name =3D "Test input device";
-> +       input_dev->id.bustype =3D BUS_VIRTUAL;
-> +       input_dev->id.vendor =3D 1;
-> +       input_dev->id.product =3D 1;
-> +       input_dev->id.version =3D 1;
-> +       input_set_capability(input_dev, EV_KEY, BTN_LEFT);
-> +       input_set_capability(input_dev, EV_KEY, BTN_RIGHT);
-> +
-> +       ret =3D input_register_device(input_dev);
-> +       KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +       test->priv =3D input_dev;
-> +
-> +       return 0;
-> +}
-> +
-> +static void input_test_exit(struct kunit *test)
-> +{
-> +       struct input_dev *input_dev =3D test->priv;
-> +
-> +       input_unregister_device(input_dev);
-> +}
-> +
-> +static void input_test_poll(struct input_dev *input) { }
-> +
-> +static void input_test_polling(struct kunit *test)
-> +{
-> +       struct input_dev *input_dev =3D test->priv;
-> +       int ret;
-> +
-> +       ret =3D input_get_poll_interval(input_dev);
-> +       KUNIT_ASSERT_EQ(test, ret, -EINVAL);
-> +
-> +       ret =3D input_setup_polling(input_dev, input_test_poll);
-> +       KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +       input_set_poll_interval(input_dev, POLL_INTERVAL);
-> +
-> +       ret =3D input_get_poll_interval(input_dev);
-> +       KUNIT_ASSERT_EQ(test, ret, POLL_INTERVAL);
-> +}
-> +
-> +static void input_test_timestamp(struct kunit *test)
-> +{
-> +       const ktime_t invalid_timestamp =3D ktime_set(0, 0);
-> +       struct input_dev *input_dev =3D test->priv;
-> +       ktime_t *timestamp, time;
-> +       int ret;
-> +
-> +       timestamp =3D input_get_timestamp(input_dev);
-> +       time =3D timestamp[INPUT_CLK_MONO];
-> +
-> +       ret =3D ktime_compare(time, invalid_timestamp);
-> +       KUNIT_ASSERT_EQ(test, ret, 1);
-> +
-> +       time =3D ktime_get();
-> +       input_set_timestamp(input_dev, time);
-> +
-> +       timestamp =3D input_get_timestamp(input_dev);
-> +       KUNIT_ASSERT_EQ(test, ktime_compare(timestamp[INPUT_CLK_MONO],
-> +                                           time), 0);
-> +}
-> +
-> +static void input_test_match_device_id(struct kunit *test)
-> +{
-> +       struct input_dev *input_dev =3D test->priv;
-> +       struct input_device_id id;
-> +
-> +       id.flags =3D INPUT_DEVICE_ID_MATCH_BUS;
-> +       id.bustype =3D BUS_VIRTUAL;
-> +       KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.bustype =3D BUS_I2C;
-> +       KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.flags =3D INPUT_DEVICE_ID_MATCH_VENDOR;
-> +       id.vendor =3D 1;
-> +       KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.vendor =3D 2;
-> +       KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.flags =3D INPUT_DEVICE_ID_MATCH_PRODUCT;
-> +       id.product =3D 1;
-> +       KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.product =3D 2;
-> +       KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.flags =3D INPUT_DEVICE_ID_MATCH_VERSION;
-> +       id.version =3D 1;
-> +       KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.version =3D 2;
-> +       KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.flags =3D INPUT_DEVICE_ID_MATCH_EVBIT;
-> +       __set_bit(EV_KEY, id.evbit);
-> +       KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-> +
-> +       __set_bit(EV_ABS, id.evbit);
-> +       KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-> +}
-> +
-> +static struct kunit_case input_tests[] =3D {
-> +       KUNIT_CASE(input_test_polling),
-> +       KUNIT_CASE(input_test_timestamp),
-> +       KUNIT_CASE(input_test_match_device_id),
-> +       { /* sentinel */ }
-> +};
-> +
-> +static struct kunit_suite input_test_suite =3D {
-> +       .name =3D "input_core",
-> +       .init =3D input_test_init,
-> +       .exit =3D input_test_exit,
-> +       .test_cases =3D input_tests,
-> +};
-> +
-> +kunit_test_suite(input_test_suite);
-> +
-> +MODULE_AUTHOR("Javier Martinez Canillas <javierm@redhat.com>");
-> +MODULE_LICENSE("GPL");
->
-> base-commit: 3a93e40326c8f470e71d20b4c42d36767450f38f
-> --
-> 2.40.0
->
+diff --git a/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h b/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
+index 4790cfa190d6..c2e0acb755cd 100644
+--- a/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
++++ b/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
+@@ -94,9 +94,6 @@ extern __iomem void *ltq_cgu_membase;
+ #define LTQ_MPS_BASE_ADDR	(KSEG1 + 0x1F107000)
+ #define LTQ_MPS_CHIPID		((u32 *)(LTQ_MPS_BASE_ADDR + 0x0344))
+ 
+-/* allow booting xrx200 phys */
+-int xrx200_gphy_boot(struct device *dev, unsigned int id, dma_addr_t dev_addr);
+-
+ /* request a non-gpio and set the PIO config */
+ #define PMU_PPE			 BIT(13)
+ extern void ltq_pmu_enable(unsigned int module);
+-- 
+2.30.2
 
