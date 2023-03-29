@@ -2,98 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE546CD7F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3B96CD806
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Mar 2023 12:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjC2KzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 06:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
+        id S229567AbjC2K7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 06:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjC2KzO (ORCPT
+        with ESMTP id S229482AbjC2K66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 06:55:14 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9D91FC3;
-        Wed, 29 Mar 2023 03:55:11 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso11157720wms.1;
-        Wed, 29 Mar 2023 03:55:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680087310;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BxWVSYNg3x9Lr51Q6bn5n72HMeWHBmcsrPZstVqCyrs=;
-        b=VByNFV754kE/eZ25qMrcu38DuGFTX/xp6ub/tU5fe0hFGPJ1aemzBDNAEjfKi9vYcJ
-         /nTqcFmhbNwmMDhoHAEPDVZbUcnAUU3NYchYF6spapngQYwqAUI+6qTIGOprLVBRcp/+
-         QMmfzCEE0c4jKkwGX1Yzu2es6052pBefuK3fkYPndyOJxxWeKxD79y1ArMxF3wovBKEE
-         wkRxDmDejC299H96F8ULKImKCv11Rd3iL139pvb6ey++pdb8w95pAmv4DuDKAgtQ+A6O
-         aXLF8ukAMlAZBXbnFMSYGUE0BH79pHeLLXs9NYdtAxL83DPPOA46RvmQh+9RJGnAk0eo
-         d0ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680087310;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BxWVSYNg3x9Lr51Q6bn5n72HMeWHBmcsrPZstVqCyrs=;
-        b=duMp7mkvutkkQU43/jjglL3Vh7Whm0mJ5ylt69gOm2eyRcm8jWsYuLFSpdMheFYVlC
-         0Z9+R3/inlbuDxoO4XEfFC/hm2oeYhdhhVprkzW3pHdGxfmZN0evL+8pZ3RK68JHKwaY
-         Ya3JQ2bsoMfqL9ltdqA1jLehkCALg0z+EUTQz1dq9Tr/32uouY5oJKPgz9fwL0U7JFgX
-         cLfSFjSxyhBQWDaF7Gmf40PBLJ0UEuwMdQyez3eGDE7sxpHl3Hp8diAW2ssqYvTemIr7
-         3i68x7AAnqZWhFogHDESMpeyv5kE+rLDkmB8+GxAlEQUjx8W1KryLUDIBfmOYu24NvKu
-         G2Eg==
-X-Gm-Message-State: AAQBX9dYSNuAu6iRpguD3sbGYOiCjEsLmifeG0L5JMsYxY+kLu6d+Np5
-        bE0D7SPGapJ9EyekMNUFxTA=
-X-Google-Smtp-Source: AKy350ZJu7jp4nxoNA3PBt3BQ1lskpGA2HTjnMYG3XSyNpuQ7wI1e+c6pBNkeN/aR69zppzW9k/gMQ==
-X-Received: by 2002:a05:600c:3c94:b0:3ef:6989:19ef with SMTP id bg20-20020a05600c3c9400b003ef698919efmr1458736wmb.13.1680087310085;
-        Wed, 29 Mar 2023 03:55:10 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003ee1e07a14asm1940538wmq.45.2023.03.29.03.55.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 03:55:09 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 13:55:05 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        dmaengine@vger.kernel.org
-Subject: Re: [PATCH 1/2] dmaengine: mv_xor_v2: Fix an error code.
-Message-ID: <73af278e-1fc7-43fb-87b9-f107ae533266@kili.mountain>
-References: <201170dff832a3c496d125772e10070cd834ebf2.1679814350.git.christophe.jaillet@wanadoo.fr>
- <e53e6f9a-09a9-42e4-8e81-dfe2ad2813ad@kili.mountain>
+        Wed, 29 Mar 2023 06:58:58 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD64A19BB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 03:58:55 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id DA0455FD1C;
+        Wed, 29 Mar 2023 13:58:52 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1680087532;
+        bh=2RiAZcjm7f7fZ6eDOOysdqaLXhVvLMfLn4XnqyG2nKM=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=MEnJ+y7qM8X68v4BX902DNuyddPZX+zOuwWBOqRh8gxt7xxAJa/dG8X/L2L+WrwI3
+         Z2CGIP3E+n3mAj/+o+GINFap/38+X/sSR84fmAe9WS0q6rbfhoIN5ioFURiQMNqM4S
+         1EezKrN/EoeXdL4uo3IJQgD5LEiJuDX/aWs6AGYjO754F4rZtz7YIqXbvkX2hTClV/
+         O1Rpc4VeDLhR76pKJaMy2eM39AnuaKCAZsekaAY8etg9b9ikLYQjJnQGmMDnuXrp/9
+         dyGl8hPkWnBxJtfLi80MKXafN3VUw+R2EzbJvJ39IsraJN6SfQ0hmCbilGyVbbMKMC
+         zWmbmkZedjxpw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 29 Mar 2023 13:58:51 +0300 (MSK)
+Message-ID: <f3dfc075-08e2-36a8-1526-e2bbd6eb110f@sberdevices.ru>
+Date:   Wed, 29 Mar 2023 13:55:29 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e53e6f9a-09a9-42e4-8e81-dfe2ad2813ad@kili.mountain>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] mtd: rawnand: meson: fix bitmask for length in command
+ word
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
+        <oxffffaa@gmail.com>
+References: <3794ffbf-dfea-e96f-1f97-fe235b005e19@sberdevices.ru>
+ <447abc1b-b4a3-5848-c99a-ecbff11486fe@linaro.org>
+ <c110bd0f-f25a-a74a-07cb-4c3fdb8ef306@sberdevices.ru>
+ <20230329110054.68455418@xps-13>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230329110054.68455418@xps-13>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/29 07:09:00 #21026578
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A bunch of false positives could be silenced by changing the assign
-and return hooks to check for unsigned types:
 
-static void match_assign(struct expression *expr)
-{
-        if (expr_unsigned(expr->left))
-                return;
-        warn_on_positive_error(expr->right);
-}
 
-static void match_return(struct expression *expr)
-{
-        struct symbol *type;
+On 29.03.2023 12:00, Miquel Raynal wrote:
+> Hi Arseniy,
+> 
+> avkrasnov@sberdevices.ru wrote on Wed, 29 Mar 2023 11:33:38 +0300:
+> 
+>> On 29.03.2023 11:09, Tudor Ambarus wrote:
+>>>
+>>>
+>>> On 3/29/23 08:47, Arseniy Krasnov wrote:  
+>>>> Valid mask is 0x3FFF, without this patch the following problems were
+>>>> found:
+>>>>
+>>>> 1) [    0.938914] Could not find a valid ONFI parameter page, trying
+>>>>                   bit-wise majority to recover it
+>>>>    [    0.947384] ONFI parameter recovery failed, aborting
+>>>>
+>>>> 2) Read with disabled ECC mode was broken.
+>>>>
+>>>> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
+>>>> Cc: <Stable@vger.kernel.org>
+>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>>> ---
+>>>>  drivers/mtd/nand/raw/meson_nand.c | 6 +++---
+>>>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>>>> index a28574c00900..074e14225c06 100644
+>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>>>> @@ -280,7 +280,7 @@ static void meson_nfc_cmd_access(struct nand_chip *nand, int raw, bool dir,
+>>>>  
+>>>>  	if (raw) {
+>>>>  		len = mtd->writesize + mtd->oobsize;
+>>>> -		cmd = (len & GENMASK(5, 0)) | scrambler | DMA_DIR(dir);
+>>>> +		cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);  
+>>>
+>>> What happens when len > GENMASK(13, 0)? Do you check this somewhere?  
+>>
+>> 'len' will be trimmed. I'm not sure that this case is possible here, because GENMASK(13, 0)
+>> is hardware limit for this NAND controller, so 'writesize' and 'oobsize' will be initialized
+>> to fit this value. Moreover GENMASK(13, 0) is 16Kb - i think it is big enough for single
+>> read. Also i'm not sure that it is good approach to check 'len' here - we are in the middle
+>> of NAND read processing.
+> 
+> No, you should check the page size will not exceed this limit in the
+> attach hook, likely.
+> 
+> You should also refuse exec_op operations with a data length bigger
+> than 16k (either with a manual check in your own parser or just by
+> providing the max size to the parser table, depending on what's used).
+>
 
-        type = cur_func_return_type();
-        if (type_unsigned(type))
-                return;
+ 
+Ok, I see.
 
-        warn_on_positive_error(expr);
-}
+Thanks, Arseniy
 
-regards,
-dan carpenter
+>>
+>>>
+>>> Please introduce a macro/field for GENMASK(13, 0), having such mask
+>>> scattered along the code looks hackish and doesn't help readability.
+>>> You'll get to use FIELD_PREP as well.  
+>>
+>> Ack, i'll do it in v3
+>>
+>> Thanks, Arseniy
+>>
+>>>   
+>>>>  		writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>  		return;
+>>>>  	}
+>>>> @@ -544,7 +544,7 @@ static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
+>>>>  	if (ret)
+>>>>  		goto out;
+>>>>  
+>>>> -	cmd = NFC_CMD_N2M | (len & GENMASK(5, 0));
+>>>> +	cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
+>>>>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>  
+>>>>  	meson_nfc_drain_cmd(nfc);
+>>>> @@ -568,7 +568,7 @@ static int meson_nfc_write_buf(struct nand_chip *nand, u8 *buf, int len)
+>>>>  	if (ret)
+>>>>  		return ret;
+>>>>  
+>>>> -	cmd = NFC_CMD_M2N | (len & GENMASK(5, 0));
+>>>> +	cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
+>>>>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>  
+>>>>  	meson_nfc_drain_cmd(nfc);  
+> 
+> 
+> Thanks,
+> Miquèl
