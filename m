@@ -2,50 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A626D09D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FA46D09D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbjC3Phx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
+        id S233180AbjC3PiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233155AbjC3Phs (ORCPT
+        with ESMTP id S233242AbjC3Ph7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:37:48 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2DD19C
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:37:29 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 15:37:15 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680190648; x=1680449848;
-        bh=8Ckr3U3t4v65Ys60F1em+mj+qQLDAHD7DjiGBhJTkTs=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=ZgF7AqEPozgajYN4fveEAtHr/jgGXLuAhkOHhx0PeQrx6dqC634OWN7hDz2k2IXjN
-         YpwGHan3Njm8+wDCzenB9xuo2rbdDI7C4hg3dWDBECSX+N8XG/jaX4xDBidcy8Dp6C
-         muInA75JR2pwzyAQcbXzuNeXInVPmdw+IKxIrgP16ueTqZPEf7D4UCoVWZh2qTy2uZ
-         zEDoKcECf8QzF2hzeI6OKiIGl2PWztwBdILLv7bRO+eDrkMumIpgxSFpUkWu3YW9pJ
-         5mB7CA8DTvoRHLdfIDi17VbfkPQmV/3UWZplnn4rZX6D0wgLPymWnK+jrpYG+lwM1L
-         LFITn+/piG3sQ==
-To:     Andreas Hindborg <nmi@metaspace.dk>, Alice Ryhl <alice@ryhl.io>
-From:   Benno Lossin <y86-dev@protonmail.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH v3 04/13] rust: add pin-init API core
-Message-ID: <caade38e-89ca-a689-7a75-1851025baa51@protonmail.com>
-In-Reply-To: <878rfe493r.fsf@metaspace.dk>
-References: <20230329223239.138757-1-y86-dev@protonmail.com> <20230329223239.138757-5-y86-dev@protonmail.com> <ce17f68e-521f-f55e-8ae2-35bcd6ebd709@ryhl.io> <878rfe493r.fsf@metaspace.dk>
-Feedback-ID: 40624463:user:proton
+        Thu, 30 Mar 2023 11:37:59 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2054.outbound.protection.outlook.com [40.107.117.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986A4124
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:37:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kz6BwLgWmRoyXQq80DYUDtNIRW+IcS4LvXBolQVN+8sKKx3fxlGbSWB90NTwwe4jfOqu6R2QoSdM8ffi7eiZRFBtntq8rlqhoX67D+O8Rr+x0v41uRVWgnMDznqvBeiY1SZOb8AQ2JyAVE6aHpSvaN2IOFqgXKOsUkxbP4vqiysd4josDGRhcwIhGFOEOrVkKQqaMwB5b8YfKfHpT5sKVycWvG23EGwn7Hec/5eGzmazYlbUTR5QnMflU42E2F98LEMGh32MCSHrc3Su9KOEQiBskV+jyoGit6xqJICtTd1XWVWvOxQ09l5sW7VuneUUPq42/hpJ5khIrpXsC+t0DQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D5GnJ5XgGnJGhMgT4ne+3mtU9fx/t9qTuiA3Re2+zpQ=;
+ b=X3EoRqypKOqeoId2wApzkocsYYAarI9ySZ04l5lP3c1FYDrF0D9iRs3TgnH6OyGC7CfKVrW/FIRtyhsqheAkjZM/DdWfCoqziZqP+Z6cuaRNk/I470QU8aTdGpSzb7T6dMeZlwoYcf6DDWxMm6cmBODhgGngBSqj2gCHaMQI43X/Aob2OiFwWSq0AcumOUVHYwPzhwTFwG2DeMEtwTZs5PXt+I2ZlN8/6kmuPmPoTUK/WIGrATSbwucS38u0nIbYnQjrHT/wIQnbBvE2RB8OQ7Y0boGJSW6hXP3jTwH/ABtPNnqp4CCTFDJhcRR75CjCEYNDQx7B7CrgE+4u7FjVOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D5GnJ5XgGnJGhMgT4ne+3mtU9fx/t9qTuiA3Re2+zpQ=;
+ b=qPWRbfqfWpLzHDljTqrEQyKNASVAtorY5MxVqV5ERw1NciMC1Zb/z/71mkexEMLPylG5mAWpfIGxw0wk2D0gdCpsdKEaw0Srb19dH0qIQLG66ZjHWQKMN6UkPV2ROdT1hfJD3xZrNjOuCmTxF/u+VPAbCZwZI8eHwVdsMcmvG4w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
+ SEZPR02MB5663.apcprd02.prod.outlook.com (2603:1096:101:4f::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6254.22; Thu, 30 Mar 2023 15:37:42 +0000
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::9a8c:cd43:d810:b523]) by SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::9a8c:cd43:d810:b523%3]) with mapi id 15.20.6254.021; Thu, 30 Mar 2023
+ 15:37:41 +0000
+From:   Sheng Yong <shengyong@oppo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     linux-kernel@vger.kernel.org, Sheng Yong <shengyong@oppo.com>
+Subject: [RFC PATCH] f2fs: expand f2fs_compr_option to allow ioctl setting compression level
+Date:   Thu, 30 Mar 2023 23:37:19 +0800
+Message-Id: <20230330153719.3085164-1-shengyong@oppo.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0104.apcprd02.prod.outlook.com
+ (2603:1096:4:92::20) To SI2PR02MB5148.apcprd02.prod.outlook.com
+ (2603:1096:4:153::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|SEZPR02MB5663:EE_
+X-MS-Office365-Filtering-Correlation-Id: 14f6b3fb-deed-4350-547f-08db3134b329
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NikSk3lUGm94LuojxBmSsrZQeVrEX+aneJPwUNCSiTzUj6LmgQsif14543jWmS6SgEOBxU2GJgOKt+Dnecf9BHnN3iIsFEEz1pQy9xy8PM+0J3x51TL4sMnaU2SASC2ptw48bxvQXZDJnL1WNtGg8S1nfXyqw1+hJMj0s8/xOJE9UbefZOmpT/v6rDQ8OP9XmhC2zjCMK6ttN3ypQtO8UH5qoUjXbCzZ9QE6cMfhQSukHIu01TpRo+n+ybFd017XViL1lqdEXOpFXNy/HOxNoJpTiq1yiSfkr8uoGuoaNpR5PbAxru5FM/70isSvmU1ErvkgA33AQYLrQU84By3g5FKWb58QoyJKnZxFQFW4boiKDP6Ld//6uXA82iRltARUCVvFKqhzXanfLq9XavwofsR8kQuZVSEkuur8TOuuwvIY4pIdYssymqrMEVAj8QdpKrQ1WmzgtbOw5aslc3HtwOYT0Dio1ZW6MtoRnQjEYxwNV48BXGzwweFxIDkkBoc8aPHy4uc4n2wIpXmbjftiW6gWifhPe2c2en4f4pQjEEFpBHAfCfxjmOBEXpP5LAujEVIwdP0cY/rIkd8CLoWCMdZhZdbOFJrs9uPha350REU8i4LH/R0NOkkctntvNJIM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(451199021)(2616005)(107886003)(26005)(83380400001)(86362001)(1076003)(186003)(6512007)(6506007)(38100700002)(38350700002)(316002)(8676002)(8936002)(41300700001)(6666004)(6486002)(478600001)(36756003)(5660300002)(52116002)(4326008)(66556008)(66946007)(66476007)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dPda5ank+fQg7wQWrGrYkhyAFB4ED5HeV6xD3O5iaiGyOnDd4/kjs03bB6yp?=
+ =?us-ascii?Q?Sp4z586lWzSPIwHhtPhie7ESX5MBxW8MnZHIp1J8WTYAQxXVPSc47Arj/tur?=
+ =?us-ascii?Q?S4GwT/oHXp/ehGFP1gR3HvHsaP18drYO8mn0RMTkZXugbYnNhIRMKGI+3+Gp?=
+ =?us-ascii?Q?OKx1u6JqRwPE5xpDqPFIjzBQALUOIrUaj8CZpBFdVZgF2aJw5TANlkryr3Xz?=
+ =?us-ascii?Q?FU+Qd8DhV4bOwkPWx9pni2lKjp6O6FcK9jBitgj4UQNBJMaw1uziytNv0e/v?=
+ =?us-ascii?Q?UuyJSGrOAH6g06hg6oy/TBv65toHi9Tj7AUEa6XaDJK3vuSDUwY4hC5vhEIA?=
+ =?us-ascii?Q?puBvK5wPEmjm8E0qJEnCkPblLyqCnOgM2bPYF1CWTc9qsJjM03bJPGmRO3QB?=
+ =?us-ascii?Q?BqtEfMUiwcLhrKS+32n1jrn+Lgbh77hNSvQHhzcSosU9dtHzprIC3Rk9bVx1?=
+ =?us-ascii?Q?nUgOcqrV8DBHkkndPW3YX0wgiywxH5C0tNjvgZIccLbjGIqQX+K9sLmrJO+O?=
+ =?us-ascii?Q?UjbpvQ/h4gdQ8n/z0nji+s9f/59h7YcuwZ6dU/i4g6TuEIwh08n+VZjyxQ2b?=
+ =?us-ascii?Q?TwesAJR3oppSsLUcE1jkn69Emwo9ogBFiijuFjpqblDKWpSv4yZ3+t8TdcEM?=
+ =?us-ascii?Q?jtw4FdQ9bTxfNF6G/K2SG0PKhP0QPGAycRpCPWIsOXWRdfrNyNfuttEL7TQy?=
+ =?us-ascii?Q?v/4AZ47zT3Z7AdlNPHHZ/3ZpP69hsurgMuUjTSS1UPHpH1rkGkcJaEGkuKKr?=
+ =?us-ascii?Q?t0EioX3AdcidcAY4+Mo5VhkBMsASQw+VxE6BGmf9JRiYzHJ+4ZXBdNDoOhal?=
+ =?us-ascii?Q?1azWyiFfLsRtkzNDjGn83JMwpgdnQfFpkh7uDqMWLeq09oZKdTK2K3qXMIeJ?=
+ =?us-ascii?Q?LT1dkCwlNlewLTZJvAYfJAH+99JMaszAyvtXl5gcoYxJbIOB/Lktymisz+1X?=
+ =?us-ascii?Q?OIpfXL2/RXH6Mj39/Jgb6bJK3mtKk/rVHzOWeGX753VYaWwD3geXaE+aM+ji?=
+ =?us-ascii?Q?Z3vfD8uMt2Ajml8y8zLV0eQJ530IwqarFoAKnE8kdl0rBCsLB313s9iKhXkg?=
+ =?us-ascii?Q?rqImTdRLWRsviABYX30T/cWuKw3jLPHjkpby+PeuHQmNClrTGJUEJQ4q6fiR?=
+ =?us-ascii?Q?4tAQX3Sc/wM+aDHPorq2BJMpo3DzXNQXukXz4A0nPZ2EMHyasulBtI9ocEbR?=
+ =?us-ascii?Q?zB8/Y9XmnTZ2++5b+wANKJIPbWokwGKEPw+s/E90GCKVK/xTE/6glJFyBoBA?=
+ =?us-ascii?Q?mtZKrYE48s3t2206VheFgy91zbmLE7E6Oc+HgqkhMagUxPJrEBWyK7acCN+c?=
+ =?us-ascii?Q?7i+HGkr0UHcELNbfk4RxW7K1DUVvUFKFOD7OROI6ojSKOwYMjI5d3WDZOAJx?=
+ =?us-ascii?Q?qkSHFA6byQam6ctie7j839v71NYfxdc+ckgYfm3AGmA0LCYLVJz8jEpjkZVN?=
+ =?us-ascii?Q?j4hOmj11Xk99+lM5J6zqcyyWvNtm/kjdSZQlxfOe82NlcxWgSIvGofDStn1l?=
+ =?us-ascii?Q?+Amqehncg1pUgsGcrV8NKygQWUWlOTlZa/nbbRNJ2+vgqgzA25M8WpdRGLW/?=
+ =?us-ascii?Q?Pp6NW5g978LKyslM8yO02SS9XJzVvW1mndyPTRJr?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14f6b3fb-deed-4350-547f-08db3134b329
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 15:37:41.8932
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0f3tCewMOrHa6bdLU/ib5YLPZQzhInS3Nd8K/p6dYDcYYGXKV06Woh9JAKviebzDp5/kexQD+YQoBbVhAV9Xag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR02MB5663
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,77 +110,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.23 16:16, Andreas Hindborg wrote:
->
-> Alice Ryhl <alice@ryhl.io> writes:
->
->> On 3/30/23 00:33, y86-dev@protonmail.com wrote:
->>> From: Benno Lossin <y86-dev@protonmail.com>
->>> This API is used to facilitate safe pinned initialization of structs. I=
-t
->>> replaces cumbersome `unsafe` manual initialization with elegant safe ma=
-cro
->>> invocations.
->>> Due to the size of this change it has been split into six commits:
->>> 1. This commit introducing the basic public interface: traits and
->>>      functions to represent and create initializers.
->>> 2. Adds the `#[pin_data]`, `pin_init!`, `try_pin_init!`, `init!` and
->>>      `try_init!` macros along with their internal types.
->>> 3. Adds the `InPlaceInit` trait that allows using an initializer to cre=
-ate
->>>      an object inside of a `Box<T>` and other smart pointers.
->>> 4. Adds the `PinnedDrop` trait and adds macro support for it in
->>>      the `#[pin_data]` macro.
->>> 5. Adds the `stack_pin_init!` macro allowing to pin-initialize a struct=
- on
->>>      the stack.
->>> 6. Adds the `Zeroable` trait and `init::zeroed` function to initialize
->>>      types that have `0x00` in all bytes as a valid bit pattern.
->>> Co-developed-by: Gary Guo <gary@garyguo.net>
->>> Signed-off-by: Gary Guo <gary@garyguo.net>
->>> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
->>
->> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
->>
->>> +//! Aside from pinned initialization, this API also supports in-place =
-construction without pinning,
->>> +//! the marcos/types/functions are generally named like the pinned var=
-iants without the `pin`
->>> +//! prefix.
->>
->> Typo: Should be "macros".
->>
->>> +type Invariant<T> =3D PhantomData<fn(*mut T) -> *mut T>;
->>
->> I think it would make sense to include a link to the nomicon on the
->> documentation for the Invariant type.
->>
->> E.g. this link: https://doc.rust-lang.org/nomicon/subtyping.html
->
-> That would be nice. I think this also applies: https://doc.rust-lang.org/=
-nomicon/phantom-data.html#table-of-phantomdata-patterns
+This patch adds `level` in `struct f2fs_compr_option` to allow ioctl
+setting compression level.
 
-Yeah I very commonly use that one as well.
+The first byte of original f2fs_compr_option indicates which algorithm
+is used. While the new f2fs_compr_option splits the first byte into two
+parts:
+  * the MBS 4 bits indicate the version
+  * the LBS 4 bits indicate the algorithm
 
->
->>
->>> +// This is the module-internal type implementing `PinInit` and `Init`.=
- It is unsafe to create this
->>> +// type, since the closure needs to fulfill the same safety requiremen=
-t as the
->>> +// `__pinned_init`/`__init` functions.
->>> +struct InitClosure<F, T: ?Sized, E>(F, Invariant<(E, T)>);
->>
->> Documentation for a type should use /// rather than //.
->>
->> I think it would help to call out explicitly in the documentation on thi=
-s type
->> that it is an implementation detail of the pin_init_from_closure and
->> init_from_closure methods.
->
+The original f2fs_compr_option is renamed to f2fs_compr_option_base,
+which is used to calculate ioctl command. For now, the version could
+be 0 or 1.
 
---
-Cheers,
-Benno
+When getting and setting compression option, the first byte should be
+copied from userspace in advance to get the version. Then copy the
+whole option according to version size.
 
+The new f2fs_compr_option could be compatible with old userspace tool:
+    Old tool does not set the MSB 4 bits, which keep all 0. F2FS
+    detects option is version 0, and will not return or set level.
+
+But if new tool is used on old F2FS:
+    New tool sets the MSB 4 bits to 1, get_option could return V0
+    values, but set_option will fail.
+
+Signed-off-by: Sheng Yong <shengyong@oppo.com>
+---
+ fs/f2fs/file.c            | 41 ++++++++++++++++++++++++++++++++++-----
+ include/uapi/linux/f2fs.h | 39 ++++++++++++++++++++++++++++++++++---
+ 2 files changed, 72 insertions(+), 8 deletions(-)
+
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 14e9a20e68df3..909da18208d76 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -3904,10 +3904,27 @@ static int f2fs_ioc_get_compress_option(struct file *filp, unsigned long arg)
+ {
+ 	struct inode *inode = file_inode(filp);
+ 	struct f2fs_comp_option option;
++	__u8 ver;
++	size_t copt_sz;
+ 
+ 	if (!f2fs_sb_has_compression(F2FS_I_SB(inode)))
+ 		return -EOPNOTSUPP;
+ 
++	if (copy_from_user(&option.value, (__u8 __user *)arg, 1))
++		return -EFAULT;
++
++	ver = COPTION_VERSION(option.value);
++	copt_sz = COPTION_SIZE(ver);
++	if (copt_sz == UINT_MAX) {
++		/*
++		 * In order to be compatible with old version option, whose
++		 * algorithm is not initialized, the V0 option is returned
++		 * instead of error.
++		 */
++		ver = F2FS_COPTION_V0;
++		copt_sz = COPTION_SIZE(ver);
++	}
++
+ 	inode_lock_shared(inode);
+ 
+ 	if (!f2fs_compressed_file(inode)) {
+@@ -3915,13 +3932,14 @@ static int f2fs_ioc_get_compress_option(struct file *filp, unsigned long arg)
+ 		return -ENODATA;
+ 	}
+ 
+-	option.algorithm = F2FS_I(inode)->i_compress_algorithm;
++	option.value = COPTION_VALUE(ver, F2FS_I(inode)->i_compress_algorithm);
+ 	option.log_cluster_size = F2FS_I(inode)->i_log_cluster_size;
++	option.level = F2FS_I(inode)->i_compress_level;
+ 
+ 	inode_unlock_shared(inode);
+ 
+ 	if (copy_to_user((struct f2fs_comp_option __user *)arg, &option,
+-				sizeof(option)))
++				copt_sz))
+ 		return -EFAULT;
+ 
+ 	return 0;
+@@ -3932,6 +3950,8 @@ static int f2fs_ioc_set_compress_option(struct file *filp, unsigned long arg)
+ 	struct inode *inode = file_inode(filp);
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 	struct f2fs_comp_option option;
++	__u8 ver, alg;
++	size_t copt_sz;
+ 	int ret = 0;
+ 
+ 	if (!f2fs_sb_has_compression(sbi))
+@@ -3940,14 +3960,23 @@ static int f2fs_ioc_set_compress_option(struct file *filp, unsigned long arg)
+ 	if (!(filp->f_mode & FMODE_WRITE))
+ 		return -EBADF;
+ 
++	if (copy_from_user(&option.value, (__u8 __user *)arg, 1))
++		return -EFAULT;
++
++	ver = COPTION_VERSION(option.value);
++	alg = COPTION_ALGORITHM(option.value);
++	copt_sz = COPTION_SIZE(ver);
++	if (copt_sz == UINT_MAX)
++		return -EFAULT;
++
+ 	if (copy_from_user(&option, (struct f2fs_comp_option __user *)arg,
+-				sizeof(option)))
++				copt_sz))
+ 		return -EFAULT;
+ 
+ 	if (!f2fs_compressed_file(inode) ||
+ 			option.log_cluster_size < MIN_COMPRESS_LOG_SIZE ||
+ 			option.log_cluster_size > MAX_COMPRESS_LOG_SIZE ||
+-			option.algorithm >= COMPRESS_MAX)
++			alg >= COMPRESS_MAX)
+ 		return -EINVAL;
+ 
+ 	file_start_write(filp);
+@@ -3963,9 +3992,11 @@ static int f2fs_ioc_set_compress_option(struct file *filp, unsigned long arg)
+ 		goto out;
+ 	}
+ 
+-	F2FS_I(inode)->i_compress_algorithm = option.algorithm;
++	F2FS_I(inode)->i_compress_algorithm = alg;
+ 	F2FS_I(inode)->i_log_cluster_size = option.log_cluster_size;
+ 	F2FS_I(inode)->i_cluster_size = BIT(option.log_cluster_size);
++	if (ver == F2FS_COPTION_V1)
++		F2FS_I(inode)->i_compress_level = option.level;
+ 	f2fs_mark_inode_dirty_sync(inode, true);
+ 
+ 	if (!f2fs_is_compress_backend_ready(inode))
+diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
+index 955d440be1046..940cf46174357 100644
+--- a/include/uapi/linux/f2fs.h
++++ b/include/uapi/linux/f2fs.h
+@@ -37,9 +37,9 @@
+ #define F2FS_IOC_SEC_TRIM_FILE		_IOW(F2FS_IOCTL_MAGIC, 20,	\
+ 						struct f2fs_sectrim_range)
+ #define F2FS_IOC_GET_COMPRESS_OPTION	_IOR(F2FS_IOCTL_MAGIC, 21,	\
+-						struct f2fs_comp_option)
++						struct f2fs_comp_option_base)
+ #define F2FS_IOC_SET_COMPRESS_OPTION	_IOW(F2FS_IOCTL_MAGIC, 22,	\
+-						struct f2fs_comp_option)
++						struct f2fs_comp_option_base)
+ #define F2FS_IOC_DECOMPRESS_FILE	_IO(F2FS_IOCTL_MAGIC, 23)
+ #define F2FS_IOC_COMPRESS_FILE		_IO(F2FS_IOCTL_MAGIC, 24)
+ #define F2FS_IOC_START_ATOMIC_REPLACE	_IO(F2FS_IOCTL_MAGIC, 25)
+@@ -91,9 +91,42 @@ struct f2fs_sectrim_range {
+ 	__u64 flags;
+ };
+ 
+-struct f2fs_comp_option {
++#define F2FS_COPTION_V0	0
++#define F2FS_COPTION_V1	1
++
++#define COPTION_VER_SHIFT	4
++#define COPTION_VER_MASK	(~((1 << COPTION_VER_SHIFT) - 1))
++
++struct f2fs_comp_option_base {
+ 	__u8 algorithm;
+ 	__u8 log_cluster_size;
+ };
+ 
++struct f2fs_comp_option {
++	union {
++		struct f2fs_comp_option_base base;
++		struct {
++			__u8 value; // MSB 4 bit is version, LSB 4 bit is algorithm
++			__u8 log_cluster_size;
++		};
++	};
++	__u8 level;
++};
++
++#define COPTION_VERSION(val) ((val) >> COPTION_VER_SHIFT)
++#define COPTION_ALGORITHM(val) ((val) & ((1 << COPTION_VER_SHIFT) - 1))
++#define COPTION_VALUE(ver, alg) (((__u8)(ver) << COPTION_VER_SHIFT) | (__u8)(alg))
++#define COPTION_SIZE(ver) ({					\
++	size_t sz = UINT_MAX;					\
++	switch (ver) {						\
++	case F2FS_COPTION_V0:					\
++		sz = offsetof(struct f2fs_comp_option, level);	\
++		break;						\
++	case F2FS_COPTION_V1:					\
++		sz = sizeof(struct f2fs_comp_option);		\
++		break;						\
++	}							\
++	sz;							\
++})
++
+ #endif /* _UAPI_LINUX_F2FS_H */
+-- 
+2.25.1
 
