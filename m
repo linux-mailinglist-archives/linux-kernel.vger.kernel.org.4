@@ -2,222 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D236D008B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1309C6D009A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjC3KDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
+        id S230033AbjC3KEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjC3KDV (ORCPT
+        with ESMTP id S230234AbjC3KEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:03:21 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E373186A2;
-        Thu, 30 Mar 2023 03:02:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680170570; x=1711706570;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UwiIvFDGOSeFTFp9xrmlY+lVix6S4aniU0xTa6dOGNY=;
-  b=cu2gpsIGel13NgcI/7JQ84chaopdJBBg4uRyebNeLZcngq6Xt4fRpaKj
-   DEOV5oDNN/LYeYHBHB/OzRPQoHq46BzuZD4GYLPK5WeQwStKdYq4KDdid
-   gQuui6vX8OfTaJIjZfdulAvR0TRSq8JdC+tk3YeGpJ7NDbHFEIyr2Rtde
-   +NTl0GF6p7TT3G98dyWwJxVl65avZeTgxuNfIbGOFE7PNLdPDNCbH4V9/
-   l3UNsU1uVyr0gVc6TliGd5M1ZXs0/cjxl/01YaRZ9rTAzfJO2kL40PftQ
-   0t86m0KCZsoePTKpN3OFe6RwdLhKQ5sciUWjaHt+Qezl8ohWftPxDqSmF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="403775152"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="403775152"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:02:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="930673602"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="930673602"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Mar 2023 03:02:47 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1php7H-000KjA-0F;
-        Thu, 30 Mar 2023 10:02:47 +0000
-Date:   Thu, 30 Mar 2023 18:02:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Manish Mandlik <mmandlik@google.com>, marcel@holtmann.org,
-        luiz.dentz@gmail.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        linux-bluetooth@vger.kernel.org,
-        Manish Mandlik <mmandlik@google.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 2/4] Bluetooth: Add vhci devcoredump support
-Message-ID: <202303301735.9Keuj1Mu-lkp@intel.com>
-References: <20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc@changeid>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc@changeid>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 30 Mar 2023 06:04:21 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361AF8A51;
+        Thu, 30 Mar 2023 03:03:57 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id A6E105821FE;
+        Thu, 30 Mar 2023 06:03:53 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 30 Mar 2023 06:03:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680170633; x=1680177833; bh=gF
+        qXqcYMWSKuJaGFIiy50Zf8Mul16NUlD8xgems2xkg=; b=JxPZOVxjXCuuUFnz8g
+        uR2No3WKokB1kYnBVGLyuNTT1GHbSx7HcllmOlx7WL73MRjvBNY1Jz63nwSIuXZm
+        fARBRkt2EgiPXJLAvasiK+94JN9Rp7qIpeg/c8F9us28ZAmzX4a12l/FSLzGWeAf
+        GP7Lhb+lkhGzU3GXPlwLR10V758pcgH1ojqXsjwkdVyUvwtO9WMqdgRyfQ7u3ctM
+        W7sU+9bMDjJx0q1aRSpQBmyxejDAdo7VNGKwjccZfKKub+cgQ2ZTm/zkP2y/rRlx
+        wYI35VSqJc9OdGsxpiyx9Lz/h6dHQyx/rbychak5+lhcx20ykt8JwaYwQzyk90NH
+        m/JA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680170633; x=1680177833; bh=gFqXqcYMWSKuJ
+        aGFIiy50Zf8Mul16NUlD8xgems2xkg=; b=o3ayTuAjbuBu4DPifrxB/HOOZRdO1
+        xb065wIqst9K32LE2zIFvIgvo3yv5lHodsQ9WEQeJOnQ4UcFBj18pN027eK8euOR
+        PtcZaxUi42xyTMd+sbBNtRmY12wtqYj80lCZcTZsq6sg8WYonLY5xmdrshZ5C44/
+        jXjWmEhQ68ThFXZ/SV/69f9njMopwi7kUxCVm+NBkbrrBCIP7mBID23rgx/hkVub
+        HQT4TO9CRtSmC/0UwEYJhKoIxPA5B3sXRdQjC9d5SuBSM3xeOdM9GqWhROqUG5n+
+        6gfH5c9KmTWNqq/meniN7YOfy58761x7eNGJpjVNO+ni0u9AywZLJQEUQ==
+X-ME-Sender: <xms:h14lZP2P6-1WML0tnHU0HdMdtZK3G6AdboBJze6kLEnEZTHVfufW-A>
+    <xme:h14lZOG421saOUxl3VTrr1QErXRPxmod2xdJenKYhBULtUD7d6J8ovO92D02wTAv1
+    7ZDE3mwId6_yOeP8ic>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehkedgvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:h14lZP41dAmtiVu4ty1E8BBZ-9reNxwryxuQCN8Se8vdMAwQTZcBkg>
+    <xmx:h14lZE2dCL5QmCe3baeT7FUMFxbuJwcm88C-9hfhLub0UJvmYVxYPg>
+    <xmx:h14lZCHsPaycpm9MVz5soXkltYLZMmnIjjAwPs6W0AlziFmXAZIfJA>
+    <xmx:iV4lZI76poFBm_RbGrZvSm-s7BW_iB7cNPqH9WgtDueAW0AKJy54Lg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 423AFB60086; Thu, 30 Mar 2023 06:03:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
+Mime-Version: 1.0
+Message-Id: <6a5bd3a3-87e0-4a24-89ca-d265b0817a95@app.fastmail.com>
+In-Reply-To: <d7f36a28-0cae-a035-791b-363754aefeee@linaro.org>
+References: <20230327121317.4081816-1-arnd@kernel.org>
+ <20230327121317.4081816-19-arnd@kernel.org>
+ <d7f36a28-0cae-a035-791b-363754aefeee@linaro.org>
+Date:   Thu, 30 Mar 2023 12:03:16 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Neil Armstrong" <neil.armstrong@linaro.org>,
+        "Arnd Bergmann" <arnd@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     "Vineet Gupta" <vgupta@kernel.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, guoren <guoren@kernel.org>,
+        "Brian Cain" <bcain@quicinc.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Michal Simek" <monstr@monstr.eu>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Stafford Horne" <shorne@gmail.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Rich Felker" <dalias@libc.org>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Max Filippov" <jcmvbkbc@gmail.com>,
+        "Christoph Hellwig" <hch@lst.de>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org,
+        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        "Daniel Golle" <daniel@makrotopia.org>
+Subject: Re: [PATCH 18/21] ARM: drop SMP support for ARM11MPCore
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manish,
+On Thu, Mar 30, 2023, at 09:48, Neil Armstrong wrote:
+> On 27/03/2023 14:13, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> The cache management operations for noncoherent DMA on ARMv6 work
+>> in two different ways:
+>> 
+>>   * When CONFIG_DMA_CACHE_RWFO is set, speculative prefetches on in-flight
+>>     DMA buffers lead to data corruption when the prefetched data is written
+>>     back on top of data from the device.
+>> 
+>>   * When CONFIG_DMA_CACHE_RWFO is disabled, a cache flush on one CPU
+>>     is not seen by the other core(s), leading to inconsistent contents
+>>     accross the system.
+>> 
+>> As a consequence, neither configuration is actually safe to use in a
+>> general-purpose kernel that is used on both MPCore systems and ARM1176
+>> with prefetching enabled.
+>> 
+>> We could add further workarounds to make the behavior more dynamic based
+>> on the system, but realistically, there are close to zero remaining
+>> users on any ARM11MPCore anyway, and nobody seems too interested in it,
+>> compared to the more popular ARM1176 used in BMC2835 and AST2500.
+>> 
+>> The Oxnas platform has some minimal support in OpenWRT, but most of the
+>> drivers and dts files never made it into the mainline kernel, while the
+>> Arm Versatile/Realview platform mainly serves as a reference system but
+>> is not necessary to be kept working once all other ARM11MPCore are gone.
+>
+> Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+>
+> It's sad but it's the reality, there's no chance full OXNAS support will
+> ever come upstream and no real work has been done for years.
+>
+> I think OXNAS support can be programmed for removal for next release,
+> it would need significant work to rework current support to make it acceptable
+> before trying to upstream missing bits anyway.
 
-Thank you for the patch! Yet something to improve:
+Ok, thanks for your reply!
 
-[auto build test ERROR on bluetooth/master]
-[also build test ERROR on bluetooth-next/master linus/master v6.3-rc4 next-20230330]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+To clarify, do you think we should plan for removal after the next
+stable release (6.3, removed in 6.4), or after the next LTS
+release (probably 6.6, removed in 6.7)? As far as I understand,
+the next OpenWRT release (23.x) will be based on linux-5.15,
+and the one after that (24.x) would likely still use 6.1, unless
+they skip an LTS kernel.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Manish-Mandlik/Bluetooth-Add-vhci-devcoredump-support/20230330-140719
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc%40changeid
-patch subject: [PATCH v12 2/4] Bluetooth: Add vhci devcoredump support
-config: hexagon-randconfig-r045-20230329 (https://download.01.org/0day-ci/archive/20230330/202303301735.9Keuj1Mu-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a96b21e272af3d91f47b77b297f1289c867259b4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Manish-Mandlik/Bluetooth-Add-vhci-devcoredump-support/20230330-140719
-        git checkout a96b21e272af3d91f47b77b297f1289c867259b4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/bluetooth/ lib/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303301735.9Keuj1Mu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/bluetooth/hci_vhci.c:22:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/bluetooth/hci_vhci.c:22:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/bluetooth/hci_vhci.c:22:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/bluetooth/hci_vhci.c:334:9: error: no member named 'dump' in 'struct hci_dev'
-                   hdev->dump.timeout = msecs_to_jiffies(dump_data.timeout * 1000);
-                   ~~~~  ^
-   6 warnings and 1 error generated.
-
-
-vim +334 drivers/bluetooth/hci_vhci.c
-
-   310	
-   311	static ssize_t force_devcd_write(struct file *file, const char __user *user_buf,
-   312					 size_t count, loff_t *ppos)
-   313	{
-   314		struct vhci_data *data = file->private_data;
-   315		struct hci_dev *hdev = data->hdev;
-   316		struct sk_buff *skb = NULL;
-   317		struct devcoredump_test_data dump_data;
-   318		int ret;
-   319	
-   320		ret = simple_write_to_buffer(&dump_data, sizeof(dump_data), ppos,
-   321					     user_buf, count);
-   322		if (ret < count)
-   323			return ret;
-   324	
-   325		skb = alloc_skb(sizeof(dump_data.data), GFP_ATOMIC);
-   326		if (!skb)
-   327			return -ENOMEM;
-   328		skb_put_data(skb, &dump_data.data, sizeof(dump_data.data));
-   329	
-   330		hci_devcd_register(hdev, vhci_coredump, vhci_coredump_hdr, NULL);
-   331	
-   332		/* Force the devcoredump timeout */
-   333		if (dump_data.timeout)
- > 334			hdev->dump.timeout = msecs_to_jiffies(dump_data.timeout * 1000);
-   335	
-   336		ret = hci_devcd_init(hdev, skb->len);
-   337		if (ret) {
-   338			BT_ERR("Failed to generate devcoredump");
-   339			kfree_skb(skb);
-   340			return ret;
-   341		}
-   342	
-   343		hci_devcd_append(hdev, skb);
-   344	
-   345		switch (dump_data.state) {
-   346		case HCI_DEVCOREDUMP_DONE:
-   347			hci_devcd_complete(hdev);
-   348			break;
-   349		case HCI_DEVCOREDUMP_ABORT:
-   350			hci_devcd_abort(hdev);
-   351			break;
-   352		case HCI_DEVCOREDUMP_TIMEOUT:
-   353			/* Do nothing */
-   354			break;
-   355		default:
-   356			return -EINVAL;
-   357		}
-   358	
-   359		return count;
-   360	}
-   361	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+     Arnd
