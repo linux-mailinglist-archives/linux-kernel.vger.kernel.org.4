@@ -2,172 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B176D0D00
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424666D0D03
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbjC3RkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 13:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
+        id S232576AbjC3Rlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbjC3RkH (ORCPT
+        with ESMTP id S230152AbjC3Rlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:40:07 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78F1E068;
-        Thu, 30 Mar 2023 10:40:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680198007; x=1711734007;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sqgOwOsqqyepaLfZuCrGHGV3YpOJJxs0Oj6uM3Ok6mI=;
-  b=IdQ7+uNDhgwZNpmMpPopIOggggVhjXXciSJaXG6GR9Sx8HWD/Q8p5Fiz
-   UWreJ7kTPfPCy68peKpXBepBaO4CMDYFIrEfVr6Sf50E6eU5nMRVKtKEZ
-   o6ZKu7X7d4uo2eOnXQjI00xaR96UAFWvDJdxnerGgLPFsd1aAhFW9SWPh
-   KtgMGgkJDOPGnsZRv/zpwbNSMQHiZStHrCUxuCCJreaKnKNzgyWn2yALq
-   V3nnk0CCAnkP4qnLPj4I18jlHYTudTZqMrXEsSvfJV/2nndzY9dLyqwRf
-   vGIBbyD4SrYEGNG6/Cc3e0MUClxW0EGJMmglis7sJAQwA6hScLOXSD3F8
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="343736487"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="343736487"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 10:40:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="808739829"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="808739829"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2023 10:40:03 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1phwFn-000L3Y-0c;
-        Thu, 30 Mar 2023 17:40:03 +0000
-Date:   Fri, 31 Mar 2023 01:39:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Piyush Malgujar <pmalgujar@marvell.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wsa@kernel.org, rric@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        jannadurai@marvell.com, cchavva@marvell.com,
-        Suneel Garapati <sgarapati@marvell.com>,
-        Piyush Malgujar <pmalgujar@marvell.com>
-Subject: Re: [PATCH 2/3] i2c: thunderx: Add support for High speed mode
-Message-ID: <202303310153.yx2xXH8s-lkp@intel.com>
-References: <20230330133953.21074-3-pmalgujar@marvell.com>
+        Thu, 30 Mar 2023 13:41:47 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9E5E04A
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:41:46 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id s1-20020a6bd301000000b0073e7646594aso12036356iob.8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:41:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680198105; x=1682790105;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7v1YglbOtREbKuqnbHJ8UKXCGSFaDBrIC+CAndWF+04=;
+        b=vaudJCn55EzRhWSnIJ4abW/O5uayIfa5sAtLhxoWQCDPJimIRcPrho9uIb+LE+0wMt
+         tRTOlfEkSzO6o7SGIakj0NEXsWERCpFdCYnnqf0BlNFYx6N0xlGVjm3kFL1Beytinm2u
+         sYWQc363w4MK8VMD6wZUudrzW7PkSH/3AOCiSMPdF4Bta/Jj7gtBtrC5MjN+ke2N79t+
+         QaMNqtu3o4r6LECLP9ncNRM2kmIP3Yf5dXwE1BtPa7oJIx6bUBNGWV2zJ/B/f9NPneQL
+         ix2cmDiZeFxexNu4+s38/LykDTiNQU1gEd0fRy7xS681HTL3R643b/tGfNtrVApiVtji
+         C7Hg==
+X-Gm-Message-State: AO0yUKVxqqpt4cY4soEnZf2q5BGGWKSePE5FqXXZDxsB4EAOL95h7Qp5
+        qtvIjC7IsYf1s2g2N+zII23elji/6n1yPqpsnnLjGVxJ1pvL
+X-Google-Smtp-Source: AK7set9jZDw2Jg6QXOuiZOojCscA0p8uGYeC2CsaDZYKHhJqJ5G8ORq40dTupjVCf0IthB0ecMU333iN16Z0kP6w/nPvi81oHH/H
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330133953.21074-3-pmalgujar@marvell.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:62ce:0:b0:3c5:1971:1b7f with SMTP id
+ d197-20020a0262ce000000b003c519711b7fmr9911856jac.6.1680198105347; Thu, 30
+ Mar 2023 10:41:45 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 10:41:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000038beff05f8219be2@google.com>
+Subject: [syzbot] [net?] kernel BUG in icmp_glue_bits
+From:   syzbot <syzbot+d373d60fddbdc915e666@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Piyush,
+Hello,
 
-Thank you for the patch! Yet something to improve:
+syzbot found the following issue on:
 
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linus/master v6.3-rc4 next-20230330]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    ffe78bbd5121 Merge tag 'xtensa-20230327' of https://github..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13f9a03ec80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e626f76ad59b1c14
+dashboard link: https://syzkaller.appspot.com/bug?extid=d373d60fddbdc915e666
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Piyush-Malgujar/i2c-thunderx-Clock-divisor-logic-changes/20230330-214626
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/20230330133953.21074-3-pmalgujar%40marvell.com
-patch subject: [PATCH 2/3] i2c: thunderx: Add support for High speed mode
-config: riscv-randconfig-r042-20230329 (https://download.01.org/0day-ci/archive/20230331/202303310153.yx2xXH8s-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/c7866465c9142bf77cc1bc651704bfbfc9b0b411
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Piyush-Malgujar/i2c-thunderx-Clock-divisor-logic-changes/20230330-214626
-        git checkout c7866465c9142bf77cc1bc651704bfbfc9b0b411
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/i2c/busses/
+Unfortunately, I don't have any reproducer for this issue yet.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303310153.yx2xXH8s-lkp@intel.com/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d373d60fddbdc915e666@syzkaller.appspotmail.com
 
-All errors (new ones prefixed by >>):
+------------[ cut here ]------------
+kernel BUG at net/core/skbuff.c:3343!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 15766 Comm: syz-executor.0 Not tainted 6.3.0-rc4-syzkaller-00039-gffe78bbd5121 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:skb_copy_and_csum_bits+0x798/0x860 net/core/skbuff.c:3343
+Code: f0 c1 c8 08 41 89 c6 e9 73 ff ff ff e8 61 48 d4 f9 e9 41 fd ff ff 48 8b 7c 24 48 e8 52 48 d4 f9 e9 c3 fc ff ff e8 c8 27 84 f9 <0f> 0b 48 89 44 24 28 e8 3c 48 d4 f9 48 8b 44 24 28 e9 9d fb ff ff
+RSP: 0018:ffffc90000007620 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 00000000000001e8 RCX: 0000000000000100
+RDX: ffff8880276f6280 RSI: ffffffff87fdd138 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000000001e8 R11: 0000000000000001 R12: 000000000000003c
+R13: 0000000000000000 R14: ffff888028244868 R15: 0000000000000b0e
+FS:  00007fbc81f1c700(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2df43000 CR3: 00000000744db000 CR4: 0000000000150ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ icmp_glue_bits+0x7b/0x210 net/ipv4/icmp.c:353
+ __ip_append_data+0x1d1b/0x39f0 net/ipv4/ip_output.c:1161
+ ip_append_data net/ipv4/ip_output.c:1343 [inline]
+ ip_append_data+0x115/0x1a0 net/ipv4/ip_output.c:1322
+ icmp_push_reply+0xa8/0x440 net/ipv4/icmp.c:370
+ __icmp_send+0xb80/0x1430 net/ipv4/icmp.c:765
+ ipv4_send_dest_unreach net/ipv4/route.c:1239 [inline]
+ ipv4_link_failure+0x5a9/0x9e0 net/ipv4/route.c:1246
+ dst_link_failure include/net/dst.h:423 [inline]
+ arp_error_report+0xcb/0x1c0 net/ipv4/arp.c:296
+ neigh_invalidate+0x20d/0x560 net/core/neighbour.c:1079
+ neigh_timer_handler+0xc77/0xff0 net/core/neighbour.c:1166
+ call_timer_fn+0x1a0/0x580 kernel/time/timer.c:1700
+ expire_timers+0x29b/0x4b0 kernel/time/timer.c:1751
+ __run_timers kernel/time/timer.c:2022 [inline]
+ __run_timers kernel/time/timer.c:1995 [inline]
+ run_timer_softirq+0x326/0x910 kernel/time/timer.c:2035
+ __do_softirq+0x1d4/0x905 kernel/softirq.c:571
+ invoke_softirq kernel/softirq.c:445 [inline]
+ __irq_exit_rcu+0x114/0x190 kernel/softirq.c:650
+ irq_exit_rcu+0x9/0x20 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x97/0xc0 arch/x86/kernel/apic/apic.c:1107
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
+RIP: 0010:finish_task_switch.isra.0+0x2bf/0xc80 kernel/sched/core.c:5186
+Code: 8b 3a 4c 89 e7 48 c7 02 00 00 00 00 ff d1 4d 85 ff 75 bf 4c 89 e7 e8 60 f8 ff ff e8 5b 94 31 00 fb 65 48 8b 1c 25 c0 b8 03 00 <48> 8d bb 50 15 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1
+RSP: 0018:ffffc900024174b8 EFLAGS: 00000206
+RAX: 0000000000003935 RBX: ffff8880276f6280 RCX: 1ffffffff1cedbd1
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: ffffc90002417500 R08: 0000000000000001 R09: 0000000000000001
+R10: fffffbfff1cee1da R11: 0000000000000000 R12: ffff88802ca3c2c0
+R13: ffff888028392000 R14: 0000000000000000 R15: ffff88802ca3ccf8
+ context_switch kernel/sched/core.c:5310 [inline]
+ __schedule+0xc99/0x5770 kernel/sched/core.c:6625
+ schedule+0xde/0x1a0 kernel/sched/core.c:6701
+ schedule_timeout+0x276/0x2b0 kernel/time/timer.c:2143
+ unix_wait_for_peer+0x244/0x280 net/unix/af_unix.c:1450
+ unix_dgram_sendmsg+0x16bf/0x1950 net/unix/af_unix.c:2048
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:747
+ ____sys_sendmsg+0x334/0x900 net/socket.c:2501
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2555
+ __sys_sendmmsg+0x18f/0x460 net/socket.c:2641
+ __do_sys_sendmmsg net/socket.c:2670 [inline]
+ __se_sys_sendmmsg net/socket.c:2667 [inline]
+ __x64_sys_sendmmsg+0x9d/0x100 net/socket.c:2667
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fbc8128c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fbc81f1c168 EFLAGS: 00000246 ORIG_RAX: 0000000000000133
+RAX: ffffffffffffffda RBX: 00007fbc813abf80 RCX: 00007fbc8128c0f9
+RDX: 0000000000000318 RSI: 00000000200bd000 RDI: 0000000000000004
+RBP: 00007fbc812e7b39 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffed3267a6f R14: 00007fbc81f1c300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:skb_copy_and_csum_bits+0x798/0x860 net/core/skbuff.c:3343
+Code: f0 c1 c8 08 41 89 c6 e9 73 ff ff ff e8 61 48 d4 f9 e9 41 fd ff ff 48 8b 7c 24 48 e8 52 48 d4 f9 e9 c3 fc ff ff e8 c8 27 84 f9 <0f> 0b 48 89 44 24 28 e8 3c 48 d4 f9 48 8b 44 24 28 e9 9d fb ff ff
+RSP: 0018:ffffc90000007620 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 00000000000001e8 RCX: 0000000000000100
+RDX: ffff8880276f6280 RSI: ffffffff87fdd138 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000000001e8 R11: 0000000000000001 R12: 000000000000003c
+R13: 0000000000000000 R14: ffff888028244868 R15: 0000000000000b0e
+FS:  00007fbc81f1c700(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2df43000 CR3: 00000000744db000 CR4: 0000000000150ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	8b 3a                	mov    (%rdx),%edi
+   2:	4c 89 e7             	mov    %r12,%rdi
+   5:	48 c7 02 00 00 00 00 	movq   $0x0,(%rdx)
+   c:	ff d1                	callq  *%rcx
+   e:	4d 85 ff             	test   %r15,%r15
+  11:	75 bf                	jne    0xffffffd2
+  13:	4c 89 e7             	mov    %r12,%rdi
+  16:	e8 60 f8 ff ff       	callq  0xfffff87b
+  1b:	e8 5b 94 31 00       	callq  0x31947b
+  20:	fb                   	sti
+  21:	65 48 8b 1c 25 c0 b8 	mov    %gs:0x3b8c0,%rbx
+  28:	03 00
+* 2a:	48 8d bb 50 15 00 00 	lea    0x1550(%rbx),%rdi <-- trapping instruction
+  31:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  38:	fc ff df
+  3b:	48 89 fa             	mov    %rdi,%rdx
+  3e:	48                   	rex.W
+  3f:	c1                   	.byte 0xc1
 
->> drivers/i2c/busses/i2c-octeon-core.c:74:5: error: call to undeclared function '__udelay'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                   __udelay(1);
-                                   ^
-   drivers/i2c/busses/i2c-octeon-core.c:74:5: note: did you mean '__delay'?
-   arch/riscv/include/asm/delay.h:18:13: note: '__delay' declared here
-   extern void __delay(unsigned long cycles);
-               ^
-   1 error generated.
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-vim +/__udelay +74 drivers/i2c/busses/i2c-octeon-core.c
-
-    39	
-    40	/**
-    41	 * octeon_i2c_wait - wait for the IFLG to be set
-    42	 * @i2c: The struct octeon_i2c
-    43	 *
-    44	 * Returns 0 on success, otherwise a negative errno.
-    45	 */
-    46	static int octeon_i2c_wait(struct octeon_i2c *i2c)
-    47	{
-    48		long time_left;
-    49	
-    50		/*
-    51		 * Some chip revisions don't assert the irq in the interrupt
-    52		 * controller. So we must poll for the IFLG change.
-    53		 */
-    54		if (i2c->broken_irq_mode) {
-    55			u64 end = get_jiffies_64() + i2c->adap.timeout;
-    56	
-    57			while (!octeon_i2c_test_iflg(i2c) &&
-    58			       time_before64(get_jiffies_64(), end))
-    59				usleep_range(I2C_OCTEON_EVENT_WAIT / 2, I2C_OCTEON_EVENT_WAIT);
-    60	
-    61			return octeon_i2c_test_iflg(i2c) ? 0 : -ETIMEDOUT;
-    62		}
-    63	
-    64		if (IS_LS_FREQ(i2c->twsi_freq)) {
-    65			i2c->int_enable(i2c);
-    66			time_left = wait_event_timeout(i2c->queue,
-    67						       octeon_i2c_test_iflg(i2c),
-    68						       i2c->adap.timeout);
-    69			i2c->int_disable(i2c);
-    70		} else {
-    71			time_left = 1000; /* 1ms */
-    72			do {
-    73				if (time_left--)
-  > 74					__udelay(1);
-    75			} while (!octeon_i2c_test_iflg(i2c) && time_left);
-    76		}
-    77	
-    78		if (i2c->broken_irq_check && !time_left &&
-    79		    octeon_i2c_test_iflg(i2c)) {
-    80			dev_err(i2c->dev, "broken irq connection detected, switching to polling mode.\n");
-    81			i2c->broken_irq_mode = true;
-    82			return 0;
-    83		}
-    84	
-    85		if (!time_left)
-    86			return -ETIMEDOUT;
-    87	
-    88		return 0;
-    89	}
-    90	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
