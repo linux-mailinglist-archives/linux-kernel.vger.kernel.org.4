@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7446D0768
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA6B6D076C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbjC3N40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
+        id S230035AbjC3N5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbjC3N4U (ORCPT
+        with ESMTP id S231857AbjC3N5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:56:20 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4462C9773
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:56:19 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5416d3a321eso189188817b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:56:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680184578;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FhHLbziee4a81RNVkwycWkVgS8ETVW18Svhu+GP0co8=;
-        b=TyIuTP4E/yt61TucQWoc7ll1E7roUOPolzxGJTLTcqFDT2S/awduj2ZxA31PhqG1eF
-         pViFXGegRdXk1ZTQ1OZiFE84LpP8jzsgn5zGDzv8AfrdWtz6bUP4a38bqGQjQBPJ7ZPH
-         VkpbiejhTh9WxOtxYFgi2Qmq/M4rZEvietQrflSUdzWuJf++ttuV3FQxBs8pvHzOH7dS
-         pIF9Zlu0Zj8zj2b8UjbcSAC+Qa2zita4jFlJyqqgUMuEAE0ugdalIvKQZ0IclWc6ztrh
-         2J5QMvqUqijxIcADyhc2S97LPFZtPxcQJxl2OXorPFY8J7zdu5g4232yUJThobhUeYdo
-         WN2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680184578;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FhHLbziee4a81RNVkwycWkVgS8ETVW18Svhu+GP0co8=;
-        b=h1Z4pKfq4Pcr5ZBR9ha4gqmHXfjk7LR1xQcEyMkVPR+WdbYDSuoOmqo+ijLdPh+JTU
-         SKQQMw/rWMvV7OEJqzKqoJJKdJuzXZ0SBhGTBSucP/fzoM3VjSsV0s1mQv6wmIEqC648
-         HMJ/usjnXwIE73DUp9OaUMWI7jdVmNXsjp+o3DKhMRhstZcDIizfzx3YE2BTWLvuufxr
-         oC1d5UZTAaD/Qs/kFzQbJuXQYA8tBF7N4ikMHjAdIle9tFwnxnrh58jtCZ7/b3PKbEWv
-         K8/ubMZZzkGmJe8k74HQW+qd7noZpc/idg+M1+Jmf1VH3y46RKZCDfjjT3pfqj7WpmyD
-         ChLg==
-X-Gm-Message-State: AAQBX9cK3Uv+jTA62R8EhRcJONcftwy7RTPa7KCHrwiFC5G6X5mNCWAC
-        0a6TffFLUbC46RWQDPIIVb3RVkoqLxv8HxtDvg==
-X-Google-Smtp-Source: AKy350a7NVHkW7b+E9eQZDgipTjPNuxq0WUrIjvNLjxZxx04gbqK2cynLJX6DcxdOG/OpZw/AYC6JOo5r4i58SQb1A==
-X-Received: from peternewman-vh.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:30cc])
- (user=peternewman job=sendgmr) by 2002:a05:6902:1024:b0:b77:3f5a:8a53 with
- SMTP id x4-20020a056902102400b00b773f5a8a53mr11703160ybt.12.1680184578517;
- Thu, 30 Mar 2023 06:56:18 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 15:55:58 +0200
-In-Reply-To: <20230330135558.1019658-1-peternewman@google.com>
-Mime-Version: 1.0
-References: <20230330135558.1019658-1-peternewman@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230330135558.1019658-4-peternewman@google.com>
-Subject: [PATCH v5 3/3] Documentation/x86: Documentation for MON group move feature
-From:   Peter Newman <peternewman@google.com>
-To:     reinette.chatre@intel.com, fenghua.yu@intel.com
-Cc:     Babu.Moger@amd.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        eranian@google.com, gupasani@google.com, hpa@zytor.com,
-        james.morse@arm.com, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, skodak@google.com, tglx@linutronix.de,
-        tony.luck@intel.com, x86@kernel.org,
-        Peter Newman <peternewman@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Thu, 30 Mar 2023 09:57:10 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C91F27EED
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:56:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC2632F4;
+        Thu, 30 Mar 2023 06:57:38 -0700 (PDT)
+Received: from [10.1.35.23] (e122027.cambridge.arm.com [10.1.35.23])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F77F3F663;
+        Thu, 30 Mar 2023 06:56:52 -0700 (PDT)
+Message-ID: <f468f934-40b6-3547-d3ea-88a0aac5bd6a@arm.com>
+Date:   Thu, 30 Mar 2023 14:56:50 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [BUG] Usersapce MTE error with allocation tag 0 when low on
+ memory
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        =?UTF-8?B?UXVuLXdlaSBMaW4gKOael+e+pOW0tCk=?= 
+        <Qun-wei.Lin@mediatek.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "surenb@google.com" <surenb@google.com>,
+        "david@redhat.com" <david@redhat.com>,
+        =?UTF-8?B?Q2hpbndlbiBDaGFuZyAo5by16Yym5paHKQ==?= 
+        <chinwen.chang@mediatek.com>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        =?UTF-8?B?S3Vhbi1ZaW5nIExlZSAo5p2O5Yag56mOKQ==?= 
+        <Kuan-Ying.Lee@mediatek.com>,
+        =?UTF-8?B?Q2FzcGVyIExpICjmnY7kuK3mpq4p?= <casper.li@mediatek.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+References: <5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com>
+ <ZCRtVW9Q0WOKEQVX@arm.com>
+Content-Language: en-GB
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <ZCRtVW9Q0WOKEQVX@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,32 +60,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe new support for moving MON groups to a new parent CTRL_MON
-group and its restrictions.
+On 29/03/2023 17:54, Catalin Marinas wrote:
+> + Steven Price who added the MTE swap support.
+> 
+> On Wed, Mar 29, 2023 at 02:55:49AM +0000, Qun-wei Lin (林群崴) wrote:
 
-Signed-off-by: Peter Newman <peternewman@google.com>
----
- Documentation/x86/resctrl.rst | 7 +++++++
- 1 file changed, 7 insertions(+)
+<snip>
 
-diff --git a/Documentation/x86/resctrl.rst b/Documentation/x86/resctrl.rst
-index 387ccbcb558f..cb05d90111b4 100644
---- a/Documentation/x86/resctrl.rst
-+++ b/Documentation/x86/resctrl.rst
-@@ -287,6 +287,13 @@ Removing a directory will move all tasks and cpus owned by the group it
- represents to the parent. Removing one of the created CTRL_MON groups
- will automatically remove all MON groups below it.
- 
-+Moving MON group directories to a new parent CTRL_MON group is supported
-+for the purpose of changing the resource allocations of a MON group
-+without impacting its monitoring data or assigned tasks. This operation
-+is not allowed for MON groups which monitor CPUs. No other move
-+operation is currently allowed other than simply renaming a CTRL_MON or
-+MON group.
-+
- All groups contain the following files:
- 
- "tasks":
--- 
-2.40.0.348.gf938b09366-goog
+>>
+>> Having compared the differences between Kernel-5.15 and Kernel-6.1,
+>> We found the order of swap_free() and set_pte_at() is changed in
+>> do_swap_page().
+>>
+>> When fault in, do_swap_page() will call swap_free() first:
+>> do_swap_page() -> swap_free() -> __swap_entry_free() ->
+>> free_swap_slot() -> swapcache_free_entries() -> swap_entry_free() ->
+>> swap_range_free() -> arch_swap_invalidate_page() ->
+>> mte_invalidate_tags_area() ->  mte_invalidate_tags() -> xa_erase()
+>>
+>> and then call set_pte_at():
+>> do_swap_page() -> set_pte_at() -> __set_pte_at() -> mte_sync_tags() ->
+>> mte_sync_page_tags() -> mte_restore_tags() -> xa_load()
+>>
+>> This means that the swap slot is invalidated before pte mapping, and
+>> this will cause the mte tag in XArray to be released before tag
+>> restore.
+
+This analysis looks correct to me. The MTE swap code works on the
+assumption that the set_pte_at() will restore the tags to the page
+before the swap entry is removed. The reordering which has happened
+since has broken this assumption and as you observed can cause the tags
+to be unavailable by the time set_pte_at() is called.
+
+>> After I moved swap_free() to the next line of set_pte_at(), the problem
+>> is disappeared.
+>>
+>> We suspect that the following patches, which have changed the order, do
+>> not consider the mte tag restoring in page fault flow:
+>> https://lore.kernel.org/all/20220131162940.210846-5-david@redhat.com/
+
+I'm not sure I entirely follow the reasoning in this patch, so I'm not
+sure whether it's safe to just move swap_free() down to below
+set_pte_at() or if that reintroduces the information leak.
+
+I also wonder if sparc has a similar issue as the arch_do_swap()
+callback is located next to set_pte_at().
+
+>> Any suggestion is appreciated.
+
+The other possibility is to add a(nother) callback for MTE in
+arch_do_swap() that calls mte_restore_tags() on the page before the
+swap_free() call rather than depending on the hook in set_pte_at().
+
+Steve
 
