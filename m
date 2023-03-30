@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46EE6CFBCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13BC36CFBC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjC3Gnu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 02:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59848 "EHLO
+        id S229864AbjC3Gnq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 02:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjC3Gnk (ORCPT
+        with ESMTP id S229652AbjC3Gnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 30 Mar 2023 02:43:40 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DD040E4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A07B40D9
         for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 23:43:39 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2A7B124E289;
-        Thu, 30 Mar 2023 14:43:33 +0800 (CST)
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 30 Mar
- 2023 14:43:33 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id A06F424E0F4;
+        Thu, 30 Mar 2023 14:43:37 +0800 (CST)
+Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 30 Mar
+ 2023 14:43:37 +0800
 Received: from jsia-virtual-machine.localdomain (202.188.176.82) by
  EXMBX066.cuchost.com (172.16.6.66) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Thu, 30 Mar 2023 14:43:29 +0800
+ 15.0.1497.42; Thu, 30 Mar 2023 14:43:34 +0800
 From:   Sia Jee Heng <jeeheng.sia@starfivetech.com>
 To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
         <aou@eecs.berkeley.edu>
 CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <jeeheng.sia@starfivetech.com>, <leyfoon.tan@starfivetech.com>,
         <mason.huo@starfivetech.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: [PATCH v8 1/4] RISC-V: Change suspend_save_csrs and suspend_restore_csrs to public function
-Date:   Thu, 30 Mar 2023 14:43:18 +0800
-Message-ID: <20230330064321.1008373-2-jeeheng.sia@starfivetech.com>
+        Andrew Jones <ajones@ventanamicro.com>,
+        "Conor Dooley" <conor.dooley@microchip.com>
+Subject: [PATCH v8 2/4] RISC-V: Factor out common code of __cpu_resume_enter()
+Date:   Thu, 30 Mar 2023 14:43:19 +0800
+Message-ID: <20230330064321.1008373-3-jeeheng.sia@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230330064321.1008373-1-jeeheng.sia@starfivetech.com>
 References: <20230330064321.1008373-1-jeeheng.sia@starfivetech.com>
@@ -56,54 +56,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently suspend_save_csrs() and suspend_restore_csrs() functions are
-statically defined in the suspend.c. Change the function's attribute
-to public so that the functions can be used by hibernation as well.
+The cpu_resume() function is very similar for the suspend to disk and
+suspend to ram cases. Factor out the common code into suspend_restore_csrs
+macro and suspend_restore_regs macro.
 
 Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/include/asm/suspend.h | 3 +++
- arch/riscv/kernel/suspend.c      | 4 ++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ arch/riscv/include/asm/assembler.h | 62 ++++++++++++++++++++++++++++++
+ arch/riscv/kernel/suspend_entry.S  | 34 ++--------------
+ 2 files changed, 65 insertions(+), 31 deletions(-)
+ create mode 100644 arch/riscv/include/asm/assembler.h
 
-diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
-index 8be391c2aecb..67e047445662 100644
---- a/arch/riscv/include/asm/suspend.h
-+++ b/arch/riscv/include/asm/suspend.h
-@@ -33,4 +33,7 @@ int cpu_suspend(unsigned long arg,
- /* Low-level CPU resume entry function */
- int __cpu_resume_enter(unsigned long hartid, unsigned long context);
- 
-+/* Used to save and restore the CSRs */
-+void suspend_save_csrs(struct suspend_context *context);
-+void suspend_restore_csrs(struct suspend_context *context);
- #endif
-diff --git a/arch/riscv/kernel/suspend.c b/arch/riscv/kernel/suspend.c
-index 9ba24fb8cc93..3c89b8ec69c4 100644
---- a/arch/riscv/kernel/suspend.c
-+++ b/arch/riscv/kernel/suspend.c
-@@ -8,7 +8,7 @@
+diff --git a/arch/riscv/include/asm/assembler.h b/arch/riscv/include/asm/assembler.h
+new file mode 100644
+index 000000000000..ba59d38f8937
+--- /dev/null
++++ b/arch/riscv/include/asm/assembler.h
+@@ -0,0 +1,62 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2023 StarFive Technology Co., Ltd.
++ *
++ * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
++ */
++
++#ifndef __ASSEMBLY__
++#error "Only include this from assembly code"
++#endif
++
++#ifndef __ASM_ASSEMBLER_H
++#define __ASM_ASSEMBLER_H
++
++#include <asm/asm.h>
++#include <asm/asm-offsets.h>
++#include <asm/csr.h>
++
++/*
++ * suspend_restore_csrs - restore CSRs
++ */
++	.macro suspend_restore_csrs
++		REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_EPC)(a0)
++		csrw	CSR_EPC, t0
++		REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_STATUS)(a0)
++		csrw	CSR_STATUS, t0
++		REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_BADADDR)(a0)
++		csrw	CSR_TVAL, t0
++		REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_CAUSE)(a0)
++		csrw	CSR_CAUSE, t0
++	.endm
++
++/*
++ * suspend_restore_regs - Restore registers (except A0 and T0-T6)
++ */
++	.macro suspend_restore_regs
++		REG_L	ra, (SUSPEND_CONTEXT_REGS + PT_RA)(a0)
++		REG_L	sp, (SUSPEND_CONTEXT_REGS + PT_SP)(a0)
++		REG_L	gp, (SUSPEND_CONTEXT_REGS + PT_GP)(a0)
++		REG_L	tp, (SUSPEND_CONTEXT_REGS + PT_TP)(a0)
++		REG_L	s0, (SUSPEND_CONTEXT_REGS + PT_S0)(a0)
++		REG_L	s1, (SUSPEND_CONTEXT_REGS + PT_S1)(a0)
++		REG_L	a1, (SUSPEND_CONTEXT_REGS + PT_A1)(a0)
++		REG_L	a2, (SUSPEND_CONTEXT_REGS + PT_A2)(a0)
++		REG_L	a3, (SUSPEND_CONTEXT_REGS + PT_A3)(a0)
++		REG_L	a4, (SUSPEND_CONTEXT_REGS + PT_A4)(a0)
++		REG_L	a5, (SUSPEND_CONTEXT_REGS + PT_A5)(a0)
++		REG_L	a6, (SUSPEND_CONTEXT_REGS + PT_A6)(a0)
++		REG_L	a7, (SUSPEND_CONTEXT_REGS + PT_A7)(a0)
++		REG_L	s2, (SUSPEND_CONTEXT_REGS + PT_S2)(a0)
++		REG_L	s3, (SUSPEND_CONTEXT_REGS + PT_S3)(a0)
++		REG_L	s4, (SUSPEND_CONTEXT_REGS + PT_S4)(a0)
++		REG_L	s5, (SUSPEND_CONTEXT_REGS + PT_S5)(a0)
++		REG_L	s6, (SUSPEND_CONTEXT_REGS + PT_S6)(a0)
++		REG_L	s7, (SUSPEND_CONTEXT_REGS + PT_S7)(a0)
++		REG_L	s8, (SUSPEND_CONTEXT_REGS + PT_S8)(a0)
++		REG_L	s9, (SUSPEND_CONTEXT_REGS + PT_S9)(a0)
++		REG_L	s10, (SUSPEND_CONTEXT_REGS + PT_S10)(a0)
++		REG_L	s11, (SUSPEND_CONTEXT_REGS + PT_S11)(a0)
++	.endm
++
++#endif	/* __ASM_ASSEMBLER_H */
+diff --git a/arch/riscv/kernel/suspend_entry.S b/arch/riscv/kernel/suspend_entry.S
+index aafcca58c19d..12b52afe09a4 100644
+--- a/arch/riscv/kernel/suspend_entry.S
++++ b/arch/riscv/kernel/suspend_entry.S
+@@ -7,6 +7,7 @@
+ #include <linux/linkage.h>
+ #include <asm/asm.h>
+ #include <asm/asm-offsets.h>
++#include <asm/assembler.h>
  #include <asm/csr.h>
- #include <asm/suspend.h>
+ #include <asm/xip_fixup.h>
  
--static void suspend_save_csrs(struct suspend_context *context)
-+void suspend_save_csrs(struct suspend_context *context)
- {
- 	context->scratch = csr_read(CSR_SCRATCH);
- 	context->tvec = csr_read(CSR_TVEC);
-@@ -29,7 +29,7 @@ static void suspend_save_csrs(struct suspend_context *context)
- #endif
- }
+@@ -83,39 +84,10 @@ ENTRY(__cpu_resume_enter)
+ 	add	a0, a1, zero
  
--static void suspend_restore_csrs(struct suspend_context *context)
-+void suspend_restore_csrs(struct suspend_context *context)
- {
- 	csr_write(CSR_SCRATCH, context->scratch);
- 	csr_write(CSR_TVEC, context->tvec);
+ 	/* Restore CSRs */
+-	REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_EPC)(a0)
+-	csrw	CSR_EPC, t0
+-	REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_STATUS)(a0)
+-	csrw	CSR_STATUS, t0
+-	REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_BADADDR)(a0)
+-	csrw	CSR_TVAL, t0
+-	REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_CAUSE)(a0)
+-	csrw	CSR_CAUSE, t0
++	suspend_restore_csrs
+ 
+ 	/* Restore registers (except A0 and T0-T6) */
+-	REG_L	ra, (SUSPEND_CONTEXT_REGS + PT_RA)(a0)
+-	REG_L	sp, (SUSPEND_CONTEXT_REGS + PT_SP)(a0)
+-	REG_L	gp, (SUSPEND_CONTEXT_REGS + PT_GP)(a0)
+-	REG_L	tp, (SUSPEND_CONTEXT_REGS + PT_TP)(a0)
+-	REG_L	s0, (SUSPEND_CONTEXT_REGS + PT_S0)(a0)
+-	REG_L	s1, (SUSPEND_CONTEXT_REGS + PT_S1)(a0)
+-	REG_L	a1, (SUSPEND_CONTEXT_REGS + PT_A1)(a0)
+-	REG_L	a2, (SUSPEND_CONTEXT_REGS + PT_A2)(a0)
+-	REG_L	a3, (SUSPEND_CONTEXT_REGS + PT_A3)(a0)
+-	REG_L	a4, (SUSPEND_CONTEXT_REGS + PT_A4)(a0)
+-	REG_L	a5, (SUSPEND_CONTEXT_REGS + PT_A5)(a0)
+-	REG_L	a6, (SUSPEND_CONTEXT_REGS + PT_A6)(a0)
+-	REG_L	a7, (SUSPEND_CONTEXT_REGS + PT_A7)(a0)
+-	REG_L	s2, (SUSPEND_CONTEXT_REGS + PT_S2)(a0)
+-	REG_L	s3, (SUSPEND_CONTEXT_REGS + PT_S3)(a0)
+-	REG_L	s4, (SUSPEND_CONTEXT_REGS + PT_S4)(a0)
+-	REG_L	s5, (SUSPEND_CONTEXT_REGS + PT_S5)(a0)
+-	REG_L	s6, (SUSPEND_CONTEXT_REGS + PT_S6)(a0)
+-	REG_L	s7, (SUSPEND_CONTEXT_REGS + PT_S7)(a0)
+-	REG_L	s8, (SUSPEND_CONTEXT_REGS + PT_S8)(a0)
+-	REG_L	s9, (SUSPEND_CONTEXT_REGS + PT_S9)(a0)
+-	REG_L	s10, (SUSPEND_CONTEXT_REGS + PT_S10)(a0)
+-	REG_L	s11, (SUSPEND_CONTEXT_REGS + PT_S11)(a0)
++	suspend_restore_regs
+ 
+ 	/* Return zero value */
+ 	add	a0, zero, zero
 -- 
 2.34.1
 
