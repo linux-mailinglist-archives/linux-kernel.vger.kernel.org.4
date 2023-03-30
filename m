@@ -2,186 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7AA6D1187
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 558F26D1191
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjC3Vz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 17:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
+        id S230257AbjC3V4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 17:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjC3VzZ (ORCPT
+        with ESMTP id S229518AbjC3V4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 17:55:25 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520BBF772;
-        Thu, 30 Mar 2023 14:55:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1680213324; x=1711749324;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OjeCvB9tNeU8DjEsNgAC0pFUIzbXpFWwjPaeRcBgyjQ=;
-  b=piqIu2cf8ZWoqBKkXqzDK/pIcd9ktDJIaMz/22AKX73N6JjGsc3e+jYE
-   jS10Jtp+Sn3siCHmH9JiPtHhZ4pbSQ3p6J6hVrdD/slds1025h8nVuMDG
-   fJDEIelDjEcP5azqx9tvVg5apRE0C2uqwSKYNxdIlRHuAKfyGbOU7UaOw
-   Q=;
-X-IronPort-AV: E=Sophos;i="5.98,306,1673913600"; 
-   d="scan'208";a="199450011"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 21:55:21 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com (Postfix) with ESMTPS id 52F6840D79;
-        Thu, 30 Mar 2023 21:55:19 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+        Thu, 30 Mar 2023 17:56:41 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2156DF772
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 14:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680213399; x=1711749399;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=LIntMjXKFhjTOcwysHd9g85CFgzPudVfHw9XTd6z9Fo=;
+  b=kuVHHiaI1zH45Bexcwh1jTrqgk3ki7NiLNPN+heZInumMcykb3Vwjk8G
+   89rPtYGNSDsGwL/Ny7EkQ9RKb+AQzJFYg/+CLT1GpRUMzMpo55paX18vN
+   owkwmgyuT5cQ3UBf7dnOobS8miGFN/ElZTUqLrePj6mXnf1kKyBlNvx2q
+   LAqPTq9g8yBSgyBk9oumvn2te7Azf9n9pA+SKhz5fJfpPHocTIicOy5eJ
+   7U8MarkerNFf5cQzERp82BJRGR7klmzLw9rBuPNx+ZLkHqW9qlKLbJSb2
+   WTKDa/XaUjhnz2fPNFg00zFxAqaHj11DucfRTZauE8joik7uLuofIUU2m
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="403993322"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="403993322"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 14:56:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="717485971"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="717485971"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga001.jf.intel.com with ESMTP; 30 Mar 2023 14:56:38 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 30 Mar 2023 14:56:38 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 30 Mar 2023 14:56:37 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 30 Mar 2023 14:56:37 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Thu, 30 Mar 2023 21:55:19 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.106.100.11) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 30 Mar 2023 21:55:16 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <threeearcat@gmail.com>
-CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-        <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <kuniyu@amazon.com>
-Subject: Re: general protection fault in raw_seq_start
-Date:   Thu, 30 Mar 2023 14:55:07 -0700
-Message-ID: <20230330215507.56509-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <ZCA2mGV_cmq7lIfV@dragonet>
-References: <ZCA2mGV_cmq7lIfV@dragonet>
+ 15.1.2507.21; Thu, 30 Mar 2023 14:56:37 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eQuhcdb0Uu4uxAt3GILSE6qJOOP7KLARXTkEoaWs+GVnaz3gPBA6Pbs0O5YfEhdtqB6DlM5AeeM6qAFCrp+iWiSxYG3pA3oIfBDAK3G7y+ZN20Oe6YFlyfToDNVvZPnx/sZroSNSvFXGJjmU3pEfxDCPOY+GJbVqFkzMQUF0mYhG1mMknrZQGh1J1G49ppmuB/FJ/uGhQ/jwRoKPxchoMh16PG8CLnabk57ImL4zSXe4pbUyMgsQetvt3U4yufq0cK1RF/CEimZoQh7dJQmsbm7E9HHM1hzF5fWMh5JG1PhGecvElSo0nMZ926bGydKrPj/IKlnfpr7gI+iNylDRQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mMR3lVKMHn2tX+Sy7TQm0taUWtkN5fNSImMTz3DkhwI=;
+ b=fhflau0Gm54tSkv2PAXT31CqRl4/cEWzvHNjNVp8easTI1PS1DgxHKVEUAsVu0BSNZBLW1ZyBSqe9x0h1i5jF1BPNXZ0MQ7ApN9pymruUz/Sb/XQgHcj1CfQHYWY14I5HV2MO558Ni8iWEO1Y+8jtTdkPeJdJgrmJRBcmmCsr+y/nXXmf6NxYUJMJbqGu6uW4vOhdy2uwGtp/k6x0Vc9Ls3Xx43wofOejddXUBTQBONBvzL9MXSOe3cR2/cKowzPU5mPdG9nLSZXyk2V8b1+8/h5xbPNxNni/h//w4MLWUZep5cWC8IbFO0IjOflxXTCbDZYsjUcPAQI4luAa5Wn1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by SJ2PR11MB7547.namprd11.prod.outlook.com (2603:10b6:a03:4cd::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Thu, 30 Mar
+ 2023 21:56:33 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::c5b2:6996:5aee:91db]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::c5b2:6996:5aee:91db%5]) with mapi id 15.20.6222.033; Thu, 30 Mar 2023
+ 21:56:33 +0000
+Date:   Thu, 30 Mar 2023 14:56:28 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Zhao Liu <zhao1.liu@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+CC:     Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v2 1/9] drm/i915: Use kmap_local_page() in
+ gem/i915_gem_object.c
+Message-ID: <6426058c566b7_375f7e294d9@iweiny-mobl.notmuch>
+References: <20230329073220.3982460-1-zhao1.liu@linux.intel.com>
+ <20230329073220.3982460-2-zhao1.liu@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230329073220.3982460-2-zhao1.liu@linux.intel.com>
+X-ClientProxiedBy: SJ0PR03CA0117.namprd03.prod.outlook.com
+ (2603:10b6:a03:333::32) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.106.100.11]
-X-ClientProxiedBy: EX19D040UWB004.ant.amazon.com (10.13.138.91) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|SJ2PR11MB7547:EE_
+X-MS-Office365-Filtering-Correlation-Id: 47f6de1b-aac3-4251-0a57-08db3169a047
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NI52zESR1Dzi5OxBaoinlMEflohPP4NV9Bp/5tokPzNzSkHez1xq3OWe6qR67nQdsy8LHJAcC9avGSASUXoSYyFntTQXHQOuy7jls5ZwJn2cv+IzJbuQccVs1PgyqQO+jAu0jpLtgYu0yhXk8tww7gKoHJSdwTJU8RsK78cjuz/xB3iHF55rlfdTaltRhcvcZ8D4fzLraLqYDwRwKv28i9E0rbg3laMZhUuJBH6n24F6vF2ioQojwlXcAyGav4yjKPWvTfXru0oaXSZbuvwbdRzUEwmG2H8OsSh2UU4iKPV5Em4oCEaBEf7R0eMP/prBx6LDSGDb4s+hH+bB69c5Rwhw7jM3hQd1sy8GJK6dc/4t+fZ0wod9jXfTy6kg+oA7crBKtrStUJKtMkwwh+4cNHrA/rngjBvVF04s3b9390LYBNwR9on+4PtsLrViUjSJDq+4SSmWcNFtnLkXQ5lGusyv+5VkCRUAj76WpEi5Xawjf0GJfx1OApxBreUvmFdN3mKaIBgOdjfAWS9XN+1OZWzRgwyqlIGCD7fl/3P+tbuWlgf3oGJoWMAPHH/o9vJdejsJYB2NWjYaJFnL9yWIgszKTSSgmGuElKct3zs2xiY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(136003)(376002)(366004)(346002)(451199021)(966005)(6486002)(4326008)(316002)(6666004)(478600001)(110136005)(66946007)(66476007)(41300700001)(86362001)(54906003)(66556008)(83380400001)(7416002)(186003)(2906002)(8676002)(8936002)(44832011)(5660300002)(82960400001)(9686003)(921005)(6506007)(6512007)(26005)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SyQkSn62Twd1f3EjB32whDdDBW7kBQ/UImKaMVRmWB4tedw3O/xG1CDDbeEV?=
+ =?us-ascii?Q?GHXg/b7IQbmmFsAqz35S+fFahxc5wN2ySufAPSWjOGPESOr80MQ7DQN7RCxn?=
+ =?us-ascii?Q?aZO02PMDOmDc56UydEsvo9UOWgYbGLhibWb/RppXkjNOTglFsUssnkqM2zfh?=
+ =?us-ascii?Q?9nwe8KUSIVtKkGiRaNJk3kDzD1N23l3pmFeMFcOHd/GBrr9KKMAsY9HB3t+/?=
+ =?us-ascii?Q?3oVYfwOA1XzTxYpiEet+9McciJPDnAlk/H8VD59KTs6Izx/RpdkVToEpLUfw?=
+ =?us-ascii?Q?ANosL7TGLVuqXHI0n47R0JyyEEQHcZdo7EmrEW4VlVH15hCWCdm6dIOJD6c9?=
+ =?us-ascii?Q?CI3Dp+tIMLxYp2ZkAv9gnghdUzSt2q+pu9r/sSV0BKEO9lIk2uSvayXUJp/q?=
+ =?us-ascii?Q?zKi3vvK3VH60749VtzmI46NwLWOhh65FL32z4tHo9COfI3dZm3F9qYbJpjmP?=
+ =?us-ascii?Q?gjUpSSTI0tpyr+y00+A4mbuyXo3xW+QYezUBt8wnOo6gYregFME68pCfKREz?=
+ =?us-ascii?Q?07IXmjGIcveaD5S1P6cd34I97PLUkNlY9D4FZgLQNCmvrMZiCuMmJxli+TZd?=
+ =?us-ascii?Q?p/ib+dm6ppY6+BJXdKAsmelBRhG/KLozM8d8pk/X69moHlaZnendXnsFKY/s?=
+ =?us-ascii?Q?yONa5gudDn3E0as4lfByCpuoX16fTr78cjOhF6v3XWqZJOtVETIQMw42XyzT?=
+ =?us-ascii?Q?4leGDYgkeACO74DNUypj3DgEWshxbW44V4Xdplsev2d8sqWQ7HkcsgUOyjw+?=
+ =?us-ascii?Q?xhOhC5KOXiXmKQTyi4cLSWYelxAY98Lg+xJC31KSSGT4i59UoqlkoCVcCEjr?=
+ =?us-ascii?Q?dUvBWBX+zw+yWVadFoFdYh5+ArWssrskBQKH4rKAzTNjGOn75ECK7UQVq9zZ?=
+ =?us-ascii?Q?nEuaiLhzGbHv3gHBED0Thmf6u0gHalaMJpG23yBmzS9ugVWoCbUzvAK6xnyv?=
+ =?us-ascii?Q?cmiGvKfQAa4dW7d5SZvh5ezXUzlElLq/5rjByU6UlEdRaJTw05sKu2G/L5zi?=
+ =?us-ascii?Q?reEx7cMkfudwIWJUx7+kLMUymXewvLI+gYbetcB7ZQv0ZK73PHLUq5Az82wQ?=
+ =?us-ascii?Q?R7AWJmQlFNjIT6uEWkFrH7HQecyLCECecK0tBc3RE038QN/83l6mTU9D9XgF?=
+ =?us-ascii?Q?4c82Sg+PBTU8kQ75T088wRa7XK9bDa5q9fKiMy+f0sLB3mKFwV+VrNnIq+p3?=
+ =?us-ascii?Q?Y30YYqVj5FbeIV3yygy/2dDn+HhlS3OGqmebl0zz0XfT7LoAqcgrL51do6bt?=
+ =?us-ascii?Q?xa8rfBaUyR4nkCywii13QmTDjPEho+bP21MfE0vSJGlB70iTdYBdFPr2pZA9?=
+ =?us-ascii?Q?2R4/IlgwmAyRLUJTqM98CVV3rfxECO6Pdc28Mk/BeUfffYbjxNfU+sMIZbVq?=
+ =?us-ascii?Q?qVal3KFwLABmmbmxzTKoDSwTr28eBRkznXRzl9lnn3nrABTGNU5kY3Sg+d0F?=
+ =?us-ascii?Q?79m9Qi4vyPHuIvE3cPWyNvpF/mSztPDUW1c3GkfzgnM0DToOqcAM84MZUDtD?=
+ =?us-ascii?Q?tVBorGdKTqxC9mYVAeh5yo03Rfx3J0ffnSEY4E8ybnwWCLnOm19xJmXGOywW?=
+ =?us-ascii?Q?vhHczSG5CsQznkXlkaj7CznB+uPOoHoIXrXPSuFf?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 47f6de1b-aac3-4251-0a57-08db3169a047
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 21:56:33.5825
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PoHgXG6P4lzISz4iEejcNjhu8n1WUaWHvLfSlc5Jp1MI0p6BsFFgbdN8L2tnkUCZWT6PPw319UDSWZEN+ACTaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7547
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   "Dae R. Jeong" <threeearcat@gmail.com>
-Date:   Sun, 26 Mar 2023 21:12:08 +0900
-> Hi,
+Zhao Liu wrote:
+> From: Zhao Liu <zhao1.liu@intel.com>
 > 
-> We observed an issue "general protection fault in raw_seq_start"
-> during fuzzing.
+> The use of kmap_atomic() is being deprecated in favor of
+> kmap_local_page()[1], and this patch converts the call from
+> kmap_atomic() to kmap_local_page().
 > 
-> Unfortunately, we have not found a reproducer for the crash yet. We
-> will inform you if we have any update on this crash.
-> Detailed crash information is attached below.
+> The main difference between atomic and local mappings is that local
+> mappings doesn't disable page faults or preemption (the preemption is
+> disabled for !PREEMPT_RT case, otherwise it only disables migration).
 > 
-> Best regards,
-> Dae R. Jeong
+> With kmap_local_page(), we can avoid the often unwanted side effect of
+> unnecessary page faults and preemption disables.
 > 
-> -----
+> There're 2 reasons why i915_gem_object_read_from_page_kmap() doesn't
+> need to disable pagefaults and preemption for mapping:
 > 
-> - Kernel version
->   6.2
+> 1. The flush operation is safe. In drm/i915/gem/i915_gem_object.c,
+> i915_gem_object_read_from_page_kmap() calls drm_clflush_virt_range() to
+> use CLFLUSHOPT or WBINVD to flush. Since CLFLUSHOPT is global on x86
+> and WBINVD is called on each cpu in drm_clflush_virt_range(), the flush
+> operation is global.
 > 
-> - Last executed input
->   unshare(0x40060200)
->   r0 = syz_open_procfs(0x0, &(0x7f0000002080)='net/raw\x00')
->   socket$inet_icmp_raw(0x2, 0x3, 0x1)
->   ppoll(0x0, 0x0, 0x0, 0x0, 0x0)
->   socket$inet_icmp_raw(0x2, 0x3, 0x1)
->   pread64(r0, &(0x7f0000000000)=""/10, 0xa, 0x10000000007f)
-
-Thanks for reporting the issue.
-
-It seems we need to use RCU variant in raw_get_first().
-I'll post a patch.
-
----
-diff --git a/net/ipv4/raw.c b/net/ipv4/raw.c
-index 3cf68695b40d..fe0d1ad20b35 100644
---- a/net/ipv4/raw.c
-+++ b/net/ipv4/raw.c
-@@ -957,7 +957,7 @@ static struct sock *raw_get_first(struct seq_file *seq, int bucket)
- 	for (state->bucket = bucket; state->bucket < RAW_HTABLE_SIZE;
- 			++state->bucket) {
- 		hlist = &h->ht[state->bucket];
--		sk_nulls_for_each(sk, hnode, hlist) {
-+		sk_nulls_for_each_rcu(sk, hnode, hlist) {
- 			if (sock_net(sk) == seq_file_net(seq))
- 				return sk;
- 		}
----
-
-Thanks,
-Kuniyuki
-
-
-
+> 2. Any context switch caused by preemption or page faults (page fault
+> may cause sleep) doesn't affect the validity of local mapping.
 > 
-> - Crash report
-> general protection fault, probably for non-canonical address 0xdffffc0000000005: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-> CPU: 2 PID: 20952 Comm: syz-executor.0 Not tainted 6.2.0-g048ec869bafd-dirty #7
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-> RIP: 0010:read_pnet include/net/net_namespace.h:383 [inline]
-> RIP: 0010:sock_net include/net/sock.h:649 [inline]
-> RIP: 0010:raw_get_next net/ipv4/raw.c:974 [inline]
-> RIP: 0010:raw_get_idx net/ipv4/raw.c:986 [inline]
-> RIP: 0010:raw_seq_start+0x431/0x800 net/ipv4/raw.c:995
-> Code: ef e8 33 3d 94 f7 49 8b 6d 00 4c 89 ef e8 b7 65 5f f7 49 89 ed 49 83 c5 98 0f 84 9a 00 00 00 48 83 c5 c8 48 89 e8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 ef e8 00 3d 94 f7 4c 8b 7d 00 48 89 ef
-> RSP: 0018:ffffc9001154f9b0 EFLAGS: 00010206
-> RAX: 0000000000000005 RBX: 1ffff1100302c8fd RCX: 0000000000000000
-> RDX: 0000000000000028 RSI: ffffc9001154f988 RDI: ffffc9000f77a338
-> RBP: 0000000000000029 R08: ffffffff8a50ffb4 R09: fffffbfff24b6bd9
-> R10: fffffbfff24b6bd9 R11: 0000000000000000 R12: ffff88801db73b78
-> R13: fffffffffffffff9 R14: dffffc0000000000 R15: 0000000000000030
-> FS:  00007f843ae8e700(0000) GS:ffff888063700000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000055bb9614b35f CR3: 000000003c672000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  seq_read_iter+0x4c6/0x10f0 fs/seq_file.c:225
->  seq_read+0x224/0x320 fs/seq_file.c:162
->  pde_read fs/proc/inode.c:316 [inline]
->  proc_reg_read+0x23f/0x330 fs/proc/inode.c:328
->  vfs_read+0x31e/0xd30 fs/read_write.c:468
->  ksys_pread64 fs/read_write.c:665 [inline]
->  __do_sys_pread64 fs/read_write.c:675 [inline]
->  __se_sys_pread64 fs/read_write.c:672 [inline]
->  __x64_sys_pread64+0x1e9/0x280 fs/read_write.c:672
->  do_syscall_x64 arch/x86/entry/common.c:51 [inline]
->  do_syscall_64+0x4e/0xa0 arch/x86/entry/common.c:82
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x478d29
-> Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f843ae8dbe8 EFLAGS: 00000246 ORIG_RAX: 0000000000000011
-> RAX: ffffffffffffffda RBX: 0000000000791408 RCX: 0000000000478d29
-> RDX: 000000000000000a RSI: 0000000020000000 RDI: 0000000000000003
-> RBP: 00000000f477909a R08: 0000000000000000 R09: 0000000000000000
-> R10: 000010000000007f R11: 0000000000000246 R12: 0000000000791740
-> R13: 0000000000791414 R14: 0000000000791408 R15: 00007ffc2eb48a50
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:read_pnet include/net/net_namespace.h:383 [inline]
-> RIP: 0010:sock_net include/net/sock.h:649 [inline]
-> RIP: 0010:raw_get_next net/ipv4/raw.c:974 [inline]
-> RIP: 0010:raw_get_idx net/ipv4/raw.c:986 [inline]
-> RIP: 0010:raw_seq_start+0x431/0x800 net/ipv4/raw.c:995
-> Code: ef e8 33 3d 94 f7 49 8b 6d 00 4c 89 ef e8 b7 65 5f f7 49 89 ed 49 83 c5 98 0f 84 9a 00 00 00 48 83 c5 c8 48 89 e8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 ef e8 00 3d 94 f7 4c 8b 7d 00 48 89 ef
-> RSP: 0018:ffffc9001154f9b0 EFLAGS: 00010206
-> RAX: 0000000000000005 RBX: 1ffff1100302c8fd RCX: 0000000000000000
-> RDX: 0000000000000028 RSI: ffffc9001154f988 RDI: ffffc9000f77a338
-> RBP: 0000000000000029 R08: ffffffff8a50ffb4 R09: fffffbfff24b6bd9
-> R10: fffffbfff24b6bd9 R11: 0000000000000000 R12: ffff88801db73b78
-> R13: fffffffffffffff9 R14: dffffc0000000000 R15: 0000000000000030
-> FS:  00007f843ae8e700(0000) GS:ffff888063700000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f92ff166000 CR3: 000000003c672000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Therefore, i915_gem_object_read_from_page_kmap() is a function where
+> the use of kmap_local_page() in place of kmap_atomic() is correctly
+> suited.
+> 
+> Convert the calls of kmap_atomic() / kunmap_atomic() to
+> kmap_local_page() / kunmap_local().
+> 
+> And remove the redundant variable that stores the address of the mapped
+> page since kunmap_local() can accept any pointer within the page.
+> 
+> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
+> 
+> v2:
+> * Dropped hot plug related description since it has nothing to do with
+>   kmap_local_page().
+> * Rebased on f47e630 (drm/i915/gem: Typecheck page lookups) to keep
+>   the "idx" variable of type pgoff_t here.
+> * Added description of the motivation of using kmap_local_page().
+> 
+> Suggested-by: Dave Hansen <dave.hansen@intel.com>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
