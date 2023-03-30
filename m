@@ -2,97 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75FB86D0C31
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96E46D0C33
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjC3RFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 13:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        id S231967AbjC3RGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbjC3RFk (ORCPT
+        with ESMTP id S231378AbjC3RGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:05:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA70C644;
-        Thu, 30 Mar 2023 10:05:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 30 Mar 2023 13:06:03 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227A6199E;
+        Thu, 30 Mar 2023 10:06:02 -0700 (PDT)
+Received: from [127.0.0.1] (dynamic-046-114-214-160.46.114.pool.telefonica.de [46.114.214.160])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A12B620BB;
-        Thu, 30 Mar 2023 17:05:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB164C4339C;
-        Thu, 30 Mar 2023 17:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680195938;
-        bh=dl+pD6CWVBgH90is4aDu0oHOzvp7o6CFpKFTzbh3qio=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pvKLL9Uy608+ysCmsFjzYAbG56HJVL+Mm7dMziQu9WdfNewKu/EHK2vUqGjcjK4uc
-         nwJ1/WIUMEZk/YXYTYzenMYFARurjDzDCGtLPUndSZeUDMTUAlvJJOLBeWgcHXgvTi
-         rDrCB/kncXqfeVMzVgX8hN2WCbjqdiWsVBa+ZZYWu2dfM4tg7U3fUrdu/SErsUQsjJ
-         cPjTGhECIe1CHmZ3HSTE26ys/gSEbGmDeNHp6AHFCNm5jIMKcCsxf/xi9vNR6beCr9
-         bfXt4k0QY01y3lf9Le+tU7UnHq0svuFOxL/JOAHU7necOqNPiKEqwEK0L2++0c0AAA
-         sqfJPnS6OKlzQ==
-Date:   Thu, 30 Mar 2023 18:05:33 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, ChiYuan Huang <cy_huang@richtek.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alice Chen <alice_chen@richtek.com>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] leds: rgb: mt6370: fix CONFIG_LINEAR_RANGES select
-Message-ID: <20230330170533.GA548901@google.com>
-References: <20230328131222.1390091-1-arnd@kernel.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 618CA1EC064E;
+        Thu, 30 Mar 2023 19:06:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680195960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VbQdC26BGuDMQMbR3dI9UycMZAF+8EQZAjhm6UnhyUw=;
+        b=eBDlTQYZWuoeljjhDYtHzcoP6FHO8j1241PdRRF88loxMQJmg+DgaYwcjYQ6AhDY8hxVaf
+        +yNnxWkyQIqU4bfsYzZG7uTuOh9UAANcMzkDrNT1Ws8PIgBSnDYPI9Nh0a9UB1Qq+ejtNr
+        jagjP91bArHMPPnDajqfi5ffxSVEGlU=
+Date:   Thu, 30 Mar 2023 19:05:58 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
+        kim.phillips@amd.com, brgerst@gmail.com
+CC:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v17_6/8=5D_x86/smpboot=3A_Send_INI?= =?US-ASCII?Q?T/SIPI/SIPI_to_secondary_CPUs_in_parallel?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <87v8iirxun.ffs@tglx>
+References: <20230328195758.1049469-1-usama.arif@bytedance.com> <20230328195758.1049469-7-usama.arif@bytedance.com> <87v8iirxun.ffs@tglx>
+Message-ID: <CAFC43E6-97E9-4E89-AABB-78E31037048A@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230328131222.1390091-1-arnd@kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023, Arnd Bergmann wrote:
+On March 30, 2023 6:46:24 PM GMT+02:00, Thomas Gleixner <tglx@linutronix=2E=
+de> wrote:
+>So that violates the rules of microcode loading that the sibling must be
+>in a state where it does not execute anything which might be affected by
+>the microcode update=2E The fragile startup code does not really qualify
+>as such a state :)
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> CONFIG_LINEAR_RANGE does not exist, but selecting is silently ignored.
->
-> ERROR: modpost: "linear_range_get_selector_within" [drivers/leds/rgb/leds-mt6370-rgb.ko] undefined!
->
-> Fixes: 55a8a5c16eb3 ("leds: rgb: mt6370: Add MediaTek MT6370 current sink type LED Indicator support")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/leds/rgb/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Yeah I don't think we ever enforced this for early loading=2E The thread s=
+ync thing came with the late loading dance=2E=2E=2E=2E
 
-Beaten to it I'm afraid:
 
-https://lore.kernel.org/r/20230323105410.10396-1-lukas.bulwahn@gmail.com
-
-> diff --git a/drivers/leds/rgb/Kconfig b/drivers/leds/rgb/Kconfig
-> index 7d86bb26c54b..360c8679c6e2 100644
-> --- a/drivers/leds/rgb/Kconfig
-> +++ b/drivers/leds/rgb/Kconfig
-> @@ -29,7 +29,7 @@ config LEDS_QCOM_LPG
->  config LEDS_MT6370_RGB
->  	tristate "LED Support for MediaTek MT6370 PMIC"
->  	depends on MFD_MT6370
-> -	select LINEAR_RANGE
-> +	select LINEAR_RANGES
->  	help
->  	  Say Y here to enable support for MT6370_RGB LED device.
->  	  In MT6370, there are four channel current-sink LED drivers that
-> --
-> 2.39.2
->
-
---
-Lee Jones [李琼斯]
+--=20
+Sent from a small device: formatting sucks and brevity is inevitable=2E 
