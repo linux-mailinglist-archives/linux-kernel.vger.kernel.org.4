@@ -2,75 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D159C6D1015
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D0B6D1017
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjC3Ufi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40668 "EHLO
+        id S229714AbjC3Ugz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjC3Ufh (ORCPT
+        with ESMTP id S229661AbjC3Ugx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:35:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ADB10FD
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:34:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680208490;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=eGkxwG96GrqLVw0TE58Wpxl+P5cmdIKahbzznaGzN4I=;
-        b=U+/r2q9O8oRlWftuZ8B/W4SNyr0Bb5fWiKmen9uNETaRwDNZ4GsTn1tBdQAUQsIGuiba/u
-        fsHiMk5HV3iK5ZoxjwiKFJOd7EHnxvxx/ouk7oRHkyTcc79Gi3Rl0YNcwExj2Jdo9Bxja5
-        7oloun+UrSmb6g3exvHQYCQtIsc2io4=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-204-uiVDvtgBPbCUTz8JOMibmQ-1; Thu, 30 Mar 2023 16:34:48 -0400
-X-MC-Unique: uiVDvtgBPbCUTz8JOMibmQ-1
-Received: by mail-qt1-f197.google.com with SMTP id h6-20020ac85846000000b003e3c23d562aso13236573qth.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:34:48 -0700 (PDT)
+        Thu, 30 Mar 2023 16:36:53 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF5FC14A
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:36:50 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-545d3b026a8so149693577b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680208610;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mOc7QRI6vr/NyUwVE8LrJGTxRHHh12pQ+l4hg/ojUak=;
+        b=CuDmFhCvr0zPB3egM6QVXPV+kb1rCQk4waPaW8HcA/YcVDkIBmaxoUoM/azrL5uBCB
+         +NIu/AaJ8ehmg2VLpGBRo1JNzcRsY/gmYMRVn5aJIHtobAkDfBl7KHWG7y614WQExjAL
+         VSUY2I+esDiUzHQh+NaNjkqfQG9nMcrhhvmuLyO7sxJ7RDTbUAR0TzYsHi9LsZswmjYo
+         wG+LjNbiXyHZdv+P1RQfUIoZfYK55CXwLSr3YPa+GuDmO0uxay1jpoV4lXQDz23A7DLB
+         JkHOocAAZnIRKGG/SOAduJk9CVwC/etLAicmQ/4e4BxRxt9Yo1Lnbf/2J1AomClN90Kb
+         9RLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680208488;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eGkxwG96GrqLVw0TE58Wpxl+P5cmdIKahbzznaGzN4I=;
-        b=pQklrtzize0N/qiROk3qspN1gTMHGPi+KGKNQB3AH8FAsQvwo67muIc1xwIhoc5QY1
-         Di7r2YbDkSKsYao+VjOO9jA1rnmqJVVAUs4pKL/xbGRrPk3MFqsXvNfnGhOkI01X9fch
-         3Lnqw3jdY/ns8JUx7aDeJKL5Z2+y+7jgCuT5N3IriK2YC/4tmGhLPTzAPk9qkm0sE62R
-         5SnuqTBs+1GTLiHsx46L7o61WJbVQonEb09QwMi9cK09S+0HmNrdxNJ72AD6eNxIJxD8
-         yeJRi7VhWUC9agJT70JQDiJHajpstPcgPfQNFslEaKPDq5S9/vwXX40XujZ/ocHZlEaC
-         v5HQ==
-X-Gm-Message-State: AAQBX9eYYUD8DMEQpB+IkccirRIdh+BcluqvQosCSlh84BnOmWb568rF
-        Y9Py+/a/tLfBoOfXMktFxBBth14CnfFjBPu4tu+LYrjFp/26T+e36IR16SnM1d89J++X+QKXRQS
-        r9aOiklLo5VvtttLa4Te4Zv0I
-X-Received: by 2002:ac8:584f:0:b0:3e1:6c7e:2ee0 with SMTP id h15-20020ac8584f000000b003e16c7e2ee0mr14242012qth.11.1680208488247;
-        Thu, 30 Mar 2023 13:34:48 -0700 (PDT)
-X-Google-Smtp-Source: AKy350a1wvKlZbAtmYILYnVwfQgOtt39xMFyExjgnV3KppLGpi4BEL0uQtNYwb/Tvs8MCv4NdLJl4Q==
-X-Received: by 2002:ac8:584f:0:b0:3e1:6c7e:2ee0 with SMTP id h15-20020ac8584f000000b003e16c7e2ee0mr14241984qth.11.1680208488012;
-        Thu, 30 Mar 2023 13:34:48 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id u17-20020ac87511000000b003e38f8d564fsm110512qtq.66.2023.03.30.13.34.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 13:34:47 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     skashyap@marvell.com, jhasan@marvell.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] scsi: qedf: remove unused num_handled variable
-Date:   Thu, 30 Mar 2023 16:34:44 -0400
-Message-Id: <20230330203444.1842425-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        d=1e100.net; s=20210112; t=1680208610;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mOc7QRI6vr/NyUwVE8LrJGTxRHHh12pQ+l4hg/ojUak=;
+        b=UkL0oy79mJI+3yDz7/dEg9Z8AIDMR22/eO+SI7RCpZ2+54eYxTaR4Ch6TpOq0LWu7j
+         HTqu04P/nULk/bfRDdyXSh7DNIu63jy//dV0c/ML6jpjZa29bo2Z+5ImskaWXBjkjoxK
+         EvtktbEDC4vMdNKwQWu6RmdpeceXFrQNgHeoPGfCAn/4cGKt6khg2mFDAQzg+zlT2HQi
+         8ctGmEbSTMiBOSETMrnF40jRISuk80/q4uTUjy0bkm6reDzcV4cNJIMmcX2eWBo8OKUW
+         qirbyDEIkmh+xRfJ13KUo1ctv4tH/lTd2kCXXRxH+dI2MxBFVp5ijl0D9kn4WrT94iQ8
+         vtfA==
+X-Gm-Message-State: AAQBX9cHuPLZ94tGfhaZ6VnybZdjJ2JfnJ202wciqT1Kazl3PC8vwJPB
+        KcILmknCq3GXGcZGCe+isC9/Qd9/dNE=
+X-Google-Smtp-Source: AKy350ZC4xNLPfjro8E/mq7a/h4oXBOsuypI9FopH8pKq1uWXOABjSIGdkBerKGHAzyMScx9hS+mUmp93Gw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:7403:0:b0:b7e:6118:348 with SMTP id
+ p3-20020a257403000000b00b7e61180348mr4415064ybc.0.1680208609862; Thu, 30 Mar
+ 2023 13:36:49 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 13:36:48 -0700
+In-Reply-To: <4c5f4f61-a8d1-a707-8100-e095d3b18398@grsecurity.net>
+Mime-Version: 1.0
+References: <20230322013731.102955-1-minipli@grsecurity.net>
+ <20230322013731.102955-7-minipli@grsecurity.net> <677169b4-051f-fcae-756b-9a3e1bb9f8fe@grsecurity.net>
+ <ZCXDAiUOnsL3fRBj@google.com> <ea3a8fbc-2bf8-7442-e498-3e5818384c83@grsecurity.net>
+ <4c5f4f61-a8d1-a707-8100-e095d3b18398@grsecurity.net>
+Message-ID: <ZCXy4C+eauDBgk37@google.com>
+Subject: Re: [PATCH v4 6/6] KVM: VMX: Make CR0.WP a guest owned bit
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mathias Krause <minipli@grsecurity.net>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,38 +70,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/scsi/qedf/qedf_main.c:2227:6: error: variable
-  'num_handled' set but not used [-Werror,-Wunused-but-set-variable]
-        int num_handled = 0;
-            ^
-This variable is not used so remove it.
+On Thu, Mar 30, 2023, Mathias Krause wrote:
+> On 30.03.23 22:15, Mathias Krause wrote:
+> > [...]
+> > Maybe it's not a stale CR0 value but the page table walker not taking
+> > the guest's CR0.WP into account? Maybe a missing role update?
+> 
+> Indeed, it is. This does the trick for me:
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 31be188aa842..6a9e90725c84 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -8372,6 +8372,9 @@ static void init_emulate_ctxt(struct kvm_vcpu *vcpu)
+> 
+>         init_decode_cache(ctxt);
+>         vcpu->arch.emulate_regs_need_sync_from_vcpu = false;
+> +       /* Ensure we're doing page table walks with an up2date MMU role */
+> +       if ((vcpu->arch.cr0 ^ kvm_read_cr0(vcpu)) == X86_CR0_WP)
+> +               kvm_init_mmu(vcpu);
+>  }
+> 
+>  void kvm_inject_realmode_interrupt(struct kvm_vcpu *vcpu, int irq, int inc_eip)
+> 
+> Very heavy weight and misplaced, but a start :)
+> 
+> It should (1) be limited to VMX as that's the only one that would make
+> CR0.WP a guest owned bit and (2) limited to emulated instructions that
+> actually do write operations, as read are harmless, obviously.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/scsi/qedf/qedf_main.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
-index e7f2560b9f7d..3b64de81ea0d 100644
---- a/drivers/scsi/qedf/qedf_main.c
-+++ b/drivers/scsi/qedf/qedf_main.c
-@@ -2224,7 +2224,6 @@ static bool qedf_process_completions(struct qedf_fastpath *fp)
- 	u16 prod_idx;
- 	struct fcoe_cqe *cqe;
- 	struct qedf_io_work *io_work;
--	int num_handled = 0;
- 	unsigned int cpu;
- 	struct qedf_ioreq *io_req = NULL;
- 	u16 xid;
-@@ -2247,7 +2246,6 @@ static bool qedf_process_completions(struct qedf_fastpath *fp)
- 
- 	while (new_cqes) {
- 		fp->completions++;
--		num_handled++;
- 		cqe = &que->cq[que->cq_cons_idx];
- 
- 		comp_type = (cqe->cqe_data >> FCOE_CQE_CQE_TYPE_SHIFT) &
--- 
-2.27.0
-
+For the record, I wrote my email before I saw this ;-)
