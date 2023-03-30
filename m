@@ -2,125 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715636D08B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532056D08B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232323AbjC3OtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S231916AbjC3OwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbjC3OtV (ORCPT
+        with ESMTP id S231377AbjC3OwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:49:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDADA273;
-        Thu, 30 Mar 2023 07:49:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 981B5620B3;
-        Thu, 30 Mar 2023 14:49:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE71C433D2;
-        Thu, 30 Mar 2023 14:49:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680187759;
-        bh=kzreuOeVhGy4b0EKlYhtPyFf/2KaV6KQScB7tGg7Ih0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RuMwuXV0ihf8NBi8DD5f8I7mE1QMWJJ3lglv0kJ/PAPxM29Rs23fWmWvO5H4Z54MO
-         mF/0guVx5oMJfN57LUKbvq1fFgccmRAm8C6onENXp4oSku7bjezMV2vII689FmxT4s
-         u/18mUKHk0erDq7UOeLFbWTBSe+Xchu4hI8cYWjQ8EWhr1qYSFqrEP2zz5MZQf6KFw
-         xj2GDG1ZPucdyLcT5/3M3swUvECtZ90r9NOVxtyZaWHvP8q88GWy8/nfoG9Jbd+H6/
-         88jINzWYU1rqan/0HoHX70HI17oZUsxR0C3Eh6a+RIy+guGqBCBaTT546GgjJ2/+rG
-         qVB3OR/2vBLyQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1phtar-00037Z-MB; Thu, 30 Mar 2023 16:49:37 +0200
-Date:   Thu, 30 Mar 2023 16:49:37 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, marijn.suijten@somainline.org,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/msm/adreno: adreno_gpu: Use suspend() instead of
- idle() on load error
-Message-ID: <ZCWhgZDuhoMYxs52@hovoldconsulting.com>
-References: <20230329140445.2180662-1-konrad.dybcio@linaro.org>
- <ZCRNFitcrAeH27Pn@hovoldconsulting.com>
- <83986fa9-c9eb-ae5a-b239-584092f2cea5@linaro.org>
- <CAA8EJpohEo+kMw7fx5112m+z7JHSLDmsqOL4T7hmyvr2fPP8vQ@mail.gmail.com>
+        Thu, 30 Mar 2023 10:52:10 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BF58A7B;
+        Thu, 30 Mar 2023 07:52:08 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id n14so18660012qta.10;
+        Thu, 30 Mar 2023 07:52:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680187927; x=1682779927;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/ZYKdU7edcggf788yfZLdWl4nPAu93UTKZlfVfQz6qs=;
+        b=6XV0z3nB2pOP2OTNQRoT/aYjiiC/Hqvhma5qewRtLM3nwcS0CNXIcdeX2ub3XK/KV2
+         O85MU/8yRpNtr4DmHZgcfnwqlAwfG8hiVM3xVRfPupDYfjynSV5wadO70mA2hVF2pErY
+         xS30DGBnEFffXhAr4Mll5MP1Y93RskOQHkeDBt5orKsBdle1AFyNU6TKGLef16b/jcld
+         T3hbdITmHbh8/wTtiY1lj6QlSlOcCQprnavlgsuioTH+0aia+l9I3CXlalNyUiVhcKJG
+         g2bK1eSpg+RGsM4V0cGxlxuOkZQ2G50qOZXmBX/8pQl9PmeuKbhQPu1nY87JsLt0iYL1
+         lm7A==
+X-Gm-Message-State: AO0yUKUT5mIdlT6L/acgai7rqDj6oZ9pSxuiKQuW3ZcM/ROQHaVMszyK
+        57HJRP/UV/SOhzAZgpWjlnG8CJu1yHAfLGis
+X-Google-Smtp-Source: AK7set9sAe+QCJglmayBw/dL9L3tcWOIWQy2pxPF9gTB0sEc+xfGPKoKyZpa9DYRCESi+9Ou5dkChw==
+X-Received: by 2002:a05:622a:4c:b0:3e3:7d6d:f5 with SMTP id y12-20020a05622a004c00b003e37d6d00f5mr36619507qtw.29.1680187927141;
+        Thu, 30 Mar 2023 07:52:07 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:d9ee])
+        by smtp.gmail.com with ESMTPSA id h22-20020ac85056000000b003d5aae2182dsm9301250qtm.29.2023.03.30.07.52.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 07:52:06 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, memxor@gmail.com
+Subject: [PATCH bpf-next 1/2] bpf: Handle PTR_MAYBE_NULL case in PTR_TO_BTF_ID helper call arg
+Date:   Thu, 30 Mar 2023 09:52:02 -0500
+Message-Id: <20230330145203.80506-1-void@manifault.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpohEo+kMw7fx5112m+z7JHSLDmsqOL4T7hmyvr2fPP8vQ@mail.gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 10:45:52PM +0300, Dmitry Baryshkov wrote:
-> On Wed, 29 Mar 2023 at 18:48, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> > On 29.03.2023 16:37, Johan Hovold wrote:
-> > > On Wed, Mar 29, 2023 at 04:04:44PM +0200, Konrad Dybcio wrote:
-> > >> If we fail to initialize the GPU for whatever reason (say we don't
-> > >> embed the GPU firmware files in the initrd), the error path involves
-> > >> pm_runtime_put_sync() which then calls idle() instead of suspend().
-> > >>
-> > >> This is suboptimal, as it means that we're not going through the
-> > >> clean shutdown sequence. With at least A619_holi, this makes the GPU
-> > >> not wake up until it goes through at least one more start-fail-stop
-> > >> cycle. Fix that by using pm_runtime_put_sync_suspend to force a clean
-> > >> shutdown.
-> > >
-> > > This does not sound right. If pm_runtime_put_sync() fails to suspend the
-> > > device when the usage count drops to zero, then you have a bug somewhere
-> > > else.
-> > I was surprised to see that it was not called as well, but I wasn't able
-> > to track it down before..
-> 
-> Could you please check that it's autosuspend who kicks in? In other
-> words, if we disable autosuspend, the pm_runtime_put_sync is enough()?
+When validating a helper function argument, we use check_reg_type() to
+ensure that the register containing the argument is of the correct type.
+When the register's base type is PTR_TO_BTF_ID, there is some
+supplemental logic where we do extra checks for various combinations of
+PTR_TO_BTF_ID type modifiers. For example, for PTR_TO_BTF_ID,
+PTR_TO_BTF_ID | PTR_TRUSTED, and PTR_TO_BTF_ID | MEM_RCU, we call
+map_kptr_match_type() for bpf_kptr_xchg() calls, and
+btf_struct_ids_match() for other helper calls.
 
-Yes, that's it. The runtime PM implementation changed at one point and
-since you need to disable autosuspend first to actually get synchronous
-behaviour. My bad.
+When an unhandled PTR_TO_BTF_ID type modifier combination is passed to
+check_reg_type(), the verifier fails with an internal verifier error
+message. This can currently be triggered by passing a PTR_MAYBE_NULL
+pointer to helper functions (currently just bpf_kptr_xchg()) with an
+ARG_PTR_TO_BTF_ID_OR_NULL arg type. For example, by callin
+bpf_kptr_xchg(&v->kptr, bpf_cpumask_create()).
 
-> That would probably mean that we lack some kind of reset in the hw_init path.
-> 
-> On the other hand, I do not know how the device will react to the
-> error-in-the-middle state. Modems for example, can enter the state
-> where you can not properly turn it off once it starts the boot
-> process.
-> 
-> And if we remember the efforts that Akhil has put into making sure
-> that the GPU is properly reset in case of an _error_, it might be
-> nearly impossible to shut it down in a proper way.
-> 
-> Thus said, I think that unless there is an obvious way to restart the
-> init process, Korad's pm_runtime_put_sync_suspend() looks like a
-> correct fix to me.
+Whether or not passing a PTR_MAYBE_NULL arg to an
+ARG_PTR_TO_BTF_ID_OR_NULL argument is valid is an interesting question.
+In a vacuum, it seems fine. A helper function with an
+ARG_PTR_TO_BTF_ID_OR_NULL arg would seem to be implying that it can
+handle either a NULL or non-NULL arg, and has logic in place to detect
+and gracefully handle each. This is the case for bpf_kptr_xchg(), which
+of course simply does an xchg(). On the other hand, bpf_kptr_xchg() also
+specifies OBJ_RELEASE, and refcounting semantics for a PTR_MAYBE_NULL
+pointer is different than handling it for a NULL _OR_ non-NULL pointer.
+For example, with a non-NULL arg, we should always fail if there was not
+a nonzero refcount for the value in the register being passed to the
+helper. For PTR_MAYBE_NULL on the other hand, it's unclear. If the
+pointer is NULL it would be fine, but if it's not NULL, it would be
+incorrect to load the program.
 
-I'd prefer to fix this by disabling autosuspend, but as that would
-involve also moving the call to enable autosuspend to this function (and
-add the missing disable on unbind), Konrad's patch using
-pm_runtime_put_sync_suspend() is probably the best option for now. I can
-send a patch to move the autosuspend handling on top.
+The current solution to this is to just fail if PTR_MAYBE_NULL is
+passed, and to instead require programs to have a NULL check to
+explicitly handle the NULL and non-NULL cases. This seems reasonable.
+Not only would it possibly be quite complicated to correctly handle
+PTR_MAYBE_NULL refcounting in the verifier, but it's also an arguably
+odd programming pattern in general to not explicitly handle the NULL
+case anyways. For example, it seems odd to not care about whether a
+pointer you're passing to bpf_kptr_xchg() was successfully allocated in
+a program such as the following:
 
-Perhaps you can just amend the commit message to clarify that not all fw
-is apparently preloaded and also mention that you need to use
-pm_runtime_put_sync_suspend() due to autosuspend being enabled.
+private(MASK) static struct bpf_cpumask __kptr * global_mask;
 
-Johan
+SEC("tp_btf/task_newtask")
+int BPF_PROG(example, struct task_struct *task, u64 clone_flags)
+{
+        struct bpf_cpumask *prev;
+
+	/* bpf_cpumask_create() returns PTR_MAYBE_NULL */
+	prev = bpf_kptr_xchg(&global_mask, bpf_cpumask_create());
+	if (prev)
+		bpf_cpumask_release(prev);
+
+	return 0;
+}
+
+This patch therefore updates the verifier to explicitly check for
+PTR_MAYBE_NULL in check_reg_type(), and fail gracefully if it's
+observed. This isn't really "fixing" anything unsafe or incorrect. We're
+just updating the verifier to fail gracefully, and explicitly handle
+this pattern rather than unintentionally falling back to an internal
+verifier error path. A subsequent patch will update selftests.
+
+Signed-off-by: David Vernet <void@manifault.com>
+---
+ kernel/bpf/verifier.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 20eb2015842f..52738f9dcb15 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7204,6 +7204,10 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
+ 		}
+ 		break;
+ 	}
++	case PTR_TO_BTF_ID | PTR_MAYBE_NULL:
++	case PTR_TO_BTF_ID | PTR_MAYBE_NULL | MEM_RCU:
++		verbose(env, "Possibly NULL pointer passed to helper arg%d\n", regno);
++		return -EACCES;
+ 	case PTR_TO_BTF_ID | MEM_ALLOC:
+ 		if (meta->func_id != BPF_FUNC_spin_lock && meta->func_id != BPF_FUNC_spin_unlock &&
+ 		    meta->func_id != BPF_FUNC_kptr_xchg) {
+-- 
+2.39.0
+
