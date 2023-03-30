@@ -2,232 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D996D00C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F3F6D00D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbjC3KMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
+        id S231250AbjC3KNW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 06:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbjC3KMa (ORCPT
+        with ESMTP id S231259AbjC3KNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:12:30 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20C87EC4;
-        Thu, 30 Mar 2023 03:12:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680171143; x=1711707143;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=jqh1jYVVrJ2yeSgy0gX8/KeUhG8micP68B8QpOPUeH4=;
-  b=m+HrhlYqNAm+0/4goN6/gFN2DLNge3Egdv1CB7HXnObbbKeunBge2yNv
-   SZ/Ek3+EDMTjvfss/y81OVsNzf1MxtEkQuAYtRSnTOUUJ+JGiHMQWNIjF
-   Eui9yrrwq/h6AzAIwByCXeN4DW0OE2IS+wKvKla8EsDggLihiKMUsMwqA
-   aSUUUp9HCNz2cC1lyruV2NJdHVrQQpi26muJu7wF/B71FU4cDM5WPXheS
-   aleXOedry2X1YvxDwD6BKimluAspAHjYrSvS/MaDqN/19NchDxMTkBSdd
-   21M/vukOWFaFF9dIsi7HjREYABVbGjDrdmy3yLe35XVI/VOKSZimxZ9m/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="321511645"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="321511645"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:12:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="1014382066"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="1014382066"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Mar 2023 03:12:23 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 03:12:23 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 03:12:22 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 30 Mar 2023 03:12:22 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 30 Mar 2023 03:12:22 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DPHWHTIVKg3wxw9XonG6j6xURhb6C/WB26CumfxUiKdZg0q9Kzy1pa4fKOs+7YaatpLQ8SNXYhlOuezR3nAXt7t6Kzg6ob6T5KelObqIf1gCEwH+DKOuZgKHlfQqF4AixNAy/F74vkAmHOP2qhDkajbDsHVP6+xsi/L826Zu97ta4gEIcsXgwBTdGA6s+YvtCIsH3ErFV3V8g4nYxP/vOWP9NZLX9AvFMqKLLxZQIm4mCX4Wg6LJCqhbuVOFI4rPHNKwQKMjE9vKBvDtw+lVZUbKNmcg8ythUQJbGiVatxJH+k9+nN5qvNOf2hJDYbQ3O43xKYxVU9q9w0OQlhm2/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jqh1jYVVrJ2yeSgy0gX8/KeUhG8micP68B8QpOPUeH4=;
- b=nPjoQ31jid2hW79uI6KVyhe0LXGLZUT/kn57+jP+gGls7wpb2gq72z+4fjem0okarfIeTL66iiEfF8gN2R48RVY61XwyveiaP4LIM3LXVNdBk61J5UPRymWg1Dk6RzFMMZTl/AdeuklPXnRbfZ3AoTC8Q7yJYW0NiFH0g57/LG44uXqSaPw7AHYjv9Vh/hX0I1qapO4gXOdfUrcuT8YeQveCFA+6bYpfHEoZcHL1h9AAPngYzjGdaNG7tbfV0pwnX1dW+GsTyPKr55hjB7+CRiN7BYcZFET29yCKg1pCUMKiQPXpcVp8zXhyAQXN7z5scK2PRMYW359zIN4l6v0QpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5782.namprd11.prod.outlook.com (2603:10b6:510:147::11)
- by SA0PR11MB4557.namprd11.prod.outlook.com (2603:10b6:806:96::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Thu, 30 Mar
- 2023 10:12:21 +0000
-Received: from PH0PR11MB5782.namprd11.prod.outlook.com
- ([fe80::3912:3caf:a32c:7791]) by PH0PR11MB5782.namprd11.prod.outlook.com
- ([fe80::3912:3caf:a32c:7791%4]) with mapi id 15.20.6222.028; Thu, 30 Mar 2023
- 10:12:21 +0000
-From:   "Drewek, Wojciech" <wojciech.drewek@intel.com>
-To:     Andrea Righi <andrea.righi@canonical.com>
-CC:     Guillaume Nault <gnault@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: selftests: net: l2tp.sh regression starting with 6.1-rc1
-Thread-Topic: selftests: net: l2tp.sh regression starting with 6.1-rc1
-Thread-Index: AQHZYjl1GRPOFSRp8EO/z00nY9tXgq8RxqfwgAAajwCAAAHa8IAAFiQAgADot4CAACws0IAACTkAgAAEZGA=
-Date:   Thu, 30 Mar 2023 10:12:20 +0000
-Message-ID: <PH0PR11MB57823A4A408304220DECA0E7FD8E9@PH0PR11MB5782.namprd11.prod.outlook.com>
-References: <ZCQt7hmodtUaBlCP@righiandr-XPS-13-7390>
- <MW4PR11MB57763144FE1BE9756FD3176BFD899@MW4PR11MB5776.namprd11.prod.outlook.com>
- <ZCRYpDehyDxsrnfi@debian>
- <MW4PR11MB5776F1B04976CB59D9FE41BFFD899@MW4PR11MB5776.namprd11.prod.outlook.com>
- <ZCRsxERSZiGf5H5e@debian> <ZCUv+8tbH3H5tZKe@righiandr-XPS-13-7390>
- <PH0PR11MB57829AF31406D3EA4B1D9112FD8E9@PH0PR11MB5782.namprd11.prod.outlook.com>
- <ZCVcxkCkgBmwjnIX@righiandr-XPS-13-7390>
-In-Reply-To: <ZCVcxkCkgBmwjnIX@righiandr-XPS-13-7390>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR11MB5782:EE_|SA0PR11MB4557:EE_
-x-ms-office365-filtering-correlation-id: c8c9cf2f-9c11-43ba-4012-08db31073feb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zyA7krk9hCnGXffH2s84YeY80oTI848SSDezBA7H5ozKSi7sEq3Gw6vHKm1tFnizruuurFZid7Ne7P7K0MFlRg9hUa5JcYhFEIjobbG6nRIRHKp7TD0rZAA9mQLcHVG5UfGxOglzM9lkJqA2LC9pcVsA2d9+Atc4sNThsfbeoRItXi7yq3NZOPYJWwwgBu5VdYaVsGrO6U+X/hOSfPSWGc90SbdvTGuLKIGyjN64oz/qqnAKw2d7sPTZ7NOqZXwZXFsZjGKcFGsMk8xc7Qfob+aRwS2KWfp6soltVNJXECqyei1zVPed1TscvOkj0IVgtoYDZyJm3duMhOKKKCQjI55TXKFsvFsZcDD3J27QMmOWcX1QjT7q3TbBm8THln+MGfWMnaDptHpAKw1Q7/MkGCJH3gjm2lJ4b75T+AFP/4EtACP5RAYi+Hxgl1Uegu9gpWIIvXpvsfvzFOxXQWsnL/X5b4BW6og4TvpfyefN5iJB1WQfw6EqORvSdcyKwQqywcZuovhjmeln+Zcl0MZNfmboM6jjMLrqnSz7dofBgdWbeFyCieAeKTIwruRfwUWCH/Yy+LKyCk55SDFUaD7bUsLWku5TGIZ9ZzEmNZxOkwChU9jtCW+n1Xl3BDlLPSBY
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5782.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(346002)(376002)(396003)(136003)(451199021)(83380400001)(7416002)(6506007)(122000001)(82960400001)(53546011)(26005)(54906003)(316002)(52536014)(76116006)(38070700005)(71200400001)(478600001)(7696005)(8676002)(66556008)(6916009)(66946007)(4326008)(66446008)(64756008)(55016003)(66476007)(41300700001)(86362001)(9686003)(38100700002)(2906002)(5660300002)(33656002)(8936002)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qWHj8ncQ2Y5aMMke9tXmN2jMI4Yf4v0x1v699TGxwUXcB4MbFBsVlk8DwHc3?=
- =?us-ascii?Q?QY3rcsKzJmhwvuCIFTy2d4LAxbX1i/+39nWnhigIARBlCpv7WRs7X1d0uQlE?=
- =?us-ascii?Q?LO9DF1LaSg5rx8uuHVW0WQjh7n4wySDdThYPdOZC8TVE4ajwYKlKOG///rvJ?=
- =?us-ascii?Q?1Hm6c2CQaLJLEp5SR71Kbe9XQA4XedP1gF7OFa/9liY0oC6hdpZvLIwfQQEz?=
- =?us-ascii?Q?yL2Lse1bzUtUdQH72k64fF0HJL7g46E41UnSrWbVJ22AXqWHfJ7v5giES7nE?=
- =?us-ascii?Q?b21cXfPD9XyAk5mtuEftllln2+SEMwo9BjUOjP8urhxdy8xsT7ML8+eh1KKC?=
- =?us-ascii?Q?sdALR3BkKwo2kOKBJVLsjjihQOzp0B0NH8fKi4yex31QgX/Wf5442XNbe/LI?=
- =?us-ascii?Q?VJvJbfzDLSOEWMtx5hyHSVqSTkKLGCmm2EJHQrV3JujEY1uiFxBY2t+XtlqI?=
- =?us-ascii?Q?shX8HbocyrfPOOF5ieNUVA/hV5ON9qVhZGBDvuZRnIJqN0dgad6JxrahXyO3?=
- =?us-ascii?Q?A6r0yoqGFhUHLdzaQgKY56wMrV5PC9jB0peAa8uoHKgc5Ru+SDuzpb8zldjd?=
- =?us-ascii?Q?TdYRY3BzNQ0f+Pmp02ovkkrGrJB1k+pBbIf9OAxm9i4mUu52Ns5vVo3X4bUJ?=
- =?us-ascii?Q?cNcCYdYZaSXXJ5By6lAZr9viN6EuA6KcByMoo73tX29B48wS9gQExmkSDy8n?=
- =?us-ascii?Q?EGeTwoo/Dx1GNdfJ53ZDfdtctE7gogroZ6zAQ5bGARuDmVWBQtk2rPy69JFN?=
- =?us-ascii?Q?d29gvxirtoRkO6dTDeGAniolDL3jxtwEmzxBJvw4EOhlC56vgcOHQeo2O8JH?=
- =?us-ascii?Q?KREpm/4yBO2WCVOvKhQaNDU8xpxkqoXK/XjPOOKJgP3HFXZ/Z38X+7EoDVKW?=
- =?us-ascii?Q?6G9QobURstadmLhAqLKB+baVPaToudgd9o00SvCmenNfRbx84HOc4yy3O6CK?=
- =?us-ascii?Q?YSo1NcXbUIazcg5mIfbIonUnoPPgkCKLShPeYgKlG8fMztsmRedKYfaiY6Zn?=
- =?us-ascii?Q?RfD6FYwm9DR4FB+jmrvvXwFzYEyOuf323uwuUHyq/JQtS9VZIA/xll8t/4+U?=
- =?us-ascii?Q?hrvb73p6QJJqObE3x6dJ4rJkVi0j0xvEU6vP/Pbv2BxQuDszzBv/z/ypDho6?=
- =?us-ascii?Q?5vzlnXsePXPAq7qY2LiiXvm0Hz+OSzOU21OnFMaTyGTeND4UuTN9UdYGr4bR?=
- =?us-ascii?Q?8rV0Cy9pYN/DZ3dcXx616ZyZko9cFdMOpemdtT3zZ4oKdPpTXi+gnKr8tZPS?=
- =?us-ascii?Q?4w9iO1AIWujYASUZwMiD+CE9km59P+rPzDaFaUsHziyu7C2wB4bGiDIIIDBf?=
- =?us-ascii?Q?47ceEO2jCkreApzvl3CwrmX99MeUJwnoKSMm2ZeMpL2N2gIzmuNNfK2y1949?=
- =?us-ascii?Q?YMhxKevgwDFufbJZXAzjn/wMk5MhbMBpDpBWApXc35Rfpv2It9sLtJMWybJk?=
- =?us-ascii?Q?FkpQJVSwztSJ0lF6x7wTKBrkO7h6hj/AUxAXmq4IZ7TN3XarJr/Mi22gfQ6y?=
- =?us-ascii?Q?xhw+A3wVYpy4griDvJ/5BpijYY5MMhfPJP4prQ8Txhe22ev+BUU0P7dLKqjZ?=
- =?us-ascii?Q?E2vjvmGsOYGMh6o70X/OnT/oiqcN2IFpKg1zz5dj?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 30 Mar 2023 06:13:15 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC478A7A;
+        Thu, 30 Mar 2023 03:13:09 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id m16so2431609ybk.0;
+        Thu, 30 Mar 2023 03:13:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680171188;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fiQtdZgzOCieHIQyt+UuoiOVmv0W3cDpr9ArTRdEFcQ=;
+        b=Cf0Wg1g9ZDlWEyBJ5jftqyHp8Y7VJb1UQVwd84vE/fjfOzA0jCggavzTHL3whf1tfb
+         dmcN0t8QPWwkqkbc705cSp+Tuy50s5sqVpzdJsU4CwmLV0RfoboVmNKGATllXak4PXym
+         7TGl1uiN9edtSFSfUmvC9Jyp7N2D6mBxFZ4qUu2E4s1jDGLSI5QzVMCN4yKcY6ipE184
+         l68WufhN221p6CnZeQwoeyYuPNyZZCJDL0cxZHbmY9uxRZArA94VZmSzL8uTBDWSBr55
+         xCjIrVNzRiA4K096J3pKAPLBao/mPxz7PWf+3NHregfEl/ksT6JppBLZe95JvLy69u6t
+         DpCg==
+X-Gm-Message-State: AAQBX9fy5viQ5Zmsk5Gtk4yMqDhaBzZ/JHlRG7/wwBoipKBFLDlLjmYT
+        6HsY9HtNEMkOZCt4Ms81rV33xKvFTSEsDg==
+X-Google-Smtp-Source: AKy350Yfn1ou7bsAOJzOvc0vyzvWto3jAIElGlJUgo9Kt8BgFvZXJZ2bwaxX5Ez7fuNYCiTnvfX52w==
+X-Received: by 2002:a05:6902:102a:b0:a27:33f:cba7 with SMTP id x10-20020a056902102a00b00a27033fcba7mr26348109ybt.33.1680171188281;
+        Thu, 30 Mar 2023 03:13:08 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id l186-20020a8157c3000000b00545a0818494sm3467569ywb.36.2023.03.30.03.13.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 03:13:08 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-5456249756bso345049517b3.5;
+        Thu, 30 Mar 2023 03:13:07 -0700 (PDT)
+X-Received: by 2002:a81:b617:0:b0:544:4008:baa1 with SMTP id
+ u23-20020a81b617000000b005444008baa1mr11162541ywh.4.1680171187711; Thu, 30
+ Mar 2023 03:13:07 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5782.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8c9cf2f-9c11-43ba-4012-08db31073feb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2023 10:12:20.9607
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: E98V6lxRCinY5EGGRFUlm1DI+ChZV89PUmV3jGGwxv0KBar3hS9fYGDvmJm4IAM/7XY0Kz/AF8/YPlXHw6BYGlqg9tG0WFQcociIopQRRso=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4557
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230322125648.24948-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230322125648.24948-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20230322125648.24948-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 30 Mar 2023 12:12:55 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVayx_jz+JHO8kd6kdDHp_f+61o2zTDjr1LdGPp37vBjA@mail.gmail.com>
+Message-ID: <CAMuHMdVayx_jz+JHO8kd6kdDHp_f+61o2zTDjr1LdGPp37vBjA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] arm64: dts: renesas: rzg2l-smarc: Enable CRU, CSI support
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 22, 2023 at 2:09 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Enable CRU, CSI on RZ/G2L SMARC EVK and tie the CSI to OV5645 sensor
+> using Device Tree overlay. rz-smarc-cru-csi-ov5645.dtsi is created so
+> that RZ/G2L alike EVKs can make use of it.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> setenv bootfile kernel_fdt.itb
+> tftpboot ${bootfile}
+> bootm ${fileaddr}#rzg2l-smarc#ov5645
+>
+> v2->v3
+> * Moved the gpio.h and rzg2l-pinctrl.h headers to
+>   r9a07g044l2-smarc-cru-csi-ov5645.dtso
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.4.
 
-> -----Original Message-----
-> From: Andrea Righi <andrea.righi@canonical.com>
-> Sent: czwartek, 30 marca 2023 11:56
-> To: Drewek, Wojciech <wojciech.drewek@intel.com>
-> Cc: Guillaume Nault <gnault@redhat.com>; David S. Miller <davem@davemloft=
-.net>; Eric Dumazet <edumazet@google.com>; Jakub
-> Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Shuah Khan <=
-shuah@kernel.org>; netdev@vger.kernel.org; linux-
-> kselftest@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: selftests: net: l2tp.sh regression starting with 6.1-rc1
->=20
-> On Thu, Mar 30, 2023 at 09:26:06AM +0000, Drewek, Wojciech wrote:
-> >
-> >
-> > > -----Original Message-----
-> > > From: Andrea Righi <andrea.righi@canonical.com>
-> > > Sent: czwartek, 30 marca 2023 08:45
-> > > To: Guillaume Nault <gnault@redhat.com>
-> > > Cc: Drewek, Wojciech <wojciech.drewek@intel.com>; David S. Miller <da=
-vem@davemloft.net>; Eric Dumazet
-> > > <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni =
-<pabeni@redhat.com>; Shuah Khan
-> <shuah@kernel.org>;
-> > > netdev@vger.kernel.org; linux-kselftest@vger.kernel.org; linux-kernel=
-@vger.kernel.org
-> > > Subject: Re: selftests: net: l2tp.sh regression starting with 6.1-rc1
-> > >
-> > > On Wed, Mar 29, 2023 at 06:52:20PM +0200, Guillaume Nault wrote:
-> > > > On Wed, Mar 29, 2023 at 03:39:13PM +0000, Drewek, Wojciech wrote:
-> > > > >
-> > > > >
-> > > > > > -----Original Message-----
-> > > > > > -MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 2, IPPROTO_L2TP);
-> > > > > > -MODULE_ALIAS_NET_PF_PROTO(PF_INET6, IPPROTO_L2TP);
-> > > > > > +MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 2, 115 /* IPPROTO_L2T=
-P */);
-> > > > > > +MODULE_ALIAS_NET_PF_PROTO(PF_INET6, 115 /* IPPROTO_L2TP */);
-> > > > >
-> > > > > Btw, am I blind or the alias with type was wrong the whole time?
-> > > > > pf goes first, then proto and type at the end according to the de=
-finition of MODULE_ALIAS_NET_PF_PROTO_TYPE
-> > > > > and here type (2) is 2nd and proto (115) is 3rd
-> > > >
-> > > > You're not blind :). The MODULE_ALIAS_NET_PF_PROTO_TYPE(...) is ind=
-eed
-> > > > wrong. Auto-loading the l2tp_ip and l2tp_ip6 modules only worked
-> > > > because of the extra MODULE_ALIAS_NET_PF_PROTO() declaration (as
-> > > > inet_create() and inet6_create() fallback to "net-pf-%d-proto-%d" i=
-f
-> > > > "net-pf-%d-proto-%d-type-%d" fails).
-> > >
-> > > At this point I think using 115 directly is probably the best solutio=
-n,
-> > > that is also what we do already with SOCK_DGRAM, but I would just upd=
-ate
-> > > the comment up above, instead of adding the inline comments.
-> >
-> > Agree,
-> >
-> > I verified the fix on my machine,
-> > Do you want me to send the patch or you'll just send below one?
->=20
-> Sent already. :)
->=20
-> -Andrea
+Gr{oetje,eeting}s,
 
-Thank you!
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
