@@ -2,111 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB846D0F72
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EB16D0F79
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbjC3Tzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 15:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
+        id S231953AbjC3T4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 15:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjC3Tzf (ORCPT
+        with ESMTP id S231912AbjC3T4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:55:35 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927861024E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:55:34 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id r187so24985460ybr.6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680206133;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KCcB5OY8SQyKSb7z+4YaRuPUYL+j2up2EUbXt0Mw2dI=;
-        b=s0h7rvKGInOi0krE3W8LR7VJ4S4A7z47vZbouVSzXWKE9OjUtQB8Kt/A8uBBIsuYGg
-         4OuHcmQ4+Q4F1sDHKG50ARafeyCKVXEeGq498f2n0uv3uMtsJe7LztATHDsOfRm0/Uv3
-         qBEgbeb3R3H6vPV2spHKFSswGjl0VxrnrilRHlDX4iyrlduGRh+HZ052Ab6z9K8z8vmK
-         rSDI8ZX7m+n9V4wmKZOrZoNCzwkLWJ8PTOJBCUonW3k5MJRT6IJxOmwtin//hOXolTMo
-         VG23NIaNap7GNfw+Ghsn50qUCERUmmyivY8RTvZvz2qsDe5q2fUUPL2UXjXx/KTDJFpL
-         /2nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680206133;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KCcB5OY8SQyKSb7z+4YaRuPUYL+j2up2EUbXt0Mw2dI=;
-        b=X7n8Aep6WDt+HX/OXwvwTpYQrz3cE+NDV2LyO0AoP4zOrYm6J/esGse5I9aMSjaKmK
-         cdFrxm8ZXMb5SpMHxnVT7Y/biCynqLzJrMS/s0o/WDvQcKOVcefvJ6vTVQAkklO1j1pZ
-         /FU9k8CaHtnH1gS/2dCKUaMtS6J3ucXJ5O6sc+ACsNMdXv7lxqiyc5O3y3eRb55DZei9
-         XbeupXYAZZy5OFEKx0BtNlVEG0id8NLrQcnTtdb303KsLbErmpnpMWGfZkn72Wa9eK5/
-         lrDAfkMo1/I3Nefv+wsdGUfEi9QmTvJqxvLT9Jp6u9jT551uE5P1N4zmSBuLinCQQPCd
-         2vCQ==
-X-Gm-Message-State: AAQBX9dnzUvMdKla3Pz/EpWMtLPjPEIMvrOgz7iErQK1DLmkocsr4+10
-        zX7sFBHqBmerPmWIs4R23IpV4yEtzbeJPRuxIoqmig==
-X-Google-Smtp-Source: AKy350Yojbn7iVVCaWAHI4hTk9wpIP45sSlDaCmOwbzyJh+Ki2GMk2GhBn+Uos49hMtA/f8mHTBe8kqwB+IBkWttIPw=
-X-Received: by 2002:a05:6902:154e:b0:b77:d2db:5f8f with SMTP id
- r14-20020a056902154e00b00b77d2db5f8fmr15921642ybu.12.1680206133587; Thu, 30
- Mar 2023 12:55:33 -0700 (PDT)
+        Thu, 30 Mar 2023 15:56:17 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6C310410;
+        Thu, 30 Mar 2023 12:56:15 -0700 (PDT)
+Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73::5f6])
+        by ms.lwn.net (Postfix) with ESMTPA id 71726736;
+        Thu, 30 Mar 2023 19:56:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 71726736
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1680206174; bh=N2IjKygEUNSWzbk9HGHBaTn8tSmphhsRZ+T4HZU7T4A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N11ThEoftHzgDZyRRy5XaAhIHIoygIt2DNi+uBUBvEOZ5WzS+vBamxM40IepJXu/i
+         BiLjVd7oPPEdBTNF+QrwK0vNnHx3vvYr/maxB8tDl6/SrGsIlF8VDMyUIG8h5Me0xI
+         FSiNcVornnTwjM1ruKphnudluEC6zRhf0Arl7BuAA8wp9NteXex3GfNQ9xQje/DgOY
+         YynTvlX09YGyjwFPRQg0QBx8BqH8MFTT3AgWx6yK1KoyKaJlYYZuSb5wHSusH7uz6z
+         Ypu/kjz8ZEToj0Re5j257032pIFzCw2JZMDU0D0fu3XwPKt6PB5gMkAXYtyLPnnThf
+         qNjOzA+ndZd9Q==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH 0/4] docs: move yet more architecture docs
+Date:   Thu, 30 Mar 2023 13:56:00 -0600
+Message-Id: <20230330195604.269346-1-corbet@lwn.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230330133822.66271-1-mathieu.desnoyers@efficios.com> <20230330124230.9f3d4f63374eb15a3b990ff8@linux-foundation.org>
-In-Reply-To: <20230330124230.9f3d4f63374eb15a3b990ff8@linux-foundation.org>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 30 Mar 2023 12:55:22 -0700
-Message-ID: <CALvZod5E649XyBC+NLkHTJJWWoWh+Uuhegw=4_4MQGxok5VpXw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mm: Fix memory leak on mm_init error handling
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-mm@kvack.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 12:42=E2=80=AFPM Andrew Morton
-<akpm@linux-foundation.org> wrote:
->
-> On Thu, 30 Mar 2023 09:38:22 -0400 Mathieu Desnoyers <mathieu.desnoyers@e=
-fficios.com> wrote:
->
-> > commit f1a7941243c1 ("mm: convert mm's rss stats into percpu_counter")
-> > introduces a memory leak by missing a call to destroy_context() when a
-> > percpu_counter fails to allocate.
-> >
-> > Before introducing the per-cpu counter allocations, init_new_context()
-> > was the last call that could fail in mm_init(), and thus there was no
-> > need to ever invoke destroy_context() in the error paths. Adding the
-> > following percpu counter allocations adds error paths after
-> > init_new_context(), which means its associated destroy_context() needs
-> > to be called when percpu counters fail to allocate.
-> >
-> > ...
-> >
-> > --- a/kernel/fork.c
-> > +++ b/kernel/fork.c
-> > @@ -1171,6 +1171,7 @@ static struct mm_struct *mm_init(struct mm_struct=
- *mm, struct task_struct *p,
-> >  fail_pcpu:
-> >       while (i > 0)
-> >               percpu_counter_destroy(&mm->rss_stat[--i]);
-> > +     destroy_context(mm);
-> >  fail_nocontext:
-> >       mm_free_pgd(mm);
-> >  fail_nopgd:
->
-> Is there really a leak?  I wasn't able to find a version of
-> init_new_context() which performs allocation.
->
+This series builds on top of the documentation reorganization posted at
 
-There are more than 20 archs defining this function and I couldn't
-check each one of them. I think we can assume there might be new
-allocation in the future.
+    https://lore.kernel.org/lkml/20230315211523.108836-1-corbet@lwn.net/
+
+it adds several more architectures (the relatively inactive ones) to the
+new arch/ directory.  This series goes on top of the previous one.
+
+The cover letter from that series provides the motivation for this work:
+
+    The top-level Documentation/ directory, despite the efforts of the last
+    few years, is still a mess; there is too much stuff there, making it
+    harder to find anything.  We do not organize our source directories
+    that way, and for good reasons.
+
+Jonathan Corbet (4):
+  docs: Move arc architecture docs under Documentation/arch/
+  docs: move ia64 architecture docs under Documentation/arch/
+  docs: move parisc documentation under Documentation/arch/
+  docs: move m68k architecture documentation under Documentation/arch/
+
+ Documentation/admin-guide/kernel-parameters.rst           | 2 +-
+ Documentation/{ => arch}/arc/arc.rst                      | 0
+ Documentation/{ => arch}/arc/features.rst                 | 0
+ Documentation/{ => arch}/arc/index.rst                    | 0
+ Documentation/{ => arch}/ia64/aliasing.rst                | 0
+ Documentation/{ => arch}/ia64/efirtc.rst                  | 0
+ Documentation/{ => arch}/ia64/err_inject.rst              | 0
+ Documentation/{ => arch}/ia64/features.rst                | 0
+ Documentation/{ => arch}/ia64/fsys.rst                    | 0
+ Documentation/{ => arch}/ia64/ia64.rst                    | 0
+ Documentation/{ => arch}/ia64/index.rst                   | 0
+ Documentation/{ => arch}/ia64/irq-redir.rst               | 0
+ Documentation/{ => arch}/ia64/mca.rst                     | 0
+ Documentation/{ => arch}/ia64/serial.rst                  | 0
+ Documentation/arch/index.rst                              | 8 ++++----
+ Documentation/{ => arch}/m68k/buddha-driver.rst           | 0
+ Documentation/{ => arch}/m68k/features.rst                | 0
+ Documentation/{ => arch}/m68k/index.rst                   | 0
+ Documentation/{ => arch}/m68k/kernel-options.rst          | 0
+ Documentation/{ => arch}/parisc/debugging.rst             | 0
+ Documentation/{ => arch}/parisc/features.rst              | 0
+ Documentation/{ => arch}/parisc/index.rst                 | 0
+ Documentation/{ => arch}/parisc/registers.rst             | 0
+ Documentation/translations/zh_CN/arch/index.rst           | 2 +-
+ .../translations/zh_CN/{ => arch}/parisc/debugging.rst    | 4 ++--
+ .../translations/zh_CN/{ => arch}/parisc/index.rst        | 4 ++--
+ .../translations/zh_CN/{ => arch}/parisc/registers.rst    | 4 ++--
+ MAINTAINERS                                               | 6 +++---
+ arch/ia64/kernel/efi.c                                    | 2 +-
+ arch/ia64/kernel/fsys.S                                   | 2 +-
+ arch/ia64/mm/ioremap.c                                    | 2 +-
+ arch/ia64/pci/pci.c                                       | 2 +-
+ arch/m68k/Kconfig.machine                                 | 4 ++--
+ 33 files changed, 21 insertions(+), 21 deletions(-)
+ rename Documentation/{ => arch}/arc/arc.rst (100%)
+ rename Documentation/{ => arch}/arc/features.rst (100%)
+ rename Documentation/{ => arch}/arc/index.rst (100%)
+ rename Documentation/{ => arch}/ia64/aliasing.rst (100%)
+ rename Documentation/{ => arch}/ia64/efirtc.rst (100%)
+ rename Documentation/{ => arch}/ia64/err_inject.rst (100%)
+ rename Documentation/{ => arch}/ia64/features.rst (100%)
+ rename Documentation/{ => arch}/ia64/fsys.rst (100%)
+ rename Documentation/{ => arch}/ia64/ia64.rst (100%)
+ rename Documentation/{ => arch}/ia64/index.rst (100%)
+ rename Documentation/{ => arch}/ia64/irq-redir.rst (100%)
+ rename Documentation/{ => arch}/ia64/mca.rst (100%)
+ rename Documentation/{ => arch}/ia64/serial.rst (100%)
+ rename Documentation/{ => arch}/m68k/buddha-driver.rst (100%)
+ rename Documentation/{ => arch}/m68k/features.rst (100%)
+ rename Documentation/{ => arch}/m68k/index.rst (100%)
+ rename Documentation/{ => arch}/m68k/kernel-options.rst (100%)
+ rename Documentation/{ => arch}/parisc/debugging.rst (100%)
+ rename Documentation/{ => arch}/parisc/features.rst (100%)
+ rename Documentation/{ => arch}/parisc/index.rst (100%)
+ rename Documentation/{ => arch}/parisc/registers.rst (100%)
+ rename Documentation/translations/zh_CN/{ => arch}/parisc/debugging.rst (94%)
+ rename Documentation/translations/zh_CN/{ => arch}/parisc/index.rst (79%)
+ rename Documentation/translations/zh_CN/{ => arch}/parisc/registers.rst (98%)
+
+-- 
+2.39.2
+
