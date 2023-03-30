@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D756D007A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02106D0079
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbjC3KAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
+        id S231169AbjC3KAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjC3J75 (ORCPT
+        with ESMTP id S230427AbjC3J76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:59:57 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F599130
+        Thu, 30 Mar 2023 05:59:58 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6401CAB
         for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:59:56 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id i2-20020a5d9e42000000b0074cfcc4ed07so11553124ioi.22
+Received: by mail-il1-f198.google.com with SMTP id z19-20020a056e02089300b00326098d01d9so7588115ils.2
         for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:59:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1680170395; x=1682762395;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nCDgQHdCaeb1tvbebK9kbzy964ALhXI8uc+LM/LdKuQ=;
-        b=sGRUwAdKwQZfR2lPum7osVDH4b/92UruFNG+8iC4grxdlllrNcmf1R/mug3KfV7mE9
-         4d697JiKbd/2TeJiX0wvg6ix4jVgcSH4OUdZF0p4907DgYRiRWjpfBCBBJj1NhOvrMuL
-         NirPfr+SfyYlM8ma+5ZsVtnk0mjStXKqmYteF5wsQSJOfM+CFH7/A/NBg3jksj8iEbx3
-         VzwgyTrJd7/Wl/Bb45yTuUUn7m9FSESGEeAN6afG4/FB2urHvGGGbXlvmmXlkrJrbOhc
-         EFfgpJlvBmSONo9TlfMpWoyDKcD02jm1B3juAhY+xrXD8gfOhpcCQWML594wfSDhIle8
-         Oc/w==
-X-Gm-Message-State: AAQBX9ftAD6RzEnBwfhv/1ubrWBzuiAY6I3/ZcDpv8+e8+gKxF3OhBcq
-        2lFVGusQf98Zy6YpV3op1fZ9/wjPPeoUbOfxzNxmuIjfDKDS46A=
-X-Google-Smtp-Source: AKy350bO7j7QRCL0pnazNhBvWgt0W98iAQdVXCKvGPsnSYymgqqAkLtXWSXOI0RMOwLrrFoYhk9qxTvTLOoO2rYagzXl/JBNVr5O
+        bh=eekIwj5eKnA6rEmgrGYnEvjMNENSNd1HFYJQseDQWh8=;
+        b=kqlTxFH8foxAL0oZH7+okyl9LJs5QpZ1W8ow2Zf9/9mGbWGQlCs4dGCUjOKT9Pf+5b
+         hX0LR7lAY5L6bQPtGBxacT7kc72mJsl/LKWHL5llu4b0mNG/Pj1GcTInvjY+4uiLFwM1
+         4vsa8NU5OLyzAkPRVeNLShkJ+p0GJz64gXAl1Lr9krhTvWflEXEVm4OgdveylV8FYe6y
+         LvnmGaVk0GlGL3beTze3a2MH/982ECjG/QZlxHiax2A/dNfS4bjtsqUwejyud+L/aLNs
+         OOyRmjQLvLV0GzFK4C8Y4QnEFaZmIGn5j1ljCKiHxJ2190o91DCAI/DiEdKJhXuirExN
+         Z2mw==
+X-Gm-Message-State: AO0yUKUJaChD/fR++rT1dgVJyAlhhUgS1Dupbpvaw/+uyLFyRip/INy1
+        6YOavG1p2b6gjTTPMGs5rjupdkT9PdX7XEED32Y3LEshS6RKBFc=
+X-Google-Smtp-Source: AK7set+3877lcpdQTl6KWfK113csIZKzSwNFCK1lL6A8jxF0alGYGFlpOTJCGRwYangkxDGAgC+Wmh2MW8RvdREgrsi2gzq8ONY2
 MIME-Version: 1.0
-X-Received: by 2002:a92:3005:0:b0:326:17ae:47b9 with SMTP id
- x5-20020a923005000000b0032617ae47b9mr5717019ile.1.1680170395345; Thu, 30 Mar
+X-Received: by 2002:a05:6638:22b7:b0:404:a43c:65b7 with SMTP id
+ z23-20020a05663822b700b00404a43c65b7mr9812572jas.4.1680170395557; Thu, 30 Mar
  2023 02:59:55 -0700 (PDT)
 Date:   Thu, 30 Mar 2023 02:59:55 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000093abe005f81b27be@google.com>
-Subject: [syzbot] Monthly media report
-From:   syzbot <syzbot+list70ae5dd68c735d914e1e@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+Message-ID: <00000000000096e4f905f81b2702@google.com>
+Subject: [syzbot] Monthly usb report
+From:   syzbot <syzbot+list75973500ae785d20690b@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
@@ -53,32 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello media maintainers/developers,
+Hello usb maintainers/developers,
 
-This is a 30-day syzbot report for the media subsystem.
+This is a 30-day syzbot report for the usb subsystem.
 All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/media
+https://syzkaller.appspot.com/upstream/s/usb
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 18 issues are still open and 81 have been fixed so far.
+During the period, 1 new issues were detected and 0 were fixed.
+In total, 32 issues are still open and 136 have been fixed so far.
 
 Some of the still happening issues:
 
 Crashes Repro Title
-2180    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
-              https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
-705     Yes   WARNING in get_vaddr_frames
-              https://syzkaller.appspot.com/bug?extid=59a71007ccac79e8bb69
-333     Yes   WARNING in smsusb_term_device
-              https://syzkaller.appspot.com/bug?extid=40ac6e73326e79ee8ecb
-90      Yes   general protection fault in ir_raw_event_store_with_filter
-              https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-87      Yes   WARNING in media_create_pad_link
-              https://syzkaller.appspot.com/bug?extid=dd320d114deb3f5bb79b
-31      Yes   inconsistent lock state in sync_info_debugfs_show
-              https://syzkaller.appspot.com/bug?extid=007bfe0f3330f6e1e7d1
-1       Yes   KASAN: use-after-free Read in em28xx_init_extension (2)
-              https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
+1238    Yes   KMSAN: uninit-value in mii_nway_restart
+              https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
+413     Yes   WARNING in sisusb_send_bulk_msg/usb_submit_urb
+              https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
+344     No    INFO: task hung in usb_get_descriptor (2)
+              https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
+86      No    INFO: task hung in hub_event (3)
+              https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
+60      Yes   WARNING in shark_write_reg/usb_submit_urb
+              https://syzkaller.appspot.com/bug?extid=4b3f8190f6e13b3efd74
+50      Yes   WARNING in shark_write_val/usb_submit_urb
+              https://syzkaller.appspot.com/bug?extid=1cb937c125adb93fad2d
+31      No    INFO: task hung in hub_port_init (3)
+              https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
 
 ---
 This report is generated by a bot. It may contain errors.
