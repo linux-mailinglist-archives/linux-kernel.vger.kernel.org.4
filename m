@@ -2,76 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716076CFFCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E83A6CFFCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjC3JaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
+        id S230183AbjC3JaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbjC3JaB (ORCPT
+        with ESMTP id S230123AbjC3JaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:30:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8745C65AD
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680168554;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+XgWAMkX5gl81w36XkfWKNCMFULxOFJmmzo6Xs6xITY=;
-        b=BhRqo07sNvcxmLdz85lpMeNZAx3mOcDqYEfD7b+78iweTHSR5zJ/zg+fyp5khHH5WGH/tr
-        3X3YVyROXnypvJutrheX0nAS0mNEvpEDX1rj+x5hKoicFPyByi5NZdXQ40qeWf+iheULIx
-        7FxZ9nGetVNxwiWJ52Ftd71xRQY+yrE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-544-jczfNWu4OtqMRHX0J7vacA-1; Thu, 30 Mar 2023 05:29:11 -0400
-X-MC-Unique: jczfNWu4OtqMRHX0J7vacA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8C7768828CB;
-        Thu, 30 Mar 2023 09:29:10 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BE8D34020C82;
-        Thu, 30 Mar 2023 09:29:07 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <6F2985FF-2474-4F36-BD94-5F8E97E46AC2@oracle.com>
-References: <6F2985FF-2474-4F36-BD94-5F8E97E46AC2@oracle.com> <20230329141354.516864-1-dhowells@redhat.com> <20230329141354.516864-41-dhowells@redhat.com>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 40/48] sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+        Thu, 30 Mar 2023 05:30:20 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAB872A2;
+        Thu, 30 Mar 2023 02:30:18 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id bg13-20020a05600c3c8d00b003ef90adc168so3554603wmb.5;
+        Thu, 30 Mar 2023 02:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680168616;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WxXKhS9wYHWQInB5jxFKjqRzqsBiAg9IWI/b1YLumcc=;
+        b=o5UR1YKGDskY7lYN1CPA3sqcrsWktdXRTHgC3jsX9yd/RemyoJJhGoPqOV0V9Ske29
+         /AV/2HYWYof4pYufYh7jV6blR4rPN7LHgG6yBv4pR9OPuxTcBBUaUjOemY0vz49bDPMd
+         JrzpyAQf2fVoCpFXHgHourHjognNlZ9rUz0si3TYfQoE4Jos2GGfX4ItBCOEvX5A3mLZ
+         HOVtpHENE2u11yedAN+JJOge3bv3Yf8/dfIe89NgeMLmel+jZiJkZHM8XT67kJJ+39XK
+         WaWs+aIkitN3nD2kypexmNThLm8NAWur5ehf4w28iY8cf9XsHM3/aUbmOFI0ouS3ND3F
+         vsgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680168616;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WxXKhS9wYHWQInB5jxFKjqRzqsBiAg9IWI/b1YLumcc=;
+        b=qu1sHU5cNQhovdlW0kFJzjB4cvUAny8Jx2wwJYFS4ZZq4z2TfIQc6e7tHb4J6Ry1E8
+         n8uPivtE5VMOw6gM3FjggJTi0NpkGbnw06ML6q5i868yNjCSx14AcbepfFbN3/WGbwb5
+         sgcuYUn/nAmlg9+HzHSM7d/Ec8ngBKYD+W7Hph/YSNCZPnVnCnWu1dQBKFex4ZxIwhZH
+         2zT3UDvK0WpLcipLZeXf61J55CI6nC7/+o4CZLSEk8gn66RFe80gwsYNKIVMBvwgGDJ8
+         AZNvVIICzgQ+rx0ZSyQ8DExTlVOVxiPEobIvXH5QB5bKDsY0JqPoByb0A1ay2H834d1M
+         cWJg==
+X-Gm-Message-State: AAQBX9eVEgbLGyAvQyWcHeW27R9dnwKcEJ8FcKJgK2v+eHs8Ey7xKDV7
+        sqsprZAPAJd4qj41qGBAlSoCvd+QU2m4YF6I
+X-Google-Smtp-Source: AKy350ZBgLhNRR9TxRDx2aLTQWJRkGyCwyq3TOUYsvCakwonAbrsN83wbcfgg94RBbGOiSfUp+sXnA==
+X-Received: by 2002:a7b:cd93:0:b0:3ed:346d:4534 with SMTP id y19-20020a7bcd93000000b003ed346d4534mr4173874wmj.0.1680168616343;
+        Thu, 30 Mar 2023 02:30:16 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id f18-20020a1c6a12000000b003ed2276cd0dsm5161439wmc.38.2023.03.30.02.30.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 02:30:15 -0700 (PDT)
+Message-ID: <d6314775-0918-eb9a-d501-2f22db6a951c@gmail.com>
+Date:   Thu, 30 Mar 2023 11:30:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <777294.1680168547.1@warthog.procyon.org.uk>
-Date:   Thu, 30 Mar 2023 10:29:07 +0100
-Message-ID: <777295.1680168547@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: soc: mediatek: mtk-svs: fix passing zero to 'PTR_ERR'
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230216132543.814-1-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230216132543.814-1-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,18 +82,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chuck Lever III <chuck.lever@oracle.com> wrote:
 
-> It seems to me that you could eliminate the kernel_sendpage()
-> consumer here in svc_tcp_sendmsg() without also replacing the
-> kernel_sendmsg() calls. That would be a conservative step-wise
-> approach which would carry less risk, and would accomplish
-> your stated goal without more radical surgery.
 
-Note that only the marker is sent with kernel_sendmsg() in the unmodified
-code; the head and tail are sent with svc_tcp_send_kvec()... which uses
-kernel_sendpage() which needs to be changed in my patchset.  I can make it do
-individual sendmsg calls for all those for now.
+On 16/02/2023 14:25, Roger Lu wrote:
+> nvmem_cell_get() cannot return NULL so checking for NULL is wrong here.
+> 
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> Fixes: 6c7174fd90a4690 ("soc: mediatek: mtk-svs: use svs get efuse common function")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://lore.kernel.org/r/202302160720.N64SWT4l-lkp@intel.com/
 
-David
+Applied, thanks.
 
+> ---
+>   drivers/soc/mediatek/mtk-svs.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index a7eb019b5157..8127fb6d587b 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -1726,7 +1726,7 @@ static int svs_get_efuse_data(struct svs_platform *svsp,
+>   	struct nvmem_cell *cell;
+>   
+>   	cell = nvmem_cell_get(svsp->dev, nvmem_cell_name);
+> -	if (IS_ERR_OR_NULL(cell)) {
+> +	if (IS_ERR(cell)) {
+>   		dev_err(svsp->dev, "no \"%s\"? %ld\n",
+>   			nvmem_cell_name, PTR_ERR(cell));
+>   		return PTR_ERR(cell);
