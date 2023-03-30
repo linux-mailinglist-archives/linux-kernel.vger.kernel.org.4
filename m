@@ -2,232 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93CB6D06BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B5B6D06BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbjC3NaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
+        id S232050AbjC3NaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjC3N35 (ORCPT
+        with ESMTP id S232013AbjC3NaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:29:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A623AD0E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:29:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9F0462062
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:29:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFFCCC433EF;
-        Thu, 30 Mar 2023 13:29:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680182981;
-        bh=Iiezy7MHd0OQyIJ37QYZcwjoZ0dREEzhmcn52eBrRuc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AeYyouDObQFj3T4HvZViNgVGfFTyAyXiJvupN/7ZvVndsmt9LVnRAH6IdunpT+uJO
-         julqE8DajyjDJShnLetEan2x+sQJk+uWCYnflD5amFk68K4x+7ez+L10TRNOEYaRNK
-         qFe5K8gH4pJssfgs8rgVVJoxcxfwx/xy3QkFyegmifObuqIINir9HTt3Pp4zRm3yO5
-         V1PeLSobbK0duiZtgGxte39ZkhBxfkD0gIz4+PQa99wnd3fKtlgws9d+wVH0M5zYtk
-         qiLhg4C1cyhLr0RXKk5vaCSWV0coz0O0wmGetqT95X2gQynP1J4OBwzGYnvlKdGunI
-         QYUkETK32zsOQ==
-Date:   Thu, 30 Mar 2023 14:29:35 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        martin.botka1@gmail.com, Shengyu Qu <wiagn233@outlook.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 2/3] mfd: axp20x: Add support for AXP313a PMIC
-Message-ID: <20230330132935.GS434339@google.com>
-References: <20230324113013.254371-1-andre.przywara@arm.com>
- <20230324113013.254371-3-andre.przywara@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Thu, 30 Mar 2023 09:30:01 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA2259FC;
+        Thu, 30 Mar 2023 06:29:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1680182997;
+  x=1711718997;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Ilxe0aEGynjt8BmKO1+4g3Rkk2/XIYvM/9OJyXaYo20=;
+  b=Fh0AmkoiPtdk5Y6i0JWHRoqKX9ZYpvoKV/WiMZMstpzVi3FmYDsOqzVy
+   QtaXk1beu3URWfY3wqyv/91s/hodMbVkFpGTjvMaCDK4XfakSrbNzDEQq
+   q8MVQX262PvYlGgwtsQI9UAZC4YZbyhYDH0i08WFZD1fBO5boSUNKoIj8
+   hhW17yUPNwuXnEZMxxSQyagbsG0yoGhTPi/Oy0Bbv+9/rJzpcxqsUQAx2
+   40vAmyvP0ztLzMm+WwCL8JAioVSVIB6owrei1gbS13iBrbUZU3HwyBIJH
+   GMt7h8VavUnotOMa5/UjipQPrelErT4YLQH/qDwKS/iB68pliLMC7xG2L
+   g==;
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f9l1aoeJv4KfgBqy+uu5x4e/B9dGld2LZPEUVfHyIECL9zwHObFZgYljCX7Vle1jqSMENTIj+D3Yi06MVQPuI1ux1JdrX2Oxh5ZySfnlb4l0UJDaMFNQpN82L3XzYTQ8PoBx/97+NTxPX+UDir1bcQyrp3RWSGhXrFFaxVVnttjOcoTv10TqjNTjQUWKCp+n3BBlI+qfmTAnbnJMBMR/Hmj5E24dApGnvoML5mqufbLhi2R1UUfKIoo107Z70YHRweWZ9cASOT8alyGBfkA3cCuiqtnT+X/yiYDMoW943FVcwZaw2v8jY5IPl5Csd9OiYS7AqKKvppD7X3AYBOmv0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ilxe0aEGynjt8BmKO1+4g3Rkk2/XIYvM/9OJyXaYo20=;
+ b=h91vlAQGIqVN7cogonEhN++baou9+K5HNLsCMeU+7jMnIhBkBmxSlISZQn4Xpg7P2Ke1lgRjLwm9Crv+2d0AQQUHvenSr6V1kr2LDshK8OktaQWO3plYSpNt8Ns1CgYG+EyqUXF/O0BMudbuDexl8OblfHcnQ4allOKsM9Ykb2UM9CbY0xug7NVUXeQ17RZZtUeHVYcaWcc+vjAJqqYNMoEzeFG11asyxjDTGxIkkhc+YV3uErbIyfFWa0E3Ingc3h1t+5yNHPjqJG1ur5RUJIrjSxd353KjMsmHQAGQrPlSRxopH25mDb1tjzabgNsgaRX5/zNNWwbpKYUO+uq/vQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axis.com; dmarc=pass action=none header.from=axis.com;
+ dkim=pass header.d=axis.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=axis365.onmicrosoft.com; s=selector2-axis365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ilxe0aEGynjt8BmKO1+4g3Rkk2/XIYvM/9OJyXaYo20=;
+ b=oKxVY51UWnrsn4WW/tQ8uD1IJDLqqH4O4C2B2xbpx6btPHHBpId/ncPj6phMPMlH8Dzc3403YfEV+rHVwb5GqE8HGqk6ZlFHd9nkjzIlX6E/Uj3PFHfKFNeEdi2M8jeQYtvh887LXozLyY7tg3IyaRq8BAYMvBVJm7WdDX8Bmtk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axis.com;
+Message-ID: <8d843a75-543d-1da2-89b1-ec256eecb009@axis.com>
+Date:   Thu, 30 Mar 2023 15:29:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH net] net: dsa: mv88e6xxx: Reset mv88e6393x watchdog
+ register
+Content-Language: en-US
+To:     =?UTF-8?Q?Marek_Beh=c3=ban?= <marek.behun@nic.cz>,
+        Andrew Lunn <andrew@lunn.ch>
+CC:     Gustav Ekelund <gustav.ekelund@axis.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <kernel@axis.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230328115511.400145-1-gustav.ekelund@axis.com>
+ <20230328120604.zawfeskqs4yhlze6@kandell>
+ <9ba1722a-8dd7-4d6d-bade-b4c702c8387f@lunn.ch>
+ <20230328124754.oscahd3wtod6vkfy@kandell>
+ <c92234f1-099b-29a0-f093-c54c046d304a@axis.com>
+ <be2b5084-9cab-4cc7-ba50-a53dd71dfea5@lunn.ch>
+ <20230328144742.vty3cpmgmsdyjiia@kandell>
+From:   Gustav Ekelund <gustaek@axis.com>
+In-Reply-To: <20230328144742.vty3cpmgmsdyjiia@kandell>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230324113013.254371-3-andre.przywara@arm.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-ClientProxiedBy: MM0P280CA0029.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:a::17) To DB7PR02MB4074.eurprd02.prod.outlook.com
+ (2603:10a6:10:27::30)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB7PR02MB4074:EE_|AS8PR02MB7382:EE_
+X-MS-Office365-Filtering-Correlation-Id: f5e054d0-91ea-4c1a-075c-08db3122d7ff
+X-LD-Processed: 78703d3c-b907-432f-b066-88f7af9ca3af,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tZCm5D8jtn4rGWcv2TYZHa8OthFw6KR9/Ob+iUWnvABGAK4PHmKfHnoVkFwhaSZDeU+LTWkvriM4Yc4nZUQQDjgKEV5Lg2JG6FliZMu/YxYP75yCNB6f+Ag2TMsH7jGI3pEtkbeH4yN2u9RpIo5zmL1n1b6+ZDLPnrN/0/eXsFpp6gpCkZHFyON5SD9frfGPDZFOsIbKKFjGbvZ4ZN0gH/LpBfFr1UF2FqfxvViJrAITt1kka07R50sIjKX24Zexh71+k0GljgzyjF2VlBYCl0l4PFZ0hUQJLsQ0SPiReLG6YUJzddWJddu2JRQIaCUsav9whxS/TouOgnW831043bgcnkupHIRq7G1MaYJemdVemkBabn4eOfCcjY4t0KXVekT+7YWzNvO6AALalMz8knFosHuVz0ymb0sEVErHzZIfCFVcxJhKhWpd3EEgphzs5rc3ImEsz8ctEKMzhHTM+q5qMTZj55OwmqhVW2ctftJawUlgKhGaiMMRE0ztiqMBLPzNcvK+mdfLLBY77OnxzoPVX/lpq518LYnfRYueKizXAilHf1XvfFslpDzJ66RWECaQzmiewZ5d5wCTDpNCkghAC7WbL/qarcXCHE+bx78L3+QBCyKC9mnelSzCWXKRLE3I8FFjm1W7ogYKamXpRg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR02MB4074.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(136003)(366004)(396003)(346002)(451199021)(6486002)(2616005)(478600001)(66574015)(36756003)(83380400001)(31696002)(38100700002)(186003)(53546011)(26005)(6506007)(41300700001)(8936002)(2906002)(31686004)(7416002)(5660300002)(316002)(110136005)(54906003)(4326008)(8676002)(66476007)(66556008)(66946007)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dk5EU2pkOTkyRXF2aWpZRjEzYlU0RTBMZ3I3VVpsbUJXN0dsQ0FKS01LSWl1?=
+ =?utf-8?B?ODFOSDBIKzIvbVFEOFI3WWJPME96UU9KLytDbHNVNWxiR1cwRmZieGYrVGJZ?=
+ =?utf-8?B?N1pXbE5SbHo5cVZ0c0lLZ3dGbERRWmFzWEVvUXV6K0JYMStIdVFwNCtzY0hB?=
+ =?utf-8?B?ejZ0T25rTExwMkdYK3paMkgxNXlXdXlCbHFtczc1bWFWTTZGaEplRU9aOUhy?=
+ =?utf-8?B?L2JLaFdwM214cVc2ZUt0Y0hHL1I4Tjk4WEtBZ3l3K0FjTFFZc3hWcXpXcnVi?=
+ =?utf-8?B?N0hKMnJUY1VHd2dHYUJ5bWZCeGg2eVZ6dDdXc0tndVBLdGFELzJPZnA3MEsw?=
+ =?utf-8?B?SGk0b2twb0kyM3diSUdBVHU0K2ZSYVRPbWNZL0xZMkt4dkwwRllqL3JZN1Qv?=
+ =?utf-8?B?L0hYV1lSYjJBZGIyVCtXb0M4NzZPUFNvTGlWVTMzRVpLY0I3N2ZKNGJjV3Ra?=
+ =?utf-8?B?Rk5sY1JrbzNKc000ZFB6TUJISjJ1UTZtTk9OZ3NSckdacWthVVQxQUhLN3lz?=
+ =?utf-8?B?UzVCRTRTSUIzdk1VbFBKNE9DR2wrRXkzWVdkQTkxYW9RaytOaVpIazN0NDNQ?=
+ =?utf-8?B?SjNjaEt2b25sWGU2SWxLYmp5dTF3SkYzeGlZUzg3eENDeVZuUElFWUt3WkV3?=
+ =?utf-8?B?VWxrL1FOeEwxZjkyVGxiK3JCZ1gzUHpLdXUzMGZuOHp6VjFFaU1CZ08vWloy?=
+ =?utf-8?B?ZDQ3dTcrWHNVcWJsYTJwVi9yOTNaTXltKzVUWVZwVERiRUl4aFdsc3Y5ZVJO?=
+ =?utf-8?B?QkxOaTA5OUhzOXJZVjVCTXMxNTZNUDFNMHo5M0l3dUhkV080akE1QlRxaUgx?=
+ =?utf-8?B?V1JPZXEzYjdmQWc2WVlDTXExN2dWN1VFemYycWRUc2c5MDZhWmRVMm9sUlBB?=
+ =?utf-8?B?aDYwSXlkbjgzejVjditCMGZDbllMQU9sMy8rWm91KzBPNEJpRkplY2M3YU42?=
+ =?utf-8?B?TTc0UEJvdk9CM2VBUmZHSVZBRE84ekg5WldZNGFDODN4ZldhaUNnZlE5V2xV?=
+ =?utf-8?B?MU5OSTEvdkVxOWNFUVoxVlpiV0JtQldIbzA0NzVNT0dOQjROYkZsNm5USWQ5?=
+ =?utf-8?B?YUZxdnpTSUloYXV3ZGMrbUpmZUtLVm9RY1YrN1pJc0JWd3ZFVGVvQVFBMXlE?=
+ =?utf-8?B?VGM4azVucytuRUNCWVkya25wRGt1a1IzL2FxZXFTc0ZDaWVVNUR1eHZST1Nl?=
+ =?utf-8?B?aUxaRkc3OE1lUElPT0pEWFJwRUlpYXA1L3pWZnJibFlNZnFYdFMzd0J1UWNm?=
+ =?utf-8?B?TWxmc1VYc0FHVmRPTi9wc0ZIWE43Rnphbjk2aDJMUHQ1NzEzdGFSeGNrV0gw?=
+ =?utf-8?B?SWtuZVJEazFTSU45TlRVOURnazZqZC9xUHc4elBydUhOUHo0cUlUTUJpMGlS?=
+ =?utf-8?B?N2hPZkpnMU50OUI1bEFnZnpVRFdZbDRwdWpySmpRQkdnYnRGV1JIUjEvcnNF?=
+ =?utf-8?B?RlFFYzJnejV5Y1BYMGJRMnVXL1F3TFByS0JrNEwyck15QW0rYk9XR240TEc0?=
+ =?utf-8?B?Q2Z0VjBWVzRUZCtRcmN3dnFsZzR6L1g3aVJNc1BueEprNXZBK2d2bjQ3b1pj?=
+ =?utf-8?B?YWQvMThESzJOcGt2UXB2MG8zYjVNclEzbjVHdUJkN2I0ZzgzaFZTanp3QzQz?=
+ =?utf-8?B?aEZvOFJCNFFEY1VkL3NBVG5aNEhYRjJUYnF1MHcrRzFlcVMrZUdMc0RUSVVJ?=
+ =?utf-8?B?NnpneXk5VXJKV0l2N3JJMHZEeERLOTRqUElFcTJjKzNWeHhNWUdUY1ZkOHpr?=
+ =?utf-8?B?TVRWM1l1S0lwTm9tdVdwQVhGRldlRFRzUHp0Q0t0MVFDZ2E2ekdHOW9EczZ6?=
+ =?utf-8?B?dDZsRFQzYWlneThIakVLdWxtam9xVkxvRE5ZMXFWSzkzbDJsT0h4Q04yN3R1?=
+ =?utf-8?B?T3UvQkhqNkE2aGxrTFNJWnJpS0cvSFhTOExzWVJxd3ZsZjdXUEZFTlQzeTB6?=
+ =?utf-8?B?OURTNnh3TzkxY2YwS1QwdUJwWXdLcU5qVWR5R3pkYkNCQXRNMG5NVXRrcVVU?=
+ =?utf-8?B?alZNdzMrWTd2SHJnTW5BU1ZVMnN5ZDRtYi9UU0tHSy91UDk5QXBnbFl0L3R6?=
+ =?utf-8?B?ZU85UDJ6UmRiYTA1RjJVRG9jNWo5YVFJdDVLTXVwZ0g5elVGSCtmY21nSjdV?=
+ =?utf-8?Q?9d5s=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5e054d0-91ea-4c1a-075c-08db3122d7ff
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR02MB4074.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 13:29:52.7653
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OxOOGOVBvPLzpNoGJB/2NaOynMZlZOk+2+CeX7BqDraXMgQkSuSEd2+7iylmQNgr0HSb3jt17nAZMarvB+n39A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR02MB7382
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Mar 2023, Andre Przywara wrote:
+On 3/28/23 16:47, Marek Behún wrote:
+> On Tue, Mar 28, 2023 at 03:45:51PM +0200, Andrew Lunn wrote:
+>> On Tue, Mar 28, 2023 at 03:34:03PM +0200, Gustav Ekelund wrote:
+>>
+>>> 1) Marvell has confirmed that 6393x (Amethyst) differs from 6390 (Peridot)
+>>> with quote: “I tried this on my board and see G2 offset 0x1B index 12 bit 0
+>>> does not clear, I also tried doing a SWReset and the bit is still 1. I did
+>>> try the same on a Peridot board and it clears as advertised.”
+>>>
+>>> 2) Marvell are not aware of any other stuck bits, but has confirmed that the
+>>> WD event bits are not cleared on SW reset which is indeed contradictory to
+>>> what the data sheet suggests.
+>>
+>> Hi Gustav
+>>
+>> Please expand the commit message with a summary of this
+>> information. It answers the questions both Marek and i have been
+>> asking, so deserves to be in the commit message.
+>>
+>> 	Andrew
+> 
+> Maybe also add a comment next to the code writing to the register, that
+> this is due to an yet unreleased erratum on 6393x.
+> 
+> Marek
+Hi Marek and Andrew
 
-> From: Martin Botka <martin.botka@somainline.org>
->
-> The AXP313a is a PMIC chip produced by X-Powers, it can be connected via
-> an I2C bus.
-> The name AXP1530 seems to appear as well, and this is what is used in
-> the BSP driver. From all we know it's the same chip, just a different
-> name. However we have only seen AXP313a chips in the wild, so go with
-> this name.
->
-> Compared to the other AXP PMICs it's a rather simple affair: just three
-> DCDC converters, three LDOs, and no battery charging support.
->
-> Describe the regmap and the MFD bits, along with the registers exposed
-> via I2C. Aside from the various regulators, also describe the power key
-> interrupts, and adjust the shutdown handler routine to use a different
-> register than the other PMICs.
-> Eventually advertise the device using the new compatible string.
->
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  drivers/mfd/axp20x-i2c.c   |  2 +
->  drivers/mfd/axp20x.c       | 82 +++++++++++++++++++++++++++++++++++++-
->  include/linux/mfd/axp20x.h | 32 +++++++++++++++
->  3 files changed, 115 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/mfd/axp20x-i2c.c b/drivers/mfd/axp20x-i2c.c
-> index f49fbd3079589..f061177cb18e5 100644
-> --- a/drivers/mfd/axp20x-i2c.c
-> +++ b/drivers/mfd/axp20x-i2c.c
-> @@ -63,6 +63,7 @@ static const struct of_device_id axp20x_i2c_of_match[] = {
->  	{ .compatible = "x-powers,axp209", .data = (void *)AXP209_ID },
->  	{ .compatible = "x-powers,axp221", .data = (void *)AXP221_ID },
->  	{ .compatible = "x-powers,axp223", .data = (void *)AXP223_ID },
-> +	{ .compatible = "x-powers,axp313a", .data = (void *)AXP313A_ID },
->  	{ .compatible = "x-powers,axp803", .data = (void *)AXP803_ID },
->  	{ .compatible = "x-powers,axp806", .data = (void *)AXP806_ID },
->  	{ },
-> @@ -76,6 +77,7 @@ static const struct i2c_device_id axp20x_i2c_id[] = {
->  	{ "axp209", 0 },
->  	{ "axp221", 0 },
->  	{ "axp223", 0 },
-> +	{ "axp313a", 0 },
->  	{ "axp803", 0 },
->  	{ "axp806", 0 },
->  	{ },
-> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
-> index 01a6bbb6d266d..c4325977e384b 100644
-> --- a/drivers/mfd/axp20x.c
-> +++ b/drivers/mfd/axp20x.c
-> @@ -39,6 +39,7 @@ static const char * const axp20x_model_names[] = {
->  	"AXP221",
->  	"AXP223",
->  	"AXP288",
-> +	"AXP313a",
->  	"AXP803",
->  	"AXP806",
->  	"AXP809",
-> @@ -154,6 +155,25 @@ static const struct regmap_range axp806_writeable_ranges[] = {
->  	regmap_reg_range(AXP806_REG_ADDR_EXT, AXP806_REG_ADDR_EXT),
->  };
->
-> +static const struct regmap_range axp313a_writeable_ranges[] = {
-> +	regmap_reg_range(AXP313A_ON_INDICATE, AXP313A_IRQ_STATE),
-> +};
-> +
-> +static const struct regmap_range axp313a_volatile_ranges[] = {
-> +	regmap_reg_range(AXP313A_SHUTDOWN_CTRL, AXP313A_SHUTDOWN_CTRL),
-> +	regmap_reg_range(AXP313A_IRQ_STATE, AXP313A_IRQ_STATE),
-> +};
-> +
-> +static const struct regmap_access_table axp313a_writeable_table = {
-> +	.yes_ranges = axp313a_writeable_ranges,
-> +	.n_yes_ranges = ARRAY_SIZE(axp313a_writeable_ranges),
-> +};
-> +
-> +static const struct regmap_access_table axp313a_volatile_table = {
-> +	.yes_ranges = axp313a_volatile_ranges,
-> +	.n_yes_ranges = ARRAY_SIZE(axp313a_volatile_ranges),
-> +};
-> +
->  static const struct regmap_range axp806_volatile_ranges[] = {
->  	regmap_reg_range(AXP20X_IRQ1_STATE, AXP20X_IRQ2_STATE),
->  };
-> @@ -221,6 +241,11 @@ static const struct resource axp288_fuel_gauge_resources[] = {
->  	DEFINE_RES_IRQ(AXP288_IRQ_WL1),
->  };
->
-> +static const struct resource axp313a_pek_resources[] = {
-> +	DEFINE_RES_IRQ_NAMED(AXP313A_IRQ_PEK_RIS_EDGE, "PEK_DBR"),
-> +	DEFINE_RES_IRQ_NAMED(AXP313A_IRQ_PEK_FAL_EDGE, "PEK_DBF"),
-> +};
-> +
->  static const struct resource axp803_pek_resources[] = {
->  	DEFINE_RES_IRQ_NAMED(AXP803_IRQ_PEK_RIS_EDGE, "PEK_DBR"),
->  	DEFINE_RES_IRQ_NAMED(AXP803_IRQ_PEK_FAL_EDGE, "PEK_DBF"),
-> @@ -272,6 +297,15 @@ static const struct regmap_config axp288_regmap_config = {
->  	.cache_type	= REGCACHE_RBTREE,
->  };
->
-> +static const struct regmap_config axp313a_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.wr_table = &axp313a_writeable_table,
-> +	.volatile_table = &axp313a_volatile_table,
-> +	.max_register = AXP313A_IRQ_STATE,
-> +	.cache_type = REGCACHE_RBTREE,
-> +};
-> +
->  static const struct regmap_config axp806_regmap_config = {
->  	.reg_bits	= 8,
->  	.val_bits	= 8,
-> @@ -415,6 +449,16 @@ static const struct regmap_irq axp288_regmap_irqs[] = {
->  	INIT_REGMAP_IRQ(AXP288, BC_USB_CHNG,            5, 1),
->  };
->
-> +static const struct regmap_irq axp313a_regmap_irqs[] = {
-> +	INIT_REGMAP_IRQ(AXP313A, PEK_RIS_EDGE,		0, 7),
-> +	INIT_REGMAP_IRQ(AXP313A, PEK_FAL_EDGE,		0, 6),
-> +	INIT_REGMAP_IRQ(AXP313A, PEK_SHORT,		0, 5),
-> +	INIT_REGMAP_IRQ(AXP313A, PEK_LONG,		0, 4),
-> +	INIT_REGMAP_IRQ(AXP313A, DCDC3_V_LOW,		0, 3),
-> +	INIT_REGMAP_IRQ(AXP313A, DCDC2_V_LOW,		0, 2),
-> +	INIT_REGMAP_IRQ(AXP313A, DIE_TEMP_HIGH,		0, 0),
-> +};
-> +
->  static const struct regmap_irq axp803_regmap_irqs[] = {
->  	INIT_REGMAP_IRQ(AXP803, ACIN_OVER_V,		0, 7),
->  	INIT_REGMAP_IRQ(AXP803, ACIN_PLUGIN,		0, 6),
-> @@ -548,6 +592,17 @@ static const struct regmap_irq_chip axp288_regmap_irq_chip = {
->
->  };
->
-> +static const struct regmap_irq_chip axp313a_regmap_irq_chip = {
-> +	.name			= "axp313a_irq_chip",
-> +	.status_base		= AXP313A_IRQ_STATE,
-> +	.ack_base		= AXP313A_IRQ_STATE,
-> +	.unmask_base		= AXP313A_IRQ_EN,
-> +	.init_ack_masked	= true,
-> +	.irqs			= axp313a_regmap_irqs,
-> +	.num_irqs		= ARRAY_SIZE(axp313a_regmap_irqs),
-> +	.num_regs		= 1,
-> +};
-> +
->  static const struct regmap_irq_chip axp803_regmap_irq_chip = {
->  	.name			= "axp803",
->  	.status_base		= AXP20X_IRQ1_STATE,
-> @@ -676,6 +731,15 @@ static const struct mfd_cell axp152_cells[] = {
->  	},
->  };
->
-> +static struct mfd_cell axp313a_cells[] = {
-> +	MFD_CELL_NAME("axp20x-regulator"),
-> +	{
-> +		.name		= "axp313a-pek",
-> +		.num_resources	= ARRAY_SIZE(axp313a_pek_resources),
-> +		.resources	= axp313a_pek_resources,
-> +	},
+As you pointed out, it is only the force WD bit that is writeable and
+the others are read-only. Just needed to clarify that the patch is only
+meant to solve clearing the force WD event bit (bit 0).
+I will clarify this in the commit as well.
 
-Nit: MFD_CELL_RES() ?
+The errata is allegedly planned to be documented in their next version
+of release notes.
 
-Other than that, looks fine.  Once fixed:
+Thank you for reviewing!
 
-For my own reference (apply this as-is to your sign-off block):
-
-Acked-for-MFD-by: Lee Jones <lee@kernel.org>
-
---
-Lee Jones [李琼斯]
+Best regards
+Gustav
