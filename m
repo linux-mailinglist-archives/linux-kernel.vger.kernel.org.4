@@ -2,152 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEC66D12B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1428E6D12BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbjC3XAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 19:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
+        id S231391AbjC3XBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 19:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjC3XAM (ORCPT
+        with ESMTP id S231342AbjC3XBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 19:00:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB54FDBE2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:59:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680217170;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o6OjiitjPwr2q3+VgtTu4P0B7q8Y0XJ2G6/rSSRxlds=;
-        b=YT3+wtgaCO+FZD5dfbpA/ZxwktWNdnriGZTMm7ALPQHDl9ekdD9kZW2MbMCZW+R2+fbsOW
-        eCuupExqLmy3++LYPdquPyKAfnZ7lyX1ThUTuDMuARORCpzF77KchKgqmQspRity9KvZX0
-        Fc7W3hVv+n5/0qo8r0TytCj6e3DYyKs=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-117-eT7sWWoROWSvlBhUifVycQ-1; Thu, 30 Mar 2023 18:59:28 -0400
-X-MC-Unique: eT7sWWoROWSvlBhUifVycQ-1
-Received: by mail-wm1-f71.google.com with SMTP id bg33-20020a05600c3ca100b003ef6d684105so6788288wmb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:59:27 -0700 (PDT)
+        Thu, 30 Mar 2023 19:01:01 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77526DBE2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 16:00:59 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id y20so26637681lfj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 16:00:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680217258;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A6kuT6yMRhPANOcy+yitv1kvMjGcvYyKQpeqJZ7sFYY=;
+        b=irqWVOstEEB8FLwfQsyPkDPxarLwczbE0LqOIgKwbTZDiQYOB4RChmvGieN9dfY3Hn
+         SrTm9RhO5ryPBJpdOPnc7yrK5uecP6W3RUerUHAxZ/5Ta3ES63mDfBtu0BrWLILYxnoq
+         mhGgqjTekbMcI7mctuzjJD/6qEaG1CemnIqqlcQjVHyMfiFpymD5xXsk/OZjjMUCMZaC
+         T5gvpZbtSIiaQsTuSmVgum2ko7jurNNnsXr6rmIreiy54ergrh1q10hL9VQIWVhvFWh0
+         LWpjKSZFOKJXy/p1YnbBXzGsnd+0oCAgmak/K18/rdhRYvE/IoHffbGEV17rs5G6LO8C
+         4xHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680217166;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o6OjiitjPwr2q3+VgtTu4P0B7q8Y0XJ2G6/rSSRxlds=;
-        b=G73/4LhrTvUXM6fOY3mmT1DSdAx3nBNf3AeLBASj8TerXNiKzSqwr83JSM7mVILt5s
-         tM20h4PVbKEFXdPNUUHRoGkdlNbSQQMPL7jox97lXtb+0AlLn0Qgn2zbrUwiLb44mFui
-         YeISnesihTVArXpGDNyJZXz+68O6y7U7EZ9dJ+N9uDCnEKOnT9bMIAGOxCT08Hm1m6h9
-         KWMxOtH837u3+yfZWT/0px83RPvJVtzMy2cYQupeuEn7nnxhbgYAoDv6ArQ6ZKfJwc9l
-         0oJl2dcx5dgmkxNpwJ02QiN4FVEtZW2mi9Y/2O5SoXZ35MtAoLTx27/lJAKamjwtlKlr
-         Jg0A==
-X-Gm-Message-State: AAQBX9e4kzY81zS/EQR+z01GlYj18Rl3laVkDY5qSNAtA+mT19tAwhC+
-        6AWhPlcSuxbzQxANz01c7hEsIT93/g1Ubx8nRJg56xxBWkTCG6sGIyHwxIbuObWYe6m20r67idB
-        mI0Cej6AGDQIrkk37bf2Ahz+MrNrwsW4F
-X-Received: by 2002:a1c:7714:0:b0:3ee:1084:aa79 with SMTP id t20-20020a1c7714000000b003ee1084aa79mr4645663wmi.20.1680217166718;
-        Thu, 30 Mar 2023 15:59:26 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Yecu73nIBzSwX6n9VC0rj75gvI4cfYDMCQVY5s6zogWVJi/S5ieqmyC8RCCI2B/05FAE9b9w==
-X-Received: by 2002:a1c:7714:0:b0:3ee:1084:aa79 with SMTP id t20-20020a1c7714000000b003ee1084aa79mr4645652wmi.20.1680217166385;
-        Thu, 30 Mar 2023 15:59:26 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05600c444d00b003ee8ab8d6cfsm7846029wmn.21.2023.03.30.15.59.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 15:59:26 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Enric Balletbo i Serra <eballetbo@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lin Huang <hl@rock-chips.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, zain wang <wzz@rock-chips.com>
-Subject: Re: [PATCH] arm64: dts: rockchip: Remove non-existing pwm-delay-us
- DT property
-In-Reply-To: <CA+ASDXOtyBgr0o+bhjOScjs2h3oUKdouoAi4m+Z=R=Bho=iRFA@mail.gmail.com>
-References: <20230330220251.2388494-1-javierm@redhat.com>
- <CA+ASDXOtyBgr0o+bhjOScjs2h3oUKdouoAi4m+Z=R=Bho=iRFA@mail.gmail.com>
-Date:   Fri, 31 Mar 2023 00:59:24 +0200
-Message-ID: <87355lg81f.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20210112; t=1680217258;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A6kuT6yMRhPANOcy+yitv1kvMjGcvYyKQpeqJZ7sFYY=;
+        b=epX+E+7qSX1YmOxRzUQZJb9trQNA26gJd14Px6g9kDyfUtSHC5vQonLagFKvjyDnF3
+         N+Tf7S8ESJd5sWwWUYX+ncGzDVtL0ZrAB/CyPWrbAU3p2CrXlzEGoL4WGVzc6g/Cg7wp
+         FDxUbv/3z3z6M1fCT9pHn954oq8Ve26gS/3NtUan41WqTaB6fSonc4avb2rzfjbyg+wS
+         nDacOW477DEnf3NRmpGtpNebfU8EXiwnTPn1YowMyKQV4a9gmzgyYa0TqbJhqBSzjEJ9
+         mwzttnZbl0iSmX6759GJG+e3JbsEF1Dbm/QKSapfMIYa/pmKNcdlmoStqyA7CXA4QvGV
+         0m7A==
+X-Gm-Message-State: AAQBX9e3d9M2H4CS+bNG4Kma/7dGRdHRlTbK2ImgglZlAc3WHDIT/flP
+        xmDbebAZdFRFbCR1jofHcfSTLw==
+X-Google-Smtp-Source: AKy350Z5ZuTNud6AGEQZ9lRSS0iZaokhTOF68/eLPut58alI5pZKqX5nYSacIeg2lYmztgwZ62id6Q==
+X-Received: by 2002:ac2:48a1:0:b0:4ea:9a49:99e4 with SMTP id u1-20020ac248a1000000b004ea9a4999e4mr6652314lfg.56.1680217257675;
+        Thu, 30 Mar 2023 16:00:57 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id m14-20020a19520e000000b004cb1de3f487sm121752lfb.104.2023.03.30.16.00.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 16:00:57 -0700 (PDT)
+Message-ID: <6f2c8609-0733-c1f6-210f-3d6f3d987c23@linaro.org>
+Date:   Fri, 31 Mar 2023 01:00:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/4] dt-bindings: usb: gpio-sbu-mux: Add OnSemi NB7VPQ904M
+ mux
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230321-topic-sagami_dp-v1-0-340c8bce4276@linaro.org>
+ <20230321-topic-sagami_dp-v1-1-340c8bce4276@linaro.org>
+ <20230330153116.GA2181381-robh@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230330153116.GA2181381-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Brian Norris <briannorris@chromium.org> writes:
 
-Hello Brian,
 
-> On Thu, Mar 30, 2023 at 3:03=E2=80=AFPM Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
+On 30.03.2023 17:31, Rob Herring wrote:
+> On Tue, Mar 21, 2023 at 11:12:28PM +0100, Konrad Dybcio wrote:
+>> The OnSemi NB7VPQ904M Type-C DP altmode redriver provides SBU signals
+>> that can be used in with the gpio-sbu-mux driver. Document it.
 >>
->> There is no neither a driver that parses this nor a DT binding schema th=
-at
+>> Note that the -mux suffix is there to indicate that the gpio-sbu-mux
+>> driver interacts with the mux part of this otherwise quite sophisticated
+>> chip, leaving the "onnn,nb7vpq904m" compatible free for when a proper
+>> driver taking care of all of the chip's capabilities is introduced.
+> 
+> You should define a proper and complete binding. If you want to bind the 
+> gpio-sbu-mux driver to it now until you have a proper driver then that's 
+> fine. When you have such a driver, then you drop the compatible from the 
+> gpio-sbu-mux driver.
+Okay, that makes perfect sense and is good to know. Perhaps even worth
+documenting somewhere.
 
-Ups, I noticed now that there's an unnecessary "no" and it should be instea=
-d:
+I think I'll delay resending this and get an "actual" driver going.
 
-"There is neither a driver..."
-
->> documents it so let's remove it from the DTS files that make use of this.
->>
->> The properties that exist are post-pwm-on-delay-ms and pwm-off-delay-ms,
->> defined in the pwm-backlight DT binding. So probably what these DTS want
->> is something like following:
->>
->>         backlight: backlight {
->>                 compatible =3D "pwm-backlight";
->>                 enable-gpios =3D <&gpio4 21 GPIO_ACTIVE_HIGH>;
->>                 pinctrl-names =3D "default";
->>                 pinctrl-0 =3D <&bl_en>;
->>                 pwms =3D <&pwm1 0 1000000 0>;
->>                 post-pwm-on-delay-ms =3D <10>;
->>                 pwm-off-delay-ms =3D <10>;
->>         };
->>
->> But that should be follow-up change if that is the case. Because otherwi=
-se
->> it would be change in behaviour, since currently pwm-delay-us is a no-op.
->>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
->
-> pwm-delay-us seems to have been a downstream-only ("CHROMIUM", if
-> you're familiar with ChromiumOS kernel parlance) change that seems
-> like a combination of the two now-upstream properties you point at. I
-
-Yes, that's what I found too. So it seems that this was an oversight when
-the DTS for these Chromebooks were upstreamed.
-
-> looked through the first use of pwm-delay-us on RK3399 Gru systems,
-> and I can't find a spec reference that said it was needed; perhaps it
-> was needless copy/paste imitation?
->
-> So, simple deletion is probably fine:
->
-> Reviewed-by: Brian Norris <briannorris@chromium.org>
->
-
-Thanks for the confirmation and review!
-
---=20
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Konrad
+> 
+> Note that having the fallback "gpio-sbu-mux" is somewhat problematic 
+> because the kernel has no mechanism to ensure you bind the most specific 
+> driver. For that to happen, it would have to support (automatically) 
+> unbinding one driver and binding to the more specific driver since one 
+> driver could be built-in and the other a module.
+> 
+> Rob
