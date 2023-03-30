@@ -2,95 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA326D060A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EDE6D060D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjC3NL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
+        id S231891AbjC3NLk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 09:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbjC3NLZ (ORCPT
+        with ESMTP id S231876AbjC3NLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:11:25 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D48A729F;
-        Thu, 30 Mar 2023 06:11:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1680181884; x=1711717884;
-  h=from:to:cc:subject:date:message-id;
-  bh=lgVVQIwI6iLlo2kEEH9j4UdpPk+a4BHv5x14ZPkjMN0=;
-  b=YxSVIMJ8OdLGcoGa2vPV27c52GWH6IJivPHJPSYEH0HjfPb2jbUFO0tk
-   mo4UBrYkxbdNDpUR+La70r9VqPQRrPVv99sfqNJqxoJNAolmuIiZC5vf7
-   WIeb0fPSIlFng2Y+TXlqPt88caCF6FC0rjgJqje2HRuYM14dwZhJFl4o9
-   Tu8ePen4MZZy2fDpiRLrj2QdN6vb6Anx6PIVjtuFdKaGTOEWDwVV6lcHW
-   Xlu97r+G9iqyHC9yfXe0upH/eJWKnklNc8SH7PgcqUUyCkyn478bDaL3n
-   q7LiKD8bY1ZMxliCYMwLjmJW7EqA9n4uMOz1cyCTdGLfDLtmkpPaDdVbP
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,303,1673884800"; 
-   d="scan'208";a="226881513"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 30 Mar 2023 21:11:23 +0800
-IronPort-SDR: VqJTwR7FZvYcAr3YF1jp8fJHWfodrwzGpVVJtEQSXMhcA9NUWFbrvHdgnjKO6Hhlc71+pVARH6
- Voc7/JXOaoTSUjR1lrhSsYnsXK0/PaEvRyTT39UqjUgUxbR/VqQyVFYO93lhk/w8dMJJ1Qdo6Q
- BPe1SdLkGjM3AMhH/9evQpp0po8TGT3lHfBLC1/bqnw8uMh6IZC9jHfpXXS1DyMn8OWtAEcHoY
- M5ceWAqIpFXMtEcjJgfz0d9vnDfuP/aAdTfh4dk2J7nJUXF/D4U7aGpjrIG0Tb7z1W/4agWwQE
- b20=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Mar 2023 05:21:51 -0700
-IronPort-SDR: +f30L4CjJfQB9hvZKMAeUD8qzXGdLAXQAQUHwxayKD/FAeMeXDI0ZHm/ncLdx9k5O5H01YREGf
- xaCrwYT8pwcKyo9FOh7dvgetSpvQ8YqDfjb61wbsdLDaQCpdw/QHnItoKfWjMtWNd37zSW9WCR
- +purt8sAzLkGsSO41AqL5Kg3mZ4CGl8KnYqKz/HOUMpRoZUxhEhmHPISLkrphQBKobQIdbHe8D
- 4g2YvenvbpY81ajQ4RvqJPv6Z8lbzyD2qTfWEVcp2e58wwTlvv7bt84WOHLrra8pvRvMLRvRfH
- Rik=
-WDCIronportException: Internal
-Received: from bxygm33.ad.shared ([10.45.30.255])
-  by uls-op-cesaip01.wdc.com with ESMTP; 30 Mar 2023 06:11:21 -0700
-From:   Avri Altman <avri.altman@wdc.com>
-To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH] scsi: ufs: mcq: Limit the amount of inflight requests
-Date:   Thu, 30 Mar 2023 16:11:09 +0300
-Message-Id: <20230330131109.5722-1-avri.altman@wdc.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 30 Mar 2023 09:11:37 -0400
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7BB8A5A;
+        Thu, 30 Mar 2023 06:11:34 -0700 (PDT)
+Received: by mail-pg1-f176.google.com with SMTP id s19so11299848pgi.0;
+        Thu, 30 Mar 2023 06:11:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680181894;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WF/k+smNF0wtDIvwvnJjHksafUxKVuwmCptDceQP0aU=;
+        b=8Ffs5vX9nn5hsSQDP71QnYvGUXKgVZPokOS5Joqe5nzZ0wy1ziz8v/NYVT/1NaYWzi
+         9xHnAKauiQ7bA8cW3dOQkAUT+6Ntok5r45wstg4Hm+VsEtZZoCIh0A6FhhzVIKB2Jx/y
+         ROlBmtreMyA67b/L+z7CFKYe3IPybZJWxOxyuu6GthfzMsFEVfxZE517Y5/aHau9Tl4y
+         RHetxs9KjOSbiVaWo2NEewfovGREqp/xcgM7NVGzENkRE7FDhBGcwU9wonXPuyv5SDXX
+         cx6H8eRWIgEl9jUbp8hZb4kxXqKImceeynrt5VY+rHStdQBAWTb1Kz8r3MCkwwle6sLF
+         2F6A==
+X-Gm-Message-State: AAQBX9c5vHpeYOHVt+i6S3EucZLRMv6ofwnW4iiTZz38c/3AMhNO5bUv
+        esFexRLYQulq65ryoLIoBu0EqHOSnXeK20xlo0MeWhPIvbk=
+X-Google-Smtp-Source: AKy350apEVm4QjI+SfyqcgMcIZVm8PoBxu+KF9LohzrSLU8Q3Hf8U6iOpoh6H5x37ntsWyNn/OgjDrCfckr0ehMjRUg=
+X-Received: by 2002:a05:6a00:1a15:b0:62a:56ce:f90b with SMTP id
+ g21-20020a056a001a1500b0062a56cef90bmr12216796pfv.2.1680181893612; Thu, 30
+ Mar 2023 06:11:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230327051048.11589-1-peter_hong@fintek.com.tw>
+ <CAMZ6Rq+ps1tLii1VfYyAqfD4ck_TGWBUo_ouK_vLfhoNEg-BPg@mail.gmail.com>
+ <5bdee736-7868-81c3-e63f-a28787bd0007@fintek.com.tw> <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
+ <8f43fc07-39b1-4b1b-9dc6-257eb00c3a81@fintek.com.tw>
+In-Reply-To: <8f43fc07-39b1-4b1b-9dc6-257eb00c3a81@fintek.com.tw>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 30 Mar 2023 22:11:22 +0900
+Message-ID: <CAMZ6RqLnWARxkJx0gBsee4NsyQicpg6=bPaysmoFo6KRc-j23g@mail.gmail.com>
+Subject: Re: [PATCH V3] can: usb: f81604: add Fintek F81604 support
+To:     Peter Hong <peter_hong@fintek.com.tw>
+Cc:     wg@grandegger.com, mkl@pengutronix.de,
+        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, frank.jungclaus@esd.eu,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-in UFS, each request is designated via the triplet <iid, lun, task tag>.
+On Thu. 30 Mars 2023 at 15:49, Peter Hong <peter_hong@fintek.com.tw> wrote:
+> Hi Vincent,
+>
+> Vincent MAILHOL 於 2023/3/28 下午 12:49 寫道:
+> >>>> +static int f81604_set_reset_mode(struct net_device *netdev)
+> >>>> +{
+> >>>> +       struct f81604_port_priv *priv = netdev_priv(netdev);
+> >>>> +       int status, i;
+> >>>> +       u8 tmp;
+> >>>> +
+> >>>> +       /* disable interrupts */
+> >>>> +       status = f81604_set_sja1000_register(priv->dev, netdev->dev_id,
+> >>>> +                                            SJA1000_IER, IRQ_OFF);
+> >>>> +       if (status)
+> >>>> +               return status;
+> >>>> +
+> >>>> +       for (i = 0; i < F81604_SET_DEVICE_RETRY; i++) {
+> >>> Thanks for removing F81604_USB_MAX_RETRY.
+> >>>
+> >>> Yet, I still would like to understand why you need one hundred tries?
+> >>> Is this some paranoiac safenet? Or does the device really need so many
+> >>> attempts to operate reliably? If those are needed, I would like to
+> >>> understand the root cause.
+> >> This section is copy from sja1000.c. In my test, the operation/reset may
+> >> retry 1 times.
+> >> I'll reduce it from 100 to 10 times.
+> > Is it because the device is not ready? Does this only appear at
+> > startup or at random?
+>
+> I'm using ip link up/down to test open/close(). It's may not ready so fast.
+> but the maximum retry is only 1 for test 10000 times.
 
-In UFS4.0 the Initiator ID field is 8 bits wide, comprised of the
-EXT_IID and IID fields. Together with the task tag (single byte), they
-limit the driver's hw queues capacity.
+Ack, thanks for the explanation.
 
-Signed-off-by: Avri Altman <avri.altman@wdc.com>
----
- drivers/ufs/core/ufshcd.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> >>>> +static int f81604_set_termination(struct net_device *netdev, u16 term)
+> >>>> +{
+> >>>> +       struct f81604_port_priv *port_priv = netdev_priv(netdev);
+> >>>> +       struct f81604_priv *priv;
+> >>>> +       u8 mask, data = 0;
+> >>>> +       int r;
+> >>>> +
+> >>>> +       priv = usb_get_intfdata(port_priv->intf);
+> >>>> +
+> >>>> +       if (netdev->dev_id == 0)
+> >>>> +               mask = F81604_CAN0_TERM;
+> >>>> +       else
+> >>>> +               mask = F81604_CAN1_TERM;
+> >>>> +
+> >>>> +       if (term == F81604_TERMINATION_ENABLED)
+> >>>> +               data = mask;
+> >>>> +
+> >>>> +       mutex_lock(&priv->mutex);
+> >>> Did you witness a race condition?
+> >>>
+> >>> As far as I know, this call back is only called while the network
+> >>> stack big kernel lock (a.k.a. rtnl_lock) is being hold.
+> >>> If you have doubt, try adding a:
+> >>>
+> >>>     ASSERT_RTNL()
+> >>>
+> >>> If this assert works, then another mutex is not needed.
+> >> It had added ASSERT_RTNL() into f81604_set_termination(). It only assert
+> >> in f81604_probe() -> f81604_set_termination(), not called via ip command:
+> >>       ip link set dev can0 type can termination 120
+> >>       ip link set dev can0 type can termination 0
+> >>
+> >> so I'll still use mutex on here.
+> > Sorry, do you mean that the assert throws warnings for f81604_probe()
+> > -> f81604_set_termination() but that it is OK (no warning) for ip
+> > command?
+> >
+> > I did not see that you called f81604_set_termination() internally.
+> > Indeed, rtnl_lock is not held in probe(). But I think it is still OK.
+> > In f81604_probe() you call f81604_set_termination() before
+> > register_candev(). If the device is not yet registered,
+> > f81604_set_termination() can not yet be called via ip command. Can you
+> > describe more precisely where you think there is a concurrency issue?
+> > I still do not see it.
+>
+> Sorry, I had inverse the mean of ASSERT_RTNL(). It like you said.
+>      f81604_probe() not held rtnl_lock.
+>      ip set terminator will held rtnl_lock.
+>
+> Due to f81604_set_termination() will called by f81604_probe() to
+> initialize, it may need mutex in
+> situation as following:
+>
+> User is setting can0 terminator when f81604_probe() complete generate
+> can0 and generating can1.
+> So IMO, the mutex may needed.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 35a3bd95c5e4..d529c42a682a 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -8468,6 +8468,10 @@ static int ufshcd_alloc_mcq(struct ufs_hba *hba)
- 	if (ret)
- 		goto err;
- 
-+	if (WARN_ONCE(hba->nutrs * hba->nr_hw_queues > (1 << 16) - 1,
-+		     "there can be at most 1<<16 inflight requests\n"))
-+		goto err;
-+
- 	/*
- 	 * Previously allocated memory for nutrs may not be enough in MCQ mode.
- 	 * Number of supported tags in MCQ mode may be larger than SDB mode.
--- 
-2.17.1
+Hmm, I am still not a fan of setting a mutex for a single concurrency
+issue which can only happen during probing.
 
+What about this:
+
+  static int __f81604_set_termination(struct net_device *netdev, u16 term)
+  {
+          struct f81604_port_priv *port_priv = netdev_priv(netdev);
+          u8 mask, data = 0;
+
+          if (netdev->dev_id == 0)
+                  mask = F81604_CAN0_TERM;
+          else
+                  mask = F81604_CAN1_TERM;
+
+          if (term == F81604_TERMINATION_ENABLED)
+                  data = mask;
+
+          return f81604_mask_set_register(port_priv->dev, F81604_TERMINATOR_REG,
+                                          mask, data);
+  }
+
+  static int f81604_set_termination(struct net_device *netdev, u16 term)
+  {
+          ASSERT_RTNL();
+
+          return __f81604_set_termination(struct net_device *netdev, u16 term);
+  }
+
+  static int f81604_init_termination(struct f81604_priv *priv)
+  {
+          int i, ret;
+
+          for (i = 0; i < ARRAY_SIZE(f81604_priv->netdev); i++) {
+                  ret = __f81604_set_termination(f81604_priv->netdev[i],
+                                                 F81604_TERMINATION_DISABLED);
+                  if (ret)
+                          return ret;
+          }
+  }
+
+  static int f81604_probe(struct usb_interface *intf,
+                          const struct usb_device_id *id)
+  {
+          /* ... */
+
+          err = f81604_init_termination(priv);
+          if (err)
+                  goto failure_cleanup;
+
+          for (i = 0; i < ARRAY_SIZE(f81604_priv->netdev); i++) {
+                  /* ... */
+          }
+
+          /* ... */
+  }
+
+Initialise all resistors with __f81604_set_termination() in probe()
+before registering any network device. Use f81604_set_termination()
+which has the lock assert elsewhere.
+
+Also, looking at your probe() function, in label clean_candev:, if the
+second can channel fails its initialization, you do not clean the
+first can channel. I suggest adding a f81604_init_netdev() and
+handling the netdev issue and cleanup in that function.
+
+> >>>> +               port_priv->can.do_get_berr_counter = f81604_get_berr_counter;
+> >>>> +               port_priv->can.ctrlmode_supported =
+> >>>> +                       CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_3_SAMPLES |
+> >>>> +                       CAN_CTRLMODE_ONE_SHOT | CAN_CTRLMODE_BERR_REPORTING |
+> >>>> +                       CAN_CTRLMODE_CC_LEN8_DLC | CAN_CTRLMODE_PRESUME_ACK;
+> >>> Did you test the CAN_CTRLMODE_CC_LEN8_DLC feature? Did you confirm
+> >>> that you can send and receive DLC greater than 8?
+> >> Sorry, I had misunderstand the define. This device is only support 0~8
+> >> data length,
+> >    ^^^^^^^^^^^
+> >
+> > Data length or Data Length Code (DLC)? Classical CAN maximum data
+> > length is 8 but maximum DLC is 15 (and DLC 8 to 15 mean a data length
+> > of 8).
+> >
+>
+> This device can't support DLC > 8. It's only support 0~8.
+
+Ack.
