@@ -2,146 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F036D0F21
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355AE6D0F2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbjC3ToR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 15:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
+        id S231222AbjC3TpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 15:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjC3ToP (ORCPT
+        with ESMTP id S230123AbjC3To5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:44:15 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1C9EFB2;
-        Thu, 30 Mar 2023 12:44:14 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32UCRDk6012211;
-        Thu, 30 Mar 2023 19:44:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=cqQmgaIu3tZ+F9OvZEHmpqKHsX7ixNOJ/m95ok1vMM8=;
- b=Up+PS7Uiny/Em6fX83QTfkoXSUJa1dAAhEEXlNRZXb0d1hMpSxU01jJDNExGvbhjdM0f
- iJB2XkZR3AuhokGk6YTwb4fXCpZTGXkmelN19od4ygoMWMMyIOZ/wBuIZ+x62YvZnMZ6
- FmV8fGiKKfeVsInT4PF2mULZil37wOQqsr5gPjlJAOmr6D0JK6zDFPH8sgzEhvMg5jHW
- 5Wan8Ysiyb0SNUPmw25twfbbrQIs9RjOe6RsvgHckB6yMgfbLyVxi9Gd+/wLv+pUlPtm
- H1cZRPbCsPO13reIo3t6CCEKqEnWWf3xFlbTMieZ6RIJ4r2X8w+841jteRuhJCD6hIO/ ow== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pn1a9tnve-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 19:44:06 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32UJhqvq013247
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 19:43:52 GMT
-Received: from [10.216.46.49] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 30 Mar
- 2023 12:43:49 -0700
-Message-ID: <fe19a934-979f-6925-fefe-a650570e68b3@quicinc.com>
-Date:   Fri, 31 Mar 2023 01:13:46 +0530
+        Thu, 30 Mar 2023 15:44:57 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AE935A2;
+        Thu, 30 Mar 2023 12:44:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DVud/tyTyEdCDQXMg/PvD6Y7y4lXf7UxOrvcMlSqT069yhd/TYmvhjTcCaSHpFtMstARlfvmM+PWIugDhM7L/8DjSZRGImLGtA7zxjBpf9icelAEvzlIEfSuLJMANKA9C/1a2iixctrjrivPoVfPCrk4j/T0Cex2c/JdQmD6GSdK2gxpu1lwCmU/prnef//ufsbP5JVLGjCCkAEODKnd6Wo1BOPp0FM2CddxffYx2A7jdSosysls4FqsRQzU4dzunKywqLQ1Y5F08m5eJc246S31hGDcwUC1emLRAULEkR0VxPFtqz6QfKYdKFdtk0UbkS75PiM3IFf6VUr0r1/6oQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9n951d29tQYhail1QPyHvl1KFSGUJaJDdPS/6kSYzSU=;
+ b=ICf7fUK511+e58lqFjPAS+JQyWEuCDf+rrCZk2c4KeJyvqjeJ62+QKobiAglY9qMwJfWaUdbYsmkvK5yGLvD+CNnX1k+6WQFL5+qcRG6gjv8A4b8U47MUhyomn+mS1s7Tk9z/ei0jfhI4oAB7mBvQaxKnAJiZ+wLch0WY9gNM1GuUTj/oWBl+sxM655r2s5lGXTBQauuAHrNDsBlfm4zCDjMSg65M2Jl1A0HU38I0p0F6C8PwHqDmrcWKZHmeKEZNlo30iJtyxXc8gsfs/z9hdIanO/47wOHi98aCUEWYi67lRNPCuSrKyOPeaS2C//UaPwwVw9gitb9CrLQ3Oy5xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=chromium.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9n951d29tQYhail1QPyHvl1KFSGUJaJDdPS/6kSYzSU=;
+ b=pqxPqCjnfgW0nIgXaBy1rE7bk2QSf7L7zah9AVjrWyva6gvbgTV93mMiwz/3NPUfVbaCgsFuwCPmNHlBV6a7F6hWepj7aX30Wg9GG/KggPtpOtLU2lXrzoK5paGRuqv89Pwt8pDBU2To8XMdh8UyjSGY6wXSVE5/epZfRZZyWj8=
+Received: from DM6PR13CA0010.namprd13.prod.outlook.com (2603:10b6:5:bc::23) by
+ DM6PR12MB4529.namprd12.prod.outlook.com (2603:10b6:5:2ab::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.35; Thu, 30 Mar 2023 19:44:54 +0000
+Received: from DS1PEPF0000E636.namprd02.prod.outlook.com
+ (2603:10b6:5:bc:cafe::6a) by DM6PR13CA0010.outlook.office365.com
+ (2603:10b6:5:bc::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20 via Frontend
+ Transport; Thu, 30 Mar 2023 19:44:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000E636.mail.protection.outlook.com (10.167.17.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6178.30 via Frontend Transport; Thu, 30 Mar 2023 19:44:53 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 30 Mar
+ 2023 14:44:52 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Sven van Ashbrook <svenva@chromium.org>,
+        John Stultz <jstultz@google.com>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     Raul Rangel <rrangel@chromium.org>,
+        David E Box <david.e.box@intel.com>,
+        Rajat Jain <rajatja@google.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v5 0/4] Add vendor agnostic mechanism to report hardware sleep
+Date:   Thu, 30 Mar 2023 14:44:34 -0500
+Message-ID: <20230330194439.14361-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] net: qrtr: Do not do DEL_SERVER broadcast after
- DEL_CLIENT
-Content-Language: en-US
-To:     Manivannan Sadhasivam <mani@kernel.org>
-CC:     <manivannan.sadhasivam@linaro.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux-arm-msm@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1680095250-21032-1-git-send-email-quic_srichara@quicinc.com>
- <20230330112716.GA84386@thinkpad>
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <20230330112716.GA84386@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cDdKCeOiOxm3LWQuSMCAiGnggPnIImfX
-X-Proofpoint-GUID: cDdKCeOiOxm3LWQuSMCAiGnggPnIImfX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-30_12,2023-03-30_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 malwarescore=0 mlxlogscore=999 lowpriorityscore=0
- suspectscore=0 adultscore=0 spamscore=0 impostorscore=0 clxscore=1015
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303300155
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E636:EE_|DM6PR12MB4529:EE_
+X-MS-Office365-Filtering-Correlation-Id: 251a6f4d-b066-4137-2902-08db31573be4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pPAtDguU5JeCfpasGmvJZGMBrDZgoH7QAQSO9/Ggti9Ay4Dh+Qjy7sn4SSoZORpyy9bBoHkjCkSe8VwdI8BMwin/2NGnNt621PXWJC+0ruvxdTGczygUW7sBpZ84l96loGMwMEdU66S5jAQyqPRTdgryVnwZjslwxFVRcJAuuzQ8/zbpxUsuKIWXuQyWNS5xEq9VVgmkOx53ZorM+SAf//l7bKuwSsKLvOjKcGWEgGcHlC3U57aTbJ/xU0ruj9v1QKDwpMjWVGYvPbJttcobiEUmnCKWpc0tjrTLW4knDE2yijzkzkirfHrzYAxY/WL4Ma8EEBhTk2Wy8BQ1T3kHUt3wTmQ8FtXhId0g8WaAv4xDo3QIbvhUSC7MrESkdPXEoWIqhacAjM5IS4HwnZh2+3PCAJAR3xKd4qju75QJab+N+d3GohCWxbYOgvNeHIOTIz4CWQ2mKdu5UOHNu6ucQz6g57vB3DMgxQcwPaBgBa10hC2xR/j9YW/Y4ubirvMrOWLj24e6R2+9eGDE59xwQDenHh+gkwP4MhUe9Vhk7MlO6R5OXQ29ebyeCqciRU5c63xdghWYGJtjAIGtyerZxlaGIRFh78PGyjHhuLRv7TmVhv/sh+0Kf+QSd8lvMcT+RaB6k7Jfb375xOGEODs8+ntqsawPpUVxpLojahz2wU+8W1pLAhscqOF/Teo9IAytTyhNe6XGolFFF0Em8rgW8vqg4qid22TAFU8Q0CZFt5I=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199021)(46966006)(40470700004)(36840700001)(40480700001)(356005)(83380400001)(1076003)(81166007)(82740400003)(26005)(6666004)(478600001)(40460700003)(110136005)(7696005)(70206006)(316002)(7416002)(82310400005)(54906003)(36756003)(70586007)(86362001)(41300700001)(336012)(4326008)(8676002)(2616005)(47076005)(2906002)(186003)(966005)(426003)(5660300002)(36860700001)(8936002)(16526019)(44832011)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 19:44:53.9000
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 251a6f4d-b066-4137-2902-08db31573be4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E636.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4529
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+An important part of validating that s0ix worked properly is to check how much
+of a cycle was spent in a hardware sleep state.
 
+The reporting of hardware sleep is a mix of kernel messages and sysfs files
+that vary from vendor to vendor. Collecting this information requires extra
+information on the kernel command line or fetching from debugfs.
 
-On 3/30/2023 6:09 PM, Manivannan Sadhasivam wrote:
-> On Wed, Mar 29, 2023 at 06:37:30PM +0530, Sricharan R wrote:
->> When the qrtr socket is released, qrtr_port_remove gets called, which
->> broadcasts a DEL_CLIENT. After this DEL_SERVER is also additionally
->> broadcasted, which becomes NOP, but triggers the below error msg.
->>
->> "failed while handling packet from 2:-2", since remote node already
->> acted upon on receiving the DEL_CLIENT, once again when it receives
->> the DEL_SERVER, it returns -ENOENT.
->>
->> Fixing it by not sending a 'DEL_SERVER' to remote when a 'DEL_CLIENT'
->> was sent for that port.
->>
-> 
-> How about:
-> 
-> "On the remote side, when QRTR socket is removed, af_qrtr will call
-> qrtr_port_remove() which broadcasts the DEL_CLIENT packet to all neighbours
-> including local NS. NS upon receiving the DEL_CLIENT packet, will remove
-> the lookups associated with the node:port and broadcasts the DEL_SERVER
-> packet.
-> 
-> But on the host side, due to the arrival of the DEL_CLIENT packet, the NS
-> would've already deleted the server belonging to that port. So when the
-> remote's NS again broadcasts the DEL_SERVER for that port, it throws below
-> error message on the host:
-> 
-> "failed while handling packet from 2:-2"
-> 
-> So fix this error by not broadcasting the DEL_SERVER packet when the
-> DEL_CLIENT packet gets processed."
-> 
+To make this information more readily accessible introduce a new file in
+suspend_stats that drivers can report into during their resume routine.
 
-   Sure, sounds good. Will change this up and send V2.
+Userspace can fetch this information and compare it against the duration of
+the cycle to allow determining residency percentages and flagging problems.
 
->> Signed-off-by: Ram Kumar D <quic_ramd@quicinc.com>
->> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
->> ---
->> Note: Functionally tested on 5.4 kernel and compile tested on 6.3 TOT
->>
+v4->v5
+ * Stop calculating a percentage, let userspace do this if desirable.
+   Userspace may just care != 0.
+ * Fix S3 case for Intel PMC
 
-  <...>
+Previous submission:
+https://lore.kernel.org/all/20221117225822.16154-1-mario.limonciello@amd.com/
 
->>   
->> -	/* Remove the server belonging to this port */
->> +	/* Remove the server belonging to this port
->> +	 * Given that DEL_CLIENT is already broadcasted
->> +	 * by port_remove, no need to send DEL_SERVER for
->> +	 * the same port to remote
->> +	 */
-> 
-> 	/*
->   	 * Remove the server belonging to this port but don't broadcast
-> 	 * DEL_SERVER. Neighbours would've already removed the server belonging
-> 	 * to this port due to the DEL_CLIENT broadcast from qrtr_port_remove().
-> 	 */
+Mario Limonciello (4):
+  PM: Add a sysfs file to represent time spent in hardware sleep state
+  platform/x86/amd: pmc: Report duration of time in hw sleep state
+  platform/x86/intel/pmc: core: Always capture counters on suspend
+  platform/x86/intel/pmc: core: Report duration of time in HW sleep
+    state
 
-    Sure, would reword it like above in V2. Thanks.
+ Documentation/ABI/testing/sysfs-power |  9 +++++++++
+ drivers/platform/x86/amd/pmc.c        |  5 ++---
+ drivers/platform/x86/intel/pmc/core.c | 15 +++++++-------
+ drivers/platform/x86/intel/pmc/core.h |  2 --
+ include/linux/suspend.h               |  2 ++
+ kernel/power/main.c                   | 29 +++++++++++++++++++++++++++
+ 6 files changed, 49 insertions(+), 13 deletions(-)
 
-Regards,
-  Sricharan
+-- 
+2.34.1
+
