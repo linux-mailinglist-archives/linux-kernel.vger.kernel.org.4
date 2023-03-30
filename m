@@ -2,113 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C266CFB70
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9799F6CFB73
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjC3GUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 02:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        id S230185AbjC3GWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 02:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjC3GUw (ORCPT
+        with ESMTP id S229661AbjC3GWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 02:20:52 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2575FE5;
-        Wed, 29 Mar 2023 23:20:48 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32U6KalT021983;
-        Thu, 30 Mar 2023 01:20:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680157236;
-        bh=H5Uk/wARPWsfe6DJM9bh6gUd8k3OEc+odUh/r1fOGRo=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=Fthu3oTLQbvnW/P/sNKfsMOSE9zDcoOYhBr9nkONB2RoQYsTI1w8Kp6enPP1Sbckm
-         hcbhYDduMF5OG0tCfsB1sQKR9z0/H8R4AwFuX6o6Yeg+ov6pP/gzegiupG+5LKyf00
-         s4WbFOj5WSao/OrfHlgN2qVz1wHX99P8Nq/cc+Ck=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32U6KZch102898
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 30 Mar 2023 01:20:36 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 30
- Mar 2023 01:20:35 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 30 Mar 2023 01:20:35 -0500
-Received: from [172.24.145.83] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32U6KWp1055089;
-        Thu, 30 Mar 2023 01:20:32 -0500
-Message-ID: <f3be8f20-fe56-489e-440c-53ca66f00508@ti.com>
-Date:   Thu, 30 Mar 2023 11:50:31 +0530
+        Thu, 30 Mar 2023 02:22:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7822720;
+        Wed, 29 Mar 2023 23:22:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4432361ED4;
+        Thu, 30 Mar 2023 06:22:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E2EC433EF;
+        Thu, 30 Mar 2023 06:22:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680157330;
+        bh=CV1MhJWmmcdEluiHaXSBfahLeQtZk22ulhw14npJM2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K3Im3bxXR2Hle5mb4m5rORHZJju44BBco019Ozm65CYpXAtKMZWGAKLENuNt4GXcu
+         IVYnUD5f3FO61GL2QsmbRTyFgHLZHgDLRWxhuZ9D9mc/p4L5oLupu2bLIWLs5ckAq8
+         WCTHC9hzjngwgSTPl/6KO2Fr7VNDp/4GlgyxgxdHN514TqZ0c7COMxkD0jkGSGxovZ
+         kh3F3tTuaKlrrA3qLjtsUI6I0TWBibMIjp71tKGzsRZ8nJr+s5KTqAp5+3RozrHYo3
+         44QkXi+5vRLyeenLe2ABXIJDh+TMoLrK92MtkUoHMJpEu0iEqf5189apOPJWdUhAqN
+         cAoUaCglLlwnw==
+Date:   Thu, 30 Mar 2023 08:22:06 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     syzbot <syzbot+8ac3859139c685c4f597@syzkaller.appspotmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] [fs?] KASAN: null-ptr-deref Read in ida_free (3)
+Message-ID: <20230330-tinsmith-grimace-008b39c60399@brauner>
+References: <00000000000088694505f8132d77@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-j784s4-evm: Add eMMC mmc0 support
-Content-Language: en-US
-To:     Apurva Nandan <a-nandan@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230327083100.12587-1-a-nandan@ti.com>
-From:   Bhavya Kapoor <b-kapoor@ti.com>
-In-Reply-To: <20230327083100.12587-1-a-nandan@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <00000000000088694505f8132d77@google.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 29, 2023 at 05:28:55PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    da8e7da11e4b Merge tag 'nfsd-6.3-4' of git://git.kernel.or..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1266331ec80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8ac3859139c685c4f597
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11639815c80000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12128b1ec80000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/62e9c5f4bead/disk-da8e7da1.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/c11aa933e2a7/vmlinux-da8e7da1.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/7a21bdd49c84/bzImage-da8e7da1.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+8ac3859139c685c4f597@syzkaller.appspotmail.com
 
-On 27/03/23 14:01, Apurva Nandan wrote:
-> Add support for eMMC card connected to main sdhci0 instance.
->
-> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+This bug deserves a #include <asm-generic/bitops/ffs.h>.
 
-Reviewed-by: Bhavya Kapoor <b-kapoor@ti.com>
+In any case, it might just be advisable to hold namespace_lock() while
+cleaning up peer group ids...
 
-> ---
->   arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 9 +++++++++
->   1 file changed, 9 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> index 7480f37e89e8..1622a01a4667 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> @@ -21,6 +21,7 @@ chosen {
->
->   	aliases {
->   		serial2 = &main_uart8;
-> +		mmc0 = &main_sdhci0;
->   		mmc1 = &main_sdhci1;
->   		i2c0 = &main_i2c0;
->   	};
-> @@ -225,6 +226,14 @@ exp2: gpio@22 {
->   	};
->   };
->
-> +&main_sdhci0 {
-> +	/* eMMC */
-> +	status = "okay";
-> +	non-removable;
-> +	ti,driver-strength-ohm = <50>;
-> +	disable-wp;
-> +};
-> +
->   &main_sdhci1 {
->   	/* SD card */
->   	status = "okay";
-> --
-> 2.34.1
-Looks correct to me.
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git b4/vfs-mount_setattr-propagation-fix
