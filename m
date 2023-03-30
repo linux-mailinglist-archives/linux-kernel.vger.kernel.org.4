@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA166D0BDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D196D0BE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbjC3Qwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 12:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S231835AbjC3QxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 12:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbjC3Qwb (ORCPT
+        with ESMTP id S231459AbjC3QxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 12:52:31 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ED6EF80;
-        Thu, 30 Mar 2023 09:51:40 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id w4so18626095plg.9;
-        Thu, 30 Mar 2023 09:51:40 -0700 (PDT)
+        Thu, 30 Mar 2023 12:53:05 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230FCEB54
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:52:51 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id y144-20020a253296000000b00b69ce0e6f2dso19368386yby.18
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:52:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680195097;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TN84UAm9uo2g8A+E0ZnufT0CTPTZwSQT4jeM4sRw1V8=;
-        b=o0CzKe2I39j6+UaJbrBFsw26RL8QgD2SERp6qPNQmXN/yzxqb/ez+doK/B4zXLJqhy
-         48RPQtZelAnuTXVUOZPSHiif8EplV7a1yoO3cj/aXLZcQOYHnEW5P/qw/cw2oKGU904L
-         gBBqzuXm/pGrCXYCkGQSypu98EKCVrEHHyx5kaBzoXKsCUtgz3LuDueawgPBfmbkvcyV
-         ZAgUHs1OGo09XkxL32OgkzpmhxFY0RpRxv85HOFR9sV0YJyqF63LklwrqTLXQt+rV8VP
-         slzqd78gRrTPAJyYTlzBRzSGdfMfMoEvezyTugXjOgdS9f+dGbUia5fmLljGf+xg7AEJ
-         MjIA==
+        d=google.com; s=20210112; t=1680195170;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mQYDmK2JgUqCpCRVA2d0KYhO6AxXou2BaS+5pOIMpjU=;
+        b=Qhwvho/jSCzD962UhSp8uw5ox5R2LCORWuT38KhF1g8kOlUAdKNLzt4oWIseQg7qy5
+         w7ssDt5UoFmaEOfi2vxsVKdWffZwOyk9SvIH1DtxV7SaetvZLdGPBi9lKWgf7qUPSVtH
+         ASeXYWr/h3EdvlTVN8GZhAr+KU6of6ZeHB90/1jZ1BKAUXAHr1F1ZCDoZ935l51aeNBu
+         N0E1aGMWwpTJOL0st3TggxhzN+bz+EYaXjh7GBoidWRNNGBfmlCvx4E8vijMA/M8+sdk
+         7fB1TBG+FcXSIh1nNwyzmJq53L1X/KhAKwwh8/ctLfsGGCD1QCGM2Iki1y+qZLDOPx3p
+         E0Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680195097;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TN84UAm9uo2g8A+E0ZnufT0CTPTZwSQT4jeM4sRw1V8=;
-        b=xg9BmTxP5LNudqbIssQCdVVmIXsIqwzTOG6zkeoO+ji8YN35fNV0eMddZv4YFUjCoD
-         S+Lalx26eMJDFE5XeMlCdPKalZ48/fj3asRa8xWR4Hw54TwIl3LO9AcoeFog7M9d3xhI
-         H6/B1jOfW/BggCGTaD56YxhfMs9pFiENDV9NAeekz7o5fvKRJ78Q/hr4Lxe+yC9wZMO2
-         0+nXGdRLXfa6jheMHMdJiq2zB2n4k6kfjipOjpSWNm2ZeV+hTP6/bK7xFbNLUwEGp4HU
-         oyJ2sc5wnfz9thOj9K1ruy6xvbmwWno44Re7s6mgB+crmFt8Oy5IASbPxFYMlnnPyCzA
-         jX9Q==
-X-Gm-Message-State: AO0yUKVUDD+gKs5bTzS41CF5YE+Z7Be/KfYCQKqzD9VzCconM29ecynW
-        1/eYOj2jblfUj4Nago/fNKs=
-X-Google-Smtp-Source: AK7set8yLcttLav6v2ClI9R/rTmCWZORspzl9e0vlLwNdn/+zeBtbviH/QnnJ1dg5TyyR+J3tTSukQ==
-X-Received: by 2002:a05:6a20:1a92:b0:d7:8ad3:bc66 with SMTP id ci18-20020a056a201a9200b000d78ad3bc66mr19976600pzb.11.1680195097528;
-        Thu, 30 Mar 2023 09:51:37 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id s37-20020a634525000000b00507249cde91sm25422pga.91.2023.03.30.09.51.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 09:51:37 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 19:51:23 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1680195170;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mQYDmK2JgUqCpCRVA2d0KYhO6AxXou2BaS+5pOIMpjU=;
+        b=Er0pI0Eh4xZeI4pSqerVh2kWUBqXkzCBTTjBZDW9rWwT/zQLn77R8QFlrUVv0zJZbT
+         CS2ufPNNzyCW84kUzY+3f14AaySMtb5u+KrZNPvCzu6H8SBdldPRx71831tF0Xwp/frI
+         b6wU+/i2DzzO20pJPt2haj8C0tWWka57atBchK/hBvO2Kc9yaGZkg18LMV7RFoB3a3lZ
+         zqzvvRqpvVN63DGNuwX9C5YcIguqhCvm5KRrqnMaf1M9d2OrNBJqgXyVnMQZbg9VkEVJ
+         g9Uf/vK62n+FSJzZX8Ef6MxasCsQ3s0rPNtfEGyV7fM0ACd/bIJJBflGTEMuDdnjQ4pC
+         Rr2w==
+X-Gm-Message-State: AAQBX9fdOmuSsjXXKgAOV17JXlMUrRcsyOAIE2r86ngHEEFn86YhV4lt
+        k8+Xckvu6qTlyWVnDlElv8nBMm8QLcVrkg==
+X-Google-Smtp-Source: AKy350ZKQUPsiA6P7BhOGzirXB+KdSmGZo7ozykgr9T5Dtqy7WkMW7GodFAWWOkH7jqts/4Tipe33E5WWOFTow==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a05:6902:1004:b0:b75:968e:f282 with SMTP
+ id w4-20020a056902100400b00b75968ef282mr15755101ybt.11.1680195170260; Thu, 30
+ Mar 2023 09:52:50 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 16:52:48 +0000
+In-Reply-To: <20230330133822.66271-1-mathieu.desnoyers@efficios.com>
+Mime-Version: 1.0
+References: <20230330133822.66271-1-mathieu.desnoyers@efficios.com>
+Message-ID: <20230330165248.rv7bssd6ys6m33od@google.com>
+Subject: Re: [PATCH 1/1] mm: Fix memory leak on mm_init error handling
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH net-next 1/2] net: dsa: rzn1-a5psw: enable DPBU for CPU
- port and fix STP states
-Message-ID: <20230330165123.4n2bmvuaixfz34tb@skbuf>
-References: <20230330083408.63136-1-clement.leger@bootlin.com>
- <20230330083408.63136-1-clement.leger@bootlin.com>
- <20230330083408.63136-2-clement.leger@bootlin.com>
- <20230330083408.63136-2-clement.leger@bootlin.com>
- <20230330151653.atzd5ptacral6syx@skbuf>
- <20230330174427.0310276a@fixe.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230330174427.0310276a@fixe.home>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-mm@kvack.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 05:44:27PM +0200, Clément Léger wrote:
-> Le Thu, 30 Mar 2023 18:16:53 +0300,
-> Vladimir Oltean <olteanv@gmail.com> a écrit :
+On Thu, Mar 30, 2023 at 09:38:22AM -0400, Mathieu Desnoyers wrote:
+> commit f1a7941243c1 ("mm: convert mm's rss stats into percpu_counter")
+> introduces a memory leak by missing a call to destroy_context() when a
+> percpu_counter fails to allocate.
 > 
-> > Have you considered adding some Fixes: tags and sending to the "net" tree?
+> Before introducing the per-cpu counter allocations, init_new_context()
+> was the last call that could fail in mm_init(), and thus there was no
+> need to ever invoke destroy_context() in the error paths. Adding the
+> following percpu counter allocations adds error paths after
+> init_new_context(), which means its associated destroy_context() needs
+> to be called when percpu counters fail to allocate.
 > 
-> I wasn't sure if due to the refactoring that should go directly to the
-> net tree but I'll do that. But since they are fixes, that's the way to
-> go.
 
-My common sense says that code quality comes first, and so, the code
-looks however it needs to look, keeping in mind that it still needs to
-be a punctual fix for the problem. This doesn't change the fact that
-it's a fix for an an observable bug, and so, it's a candidate for 'net'.
+Fixes: f1a7941243c1 ("mm: convert mm's rss stats into percpu_counter")
 
-That's just my opinion though, others may disagree.
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+> Cc: linux-mm@kvack.org
+> Cc: stable@vger.kernel.org # 6.2
 
-> > To be absolutely clear, when talking about BPDUs, is it applicable
-> > effectively only to STP protocol frames, or to any management traffic
-> > sent by tag_rzn1_a5psw.c which has A5PSW_CTRL_DATA_FORCE_FORWARD set?
-> 
-> The documentation uses BPDUs but this is to be understood as in a
-> broader sense for "management frames" since it matches all the MAC with
-> "01-80-c2-00-00-XX". 
-
-And even so, is it just for frames sent to "01-80-c2-00-00-XX", or for
-all frames sent with A5PSW_CTRL_DATA_FORCE_FORWARD? Other switch
-families can inject whatever they want into ports that are in the
-BLOCKING STP state.
+Acked-by: Shakeel Butt <shakeelb@google.com>
