@@ -2,139 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850376CFB42
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C8B6CFB4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjC3GJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 02:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
+        id S230153AbjC3GMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 02:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjC3GJf (ORCPT
+        with ESMTP id S229505AbjC3GMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 02:09:35 -0400
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B898A40C8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 23:09:33 -0700 (PDT)
-X-UUID: 033a14a9cd8241bb9dfdbc7bef98356a-20230330
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:ebafa566-ce38-4805-b97e-5c459c92663f,IP:5,U
-        RL:0,TC:0,Content:-25,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACT
-        ION:release,TS:0
-X-CID-INFO: VERSION:1.1.22,REQID:ebafa566-ce38-4805-b97e-5c459c92663f,IP:5,URL
-        :0,TC:0,Content:-25,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:491df029-564d-42d9-9875-7c868ee415ec,B
-        ulkID:230330140918KLMIUS1O,BulkQuantity:0,Recheck:0,SF:38|24|17|19|44|102,
-        TC:nil,Content:0,EDM:5,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,
-        OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 033a14a9cd8241bb9dfdbc7bef98356a-20230330
-X-User: gehao@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <gehao@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 39918076; Thu, 30 Mar 2023 14:09:17 +0800
-From:   Hao Ge <gehao@kylinos.cn>
-To:     akpm@linux-foundation.org, alex.williamson@redhat.com,
-        jgg@ziepe.ca, akrowiak@linux.ibm.com, arnd@arndb.de,
-        mark.rutland@arm.com, ye.xingchen@zte.com.cn, ojeda@kernel.org,
-        alex.gaynor@gmail.com, me@kloenk.de, gregkh@linuxfoundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, gehao618@163.com,
-        Hao Ge <gehao@kylinos.cn>
-Subject: [RESEND PATCH] kmemleak-test: Optimize kmemleak_test.c build flow
-Date:   Thu, 30 Mar 2023 14:09:04 +0800
-Message-Id: <20230330060904.292975-1-gehao@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 30 Mar 2023 02:12:03 -0400
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672C565A8;
+        Wed, 29 Mar 2023 23:11:52 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VezS-Oc_1680156705;
+Received: from 30.240.113.3(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VezS-Oc_1680156705)
+          by smtp.aliyun-inc.com;
+          Thu, 30 Mar 2023 14:11:47 +0800
+Message-ID: <0133c209-b098-e822-58d7-27568888c282@linux.alibaba.com>
+Date:   Thu, 30 Mar 2023 14:11:45 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 0/2] ACPI: APEI: handle synchronous exceptions with
+ proper si_code
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>, tony.luck@intel.com,
+        james.morse@arm.com, bp@alien8.de,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc:     linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, justin.he@arm.com,
+        akpm@linux-foundation.org, ardb@kernel.org, ashish.kalra@amd.com,
+        baolin.wang@linux.alibaba.com, cuibixuan@linux.alibaba.com,
+        dave.hansen@linux.intel.com, jarkko@kernel.org, lenb@kernel.org,
+        linmiaohe@huawei.com, lvying6@huawei.com, xiexiuqi@huawei.com,
+        zhuo.song@linux.alibaba.com
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+ <20230317072443.3189-1-xueshuai@linux.alibaba.com>
+ <CAJZ5v0gXTbxP5VkNWY+UiXM9oiGmtQbnCsMrCW8n40TvQehcWA@mail.gmail.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <CAJZ5v0gXTbxP5VkNWY+UiXM9oiGmtQbnCsMrCW8n40TvQehcWA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now kmemleak-test.c is moved to samples directory,
-if CONFIG_DEBUG_KMEMLEAK_TEST=m,but CONFIG_SAMPLES
-is not set,it will be meaningless.
 
-So we will remove CONFIG_DEBUG_KMEMLEAK_TEST and
-add CONFIG_SAMPLE_KMEMLEAK which in samples directory
-to control kmemleak-test.c build or not
+On 2023/3/21 AM2:03, Rafael J. Wysocki wrote:
+> On Fri, Mar 17, 2023 at 8:25 AM Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+>>
+>> changes since v2 by addressing comments from Naoya:
+>> - rename mce_task_work to sync_task_work
+>> - drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
+>> - add steps to reproduce this problem in cover letter
+>> - Link: https://lore.kernel.org/lkml/1aa0ca90-d44c-aa99-1e2d-bd2ae610b088@linux.alibaba.com/T/#mb3dede6b7a6d189dc8de3cf9310071e38a192f8e
+>>
+>> changes since v1:
+>> - synchronous events by notify type
+>> - Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
+>>
+>> Currently, both synchronous and asynchronous error are queued and handled
+>> by a dedicated kthread in workqueue. And Memory failure for synchronous
+>> error is synced by a cancel_work_sync trick which ensures that the
+>> corrupted page is unmapped and poisoned. And after returning to user-space,
+>> the task starts at current instruction which triggering a page fault in
+>> which kernel will send SIGBUS to current process due to VM_FAULT_HWPOISON.
+>>
+>> However, the memory failure recovery for hwpoison-aware mechanisms does not
+>> work as expected. For example, hwpoison-aware user-space processes like
+>> QEMU register their customized SIGBUS handler and enable early kill mode by
+>> seting PF_MCE_EARLY at initialization. Then the kernel will directy notify
+>> the process by sending a SIGBUS signal in memory failure with wrong
+>> si_code: BUS_MCEERR_AO si_code to the actual user-space process instead of
+>> BUS_MCEERR_AR.
+>>
+>> To address this problem:
+>>
+>> - PATCH 1 sets mf_flags as MF_ACTION_REQUIRED on synchronous events which
+>>   indicates error happened in current execution context
+>> - PATCH 2 separates synchronous error handling into task work so that the
+>>   current context in memory failure is exactly belongs to the task
+>>   consuming poison data.
+>>
+>> Then, kernel will send SIGBUS with proper si_code in kill_proc().
+>>
+>> Lv Ying and XiuQi also proposed to address similar problem and we discussed
+>> about new solution to add a new flag(acpi_hest_generic_data::flags bit 8) to
+>> distinguish synchronous event. [2][3] The UEFI community still has no response.
+>> After a deep dive into the SDEI TRM, the SDEI notification should be used for
+>> asynchronous error. As SDEI TRM[1] describes "the dispatcher can simulate an
+>> exception-like entry into the client, **with the client providing an additional
+>> asynchronous entry point similar to an interrupt entry point**". The client
+>> (kernel) lacks complete synchronous context, e.g. systeam register (ELR, ESR,
+>> etc). So notify type is enough to distinguish synchronous event.
+>>
+>> To reproduce this problem:
+>>
+>>         # STEP1: enable early kill mode
+>>         #sysctl -w vm.memory_failure_early_kill=1
+>>         vm.memory_failure_early_kill = 1
+>>
+>>         # STEP2: inject an UCE error and consume it to trigger a synchronous error
+>>         #einj_mem_uc single
+>>         0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+>>         injecting ...
+>>         triggering ...
+>>         signal 7 code 5 addr 0xffffb0d75000
+>>         page not present
+>>         Test passed
+>>
+>> The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO error
+>> and it is not fact.
+>>
+>> After this patch set:
+>>
+>>         # STEP1: enable early kill mode
+>>         #sysctl -w vm.memory_failure_early_kill=1
+>>         vm.memory_failure_early_kill = 1
+>>
+>>         # STEP2: inject an UCE error and consume it to trigger a synchronous error
+>>         #einj_mem_uc single
+>>         0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+>>         injecting ...
+>>         triggering ...
+>>         signal 7 code 4 addr 0xffffb0d75000
+>>         page not present
+>>         Test passed
+>>
+>> The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR error
+>> as we expected.
+>>
+>> [1] https://developer.arm.com/documentation/den0054/latest/
+>> [2] https://lore.kernel.org/linux-arm-kernel/20221205160043.57465-4-xiexiuqi@huawei.com/T/
+>> [3] https://lore.kernel.org/lkml/20221209095407.383211-1-lvying6@huawei.com/
+>>
+>> Shuai Xue (2):
+>>   ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on
+>>     synchronous events
+>>   ACPI: APEI: handle synchronous exceptions in task work
+>>
+>>  drivers/acpi/apei/ghes.c | 135 ++++++++++++++++++++++++---------------
+>>  include/acpi/ghes.h      |   3 -
+>>  mm/memory-failure.c      |  13 ----
+>>  3 files changed, 83 insertions(+), 68 deletions(-)
+>>
+>> --
+> 
+> I really need the designated APEI reviewers to give their feedback on this.
 
-Signed-off-by: Hao Ge <gehao@kylinos.cn>
----
- mm/Kconfig.debug          | 8 --------
- samples/Kconfig           | 7 +++++++
- samples/Makefile          | 2 +-
- samples/kmemleak/Makefile | 2 +-
- 4 files changed, 9 insertions(+), 10 deletions(-)
+Gentle ping.
 
-diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
-index c3547a373c9c..fb86e9952bac 100644
---- a/mm/Kconfig.debug
-+++ b/mm/Kconfig.debug
-@@ -249,14 +249,6 @@ config DEBUG_KMEMLEAK_MEM_POOL_SIZE
- 	  fully initialised, this memory pool acts as an emergency one
- 	  if slab allocations fail.
- 
--config DEBUG_KMEMLEAK_TEST
--	tristate "Simple test for the kernel memory leak detector"
--	depends on DEBUG_KMEMLEAK && m
--	help
--	  This option enables a module that explicitly leaks memory.
--
--	  If unsure, say N.
--
- config DEBUG_KMEMLEAK_DEFAULT_OFF
- 	bool "Default kmemleak to off"
- 	depends on DEBUG_KMEMLEAK
-diff --git a/samples/Kconfig b/samples/Kconfig
-index 30ef8bd48ba3..69076fbf3298 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -273,6 +273,13 @@ config SAMPLE_CORESIGHT_SYSCFG
- 	  This demonstrates how a user may create their own CoreSight
- 	  configurations and easily load them into the system at runtime.
- 
-+config SAMPLE_KMEMLEAK
-+        tristate "Simple test for the kernel memory leak detector"
-+        depends on DEBUG_KMEMLEAK && m
-+        help
-+          Build a sample program which have explicitly leaks memory to test
-+          kmemleak
-+
- source "samples/rust/Kconfig"
- 
- endif # SAMPLES
-diff --git a/samples/Makefile b/samples/Makefile
-index 7cb632ef88ee..7727f1a0d6d1 100644
---- a/samples/Makefile
-+++ b/samples/Makefile
-@@ -33,7 +33,7 @@ subdir-$(CONFIG_SAMPLE_VFS)		+= vfs
- obj-$(CONFIG_SAMPLE_INTEL_MEI)		+= mei/
- subdir-$(CONFIG_SAMPLE_WATCHDOG)	+= watchdog
- subdir-$(CONFIG_SAMPLE_WATCH_QUEUE)	+= watch_queue
--obj-$(CONFIG_DEBUG_KMEMLEAK_TEST)	+= kmemleak/
-+obj-$(CONFIG_SAMPLE_KMEMLEAK)		+= kmemleak/
- obj-$(CONFIG_SAMPLE_CORESIGHT_SYSCFG)	+= coresight/
- obj-$(CONFIG_SAMPLE_FPROBE)		+= fprobe/
- obj-$(CONFIG_SAMPLES_RUST)		+= rust/
-diff --git a/samples/kmemleak/Makefile b/samples/kmemleak/Makefile
-index 16b6132c540c..8a999ab43b6d 100644
---- a/samples/kmemleak/Makefile
-+++ b/samples/kmemleak/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
--obj-$(CONFIG_DEBUG_KMEMLEAK_TEST) += kmemleak-test.o
-+obj-$(CONFIG_SAMPLE_KMEMLEAK) += kmemleak-test.o
--- 
-2.25.1
+Best Regards.
+Shuai
 
 
-No virus found
-		Checked by Hillstone Network AntiVirus
+
+
