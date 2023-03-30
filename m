@@ -2,114 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73136CFA6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 06:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BF76CFA5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 06:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjC3Exu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 00:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S229939AbjC3EsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 00:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjC3Exr (ORCPT
+        with ESMTP id S229479AbjC3EsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 00:53:47 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981AB5FF9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 21:53:39 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Pn9zg43vWz9sRK;
-        Thu, 30 Mar 2023 06:53:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1680152015;
+        Thu, 30 Mar 2023 00:48:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5ABF1995
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 21:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680151641;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YWgtpd4fPVhiIFkjr04jTbq0IIVxM0oReji2cEeLfdU=;
-        b=0OB7M/a5iFHbPqjPbr/ZjCY8Co+ka63KsdbxBGmim5q3SJGAxJrjlZOvtpdXteJCpTqDYP
-        0OOlps4JPQbBO/CbC6lQoajGKnh12+sqBzuE+GBW7jynF5voI9hZCzdHeQRqYzZwlXkHSQ
-        BW7FTkkCcX/VpeyrTrIHCgivtVEyx62TQqar4gg7BhgvCYTiqqYOIJP3GF5bfE8VltFQAw
-        iznGEjhyjpCgmwz16H0nJEIKeKUbVI4JMs0aLhIVrKT+S0ndzjum1BfoJ/k+LpeKdwMdZK
-        zEB9GhNUp5sxl/hg92tDlHj+FG24O6BZWEX7OLZ+bO6qUU3nd6SUWKtBoytN4g==
-References: <20230320161636.24411-1-romanberanek@icloud.com>
- <87wn356ni4.fsf@oltmanns.dev> <20230327202045.ceeqqwjug4ktxtsf@penduick>
- <CRHKFX934UA0.1MCKCD8SJSPIE@iMac.local>
- <20230329195802.veybo3367zifw77n@penduick>
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     Roman Beranek <romanberanek@icloud.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Chen-Yu Tsai <wens@csie.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
- TCON0_DCLK_REG
-Date:   Thu, 30 Mar 2023 06:45:22 +0200
-In-reply-to: <20230329195802.veybo3367zifw77n@penduick>
-Message-ID: <877cuyon5e.fsf@oltmanns.dev>
+        bh=WI7skcIMdsKFqr6Q4mz9+y189EcG3fURymOsrhUr7nA=;
+        b=eIPh0PAlHyfHaJmEiafqQdspKdeciQflPTuKr+Jn42qJpOEBx46DEvRdWD4/34uWVzjDAL
+        WsgkWgZqCIAAEbSQTKAfGp8v57vpoF5Q2ZlTCfihinesp1WT01JJZX0DDIrSCaP5WT0Q/7
+        Jpp+T1R4cZCSWITkzeGMRLTkcEkTyw0=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-622-StV1_NBQM0-CQkN_9oKK9g-1; Thu, 30 Mar 2023 00:47:20 -0400
+X-MC-Unique: StV1_NBQM0-CQkN_9oKK9g-1
+Received: by mail-pj1-f70.google.com with SMTP id j3-20020a17090a94c300b0024018f0656cso5377884pjw.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 21:47:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680151639;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WI7skcIMdsKFqr6Q4mz9+y189EcG3fURymOsrhUr7nA=;
+        b=1h3mshAqovFh/4dPux3qedS1gedGhkUpJ9IUk4DWutxjS6pIxLiDdIZsO8J9otnmzG
+         1s/is8p5U3j1wT/QJyS/xtrZoHsGGXYS3TDtve4uxaChlp5fQ7epxpQRXbERq1lI2AbN
+         KqkRHJuSj+9hOO7HbkDXcHiR1nuLSgiUsfcHucWOGd8gRZUwhpYEz+MKg2Dq2dF7Pqb6
+         P+9SWaC1mrXIRCCesxUWQCNnKdKmr1HrVoI/MaTuaXGaguQU+fiB/eubrVmXx0q8bOOr
+         HmmJC/Fo8eT/7PuzoSFSpwxv87CewrY9xXQekQJIO2/vpcM/SmI8rDWG5wvHnQVGd8UV
+         rTdw==
+X-Gm-Message-State: AAQBX9eVVRoLvg70GlK1KD7QmiIA1V6AtW4dJQIHZ5wy9lsol175K/1G
+        ZycuPtqVbCSole5ctRKJAH6G7ED+lXJz8NWsW9wJH5ZYucSd/6c/gj0Y2Y1fBZYoisn+eQEuS5V
+        q6AxlDDOXdIqGclKOR1/hr/9Y
+X-Received: by 2002:a17:902:e414:b0:1a1:b36d:7803 with SMTP id m20-20020a170902e41400b001a1b36d7803mr17809133ple.36.1680151638873;
+        Wed, 29 Mar 2023 21:47:18 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aD0W9a0ga74YA+xgP3nkpy1sPD3F2aI7Cc1Mrstl29HO2k+W4VsHYLy5soMFeF3qXHSqtJwQ==
+X-Received: by 2002:a17:902:e414:b0:1a1:b36d:7803 with SMTP id m20-20020a170902e41400b001a1b36d7803mr17809115ple.36.1680151638522;
+        Wed, 29 Mar 2023 21:47:18 -0700 (PDT)
+Received: from [192.168.35.160] ([64.114.255.114])
+        by smtp.gmail.com with ESMTPSA id iz4-20020a170902ef8400b0019aa4c00ff4sm23856801plb.206.2023.03.29.21.47.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 21:47:18 -0700 (PDT)
+Message-ID: <78e35d88-8a4e-3b36-bbbd-94048c0c5b54@redhat.com>
+Date:   Thu, 30 Mar 2023 06:47:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v6 0/6] ksm: support tracking KSM-placed zero-pages
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>, yang.yang29@zte.com.cn
+Cc:     imbrenda@linux.ibm.com, jiang.xuexin@zte.com.cn,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
+References: <202302100915227721315@zte.com.cn>
+ <20230328153852.26c2577e4bd921c371c47a7e@linux-foundation.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230328153852.26c2577e4bd921c371c47a7e@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roman,
+On 29.03.23 00:38, Andrew Morton wrote:
+> On Fri, 10 Feb 2023 09:15:22 +0800 (CST) <yang.yang29@zte.com.cn> wrote:
+> 
+>> The core idea of this patch set is to enable users to perceive the number of any
+>> pages merged by KSM, regardless of whether use_zero_page switch has been turned
+>> on, so that users can know how much free memory increase is really due to their
+>> madvise(MERGEABLE) actions. But the problem is, when enabling use_zero_pages,
+>> all empty pages will be merged with kernel zero pages instead of with each
+>> other as use_zero_pages is disabled, and then these zero-pages are no longer
+>> monitored by KSM.
+> 
+> We appear to have some outstanding activity on this quite old patchset.
+>  From my notes:
+> 
+> - An unresponded-to question from Claudia:
+> 	https://lkml.kernel.org/r/20230307192421.30ab869c@p-imbrenda
+> 
+> - Hoping for overall review from David
 
-On 2023-03-29 at 21:58:02 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
-> On Tue, Mar 28, 2023 at 01:48:33AM +0200, Roman Beranek wrote:
->> On Mon Mar 27, 2023 at 10:20 PM CEST, Maxime Ripard wrote:
->> >
->> > On Sat, Mar 25, 2023 at 12:40:04PM +0100, Frank Oltmanns wrote:
->> > > Claiming to set the divider to a different value (bpp / lanes) than =
-what we=E2=80=99re actually using in
->> > > the end (SUN6I_DSIO_TCON_DIV) is somehow bugging me. I feel like the=
- proposal that I submitted is
->> > > more direct: <https://lore.kernel.org/all/20230319160704.9858-2-fran=
-k@oltmanns.dev/>
->> >
->> > Yeah, this patch looks better to me too: it's simpler, more straightfo=
-rward. If Roman can confirm it
->> > works with his testing, I'll be happy to merge it.
->> >
->>
->> So I've just found out that my understanding of what sun4i_dotclock is
->> was wrong the whole time. I treated it as a virtual clock representing
->> the true CRTC pixel clock and only coincidentally also matching what
->> A64 Reference Manual labels as TCON0 data clock (a coincidence to which
->> DSI is an exception).
->>
->> Now that I finally see dotclock as 'what could dclk be an abbreviation
->> to', I to agree that it's not only straightforward but also correct to
->> keep the divider at 4 and adjust the rate as is done it the patch Frank
->> submitted.
->>
->> In order to preserve semantic correctness however, I propose to preface
->> the change with a patch that renames sun4i_dotclock and tcon-pixel-clock
->> such that dot/pixel is replaced with d/data. What do you think?
->
-> I don't think it's exposed to the userspace in any way so it makes sense =
-to me
+I already shared some feedback in [1]. I think we should try to simplify 
+this handling, as proposed in that mail. Still waiting for a reply.
 
-Roman, will you please submit a V2 of the patch I submitted then? Or do
-you want me to do it?
+[1] 
+https://lore.kernel.org/all/9d7a8be3-ee9e-3492-841b-a0af9952ef36@redhat.com/
 
+-- 
 Thanks,
-  Frank
 
->
-> Maxime
->
+David / dhildenb
 
-
---
