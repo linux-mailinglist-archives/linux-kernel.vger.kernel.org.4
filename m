@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA836D08EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42596D08F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbjC3O7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S232651AbjC3O7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232641AbjC3O7B (ORCPT
+        with ESMTP id S232614AbjC3O7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:59:01 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A80ACDE9
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:58:43 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-194-oEK8kR7MNXufi6_5iMJJKw-1; Thu, 30 Mar 2023 15:58:25 +0100
-X-MC-Unique: oEK8kR7MNXufi6_5iMJJKw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 30 Mar
- 2023 15:58:24 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 30 Mar 2023 15:58:24 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'y86-dev@protonmail.com'" <y86-dev@protonmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?B?QmrDtnJuIFJveSBCYXJvbg==?= <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <alice@ryhl.io>
-CC:     "rust-for-linux@vger.kernel.org" <rust-for-linux@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [PATCH v3 12/13] rust: sync: reduce stack usage of
- `UniqueArc::try_new_uninit`
-Thread-Topic: [PATCH v3 12/13] rust: sync: reduce stack usage of
- `UniqueArc::try_new_uninit`
-Thread-Index: AQHZYo67xiEDbSa93U2SiSHlQgdRKq8TaqBw
-Date:   Thu, 30 Mar 2023 14:58:24 +0000
-Message-ID: <7f55875c46ab4c4989323ede57f6e46d@AcuMS.aculab.com>
-References: <20230329223239.138757-13-y86-dev@protonmail.com>
-In-Reply-To: <20230329223239.138757-13-y86-dev@protonmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 30 Mar 2023 10:59:13 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29E6769B
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:58:55 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5463fa0c2bfso28717187b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680188335;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AwZvoXv5Ik7M4dgOpEILycWjntmKDPLmuGuHDa/y93Q=;
+        b=hvoIxo1To6KPMEfbaqMEIFHroev9LrGs0faSunEFSa9C3bGX4Gm4I0XTvfnPaymlpn
+         2V74UXpHrg7lhv4J9aju1XnmnOZZkzsngXuf/dtPSyZrvW6kmYWXALTL7NjI+nR+B5go
+         H5I2cTPaeAyNLi6ESs6rCrif4/G5m28Cg3QIZeQmpLZ2ElPkt82bJpQMudZQxOSsCVs0
+         GOrxhP3VT/AoqxQVXXpCjFpeqFtGM+Sv5d3wLkL8OT6+ALBxldv9fmOWAfZYAys4haGF
+         yqNcXk7jRQ4WZwz8tgu3mda7p6Ma72UgRunlIFv1rCeYccv9nrN4eAe5W+lg18o5rCer
+         FE9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680188335;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AwZvoXv5Ik7M4dgOpEILycWjntmKDPLmuGuHDa/y93Q=;
+        b=ExFIFwZbNMTh54cLIPyNcnHv6g925GSDKdtVnWR9lf7diozArDpSdi+vBrY/mwW4Q3
+         mpuAxcARnK2kf+RhQ6399qaz84N78FS7jitlV6Ad8qylt7kakEwvkDhhioRnYOVG8ROF
+         tCgrw8J0kf7HbJ8M8+uaJCa36JrhQCj9tsY1SVa71RQv6O5UiQwbnKLee10JtwCfo7Sk
+         6ZokIp4h5AxuOO5qBfFioYzIHWyP70788UW3TXinh0LU/HXmvHq6hakIolEplGx2nreZ
+         uN+OHB3u8pf70CsNqpe9AJWj16/nrC57XV+qCVW5W6UAKZpnRZSm9tQSf0/0gr7B2Bhc
+         67vg==
+X-Gm-Message-State: AAQBX9fN3G0SXVKAW1UaD3ptlT3YDBs+bjdDqXA6P4e4p8CVsDR+N7ti
+        I8ab+N/fRr90duz2cqBuyfxXTddA14vOn3sbnoo=
+X-Google-Smtp-Source: AKy350adbduzwsqT34Ik8vLNCGf8HbE1zRpj6ONG2dEXGngdSZlpdeXn7jJHF4TnUtnIJ2Y55oX+6C1TxGmHWu/L8bQ=
+X-Received: by 2002:a81:b647:0:b0:534:d71f:14e6 with SMTP id
+ h7-20020a81b647000000b00534d71f14e6mr11168764ywk.9.1680188334657; Thu, 30 Mar
+ 2023 07:58:54 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Received: by 2002:a05:7010:4186:b0:32b:28c5:a477 with HTTP; Thu, 30 Mar 2023
+ 07:58:54 -0700 (PDT)
+Reply-To: wormer.amos@aol.com
+From:   Wormer Amos <fatimamuhammad5689@gmail.com>
+Date:   Thu, 30 Mar 2023 14:58:54 +0000
+Message-ID: <CA+QAR6V622vRkg=bDMDDXFHDck+0NBcdoretOfZSTzhwP4zw7Q@mail.gmail.com>
+Subject: I WANT TO KNOW YOU,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogeTg2LWRldkBwcm90b25tYWlsLmNvbQ0KPiBTZW50OiAyOSBNYXJjaCAyMDIzIDIzOjM0
-DQo+IA0KPiBgVW5pcXVlQXJjOjp0cnlfbmV3X3VuaW5pdGAgY2FsbHMgYEFyYzo6dHJ5X25ldyhN
-YXliZVVuaW5pdDo6dW5pbml0KCkpYC4NCj4gVGhpcyByZXN1bHRzIGluIHRoZSB1bmluaXRpYWxp
-emVkIG1lbW9yeSBiZWluZyBwbGFjZWQgb24gdGhlIHN0YWNrLA0KPiB3aGljaCBtYXkgYmUgYXJi
-aXRyYXJpbHkgbGFyZ2UgZHVlIHRvIHRoZSBnZW5lcmljIGBUYCBhbmQgdGh1cyBjb3VsZA0KPiBj
-YXVzZSBhIHN0YWNrIG92ZXJmbG93IGZvciBsYXJnZSB0eXBlcy4NCg0KRG9lcyB0aGF0IG1lYW4g
-cnVzdCBpcyB1c2luZyAodGhlIGVxdWl2YWxlbnQgb2YpIGFsbG9jYSgpID8NCg0KVGhhdCBpcyBi
-YW5uZWQgZm9yIEMgY29kZSBpbiB0aGUga2VybmVsIGZvciBhbnkgc2l6ZXMuDQoNCglEYXZpZA0K
-DQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFy
-bSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAo
-V2FsZXMpDQo=
+Just want to know if you're ready for investment project in your country. i
+need serious investment partnership with good background, kindly reply
+me to discuss details immediately. i will appreciate you to contact me
+on this email address Thanks and awaiting your quick response,
 
+Yours
+Wormer,
