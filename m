@@ -2,159 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03ED16D0DCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82286D0DC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjC3Sc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 14:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
+        id S231255AbjC3Sb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 14:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjC3ScX (ORCPT
+        with ESMTP id S230019AbjC3Sby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 14:32:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9CF26B8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:31:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680201096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jobE+W1McsuIR3du17YGJC3Z6W/dejQUbpwCNwzU5Sc=;
-        b=AVKIdV8YHZewAguVrUZqzrkuII2p/r7iwSSaTIQE51Dnbt8LfOVme09peVqqi3yj0K+xPT
-        vMvnOGkACZETpK428IKwijkslhUP1rT22EJMH6NAnh75Dz3T4amxkUbrpHeIcpf+e8Kp1J
-        hfWl29t7GUzfMYqvyt4qJpHmUZ9H220=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-169-DxNs0ONEPxKBsxtnAIng5A-1; Thu, 30 Mar 2023 14:31:33 -0400
-X-MC-Unique: DxNs0ONEPxKBsxtnAIng5A-1
-Received: by mail-pf1-f197.google.com with SMTP id i26-20020aa796fa000000b006261da7aeceso9186387pfq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:31:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680201092;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        Thu, 30 Mar 2023 14:31:54 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91A735A2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:31:53 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id g9so14456539uam.9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:31:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680201111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jobE+W1McsuIR3du17YGJC3Z6W/dejQUbpwCNwzU5Sc=;
-        b=oYTrA8S4FzrcQnl24v3LiQGnufHxQhQ/DutLoV0IP8V59hg+X89H9wVrgHiob1HtRK
-         Ab/Z2+oAUAExCZQLOW5VdV0RLZVvoz9MktaYp4ErRPvSWY2Voxs8uupwOBaqH/vbSd1W
-         6uIClFCWV+5GRnLz8E610m3PqF+wS4iDq0sthh6OrRuyJLy8jY4qh61ahlkcOyBiOrws
-         yEHGhxAL4TJdolsOhbBGGFLWmH0Y9ZJaDy4zCmkFxnvr6cjTRs5/G/UTO9wifAGlnhiw
-         phMrdJoYni6DUMOYHoSTo8CYOzPa/vAVDdPxpvn8Dmj717yaYe6p1iIjwJCpu+mwrTM6
-         cg/g==
-X-Gm-Message-State: AAQBX9dDz0XDXpS+sT2es0TZ6s2Wl4saMtsv8s38ppuXE/wLjmnGQU1G
-        dg/NIGqHHhPVQ1Rhedecm4DCp7FWQwLBAyL2Cx5o8MoavJgQbPbwKUark6P8bOpacNxPNks3eJA
-        ZK/hzSF1dDdkzFxnduSNn2EPqWxBCFE1s2S4=
-X-Received: by 2002:a17:902:f550:b0:1a1:b8cc:59da with SMTP id h16-20020a170902f55000b001a1b8cc59damr34302066plf.33.1680201092400;
-        Thu, 30 Mar 2023 11:31:32 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y2XtPFSh2/v9wjpAeWlY42dx0ySEUXCrM0cIilFUSj200Kj1d2tPF9lFKbZ4sHT5e1f1bXcw==
-X-Received: by 2002:a17:902:f550:b0:1a1:b8cc:59da with SMTP id h16-20020a170902f55000b001a1b8cc59damr34302031plf.33.1680201092055;
-        Thu, 30 Mar 2023 11:31:32 -0700 (PDT)
-Received: from [10.20.159.115] ([204.239.251.6])
-        by smtp.gmail.com with ESMTPSA id c11-20020a170902724b00b001a1a31953a8sm50799pll.130.2023.03.30.11.31.31
+        bh=6bmgWM4VeyB5ih4GlZbThd/2eiyQX/X/Evx0/5WbwLA=;
+        b=n7Fbcx5kLC5PQCrKOLLphRB+Qj+CJ1V2n+6VE2q9x8tgdTfNT/TvljT9Ud5D0Sev+I
+         jSx0/mE5wPBJBUslQrVt+msUKR8oj3psvddiRCxHXDNcC7JwUdR4++FURzyQa2lH2oPP
+         QrylpyoNqKGTbaDitz5XTgPk8P5ruj9xa1qC8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680201111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6bmgWM4VeyB5ih4GlZbThd/2eiyQX/X/Evx0/5WbwLA=;
+        b=0UvjUmRJtyo6pg+e20egV0P8wkKa2FpYR8ueaOFHL6dcP75hxMhJfJvGhgmAOwHKKE
+         dpCeVDXpUTn+AVa8pXif5WMCL5cKO+uh6k2AdcD7TgsOkug4mHTU9zu5Do9T5z9DJL2c
+         deIAML9wxDsC/IDF4DCnT0AUjvrn/FA2kTFeU1b5TmMKWBBAtQ1DptS0eSt1wkxRJOi5
+         k2CDT+oPTGbzA5ca5a/Dwhz/Y1eeT4ynMbPRHoWoGzY+VAlAJCqINUSFV4ftSWaiZlFV
+         Nt3hS4YNV5yh6GCDx30Zft6MnnDIiIo2pcfC21EPHDbV7ON6TrNU1iut1bxpja3bws7x
+         qmFA==
+X-Gm-Message-State: AAQBX9d6QH+lP85lWmdB2CKJ5WJ9XNJoryvJWy/66enFP0IqwsvRTZgl
+        flLuPxlYRu6x9SuS9Ib7b1MyebKmqbsAQcC4cuU=
+X-Google-Smtp-Source: AKy350aACrcFTbR3lPTu6vlqkLjAL0MkJAs60OamVoMZ0EhPcDJCVd26cehJivCctgna8JCl38bw7Q==
+X-Received: by 2002:a1f:b696:0:b0:432:2c6f:f246 with SMTP id g144-20020a1fb696000000b004322c6ff246mr8951249vkf.3.1680201111138;
+        Thu, 30 Mar 2023 11:31:51 -0700 (PDT)
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
+        by smtp.gmail.com with ESMTPSA id 2-20020a1f1102000000b0041280d4601asm89275vkr.51.2023.03.30.11.31.50
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 11:31:31 -0700 (PDT)
-Message-ID: <6eb02bdd-e69e-d277-c44c-0aefb23430bb@redhat.com>
-Date:   Thu, 30 Mar 2023 20:31:30 +0200
+        Thu, 30 Mar 2023 11:31:50 -0700 (PDT)
+Received: by mail-vs1-f50.google.com with SMTP id b6so13814128vsu.12
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:31:50 -0700 (PDT)
+X-Received: by 2002:a67:c18a:0:b0:425:cf00:e332 with SMTP id
+ h10-20020a67c18a000000b00425cf00e332mr13402479vsj.7.1680201109830; Thu, 30
+ Mar 2023 11:31:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 01/29] Revert "userfaultfd: don't fail on unrecognized
- features"
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        linux-stable <stable@vger.kernel.org>
-References: <20230330155707.3106228-1-peterx@redhat.com>
- <20230330155707.3106228-2-peterx@redhat.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230330155707.3106228-2-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230324195555.3921170-1-markyacoub@google.com> <20230324195555.3921170-10-markyacoub@google.com>
+In-Reply-To: <20230324195555.3921170-10-markyacoub@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 30 Mar 2023 11:31:38 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Xvu++Bvkkq+xORUB0OWq_49nupFgCqsbX0XJz8vgy0Zw@mail.gmail.com>
+Message-ID: <CAD=FV=Xvu++Bvkkq+xORUB0OWq_49nupFgCqsbX0XJz8vgy0Zw@mail.gmail.com>
+Subject: Re: [PATCH v7 09/10] arm64: dts: qcom: sc7180: Add support for HDCP
+ in dp-controller
+To:     Mark Yacoub <markyacoub@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        seanpaul@chromium.org, suraj.kandpal@intel.com,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.23 17:56, Peter Xu wrote:
-> This is a proposal to revert commit 914eedcb9ba0ff53c33808.
-> 
-> I found this when writting a simple UFFDIO_API test to be the first unit
-> test in this set.  Two things breaks with the commit:
-> 
->    - UFFDIO_API check was lost and missing.  According to man page, the
->    kernel should reject ioctl(UFFDIO_API) if uffdio_api.api != 0xaa.  This
->    check is needed if the api version will be extended in the future, or
->    user app won't be able to identify which is a new kernel.
+Hi,
 
-Agreed.
-
-> 
->    - Feature flags checks were removed, which means UFFDIO_API with a
->    feature that does not exist will also succeed.  According to the man
->    page, we should (and it makes sense) to reject ioctl(UFFDIO_API) if
->    unknown features passed in.
-> 
-
-Agreed.
-
-I understand the motivation of the original commit, but it should not 
-have changed existing checks/functionality. Introducing a different way 
-to enable such functionality on explicit request would be better. But 
-maybe simple feature probing (is X support? is Y supported? is Z 
-supported) might be easier without requiring ABI changes.
-
-I assume we better add
-
-Fixes: 914eedcb9ba0 ("userfaultfd: don't fail on unrecognized features")
-
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
-> Link: https://lore.kernel.org/r/20220722201513.1624158-1-axelrasmussen@google.com
-> Cc: Axel Rasmussen <axelrasmussen@google.com>
-> Cc: linux-stable <stable@vger.kernel.org>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+On Fri, Mar 24, 2023 at 12:56=E2=80=AFPM Mark Yacoub <markyacoub@chromium.o=
+rg> wrote:
+>
+> From: Sean Paul <seanpaul@chromium.org>
+>
+> Add the register ranges required for HDCP key injection and
+> HDCP TrustZone interaction as described in the dt-bindings for the
+> sc7180 dp controller.
+>
+> Signed-off-by: Sean Paul <seanpaul@chromium.org>
+> Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+>
 > ---
->   fs/userfaultfd.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> index 8395605790f6..3b2a41c330e6 100644
-> --- a/fs/userfaultfd.c
-> +++ b/fs/userfaultfd.c
-> @@ -1977,8 +1977,10 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
->   	ret = -EFAULT;
->   	if (copy_from_user(&uffdio_api, buf, sizeof(uffdio_api)))
->   		goto out;
-> -	/* Ignore unsupported features (userspace built against newer kernel) */
-> -	features = uffdio_api.features & UFFD_API_FEATURES;
-> +	features = uffdio_api.features;
-> +	ret = -EINVAL;
-> +	if (uffdio_api.api != UFFD_API || (features & ~UFFD_API_FEATURES))
-> +		goto err_out;
->   	ret = -EPERM;
->   	if ((features & UFFD_FEATURE_EVENT_FORK) && !capable(CAP_SYS_PTRACE))
->   		goto err_out;
+> Changes in v3:
+> -Split off into a new patch containing just the dts change (Stephen)
+> -Add hdcp compatible string (Stephen)
+> Changes in v4:
+> -Rebase on Bjorn's multi-dp patchset
+> Changes in v5:
+> -Put the tz register offsets in trogdor dtsi (Rob C)
+> Changes in v6:
+> -Rebased: Removed modifications in sc7180.dtsi as it's already upstream
+> Changes in v7:
+> -Change registers offset
+>
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/bo=
+ot/dts/qcom/sc7180-trogdor.dtsi
+> index 47f39c547c41a..63183ac9c3c48 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> @@ -816,6 +816,14 @@ &mdss_dp {
+>         status =3D "okay";
+>         pinctrl-names =3D "default";
+>         pinctrl-0 =3D <&dp_hot_plug_det>;
+> +
+> +       reg =3D <0 0x0ae90000 0 0x200>,
+> +             <0 0x0ae90200 0 0x200>,
+> +             <0 0x0ae90400 0 0xc00>,
+> +             <0 0x0ae91000 0 0x400>,
+> +             <0 0x0ae91400 0 0x400>,
+> +             <0 0x0aed1000 0 0x174>,
+> +             <0 0x0aee1000 0 0x2c>;
 
--- 
-Thanks,
-
-David / dhildenb
-
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
