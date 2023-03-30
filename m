@@ -2,108 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6E96D0879
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB486D0880
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbjC3Okb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
+        id S232184AbjC3OlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbjC3Ok2 (ORCPT
+        with ESMTP id S231151AbjC3OlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:40:28 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B486583;
-        Thu, 30 Mar 2023 07:40:25 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso22216858pjb.0;
-        Thu, 30 Mar 2023 07:40:25 -0700 (PDT)
+        Thu, 30 Mar 2023 10:41:13 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8D39778
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:41:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680187224;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FY+SKBw7Qws18lttqqyOjOtRuuw+3DmhSxmnLbT/52w=;
-        b=PhBx0T8X/JnR4d0ibxFzbJ44GRdXpGaCriPHRVrFr01ZlATYTI9SVbj6qxuZQmzsAr
-         ARslTQDGsKfwH8CMWEXU9r/fT1HkOGRXdkQVbj+2QpU0uge/dbsyXpfaepcTEceG3Myf
-         6ytEbobn8m2E336ztDazWRrcXHIzU4ou4iioqaiPfwbIwpAiSSxkOZVC6bGVQzS0faoF
-         GYd47aNw3EWA6lGSS4RCkmT+glMtltOTgQjW4gF3sDBeAPo73DQxLUN+dfFGLuOS0JpG
-         yHxSa9+KYEehJnn8reyn3Yuy4J/cu1WsXVnRmcKacEPZB4h82wbeZ5evarjgwbFze/X9
-         HqGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680187224;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FY+SKBw7Qws18lttqqyOjOtRuuw+3DmhSxmnLbT/52w=;
-        b=7Sv3j33ctpmJ41dDavQwdCL50xuusVs1FqGbj0Oiwy8U9zuRI2h5CkH+v/7Y02mij/
-         e4ek7PTGM2FhIb8U916OheRSxs+ANIoyz6a6xD7eHm0kKg+CNmDjlA8d2hmGK0itIPUZ
-         8jkxj/BxXDZ/6RilzamqdIaEv0xkwzyvKBv6rPsiOH3WUjxkIbCeiH94EIW7Cb6adhno
-         QDCT9i7tZ+p8jZTbQmQhTHZuW3GPJDj9CSHcrBYsN3Jsmoyk/P4wNfxDklJU0Jml/mvH
-         bVdNREbMcoT6I/w+7hN7C+ar5wfVlosWnE2CInKBGUmyc838UvheT2nskItfyRZJxYAm
-         k+0A==
-X-Gm-Message-State: AO0yUKXC4HT1GFPzUnUuZncqhxekIBNG2uLJzHbm2Y3CJBpG0BTd5tEp
-        xw7TCcuC5dL7w+OZ8U/e630=
-X-Google-Smtp-Source: AK7set9FV3bbfuxtVRPrY/z2/LfXKixW3w6DLZaeN9utJpucgU4ShkHeuaprtv9cthsxTNiXKg19cQ==
-X-Received: by 2002:a05:6a20:be0a:b0:d6:a2f9:ca9a with SMTP id ge10-20020a056a20be0a00b000d6a2f9ca9amr20431667pzb.42.1680187224450;
-        Thu, 30 Mar 2023 07:40:24 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id y17-20020aa78051000000b006288ca3cadfsm7284185pfm.35.2023.03.30.07.40.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 07:40:24 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 17:40:09 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexis Lothore <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH RESEND net-next v4 3/3] net: dsa: rzn1-a5psw: add vlan
- support
-Message-ID: <20230330144009.3lqsqt7h5qc7siuw@skbuf>
-References: <20230314163651.242259-1-clement.leger@bootlin.com>
- <20230314163651.242259-4-clement.leger@bootlin.com>
- <20230314163651.242259-4-clement.leger@bootlin.com>
- <20230314233454.3zcpzhobif475hl2@skbuf>
- <20230315155430.5873cdb6@fixe.home>
- <20230324220042.rquucjt7dctn7xno@skbuf>
- <20230328104429.5d2e475a@fixe.home>
- <20230328104429.5d2e475a@fixe.home>
- <20230329131613.zg4whzzoa4yna7lh@skbuf>
- <20230330110959.2132cd07@fixe.home>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1680187263;
+  x=1711723263;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=im1xHFBiQBfuSGAUiVkeWoF5rTdTuQGdGDQOsjFK6VE=;
+  b=eHL/G2qJgbMF4pV+ALpl9LSJePbHS3t/9uAJuhngis00yDNFHNaT3IoK
+   TZSlRogD+K2A7XoQZ4KQRtBRfLovOlD2ukviKdbtFO825nZzMyRKBRZo5
+   Dakn03lYohnxxtTLZJXhfzbyP/bPprIgcjHPRIhd9I/MwBgZUFuzKTauv
+   +u06XQDtAkng0hKZJMFwIaKNaTUo+FPSreZcDuAlHtQ0kzGJsPYGJyTQ3
+   Tw7L55DxJRRs86MeuBMApoiSdkUAwaM2BTafgdJ1oVq1w/GI2bZCcBU2W
+   LU2giTFg9nthHYY5XyDXFLm6MEyf2G+Z4rTt/KyF8AwtQDqZpnJQ5ONLC
+   g==;
+From:   =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
+Date:   Thu, 30 Mar 2023 16:40:59 +0200
+Subject: [PATCH v2] ubifs: Fix memory leak in do_rename
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230330110959.2132cd07@fixe.home>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <20230330-memleak_rename-fix-v2-1-687242e41163@axis.com>
+X-B4-Tracking: v=1; b=H4sIAHufJWQC/32NWwqDMBBFtyLz3ZRo+jB+dR9FyqiTGtrEMiNiE
+ ffe6AL6c+HcmctZQIg9CVTZAkyTFz/EBMUhg7bH+CTlu8RQ6MJoY7QKFN6ErwdTxEDK+VldnD1
+ hCmvOGtKwQSHVMMa236YBZSTeDh+m9L/b7nXi3ss48HeXT/nW/vVMucqVtdfSktWl69wNZy/Hd
+ ghQr+v6A9vuNafMAAAA
+To:     Richard Weinberger <richard@nod.at>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        "Zhihao Cheng" <chengzhihao1@huawei.com>, <kernel@axis.com>,
+        =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680187260; l=2535;
+ i=marten.lindahl@axis.com; s=20230329; h=from:subject:message-id;
+ bh=3mcJAPvJidZPoHyhj7PF7QetETALl5dvWMu5ksFMcR4=;
+ b=1QH4dNzVxp3TRA84Ml2WSVq5Mz1/T7nZsqLUNPuClYid7nEfOTs18BxvuT/LFjsF89+h+AmQF
+ fnKcJ3om58KC1qLuZeskLbuugUYkXgAioDfe151guJ6JeP4s7aV+ZZ+
+X-Developer-Key: i=marten.lindahl@axis.com; a=ed25519;
+ pk=JfbjqFPJnIDIQOkJBeatC8+S3Ax3N0RIdmN+fL3wXgw=
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 11:09:59AM +0200, Clément Léger wrote:
-> Yes indeed, and we noticed the handling of VLANVERI and VLANDISC in
-> vlan_filtering() should be set according to the fact there is a PVID or
-> not (which is not the case right now).
+If renaming a file in an encrypted directory, function
+fscrypt_setup_filename allocates memory for a file name. This name is
+never used, and before returning to the caller the memory for it is not
+freed.
 
-I was thinking the other way around, that the handling of
-VLAN_IN_MODE_ENA should be moved to port_vlan_filtering().
+When running kmemleak on it we see that it is registered as a leak. The
+report below is triggered by a simple program 'rename' that renames a
+file in an encrypted directory:
 
-The expected behavior relating to VLANs is documented in the "Bridge
-VLAN filtering" section of Documentation/networking/switchdev.rst btw.
+  unreferenced object 0xffff888101502840 (size 32):
+    comm "rename", pid 9404, jiffies 4302582475 (age 435.735s)
+    backtrace:
+      __kmem_cache_alloc_node
+      __kmalloc
+      fscrypt_setup_filename
+      do_rename
+      ubifs_rename
+      vfs_rename
+      do_renameat2
+
+To fix this we can remove the call to fscrypt_setup_filename as it's not
+needed.
+
+Fixes: 278d9a243635f26 ("ubifs: Rename whiteout atomically")
+Reported-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: MÃ¥rten Lindahl <marten.lindahl@axis.com>
+Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
+---
+Changes in v2:
+- Added Fixes tag
+- Added Reviewed-by tag from Zhihao Cheng
+- Link to v1: https://lore.kernel.org/r/20230330-memleak_rename-fix-v1-1-99789e908fdf@axis.com
+---
+ fs/ubifs/dir.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/fs/ubifs/dir.c b/fs/ubifs/dir.c
+index 0f29cf201136..4c2dda1346e7 100644
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -358,7 +358,6 @@ static struct inode *create_whiteout(struct inode *dir, struct dentry *dentry)
+ 	umode_t mode = S_IFCHR | WHITEOUT_MODE;
+ 	struct inode *inode;
+ 	struct ubifs_info *c = dir->i_sb->s_fs_info;
+-	struct fscrypt_name nm;
+ 
+ 	/*
+ 	 * Create an inode('nlink = 1') for whiteout without updating journal,
+@@ -369,10 +368,6 @@ static struct inode *create_whiteout(struct inode *dir, struct dentry *dentry)
+ 	dbg_gen("dent '%pd', mode %#hx in dir ino %lu",
+ 		dentry, mode, dir->i_ino);
+ 
+-	err = fscrypt_setup_filename(dir, &dentry->d_name, 0, &nm);
+-	if (err)
+-		return ERR_PTR(err);
+-
+ 	inode = ubifs_new_inode(c, dir, mode, false);
+ 	if (IS_ERR(inode)) {
+ 		err = PTR_ERR(inode);
+@@ -395,7 +390,6 @@ static struct inode *create_whiteout(struct inode *dir, struct dentry *dentry)
+ 	make_bad_inode(inode);
+ 	iput(inode);
+ out_free:
+-	fscrypt_free_filename(&nm);
+ 	ubifs_err(c, "cannot create whiteout file, error %d", err);
+ 	return ERR_PTR(err);
+ }
+
+---
+base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+change-id: 20230330-memleak_rename-fix-6f94a6f99350
+
+Best regards,
+-- 
+MÃ¥rten Lindahl <marten.lindahl@axis.com>
+
