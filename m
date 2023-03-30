@@ -2,90 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9366D091D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61226D0916
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232745AbjC3PJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        id S232748AbjC3PIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232762AbjC3PI6 (ORCPT
+        with ESMTP id S232749AbjC3PH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:08:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D70FCC32
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:07:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680188853;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=flEdophtYQM+tpSiaQIdRAJlRLOhJGfz1jgwJJ1BJnE=;
-        b=RdwF3eRYjCT1dUzk77t5/ZIl0VitEAHhjGWCmNE2gk96EmOp6GWMzqf49hFEaMKrMS7zjG
-        hzhtEaUTvfHRdF9AmjjpX74bTgvNkJh7Ad6jWaiS8ZRle+Tb0tWK45ayNG6ZKBYj55LuF3
-        cjvm2a8fuG6kZyuGLqlsZ40q8cxXmTQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-dFQTAMfoPD2U4QyvYcJNIw-1; Thu, 30 Mar 2023 11:07:28 -0400
-X-MC-Unique: dFQTAMfoPD2U4QyvYcJNIw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D419858297;
-        Thu, 30 Mar 2023 15:07:27 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 938B4C15BA0;
-        Thu, 30 Mar 2023 15:07:25 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <64259c7b2b327_21883920818@willemb.c.googlers.com.notmuch>
-References: <64259c7b2b327_21883920818@willemb.c.googlers.com.notmuch> <20230329141354.516864-1-dhowells@redhat.com> <20230329141354.516864-5-dhowells@redhat.com>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH v2 04/48] net: Declare MSG_SPLICE_PAGES internal sendmsg() flag
+        Thu, 30 Mar 2023 11:07:59 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228F0CDDC;
+        Thu, 30 Mar 2023 08:07:17 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id E856032006F2;
+        Thu, 30 Mar 2023 11:07:15 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 30 Mar 2023 11:07:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680188835; x=1680275235; bh=LBgpEuVRLV1T8u09/zjqM82d32cWiHoXkNx
+        4ST+kG3A=; b=Mn2MQFtCMDufOJX/6+aQOJNyHseLzzRKdAl2dO3KvU3v+w7h9Fc
+        YeMbp6Cc7bQPwqD7q8HOefnxg0+5xUhPtFnKMYr9VV6B1/G3XC0Mj3Pnz0cX6kTc
+        uuniZZct/z2dQ+I1bV87rOUXNvnGbt+nTaoFaA3biIl+RVphQ4QU89OtoMk7Co9u
+        qhl8lguld4RTt6DYWM10Xvny1FBFLA7behEISgiYVYTauHzzY3M6IgDDYvuQNulB
+        gKyiomP4RUuIPOIRwvvJylhRBJIBcWnnuKiJ+B8oW/QGF6GDnPEndrnxLd8BXEny
+        LnU2Lm9b6noFb8WUJDXXrMFIXRmBpBAkalQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680188835; x=1680275235; bh=LBgpEuVRLV1T8u09/zjqM82d32cWiHoXkNx
+        4ST+kG3A=; b=XrNXNbEqRcpRfGFnpxb5OG2gI1kYvM77ukQD9XGDt/0/lp4GlpF
+        VM40nAoTCVRL8X7earO8EhwyWu+PZryL4F9vZQts1FNvIURzy491ijZt7h1nxTKC
+        6X1igKRoCrwvruAcRspvoFDEQHIjrbQZdMoYGbIP+P5CXX1eJwXJisDr0FVO7AUi
+        J+e+SIILArAEWLTOAMWw9UKwAJtVM4rlxcf2KubOc25x/HpMxPsJcXbfzDyb3bu2
+        z9Me3HVFJQVqIHl+Vtn6sm9V06fa95UZqJCJgtIeBbqXcoWwH7wZD5Lo2HdmlrdN
+        DKwDtpj+j6I1Fk5KHb0/ztRvUbTcJ+/KaRw==
+X-ME-Sender: <xms:oqUlZA3HyT_ZP9c7LvJBKQ1DBgmtTwPP21y_j06WP_3BTFVbBY84zw>
+    <xme:oqUlZLGKsX-x7Y3WImwclD2jYFXlYy1syCU9RGqrz5m2zJNh9PXeU51dW4h0GK_Bt
+    AETGIpsItcjMMMQYQ>
+X-ME-Received: <xmr:oqUlZI5rvzGY9Nh2d_QcPcIaC_3NwCZnL97qnK6ML07DPmW9RJPZEsDno5D0AR-imcti3Lc5C7MeCh17gc45HEq8kg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehkedgkeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeetlhhi
+    tggvucfthihhlhcuoegrlhhitggvsehrhihhlhdrihhoqeenucggtffrrghtthgvrhhnpe
+    ehudduvdetkedvkedtudeludfgfffhudegjeeguedvvedtteevjeehheeiffefgeenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhitggvse
+    hrhihhlhdrihho
+X-ME-Proxy: <xmx:o6UlZJ3L7bg3mKPH15UanuEBi4SgIJ19qVaUzA3psLyxp-TmmrsxlA>
+    <xmx:o6UlZDGELnnJchL74s60kQ0pFZHLXeHAd6KlVAS5L23u8-qjtFq-8A>
+    <xmx:o6UlZC_rpD8zsl4y8ZVEr63-BgMwK81_pec2VdNQVjijbO84d_e2HQ>
+    <xmx:o6UlZJZTeFQJCKyMOHHQ7hXQBYzXXBCNEro5hLKKGQMfPGQGI-dkiw>
+Feedback-ID: i56684263:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Mar 2023 11:07:13 -0400 (EDT)
+Message-ID: <672f991f-96af-9389-278d-77bde2ee2db8@ryhl.io>
+Date:   Thu, 30 Mar 2023 17:07:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <854581.1680188845.1@warthog.procyon.org.uk>
-Date:   Thu, 30 Mar 2023 16:07:25 +0100
-Message-ID: <854582.1680188845@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 08/13] rust: init: add `stack_pin_init!` macro
+Content-Language: en-US
+To:     Gary Guo <gary@garyguo.net>, y86-dev@protonmail.com
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+References: <20230329223239.138757-1-y86-dev@protonmail.com>
+ <20230329223239.138757-9-y86-dev@protonmail.com>
+ <20230330120600.45418253.gary@garyguo.net>
+From:   Alice Ryhl <alice@ryhl.io>
+In-Reply-To: <20230330120600.45418253.gary@garyguo.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
-
-> No need to modify __sys_sendmmsg explicitly, as it ends up calling
-> __sys_sendmsg?
+On 3/30/23 13:06, Gary Guo wrote:
+>> +impl<T> StackInit<T> {
+>> +    /// Creates a new [`StackInit<T>`] that is uninitialized. Use [`stack_pin_init`] instead of this
+>> +    /// primitive.
+>> +    ///
+>> +    /// [`stack_pin_init`]: kernel::stack_pin_init
+>> +    #[inline]
+>> +    pub fn uninit() -> Self {
+>> +        Self(MaybeUninit::uninit(), false)
+>> +    }
+>> +
+>> +    /// Initializes the contents and returns the result.
+>> +    ///
+>> +    /// # Safety
+>> +    ///
+>> +    /// The caller ensures that `self` is on the stack and not accessible in any other way, if this
+>> +    /// function returns `Ok`.
+>> +    #[inline]
+>> +    pub unsafe fn init<E>(&mut self, init: impl PinInit<T, E>) -> Result<Pin<&mut T>, E> {
 > 
-> Also, sendpage does this flags masking in the internal sock_FUNC
-> helpers rather than __sys_FUNC. Might be preferable.
+> Could this be made safe if the signature takes `self: Pin<&mut Self>`
+> instead?
+> 
+> The std `pin!` macro is stable in
+> 1.68 so we can just `core::pin::pin!(StackInit::uninit())` and then
+> call `init` on it.
+> 
+> Best,
+> Gary
 
-I was wondering whether other flags, such as MSG_BATCH should be added to the
-list.  Is it bad if userspace sets that in sendmsg()?  AF_KCM, at least, looks
-at it.
-
-David
-
+Yeah, I think that would work. If it's marked safe, then it will be 
+possible to call `init` several times, but this is fine if `init` 
+transitions the `StackInit` back into its uninitialized state before 
+attempting to initialize it again.
