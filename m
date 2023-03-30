@@ -2,115 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D0B6CFC20
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDD16CFC24
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjC3HBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        id S229904AbjC3HCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjC3HB2 (ORCPT
+        with ESMTP id S229896AbjC3HCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:01:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0721FE2;
-        Thu, 30 Mar 2023 00:01:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BBEF61F0E;
-        Thu, 30 Mar 2023 07:01:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78482C433EF;
-        Thu, 30 Mar 2023 07:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680159686;
-        bh=H3toqFQVNcpuGUTVQatxSq9QUFu7uhOw9AGmIacnjMA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RbIfwNUYo6lNqcJnUmsRHqjAeehV12pNlEYbDi4Cu1UYYibz0ZSoqLAXT3AA8fpJI
-         hbSxynNc2t0S8Fmqbdg951w0p8NeQX8DjcZRiBWMbV66HyCLOL9BWUquWB07w9cDS3
-         8bK9seUy7ecfj152HB8nBW5OVSrOZ9s6QqHFiiKqNT+7OFs2VnpoBeUGGrbJeX3pRO
-         MSJJiwnRP+KJMzpAqD6vdrivZuv5kUIcyvzoLhGw0q2h6raXKXsQOE1fvO208rNHkA
-         b7k0hf4Yxf9+U9YBPhDQtEceMFPlYXw1Bofp+9IdQSTVmI7JxW6D931MM7jQ4O/QPW
-         xK+mibakT364A==
-Date:   Thu, 30 Mar 2023 15:01:23 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] platform/chrome: Fix -Warray-bounds warnings
-Message-ID: <ZCUzw9epJig2rTIY@google.com>
-References: <ZCTrutoN+9TiJM8u@work>
+        Thu, 30 Mar 2023 03:02:51 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4332855B5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680159770; x=1711695770;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=emsz7RuRmLOMYEXI0fF4ScGgAtHMX/rkvAuxD3N/61I=;
+  b=IjgkuAjqiWWAnwxafocUi2bdesIWMloQqAssB8xDG71LwbKqyKiOtY2E
+   jtHj8XLAoTNbFGTpYZl+6UwGrvKLW9e/SUroi6Ikc9xyOF/Kx3Z8QBlfJ
+   CIxhadMZG1Pov31+UKjiuUBHyKIJKCGSdrFuon/kTIMvvtIIi62sjcIDP
+   2yMB1aBwXDGyldHPo4POD0Ahk/qwk0iuCR298N/vFA0LOdySpJQmdOk7P
+   GiNrRgXu7NJEuk10dxSftA/G3vYoEzCQBXJeaXP0LLiH4zXNOEnOsF7tF
+   CT0QJ6VgYOGbHs8zg4riLCWwZzbpsCgNJgsxeKszda005PlY5Ao4kuXoD
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="329580887"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="329580887"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 00:02:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="795557898"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="795557898"
+Received: from pglmail07.png.intel.com ([10.221.193.207])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Mar 2023 00:02:48 -0700
+Received: from localhost (ppgyli0109.png.intel.com [10.126.160.114])
+        by pglmail07.png.intel.com (Postfix) with ESMTP id 938D34837;
+        Thu, 30 Mar 2023 15:02:47 +0800 (+08)
+Received: by localhost (Postfix, from userid 11742525)
+        id 8FB5C3040; Thu, 30 Mar 2023 15:02:47 +0800 (+08)
+From:   Boon Khai Ng <boon.khai.ng@intel.com>
+To:     "David S . Miller" <davem@davemloft.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Tien Sung Ang <tien.sung.ang@intel.com>,
+        Boon Khai Ng <boon.khai.ng@intel.com>
+Subject: [PATCH v1 0/8] drivers: net: stmicro: Add VLAN support
+Date:   Thu, 30 Mar 2023 15:02:27 +0800
+Message-Id: <20230330070227.27173-1-boon.khai.ng@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCTrutoN+9TiJM8u@work>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.0 required=5.0 tests=AC_FROM_MANY_DOTS,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 07:54:02PM -0600, Gustavo A. R. Silva wrote:
-> In this case, as only enough space for the op field is allocated,
-> we can use an object of type uint32_t instead of a whole
-> struct ec_params_vbnvcontext (for which not enough memory is
-> allocated).
+Hi,
+The Designware 10G MAC(dwxgmac) driver has lack of vlan support in term of
+hardware, such as the hardware accelerated VLAN stripping, hardware filtering
+and vlan fail queue. These patches are meant to enable not only the hardware
+support of VLAN features but also the promiscous mode. The driver was not draft
+from scratch, however it was ported from the Ethernet Quality-of-Service (dwmac4)
+driver, it was tested working on ourside.
 
-It doesn't make sense to me.  See comments below.
+Boon Khai Ng (8):
+  drivers: net: stmmac_main: Add support for HW-accelerated VLAN
+    Stripping
+  drivers: net: stmmac_main: fix vlan toggle option.
+  drivers: net: stmmac: Add support for HW-accelerated VLAN Stripping
+  drivers: net: dwmac: Add use_hw_vlan setting
+  net: stmmac: Add support for VLAN Rx filtering
+  net: stmmac: Add support for VLAN promiscuous mode
+  net: stmmac: Add Double VLAN handling for VLAN Rx filtering
+  net: stmmac: Add option for VLAN filter fail queue enable
 
-> Fix the following warning seen under GCC 13:
-> drivers/platform/chrome/cros_ec_vbc.c: In function ‘vboot_context_read’:
-> drivers/platform/chrome/cros_ec_vbc.c:36:15: warning: array subscript ‘struct ec_params_vbnvcontext[1]’ is partly outside array bounds of ‘unsigned char[36]’ [-Warray-bounds=]
->    36 |         params->op = EC_VBNV_CONTEXT_OP_READ;
->       |               ^~
-> In file included from drivers/platform/chrome/cros_ec_vbc.c:12:
-> In function ‘kmalloc’,
->     inlined from ‘vboot_context_read’ at drivers/platform/chrome/cros_ec_vbc.c:30:8:
-> ./include/linux/slab.h:580:24: note: at offset 20 into object of size 36 allocated by ‘kmalloc_trace’
->   580 |                 return kmalloc_trace(
->       |                        ^~~~~~~~~~~~~~
->   581 |                                 kmalloc_caches[kmalloc_type(flags)][index],
->       |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   582 |                                 flags, size);
->       |                                 ~~~~~~~~~~~~
+ drivers/net/ethernet/stmicro/stmmac/common.h  |   1 +
+ .../net/ethernet/stmicro/stmmac/dwxgmac2.h    |  56 +++
+ .../ethernet/stmicro/stmmac/dwxgmac2_core.c   | 328 +++++++++++++++++-
+ .../ethernet/stmicro/stmmac/dwxgmac2_descs.c  |  15 +
+ drivers/net/ethernet/stmicro/stmmac/hwif.h    |  16 +
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  30 +-
+ .../ethernet/stmicro/stmmac/stmmac_platform.c |  13 +
+ include/linux/stmmac.h                        |   1 +
+ 8 files changed, 452 insertions(+), 8 deletions(-)
 
-Please trim the commit message a bit and try to wrap at 75 columns as
-[1] suggested.
+-- 
+2.25.1
 
-[1]: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#the-canonical-patch-format
-
-> @@ -20,10 +20,14 @@ static ssize_t vboot_context_read(struct file *filp, struct kobject *kobj,
->  	struct device *dev = kobj_to_dev(kobj);
->  	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
->  	struct cros_ec_device *ecdev = ec->ec_dev;
-> -	struct ec_params_vbnvcontext *params;
->  	struct cros_ec_command *msg;
-> +	/*
-> +	 * This should be a pointer to the same type as op field in
-> +	 * struct ec_params_vbnvcontext.
-> +	 */
-> +	uint32_t *params_op;
->  	int err;
-> -	const size_t para_sz = sizeof(params->op);
-> +	const size_t para_sz = sizeof(*params_op);
->  	const size_t resp_sz = sizeof(struct ec_response_vbnvcontext);
->  	const size_t payload = max(para_sz, resp_sz);
->  
-> @@ -32,8 +36,8 @@ static ssize_t vboot_context_read(struct file *filp, struct kobject *kobj,
->  		return -ENOMEM;
->  
->  	/* NB: we only kmalloc()ated enough space for the op field */
-> -	params = (struct ec_params_vbnvcontext *)msg->data;
-> -	params->op = EC_VBNV_CONTEXT_OP_READ;
-> +	params_op = (uint32_t *)msg->data;
-> +	*params_op = EC_VBNV_CONTEXT_OP_READ;
-
-I don't see a good reason to partially allocate memory here.  Perhaps, just
-let `para_sz = sizeof(struct ec_params_vbnvcontext)`?  If it also makes
-sense to you, please remove the comment "NB: we only..." as well.
