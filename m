@@ -2,124 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 013BC6CF89E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F5A6CF8A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjC3BP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 21:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
+        id S229810AbjC3BTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 21:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjC3BP6 (ORCPT
+        with ESMTP id S229505AbjC3BTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 21:15:58 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E0D19A;
-        Wed, 29 Mar 2023 18:15:57 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id z19so16671676plo.2;
-        Wed, 29 Mar 2023 18:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680138956;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TihRUSuIbcyCr0lFNEjhUbfKbaamQ0uPf3hyuIDE6gQ=;
-        b=RTCry2uEnJf3RnYi048V1AACEOoeINBihN3daGEThrK7Bq+36P6NP1q9dkpULWbie8
-         uQ+5BgrxGjr7TFybutkeCUNROz8jAAU2iJAYvbAeJat1n3Y84fIlGB5JO8bQN2fILctV
-         weQomRf25JCSNirmMlrZaZXWqMY+Ndlv4D7ywqjsk4uGOFl2jRWEjPrDLVe+qEUwtVb7
-         gHIGhoXDOIjAZBJu0GAc9dXoeWWsZa95TZ3WNZxAeeqOtwj4ggXyBUQA91tbJh7MSABN
-         4Q8h5m17gFc6yi4pAJjEumavn5466GH9ZVOjZe9MX8KInbActnX91Mc0xDbj3tPgLqIk
-         M2tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680138956;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TihRUSuIbcyCr0lFNEjhUbfKbaamQ0uPf3hyuIDE6gQ=;
-        b=a97sSIxFPhaBR4gUofMdtd0njRI9NNvGYc0hJree1Mpwtx+Gn12tm6SVTz4HqnK9tG
-         ytGf9e8vmBfWpLBxsvW0Yr7+/9DfE8x4QqcJK4yyiZSJfxa4mRhw7iXP46vj06maKiyx
-         iCFxFyMCSn+UA87kITzduEAPzEsvgxaptBQPZZgpjx5Pmak7yb0a/DrGmuSLDyNa/vqQ
-         Sxqw9ZAZmeWqSa3N0Ly1AbfJM1Ei376djTL7uYXs5DWzUT/QIbctv7AdU5tsFMPuUC5S
-         RWZO6KYYfpewE/wKWYsn/KbeVr4XHP/7VDljvPHUf+6P+XyQTdC92+Q4S3R56CNPWhO6
-         pd/w==
-X-Gm-Message-State: AAQBX9dCnhsDQhgfBQ0gMOub4YCto9HApE82OPBoKPCaDpiRm6evN33j
-        89OAhqtfIauuR2USCUM/IAc=
-X-Google-Smtp-Source: AKy350bTyshcbmCc+pIoeONIBpErKFE3Gxut0UYm4dqDCX6T8TbmlSk/RhFbqlgU82sSChm+gMnTgQ==
-X-Received: by 2002:a17:903:7c3:b0:19c:b4e3:c65b with SMTP id ko3-20020a17090307c300b0019cb4e3c65bmr16884174plb.8.1680138956389;
-        Wed, 29 Mar 2023 18:15:56 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id f12-20020a170902ab8c00b001a1a9a5e53fsm6979478plr.136.2023.03.29.18.15.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 18:15:55 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 18:15:54 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Subject: Re: [PATCH v13 057/113] KVM: TDX: MTRR: implement get_mt_mask() for
- TDX
-Message-ID: <20230330011554.GD1112017@ls.amr.corp.intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
- <cbfaedb652dad85f4020a2dcd74ac4abb5c14ac5.1678643052.git.isaku.yamahata@intel.com>
- <b3198a621a39d4c277ddf540e7a492953dc3637d.camel@intel.com>
- <20230325011200.GB214881@ls.amr.corp.intel.com>
- <a10d63840b02c4bbe1c027e5f230e4799f87ddda.camel@intel.com>
+        Wed, 29 Mar 2023 21:19:16 -0400
+Received: from out-14.mta1.migadu.com (out-14.mta1.migadu.com [95.215.58.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14523C13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 18:19:14 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 01:19:06 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1680139152;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ieJMdM29DRBiOqszQV7TS65QczUNcFjEDp7KMm1vo3M=;
+        b=K99/mO6ZmX+9Z0SOnOzW1yNj0BHgL3UOGUt5LDv4XF9H4nY2Cg0HyI0qsjQUQNx7YLeIe0
+        uom4b/i4ad0aQ5i458f25KJCmhDQSZwecGkcQn5VkL+En/wHNQ+m4NVLwnEMwFh8yvPosG
+        I4QEkthBz0FE0FQ9g1HCfE7t7CgQvbk=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 2/7] KVM: arm64: Add FEAT_TLBIRANGE support
+Message-ID: <ZCTjirkCgBkT65eP@linux.dev>
+References: <20230206172340.2639971-1-rananta@google.com>
+ <20230206172340.2639971-3-rananta@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a10d63840b02c4bbe1c027e5f230e4799f87ddda.camel@intel.com>
+In-Reply-To: <20230206172340.2639971-3-rananta@google.com>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 09:54:40AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
-
-> > diff -u b/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> > --- b/arch/x86/kvm/vmx/tdx.c
-> > +++ b/arch/x86/kvm/vmx/tdx.c
-> > @@ -347,6 +347,25 @@
-> >  	return 0;
-> >  }
-> >  
-> > +u8 tdx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-> > +{
-> > +	/* TDX private GPA is always WB. */
-> > +	if (!(gfn & kvm_gfn_shared_mask(vcpu->kvm))) {
+On Mon, Feb 06, 2023 at 05:23:35PM +0000, Raghavendra Rao Ananta wrote:
+> Define a generic function __kvm_tlb_flush_range() to
+> invalidate the TLBs over a range of addresses. The
+> implementation accepts 'op' as a generic TLBI operation.
+> Upcoming patches will use this to implement IPA based
+> TLB invalidations (ipas2e1is).
 > 
-> Are you still passing a "raw" GFN?  Could you explain why you choose this way?
+> If the system doesn't support FEAT_TLBIRANGE, the
+> implementation falls back to flushing the pages one by one
+> for the range supplied.
 > 
-> > +		/* MMIO is only for shared GPA. */
-> > +		WARN_ON_ONCE(is_mmio);
-> > +		return  MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT;
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>  arch/arm64/include/asm/kvm_asm.h | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 > 
-> I guess it's better to include VMX_EPT_IPAT_BIT bit.
+> diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
+> index 43c3bc0f9544d..995ff048e8851 100644
+> --- a/arch/arm64/include/asm/kvm_asm.h
+> +++ b/arch/arm64/include/asm/kvm_asm.h
+> @@ -221,6 +221,24 @@ DECLARE_KVM_NVHE_SYM(__per_cpu_end);
+>  DECLARE_KVM_HYP_SYM(__bp_harden_hyp_vecs);
+>  #define __bp_harden_hyp_vecs	CHOOSE_HYP_SYM(__bp_harden_hyp_vecs)
+>  
+> +#define __kvm_tlb_flush_range(op, mmu, start, end, level, tlb_level) do {	\
+> +	unsigned long pages, stride;						\
+> +										\
+> +	stride = kvm_granule_size(level);					\
 
-On second thought, there is no need to check it.  We can simply drop this check.
+Hmm... There's a rather subtle and annoying complication here that I
+don't believe is handled.
 
-u8 tdx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-{
-	if (is_mmio)
-		return MTRR_TYPE_UNCACHABLE << VMX_EPT_MT_EPTE_SHIFT;
+Similar to what I said in the last spin of the series, there is no
+guarantee that a range of IPAs is mapped at the exact same level
+throughout. Dirty logging and memslots that aren't hugepage aligned
+could lead to a mix of mapping levels being used within a range of the
+IPA space.
 
-	if (!kvm_arch_has_noncoherent_dma(vcpu->kvm))
-		return (MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT) | VMX_EPT_IPAT_BIT;
+> +	start = round_down(start, stride);					\
+> +	end = round_up(end, stride);						\
+> +	pages = (end - start) >> PAGE_SHIFT;					\
+> +										\
+> +	if ((!system_supports_tlb_range() &&					\
+> +	     (end - start) >= (MAX_TLBI_OPS * stride)) ||			\
 
-	/* TDX enforces CR0.CD = 0 and KVM MTRR emulation enforces writeback. */
-	return MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT;
-}
+Doesn't checking for TLBIRANGE above eliminate the need to test against
+MAX_TLBI_OPS?
+
+> +	    pages >= MAX_TLBI_RANGE_PAGES) {					\
+> +		__kvm_tlb_flush_vmid(mmu);					\
+> +		break;								\
+> +	}									\
+> +										\
+> +	__flush_tlb_range_op(op, start, pages, stride, 0, tlb_level, false);	\
+> +} while (0)
+> +
+>  extern void __kvm_flush_vm_context(void);
+>  extern void __kvm_flush_cpu_context(struct kvm_s2_mmu *mmu);
+>  extern void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu, phys_addr_t ipa,
+> -- 
+> 2.39.1.519.gcb327c4b5f-goog
+> 
+> 
 
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Thanks,
+Oliver
