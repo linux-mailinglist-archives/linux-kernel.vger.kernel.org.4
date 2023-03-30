@@ -2,134 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82286D0DC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E976D0DD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbjC3Sb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 14:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S231368AbjC3Sfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 14:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjC3Sby (ORCPT
+        with ESMTP id S229847AbjC3Sfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 14:31:54 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91A735A2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:31:53 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id g9so14456539uam.9
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:31:53 -0700 (PDT)
+        Thu, 30 Mar 2023 14:35:41 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADA61FCA
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:35:40 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id e36-20020a631e24000000b0050f76fb84b6so5593907pge.8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:35:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680201111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6bmgWM4VeyB5ih4GlZbThd/2eiyQX/X/Evx0/5WbwLA=;
-        b=n7Fbcx5kLC5PQCrKOLLphRB+Qj+CJ1V2n+6VE2q9x8tgdTfNT/TvljT9Ud5D0Sev+I
-         jSx0/mE5wPBJBUslQrVt+msUKR8oj3psvddiRCxHXDNcC7JwUdR4++FURzyQa2lH2oPP
-         QrylpyoNqKGTbaDitz5XTgPk8P5ruj9xa1qC8=
+        d=google.com; s=20210112; t=1680201340;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tJ8KMmzZMobHnGFo0ko1eaVfakeUKqQliIoetDZ8YRE=;
+        b=WgMZHweAIlvltzKw/+MMymuPl6RB4LL5CZYBxU4/ZD0skm5UDSzptayGoOpbfYINCi
+         F4omkDCzLPbqgAxfokotNM3r7etG66+xL/trzKuF6wsdjRVxXvTOuCuM6HhhGSsnOX6G
+         5ho/ZaMQNij5T/GjQVITrS6W+5MrPFgc5nEF4CILv5rSuqDvL/mEXWQ8D34L2uM3pXd/
+         61qag+QhuH6AGSM11jyqfbr3pBmzCG80rt7SezTrXXpK5aPMpBSJ53baGNSu/GZME5QO
+         sXSvq/ZUXH/umvLjnwiaghxQyglWLWHB4dvypDqXOseKdcjIAfmHat3cckTmOmQg9aPy
+         MK/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680201111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6bmgWM4VeyB5ih4GlZbThd/2eiyQX/X/Evx0/5WbwLA=;
-        b=0UvjUmRJtyo6pg+e20egV0P8wkKa2FpYR8ueaOFHL6dcP75hxMhJfJvGhgmAOwHKKE
-         dpCeVDXpUTn+AVa8pXif5WMCL5cKO+uh6k2AdcD7TgsOkug4mHTU9zu5Do9T5z9DJL2c
-         deIAML9wxDsC/IDF4DCnT0AUjvrn/FA2kTFeU1b5TmMKWBBAtQ1DptS0eSt1wkxRJOi5
-         k2CDT+oPTGbzA5ca5a/Dwhz/Y1eeT4ynMbPRHoWoGzY+VAlAJCqINUSFV4ftSWaiZlFV
-         Nt3hS4YNV5yh6GCDx30Zft6MnnDIiIo2pcfC21EPHDbV7ON6TrNU1iut1bxpja3bws7x
-         qmFA==
-X-Gm-Message-State: AAQBX9d6QH+lP85lWmdB2CKJ5WJ9XNJoryvJWy/66enFP0IqwsvRTZgl
-        flLuPxlYRu6x9SuS9Ib7b1MyebKmqbsAQcC4cuU=
-X-Google-Smtp-Source: AKy350aACrcFTbR3lPTu6vlqkLjAL0MkJAs60OamVoMZ0EhPcDJCVd26cehJivCctgna8JCl38bw7Q==
-X-Received: by 2002:a1f:b696:0:b0:432:2c6f:f246 with SMTP id g144-20020a1fb696000000b004322c6ff246mr8951249vkf.3.1680201111138;
-        Thu, 30 Mar 2023 11:31:51 -0700 (PDT)
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
-        by smtp.gmail.com with ESMTPSA id 2-20020a1f1102000000b0041280d4601asm89275vkr.51.2023.03.30.11.31.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 11:31:50 -0700 (PDT)
-Received: by mail-vs1-f50.google.com with SMTP id b6so13814128vsu.12
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:31:50 -0700 (PDT)
-X-Received: by 2002:a67:c18a:0:b0:425:cf00:e332 with SMTP id
- h10-20020a67c18a000000b00425cf00e332mr13402479vsj.7.1680201109830; Thu, 30
- Mar 2023 11:31:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230324195555.3921170-1-markyacoub@google.com> <20230324195555.3921170-10-markyacoub@google.com>
-In-Reply-To: <20230324195555.3921170-10-markyacoub@google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 30 Mar 2023 11:31:38 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Xvu++Bvkkq+xORUB0OWq_49nupFgCqsbX0XJz8vgy0Zw@mail.gmail.com>
-Message-ID: <CAD=FV=Xvu++Bvkkq+xORUB0OWq_49nupFgCqsbX0XJz8vgy0Zw@mail.gmail.com>
-Subject: Re: [PATCH v7 09/10] arm64: dts: qcom: sc7180: Add support for HDCP
- in dp-controller
-To:     Mark Yacoub <markyacoub@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        seanpaul@chromium.org, suraj.kandpal@intel.com,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        d=1e100.net; s=20210112; t=1680201340;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tJ8KMmzZMobHnGFo0ko1eaVfakeUKqQliIoetDZ8YRE=;
+        b=02w6yTkw1AJKwcmmT7cakDpFQw2ApQ0J7/e3g3EoNLDG3J0c+uUbC/1lO5Tf8gtX8B
+         r4VgQGKkUTumHnXB+9pZcV8UU7gjZIZzDz9jyQowXpuV9MnedE/gVhNU8xjXQ9j901V1
+         B9Nxemsp8ERfLJjmhtaViXUchXuXXJkckzecQP3rZ37GXgsFz65UFu+DVPGM98YYeSwu
+         1FYV/LCO/w++Yha1SLQVqm1y0oT1KkqqTM/DW8+EGtVRAV09++sSMrWh49KTRnA9qUwg
+         X92ooI7aO0tv0K5R2IZYT3GMkNypEmW/Ss5fJBUvZkBhYmAXfSawWvQBW0iAqQKsKFq9
+         fW8Q==
+X-Gm-Message-State: AAQBX9fSGIC9fVuFilwDaIVfgiVbRSH5bnnYLguwH5PvfSnZER5g2fnb
+        sVmrr56xLyiMp+uiJ+wdId6Y7dA=
+X-Google-Smtp-Source: AKy350YQ6/8gUx3E8iyg+pu8q3ARXIx8GYJQPh6U8FgTFFppyvYT8YPMwoiIG8aW+ins6SCLDnqLojs=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a63:1c3:0:b0:513:5162:a692 with SMTP id
+ 186-20020a6301c3000000b005135162a692mr2124246pgb.5.1680201340149; Thu, 30 Mar
+ 2023 11:35:40 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 11:35:38 -0700
+In-Reply-To: <168019606574.3557870.15629824904085210321.stgit@firesoul>
+Mime-Version: 1.0
+References: <168019602958.3557870.9960387532660882277.stgit@firesoul> <168019606574.3557870.15629824904085210321.stgit@firesoul>
+Message-ID: <ZCXWerysZL1XwVfX@google.com>
+Subject: Re: [PATCH bpf RFC-V3 1/5] xdp: rss hash types representation
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 03/30, Jesper Dangaard Brouer wrote:
+> The RSS hash type specifies what portion of packet data NIC hardware used
+> when calculating RSS hash value. The RSS types are focused on Internet
+> traffic protocols at OSI layers L3 and L4. L2 (e.g. ARP) often get hash
+> value zero and no RSS type. For L3 focused on IPv4 vs. IPv6, and L4
+> primarily TCP vs UDP, but some hardware supports SCTP.
 
-On Fri, Mar 24, 2023 at 12:56=E2=80=AFPM Mark Yacoub <markyacoub@chromium.o=
-rg> wrote:
->
-> From: Sean Paul <seanpaul@chromium.org>
->
-> Add the register ranges required for HDCP key injection and
-> HDCP TrustZone interaction as described in the dt-bindings for the
-> sc7180 dp controller.
->
-> Signed-off-by: Sean Paul <seanpaul@chromium.org>
-> Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
->
+> Hardware RSS types are differently encoded for each hardware NIC. Most
+> hardware represent RSS hash type as a number. Determining L3 vs L4 often
+> requires a mapping table as there often isn't a pattern or sorting
+> according to ISO layer.
+
+> The patch introduce a XDP RSS hash type (enum xdp_rss_hash_type) that
+> contain combinations to be used by drivers, which gets build up with bits
+> from enum xdp_rss_type_bits. Both enum xdp_rss_type_bits and
+> xdp_rss_hash_type get exposed to BPF via BTF, and it is up to the
+> BPF-programmer to match using these defines.
+
+> This proposal change the kfunc API bpf_xdp_metadata_rx_hash() adding
+> a pointer value argument for provide the RSS hash type.
+
+> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 > ---
-> Changes in v3:
-> -Split off into a new patch containing just the dts change (Stephen)
-> -Add hdcp compatible string (Stephen)
-> Changes in v4:
-> -Rebase on Bjorn's multi-dp patchset
-> Changes in v5:
-> -Put the tz register offsets in trogdor dtsi (Rob C)
-> Changes in v6:
-> -Rebased: Removed modifications in sc7180.dtsi as it's already upstream
-> Changes in v7:
-> -Change registers offset
->
->  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/bo=
-ot/dts/qcom/sc7180-trogdor.dtsi
-> index 47f39c547c41a..63183ac9c3c48 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> @@ -816,6 +816,14 @@ &mdss_dp {
->         status =3D "okay";
->         pinctrl-names =3D "default";
->         pinctrl-0 =3D <&dp_hot_plug_det>;
-> +
-> +       reg =3D <0 0x0ae90000 0 0x200>,
-> +             <0 0x0ae90200 0 0x200>,
-> +             <0 0x0ae90400 0 0xc00>,
-> +             <0 0x0ae91000 0 0x400>,
-> +             <0 0x0ae91400 0 0x400>,
-> +             <0 0x0aed1000 0 0x174>,
-> +             <0 0x0aee1000 0 0x2c>;
+>   include/linux/netdevice.h |    3 ++-
+>   include/net/xdp.h         |   46  
+> +++++++++++++++++++++++++++++++++++++++++++++
+>   net/core/xdp.c            |   10 +++++++++-
+>   3 files changed, 57 insertions(+), 2 deletions(-)
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 470085b121d3..c35f04f636f1 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -1624,7 +1624,8 @@ struct net_device_ops {
+
+>   struct xdp_metadata_ops {
+>   	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
+> -	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash);
+> +	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
+> +			       enum xdp_rss_hash_type *rss_type);
+>   };
+
+>   /**
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index 41c57b8b1671..130091a55a6f 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -8,6 +8,7 @@
+
+>   #include <linux/skbuff.h> /* skb_shared_info */
+>   #include <uapi/linux/netdev.h>
+> +#include <linux/bitfield.h>
+
+>   /**
+>    * DOC: XDP RX-queue information
+> @@ -425,6 +426,51 @@ XDP_METADATA_KFUNC_xxx
+>   MAX_XDP_METADATA_KFUNC,
+>   };
+
+> +enum xdp_rss_type_bits {
+> +	XDP_RSS_L3_IPV4		= BIT(0),
+> +	XDP_RSS_L3_IPV6		= BIT(1),
+> +
+> +	/* The fixed (L3) IPv4 and IPv6 headers can both be followed by
+> +	 * variable/dynamic headers, IPv4 called Options and IPv6 called
+> +	 * Extension Headers. HW RSS type can contain this info.
+> +	 */
+> +	XDP_RSS_L3_DYNHDR	= BIT(2),
+> +
+> +	/* When RSS hash covers L4 then drivers MUST set XDP_RSS_L4 bit in
+> +	 * addition to the protocol specific bit.  This ease interaction with
+> +	 * SKBs and avoids reserving a fixed mask for future L4 protocol bits.
+> +	 */
+> +	XDP_RSS_L4		= BIT(3), /* L4 based hash, proto can be unknown */
+> +	XDP_RSS_L4_TCP		= BIT(4),
+> +	XDP_RSS_L4_UDP		= BIT(5),
+> +	XDP_RSS_L4_SCTP		= BIT(6),
+> +	XDP_RSS_L4_IPSEC	= BIT(7), /* L4 based hash include IPSEC SPI */
+> +};
+> +
+> +/* RSS hash type combinations used for driver HW mapping */
+> +enum xdp_rss_hash_type {
+> +	XDP_RSS_TYPE_NONE            = 0,
+> +	XDP_RSS_TYPE_L2              = XDP_RSS_TYPE_NONE,
+> +
+> +	XDP_RSS_TYPE_L3_IPV4         = XDP_RSS_L3_IPV4,
+> +	XDP_RSS_TYPE_L3_IPV6         = XDP_RSS_L3_IPV6,
+> +	XDP_RSS_TYPE_L3_IPV4_OPT     = XDP_RSS_L3_IPV4 | XDP_RSS_L3_DYNHDR,
+> +	XDP_RSS_TYPE_L3_IPV6_EX      = XDP_RSS_L3_IPV6 | XDP_RSS_L3_DYNHDR,
+> +
+> +	XDP_RSS_TYPE_L4_ANY          = XDP_RSS_L4,
+> +	XDP_RSS_TYPE_L4_IPV4_TCP     = XDP_RSS_L3_IPV4 | XDP_RSS_L4 |  
+> XDP_RSS_L4_TCP,
+> +	XDP_RSS_TYPE_L4_IPV4_UDP     = XDP_RSS_L3_IPV4 | XDP_RSS_L4 |  
+> XDP_RSS_L4_UDP,
+> +	XDP_RSS_TYPE_L4_IPV4_SCTP    = XDP_RSS_L3_IPV4 | XDP_RSS_L4 |  
+> XDP_RSS_L4_SCTP,
+> +
+> +	XDP_RSS_TYPE_L4_IPV6_TCP     = XDP_RSS_L3_IPV6 | XDP_RSS_L4 |  
+> XDP_RSS_L4_TCP,
+> +	XDP_RSS_TYPE_L4_IPV6_UDP     = XDP_RSS_L3_IPV6 | XDP_RSS_L4 |  
+> XDP_RSS_L4_UDP,
+> +	XDP_RSS_TYPE_L4_IPV6_SCTP    = XDP_RSS_L3_IPV6 | XDP_RSS_L4 |  
+> XDP_RSS_L4_SCTP,
+> +
+> +	XDP_RSS_TYPE_L4_IPV6_TCP_EX  = XDP_RSS_TYPE_L4_IPV6_TCP | 
+> XDP_RSS_L3_DYNHDR,
+> +	XDP_RSS_TYPE_L4_IPV6_UDP_EX  = XDP_RSS_TYPE_L4_IPV6_UDP | 
+> XDP_RSS_L3_DYNHDR,
+> +	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP| 
+> XDP_RSS_L3_DYNHDR,
+> +};
+> +
+>   #ifdef CONFIG_NET
+>   u32 bpf_xdp_metadata_kfunc_id(int id);
+>   bool bpf_dev_bound_kfunc_id(u32 btf_id);
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index 528d4b37983d..38d2dee16b47 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -734,14 +734,22 @@ __bpf_kfunc int bpf_xdp_metadata_rx_timestamp(const  
+> struct xdp_md *ctx, u64 *tim
+>    * bpf_xdp_metadata_rx_hash - Read XDP frame RX hash.
+>    * @ctx: XDP context pointer.
+>    * @hash: Return value pointer.
+> + * @rss_type: Return value pointer for RSS type.
+> + *
+> + * The RSS hash type (@rss_type) specifies what portion of packet  
+> headers NIC
+> + * hardware were used when calculating RSS hash value.  The type  
+> combinations
+> + * are defined via &enum xdp_rss_hash_type and individual bits can be  
+> decoded
+> + * via &enum xdp_rss_type_bits.
+>    *
+>    * Return:
+>    * * Returns 0 on success or ``-errno`` on error.
+>    * * ``-EOPNOTSUPP`` : means device driver doesn't implement kfunc
+>    * * ``-ENODATA``    : means no RX-hash available for this frame
+>    */
+> -__bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32  
+> *hash)
+> +__bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32  
+> *hash,
+> +					 enum xdp_rss_hash_type *rss_type)
+>   {
+
+[..]
+
+> +	BTF_TYPE_EMIT(enum xdp_rss_type_bits);
+
+nit: Do we still need this with an extra argument?
+
+>   	return -EOPNOTSUPP;
+>   }
+
+
+
