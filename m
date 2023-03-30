@@ -2,100 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2787E6D0021
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D144E6D0024
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjC3Jrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
+        id S229793AbjC3Jsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjC3JrP (ORCPT
+        with ESMTP id S230420AbjC3JsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:47:15 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1616586B4;
-        Thu, 30 Mar 2023 02:46:36 -0700 (PDT)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 892C2E0010;
-        Thu, 30 Mar 2023 09:46:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680169595;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tDZMFFeXlhTNHv0SPx6QXJ/W5qsCoVxWgCf1SwG+2Wo=;
-        b=jl1v7xa81tnvUJc7h0fegAZMWr2Di8Zr9J7ucrXYdEnehswb+2ISKV+RyjocaWIoYTH9AI
-        E6HMrrTV2eX7J5osIb34clZX6kQL46SOnjqcZp21jqhUhT349ljsSeaeAgNxIkihlvfyzz
-        jFpIaOsBrejO1VxvmqNtSnW3zoW8biP5QIYg8ykBeby1NdknwWVUkJBOcNMZKMvGSlD81g
-        z2Ou6jivSsdrTQlSYQwHjN0rhBQxUhdnO1h191oRXFqOYBjkY27a1ofnierJaW25hor1ZX
-        m/xHqnOfqLrcT5viVwqpARBqIFc5mo9FkOKqageu4oA8v1RNvSjT/Npb4G5mSg==
-Date:   Thu, 30 Mar 2023 11:46:31 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rafael@kernel.org, Colin Foster <colin.foster@in-advantage.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee@kernel.org>, davem@davemloft.net,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        thomas.petazzoni@bootlin.com
-Subject: Re: [RFC 4/7] mfd: ocelot-spi: Change the regmap stride to reflect
- the real one
-Message-ID: <20230330114631.6afa041c@pc-7.home>
-In-Reply-To: <826e295b-6a0b-4015-85bc-5ba6015678dc@lunn.ch>
-References: <20230324093644.464704-1-maxime.chevallier@bootlin.com>
-        <20230324093644.464704-5-maxime.chevallier@bootlin.com>
-        <c87cd0b0-9ea4-493d-819d-217334c299dd@lunn.ch>
-        <20230324134817.50358271@pc-7.home>
-        <826e295b-6a0b-4015-85bc-5ba6015678dc@lunn.ch>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 30 Mar 2023 05:48:19 -0400
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EA693E0;
+        Thu, 30 Mar 2023 02:47:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0Vf-9mI6_1680169623;
+Received: from srmbuffer011165236051.sqa.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vf-9mI6_1680169623)
+          by smtp.aliyun-inc.com;
+          Thu, 30 Mar 2023 17:47:11 +0800
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Ruidong Tian <tianruidong@linux.alibaba.com>
+Subject: [PATCH] perf/arm-cmn: fix regitster offset of CMN_MXP__CONNECT_INFO_P2-5
+Date:   Thu, 30 Mar 2023 17:47:00 +0800
+Message-Id: <1680169620-26012-1-git-send-email-renyu.zj@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andrew,
+In the CMN700 specification, it is described that the address offset
+of the mxp_device_connect_info_p0-5 register is 16'h8 + #{8*index}.
+Therefore, the address offset of the CMN_MXP__CONNECT_INFO_P2-5 macro
+defined in the code is wrong, which causes the cmn700 topology map
+incorrect printed in debugfs.
 
-On Mon, 27 Mar 2023 02:02:55 +0200
-Andrew Lunn <andrew@lunn.ch> wrote:
+So correct the address offset value to make the cmn700 topology map
+correct in debugfs.
 
-> > > >  static const struct regmap_config ocelot_spi_regmap_config = {
-> > > >  	.reg_bits = 24,
-> > > > -	.reg_stride = 4,
-> > > > +	.reg_stride = 1,
-> > > >  	.reg_shift = REGMAP_DOWNSHIFT(2),
-> > > >  	.val_bits = 32,    
-> > > 
-> > > This does not look like a bisectable change? Or did it never work
-> > > before?  
-> > 
-> > Actually this works in all cases because of "regmap: check for
-> > alignment on translated register addresses" in this series. Before
-> > this series, I think using a stride of 1 would have worked too, as
-> > any 4-byte-aligned accesses are also 1-byte aligned.  
-> 
-> This is the sort of think which is good to explain in the commit
-> message. That is the place to answer questions reviewers are likely to
-> ask for things which are not obvious from just the patch.
+Fixes: 60d1504070c2 ("perf/arm-cmn: Support new IP features")
+Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+Signed-off-by: Ruidong Tian <tianruidong@linux.alibaba.com>
+---
+ drivers/perf/arm-cmn.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-That's right, I will include this explanation in the next iteration.
-Thanks for the review,
-
-Maxime
-
->     Andrew
+diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+index 1deb61b..e9f844b 100644
+--- a/drivers/perf/arm-cmn.c
++++ b/drivers/perf/arm-cmn.c
+@@ -59,10 +59,10 @@
+ /* XPs also have some local topology info which has uses too */
+ #define CMN_MXP__CONNECT_INFO_P0	0x0008
+ #define CMN_MXP__CONNECT_INFO_P1	0x0010
+-#define CMN_MXP__CONNECT_INFO_P2	0x0028
+-#define CMN_MXP__CONNECT_INFO_P3	0x0030
+-#define CMN_MXP__CONNECT_INFO_P4	0x0038
+-#define CMN_MXP__CONNECT_INFO_P5	0x0040
++#define CMN_MXP__CONNECT_INFO_P2	0x0018
++#define CMN_MXP__CONNECT_INFO_P3	0x0020
++#define CMN_MXP__CONNECT_INFO_P4	0x0028
++#define CMN_MXP__CONNECT_INFO_P5	0x0030
+ #define CMN__CONNECT_INFO_DEVICE_TYPE	GENMASK_ULL(4, 0)
+ 
+ /* PMU registers occupy the 3rd 4KB page of each node's region */
+-- 
+1.8.3.1
 
