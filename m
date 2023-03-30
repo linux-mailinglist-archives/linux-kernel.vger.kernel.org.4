@@ -2,89 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74286CFB20
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CE66CFB26
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjC3GBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 02:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        id S229986AbjC3GCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 02:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjC3GBL (ORCPT
+        with ESMTP id S230011AbjC3GCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 02:01:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6475F5B8E;
-        Wed, 29 Mar 2023 23:01:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BF3161ED4;
-        Thu, 30 Mar 2023 06:01:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C247C433EF;
-        Thu, 30 Mar 2023 06:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680156069;
-        bh=qI0qsnXqQKDOWulB+WAd4HD4/HMrD9/ycIJ/oMxn0oY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gBG+RraMJnoaJWwhflk/lEn1nnjxorrS4ILTHNm5k7sN7GcM4uvwQB2NhBuiN9CO6
-         KkpJI0eVOSpavtgNjSqbyg3YjCRFUotud59NNMsfWoNaCe8uHXBKzAi5jCwz9+ebXs
-         zZX2pR1sN6zvf/hVSnT/pO0Zjac3PWr7xxG3dlsw=
-Date:   Thu, 30 Mar 2023 08:01:07 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     linux-kernel@vger.kernel.org, Karsten Keil <isdn@linux-pingi.de>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] mISDN: remove unneeded mISDN_class_release()
-Message-ID: <ZCUlo1jcPeU4K_AI@kroah.com>
-References: <20230329060127.2688492-1-gregkh@linuxfoundation.org>
- <ZCST8vuQDEo9GhsS@corigine.com>
+        Thu, 30 Mar 2023 02:02:00 -0400
+X-Greylist: delayed 48770 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Mar 2023 23:01:43 PDT
+Received: from forwardcorp1a.mail.yandex.net (forwardcorp1a.mail.yandex.net [178.154.239.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A308565BA;
+        Wed, 29 Mar 2023 23:01:42 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-corp-main-62.vla.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-62.vla.yp-c.yandex.net [IPv6:2a02:6b8:c0d:3786:0:640:7c97:0])
+        by forwardcorp1a.mail.yandex.net (Yandex) with ESMTP id 975765FEED;
+        Thu, 30 Mar 2023 09:01:37 +0300 (MSK)
+Received: from [IPV6:2a02:6b8:b081:b502::1:25] (unknown [2a02:6b8:b081:b502::1:25])
+        by mail-nwsmtp-smtp-corp-main-62.vla.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id Z1CoQ70OrW20-2kVAMQRA;
+        Thu, 30 Mar 2023 09:01:36 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1680156097; bh=WxZblk8zP/PpvV733dqP5OGbqFyUaHE6g96KWu2H4Nc=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=giPk5XoEoiMdCaRmRcd6Kwxxt0xxtX2pS+QpLy7JBX8rz3ip0UgZsktieGwFrd5Hx
+         bYtb7hpPsVHmzPCj647UhLQVwyMxIWnl1ZNoAcSkHdo7BQwJu/gCv+950kZIYoLLVR
+         kKoFlUOoC0IXi1z6pzBLvCoPnolZ3njcCxGpDNfE=
+Authentication-Results: mail-nwsmtp-smtp-corp-main-62.vla.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+Message-ID: <bd780d59-4e3d-34bc-a2e4-aece5c851028@yandex-team.ru>
+Date:   Thu, 30 Mar 2023 09:01:35 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCST8vuQDEo9GhsS@corigine.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] net: netxen: report error on version offset reading
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     GR-Linux-NIC-Dev@marvell.com, manishc@marvell.com,
+        rahulv@marvell.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+References: <20230329162629.96590-1-den-plotnikov@yandex-team.ru>
+ <20230329185907.GE831478@unreal>
+Content-Language: en-US
+From:   Denis Plotnikov <den-plotnikov@yandex-team.ru>
+In-Reply-To: <20230329185907.GE831478@unreal>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 09:39:30PM +0200, Simon Horman wrote:
-> On Wed, Mar 29, 2023 at 08:01:27AM +0200, Greg Kroah-Hartman wrote:
-> > The mISDN_class_release() is not needed at all, as the class structure
-> > is static, and it does not actually do anything either, so it is safe to
-> > remove as struct class does not require a release callback.
-> > 
-> > Cc: Karsten Keil <isdn@linux-pingi.de>
-> > Cc: netdev@vger.kernel.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> > Note: I would like to take this through the driver-core tree as I have
-> > later struct class cleanups that depend on this change being made to the
-> > tree if that's ok with the maintainer of this file.
-> > 
-> >  drivers/isdn/mISDN/core.c | 6 ------
-> >  1 file changed, 6 deletions(-)
-> 
-> I assume this will hit the following in drivers/base/class.c:class_release():
-> 
->         if (class->class_release)
->                 class->class_release(class);
->         else
-> 		pr_debug("class '%s' does not have a release() function, "
-> 		"be careful\n", class->name);
-> 
-> So I also assume that you are being careful :)
 
-Yes, I am :)
+On 29.03.2023 21:59, Leon Romanovsky wrote:
+> On Wed, Mar 29, 2023 at 07:26:29PM +0300, Denis Plotnikov wrote:
+>> A static analyzer complains for non-checking the function returning value.
+>> Although, the code looks like not expecting any problems with version
+>> reading on netxen_p3_has_mn call, it seems the error still may happen.
+>> So, at least, add error reporting to ease problems investigation.
+>>
+>> Signed-off-by: Denis Plotnikov <den-plotnikov@yandex-team.ru>
+>> ---
+>>   drivers/net/ethernet/qlogic/netxen/netxen_nic_init.c | 9 +++++++--
+>>   1 file changed, 7 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/qlogic/netxen/netxen_nic_init.c b/drivers/net/ethernet/qlogic/netxen/netxen_nic_init.c
+>> index 35ec9aab3dc7b..92962dbb73ad0 100644
+>> --- a/drivers/net/ethernet/qlogic/netxen/netxen_nic_init.c
+>> +++ b/drivers/net/ethernet/qlogic/netxen/netxen_nic_init.c
+>> @@ -1192,8 +1192,13 @@ netxen_p3_has_mn(struct netxen_adapter *adapter)
+>>   	if (NX_IS_REVISION_P2(adapter->ahw.revision_id))
+>>   		return 1;
+>>   
+>> -	netxen_rom_fast_read(adapter,
+>> -			NX_FW_VERSION_OFFSET, (int *)&flashed_ver);
+>> +	if (netxen_rom_fast_read(adapter,
+>> +			NX_FW_VERSION_OFFSET, (int *)&flashed_ver)) {
+> 1. Mo callers of netxen_rom_fast_read() print debug messages, so this
+> shouldn't too.
+> 2. netxen_p3_has_mn() can't fail and by returning 0, you will cause to
+> unpredictable behaviour in netxen_validate_firmware().
+>
+> Thanks
 
-I need to remove that debug line soon as I'm moving all struct class
-instances to be static and in read-only memory, which would mean that no
-release function is needed at all for them.  Give me a few hundred more
-commits to get there...
+Well, ok. Then patch isn't needed.
 
-thanks for the review!
+Thanks for reviewing!
 
-greg k-h
+
+Denis
+
+>
+>> +		printk(KERN_ERR "%s: ERROR on flashed version reading",
+>> +				netxen_nic_driver_name);
+>> +		return 0;
+>> +	}
+>> +
+>>   	flashed_ver = NETXEN_DECODE_VERSION(flashed_ver);
+>>   
+>>   	if (flashed_ver >= NETXEN_VERSION_CODE(4, 0, 220)) {
+>> -- 
+>> 2.25.1
+>>
