@@ -2,158 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3F36D0B47
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6836D0AFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjC3Q35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 12:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
+        id S231359AbjC3Q0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 12:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjC3Q3Q (ORCPT
+        with ESMTP id S230123AbjC3Q0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 12:29:16 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AC6E199;
-        Thu, 30 Mar 2023 09:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680193727; x=1711729727;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CylzEgRAmJXOphwnxg3IbL2UXwW6z4Wch9KnUOezzDg=;
-  b=IDOEIl4jgTZNoU2e3/nuVrwGRK11UDzFAasGHBD/cjlQI8UCinoc5hus
-   Ru+kkPc+GxFSUZGBp7yJGpeAoDju9BZfbO9LWw8swbdZZ0xM1jSf2AR27
-   vRT85G3NgF78yaqhmke3IDkClFFtWb1bvUX49GkLUWhgEx8hufxlW3CxV
-   g6F1zaGpXFBumLR50MGM2Mc3VMaG85eWbxh0qbw/L/QlIWFg6uuWW7Fs6
-   Jjm4cLiQ4BkS/hN8u/rg/WSB+25bxq5/ojNu1RQ1LtqUeqs2jrEYOaTKz
-   dDO5pveFIlLlGZkWdhFSETm5m7Txdox4wOzt5jNVDc3keNOOKmk7gWmCV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="321607012"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="321607012"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 09:28:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="687307670"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="687307670"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Mar 2023 09:28:29 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4A5522E9; Thu, 30 Mar 2023 19:24:53 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: [PATCH v8 7/7] pcmcia: Convert to use less arguments in pci_bus_for_each_resource()
-Date:   Thu, 30 Mar 2023 19:24:34 +0300
-Message-Id: <20230330162434.35055-8-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230330162434.35055-1-andriy.shevchenko@linux.intel.com>
-References: <20230330162434.35055-1-andriy.shevchenko@linux.intel.com>
+        Thu, 30 Mar 2023 12:26:05 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E09BC168
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:26:00 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id d6-20020a92d786000000b00316f1737173so12885759iln.16
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:26:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680193559; x=1682785559;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T+dBOx95iSr24ri7d8wMa5srG3WWZaF8JUbwdum/RBY=;
+        b=5nteyluNGsVQ1+UQIJWbHxXb1fpSt3vhrZaxfjVOjY2i4tUcfaJJE97GLhmNBXErJZ
+         y/m3F0n4w4Qa+UwypCbqyynIjyFAQqeacphid8Guty8Bs3qdQBMdfueyWpqr6Mk+eVFw
+         b0e5JdvCqlPEmx/rCJSCn2KcJ9+1czDe3O7WMCPxDEasCjd/RylQtCbUA/XBZlVNQJKr
+         8KgJpS5VVFsHuiQ49XzEaHPQ54aDqXmorKSqvmotANH9orp0BE5dPUvTlLBZXv7I3ont
+         fvQ8W7zpX6h5gi1XKvHK4Y6FDN15dERVuUvu9k6AgUPwMIr7SRA+XYAWxbF5E9dnPzTy
+         EuzA==
+X-Gm-Message-State: AAQBX9czDO/B3BOPmq/SSxZF+Hch1HPxNYDNi98wkN6VH9/bGQQnKbBg
+        FcSBKB0yMh4D0YX1pgXAxU+GzyXZfuTifXOLd1oPomvE5Y4y
+X-Google-Smtp-Source: AKy350YpSMoQTsHL/4Yzsb0ybOReAZtTdnsOsaipsea6BE0mZJGFTyAVUssFbne9V7tMSA1ohsrw3Kxew1ed5hF5z9XH7KpHqWrM
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:3343:0:b0:40b:466:4367 with SMTP id
+ k3-20020a023343000000b0040b04664367mr1375618jak.3.1680193559698; Thu, 30 Mar
+ 2023 09:25:59 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 09:25:59 -0700
+In-Reply-To: <000000000000030b7e05f7b9ac32@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000047a22405f8208cf9@google.com>
+Subject: Re: [syzbot] [ntfs3?] WARNING in attr_data_get_block (2)
+From:   syzbot <syzbot+a98f21ebda0a437b04d7@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pci_bus_for_each_resource() can hide the iterator loop since
-it may be not used otherwise. With this, we may drop that iterator
-variable definition.
+syzbot has found a reproducer for the following issue on:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
-Acked-by: Dominik Brodowski <linux@dominikbrodowski.net>
----
- drivers/pcmcia/rsrc_nonstatic.c | 9 +++------
- drivers/pcmcia/yenta_socket.c   | 3 +--
- 2 files changed, 4 insertions(+), 8 deletions(-)
+HEAD commit:    ffe78bbd5121 Merge tag 'xtensa-20230327' of https://github..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16237c0dc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9c35b3803e5ad668
+dashboard link: https://syzkaller.appspot.com/bug?extid=a98f21ebda0a437b04d7
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=139dca3ec80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15a55a35c80000
 
-diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstatic.c
-index ad1141fddb4c..96264ebee46a 100644
---- a/drivers/pcmcia/rsrc_nonstatic.c
-+++ b/drivers/pcmcia/rsrc_nonstatic.c
-@@ -934,7 +934,7 @@ static int adjust_io(struct pcmcia_socket *s, unsigned int action, unsigned long
- static int nonstatic_autoadd_resources(struct pcmcia_socket *s)
- {
- 	struct resource *res;
--	int i, done = 0;
-+	int done = 0;
- 
- 	if (!s->cb_dev || !s->cb_dev->bus)
- 		return -ENODEV;
-@@ -960,12 +960,9 @@ static int nonstatic_autoadd_resources(struct pcmcia_socket *s)
- 	 */
- 	if (s->cb_dev->bus->number == 0)
- 		return -EINVAL;
--
--	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
--		res = s->cb_dev->bus->resource[i];
--#else
--	pci_bus_for_each_resource(s->cb_dev->bus, res, i) {
- #endif
-+
-+	pci_bus_for_each_resource(s->cb_dev->bus, res) {
- 		if (!res)
- 			continue;
- 
-diff --git a/drivers/pcmcia/yenta_socket.c b/drivers/pcmcia/yenta_socket.c
-index 1365eaa20ff4..fd18ab571ce8 100644
---- a/drivers/pcmcia/yenta_socket.c
-+++ b/drivers/pcmcia/yenta_socket.c
-@@ -673,9 +673,8 @@ static int yenta_search_res(struct yenta_socket *socket, struct resource *res,
- 			    u32 min)
- {
- 	struct resource *root;
--	int i;
- 
--	pci_bus_for_each_resource(socket->dev->bus, root, i) {
-+	pci_bus_for_each_resource(socket->dev->bus, root) {
- 		if (!root)
- 			continue;
- 
--- 
-2.40.0.1.gaa8946217a0b
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/595cb07a344c/disk-ffe78bbd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/13a6464b8ace/vmlinux-ffe78bbd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/640bf4496398/bzImage-ffe78bbd.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/53cbcc1fd741/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a98f21ebda0a437b04d7@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 5092 at fs/ntfs3/attrib.c:1060 attr_data_get_block+0x1926/0x2da0
+Modules linked in:
+CPU: 0 PID: 5092 Comm: syz-executor285 Not tainted 6.3.0-rc4-syzkaller-00039-gffe78bbd5121 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+RIP: 0010:attr_data_get_block+0x1926/0x2da0 fs/ntfs3/attrib.c:1060
+Code: 80 e1 07 80 c1 03 38 c1 0f 8c 48 ff ff ff 48 8d bc 24 e0 01 00 00 e8 99 54 1b ff 48 8b 54 24 58 e9 31 ff ff ff e8 fa 9d c5 fe <0f> 0b bb ea ff ff ff e9 11 fa ff ff e8 e9 9d c5 fe e9 0f f9 ff ff
+RSP: 0018:ffffc90003cb7ac0 EFLAGS: 00010293
+RAX: ffffffff82c4b4f6 RBX: 00000000ffffffff RCX: ffff888076523a80
+RDX: 0000000000000000 RSI: 00000000ffffffff RDI: 00000000ffffffff
+RBP: ffffc90003cb7d28 R08: ffffffff82c4afcf R09: fffffbfff205c652
+R10: 0000000000000000 R11: dffffc0000000001 R12: 1ffff92000796f78
+R13: 0000000000000032 R14: ffff8880756043a0 R15: dffffc0000000000
+FS:  00007f2d8728d700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2d8726c718 CR3: 000000007693d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ntfs_fallocate+0xca4/0x1190 fs/ntfs3/file.c:614
+ vfs_fallocate+0x54b/0x6b0 fs/open.c:324
+ ksys_fallocate fs/open.c:347 [inline]
+ __do_sys_fallocate fs/open.c:355 [inline]
+ __se_sys_fallocate fs/open.c:353 [inline]
+ __x64_sys_fallocate+0xbd/0x100 fs/open.c:353
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f2d8f5027b9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f2d8728d308 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
+RAX: ffffffffffffffda RBX: 00007f2d8f5a67b8 RCX: 00007f2d8f5027b9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000006
+RBP: 00007f2d8f5a67b0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000ff8000 R11: 0000000000000246 R12: 00007f2d8f5a67bc
+R13: 00007f2d8f5734ac R14: 0030656c69662f2e R15: 0000000000022000
+ </TASK>
 
