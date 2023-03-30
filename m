@@ -2,130 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EE16D00AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 592CA6D00B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbjC3KJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S230410AbjC3KKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjC3KJW (ORCPT
+        with ESMTP id S230413AbjC3KKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:09:22 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE3783FB
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:09:17 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3e0965f70ecso477851cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680170956;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5QHfYK4L+ShyHkhoulB2o8AHckH/Mpd3a3lRdE+7Qyg=;
-        b=OFheN3XNdX8YEQe4sywLKUI2sM6vwFMNrlsCdxQS6E/CE5Au90/oAJtr1iRriRGja4
-         5+0/cHgi1vRdBxW1Ir0bUevE7Ijz7ufuw9YS1GuzdyaUYo9WFmMqYYcJfRYL2E20yepH
-         dITqa6az4fu6qcLuQF38artlSvVdQlUbMS4WZpiYsOQVfpiTpmatRLFyZYNscjfaQ/Bu
-         ye63v6UUyPjNAYZg9v490wFsHNbyjvzO3Oao19MVgk9ohYD/UG5FnPKG+wxtuaaWXrCR
-         P+IOplx08kkFuVVaP2E8Pbvy0NNLjVrnmbocX9ybtLC1W1qYHgVoBL/VyWTNCqiQHHXc
-         GuYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680170956;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5QHfYK4L+ShyHkhoulB2o8AHckH/Mpd3a3lRdE+7Qyg=;
-        b=rS5R8jEW1ijOf/egeQ1CRo2x68rL3Ww8Oi8VMR4Svdnc1e4Kvz5Sbfo7Bk7BqLMVNq
-         mjwmJw58xKXXrhUIUypCsVqwSR3GmuyxEZRIvyTieS2ptiz02bIvYr49xN3TPCMKOoJl
-         jNKo1xKlYnFIox2LBvin0o+dcwxwPQBPC1k0SwLRcA4LWCpbX95SsQW9J2XIe52JTkNy
-         UEAOKDHwZEpOV/xcNFj2KsCb5BO1IW/8f1mQvVFSD/AIwp7eXv03dTc+EhzdyY1iMxXZ
-         8Ch2iZI7s23OZVLWuuo/neFlf7uLAaLtqnzJZa3ayi3AdIG4G6k1w1mXYhOznWDYlHr0
-         3pSg==
-X-Gm-Message-State: AAQBX9cAIPPtKZzbtRP4oWSFxeg7MLMC4GgBXJZc0fDiSBnILrHoPSsa
-        YZ1IIbOSaMXttHeUPZavI4Ri5rfrgq57TrHSTGEwqsGFHRJh+knW88hc0yRO
-X-Google-Smtp-Source: AKy350Y80+QkSJsZopsDohV2gcHyIz6/stE6BaGOTjtia6jmm8aSYAzJcTz5XTMBRHxX57rCN7LBoqUFEPkvdOkl6to=
-X-Received: by 2002:ac8:7f87:0:b0:3d3:3cc:6f70 with SMTP id
- z7-20020ac87f87000000b003d303cc6f70mr72806qtj.17.1680170956136; Thu, 30 Mar
- 2023 03:09:16 -0700 (PDT)
+        Thu, 30 Mar 2023 06:10:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8DA7D93;
+        Thu, 30 Mar 2023 03:09:41 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 10:09:39 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680170979;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MzwYpHAlGFh2jcUeq4SdySXMk9iHC9iZ6y9++anDNoE=;
+        b=KM222hMi3A2IIcnhPjYwrQpr8XiHlwxM/zurbhYUwW3asTzbulzgIHuHPDtj2VLhsnus3k
+        tLmNJSxRCvVHTIpi1vWgvclkgS7X98iCa3YBKYeIPcwBu7w/W8UxwC7+iiH5cmlp3WMwH6
+        /xAnuieEaidnmu/VepjY+wKB3u5b9Oi07ePEJxY2nBjZ6JTEB4PKuGc50DRd2M9DFGFxDN
+        ljtPn2GGM29/nXGVKnBY2XL+JUVYzoB8FZqW2tKeUNKGqPrZTHK+Kkpe0FmmHhkatF8OXf
+        zjHdaY9xmVkG+lcbKFsorwFSV3d42qozjzg5IFZFfz9fjVRLpXY8oUlTeweDGg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680170979;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MzwYpHAlGFh2jcUeq4SdySXMk9iHC9iZ6y9++anDNoE=;
+        b=+bZu9CFZt+G66lzntjHFTd0Mcgmf5VI71aMmmY/JKMq00J0FLiaHi1LdhwmfToTEjgcLkV
+        btofhqMghNsItUCg==
+From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cc] x86/coco: Export cc_vendor
+Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230318115634.9392-2-bp@alien8.de>
+References: <20230318115634.9392-2-bp@alien8.de>
 MIME-Version: 1.0
-References: <000000000000bdc7df05f7f837ff@google.com>
-In-Reply-To: <000000000000bdc7df05f7f837ff@google.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Thu, 30 Mar 2023 12:09:02 +0200
-Message-ID: <CANp29Y50uKR9SgXi+wFGQkdcrSn98MfTsmwQXxofYngkzWaKjQ@mail.gmail.com>
-Subject: Re: [syzbot] Monthly cluster report
-To:     syzbot <syzbot+list6e220af77940a0f2148c@syzkaller.appspotmail.com>
-Cc:     cluster-devel@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <168017097924.404.15209284037516830804.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FTR The subsystem was recently renamed to gfs2 on syzbot, so the list
-of gfs2 bugs can now be found at:
-https://syzkaller.appspot.com/upstream/s/gfs2
+The following commit has been merged into the x86/cc branch of tip:
 
-On Tue, Mar 28, 2023 at 6:19=E2=80=AFPM syzbot
-<syzbot+list6e220af77940a0f2148c@syzkaller.appspotmail.com> wrote:
->
-> Hello cluster maintainers/developers,
->
-> This is a 30-day syzbot report for the cluster subsystem.
-> All related reports/information can be found at:
-> https://syzkaller.appspot.com/upstream/s/cluster
->
-> During the period, 1 new issues were detected and 0 were fixed.
-> In total, 23 issues are still open and 12 have been fixed so far.
->
-> Some of the still happening issues:
->
-> Crashes Repro Title
-> 237     Yes   kernel BUG in gfs2_glock_nq (2)
->               https://syzkaller.appspot.com/bug?extid=3D70f4e455dee59ab40=
-c80
-> 111     Yes   INFO: task hung in gfs2_jhead_process_page
->               https://syzkaller.appspot.com/bug?extid=3Db9c5afe053a08cd29=
-468
-> 108     Yes   general protection fault in gfs2_evict_inode (2)
->               https://syzkaller.appspot.com/bug?extid=3D8a5fc6416c175cece=
-a34
-> 23      Yes   INFO: task hung in __gfs2_trans_begin
->               https://syzkaller.appspot.com/bug?extid=3Da159cc6676345e04f=
-f7d
-> 21      Yes   WARNING in gfs2_check_blk_type
->               https://syzkaller.appspot.com/bug?extid=3D092b28923eb79e0f3=
-c41
-> 18      Yes   UBSAN: array-index-out-of-bounds in __gfs2_iomap_get
->               https://syzkaller.appspot.com/bug?extid=3D45d4691b1ed3c48eb=
-a05
-> 13      Yes   INFO: task hung in gfs2_gl_hash_clear (3)
->               https://syzkaller.appspot.com/bug?extid=3Ded7d0f71a89e28557=
-a77
-> 6       No    KMSAN: uninit-value in inode_go_dump
->               https://syzkaller.appspot.com/bug?extid=3D79333ce1ae874ab7f=
-fbb
-> 3       Yes   general protection fault in gfs2_dump_glock (2)
->               https://syzkaller.appspot.com/bug?extid=3D427fed3295e9a7e88=
-7f2
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/000000000000bdc7df05f7f837ff%40google.com.
+Commit-ID:     52e490dcb9e47e8dcf9d915214c6b9d79580d03e
+Gitweb:        https://git.kernel.org/tip/52e490dcb9e47e8dcf9d915214c6b9d79580d03e
+Author:        Borislav Petkov (AMD) <bp@alien8.de>
+AuthorDate:    Sat, 18 Mar 2023 12:56:33 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 30 Mar 2023 11:59:58 +02:00
+
+x86/coco: Export cc_vendor
+
+It will be used in different checks in future changes. Export it
+directly and drop the setter as it is a __ro_after_init variable anyway.
+
+No functional changes.
+
+[ tglx: Add accessor function ]
+
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/20230318115634.9392-2-bp@alien8.de
+
+---
+ arch/x86/coco/core.c               | 13 ++++---------
+ arch/x86/coco/tdx/tdx.c            |  2 +-
+ arch/x86/include/asm/coco.h        | 16 +++++++++++++---
+ arch/x86/kernel/cpu/mshyperv.c     |  2 +-
+ arch/x86/mm/mem_encrypt_identity.c |  2 +-
+ 5 files changed, 20 insertions(+), 15 deletions(-)
+
+diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+index 49b44f8..684f0a9 100644
+--- a/arch/x86/coco/core.c
++++ b/arch/x86/coco/core.c
+@@ -13,7 +13,7 @@
+ #include <asm/coco.h>
+ #include <asm/processor.h>
+ 
+-static enum cc_vendor vendor __ro_after_init;
++enum cc_vendor cc_vendor __ro_after_init;
+ static u64 cc_mask __ro_after_init;
+ 
+ static bool intel_cc_platform_has(enum cc_attr attr)
+@@ -83,7 +83,7 @@ static bool hyperv_cc_platform_has(enum cc_attr attr)
+ 
+ bool cc_platform_has(enum cc_attr attr)
+ {
+-	switch (vendor) {
++	switch (cc_vendor) {
+ 	case CC_VENDOR_AMD:
+ 		return amd_cc_platform_has(attr);
+ 	case CC_VENDOR_INTEL:
+@@ -105,7 +105,7 @@ u64 cc_mkenc(u64 val)
+ 	 * - for AMD, bit *set* means the page is encrypted
+ 	 * - for Intel *clear* means encrypted.
+ 	 */
+-	switch (vendor) {
++	switch (cc_vendor) {
+ 	case CC_VENDOR_AMD:
+ 		return val | cc_mask;
+ 	case CC_VENDOR_INTEL:
+@@ -118,7 +118,7 @@ u64 cc_mkenc(u64 val)
+ u64 cc_mkdec(u64 val)
+ {
+ 	/* See comment in cc_mkenc() */
+-	switch (vendor) {
++	switch (cc_vendor) {
+ 	case CC_VENDOR_AMD:
+ 		return val & ~cc_mask;
+ 	case CC_VENDOR_INTEL:
+@@ -129,11 +129,6 @@ u64 cc_mkdec(u64 val)
+ }
+ EXPORT_SYMBOL_GPL(cc_mkdec);
+ 
+-__init void cc_set_vendor(enum cc_vendor v)
+-{
+-	vendor = v;
+-}
+-
+ __init void cc_set_mask(u64 mask)
+ {
+ 	cc_mask = mask;
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index 055300e..bab29cb 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -852,7 +852,7 @@ void __init tdx_early_init(void)
+ 
+ 	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
+ 
+-	cc_set_vendor(CC_VENDOR_INTEL);
++	cc_vendor = CC_VENDOR_INTEL;
+ 	tdx_parse_tdinfo(&cc_mask);
+ 	cc_set_mask(cc_mask);
+ 
+diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
+index 3d98c3a..35d7aa9 100644
+--- a/arch/x86/include/asm/coco.h
++++ b/arch/x86/include/asm/coco.h
+@@ -11,13 +11,23 @@ enum cc_vendor {
+ 	CC_VENDOR_INTEL,
+ };
+ 
+-void cc_set_vendor(enum cc_vendor v);
+-void cc_set_mask(u64 mask);
+-
+ #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
++extern enum cc_vendor cc_vendor;
++
++static inline enum cc_vendor cc_get_vendor(void)
++{
++	return cc_vendor;
++}
++
++void cc_set_mask(u64 mask);
+ u64 cc_mkenc(u64 val);
+ u64 cc_mkdec(u64 val);
+ #else
++static inline enum cc_vendor cc_get_vendor(void)
++{
++	return CC_VENDOR_NONE;
++}
++
+ static inline u64 cc_mkenc(u64 val)
+ {
+ 	return val;
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index f36dc2f..9f3fad3 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -412,7 +412,7 @@ static void __init ms_hyperv_init_platform(void)
+ 		/* Isolation VMs are unenlightened SEV-based VMs, thus this check: */
+ 		if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
+ 			if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE)
+-				cc_set_vendor(CC_VENDOR_HYPERV);
++				cc_vendor = CC_VENDOR_HYPERV;
+ 		}
+ 	}
+ 
+diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
+index c6efcf5..bfe22fd 100644
+--- a/arch/x86/mm/mem_encrypt_identity.c
++++ b/arch/x86/mm/mem_encrypt_identity.c
+@@ -612,7 +612,7 @@ void __init sme_enable(struct boot_params *bp)
+ out:
+ 	if (sme_me_mask) {
+ 		physical_mask &= ~sme_me_mask;
+-		cc_set_vendor(CC_VENDOR_AMD);
++		cc_vendor = CC_VENDOR_AMD;
+ 		cc_set_mask(sme_me_mask);
+ 	}
+ }
