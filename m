@@ -2,88 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183296CFFD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505CA6CFFDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjC3Jbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
+        id S230023AbjC3Jch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjC3Jbq (ORCPT
+        with ESMTP id S229852AbjC3Jca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:31:46 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329BB7ABA;
-        Thu, 30 Mar 2023 02:31:45 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so13036231wmq.4;
-        Thu, 30 Mar 2023 02:31:45 -0700 (PDT)
+        Thu, 30 Mar 2023 05:32:30 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24AD7687
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:32:07 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id er13so32972701edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:32:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680168703;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2wlyXiuObJJjktYiyreCZzL3rjA4zKtmBixPoT6R+F0=;
-        b=Y4OoQAhVGOqI+uv0pxKJRu4ZsIvPkStPkTUbv/2I6V3iDEot8HwhvO6dInlCxKYWBc
-         bad03C5wA4wX8bLnfeOGwydUjNhDacl6qyErhJ2XmtoyJipMNSIuJ1eD0afSmtPlZgv4
-         3VuwgNhG0xmkrhPVS/AXsIONapDnDoANbq/0JoqJeAPqulZOOfuZrfaZBgRa0YZ0KX0u
-         61yL6jG5GqP/yUlIdvtrRqUjOZF0scdaKVObg3LqAyb5EKJ4mfh/IaXPNwt82a0C2uVA
-         p1cSHvykOG99d3Br0z5fqhMb+1v5wFHN0KyfDnZosrZ35uNnKUJeCCd1mdcAp3mYgcH/
-         YFXw==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1680168726;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=dhY9/3aNsTwYD8JARE0vudUjZ+1QcHbCGg2fnRM4sRI=;
+        b=vc4nJO23T2Q2lm2HKPBkW1KZABzY9+vE8sCq1qfaQlT9LzrfpSEHyhy/fblPbrusvi
+         5ljMIY9ieK6OqfgZk9k31oF8z11eSj3mLin6FflkRZPD91D7euhQdWvbhBF2kNU9paEm
+         EEUw9SRQy1MrHtrfb12j5CE1ElgR/ONERAchYFL1H/hMTAyYkOodcbvjut+H0Gt1yVTG
+         ++/e2sNL9VSlMmfrCRFE5e3GT+zR1Dv20Kq5ZwQZ/sTOOR9IsqnFOD8Z2F9n2VBuwrsZ
+         1m31fck8eJr9WqAg9xYNfCyv+/rXVkQZsaGeEeFh+VjMriQKGe31laXefWKbC5BA+oOn
+         vvWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680168703;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1680168726;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2wlyXiuObJJjktYiyreCZzL3rjA4zKtmBixPoT6R+F0=;
-        b=SjpmeYc0ydaYmQd4AQLrQncp7jGv27FrvtutQHKIZsLPNM7ajWh+GgVbHC+ENOuolu
-         eEHkHGaySLvuUKB+2hnJiBVbfZJNJCHW3iOOwYUdbOYT2fTmLr8GCOgr/0Pf7JsR7S+p
-         33nvRt8IbA+qlLteYYIf/swvT+1pTgeYKXl6RPL9zhhnA9V29kCc5dwST9qbmi8FBWLp
-         +MamhNz9n6fMLCLPhg0Vk04eIagZ/4pqwNoD91GCmk8AjF3wBd0pPZOb/d9P2gCMlyh8
-         XW+UIL1CkG+z9iNOb1gJaQy6+euQhzZdj729YlutDEa2290TBHg6LRpvT/J0e17QHL6s
-         TTsQ==
-X-Gm-Message-State: AO0yUKWy8/yb9COKHg4eXA+Ye5fXmM26sglMXRfJVs8Ainuc0xVNlarD
-        QkiwnCHOlxKji5FMYIepJPVdwjsjdapSfMFG
-X-Google-Smtp-Source: AK7set8MoRoP1u28J2KlqIRCUvbhxPNq5qX8D5y1gRGG9mTbXEF5Z82DXD5g1HsNB5h8AJgc4McNiQ==
-X-Received: by 2002:a7b:ca4a:0:b0:3ea:e582:48dd with SMTP id m10-20020a7bca4a000000b003eae58248ddmr17293179wml.34.1680168703616;
-        Thu, 30 Mar 2023 02:31:43 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id m18-20020a7bcb92000000b003ee58e8c971sm5107057wmi.14.2023.03.30.02.31.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 02:31:42 -0700 (PDT)
-Message-ID: <5a1b22cb-4597-8137-e802-ca81ceb99c7c@gmail.com>
-Date:   Thu, 30 Mar 2023 11:31:41 +0200
+        bh=dhY9/3aNsTwYD8JARE0vudUjZ+1QcHbCGg2fnRM4sRI=;
+        b=iTJVWZBfQIxBQlajB9IsckEUd3BbVkeurMGfatosqhuG60sBUqT/e2cb788R0j+yAy
+         iAFX8U4PMK6+W3TfJxFKdCmu84Pw1B+/Tu7w9JRwugG8XdfFqzDNB0YMBPefuvy9bJuA
+         15uG9n/La/kLEz0zfsmLqLiAFxU00MDgiQ2UBJTEMaij+RoAwxL6PD+zrEjmZO7Izhpt
+         FXaFeb6xrnDoqHhmN2MbQjpbpIKuK39rZxjob7TEYgzihSzKmKyOnL5xA2N3Sq8n0xNo
+         VlGXb91EwfPCqaJI/QmB4BEL+RK5feFSieziHCkxD6WiGPt/0kRxMcmF5e9tYsG+qEOZ
+         Hh2g==
+X-Gm-Message-State: AAQBX9csm7P2ra8ATmutiy56QqRi/X4PIJjvmgJirhW1ff7mFpe4rorA
+        B5DTaL20c8btVbolumELaFBfRg==
+X-Google-Smtp-Source: AKy350alAnOUxE/5fQm9gWe+KOGNktqREfVXP71vAIxmMmmyVwTNOpQG2cmV3p42xTFkgZJDZEhUKg==
+X-Received: by 2002:a17:907:25cb:b0:946:f79b:e785 with SMTP id ae11-20020a17090725cb00b00946f79be785mr6532593ejc.2.1680168726200;
+        Thu, 30 Mar 2023 02:32:06 -0700 (PDT)
+Received: from localhost ([2a02:8070:6387:ab20:5139:4abd:1194:8f0e])
+        by smtp.gmail.com with ESMTPSA id lt11-20020a170906fa8b00b008e54ac90de1sm17437256ejb.74.2023.03.30.02.32.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 02:32:06 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 05:32:04 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
+Subject: Re: [PATCH] mm: mark folio as workingset in lru_deactivate_fn
+Message-ID: <ZCVXFLA+sarzGG18@cmpxchg.org>
+References: <1680086855-7989-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <ZCRRaHHKVt7fpvmD@cmpxchg.org>
+ <CAGWkznFRHbYv2ev3FU10zapka_6MDQ+g_-b0jufzqcAEAKUqFA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v5 3/3] soc: mediatek: mtk-svs: add thermal voltage
- compensation if needed
-Content-Language: en-US
-To:     =?UTF-8?B?Um9nZXIgTHUgKOmZuOeRnuWCkSk=?= <Roger.Lu@mediatek.com>,
-        "eballetbo@gmail.com" <eballetbo@gmail.com>,
-        "khilman@kernel.org" <khilman@kernel.org>,
-        "drinkcat@google.com" <drinkcat@google.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?SmlhLXdlaSBDaGFuZyAo5by15L2z5YGJKQ==?= 
-        <Jia-wei.Chang@mediatek.com>,
-        =?UTF-8?B?RmFuIENoZW4gKOmZs+WHoSk=?= <fan.chen@mediatek.com>
-References: <20230202124104.16504-1-roger.lu@mediatek.com>
- <20230202124104.16504-4-roger.lu@mediatek.com>
- <26837308-4837-f252-d162-f8af4859b63e@gmail.com>
- <fd62705e1abf8124706da6520fde5b77846bfd2c.camel@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <fd62705e1abf8124706da6520fde5b77846bfd2c.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+In-Reply-To: <CAGWkznFRHbYv2ev3FU10zapka_6MDQ+g_-b0jufzqcAEAKUqFA@mail.gmail.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,73 +75,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 30, 2023 at 09:38:48AM +0800, Zhaoyang Huang wrote:
+> On Wed, Mar 29, 2023 at 10:55 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> >
+> > On Wed, Mar 29, 2023 at 06:47:35PM +0800, zhaoyang.huang wrote:
+> > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > >
+> > > folio will skip of being set as workingset in lru_deactivate_fn.
+> >
+> > Can you please elaborate why that's undesirable? What's the problem
+> > you're fixing?
+> If I am correct, folio will skip being set as workingset when moving
+> from active lru to inactive lru, which is performed on every folio in
+> shrink_active_list during normal reclaim.
 
+shrink_active_list directly calls folio_set_workingset(). The function
+you're editing is used for things like MADV_COLD and truncate().
 
-On 11/02/2023 12:12, Roger Lu (陸瑞傑) wrote:
-> Hi Matthias Sir,
-> 
-> Sorry for the late reply.
-> 
-> ... [snip] ...
-> 
->>> @@ -2127,6 +2123,7 @@ static struct svs_bank svs_mt8192_banks[] = {
->>>    		.type			= SVSB_LOW,
->>>    		.set_freq_pct		= svs_set_bank_freq_pct_v3,
->>>    		.get_volts		= svs_get_bank_volts_v3,
->>> +		.tzone_name		= "gpu1",
->>>    		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT,
->>>    		.mode_support		= SVSB_MODE_INIT02,
->>>    		.opp_count		= MAX_OPP_ENTRIES,
->>> @@ -2144,6 +2141,10 @@ static struct svs_bank svs_mt8192_banks[] = {
->>>    		.core_sel		= 0x0fff0100,
->>>    		.int_st			= BIT(0),
->>>    		.ctl0			= 0x00540003,
->>> +		.tzone_htemp		= 85000,
->>> +		.tzone_htemp_voffset	= 0,
->>> +		.tzone_ltemp		= 25000,
->>> +		.tzone_ltemp_voffset	= 7,
->>
->> Which is the exact same tzone then in the other bank. Which brings me to a
->> good
->> point:
->> Is the tzone bank specific or the same for all banks?
-> 
-> Thermal zone (tzone) isn't for all SVS banks. In other words, tzone is specific
-> for corresponding DVFS domain like SVS GPU tzone is for GPU DVFS domain. Let's
-> take MT8183 SVS and MT8192 SVS as examples.
-> 
-> MT8192 SVS applies 2-line HW design (High/low 2 banks optimize the same DVFS
-> domain). So, SVS GPU High/low bank uses the same GPU tzone.
-> 
-> MT8183 SVS applies 1-line HW design (1 bank optimizes 1 DVFS domain)
-> Therefore, SVS CPU/GPU/CCI bank use different tzone because they are different
-> DVFS domain.
-> 
->> At least for mt8192 they are not. I suppose with this change to the code
->> mt8183
->> could take advantage of this on all it's banks as well.
->> In that case, can we
->> start to restructure the struct svs_bank to only have the tzone values
->> declared
->> once?
-> 
-> Since tzone isn't for all banks, we cannot declare it once for all IC supports
-> from this point of view.
-> 
-
-Thanks for clarification, applied now.
-
->>
->> Background is that I'm very unhappy with the svs_bank data strucutre. It
->> seems
->> like a "throw it all in here". It should be structured for functional parts
->> of
->> the banks. Maybe using structs, maybe unions where possible. In any case
->> having
->> a flat struct of over 50 members isn't really what we want.
-> 
-> My apology. We'll structure svs_bank for functional parts of them.
-> 
->>
->> Regards,
->> Matthias
+It sounds like there is just a misunderstanding of the code, not an
+actual problem.
