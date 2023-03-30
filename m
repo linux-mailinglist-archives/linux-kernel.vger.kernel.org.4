@@ -2,168 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C50C6D0DA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2266D0E2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjC3STs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 14:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
+        id S231591AbjC3Szu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 14:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjC3STq (ORCPT
+        with ESMTP id S229505AbjC3Szs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 14:19:46 -0400
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3598FEC5B;
-        Thu, 30 Mar 2023 11:19:45 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id i5so80202839eda.0;
-        Thu, 30 Mar 2023 11:19:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680200383;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=STSBMurQeIiaZJ0+aAMioO6okKVvv9dt5WY+P9P2Ffs=;
-        b=oAomp/ERjeZ3KCykPrGL0ZpiUrj23h597cHdls85PFyudshwQczTOMCFPyn36ZuFCC
-         PALhsuS6EZ9/9OOcyDZfr40uIYD7xQMNcIzrTVp6q8R618goyJrZ/PmatdW9zEciQz7b
-         0nzxv5Zkz2VFnkgyjaQS5SwoD17W5YyYQsgMe3QsLkkZaBddjbGMBjDDfAZWUdvkR/ec
-         ad5R8w/N0hnVqVSyeG9KJ8j0iabcNEJuc9b7KSecS4NyEnwut43XZtoVkgQcllv9PZLD
-         RAwCvy5W1dKIqGhFkGqi5YkYyiIu+smdmNND5snSms6NfW+s+VLeutsQ84zl4ACoT49N
-         YTiw==
-X-Gm-Message-State: AAQBX9dwYkSORF9bDf6qBU3+KMgBnDsT6X8gUGmDog2DtSNu2HT2mAAa
-        eiUJz2y4bfGeGwvkv7VcvPT4EVtoO5r5fa6A168=
-X-Google-Smtp-Source: AKy350ZFlQ9uvB/2IZQZth1I/dMU9HgfQQVqbdU/38YFudco92YyBhJH7q0MdiUGPR+8VkkW71+dpX8o8y/D+HtoQoQ=
-X-Received: by 2002:a50:d49e:0:b0:502:148d:9e1e with SMTP id
- s30-20020a50d49e000000b00502148d9e1emr12039537edi.3.1680200383708; Thu, 30
- Mar 2023 11:19:43 -0700 (PDT)
+        Thu, 30 Mar 2023 14:55:48 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6D2DE;
+        Thu, 30 Mar 2023 11:55:46 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 796255C0140;
+        Thu, 30 Mar 2023 14:55:43 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Thu, 30 Mar 2023 14:55:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1680202543; x=1680288943; bh=TDo5jZQU9I
+        C6sywgEGOqzPOxZ7aUBvX49rI+0P5qm4M=; b=YUUnIRZLMok8GCi4FocI0W8ffH
+        OCnwU3bxzlbM5/7WDWYUo45uJ1bg8XOdyeuze5G16V52Aww+hYfVu1D0PKbBAgH4
+        zkQXOQaKQu0SXIqtObwFme1g4B4Vbp8uEdBqnFseJxGS4n1MLuwtaP6waWwLfOXr
+        KgxghKpkpR2g622ml3kXoBaZj0/vFGdIaERQxhoy8oQOtb7TcNlxFQ0140bFdmeq
+        q4qRzIJFVyzlV1TUN9sSIOyC/GtalhQKMWBKU4gZi/m/RE6N9Syg55ZRBglmvZIg
+        wxsNmk4zolUakgbsBB/gI5bRS/PGP/PFGwZY4n4CHSnGq4agNBujAg5iFgOw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680202543; x=1680288943; bh=TDo5jZQU9IC6s
+        ywgEGOqzPOxZ7aUBvX49rI+0P5qm4M=; b=ajTGmETHYzYFDrstGf22x7WNZofkA
+        NT8vzSXDCiLD64FmeN/IdTu7WOv2vl2NLzFTlpGQgZMavTYMrp2CRo5a2/mWZPWO
+        qz6v3pqocDBXEFJs+6Oxckah37XAJmfcHedQpQ2cpoL/2pqwuEhYyXWr76IEIkBK
+        iQJYf+7jIxDyPDZn1bPB6kq6thoItnnyGI9cmckDzjFM6hk1SLoCgzByblbLUfH2
+        mAxGgmqKJRnGOhZiPfMqh7/HcZqV9/+hgmF0RKwMR3qIqrLftdCDznRDzwL0FEDv
+        Ep39owL9m34YQLVXatTtxG/szBiYeRit+YG5WJWnpQ/qDpmnBtFMZaJ1Q==
+X-ME-Sender: <xms:LtslZH6_F25VBTpOAFRk0gSKxli1GSUkbbQWyUndO95RF6Y56khtWA>
+    <xme:LtslZM7YRUqU_xB5XRYRQo5T3gPE1pkQiR2XdfMRzIbA4b72YjFqW8shok9IKKd7y
+    dN5u-9Dr9V45t3r1w>
+X-ME-Received: <xmr:LtslZOe7ztlwA7GxRLBUrrirh73AZD4Sv3XAqDKBNh1LVp3_5Tda48DjHBMLL84JHgIF028L9UExtIG1wqtC6UO3ut-_uwwK>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehledgfeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehlhihsshgr
+    ucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhepueefie
+    dvheffveegieejjeevgfejjeduveekffeiveeuvedvtedvhfelieeutdfgnecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehhihesrghlhihsshgrrdhish
+X-ME-Proxy: <xmx:LtslZIL3rkl7TX1GDdSypybenFWILqzROWAeeos8jvsYoI13L-PK-Q>
+    <xmx:LtslZLLy-bW9CXCjyB7dTbzS5NpayGemdVvygt9DAykZGpggMXaKaw>
+    <xmx:LtslZBzedqTWGZ0FoZ-wkJLpp6DPC74p5DUGlfrYSGHSm1oc7aTIgA>
+    <xmx:L9slZAdMAkfdHmY_WUtkjG1bTdRT_nNFH5DIHtHYZPftdRVLemcgPw>
+Feedback-ID: i12284293:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Mar 2023 14:55:42 -0400 (EDT)
+Received: by x220.qyliss.net (Postfix, from userid 1000)
+        id 3BF532412; Thu, 30 Mar 2023 18:55:41 +0000 (UTC)
+From:   Alyssa Ross <hi@alyssa.is>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alyssa Ross <hi@alyssa.is>, stable@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v3] purgatory: fix disabling debug info
+Date:   Thu, 30 Mar 2023 18:22:24 +0000
+Message-Id: <20230330182223.181775-1-hi@alyssa.is>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20230330141314.1364083-1-wyes.karny@amd.com>
-In-Reply-To: <20230330141314.1364083-1-wyes.karny@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Mar 2023 20:19:32 +0200
-Message-ID: <CAJZ5v0jxwuAnTVdnThGmHmptB7qeKc34-keUOdHcugeADYSL+w@mail.gmail.com>
-Subject: Re: [PATCH] amd-pstate: Fix amd_pstate mode switch
-To:     Wyes Karny <wyes.karny@amd.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, ray.huang@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Kardashevskiy <aik@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 4:13 PM Wyes Karny <wyes.karny@amd.com> wrote:
->
-> amd_pstate mode can be changed by writing the mode name to the `status`
-> sysfs. But some combinations are not working. Fix this issue by taking
-> care of the edge cases.
->
-> Before the fix the mode change combination test fails:
->
->  #./pst_test.sh
-> Test passed: from: disable, to
-> Test passed: from: disable, to disable
-> Test failed: 1, From mode: disable, to mode: passive
-> Test failed: 1, From mode: disable, to mode: active
-> Test failed: 1, From mode: passive, to mode: active
-> Test passed: from: passive, to disable
-> Test failed: 1, From mode: passive, to mode: passive
-> Test failed: 1, From mode: passive, to mode: active
-> Test failed: 1, From mode: active, to mode: active
-> Test passed: from: active, to disable
-> Test failed: 1, From mode: active, to mode: passive
-> Test failed: 1, From mode: active, to mode: active
->
-> After the fix test passes:
->
->  #./pst_test.sh
-> Test passed: from: disable, to
-> Test passed: from: disable, to disable
-> Test passed: from: disable, to passive
-> Test passed: from: disable, to active
-> Test passed: from: passive, to active
-> Test passed: from: passive, to disable
-> Test passed: from: passive, to passive
-> Test passed: from: passive, to active
-> Test passed: from: active, to active
-> Test passed: from: active, to disable
-> Test passed: from: active, to passive
-> Test passed: from: active, to active
->
-> Fixes: abd61c08ef349 ("cpufreq: amd-pstate: add driver working mode switch support")
->
-> Acked-by: Huang Rui <ray.huang@amd.com>
-> Reviewed-by: Alexey Kardashevskiy <aik@amd.com>
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Mario Limonciello <mario.limonciello@amd.com>
-> Cc: Perry Yuan <Perry.Yuan@amd.com>
+Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
+Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
+-Wa versions of both of those if building with Clang and GNU as.  As a
+result, debug info was being generated for the purgatory objects, even
+though the intention was that it not be.
 
-This is all fine, but you need to tell me how it interacts with the
-amd-pstate changes in linux-next.
+Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
+Signed-off-by: Alyssa Ross <hi@alyssa.is>
+Cc: stable@vger.kernel.org
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+v2: https://lore.kernel.org/r/20230326182120.194541-1-hi@alyssa.is
 
-Does it affect the code in linux-next at all or is it only for 6.3-rc?
+Difference from v2: replaced asflags-remove-y with every possible
+debug flag with asflags-y += -g0, as suggested by Nick Desaulniers.
 
-> ---
->  drivers/cpufreq/amd-pstate.c | 18 ++++++++----------
->  1 file changed, 8 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 73c7643b2697..8dd46fad151e 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -840,22 +840,20 @@ static int amd_pstate_update_status(const char *buf, size_t size)
->
->         switch(mode_idx) {
->         case AMD_PSTATE_DISABLE:
-> -               if (!current_pstate_driver)
-> -                       return -EINVAL;
-> -               if (cppc_state == AMD_PSTATE_ACTIVE)
-> -                       return -EBUSY;
-> -               cpufreq_unregister_driver(current_pstate_driver);
-> -               amd_pstate_driver_cleanup();
-> +               if (current_pstate_driver) {
-> +                       cpufreq_unregister_driver(current_pstate_driver);
-> +                       amd_pstate_driver_cleanup();
-> +               }
->                 break;
->         case AMD_PSTATE_PASSIVE:
->                 if (current_pstate_driver) {
->                         if (current_pstate_driver == &amd_pstate_driver)
->                                 return 0;
->                         cpufreq_unregister_driver(current_pstate_driver);
-> -                       cppc_state = AMD_PSTATE_PASSIVE;
-> -                       current_pstate_driver = &amd_pstate_driver;
->                 }
->
-> +               current_pstate_driver = &amd_pstate_driver;
-> +               cppc_state = AMD_PSTATE_PASSIVE;
->                 ret = cpufreq_register_driver(current_pstate_driver);
->                 break;
->         case AMD_PSTATE_ACTIVE:
-> @@ -863,10 +861,10 @@ static int amd_pstate_update_status(const char *buf, size_t size)
->                         if (current_pstate_driver == &amd_pstate_epp_driver)
->                                 return 0;
->                         cpufreq_unregister_driver(current_pstate_driver);
-> -                       current_pstate_driver = &amd_pstate_epp_driver;
-> -                       cppc_state = AMD_PSTATE_ACTIVE;
->                 }
->
-> +               current_pstate_driver = &amd_pstate_epp_driver;
-> +               cppc_state = AMD_PSTATE_ACTIVE;
->                 ret = cpufreq_register_driver(current_pstate_driver);
->                 break;
->         default:
-> --
-> 2.34.1
->
+Additionally, I've CCed the x86 maintainers this time, since Masahiro
+said he would like acks from subsystem maintainers, and
+get_maintainer.pl didn't pick them the first time around.
+
+ arch/riscv/purgatory/Makefile | 7 +------
+ arch/x86/purgatory/Makefile   | 3 +--
+ 2 files changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
+index d16bf715a586..9c1e71853ee7 100644
+--- a/arch/riscv/purgatory/Makefile
++++ b/arch/riscv/purgatory/Makefile
+@@ -84,12 +84,7 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+ CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
+ CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
+ 
+-AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
++asflags-y			+= -g0
+ 
+ $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+ 		$(call if_changed,ld)
+diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+index 17f09dc26381..8e6c81b1c8f7 100644
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@ -69,8 +69,7 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
+ CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
+ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+ 
+-AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
++asflags-y			+= -g0
+ 
+ $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+ 		$(call if_changed,ld)
+-- 
+2.37.1
+
