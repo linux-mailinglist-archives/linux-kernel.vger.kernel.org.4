@@ -2,76 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A69C6D0E05
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761F06D0E08
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbjC3SnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 14:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
+        id S231616AbjC3SpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 14:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbjC3SnE (ORCPT
+        with ESMTP id S230082AbjC3SpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 14:43:04 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72402FF12;
-        Thu, 30 Mar 2023 11:43:02 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id DC8C0604F5;
-        Thu, 30 Mar 2023 20:42:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680201779; bh=OGjehXW0tLGg+twlguEY6jqdgc6IMiPs6y4SgDUgv38=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pq7VG2APrR+8V5JeNK/lg6mF+fiv+sf5qRk0xTCRJQjxY9kP13eXgn8qE7FktA/py
-         KdKVJK82tHIRxfpzwdxKeEgMZzKFIyMKYbHD2Rz75mPvFAUL/9PqWlSn1YFxXy0S4P
-         bhqRDifIKCUlW06rkBuRvFM3hxzaN2QqR5ABjacJjEkMuG+PeC0cD3amNWuDI7/UaB
-         d0PG91cPSISnceqtqwco1NeQGj6oGzJSkzOSpMNFEpJs47a/X3dNjfSMZDjM0VzORW
-         w481I0HJQtnoM1U91/iCL1vyTZ9JmcEe9A+G1wMNg4FHVj6wqHHkSGkZraTejF/Rab
-         K3+IMw+NvjEHQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xoEdwq1QnuJO; Thu, 30 Mar 2023 20:42:57 +0200 (CEST)
-Received: from [192.168.1.4] (unknown [77.237.101.225])
-        by domac.alu.hr (Postfix) with ESMTPSA id A252F604F0;
-        Thu, 30 Mar 2023 20:42:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680201777; bh=OGjehXW0tLGg+twlguEY6jqdgc6IMiPs6y4SgDUgv38=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qdnwgRkIh6yiHAoADC75ia964sCT+lXtViWtEgFsv+unle25nABnjVs3T8QA20WA4
-         xEV2WrbpsajvHV8XoFUbeOCA1HhaEQw/srwJgUfG2J9KgXBzxLazoHZ4H74StV2Bno
-         ca+PbzDL7mRhvmh5n0RfpISwOeeupZ4fOb/MjmwceeZ8gslOeC2uZ8Gz607W5Ji9eT
-         XkXLRNqB3qdEx3amwGTEMa45Zlt7SCXyVsnHMkdahkiXMBCNxb7VUZwRdkuniWb7tO
-         Em9iMt4gI9teOtHrE3T/Af7VhnT1qybWgcAWKQiLW/TMoNyHZsLZxf88US6nC5vLlC
-         Irf1mICy4GsiQ==
-Message-ID: <5e1d56b9-5cf6-75f4-76ab-7c84679cad6a@alu.unizg.hr>
-Date:   Thu, 30 Mar 2023 20:42:50 +0200
+        Thu, 30 Mar 2023 14:45:05 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2109.outbound.protection.outlook.com [40.107.20.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F6EB47F;
+        Thu, 30 Mar 2023 11:45:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UpHAGJDyFIBhUHuvcfyFnHDCKaQvvW/8cP7aMVAz0UwpbhTy4mfdbmKmK5oAk8MOmDKGkWzRPyH8qSI96Ix0AyvDC7E8yyHnoQWkiZ7G7r/myesVN8MuxFZx+IBokbCOTXhhylPvCRry2BGLwgy0Dw9C+mhfOXiPhyWJy02Req+kM0ClV6OztGGLH3+mc1KEcwduAfoJgx0qlFjeeJP3HjHZGff7aTDVls/Iphq2S1YjbWOlwWogNEtS3FBuOWmQyCuyksglqJuiMQ3Fosm91NXBaD5mZ7b/4hTHNqVidgSVYI9TEIIEO4zgKQBV6Xg4y+W/D6dCdQIRc2GoExeBGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6lXP6130WUEDWyBIhEjdhpaQ2JobBbDafyi4XRQ/dIc=;
+ b=kO7mELR2KBBkamacYBOtbc/K4murOtbBupDHL12A6vpE27Z1sI00c0qVs2GTHhSC1z0ryn3rdCqmkzhoJttN91rlYmdzsir9moRG2ukhfj9GKChHwDm2Wi3EK3vY0uAbbJldj1yN0VjFfGTjWAnDemA+a2QlI5GvIIMSRScdRNnVo1YNeyo1gZ+jhnMZ3vRVOEYDwitLPQoPmwSPg1vVX/VsOBB1Yqh6my4JQS81LWuNW7r2wOPu8l4NC8pK3FUTFyf1CvyheKPupbqILNIAzpmQTsUZmM8HPopdju+Q1CxtzsHG+yup5fc+tagfKZNvdlcmiYiTFA+yrPlhg4XPkw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=none
+ action=none header.from=esd.eu; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6lXP6130WUEDWyBIhEjdhpaQ2JobBbDafyi4XRQ/dIc=;
+ b=jTo9pCRaMM5EhyMEVdl0nTYLRFLEIobgNhOUe6kwNAsyDzE1vES/yNeSuDd+x8zKdp+8p+zgLTfnvAdBCPaIvFiTa24UblG3f9RwMc1sXQqjn3tHSBpju5v+YHL5/RuJD5Hmu+yshES2ExFSwposQ540XNeuIyiJeWZn+qS+0ok=
+Received: from ZR0P278CA0182.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:44::15)
+ by DU0PR03MB9079.eurprd03.prod.outlook.com (2603:10a6:10:466::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Thu, 30 Mar
+ 2023 18:44:59 +0000
+Received: from VI1EUR06FT055.eop-eur06.prod.protection.outlook.com
+ (2603:10a6:910:44:cafe::bd) by ZR0P278CA0182.outlook.office365.com
+ (2603:10a6:910:44::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22 via Frontend
+ Transport; Thu, 30 Mar 2023 18:44:57 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=esd.eu;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
+ discourages use of 80.151.164.27 as permitted sender)
+Received: from esd-s7.esd (80.151.164.27) by
+ VI1EUR06FT055.mail.protection.outlook.com (10.13.6.226) with Microsoft SMTP
+ Server id 15.20.6222.22 via Frontend Transport; Thu, 30 Mar 2023 18:44:57
+ +0000
+Received: from esd-s20.esd.local (jenkins.esd.local [10.0.0.190])
+        by esd-s7.esd (Postfix) with ESMTPS id 93AD47C1635;
+        Thu, 30 Mar 2023 20:44:57 +0200 (CEST)
+Received: by esd-s20.esd.local (Postfix, from userid 2046)
+        id 7C3292E0158; Thu, 30 Mar 2023 20:44:57 +0200 (CEST)
+From:   Frank Jungclaus <frank.jungclaus@esd.eu>
+To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frank Jungclaus <frank.jungclaus@esd.eu>
+Subject: [PATCH] can: esd_usb: Add support for CAN_CTRLMODE_BERR_REPORTING
+Date:   Thu, 30 Mar 2023 20:44:46 +0200
+Message-Id: <20230330184446.2802135-1-frank.jungclaus@esd.eu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [BUG] [PATCH RFC v2] selftests/firmware: copious kernel memory
- leaks in test_fw_run_batch_request()
-To:     Takashi Iwai <tiwai@suse.de>, Dan Carpenter <error27@gmail.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
- <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
- <dce6ffbe-7580-db1a-dd24-798be27b3a26@alu.unizg.hr>
- <5b103196-68d0-4d42-aa66-779af4d78532@kili.mountain>
- <878rfekz2l.wl-tiwai@suse.de>
-Content-Language: en-US, hr
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <878rfekz2l.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1EUR06FT055:EE_|DU0PR03MB9079:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 750108e8-1343-4610-26c7-08db314edc73
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9t/507usxWORTmYEQq7LjXxW4qLQF9L5UakPnlxhgtNlsDZvOJa/iSwrw34f93pFFZlG7gQLpXyt+8plWqrjDYo13rsAbML+vvZkDDqExmAbc1fX8MsoiSxTVXiVNekZycVmkqoun/Cnv4wWYU+l/d5AkfiiZULdKfsoWhzmJfv6gXmwE1oyIhuhMhhxxtz/P+JKOyix9LI5E/WLrZ5AV+reO089E84O3qh+3se73BvtKrxvQQNzvuEI7JsrYD0l3HoEFhs6K6ssMC1cf3+qAcA4wHTg5VqfDMsv0qqFnDvOQvvJf5dLDKUBUtj/NsiiLb4QclCl1CiqPh5bvvdfrvzqQrlnxIJ5BWXaLjHhw5nY+tKYAfgLJ81ZqGqC2fi9OpvhJUjl/tXD7kB/3/oyRWrQyXdUzfDUYiajXCZLgfvL7a3F54mkBy3d+yvlGfmaWEu6Ralmr3ZSnLJaQYiRjbJumO2xn4pgJ0UfHu1r5f8bCbM/W9eAr6jIBGFkkksW7w0EyIduw9/7t6fycEQTLA7GB/o6KMyDx3Z6lFkyDbewCQgxxW/kZvnEyEV1CDeFf2ZEEXEKhXTn93us0EwpdW4plB8CSQYFD8IVQClBMHLVOrLaV4J96gSJ0gE0w9Wqi3PSTqxs2i4mYm3rp/0f5Kp0ev+Lu6c5t5OAFlfyex0=
+X-Forefront-Antispam-Report: CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39840400004)(376002)(346002)(451199021)(46966006)(36840700001)(6266002)(26005)(41300700001)(186003)(1076003)(40480700001)(6666004)(83380400001)(2616005)(336012)(47076005)(478600001)(42186006)(54906003)(316002)(110136005)(36860700001)(44832011)(70206006)(4326008)(70586007)(2906002)(8676002)(86362001)(81166007)(356005)(82310400005)(36756003)(5660300002)(8936002);DIR:OUT;SFP:1102;
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 18:44:57.7863
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 750108e8-1343-4610-26c7-08db314edc73
+X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
+X-MS-Exchange-CrossTenant-AuthSource: VI1EUR06FT055.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR03MB9079
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,281 +96,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30. 03. 2023. 18:01, Takashi Iwai wrote:
-> On Thu, 30 Mar 2023 17:44:42 +0200,
-> Dan Carpenter wrote:
->>
->> I admire your enthusiam.  :)  What about if we just did this?  Does it
->> help with the leaks?
->>
->> regards,
->> dan carpenter
->>
->> diff --git a/lib/test_firmware.c b/lib/test_firmware.c
->> index 05ed84c2fc4c..626b836895f4 100644
->> --- a/lib/test_firmware.c
->> +++ b/lib/test_firmware.c
->> @@ -895,6 +895,9 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
->>  
->>  	mutex_lock(&test_fw_mutex);
->>  
->> +	if (test_fw_config->reqs)
->> +		return -EBUSY;
->> +
-> 
-> This leaves the mutex locked.
-> It should be the following instead, I suppose?
-> 
-> 	if (test_fw_config->reqs) {
-> 		rc = -EBUSY;
-> 		goto out_unlock;
-> 	}
-> 
-> 
-> Takashi
+Announce that the driver supports CAN_CTRLMODE_BERR_REPORTING by means
+of priv->can.ctrlmode_supported. Until now berr reporting always has
+been active without taking care of the berr-reporting parameter given
+to an "ip link set ..." command.
 
-Hi, Dan, Takashi,
+Additionally apply some changes to function esd_usb_rx_event():
+- If berr reporting is off and it is also no state change, then
+immediately return.
+- Unconditionally (even in case of the above "immediate return") store
+tx- and rx-error counters, so directly use priv->bec.txerr and
+priv->bec.rxerr instead of intermediate variables.
+- Not directly related, but to better point out the linkage between a
+failed alloc_can_err_skb() and stats->rx_dropped++:
+Move the increment of the rx_dropped statistic counter (back) to
+directly behind the err_skb allocation.
 
-Unfortunately, it did not suffice.
-
-What I was building with was
-commit 8bb95a1662f8:Merge tag 'sound-6.3-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound
-with the following patch for lib/test_firmware.c:
-
-
+Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
 ---
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 05ed84c2fc4c..4daa38bd2cac 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -353,6 +353,19 @@ static ssize_t config_test_show_str(char *dst,
-        return len;
+ drivers/net/can/usb/esd_usb.c | 35 ++++++++++++++++++++---------------
+ 1 file changed, 20 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+index e78bb468115a..d33bac3a6c10 100644
+--- a/drivers/net/can/usb/esd_usb.c
++++ b/drivers/net/can/usb/esd_usb.c
+@@ -237,14 +237,23 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+ 	if (id == ESD_EV_CAN_ERROR_EXT) {
+ 		u8 state = msg->rx.ev_can_err_ext.status;
+ 		u8 ecc = msg->rx.ev_can_err_ext.ecc;
+-		u8 rxerr = msg->rx.ev_can_err_ext.rec;
+-		u8 txerr = msg->rx.ev_can_err_ext.tec;
++
++		priv->bec.rxerr = msg->rx.ev_can_err_ext.rec;
++		priv->bec.txerr = msg->rx.ev_can_err_ext.tec;
+ 
+ 		netdev_dbg(priv->netdev,
+ 			   "CAN_ERR_EV_EXT: dlc=%#02x state=%02x ecc=%02x rec=%02x tec=%02x\n",
+-			   msg->rx.dlc, state, ecc, rxerr, txerr);
++			   msg->rx.dlc, state, ecc,
++			   priv->bec.rxerr, priv->bec.txerr);
++
++		/* if berr-reporting is off, only pass through on state change ... */
++		if (!(priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
++		    state == priv->old_state)
++			return;
+ 
+ 		skb = alloc_can_err_skb(priv->netdev, &cf);
++		if (!skb)
++			stats->rx_dropped++;
+ 
+ 		if (state != priv->old_state) {
+ 			enum can_state tx_state, rx_state;
+@@ -265,14 +274,14 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+ 				break;
+ 			default:
+ 				new_state = CAN_STATE_ERROR_ACTIVE;
+-				txerr = 0;
+-				rxerr = 0;
++				priv->bec.txerr = 0;
++				priv->bec.rxerr = 0;
+ 				break;
+ 			}
+ 
+ 			if (new_state != priv->can.state) {
+-				tx_state = (txerr >= rxerr) ? new_state : 0;
+-				rx_state = (txerr <= rxerr) ? new_state : 0;
++				tx_state = (priv->bec.txerr >= priv->bec.rxerr) ? new_state : 0;
++				rx_state = (priv->bec.txerr <= priv->bec.rxerr) ? new_state : 0;
+ 				can_change_state(priv->netdev, cf,
+ 						 tx_state, rx_state);
+ 			}
+@@ -304,17 +313,12 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+ 			cf->data[3] = ecc & SJA1000_ECC_SEG;
+ 		}
+ 
+-		priv->bec.txerr = txerr;
+-		priv->bec.rxerr = rxerr;
+-
+ 		if (skb) {
+ 			cf->can_id |= CAN_ERR_CNT;
+-			cf->data[6] = txerr;
+-			cf->data[7] = rxerr;
++			cf->data[6] = priv->bec.txerr;
++			cf->data[7] = priv->bec.rxerr;
+ 
+ 			netif_rx(skb);
+-		} else {
+-			stats->rx_dropped++;
+ 		}
+ 	}
  }
+@@ -1016,7 +1020,8 @@ static int esd_usb_probe_one_net(struct usb_interface *intf, int index)
  
-+static inline int test_dev_config_update_bool_unlocked(const char *buf, size_t size,
-+                                      bool *cfg)
-+{
-+       int ret;
-+
-+       if (kstrtobool(buf, cfg) < 0)
-+               ret = -EINVAL;
-+       else
-+               ret = size;
-+
-+       return ret;
-+}
-+
- static int test_dev_config_update_bool(const char *buf, size_t size,
-                                       bool *cfg)
- {
-@@ -373,6 +386,24 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
-        return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
+ 	priv->can.state = CAN_STATE_STOPPED;
+ 	priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
+-		CAN_CTRLMODE_CC_LEN8_DLC;
++		CAN_CTRLMODE_CC_LEN8_DLC |
++		CAN_CTRLMODE_BERR_REPORTING;
  
-+static int test_dev_config_update_size_t_unlocked(
-+                                        const char *buf,
-+                                        size_t size,
-+                                        size_t *cfg)
-+{
-+       int ret;
-+       long new;
-+
-+       ret = kstrtol(buf, 10, &new);
-+       if (ret)
-+               return ret;
-+
-+       *(size_t *)cfg = new;
-+
-+       /* Always return full write size even if we didn't consume all */
-+       return size;
-+}
-+
- static int test_dev_config_update_size_t(const char *buf,
-                                         size_t size,
-                                         size_t *cfg)
-@@ -402,6 +433,21 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
-        return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
- 
-+static int test_dev_config_update_u8_unlocked(const char *buf, size_t size, u8 *cfg)
-+{
-+       u8 val;
-+       int ret;
-+
-+       ret = kstrtou8(buf, 10, &val);
-+       if (ret)
-+               return ret;
-+
-+       *(u8 *)cfg = val;
-+
-+       /* Always return full write size even if we didn't consume all */
-+       return size;
-+}
-+
- static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
- {
-        u8 val;
-@@ -471,10 +517,10 @@ static ssize_t config_num_requests_store(struct device *dev,
-                mutex_unlock(&test_fw_mutex);
-                goto out;
-        }
--       mutex_unlock(&test_fw_mutex);
- 
--       rc = test_dev_config_update_u8(buf, count,
--                                      &test_fw_config->num_requests);
-+       rc = test_dev_config_update_u8_unlocked(buf, count,
-+                                               &test_fw_config->num_requests);
-+       mutex_unlock(&test_fw_mutex);
- 
- out:
-        return rc;
-@@ -518,10 +564,10 @@ static ssize_t config_buf_size_store(struct device *dev,
-                mutex_unlock(&test_fw_mutex);
-                goto out;
-        }
--       mutex_unlock(&test_fw_mutex);
- 
--       rc = test_dev_config_update_size_t(buf, count,
--                                          &test_fw_config->buf_size);
-+       rc = test_dev_config_update_size_t_unlocked(buf, count,
-+                                                   &test_fw_config->buf_size);
-+       mutex_unlock(&test_fw_mutex);
- 
- out:
-        return rc;
-@@ -548,10 +594,10 @@ static ssize_t config_file_offset_store(struct device *dev,
-                mutex_unlock(&test_fw_mutex);
-                goto out;
-        }
--       mutex_unlock(&test_fw_mutex);
- 
--       rc = test_dev_config_update_size_t(buf, count,
--                                          &test_fw_config->file_offset);
-+       rc = test_dev_config_update_size_t_unlocked(buf, count,
-+                                                   &test_fw_config->file_offset);
-+       mutex_unlock(&test_fw_mutex);
- 
- out:
-        return rc;
-@@ -895,6 +941,11 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
- 
-        mutex_lock(&test_fw_mutex);
- 
-+       if (test_fw_config->reqs) {
-+               rc = -EBUSY;
-+               goto out_unlock;
-+       }
-+
-        test_fw_config->reqs =
-                vzalloc(array3_size(sizeof(struct test_batched_req),
-                                    test_fw_config->num_requests, 2));
-@@ -993,6 +1044,11 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
- 
-        mutex_lock(&test_fw_mutex);
- 
-+       if (test_fw_config->reqs) {
-+               rc = -EBUSY;
-+               goto out;
-+       }
-+
-        test_fw_config->reqs =
-                vzalloc(array3_size(sizeof(struct test_batched_req),
-                                    test_fw_config->num_requests, 2));
+ 	if (le16_to_cpu(dev->udev->descriptor.idProduct) ==
+ 	    USB_CANUSBM_PRODUCT_ID)
 
-The leaks are the same:
-
-unreferenced object 0xffff96deccc99c00 (size 1024):
-  comm "test_firmware-2", pid 3093, jiffies 4294945062 (age 605.444s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff96ded72be400 (size 1024):
-  comm "test_firmware-3", pid 3094, jiffies 4294945062 (age 605.444s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff96dec9e32800 (size 1024):
-  comm "test_firmware-0", pid 3101, jiffies 4294945072 (age 605.404s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff96df0ab17000 (size 1024):
-  comm "test_firmware-1", pid 3102, jiffies 4294945073 (age 605.432s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff96decd6f6400 (size 1024):
-  comm "test_firmware-2", pid 3103, jiffies 4294945073 (age 605.432s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff96df0dc69c00 (size 1024):
-  comm "test_firmware-3", pid 3104, jiffies 4294945073 (age 605.432s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-[root@pc-mtodorov linux_torvalds]# uname -rms
-Linux 6.3.0-rc4mt+20230330-00051-g8bb95a1662f8-dirty x86_64
-[root@pc-mtodorov linux_torvalds]# 
-
-My gut feeling tells me that it is not test_fw_config->reqs because
-there are 75 instances leaked.
-
-Regards,
-Mirsad
-
+base-commit: db88681c4885b8f2f07241c6f3f1fcf2d773754e
 -- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
-"I see something approaching fast ... Will it be friends with me?"
+2.25.1
 
