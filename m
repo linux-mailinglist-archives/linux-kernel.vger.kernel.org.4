@@ -2,123 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998C06CF83F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5766C6CF849
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjC3A27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 20:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        id S229919AbjC3AiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 20:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjC3A25 (ORCPT
+        with ESMTP id S229638AbjC3AiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 20:28:57 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9D155AE
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:28:56 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id 187-20020a6b15c4000000b007590817bcfbso10802416iov.12
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:28:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680136135; x=1682728135;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tOFO6ix9K7hEKxkWoMSfJOZ7hN3aNlRJUo1TnYoWGk4=;
-        b=CoQJJfCWqSjoAFB5FlzWEWwiiu13dgyznrPBbBmbc3SR8Mg7o99kE1U+rRwg/+rpKN
-         qHC1dcAaw2nHGmsCr/K5sQHkwk+5BrTQLgP/7yrtEEx4dih3PuKw0vpLcoh70vSU4hTf
-         /ziPgyrQ5s6ur2uQLQCxdQJOz4DrpRs3tNd+KLJeo9v7BJ085O0PogcLbxq7OEF5kdrN
-         9ZF259cVlJlp1NX3lH+tSgNb5QaJ0G5gAfgGiEcpaieOJNJ6bZ0Cg8EcklC8cHS78dhn
-         Qb+ACoDdccoA+3TF3yYL0VVIzpSvOdC1m8AkFJqtOlDfAvT7vkle6/+GSH5C202g2h9a
-         Rs0Q==
-X-Gm-Message-State: AAQBX9cwLBlMBdLVw0aNHSKWBbPbO+sw55seJNYRO45l5KPeHf5g8iHY
-        iCKObK6m9ZMi8SHY5bBLJZjK9Ho6n87YL1H0j5XHktz3mSJX
-X-Google-Smtp-Source: AKy350ZFHYuEwSPSNjhCBN2Ly1E+uEsmLmnELVyr5i3aroBtkqbBciEynrcmC0cgfda+2x2aIvIRw1SbviT8xg3JbAcsjL22yeK3
+        Wed, 29 Mar 2023 20:38:22 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378EA46B0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:38:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680136701; x=1711672701;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XLf3VZ5VPXuk5l1PkmuuBga56HLKuT48oalwmG4a4/4=;
+  b=DFTH6aZcELe204FLaboeCC4N8TT2kTCbo4cTCxFnnHkCtKqNob9N2i6t
+   KNyNpGxLiJU8m4BIqe4hHccddSQdlffJJkUGIU0IG0wEp9oIM7Y1UiAc6
+   ZTpmQ3eLK5GgPk4WHJpwZtOFzFByQNb5Kxbv05ouqIwO+2Xhw82jIrTSD
+   JRGkZRywWPQx1uImkZzq8/gs+hzg7M2mVA+nHL+O0QdxjIpmzsU9eE23z
+   VvC/9Mhs2ntaXNv43ETMQN3NLnRllhwkfK8lGhQUgN7uMq7X6Rl4wIX3q
+   YhSAZvDiAtef35cz1Ky5NeL2RQ1RPY1CGfsuCAc979Og3weFbvR2XvLkI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="427310014"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="427310014"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 17:38:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="717102232"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="717102232"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 29 Mar 2023 17:38:19 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phgJ0-000K5s-0f;
+        Thu, 30 Mar 2023 00:38:18 +0000
+Date:   Thu, 30 Mar 2023 08:38:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: [tip:locking/rcuref 2/2] arch/alpha/include/asm/xchg.h:234:32:
+ sparse: sparse: cast truncates bits from constant value (ffffffffe0000000
+ becomes 0)
+Message-ID: <202303300857.c20wTtqR-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:7603:0:b0:323:cab8:3c0c with SMTP id
- r3-20020a927603000000b00323cab83c0cmr11044041ilc.5.1680136135532; Wed, 29 Mar
- 2023 17:28:55 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 17:28:55 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000088694505f8132d77@google.com>
-Subject: [syzbot] [fs?] KASAN: null-ptr-deref Read in ida_free (3)
-From:   syzbot <syzbot+8ac3859139c685c4f597@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/rcuref
+head:   ee1ee6db07795d9637bc5e8993a8ddcf886541ef
+commit: ee1ee6db07795d9637bc5e8993a8ddcf886541ef [2/2] atomics: Provide rcuref - scalable reference counting
+config: alpha-randconfig-s052-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300857.c20wTtqR-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=ee1ee6db07795d9637bc5e8993a8ddcf886541ef
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip locking/rcuref
+        git checkout ee1ee6db07795d9637bc5e8993a8ddcf886541ef
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash
 
-syzbot found the following issue on:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303300857.c20wTtqR-lkp@intel.com/
 
-HEAD commit:    da8e7da11e4b Merge tag 'nfsd-6.3-4' of git://git.kernel.or..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1266331ec80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
-dashboard link: https://syzkaller.appspot.com/bug?extid=8ac3859139c685c4f597
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11639815c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12128b1ec80000
+sparse warnings: (new ones prefixed by >>)
+   lib/rcuref.c: note: in included file (through arch/alpha/include/asm/cmpxchg.h, arch/alpha/include/asm/atomic.h, include/linux/atomic.h, ...):
+>> arch/alpha/include/asm/xchg.h:234:32: sparse: sparse: cast truncates bits from constant value (ffffffffe0000000 becomes 0)
+   arch/alpha/include/asm/xchg.h:236:32: sparse: sparse: cast truncates bits from constant value (ffffffffe0000000 becomes 0)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/62e9c5f4bead/disk-da8e7da1.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c11aa933e2a7/vmlinux-da8e7da1.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7a21bdd49c84/bzImage-da8e7da1.xz
+vim +234 arch/alpha/include/asm/xchg.h
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8ac3859139c685c4f597@syzkaller.appspotmail.com
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  227  
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  228  static __always_inline unsigned long
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  229  ____cmpxchg(, volatile void *ptr, unsigned long old, unsigned long new,
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  230  	      int size)
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  231  {
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  232  	switch (size) {
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  233  		case 1:
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31 @234  			return ____cmpxchg(_u8, ptr, old, new);
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  235  		case 2:
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  236  			return ____cmpxchg(_u16, ptr, old, new);
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  237  		case 4:
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  238  			return ____cmpxchg(_u32, ptr, old, new);
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  239  		case 8:
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  240  			return ____cmpxchg(_u64, ptr, old, new);
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  241  	}
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  242  	__cmpxchg_called_with_bad_pointer();
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  243  	return old;
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  244  }
+a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  245  
 
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:72 [inline]
-BUG: KASAN: null-ptr-deref in _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
-BUG: KASAN: null-ptr-deref in ida_free+0x1b9/0x400 lib/idr.c:511
-Read of size 8 at addr 0000000000000000 by task syz-executor237/5830
+:::::: The code at line 234 was first introduced by commit
+:::::: a6209d6d71f2ab8c63cc1587ef65490d83022baf alpha: xchg/cmpxchg cleanup and fixes
 
-CPU: 1 PID: 5830 Comm: syz-executor237 Not tainted 6.3.0-rc3-syzkaller-00338-gda8e7da11e4b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_report+0xe6/0x540 mm/kasan/report.c:433
- kasan_report+0x176/0x1b0 mm/kasan/report.c:536
- kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
- instrument_atomic_read include/linux/instrumented.h:72 [inline]
- _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
- ida_free+0x1b9/0x400 lib/idr.c:511
- mnt_release_group_id fs/namespace.c:160 [inline]
- cleanup_group_ids fs/namespace.c:2093 [inline]
- do_mount_setattr fs/namespace.c:4188 [inline]
- __do_sys_mount_setattr fs/namespace.c:4375 [inline]
- __se_sys_mount_setattr+0xc44/0x1b00 fs/namespace.c:4334
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7efc4b190919
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007efc4b142318 EFLAGS: 00000246 ORIG_RAX: 00000000000001ba
-RAX: ffffffffffffffda RBX: 00007efc4b2183e8 RCX: 00007efc4b190919
-RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000003
-RBP: 00007efc4b2183e0 R08: 0000000000000020 R09: 0000000000000000
-R10: 0000000020000140 R11: 0000000000000246 R12: 0030656c69662f2e
-R13: 00007ffe5a122bdf R14: 00007efc4b142400 R15: 0000000000022000
- </TASK>
-==================================================================
+:::::: TO: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
