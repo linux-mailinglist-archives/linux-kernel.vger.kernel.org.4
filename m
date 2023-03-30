@@ -2,75 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034D36D0597
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2625B6D059F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjC3M7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 08:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
+        id S231742AbjC3NA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbjC3M7e (ORCPT
+        with ESMTP id S231732AbjC3NAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:59:34 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE43F974B;
-        Thu, 30 Mar 2023 05:59:33 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id F407F80FE;
-        Thu, 30 Mar 2023 12:59:32 +0000 (UTC)
-Date:   Thu, 30 Mar 2023 15:59:31 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v9 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <20230330125931.GT7501@atomide.com>
-References: <20230323071051.2184-1-tony@atomide.com>
- <ZCQAF-nrrsfBtviT@kroah.com>
- <20230330113231.GR7501@atomide.com>
- <ZCWF_Envuh3Qnaxm@kroah.com>
+        Thu, 30 Mar 2023 09:00:23 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A32EAD27;
+        Thu, 30 Mar 2023 06:00:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id ECBA8CE2A67;
+        Thu, 30 Mar 2023 13:00:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0314CC433D2;
+        Thu, 30 Mar 2023 13:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680181208;
+        bh=lQjT9u0QiI93GzA4zuiaCmVz/t8Vr34KEmtX0zEjsWo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EGgAKfDnmn1bK04UtJg9001JUdYjVM8JejGQNguo5mn6m5ExHmwleJrcZ0smOEGzS
+         vBPiLlvo0r/WvjIpUFrum18B6eJo442F5NgcnrK2NOxQQ/7DXnBfOCNuI1RQS1xddQ
+         1idQt6Xpj/jzElx70h7DfDv31JhWWVI/1bON2Kwc53Ac/B412bSX4k7XtJJFebqhDx
+         y3wJJC5VoaKVau28PQJTB5NFEx6qBKhTZZejtIodeImkFJVzz1Hn455odKflpHFNIM
+         iS4giE87UuUseFO0JmmEKJfxI0pJRTknBPyNLJkjzWC1/ytBEr/BRk/oyuuq6oNjyB
+         Jx/zwBLgBj9mQ==
+Date:   Thu, 30 Mar 2023 14:00:04 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     pavel@ucw.cz, quic_fenglinw@quicinc.com,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] leds: flash: set varaiables mvflash_3,4ch_regs
+ storage-class-specifier to static
+Message-ID: <20230330130004.GN434339@google.com>
+References: <20230317191341.1670660-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZCWF_Envuh3Qnaxm@kroah.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230317191341.1670660-1-trix@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Greg Kroah-Hartman <gregkh@linuxfoundation.org> [230330 12:52]:
-> On Thu, Mar 30, 2023 at 02:32:31PM +0300, Tony Lindgren wrote:
-> > * Greg Kroah-Hartman <gregkh@linuxfoundation.org> [230329 09:08]:
-> > > On Thu, Mar 23, 2023 at 09:10:47AM +0200, Tony Lindgren wrote:
-> > > > --- /dev/null
-> > > > +++ b/drivers/tty/serial/serial_base.c
-> > > > @@ -0,0 +1,142 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > > 
-> > > Given that the driver core is "GPL-2.0-only", why is this -or-later?
-> > 
-> > Thanks for noticing, the intention was to set it to what serial_core.c has:
-> > 
-> > $ git grep -e SPDX -e MODULE_LICENSE drivers/tty/serial/serial_core.c
-> > drivers/tty/serial/serial_core.c:// SPDX-License-Identifier: GPL-2.0+
-> > drivers/tty/serial/serial_core.c:MODULE_LICENSE("GPL");
-> 
-> Doesn't mean you have to copy it, it's your choice :)
+On Fri, 17 Mar 2023, Tom Rix wrote:
 
-In this case my preference is to use the same as for serial_core.c. This is
-so folks can start moving serial port specific functions from serial_core.c
-to serial_port.c. And not have to worry about the possible differences with
-various licenses at that point :)
+> smatch reports
+> drivers/leds/flash/leds-qcom-flash.c:103:18: warning:
+>   symbol 'mvflash_3ch_regs' was not declared. Should it be static?
+> drivers/leds/flash/leds-qcom-flash.c:115:18: warning:
+>   symbol 'mvflash_4ch_regs' was not declared. Should it be static?
+>
+> These variables are only used in leds-qcom-flash.c,
+> so it should be static.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/leds/flash/leds-qcom-flash.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Tony
+I fixed-up some spelling / formatting issues and ...
+
+Applied, thanks
+
+--
+Lee Jones [李琼斯]
