@@ -2,165 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB6A6D04E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A436D04EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbjC3Mg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 08:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S229724AbjC3MiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 08:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjC3Mg4 (ORCPT
+        with ESMTP id S229923AbjC3MiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:36:56 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9C0AF39
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:36:32 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id u1so10798886wmn.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680179791;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v2SdBqcaN+6GFOx8z6KlPRSpnR3fHYMtwzYOEPCISQU=;
-        b=dZuY7jmT9vyCXbDNUerGw0l6wRsmn0RlBppowH5woVa6tbB1tKBGzHEHu2YLRKOXfO
-         3eDfIno32GPPl8cGTXhP5VgiL3GZLtxcdzQS4uxRi2DD0wXJxj268WcYfSlll+Wi8O2i
-         Jm8hgX9+4d/bKj3ixsNXXuGoCW+PdQ4umBJKnQVGRTaXJ8n4z2VV2wHRYCwmX32v8YzC
-         0ORixTd6z+ph+bEktz6724JHFog/5u26PDHd/vlnEl/xSCLmd3p5NvynNegeBq+CwOCv
-         7t8KrOkmR26HAkeYzwzagGqVZPx7aw5NPe1cE0q8ngOZRE7o92ql9YL8p6rDoM5w4+21
-         kUsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680179791;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v2SdBqcaN+6GFOx8z6KlPRSpnR3fHYMtwzYOEPCISQU=;
-        b=k2PgB+/VU/4ENZezzNEIiCcln/l2ANk+Wewq5ejKXV8Mr8eOFd9Zo808dHydAKDDi7
-         iJyKAjjIrn4yYkoTD3H4z5LwK3whDrcVzmt6vAmdQAZy6XemB00yD8AfuKK+4OXkQqaw
-         FMx5q2GDes54BOmk/nn0XF9jvd/FRjGdRExnd8ccB2PHkmrtYZXXmFIqexo+9mmKEAUN
-         5eqyCV59ovNPy4DGYAloxxLVLL8AFF1FisJHMf3c4XguXixW6ow53i0H/3aKGHbPImtU
-         eDmZEClsxn3beM1dxsS1N6jSKdJgVhnBNWsjLMZZ8sjBZV3gmR4ElcML9uEv3robCWqZ
-         AaIg==
-X-Gm-Message-State: AO0yUKUDp8Oiv8QV4ivEI9f6nD7BVBYcc+iVvWIzd/Ux6WGhDC6GJYZy
-        ngMW8K38eCviTKwYGIH0BEM5xQ==
-X-Google-Smtp-Source: AK7set8F33mlI3B/K+4GNJa26Hkl0rO/8byJx+CY3cNSKt2rN5r8e8DfPD7n3KvlXcP+LtzOfmUdaA==
-X-Received: by 2002:a7b:cb90:0:b0:3dc:4b87:a570 with SMTP id m16-20020a7bcb90000000b003dc4b87a570mr18706150wmi.35.1680179791154;
-        Thu, 30 Mar 2023 05:36:31 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:9ee7:40a0:eee0:62cc? ([2a05:6e02:1041:c10:9ee7:40a0:eee0:62cc])
-        by smtp.googlemail.com with ESMTPSA id ay13-20020a05600c1e0d00b003ee6def283bsm6013635wmb.11.2023.03.30.05.36.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 05:36:30 -0700 (PDT)
-Message-ID: <ff48b15c-f8ce-b971-c840-81458715d82b@linaro.org>
-Date:   Thu, 30 Mar 2023 14:36:29 +0200
+        Thu, 30 Mar 2023 08:38:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC4D76A6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:38:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64C87B828A2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:37:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39438C4339B;
+        Thu, 30 Mar 2023 12:37:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680179878;
+        bh=Rz5jdL0fwhPMzX2/0YZvGF07uAWfnZV5XYASum4cWDc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ouVSV8UuttOz1kMyM02GVxQp+MPWOiZv/BigqlwLlFWPwIp6eI3dN1EvtgKyPVzhP
+         7i+CtTDFVveK0llw0fnotdJfWvvl4mTJLMexu/1l16HpRrhiEY4BnJu9HnMcOjNWx/
+         AvsJK8Q3U36D62ey9kNQovmzKmdTDKtb2HlgXJI4dTmw7P7L0BK/rTwMVKO86G+km2
+         cfyFKsqpnkHgIm5uqWEzm5CJH46EFqgQVV6EHHY3QPG71GrFVB/z/1G6AOEOZeVIV/
+         OkwJiyaWv+/vXVuty54/mLbD7NZ+6K4VFVlW2jz7wyiqUJ6WL/7lau/qVWF405l41X
+         rBXk+LgXcL1kg==
+Date:   Thu, 30 Mar 2023 13:37:53 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH v1 mfd] mfd: ocelot-spi: fix bulk read
+Message-ID: <20230330123753.GI434339@google.com>
+References: <20230322141130.2531256-1-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2] thermal: tegra-bpmp: Handle offline zones
-Content-Language: en-US
-To:     Mikko Perttunen <cyndis@kapsi.fi>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230330094904.2589428-1-cyndis@kapsi.fi>
- <a09d8edf-9db1-0037-15a4-7ce329b82bf2@linaro.org>
- <204e0435-c544-8727-e892-9fc69b8d691d@kapsi.fi>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <204e0435-c544-8727-e892-9fc69b8d691d@kapsi.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230322141130.2531256-1-colin.foster@in-advantage.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2023 12:06, Mikko Perttunen wrote:
-> On 3/30/23 13:03, Daniel Lezcano wrote:
->> On 30/03/2023 11:49, Mikko Perttunen wrote:
->>> From: Mikko Perttunen <mperttunen@nvidia.com>
->>>
->>> Thermal zones located in power domains may not be accessible when
->>> the domain is powergated. In this situation, reading the temperature
->>> will return -BPMP_EFAULT. When evaluating trips, BPMP will internally
->>> use -256C as the temperature for offline zones.
->>
->>> For smooth operation, for offline zones, return -EAGAIN when reading
->>> the temperature and allow registration of zones even if they are
->>> offline during probe.
->>
->> I think it makes more sense to check if the power domain associated 
->> with the device is powered up and if not return -EPROBE_DEFER.
-> 
-> The power domains in question are related to computer vision engines 
-> that only get powered on when in use, possibly never if the user doesn't 
-> run a computer vision workload on the system. We still want other 
-> thermal zones to be available.
+On Wed, 22 Mar 2023, Colin Foster wrote:
 
-Ok, I see the point.
+> Ocelot chips (VSC7511, VSC7512, VSC7513, VSC7514) don't support bulk read
+> operations over SPI.
+>
+> Many SPI buses have hardware that can optimize consecutive reads.
+> Essentially an address is written to the chip, and if the SPI controller
+> continues to toggle the clock, subsequent register values are reported.
+> This can lead to significant optimizations, because the time between
+> "address is written to the chip" and "chip starts to report data" can often
+> take a fixed amount of time.
+>
+> When support for Ocelot chips were added in commit f3e893626abe ("mfd:
+> ocelot: Add support for the vsc7512 chip via spi") it was believed that
+> this optimization was supported. However it is not.
+>
+> Most register transactions with the Ocelot chips are not done in bulk, so
+> this bug could go unnoticed. The one scenario where bulk register
+> operations _are_ performed is when polling port statistics counters, which
+> was added in commit d87b1c08f38a ("net: mscc: ocelot: use bulk reads for
+> stats").
+>
+> Things get slightly more complicated here...
+>
+> A bug was introduced in commit d4c367650704 ("net: mscc: ocelot: keep
+> ocelot_stat_layout by reg address, not offset") that broke the optimization
+> of bulk reads. This means that when Ethernet support for the VSC7512 chip
+> was added in commit 3d7316ac81ac ("net: dsa: ocelot: add external ocelot
+> switch control") things were actually working "as expected".
+>
+> The bulk read opmtimization was discovered, and fixed in commit
+> 6acc72a43eac ("net: mscc: ocelot: fix stats region batching") and the
+> timing optimizations for SPI were noticed. A bulk read went from ~14ms to
+> ~2ms. But this timing improvement came at the cost of every register
+> reading zero due the fact that bulk reads don't work.
+>
+> The read timings increase back to 13-14ms, but that's a price worth paying
+> in order to receive valid data. This is verified in a DSA setup (cpsw-new
+> switch tied to port 0 on the VSC7512, after having been running overnight)
+>
+>      Rx Octets: 16222055 # Counters from CPSW switch
+>      Tx Octets: 12034702
+>      Net Octets: 28256757
+>      p00_rx_octets: 12034702 # Counters from Ocelot switch
+>      p00_rx_frames_below_65_octets: 0
+>      p00_rx_frames_65_to_127_octets: 88188
+>      p00_rx_frames_128_to_255_octets: 13
+>      p00_rx_frames_256_to_511_octets: 0
+>      p00_rx_frames_512_to_1023_octets: 0
+>      p00_rx_frames_over_1526_octets: 3306
+>      p00_tx_octets: 16222055
+>
+> Fixes: f3e893626abe ("mfd: ocelot: Add support for the vsc7512 chip via spi")
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
+>  drivers/mfd/ocelot-spi.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-I'm worried about the semantic of the errors returned, the translation 
-from BPMP_EFAULT to EAGAIN and the assumption it is a disabled (may be 
-forever) thermal zone.
+Applied, thanks
 
-What does the documentation say for the error msg.rx.ret == -BPMP_EFAULT?
-
-
-
->>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
->>> ---
->>> v2:
->>> * Adjusted commit message.
->>> * Patch 2/2 dropped for now since it is more controversial,
->>>    and this patch is more critical.
->>>
->>>   drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
->>>   1 file changed, 8 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c 
->>> b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>> index f5fd4018f72f..4ffc3bb3bf35 100644
->>> --- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>> +++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>> @@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct 
->>> tegra_bpmp_thermal_zone *zone,
->>>       err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
->>>       if (err)
->>>           return err;
->>> +    if (msg.rx.ret == -BPMP_EFAULT)
->>> +        return -EAGAIN;
->>>       if (msg.rx.ret)
->>>           return -EINVAL;
->>> @@ -259,7 +261,12 @@ static int tegra_bpmp_thermal_probe(struct 
->>> platform_device *pdev)
->>>           zone->tegra = tegra;
->>>           err = __tegra_bpmp_thermal_get_temp(zone, &temp);
->>> -        if (err < 0) {
->>> +
->>> +        /*
->>> +         * Sensors in powergated domains may temporarily fail to be 
->>> read
->>> +         * (-EAGAIN), but will become accessible when the domain is 
->>> powered on.
->>> +         */
->>> +        if (err < 0 && err != -EAGAIN) {
->>>               devm_kfree(&pdev->dev, zone);
->>>               continue;
->>>           }
->>
-> 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+--
+Lee Jones [李琼斯]
