@@ -2,80 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC506CFD7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0083E6CFD78
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjC3H4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
+        id S229874AbjC3Hzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjC3H4D (ORCPT
+        with ESMTP id S229812AbjC3Hzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:56:03 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89E36A6F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:55:55 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id x3so72995779edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:55:55 -0700 (PDT)
+        Thu, 30 Mar 2023 03:55:33 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7AD1FCC
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:55:31 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id x20so18682205ljq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:55:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680162954;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=anbj3k8bVreIFvoy5ezWKZvlLhuV6pERZy1Bnx+kNns=;
-        b=ZD9aj6n0GX26RjIgVcV8XWHXeXxhiTySnXtfLlIh2Y4ULsYer620/o/Gxai5NDEyx0
-         U9cLhrKkIyrcXCb9H0C1LsSrI3aYqgf3GO6P4vMGibxu+NJs5rV7tQbNe7/BuzZ9ngD4
-         QlTJGq/55WJCvX0baHxwlbOU546xXFXX3rhwhxfTlPe1DtgL+SZFj+3v/M/zynT9IjDn
-         ZyadAB66teMDMbs9xKwieRC4GEnlOFheMYpz1xGF7yvvoKjAofsoTZMoVDKAnSS6/+pv
-         n2YA0BsqSmXP4EqjlRt/DgekBF6qWk4ejPD+mZWis8RRK9kN76WGkT00+z0dkPShQagp
-         7beQ==
+        d=linaro.org; s=google; t=1680162929;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tGYTSHL46X7bsDTKLQ+Wx3uN2whDUAE5JW3rEceASdQ=;
+        b=Jk0+FrfJqn1tgVh5ejKOGngvHbWs6g9OXXxkDSbw+zlibIQdUIVybm2J3a6+q6/Xx4
+         UcLPwmRSX4qBAjXHO2k0Iiea2y0aWPzdxqzGK61fk4UPT9JD++eIXbtZutSMjQN7wLgI
+         0hwTtQn14nxEX4DiJWogQjdn9JOUmYrvFb6SLFjXhoy9scbZrPV/GXb0HsWz24r+I4aZ
+         KjwgdrhfuEhIeRsMGfNTige0EH4yc95uJ+fnuj+L/Ii7n5ALRzQLMzK7QHXz3D6gaE7v
+         /cdqgBB7fXszDeLhEabN8OjQFUYXwnBzrYZFz515Y6ZtN+lU38iIW3IcwDGi0Is9gGj+
+         T1fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680162954;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=anbj3k8bVreIFvoy5ezWKZvlLhuV6pERZy1Bnx+kNns=;
-        b=SR2dkyyG6zZGdITvCAGUwc54c82iiVMzsscVuhnsLd5Kwe10jzauz9jw+pd4T8O6vM
-         0WFrP75DsKmPOQEwGNz+TIazD2nCfgHw+khJOiQDpoL3GDvVgCc6h489crARVwPWMaF+
-         gYnVuW63oIU/eKhFUrlRFKhTOtJ1rSjpT7xGEzHmzCpsqXpb087oNBPU3G0uJc/snWfr
-         pC01zf145yMd8TpwHEdGze2VNkb+VscU2YkCgXVyv61LiT8JROIMSder7H385tgzNM0u
-         IwVtaOu29BjETLk4oYBPk0GAvLSwcyDzTLrwUAJkZIXJeESiy7tY47STmayXJZ1gKfGg
-         AQqw==
-X-Gm-Message-State: AAQBX9fRfrJ+jftVLwvh5MUakDhN29UXMS6JDInmiXR9ZLYov0eNKCHp
-        /81/utpS7cuKuyfZGK+OQZm26+9zDOt7TbWBLkFkEQ==
-X-Google-Smtp-Source: AKy350ZKBVchKo8yL5qnCRGOKj6HMXymGhCHv0sbs5xG5akH53sSrKAZcQmbeW6Sz+oAWJWB2Er2VE8WUpb+CRjLT3s=
-X-Received: by 2002:a17:906:eec7:b0:93e:186f:ea0d with SMTP id
- wu7-20020a170906eec700b0093e186fea0dmr10952473ejb.15.1680162953989; Thu, 30
- Mar 2023 00:55:53 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680162929;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tGYTSHL46X7bsDTKLQ+Wx3uN2whDUAE5JW3rEceASdQ=;
+        b=kk16APfMVbHTQyjUDwznCEOyJRLbkJSBa0XwXMeizj4nhXh4j1pzKgz72FB5AHwlLm
+         QJ+N5dE1bdA3f1o6WKs2aFer8skg4Nlnc3DRn/PMv+lI5Ad5H93p+koZhxS7xUQsQiD/
+         hdA6EiX3Wjhnc6PY7wqKcti7RlQ2lFPYiX7rTschZP36aXlS+3jYOVoQRtD1jiAaPwi5
+         hbIIIMZsEcwIc3ZQHjv7Guo+XZYo21HWPQ3j8jRy9SevlOhsYEhyYWtBCLHvIO/laWPS
+         MtT+5cCJJLf177cQcMG392bTg7bo4lZhia2JafnWJWPiCoIem32LOEEXkFR78pc7py29
+         WStA==
+X-Gm-Message-State: AAQBX9fecYdbimuWSM/xUFwqTw0ckJWjm28QeVsdayqxVlTLm+lNDqFL
+        dMW8dFu/cA/LlkKIzOByWc4tDA==
+X-Google-Smtp-Source: AKy350YwpSqUYkl+UrlSSuUZ/GJqJNMvJOcPamCCu517TXTO1xYOctGZpA+aNAVDfmgreF5ee1eu/Q==
+X-Received: by 2002:a2e:3813:0:b0:299:edc5:9c10 with SMTP id f19-20020a2e3813000000b00299edc59c10mr6930107lja.2.1680162929589;
+        Thu, 30 Mar 2023 00:55:29 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id c2-20020a2e9d82000000b002a6007383a0sm1043907ljj.135.2023.03.30.00.55.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 00:55:29 -0700 (PDT)
+Message-ID: <a65f4aa9-b26b-adac-7e5d-e7a1b6bf4e57@linaro.org>
+Date:   Thu, 30 Mar 2023 09:55:27 +0200
 MIME-Version: 1.0
-References: <20230328221644.803272-1-yosryahmed@google.com>
- <20230328221644.803272-8-yosryahmed@google.com> <ZCU8tjqzg8cDbobQ@dhcp22.suse.cz>
- <CAJD7tkZLBs=A8m5u=9jGtMeD0ptOgtCTYUoh2r4Ex+fCkvwAXg@mail.gmail.com> <ZCU/SMr5gC9C0U+R@dhcp22.suse.cz>
-In-Reply-To: <ZCU/SMr5gC9C0U+R@dhcp22.suse.cz>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 30 Mar 2023 00:55:17 -0700
-Message-ID: <CAJD7tkZfexGoyZx0ormVzp_KkYmOczxBPfFaffKqd_TD4gvGCg@mail.gmail.com>
-Subject: Re: [PATCH v2 7/9] workingset: memcg: sleep when flushing stats in workingset_refault()
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 10/11] dt-bindings: arm: Add support for DSB MSR
+ register
+Content-Language: en-US
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-11-git-send-email-quic_taozha@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1679551448-19160-11-git-send-email-quic_taozha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,35 +92,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 12:50=E2=80=AFAM Michal Hocko <mhocko@suse.com> wro=
-te:
->
-> On Thu 30-03-23 00:42:36, Yosry Ahmed wrote:
-> > On Thu, Mar 30, 2023 at 12:39=E2=80=AFAM Michal Hocko <mhocko@suse.com>=
- wrote:
-> > >
-> > > On Tue 28-03-23 22:16:42, Yosry Ahmed wrote:
-> > > > In workingset_refault(), we call
-> > > > mem_cgroup_flush_stats_atomic_ratelimited() to flush stats within a=
-n
-> > > > RCU read section and with sleeping disallowed. Move the call above
-> > > > the RCU read section and allow sleeping to avoid unnecessarily
-> > > > performing a lot of work without sleeping.
-> > >
-> > > Could you say few words why the flushing is done before counters are
-> > > updated rather than after (the RCU section)?
-> >
-> > It's not about the counters that are updated, it's about the counters
-> > that we read. Stats readers do a flush first to read accurate stats.
-> > We flush before a read, not after an update.
->
-> Right you are, my bad I have misread the intention here.
->
-> Acked-by: Michal Hocko <mhocko@suse.com>
+On 23/03/2023 07:04, Tao Zhang wrote:
+> Add property "qcom,dsb_msr_num" to support DSB(Discrete Single
+> Bit) MSR(mux select register) for TPDM. It specifies the number
+> of MSR registers supported by the DSB TDPM.
+> 
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+> index d9b6b613..691c7ba 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+> @@ -53,6 +53,15 @@ properties:
+>      minimum: 32
+>      maximum: 64
+>  
+> +  qcom,dsb_msr_num:
 
-Thanks!
+Underscores are not allowed.
 
->
-> --
-> Michal Hocko
-> SUSE Labs
+
+Best regards,
+Krzysztof
+
