@@ -2,226 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7326CFBCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CC96CFBD5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjC3GoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 02:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
+        id S230057AbjC3GqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 02:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbjC3GoG (ORCPT
+        with ESMTP id S230113AbjC3GqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 02:44:06 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC387695;
-        Wed, 29 Mar 2023 23:43:56 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32U6hiGV052781;
-        Thu, 30 Mar 2023 01:43:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680158624;
-        bh=bT80fJZkEzcPwq0rZSo29Ml6Els/2Qq5nIx8+2O0vBo=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=wMUGzLLLo32IMr9dfmZz9vd4VQJi5nSpv8NNQZlfkD75WbHZNOoiO5CySMskIezjV
-         JdORohToS0QtKETX2Ny3MWziOMuydCKgLluweYyhsHXaElPN+9hWASVNkUA3bC5t/8
-         SszvNB8XWupj2iwYVjVR+d6+llmZwtvwcHMzm9JA=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32U6hinY021752
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 30 Mar 2023 01:43:44 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 30
- Mar 2023 01:43:44 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 30 Mar 2023 01:43:44 -0500
-Received: from [10.24.69.141] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32U6hefP074293;
-        Thu, 30 Mar 2023 01:43:41 -0500
-Message-ID: <ac2e194a-9b16-eec2-4e1b-a6708d1bb9f1@ti.com>
-Date:   Thu, 30 Mar 2023 12:13:40 +0530
+        Thu, 30 Mar 2023 02:46:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95ECF5FEB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 23:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680158692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uOR4AABgXY6rT1UM0saCrM1Os02S42xCRn/OKU3aRlo=;
+        b=So9JqLmI1RpacCLj54C/jula3vWGM933SQplv0zTYSOZiVMwpjbtzejMyYRVF45V8xDO7f
+        qMz5E/X3YwaTZ6qk8EzPDIh1RT1Tcbpmw6e7TJyFD3/OBHf8PxaJdcBzH2o+qR8KeNssqo
+        Iyf3clLfbokzWKY05UdL0r6+EZ92PQE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-549-B4EvlMpeP32ZBboxD9QbeQ-1; Thu, 30 Mar 2023 02:44:49 -0400
+X-MC-Unique: B4EvlMpeP32ZBboxD9QbeQ-1
+Received: by mail-wm1-f72.google.com with SMTP id j27-20020a05600c1c1b00b003edd2023418so9900679wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 23:44:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680158689;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uOR4AABgXY6rT1UM0saCrM1Os02S42xCRn/OKU3aRlo=;
+        b=D2BHKCdvlRHDHwjThE4XCVnj+PjaIIElznOsXFgKYblTg/iyIJQDyATjTBNFcq5G7y
+         3Lgjqth9UUO2O7/Vr3kHTPIp6rRKuKOq15PCbCmTd5Ip6GaeaMCfLvIptot5CAOBr1Ro
+         lNI8Zq5IDa1aSfnu7RaKbCVcLjLwvhX3t41IM8qXlX6EV1h0RcwmzsjeejgsLEZTehDz
+         awcEao5wGVyBbmSHoXCo1UcrWZ9Hx1mbBe3iobdZpYTPiJmfabhXdJYOKp8Jszlhr0zo
+         P4TnBRYUUEuj1ccMFKwpi99zThgXYNWnRJR0WLXh9rvY+hH1SJR4BYErv6yowA3wfYwq
+         46XA==
+X-Gm-Message-State: AAQBX9dQFoxAT+N22+QHLmG/gNS9CE4gcsYb4NEmvvZoiVmgfF9cezIQ
+        dBO3+X9P2+YY5C9u3vrYepiIZidFy4z2TtNt7QW4Hue+EowRK2dHYPBsEBV1QtWg4SbmfMcwBqz
+        SbFs+z5ysuXG1gzxpPSrd6kiG
+X-Received: by 2002:a7b:c045:0:b0:3ef:6fee:8057 with SMTP id u5-20020a7bc045000000b003ef6fee8057mr9121727wmc.25.1680158688798;
+        Wed, 29 Mar 2023 23:44:48 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b9YXLwf8YQAIK1wJbojYDvpMv6wMNdBsep+spzdVpXknozxcuIotMCTlq+T8/9wIqhpHiyXQ==
+X-Received: by 2002:a7b:c045:0:b0:3ef:6fee:8057 with SMTP id u5-20020a7bc045000000b003ef6fee8057mr9121710wmc.25.1680158688488;
+        Wed, 29 Mar 2023 23:44:48 -0700 (PDT)
+Received: from redhat.com ([2.52.159.107])
+        by smtp.gmail.com with ESMTPSA id f17-20020a05600c4e9100b003ede3f5c81fsm5062688wmq.41.2023.03.29.23.44.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 23:44:47 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 02:44:44 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Jakub Kicinski <kuba@kernel.org>, Wei Wang <weiwan@google.com>,
+        David Miller <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] virtio: fix up virtio_disable_cb
+Message-ID: <20230330024220-mutt-send-email-mst@kernel.org>
+References: <20210526082423.47837-1-mst@redhat.com>
+ <20210526082423.47837-4-mst@redhat.com>
+ <1680156457.5551112-5-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH V3 2/2] arm64: dts: ti: k3-am68-sk-base-board: Add pinmux
- for RPi Header
-Content-Language: en-US
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Sinthu Raja <sinthu.raja@ti.com>, <u-kumar1@ti.com>,
-        Rahul Ravikumar <r-ravikumar@ti.com>
-References: <20230316114102.3602-1-sinthu.raja@ti.com>
- <20230316114102.3602-3-sinthu.raja@ti.com>
- <da0e31a6-2304-984c-35ea-41e29b2eb418@ti.com>
-In-Reply-To: <da0e31a6-2304-984c-35ea-41e29b2eb418@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1680156457.5551112-5-xuanzhuo@linux.alibaba.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sinthu,
-
-On 28/03/23 16:30, Vaishnav Achath wrote:
-> Hi Sinthu,
+On Thu, Mar 30, 2023 at 02:07:37PM +0800, Xuan Zhuo wrote:
+> On Wed, 26 May 2021 04:24:40 -0400, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > virtio_disable_cb is currently a nop for split ring with event index.
+> > This is because it used to be always called from a callback when we know
+> > device won't trigger more events until we update the index.  However,
+> > now that we run with interrupts enabled a lot we also poll without a
+> > callback so that is different: disabling callbacks will help reduce the
+> > number of spurious interrupts.
+> > Further, if using event index with a packed ring, and if being called
+> > from a callback, we actually do disable interrupts which is unnecessary.
+> >
+> > Fix both issues by tracking whenever we get a callback. If that is
+> > the case disabling interrupts with event index can be a nop.
+> > If not the case disable interrupts. Note: with a split ring
+> > there's no explicit "no interrupts" value. For now we write
+> > a fixed value so our chance of triggering an interupt
+> > is 1/ring size. It's probably better to write something
+> > related to the last used index there to reduce the chance
+> > even further. For now I'm keeping it simple.
 > 
-> On 16/03/23 17:11, Sinthu Raja wrote:
->> From: Sinthu Raja <sinthu.raja@ti.com>
->>
->> Add pinmux required to bring out the i2c and gpios on 40-pin RPi
->> expansion header on the AM68 SK board.
->>
->> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
->> ---
->>
->> No Changes in V3.
->>
 > 
-> It looks like you missed to carry the tested tag from Rahul on V2,
-> was that intentional?
+> Don't understand, is this patch necessary? For this patch set, we can do without
+> this patch.
 > 
-> https://lore.kernel.org/all/20230125200427.2bqlpym5tzz43yqq@uda0490373/
+> So doest this patch optimize virtqueue_disable_cb() by reducing a modification of
+> vring_used_event(&vq-> split.vring)?
 > 
-> Thanks and Regards,
-> Vaishnav
+> Or I miss something.
 > 
->>  .../boot/dts/ti/k3-am68-sk-base-board.dts     | 70 ++++++++++++++++++-
->>  1 file changed, 69 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
->> index 27a43a8ecffd..118308cfdd75 100644
->> --- a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
->> +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
->> @@ -173,6 +173,32 @@ J721S2_IOPAD(0x0a0, PIN_INPUT, 0) /* (AB25) MCASP0_AXR12.MCAN7_RX */
->>  			J721S2_IOPAD(0x09c, PIN_INPUT, 0) /* (T24) MCASP0_AXR11.MCAN7_TX */
->>  		>;
->>  	};
->> +
->> +	main_i2c4_pins_default: main-i2c4-pins-default {
->> +		pinctrl-single,pins = <
->> +			J721S2_IOPAD(0x010, PIN_INPUT_PULLUP, 7) /* (AF28) MCAN13_RX.I2C4_SDA */
->> +			J721S2_IOPAD(0x014, PIN_INPUT_PULLUP, 7) /* (AD25) MCAN14_TX.I2C4_SCL */
+> Thanks.
 
-While reviewing these changes with Udit, we found that these settings for I2C is
-wrong as per the datasheet(or sysconfig), for these PADs the mux mode 7 is GPIO
-and mode 8 is I2C, can you please check and correct this.
+Before this patch virtqueue_disable_cb did nothing at all
+for the common case of event index enabled, so
+calling it from virtio net would not help matters.
 
-Thanks and Regards,
-Vaishnav
+But the patch is from 2021, isn't it a bit too late to argue?
+If you have a cleanup or an optimization in mind, please
+post a patch.
 
+> >
+> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> > ---
+> >  drivers/virtio/virtio_ring.c | 26 +++++++++++++++++++++++++-
+> >  1 file changed, 25 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > index 71e16b53e9c1..88f0b16b11b8 100644
+> > --- a/drivers/virtio/virtio_ring.c
+> > +++ b/drivers/virtio/virtio_ring.c
+> > @@ -113,6 +113,9 @@ struct vring_virtqueue {
+> >  	/* Last used index we've seen. */
+> >  	u16 last_used_idx;
+> >
+> > +	/* Hint for event idx: already triggered no need to disable. */
+> > +	bool event_triggered;
+> > +
+> >  	union {
+> >  		/* Available for split ring */
+> >  		struct {
+> > @@ -739,7 +742,10 @@ static void virtqueue_disable_cb_split(struct virtqueue *_vq)
+> >
+> >  	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)) {
+> >  		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
+> > -		if (!vq->event)
+> > +		if (vq->event)
+> > +			/* TODO: this is a hack. Figure out a cleaner value to write. */
+> > +			vring_used_event(&vq->split.vring) = 0x0;
+> > +		else
+> >  			vq->split.vring.avail->flags =
+> >  				cpu_to_virtio16(_vq->vdev,
+> >  						vq->split.avail_flags_shadow);
+> > @@ -1605,6 +1611,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> >  	vq->weak_barriers = weak_barriers;
+> >  	vq->broken = false;
+> >  	vq->last_used_idx = 0;
+> > +	vq->event_triggered = false;
+> >  	vq->num_added = 0;
+> >  	vq->packed_ring = true;
+> >  	vq->use_dma_api = vring_use_dma_api(vdev);
+> > @@ -1919,6 +1926,12 @@ void virtqueue_disable_cb(struct virtqueue *_vq)
+> >  {
+> >  	struct vring_virtqueue *vq = to_vvq(_vq);
+> >
+> > +	/* If device triggered an event already it won't trigger one again:
+> > +	 * no need to disable.
+> > +	 */
+> > +	if (vq->event_triggered)
+> > +		return;
+> > +
+> >  	if (vq->packed_ring)
+> >  		virtqueue_disable_cb_packed(_vq);
+> >  	else
+> > @@ -1942,6 +1955,9 @@ unsigned virtqueue_enable_cb_prepare(struct virtqueue *_vq)
+> >  {
+> >  	struct vring_virtqueue *vq = to_vvq(_vq);
+> >
+> > +	if (vq->event_triggered)
+> > +		vq->event_triggered = false;
+> > +
+> >  	return vq->packed_ring ? virtqueue_enable_cb_prepare_packed(_vq) :
+> >  				 virtqueue_enable_cb_prepare_split(_vq);
+> >  }
+> > @@ -2005,6 +2021,9 @@ bool virtqueue_enable_cb_delayed(struct virtqueue *_vq)
+> >  {
+> >  	struct vring_virtqueue *vq = to_vvq(_vq);
+> >
+> > +	if (vq->event_triggered)
+> > +		vq->event_triggered = false;
+> > +
+> >  	return vq->packed_ring ? virtqueue_enable_cb_delayed_packed(_vq) :
+> >  				 virtqueue_enable_cb_delayed_split(_vq);
+> >  }
+> > @@ -2044,6 +2063,10 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+> >  	if (unlikely(vq->broken))
+> >  		return IRQ_HANDLED;
+> >
+> > +	/* Just a hint for performance: so it's ok that this can be racy! */
+> > +	if (vq->event)
+> > +		vq->event_triggered = true;
+> > +
+> >  	pr_debug("virtqueue callback for %p (%p)\n", vq, vq->vq.callback);
+> >  	if (vq->vq.callback)
+> >  		vq->vq.callback(&vq->vq);
+> > @@ -2083,6 +2106,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+> >  	vq->weak_barriers = weak_barriers;
+> >  	vq->broken = false;
+> >  	vq->last_used_idx = 0;
+> > +	vq->event_triggered = false;
+> >  	vq->num_added = 0;
+> >  	vq->use_dma_api = vring_use_dma_api(vdev);
+> >  #ifdef DEBUG
+> > --
+> > MST
+> >
+> > _______________________________________________
+> > Virtualization mailing list
+> > Virtualization@lists.linux-foundation.org
+> > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
 
->> +		>;
->> +	};
->> +
->> +	rpi_header_gpio0_pins_default: rpi-header-gpio0-pins-default {
->> +		pinctrl-single,pins = <
->> +			J721S2_IOPAD(0x0a8, PIN_INPUT, 7) /* (U24)  MCASP0_AXR14.GPIO0_42 */
->> +			J721S2_IOPAD(0x090, PIN_INPUT, 7) /* (W24) MCASP0_AXR8.GPIO0_36 */
->> +			J721S2_IOPAD(0x0bc, PIN_INPUT, 7) /* (V28) MCASP1_AFSX.GPIO0_47 */
->> +			J721S2_IOPAD(0x06c, PIN_INPUT, 7) /* (V26) MCAN1_TX.GPIO0_27 */
->> +			J721S2_IOPAD(0x004, PIN_INPUT, 7) /* (W25) MCAN12_TX.GPIO0_1 */
->> +			J721S2_IOPAD(0x008, PIN_INPUT, 7) /* (AC24) MCAN12_RX.GPIO0_2 */
->> +			J721S2_IOPAD(0x0b8, PIN_INPUT, 7) /* (AA24) MCASP1_ACLKX.GPIO0_46 */
->> +			J721S2_IOPAD(0x00c, PIN_INPUT, 7) /* (AE28) MCAN13_TX.GPIO0_3 */
->> +			J721S2_IOPAD(0x034, PIN_INPUT, 7) /* (AD24) PMIC_WAKE0.GPIO0_13 */
->> +			J721S2_IOPAD(0x0a4, PIN_INPUT, 7) /* (T23) MCASP0_AXR13.GPIO0_41 */
->> +			J721S2_IOPAD(0x0c0, PIN_INPUT, 7) /* (T28) MCASP1_AXR0.GPIO0_48 */
->> +			J721S2_IOPAD(0x0b4, PIN_INPUT, 7) /* (U25) MCASP1_AXR4.GPIO0_45 */
->> +			J721S2_IOPAD(0x0cc, PIN_INPUT, 7) /* (AE27) SPI0_CS0.GPIO0_51 */
->> +			J721S2_IOPAD(0x08c, PIN_INPUT, 7) /* (T25) MCASP0_AXR7.GPIO0_35 */
->> +		>;
->> +	};
->>  };
->>  
->>  &wkup_pmx0 {
->> @@ -214,12 +240,39 @@ J721S2_WKUP_IOPAD(0x0d0, PIN_OUTPUT, 0) /* (C23) WKUP_GPIO0_4.MCU_MCAN1_TX*/
->>  		>;
->>  	};
->>  
->> +	mcu_i2c0_pins_default: mcu-i2c0-pins-default {
->> +		pinctrl-single,pins = <
->> +			J721S2_WKUP_IOPAD(0x100, PIN_INPUT, 0) /*(H24) WKUP_GPIO0_63.MCU_I2C0_SCL*/
->> +			J721S2_WKUP_IOPAD(0x104, PIN_INPUT, 0) /*(H27) WKUP_GPIO0_64.MCU_I2C0_SDA*/
->> +		>;
->> +	};
->> +
->>  	mcu_i2c1_pins_default: mcu-i2c1-pins-default {
->>  		pinctrl-single,pins = <
->>  			J721S2_WKUP_IOPAD(0x0e0, PIN_INPUT, 0) /* (F24) WKUP_GPIO0_8.MCU_I2C1_SCL */
->>  			J721S2_WKUP_IOPAD(0x0e4, PIN_INPUT, 0) /* (H26) WKUP_GPIO0_9.MCU_I2C1_SDA */
->>  		>;
->>  	};
->> +
->> +	mcu_rpi_header_gpio0_pins_default: mcu-rpi-header-gpio0-pins-default {
->> +		pinctrl-single,pins = <
->> +			J721S2_WKUP_IOPAD(0x180, PIN_INPUT, 7) /* (G25) WKUP_GPIO0_66 */
->> +			J721S2_WKUP_IOPAD(0x190, PIN_INPUT, 7) /* (K26) WKUP_GPIO0_49 */
->> +			J721S2_WKUP_IOPAD(0x0c4, PIN_INPUT, 7) /* (E24) MCU_SPI1_D0.WKUP_GPIO0_1 */
->> +			J721S2_WKUP_IOPAD(0x0c8, PIN_INPUT, 7) /* (C28) MCU_SPI1_D1.WKUP_GPIO0_2 */
->> +			J721S2_WKUP_IOPAD(0x0c0, PIN_INPUT, 7) /* (D26) MCU_SPI1_CLK.WKUP_GPIO0_0 */
->> +			J721S2_WKUP_IOPAD(0x0fc, PIN_INPUT, 7) /* (D25) MCU_SPI1_CS2.WKUP_GPIO0_15*/
->> +			J721S2_WKUP_IOPAD(0x120, PIN_INPUT, 7) /* (G27) WKUP_GPIO0_56 */
->> +			J721S2_WKUP_IOPAD(0x17c, PIN_INPUT, 7) /* (J26) WKUP_GPIO0_57 */
->> +			J721S2_WKUP_IOPAD(0x184, PIN_INPUT, 7) /* (J27) WKUP_GPIO0_67 */
->> +			J721S2_WKUP_IOPAD(0x0cc, PIN_INPUT, 7) /* (C27) MCU_SPI1_CS0.WKUP_GPIO0_3 */
->> +		>;
->> +	};
->> +};
->> +
->> +&main_gpio0 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&rpi_header_gpio0_pins_default>;
->>  };
->>  
->>  &main_gpio2 {
->> @@ -235,7 +288,8 @@ &main_gpio6 {
->>  };
->>  
->>  &wkup_gpio0 {
->> -	status = "disabled";
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&mcu_rpi_header_gpio0_pins_default>;
->>  };
->>  
->>  &wkup_gpio1 {
->> @@ -271,6 +325,20 @@ exp1: gpio@21 {
->>  	};
->>  };
->>  
->> +&main_i2c4 {
->> +	status = "okay";
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&main_i2c4_pins_default>;
->> +	clock-frequency = <400000>;
->> +};
->> +
->> +&mcu_i2c0 {
->> +	status = "okay";
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&mcu_i2c0_pins_default>;
->> +	clock-frequency = <400000>;
->> +};
->> +
->>  &main_sdhci0 {
->>  	/* Unused */
->>  	status = "disabled";
-> 
-
--- 
-Regards,
-Vaishnav
