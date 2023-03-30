@@ -2,233 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858246CF959
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 04:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E6D6CF952
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 04:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjC3C4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 22:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
+        id S229449AbjC3Cz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 22:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjC3C41 (ORCPT
+        with ESMTP id S229661AbjC3Cz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 22:56:27 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE07D3C26;
-        Wed, 29 Mar 2023 19:56:17 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id m16so13100645qvi.12;
-        Wed, 29 Mar 2023 19:56:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680144977;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8X2YSVby3eARSC5IBWjikSWO8skTq18zdSjFOS2gB6I=;
-        b=RPWn/wB+SOLnUxOcLQLIKnFvdFrJ/Q7oRalBf/lJRKKJ8998AG/120Zt20hEkFjXMK
-         wGLEd/pLUhdwnGBTficsp3sknQRQE18AK+bFlxbHkD9teAzku7+dTDwVW9l2/pOmO0O+
-         JGyZbVwUWM7JxNm1/nb8HKZZnCQ5Su9urxE8Byl8Aruc/fK/VX5Qrdq4kze/+tH1qfLG
-         S312kdeukWHPRJgAzcQlnQTKpFsyk75hSF5w2qh3ngQbhWzliFccrTyqr9Kg1SKqoKbo
-         lxSZzgCX4BygCt9N6GN6+78SHoBVlUHP4/9OfZYhowFx4HSlTLZPj6dYlbW2dSpcZp/W
-         xxUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680144977;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8X2YSVby3eARSC5IBWjikSWO8skTq18zdSjFOS2gB6I=;
-        b=BJZpZz1cZjEmJy0LoFPcoacccrhsY5lBHGd9Sjvxs1KOx7JeKd+JjO0BHbiI1HoV0s
-         yyVTK9inqBKuHpxNLc18AwxhrFRnaq+90J3hvxvpFADfov/8zFiFXqnNIUCCu1rWBGOF
-         NifGtcPIRtCRAoptLWfcrvMctVWZBDb402ldTuI2syUpJ2ks0r4ZBmZdkD9jk/hHVoad
-         6qV/0+WEpGfVeNKGID32qltuqh5eek34BnTrGhRGmr4z1p/Hjj+GMliaUEQp7XGSTuj6
-         nc9OmV2LOkg4DM6KzKHjnDVxcvXoBHrb0nE6qJJ91PnfpSihJ3nJCMFADW4qfx7pXFaY
-         zmPA==
-X-Gm-Message-State: AAQBX9ejaiIwMgGiRvthaoQJMDs1T3VpgCcMYaufoYuw6m71UMuxYBam
-        9x/IKMkbn6Tp3v0HYvCy5Ag=
-X-Google-Smtp-Source: AKy350ZDgR1/Z52yr2nflFcnv6/3LiGTO5DKz4Z0hYd9YkaWAchuq+IKfoBX+R9is/hQuJ+zi+01kA==
-X-Received: by 2002:ad4:5c61:0:b0:5c9:422e:c7b9 with SMTP id i1-20020ad45c61000000b005c9422ec7b9mr39171311qvh.19.1680144977029;
-        Wed, 29 Mar 2023 19:56:17 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id a8-20020a0ce908000000b005dd8b9345a3sm5108719qvo.59.2023.03.29.19.56.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 19:56:16 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailauth.nyi.internal (Postfix) with ESMTP id B4DE627C0054;
-        Wed, 29 Mar 2023 22:56:15 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 29 Mar 2023 22:56:15 -0400
-X-ME-Sender: <xms:T_okZA6_fAKqbW5wicByn_U55I3RvSYD1HinI_0iYhHvzMrS2FQhSw>
-    <xme:T_okZB4Joq_O45HF3y4d-uw7XokUpTj2WbRsMgRw8d7oWp_uy4coowSyjW-58dwe3
-    3_2iAT4Q7vrjwnc6A>
-X-ME-Received: <xmr:T_okZPctN7-nixS5SQZ9r8fEGULqZQsEqSAEaYLCcwRdx6uMtWVHSvnFLpG9TA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehjedgieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeeigeethfejvdfhudegtdevtefhleelffegteevtdelgfeugefhhffhteeg
-    iefhheenucffohhmrghinheplhifnhdrnhgvthenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
-    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
-    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:T_okZFLoYdTpwssuGuYv_32DhfWPm3BshK_nx6MJ1YKbYZ4wxqZKIw>
-    <xmx:T_okZEJbRehIGY11Qy2ZGixI6pf6jq1OSgu-SJW3nB_ObqOCBgX4dQ>
-    <xmx:T_okZGzDQxP8uaaoX2dtTRGClVrf1ltQFtkI5CQL2DUk2XLd-M3qew>
-    <xmx:T_okZA_UWYqtzpmlbqF6s2t48Z9MHWHKRVPmdbhZi22CsnGF1jSnOA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Mar 2023 22:56:15 -0400 (EDT)
-Date:   Wed, 29 Mar 2023 19:55:32 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     quic_jhugo@quicinc.com, quic_carlv@quicinc.com, wei.liu@kernel.org,
-        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        lpieralisi@kernel.org, bhelgaas@google.com,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mikelley@microsoft.com,
-        robh@kernel.org, kw@linux.com, helgaas@kernel.org,
-        alex.williamson@redhat.com, stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH v2] PCI: hv: Fix the definition of vector in
- hv_compose_msi_msg()
-Message-ID: <ZCT6JEK/yGpKHVLn@boqun-archlinux>
-References: <20221027205256.17678-1-decui@microsoft.com>
- <ZCTsPFb7dBj2IZmo@boqun-archlinux>
+        Wed, 29 Mar 2023 22:55:56 -0400
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FC355A1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 19:55:53 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=wuzongyong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Veyr5Lz_1680144950;
+Received: from localhost(mailfrom:wuzongyong@linux.alibaba.com fp:SMTPD_---0Veyr5Lz_1680144950)
+          by smtp.aliyun-inc.com;
+          Thu, 30 Mar 2023 10:55:50 +0800
+Date:   Thu, 30 Mar 2023 10:55:51 +0800
+From:   Wu Zongyong <wuzongyong@linux.alibaba.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org, tony.luck@intel.com,
+        kirill.shutemov@linux.intel.com, wutu.xq2@linux.alibaba.com,
+        gerry@linux.alibaba.com
+Subject: Re: [RFC PATCH] x86/insn: support decode MOVSXD instruction for MMIO
+Message-ID: <20230330025550.GA2522@L-PF27918B-1352.localdomain>
+Reply-To: Wu Zongyong <wuzongyong@linux.alibaba.com>
+References: <1655f5dc49ab77f94e350ecbdc93e8d9b31acf61.1680058548.git.wuzongyong@linux.alibaba.com>
+ <17b65c2a-69a8-6348-da64-641d34be122e@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZCTsPFb7dBj2IZmo@boqun-archlinux>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <17b65c2a-69a8-6348-da64-641d34be122e@amd.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 06:56:12PM -0700, Boqun Feng wrote:
-> [Cc stable]
+On Wed, Mar 29, 2023 at 08:49:24AM -0500, Tom Lendacky wrote:
+> On 3/28/23 21:59, Wu Zongyong wrote:
+> > It seems MOVSXD which opcode is 0x63 is not handled, support
+> > to decode it in insn_decode_mmio().
 > 
-> On Thu, Oct 27, 2022 at 01:52:56PM -0700, Dexuan Cui wrote:
-> > The local variable 'vector' must be u32 rather than u8: see the
-> > struct hv_msi_desc3.
+> Aren't there some caveats to worry about with this instruction based on the
+> presence of the REX prefix 64-bit operand size bit? Sometimes it can be a
+> sign extended and sometimes it can be a zero extended.
+
+If I undertand right, the patch should like that?
+
+diff --git a/arch/x86/lib/insn-eval.c b/arch/x86/lib/insn-eval.c
+index 558a605929db..a1272f1be35d 100644
+--- a/arch/x86/lib/insn-eval.c
++++ b/arch/x86/lib/insn-eval.c
+@@ -1607,6 +1607,13 @@ enum insn_mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+                return INSN_MMIO_DECODE_FAILED;
+
+        switch (insn->opcode.bytes[0]) {
++       case 0x63:
++               *bytes = 4;
++               if (X86_REX_W(insn->rex_prefix.value))
++                       type = INSN_MMIO_READ_SIGN_EXTEND;
++               else
++                       type = INSN_MMIO_READ_ZERO_EXTEND;
++               break;
+        case 0x88: /* MOV m8,r8 */
+                *bytes = 1;
+                fallthrough;
+> 
+> Thanks,
+> Tom
+> 
 > > 
-> > 'vector_count' should be u16 rather than u8: see struct hv_msi_desc,
-> > hv_msi_desc2 and hv_msi_desc3.
-> > 
-> 
-> Dexuan, I think this patch should only be in 5.15, because...
-> 
-
-Sorry, I meant:
-
-"this patch should also be backported in 5.15"
-
-Regards,
-Boqun
-
-> > Fixes: a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
-> 
-> ^^^ this commit is already in 5.15.y (commit id 92dcb50f7f09).
-> 
-> Upstream id e70af8d040d2b7904dca93d942ba23fb722e21b1
-> Cc: <stable@vger.kernel.org> # 5.15.x
-> 
-> Regards,
-> Boqun
-> 
-> > Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> > Cc: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> > Cc: Carl Vanderlip <quic_carlv@quicinc.com>
+> > Signed-off-by: Wu Zongyong <wuzongyong@linux.alibaba.com>
 > > ---
+> >   arch/x86/lib/insn-eval.c | 4 ++++
+> >   1 file changed, 4 insertions(+)
 > > 
-> > v1 was posted here (sorry, I forgot to follow this up...):
-> > https://lwn.net/ml/linux-kernel/20220815185505.7626-1-decui@microsoft.com/
-> > 
-> > Changes in v2:
-> >   Added the explicit "(u8)" cast in hv_compose_msi_msg().
-> >   Added and improved the comments.
-> >   Fixed a typo in the subject in v1: s/definiton/definition
-> > 
-> >  drivers/pci/controller/pci-hyperv.c | 22 ++++++++++++++++------
-> >  1 file changed, 16 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> > index e7c6f6629e7c..ba64284eaf9f 100644
-> > --- a/drivers/pci/controller/pci-hyperv.c
-> > +++ b/drivers/pci/controller/pci-hyperv.c
-> > @@ -1614,7 +1614,7 @@ static void hv_pci_compose_compl(void *context, struct pci_response *resp,
-> >  
-> >  static u32 hv_compose_msi_req_v1(
-> >  	struct pci_create_interrupt *int_pkt, const struct cpumask *affinity,
-> > -	u32 slot, u8 vector, u8 vector_count)
-> > +	u32 slot, u8 vector, u16 vector_count)
-> >  {
-> >  	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE;
-> >  	int_pkt->wslot.slot = slot;
-> > @@ -1642,7 +1642,7 @@ static int hv_compose_msi_req_get_cpu(const struct cpumask *affinity)
-> >  
-> >  static u32 hv_compose_msi_req_v2(
-> >  	struct pci_create_interrupt2 *int_pkt, const struct cpumask *affinity,
-> > -	u32 slot, u8 vector, u8 vector_count)
-> > +	u32 slot, u8 vector, u16 vector_count)
-> >  {
-> >  	int cpu;
-> >  
-> > @@ -1661,7 +1661,7 @@ static u32 hv_compose_msi_req_v2(
-> >  
-> >  static u32 hv_compose_msi_req_v3(
-> >  	struct pci_create_interrupt3 *int_pkt, const struct cpumask *affinity,
-> > -	u32 slot, u32 vector, u8 vector_count)
-> > +	u32 slot, u32 vector, u16 vector_count)
-> >  {
-> >  	int cpu;
-> >  
-> > @@ -1701,7 +1701,12 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
-> >  	struct compose_comp_ctxt comp;
-> >  	struct tran_int_desc *int_desc;
-> >  	struct msi_desc *msi_desc;
-> > -	u8 vector, vector_count;
-> > +	/*
-> > +	 * vector_count should be u16: see hv_msi_desc, hv_msi_desc2
-> > +	 * and hv_msi_desc3. vector must be u32: see hv_msi_desc3.
-> > +	 */
-> > +	u16 vector_count;
-> > +	u32 vector;
-> >  	struct {
-> >  		struct pci_packet pci_pkt;
-> >  		union {
-> > @@ -1767,6 +1772,11 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
-> >  		vector_count = 1;
-> >  	}
-> >  
-> > +	/*
-> > +	 * hv_compose_msi_req_v1 and v2 are for x86 only, meaning 'vector'
-> > +	 * can't exceed u8. Cast 'vector' down to u8 for v1/v2 explicitly
-> > +	 * for better readability.
-> > +	 */
-> >  	memset(&ctxt, 0, sizeof(ctxt));
-> >  	init_completion(&comp.comp_pkt.host_event);
-> >  	ctxt.pci_pkt.completion_func = hv_pci_compose_compl;
-> > @@ -1777,7 +1787,7 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
-> >  		size = hv_compose_msi_req_v1(&ctxt.int_pkts.v1,
-> >  					dest,
-> >  					hpdev->desc.win_slot.slot,
-> > -					vector,
-> > +					(u8)vector,
-> >  					vector_count);
-> >  		break;
-> >  
-> > @@ -1786,7 +1796,7 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
-> >  		size = hv_compose_msi_req_v2(&ctxt.int_pkts.v2,
-> >  					dest,
-> >  					hpdev->desc.win_slot.slot,
-> > -					vector,
-> > +					(u8)vector,
-> >  					vector_count);
-> >  		break;
-> >  
-> > -- 
-> > 2.25.1
-> > 
+> > diff --git a/arch/x86/lib/insn-eval.c b/arch/x86/lib/insn-eval.c
+> > index 558a605929db..db6f93bad219 100644
+> > --- a/arch/x86/lib/insn-eval.c
+> > +++ b/arch/x86/lib/insn-eval.c
+> > @@ -1607,6 +1607,10 @@ enum insn_mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+> >   		return INSN_MMIO_DECODE_FAILED;
+> >   	switch (insn->opcode.bytes[0]) {
+> > +	case 0x63: /* MOVSXD r64, m32 */
+> > +		*bytes = 4;
+> > +		type = INSN_MMIO_READ_SIGN_EXTEND;
+> > +		break;
+> >   	case 0x88: /* MOV m8,r8 */
+> >   		*bytes = 1;
+> >   		fallthrough;
