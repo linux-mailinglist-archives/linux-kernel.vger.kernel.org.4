@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A106D0624
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D9B6D0629
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbjC3NNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S231209AbjC3NNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbjC3NNd (ORCPT
+        with ESMTP id S231932AbjC3NNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:13:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9268799;
-        Thu, 30 Mar 2023 06:13:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C3D0B828C7;
-        Thu, 30 Mar 2023 13:13:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C25C433EF;
-        Thu, 30 Mar 2023 13:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680182010;
-        bh=6E6jFHtYIw5DptuqTHixVsIl5fjkh15ei8BZIjlv0Ww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C25FigMiaDq2/vPdIbcy5qtNzfVgoWj+hoP0NgqvnGo76rjaAUr0FW7P5qZUwF5jC
-         /YglmykQv+A9MBk+k0ABIht8dzcVLiMcgvcVRATS7xA6oNRz5d4iBUAejG48IGZmw4
-         xi2yo0EtbDJKVwFjt2i7uByEHJsPfPUONiKUhZkwrRoouDahjeEMVG1wjAlYHeRFfw
-         /Z/otX0kosHcTQQHefS1a7002QrhZpbF2iOERTJ3+q9b4JKtVVVTKzUQ89tbxTZDDy
-         SO9lfkNgispDEyZt3Zy2R+7GenqUy7OKf7BWS2u6XVvSWhZS4iYCJDeiSLpDvlHZCi
-         YCntRrqKp47Jg==
-Date:   Thu, 30 Mar 2023 14:13:24 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3 06/18] dt-bindings: mfd: qcom,spmi-pmic: add
- compatible for pmm8654au
-Message-ID: <20230330131324.GQ434339@google.com>
-References: <20230327125316.210812-1-brgl@bgdev.pl>
- <20230327125316.210812-7-brgl@bgdev.pl>
+        Thu, 30 Mar 2023 09:13:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B74AC9760;
+        Thu, 30 Mar 2023 06:13:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CEA882F4;
+        Thu, 30 Mar 2023 06:14:22 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0FE33F663;
+        Thu, 30 Mar 2023 06:13:36 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 14:13:34 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Maulik Shah <quic_mkshah@quicinc.com>, andersson@kernel.org,
+        dianders@chromium.org, swboyd@chromium.org, wingers@google.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, jwerner@chromium.org,
+        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
+Subject: Re: [PATCH v2 1/2] cpuidle: psci: Move enabling OSI mode after power
+ domains creation
+Message-ID: <20230330131334.idb25zf4tdf3zqn3@bogus>
+References: <20230330084250.32600-1-quic_mkshah@quicinc.com>
+ <20230330084250.32600-2-quic_mkshah@quicinc.com>
+ <20230330093431.xn5wwiwqbne5owf7@bogus>
+ <CAPDyKFpUmkF=pOwXNrva1k2R+RFBB39-Y4kA0Fve+-3NGbtDag@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230327125316.210812-7-brgl@bgdev.pl>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAPDyKFpUmkF=pOwXNrva1k2R+RFBB39-Y4kA0Fve+-3NGbtDag@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023, Bartosz Golaszewski wrote:
-
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Thu, Mar 30, 2023 at 02:06:19PM +0200, Ulf Hansson wrote:
+> On Thu, 30 Mar 2023 at 11:34, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Thu, Mar 30, 2023 at 02:12:49PM +0530, Maulik Shah wrote:
+> > > A switch from OSI to PC mode is only possible if all CPUs other than the
+> > > calling one are OFF, either through a call to CPU_OFF or not yet booted.
+> > >
+> >
+> > As per the spec, all cores are in one of the following states:
+> >  - Running
+> >  - OFF, either through a call to CPU_OFF or not yet booted
+> >  - Suspended, through a call to CPU_DEFAULT_SUSPEND
+> >
+> > Better to provide full information.
+> >
+> > > Currently OSI mode is enabled before power domains are created. In cases
+> > > where CPUidle states are not using hierarchical CPU topology the bail out
+> > > path tries to switch back to PC mode which gets denied by firmware since
+> > > other CPUs are online at this point and creates inconsistent state as
+> > > firmware is in OSI mode and Linux in PC mode.
+> > >
+> >
+> > OK what is the issue if the other cores are online ? As long as they are
+> > running, it is allowed in the spec, so your statement is incorrect.
+> >
+> > Is CPUidle enabled before setting the OSI mode. I see only that can cause
+> > issue as we don't use CPU_DEFAULT_SUSPEND. If idle is not yet enabled, it
+> > shouldn't be a problem.
+> 
+> Sudeep, you may very well be correct here. Nevertheless, it looks like
+> the current public TF-A implementation doesn't work exactly like this,
+> as it reports an error in Maulik's case. We should fix it too, I
+> think.
+> 
+> Although, to me it doesn't really matter as I think $subject patch
+> makes sense anyway. It's always nice to simplify code when it's
+> possible.
 >
-> PMM8654au is the SPMI PMIC variant used on sa8775p-ride. Add a compatible
-> for it.
->
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Cc: Lee Jones <lee@kernel.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
 
-Change-log?
+Agreed, I don't have any objection to the change. The wording the message
+worried me and wanted to check if there are any other issues because of this.
+As such it doesn't look like there are but the commit message needs to be
+updated as it gives a different impression/understanding.
 
->  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-> index 975c30aad23c..0f7dd7ac9630 100644
-> --- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-> @@ -79,6 +79,7 @@ properties:
->            - qcom,pmk8350
->            - qcom,pmk8550
->            - qcom,pmm8155au
-> +          - qcom,pmm8654au
->            - qcom,pmp8074
->            - qcom,pmr735a
->            - qcom,pmr735b
-
-I believe this is already applied, right?
-
-Not sure why I have 3 copies of seemingly the same patch in my inbox.
-
---
-Lee Jones [李琼斯]
+-- 
+Regards,
+Sudeep
