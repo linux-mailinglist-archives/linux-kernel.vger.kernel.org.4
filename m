@@ -2,75 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42596D08F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0811A6D08F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbjC3O7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
+        id S232626AbjC3O75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbjC3O7N (ORCPT
+        with ESMTP id S232614AbjC3O7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:59:13 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29E6769B
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:58:55 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5463fa0c2bfso28717187b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680188335;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AwZvoXv5Ik7M4dgOpEILycWjntmKDPLmuGuHDa/y93Q=;
-        b=hvoIxo1To6KPMEfbaqMEIFHroev9LrGs0faSunEFSa9C3bGX4Gm4I0XTvfnPaymlpn
-         2V74UXpHrg7lhv4J9aju1XnmnOZZkzsngXuf/dtPSyZrvW6kmYWXALTL7NjI+nR+B5go
-         H5I2cTPaeAyNLi6ESs6rCrif4/G5m28Cg3QIZeQmpLZ2ElPkt82bJpQMudZQxOSsCVs0
-         GOrxhP3VT/AoqxQVXXpCjFpeqFtGM+Sv5d3wLkL8OT6+ALBxldv9fmOWAfZYAys4haGF
-         yqNcXk7jRQ4WZwz8tgu3mda7p6Ma72UgRunlIFv1rCeYccv9nrN4eAe5W+lg18o5rCer
-         FE9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680188335;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AwZvoXv5Ik7M4dgOpEILycWjntmKDPLmuGuHDa/y93Q=;
-        b=ExFIFwZbNMTh54cLIPyNcnHv6g925GSDKdtVnWR9lf7diozArDpSdi+vBrY/mwW4Q3
-         mpuAxcARnK2kf+RhQ6399qaz84N78FS7jitlV6Ad8qylt7kakEwvkDhhioRnYOVG8ROF
-         tCgrw8J0kf7HbJ8M8+uaJCa36JrhQCj9tsY1SVa71RQv6O5UiQwbnKLee10JtwCfo7Sk
-         6ZokIp4h5AxuOO5qBfFioYzIHWyP70788UW3TXinh0LU/HXmvHq6hakIolEplGx2nreZ
-         uN+OHB3u8pf70CsNqpe9AJWj16/nrC57XV+qCVW5W6UAKZpnRZSm9tQSf0/0gr7B2Bhc
-         67vg==
-X-Gm-Message-State: AAQBX9fN3G0SXVKAW1UaD3ptlT3YDBs+bjdDqXA6P4e4p8CVsDR+N7ti
-        I8ab+N/fRr90duz2cqBuyfxXTddA14vOn3sbnoo=
-X-Google-Smtp-Source: AKy350adbduzwsqT34Ik8vLNCGf8HbE1zRpj6ONG2dEXGngdSZlpdeXn7jJHF4TnUtnIJ2Y55oX+6C1TxGmHWu/L8bQ=
-X-Received: by 2002:a81:b647:0:b0:534:d71f:14e6 with SMTP id
- h7-20020a81b647000000b00534d71f14e6mr11168764ywk.9.1680188334657; Thu, 30 Mar
- 2023 07:58:54 -0700 (PDT)
+        Thu, 30 Mar 2023 10:59:51 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9610FC16D;
+        Thu, 30 Mar 2023 07:59:34 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32UExMmc005030;
+        Thu, 30 Mar 2023 09:59:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680188362;
+        bh=8DZkW36nrbs0H4pGSSHQDlmnjQ7hcArGjyRNSZ2ArI0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=DJURShdBb3VPgHDdHzvooZv7J6L1mjzLtc/nkV4akeS/sg06lVKK+K3UR968fWf8D
+         kJ7VwOwnStbpJc0DxY8ZrGPDFUMVyWEXE+89TFRaS+2NZhXoQeDdj9j9bMAGrQysb7
+         uA/oCBpKtZKlybRezd3d9x2GWqX/UEUT7Aq/oK7c=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32UExLqB049658
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 30 Mar 2023 09:59:21 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 30
+ Mar 2023 09:59:21 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 30 Mar 2023 09:59:21 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32UExLdO128517;
+        Thu, 30 Mar 2023 09:59:21 -0500
+Date:   Thu, 30 Mar 2023 09:59:21 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+CC:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next 0/2] arm64: dts: ti: Fixes for Beagleplay SD
+Message-ID: <20230330145921.5pnmcjgwl5wllhvq@await>
+References: <20230330105921.3639185-1-vigneshr@ti.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:4186:b0:32b:28c5:a477 with HTTP; Thu, 30 Mar 2023
- 07:58:54 -0700 (PDT)
-Reply-To: wormer.amos@aol.com
-From:   Wormer Amos <fatimamuhammad5689@gmail.com>
-Date:   Thu, 30 Mar 2023 14:58:54 +0000
-Message-ID: <CA+QAR6V622vRkg=bDMDDXFHDck+0NBcdoretOfZSTzhwP4zw7Q@mail.gmail.com>
-Subject: I WANT TO KNOW YOU,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230330105921.3639185-1-vigneshr@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just want to know if you're ready for investment project in your country. i
-need serious investment partnership with good background, kindly reply
-me to discuss details immediately. i will appreciate you to contact me
-on this email address Thanks and awaiting your quick response,
+On 16:29-20230330, Vignesh Raghavendra wrote:
+> Couple of fixups on top of ti-next branch:
+> 
+> The SD supply on Beagle is really coming from PMIC LDO1 even though its
+> controllable via GPIO, hence fix the DT accordingly, this also means
+> PMIC regulator drivers need to be built-in to allow SD card rootfs
+> 
+> Nishanth,
+> Better to squash into respetive commits if possible
+> 
+> Vignesh Raghavendra (2):
+>   arm64: configs: defconfig: Make TPS65219 regulator built-in
+>   arm64: dts: ti: k3-am625-beagleplay: Fixup SD card supply regulator
+> 
+>  arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts | 2 +-
+>  arch/arm64/configs/defconfig                   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> -- 
+> 2.40.0
+> 
+Thanks Vignesh, I will do the fixup.
 
-Yours
-Wormer,
+Chatting with Roger offline, also realized that the board circuitry will
+need the following change as it is using a 1/3 voltage divider on SoC's
+USB1 as well: I will add this fixup while at it.
+
+diff --git a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+index f75e79e54dfc..a4eb54722743 100644
+--- a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
++++ b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+@@ -484,6 +484,7 @@ &usb0 {
+ };
+ 
+ &usbss1 {
++	ti,vbus-divider;
+ 	status = "okay";
+ };
+ 
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
