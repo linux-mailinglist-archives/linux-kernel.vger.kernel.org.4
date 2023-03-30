@@ -2,130 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3F36CF817
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3731C6CF81A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjC3ANm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 20:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
+        id S229602AbjC3AOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 20:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjC3ANj (ORCPT
+        with ESMTP id S229756AbjC3AOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 20:13:39 -0400
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B78259D0;
-        Wed, 29 Mar 2023 17:13:30 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id bg13-20020a05600c3c8d00b003ef90adc168so2950019wmb.5;
-        Wed, 29 Mar 2023 17:13:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680135209; x=1682727209;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2MbJUhmfp2/sjO2bCujmzTffPzek7PDtiEwqtyllI5s=;
-        b=NgJh1Lh8+YqvKQ05GQYt4TL4YhRX6tSC4xyScv6DEuPFup30FLCCPTJ1YawMGuTged
-         z2WFf7yXn9swA6Y5Iog++XHj+Rdr3NylWPkWpxXDcKw9dJOYdnWhs4m9U4d/w/fbqjqB
-         px1lb03fK9MruDiZMqQzNvy+J6v05VD84Ei18+h4NpxHqoPxG3EClgbhyw+kkF8TiL7l
-         fkJ1c95lhOwfq8eHlD9I1bxoWEA5bLlBeC+VKsbDjxr0vOiGiiPKrFtbJ1SDuLu1zowV
-         u4k0Wx+nTQ5gEuZKctL5J4ZWHg/TiswUMGQt+JHkOmxej+SsQJ5ujuqHkag4MbG5YxmT
-         lOAw==
-X-Gm-Message-State: AO0yUKULpPzA2btmDD9Ys1jHSnsDoytmDEFdOlWLA8CO0cHnawQTC3mu
-        PXykoWW9M0jE9+CwIntuTl7zLSCmiWxr8BcaDVs=
-X-Google-Smtp-Source: AK7set+xUSucWKhr/d8qUx5lNEsNTPJQ/xRt2amK24OOt3jck3xt0Sn8BYbJfoO4e7g7n3olRvv7l+WhLCiaf/aBZxE=
-X-Received: by 2002:a1c:4b07:0:b0:3eb:29fe:f911 with SMTP id
- y7-20020a1c4b07000000b003eb29fef911mr16334958wma.13.1680135208723; Wed, 29
- Mar 2023 17:13:28 -0700 (PDT)
+        Wed, 29 Mar 2023 20:14:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0151C423A;
+        Wed, 29 Mar 2023 17:14:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B2D5B82100;
+        Thu, 30 Mar 2023 00:13:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C48C433EF;
+        Thu, 30 Mar 2023 00:13:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680135238;
+        bh=tYHCEIojzv25PjRE2jg0W657UEBIQswj9r2DHDHUvvg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=acUaVla6O3YM6bwhRd8HTvmbv28UHoAb9mSKQ9Bi0BoXQGSmtgYIwkhFn1EJi7Y05
+         DIWWb6XNuHgf71tPlz44+HOSuRSNj6sj181IkYwGoVw1gHYrDpbY4866b9e4oDMpkq
+         0EgOpQL4JkTm7jsYnCQzRNF6FaxAun1PBaKyhQlQleIU3bLBdSx1twGX5i/43f4TE2
+         3RRXNOdxvqe92WwgZ+KFDUofIFCtsdc5JDXENZM16RD/ii0EiMq46MbK5YPS07ZgPo
+         nMk/nTpjmif9rJEAThOhRp9scbLonR5SAE4w6l0DEOCGuT+9Da8XrIyfkJMjiyuW2Y
+         finpuO0rXUyoQ==
+Date:   Thu, 30 Mar 2023 03:13:55 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     dhowells@redhat.com, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] keys: Fix linking a duplicate key to a keyring's
+ assoc_array
+Message-ID: <20230330001355.dyazfwx4tyiyvux2@kernel.org>
+References: <20230323130412.32097-1-petr.pavlu@suse.com>
 MIME-Version: 1.0
-References: <20230328235543.1082207-1-irogers@google.com> <20230328235543.1082207-2-irogers@google.com>
- <ZCQ4nERbit/f6yhh@kernel.org> <ZCQ6kqhODsxSCXdP@kernel.org>
-In-Reply-To: <ZCQ6kqhODsxSCXdP@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 29 Mar 2023 17:13:17 -0700
-Message-ID: <CAM9d7cjSEx_=UTMpDHMwGb=5H6Yf8UdHTMt1xO=4CVToh60oSA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/6] perf annotate: Delete session for debug builds
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, James Clark <james.clark@arm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Andres Freund <andres@anarazel.de>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323130412.32097-1-petr.pavlu@suse.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 6:18 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Wed, Mar 29, 2023 at 10:09:48AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Tue, Mar 28, 2023 at 04:55:38PM -0700, Ian Rogers escreveu:
-> > > Use the debug build indicator as the guide to free the session. This
-> > > implements a behavior described in a comment, which is consequentially
-> > > removed.
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/perf/builtin-annotate.c | 16 ++++++----------
-> > >  1 file changed, 6 insertions(+), 10 deletions(-)
-> > >
-> > > diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-> > > index 4750fac7bf93..98d1b6379230 100644
-> > > --- a/tools/perf/builtin-annotate.c
-> > > +++ b/tools/perf/builtin-annotate.c
-> > > @@ -692,16 +692,12 @@ int cmd_annotate(int argc, const char **argv)
-> > >
-> > >  out_delete:
-> > >     /*
-> > > -    * Speed up the exit process, for large files this can
-> > > -    * take quite a while.
-> > > -    *
-> > > -    * XXX Enable this when using valgrind or if we ever
-> > > -    * librarize this command.
-> > > -    *
-> > > -    * Also experiment with obstacks to see how much speed
-> > > -    * up we'll get here.
-> > > -    *
-> > > -    * perf_session__delete(session);
-> > > +    * Speed up the exit process by only deleting for debug builds. For
-> > > +    * large files this can save time.
-> > >      */
-> > > +#ifndef NDEBUG
-> > > +   perf_session__delete(annotate.session);
-> > > +#endif
-> >
-> > So now, but default, we will call this, as we don't have this defined
-> > only if DEBUG=1 is set, right?
-> >
-> > ⬢[acme@toolbox perf-tools-next]$ find tools/perf/ -type f | xargs grep NDEBUG
-> > tools/perf/util/mutex.c:#ifndef NDEBUG
-> > ⬢[acme@toolbox perf-tools-next]$
->
-> We can discuss this later, applied the series with just that zfree()
-> change to annotation_options__exit().
+On Thu, Mar 23, 2023 at 02:04:12PM +0100, Petr Pavlu wrote:
+> When making a DNS query inside the kernel using dns_query(), the request
+> code can in rare cases end up creating a duplicate index key in the
+> assoc_array of the destination keyring. It is eventually found by
+> a BUG_ON() check in the assoc_array implementation and results in
+> a crash.
+> 
+> Example report:
+> [2158499.700025] kernel BUG at ../lib/assoc_array.c:652!
+> [2158499.700039] invalid opcode: 0000 [#1] SMP PTI
+> [2158499.700065] CPU: 3 PID: 31985 Comm: kworker/3:1 Kdump: loaded Not tainted 5.3.18-150300.59.90-default #1 SLE15-SP3
+> [2158499.700096] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
+> [2158499.700351] Workqueue: cifsiod cifs_resolve_server [cifs]
+> [2158499.700380] RIP: 0010:assoc_array_insert+0x85f/0xa40
+> [2158499.700401] Code: ff 74 2b 48 8b 3b 49 8b 45 18 4c 89 e6 48 83 e7 fe e8 95 ec 74 00 3b 45 88 7d db 85 c0 79 d4 0f 0b 0f 0b 0f 0b e8 41 f2 be ff <0f> 0b 0f 0b 81 7d 88 ff ff ff 7f 4c 89 eb 4c 8b ad 58 ff ff ff 0f
+> [2158499.700448] RSP: 0018:ffffc0bd6187faf0 EFLAGS: 00010282
+> [2158499.700470] RAX: ffff9f1ea7da2fe8 RBX: ffff9f1ea7da2fc1 RCX: 0000000000000005
+> [2158499.700492] RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000000
+> [2158499.700515] RBP: ffffc0bd6187fbb0 R08: ffff9f185faf1100 R09: 0000000000000000
+> [2158499.700538] R10: ffff9f1ea7da2cc0 R11: 000000005ed8cec8 R12: ffffc0bd6187fc28
+> [2158499.700561] R13: ffff9f15feb8d000 R14: ffff9f1ea7da2fc0 R15: ffff9f168dc0d740
+> [2158499.700585] FS:  0000000000000000(0000) GS:ffff9f185fac0000(0000) knlGS:0000000000000000
+> [2158499.700610] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [2158499.700630] CR2: 00007fdd94fca238 CR3: 0000000809d8c006 CR4: 00000000003706e0
+> [2158499.700702] Call Trace:
+> [2158499.700741]  ? key_alloc+0x447/0x4b0
+> [2158499.700768]  ? __key_link_begin+0x43/0xa0
+> [2158499.700790]  __key_link_begin+0x43/0xa0
+> [2158499.700814]  request_key_and_link+0x2c7/0x730
+> [2158499.700847]  ? dns_resolver_read+0x20/0x20 [dns_resolver]
+> [2158499.700873]  ? key_default_cmp+0x20/0x20
+> [2158499.700898]  request_key_tag+0x43/0xa0
+> [2158499.700926]  dns_query+0x114/0x2ca [dns_resolver]
+> [2158499.701127]  dns_resolve_server_name_to_ip+0x194/0x310 [cifs]
+> [2158499.701164]  ? scnprintf+0x49/0x90
+> [2158499.701190]  ? __switch_to_asm+0x40/0x70
+> [2158499.701211]  ? __switch_to_asm+0x34/0x70
+> [2158499.701405]  reconn_set_ipaddr_from_hostname+0x81/0x2a0 [cifs]
+> [2158499.701603]  cifs_resolve_server+0x4b/0xd0 [cifs]
+> [2158499.701632]  process_one_work+0x1f8/0x3e0
+> [2158499.701658]  worker_thread+0x2d/0x3f0
+> [2158499.701682]  ? process_one_work+0x3e0/0x3e0
+> [2158499.701703]  kthread+0x10d/0x130
+> [2158499.701723]  ? kthread_park+0xb0/0xb0
+> [2158499.701746]  ret_from_fork+0x1f/0x40
+> 
+> The situation occurs as follows:
+> * Some kernel facility invokes dns_query() to resolve a hostname, for
+>   example, "abcdef". The function registers its global DNS resolver
+>   cache as current->cred.thread_keyring and passes the query to
+>   request_key_net() -> request_key_tag() -> request_key_and_link().
+> * Function request_key_and_link() creates a keyring_search_context
+>   object. Its match_data.cmp method gets set via a call to
+>   type->match_preparse() (resolves to dns_resolver_match_preparse()) to
+>   dns_resolver_cmp().
+> * Function request_key_and_link() continues and invokes
+>   search_process_keyrings_rcu() which returns that a given key was not
+>   found. The control is then passed to request_key_and_link() ->
+>   construct_alloc_key().
+> * Concurrently to that, a second task similarly makes a DNS query for
+>   "abcdef." and its result gets inserted into the DNS resolver cache.
+> * Back on the first task, function construct_alloc_key() first runs
+>   __key_link_begin() to determine an assoc_array_edit operation to
+>   insert a new key. Index keys in the array are compared exactly as-is,
+>   using keyring_compare_object(). The operation finds that "abcdef" is
+>   not yet present in the destination keyring.
+> * Function construct_alloc_key() continues and checks if a given key is
+>   already present on some keyring by again calling
+>   search_process_keyrings_rcu(). This search is done using
+>   dns_resolver_cmp() and "abcdef" gets matched with now present key
+>   "abcdef.".
+> * The found key is linked on the destination keyring by calling
+>   __key_link() and using the previously calculated assoc_array_edit
+>   operation. This inserts the "abcdef." key in the array but creates
+>   a duplicity because the same index key is already present.
+> 
+> Fix the problem by postponing __key_link_begin() in
+> construct_alloc_key() until an actual key which should be linked into
+> the destination keyring is determined.
+> 
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
+>  security/keys/request_key.c | 35 ++++++++++++++++++++++++-----------
+>  1 file changed, 24 insertions(+), 11 deletions(-)
+> 
+> diff --git a/security/keys/request_key.c b/security/keys/request_key.c
+> index 2da4404276f0..04eb7e4cedad 100644
+> --- a/security/keys/request_key.c
+> +++ b/security/keys/request_key.c
+> @@ -398,17 +398,21 @@ static int construct_alloc_key(struct keyring_search_context *ctx,
+>  	set_bit(KEY_FLAG_USER_CONSTRUCT, &key->flags);
+>  
+>  	if (dest_keyring) {
+> -		ret = __key_link_lock(dest_keyring, &ctx->index_key);
+> +		ret = __key_link_lock(dest_keyring, &key->index_key);
+>  		if (ret < 0)
+>  			goto link_lock_failed;
+> -		ret = __key_link_begin(dest_keyring, &ctx->index_key, &edit);
+> -		if (ret < 0)
+> -			goto link_prealloc_failed;
+>  	}
+>  
+> -	/* attach the key to the destination keyring under lock, but we do need
+> +	/*
+> +	 * Attach the key to the destination keyring under lock, but we do need
+>  	 * to do another check just in case someone beat us to it whilst we
+> -	 * waited for locks */
+> +	 * waited for locks.
+> +	 *
+> +	 * The caller might specify a comparison function which looks for keys
+> +	 * that do not exactly match but are still equivalent from the caller's
+> +	 * perspective. The __key_link_begin() operation must be done only after
+> +	 * an actual key is determined.
+> +	 */
+>  	mutex_lock(&key_construction_mutex);
+>  
+>  	rcu_read_lock();
+> @@ -417,12 +421,16 @@ static int construct_alloc_key(struct keyring_search_context *ctx,
+>  	if (!IS_ERR(key_ref))
+>  		goto key_already_present;
+>  
+> -	if (dest_keyring)
+> +	if (dest_keyring) {
+> +		ret = __key_link_begin(dest_keyring, &key->index_key, &edit);
+> +		if (ret < 0)
+> +			goto link_alloc_failed;
+>  		__key_link(dest_keyring, key, &edit);
+> +	}
+>  
+>  	mutex_unlock(&key_construction_mutex);
+>  	if (dest_keyring)
+> -		__key_link_end(dest_keyring, &ctx->index_key, edit);
+> +		__key_link_end(dest_keyring, &key->index_key, edit);
+>  	mutex_unlock(&user->cons_lock);
+>  	*_key = key;
+>  	kleave(" = 0 [%d]", key_serial(key));
+> @@ -435,10 +443,13 @@ static int construct_alloc_key(struct keyring_search_context *ctx,
+>  	mutex_unlock(&key_construction_mutex);
+>  	key = key_ref_to_ptr(key_ref);
+>  	if (dest_keyring) {
+> +		ret = __key_link_begin(dest_keyring, &key->index_key, &edit);
+> +		if (ret < 0)
+> +			goto link_alloc_failed_unlocked;
+>  		ret = __key_link_check_live_key(dest_keyring, key);
+>  		if (ret == 0)
+>  			__key_link(dest_keyring, key, &edit);
+> -		__key_link_end(dest_keyring, &ctx->index_key, edit);
+> +		__key_link_end(dest_keyring, &key->index_key, edit);
+>  		if (ret < 0)
+>  			goto link_check_failed;
+>  	}
+> @@ -453,8 +464,10 @@ static int construct_alloc_key(struct keyring_search_context *ctx,
+>  	kleave(" = %d [linkcheck]", ret);
+>  	return ret;
+>  
+> -link_prealloc_failed:
+> -	__key_link_end(dest_keyring, &ctx->index_key, edit);
+> +link_alloc_failed:
+> +	mutex_unlock(&key_construction_mutex);
+> +link_alloc_failed_unlocked:
+> +	__key_link_end(dest_keyring, &key->index_key, edit);
+>  link_lock_failed:
+>  	mutex_unlock(&user->cons_lock);
+>  	key_put(key);
+> -- 
+> 2.35.3
+> 
 
-I don't think it's just an issue in the perf annotate.  Maybe we can
-do the same for perf report and so on.
+A good catch, thanks.
 
-Anyway we could define NDEBUG=1 for release builds from now on.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Thanks,
-Namhyung
+BR, Jarkko
