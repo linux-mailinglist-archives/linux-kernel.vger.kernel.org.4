@@ -2,111 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB5F6D0C58
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B6A6D0C5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbjC3RKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 13:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
+        id S231615AbjC3RLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbjC3RJ5 (ORCPT
+        with ESMTP id S232178AbjC3RLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:09:57 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3607AFF13;
-        Thu, 30 Mar 2023 10:09:27 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id h17so19804184wrt.8;
-        Thu, 30 Mar 2023 10:09:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680196162;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3TRHg+cTs43kfHGBM/5sDvwk2CMTBx+iHyHIRc3YKQQ=;
-        b=CpJm8U3E2ngq5rxs2vxcVii+NSUiivF5PvrdcT9zIODeeTR8/M1driEylYB4tXc+Ji
-         Q70bTtmldbgaiM6gPDCwwpP4JYUlZfvgOGXw/q3h2qmOruMVI77FkXK3uNKe7CJox0Ad
-         mhTTSDEwVzmE6+lIwyuIXO03g7jGnZBHmdNdtlZ4WsGaX7oVflyFZ+t+FIvmVlTPvt1T
-         0oCaLiyfvd3T+RPL/+MuOB0d4AX2qa2mVqZRGfAfnk9ooi64pwyxRcGoRGbQcvOowbCS
-         u4Uz9nq51cWuuF9isJefbrSLM/wqoM+7sVBMfzf29x0m+F0fVhTU8L7vHJxPpxxMaYNC
-         ew4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680196162;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3TRHg+cTs43kfHGBM/5sDvwk2CMTBx+iHyHIRc3YKQQ=;
-        b=Y2GHcC/48fnGUJezE5aiKXP3JQw7ok0r8QZB8EuUN3cIbHhdTPduVUkgsMmjUXGEML
-         +gBEqD++dw3vQYeF1Go+RwHJ7k5xz3Wb1tmkxvg5+71oIONZTTwSwPgbZSQh/vmAmP3+
-         Aelmjg2tWooceo3cgWK1V4r1xsYbS70IBJ17Dl485jC35eIzDsvoaUJS1nzEY3I+Zklc
-         CoJXSlk0y8LrQEecrpDAGcAk3F3ABo8oHaUrQzmu0oMRDNRaWFx4wUzh82AoUUayzTR+
-         rtc00VEoBcWtWsGijRKSaDrhLnR/osxvWRidB8TjOSXeMyDEZ9sLuZa2+MxgR4Frsz29
-         8x0w==
-X-Gm-Message-State: AAQBX9d5MrasdguZKPoOFK6QXBub0oSwv7NfYd+8+Upv874tQPJMh2NL
-        ywTeS07bvv8ahEy+1C7Sh4w=
-X-Google-Smtp-Source: AKy350brgt1+Yl/+qZ7NQ5as83uCi0jHokhPsY7zou3nvHJT9Eg+7r5f7fUfv8kl5fSyf5OCPkzRUA==
-X-Received: by 2002:adf:efc3:0:b0:2ce:a944:2c6a with SMTP id i3-20020adfefc3000000b002cea9442c6amr18546399wrp.70.1680196161696;
-        Thu, 30 Mar 2023 10:09:21 -0700 (PDT)
-Received: from [192.168.1.135] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id j6-20020a5d5646000000b002d2f0e23acbsm33229184wrw.12.2023.03.30.10.09.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 10:09:20 -0700 (PDT)
-Message-ID: <8a6d8107-436a-1b13-3799-59fa75c59635@gmail.com>
-Date:   Thu, 30 Mar 2023 19:09:19 +0200
+        Thu, 30 Mar 2023 13:11:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC7AEB63;
+        Thu, 30 Mar 2023 10:10:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6F8D6212C;
+        Thu, 30 Mar 2023 17:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49867C433EF;
+        Thu, 30 Mar 2023 17:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680196212;
+        bh=Ff05YU+OXdwBxx5FHkJBKPbVv/qmWBEzp2lfTR+HLwo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d7FDU4Sq0GIHZNVN99MPeicNFv/d31zDuq4G5810smpAgLUMmZqbPaVTxB24xFeoJ
+         IdY+5S+50BnN0Wzh1okRUFWMh/GbPmLGdBlFelETeSi5lcaOPYJXGI4VlO2VshKH2j
+         iu2fYntuUC3ddBrDdK2s9J7sdJN7xSsnCwIbUpDmSwPgAJs2lewKcTZ5zJPSqeKTLX
+         W4m/3euvqupWyoHljsVualAh22OupGaA886CviwtSp42+XBE2fWCG9Qe4D7FMyvrxo
+         nlQW/qks3dTFp/45nJLxRSb8QxacRiVeEQY0u6t1snX4rvWyqdDtrDJMhyRDYIDL7H
+         wzLrjdNocZ0TQ==
+Date:   Thu, 30 Mar 2023 18:10:05 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Julien Panis <jpanis@baylibre.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        corbet@lwn.net, arnd@arndb.de, gregkh@linuxfoundation.org,
+        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
+        yi.l.liu@intel.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, prabhakar.csengg@gmail.com,
+        contact@emersion.fr, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        sterzik@ti.com, u-kumar1@ti.com, eblanc@baylibre.com,
+        jneanne@baylibre.com
+Subject: Re: [PATCH v5 0/4] TI TPS6594 PMIC support (Core, ESM, PFSM)
+Message-ID: <20230330171005.GC548901@google.com>
+References: <20230330082006.11216-1-jpanis@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] dt-bindings: mt76: add active-low property for led
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230207133504.21826-1-linux@fw-web.de>
- <7aa132aa-d2fe-e2a1-a2a7-97321a74165c@linaro.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <7aa132aa-d2fe-e2a1-a2a7-97321a74165c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230330082006.11216-1-jpanis@baylibre.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Felix and Kalle,
+On Thu, 30 Mar 2023, Julien Panis wrote:
 
-On 07/02/2023 14:36, Krzysztof Kozlowski wrote:
-> On 07/02/2023 14:35, Frank Wunderlich wrote:
->> From: Frank Wunderlich <frank-w@public-files.de>
->>
->> LEDs can be in low-active mode, driver already supports it, but
->> documentation is missing. Add documentation for the dt property.
->>
->> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>\
-> 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+> TPS6594 is a Power Management IC which provides regulators and others
+> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+> PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
+> communicate through the I2C or SPI interfaces.
+> TPS6594 is the super-set device while TPS6593 and LP8764 are derivatives.
 
-Can you take that through your tree or are fine if I take it through mine?
+Note to future me: once the misc drivers are good to go, route through MFD.
 
-Regards,
-Matthias
+--
+Lee Jones [李琼斯]
