@@ -2,70 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA81C6D070F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E4C6D072C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbjC3NlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
+        id S232133AbjC3NoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbjC3NlP (ORCPT
+        with ESMTP id S232184AbjC3Nnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:41:15 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C46B9F;
-        Thu, 30 Mar 2023 06:41:13 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 30 Mar 2023 09:43:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFC8BDEA
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:42:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680183764;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dMBYYLyfgZhPJMlJlU0M/wdSvmkWIhoOy3DzMIOwJ1w=;
+        b=WDEQOvzA2jztTq3CQqM0UtNTjOUc+jgfouQyZDY6DEfSHCi9SLgtfkxVED2E89RtqsKXUp
+        HLb930vNHhhTg3k7eEuMgQfCYNZoAv+evKtj4+Qk1VG6XpkALi/lPtlplXxsMFgyDXOhKF
+        QeyYuXYA3pVSXh2zM8VAGrfKljqZNtM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-640-phDZn31VM7WEPRnFnizwEw-1; Thu, 30 Mar 2023 09:42:41 -0400
+X-MC-Unique: phDZn31VM7WEPRnFnizwEw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id A1C2F736;
-        Thu, 30 Mar 2023 13:41:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A1C2F736
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1680183672; bh=nO26Xu/p6Q24gR40+zVob63N6d/dg8KmFM/GexFfZLg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=C8qjl6M2pGRsRVORPqLI20zJKclZsCBVJ9EPZw86FmE9K9pHoFUWhaOIvB5f+CZ78
-         qxpVSyLRJu/kJGN0SZ63CgCRqHVszFE/6Gs4toa84oyIuroOpvz868mE1A6/g3TEu1
-         rERAzfe+N+dwGuplI0XV7YbLppAqaTN0n0MqDBgId6ApyqY3tUTXmHC0bAbCTWVadj
-         vFO/wj0LtF7Cg6R0n7uCGA4U69+1JVOHel9Jw+WNRNj6r/MuXmrPqpeqFO0mQGuRiI
-         f3VB/sC6Nxdvz/8YGnLOMnmv+JI0B6m7U/V9ghAVl6/3Lz6UhMVrKrUTa+FQgpihsi
-         KYzHttTImapeg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Shakeel Butt <shakeelb@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Feng Tang <feng.tang@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Joe Mario <jmario@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>, dave.hansen@intel.com,
-        ying.huang@intel.com, tim.c.chen@intel.com, andi.kleen@intel.com
-Subject: Re: [PATCH v2] Documentation: Add document for false sharing
-In-Reply-To: <CALvZod48Fwua_VJvnzHatF-J4YRWqfMFnYjYN6W0_ioLtPZEfA@mail.gmail.com>
-References: <20230329073322.323177-1-feng.tang@intel.com>
- <ZCUPxMQPJ8ETvUbM@debian.me>
- <CALvZod48Fwua_VJvnzHatF-J4YRWqfMFnYjYN6W0_ioLtPZEfA@mail.gmail.com>
-Date:   Thu, 30 Mar 2023 07:41:11 -0600
-Message-ID: <87h6u2gxvs.fsf@meer.lwn.net>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A67C58028B3;
+        Thu, 30 Mar 2023 13:42:40 +0000 (UTC)
+Received: from dba62.ml3.eng.bos.redhat.com (dba62.ml3.eng.bos.redhat.com [10.19.176.128])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 508EE18EC6;
+        Thu, 30 Mar 2023 13:42:40 +0000 (UTC)
+From:   David Arcari <darcari@redhat.com>
+To:     linux-pm@vger.kernel.org
+Cc:     David Arcari <darcari@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Chen Yu <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH] thermal: intel: powerclamp: Fix cpumask and max_idle module parameters
+Date:   Thu, 30 Mar 2023 09:42:18 -0400
+Message-Id: <20230330134218.1897786-1-darcari@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shakeel Butt <shakeelb@google.com> writes:
+When cpumask is specified as a module parameter the value is
+overwritten by the module init routine.  This can easily be fixed
+by checking to see if the mask has already been allocated in the
+init routine.
 
-> This is too much and unneeded nitpicking. The patch looks good as is.
+When max_idle is specified as a module parameter a panic will occur.
+The problem is that the idle_injection_cpu_mask is not allocated until
+the module init routine executes. This can easily be fixed by allocating
+the cpumask if it's not already allocated.
 
-Agreed.
+Fixes: ebf519710218 ("thermal: intel: powerclamp: Add two module parameters")
 
-Bagas, we've had this discussion before ... several times ...
+Signed-off-by: David Arcari <darcari@redhat.com>
 
-jon
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: David Arcari <darcari@redhat.com>
+Cc: Chen Yu <yu.c.chen@intel.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+
+---
+ drivers/thermal/intel/intel_powerclamp.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index c7ba5680cd48..91fc7e239497 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -235,6 +235,12 @@ static int max_idle_set(const char *arg, const struct kernel_param *kp)
+ 		goto skip_limit_set;
+ 	}
+ 
++	if (!cpumask_available(idle_injection_cpu_mask)) {
++		ret = allocate_copy_idle_injection_mask(cpu_present_mask);
++		if (ret)
++			goto skip_limit_set;
++	}
++
+ 	if (check_invalid(idle_injection_cpu_mask, new_max_idle)) {
+ 		ret = -EINVAL;
+ 		goto skip_limit_set;
+@@ -791,7 +797,8 @@ static int __init powerclamp_init(void)
+ 		return retval;
+ 
+ 	mutex_lock(&powerclamp_lock);
+-	retval = allocate_copy_idle_injection_mask(cpu_present_mask);
++	if (!cpumask_available(idle_injection_cpu_mask))
++		retval = allocate_copy_idle_injection_mask(cpu_present_mask);
+ 	mutex_unlock(&powerclamp_lock);
+ 
+ 	if (retval)
+-- 
+2.27.0
+
