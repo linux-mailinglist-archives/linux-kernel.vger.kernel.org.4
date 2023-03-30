@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA466D06CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B030A6D06CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbjC3Nd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S232017AbjC3Ndf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjC3NdZ (ORCPT
+        with ESMTP id S232003AbjC3Nda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:33:25 -0400
+        Thu, 30 Mar 2023 09:33:30 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5603FAD27;
-        Thu, 30 Mar 2023 06:33:21 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 8602432003AC;
-        Thu, 30 Mar 2023 09:33:20 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AB0A5FE;
+        Thu, 30 Mar 2023 06:33:24 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id A9B2D3200940;
+        Thu, 30 Mar 2023 09:33:23 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 30 Mar 2023 09:33:20 -0400
+  by compute3.internal (MEProxy); Thu, 30 Mar 2023 09:33:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
         :content-transfer-encoding:content-type:content-type:date:date
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1680183200; x=1680269600; bh=ZNmR3kieAqctdwlbiLltTH+s1ytqrjcQ2ad
-        U8yfZiJs=; b=V/S+FXPHaO8WyHojLbqH85/DnVNGqaU/58erWa5JKKm31BKzuUT
-        nAHoQIDTvw6KEQh+h6990nMu8OO6U1767Z7c1Kg4571nkgAyVsXj+XEjrRA94aFT
-        ak5UdbXmz3LVylnnpbvIMKkLN3Z0MoNnN7D1KcKqzazeQ8j/utCaS53bLmJEdz+x
-        /zccVVYiEuFi06bX7Wii/fMswJu7SIf42g4c/Np0zXg1AHbwDNtoGOemCFOFhn1g
-        MsneuNFFUplPFpuPyUtbngmakF0WnO+C80aU+ljGjv/IbJmjMzdRS/4IjuwfhAYp
-        UmKA4BhquzNwmmFz1ljCCknaY9PGDuB8HAw==
+        1680183203; x=1680269603; bh=8hK5O/2ZsARKmnZz4VEMmRHLiu7nMyGL3+T
+        uIN4XVgQ=; b=jkcd9H00JGWhv/pd59Iu685SIJlwV7PUYONt+BWzN5jVDU4qiGG
+        Ih66IhJZL/hEwJj+RhygbubQ9M6fdjOw7mHFZ+QHyZCe2iA36rNyojWNW0QpFjK6
+        3CPoo3Ldo7vo94k+sCMtFkamYI0DApM030PMe93IceLsAukRMMuPdkCGBBoq+GxW
+        WW9aPhkKbMEcM4oz+AdXGSIgkEBFxfw6md9XcdhKBewSTg3bGcq/02WppBWRVLaZ
+        uh80aM4PnkwVh9eZ2Jn93BKry2qN2Eo3R89mu8yE+BjJypMbhBj0m6vguBz522Zj
+        2U35ek8OmchECtvLojlKiei/tC0vbnLnxXg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:content-type:date:date:feedback-id:feedback-id
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680183200; x=1680269600; bh=ZNmR3kieAqctdwlbiLltTH+s1ytqrjcQ2ad
-        U8yfZiJs=; b=hjprN0AK6NYt1bSpGF9fUFgOGKNE7L1QxlsC8EdLbckAze36Lfg
-        MZY9Kahmt+7nms5e+rUeDWFKc+wg237nzPCSXBhchUQ/dyz2zqfJSVue+/ZClPH5
-        jR2G1LJBK7QsDpcbjPUMXGjFztzs/qO8vh5fXiD7vphbZqrTx0teb6v0DPuAtDSK
-        4qoLpKbvWm4vrVSNB2SR+rC/fxP7Hqhb0mYj8O+wefls+4Hw88UfjfOy0StnLH1B
-        XOeFpnqR63puIzGBhBW9GGp7RPwKAbmRQ1XC1TQ3S5zBo1SzzQym1dLjb7jYd396
-        vCPLE00q6PZqquCgpsY1Xxy3Fpckey2AfaA==
-X-ME-Sender: <xms:n48lZIHRK6320eLy9er_Tm0mRcDIGWiKt9cl-2xlHqexttVooXr89w>
-    <xme:n48lZBU2xGL_rZugJckv7g4zb9p8bx1kb-4P3deSG5PawYI6IsN652nGd6PCfHbQM
-    Yd0wiWvP1PD_WGpNQ>
-X-ME-Received: <xmr:n48lZCI93l7_zVhVF57WH8sRWJB_SSusRDgOjupiSFHlBEyLX0TEFTVjdXRIYfoRc5jOR7cu5R3qpNlMFC0wuOjNWg>
+        1680183203; x=1680269603; bh=8hK5O/2ZsARKmnZz4VEMmRHLiu7nMyGL3+T
+        uIN4XVgQ=; b=nRt5WBj6zh2NVesK4wfJXrHeustij60o4CQM1Z8ap0WbhxoBR9p
+        X6Qib0PAB/kghz9C6bLv7dBGddMr1FtFjVMT/QDUz/Y8Wq8EIecp5RxU9DItivBC
+        HF7rZS0PXRwcI4bB0G1sFzu7TEUFIise0eZ+3kmut5Ct/MN0I4CojB1xkWSOk7K3
+        Uvvf+/UqoJIP8XbfY53WF9YF2eME73ZY4oUj3Mw7dPDVuQje6VZixuhbJ/OT+P/G
+        ZTw2lj+/hvoe008mycs83U6XLMsH+BOHUYKeILgMjONkxkHxGi4H0IzDxTfFIwwy
+        XBPXTJWzrJUK/Sq9q0D2kVO9Z6Jok1dMQ/Q==
+X-ME-Sender: <xms:oo8lZEMS8RfF1Uxg6VwxMHZ6A2t44DZVOI_63KhsPdUpMQEfbA1WbA>
+    <xme:oo8lZK8Ux__8YCQdzm4GeJjFejfyAb28YERpJfs12nKqBkmCJaJB4G1z0tERokhuw
+    wpwI7FMkbLdb8ffZQ>
+X-ME-Received: <xmr:oo8lZLRgDY8TVy1O4Q8BHiW4aWv6lez7FNewHvdu0lAElA8gaZI4H-8HuTVDdBKHnCFdBuAfQpieja3rUXhozSETdQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehkedgieegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefkffggfgfhuffvvehfjggtgfesth
@@ -55,27 +55,27 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehkedgieegucetufdoteggod
     rdhioheqnecuggftrfgrthhtvghrnhephfehueeileevjeefkeetvdffveffudeuhffgte
     dvuefgiefgiedvjeegvdejleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
     pehmrghilhhfrhhomheprghlihgtvgesrhihhhhlrdhioh
-X-ME-Proxy: <xmx:oI8lZKH_xysUrJ1WwOPnIvEu-ilVIZSt2FaJ1nQf8vm45i5BNTaR1g>
-    <xmx:oI8lZOVBgtY6Kc0B4t3PdsZAEOUOzLgDb4TOXpUvIdBOSBiHqh_Ilg>
-    <xmx:oI8lZNNorDLALW0IiGUTlwFD0VJFj74oC49xy3vEP87RkfAMEpqJew>
-    <xmx:oI8lZLjGmwu3ztGz-Kmlav6jzOGeTsphzLsffMoxeK_Jb2DW1ANzrA>
+X-ME-Proxy: <xmx:o48lZMtQZ3ABcnNQPYB5XFStMvFossMCTkwFAVnhu3b7JoIsTtcJ0A>
+    <xmx:o48lZMeM-28uuPzF4lmak4UE9rhpFk1hgAT5aux8v6ddIw5WmumPZA>
+    <xmx:o48lZA1X8IgzUHr2vjmRqrz9Nbb7MHDoQsbFQG_p_ggEhgjHamo79w>
+    <xmx:o48lZNrLalpSzehHpXur1td9XLHGcnN0_H5rJWhx7XzC7Y66OLvQkg>
 Feedback-ID: i56684263:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Mar 2023 09:33:18 -0400 (EDT)
-Message-ID: <a51d2cd1-6f00-b4bf-99df-be2e906674a4@ryhl.io>
-Date:   Thu, 30 Mar 2023 15:33:31 +0200
+ 30 Mar 2023 09:33:22 -0400 (EDT)
+Message-ID: <8df770e5-5493-b43b-6245-a5701f50c64f@ryhl.io>
+Date:   Thu, 30 Mar 2023 15:33:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
 From:   Alice Ryhl <alice@ryhl.io>
-Subject: Re: [PATCH v3 01/13] rust: macros: add `quote!` macro
+Subject: Re: [PATCH v3 02/13] rust: sync: add `assume_init` to `UniqueArc`
 To:     y86-dev@protonmail.com
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev
 References: <20230329223239.138757-1-y86-dev@protonmail.com>
- <20230329223239.138757-2-y86-dev@protonmail.com>
+ <20230329223239.138757-3-y86-dev@protonmail.com>
 Content-Language: en-US
-In-Reply-To: <20230329223239.138757-2-y86-dev@protonmail.com>
+In-Reply-To: <20230329223239.138757-3-y86-dev@protonmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -89,14 +89,13 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 3/30/23 00:32, y86-dev@protonmail.com wrote:
-> From: Gary Guo <gary@garyguo.net>
+> From: Benno Lossin <y86-dev@protonmail.com>
 > 
-> Add the `quote!` macro for creating `TokenStream`s directly via the
-> given Rust tokens. It also supports repetitions using iterators.
+> Adds the `assume_init` function to `UniqueArc<MaybeUninit<T>>` that
+> unsafely assumes the value to be initialized and yields a value of type
+> `UniqueArc<T>`. This function is used when manually initializing the
+> pointee of an `UniqueArc`.
 > 
-> It will be used by the pin-init API proc-macros to generate code.
-> 
-> Signed-off-by: Gary Guo <gary@garyguo.net>
 > Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
 
 Reviewed-by: Alice Ryhl <aliceryhl@google.com>
