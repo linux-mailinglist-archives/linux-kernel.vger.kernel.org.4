@@ -2,174 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC326D026F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A426D0279
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbjC3LDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S230085AbjC3LFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbjC3LDn (ORCPT
+        with ESMTP id S229795AbjC3LFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:03:43 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179946A71;
-        Thu, 30 Mar 2023 04:03:38 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32UAs7PV015381;
-        Thu, 30 Mar 2023 11:03:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vul7olHZLizn9mFsl0sHisxIJ3GgAM9Zuxm0tboBoGo=;
- b=WNZ1qDQJZRPkz5ySK+JTGPRwNSupM46dkaoWfgRB1FJYrVZtbPS9eGz/8uQA+uRQfVgu
- 0SnUuTCoirpNqbn+SWWxXWbxEpn19N0Tv8YtWwCNunt1KP9Tmdsb9EWQluV3S2X3riog
- HNZgS64vyFRaRHGrs07Ba9MfUYJOhNQYp+nz4No7g/narfEk1UbEpgpYbqFkjz0gSZxz
- M6SLj8pytZuXZ0IEpLVmNw6nD5wKAfprQ4Dt+1IlPPgVx2wxPitbgPuAqHy6wpio5JgO
- DxZrVwEBoMuhOY74AWLfp6/py/A0vG0nGkKOIb872La+KFjJE5nkOT4rlUgzcP4IaxhP IQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pn51ygpg7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 11:03:02 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32UB31VK032743
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 11:03:01 GMT
-Received: from [10.216.26.177] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 30 Mar
- 2023 04:02:55 -0700
-Message-ID: <0e85caec-f6ec-fbd4-1815-8df9769bffcf@quicinc.com>
-Date:   Thu, 30 Mar 2023 16:32:51 +0530
+        Thu, 30 Mar 2023 07:05:37 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA55B8A5A;
+        Thu, 30 Mar 2023 04:05:35 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so19166899pjl.4;
+        Thu, 30 Mar 2023 04:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680174335;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aSsBdFgmLEOw2PjCqJA6tCxvXim9qR7c1xKpf7wm/I0=;
+        b=fGRKbjJl7EWwXKj8W17yfb2PBHkOS8UQKmMruulJjf3KF0yPrwvgBy0Esm1a4KSx3F
+         bCzRZQBuQmvzXb3v41xeazqlVKrBQyT7B/Uw5DksnxIHpdUJgEplHqKcqm8HGme3CGmj
+         kQ11ib1hHhNUuQlOhPOfDY/5ekovGK/11nlGs2R4HbptGotur2XOvmVqx536cuNFxS/3
+         DiTxMZUkcrjJbFbDSyE/G1JyKpAWeBVDU3y/eGiE0i0vq66TtDGrjwt/WyjKEOcss0m+
+         fayWCHmwx/msEgQh+HsBENa3sJUI0DDelM1J5iDDk4a5hC95O08j3ibBnRPSylF9pEvj
+         50hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680174335;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aSsBdFgmLEOw2PjCqJA6tCxvXim9qR7c1xKpf7wm/I0=;
+        b=sCAaoLSucZ0zsXXEpPg9tnmQeMktPo7fyfyxe0YlGH/QTYn32fR9uxP0+Dix59TFb9
+         ZwogznG1UDKkboYVIJOpEN0AInlPG6lo0tQjlqhHqIUSNRhwPWuSTUqbXJniXv6Vq2qw
+         S4wfwl5Sn915TJ6oxrxrlRWQ+2Vd33CNPBwd4PnMWGvJQMtCTTE34s+yrUsqdQFV5rY8
+         nUmw1Jp2tVb9i63g0BzINFZuXzokdf4M++35j1W3tXyzhPwOotSD03B3659fwM2Y9Lkh
+         QYOCgKle7sst01TZyoZeEWUi3Py+f+4hcd7uVNRHGXOkAG3a7p4PypNxYe62GkzYb4H5
+         vDFQ==
+X-Gm-Message-State: AO0yUKVuzrt59u8+w6Z6WW+6YZZQd6xaIGCy31TfU0rbqvjULkzq5+Db
+        1VbHdt4AOJIZaabG3TKcYAglezoC7sUnxA==
+X-Google-Smtp-Source: AK7set9iXsyf/GD4idtX+0+QUHhzsLAwQi6yJ4Opz5Ry5IDmgmweK8VHHo5nlCHzf57zJTks+ez0pQ==
+X-Received: by 2002:a05:6a20:6589:b0:d9:3440:9a26 with SMTP id p9-20020a056a20658900b000d934409a26mr20527873pzh.20.1680174334882;
+        Thu, 30 Mar 2023 04:05:34 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
+        by smtp.gmail.com with ESMTPSA id r1-20020a62e401000000b005e4c3e2022fsm24670922pfh.72.2023.03.30.04.05.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 04:05:34 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH v3 0/3] Move Loongson1 PWM timer to clocksource framework
+Date:   Thu, 30 Mar 2023 19:05:09 +0800
+Message-Id: <20230330110512.549704-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 02/18] media: venus: Introduce VPU version distinction
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Dikshita Agarwal <dikshita@codeaurora.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>
-CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Vikash Garodia" <vgarodia@codeaurora.org>
-References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
- <20230228-topic-venus-v1-2-58c2c88384e9@linaro.org>
- <cf2eee18-a6c9-2a9b-84fa-3e2351c413e8@quicinc.com>
- <f8833364-854e-3f04-db7a-82a29682b0c9@linaro.org>
-From:   Vikash Garodia <quic_vgarodia@quicinc.com>
-In-Reply-To: <f8833364-854e-3f04-db7a-82a29682b0c9@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: mX4hA1DBL7Tow3_Bk7jTu7ZtGJXwdTL7
-X-Proofpoint-GUID: mX4hA1DBL7Tow3_Bk7jTu7ZtGJXwdTL7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-30_06,2023-03-30_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- impostorscore=0 malwarescore=0 adultscore=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 clxscore=1011 priorityscore=1501 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303300090
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/2023 5:07 PM, Konrad Dybcio wrote:
->
-> On 2.03.2023 08:12, Dikshita Agarwal wrote:
->> On 2/28/2023 8:54 PM, Konrad Dybcio wrote:
->>> The Video Processing Unit hardware version is the differentiator,
->>> based on which we should decide which code paths to take in hw
->>> init. Up until now, we've relied on HFI versions, but that was
->>> just a happy accident between recent SoCs. Add a field in the
->>> res struct and add correlated definitions that will be used to
->>> account for the aforementioned differences.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>>    drivers/media/platform/qcom/venus/core.h | 15 +++++++++++++++
->>>    1 file changed, 15 insertions(+)
->>>
->>> diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
->>> index 32551c2602a9..4b785205c5b1 100644
->>> --- a/drivers/media/platform/qcom/venus/core.h
->>> +++ b/drivers/media/platform/qcom/venus/core.h
->>> @@ -48,6 +48,14 @@ struct bw_tbl {
->>>        u32 peak_10bit;
->>>    };
->>>    +enum vpu_version {
->>> +    VPU_VERSION_AR50, /* VPU4 */
->>> +    VPU_VERSION_AR50_LITE, /* VPU4.4 */
->>> +    VPU_VERSION_IRIS1, /* VPU5 */
+Move Loongson1 PWM timer to clocksource framework
+and update the Kconfig/Makefile options accordingly.
 
-There was Venus3X, followed by a different generation of video hardware. 
-Driver just extended the versions for next generation incrementally.
+Changelog
+V2 -> V3: Remove the reference to regs-pwm.h
+V1 -> V2: Delete the obsolete header file regs-pwm.h
 
-Existing versions in driver are not the VPU versions, so we can drop 
-them from comments.
+Keguang Zhang (3):
+  MIPS: Loongson32: Remove deprecated PWM timer clocksource
+  dt-bindings: timer: Add Loongson-1 clocksource
+  clocksource: loongson1: Move PWM timer to clocksource framework
 
->>> +    VPU_VERSION_IRIS2,
->>> +    VPU_VERSION_IRIS2_1,
->>> +};
->>> +
->>>    struct venus_resources {
->>>        u64 dma_mask;
->>>        const struct freq_tbl *freq_tbl;
->>> @@ -71,6 +79,7 @@ struct venus_resources {
->>>        const char * const resets[VIDC_RESETS_NUM_MAX];
->>>        unsigned int resets_num;
->>>        enum hfi_version hfi_version;
->>> +    enum vpu_version vpu_version;
->>>        u8 num_vpp_pipes;
->>>        u32 max_load;
->>>        unsigned int vmem_id;
->>> @@ -473,6 +482,12 @@ struct venus_inst {
->>>    #define IS_V4(core)    ((core)->res->hfi_version == HFI_VERSION_4XX)
->>>    #define IS_V6(core)    ((core)->res->hfi_version == HFI_VERSION_6XX)
->>>    +#define IS_AR50(core)        ((core)->res->vpu_version == VPU_VERSION_AR50)
->>> +#define IS_AR50_LITE(core)    ((core)->res->vpu_version == VPU_VERSION_AR50_LITE)
->>> +#define IS_IRIS1(core)        ((core)->res->vpu_version == VPU_VERSION_IRIS1)
->>> +#define IS_IRIS2(core)        ((core)->res->vpu_version == VPU_VERSION_IRIS2)
->>> +#define IS_IRIS2_1(core)    ((core)->res->vpu_version == VPU_VERSION_IRIS2_1)
->>> +
->>>    #define ctrl_to_inst(ctrl)    \
->>>        container_of((ctrl)->handler, struct venus_inst, ctrl_handler)
->>>    
->> Adding VPU version check seems a good idea to me. Can we remove HFI Version checks now?
-> If all implementations using VPU x.y *always* use the
-> same HFI generation for given x, y, we could.
+ .../timer/loongson,ls1x-pwmtimer.yaml         |  48 ++++
+ .../include/asm/mach-loongson32/loongson1.h   |   1 -
+ .../include/asm/mach-loongson32/regs-pwm.h    |  25 --
+ arch/mips/loongson32/Kconfig                  |  37 ---
+ arch/mips/loongson32/common/time.c            | 210 ----------------
+ drivers/clocksource/Kconfig                   |   9 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-loongson1-pwm.c     | 236 ++++++++++++++++++
+ 8 files changed, 294 insertions(+), 273 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-pwm.h
+ create mode 100644 drivers/clocksource/timer-loongson1-pwm.c
 
-HFIs generally does not change, so we can be sure that they would always 
-use the same HFI.
 
-We might add a new interface (HFI) for a feature requirement, but always 
-support the existing ones.
+base-commit: f7b5a248213f0976c7944925f3f3ab7ff199e581
+-- 
+2.34.1
 
->
-> That said, I think keeping it as-is would be convenient
-> from the maintainability standpoint if nothing else.. For
-> example functions that only appear in ancient msm-3.10
-> releases can be easily guarded with IS_V1 or what have you
-> without having to dig up all n VPU revisions.
->
-> Konrad
