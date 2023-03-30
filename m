@@ -2,93 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D196D0BE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949926D0BED
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjC3QxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 12:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
+        id S231311AbjC3QyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 12:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbjC3QxF (ORCPT
+        with ESMTP id S231444AbjC3Qxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 12:53:05 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230FCEB54
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:52:51 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id y144-20020a253296000000b00b69ce0e6f2dso19368386yby.18
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:52:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680195170;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mQYDmK2JgUqCpCRVA2d0KYhO6AxXou2BaS+5pOIMpjU=;
-        b=Qhwvho/jSCzD962UhSp8uw5ox5R2LCORWuT38KhF1g8kOlUAdKNLzt4oWIseQg7qy5
-         w7ssDt5UoFmaEOfi2vxsVKdWffZwOyk9SvIH1DtxV7SaetvZLdGPBi9lKWgf7qUPSVtH
-         ASeXYWr/h3EdvlTVN8GZhAr+KU6of6ZeHB90/1jZ1BKAUXAHr1F1ZCDoZ935l51aeNBu
-         N0E1aGMWwpTJOL0st3TggxhzN+bz+EYaXjh7GBoidWRNNGBfmlCvx4E8vijMA/M8+sdk
-         7fB1TBG+FcXSIh1nNwyzmJq53L1X/KhAKwwh8/ctLfsGGCD1QCGM2Iki1y+qZLDOPx3p
-         E0Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680195170;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mQYDmK2JgUqCpCRVA2d0KYhO6AxXou2BaS+5pOIMpjU=;
-        b=Er0pI0Eh4xZeI4pSqerVh2kWUBqXkzCBTTjBZDW9rWwT/zQLn77R8QFlrUVv0zJZbT
-         CS2ufPNNzyCW84kUzY+3f14AaySMtb5u+KrZNPvCzu6H8SBdldPRx71831tF0Xwp/frI
-         b6wU+/i2DzzO20pJPt2haj8C0tWWka57atBchK/hBvO2Kc9yaGZkg18LMV7RFoB3a3lZ
-         zqzvvRqpvVN63DGNuwX9C5YcIguqhCvm5KRrqnMaf1M9d2OrNBJqgXyVnMQZbg9VkEVJ
-         g9Uf/vK62n+FSJzZX8Ef6MxasCsQ3s0rPNtfEGyV7fM0ACd/bIJJBflGTEMuDdnjQ4pC
-         Rr2w==
-X-Gm-Message-State: AAQBX9fdOmuSsjXXKgAOV17JXlMUrRcsyOAIE2r86ngHEEFn86YhV4lt
-        k8+Xckvu6qTlyWVnDlElv8nBMm8QLcVrkg==
-X-Google-Smtp-Source: AKy350ZKQUPsiA6P7BhOGzirXB+KdSmGZo7ozykgr9T5Dtqy7WkMW7GodFAWWOkH7jqts/4Tipe33E5WWOFTow==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a05:6902:1004:b0:b75:968e:f282 with SMTP
- id w4-20020a056902100400b00b75968ef282mr15755101ybt.11.1680195170260; Thu, 30
- Mar 2023 09:52:50 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 16:52:48 +0000
-In-Reply-To: <20230330133822.66271-1-mathieu.desnoyers@efficios.com>
-Mime-Version: 1.0
-References: <20230330133822.66271-1-mathieu.desnoyers@efficios.com>
-Message-ID: <20230330165248.rv7bssd6ys6m33od@google.com>
-Subject: Re: [PATCH 1/1] mm: Fix memory leak on mm_init error handling
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thu, 30 Mar 2023 12:53:52 -0400
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050:0:465::202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71A7D316;
+        Thu, 30 Mar 2023 09:53:38 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4PnTyQ0XZJz9sTs;
+        Thu, 30 Mar 2023 18:53:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
+        s=MBO0001; t=1680195214;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yw5UeIZa0PRwQ4TADlzPWSNt+mqlggJWWHWgo8amwkY=;
+        b=VHvP4TAUn0G4VYLbirWKxAbIfZLSF+mEUYKqHQhDtDMa6RiXicVO8ZVKu17hrAUSHBLhIg
+        wRRcYWl9okooTbVr2Xe6zv7LHYcI6TBIDTdaoeZZeF3pHKgw4/rJ+8Ybh9s6BVIK9Z4lRi
+        SeKK3LKIbZTtTTJjPG1AY8Kwdbxv8hM4NH7gMfxdnjCcBzSPOqTZURxPswJ1TW2olDjozx
+        oAXJPXWwjAExyZXcdnNzqxlL48gtltMW8M5glMU5aPCgrYinzUS+YyafU7Z7KQhicDDUIy
+        bXeL9xDLuA6uZzKdsBVDpqJw83vYa0ct0onh0S/qfW2uTdS/UGTXeGkLELH8PA==
+From:   Dylan Van Assche <me@dylanvanassche.be>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-mm@kvack.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Dylan Van Assche <me@dylanvanassche.be>
+Subject: [PATCH v3 0/4] dts: qcom: arm64: sdm845: SLPI DSP enablement
+Date:   Thu, 30 Mar 2023 18:53:18 +0200
+Message-Id: <20230330165322.118279-1-me@dylanvanassche.be>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4PnTyQ0XZJz9sTs
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 09:38:22AM -0400, Mathieu Desnoyers wrote:
-> commit f1a7941243c1 ("mm: convert mm's rss stats into percpu_counter")
-> introduces a memory leak by missing a call to destroy_context() when a
-> percpu_counter fails to allocate.
-> 
-> Before introducing the per-cpu counter allocations, init_new_context()
-> was the last call that could fail in mm_init(), and thus there was no
-> need to ever invoke destroy_context() in the error paths. Adding the
-> following percpu counter allocations adds error paths after
-> init_new_context(), which means its associated destroy_context() needs
-> to be called when percpu counters fail to allocate.
-> 
+* About *
 
-Fixes: f1a7941243c1 ("mm: convert mm's rss stats into percpu_counter")
+The Qualcomm SDM845 SoC has a separate SLPI (Sensor Low Power Island)
+DSP for sensors connected to the SoC which is responsible for exposing
+sensors to userspace, power saving, and other features. 
+While sensors are connected to GPIOs of the SoC, they cannot be used
+because the hypervisor blocks direct access to the sensors, thus the 
+DSP must be used to access any sensor on this SoC. The SLPI DSP uses a
+GLink edge (dsps) to communicate with the host and has a FastRPC interface
+to load files from the host filesystem such as sensor configuration files.
+The FastRPC interface does not use regular FastRPC Compute Banks
+but instead uses an allocated CMA region through which communication happens.
 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Shakeel Butt <shakeelb@google.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> Cc: linux-mm@kvack.org
-> Cc: stable@vger.kernel.org # 6.2
+* Changes *
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+This patchseries completes support for the SLPI in the Qualcomm SDM845 SoC
+by adding the SLPI to the SDM845 DTS and enable it for 2 hardware devices:
+- Oneplus 6
+- SHIFTPHONES SHIFT6mq
+
+* Related patches *
+
+1. Remoteproc changes (v2) to support the SLPI DSP in SDM845:
+https://lore.kernel.org/linux-remoteproc/20230327183736.496170-1-me@dylanvanassche.be/
+2. FastRPC changes (v2) to support the SLPI DSP in SDM845:
+https://lore.kernel.org/linux-arm-msm/20230327184204.498032-1-me@dylanvanassche.be/
+
+This serie does not depend on any serie, but all of them are necessary
+to enable the feature in the end.
+
+* Changelog *
+
+Changes in v2:
+
+- Removed double blank lines
+- Enforce alphabetically order for 'slpi_pas'
+- Reordered 'slpi_pas' properties
+- Fixed FastRPC syntax
+- Dropped qcom,assign-all-mem property as this is not necessary anymore
+
+Changes in v3:
+
+- Dropped FastRPC dt-bindings change, unnecessary to relax the bindings
+- Add reg property to compute-cb for the SLPI on SDM845
+
+Kind regards,
+Dylan Van Assche
+
+Dylan Van Assche (4):
+  dts: arm64: qcom: sdm845: add SLPI remoteproc
+  dts: arm64: qcom: sdm845: add SLPI FastRPC support
+  dts: arm64: qcom: sdm845-oneplus: enable SLPI
+  dts: arm64: qcom: sdm845-shift-axolotl: enable SLPI
+
+ .../boot/dts/qcom/sdm845-oneplus-common.dtsi  |  5 ++
+ .../boot/dts/qcom/sdm845-shift-axolotl.dts    |  5 ++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          | 60 +++++++++++++++++++
+ 3 files changed, 70 insertions(+)
+
+-- 
+2.39.2
+
