@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914406D0DE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D12BE6D0DDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjC3SjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 14:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
+        id S231222AbjC3Sib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 14:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbjC3SjG (ORCPT
+        with ESMTP id S229661AbjC3Si3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 14:39:06 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8840ECDEE
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:38:52 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id s4-20020a170902ea0400b001a1f4137086so11643290plg.14
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:38:52 -0700 (PDT)
+        Thu, 30 Mar 2023 14:38:29 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98267BDF1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:38:28 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54196bfcd5fso193558517b3.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:38:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680201532;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Rc0WsSKhrfezZG14LM0dWooUum9c0MXHA4o6d0x9y1w=;
-        b=h0nf3bWtd92qScL1j9hY2/7NM2m8VITXWJ8OnlSeERxoyrf8IKNHQmqeo8SX+snYD1
-         DPJMb44DkDtvYiRLt2v2Cj7qwhc7gHtDsZ/7ZehzjHm6nniACa8+WI53rcESu/5tC3yn
-         0+JlKwhxebFRGqjDQvbNLt8Rn/uh6DRAWx9FX8WToSBiXDOsuG7u+CbZbxaehdKwBzNw
-         gmB33LiiFiVeK3tMewlqfkBP9y8amM3VVszEjlJEdE1tmgGwGhXaM5EfvGw57G17KeHu
-         4g9PYsi00nLM41A14C6NFMOfqh8w5CG7xzzbfVn7K8HosZUFC0T5nzJHQti3x0SUokKm
-         c3ZQ==
+        d=google.com; s=20210112; t=1680201508;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5GkwAWkFeGOoqs9hRwF96vtUzcfuETanmtHhAqfhjYY=;
+        b=tFwe1yaHBDRUAQZeC2CyOVnO1GFnmf/+FwndqdvRzobvAL2/m1XwhS37YkNmRK/CiF
+         XEk2LQpML633tC9qr9hkLZBnDe4W6Az0r772FRUXkiH+OapgCsWD2snqlNOarsBKRyU3
+         ffpS0HAH7nEKpXNj1iv4jhCC2LJIioUmj2yna7Ji4tIFmj96gHEvCoOD5ASvdUS8eQ5U
+         KuRCtF1dbEivxLJUOL+oEKkez5lEVQUTe72P5Xx3SBPwYGj21AffgYXkMZQDGtAb7vLF
+         wcM3oUgMiWZhsuLsEVyLEH2QiRLm8cO3RTSfqkcKI9gg9e1+6Q+BN0vAcJTIu1xT7akZ
+         Vn3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680201532;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rc0WsSKhrfezZG14LM0dWooUum9c0MXHA4o6d0x9y1w=;
-        b=4M/33IGiVC5iddU3pV+/hlJ7nyYpjowhaWejZsSVX3upPpVmJas7yABUVirbHg3xkG
-         ysYCFQeIoVIFSFSZTN38Rj9iViWc7I/nn8y9er/wirp6/Yx0sSXfNTNnKdYmSSxy4MZL
-         9YrNGS+9WEo+ZnXMXzx9fH2SK9+Tgj58N9z1vExH45mmBqcfjo592YuoqzOg8H2GvXKq
-         vI0L9HWSwBwmW7rV+IFoerAGlT68CNPRv93e2WJhzc5efIQnOsX4ETIBsmjjq6Yk+50V
-         APmlRpm+jvzuN0Mzl6SfH+AVDCvuyajUSSR3pTIKQhickRNMG4vkyrQnSoRK6UKnd9ZH
-         eSBQ==
-X-Gm-Message-State: AAQBX9drnm9tHExlRUC68sLxHiRthNhBRngKmMGPYvZHEuHIPps982Wb
-        RHC0c3w7qqoQh3n2flrUzWKKrVJNTs2K
-X-Google-Smtp-Source: AKy350ZDXa8GoDGRrg5g0i86ixFwbwBcMF9K8wp39rBOS2QnXaKFmX4Ua0dg8GzUqhFJTCSDb3Oa+oxeOrUz
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:11ea:eb75:e48c:2c04])
- (user=irogers job=sendgmr) by 2002:a17:90a:600c:b0:240:9d66:cd54 with SMTP id
- y12-20020a17090a600c00b002409d66cd54mr3550317pji.8.1680201532035; Thu, 30 Mar
- 2023 11:38:52 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680201508;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5GkwAWkFeGOoqs9hRwF96vtUzcfuETanmtHhAqfhjYY=;
+        b=sCo08UoyGwm7WT1QhhNovQIpc5fZ7HshIq6bJFnzOwWYpIwNIYE7eG0dKV9iYZDAw0
+         CkROgG0o8Rp1jntQZfEyODVeS4Pnvwly3LeVqIvJKfPcrYJF52RcXaGG4xdpr1ju+2gZ
+         KPGUM1SK8u7OJ/3FsLl5EO8o9e6sHzDTDz0RMqt6ThbfE6B63iPfkex6LFPUf+4uAy9H
+         vLJR/TZA3pUhaxd7U8eA90p/YuzmB7llf/J9YUUaFCMZZewRSr1+/Ox1E0n/OhhsEBaL
+         GO2MAnpIHd7KRAyRDnnJ7nIHaHQOQIvM0MCIF6rIKJKIkeMV3ZnCvpSoiKc0l/0sG6zd
+         0GJw==
+X-Gm-Message-State: AAQBX9c5aGMNeTfvXfveahdTjfWdvo/YH08w6L7pKKUUFAUCXYRk2Dfe
+        +W6u2juSmGKY9LD9Pix5mpzAyBk=
+X-Google-Smtp-Source: AKy350YtshKMp46RHnx3xTtU6bgWkHllXfaEC32Tne8v1zqOX5qgfnkZuLdugYZ2+srYbQSUQtgl+mA=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a05:6902:1586:b0:b76:ae61:b68c with SMTP id
+ k6-20020a056902158600b00b76ae61b68cmr12753744ybu.10.1680201507899; Thu, 30
+ Mar 2023 11:38:27 -0700 (PDT)
 Date:   Thu, 30 Mar 2023 11:38:26 -0700
-In-Reply-To: <20230330183827.1412303-1-irogers@google.com>
-Message-Id: <20230330183827.1412303-2-irogers@google.com>
+In-Reply-To: <168019602958.3557870.9960387532660882277.stgit@firesoul>
 Mime-Version: 1.0
-References: <20230330183827.1412303-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v1 2/3] perf block-range: Move debug code behind ifndef NDEBUG
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+References: <168019602958.3557870.9960387532660882277.stgit@firesoul>
+Message-ID: <ZCXXIvvnTBch/0Oz@google.com>
+Subject: Re: [PATCH bpf RFC-V3 0/5] XDP-hints: API change for RX-hash kfunc bpf_xdp_metadata_rx_hash
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
@@ -77,30 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make good on a comment and avoid a unused-but-set-variable warning.
+On 03/30, Jesper Dangaard Brouer wrote:
+> Notice targeted 6.3-rc kernel via bpf git tree.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/block-range.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+> Current API for bpf_xdp_metadata_rx_hash() returns the raw RSS hash value,
+> but doesn't provide information on the RSS hash type (part of 6.3-rc).
 
-diff --git a/tools/perf/util/block-range.c b/tools/perf/util/block-range.c
-index 1be432657501..680e92774d0c 100644
---- a/tools/perf/util/block-range.c
-+++ b/tools/perf/util/block-range.c
-@@ -11,11 +11,7 @@ struct {
- 
- static void block_range__debug(void)
- {
--	/*
--	 * XXX still paranoid for now; see if we can make this depend on
--	 * DEBUG=1 builds.
--	 */
--#if 1
-+#ifndef NDEBUG
- 	struct rb_node *rb;
- 	u64 old = 0; /* NULL isn't executable */
- 
--- 
-2.40.0.348.gf938b09366-goog
+> This patchset proposal is to change the function call signature via adding
+> a pointer value argument for provide the RSS hash type.
+
+> Alternatively we disable bpf_xdp_metadata_rx_hash() in 6.3-rc, and have
+> more time to nitpick the RSS hash-type bits.
+
+LGTM with one nit about EMIT_BTF.
+
+> ---
+
+> Jesper Dangaard Brouer (5):
+>        xdp: rss hash types representation
+>        mlx5: bpf_xdp_metadata_rx_hash add xdp rss hash type
+>        veth: bpf_xdp_metadata_rx_hash add xdp rss hash type
+>        mlx4: bpf_xdp_metadata_rx_hash add xdp rss hash type
+>        selftests/bpf: Adjust bpf_xdp_metadata_rx_hash for new arg
+
+
+>   drivers/net/ethernet/mellanox/mlx4/en_rx.c    | 22 ++++++-
+>   drivers/net/ethernet/mellanox/mlx4/mlx4_en.h  |  3 +-
+>   .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 63 ++++++++++++++++++-
+>   drivers/net/veth.c                            | 11 +++-
+>   include/linux/mlx5/device.h                   | 14 ++++-
+>   include/linux/netdevice.h                     |  3 +-
+>   include/net/xdp.h                             | 49 +++++++++++++++
+>   net/core/xdp.c                                | 10 ++-
+>   .../selftests/bpf/prog_tests/xdp_metadata.c   |  2 +
+>   .../selftests/bpf/progs/xdp_hw_metadata.c     | 14 +++--
+>   .../selftests/bpf/progs/xdp_metadata.c        |  6 +-
+>   .../selftests/bpf/progs/xdp_metadata2.c       |  7 ++-
+>   tools/testing/selftests/bpf/xdp_hw_metadata.c |  2 +-
+>   tools/testing/selftests/bpf/xdp_metadata.h    |  1 +
+>   14 files changed, 183 insertions(+), 24 deletions(-)
+
+> --
 
