@@ -2,101 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D0B6D1017
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACA26D101A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjC3Ugz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        id S229837AbjC3UjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjC3Ugx (ORCPT
+        with ESMTP id S229823AbjC3UjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:36:53 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF5FC14A
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:36:50 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-545d3b026a8so149693577b3.7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680208610;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mOc7QRI6vr/NyUwVE8LrJGTxRHHh12pQ+l4hg/ojUak=;
-        b=CuDmFhCvr0zPB3egM6QVXPV+kb1rCQk4waPaW8HcA/YcVDkIBmaxoUoM/azrL5uBCB
-         +NIu/AaJ8ehmg2VLpGBRo1JNzcRsY/gmYMRVn5aJIHtobAkDfBl7KHWG7y614WQExjAL
-         VSUY2I+esDiUzHQh+NaNjkqfQG9nMcrhhvmuLyO7sxJ7RDTbUAR0TzYsHi9LsZswmjYo
-         wG+LjNbiXyHZdv+P1RQfUIoZfYK55CXwLSr3YPa+GuDmO0uxay1jpoV4lXQDz23A7DLB
-         JkHOocAAZnIRKGG/SOAduJk9CVwC/etLAicmQ/4e4BxRxt9Yo1Lnbf/2J1AomClN90Kb
-         9RLg==
+        Thu, 30 Mar 2023 16:39:22 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D10CDBEC
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:39:21 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id l7-20020a0566022dc700b0074cc9aba965so12168628iow.11
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:39:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680208610;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mOc7QRI6vr/NyUwVE8LrJGTxRHHh12pQ+l4hg/ojUak=;
-        b=UkL0oy79mJI+3yDz7/dEg9Z8AIDMR22/eO+SI7RCpZ2+54eYxTaR4Ch6TpOq0LWu7j
-         HTqu04P/nULk/bfRDdyXSh7DNIu63jy//dV0c/ML6jpjZa29bo2Z+5ImskaWXBjkjoxK
-         EvtktbEDC4vMdNKwQWu6RmdpeceXFrQNgHeoPGfCAn/4cGKt6khg2mFDAQzg+zlT2HQi
-         8ctGmEbSTMiBOSETMrnF40jRISuk80/q4uTUjy0bkm6reDzcV4cNJIMmcX2eWBo8OKUW
-         qirbyDEIkmh+xRfJ13KUo1ctv4tH/lTd2kCXXRxH+dI2MxBFVp5ijl0D9kn4WrT94iQ8
-         vtfA==
-X-Gm-Message-State: AAQBX9cHuPLZ94tGfhaZ6VnybZdjJ2JfnJ202wciqT1Kazl3PC8vwJPB
-        KcILmknCq3GXGcZGCe+isC9/Qd9/dNE=
-X-Google-Smtp-Source: AKy350ZC4xNLPfjro8E/mq7a/h4oXBOsuypI9FopH8pKq1uWXOABjSIGdkBerKGHAzyMScx9hS+mUmp93Gw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:7403:0:b0:b7e:6118:348 with SMTP id
- p3-20020a257403000000b00b7e61180348mr4415064ybc.0.1680208609862; Thu, 30 Mar
- 2023 13:36:49 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 13:36:48 -0700
-In-Reply-To: <4c5f4f61-a8d1-a707-8100-e095d3b18398@grsecurity.net>
-Mime-Version: 1.0
-References: <20230322013731.102955-1-minipli@grsecurity.net>
- <20230322013731.102955-7-minipli@grsecurity.net> <677169b4-051f-fcae-756b-9a3e1bb9f8fe@grsecurity.net>
- <ZCXDAiUOnsL3fRBj@google.com> <ea3a8fbc-2bf8-7442-e498-3e5818384c83@grsecurity.net>
- <4c5f4f61-a8d1-a707-8100-e095d3b18398@grsecurity.net>
-Message-ID: <ZCXy4C+eauDBgk37@google.com>
-Subject: Re: [PATCH v4 6/6] KVM: VMX: Make CR0.WP a guest owned bit
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mathias Krause <minipli@grsecurity.net>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1680208760; x=1682800760;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sFbffXJR0JL9PDHMNwY5NVqIQ/uvZ93Gi0qNlmzxWos=;
+        b=bjnUU2TalKJ4CJVGIhettLOhPTeJskJ5xIFrO5/tggqeDSfP1yrpFk0wsB1Z1vdJRy
+         j/V0noeMDSp8BB1eObY+NLsNPPCrThPSFcfe24qse0yblJBeMSwmk3FBC7MLqmRZ77QE
+         cjSAWxthyCM6K0oE8NDPJO7qGIs93H6/GzjjDddgFK9e+NW6Pn6TM9rEoFxU36Ntzb+h
+         ozXFrkBsOBwKUqeqSwIeuQq6Utlv462NSTHRSevZH0mryn6shPn7TSmWQik5jxuaK7/N
+         j2us7NGbaVsssSQNDs1uLRf/A/1u2OlZ4X9ZgGUa/hl73njqhQMdXk4JebNZePW7n2Wy
+         BH+Q==
+X-Gm-Message-State: AO0yUKWQvup4KMRwI5+657Bi6cF2ZgazxskmFdZ6l7PRIGGWv+fyC24/
+        DTP8tePT5yEbKHFKfBrxNh5yLe/Mux1JDWrlvAj17nAlV3fh
+X-Google-Smtp-Source: AK7set+0oavY+0jKy0ek5WpcstbGWarENmcFKtA+8z1+E0AQn/vJmAFoPbgf7h8KMvihhKAX1KqGlfyWGrrCnL+4C0k9lCPKQeHW
+MIME-Version: 1.0
+X-Received: by 2002:a5d:93c8:0:b0:753:34e:2ee7 with SMTP id
+ j8-20020a5d93c8000000b00753034e2ee7mr9264465ioo.0.1680208760480; Thu, 30 Mar
+ 2023 13:39:20 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 13:39:20 -0700
+In-Reply-To: <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000051298605f82416f5@google.com>
+Subject: Re: [syzbot] [usb?] WARNING in shark_write_reg/usb_submit_urb
+From:   syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>
+To:     hdegoede@redhat.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023, Mathias Krause wrote:
-> On 30.03.23 22:15, Mathias Krause wrote:
-> > [...]
-> > Maybe it's not a stale CR0 value but the page table walker not taking
-> > the guest's CR0.WP into account? Maybe a missing role update?
-> 
-> Indeed, it is. This does the trick for me:
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 31be188aa842..6a9e90725c84 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -8372,6 +8372,9 @@ static void init_emulate_ctxt(struct kvm_vcpu *vcpu)
-> 
->         init_decode_cache(ctxt);
->         vcpu->arch.emulate_regs_need_sync_from_vcpu = false;
-> +       /* Ensure we're doing page table walks with an up2date MMU role */
-> +       if ((vcpu->arch.cr0 ^ kvm_read_cr0(vcpu)) == X86_CR0_WP)
-> +               kvm_init_mmu(vcpu);
->  }
-> 
->  void kvm_inject_realmode_interrupt(struct kvm_vcpu *vcpu, int irq, int inc_eip)
-> 
-> Very heavy weight and misplaced, but a start :)
-> 
-> It should (1) be limited to VMX as that's the only one that would make
-> CR0.WP a guest owned bit and (2) limited to emulated instructions that
-> actually do write operations, as read are harmless, obviously.
+Hello,
 
-For the record, I wrote my email before I saw this ;-)
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+
+Reported-and-tested-by: syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         c9c3395d Linux 6.2
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
+console output: https://syzkaller.appspot.com/x/log.txt?x=16d9f695c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fea01b13d861cd1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=4b3f8190f6e13b3efd74
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1134ea95c80000
+
+Note: testing is done by a robot and is best-effort only.
