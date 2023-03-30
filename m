@@ -2,115 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6836D0AFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340C06D0B01
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjC3Q0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 12:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S231543AbjC3Q04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 12:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjC3Q0F (ORCPT
+        with ESMTP id S230119AbjC3Q0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 12:26:05 -0400
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E09BC168
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:26:00 -0700 (PDT)
-Received: by mail-il1-f207.google.com with SMTP id d6-20020a92d786000000b00316f1737173so12885759iln.16
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:26:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680193559; x=1682785559;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T+dBOx95iSr24ri7d8wMa5srG3WWZaF8JUbwdum/RBY=;
-        b=5nteyluNGsVQ1+UQIJWbHxXb1fpSt3vhrZaxfjVOjY2i4tUcfaJJE97GLhmNBXErJZ
-         y/m3F0n4w4Qa+UwypCbqyynIjyFAQqeacphid8Guty8Bs3qdQBMdfueyWpqr6Mk+eVFw
-         b0e5JdvCqlPEmx/rCJSCn2KcJ9+1czDe3O7WMCPxDEasCjd/RylQtCbUA/XBZlVNQJKr
-         8KgJpS5VVFsHuiQ49XzEaHPQ54aDqXmorKSqvmotANH9orp0BE5dPUvTlLBZXv7I3ont
-         fvQ8W7zpX6h5gi1XKvHK4Y6FDN15dERVuUvu9k6AgUPwMIr7SRA+XYAWxbF5E9dnPzTy
-         EuzA==
-X-Gm-Message-State: AAQBX9czDO/B3BOPmq/SSxZF+Hch1HPxNYDNi98wkN6VH9/bGQQnKbBg
-        FcSBKB0yMh4D0YX1pgXAxU+GzyXZfuTifXOLd1oPomvE5Y4y
-X-Google-Smtp-Source: AKy350YpSMoQTsHL/4Yzsb0ybOReAZtTdnsOsaipsea6BE0mZJGFTyAVUssFbne9V7tMSA1ohsrw3Kxew1ed5hF5z9XH7KpHqWrM
+        Thu, 30 Mar 2023 12:26:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA1EC159;
+        Thu, 30 Mar 2023 09:26:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 496AA620FB;
+        Thu, 30 Mar 2023 16:26:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15D38C433D2;
+        Thu, 30 Mar 2023 16:26:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680193613;
+        bh=OTht3a35wO9ZxOdDuztv9uVBcSe4Zhlcnodcxs7W1WM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XvgMvf6FdRDzWddB6VRohM5pC+Uj0wFELzD+Z6dy0Qt/Rh2tw0Pt+KGa2GnPr4owc
+         LDj3IFQMi0BqJQqT19paE2ytsuYa+Vj5MUZpmiFEe6kx7e6/o/tsWdAyewr+nGSvk5
+         x6ohs7C7r66BUVk82fDEL7274i+Qupy0Qt6Glyo1xbatObsoOA3UX0XFXbu/8DThY0
+         1o3mxJgKDeF5P6SpeGxjVCujWhUjY2zzrLOoi4PKrwQA8O6c+Ud2zPhH6eAD6obHI0
+         xRmjUFxQplfm+NzytrBeZ3C8F77a6ajgoLM5ynqwmeXLdoUEG0yJDpyhzuVke97g/I
+         GICTG0rfsh2Pw==
+Date:   Thu, 30 Mar 2023 09:26:51 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+Cc:     Max Georgiev <glipus@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Michael Walle <michael@walle.cc>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Minghao Chi <chi.minghao@zte.com.cn>,
+        Jie Wang <wangjie125@huawei.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Marco Bonelli <marco@mebeim.net>
+Subject: Re: [PATCH v3 3/5] net: Let the active time stamping layer be
+ selectable.
+Message-ID: <20230330092651.4acb7b64@kernel.org>
+In-Reply-To: <20230330143824.43eb0c56@kmaincent-XPS-13-7390>
+References: <20230308135936.761794-4-kory.maincent@bootlin.com>
+        <20230308230321.liw3v255okrhxg6s@skbuf>
+        <20230310114852.3cef643d@kmaincent-XPS-13-7390>
+        <20230310113533.l7flaoli7y3bmlnr@skbuf>
+        <b4ebfd3770ffa5ad1233d2b5e79499ee@walle.cc>
+        <20230310131529.6bahmi4obryy5dsx@soft-dev3-1>
+        <20230310164451.ls7bbs6pdzs4m6pw@skbuf>
+        <20230313084059.GA11063@pengutronix.de>
+        <20230316160920.53737d1c@kmaincent-XPS-13-7390>
+        <20230317152150.qahrr6w5x4o3eysz@skbuf>
+        <20230317120744.5b7f1666@kernel.org>
+        <CAP5jrPHep12hRbbcb5gXrZB5w_uzmVpEp4EhpfqW=9zC+zcu9A@mail.gmail.com>
+        <20230330143824.43eb0c56@kmaincent-XPS-13-7390>
 MIME-Version: 1.0
-X-Received: by 2002:a02:3343:0:b0:40b:466:4367 with SMTP id
- k3-20020a023343000000b0040b04664367mr1375618jak.3.1680193559698; Thu, 30 Mar
- 2023 09:25:59 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 09:25:59 -0700
-In-Reply-To: <000000000000030b7e05f7b9ac32@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000047a22405f8208cf9@google.com>
-Subject: Re: [syzbot] [ntfs3?] WARNING in attr_data_get_block (2)
-From:   syzbot <syzbot+a98f21ebda0a437b04d7@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Thu, 30 Mar 2023 14:38:24 +0200 K=C3=B6ry Maincent wrote:
+> > I started working on a patch introducing NDO functions for hw
+> > timestamping, but unfortunately put it on hold.
+> > Let me finish it and send it out for review. =20
+>=20
+> What is your timeline for it? Do you think of sending it in the followings
+> weeks, months, years? If you don't have much time ask for help, I am not =
+really
+> a PTP core expert but I would gladly work with you on this.
 
-HEAD commit:    ffe78bbd5121 Merge tag 'xtensa-20230327' of https://github..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16237c0dc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9c35b3803e5ad668
-dashboard link: https://syzkaller.appspot.com/bug?extid=a98f21ebda0a437b04d7
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=139dca3ec80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15a55a35c80000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/595cb07a344c/disk-ffe78bbd.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/13a6464b8ace/vmlinux-ffe78bbd.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/640bf4496398/bzImage-ffe78bbd.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/53cbcc1fd741/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a98f21ebda0a437b04d7@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5092 at fs/ntfs3/attrib.c:1060 attr_data_get_block+0x1926/0x2da0
-Modules linked in:
-CPU: 0 PID: 5092 Comm: syz-executor285 Not tainted 6.3.0-rc4-syzkaller-00039-gffe78bbd5121 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-RIP: 0010:attr_data_get_block+0x1926/0x2da0 fs/ntfs3/attrib.c:1060
-Code: 80 e1 07 80 c1 03 38 c1 0f 8c 48 ff ff ff 48 8d bc 24 e0 01 00 00 e8 99 54 1b ff 48 8b 54 24 58 e9 31 ff ff ff e8 fa 9d c5 fe <0f> 0b bb ea ff ff ff e9 11 fa ff ff e8 e9 9d c5 fe e9 0f f9 ff ff
-RSP: 0018:ffffc90003cb7ac0 EFLAGS: 00010293
-RAX: ffffffff82c4b4f6 RBX: 00000000ffffffff RCX: ffff888076523a80
-RDX: 0000000000000000 RSI: 00000000ffffffff RDI: 00000000ffffffff
-RBP: ffffc90003cb7d28 R08: ffffffff82c4afcf R09: fffffbfff205c652
-R10: 0000000000000000 R11: dffffc0000000001 R12: 1ffff92000796f78
-R13: 0000000000000032 R14: ffff8880756043a0 R15: dffffc0000000000
-FS:  00007f2d8728d700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2d8726c718 CR3: 000000007693d000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ntfs_fallocate+0xca4/0x1190 fs/ntfs3/file.c:614
- vfs_fallocate+0x54b/0x6b0 fs/open.c:324
- ksys_fallocate fs/open.c:347 [inline]
- __do_sys_fallocate fs/open.c:355 [inline]
- __se_sys_fallocate fs/open.c:353 [inline]
- __x64_sys_fallocate+0xbd/0x100 fs/open.c:353
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f2d8f5027b9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f2d8728d308 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-RAX: ffffffffffffffda RBX: 00007f2d8f5a67b8 RCX: 00007f2d8f5027b9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000006
-RBP: 00007f2d8f5a67b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000ff8000 R11: 0000000000000246 R12: 00007f2d8f5a67bc
-R13: 00007f2d8f5734ac R14: 0030656c69662f2e R15: 0000000000022000
- </TASK>
-
++1 Max, could you push what you have to GitHub or post as an RFC?
