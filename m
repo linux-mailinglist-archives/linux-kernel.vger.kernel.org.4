@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB8E6D0CF3
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D266D0CF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbjC3RgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 13:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
+        id S232566AbjC3Rgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbjC3RgO (ORCPT
+        with ESMTP id S232554AbjC3Rgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:36:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC27C6A47
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:36:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7658662150
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:36:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D232BC433EF;
-        Thu, 30 Mar 2023 17:36:10 +0000 (UTC)
-Date:   Thu, 30 Mar 2023 18:36:08 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Steven Price <steven.price@arm.com>
-Cc:     Qun-wei Lin =?utf-8?B?KOael+e+pOW0tCk=?= 
-        <Qun-wei.Lin@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "surenb@google.com" <surenb@google.com>,
-        "david@redhat.com" <david@redhat.com>,
-        Chinwen Chang =?utf-8?B?KOW8temMpuaWhyk=?= 
-        <chinwen.chang@mediatek.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        Kuan-Ying Lee =?utf-8?B?KOadjuWGoOepjik=?= 
-        <Kuan-Ying.Lee@mediatek.com>,
-        Casper Li =?utf-8?B?KOadjuS4reamrik=?= <casper.li@mediatek.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Subject: Re: [BUG] Usersapce MTE error with allocation tag 0 when low on
- memory
-Message-ID: <ZCXIiCtjFt19wBAM@arm.com>
-References: <5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com>
- <ZCRtVW9Q0WOKEQVX@arm.com>
- <f468f934-40b6-3547-d3ea-88a0aac5bd6a@arm.com>
+        Thu, 30 Mar 2023 13:36:38 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B2B6A47;
+        Thu, 30 Mar 2023 10:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680197797; x=1711733797;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=RBvzdW7pSSpZoGr/lhLmsN5VnHXIMJICoUqPvQK2N5Q=;
+  b=DLeQPrASHVmaxAqKK9uD5xx4gmQBbCVnK3MqduChJqHDNvUszkwXDaf2
+   snwReF1wD1JaLXm93RZHAhUA40ZOEapl+BOi6wf9PHVOihi+hj2RS34Yd
+   RVGDfId3WNFMPN/kwPi0TJKMe84picJN8RpxZmPG9M9KS8+ULd/SVVeMP
+   3s7L2irvS42FYA9brDYXkcF/3XeK4HKQWceF9K+yT2bTbZdMePk9WKD74
+   0bNomyailRjP4J+ZLxZiKWnfsLTKo2E8mfxvMhrA31k87qyLXWFwxvGkC
+   dlEEkMjHTZaUrfcZ2dOSYzeHOkMlRHUJiYFjNn/YXzVUF57xGQSwJwXS0
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="342883002"
+X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
+   d="scan'208";a="342883002"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 10:36:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="678277381"
+X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
+   d="scan'208";a="678277381"
+Received: from pabbey-mobl.amr.corp.intel.com ([10.212.62.67])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 10:36:35 -0700
+Message-ID: <9e65a37b8220943a540cc3aaf660a79cef4041dc.camel@linux.intel.com>
+Subject: Re: [PATCH] thermal: intel: powerclamp: Fix cpumask and max_idle
+ module parameters
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     David Arcari <darcari@redhat.com>, linux-pm@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen Yu <yu.c.chen@intel.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date:   Thu, 30 Mar 2023 10:36:33 -0700
+In-Reply-To: <20230330134218.1897786-1-darcari@redhat.com>
+References: <20230330134218.1897786-1-darcari@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f468f934-40b6-3547-d3ea-88a0aac5bd6a@arm.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,60 +66,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 02:56:50PM +0100, Steven Price wrote:
-> > On Wed, Mar 29, 2023 at 02:55:49AM +0000, Qun-wei Lin (林群崴) wrote:
-> >> Having compared the differences between Kernel-5.15 and Kernel-6.1,
-> >> We found the order of swap_free() and set_pte_at() is changed in
-> >> do_swap_page().
-> >>
-> >> When fault in, do_swap_page() will call swap_free() first:
-> >> do_swap_page() -> swap_free() -> __swap_entry_free() ->
-> >> free_swap_slot() -> swapcache_free_entries() -> swap_entry_free() ->
-> >> swap_range_free() -> arch_swap_invalidate_page() ->
-> >> mte_invalidate_tags_area() ->  mte_invalidate_tags() -> xa_erase()
-> >>
-> >> and then call set_pte_at():
-> >> do_swap_page() -> set_pte_at() -> __set_pte_at() -> mte_sync_tags() ->
-> >> mte_sync_page_tags() -> mte_restore_tags() -> xa_load()
-> >>
-> >> This means that the swap slot is invalidated before pte mapping, and
-> >> this will cause the mte tag in XArray to be released before tag
-> >> restore.
-> 
-> This analysis looks correct to me. The MTE swap code works on the
-> assumption that the set_pte_at() will restore the tags to the page
-> before the swap entry is removed. The reordering which has happened
-> since has broken this assumption and as you observed can cause the tags
-> to be unavailable by the time set_pte_at() is called.
-> 
-> >> After I moved swap_free() to the next line of set_pte_at(), the problem
-> >> is disappeared.
-> >>
-> >> We suspect that the following patches, which have changed the order, do
-> >> not consider the mte tag restoring in page fault flow:
-> >> https://lore.kernel.org/all/20220131162940.210846-5-david@redhat.com/
-> 
-> I'm not sure I entirely follow the reasoning in this patch, so I'm not
-> sure whether it's safe to just move swap_free() down to below
-> set_pte_at() or if that reintroduces the information leak.
-> 
-> I also wonder if sparc has a similar issue as the arch_do_swap()
-> callback is located next to set_pte_at().
+On Thu, 2023-03-30 at 09:42 -0400, David Arcari wrote:
+Reviewed-by: Srinivas Pandruvada <>> When cpumask is specified as a module =
+parameter the value is
+> overwritten by the module init routine.=C2=A0 This can easily be fixed
+> by checking to see if the mask has already been allocated in the
+> init routine.
+>=20
+> When max_idle is specified as a module parameter a panic will occur.
+> The problem is that the idle_injection_cpu_mask is not allocated
+> until
+> the module init routine executes. This can easily be fixed by
+> allocating
+> the cpumask if it's not already allocated.
+>=20
+> Fixes: ebf519710218 ("thermal: intel: powerclamp: Add two module
+> parameters")
+>=20
+> Signed-off-by: David Arcari <darcari@redhat.com>
+Reviewed-by: Srinivas Pandruvada<srinivas.pandruvada@linux.intel.com>
 
-SPARC has a potential race here since the page is made visible to the
-user but the tags are not restored yet (I raised this before). But even
-ignoring this small window, arch_do_swap() needs to have the metadata
-available.
+>=20
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Amit Kucheria <amitk@kernel.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: David Arcari <darcari@redhat.com>
+> Cc: Chen Yu <yu.c.chen@intel.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: stable@vger.kernel.org
+>=20
+> ---
+> =C2=A0drivers/thermal/intel/intel_powerclamp.c | 9 ++++++++-
+> =C2=A01 file changed, 8 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c
+> b/drivers/thermal/intel/intel_powerclamp.c
+> index c7ba5680cd48..91fc7e239497 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -235,6 +235,12 @@ static int max_idle_set(const char *arg, const
+> struct kernel_param *kp)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0goto skip_limit_set;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> =C2=A0
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!cpumask_available(idle_in=
+jection_cpu_mask)) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0ret =3D
+> allocate_copy_idle_injection_mask(cpu_present_mask);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0if (ret)
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0goto skip=
+_limit_set;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> +
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (check_invalid(idle_in=
+jection_cpu_mask, new_max_idle)) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0ret =3D -EINVAL;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0goto skip_limit_set;
+> @@ -791,7 +797,8 @@ static int __init powerclamp_init(void)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return retval;
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_lock(&powerclamp_lo=
+ck);
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0retval =3D allocate_copy_idle_=
+injection_mask(cpu_present_mask);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!cpumask_available(idle_in=
+jection_cpu_mask))
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0retval =3D
+> allocate_copy_idle_injection_mask(cpu_present_mask);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_unlock(&powerclamp_=
+lock);
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (retval)
 
-> >> Any suggestion is appreciated.
-> 
-> The other possibility is to add a(nother) callback for MTE in
-> arch_do_swap() that calls mte_restore_tags() on the page before the
-> swap_free() call rather than depending on the hook in set_pte_at().
-
-I think we should move arch_do_swap_page() earlier before swap_free()
-and in arm64 we copy the tags to pte_page(pte). I don't think SPARC
-would have any issues with this change (and it also fixes their race).
-
--- 
-Catalin
