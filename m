@@ -2,259 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A436D6D0963
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209906D0969
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbjC3PWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S232972AbjC3PXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232806AbjC3PWm (ORCPT
+        with ESMTP id S232958AbjC3PXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:22:42 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289BFCDF6;
-        Thu, 30 Mar 2023 08:21:46 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1phu5F-0006cb-3D;
-        Thu, 30 Mar 2023 17:21:02 +0200
-Date:   Thu, 30 Mar 2023 16:20:57 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        =?utf-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: [PATCH net-next 04/15] net: dsa: mt7530: use regmap to access switch
- register space
-Message-ID: <1763ab54a479458c4bb84342f32d4a2e379f1d26.1680180959.git.daniel@makrotopia.org>
-References: <cover.1680180959.git.daniel@makrotopia.org>
+        Thu, 30 Mar 2023 11:23:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50280D31D;
+        Thu, 30 Mar 2023 08:22:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AAE5620D0;
+        Thu, 30 Mar 2023 15:21:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53AD1C4339B;
+        Thu, 30 Mar 2023 15:21:05 +0000 (UTC)
+Date:   Thu, 30 Mar 2023 11:21:03 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Vincent Donnefort <vdonnefort@google.com>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v2 1/2] ring-buffer: Introducing ring-buffer mapping
+ functions
+Message-ID: <20230330112103.00c3f422@gandalf.local.home>
+In-Reply-To: <ZCVk26InuXhy+Lmg@google.com>
+References: <20230328224411.0d69e272@gandalf.local.home>
+        <ZCQCsD9+nNwBYIyH@google.com>
+        <20230329070353.1e1b443b@gandalf.local.home>
+        <20230329085106.046a8991@rorschach.local.home>
+        <ZCQ2jW5Jl/cWCG7s@google.com>
+        <20230329091107.408d63a8@rorschach.local.home>
+        <ZCQ9m5K34Qa9ZkUd@google.com>
+        <20230329093602.2b3243f0@rorschach.local.home>
+        <ZCRDXaTVfNwxdRJZ@google.com>
+        <20230329113234.3285209c@gandalf.local.home>
+        <ZCVk26InuXhy+Lmg@google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1680180959.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use regmap API to access the switch register space.
+On Thu, 30 Mar 2023 11:30:51 +0100
+Vincent Donnefort <vdonnefort@google.com> wrote:
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/dsa/mt7530.c | 91 +++++++++++++++++++++++++---------------
- drivers/net/dsa/mt7530.h |  2 +
- 2 files changed, 60 insertions(+), 33 deletions(-)
+> How about?
+> 
+> userspace:
+> 
+>   prev_read = meta->read;
+>   ioctl(TRACE_MMAP_IOCTL_GET_READER_PAGE)
+> 
+> kernel:
+>     ring_buffer_get_reader_page()
+>       rb_get_reader_page(cpu_buffer);
+>       cpu_buffer->reader_page->read = rb_page_size(reader);
+>       meta->read = cpu_buffer->reader_page->read;
+> 
+> userspace:
+>    /* if new page prev_read = 0 */
+>    /* read between prev_read and meta->read */
+> 
+> If the writer does anything in-between, wouldn't rb_get_reader_page() handle it
+> nicely by returning the same reader as more would be there to read?
+> 
+> It is similar to rb_advance_reader() except we'd be moving several events at
+> once?
 
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index d8b041d79f2b7..e27a0e551cec0 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -183,9 +183,9 @@ core_clear(struct mt7530_priv *priv, u32 reg, u32 val)
- }
- 
- static int
--mt7530_mii_write(struct mt7530_priv *priv, u32 reg, u32 val)
-+mt7530_regmap_write(void *context, unsigned int reg, unsigned int val)
- {
--	struct mii_bus *bus = priv->bus;
-+	struct mii_bus *bus = context;
- 	u16 page, r, lo, hi;
- 	int ret;
- 
-@@ -197,24 +197,34 @@ mt7530_mii_write(struct mt7530_priv *priv, u32 reg, u32 val)
- 	/* MT7530 uses 31 as the pseudo port */
- 	ret = bus->write(bus, 0x1f, 0x1f, page);
- 	if (ret < 0)
--		goto err;
-+		return ret;
- 
- 	ret = bus->write(bus, 0x1f, r,  lo);
- 	if (ret < 0)
--		goto err;
-+		return ret;
- 
- 	ret = bus->write(bus, 0x1f, 0x10, hi);
--err:
-+	return ret;
-+}
-+
-+static int
-+mt7530_mii_write(struct mt7530_priv *priv, u32 reg, u32 val)
-+{
-+	int ret;
-+
-+	ret = regmap_write(priv->regmap, reg, val);
-+
- 	if (ret < 0)
--		dev_err(&bus->dev,
-+		dev_err(priv->dev,
- 			"failed to write mt7530 register\n");
-+
- 	return ret;
- }
- 
--static u32
--mt7530_mii_read(struct mt7530_priv *priv, u32 reg)
-+static int
-+mt7530_regmap_read(void *context, unsigned int reg, unsigned int *val)
- {
--	struct mii_bus *bus = priv->bus;
-+	struct mii_bus *bus = context;
- 	u16 page, r, lo, hi;
- 	int ret;
- 
-@@ -223,17 +233,32 @@ mt7530_mii_read(struct mt7530_priv *priv, u32 reg)
- 
- 	/* MT7530 uses 31 as the pseudo port */
- 	ret = bus->write(bus, 0x1f, 0x1f, page);
--	if (ret < 0) {
-+	if (ret < 0)
-+		return ret;
-+
-+	lo = bus->read(bus, 0x1f, r);
-+	hi = bus->read(bus, 0x1f, 0x10);
-+
-+	*val = (hi << 16) | (lo & 0xffff);
-+
-+	return 0;
-+}
-+
-+static u32
-+mt7530_mii_read(struct mt7530_priv *priv, u32 reg)
-+{
-+	int ret;
-+	u32 val;
-+
-+	ret = regmap_read(priv->regmap, reg, &val);
-+	if (ret) {
- 		WARN_ON_ONCE(1);
--		dev_err(&bus->dev,
-+		dev_err(priv->dev,
- 			"failed to read mt7530 register\n");
- 		return 0;
- 	}
- 
--	lo = bus->read(bus, 0x1f, r);
--	hi = bus->read(bus, 0x1f, 0x10);
--
--	return (hi << 16) | (lo & 0xffff);
-+	return val;
- }
- 
- static void
-@@ -2896,22 +2921,6 @@ static const struct phylink_pcs_ops mt7530_pcs_ops = {
- 	.pcs_an_restart = mt7530_pcs_an_restart,
- };
- 
--static int mt7530_regmap_read(void *context, unsigned int reg, unsigned int *val)
--{
--	struct mt7530_priv *priv = context;
--
--	*val = mt7530_mii_read(priv, reg);
--	return 0;
--};
--
--static int mt7530_regmap_write(void *context, unsigned int reg, unsigned int val)
--{
--	struct mt7530_priv *priv = context;
--
--	mt7530_mii_write(priv, reg, val);
--	return 0;
--};
--
- static void
- mt7530_mdio_regmap_lock(void *mdio_lock)
- {
-@@ -2924,7 +2933,7 @@ mt7530_mdio_regmap_unlock(void *mdio_lock)
- 	mutex_unlock(mdio_lock);
- }
- 
--static const struct regmap_bus mt7531_regmap_bus = {
-+static const struct regmap_bus mt7530_regmap_bus = {
- 	.reg_write = mt7530_regmap_write,
- 	.reg_read = mt7530_regmap_read,
- };
-@@ -2957,7 +2966,7 @@ mt7531_create_sgmii(struct mt7530_priv *priv)
- 		mt7531_pcs_config[i]->lock_arg = &priv->bus->mdio_lock;
- 
- 		regmap = devm_regmap_init(priv->dev,
--					  &mt7531_regmap_bus, priv,
-+					  &mt7530_regmap_bus, priv->bus,
- 					  mt7531_pcs_config[i]);
- 		if (IS_ERR(regmap)) {
- 			ret = PTR_ERR(regmap);
-@@ -3128,6 +3137,7 @@ MODULE_DEVICE_TABLE(of, mt7530_of_match);
- static int
- mt7530_probe(struct mdio_device *mdiodev)
- {
-+	static struct regmap_config *regmap_config;
- 	struct mt7530_priv *priv;
- 	struct device_node *dn;
- 
-@@ -3207,6 +3217,21 @@ mt7530_probe(struct mdio_device *mdiodev)
- 	mutex_init(&priv->reg_mutex);
- 	dev_set_drvdata(&mdiodev->dev, priv);
- 
-+	regmap_config = devm_kzalloc(&mdiodev->dev, sizeof(*regmap_config),
-+				     GFP_KERNEL);
-+	if (!regmap_config)
-+		return -ENOMEM;
-+
-+	regmap_config->reg_bits = 16;
-+	regmap_config->val_bits = 32;
-+	regmap_config->reg_stride = 4;
-+	regmap_config->max_register = MT7530_CREV;
-+	regmap_config->disable_locking = true;
-+	priv->regmap = devm_regmap_init(priv->dev, &mt7530_regmap_bus,
-+					priv->bus, regmap_config);
-+	if (IS_ERR(priv->regmap))
-+		return PTR_ERR(priv->regmap);
-+
- 	return dsa_register_switch(priv->ds);
- }
- 
-diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
-index c5d29f3fc1d80..39aaca50961bd 100644
---- a/drivers/net/dsa/mt7530.h
-+++ b/drivers/net/dsa/mt7530.h
-@@ -754,6 +754,7 @@ struct mt753x_info {
-  * @dev:		The device pointer
-  * @ds:			The pointer to the dsa core structure
-  * @bus:		The bus used for the device and built-in PHY
-+ * @regmap:		The regmap instance representing all switch registers
-  * @rstc:		The pointer to reset control used by MCM
-  * @core_pwr:		The power supplied into the core
-  * @io_pwr:		The power supplied into the I/O
-@@ -774,6 +775,7 @@ struct mt7530_priv {
- 	struct device		*dev;
- 	struct dsa_switch	*ds;
- 	struct mii_bus		*bus;
-+	struct regmap		*regmap;
- 	struct reset_control	*rstc;
- 	struct regulator	*core_pwr;
- 	struct regulator	*io_pwr;
--- 
-2.39.2
+Yeah, I think that can work. So we just need to make sure that the meta
+page has the "read" variable passed through.
 
+-- Steve
