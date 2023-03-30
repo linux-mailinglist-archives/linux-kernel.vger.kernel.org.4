@@ -2,362 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB106CFAC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 07:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B465F6CFACD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 07:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjC3Fbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 01:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S229769AbjC3FhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 01:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjC3Fbs (ORCPT
+        with ESMTP id S229661AbjC3FhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 01:31:48 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F90B2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 22:31:47 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id o11so17088884ple.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 22:31:47 -0700 (PDT)
+        Thu, 30 Mar 2023 01:37:03 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6244558D;
+        Wed, 29 Mar 2023 22:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680154622; x=1711690622;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=lpuYsrGkgbBGBtQrbP5sCLf/w4rs/RKmi2M7qTfWXhY=;
+  b=SdGRFZOm7uNoyuD2nA2NEQM94/LzKVeMxtbS+HROP70xO80P19jUR9S2
+   2Q3aVcb+Bkm1HfySwMRr1jHPmiM2x5aYaBz95YPV60qLqB4Um7IgMBV6L
+   Kjo0jG6wTe1poSjxn6aviUCymflf6P23tcGNcHn0gpbvKaNziXk3hBaaG
+   H7CKArdK6o5JsR9RlSD6LWpyj5+UQ8pHJATKUKo8CTARBOrai639ljnUB
+   4ZdyNnTQSkF3UFHmuErT5zY5S5kyNZMRn+3qJMhIA9joKQZaNp253De/c
+   ifM5u4tI6nS7SLdJGaYGaTm/b9d3pPJ+SJm405uedfPBy3ZbB+N7jQGop
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,303,1673938800"; 
+   d="scan'208";a="218633958"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2023 22:37:02 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 29 Mar 2023 22:37:01 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 29 Mar 2023 22:37:01 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ePQNUYRb9rwOztDLpikH1ZXOsvzq3CFZc8MBOPVJ2RcHZ0GUlnMIgHgORd9NRCicmeALM8SDvCGYNSic1WMLai5Vfw5xReGwT3o2+CWZTNMgnusMTQ7IZgLypuud8aJqJheY+bAJEoknDkDr1EJAv0gnaOsWOxukMJ1fNzyMVSOnqihB+VnMl8eObuieFGRvL1zQYOQUs+Fev4gzs823zMNvCKPw7Pi5DgaCB6Efs3JU25vb02XVPjXEMPWQtWzOxGD1MNFB/+64mNiNdXKDKG5ODy0QgCGZJEj30k28KwumOyITBJ8ltcEL9Vs9Ki0i6jzkr9hIU/EV+BwMrb4TVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lpuYsrGkgbBGBtQrbP5sCLf/w4rs/RKmi2M7qTfWXhY=;
+ b=Zcz0QV/GOLvJ6ChXro504e0usPpPCUuEkMuIMZLlsV4xHm54Vbw/kjp4UVZuC3DxDu0lQEj/8PWwajJoFJq5JIz3dNRYcTVrqqk/HsDF7jUZObaKloBS8S7fVqi52V6b+NPSMvw8GP/0dPtSLAQc5/sVoIcZFMD5VkmoPrNOF/3avHsB567yZx8iThG5fooXTueXrDNIYc6GQlV56mzyo+MJQl7UBkkmU4zXaYft/80fFefQZgZ7dIZTOjuArw6agFp1np2nmSiLdkevVHz7ery9Wik8eKM8yW63ft3tdAN+maZARwCGLI0JM3RRWFMVyET3KHiMzmJpHYK4IUVIrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680154307; x=1682746307;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wYfff0Zf1lxUCbJ2nrqYJ8/mKtECEZ2GKO3QQowmo0w=;
-        b=b7S+LPDd7Hvt86RLSzYqZ4GZsU/AknAz3cGanMzkIeCLHxRjDPzRXgVy7GAy/Qe3SE
-         seWFzZ0WOcv4z6UnawMNV2zZpqhKO0FMrlpYfcKKNPM+Npzf2YR2UyxIovOnC/vFDugY
-         9t2BIQbS35J5L9olpYFJH3zl0gYw8KV05nsdBZ3DpZZ0FrEeDz1m4LzJ3RwzMgzRg4gj
-         LY2xVb5u52L9EEhZO1IKxBEf6uo1ClHbpMjsPCOcMKLR9YuQyzIGkHSKzQ591CZ3VYTX
-         wrzcgyXVDlnBfnzl+3NdSD7XmyG/ApCv33pDPIBnn5pt1xsEstreUVmphQLww/Fj7rJf
-         3zRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680154307; x=1682746307;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wYfff0Zf1lxUCbJ2nrqYJ8/mKtECEZ2GKO3QQowmo0w=;
-        b=Hzw8tGU8nhTXBW/8juPeKIvlc1IDmGzFo9zXUuLk+chDIbW6+o5NKBNV0IE4HmFuS1
-         +IXWX5AX6ztRP1dhPVc0pB+g3wkRDKBsqVrKJT5yrXThBTmH0kzbdTGcAAb76H+ojJt7
-         JZMU7spYpTxPmaVRuBiUR8i0cKF/RVLsV8xlzQygxSWRgIsNQuv0uma15rdJqk1xN9lw
-         yylFALZKc06/dOCT7XAbFrvX30jd/W28npUPThu7eNmlTNxKOchXsfZjyQuELAaJkifI
-         Sd7Mm0DdLQgtrgHxfLdY0aCWxaZfu6V5LAm2gD9hslZ1lmW2ELFVaSQY1k29oU4q0Gu/
-         zVLg==
-X-Gm-Message-State: AAQBX9dP9GlmkBb12MoHHFRLE6LjcoAd3ranJdpGcl1lUvvdHURtQWGi
-        K7MV1c0gS44OqczK2kyjFUHMyQ==
-X-Google-Smtp-Source: AKy350YQBkdQX4AmdFekpxXAC2nXRbNnhNWSMNrXUc8W6PG87LflXR6+Or9JExtgLP75iPcok72lZw==
-X-Received: by 2002:a17:902:cf4e:b0:1a2:1922:985b with SMTP id e14-20020a170902cf4e00b001a21922985bmr17195587plg.59.1680154306611;
-        Wed, 29 Mar 2023 22:31:46 -0700 (PDT)
-Received: from anup-ubuntu-vm.localdomain ([171.76.80.30])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170902ee5100b0019339f3368asm24045679plo.3.2023.03.29.22.31.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 22:31:46 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH v2 1/1] RISC-V: KVM: Add ONE_REG interface to enable/disable SBI extensions
-Date:   Thu, 30 Mar 2023 11:01:35 +0530
-Message-Id: <20230330053135.1686577-2-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230330053135.1686577-1-apatel@ventanamicro.com>
-References: <20230330053135.1686577-1-apatel@ventanamicro.com>
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lpuYsrGkgbBGBtQrbP5sCLf/w4rs/RKmi2M7qTfWXhY=;
+ b=CYtKPAUwy1uCNxVTuOavHEcrP0KxTF+PNfU0SQQaz71RwB1ZLLq/4Yvca4KLZvPmR5PgckyAGhvRWO/+HMPFvNFP30H9ioSM1YjSzlpUuehC6UjOL81pLuZfPsXvmmhjt9AmRn+BAfftTykVTL4cQyDNPVJwZeddPzhFcOn6ZvE=
+Received: from MN0PR11MB6232.namprd11.prod.outlook.com (2603:10b6:208:3c3::7)
+ by DM4PR11MB5437.namprd11.prod.outlook.com (2603:10b6:5:398::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Thu, 30 Mar
+ 2023 05:37:00 +0000
+Received: from MN0PR11MB6232.namprd11.prod.outlook.com
+ ([fe80::5939:1be9:fdb0:d5c]) by MN0PR11MB6232.namprd11.prod.outlook.com
+ ([fe80::5939:1be9:fdb0:d5c%6]) with mapi id 15.20.6254.022; Thu, 30 Mar 2023
+ 05:37:00 +0000
+From:   <VaibhaavRam.TL@microchip.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <arnd@arndb.de>,
+        <Tharunkumar.Pasumarthi@microchip.com>
+Subject: Re: [PATCH v8 char-misc-next 5/5] misc: microchip: pci1xxxx: Add
+ documentation for sysfs bin attributes
+Thread-Topic: [PATCH v8 char-misc-next 5/5] misc: microchip: pci1xxxx: Add
+ documentation for sysfs bin attributes
+Thread-Index: AQHZYYNnaDTu/bzl90iSK5hISFywcq8RiEkAgAFIEQA=
+Date:   Thu, 30 Mar 2023 05:37:00 +0000
+Message-ID: <225b45e405801d3756588580d9f325c58c769fc6.camel@microchip.com>
+References: <20230328144008.4113-1-vaibhaavram.tl@microchip.com>
+         <20230328144008.4113-6-vaibhaavram.tl@microchip.com>
+         <ZCQM2hymNEneoSTa@kroah.com>
+In-Reply-To: <ZCQM2hymNEneoSTa@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR11MB6232:EE_|DM4PR11MB5437:EE_
+x-ms-office365-filtering-correlation-id: 96317051-bff9-400d-9322-08db30e0c8b0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0KX9gQmwMHsZD9R4W9LTmvyR8uZTozRilZm/n2Xcy4RKmxlVUsSQMTVnIfZ1Og//yXt305l94Ymu5KbelYzmTDWNM2AWQgBQ+j3pMiI+ARCD6Lu/0ZCAuw2C1MVWcnNa86CiQYiIiFtaA63/MrCjWUQY8UgwLpnCezTDVH3BnCjhe4lWMQ4T0+12+7LSu9OVXADZ6dLTihP5uXkdNqemOAO0XhkZlo28LvhbIhh8tyenJB7iqfoq0LzulV8+ohnFVyx4aTk358mhOgGnTeEPKP7I3phDrT8WlaxdewmJt7Sf1O+sqear0JmcwLoX0AzdCHA+Q5pMkVNOJkQeOrWx8eL+uxUm3GLiD+y28xyvQ1jC3eeIrJMAhOaxjoF/V7Gw7vW00rGht1EssMAMKbyje7FVXkmCeaLa4QfR7LsX2ta5P8jyxmOdYh90Y2Qt+GlTzIkiXyzDM9yOdygIRp7JY+FnDQ1kbUz8HCSxgUwhAZMO/yOQ4w7h8/Y/VvK4S22No/BOJn4o73y/Rv8iYiP9HbbQtd+9L2rakquvEjFdELqLO/30RKjHvv3C85+0oD6djUtDNzrA1tbaU5tG1WKLr3FqI8X4bNyTHWsVfAnogUqD4J9TOOmu01OJD723LhKAmkxBiXt4qzDDDv2oKYsVDkpDsFnfE7wABcXiIwDAteUdm8hYYl2aRk4b7am3+V6QalHNeYR1nfSneXJnOo8twA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6232.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(366004)(376002)(346002)(136003)(451199021)(8936002)(26005)(54906003)(5660300002)(83380400001)(2616005)(66446008)(64756008)(186003)(122000001)(66476007)(86362001)(38100700002)(66556008)(6916009)(8676002)(4326008)(76116006)(41300700001)(66946007)(36756003)(6486002)(316002)(107886003)(6506007)(91956017)(478600001)(38070700005)(6512007)(71200400001)(2906002)(32563001)(414714003)(473944003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WFkrUWtNY2NUK2Vtdm4vdVBRc0E2a3c3Tk5pYXVmOEQzZGJqRDQvQ21mSDhW?=
+ =?utf-8?B?SGc5d2FMeFlTUkxsQXJHTVBobHlkSXFETlpkWmhMUnI2WHRUWHFrYjMvdnhr?=
+ =?utf-8?B?Z0xOU2xOajk1dGt1eGFaVk82bkFBdVNuNUhybGFJRWsyUVVYSVFnb1pMMXBa?=
+ =?utf-8?B?UnZxTytIN2ZzdVoxYUV4bm8rYXdkVnpSQUM3UGhOZTJleW5rOTMrNWRZWkY4?=
+ =?utf-8?B?eThMZ3FsOEg2WXRKMVo4aFlVcVg5eFpLWGFzVWpQZWkwaitkY1RLbVNwNVhH?=
+ =?utf-8?B?TzgrTGxKMlBoRnViaXlsV3Z2bE5iYWZ4TzFTRTRmVG4zbGhJWGJzVERoQk1K?=
+ =?utf-8?B?ai9lUENFZ2d1NWlsanhUV0V6a0I1MmdOckgrazBhT2x1dGp4WU9mNFUyMmRh?=
+ =?utf-8?B?a0NvM2o5b0FLdndvdmpCYm8rTHB4YmpBOEM0TXlCakhPdEd6VVpLcFlaN2xu?=
+ =?utf-8?B?ZWd0eUpJaDdzaG0yNjFaREVsc0hZbTI0am96aUxxbmw1OUpHR3RCVGdMN2or?=
+ =?utf-8?B?M1pCYVl6U3cvZEVZSGowVUw5QnIxcUtEK3BKcndRRkxma0xqdU42cTZ2cUcv?=
+ =?utf-8?B?VUVxSzRiaXJkc3Z0WHFWQ2x6Um1Nd243ZUxmYWl1T2txaU4zMURnalJ5TGh3?=
+ =?utf-8?B?b1V3L3c1bUtSS055dVh1cWZ2RmtZVEo3YTJnbnBuNGFYRk1KTjdENENvRHdK?=
+ =?utf-8?B?TUMxTVlxRDI1RFhwa1Q5eU5JNi9XUE5xMjQrRXpqVjlRWHJ3SGh3TXlZOERT?=
+ =?utf-8?B?VU1paktUNlNyVjJTaDlOOVkzUjMrRFNpM010S243WGZWTGc0K0hDMU16akg0?=
+ =?utf-8?B?cDI3OVU2UXNQSGxpV3BKNFFaRXlaWDhxTEc2K2ZZL29CeW11Q0MraXIxZ3NR?=
+ =?utf-8?B?V0ZmNFhKZTRKRzRnNEZNVWUxRFJuY0hFQmV4bHZ5c1NndzVGd2I1NEo2UW0v?=
+ =?utf-8?B?dTR3V0Z2TXVUTXVVS2NndnlzR3FlcDllbStQUGI0dWhBOWFadWpheDRsNGpC?=
+ =?utf-8?B?Z0c3NUdhRkttQi9sSytBOEEybVpaNm1SbnV4d2dhVUlxeERLS05qeG92ZGIw?=
+ =?utf-8?B?VkVQVHRueHJwTjdJbmhqdGJBY0IrWDRtWkFFeHBxTnFoeENZOUVnOUpPcWxT?=
+ =?utf-8?B?NTRsK2NiQmZuMTNoMmcrR3hBblhGVmhnZzVLOUx3eWhRWVV3K0FaWVc2eGpq?=
+ =?utf-8?B?RFAydkV3SkUrVFN1UnlRMXN3eVhiVTRNRTFqV05Lc0lwVFQ5VXg3U3F6QW5w?=
+ =?utf-8?B?bUlkakhSSnJZazRYOUNOY2kzMjU5bXN1MTVGT0FvWU1FUUdCYlZtS3hsTmxu?=
+ =?utf-8?B?dDVSL2FoVGdpN250Z0dPZVlCZXdxQmFrOEFrNWNLR0w2OVR1WGhuUm9uN0ZE?=
+ =?utf-8?B?M0hmSEtkOFprbXhFeWFadkovMjBEM09PeGI0QzFRRGUrRVJnYkVSSFA4UFNB?=
+ =?utf-8?B?VEpIU0p4RzFtZTNkZ3lCTVpWTStlWnVVbk1aOXFKbXNuODVOMldHQUNFN1R6?=
+ =?utf-8?B?ZCtFY0hIMktMKy9NKzhPM2JQWCtqM1VmREUwcHNER1dDNC9DWVhrQXVTNTFp?=
+ =?utf-8?B?RHdicTFjSEtkSHNickMyM3FtN3NhZ0s2L1QyNUEwMlFXdmhxQTFPcFlRUlJV?=
+ =?utf-8?B?SHFZYmY1cy9Laklna3ljK3FtdWtmZGQyQmtEUDFxVEx2M0I3ZUE3UmJwR3Fi?=
+ =?utf-8?B?Y2tuQWtqdlJndFA4WmREYnp0TTdNK3FJemVKSGhJWTVkOUw0ci9EK2RkS00x?=
+ =?utf-8?B?Q0hCZHphM1E3MlRQeSt2Tzk3ZjFxdmpWQXZ4dHhtYlNLLzRWdmt0ZlNHYmRV?=
+ =?utf-8?B?djBveFB2WFMvbEZrNENIMEZFOXVZSmJxNlNrcENFblkxTU5yWWRNTERacTdN?=
+ =?utf-8?B?V2YxWElEV1BrSUxERjdlYWZHVXExb3NmVmV4TFN5TUZjUXZLWWdUVmNmR2hx?=
+ =?utf-8?B?RVJrSlBaVkJ4Y1VKMktOUHpQRGh4SkR0UXNBeHhsZkFQQ2ZvbUh0dWdYZ2Uw?=
+ =?utf-8?B?eG53V0pvTm9jQmZMU1VldUdnN2VqOVdOcFhNSmczc0k2WHRiR3JjNmRia1Za?=
+ =?utf-8?B?Tm5jV0pKWnNZRGZTNjA4elJqVVJpWjRvQXZXbHlRRzhFVzd4RUdsOTBKaDVv?=
+ =?utf-8?B?VkR5c2doOHgvOUo1SDJwSW5HblJYMENtYW5sTnZrQkR0MkRWL3M5dlo2Mlpn?=
+ =?utf-8?Q?6egQPZAig2s3jvQ44S8IFnk=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8798CB954AEB7C4581D100E368FCF570@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6232.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96317051-bff9-400d-9322-08db30e0c8b0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2023 05:37:00.0504
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +Z8kO+cAMvjDUEdhaTLdXSonDSOytvkT0RcKZTDWSO4L6IeTgksrPSUeSqdubXXibmt0wuntFcz+Knkghu14DAEwQuLYygpxVKmGT+cKue8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5437
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We add ONE_REG interface to enable/disable SBI extensions (just
-like the ONE_REG interface for ISA extensions). This allows KVM
-user-space to decide the set of SBI extension enabled for a Guest
-and by default all SBI extensions are enabled.
-
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- arch/riscv/include/asm/kvm_vcpu_sbi.h |   8 +-
- arch/riscv/include/uapi/asm/kvm.h     |  20 ++++
- arch/riscv/kvm/vcpu.c                 |   2 +
- arch/riscv/kvm/vcpu_sbi.c             | 150 +++++++++++++++++++++++---
- arch/riscv/kvm/vcpu_sbi_base.c        |   2 +-
- 5 files changed, 163 insertions(+), 19 deletions(-)
-
-diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-index 8425556af7d1..4278125a38a5 100644
---- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
-+++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-@@ -16,6 +16,7 @@
- 
- struct kvm_vcpu_sbi_context {
- 	int return_handled;
-+	bool extension_disabled[KVM_RISCV_SBI_EXT_MAX];
- };
- 
- struct kvm_vcpu_sbi_return {
-@@ -45,7 +46,12 @@ void kvm_riscv_vcpu_sbi_system_reset(struct kvm_vcpu *vcpu,
- 				     struct kvm_run *run,
- 				     u32 type, u64 flags);
- int kvm_riscv_vcpu_sbi_return(struct kvm_vcpu *vcpu, struct kvm_run *run);
--const struct kvm_vcpu_sbi_extension *kvm_vcpu_sbi_find_ext(unsigned long extid);
-+int kvm_riscv_vcpu_set_reg_sbi_ext(struct kvm_vcpu *vcpu,
-+				   const struct kvm_one_reg *reg);
-+int kvm_riscv_vcpu_get_reg_sbi_ext(struct kvm_vcpu *vcpu,
-+				   const struct kvm_one_reg *reg);
-+const struct kvm_vcpu_sbi_extension *kvm_vcpu_sbi_find_ext(
-+				struct kvm_vcpu *vcpu, unsigned long extid);
- int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run);
- 
- #ifdef CONFIG_RISCV_SBI_V01
-diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-index 92af6f3f057c..33c3457b94e7 100644
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@ -108,6 +108,23 @@ enum KVM_RISCV_ISA_EXT_ID {
- 	KVM_RISCV_ISA_EXT_MAX,
- };
- 
-+/*
-+ * SBI extension IDs specific to KVM. This is not the same as the SBI
-+ * extension IDs defined by the RISC-V SBI specification.
-+ */
-+enum KVM_RISCV_SBI_EXT_ID {
-+	KVM_RISCV_SBI_EXT_V01 = 0,
-+	KVM_RISCV_SBI_EXT_TIME,
-+	KVM_RISCV_SBI_EXT_IPI,
-+	KVM_RISCV_SBI_EXT_RFENCE,
-+	KVM_RISCV_SBI_EXT_SRST,
-+	KVM_RISCV_SBI_EXT_HSM,
-+	KVM_RISCV_SBI_EXT_PMU,
-+	KVM_RISCV_SBI_EXT_EXPERIMENTAL,
-+	KVM_RISCV_SBI_EXT_VENDOR,
-+	KVM_RISCV_SBI_EXT_MAX,
-+};
-+
- /* Possible states for kvm_riscv_timer */
- #define KVM_RISCV_TIMER_STATE_OFF	0
- #define KVM_RISCV_TIMER_STATE_ON	1
-@@ -152,6 +169,9 @@ enum KVM_RISCV_ISA_EXT_ID {
- /* ISA Extension registers are mapped as type 7 */
- #define KVM_REG_RISCV_ISA_EXT		(0x07 << KVM_REG_RISCV_TYPE_SHIFT)
- 
-+/* SBI extension registers are mapped as type 8 */
-+#define KVM_REG_RISCV_SBI_EXT		(0x08 << KVM_REG_RISCV_TYPE_SHIFT)
-+
- #endif
- 
- #endif /* __LINUX_KVM_RISCV_H */
-diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-index 7d010b0be54e..311fd347c5a8 100644
---- a/arch/riscv/kvm/vcpu.c
-+++ b/arch/riscv/kvm/vcpu.c
-@@ -601,6 +601,8 @@ static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
- 						 KVM_REG_RISCV_FP_D);
- 	case KVM_REG_RISCV_ISA_EXT:
- 		return kvm_riscv_vcpu_set_reg_isa_ext(vcpu, reg);
-+	case KVM_REG_RISCV_SBI_EXT:
-+		return kvm_riscv_vcpu_set_reg_sbi_ext(vcpu, reg);
- 	default:
- 		break;
- 	}
-diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
-index 15fde15f9fb8..bedd7d78a5f0 100644
---- a/arch/riscv/kvm/vcpu_sbi.c
-+++ b/arch/riscv/kvm/vcpu_sbi.c
-@@ -30,17 +30,52 @@ static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
- };
- #endif
- 
--static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
--	&vcpu_sbi_ext_v01,
--	&vcpu_sbi_ext_base,
--	&vcpu_sbi_ext_time,
--	&vcpu_sbi_ext_ipi,
--	&vcpu_sbi_ext_rfence,
--	&vcpu_sbi_ext_srst,
--	&vcpu_sbi_ext_hsm,
--	&vcpu_sbi_ext_pmu,
--	&vcpu_sbi_ext_experimental,
--	&vcpu_sbi_ext_vendor,
-+struct kvm_riscv_sbi_extension_entry {
-+	enum KVM_RISCV_SBI_EXT_ID dis_idx;
-+	const struct kvm_vcpu_sbi_extension *ext_ptr;
-+};
-+
-+static const struct kvm_riscv_sbi_extension_entry sbi_ext[] = {
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_V01,
-+		.ext_ptr = &vcpu_sbi_ext_v01,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_MAX, /* Can't be disabled */
-+		.ext_ptr = &vcpu_sbi_ext_base,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_TIME,
-+		.ext_ptr = &vcpu_sbi_ext_time,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_IPI,
-+		.ext_ptr = &vcpu_sbi_ext_ipi,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_RFENCE,
-+		.ext_ptr = &vcpu_sbi_ext_rfence,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_SRST,
-+		.ext_ptr = &vcpu_sbi_ext_srst,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_HSM,
-+		.ext_ptr = &vcpu_sbi_ext_hsm,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_PMU,
-+		.ext_ptr = &vcpu_sbi_ext_pmu,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_EXPERIMENTAL,
-+		.ext_ptr = &vcpu_sbi_ext_experimental,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_VENDOR,
-+		.ext_ptr = &vcpu_sbi_ext_vendor,
-+	},
- };
- 
- void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run)
-@@ -99,14 +134,95 @@ int kvm_riscv_vcpu_sbi_return(struct kvm_vcpu *vcpu, struct kvm_run *run)
- 	return 0;
- }
- 
--const struct kvm_vcpu_sbi_extension *kvm_vcpu_sbi_find_ext(unsigned long extid)
-+int kvm_riscv_vcpu_set_reg_sbi_ext(struct kvm_vcpu *vcpu,
-+				   const struct kvm_one_reg *reg)
-+{
-+	unsigned long __user *uaddr =
-+			(unsigned long __user *)(unsigned long)reg->addr;
-+	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
-+					    KVM_REG_SIZE_MASK |
-+					    KVM_REG_RISCV_SBI_EXT);
-+	unsigned long i, reg_val;
-+	const struct kvm_riscv_sbi_extension_entry *sext = NULL;
-+	struct kvm_vcpu_sbi_context *scontext = &vcpu->arch.sbi_context;
-+
-+	if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&reg_val, uaddr, KVM_REG_SIZE(reg->id)))
-+		return -EFAULT;
-+
-+	if (reg_num >= KVM_RISCV_SBI_EXT_MAX ||
-+	    (reg_val != 1 && reg_val != 0))
-+		return -EINVAL;
-+
-+	if (vcpu->arch.ran_atleast_once)
-+		return -EBUSY;
-+
-+	for (i = 0; i < ARRAY_SIZE(sbi_ext); i++) {
-+		if (sbi_ext[i].dis_idx == reg_num) {
-+			sext = &sbi_ext[i];
-+			break;
-+		}
-+	}
-+	if (!sext)
-+		return -ENOENT;
-+
-+	scontext->extension_disabled[sext->dis_idx] = !reg_val;
-+
-+	return 0;
-+}
-+
-+int kvm_riscv_vcpu_get_reg_sbi_ext(struct kvm_vcpu *vcpu,
-+				   const struct kvm_one_reg *reg)
-+{
-+	unsigned long __user *uaddr =
-+			(unsigned long __user *)(unsigned long)reg->addr;
-+	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
-+					    KVM_REG_SIZE_MASK |
-+					    KVM_REG_RISCV_SBI_EXT);
-+	unsigned long i, reg_val;
-+	const struct kvm_riscv_sbi_extension_entry *sext = NULL;
-+	struct kvm_vcpu_sbi_context *scontext = &vcpu->arch.sbi_context;
-+
-+	if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
-+		return -EINVAL;
-+
-+	if (reg_num >= KVM_RISCV_SBI_EXT_MAX)
-+		return -EINVAL;
-+
-+	for (i = 0; i < ARRAY_SIZE(sbi_ext); i++) {
-+		if (sbi_ext[i].dis_idx == reg_num) {
-+			sext = &sbi_ext[i];
-+			break;
-+		}
-+	}
-+	if (!sext)
-+		return -ENOENT;
-+
-+	reg_val = !scontext->extension_disabled[sext->dis_idx];
-+	if (copy_to_user(uaddr, &reg_val, KVM_REG_SIZE(reg->id)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+const struct kvm_vcpu_sbi_extension *kvm_vcpu_sbi_find_ext(
-+				struct kvm_vcpu *vcpu, unsigned long extid)
- {
--	int i = 0;
-+	int i;
-+	const struct kvm_riscv_sbi_extension_entry *sext;
-+	struct kvm_vcpu_sbi_context *scontext = &vcpu->arch.sbi_context;
- 
- 	for (i = 0; i < ARRAY_SIZE(sbi_ext); i++) {
--		if (sbi_ext[i]->extid_start <= extid &&
--		    sbi_ext[i]->extid_end >= extid)
--			return sbi_ext[i];
-+		sext = &sbi_ext[i];
-+		if (sext->ext_ptr->extid_start <= extid &&
-+		    sext->ext_ptr->extid_end >= extid) {
-+			if (sext->dis_idx < KVM_RISCV_SBI_EXT_MAX &&
-+			    scontext->extension_disabled[sext->dis_idx])
-+				return NULL;
-+			return sbi_ext[i].ext_ptr;
-+		}
- 	}
- 
- 	return NULL;
-@@ -126,7 +242,7 @@ int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
- 	};
- 	bool ext_is_v01 = false;
- 
--	sbi_ext = kvm_vcpu_sbi_find_ext(cp->a7);
-+	sbi_ext = kvm_vcpu_sbi_find_ext(vcpu, cp->a7);
- 	if (sbi_ext && sbi_ext->handler) {
- #ifdef CONFIG_RISCV_SBI_V01
- 		if (cp->a7 >= SBI_EXT_0_1_SET_TIMER &&
-diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
-index 9945aff34c14..5bc570b984f4 100644
---- a/arch/riscv/kvm/vcpu_sbi_base.c
-+++ b/arch/riscv/kvm/vcpu_sbi_base.c
-@@ -44,7 +44,7 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 			kvm_riscv_vcpu_sbi_forward(vcpu, run);
- 			retdata->uexit = true;
- 		} else {
--			sbi_ext = kvm_vcpu_sbi_find_ext(cp->a0);
-+			sbi_ext = kvm_vcpu_sbi_find_ext(vcpu, cp->a0);
- 			*out_val = sbi_ext && sbi_ext->probe ?
- 					   sbi_ext->probe(vcpu) : !!sbi_ext;
- 		}
--- 
-2.34.1
-
+T24gV2VkLCAyMDIzLTAzLTI5IGF0IDEyOjAzICswMjAwLCBHcmVnIEtIIHdyb3RlOg0KPiBFWFRF
+Uk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNz
+IHlvdQ0KPiBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IE9uIFR1ZSwgTWFyIDI4LCAy
+MDIzIGF0IDA4OjEwOjA4UE0gKzA1MzAsIFZhaWJoYWF2IFJhbSBULkwgd3JvdGU6DQo+ID4gRnJv
+bTogS3VtYXJhdmVsIFRoaWFnYXJhamFuIDxrdW1hcmF2ZWwudGhpYWdhcmFqYW5AbWljcm9jaGlw
+LmNvbT4NCj4gPiANCj4gPiBUaGlzIHBhdGNoIGNvbnRhaW5zIERvY3VtZW50YXRpb24gZm9yIE1p
+Y3JvY2hpcCBQQ0kxWFhYWCBPVFAvRUVQUk9NDQo+ID4gc3lzZnMNCj4gPiBiaW4gYXR0cmlidXRl
+cy4NCj4gPiANCj4gPiBDby1kZXZlbG9wZWQtYnk6IFRoYXJ1biBLdW1hciBQDQo+ID4gPHRoYXJ1
+bmt1bWFyLnBhc3VtYXJ0aGlAbWljcm9jaGlwLmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBUaGFy
+dW4gS3VtYXIgUA0KPiA+IDx0aGFydW5rdW1hci5wYXN1bWFydGhpQG1pY3JvY2hpcC5jb20+DQo+
+ID4gU2lnbmVkLW9mZi1ieTogS3VtYXJhdmVsIFRoaWFnYXJhamFuDQo+ID4gPGt1bWFyYXZlbC50
+aGlhZ2FyYWphbkBtaWNyb2NoaXAuY29tPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFZhaWJoYWF2IFJh
+bSBULkwgPHZhaWJoYWF2cmFtLnRsQG1pY3JvY2hpcC5jb20+DQo+ID4gLS0tDQo+ID4gwqBEb2N1
+bWVudGF0aW9uL0FCSS9zdGFibGUvc3lzZnMtZGV2aWNlcy1tY2hwLXBjaTF4eHh4IHwgMTENCj4g
+PiArKysrKysrKysrKw0KPiA+IMKgMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKykNCj4g
+PiDCoGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL0FCSS9zdGFibGUvc3lzZnMtZGV2
+aWNlcy1tY2hwLQ0KPiA+IHBjaTF4eHh4DQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50
+YXRpb24vQUJJL3N0YWJsZS9zeXNmcy1kZXZpY2VzLW1jaHAtcGNpMXh4eHgNCj4gPiBiL0RvY3Vt
+ZW50YXRpb24vQUJJL3N0YWJsZS9zeXNmcy1kZXZpY2VzLW1jaHAtcGNpMXh4eHgNCj4gPiBuZXcg
+ZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uMDkxM2M3YjAxOTkwDQo+
+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vQUJJL3N0YWJsZS9zeXNm
+cy1kZXZpY2VzLW1jaHAtcGNpMXh4eHgNCj4gPiBAQCAtMCwwICsxLDExIEBADQo+ID4gK1doYXQ6
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgDQo+ID4gL3N5cy9kZXZpY2VzL3BjaVhYWFg6
+WFgvWFhYWDpYWDpYWC5YLy4uL21jaHBfcGNpMXh4eHhfZ3AuZ3Bfb3RwX2UycA0KPiA+IC5uL3Bj
+aTF4eHh4X2VlcHJvbQ0KPiA+ICtEYXRlOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBN
+YXJjaCAyNywgMjAyMw0KPiA+ICtLZXJuZWxWZXJzaW9uOsKgwqDCoMKgwqDCoCA2LjMNCj4gPiAr
+Q29udGFjdDrCoMKgwqDCoCBWYWliaGFhdiBSYW0gVC5MIDx2YWliaGFhdnJhbS50bEBtaWNyb2No
+aXAuY29tPg0KPiA+ICtEZXNjcmlwdGlvbjogVGhpcyBiaW4gZmlsZSBpcyB1c2VkIGZvciB3cml0
+aW5nIGludG8gYW5kIHJlYWRpbmcNCj4gPiBmcm9tIE1pY3JvY2hpcCBQQ0kxWFhYWCBFRVBST00N
+Cj4gDQo+ICJiaW4iP8KgIFVzZXJzcGFjZSBkb2Vzbid0IGtub3cgd2hhdCB0aGF0IG1lYW5zLg0K
+Q2FuIEkgcmVwbGFjZSB3aXRoICJmaWxlcyI/DQo+IA0KPiBCdXQgYWdhaW4sIHdoeSBjYW4ndCB5
+b3UgdXNlIHRoZSBlZXByb20gYXBpIGluc3RlYWQ/DQpUaGlzIGlzIGV4cGxhaW5lZCBpbiBvdGhl
+ciByZXBsaWVzIC0gdGhpcyBlZXByb20vb3RwIGlzIG5vdCBhY2Nlc3NpYmxlDQp0aHJvdWdoIGFu
+eSBpMmMvU1BJIGJ1cyBhdmFpbGFibGUgdG8ga2VybmVsLg0KDQoNClRoYW5rIFlvdS4NCg0KUmVn
+YXJkcywNClZhaWJoYWF2IFJhbQ0K
