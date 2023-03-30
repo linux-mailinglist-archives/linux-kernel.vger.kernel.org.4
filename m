@@ -2,195 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD05D6D0239
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334F46D023E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbjC3K4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S231265AbjC3K5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbjC3K4s (ORCPT
+        with ESMTP id S231214AbjC3K5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:56:48 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2087.outbound.protection.outlook.com [40.107.244.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DDE8A62
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:56:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e8c76S1m8068GT3XxUneb0MyFOl8pw6hB3I79qhLC5LbG+H1KRZzN6w1n7nKI4SEN1IF4tIiPJfp8OPQeyNf7wfX/YVtfFtZKiZ0rRi7YMC6N19syMwYU6HReRBzRRzvwHiPQJb9oy7Nt+PyV0/6/5qtqdTH8Ku/IPJX+E2pvEJ9+WGRoTSsHRzokvdWyp+bi42NaNf5XAWMyyToJsrunhxoWsGopCnNSLelIfMiQMvbcCDXeN9dp6ifsdD0/qvW9gvwaiQ3f+L75hAdp1Hmg/mqvEcIzGumy3FKvhM0CW6SC/2NH7sqGNoqxm5Lv7ghBzJrsPnsTlVd+Nmhzd0J+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xBKJgTvVMUw6WSjprv+iFaGtvY7zpB1L8rMB2wzx57g=;
- b=IDHN6l+CRFZLkJBXVS5FVJvMHK4cutOyTodA0zjmXaw2mo1l9zarfZ/zbddcdGuyWs5BYhfmv8BslSpTR1KY/Q7ZudKq7bDaibtuyh6dGYg1Okusduy4OXcI5CNOc3Q9lxyhO3jiC50odTT9NlHytutbSzwHL/N+4dHr7PTO1qMK2P9VkvmrE+GrVdsxgPpe7/UwdVViQt7kwGqSTcz4OV7ws6/eWumChThOHEteNUniUY3jk+L+CApHjB9ER6ga3NUz8jyb9saH/Cbfa/kboDP5vOO5aVwGNXnMYPH8Q5uB+Ve6kMj6vJgDftMcpU/TBydh8e8gMzeWTJALJlAMAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xBKJgTvVMUw6WSjprv+iFaGtvY7zpB1L8rMB2wzx57g=;
- b=qeA8kCNRSurGDHZjsoUJjoBWCprKjVIfiQQP5VIO3zrU2GBHqnPciZlTyVLxG/n6TgJPYJ74jspNm4sbzH729T0cMCI0ll9eUng3ZzUF+pFdXBFgANvqpykaWGfauW3ghBEq3r+NFtrvlHmqUqyPdMWKMAD7dNdF8n7jrKO6F+0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM6PR12MB4265.namprd12.prod.outlook.com (2603:10b6:5:211::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Thu, 30 Mar
- 2023 10:56:33 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4624:dc39:943e:6ae]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4624:dc39:943e:6ae%5]) with mapi id 15.20.6254.022; Thu, 30 Mar 2023
- 10:56:32 +0000
-Message-ID: <e1af591e-a183-9b22-f533-297934e15e30@amd.com>
-Date:   Thu, 30 Mar 2023 12:56:27 +0200
+        Thu, 30 Mar 2023 06:57:23 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE6461A4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:57:22 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id g19so10851259lfr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:57:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680173840;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fEeZR+WcM39xhpEXHe4o33Q+UWFLjkaYXxsz/SpALV0=;
+        b=ap0PmGpEjOfv2nUrxeYfNyJjPZMDfcKXuBbxzGaRAAPQ+EoUPnXPPUnwvm0mhZIxIp
+         wSrcSzDwkPl6zD1gtzkxtoPXsELvPtUhQUKjq/kcGOmfywtmBsWZMdFwtFz6Gkt8jt4X
+         1xYqe0jFL1GdN5LP9Cft3qyzy8PrBKYUb4CHwGlGw71FkMYUqx84boxjguNgO9h+t4yu
+         FZ4uza72h/VodF59WruDDzowT2xLnGbmJyIS9Zco7JG9H3e5dgAQQzr6RMKhnsgsfuTX
+         PZCrbrnV/gy53rwYDueBKk+i88MKJwUme7Pb0fOpvLfPEqPox3g/xHSznD14dUQfZtT7
+         OqNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680173840;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fEeZR+WcM39xhpEXHe4o33Q+UWFLjkaYXxsz/SpALV0=;
+        b=BzBYd7dZWRo3ccout43uXYdDa2T+giqHDKD4VftUr4XOQIcC9QjNZBbDEFeuOTuc8D
+         RLDlRg31viuuRmsC5u27WzeMnRis3n/M5Hzw3OMqr9D+HxXLzV89xqJyTlAMYHRXTLSG
+         M7i2P1E3m9e2Gtq0y4sN0Wiu+iIpp71HisJf1ChC7/CtH9YKMsYsqQirz4bqp+wZ1dOb
+         LBhYFtu39V8aSA3Us2dJYA3XzpDHfvE/nwJeMAuLMQ07pKbHYwikXsRG6W80zB0QuCJG
+         voTcCsWKeTj/ZDuemE/2piEA2rLVS1UkX1R+fzretJIzOITF2gr0MzWm9r3AU9C6fTpu
+         tjbA==
+X-Gm-Message-State: AAQBX9eRzUtXq68iCvox0z3hocE1hGuWq42y47g4cvo9WXOaVOE518I8
+        dkhwMZmvnwrY3tMLoPF0j/A3JA==
+X-Google-Smtp-Source: AKy350ZbNlhbm9DQxukLP3ML+9FgpDYCaeTXB86XDbiFJ0YpbMmqdtHJQxXD09YjvMnEjlF5JuzyAg==
+X-Received: by 2002:ac2:50d9:0:b0:4e8:44c1:f170 with SMTP id h25-20020ac250d9000000b004e844c1f170mr6951040lfm.54.1680173840314;
+        Thu, 30 Mar 2023 03:57:20 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id t18-20020ac243b2000000b004e92c0ed7a0sm5823486lfl.100.2023.03.30.03.57.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 03:57:19 -0700 (PDT)
+Message-ID: <bc5dd7d1-e001-8bd2-55c6-b6827c418371@linaro.org>
+Date:   Thu, 30 Mar 2023 12:57:18 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] drm: buddy_allocator: Fix buddy allocator init on
- 32-bit systems
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: msm8996: Improve GPU OPP table
 Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        David Gow <davidgow@google.com>,
-        =?UTF-8?Q?Lu=c3=ads_Mendes?= <luis.p.mendes@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Arthur Grillo <arthurgrillo@riseup.net>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230329065532.2122295-1-davidgow@google.com>
- <878rfe4iis.fsf@intel.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <878rfe4iis.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FRYP281CA0004.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::14)
- To BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM6PR12MB4265:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0fecfa18-a45c-4845-206f-08db310d6bed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hYTZXPhQgANCBTKvrU+khI5dmp0xwuU3+yrTCezmP8LuHcxbPhR4dBw/0vzQzhmtofqWKtiQe/o9sl9hfYigk0MmtV4cetT8y++4jdmyaa5bAKZoHom4uXup5cvpB04LSQ23Kryje2FnJbyjkQwuPVGKRwFEb/3kTnzvJEWzYTmZZInvrbKoFQYpRoYg8TeRfkO9RZIWLMpHIHFlKVv8MvlqwNCr5tyUKm0F/kLvw6LP2Wnd2RdTTltv0ZtwkQNKCY3gfTQerWk1rbbsfCcAdJgGJ/xaerk91zlOxECV/yjOMttXbfH6WqKD7ZiNS/g0umIEhfyhspS+IYCsL1YhW4NjUtKC8dAfKxbuvNVWg6AIsqTU+dY02hrDjSDRl1fWVKfdncVgPrPYHwIrTFFeQsIND8TwuzraSOginkvlgSvFDH3eauf0IWNBMkc2s7Zk4CvpXpZYeKtIuyFGxAYxUfu2jRpSpmsMzIN3QUfEV+FBabxGJhQyBuebHxR22J74bdqPQ04KNpuwwc2Adnz6AGnb1tFYnl5hbset/vRvDImZqae9g9izAgXgpaWD3yA3DoyF9+iZ8VNMdZ/ckxiQ4YzcM4RVV03pYD//oSCz2heUw3y1UQthm0b8wvNCAM4CJk3ay9mXRwT4QaYQ+ywSPWsiCrgqnl4PdMc9McpFUWQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(396003)(136003)(39860400002)(451199021)(31686004)(2906002)(83380400001)(66574015)(7416002)(26005)(8936002)(5660300002)(6506007)(6666004)(316002)(36756003)(966005)(6486002)(110136005)(66946007)(478600001)(6512007)(66476007)(2616005)(186003)(66556008)(4326008)(38100700002)(8676002)(41300700001)(31696002)(921005)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmp5YVBId0Z6VFpPSjFIdTZmTFVsYmgzaXNmaFJ1THRwcFhnbmhZcHpZWlhR?=
- =?utf-8?B?VXE1TWZ6dHBrTEZoSzBFM01mbnBBOUZpY3A3R2ZTUW02M05DQkRWS3lyemFm?=
- =?utf-8?B?ZkhqRW1uUWRYc3BGWFhVUVU2dHZLenNDTnAyVS9rd1BrN1Zmb1ByVU1KcGxh?=
- =?utf-8?B?NGlpL0dST2Q4M3Qrck8rY2hRRWlZK1hNQXVmSng1MGsrWTJrTnR5L3lVRjVn?=
- =?utf-8?B?SmoydHAzQlJHcDFrbjg5eExQejlhQ1cxeEs1cVdjZUVGSkJEL2MzWklpS3lx?=
- =?utf-8?B?bUpyNnNLNG1odW5uZDEzMEh2TGdvdGZmbU85NFFZcThlYmovQnRHSHZISk12?=
- =?utf-8?B?Qko0ZllZTlh4d0hqUXllSFBPeWdnZ3lxOWlEZTN4K2ZwMUpUSitJR2tDQUxB?=
- =?utf-8?B?N3ZrUHdRcTRpNldvSyttYjBQRUg1dDd2a21ObVM5VEJVZVo0ckZabHJvRzE3?=
- =?utf-8?B?djhRSEVVVGVKRXZBeFV5aFVOVTgvdTg2MVJwTUtrUStzRkF0b2RtbStoQi9y?=
- =?utf-8?B?amRaR3ZGMVA0VU1NMVY1Q1lmeWt6YXNLN2w2MitDNnE4WmwrNDg2L3J4aDdx?=
- =?utf-8?B?TTRWbnN4YVoveEFBMC9HanpUR3BmdnRhQ1R1MjkvY0FlT2VnMFRJaUFqWXVS?=
- =?utf-8?B?WHJ4VVdhYkpUNzQwa3JKdFYyaTlvekFvSlRLM2dIZGs4Y2J3UUF4V3gwYVNt?=
- =?utf-8?B?NEh5ME10Sit2LytJdWdPejJmZEZQVUtsSXQyUEpXM28veUNuRmxNWVhEVFlP?=
- =?utf-8?B?RFJiTXFxcFJlWkNHS1lWR0ZRTEZrYmVUKytFcit0RVY3cE9yNUJ0NGxKOXZl?=
- =?utf-8?B?aWR2VEhJVjUwa3dpNWpRc3cyY0twV0hhd0o4ejl4R0FFMDF3bTBiUHFWOE1o?=
- =?utf-8?B?SE5qOXEyS0FBNEZDd0N0dGY1WTVhZUFoNy9iVDF5VzBsWFhVWEEvMTlocitw?=
- =?utf-8?B?NWoraGNPUTRiaXJDeU9lWVBUK1pvL0ttZ0EzUWtrbWd4ajZFZ0E5UjFwd0hX?=
- =?utf-8?B?eEwwSFgxeDN5TXdLWU41dVVkRkxpdHVQck84RytaRlFIS2VjSGJuenlQTWd3?=
- =?utf-8?B?YnJQQlR3U1E2bXNwaURLQ0UrWTN5M0VwNVdQYU8xbmZRN1ViNG55VzVEclk1?=
- =?utf-8?B?VzB5UGtGcThHUXdoTVp6OGJiWWxsMFVOQmpIMmpDWXB4ajRpVGlHcURFQVFL?=
- =?utf-8?B?T2FSU3dDNHdPcExxaVJ5dVl4djY4Sm5aSm4rS1VJMVBVcTFEclRzQ3p6bTFF?=
- =?utf-8?B?ZUk2Mm9kVm02dWZoMVM0Sno0RUphMVg0VWYweEszK09wY2ZIdDJOZlh1NHhM?=
- =?utf-8?B?Nk54S09QeXZkYnVkbmovKzNJdkhyZkpLSXlvSjcxQlFXdUY2K2ZNZWJjZnBj?=
- =?utf-8?B?aFJtandsdmVzUkhidkl2OHlrWGlWZFFzb2x3S0Y5ckIxZjF6dWo3WVpWQjZq?=
- =?utf-8?B?L0ZNT05lQ2pLNE45U3A5dzNGa2ZiY0RSTkZFL3dQYnpzandSZUtTbEFydHB6?=
- =?utf-8?B?amp3VmozRzJudnQ1RzZKR0FSclJIZGRKT2QwTWZBdnNSTmw4QUlBM2QrMkVy?=
- =?utf-8?B?SDkxalc0V0ZyN0FhSHgrNTVuSlg2QlV0Wm9rd2tVcUxUa29MYk9tTWMrYkZL?=
- =?utf-8?B?WHFNeEQrVzB3ekQvS29ZeE00WXdGRHhRWFdDZFdDc2k5aHNHMXM4ZmFuWUFw?=
- =?utf-8?B?ZTZCQzRMRE9tRzE5VUl5eXRJTDhtalFqT0dCSm5NTUtWS0QyR25md1ZjVHJo?=
- =?utf-8?B?OTEzN0NIazlobUNWOEYzZVV5bkErdThNWFh6NERub2ZmRGlOd0hKUS9ZZ1h4?=
- =?utf-8?B?S3g2ZVd4WGNVOWN5VlNmNXZyaWk2UXdoUUU0QTBoSkpvaXdueEtYY0luYi96?=
- =?utf-8?B?ek1Na0dDUUZ2RCtFeU1qVWJ6NVo4NG80Z3EzNlNrNEFMTVkrNkhzc0pwWHdD?=
- =?utf-8?B?Vm55bVFEZVRKbDJMUFhRM2NjOUdTVzFIcTdXQWhsTzZJWGV5d2RFS3NsY2NS?=
- =?utf-8?B?TDl1bDVFTVFMd1dUQ0JHRnRIbzJ1QjlXV1cvam82K1o3OGlMdXBlUTNzcUg3?=
- =?utf-8?B?UHdOcmtZQkNzTnJhUDQ3Uk91cFdWR2FhMTBUZGVxdGJNRHA4MW1jWjdFTk9I?=
- =?utf-8?Q?hQDI=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fecfa18-a45c-4845-206f-08db310d6bed
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 10:56:32.0399
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CNRadyi83x+X2Mk7L+EoIz682MNWjFaBT/bj8nKhTxZEX/EgmVmnVMZ84h6wv0Qo
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4265
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vivek Gautam <vivek.gautam@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>
+References: <20230329-topic-adreno_opp-v1-0-24d34ac6f007@linaro.org>
+ <20230329-topic-adreno_opp-v1-3-24d34ac6f007@linaro.org>
+ <CAA8EJpprgiXWZC2W3JSgG3jtTZDtbwoeQ6LBK=pqfpk0oMvNRw@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAA8EJpprgiXWZC2W3JSgG3jtTZDtbwoeQ6LBK=pqfpk0oMvNRw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 30.03.23 um 12:53 schrieb Jani Nikula:
-> On Wed, 29 Mar 2023, David Gow <davidgow@google.com> wrote:
->> The drm buddy allocator tests were broken on 32-bit systems, as
->> rounddown_pow_of_two() takes a long, and the buddy allocator handles
->> 64-bit sizes even on 32-bit systems.
+
+
+On 29.03.2023 23:32, Dmitry Baryshkov wrote:
+> On Wed, 29 Mar 2023 at 22:17, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 >>
->> This can be reproduced with the drm_buddy_allocator KUnit tests on i386:
->> 	./tools/testing/kunit/kunit.py run --arch i386 \
->> 	--kunitconfig ./drivers/gpu/drm/tests drm_buddy
+>> Remove the self-explanatory comment about opp-supported-hw contents,
+>> add required-opps to ensure reasonable power domain levels are voted
+>> for (currently we've been piggybacking off of miracles and MDP votes)
+>> and add newlines between each subnode.
+> 
+> I'm not sure this is 100% correct. The values that you add are correct
+> for the voltage scaling case. However, based on the vendor kernel
+> sources I think that MX should only be scaled if the voltage is scaled
+> too. I might be wrong here.
+MX must be >= CX (and GX), so this should bring no harm.
+
+(citation needed, but that seems to hold true..)
+
+Konrad
+> 
 >>
->> (It results in kernel BUG_ON() when too many blocks are created, due to
->> the block size being too small.)
->>
->> This was independently uncovered (and fixed) by Luís Mendes, whose patch
->> added a new u64 variant of rounddown_pow_of_two(). This version instead
->> recalculates the size based on the order.
->>
->> Reported-by: Luís Mendes <luis.p.mendes@gmail.com>
->> Link: https://lore.kernel.org/lkml/CAEzXK1oghXAB_KpKpm=-CviDQbNaH0qfgYTSSjZgvvyj4U78AA@mail.gmail.com/T/
->> Signed-off-by: David Gow <davidgow@google.com>
+>> Fixes: 69cc3114ab0f ("arm64: dts: Add Adreno GPU definitions")
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 >> ---
->>   drivers/gpu/drm/drm_buddy.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>  arch/arm64/boot/dts/qcom/msm8996.dtsi | 18 +++++++++++++-----
+>>  1 file changed, 13 insertions(+), 5 deletions(-)
 >>
->> diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
->> index 3d1f50f481cf..7098f125b54a 100644
->> --- a/drivers/gpu/drm/drm_buddy.c
->> +++ b/drivers/gpu/drm/drm_buddy.c
->> @@ -146,8 +146,8 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
->>   		unsigned int order;
->>   		u64 root_size;
->>   
->> -		root_size = rounddown_pow_of_two(size);
->> -		order = ilog2(root_size) - ilog2(chunk_size);
->> +		order = ilog2(size) - ilog2(chunk_size);
->> +		root_size = chunk_size << order;
-> Just noticed near the beginning of the function there's also:
->
-> 	if (!is_power_of_2(chunk_size))
-> 		return -EINVAL;
->
-> which is also wrong for 32-bit.
-
-Yeah, but that isn't vital. We just use u64 for the chunk_size for 
-consistency.
-
-In reality I wouldn't except more than 256K here.
-
-Regards,
-Christian.
-
->
->
-> BR,
-> Jani.
->
->
->>   
->>   		root = drm_block_alloc(mm, NULL, order, offset);
->>   		if (!root)
-
+>> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+>> index 4dd37f72e018..62ad30e94f40 100644
+>> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+>> @@ -1244,37 +1244,45 @@ gpu: gpu@b00000 {
+>>                         gpu_opp_table: opp-table {
+>>                                 compatible = "operating-points-v2";
+>>
+>> -                               /*
+>> -                                * 624Mhz is only available on speed bins 0 and 3.
+>> -                                * 560Mhz is only available on speed bins 0, 2 and 3.
+>> -                                * All the rest are available on all bins of the hardware.
+>> -                                */
+>>                                 opp-624000000 {
+>>                                         opp-hz = /bits/ 64 <624000000>;
+>> +                                       required-opps = <&rpmpd_opp_turbo>;
+>>                                         opp-supported-hw = <0x09>;
+>>                                 };
+>> +
+>>                                 opp-560000000 {
+>>                                         opp-hz = /bits/ 64 <560000000>;
+>> +                                       required-opps = <&rpmpd_opp_turbo>;
+>>                                         opp-supported-hw = <0x0d>;
+>>                                 };
+>> +
+>>                                 opp-510000000 {
+>>                                         opp-hz = /bits/ 64 <510000000>;
+>> +                                       required-opps = <&rpmpd_opp_nom>;
+>>                                         opp-supported-hw = <0xff>;
+>>                                 };
+>> +
+>>                                 opp-401800000 {
+>>                                         opp-hz = /bits/ 64 <401800000>;
+>> +                                       required-opps = <&rpmpd_opp_nom>;
+>>                                         opp-supported-hw = <0xff>;
+>>                                 };
+>> +
+>>                                 opp-315000000 {
+>>                                         opp-hz = /bits/ 64 <315000000>;
+>> +                                       required-opps = <&rpmpd_opp_svs>;
+>>                                         opp-supported-hw = <0xff>;
+>>                                 };
+>> +
+>>                                 opp-214000000 {
+>>                                         opp-hz = /bits/ 64 <214000000>;
+>> +                                       required-opps = <&rpmpd_opp_svs>;
+>>                                         opp-supported-hw = <0xff>;
+>>                                 };
+>> +
+>>                                 opp-133000000 {
+>>                                         opp-hz = /bits/ 64 <133000000>;
+>> +                                       required-opps = <&rpmpd_opp_svs>;
+>>                                         opp-supported-hw = <0xff>;
+>>                                 };
+>>                         };
+>>
+>> --
+>> 2.40.0
+>>
+> 
+> 
