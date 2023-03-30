@@ -2,124 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E71D6D0725
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481B16D071F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbjC3Nnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
+        id S231221AbjC3NnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbjC3Nnc (ORCPT
+        with ESMTP id S232091AbjC3NnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:43:32 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D39DBDFD;
-        Thu, 30 Mar 2023 06:43:23 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32UDAlfq014499;
-        Thu, 30 Mar 2023 06:43:21 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=Ssk0O0bXBPfhBKJenQvgeKoOFmkN+0GiqUnjxldS3ws=;
- b=Z9UcGxhIQZFx6FuvYtJiiReWsTwhMauciJKUrm+0aMxm5oDf13jCqZSRX5Sq1vDeFonT
- vBY1d51DTtZabjKezIHECiOnaz/rwSJr1vGgvsRbSyVkMv8eQEovO4E1lEIEWTSnxZ08
- vLWIjUG3obG5Vf/YD0R7tGDzXxb9zjiQ0n//MPvBJOwGuFWAcBAQApSEDMLilXVfdfAh
- WMkvZjozZakJa7CUF3hqgBoobL5OWc9psuMc+BO2Uql5ogMQo4YumV/g3+5r4KXu/Ubx
- idiJ1MOlIV0Ql/dKX6LC9IjNBjKCsfFgg+LLDoycqk9ApyaOparATIxZp7Zz5zSaghcf rg== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3pn2ty2nvq-12
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 06:43:21 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 30 Mar
- 2023 06:40:45 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Thu, 30 Mar 2023 06:40:45 -0700
-Received: from localhost.localdomain (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id C220F3F704A;
-        Thu, 30 Mar 2023 06:40:45 -0700 (PDT)
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wsa@kernel.org>, <rric@kernel.org>
-CC:     <jannadurai@marvell.com>, <cchavva@marvell.com>,
-        Suneel Garapati <sgarapati@marvell.com>,
-        Piyush Malgujar <pmalgujar@marvell.com>
-Subject: [PATCH 3/3] i2c: octeon: Handle watchdog timeout
-Date:   Thu, 30 Mar 2023 06:39:53 -0700
-Message-ID: <20230330133953.21074-4-pmalgujar@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230330133953.21074-1-pmalgujar@marvell.com>
-References: <20230330133953.21074-1-pmalgujar@marvell.com>
+        Thu, 30 Mar 2023 09:43:12 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B238A5B
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:42:41 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230330134238epoutp022efe9fd328d67c136058d5171e47aa9c~RNjn8DRgT0041500415epoutp02u
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:42:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230330134238epoutp022efe9fd328d67c136058d5171e47aa9c~RNjn8DRgT0041500415epoutp02u
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1680183758;
+        bh=eD+0Qn+GvCxGYmQvUmHZQydqS3ceCfgdPGxWqbGb4gw=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=Ctv4WLTExQ4vI52TxieKPq8G8WIsT/RKY+fum7zEd7ULHUEPNQjQ0qhvItVk/5FxI
+         0/IAmkHq8anEb5ileR4eQMSPFjLwKu1AldKYTGH1PiRL9xVK2Q3bCLUaAw15MqEiK8
+         kxqprf6RwE7RjHTBLvx4NA98FQJoDHuvskTuXxV4=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230330134237epcas2p1f1da3edb62b02bdb7e7eef3beb252e30~RNjnAXBXS1252412524epcas2p1w;
+        Thu, 30 Mar 2023 13:42:37 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.70]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4PnPk5277wz4x9Pt; Thu, 30 Mar
+        2023 13:42:37 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        15.42.61927.DC195246; Thu, 30 Mar 2023 22:42:37 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230330134236epcas2p14bcd5ccdc712997b40c1f6f22eba9a2e~RNjmHdUpT1252412524epcas2p1u;
+        Thu, 30 Mar 2023 13:42:36 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230330134236epsmtrp25aa160fdd60985f29e4beedc4457aef3~RNjmGycmu0536105361epsmtrp2C;
+        Thu, 30 Mar 2023 13:42:36 +0000 (GMT)
+X-AuditID: b6c32a45-8bdf87000001f1e7-31-642591cd4309
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D5.34.18071.CC195246; Thu, 30 Mar 2023 22:42:36 +0900 (KST)
+Received: from [10.229.8.168] (unknown [10.229.8.168]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230330134236epsmtip239ba987a654f4e1b0b9741367db454d0~RNjl6D71U1920919209epsmtip2h;
+        Thu, 30 Mar 2023 13:42:36 +0000 (GMT)
+Message-ID: <1b4f0367-a919-cd8a-17e1-a38998575e58@samsung.com>
+Date:   Thu, 30 Mar 2023 22:40:13 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 5yIs7O4U5wswzkYXU_QdDCdps8dWcBwJ
-X-Proofpoint-ORIG-GUID: 5yIs7O4U5wswzkYXU_QdDCdps8dWcBwJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-30_09,2023-03-30_03,2023-02-09_01
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thunderbird/102.9.0
+Subject: Re: [PATCH] spi: s3c64xx: add no_cs description
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+In-Reply-To: <20230306014239.80570-1-jaewon02.kim@samsung.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHJsWRmVeSWpSXmKPExsWy7bCmue7ZiaopBnun8Fg8mLeNzWLxj+dM
+        FlMfPmGz2Pt6K7vFpsfXWC0u75rDZjHj/D4mi8aPN9kdODyuL/nE7LFpVSebx51re9g8Ni+p
+        9+jbsorR4/MmuQC2qGybjNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWFvMTcVFsl
+        F58AXbfMHKB7lBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkF5gV6xYm5xaV56Xp5
+        qSVWhgYGRqZAhQnZGc8nfWUr2MpR8XhXXgPjO7YuRk4OCQETif0t+5i7GLk4hAR2MEqc+v2d
+        DcL5xChxfUsfE4TzjVHi0ZpzLDAtU1edYAWxhQT2MkpseckCUfSaUWLx+e1A7RwcvAJ2Er07
+        qkBqWARUJV7fXwC2jldAUOLkzCdgc0QFoiT6bm8CmyMsYCGxbd8bMJtZQFzi1pP5TCC2iICy
+        xNXve8HmMwu0MUl8uf+fGSTBJqAt8X39YrAGTqBdn5eeYINolpfY/nYO2D8SAnM5JD783w51
+        tYvEtUc/WSFsYYlXx7ewQ9hSEp/f7YUGRrZE+/Q/UDUVEhc3zIaKG0vMetbOCPIYs4CmxPpd
+        +iCmBNBxR26xQKzlk+g4/JcdIswr0dEmBNGoJnF/6jmoITISk46sZIKwPSRO/e9im8CoOAsp
+        VGYh+X4WkmdmIexdwMiyilEstaA4Nz212KjAEB7Vyfm5mxjBCVXLdQfj5Lcf9A4xMnEwHmKU
+        4GBWEuEtNFZNEeJNSaysSi3Kjy8qzUktPsRoCoybicxSosn5wJSeVxJvaGJpYGJmZmhuZGpg
+        riTOK217MllIID2xJDU7NbUgtQimj4mDU6qBKSFb6c+BrWc8L8+XsVh5085MKeu/ccaybLtX
+        vzoifcVKX8tPbErLlgnUk3pSYL1jTsqyzfw8L6JiTtrtfKdvznHqSXmnllqNdpnvQp/VEe5v
+        RXIPPX7rUrS7IW+x+SNxwymrZ3yWft9d7zXtxjLj9+m2qucu5m68tKTyuq9W19ebUVFGVw9J
+        rRXa0ptmfumvkfiD+Gm16hLLZ8X6/p3lHvIo8FU8yyShbG8tm1/zdB2CxSXfF1W8t9UQb7PV
+        nP8va5HY3ycy2rJMhes3rtPoPnRguu0N5vaNWkv+7Xgxf4fbiZJFE/y15Nf4hl3aLq4VxWLz
+        o+eQ6pavuZcs1udENOyZa1OsFTCrx/Y7Z5iEEktxRqKhFnNRcSIAwvru+DEEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgkeLIzCtJLcpLzFFi42LZdlhJXvfMRNUUg8XH1SwezNvGZrH4x3Mm
+        i6kPn7BZ7H29ld1i0+NrrBaXd81hs5hxfh+TRePHm+wOHB7Xl3xi9ti0qpPN4861PWwem5fU
+        e/RtWcXo8XmTXABbFJdNSmpOZllqkb5dAlfG80lf2Qq2clQ83pXXwPiOrYuRk0NCwERi6qoT
+        rF2MXBxCArsZJU7O/csKkZCRWP6sD6pIWOJ+yxGoopeMEo8vLwRKcHDwCthJ9O6oAqlhEVCV
+        eH1/AVg9r4CgxMmZT1hAbFGBKInPB1rYQWxhAQuJbfvegM1nFhCXuPVkPhOILSKgLHH1+14W
+        kPnMAm1MEuc/LmCGWDaRUeLcFxCHk4NNQFvi+/rFYN2cQIs/Lz3BBjHJTKJraxcjhC0vsf3t
+        HOYJjEKzkBwyC8nCWUhaZiFpWcDIsopRMrWgODc9t9iwwDAvtVyvODG3uDQvXS85P3cTIziS
+        tDR3MG5f9UHvECMTB+MhRgkOZiUR3kJj1RQh3pTEyqrUovz4otKc1OJDjNIcLErivBe6TsYL
+        CaQnlqRmp6YWpBbBZJk4OKUamJrlA18Lqt2/557sLPf64CHdgF8HXPalVe0qTZq1RbXq0NfV
+        zB4XPnz9sn8TR7qZt2HPxNTc0v0lUxySF27ZlxHSlrpt1p7pJ054qyoqvtVaZq+9dxnPxf13
+        GDPWff9hXif4ft2e41ejJ9psq3X++eyX0ey/nDEynxReBj1Jf3hvwX/j4JX5O6QaHixM9PYN
+        9y2/5DFx8QOda9oPzhYkmC57vysvg/u1db75Q7a8Bet4vDx9WNmXmS18cFv79myNaweCTqiU
+        iVrUbjDNkdk6feme1KqDS1L8hBnajd4U2+5nfta0KM5P3TSub42X/2f9T7NX7VFqLythuPP3
+        WmeW3qOtl7+ssDgT8OjvyjMLJ/ErsRRnJBpqMRcVJwIA/cU0XBMDAAA=
+X-CMS-MailID: 20230330134236epcas2p14bcd5ccdc712997b40c1f6f22eba9a2e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a
+References: <CGME20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a@epcas2p3.samsung.com>
+        <20230306014239.80570-1-jaewon02.kim@samsung.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suneel Garapati <sgarapati@marvell.com>
+Hello Mark
 
-Status code 0xF0 refers to expiry of TWSI controller
-access watchdog and needs bus monitor reset using MODE
-register.
 
-Signed-off-by: Suneel Garapati <sgarapati@marvell.com>
-Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
----
- drivers/i2c/busses/i2c-octeon-core.c | 8 ++++++++
- drivers/i2c/busses/i2c-octeon-core.h | 1 +
- 2 files changed, 9 insertions(+)
+Could you apply this patch?
 
-diff --git a/drivers/i2c/busses/i2c-octeon-core.c b/drivers/i2c/busses/i2c-octeon-core.c
-index 7c49dc8ccbd2ef05fec675d282193b98f2b69835..3482db7165f243232937e0af148fe996858e9f2e 100644
---- a/drivers/i2c/busses/i2c-octeon-core.c
-+++ b/drivers/i2c/busses/i2c-octeon-core.c
-@@ -187,6 +187,7 @@ static int octeon_i2c_hlc_wait(struct octeon_i2c *i2c)
- static int octeon_i2c_check_status(struct octeon_i2c *i2c, int final_read)
- {
- 	u8 stat;
-+	u64 mode;
- 
- 	/*
- 	 * This is ugly... in HLC mode the status is not in the status register
-@@ -249,6 +250,13 @@ static int octeon_i2c_check_status(struct octeon_i2c *i2c, int final_read)
- 	case STAT_RXADDR_NAK:
- 	case STAT_AD2W_NAK:
- 		return -ENXIO;
-+
-+	case STAT_WDOG_TOUT:
-+		mode = __raw_readq(i2c->twsi_base + MODE(i2c));
-+		/* Set BUS_MON_RST to reset bus monitor */
-+		mode |= BIT(3);
-+		octeon_i2c_writeq_flush(mode, i2c->twsi_base + MODE(i2c));
-+		return -EIO;
- 	default:
- 		dev_err(i2c->dev, "unhandled state: %d\n", stat);
- 		return -EIO;
-diff --git a/drivers/i2c/busses/i2c-octeon-core.h b/drivers/i2c/busses/i2c-octeon-core.h
-index 89d7d3bb8e30bd5787978d17d5a9b20ab0d41e22..a8d1bf9e89b8b0d21f52ff9f77f0ecf5263b5843 100644
---- a/drivers/i2c/busses/i2c-octeon-core.h
-+++ b/drivers/i2c/busses/i2c-octeon-core.h
-@@ -72,6 +72,7 @@
- #define STAT_SLAVE_ACK		0xC8
- #define STAT_AD2W_ACK		0xD0
- #define STAT_AD2W_NAK		0xD8
-+#define STAT_WDOG_TOUT		0xF0
- #define STAT_IDLE		0xF8
- 
- /* TWSI_INT values */
--- 
-2.17.1
+I missed you in the mail recipient.
+
+
+https://lkml.org/lkml/2023/3/6/34
+
+https://lkml.org/lkml/2023/3/6/232
+
+
+On 23. 3. 6. 10:42, Jaewon Kim wrote:
+> This patch adds missing variable no_cs descriptions.
+>
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+> ---
+>   include/linux/platform_data/spi-s3c64xx.h | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/include/linux/platform_data/spi-s3c64xx.h b/include/linux/platform_data/spi-s3c64xx.h
+> index 5df1ace6d2c9..3101152ce449 100644
+> --- a/include/linux/platform_data/spi-s3c64xx.h
+> +++ b/include/linux/platform_data/spi-s3c64xx.h
+> @@ -29,6 +29,7 @@ struct s3c64xx_spi_csinfo {
+>    * struct s3c64xx_spi_info - SPI Controller defining structure
+>    * @src_clk_nr: Clock source index for the CLK_CFG[SPI_CLKSEL] field.
+>    * @num_cs: Number of CS this controller emulates.
+> + * @no_cs: Used when CS line is not connected.
+>    * @cfg_gpio: Configure pins for this SPI controller.
+>    */
+>   struct s3c64xx_spi_info {
+
+
+Thanks
 
