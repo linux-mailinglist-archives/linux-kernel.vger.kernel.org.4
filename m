@@ -2,95 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641066D1B69
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC026D0FB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbjCaJJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
+        id S229586AbjC3UKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbjCaJJU (ORCPT
+        with ESMTP id S229436AbjC3UKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:09:20 -0400
-Received: from omta037.useast.a.cloudfilter.net (omta037.useast.a.cloudfilter.net [44.202.169.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E0EF77B;
-        Fri, 31 Mar 2023 02:09:19 -0700 (PDT)
-Received: from eig-obgw-6004a.ext.cloudfilter.net ([10.0.30.197])
-        by cmsmtp with ESMTP
-        id i0wmp51qxElIgiAl3p9ZK1; Fri, 31 Mar 2023 09:09:18 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTP
-        id iAl2p9L7X1O1NiAl2ps9Ay; Fri, 31 Mar 2023 09:09:17 +0000
-X-Authority-Analysis: v=2.4 cv=NsHCzuRJ c=1 sm=1 tr=0 ts=6426a33d
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=wTog8WU66it3cfrESHnF4A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=k__wU0fu6RkA:10
- a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8 a=mDV3o1hIAAAA:8 a=VwQbUJbxAAAA:8
- a=9ic7p0EMSS3MKrTfbvcA:9 a=QEXdDO2ut3YA:10 a=3IOs8h2EC4YA:10
- a=_FVE-zBwftR9WsbkzFJk:22 a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QYBk0OPmCB6p8kOb/XVyJI7inLkUJjeV0vKcdLVXoPM=; b=Lf3+WC2x3Wbp3hXFbidKhgntw4
-        wwL1Apr+wOS9AnVSyg2qMwVZ9S4nByhAtC5urYdc5RUvQRjUk1qruCzdqBC/LXOJ9Dyj+iazWA7pN
-        2cqZFxcPrfW6qZKcCunoHBFRASPeOlejYSJwJh2AvUFG+sGFeC4qgrnMkOorw/3iSXBPJNwlwKtJE
-        yS5dwOdsiwRWGJqrr3pZo80Q8g+OX9XB5oYArXpTpQDdgJ3ghhLXNtiChrM1EJmzYj8nvxmuVXiuc
-        wezx1mznuADHn3pA0pWiUp63ZJjDV4AyzqsdgUJqi2LVDdr4oRt6SLXCWZa194jM54KUz14znoiMj
-        Xy+GZzmQ==;
-Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:48012 helo=[192.168.15.7])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1phyZh-002gVr-HQ;
-        Thu, 30 Mar 2023 15:08:45 -0500
-Message-ID: <cfd01e87-6edc-2547-894a-72e7cd5ba9ef@embeddedor.com>
-Date:   Thu, 30 Mar 2023 14:09:20 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH][next] wifi: rndis_wlan: Replace fake flex-array with
- flexible-array member
-Content-Language: en-US
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <ZBtIbU77L9eXqa4j@work>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <ZBtIbU77L9eXqa4j@work>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.31.110
-X-Source-L: No
-X-Exim-ID: 1phyZh-002gVr-HQ
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.7]) [187.162.31.110]:48012
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 0
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfC3oJgzMAK1i4Dizj7Hh56BS73gmpDXb9iDKgZAv5SMl6nhjVIuANcuUZZQkZ0hzm0SLAy3tIAAS1nNEnhil6kycbSJjq6mQHC5LHbujFcVgcYUBE6Gx
- BcWEQlETfv7ZOn1xQTo7VJgYuQTY5ZZ+PwXV+1IWf2upc3AAG1JzcWFPRmEtIv+BoD842HndB+pGhoW7dZ+wzV/PaqhQS9Y6X20KISV2RS+iUddiH+qfmj97
- WbUe+picvSkMlLoj1IqMP0U7ej0wgHR6xMT+APth+OlPYdUwB17Jo+ZvGE0fZaazTk7icYzSqhUgF6n92B7Yyrr+bZ505T2zdw6KCMWocO3FkCN+dXg2H4+o
- y/onHFCB
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        Thu, 30 Mar 2023 16:10:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808CF172A
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:10:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13604620BE
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0DB6C433EF;
+        Thu, 30 Mar 2023 20:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1680207014;
+        bh=65urcWDJM1aNO6xZxCWkwK2KeKrFuD7Q79vl5/+iSAE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qjk+6lnbBXu33eRAEN5TzklCabFGfi+TkC/IEih7eBLKrE9s9kUY7cAnstztsGRxG
+         H1qhQ9hK0FnoQZUFUUHBY4ZeZ1vl+mzRZrb/pvyYbR4qYgnuWjJTJuOjzLY0fVkCP4
+         9OcykttciEicNRpp4A2ZV3dddXLPnBLaTMiMjbrE=
+Date:   Thu, 30 Mar 2023 13:10:13 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Hao Ge <gehao@kylinos.cn>
+Cc:     alex.williamson@redhat.com, jgg@ziepe.ca, akrowiak@linux.ibm.com,
+        arnd@arndb.de, mark.rutland@arm.com, ye.xingchen@zte.com.cn,
+        ojeda@kernel.org, alex.gaynor@gmail.com, me@kloenk.de,
+        gregkh@linuxfoundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, gehao618@163.com,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [RESEND PATCH] kmemleak-test: Optimize kmemleak_test.c build
+ flow
+Message-Id: <20230330131013.2685eeee5f7db76b850512ed@linux-foundation.org>
+In-Reply-To: <20230330060904.292975-1-gehao@kylinos.cn>
+References: <20230330060904.292975-1-gehao@kylinos.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -99,44 +57,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Thu, 30 Mar 2023 14:09:04 +0800 Hao Ge <gehao@kylinos.cn> wrote:
 
-Friendly ping: who can take this, please? 😄
+> Now kmemleak-test.c is moved to samples directory,
+> if CONFIG_DEBUG_KMEMLEAK_TEST=m,but CONFIG_SAMPLES
+> is not set,it will be meaningless.
+> 
+> So we will remove CONFIG_DEBUG_KMEMLEAK_TEST and
+> add CONFIG_SAMPLE_KMEMLEAK which in samples directory
+> to control kmemleak-test.c build or not
 
-Thanks
--- 
-Gustavo
+Thanks.
 
-On 3/22/23 12:26, Gustavo A. R. Silva wrote:
-> Zero-length arrays as fake flexible arrays are deprecated and we are
-> moving towards adopting C99 flexible-array members instead.
-> 
-> Address the following warning found with GCC-13 and
-> -fstrict-flex-array=3 enabled:
-> drivers/net/wireless/rndis_wlan.c:2902:23: warning: array subscript 0 is outside array bounds of ‘struct ndis_80211_auth_request[0]’ [-Warray-bounds=]
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
-> 
-> Link: https://github.com/KSPP/linux/issues/21
-> Link: https://github.com/KSPP/linux/issues/274
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->   drivers/net/wireless/legacy/rndis_wlan.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/legacy/rndis_wlan.c b/drivers/net/wireless/legacy/rndis_wlan.c
-> index bf72e5fd39cf..54c347fa54c4 100644
-> --- a/drivers/net/wireless/legacy/rndis_wlan.c
-> +++ b/drivers/net/wireless/legacy/rndis_wlan.c
-> @@ -209,7 +209,7 @@ struct ndis_80211_status_indication {
->   	union {
->   		__le32					media_stream_mode;
->   		__le32					radio_status;
-> -		struct ndis_80211_auth_request		auth_request[0];
-> +		DECLARE_FLEX_ARRAY(struct ndis_80211_auth_request, auth_request);
->   		struct ndis_80211_pmkid_cand_list	cand_list;
->   	} u;
->   } __packed;
+I changed the patch title, reworked the changelog and added the Fixes:
+information.  Please check all this carefully.
+
+
+
+From: Hao Ge <gehao@kylinos.cn>
+Subject: kmemleak-test: fix kmemleak_test.c build logic
+Date: Thu, 30 Mar 2023 14:09:04 +0800
+
+kmemleak-test.c was moved to the samples directory in 1abbef4f51724
+("mm,kmemleak-test.c: move kmemleak-test.c to samples dir").
+
+If CONFIG_DEBUG_KMEMLEAK_TEST=m and CONFIG_SAMPLES is unset,
+kmemleak-test.c will be unnecessarily compiled.
+
+So move the entry for CONFIG_DEBUG_KMEMLEAK_TEST from mm/Kconfig and add a
+new CONFIG_SAMPLE_KMEMLEAK in samples/ to control whether kmemleak-test.c
+is built or not.
+
+Link: https://lkml.kernel.org/r/20230330060904.292975-1-gehao@kylinos.cn
+Fixes: 1abbef4f51724 ("mm,kmemleak-test.c: move kmemleak-test.c to samples dir")
+Signed-off-by: Hao Ge <gehao@kylinos.cn>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Alex Gaynor <alex.gaynor@gmail.com>
+Cc: Alex Williamson <alex.williamson@redhat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Finn Behrens <me@kloenk.dev>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Tony Krowiak <akrowiak@linux.ibm.com>
+Cc: Ye Xingchen <ye.xingchen@zte.com.cn>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+ mm/Kconfig.debug          |    8 --------
+ samples/Kconfig           |    7 +++++++
+ samples/Makefile          |    2 +-
+ samples/kmemleak/Makefile |    2 +-
+ 4 files changed, 9 insertions(+), 10 deletions(-)
+
+--- a/mm/Kconfig.debug~kmemleak-test-optimize-kmemleak_testc-build-flow
++++ a/mm/Kconfig.debug
+@@ -249,14 +249,6 @@ config DEBUG_KMEMLEAK_MEM_POOL_SIZE
+ 	  fully initialised, this memory pool acts as an emergency one
+ 	  if slab allocations fail.
+ 
+-config DEBUG_KMEMLEAK_TEST
+-	tristate "Simple test for the kernel memory leak detector"
+-	depends on DEBUG_KMEMLEAK && m
+-	help
+-	  This option enables a module that explicitly leaks memory.
+-
+-	  If unsure, say N.
+-
+ config DEBUG_KMEMLEAK_DEFAULT_OFF
+ 	bool "Default kmemleak to off"
+ 	depends on DEBUG_KMEMLEAK
+--- a/samples/Kconfig~kmemleak-test-optimize-kmemleak_testc-build-flow
++++ a/samples/Kconfig
+@@ -273,6 +273,13 @@ config SAMPLE_CORESIGHT_SYSCFG
+ 	  This demonstrates how a user may create their own CoreSight
+ 	  configurations and easily load them into the system at runtime.
+ 
++config SAMPLE_KMEMLEAK
++        tristate "Simple test for the kernel memory leak detector"
++        depends on DEBUG_KMEMLEAK && m
++        help
++          Build a sample program which have explicitly leaks memory to test
++          kmemleak
++
+ source "samples/rust/Kconfig"
+ 
+ endif # SAMPLES
+--- a/samples/kmemleak/Makefile~kmemleak-test-optimize-kmemleak_testc-build-flow
++++ a/samples/kmemleak/Makefile
+@@ -1,3 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+-obj-$(CONFIG_DEBUG_KMEMLEAK_TEST) += kmemleak-test.o
++obj-$(CONFIG_SAMPLE_KMEMLEAK) += kmemleak-test.o
+--- a/samples/Makefile~kmemleak-test-optimize-kmemleak_testc-build-flow
++++ a/samples/Makefile
+@@ -33,7 +33,7 @@ subdir-$(CONFIG_SAMPLE_VFS)		+= vfs
+ obj-$(CONFIG_SAMPLE_INTEL_MEI)		+= mei/
+ subdir-$(CONFIG_SAMPLE_WATCHDOG)	+= watchdog
+ subdir-$(CONFIG_SAMPLE_WATCH_QUEUE)	+= watch_queue
+-obj-$(CONFIG_DEBUG_KMEMLEAK_TEST)	+= kmemleak/
++obj-$(CONFIG_SAMPLE_KMEMLEAK)		+= kmemleak/
+ obj-$(CONFIG_SAMPLE_CORESIGHT_SYSCFG)	+= coresight/
+ obj-$(CONFIG_SAMPLE_FPROBE)		+= fprobe/
+ obj-$(CONFIG_SAMPLES_RUST)		+= rust/
+_
+
