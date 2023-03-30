@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1936D0C0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE2F6D0C0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbjC3Q6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 12:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
+        id S232117AbjC3Q6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 12:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231674AbjC3Q6i (ORCPT
+        with ESMTP id S231674AbjC3Q6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 12:58:38 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FBFC646
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:58:34 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id kp6-20020a170903280600b001a2945a7fdeso591109plb.18
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:58:34 -0700 (PDT)
+        Thu, 30 Mar 2023 12:58:51 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D71D729F
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:58:36 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54161af1984so192566367b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:58:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680195514;
+        d=google.com; s=20210112; t=1680195515;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OjsY2D3zZ2sjOJI/DMM6//97spV+E6fw5UYIqOUq7z8=;
-        b=DlRsfLib3MyZOsvAB3d+LRxd3sJ3tfd82aIAV16K+bg69XGehev1j24XodH2+gB2Fv
-         TgzValaNfP6Fy1Djs680Qj6e/SHt1q4W7lR/Wj3r12re91ZdecNufAhp9Zb9jZEOzrrv
-         Go1Bu72a61FMG4o6ySc7eoZnAyNoLhqmRFIX5KMoE5R6GDO24mvhgLorov7dEVh1Prlp
-         jIcyDmUEEDmacvxtQWdsH3rrHejdTXtjrivccx2r59DHBbShXfouojUg83KRjVL9S6X7
-         mn5bDrBo+lwfBKTdZF65rTYX2g2iPB9xDix3e/R0RqCG/4RInxU/sN/RML8DoOuBpO4M
-         FAjw==
+        bh=3IPXOF71xhyJEtqQ3Z98VllJlolVRDwWUwDqo2jNXHo=;
+        b=sPkOM60p9XfgUbH7pBqUd6F96vI0z12zFZQETS/H9riaTmwdSkGlenqKyfhBTC/U7j
+         PtK54UDOLWnX+Fx3oyis0o7DI4JTPlvINvBlMalUduIzcBbSrqy/DNY5WnhiJmE5DeE5
+         yMmgRWeuadZKKUzXv53Lql8cXIa9Jy/DGqd5uq82/xEaNu+X+vVYbrByUn8OVSi/7i+V
+         +qNOkz1irQ9lYHRKlu3ddPhy71wJIVT4+vms7OaxKK8/k4HVrY9bmPSspeAQqWnoRmJ8
+         rWp7snGpEq5ca3mAtorvXHsfSUn7C/yI8e0ca96v3VuWFMQgGjV+Ux6CzAer9A5KX3CY
+         4Bdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680195514;
+        d=1e100.net; s=20210112; t=1680195515;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OjsY2D3zZ2sjOJI/DMM6//97spV+E6fw5UYIqOUq7z8=;
-        b=XcKND9nTKdodnBa6rlpNqhaB6TZtvoh7DBGXN6twLssZzNu2bFrccfidmkgtrvrEPr
-         /Eiiknr+o5a/DFtAXjXb4LFveYME4W9Ff5rlLvXsE3+bKpaZrB2Ycc4snebsxZrV9pL/
-         GPFrmMIkzwmTxCwbo9Csis/epOoK2fyVejX37wo8CK9osLCWjtfx5TpOKcoJ/mxScuAh
-         5oqPeFryHHxGI2nckCOMTNjbl/jbDcCH9OlcCFchQHCGl1Aup4TA9rKlxtb8tUN8D+kh
-         HFtI5QD2RsfR3eHonv2MP//UDzPbrLRaLXW1YNv/lUdsyPLhASDNs94zcwAxpzkezSZR
-         hMSw==
-X-Gm-Message-State: AAQBX9eEMlA8tgStkEaOZCU3IBuiEgoD6otVDB8Fmj6Hj2t41PMMn5ZQ
-        oi8LbREq7Kc4C3yNoF2LgsMOG4bUSjpJzQ==
-X-Google-Smtp-Source: AKy350bT6+eQmZAojALY3eocg4enim01apzdl+bV09oTdD8MFcOcFvr3LeYYs09OTvUIvMpYt/PJdDqoiqOphA==
+        bh=3IPXOF71xhyJEtqQ3Z98VllJlolVRDwWUwDqo2jNXHo=;
+        b=6W3WCV3fwi9PXOigWKYJIJSAsIia2ga39mZ9mpyFhGTJ8glYMUdUSarG0s5OYdoB0m
+         Q+/bkjpONf7zgmMxyA5JH+ctz6QKehDudDVjcfzwddy4WVgz2vEZAjpWr5p+CYqYyvfL
+         iOSVFF53VD+jLShlQQp1xDigH2ImP386r0wOdnXS3Ce/uT7plhhtIxXdCOpkKdtKxZLQ
+         I0k0+9I3IEZYsElU+yhPGmtEWJgI59/h7Qkcz+CzGWz+AmbmcE+mjdrBNVZL7pkj2LQS
+         8q5M/TcvH7+JQQsYe8JzIyztJ1fZ1VcEEAbM2f5VBx+TrwMPE30MdXl3XR7nXW/W02L4
+         XGNA==
+X-Gm-Message-State: AAQBX9dWHi31jhPbTBFL6hL1D6sQZxycDlJzrp91fngDVESRFbnXSsTT
+        P6LhezXUnG45nR4owWY6epJfq8uuJZl6mA==
+X-Google-Smtp-Source: AKy350boZukWbuXgC6wUO0k6aTTxUoc9xBZqgphDIqIKwRq3W8Ollw1lCQYK6HXG5SVcl6J/Wqfv3dF36Fagsw==
 X-Received: from mmandlik-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2893])
- (user=mmandlik job=sendgmr) by 2002:a05:6a00:98e:b0:625:f78a:56f with SMTP id
- u14-20020a056a00098e00b00625f78a056fmr3075727pfg.3.1680195513805; Thu, 30 Mar
- 2023 09:58:33 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 09:58:24 -0700
+ (user=mmandlik job=sendgmr) by 2002:a05:6902:1003:b0:b1d:5061:98e3 with SMTP
+ id w3-20020a056902100300b00b1d506198e3mr16426997ybt.6.1680195515673; Thu, 30
+ Mar 2023 09:58:35 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 09:58:25 -0700
 In-Reply-To: <20230330095714.v13.1.I9b4e4818bab450657b19cda3497d363c9baa616e@changeid>
 Mime-Version: 1.0
 References: <20230330095714.v13.1.I9b4e4818bab450657b19cda3497d363c9baa616e@changeid>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230330095714.v13.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc@changeid>
-Subject: [PATCH v13 2/4] Bluetooth: Add vhci devcoredump support
+Message-ID: <20230330095714.v13.3.I8cd97c192e8268567b6f467ccd993ec71897318e@changeid>
+Subject: [PATCH v13 3/4] Bluetooth: btusb: Add btusb devcoredump support
 From:   Manish Mandlik <mmandlik@google.com>
 To:     marcel@holtmann.org, luiz.dentz@gmail.com
 Cc:     chromeos-bluetooth-upstreaming@chromium.org,
         linux-bluetooth@vger.kernel.org,
         Manish Mandlik <mmandlik@google.com>,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
         Johan Hedberg <johan.hedberg@gmail.com>,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -71,159 +72,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devcoredump support for vhci that creates forcce_devcoredump debugfs
-entry. This is used for mgmt-tester tests.
+This patch implements the btusb driver side .coredump() callback to
+trigger a devcoredump via sysfs.
 
 Signed-off-by: Manish Mandlik <mmandlik@google.com>
+Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 ---
 
-Changes in v13:
-- Add force_devcd_timeout() to update the devcoredump timeout
+(no changes since v6)
 
-Changes in v12:
-- Rename force_devcoredump_write() to force_devcd_write()
-- Update force_devcd_write() to handle coredump state and timeout
+Changes in v6:
+- Remove dev->coredump_disabled check since the sysfs flag related
+  change has been abandoned
 
-Changes in v9:
-- Rename hci_devcoredump_*() to hci_devcd_*()
-
-Changes in v8:
-- Update vhci_coredump_hdr() to use skb
-
-Changes in v7:
+Changes in v4:
 - New patch in the series
 
- drivers/bluetooth/Kconfig    |  1 +
- drivers/bluetooth/hci_vhci.c | 97 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 98 insertions(+)
+ drivers/bluetooth/btusb.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/drivers/bluetooth/Kconfig b/drivers/bluetooth/Kconfig
-index 5a1a7bec3c42..7bc7a765ad69 100644
---- a/drivers/bluetooth/Kconfig
-+++ b/drivers/bluetooth/Kconfig
-@@ -363,6 +363,7 @@ config BT_HCIBLUECARD
- 
- config BT_HCIVHCI
- 	tristate "HCI VHCI (Virtual HCI device) driver"
-+	select WANT_DEV_COREDUMP
- 	help
- 	  Bluetooth Virtual HCI device driver.
- 	  This driver is required if you want to use HCI Emulation software.
-diff --git a/drivers/bluetooth/hci_vhci.c b/drivers/bluetooth/hci_vhci.c
-index c443c3b0a4da..691fe93b1976 100644
---- a/drivers/bluetooth/hci_vhci.c
-+++ b/drivers/bluetooth/hci_vhci.c
-@@ -278,6 +278,100 @@ static int vhci_setup(struct hci_dev *hdev)
- 	return 0;
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 4ca91c033d2f..9c9f7bf1375a 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -4385,6 +4385,17 @@ static int btusb_resume(struct usb_interface *intf)
  }
+ #endif
  
-+static void vhci_coredump(struct hci_dev *hdev)
-+{
-+	/* No need to do anything */
-+}
-+
-+static void vhci_coredump_hdr(struct hci_dev *hdev, struct sk_buff *skb)
-+{
-+	char buf[80];
-+
-+	snprintf(buf, sizeof(buf), "Controller Name: vhci_ctrl\n");
-+	skb_put_data(skb, buf, strlen(buf));
-+
-+	snprintf(buf, sizeof(buf), "Firmware Version: vhci_fw\n");
-+	skb_put_data(skb, buf, strlen(buf));
-+
-+	snprintf(buf, sizeof(buf), "Driver: vhci_drv\n");
-+	skb_put_data(skb, buf, strlen(buf));
-+
-+	snprintf(buf, sizeof(buf), "Vendor: vhci\n");
-+	skb_put_data(skb, buf, strlen(buf));
-+}
-+
-+#define MAX_COREDUMP_LINE_LEN	40
-+
-+struct devcoredump_test_data {
-+	enum devcoredump_state state;
-+	unsigned int timeout;
-+	char data[MAX_COREDUMP_LINE_LEN];
-+};
-+
-+static inline void force_devcd_timeout(struct hci_dev *hdev,
-+				       unsigned int timeout)
-+{
 +#ifdef CONFIG_DEV_COREDUMP
-+	hdev->dump.timeout = msecs_to_jiffies(timeout * 1000);
-+#endif
-+}
-+
-+static ssize_t force_devcd_write(struct file *file, const char __user *user_buf,
-+				 size_t count, loff_t *ppos)
++static void btusb_coredump(struct device *dev)
 +{
-+	struct vhci_data *data = file->private_data;
++	struct btusb_data *data = dev_get_drvdata(dev);
 +	struct hci_dev *hdev = data->hdev;
-+	struct sk_buff *skb = NULL;
-+	struct devcoredump_test_data dump_data;
-+	int ret;
 +
-+	ret = simple_write_to_buffer(&dump_data, sizeof(dump_data), ppos,
-+				     user_buf, count);
-+	if (ret < count)
-+		return ret;
-+
-+	skb = alloc_skb(sizeof(dump_data.data), GFP_ATOMIC);
-+	if (!skb)
-+		return -ENOMEM;
-+	skb_put_data(skb, &dump_data.data, sizeof(dump_data.data));
-+
-+	hci_devcd_register(hdev, vhci_coredump, vhci_coredump_hdr, NULL);
-+
-+	/* Force the devcoredump timeout */
-+	if (dump_data.timeout)
-+		force_devcd_timeout(hdev, dump_data.timeout);
-+
-+	ret = hci_devcd_init(hdev, skb->len);
-+	if (ret) {
-+		BT_ERR("Failed to generate devcoredump");
-+		kfree_skb(skb);
-+		return ret;
-+	}
-+
-+	hci_devcd_append(hdev, skb);
-+
-+	switch (dump_data.state) {
-+	case HCI_DEVCOREDUMP_DONE:
-+		hci_devcd_complete(hdev);
-+		break;
-+	case HCI_DEVCOREDUMP_ABORT:
-+		hci_devcd_abort(hdev);
-+		break;
-+	case HCI_DEVCOREDUMP_TIMEOUT:
-+		/* Do nothing */
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return count;
++	if (hdev->dump.coredump)
++		hdev->dump.coredump(hdev);
 +}
++#endif
 +
-+static const struct file_operations force_devcoredump_fops = {
-+	.open		= simple_open,
-+	.write		= force_devcd_write,
-+};
+ static struct usb_driver btusb_driver = {
+ 	.name		= "btusb",
+ 	.probe		= btusb_probe,
+@@ -4396,6 +4407,14 @@ static struct usb_driver btusb_driver = {
+ 	.id_table	= btusb_table,
+ 	.supports_autosuspend = 1,
+ 	.disable_hub_initiated_lpm = 1,
 +
- static int __vhci_create_device(struct vhci_data *data, __u8 opcode)
- {
- 	struct hci_dev *hdev;
-@@ -355,6 +449,9 @@ static int __vhci_create_device(struct vhci_data *data, __u8 opcode)
- 		debugfs_create_file("aosp_capable", 0644, hdev->debugfs, data,
- 				    &aosp_capable_fops);
++#ifdef CONFIG_DEV_COREDUMP
++	.drvwrap = {
++		.driver = {
++			.coredump = btusb_coredump,
++		},
++	},
++#endif
+ };
  
-+	debugfs_create_file("force_devcoredump", 0644, hdev->debugfs, data,
-+			    &force_devcoredump_fops);
-+
- 	hci_skb_pkt_type(skb) = HCI_VENDOR_PKT;
- 
- 	skb_put_u8(skb, 0xff);
+ module_usb_driver(btusb_driver);
 -- 
 2.40.0.348.gf938b09366-goog
 
