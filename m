@@ -2,57 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472226CFFDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDFF6CFFE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjC3Jco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
+        id S230094AbjC3JdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjC3Jcl (ORCPT
+        with ESMTP id S229814AbjC3JdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:32:41 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CFE7698
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:32:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1680168761;
-  x=1711704761;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=ARulaqHJxPwB/WKU7rfcwJ3+y3Mu0UnpMwYgGZ/ZzmM=;
-  b=cirIf2Dr7mJ9K4/sA7f8sfQNepMza7P747a+4lsojzpZwCtM8hCXbwYf
-   lW6r6RKXkkECNfpk4yIGvkY7kEkN5zGEcCIwGaZl11t65zYbGHSg3M0I0
-   sESW0vJ7RlZbcrd3Keb+mU0ObyWzBC+/f/QJf2X4jQytjZkRKIUseZSJR
-   gVm3f52x9Jh5I5eFFtPm2a8wbH9W/QgurmL5zWtmpOdQ2/7Ry2q3rfdpx
-   n5Z5wrvZhmtGsrigycRLLXYp5bo7FpeC+lyf1x7+npXqXZUDQaPzhEZBY
-   0dQh/7tl+C/+nSksvV+KjL8laxIoF21XkKcamX8jtwLHBNXahi1ch9Uyr
-   Q==;
-From:   =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
-Date:   Thu, 30 Mar 2023 11:32:14 +0200
-Subject: [PATCH v2] ubifs: Free memory for tmpfile name
+        Thu, 30 Mar 2023 05:33:08 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4806E93;
+        Thu, 30 Mar 2023 02:33:03 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 09:33:00 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680168781;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vqOK79NtrV7he0FM5j2OjTQDuyQecRZj6vRZgqwExg4=;
+        b=b76AvJO2QCUzr7uneadSs/vpjdB8eCOtTw59Z8PY3Ww7KYI01iVOX5H6N2c5rVczuoTL0A
+        ua4O0L1MCXV1opaDoVHAbq0PL1qyICyloNiND2vzPZCnzPidfyB4CRKupp87p5Lz6/TmOI
+        1FL/mdwFnyna1Rap4okeaymaG7dc5ejxj82n8r7gpHHBq6+Il2cHuLH8P4VCVGkx/K/VdT
+        uWLcd5JKG/K4kxm1duR5YVHpTH3NhNz3ynEoa9bC0gk5EbaTiv0JQWkcZnkuZh7cfntOCr
+        s1x/Z+n2DjmaPVhEvztIBDwhxSujR+jtEO8fJHCEpR2lbfOcYDqUf/cpg0dcOA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680168781;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vqOK79NtrV7he0FM5j2OjTQDuyQecRZj6vRZgqwExg4=;
+        b=COCFp4z0K2EoY/I25UgrX58l47Bk1g6afszS3EVJWvF7f6egDobKI+edqkhiwydXmNEyre
+        sy9/Ox01EOc/OcDw==
+From:   "tip-bot2 for Eric DeVolder" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/acpi/boot: Correct acpi_is_processor_usable() check
+Cc:     Miguel Luis <miguel.luis@oracle.com>,
+        Boris Ostrovsky <boris.ovstrosky@oracle.com>,
+        Eric DeVolder <eric.devolder@oracle.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        David R <david@unsolicited.net>, <stable@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230327191026.3454-2-eric.devolder@oracle.com>
+References: <20230327191026.3454-2-eric.devolder@oracle.com>
 MIME-Version: 1.0
+Message-ID: <168016878002.404.5262105401164408214.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-ID: <20230329-memleak-fix-v2-1-cb8d9394300b@axis.com>
-X-B4-Tracking: v=1; b=H4sIAB1XJWQC/22Nyw6CQAxFf4V0bQ0zozxc+R+GRYEijQ6YKSEYw
- r87sHZ57iNnBeUgrHBLVgg8i8o4RLCnBJqehiejtJHBptalzpbo2b+ZXtjJgkVOqWmpu2QlQ3z
- UpIx1oKHp948nnTjsxSdw3B+aRxW5F53G8D2ss9nT/4LZoMHcONfSNWMqujstoudm9FBt2/YDO
- U6Ms74AAAA=
-To:     Richard Weinberger <richard@nod.at>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@axis.com>,
-        =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680168758; l=1585;
- i=marten.lindahl@axis.com; s=20230329; h=from:subject:message-id;
- bh=DvHc9WiK+hCXxAJFzO5SlY8uEWNpRF0ZPAgyp0dhgpQ=;
- b=+VxG8dBorTmhj1CUJGkeCxLyzvmUn+kHjSxEOH4y6tqHD/w29wuRZ3n5bTPTEvZR/XLLGNmCU
- e4XJ5VCW9Y4DDcaapawU1ESDAnzvAz+1R4Nfbf5X56egcCPv//z2JCX
-X-Developer-Key: i=marten.lindahl@axis.com; a=ed25519;
- pk=JfbjqFPJnIDIQOkJBeatC8+S3Ax3N0RIdmN+fL3wXgw=
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,54 +67,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When opening a ubifs tmpfile on an encrypted directory, function
-fscrypt_setup_filename allocates memory for the name that is to be
-stored in the directory entry, but after the name has been copied to the
-directory entry inode, the memory is not freed.
+The following commit has been merged into the x86/urgent branch of tip:
 
-When running kmemleak on it we see that it is registered as a leak. The
-report below is triggered by a simple program 'tmpfile' just opening a
-tmpfile:
+Commit-ID:     fed8d8773b8ea68ad99d9eee8c8343bef9da2c2c
+Gitweb:        https://git.kernel.org/tip/fed8d8773b8ea68ad99d9eee8c8343bef9da2c2c
+Author:        Eric DeVolder <eric.devolder@oracle.com>
+AuthorDate:    Mon, 27 Mar 2023 15:10:26 -04:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Thu, 30 Mar 2023 11:07:30 +02:00
 
-  unreferenced object 0xffff88810178f380 (size 32):
-    comm "tmpfile", pid 509, jiffies 4294934744 (age 1524.742s)
-    backtrace:
-      __kmem_cache_alloc_node
-      __kmalloc
-      fscrypt_setup_filename
-      ubifs_tmpfile
-      vfs_tmpfile
-      path_openat
+x86/acpi/boot: Correct acpi_is_processor_usable() check
 
-Free this memory after it has been copied to the inode.
+The logic in acpi_is_processor_usable() requires the online capable
+bit be set for hotpluggable CPUs.  The online capable bit has been
+introduced in ACPI 6.3.
 
-Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+However, for ACPI revisions < 6.3 which do not support that bit, CPUs
+should be reported as usable, not the other way around.
+
+Reverse the check.
+
+  [ bp: Rewrite commit message. ]
+
+Fixes: e2869bd7af60 ("x86/acpi/boot: Do not register processors that cannot be onlined for x2APIC")
+Suggested-by: Miguel Luis <miguel.luis@oracle.com>
+Suggested-by: Boris Ostrovsky <boris.ovstrosky@oracle.com>
+Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Tested-by: David R <david@unsolicited.net>
+Cc: <stable@kernel.org>
+Link: https://lore.kernel.org/r/20230327191026.3454-2-eric.devolder@oracle.com
 ---
-Changes in v2:
-- Call fscrypt_free_filename after ubifs_release_budget
-- Link to v1: https://lore.kernel.org/r/20230329-memleak-fix-v1-1-7133da56ea8f@axis.com
----
- fs/ubifs/dir.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kernel/acpi/boot.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/fs/ubifs/dir.c b/fs/ubifs/dir.c
-index 0f29cf201136..7dd6dd34b84c 100644
---- a/fs/ubifs/dir.c
-+++ b/fs/ubifs/dir.c
-@@ -492,6 +492,7 @@ static int ubifs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
- 	unlock_2_inodes(dir, inode);
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 7292184..0dac4ab 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -197,7 +197,8 @@ static bool __init acpi_is_processor_usable(u32 lapic_flags)
+ 	if (lapic_flags & ACPI_MADT_ENABLED)
+ 		return true;
  
- 	ubifs_release_budget(c, &req);
-+	fscrypt_free_filename(&nm);
+-	if (acpi_support_online_capable && (lapic_flags & ACPI_MADT_ONLINE_CAPABLE))
++	if (!acpi_support_online_capable ||
++	    (lapic_flags & ACPI_MADT_ONLINE_CAPABLE))
+ 		return true;
  
- 	return finish_open_simple(file, 0);
- 
-
----
-base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
-change-id: 20230329-memleak-fix-87a01daf469e
-
-Best regards,
--- 
-Mårten Lindahl <marten.lindahl@axis.com>
-
+ 	return false;
