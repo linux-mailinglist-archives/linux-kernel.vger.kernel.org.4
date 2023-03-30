@@ -2,83 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1476D08E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217516D08E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbjC3O5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S232585AbjC3O5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbjC3O45 (ORCPT
+        with ESMTP id S232664AbjC3O5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:56:57 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE517BB9C;
-        Thu, 30 Mar 2023 07:56:38 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso22209884pjb.3;
-        Thu, 30 Mar 2023 07:56:38 -0700 (PDT)
+        Thu, 30 Mar 2023 10:57:04 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD40ECDCF;
+        Thu, 30 Mar 2023 07:56:44 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id f4-20020a9d0384000000b0069fab3f4cafso10127624otf.9;
+        Thu, 30 Mar 2023 07:56:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680188198;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yU8Am5XS4bF62pVIqk8T6WsY9phiYr9ElUgv6Ugf+V4=;
-        b=XNyGjhS0HyE/19hdtnkz4Ep2rUVTq/MvwpH9+sV9RrYuAOe34ArZ34J1LjrpbQDQoT
-         j9AorV55iC8yKbebmSG1/CEEmd3RbdrqxzCQgdMKSxKdQbUrt+xH4UWMPS8IyaCN3Jr0
-         os1/scO7YSDkUes7sscnsTFqYQss0sfya34emJv8JPXDN5UPcmNrk7ismVAfK2KscYPU
-         lsdloEQ2pV36SXEFQySk8wftm1EmE3BnJytvc4gekp6vB6/8FvjU3SM5+IHPS0ZffVu5
-         4wsviBgxT3H0OqaVqHVtEBKK5I9zsfDDfiVLWKDkLsKTcZ4NGFmzNsp+Vn2NtL995iIy
-         M+SQ==
+        d=gmail.com; s=20210112; t=1680188202;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=33ML0sCiZsmNYfIFvzdCr7eA6//B/DCyhkc4DfMG7yU=;
+        b=hhjyyGJ5Z0Z9yX+gD6bwCy3N0MKqvKQvuAKssumxFM6eTwIyp5Oo20vI2M48SmAnwc
+         OGKJJ/EKx/osI6bXWGgXsawSSeJI/xNBk826LDFym/449NtzxHgDgQx+v+7YHl6taobR
+         w8gR5lsLuk+8uf+VTcf7e4kiGKagtMAIUdnouhZuFSljwm3XZN2Y3iEpAfiJIxfW5Umi
+         aV2I3c8AbUY8F8ZodWmx3LMt7RmTkOJbtjpS/kUd2Yk4xr5KGrhRfYVoAGX3nhWgGwpc
+         sPFJ4vnxIIvmQOrxFf3TWPxwIsNH6ZT7vJZQNEhhiYn2p+POO94/i1Q7myXLnWb+ya92
+         b6Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680188198;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yU8Am5XS4bF62pVIqk8T6WsY9phiYr9ElUgv6Ugf+V4=;
-        b=l4Ih1f09tUVjXerrBvNHIYIVhtkU11ikQvn3nDaWTXdjWL9LQGLLv/4aRUHC8ubMwJ
-         4Z1Y5HBEBwY6gcxdASA5gg0H2qij8KcuHJZKS+LQTZUb/NoPYIzREIOV/4ZApiTi8Ikd
-         BmvI37s8dfdTWRhob2vamh8rvYERIWf24pf72XbwIVXdgkihR/bI/LdI7XZ3KwDnu+Lm
-         oVvFUfktrRGH/52sc8F6Yr/H0BltG7fnrrLAf7srwXLv8Yc5b9z1YrohMRBLtT85awI6
-         jjUwYn7D5ak7coG+3osC5NxgaYZeOyeZPB72FeDabp3Mh6bR5Ir1MOmgp57z23BUtpOt
-         P9IQ==
-X-Gm-Message-State: AAQBX9fziFVUxwE0wWdr6qafqAnbqAnk6tFcMJ9Rcz/6BPGnkIjH8+1v
-        NhGLqnasldeK3a0pxj4OY9g=
-X-Google-Smtp-Source: AKy350YoGDgn2poQnnaCqiFv0hhws5xv1ZehFOBFTiz0scDtfRKenDXvcfbcsvYzDmbQEWyFfWyS8A==
-X-Received: by 2002:a17:902:ce86:b0:1a1:cef9:cc5c with SMTP id f6-20020a170902ce8600b001a1cef9cc5cmr29508944plg.15.1680188198040;
-        Thu, 30 Mar 2023 07:56:38 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170902a9ca00b001a04a372fa0sm10562439plr.251.2023.03.30.07.56.29
+        d=1e100.net; s=20210112; t=1680188202;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=33ML0sCiZsmNYfIFvzdCr7eA6//B/DCyhkc4DfMG7yU=;
+        b=4Wn88KRGra19tiC5KTWra5EMvKefIEqVNEbo7uxVVDsHJgGF1x/kd8jjf36qQApB9J
+         PRLDYvdpQywLLIS8L+KBqt3P4ti41Vhu79crhJx8J8S8epnbf8HCgwJAoF72b/B3EV6s
+         ZBWV7a0006f6iCyUXcOSrApZ0k7epwXTv4npZdcapMwQYFZ5nHLxyD5pXXWHQY6DClkD
+         QCjMqSyoWLFAAvrcRR7C2fOMak6cp+mxATolFbwVQXMTsDPGSxyrkHmFCWrCan2Gr4gH
+         LKo9lvmGaeUr1V8fDqTKzEyjyVVaE8rpCVNEe/kipcs/KANG0Px97ft5tM0nEpZjVOT9
+         c+mw==
+X-Gm-Message-State: AAQBX9fGJITOspvkhMYf7A0KP7W5pD2kA7PpdBxwYJJqkGPikbEg0J6J
+        wKgr9A0ZuzG3sk8P9GeLJGo=
+X-Google-Smtp-Source: AKy350YMbqNcniqsqDGNpoQIaqTLdf6LjevJjKOilBkazQbxdkPIpJF6FeKur4gcsonWQu9dRqAzyA==
+X-Received: by 2002:a05:6830:1644:b0:6a1:7eaa:3836 with SMTP id h4-20020a056830164400b006a17eaa3836mr591188otr.5.1680188202533;
+        Thu, 30 Mar 2023 07:56:42 -0700 (PDT)
+Received: from wedsonaf-dev ([189.124.190.154])
+        by smtp.gmail.com with ESMTPSA id d11-20020a05683018eb00b0069f1774cde8sm8625555otf.71.2023.03.30.07.56.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 07:56:37 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 17:56:23 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        Thu, 30 Mar 2023 07:56:42 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 11:56:33 -0300
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
         linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH net-next 1/2] net: dsa: rzn1-a5psw: enable DPBU for CPU
- port and fix STP states
-Message-ID: <20230330145623.z5q44euny3zj3uat@skbuf>
-References: <20230330083408.63136-1-clement.leger@bootlin.com>
- <20230330083408.63136-2-clement.leger@bootlin.com>
- <20230330104828.6badaaad@fixe.home>
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH 12/13] rust: sync: introduce `CondVar`
+Message-ID: <ZCWjIaByRHDhdCud@wedsonaf-dev>
+References: <20230330043954.562237-1-wedsonaf@gmail.com>
+ <20230330043954.562237-12-wedsonaf@gmail.com>
+ <20230330125927.GD124812@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230330104828.6badaaad@fixe.home>
+In-Reply-To: <20230330125927.GD124812@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -89,18 +79,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 10:48:28AM +0200, Clément Léger wrote:
-> Actually, after leaving a bridge, it seems like the DSA core put the
-> port in STP DISABLED state. Which means it will potentially leave that
-> port with TX disable... Since this TX enable is applying not only on
-> bridge port but also on standalone port, it seems like this also needs
-> to be reenabled in bridge_leave().
+On Thu, Mar 30, 2023 at 02:59:27PM +0200, Peter Zijlstra wrote:
+> On Thu, Mar 30, 2023 at 01:39:53AM -0300, Wedson Almeida Filho wrote:
+> 
+> > +    fn wait_internal<T: ?Sized, B: Backend>(&self, wait_state: u32, guard: &mut Guard<'_, T, B>) {
+> > +        let wait = Opaque::<bindings::wait_queue_entry>::uninit();
+> > +
+> > +        // SAFETY: `wait` points to valid memory.
+> > +        unsafe { bindings::init_wait(wait.get()) };
+> > +
+> > +        // SAFETY: Both `wait` and `wait_list` point to valid memory.
+> > +        unsafe {
+> > +            bindings::prepare_to_wait_exclusive(self.wait_list.get(), wait.get(), wait_state as _)
+> > +        };
+> 
+> I can't read this rust gunk, but where is the condition test gone?
+> 
+> Also, where is the loop gone to?
 
-That's... not true? dsa_port_switchdev_unsync_attrs() has:
+They're both at the caller. The usage of condition variables is something like:
 
-	/* Port left the bridge, put in BR_STATE_DISABLED by the bridge layer,
-	 * so allow it to be in BR_STATE_FORWARDING to be kept functional
-	 */
-	dsa_port_set_state_now(dp, BR_STATE_FORWARDING, true);
+while guard.value != v {
+    condvar.wait_uninterruptible(&mut guard);
+}
 
-a dump_stack() could help explain what's going on in your system?
+(Note that this is not specific to the kernel or to Rust: this is how condvars
+work in general. You'll find this in any textbook on the topic.)
+
+In the implementation of wait_internal(), we add the local wait entry to the
+wait queue _before_ releasing the lock (i.e., before the test result can
+change), so we guarantee that we don't miss wake up attempts.
+
+Thanks,
+-Wedson
