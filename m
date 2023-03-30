@@ -2,113 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213B96CFE30
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F41396CFE2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjC3IYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
+        id S230044AbjC3IXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbjC3IYI (ORCPT
+        with ESMTP id S229475AbjC3IXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:24:08 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B90440EB;
-        Thu, 30 Mar 2023 01:24:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1680164643; x=1711700643;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SBoEmEO7Dj8b7NzG7TSXvuV5ruIHbv+zWUEtKVANFTE=;
-  b=SFRBen89IOz4UM2WOTouzvEBLOT3JzGCc95ze561lmGjwRXCZmk08xGF
-   Ia+hhOi8j0XAzQQkJXEp6hjigNhHdX++oaU80FbQwKdHct1CGhoI6cNp7
-   xRfcjQRP+ojvf7hMFL0HPQS3Dc4g87yrF6xi64VhdkBvnsujfeXOdbGJE
-   sml3OpPaROb99qZ0i1i66ooYRJ9yIcxIovNB31RaOPLaNYIQ45WJ3kt2k
-   cBXvo+4F5hQxnBs7lUXzrYaIMfdTG4g5zqcGfRJRXf1RAJ3W2XToL3fCQ
-   ykpG1EintgJKaNH6PujsiTK5ek5tsFk0n/bur0laexSXgZOuw79nfu3iU
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,303,1673938800"; 
-   d="asc'?scan'208";a="204161151"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Mar 2023 01:24:02 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 01:24:01 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 30 Mar 2023 01:23:58 -0700
-Date:   Thu, 30 Mar 2023 09:23:45 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-CC:     <linux-riscv@lists.infradead.org>, <conor@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
-Message-ID: <a6220e52-9934-422b-9b05-95705b8fd684@spud>
-References: <20230307102441.94417-1-conor.dooley@microchip.com>
- <CANiq72=i9je2864iTvZBFnhVLhF7Cema7EPCcdWOJ3mr62SqDg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YyN1dM7SJNHGwojV"
-Content-Disposition: inline
-In-Reply-To: <CANiq72=i9je2864iTvZBFnhVLhF7Cema7EPCcdWOJ3mr62SqDg@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 30 Mar 2023 04:23:52 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205051727;
+        Thu, 30 Mar 2023 01:23:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D283A1FEA0;
+        Thu, 30 Mar 2023 08:23:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680164629; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ByFAfmSPj10Mw78BaMXnotsF0EThOT5754/yOyFKQ14=;
+        b=TRuWDQxuOtOQf2MjYQRPWN+/AyHBP9vc6v6qg0nNVg8UCNh9VKVm29GKIj/LetibQNVQHT
+        1gEsQSe8ch93GG3PHYgmeZwWsKtlHp7rFgtgbr+4RxKtL46HWfwJw8eX7mpE6CGr7EAzQJ
+        HL5Uaf6cYNuC6LwEmx94gM1Ner6h8Bo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680164629;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ByFAfmSPj10Mw78BaMXnotsF0EThOT5754/yOyFKQ14=;
+        b=rYT4c19Xle6TWzOhfpqe8oUBHnFgzg4mcgBQCuydnWg0c1Pk82UFyeVox4TOs3bGUFyQl/
+        kka8YZ/+Z2zB7UCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AFF88138FF;
+        Thu, 30 Mar 2023 08:23:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hKtYKhVHJWR5FQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 30 Mar 2023 08:23:49 +0000
+Date:   Thu, 30 Mar 2023 10:23:49 +0200
+Message-ID: <87mt3umyui.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Pali =?ISO-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        regressions@lists.linux.dev, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION] wrong coord from Thinkpad TrackPoint since 6.2 kernel
+In-Reply-To: <874jq3q52i.wl-tiwai@suse.de>
+References: <87h6u4otuc.wl-tiwai@suse.de>
+        <3dec29bf-b772-d82d-fff9-6c8bcca5f464@redhat.com>
+        <874jq3q52i.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---YyN1dM7SJNHGwojV
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 29 Mar 2023 11:28:53 +0200,
+Takashi Iwai wrote:
+> 
+> On Wed, 29 Mar 2023 11:22:18 +0200,
+> Hans de Goede wrote:
+> > 
+> > Hi Takashi,
+> > 
+> > On 3/29/23 10:16, Takashi Iwai wrote:
+> > > Hi,
+> > > 
+> > > we've received a bug report about Thinkpad TrackPoint (ALPS DualPoint
+> > > Stick) on 6.2 kernel:
+> > >   https://bugzilla.opensuse.org/show_bug.cgi?id=1209805
+> > > 
+> > > The device reports the wrong values as the movements, e.g. sometimes a
+> > > value such as 255, 254 or -255 is returned while usually it should be
+> > > a smaller value like -1 or 2.
+> > > 
+> > > The evtest on 6.2.x kernel shows the wrong values like:
+> > > 
+> > > Event: time 1680037542.898747, type 2 (EV_REL), code 0 (REL_X), value 255
+> > > Event: time 1680037542.898747, -------------- SYN_REPORT ------------
+> > > Event: time 1680037543.145196, type 2 (EV_REL), code 0 (REL_X), value 1
+> > > Event: time 1680037543.145196, -------------- SYN_REPORT ------------
+> > > Event: time 1680037543.175087, type 2 (EV_REL), code 1 (REL_Y), value -255
+> > > Event: time 1680037543.175087, -------------- SYN_REPORT ------------
+> > > Event: time 1680037543.185421, type 2 (EV_REL), code 0 (REL_X), value 1
+> > > Event: time 1680037543.185421, type 2 (EV_REL), code 1 (REL_Y), value -255
+> > > Event: time 1680037543.185421, -------------- SYN_REPORT ------------
+> > > 
+> > > while 6.1.x kernel shows the correct values like:
+> > > 
+> > > Event: time 1680037386.318058, type 2 (EV_REL), code 0 (REL_X), value -1
+> > > Event: time 1680037386.318058, type 2 (EV_REL), code 1 (REL_Y), value -1
+> > > Event: time 1680037386.318058, -------------- SYN_REPORT ------------
+> > > Event: time 1680037386.328087, type 2 (EV_REL), code 0 (REL_X), value -1
+> > > Event: time 1680037386.328087, type 2 (EV_REL), code 1 (REL_Y), value -1
+> > > Event: time 1680037386.328087, -------------- SYN_REPORT ------------
+> > > Event: time 1680037386.338046, type 2 (EV_REL), code 0 (REL_X), value -1
+> > > Event: time 1680037386.338046, type 2 (EV_REL), code 1 (REL_Y), value -2
+> > > Event: time 1680037386.338046, -------------- SYN_REPORT ------------
+> > >   
+> > > I couldn't see any relevant changes in alps.c between those versions,
+> > > so this is likely a breakage in a lower layer.
+> > > 
+> > > Could you guys take a look?
+> > 
+> > I believe this is caused by the kernel now using -funsigned-char
+> > everywhere and this should be fixed by this commit:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git/commit/?h=for-linus&id=754ff5060daf5a1cf4474eff9b4edeb6c17ef7ab
+> 
+> Ah, that makes sense!
+> 
+> I'll build a test kernel with this fix and ask the reporter for
+> testing.
 
-On Tue, Mar 07, 2023 at 12:07:29PM +0100, Miguel Ojeda wrote:
-> On Tue, Mar 7, 2023 at 11:25=E2=80=AFAM Conor Dooley <conor.dooley@microc=
-hip.com> wrote:
-> >
-> > I have added SoB's too, but if that is not okay Gary, then please scream
-> > loudly.
->=20
-> Note that `Co-developed-by`s always go with a `Signed-off-by`s, i.e.
-> it is not possible to add just a `Co-developed-by`.
+And it's confirmed that the commit above fixes the problem indeed.
 
-Aye, but that does not mean that I am entitled to add someone else's!
 
-> By the way, like for the Arm patch set, if you end up doing a v2,
-> could you please add the `BINDGEN_TARGET_*` in `rust/Makefile` (GCC
-> builds are really experimental, but since they are there anyway, it is
-> best to be consistent and add it).
+thanks,
 
-Sure.
-
---YyN1dM7SJNHGwojV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCVHEQAKCRB4tDGHoIJi
-0sZQAQCUXauXvBSo3TQBU7zir2CymSgO+QWCV5+jRW9nEMhawAD/bfruWxpKJBpY
-m9CRaroRiPS0CZfC4rp/1I2j2aRuSQg=
-=eDKb
------END PGP SIGNATURE-----
-
---YyN1dM7SJNHGwojV--
+Takashi
