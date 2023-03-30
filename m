@@ -2,54 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9878D6CFAFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 07:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25A86CFB10
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 07:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjC3Fzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 01:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
+        id S229854AbjC3F6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 01:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbjC3Fzi (ORCPT
+        with ESMTP id S229524AbjC3F63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 01:55:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD691BE1;
-        Wed, 29 Mar 2023 22:55:37 -0700 (PDT)
+        Thu, 30 Mar 2023 01:58:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB09E4;
+        Wed, 29 Mar 2023 22:58:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03D6B61ED4;
-        Thu, 30 Mar 2023 05:55:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0947C433D2;
-        Thu, 30 Mar 2023 05:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680155736;
-        bh=jePcfN0x3909Hzntn86C67kAOB+wuqEjPSGL6lUh7Zc=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E93DB825DA;
+        Thu, 30 Mar 2023 05:58:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CAA0C433D2;
+        Thu, 30 Mar 2023 05:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680155906;
+        bh=vx/Rnvlz/DgN2zpFUitn4sJ61icshhEzaPkBFQHilaA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RnEwa2LVs76papoofedcMKqAycv5hXhBhVCjFU8YU+SjshRamZXvT3tpfGPjiacPD
-         xWylfk9c94ox2VywaLKRVB4hJFXQO6oWuwOR9zZ7kzrpwaTzt5eCvtAbOYW2FSIdVm
-         2WmggUnl3VEIc0s5ZlTWF9BxDbFyj/tS2jwKs9CYhjDKOMPg3LvDb85g4eyTf/qtmp
-         F7qqh7FCubnT3OkKJ4gxP0J3BvTKdfmOvO2BpNRpIKvBONeHMf7Lv57q3LwGxLc8hG
-         74qlDf8010lvWpM3gKE29NF6nPqgiqNYQoYSxtev3a196k/8nvAgPLyuXtqYOrKW0d
-         E/VjZooPXKAtQ==
-Date:   Thu, 30 Mar 2023 08:55:32 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Sai Krishna <saikrishnag@marvell.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sgoutham@marvell.com,
-        richardcochran@gmail.com, Geetha sowjanya <gakula@marvell.com>
-Subject: Re: [net PATCH 1/7] octeontx2-af: Secure APR table update with the
- lock
-Message-ID: <20230330055532.GK831478@unreal>
-References: <20230329170619.183064-1-saikrishnag@marvell.com>
- <20230329170619.183064-2-saikrishnag@marvell.com>
+        b=hqMaP3HREd0etYbIDJDe3wFNh2yBBggwgWJnYQhMaiWD9UbeD5IyvNh5E230ustkC
+         bVdvPiwvs8fFeb4lYFWXiXkZv85cYyiSLP35vyyxGrSCzoeTG9+tn39sVOg0d9xnCb
+         zlyfb7MK3rmCnayaKeoL51E3hJpm0po69Y7dh9fY=
+Date:   Thu, 30 Mar 2023 07:58:23 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        "quic_jhugo@quicinc.com" <quic_jhugo@quicinc.com>,
+        "quic_carlv@quicinc.com" <quic_carlv@quicinc.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "helgaas@kernel.org" <helgaas@kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH v2] PCI: hv: Fix the definition of vector in
+ hv_compose_msi_msg()
+Message-ID: <ZCUk_9YQGSfedCOR@kroah.com>
+References: <20221027205256.17678-1-decui@microsoft.com>
+ <ZCTsPFb7dBj2IZmo@boqun-archlinux>
+ <ZCT6JEK/yGpKHVLn@boqun-archlinux>
+ <SA1PR21MB13354973735A5E727F94A169BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230329170619.183064-2-saikrishnag@marvell.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+In-Reply-To: <SA1PR21MB13354973735A5E727F94A169BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,74 +70,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 10:36:13PM +0530, Sai Krishna wrote:
-> From: Geetha sowjanya <gakula@marvell.com>
+On Thu, Mar 30, 2023 at 03:23:45AM +0000, Dexuan Cui wrote:
+> > From: Boqun Feng <boqun.feng@gmail.com>
+> > Sent: Wednesday, March 29, 2023 7:56 PM
+> > To: Dexuan Cui <decui@microsoft.com>
+> >  ...
+> > On Wed, Mar 29, 2023 at 06:56:12PM -0700, Boqun Feng wrote:
+> > > [Cc stable]
+> > >
+> > > On Thu, Oct 27, 2022 at 01:52:56PM -0700, Dexuan Cui wrote:
+> > > > The local variable 'vector' must be u32 rather than u8: see the
+> > > > struct hv_msi_desc3.
+> > > >
+> > > > 'vector_count' should be u16 rather than u8: see struct hv_msi_desc,
+> > > > hv_msi_desc2 and hv_msi_desc3.
+> > > >
+> > >
+> > > Dexuan, I think this patch should only be in 5.15, because...
+> > >
+> > 
+> > Sorry, I meant:
+> > 
+> > "this patch should also be backported in 5.15"
+> > 
+> > Regards,
+> > Boqun
+> > 
+> > > > Fixes: a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
+> > >
+> > > ^^^ this commit is already in 5.15.y (commit id 92dcb50f7f09).
+> > >
+> > > Upstream id e70af8d040d2b7904dca93d942ba23fb722e21b1
+> > > Cc: <stable@vger.kernel.org> # 5.15.x
 > 
-> APR table contains the lmtst base address of PF/VFs.
-> These entries are updated by the PF/VF during the
-> device probe. Due to race condition while updating the
-> entries are getting corrupted. Hence secure the APR
-> table update with the lock.
-
-However, I don't see rsrc_lock in probe path.
-otx2_probe()
- -> cn10k_lmtst_init()
-  -> lmt_base/lmstst is updated with and without mbox.lock.
-
-Where did you take rsrc_lock in probe flow?
-
-Thanks
-
+> The faulty commit a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
+> is in all the stable branches, even including 4.14.y, so yes, the commit
+> e70af8d040d2 ("PCI: hv: Fix the definition of vector in hv_compose_msi_msg()")
+> should be backported to all the stable branches as well, including
+> v5.15.y, v5.10.y, v5.4.y, v4.19.y, v4.14.y.
 > 
-> Fixes: 893ae97214c3 ("octeontx2-af: cn10k: Support configurable LMTST regions")
-> Signed-off-by: Geetha sowjanya <gakula@marvell.com>
-> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
-> Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
-> ---
->  drivers/net/ethernet/marvell/octeontx2/af/rvu_cn10k.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_cn10k.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_cn10k.c
-> index 4ad9ff025c96..8530250f6fba 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_cn10k.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_cn10k.c
-> @@ -142,16 +142,17 @@ int rvu_mbox_handler_lmtst_tbl_setup(struct rvu *rvu,
->  	 * region, if so, convert that IOVA to physical address and
->  	 * populate LMT table with that address
->  	 */
-> +	mutex_lock(&rvu->rsrc_lock);
->  	if (req->use_local_lmt_region) {
->  		err = rvu_get_lmtaddr(rvu, req->hdr.pcifunc,
->  				      req->lmt_iova, &lmt_addr);
->  		if (err < 0)
-> -			return err;
-> +			goto error;
->  
->  		/* Update the lmt addr for this PFFUNC in the LMT table */
->  		err = rvu_update_lmtaddr(rvu, req->hdr.pcifunc, lmt_addr);
->  		if (err)
-> -			return err;
-> +			goto error;
->  	}
->  
->  	/* Reconfiguring lmtst map table in lmt region shared mode i.e. make
-> @@ -181,7 +182,7 @@ int rvu_mbox_handler_lmtst_tbl_setup(struct rvu *rvu,
->  		 */
->  		err = rvu_update_lmtaddr(rvu, req->hdr.pcifunc, val);
->  		if (err)
-> -			return err;
-> +			goto error;
->  	}
->  
->  	/* This mailbox can also be used to update word1 of APR_LMT_MAP_ENTRY_S
-> @@ -230,6 +231,7 @@ int rvu_mbox_handler_lmtst_tbl_setup(struct rvu *rvu,
->  	}
->  
->  error:
-> +	mutex_unlock(&rvu->rsrc_lock);
->  	return err;
->  }
->  
-> -- 
-> 2.25.1
-> 
+> e70af8d040d2 has a Fixes tag. Not sure why it's not automatically backported.
+
+Because "Fixes:" is not the flag that we are sure to trigger off of.
+Please read:
+    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to do this properly.
+
+That being said, because some subsystem maintainers do NOT put cc:
+stable in their patches, we do sometimes sweep the tree and try to pick
+up things with only "Fixes:" but we don't always catch everything.
+
+So if you want to be sure a patch is applied, please always add a cc:
+stable in the patch.
+
+thanks,
+
+greg k-h
