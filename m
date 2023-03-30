@@ -2,279 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D266D0928
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E8E6D0B76
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbjC3PLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S231803AbjC3Qic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 12:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbjC3PK6 (ORCPT
+        with ESMTP id S230510AbjC3Qia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:10:58 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20583C3D
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:09:36 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id t19so18720132qta.12
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:09:36 -0700 (PDT)
+        Thu, 30 Mar 2023 12:38:30 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0996CA1D
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:38:29 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32UEE7ka032275;
+        Thu, 30 Mar 2023 15:10:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=kEm9Ur8JpBiX2M08fuPFoH+GWoJCKVCjBoBeglJ4U7Q=;
+ b=CGjZ98Q6pbP+Koe6o5dthVi6plmWdqQd+lXRl1KAZ9brfiTqsOm33ebN/5rJPjj3zvxi
+ 5CzX6Q1TEuM71b3BXAVcubZBbbOuolK0loZyt8Fkh4vDhNEgReTIVCDZvv/rZjWdH2xz
+ U6i55ZgYHsU4N5SCFZx1v82DGGvNTG1TEPT3PRcqpB+gFbQMmvK0yhfVnIzwpbXwJo3a
+ EXR8f0n7vh8sDPG2wSBj/dcv/wJN7uSwhl+K81QAW1fq+b1n1Z+7K3Zi/4C740pwCOmO
+ /9CJ87G7BL7m4sHu2enSX6wnpZQgQE9Toys0Xfa0hwdrCmveIUSUvY/LNsEdIpDquRE7 fQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pmq79awwe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Mar 2023 15:10:42 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32UDopHF016288;
+        Thu, 30 Mar 2023 15:10:41 GMT
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2043.outbound.protection.outlook.com [104.47.74.43])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3pmyvvg5nc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Mar 2023 15:10:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V5ZX7kkIB7pMrWMird0ExVniMZr8DZvqeodQ+tPBZNWJdq7zZlwv51e5QDVDl1PdRd6OOiX5NLYIf6STxEVYt8487zMD3R9L32RPj/VhdjU/rcfyhyT7rHVO4JnAq++uoHLoEt+E/13Hb68oH+OwdWweAVq1hPq7Zp11HF8UEQAXLr99rvRixRyhzeQxZAwaqkZahboazknR8Uk48rk2CYn2TEbNiPB/dYWnVS24n1ny7sn85VovvnSr0T6yCnyt9DyhktKR+OVRY2QHmP+LHgQWDWHtcbnUvGTFzCKm0m23cFBhRcqDWJ3pRRrIDdHcHL8et5KrUYWsxUnEu2BHgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kEm9Ur8JpBiX2M08fuPFoH+GWoJCKVCjBoBeglJ4U7Q=;
+ b=DYiaB4a3y+dodpabw/Vz9XxkKd6vgajq6qzHckJCCvWuVX2qLEwfXOtPqeg/BV4OY1Ijc4/eI2tldp2bbXfS9GHqJLeokb1TFIfeJZ5bLq63K/TIv8f75qC0TcfGlu+mP2ov2SpuXOOyKDY/SFsuutsJ+XGGW+wuqvD98euQmC96mRPtjnVOpZHSPgXIUeOzKZf+E3FZBNlGXCzcobB8BoLcY+ZhtE8+lR5WslnpQufmKq4/fpbJk8sCUuz10scS+gN08YLaJNda66mLIBVykN+dvXwfFyJi3uUWArWWCz+akOz05nOES9me2LsUz4GlzOc+LyRgnz1fJlCQwTbvTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1680188974;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=d9SSEYK9+rLxf8rsg8ZhJkHKzQe51MzIdNwTny7GCDE=;
-        b=m6UVd1hdrKFSzgvADYkcehDr1RbP+WDP6ki0+MRYiZePeMzYfH5bnL8iaZpk1yobQ9
-         Ij9sX5WPve0A+sxBY7mx8QBV6b9MwsVb7Ppm9uYSBSUpSAmJQ5/9d+Eftrlv2kmvdugk
-         hYP6HwviiUDgkgvncrcG1qSBEZVp5Gp72jLwg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680188974;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d9SSEYK9+rLxf8rsg8ZhJkHKzQe51MzIdNwTny7GCDE=;
-        b=yD6DX3sjMI6ZfI9tA8zyeYMAhSwkncNPSZmoqs0M4lJ6nUoAxiAHLnH6Zg5c/WSuPX
-         C1lOoydjTEhR6HXHM/ruvAoh70EsQIYhtpkqTPkN0dz1eLbeqUfxIeeT3gCkgUxHuXwc
-         qvF9axxJL+s79fvgeJ6vepccaX4cgSdKBd2IFgOyxyaWUXZuqZvVmu+nnby2RHtdNn+a
-         73sejBOk/Ie5vPjWh64/xBMD7ykDgH2ypktirxJBnIr6i5gVufFZXFJg2AjKwaa3xYzX
-         Ln2Cs6glaMndEkFPD4nzfN3Umu/X0mS0xvZxzE1kYvUrhG90Itle/VHjJI38cqrsX4TP
-         idaA==
-X-Gm-Message-State: AAQBX9ff5RyQr0hhNKn5K42IluYug4jbeprqAcn4m1HrPYuFLRh98ATI
-        Upa3L4OPBtBtvAozoazrXnwj6A==
-X-Google-Smtp-Source: AKy350bLyYVwa9hLM4jIL0bMyImUrBVP5LGI21RzzgdZezsUwraYXUHEaBqU1OwBv14FXe6M6ncxSg==
-X-Received: by 2002:a05:622a:190f:b0:3bf:b5fe:372d with SMTP id w15-20020a05622a190f00b003bfb5fe372dmr37528110qtc.61.1680188974011;
-        Thu, 30 Mar 2023 08:09:34 -0700 (PDT)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id d3-20020ac847c3000000b003e4f1b3ce43sm2124925qtr.50.2023.03.30.08.09.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:09:33 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 15:09:33 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, RCU <rcu@vger.kernel.org>,
-        quic_neeraju@quicinc.com, Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-Message-ID: <20230330150933.GB2114899@google.com>
-References: <ca153af5-bd66-4d48-afa5-ace3a13aec3c@paulmck-laptop>
- <FC49F388-0480-4687-8DD3-94049FCBC92B@joelfernandes.org>
- <2cd8f407-2b77-48b1-9f17-9aa8e4ce9c64@paulmck-laptop>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kEm9Ur8JpBiX2M08fuPFoH+GWoJCKVCjBoBeglJ4U7Q=;
+ b=QnImZeFav8cj3g7qdYttL1ViaiG07zLi0caVnNP4iJRUIcAWJpKmH98xuEeOJxA1Ry67CZAoeiT7il5SFcFrq9iOIAYjNvtq/z+fVjhGFCvCgl8UxwRkyaPEZrlTg7Z0DLghY8EdNg8fapP9nSSK3kociOpYs33ngIw2McD8aXE=
+Received: from CO1PR10MB4705.namprd10.prod.outlook.com (2603:10b6:303:96::11)
+ by SA1PR10MB6319.namprd10.prod.outlook.com (2603:10b6:806:252::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Thu, 30 Mar
+ 2023 15:10:36 +0000
+Received: from CO1PR10MB4705.namprd10.prod.outlook.com
+ ([fe80::ab8d:2bb:c060:7d73]) by CO1PR10MB4705.namprd10.prod.outlook.com
+ ([fe80::ab8d:2bb:c060:7d73%5]) with mapi id 15.20.6254.022; Thu, 30 Mar 2023
+ 15:10:36 +0000
+Message-ID: <d3ff86b7-ec8e-d66c-7098-138115361a77@oracle.com>
+Date:   Thu, 30 Mar 2023 11:10:22 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] sched/numa: Fix divide by zero for
+ sysctl_numa_balancing_scan_size.
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        vincent.guittot@linaro.org
+References: <20230329162610.4130188-1-chris.hyser@oracle.com>
+ <d1fbf2d4-8989-effd-c908-2784f386fb8d@oracle.com>
+ <20230330134557.GG124812@hirez.programming.kicks-ass.net>
+From:   chris hyser <chris.hyser@oracle.com>
+In-Reply-To: <20230330134557.GG124812@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR10CA0023.namprd10.prod.outlook.com
+ (2603:10b6:208:120::36) To CO1PR10MB4705.namprd10.prod.outlook.com
+ (2603:10b6:303:96::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2cd8f407-2b77-48b1-9f17-9aa8e4ce9c64@paulmck-laptop>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4705:EE_|SA1PR10MB6319:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c58c012-d516-44fd-173f-08db3130ea34
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Wh/286mkZxBH+mxHpxTAq0bo3epu/x0XYdcit4r5DCMSPKEVRCspuXNr/cmAKlFjqS9fg+ZEsqD+0XUha7sG7kfMqSbHiTaE1Kv/u82U+XNeC+TB/nyq2xJdKNTzYnTvgt/N751l13lsc0a/9T86GAmRRZXVEsz4goON5phM/Eh7ppNzjuDkEoAhmi7Oo/eZZe/lbsg9xcA90A2uTEJykKWpvX4/pQvge7KVMAsLZRnYJchjhDaM8jxXvxIRq3hG2U4xDpZsXeyCiWciA0SBG7C+HA81/tkFdq1RZGzwysikaWL3+L+McAvIsn/9quvT8sGZ3LtLp/bmm8ldd6yWI7nzupqZala0JWOlwUxSYm5JFNXv1Yiy133EW9WVbXMct+xpaSCM4rSeWeJDN1gY2hFzsdmwjKq/WEIld7C6lR66/KLMkMGVrkID8nw6iGS1tDgZgUj0zeeFs1l6DZWXWdvsXkrtkq0E06wiNL7OxO9pY2/HjHHDSi1+zgWNLdkT+zYvSsm7EMnlXFP6JNV2e9MeSTMeVjhlorIig9JpmClyXMyo1/g74uMcdsT8fIev3uWeJVmLIROsn6BTjDpiGJfEsY13NZ7beAeqheSQTAbNUCyA8UVu13Tek4nGNVSnJ7MGPym0ShNevKTa11QtvA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4705.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(39860400002)(376002)(136003)(346002)(451199021)(6512007)(6506007)(6666004)(316002)(86362001)(5660300002)(8936002)(2616005)(31696002)(66946007)(41300700001)(6916009)(36756003)(66476007)(8676002)(4326008)(66556008)(53546011)(186003)(26005)(38100700002)(478600001)(2906002)(31686004)(6486002)(4744005)(66899021)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aVJlUkdTKzNybVlTWHBzbDhPclJRMmxQMlFVMGpRNmU1M0VvNDVRQ1laQ2Nn?=
+ =?utf-8?B?c2NSVTUwYzMrUmlQc2QzOUdrMEZNZVJwQnZSTVErVmlESGJVWlk5WTFGKzZ0?=
+ =?utf-8?B?b1ZpajNKTjF3RHhlTHVXR3dOU2RUL3NCczB2T0NvWkZpaTRvQnNwQm1IbWFw?=
+ =?utf-8?B?R053V1RiVHI4THd0T01VUTdDRHU3eVRyYktvOC8rcWVrVEVLeHJsdURWWlRh?=
+ =?utf-8?B?OXV0dEtmTEhaaUNLMVV1RnZtaUpxd0pCWVppZmNLUGROcTFRc2RTTDFBK2g1?=
+ =?utf-8?B?NGd3ZmRmQTFOZ3dEbElnQnhpRS85YnZhNEc3Nlo1R1JSQmlKYmYvaUU4b2Fz?=
+ =?utf-8?B?ZkN2dVdEWFhqUCs5TE1WWHJadmdSVnBJM0pKSWpTUWRLc0lEaXpUeXMvVTd5?=
+ =?utf-8?B?cExycTVuelRSZ1h4NUxCek9nQ1JmZWFEb0hYYlJ2L2gvRUhNQlRUQ21xc3BV?=
+ =?utf-8?B?c1RkRTVxWVpXbUk0bllSalI1MS9LNmJycWFvbUZmaVFRWXg0Z29Qb1hXTnBT?=
+ =?utf-8?B?QnpjTXZCTGhsRGdkdHlFNGRRZmtOdGk4ZTNIM1ZJc1pEMzVXSG5aOHhHL2cy?=
+ =?utf-8?B?Q2gzWW9YeE5HUkVZcS9wZ0FIZnk4dUY3NlNwM2FQanhwcmV3azNIb2o5S0dX?=
+ =?utf-8?B?MXpZc2grYTJKdjdOOW5kbUVseXB2UmlsVCtabmtlNTF2ZFB1SHVBL3dIS1hC?=
+ =?utf-8?B?NXdoUmFEVFFIUEhobEt6TzJFUEdUUVgzT2xtaGhURm5sdWRXcjhmQ3JjRm5D?=
+ =?utf-8?B?UVZFeTVOTmd1bHlyTzB3S0hXRWNYWDc1Y1YxVmhUbi9ZdWNsTzBxVUF3Y3BC?=
+ =?utf-8?B?R0x5a2s3emk1blNQZTJvd1BGbTlKNkxic3crckl6M2NUVmZCUlkwWDI3UlZk?=
+ =?utf-8?B?aWhmeE4zeDNGaFN6dFNuQjh5eVZXbE1IZFhnWDdBRjB4ZkNIODRiVFQ4YnNk?=
+ =?utf-8?B?M0tTazdTZVZqbkMwV0g0VWtxWlFnaWx5N1drY3ZMVEFFQndzY3A1bm1QR3o2?=
+ =?utf-8?B?QkdSTFdwU3g2WWVyaGcrZ2FJVGxzZDhRazBRdEU5NkxQc3FUbGxuem1OQ0RL?=
+ =?utf-8?B?WTNMeWhZc1N3WlJYTEcybTVTb2tRME42a1hIZ1R2QmZVUWExQS83STcrTHZT?=
+ =?utf-8?B?YXhDL0s0WDk4VVNJdlZDdFoyZDIzUlA2dXM4Y2Vzdmx5UkRFYUZyR29jRUh2?=
+ =?utf-8?B?cVlzRFdGMjBjckoxTURYV3dtY1oweWNRZGVWMXJJZWEwUFlVRDhtREdMdlRS?=
+ =?utf-8?B?V0tjMkh3SkNCdmpmdWNYTVVFNENWczZ5ODZEc1hMMVhZZHFaVlZ5ZTd3bGEy?=
+ =?utf-8?B?clRGanNXQmdQMzFyMWFORFQwNlYrZ0EvS3V3WSswQ0NTYXJQUEJtN1BucDNG?=
+ =?utf-8?B?cWZhckJoUHRmM0ljdmlpRzBHT1crOFpHamdGTlVlaE9tZ2ltWlZYVENNNnp6?=
+ =?utf-8?B?d0Q0bVMzYVBoczFGS0t4ZEd0VnBEemlpMXNwVXZpc0dCL0ZtUzc0NmpuNE54?=
+ =?utf-8?B?ZzFFNTRCWHBIUzNlZEZvdjd1TzVlRnU2amFMSE80VU94M2EyaCtLTmx2d3Rh?=
+ =?utf-8?B?UUZJVWdDRWFUeTRpVGtJOXJVYWVvZ3ZZaUZiTUZUTWtFdzRCdnNOT3lzQXdn?=
+ =?utf-8?B?azBsTHFoWjk3b1BMTVM3N1hCSFBZNWJrSUhSYUJVUlRibm5YY0hwMm5mczhv?=
+ =?utf-8?B?TitSbnpQTGNOaytEYnFVREZNQnVON3BWSHBEYTY4UG84SlQ1NmhiektMTUN6?=
+ =?utf-8?B?TEE0NUl0NmZoNWN4ZXgwY0JGUitQdWVGTEI3UHA5OU0zNEhGbTkzUnBmdHpF?=
+ =?utf-8?B?ejAzRCtUS2tnS1l0azQzeThHc0M3NWxmY0dGNWJ0eUFCWWFURWVnL01YMUJw?=
+ =?utf-8?B?a3A4MFVFMkdHMFhOUWEyNTUybDcrRVRsQjlFQTFtdUVuOWdCUTZmYmVjeXo2?=
+ =?utf-8?B?V1hpRXM3OGFJY1huZWdYVHlVRWFGc09URHBHMzJWRitjOGttVzl1VGhxYVk3?=
+ =?utf-8?B?M3grR1pNNlI2ZDdpMlVXaEw3eG83d3d5RkswRytnSDhGU3hXbXNIdElGNCtw?=
+ =?utf-8?B?TFBwVkJTaER0aldHT1l5eElmMFV2dEtBeUovd2JlcUN2S2R6QVh1c2VSQ2Nl?=
+ =?utf-8?B?VzR1aXRISUtFM1lZYzQ3OWRzYjFZdFZVdUxKTGNQK05FaktGS21ydmtqMHcy?=
+ =?utf-8?B?Wnc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: ZCF7KwH8qL0fm/kKLqXwTGUVhe95mqn1gT5iQHo7/NxuziKgGN5zaTqdyklg9sH0HeQDRsXnkmUvtOW6K8BspgrjLlRAqgkBlj2m01rAS5O2wSTGYpCOT19BYCs01Dah0wW5ZNXSiUZP9VB7OqOTwAKjFT9MmkHn5x4iyu6uEGciTTeXeAVG72GaFWEc5bNmVrmZG8r2JcWS7tgNYWQFJek0o1zRlbVMKoHAkpGh+FWMfBaWUzocgNzcPF/QQcrZdAkzcLZ1Quwz2hI05QplfaqaTwgqqHqmYUBxdTIpIkIDIsIDpZjC7vI9PGEMG1shpIu40002oe4kayVS0pVZfBfvuzevzlctNY1BxI8Gj0lmQEaSbu5MQ231JTeqnmyfHsJUPGTiQOCJTuQ45EGUOxJO4pfQZC2IWn8VCX6zWnZse70uSBiwqLBdndNLeX0Lnm4s5vYWoDOl4G1tfsp3w5CcksipIkLE51bAsYEg71BPxA7tpxmXVj/XH8gjIEaogZkzUxfxe43HHRsFGuOYfBXOtntRztTCT4r9s+4lvhgIQ3/6xONR/oyM4BTzLQ/HQh+CZNGJtyxQuH98dwv4kTjzFVF8RcBmfssnRQQEvKQzaaS/+L5p0YfaT37I5ZDkrX+aXv1utD2eAK+HeQrFan+pXtOijLT30RkYnCqBanCnyPOJgxSE471vgCllWR3nXDXQPQLiHAYSw0ZG587loiT4aiufetongihn8pU6eOTgjaqb17kbGh+JZ864qzL9zWljwbisru2y5YmS38VGM8+iPpx4HQWsLGq2O0+GLEAOILSyIP2N27w2v29OPCBvcy90gu+pZf/HO4ajZimuLtH5/KgUzWXDFzSxya9XsMQ=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c58c012-d516-44fd-173f-08db3130ea34
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4705.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 15:10:36.2739
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i4xpTLuri/XXkoT0M2cibogTw9igftQgGs42NpARIWFZ1xVmL7/oVMmXFJUB+nGyT/u7nUsV/7dEfz+rKLz/Tg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6319
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-30_09,2023-03-30_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
+ malwarescore=0 mlxlogscore=860 adultscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303300119
+X-Proofpoint-ORIG-GUID: rYW0_EwexEA2faHVFuaWZJ4_ytFBVbXf
+X-Proofpoint-GUID: rYW0_EwexEA2faHVFuaWZJ4_ytFBVbXf
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 08:26:13AM -0700, Paul E. McKenney wrote:
-> On Mon, Mar 27, 2023 at 10:29:31PM -0400, Joel Fernandes wrote:
-> > Hello,
-> > 
-> > > On Mar 27, 2023, at 9:06 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > 
-> > > ﻿On Mon, Mar 27, 2023 at 11:21:23AM +0000, Zhang, Qiang1 wrote:
-> > >>>> From: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > >>>> Sent: Tuesday, March 21, 2023 6:28 PM
-> > >>>> [...]
-> > >>>> Subject: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-> > >>>> 
-> > >>>> A call to a synchronize_rcu() can be expensive from time point of view.
-> > >>>> Different workloads can be affected by this especially the ones which use this
-> > >>>> API in its time critical sections.
-> > >>>> 
-> > >>> 
-> > >>> This is interesting and meaningful research. ;-)
-> > >>> 
-> > >>>> For example in case of NOCB scenario the wakeme_after_rcu() callback
-> > >>>> invocation depends on where in a nocb-list it is located. Below is an example
-> > >>>> when it was the last out of ~3600 callbacks:
-> > >>> 
-> > >> 
-> > >> 
-> > >> 
-> > >> Can it be implemented separately as follows?  it seems that the code is simpler
-> > >> (only personal opinion)  😊.
-> > >> 
-> > >> But I didn't test whether this reduce synchronize_rcu() waiting time
-> > >> 
-> > >> +static void rcu_poll_wait_gp(struct rcu_tasks *rtp)
-> > >> +{
-> > >> +       unsigned long gp_snap;
-> > >> +
-> > >> +       gp_snap = start_poll_synchronize_rcu();
-> > >> +       while (!poll_state_synchronize_rcu(gp_snap))
-> > >> +               schedule_timeout_idle(1);
-> > > 
-> > > I could be wrong, but my guess is that the guys working with
-> > > battery-powered devices are not going to be very happy with this loop.
-> > > 
-> > > All those wakeups by all tasks waiting for a grace period end up
-> > > consuming a surprisingly large amount of energy.
-> > 
-> > Is that really the common case? On the general topic of wake-ups:
-> > Most of the time there should be only one
-> > task waiting synchronously on a GP to end. If that is
-> > true, then it feels like waking
-> > up nocb Kthreads which indirectly wake other threads is doing more work than usual?
+On 3/30/23 09:45, Peter Zijlstra wrote:
+> On Wed, Mar 29, 2023 at 02:28:25PM -0400, chris hyser wrote:
+>> On 3/29/23 12:26, Chris Hyser wrote:
+>>> From: chris hyser <chris.hyser@oracle.com>
+>>
+>> Apologies. Something in my email chain put this in, but I think I figured it
+>> out and sent a version 1.
 > 
-> A good question, and the number of outstanding synchronize_rcu()
-> calls will of course be limited by the number of tasks in the system.
-> But I myself have raised the ire of battery-powered embedded folks with
-> a rather small number of wakeups, so...
+> Not actually a problem -- all patch processing tools can deal with this
+> since it's a common pattern when forwarding patches written by others.
 
-But unless I am missing something, even if there is single synchronize_rcu(),
-you have a flurry of potential wakeups right now, instead of the bare minimum
-I think. I have not measured how many wake ups, but I'd love to when I get
-time. Maybe Vlad has some numbers.
-
-> And on larger systems there can be a tradeoff between contention on
-> the one hand and number of wakeups on the other.
-> 
-> The original nocb implementation in fact had the grace-period kthead
-> waking up all of what are now called rcuoc kthreads.  The indirect scheme
-> reduced the total number of wakeups by up to 50% and also reduced the
-> CPU consumption of the grace-period kthread, which otherwise would have
-> become a bottleneck on large systems.
-
-Thanks for the background.
-
-> And also, a scheme that directly wakes tasks waiting in synchronize_rcu()
-> might well use the same ->nocb_gp_wq[] waitqueues that are used by the
-> rcuog kthreads, if that is what you were getting at.
-
-Yes that's what I was getting at. I thought Vlad was going for doing direct
-wake ups from the main RCU GP thread that orchestates RCU grace period
-cycles.
-
-> > I am curious to measure how much does Vlad patch reduce wakeups in the common case.
-> 
-> Sounds like a good thing to measure!
-
-Ok. At the moment I am preparing 2 talks I am giving at OSPM for real-time and
-timers. Plus preparing the PR, so I'm fully booked. :(  [and the LWN article..].
-> 
-> > I was also wondering how Vlad patch effects RCU-barrier ordering. I guess
-> > we want the wake up to happen in the order of
-> > other callbacks also waiting.
-> 
-> OK, I will bite.  Why would rcu_barrier() need to care about the
-> synchronize_rcu() invocations if they no longer used call_rcu()?
-
-Hm, I was just going for the fact that it is a behavioral change. Not
-illuding that it would certainly cause an issue. As we know, Linux kernel
-developers have interesting ways of using RCU APIs. :-)
-
-But yes, it may not be an issue considering expedited synchronize_rcu() also
-has such behavior anyway, if I'm not mistaken.
-
-> > One last note, most battery powered systems are perhaps already using expedited RCU ;-)
-> 
-> Good point.  And that does raise the question of exactly what workloads
-> and systems want faster wakeups from synchronize_rcu() and cannot get
-> this effect from expedited grace periods.
-
-Maybe the kind of workloads that don't need GP completion very quickly, but
-just want to reduce wakeups. The wakeups do have a cost, the scheduler can
-wake up several idle CPUs to "spread the awakened load" and cause wastage
-power. And also contend on locks during the wake up.
-
-thanks,
-
- - Joel
-
-
-> >  - Joel 
-> > 
-> > > 
-> > >                            Thanx, Paul
-> > > 
-> > >> +}
-> > >> +
-> > >> +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func);
-> > >> +DEFINE_RCU_TASKS(rcu_poll, rcu_poll_wait_gp, call_rcu_poll,
-> > >> +                 "RCU Poll");
-> > >> +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func)
-> > >> +{
-> > >> +       call_rcu_tasks_generic(rhp, func, &rcu_poll);
-> > >> +}
-> > >> +EXPORT_SYMBOL_GPL(call_rcu_poll);
-> > >> +
-> > >> +void synchronize_rcu_poll(void)
-> > >> +{
-> > >> +       synchronize_rcu_tasks_generic(&rcu_poll);
-> > >> +}
-> > >> +EXPORT_SYMBOL_GPL(synchronize_rcu_poll);
-> > >> +
-> > >> +static int __init rcu_spawn_poll_kthread(void)
-> > >> +{
-> > >> +       cblist_init_generic(&rcu_poll);
-> > >> +       rcu_poll.gp_sleep = HZ / 10;
-> > >> +       rcu_spawn_tasks_kthread_generic(&rcu_poll);
-> > >> +       return 0;
-> > >> +}
-> > >> 
-> > >> Thanks
-> > >> Zqiang
-> > >> 
-> > >> 
-> > >>>> 
-> > >>>> <snip>
-> > >>>>  <...>-29      [001] d..1. 21950.145313: rcu_batch_start: rcu_preempt
-> > >>>> CBs=3613 bl=28
-> > >>>> ...
-> > >>>>  <...>-29      [001] ..... 21950.152578: rcu_invoke_callback: rcu_preempt
-> > >>>> rhp=00000000b2d6dee8 func=__free_vm_area_struct.cfi_jt
-> > >>>>  <...>-29      [001] ..... 21950.152579: rcu_invoke_callback: rcu_preempt
-> > >>>> rhp=00000000a446f607 func=__free_vm_area_struct.cfi_jt
-> > >>>>  <...>-29      [001] ..... 21950.152580: rcu_invoke_callback: rcu_preempt
-> > >>>> rhp=00000000a5cab03b func=__free_vm_area_struct.cfi_jt
-> > >>>>  <...>-29      [001] ..... 21950.152581: rcu_invoke_callback: rcu_preempt
-> > >>>> rhp=0000000013b7e5ee func=__free_vm_area_struct.cfi_jt
-> > >>>>  <...>-29      [001] ..... 21950.152582: rcu_invoke_callback: rcu_preempt
-> > >>>> rhp=000000000a8ca6f9 func=__free_vm_area_struct.cfi_jt
-> > >>>>  <...>-29      [001] ..... 21950.152583: rcu_invoke_callback: rcu_preempt
-> > >>>> rhp=000000008f162ca8 func=wakeme_after_rcu.cfi_jt
-> > >>>>  <...>-29      [001] d..1. 21950.152625: rcu_batch_end: rcu_preempt CBs-
-> > >>>> invoked=3612 idle=....
-> > >>>> <snip>
-> > >>>> 
-> > >>> 
-> > >>> Did the results above tell us that CBs-invoked=3612 during the time 21950.145313 ~ 21950.152625?
-> > >>> 
-> > >>> Yes.
-> > >>> 
-> > >>> 
-> > >>> If possible, may I know the steps, commands, and related parameters to produce the results above?
-> > >>> Thank you!
-> > >>> 
-> > >>> Build the kernel with CONFIG_RCU_TRACE configuration. Update your "set_event"
-> > >>> file with appropriate traces:
-> > >>> 
-> > >>> <snip>
-> > >>> XQ-DQ54:/sys/kernel/tracing # echo rcu:rcu_batch_start rcu:rcu_batch_end rcu:rcu_invoke_callback > set_event
-> > >>> 
-> > >>> XQ-DQ54:/sys/kernel/tracing # cat set_event
-> > >>> rcu:rcu_batch_start
-> > >>> rcu:rcu_invoke_callback
-> > >>> rcu:rcu_batch_end
-> > >>> XQ-DQ54:/sys/kernel/tracing #
-> > >>> <snip>
-> > >>> 
-> > >>> Collect traces as much as you want: XQ-DQ54:/sys/kernel/tracing # echo 1 > tracing_on; sleep 10; echo 0 > tracing_on
-> > >>> Next problem is how to parse it. Of course you will not be able to parse
-> > >>> megabytes of traces. For that purpose i use a special C trace parser.
-> > >>> If you need an example please let me know i can show here.
-> > >>> 
-> > >>> --
-> > >>> Uladzislau Rezki
+Makes sense. Thanks.
