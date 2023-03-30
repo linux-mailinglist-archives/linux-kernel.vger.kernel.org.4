@@ -2,69 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573F96D0CC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61A66D0CCB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbjC3R2w convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 13:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
+        id S232223AbjC3R3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjC3R2u (ORCPT
+        with ESMTP id S232372AbjC3R27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:28:50 -0400
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99D8CDF9;
-        Thu, 30 Mar 2023 10:28:49 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id y4so79505768edo.2;
-        Thu, 30 Mar 2023 10:28:49 -0700 (PDT)
+        Thu, 30 Mar 2023 13:28:59 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084B6DBD1;
+        Thu, 30 Mar 2023 10:28:58 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so8547780wmq.3;
+        Thu, 30 Mar 2023 10:28:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680197336;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9Y2DqD4b0TEjJPvYx6jYpEw4YYcOZf2U/uI5AHnyKKE=;
+        b=WFMeZNzYNRmA4eopOnR7jiHne/7tIemjxw8rqSTQ8QSkYJm5WXH6WM/c8bQ5cx/8/q
+         TPvVjODX1ArBalsWhxli6d0h32H5lIa5OcwgRQri6KepMhN8aRC7jYlFFQA4YlNVcJtr
+         BbCKcij4XvZm96F1e3spFuhovODz9yIoSRH5dL9ckR+9wi4Qln2yppZp4ccggPnOmdLA
+         Rv7C7qjTwQmmJu9TO4NJkzI00doWzskFpMFu/d3mQZqTRk1nuIFS/7AskxbOa1SXhZrK
+         bVLTzKaTrM1xqYip2iVtpXxXpcOD3Ak6LvLLLC0+9McOowfX/cVnwFCh5W16YhyDVIP2
+         gDNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680197328;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/8hXWy6c7o0Kr1iLcvn9+6HR84nHwK24sk7KgE0uVSc=;
-        b=Y87FxttZtH+8VmlwVn3GRht7KHPnQYOUH/Nakoi38gK5mXSmB8IyMMfH1sePUN9yIn
-         Hy1QLLsk+mwtoepULKT4kbDGg4ZIi9xJOCq/8sLCkLAYH8Xkufx9gHslG/NMNf60vKXW
-         X50R2y+j8PBBmHY2Vi6voxYELFR40swSOac9Yhk55bhkJw/SI/VxuX1PRpND4Zbz4l0H
-         8V6asgQkotYAfsNGGFDjhGxiEvxvpns2/JdwflUCc/xwFPToiRQxmAtPEj7j67a1LPjI
-         J8vBlQSrthhRzho6DV2SbX57LqUzBPVt6ydnhE0KB0EnzOIsWdEKkm+Y4kof8fKI05Hk
-         Z1UA==
-X-Gm-Message-State: AAQBX9e4vdRPEP7JHZGHqrN/mun19HE+t7GDNkcQp+jacxul0JReTR5D
-        8HHEM0+FWPDr91HsHGzHNi+0/raEobvUi/iG7Cc=
-X-Google-Smtp-Source: AKy350bQ8RtXNV+REfnvhajyMgzLRFOmaz5LP0vGAlL2cL8esa5cPkycEr0oW6G/JKFOpqHUz2D0IyapN0eKe+G5X3o=
-X-Received: by 2002:a50:d6d6:0:b0:4fb:c8e3:1adb with SMTP id
- l22-20020a50d6d6000000b004fbc8e31adbmr11657665edj.3.1680197328309; Thu, 30
- Mar 2023 10:28:48 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680197336;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9Y2DqD4b0TEjJPvYx6jYpEw4YYcOZf2U/uI5AHnyKKE=;
+        b=GDDniWyENuDj4ng0Q/cSex+XmEqS7KfSe8Bh3qi3+MRXtxFdShseZ1x7JEWnB5kA3f
+         XSWlZ3XLLjUp1wGu7zKo5pvHzt3yP45FWbDrc+DcshFJkUsOzCJPqCIxMjWH6OVvet8C
+         NtxaNtHeZEdMxlNtT46xUvHzRpgm8+nnWURfCpuejeT7d7DQPc7vRz2poyI5ZJFEqLum
+         pQ0rAGX3Thd1lO+/mueYk5HbFEoI/tqBcKxb0s9ZWjQImidvLzTkIxqA5qK0ZorlK63M
+         zA4CFIztfGn1X47c8jBU2kBkCJDX/jEXk7vHlnYkydAk+fx5w0YOMaCnBzPhy6FHgJWQ
+         sL4g==
+X-Gm-Message-State: AO0yUKUh0aLebCjBIWcCHX56goFLdQPU4nQqXC/ha72WO2YkBgATrsGe
+        A5DN7jf5XiSTZ2394fzQFKo=
+X-Google-Smtp-Source: AK7set9MIenmW0wOxrwzuKWQ9Susz0ahiNwcPlAjmAJVYRoVF2Kv7qkJghXMUIEjEKEN6BgtEX0Mfg==
+X-Received: by 2002:a05:600c:d5:b0:3ed:bc83:3745 with SMTP id u21-20020a05600c00d500b003edbc833745mr17495399wmm.25.1680197336468;
+        Thu, 30 Mar 2023 10:28:56 -0700 (PDT)
+Received: from [192.168.1.135] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id y5-20020a1c4b05000000b003e91b9a92c9sm6507980wma.24.2023.03.30.10.28.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 10:28:55 -0700 (PDT)
+Message-ID: <c575ac46-28bf-254f-a3c1-e30885ba7933@gmail.com>
+Date:   Thu, 30 Mar 2023 19:28:53 +0200
 MIME-Version: 1.0
-References: <20230310144726.1545543-1-robh@kernel.org> <CAJZ5v0hAeRa9xsp6-_um9j-9F6nf=PYuOC2mgMAmmUHP+9=RZg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hAeRa9xsp6-_um9j-9F6nf=PYuOC2mgMAmmUHP+9=RZg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Mar 2023 19:28:37 +0200
-Message-ID: <CAJZ5v0i-Vum+js8c7fZJiQWwTBYByy2O=UtObR6GciLMLt41Nw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: Use of_property_present() for testing DT
- property presence
-To:     Rob Herring <robh@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 08/17] arm64: dts: mediatek: add mmc support for mt8365
+ SoC
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
+ <20230203-evk-board-support-v3-8-0003e80e0095@baylibre.com>
+ <c785d80f-e443-cae4-1e17-b79eb2dc385c@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <c785d80f-e443-cae4-1e17-b79eb2dc385c@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,91 +95,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 7:13 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Fri, Mar 10, 2023 at 3:48 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > It is preferred to use typed property access functions (i.e.
-> > of_property_read_<type> functions) rather than low-level
-> > of_get_property/of_find_property functions for reading properties. As
-> > part of this, convert of_get_property/of_find_property calls to the
-> > recently added of_property_present() helper when we just want to test
-> > for presence of a property and nothing more.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
->
-> Daniel, are you going to apply this, or should I take it directly?
 
-Applied as 6.4 material, thanks!
 
-> > ---
-> >  drivers/thermal/cpufreq_cooling.c                  | 2 +-
-> >  drivers/thermal/imx8mm_thermal.c                   | 2 +-
-> >  drivers/thermal/imx_thermal.c                      | 4 ++--
-> >  drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 2 +-
-> >  4 files changed, 5 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> > index 9f8b438fcf8f..4608555b7ec3 100644
-> > --- a/drivers/thermal/cpufreq_cooling.c
-> > +++ b/drivers/thermal/cpufreq_cooling.c
-> > @@ -633,7 +633,7 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
-> >                 return NULL;
-> >         }
-> >
-> > -       if (of_find_property(np, "#cooling-cells", NULL)) {
-> > +       if (of_property_present(np, "#cooling-cells")) {
-> >                 struct em_perf_domain *em = em_cpu_get(policy->cpu);
-> >
-> >                 cdev = __cpufreq_cooling_register(np, policy, em);
-> > diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
-> > index 72b5d6f319c1..334ce8e9830b 100644
-> > --- a/drivers/thermal/imx8mm_thermal.c
-> > +++ b/drivers/thermal/imx8mm_thermal.c
-> > @@ -282,7 +282,7 @@ static int imx8mm_tmu_probe_set_calib(struct platform_device *pdev,
-> >          * strongly recommended to update such old DTs to get correct
-> >          * temperature compensation values for each SoC.
-> >          */
-> > -       if (!of_find_property(pdev->dev.of_node, "nvmem-cells", NULL)) {
-> > +       if (!of_property_present(pdev->dev.of_node, "nvmem-cells")) {
-> >                 dev_warn(dev,
-> >                          "No OCOTP nvmem reference found, SoC-specific calibration not loaded. Please update your DT.\n");
-> >                 return 0;
-> > diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-> > index fb0d5cab70af..77d6567a3f47 100644
-> > --- a/drivers/thermal/imx_thermal.c
-> > +++ b/drivers/thermal/imx_thermal.c
-> > @@ -594,7 +594,7 @@ static int imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
-> >
-> >         np = of_get_cpu_node(data->policy->cpu, NULL);
-> >
-> > -       if (!np || !of_find_property(np, "#cooling-cells", NULL)) {
-> > +       if (!np || !of_property_present(np, "#cooling-cells")) {
-> >                 data->cdev = cpufreq_cooling_register(data->policy);
-> >                 if (IS_ERR(data->cdev)) {
-> >                         ret = PTR_ERR(data->cdev);
-> > @@ -671,7 +671,7 @@ static int imx_thermal_probe(struct platform_device *pdev)
-> >
-> >         platform_set_drvdata(pdev, data);
-> >
-> > -       if (of_find_property(pdev->dev.of_node, "nvmem-cells", NULL)) {
-> > +       if (of_property_present(pdev->dev.of_node, "nvmem-cells")) {
-> >                 ret = imx_init_from_nvmem_cells(pdev);
-> >                 if (ret)
-> >                         return dev_err_probe(&pdev->dev, ret,
-> > diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> > index 8a9055bd376e..dace6591220e 100644
-> > --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> > +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> > @@ -223,7 +223,7 @@ int ti_thermal_register_cpu_cooling(struct ti_bandgap *bgp, int id)
-> >          * using DT, then it must be aware that the cooling device
-> >          * loading has to happen via cpufreq driver.
-> >          */
-> > -       if (of_find_property(np, "#thermal-sensor-cells", NULL))
-> > +       if (of_property_present(np, "#thermal-sensor-cells"))
-> >                 return 0;
-> >
-> >         data = ti_bandgap_get_sensor_data(bgp, id);
-> > --
-> > 2.39.2
-> >
+On 29/03/2023 15:21, AngeloGioacchino Del Regno wrote:
+> Il 29/03/23 10:54, Alexandre Mergnat ha scritto:
+>> There are three ports of MSDC (MMC and SD Controller), which are:
+>> - MSDC0: EMMC5.1
+>> - MSDC1: SD3.0/SDIO3.0
+>> - MSDC2: SDIO3.0+
+>>
+>> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt8365.dtsi | 39 ++++++++++++++++++++++++++++++++
+>>   1 file changed, 39 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi 
+>> b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+>> index 687011353f69..a67eeca28da5 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+>> +++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+>> @@ -399,6 +399,45 @@ usb_host: usb@11200000 {
+>>               };
+>>           };
+>> +        mmc0: mmc@11230000 {
+>> +            compatible = "mediatek,mt8365-mmc", "mediatek,mt8183-mmc";
+>> +            reg = <0 0x11230000 0 0x1000>,
+>> +                  <0 0x11cd0000 0 0x1000>;
+>> +            interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_LOW>;
+>> +            clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>,
+>> +                 <&infracfg CLK_IFR_MSDC0_HCLK>,
+>> +                 <&infracfg CLK_IFR_MSDC0_SRC>;
+>> +            clock-names = "source", "hclk", "source_cg";
+>> +            status = "disabled";
+>> +        };
+>> +
+>> +        mmc1: mmc@11240000 {
+>> +            compatible = "mediatek,mt8365-mmc", "mediatek,mt8183-mmc";
+>> +            reg = <0 0x11240000 0 0x1000>,
+>> +                  <0 0x11c90000 0 0x1000>;
+>> +            interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_LOW>;
+>> +            clocks = <&topckgen CLK_TOP_MSDC30_1_SEL>,
+>> +                 <&infracfg CLK_IFR_MSDC1_HCLK>,
+>> +                 <&infracfg CLK_IFR_MSDC1_SRC>;
+>> +            clock-names = "source", "hclk", "source_cg";
+>> +            status = "disabled";
+>> +        };
+>> +
+>> +        mmc2: mmc@11250000 {
+>> +            compatible = "mediatek,mt8365-mmc", "mediatek,mt8183-mmc";
+>> +            reg = <0 0x11250000 0 0x1000>,
+>> +                  <0 0x11c60000 0 0x1000>;
+>> +            interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_LOW>;
+>> +            clocks = <&topckgen CLK_TOP_MSDC50_2_SEL>,
+>> +                 <&infracfg CLK_IFR_MSDC2_HCLK>,
+>> +                 <&infracfg CLK_IFR_MSDC2_SRC>,
+>> +                 <&infracfg CLK_IFR_MSDC2_BK>,
+>> +                 <&infracfg CLK_IFR_AP_MSDC0>;
+>> +            clock-names = "source", "hclk", "source_cg",
+>> +                      "bus_clk", "sys_cg";
+> 
+> clock-names for this do fit in one 90 columns line.
+> 
+> After compressing it,
+> 
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+
+I applied the patch and dropped you Reviewed-by tag. I think it depends on the 
+taste of everybody how you prefer to structure this. I've also seen that on 
+boards you care (mt8183 in that case) there a clocks that don't adhere to the 
+criteria you mention here ;-)
+
+Anyway many thanks for reviewing this and all the great work in general. 
+Honestly I feel I didn't made justice by dropping your tag, but as you stated so 
+explicitly... :)
+
+Regards,
+Matthias
