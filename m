@@ -2,86 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4396D0132
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E386F6D0141
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbjC3K2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S229940AbjC3KcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbjC3K2O (ORCPT
+        with ESMTP id S229486AbjC3KcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:28:14 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9E39768
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:28:03 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id d12-20020a056e020bec00b00325e125fbe5so11607316ilu.12
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:28:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680172083; x=1682764083;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MZCJ1GFOnXsw5GZHmXKIt/ZfvR8rQziDdFihcj/FfSk=;
-        b=4/hLQO936D1DQ2XnG5p+B31KHh1V3QmWNHxwps8KW3IDr2kfiaX6Hv/dg1Olwya2FW
-         nruM2EBh9Rn4tehdhIxJN60QcAlnJP7GVTtcIv2jeUFqKObxaZV/kBeGYqYFNcTC5KhF
-         LJoYLIhKmzI/EMM4Kv9durfMeYnVABkaUTz4BkpSo+uGsMoqD7JnwSKWLZmDrP11KwUA
-         2kR6dYqnRlmAVVjDejSfCwsncsnyjEFZzsjV3K9q/IMLG2Fufrj1r1rhS257gT+HNLp4
-         r4Bc8eeDZO++WJjnHiC7VQqp/wRFA7t9XyfuXGGM9WSp0sTXAyKjyzs5QuPhKRaQOMkQ
-         u1hw==
-X-Gm-Message-State: AAQBX9f1ZoTLLh4YRM8Lsp0X4dgn5mTEtqFMslokkSvWOb6kfSSexco9
-        KXIzQlxCoaf1iB5+Ww/ZnEwKz5Gqkusk5tDJ1gUbcLKCh+i6
-X-Google-Smtp-Source: AKy350YFlZF3HUfI6MydM2+zeNHyi90GOM7KeSg8KymdQISrF7Vn38JsCqtvVGqFJnplpdHQRltB4uaMjG5H9wJzMPQORTV2BNmv
+        Thu, 30 Mar 2023 06:32:03 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED7A19F;
+        Thu, 30 Mar 2023 03:31:59 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 550331883A12;
+        Thu, 30 Mar 2023 10:31:57 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 3F89F2500389;
+        Thu, 30 Mar 2023 10:31:57 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 342579B403F6; Thu, 30 Mar 2023 10:31:57 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 821C49B403E4;
+        Thu, 30 Mar 2023 10:31:56 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
+ test
+In-Reply-To: <ZCUuMosWbyq1pK8R@shredder>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-7-netdev@kapio-technology.com>
+ <ZBgdAo8mxwnl+pEE@shredder> <87a5zzh65p.fsf@kapio-technology.com>
+ <ZCMYbRqd+qZaiHfu@shredder> <87fs9ollmn.fsf@kapio-technology.com>
+ <ZCUuMosWbyq1pK8R@shredder>
+Date:   Thu, 30 Mar 2023 12:29:18 +0200
+Message-ID: <87mt3u7csh.fsf@kapio-technology.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c26b:0:b0:325:e340:a873 with SMTP id
- h11-20020a92c26b000000b00325e340a873mr10524437ild.0.1680172082856; Thu, 30
- Mar 2023 03:28:02 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 03:28:02 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000290bf205f81b8c93@google.com>
-Subject: [syzbot] Monthly fat report
-From:   syzbot <syzbot+list339127c34ca34b120a41@syzkaller.appspotmail.com>
-To:     linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sj1557.seo@samsung.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello fat maintainers/developers,
+On Thu, Mar 30, 2023 at 09:37, Ido Schimmel <idosch@nvidia.com> wrote:
+> On Tue, Mar 28, 2023 at 09:30:08PM +0200, Hans Schultz wrote:
+>> 
+>> Sorry, but I have sent you several emails telling you about the problems
+>> I have with running the selftests due to changes in the phy etc. Maybe
+>> you have just not received all those emails?
+>> 
+>> Have you checked spamfilters?
+>> 
+>> With the kernels now, I cannot even test with the software bridge and
+>> selftests as the compile fails - probably due to changes in uapi headers
+>> compared to what the packages my system uses expects.
+>
+> My spam filters are fine. I saw your emails where you basically said
+> that you are too lazy to setup a VM to test your patches and that your
+> time is more valuable than mine, which is why I should be testing them.
+> Stop making your problems our problems. It's hardly the first time. If
+> you are unable to test your patches, then invest the time in fixing your
+> setup instead of submitting completely broken patches and making it our
+> problem to test and fix them. I refuse to invest time in reviewing /
+> testing / reworking your submissions as long as you insist on doing less
+> than the bare minimum.
+>
+> Good luck
 
-This is a 30-day syzbot report for the fat subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/fat
+I never said or indicated that my time is more valuable than yours. I
+have a VM to run these things that some have spent countless hours to
+develop with the right tools etc installed and set up. Fixing that
+system will take quite many hours for me, so I am asking for some simple
+assistance from someone who already has a system running supporting the
+newest kernel.
 
-During the period, 3 new issues were detected and 0 were fixed.
-In total, 28 issues are still open and 21 have been fixed so far.
+Alternatively if there is an open sourced system available that would be
+great.
 
-Some of the still happening issues:
-
-Crashes Repro Title
-183     Yes   possible deadlock in filemap_fault
-              https://syzkaller.appspot.com/bug?extid=7736960b837908f3a81d
-180     Yes   kernel BUG at fs/buffer.c:LINE!
-              https://syzkaller.appspot.com/bug?extid=cfed5b56649bddf80d6e
-154     Yes   possible deadlock in exfat_get_block
-              https://syzkaller.appspot.com/bug?extid=247e66a2c3ea756332c7
-121     Yes   possible deadlock in exfat_iterate
-              https://syzkaller.appspot.com/bug?extid=38655f1298fefc58a904
-55      Yes   possible deadlock in exc_page_fault
-              https://syzkaller.appspot.com/bug?extid=6d274a5dc4fa0974d4ad
-20      Yes   INFO: task hung in exfat_write_inode
-              https://syzkaller.appspot.com/bug?extid=2f73ed585f115e98aee8
-1       Yes   general protection fault in timerqueue_add (4)
-              https://syzkaller.appspot.com/bug?extid=21f2b8753d8bfc6bb816
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+As this patch-set is for the community and some companies that would
+like to use it and not for myself, I am asking for some help from the
+community with a task that when someone has the system in place should
+not take more than 15-20 minutes, maybe even less.
