@@ -2,83 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7132E6D1076
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C376D107D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjC3VD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 17:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
+        id S229995AbjC3VFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 17:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjC3VD5 (ORCPT
+        with ESMTP id S229827AbjC3VE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 17:03:57 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718A3E068;
-        Thu, 30 Mar 2023 14:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=P4o/Cj1xJY/GvgxgLFSwpwnxIiEruRDJKJu5rzeHPS8=; b=ZOYNoZH7cE6S22POgLgRlpTAPp
-        4lS5hqJOgTgsqI1yHj/QvUZbFCTHP5RtrT2sGH/yB+Le2IM1AaiZfYO+JYKmjPWZM60ULOqyPV2bq
-        /BVJB3x3QB+DlVbLndnlMw4pG8/egWPYzJOP0Fgsvo0sx+vTpReOQzmgibzliC61nx/0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1phzQz-008w0S-63; Thu, 30 Mar 2023 23:03:49 +0200
-Date:   Thu, 30 Mar 2023 23:03:49 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH net-next 14/15] net: dsa: mt7530: introduce driver for
- MT7988 built-in switch
-Message-ID: <b8db273d-27b5-4d05-b128-3d53ecc5f139@lunn.ch>
-References: <cover.1680180959.git.daniel@makrotopia.org>
- <fef2cb2fe3d2b70fa46e93107a0c862f53bb3bfa.1680180959.git.daniel@makrotopia.org>
+        Thu, 30 Mar 2023 17:04:59 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F78D51E;
+        Thu, 30 Mar 2023 14:04:58 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id cf7so25239456ybb.5;
+        Thu, 30 Mar 2023 14:04:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680210297;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VAVdnEyhBX67rGN9GmJ10KCD1xhjSGMvFHdAmoei0kE=;
+        b=ji21yy6iIwZ6mLctHKNw0WVWnp80uefwFMB3pAqdOaeyJVs1cnDTdy0Y2yPA9P0wJj
+         dTRsg9L527yxqWs0oL8BPhBZ3qJ5D89thjaWd9PgK4xoOqO36f4MZMgEPtBtlythhNtF
+         GwYkRSZWM7O6dWxJakr9nhU0CMApXpV9cXVPdxNKk5agv9bz4slcq1l6ABTq34wqv1SK
+         c4rbkOlsYuHMgRILFc1JpMjYdB4iUG4+S9xgQA6B2eCJ1qgd4tGi8ZxyUP+JhGV+Z0Al
+         Q4k7EBbkP+eTNAjb4POe/H510aFnZeq5cK0ROkl5PZYbHeHueMS0txxQKTdYO8fsP11n
+         i/wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680210297;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VAVdnEyhBX67rGN9GmJ10KCD1xhjSGMvFHdAmoei0kE=;
+        b=RCzgV4ymty34psqb6Yl6OXpzCdOMrSzyTJMjxZ261xJRjlw290U/fsPemkPj31SzIq
+         j3SrbIavRZs0ehXT2cz7j0D7yIgfrx6xI5WherPgKJ6MJqeOh+DX50v9F1VvmHaAxDtx
+         z7YSY5+xku+/FcfDoUe81RF/ufp943pOP4TXNrkwdGVHF9ORWnsd+sIv5765QjnQk1X6
+         D1Wc6kC51SZ3ZKxO+BiONhTImztEnbkSS1mIU2fLKIssoUoEpHgjFDEGAy+tM6xtqxED
+         m+rQ+lvMLeUKpe4UUHuktqYQlvmklZjp5S0WCU8iySLrsjyTp7wOvl/yDK7ra+woggDI
+         fflA==
+X-Gm-Message-State: AAQBX9e0W1TX9ZfMGhFt2KTV5Kdn2K1KiLWPQOmVGGurkAIEsxv1A4Et
+        q28RXWQkTKp5H2vmErBPs8Db6aYYeWXIPiDU2G4=
+X-Google-Smtp-Source: AKy350bIf64moUuEFjVkY4AP549wMMkFtIk23Xy2jMIC3JnVfmBHKLAwX/3amOJItj++ig1NJ30xI/9WU624TfYizT8=
+X-Received: by 2002:a25:2d7:0:b0:997:c919:4484 with SMTP id
+ 206-20020a2502d7000000b00997c9194484mr13191255ybc.6.1680210297368; Thu, 30
+ Mar 2023 14:04:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fef2cb2fe3d2b70fa46e93107a0c862f53bb3bfa.1680180959.git.daniel@makrotopia.org>
+References: <20230330043954.562237-1-wedsonaf@gmail.com> <20230330043954.562237-13-wedsonaf@gmail.com>
+ <04034640-2d89-dd63-07e5-29fa612aa458@protonmail.com> <06a7c5e7-fc5f-3860-7f17-7f3609de669a@protonmail.com>
+In-Reply-To: <06a7c5e7-fc5f-3860-7f17-7f3609de669a@protonmail.com>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Thu, 30 Mar 2023 18:04:48 -0300
+Message-ID: <CANeycqotBmHkXAFbibp3BerEt=RA6sse+dgAkmpcy+oFMiA-vA@mail.gmail.com>
+Subject: Re: [PATCH 13/13] rust: sync: introduce `LockedBy`
+To:     Benno Lossin <y86-dev@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 04:23:42PM +0100, Daniel Golle wrote:
-> Add driver for the built-in Gigabit Ethernet switch which can be found
-> in the MediaTek MT7988 SoC.
-> 
-> The switch shares most of its design with MT7530 and MT7531, but has
-> it's registers mapped into the SoCs register space rather than being
-> connected externally or internally via MDIO.
-> 
-> Introduce a new platform driver to support that.
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+On Thu, 30 Mar 2023 at 08:45, Benno Lossin <y86-dev@protonmail.com> wrote:
+>
+> On 30.03.23 13:28, Benno Lossin wrote:
+>      struct Outer {
+>          mtx1: Mutex<()>,
+>          mtx2: Mutex<()>,
+>          inners: Vec<Inner>,
+>      }
+>
+>      struct Inner {
+>          count: LockedBy<usize, ()>,
+>      }
+>
+>      fn new_inner(outer: &Outer) -> Inner {
+>          Inner { count: LockedBy::new(&outer.mtx1, 0) }
+>      }
+>
+>      fn evil(outer: &Outer) {
+>          let inner = outer.inners.get(0).unwrap();
+>          let mut guard1 = outer.mtx1.lock();
+>          let mut guard2 = outer.mtx2.lock();
+>         // The pointee of `guard1` and `guard2` have the same address.
+>          let ref1 = inner.count.access_mut(&mut *guard1);
+>          let ref2 = inner.count.access_mut(&mut *guard2);
+>          mem::swap(ref1, ref2);
+>      }
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+This doesn't reproduce the issue because `mtx2` itself is not a ZST
+(it contains a `struct mutex` before the data it protects).
 
-    Andrew
+Something like the following should reproduce it though:
+
+    struct Outer {
+         mtx1: Mutex<()>,
+         zst: (),
+     }
+
+     fn evil(outer: &Outer) {
+         let lb = LockedBy::new(&outer.mtx1, 0u8);
+         let value = lb.access(&outer.zst);
+         // Accessing "value" without holding `mtx1`.
+         pr_info!("{}", *value);
+     }
