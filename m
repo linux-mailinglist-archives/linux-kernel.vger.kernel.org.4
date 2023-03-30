@@ -2,233 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17E66D12A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8649C6D12AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjC3Wzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 18:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
+        id S231381AbjC3Wz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 18:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbjC3Wzh (ORCPT
+        with ESMTP id S231395AbjC3Wzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 18:55:37 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014E640CB
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:55:35 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id f188so7050338ybb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1680216934;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hrk4XWP2LlLp6tf/dpvbwPMg4LcYjpdq+wjECDnYpOY=;
-        b=FwsKtbaQVIE2GbX31Lf9NND+ddvA43T1+SHp4SqJNBukcc5ImubhkF2Cv4RgnlK/sq
-         cGyA5rQcHXRKaAu59Y8iCBTEFtFA7eAb+2+qKf9e0pJIuJFS+iwyaeL4TNsmlUzriAWN
-         dlTXsqCHLxlVB583mtV8o40KNZ3SgRF54X5JMpIRlRWCrFQEyAka8tK4gyO8XdpGMMr6
-         HQsjEnwDCbDZRpiMD2pZWQui+bkrXP2IACMPKZw7UPsVoctSu/6RWkerj6+qy2JErIvH
-         9VksySt2a1hC4E4g8GORfcSHm+oEaq0pNFZDCOrgOv/EvD58JICyEsnJmKO+jzZQK7bT
-         bkGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680216934;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hrk4XWP2LlLp6tf/dpvbwPMg4LcYjpdq+wjECDnYpOY=;
-        b=abAVoixM4F7G65Ou6lbZT7H3UrQkCtMYMfGmdtUhrWkmltZadOaZHlagQyLcMaeCdv
-         AUW2Ce0kePuwpWU7NT+u6DWp91NKy8r263hP1F0DTgnU1iDA1bdXxNABeYd0DWfdnolO
-         fbMJUhFvYJSeNfK6MIRSkDz3dUS7vtVpeNjpLn/zz8Saez6am5rvTSFtTyVCNibJWD7C
-         6rNmaXgwg7J+HSCyPlGZSmvtUs+FsL4OtF3+FVpIyfwfCPg9Hsc8y9eAdv0nZn8D90SV
-         0sUCsDKYqi0XGen/S8wM11fn+XAoGXbdDMAReNiNB27NSrlzwdIvktt/12HDnmlPlZYy
-         +FZg==
-X-Gm-Message-State: AAQBX9fmBl1CA3Ysq6nq62sf8G5MGdxbL0fuC47sjkxEYTdyWD6VUkDc
-        lm9CF00neE6RvSTVJWXHpViR7tMdwz2wrKv0gyn3
-X-Google-Smtp-Source: AKy350bk5Pk67liICwsk6UAmxHRIRuqZJwqZZnQ+A3BSMwbcthTYI+AA0F19TB+zemcJ+5INEM0MzxPjC4ol+f8sQYE=
-X-Received: by 2002:a25:344:0:b0:b27:4632:f651 with SMTP id
- 65-20020a250344000000b00b274632f651mr12319460ybd.3.1680216934101; Thu, 30 Mar
- 2023 15:55:34 -0700 (PDT)
+        Thu, 30 Mar 2023 18:55:50 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A77E1A0;
+        Thu, 30 Mar 2023 15:55:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680216948; x=1711752948;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zgFpmRZs/7ZR9MOQdmaZR491jtEUEudV+B86M7lXITU=;
+  b=I+tWhtv7EgDXr2ygNtK/3YE0q24J/4hZ85/smvdk9/HTEK/u3lMBcEED
+   2RQFygzaJm/l9SWCCHVG16BQyFOoapw/jT/pS3NNNK1yczuJbcJyT51RU
+   xNk2y0hCROJipxrMqYOzYy/JswVSXiamqO4UKQcY6GGVT2Wz2zfU5MPux
+   Lc1ARF8bvM9Sa+EGcvwFH7GT74f0VGzX43U1DB/qUCz+WAFvGWnybqjJ4
+   KY/pg5l65/R7psjNmUBoKDsmtac4BTCY0fY5yPOGXYkVSQXFNTRhRDqAu
+   AiYDgcLKbly1I/oPv/qGOw7D697MPAr9h5g2vqjRFZxuCZXKfhULVlAdG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="325262469"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="325262469"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 15:55:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="1014611994"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="1014611994"
+Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.117.86]) ([10.212.117.86])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 15:55:47 -0700
+Message-ID: <6e59a3d6-0b68-2d36-d25a-652167168db8@intel.com>
+Date:   Thu, 30 Mar 2023 15:55:46 -0700
 MIME-Version: 1.0
-References: <20230329130415.2312521-1-roberto.sassu@huaweicloud.com> <20230329130415.2312521-4-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20230329130415.2312521-4-roberto.sassu@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 30 Mar 2023 18:55:23 -0400
-Message-ID: <CAHC9VhSDVv30ce2652kridRU7iaQQ19tiGubWpyP0mi7pf+JJw@mail.gmail.com>
-Subject: Re: [PATCH v9 3/4] evm: Align evm_inode_init_security() definition
- with LSM infrastructure
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH v10 3/6] cxl/memdev: Add trigger_poison_list sysfs
+ attribute
+Content-Language: en-US
+To:     alison.schofield@intel.com,
+        Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <cover.1679448904.git.alison.schofield@intel.com>
+ <b0d0296b7001f2646c54b56ac15cda319d133097.1679448904.git.alison.schofield@intel.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <b0d0296b7001f2646c54b56ac15cda319d133097.1679448904.git.alison.schofield@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 9:05=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Change the evm_inode_init_security() definition to align with the LSM
-> infrastructure. Keep the existing behavior of including in the HMAC
-> calculation only the first xattr provided by LSMs.
->
-> Changing the evm_inode_init_security() definition requires passing the
-> xattr array allocated by security_inode_init_security(), and the number o=
-f
-> xattrs filled by previously invoked LSMs.
->
-> Use the newly introduced lsm_find_xattr_slot() to position EVM correctly =
-in
-> the xattrs array, like a regular LSM, and to increment the number of fill=
-ed
-> slots. For now, the LSM infrastructure allocates enough xattrs slots to
-> store the EVM xattr, without using the reservation mechanism.
->
-> Finally, make evm_inode_init_security() return value compatible with the
-> inode_init_security hook conventions, i.e. return -EOPNOTSUPP if it is no=
-t
-> setting an xattr.
->
-> EVM is a bit tricky, because xattrs is both an input and an output. If it
-> was just output, EVM should have returned zero if xattrs is NULL. But,
-> since xattrs is also input, EVM is unable to do its calculations, so retu=
-rn
-> -EOPNOTSUPP and handle this error in security_inode_init_security().
 
-I don't quite understand why EVM would return EOPNOTSUPP if it is
-enabled but there are not xattrs to measure.  It seems like EVM should
-return success/0 in the no-xattr case; there were no xattrs to
-measure, so it succeeded in measuring nothing.  Am I missing
-something?
 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+On 3/21/23 7:12 PM, alison.schofield@intel.com wrote:
+> From: Alison Schofield <alison.schofield@intel.com>
+> 
+> When a boolean 'true' is written to this attribute the memdev driver
+> retrieves the poison list from the device. The list consists of
+> addresses that are poisoned, or would result in poison if accessed,
+> and the source of the poison. This attribute is only visible for
+> devices supporting the capability. The retrieved errors are logged
+> as kernel trace events with the label 'cxl_poison'.
+> 
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 > ---
->  include/linux/evm.h               | 14 ++++++++------
->  security/integrity/evm/evm_main.c | 18 +++++++++++-------
->  security/security.c               |  6 +++---
->  3 files changed, 22 insertions(+), 16 deletions(-)
->
-> diff --git a/include/linux/evm.h b/include/linux/evm.h
-> index 7dc1ee74169..3c0e8591b69 100644
-> --- a/include/linux/evm.h
-> +++ b/include/linux/evm.h
-> @@ -56,9 +56,10 @@ static inline void evm_inode_post_set_acl(struct dentr=
-y *dentry,
->  {
->         return evm_inode_post_setxattr(dentry, acl_name, NULL, 0);
->  }
-> -extern int evm_inode_init_security(struct inode *inode,
-> -                                  const struct xattr *xattr_array,
-> -                                  struct xattr *evm);
-> +extern int evm_inode_init_security(struct inode *inode, struct inode *di=
-r,
-> +                                  const struct qstr *qstr,
-> +                                  struct xattr *xattrs,
-> +                                  int *num_filled_xattrs);
->  extern bool evm_revalidate_status(const char *xattr_name);
->  extern int evm_protected_xattr_if_enabled(const char *req_xattr_name);
->  extern int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
-> @@ -157,9 +158,10 @@ static inline void evm_inode_post_set_acl(struct den=
-try *dentry,
->         return;
->  }
->
-> -static inline int evm_inode_init_security(struct inode *inode,
-> -                                         const struct xattr *xattr_array=
-,
-> -                                         struct xattr *evm)
-> +static inline int evm_inode_init_security(struct inode *inode, struct in=
-ode *dir,
-> +                                         const struct qstr *qstr,
-> +                                         struct xattr *xattrs,
-> +                                         int *num_filled_xattrs)
->  {
->         return 0;
->  }
-> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/e=
-vm_main.c
-> index cf24c525558..9e75759150c 100644
-> --- a/security/integrity/evm/evm_main.c
-> +++ b/security/integrity/evm/evm_main.c
-> @@ -21,6 +21,7 @@
->  #include <linux/evm.h>
->  #include <linux/magic.h>
->  #include <linux/posix_acl_xattr.h>
-> +#include <linux/lsm_hooks.h>
->
->  #include <crypto/hash.h>
->  #include <crypto/hash_info.h>
-> @@ -864,23 +865,26 @@ void evm_inode_post_setattr(struct dentry *dentry, =
-int ia_valid)
->  /*
->   * evm_inode_init_security - initializes security.evm HMAC value
->   */
-> -int evm_inode_init_security(struct inode *inode,
-> -                                const struct xattr *lsm_xattr,
-> -                                struct xattr *evm_xattr)
-> +int evm_inode_init_security(struct inode *inode, struct inode *dir,
-> +                           const struct qstr *qstr, struct xattr *xattrs=
-,
-> +                           int *num_filled_xattrs)
->  {
->         struct evm_xattr *xattr_data;
-> +       struct xattr *evm_xattr;
->         int rc;
->
-> -       if (!(evm_initialized & EVM_INIT_HMAC) ||
-> -           !evm_protected_xattr(lsm_xattr->name))
-> -               return 0;
-> +       if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs ||
-> +           !evm_protected_xattr(xattrs->name))
-> +               return -EOPNOTSUPP;
+>   Documentation/ABI/testing/sysfs-bus-cxl | 14 ++++++++
+>   drivers/cxl/core/memdev.c               | 48 +++++++++++++++++++++++++
+>   drivers/cxl/cxlmem.h                    |  5 ++-
+>   drivers/cxl/mem.c                       | 36 +++++++++++++++++++
+>   4 files changed, 102 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
+> index 3acf2f17a73f..02776fee6d4c 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-cxl
+> +++ b/Documentation/ABI/testing/sysfs-bus-cxl
+> @@ -415,3 +415,17 @@ Description:
+>   		1), and checks that the hardware accepts the commit request.
+>   		Reading this value indicates whether the region is committed or
+>   		not.
 > +
-> +       evm_xattr =3D lsm_find_xattr_slot(xattrs, num_filled_xattrs);
->
->         xattr_data =3D kzalloc(sizeof(*xattr_data), GFP_NOFS);
->         if (!xattr_data)
->                 return -ENOMEM;
->
->         xattr_data->data.type =3D EVM_XATTR_HMAC;
-> -       rc =3D evm_init_hmac(inode, lsm_xattr, xattr_data->digest);
-> +       rc =3D evm_init_hmac(inode, xattrs, xattr_data->digest);
->         if (rc < 0)
->                 goto out;
->
-> diff --git a/security/security.c b/security/security.c
-> index be33d643a81..22ab4fb7ebf 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -1674,9 +1674,9 @@ int security_inode_init_security(struct inode *inod=
-e, struct inode *dir,
->         if (!num_filled_xattrs)
->                 goto out;
->
-> -       ret =3D evm_inode_init_security(inode, new_xattrs,
-> -                                     new_xattrs + num_filled_xattrs);
-> -       if (ret)
-> +       ret =3D evm_inode_init_security(inode, dir, qstr, new_xattrs,
-> +                                     &num_filled_xattrs);
-> +       if (ret && ret !=3D -EOPNOTSUPP)
->                 goto out;
->         ret =3D initxattrs(inode, new_xattrs, fs_data);
->  out:
-> --
-> 2.25.1
->
+> +
+> +What:		/sys/bus/cxl/devices/memX/trigger_poison_list
+> +Date:		March, 2023
+> +KernelVersion:	v6.4
+> +Contact:	linux-cxl@vger.kernel.org
+> +Description:
+> +		(WO) When a boolean 'true' is written to this attribute the
+> +		memdev driver retrieves the poison list from the device. The
+> +		list consists of addresses that are poisoned, or would result
+> +		in poison if accessed, and the source of the poison. This
+> +		attribute is only visible for devices supporting the
+> +		capability. The retrieved errors are logged as kernel
+> +		trace events with the label 'cxl_poison'.
+> diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+> index 0af8856936dc..5ef40c36f1a3 100644
+> --- a/drivers/cxl/core/memdev.c
+> +++ b/drivers/cxl/core/memdev.c
+> @@ -106,6 +106,53 @@ static ssize_t numa_node_show(struct device *dev, struct device_attribute *attr,
+>   }
+>   static DEVICE_ATTR_RO(numa_node);
+>   
+> +static int cxl_get_poison_by_memdev(struct cxl_memdev *cxlmd)
+> +{
+> +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+> +	u64 offset, length;
+> +	int rc = 0;
+> +
+> +	/* CXL 3.0 Spec 8.2.9.8.4.1 Separate pmem and ram poison requests */
+> +	if (resource_size(&cxlds->pmem_res)) {
+> +		offset = cxlds->pmem_res.start;
+> +		length = resource_size(&cxlds->pmem_res);
+> +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
+> +		if (rc)
+> +			return rc;
+> +	}
+> +	if (resource_size(&cxlds->ram_res)) {
+> +		offset = cxlds->ram_res.start;
+> +		length = resource_size(&cxlds->ram_res);
+> +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
+> +		/*
+> +		 * Invalid Physical Address is not an error for
+> +		 * volatile addresses. Device support is optional.
+> +		 */
+> +		if (rc == -EFAULT)
+> +			rc = 0;
+> +	}
+> +	return rc;
+> +}
+> +
+> +ssize_t cxl_trigger_poison_list(struct device *dev,
+> +				struct device_attribute *attr,
+> +				const char *buf, size_t len)
+> +{
+> +	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
+> +	bool trigger;
+> +	int rc;
+> +
+> +	if (kstrtobool(buf, &trigger) || !trigger)
+> +		return -EINVAL;
+> +
+> +	down_read(&cxl_dpa_rwsem);
+> +	rc = cxl_get_poison_by_memdev(cxlmd);
+> +	up_read(&cxl_dpa_rwsem);
+> +
+> +	return rc ? rc : len;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(cxl_trigger_poison_list, CXL);
+> +
+>   static struct attribute *cxl_memdev_attributes[] = {
+>   	&dev_attr_serial.attr,
+>   	&dev_attr_firmware_version.attr,
+> @@ -130,6 +177,7 @@ static umode_t cxl_memdev_visible(struct kobject *kobj, struct attribute *a,
+>   {
+>   	if (!IS_ENABLED(CONFIG_NUMA) && a == &dev_attr_numa_node.attr)
+>   		return 0;
+> +
 
+Stray blank line?
 
---=20
-paul-moore.com
+>   	return a->mode;
+>   }
+>   
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index 57a5999ddb35..5febaa3f9b04 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -145,7 +145,7 @@ struct cxl_mbox_cmd {
+>   	C(FWROLLBACK, -ENXIO, "rolled back to the previous active FW"),         \
+>   	C(FWRESET, -ENXIO, "FW failed to activate, needs cold reset"),		\
+>   	C(HANDLE, -ENXIO, "one or more Event Record Handles were invalid"),     \
+> -	C(PADDR, -ENXIO, "physical address specified is invalid"),		\
+> +	C(PADDR, -EFAULT, "physical address specified is invalid"),		\
+
+Seems unrelated change? Does it go with previous patch?
+
+>   	C(POISONLMT, -ENXIO, "poison injection limit has been reached"),        \
+>   	C(MEDIAFAILURE, -ENXIO, "permanent issue with the media"),		\
+>   	C(ABORT, -ENXIO, "background cmd was aborted by device"),               \
+> @@ -675,6 +675,9 @@ int cxl_set_timestamp(struct cxl_dev_state *cxlds);
+>   int cxl_poison_state_init(struct cxl_dev_state *cxlds);
+>   int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
+>   		       struct cxl_region *cxlr);
+> +ssize_t cxl_trigger_poison_list(struct device *dev,
+> +				struct device_attribute *attr, const char *buf,
+> +				size_t len);
+>   
+>   #ifdef CONFIG_CXL_SUSPEND
+>   void cxl_mem_active_inc(void);
+> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
+> index 39c4b54f0715..576f5b691589 100644
+> --- a/drivers/cxl/mem.c
+> +++ b/drivers/cxl/mem.c
+> @@ -176,10 +176,46 @@ static int cxl_mem_probe(struct device *dev)
+>   	return devm_add_action_or_reset(dev, enable_suspend, NULL);
+>   }
+>   
+> +static ssize_t trigger_poison_list_store(struct device *dev,
+> +					 struct device_attribute *attr,
+> +					 const char *buf, size_t len)
+> +{
+> +	return cxl_trigger_poison_list(dev, attr, buf, len);
+> +}
+> +
+> +static DEVICE_ATTR_WO(trigger_poison_list);
+> +
+> +static umode_t cxl_mem_visible(struct kobject *kobj, struct attribute *a, int n)
+> +{
+> +	if (a == &dev_attr_trigger_poison_list.attr) {
+> +		struct device *dev = kobj_to_dev(kobj);
+> +
+> +		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
+> +			      to_cxl_memdev(dev)->cxlds->enabled_cmds))
+> +			return 0;
+> +	}
+> +	return a->mode;
+> +}
+> +
+> +static struct attribute *cxl_mem_attrs[] = {
+> +	&dev_attr_trigger_poison_list.attr,
+> +	NULL
+> +};
+> +
+> +static struct attribute_group cxl_mem_group = {
+> +	.attrs = cxl_mem_attrs,
+> +	.is_visible = cxl_mem_visible,
+> +};
+> +
+> +__ATTRIBUTE_GROUPS(cxl_mem);
+> +
+>   static struct cxl_driver cxl_mem_driver = {
+>   	.name = "cxl_mem",
+>   	.probe = cxl_mem_probe,
+>   	.id = CXL_DEVICE_MEMORY_EXPANDER,
+> +	.drv = {
+> +		.dev_groups = cxl_mem_groups,
+> +	},
+>   };
+>   
+>   module_cxl_driver(cxl_mem_driver);
