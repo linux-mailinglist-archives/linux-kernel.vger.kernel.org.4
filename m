@@ -2,94 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9DF6D09C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B266D09C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233187AbjC3Pfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:35:45 -0400
+        id S233133AbjC3Pfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:35:37 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233045AbjC3Pfg (ORCPT
+        with ESMTP id S233132AbjC3Pfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:35:36 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CF5095BA1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:35:18 -0700 (PDT)
-Received: (qmail 200941 invoked by uid 1000); 30 Mar 2023 11:34:46 -0400
-Date:   Thu, 30 Mar 2023 11:34:46 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>,
-        Thomas Winischhofer <thomas@winischhofer.net>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in sisusb_send_bulk_msg/usb_submit_urb
-Message-ID: <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
-References: <00000000000096e4f905f81b2702@google.com>
+        Thu, 30 Mar 2023 11:35:30 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A209CDCA
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:35:09 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id o2so18434990plg.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680190509;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6J5Dz0I/J07O36CXqE0BRQW45IGKi4sdZ6anPBoj71I=;
+        b=EAl1AhmF75rYCLH5Q2vZtyt7h5YQjV6yPyx8moPuHclV7yeuRCAzkRDD7F2j341P9n
+         YA8/XGuqFn9dKR+A4VEiA1rYPHy24yN3RG4Wm/YJkXMtoUXuyx2jY8s14FpT34Zd1GD8
+         L07QTzxvU/AqKb62ZBKabLzqx3uaUvYHWDcY0HoWZ8x+DNeAFd7yqmqR0Tvku7NIkiU8
+         WG5LOOf8II2uEEZjDVy/AZMLvDzdsGdKAlnduD2YzCH1Wk7T0sAVXkpeyGIpnGXJPVFS
+         VnfsYAHXWqM4GIn8j+O/EUmETfFqRZg7LR81x1yzS49w7C7FH19BTm/O3B7uGa3uh5Dc
+         C1XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680190509;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6J5Dz0I/J07O36CXqE0BRQW45IGKi4sdZ6anPBoj71I=;
+        b=uep5pvBR091AmObodBGrJltBTjJ6I96g25YeyE35mEWG6NJmmVvs2nFamsWgEQEH0x
+         FNgZa5XIzzeixIUHu2TwHfmpZVPreJ5wM3GxPZwPEhIy31VJ/W8S9G6pifbq23hAQFww
+         BE2B441QE+0jdOCU+jPu8zRJS2Q3x2pGjYmblSFSxfUkVvNNiLL4tTm2+GsHoLRBMO0l
+         F3AZlitIcSWmOa0aH4a6k93BU6sRuc4DN9GBA25N4OO4gIiD7TcfAE+jkcYZWD2QohE5
+         A24lzFZL0XfcmcxkCJ+bPZnYFcDSmngY4codo0C7gZfa64tOSZK4xGmOlz08vxAlZG8I
+         AmZA==
+X-Gm-Message-State: AAQBX9dsPL1l5LzgXq5zvR6fPTgumuyIHpOyjHqdmOObjuvCqnnvVFnm
+        PCWRPAxp+0d7KY08PD4LLQbk58tA6RB/2jMyx5nLuw==
+X-Google-Smtp-Source: AKy350YNQ6FECTA9ROsjSO3DYIpGj7n6B0divEu9JE+0CLFvLjKtYxt1YutcyQDZ0/lroePvmXBB7C0NdX8bl0paJF0=
+X-Received: by 2002:a17:90a:da01:b0:23f:695a:1355 with SMTP id
+ e1-20020a17090ada0100b0023f695a1355mr7327830pjv.5.1680190508548; Thu, 30 Mar
+ 2023 08:35:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000096e4f905f81b2702@google.com>
-X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230330112743.2331141-1-javierm@redhat.com>
+In-Reply-To: <20230330112743.2331141-1-javierm@redhat.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 30 Mar 2023 08:34:57 -0700
+Message-ID: <CAGS_qxptBcUQByWAd6JHAxWb08czOiGnx0_uSvMKdhzTVwv=6w@mail.gmail.com>
+Subject: Re: [PATCH] .gitignore: Exclude KUnit config dot-files
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>,
+        linux-kselftest@vger.kernel.org, David Gow <davidgow@google.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        kunit-dev@googlegroups.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>, Andrew Davis <afd@ti.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reference: https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
+On Thu, Mar 30, 2023 at 4:27=E2=80=AFAM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+>
+> There's a rule to ignore all the dot-files (.*) but we want to exclude th=
+e
+> config files used by KUnit (.kunitconfig) since those are usually added t=
+o
+> allow executing test suites without having to enable custom config symbol=
+s.
+>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-The sisusbvga driver just assumes that the endpoints it uses will be 
-present, without checking.  I don't know anything about this driver, so 
-the fix below may not be entirely correct.
+FYI, Andy has a version of this patch from back in Jan here,
+https://lore.kernel.org/linux-kselftest/20230127145708.12915-1-andriy.shevc=
+henko@linux.intel.com/
 
-Alan Stern
+I don't think anyone was adamantly opposed to it, but it's just been
+sitting on the list waiting.
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
-
---- usb-devel.orig/drivers/usb/misc/sisusbvga/sisusbvga.c
-+++ usb-devel/drivers/usb/misc/sisusbvga/sisusbvga.c
-@@ -2772,6 +2772,24 @@ static struct usb_class_driver usb_sisus
- 	.minor_base =	SISUSB_MINOR
- };
- 
-+/*
-+ * Check whether the current altsetting for intf contains a bulk endpoint
-+ * with the specified address (number and direction).
-+ */
-+static int check_bulk_ep(struct usb_interface *intf, unsigned int ep_addr)
-+{
-+	int n, i;
-+	const struct usb_endpoint_descriptor *epd;
-+
-+	n = intf->cur_altsetting->desc.bNumEndpoints;
-+	for (i = 0; i < n; ++i) {
-+		epd = &intf->cur_altsetting->endpoint[i].desc;
-+		if (epd->bEndpointAddress == ep_addr)
-+			return usb_endpoint_xfer_bulk(epd);
-+	}
-+	return 0;
-+}
-+
- static int sisusb_probe(struct usb_interface *intf,
- 		const struct usb_device_id *id)
- {
-@@ -2779,6 +2797,17 @@ static int sisusb_probe(struct usb_inter
- 	struct sisusb_usb_data *sisusb;
- 	int retval = 0, i;
- 
-+	/* Are the expected endpoints present? */
-+	if (!check_bulk_ep(intf, SISUSB_EP_GFX_IN | USB_DIR_IN) ||
-+	    !check_bulk_ep(intf, SISUSB_EP_GFX_OUT | USB_DIR_OUT) ||
-+	    !check_bulk_ep(intf, SISUSB_EP_GFX_BULK_OUT | USB_DIR_OUT) ||
-+	    !check_bulk_ep(intf, SISUSB_EP_GFX_LBULK_OUT | USB_DIR_OUT) ||
-+	    !check_bulk_ep(intf, SISUSB_EP_BRIDGE_IN | USB_DIR_IN) ||
-+	    !check_bulk_ep(intf, SISUSB_EP_BRIDGE_OUT | USB_DIR_OUT)) {
-+		dev_err(&dev->dev, "Invalid USB2VGA device\n");
-+		return -EINVAL;
-+	}
-+
- 	dev_info(&dev->dev, "USB2VGA dongle found at address %d\n",
- 			dev->devnum);
- 
-
+Daniel
