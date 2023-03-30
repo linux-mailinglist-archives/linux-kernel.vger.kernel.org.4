@@ -2,121 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB6A6D1095
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5696D109C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjC3VL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 17:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S229521AbjC3VN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 17:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjC3VLm (ORCPT
+        with ESMTP id S229524AbjC3VNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 17:11:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27333DBE6;
-        Thu, 30 Mar 2023 14:11:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF8FAB82A37;
-        Thu, 30 Mar 2023 21:11:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C56BC433D2;
-        Thu, 30 Mar 2023 21:11:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680210698;
-        bh=0BNxiRvexGip6Q6l3mbtrFq0KLDE7GfQjeWE5qFYM1w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pRvJlCRpnS0i7CK1rEcQGoZXvWyFiqO/w0pRmO9u+sBxxxvvRYp1eRy45g9AinDoR
-         MiMq7Qz/lDTARGEjkGplwNq/yJP4oLjsCnKBFS+X/Of45kHNr/ds9ogW5TfmrGVthD
-         uj3t2bpZB8pcVL7rXjj8tUG/gUdwbY/9IRb8F53PuTgQ/32AKfMW5Zz+/MJae9v0aO
-         hysXx+8nm1Ir/XIRhYdHHKEcwCI+Rb5fIZUk67a8BYoFV4m27WPD/GBczaxmUaR+2Q
-         pG/jOnypA/BuD7v5q5aNQhFl/jTvXCYbz3Gu1PrGSXAqOBw42P0uLIs1eAd+HAxgrQ
-         e8Mi29fCuVHeQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D1FC44052D; Thu, 30 Mar 2023 18:11:35 -0300 (-03)
-Date:   Thu, 30 Mar 2023 18:11:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] perf bench: Avoid NDEBUG warning
-Message-ID: <ZCX7B/7ikbbie/FD@kernel.org>
-References: <20230330183827.1412303-1-irogers@google.com>
+        Thu, 30 Mar 2023 17:13:49 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6BDE1BD
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 14:13:47 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id m8so814660wmq.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 14:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680210826;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xYJ7UCsO7F5A7GpXsRX+DRI450uHDvtid0ji5HrtybQ=;
+        b=TIOuMwmc+8BXKmxoFMV87oMywgcK9gX6n7HKYcIRNQi1qfrrh4vWceK117IiKCBCRl
+         /C3RSxWGKAi3MXa9Zq0Ijm8ydELmAe76IJ5Bc+7xX6iqj+yXUxbvQh5MDAo6wjVgSvmh
+         sHjDwMm2UP/yiZcOdJekZwww5sxrrPH4jCobUFUm36ZarX3aQ7fG6HfXSr1PkrcXd1ZM
+         tfYKHp4DmRrkytK3zstli4lpNVTtBicxQHPnEyi5fOP5UhfS4lTAv9rHOzx1aDSbxxGX
+         22zMxMyHp1Jtp6+NPKJKKF6Emzw89VShKFj44OeI+CqNUIb7vaOlUYZJIzYL07KOC3Wx
+         cJMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680210826;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xYJ7UCsO7F5A7GpXsRX+DRI450uHDvtid0ji5HrtybQ=;
+        b=z5BEWxmb4y3ay9yTSb7RQ0cD3/Xhy1S94PW2JvuabTzlR0KzAyYRviFJ7X9UsUYPwt
+         MrkenWEAhBTCP2U49v8iGPdETBAhp56TEv5unrZuvknIHZFCxCd/UVGdroUdwmvUEx1B
+         7eHoKpLVcifHv7PI8PODt7CqljJCQsz+f7nAnxSZbtRuwrlJDd5oeU5VOy/nNaZbHHpR
+         191swp40edi13FuT7Ho1+DjI+1UNY+sD4177g8FJrUsHGd6OX5qFbZDw2Ue4NZCl1WOp
+         Nn8O8LwkvP05sZhKhqwCQbXIne65KnYiD7dAKPmoqkDiWObOaE1zEEqZTqG2EboiCVBV
+         Dr7Q==
+X-Gm-Message-State: AO0yUKWTCINKGUN5xFGvkUuNrjbEfF8fMnouoOaWd98lfa4hrRnyxi5F
+        BWv27rq47RV0Bc+HSRgMs+M4kg==
+X-Google-Smtp-Source: AK7set/RF9lEynbBcbIUXZaNxVwOwSMZ+BeXGxObXH50aHsfuSIlJxKeFMBWVKZjvnItHxnhRNWXzA==
+X-Received: by 2002:a7b:c381:0:b0:3ed:4627:ed09 with SMTP id s1-20020a7bc381000000b003ed4627ed09mr18481456wmj.28.1680210826323;
+        Thu, 30 Mar 2023 14:13:46 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:17ff:909e:1b73:8366? ([2a05:6e02:1041:c10:17ff:909e:1b73:8366])
+        by smtp.googlemail.com with ESMTPSA id hg13-20020a05600c538d00b003ed793d9de0sm11413067wmb.1.2023.03.30.14.13.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 14:13:45 -0700 (PDT)
+Message-ID: <3e9154df-bae4-23a6-7c5d-d42477800b19@linaro.org>
+Date:   Thu, 30 Mar 2023 23:13:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330183827.1412303-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RESEND] [PATCHv3 4/7] thermal: rockchip: Simplify channel id
+ logic
+Content-Language: en-US
+To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230308112253.15659-1-sebastian.reichel@collabora.com>
+ <ec66d4e7-cb82-46c6-84ae-bd51df7cab7c@mercury.local>
+ <bae80282-cb80-462d-e554-1934d090e216@linaro.org> <2066924.KlZ2vcFHjT@diego>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <2066924.KlZ2vcFHjT@diego>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Mar 30, 2023 at 11:38:25AM -0700, Ian Rogers escreveu:
-> With NDEBUG set the asserts are compiled out. This yields
-> "unused-but-set-variable" variables. Move these variables behind
-> NDEBUG to avoid the warning.
-
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/bench/find-bit-bench.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+On 30/03/2023 19:07, Heiko Stübner wrote:
+> Am Donnerstag, 16. März 2023, 11:05:25 CEST schrieb Daniel Lezcano:
+>>
+>> Hi Heiko,
+>>
+>> On 08/03/2023 19:42, Sebastian Reichel wrote:
+>>> Hi Daniel,
+>>>
+>>> On Wed, Mar 08, 2023 at 07:13:22PM +0100, Daniel Lezcano wrote:
+>>>> On 08/03/2023 12:22, Sebastian Reichel wrote:
+>>>>> Replace the channel ID lookup table by a simple offset, since
+>>>>> the channel IDs are consecutive.
+>>>>>
+>>>>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>>>>
+>>>> As all the other patches are reviewed by Heiko, is the tag missing here?
+>>>
+>>> Heiko was not happy with this in PATCHv2, when he reviewed most
+>>> of the patches:
+>>>
+>>> https://lore.kernel.org/all/3601039.e9J7NaK4W3@phil/
+>>>
+>>> I replied, but never got a response, so I kept it as is:
+>>>
+>>> https://lore.kernel.org/all/20221206170232.xsm4kcbfwrmlrriw@mercury.elektranox.org/
+>>>
+>>> FWIW it is essential for the series and cannot be dropped, because
+>>> RK3588 has more than 2 channels.
+>>
+>> Do you have a suggestion to improve the proposed change ?
 > 
-> diff --git a/tools/perf/bench/find-bit-bench.c b/tools/perf/bench/find-bit-bench.c
-> index d103c3136983..7e25b0e413f6 100644
-> --- a/tools/perf/bench/find-bit-bench.c
-> +++ b/tools/perf/bench/find-bit-bench.c
-> @@ -61,7 +61,6 @@ static int do_for_each_set_bit(unsigned int num_bits)
->  	double time_average, time_stddev;
->  	unsigned int bit, i, j;
->  	unsigned int set_bits, skip;
-> -	unsigned int old;
->  
->  	init_stats(&fb_time_stats);
->  	init_stats(&tb_time_stats);
-> @@ -73,7 +72,10 @@ static int do_for_each_set_bit(unsigned int num_bits)
->  			__set_bit(i, to_test);
->  
->  		for (i = 0; i < outer_iterations; i++) {
-> -			old = accumulator;
-> +#ifndef NDEBUG
-> +			unsigned int old = accumulator;
-> +#endif
-> +
->  			gettimeofday(&start, NULL);
->  			for (j = 0; j < inner_iterations; j++) {
->  				for_each_set_bit(bit, to_test, num_bits)
-> @@ -85,7 +87,9 @@ static int do_for_each_set_bit(unsigned int num_bits)
->  			runtime_us = diff.tv_sec * USEC_PER_SEC + diff.tv_usec;
->  			update_stats(&fb_time_stats, runtime_us);
->  
-> +#ifndef NDEBUG
->  			old = accumulator;
-> +#endif
->  			gettimeofday(&start, NULL);
->  			for (j = 0; j < inner_iterations; j++) {
->  				for (bit = 0; bit < num_bits; bit++) {
-> -- 
-> 2.40.0.348.gf938b09366-goog
+> I guess it's fine after all.
 > 
+> Sebastian's response makes sense and there is not really a reason to keep
+> infrastructure around for a hypothetical case that may never happen.
+> 
+> If that really changes with some SoC in the far future we can always
+> re-evaluate.
+
+Thanks, I've added your tag
+
 
 -- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-- Arnaldo
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
