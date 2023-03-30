@@ -2,97 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D9B6D0629
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92F16D0633
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjC3NNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
+        id S231899AbjC3NOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbjC3NNm (ORCPT
+        with ESMTP id S230200AbjC3NOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:13:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B74AC9760;
-        Thu, 30 Mar 2023 06:13:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CEA882F4;
-        Thu, 30 Mar 2023 06:14:22 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0FE33F663;
-        Thu, 30 Mar 2023 06:13:36 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 14:13:34 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Maulik Shah <quic_mkshah@quicinc.com>, andersson@kernel.org,
-        dianders@chromium.org, swboyd@chromium.org, wingers@google.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, jwerner@chromium.org,
-        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
-Subject: Re: [PATCH v2 1/2] cpuidle: psci: Move enabling OSI mode after power
- domains creation
-Message-ID: <20230330131334.idb25zf4tdf3zqn3@bogus>
-References: <20230330084250.32600-1-quic_mkshah@quicinc.com>
- <20230330084250.32600-2-quic_mkshah@quicinc.com>
- <20230330093431.xn5wwiwqbne5owf7@bogus>
- <CAPDyKFpUmkF=pOwXNrva1k2R+RFBB39-Y4kA0Fve+-3NGbtDag@mail.gmail.com>
+        Thu, 30 Mar 2023 09:14:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CE3AD31;
+        Thu, 30 Mar 2023 06:14:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00AF662071;
+        Thu, 30 Mar 2023 13:14:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDD20C433D2;
+        Thu, 30 Mar 2023 13:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680182042;
+        bh=KS4LCNe9lQlce8Dp6zV/p0jgbUK0QS/1mjfSUOf8RBg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xIYWpBhUmazj7wxv8o64t2zb3BZly6D92vtLeDbjvXe7Bf5Gl51PbVmP1UxRQSfmG
+         /cEToTozlmY87a1ixKF9FtsmQdvNZcbkQUxHYVXsscjFGApYGxMS0Ixwc+Mv5oKpjI
+         JktmegATsl1EN85wVXOSOZXPlYULCges5fhVq7kE=
+Date:   Thu, 30 Mar 2023 15:14:00 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v9 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <ZCWLGLNxj-02ALA1@kroah.com>
+References: <20230323071051.2184-1-tony@atomide.com>
+ <ZCQAF-nrrsfBtviT@kroah.com>
+ <20230330113231.GR7501@atomide.com>
+ <ZCWF_Envuh3Qnaxm@kroah.com>
+ <20230330125931.GT7501@atomide.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFpUmkF=pOwXNrva1k2R+RFBB39-Y4kA0Fve+-3NGbtDag@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230330125931.GT7501@atomide.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 02:06:19PM +0200, Ulf Hansson wrote:
-> On Thu, 30 Mar 2023 at 11:34, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Thu, Mar 30, 2023 at 02:12:49PM +0530, Maulik Shah wrote:
-> > > A switch from OSI to PC mode is only possible if all CPUs other than the
-> > > calling one are OFF, either through a call to CPU_OFF or not yet booted.
-> > >
-> >
-> > As per the spec, all cores are in one of the following states:
-> >  - Running
-> >  - OFF, either through a call to CPU_OFF or not yet booted
-> >  - Suspended, through a call to CPU_DEFAULT_SUSPEND
-> >
-> > Better to provide full information.
-> >
-> > > Currently OSI mode is enabled before power domains are created. In cases
-> > > where CPUidle states are not using hierarchical CPU topology the bail out
-> > > path tries to switch back to PC mode which gets denied by firmware since
-> > > other CPUs are online at this point and creates inconsistent state as
-> > > firmware is in OSI mode and Linux in PC mode.
-> > >
-> >
-> > OK what is the issue if the other cores are online ? As long as they are
-> > running, it is allowed in the spec, so your statement is incorrect.
-> >
-> > Is CPUidle enabled before setting the OSI mode. I see only that can cause
-> > issue as we don't use CPU_DEFAULT_SUSPEND. If idle is not yet enabled, it
-> > shouldn't be a problem.
+On Thu, Mar 30, 2023 at 03:59:31PM +0300, Tony Lindgren wrote:
+> * Greg Kroah-Hartman <gregkh@linuxfoundation.org> [230330 12:52]:
+> > On Thu, Mar 30, 2023 at 02:32:31PM +0300, Tony Lindgren wrote:
+> > > * Greg Kroah-Hartman <gregkh@linuxfoundation.org> [230329 09:08]:
+> > > > On Thu, Mar 23, 2023 at 09:10:47AM +0200, Tony Lindgren wrote:
+> > > > > --- /dev/null
+> > > > > +++ b/drivers/tty/serial/serial_base.c
+> > > > > @@ -0,0 +1,142 @@
+> > > > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > > 
+> > > > Given that the driver core is "GPL-2.0-only", why is this -or-later?
+> > > 
+> > > Thanks for noticing, the intention was to set it to what serial_core.c has:
+> > > 
+> > > $ git grep -e SPDX -e MODULE_LICENSE drivers/tty/serial/serial_core.c
+> > > drivers/tty/serial/serial_core.c:// SPDX-License-Identifier: GPL-2.0+
+> > > drivers/tty/serial/serial_core.c:MODULE_LICENSE("GPL");
+> > 
+> > Doesn't mean you have to copy it, it's your choice :)
 > 
-> Sudeep, you may very well be correct here. Nevertheless, it looks like
-> the current public TF-A implementation doesn't work exactly like this,
-> as it reports an error in Maulik's case. We should fix it too, I
-> think.
-> 
-> Although, to me it doesn't really matter as I think $subject patch
-> makes sense anyway. It's always nice to simplify code when it's
-> possible.
->
+> In this case my preference is to use the same as for serial_core.c. This is
+> so folks can start moving serial port specific functions from serial_core.c
+> to serial_port.c. And not have to worry about the possible differences with
+> various licenses at that point :)
 
-Agreed, I don't have any objection to the change. The wording the message
-worried me and wanted to check if there are any other issues because of this.
-As such it doesn't look like there are but the commit message needs to be
-updated as it gives a different impression/understanding.
+That's great, no objection from me, sorry, but I had to ask, the "no
+fun" part of my job...
 
--- 
-Regards,
-Sudeep
+greg k-h
