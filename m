@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8908E6D0F76
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5586D0F8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbjC3T4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 15:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
+        id S231989AbjC3T7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 15:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbjC3T4J (ORCPT
+        with ESMTP id S230465AbjC3T7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:56:09 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E679EFF19;
-        Thu, 30 Mar 2023 12:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1680206164;
-        bh=ccdCK8cB1yDs2Qew7hb2Qs/bMNJYZZtrVs8VhxEJ4v8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GC8dpnFqcrogDv720XejMUUpwoNhZrhNHwZHtxeA8YFLTRkrdizktLBcyp7sIj5A/
-         kEO1vhD1f0m2q8TJL+J/VZ4NcjitpLNEkWCL5OV4AMYlwe7uU1+Qj13S76ECZZ36xx
-         aXwgwAMQ+O7Qyl+77CukTcWbChw7OS6vxS003VtdwEaCkC8ztqEJ4u8glCNLFzDERo
-         SzjTLMvRxnPMQ3L1jLr08URNU07TrX+Vat/oTCk4e2RwuIMOTCCnTo4wH5vZ3dNXE9
-         vkEvtxkqMIhRUN4outwRjTX0IhsQqBS0GX1qvOsMiiOdm2npBWrokJR6W2d5OifJHe
-         ULM1EJJgyXr1Q==
-Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PnZ103kdcztBL;
-        Thu, 30 Mar 2023 15:56:04 -0400 (EDT)
-Message-ID: <91a414dd-9d21-01a1-536a-fee698080f1a@efficios.com>
-Date:   Thu, 30 Mar 2023 15:56:18 -0400
+        Thu, 30 Mar 2023 15:59:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D297692;
+        Thu, 30 Mar 2023 12:59:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41DEDB829FE;
+        Thu, 30 Mar 2023 19:59:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D566C433EF;
+        Thu, 30 Mar 2023 19:59:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680206374;
+        bh=x6NOVdTaz7CGWvps81jobrp9t31g87Tz81IuQnxXTB4=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=lndkGvrHqy7SgEdw+IG71XbctymOJR02QCIJddo28Ncdwtnqnh6iWxEUH9omZccG7
+         /EeDzZ9EQ1cbWqhVFK4KwagNntpz7NCfxdqwiDTGWCb7cV2zMoNiZLdiHfQCPilt9i
+         zer6XqQgVFyeOH87qi5oBNtaM6xjS7aOxLw/u3Jfzfgba5QipAHAjygiBio8srJyWa
+         Ywbh0Us391GZ3NnY3PyIVsiY4CuNYBwlqEuSus18Twx/Vg38bNrgCkzXf3DFSJ0D/I
+         +vxDcZJ99gNVwWVYeS2jSPOi6KJ2GhAwUIOH2XCow+5guMfQlkrpixA39y3eaJzgGU
+         DF5QIqNHtLW+A==
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230330070342.19448-1-krzysztof.kozlowski@linaro.org>
+References: <20230330070342.19448-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4] ASoC: dt-bindings: qcom,lpass-va-macro: Add missing
+ NPL clock
+Message-Id: <168020637190.3358032.1777866754231167015.b4-ty@kernel.org>
+Date:   Thu, 30 Mar 2023 20:59:31 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/1] mm: Fix memory leak on mm_init error handling
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-mm@kvack.org, stable@vger.kernel.org
-References: <20230330133822.66271-1-mathieu.desnoyers@efficios.com>
- <20230330124230.9f3d4f63374eb15a3b990ff8@linux-foundation.org>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230330124230.9f3d4f63374eb15a3b990ff8@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-2eb1a
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-30 15:42, Andrew Morton wrote:
-> On Thu, 30 Mar 2023 09:38:22 -0400 Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+On Thu, 30 Mar 2023 09:03:42 +0200, Krzysztof Kozlowski wrote:
+> Several devices (e.g. SC8280XP and SM8450) expect a NPL (Near Pad Logic)
+> clock.  Add the clock and customize allowed clocks per each variant.
+> The clocks are also required by ADSP in all variants.
 > 
->> commit f1a7941243c1 ("mm: convert mm's rss stats into percpu_counter")
->> introduces a memory leak by missing a call to destroy_context() when a
->> percpu_counter fails to allocate.
->>
->> Before introducing the per-cpu counter allocations, init_new_context()
->> was the last call that could fail in mm_init(), and thus there was no
->> need to ever invoke destroy_context() in the error paths. Adding the
->> following percpu counter allocations adds error paths after
->> init_new_context(), which means its associated destroy_context() needs
->> to be called when percpu counters fail to allocate.
->>
->> ...
->>
->> --- a/kernel/fork.c
->> +++ b/kernel/fork.c
->> @@ -1171,6 +1171,7 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
->>   fail_pcpu:
->>   	while (i > 0)
->>   		percpu_counter_destroy(&mm->rss_stat[--i]);
->> +	destroy_context(mm);
->>   fail_nocontext:
->>   	mm_free_pgd(mm);
->>   fail_nopgd:
 > 
-> Is there really a leak?  I wasn't able to find a version of
-> init_new_context() which performs allocation.
 
-AFAIU, at least on powerpc:
+Applied to
 
-arch/powerpc/mm/book3s64/mmu_context.c: init_new_context() calls 
-radix__init_new_context() or hash__init_new_context() which
-leak IDs through ida_alloc_range.
+   broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: dt-bindings: qcom,lpass-va-macro: Add missing NPL clock
+      commit: cfad817095e111b640c7d538b9f182d2535ee065
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-
-Mathieu
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Mark
 
