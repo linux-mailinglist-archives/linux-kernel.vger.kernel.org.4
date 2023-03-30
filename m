@@ -2,200 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297596CFBD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C4E6CFBE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjC3GrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 02:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
+        id S230290AbjC3GtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 02:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjC3Gq6 (ORCPT
+        with ESMTP id S230269AbjC3GtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 02:46:58 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A94640E5;
-        Wed, 29 Mar 2023 23:46:55 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:49992.1004970275
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 05A171002CF;
-        Thu, 30 Mar 2023 14:46:51 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 8848f98944564ef38c37ea117c5c5e46 for lkp@intel.com;
-        Thu, 30 Mar 2023 14:46:53 CST
-X-Transaction-ID: 8848f98944564ef38c37ea117c5c5e46
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <83c392c9-52de-d819-70e5-651106341f20@189.cn>
-Date:   Thu, 30 Mar 2023 14:46:50 +0800
+        Thu, 30 Mar 2023 02:49:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A23840D9
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 23:48:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680158910;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DALHbgeFEf+za91SMnDqIHwqs2Pkttr/jtZwkTUdNi4=;
+        b=JiiXzCpi6rVVNIrodSWlB4xabesLQHrw/NSaMNaPl5EivWP8QBriGs2vyjtkdqRgy3kyds
+        5GxQ4ZO7krEqA3ix4aVjK981yAN0TSQ1utsIlRsusNuPv0YStkTWAgoJS8PyuojKlLgAOL
+        z7ST7ifovnYXuWwbMkh/qUH0eEBaLqc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-605-tJaJ6MZVMQmBqT7ETyJKHQ-1; Thu, 30 Mar 2023 02:48:26 -0400
+X-MC-Unique: tJaJ6MZVMQmBqT7ETyJKHQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43EC83C0ED71;
+        Thu, 30 Mar 2023 06:48:25 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E0F2B14171BB;
+        Thu, 30 Mar 2023 06:48:22 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <7f7947d6-2a03-688b-dc5e-3887553f0106@redhat.com>
+References: <7f7947d6-2a03-688b-dc5e-3887553f0106@redhat.com> <20230329141354.516864-1-dhowells@redhat.com> <20230329141354.516864-38-dhowells@redhat.com>
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 37/48] ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage()
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v9 2/2] drm: add kms driver for loongson display
- controller
-To:     kernel test robot <lkp@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
-        Li Yi <liyi@loongson.cn>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, nathan@kernel.org,
-        linux-media@vger.kernel.org
-References: <20230329155033.1303550-3-15330273260@189.cn>
- <202303301403.lRjtbd5K-lkp@intel.com>
-Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <202303301403.lRjtbd5K-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <709551.1680158901.1@warthog.procyon.org.uk>
+Date:   Thu, 30 Mar 2023 07:48:21 +0100
+Message-ID: <709552.1680158901@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Xiubo Li <xiubli@redhat.com> wrote:
 
-On 2023/3/30 14:28, kernel test robot wrote:
-> Hi Sui,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on drm-misc/drm-misc-next]
-> [also build test WARNING on linus/master v6.3-rc4 next-20230329]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230329-235338
-> base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-> patch link:    https://lore.kernel.org/r/20230329155033.1303550-3-15330273260%40189.cn
-> patch subject: [PATCH v9 2/2] drm: add kms driver for loongson display controller
-> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230330/202303301403.lRjtbd5K-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/ed6a57085a2dc87999193a71c28399a56e29097b
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230329-235338
->          git checkout ed6a57085a2dc87999193a71c28399a56e29097b
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/fpga/ drivers/gpu/drm/loongson/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303301403.lRjtbd5K-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->>> drivers/gpu/drm/loongson/lsdc_drv.c:342:11: warning: variable 'ddev' is uninitialized when used here [-Wuninitialized]
->                     drm_err(ddev, "Not known device, the driver need update!\n");
->                             ^~~~
->     include/drm/drm_print.h:469:16: note: expanded from macro 'drm_err'
->             __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
->                           ^~~
->     include/drm/drm_print.h:456:21: note: expanded from macro '__drm_printk'
->             dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
->                                ^~~
->     include/linux/dev_printk.h:144:44: note: expanded from macro 'dev_err'
->             dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
->                                                       ^~~
->     include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
->                     _p_func(dev, fmt, ##__VA_ARGS__);                       \
->                             ^~~
->     drivers/gpu/drm/loongson/lsdc_drv.c:326:25: note: initialize the variable 'ddev' to silence this warning
->             struct drm_device *ddev;
->                                    ^
->                                     = NULL
->     1 warning generated.
->
->
-> vim +/ddev +342 drivers/gpu/drm/loongson/lsdc_drv.c
->
->     321	
->     322	static int lsdc_pci_probe(struct pci_dev *pdev,
->     323				  const struct pci_device_id *ent)
->     324	{
->     325		const struct lsdc_desc *descp;
->     326		struct drm_device *ddev;
->     327		struct lsdc_device *ldev;
->     328		int ret;
->     329	
->     330		ret = pcim_enable_device(pdev);
->     331		if (ret)
->     332			return ret;
->     333	
->     334		pci_set_master(pdev);
->     335	
->     336		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(40));
->     337		if (ret)
->     338			return ret;
->     339	
->     340		descp = lsdc_detect_chip(pdev, ent);
->     341		if (IS_ERR_OR_NULL(descp)) {
->   > 342			drm_err(ddev, "Not known device, the driver need update!\n");
->     343			return -ENODEV;
->     344		}
->     345	
+> BTW, will this two patch depend on the others in this patch series ?
 
-Right, i admit this.
+Yes.  You'll need patches that affect TCP at least so that TCP supports
+MSG_SPLICE_PAGES, so 04-08 and perhaps 09.  It's also on top of the patches
+that remove ITER_PIPE on my iov-extract branch, but I don't think that should
+affect you.
 
+David
 
-I move  lsdc_detect_chip() function out from lsdc_create_device() to 
-here in v9.
-
-Since i think the chip probe should be run as early as possible.
-
-Remove  line 342 `drm_err(ddev, "Not known device, the driver need 
-update!\n");` would solve the problem.
-
-This time robot win.
-
-I will wait one or two day before send next version, ok?
-
->     346		dev_info(&pdev->dev, "%s found, revision: %u",
->     347			 chip_to_str(descp->chip), pdev->revision);
->     348	
->     349		ldev = lsdc_create_device(pdev, descp, &lsdc_drm_driver);
->     350		if (IS_ERR(ldev))
->     351			return PTR_ERR(ldev);
->     352	
->     353		ddev = &ldev->base;
->     354	
->     355		pci_set_drvdata(pdev, ddev);
->     356	
->     357		ret = devm_request_irq(&pdev->dev,
->     358				       pdev->irq,
->     359				       lsdc_get_irq_handler(descp),
->     360				       IRQF_SHARED,
->     361				       dev_name(&pdev->dev),
->     362				       ddev);
->     363		if (ret) {
->     364			drm_err(ddev, "Failed to register interrupt: %d\n", ret);
->     365			return ret;
->     366		}
->     367	
->     368		ret = drm_dev_register(ddev, 0);
->     369		if (ret)
->     370			return ret;
->     371	
->     372		drm_fbdev_generic_setup(ddev, 32);
->     373	
->     374		return 0;
->     375	}
->     376	
->
