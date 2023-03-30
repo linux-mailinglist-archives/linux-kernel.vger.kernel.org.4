@@ -2,138 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678306D07D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473816D07DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbjC3OPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
+        id S232336AbjC3OQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbjC3OPx (ORCPT
+        with ESMTP id S232308AbjC3OQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:15:53 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7758A5A;
-        Thu, 30 Mar 2023 07:15:51 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32UEFaCZ021541;
-        Thu, 30 Mar 2023 09:15:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680185737;
-        bh=aVGHt1tNgSRDuypNWJ2WFD4INriqP7ZqOIDcBGhcX9Y=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=s/fxS7tROtiOzDEDfkCMrrDm1TBKHXtTZ4uFHCvkscvm+8zijIY6dPTmdp5Dv83mx
-         PqmGJMJCAGNk+weE2WYDpE8rrsv6ptT7weMcLen4i0wxar8InibmA0AzNewCV2PLRI
-         f0UDcvZzRTL3QxUahQH6rnRSltE9RiU9cTuICqEY=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32UEFaFU022900
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 30 Mar 2023 09:15:36 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 30
- Mar 2023 09:15:36 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 30 Mar 2023 09:15:36 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32UEFaM0087889;
-        Thu, 30 Mar 2023 09:15:36 -0500
-From:   Hari Nagalla <hnagalla@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>
-CC:     <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] arm64: dts: ti: k3-j784s4-main: Add C71x DSP nodes
-Date:   Thu, 30 Mar 2023 09:15:36 -0500
-Message-ID: <20230330141536.22480-3-hnagalla@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230330141536.22480-1-hnagalla@ti.com>
-References: <20230330141536.22480-1-hnagalla@ti.com>
+        Thu, 30 Mar 2023 10:16:43 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8637293F9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:16:37 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6A51A66030CD;
+        Thu, 30 Mar 2023 15:16:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680185796;
+        bh=ux/0TN81WLnYDd2jDMimgAkbJMXx28lS+SbskQF/S3M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QHe1PlT1KPRiWBcbWcv3WdCSLU1ucNSBotILUNaoQ6WqRFDnLUrTCG2A2+F2CDLaJ
+         g6ryx1cWECvB44J/w1LqlLX0p/gK8APKAXjLuS547x09Nn+i8jVKo319Hu7qmAxdRx
+         RG6c+zQQiZBVedQ5crYBeufHLfJart3oVnU7YuuO4QWTseWl6/vXtue+gM7erUQ8y+
+         mHnWax7mrOPhcrK1z2LgANBi9T+nQK2zsuSJzEmu2n+uokXip/jqaM02OPHrAspbTu
+         9qJ0DpszpckB71+l41lP2Yzirb4Nx3ScvUZ4miQhHAPsZogxt09rgfZmEHZxBglU4j
+         W1W45b8cHNkqQ==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+        wenst@chromium.org
+Subject: [PATCH v1 0/8] MediaTek DisplayPort: support eDP and aux-bus
+Date:   Thu, 30 Mar 2023 16:16:22 +0200
+Message-Id: <20230330141631.190528-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The J784S4 SoCs have four TMS320C71x DSP subsystems in the MAIN voltage
-domain. The functionality of these DSP subsystems is similar to the C71x
-DSP subsystems on earlier k3 device J721S2. Each subsystem has a 48 KB of
-L1D configurable SRAM/Cache and 512 KB of L2 SRAM/Cache. This subsystem
-has a CMMU but is not currently used. The inter-processor communication
-between the main A72 cores and the C71x DSPs is achieved through shared
-memory and mailboxes. Add the DT nodes for these DSP processor sub-systems.
+This series adds "real" support for eDP in the mtk-dp DisplayPort driver.
 
-Signed-off-by: Hari Nagalla <hnagalla@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+Explaining the "real":
+Before this change, the DisplayPort driver did support eDP to some
+extent, but it was treating it entirely like a regular DP interface
+which is partially fine, after all, embedded DisplayPort *is* actually
+DisplayPort, but there might be some differences to account for... and
+this is for both small performance improvements and, more importantly,
+for correct functionality in some systems.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-index 3c785cef4f20..7277bf6eda09 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-@@ -1232,4 +1232,52 @@
- 			ti,loczrama = <1>;
- 		};
- 	};
-+
-+	c71_0: dsp@64800000 {
-+		compatible = "ti,j721s2-c71-dsp";
-+		reg = <0x00 0x64800000 0x00 0x00080000>,
-+		      <0x00 0x64e00000 0x00 0x0000c000>;
-+		reg-names = "l2sram", "l1dram";
-+		ti,sci = <&sms>;
-+		ti,sci-dev-id = <30>;
-+		ti,sci-proc-ids = <0x30 0xff>;
-+		resets = <&k3_reset 30 1>;
-+		firmware-name = "j784s4-c71_0-fw";
-+	};
-+
-+	c71_1: dsp@65800000 {
-+		compatible = "ti,j721s2-c71-dsp";
-+		reg = <0x00 0x65800000 0x00 0x00080000>,
-+		      <0x00 0x65e00000 0x00 0x0000c000>;
-+		reg-names = "l2sram", "l1dram";
-+		ti,sci = <&sms>;
-+		ti,sci-dev-id = <33>;
-+		ti,sci-proc-ids = <0x31 0xff>;
-+		resets = <&k3_reset 33 1>;
-+		firmware-name = "j784s4-c71_1-fw";
-+	};
-+
-+	c71_2: dsp@66800000 {
-+		compatible = "ti,j721s2-c71-dsp";
-+		reg = <0x00 0x66800000 0x00 0x00080000>,
-+		      <0x00 0x66e00000 0x00 0x0000c000>;
-+		reg-names = "l2sram", "l1dram";
-+		ti,sci = <&sms>;
-+		ti,sci-dev-id = <37>;
-+		ti,sci-proc-ids = <0x32 0xff>;
-+		resets = <&k3_reset 37 1>;
-+		firmware-name = "j784s4-c71_2-fw";
-+	};
-+
-+	c71_3: dsp@67800000 {
-+		compatible = "ti,j721s2-c71-dsp";
-+		reg = <0x00 0x67800000 0x00 0x00080000>,
-+		      <0x00 0x67e00000 0x00 0x0000c000>;
-+		reg-names = "l2sram", "l1dram";
-+		ti,sci = <&sms>;
-+		ti,sci-dev-id = <40>;
-+		ti,sci-proc-ids = <0x33 0xff>;
-+		resets = <&k3_reset 40 1>;
-+		firmware-name = "j784s4-c71_3-fw";
-+	};
- };
+Functionality first:
+
+One of the common differences found in various boards implementing eDP
+and machines using an eDP panel is that many times the HPD line is not
+connected. This *must* be accounted for: at startup, this specific IP
+will raise a HPD interrupt (which should maybe be ignored... as it does
+not appear to be a "real" event...) that will make the eDP panel to be
+detected and to actually work but, after a suspend-resume cycle, there
+will be no HPD interrupt (as there's no HPD line in my case!) producing
+a functionality issue - specifically, the DP Link Training fails because
+the panel doesn't get powered up, then it stays black and won't work
+until rebooting the machine (or removing and reinserting the module I
+think, but I haven't tried that).
+
+Now for.. both:
+eDP panels are *e*DP because they are *not* removable (in the sense that
+you can't unplug the cable without disassembling the machine, in which
+case, the machine shall be powered down..!): this (correct) assumption
+makes us able to solve some issues and to also gain a little performance
+during PM operations.
+
+What was done here is:
+ - Caching the EDID if the panel is eDP: we're always going to read the
+   same data everytime, so we can just cache that (as it's small enough)
+   shortening PM resume times for the eDP driver instance;
+ - Always return connector_status_connected if it's eDP: non-removable
+   means connector_status_disconnected can't happen during runtime...
+   this also saves us some time and even power, as we won't have to
+   perform yet another power cycle of the HW;
+ - Added aux-bus support!
+   This makes us able to rely on panel autodetection from the EDID,
+   avoiding to add more and more panel timings to panel-edp and, even
+   better, allowing to use one panel node in devicetrees for multiple
+   variants of the same machine since, at that point, it's not important
+   to "preventively know" what panel we have (eh, it's autodetected...!).
+
+This was tested on a MT8195 Cherry Tomato Chromebook (panel-edp on aux-bus)
+
+
+P.S.: For your own testing commodity, here's a reference devicetree:
+&edp_tx {
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&edptx_pins_default>;
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@0 {
+			reg = <0>;
+			edp_in: endpoint {
+				remote-endpoint = <&dp_intf0_out>;
+			};
+		};
+
+		port@1 {
+			reg = <1>;
+			edp_out: endpoint {
+				data-lanes = <0 1 2 3>;
+				remote-endpoint = <&panel_in>;
+			};
+		};
+	};
+
+	aux-bus {
+		panel: panel {
+			compatible = "edp-panel";
+			power-supply = <&pp3300_disp_x>;
+			backlight = <&backlight_lcd0>;
+			port {
+				panel_in: endpoint {
+					remote-endpoint = <&edp_out>;
+				};
+			};
+		};
+	};
+};
+
+AngeloGioacchino Del Regno (8):
+  drm/mediatek: dp: Cache EDID for eDP panel
+  drm/mediatek: dp: Move AUX and panel poweron/off sequence to function
+  drm/mediatek: dp: Always return connected status for eDP in .detect()
+  drm/mediatek: dp: Always set cable_plugged_in at resume for eDP panel
+  drm/mediatek: dp: Change logging to dev for mtk_dp_aux_transfer()
+  drm/mediatek: dp: Enable event interrupt only when bridge attached
+  drm/mediatek: dp: Use devm variant of drm_bridge_add()
+  drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
+
+ drivers/gpu/drm/mediatek/mtk_dp.c | 172 ++++++++++++++++++------------
+ 1 file changed, 106 insertions(+), 66 deletions(-)
+
 -- 
-2.17.1
+2.40.0
 
