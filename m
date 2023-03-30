@@ -2,272 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F876D0673
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D927D6D0674
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjC3NWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
+        id S231318AbjC3NXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbjC3NWm (ORCPT
+        with ESMTP id S230015AbjC3NX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:22:42 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCC8185
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:22:41 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id w13so2738284oik.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:22:41 -0700 (PDT)
+        Thu, 30 Mar 2023 09:23:27 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694A6B2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:23:24 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id o25-20020a9d4119000000b006a11eb19f8eso8789101ote.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:23:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680182561;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G9YMpuSttM4A9nULCMBhiq2+uydHNy9WNmU1ZG++oTM=;
-        b=blZZRDRBNT5kYMjCC85ZeQpLeFdPOaXatuCk4NyXH1yuA9j9xns+8uFcbTyf6WGsd7
-         BDclarMJIrma70T6OYfrbTKiaJktRYiWtH2IupaFo26teMxv1+nv1CU/Je+ECtaGqleu
-         +T7GquzfQQRKKcFfc/Ta8p8NIkr3Lu11J9EmmwLDKz5MpdzSkh7V3T4ZLjUNXVqZcOpW
-         hbhyN50tsxwj4fL3Gbsbt97t0hVUNuwNegP1RVM2DEowXcZxRcWoHTZXaFDnBaj2MwW2
-         z0Ko4Al/zR8CxIwAqfIsUfpt4efg4XRPVPjgcZJRTCvxjQcjicKRXrNb544sZnHxOHR9
-         nAug==
+        d=linaro.org; s=google; t=1680182603; x=1682774603;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a6p4S+OFwxXEt9jpAp/SFRwoGNDlMGGRe6syLDcLJyQ=;
+        b=istmsy1ZyFqBqT6CNaXjUsKT6KAO67oRzxSNQtpzGbwHH3zoOSxW1iIMJijz06A+32
+         v/74NA9k5O26GyOWDGC/n80Nr336O+5C//8nshppV1pzOx8/VvzUIY1UgDuE+tuZjJ6N
+         FGIRTjGWL/D25wTiiKXDUOFzpksZmo2qzuw6JJG5+7jV6zAotKe/2He/GNvE76pLKojz
+         9vD/CuJ1+oGKt7KGanTRssOlB2fz4lprnYhw131MXI2KdmtkH8AQg6YuCG+wqnb1asME
+         7uNyznItk3KeuCcfXDRQb4cYip1DENwEIQppLCRdxJ/9KCT/9IOrw/fR+AssU5O5/+sV
+         /NKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680182561;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G9YMpuSttM4A9nULCMBhiq2+uydHNy9WNmU1ZG++oTM=;
-        b=tyA3JTookJS1oUVfBM8RkVH3c7+uKWAX6RuYEhKG7tTsNKUzEF9cOCGUbfOeg8nC0F
-         oRxpdr7T7GRZQ+RIwBr8/qgaBqUKn0SkteP+qynBDDzpRCGW3Ybzy93IN0NxVElpkPrt
-         m1eMf4Ac2a3gMh7xCVyxlnLzv8GfPiSupd+v5QMMApIoEAsxC5Oi+tmwLdiLaqxJUtkF
-         0BoVS/c6jk1d1uB8HAWiRBsIaTjB7zY9hd2wMhEgx8y+VgoEeC/2vP4dlvo7xcLXCzrf
-         nCFVE9sM8X7DHjZLe06IszeZhzzQGsOzrJjx8m0h2jm21/dVpWlxW0AiL077XMyAkFQR
-         TROg==
-X-Gm-Message-State: AAQBX9cPuTVAAZUHui1v5d2ISAU4g52mPu3wRB7cIbPf/OcUEmqOAucP
-        6uwWXwmZLODk6cpuut4w+u7JcYieZ53QyNLcFis=
-X-Google-Smtp-Source: AKy350bR4j3tWoutyh4OrqpV7ceW0UP7GuJA3//rLD7fDA/S8emKV6+mvo+u+TtelRGzGKE8vVlQiTelIZxHtDX1mh0=
-X-Received: by 2002:a54:4019:0:b0:386:a2d0:2814 with SMTP id
- x25-20020a544019000000b00386a2d02814mr2811957oie.4.1680182560801; Thu, 30 Mar
- 2023 06:22:40 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680182603; x=1682774603;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a6p4S+OFwxXEt9jpAp/SFRwoGNDlMGGRe6syLDcLJyQ=;
+        b=XGfWck19Y25Rgb63+NfR1rQJLTbII3uFaTIKr0c4h7ztJLhgGq5BUjobRgtfUM6/MI
+         mqTxzSctOBPzl6aru1arnU+1mJZbMs9paT8i9GTY8/lE10sKSB8L9oi6nW6JgoLVEjCS
+         TNF3jN+nCOi7srTy9dAGXWFQrB6+X/bySZGxGPdBStqWNa+AaG6fP9iJ40Ru3EQL9JTM
+         L30hSwdOg/USRbau1XB5rAbm8Uruvkr2Fne2gBK2USpaSJpu94M1UykvcU5US+duYUni
+         K4czf+vih0aPoAyGSWZgB2rqD78ppvY93FT3UrDF9g8lHit8jxs3gxTlPW1i7uhEXEwu
+         Bqbw==
+X-Gm-Message-State: AAQBX9d4CYAU3It1vc2Ge/cobeuMrsXS4pj3gA0hCJzR32pCUHsb8VRm
+        NDlmP10PPCPiR4dUC6u+T0OXRMjyRtFivhritD3oS4P/39pH2vud
+X-Google-Smtp-Source: AKy350amzRxvS4xLqnegzflwIzQQwykCGpH7NvTW7w2m6QY0h0ywhz7LQ56ZxDaxK0t3brC6WqCdJkL5tr8nZf4VdS0=
+X-Received: by 2002:a05:6830:39d7:b0:6a1:3fd6:5a0b with SMTP id
+ bt23-20020a05683039d700b006a13fd65a0bmr4682887otb.2.1680182603640; Thu, 30
+ Mar 2023 06:23:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230329095933.1203559-1-kai.heng.feng@canonical.com>
- <76853776-ddfd-2fbc-a209-ca4f77faa481@amd.com> <CAAd53p7sgowhaFS1b7MM0F0kf14sWf6jbF9T__=4BAMM8bnz3A@mail.gmail.com>
-In-Reply-To: <CAAd53p7sgowhaFS1b7MM0F0kf14sWf6jbF9T__=4BAMM8bnz3A@mail.gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 30 Mar 2023 09:22:29 -0400
-Message-ID: <CADnq5_PicHGZKH5f23btP9srMQ5iKWDhfAk0Gnr27X92C-rFYg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drm/amdgpu: Reset GPU on S0ix when device supports BOCO
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Jingyu Wang <jingyuwang_vip@163.com>, Xinhui.Pan@amd.com,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        amd-gfx@lists.freedesktop.org,
-        Jiansong Chen <Jiansong.Chen@amd.com>,
-        Kenneth Feng <kenneth.feng@amd.com>,
-        Tim Huang <tim.huang@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Evan Quan <evan.quan@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        linux-kernel@vger.kernel.org, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Hawking Zhang <Hawking.Zhang@amd.com>
+References: <20230320152319.665592-1-loic.poulain@linaro.org>
+ <20230330114242.GC434339@google.com> <242a5400-b5e6-4707-af88-1d695e114f78@app.fastmail.com>
+In-Reply-To: <242a5400-b5e6-4707-af88-1d695e114f78@app.fastmail.com>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Thu, 30 Mar 2023 15:22:47 +0200
+Message-ID: <CAMZdPi8ZMfLTHaEn2LbXvuen=Rb68KrWJmgbq9Miou_RDi=Btg@mail.gmail.com>
+Subject: Re: [PATCH] mfd: syscon: Use of_io_request_and_map() for IO mapping
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 11:36=E2=80=AFPM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> On Wed, Mar 29, 2023 at 9:23=E2=80=AFPM Mario Limonciello
-> <mario.limonciello@amd.com> wrote:
-> >
-> >
-> > On 3/29/23 04:59, Kai-Heng Feng wrote:
-> > > When the power is lost due to ACPI power resources being turned off, =
-the
-> > > driver should reset the GPU so it can work anew.
-> > >
-> > > First, _PR3 support of the hierarchy needs to be found correctly. Sin=
-ce
-> > > the GPU on some discrete GFX cards is behind a PCIe switch, checking =
-the
-> > > _PR3 on downstream port alone is not enough, as the _PR3 can associat=
-e
-> > > to the root port above the PCIe switch.
-> >
-> > I think this should be split into two commits:
-> >
-> > * One of them to look at _PR3 further up in hierarchy to fix indication
-> > for BOCO support.
->
-> Yes, this part can be split up.
->
-> >
-> > * One to adjust policy for whether to reset
->
-> IIUC, the GPU only needs to be reset when the power status isn't certain?
->
-> Assuming power resources in _PR3 are really disabled, GPU is already
-> reset by itself. That means reset shouldn't be necessary for D3cold,
-> am I understanding it correctly?
+Hi Arnd,
 
-Right, if D3cold actually works, then no reset is necessary.
-
+On Thu, 30 Mar 2023 at 14:45, Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> However, this is a desktop plugged with GFX card that has external
-> power, does that assumption still stand? Perform resetting on D3cold
-> can cover this scenario.
+> On Thu, Mar 30, 2023, at 13:42, Lee Jones wrote:
+> > On Mon, 20 Mar 2023, Loic Poulain wrote:
+> >
+> >> Use of_io_request_and_map() instead of of_iomap() so that the
+> >> region is reserved and protected, i.e reported in /proc/iomem
+> >> and not accessible from user side (CONFIG_IO_STRICT_DEVMEM).
+> >>
+> >> Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+> >> ---
+> >>  drivers/mfd/syscon.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
+> >> index bdb2ce7ff03b..7e6d4edda118 100644
+> >> --- a/drivers/mfd/syscon.c
+> >> +++ b/drivers/mfd/syscon.c
+> >> @@ -60,7 +60,7 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
+> >>              goto err_map;
+> >>      }
+> >>
+> >> -    base = of_iomap(np, 0);
+> >> +    base = of_io_request_and_map(np, 0, NULL);
+> >>      if (!base) {
+> >>              ret = -ENOMEM;
+> >>              goto err_map;
+> >
+> > Looks sane though.
+> >
+> > Arnd, do you have an opinion?
+>
+> Thanks for pinging me. I would indeed expect this to cause
+> problems, as syscon mappings are likely to be used in a way
+> that is not entirely clean, with other devices defining
+> overlapping ranges.
 
-BOCO is generally only available on laptops and all-in-one systems
-where the dGPU is integrated into the platform.  Power to the dGPU is
-controlled by a GPIO which is toggled by the ACPI _PR3 method for the
-device.  There is an ATPX method on all platforms which support BOCO.
-Since this is an AIB in a desktop system, I doubt it actually supports
-D3Cold.  For desktop systems, we have what we call BACO where the
-driver controls power to everything on the GPU except the bus
-interface.  In the BACO case, we can turn off the GPU, but the device
-still shows up on the PCI bus.  For BOCO, the device is completely
-powered down and disappears from the PCI bus.
+Isn't syscon exactly here to address that collision/overlapping issue?
+From a syscon perspective, it seems to be handled correctly at least
+since the mapping is only setup once, with the first user device (in
+syscon_node_to_regmap). Or are you thinking about non syscon devices
+overlapping the syscon area?
 
-Alex
+
+
 
 >
-> >
-> >
-> > > Once the _PR3 is found and BOCO support is correctly marked, use that
-> > > information to inform the GPU should be reset. This solves an issue t=
-hat
-> > > system freeze on a Intel ADL desktop that uses S0ix for sleep and D3c=
-old
-> > > is supported for the GFX slot.
-> >
-> > I'm worried this is still papering over an underlying issue with L0s
-> > handling on ALD + Navi1x/Navi2x.
+> For any other driver, the change makes a lot of sense after
+> checking the DT file, but for syscon in particular I don't
+> think it's even realistic to check all users.
 >
-> Is it possible to get the ASIC's ASPM parameter under Windows? Knowing
-> the difference can be useful.
->
-> >
-> > Also, what about runtime suspend?  If you unplug the monitor from this
-> > dGPU and interact with it over SSH it should go into runtime suspend.
-> >
-> > Is it working properly for that case now?
->
-> Thanks for the tip. Runtime resume doesn't work at all:
-> [ 1087.601631] pcieport 0000:00:01.0: power state changed by ACPI to D0
-> [ 1087.613820] pcieport 0000:00:01.0: restoring config space at offset
-> 0x2c (was 0x43, writing 0x43)
-> [ 1087.613835] pcieport 0000:00:01.0: restoring config space at offset
-> 0x28 (was 0x41, writing 0x41)
-> [ 1087.613841] pcieport 0000:00:01.0: restoring config space at offset
-> 0x24 (was 0xfff10001, writing 0xfff10001)
-> [ 1087.613978] pcieport 0000:00:01.0: PME# disabled
-> [ 1087.613984] pcieport 0000:00:01.0: waiting 100 ms for downstream
-> link, after activation
-> [ 1089.330956] pcieport 0000:01:00.0: not ready 1023ms after resume; givi=
-ng up
-> [ 1089.373036] pcieport 0000:01:00.0: Unable to change power state
-> from D3cold to D0, device inaccessible
->
-> After a short while the whole system froze.
->
-> So the upstream port of GFX's PCIe switch cannot be powered on again.
->
-> Kai-Heng
->
-> >
-> > >
-> > > Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
-> > > Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
-> > > Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2458
-> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > ---
-> > >   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c   |  3 +++
-> > >   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  7 ++++++-
-> > >   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c    | 12 +++++-------
-> > >   3 files changed, 14 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c b/drivers/gpu/d=
-rm/amd/amdgpu/amdgpu_acpi.c
-> > > index 60b1857f469e..407456ac0e84 100644
-> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-> > > @@ -987,6 +987,9 @@ bool amdgpu_acpi_should_gpu_reset(struct amdgpu_d=
-evice *adev)
-> > >       if (amdgpu_sriov_vf(adev))
-> > >               return false;
-> > >
-> > > +     if (amdgpu_device_supports_boco(adev_to_drm(adev)))
-> > > +             return true;
-> > > +
-> > >   #if IS_ENABLED(CONFIG_SUSPEND)
-> > >       return pm_suspend_target_state !=3D PM_SUSPEND_TO_IDLE;
-> > >   #else
-> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu=
-/drm/amd/amdgpu/amdgpu_device.c
-> > > index f5658359ff5c..d56b7a2bafa6 100644
-> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> > > @@ -2181,7 +2181,12 @@ static int amdgpu_device_ip_early_init(struct =
-amdgpu_device *adev)
-> > >
-> > >       if (!(adev->flags & AMD_IS_APU)) {
-> > >               parent =3D pci_upstream_bridge(adev->pdev);
-> > > -             adev->has_pr3 =3D parent ? pci_pr3_present(parent) : fa=
-lse;
-> > > +             do {
-> > > +                     if (pci_pr3_present(parent)) {
-> > > +                             adev->has_pr3 =3D true;
-> > > +                             break;
-> > > +                     }
-> > > +             } while ((parent =3D pci_upstream_bridge(parent)));
-> > >       }
-> > >
-> > >       amdgpu_amdkfd_device_probe(adev);
-> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/dr=
-m/amd/amdgpu/amdgpu_drv.c
-> > > index ba5def374368..5d81fcac4b0a 100644
-> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > > @@ -2415,10 +2415,11 @@ static int amdgpu_pmops_suspend(struct device=
- *dev)
-> > >       struct drm_device *drm_dev =3D dev_get_drvdata(dev);
-> > >       struct amdgpu_device *adev =3D drm_to_adev(drm_dev);
-> > >
-> > > -     if (amdgpu_acpi_is_s0ix_active(adev))
-> > > -             adev->in_s0ix =3D true;
-> > > -     else if (amdgpu_acpi_is_s3_active(adev))
-> > > +     if (amdgpu_acpi_is_s3_active(adev) ||
-> > > +         amdgpu_device_supports_boco(drm_dev))
-> > >               adev->in_s3 =3D true;
-> > > +     else if (amdgpu_acpi_is_s0ix_active(adev))
-> > > +             adev->in_s0ix =3D true;
-> > >       if (!adev->in_s0ix && !adev->in_s3)
-> > >               return 0;
-> > >       return amdgpu_device_suspend(drm_dev, true);
-> > > @@ -2449,10 +2450,7 @@ static int amdgpu_pmops_resume(struct device *=
-dev)
-> > >               adev->no_hw_access =3D true;
-> > >
-> > >       r =3D amdgpu_device_resume(drm_dev, true);
-> > > -     if (amdgpu_acpi_is_s0ix_active(adev))
-> > > -             adev->in_s0ix =3D false;
-> > > -     else
-> > > -             adev->in_s3 =3D false;
-> > > +     adev->in_s0ix =3D adev->in_s3 =3D false;
-> > >       return r;
-> > >   }
-> > >
+>      Arnd
