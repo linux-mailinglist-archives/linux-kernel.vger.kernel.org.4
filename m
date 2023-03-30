@@ -2,150 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4E46D0E49
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF626D0E4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbjC3TEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 15:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S231915AbjC3TFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 15:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbjC3TEt (ORCPT
+        with ESMTP id S231838AbjC3TFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:04:49 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7501FC1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:04:48 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id h9so20704542ljq.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680203086; x=1682795086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ViRntU/RBw/t4ZG4j3zD5QSxaRXCjDm7pTbD6yzt3a8=;
-        b=dV0eOrY64A8f3Aifg1ktecdTLHjwppffuR9U+jgLkYvX5MPPYsv9GweFII+I3t3v0o
-         9jDUXsvJMrPGEHZdm2GTi65Hfmw3a4ibc8v8r1yPTfDacXDy2tuui059sb/LWhFr6H+H
-         UP9us03F/CeqELxCEVFGNRLtAJxBsJVpPwkAky/qVzjej7ZzN8fa8tNm2d3W32e31tbu
-         BtK/YWj1gJaR8aOw8FQ95nsRGqgYD9gg/k+zm6oxnRW5a1ko9Odd1OOYs48mxEoGd5eX
-         c3+9Vum6jH3lt36eOSVGmAFLUpEM4wQoaph53BHMmdalSnMjSX5gQGgZ+DPtuMYw0KF/
-         Yx4Q==
+        Thu, 30 Mar 2023 15:05:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4007B26B9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:05:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680203104;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AjWL/5ulXSBNWvEtpYPDT+pUxocHBbNGFxfjDnuHH+M=;
+        b=ZXIvEA8xOHzc/0lT9hLiQl6yDBjgc1z3+LjloazkNQ7oNNbJL2+aZNKe9LPNLPAhJdoLDO
+        TEc8RZUWF2nHSpura0PpDxzDOTsj7YtZSS5YuD0XrYMxlkwHmFvChHxVO1oqOhdvXxYaF6
+        bT58zv5h0GFLIzAiY7XUohv+Y9ndgEE=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-632-LcuURCw7OMCaOY8GOMBirQ-1; Thu, 30 Mar 2023 15:05:02 -0400
+X-MC-Unique: LcuURCw7OMCaOY8GOMBirQ-1
+Received: by mail-lj1-f199.google.com with SMTP id b5-20020a2ebc05000000b00295bab7c7d0so4531597ljf.15
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:05:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680203086; x=1682795086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ViRntU/RBw/t4ZG4j3zD5QSxaRXCjDm7pTbD6yzt3a8=;
-        b=oW6phQoGKWnU4zkQ+2Z//3MD/jDmEbNzeuIezdSgc0MLxm0LGwSW0tawVgAGnnhSmy
-         B3DTT0bgM+ofot/cUN/nhIkEyPKsXteKkU9pKH0xb+qbRJDBz+Hq3D6HQ0pUrg1arK4W
-         /QXTguoPkCwR+pr0jHWVLxr8ifZl5Z+8QjAyuRUdXysw4uIyYSaUsKNPQgtSnq66+fIj
-         XAuf8JL74vptJG9Ohw+1rLi45j6pK7wqTVrT+dgwWbsh3oQzoYoMom6rqTPixKA5eMkY
-         2eTarKmpzmHaOVYa5dk9nf15pYncQ6hf9XiRDeZWjPaTKHm2c7REe9XLZZnHHivIlCj3
-         Mwrg==
-X-Gm-Message-State: AAQBX9dENkXRnnFpDcLj5BoFUnbDPy6kdGLZ6RrfERwVebRCm2KaM29J
-        CCnIpx3gSTiT1T+mEyTvCgbeogPUiEnM9n8zXd500A==
-X-Google-Smtp-Source: AKy350ZvsfzrmBwt4dNUcCAGb/P/J4h6ZV4gG939299gXsIjuhp+FqawIQXRd32zcR9EZBP4mKkY9XmmXGBdtQgJZ6o=
-X-Received: by 2002:a2e:3203:0:b0:299:9de5:2f0c with SMTP id
- y3-20020a2e3203000000b002999de52f0cmr7643353ljy.6.1680203086265; Thu, 30 Mar
- 2023 12:04:46 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680203101;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AjWL/5ulXSBNWvEtpYPDT+pUxocHBbNGFxfjDnuHH+M=;
+        b=BCo1jhV05NSzq8l26q7g/1kAelBJVCRj16cYDGbD+2xGDfR+BUSOG4Fle6bM+mfLNo
+         xittIgPCT7eB9ZUaKs4S/IU1GBnG7lWsISnGHD0bNYEHeOUZkdCmmonzykG6IlG5E4hw
+         hNz5bvJAFbg3QZvVZmBCS+muVXe4s0DR8TOCeWog9Dvnoa3LidNFT4t7WLbWphdfEq49
+         lhdiQachvWJr68u/cxv1SKEN7okU/vyKHoHGFK/7wm9MWM3orBSiGAJ3S9YQU5tdIEWq
+         m8Y64g0X9oP8JLxI7PWNwnf3yitzxhsh7GZ/BUO9lg9uFEZakTcGCA00OCINhk7CckkA
+         LXqQ==
+X-Gm-Message-State: AAQBX9dj6dC4A6nPMXPSkP80diC4lZyxz0QppC/ok9jgJa7QQBAnysC4
+        l2uCHYdDtuw5YX3K72qf/SbG2tCw79SBsyWKPuRGBq5IE8NUk1OIzM5ZWzRJ48D0d+7oIBcHr1H
+        lzxrp4OK5S9tvW8iEYTvVfo+u
+X-Received: by 2002:ac2:596f:0:b0:4eb:e03:9e6c with SMTP id h15-20020ac2596f000000b004eb0e039e6cmr1997565lfp.33.1680203101215;
+        Thu, 30 Mar 2023 12:05:01 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aLpoXMI1x1xPT2ugdceXR972Lacx2zk/SiRRmV+Uf/xnP2xCALcA41ZMbTbuQxJnhXH31Y/w==
+X-Received: by 2002:ac2:596f:0:b0:4eb:e03:9e6c with SMTP id h15-20020ac2596f000000b004eb0e039e6cmr1997548lfp.33.1680203100914;
+        Thu, 30 Mar 2023 12:05:00 -0700 (PDT)
+Received: from [192.168.42.100] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
+        by smtp.gmail.com with ESMTPSA id v28-20020ac2593c000000b004e9b42d778esm57581lfi.26.2023.03.30.12.04.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 12:05:00 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <3423b37b-43d7-e9ee-6b1b-768b255a2773@redhat.com>
+Date:   Thu, 30 Mar 2023 21:04:58 +0200
 MIME-Version: 1.0
-References: <20230330155707.3106228-1-peterx@redhat.com> <20230330155707.3106228-2-peterx@redhat.com>
-In-Reply-To: <20230330155707.3106228-2-peterx@redhat.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 30 Mar 2023 12:04:09 -0700
-Message-ID: <CAJHvVcgDZBi6pH0BD12sQ3T+7Kr9exX1QU3-YLTd1voYhVBN0w@mail.gmail.com>
-Subject: Re: [PATCH 01/29] Revert "userfaultfd: don't fail on unrecognized features"
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net
+Subject: Re: [PATCH bpf RFC-V3 0/5] XDP-hints: API change for RX-hash kfunc
+ bpf_xdp_metadata_rx_hash
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>
+References: <168019602958.3557870.9960387532660882277.stgit@firesoul>
+ <ZCXXIvvnTBch/0Oz@google.com>
+In-Reply-To: <ZCXXIvvnTBch/0Oz@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 8:57=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
->
-> This is a proposal to revert commit 914eedcb9ba0ff53c33808.
->
-> I found this when writting a simple UFFDIO_API test to be the first unit
-> test in this set.  Two things breaks with the commit:
->
->   - UFFDIO_API check was lost and missing.  According to man page, the
->   kernel should reject ioctl(UFFDIO_API) if uffdio_api.api !=3D 0xaa.  Th=
-is
->   check is needed if the api version will be extended in the future, or
->   user app won't be able to identify which is a new kernel.
 
-100% agreed, this was a mistake.
+On 30/03/2023 20.38, Stanislav Fomichev wrote:
+> On 03/30, Jesper Dangaard Brouer wrote:
+>> Notice targeted 6.3-rc kernel via bpf git tree.
+> 
+>> Current API for bpf_xdp_metadata_rx_hash() returns the raw RSS hash value,
+>> but doesn't provide information on the RSS hash type (part of 6.3-rc).
+> 
+>> This patchset proposal is to change the function call signature via adding
+>> a pointer value argument for provide the RSS hash type.
+> 
+>> Alternatively we disable bpf_xdp_metadata_rx_hash() in 6.3-rc, and have
+>> more time to nitpick the RSS hash-type bits.
+> 
+> LGTM with one nit about EMIT_BTF.
+> 
 
->
->   - Feature flags checks were removed, which means UFFDIO_API with a
->   feature that does not exist will also succeed.  According to the man
->   page, we should (and it makes sense) to reject ioctl(UFFDIO_API) if
->   unknown features passed in.
+Great, others please review, so I can incorporate for tomorrow.
+I will send a official patchset V4 tomorrow.
 
-I still strongly disagree with reverting this part, my feeling is
-still that doing so makes things more complicated for no reason.
+--Jesper
 
-Re: David's point, it's clearly wrong to change semantics so a thing
-that used to work now fails. But this instead makes it more permissive
-- existing userspace programs continue to work as-is, but *also* one
-can achieve the same thing more simply (combine probing +
-configuration into one step). I don't see any problem with that,
-generally.
-
-But, if David and others don't find my argument convincing, it isn't
-the end of the world. It just means I have to go update my userspace
-code to be a bit more complicated. :)
-
-I also still think the man page is incorrect or at least incomplete no
-matter what we do here; we should be sure to update it as a follow-up.
-
->
-> Link: https://lore.kernel.org/r/20220722201513.1624158-1-axelrasmussen@go=
-ogle.com
-> Cc: Axel Rasmussen <axelrasmussen@google.com>
-> Cc: linux-stable <stable@vger.kernel.org>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  fs/userfaultfd.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> index 8395605790f6..3b2a41c330e6 100644
-> --- a/fs/userfaultfd.c
-> +++ b/fs/userfaultfd.c
-> @@ -1977,8 +1977,10 @@ static int userfaultfd_api(struct userfaultfd_ctx =
-*ctx,
->         ret =3D -EFAULT;
->         if (copy_from_user(&uffdio_api, buf, sizeof(uffdio_api)))
->                 goto out;
-> -       /* Ignore unsupported features (userspace built against newer ker=
-nel) */
-> -       features =3D uffdio_api.features & UFFD_API_FEATURES;
-> +       features =3D uffdio_api.features;
-> +       ret =3D -EINVAL;
-> +       if (uffdio_api.api !=3D UFFD_API || (features & ~UFFD_API_FEATURE=
-S))
-> +               goto err_out;
->         ret =3D -EPERM;
->         if ((features & UFFD_FEATURE_EVENT_FORK) && !capable(CAP_SYS_PTRA=
-CE))
->                 goto err_out;
-> --
-> 2.39.1
->
