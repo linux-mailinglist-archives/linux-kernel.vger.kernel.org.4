@@ -2,43 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FA46CFB79
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30E46CFB7B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjC3GZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 02:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S230211AbjC3GZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 02:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjC3GZC (ORCPT
+        with ESMTP id S229453AbjC3GZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 02:25:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92752720;
-        Wed, 29 Mar 2023 23:25:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 445FDB825F0;
-        Thu, 30 Mar 2023 06:25:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8807C433EF;
-        Thu, 30 Mar 2023 06:24:55 +0000 (UTC)
-Date:   Thu, 30 Mar 2023 11:54:45 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Sricharan R <quic_srichara@quicinc.com>
-Cc:     mani@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: qrtr: Do not do DEL_SERVER broadcast after
- DEL_CLIENT
-Message-ID: <20230330062445.GB9876@thinkpad>
-References: <1680095250-21032-1-git-send-email-quic_srichara@quicinc.com>
+        Thu, 30 Mar 2023 02:25:41 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6772720
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 23:25:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680157539; x=1711693539;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5EGj2XhAyY9wzau/N0SV9k/j+g1O3v8mLGQWAMN9hys=;
+  b=JOY/YBBLDeiImst1BfnKDSQ8EZLOh3DPs/ad14L1HXgyye0flD+5wVdo
+   xeD9xOZZZsszleDYKL00uT+MKTQmYOtDHRZTipyaHWQVF734VVyhIhmVh
+   a+Hbam+xmErVidLOSrFUmDJNHGl70daPcHFcxKiJzBNuHOJMWAechVGr9
+   U5SZDjnecfjvK7viVkfMHZIxWC2ZHE9TWJn+vYtTf359KBbQoaLqX6hPy
+   88IHZah3qA4sUq+W+eqT7gC7wMKyxHqXQzGqXbQ3AIJ18qtqmsdvNZ/bq
+   kdoIfANJwCmUOS6mFwMy7TQ1QfRP+9TZ6dQ9vEZ/LO66VdLfsrOGXjy5L
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,303,1673938800"; 
+   d="asc'?scan'208";a="218638271"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2023 23:25:38 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 29 Mar 2023 23:25:38 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 29 Mar 2023 23:25:37 -0700
+Date:   Thu, 30 Mar 2023 07:25:23 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+CC:     <linux-kernel@vger.kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, <iommu@lists.linux.dev>,
+        Conor Dooley <conor@kernel.org>,
+        <linux-riscv@lists.infradead.org>, <geert+renesas@glider.be>
+Subject: Re: [PATCH] iommu: PGTABLE_LPAE is also for RISCV
+Message-ID: <e1b6f12a-899b-4985-8725-556bcb5d0991@spud>
+References: <20230330060105.29460-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="voV2wf9Drw69lJ6G"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1680095250-21032-1-git-send-email-quic_srichara@quicinc.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+In-Reply-To: <20230330060105.29460-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,91 +66,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 06:37:30PM +0530, Sricharan R wrote:
-> When the qrtr socket is released, qrtr_port_remove gets called, which
-> broadcasts a DEL_CLIENT. After this DEL_SERVER is also additionally
-> broadcasted, which becomes NOP, but triggers the below error msg.
-> 
-> "failed while handling packet from 2:-2", since remote node already
-> acted upon on receiving the DEL_CLIENT, once again when it receives
-> the DEL_SERVER, it returns -ENOENT.
-> 
-> Fixing it by not sending a 'DEL_SERVER' to remote when a 'DEL_CLIENT'
-> was sent for that port.
-> 
+--voV2wf9Drw69lJ6G
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Can you share the qrtr trace when this happens to help me understand the flow?
+Hey Randy,
 
-- Mani
-
-> Signed-off-by: Ram Kumar D <quic_ramd@quicinc.com>
-> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+On Wed, Mar 29, 2023 at 11:01:05PM -0700, Randy Dunlap wrote:
+> On riscv64, linux-next-20233030 (and for several days earlier),
+> there is a kconfig warning:
+>=20
+> WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
+>   Depends on [n]: IOMMU_SUPPORT [=3Dy] && (ARM || ARM64 || COMPILE_TEST [=
+=3Dn]) && !GENERIC_ATOMIC64 [=3Dn]
+>   Selected by [y]:
+>   - IPMMU_VMSA [=3Dy] && IOMMU_SUPPORT [=3Dy] && (ARCH_RENESAS [=3Dy] || =
+COMPILE_TEST [=3Dn]) && !GENERIC_ATOMIC64 [=3Dn]
+>=20
+> and build errors:
+>=20
+> riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L140':
+> io-pgtable-arm.c:(.init.text+0x1e8): undefined reference to `alloc_io_pgt=
+able_ops'
+> riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L168':
+> io-pgtable-arm.c:(.init.text+0xab0): undefined reference to `free_io_pgta=
+ble_ops'
+> riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L140':
+> ipmmu-vmsa.c:(.text+0xbc4): undefined reference to `free_io_pgtable_ops'
+> riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L0 ':
+> ipmmu-vmsa.c:(.text+0x145e): undefined reference to `alloc_io_pgtable_ops'
+>=20
+> Add RISCV as an allowed ARCH dependency to fix these problems.
+>=20
+> Fixes: d286a58bc8f4 ("iommu: Tidy up io-pgtable dependencies")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Cc: iommu@lists.linux.dev
+> Cc: Conor Dooley <conor@kernel.org>
+> Cc: linux-riscv@lists.infradead.org
 > ---
-> Note: Functionally tested on 5.4 kernel and compile tested on 6.3 TOT
-> 
->  net/qrtr/ns.c | 16 ++++++++++------
->  1 file changed, 10 insertions(+), 6 deletions(-)
-> 
-> diff --git a/net/qrtr/ns.c b/net/qrtr/ns.c
-> index 722936f..6fbb195 100644
-> --- a/net/qrtr/ns.c
-> +++ b/net/qrtr/ns.c
-> @@ -274,7 +274,7 @@ static struct qrtr_server *server_add(unsigned int service,
->  	return NULL;
->  }
->  
-> -static int server_del(struct qrtr_node *node, unsigned int port)
-> +static int server_del(struct qrtr_node *node, unsigned int port, bool del_server)
->  {
->  	struct qrtr_lookup *lookup;
->  	struct qrtr_server *srv;
-> @@ -287,7 +287,7 @@ static int server_del(struct qrtr_node *node, unsigned int port)
->  	radix_tree_delete(&node->servers, port);
->  
->  	/* Broadcast the removal of local servers */
-> -	if (srv->node == qrtr_ns.local_node)
-> +	if (srv->node == qrtr_ns.local_node && del_server)
->  		service_announce_del(&qrtr_ns.bcast_sq, srv);
->  
->  	/* Announce the service's disappearance to observers */
-> @@ -373,7 +373,7 @@ static int ctrl_cmd_bye(struct sockaddr_qrtr *from)
->  		}
->  		slot = radix_tree_iter_resume(slot, &iter);
->  		rcu_read_unlock();
-> -		server_del(node, srv->port);
-> +		server_del(node, srv->port, true);
->  		rcu_read_lock();
->  	}
->  	rcu_read_unlock();
-> @@ -459,10 +459,14 @@ static int ctrl_cmd_del_client(struct sockaddr_qrtr *from,
->  		kfree(lookup);
->  	}
->  
-> -	/* Remove the server belonging to this port */
-> +	/* Remove the server belonging to this port
-> +	 * Given that DEL_CLIENT is already broadcasted
-> +	 * by port_remove, no need to send DEL_SERVER for
-> +	 * the same port to remote
-> +	 */
->  	node = node_get(node_id);
->  	if (node)
-> -		server_del(node, port);
-> +		server_del(node, port, false);
->  
->  	/* Advertise the removal of this client to all local servers */
->  	local_node = node_get(qrtr_ns.local_node);
-> @@ -567,7 +571,7 @@ static int ctrl_cmd_del_server(struct sockaddr_qrtr *from,
->  	if (!node)
->  		return -ENOENT;
->  
-> -	return server_del(node, port);
-> +	return server_del(node, port, true);
->  }
->  
->  static int ctrl_cmd_new_lookup(struct sockaddr_qrtr *from,
-> -- 
-> 2.7.4
-> 
+>  drivers/iommu/Kconfig |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+> --- a/drivers/iommu/Kconfig
+> +++ b/drivers/iommu/Kconfig
+> @@ -32,7 +32,7 @@ config IOMMU_IO_PGTABLE
+>  config IOMMU_IO_PGTABLE_LPAE
+>  	bool "ARMv7/v8 Long Descriptor Format"
 
--- 
-மணிவண்ணன் சதாசிவம்
+I'm probably missing something here, but why would we want to enable
+"ARMv7/v8 Long Descriptor Format" on RISC-V?
+Would it not be better to make the Renesas depend on, rather than
+select the option? It does seem highly arch specific, and I feel like
+Geert previously mentioned that the RZ/Five (their RISC-V offering)
+didn't use it.
+
+Cheers,
+Conor.
+
+>  	select IOMMU_IO_PGTABLE
+> -	depends on ARM || ARM64 || COMPILE_TEST
+> +	depends on ARM || ARM64 || RISCV || COMPILE_TEST
+>  	depends on !GENERIC_ATOMIC64	# for cmpxchg64()
+>  	help
+>  	  Enable support for the ARM long descriptor pagetable format.
+>=20
+
+--voV2wf9Drw69lJ6G
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCUrRAAKCRB4tDGHoIJi
+0mUOAQC/6NyhN5R0KrNSLvgjSttTTgoOT7Q7tk3qW1ws7ymJKAD/RCBEsz++6L3M
+0m6tx3tTnLt6jB6secRd7TkULa4UGwo=
+=UDBy
+-----END PGP SIGNATURE-----
+
+--voV2wf9Drw69lJ6G--
