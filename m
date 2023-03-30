@@ -2,185 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A986D6CFC76
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED2E6CFC75
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbjC3HOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        id S230451AbjC3HOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjC3HOW (ORCPT
+        with ESMTP id S230465AbjC3HOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:14:22 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3460972A9
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:13:55 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id y4so72774529edo.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:13:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680160433;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rIO+xjpPvxFE7p3Fg529YdgqYE0es+Za65fM8K1qjgQ=;
-        b=UvXOXvaKg5W3pOiKg4eDH9lHl4Zdbajrfr9yCdPGB59p3EbanzUW5AbZ60M0Fo1jLj
-         xgrtU13pG+2HRUXSZV1YHQUF6aAPx8bmMFTsyT+tMN4I6uSd3iTp4e0p5o0dlpChmR1N
-         kgpM/rCb2oFLWV87Mo4Q+i3t95OakU3lMRj4YQ1nysYmA+Tpl5yBca0fvDqMPohFxbDB
-         Y7+D8BKyWgRNceAUWpnfWnDi7HIUgkBAG3eDp8W+4bCHX6Cc8wGgEGVLJTMMQ7fZWTfd
-         8/Oa9xlswq0vuQl+sJims+8vhoieSnu1v+Z91iZH9bXW/MlL8LF9mWWEI22UEcU5KFZ+
-         xqbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680160433;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rIO+xjpPvxFE7p3Fg529YdgqYE0es+Za65fM8K1qjgQ=;
-        b=POLhitlsITesnZUMror3QIGSQzs5ByWjgtVp3Q2zT48eiKK12lH3rUhpzXveGvQREW
-         0FQDjNyM8lYcM5riZ6na1YckmCsxUOjgUH996VgEXFX953ZRapCFEej7LSnWcHfoDdB2
-         9gwCr6spUKnPYJCIpGRM/jmVY/zsJs9QSw6LfzwRnSHY0LQG1dBfqg1LUkDBpAu/ALSf
-         Z8k2RGfGkmYjNY0mTeEMaDEJ6LGv+sMNe78Ghg7NR/51DtDMZSDe6CpJf3ihTSvXoOrK
-         qbk3r/nz54WPRaJUSTe13fQjz2QzzP0dspJqh8asjwVCzs7ZRfHKhZloftBoNLnk5vay
-         UBCw==
-X-Gm-Message-State: AAQBX9cd4ie0m1Y0lvhx3KxE43MaUtgBlDXnmjItI0u/D398c4um03jm
-        Dybeq0xP/rgEdKD2SgvbNIphVIoOwIAsTenz18tubg==
-X-Google-Smtp-Source: AKy350YivWZ/HKPgZxm5eZxF7+2qcjmArqrs51gN4d7jnY/jgrQdpgyHe6R7cHRBBvkOSSb0g8UX51iLn7ZYwWx1eHQ=
-X-Received: by 2002:a17:906:7846:b0:933:1967:a984 with SMTP id
- p6-20020a170906784600b009331967a984mr10847576ejm.15.1680160433435; Thu, 30
- Mar 2023 00:13:53 -0700 (PDT)
+        Thu, 30 Mar 2023 03:14:08 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DD165BA;
+        Thu, 30 Mar 2023 00:13:41 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32U3hOYi005087;
+        Thu, 30 Mar 2023 07:13:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=6B16GjtCP8jmz8x2KKLApwXYgb+Wl4vnXGjbWAhATyI=;
+ b=LwdBiR5XeKm6/VlzxnOrw8n0vz3NsmARiBdYOMEmGDwZNdS6YBtHi02E13931zLWSa2F
+ /9e+wLZ14MqgBGJQ9CHqzFzBmHP+DWMW8yq+jzsRcHSVGokKXq7E2XR5eTWx/n673nY0
+ hHAYmzeTMYnXADPnzV8+ZzQJ6YNygzaHQxFFJvrFeBu/jF6eY/Fiv6R4/19EZc6C2TL6
+ cYEc+ilv61Dmafz3yeg+28XX/b8dwe26tjbwkQhmjoUzcSvFZurlFKZUpnOhMwuanI/9
+ eLuNDV+4PH1EUqAvfs+Cn9jb36HNsz8CGPjSk7VEYZ3VsBzsOHQgx8FrHK0g4ipfAf61 Bg== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pn2rqrm6m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 07:13:28 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32U7DSv1003345
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 07:13:28 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 30 Mar 2023 00:13:21 -0700
+Date:   Thu, 30 Mar 2023 12:43:17 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v4 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
+ PHY
+Message-ID: <20230330071316.GC13508@varda-linux.qualcomm.com>
+References: <cover.1679909245.git.quic_varada@quicinc.com>
+ <4a21defe3320eb11d0e43bc7f02b3168ecefd458.1679909245.git.quic_varada@quicinc.com>
+ <39356c59-7723-40df-08ba-cd563a7e066c@linaro.org>
 MIME-Version: 1.0
-References: <20230328221644.803272-1-yosryahmed@google.com>
- <20230328221644.803272-5-yosryahmed@google.com> <ZCQfZJFufkJ10o01@dhcp22.suse.cz>
- <CAJD7tkb-UpKm2QbjYzB=B=oGk6Hyj9cbUviZUPC+7VsvBecH7g@mail.gmail.com>
- <20230329192059.2nlme5ubshzdbpg6@google.com> <ZCU1Bp+5bKNJzWIu@dhcp22.suse.cz>
-In-Reply-To: <ZCU1Bp+5bKNJzWIu@dhcp22.suse.cz>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 30 Mar 2023 00:13:16 -0700
-Message-ID: <CAJD7tka0CmRvcvB0k8DZuid1vC9OK_mFriHHbXNTUkVE7OjaTA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/9] cgroup: rstat: add WARN_ON_ONCE() if flushing
- outside task context
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Shakeel Butt <shakeelb@google.com>, Tejun Heo <tj@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <39356c59-7723-40df-08ba-cd563a7e066c@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -c2unPo9kpCI8gT2WIRGck5ZYFaqhFgP
+X-Proofpoint-GUID: -c2unPo9kpCI8gT2WIRGck5ZYFaqhFgP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-30_03,2023-03-30_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 phishscore=0 suspectscore=0 spamscore=0 bulkscore=0
+ clxscore=1015 mlxscore=0 mlxlogscore=999 priorityscore=1501 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303300056
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 12:06=E2=80=AFAM Michal Hocko <mhocko@suse.com> wro=
-te:
->
-> On Wed 29-03-23 19:20:59, Shakeel Butt wrote:
-> > On Wed, Mar 29, 2023 at 11:41:39AM -0700, Yosry Ahmed wrote:
-> > > On Wed, Mar 29, 2023 at 4:22=E2=80=AFAM Michal Hocko <mhocko@suse.com=
-> wrote:
-> > > >
-> > > > On Tue 28-03-23 22:16:39, Yosry Ahmed wrote:
-> > > > > rstat flushing is too expensive to perform in irq context.
-> > > > > The previous patch removed the only context that may invoke an rs=
-tat
-> > > > > flush from irq context, add a WARN_ON_ONCE() to detect future
-> > > > > violations, or those that we are not aware of.
-> > > > >
-> > > > > Ideally, we wouldn't flush with irqs disabled either, but we have=
- one
-> > > > > context today that does so in mem_cgroup_usage(). Forbid callers =
-from
-> > > > > irq context for now, and hopefully we can also forbid callers wit=
-h irqs
-> > > > > disabled in the future when we can get rid of this callsite.
-> > > >
-> > > > I am sorry to be late to the discussion. I wanted to follow up on
-> > > > Johannes reply in the previous version but you are too fast ;)
-> > > >
-> > > > I do agree that this looks rather arbitrary. You do not explain how=
- the
-> > > > warning actually helps. Is the intention to be really verbose to th=
-e
-> > > > kernel log when somebody uses this interface from the IRQ context a=
-nd
-> > > > get bug reports? What about configurations with panic on warn? Do w=
-e
-> > > > really want to crash their systems for something like that?
-> > >
-> > > Thanks for taking a look, Michal!
-> > >
-> > > The ultimate goal is not to flush in irq context or with irqs
-> > > disabled, as in some cases it causes irqs to be disabled for a long
-> > > time, as flushing is an expensive operation. The previous patch in th=
-e
-> > > series should have removed the only context that flushes in irq
-> > > context, and the purpose of the WARN_ON_ONCE() is to catch future use=
-s
-> > > or uses that we might have missed.
-> > >
-> > > There is still one code path that flushes with irqs disabled (also
-> > > mem_cgroup_usage()), and we cannot remove this just yet; we need to
-> > > deprecate usage threshold events for root to do that. So we cannot
-> > > enforce not flushing with irqs disabled yet.
-> > >
-> > > So basically the patch is trying to enforce what we have now, not
-> > > flushing in irq context, and hopefully at some point we will also be
-> > > able to enforce not flushing with irqs disabled.
-> > >
-> > > If WARN_ON_ONCE() is the wrong tool for this, please let me know.
-> > >
+On Tue, Mar 28, 2023 at 09:07:08AM +0200, Krzysztof Kozlowski wrote:
+> On 27/03/2023 11:30, Varadarajan Narayanan wrote:
+> > Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
 > >
-> > If I understand Michal's concern, the question is should be start with
-> > pr_warn_once() instead of WARN_ON_ONCE() and I think yes we should star=
-t
-> > with pr_warn_once().
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  Changes in v4:
+> > 	- Remove constraints not applicable to IPQ9574
+> >  Changes in v3:
+> > 	- Update other mandatory fields to accomodate IPQ9574
+> >  Changes in v2:
+> > 	- Updated sections missed in previous patch
+> > ---
+> >  .../bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml    | 25 ++++++++++++++++++++--
+> >  1 file changed, 23 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> > index e81a382..aa5b58c 100644
+> > --- a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> > +++ b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> > @@ -21,6 +21,7 @@ properties:
+> >      enum:
+> >        - qcom,ipq6018-qmp-usb3-phy
+> >        - qcom,ipq8074-qmp-usb3-phy
+> > +      - qcom,ipq9574-qmp-usb3-phy
+> >        - qcom,msm8996-qmp-usb3-phy
+> >        - qcom,msm8998-qmp-usb3-phy
+> >        - qcom,qcm2290-qmp-usb3-phy
+> > @@ -122,8 +123,6 @@ required:
+> >    - clock-names
+> >    - resets
+> >    - reset-names
+> > -  - vdda-phy-supply
+> > -  - vdda-pll-supply
+> >
+> >  additionalProperties: false
+> >
+> > @@ -204,6 +203,28 @@ allOf:
+> >          compatible:
+> >            contains:
+> >              enum:
+> > +              - qcom,ipq9574-qmp-usb3-phy
+> > +    then:
+> > +      properties:
+> > +        clocks:
+> > +          maxItems: 3
+> > +        clock-names:
+> > +          items:
+> > +            - const: aux
+> > +            - const: cfg_ahb
+> > +            - const: pipe
 >
-> Yes, I do not really like the WARN_ON here. It is an overkill. pr_warn
-> would much less intrusive but potentially incomplete because you won't
-> know who that offender is. So if you really care about those then you
-> would need to call dump_stack as well.
+> Isn't pipe the clock for child node?
+
+Will be moving to a newer style binding (as specified in
+qcom,sc8280xp-qmp-usb3-uni-phy.yaml). Will update accordingly
+and post the patch.
+
+Thanks
+Varada
+
+> Best regards,
+> Krzysztof
 >
-> So the real question is. Do we really care so deeply? After all somebody
-> might be calling this from within a spin lock or irq disabled section
-> resulting in a similar situation without noticing.
-
-There are discussions in [1] about making atomic rstat flush not
-disable irqs throughout the process, so in that case it would only
-result in a similar situation if the caller has irq disabled. The only
-caller that might have irq disabled is the same caller that might be
-in irq context before this series: mem_cgroup_usage().
-
-On that note, and while I have your attention, I was wondering if we
-can eliminate the flush call completely from mem_cgroup_usage(), and
-read the global stats counters for root memcg instead of the root
-counters. There might be subtle differences, but the root memcg usage
-isn't super accurate now anyway (e.g. it doesn't include kernel
-memory).
-
-With that removed, no callers to rstat flushing would be from irq
-context or have irqs disabled. There will only be one atomic flusher
-(mem_cgroup_wb_stats()), and we can proceed with [1] if it causes a
-problem.
-
-What do you think?
-
-[1] https://lore.kernel.org/lkml/CAJD7tkZrp=3D4zWvjE9_010TAG1T_crCbf9P64UzJ=
-ABspgcrGPKg@mail.gmail.com/
-
-> --
-> Michal Hocko
-> SUSE Labs
