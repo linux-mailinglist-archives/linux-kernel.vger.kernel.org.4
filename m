@@ -2,150 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E976D02B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F71E6D02B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbjC3LMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
+        id S230082AbjC3LNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjC3LMn (ORCPT
+        with ESMTP id S231400AbjC3LNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:12:43 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEFC1709
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:12:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680174762; x=1711710762;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=Hlo3O44M8BngBpuXPetDOZID6/wfbPZbTYhMPgpcDcU=;
-  b=Ttw/ZMvp2Z6I/jOmCs8vK7viix5fICRriL0N5EH+00lJPCpi25GHUxR/
-   qe7aScHGnM0VuvzIrxKKro6iSMUG5OhlJqIs3n1MnaR5faD7vCafqwZIJ
-   nGiB4vcuwCCcv/L/f1TMnnwzqabRB7cuiMPwIlKUK7jHwoMF6wO/MDOiH
-   s5GKVLZTxEOa8UVvg/ajXJ7WcGpojxGpjwL5mCW4AEO/QDSWKOi4YgcoN
-   ZDb+baRAPZJ6robC+m5XJD9fwRgdIQ564UQYPUV8G0UFTxyTmrtuQpamV
-   4Sz4AyrUGsYBzWxO4OzWSWpwekNzBCp75pA5qO0XULrM32UR/XIAVHDwt
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="368917536"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="368917536"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:12:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="714946982"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="714946982"
-Received: from unknown (HELO localhost) ([10.237.66.160])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:12:20 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        David Gow <davidgow@google.com>,
-        =?utf-8?Q?Lu=C3=ADs?= Mendes <luis.p.mendes@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?utf-8?Q?Ma?= =?utf-8?Q?=C3=ADra?= Canal 
-        <mairacanal@riseup.net>, Arthur Grillo <arthurgrillo@riseup.net>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] drm: buddy_allocator: Fix buddy allocator init on
- 32-bit systems
-In-Reply-To: <e1af591e-a183-9b22-f533-297934e15e30@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230329065532.2122295-1-davidgow@google.com>
- <878rfe4iis.fsf@intel.com> <e1af591e-a183-9b22-f533-297934e15e30@amd.com>
-Date:   Thu, 30 Mar 2023 14:12:17 +0300
-Message-ID: <875yai4hny.fsf@intel.com>
+        Thu, 30 Mar 2023 07:13:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9473040DC;
+        Thu, 30 Mar 2023 04:13:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EE50FCE2982;
+        Thu, 30 Mar 2023 11:13:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 385C1C433EF;
+        Thu, 30 Mar 2023 11:13:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680174811;
+        bh=ukBEhWrw/ajFJGkVU2++82d/hl2/pJctfu+fiaMHW7I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a7LcQIvbyx7HpDMExhi0iZUT+YkyF6a8Ahe17BEHusojPX7S8t7ZhOnRBnYTgF6+3
+         d91W6s+c8uv75MVWCsIjmTI8WKR63Ki65wdRLalRWD9Kuxr34MMMdfxd2NoBcy7K05
+         TS5JyobUdu8koooM2vi/ffjuEbrVQESlPWeOg1YInAsImoUx7co19tEbRgEayYgUjE
+         XyL8QwH0cxRH0Ldxp48VFEQKA2U/vRTV8MgzghQ6Jh2irGTXeZ/KY7KQwAIBdfOY0F
+         WWKH8Tv94CrI/MqWMNV/Q6PRQWwCwYfUOsbhWbx3HGdBmnGGZsQ/3sC1LTM8+iydCu
+         GBGf3QK/3bHzw==
+Date:   Thu, 30 Mar 2023 12:13:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Patrick Lai <quic_plai@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v3 07/10] ASoC: dt-bindings: qcom,lpass-va-macro: Add
+ missing NPL clock
+Message-ID: <ZCVu11dHay8ktiRl@sirena.org.uk>
+References: <20230327132254.147975-1-krzysztof.kozlowski@linaro.org>
+ <20230327132254.147975-8-krzysztof.kozlowski@linaro.org>
+ <3bb3f40f-39da-2fe6-f5ca-2848a9e5c49b@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IsDYuCYOQLYYOx2V"
+Content-Disposition: inline
+In-Reply-To: <3bb3f40f-39da-2fe6-f5ca-2848a9e5c49b@linaro.org>
+X-Cookie: Single tasking: Just Say No.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Mar 2023, Christian K=C3=B6nig <christian.koenig@amd.com> wrote:
-> Am 30.03.23 um 12:53 schrieb Jani Nikula:
->> On Wed, 29 Mar 2023, David Gow <davidgow@google.com> wrote:
->>> The drm buddy allocator tests were broken on 32-bit systems, as
->>> rounddown_pow_of_two() takes a long, and the buddy allocator handles
->>> 64-bit sizes even on 32-bit systems.
->>>
->>> This can be reproduced with the drm_buddy_allocator KUnit tests on i386:
->>> 	./tools/testing/kunit/kunit.py run --arch i386 \
->>> 	--kunitconfig ./drivers/gpu/drm/tests drm_buddy
->>>
->>> (It results in kernel BUG_ON() when too many blocks are created, due to
->>> the block size being too small.)
->>>
->>> This was independently uncovered (and fixed) by Lu=C3=ADs Mendes, whose=
- patch
->>> added a new u64 variant of rounddown_pow_of_two(). This version instead
->>> recalculates the size based on the order.
->>>
->>> Reported-by: Lu=C3=ADs Mendes <luis.p.mendes@gmail.com>
->>> Link: https://lore.kernel.org/lkml/CAEzXK1oghXAB_KpKpm=3D-CviDQbNaH0qfg=
-YTSSjZgvvyj4U78AA@mail.gmail.com/T/
->>> Signed-off-by: David Gow <davidgow@google.com>
->>> ---
->>>   drivers/gpu/drm/drm_buddy.c | 4 ++--
->>>   1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
->>> index 3d1f50f481cf..7098f125b54a 100644
->>> --- a/drivers/gpu/drm/drm_buddy.c
->>> +++ b/drivers/gpu/drm/drm_buddy.c
->>> @@ -146,8 +146,8 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, =
-u64 chunk_size)
->>>   		unsigned int order;
->>>   		u64 root_size;
->>>=20=20=20
->>> -		root_size =3D rounddown_pow_of_two(size);
->>> -		order =3D ilog2(root_size) - ilog2(chunk_size);
->>> +		order =3D ilog2(size) - ilog2(chunk_size);
->>> +		root_size =3D chunk_size << order;
->> Just noticed near the beginning of the function there's also:
->>
->> 	if (!is_power_of_2(chunk_size))
->> 		return -EINVAL;
->>
->> which is also wrong for 32-bit.
->
-> Yeah, but that isn't vital. We just use u64 for the chunk_size for=20
-> consistency.
->
-> In reality I wouldn't except more than 256K here.
 
-Right. It's just not pedantically correct either. ;)
+--IsDYuCYOQLYYOx2V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-is_power_of_2() is pretty scary as it is, since it just truncates.
+On Thu, Mar 30, 2023 at 08:59:12AM +0200, Krzysztof Kozlowski wrote:
 
-BR,
-Jani.
+> It seems you applied v2, not v3, so this patch is missing and the
+> binding needs fixes.
 
+I'd queued v2 already when you sent v3, and you're sending a lot
+of serieses right now.
 
->
-> Regards,
-> Christian.
->
->>
->>
->> BR,
->> Jani.
->>
->>
->>>=20=20=20
->>>   		root =3D drm_block_alloc(mm, NULL, order, offset);
->>>   		if (!root)
->
+--IsDYuCYOQLYYOx2V
+Content-Type: application/pgp-signature; name="signature.asc"
 
---=20
-Jani Nikula, Intel Open Source Graphics Center
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQlbtMACgkQJNaLcl1U
+h9AXegf/RDW+9ZdRUx8ufviZmnmZibB7wVYT4S9MOFBHzXu5Xs9hFd60Nl2uhGsi
+VloXjO2lGlAuStck5I02NIMUNC1kEP/YExTGWadOY92CggJTGsUxhf4OGPKh5ib4
+bDn37PhNH6IRdcH/rNTSyLmzxqWkrPt610U7gdgsLAjB6JYIT2lREX6ZqW3Ssizw
+Qvq7IUXtcrs7DFEahV3ipkhBHB+RpZz++k0kWS42IlQo4Ij8pGanusKT5f5gzPoz
+rYEEkTmIZWyUzUPkBa22IE7ROpvkyc+dCaYfAyLhBOBBq7TVn6JfQErggPhridD/
+/S7VdzM5YXqVgwVHI/1nwAnvoumvNQ==
+=NJ5a
+-----END PGP SIGNATURE-----
+
+--IsDYuCYOQLYYOx2V--
