@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE536CF969
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 05:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E916CF96A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 05:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjC3DEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 23:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
+        id S229745AbjC3DEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 23:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjC3DE2 (ORCPT
+        with ESMTP id S229504AbjC3DEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 23:04:28 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793D45240
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 20:04:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680145467; x=1711681467;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9EltCdudEdttZj7/KIfLl6F8Q1jp/dfvDazeWeBsh+Q=;
-  b=CYRKDQDbRxaOBgsJePOjy+hUDk8h5/FJMU5g3KtC4hrPcmelHxioetao
-   4pt2wSmvdNgeydSpWsNdxUIg9xe/W3H2+3tqW8lX+1pphBJwm841TKpBa
-   6T/OAYV7VuQoDyL96czEaQp/YZCq4xfxHJemFv2L+s5e07Rd9N6Ksnq8f
-   aIE2d+5wL4Fx613k/R6ajDQdc6acN93SltO3pxuwsVSNtsAjYO2rzZIpm
-   NRhmj2q3y/e0qVasNQNItmAdE9u4SC979+aaeexqJn6WQ/VZsigCq0jhU
-   lxQtHSk53MUWxwylHlDr/4buv/K1Kwur12jwrpGGwyVBYfUFYMIsxYFAj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="341073689"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="341073689"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 20:04:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="930563232"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="930563232"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Mar 2023 20:04:25 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1phiaO-000KFe-1w;
-        Thu, 30 Mar 2023 03:04:24 +0000
-Date:   Thu, 30 Mar 2023 11:03:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: [tip:locking/rcuref 2/2] arch/arm64/include/asm/cmpxchg.h:174:1:
- sparse: sparse: cast truncates bits from constant value (ffffffffe0000000
- becomes 0)
-Message-ID: <202303301144.szF9LGFj-lkp@intel.com>
+        Wed, 29 Mar 2023 23:04:30 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6395240;
+        Wed, 29 Mar 2023 20:04:29 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32U34NOL049681;
+        Wed, 29 Mar 2023 22:04:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680145463;
+        bh=rwgY+brqpxleHmcpDlVKMBclpHE9SNEizgk3yrgzpDo=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=QX6V0Cs+IC/t67bt0ySHYpoyuLEqHOM9duE1iM9Zk3Y3Uc+cpla4T9m615pQmfAN9
+         2DunSTNclIXIBbUJbvvYKmrVJ0wETViQ/01X7XuSo5HsreQlqbn8+DV3cgzyV2xW2G
+         3oYk8PEgGrG1MhHVdab3Is9XPUK1ZVoJ+5qYHGhs=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32U34NSG015551
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 29 Mar 2023 22:04:23 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 29
+ Mar 2023 22:04:22 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 29 Mar 2023 22:04:22 -0500
+Received: from [172.24.156.204] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32U34JQO012021;
+        Wed, 29 Mar 2023 22:04:20 -0500
+Message-ID: <48d7ba60-aa7b-8d93-fcf0-c7e64908e9f5@ti.com>
+Date:   Thu, 30 Mar 2023 08:34:19 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH 1/2] gpio: davinci: Do not clear the bank intr enable
+ bit in save_context
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Dhruva Gole <d-gole@ti.com>
+CC:     Vibhore Vardhan <vibhore@ti.com>, Tony Lindgren <tony@atomide.com>,
+        Vignesh <vigneshr@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Devarsh Thakkar <devarsht@ti.com>
+References: <20230323122910.991148-1-d-gole@ti.com>
+ <CACRpkdY_rhe69Y4AbEp8iws1fpL0bUkP5iBMN68EB+wxhFyHTw@mail.gmail.com>
+From:   "J, KEERTHY" <j-keerthy@ti.com>
+In-Reply-To: <CACRpkdY_rhe69Y4AbEp8iws1fpL0bUkP5iBMN68EB+wxhFyHTw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/rcuref
-head:   ee1ee6db07795d9637bc5e8993a8ddcf886541ef
-commit: ee1ee6db07795d9637bc5e8993a8ddcf886541ef [2/2] atomics: Provide rcuref - scalable reference counting
-config: arm64-randconfig-s041-20230329 (https://download.01.org/0day-ci/archive/20230330/202303301144.szF9LGFj-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=ee1ee6db07795d9637bc5e8993a8ddcf886541ef
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip locking/rcuref
-        git checkout ee1ee6db07795d9637bc5e8993a8ddcf886541ef
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303301144.szF9LGFj-lkp@intel.com/
 
-sparse warnings: (new ones prefixed by >>)
-   lib/rcuref.c: note: in included file (through arch/arm64/include/asm/atomic.h, include/linux/atomic.h, include/linux/rcuref.h):
->> arch/arm64/include/asm/cmpxchg.h:174:1: sparse: sparse: cast truncates bits from constant value (ffffffffe0000000 becomes 0)
->> arch/arm64/include/asm/cmpxchg.h:174:1: sparse: sparse: cast truncates bits from constant value (ffffffffe0000000 becomes 0)
+On 3/28/2023 6:59 PM, Linus Walleij wrote:
+> On Thu, Mar 23, 2023 at 1:29 PM Dhruva Gole <d-gole@ti.com> wrote:
+> 
+>> The interrupt enable bits might be set if we want to use the GPIO as
+>> wakeup source. Clearing this will mean disabling of interrupts in the GPIO
+>> banks that we may want to wakeup from.
+>> Thus remove the line that was clearing this bit from the driver's save
+>> context function.
+>>
+>> Fixes: 0651a730924b ("gpio: davinci: Add support for system suspend/resume PM")
+>> Cc: Devarsh Thakkar <devarsht@ti.com>
+>> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> 
+> Looks like the right solution to me.
+> I'm a bit surprised given how long we have had this driver.
+> I suppose people have used out-of-tree patches for suspend/resume. :(
+> 
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-vim +174 arch/arm64/include/asm/cmpxchg.h
+Acked-by: Keerthy <j-keerthy@ti.com>
 
-10b663aef1c247 Catalin Marinas 2012-03-05  171  
-305d454aaa292b Will Deacon     2015-10-08  172  __CMPXCHG_GEN()
-305d454aaa292b Will Deacon     2015-10-08  173  __CMPXCHG_GEN(_acq)
-305d454aaa292b Will Deacon     2015-10-08 @174  __CMPXCHG_GEN(_rel)
-305d454aaa292b Will Deacon     2015-10-08  175  __CMPXCHG_GEN(_mb)
-10b663aef1c247 Catalin Marinas 2012-03-05  176  
-
-:::::: The code at line 174 was first introduced by commit
-:::::: 305d454aaa292be3a09a9d674e6c35f5b4249a13 arm64: atomics: implement native {relaxed, acquire, release} atomics
-
-:::::: TO: Will Deacon <will.deacon@arm.com>
-:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> Yours,
+> Linus Walleij
