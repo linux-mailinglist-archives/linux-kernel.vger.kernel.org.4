@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369C16D0AB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E77C6D0AB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233543AbjC3QIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 12:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
+        id S231700AbjC3QJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 12:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232815AbjC3QIT (ORCPT
+        with ESMTP id S232936AbjC3QJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 12:08:19 -0400
+        Thu, 30 Mar 2023 12:09:00 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E6CA24B
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:07:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD626C168
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:08:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680192451;
+        s=mimecast20190719; t=1680192479;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9IAbBMcnsKQ/wMG+wiEQBSaGDUBrmUfxUQY9hBhFLu8=;
-        b=FLI1kdsg3y6jiXseASDT8PAS0qVMJHuc3QUeY5OMsxb8saCtBezQAP4G6rOVmPkGH10+xV
-        qreKVOc56SAgh02iLsThs7XxJhb34UsNVeKlwdvAgtPyS6J8PWbg2nDvobQjx0AJslsL4n
-        1csVagEGC8KF5SzyQQWk1Yp7u87O/8w=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=t0fDgNcYvYYWETXPJiek9vgfY3+GH1MCmZd5+QiqXiU=;
+        b=JFsIikucHw5aY9SQsQhcqJMfZsDhcGLh+PezXbMAfZca9mSfT62Uy/h0w5MVUvBhPJvcWB
+        qvcRNgLsL2lfjziy2A7PyZPmvLsLEUzRWyUSuxC0t4/5m93LTL6LHZ8NKcpIbF89uy78w5
+        eer21HYMz0V7oDBJu55TnFfsrzjuWOs=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-413-UzN6F66WNPuB8VWtdmINqw-1; Thu, 30 Mar 2023 12:07:30 -0400
-X-MC-Unique: UzN6F66WNPuB8VWtdmINqw-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-74678af9349so60314585a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:07:30 -0700 (PDT)
+ us-mta-471-2N_e10GjPKKN_bB-T61t0A-1; Thu, 30 Mar 2023 12:07:51 -0400
+X-MC-Unique: 2N_e10GjPKKN_bB-T61t0A-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-746bae78af3so60170485a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:07:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680192447;
+        d=1e100.net; s=20210112; t=1680192470;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9IAbBMcnsKQ/wMG+wiEQBSaGDUBrmUfxUQY9hBhFLu8=;
-        b=zZ1ZLw4FGVUa0pGzFy+Fx+FObgcQG/tvVbfsGCMYSZDV8P6yeWB4GkyLguRNtfssYv
-         bOG6r74ZWmLP62Y4AEZRK+tt8M6ntbypTknRK1FR65NkeIxZ0VYOdlMUK99/SdVcWNHQ
-         d3kdZL4HN4FRqzQxphSp74eMqRlLNdXWuMy5WD8ztVqcKOpSxEoZUsxxYrPwvDsaBV0C
-         8ista8va3hoKWK+MtKqDcGZpkITB9XVNtWaN74lg/Bppb7m/D7jrqRfhITN+vUjvFow8
-         Q33kHOQbwgrAzk1zp0xJ4mRd+eADeFlNJC+MOGd50lm/Cd9bGbiwQcl6zFlo3kTlEsqp
-         HLAw==
-X-Gm-Message-State: AAQBX9fLyaW9vvraTLeW13HymwSXbrMnCpcMl0ziETLr6spG6dY/gV5f
-        HBaCttke5CNN0hNiZmkoPkK8kvPI9TJ6hWvii0lQuSFmPDIJt/jkngpezV5FCqKmsdGNWik6EnS
-        LUsjXtCPYan1uExm1dJJVOpjF
-X-Received: by 2002:a05:622a:1885:b0:3bf:cf77:a861 with SMTP id v5-20020a05622a188500b003bfcf77a861mr4161754qtc.4.1680192446657;
-        Thu, 30 Mar 2023 09:07:26 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aDzum34tIGGIl5D1DP0AG1BkXRe6bE/ERsqntOfZrNMLu3f+ZX4TwL8/dXblBvXoRbwqvGXg==
-X-Received: by 2002:a05:622a:1885:b0:3bf:cf77:a861 with SMTP id v5-20020a05622a188500b003bfcf77a861mr4161702qtc.4.1680192446285;
-        Thu, 30 Mar 2023 09:07:26 -0700 (PDT)
+        bh=t0fDgNcYvYYWETXPJiek9vgfY3+GH1MCmZd5+QiqXiU=;
+        b=tM+FB4G6wSI56/2Rg9wiCSqIIQjLUhesTLycnJ9IYS15zqx3NDU2IBiTN++JOARWrw
+         z3ExX7hbTR/Fenk3tcD0Dm9X5WFBD+DmQOBHGhyzEu3f8vbQayv2jm2r79ZpZuK5TYgF
+         43PYnF0FUBzojH3XGp9xQajd9vFCuXHizYdApYBhIh5xZlpbeHJScH7jU2SZg933AH7t
+         f6oSeab8NsqL4CG9p/BaU7yo/Tx9z5ODUxa7w4dQ80DHzZ/GLiOhHvRu7OX3dx79g3Pz
+         s5nDRCaTJUWXTMgR1QxYZZpE0aMcSYTT4UGoCfeZlJSmHb3xq2Sq5hA/05R0I8B+D1j2
+         cXAQ==
+X-Gm-Message-State: AAQBX9dfOO5zszT8seAk0Wgv9c7btrqAXfgUCN88ezDPgnZ4iYRdVemK
+        +7wLUV8TLGKzc+z2C4+oUfSh6eWU0yRAwhaBGIVrX/egLRhikxMiHEq/6Ej9X4+2sr++161gtr8
+        ky8+7VHx1ijqzlEapk/Qnxao5ILjJyqoZ
+X-Received: by 2002:a05:622a:1aa1:b0:3e3:8e1a:c30b with SMTP id s33-20020a05622a1aa100b003e38e1ac30bmr4579792qtc.1.1680192469864;
+        Thu, 30 Mar 2023 09:07:49 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bISALJDsJEmaVdBJpcLTGX6PSIXoG+fwKiOAlCT8YbnZWDRnPeLTz9TUVS+0m6Cgnx60xAtQ==
+X-Received: by 2002:a05:622a:1aa1:b0:3e3:8e1a:c30b with SMTP id s33-20020a05622a1aa100b003e38e1ac30bmr4579758qtc.1.1680192469579;
+        Thu, 30 Mar 2023 09:07:49 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id p126-20020a374284000000b007486fc7a74csm3517511qka.135.2023.03.30.09.07.23
+        by smtp.gmail.com with ESMTPSA id d185-20020a37b4c2000000b007425ef4cbc2sm19546682qkf.100.2023.03.30.09.07.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 09:07:24 -0700 (PDT)
+        Thu, 30 Mar 2023 09:07:48 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     David Hildenbrand <david@redhat.com>,
+Cc:     Andrea Arcangeli <aarcange@redhat.com>, peterx@redhat.com,
+        David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>, peterx@redhat.com,
-        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
         Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: [PATCH 13/29] selftests/mm: Split uffd tests into uffd-stress and uffd-unit-tests
-Date:   Thu, 30 Mar 2023 12:07:23 -0400
-Message-Id: <20230330160723.3107032-1-peterx@redhat.com>
+        Mike Rapoport <rppt@linux.vnet.ibm.com>
+Subject: [PATCH 14/29] selftests/mm: uffd_[un]register()
+Date:   Thu, 30 Mar 2023 12:07:47 -0400
+Message-Id: <20230330160747.3107258-1-peterx@redhat.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230330155707.3106228-1-peterx@redhat.com>
 References: <20230330155707.3106228-1-peterx@redhat.com>
@@ -84,150 +84,406 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In many ways it's weird and unwanted to keep all the tests in the same
-userfaultfd.c at least when still in the current way.
+Add two helpers to register/unregister to an uffd.  Use them to drop
+duplicate codes.
 
-For example, it doesn't make much sense to run the stress test for each
-method we can create an userfaultfd handle (either via syscall or /dev/
-node).  It's a waste of time running this twice for the whole stress as the
-stress paths are the same, only the open path is different.
+This patch also drops assert_expected_ioctls_present() and
+get_expected_ioctls().  Reasons:
 
-It's also just weird to need to manually specify different types of memory
-to run all unit tests for the userfaultfd interface.  We should be able to
-just run a single program and that should go through all functional uffd
-tests without running the stress test at all.  The stress test was more for
-torturing and finding race conditions.  We don't want to wait for stress to
-finish just to regress test a functional test.
+  - It'll need a lot of effort to pass test_type==HUGETLB into it from the
+  upper, so it's the simplest way to get rid of another global var
 
-When we start to pile up more things on top of the same file and same
-functions, things start to go a bit chaos and the code is just harder to
-maintain too with tons of global variables.
+  - The ioctls returned in UFFDIO_REGISTER is hardly useful at all, because
+  any app can already detect kernel support on any ioctl via its
+  corresponding UFFD_FEATURE_*.  The check here is for sanity mostly but
+  it's probably destined no user app will even use it.
 
-This patch creates a new test uffd-unit-tests to keep userfaultfd unit
-tests in the future, currently empty.
+  - It's not friendly to one future goal of uffd to run on old kernels, the
+  problem is get_expected_ioctls() compiles against UFFD_API_RANGE_IOCTLS,
+  which is a value that can change depending on where the test is compiled,
+  rather than reflecting what the kernel underneath has.  It means it'll
+  report false negatives on old kernels so it's against our will.
 
-Meanwhile rename the old userfaultfd.c test to uffd-stress.c.
+So let's make our live easier.
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- tools/testing/selftests/mm/.gitignore         |  3 ++-
- tools/testing/selftests/mm/Makefile           |  8 +++---
- tools/testing/selftests/mm/run_vmtests.sh     | 10 ++++---
- .../mm/{userfaultfd.c => uffd-stress.c}       |  0
- tools/testing/selftests/mm/uffd-unit-tests.c  | 27 +++++++++++++++++++
- 5 files changed, 40 insertions(+), 8 deletions(-)
- rename tools/testing/selftests/mm/{userfaultfd.c => uffd-stress.c} (100%)
- create mode 100644 tools/testing/selftests/mm/uffd-unit-tests.c
+ tools/testing/selftests/mm/hugepage-mremap.c  |  7 +-
+ .../selftests/mm/ksm_functional_tests.c       |  6 +-
+ tools/testing/selftests/mm/uffd-common.c      | 28 +------
+ tools/testing/selftests/mm/uffd-common.h      |  2 -
+ tools/testing/selftests/mm/uffd-stress.c      | 83 +++++--------------
+ tools/testing/selftests/mm/vm_util.c          | 37 +++++++++
+ tools/testing/selftests/mm/vm_util.h          |  7 ++
+ 7 files changed, 66 insertions(+), 104 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index 347277f2adc3..8917455f4f51 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -21,7 +21,8 @@ protection_keys
- protection_keys_32
- protection_keys_64
- madv_populate
--userfaultfd
-+uffd-stress
-+uffd-unit-tests
- mlock-intersect-test
- mlock-random-test
- virtual_address_range
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 9c3737285f8a..ca8bc4ac71e6 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -20,7 +20,7 @@ MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/p
- # Avoid accidental wrong builds, due to built-in rules working just a little
- # bit too well--but not quite as well as required for our situation here.
- #
--# In other words, "make userfaultfd" is supposed to fail to build at all,
-+# In other words, "make $SOME_TEST" is supposed to fail to build at all,
- # because this Makefile only supports either "make" (all), or "make /full/path".
- # However,  the built-in rules, if not suppressed, will pick up CFLAGS and the
- # initial LDLIBS (but not the target-specific LDLIBS, because those are only
-@@ -56,7 +56,8 @@ TEST_GEN_PROGS += mremap_test
- TEST_GEN_PROGS += on-fault-limit
- TEST_GEN_PROGS += thuge-gen
- TEST_GEN_PROGS += transhuge-stress
--TEST_GEN_PROGS += userfaultfd
-+TEST_GEN_PROGS += uffd-stress
-+TEST_GEN_PROGS += uffd-unit-tests
- TEST_GEN_PROGS += soft-dirty
- TEST_GEN_PROGS += split_huge_page_test
- TEST_GEN_PROGS += ksm_tests
-@@ -107,7 +108,8 @@ include ../lib.mk
+diff --git a/tools/testing/selftests/mm/hugepage-mremap.c b/tools/testing/selftests/mm/hugepage-mremap.c
+index e53b5eaa8fce..2084692fe1c4 100644
+--- a/tools/testing/selftests/mm/hugepage-mremap.c
++++ b/tools/testing/selftests/mm/hugepage-mremap.c
+@@ -60,7 +60,6 @@ static void register_region_with_uffd(char *addr, size_t len)
+ {
+ 	long uffd; /* userfaultfd file descriptor */
+ 	struct uffdio_api uffdio_api;
+-	struct uffdio_register uffdio_register;
  
- $(TEST_GEN_PROGS): vm_util.c
+ 	/* Create and enable userfaultfd object. */
  
--$(OUTPUT)/userfaultfd: uffd-common.c
-+$(OUTPUT)/uffd-stress: uffd-common.c
-+$(OUTPUT)/uffd-unit-tests: uffd-common.c
+@@ -96,11 +95,7 @@ static void register_region_with_uffd(char *addr, size_t len)
+ 	 * handling by the userfaultfd object. In mode, we request to track
+ 	 * missing pages (i.e., pages that have not yet been faulted in).
+ 	 */
+-
+-	uffdio_register.range.start = (unsigned long)addr;
+-	uffdio_register.range.len = len;
+-	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+-	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1) {
++	if (uffd_register(uffd, addr, len, true, false, false)) {
+ 		perror("ioctl-UFFDIO_REGISTER");
+ 		exit(1);
+ 	}
+diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+index d8b5b4930412..d3f26050dfd7 100644
+--- a/tools/testing/selftests/mm/ksm_functional_tests.c
++++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+@@ -178,7 +178,6 @@ static void test_unmerge_discarded(void)
+ static void test_unmerge_uffd_wp(void)
+ {
+ 	struct uffdio_writeprotect uffd_writeprotect;
+-	struct uffdio_register uffdio_register;
+ 	const unsigned int size = 2 * MiB;
+ 	struct uffdio_api uffdio_api;
+ 	char *map;
+@@ -210,10 +209,7 @@ static void test_unmerge_uffd_wp(void)
+ 	}
  
- ifeq ($(MACHINE),x86_64)
- BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 9cc33984aa9f..af7bbc74cd83 100644
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -196,14 +196,16 @@ CATEGORY="gup_test" run_test ./gup_test -a
- # Dump pages 0, 19, and 4096, using pin_user_pages:
- CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
+ 	/* Register UFFD-WP, no need for an actual handler. */
+-	uffdio_register.range.start = (unsigned long) map;
+-	uffdio_register.range.len = size;
+-	uffdio_register.mode = UFFDIO_REGISTER_MODE_WP;
+-	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) < 0) {
++	if (uffd_register(uffd, map, size, false, true, false)) {
+ 		ksft_test_result_fail("UFFDIO_REGISTER_MODE_WP failed\n");
+ 		goto close_uffd;
+ 	}
+diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+index c57757c2a36f..17f2bb82c3db 100644
+--- a/tools/testing/selftests/mm/uffd-common.c
++++ b/tools/testing/selftests/mm/uffd-common.c
+@@ -330,33 +330,6 @@ void uffd_test_ctx_init(uint64_t features)
+ 			err("pipe");
+ }
  
-+CATEGORY="userfaultfd" run_test ./uffd-unit-tests
- uffd_mods=("" ":dev")
-+uffd_stress_bin=./uffd-stress
- for mod in "${uffd_mods[@]}"; do
--	CATEGORY="userfaultfd" run_test ./userfaultfd anon${mod} 20 16
-+	CATEGORY="userfaultfd" run_test ${uffd_stress_bin} anon${mod} 20 16
- 	# Hugetlb tests require source and destination huge pages. Pass in half
- 	# the size ($half_ufd_size_MB), which is used for *each*.
--	CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb${mod} "$half_ufd_size_MB" 32
--	CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb_shared${mod} "$half_ufd_size_MB" 32
--	CATEGORY="userfaultfd" run_test ./userfaultfd shmem${mod} 20 16
-+	CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb${mod} "$half_ufd_size_MB" 32
-+	CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb_shared${mod} "$half_ufd_size_MB" 32
-+	CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem${mod} 20 16
- done
- 
- #cleanup
-diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/selftests/mm/uffd-stress.c
-similarity index 100%
-rename from tools/testing/selftests/mm/userfaultfd.c
-rename to tools/testing/selftests/mm/uffd-stress.c
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-new file mode 100644
-index 000000000000..6857388783be
---- /dev/null
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Userfaultfd unit tests.
-+ *
-+ *  Copyright (C) 2015-2023  Red Hat, Inc.
-+ */
+-uint64_t get_expected_ioctls(uint64_t mode)
+-{
+-	uint64_t ioctls = UFFD_API_RANGE_IOCTLS;
+-
+-	if (test_type == TEST_HUGETLB)
+-		ioctls &= ~(1 << _UFFDIO_ZEROPAGE);
+-
+-	if (!((mode & UFFDIO_REGISTER_MODE_WP) && test_uffdio_wp))
+-		ioctls &= ~(1 << _UFFDIO_WRITEPROTECT);
+-
+-	if (!((mode & UFFDIO_REGISTER_MODE_MINOR) && test_uffdio_minor))
+-		ioctls &= ~(1 << _UFFDIO_CONTINUE);
+-
+-	return ioctls;
+-}
+-
+-void assert_expected_ioctls_present(uint64_t mode, uint64_t ioctls)
+-{
+-	uint64_t expected = get_expected_ioctls(mode);
+-	uint64_t actual = ioctls & expected;
+-
+-	if (actual != expected) {
+-		err("missing ioctl(s): expected %"PRIx64" actual: %"PRIx64,
+-		    expected, actual);
+-	}
+-}
+-
+ void wp_range(int ufd, __u64 start, __u64 len, bool wp)
+ {
+ 	struct uffdio_writeprotect prms;
+@@ -609,3 +582,4 @@ int copy_page(int ufd, unsigned long offset)
+ {
+ 	return __copy_page(ufd, offset, false);
+ }
 +
-+#include "uffd-common.h"
+diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+index d9430cfdcb19..11f770391bd9 100644
+--- a/tools/testing/selftests/mm/uffd-common.h
++++ b/tools/testing/selftests/mm/uffd-common.h
+@@ -101,8 +101,6 @@ extern uffd_test_ops_t *uffd_test_ops;
+ void uffd_stats_report(struct uffd_stats *stats, int n_cpus);
+ void uffd_test_ctx_init(uint64_t features);
+ void userfaultfd_open(uint64_t *features);
+-uint64_t get_expected_ioctls(uint64_t mode);
+-void assert_expected_ioctls_present(uint64_t mode, uint64_t ioctls);
+ int uffd_read_msg(int ufd, struct uffd_msg *msg);
+ void wp_range(int ufd, __u64 start, __u64 len, bool wp);
+ void uffd_handle_page_fault(struct uffd_msg *msg, struct uffd_stats *stats);
+diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+index c68a9aeefc41..e6d39a755082 100644
+--- a/tools/testing/selftests/mm/uffd-stress.c
++++ b/tools/testing/selftests/mm/uffd-stress.c
+@@ -463,28 +463,19 @@ static int uffdio_zeropage(int ufd, unsigned long offset)
+ /* exercise UFFDIO_ZEROPAGE */
+ static int userfaultfd_zeropage_test(void)
+ {
+-	struct uffdio_register uffdio_register;
+-
+ 	printf("testing UFFDIO_ZEROPAGE: ");
+ 	fflush(stdout);
+ 
+ 	uffd_test_ctx_init(0);
+ 
+-	uffdio_register.range.start = (unsigned long) area_dst;
+-	uffdio_register.range.len = nr_pages * page_size;
+-	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+-	if (test_uffdio_wp)
+-		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
+-	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
++	if (uffd_register(uffd, area_dst, nr_pages * page_size,
++			  true, test_uffdio_wp, false))
+ 		err("register failure");
+ 
+-	assert_expected_ioctls_present(
+-		uffdio_register.mode, uffdio_register.ioctls);
+-
+ 	if (area_dst_alias) {
+ 		/* Needed this to test zeropage-retry on shared memory */
+-		uffdio_register.range.start = (unsigned long) area_dst_alias;
+-		if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
++		if (uffd_register(uffd, area_dst_alias, nr_pages * page_size,
++				  true, test_uffdio_wp, false))
+ 			err("register failure");
+ 	}
+ 
+@@ -498,7 +489,6 @@ static int userfaultfd_zeropage_test(void)
+ 
+ static int userfaultfd_events_test(void)
+ {
+-	struct uffdio_register uffdio_register;
+ 	pthread_t uffd_mon;
+ 	int err, features;
+ 	pid_t pid;
+@@ -514,17 +504,10 @@ static int userfaultfd_events_test(void)
+ 
+ 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+ 
+-	uffdio_register.range.start = (unsigned long) area_dst;
+-	uffdio_register.range.len = nr_pages * page_size;
+-	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+-	if (test_uffdio_wp)
+-		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
+-	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
++	if (uffd_register(uffd, area_dst, nr_pages * page_size,
++			  true, test_uffdio_wp, false))
+ 		err("register failure");
+ 
+-	assert_expected_ioctls_present(
+-		uffdio_register.mode, uffdio_register.ioctls);
+-
+ 	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, &stats))
+ 		err("uffd_poll_thread create");
+ 
+@@ -550,7 +533,6 @@ static int userfaultfd_events_test(void)
+ 
+ static int userfaultfd_sig_test(void)
+ {
+-	struct uffdio_register uffdio_register;
+ 	unsigned long userfaults;
+ 	pthread_t uffd_mon;
+ 	int err, features;
+@@ -566,17 +548,10 @@ static int userfaultfd_sig_test(void)
+ 
+ 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+ 
+-	uffdio_register.range.start = (unsigned long) area_dst;
+-	uffdio_register.range.len = nr_pages * page_size;
+-	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+-	if (test_uffdio_wp)
+-		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
+-	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
++	if (uffd_register(uffd, area_dst, nr_pages * page_size,
++			  true, test_uffdio_wp, false))
+ 		err("register failure");
+ 
+-	assert_expected_ioctls_present(
+-		uffdio_register.mode, uffdio_register.ioctls);
+-
+ 	if (faulting_process(1))
+ 		err("faulting process failed");
+ 
+@@ -629,7 +604,6 @@ void check_memory_contents(char *p)
+ static int userfaultfd_minor_test(void)
+ {
+ 	unsigned long p;
+-	struct uffdio_register uffdio_register;
+ 	pthread_t uffd_mon;
+ 	char c;
+ 	struct uffd_stats stats = { 0 };
+@@ -642,17 +616,10 @@ static int userfaultfd_minor_test(void)
+ 
+ 	uffd_test_ctx_init(uffd_minor_feature());
+ 
+-	uffdio_register.range.start = (unsigned long)area_dst_alias;
+-	uffdio_register.range.len = nr_pages * page_size;
+-	uffdio_register.mode = UFFDIO_REGISTER_MODE_MINOR;
+-	if (test_uffdio_wp)
+-		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
+-	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
++	if (uffd_register(uffd, area_dst_alias, nr_pages * page_size,
++			  false, test_uffdio_wp, true))
+ 		err("register failure");
+ 
+-	assert_expected_ioctls_present(
+-		uffdio_register.mode, uffdio_register.ioctls);
+-
+ 	/*
+ 	 * After registering with UFFD, populate the non-UFFD-registered side of
+ 	 * the shared mapping. This should *not* trigger any UFFD minor faults.
+@@ -777,7 +744,6 @@ static void userfaultfd_wp_unpopulated_test(int pagemap_fd)
+ 
+ static void userfaultfd_pagemap_test(unsigned int test_pgsize)
+ {
+-	struct uffdio_register uffdio_register;
+ 	int pagemap_fd;
+ 	uint64_t value;
+ 
+@@ -805,10 +771,8 @@ static void userfaultfd_pagemap_test(unsigned int test_pgsize)
+ 			err("madvise(MADV_NOHUGEPAGE) failed");
+ 	}
+ 
+-	uffdio_register.range.start = (unsigned long) area_dst;
+-	uffdio_register.range.len = nr_pages * page_size;
+-	uffdio_register.mode = UFFDIO_REGISTER_MODE_WP;
+-	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
++	if (uffd_register(uffd, area_dst, nr_pages * page_size,
++			  false, true, false))
+ 		err("register failed");
+ 
+ 	pagemap_fd = pagemap_open();
+@@ -858,8 +822,8 @@ static int userfaultfd_stress(void)
+ {
+ 	void *area;
+ 	unsigned long nr;
+-	struct uffdio_register uffdio_register;
+ 	struct uffd_stats uffd_stats[nr_cpus];
++	uint64_t mem_size = nr_pages * page_size;
+ 
+ 	uffd_test_ctx_init(UFFD_FEATURE_WP_UNPOPULATED);
+ 
+@@ -894,20 +858,13 @@ static int userfaultfd_stress(void)
+ 			fcntl(uffd, F_SETFL, uffd_flags & ~O_NONBLOCK);
+ 
+ 		/* register */
+-		uffdio_register.range.start = (unsigned long) area_dst;
+-		uffdio_register.range.len = nr_pages * page_size;
+-		uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+-		if (test_uffdio_wp)
+-			uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
+-		if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
++		if (uffd_register(uffd, area_dst, mem_size,
++				  true, test_uffdio_wp, false))
+ 			err("register failure");
+-		assert_expected_ioctls_present(
+-			uffdio_register.mode, uffdio_register.ioctls);
+ 
+ 		if (area_dst_alias) {
+-			uffdio_register.range.start = (unsigned long)
+-				area_dst_alias;
+-			if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
++			if (uffd_register(uffd, area_dst_alias, mem_size,
++					  true, test_uffdio_wp, false))
+ 				err("register failure alias");
+ 		}
+ 
+@@ -949,12 +906,10 @@ static int userfaultfd_stress(void)
+ 				 nr_pages * page_size, false);
+ 
+ 		/* unregister */
+-		if (ioctl(uffd, UFFDIO_UNREGISTER, &uffdio_register.range))
++		if (uffd_unregister(uffd, area_dst, mem_size))
+ 			err("unregister failure");
+ 		if (area_dst_alias) {
+-			uffdio_register.range.start = (unsigned long) area_dst;
+-			if (ioctl(uffd, UFFDIO_UNREGISTER,
+-				  &uffdio_register.range))
++			if (uffd_unregister(uffd, area_dst_alias, mem_size))
+ 				err("unregister failure alias");
+ 		}
+ 
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index 8e9da621764a..10e76400ed70 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -1,6 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <string.h>
+ #include <fcntl.h>
++#include <sys/ioctl.h>
++#include <linux/userfaultfd.h>
+ #include "../kselftest.h"
+ #include "vm_util.h"
+ 
+@@ -193,3 +195,38 @@ unsigned long default_huge_page_size(void)
+ 	fclose(f);
+ 	return hps;
+ }
 +
-+#ifdef __NR_userfaultfd
-+
-+int main(int argc, char *argv[])
++int uffd_register(int uffd, void *addr, uint64_t len,
++		  bool miss, bool wp, bool minor)
 +{
-+	return KSFT_PASS;
++	struct uffdio_register uffdio_register = { 0 };
++	uint64_t mode = 0;
++	int ret = 0;
++
++	if (miss)
++		mode |= UFFDIO_REGISTER_MODE_MISSING;
++	if (wp)
++		mode |= UFFDIO_REGISTER_MODE_WP;
++	if (minor)
++		mode |= UFFDIO_REGISTER_MODE_MINOR;
++
++	uffdio_register.range.start = (unsigned long)addr;
++	uffdio_register.range.len = len;
++	uffdio_register.mode = mode;
++
++	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
++		ret = -errno;
++
++	return ret;
 +}
 +
-+#else /* __NR_userfaultfd */
-+
-+#warning "missing __NR_userfaultfd definition"
-+
-+int main(void)
++int uffd_unregister(int uffd, void *addr, uint64_t len)
 +{
-+	printf("Skipping %s (missing __NR_userfaultfd)\n", __file__);
-+	return KSFT_SKIP;
-+}
++	struct uffdio_range range = { .start = (uintptr_t)addr, .len = len };
++	int ret = 0;
 +
-+#endif /* __NR_userfaultfd */
++	if (ioctl(uffd, UFFDIO_UNREGISTER, &range) == -1)
++		ret = -errno;
++
++	return ret;
++}
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index d9fadddb5c69..a67db8432855 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -45,6 +45,13 @@ bool check_huge_shmem(void *addr, int nr_hpages, uint64_t hpage_size);
+ int64_t allocate_transhuge(void *ptr, int pagemap_fd);
+ unsigned long default_huge_page_size(void);
+ 
++int uffd_open_dev(unsigned int flags);
++int uffd_open_sys(unsigned int flags);
++int uffd_open(unsigned int flags);
++int uffd_register(int uffd, void *addr, uint64_t len,
++		  bool miss, bool wp, bool minor);
++int uffd_unregister(int uffd, void *addr, uint64_t len);
++
+ /*
+  * On ppc64 this will only work with radix 2M hugepage size
+  */
 -- 
 2.39.1
 
