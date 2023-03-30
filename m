@@ -2,270 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738806D127C
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA366D127E
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbjC3Wq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 18:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S231137AbjC3Wrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 18:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbjC3Wqo (ORCPT
+        with ESMTP id S231161AbjC3Wrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 18:46:44 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F413A18497;
-        Thu, 30 Mar 2023 15:46:11 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id h15so17684883vsh.0;
-        Thu, 30 Mar 2023 15:46:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680216370;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4EQSMQs5GAUSHzo+hKN5Bk3dJVN6YWS21XRsOUj0x+w=;
-        b=nh28FL2qHIqiboX9rLnHjQQQAlv484JpH9ACfhTVosb05+8yjV5LJDAJpA+of5gqrg
-         SJ8fFOW2ZuaNuB0+qNIARmjSEWkmTrRDu9YxSLopwyJnIlW3gTj/ZZdQve+xEDqwyf5m
-         gJkhvrXnE+UatJXGty4j+b/zEC01+ADh+bjvTgmwu/RlbdDM0XTOY6bvan31LT8uGjOE
-         hbc4CV7jsXdYcMB3Gue8jNklOY2AEjntRg9we2cxW7yhopD3jd/VBfPHum7n/RP7HtAd
-         iwppxh3rRiv1131olF2milFcXQq5ptnA6ca/zGjAWnepoLZlYQETm/PY3DG6gpVijBvD
-         hzuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680216370;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4EQSMQs5GAUSHzo+hKN5Bk3dJVN6YWS21XRsOUj0x+w=;
-        b=A7qCdZNYwZcRc3ENTXZ+VnyFMI3Ygl9LDx/TQykg8VfdpTm2CozUCwCF38BhzMcPDL
-         cz8DSZd6jAyLWXigwKi+j9zymXL38KCaCJygORBBtqoKfd2vYyxxArUtIo1bphKQZLdV
-         VEe2CHXs6e7efsV3k/S5iDcLVJ47RF9NXpNcPrT8Z88JifoO1lwaMDGaKbxgmWuKmgur
-         DurlYEfW7YriLLVYO1E7Iz1xyXE8NBje/B7IpcRnqVWdisRNiCcHR43XoJhOQ0XYWHhq
-         aRc9a/0633ZSzAR/8HM2BvBpX0Op7dNubgGBWyXYxtKvqpGcmIBVk4/FxpXY/vI9VcJF
-         +Wgw==
-X-Gm-Message-State: AAQBX9df0X1IhPXTQmLtIaCvaS3+w8hcartQ4nZV2PpzP9IgfMac/SP1
-        RLA0NewiXgh25yVcpI0hedSLCB2lVXv52XX2xBg=
-X-Google-Smtp-Source: AKy350ZNvBnnpcdcvbix66uxlX53AEvGhtPQavOgxlBpbqhGRnxmOdwEvIkB8JOy1dCLh5rYMA/esqvpHXVPn9Xtv2A=
-X-Received: by 2002:a67:d88e:0:b0:426:3a3d:180b with SMTP id
- f14-20020a67d88e000000b004263a3d180bmr13165011vsj.5.1680216369880; Thu, 30
- Mar 2023 15:46:09 -0700 (PDT)
+        Thu, 30 Mar 2023 18:47:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF79810260;
+        Thu, 30 Mar 2023 15:47:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98133621B6;
+        Thu, 30 Mar 2023 22:47:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF273C433D2;
+        Thu, 30 Mar 2023 22:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680216423;
+        bh=4jYmhmp47uOvZtdHQ0v//zemjNfZtnZjGHBhC5uAjH4=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=GUinQEY5wUkcVKqQXVUPhdjIYsJgmOVeiSHzfTNUqk/yqyUzzVZuGynKUPFllOWXr
+         DyvY8fm8360BN3oelhk0WBJMHhNhqhr1SSS4WXSduXQrbmhBXIG116utuEma4DGvOI
+         rqehKwxAw1nusqImrnUFV2rf3pKBrygJ8C6OUbqMglys69t+FQTlHEkr3hDG9Abz6t
+         ieRmRbCGKAovAnSQrXytpaVAw416TSqo4dURH7jJ4P20alVoQg98yx2SlymdU8Cx/3
+         lB/Z6LqWF0n/EC5p3Ue8TNyCnb6qg9Tc2jNBYQS3S9by4+qEIxexVcvYaRPA6j78NH
+         pKqZe5mF9YNyg==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 8B0551540476; Thu, 30 Mar 2023 15:47:02 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 15:47:02 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, hch@lst.de
+Subject: [PATCH rcu 0/20] Further shrink srcu_struct to promote cache locality
+Message-ID: <f1b6cd5f-f0b7-4748-abd5-0dcfef0ce126@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-From:   jim.cromie@gmail.com
-Date:   Thu, 30 Mar 2023 16:45:43 -0600
-Message-ID: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
-Subject: kmemleaks on ac3b43283923 ("module: replace module_layout with module_memory")
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, song@kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Luis, etal
+Hello!
 
-kmemleak is reporting 19 leaks during boot
+This post-RFC series shrinks the srcu_struct structure to the bare minimum
+required to support SRCU readers, relegating the remaining fields to a new
+srcu_usage structure.  Statically allocated srcu_struct structures created
+by DEFINE_SRCU() and DEFINE_STATIC_SRCU() have statically allocated
+srcu_usage structures, but those required for dynamically allocated
+srcu_struct structures that are initialized using init_srcu_struct()
+are dynamically allocated.
 
-because the hexdumps appeared to have module-names,
-and Ive been hacking nearby, and see the same names
-every time I boot my test-vm, I needed a clearer picture
-Jason corroborated and bisected.
+The results is a reduction in the size of an srcu_struct structure from
+a couple hundred bytes to just 24 bytes on x86_64 systems.  This can be
+helpful when SRCU readers are used in a fastpath for which the srcu_struct
+structure must be embedded in another structure, and especially where
+that fastpath also needs to access fields both before and after the
+srcu_struct structure.
 
-the 19 leaks split into 2 groups,
-9 with names of builtin modules in the hexdump,
-all with the same backtrace
-9 without module-names (with a shared backtrace)
-+1 wo name-ish and a separate backtrace
+This series takes baby steps, in part because breaking SRCU means that
+you get absolutely no console output.  Yes, I did learn this the hard way.
+Why do you ask?  ;-)
 
+Here are those baby steps:
 
-bash-5.2# ./grok_kmemleak -n
-this prints not-module-name set 1st, then the "module"-ish
+1.	rcu-tasks: Fix warning for unused tasks_rcu_exit_srcu.
 
-not: bless( {
-  'backtraces' => {
-    '[<0000000003a4e200>] __kmalloc_node_track_caller+0x44/0xb0
-    [<0000000072a38f0a>] memdup_user+0x26/0x90
-    [<000000005669249f>] strndup_user+0x47/0x70
-    [<00000000a8de6ea1>] load_module+0x9d5/0x10b0
-    [<000000000132739b>] __do_sys_finit_module+0xe4/0x160
-    [<000000005ac0591a>] do_syscall_64+0x34/0x80
-    [<0000000078e9b61a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0' => 9,
-    '[<00000000f9318e0d>] kmalloc_trace+0x26/0x60
-    [<0000000056fc149d>] ref_module+0xd6/0x200
-    [<0000000059adcd74>] resolve_symbol+0x2ae/0x320
-    [<000000006a75da8e>] simplify_symbols+0x1ae/0x5a0
-    [<0000000061d9061a>] load_module+0x529/0x10b0
-    [<000000000132739b>] __do_sys_finit_module+0xe4/0x160
-    [<000000005ac0591a>] do_syscall_64+0x34/0x80
-    [<0000000078e9b61a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0' => 1
-  },
-  'hexdumps' => {
-    '00 19 b2 fc 00 c8 52 8a                          ......R.' => 1,
-    '00 42 7d fc 00 07 09 a2                          .B}.....' => 1,
-    '00 42 ba fc 00 c0 0f 6a                          .B.....j' => 1,
-    '00 43 48 fc 00 32 0c 8a                          .CH..2..' => 1,
-    '00 44 48 fc 00 32 05 92                          .DH..2..' => 1,
-    '00 4f 7d fc 00 07 0c 42                          .O}....B' => 1,
-    '00 61 a7 fc 00 dd 2d 52                          .a....-R' => 1,
-    '00 62 a7 fc 00 dd 29 f2                          .b....).' => 1,
-    '00 69 a7 fc 00 dd 2a 62                          .i....*b' => 1,
-    '38 86 25 c0 ff ff ff ff 38 86 25 c0 ff ff ff ff  8.%.....8.%.....' => 1
-  },
-  'users' => {
-    'comm "(udev-worker)", pid 218,' => 1,
-    'comm "(udev-worker)", pid 219,' => 2,
-    'comm "(udev-worker)", pid 225,' => 1,
-    'comm "(udev-worker)", pid 226,' => 1,
-    'comm "(udev-worker)", pid 229,' => 5
-  }
-}, 'LeakSet' )
-mods: bless( {
-  'backtraces' => {
-    '[<0000000003a4e200>] __kmalloc_node_track_caller+0x44/0xb0
-    [<00000000a39d2d44>] kstrdup+0x30/0x60
-    [<000000003584675a>] kobject_set_name_vargs+0x2d/0xb0
-    [<00000000fd79ba60>] kobject_init_and_add+0x9d/0x100
-    [<00000000b107c417>] mod_sysfs_setup+0xf8/0x3c0
-    [<0000000082c80748>] load_module+0xf16/0x10b0
-    [<000000000132739b>] __do_sys_finit_module+0xe4/0x160
-    [<000000005ac0591a>] do_syscall_64+0x34/0x80
-    [<0000000078e9b61a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0' => 9
-  },
-  'hexdumps' => {
-    '63 72 63 33 32 5f 70 63 6c 6d 75 6c 00 ca 32 3f  crc32_pclmul..2?' => 1,
-    '63 72 63 33 32 63 5f 69 6e 74 65 6c 00 dd 01 bf  crc32c_intel....' => 1,
-    '63 72 63 74 31 30 64 69 66 5f 70 63 6c 6d 75 6c  crct10dif_pclmul' => 1,
-    '67 68 61 73 68 5f 63 6c 6d 75 6c 6e 69 5f 69 6e  ghash_clmulni_in' => 1,
-    '69 32 63 5f 70 69 69 78 34 00 77 85 96 39 f4 3f  i2c_piix4.w..9.?' => 1,
-    '69 6e 74 65 6c 5f 72 61 70 6c 5f 63 6f 6d 6d 6f  intel_rapl_commo' => 1,
-    '69 6e 74 65 6c 5f 72 61 70 6c 5f 6d 73 72 00 9f  intel_rapl_msr..' => 1,
-    '70 63 73 70 6b 72 00 72                          pcspkr.r' => 1,
-    '73 65 72 69 6f 5f 72 61 77 00 c9 84 97 87 cb 3f  serio_raw......?' => 1
-  },
-  'users' => {
-    'comm "(udev-worker)", pid 218,' => 1,
-    'comm "(udev-worker)", pid 219,' => 1,
-    'comm "(udev-worker)", pid 225,' => 1,
-    'comm "(udev-worker)", pid 226,' => 1,
-    'comm "(udev-worker)", pid 229,' => 5
-  }
-}, 'LeakSet' )
+2.	Add whitespace to __SRCU_STRUCT_INIT() & __DEFINE_SRCU().
 
+3.	Use static init for statically allocated in-module srcu_struct.
 
-After a batch of modprobe, rmmod cycles on drm,
-I got more leaks.
-They have same backtrace as the original set
-only the user has changed, to "modprobe"
+4.	Begin offloading srcu_struct fields to srcu_update.
 
-:#> [98442.905272] kmemleak: 14 new suspected memory leaks (see
-/sys/kernel/debug/kmemleak)
-./grok_kmemleak -n
-not: bless( {
-  'backtraces' => {
-    '[<0000000003a4e200>] __kmalloc_node_track_caller+0x44/0xb0
-    [<0000000072a38f0a>] memdup_user+0x26/0x90
-    [<000000005669249f>] strndup_user+0x47/0x70
-    [<00000000a8de6ea1>] load_module+0x9d5/0x10b0
-    [<000000000132739b>] __do_sys_finit_module+0xe4/0x160
-    [<000000005ac0591a>] do_syscall_64+0x34/0x80
-    [<0000000078e9b61a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0' => 15,
-    '[<00000000f9318e0d>] kmalloc_trace+0x26/0x60
-    [<0000000056fc149d>] ref_module+0xd6/0x200
-    [<0000000059adcd74>] resolve_symbol+0x2ae/0x320
-    [<000000006a75da8e>] simplify_symbols+0x1ae/0x5a0
-    [<0000000061d9061a>] load_module+0x529/0x10b0
-    [<000000000132739b>] __do_sys_finit_module+0xe4/0x160
-    [<000000005ac0591a>] do_syscall_64+0x34/0x80
-    [<0000000078e9b61a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0' => 2
-  },
-  'hexdumps' => {
-    '00 19 b2 fc 00 c8 52 8a                          ......R.' => 1,
-    '00 2d 0d f8 04 77 62 a2                          .-...wb.' => 1,
-    '00 3f 4e fd 01 34 7a aa                          .?N..4z.' => 1,
-    '00 41 48 fc 00 32 03 9a                          .AH..2..' => 1,
-    '00 42 7d fc 00 07 09 a2                          .B}.....' => 1,
-    '00 42 ba fc 00 c0 0f 6a                          .B.....j' => 1,
-    '00 43 48 fc 00 32 0c 8a                          .CH..2..' => 1,
-    '00 44 48 fc 00 32 05 92                          .DH..2..' => 1,
-    '00 4e ba fc 00 c0 06 b2                          .N......' => 1,
-    '00 4f 7d fc 00 07 0c 42                          .O}....B' => 1,
-    '00 61 a7 fc 00 dd 2d 52                          .a....-R' => 1,
-    '00 62 a7 fc 00 dd 29 f2                          .b....).' => 1,
-    '00 69 a7 fc 00 dd 2a 62                          .i....*b' => 1,
-    '00 e8 f4 fc 00 8e aa 4a                          .......J' => 1,
-    '00 ee f4 fc 00 8e aa 62                          .......b' => 1,
-    '38 86 25 c0 ff ff ff ff 38 86 25 c0 ff ff ff ff  8.%.....8.%.....' => 1,
-    '80 70 0c 08 80 88 ff ff 38 7a 42 c0 ff ff ff ff  .p......8zB.....' => 1
-  },
-  'users' => {
-    'comm "(udev-worker)", pid 218,' => 1,
-    'comm "(udev-worker)", pid 219,' => 2,
-    'comm "(udev-worker)", pid 225,' => 1,
-    'comm "(udev-worker)", pid 226,' => 1,
-    'comm "(udev-worker)", pid 229,' => 5,
-    'comm "modprobe", pid 673,' => 1,
-    'comm "modprobe", pid 683,' => 3,
-    'comm "modprobe", pid 690,' => 1,
-    'comm "modprobe", pid 693,' => 2
-  }
-}, 'LeakSet' )
-mods: bless( {
-  'backtraces' => {
-    '[<0000000003a4e200>] __kmalloc_node_track_caller+0x44/0xb0
-    [<00000000a39d2d44>] kstrdup+0x30/0x60
-    [<000000003584675a>] kobject_set_name_vargs+0x2d/0xb0
-    [<00000000fd79ba60>] kobject_init_and_add+0x9d/0x100
-    [<00000000b107c417>] mod_sysfs_setup+0xf8/0x3c0
-    [<0000000082c80748>] load_module+0xf16/0x10b0
-    [<000000000132739b>] __do_sys_finit_module+0xe4/0x160
-    [<000000005ac0591a>] do_syscall_64+0x34/0x80
-    [<0000000078e9b61a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0' => 15,
-    '[<00000000f9318e0d>] kmalloc_trace+0x26/0x60
-    [<0000000056fc149d>] ref_module+0xd6/0x200
-    [<0000000059adcd74>] resolve_symbol+0x2ae/0x320
-    [<000000006a75da8e>] simplify_symbols+0x1ae/0x5a0
-    [<0000000061d9061a>] load_module+0x529/0x10b0
-    [<000000000132739b>] __do_sys_finit_module+0xe4/0x160
-    [<000000005ac0591a>] do_syscall_64+0x34/0x80
-    [<0000000078e9b61a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0' => 1
-  },
-  'hexdumps' => {
-    '38 7a 42 c0 ff ff ff ff 80 97 bf 09 80 88 ff ff  8zB.............' => 1,
-    '63 65 63 00 04 77 6a c2                          cec..wj.' => 1,
-    '63 72 63 33 32 5f 70 63 6c 6d 75 6c 00 ca 32 3f  crc32_pclmul..2?' => 1,
-    '63 72 63 33 32 63 5f 69 6e 74 65 6c 00 dd 01 bf  crc32c_intel....' => 1,
-    '63 72 63 74 31 30 64 69 66 5f 70 63 6c 6d 75 6c  crct10dif_pclmul' => 1,
-    '67 68 61 73 68 5f 63 6c 6d 75 6c 6e 69 5f 69 6e  ghash_clmulni_in' => 1,
-    '69 32 63 5f 61 6c 67 6f 5f 62 69 74 00 f2 db 3f  i2c_algo_bit...?' => 1,
-    '69 32 63 5f 70 69 69 78 34 00 77 85 96 39 f4 3f  i2c_piix4.w..9.?' => 1,
-    '69 6e 74 65 6c 5f 72 61 70 6c 5f 63 6f 6d 6d 6f  intel_rapl_commo' => 1,
-    '69 6e 74 65 6c 5f 72 61 70 6c 5f 6d 73 72 00 9f  intel_rapl_msr..' => 1,
-    '69 6f 6d 6d 75 5f 76 32 00 ae da 84 97 94 b1 5f  iommu_v2......._' => 1,
-    '6d 78 6d 5f 77 6d 69 00                          mxm_wmi.' => 1,
-    '70 63 73 70 6b 72 00 72                          pcspkr.r' => 1,
-    '73 65 72 69 6f 5f 72 61 77 00 c9 84 97 87 cb 3f  serio_raw......?' => 1,
-    '76 69 64 65 6f 00 ae 82                          video...' => 1,
-    '77 6d 69 00 00 c0 06 52                          wmi....R' => 1
-  },
-  'users' => {
-    'comm "(udev-worker)", pid 218,' => 1,
-    'comm "(udev-worker)", pid 219,' => 1,
-    'comm "(udev-worker)", pid 225,' => 1,
-    'comm "(udev-worker)", pid 226,' => 1,
-    'comm "(udev-worker)", pid 229,' => 5,
-    'comm "modprobe", pid 673,' => 1,
-    'comm "modprobe", pid 683,' => 4,
-    'comm "modprobe", pid 690,' => 1,
-    'comm "modprobe", pid 693,' => 1
-  }
-}, 'LeakSet' )
-:#>
+5.	Move ->level from srcu_struct to srcu_usage.
 
-I hope all this helps to sort out what the kmemleak is,
-let me know how I can help further
+6.	Move ->srcu_size_state from srcu_struct to srcu_usage.
 
-Jim
+7.	Move ->srcu_cb_mutex from srcu_struct to srcu_usage.
+
+8.	Move ->lock initialization after srcu_usage allocation.
+
+9.	Move ->lock from srcu_struct to srcu_usage.
+
+10.	Move ->srcu_gp_mutex from srcu_struct to srcu_usage.
+
+11.	Move grace-period fields from srcu_struct to srcu_usage.
+
+12.	Move heuristics fields from srcu_struct to srcu_usage.
+
+13.	Move ->sda_is_static from srcu_struct to srcu_usage.
+
+14.	Move srcu_barrier() fields from srcu_struct to srcu_usage.
+
+15.	Move work-scheduling fields from srcu_struct to srcu_usage.
+
+16.	Check for readers at module-exit time.
+
+17.	Fix long lines in srcu_get_delay().
+
+18.	Fix long lines in cleanup_srcu_struct().
+
+19.	Fix long lines in srcu_gp_end().
+
+20.	Fix long lines in srcu_funnel_gp_start().
+
+Changes since the RFC series:
+https://lore.kernel.org/all/3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop/
+
+1.	Add checks for readers of in-module statically allocated
+	srcu_struct structures persisting past module unload.
+
+2.	Apply Tested-by tags.
+
+3.	Apply feedback from "Zhang, Qiang1" and kernel test robot,
+	perhaps most notably getting rid of memory leaks and improving
+	the handling of statically allocated srcu_struct structures
+	defined within modules.
+
+4.	Drop the commit removing extraneous parentheses given the desire
+	to push this into the v6.4 merge window, the fact that this
+	commit generates conflicts with other v6.4 RCU commits, and the
+	low value of this commit.  It therefore remains in the v6.5 pile.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ b/include/linux/notifier.h |    5 
+ b/include/linux/srcutiny.h |    6 
+ b/include/linux/srcutree.h |   28 +-
+ b/kernel/rcu/rcu.h         |    6 
+ b/kernel/rcu/srcutree.c    |   19 +
+ b/kernel/rcu/tasks.h       |    2 
+ include/linux/srcutree.h   |  123 ++++++-----
+ kernel/rcu/srcutree.c      |  495 +++++++++++++++++++++++----------------------
+ 8 files changed, 370 insertions(+), 314 deletions(-)
