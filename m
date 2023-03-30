@@ -2,194 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610EF6D0FBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096B36D0FC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjC3ULD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S229660AbjC3ULl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjC3ULB (ORCPT
+        with ESMTP id S229436AbjC3ULj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:11:01 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 560459EF3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:11:00 -0700 (PDT)
-Received: (qmail 212186 invoked by uid 1000); 30 Mar 2023 16:10:59 -0400
-Date:   Thu, 30 Mar 2023 16:10:59 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>,
-        syzbot <syzbot+1cb937c125adb93fad2d@syzkaller.appspotmail.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in shark_write_reg/usb_submit_urb, WARNING in
- shark_write_val/usb_submit_urb
-Message-ID: <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
-References: <00000000000096e4f905f81b2702@google.com>
+        Thu, 30 Mar 2023 16:11:39 -0400
+Received: from smtp41.i.mail.ru (smtp41.i.mail.ru [95.163.41.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A86172A;
+        Thu, 30 Mar 2023 13:11:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=s+oBr5dCSwSMElY6XhVdi34tfdIxBUPVWSpJs/QKqpY=;
+        t=1680207098;x=1680297098; 
+        b=jEhMSwj4eCuKJLqIZwKtbbOp0nX9N33t5YTNhQKzP4IWIK0dwgmt+F9zzg5CHaAezOwQCeY/Fttn0Us8GPIKEpFEFLwfG/yI7yHYuA6DBCcE3o85pE4WgnhC1mE1yGyifS/y//6qsa/9YELP6La0NSEgJ84OO1s35aNZJFU83LyL/Ze8sgu+SEqJGytT52rf0EgDVWO2AwralUqq/y/JTb3fGwqVz5k8mA4alVNUlmVxWf2fLrMXjOKSzqfOirzqkb6XYcNAKmoh6fLpYVOz+vE0HIJiiflWFKgITkXV0A85anFoASzlALoNLdOWoCLzk+ozu8lBBa6q+pUeT9CG1Q==;
+Received: by smtp41.i.mail.ru with esmtpa (envelope-from <listdansp@mail.ru>)
+        id 1phycS-007xQb-Do; Thu, 30 Mar 2023 23:11:36 +0300
+From:   Danila Chernetsov <listdansp@mail.ru>
+To:     stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Danila Chernetsov <listdansp@mail.ru>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: [PATCH 5.10 0/1] staging: rtl8192u: Add null check in rtl8192_usb_initendpoints
+Date:   Thu, 30 Mar 2023 20:11:06 +0000
+Message-Id: <20230330201107.17647-1-listdansp@mail.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000096e4f905f81b2702@google.com>
-X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp41.i.mail.ru; auth=pass smtp.auth=listdansp@mail.ru smtp.mailfrom=listdansp@mail.ru
+X-Mailru-Src: smtp
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD9381BDEF7E890522374E96C25A4C93FA7A12044CB9EF771D1182A05F538085040273A521DCF28E9018BDD7F0FADC70E1DBF2FF027E43AE594D0F85933A76E85ED
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7DB84ED444C624799EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006373D58C44ED3182E498638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D86D69A6A09FF8BD4E48DDC0995DE31FF06F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE73CD73D99384BA5CA9FA2833FD35BB23D9E625A9149C048EE437C869540D2AB0FBDFBBEFFF4125B51D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8B972D20C7389F068BA471835C12D1D977C4224003CC836476EB9C4185024447017B076A6E789B0E975F5C1EE8F4F765FCB54ED5A1C00E98C93AA81AA40904B5D9CF19DD082D7633A078D18283394535A93AA81AA40904B5D98AA50765F7900637C17EAD96B13C99AED81D268191BDAD3D3666184CF4C3C14F3FC91FA280E0CE3D1A620F70A64A45A98AA50765F7900637F9425D8FA97DB4396D1867E19FE1407959CC434672EE6371089D37D7C0E48F6C8AA50765F790063752BC29AF30EF825DEFF80C71ABB335746BA297DBC24807EABDAD6C7F3747799A
+X-C1DE0DAB: 0D63561A33F958A5D5A42AB246F214E111877D0E07F277A99F3028180EB9E46DF87CCE6106E1FC07E67D4AC08A07B9B0CE135D2742255B359C5DF10A05D560A950611B66E3DA6D700B0A020F03D25A0978444BBB7636F62ACB5012B2E24CD356
+X-C8649E89: 1C3962B70DF3F0ADBF74143AD284FC7177DD89D51EBB7742DC8270968E61249B1004E42C50DC4CA955A7F0CF078B5EC49A30900B95165D3429538671E6527D326F539B2FF2DA5D33CF989C0D08BEDBCB1AEA475F8D49D60DA86E506B070084521D7E09C32AA3244C09ECB328DFCB224094E8CF3631C30378C3B3ADDA61883BB5DCA3B3C10BC03908
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojoVQ5iBoMj9alA2rtSSp3Kw==
+X-Mailru-Sender: F244DC1430FACE54496B7D2C616565FD134E7648211741201D697B3E1A1807172DF693117FD8693CCE8DDCF05647143DC77752E0C033A69E3DC0BC7494A416CF0226C39053983FF0B4A721A3011E896F
+X-Mras: Ok
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reference: https://syzkaller.appspot.com/bug?extid=4b3f8190f6e13b3efd74
-Reference: https://syzkaller.appspot.com/bug?extid=1cb937c125adb93fad2d
+SVACE reports return value of a function 'usb_alloc_urb' is dereferenced
+ without checking for null in 5.10 stable releases.
+The problem has been fixed by the following 
+patch which can be cleanly applied to the 5.10 branch.
 
-The radio-shark driver just assumes that the endpoints it uses will be
-present, without checking.  This adds an appropriate check.
-
-Alan Stern
-
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
-
- drivers/usb/core/usb.c |   70 +++++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/usb.h    |    7 ++++
- 2 files changed, 77 insertions(+)
-
-Index: usb-devel/drivers/usb/core/usb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/usb.c
-+++ usb-devel/drivers/usb/core/usb.c
-@@ -207,6 +207,76 @@ int usb_find_common_endpoints_reverse(st
- EXPORT_SYMBOL_GPL(usb_find_common_endpoints_reverse);
- 
- /**
-+ * usb_find_endpoint() - Given an endpoint address, search for the endpoint's
-+ * usb_host_endpoint structure in an interface's current altsetting.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addr: the endpoint address (number and direction) to find
-+ *
-+ * Search the altsetting's list of endpoints for one with the specified address.
-+ *
-+ * Return: Pointer to the usb_host_endpoint if found, %NULL otherwise.
-+ */
-+struct usb_host_endpoint __must_check *usb_find_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr)
-+{
-+	int n;
-+	struct usb_host_endpoint *ep;
-+
-+	n = intf->cur_altsetting->desc.bNumEndpoints;
-+	ep = intf->cur_altsetting->endpoint;
-+	for (; n > 0; (--n, ++ep)) {
-+		if (ep->desc.bEndpointAddress == ep_addr)
-+			return ep;
-+	}
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(usb_find_endpoint);
-+
-+/**
-+ * usb_check_bulk_endpoint - Check whether an interface's current altsetting
-+ * contains a bulk endpoint with the given address.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addr: the endpoint address (number and direction) to look for
-+ *
-+ * Search for an endpoint with the specified address and check its type.
-+ *
-+ * Return: %true if the endpoint is found and is bulk, %false otherwise.
-+ */
-+bool usb_check_bulk_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr)
-+{
-+	const struct usb_host_endpoint *ep;
-+
-+	ep = usb_find_endpoint(intf, ep_addr);
-+	if (!ep)
-+		return false;
-+	return usb_endpoint_xfer_bulk(&ep->desc);
-+}
-+EXPORT_SYMBOL_GPL(usb_check_bulk_endpoint);
-+
-+/**
-+ * usb_check_int_endpoint - Check whether an interface's current altsetting
-+ * contains an interrupt endpoint with the given address.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addr: the endpoint address (number and direction) to look for
-+ *
-+ * Search for an endpoint with the specified address and check its type.
-+ *
-+ * Return: %true if the endpoint is found and is interrupt, %false otherwise.
-+ */
-+bool usb_check_int_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr)
-+{
-+	const struct usb_host_endpoint *ep;
-+
-+	ep = usb_find_endpoint(intf, ep_addr);
-+	if (!ep)
-+		return false;
-+	return usb_endpoint_xfer_int(&ep->desc);
-+}
-+EXPORT_SYMBOL_GPL(usb_check_int_endpoint);
-+
-+/**
-  * usb_find_alt_setting() - Given a configuration, find the alternate setting
-  * for the given interface.
-  * @config: the configuration to search (not necessarily the current config).
-Index: usb-devel/include/linux/usb.h
-===================================================================
---- usb-devel.orig/include/linux/usb.h
-+++ usb-devel/include/linux/usb.h
-@@ -292,6 +292,13 @@ void usb_put_intf(struct usb_interface *
- #define USB_MAXINTERFACES	32
- #define USB_MAXIADS		(USB_MAXINTERFACES/2)
- 
-+struct usb_host_endpoint __must_check *usb_find_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr);
-+bool usb_check_bulk_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr);
-+bool usb_check_int_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr);
-+
- /*
-  * USB Resume Timer: Every Host controller driver should drive the resume
-  * signalling on the bus for the amount of time defined by this macro.
-
- drivers/media/radio/radio-shark.c  |    7 +++++++
- drivers/media/radio/radio-shark2.c |    7 +++++++
- 2 files changed, 14 insertions(+)
-
-Index: usb-devel/drivers/media/radio/radio-shark.c
-===================================================================
---- usb-devel.orig/drivers/media/radio/radio-shark.c
-+++ usb-devel/drivers/media/radio/radio-shark.c
-@@ -317,6 +317,13 @@ static int usb_shark_probe(struct usb_in
- 	struct shark_device *shark;
- 	int retval = -ENOMEM;
- 
-+	/* Are the expected endpoints present? */
-+	if (!usb_check_int_endpoint(intf, SHARK_IN_EP | USB_DIR_IN) ||
-+	    !usb_check_int_endpoint(intf, SHARK_OUT_EP | USB_DIR_OUT)) {
-+		dev_err(&intf->dev, "Invalid radioSHARK device\n");
-+		return -EINVAL;
-+	}
-+
- 	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
- 	if (!shark)
- 		return retval;
-Index: usb-devel/drivers/media/radio/radio-shark2.c
-===================================================================
---- usb-devel.orig/drivers/media/radio/radio-shark2.c
-+++ usb-devel/drivers/media/radio/radio-shark2.c
-@@ -283,6 +283,13 @@ static int usb_shark_probe(struct usb_in
- 	struct shark_device *shark;
- 	int retval = -ENOMEM;
- 
-+	/* Are the expected endpoints present? */
-+	if (!usb_check_int_endpoint(intf, SHARK_IN_EP | USB_DIR_IN) ||
-+	    !usb_check_int_endpoint(intf, SHARK_OUT_EP | USB_DIR_OUT)) {
-+		dev_err(&intf->dev, "Invalid radioSHARK2 device\n");
-+		return -EINVAL;
-+	}
-+
- 	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
- 	if (!shark)
- 		return retval;
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
