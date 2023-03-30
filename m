@@ -2,124 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A486C6D0044
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553E56D0047
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbjC3Jyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
+        id S229898AbjC3JzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjC3Jym (ORCPT
+        with ESMTP id S230181AbjC3Jys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:54:42 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E8940CF
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:54:40 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id j7so22746672ybg.4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:54:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680170079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pbyws3H75gB+yatcu0+FBMyILwRxUxSpq4AefwZkLKg=;
-        b=mZsCUYHtWVu0vKKEGZmsGvkF+uy4o1aUwHzHWz89XldmLe8AQt/HxwPKXCnk93KRbH
-         V8UAN9+MMCbN5JvfzvF+7noo3B3ZC1SlListXXAlyAe/Si2dth9gBK0ZYJ1pNZjq9WpB
-         iNKgAFfirtS5iYb0r3mNi+HVpohWdyNPRun52UqeTAcSf+8ut/tE0fXdPt8xlgEB0Xiy
-         Rj4pHSlWP9szJ+wDfC+QfLt2W4ckBGmT2H86xnDFs4tatnn3zZjeDGcEbbnYNyzNRnHm
-         anAKm5idqzYX1EilwXDVQL2PFUkUsY4u2ooCexDw3QuTQhI2n1gfk4TR7i0W9tXx8lZp
-         mHGw==
+        Thu, 30 Mar 2023 05:54:48 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2300B0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:54:46 -0700 (PDT)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CE74F3F22E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:54:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1680170084;
+        bh=T7mBxCfafRtBzm4CcOSBFKfHm4zEVrLF2OE++FUVsZo=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=ag+7bLwMLaQXgW057zXwxFJ2XPUwqi7UPRiylQLC16my+OGXlQKJWW41+F11Ai49a
+         p8ACLZ2aK1/ACHlWzRnJ/vaD6hZZS/VmdZU3Z9BptjsNFCm8I98XfQTCgXdmosR3Np
+         InGzyfszFYFgx/XyPnhVYlmbQM5sp3DhnAUqZnENfY2l/dJClV4OwQoya9jLFNmmaf
+         UKwukcDPgwR4yAzW83j43QIUqOhmFMmyJCwo5qOacVqdKFMHb22GUvEBwcdNIYKbhB
+         k4pTq6AM0eRMNH0DOOtrBimJAAd9xBkdhownS71bQu+4O1gZlPe18j1fexLpWmYhhl
+         f00bt79uQlXvA==
+Received: by mail-ed1-f71.google.com with SMTP id m18-20020a50d7d2000000b00501dfd867a4so26641680edj.20
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:54:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680170079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pbyws3H75gB+yatcu0+FBMyILwRxUxSpq4AefwZkLKg=;
-        b=b+87tcqkb6wA0p2gaQxijbnWG6j1rlr2lEtOFsRnu5+wi9iCgZQy8PesMAy5Q6vllX
-         uegx/oKK963A0eKh7aQEzquV9qkU0lyb8XjBO5iS8MRrXFlA7nN0o9PCo9ESnxjAia9O
-         Wp++90Wdh0aG7aHGJgXk8wcINlaCTYAI/qMC1EFZyuS3VM3wuNAN45fgASh4xBHGBCu9
-         u6JeMQchu7il03tL7Vdth6Qd8fLd9tZq7sfb3vqEufQv9iZ3/D8FDRrcB4zmoBXRtKlP
-         Xa8MPubsF9UR4rLeuJSq1JS+tHL4+YPW5SklQeZeUHQYZWf+vegkN20LyL+Mo1o1EcEO
-         Uf8w==
-X-Gm-Message-State: AAQBX9c0PeyddKILse/RAb9lTN5BdWgZxaoHpOzEWTrgyi40162IqO+/
-        DjsQG3uhkQ6BxElYI30PIW6hsFmocvQE9BraC/7LIQ==
-X-Google-Smtp-Source: AKy350bEejlHh/La/ICbG+v0y62RclEvzaIlO/L71B6Mcr7xujU2ePyASX64lF1cgA+JnYGg8IIpcjjXYY2L1pzN96g=
-X-Received: by 2002:a05:6902:1501:b0:b6d:80ab:8bb6 with SMTP id
- q1-20020a056902150100b00b6d80ab8bb6mr15155725ybu.1.1680170079704; Thu, 30 Mar
- 2023 02:54:39 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680170084; x=1682762084;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T7mBxCfafRtBzm4CcOSBFKfHm4zEVrLF2OE++FUVsZo=;
+        b=XmAI2B3WWJN2CwMl45XaXhf8t+0VA4ep8z3k8tUyhiv3SA9bI6wD4ds3u31jhQiv3x
+         Y70gAo4MPkQy0bzW/oI5+y0jJmzJZQFDtBZBeoSjAAGf03x0E1ypoUUmrtk90UwyZ+KK
+         Z/8iF/WZWOLGk3V1cirk5KpFexwQZbuwAt8SGT4pjwqXxyj5G0R1vlBwq7DHhFk96yCH
+         5vEw5imw41zZ16f66ahzoRA+RAfWEzk0hXYMByknhf3xJEnBXEJnisNw8xFH3Er5SZew
+         K3OT8BMqSAAHNkkK+x9RCl4SGIqlprWH0GXqso4pI1pKACQqOvk8DB7lQl+HOvBCbdhL
+         a4Rw==
+X-Gm-Message-State: AAQBX9cNwsXOSiKoQ4vx8oal9r08hCCB4TzcKIsrm5RIBp+A2v2CXdHK
+        iipXjzt1dqbvzYQLE1BNHLL7P1M61rp/acHragDErfPKEGI5BdjSiBNH13jS8UEM4hHBtg+x3MB
+        tzOQvMm0OoJpY7uZfjFnkq98nvdWSDWIH9IC7+RIZGA==
+X-Received: by 2002:a17:907:9a0c:b0:947:6fae:5d27 with SMTP id kr12-20020a1709079a0c00b009476fae5d27mr993709ejc.56.1680170084558;
+        Thu, 30 Mar 2023 02:54:44 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bKhnnWvol18CEKvEou2r/IMLnBhwUZQdPMuSULagsmAa7GsWb+yLs5E05+GXwlM3D3VmFXXg==
+X-Received: by 2002:a17:907:9a0c:b0:947:6fae:5d27 with SMTP id kr12-20020a1709079a0c00b009476fae5d27mr993692ejc.56.1680170084289;
+        Thu, 30 Mar 2023 02:54:44 -0700 (PDT)
+Received: from righiandr-XPS-13-7390.homenet.telecomitalia.it (host-79-33-132-140.retail.telecomitalia.it. [79.33.132.140])
+        by smtp.gmail.com with ESMTPSA id lj24-20020a170906f9d800b00932ba722482sm16703862ejb.149.2023.03.30.02.54.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 02:54:44 -0700 (PDT)
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Wojciech Drewek <wojciech.drewek@intel.com>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] l2tp: generate correct module alias strings
+Date:   Thu, 30 Mar 2023 11:54:42 +0200
+Message-Id: <20230330095442.363201-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com> <7h8rffyu9x.fsf@baylibre.com>
-In-Reply-To: <7h8rffyu9x.fsf@baylibre.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Thu, 30 Mar 2023 11:54:27 +0200
-Message-ID: <CAFGrd9p7oPvhZ8KL40XYfNi2CAdEd8BZWrXPqfcqu7DTSSg4Kw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/17] Improve the MT8365 SoC and EVK board support
-To:     Kevin Hilman <khilman@baylibre.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeu. 30 mars 2023 =C3=A0 02:09, Kevin Hilman <khilman@baylibre.com> a =
-=C3=A9crit :
->
-> Alexandre Mergnat <amergnat@baylibre.com> writes:
->
-> > This commits are based on the Fabien Parent <fparent@baylibre.com> work=
-.
-> >
-> > The purpose of this series is to add the following HWs / IPs support fo=
-r
-> > the mt8365-evk board:
-> > - Watchdog
-> > - Power Management Integrated Circuit "PMIC" wrapper
-> >   - MT6357 PMIC
-> > - MultiMediaCard "MMC" & Secure Digital "SD" controller
-> > - USB controller
-> > - Ethernet MAC controller
-> >
-> > Add CPU Freq & IDLE support for this board.
-> >
-> > This series depends to another one which add support for MT8365 SoC and
-> > EVK board [1].
->
-> It seems to depend on more than that series.  In order to test this, I
-> tried applying this series on top of Bero's minimal support (now in
-> linux-next), and it does not apply cleanly.
->
-> Could you please list all the dependencies that are not yet upstream.
+Commit 65b32f801bfb ("uapi: move IPPROTO_L2TP to in.h") moved the
+definition of IPPROTO_L2TP from a define to an enum, but since
+__stringify doesn't work properly with enums, we ended up breaking the
+modalias strings for the l2tp modules:
 
-Hi Kevin,
-You're right, it also depend to
-https://lore.kernel.org/all/20221122-mt8365-i2c-support-v6-0-e1009c8afd53@b=
-aylibre.com/
+ $ modinfo l2tp_ip l2tp_ip6 | grep alias
+ alias:          net-pf-2-proto-IPPROTO_L2TP
+ alias:          net-pf-2-proto-2-type-IPPROTO_L2TP
+ alias:          net-pf-10-proto-IPPROTO_L2TP
+ alias:          net-pf-10-proto-2-type-IPPROTO_L2TP
 
-Regards,
-Alex
+Use the resolved number directly in MODULE_ALIAS_*() macros (as we
+already do with SOCK_DGRAM) to fix the alias strings:
+
+$ modinfo l2tp_ip l2tp_ip6 | grep alias
+alias:          net-pf-2-proto-115
+alias:          net-pf-2-proto-115-type-2
+alias:          net-pf-10-proto-115
+alias:          net-pf-10-proto-115-type-2
+
+Moreover, fix the ordering of the parameters passed to
+MODULE_ALIAS_NET_PF_PROTO_TYPE() by switching proto and type.
+
+Fixes: 65b32f801bfb ("uapi: move IPPROTO_L2TP to in.h")
+Link: https://lore.kernel.org/lkml/ZCQt7hmodtUaBlCP@righiandr-XPS-13-7390
+Signed-off-by: Guillaume Nault <gnault@redhat.com>
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ net/l2tp/l2tp_ip.c  | 8 ++++----
+ net/l2tp/l2tp_ip6.c | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/net/l2tp/l2tp_ip.c b/net/l2tp/l2tp_ip.c
+index 4db5a554bdbd..41a74fc84ca1 100644
+--- a/net/l2tp/l2tp_ip.c
++++ b/net/l2tp/l2tp_ip.c
+@@ -677,8 +677,8 @@ MODULE_AUTHOR("James Chapman <jchapman@katalix.com>");
+ MODULE_DESCRIPTION("L2TP over IP");
+ MODULE_VERSION("1.0");
+ 
+-/* Use the value of SOCK_DGRAM (2) directory, because __stringify doesn't like
+- * enums
++/* Use the values of SOCK_DGRAM (2) as type and IPPROTO_L2TP (115) as protocol,
++ * because __stringify doesn't like enums
+  */
+-MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET, 2, IPPROTO_L2TP);
+-MODULE_ALIAS_NET_PF_PROTO(PF_INET, IPPROTO_L2TP);
++MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET, 115, 2);
++MODULE_ALIAS_NET_PF_PROTO(PF_INET, 115);
+diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
+index 2478aa60145f..5137ea1861ce 100644
+--- a/net/l2tp/l2tp_ip6.c
++++ b/net/l2tp/l2tp_ip6.c
+@@ -806,8 +806,8 @@ MODULE_AUTHOR("Chris Elston <celston@katalix.com>");
+ MODULE_DESCRIPTION("L2TP IP encapsulation for IPv6");
+ MODULE_VERSION("1.0");
+ 
+-/* Use the value of SOCK_DGRAM (2) directory, because __stringify doesn't like
+- * enums
++/* Use the values of SOCK_DGRAM (2) as type and IPPROTO_L2TP (115) as protocol,
++ * because __stringify doesn't like enums
+  */
+-MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 2, IPPROTO_L2TP);
+-MODULE_ALIAS_NET_PF_PROTO(PF_INET6, IPPROTO_L2TP);
++MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 115, 2);
++MODULE_ALIAS_NET_PF_PROTO(PF_INET6, 115);
+-- 
+2.39.2
+
