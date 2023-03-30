@@ -2,105 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 060AB6D06B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F3B6D06B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbjC3N2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
+        id S231960AbjC3N2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbjC3N2s (ORCPT
+        with ESMTP id S231897AbjC3N2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:28:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0915AA5FA;
-        Thu, 30 Mar 2023 06:28:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9913BB82775;
-        Thu, 30 Mar 2023 13:28:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F12C433EF;
-        Thu, 30 Mar 2023 13:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680182915;
-        bh=v8AtPPr2npAFWTLwZhYml/BlOepM7LWNbVlANAVOCtg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=uortMvtcdtdqnx0Y8n5Qs4F9ErnSxttq/nRUtqbVq9vZpzq6wAAZ4Dshr6cqcHpb6
-         nH1y0MXpMPsIquNjIdG0NIA1YsfS3ydxDu9u0oRI3DB0FQytofcHLhKFdY5TGIgEE5
-         DBkLno/7MT19g206Osn/IhZOk0vjoxEOpfGZatuyctJzn5Q3RtSCWt0mVnan/F0geQ
-         A8ejzHrOAMhk3lE3NOCZUZbMZ3nYB7YGHpZI63Q7iTd8xzCXd7z9B+Z2lypc2x8Vlv
-         LpTCOaz/G9ayCN6YYlcWhxsMMkv8ltlQXCaffLebVLmZgy9/Vq9FNFNVFGikjtbpme
-         x5YRdOnuTkHHg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     stable@vger.kernel.org, Rob Herring <robh@kernel.org>
-In-Reply-To: <20230330071333.24308-1-krzysztof.kozlowski@linaro.org>
-References: <20230330071333.24308-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [RESEND PATCH] ASoC: dt-bindings: qcom,lpass-rx-macro: correct
- minItems for clocks
-Message-Id: <168018291034.3345013.1034943488652302497.b4-ty@kernel.org>
-Date:   Thu, 30 Mar 2023 14:28:30 +0100
+        Thu, 30 Mar 2023 09:28:45 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542C4213C;
+        Thu, 30 Mar 2023 06:28:35 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1phsKO-00025P-KA; Thu, 30 Mar 2023 15:28:32 +0200
+Message-ID: <7fe4e169-1cf9-2a26-0567-021172dadd3c@leemhuis.info>
+Date:   Thu, 30 Mar 2023 15:28:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ike Panhc <ike.pan@canonical.com>,
+        Mark Gross <markgross@kernel.org>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: [regression] Bug 217234 - Touchpad disabled after wakeup from sleep
+ on Lenovo Yoga 7i 15ITL5 (bisected)
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-2eb1a
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680182915;27f7e9b0;
+X-HE-SMSGID: 1phsKO-00025P-KA
+X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Mar 2023 09:13:33 +0200, Krzysztof Kozlowski wrote:
-> The RX macro codec comes on some platforms in two variants - ADSP
-> and ADSP bypassed - thus the clock-names varies from 3 to 5.  The clocks
-> must vary as well:
+Hi, Thorsten here, the Linux kernel's regression tracker.
+
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developers don't keep an eye on it, I decided to forward it by mail.
+
+Hans, apparently it's cause by a change of yours.
+
+Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
+not CCed them in mails like this.
+
+Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217234 :
+
+>  arsgeiger@gmail.com 2023-03-22 23:52:35 UTC
 > 
->   sc7280-idp.dtb: codec@3200000: clocks: [[202, 8], [202, 7], [203]] is too short
+> Created attachment 304002 [details]
+> libinput events on linux6.0
 > 
+> After booting linux6.1 and later upon closing the lid and opening it again, the touchpad is no longer usable. After powering off and booting linux6.0 again (no other changes), the touchpad does continue to work after closing the lid and opening it again.
 > 
+> When the touchpad gets disabled on linux6.1, after logging in to gnome, I can re-enable it from the settings. Using `libinput debug-events --verbose` Here is a comparison of the output on linux6.0:
+> 
+>>    2: event10 - lid: suspending touchpad
+>> -event1   SWITCH_TOGGLE           +0.000s     switch lid state 1
+>>    3: event10 - lid: resume touchpad
+>> -event6   KEYBOARD_KEY            +2.164s     KEY_F22 (192) pressed
+>>  event6   KEYBOARD_KEY            +2.164s     KEY_F22 (192) released
+>>  event6   KEYBOARD_KEY            +2.627s     KEY_F22 (192) pressed
+>>  event6   KEYBOARD_KEY            +2.627s     KEY_F22 (192) released
+>> -event1   SWITCH_TOGGLE           +2.168s     switch lid state 0
+> 
+> And linux 6.1+:
+> 
+>>   2: event10 - lid: suspending touchpad
+>> -event1   SWITCH_TOGGLE           +0.000s     switch lid state 1
+>>    3: event10 - lid: resume touchpad
+>> -event6   KEYBOARD_KEY            +2.000s     KEY_TOUCHPAD_TOGGLE (530)
+>> pressed
+>>  event6   KEYBOARD_KEY            +2.000s     KEY_TOUCHPAD_TOGGLE (530)
+>>  released
+>> -event1   SWITCH_TOGGLE           +2.000s     switch lid state 0
+
 > [...]
 
-Applied to
+>  arsgeiger@gmail.com 2023-03-30 11:50:11 UTC
+> 
+> Alright, I found the offending commit (which does not exist in linux6.0 but was backported to linux6.1):
+> https://gitlab.com/linux-kernel/stable/-/commit/5829f8a897e4f030cd2d32a930eea8954ab5dcd3
+> 
+> Building linux6.2 with this commit reverted does workaround the issue for me.
 
-   broonie/sound.git for-next
+See the ticket for more details.
 
-Thanks!
 
-[1/1] ASoC: dt-bindings: qcom,lpass-rx-macro: correct minItems for clocks
-      commit: 59257015ac8813d2430988aa01c2f4609a60e8e7
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+#regzbot introduced: 5829f8a897e4f0
+https://bugzilla.kernel.org/show_bug.cgi?id=217234
+#regzbot title: platform/x86: ideapad-laptop: Touchpad disabled after
+wakeup
+#regzbot ignore-activity
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
 
-Thanks,
-Mark
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
+[1] because bugzilla.kernel.org tells users upon registration their
+"email address will never be displayed to logged out users"
