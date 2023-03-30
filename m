@@ -2,100 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F846CFC70
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A986D6CFC76
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbjC3HNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
+        id S231152AbjC3HOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjC3HNr (ORCPT
+        with ESMTP id S230465AbjC3HOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:13:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2F96E8B;
-        Thu, 30 Mar 2023 00:13:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D39C61F1B;
-        Thu, 30 Mar 2023 07:13:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 913F7C4339B;
-        Thu, 30 Mar 2023 07:13:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680160402;
-        bh=G/raK3ocYVegw3OGWU88n2Ffrz9wyE2LoLFozbjp/Q0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=r+buEN7fejd0laG635oaSqHZcv+5essLQfQu1v4G4/qQggbkeNNimQ0XxuTzSkIj1
-         JIxbGYaR5b1w+ob2xDSpqSU5GsghUwnusFvsKFHeROCnV9l+wlEXuOk9X+9uJvUzCo
-         FSdE1bsMJsb7uwXfUcmnoEzkCMSz+pBhjJhGfzBjY/UCikmksHZ20KmMMxslkc6bca
-         yMQcM424mIg+YLovsX+pykjnwfUbaoDNnPOmpT0An4t+m+E5/mNWTEytUgf9iWs/f7
-         YkT0w/6MwUz3xwSgVkKeShrFrwQQYp6xR7v34S/b24AWi5i+F6K/FKWPjPsUVcFnIT
-         PQNKn+OmY66YA==
-Date:   Thu, 30 Mar 2023 09:13:16 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk,
-        syzbot+8ac3859139c685c4f597@syzkaller.appspotmail.com,
-        stable@vger.kernel.org, Christian Brauner <brauner@kernel.org>
-Subject: [PATCH] fs: drop peer group ids under namespace lock
-Message-ID: <20230330-vfs-mount_setattr-propagation-fix-v1-1-37548d91533b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAI41JWQC/x2NwQqDMBBEf0Vy7kJqaKX9lVLKJm40B5Owu0pB/
- PfGHh8z82Y3QpxIzLPbDdOWJJXc4HrpTJgxTwRpbGx62zvrnIUtCixlzfoRUlRlqFwqTqhtCTF
- 9wd2dH8LtMQ7Rm+bxKASeMYf5NC0oSnwGlan1/+ev93H8ALwgrQGMAAAA
-X-Mailer: b4 0.13-dev-00303
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1119; i=brauner@kernel.org;
- h=from:subject:message-id; bh=6ePqaCE6h84elZe3L+tFR/+iRaxe2PhzaSxvtZilVWk=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSomvbZHl0dvkNr6p0/qf2pTvd1ZL1jnm659dggr78+yX9t
- 74ZTHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABM5v56RYWWKc6K0ae2qulSBhx8UmK
- /OqRFXigmKTlQSWGOgvnHuL0aGRfyfXvXtnpq9T9j3dVMBi4yN8sb5XKvu565YXr9ctS+NGwA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+        Thu, 30 Mar 2023 03:14:22 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3460972A9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:13:55 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id y4so72774529edo.2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:13:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680160433;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rIO+xjpPvxFE7p3Fg529YdgqYE0es+Za65fM8K1qjgQ=;
+        b=UvXOXvaKg5W3pOiKg4eDH9lHl4Zdbajrfr9yCdPGB59p3EbanzUW5AbZ60M0Fo1jLj
+         xgrtU13pG+2HRUXSZV1YHQUF6aAPx8bmMFTsyT+tMN4I6uSd3iTp4e0p5o0dlpChmR1N
+         kgpM/rCb2oFLWV87Mo4Q+i3t95OakU3lMRj4YQ1nysYmA+Tpl5yBca0fvDqMPohFxbDB
+         Y7+D8BKyWgRNceAUWpnfWnDi7HIUgkBAG3eDp8W+4bCHX6Cc8wGgEGVLJTMMQ7fZWTfd
+         8/Oa9xlswq0vuQl+sJims+8vhoieSnu1v+Z91iZH9bXW/MlL8LF9mWWEI22UEcU5KFZ+
+         xqbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680160433;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rIO+xjpPvxFE7p3Fg529YdgqYE0es+Za65fM8K1qjgQ=;
+        b=POLhitlsITesnZUMror3QIGSQzs5ByWjgtVp3Q2zT48eiKK12lH3rUhpzXveGvQREW
+         0FQDjNyM8lYcM5riZ6na1YckmCsxUOjgUH996VgEXFX953ZRapCFEej7LSnWcHfoDdB2
+         9gwCr6spUKnPYJCIpGRM/jmVY/zsJs9QSw6LfzwRnSHY0LQG1dBfqg1LUkDBpAu/ALSf
+         Z8k2RGfGkmYjNY0mTeEMaDEJ6LGv+sMNe78Ghg7NR/51DtDMZSDe6CpJf3ihTSvXoOrK
+         qbk3r/nz54WPRaJUSTe13fQjz2QzzP0dspJqh8asjwVCzs7ZRfHKhZloftBoNLnk5vay
+         UBCw==
+X-Gm-Message-State: AAQBX9cd4ie0m1Y0lvhx3KxE43MaUtgBlDXnmjItI0u/D398c4um03jm
+        Dybeq0xP/rgEdKD2SgvbNIphVIoOwIAsTenz18tubg==
+X-Google-Smtp-Source: AKy350YivWZ/HKPgZxm5eZxF7+2qcjmArqrs51gN4d7jnY/jgrQdpgyHe6R7cHRBBvkOSSb0g8UX51iLn7ZYwWx1eHQ=
+X-Received: by 2002:a17:906:7846:b0:933:1967:a984 with SMTP id
+ p6-20020a170906784600b009331967a984mr10847576ejm.15.1680160433435; Thu, 30
+ Mar 2023 00:13:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <00000000000088694505f8132d77@google.com>
- <000000000000a0139105f81888eb@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230328221644.803272-1-yosryahmed@google.com>
+ <20230328221644.803272-5-yosryahmed@google.com> <ZCQfZJFufkJ10o01@dhcp22.suse.cz>
+ <CAJD7tkb-UpKm2QbjYzB=B=oGk6Hyj9cbUviZUPC+7VsvBecH7g@mail.gmail.com>
+ <20230329192059.2nlme5ubshzdbpg6@google.com> <ZCU1Bp+5bKNJzWIu@dhcp22.suse.cz>
+In-Reply-To: <ZCU1Bp+5bKNJzWIu@dhcp22.suse.cz>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 30 Mar 2023 00:13:16 -0700
+Message-ID: <CAJD7tka0CmRvcvB0k8DZuid1vC9OK_mFriHHbXNTUkVE7OjaTA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] cgroup: rstat: add WARN_ON_ONCE() if flushing
+ outside task context
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Shakeel Butt <shakeelb@google.com>, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When cleaning up peer group ids in the failure path we need to make sure
-to hold on to the namespace lock. Otherwise another thread might just
-turn the mount from a shared into a non-shared mount concurrently.
+On Thu, Mar 30, 2023 at 12:06=E2=80=AFAM Michal Hocko <mhocko@suse.com> wro=
+te:
+>
+> On Wed 29-03-23 19:20:59, Shakeel Butt wrote:
+> > On Wed, Mar 29, 2023 at 11:41:39AM -0700, Yosry Ahmed wrote:
+> > > On Wed, Mar 29, 2023 at 4:22=E2=80=AFAM Michal Hocko <mhocko@suse.com=
+> wrote:
+> > > >
+> > > > On Tue 28-03-23 22:16:39, Yosry Ahmed wrote:
+> > > > > rstat flushing is too expensive to perform in irq context.
+> > > > > The previous patch removed the only context that may invoke an rs=
+tat
+> > > > > flush from irq context, add a WARN_ON_ONCE() to detect future
+> > > > > violations, or those that we are not aware of.
+> > > > >
+> > > > > Ideally, we wouldn't flush with irqs disabled either, but we have=
+ one
+> > > > > context today that does so in mem_cgroup_usage(). Forbid callers =
+from
+> > > > > irq context for now, and hopefully we can also forbid callers wit=
+h irqs
+> > > > > disabled in the future when we can get rid of this callsite.
+> > > >
+> > > > I am sorry to be late to the discussion. I wanted to follow up on
+> > > > Johannes reply in the previous version but you are too fast ;)
+> > > >
+> > > > I do agree that this looks rather arbitrary. You do not explain how=
+ the
+> > > > warning actually helps. Is the intention to be really verbose to th=
+e
+> > > > kernel log when somebody uses this interface from the IRQ context a=
+nd
+> > > > get bug reports? What about configurations with panic on warn? Do w=
+e
+> > > > really want to crash their systems for something like that?
+> > >
+> > > Thanks for taking a look, Michal!
+> > >
+> > > The ultimate goal is not to flush in irq context or with irqs
+> > > disabled, as in some cases it causes irqs to be disabled for a long
+> > > time, as flushing is an expensive operation. The previous patch in th=
+e
+> > > series should have removed the only context that flushes in irq
+> > > context, and the purpose of the WARN_ON_ONCE() is to catch future use=
+s
+> > > or uses that we might have missed.
+> > >
+> > > There is still one code path that flushes with irqs disabled (also
+> > > mem_cgroup_usage()), and we cannot remove this just yet; we need to
+> > > deprecate usage threshold events for root to do that. So we cannot
+> > > enforce not flushing with irqs disabled yet.
+> > >
+> > > So basically the patch is trying to enforce what we have now, not
+> > > flushing in irq context, and hopefully at some point we will also be
+> > > able to enforce not flushing with irqs disabled.
+> > >
+> > > If WARN_ON_ONCE() is the wrong tool for this, please let me know.
+> > >
+> >
+> > If I understand Michal's concern, the question is should be start with
+> > pr_warn_once() instead of WARN_ON_ONCE() and I think yes we should star=
+t
+> > with pr_warn_once().
+>
+> Yes, I do not really like the WARN_ON here. It is an overkill. pr_warn
+> would much less intrusive but potentially incomplete because you won't
+> know who that offender is. So if you really care about those then you
+> would need to call dump_stack as well.
+>
+> So the real question is. Do we really care so deeply? After all somebody
+> might be calling this from within a spin lock or irq disabled section
+> resulting in a similar situation without noticing.
 
-Reported-by: syzbot+8ac3859139c685c4f597@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/lkml/00000000000088694505f8132d77@google.com
-Fixes: 2a1867219c7b ("fs: add mount_setattr()")
-Cc: stable@vger.kernel.org # 5.12+
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- fs/namespace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+There are discussions in [1] about making atomic rstat flush not
+disable irqs throughout the process, so in that case it would only
+result in a similar situation if the caller has irq disabled. The only
+caller that might have irq disabled is the same caller that might be
+in irq context before this series: mem_cgroup_usage().
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index bc0f15257b49..6836e937ee61 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -4183,9 +4183,9 @@ static int do_mount_setattr(struct path *path, struct mount_kattr *kattr)
- 	unlock_mount_hash();
- 
- 	if (kattr->propagation) {
--		namespace_unlock();
- 		if (err)
- 			cleanup_group_ids(mnt, NULL);
-+		namespace_unlock();
- 	}
- 
- 	return err;
+On that note, and while I have your attention, I was wondering if we
+can eliminate the flush call completely from mem_cgroup_usage(), and
+read the global stats counters for root memcg instead of the root
+counters. There might be subtle differences, but the root memcg usage
+isn't super accurate now anyway (e.g. it doesn't include kernel
+memory).
 
----
-base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
-change-id: 20230330-vfs-mount_setattr-propagation-fix-363b7c59d7fb
+With that removed, no callers to rstat flushing would be from irq
+context or have irqs disabled. There will only be one atomic flusher
+(mem_cgroup_wb_stats()), and we can proceed with [1] if it causes a
+problem.
 
+What do you think?
+
+[1] https://lore.kernel.org/lkml/CAJD7tkZrp=3D4zWvjE9_010TAG1T_crCbf9P64UzJ=
+ABspgcrGPKg@mail.gmail.com/
+
+> --
+> Michal Hocko
+> SUSE Labs
