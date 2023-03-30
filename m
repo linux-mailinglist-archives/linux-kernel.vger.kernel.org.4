@@ -2,209 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6036D0A7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B0D6D0A94
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233549AbjC3Pxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
+        id S231624AbjC3QBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 12:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233499AbjC3Pxm (ORCPT
+        with ESMTP id S230393AbjC3QBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:53:42 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F8D5BA6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:53:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680191619; x=1711727619;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=NQBtoTtOarnK7I2M7dGSHlKc2KGRDM8RBMAE5oqHmuY=;
-  b=GPF8VGSqBTXH4HOn57yk+NRS6wdrGOB+p1vUcMNpnuKn1ABkVYX1OqJp
-   K9rkltBp//tET62HKVi8JnboVEV358ImsC0jdVl8xmkohB+c2OffsiRw3
-   bRh0O6/rBidKy0oHPqjIYr3lJLQD01mq9um/8l52MYeexu5zRndGvHzft
-   dFbkSMIMauopwjfy0Un8D+dNRbFfstbroRl+G5EBo+IWzZsB3msFrN8WD
-   UqEB0EyU7RLgK0a49xHGk1bwHP7XkvBtKJlIF874VO+pZj6c8MeDWvPKL
-   htQZ32QRt7deRw49AE39N0XbRDOItPkn0lGp32WNthZ2HonULUBPn6Asa
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="427484398"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="427484398"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 08:52:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="717357280"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="717357280"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.112])
-  by orsmga001.jf.intel.com with ESMTP; 30 Mar 2023 08:52:24 -0700
-Date:   Fri, 31 Mar 2023 00:00:39 +0800
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?utf-8?B?SGVsbHN0cu+/vW0=?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Christian =?utf-8?B?S++/vW5pZw==?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-Subject: Re: [PATCH v2 0/9] drm/i915: Replace kmap_atomic() with
- kmap_local_page()
-Message-ID: <ZCWyJzuCZG79zxLi@liuzhao-OptiPlex-7080>
-References: <20230329073220.3982460-1-zhao1.liu@linux.intel.com>
- <4498688.cEBGB3zze1@suse>
+        Thu, 30 Mar 2023 12:01:01 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD84CCC09
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:00:51 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id c4so1635082pjs.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:00:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680192051;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ndN3+GWy8wiNegcKyQXjM8GtRL7wqyotsSg3louAi+Y=;
+        b=B+4E6zCM3cVbvx/Ya9MhixdwjJ2M5pFXN+uWzVzW8ahSxKL6Nlk4YMR8gQb2LQb4na
+         ONESj/nRf3zYZhdUgHt71q3LSmG5FnInlOTKB43AqnRaiVDgzH6IOfdbgJLDvA1SxSjO
+         ZcMY9FXTG/5whKP9/GGRf3w3eckoelDPbXIp0rHtVVh1O0SQu+qxMYaZRy+NOZ8AwtcO
+         h6zq9qSO+NcVl2fxgvOcW4P3S3bMVK7vacW20vV6sqp/ijKbzXcPnSqSU8E70nCaZk/n
+         WF6bkWSjsgRdtwZNLLTfzWzu1cfHV/RmBaeXFmYs6iKZ3Y6IVOx5PlcgUfSNN2ygnDE9
+         LouQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680192051;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ndN3+GWy8wiNegcKyQXjM8GtRL7wqyotsSg3louAi+Y=;
+        b=mgprwmevRsW025yag2vyuElkpLz6vRbSkkUhJ7QSCOXhX2n3iKb0xLkmjX9YqZbvni
+         yFWGf/K44JVjf97cJMgGK6L6c9MIiihWfL8dkrwGminalaGeLPXBy9d91jvi+lg/DjsU
+         OOPAXKp144F1DEqPfGu9ONkZJRvFEurV7w6gtZM/CAJU8/qNMuXQa1EJgOpH5dIAiBbu
+         nNYGZHqM161hGV4qubfDk8UnCWyDXoDD+g617YNcrCGttkawDEpwnyVqWHRI/yPFo8nD
+         mN8dSiKdiCMYciyu6yoCkMSPa5zE3dJTVGs9dX4mITjYwqeF0l9T8zx4xIKf39W/eAth
+         Aheg==
+X-Gm-Message-State: AAQBX9d111FIUWsAGw5iGMR4v6Sl/iOCNuM41afCAzXhBlKklSWOqIcc
+        8jB3i2fVqAOnK7K/XYEAE1Vz9fVPtAcaJFsQSWK8AQ==
+X-Google-Smtp-Source: AKy350ZRFCaxo1XdHRaStzy2w+WauhrDw1erUDUR6mVqVnGireSA8/POZOMnlvpUoGDqOHndQJiPJs+v19qW2Gwzq3A=
+X-Received: by 2002:a17:902:74c9:b0:1a0:48ff:539c with SMTP id
+ f9-20020a17090274c900b001a048ff539cmr7929154plt.11.1680192050876; Thu, 30 Mar
+ 2023 09:00:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=gb2312
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4498688.cEBGB3zze1@suse>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230330081831.2291351-1-javierm@redhat.com> <202303301815.kRKFM3NH-lkp@intel.com>
+ <87a5zufq7n.fsf@minerva.mail-host-address-is-not-set>
+In-Reply-To: <87a5zufq7n.fsf@minerva.mail-host-address-is-not-set>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 30 Mar 2023 09:00:39 -0700
+Message-ID: <CAGS_qxot1_+J3YCykkk0H1fZM6Cn6Pv4SFT6iCf9J7td1aH9HQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Input: Add KUnit tests for some of the input core
+ helper functions
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
+        oe-kbuild-all@lists.linux.dev,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>,
+        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        Maxime Ripard <maxime@cerno.tech>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabio,
+On Thu, Mar 30, 2023 at 4:12=E2=80=AFAM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+>
+> kernel test robot <lkp@intel.com> writes:
+>
+> Hello,
+>
+> [...]
+>
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> >    drivers/clk/.kunitconfig: warning: ignored by one of the .gitignore =
+files
+> >    drivers/gpu/drm/tests/.kunitconfig: warning: ignored by one of the .=
+gitignore files
+> >    drivers/gpu/drm/vc4/tests/.kunitconfig: warning: ignored by one of t=
+he .gitignore files
+> >    drivers/hid/.kunitconfig: warning: ignored by one of the .gitignore =
+files
+> >>> drivers/input/tests/.kunitconfig: warning: ignored by one of the .git=
+ignore files
+>
+> KUnit folks, what should we do about this? I believe the correct thing
+> here would be for these dot-files to not be ignored by git.
+>
+> Not only to prevent these reports, but also to avoid the need to add
+> them using `git add -f`, since is quite error prone and easy to miss.
+>
+> I was thinking about posting the following patch:
+>
+> From f1dc1733001682886458c23b676123635bc29da0 Mon Sep 17 00:00:00 2001
+> From: Javier Martinez Canillas <javierm@redhat.com>
+> Date: Thu, 30 Mar 2023 13:04:42 +0200
+> Subject: [PATCH] .gitignore: Exclude KUnit config dot-files
 
-On Wed, Mar 29, 2023 at 06:03:38PM +0200, Fabio M. De Francesco wrote:
-> Date: Wed, 29 Mar 2023 18:03:38 +0200
-> From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-> Subject: Re: [PATCH v2 0/9] drm/i915: Replace kmap_atomic() with
->  kmap_local_page()
-> 
-> On mercoled¨¬ 29 marzo 2023 09:32:11 CEST Zhao Liu wrote:
-> > From: Zhao Liu <zhao1.liu@intel.com>
-> > 
-> > Hi list,
-> > 
-> > Sorry for a long delay since v1 [1]. This patchset is based on 197b6b6
-> > (Linux 6.3-rc4).
-> > 
-> > Welcome and thanks for your review and comments!
-> > 
-> > 
-> > # Purpose of this patchset
-> > 
-> > The purpose of this pacthset is to replace all uses of kmap_atomic() in
-> > i915 with kmap_local_page() because the use of kmap_atomic() is being
-> > deprecated in favor of kmap_local_page()[1]. And 92b64bd (mm/highmem:
-> > add notes about conversions from kmap{,_atomic}()) has declared the
-> > deprecation of kmap_atomic().
-> > 
-> > 
-> > # Motivation for deprecating kmap_atomic() and using kmap_local_page()
-> > 
-> > The main difference between atomic and local mappings is that local
-> > mappings doesn't disable page faults or preemption (the preemption is
-> > disabled for !PREEMPT_RT case, otherwise it only disables migration).
-> > 
-> > With kmap_local_page(), we can avoid the often unwanted side effect of
-> > unnecessary page faults and preemption disables.
-> > 
-> > 
-> > # Patch summary
-> > 
-> > Patch 1, 4-6 and 8-9 replace kamp_atomic()/kunmap_atomic() with
-> >         kmap_local_page()/kunmap_local() directly. With thses local
-> >         mappings, the page faults and preemption are allowed.
-> > 
-> > Patch 2 and 7 use memcpy_from_page() and memcpy_to_page() to replace
-> >         kamp_atomic()/kunmap_atomic(). These two variants of memcpy()
-> >         are based on the local mapping, so page faults and preemption
-> >         are also allowed in these two interfaces.
-> > 
-> > Patch 3 replaces kamp_atomic()/kunmap_atomic() with kmap_local_page()/
-> >         kunmap_local() and also diable page fault since the for special
-> >         handling (pls see the commit message).
-> > 
-> > 
-> > # Changes since v1
-> > 
-> > * Dropped hot plug related description in commit message since it has
-> >   nothing to do with kmap_local_page().
-> > * Emphasized the motivation for using kmap_local_page() in commit
-> >   message.
-> > * Rebased patch 1 on f47e630 (drm/i915/gem: Typecheck page lookups) to
-> >   keep the "idx" variable of type pgoff_t here.
-> > * Used memcpy_from_page() and memcpy_to_page() to replace
-> >   kmap_local_page() + memcpy() in patch 2.
-> > 
-> > 
-> > # Reference
-> > 
-> > [1]:
-> > https://lore.kernel.org/lkml/20221017093726.2070674-1-zhao1.liu@linux.intel.c
-> > om/ [1]:
-> > https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com ---
-> > Zhao Liu (9):
-> >   drm/i915: Use kmap_local_page() in gem/i915_gem_object.c
-> >   drm/i915: Use memcpy_[from/to]_page() in gem/i915_gem_pyhs.c
-> >   drm/i915: Use kmap_local_page() in gem/i915_gem_shmem.c
-> >   drm/i915: Use kmap_local_page() in gem/selftests/huge_pages.c
-> >   drm/i915: Use kmap_local_page() in gem/selftests/i915_gem_coherency.c
-> >   drm/i915: Use kmap_local_page() in gem/selftests/i915_gem_context.c
-> >   drm/i915: Use memcpy_from_page() in gt/uc/intel_uc_fw.c
-> >   drm/i915: Use kmap_local_page() in i915_cmd_parser.c
-> >   drm/i915: Use kmap_local_page() in gem/i915_gem_execbuffer.c
-> > 
-> 
-> I _think_ that the "long delay" you mentioned in the first sentence has paid 
-> off in full. 
-> 
-> I don't see things to improve (except all those "kamp_atomic()" typo in the 
-> patches summary; however, typos are only in the cover so I'm sure they won't 
-> hurt anybody). 
+Ah, I forgot/didn't realize lkp bot was complaining about .kunitconfig's.
+Agreed, we should go with something like that.
 
-Thanks a lot for your patience and your help! :-)
+As I noted in my reply on the patch, there was a previous patch to do
+just the same thing here,
+https://lore.kernel.org/linux-kselftest/20230127145708.12915-1-andriy.shevc=
+henko@linux.intel.com/
 
-> 
-> Each of the nine patches listed above looks good to me, so they are all¡­
-> 
-> Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> 
-> Thanks!
-> 
-> Fabio
-> 
-> PS: Obviously there was no need to reconfirm my tag for patch 3/9. A single 
-> tag that catches all patches is easier for a lazy person like me :-)
-
-The typos and this description still can be improved. I'll pay
-attention in the future!
+I'm not sure who is intended to pick up the patch, but maybe bringing
+up the fact this causes spurious warnings will help argue for the
+change.
 
 Thanks,
-Zhao
-
-> 
-> >
-> >  drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c       | 10 +++++-----
-> >  drivers/gpu/drm/i915/gem/i915_gem_object.c           |  8 +++-----
-> >  drivers/gpu/drm/i915/gem/i915_gem_phys.c             | 10 ++--------
-> >  drivers/gpu/drm/i915/gem/i915_gem_shmem.c            |  6 ++++--
-> >  drivers/gpu/drm/i915/gem/selftests/huge_pages.c      |  6 +++---
-> >  .../gpu/drm/i915/gem/selftests/i915_gem_coherency.c  | 12 ++++--------
-> >  .../gpu/drm/i915/gem/selftests/i915_gem_context.c    |  8 ++++----
-> >  drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c             |  5 +----
-> >  drivers/gpu/drm/i915/i915_cmd_parser.c               |  4 ++--
-> >  9 files changed, 28 insertions(+), 41 deletions(-)
-> > 
-> > --
-> > 2.34.1
-> 
-> 
-> 
-> 
+Daniel
