@@ -2,63 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C996D093D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E895D6D093F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbjC3PQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S232830AbjC3PRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbjC3PQy (ORCPT
+        with ESMTP id S232757AbjC3PRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:16:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7E29C176;
-        Thu, 30 Mar 2023 08:15:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B32732F4;
-        Thu, 30 Mar 2023 08:14:59 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E1F6A3F6C4;
-        Thu, 30 Mar 2023 08:14:11 -0700 (PDT)
-Message-ID: <5ff103f9-1366-0a9b-bd97-419ced1de07f@arm.com>
-Date:   Thu, 30 Mar 2023 17:14:06 +0200
+        Thu, 30 Mar 2023 11:17:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15920CA33
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:15:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5AB8620D0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:15:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12418C433EF;
+        Thu, 30 Mar 2023 15:15:24 +0000 (UTC)
+Date:   Thu, 30 Mar 2023 11:15:23 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Baoquan He <bhe@redhat.com>, Philipp Rudo <prudo@redhat.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ross Zwisler <zwisler@google.com>,
+        Simon Horman <horms@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH v5 2/2] x86/purgatory: Add linker script
+Message-ID: <20230330111523.4b98c8ce@gandalf.local.home>
+In-Reply-To: <20230321-kexec_clang16-v5-2-5563bf7c4173@chromium.org>
+References: <20230321-kexec_clang16-v5-0-5563bf7c4173@chromium.org>
+        <20230321-kexec_clang16-v5-2-5563bf7c4173@chromium.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 5/6] cgroup/cpuset: Free DL BW in case can_attach() fails
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-        luca.abeni@santannapisa.it, claudio@evidence.eu.com,
-        tommaso.cucinotta@santannapisa.it, bristot@redhat.com,
-        mathieu.poirier@linaro.org, cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230329125558.255239-1-juri.lelli@redhat.com>
- <20230329125558.255239-6-juri.lelli@redhat.com>
- <f8dfc30b-5079-2f44-7ab1-42ac25bd48b7@redhat.com>
- <f8baea06-eeda-439a-3699-1cad7cde659e@redhat.com>
- <cdede77a-5dc5-8933-a444-a2046b074b12@arm.com>
- <b7ad39b1-c615-3ebc-6980-d9db0f2ab0a0@redhat.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <b7ad39b1-c615-3ebc-6980-d9db0f2ab0a0@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,62 +49,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2023 20:09, Waiman Long wrote:
-> On 3/29/23 12:39, Dietmar Eggemann wrote:
->> On 29/03/2023 16:31, Waiman Long wrote:
->>> On 3/29/23 10:25, Waiman Long wrote:
->>>> On 3/29/23 08:55, Juri Lelli wrote:
->>>>> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
->> [...]
->>
->>>>> @@ -2518,11 +2547,21 @@ static int cpuset_can_attach(struct
->>>>> cgroup_taskset *tset)
->>>>>    static void cpuset_cancel_attach(struct cgroup_taskset *tset)
->>>>>    {
->>>>>        struct cgroup_subsys_state *css;
->>>>> +    struct cpuset *cs;
->>>>>          cgroup_taskset_first(tset, &css);
->>>>> +    cs = css_cs(css);
->>>>>          mutex_lock(&cpuset_mutex);
->>>>> -    css_cs(css)->attach_in_progress--;
->>>>> +    cs->attach_in_progress--;
->>>>> +
->>>>> +    if (cs->nr_migrate_dl_tasks) {
->>>>> +        int cpu = cpumask_any(cs->effective_cpus);
->>>>> +
->>>>> +        dl_bw_free(cpu, cs->sum_migrate_dl_bw);
->>>>> +        reset_migrate_dl_data(cs);
->>>>> +    }
->>>>> +
->>> Another nit that I have is that you may have to record also the cpu
->>> where the DL bandwidth is allocated in cpuset_can_attach() and free the
->>> bandwidth back into that cpu or there can be an underflow if another cpu
->>> is chosen.
->> Many thanks for the review!
->>
->> But isn't the DL BW control `struct dl_bw` per `struct root_domain`
->> which is per exclusive cpuset. So as long cpu is from
->> `cs->effective_cpus` shouldn't this be fine?
+
+Hmm, this patch may need some more eyes. At least from the x86 maintainers.
+
+-- Steve
+
+
+On Thu, 30 Mar 2023 11:44:48 +0200
+Ricardo Ribalda <ribalda@chromium.org> wrote:
+
+> Make sure that the .text section is not divided in multiple overlapping
+> sections. This is not supported by kexec_file.
 > 
-> Sorry for my ignorance on how the deadline bandwidth operation work. I
-> check the bandwidth code and find that we are storing the bandwidth
-> information in the root domain, not on the cpu. That shouldn't be a
-> concern then.
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  arch/x86/purgatory/.gitignore        |  2 ++
+>  arch/x86/purgatory/Makefile          | 20 +++++++++----
+>  arch/x86/purgatory/kexec-purgatory.S |  2 +-
+>  arch/x86/purgatory/purgatory.lds.S   | 57 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 74 insertions(+), 7 deletions(-)
 > 
-> However, I still have some question on how that works when dealing with
-> cpuset. First of all, not all the CPUs in a given root domains are in
-> the cpuset. So there may be enough bandwidth on the root domain, but it
-> doesn't mean there will be enough bandwidth in the set of CPUs in a
-> particular cpuset. Secondly, how do you deal with isolated CPUs that do
-> not have a corresponding root domain? It is now possible to create a
-> cpuset with isolated CPUs.
+> diff --git a/arch/x86/purgatory/.gitignore b/arch/x86/purgatory/.gitignore
+> index d2be1500671d..1fe71fe5945d 100644
+> --- a/arch/x86/purgatory/.gitignore
+> +++ b/arch/x86/purgatory/.gitignore
+> @@ -1 +1,3 @@
+>  purgatory.chk
+> +purgatory.lds
+> +purgatory
+> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+> index 17f09dc26381..4dc96d409bec 100644
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@ -16,10 +16,11 @@ CFLAGS_sha256.o := -D__DISABLE_EXPORTS
+>  
+>  # When linking purgatory.ro with -r unresolved symbols are not checked,
+>  # also link a purgatory.chk binary without -r to check for unresolved symbols.
+> -PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
+> -LDFLAGS_purgatory.ro := -r $(PURGATORY_LDFLAGS)
+> -LDFLAGS_purgatory.chk := $(PURGATORY_LDFLAGS)
+> -targets += purgatory.ro purgatory.chk
+> +PURGATORY_LDFLAGS := -nostdlib -z nodefaultlib
+> +LDFLAGS_purgatory := -r $(PURGATORY_LDFLAGS) -T
+> +LDFLAGS_purgatory.chk := -e purgatory_start $(PURGATORY_LDFLAGS)
+> +
+> +targets += purgatory.lds purgatory.ro purgatory.chk
+>  
+>  # Sanitizer, etc. runtimes are unavailable and cannot be linked here.
+>  GCOV_PROFILE	:= n
+> @@ -72,10 +73,17 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+>  AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
+>  AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
+>  
+> -$(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+> +OBJCOPYFLAGS_purgatory.ro := -O elf64-x86-64
+> +OBJCOPYFLAGS_purgatory.ro += --remove-section='*debug*'
+> +OBJCOPYFLAGS_purgatory.ro += --remove-section='.comment'
+> +OBJCOPYFLAGS_purgatory.ro += --remove-section='.note.*'
+> +$(obj)/purgatory.ro: $(obj)/purgatory FORCE
+> +		$(call if_changed,objcopy)
+> +
+> +$(obj)/purgatory.chk: $(obj)/purgatory FORCE
+>  		$(call if_changed,ld)
+>  
+> -$(obj)/purgatory.chk: $(obj)/purgatory.ro FORCE
+> +$(obj)/purgatory: $(obj)/purgatory.lds $(PURGATORY_OBJS) FORCE
+>  		$(call if_changed,ld)
+>  
+>  $(obj)/kexec-purgatory.o: $(obj)/purgatory.ro $(obj)/purgatory.chk
+> diff --git a/arch/x86/purgatory/kexec-purgatory.S b/arch/x86/purgatory/kexec-purgatory.S
+> index 8530fe93b718..54b0d0b4dc42 100644
+> --- a/arch/x86/purgatory/kexec-purgatory.S
+> +++ b/arch/x86/purgatory/kexec-purgatory.S
+> @@ -5,7 +5,7 @@
+>  	.align	8
+>  kexec_purgatory:
+>  	.globl	kexec_purgatory
+> -	.incbin	"arch/x86/purgatory/purgatory.ro"
+> +	.incbin	"arch/x86/purgatory/purgatory"
+>  .Lkexec_purgatory_end:
+>  
+>  	.align	8
+> diff --git a/arch/x86/purgatory/purgatory.lds.S b/arch/x86/purgatory/purgatory.lds.S
+> new file mode 100644
+> index 000000000000..610da88aafa0
+> --- /dev/null
+> +++ b/arch/x86/purgatory/purgatory.lds.S
+> @@ -0,0 +1,57 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#include <asm-generic/vmlinux.lds.h>
+> +
+> +OUTPUT_FORMAT(CONFIG_OUTPUT_FORMAT)
+> +
+> +#undef i386
+> +
+> +#include <asm/cache.h>
+> +#include <asm/page_types.h>
+> +
+> +ENTRY(purgatory_start)
+> +
+> +SECTIONS
+> +{
+> +	. = 0;
+> +	.head.text : {
+> +		_head = . ;
+> +		HEAD_TEXT
+> +		_ehead = . ;
+> +	}
+> +	.rodata : {
+> +		_rodata = . ;
+> +		*(.rodata)	 /* read-only data */
+> +		*(.rodata.*)
+> +		_erodata = . ;
+> +	}
+> +	.text :	{
+> +		_text = .; 	/* Text */
+> +		*(.text)
+> +		*(.text.*)
+> +		*(.noinstr.text)
+> +		_etext = . ;
+> +	}
+> +	.data :	{
+> +		_data = . ;
+> +		*(.data)
+> +		*(.data.*)
+> +		*(.bss.efistub)
+> +		_edata = . ;
+> +	}
+> +	. = ALIGN(L1_CACHE_BYTES);
+> +	.bss : {
+> +		_bss = . ;
+> +		*(.bss)
+> +		*(.bss.*)
+> +		*(COMMON)
+> +		. = ALIGN(8);	/* For convenience during zeroing */
+> +		_ebss = .;
+> +	}
+> +
+> +	/* Sections to be discarded */
+> +	/DISCARD/ : {
+> +		*(.eh_frame)
+> +		*(*__ksymtab*)
+> +		*(___kcrctab*)
+> +	}
+> +}
+> 
 
-Sorry, I overlooked this email somehow.
-
-IMHO, this is only done for exclusive cpusets:
-
-  cpuset_can_attach()
-
-    if (!cpumask_intersects(oldcs->effective_cpus, cs->effective_cpus))
-
-So they should have their own root_domain congruent to their cpumask.
