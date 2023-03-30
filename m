@@ -2,113 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047D66D105D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 939076D1060
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjC3U4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S230002AbjC3U4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjC3U4L (ORCPT
+        with ESMTP id S229755AbjC3U4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:56:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07ACFCA39;
-        Thu, 30 Mar 2023 13:56:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97A67621AF;
-        Thu, 30 Mar 2023 20:56:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79419C433EF;
-        Thu, 30 Mar 2023 20:56:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680209765;
-        bh=0djKXzg5S9iieMQ+tqm7uwpizSVx6AIzaRoioVm/uUA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h9suXRmM0KtxtECkOEwilpDhN6528XVIj0jE6on13fOsyvBVdR0+N8nJwkgjxd4M7
-         ZJSetTh4LettQtbTgvXjLLr3cMuv3AgeFmwiYlXBqjJ99uW0VJ+aAv5Vc/j+7UkCBT
-         Z6EanJfXLrbadglUINO6aH7UkLLhX8ecRyzYnKPU=
-Date:   Thu, 30 Mar 2023 22:56:02 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     "quic_jhugo@quicinc.com" <quic_jhugo@quicinc.com>,
-        "quic_carlv@quicinc.com" <quic_carlv@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH v2] PCI: hv: Fix the definition of vector in
- hv_compose_msi_msg()
-Message-ID: <ZCX3Ys8BCRODV0jD@kroah.com>
-References: <20221027205256.17678-1-decui@microsoft.com>
- <ZCTsPFb7dBj2IZmo@boqun-archlinux>
- <ZCT6JEK/yGpKHVLn@boqun-archlinux>
- <SA1PR21MB13354973735A5E727F94A169BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
- <ZCUk_9YQGSfedCOR@kroah.com>
- <SA1PR21MB13350093800BC2C387EE0648BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
+        Thu, 30 Mar 2023 16:56:14 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABC5BDE9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:56:09 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id c18so19307341ple.11
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680209768;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bk3AJcU0Vx2dUlJVSwRSD2rFIMPkaNP8pt8iHwIyw/I=;
+        b=DxOkvfgyGlyZIdctyMoucrRwTgAvwdnFKYHtd6iQSv64o0bLznsU+3yzLh4wHENo5c
+         12ynOk18zhZ0y95L2CbIDmbZ8i1k1/QpkV5T+HTRG1mTjVQe4JbSFYLZJjc4p0aK4gNA
+         E6eS/ma0+SXAXwlAZkZYsYt325r2yj3PyANVjP+xrTTGesU5N/N0pB5EAtDYO2wU0vL7
+         3ZjsPG/j9FxQp/xq1Hd1rrY8bdlANwqVnbNEmgU8g5yzpN0E54kxWlPi8scFowwBX/y+
+         s6uKf6ztIucMnzTvdHXCrArvCd40ZLKLpCVtN72XC/258aNlybIufSvn1PhRRkWj1QHP
+         tfkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680209768;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Bk3AJcU0Vx2dUlJVSwRSD2rFIMPkaNP8pt8iHwIyw/I=;
+        b=cUS35huy/M8QbitAzngRvD8i4G63+T0jl3WURCGK8glwVVD6IgEdWmZpACWS/Oe692
+         YVyOglwVwqzrrobJwzKDwKFutyqIalWnHOob7Niw4FnwVhRCY737GVAeKBg5MmGS6ZSv
+         ClBD9an2tMr/q5aPdS4LvJaMxSCCDEeYgQde1nk0RPH+ClB+62MZZ0D3EP8uy9+yeYrU
+         cacXnFKFB2WRVUDsUiR1MCS/gSS2PFgpWofP8nusx5F3okg0KZuf5btFlq8nxOI7Vrkb
+         fYMhanTgoPai8dg1iBujaEL8FQozZ+vPrBrr1cTrg7OJEqAlFFq7Bm/0Aqce7yqhH8v4
+         OVBg==
+X-Gm-Message-State: AAQBX9d2ERApEKELt+qQflNyN+wqDKpJcdAuqWOKvOC1/w10Pk4SSv3c
+        Yy0eLna1chmp1XSV9VQj65CKlA==
+X-Google-Smtp-Source: AKy350YUmLiSO/0zx78yxuNvIBq/d2XMWROc3sNsblZMXAHe6u6xTxhKGFofc2ryyJ1Tl2KTks3vBw==
+X-Received: by 2002:a17:903:708:b0:1a1:bfe8:4fae with SMTP id kk8-20020a170903070800b001a1bfe84faemr22003294plb.43.1680209768644;
+        Thu, 30 Mar 2023 13:56:08 -0700 (PDT)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id d19-20020a170902b71300b00198d7b52eefsm128062pls.257.2023.03.30.13.56.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 13:56:08 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Bernhard =?utf-8?Q?Rosenkr=C3=A4n?= =?utf-8?Q?zer?= 
+        <bero@baylibre.com>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 00/17] Improve the MT8365 SoC and EVK board support
+In-Reply-To: <CAFGrd9p7oPvhZ8KL40XYfNi2CAdEd8BZWrXPqfcqu7DTSSg4Kw@mail.gmail.com>
+References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
+ <7h8rffyu9x.fsf@baylibre.com>
+ <CAFGrd9p7oPvhZ8KL40XYfNi2CAdEd8BZWrXPqfcqu7DTSSg4Kw@mail.gmail.com>
+Date:   Thu, 30 Mar 2023 13:56:07 -0700
+Message-ID: <7h1ql6yn4o.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SA1PR21MB13350093800BC2C387EE0648BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 07:50:11PM +0000, Dexuan Cui wrote:
-> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > ...
-> > > e70af8d040d2 has a Fixes tag. Not sure why it's not automatically
-> > backported.
-> > 
-> > Because "Fixes:" is not the flag that we are sure to trigger off of.
-> > Please read:
-> > https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-> > for how to do this properly.
-> 
-> Thanks, I just read this again to refresh my memory :-)
-> I remember Sasha has an AI algorithm to pick up patches into the stable
-> tree and a "Fixes" tag should be a strong indicator. 
+Alexandre Mergnat <amergnat@baylibre.com> writes:
 
-Yes, we have to rely on "hints" like that due to maintainers not wanting
-to put any cc: stable tags for many subsystems so we have to dig them
-out somehow.
+> Le jeu. 30 mars 2023 =C3=A0 02:09, Kevin Hilman <khilman@baylibre.com> a =
+=C3=A9crit :
+>>
+>> Alexandre Mergnat <amergnat@baylibre.com> writes:
+>>
+>> > This commits are based on the Fabien Parent <fparent@baylibre.com> wor=
+k.
+>> >
+>> > The purpose of this series is to add the following HWs / IPs support f=
+or
+>> > the mt8365-evk board:
+>> > - Watchdog
+>> > - Power Management Integrated Circuit "PMIC" wrapper
+>> >   - MT6357 PMIC
+>> > - MultiMediaCard "MMC" & Secure Digital "SD" controller
+>> > - USB controller
+>> > - Ethernet MAC controller
+>> >
+>> > Add CPU Freq & IDLE support for this board.
+>> >
+>> > This series depends to another one which add support for MT8365 SoC and
+>> > EVK board [1].
+>>
+>> It seems to depend on more than that series.  In order to test this, I
+>> tried applying this series on top of Bero's minimal support (now in
+>> linux-next), and it does not apply cleanly.
+>>
+>> Could you please list all the dependencies that are not yet upstream.
+>
+> Hi Kevin,
+> You're right, it also depend to
+> https://lore.kernel.org/all/20221122-mt8365-i2c-support-v6-0-e1009c8afd53=
+@baylibre.com/
 
-> If I add the cc: stable line in a patch and use git-send-email to post
-> the patch, git-send-email also posts the patch to the stable list -- is
-> this acceptable?
+Nope. Something else is missing too.  I tried this series on top of
+Bero's series + i2c series and still doesn't apply cleanly.  Look like
+some pinctrl stuff is also missing[1].
 
-Totally acceptable.
+Kevin
 
-> Sometimes a patch may have to undergo multiple
-> revisions, meaning all the discussion emails go to the stable list
-> unnecessarily, and I guess this is not good?
+[1]
+ Link: https://lore.kernel.org/r/20230203-evk-board-support-v3-0-0003e80e00=
+95@baylibre.com
+ Base: base-commit 555b3a55823ec063129de4403899203febb58788 not known, igno=
+ring
+ Base: not specified
+       git am /ssd/work/tmp/b4.mbx
+Applying: dt-bindings: watchdog: mediatek,mtk-wdt: add mt8365
+Applying: dt-bindings: pinctrl: mediatek,mt8365-pinctrl: add drive strength=
+ property
+error: Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.ya=
+ml: does not exist in index
+Patch failed at 0002 dt-bindings: pinctrl: mediatek,mt8365-pinctrl: add dri=
+ve strength property
 
-It's not a problem at all, happens all the time and in fact I like it as
-it gives us a heads-up that a patch is going to be eventually merged for
-us to handle.
 
-> It looks like there is no git-send-email option to exclude an email.
-
-No need to, don't worry about that at all.
-
-thanks,
-
-greg k-h
