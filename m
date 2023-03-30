@@ -2,68 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24586D0A6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 181286D0A78
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233405AbjC3PwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
+        id S233501AbjC3Pwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbjC3PwE (ORCPT
+        with ESMTP id S233500AbjC3Pwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:52:04 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F475D524
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:51:34 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso22397184pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680191493;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+UiZ1OnVN4eKK6Y2ubWlnceTNBKlqFHwpFESVYfLs/8=;
-        b=S/vO94S1KrhqZU+6ElYPyVmX/X2aqQ0WwjpCi7kD9I/GGADZwABRLXuThUACybh9fW
-         Jc8vWoM54trxFU9jTD8vT9qv1/YzIAK+t/+iSWqMHV3VvmbMbsFpPNPkLOWtNmQdr2M+
-         NOOglXpvt8QOovjU6tyAronds4rHDHXiVsrcr4pHOxIf4Mkc2kMCPS9E9hbM0FRc8Xap
-         OQzVkVSSJebU6P3/ujxSbgclr7egmG7yYKWaU9hkWjPXB+5srf+8/G/mryMBSsZC5uOk
-         AkZ+twFDDAEi1OvD7mYJUYLc+FXyT2GV6BPHwciyaDhucZPypkEltVKvz07HzD3Kxq9w
-         tEFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680191493;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+UiZ1OnVN4eKK6Y2ubWlnceTNBKlqFHwpFESVYfLs/8=;
-        b=bWbVDgWsXMLwRGU5ms7cF7iRnV/R5UyH/oM8mHnjUfKc0G14Hv36pF8TkOJJKYCby2
-         KgZrPed1VhQa6Hm0nhN2zu5t5ckocAW3ybJW7dZnXSgfkEHbnO1X3tHEYg5WUbJvv8EH
-         9qprb0KP+58NWXhyf7iGWFcE7kLOa0c8n3rLyzbOrH74LwPWDlkeZBYciYklc82277gG
-         l7cp1S2zTHMFBhzvNK47VUU6+53cZ9jyZ9nMlZ9yRCkBVWzPjsPJtkYB/uMfd2gGUtQs
-         cSFrB6YwW+U9UUjTOM5L5qeXoD5LZB9EFtRBSTTi32rKOuLvYh8Uo0cTxFiLhWC9HCpq
-         6Hig==
-X-Gm-Message-State: AAQBX9cApDPbO40FymzNRhVUb9NZtRW9GGu+TWHviA0Ng8FEWbMFKFII
-        ps5GuOs1hloVJB3653tgGPrWf26TU+YmHxX0hVg=
-X-Google-Smtp-Source: AKy350Z/fQwD6SWUO0Js9b6F9iq2N+n6uG5uCtOKnAI5zH9aI+LgGmdPVVeCxTY1fZdDZEXa5GtkUA==
-X-Received: by 2002:a17:902:f543:b0:1a1:ce5d:5a15 with SMTP id h3-20020a170902f54300b001a1ce5d5a15mr25852068plf.50.1680191492871;
-        Thu, 30 Mar 2023 08:51:32 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c5e:53ce:1f39:30a5:d20f:f205])
-        by smtp.gmail.com with ESMTPSA id b2-20020a170902ed0200b0019c8ef78d52sm24799025pld.21.2023.03.30.08.51.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:51:32 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, andersson@kernel.org,
-        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org
-Subject: [PATCH v2 1/1] arm64: dts: qcom: sm6115: Add CPU idle-states
-Date:   Thu, 30 Mar 2023 21:21:22 +0530
-Message-Id: <20230330155122.591099-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        Thu, 30 Mar 2023 11:52:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC19E19A
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:52:15 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32UF2ips006772;
+        Thu, 30 Mar 2023 15:52:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=pZCUFkZgsAw3SUtEcfncO2YiMButsh4w+3FR83KmNmI=;
+ b=jeavevmHOm6cm4mN/MxIsII10Y4RcmL+slaDNWZYEBvUOcBDnCfYX5DPaxrxu4esJ33o
+ kl5uU7SYpzMgoyZVx9rfB0oE8h3VRH8TMM12T/Zl+xptVvzpLzJOEsOLWO/ME2Jn/yll
+ NiilTLryzub9Spm9L7PKbs8SBQd1ZhhRY4cXQNjIrpO7UBNqgZDkBuhmAXxv/CgdDs/h
+ /VI+mV3XFksrpBu7lif1aLUQYf5QDMDJ3avdSuo30CnbESmcacyfVPlETfMMmwIMUx62
+ nyPlMSMofuIjAHYGxf9pNYiyJSP2R8plBjynkqPWmmw0TLJmxC/dkcith+Mtghi00pnG Yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmpr41uwu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 15:52:04 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32UF2rTU007786;
+        Thu, 30 Mar 2023 15:52:04 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmpr41uvj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 15:52:03 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32TKpnPI010293;
+        Thu, 30 Mar 2023 15:52:01 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3phrk6p0gg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 15:52:01 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32UFpw1Z46465388
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Mar 2023 15:51:58 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0B33D2004E;
+        Thu, 30 Mar 2023 15:51:58 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B79B320043;
+        Thu, 30 Mar 2023 15:51:57 +0000 (GMT)
+Received: from [9.101.4.33] (unknown [9.101.4.33])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 30 Mar 2023 15:51:57 +0000 (GMT)
+Message-ID: <45989617-e6f9-0ca5-3371-571268807fc5@linux.ibm.com>
+Date:   Thu, 30 Mar 2023 17:51:57 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH] powerpc/pseries/cpuhp: respect current SMT when adding
+ new CPU
+To:     Nathan Lynch <nathanl@linux.ibm.com>,
+        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
+Cc:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org,
+        Srikar Dronamraju <srikar@linux.ibm.com>, npiggin@gmail.com,
+        linuxppc-dev@lists.ozlabs.org
+References: <20230213124510.12651-1-ldufour@linux.ibm.com>
+ <87ilg5aahx.fsf@linux.ibm.com> <20230213150429.GZ19419@kitsune.suse.cz>
+ <87fsb9a7zx.fsf@linux.ibm.com>
+Content-Language: en-US
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <87fsb9a7zx.fsf@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1NHTgHTUYtooka195LEfZscRFAKWB2bH
+X-Proofpoint-ORIG-GUID: NrYgbgxGkFR0zlCkEhKJwHMZhAl6U_X1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-30_09,2023-03-30_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 spamscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ phishscore=0 adultscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303300123
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,224 +99,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add CPU idle-state nodes and power-domains in Qualcomm sm6115 SoC dtsi.
+On 13/02/2023 16:40:50, Nathan Lynch wrote:
+> Michal Suchánek <msuchanek@suse.de> writes:
+>> On Mon, Feb 13, 2023 at 08:46:50AM -0600, Nathan Lynch wrote:
+>>> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>>>> When a new CPU is added, the kernel is activating all its threads. This
+>>>> leads to weird, but functional, result when adding CPU on a SMT 4 system
+>>>> for instance.
+>>>>
+>>>> Here the newly added CPU 1 has 8 threads while the other one has 4 threads
+>>>> active (system has been booted with the 'smt-enabled=4' kernel option):
+>>>>
+>>>> ltcden3-lp12:~ # ppc64_cpu --info
+>>>> Core   0:    0*    1*    2*    3*    4     5     6     7
+>>>> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
+>>>>
+>>>> There is no SMT value in the kernel. It is possible to run unbalanced LPAR
+>>>> with 2 threads for a CPU, 4 for another one, and 5 on the latest.
+>>>>
+>>>> To work around this possibility, and assuming that the LPAR run with the
+>>>> same number of threads for each CPU, which is the common case,
+>>>
+>>> I am skeptical at best of baking that assumption into this code. Mixed
+>>> SMT modes within a partition doesn't strike me as an unreasonable
+>>> possibility for some use cases. And if that's wrong, then we should just
+>>> add a global smt value instead of using heuristics.
+>>>
+>>>> the number
+>>>> of active threads of the CPU doing the hot-plug operation is computed. Only
+>>>> that number of threads will be activated for the newly added CPU.
+>>>>
+>>>> This way on a LPAR running in SMT=4, newly added CPU will be running 4
+>>>> threads, which is what a end user would expect.
+>>>
+>>> I could see why most users would prefer this new behavior. But surely
+>>> some users have come to expect the existing behavior, which has been in
+>>> place for years, and developed workarounds that might be broken by this
+>>> change?
+>>>
+>>> I would suggest that to handle this well, we need to give user space
+>>> more ability to tell the kernel what actions to take on added cores, on
+>>> an opt-in basis.
+>>>
+>>> This could take the form of extending the DLPAR sysfs command set:
+>>>
+>>> Option 1 - Add a flag that tells the kernel not to online any threads at
+>>> all; user space will online the desired threads later.
+>>>
+>>> Option 2 - Add an option that tells the kernel which SMT mode to apply.
+>>
+>> powerpc-utils grew some drmgr hooks recently so maybe the policy can be
+>> moved to userspace?
+> 
+> I'm not sure whether the hook mechanism would come into play, but yes, I
+> am suggesting that user space be given the option of overriding the
+> kernel's current behavior.
 
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
-Changes since v1:
-- v1 can be viewed here: https://lore.kernel.org/lkml/e5cda4cf-5c2a-a7ed-9e1d-1fe9f2cbef40@linaro.org
-- Addressed Konrad's comments on v1 and added GDHS and Power Collapse
-  cluster power states.
+Indeed, that's not so easy. There are multiple ways for the SMT level to be
+impacted:
+ - smt-enabled kernel option
+ - smtstate systemctl service (if activated), saving SMT level at shutdown
+time to restore it a boot time
+ - pseries-energyd daemon (if activated) could turn off threads
+ - ppc64_cpu --smt=x user command
+ - sysfs direct writing to turn off/on specific threads.
 
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 132 +++++++++++++++++++++++++++
- 1 file changed, 132 insertions(+)
+There is no SMT level saved, on "disk" or in the kernel, and any of these
+options can interact in parallel. So from the user space point of view, the
+best we could do is looking for the SMT current values, there could be
+multiple values in the case of a mixed SMT state, peek one value and apply it.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 2a51c938bbcb..c93677e97076 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -45,6 +45,8 @@ CPU0: cpu@0 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD0>;
-+			power-domain-names = "psci";
- 			L2_0: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -61,6 +63,8 @@ CPU1: cpu@1 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD1>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU2: cpu@2 {
-@@ -73,6 +77,8 @@ CPU2: cpu@2 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD2>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU3: cpu@3 {
-@@ -85,6 +91,8 @@ CPU3: cpu@3 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD3>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU4: cpu@100 {
-@@ -97,6 +105,8 @@ CPU4: cpu@100 {
- 			dynamic-power-coefficient = <282>;
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			power-domains = <&CPU_PD4>;
-+			power-domain-names = "psci";
- 			L2_1: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -113,6 +123,8 @@ CPU5: cpu@101 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			power-domains = <&CPU_PD5>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU6: cpu@102 {
-@@ -125,6 +137,8 @@ CPU6: cpu@102 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			power-domains = <&CPU_PD6>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU7: cpu@103 {
-@@ -137,6 +151,8 @@ CPU7: cpu@103 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			power-domains = <&CPU_PD7>;
-+			power-domain-names = "psci";
- 		};
- 
- 		cpu-map {
-@@ -176,6 +192,68 @@ core3 {
- 				};
- 			};
- 		};
-+
-+		idle-states {
-+			entry-method = "psci";
-+
-+			LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "silver-rail-power-collapse";
-+				arm,psci-suspend-param = <0x40000003>;
-+				entry-latency-us = <290>;
-+				exit-latency-us = <376>;
-+				min-residency-us = <1182>;
-+				local-timer-stop;
-+			};
-+
-+			BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "gold-rail-power-collapse";
-+				arm,psci-suspend-param = <0x40000003>;
-+				entry-latency-us = <297>;
-+				exit-latency-us = <324>;
-+				min-residency-us = <1110>;
-+				local-timer-stop;
-+			};
-+		};
-+
-+		domain-idle-states {
-+			CLUSTER_0_SLEEP_0: cluster-sleep-0-0 {
-+				/* GDHS */
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x40000022>;
-+				entry-latency-us = <360>;
-+				exit-latency-us = <421>;
-+				min-residency-us = <782>;
-+			};
-+
-+			CLUSTER_0_SLEEP_1: cluster-sleep-0-1 {
-+				/* Power Collapse */
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x41000044>;
-+				entry-latency-us = <800>;
-+				exit-latency-us = <2118>;
-+				min-residency-us = <7376>;
-+			};
-+
-+			CLUSTER_1_SLEEP_0: cluster-sleep-1-0 {
-+				/* GDHS */
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x40000042>;
-+				entry-latency-us = <314>;
-+				exit-latency-us = <345>;
-+				min-residency-us = <660>;
-+			};
-+
-+			CLUSTER_1_SLEEP_1: cluster-sleep-1-1 {
-+				/* Power Collapse */
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x41000044>;
-+				entry-latency-us = <640>;
-+				exit-latency-us = <1654>;
-+				min-residency-us = <8094>;
-+			};
-+		};
- 	};
- 
- 	firmware {
-@@ -199,6 +277,60 @@ pmu {
- 	psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
-+
-+		CPU_PD0: power-domain-cpu0 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD1: power-domain-cpu1 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD2: power-domain-cpu2 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD3: power-domain-cpu3 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD4: power-domain-cpu4 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD5: power-domain-cpu5 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD6: power-domain-cpu6 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD7: power-domain-cpu7 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CLUSTER_PD: power-domain-cpu-cluster0 {
-+			#power-domain-cells = <0>;
-+			domain-idle-states = <&CLUSTER_0_SLEEP_0>, <&CLUSTER_0_SLEEP_1>,
-+					     <&CLUSTER_1_SLEEP_0>, <&CLUSTER_1_SLEEP_1>;
-+		};
- 	};
- 
- 	reserved_memory: reserved-memory {
--- 
-2.38.1
+Extending the drmgr's hook is still valid, and I sent a patch series on the
+powerpc-utils mailing list to achieve that. However, changing the SMT level
+in that hook means that newly added CPU will be first turn on and there is
+a window where this threads could be seen active. Not a big deal but not
+turning on these extra threads looks better to me.
 
+That's being said, I can't see any benefit of a user space implementation
+compared to the option I'm proposing in that patch.
+
+Does anyone have a better idea?
+
+Cheers,
+Laurent.
