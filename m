@@ -2,484 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FA86CFD48
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D946CFD44
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjC3HtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S229694AbjC3Hs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjC3Hsy (ORCPT
+        with ESMTP id S229530AbjC3Hsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 30 Mar 2023 03:48:54 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A994C13
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:48:49 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id l12so18064783wrm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:48:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680162528;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=okeSFnANawi1LC1aBHEsxSK/GYfBSKiaqPeM+AamHZg=;
-        b=HzMJRijwdPPEPy8qvkSlWVtDrQWbV6dX/IL9jpBcjDXV5uqcfCKxOOzHCZbYFRAYG9
-         PusIZChCya8EGmAMCT6kgYuzD4J2gzg2TMrbZr/2YX4LHmNMTKGkwWb+1qc/m3Aouwo0
-         Pk8GcPYf09RdHiRVewn+Z085xM0Qb9aDCv1E+ZRCKQBq1j+mwW6mkzvRepX9pEnryCbo
-         LNK6+ZH8/UojXRD/l6SrrhXj6lreIAjsqW0h+a28rfzS1vPWYufZ7uObUt8gdDt931rC
-         S/gMa8KGdjKfyceVQVMUx5FjJS76Sc32y8i/cAO0ok/3Nnf/1vgP9lvisyAOrgPVObJQ
-         nypg==
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B5E5272
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:48:51 -0700 (PDT)
+Received: by mail-io1-f79.google.com with SMTP id c83-20020a6bb356000000b00758333e1ddfso11106202iof.14
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:48:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680162528;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=okeSFnANawi1LC1aBHEsxSK/GYfBSKiaqPeM+AamHZg=;
-        b=V8+2ImrNuAXtPZSxsk2RpoNpYdRQVvCPXwjSqsyCpxmOKJdHrx1wa50ttMbr9YEMu/
-         VeTgLJ4uI/D37A6qUDqja5z8AyBuPpuSxt2NI32dZA/nFYGmIlfuknqcO9WKnIiP0Kz7
-         g7JXc0VwZ++sMqT8+Fpcm1jEBcI6yfBM2LbqQhkzgJv+CrsmO9KD+QCygNpI54AvWJAd
-         vXU09ceQQ0I/Qvu5B0chdBtP3Vz5G257uOofmnmoCZKlk+inXu9B0lRIsmlgzQBa171C
-         AHGxytw//+s4Hy8RVupzzgk/GXcxzVtwY8OLaZM5uqYtu1VWSCuZHsobatTY68DRhV7I
-         g8Sg==
-X-Gm-Message-State: AAQBX9c7N2CBXvSXMvntOIdJ95NkxFf6MljexEkPXWhgJVmRyjyXHiC1
-        Mx8UZmlVpDvZc2wCgIwUQQybVw==
-X-Google-Smtp-Source: AKy350YBDtDK4PFtkzL9mw2TdTBg5d1e+av3yV0hQ8sa0sVV3ghf+fwGAiaHFlngdg878+Nut7sZlA==
-X-Received: by 2002:adf:f0ca:0:b0:2d3:f610:8417 with SMTP id x10-20020adff0ca000000b002d3f6108417mr16612494wro.0.1680162527868;
-        Thu, 30 Mar 2023 00:48:47 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:fe8e:8291:fc25:6c8f? ([2a01:e0a:982:cbb0:fe8e:8291:fc25:6c8f])
-        by smtp.gmail.com with ESMTPSA id z1-20020adff1c1000000b002c6e8af1037sm32115528wro.104.2023.03.30.00.48.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 00:48:47 -0700 (PDT)
-Message-ID: <d7f36a28-0cae-a035-791b-363754aefeee@linaro.org>
-Date:   Thu, 30 Mar 2023 09:48:45 +0200
+        d=1e100.net; s=20210112; t=1680162530; x=1682754530;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vUsfODEsDzAR9EqvWlT1PM9QUz8OEaJY4GXMYUHR7zc=;
+        b=SK/INVLCR2/00NjXbp1/yqy7lN6nuFpXM2oNNPBb1ey4afdb238tHhqrkcxm28qXK6
+         GXK0lvtvQETS0hD8a2n7BjApDGALpT2fXIfD+88ssBMVdr7ZSuroBd53w8OcpPnf7BeY
+         lObXZl6OCwduNXt0fTbgsW8jW5HxGvCNWa9kGYdZNhvGG8+6HPgNnjAR1QyhytLAALlL
+         JOy9b5DfmwrsLfPv/VS9laSDOUydLL1gu+FqqE/0QZGcxzwYU0SJx9c8p734ldeKjGac
+         ByX9EfnuLROwRl4n/9dc3IGC5Qa+lD5bEEzIPI7EwJMD3ZQ5EAPzbXnXBwZOuEHjRvzi
+         2zXg==
+X-Gm-Message-State: AAQBX9dmi3ptzjM0BiyIRN8w17RJx5c4eIKt5CVpIeCwr0zJHMcqXr+A
+        Ulzcgd9CkHkPYSq8uWIyeA409T+/15AfgXu7FVDAFs5Y+ADR
+X-Google-Smtp-Source: AKy350b1Dj3CFZk+cHqn2IXzGI1Q97FSUeDDxWzStstwOIrJ/00+mw1jNVvvr/SqmR0xIVy/smQidgiwb8RQwJ8M6/dled2AlGdy
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 18/21] ARM: drop SMP support for ARM11MPCore
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Daniel Golle <daniel@makrotopia.org>
-References: <20230327121317.4081816-1-arnd@kernel.org>
- <20230327121317.4081816-19-arnd@kernel.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230327121317.4081816-19-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:20c8:b0:326:2db8:e61e with SMTP id
+ 8-20020a056e0220c800b003262db8e61emr2351346ilq.5.1680162530653; Thu, 30 Mar
+ 2023 00:48:50 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 00:48:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cdfab505f819529a@google.com>
+Subject: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in get_max_inline_xattr_value_size
+From:   syzbot <syzbot+1966db24521e5f6e23f7@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 14:13, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The cache management operations for noncoherent DMA on ARMv6 work
-> in two different ways:
-> 
->   * When CONFIG_DMA_CACHE_RWFO is set, speculative prefetches on in-flight
->     DMA buffers lead to data corruption when the prefetched data is written
->     back on top of data from the device.
-> 
->   * When CONFIG_DMA_CACHE_RWFO is disabled, a cache flush on one CPU
->     is not seen by the other core(s), leading to inconsistent contents
->     accross the system.
-> 
-> As a consequence, neither configuration is actually safe to use in a
-> general-purpose kernel that is used on both MPCore systems and ARM1176
-> with prefetching enabled.
-> 
-> We could add further workarounds to make the behavior more dynamic based
-> on the system, but realistically, there are close to zero remaining
-> users on any ARM11MPCore anyway, and nobody seems too interested in it,
-> compared to the more popular ARM1176 used in BMC2835 and AST2500.
-> 
-> The Oxnas platform has some minimal support in OpenWRT, but most of the
-> drivers and dts files never made it into the mainline kernel, while the
-> Arm Versatile/Realview platform mainly serves as a reference system but
-> is not necessary to be kept working once all other ARM11MPCore are gone.
+Hello,
 
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+syzbot found the following issue on:
 
-It's sad but it's the reality, there's no chance full OXNAS support will
-ever come upstream and no real work has been done for years.
+HEAD commit:    da8e7da11e4b Merge tag 'nfsd-6.3-4' of git://git.kernel.or..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=114fae51c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
+dashboard link: https://syzkaller.appspot.com/bug?extid=1966db24521e5f6e23f7
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1597fd0ec80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14149471c80000
 
-I think OXNAS support can be programmed for removal for next release,
-it would need significant work to rework current support to make it acceptable
-before trying to upstream missing bits anyway.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/62e9c5f4bead/disk-da8e7da1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c11aa933e2a7/vmlinux-da8e7da1.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7a21bdd49c84/bzImage-da8e7da1.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/58216d4aadcf/mount_0.gz
 
-Thanks,
-Neil
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1966db24521e5f6e23f7@syzkaller.appspotmail.com
+
+EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: none.
+EXT4-fs error (device loop0): ext4_xattr_ibody_get:669: inode #18: comm syz-executor366: corrupted in-inode xattr: bad magic number in in-inode xattr
+==================================================================
+BUG: KASAN: slab-use-after-free in get_max_inline_xattr_value_size+0x369/0x510 fs/ext4/inline.c:62
+Read of size 4 at addr ffff88807c4ac084 by task syz-executor366/5076
+
+CPU: 0 PID: 5076 Comm: syz-executor366 Not tainted 6.3.0-rc3-syzkaller-00338-gda8e7da11e4b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:319 [inline]
+ print_report+0x163/0x540 mm/kasan/report.c:430
+ kasan_report+0x176/0x1b0 mm/kasan/report.c:536
+ get_max_inline_xattr_value_size+0x369/0x510 fs/ext4/inline.c:62
+ ext4_get_max_inline_size+0x141/0x200 fs/ext4/inline.c:113
+ ext4_prepare_inline_data+0x87/0x1d0 fs/ext4/inline.c:393
+ ext4_da_write_inline_data_begin+0x208/0xe40 fs/ext4/inline.c:931
+ ext4_da_write_begin+0x4da/0x960 fs/ext4/inode.c:3064
+ generic_perform_write+0x300/0x5e0 mm/filemap.c:3926
+ ext4_buffered_write_iter+0x122/0x3a0 fs/ext4/file.c:289
+ ext4_file_write_iter+0x1d6/0x1930
+ call_write_iter include/linux/fs.h:1851 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x7b2/0xbb0 fs/read_write.c:584
+ ksys_write+0x1a0/0x2c0 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f63c54aea99
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff3f17f0c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f63c54aea99
+RDX: 0000000000000010 RSI: 0000000020000100 RDI: 0000000000000004
+RBP: 0000000000000000 R08: 00007fff3f17f0f0 R09: 00007fff3f17f0f0
+R10: 00007fff3f17f0f0 R11: 0000000000000246 R12: 00007f63c546d960
+R13: 00007fff3f17f120 R14: 00007fff3f17f100 R15: 0000000000000000
+ </TASK>
+
+Allocated by task 4998:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x66/0x70 mm/kasan/common.c:328
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:769
+ slab_alloc_node mm/slub.c:3452 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x11f/0x2e0 mm/slub.c:3476
+ anon_vma_chain_alloc mm/rmap.c:141 [inline]
+ anon_vma_fork+0x1fa/0x580 mm/rmap.c:364
+ dup_mmap kernel/fork.c:660 [inline]
+ dup_mm kernel/fork.c:1545 [inline]
+ copy_mm+0xae3/0x1670 kernel/fork.c:1594
+ copy_process+0x1905/0x3fc0 kernel/fork.c:2264
+ kernel_clone+0x222/0x800 kernel/fork.c:2679
+ __do_sys_clone kernel/fork.c:2820 [inline]
+ __se_sys_clone kernel/fork.c:2804 [inline]
+ __x64_sys_clone+0x235/0x280 kernel/fork.c:2804
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 5013:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:521
+ ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook mm/slub.c:1807 [inline]
+ slab_free mm/slub.c:3787 [inline]
+ kmem_cache_free+0x297/0x520 mm/slub.c:3809
+ anon_vma_chain_free mm/rmap.c:146 [inline]
+ unlink_anon_vmas+0x59e/0x5f0 mm/rmap.c:447
+ free_pgtables+0x348/0x4f0 mm/memory.c:383
+ exit_mmap+0x2c1/0x850 mm/mmap.c:3040
+ __mmput+0x115/0x3c0 kernel/fork.c:1204
+ exit_mm+0x227/0x310 kernel/exit.c:563
+ do_exit+0x612/0x2290 kernel/exit.c:856
+ do_group_exit+0x206/0x2c0 kernel/exit.c:1019
+ __do_sys_exit_group kernel/exit.c:1030 [inline]
+ __se_sys_exit_group kernel/exit.c:1028 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1028
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff88807c4ac070
+ which belongs to the cache anon_vma_chain of size 80
+The buggy address is located 20 bytes inside of
+ freed 80-byte region [ffff88807c4ac070, ffff88807c4ac0c0)
+
+The buggy address belongs to the physical page:
+page:ffffea0001f12b00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7c4ac
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffff888140007280 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000240024 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12800(GFP_NOWAIT|__GFP_NOWARN|__GFP_NORETRY), pid 4998, tgid 4998 (dhcpcd-run-hook), ts 47082738820, free_ts 47079213294
+ prep_new_page mm/page_alloc.c:2553 [inline]
+ get_page_from_freelist+0x3246/0x33c0 mm/page_alloc.c:4326
+ __alloc_pages+0x255/0x670 mm/page_alloc.c:5592
+ alloc_slab_page+0x6a/0x160 mm/slub.c:1851
+ allocate_slab mm/slub.c:1998 [inline]
+ new_slab+0x84/0x2f0 mm/slub.c:2051
+ ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
+ __slab_alloc mm/slub.c:3292 [inline]
+ __slab_alloc_node mm/slub.c:3345 [inline]
+ slab_alloc_node mm/slub.c:3442 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x1b9/0x2e0 mm/slub.c:3476
+ anon_vma_chain_alloc mm/rmap.c:141 [inline]
+ anon_vma_clone+0x98/0x4d0 mm/rmap.c:288
+ anon_vma_fork+0x87/0x580 mm/rmap.c:351
+ dup_mmap kernel/fork.c:660 [inline]
+ dup_mm kernel/fork.c:1545 [inline]
+ copy_mm+0xae3/0x1670 kernel/fork.c:1594
+ copy_process+0x1905/0x3fc0 kernel/fork.c:2264
+ kernel_clone+0x222/0x800 kernel/fork.c:2679
+ __do_sys_clone kernel/fork.c:2820 [inline]
+ __se_sys_clone kernel/fork.c:2804 [inline]
+ __x64_sys_clone+0x235/0x280 kernel/fork.c:2804
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1454 [inline]
+ free_pcp_prepare mm/page_alloc.c:1504 [inline]
+ free_unref_page_prepare+0xe2f/0xe70 mm/page_alloc.c:3388
+ free_unref_page_list+0x596/0x830 mm/page_alloc.c:3529
+ release_pages+0x219e/0x2470 mm/swap.c:1042
+ tlb_batch_pages_flush mm/mmu_gather.c:97 [inline]
+ tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
+ tlb_flush_mmu+0x100/0x210 mm/mmu_gather.c:299
+ tlb_finish_mmu+0xd4/0x1f0 mm/mmu_gather.c:391
+ exit_mmap+0x2c9/0x850 mm/mmap.c:3042
+ __mmput+0x115/0x3c0 kernel/fork.c:1204
+ exit_mm+0x227/0x310 kernel/exit.c:563
+ do_exit+0x612/0x2290 kernel/exit.c:856
+ do_group_exit+0x206/0x2c0 kernel/exit.c:1019
+ __do_sys_exit_group kernel/exit.c:1030 [inline]
+ __se_sys_exit_group kernel/exit.c:1028 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1028
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff88807c4abf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff88807c4ac000: fa fb fb fb fb fb fb fb fb fb fc fc fc fc fa fb
+>ffff88807c4ac080: fb fb fb fb fb fb fb fb fc fc fc fc fa fb fb fb
+                   ^
+ ffff88807c4ac100: fb fb fb fb fb fb fc fc fc fc fa fb fb fb fb fb
+ ffff88807c4ac180: fb fb fb fb fc fc fc fc fa fb fb fb fb fb fb fb
+==================================================================
 
 
-> 
-> Take the easy way out here and drop support for multiprocessing on
-> ARMv6, along with the CONFIG_DMA_CACHE_RWFO option and the cache
-> management implementation for it. This also helps with other ARMv6
-> issues, but for the moment leaves the ability to build a kernel that
-> can run on both ARMv7 SMP and single-processor ARMv6, which we probably
-> want to stop supporting as well, but not as part of this series.
-> 
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Daniel Golle <daniel@makrotopia.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: linux-oxnas@groups.io
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> I could use some help clarifying the above changelog text to describe
-> the exact problem, and how the CONFIG_DMA_CACHE_RWFO actually works on
-> MPCore. The TRMs for both 1176 and 11MPCore only describe prefetching
-> into the instruction cache, not the data cache, but this can end up in
-> the outercache as a result. The 1176 has some extra control bits to
-> control prefetching, but I found no reference that explains why an
-> MPCore does not run into the problem.
-> ---
->   arch/arm/mach-oxnas/Kconfig                |  4 -
->   arch/arm/mach-oxnas/Makefile               |  1 -
->   arch/arm/mach-oxnas/headsmp.S              | 23 ------
->   arch/arm/mach-oxnas/platsmp.c              | 96 ----------------------
->   arch/arm/mach-versatile/platsmp-realview.c |  4 -
->   arch/arm/mm/Kconfig                        | 19 -----
->   arch/arm/mm/cache-v6.S                     | 31 -------
->   7 files changed, 178 deletions(-)
->   delete mode 100644 arch/arm/mach-oxnas/headsmp.S
->   delete mode 100644 arch/arm/mach-oxnas/platsmp.c
-> 
-> diff --git a/arch/arm/mach-oxnas/Kconfig b/arch/arm/mach-oxnas/Kconfig
-> index a9ded7079268..a054235c3d6c 100644
-> --- a/arch/arm/mach-oxnas/Kconfig
-> +++ b/arch/arm/mach-oxnas/Kconfig
-> @@ -28,10 +28,6 @@ config MACH_OX820
->   	bool "Support OX820 Based Products"
->   	depends on ARCH_MULTI_V6
->   	select ARM_GIC
-> -	select DMA_CACHE_RWFO if SMP
-> -	select HAVE_SMP
-> -	select HAVE_ARM_SCU if SMP
-> -	select HAVE_ARM_TWD if SMP
->   	help
->   	  Include Support for the Oxford Semiconductor OX820 SoC Based Products.
->   
-> diff --git a/arch/arm/mach-oxnas/Makefile b/arch/arm/mach-oxnas/Makefile
-> index 0e78ecfe6c49..a4e40e534e6a 100644
-> --- a/arch/arm/mach-oxnas/Makefile
-> +++ b/arch/arm/mach-oxnas/Makefile
-> @@ -1,2 +1 @@
->   # SPDX-License-Identifier: GPL-2.0-only
-> -obj-$(CONFIG_SMP)		+= platsmp.o headsmp.o
-> diff --git a/arch/arm/mach-oxnas/headsmp.S b/arch/arm/mach-oxnas/headsmp.S
-> deleted file mode 100644
-> index 9c0f1479f33a..000000000000
-> --- a/arch/arm/mach-oxnas/headsmp.S
-> +++ /dev/null
-> @@ -1,23 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0-only */
-> -/*
-> - * Copyright (C) 2013 Ma Haijun <mahaijuns@gmail.com>
-> - * Copyright (c) 2003 ARM Limited
-> - * All Rights Reserved
-> - */
-> -#include <linux/linkage.h>
-> -#include <linux/init.h>
-> -
-> -	__INIT
-> -
-> -/*
-> - * OX820 specific entry point for secondary CPUs.
-> - */
-> -ENTRY(ox820_secondary_startup)
-> -	mov r4, #0
-> -	/* invalidate both caches and branch target cache */
-> -	mcr p15, 0, r4, c7, c7, 0
-> -	/*
-> -	 * we've been released from the holding pen: secondary_stack
-> -	 * should now contain the SVC stack for this core
-> -	 */
-> -	b	secondary_startup
-> diff --git a/arch/arm/mach-oxnas/platsmp.c b/arch/arm/mach-oxnas/platsmp.c
-> deleted file mode 100644
-> index f0a50b9e61df..000000000000
-> --- a/arch/arm/mach-oxnas/platsmp.c
-> +++ /dev/null
-> @@ -1,96 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-only
-> -/*
-> - * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
-> - * Copyright (C) 2013 Ma Haijun <mahaijuns@gmail.com>
-> - * Copyright (C) 2002 ARM Ltd.
-> - * All Rights Reserved
-> - */
-> -#include <linux/io.h>
-> -#include <linux/delay.h>
-> -#include <linux/of.h>
-> -#include <linux/of_address.h>
-> -
-> -#include <asm/cacheflush.h>
-> -#include <asm/cp15.h>
-> -#include <asm/smp_plat.h>
-> -#include <asm/smp_scu.h>
-> -
-> -extern void ox820_secondary_startup(void);
-> -
-> -static void __iomem *cpu_ctrl;
-> -static void __iomem *gic_cpu_ctrl;
-> -
-> -#define HOLDINGPEN_CPU_OFFSET		0xc8
-> -#define HOLDINGPEN_LOCATION_OFFSET	0xc4
-> -
-> -#define GIC_NCPU_OFFSET(cpu)		(0x100 + (cpu)*0x100)
-> -#define GIC_CPU_CTRL			0x00
-> -#define GIC_CPU_CTRL_ENABLE		1
-> -
-> -static int __init ox820_boot_secondary(unsigned int cpu,
-> -		struct task_struct *idle)
-> -{
-> -	/*
-> -	 * Write the address of secondary startup into the
-> -	 * system-wide flags register. The BootMonitor waits
-> -	 * until it receives a soft interrupt, and then the
-> -	 * secondary CPU branches to this address.
-> -	 */
-> -	writel(virt_to_phys(ox820_secondary_startup),
-> -			cpu_ctrl + HOLDINGPEN_LOCATION_OFFSET);
-> -
-> -	writel(cpu, cpu_ctrl + HOLDINGPEN_CPU_OFFSET);
-> -
-> -	/*
-> -	 * Enable GIC cpu interface in CPU Interface Control Register
-> -	 */
-> -	writel(GIC_CPU_CTRL_ENABLE,
-> -		gic_cpu_ctrl + GIC_NCPU_OFFSET(cpu) + GIC_CPU_CTRL);
-> -
-> -	/*
-> -	 * Send the secondary CPU a soft interrupt, thereby causing
-> -	 * the boot monitor to read the system wide flags register,
-> -	 * and branch to the address found there.
-> -	 */
-> -	arch_send_wakeup_ipi_mask(cpumask_of(cpu));
-> -
-> -	return 0;
-> -}
-> -
-> -static void __init ox820_smp_prepare_cpus(unsigned int max_cpus)
-> -{
-> -	struct device_node *np;
-> -	void __iomem *scu_base;
-> -
-> -	np = of_find_compatible_node(NULL, NULL, "arm,arm11mp-scu");
-> -	scu_base = of_iomap(np, 0);
-> -	of_node_put(np);
-> -	if (!scu_base)
-> -		return;
-> -
-> -	/* Remap CPU Interrupt Interface Registers */
-> -	np = of_find_compatible_node(NULL, NULL, "arm,arm11mp-gic");
-> -	gic_cpu_ctrl = of_iomap(np, 1);
-> -	of_node_put(np);
-> -	if (!gic_cpu_ctrl)
-> -		goto unmap_scu;
-> -
-> -	np = of_find_compatible_node(NULL, NULL, "oxsemi,ox820-sys-ctrl");
-> -	cpu_ctrl = of_iomap(np, 0);
-> -	of_node_put(np);
-> -	if (!cpu_ctrl)
-> -		goto unmap_scu;
-> -
-> -	scu_enable(scu_base);
-> -	flush_cache_all();
-> -
-> -unmap_scu:
-> -	iounmap(scu_base);
-> -}
-> -
-> -static const struct smp_operations ox820_smp_ops __initconst = {
-> -	.smp_prepare_cpus	= ox820_smp_prepare_cpus,
-> -	.smp_boot_secondary	= ox820_boot_secondary,
-> -};
-> -
-> -CPU_METHOD_OF_DECLARE(ox820_smp, "oxsemi,ox820-smp", &ox820_smp_ops);
-> diff --git a/arch/arm/mach-versatile/platsmp-realview.c b/arch/arm/mach-versatile/platsmp-realview.c
-> index 5d363385c801..fa31fd2d211d 100644
-> --- a/arch/arm/mach-versatile/platsmp-realview.c
-> +++ b/arch/arm/mach-versatile/platsmp-realview.c
-> @@ -18,16 +18,12 @@
->   #define REALVIEW_SYS_FLAGSSET_OFFSET	0x30
->   
->   static const struct of_device_id realview_scu_match[] = {
-> -	{ .compatible = "arm,arm11mp-scu", },
->   	{ .compatible = "arm,cortex-a9-scu", },
->   	{ .compatible = "arm,cortex-a5-scu", },
->   	{ }
->   };
->   
->   static const struct of_device_id realview_syscon_match[] = {
-> -        { .compatible = "arm,core-module-integrator", },
-> -        { .compatible = "arm,realview-eb-syscon", },
-> -        { .compatible = "arm,realview-pb11mp-syscon", },
->           { .compatible = "arm,realview-pbx-syscon", },
->           { },
->   };
-> diff --git a/arch/arm/mm/Kconfig b/arch/arm/mm/Kconfig
-> index c5bbae86f725..16b62bc0a970 100644
-> --- a/arch/arm/mm/Kconfig
-> +++ b/arch/arm/mm/Kconfig
-> @@ -937,25 +937,6 @@ config VDSO
->   	  You must have glibc 2.22 or later for programs to seamlessly
->   	  take advantage of this.
->   
-> -config DMA_CACHE_RWFO
-> -	bool "Enable read/write for ownership DMA cache maintenance"
-> -	depends on CPU_V6K && SMP
-> -	default y
-> -	help
-> -	  The Snoop Control Unit on ARM11MPCore does not detect the
-> -	  cache maintenance operations and the dma_{map,unmap}_area()
-> -	  functions may leave stale cache entries on other CPUs. By
-> -	  enabling this option, Read or Write For Ownership in the ARMv6
-> -	  DMA cache maintenance functions is performed. These LDR/STR
-> -	  instructions change the cache line state to shared or modified
-> -	  so that the cache operation has the desired effect.
-> -
-> -	  Note that the workaround is only valid on processors that do
-> -	  not perform speculative loads into the D-cache. For such
-> -	  processors, if cache maintenance operations are not broadcast
-> -	  in hardware, other workarounds are needed (e.g. cache
-> -	  maintenance broadcasting in software via FIQ).
-> -
->   config OUTER_CACHE
->   	bool
->   
-> diff --git a/arch/arm/mm/cache-v6.S b/arch/arm/mm/cache-v6.S
-> index abae7ff5defc..f6ee53c1de20 100644
-> --- a/arch/arm/mm/cache-v6.S
-> +++ b/arch/arm/mm/cache-v6.S
-> @@ -201,10 +201,6 @@ ENTRY(v6_flush_kern_dcache_area)
->    *	- end     - virtual end address of region
->    */
->   ENTRY(v6_dma_inv_range)
-> -#ifdef CONFIG_DMA_CACHE_RWFO
-> -	ldrb	r2, [r0]			@ read for ownership
-> -	strb	r2, [r0]			@ write for ownership
-> -#endif
->   	tst	r0, #D_CACHE_LINE_SIZE - 1
->   	bic	r0, r0, #D_CACHE_LINE_SIZE - 1
->   #ifdef HARVARD_CACHE
-> @@ -213,10 +209,6 @@ ENTRY(v6_dma_inv_range)
->   	mcrne	p15, 0, r0, c7, c11, 1		@ clean unified line
->   #endif
->   	tst	r1, #D_CACHE_LINE_SIZE - 1
-> -#ifdef CONFIG_DMA_CACHE_RWFO
-> -	ldrbne	r2, [r1, #-1]			@ read for ownership
-> -	strbne	r2, [r1, #-1]			@ write for ownership
-> -#endif
->   	bic	r1, r1, #D_CACHE_LINE_SIZE - 1
->   #ifdef HARVARD_CACHE
->   	mcrne	p15, 0, r1, c7, c14, 1		@ clean & invalidate D line
-> @@ -231,10 +223,6 @@ ENTRY(v6_dma_inv_range)
->   #endif
->   	add	r0, r0, #D_CACHE_LINE_SIZE
->   	cmp	r0, r1
-> -#ifdef CONFIG_DMA_CACHE_RWFO
-> -	ldrlo	r2, [r0]			@ read for ownership
-> -	strlo	r2, [r0]			@ write for ownership
-> -#endif
->   	blo	1b
->   	mov	r0, #0
->   	mcr	p15, 0, r0, c7, c10, 4		@ drain write buffer
-> @@ -248,9 +236,6 @@ ENTRY(v6_dma_inv_range)
->   ENTRY(v6_dma_clean_range)
->   	bic	r0, r0, #D_CACHE_LINE_SIZE - 1
->   1:
-> -#ifdef CONFIG_DMA_CACHE_RWFO
-> -	ldr	r2, [r0]			@ read for ownership
-> -#endif
->   #ifdef HARVARD_CACHE
->   	mcr	p15, 0, r0, c7, c10, 1		@ clean D line
->   #else
-> @@ -269,10 +254,6 @@ ENTRY(v6_dma_clean_range)
->    *	- end     - virtual end address of region
->    */
->   ENTRY(v6_dma_flush_range)
-> -#ifdef CONFIG_DMA_CACHE_RWFO
-> -	ldrb	r2, [r0]		@ read for ownership
-> -	strb	r2, [r0]		@ write for ownership
-> -#endif
->   	bic	r0, r0, #D_CACHE_LINE_SIZE - 1
->   1:
->   #ifdef HARVARD_CACHE
-> @@ -282,10 +263,6 @@ ENTRY(v6_dma_flush_range)
->   #endif
->   	add	r0, r0, #D_CACHE_LINE_SIZE
->   	cmp	r0, r1
-> -#ifdef CONFIG_DMA_CACHE_RWFO
-> -	ldrblo	r2, [r0]			@ read for ownership
-> -	strblo	r2, [r0]			@ write for ownership
-> -#endif
->   	blo	1b
->   	mov	r0, #0
->   	mcr	p15, 0, r0, c7, c10, 4		@ drain write buffer
-> @@ -301,13 +278,7 @@ ENTRY(v6_dma_map_area)
->   	add	r1, r1, r0
->   	teq	r2, #DMA_FROM_DEVICE
->   	beq	v6_dma_inv_range
-> -#ifndef CONFIG_DMA_CACHE_RWFO
->   	b	v6_dma_clean_range
-> -#else
-> -	teq	r2, #DMA_TO_DEVICE
-> -	beq	v6_dma_clean_range
-> -	b	v6_dma_flush_range
-> -#endif
->   ENDPROC(v6_dma_map_area)
->   
->   /*
-> @@ -317,11 +288,9 @@ ENDPROC(v6_dma_map_area)
->    *	- dir	- DMA direction
->    */
->   ENTRY(v6_dma_unmap_area)
-> -#ifndef CONFIG_DMA_CACHE_RWFO
->   	add	r1, r1, r0
->   	teq	r2, #DMA_TO_DEVICE
->   	bne	v6_dma_inv_range
-> -#endif
->   	ret	lr
->   ENDPROC(v6_dma_unmap_area)
->   
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
