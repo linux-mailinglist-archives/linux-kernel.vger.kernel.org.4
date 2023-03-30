@@ -2,129 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38606CF8B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302F96CF8C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjC3Bai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 21:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S229739AbjC3BfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 21:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjC3Baf (ORCPT
+        with ESMTP id S229708AbjC3Be7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 21:30:35 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB75B2132
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 18:30:31 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:56584.343497374
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id E1F891002FD;
-        Thu, 30 Mar 2023 09:30:27 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 2a513672f4724ede906719b5faed2f28 for lkp@intel.com;
-        Thu, 30 Mar 2023 09:30:30 CST
-X-Transaction-ID: 2a513672f4724ede906719b5faed2f28
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <eca6b468-1bf6-01a1-c9e4-5241f2d7cad9@189.cn>
-Date:   Thu, 30 Mar 2023 09:30:24 +0800
+        Wed, 29 Mar 2023 21:34:59 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52BC4C07
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 18:34:57 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id iw3so16689000plb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 18:34:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680140097;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+s3/7avJ4jXfEL/EcHu+vdSVHrfTZ0GFVAw0Oijq+5s=;
+        b=Fvg2Ut9YmRIdGmiIGn0vAOuc+ZHU1m8fZpC4dHiKI+1SK3oXa61qaRx2rkr1rYJkz7
+         i71lQU96Xbnmo3P8Dm2QC5r4YMCmnyhURdPljQ0WbKGuIg5TjeepcD9nwIs+AyWbls4Z
+         dOUZJxDUKTwc7uYxe5h4TO9zFvALEqUiriR8Vqw8frJhrO2ByWApDe4Rnhngohf619Tw
+         jd0wN9xKEJE+8QkMXbMmmzFZ8npJ36rxqt/Y2GSc3kSpURapwoo871F6ib3hpTujXKKz
+         ONoDrfZ+S6fDV7zxFpxXPghWFE5b/HvloxI9WCxYdjk/KyNrDY1rm+sDl3KblEKSNSi0
+         zMhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680140097;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+s3/7avJ4jXfEL/EcHu+vdSVHrfTZ0GFVAw0Oijq+5s=;
+        b=Djf/wMh75PKJH9kO7NIEN3KbKcs2wX2U6USeGmz9ui1P8m/OCluv+azaJJujzxRFJt
+         xt0+kF6veJYZfp0d9r8b94jwWMM9H+bV+vm0CHQezdqPKthgK5KS6fOmrAWgc0sermg3
+         CwoalCmu89uCtlKNURIspmRUztIz1UoaaCKzAj5HkDfGW7woHbiz/fVSMxrqDD45UVbt
+         73DbVn970NF2NgoT6v31fgwpSGXWZl0VcNzXY/I/GbvUa9BstHQkDs+AfbUqf+eb1Xva
+         KrkfqYccXk6d4/OoCxXPy2dO87RiQQK7osV+fX5DyZKKi/avHkLdMcGFISdaGp8M8GfI
+         KagA==
+X-Gm-Message-State: AAQBX9fOJLmlDQEnCrtqqIUOyoTuta11VMEdhdDqjSwxxVm4Blc4h3If
+        4TmGRtFd9KDZxkZUNfOUwVc3yA==
+X-Google-Smtp-Source: AKy350byhc7BcOIWgRDGMh3ui2tHi24Dd3KnN1ayQaCGu36TkkQY/yVUP2ZTbD6kyTEXIQN2psP5VA==
+X-Received: by 2002:a17:90a:198e:b0:237:9cc7:28a4 with SMTP id 14-20020a17090a198e00b002379cc728a4mr23166855pji.14.1680140097081;
+        Wed, 29 Mar 2023 18:34:57 -0700 (PDT)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id ij21-20020a17090af81500b0023b3d80c76csm2081346pjb.4.2023.03.29.18.34.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 18:34:56 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 09:34:49 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] irqchip: irq-qcom-mpm: Support passing a slice of
+ SRAM as reg space
+Message-ID: <20230330013449.GB3590215@dragon>
+References: <20230328-topic-msgram_mpm-v1-0-1b788a5f5a33@linaro.org>
+ <20230328-topic-msgram_mpm-v1-2-1b788a5f5a33@linaro.org>
+ <20230329034958.GC3554086@dragon>
+ <c42b8c24-2159-64ae-d36c-92c69274f24f@linaro.org>
+ <20230329132819.GA3590215@dragon>
+ <14350eba-edb6-0243-5451-2e2b7d1bd3fd@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 5/6] drm/etnaviv: expand driver support for the pci
- devices
-To:     kernel test robot <lkp@intel.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Sui Jingfeng <suijingfeng@loongson.cn>
-References: <20230329205129.1513734-6-15330273260@189.cn>
- <202303300759.E9lbKNTQ-lkp@intel.com>
-Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <202303300759.E9lbKNTQ-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <14350eba-edb6-0243-5451-2e2b7d1bd3fd@linaro.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, pci_clear_master is located at pci.h.
+On Wed, Mar 29, 2023 at 03:30:12PM +0200, Konrad Dybcio wrote:
+> >>>> @@ -374,9 +377,21 @@ static int qcom_mpm_init(struct device_node *np, struct device_node *parent)
+> >>>>  
+> >>>>  	raw_spin_lock_init(&priv->lock);
+> >>>>  
+> >>>> -	priv->base = devm_platform_ioremap_resource(pdev, 0);
+> >>>> -	if (IS_ERR(priv->base))
+> >>>> -		return PTR_ERR(priv->base);
+> >>>> +	/* If we have a handle to an RPM message ram partition, use it. */
+> >>>> +	msgram_np = of_parse_phandle(np, "qcom,rpm-msg-ram", 0);
+> >>>> +	if (msgram_np) {
+> >>>> +		ret = of_address_to_resource(msgram_np, 0, &res);
+> >>>> +		/* Don't use devm_ioremap_resource, as we're accessing a shared region. */
+> >>>> +		priv->base = ioremap(res.start, resource_size(&res));
+> >>>
+> >>> Are you suggesting that other cores/drivers will also need to access
+> >>> the mpm slice below?
+> >>>
+> >>> 	apss_mpm: sram@1b8 {
+> >>> 		reg = <0x1b8 0x48>;
+> >>> 	};
+> >> Yes, the RPM M3 core. Other slices may be accessed
+> >> by any core at any time.
+> > 
+> > Hmm, let me reword my question.  Other than irq-qcom-mpm, is there any
+> > other Linux drivers that also need to request this slice region?
+> No.
+> 
+> > Otherwise, I do not understand why devm_ioremap_resource() cannot be
+> > used.
+> drivers/rpmsg/qcom_glink_rpm.c calls devm_ioremap on the entire
+> RPM MSG RAM.
 
+Can we use devm_ioremap() too instead of ioremap() here?
 
-  Added by commit 6a479079c07211bf348ac8a79754f26bea258f26 (PCI: Add 
-pci_clear_master() as opposite of pci_set_master())
-
-
-  I don't know what the reason arc architecture can't use this.
-
-
-On 2023/3/30 08:07, kernel test robot wrote:
-> Hi Sui,
->
-> Thank you for the patch! Yet something to improve:
->
-> [auto build test ERROR on drm-misc/drm-misc-next]
-> [also build test ERROR on drm/drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc4 next-20230329]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/drm-etnaviv-add-a-dedicate-function-to-register-irq-handler-for-the-gpu/20230330-045519
-> base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-> patch link:    https://lore.kernel.org/r/20230329205129.1513734-6-15330273260%40189.cn
-> patch subject: [PATCH v3 5/6] drm/etnaviv: expand driver support for the pci devices
-> config: arc-randconfig-r043-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300759.E9lbKNTQ-lkp@intel.com/config)
-> compiler: arc-elf-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/cfc3554b9fbd8ca3f3f6731d45d811bfa7fdf777
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Sui-Jingfeng/drm-etnaviv-add-a-dedicate-function-to-register-irq-handler-for-the-gpu/20230330-045519
->          git checkout cfc3554b9fbd8ca3f3f6731d45d811bfa7fdf777
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/gpu/drm/etnaviv/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303300759.E9lbKNTQ-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->     drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c: In function 'etnaviv_gpu_pci_fini':
->>> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9: error: implicit declaration of function 'pci_clear_master'; did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
->        32 |         pci_clear_master(pdev);
->           |         ^~~~~~~~~~~~~~~~
->           |         pci_set_master
->     cc1: some warnings being treated as errors
->
->
-> vim +32 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
->
->      27	
->      28	static void etnaviv_gpu_pci_fini(struct etnaviv_gpu *gpu, bool component)
->      29	{
->      30		struct pci_dev *pdev = to_pci_dev(gpu->dev);
->      31	
->    > 32		pci_clear_master(pdev);
->      33	
->      34		dev_dbg(gpu->dev, "component is %s\n",
->      35			component ? "enabled" : "disabled");
->      36	}
->      37	
->
+Shawn
