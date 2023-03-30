@@ -2,173 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE346D0E99
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7A06D0EB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjC3TTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 15:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+        id S232187AbjC3TZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 15:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232076AbjC3TTK (ORCPT
+        with ESMTP id S231549AbjC3TZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:19:10 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55FA11158;
-        Thu, 30 Mar 2023 12:18:49 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id cn12so80690560edb.4;
-        Thu, 30 Mar 2023 12:18:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680203928;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4q03OZ6Bg+GlvpSvY95+tuvETzAF1mWv6O6MJqkSOes=;
-        b=O28g3NA8Tb2ES1tEbLmVheLCFjUEgDzVflxrsrNJwK1AdjLkgJjOE/tVKCDdaxXwZp
-         WCCzlOKVnTYxDR0HmhVnIXFreE08BxTQJmc+dawdjtYyiD4iiYk78b654B4auVB/dslq
-         7DG48ByHnzkwesNqh7Ya3zL1QwK5gLt5lZ2AT4OfGaN5TDHv7qKi/n7YatPRh2BU2CrN
-         GSbJhL5cpyaywuayFC9N8fb9+ordoHFCZE8D/VxBG46PcFNWtnrviOvEOklA0b34kLN7
-         e48ViFQuhHD7bJ/psalH7wvJXbbkEiZO89lq0Xrw9rA9bmkJTqRF1wb8dQFjNsR1oD52
-         iNJA==
+        Thu, 30 Mar 2023 15:25:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C63FF742
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:24:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680204254;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HBqpSW6QK4EA+LClEvnqsikCHd1YVrQiiftMR2XV5Rc=;
+        b=CXeQaZnnJus+YpVIjfyzfmyvnzSdWS4iQ0U+28GIZqN9yNSYb+gOCfztXf4NSxPWAz5c4J
+        HAeJx+BwbhnHdei2LdEH2wwp4Ei8TmwfC4zvb6pZNFVEvtOSDwAJkCI5DvYxrKvLc/ATEF
+        TlvQzAe0cbTO2tLUJIluSA7cEdvvE/Y=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-611-eoSboot9PE-gPZNSEAAw5g-1; Thu, 30 Mar 2023 15:24:13 -0400
+X-MC-Unique: eoSboot9PE-gPZNSEAAw5g-1
+Received: by mail-ed1-f69.google.com with SMTP id a40-20020a509eab000000b005024c025bf4so16194567edf.14
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:24:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680203928;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4q03OZ6Bg+GlvpSvY95+tuvETzAF1mWv6O6MJqkSOes=;
-        b=rPtsllWO/vvkjOizn2uAp4v5Ty05fvWc2ba7PqU8xN3KW+x9YT/YB40LrSRt84KCHV
-         w+AWNhjHxnPVXx9xTrxxFaAuv8A4hTabgGimkdj9eXV2kv5xjbPt0KfGO5drAccf40Qh
-         1vifHAesTdLfXGd5llFaNCe5zXOhxTlLufTMwOj5xPgFwjmSlcbSMJmW+F7aF0SiErUZ
-         e1vnzUGitZZYN+DPtfSrjlGvVl2ICZ0WUTVW/YFBzSLtql8UQJ01BE5GNr8ZXNR8d38n
-         nDoHy4f2VzznTjglwzhM0VjScu+zIO6ZpgjPkD0BjyFdOY6ir7Maj5LA9kBcwrrMm+TW
-         8iFg==
-X-Gm-Message-State: AAQBX9eB97ptDTicu8cgiufnHBA9FL4/zZYsprjItnlwKb2RXHIkwUex
-        fAnSgoLpXkqOnVeRqOX43rs=
-X-Google-Smtp-Source: AKy350ZdUzEUad/4w3uOLqChw1DiPg/T2noGNa6IvE9m7OI0oF76V4MwVBeh2pIG9pR/FXdp1KIMnQ==
-X-Received: by 2002:a17:907:9d1a:b0:92e:eecf:b742 with SMTP id kt26-20020a1709079d1a00b0092eeecfb742mr24362906ejc.2.1680203927685;
-        Thu, 30 Mar 2023 12:18:47 -0700 (PDT)
-Received: from pc636 ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id gx20-20020a1709068a5400b00931faf03db0sm139005ejc.27.2023.03.30.12.18.46
+        d=1e100.net; s=20210112; t=1680204252;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HBqpSW6QK4EA+LClEvnqsikCHd1YVrQiiftMR2XV5Rc=;
+        b=mUDuqP2fnQCcIFc443DKLGLZFMAw2Mjo2Z9YLlwC2Bam55tFQsBV/4/nxb9T8ByGOc
+         d0wpRoo70IwtjAKYES1W8wiieG1/YabNU3w+Jz8FNOirJjsRPLwiBEwrYGDxIGUQr3bD
+         YR1hTQ6KeQKBHlJtHTGbZ4ux/Oohl3sOimlZH1/eHTy4lOx45kG6K8Izd1kiSzrRPcj3
+         GnmkkJood89FqtbQzDiY1M2edgofRQqXYncZETuC6LK9bj2KRLb9S/N4vp8w4QckPViw
+         CJzjYgD/YY9TmQHa2KLSeV7gsE3AUWU1OlbSi+LQ9YmXgct8RxNFVUDxTdsGLWO/V6Eo
+         57Ew==
+X-Gm-Message-State: AAQBX9doPRTtftmjC2TAspL6Ds4i+SUVtGa11tcsZJq6NawC+D7BLCxK
+        CFtoLNzr+NrWPo8BWwzgtEbTPHkVgwsCli3ALKaZsfoSv0BJ35JpUNwchMh4Je9UsNhppCTjjMY
+        zAXiN28wvAwJEg2zK8HjoUz/K
+X-Received: by 2002:a17:906:f29a:b0:933:816c:abb9 with SMTP id gu26-20020a170906f29a00b00933816cabb9mr6510538ejb.36.1680204251870;
+        Thu, 30 Mar 2023 12:24:11 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YRFH6WV6KD6S27b8VZNNgwBJYd+z/cdioM+cIk73QZtr3NowyOAQvVk7LllNJraDEBULrnPQ==
+X-Received: by 2002:a17:906:f29a:b0:933:816c:abb9 with SMTP id gu26-20020a170906f29a00b00933816cabb9mr6510517ejb.36.1680204251499;
+        Thu, 30 Mar 2023 12:24:11 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id h27-20020a50cddb000000b004c19f1891fasm264876edj.59.2023.03.30.12.24.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 12:18:47 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 30 Mar 2023 21:18:44 +0200
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, RCU <rcu@vger.kernel.org>,
-        quic_neeraju@quicinc.com, Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-Message-ID: <ZCXglNnT9EpeBf4t@pc636>
-References: <ca153af5-bd66-4d48-afa5-ace3a13aec3c@paulmck-laptop>
- <FC49F388-0480-4687-8DD3-94049FCBC92B@joelfernandes.org>
- <2cd8f407-2b77-48b1-9f17-9aa8e4ce9c64@paulmck-laptop>
- <20230330150933.GB2114899@google.com>
- <ZCWuE+b+QDApqgWG@pc636>
- <f529af35-557a-4a19-b14d-295e88aace9c@paulmck-laptop>
+        Thu, 30 Mar 2023 12:24:10 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 38E96A22D4A; Thu, 30 Mar 2023 21:24:10 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>, bpf@vger.kernel.org,
+        Stanislav Fomichev <sdf@google.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net
+Subject: Re: [xdp-hints] [PATCH bpf RFC-V3 0/5] XDP-hints: API change for
+ RX-hash kfunc bpf_xdp_metadata_rx_hash
+In-Reply-To: <168019602958.3557870.9960387532660882277.stgit@firesoul>
+References: <168019602958.3557870.9960387532660882277.stgit@firesoul>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 30 Mar 2023 21:24:10 +0200
+Message-ID: <87o7oam49x.fsf@toke.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f529af35-557a-4a19-b14d-295e88aace9c@paulmck-laptop>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 11:58:41AM -0700, Paul E. McKenney wrote:
-> On Thu, Mar 30, 2023 at 05:43:15PM +0200, Uladzislau Rezki wrote:
-> > On Thu, Mar 30, 2023 at 03:09:33PM +0000, Joel Fernandes wrote:
-> > > On Tue, Mar 28, 2023 at 08:26:13AM -0700, Paul E. McKenney wrote:
-> > > > On Mon, Mar 27, 2023 at 10:29:31PM -0400, Joel Fernandes wrote:
-> > > > > Hello,
-> > > > > 
-> > > > > > On Mar 27, 2023, at 9:06 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > > > 
-> > > > > > ﻿On Mon, Mar 27, 2023 at 11:21:23AM +0000, Zhang, Qiang1 wrote:
-> > > > > >>>> From: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > > > >>>> Sent: Tuesday, March 21, 2023 6:28 PM
-> > > > > >>>> [...]
-> > > > > >>>> Subject: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-> > > > > >>>> 
-> > > > > >>>> A call to a synchronize_rcu() can be expensive from time point of view.
-> > > > > >>>> Different workloads can be affected by this especially the ones which use this
-> > > > > >>>> API in its time critical sections.
-> > > > > >>>> 
-> > > > > >>> 
-> > > > > >>> This is interesting and meaningful research. ;-)
-> > > > > >>> 
-> > > > > >>>> For example in case of NOCB scenario the wakeme_after_rcu() callback
-> > > > > >>>> invocation depends on where in a nocb-list it is located. Below is an example
-> > > > > >>>> when it was the last out of ~3600 callbacks:
-> > > > > >>> 
-> > > > > >> 
-> > > > > >> 
-> > > > > >> 
-> > > > > >> Can it be implemented separately as follows?  it seems that the code is simpler
-> > > > > >> (only personal opinion)  😊.
-> > > > > >> 
-> > > > > >> But I didn't test whether this reduce synchronize_rcu() waiting time
-> > > > > >> 
-> > > > > >> +static void rcu_poll_wait_gp(struct rcu_tasks *rtp)
-> > > > > >> +{
-> > > > > >> +       unsigned long gp_snap;
-> > > > > >> +
-> > > > > >> +       gp_snap = start_poll_synchronize_rcu();
-> > > > > >> +       while (!poll_state_synchronize_rcu(gp_snap))
-> > > > > >> +               schedule_timeout_idle(1);
-> > > > > > 
-> > > > > > I could be wrong, but my guess is that the guys working with
-> > > > > > battery-powered devices are not going to be very happy with this loop.
-> > > > > > 
-> > > > > > All those wakeups by all tasks waiting for a grace period end up
-> > > > > > consuming a surprisingly large amount of energy.
-> > > > > 
-> > > > > Is that really the common case? On the general topic of wake-ups:
-> > > > > Most of the time there should be only one
-> > > > > task waiting synchronously on a GP to end. If that is
-> > > > > true, then it feels like waking
-> > > > > up nocb Kthreads which indirectly wake other threads is doing more work than usual?
-> > > > 
-> > > > A good question, and the number of outstanding synchronize_rcu()
-> > > > calls will of course be limited by the number of tasks in the system.
-> > > > But I myself have raised the ire of battery-powered embedded folks with
-> > > > a rather small number of wakeups, so...
-> > > 
-> > > But unless I am missing something, even if there is single synchronize_rcu(),
-> > > you have a flurry of potential wakeups right now, instead of the bare minimum
-> > > I think. I have not measured how many wake ups, but I'd love to when I get
-> > > time. Maybe Vlad has some numbers.
-> > > 
-> > I will measure and have a look at wake-ups. But, what we have for now is
-> > if there are two callers of synchronize_rcu() on different CPUs, i guess
-> > two nocb-kthreads have to handle it, thus two nocb-kthreads have to be
-> > awaken to do the work. This patch needs only one wake-up to serve all
-> > users.
-> 
-> One wakeup per synchronize_rcu(), right?
-> 
-The gp-kthread wake-ups only one work, in its turn a worker wake-ups all
-registered users of synchronize_rcu() for which a gp was passed. How many
-users of synchonize_rcu() awaken by one worker depends on how many were
-registered before initiating a new GP by the gp-kthread.
+Jesper Dangaard Brouer <brouer@redhat.com> writes:
 
-> > Anyway, i will provide some data and analysis of it.
-> 
-> Looking forward to seeing it!
-> 
-Good. I will switch fully on it soon. I need to sort out some perf.
-issues at work.
+> Notice targeted 6.3-rc kernel via bpf git tree.
+>
+> Current API for bpf_xdp_metadata_rx_hash() returns the raw RSS hash value,
+> but doesn't provide information on the RSS hash type (part of 6.3-rc).
+>
+> This patchset proposal is to change the function call signature via adding
+> a pointer value argument for provide the RSS hash type.
+>
+> Alternatively we disable bpf_xdp_metadata_rx_hash() in 6.3-rc, and have
+> more time to nitpick the RSS hash-type bits.
 
---
-Uladzislau Rezki
+LGTM; for the series:
+
+Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+
