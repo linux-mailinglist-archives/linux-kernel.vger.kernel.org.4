@@ -2,140 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620096D06D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A80456D0707
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjC3Nec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
+        id S231289AbjC3Nin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbjC3Ne3 (ORCPT
+        with ESMTP id S229966AbjC3Nil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:34:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AFA2AF02;
-        Thu, 30 Mar 2023 06:34:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D589B2F4;
-        Thu, 30 Mar 2023 06:34:55 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA3FC3F663;
-        Thu, 30 Mar 2023 06:34:07 -0700 (PDT)
-Message-ID: <67eeb47c-ae23-1389-bb52-f9cfb3206741@arm.com>
-Date:   Thu, 30 Mar 2023 15:34:02 +0200
+        Thu, 30 Mar 2023 09:38:41 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECCDB44C;
+        Thu, 30 Mar 2023 06:38:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1680183504;
+        bh=24hs/GAOgBlVSR4B3MD3Qa1OeM+tlMUGandZTll4v9o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P4hVo2EZZRdByxjRo59jz0QLN9PDmvFRp1opXBJvMaYkvg2EASQ9fPugdPpcXsu2g
+         LOhcUyR2joIXhVYMOdYsHnPIav9cWlqmrlCblMZsHRbJYibESdYmYRvnaRjADKiqm5
+         j0zdo2Dfqi06FIVg6EH6dYNbEuAj2JMMbpnSVlA+RdMWr8f/BudEMQvMNsMMSwnwZA
+         CPQFJNB/IBo7aYkNiOJskGnM2Vqdqdvd3IjhFyE5TRZ0pKI0KBZhKf2zlNkXwpr/3E
+         UEb7ynurlSL8qN/y3zJcu43QACN215cPl2d/UcsZfRnBrhjoR3E7rV7enw90eVURDy
+         ISZ5k5GBWUw0Q==
+Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PnPdD01kRztMX;
+        Thu, 30 Mar 2023 09:38:23 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-mm@kvack.org, stable@vger.kernel.org
+Subject: [PATCH 1/1] mm: Fix memory leak on mm_init error handling
+Date:   Thu, 30 Mar 2023 09:38:22 -0400
+Message-Id: <20230330133822.66271-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 6/7] cgroup/cpuset: Protect DL BW data against parallel
- cpuset_attach()
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        luca.abeni@santannapisa.it, claudio@evidence.eu.com,
-        tommaso.cucinotta@santannapisa.it, bristot@redhat.com,
-        mathieu.poirier@linaro.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230329125558.255239-1-juri.lelli@redhat.com>
- <20230329160240.2093277-1-longman@redhat.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230329160240.2093277-1-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2023 18:02, Waiman Long wrote:
-> It is possible to have parallel attach operations to the same cpuset in
-> progress. To avoid possible corruption of single set of DL BW data in
-> the cpuset structure, we have to disallow parallel attach operations if
-> DL tasks are present. Attach operations can still proceed in parallel
-> as long as no DL tasks are involved.
-> 
-> This patch also stores the CPU where DL BW is allocated and free that BW
-> back to the same CPU in case cpuset_can_attach() is called.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  kernel/cgroup/cpuset.c | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 05c0a1255218..555a6b1a2b76 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -199,6 +199,7 @@ struct cpuset {
->  	 */
->  	int nr_deadline_tasks;
->  	int nr_migrate_dl_tasks;
-> +	int dl_bw_cpu;
+commit f1a7941243c1 ("mm: convert mm's rss stats into percpu_counter")
+introduces a memory leak by missing a call to destroy_context() when a
+percpu_counter fails to allocate.
 
-Like I mentioned in
-https://lkml.kernel.org/r/cdede77a-5dc5-8933-a444-a2046b074b12@arm.com
-IMHO any CPU of the cpuset is fine since exclusive cpuset and related
-root_domain (as the container for DL BW accounting data) are congruent
-in terms of cpumask.
+Before introducing the per-cpu counter allocations, init_new_context()
+was the last call that could fail in mm_init(), and thus there was no
+need to ever invoke destroy_context() in the error paths. Adding the
+following percpu counter allocations adds error paths after
+init_new_context(), which means its associated destroy_context() needs
+to be called when percpu counters fail to allocate.
 
->  	u64 sum_migrate_dl_bw;
->  
->  	/* Invalid partition error code, not lock protected */
-> @@ -2502,6 +2503,16 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->  	if (cpumask_empty(cs->effective_cpus))
->  		goto out_unlock;
->  
-> +	/*
-> +	 * If there is another parallel attach operations in progress for
-> +	 * the same cpuset, the single set of DL data there may get
-> +	 * incorrectly overwritten. So parallel operations are not allowed
-> +	 * if DL tasks are present.
-> +	 */
-> +	ret = -EBUSY;
-> +	if (cs->nr_migrate_dl_tasks)
-> +		goto out_unlock;
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: linux-mm@kvack.org
+Cc: stable@vger.kernel.org # 6.2
+---
+ kernel/fork.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-(1)
-
->  	cgroup_taskset_for_each(task, css, tset) {
->  		ret = task_can_attach(task);
->  		if (ret)
-> @@ -2511,6 +2522,9 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->  			goto out_unlock;
->  
->  		if (dl_task(task)) {
-> +			if (cs->attach_in_progress)
-> +				goto out_unlock;
-
-(2)
-
-Just to check if I get this right, 2 bail-out conditions are necessary
-because:
-
-(1) is to prevent any new cs attach if there is already a DL cs attach
-and (2) is to prevent a new DL cs attach if there is already a non-DL cs
-attach.
-
->  			cs->nr_migrate_dl_tasks++;
->  			cs->sum_migrate_dl_bw += task->dl.dl_bw;
->  		}
-
-[...]
+diff --git a/kernel/fork.c b/kernel/fork.c
+index c0257cbee093..c983c4fe3090 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1171,6 +1171,7 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
+ fail_pcpu:
+ 	while (i > 0)
+ 		percpu_counter_destroy(&mm->rss_stat[--i]);
++	destroy_context(mm);
+ fail_nocontext:
+ 	mm_free_pgd(mm);
+ fail_nopgd:
+-- 
+2.25.1
 
