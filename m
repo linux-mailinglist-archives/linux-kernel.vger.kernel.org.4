@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D416D0233
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFD46D0234
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjC3KzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
+        id S229742AbjC3KzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjC3Kyj (ORCPT
+        with ESMTP id S231179AbjC3Kyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:54:39 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7307A9B
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:54:37 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id h8so74754601ede.8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:54:37 -0700 (PDT)
+        Thu, 30 Mar 2023 06:54:41 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4169D5BAB
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:54:39 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id h8so74754871ede.8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:54:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680173676;
+        d=gmail.com; s=20210112; t=1680173677;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p1vTstqwimUvhUc8A7ZyPgFdk3wEGUrShLMTBVm4/iM=;
-        b=SAhdUE8RtpQp3xboOBAvlJrDteDAvPjfKGtWDLGIdmtp9P7WRiag+VrAVmfymEHsE/
-         o8E2OYYoSRb98hpU90/eNIl+MtzGq+fqSzOXEjNMx/LI2BCxISMoyd0bcD5HFsx2PjSj
-         hhFc5Gfmm0gnuyBIBnhfyXkK1IRFjdcLMnIN9LHeucdUqINXnB9CTi6AON1QzPWwlVfY
-         071VqgphGsCt6FvotWE751IidWNnh0Wglb2BOI8ivJ/gYA9FNtXvW1J8/ExgDCO3f580
-         OzctikEjP0ldMyjBWHzCcrMtSzJTHL0hrAoVokxBLjUSBjaJpAuSNCyMjJ0wlLuzVZFG
-         X9SQ==
+        bh=T+oaMpklZ91CFFf11bfbVuXOqiNSqNeAo/8nmRQbes8=;
+        b=oHLShFj5F1drSAKAU8jHdJ0/ct9LZujyyQbIOzo0WOHyKNHZ8GOZ4Yxo+HSlT5O0Qt
+         ZvtYyung4BuIGdpxysHs+Nn2Q6Ly1KjBd7QVnN2yOU8C8Jkvvi8pAIWjic+YtH58KX3W
+         +BniUCEy9yaNgWY0qYr/iaLHfnsc1FXUgQwrJbmWm02cm6p8UjNYe/06HoE+qc+RCNpw
+         iUHYqGfl7XWs9xi9wYhOrL5pCwRZ+HfTNnLXqFua16UxJZNGHHWI/LWHX2CCGf5zF9Jv
+         s3MNs5LGxANKd8TE2JWuh11B7lfoNwJZnBQ+11FG7/rBESbJlyQT2NiLYkg+U+DR6xMe
+         j+yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680173676;
+        d=1e100.net; s=20210112; t=1680173677;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p1vTstqwimUvhUc8A7ZyPgFdk3wEGUrShLMTBVm4/iM=;
-        b=xYFnnTCegyTZh9es6Nuc1w+x2Oftn2o2O3xpnkOsHVTqTZYLp2uMT8rVYeA0aJdjbJ
-         NFxIaPpDg4qVbdnkQdrZBoAY8q3FCX6PylTA5EPRW1EZRpc0YEJ+rZBe8ns8i7edh/5m
-         INXfyXPuVWbQO0W+VY7BvbIGt9rmUylWiV5CW3aOq+06Pq9daBA9EQJWaxWnaRYkXPQI
-         uSSx7MT36FwAw/Aj4MUCVGd1BiMRSR1ovuiIEgKLoqGoVeazN6g9fa+fxruI/xhrqFi8
-         Me9L7T4ocw9Vn/Q9+bW+bLvJ8LdE0KD0wasNTrX/FjSLLJHhPnHM5fbtGATBqZy7mVSv
-         uG6w==
-X-Gm-Message-State: AAQBX9don+pmXbWUABy/lhXfn4puV2rmQyGc3AvjuPhLMD2MGSd9e7ko
-        8oJGeQyy82h7HIAdLygSnnrBvemwNpFaoA==
-X-Google-Smtp-Source: AKy350Z4JY4tDfwJ5/I1Vn3RXg2v9830bDiL7NaWZMACTlXYdf7VdRuvLn+CpwJvTUYEGHvo0kaOHA==
-X-Received: by 2002:a17:906:1cda:b0:920:3263:d643 with SMTP id i26-20020a1709061cda00b009203263d643mr20687377ejh.72.1680173676021;
-        Thu, 30 Mar 2023 03:54:36 -0700 (PDT)
+        bh=T+oaMpklZ91CFFf11bfbVuXOqiNSqNeAo/8nmRQbes8=;
+        b=fjGfbOgKZZe3I5w5bBPX30MgKQBXOFqF0kydo2JffH3FyVg7KCgUFbkPuYQ88RMuqc
+         Ck/TKzsbkYq4ePoaAjxtPD0+W/3KYEsem2NNjLdl8m8hDAgj7bDjvagjGvGzBMmdECg1
+         zHJhQD6q4aNlpYAsVwp2gCxWnDLs83GXD2JQpvgyRCOBeI054RoLcp9bgK/5UCn4kBL7
+         b/KduEnWaTUnw5leADi58wQMJA/6rd3VMLWC5uGKNiFgHRIZPhTNlRL2kbJ1gyOf0Uva
+         SkGaxpSVH7fotUnxiR74hnzmvB53RkWKCCWfMC52ugA08eQdr2JyQd18fcgx53HXTHUQ
+         XzMg==
+X-Gm-Message-State: AAQBX9dMee1FFYL8V9Y5vWAsnJFRpwJIENT2WmWtExW+aO6um6mc9zVw
+        3unttQW01ive9mpq+zZ2y2J8AfP3/hA8mw==
+X-Google-Smtp-Source: AKy350aBnKdwdzP2lg3m4sFgrnHAOIXNpFwHHpMWX4gLiK6PzV/A/Ag4NZy6R0G1FJbQ6d5Jn8tnxw==
+X-Received: by 2002:a05:6402:74a:b0:4fc:e605:556a with SMTP id p10-20020a056402074a00b004fce605556amr21208325edy.5.1680173677347;
+        Thu, 30 Mar 2023 03:54:37 -0700 (PDT)
 Received: from lelloman-5950.. (host-80-182-134-1.pool80182.interbusiness.it. [80.182.134.1])
-        by smtp.gmail.com with ESMTPSA id hb6-20020a170906b88600b0093120a11a5dsm17639628ejb.92.2023.03.30.03.54.34
+        by smtp.gmail.com with ESMTPSA id hb6-20020a170906b88600b0093120a11a5dsm17639628ejb.92.2023.03.30.03.54.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 03:54:35 -0700 (PDT)
+        Thu, 30 Mar 2023 03:54:36 -0700 (PDT)
 From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     peterz@infradead.org, surenb@google.com, brauner@kernel.org,
         chris@chrisdown.name, hannes@cmpxchg.org,
         Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Subject: [PATCH v6 3/4] sched/psi: extract update_triggers side effect
-Date:   Thu, 30 Mar 2023 12:54:17 +0200
-Message-Id: <20230330105418.77061-4-cerasuolodomenico@gmail.com>
+Subject: [PATCH v6 4/4] sched/psi: allow unprivileged polling of N*2s period
+Date:   Thu, 30 Mar 2023 12:54:18 +0200
+Message-Id: <20230330105418.77061-5-cerasuolodomenico@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230330105418.77061-1-cerasuolodomenico@gmail.com>
 References: <20230330105418.77061-1-cerasuolodomenico@gmail.com>
@@ -73,81 +73,424 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change moves update_total flag out of update_triggers function,
-currently called only in psi_poll_work.
-In the next patch, update_triggers will be called also in psi_avgs_work,
-but the total update information is specific to psi_poll_work.
-Returning update_total value to the caller let us avoid differentiating
-the implementation of update_triggers for different aggregators.
+PSI offers 2 mechanisms to get information about a specific resource
+pressure. One is reading from /proc/pressure/<resource>, which gives
+average pressures aggregated every 2s. The other is creating a pollable
+fd for a specific resource and cgroup.
+
+The trigger creation requires CAP_SYS_RESOURCE, and gives the
+possibility to pick specific time window and threshold, spawing an RT
+thread to aggregate the data.
+
+Systemd would like to provide containers the option to monitor pressure
+on their own cgroup and sub-cgroups. For example, if systemd launches a
+container that itself then launches services, the container should have
+the ability to poll() for pressure in individual services. But neither
+the container nor the services are privileged.
+
+This patch implements a mechanism to allow unprivileged users to create
+pressure triggers. The difference with privileged triggers creation is
+that unprivileged ones must have a time window that's a multiple of 2s.
+This is so that we can avoid unrestricted spawning of rt threads, and
+use instead the same aggregation mechanism done for the averages, which
+runs independently of any triggers.
 
 Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
 Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 ---
- kernel/sched/psi.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ Documentation/accounting/psi.rst |   4 +
+ include/linux/psi.h              |   2 +-
+ include/linux/psi_types.h        |   7 ++
+ kernel/cgroup/cgroup.c           |   2 +-
+ kernel/sched/psi.c               | 175 +++++++++++++++++++------------
+ 5 files changed, 121 insertions(+), 69 deletions(-)
 
+diff --git a/Documentation/accounting/psi.rst b/Documentation/accounting/psi.rst
+index 5e40b3f437f9..df6062eb3abb 100644
+--- a/Documentation/accounting/psi.rst
++++ b/Documentation/accounting/psi.rst
+@@ -105,6 +105,10 @@ prevent overly frequent polling. Max limit is chosen as a high enough number
+ after which monitors are most likely not needed and psi averages can be used
+ instead.
+ 
++Unprivileged users can also create monitors, with the only limitation that the
++window size must be a multiple of 2s, in order to prevent excessive resource
++usage.
++
+ When activated, psi monitor stays active for at least the duration of one
+ tracking window to avoid repeated activations/deactivations when system is
+ bouncing in and out of the stall state.
+diff --git a/include/linux/psi.h b/include/linux/psi.h
+index b029a847def1..ab26200c2803 100644
+--- a/include/linux/psi.h
++++ b/include/linux/psi.h
+@@ -24,7 +24,7 @@ void psi_memstall_leave(unsigned long *flags);
+ 
+ int psi_show(struct seq_file *s, struct psi_group *group, enum psi_res res);
+ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+-			char *buf, enum psi_res res);
++			char *buf, enum psi_res res, struct file *file);
+ void psi_trigger_destroy(struct psi_trigger *t);
+ 
+ __poll_t psi_trigger_poll(void **trigger_ptr, struct file *file,
+diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+index 1819afa8b198..040c089581c6 100644
+--- a/include/linux/psi_types.h
++++ b/include/linux/psi_types.h
+@@ -151,6 +151,9 @@ struct psi_trigger {
+ 
+ 	/* Deferred event(s) from previous ratelimit window */
+ 	bool pending_event;
++
++	/* Trigger type - PSI_AVGS for unprivileged, PSI_POLL for RT */
++	enum psi_aggregators aggregator;
+ };
+ 
+ struct psi_group {
+@@ -171,6 +174,10 @@ struct psi_group {
+ 	/* Aggregator work control */
+ 	struct delayed_work avgs_work;
+ 
++	/* Unprivileged triggers against N*PSI_FREQ windows */
++	struct list_head avg_triggers;
++	u32 avg_nr_triggers[NR_PSI_STATES - 1];
++
+ 	/* Total stall times and sampled pressure averages */
+ 	u64 total[NR_PSI_AGGREGATORS][NR_PSI_STATES - 1];
+ 	unsigned long avg[NR_PSI_STATES - 1][3];
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 935e8121b21e..dead36969bba 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -3761,7 +3761,7 @@ static ssize_t pressure_write(struct kernfs_open_file *of, char *buf,
+ 	}
+ 
+ 	psi = cgroup_psi(cgrp);
+-	new = psi_trigger_create(psi, buf, res);
++	new = psi_trigger_create(psi, buf, res, of->file);
+ 	if (IS_ERR(new)) {
+ 		cgroup_put(cgrp);
+ 		return PTR_ERR(new);
 diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index a3d0b5cf797a..f3df6a8ff493 100644
+index f3df6a8ff493..e072f6b31bf3 100644
 --- a/kernel/sched/psi.c
 +++ b/kernel/sched/psi.c
-@@ -430,11 +430,11 @@ static u64 window_update(struct psi_window *win, u64 now, u64 value)
+@@ -186,9 +186,14 @@ static void group_init(struct psi_group *group)
+ 		seqcount_init(&per_cpu_ptr(group->pcpu, cpu)->seq);
+ 	group->avg_last_update = sched_clock();
+ 	group->avg_next_update = group->avg_last_update + psi_period;
+-	INIT_DELAYED_WORK(&group->avgs_work, psi_avgs_work);
+ 	mutex_init(&group->avgs_lock);
+-	/* Init trigger-related members */
++
++	/* Init avg trigger-related members */
++	INIT_LIST_HEAD(&group->avg_triggers);
++	memset(group->avg_nr_triggers, 0, sizeof(group->avg_nr_triggers));
++	INIT_DELAYED_WORK(&group->avgs_work, psi_avgs_work);
++
++	/* Init rtpoll trigger-related members */
+ 	atomic_set(&group->rtpoll_scheduled, 0);
+ 	mutex_init(&group->rtpoll_trigger_lock);
+ 	INIT_LIST_HEAD(&group->rtpoll_triggers);
+@@ -430,21 +435,32 @@ static u64 window_update(struct psi_window *win, u64 now, u64 value)
  	return growth;
  }
  
--static u64 update_triggers(struct psi_group *group, u64 now)
-+static u64 update_triggers(struct psi_group *group, u64 now, bool *update_total)
+-static u64 update_triggers(struct psi_group *group, u64 now, bool *update_total)
++static u64 update_triggers(struct psi_group *group, u64 now, bool *update_total,
++						   enum psi_aggregators aggregator)
  {
  	struct psi_trigger *t;
--	bool update_total = false;
- 	u64 *total = group->total[PSI_POLL];
-+	*update_total = false;
+-	u64 *total = group->total[PSI_POLL];
++	u64 *total = group->total[aggregator];
++	struct list_head *triggers;
++	u64 *aggregator_total;
+ 	*update_total = false;
  
++	if (aggregator == PSI_AVGS) {
++		triggers = &group->avg_triggers;
++		aggregator_total = group->avg_total;
++	} else {
++		triggers = &group->rtpoll_triggers;
++		aggregator_total = group->rtpoll_total;
++	}
++
  	/*
  	 * On subsequent updates, calculate growth deltas and let
-@@ -462,7 +462,7 @@ static u64 update_triggers(struct psi_group *group, u64 now)
- 			 * been through all of them. Also remember to extend the
- 			 * polling time if we see new stall activity.
- 			 */
--			update_total = true;
-+			*update_total = true;
+ 	 * watchers know when their specified thresholds are exceeded.
+ 	 */
+-	list_for_each_entry(t, &group->rtpoll_triggers, node) {
++	list_for_each_entry(t, triggers, node) {
+ 		u64 growth;
+ 		bool new_stall;
  
- 			/* Calculate growth since last update */
- 			growth = window_update(&t->win, now, total[t->state]);
-@@ -485,10 +485,6 @@ static u64 update_triggers(struct psi_group *group, u64 now)
- 		t->pending_event = false;
- 	}
+-		new_stall = group->rtpoll_total[t->state] != total[t->state];
++		new_stall = aggregator_total[t->state] != total[t->state];
  
--	if (update_total)
--		memcpy(group->rtpoll_total, total,
--				sizeof(group->rtpoll_total));
--
- 	return now + group->rtpoll_min_period;
- }
- 
-@@ -622,6 +618,7 @@ static void psi_rtpoll_work(struct psi_group *group)
- {
- 	bool force_reschedule = false;
+ 		/* Check for stall activity or a previous threshold breach */
+ 		if (!new_stall && !t->pending_event)
+@@ -546,6 +562,7 @@ static void psi_avgs_work(struct work_struct *work)
+ 	struct delayed_work *dwork;
+ 	struct psi_group *group;
  	u32 changed_states;
 +	bool update_total;
  	u64 now;
  
- 	mutex_lock(&group->rtpoll_trigger_lock);
-@@ -686,8 +683,12 @@ static void psi_rtpoll_work(struct psi_group *group)
- 		goto out;
- 	}
- 
--	if (now >= group->rtpoll_next_update)
--		group->rtpoll_next_update = update_triggers(group, now);
-+	if (now >= group->rtpoll_next_update) {
-+		group->rtpoll_next_update = update_triggers(group, now, &update_total);
-+		if (update_total)
-+			memcpy(group->rtpoll_total, group->total[PSI_POLL],
-+				   sizeof(group->rtpoll_total));
+ 	dwork = to_delayed_work(work);
+@@ -563,8 +580,10 @@ static void psi_avgs_work(struct work_struct *work)
+ 	 * Once restarted, we'll catch up the running averages in one
+ 	 * go - see calc_avgs() and missed_periods.
+ 	 */
+-	if (now >= group->avg_next_update)
++	if (now >= group->avg_next_update) {
++		update_triggers(group, now, &update_total, PSI_AVGS);
+ 		group->avg_next_update = update_averages(group, now);
 +	}
  
- 	psi_schedule_rtpoll_work(group,
- 		nsecs_to_jiffies(group->rtpoll_next_update - now) + 1,
+ 	if (changed_states & PSI_STATE_RESCHEDULE) {
+ 		schedule_delayed_work(dwork, nsecs_to_jiffies(
+@@ -574,7 +593,7 @@ static void psi_avgs_work(struct work_struct *work)
+ 	mutex_unlock(&group->avgs_lock);
+ }
+ 
+-static void init_triggers(struct psi_group *group, u64 now)
++static void init_rtpoll_triggers(struct psi_group *group, u64 now)
+ {
+ 	struct psi_trigger *t;
+ 
+@@ -667,7 +686,7 @@ static void psi_rtpoll_work(struct psi_group *group)
+ 	if (changed_states & group->rtpoll_states) {
+ 		/* Initialize trigger windows when entering polling mode */
+ 		if (now > group->rtpoll_until)
+-			init_triggers(group, now);
++			init_rtpoll_triggers(group, now);
+ 
+ 		/*
+ 		 * Keep the monitor active for at least the duration of the
+@@ -684,7 +703,7 @@ static void psi_rtpoll_work(struct psi_group *group)
+ 	}
+ 
+ 	if (now >= group->rtpoll_next_update) {
+-		group->rtpoll_next_update = update_triggers(group, now, &update_total);
++		group->rtpoll_next_update = update_triggers(group, now, &update_total, PSI_POLL);
+ 		if (update_total)
+ 			memcpy(group->rtpoll_total, group->total[PSI_POLL],
+ 				   sizeof(group->rtpoll_total));
+@@ -1254,16 +1273,23 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
+ }
+ 
+ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+-			char *buf, enum psi_res res)
++			char *buf, enum psi_res res, struct file *file)
+ {
+ 	struct psi_trigger *t;
+ 	enum psi_states state;
+ 	u32 threshold_us;
++	bool privileged;
+ 	u32 window_us;
+ 
+ 	if (static_branch_likely(&psi_disabled))
+ 		return ERR_PTR(-EOPNOTSUPP);
+ 
++	/*
++	 * Checking the privilege here on file->f_cred implies that a privileged user
++	 * could open the file and delegate the write to an unprivileged one.
++	 */
++	privileged = cap_raised(file->f_cred->cap_effective, CAP_SYS_RESOURCE);
++
+ 	if (sscanf(buf, "some %u %u", &threshold_us, &window_us) == 2)
+ 		state = PSI_IO_SOME + res * 2;
+ 	else if (sscanf(buf, "full %u %u", &threshold_us, &window_us) == 2)
+@@ -1283,6 +1309,13 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+ 		window_us > WINDOW_MAX_US)
+ 		return ERR_PTR(-EINVAL);
+ 
++	/*
++	 * Unprivileged users can only use 2s windows so that averages aggregation
++	 * work is used, and no RT threads need to be spawned.
++	 */
++	if (!privileged && window_us % 2000000)
++		return ERR_PTR(-EINVAL);
++
+ 	/* Check threshold */
+ 	if (threshold_us == 0 || threshold_us > window_us)
+ 		return ERR_PTR(-EINVAL);
+@@ -1302,31 +1335,40 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+ 	t->last_event_time = 0;
+ 	init_waitqueue_head(&t->event_wait);
+ 	t->pending_event = false;
++	t->aggregator = privileged ? PSI_POLL : PSI_AVGS;
+ 
+-	mutex_lock(&group->rtpoll_trigger_lock);
++	if (privileged) {
++		mutex_lock(&group->rtpoll_trigger_lock);
+ 
+-	if (!rcu_access_pointer(group->rtpoll_task)) {
+-		struct task_struct *task;
++		if (!rcu_access_pointer(group->rtpoll_task)) {
++			struct task_struct *task;
+ 
+-		task = kthread_create(psi_rtpoll_worker, group, "psimon");
+-		if (IS_ERR(task)) {
+-			kfree(t);
+-			mutex_unlock(&group->rtpoll_trigger_lock);
+-			return ERR_CAST(task);
++			task = kthread_create(psi_rtpoll_worker, group, "psimon");
++			if (IS_ERR(task)) {
++				kfree(t);
++				mutex_unlock(&group->rtpoll_trigger_lock);
++				return ERR_CAST(task);
++			}
++			atomic_set(&group->rtpoll_wakeup, 0);
++			wake_up_process(task);
++			rcu_assign_pointer(group->rtpoll_task, task);
+ 		}
+-		atomic_set(&group->rtpoll_wakeup, 0);
+-		wake_up_process(task);
+-		rcu_assign_pointer(group->rtpoll_task, task);
+-	}
+ 
+-	list_add(&t->node, &group->rtpoll_triggers);
+-	group->rtpoll_min_period = min(group->rtpoll_min_period,
+-		div_u64(t->win.size, UPDATES_PER_WINDOW));
+-	group->rtpoll_nr_triggers[t->state]++;
+-	group->rtpoll_states |= (1 << t->state);
++		list_add(&t->node, &group->rtpoll_triggers);
++		group->rtpoll_min_period = min(group->rtpoll_min_period,
++			div_u64(t->win.size, UPDATES_PER_WINDOW));
++		group->rtpoll_nr_triggers[t->state]++;
++		group->rtpoll_states |= (1 << t->state);
+ 
+-	mutex_unlock(&group->rtpoll_trigger_lock);
++		mutex_unlock(&group->rtpoll_trigger_lock);
++	} else {
++		mutex_lock(&group->avgs_lock);
++
++		list_add(&t->node, &group->avg_triggers);
++		group->avg_nr_triggers[t->state]++;
+ 
++		mutex_unlock(&group->avgs_lock);
++	}
+ 	return t;
+ }
+ 
+@@ -1350,34 +1392,41 @@ void psi_trigger_destroy(struct psi_trigger *t)
+ 	 */
+ 	wake_up_pollfree(&t->event_wait);
+ 
+-	mutex_lock(&group->rtpoll_trigger_lock);
+-
+-	if (!list_empty(&t->node)) {
+-		struct psi_trigger *tmp;
+-		u64 period = ULLONG_MAX;
+-
+-		list_del(&t->node);
+-		group->rtpoll_nr_triggers[t->state]--;
+-		if (!group->rtpoll_nr_triggers[t->state])
+-			group->rtpoll_states &= ~(1 << t->state);
+-		/* reset min update period for the remaining triggers */
+-		list_for_each_entry(tmp, &group->rtpoll_triggers, node)
+-			period = min(period, div_u64(tmp->win.size,
+-					UPDATES_PER_WINDOW));
+-		group->rtpoll_min_period = period;
+-		/* Destroy rtpoll_task when the last trigger is destroyed */
+-		if (group->rtpoll_states == 0) {
+-			group->rtpoll_until = 0;
+-			task_to_destroy = rcu_dereference_protected(
+-					group->rtpoll_task,
+-					lockdep_is_held(&group->rtpoll_trigger_lock));
+-			rcu_assign_pointer(group->rtpoll_task, NULL);
+-			del_timer(&group->rtpoll_timer);
++	if (t->aggregator == PSI_AVGS) {
++		mutex_lock(&group->avgs_lock);
++		if (!list_empty(&t->node)) {
++			list_del(&t->node);
++			group->avg_nr_triggers[t->state]--;
+ 		}
++		mutex_unlock(&group->avgs_lock);
++	} else {
++		mutex_lock(&group->rtpoll_trigger_lock);
++		if (!list_empty(&t->node)) {
++			struct psi_trigger *tmp;
++			u64 period = ULLONG_MAX;
++
++			list_del(&t->node);
++			group->rtpoll_nr_triggers[t->state]--;
++			if (!group->rtpoll_nr_triggers[t->state])
++				group->rtpoll_states &= ~(1 << t->state);
++			/* reset min update period for the remaining triggers */
++			list_for_each_entry(tmp, &group->rtpoll_triggers, node)
++				period = min(period, div_u64(tmp->win.size,
++						UPDATES_PER_WINDOW));
++			group->rtpoll_min_period = period;
++			/* Destroy rtpoll_task when the last trigger is destroyed */
++			if (group->rtpoll_states == 0) {
++				group->rtpoll_until = 0;
++				task_to_destroy = rcu_dereference_protected(
++						group->rtpoll_task,
++						lockdep_is_held(&group->rtpoll_trigger_lock));
++				rcu_assign_pointer(group->rtpoll_task, NULL);
++				del_timer(&group->rtpoll_timer);
++			}
++		}
++		mutex_unlock(&group->rtpoll_trigger_lock);
+ 	}
+ 
+-	mutex_unlock(&group->rtpoll_trigger_lock);
+-
+ 	/*
+ 	 * Wait for psi_schedule_rtpoll_work RCU to complete its read-side
+ 	 * critical section before destroying the trigger and optionally the
+@@ -1437,27 +1486,19 @@ static int psi_cpu_show(struct seq_file *m, void *v)
+ 	return psi_show(m, &psi_system, PSI_CPU);
+ }
+ 
+-static int psi_open(struct file *file, int (*psi_show)(struct seq_file *, void *))
+-{
+-	if (file->f_mode & FMODE_WRITE && !capable(CAP_SYS_RESOURCE))
+-		return -EPERM;
+-
+-	return single_open(file, psi_show, NULL);
+-}
+-
+ static int psi_io_open(struct inode *inode, struct file *file)
+ {
+-	return psi_open(file, psi_io_show);
++	return single_open(file, psi_io_show, NULL);
+ }
+ 
+ static int psi_memory_open(struct inode *inode, struct file *file)
+ {
+-	return psi_open(file, psi_memory_show);
++	return single_open(file, psi_memory_show, NULL);
+ }
+ 
+ static int psi_cpu_open(struct inode *inode, struct file *file)
+ {
+-	return psi_open(file, psi_cpu_show);
++	return single_open(file, psi_cpu_show, NULL);
+ }
+ 
+ static ssize_t psi_write(struct file *file, const char __user *user_buf,
+@@ -1491,7 +1532,7 @@ static ssize_t psi_write(struct file *file, const char __user *user_buf,
+ 		return -EBUSY;
+ 	}
+ 
+-	new = psi_trigger_create(&psi_system, buf, res);
++	new = psi_trigger_create(&psi_system, buf, res, file);
+ 	if (IS_ERR(new)) {
+ 		mutex_unlock(&seq->lock);
+ 		return PTR_ERR(new);
+@@ -1571,7 +1612,7 @@ static int psi_irq_show(struct seq_file *m, void *v)
+ 
+ static int psi_irq_open(struct inode *inode, struct file *file)
+ {
+-	return psi_open(file, psi_irq_show);
++	return single_open(file, psi_irq_show, NULL);
+ }
+ 
+ static ssize_t psi_irq_write(struct file *file, const char __user *user_buf,
 -- 
 2.34.1
 
