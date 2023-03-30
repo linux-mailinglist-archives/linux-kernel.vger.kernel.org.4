@@ -2,133 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376A26D07F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7356D07D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232396AbjC3OUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
+        id S231477AbjC3OPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbjC3OT4 (ORCPT
+        with ESMTP id S231805AbjC3OPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:19:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C8CC160;
-        Thu, 30 Mar 2023 07:19:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680185977; x=1711721977;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=79LV+OrRl703R6iMPgkR0twJmLykHeDX2mMjxvwYOEg=;
-  b=OX9PRYjsnUiuG7c1SaP9xfxZGfbP96zFaeTUay8nMAz77C40tnMnpVlB
-   Elew9ZivchFIPDV5RoKBy4L9rco+6IxS6fzyRs2zYd9SWekU0PxS0huA3
-   B+uE0r8aiiDLcdYr9ijZk3lmX1SZvLP24/9+7qEUVtz7GjY3NhZzxiL2W
-   QNzbFA3L4IvzOooWkttSFdofLTCd7145DtIUUty7R8bx0pBnt6Wcw+nOj
-   0VnQCDInIcVt1OovRpDnh+y2ZtGD8yG3R1SWfJ42MbiXNLZ/UmRBvKl04
-   MmCfxeKCkk+bLaVxXBEvfqGThl34j5s5sohZDm+kn8L0gPB0E23SxcATE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="339903322"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="339903322"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:19:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="749213928"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="749213928"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Mar 2023 07:19:17 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id CD98814B; Thu, 30 Mar 2023 17:15:40 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Olliver Schinagl <oliver@schinagl.nl>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: [PATCH v1 2/2] thunderbolt: Make use of ioread32_poll_timeout()
-Date:   Thu, 30 Mar 2023 17:14:13 +0300
-Message-Id: <20230330141413.25569-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230330141413.25569-1-andriy.shevchenko@linux.intel.com>
-References: <20230330141413.25569-1-andriy.shevchenko@linux.intel.com>
+        Thu, 30 Mar 2023 10:15:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B392D5FE5;
+        Thu, 30 Mar 2023 07:15:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67597B828FF;
+        Thu, 30 Mar 2023 14:15:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D04B9C433EF;
+        Thu, 30 Mar 2023 14:15:28 +0000 (UTC)
+Date:   Thu, 30 Mar 2023 10:15:26 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Donglin Peng <pengdonglin@sangfor.com.cn>, mhiramat@kernel.org,
+        linux@armlinux.org.uk, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com, rmk+kernel@armlinux.org.uk,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        chenhuacai@kernel.org, zhangqing@loongson.cn, kernel@xen0n.name,
+        mingo@redhat.com, peterz@infradead.org, xiehuan09@gmail.com,
+        dinghui@sangfor.com.cn, huangcun@sangfor.com.cn,
+        dolinux.peng@gmail.com, linux-trace-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 0/8] function_graph: Support recording and printing
+ the return value of function
+Message-ID: <20230330101526.2c862a42@gandalf.local.home>
+In-Reply-To: <20230330135948.GCZCWV1O/IjsxsBmN8@fat_crate.local>
+References: <cover.1680176068.git.pengdonglin@sangfor.com.cn>
+        <20230330135948.GCZCWV1O/IjsxsBmN8@fat_crate.local>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of open coding the same routine switch the code to use
-ioread32_poll_timeout().
+On Thu, 30 Mar 2023 15:59:48 +0200
+Borislav Petkov <bp@alien8.de> wrote:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/thunderbolt/nhi.c | 20 ++++++++------------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+> Please control your spamming:
+> 
+> From: Documentation/process/submitting-patches.rst
+> 
+> Don't get discouraged - or impatient
+> ------------------------------------
+> 
+> After you have submitted your change, be patient and wait.  Reviewers are
+> busy people and may not get to your patch right away.
+> 
+> Once upon a time, patches used to disappear into the void without comment,
+> but the development process works more smoothly than that now.  You should
+> receive comments within a week or so; if that does not happen, make sure
+> that you have sent your patches to the right place.  Wait for a minimum of
+> 						     ^^^^^^^^^^^^^^^^^^^^^
+> 
+> one week before resubmitting or pinging reviewers - possibly longer during
+> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 
+> busy times like merge windows.
 
-diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-index d76e923fbc6a..d0bf11b40131 100644
---- a/drivers/thunderbolt/nhi.c
-+++ b/drivers/thunderbolt/nhi.c
-@@ -16,8 +16,8 @@
- #include <linux/dma-mapping.h>
- #include <linux/interrupt.h>
- #include <linux/iommu.h>
-+#include <linux/iopoll.h>
- #include <linux/module.h>
--#include <linux/delay.h>
- #include <linux/property.h>
- #include <linux/string_helpers.h>
- 
-@@ -40,7 +40,7 @@
- #define MSIX_MIN_VECS		6
- #define MSIX_MAX_VECS		16
- 
--#define NHI_MAILBOX_TIMEOUT	500 /* ms */
-+#define NHI_MAILBOX_TIMEOUT_US	500000
- 
- /* Host interface quirks */
- #define QUIRK_AUTO_CLEAR_INT	BIT(0)
-@@ -830,8 +830,8 @@ EXPORT_SYMBOL_GPL(tb_ring_free);
-  */
- int nhi_mailbox_cmd(struct tb_nhi *nhi, enum nhi_mailbox_cmd cmd, u32 data)
- {
--	ktime_t timeout;
- 	u32 val;
-+	int ret;
- 
- 	iowrite32(data, nhi->iobase + REG_INMAIL_DATA);
- 
-@@ -840,16 +840,12 @@ int nhi_mailbox_cmd(struct tb_nhi *nhi, enum nhi_mailbox_cmd cmd, u32 data)
- 	val |= REG_INMAIL_OP_REQUEST | cmd;
- 	iowrite32(val, nhi->iobase + REG_INMAIL_CMD);
- 
--	timeout = ktime_add_ms(ktime_get(), NHI_MAILBOX_TIMEOUT);
--	do {
--		val = ioread32(nhi->iobase + REG_INMAIL_CMD);
--		if (!(val & REG_INMAIL_OP_REQUEST))
--			break;
--		usleep_range(10, 20);
--	} while (ktime_before(ktime_get(), timeout));
-+	ret = ioread32_poll_timeout(nhi->iobase + REG_INMAIL_CMD,
-+				    val, !(val & REG_INMAIL_OP_REQUEST),
-+				    40, NHI_MAILBOX_TIMEOUT_US);
-+	if (ret)
-+		return ret;
- 
--	if (val & REG_INMAIL_OP_REQUEST)
--		return -ETIMEDOUT;
- 	if (val & REG_INMAIL_ERROR)
- 		return -EIO;
- 
--- 
-2.40.0.1.gaa8946217a0b
+To be fair, this isn't a ping or a resend. It's addressing comments that
+were given in v8 that was sent out on Tuesday.
 
+This isn't v1, where I would agree with waiting a week for comments. v1 was
+sent back in 3/6. I do not expect (nor want) someone to wait a week on v8
+for all feedback to come in, unless it was a redesign of the code. But it's
+now starting to settle, and that "week waiting" period isn't necessary for
+fixing up minor suggestions by the reviewers.
+
+I was hoping this would be good to go by the end of the week, so I could
+get it into linux-next by next week.
+
+-- Steve
