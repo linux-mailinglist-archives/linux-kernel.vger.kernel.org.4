@@ -2,146 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAB06D08D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 638A96D08C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjC3Oz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S232493AbjC3Oxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232587AbjC3OzA (ORCPT
+        with ESMTP id S231157AbjC3Oxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:55:00 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4056FCC28;
-        Thu, 30 Mar 2023 07:54:50 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id h17so19368928wrt.8;
-        Thu, 30 Mar 2023 07:54:50 -0700 (PDT)
+        Thu, 30 Mar 2023 10:53:38 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C462EA2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:53:37 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id r11so77586181edd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:53:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680188088;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cs6esp50Jp8jC0Q9hhTRpI4nFHoCs+WBE2+fqKZb6bE=;
-        b=lZAb3+CF9ww4EB25PAj0+FL6j458WyQZqxNaCRdNWNkCqzpefmh+epQzj26e3OrL8n
-         TawKc4VhwlrLo35FK5XVNnUUfAZzzv4mIacNOrsSiYkn478r4ECEfAjWEG9hH5lnNh7X
-         BkdLNArI1Xv6UnoeTi6296UPd++TUI5Ui/T93an238DKnTulXzRnQ9eMD/A9zK5xxU0y
-         BV7BSq2FjbBKojJdqQ5mCUbaWV+np5V2VdduZBuDPk9HLHiqt4djiYChWGDy8BcrZKU2
-         yE/Bq3prxOLlWMFVPZv/ZEH2jnZprFNE0fyHk08xrt3HwTz72C5Ep0TuaR1HuCM8VntC
-         89VQ==
+        d=gmail.com; s=20210112; t=1680188016;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Kf4j1XV1zBAvKAeKkAtDa8lDI5sOqBXzDIOXiVOIMdo=;
+        b=pAjs55hpk1du9S7H97QKxkiStU0LOS1YlvodKIzibAp3keecnAMdcj+2ZzDWYqmpTD
+         Z3GT8XnNtV0Bl3Ob6r1bBy1y8kIPDU0TTO0rgFBYhzvYt6NpfHbuB14auA4Dwfmd48KK
+         0Z1H47Jw2Q+S5X1o3zH7M1yjPnx4NP+H4pzIW/zRYsm3zkSWPYePkhT1s1Us9fyozzsF
+         1js6MJ25ojpT972FeXJn0pQGUGN5KbVKIhH3wZ7ByAfnuXirrMagn9oDKbCZKUTw+gWS
+         OcR+PgHwYCTrb8phNE6dOSoxNBg8zXpJqkCuST0zeW5D1DScWW4x0Jk08b87yPSviiJ/
+         bPWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680188088;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cs6esp50Jp8jC0Q9hhTRpI4nFHoCs+WBE2+fqKZb6bE=;
-        b=ZcaqVxvXKLPbyQsDCZJK4zwNVk0roXyeFmTiJlDmtM4z6ackJp+1v9pz9YLG8RMhIG
-         IK4mn75pz7jlSZ2frc+k20z0iYd5W3jHGWxEula/R0uC1GeednuhwCph13dm/X7z5qaH
-         L+qGhO0N/Q3bY5Fp1Df6obk1CqXb79fQ2oi2HYj527liwBuQWhn2mNchMJiMbI//4nNy
-         SVdb1txe0bljhZ4GhjaXEdpoU9bymdid+yUitCUeNvVDdqzJ8C7VRbS1QbZVxkw5aZod
-         6WY9CzkMM0jhDh7y63n/fSjTzEm8w8Mqxsg+uIVF5x04exBUBRyNh+ZxwDWESUuxw7bh
-         ks3g==
-X-Gm-Message-State: AAQBX9dCAVnBmuJ8/4lw6WeQhc0BjZayrlTUEW/y/2UlUE/Pu28Im8W1
-        GmHK2YMPr21SAzooVdKN+oYDLA7uLGY=
-X-Google-Smtp-Source: AKy350apMKT24Tk1edTb7V3CDWaTS7QzV3PIphwMloAC3NGDCOIeI+eUl3G7kPsD/NcJ9F+a5GpFbQ==
-X-Received: by 2002:adf:f549:0:b0:2e5:ab4:22f0 with SMTP id j9-20020adff549000000b002e50ab422f0mr1582562wrp.60.1680188088366;
-        Thu, 30 Mar 2023 07:54:48 -0700 (PDT)
-Received: from 127.0.0.1localhost (82-132-231-234.dab.02.net. [82.132.231.234])
-        by smtp.gmail.com with ESMTPSA id d7-20020adffbc7000000b002d5a8d8442asm28727962wrs.37.2023.03.30.07.54.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 07:54:48 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 11/11] io_uring/rsrc: add lockdep sanity checks
-Date:   Thu, 30 Mar 2023 15:53:29 +0100
-Message-Id: <d4c9d4791c934fb40e17c69529de78afe241cd6b.1680187408.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <cover.1680187408.git.asml.silence@gmail.com>
-References: <cover.1680187408.git.asml.silence@gmail.com>
+        d=1e100.net; s=20210112; t=1680188016;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kf4j1XV1zBAvKAeKkAtDa8lDI5sOqBXzDIOXiVOIMdo=;
+        b=PZvKVZL3CAH8TCC75jibqnt/RD8aQrCBG7TTra/rZMaZsA+FxCiQketFInvVRm8lfs
+         HKMBvq/2V2pqp4FskCSOEt5WQAuOTU7zT4i5SE58YmWWqzyr6eUezIDNasic2w0i+rzx
+         EEegZ0xu3OqZrPRYfPi1nHVBvw+edG6c3v8FuFRIvAFkFrKvzDKndlOavjepICGLflkI
+         cZPOtoOPlWb54C3f6WBLdEKA1gZME8jP8FFtHbNxhSn5ujeO5dH1/dbZZ9ItIAuKzpNn
+         ghV54VbVn++VHbwRYdbx8L9aiDaWt5238HSecagi8Gq9iJWJbe9IWRhegUPnEY1NSil0
+         mY3A==
+X-Gm-Message-State: AAQBX9epYL47x8w1Zq5kNneghc/lKsO14pPM+Wvtak2T/bUbR0focCFO
+        N7CsnLGXlbIFD6KvCJkXrtzh5iejNIPi9Q==
+X-Google-Smtp-Source: AKy350Zlre467MsXUK7sMLFincwSyv5+0dUst3Q22xu+yckgqnetO5EzRIbGIReA4ggho2Be2w9vPQ==
+X-Received: by 2002:aa7:db94:0:b0:4bb:e80c:5667 with SMTP id u20-20020aa7db94000000b004bbe80c5667mr23376928edt.10.1680188016170;
+        Thu, 30 Mar 2023 07:53:36 -0700 (PDT)
+Received: from [192.168.32.129] (aftr-82-135-86-174.dynamic.mnet-online.de. [82.135.86.174])
+        by smtp.gmail.com with ESMTPSA id a10-20020a1709065f8a00b0092595899cfcsm17759565eju.53.2023.03.30.07.53.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 07:53:35 -0700 (PDT)
+Message-ID: <ecd044c9-2fc8-fc8f-98be-c96e0622ad2b@gmail.com>
+Date:   Thu, 30 Mar 2023 16:53:34 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 0/3] mcb-pci: fix memory overlapping on MCB devices
+To:     =?UTF-8?Q?Rodr=c3=adguez_Barbarin=2c_Jos=c3=a9_Javier?= 
+        <JoseJavier.Rodriguez@duagon.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "jth@kernel.org" <jth@kernel.org>,
+        =?UTF-8?B?U2FuanXDoW4gR2FyY8OtYSwgSm9yZ2U=?= 
+        <Jorge.SanjuanGarcia@duagon.com>
+References: <20230330104949.21918-1-josejavier.rodriguez@duagon.com>
+Content-Language: en-US
+From:   Johannes Thumshirn <morbidrsa@gmail.com>
+In-Reply-To: <20230330104949.21918-1-josejavier.rodriguez@duagon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We should hold ->uring_lock while putting nodes with io_put_rsrc_node(),
-add a lockdep check for that.
+Pushed to mcb-for-next.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/io_uring.c | 4 ++--
- io_uring/rsrc.c     | 2 +-
- io_uring/rsrc.h     | 6 ++++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index beedaf403284..a781b7243b97 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1002,7 +1002,7 @@ static void __io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
- 
- 	if (rsrc_node) {
- 		io_ring_submit_lock(ctx, issue_flags);
--		io_put_rsrc_node(rsrc_node);
-+		io_put_rsrc_node(ctx, rsrc_node);
- 		io_ring_submit_unlock(ctx, issue_flags);
- 	}
- }
-@@ -1123,7 +1123,7 @@ __cold void io_free_req_tw(struct io_kiocb *req, struct io_tw_state *ts)
- 
- 	if (req->rsrc_node) {
- 		io_tw_lock(ctx, ts);
--		io_put_rsrc_node(req->rsrc_node);
-+		io_put_rsrc_node(ctx, req->rsrc_node);
- 	}
- 	io_dismantle_req(req);
- 	io_put_task_remote(req->task, 1);
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index 345631091d80..d4bca5e18434 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -236,7 +236,7 @@ void io_rsrc_node_switch(struct io_ring_ctx *ctx,
- 
- 		atomic_inc(&data_to_kill->refs);
- 		/* put master ref */
--		io_put_rsrc_node(rsrc_node);
-+		io_put_rsrc_node(ctx, rsrc_node);
- 		ctx->rsrc_node = NULL;
- 	}
- 
-diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
-index d1555eaae81a..99f2df4eafa1 100644
---- a/io_uring/rsrc.h
-+++ b/io_uring/rsrc.h
-@@ -117,8 +117,10 @@ int io_register_rsrc_update(struct io_ring_ctx *ctx, void __user *arg,
- int io_register_rsrc(struct io_ring_ctx *ctx, void __user *arg,
- 			unsigned int size, unsigned int type);
- 
--static inline void io_put_rsrc_node(struct io_rsrc_node *node)
-+static inline void io_put_rsrc_node(struct io_ring_ctx *ctx, struct io_rsrc_node *node)
- {
-+	lockdep_assert_held(&ctx->uring_lock);
-+
- 	if (node && !--node->refs)
- 		io_rsrc_node_ref_zero(node);
- }
-@@ -126,7 +128,7 @@ static inline void io_put_rsrc_node(struct io_rsrc_node *node)
- static inline void io_req_put_rsrc_locked(struct io_kiocb *req,
- 					  struct io_ring_ctx *ctx)
- {
--	io_put_rsrc_node(req->rsrc_node);
-+	io_put_rsrc_node(ctx, req->rsrc_node);
- }
- 
- static inline void io_charge_rsrc_node(struct io_ring_ctx *ctx,
--- 
-2.39.1
-
+Thanks,
+	Johannes
