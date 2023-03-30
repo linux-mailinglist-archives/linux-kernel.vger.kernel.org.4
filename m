@@ -2,183 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 181286D0A78
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8F96D0A7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbjC3Pwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
+        id S233482AbjC3Pxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbjC3Pwb (ORCPT
+        with ESMTP id S233502AbjC3Px3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:52:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC19E19A
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:52:15 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32UF2ips006772;
-        Thu, 30 Mar 2023 15:52:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=pZCUFkZgsAw3SUtEcfncO2YiMButsh4w+3FR83KmNmI=;
- b=jeavevmHOm6cm4mN/MxIsII10Y4RcmL+slaDNWZYEBvUOcBDnCfYX5DPaxrxu4esJ33o
- kl5uU7SYpzMgoyZVx9rfB0oE8h3VRH8TMM12T/Zl+xptVvzpLzJOEsOLWO/ME2Jn/yll
- NiilTLryzub9Spm9L7PKbs8SBQd1ZhhRY4cXQNjIrpO7UBNqgZDkBuhmAXxv/CgdDs/h
- /VI+mV3XFksrpBu7lif1aLUQYf5QDMDJ3avdSuo30CnbESmcacyfVPlETfMMmwIMUx62
- nyPlMSMofuIjAHYGxf9pNYiyJSP2R8plBjynkqPWmmw0TLJmxC/dkcith+Mtghi00pnG Yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmpr41uwu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 15:52:04 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32UF2rTU007786;
-        Thu, 30 Mar 2023 15:52:04 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmpr41uvj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 15:52:03 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32TKpnPI010293;
-        Thu, 30 Mar 2023 15:52:01 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3phrk6p0gg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 15:52:01 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32UFpw1Z46465388
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Mar 2023 15:51:58 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0B33D2004E;
-        Thu, 30 Mar 2023 15:51:58 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B79B320043;
-        Thu, 30 Mar 2023 15:51:57 +0000 (GMT)
-Received: from [9.101.4.33] (unknown [9.101.4.33])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 30 Mar 2023 15:51:57 +0000 (GMT)
-Message-ID: <45989617-e6f9-0ca5-3371-571268807fc5@linux.ibm.com>
-Date:   Thu, 30 Mar 2023 17:51:57 +0200
+        Thu, 30 Mar 2023 11:53:29 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C21EC65E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:53:10 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id r11so78333657edd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680191589;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ikZyF37hU9YDO+GQB/GUbHTmkdXciWAtoxo0PEHvqgY=;
+        b=ROBarmsc9FRDQk/abfcUvYA25l2Bl8IEyF1WgfDPAx4A5JuDBqHyeCrwreeMJyenNA
+         v/OJvRZVjGKu2bWHM+Y28FtVAY6hyB6C03uv4iS0cfRSbz/rNPzTHClz1dEfTIq8hAo/
+         E2RjDsaqtmGYV8cQslOaONDxnL3O6+LRmtpvoq1XA6o4BxiTC15ritsL82jR1iGCzY7C
+         3D2+R8sk27Dp51zWeHJx80dTawRIABmezauk948tCUgvfgwcei/0sLl0SuFo6h3Ofh6d
+         U55bwxxMHRJLYAxH4nI8QpYP6r39xLfRaF8nWV7+OZhpkXsY2QUuxWRnvwrdCzq/CGqE
+         aKiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680191589;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ikZyF37hU9YDO+GQB/GUbHTmkdXciWAtoxo0PEHvqgY=;
+        b=uVM0FrMqudoFzP4UwPvc8tcvBYkYWsLE7uATQEeMFVm18sq3LQkRAP4Q1PHjqQdlfL
+         JMtIMyYnuhC0odSf/uE7/jK1fWhYntcVInMvqQ2BQVxZAlPgnXXkKYkWXZjh2WLmnVZv
+         Q0zhZbTJnyVl1PvL6kRElR8cvC7FRszBGD3ZMgsI/WU6fB5ehc8N3svm10I4KIcAvIjf
+         MVsiH/5b0RTrkUOCh4c/gCI0/VqoslZgghoOUFgEvzMlSYEZAVc+XTDUF6Mx85QmUvE/
+         yrpOgeEJ29DRHYo4G7umamKEAB+9LHckl9AIyOzEfMTtEM7Uy231qu/CGzDneP4A9zAx
+         Sxqg==
+X-Gm-Message-State: AAQBX9eqUZ/A6g28wdUb/uphmJACl7MDcH2WTTM9ed1Sv/aqqDLDukaE
+        ZYggm5S2XLju7JW1XignHVw=
+X-Google-Smtp-Source: AKy350bonleupkdfcCxOXzFGjgMB/RZ0SXYhmfxsTBkQyFAwaTdJDflIKAwbXhgwxlO9d0UptITKhQ==
+X-Received: by 2002:a17:906:2098:b0:8d2:78c5:1d4e with SMTP id 24-20020a170906209800b008d278c51d4emr2497476ejq.5.1680191588594;
+        Thu, 30 Mar 2023 08:53:08 -0700 (PDT)
+Received: from ivan-HLYL-WXX9.. ([37.252.81.51])
+        by smtp.gmail.com with ESMTPSA id e7-20020a170906248700b0093408d33875sm15027305ejb.49.2023.03.30.08.53.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 08:53:08 -0700 (PDT)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, himadrispandya@gmail.com,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        shy828301@gmail.com, zokeefe@google.com,
+        syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
+Subject: [PATCH v2] mm: khugepaged: Fix kernel BUG in hpage_collapse_scan_file
+Date:   Thu, 30 Mar 2023 19:53:05 +0400
+Message-Id: <20230330155305.423051-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH] powerpc/pseries/cpuhp: respect current SMT when adding
- new CPU
-To:     Nathan Lynch <nathanl@linux.ibm.com>,
-        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
-Cc:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org,
-        Srikar Dronamraju <srikar@linux.ibm.com>, npiggin@gmail.com,
-        linuxppc-dev@lists.ozlabs.org
-References: <20230213124510.12651-1-ldufour@linux.ibm.com>
- <87ilg5aahx.fsf@linux.ibm.com> <20230213150429.GZ19419@kitsune.suse.cz>
- <87fsb9a7zx.fsf@linux.ibm.com>
-Content-Language: en-US
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <87fsb9a7zx.fsf@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1NHTgHTUYtooka195LEfZscRFAKWB2bH
-X-Proofpoint-ORIG-GUID: NrYgbgxGkFR0zlCkEhKJwHMZhAl6U_X1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-30_09,2023-03-30_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 spamscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- phishscore=0 adultscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303300123
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 16:40:50, Nathan Lynch wrote:
-> Michal Suchánek <msuchanek@suse.de> writes:
->> On Mon, Feb 13, 2023 at 08:46:50AM -0600, Nathan Lynch wrote:
->>> Laurent Dufour <ldufour@linux.ibm.com> writes:
->>>> When a new CPU is added, the kernel is activating all its threads. This
->>>> leads to weird, but functional, result when adding CPU on a SMT 4 system
->>>> for instance.
->>>>
->>>> Here the newly added CPU 1 has 8 threads while the other one has 4 threads
->>>> active (system has been booted with the 'smt-enabled=4' kernel option):
->>>>
->>>> ltcden3-lp12:~ # ppc64_cpu --info
->>>> Core   0:    0*    1*    2*    3*    4     5     6     7
->>>> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
->>>>
->>>> There is no SMT value in the kernel. It is possible to run unbalanced LPAR
->>>> with 2 threads for a CPU, 4 for another one, and 5 on the latest.
->>>>
->>>> To work around this possibility, and assuming that the LPAR run with the
->>>> same number of threads for each CPU, which is the common case,
->>>
->>> I am skeptical at best of baking that assumption into this code. Mixed
->>> SMT modes within a partition doesn't strike me as an unreasonable
->>> possibility for some use cases. And if that's wrong, then we should just
->>> add a global smt value instead of using heuristics.
->>>
->>>> the number
->>>> of active threads of the CPU doing the hot-plug operation is computed. Only
->>>> that number of threads will be activated for the newly added CPU.
->>>>
->>>> This way on a LPAR running in SMT=4, newly added CPU will be running 4
->>>> threads, which is what a end user would expect.
->>>
->>> I could see why most users would prefer this new behavior. But surely
->>> some users have come to expect the existing behavior, which has been in
->>> place for years, and developed workarounds that might be broken by this
->>> change?
->>>
->>> I would suggest that to handle this well, we need to give user space
->>> more ability to tell the kernel what actions to take on added cores, on
->>> an opt-in basis.
->>>
->>> This could take the form of extending the DLPAR sysfs command set:
->>>
->>> Option 1 - Add a flag that tells the kernel not to online any threads at
->>> all; user space will online the desired threads later.
->>>
->>> Option 2 - Add an option that tells the kernel which SMT mode to apply.
->>
->> powerpc-utils grew some drmgr hooks recently so maybe the policy can be
->> moved to userspace?
-> 
-> I'm not sure whether the hook mechanism would come into play, but yes, I
-> am suggesting that user space be given the option of overriding the
-> kernel's current behavior.
+Syzkaller reported the following issue:
 
-Indeed, that's not so easy. There are multiple ways for the SMT level to be
-impacted:
- - smt-enabled kernel option
- - smtstate systemctl service (if activated), saving SMT level at shutdown
-time to restore it a boot time
- - pseries-energyd daemon (if activated) could turn off threads
- - ppc64_cpu --smt=x user command
- - sysfs direct writing to turn off/on specific threads.
+kernel BUG at mm/khugepaged.c:1823!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 5097 Comm: syz-executor220 Not tainted 6.2.0-syzkaller-13154-g857f1268a591 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
+RIP: 0010:collapse_file mm/khugepaged.c:1823 [inline]
+RIP: 0010:hpage_collapse_scan_file+0x67c8/0x7580 mm/khugepaged.c:2233
+Code: 00 00 89 de e8 c9 66 a3 ff 31 ff 89 de e8 c0 66 a3 ff 45 84 f6 0f 85 28 0d 00 00 e8 22 64 a3 ff e9 dc f7 ff ff e8 18 64 a3 ff <0f> 0b f3 0f 1e fa e8 0d 64 a3 ff e9 93 f6 ff ff f3 0f 1e fa 4c 89
+RSP: 0018:ffffc90003dff4e0 EFLAGS: 00010093
+RAX: ffffffff81e95988 RBX: 00000000000001c1 RCX: ffff8880205b3a80
+RDX: 0000000000000000 RSI: 00000000000001c0 RDI: 00000000000001c1
+RBP: ffffc90003dff830 R08: ffffffff81e90e67 R09: fffffbfff1a433c3
+R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
+R13: ffffc90003dff6c0 R14: 00000000000001c0 R15: 0000000000000000
+FS:  00007fdbae5ee700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fdbae6901e0 CR3: 000000007b2dd000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ madvise_collapse+0x721/0xf50 mm/khugepaged.c:2693
+ madvise_vma_behavior mm/madvise.c:1086 [inline]
+ madvise_walk_vmas mm/madvise.c:1260 [inline]
+ do_madvise+0x9e5/0x4680 mm/madvise.c:1439
+ __do_sys_madvise mm/madvise.c:1452 [inline]
+ __se_sys_madvise mm/madvise.c:1450 [inline]
+ __x64_sys_madvise+0xa5/0xb0 mm/madvise.c:1450
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-There is no SMT level saved, on "disk" or in the kernel, and any of these
-options can interact in parallel. So from the user space point of view, the
-best we could do is looking for the SMT current values, there could be
-multiple values in the case of a mixed SMT state, peek one value and apply it.
+The 'xas_store' call during page cache scanning can potentially
+translate 'xas' into the error state (with the reproducer provided
+by the syzkaller the error code is -ENOMEM). However, there are no
+further checks after the 'xas_store', and the next call of 'xas_next'
+at the start of the scanning cycle doesn't increase the xa_index,
+and the issue occurs.
 
-Extending the drmgr's hook is still valid, and I sent a patch series on the
-powerpc-utils mailing list to achieve that. However, changing the SMT level
-in that hook means that newly added CPU will be first turn on and there is
-a window where this threads could be seen active. Not a big deal but not
-turning on these extra threads looks better to me.
+This patch will add the xarray state error checking after the
+'xas_store' and the corresponding result error code. It will
+also add xarray state error checking via WARN_ON_ONCE macros,
+to be sure that ENOMEM or other possible errors don't occur
+at the places they shouldn't.
 
-That's being said, I can't see any benefit of a user space implementation
-compared to the option I'm proposing in that patch.
+Tested via syzbot.
 
-Does anyone have a better idea?
+Reported-by: syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?id=7d6bb3760e026ece7524500fe44fb024a0e959fc
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+V1 -> V2: Add WARN_ON_ONCE error checking and comments
 
-Cheers,
-Laurent.
+ mm/khugepaged.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 92e6f56a932d..8b6580b13339 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -55,6 +55,7 @@ enum scan_result {
+ 	SCAN_CGROUP_CHARGE_FAIL,
+ 	SCAN_TRUNCATED,
+ 	SCAN_PAGE_HAS_PRIVATE,
++	SCAN_STORE_FAILED,
+ };
+ 
+ #define CREATE_TRACE_POINTS
+@@ -1840,6 +1841,15 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 					goto xa_locked;
+ 				}
+ 				xas_store(&xas, hpage);
++				if (xas_error(&xas)) {
++					/* revert shmem_charge performed
++					 * in the previous condition
++					 */
++					mapping->nrpages--;
++					shmem_uncharge(mapping->host, 1);
++					result = SCAN_STORE_FAILED;
++					goto xa_locked;
++				}
+ 				nr_none++;
+ 				continue;
+ 			}
+@@ -1992,6 +2002,11 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 
+ 		/* Finally, replace with the new page. */
+ 		xas_store(&xas, hpage);
++		/* We can't get an ENOMEM here (because the allocation happened before)
++		 * but let's check for errors (XArray implementation can be
++		 * changed in the future)
++		 */
++		WARN_ON_ONCE(xas_error(&xas));
+ 		continue;
+ out_unlock:
+ 		unlock_page(page);
+@@ -2029,6 +2044,11 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 	/* Join all the small entries into a single multi-index entry */
+ 	xas_set_order(&xas, start, HPAGE_PMD_ORDER);
+ 	xas_store(&xas, hpage);
++	/* Here we can't get an ENOMEM (because entries were
++	 * previously allocated) But let's check for errors
++	 * (XArray implementation can be changed in the future)
++	 */
++	WARN_ON_ONCE(xas_error(&xas));
+ xa_locked:
+ 	xas_unlock_irq(&xas);
+ xa_unlocked:
+-- 
+2.34.1
+
