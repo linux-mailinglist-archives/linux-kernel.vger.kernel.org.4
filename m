@@ -2,57 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E136D00AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16EB6D00AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjC3KH2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 06:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        id S230262AbjC3KJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjC3KH0 (ORCPT
+        with ESMTP id S229680AbjC3KJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:07:26 -0400
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC91DB0;
-        Thu, 30 Mar 2023 03:07:25 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id r11so74321125edd.5;
-        Thu, 30 Mar 2023 03:07:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680170844;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CvEjtWJx3cZceF++2Dm4Xv1D1mJF+XmnWd+65BDo320=;
-        b=LpoJgxrd7Nd8pcjMaBCO0HdVAQOp/dbwTIRgn2iIMKMu3pfORUYNF+JxhgZOmZ58FM
-         z/471M562U9jr9d0oldkQP9Cdt6j+9G8XBvqrgObLuQ7g0qU47sAZtUaPNHPhD70IUOp
-         vZBmLsXkmcL71xY7jY1c1kf58ExXz589Wyvx2lar26norE1qP32WiNtu4+wFLL3V7OJC
-         ekfn6W3gMLhrH3t/BM4kLQt70fT3ZXaLrjcOLHgSjtHMIs5jqlYKmu6RmPAsIjtWxOK3
-         2rIfq9CxFgMAdUs3yaPq5kXQ2rPgWisP4kepKVystduKqNXGZ6is/POH0kMAIh7CY5ST
-         gxKA==
-X-Gm-Message-State: AAQBX9foAPluwtIJn/UbezxJm05csKnM88JcdL5+/76xiPX6VSqP7RTb
-        Bmjy03CYSjOlX0MQc2eL1gcxg6eZkliC+dw0TwY=
-X-Google-Smtp-Source: AKy350bbIJNmv5v0ZMtWilvLjDEulMsgxu4uajx7iqvyQskJCnwCaqVHzla5TFM3ywhX815/ufBnAtO3e9M6OM0zesQ=
-X-Received: by 2002:a17:906:fe49:b0:8b1:3298:c587 with SMTP id
- wz9-20020a170906fe4900b008b13298c587mr12300921ejb.2.1680170844023; Thu, 30
- Mar 2023 03:07:24 -0700 (PDT)
+        Thu, 30 Mar 2023 06:09:10 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5906E93;
+        Thu, 30 Mar 2023 03:09:09 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32U6f0O8005361;
+        Thu, 30 Mar 2023 03:09:02 -0700
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3pmhc4d0xg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 03:09:01 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nbIJMxS98rk/YSwbZrsHRoataEcjEZHe2G5aJOKq5fJ8AJa+8EaiAa6iWKQglZJurytB4maqkI4HE9wErrWPGPTsnPnpnym0FSa4HJHtUVSNKiAbdl1eMikvrj8l977qmpRX5QGmnNGUF2DpB7mbitpedVC6TYm7cVgrs9d4MltYtO2wdlulvtHk4pENiM1KU6kQVCJXd5R6juMWsbez9H+L6M/WvUYCKLll+OEYYyXeUS2bBF7cCyvEnTxSn6X0r5eC+QwkONzjcUvh8EVJAJCUSpJRMtAln3aaJYKscNNo4G9kS2qd60S2JoHRRcwAilqoot+qONOZ8s7wn2q84w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HiwQ6P0LbvPPsnUkMUzEx3vgciy3yYOsebCKfh2Y1Rs=;
+ b=PJFXjCGqFUTA1aQ2k9JNNF5EmIkbTZUFFPMWHhNzDk2QP4vYxWATd5nCPHt6u4cW1z09nTAnCRIRO9RRPNj0qqM4rpUzUiyaPhYrQI00+d1sA+hfxD56FtzslEAXvwpsPFlY0w74VCEWS7NFzaMwUftunERbNN53RzbjIoJfy6WIepGJnHhvOZspDEaNdpn02fv/O4ErZCf/HZjEhBUIg2exLDMaMSFX8kSfFCyzrjzsS73b3iAhXQZjtAowlG1CvqhBMZjsFGVZN7Iz24SlvEjO5LvvbekYopDr+F+PerRk4auc8zY5GX3nodMsfEnG35ZI/+v+CPhB5oGtJ4TRVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HiwQ6P0LbvPPsnUkMUzEx3vgciy3yYOsebCKfh2Y1Rs=;
+ b=OKPCpFLlBKyGdUr/wzh60AJNdCuiwE3pTGfx9ntWLkYyq+n/4CI9CeX/2iY34Vz2vNVdcuDqpOSy5BPo61xRnYcxmwxtHiGN0EesfW1N8TtiKMQgUoO5Y4MpUy6hwIvqJh36ePFRvZ+9tzKYs0AIDmg1LvmpmoQ/+f7MeEMmYrY=
+Received: from BY3PR18MB4707.namprd18.prod.outlook.com (2603:10b6:a03:3ca::23)
+ by SN7PR18MB3919.namprd18.prod.outlook.com (2603:10b6:806:f5::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20; Thu, 30 Mar
+ 2023 10:08:59 +0000
+Received: from BY3PR18MB4707.namprd18.prod.outlook.com
+ ([fe80::bfe5:6d08:3a10:6251]) by BY3PR18MB4707.namprd18.prod.outlook.com
+ ([fe80::bfe5:6d08:3a10:6251%3]) with mapi id 15.20.6222.035; Thu, 30 Mar 2023
+ 10:08:59 +0000
+From:   Sai Krishna Gajula <saikrishnag@marvell.com>
+To:     Leon Romanovsky <leon@kernel.org>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        Hariprasad Kelam <hkelam@marvell.com>
+Subject: RE: [EXT] Re: [net PATCH 3/7] octeontx2-af: Add validation for lmac
+ type
+Thread-Topic: [EXT] Re: [net PATCH 3/7] octeontx2-af: Add validation for lmac
+ type
+Thread-Index: AQHZYmDeXzOo7CyzoU608CFuRZt47a8S2i4AgAA9ijA=
+Date:   Thu, 30 Mar 2023 10:08:59 +0000
+Message-ID: <BY3PR18MB470786C30C037BFD519147C3A08E9@BY3PR18MB4707.namprd18.prod.outlook.com>
+References: <20230329170619.183064-1-saikrishnag@marvell.com>
+ <20230329170619.183064-4-saikrishnag@marvell.com>
+ <20230330061840.GM831478@unreal>
+In-Reply-To: <20230330061840.GM831478@unreal>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcc2Fpa3Jpc2hu?=
+ =?us-ascii?Q?YWdcYXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZi?=
+ =?us-ascii?Q?ODRiYTI5ZTM1Ylxtc2dzXG1zZy1lMGRlM2RjYi1jZWUyLTExZWQtYWQxYy0x?=
+ =?us-ascii?Q?Y2MxMGM0MGQ5ZTRcYW1lLXRlc3RcZTBkZTNkY2MtY2VlMi0xMWVkLWFkMWMt?=
+ =?us-ascii?Q?MWNjMTBjNDBkOWU0Ym9keS50eHQiIHN6PSIzNDg3IiB0PSIxMzMyNDY0NDUz?=
+ =?us-ascii?Q?NjA0OTY4MTUiIGg9IkRoZ09tL1gwbGdBSW0ySTVUazZsTGdHOVRpTT0iIGlk?=
+ =?us-ascii?Q?PSIiIGJsPSIwIiBibz0iMSIgY2k9ImNBQUFBRVJIVTFSU1JVRk5DZ1VBQUhZ?=
+ =?us-ascii?Q?SUFBQ3Z3RXVqNzJMWkFZMENXbVFEdnloeGpRSmFaQU8vS0hFTkFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFIQUFBQUFHQ0FBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFFQUFRQUJBQUFBMUZIM2FBQUFBQUFBQUFBQUFBQUFBSjRBQUFCaEFH?=
+ =?us-ascii?Q?UUFaQUJ5QUdVQWN3QnpBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR01BZFFCekFIUUFid0J0QUY4?=
+ =?us-ascii?Q?QWNBQmxBSElBY3dCdkFHNEFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFB?=
+ =?us-ascii?Q?Q0FBQUFBQUNlQUFBQVl3QjFBSE1BZEFCdkFHMEFYd0J3QUdnQWJ3QnVBR1VB?=
+ =?us-ascii?Q?YmdCMUFHMEFZZ0JsQUhJQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUJq?=
+ =?us-ascii?Q?QUhVQWN3QjBBRzhBYlFCZkFITUFjd0J1QUY4QVpBQmhBSE1BYUFCZkFIWUFN?=
+ =?us-ascii?Q?QUF5QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+x-dg-rorf: true
+x-dg-refone: =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdB?=
+ =?us-ascii?Q?QUFHTUFkUUJ6QUhRQWJ3QnRBRjhBY3dCekFHNEFYd0JyQUdVQWVRQjNBRzhB?=
+ =?us-ascii?Q?Y2dCa0FITUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQVFBQUFBQUFBQUFDQUFBQUFBQ2VBQUFBWXdCMUFITUFkQUJ2?=
+ =?us-ascii?Q?QUcwQVh3QnpBSE1BYmdCZkFHNEFid0JrQUdVQWJBQnBBRzBBYVFCMEFHVUFj?=
+ =?us-ascii?Q?Z0JmQUhZQU1BQXlBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFB?=
+ =?us-ascii?Q?QUFBQUFBSUFBQUFBQUo0QUFBQmpBSFVBY3dCMEFHOEFiUUJmQUhNQWN3QnVB?=
+ =?us-ascii?Q?RjhBY3dCd0FHRUFZd0JsQUY4QWRnQXdBRElBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFu?=
+ =?us-ascii?Q?Z0FBQUdRQWJBQndBRjhBY3dCckFIa0FjQUJsQUY4QVl3Qm9BR0VBZEFCZkFH?=
+ =?us-ascii?Q?MEFaUUJ6QUhNQVlRQm5BR1VBWHdCMkFEQUFNZ0FBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFaQUJzQUhBQVh3?=
+ =?us-ascii?Q?QnpBR3dBWVFCakFHc0FYd0JqQUdnQVlRQjBBRjhBYlFCbEFITUFjd0JoQUdj?=
+ =?us-ascii?Q?QVpRQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+x-dg-reftwo: =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCa0FHd0Fj?=
+ =?us-ascii?Q?QUJmQUhRQVpRQmhBRzBBY3dCZkFHOEFiZ0JsQUdRQWNnQnBBSFlBWlFCZkFH?=
+ =?us-ascii?Q?WUFhUUJzQUdVQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR1VBYlFCaEFHa0FiQUJmQUdFQVpB?=
+ =?us-ascii?Q?QmtBSElBWlFCekFITUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBRHdBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FB?=
+ =?us-ascii?Q?QUFBQUNlQUFBQWJRQmhBSElBZGdCbEFHd0FiQUJmQUhBQWNnQnZBR29BWlFC?=
+ =?us-ascii?Q?akFIUUFYd0JqQUc4QVpBQmxBSE1BQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUJ0QUdF?=
+ =?us-ascii?Q?QWNnQjJBR1VBYkFCc0FGOEFkQUJsQUhJQWJRQnBBRzRBZFFCekFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBRUFBQUFBQUFBQUFnQUFBQUFBIi8+PC9tZXRhPg=3D=3D?=
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY3PR18MB4707:EE_|SN7PR18MB3919:EE_
+x-ms-office365-filtering-correlation-id: 2dbf4141-c78c-4fe8-7362-08db3106c7c6
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: O/3tcki14kBPv2pI+MkPm9efP7/ScKh/PTJtFqWxPK/uakNbQOZUwVKzY1zK5HeakyRYYkZJachrn2Yz3AWgiVzrkFQfFAg7DNogFgPTPer7bh/6rFwAkKy0aL5n/5+i3WHLv6F/xYwgL6tPlc4iuziGyegVs4FYgHVom5WeeGOYumNyyjDnV9AewbAGVYarHX6I0OWJFjxr5ifHZGpZ2nKOF8OGMZs/EAD9M2X6bUaMdh8os2pv3EnEMpwlfSbtt5h6hzCGDo/Z2HvLINNjg8zxMqL+qidGMTN+F7emMVGmStZh0MiSn9C95pou7RhgrlBcdHm2BP9fhEn4Ge1ZYB3QIkhklLjhYBgwFfQsvULFGuIXqPBEW7dKn48/F9xmo2CyFjVamF8JDPsZrIzsXDbkExRJDc7+UWhI1+uRttjHgZyk+Ke53LyGgoAdplTKhhGgu/b4lGmCKD5MF8Vz2WK+cNmZlMlrU96qkDK8pLjFFmxbksEJ3XNfnT3gC0AiH3GtfB/F7Rq6wrGL4w29uesYRD9OwJW7jxtElYcBo0gjVfowJ+ev4G/BRmNUG4cyPqUWxZ1HttE9BH8fOPvl4g30DzPRCeErzw5455OI02lBOlIhg/n+4cwN15+1/AWK
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR18MB4707.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(451199021)(5660300002)(8936002)(52536014)(41300700001)(2906002)(86362001)(66476007)(76116006)(66556008)(8676002)(66946007)(6916009)(4326008)(66446008)(64756008)(316002)(478600001)(54906003)(45080400002)(71200400001)(7696005)(107886003)(9686003)(6506007)(26005)(186003)(53546011)(122000001)(83380400001)(33656002)(38100700002)(38070700005)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?R7aGBCUwzNmLNfSr4keOtqRJ7JUBTUDeeZQmmmVQKaw/aWrOaI9mgqFCOnnk?=
+ =?us-ascii?Q?2bvg4M+92XKl1uDnkzDJ+YsPOT8dMk/a8Rmml+QCcmKwSeYIU6tQG3NqILxh?=
+ =?us-ascii?Q?Vu4CDszorUVw3sCYNsiysx5FIwVi4zkU/BqrvGXgtdtlOIrbCg7rCuaWiNTw?=
+ =?us-ascii?Q?vxmgo8x+oM9B09NtnWnssXWAIVbYbZ7Jx7Ux2rP4cLaFEUKfwL1mCLmzVFXE?=
+ =?us-ascii?Q?sifm9AuXIp4r7dVo4uf29Q19AURSQXn7nWETeuPeIKOp05akyY3kTOrULy1c?=
+ =?us-ascii?Q?vVRT+wNgcTgIqniojXYDoiyxNTiPmFcywVqW7+J52HzoPFgQ8XrGW33L0u3N?=
+ =?us-ascii?Q?Fq+7tAyXbtRQnDZFiTC5lr+v2ji5T5M4O9CZN+oKyyjNEebBHvelKnX6OyEc?=
+ =?us-ascii?Q?riohYLLRljZUG2n15wCCBvA0CVb89xnnzqRlGvPCTyeT9oenayLyZA3Yo9aQ?=
+ =?us-ascii?Q?YeCxvTNO5Y9hpSxCSUGbtkIxQ9SDm8IfsvT0Cr+/PLp7fNbEzSdyucDzqkO1?=
+ =?us-ascii?Q?Jg6s35uYFZ9Fe5l+olEhEVFeamLUMlaH4c10ANMB99tnGtsR0gaZu7Ls/mWL?=
+ =?us-ascii?Q?EBXme6gO48HysGO9YNVI1BnzNGkAvfDCm0UFTOjRGfmXFBVG/DMh4LZDc7XS?=
+ =?us-ascii?Q?JBC09Z+uH+bAJgUqXpDurBdZhy2+WMCQKshl+mZMvcAJb7+mwjl0iPGcPMl/?=
+ =?us-ascii?Q?UTT0i773gLZJ9HCpNoOoUloH7N/o222jFJwM46+mtWUg+9cMkty2hQK5mKh2?=
+ =?us-ascii?Q?DDxVQDMlKABjDoBcjN8j2nznPo2j6XpyooOQHhEfe0jcD03AJKgP/CU6ibON?=
+ =?us-ascii?Q?4QpGdLAm9IJRcFeVHFSjyrmrkHGFovf+Wznx0fG8vFgzbxmvyCqtZ1vEDzZP?=
+ =?us-ascii?Q?C0ehHS1HNnMUVMSzLya4iozMhnzRCCgEjCkTSOjTv2Og9kYMhPbBgjMDHhVd?=
+ =?us-ascii?Q?kki/RerSVCf82omRqC9dKJt+7jhn4KVVDC8ooODUC0qDW1Nbl/yDcaWb0S45?=
+ =?us-ascii?Q?R8bw6sFzHAIUFK9NgHOpRzFf0DOq3Xql9J0gPVmUb5zoz0vLJ3rE1oZAnEZ7?=
+ =?us-ascii?Q?BZW4PvB6wUdEOLF6OiZIk35Jbq4DnPxo60t9UxSuTPAoz9sslTNfiu5JOQut?=
+ =?us-ascii?Q?rWARLL+T2VehiWGV+LWRYRmfUBBrZF3aFSLO3b54ds7ZgVtx6UXQFB3ecOe8?=
+ =?us-ascii?Q?PJXKk16wJLrlRG3RfNeElFk4pUqs6s7lSJEaL7bJOXgrKlfCIgCSMSDPpOi6?=
+ =?us-ascii?Q?jzwqt5OMgQRHUVNvEv2vrJ/8rNKDgeskHbvvSFYY9PPdKKUN9qPv8djeWpgk?=
+ =?us-ascii?Q?gP/g+xM9pUYgJEXFMHh2vlX/NV2OkucHQ3PxiG+x8Nmg4ujQ17JVqNJR2yYa?=
+ =?us-ascii?Q?whDignQbB/QROlRUNWWuzZSKQrbk1Zt3KoozhUrNAG8YdIT6bplmt/yo58ix?=
+ =?us-ascii?Q?QRA6mdYaVY8kQVko0sw8wFNvM26dlEdS/AbFdJ4M3fUtw5v0aIFZ3ElrqL9V?=
+ =?us-ascii?Q?YrtE4dBmVp8C9OiCYTsbIzJKC2th6ZFPEmY4AX+qvvwsPrJ7f0cZtkd/dQ3I?=
+ =?us-ascii?Q?uJBwFnaD7H4ebL153IV17UahTerSWvUI8YUyv9PH?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <CABXGCsNcKc9BP0t1q=TaFF6fjjJU-MNcoLt_LT1rVKbHsUXiAw@mail.gmail.com>
-In-Reply-To: <CABXGCsNcKc9BP0t1q=TaFF6fjjJU-MNcoLt_LT1rVKbHsUXiAw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Mar 2023 12:07:12 +0200
-Message-ID: <CAJZ5v0jv0BYE1pgCEJDsadfzH0ZnZYfwJuScPMQcpFYSJPYL6w@mail.gmail.com>
-Subject: Re: [bug/6.3-rc4/bisected] WARNING at cooling_device_stats_setup+0xac
- caused by commit 790930f44289c8209c57461b2db499fcc702e0b3
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     rafael.j.wysocki@intel.com, rui.zhang@intel.com,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR18MB4707.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2dbf4141-c78c-4fe8-7362-08db3106c7c6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2023 10:08:59.4106
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: B+KIycUjQWSnQI07jF4Tb9N8ZYfb0KFHHbeL0cCEieCk+DIylelY0N3mizUohL4YLqTmuv7Z3sLUEzrNQllI1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR18MB3919
+X-Proofpoint-ORIG-GUID: eAM2zbAwG2YQr0eAOr3jfSDJcfBhpVNl
+X-Proofpoint-GUID: eAM2zbAwG2YQr0eAOr3jfSDJcfBhpVNl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-30_04,2023-03-30_01,2023-02-09_01
+X-Spam-Status: No, score=-0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,127 +209,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 9:52 AM Mikhail Gavrilov
-<mikhail.v.gavrilov@gmail.com> wrote:
->
-> Hi,
-> The release 6.3-rc4 brings new warning messages to log:
+Please see inline.
 
-Thanks for the report, please see this patch:
+> -----Original Message-----
+> From: Leon Romanovsky <leon@kernel.org>
+> Sent: Thursday, March 30, 2023 11:49 AM
+> To: Sai Krishna Gajula <saikrishnag@marvell.com>
+> Cc: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> pabeni@redhat.com; netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
+> Sunil Kovvuri Goutham <sgoutham@marvell.com>;
+> richardcochran@gmail.com; Hariprasad Kelam <hkelam@marvell.com>
+> Subject: [EXT] Re: [net PATCH 3/7] octeontx2-af: Add validation for lmac =
+type
+>=20
+> External Email
+>=20
+> ----------------------------------------------------------------------
+> On Wed, Mar 29, 2023 at 10:36:15PM +0530, Sai Krishna wrote:
+> > From: Hariprasad Kelam <hkelam@marvell.com>
+> >
+> > Upon physical link change, firmware reports to the kernel about the
+> > change along with the details like speed, lmac_type_id, etc.
+> > Kernel derives lmac_type based on lmac_type_id received from firmware.
+> >
+> > In a few scenarios, firmware returns an invalid lmac_type_id, which is
+> > resulting in below kernel panic. This patch adds the missing
+> > validation of the lmac_type_id field.
+> >
+> > Internal error: Oops: 96000005 [#1] PREEMPT SMP
+> > [   35.321595] Modules linked in:
+> > [   35.328982] CPU: 0 PID: 31 Comm: kworker/0:1 Not tainted
+> > 5.4.210-g2e3169d8e1bc-dirty #17
+> > [   35.337014] Hardware name: Marvell CN103XX board (DT)
+> > [   35.344297] Workqueue: events work_for_cpu_fn
+> > [   35.352730] pstate: 40400089 (nZcv daIf +PAN -UAO)
+> > [   35.360267] pc : strncpy+0x10/0x30
+> > [   35.366595] lr : cgx_link_change_handler+0x90/0x180
+> >
+> > Fixes: 61071a871ea6 ("octeontx2-af: Forward CGX link notifications to
+> > PFs")
+> > Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+> > Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+> > Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
+> > ---
+> >  drivers/net/ethernet/marvell/octeontx2/af/cgx.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
+> > b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
+> > index 724df6398bbe..180aa84cf1c3 100644
+> > --- a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
+> > +++ b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
+> > @@ -1231,6 +1231,13 @@ static inline void link_status_user_format(u64
+> lstat,
+> >  	linfo->an =3D FIELD_GET(RESP_LINKSTAT_AN, lstat);
+> >  	linfo->fec =3D FIELD_GET(RESP_LINKSTAT_FEC, lstat);
+> >  	linfo->lmac_type_id =3D FIELD_GET(RESP_LINKSTAT_LMAC_TYPE, lstat);
+> > +
+> > +	if (linfo->lmac_type_id >=3D LMAC_MODE_MAX) {
+> > +		dev_err(&cgx->pdev->dev, "Unknown lmac_type_id %d
+> reported by firmware on cgx port%d:%d",
+> > +			linfo->lmac_type_id, cgx->cgx_id, lmac_id);
+> > +		return;
+>=20
+> You are keeping old lmac_type, which is out-of-sync now.
+> Why don't you do something like that?
+>=20
+> if (linfo->lmac_type_id >=3D LMAC_MODE_MAX) {
+>   strncpy(linfo->lmac_type, "Unknown", LMACTYPE_STR_LEN - 1);
+>   return;
+> }
+>=20
+>=20
+We will add the proposed change (Unknown). Since we need to know the firmwa=
+re reported lmac type ID is proper or not, we will keep dev_err also.
+> > +	}
+> > +
+> >  	lmac_string =3D cgx_lmactype_string[linfo->lmac_type_id];
+> >  	strncpy(linfo->lmac_type, lmac_string, LMACTYPE_STR_LEN - 1);  }
+> > --
+> > 2.25.1
+> >
+Thanks,
+Sai
 
-https://patchwork.kernel.org/project/linux-pm/patch/2681615.mvXUDI8C0e@kreacher/
-
-> [    4.590775] ------------[ cut here ]------------
-> [    4.590783] WARNING: CPU: 2 PID: 1 at
-> drivers/thermal/thermal_sysfs.c:879
-> cooling_device_stats_setup+0xac/0xc0
-> [    4.590799] Modules linked in:
-> [    4.590806] CPU: 2 PID: 1 Comm: swapper/0 Not tainted
-> 6.3.0-rc3-08-790930f44289c8209c57461b2db499fcc702e0b3+ #87
-> [    4.590819] Hardware name: ASUSTeK COMPUTER INC. ROG Strix
-> G513QY_G513QY/G513QY, BIOS G513QY.320 09/07/2022
-> [    4.590832] RIP: 0010:cooling_device_stats_setup+0xac/0xc0
-> [    4.590841] Code: ff 48 89 1d 9e 27 9f 01 5b 5d 41 5c c3 cc cc cc
-> cc 48 8d bf 60 05 00 00 be ff ff ff ff e8 5c 16 3b 00 85 c0 0f 85 72
-> ff ff ff <0f> 0b e9 6b ff ff ff 66 66 2e 0f 1f 84 00 00 00 00 00 66 90
-> 90 90
-> [    4.590863] RSP: 0018:ffffa5a080107c60 EFLAGS: 00010246
-> [    4.590871] RAX: 0000000000000000 RBX: ffff96fc51f6d800 RCX: 0000000000000001
-> [    4.590880] RDX: 0000000000000000 RSI: ffffffffb9a7f591 RDI: ffffffffb9b325ce
-> [    4.590889] RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000001
-> [    4.590898] R10: 0000000000000001 R11: 0000000000000001 R12: ffff96fc51f6d800
-> [    4.590907] R13: ffff96fc51f6d818 R14: ffff96fc4b450000 R15: 0000000000000000
-> [    4.590916] FS:  0000000000000000(0000) GS:ffff970b16a00000(0000)
-> knlGS:0000000000000000
-> [    4.590927] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    4.590934] CR2: 0000000000000000 CR3: 000000034643c000 CR4: 0000000000750ee0
-> [    4.590944] PKRU: 55555554
-> [    4.590948] Call Trace:
-> [    4.590953]  <TASK>
-> [    4.590958]  thermal_cooling_device_setup_sysfs+0xe/0x20
-> [    4.590967]  __thermal_cooling_device_register.part.0+0x13c/0x3d0
-> [    4.590977]  acpi_processor_thermal_init+0x22/0x100
-> [    4.590987]  __acpi_processor_start+0x7f/0xf0
-> [    4.590995]  acpi_processor_start+0x2c/0x50
-> [    4.591002]  really_probe+0x19e/0x3e0
-> [    4.591010]  ? __pfx___driver_attach+0x10/0x10
-> [    4.591017]  __driver_probe_device+0x78/0x160
-> [    4.591025]  driver_probe_device+0x1f/0x90
-> [    4.591032]  __driver_attach+0xd2/0x1c0
-> [    4.591039]  bus_for_each_dev+0x8b/0xe0
-> [    4.591047]  bus_add_driver+0x115/0x210
-> [    4.591055]  driver_register+0x55/0x100
-> [    4.591062]  ? __pfx_acpi_processor_driver_init+0x10/0x10
-> [    4.591072]  acpi_processor_driver_init+0x3b/0xc0
-> [    4.591080]  ? __pfx_acpi_processor_driver_init+0x10/0x10
-> [    4.591088]  do_one_initcall+0x70/0x290
-> [    4.591101]  kernel_init_freeable+0x3c5/0x580
-> [    4.591112]  ? __pfx_kernel_init+0x10/0x10
-> [    4.591122]  kernel_init+0x16/0x1c0
-> [    4.591128]  ret_from_fork+0x2c/0x50
-> [    4.591139]  </TASK>
->
-> This message appears after each boot.
->
-> Bisect blaming this commit:
->
-> commit 790930f44289c8209c57461b2db499fcc702e0b3
-> Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Date:   Fri Mar 17 18:01:26 2023 +0100
->
->     thermal: core: Introduce thermal_cooling_device_update()
->
->     Introduce a core thermal API function, thermal_cooling_device_update(),
->     for updating the max_state value for a cooling device and rearranging
->     its statistics in sysfs after a possible change of its ->get_max_state()
->     callback return value.
->
->     That callback is now invoked only once, during cooling device
->     registration, to populate the max_state field in the cooling device
->     object, so if its return value changes, it needs to be invoked again
->     and the new return value needs to be stored as max_state.  Moreover,
->     the statistics presented in sysfs need to be rearranged in general,
->     because there may not be enough room in them to store data for all
->     of the possible states (in the case when max_state grows).
->
->     The new function takes care of that (and some other minor things
->     related to it), but some extra locking and lockdep annotations are
->     added in several places too to protect against crashes in the cases
->     when the statistics are not present or when a stale max_state value
->     might be used by sysfs attributes.
->
->     Note that the actual user of the new function will be added separately.
->
->     Link: https://lore.kernel.org/linux-pm/53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com/
->     Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->     Tested-by: Zhang Rui <rui.zhang@intel.com>
->     Reviewed-by: Zhang Rui <rui.zhang@intel.com>
->
->  drivers/thermal/thermal_core.c  | 83 ++++++++++++++++++++++++++++++++++++++++-
->  drivers/thermal/thermal_core.h  |  2 +
->  drivers/thermal/thermal_sysfs.c | 74 +++++++++++++++++++++++++++++++-----
->  include/linux/thermal.h         |  1 +
->  4 files changed, 150 insertions(+), 10 deletions(-)
->
-> All my PCs turned up affected by this issue:
-> - CPU: Ryzen 3950X / MB: ROG Strix X570-I
-> - CPU Ruzen 7950X / MB: MPG B650I EDGE WIFI
-> - Laptop: ASUS ROG Strix G15 G513QY-HF001 (CPU: 5900HX)
->
-> Unfortunately I couldn't check revert this commit, because after
-> reverting the kernel does not build.
->
-> drivers/acpi/processor_thermal.c: In function ‘acpi_thermal_cpufreq_init’:
-> drivers/acpi/processor_thermal.c:149:17: error: implicit declaration
-> of function ‘thermal_cooling_device_update’; did you mean
-> ‘thermal_zone_device_update’? [-Werror=implicit-function-declaration]
->   149 |                 thermal_cooling_device_update(pr->cdev);
->       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                 thermal_zone_device_update
->
->
-> Who wants to see the full kernel log could see an attached archive (for laptop).
->
-> --
-> Best Regards,
-> Mike Gavrilov.
