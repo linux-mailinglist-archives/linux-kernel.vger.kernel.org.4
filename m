@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B1D6D0F85
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8908E6D0F76
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbjC3T4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 15:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
+        id S231861AbjC3T4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 15:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232109AbjC3T41 (ORCPT
+        with ESMTP id S231820AbjC3T4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:56:27 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903B510408;
-        Thu, 30 Mar 2023 12:56:21 -0700 (PDT)
-Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73::5f6])
-        by ms.lwn.net (Postfix) with ESMTPA id 9BBE9993;
-        Thu, 30 Mar 2023 19:56:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 9BBE9993
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1680206181; bh=8qKYwim6qzzDNM1Ego9KfkuJofkSbeI1sjSlRBWM9CE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f/kUoGqpKoyEYCz29zAodrRGvGKcUY0/n1kHOY/cYQSf4oq+nIbrrq1X+DuevahzK
-         pZNMNQoScjO8tGcJloG2cL8Qwl9kiz2yeUMpyeQSEHP1deDhbYF465tzRpJk5ukmVA
-         iVtd4Ets7v/e1fvDvPP28EIqaDjak5fJf3sxf5uOuH9Av+DyZZA2T0IMKA68kB0QYD
-         UwVbhISHml+w3NUeXFmd9UY2ipbzWDOYl3sU0kRxKEw8Q1dP1qydrfZYwdtceH8101
-         V2Zv+4YHVOsEx+54d6CJ8Xe8WsanOXp3NfKL53A8q5Axd7vxH8kYX7yqD6aklz1gqy
-         wfdU8TRiHlvgw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH 4/4] docs: move m68k architecture documentation under Documentation/arch/
-Date:   Thu, 30 Mar 2023 13:56:04 -0600
-Message-Id: <20230330195604.269346-5-corbet@lwn.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230330195604.269346-1-corbet@lwn.net>
-References: <20230330195604.269346-1-corbet@lwn.net>
+        Thu, 30 Mar 2023 15:56:09 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E679EFF19;
+        Thu, 30 Mar 2023 12:56:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1680206164;
+        bh=ccdCK8cB1yDs2Qew7hb2Qs/bMNJYZZtrVs8VhxEJ4v8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GC8dpnFqcrogDv720XejMUUpwoNhZrhNHwZHtxeA8YFLTRkrdizktLBcyp7sIj5A/
+         kEO1vhD1f0m2q8TJL+J/VZ4NcjitpLNEkWCL5OV4AMYlwe7uU1+Qj13S76ECZZ36xx
+         aXwgwAMQ+O7Qyl+77CukTcWbChw7OS6vxS003VtdwEaCkC8ztqEJ4u8glCNLFzDERo
+         SzjTLMvRxnPMQ3L1jLr08URNU07TrX+Vat/oTCk4e2RwuIMOTCCnTo4wH5vZ3dNXE9
+         vkEvtxkqMIhRUN4outwRjTX0IhsQqBS0GX1qvOsMiiOdm2npBWrokJR6W2d5OifJHe
+         ULM1EJJgyXr1Q==
+Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PnZ103kdcztBL;
+        Thu, 30 Mar 2023 15:56:04 -0400 (EDT)
+Message-ID: <91a414dd-9d21-01a1-536a-fee698080f1a@efficios.com>
+Date:   Thu, 30 Mar 2023 15:56:18 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/1] mm: Fix memory leak on mm_init error handling
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-mm@kvack.org, stable@vger.kernel.org
+References: <20230330133822.66271-1-mathieu.desnoyers@efficios.com>
+ <20230330124230.9f3d4f63374eb15a3b990ff8@linux-foundation.org>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20230330124230.9f3d4f63374eb15a3b990ff8@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,125 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Architecture-specific documentation is being moved into Documentation/arch/
-as a way of cleaning up the top-level documentation directory and making
-the docs hierarchy more closely match the source hierarchy.  Move
-Documentation/m68k into arch/ and fix all in-tree references.
+On 2023-03-30 15:42, Andrew Morton wrote:
+> On Thu, 30 Mar 2023 09:38:22 -0400 Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> 
+>> commit f1a7941243c1 ("mm: convert mm's rss stats into percpu_counter")
+>> introduces a memory leak by missing a call to destroy_context() when a
+>> percpu_counter fails to allocate.
+>>
+>> Before introducing the per-cpu counter allocations, init_new_context()
+>> was the last call that could fail in mm_init(), and thus there was no
+>> need to ever invoke destroy_context() in the error paths. Adding the
+>> following percpu counter allocations adds error paths after
+>> init_new_context(), which means its associated destroy_context() needs
+>> to be called when percpu counters fail to allocate.
+>>
+>> ...
+>>
+>> --- a/kernel/fork.c
+>> +++ b/kernel/fork.c
+>> @@ -1171,6 +1171,7 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
+>>   fail_pcpu:
+>>   	while (i > 0)
+>>   		percpu_counter_destroy(&mm->rss_stat[--i]);
+>> +	destroy_context(mm);
+>>   fail_nocontext:
+>>   	mm_free_pgd(mm);
+>>   fail_nopgd:
+> 
+> Is there really a leak?  I wasn't able to find a version of
+> init_new_context() which performs allocation.
 
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
----
- Documentation/admin-guide/kernel-parameters.rst            | 2 +-
- Documentation/arch/index.rst                               | 2 +-
- Documentation/{ => arch}/m68k/buddha-driver.rst            | 0
- Documentation/{ => arch}/m68k/features.rst                 | 0
- Documentation/{ => arch}/m68k/index.rst                    | 0
- Documentation/{ => arch}/m68k/kernel-options.rst           | 0
- Documentation/translations/zh_CN/arch/parisc/debugging.rst | 2 +-
- Documentation/translations/zh_CN/arch/parisc/index.rst     | 2 +-
- Documentation/translations/zh_CN/arch/parisc/registers.rst | 2 +-
- arch/m68k/Kconfig.machine                                  | 4 ++--
- 10 files changed, 7 insertions(+), 7 deletions(-)
- rename Documentation/{ => arch}/m68k/buddha-driver.rst (100%)
- rename Documentation/{ => arch}/m68k/features.rst (100%)
- rename Documentation/{ => arch}/m68k/index.rst (100%)
- rename Documentation/{ => arch}/m68k/kernel-options.rst (100%)
+AFAIU, at least on powerpc:
 
-diff --git a/Documentation/admin-guide/kernel-parameters.rst b/Documentation/admin-guide/kernel-parameters.rst
-index c833eac3fe59..6385e3b9b879 100644
---- a/Documentation/admin-guide/kernel-parameters.rst
-+++ b/Documentation/admin-guide/kernel-parameters.rst
-@@ -131,7 +131,7 @@ parameter is applicable::
- 	LOOP	Loopback device support is enabled.
- 	M68k	M68k architecture is enabled.
- 			These options have more detailed description inside of
--			Documentation/m68k/kernel-options.rst.
-+			Documentation/arch/m68k/kernel-options.rst.
- 	MDA	MDA console support is enabled.
- 	MIPS	MIPS architecture is enabled.
- 	MOUSE	Appropriate mouse support is enabled.
-diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rst
-index 6839cd46850d..80ee31016584 100644
---- a/Documentation/arch/index.rst
-+++ b/Documentation/arch/index.rst
-@@ -14,7 +14,7 @@ implementation.
-    ../arm64/index
-    ia64/index
-    ../loongarch/index
--   ../m68k/index
-+   m68k/index
-    ../mips/index
-    nios2/index
-    openrisc/index
-diff --git a/Documentation/m68k/buddha-driver.rst b/Documentation/arch/m68k/buddha-driver.rst
-similarity index 100%
-rename from Documentation/m68k/buddha-driver.rst
-rename to Documentation/arch/m68k/buddha-driver.rst
-diff --git a/Documentation/m68k/features.rst b/Documentation/arch/m68k/features.rst
-similarity index 100%
-rename from Documentation/m68k/features.rst
-rename to Documentation/arch/m68k/features.rst
-diff --git a/Documentation/m68k/index.rst b/Documentation/arch/m68k/index.rst
-similarity index 100%
-rename from Documentation/m68k/index.rst
-rename to Documentation/arch/m68k/index.rst
-diff --git a/Documentation/m68k/kernel-options.rst b/Documentation/arch/m68k/kernel-options.rst
-similarity index 100%
-rename from Documentation/m68k/kernel-options.rst
-rename to Documentation/arch/m68k/kernel-options.rst
-diff --git a/Documentation/translations/zh_CN/arch/parisc/debugging.rst b/Documentation/translations/zh_CN/arch/parisc/debugging.rst
-index 9bd197eb0d41..c6b9de6d3175 100644
---- a/Documentation/translations/zh_CN/arch/parisc/debugging.rst
-+++ b/Documentation/translations/zh_CN/arch/parisc/debugging.rst
-@@ -1,4 +1,4 @@
--.. include:: ../disclaimer-zh_CN.rst
-+.. include:: ../../disclaimer-zh_CN.rst
- 
- :Original: Documentation/arch/parisc/debugging.rst
- 
-diff --git a/Documentation/translations/zh_CN/arch/parisc/index.rst b/Documentation/translations/zh_CN/arch/parisc/index.rst
-index 848742539550..9f69283bd1c9 100644
---- a/Documentation/translations/zh_CN/arch/parisc/index.rst
-+++ b/Documentation/translations/zh_CN/arch/parisc/index.rst
-@@ -1,5 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0
--.. include:: ../disclaimer-zh_CN.rst
-+.. include:: ../../disclaimer-zh_CN.rst
- 
- :Original: Documentation/arch/parisc/index.rst
- 
-diff --git a/Documentation/translations/zh_CN/arch/parisc/registers.rst b/Documentation/translations/zh_CN/arch/parisc/registers.rst
-index caf5f258248b..a55250afcc27 100644
---- a/Documentation/translations/zh_CN/arch/parisc/registers.rst
-+++ b/Documentation/translations/zh_CN/arch/parisc/registers.rst
-@@ -1,4 +1,4 @@
--.. include:: ../disclaimer-zh_CN.rst
-+.. include:: ../../disclaimer-zh_CN.rst
- 
- :Original: Documentation/arch/parisc/registers.rst
- 
-diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
-index e2f961208f18..28eebabfd34b 100644
---- a/arch/m68k/Kconfig.machine
-+++ b/arch/m68k/Kconfig.machine
-@@ -11,7 +11,7 @@ config AMIGA
- 	help
- 	  This option enables support for the Amiga series of computers. If
- 	  you plan to use this kernel on an Amiga, say Y here and browse the
--	  material available in <file:Documentation/m68k>; otherwise say N.
-+	  material available in <file:Documentation/arch/m68k>; otherwise say N.
- 
- config ATARI
- 	bool "Atari support"
-@@ -23,7 +23,7 @@ config ATARI
- 	  This option enables support for the 68000-based Atari series of
- 	  computers (including the TT, Falcon and Medusa). If you plan to use
- 	  this kernel on an Atari, say Y here and browse the material
--	  available in <file:Documentation/m68k>; otherwise say N.
-+	  available in <file:Documentation/arch/m68k>; otherwise say N.
- 
- config ATARI_KBD_CORE
- 	bool
+arch/powerpc/mm/book3s64/mmu_context.c: init_new_context() calls 
+radix__init_new_context() or hash__init_new_context() which
+leak IDs through ida_alloc_range.
+
+Thanks,
+
+Mathieu
+
+
 -- 
-2.39.2
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
