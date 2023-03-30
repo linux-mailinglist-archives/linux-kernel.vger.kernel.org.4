@@ -2,83 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638A96D08C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9F56D08E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232493AbjC3Oxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S232558AbjC3O5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjC3Oxi (ORCPT
+        with ESMTP id S232629AbjC3O5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:53:38 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C462EA2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:53:37 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id r11so77586181edd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680188016;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kf4j1XV1zBAvKAeKkAtDa8lDI5sOqBXzDIOXiVOIMdo=;
-        b=pAjs55hpk1du9S7H97QKxkiStU0LOS1YlvodKIzibAp3keecnAMdcj+2ZzDWYqmpTD
-         Z3GT8XnNtV0Bl3Ob6r1bBy1y8kIPDU0TTO0rgFBYhzvYt6NpfHbuB14auA4Dwfmd48KK
-         0Z1H47Jw2Q+S5X1o3zH7M1yjPnx4NP+H4pzIW/zRYsm3zkSWPYePkhT1s1Us9fyozzsF
-         1js6MJ25ojpT972FeXJn0pQGUGN5KbVKIhH3wZ7ByAfnuXirrMagn9oDKbCZKUTw+gWS
-         OcR+PgHwYCTrb8phNE6dOSoxNBg8zXpJqkCuST0zeW5D1DScWW4x0Jk08b87yPSviiJ/
-         bPWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680188016;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kf4j1XV1zBAvKAeKkAtDa8lDI5sOqBXzDIOXiVOIMdo=;
-        b=PZvKVZL3CAH8TCC75jibqnt/RD8aQrCBG7TTra/rZMaZsA+FxCiQketFInvVRm8lfs
-         HKMBvq/2V2pqp4FskCSOEt5WQAuOTU7zT4i5SE58YmWWqzyr6eUezIDNasic2w0i+rzx
-         EEegZ0xu3OqZrPRYfPi1nHVBvw+edG6c3v8FuFRIvAFkFrKvzDKndlOavjepICGLflkI
-         cZPOtoOPlWb54C3f6WBLdEKA1gZME8jP8FFtHbNxhSn5ujeO5dH1/dbZZ9ItIAuKzpNn
-         ghV54VbVn++VHbwRYdbx8L9aiDaWt5238HSecagi8Gq9iJWJbe9IWRhegUPnEY1NSil0
-         mY3A==
-X-Gm-Message-State: AAQBX9epYL47x8w1Zq5kNneghc/lKsO14pPM+Wvtak2T/bUbR0focCFO
-        N7CsnLGXlbIFD6KvCJkXrtzh5iejNIPi9Q==
-X-Google-Smtp-Source: AKy350Zlre467MsXUK7sMLFincwSyv5+0dUst3Q22xu+yckgqnetO5EzRIbGIReA4ggho2Be2w9vPQ==
-X-Received: by 2002:aa7:db94:0:b0:4bb:e80c:5667 with SMTP id u20-20020aa7db94000000b004bbe80c5667mr23376928edt.10.1680188016170;
-        Thu, 30 Mar 2023 07:53:36 -0700 (PDT)
-Received: from [192.168.32.129] (aftr-82-135-86-174.dynamic.mnet-online.de. [82.135.86.174])
-        by smtp.gmail.com with ESMTPSA id a10-20020a1709065f8a00b0092595899cfcsm17759565eju.53.2023.03.30.07.53.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 07:53:35 -0700 (PDT)
-Message-ID: <ecd044c9-2fc8-fc8f-98be-c96e0622ad2b@gmail.com>
-Date:   Thu, 30 Mar 2023 16:53:34 +0200
+        Thu, 30 Mar 2023 10:57:34 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94440CDEB;
+        Thu, 30 Mar 2023 07:57:10 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 539B918843BF;
+        Thu, 30 Mar 2023 14:56:59 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 48FC82500389;
+        Thu, 30 Mar 2023 14:56:59 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 42A529B403E2; Thu, 30 Mar 2023 14:56:59 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 8F6B191201E3;
+        Thu, 30 Mar 2023 14:56:58 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
+ drivers
+In-Reply-To: <20230330130936.hxme34qrqwolvpsh@skbuf>
+References: <20230327115206.jk5q5l753aoelwus@skbuf>
+ <87355qb48h.fsf@kapio-technology.com>
+ <20230327160009.bdswnalizdv2u77z@skbuf>
+ <87pm8tooe1.fsf@kapio-technology.com>
+ <20230327225933.plm5raegywbe7g2a@skbuf>
+ <87ileljfwo.fsf@kapio-technology.com>
+ <20230328114943.4mibmn2icutcio4m@skbuf>
+ <87cz4slkx5.fsf@kapio-technology.com>
+ <20230330124326.v5mqg7do25tz6izk@skbuf>
+ <87wn2yxunb.fsf@kapio-technology.com>
+ <20230330130936.hxme34qrqwolvpsh@skbuf>
+Date:   Thu, 30 Mar 2023 16:54:19 +0200
+Message-ID: <875yaimgro.fsf@kapio-technology.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 0/3] mcb-pci: fix memory overlapping on MCB devices
-To:     =?UTF-8?Q?Rodr=c3=adguez_Barbarin=2c_Jos=c3=a9_Javier?= 
-        <JoseJavier.Rodriguez@duagon.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "jth@kernel.org" <jth@kernel.org>,
-        =?UTF-8?B?U2FuanXDoW4gR2FyY8OtYSwgSm9yZ2U=?= 
-        <Jorge.SanjuanGarcia@duagon.com>
-References: <20230330104949.21918-1-josejavier.rodriguez@duagon.com>
-Content-Language: en-US
-From:   Johannes Thumshirn <morbidrsa@gmail.com>
-In-Reply-To: <20230330104949.21918-1-josejavier.rodriguez@duagon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pushed to mcb-for-next.
+On Thu, Mar 30, 2023 at 16:09, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Thu, Mar 30, 2023 at 02:59:04PM +0200, Hans Schultz wrote:
+>> On Thu, Mar 30, 2023 at 15:43, Vladimir Oltean <olteanv@gmail.com> wrote:
+>> > On Tue, Mar 28, 2023 at 09:45:26PM +0200, Hans Schultz wrote:
+>> >> So the solution would be to not let the DSA layer send the
+>> >> SWITCHDEV_FDB_OFFLOADED event in the case when the new dynamic flag is
+>> >> set?
+>> >
+>> > I have never said that.
+>> 
+>> No, I was just thinking of a solution based on your previous comment
+>> that dynamic fdb entries with the offloaded flag set should not be aged
+>> out by the bridge as they are now.
+>
+> If you were a user of those other drivers, and you ran the command:
+> "bridge fdb add ... master dynamic"
+> would you be ok with the behavior: "I don't have dynamic FDB entries,
+> but here's a static one for you"?
 
-Thanks,
-	Johannes
+I don't know if you have a solution in mind wrt the behaviour of the
+offloaded flag if it is not to do as it does now and let the bridge age
+out dynamic entries. That led me to conclude that this patch-set cannot
+use the offloaded flag, but you seem to suggest otherwise.
+
+If you have a suggestion, feel free.
