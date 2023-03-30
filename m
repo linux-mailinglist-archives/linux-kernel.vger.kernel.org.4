@@ -2,232 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A4B6CF905
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 04:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217326CF90B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 04:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjC3CIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 22:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
+        id S229715AbjC3CKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 22:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjC3CIX (ORCPT
+        with ESMTP id S229452AbjC3CKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 22:08:23 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AD7135
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 19:08:22 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id x8-20020a9d3788000000b0069f922cd5ceso9287256otb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 19:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680142101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sy5NzJg49ItAmdfPzDIPNFNHG8KPHe+y/70Sz4C8t/Q=;
-        b=dj3pDmzX9esXH3m186tk5BDhMUS8uTz/RMb68iBmqLeFXMlrZC8Gv3BI4YtClR8Mbj
-         7Bt7l37n/4trmlFwnRIXUoFQKm/hkLnRiko6+7cGnGeWoF9HrjoEC/QtbwnT5oHL2BjL
-         8iAkbDrCAU9nbHQ5egrseqIliBqu1Y/ZAOSzeIKjFKiuGSS5rIb7qe4SFPRw+cVEdEIh
-         /5ieJwpMHhDBlPXtqGBmrEuOPCvEOQYgv5tvIPPfPyCKUtD+o56YaphvhMEVUFOGGl/T
-         OkvBRVazGT5KXzoKD34qjOfcTqxAeDedp71q1z6UcTS0Dl3GiZpiky+KnhNYWG/F5kUK
-         1eTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680142101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sy5NzJg49ItAmdfPzDIPNFNHG8KPHe+y/70Sz4C8t/Q=;
-        b=jl3koAIoqkpgxTq25gQ1RAzm2eJee4iiLMco7nn9zEMnssSWT2vVfy4yNBFWqS3s9J
-         C6O4KBzBvsrU1iFmatpRgh8nxqX+YpSQA8X1TvIuwGZU2EcpXk5sQrIh1f4ccfvo9FiV
-         DkDHwxiXOHCC+3syOQ2cjciX40VaCBce6bJ8H/d/hdm0dfJxacIdLIvI5MyKP9wzOvR8
-         LECmxFuKt48q5WzMhnsJZ1nbBFZ3MUtj8IRna8d3FpoQ5jZmhwHN/n3t7dGVkM9C9mzK
-         6ss7WT843qwmBA66eVCOaXWguTreuNzQuKVZSzUrYbebXxbHE28VmJFjotbwzX+aSTBE
-         Ereg==
-X-Gm-Message-State: AO0yUKUUtVhl16oBbBBHY3OQtspiVxRPN9ze4Fb4xMBoTyk0SzBAmVNQ
-        /4If1I6McLbwZo18CXCmsFxsQZGyW+PbQ3XSzDo=
-X-Google-Smtp-Source: AKy350bVDHc7UaJ/spwtoiE3Jw+p6CVer0KscCfBXzldVTkp5JZ22BVY8g0xOKVIkl2XVb9Y4tYKI78F/z4fnFtC5XM=
-X-Received: by 2002:a05:6830:1bed:b0:69f:882:cdb2 with SMTP id
- k13-20020a0568301bed00b0069f0882cdb2mr7034850otb.3.1680142101284; Wed, 29 Mar
- 2023 19:08:21 -0700 (PDT)
+        Wed, 29 Mar 2023 22:10:20 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53E01BC;
+        Wed, 29 Mar 2023 19:10:18 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=wuzongyong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Veyj5ne_1680142215;
+Received: from localhost(mailfrom:wuzongyong@linux.alibaba.com fp:SMTPD_---0Veyj5ne_1680142215)
+          by smtp.aliyun-inc.com;
+          Thu, 30 Mar 2023 10:10:15 +0800
+Date:   Thu, 30 Mar 2023 10:10:16 +0800
+From:   Wu Zongyong <wuzongyong@linux.alibaba.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     sdonthineni@nvidia.com, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wllenyj@linux.alibaba.com, wutu.xq2@linux.alibaba.com,
+        gerry@linux.alibaba.com
+Subject: Re: [RFC PATCH] PCI: avoid SBR for NVIDIA T4
+Message-ID: <20230330021016.GA30164@L-PF27918B-1352.localdomain>
+Reply-To: Wu Zongyong <wuzongyong@linux.alibaba.com>
+References: <388bc353a5f88edb502ec04c0dc53ab62a526020.1680090885.git.wuzongyong@linux.alibaba.com>
+ <20230329170515.GA3067097@bhelgaas>
 MIME-Version: 1.0
-References: <20230329095933.1203559-1-kai.heng.feng@canonical.com>
- <CADnq5_MMg4XD3QK72ZfLYvq02hYrX2aApNT2JUEAvQGvBP+NeQ@mail.gmail.com> <CAAd53p5A4Rxs0FHXzkgP9sXe=5_mWjfkDeROBT2k71PYKVKTwQ@mail.gmail.com>
-In-Reply-To: <CAAd53p5A4Rxs0FHXzkgP9sXe=5_mWjfkDeROBT2k71PYKVKTwQ@mail.gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 29 Mar 2023 22:08:09 -0400
-Message-ID: <CADnq5_NdqjUygZrbhpO0C4sKpDKYSpSn2y1VEQnC=svEGTveKQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drm/amdgpu: Reset GPU on S0ix when device supports BOCO
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, Jingyu Wang <jingyuwang_vip@163.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        amd-gfx@lists.freedesktop.org,
-        Jiansong Chen <Jiansong.Chen@amd.com>,
-        Kenneth Feng <kenneth.feng@amd.com>,
-        Tim Huang <tim.huang@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Evan Quan <evan.quan@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        linux-kernel@vger.kernel.org, Hawking Zhang <Hawking.Zhang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329170515.GA3067097@bhelgaas>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 8:49=E2=80=AFPM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> On Wed, Mar 29, 2023 at 9:21=E2=80=AFPM Alex Deucher <alexdeucher@gmail.c=
-om> wrote:
-> >
-> > On Wed, Mar 29, 2023 at 6:00=E2=80=AFAM Kai-Heng Feng
-> > <kai.heng.feng@canonical.com> wrote:
-> > >
-> > > When the power is lost due to ACPI power resources being turned off, =
-the
-> > > driver should reset the GPU so it can work anew.
-> > >
-> > > First, _PR3 support of the hierarchy needs to be found correctly. Sin=
-ce
-> > > the GPU on some discrete GFX cards is behind a PCIe switch, checking =
-the
-> > > _PR3 on downstream port alone is not enough, as the _PR3 can associat=
-e
-> > > to the root port above the PCIe switch.
-> > >
-> > > Once the _PR3 is found and BOCO support is correctly marked, use that
-> > > information to inform the GPU should be reset. This solves an issue t=
-hat
-> > > system freeze on a Intel ADL desktop that uses S0ix for sleep and D3c=
-old
-> > > is supported for the GFX slot.
-> >
-> > I don't think we need to reset the GPU.  If the power is turned off, a
-> > reset shouldn't be necessary. The reset is only necessary when the
-> > power is not turned off to put the GPU into a known good state.  It
-> > should be in that state already if the power is turn off.  It sounds
-> > like the device is not actually getting powered off.
->
-> I had the impression that the GPU gets reset because S3 turned the
-> power rail off.
->
-> So the actual intention for GPU reset is because S3 doesn't guarantee
-> the power is being turned off?
+On Wed, Mar 29, 2023 at 12:05:15PM -0500, Bjorn Helgaas wrote:
+> On Wed, Mar 29, 2023 at 07:58:45PM +0800, Wu Zongyong wrote:
+> > Secondary bus reset will fail if NVIDIA T4 card is direct attached to a
+> > root port.
+> 
+> Blank line between paragraphs.  Rewrap to fill 75 columns if it's a
+> single paragraph.
+Will be fixed.
+> 
+> Is this only a problem when direct attached to a Root Port?  Why would
+> that be?  If it's *not* related to being directly under a Root Port,
+> don't mention that at all.
+Yes, this problem occurs only when the T4 card is direct attached to a
+Root Port.
+I have test it with a T4 card attached to a PCIe Switch or a PCI Bridge,
+and it works well.
 
-For S4, the reset in freeze is there because once the boot kernel
-transitions to the hibernated kernel, we need the reset to bring the
-GPU back to a known state.  On dGPUs at least there are some engines
-that can only be initialized once and then require a reset to be
-initialized again.  The one in suspend was originally there to deal
-with aborted suspends where we'd need to reset the GPU for the same
-reason as S4.  However, it no longer really serves much purpose since
-it got moved to noirq and it could probably be dropped.
-
-Alex
-
-
->
-> Kai-Heng
->
-> >
-> > Alex
-> >
-> > >
-> > > Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
-> > > Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
-> > > Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2458
-> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > ---
-> > >  drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c   |  3 +++
-> > >  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  7 ++++++-
-> > >  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c    | 12 +++++-------
-> > >  3 files changed, 14 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c b/drivers/gpu/d=
-rm/amd/amdgpu/amdgpu_acpi.c
-> > > index 60b1857f469e..407456ac0e84 100644
-> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-> > > @@ -987,6 +987,9 @@ bool amdgpu_acpi_should_gpu_reset(struct amdgpu_d=
-evice *adev)
-> > >         if (amdgpu_sriov_vf(adev))
-> > >                 return false;
-> > >
-> > > +       if (amdgpu_device_supports_boco(adev_to_drm(adev)))
-> > > +               return true;
-> > > +
-> > >  #if IS_ENABLED(CONFIG_SUSPEND)
-> > >         return pm_suspend_target_state !=3D PM_SUSPEND_TO_IDLE;
-> > >  #else
-> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu=
-/drm/amd/amdgpu/amdgpu_device.c
-> > > index f5658359ff5c..d56b7a2bafa6 100644
-> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> > > @@ -2181,7 +2181,12 @@ static int amdgpu_device_ip_early_init(struct =
-amdgpu_device *adev)
-> > >
-> > >         if (!(adev->flags & AMD_IS_APU)) {
-> > >                 parent =3D pci_upstream_bridge(adev->pdev);
-> > > -               adev->has_pr3 =3D parent ? pci_pr3_present(parent) : =
-false;
-> > > +               do {
-> > > +                       if (pci_pr3_present(parent)) {
-> > > +                               adev->has_pr3 =3D true;
-> > > +                               break;
-> > > +                       }
-> > > +               } while ((parent =3D pci_upstream_bridge(parent)));
-> > >         }
-> > >
-> > >         amdgpu_amdkfd_device_probe(adev);
-> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/dr=
-m/amd/amdgpu/amdgpu_drv.c
-> > > index ba5def374368..5d81fcac4b0a 100644
-> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > > @@ -2415,10 +2415,11 @@ static int amdgpu_pmops_suspend(struct device=
- *dev)
-> > >         struct drm_device *drm_dev =3D dev_get_drvdata(dev);
-> > >         struct amdgpu_device *adev =3D drm_to_adev(drm_dev);
-> > >
-> > > -       if (amdgpu_acpi_is_s0ix_active(adev))
-> > > -               adev->in_s0ix =3D true;
-> > > -       else if (amdgpu_acpi_is_s3_active(adev))
-> > > +       if (amdgpu_acpi_is_s3_active(adev) ||
-> > > +           amdgpu_device_supports_boco(drm_dev))
-> > >                 adev->in_s3 =3D true;
-> > > +       else if (amdgpu_acpi_is_s0ix_active(adev))
-> > > +               adev->in_s0ix =3D true;
-> > >         if (!adev->in_s0ix && !adev->in_s3)
-> > >                 return 0;
-> > >         return amdgpu_device_suspend(drm_dev, true);
-> > > @@ -2449,10 +2450,7 @@ static int amdgpu_pmops_resume(struct device *=
-dev)
-> > >                 adev->no_hw_access =3D true;
-> > >
-> > >         r =3D amdgpu_device_resume(drm_dev, true);
-> > > -       if (amdgpu_acpi_is_s0ix_active(adev))
-> > > -               adev->in_s0ix =3D false;
-> > > -       else
-> > > -               adev->in_s3 =3D false;
-> > > +       adev->in_s0ix =3D adev->in_s3 =3D false;
-> > >         return r;
-> > >  }
-> > >
-> > > --
-> > > 2.34.1
-> > >
+> 
+> > So avoid to do bus reset,  pci_parent_bus_reset() works nomarlly.
+> > 
+> > Maybe NVIDIA guys can do some detailed explanation abount the SBR
+> > behaviour of GPUs.
+> 
+> This is a follow-on to 4c207e7121fa ("PCI: Mark some NVIDIA GPUs to
+> avoid bus reset"), so probably should have a Fixes: tag so it goes
+> whereever that commit goes.
+> 
+> Also copy the subject line from 4c207e7121fa, e.g.,
+> 
+>   PCI: Mark NVIDIA T4 GPUs to avoid bus reset
+Will be fixed too.
+> 
+> Are there any problem reports or bugzilla issues you can include a URL
+> to?
+No, I just find the problem in our test environment and I didn't find a
+similar report.
+> 
+> > Signed-off-by: Wu Zongyong <wuzongyong@linux.alibaba.com>
+> > ---
+> >  drivers/pci/quirks.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> > index 44cab813bf95..be86b93b9e38 100644
+> > --- a/drivers/pci/quirks.c
+> > +++ b/drivers/pci/quirks.c
+> > @@ -3618,7 +3618,7 @@ static void quirk_no_bus_reset(struct pci_dev *dev)
+> >   */
+> >  static void quirk_nvidia_no_bus_reset(struct pci_dev *dev)
+> >  {
+> > -	if ((dev->device & 0xffc0) == 0x2340)
+> > +	if ((dev->device & 0xffc0) == 0x2340 || dev->device == 0x1eb8)
+> >  		quirk_no_bus_reset(dev);
+> >  }
+> >  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_NVIDIA, PCI_ANY_ID,
+> > -- 
+> > 2.34.3
+> > 
