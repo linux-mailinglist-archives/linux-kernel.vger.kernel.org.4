@@ -2,139 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5AB6CFC3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BB06CFC3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjC3HGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        id S230222AbjC3HHx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 03:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbjC3HGt (ORCPT
+        with ESMTP id S229846AbjC3HHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:06:49 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08D365B5;
-        Thu, 30 Mar 2023 00:06:48 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 654981FE87;
-        Thu, 30 Mar 2023 07:06:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680160007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QLfYeLt+TXwV+pwToLzrHHrJTaYboOCW9UaiwVxS7lA=;
-        b=mAI7MPiHSl8rJ93izo+zY41ldY7Q5UIHq3cnqnGtElFi7az9dtYt0NrZYGnhHulCp4xuiB
-        tCKde3AIvlhN6fTukiLKYF3ViOCSzqBHTGWpE8aQCHMCXW6+8GcWX7Keeil3ozJ3OOGTHK
-        IGmmNg/5vANvb4KhA3aiQh5XlXtsXR4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4169A1348E;
-        Thu, 30 Mar 2023 07:06:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yVwIDQc1JWR+bAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 30 Mar 2023 07:06:47 +0000
-Date:   Thu, 30 Mar 2023 09:06:46 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>, Tejun Heo <tj@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v2 4/9] cgroup: rstat: add WARN_ON_ONCE() if flushing
- outside task context
-Message-ID: <ZCU1Bp+5bKNJzWIu@dhcp22.suse.cz>
-References: <20230328221644.803272-1-yosryahmed@google.com>
- <20230328221644.803272-5-yosryahmed@google.com>
- <ZCQfZJFufkJ10o01@dhcp22.suse.cz>
- <CAJD7tkb-UpKm2QbjYzB=B=oGk6Hyj9cbUviZUPC+7VsvBecH7g@mail.gmail.com>
- <20230329192059.2nlme5ubshzdbpg6@google.com>
+        Thu, 30 Mar 2023 03:07:51 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DA859FA
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:07:47 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-536af432ee5so339016517b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:07:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680160066;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lx/OPeSP/6JGscUKbwjWV1A44GfF+C/voNDzk4y2Gmk=;
+        b=2weDzp8zhC4bhhVpwpMakjkft1DGB0tyYEVv0DYpcL4MZTK89hVzh3zQotROvbNq5b
+         u93y3TmIwmqlgon+P5x8jNIJ1qtfxhuPdDGGYwvfz/DbnrBvQ8FGgSdzV7kLdzhxArWa
+         er7fuvyvtWjyqPePoTLuwJHioVOluy/Zq+0hBFB7FYQVbxvQQOBqr3Ub2npdOGSJBSx1
+         1T6LzyIFdlZASCRTSbYpYm8RLEQ0UmKNa9uReCSKE/vdpQp7Xm6k0MB0Eu/+/Vpe5sR3
+         YmfRraXakYVynaKp11l8L18wwLqDrd3IRZqDr+ANgQ/inYveihJ2dcq17IwuyPnj5tak
+         7Opw==
+X-Gm-Message-State: AAQBX9fZXv/FkKAvoDS834J2QS9LAPRFRptFeKZuCUtKQf3IjvcQsFW8
+        tyl5W8Z4AXzJSZOtEQQblPZlyHnef8xe3w==
+X-Google-Smtp-Source: AKy350aZA+Y+P0T/bGPR5lTc2E24HqT7tEf/MS1kkX8RJWGXujNv2GQa2DLSdPCfbHdc8zZdBh3yag==
+X-Received: by 2002:a0d:cb56:0:b0:527:abe5:8478 with SMTP id n83-20020a0dcb56000000b00527abe58478mr22570825ywd.10.1680160066423;
+        Thu, 30 Mar 2023 00:07:46 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id y3-20020a814b03000000b0054629ed82f9sm655163ywa.83.2023.03.30.00.07.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 00:07:46 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5456249756bso338214427b3.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:07:45 -0700 (PDT)
+X-Received: by 2002:a81:a7c4:0:b0:546:264:a375 with SMTP id
+ e187-20020a81a7c4000000b005460264a375mr5797313ywh.4.1680160065429; Thu, 30
+ Mar 2023 00:07:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230329192059.2nlme5ubshzdbpg6@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230329071405.1568021-1-geert+renesas@glider.be> <ZCTOxOGDPoJoZDNW@infradead.org>
+In-Reply-To: <ZCTOxOGDPoJoZDNW@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 30 Mar 2023 09:07:33 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWV0GzA91MNuZVqs1B_8jry=fUGPgL4hSxtGLNF=Gj1Sw@mail.gmail.com>
+Message-ID: <CAMuHMdWV0GzA91MNuZVqs1B_8jry=fUGPgL4hSxtGLNF=Gj1Sw@mail.gmail.com>
+Subject: Re: [PATCH -next] dma-debug: Use %pa to format phys_addr_t
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Desnes Nunes <desnesn@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        noreply@ellerman.id.au, Arnd Bergmann <arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 29-03-23 19:20:59, Shakeel Butt wrote:
-> On Wed, Mar 29, 2023 at 11:41:39AM -0700, Yosry Ahmed wrote:
-> > On Wed, Mar 29, 2023 at 4:22 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Tue 28-03-23 22:16:39, Yosry Ahmed wrote:
-> > > > rstat flushing is too expensive to perform in irq context.
-> > > > The previous patch removed the only context that may invoke an rstat
-> > > > flush from irq context, add a WARN_ON_ONCE() to detect future
-> > > > violations, or those that we are not aware of.
-> > > >
-> > > > Ideally, we wouldn't flush with irqs disabled either, but we have one
-> > > > context today that does so in mem_cgroup_usage(). Forbid callers from
-> > > > irq context for now, and hopefully we can also forbid callers with irqs
-> > > > disabled in the future when we can get rid of this callsite.
-> > >
-> > > I am sorry to be late to the discussion. I wanted to follow up on
-> > > Johannes reply in the previous version but you are too fast ;)
-> > >
-> > > I do agree that this looks rather arbitrary. You do not explain how the
-> > > warning actually helps. Is the intention to be really verbose to the
-> > > kernel log when somebody uses this interface from the IRQ context and
-> > > get bug reports? What about configurations with panic on warn? Do we
-> > > really want to crash their systems for something like that?
-> > 
-> > Thanks for taking a look, Michal!
-> > 
-> > The ultimate goal is not to flush in irq context or with irqs
-> > disabled, as in some cases it causes irqs to be disabled for a long
-> > time, as flushing is an expensive operation. The previous patch in the
-> > series should have removed the only context that flushes in irq
-> > context, and the purpose of the WARN_ON_ONCE() is to catch future uses
-> > or uses that we might have missed.
-> > 
-> > There is still one code path that flushes with irqs disabled (also
-> > mem_cgroup_usage()), and we cannot remove this just yet; we need to
-> > deprecate usage threshold events for root to do that. So we cannot
-> > enforce not flushing with irqs disabled yet.
-> > 
-> > So basically the patch is trying to enforce what we have now, not
-> > flushing in irq context, and hopefully at some point we will also be
-> > able to enforce not flushing with irqs disabled.
-> > 
-> > If WARN_ON_ONCE() is the wrong tool for this, please let me know.
-> > 
-> 
-> If I understand Michal's concern, the question is should be start with
-> pr_warn_once() instead of WARN_ON_ONCE() and I think yes we should start
-> with pr_warn_once().
+Hi Christoph,
 
-Yes, I do not really like the WARN_ON here. It is an overkill. pr_warn
-would much less intrusive but potentially incomplete because you won't
-know who that offender is. So if you really care about those then you
-would need to call dump_stack as well.
+On Thu, Mar 30, 2023 at 1:50 AM Christoph Hellwig <hch@infradead.org> wrote:
+> I've applied this as it is the first fix I got into my mailbox for it.
 
-So the real question is. Do we really care so deeply? After all somebody
-might be calling this from within a spin lock or irq disabled section
-resulting in a similar situation without noticing.
+Thank you!
+
+> Arnd sent one a little later, which uses %pap instead of %pa, which
+> confused me a bit.  The documentation seems to allow both without
+> any recommendation which one to use, which confuses me even further.
+
+The "%pa" class supports two variants: "%pad" (for dma_addr_t) and
+"%pap" (for phys_addr_t). "%pa" is a shortcut for the latter, cfr.
+https://elixir.bootlin.com/linux/latest/source/lib/vsprintf.c#L1792
+
+The default exists because "%pa" was fist, cfr. commit aaf07621b8bbfdc0
+("vsprintf: add %pad extension for dma_addr_t use"), and I don't think
+we can easily remove it. The default is shorter (saves one byte, even
+compared to %llx"), so why not use it?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-Michal Hocko
-SUSE Labs
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
