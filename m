@@ -2,123 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D856CF880
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBBF6CF887
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjC3BKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 21:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        id S229626AbjC3BLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 21:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjC3BKt (ORCPT
+        with ESMTP id S229529AbjC3BLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 21:10:49 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FB05B92
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 18:10:42 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-53d277c1834so326698797b3.10
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 18:10:42 -0700 (PDT)
+        Wed, 29 Mar 2023 21:11:10 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7444F55BF;
+        Wed, 29 Mar 2023 18:10:58 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id h22-20020a4ad756000000b0053e4ab58fb5so1701495oot.4;
+        Wed, 29 Mar 2023 18:10:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1680138641;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=trHb4ZOG7XU5ZjiWJc1P83x2prz9WeqvxotCOi1K6Ow=;
-        b=DS/uhgZThWHoOTi9eBksq5fEsaIGz7ngHca8dbA8p8bF7mQD8TH7k9rtmQR8pc9/kw
-         5csXEDiz0NNIXY4cG7rj4I9hXaTbcEkzCKr0l6Lk57uogUjfT5DFjLOvT8J93GlHkU9F
-         QqRveaP0eHdQ3h234e/3IDC0YpBf09gnLVp1WVFmVjYkdh5djkRH7Fk8FW/kAvel6Eh4
-         uWKfYMvJ0E7cv9W3N8nWb3MT3Wbml+pU0ZZVzREjvQpTfHgMf9nUy8YAgJ35Tg/n7B9m
-         Fq2RsVdlSubBCk3ntpmHELGXrkhlGRz8gsUiPD9WQUDIxl18CKGmABMgjVoLYiv8o8VW
-         rjJA==
+        d=gmail.com; s=20210112; t=1680138657;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U+tJVafNWqOuQPEBzM6fBHEcL9TFwibZa5a2SuWE/Mw=;
+        b=V+tUe7XXMFg4HA9Oko7HdLAlWQOelRQY0PBqFWWzmh+5KOtThPI/G2Jy60G0f1X9m2
+         a0otZN4N9j9ZQMQAF6UBd4x7N+eIuTsWhxWzqdWlkjWL4+EQMfdx24hnpK9D+O+ywZbk
+         gTWIDAP8N/4oHk6GeuPdr+0YqMdgHaFdODb3mWVerfqrR5sxN90+ZukGGKgkSTwT19+g
+         uItG+h1D8aaX0TishHleeXzoEo937TqaHFDccG4PmI333dPPLavyvAW2AC4VLPzZ0TJY
+         GMXqoCAgMLeIThwlfsbe9D71GtqJKhtC+HV+aymwmv5DPqfOPU1wuBvsxScyPkR+Ltpt
+         Oqfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680138641;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=trHb4ZOG7XU5ZjiWJc1P83x2prz9WeqvxotCOi1K6Ow=;
-        b=0KRD5j1bXxR3dBWgxU014uvPnYOVTElPmQ4NYquxN9FBsxXO/ocfmHdu/8qC7rIcBb
-         kzk4v4OdVmWCQ+Q8dfDosTfnabxSqUuqY+QWxadGcIMYAbObeYOMdkr/m0zw/PF0G/T8
-         dVAAntGqepSv43Sx2WR5Rox20j+yPVOqPt48njoXJiBa+kXJuwPa2KkWocuwVV/UbVzA
-         4j1yA6JR6m39WGv8dFPK9QVE05u09RIfRwKJ2DQzSy+aEc85Xw9RLTwHjA+w4+p/HApo
-         PGZoKJTfLqu639sV6BEs7M2gSFvi9/zPJp7QjUZXF6/D3bGoLjxb6jvdi/P6wH1i20zI
-         vzZQ==
-X-Gm-Message-State: AAQBX9ewkTVhU6JsGldObjKXMYx57czvjyVh9NKNNhudvj+eZodlN1fQ
-        jIpXR149RBq384aPFZIDRa30qRiEIkEdcbyEv+kf
-X-Google-Smtp-Source: AKy350YFd9HgM1JadFaOcawRIMLYxQxdwNgPA5DDSFpKyb0PXktJ6Z52BAMcyyw/1+BhkBiBeS99qbIG3x1DxfMmdA0=
-X-Received: by 2002:a81:c406:0:b0:546:8e4:703f with SMTP id
- j6-20020a81c406000000b0054608e4703fmr4919710ywi.8.1680138641366; Wed, 29 Mar
- 2023 18:10:41 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680138657;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U+tJVafNWqOuQPEBzM6fBHEcL9TFwibZa5a2SuWE/Mw=;
+        b=A+7qDArmCLnhgDg2gCZGSSh7Llg6Vg7Foot4TIOJ8LVbbMOvfyl45DH8ChyIXFoCZA
+         TVOZagqRzKJTE1+AFeRxfqmnobFJIqMNm2rwGR5/NtDJLSJCCA61gFbgUg4Jl+6mTL2h
+         ATfiAv9ZIcAxePGGBO54KO5iXe4mDiugqVYnZPTcM5I1W6ZJDzNq1+teRF8nDgBVyibw
+         7rRafGAUde2RWSulnrj13P+uk7G2EDczF2lfV5KHGgnF2Mde35/eV4frEscQ7Ujtz3Vf
+         aJcPJu29vjPBX0EDXJ66M0yVVoZCAErOXsnJPddIVNZNTyBzGeBHFviHu9sI/4iaL4VR
+         HU9A==
+X-Gm-Message-State: AO0yUKXLZeQ3XipnMDbVut+19X0fnoAiLDpCjLGoHvqMwkxJ2bHwFvSD
+        wvEbkdTYRmnRhTUXGYFPjIc=
+X-Google-Smtp-Source: AK7set9QoADutjDVRDgteYOyjw4F3Isfx6K9mtlsnhbTf75K3gN9oJxta4a+1hufvOhSlJw5yjAAiA==
+X-Received: by 2002:a4a:d64a:0:b0:53b:62ee:8bf5 with SMTP id y10-20020a4ad64a000000b0053b62ee8bf5mr9840866oos.3.1680138657397;
+        Wed, 29 Mar 2023 18:10:57 -0700 (PDT)
+Received: from localhost ([2804:30c:900:c000:e02a:5b57:da1d:f7cf])
+        by smtp.gmail.com with ESMTPSA id b7-20020a056830104700b0069d4e5284fdsm8656763otp.7.2023.03.29.18.10.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 18:10:56 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 22:10:55 -0300
+From:   Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Marc Zyngier <maz@kernel.org>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/5] iio: adc: ad7292: Add explicit include for of.h
+Message-ID: <ZCThn87xFr3wGtzP@marsc.168.1.7>
+References: <20230329-acpi-header-cleanup-v1-0-8dc5cd3c610e@kernel.org>
+ <20230329-acpi-header-cleanup-v1-1-8dc5cd3c610e@kernel.org>
 MIME-Version: 1.0
-References: <20230315224704.2672-1-casey@schaufler-ca.com> <20230315224704.2672-3-casey@schaufler-ca.com>
-In-Reply-To: <20230315224704.2672-3-casey@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 29 Mar 2023 21:10:30 -0400
-Message-ID: <CAHC9VhT3PpgTzUdGEdn4Jg8=91PFzto5w+9ZnQRJgxnTCc9hMg@mail.gmail.com>
-Subject: Re: [PATCH v7 02/11] LSM: Maintain a table of LSM attribute data
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     linux-security-module@vger.kernel.org, jmorris@namei.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329-acpi-header-cleanup-v1-1-8dc5cd3c610e@kernel.org>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 6:47=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
-.com> wrote:
->
-> As LSMs are registered add their lsm_id pointers to a table.
-> This will be used later for attribute reporting.
->
-> Determine the number of possible security modules based on
-> their respective CONFIG options. This allows the number to be
-> known at build time. This allows data structures and tables
-> to use the constant.
->
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+On 03/29, Rob Herring wrote:
+> With linux/acpi.h no longer implicitly including of.h, add an explicit
+> include of of.h to fix the following error:
+> 
+> drivers/iio/adc/ad7292.c:307:9: error: implicit declaration of function 'for_each_available_child_of_node'; did you mean 'fwnode_for_each_available_child_node'? [-Werror=implicit-function-declaration]
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Acked-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+
+Thanks,
+Marcelo
+
 > ---
->  include/linux/security.h |  2 ++
->  security/security.c      | 44 ++++++++++++++++++++++++++++++++--------
->  2 files changed, 38 insertions(+), 8 deletions(-)
-
-...
-
-> diff --git a/security/security.c b/security/security.c
-> index 58828a326024..aa84b1cf4253 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -513,6 +531,16 @@ void __init security_add_hooks(struct security_hook_=
-list *hooks, int count,
->  {
->         int i;
->
-> +       /*
-> +        * A security module may call security_add_hooks() more
-> +        * than once. Landlock is one such case.
-> +        */
-> +       if (lsm_active_cnt =3D=3D 0 || lsm_idlist[lsm_active_cnt - 1] !=
-=3D lsmid)
-> +               lsm_idlist[lsm_active_cnt++] =3D lsmid;
-> +
-> +       if (lsm_active_cnt > LSM_COUNT)
-> +               panic("%s Too many LSMs registered.\n", __func__);
-
-In addition to the fixes needed to resolve the bug identified by the
-kernel test robot, I think it might be wise to do the @lsm_active_cnt
-check *before* potentially adding it to the @lsm_idlist array.
-
->         for (i =3D 0; i < count; i++) {
->                 hooks[i].lsmid =3D lsmid;
->                 hlist_add_tail_rcu(&hooks[i].list, hooks[i].head);
-> --
+>  drivers/iio/adc/ad7292.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/iio/adc/ad7292.c b/drivers/iio/adc/ad7292.c
+> index a2f9fda25ff3..cccacec5db6d 100644
+> --- a/drivers/iio/adc/ad7292.c
+> +++ b/drivers/iio/adc/ad7292.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/bitfield.h>
+>  #include <linux/device.h>
+>  #include <linux/module.h>
+> +#include <linux/of.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/spi/spi.h>
+>  
+> 
+> -- 
 > 2.39.2
-
---
-paul-moore.com
+> 
