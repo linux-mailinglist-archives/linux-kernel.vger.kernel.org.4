@@ -2,70 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B0C6D02FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB7D6D0305
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbjC3LVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S231166AbjC3LXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjC3LVN (ORCPT
+        with ESMTP id S229820AbjC3LXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:21:13 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE369757;
-        Thu, 30 Mar 2023 04:21:10 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id r7-20020a17090b050700b002404be7920aso17553143pjz.5;
-        Thu, 30 Mar 2023 04:21:10 -0700 (PDT)
+        Thu, 30 Mar 2023 07:23:53 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791A85266;
+        Thu, 30 Mar 2023 04:23:52 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id ek18so75076417edb.6;
+        Thu, 30 Mar 2023 04:23:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680175269;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1680175431; x=1682767431;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=flDRWY0SXQRWGYI8uX7jYuDz+uuIEnYkNVcdxGhVOsI=;
-        b=Mn71fKPWKew4GV3Y3GsROsed1zcfc+1BIcYGztLPKC0GctJCg+Dwvj2NH7evxApdsz
-         6HqifP31lg3OxLHgGkqAbe/NPJj6XK1eZk/+YzRYJ+GMXMXrcx6pkVPdt8gB8AjOjtkC
-         LtPTaESeeeQ5BIcQgq7EVfyls4FzwGBET244bz3hJ4VmK+lXYzlHm1Pb3cdRUpXJ6BUZ
-         uOFFcrfG1p6yghsT8yHU1A6Zy4PnFklibtIq9phdquxIzA7LMs3WMChNVFFuswQLtnaa
-         4JflHBRCBV/Wisnw1+n77WfcN/LgOXvaN7sFXZYwXfdSULUdVS/qkHY420hNMixUyWBM
-         futQ==
+        bh=E1q/JIvVvnmupFRzfcrQka/eftCvRT4KzrIIH6Gs4Go=;
+        b=WolzbQtX6W9/wjMZJjhvikqUrkqfgJMq4nU59Bspr6u5PM7Co71h+QL82spZPm9LQI
+         XlITU7GDaFgJTm8kW/2VVHaeMWME+C2cF5KfO2qPuCIiUavvJv2B/KcCsN1DphgsR3mD
+         iu6DSldPa6WzvfH6Ld3IZSGfX/bbyfMtHuvhywEeYjUNRIbxwevAEWZPVJ89PGwaVuMh
+         9eodU0m50W+ORQQalBKG3nC3Rxj0hOn8x7Lb8uSihieaGlyV/aQziL9Jn1w3vEiHlsr3
+         pKdxPXLvsUi3JSM+oano77QbKRFbbF6LzDACEqk3FmLG8esbDqwfLutjJ7hibwDwqjt9
+         3Nug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680175269;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680175431; x=1682767431;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=flDRWY0SXQRWGYI8uX7jYuDz+uuIEnYkNVcdxGhVOsI=;
-        b=W/DRZEIOpRcxggm3xk6Ms5wD5UjiGwkrqQBevnbLoIt/bHNjDFmlaMgFxCAA7JN7NP
-         RusHmWckh30kDRiYZpXXJSBxE9G5Dr+SDyc77ldFfjxlR33lROo2u2VeezZIV+3I9Fhi
-         IR819KhKc+11qyBxG15X5TdPbd+xgkrQgCRC0Wth7Mfqxoj9rFYs1MnlHm8tMiY4No3w
-         pO4UI22fZ94s6D6Wtkzq2R8CkdhkF2mH+Xj4wc/TkGuEPEHD8l9co31Gc2m9Bexn/K+K
-         R0OK3L0JaJCY7Eybl1ndgEhwZHXAhbuW/hMYXu8ZRQKTrn3kfWZPK/6qFL4G1rQ1oBks
-         nzTQ==
-X-Gm-Message-State: AAQBX9f+1C7gEJShCv5T2rp3DMjOYiZPJRVdevAAfiu9wKaMBbmL0XYs
-        xC7emceP0xojMPVdGB5/L6yKRTXlKifIFA==
-X-Google-Smtp-Source: AKy350ZQH0+bj83gJRvuR6lEKxOyEptMg+PH70Io+hn00pQpCUcPe9xlwLm811aChlIejNnY91Go5w==
-X-Received: by 2002:a17:903:41cd:b0:1a1:b65a:2072 with SMTP id u13-20020a17090341cd00b001a1b65a2072mr29339568ple.59.1680175269202;
-        Thu, 30 Mar 2023 04:21:09 -0700 (PDT)
-Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
-        by smtp.gmail.com with ESMTPSA id a13-20020a170902ee8d00b0019f11a68c42sm24444851pld.297.2023.03.30.04.21.05
+        bh=E1q/JIvVvnmupFRzfcrQka/eftCvRT4KzrIIH6Gs4Go=;
+        b=b2rL4SYcyS/Pbez3sUWZtc+YNQ55fC8XVCowGCMFGcylcfCkcTZ8EoAYJuJAG3HQtd
+         oFBP0j5q0WhegT5TLt9uFlz3gQVuPxhKlQB2VEJDGSvUEvl29GWNgK4qpKXkQJwX+WSD
+         4/suKzfDLTPCBXpEq/HNqquc8VBDtfy17/dztm81/dwXacWaxOrFyChVnPci0SRL+7zw
+         HfYQk0r4YWUxr+7yL+lsM5n5bn/vCngvcsu4DzojgOAQFVvAdbit3+Jv8bhFNaWYZfq4
+         1xwgahyr2rgNGWFLD/3babjhK/zb1yR/ZSy+rv5hFofBZ6wEFISaLMnY8oomYDfZXWVV
+         TcgA==
+X-Gm-Message-State: AAQBX9f/JXkYSUIn8OFA7MN1Ov+VN9i9QSjOk84IIEfudCP/1Ybnvd1z
+        ySGG8ki6N4TFfVVka0tZPHM=
+X-Google-Smtp-Source: AKy350ZH+9AJl1fJcpFJyxjWu+QfD0quf+8pn5RJ7yfM7i9DnNIHLuUpfwoELKVZ09xUbpJBzhrvpw==
+X-Received: by 2002:a17:906:254c:b0:930:27c2:6d8d with SMTP id j12-20020a170906254c00b0093027c26d8dmr22301936ejb.61.1680175430868;
+        Thu, 30 Mar 2023 04:23:50 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:2a40:1104:b46b:e78:a1d5:4082])
+        by smtp.gmail.com with ESMTPSA id c14-20020a509f8e000000b005003fd12eafsm17851210edf.63.2023.03.30.04.23.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 04:21:08 -0700 (PDT)
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yang Ling <gnaygnil@gmail.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH v2 2/2] watchdog: loongson1_wdt: Implement restart handler
-Date:   Thu, 30 Mar 2023 19:20:51 +0800
-Message-Id: <20230330112051.551648-3-keguang.zhang@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230330112051.551648-1-keguang.zhang@gmail.com>
-References: <20230330112051.551648-1-keguang.zhang@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 30 Mar 2023 04:23:50 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH 1/2] ARM: sti: remove configs SOC_STIH415 and SOC_STIH416
+Date:   Thu, 30 Mar 2023 13:23:46 +0200
+Message-Id: <20230330112347.31137-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -76,60 +69,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement restart handler for the Loongson-1 watchdog driver and
-define the watchdog registers instead of including the legacy header.
+Commit b4bba92dfbe2 ("drm/sti: remove stih415-416 platform support")
+removes the reference to configs SOC_STIH415 and SOC_STIH416 in the
+config DRM_STI. Commit 64933513e461 ("reset: sti: Remove STiH415/6 reset
+support") removes the two configs STIH41{5,6}_RESET.
 
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
-V1 -> V2: None
----
- drivers/watchdog/loongson1_wdt.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+With those changes, the two configs SOC_STIH415 and SOC_STIH416 has no
+remaining effect. Remove them.
 
-diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
-index bb3d075c0633..a0b6fe62e516 100644
---- a/drivers/watchdog/loongson1_wdt.c
-+++ b/drivers/watchdog/loongson1_wdt.c
-@@ -7,7 +7,11 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/watchdog.h>
--#include <loongson1.h>
-+
-+/* Loongson 1 Watchdog Register Definitions */
-+#define WDT_EN			0x0
-+#define WDT_TIMER		0x4
-+#define WDT_SET			0x8
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ arch/arm/mach-sti/Kconfig | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
+diff --git a/arch/arm/mach-sti/Kconfig b/arch/arm/mach-sti/Kconfig
+index b2d45cf10a3c..8c21dccb61b7 100644
+--- a/arch/arm/mach-sti/Kconfig
++++ b/arch/arm/mach-sti/Kconfig
+@@ -26,24 +26,6 @@ menuconfig ARCH_STI
  
- #define DEFAULT_HEARTBEAT	30
+ if ARCH_STI
  
-@@ -66,6 +70,18 @@ static int ls1x_wdt_stop(struct watchdog_device *wdt_dev)
- 	return 0;
- }
- 
-+static int ls1x_wdt_restart(struct watchdog_device *wdt_dev,
-+			    unsigned long action, void *data)
-+{
-+	struct ls1x_wdt_drvdata *drvdata = watchdog_get_drvdata(wdt_dev);
-+
-+	writel(0x1, drvdata->base + WDT_EN);
-+	writel(0x1, drvdata->base + WDT_TIMER);
-+	writel(0x1, drvdata->base + WDT_SET);
-+
-+	return 0;
-+}
-+
- static const struct watchdog_info ls1x_wdt_info = {
- 	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
- 	.identity = "Loongson1 Watchdog",
-@@ -77,6 +93,7 @@ static const struct watchdog_ops ls1x_wdt_ops = {
- 	.stop = ls1x_wdt_stop,
- 	.ping = ls1x_wdt_ping,
- 	.set_timeout = ls1x_wdt_set_timeout,
-+	.restart = ls1x_wdt_restart,
- };
- 
- static void ls1x_clk_disable_unprepare(void *data)
+-config SOC_STIH415
+-	bool "STiH415 STMicroelectronics Consumer Electronics family"
+-	default y
+-	help
+-	  This enables support for STMicroelectronics Digital Consumer
+-	  Electronics family StiH415 parts, primarily targeted at set-top-box
+-	  and other digital audio/video applications using Flattned Device
+-	  Trees.
+-
+-config SOC_STIH416
+-	bool "STiH416 STMicroelectronics Consumer Electronics family"
+-	default y
+-	help
+-	  This enables support for STMicroelectronics Digital Consumer
+-	  Electronics family StiH416 parts, primarily targeted at set-top-box
+-	  and other digital audio/video applications using Flattened Device
+-	  Trees.
+-
+ config SOC_STIH407
+ 	bool "STiH407 STMicroelectronics Consumer Electronics family"
+ 	default y
 -- 
-2.34.1
+2.17.1
 
