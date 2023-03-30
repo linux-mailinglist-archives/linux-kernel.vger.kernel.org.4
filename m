@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD09B6D003F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018626D0038
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjC3Jyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
+        id S230309AbjC3JxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjC3Jye (ORCPT
+        with ESMTP id S230198AbjC3Jwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:54:34 -0400
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC18B0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:54:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=W0nW0vQLM7G/2/2VIeK8J7D28U5u8Jc7f3i4je1IBPI=; b=J+tlZn+jVHSD//mSIQllBB2cQV
-        uC95+Onna9Su0RG4BPi6Zv/0N4pET4/TZzYJkOyDpaj+lM7NKQD4FTn7/AGurFv1YdG0lye8AO247
-        QqM8jChJLdKh3t929x+yc+ZlM04TlwxJnOb2H6JWZQBtXbBBFdUPBmc0iwfLZDO1FKOgTq35Oi38L
-        mbkU8G/L6qpPC3BbO5Dl6gdPKQoN4JjQve8LB+VNDRcMs59lyzdlM8nkc7/WDbMA9nnz5veYg04ak
-        60nSwD3cehekbqDfMw88sEMzWrDUuMq4ecxL47klPOUjjyY1FY9I9j48TYrjsS3f6lmunTSpnzxL9
-        eVlu788g==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1phouA-0007Ze-AN; Thu, 30 Mar 2023 12:49:14 +0300
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] thermal: tegra-bpmp: Handle offline zones
-Date:   Thu, 30 Mar 2023 12:49:04 +0300
-Message-Id: <20230330094904.2589428-1-cyndis@kapsi.fi>
-X-Mailer: git-send-email 2.39.2
+        Thu, 30 Mar 2023 05:52:49 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6AE728A;
+        Thu, 30 Mar 2023 02:51:52 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 463511272;
+        Thu, 30 Mar 2023 11:51:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1680169910;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BfCqrBgiqxweVNM1TXbSkTYgh4gxLV1zcEcv6yIVr5w=;
+        b=qjhBh38Itt0cwBjWXOoTtH38EhHSnjiqyZVZb88hPF1f4H3D/+g1kTF8sb8o3Q24S2i9KH
+        AtreYhCTsaHF2zyxZ/zxCWfNU2GTDslbu9K8BXOMf5bhFZeO3PbaW6SqKzB0Gcbay12L+L
+        HsTNVh3Uzb36PQVd+wTRBqGe2GrTsek23VXOYEeuevUoY2TejtoKR1hNC0jIsh6phAbyd/
+        OM8tpjoo7bR444kZEtvmh2U/2AVBfMXyJvYjdiHIz6OC0JB6T616kJwL/fI6023H8Ldv1f
+        RamYA+lcWwVxeomFSfkyuqkFq5xOFSbxevpIGE5phaQwHLFfT6GjkQcr14mPTg==
+From:   Michael Walle <michael@walle.cc>
+To:     vaibhaavram.tl@microchip.com
+Cc:     Tharunkumar.Pasumarthi@microchip.com, UNGLinuxDriver@microchip.com,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v8 char-misc-next 3/5] misc: microchip: pci1xxxx: Add EEPROM Functionality to read and write into EEPROM bin sysfs
+Date:   Thu, 30 Mar 2023 11:51:40 +0200
+Message-Id: <20230330095140.3384441-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <f999539280139b7085721803f12f836c201edf20.camel@microchip.com>
+References: <f999539280139b7085721803f12f836c201edf20.camel@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -59,54 +57,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikko Perttunen <mperttunen@nvidia.com>
+[First, please CC people who did comments on previous versions.]
 
-Thermal zones located in power domains may not be accessible when
-the domain is powergated. In this situation, reading the temperature
-will return -BPMP_EFAULT. When evaluating trips, BPMP will internally
-use -256C as the temperature for offline zones.
+> > > Microchip's pci1xxxx is an unmanaged PCIe3.1a switch for consumer,
+> > > industrial, and automotive applications. This switch integrates OTP
+> > > and EEPROM to enable customization of the part in the field.
+> > > This patch adds EEPROM functionality to support the same.
+> > 
+> > Again, why not use the in-kernel eeprom api instead?
+> Unlike other in-Kernel EEPROM APIs, this EEPROM is not accessible
+> through any of the i2c/spi buses available to the kernel.
 
-For smooth operation, for offline zones, return -EAGAIN when reading
-the temperature and allow registration of zones even if they are
-offline during probe.
+I fail to see how this matters. NVMEM has a generic read/write callback.
+There is no dependency on I2C or SPI. Again, you should look into nvmem.
+And it should be perfectly fine to use nvmem without nvmem cells at all.
 
-Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
----
-v2:
-* Adjusted commit message.
-* Patch 2/2 dropped for now since it is more controversial,
-  and this patch is more critical.
+With CONFIG_NVMEM_SYSFS you should get a "nvmem" binary file in sysfs.
+Wit config->compat set (although I don't know if that is recommended) you
+should get an "eeprom" binary file in sysfs.
 
- drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+> It is only accessible through the register interface available in the
+> EEPROM controller of the PCI1XXXX device.
 
-diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c b/drivers/thermal/tegra/tegra-bpmp-thermal.c
-index f5fd4018f72f..4ffc3bb3bf35 100644
---- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
-+++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
-@@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct tegra_bpmp_thermal_zone *zone,
- 	err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
- 	if (err)
- 		return err;
-+	if (msg.rx.ret == -BPMP_EFAULT)
-+		return -EAGAIN;
- 	if (msg.rx.ret)
- 		return -EINVAL;
- 
-@@ -259,7 +261,12 @@ static int tegra_bpmp_thermal_probe(struct platform_device *pdev)
- 		zone->tegra = tegra;
- 
- 		err = __tegra_bpmp_thermal_get_temp(zone, &temp);
--		if (err < 0) {
-+
-+		/*
-+		 * Sensors in powergated domains may temporarily fail to be read
-+		 * (-EAGAIN), but will become accessible when the domain is powered on.
-+		 */
-+		if (err < 0 && err != -EAGAIN) {
- 			devm_kfree(&pdev->dev, zone);
- 			continue;
- 		}
--- 
-2.39.2
-
+-michael
