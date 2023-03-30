@@ -2,98 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA87C6CFDEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476166CFDEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjC3IQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S230368AbjC3IQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjC3IP5 (ORCPT
+        with ESMTP id S230304AbjC3IQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:15:57 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540086A5F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:15:53 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id s20so18755508ljp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:15:53 -0700 (PDT)
+        Thu, 30 Mar 2023 04:16:13 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915096E90
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:16:12 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so21178146pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:16:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680164151;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JA4XVHo0Eq19cyVZPkQAeO5VCdeLqQwOP0zPCiEBUMw=;
-        b=EWXEC36M+TxkQLalkkn9rZ18ai2dy9NRazwNzO1L8FJUl9ResCIWtediINEPJ/Bxvs
-         Je1bgkzkOTsNypIWNvYCAYtCWEC7j2Vl7x90ZXH4kPAYXioXtea9SaMQTs1VJHATL4oH
-         fzRmSCrNRvWPUFijWJ3YqMnDUf4tnQCZF98UcZT4ELvZJe9fdWt1WTbLG6IkvAZMWtIh
-         UvVi6CcHTEuDj6KqD9N3Jkz2fxHYaYxTRpViUBaD042syf7CiBpQ1HG5QVPS4F+B4eUT
-         g3DZf7HJxDX8A7OWw/mEKRzD1/VYUv278u2YeOiFyFic3QnvuXxRZcsn3bSoGjNKLbIA
-         Zn2w==
+        d=bytedance.com; s=google; t=1680164172;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=L10x+gjZbBUxwXOMonAltHgEjn5J6xPItrkvXXLM++4=;
+        b=UpYLB6W9l88El8IMNzJv2COxBro+vsxq+NdP4fzoPWmQxyXzgyqgJ9f3rF/FdgQQK7
+         28132MZi6UY9VRUYcpc/96wjPXoQ0nKj0aJsMMByazZi4lidlKMRpIUHnkY2AUMPrQ0P
+         DKepCpUgD/pndT3d8yTNrThsxGmbOEKAoY8jdP5erzCZuJBksBZGvjItsSm9RiRelIS+
+         0vSLdtYTkXImNER0vutxlCxFv50yzgNhCo2hEuidPpakx7Dx/Z2n+KhgJd4+JtzddBGE
+         yQ4S78s+MHku6GnjQzYcfrdWfjQUHDMh+VW98ldWi9o5D8/6ukqHs6XiFxcI1zLvgyKh
+         uKIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680164151;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JA4XVHo0Eq19cyVZPkQAeO5VCdeLqQwOP0zPCiEBUMw=;
-        b=d/9XBGZB06Kn3F+MrcZhq6T6F7uo/q0JjSYYkOv0x2CKJwpd2adKOdZSsnr2Cc2KG2
-         uPLczgmxS6zSZ3U0UnmQesNP+9Q5SmuX5TS+dHvLZkncFXZ7srU597ZRvKZcgRba3Pea
-         RDsP61ATEuXe2RaMUipzLCh+eFYsecvUnDD1ch8nqu9VgXoZQftvYt+QmYznVqaVhjsi
-         vUalMBSwVZcNSnMWnfyI6jAsde6KW2ymrNoQ618Lgo8OhJb8hNLG/4nbZCZWyu0h9rq3
-         wpI5fYoI/guH5ipR5yEoRSg1JST5y96yGxlUDgUPZuHui7owiaI9WoCtIIzvLobjBFZL
-         3BsQ==
-X-Gm-Message-State: AAQBX9fVkHUeA//APMzkQSJ67AQJ4kFw8DwGs4QfWkNV9ZXPdFFqJDCx
-        9YlzPrj7AT2KSV8zYUS6S5Q2NQ==
-X-Google-Smtp-Source: AKy350Y8D7vwA4tRhgHdmVdiyKJ+l63hqNEVbOuIw5/rG0Pn7g7QJPS8YNRy4aPi5ZxXVQPb3M3Bcg==
-X-Received: by 2002:a2e:aa1c:0:b0:2a1:9b6a:72b9 with SMTP id bf28-20020a2eaa1c000000b002a19b6a72b9mr1795529ljb.13.1680164151534;
-        Thu, 30 Mar 2023 01:15:51 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id w23-20020a2e3017000000b0029df8e31785sm4192341ljw.107.2023.03.30.01.15.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 01:15:50 -0700 (PDT)
-Message-ID: <edb749aa-9ae5-81b2-77b9-416810c5cca7@linaro.org>
-Date:   Thu, 30 Mar 2023 10:15:49 +0200
+        d=1e100.net; s=20210112; t=1680164172;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L10x+gjZbBUxwXOMonAltHgEjn5J6xPItrkvXXLM++4=;
+        b=zve9ORgRoVxS+wSKnlibiyVMxwl6lm9BF6sCfUok+FkqwdGkNh10+xNMV3n7GKhcQr
+         gPFyh2ax6Mrj6ptDHqKr76Py5Bk+P2nNhC/F6iWUNzZ3W/rlBdXel5ErCHPkFuozVpSL
+         QLnN6GX60p58Ja/acJClHgIjQTfjA/N0aCrtnbKbrc+cIr9WbLlVYvQ5e12R/mMqsTVV
+         UBBYHzWKn4pGNVrRKO+8pThx/h1H/OR+MrOsVV0OPjJWCF4V6+Jxy7dkARhqhJphfJLc
+         7F9N27COxUujeH4mzsYUcvPxLu5hua9sR9xI8eOZ6JA5t86c4gujEuTg/HZJkQ8Z3mS3
+         rFMg==
+X-Gm-Message-State: AAQBX9f+Z0ssyAOs3LX8WMUmI8+r8AII3WA8eHfgKhkBJv487Rwc/jQ3
+        rktgvKS9CUGGnau7BK9PYkr2pw==
+X-Google-Smtp-Source: AKy350ahkSNwKWus/wT0n2FZM9Il4SdQimFgBWw+5oril1smind4xGMVDtIMs93dIUUGq31ArLJNSA==
+X-Received: by 2002:a17:90a:fd81:b0:240:c0df:64fc with SMTP id cx1-20020a17090afd8100b00240c0df64fcmr1561442pjb.2.1680164171960;
+        Thu, 30 Mar 2023 01:16:11 -0700 (PDT)
+Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id i13-20020a17090a138d00b0023cd53e7706sm2630837pja.47.2023.03.30.01.16.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 01:16:09 -0700 (PDT)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     peterz@infradead.org, keescook@chromium.org, jpoimboe@kernel.org,
+        dave.hansen@linux.intel.com, bp@alien8.de, mingo@redhat.com,
+        tglx@linutronix.de, rostedt@goodmis.org
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH 0/2] some fixes and cleanups for x86
+Date:   Thu, 30 Mar 2023 16:15:50 +0800
+Message-Id: <20230330081552.54178-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 3/9] dt-bindings: qcom-qce: Fix compatibles
- combinations for SM8150 and IPQ4019 SoCs
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
-        rfoss@kernel.org, neil.armstrong@linaro.org
-References: <20230328092815.292665-1-bhupesh.sharma@linaro.org>
- <20230328092815.292665-4-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230328092815.292665-4-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 11:28, Bhupesh Sharma wrote:
-> Currently the compatible list available in 'qce' dt-bindings does not
-> support SM8150 and IPQ4019 SoCs directly, leading to following
-> 'dtbs_check' error:
-> 
->  arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-griffin.dtb:
->   crypto@1dfa000: compatible: 'oneOf' conditional failed, one must be fixed:
-> 	['qcom,sm8150-qce', 'qcom,qce'] is too long
-> 	['qcom,sm8150-qce', 'qcom,qce'] is too short
+Hi all,
 
-There is no such change in the files. Document only warnings which are
-real - happening.
+This series uses arch_stack_walk() to fix false positives of KASAN and
+avoid open-coding of unwind logic.
 
-Best regards,
-Krzysztof
+This series is based on next-20230330.
+
+Comments and suggestions are welcome.
+
+Thanks,
+Qi
+
+Qi Zheng (2):
+  x86: make profile_pc() use arch_stack_walk()
+  x86: make __get_wchan() use arch_stack_walk()
+
+ arch/x86/kernel/process.c | 22 ++++++++++++----------
+ arch/x86/kernel/time.c    | 36 +++++++++++++++++-------------------
+ 2 files changed, 29 insertions(+), 29 deletions(-)
+
+-- 
+2.20.1
 
