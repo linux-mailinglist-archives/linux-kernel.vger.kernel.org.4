@@ -2,93 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B806D04F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BEA6D04F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbjC3Miy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 08:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
+        id S231314AbjC3Mi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 08:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjC3MiW (ORCPT
+        with ESMTP id S230355AbjC3Mig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:38:22 -0400
-X-Greylist: delayed 68073 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Mar 2023 05:38:21 PDT
-Received: from forward206c.mail.yandex.net (forward206c.mail.yandex.net [178.154.239.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9078672BA
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:38:21 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-69.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-69.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:610a:0:640:be20:0])
-        by forward206c.mail.yandex.net (Yandex) with ESMTP id 21AB3600FF;
-        Thu, 30 Mar 2023 15:38:18 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-69.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id GcI7wM1Dba60-KLRgsifT;
-        Thu, 30 Mar 2023 15:38:17 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1680179897;
-        bh=AUfUxWMmLzsWr9J8KyIIOEW5XdM2YJZTIzMN2LQK6rM=;
-        h=Cc:Subject:To:Message-ID:Date:From;
-        b=pti/RoUJV3jh0s2ptDQf5/Lh3HH0bI+tBPsgcTB/fxAS2LpLSyFQ4PHDc0Mab0R5d
-         hWbTYXJAuKgr+9p8vtW5uU1tDV1F+lPaa5YB3n5aw2uhtLSw84QUF+lcwvvoINQuEu
-         SNxLpbVwJQi5NdQcVZdSS5KmiHk1BcP5bzRhdZpw=
-Authentication-Results: mail-nwsmtp-smtp-production-main-69.iva.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Content-Type: multipart/mixed; boundary="------------J3j8IHe1JzGMO5Jt5X1dfnsH"
-Message-ID: <aee53ac3-6d25-5009-7416-3f7c5fe1f989@yandex.ru>
-Date:   Thu, 30 Mar 2023 17:38:15 +0500
+        Thu, 30 Mar 2023 08:38:36 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5072C72BA;
+        Thu, 30 Mar 2023 05:38:34 -0700 (PDT)
+Received: (Authenticated sender: kory.maincent@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EE1A824000E;
+        Thu, 30 Mar 2023 12:38:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1680179911;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dCYhB/ohRuc+DVtWM6806sL+h/G0zdL7RlQsyRs9dkA=;
+        b=l6iJoOIeUNqwhp9BRmerGiqKLGaatcZ4QREzrooUEyGMsdx06XkudItjqEgzcjDHnu0geT
+        GHHOHTxoNvrEPVv3bIeMpJSCJvqULxICQZIvYoB+ZeO7hJh7I1EM2NR1H/PHgiqKN+NSeH
+        4Pl7Qg9yACQV2DmYZqAxOAblg+wkOzuaE4Z4x0/ThPWwvK/IkcvRCkN6ZnWRIPtvXpPUwD
+        /ra3v/Mn/giO+NoaNlctY669eBkpsyHc5s72uz74X9OLen9hNQMumEFo4Jqz5yT53V4uVk
+        dnxTvCI1u1lsbgEzt/m9Ehnijgqm9KMunMnZ0uhl9OJ+C3LpViUlSzFhe7wxvQ==
+Date:   Thu, 30 Mar 2023 14:38:24 +0200
+From:   =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+To:     Max Georgiev <glipus@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Michael Walle <michael@walle.cc>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Minghao Chi <chi.minghao@zte.com.cn>,
+        Jie Wang <wangjie125@huawei.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Marco Bonelli <marco@mebeim.net>
+Subject: Re: [PATCH v3 3/5] net: Let the active time stamping layer be
+ selectable.
+Message-ID: <20230330143824.43eb0c56@kmaincent-XPS-13-7390>
+In-Reply-To: <CAP5jrPHep12hRbbcb5gXrZB5w_uzmVpEp4EhpfqW=9zC+zcu9A@mail.gmail.com>
+References: <20230308135936.761794-4-kory.maincent@bootlin.com>
+        <20230308230321.liw3v255okrhxg6s@skbuf>
+        <20230310114852.3cef643d@kmaincent-XPS-13-7390>
+        <20230310113533.l7flaoli7y3bmlnr@skbuf>
+        <b4ebfd3770ffa5ad1233d2b5e79499ee@walle.cc>
+        <20230310131529.6bahmi4obryy5dsx@soft-dev3-1>
+        <20230310164451.ls7bbs6pdzs4m6pw@skbuf>
+        <20230313084059.GA11063@pengutronix.de>
+        <20230316160920.53737d1c@kmaincent-XPS-13-7390>
+        <20230317152150.qahrr6w5x4o3eysz@skbuf>
+        <20230317120744.5b7f1666@kernel.org>
+        <CAP5jrPHep12hRbbcb5gXrZB5w_uzmVpEp4EhpfqW=9zC+zcu9A@mail.gmail.com>
+Organization: bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From:   stsp <stsp2@yandex.ru>
-Subject: MREMAP_DONTUNMAP corrupts initial mapping
-Cc:     linux-mm@kvack.org
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------J3j8IHe1JzGMO5Jt5X1dfnsH
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hello Max,
 
-Hello.
+On Fri, 17 Mar 2023 13:43:34 -0600
+Max Georgiev <glipus@gmail.com> wrote:
 
-Attached is a small test-case that
-demonstrates the problem.
-The problem happens if you change
-some data in a file-backed private
-mapping and then use mremap on
-it with MREMAP_DONTUNMAP flag.
-The result is:
-- destination copy is valid
-- source copy restored from the original file
+> Jakub,
+>=20
+> I started working on a patch introducing NDO functions for hw
+> timestamping, but unfortunately put it on hold.
+> Let me finish it and send it out for review.
 
-So the 2 copies do not match.
+What is your timeline for it? Do you think of sending it in the followings
+weeks, months, years? If you don't have much time ask for help, I am not re=
+ally
+a PTP core expert but I would gladly work with you on this.
 
---------------J3j8IHe1JzGMO5Jt5X1dfnsH
-Content-Type: text/x-csrc; charset=UTF-8; name="mretst.c"
-Content-Disposition: attachment; filename="mretst.c"
-Content-Transfer-Encoding: base64
-
-I2RlZmluZSBfR05VX1NPVVJDRQojaW5jbHVkZSA8c3lzL21tYW4uaD4KI2luY2x1ZGUgPGFz
-c2VydC5oPgojaW5jbHVkZSA8c3RkbGliLmg+CiNpbmNsdWRlIDxmY250bC5oPgojaW5jbHVk
-ZSA8c3RkaW8uaD4KI2luY2x1ZGUgPHVuaXN0ZC5oPgoKI2lmbmRlZiBQQUdFX1NJWkUKI2Rl
-ZmluZSBQQUdFX1NJWkUgNDA5NgojZW5kaWYKCmludCBtYWluKHZvaWQpCnsKICAgIGNvbnN0
-IGNoYXIgKmZpbGUgPSAibXJldHN0LmMiOwogICAgY2hhciAqYWRkciwgKmFkZHIyOwogICAg
-aW50IGZkOwogICAgY2hhciBjOwoKICAgIGZkID0gb3BlbiAoZmlsZSwgT19SRE9OTFkpOwog
-ICAgaWYgKGZkID09IC0xKQogICAgICAgIHJldHVybiBFWElUX0ZBSUxVUkU7CiAgICBhZGRy
-ID0gbW1hcCAoTlVMTCwgUEFHRV9TSVpFLCBQUk9UX1JFQUQgfCBQUk9UX1dSSVRFLCBNQVBf
-UFJJVkFURSwgZmQsIDApOwogICAgY2xvc2UoZmQpOwogICAgaWYgKGFkZHIgPT0gTUFQX0ZB
-SUxFRCkKICAgICAgICByZXR1cm4gRVhJVF9GQUlMVVJFOwogICAgYyA9IGFkZHJbMF07CiAg
-ICBhc3NlcnQoYWRkclswXSk7CiAgICBhZGRyWzBdID0gMDsKICAgIGFzc2VydCghYWRkclsw
-XSk7CiAgICBhZGRyMiA9IG1yZW1hcCAoYWRkciwgUEFHRV9TSVpFLCBQQUdFX1NJWkUsCiAg
-ICAgICAgICAgICAgICAgICAgTVJFTUFQX01BWU1PVkUgfCBNUkVNQVBfRE9OVFVOTUFQKTsK
-ICAgIGFzc2VydCghYWRkcjJbMF0pOwogICAgaWYgKGFkZHJbMF0gPT0gYykKICAgICAgICBw
-cmludGYoIlRlc3QgRkFJTEVEXG4iKTsKICAgIGVsc2UKICAgICAgICBwcmludGYoIlRlc3Qg
-UEFTU0VEXG4iKTsKICAgIHJldHVybiAwOwp9Cg==
-
---------------J3j8IHe1JzGMO5Jt5X1dfnsH--
+K=C3=B6ry
