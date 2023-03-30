@@ -2,296 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5EB6D0812
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 478ED6D0819
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbjC3OV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S232377AbjC3OWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbjC3OVi (ORCPT
+        with ESMTP id S232452AbjC3OW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:21:38 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F8DCC1E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:21:16 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id q19so16197626wrc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:21:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680186071;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sfjgn2sklT68/0BLeF+AeFT45mcxXZf7FXc0FH6Wl20=;
-        b=GwQkyFczagEwSP/T4r+ynsFphEKSQTfFKzBBpMV3x/6tlPBpBId0PDVaCRQMseg8sA
-         8aTHCb07YgMglNdMTNBcdmkd4B0b8ZE9OQFHG8xwLaiivqxbESFdX29IqrHJbruo1niC
-         dgPT4cmJaXJv35HiEBYb43nXki+IvPyrkox615l/A6abnjFKmYtuJwmn8wVI+KwxFbJp
-         QCXMqp0uhu07kiKfqQGsIlQXlOTMyrx6ZnPCfIDRquePY3zxql2/9xAUwa+CHmgcA6uY
-         VHBRo4nTeVm0WYSFTJLNtVPLMsBKAefnYQ6Y4BDtqnv5GwXtAr3ajAwoAGF6H+qnu5JE
-         XLag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680186071;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sfjgn2sklT68/0BLeF+AeFT45mcxXZf7FXc0FH6Wl20=;
-        b=idXPhId6le9lufasunKtum8+KeufPwHY6+Dn/hxaeAs3Ukqwvq5Zwaij6oq4ghLsLJ
-         7vvZTso6BOLPskmsTqDZVEPek74OlMuyqmswxWmksdogfedsYhAZ2D/m/UkvIdDKkbxi
-         /iFem5dB46oPGd3sMhZPpcziCKgJMGdaU0XAZhExqVCKxgdIKoqRN2xBXso2jCjVvJrQ
-         Z0KTIZOcox1diw0Dre+OwK4tL9TsKGbnVW5GtyN13zbkzuQBAmDc50e7txOFppEePrKY
-         cGOBr/t6l66AD8Zv3qYRK2p/otX1jYDgJYKwygfC/VQH26ufcLyntNwlN/Ts3bSsZUPd
-         NHRg==
-X-Gm-Message-State: AAQBX9cWj1j3iZh9xGRTOp49V8k6CRMSEPVTIUR/ZkNSJN1ZhVYUByq0
-        pSnBvpCgm6qt7tgMLR/T0OFosISTiANtlf/f/l7xwg==
-X-Google-Smtp-Source: AKy350YW/TLCSUTasJvb+twytxxuh4IwsLR1qvC1jNpbA1Tx7TAo0p3sJxo1L0jBKBVevjs1xmX0N5y3Go5scX2UhbM=
-X-Received: by 2002:a5d:4349:0:b0:2df:ebbe:7d46 with SMTP id
- u9-20020a5d4349000000b002dfebbe7d46mr2838344wrr.2.1680186071175; Thu, 30 Mar
- 2023 07:21:11 -0700 (PDT)
+        Thu, 30 Mar 2023 10:22:27 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C776C65F;
+        Thu, 30 Mar 2023 07:21:54 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 3A9893200495;
+        Thu, 30 Mar 2023 10:21:29 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Thu, 30 Mar 2023 10:21:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680186088; x=1680272488; bh=aaHDnGEY8jQWwBiHM0AomkpCoN/1r8C0yPk
+        Rgo7kzOI=; b=EHkKTUkv+ZU6d642PnmpxtLiefd1jLRa6aLEbIBZJ//Xw7xFb6c
+        ocJWhL+RgkKFlpAUPpap17tuAX81odULLYvUU91brxOKbxnj0nrqy9MElOcKFGVn
+        bO9cNNZ77tYEAC0zALL5UM84t9+CpLJw6oulVqFL9wheqoeAfer1QlWYWQqfPjK0
+        LkQ3ry/O5qcyo1Ui7NRTlIcgU1n46LjvSE3O9+eJMM0KStMZ1RvFhEt07zeHKLiz
+        NeiR9XwLlErMq+WEXJXkjbLMxv2vYVs36FE5bioe3jL/ddC321lxxJGMtauMfK2Q
+        pFDH1IK1DI/6HfMx9aDZEPdPx36Rlx6oimQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680186088; x=1680272488; bh=aaHDnGEY8jQWwBiHM0AomkpCoN/1r8C0yPk
+        Rgo7kzOI=; b=K3sAiPnwAgatkHpndFCVM+oXEIgS85j2P85doaM33lDqwSPc01x
+        UhocjnwJrul9UKtXn3u6JOWP0Vqm6ijMCalG2RbLG3vVbzyI4BgmL9Eji9YKj28r
+        IZCStdV8LizaemXBFYXWhbrhgDd88gPfWqvj0saeO1fDSmkpsbhHr2H4cnK/v8Ci
+        +hFXtrWb6wW24aKjs+IWdXmQTqIrMxyGK7gvFIPWLSjUJlMzrZv2bHe80bhniER6
+        c/nmId1wTut389t9YuZECQkyw067UJW0AckXkyJ1fgV5zFNyaYDLZx+NPx+Ibs6U
+        7XyEuL6e02QN+RsQ/ow2v7A9BMIiNEtLiTQ==
+X-ME-Sender: <xms:6JolZNcXnXZ7XiZU_4IBe11YdpZNup2eUydwSJMrLEBPelmLQf8QJg>
+    <xme:6JolZLNseFiRZtvfWhn8Ur6MYI885UoSISMtUbkd7amhMWkrMxUl-HqoaKcNJK8_g
+    VE6pjnOiQ4069AmsA>
+X-ME-Received: <xmr:6JolZGhyU0Pg1UMtSJ3KCjz6WlzS8almvWTOrS9Xe8WovwVCwCV_A_X6XUzfzev7j6Ta7M9QIGhsPN1Lh9XB_cgJfQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehkedgjeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeetlhhi
+    tggvucfthihhlhcuoegrlhhitggvsehrhihhlhdrihhoqeenucggtffrrghtthgvrhhnpe
+    ehudduvdetkedvkedtudeludfgfffhudegjeeguedvvedtteevjeehheeiffefgeenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhitggvse
+    hrhihhlhdrihho
+X-ME-Proxy: <xmx:6JolZG-SFJASRZFtVlu6e8tPr5u6j0a5ta7R2RRNVQQYdmuJG2KqDw>
+    <xmx:6JolZJvX6VD87l6X1knRohP3xv2W49faYPPoCzaduANlJfZOtXsjEw>
+    <xmx:6JolZFGrEDmfUvBQcqJZcVCWWBLjFmbOn5VZDrl6ASmaDglTY0IpQQ>
+    <xmx:6JolZPDE481H-10Woc2is43edXxLmRkIJeNyFeNb6KkxVEX1nea_yg>
+Feedback-ID: i56684263:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Mar 2023 10:21:25 -0400 (EDT)
+Message-ID: <f9f1d67f-5c89-d508-d582-528273b635db@ryhl.io>
+Date:   Thu, 30 Mar 2023 16:21:37 +0200
 MIME-Version: 1.0
-References: <20230323062451.2925996-1-danishanwar@ti.com> <20230323062451.2925996-4-danishanwar@ti.com>
- <20230327210126.GC3158115@p14s> <4e239000-c5f7-a42e-157e-5b668c6b2908@ti.com>
-In-Reply-To: <4e239000-c5f7-a42e-157e-5b668c6b2908@ti.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Thu, 30 Mar 2023 08:21:00 -0600
-Message-ID: <CANLsYkxcprFh4SNxb=TkTLT7PNR6=QPFW5HhqPouPP3+oYk7Sg@mail.gmail.com>
-Subject: Re: [EXTERNAL] Re: [PATCH v5 3/5] soc: ti: pruss: Add
- pruss_cfg_read()/update() API
-To:     Md Danish Anwar <a0501179@ti.com>
-Cc:     MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 05/13] rust: init: add initialization macros
+Content-Language: en-US
+To:     y86-dev@protonmail.com
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+References: <20230329223239.138757-1-y86-dev@protonmail.com>
+ <20230329223239.138757-6-y86-dev@protonmail.com>
+From:   Alice Ryhl <alice@ryhl.io>
+In-Reply-To: <20230329223239.138757-6-y86-dev@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Mar 2023 at 04:00, Md Danish Anwar <a0501179@ti.com> wrote:
->
-> Hi Mathieu,
->
-> On 28/03/23 02:31, Mathieu Poirier wrote:
-> > On Thu, Mar 23, 2023 at 11:54:49AM +0530, MD Danish Anwar wrote:
-> >> From: Suman Anna <s-anna@ti.com>
-> >>
-> >> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
-> >> the PRUSS platform driver to read and program respectively a register
-> >> within the PRUSS CFG sub-module represented by a syscon driver.
-> >>
-> >> These APIs are internal to PRUSS driver. Various useful registers
-> >> and macros for certain register bit-fields and their values have also
-> >> been added.
-> >>
-> >> Signed-off-by: Suman Anna <s-anna@ti.com>
-> >> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> >> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> >> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> >> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> >> ---
-> >>  drivers/soc/ti/pruss.c |   1 +
-> >>  drivers/soc/ti/pruss.h | 112 ++++++++++++++++++++++++++++++++++++++++=
-+
-> >>  2 files changed, 113 insertions(+)
-> >>  create mode 100644 drivers/soc/ti/pruss.h
-> >>
-> >
-> > This patch doesn't compile without warnings.
-> >
->
-> I checked the warnings. Below are the warnings that I am getting for thes=
-e patch.
->
-> In file included from drivers/soc/ti/pruss.c:24:
-> drivers/soc/ti/pruss.h:103:12: warning: =E2=80=98pruss_cfg_update=E2=80=
-=99 defined but not used
-> [-Wunused-function]
->   103 | static int pruss_cfg_update(struct pruss *pruss, unsigned int reg=
-,
->       |            ^~~~~~~~~~~~~~~~
-> drivers/soc/ti/pruss.h:84:12: warning: =E2=80=98pruss_cfg_read=E2=80=99 d=
-efined but not used
-> [-Wunused-function]
->    84 | static int pruss_cfg_read(struct pruss *pruss, unsigned int reg,
-> unsigned int *val)
->
-> These warnings are coming because pruss_cfg_read() / update() APIs are
-> introduced in this patch but they are used later.
->
-> One way to resolve this warning is to make this API "inline". I compiled =
-after
-> making these APIs inline, it got compiled without any warnings.
->
-> The other solution is to merge a user API of these APIs in this patch. Pa=
-tch 4
-> and 5 introduces some APIs that uses pruss_cfg_read() / update() APIs. If=
- we
-> squash patch 5 (as patch 5 uses both read() and update() APIs where as pa=
-tch 4
-> only uses update() API) with this patch and make it a single patch where
-> pruss_cfg_read() / update() is introduced as well as used, then this warn=
-ing
-> will be resolved.
->
+On 3/30/23 00:33, y86-dev@protonmail.com wrote:
+> From: Benno Lossin <y86-dev@protonmail.com>
+> 
+> Add the following initializer macros:
+> - `#[pin_data]` to annotate structurally pinned fields of structs,
+>    needed for `pin_init!` and `try_pin_init!` to select the correct
+>    initializer of fields.
+> - `pin_init!` create a pin-initializer for a struct with the
+>    `Infallible` error type.
+> - `try_pin_init!` create a pin-initializer for a struct with a custom
+>    error type (`kernel::error::Error` is the default).
+> - `init!` create an in-place-initializer for a struct with the
+>    `Infallible` error type.
+> - `try_init!` create an in-place-initializer for a struct with a custom
+>    error type (`kernel::error::Error` is the default).
+> 
+> Also add their needed internal helper traits and structs.
+> 
+> Co-developed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
 
-The proper way to do this is to introduce new APIs only when they are neede=
-d.
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 
-> I still think making these APIs "inline" is a better option as these APIs
-> implement very simple one line logic and can be made inline.
->
-> Please let me know what do you think and which approach sounds better.
->
->
-> >> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-> >> index 126b672b9b30..2fa7df667592 100644
-> >> --- a/drivers/soc/ti/pruss.c
-> >> +++ b/drivers/soc/ti/pruss.c
-> >> @@ -21,6 +21,7 @@
-> >>  #include <linux/regmap.h>
-> >>  #include <linux/remoteproc.h>
-> >>  #include <linux/slab.h>
-> >> +#include "pruss.h"
-> >>
-> >>  /**
-> >>   * struct pruss_private_data - PRUSS driver private data
-> >> diff --git a/drivers/soc/ti/pruss.h b/drivers/soc/ti/pruss.h
-> >> new file mode 100644
-> >> index 000000000000..4626d5f6b874
-> >> --- /dev/null
-> >> +++ b/drivers/soc/ti/pruss.h
-> >> @@ -0,0 +1,112 @@
-> >> +/* SPDX-License-Identifier: GPL-2.0-only */
-> >> +/*
-> >> + * PRU-ICSS Subsystem user interfaces
-> >> + *
-> >> + * Copyright (C) 2015-2023 Texas Instruments Incorporated - http://ww=
-w.ti.com
-> >> + *  MD Danish Anwar <danishanwar@ti.com>
-> >> + */
-> >> +
-> >> +#ifndef _SOC_TI_PRUSS_H_
-> >> +#define _SOC_TI_PRUSS_H_
-> >> +
-> >> +#include <linux/bits.h>
-> >> +#include <linux/regmap.h>
-> >> +
-> >> +/*
-> >> + * PRU_ICSS_CFG registers
-> >> + * SYSCFG, ISRP, ISP, IESP, IECP, SCRP applicable on AMxxxx devices o=
-nly
-> >> + */
-> >> +#define PRUSS_CFG_REVID         0x00
-> >> +#define PRUSS_CFG_SYSCFG        0x04
-> >> +#define PRUSS_CFG_GPCFG(x)      (0x08 + (x) * 4)
-> >> +#define PRUSS_CFG_CGR           0x10
-> >> +#define PRUSS_CFG_ISRP          0x14
-> >> +#define PRUSS_CFG_ISP           0x18
-> >> +#define PRUSS_CFG_IESP          0x1C
-> >> +#define PRUSS_CFG_IECP          0x20
-> >> +#define PRUSS_CFG_SCRP          0x24
-> >> +#define PRUSS_CFG_PMAO          0x28
-> >> +#define PRUSS_CFG_MII_RT        0x2C
-> >> +#define PRUSS_CFG_IEPCLK        0x30
-> >> +#define PRUSS_CFG_SPP           0x34
-> >> +#define PRUSS_CFG_PIN_MX        0x40
-> >> +
-> >> +/* PRUSS_GPCFG register bits */
-> >> +#define PRUSS_GPCFG_PRU_GPO_SH_SEL              BIT(25)
-> >> +
-> >> +#define PRUSS_GPCFG_PRU_DIV1_SHIFT              20
-> >> +#define PRUSS_GPCFG_PRU_DIV1_MASK               GENMASK(24, 20)
-> >> +
-> >> +#define PRUSS_GPCFG_PRU_DIV0_SHIFT              15
-> >> +#define PRUSS_GPCFG_PRU_DIV0_MASK               GENMASK(15, 19)
-> >> +
-> >> +#define PRUSS_GPCFG_PRU_GPO_MODE                BIT(14)
-> >> +#define PRUSS_GPCFG_PRU_GPO_MODE_DIRECT         0
-> >> +#define PRUSS_GPCFG_PRU_GPO_MODE_SERIAL         BIT(14)
-> >> +
-> >> +#define PRUSS_GPCFG_PRU_GPI_SB                  BIT(13)
-> >> +
-> >> +#define PRUSS_GPCFG_PRU_GPI_DIV1_SHIFT          8
-> >> +#define PRUSS_GPCFG_PRU_GPI_DIV1_MASK           GENMASK(12, 8)
-> >> +
-> >> +#define PRUSS_GPCFG_PRU_GPI_DIV0_SHIFT          3
-> >> +#define PRUSS_GPCFG_PRU_GPI_DIV0_MASK           GENMASK(7, 3)
-> >> +
-> >> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_POSITIVE   0
-> >> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_NEGATIVE   BIT(2)
-> >> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE            BIT(2)
-> >> +
-> >> +#define PRUSS_GPCFG_PRU_GPI_MODE_MASK           GENMASK(1, 0)
-> >> +#define PRUSS_GPCFG_PRU_GPI_MODE_SHIFT          0
-> >> +
-> >> +#define PRUSS_GPCFG_PRU_MUX_SEL_SHIFT           26
-> >> +#define PRUSS_GPCFG_PRU_MUX_SEL_MASK            GENMASK(29, 26)
-> >> +
-> >> +/* PRUSS_MII_RT register bits */
-> >> +#define PRUSS_MII_RT_EVENT_EN                   BIT(0)
-> >> +
-> >> +/* PRUSS_SPP register bits */
-> >> +#define PRUSS_SPP_XFER_SHIFT_EN                 BIT(1)
-> >> +#define PRUSS_SPP_PRU1_PAD_HP_EN                BIT(0)
-> >> +#define PRUSS_SPP_RTU_XFR_SHIFT_EN              BIT(3)
-> >> +
-> >> +/**
-> >> + * pruss_cfg_read() - read a PRUSS CFG sub-module register
-> >> + * @pruss: the pruss instance handle
-> >> + * @reg: register offset within the CFG sub-module
-> >> + * @val: pointer to return the value in
-> >> + *
-> >> + * Reads a given register within the PRUSS CFG sub-module and
-> >> + * returns it through the passed-in @val pointer
-> >> + *
-> >> + * Return: 0 on success, or an error code otherwise
-> >> + */
-> >> +static int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsi=
-gned int *val)
-> >> +{
-> >> +    if (IS_ERR_OR_NULL(pruss))
-> >> +            return -EINVAL;
-> >> +
-> >> +    return regmap_read(pruss->cfg_regmap, reg, val);
-> >> +}
-> >> +
-> >> +/**
-> >> + * pruss_cfg_update() - configure a PRUSS CFG sub-module register
-> >> + * @pruss: the pruss instance handle
-> >> + * @reg: register offset within the CFG sub-module
-> >> + * @mask: bit mask to use for programming the @val
-> >> + * @val: value to write
-> >> + *
-> >> + * Programs a given register within the PRUSS CFG sub-module
-> >> + *
-> >> + * Return: 0 on success, or an error code otherwise
-> >> + */
-> >> +static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
-> >> +                        unsigned int mask, unsigned int val)
-> >> +{
-> >> +    if (IS_ERR_OR_NULL(pruss))
-> >> +            return -EINVAL;
-> >> +
-> >> +    return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
-> >> +}
-> >> +
-> >> +#endif  /* _SOC_TI_PRUSS_H_ */
-> >> --
-> >> 2.25.1
-> >>
->
-> --
-> Thanks and Regards,
-> Danish.
+> +/// ```rust
+> +/// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
+> +/// # use kernel::{init, pin_init, prelude::*, init::*};
+> +/// # use core::pin::Pin;
+> +/// # #[pin_data]
+> +/// # struct Foo {
+> +/// #     a: usize,
+> +/// #     b: Bar,
+> +/// # }
+> +/// # #[pin_data]
+> +/// # struct Bar {
+> +/// #     x: u32,
+> +/// # }
+> +///
+> +/// impl Foo {
+> +///     fn new() -> impl PinInit<Self> {
+
+I would remove the empty line above `impl Foo` so that the example 
+doesn't start with an empty line when rendered.
+
+> +/// # Syntax
+> +///
+> +/// As already mentioned in the examples above, inside of `pin_init!` a `struct` initializer with
+> +/// the following modifications is expected:
+> +/// - Fields that you want to initialize in-place have to use `<-` instead of `:`.
+> +/// - In front of the initializer you can write `&this in` to have access to a [`NonNull<Self>`]
+> +///   pointer named `this` inside of the initializer.
+> +///
+> +/// For instance:
+> +///
+> +/// ```rust
+> +/// # use kernel::pin_init;
+> +/// # use macros::pin_data;
+> +/// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
+> +/// #[pin_data]
+> +/// struct Buf {
+> +///     ptr: *mut u8,
+
+I'd add a comment on the `ptr` field saying "points at `buf`".
+
+> +/// impl BigBuf {
+> +///     fn new() -> impl PinInit<Self, Error> {
+> +///         try_pin_init!(Self {
+> +///             big: {
+> +///                 let zero = Box::try_new_zeroed()?;
+> +///                 unsafe { zero.assume_init() }
+> +///             },
+
+Is there a reason for not using `Box::init(kernel::init::zeroed())?` here?
