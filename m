@@ -2,245 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891266D0F6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3E76D0F69
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbjC3TzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 15:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
+        id S231613AbjC3Tyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 15:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbjC3TzF (ORCPT
+        with ESMTP id S231315AbjC3Tyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:55:05 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBFC10273
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:54:58 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id y35so12074663pgl.4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:54:58 -0700 (PDT)
+        Thu, 30 Mar 2023 15:54:38 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9150B49E3;
+        Thu, 30 Mar 2023 12:54:37 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id x15so18325008pjk.2;
+        Thu, 30 Mar 2023 12:54:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680206098;
+        d=gmail.com; s=20210112; t=1680206077;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G0C8x1Qfu5NpmV+FfqktLcV4MhMy0ca1jPVOTkp3rFw=;
-        b=AZaQzujqtCMFP3dj9NurzoSLTd7YNlA3x4AvbFl6yNXyvTRSrt8hxNQo76+F2XX8b2
-         GiyK3MF/+nNhJRwOwEBGYQFoskDRxy+Tz723ASGyytzdZ+oev8f+5Yc3/7Fg830AP+r+
-         oKJW/+Aq3gSB6SnmxzdzyfTvtw8sklU+CP3wKXnWh4y1CcCV2YzERiZl+0E8GvcdXFUf
-         KJj6XYN/ZiY/xdk34WYL58bZ2XB2cbuQG8LtXKH5yXwqhPivJg7qH1+EWG2q0xJXbEVK
-         5+KSa+2TJVgg0I7AfAJYSqxYYWFB0c8msazPYhaaaLVL8i5lXmhzYMS5YqEqzde5c5mc
-         6Ydw==
+        bh=OzYl34qHqlnYZZkPFK+yoEyv37qx/dlfpjxFYKlTm4s=;
+        b=mq2rnwbci+RMgKDXaruFkc1XWydlzWeaZrArIDHiTdsDMtz7bv5e8qx9R9c23p8EL9
+         j74PfI7MfW0o4RfbePiuH53k+4iu3YyZQgUnhZAG9DncY9dkcWMLVC4XpDci7HOJ50Ds
+         hxlH4mW72qYfOgHq66jZWGkG3foK4PBNKccmsWNVkYTbLOcs5COijXeRcBRvp3L9/na/
+         A10gv0aZFVz63PoE2AFhoPIvQqYfwjHSv1XPdahkTNqO+DdN1oA0NTth0DKzTSwxxxPf
+         aqrU1zxYG8DO1960GuDUxfSUk875+12vTMipWq5SwhnM8AKdKU75yarkfM9Zbqtyclqv
+         Dn+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680206098;
+        d=1e100.net; s=20210112; t=1680206077;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G0C8x1Qfu5NpmV+FfqktLcV4MhMy0ca1jPVOTkp3rFw=;
-        b=VfSk5vnAnNcynI8xz/qTCIhrnDe8cL0kq8LatU7rua55dF59aVNw608qIXFJcUKlhq
-         fe1ahNlG7nvupDrEWt3l7o6UKm8/ceW88QkDaf1uHDk0NK2pCj2LFZlMx0taxXpawlKW
-         hUDBGvsZDfe7a990RQPumEmT1rFTKFjf1oJnVluD8dYAz9pLyJZFEePHf/1ictqhn8MP
-         oFnEdfULn32AAmy32iC4xIRlJSm8NaicXBtM7PcvOzKnE9WlBZZSLCL+EKkM9HOWHqOJ
-         d7O6XFgpC2SLASF5X87e0SMXLod8HnuxpDlEfHV4dTcX5FyRhFvP0fYXqmWrgBV3P37X
-         Cvcg==
-X-Gm-Message-State: AAQBX9fHx0AgqflKUyzPInKhDv+uHxzwdgZKxf+4dGsqfNrXcFNaw/xE
-        irzHfw+IG2fTB2YO+5L8L0T9nLnKpeJHIt1ikQNfbQ==
-X-Google-Smtp-Source: AKy350ZsSA2zMm7jiilzQo6BWFTqU1m42D9YuSsH/eu33F/LyA8ptMrsw8svd/C6JnFSEz6ZpCMVo8wtDnO9IipeFWc=
-X-Received: by 2002:a63:1b61:0:b0:50c:2b1:7a8f with SMTP id
- b33-20020a631b61000000b0050c02b17a8fmr2203806pgm.6.1680206097475; Thu, 30 Mar
- 2023 12:54:57 -0700 (PDT)
+        bh=OzYl34qHqlnYZZkPFK+yoEyv37qx/dlfpjxFYKlTm4s=;
+        b=73Mhj/EUs9+cKo14eobaqtVqH11vJ1A5q6bWb2fWX93jaLTNv6t5Sa+aWsaAaPG6UV
+         UH6L/O+R/bO2F+D1TvHstIvTBFvRJh/LQSZucsvGFct3GKhHF9kvQiX7bSbGEk7CHH76
+         pEJYpS95iEPL7X0KgIoI6fa3mKk64Kahg+y4x2dRj7n5r4OO7Mkp9IZ3BwxJ5cz0hkQX
+         fVykHWgdRwC4MQT4aknSEdGGysVeK+JaSKbhfjiQCm620npHGThlACymTcVxK67gMJJR
+         TVC1B5lzHun0bJh4jSxtYdFeyN5XBkE85y2RaALWSsCHw22HhzhlI5HetcHnlUrDNyw3
+         +WQg==
+X-Gm-Message-State: AAQBX9clU6HRpNCgso3a9j8ICkWBuaYTiUcqMikO3zQR2cGvlWHxHaXA
+        UXVFyE4KSiGiaGnEjOCRsHAK3KrceHH6H/LZpbCX6/RzokA=
+X-Google-Smtp-Source: AKy350YzaTd8+e6WYf59Mb6Fe994sEGAJxtHMrPxE167lASMPrx+SMG6JBujSvRBxAgTI3CzFSoZbWFksrs4YRewKc8=
+X-Received: by 2002:a17:903:2615:b0:1a0:561c:7276 with SMTP id
+ jd21-20020a170903261500b001a0561c7276mr8652529plb.1.1680206077050; Thu, 30
+ Mar 2023 12:54:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <e1fa546682ea4c8474ff997ab6244c5e11b6f8bc.1680182615.git.geert+renesas@glider.be>
-In-Reply-To: <e1fa546682ea4c8474ff997ab6244c5e11b6f8bc.1680182615.git.geert+renesas@glider.be>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 30 Mar 2023 12:54:21 -0700
-Message-ID: <CAGETcx9N_6cpkK=E3-ibtUgw4NaSgyV1a0hE9uGdd+DMWfY78w@mail.gmail.com>
-Subject: Re: [PATCH v3] treewide: Fix probing of devices in DT overlays
-To:     geert+renesas@glider.be
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAHbLzkrJQTrYBtPkf=jf3OpQ-yBcJe7XkvQstX9j2frz4WF-SQ@mail.gmail.com>
+ <8ca2b07e-674e-afb6-ff12-87504f51f252@arm.com> <CAHbLzkpf4RUZugKdn-uXC5m3RpAQH5aDmRXdsxPZi0Cbf-yiyw@mail.gmail.com>
+ <CAHbLzkq_7aXcys1cpgGFsfMDDDKMsT3e7zdNW=0jAkw7kBtJ0Q@mail.gmail.com>
+ <20230309113851.GF19253@leoy-yangtze.lan> <CAHbLzkpvLHnyL5J5kB_ke3CWVq2=MOEdEQsGex56+Esfgqh1=g@mail.gmail.com>
+ <20230313121420.GB2426758@leoy-yangtze.lan> <CAHbLzkpZjrd401DEKnnCNMdra0f6kGRe1Nh_rTovNTmyD8aBpg@mail.gmail.com>
+ <20230314003610.GD2426758@leoy-yangtze.lan> <6dcf83ad-bfbc-7e59-7c86-bed334bd09e8@arm.com>
+ <5dc10954-d1ad-e8f8-deff-fd237df48ecb@arm.com>
+In-Reply-To: <5dc10954-d1ad-e8f8-deff-fd237df48ecb@arm.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 30 Mar 2023 12:54:25 -0700
+Message-ID: <CAHbLzkqrEQoK_NDfHVO8tdBT1Lycpia5dcAVuiJBeDdx+jtzaQ@mail.gmail.com>
+Subject: Re: [BUG] perf: No samples found when using kcore + coresight
+To:     James Clark <james.clark@arm.com>
+Cc:     Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        coresight@lists.linaro.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mathieu.poirier@linaro.org, adrian.hunter@intel.com,
+        Jiri Olsa <jolsa@kernel.org>, acme@redhat.com,
+        mike.leach@linaro.org, Will Deacon <will@kernel.org>,
+        suzuki.poulose@arm.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 6:26=E2=80=AFAM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
+On Thu, Mar 30, 2023 at 3:36=E2=80=AFAM James Clark <james.clark@arm.com> w=
+rote:
 >
-> When loading a DT overlay that creates a device, the device is not
-> probed, unless the DT overlay is unloaded and reloaded again.
 >
-> After the recent refactoring to improve fw_devlink, it no longer depends
-> on the "compatible" property to identify which device tree nodes will
-> become struct devices.   fw_devlink now picks up dangling consumers
-> (consumers pointing to descendent device tree nodes of a device that
-> aren't converted to child devices) when a device is successfully bound
-> to a driver.  See __fw_devlink_pickup_dangling_consumers().
 >
-> However, during DT overlay, a device's device tree node can have
-> sub-nodes added/removed without unbinding/rebinding the driver.  This
-> difference in behavior between the normal device instantiation and
-> probing flow vs. the DT overlay flow has a bunch of implications that
-> are pointed out elsewhere[1].  One of them is that the fw_devlink logic
-> to pick up dangling consumers is never exercised.
->
-> This patch solves the fw_devlink issue by marking all DT nodes added by
-> DT overlays with FWNODE_FLAG_NOT_DEVICE (fwnode that won't become
-> device), and by clearing the flag when a struct device is actually
-> created for the DT node.  This way, fw_devlink knows not to have
-> consumers waiting on these newly added DT nodes, and to propagate the
-> dependency to an ancestor DT node that has the corresponding struct
-> device.
->
-> Based on a patch by Saravana Kannan, which covered only platform and spi
-> devices.
-
-Doesn't make sense to give a Reviewed-by to something I partially wrote, so=
-:
-
-Acked-by: Saravana Kannan <saravanak@google.com>
-
-Thanks for making sure this is fixed Geert!
-
--Saravana
-
->
-> [1] https://lore.kernel.org/r/CAGETcx_bkuFaLCiPrAWCPQz+w79ccDp6=3D9e881qm=
-K=3Dvx3hBMyg@mail.gmail.com
->
-> Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
-> Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=3DrWYnkC=
-Z6z5bGX-wj4w@mail.gmail.com
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
-> ---
-> v3:
->   - Add Acked-by,
->   - s/instantiate/probe/,
->   - Improve commit description,
->   - Add comment before clearing FWNODE_FLAG_NOT_DEVICE,
->
-> v2:
->   - Add Acked-by,
->   - Drop RFC.
-> ---
->  drivers/bus/imx-weim.c    | 6 ++++++
->  drivers/i2c/i2c-core-of.c | 5 +++++
->  drivers/of/dynamic.c      | 1 +
->  drivers/of/platform.c     | 5 +++++
->  drivers/spi/spi.c         | 5 +++++
->  5 files changed, 22 insertions(+)
->
-> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
-> index 36d42484142aede2..cf463c1d2102c6fb 100644
-> --- a/drivers/bus/imx-weim.c
-> +++ b/drivers/bus/imx-weim.c
-> @@ -329,6 +329,12 @@ static int of_weim_notify(struct notifier_block *nb,=
- unsigned long action,
->                                  "Failed to setup timing for '%pOF'\n", r=
-d->dn);
->
->                 if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
-> +                       /*
-> +                        * Clear the flag before adding the device so tha=
+> On 29/03/2023 17:11, James Clark wrote:
+> >
+> >
+> > On 14/03/2023 00:36, Leo Yan wrote:
+> >> On Mon, Mar 13, 2023 at 11:15:44AM -0700, Yang Shi wrote:
+> >>
+> >> [...]
+> >>
+> >>>> Just a quick summary, here we have two issues:
+> >>>>
+> >>>> - With command:
+> >>>>   perf record -e cs_etm/@tmc_etf63/k --kcore --per-thread \
+> >>>>   -- taskset --cpu-list 1 uname",
+> >>>>
+> >>>>   perf doesn't enable "text poke" attribution.
+> >>>
+> >>> No, it enables "text poke" and perf fails to decode coresight trace
+> >>> data too. It doesn't matter whether "--kcore" is after or before "-e
+> >>> cs/etm/@tmc_etf63/k".
+> >>
+> >> Understand now.  Thanks for correction, if so we can ignore this one.
+> >>
+> >> Leo
+> >
+> > To me it looks like it's only --per-thread and --kcore together that
+> > cause the issue. I can't see if that was mentioned previously in this
+> > thread.
+> >
+> > If it is --per-thread that's causing the issue then I think I have an
+> > idea why it might be. There are some assumptions and different paths
+> > taken in decoding in that mode that aren't correct. It causes some othe=
+r
+> > issues to do with ordering and timestamps as well and I wanted to fix i=
 t
-> +                        * fw_devlink doesn't skip adding consumers to th=
-is
-> +                        * device.
-> +                        */
-> +                       rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE=
-;
->                         if (!of_platform_device_create(rd->dn, NULL, &pde=
-v->dev)) {
->                                 dev_err(&pdev->dev,
->                                         "Failed to create child device '%=
-pOF'\n",
-> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-> index aa93467784c29c89..5c137638689799c8 100644
-> --- a/drivers/i2c/i2c-core-of.c
-> +++ b/drivers/i2c/i2c-core-of.c
-> @@ -178,6 +178,11 @@ static int of_i2c_notify(struct notifier_block *nb, =
-unsigned long action,
->                         return NOTIFY_OK;
->                 }
+> > previously. I wouldn't say that the text-poke change has caused a
+> > regression, as decoding in this mode was always a bit buggy.
+> >
+> > Maybe this is another reason to fix it properly.
 >
-> +               /*
-> +                * Clear the flag before adding the device so that fw_dev=
-link
-> +                * doesn't skip adding consumers to this device.
-> +                */
-> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
->                 client =3D of_i2c_register_device(adap, rd->dn);
->                 if (IS_ERR(client)) {
->                         dev_err(&adap->dev, "failed to create client for =
-'%pOF'\n",
-> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
-> index 07d93753b12f5f4d..e311d406b1705306 100644
-> --- a/drivers/of/dynamic.c
-> +++ b/drivers/of/dynamic.c
-> @@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np)
->         np->sibling =3D np->parent->child;
->         np->parent->child =3D np;
->         of_node_clear_flag(np, OF_DETACHED);
-> +       np->fwnode.flags |=3D FWNODE_FLAG_NOT_DEVICE;
->  }
+> Hi Yang,
 >
->  /**
-> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> index b2bd2e783445dd78..78ae8418744905c9 100644
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -737,6 +737,11 @@ static int of_platform_notify(struct notifier_block =
-*nb,
->                 if (of_node_check_flag(rd->dn, OF_POPULATED))
->                         return NOTIFY_OK;
+> I found a temporary workaround to the issue. Whenever you use
+> --per-thread mode, force timeless mode when decoding with --itrace=3DZ an=
+d
+> it works the same as it did before. For example:
 >
-> +               /*
-> +                * Clear the flag before adding the device so that fw_dev=
-link
-> +                * doesn't skip adding consumers to this device.
-> +                */
-> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
->                 /* pdev_parent may be NULL when no bus platform device */
->                 pdev_parent =3D of_find_device_by_node(rd->dn->parent);
->                 pdev =3D of_platform_device_create(rd->dn, NULL,
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 37a7be6c5a44c8f9..a12420e28640bbd4 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -4504,6 +4504,11 @@ static int of_spi_notify(struct notifier_block *nb=
-, unsigned long action,
->                         return NOTIFY_OK;
->                 }
+>   perf report --itrace=3DZi1000i
 >
-> +               /*
-> +                * Clear the flag before adding the device so that fw_dev=
-link
-> +                * doesn't skip adding consumers to this device.
-> +                */
-> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
->                 spi =3D of_register_spi_device(ctlr, rd->dn);
->                 put_device(&ctlr->dev);
+> The reason is that the new text poke event was added with timestamps
+> enabled. The Coresight decoder slightly incorrectly assumed that no
+> timestamps =3D=3D per-thread mode so when it sees the new event it goes i=
+nto
+> the wrong decode mode.
 >
-> --
-> 2.34.1
+> The assumption was never really correct so I will make a proper fix. But
+> in the mean time the workaround should be fine.
+
+Hi James,
+
+Thanks for figuring out the workaround. I tested both (using "-C"
+instead of "--per-thread" for record or using "--itrace=3DZ" for report)
+works. I think the workaround is fine before we have a proper fix.
+
 >
