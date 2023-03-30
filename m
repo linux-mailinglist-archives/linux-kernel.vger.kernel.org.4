@@ -2,134 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964006CFFAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1046CFFB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjC3JTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
+        id S229957AbjC3JTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjC3JSi (ORCPT
+        with ESMTP id S229760AbjC3JTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:18:38 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0D3172A;
-        Thu, 30 Mar 2023 02:18:37 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32U8lhXP013501;
-        Thu, 30 Mar 2023 09:18:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=qmGkvGd4ktq1l/QDvk5WbJ3XQOI7H5CxYNwOBRXa/FA=;
- b=W5zcyq4uPZk0yygVF/+epdDqQFvXYdMCmyamBJCG4SooB0oST4HF7mbVkBFI06ePamyE
- F3+ueQXLA5J/shFfXott7a82njNk8q6tfC3tzPLjo3vMcuVzwqCQgUPTIb+FHUGIcovh
- JUo68XFNHZRnO0rbxFbcvwQTrm2ZeXBK4pT8exYBwzc+/v+7Zw4+c1Ps2iOoAOPJR9Kt
- U0R6cotpORl2hjmDrysbpGgfPed7bIEmCufwkCLTPnWppa+kMjxHyPW+VnNi+mVPvUf4
- b+5YAZ/a1PdCzIRQKp0YKhns0ajGzvqJWbuJVQsYWPJaMfx25wv8hsqKbRVS609BRROg PA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pn51ygg01-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 09:18:15 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32U9IDal010154
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 09:18:13 GMT
-Received: from [10.50.5.192] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 30 Mar
- 2023 02:18:04 -0700
-Message-ID: <4be7554b-eba7-5c72-f040-9b9f12bfb3d9@quicinc.com>
-Date:   Thu, 30 Mar 2023 14:47:52 +0530
+        Thu, 30 Mar 2023 05:19:06 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE48F7D91;
+        Thu, 30 Mar 2023 02:19:03 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32U9IsE2064180;
+        Thu, 30 Mar 2023 04:18:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680167934;
+        bh=FH1MbDTyJhw4vrH2TcRcS2PlVKs97RQ7D5LV7TM2Ies=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=IhCcqHUO7u8jy1kgxVmTnHwssFArm5lLf8PygVimjoJjPa15VNZQ+Wu8kkpkOEtlX
+         B21cBsjjG0UQkQdXI5SU7Kxkk51a6EPbr96dBswKdVlHrSUQiEy2wuA5wHDbaThIX5
+         JC7Nbm9bLl5u2Ns453cFuWl2mcomtVz5ysJ0K36w=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32U9IsLS024886
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 30 Mar 2023 04:18:54 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 30
+ Mar 2023 04:18:54 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 30 Mar 2023 04:18:54 -0500
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32U9ImhE048823;
+        Thu, 30 Mar 2023 04:18:49 -0500
+Message-ID: <87992a43-a9c3-acb5-2ca1-0174558f2420@ti.com>
+Date:   Thu, 30 Mar 2023 14:48:47 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH V10 2/4] clk: qcom: Add Global Clock Controller driver for
- IPQ9574
-To:     Stephen Boyd <sboyd@kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <arnd@arndb.de>, <broonie@kernel.org>,
-        <catalin.marinas@arm.com>, <devicetree@vger.kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <konrad.dybcio@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <marcel.ziswiler@toradex.com>, <mturquette@baylibre.com>,
-        <nfraprado@collabora.com>, <p.zabel@pengutronix.de>,
-        <robh+dt@kernel.org>, <shawnguo@kernel.org>, <will@kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <20230327132718.573-1-quic_devipriy@quicinc.com>
- <20230327132718.573-3-quic_devipriy@quicinc.com>
- <0af15083921c5d3c89392209654f0c9b.sboyd@kernel.org>
- <2484518b-bcf6-7fb1-6bfb-b96b3682397b@quicinc.com>
- <1cfd584a48e1bb453596948a0187ecf1.sboyd@kernel.org>
+Subject: Re: [EXTERNAL] Re: [PATCH v5 5/5] soc: ti: pruss: Add helper
+ functions to get/set PRUSS_CFG_GPMUX
 Content-Language: en-US
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <1cfd584a48e1bb453596948a0187ecf1.sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230323062451.2925996-1-danishanwar@ti.com>
+ <20230323062451.2925996-6-danishanwar@ti.com> <20230327210429.GD3158115@p14s>
+ <08cdd2b7-5152-8dec-aea2-ce286f8b97fb@ti.com>
+ <CANLsYkwO62JH0TgOLwt08n8WdM_KsNYBCvUBOEsaxikJRfut0A@mail.gmail.com>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <CANLsYkwO62JH0TgOLwt08n8WdM_KsNYBCvUBOEsaxikJRfut0A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: CkK5fHF6YxF7BIdqV0rOIUxMQspOyjII
-X-Proofpoint-GUID: CkK5fHF6YxF7BIdqV0rOIUxMQspOyjII
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-30_04,2023-03-30_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- impostorscore=0 malwarescore=0 adultscore=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=740
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303300075
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/28/2023 10:29 PM, Stephen Boyd wrote:
-> Quoting Devi Priya (2023-03-27 23:15:35)
+On 29/03/23 23:34, Mathieu Poirier wrote:
+> On Tue, 28 Mar 2023 at 05:28, Md Danish Anwar <a0501179@ti.com> wrote:
 >>
->>
->> On 3/27/2023 10:18 PM, Stephen Boyd wrote:
->>> Quoting Devi Priya (2023-03-27 06:27:16)
->>>> diff --git a/drivers/clk/qcom/gcc-ipq9574.c b/drivers/clk/qcom/gcc-ipq9574.c
->>>> new file mode 100644
->>>> index 000000000000..b2a2d618a5ec
->>>> --- /dev/null
->>>> +++ b/drivers/clk/qcom/gcc-ipq9574.c
->>>> @@ -0,0 +1,4248 @@
->>>> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>> +/*
->>>> + * Copyright (c) 2023 The Linux Foundation. All rights reserved.
+>> On 28/03/23 02:34, Mathieu Poirier wrote:
+>>> On Thu, Mar 23, 2023 at 11:54:51AM +0530, MD Danish Anwar wrote:
+>>>> From: Tero Kristo <t-kristo@ti.com>
+>>>>
+>>>> Add two new helper functions pruss_cfg_get_gpmux() & pruss_cfg_set_gpmux()
+>>>> to get and set the GP MUX mode for programming the PRUSS internal wrapper
+>>>> mux functionality as needed by usecases.
+>>>>
+>>>> Co-developed-by: Suman Anna <s-anna@ti.com>
+>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>>>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+>>>> ---
+>>>>  drivers/soc/ti/pruss.c           | 44 ++++++++++++++++++++++++++++++++
+>>>>  include/linux/remoteproc/pruss.h | 30 ++++++++++++++++++++++
+>>>>  2 files changed, 74 insertions(+)
+>>>>
+>>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+>>>> index ac415442e85b..3aa3c38c6c79 100644
+>>>> --- a/drivers/soc/ti/pruss.c
+>>>> +++ b/drivers/soc/ti/pruss.c
+>>>> @@ -239,6 +239,50 @@ int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
+>>>>  }
+>>>>  EXPORT_SYMBOL_GPL(pruss_cfg_xfr_enable);
+>>>>
+>>>> +/**
+>>>> + * pruss_cfg_get_gpmux() - get the current GPMUX value for a PRU device
+>>>> + * @pruss: pruss instance
+>>>> + * @pru_id: PRU identifier (0-1)
+>>>> + * @mux: pointer to store the current mux value into
+>>>> + *
+>>>> + * Return: 0 on success, or an error code otherwise
 >>>> + */
+>>>> +int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux)
+>>>> +{
+>>>> +    int ret = 0;
+>>>> +    u32 val;
 >>>> +
->>>> +#include <linux/kernel.h>
->>>> +#include <linux/err.h>
->>>> +#include <linux/platform_device.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/of.h>
->>>> +#include <linux/of_device.h>
+>>>> +    if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
+>>>> +            return -EINVAL;
+>>>> +
+>>>> +    ret = pruss_cfg_read(pruss, PRUSS_CFG_GPCFG(pru_id), &val);
+>>>> +    if (!ret)
+>>>> +            *mux = (u8)((val & PRUSS_GPCFG_PRU_MUX_SEL_MASK) >>
+>>>> +                        PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
 >>>
->>> What is this include for?
->> This include actually don't seem necessary. But, I see that of.h &
->> platform_device.h are being included via of_device.h
->> Would you suggest to drop of_device.h or the other two
->> headers instead?
+>>> What happens if @mux is NULL?
+>>
+>> @mux being null may result in some error here. I will add NULL check for mux
+>> before storing the value in mux.
+>>
 > 
-> Include headers for things you use. Don't try to omit includes if you
-> see that a header includes other headers that you're using.
-Sure, got it!
+> It will result in a kernel panic.
+> 
+>> I will modify the above if condition to have NULL check for mux as well.
+>> The if condition will look like below.
+>>
+>>         if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS || !mux)
+>>                 return -EINVAL;
+>>
+> 
+> That will be fine.>
 
-Regards,
-Devi Priya
+Sure, I'll go ahead and make this change.
+
+>> Please let me know if this looks OK.
+>>
+>>>
+>>> Thanks,
+>>> Mathieu
+>>>
+>>>
+>>>> +    return ret;
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(pruss_cfg_get_gpmux);
+>>>> +
+>>>> +/**
+>>>> + * pruss_cfg_set_gpmux() - set the GPMUX value for a PRU device
+>>>> + * @pruss: pruss instance
+>>>> + * @pru_id: PRU identifier (0-1)
+>>>> + * @mux: new mux value for PRU
+>>>> + *
+>>>> + * Return: 0 on success, or an error code otherwise
+>>>> + */
+>>>> +int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux)
+>>>> +{
+>>>> +    if (mux >= PRUSS_GP_MUX_SEL_MAX ||
+>>>> +        pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
+>>>> +            return -EINVAL;
+>>>> +
+>>>> +    return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
+>>>> +                            PRUSS_GPCFG_PRU_MUX_SEL_MASK,
+>>>> +                            (u32)mux << PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(pruss_cfg_set_gpmux);
+>>>> +
+>>>>  static void pruss_of_free_clk_provider(void *data)
+>>>>  {
+>>>>      struct device_node *clk_mux_np = data;
+>>>> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+>>>> index bb001f712980..42f1586c62ac 100644
+>>>> --- a/include/linux/remoteproc/pruss.h
+>>>> +++ b/include/linux/remoteproc/pruss.h
+>>>> @@ -16,6 +16,24 @@
+>>>>
+>>>>  #define PRU_RPROC_DRVNAME "pru-rproc"
+>>>>
+>>>> +/*
+>>>> + * enum pruss_gp_mux_sel - PRUSS GPI/O Mux modes for the
+>>>> + * PRUSS_GPCFG0/1 registers
+>>>> + *
+>>>> + * NOTE: The below defines are the most common values, but there
+>>>> + * are some exceptions like on 66AK2G, where the RESERVED and MII2
+>>>> + * values are interchanged. Also, this bit-field does not exist on
+>>>> + * AM335x SoCs
+>>>> + */
+>>>> +enum pruss_gp_mux_sel {
+>>>> +    PRUSS_GP_MUX_SEL_GP = 0,
+>>>> +    PRUSS_GP_MUX_SEL_ENDAT,
+>>>> +    PRUSS_GP_MUX_SEL_RESERVED,
+>>>> +    PRUSS_GP_MUX_SEL_SD,
+>>>> +    PRUSS_GP_MUX_SEL_MII2,
+>>>> +    PRUSS_GP_MUX_SEL_MAX,
+>>>> +};
+>>>> +
+>>>>  /*
+>>>>   * enum pruss_gpi_mode - PRUSS GPI configuration modes, used
+>>>>   *                   to program the PRUSS_GPCFG0/1 registers
+>>>> @@ -110,6 +128,8 @@ int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
+>>>>  int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable);
+>>>>  int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
+>>>>                       bool enable);
+>>>> +int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux);
+>>>> +int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux);
+>>>>
+>>>>  #else
+>>>>
+>>>> @@ -152,6 +172,16 @@ static inline int pruss_cfg_xfr_enable(struct pruss *pruss,
+>>>>      return ERR_PTR(-EOPNOTSUPP);
+>>>>  }
+>>>>
+>>>> +static inline int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux)
+>>>> +{
+>>>> +    return ERR_PTR(-EOPNOTSUPP);
+>>>> +}
+>>>> +
+>>>> +static inline int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux)
+>>>> +{
+>>>> +    return ERR_PTR(-EOPNOTSUPP);
+>>>> +}
+>>>> +
+>>>>  #endif /* CONFIG_TI_PRUSS */
+>>>>
+>>>>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+>>>> --
+>>>> 2.25.1
+>>>>
+>>
+>> --
+>> Thanks and Regards,
+>> Danish.
+
+-- 
+Thanks and Regards,
+Danish.
