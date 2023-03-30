@@ -2,153 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262A86D0912
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0306D090B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbjC3PGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
+        id S232723AbjC3PFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbjC3PGw (ORCPT
+        with ESMTP id S232602AbjC3PFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:06:52 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D089AC177;
-        Thu, 30 Mar 2023 08:06:31 -0700 (PDT)
+        Thu, 30 Mar 2023 11:05:37 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10FD7D83
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:05:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680188791; x=1711724791;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=rfKeQjvyn8N2YTCFOkndJE6Sd7mjB//UW9R1B4NqpO0=;
-  b=X3ouvyC97dsiMYIid3y7oZoLisYuM80Fr3x1potMXTCPGtNetSLx8rcc
-   i/NkTNs79YWlC5b6OkcQIsFYqblFpKjP29xCqtskYlqcOLJmSSb8cTerq
-   GpJlyHqfuUb9yNJERBlLk1iXCdGCs2S9QOn8XNoE7mWGKAgIyfcSGQN2B
-   iXPq5NNMf4b/77fNOL+70kONtzPlijsnDsb+xre8Hu4Wyz6KTabZnyMTZ
-   B0H7Blr8OerH2xnskn/frexHght4meyut55BijApNXLGYsa/9Olun2fYA
-   FKAtBhTYj4DlKk4w5CWJa/XCoJZdtIfdNFWhcz9SNoo3gRDW945BYPz9z
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="341207647"
+  t=1680188735; x=1711724735;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=NyqYXy+0yjiNSnF5Uyf/8PEL6Swi3G6OhgmBE9uKwTQ=;
+  b=hs7Gq7/gzN+ilHUMBYAmopGB/Fn7Rmr6tVBd/Nq5vOtNl0VpVT1odJJN
+   mnZIcXbn3xuwvgD6uEhXh04MpO9UownrWarmijSa/jnL/gbV3J00aTY7P
+   H75iSJf8qwDj971aM4prjH/MK7vrDxHSflYPJQUi38Gmh4f84ITiTPBSC
+   9V712yeZl3Yr5wUxwGcF9FUEIPOKpJ7S3FoF6JDN+WeHug5BFBUGY/7Zb
+   q0+Q2JG1Z49uDZFF1knl7Vu5jzjFbSc7wbRlQOn0hDnwo1Eccc1wnmO5R
+   JZTN82J/S1F0Bfhe5NbsrGwx2PbmUWK450tqAJTlbPll/RgITAnHv789k
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="338691663"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="341207647"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 08:03:54 -0700
+   d="scan'208";a="338691663"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 08:04:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="774027109"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="662052743"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="774027109"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Mar 2023 08:03:53 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+   d="scan'208";a="662052743"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga006.jf.intel.com with ESMTP; 30 Mar 2023 08:04:08 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 08:03:53 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ 15.1.2507.21; Thu, 30 Mar 2023 08:04:07 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 08:03:52 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 30 Mar 2023 08:03:52 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ 15.1.2507.21 via Frontend Transport; Thu, 30 Mar 2023 08:04:07 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.43) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 30 Mar 2023 08:03:52 -0700
+ 15.1.2507.21; Thu, 30 Mar 2023 08:04:07 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZFNQmHwNBnurNvtajiFCWK8Ar96lfrZ2vET+SKMnl3h4j8V0YUFPOlSuof6gQGwGHWZd/zNxtm4RN+ecAGvMnKWhju7h7yPVpLcp0iuOAFyYzuPvM62OgybxvirnaQfW5HJ5//RuJv5OJw+DFqKXIhdy7rktoE1yt0CXQwkNNWDD90LTgnGof5TxgTaS+MHQ/LEpQs9fc68rf3vlQrQsgjqrNAMa2n7nzr3ONok3HnP0Hq330bNitVj7xMcui8apUjkFVT9p7dFtZ6+14aeVzDzSReAEk8ORAaepAOrQjj/tsMUBuatEteXZVgkSpQBKvhTulO2oH0SkEgou5gyCvw==
+ b=cVQEWT/p34Lrukr9wQbk56bD9ek6G5WqX3bLOLJ8zmz2BGcTnjRBmuYdTZwPDnIwS6do7MnUwCliyR+/xGVN3Mz43BnmmCDGcWCCWj7/YfpN85mYs2RQOg8MFzBXxiG8NmSq8J3GBhBBFeYETNOn08IsYcPu1Mgo18VT27rQuuRVTEoLt2lIfKWZ9TwKEiOqxhWC7rDUsP5sRPNaE+1I9AYkPdZNFxWbGPFXP4EnOHNO58830r+ZTnuR1npnQUAoOZmqX9lvRXaIHW/zAU72aenH6z+UL41RyJHJMwblvlyHClDIS6tJymEI8xUif2xBs1tppl9CWyYsb6PeRM9wDg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6b2qN9zYaGGq2G3EtlEheFti5U6XR9FjaSiy/sdVMUg=;
- b=LSwdNP67XOpL1k6aAZKpTBSJO8m2dQMR+PL3z4NcCHCD3T+45aYTWZhqugz6YXVEvCE7WdfBOogKDyWRzabIn3SWFdujTVJhY8dH9g5I0sbeM9bXtxeJM0PXhiI3aUkclls711DSpYHg0H8xFpHJGTuhdhdrDK7elsBD18COyayNKe8Ufn3TckKVYk6MS1D7IFgd8+AtxslfjFfq4gtechIYFys9nUfmcfjrBEcwMMArM6EBBk5rXzLUA15DvB/PcTVbNoT95KWF/rMxpOWoYcWZZFTNEPaWlqsIZbAPwI13if9AfbF4qt9Q3BfCJlaM/QsZvrrLxhM+qkiSe40H1w==
+ bh=Oc5vIazPJ0gWkW59oK9vUaf3Br1nHNAd7Fa1tTDyCjs=;
+ b=b9vFx59KHIGeu4c26EI3iOwqyQ1G4fODdAhD1QZWeWEs/vxe6+N4P3NyyP2zZtfXC99V4f9Djcf7MVhO4IU4UOJOFlF8PTMreOU5xNC8ZAyRUHIhvcpHqcP1Vfb0t8HF+n0Pfbd4l7EJq1n1V/gSUFh9gEEIJc1iACYbdboPwFR3FqnjGB8rmqoxzZOF7eA0VOakf9Wf2amtLWOSuR12oiSRT8ImEtXf2+PchWLKvm+pGwJohwj+LBO0M/yrRoJqnEnIvsOiAVm2lKd6Vv7dxW43KXOImzgYPLPzJmoaYyUML7PrhoVcgHxOtS6EqquPD6MgIZH6xNF9TcXmNE9nwA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
- by SN7PR11MB7511.namprd11.prod.outlook.com (2603:10b6:806:347::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22; Thu, 30 Mar
- 2023 15:03:51 +0000
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::4075:1af2:9fc0:66d0]) by PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::4075:1af2:9fc0:66d0%5]) with mapi id 15.20.6222.033; Thu, 30 Mar 2023
- 15:03:50 +0000
-From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
-To:     "paulmck@kernel.org" <paulmck@kernel.org>
-CC:     "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-team@meta.com" <kernel-team@meta.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "hch@lst.de" <hch@lst.de>,
-        "qiang.zhang1211@gmail.com" <qiang.zhang1211@gmail.com>
-Subject: RE: [PATCH RFC rcu 02/19] srcu: Use static init for statically
- allocated in-module srcu_struct
-Thread-Topic: [PATCH RFC rcu 02/19] srcu: Use static init for statically
- allocated in-module srcu_struct
-Thread-Index: AQHZXeZkMjCksJUJIEigTtRmvPjKta8SunIggAC5AYCAAAGhAA==
-Date:   Thu, 30 Mar 2023 15:03:50 +0000
-Message-ID: <PH0PR11MB58807EB1C375AE03F8586C92DA8E9@PH0PR11MB5880.namprd11.prod.outlook.com>
-References: <3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop>
- <20230324001938.3443499-2-paulmck@kernel.org>
- <PH0PR11MB5880CA682074874FF64B3412DA8E9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <b66d52cb-ed73-4c7f-bab0-201dc13d164a@paulmck-laptop>
-In-Reply-To: <b66d52cb-ed73-4c7f-bab0-201dc13d164a@paulmck-laptop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
+Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR11MB5880:EE_|SN7PR11MB7511:EE_
-x-ms-office365-filtering-correlation-id: b73d077e-cc19-4fea-5c12-08db312ff8b1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bUkOLUWauUlCZ5jrm6DFugmkZgWSJqjszQn5RHN1KCtnw3xUYbzVYDRG2JUB8F55BG6alo6SATwaNkb7suOnIlVSB/9oGAKSXmzB2+s+uRpjPYtT/FBA+L6akwKq0aj4gjMZ1GO2eDYllkUDuZ7y6WQ5ZZEo7lvlf6a9fzxalqfn+6d2kA7oXjixSSzVwbXSElUPOTobg3Xh5Yn/FIIJwpUZtKKyiD5RrqNceym6ej+820pLaUbFiisLH5JiKLriNLDl2MTQQGBz5ZD6GZ6NsIPT+pTY+uJYsZZ1CmVGPr+RFU8m/VhTAyaATnKd11Hy+MTWpHdbrvsW4+pGwYZKUkB5oWQ98hAzOob82xWFs73s8N2qLtZiLwOt6g7K863zVWrqBwnQCxlkcUSmiBYUiZqi8yrCGJnBbauSCZPg0aYnXqYwC4CNc42kfIqRmwTnBkvG6chCBfA8Mw1jfKL410JFz28VKqnHnjsgNBbg3iDLNg4eHLbL4+SgJmgbJTaOeaeAtWxx4+/cqudaoYV11CikKf8ReV8I+f/2jZgG/tnbCzSHuoUHT8zBmq6K39blUc5Itzr/oSTILSk7LoXS8rJBJn0qBOUgo8UUCu968JcPu28U42I9Xsu16LN5k/G3
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(39860400002)(376002)(346002)(136003)(451199021)(52536014)(83380400001)(26005)(122000001)(186003)(86362001)(6506007)(9686003)(82960400001)(5660300002)(38100700002)(38070700005)(41300700001)(8936002)(8676002)(66476007)(7696005)(33656002)(71200400001)(478600001)(55016003)(76116006)(64756008)(66556008)(66446008)(6916009)(316002)(4326008)(54906003)(66946007)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZLr/aEwhmIorCb3TVqZQQk+Rate/dtxoTXfcyvrq2/XpqyltA9PWr/OTIdAb?=
- =?us-ascii?Q?du43O4WUf2sTJQUaD/6aEbup3iT8w8GkP5xnld3ha3rdROFiePXpotajZ/Q1?=
- =?us-ascii?Q?S6CLPnrXyFPqWRx+ClCJian0CV7p29VRq+Uh8h4H13fMbCrExZsizjMIe+oa?=
- =?us-ascii?Q?vPu3XOxZS2sNgvMCBta7i8P+YXSzbs4FdcfO8kjSUfphSn6KjI9XBiLKKB3x?=
- =?us-ascii?Q?Awu5/A4R0sHLW6OEJwka6jdzRaipSJNFKIGt3f5Vx/a5xIXc0wD8RsKBhLe/?=
- =?us-ascii?Q?YDbCclyMps5h9knBNZUqnmGoX7dqgK6mbRp2EPK0xHB51Uj7+bBFbwGZikfv?=
- =?us-ascii?Q?Knd8ZRqZcC2tjje+3p1RjtKySo/6hTsuokz1UdyDeZV9l5lPjddZQwtQuieT?=
- =?us-ascii?Q?1Q2NREoj1iC8dsJeKenqG0EmRychECJBjwtvTcUPwbQOG4If7pymj8Yi/pap?=
- =?us-ascii?Q?TNq9xHzMnx7u0zijYVuFIKE96UeN0CvREhQVFGh4ToJIKwYuuu80ex86yZyP?=
- =?us-ascii?Q?bvqF8f6IW0fWw5o4c3JZEVOBG91YEiSCBZsfyBs1AYhdektM+sZmeBZTwhH6?=
- =?us-ascii?Q?bmxWP+ddREvCoISJNb76qJghHZuFFXmO5iZYoAoF1OwIlaHeVfVFKvFVepfu?=
- =?us-ascii?Q?LGw+fJmZtzLslyGzAm1G+NnN0mTA7AQxE88u21H2CJUIM53kTVPREpDaT3gl?=
- =?us-ascii?Q?STZdCXEZ8xNEqyQcf7Xkpr9+mxYh0OzYRA50kmUmM/r53qxfIGBVgLM5Re0W?=
- =?us-ascii?Q?R4Q8z1F6k1xRdwfaI/df9L2wd7t6jNr2FJMr5pG6ss8iwmcDnDJodU/nJ0R+?=
- =?us-ascii?Q?XdwGIlmCKunM23bGtibD/+vH1MhH/BL/TcXayoH/SlVyeKO9s1tMEuJXfXD+?=
- =?us-ascii?Q?dnVOTDe7p1lStRsYWw5SML4+mdlTQ4mXN1w8HI51AgZva9Q4Cj4NXjoJLQaB?=
- =?us-ascii?Q?h5FDpuqJ6/xI+pyulN9YEeMVl2OkWK67+9UkAjEL0jmhqPdcEdZGsBMyJsfN?=
- =?us-ascii?Q?KL7gF9tPrBnJMtC6BDQkXmtFayyUW84199qeR6zjAan/9SlUEIrfmMyrhjMg?=
- =?us-ascii?Q?Qp7zbluyfq5OkYofNC3swFarL6cdzHvUoPmfs4FxFi6I0+wdAVJ83Et0RUZf?=
- =?us-ascii?Q?IpKzAINrGkxpq5ILYSidxoxtxUXiz3OKztP1+X4V2z0zVX/vF0+stilqQCZb?=
- =?us-ascii?Q?DuzLWsEgG2Uwf6fXJvNaQXfbaDH/Bk4I5m4T9P0xNG7D1eMq17h4tc02KSze?=
- =?us-ascii?Q?mT3etvfybo7RVKfZmenc6TvTzZ+vSY6L1TfSMtJ/VSVsKPRePjF/BIAzKNFt?=
- =?us-ascii?Q?d9ENxZiImt6Jng/xh/6Rc4Znd+Vh+pOntZZrH+GR48EoXdm84X5L0/Ddtwqg?=
- =?us-ascii?Q?7adgJWIddj0t623gQ5W3pEN26+ZqLc0px+fYT+Dz8d/EDHyVttPyovVUyiPY?=
- =?us-ascii?Q?R5L3F5HEa0gLjsMB64EpMYnR2JYKeMprsGN/1t6czcOcVcE1PEVSXNi/l8ia?=
- =?us-ascii?Q?GpNctdfdqFKPUHvlg4+rrGSPxqFRe/mFnEDHCQupQ1O7xM8HKU9LTCAcagGZ?=
- =?us-ascii?Q?hkzkFXrxBrjLA8Wuolgih66OxHn1bwto7Kl8GZtV?=
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
+ by CO1PR11MB4946.namprd11.prod.outlook.com (2603:10b6:303:9e::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Thu, 30 Mar
+ 2023 15:04:04 +0000
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::2b57:646c:1b01:cd18]) by MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::2b57:646c:1b01:cd18%6]) with mapi id 15.20.6222.032; Thu, 30 Mar 2023
+ 15:04:04 +0000
+Date:   Thu, 30 Mar 2023 11:03:57 -0400
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+CC:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        "Chris Wilson" <chris.p.wilson@linux.intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>
+Subject: Re: [PATCH] drm/i915/gt: Hold a wakeref for the active VM
+Message-ID: <ZCWk3Wb2eMpN9dw0@intel.com>
+References: <20230330-hold_wakeref_for_active_vm-v1-1-baca712692f6@intel.com>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+In-Reply-To: <20230330-hold_wakeref_for_active_vm-v1-1-baca712692f6@intel.com>
+X-ClientProxiedBy: SJ0PR03CA0287.namprd03.prod.outlook.com
+ (2603:10b6:a03:39e::22) To MN0PR11MB6059.namprd11.prod.outlook.com
+ (2603:10b6:208:377::9)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|CO1PR11MB4946:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a7f5a44-da30-4f7a-83a5-08db31300064
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XVeAnZ7/Di3d6jK5uuAXXQ5tilpH3AocD4HUg4X+a5ZbcnKVaG+DdpkTM/0iRyQuhm167hXA+GvqNw3c3g5FK2N+xcB00BNNoqk4dT/LushQUVkJg5VIRIbjV2wMBab8yX3LcUWBwtsyVdTu4ST/aS28tT1fBxb8YABDz9wOR+9j9QJN6jWVIhSJCBneh7xyzeENP6NpCJUSfCy9+mGCKHnXUC3aA0KqsQciYHxMTKQS/ggjmvsI12SLhwJ3EHYhRQd3P/g0ZAF33XbXL1sgTX5+pT/6lmsDXOg/zb7g2iUagF3C0oBswFfCkcLvCTB8HwMfxk6ZpNTylR3Bv6ODDBmksohioyKW4pxqCJjfj4MawUlE0AO2HcCSH0z40CWZYowOYulskU++znsXoBYEzppdQW/7R8PM5kloT6XIaDhEyu+lgTp7vognddN0CmqwX/wYkaw0IVQBnQbxuDRYSpKZe1uICAaHEOkERtTMBQ67iJ9ZeI53Il9Ln9OyfTzln5B+RWKNkqIvhB24Y3w47BHULaWGXR+82sM+i+8eJvMnQCAYs013esG22Y7AljUr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(136003)(366004)(346002)(376002)(451199021)(66946007)(38100700002)(86362001)(66476007)(66556008)(36756003)(8676002)(37006003)(5660300002)(186003)(6862004)(6636002)(83380400001)(7416002)(8936002)(41300700001)(2616005)(478600001)(6666004)(6486002)(6506007)(6512007)(54906003)(26005)(316002)(4326008)(82960400001)(2906002)(44832011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?C/HQ373cG9kdhr0q6KV9xf6HEdnJDq+WwXjiJGdK0jwb8crl2w7jP47lYoxY?=
+ =?us-ascii?Q?It+xWRenGI+zF9H/MfCMsVsDoEkPIHbJ/U74tLZR9ShZ4qKS32cAZoz5DMxR?=
+ =?us-ascii?Q?MdTcopBik36VxDQlYbZDV5A/uupiRi45slzKnbe0b8psGrRXdTfKaUrLiO+z?=
+ =?us-ascii?Q?di3ydu2u1SSggKrC6lOriN0UrznuGfyJy5nx+h7Q43kbQCKqHkLo9Ob0aSQW?=
+ =?us-ascii?Q?Hmys6fdB8PbXm008HcXUB6Q8tRQp51fuood4PJx+nVmsKe8ruyd4I9mv2w+1?=
+ =?us-ascii?Q?ug1Ve6AD5/1BjZofJ6hMcVuOBM9SpAHzOvHr2dUd2m0M3z89ndzaRUQGuRZn?=
+ =?us-ascii?Q?sRIqpyid4GZOhx5jPltzvmN01MkIuR9Vp6Ut43IEFcz9KK9Cc/LNK9+/Zd6m?=
+ =?us-ascii?Q?6nVRzOUo9r/q7sNcEXdLnVF6B3DOzacCZuoZWA68OakBrvvNlEOH0d8ylyyi?=
+ =?us-ascii?Q?84QeQy6PMInsh5Pjl/IL6Hg9sw+iJ42x+zPqOI3SWOrP+YZZEJ1OaiJasrkI?=
+ =?us-ascii?Q?vZuyoRaasZrMkGX/CgIAwvQi5fg3wwv3wQUYx1ENahc3dyue48bsw2D8zNPv?=
+ =?us-ascii?Q?3MIfK5MA2KUloTmuK0eB74bckOgxd4Efcx/k6gBus9UcvunXBoBOwM6y/uv6?=
+ =?us-ascii?Q?5xhclPcXxC2oekuJY+KNkmYMrzfG47t/FkzYUy8EktZj2g66I4nxDII+1Qp8?=
+ =?us-ascii?Q?fmG37FdYiuNCdTK6oDeSwRuN8b4xxTdDT1O+KiqDcLkoVSNgDgys+EIpCGBL?=
+ =?us-ascii?Q?Krcft9Cu0O2qHpJl5JByUhUxojSF4sx6XNsYduTV4A9t7CKPYMG/cG+OKlK9?=
+ =?us-ascii?Q?hiNfpVrtO6thh8WTqCV/ARjYHVviftEuqN4/fJgf3l4ke5EE+BxrFF12eoru?=
+ =?us-ascii?Q?4unM9UaVos9V6np0st+VdO9on89RdabCUFvr6t9YMHVTadL3K+SNrttdP027?=
+ =?us-ascii?Q?qJI+xXvBNudA4loWsPT1dpIjkiuMgWe56L4kYWJtr478rAPDGuNgHS5otjfk?=
+ =?us-ascii?Q?nm2d1CC/wdvf1//8RttWnFHWl5APrn4mJm3tDYdyVco7+e36oWywUaWh1s8b?=
+ =?us-ascii?Q?NuEsFDFoqa3ep7LqZTWc3jUw5eVng7gPZgopBWhaQ1lveSdNIKz1rToJy7Jy?=
+ =?us-ascii?Q?gfmzw4adcAeXmcQVYQPi9iUM/wrCGISr2U1dRvSGdUcu6p2wAyTkEFFSsEiR?=
+ =?us-ascii?Q?dwpwwm8W/YlGJB6Kp4zErbHHidCg2Yiz6k0IZeGrcElWkmKk7I4FrOBr+OMS?=
+ =?us-ascii?Q?bdt4BxDFzjMbz+JYce3dgkdYozXFSTsmgXk1bTe/ulrQohayc1BKzpwZ3d22?=
+ =?us-ascii?Q?1w4oMmDFfCqv+3zwsB4VvIDfaZr5ktMikhW4VrvA3cibM/q0vYotUUNtwMYb?=
+ =?us-ascii?Q?rzLXRPeISjxwFYS5gtiF25y8LFYgG38D25nTUH1QMIIX11lSQfI0BtTEcaEv?=
+ =?us-ascii?Q?2vqmiqymfEoiM+wzJuMyo0As7a7+tej5tsRjL85Sh5FM/xspo1UdhpZGm7sT?=
+ =?us-ascii?Q?PMohmhkek+jMmPHb4zdIq0XGyj+90yeR938nlwb7Wblv5eFJaYUmVVhIIwKE?=
+ =?us-ascii?Q?35DoAp5p+oQ2/CeT2TaD0EOBbKp1OZH2rnv7AbEb?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a7f5a44-da30-4f7a-83a5-08db31300064
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b73d077e-cc19-4fea-5c12-08db312ff8b1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2023 15:03:50.8269
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 15:04:04.1740
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tlza55QJg9y72RifoUtqi4q2hpN8WiNis6s3ry80NaQDng8nJEK2xbtAd2Ro1WEVZmWQWYlUS5/HvFPnG0aZzA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7511
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rq0uc9id8Jl5Qss+y7O78hDQL+uEGODvffAvxZBAFDP7iG32trv8RUZNRcy0yeKzccEu/uzVlBODniUJetfKkg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4946
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -159,155 +151,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >Further shrinking the srcu_struct structure is eased by requiring
-> >that in-module srcu_struct structures rely more heavily on static
-> >initialization.  In particular, this preserves the property that
-> >a module-load-time srcu_struct initialization can fail only due
-> >to memory-allocation failure of the per-CPU srcu_data structures.
-> >It might also slightly improve robustness by keeping the number of memor=
-y
-> >allocations that must succeed down percpu_alloc() call.
-> >
-> >This is in preparation for splitting an srcu_usage structure out
-> >of the srcu_struct structure.
-> >
-> >[ paulmck: Fold in qiang1.zhang@intel.com feedback. ]
-> >
-> >Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> >Cc: Christoph Hellwig <hch@lst.de>
-> >---
-> > include/linux/srcutree.h | 19 ++++++++++++++-----
-> > kernel/rcu/srcutree.c    | 19 +++++++++++++------
-> > 2 files changed, 27 insertions(+), 11 deletions(-)
-> >
-> >diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
-> >index ac8af12f93b3..428480152375 100644
-> >--- a/include/linux/srcutree.h
-> >+++ b/include/linux/srcutree.h
-> >@@ -121,15 +121,24 @@ struct srcu_struct {
-> > #define SRCU_STATE_SCAN1	1
-> > #define SRCU_STATE_SCAN2	2
-> >=20
-> >-#define __SRCU_STRUCT_INIT(name, pcpu_name)							\
-> >-{												\
-> >-	.sda =3D &pcpu_name,									\
-> >+#define __SRCU_STRUCT_INIT_COMMON(name)								\
-> > 	.lock =3D __SPIN_LOCK_UNLOCKED(name.lock),						\
-> > 	.srcu_gp_seq_needed =3D -1UL,								\
-> > 	.work =3D __DELAYED_WORK_INITIALIZER(name.work, NULL, 0),					\
-> >-	__SRCU_DEP_MAP_INIT(name)								\
-> >+	__SRCU_DEP_MAP_INIT(name)
-> >+
-> >+#define __SRCU_STRUCT_INIT_MODULE(name)								\
-> >+{												\
-> >+	__SRCU_STRUCT_INIT_COMMON(name)								\
-> > }
-> >=20
-> >+#define __SRCU_STRUCT_INIT(name, pcpu_name)							\
-> >+{												\
-> >+	.sda =3D &pcpu_name,									\
-> >+	__SRCU_STRUCT_INIT_COMMON(name)								\
-> >+}
-> >+
-> >+
-> > /*
-> >  * Define and initialize a srcu struct at build time.
-> >  * Do -not- call init_srcu_struct() nor cleanup_srcu_struct() on it.
-> >@@ -151,7 +160,7 @@ struct srcu_struct {
-> >  */
-> > #ifdef MODULE
-> > # define __DEFINE_SRCU(name, is_static)								\
-> >-	is_static struct srcu_struct name;							\
-> >+	is_static struct srcu_struct name =3D __SRCU_STRUCT_INIT_MODULE(name);=
-			\
-> > 	extern struct srcu_struct * const __srcu_struct_##name;					\
-> > 	struct srcu_struct * const __srcu_struct_##name						\
-> > 		__section("___srcu_struct_ptrs") =3D &name
-> >diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> >index cd46fe063e50..7a6d9452a5d0 100644
-> >--- a/kernel/rcu/srcutree.c
-> >+++ b/kernel/rcu/srcutree.c
-> >@@ -1895,13 +1895,14 @@ void __init srcu_init(void)
-> > static int srcu_module_coming(struct module *mod)
-> > {
-> > 	int i;
-> >+	struct srcu_struct *ssp;
-> > 	struct srcu_struct **sspp =3D mod->srcu_struct_ptrs;
-> >-	int ret;
-> >=20
-> > 	for (i =3D 0; i < mod->num_srcu_structs; i++) {
-> >-		ret =3D init_srcu_struct(*(sspp++));
-> >-		if (WARN_ON_ONCE(ret))
-> >-			return ret;
-> >+		ssp =3D *(sspp++);
-> >+		ssp->sda =3D alloc_percpu(struct srcu_data);
-> >+		if (WARN_ON_ONCE(!ssp->sda))
-> >+			return -ENOMEM;
-> > 	}
-> > 	return 0;
-> > }
-> >@@ -1910,10 +1911,16 @@ static int srcu_module_coming(struct module *mod=
-)
-> > static void srcu_module_going(struct module *mod)
-> > {
-> > 	int i;
-> >+	struct srcu_struct *ssp;
-> > 	struct srcu_struct **sspp =3D mod->srcu_struct_ptrs;
-> >=20
-> >-	for (i =3D 0; i < mod->num_srcu_structs; i++)
-> >-		cleanup_srcu_struct(*(sspp++));
-> >+	for (i =3D 0; i < mod->num_srcu_structs; i++) {
-> >+		ssp =3D *(sspp++);
-> >+		if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_neede=
-d)) &&
-> >+		    !WARN_ON_ONCE(!ssp->srcu_sup->sda_is_static))
-> >+				cleanup_srcu_struct(ssp);
-> >+		free_percpu(ssp->sda);
->=20
->=20
-> Hi Paul
->=20
-> About 037b80b8865fb ("srcu: Check for readers at module-exit time ")
->=20
-> --- a/kernel/rcu/srcutree.c
-> +++ b/kernel/rcu/srcutree.c
-> @@ -1911,7 +1911,8 @@ static void srcu_module_going(struct module *mod)
->                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_=
-gp_seq_needed)) &&
->                     !WARN_ON_ONCE(!ssp->srcu_sup->sda_is_static))
->                         cleanup_srcu_struct(ssp);
+On Thu, Mar 30, 2023 at 04:35:39PM +0200, Andrzej Hajda wrote:
+> From: Chris Wilson <chris@chris-wilson.co.uk>
+> 
+> There may be a disconnect between the GT used by the engine and the GT
+> used for the VM, requiring us to hold a wakeref on both while the GPU is
+> active with this request.
+> 
+> Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
+> [ahajda: removed not-yet-upstremed wakeref tracking bits]
+> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> ---
+>  drivers/gpu/drm/i915/gt/intel_context.h   | 15 +++++++++++----
+>  drivers/gpu/drm/i915/gt/intel_engine_pm.c |  3 +++
+>  2 files changed, 14 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gt/intel_context.h b/drivers/gpu/drm/i915/gt/intel_context.h
+> index 0a8d553da3f439..48f888c3da083b 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_context.h
+> +++ b/drivers/gpu/drm/i915/gt/intel_context.h
+> @@ -14,6 +14,7 @@
+>  #include "i915_drv.h"
+>  #include "intel_context_types.h"
+>  #include "intel_engine_types.h"
+> +#include "intel_gt_pm.h"
+>  #include "intel_ring_types.h"
+>  #include "intel_timeline_types.h"
+>  #include "i915_trace.h"
+> @@ -207,8 +208,11 @@ void intel_context_exit_engine(struct intel_context *ce);
+>  static inline void intel_context_enter(struct intel_context *ce)
+>  {
+>  	lockdep_assert_held(&ce->timeline->mutex);
+> -	if (!ce->active_count++)
+> -		ce->ops->enter(ce);
+> +	if (ce->active_count++)
+> +		return;
+> +
+> +	ce->ops->enter(ce);
+> +	intel_gt_pm_get(ce->vm->gt);
+>  }
+>  
+>  static inline void intel_context_mark_active(struct intel_context *ce)
+> @@ -222,8 +226,11 @@ static inline void intel_context_exit(struct intel_context *ce)
+>  {
+>  	lockdep_assert_held(&ce->timeline->mutex);
+>  	GEM_BUG_ON(!ce->active_count);
+> -	if (!--ce->active_count)
+> -		ce->ops->exit(ce);
+> +	if (--ce->active_count)
+> +		return;
+> +
+> +	intel_gt_pm_put_async(ce->vm->gt);
+> +	ce->ops->exit(ce);
+
+so far so good. this all matches the commit msg and seems a good move.
 
 
-The srcu_sup->sda_is_static is true, in cleanup_srcu_struct(), the ssp->sda=
- can not be freed.
+>  }
+>  
+>  static inline struct intel_context *intel_context_get(struct intel_context *ce)
+> diff --git a/drivers/gpu/drm/i915/gt/intel_engine_pm.c b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
+> index e971b153fda976..ac0566c5e99e17 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_engine_pm.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
+> @@ -114,6 +114,9 @@ __queue_and_release_pm(struct i915_request *rq,
+>  
+>  	ENGINE_TRACE(engine, "parking\n");
+>  
+> +	GEM_BUG_ON(rq->context->active_count != 1);
+
+why do you need this here? should it be a separated patch with
+separated explanation?
 
 
-> -               free_percpu(ssp->sda);
-> +               else if (!WARN_ON(srcu_readers_active(ssp)))
-> +                       free_percpu(ssp->sda);
->=20
-> Should the else statement be removed?  like this:
->=20
-> if (!WARN_ON(srcu_readers_active(ssp)))
-> 	free_percpu(ssp->sda);
->
->Mightn't that cause us to double-free ssp->sda?  Once in free_percpu(),
->and before that in cleanup_srcu_struct()?
+> +	__intel_gt_pm_get(engine->gt);
 
-Thanks
-Zqiang
+why? I mean, why the get in the release pm?
+and where's the put for this get?
+should it be a separated patch as well?
 
->
->							Thanx, Paul
->
-> Thanks
-> Zqiang
->=20
->=20
-> >+	}
-> > }
-> >=20
-> > /* Handle one module, either coming or going. */
-> >--=20
-> >2.40.0.rc2
-> >
+> +
+>  	/*
+>  	 * We have to serialise all potential retirement paths with our
+>  	 * submission, as we don't want to underflow either the
+> 
+> ---
+> base-commit: 3385d6482cd60f2a0bbb0fa97b70ae7dbba4f95c
+> change-id: 20230330-hold_wakeref_for_active_vm-7f013a449ef3
+> 
+> Best regards,
+> -- 
+> Andrzej Hajda <andrzej.hajda@intel.com>
