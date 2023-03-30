@@ -2,139 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF126CFE64
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4016CFE6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjC3IeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
+        id S229890AbjC3IfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjC3Idt (ORCPT
+        with ESMTP id S229874AbjC3IfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:33:49 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1120B3;
-        Thu, 30 Mar 2023 01:33:46 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 42666C0009;
-        Thu, 30 Mar 2023 08:33:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680165225;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WwAhyV1Sj5KBBfVDCAdRTQpNDnZo2GvHv0Rky3dXMiQ=;
-        b=FvKfGfSZ6CE043eolJcSg7z6fIgqiQ5Fle3qnqfqGZ8Jy2NG2lvc0m9kRNOiabUtHmpz+I
-        qVQO7iL5hQgf5eLue/mh36wbIRDyD5+fSG9qDLr6FOKTkd4jgcjVor+XbxH1M14b2sBo+Z
-        E/nbVZ/vi64gxVcGvKXKRKBhyGeQEZNlmHZCvGvPVmwYlPVaCzPC7iFsvNIyOpPtu8LdWU
-        T+HCrZiRdahsgfyHNtPy5oPLTNRfh3Eww2CsZFbai2IiqyYxVb3oZicR6Aa1+s6tvd9MXp
-        UrwsWF/IP5nAcw14KGSqaa0MIOrxhdXdF9JALgijw/w2dTh8J5psh/VqiYpxWw==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Subject: [PATCH net-next 2/2] net: dsa: rzn1-a5psw: disable learning for standalone ports
-Date:   Thu, 30 Mar 2023 10:34:08 +0200
-Message-Id: <20230330083408.63136-3-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230330083408.63136-1-clement.leger@bootlin.com>
-References: <20230330083408.63136-1-clement.leger@bootlin.com>
+        Thu, 30 Mar 2023 04:35:16 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6867AAD;
+        Thu, 30 Mar 2023 01:35:02 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PnGtP6PTCz6J7sL;
+        Thu, 30 Mar 2023 16:34:21 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 30 Mar
+ 2023 09:35:00 +0100
+Date:   Thu, 30 Mar 2023 09:34:58 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+CC:     <yangyicong@hisilicon.com>, <mathieu.poirier@linaro.org>,
+        <suzuki.poulose@arm.com>, <corbet@lwn.net>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <helgaas@kernel.org>,
+        <linux-pci@vger.kernel.org>, <prime.zeng@huawei.com>,
+        <linuxarm@huawei.com>
+Subject: Re: [PATCH 1/4] hwtracing: hisi_ptt: Make cpumask only present
+ online CPUs
+Message-ID: <20230330093458.00002c50@Huawei.com>
+In-Reply-To: <94e7d85a-d580-94c5-ae2c-fe6a77c21487@huawei.com>
+References: <20230315094316.26772-1-yangyicong@huawei.com>
+        <20230315094316.26772-2-yangyicong@huawei.com>
+        <20230328172409.000021f5@Huawei.com>
+        <94e7d85a-d580-94c5-ae2c-fe6a77c21487@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When port are in standalone mode, they should have learning disabled to
-avoid adding new entries in the MAC lookup table which might be used by
-other bridge ports to forward packets. While adding that, also make sure
-learning is enabled for CPU port.
+On Thu, 30 Mar 2023 11:53:14 +0800
+Yicong Yang <yangyicong@huawei.com> wrote:
 
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- drivers/net/dsa/rzn1_a5psw.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+> On 2023/3/29 0:24, Jonathan Cameron wrote:
+> > On Wed, 15 Mar 2023 17:43:13 +0800
+> > Yicong Yang <yangyicong@huawei.com> wrote:
+> >   
+> >> From: Yicong Yang <yangyicong@hisilicon.com>
+> >>
+> >> perf will try to start PTT trace on every CPU presented in cpumask sysfs
+> >> attribute and it will fail to start on offline CPUs(see the comments in
+> >> perf_event_open()). But the driver is using cpumask_of_node() to export
+> >> the available cpumask which may include offline CPUs and may fail the
+> >> perf unintendedly. Fix this by only export the online CPUs of the node.  
+> > 
+> > There isn't clear documentation that I can find for cpumask_of_node()
+> > and chasing through on arm64 (which is what we care about for this driver)
+> > it's maintained via numa_add_cpu() numa_remove_cpu()
+> > Those are called in arch/arm64/kernel/smp.c in locations that are closely coupled
+> > with set_cpu_online(cpu, XXX);
+> > https://elixir.bootlin.com/linux/v6.3-rc4/source/arch/arm64/kernel/smp.c#L246
+> > https://elixir.bootlin.com/linux/v6.3-rc4/source/arch/arm64/kernel/smp.c#L303
+> > 
+> > Now there are races when the two might not be in sync but in this case
+> > we are just exposing the result to userspace, so chances of a race
+> > after this sysfs attribute has been read seems much higher to me and
+> > I don't think we can do anything about that.
+> > 
+> > Is there another path that I'm missing where online and node masks are out
+> > of sync?
+> >   
+> 
+> maybe no. This patch maybe incorrect and I need more investigation, so let's me
+> drop it from the series. Tested and everything seems fine now.
+> 
+> I found this problem and referred to commit 064f0e9302af ("mm: only display online cpus of the numa node")
+> which might be the same problem. But seems unnecessary that cpumask_of_node()
+> already include online CPUs only.
 
-diff --git a/drivers/net/dsa/rzn1_a5psw.c b/drivers/net/dsa/rzn1_a5psw.c
-index bbc1424ed416..3e5062ab0928 100644
---- a/drivers/net/dsa/rzn1_a5psw.c
-+++ b/drivers/net/dsa/rzn1_a5psw.c
-@@ -336,6 +336,14 @@ static void a5psw_flooding_set_resolution(struct a5psw *a5psw, int port,
- 		a5psw_reg_writel(a5psw, offsets[i], a5psw->bridged_ports);
- }
+Seems it was fixed up for arm64 in
+7f954aa1a ("arm64: smp: remove cpu and numa topology information when hotplugging out CPMU")
+
+If we could audit all the other architectures it would be great to document
+the properties of this cpmuask and possibly simplify the code in the
+path you highlight above (assuming no race conditions etc)
+
+Jonathan
  
-+static void a5psw_port_set_standalone(struct a5psw *a5psw, int port,
-+				      bool standalone)
-+{
-+	a5psw_port_learning_set(a5psw, port, !standalone, false);
-+	a5psw_flooding_set_resolution(a5psw, port, !standalone);
-+	a5psw_port_mgmtfwd_set(a5psw, port, standalone);
-+}
-+
- static int a5psw_port_bridge_join(struct dsa_switch *ds, int port,
- 				  struct dsa_bridge bridge,
- 				  bool *tx_fwd_offload,
-@@ -351,8 +359,7 @@ static int a5psw_port_bridge_join(struct dsa_switch *ds, int port,
- 	}
- 
- 	a5psw->br_dev = bridge.dev;
--	a5psw_flooding_set_resolution(a5psw, port, true);
--	a5psw_port_mgmtfwd_set(a5psw, port, false);
-+	a5psw_port_set_standalone(a5psw, port, false);
- 
- 	return 0;
- }
-@@ -362,8 +369,7 @@ static void a5psw_port_bridge_leave(struct dsa_switch *ds, int port,
- {
- 	struct a5psw *a5psw = ds->priv;
- 
--	a5psw_flooding_set_resolution(a5psw, port, false);
--	a5psw_port_mgmtfwd_set(a5psw, port, true);
-+	a5psw_port_set_standalone(a5psw, port, true);
- 
- 	/* No more ports bridged */
- 	if (a5psw->bridged_ports == BIT(A5PSW_CPU_PORT))
-@@ -755,13 +761,15 @@ static int a5psw_setup(struct dsa_switch *ds)
- 		if (dsa_port_is_unused(dp))
- 			continue;
- 
--		/* Enable egress flooding for CPU port */
--		if (dsa_port_is_cpu(dp))
-+		/* Enable egress flooding and learning for CPU port */
-+		if (dsa_port_is_cpu(dp)) {
- 			a5psw_flooding_set_resolution(a5psw, port, true);
-+			a5psw_port_learning_set(a5psw, port, true, false);
-+		}
- 
--		/* Enable management forward only for user ports */
-+		/* Enable standalone mode for user ports */
- 		if (dsa_port_is_user(dp))
--			a5psw_port_mgmtfwd_set(a5psw, port, true);
-+			a5psw_port_set_standalone(a5psw, port, true);
- 	}
- 
- 	return 0;
--- 
-2.39.2
+> 
+> Thanks.
+> 
+> > Jonathan
+> > 
+> >   
+> >>
+> >> Fixes: ff0de066b463 ("hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe Tune and Trace device")
+> >> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>  
+> >   
+> >> ---
+> >>  drivers/hwtracing/ptt/hisi_ptt.c | 13 +++++++++++--
+> >>  1 file changed, 11 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
+> >> index 30f1525639b5..0a10c7ec46ad 100644
+> >> --- a/drivers/hwtracing/ptt/hisi_ptt.c
+> >> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
+> >> @@ -487,9 +487,18 @@ static ssize_t cpumask_show(struct device *dev, struct device_attribute *attr,
+> >>  			    char *buf)
+> >>  {
+> >>  	struct hisi_ptt *hisi_ptt = to_hisi_ptt(dev_get_drvdata(dev));
+> >> -	const cpumask_t *cpumask = cpumask_of_node(dev_to_node(&hisi_ptt->pdev->dev));
+> >> +	cpumask_var_t mask;
+> >> +	ssize_t n;
+> >>  
+> >> -	return cpumap_print_to_pagebuf(true, buf, cpumask);
+> >> +	if (!alloc_cpumask_var(&mask, GFP_KERNEL))
+> >> +		return 0;
+> >> +
+> >> +	cpumask_and(mask, cpumask_of_node(dev_to_node(&hisi_ptt->pdev->dev)),
+> >> +		    cpu_online_mask);
+> >> +	n = cpumap_print_to_pagebuf(true, buf, mask);
+> >> +	free_cpumask_var(mask);
+> >> +
+> >> +	return n;
+> >>  }
+> >>  static DEVICE_ATTR_RO(cpumask);
+> >>    
+> > 
+> > .
+> >   
 
