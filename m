@@ -2,280 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD86A6D023F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D18C6D0241
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbjC3K6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
+        id S231341AbjC3K7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbjC3K6O (ORCPT
+        with ESMTP id S230418AbjC3K72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:58:14 -0400
-Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2103.outbound.protection.outlook.com [40.107.11.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08367EC3;
-        Thu, 30 Mar 2023 03:58:12 -0700 (PDT)
+        Thu, 30 Mar 2023 06:59:28 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2079.outbound.protection.outlook.com [40.107.244.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E289A7DB3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:59:26 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e3fQZhs8L4ZlJ8n7sH5YJsVfR36PtHP6z6SGBVBEsX+5Og3TS4+cKYoVdLOapR2tmFUh+v+/fe7KB3X+PBfVURJ3jwXeftP6X3m7gw+ejBQ5TNF/ExLfJf7bkiP0JNhRcQ4faA5vQBg9x1cqN3LbLf41/tXEAkgln3dO9qbEdVT0WHJOcNf4naPFXMb/kt5NyXES+YqQEuPSjkPzBmKNJ1MFBwrqnEkbcyBUw0rI+/rue+wgnCFUX/8YjPTuw8WpO83ZfViQcY6U7j6fcw56AhFvKcoO1Lju7a1x5stP17wIoCM103A0WlB/9MKw2o0N0A5ol/zlldfM/EcemaXLKQ==
+ b=SH2i+Tbzai8lkb1E9Qi8GQamCvPBEyMRs5jbzOUfXWV6d5vyrxr4jU6OFks0Fk51LyYzN9O/2pEqTEFQ/24dXnavbYJjemOOGrw7lQj5Dk0Jg1JwQqI2z4qHLdnkAoaY2dnKWq8J3F9PaqJI3KCfGE+QIKrGXRhkCwheyZxBCGpsnrdN6OB8x5OjHL2M7lgORxhoZNRw492E4foTcfrMXgsOV/1PCmNQ+AJ5iitRghaW2nxP5YC67YN5lghgGUAj0ETumLFehZ7/iNtxMsbGvRRmtLMdxKGeXDcdSUroBeTvf8JBE3RmsAEk8V/6UauQl3KWBY8pYI1jAD99RUISUg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7IkwZtjPJ9Wn0ZKe/3NyngbqzUtimVrUVmEDqp5U+TM=;
- b=faBxXU/oriATdDhXbnRUDmkoSkP1w5zyJLMIeRD1w/ql9tDAlitWMqroJl2Ko4bGR/k1CPydwff7Dlf7bSukqb+yo2mdvZQBwQoSOXjqOxX+5lWud3Z6bD2tuk6ujcCK0XOaNZRh8h5WZD+xw8U0PycBMedCWSt0sAic92vwKcIfDrMY1Zb4RJ9LSwd6iJmsHTZKbyUXfj6QQmntswv8zVmyXLsy+42U6gKEBzc36TorXKrnHyBQrVXpdk/ncccun+egyoQCTmaNOazbyOml0srfGVpTKUb2T4MvLQWeTzBL7axBVuaMy9yazTB/nTYmf6NBE5QpfxkJfdtry4QcfA==
+ bh=Y7wSsGtKslMp5Z+FVWyV9P5E/3RtJHE9R/5KFDp5D6Y=;
+ b=lkoykhdgz60EJe82TSBPvVCdkM14CfQenMyh1nihLnJ5wOfwFSdSUHynFUUEdjViV8boSu0kA6YwfF5z+THq2/Rr5yByX/6aa9vVx+jnjAOe0/qFJKdnDMjlv+R2NIPoh7aP0vF1Hs8+u6WNclSDSsh00+yx74DsoGcgn2ZrcKiZbf/10RDHnGttA9+rEs/qXTirSEb/QdpOmNUCyYAUSBni+vSULh/aeUmFTWAFLpwB5v+JfnauqTelyW1IttAhoujQJGbYdEmI5QSXccpaUmZPRIjh4z4zEcHNbDXs9gEmWVOFz2TYixRx8rGX3+hHbyb4BAsRtZ0U+EX5Ps16Bg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7IkwZtjPJ9Wn0ZKe/3NyngbqzUtimVrUVmEDqp5U+TM=;
- b=k88C7a02WzoVOnhNHwj9gU8hRNkzMFs1m7c2K4BfWhydhQD7qLU8cKeWoG8YzW0GMQ0CmnJTpEq3SRB3WE4Oj7wVvuoPgmBSRQslGC7NjrfaijOTQk8ASzR2aNonwJzjqZ/F96bSr9zKUdtDriRGdDifmC3fhfyakCHJS8EbiNs=
+ bh=Y7wSsGtKslMp5Z+FVWyV9P5E/3RtJHE9R/5KFDp5D6Y=;
+ b=2OSzwXWS00OqiO+EqrZfwL4CrhZJcpfKwZSQqI2JlNa9CPoRZKVedJEznYPEpnLwfhduu2zaNCWWd62QohcoEqy8clb0koNwRv61HzYXKO319fxVhW6yj8YcrRCI1us4HKTlnKOu1hH/AMqSz8ap+KUuLHRyNcQGXYwHMrepIwc=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO6P265MB6126.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2b8::7) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM6PR12MB4265.namprd12.prod.outlook.com (2603:10b6:5:211::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.37; Thu, 30 Mar
- 2023 10:58:10 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f2a:55d4:ea1d:dece%4]) with mapi id 15.20.6222.035; Thu, 30 Mar 2023
- 10:58:10 +0000
-Date:   Thu, 30 Mar 2023 11:58:08 +0100
-From:   Gary Guo <gary@garyguo.net>
-To:     y86-dev@protonmail.com
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v3 06/13] rust: init/sync: add `InPlaceInit` trait to
- pin-initialize smart pointers
-Message-ID: <20230330115808.65f8c01d.gary@garyguo.net>
-In-Reply-To: <20230329223239.138757-7-y86-dev@protonmail.com>
-References: <20230329223239.138757-1-y86-dev@protonmail.com>
-        <20230329223239.138757-7-y86-dev@protonmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0208.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:33a::6) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Thu, 30 Mar
+ 2023 10:59:24 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4624:dc39:943e:6ae]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4624:dc39:943e:6ae%5]) with mapi id 15.20.6254.022; Thu, 30 Mar 2023
+ 10:59:24 +0000
+Message-ID: <7e7fa796-2614-92ea-012b-aa04f04a7312@amd.com>
+Date:   Thu, 30 Mar 2023 12:59:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/4] log2: make is_power_of_2() more generic
+Content-Language: en-US
+To:     Jani Nikula <jani.nikula@intel.com>, linux-kernel@vger.kernel.org
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Gow <davidgow@google.com>
+References: <20230330104243.2120761-1-jani.nikula@intel.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230330104243.2120761-1-jani.nikula@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR2P281CA0004.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a::14) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO6P265MB6126:EE_
-X-MS-Office365-Filtering-Correlation-Id: b023ae9c-e4b7-414d-08da-08db310da6c9
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM6PR12MB4265:EE_
+X-MS-Office365-Filtering-Correlation-Id: 28e5a3d6-9cb2-45f5-dc66-08db310dd2a4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1T867qwJohZIBKI6MYeRq39w1XLBSXVOPT87T4Iy6O8+5Yg9URNMAG7JoJHZ6PPLpX8vFDtHse9vXMeTS+G42BbdwGiOdv8T1wSylWnQB4BUYaTpddZxbqSy8ZbWsIKbpncc44oSCHLWVSiW5tsGJpSEpMjQcar2AkwHzg0kHsZLNzl1Rwq63D8kiIkN/kHlCSMvruqK1A3CT3zP45iWYnrN41UXPWzXdU0xH6FqcgrS2BxH8S1HqtgkcxT08L4KK1BZwj9SyEMKGE8V6tQm9UHMme2ACAwgXxmuqIjXDnC/pPQC8DObL/tMwP9zAM394Y368hhjOA8IwQvP8Os1dsWVqDCh8kCnGQSyVL2XOSxPJd3ls2kaZSr2Z7kOMzUDdcVVfrSyjt3yPaxE2oJVQ1KJxc0I/9iSa1Em0X7JIWiF1jD7TEslAYJRC82lyMHBtAsMlikq3nb2NhEvxda3f881NvLYIV1UgqXScydY7tun53acHP9emycHuDiyGl0FoJ19NfgX19vwGbeZ8sHCkQu0q6YBpR+b4sdUxGvyKjScCjPuV8yLFamKGDj7tLmZ7pAyEA4ToCCxXUYFKXYJ7Gnt1Kp9WF4bj2wPsf9AxHM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(6029001)(376002)(346002)(136003)(396003)(366004)(39830400003)(451199021)(2616005)(83380400001)(6486002)(478600001)(186003)(316002)(26005)(1076003)(54906003)(6512007)(2906002)(6506007)(5660300002)(7416002)(36756003)(4326008)(8936002)(38100700002)(6916009)(8676002)(66946007)(41300700001)(66476007)(66556008)(86362001)(66899021)(81973001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: aZxgBfT7d9IK1EUN20eVOb0s7T3KRJGHNoRFpIHsWFnczdPifPSg/46DNuF75HBQsY/lJfZyDHLr3PJrNDFkh0diHwrwWEIv7eTC1axu3u6pYAL11YS+8bLo66PposApGycTeGveVaGbTeoebKvfBA0m/DyZrn26gBzXIUFJNM/xfQuuothcjSA2VNMhKGnGIXPffn0njcS7LMfQwLg3i3+AB87IRetY4/q7irf4IYWZfXTFzoJNvzjVTVi7ICYuXyLKx9gQPtGqzYrdNoNd7p1mhIWwOeWEWv2MdlC9nXc0pVFUdxMLqr+xpR11szJX4NSp/kZTc25/EAaVND9ohdhNBrtwlsToGjseZkYwGRDbW2FyDX6etaWZF5JC8c0nK0sZurQGTM3D9VgFcq5lpq89hc3ctwkmL0cUtc3+B0aifp8ITqYURKyFsZC5sgzOpWkvu5MXQ3sVf2wDCucs2lEn1r7bjAK6BYnozlT+GCc4od8Gyj1JL1BYJNHM+2oimA+H1d/9WDUJl/ivN860hh8nSprhz2CTMpwySGPryKAxgVANaGjMyErAoKko1+eKqUs17vzmoKcAeK3wTQfe0kFXJe4E+i0KXQAv1Jd9fzw4KeAPjR52DE5grK3uQ7d7AclmEx8rEM+lg0I7TQkfvCyhm3FVmJt5XUqUmo5ILbQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(396003)(136003)(39860400002)(451199021)(31686004)(2906002)(83380400001)(26005)(8936002)(5660300002)(54906003)(6506007)(6666004)(316002)(36756003)(6486002)(66946007)(478600001)(6512007)(66476007)(2616005)(186003)(66556008)(4326008)(38100700002)(8676002)(41300700001)(31696002)(86362001)(41533002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yYe3IoM8AoVHi3TUYcTnOJ4bSp86amIzw8RE6j3Tq1CmoAd/3jMCJOgBRyTF?=
- =?us-ascii?Q?x9P3USRNrIcnn3bYIae8aBbkmylzoVktbANUdYcuLhiXNMEIoTpGlewKosOA?=
- =?us-ascii?Q?m7nK2pJJaS8VVwZAJ+PKEycDWT8zbd+1Of7qoa76dZQgPOE+qBI45aOc1VTy?=
- =?us-ascii?Q?PopLTfmavCdjpPAQMBx/0sSho14QUZe0hMaXB25DOuxKIVe7kjQZDw+04suc?=
- =?us-ascii?Q?kGZ3bcemgtWu2bxn8ON1Zz65L+qJwyz+njHAFiODYDBDLVJmvKlKsbu53Hp+?=
- =?us-ascii?Q?OCA0QtQvYuYaffy/fydp6AxhNTi02iyJELtKaNlSkWhwbYEQ48AcWHUpAecE?=
- =?us-ascii?Q?veeHSEhoe7PHcK1Eq1S9y+4bMofT8FMbRu+6XTg5L5Q7zgTnXw1Pnybe7fH+?=
- =?us-ascii?Q?43Sz6aR4iYkuzcP/E9qpiStPBHZ8kze1dTIyR8Bo/TI1UzJRbYigFr9JVUnL?=
- =?us-ascii?Q?PbMJS2c7/CdvAxeVU6pZUSgZ2/DgYUeUGhFbDplBTw6pO8Ugx1BVlR8g/mB3?=
- =?us-ascii?Q?KHGQ1FAwwL5ynU67ZY/KHAgd7QOUr4bdWueHbySHlhYkkI8rhh/nr6H8Kzuy?=
- =?us-ascii?Q?AoL5fTmcSmfOXfZSd5rWzqGkKtbSkYKvuGJ3nPLu6okbcrdQPJlTgU44K2hN?=
- =?us-ascii?Q?6pJ0TVnb7RxBY3qPMDTPsKTOX57kEypZ4xNjB+ZsSUVGbL7/hg8VrlVOmh9d?=
- =?us-ascii?Q?+8ku/vKnC3epbrHa8g0OR4/B/J+9m0qDC8hGqazXDA0Rh/N1n2P4Sw8W3VTJ?=
- =?us-ascii?Q?Ps+mgBmnSBxf7+M3M92PlVirFGMtUnxhnI7dU78LsiP1bauWq02vYvMlFDPt?=
- =?us-ascii?Q?dsJ26zNNnuo3EjOBr835reSTIgSK/xHXfKzO+x4SVtUnh7BQMkCPiCytasHa?=
- =?us-ascii?Q?hgh8TplgOEvJJA73i7X3Zj7agZ9/sRWrlkuipMB0rw5pRdwFhW8le0kJk7t/?=
- =?us-ascii?Q?9jni6A1Y6ashpEcKnCZ5MBOgL2HPjmI5ZeAasRrxRY1JUhjP05fKpbY5izkc?=
- =?us-ascii?Q?0Rl9lsnM7qRF4YqHeVf77L6RkaUluFqTfmK4O1gf3i3tF1nlBGByVuN4W4l+?=
- =?us-ascii?Q?/UoCA7QOXpUvk9C45KJdULqcbNIwRveBJgsbySg1t4hSQYQ3GQsYnodB1iJm?=
- =?us-ascii?Q?jG4tUYes5meflVWB01m/XQCmF4xPQ8AG0HroBbhCVpKysHZibmVVOA/YvC5K?=
- =?us-ascii?Q?v9hviBRx3eorGx5qYHqflhpKfumfyxur8ww+9xOoHXBhwDigs+fE2l1Ov9mf?=
- =?us-ascii?Q?52kN7X7r1VqFw4N8HLLNoH44TezPm0e8Gn1stDX9TSyP2Rh+FwTaHC/yH1Eg?=
- =?us-ascii?Q?TW3by1nqZZNFmbuwiHGQX+z0W3NJW4pbInc7uq9yZkEhDDU1AX+YA+wty8Uh?=
- =?us-ascii?Q?WFzRYA6knwnb5RiS71rXMNLlEZPTk+/VW3hllWTXFIZLvnapJsdkcC7i5kIq?=
- =?us-ascii?Q?EgUooMA8o0JOOT1JWR5X6pnSE8k8e8AvNbIEe2v6RLbmduY8+DoU7t1bRPRR?=
- =?us-ascii?Q?Y54T2oXx6WPK3ObUz+RYL6uE3CTLTeQ4/ilsifLxP2aMkOfY6zm4mrNrEiqO?=
- =?us-ascii?Q?WYlFZJf9RMcKMJoQsphQ3NGEfZo/TWMdXn8jTE5u?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: b023ae9c-e4b7-414d-08da-08db310da6c9
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ejlLTnRxczFUSmtLZ0ljVDRMdGVmVy91WXA4QmlTUC9VcnU4WjZ2SG9MQVpN?=
+ =?utf-8?B?U0tWZytZR3B6MmRpOGY5U28rU0h4NHFLZm9PZGh0OC9RaUNrbTg2SFhxdXZM?=
+ =?utf-8?B?eFh0ekY0RktrVFhvZzJiTDRtdU42ckZXTk1rTlhEWDVYaHNORW4yaVB1Z2dh?=
+ =?utf-8?B?cVBhcG1IM1ZodmZEOXhCTndRUitYeGtCWXZmclBzOSt5VkF0eTVLWkdhVXIv?=
+ =?utf-8?B?WHJxWVFGakFFNDV6UWpIWkVNWmdaZXVEZU9CSDA4OUZkNTBvWDNFQ29jSHdt?=
+ =?utf-8?B?eGVVMUtvUHJ5SmorMWlmOWFURjlFMGJFVkxtY041Rk9mdUwrYklac1VvRTl6?=
+ =?utf-8?B?VjVzS0FvRFlDY094T1hPSTFONGgwTiszeEhmcFFvRG9sWXFTSHdiRG1TSTB1?=
+ =?utf-8?B?aW9RMTkvZEJrQ05VaUs5TUpObnZSZnJvdFB3MFBKVUk1emxpYkhLLzM4aVZI?=
+ =?utf-8?B?bEVJd1VNTm1GSDd5dFplOHgwbzBWdDlTMXpqeTBldFc0ZkFDYWw4dTNScHZv?=
+ =?utf-8?B?Wjg3UVJLL0RTWVZ3endTUHJvUG52RHhzRUp4UThIWVl2SjFqZTVhZExZOHZw?=
+ =?utf-8?B?VnEydjZ5UFdPVlR2cEthU1BZakovK2dsTytRaldTRE0yM0ZMalZNcXdoSzhS?=
+ =?utf-8?B?VlJmNlhZT3NwanNlTHc3K0dBVmkvVmIyMjNoVlJQb2JxV2VGYVdacUxVTmNN?=
+ =?utf-8?B?bjlGY3lQc29FeGIzOUN6V1FVS1Y3MCtCR1pxTmFoemRRR2t4VVdmcDRsMHZQ?=
+ =?utf-8?B?SUFBNmxkUlorQkp3OTJyTkZpN0EwSDMzNFhWVDRBNDJhbjIvaExRTW16ZUQy?=
+ =?utf-8?B?aTA1V2J5bnBhL1l6SFRwbGRweGIrVmRIWDF0LzRwVUJ0VVVRcFBCZmI5RVlr?=
+ =?utf-8?B?dmhtZWRUaGVoY0s1cXVvWVBpSnA1Z1lxWmZUK2w2Yi9SQllYcHZ0dlhqR3VW?=
+ =?utf-8?B?aEJ6YS9BeVM4aUtoNXlPbzR4bVFIVkxDK0JTOVk5am9qUUZIRTBITWJEc3VV?=
+ =?utf-8?B?WXRHYllQV2VMOU55bXBMTTJzVFNEenNjUWlrRDN2cHNrVlJPdDVyUnlZTFV0?=
+ =?utf-8?B?VmZkZHZUTmt5UTZBTFEwNFdyanA1N1VrRGpJZ2lRSEVJNUY3eHRnd2RpZ1Rx?=
+ =?utf-8?B?amliNVJjOU9jK2RtdnlZMnNpOWF2SUYxNUVqRGQybXBlaHVKZkNRVkI2eGZI?=
+ =?utf-8?B?MVFPbW5Oc0J3c3dVekRWem1ES29iMDRncE1EeU1WdTRLaWx6bTExM1MvUi9x?=
+ =?utf-8?B?dkJOaWg3REQvTHg1Y3lac1RmMWhlaDJTUkl3a3g2VGlFNnB4bm45NVJaOEUw?=
+ =?utf-8?B?K2VreWlGVGtpcjI1K3gyYUJ0c1BPVG16cnQxQUtQZW5Dd1pxK2hzaDJoRktt?=
+ =?utf-8?B?SHpiUnhEenoyMUdDOTlYQ2xCcEVoRWtaampyRnJrcktUSjhSZXliMDVQWFQr?=
+ =?utf-8?B?a0VXTnBvMW56Zy9ZQ2xFY21jcmZnQ2E1aFh0VzJEdlZkbGY1T3dMSWIvWVdE?=
+ =?utf-8?B?MFBGUjBoNSswR09raWY5Sk03NldoU05jYlBhWU5Falp6WlJFR3EwNzM3emo1?=
+ =?utf-8?B?VmlIWUlTMnAyWjl5UFNZNWorRHZObUVHRHYrTXM1RVZxS3BnMXBXOE9rdlln?=
+ =?utf-8?B?d1VrZWJid1lPaTZRRDBlZlVrS1p5OS9JM0ZqMkVMcWdhQW1yc0JnZU1CVnEx?=
+ =?utf-8?B?R3l3cVN6Vlg2Rmg0TzQ1OXk3c3RvNHU0aWpubU5TUFo2WHZDYzBTYkZqZG5t?=
+ =?utf-8?B?eklaV1VLZnBlQXZDbkZld05LY2YralMrTUJUUzdlNlpxUzJubG13dVNqQjQv?=
+ =?utf-8?B?a3YvR0ZPRjJITVpORDBVSXQ1NmYwbWhja21GU1dkc2hLUXI5bHJBNCtnbVdl?=
+ =?utf-8?B?M0JtSm4wTkh1OWhkenpSdU1RM2huY3pBRlVYK3cyZVRvZ3BUOFhNaWp5ZVM1?=
+ =?utf-8?B?b1JhbW9ndXlrT0VqUkRzbmU4SVdEOXp2N0VhS3FQY0RjcWFxY0dRbXVYY3Er?=
+ =?utf-8?B?R1MyNE1ZZ1h5d1dDa2NxbnlFNXAwMkh2WHdXSzBJenJZVGVCVUt1dmI0Nk5k?=
+ =?utf-8?B?eVdicGZHTmpwc01HTGdkUnB5SmZwczVIUVZsa3BXU1lvUXM2ODRmY0tHWURr?=
+ =?utf-8?Q?S9sw=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28e5a3d6-9cb2-45f5-dc66-08db310dd2a4
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 10:58:10.6382
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 10:59:24.3250
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: J21lU1i1uV/Z0Y90zprzG9gPWC2yndCZPAm9xOY9HWGxz7TqYJHvox6QHMlwlFH8r/32TBmALHCEe/NxThXeeQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P265MB6126
+X-MS-Exchange-CrossTenant-UserPrincipalName: o6b+O8SpyMcnuz/cV80GfyImbEDkRT364PdO13SZqtr6P5RBS0yotKpuQ5zhgSJV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4265
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023 22:33:18 +0000
-y86-dev@protonmail.com wrote:
+Am 30.03.23 um 12:42 schrieb Jani Nikula:
+> is_power_of_2() only works for types <= sizeof(unsigned long) and it's
+> also not a constant expression. There are a number of places in kernel
+> where is_power_of_2() is called on u64, which fails on 32-bit
+> builds. Try to remedy that. While at it, make it a constant expression
+> when possible.
+>
+> I admit I've only lightly tested this, and I haven't tried it with
+> allmodconfig.
 
-> From: Benno Lossin <y86-dev@protonmail.com>
-> 
-> The `InPlaceInit` trait that provides two functions, for initializing
-> using `PinInit<T, E>` and `Init<T>`. It is implemented by `Arc<T>`,
-> `UniqueArc<T>` and `Box<T>`.
-> 
-> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-> ---
->  rust/kernel/init.rs     | 97 +++++++++++++++++++++++++++++++++++------
->  rust/kernel/sync/arc.rs | 25 ++++++++++-
->  2 files changed, 108 insertions(+), 14 deletions(-)
-> 
-> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-> index 85e8d5f41b60..3d89c7e3bdb5 100644
-> --- a/rust/kernel/init.rs
-> +++ b/rust/kernel/init.rs
-> @@ -114,10 +114,13 @@
->  //! [`impl Init<T, E>`]: Init
->  //! [`Opaque`]: kernel::types::Opaque
->  //! [`pin_data`]: ::macros::pin_data
-> -//! [`UniqueArc<T>`]: kernel::sync::UniqueArc
-> 
-> +use crate::{
-> +    error::{self, Error},
-> +    sync::UniqueArc,
-> +};
->  use alloc::boxed::Box;
-> -use core::{cell::Cell, convert::Infallible, marker::PhantomData, mem::MaybeUninit, ptr};
-> +use core::{cell::Cell, convert::Infallible, marker::PhantomData, mem::MaybeUninit, pin::Pin, ptr};
-> 
->  #[doc(hidden)]
->  pub mod __internal;
-> @@ -309,7 +312,6 @@ pub mod macros;
->  ///
->  /// [`try_pin_init!`]: kernel::try_pin_init
->  /// [`NonNull<Self>`]: core::ptr::NonNull
-> -/// [`Error`]: kernel::error::Error
->  // For a detailed example of how this macro works, see the module documentation of the hidden
->  // module `__internal` inside of `init/__internal.rs`.
->  #[macro_export]
-> @@ -366,8 +368,6 @@ macro_rules! pin_init {
->  ///     }
->  /// }
->  /// ```
-> -///
-> -/// [`Error`]: kernel::error::Error
->  // For a detailed example of how this macro works, see the module documentation of the hidden
->  // module `__internal` inside of `init/__internal.rs`.
->  #[macro_export]
-> @@ -589,8 +589,6 @@ macro_rules! try_pin_init {
->  ///
->  /// This initializer is for initializing data in-place that might later be moved. If you want to
->  /// pin-initialize, use [`pin_init!`].
-> -///
-> -/// [`Error`]: kernel::error::Error
->  // For a detailed example of how this macro works, see the module documentation of the hidden
->  // module `__internal` inside of `init/__internal.rs`.
->  #[macro_export]
-> @@ -641,8 +639,6 @@ macro_rules! init {
->  ///     }
->  /// }
->  /// ```
-> -///
-> -/// [`Error`]: kernel::error::Error
->  // For a detailed example of how this macro works, see the module documentation of the hidden
->  // module `__internal` inside of `init/__internal.rs`.
->  #[macro_export]
-> @@ -848,7 +844,8 @@ macro_rules! try_init {
->  /// A pinned initializer for `T`.
->  ///
->  /// To use this initializer, you will need a suitable memory location that can hold a `T`. This can
-> -/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`].
-> +/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Use the [`InPlaceInit::pin_init`] function of a
-> +/// smart pointer like [`Arc<T>`] on this.
->  ///
->  /// Also see the [module description](self).
->  ///
-> @@ -867,7 +864,6 @@ macro_rules! try_init {
->  ///
->  /// [`Arc<T>`]: crate::sync::Arc
->  /// [`Arc::pin_init`]: crate::sync::Arc::pin_init
-> -/// [`UniqueArc<T>`]: kernel::sync::UniqueArc
->  #[must_use = "An initializer must be used in order to create its value."]
->  pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
->      /// Initializes `slot`.
-> @@ -884,7 +880,8 @@ pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
->  /// An initializer for `T`.
->  ///
->  /// To use this initializer, you will need a suitable memory location that can hold a `T`. This can
-> -/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Because [`PinInit<T, E>`] is a super trait, you can
-> +/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Use the [`InPlaceInit::init`] function of a smart
-> +/// pointer like [`Arc<T>`] on this. Because [`PinInit<T, E>`] is a super trait, you can
->  /// use every function that takes it as well.
->  ///
->  /// Also see the [module description](self).
-> @@ -909,7 +906,6 @@ pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
->  /// move the pointee after initialization.
->  ///
->  /// [`Arc<T>`]: crate::sync::Arc
-> -/// [`UniqueArc<T>`]: kernel::sync::UniqueArc
->  #[must_use = "An initializer must be used in order to create its value."]
->  pub unsafe trait Init<T: ?Sized, E = Infallible>: PinInit<T, E> {
->      /// Initializes `slot`.
-> @@ -1014,3 +1010,78 @@ unsafe impl<T> Init<T> for T {
->          Ok(())
->      }
->  }
-> +
-> +/// Smart pointer that can initialize memory in-place.
-> +pub trait InPlaceInit<T>: Sized {
-> +    /// Use the given initializer to in-place initialize a `T`.
-> +    ///
-> +    /// If `T: !Unpin` it will not be able to move afterwards.
-> +    fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
-> +    where
-> +        Error: From<E>;
-> +
-> +    /// Use the given initializer to in-place initialize a `T`.
-> +    fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
-> +    where
-> +        Error: From<E>;
-> +}
-> +
-> +impl<T> InPlaceInit<T> for Box<T> {
-> +    #[inline]
-> +    fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
-> +    where
-> +        Error: From<E>,
-> +    {
-> +        let mut this = Box::try_new_uninit()?;
-> +        let slot = this.as_mut_ptr();
-> +        // SAFETY: When init errors/panics, slot will get deallocated but not dropped,
-> +        // slot is valid and will not be moved because of the `Pin::new_unchecked`
-> +        unsafe { init.__pinned_init(slot)? };
-> +        // SAFETY: All fields have been initialized.
-> +        Ok(unsafe { Pin::new_unchecked(this.assume_init()) })
+Looks good to me from a one mile high level pov. But I'm really not an 
+expert on that type of compiler magic, so only:
 
-This can be either `Box::into_pin` or just `into()`.
+Acked-by: Christian König <christian.koenig@amd.com>
 
-> +    }
-> +
-> +    #[inline]
-> +    fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
-> +    where
-> +        Error: From<E>,
-> +    {
-> +        let mut this = Box::try_new_uninit()?;
-> +        let slot = this.as_mut_ptr();
-> +        // SAFETY: When init errors/panics, slot will get deallocated but not dropped,
-> +        // slot is valid
-> +        unsafe { init.__init(slot)? };
-> +        // SAFETY: All fields have been initialized.
-> +        Ok(unsafe { this.assume_init() })
-> +    }
-> +}
+for the series.
+
+Regards,
+Christian.
+
+>
+>
+> Jani Nikula (4):
+>    log2: add helper __IS_POWER_OF_2()
+>    log2: have is_power_of_2() support bigger types than unsigned long
+>    log2: allow use of is_power_of_2() in constant expressions
+>    drm/i915/reg: use is_power_of_2() from log2.h
+>
+>   drivers/gpu/drm/i915/i915_reg_defs.h |  7 +------
+>   include/linux/log2.h                 | 25 ++++++++++++++++++++-----
+>   2 files changed, 21 insertions(+), 11 deletions(-)
+>
+
