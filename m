@@ -2,132 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164B16D0074
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D756D007A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjC3KAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S231157AbjC3KAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbjC3J7w (ORCPT
+        with ESMTP id S229682AbjC3J75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:59:52 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB27F1BC
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:59:51 -0700 (PDT)
-Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id 1F2CC20FAA;
-        Thu, 30 Mar 2023 11:59:50 +0200 (CEST)
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 6/6] drm/bridge: tc358768: Add atomic_get_input_bus_fmts() implementation
-Date:   Thu, 30 Mar 2023 11:59:41 +0200
-Message-Id: <20230330095941.428122-7-francesco@dolcini.it>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230330095941.428122-1-francesco@dolcini.it>
-References: <20230330095941.428122-1-francesco@dolcini.it>
+        Thu, 30 Mar 2023 05:59:57 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F599130
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:59:56 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id i2-20020a5d9e42000000b0074cfcc4ed07so11553124ioi.22
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:59:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680170395; x=1682762395;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nCDgQHdCaeb1tvbebK9kbzy964ALhXI8uc+LM/LdKuQ=;
+        b=sGRUwAdKwQZfR2lPum7osVDH4b/92UruFNG+8iC4grxdlllrNcmf1R/mug3KfV7mE9
+         4d697JiKbd/2TeJiX0wvg6ix4jVgcSH4OUdZF0p4907DgYRiRWjpfBCBBJj1NhOvrMuL
+         NirPfr+SfyYlM8ma+5ZsVtnk0mjStXKqmYteF5wsQSJOfM+CFH7/A/NBg3jksj8iEbx3
+         VzwgyTrJd7/Wl/Bb45yTuUUn7m9FSESGEeAN6afG4/FB2urHvGGGbXlvmmXlkrJrbOhc
+         EFfgpJlvBmSONo9TlfMpWoyDKcD02jm1B3juAhY+xrXD8gfOhpcCQWML594wfSDhIle8
+         Oc/w==
+X-Gm-Message-State: AAQBX9ftAD6RzEnBwfhv/1ubrWBzuiAY6I3/ZcDpv8+e8+gKxF3OhBcq
+        2lFVGusQf98Zy6YpV3op1fZ9/wjPPeoUbOfxzNxmuIjfDKDS46A=
+X-Google-Smtp-Source: AKy350bO7j7QRCL0pnazNhBvWgt0W98iAQdVXCKvGPsnSYymgqqAkLtXWSXOI0RMOwLrrFoYhk9qxTvTLOoO2rYagzXl/JBNVr5O
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:3005:0:b0:326:17ae:47b9 with SMTP id
+ x5-20020a923005000000b0032617ae47b9mr5717019ile.1.1680170395345; Thu, 30 Mar
+ 2023 02:59:55 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 02:59:55 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000093abe005f81b27be@google.com>
+Subject: [syzbot] Monthly media report
+From:   syzbot <syzbot+list70ae5dd68c735d914e1e@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Francesco Dolcini <francesco.dolcini@toradex.com>
+Hello media maintainers/developers,
 
-Add atomic_get_input_bus_fmts() implementation, tc358768 has a parallel
-RGB input interface with the actual bus format depending on the amount
-of parallel input data lines.
+This is a 30-day syzbot report for the media subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/media
 
-Without this change when the tc358768 is used with less than 24bit the
-color mapping is completely wrong.
+During the period, 0 new issues were detected and 0 were fixed.
+In total, 18 issues are still open and 81 have been fixed so far.
 
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+Some of the still happening issues:
+
+Crashes Repro Title
+2180    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
+              https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
+705     Yes   WARNING in get_vaddr_frames
+              https://syzkaller.appspot.com/bug?extid=59a71007ccac79e8bb69
+333     Yes   WARNING in smsusb_term_device
+              https://syzkaller.appspot.com/bug?extid=40ac6e73326e79ee8ecb
+90      Yes   general protection fault in ir_raw_event_store_with_filter
+              https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
+87      Yes   WARNING in media_create_pad_link
+              https://syzkaller.appspot.com/bug?extid=dd320d114deb3f5bb79b
+31      Yes   inconsistent lock state in sync_info_debugfs_show
+              https://syzkaller.appspot.com/bug?extid=007bfe0f3330f6e1e7d1
+1       Yes   KASAN: use-after-free Read in em28xx_init_extension (2)
+              https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
+
 ---
- drivers/gpu/drm/bridge/tc358768.c | 44 +++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
-
-diff --git a/drivers/gpu/drm/bridge/tc358768.c b/drivers/gpu/drm/bridge/tc358768.c
-index 4462264274af..c41620409a39 100644
---- a/drivers/gpu/drm/bridge/tc358768.c
-+++ b/drivers/gpu/drm/bridge/tc358768.c
-@@ -9,6 +9,7 @@
- #include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/kernel.h>
-+#include <linux/media-bus-format.h>
- #include <linux/module.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
-@@ -918,6 +919,44 @@ static void tc358768_bridge_enable(struct drm_bridge *bridge)
- 	}
- }
- 
-+#define MAX_INPUT_SEL_FORMATS	1
-+
-+static u32 *
-+tc358768_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
-+				   struct drm_bridge_state *bridge_state,
-+				   struct drm_crtc_state *crtc_state,
-+				   struct drm_connector_state *conn_state,
-+				   u32 output_fmt,
-+				   unsigned int *num_input_fmts)
-+{
-+	struct tc358768_priv *priv = bridge_to_tc358768(bridge);
-+	u32 *input_fmts;
-+
-+	*num_input_fmts = 0;
-+
-+	input_fmts = kcalloc(MAX_INPUT_SEL_FORMATS, sizeof(*input_fmts),
-+			     GFP_KERNEL);
-+	if (!input_fmts)
-+		return NULL;
-+
-+	switch (priv->pd_lines) {
-+	case 16:
-+		input_fmts[0] = MEDIA_BUS_FMT_RGB565_1X16;
-+		break;
-+	case 18:
-+		input_fmts[0] = MEDIA_BUS_FMT_RGB666_1X18;
-+		break;
-+	default:
-+	case 24:
-+		input_fmts[0] = MEDIA_BUS_FMT_RGB888_1X24;
-+		break;
-+	};
-+
-+	*num_input_fmts = MAX_INPUT_SEL_FORMATS;
-+
-+	return input_fmts;
-+}
-+
- static const struct drm_bridge_funcs tc358768_bridge_funcs = {
- 	.attach = tc358768_bridge_attach,
- 	.mode_valid = tc358768_bridge_mode_valid,
-@@ -925,6 +964,11 @@ static const struct drm_bridge_funcs tc358768_bridge_funcs = {
- 	.enable = tc358768_bridge_enable,
- 	.disable = tc358768_bridge_disable,
- 	.post_disable = tc358768_bridge_post_disable,
-+
-+	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-+	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
-+	.atomic_reset = drm_atomic_helper_bridge_reset,
-+	.atomic_get_input_bus_fmts = tc358768_atomic_get_input_bus_fmts,
- };
- 
- static const struct drm_bridge_timings default_tc358768_timings = {
--- 
-2.25.1
-
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
