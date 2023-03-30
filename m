@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F456D0A2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5776D0A71
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbjC3PlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S233496AbjC3PwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbjC3PlE (ORCPT
+        with ESMTP id S233482AbjC3PwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:41:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6709777;
-        Thu, 30 Mar 2023 08:41:01 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:792c:96d5:14:366a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6267D660319F;
-        Thu, 30 Mar 2023 16:40:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680190857;
-        bh=SFkEyJ2jkQipi8zjFY3ky+Bya3/h0EUtC+kLHT4AkTE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A2EtgEztlrHnrRU0BzaaBdBu07wYIDSUVOLhz5cKnhpNdHj30caOCnjt03N7xdosU
-         geikShiaIq4F2sPMSuSLzmu4IsFnfHQNxkyU8y5WrnBj+1FgKl/buOJ7Jotgea08Zb
-         neaVz4ISLQCXqoPGwmoA3bm2RnTw0aVqf6ilFGbECcajazFIIbuQ/AKtbaw9YSULs0
-         GfKL6B4GhYPb8uiQQkCo9RJqWUac0zG4yXnUwK21zSgqpt6A2ctSQwfNv6dHR8utBT
-         id/imiAlYszGIYTSd/fZeGw9prpEm6gHmaRNa+IJ2NS3CCu7MOpyWJg6MbGdf5sane
-         OIyN9ATe/gpGA==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v5 13/13] media: AV1: Make sure that bit depth in correctly initialize
-Date:   Thu, 30 Mar 2023 17:40:43 +0200
-Message-Id: <20230330154043.1250736-14-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230330154043.1250736-1-benjamin.gaignard@collabora.com>
-References: <20230330154043.1250736-1-benjamin.gaignard@collabora.com>
+        Thu, 30 Mar 2023 11:52:18 -0400
+Received: from mail-41104.protonmail.ch (mail-41104.protonmail.ch [185.70.41.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275D9E053
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:51:56 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 15:41:35 +0000
+Authentication-Results: mail-41104.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="Zy9gNGHf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1680190900; x=1680450100;
+        bh=4UQL5YU3GftVLCSKg9iIuP0+cp+0sOxbHm9DzBH9Tg8=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=Zy9gNGHfDtFL19Ml2z4VGj5D2hEpJeOKewnLCxj76Fz6YTlOfIwIPGj/g6bf/cpZe
+         OqoSfa2dUkE1qG5KJls8+BBQvsVJc1FWRdzHi6WzD0JkEsI2q3I7NTPjbAleNUb0d/
+         ZyqMUx2LL5juEOBjz18LTzwfnisHNahB0saoEzE8kWBiQlX1S25xOGzZxiud8JnV5a
+         fCC+a0LO1i8maYLYsTFr99OMLPNb/xbaiRmqefe2u2itsKBNXyldDSUrRNy5gNUS3O
+         xgr7NFpwW7L6tR7NCrWfMcebpkz17O3RnA9je3xnOnuPhX2BWySRjlasmMDosSsPE8
+         fH/v/QpA3YihQ==
+To:     Gary Guo <gary@garyguo.net>
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v3 07/13] rust: init: add `PinnedDrop` trait and macros
+Message-ID: <bf492337-1a4d-cca3-f12a-d5f4eaf742f0@protonmail.com>
+In-Reply-To: <20230330120103.2baaeb1b.gary@garyguo.net>
+References: <20230329223239.138757-1-y86-dev@protonmail.com> <20230329223239.138757-8-y86-dev@protonmail.com> <20230330120103.2baaeb1b.gary@garyguo.net>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,37 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure that bit_depth field of V4L2_CTRL_TYPE_AV1_SEQUENCE
-is initialized correctly before using it.
+On 30.03.23 13:01, Gary Guo wrote:
+> On Wed, 29 Mar 2023 22:33:24 +0000
+> y86-dev@protonmail.com wrote:
+>
+>> From: Benno Lossin <y86-dev@protonmail.com>
+>>
+>> The `PinnedDrop` trait that facilitates destruction of pinned types.
+>> It has to be implemented via the `#[pinned_drop]` macro, since the
+>> `drop` function should not be called by normal code, only by other
+>> destructors. It also only works on structs that are annotated with
+>> `#[pin_data(PinnedDrop)]`.
+>>
+>> Co-developed-by: Gary Guo <gary@garyguo.net>
+>> Signed-off-by: Gary Guo <gary@garyguo.net>
+>> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+>> ---
+>>   rust/kernel/init.rs            | 111 ++++++++++++++
+>>   rust/kernel/init/__internal.rs |  15 ++
+>>   rust/kernel/init/macros.rs     | 263 +++++++++++++++++++++++++++++++++
+>>   rust/macros/lib.rs             |  49 ++++++
+>>   rust/macros/pinned_drop.rs     |  49 ++++++
+>>   5 files changed, 487 insertions(+)
+>>   create mode 100644 rust/macros/pinned_drop.rs
+>>
+>> diff --git a/rust/kernel/init/__internal.rs b/rust/kernel/init/__interna=
+l.rs
+>> index 692942a008b3..4a3c7bf27a06 100644
+>> --- a/rust/kernel/init/__internal.rs
+>> +++ b/rust/kernel/init/__internal.rs
+>> @@ -132,3 +132,18 @@ impl<T: ?Sized> Drop for DropGuard<T> {
+>>           }
+>>       }
+>>   }
+>> +
+>> +/// Token used by `PinnedDrop` to prevent calling the function without =
+creating this unsafely
+>> +/// created struct. This is needed, because the `drop` function is safe=
+, but should not be called
+>> +/// manually.
+>> +pub struct OnlyCallFromDrop(());
+>> +
+>> +impl OnlyCallFromDrop {
+>> +    /// # Safety
+>> +    ///
+>> +    /// This function should only be called from the [`Drop::drop`] fun=
+ction and only be used to
+>> +    /// delegate the destruction to the pinned destructor [`PinnedDrop:=
+:drop`] of the same type.
+>> +    pub unsafe fn create() -> Self {
+>
+> Although this is impl detail and the name doesn't really matter, but I
+> am wondering why this is called `create` instead of just `new`.
+Not really a good reason, I associate `new()` with 'unburdened' creation
+(i.e. a safe function). Will change this.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- drivers/media/v4l2-core/v4l2-ctrls-core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+--
+Cheers,
+Benno
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 9fd37e94db17..a662fb60f73f 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -111,6 +111,7 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_vp9_frame *p_vp9_frame;
- 	struct v4l2_ctrl_fwht_params *p_fwht_params;
- 	struct v4l2_ctrl_h264_scaling_matrix *p_h264_scaling_matrix;
-+	struct v4l2_ctrl_av1_sequence *p_av1_sequence;
- 	void *p = ptr.p + idx * ctrl->elem_size;
- 
- 	if (ctrl->p_def.p_const)
-@@ -157,6 +158,10 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 		p_vp9_frame->flags |= V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING |
- 			V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING;
- 		break;
-+	case V4L2_CTRL_TYPE_AV1_SEQUENCE:
-+		p_av1_sequence = p;
-+		p_av1_sequence->bit_depth = 8;
-+		break;
- 	case V4L2_CTRL_TYPE_FWHT_PARAMS:
- 		p_fwht_params = p;
- 		p_fwht_params->version = V4L2_FWHT_VERSION;
--- 
-2.34.1
+>
+>> +        Self(())
+>> +    }
+>> +}
 
