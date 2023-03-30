@@ -2,110 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6540C6CFD09
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 848586CFD20
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjC3HlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
+        id S229510AbjC3Hmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjC3HlA (ORCPT
+        with ESMTP id S229448AbjC3Hmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:41:00 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106BD44B8;
-        Thu, 30 Mar 2023 00:40:58 -0700 (PDT)
+        Thu, 30 Mar 2023 03:42:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80A94213;
+        Thu, 30 Mar 2023 00:42:50 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id ABA6921B01;
-        Thu, 30 Mar 2023 07:40:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680162056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BKxsqFuPBiJOzp/911MeVFEqQ254isRtT/UBAD5emFQ=;
-        b=sTAn42JSwbAgamjaUYbp6+y54yG/0D5tCvLe1EAk35Y48Mnk7UsdkmVOu2kuNympONNMUv
-        XI4XZBzDBYJE2KgYltVPWCpNfPg3NcQMmw8eox7urLMBPMd205E8khnA3qaf66WIhHGAdW
-        az9nTYr3M/QZeuiGHvSRPVIWHVOsqSk=
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 98CB121B00;
+        Thu, 30 Mar 2023 07:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680162169; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=dcdGBGxLxQLdtnHwDzVvtW66/+5pqTVU2RqRlNoXsE4=;
+        b=HS5TVwF3MwExjn1RvabFUF3zDzV5HdDpiKPIHLnj3un+d7MqwJtYQ28vwgRAXUk3C16rw1
+        j4x8fW18uk+W3tBOH2FCvfFRws5zLG+vlrWIoAQqNcPnTdw0r5MPer/F4yh7KprhSpG8Be
+        hy5HgMGnRt/T5wCccKsv6qw1d8a2MnU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680162169;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=dcdGBGxLxQLdtnHwDzVvtW66/+5pqTVU2RqRlNoXsE4=;
+        b=BKcGeabqCKyWL1Lzx3puVPICoCpl9wBcoKhmNmhi3r85r3eJaEFvXNYDDph19/SoSxEn/r
+        RgjtYTrnQvuhqoDw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 83F111348E;
-        Thu, 30 Mar 2023 07:40:56 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 702071348E;
+        Thu, 30 Mar 2023 07:42:49 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id qtK5HQg9JWQUfQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 30 Mar 2023 07:40:56 +0000
-Date:   Thu, 30 Mar 2023 09:40:55 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v2 8/9] vmscan: memcg: sleep when flushing stats during
- reclaim
-Message-ID: <ZCU9ByZybEi5G5sl@dhcp22.suse.cz>
-References: <20230328221644.803272-1-yosryahmed@google.com>
- <20230328221644.803272-9-yosryahmed@google.com>
+        id CWjZGXk9JWQIfgAAMHmgww
+        (envelope-from <aherrmann@suse.de>); Thu, 30 Mar 2023 07:42:49 +0000
+From:   Andreas Herrmann <aherrmann@suse.de>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Andreas Herrmann <aherrmann@suse.de>
+Subject: [PATCH] perf bench numa: Fix for loop in do_work
+Date:   Thu, 30 Mar 2023 09:42:02 +0200
+Message-Id: <20230330074202.14052-1-aherrmann@suse.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328221644.803272-9-yosryahmed@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 28-03-23 22:16:43, Yosry Ahmed wrote:
-> Memory reclaim is a sleepable context. Allow sleeping when flushing
-> memcg stats to avoid unnecessarily performing a lot of work without
-> sleeping. This can slow down reclaim code if flushing stats is taking
-> too long, but there is already multiple cond_resched()'s in reclaim
-> code.
+j is of type int and start/end are of type long. Thus j might become
+negative and cause segfault in access_data(). Fix it by using long for
+j as well.
 
-Why is this preferred? Memory reclaim is surely a slow path but what is
-the advantage of calling mem_cgroup_flush_stats here?
+Signed-off-by: Andreas Herrmann <aherrmann@suse.de>
+---
+ tools/perf/bench/numa.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Acked-by: Shakeel Butt <shakeelb@google.com>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> ---
->  mm/vmscan.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index a9511ccb936f..9c1c5e8b24b8 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -2845,7 +2845,7 @@ static void prepare_scan_count(pg_data_t *pgdat, struct scan_control *sc)
->  	 * Flush the memory cgroup stats, so that we read accurate per-memcg
->  	 * lruvec stats for heuristics.
->  	 */
-> -	mem_cgroup_flush_stats_atomic();
-> +	mem_cgroup_flush_stats();
->  
->  	/*
->  	 * Determine the scan balance between anon and file LRUs.
-> -- 
-> 2.40.0.348.gf938b09366-goog
+Example of segfault (with 6.3.0-rc4) is:
 
+# ./perf bench numa mem -d -m -p 2 -t 12 -P 25425
+...
+ threads initialized in 6.052135 seconds.
+ #
+perf: bench/numa.c:1654: __bench_numa: Assertion `!(!(((wait_stat) & 0x7f) == 0))' failed.
+Aborted (core dumped)
+# dmesg | grep segfault
+[78812.711311] thread 1/3[43215]: segfault at 7f07936c9ec0 ip 00000000004ab6d0 sp 00007f0acb1f9cb0 error 4
+[78812.711309] thread 1/9[43221]: segfault at 7f08bda71a70 ip 00000000004ab6d0 sp 00007f0ac81f3cb0 error 4
+[78812.711316] thread 1/4[43216]: segfault at 7f07ccf76a08 ip 00000000004ab6d0 sp 00007f0aca9f8cb0 error 4
+[78812.711325] thread 1/2[43214]: segfault at 7f08be2f44b0 ip 00000000004ab6d0 sp 00007f0acb9facb0 error 4
+[78812.711328] thread 1/8[43220]: segfault at 7f06d3096b20 ip 00000000004ab6d0 sp 00007f0ac89f4cb0 error 4
+[78812.711345] thread 1/6[43218]: segfault at 7f0774b46a18 ip 00000000004ab6d0 sp 00007f0ac99f6cb0 error 4 in perf[400000+caa000] likely on CPU 6 (core 8, socket 0)
+[78812.711366] thread 0/0[43224]: segfault at 7f08a936b130 ip 00000000004ab6d0 sp 00007f0acc9fccb0 error 4 in perf[400000+caa000] likely on CPU 1 (core 1, socket 0)
+
+diff --git a/tools/perf/bench/numa.c b/tools/perf/bench/numa.c
+index 9717c6c17433..1fbd7c947abc 100644
+--- a/tools/perf/bench/numa.c
++++ b/tools/perf/bench/numa.c
+@@ -847,7 +847,7 @@ static u64 do_work(u8 *__data, long bytes, int nr, int nr_max, int loop, u64 val
+ 
+ 	if (g->p.data_rand_walk) {
+ 		u32 lfsr = nr + loop + val;
+-		int j;
++		long j;
+ 
+ 		for (i = 0; i < words/1024; i++) {
+ 			long start, end;
 -- 
-Michal Hocko
-SUSE Labs
+2.39.1
+
