@@ -2,72 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B2E6D0FEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2BE6D0FF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjC3UWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S229736AbjC3UZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjC3UWv (ORCPT
+        with ESMTP id S229521AbjC3UZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:22:51 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC20F40D3;
-        Thu, 30 Mar 2023 13:22:50 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id d10so12111876pgt.12;
-        Thu, 30 Mar 2023 13:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680207770;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OBkq6KxCtXfKvlem/Zb/2GDPHcnhhSsCCkCs5rwvqhw=;
-        b=Ze1fJTTrAjpXdOhtpMZb/pWrc+OxYU0E2dF3+BqmPVjzlrkpBGMbVVwlILNlZ/qbnv
-         mjaMFzag7RBRmgw0vQCsufH1JIGiRw7v2iYCClFpCDlDLUrU4Gswed1vjjTf2551B2t1
-         y1KP+9T+SgP7GxAskck2N2B38gAgeP1h8RqHlYUanT4Tw9NI9VV37kqbYbk8tYCZyIDs
-         wsJyTGiTuvI7HhK6m3Frln7sAMRGFQy5OYDvRxyd+y6Pt5PZs+MaAH06PlqCym4ehpQF
-         eb2c6pzclizqej8lG5CHoN5ppB5BHUhjjXI3SqPMD1NHXZxMgzz3d4SwNuVISbEIS9K6
-         2xMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680207770;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OBkq6KxCtXfKvlem/Zb/2GDPHcnhhSsCCkCs5rwvqhw=;
-        b=Pn7B98FvjaUacfgv9qdPm/ma1M/g0bOr32sd4CbsX39OSPdsFBv62v9Sibpmt/KQZW
-         p/qdaXuruyeNpPgG5oenNh01ONzuaEXUnM7ibRSv7K7QK93QL2o2mYbqYuXi8I0GOkVe
-         Y9jTwT4JPwKtziaLQ+wkCmTcaFeTDcQKmCmCPmRjKKVPP2Py58qf5rvjwlJIsHRh1rTx
-         aMrION5ahabTyya72hMypvnvpAlQt6zCpaet+U9mrHgUnGuP08JVPeIHFSv9UQtNfsQB
-         KjQ9seDdHH0YO8WQ49p0+BkW9buXzJgDv724FQojZdB0l/xNLNNWgvYj2TBf4fnfqt3C
-         gMXw==
-X-Gm-Message-State: AAQBX9eDv0yUES9iJIMu2nHUGenRzQhJsOeF9R5hk/92k0VXFNUP89p6
-        Ob1Kgb5fcI6yFkUnvj0szmz/M38wjyBEB0R0
-X-Google-Smtp-Source: AKy350a/3LDVNunLU+X2jx+/r8XTGQn4nCYK32oghDWPolROcLXTb+Xmjs+x/CZAAmduRrhpeGJD8w==
-X-Received: by 2002:a62:5246:0:b0:628:87f:6b5d with SMTP id g67-20020a625246000000b00628087f6b5dmr21039787pfb.11.1680207770173;
-        Thu, 30 Mar 2023 13:22:50 -0700 (PDT)
-Received: from lunar.aeonazure.com ([158.140.180.109])
-        by smtp.gmail.com with ESMTPSA id x22-20020aa784d6000000b0062505afff9fsm266987pfn.126.2023.03.30.13.22.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 13:22:49 -0700 (PDT)
-From:   Shaun Tancheff <shaun.tancheff@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>
-Cc:     Shaun Tancheff <shaun@tancheff.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        "stable @ vger . kernel . org . Shaun Tancheff" 
-        <shaun.tancheff@hpe.com>
-Subject: [PATCH] memcg: Set memory min, low, high values along with max
-Date:   Fri, 31 Mar 2023 03:22:32 +0700
-Message-Id: <20230330202232.355471-1-shaun.tancheff@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 30 Mar 2023 16:25:02 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF541FE7;
+        Thu, 30 Mar 2023 13:25:00 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 4D886320095E;
+        Thu, 30 Mar 2023 16:24:57 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 30 Mar 2023 16:24:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680207896; x=1680294296; bh=yo0C034vGSBxi+os4rgvPlo0nGFfVZiz3Ze
+        ZDUzAo6s=; b=nOg05TAvugjNHAwkD3hyb0R1J5DEk7CRznYnzN5yw0NWL10NJzN
+        z3M9Zh5rNeVOAa6UldhwinRCmVCMOvuD+ojq45oYGORIjyI5XQ1WFOg84piAUKpN
+        kFpdzqcxc2W/am+mqyUVlymv4StJurYHgeO5sfxQKGJqReJx6wATUzrp4tm5Qwdm
+        TXHjpFOpMt8q9ecYyh2gMjnzneF+udKQVM+ielJig/6VmcCEx8k6dOGH51fcg9ke
+        Nz42HjIOlIUIe5/QF5r8/fomql7mBzEV0Q0wkCp8iEVFj0CVhlgeiQbymcUr75Q3
+        rzjEZG4vndYKPXC66yFO+65bHaXA64vwmfA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680207896; x=1680294296; bh=yo0C034vGSBxi+os4rgvPlo0nGFfVZiz3Ze
+        ZDUzAo6s=; b=Hf4xg2ZRLnr4FEdB89FkRxOtOh1rC5R3F5xNZIAUVjgavUdhIuz
+        HUQZyUtvXtMWtMVZGzXicqTeYukba/uR54NxYldr7ULZW5nOGfVRIY84/d7KA4Gg
+        QpQeszMbTPMYpchPb5wXxykOhGFf1PBbkL7ypdo190jdDb+iG6U9sSYpGkI1kF9n
+        w63pIoFIcY7mdUbRbFIdloYFNnvG4FBHY4B5D8OLZoTD3xOCbMGChy8WYaI8J0iK
+        +8E24zKrSR0lGUd6yMZNE5EhESwA8OO638GR6KharmlgGC6NrR4E8zingV0H/96N
+        7R5CLhsdH9cmzhXqjnTl7Bq7prCE6wZVlyw==
+X-ME-Sender: <xms:GPAlZD4tEv0kJWPtH5VtIAf4tYGTLf1EjBJccF2saLX7Y7jSiRbXMg>
+    <xme:GPAlZI4TgdYB3ods2wnGosGKB_uyod2owRDdo4R9UtPSO4yYdyJyzbvaGIQSAR6nq
+    H8XNNZd-tQjzD9fnw>
+X-ME-Received: <xmr:GPAlZKc_z27p6MVM7NKX-bQj5U0EzzZDCH1Q3XrrzgsOfo9LWfAeHwhZI7cLaV4u6XZDcGHFN6K-Os6aeHA46IctXA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehledgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeetlhhi
+    tggvucfthihhlhcuoegrlhhitggvsehrhihhlhdrihhoqeenucggtffrrghtthgvrhhnpe
+    fhtdfhieejveekgfevfedvieefhfeggeeiieehhfffleeuuddugfejleelkeffieenucff
+    ohhmrghinhepughotghsrdhrshenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrlhhitggvsehrhihhlhdrihho
+X-ME-Proxy: <xmx:GPAlZEKQRSY0c1OEI-rrAwIF2llj27p3YjSMNdK7QOC2D_Mds8mD3g>
+    <xmx:GPAlZHJ8VUDv8WStv3DSvCDe-HJruiNa4cEw6qsmqXjIB4Qk9ShKIg>
+    <xmx:GPAlZNwEM0g03LaBxWN7y5KYqY1pc_A6V8O0SLKNMf9XG61Odqc-Ig>
+    <xmx:GPAlZO9feXDFAczCA-Flll0p8Hz2394nBjAVLCI81fbn8AQ6H7IAOw>
+Feedback-ID: i56684263:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Mar 2023 16:24:54 -0400 (EDT)
+Message-ID: <1c2338c5-adab-f85c-645e-44e361ef0677@ryhl.io>
+Date:   Thu, 30 Mar 2023 22:24:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 06/13] rust: init/sync: add `InPlaceInit` trait to
+ pin-initialize smart pointers
+Content-Language: en-US-large
+To:     Benno Lossin <y86-dev@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+References: <20230329223239.138757-1-y86-dev@protonmail.com>
+ <20230329223239.138757-7-y86-dev@protonmail.com>
+ <1f93a045-5bd8-e07f-cf1b-7b1196c8ab54@ryhl.io>
+ <3ea5cd8d-84ca-59bd-de50-fef185233a50@protonmail.com>
+From:   Alice Ryhl <alice@ryhl.io>
+In-Reply-To: <3ea5cd8d-84ca-59bd-de50-fef185233a50@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,43 +96,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaun Tancheff <shaun@tancheff.com>
+On 3/30/23 17:28, Benno Lossin wrote:
+> On 30.03.23 16:37, Alice Ryhl wrote:
+>> On 3/30/23 00:33, y86-dev@protonmail.com wrote:
+>>> From: Benno Lossin <y86-dev@protonmail.com>
+>>>
+>>> The `InPlaceInit` trait that provides two functions, for initializing
+>>> using `PinInit<T, E>` and `Init<T>`. It is implemented by `Arc<T>`,
+>>> `UniqueArc<T>` and `Box<T>`.
+>>>
+>>> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+>>> ---
+>>>
+>>> +/// Smart pointer that can initialize memory in-place.
+>>> +pub trait InPlaceInit<T>: Sized {
+>>> +    /// Use the given initializer to in-place initialize a `T`.
+>>> +    ///
+>>> +    /// If `T: !Unpin` it will not be able to move afterwards.
+>>> +    fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
+>>> +    where
+>>> +        Error: From<E>;
+>>> +
+>>> +    /// Use the given initializer to in-place initialize a `T`.
+>>> +    fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
+>>> +    where
+>>> +        Error: From<E>;
+>>> +}
+>>
+>> This definition is potentially rather limiting, because it can only be
+>> used with error types that can be converted into a `kernel::Error`. What
+>> do you think of this alternative?
+>>
+>> pub trait InPlaceInit<T>: Sized {
+>>        fn pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
+>>        where
+>>            E: From<AllocError>;
+>>
+>>        fn init<E>(init: impl Init<T, E>) -> Result<Self, E>
+>>        where
+>>            E: From<AllocError>;
+>> }
+> 
+> I initially implemented it like this, but it required almost always that
+> `E` is specified, I will try and see if the situation is any different now,
+> but I do not think so. In the user-space version of this API (see [1]) I
+> have four functions, normal variants that return an `AllocError` and `try`
+> variants that look exactly like what you suggested. In the kernel, we could
+> make the normal variants as they are now and add the `try` variants as you
+> described.
+> 
+> [1]: https://docs.rs/pinned-init/0.0.5/pinned_init/trait.InPlaceInit.html
+> 
+> --
+> Cheers,
+> Benno
 
-memcg-v1 does not expose memory min, low, and high.
+Ok, if my alternative causes type inference problems, then let us keep 
+the version you proposed here. We can add more variants later. (Or if 
+you want to add more now, that's also fine.)
 
-These values should to be set to reasonable non-zero values
-when max is set.
-
-This patch sets them to 10%, 20% and 80% respective to max.
-
-This fixes an issue with memory pressure with file systems
-do an unbounded high rate of I/O hitting oom.
-
-Signed-off-by: Shaun Tancheff <shaun.tancheff@hpe.com>
----
- mm/memcontrol.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 2eee092f8f11..0f5918d9dd2a 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -3491,6 +3491,15 @@ static int mem_cgroup_resize_max(struct mem_cgroup *memcg,
- 		if (max > counter->max)
- 			enlarge = true;
- 		ret = page_counter_set_max(counter, max);
-+		if (!ret && !memsw) {
-+			unsigned long min = (max / 10) + 1;
-+			unsigned long low = min * 2;
-+			unsigned long high = max - low;
-+
-+			page_counter_set_min(counter, min);
-+			page_counter_set_low(counter, low);
-+			page_counter_set_high(counter, high);
-+		}
- 		mutex_unlock(&memcg_max_mutex);
- 
- 		if (!ret)
--- 
-2.34.1
-
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
