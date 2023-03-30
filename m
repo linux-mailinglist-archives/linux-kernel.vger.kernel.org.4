@@ -2,91 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491386D0DD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0F26D0DE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbjC3Sgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 14:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
+        id S230014AbjC3Siy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 14:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbjC3Sgv (ORCPT
+        with ESMTP id S231311AbjC3Siv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 14:36:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34ABFD314;
-        Thu, 30 Mar 2023 11:36:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF5EF62152;
-        Thu, 30 Mar 2023 18:36:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16401C433D2;
-        Thu, 30 Mar 2023 18:36:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680201409;
-        bh=bDY5rMs3EMNNr0c5/9StmA62vm5rG0gFVS3lgmEhvO8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ATvrpXso0THNvABmZWz6bq2h5GqmAwXi3P9K4nAmpqXARwN+wYkFHcZP9Jw/WkK/j
-         4/DzOmXYt5GSKL+iQuVuyIk4XQ6XFCvIKvTHW5KhXfsngNi6Kp96SnxzQN2saXGBdw
-         nv9BCe0CVYEXXPM3iQOeKL50O0Mxuckkvwd0LJnYF70qnI7lYDQUymR/LOt89ZZOm7
-         bReTTt3VPmlpZ2RvgF+BviuVVRouWl81R6AON3htM9HUNCeMkVArR6JC0PahrHREMb
-         k3XMtnlpvVijIcneJjIXE8p+mnMlU3u5gtb34vAoBLyWSYbJ0QnbFOvvUUQOhFjzxi
-         qX3IiD8AwGWBw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1phx8h-004Szu-1L;
-        Thu, 30 Mar 2023 19:36:47 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH] KVM: selftests: Comment newly defined aarch64 ID registers
-Date:   Thu, 30 Mar 2023 19:36:40 +0100
-Message-Id: <168020137263.2928811.17818643951034936761.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230210-kvm-arm64-getreg-comments-v1-1-a16c73be5ab4@kernel.org>
-References: <20230210-kvm-arm64-getreg-comments-v1-1-a16c73be5ab4@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: shuah@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, broonie@kernel.org, suzuki.poulose@arm.com, oliver.upton@linux.dev, pbonzini@redhat.com, kvmarm@lists.cs.columbia.edu, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, kvmarm@lists.linux.dev
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 30 Mar 2023 14:38:51 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DDDCDDF
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:38:43 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3-20020a250b03000000b00b5f1fab9897so19729978ybl.19
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:38:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680201522;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hC7xphE3EtBy91WzkYCkbXWPSl9bqB8/LM63NgI7+lQ=;
+        b=Rp86VjhTtbp93iE09qhyXe9tIWluG5P6cBEYlVqOaJnneDY20hKvd3bQaqaRnb4TOL
+         vmzH/sXmFtdZxG2M+9Q++0uTit2Mu/bapyOpXpvkHUd+T0NMcTR94f5F6zm6UFge1eYR
+         zUX6tYNfN9U12320yxDfWC//CYcw2oPGZWNGk4P3J27RPb2yTdhvemlTV5nlKXCR/jmI
+         4ZXoeUYtFG843IZ/A9KeKUzFjGiYPwMhRj/WE4mOOa5QoN6KlzN9laV2rd5XJqPqSpYT
+         HJdt1H2p6wVIk0W7+oHoK0Ev1GsjHNwHltRk5tRznUJzQb3sumyAOCQOQNsgxj/7L1Q4
+         hy+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680201522;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hC7xphE3EtBy91WzkYCkbXWPSl9bqB8/LM63NgI7+lQ=;
+        b=JQGYAqU+qPGbpvzrULv0+a0UvedqqWbgyGIPOO4Cc3DZ7rz0JKQljEGD4mez0nAfG+
+         7Oy16Kr7koYR1g/7F2rfj2ObVi+Twtp12mBADzYjr+3I0mcoTq3l9iEnVmgCq7pbe67B
+         Z5y55yLro1ky8IU4wJCoBXYSlXaHPkr8vm39Ql1yIv+rHBybZ9EXcEUnaCjAXbwhbtyN
+         QvDcNjD0DQcMIsRgq/3nMFh6xeINNdPLYdfpKKWuyDroK5wjLWj5IC/nONyUYSpjb9qH
+         QuQovPq0nwg1h1fXn5H/Erroixj+qlCS7XZ7rLKuIhWEyf7mIhE+ygZut416aV+GOrQe
+         eVyA==
+X-Gm-Message-State: AAQBX9eNvZCL2gGMhH2qJuUuyIms3jklctSAi9pUhmBhgtiiQtKmTpFf
+        r9DfVfS77wlT7YK+YLsqzX5+NWGFeFLW
+X-Google-Smtp-Source: AKy350abJFHAnAEKlC7Gh5kAzxSv64hHJ7ElsSSCg9WwTxhyjA3AqRNnx1ijXVWK301wTZltcyPsg2EuInve
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:11ea:eb75:e48c:2c04])
+ (user=irogers job=sendgmr) by 2002:a81:af18:0:b0:541:7f7b:a2ff with SMTP id
+ n24-20020a81af18000000b005417f7ba2ffmr12145934ywh.8.1680201522628; Thu, 30
+ Mar 2023 11:38:42 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 11:38:25 -0700
+Message-Id: <20230330183827.1412303-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Subject: [PATCH v1 1/3] perf bench: Avoid NDEBUG warning
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Mar 2023 16:15:07 +0000, Mark Brown wrote:
-> All otherwise unspecified aarch64 ID registers should be read as zero so
-> we cover the whole ID register space in the get-reg-list test but we've
-> added comments for those that have been named. Add comments for
-> ID_AA64PFR2_EL1, ID_AA64SMFR0_EL1, ID_AA64ISAR2_EL1, ID_AA64MMFR3_EL1
-> and ID_AA64MMFR4_EL1 which have been defined since the comments were
-> added so someone looking for them will see that they are covered.
+With NDEBUG set the asserts are compiled out. This yields
+"unused-but-set-variable" variables. Move these variables behind
+NDEBUG to avoid the warning.
 
-Applied to next, thanks!
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/bench/find-bit-bench.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-[1/1] KVM: selftests: Comment newly defined aarch64 ID registers
-      commit: 767cc0501bbb51f2daad35d1bc4f6eaa857ed057
-
-Cheers,
-
-	M.
+diff --git a/tools/perf/bench/find-bit-bench.c b/tools/perf/bench/find-bit-bench.c
+index d103c3136983..7e25b0e413f6 100644
+--- a/tools/perf/bench/find-bit-bench.c
++++ b/tools/perf/bench/find-bit-bench.c
+@@ -61,7 +61,6 @@ static int do_for_each_set_bit(unsigned int num_bits)
+ 	double time_average, time_stddev;
+ 	unsigned int bit, i, j;
+ 	unsigned int set_bits, skip;
+-	unsigned int old;
+ 
+ 	init_stats(&fb_time_stats);
+ 	init_stats(&tb_time_stats);
+@@ -73,7 +72,10 @@ static int do_for_each_set_bit(unsigned int num_bits)
+ 			__set_bit(i, to_test);
+ 
+ 		for (i = 0; i < outer_iterations; i++) {
+-			old = accumulator;
++#ifndef NDEBUG
++			unsigned int old = accumulator;
++#endif
++
+ 			gettimeofday(&start, NULL);
+ 			for (j = 0; j < inner_iterations; j++) {
+ 				for_each_set_bit(bit, to_test, num_bits)
+@@ -85,7 +87,9 @@ static int do_for_each_set_bit(unsigned int num_bits)
+ 			runtime_us = diff.tv_sec * USEC_PER_SEC + diff.tv_usec;
+ 			update_stats(&fb_time_stats, runtime_us);
+ 
++#ifndef NDEBUG
+ 			old = accumulator;
++#endif
+ 			gettimeofday(&start, NULL);
+ 			for (j = 0; j < inner_iterations; j++) {
+ 				for (bit = 0; bit < num_bits; bit++) {
 -- 
-Without deviation from the norm, progress is not possible.
-
+2.40.0.348.gf938b09366-goog
 
