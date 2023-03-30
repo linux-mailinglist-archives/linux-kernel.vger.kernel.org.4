@@ -2,200 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17096D080A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067DE6D080D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbjC3OVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
+        id S232486AbjC3OVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbjC3OUt (ORCPT
+        with ESMTP id S232477AbjC3OVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:20:49 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDB3BB8E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:20:47 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2ECB76603188;
-        Thu, 30 Mar 2023 15:20:46 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680186046;
-        bh=eZ/KgEJ3/NtZRipFLNfrQ0jkavJVDGo3ZnqqWIgjfIo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J6eT9hopJTfhMn18I6oYzTmUvqzKs9vpBPbgqF+fdtu07yw0ynkbWdjWHyPuL3UU/
-         U1+dQxHJeYgxp8f1RgMMd8xdqLEy/ZyckdVQ76gyCZp+RLx44/v0LZF1FOGjsXZ37l
-         ISC4MY4EgB+xvKC1hWdanMhrrhPx3/D889LgWNuqmjC81Exa1CGvh84e7AhXKa/R+t
-         2bNxMulH4r6fZJF+9KdEPHJHYygNVyJqATnz8FrfK2WUhoExVBi6mXZXIxmraHpbDj
-         BlUBvN9AaVujKIKBfTe6+jZTfs3vQmQLSAYlTQx7GCUgbOFM0NEGHRwd87c/QxOcE9
-         /pbZfV4lK7Nbw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     chunkuang.hu@kernel.org
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        wenst@chromium.org
-Subject: [PATCH v2 8/8] drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
-Date:   Thu, 30 Mar 2023 16:20:35 +0200
-Message-Id: <20230330142035.191399-9-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230330142035.191399-1-angelogioacchino.delregno@collabora.com>
-References: <20230330142035.191399-1-angelogioacchino.delregno@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 30 Mar 2023 10:21:24 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24311CC21;
+        Thu, 30 Mar 2023 07:21:04 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id t19so18546541qta.12;
+        Thu, 30 Mar 2023 07:21:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680186063; x=1682778063;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HNzyLbcT71SZ0Q6C/jWoJ0Cg7eh1oszsRyaIyb92T8k=;
+        b=BFe15+bYWhXYvY4GorsLIlwPLJW5nVfpu9uDVTkB7uvDcSzbN8oAcwMjQPN4veK8sw
+         fnk9zwpwb8ZqQCzkLIJ54iaS9GTt6ODBlG56Nj6ND12/sMHVKH2mm5bN1eWC4E0jr0rv
+         jvvKarogQYQ8FHyPkqW62qjBGVkd7T0+qyGALdadbjwHes9Uh91LCp+hyqNQP8hHzetd
+         K7zESzqhh4KL/qfAGuuHkhaqBKo4msp8II7jBfdQuJzmsoyCyHKGEEKpwstulRUrsOU1
+         N4Pl1CyEkD+R9a1Fxnbq7F6RxfHm6ep+6URL8bOJpcVKLFlQ2p8Oh6+2ZlXSyY8hByx0
+         Jf6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680186063; x=1682778063;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HNzyLbcT71SZ0Q6C/jWoJ0Cg7eh1oszsRyaIyb92T8k=;
+        b=ovQ6Exlmmu58ivQYR3adg8n6+SaS3hTUrmLWcFcYCz3VHhGosSey7KmLinIGstStT/
+         R9twUr+Lis7X+TUT9CoJUvYxa/iGUJojluYpm4HzUuLMreiaf2VClP/2fz1ii96SDZRs
+         Ne/1diR5f092DLJPKxS5bfUJZeKZaANW3YCOwuDfCeYTNHDikzgtbtFsSssDgHPGg3xV
+         DdMAWWKgpPAtfQtlHTTIAUotNK4KwoSBH0kNYZaC3AuIVPhuiUNGW40mUD46AEDOwiIm
+         jy3MI4Bopiz46MGQ4CbO6yC3ki7I9oYgX7V/BCW4w4OMDnKIg0/Ae6oXHz2WURWHwogl
+         1Pbg==
+X-Gm-Message-State: AO0yUKWgG2rpqHF1/uXP9a5lA/9MjrNuDSnMiLaYHGrNQB1cibUqUpD2
+        ywRwEPig2liYwmV/jJvwL/UN37TLoPM=
+X-Google-Smtp-Source: AK7set/bWzjtAA65AERRinPes69F2ViUXErn9DbBsEtdGoGYHHSER9u9vaEhBqPpA48BKj/KhCrS9A==
+X-Received: by 2002:ac8:58c6:0:b0:3e3:9199:d27 with SMTP id u6-20020ac858c6000000b003e391990d27mr38956546qta.53.1680186063638;
+        Thu, 30 Mar 2023 07:21:03 -0700 (PDT)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id e16-20020ac86710000000b003ba2a15f93dsm10300408qtp.26.2023.03.30.07.20.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 07:20:59 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 10:20:58 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Message-ID: <64259aca22046_21883920890@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20230329141354.516864-17-dhowells@redhat.com>
+References: <20230329141354.516864-1-dhowells@redhat.com>
+ <20230329141354.516864-17-dhowells@redhat.com>
+Subject: RE: [RFC PATCH v2 16/48] ip, udp: Support MSG_SPLICE_PAGES
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the eDP case we can support using aux-bus on MediaTek DP: this
-gives us the possibility to declare our panel as generic "panel-edp"
-which will automatically configure the timings and available modes
-via the EDID that we read from it.
+David Howells wrote:
+> Make IP/UDP sendmsg() support MSG_SPLICE_PAGES.  This causes pages to be
+> spliced from the source iterator if possible (the iterator must be
+> ITER_BVEC and the pages must be spliceable).
+> 
+> This allows ->sendpage() to be replaced by something that can handle
+> multiple multipage folios in a single transaction.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+> cc: "David S. Miller" <davem@davemloft.net>
+> cc: Eric Dumazet <edumazet@google.com>
+> cc: Jakub Kicinski <kuba@kernel.org>
+> cc: Paolo Abeni <pabeni@redhat.com>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: netdev@vger.kernel.org
+> ---
+>  net/ipv4/ip_output.c | 85 +++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 81 insertions(+), 4 deletions(-)
+> 
+> diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
 
-To do this, move the panel parsing at the end of the probe function
-so that the hardware is initialized beforehand and also power it on
-as, when we populate the aux-bus, the panel driver will trigger an
-EDID read as panel detection.
+A non-RFC version would require the same for ipv6, of course.
 
-**** CUT ****
-Also, since the DP IP will always trigger a HPD interrupt at this
-stage, it was necessary to add a new `bridge_attached` member to
-the mtk_dp structure to make sure that `drm_helper_hpd_irq_event()`
-will not be called before the bridge gets actually attached, or
-otherwise we will get a NULL pointer KP due to mtk_dp->bridge.dev
-being uninitialized.
-**** CUT ****
+> index 4e4e308c3230..07736da70eab 100644
+> --- a/net/ipv4/ip_output.c
+> +++ b/net/ipv4/ip_output.c
+> @@ -973,11 +973,11 @@ static int __ip_append_data(struct sock *sk,
+>  	int hh_len;
+>  	int exthdrlen;
+>  	int mtu;
+> -	int copy;
+> +	ssize_t copy;
+>  	int err;
+>  	int offset = 0;
+>  	bool zc = false;
+> -	unsigned int maxfraglen, fragheaderlen, maxnonfragsize;
+> +	unsigned int maxfraglen, fragheaderlen, maxnonfragsize, xlength;
 
-Last but not least, since now the AUX transfers can happen in the
-separated aux-bus, it was necessary to add an exclusion for the
-cable_plugged_in check in `mtk_dp_aux_transfer()` and the easiest
-way to do this is to simply ignore checking that when the bridge
-type is eDP.
+Does x here stand for anything?
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/gpu/drm/mediatek/mtk_dp.c | 56 +++++++++++++++++++++++++------
- 1 file changed, 46 insertions(+), 10 deletions(-)
+>  	int csummode = CHECKSUM_NONE;
+>  	struct rtable *rt = (struct rtable *)cork->dst;
+>  	unsigned int wmem_alloc_delta = 0;
+> @@ -1017,6 +1017,7 @@ static int __ip_append_data(struct sock *sk,
+>  	    (!exthdrlen || (rt->dst.dev->features & NETIF_F_HW_ESP_TX_CSUM)))
+>  		csummode = CHECKSUM_PARTIAL;
+>  
+> +	xlength = length;
+>  	if ((flags & MSG_ZEROCOPY) && length) {
+>  		struct msghdr *msg = from;
+>  
+> @@ -1047,6 +1048,14 @@ static int __ip_append_data(struct sock *sk,
+>  				skb_zcopy_set(skb, uarg, &extra_uref);
+>  			}
+>  		}
+> +	} else if ((flags & MSG_SPLICE_PAGES) && length) {
+> +		struct msghdr *msg = from;
+> +
+> +		if (inet->hdrincl)
+> +			return -EPERM;
+> +		if (!(rt->dst.dev->features & NETIF_F_SG))
+> +			return -EOPNOTSUPP;
+> +		xlength = transhdrlen; /* We need an empty buffer to attach stuff to */
+>  	}
+>  
+>  	cork->length += length;
+> @@ -1074,6 +1083,50 @@ static int __ip_append_data(struct sock *sk,
+>  			unsigned int alloclen, alloc_extra;
+>  			unsigned int pagedlen;
+>  			struct sk_buff *skb_prev;
+> +
+> +			if (unlikely(flags & MSG_SPLICE_PAGES)) {
+> +				skb_prev = skb;
+> +				fraggap = skb_prev->len - maxfraglen;
+> +
+> +				alloclen = fragheaderlen + hh_len + fraggap + 15;
+> +				skb = sock_wmalloc(sk, alloclen, 1, sk->sk_allocation);
+> +				if (unlikely(!skb)) {
+> +					err = -ENOBUFS;
+> +					goto error;
+> +				}
+> +
+> +				/*
+> +				 *	Fill in the control structures
+> +				 */
+> +				skb->ip_summed = CHECKSUM_NONE;
+> +				skb->csum = 0;
+> +				skb_reserve(skb, hh_len);
+> +
+> +				/*
+> +				 *	Find where to start putting bytes.
+> +				 */
+> +				skb_put(skb, fragheaderlen + fraggap);
+> +				skb_reset_network_header(skb);
+> +				skb->transport_header = (skb->network_header +
+> +							 fragheaderlen);
+> +				if (fraggap) {
+> +					skb->csum = skb_copy_and_csum_bits(
+> +						skb_prev, maxfraglen,
+> +						skb_transport_header(skb),
+> +						fraggap);
+> +					skb_prev->csum = csum_sub(skb_prev->csum,
+> +								  skb->csum);
+> +					pskb_trim_unique(skb_prev, maxfraglen);
+> +				}
+> +
+> +				/*
+> +				 * Put the packet on the pending queue.
+> +				 */
+> +				__skb_queue_tail(&sk->sk_write_queue, skb);
+> +				continue;
+> +			}
+> +			xlength = length;
+> +
+>  alloc_new_skb:
+>  			skb_prev = skb;
+>  			if (skb_prev)
+> @@ -1085,7 +1138,7 @@ static int __ip_append_data(struct sock *sk,
+>  			 * If remaining data exceeds the mtu,
+>  			 * we know we need more fragment(s).
+>  			 */
+> -			datalen = length + fraggap;
+> +			datalen = xlength + fraggap;
+>  			if (datalen > mtu - fragheaderlen)
+>  				datalen = maxfraglen - fragheaderlen;
+>  			fraglen = datalen + fragheaderlen;
+> @@ -1099,7 +1152,7 @@ static int __ip_append_data(struct sock *sk,
+>  			 * because we have no idea what fragment will be
+>  			 * the last.
+>  			 */
+> -			if (datalen == length + fraggap)
+> +			if (datalen == xlength + fraggap)
+>  				alloc_extra += rt->dst.trailer_len;
+>  
+>  			if ((flags & MSG_MORE) &&
+> @@ -1206,6 +1259,30 @@ static int __ip_append_data(struct sock *sk,
+>  				err = -EFAULT;
+>  				goto error;
+>  			}
+> +		} else if (flags & MSG_SPLICE_PAGES) {
+> +			struct msghdr *msg = from;
+> +			struct page *page = NULL, **pages = &page;
+> +			size_t off;
+> +
+> +			copy = iov_iter_extract_pages(&msg->msg_iter, &pages,
+> +						      copy, 1, 0, &off);
+> +			if (copy <= 0) {
+> +				err = copy ?: -EIO;
+> +				goto error;
+> +			}
+> +
+> +			err = skb_append_pagefrags(skb, page, off, copy);
+> +			if (err < 0)
+> +				goto error;
+> +
+> +			if (skb->ip_summed == CHECKSUM_NONE) {
+> +				__wsum csum;
+> +				csum = csum_page(page, off, copy);
+> +				skb->csum = csum_block_add(skb->csum, csum, skb->len);
+> +			}
+> +
+> +			skb_len_add(skb, copy);
+> +			refcount_add(copy, &sk->sk_wmem_alloc);
+>  		} else if (!zc) {
+>  			int i = skb_shinfo(skb)->nr_frags;
+>  
+> 
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-index 62d53c4b3feb..f62ef24db67d 100644
---- a/drivers/gpu/drm/mediatek/mtk_dp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-@@ -4,6 +4,7 @@
-  * Copyright (c) 2022 BayLibre
-  */
- 
-+#include <drm/display/drm_dp_aux_bus.h>
- #include <drm/display/drm_dp.h>
- #include <drm/display/drm_dp_helper.h>
- #include <drm/drm_atomic_helper.h>
-@@ -2041,7 +2042,8 @@ static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
- 
- 	mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
- 
--	if (!mtk_dp->train_info.cable_plugged_in) {
-+	if (mtk_dp->bridge.type != DRM_MODE_CONNECTOR_eDP &&
-+	    !mtk_dp->train_info.cable_plugged_in) {
- 		ret = -EAGAIN;
- 		goto err;
- 	}
-@@ -2153,6 +2155,11 @@ static int mtk_dp_bridge_attach(struct drm_bridge *bridge,
- 	enable_irq(mtk_dp->irq);
- 	mtk_dp_hwirq_enable(mtk_dp, true);
- 
-+	if (mtk_dp->bridge.type == DRM_MODE_CONNECTOR_eDP /* && panel_on_aux_bus() */) {
-+		mtk_dp->train_info.cable_plugged_in = true;
-+		drm_helper_hpd_irq_event(mtk_dp->drm_dev);
-+	}
-+
- 	return 0;
- 
- err_bridge_attach:
-@@ -2482,6 +2489,20 @@ static int mtk_dp_register_audio_driver(struct device *dev)
- 	return PTR_ERR_OR_ZERO(mtk_dp->audio_pdev);
- }
- 
-+static int mtk_dp_edp_link_panel(struct drm_dp_aux *mtk_aux)
-+{
-+	struct mtk_dp *mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
-+	struct device *dev = mtk_aux->dev;
-+	struct drm_bridge *panel_aux_bridge;
-+
-+	panel_aux_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
-+	if (IS_ERR(panel_aux_bridge))
-+		return PTR_ERR(panel_aux_bridge);
-+
-+	mtk_dp->next_bridge = panel_aux_bridge;
-+	return 0;
-+}
-+
- static int mtk_dp_probe(struct platform_device *pdev)
- {
- 	struct mtk_dp *mtk_dp;
-@@ -2500,21 +2521,14 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, mtk_dp->irq,
- 				     "failed to request dp irq resource\n");
- 
--	mtk_dp->next_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
--	if (IS_ERR(mtk_dp->next_bridge) &&
--	    PTR_ERR(mtk_dp->next_bridge) == -ENODEV)
--		mtk_dp->next_bridge = NULL;
--	else if (IS_ERR(mtk_dp->next_bridge))
--		return dev_err_probe(dev, PTR_ERR(mtk_dp->next_bridge),
--				     "Failed to get bridge\n");
--
- 	ret = mtk_dp_dt_parse(mtk_dp, pdev);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to parse dt\n");
- 
--	drm_dp_aux_init(&mtk_dp->aux);
- 	mtk_dp->aux.name = "aux_mtk_dp";
-+	mtk_dp->aux.dev = dev;
- 	mtk_dp->aux.transfer = mtk_dp_aux_transfer;
-+	drm_dp_aux_init(&mtk_dp->aux);
- 
- 	spin_lock_init(&mtk_dp->irq_thread_lock);
- 
-@@ -2570,6 +2584,28 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 	mtk_dp->need_debounce = true;
- 	timer_setup(&mtk_dp->debounce_timer, mtk_dp_debounce_timer, 0);
- 
-+	if (mtk_dp->bridge.type == DRM_MODE_CONNECTOR_eDP) {
-+		/* Need to power on HW because aux-bus will read EDID */
-+		mtk_dp_aux_panel_poweron(mtk_dp, true);
-+
-+		ret = devm_of_dp_aux_populate_bus(&mtk_dp->aux, NULL);
-+
-+		/* Power off AUX and panel now as detection is done. */
-+		mtk_dp_aux_panel_poweron(mtk_dp, false);
-+
-+		/* We ignore -ENODEV error, as the panel may not be on aux-bus */
-+		if (ret && ret != -ENODEV)
-+			return ret;
-+
-+		/*
-+		 * Here we don't ignore any error, as if there's no panel to
-+		 * link, eDP is not configured correctly and will be unusable.
-+		 */
-+		ret = mtk_dp_edp_link_panel(&mtk_dp->aux);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 
--- 
-2.40.0
-
+This does add a lot of code to two functions that are already
+unwieldy. It may be unavoidable, but it if can use helpers, that would
+be preferable.
