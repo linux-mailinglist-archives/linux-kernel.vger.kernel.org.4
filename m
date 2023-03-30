@@ -2,134 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AB96D0ECB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A09A6D0ED2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbjC3T2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 15:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
+        id S231796AbjC3TaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 15:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbjC3T2L (ORCPT
+        with ESMTP id S229902AbjC3TaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:28:11 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB68FF2F;
-        Thu, 30 Mar 2023 12:28:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=hSsnOko9sGhkX9GeGg7lRAXU38w+ZJny3hsOl+XpUFI=; b=Az7EnUEBQ0lDG3OS4izH9AEY5X
-        pCtOwKJ09t5440CpQF/K+16nluRB59Z6erAqx4yLXXN8M1b74e7zvGqVlVa2CnhiL7oLZCWHcMjBR
-        aptzDwOSSsCkR6m9uYyai5JKHDTZOYtHAbbbLCydbX1xa6CWqvvlKKDKWaO6dFEXJqq7sgZRJxT/o
-        WXeW0hVoGES7aTSdY1MRDl0mJo7Pks5wUW/JY5rdZr5Cl/+iHhaGOOkeS6Kwv62CdWnADvxg+Fa+b
-        nMRahIf3avBY32LiXzBSOHJn+pGW/Nz7GvUgNVb96ltkOAgmrWiDdV6IOcLOjHXIUjsQi5PTxjsQQ
-        9j8kWmnw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1phxwH-004vIK-0g;
-        Thu, 30 Mar 2023 19:28:01 +0000
-Message-ID: <97d745be-afb4-dfc0-5eeb-20d86e407cf4@infradead.org>
-Date:   Thu, 30 Mar 2023 12:28:00 -0700
+        Thu, 30 Mar 2023 15:30:20 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4FA5B82
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:30:18 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id l7-20020a4abe07000000b0053e1205c84bso2781934oop.9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1680204618;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Khpw7ou3XcOkEyyu20b7pCpZUxpOS3o1zWL8rB8cIWg=;
+        b=EBZ5RSwu7qAxwJOxXP+VV5tCHAvd597imHWQHEOpyHjV99Yma2yYj2+GVrBE3CvEYu
+         j8GOYLIo/8V6p01dDFwWDz0SuE7pJ9ps3e/uuV/vrp+Efny6FMlE8BM6+lrA9yui5XXy
+         BP6sOtWFiXcCali8wq+wJ3ZeGb16MFGin5/zucLqAsEfB6IkgmUZYUNLVZS0o4LTsQYV
+         p4WDiyCZ5dD1Xl6y5Lz0GhJWbb1bQHZ85QIJV0Hj8hcm7nUsFbYsfBttw01lkBWhwMDp
+         adaoaJrHF1Tqpn0MyPd0QZKQohCtbf0gRnsrAsPTFufImEuTtaA7mENwlPt7Do/NeuEl
+         4V8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680204618;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Khpw7ou3XcOkEyyu20b7pCpZUxpOS3o1zWL8rB8cIWg=;
+        b=yydrjn8XEwSmsRGnSD9DrUB5y0C6VsnbyOj+UkAC7rbTvRxDgjP8WPv4QYemzEWiYw
+         kpelKyrDhUYTkM7eHlhYdrbFnr9nN4vWZQR7b5tkY8NQWkJbCQcSkfyC09f6OubIIK0V
+         JW5nYerIVU5aKGTygWKqQRU1WC6vs4HbWlwF9V1XROJMxHfa+bsERCQjXYhlElV1wHMf
+         Ni+DfZBwplPZObSQ1SZpy8cJy4YvM/HCGBlEsPSXnPGccEaxWVoDU4oZaJ+Sljeemk97
+         TeEY/6bOp4AgNtsP1tvPTqKVGLd1TF76a9pcuUtxBaK+hNep8FLbEFdlt1KKY+vA4r5i
+         TpbQ==
+X-Gm-Message-State: AO0yUKU1vBFWb1QuvC4KuJ1HwaJqzxx6bD8mh7sxuEr1EJR3OdLbxxUL
+        XszHfnzhh5dbDfTgRteQD0lCwA==
+X-Google-Smtp-Source: AK7set8ZpEUnr0vsSLvX76E+UiWGEN8KrfPFawZyGwI6bQmQYsusk8/LecZTtUIeYJN+T8sl467z8w==
+X-Received: by 2002:a4a:558f:0:b0:534:c237:eb00 with SMTP id e137-20020a4a558f000000b00534c237eb00mr11810755oob.3.1680204618144;
+        Thu, 30 Mar 2023 12:30:18 -0700 (PDT)
+Received: from localhost ([107.116.82.97])
+        by smtp.gmail.com with ESMTPSA id 2-20020a4a0302000000b005251f71250dsm13103ooi.37.2023.03.30.12.30.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 12:30:17 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 15:30:13 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH v3 5/8] memcg: sleep during flushing stats in safe
+ contexts
+Message-ID: <ZCXjRYASA+Cjomlx@cmpxchg.org>
+References: <20230330191801.1967435-1-yosryahmed@google.com>
+ <20230330191801.1967435-6-yosryahmed@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 7/7] serial: allow COMPILE_TEST for some drivers
-Content-Language: en-US
-To:     Jiri Slaby <jslaby@suse.cz>, gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220421101708.5640-1-jslaby@suse.cz>
- <20220421101708.5640-8-jslaby@suse.cz>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220421101708.5640-8-jslaby@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330191801.1967435-6-yosryahmed@google.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiri,
-
-On 4/21/22 03:17, Jiri Slaby wrote:
-> Some more serial drivers can be compile-tested under certain
-> circumstances (when building a specific architecture). So allow for
-> that.
+On Thu, Mar 30, 2023 at 07:17:58PM +0000, Yosry Ahmed wrote:
+> Currently, all contexts that flush memcg stats do so with sleeping not
+> allowed. Some of these contexts are perfectly safe to sleep in, such as
+> reading cgroup files from userspace or the background periodic flusher.
+> Flushing is an expensive operation that scales with the number of cpus
+> and the number of cgroups in the system, so avoid doing it atomically
+> where possible.
 > 
-> This reduces the need of zillion mach/subarch-specific configs. And
-> since the 0day bot has only allmodconfig's for some archs, this
-> increases build coverage there too.
+> Refactor the code to make mem_cgroup_flush_stats() non-atomic (aka
+> sleepable), and provide a separate atomic version. The atomic version is
+> used in reclaim, refault, writeback, and in mem_cgroup_usage(). All
+> other code paths are left to use the non-atomic version. This includes
+> callbacks for userspace reads and the periodic flusher.
 > 
-> Note that cpm needs a minor update in the header, so that it drags in
-> at least some defines (CPM2 ones).
+> Since refault is the only caller of mem_cgroup_flush_stats_ratelimited(),
+> change it to mem_cgroup_flush_stats_atomic_ratelimited(). Reclaim and
+> refault code paths are modified to do non-atomic flushing in separate
+> later patches -- so it will eventually be changed back to
+> mem_cgroup_flush_stats_ratelimited().
 > 
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> ---
->  drivers/tty/serial/Kconfig             | 6 +++---
->  drivers/tty/serial/cpm_uart/cpm_uart.h | 2 ++
->  2 files changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> index 20cb103972fa..2d3eed53b43e 100644
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -782,7 +782,7 @@ config SERIAL_PMACZILOG_CONSOLE
->  
->  config SERIAL_CPM
->  	tristate "CPM SCC/SMC serial port support"
-> -	depends on CPM2 || CPM1
-> +	depends on CPM2 || CPM1 || (PPC32 && COMPILE_TEST)
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
+> Acked-by: Michal Hocko <mhocko@suse.com>
 
-
-This patch (now commit e3e7b13bffae) causes build errors
-when neither CPM1 nor CPM2 is set but PPC32=y and COMPILE_TEST=y:
-
-ERROR: modpost: "cpm_uart_freebuf" [drivers/tty/serial/cpm_uart/cpm_uart.ko] undefined!
-ERROR: modpost: "cpm_uart_allocbuf" [drivers/tty/serial/cpm_uart/cpm_uart.ko] undefined!
-ERROR: modpost: "cpm_line_cr_cmd" [drivers/tty/serial/cpm_uart/cpm_uart.ko] undefined!
-ERROR: modpost: "__cpm2_setbrg" [drivers/tty/serial/cpm_uart/cpm_uart.ko] undefined!
-ERROR: modpost: "cpm_uart_unmap_pram" [drivers/tty/serial/cpm_uart/cpm_uart.ko] undefined!
-ERROR: modpost: "cpm_uart_map_pram" [drivers/tty/serial/cpm_uart/cpm_uart.ko] undefined!
-
->  	select SERIAL_CORE
->  	help
->  	  This driver supports the SCC and SMC serial ports on Motorola 
-> @@ -806,7 +806,7 @@ config SERIAL_CPM_CONSOLE
->  
->  config SERIAL_PIC32
->  	tristate "Microchip PIC32 serial support"
-> -	depends on MACH_PIC32
-> +	depends on MACH_PIC32 || (MIPS && COMPILE_TEST)
->  	select SERIAL_CORE
->  	help
->  	  If you have a PIC32, this driver supports the serial ports.
-> @@ -1246,7 +1246,7 @@ config SERIAL_XILINX_PS_UART_CONSOLE
->  
->  config SERIAL_AR933X
->  	tristate "AR933X serial port support"
-> -	depends on HAVE_CLK && ATH79
-> +	depends on (HAVE_CLK && ATH79) || (MIPS && COMPILE_TEST)
->  	select SERIAL_CORE
->  	select SERIAL_MCTRL_GPIO if GPIOLIB
->  	help
-> diff --git a/drivers/tty/serial/cpm_uart/cpm_uart.h b/drivers/tty/serial/cpm_uart/cpm_uart.h
-> index 6113b953ce25..8c582779cf22 100644
-> --- a/drivers/tty/serial/cpm_uart/cpm_uart.h
-> +++ b/drivers/tty/serial/cpm_uart/cpm_uart.h
-> @@ -19,6 +19,8 @@ struct gpio_desc;
->  #include "cpm_uart_cpm2.h"
->  #elif defined(CONFIG_CPM1)
->  #include "cpm_uart_cpm1.h"
-> +#elif defined(CONFIG_COMPILE_TEST)
-> +#include "cpm_uart_cpm2.h"
->  #endif
->  
->  #define SERIAL_CPM_MAJOR	204
-
--- 
-~Randy
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
