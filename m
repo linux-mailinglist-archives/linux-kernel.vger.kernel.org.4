@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B746D089A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D726D08AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbjC3OqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
+        id S229694AbjC3OtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjC3OqQ (ORCPT
+        with ESMTP id S231322AbjC3Os6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:46:16 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203407D91
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:46:14 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id h25so24832963lfv.6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:46:14 -0700 (PDT)
+        Thu, 30 Mar 2023 10:48:58 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330769ED8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:48:54 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id o32so11088052wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:48:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680187572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z1Fjh5ZtqQhB8d4/UD1BbNRwfMP9z+fQO4XHd2yct5U=;
-        b=kmvvP0cwtzzFxAvMqLvXH+s/VC+SKGkFg2H9qYkC3jx469rq/SPWGs5V5BeETD3HxG
-         9I0y29h599gCXvjsSzSDDpnuhyrmc5vvDXAHMSfJyS3wcJlFzfCz+r/TRK45n4Po+5ed
-         e3uX2U7KVAUDZe7syaKG285CUJuUkew2bbItTPl5lBCCM9LwnJ7mARm7h/FnYclzf1p7
-         FXUhoFfuZ4IszPxhGmrGT2FjZkVb6gFO1spR6jp+0e82/QtTzF4y/pJldPmqqwthduM4
-         iYjBhtPmSh+uA2j9fQ2N3MLA5KarV14tJCORHNulgOfUBurdj9i2/Zn8x4gkJ4UXUha8
-         SmgQ==
+        d=google.com; s=20210112; t=1680187733;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p4OohPlRc6cXjWGAaBe3MyDvgleJXKEjuRcyG613iUs=;
+        b=p/TPCRpMTv8kROX09sg6YeUktmFZjYDMcsPXN6YJout4HuGxMo58ztuU++660YaJSc
+         Y2O7JDveKuEUcCXMtWmfF1PTzyskoQOgylg2tNPOYBcMJdMcrKvVCT3dfz2xxc07vBcc
+         4rETFmDM+8V0bCu6QWETcs+qXQrTYkBFCiBLr5lXTzLdY85KE4L1Xv5/Ym7BBqggda06
+         jxAlObFWDE0AZChQ0q0wRxb/r7XUayqb0QrsuoLb10RoWzHelWS3R9wdER0wsEP51KR3
+         CGOGNTyzu6z7KbdJDbl5NPTYEVN6H+v/N2Xg7SmIIVMj9zMJnvVlPzv7st4tKjruiIZi
+         rwNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680187572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z1Fjh5ZtqQhB8d4/UD1BbNRwfMP9z+fQO4XHd2yct5U=;
-        b=tt5dlXqHtPhjXXBWuklRxALG/pnWN1FnKxMi7A1/VAzd+KxpwbdySxEQhe+Pbo+fX1
-         OYH6nRIdH1FeeoUC7NFF3YZEi49RoKdNjxd/gryHG91InryTZjmSNKK0+Ux3h/dH2Z7r
-         eh6+Zy14h0lk9D5BsAIdRXI+CiFWTA44c6+2sXjaH1hx1bBb90b73M4bll9/zN9pyqYK
-         nGGEunt6Kan5OzEa0plXC7zkwdrDIQl8Q+q3BPn+xekzEXHlNdEHb7hAZK2a0J6NQYu0
-         ina0GuVGJSut1rIVIyPw6HDZCpi5IlzZ9Z5wLnewQCchnkOclZ9uBcN8xsUy+OyMYHn+
-         IYtA==
-X-Gm-Message-State: AAQBX9d2zxJvP1orLghQjoDTwt8qByNmROrMwpCd/HaL1dGpiZnMlZid
-        Qf3p5yooHdNrAHTD5Gl8U1exSw==
-X-Google-Smtp-Source: AKy350YiLWbNsV5anB2e8tcq75HozfrseDABH+uyqe4bp+uO++luAoeVQZ+C37X7sNCsVJg5DEggBQ==
-X-Received: by 2002:ac2:515e:0:b0:4e2:cb9:e266 with SMTP id q30-20020ac2515e000000b004e20cb9e266mr6799001lfd.50.1680187572387;
-        Thu, 30 Mar 2023 07:46:12 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id n1-20020ac24901000000b004eb0c18efc2sm2230035lfi.221.2023.03.30.07.46.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 07:46:11 -0700 (PDT)
-Message-ID: <420495f8-b894-1665-bbc3-f5cab0f95301@linaro.org>
-Date:   Thu, 30 Mar 2023 16:46:11 +0200
+        d=1e100.net; s=20210112; t=1680187733;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p4OohPlRc6cXjWGAaBe3MyDvgleJXKEjuRcyG613iUs=;
+        b=2HpudN5TJo8AhQYxblsNhmmrHY+ytnhhK+/OVzmeoUdR+1ztSSObGaTQZIzXHgczMR
+         0ZR3ByMbEI39wNqUtRQ2XHQaFqI7lR6aBFbYlOlIsDsR+bYJcJE5qn0JRO8wtaHLzBwa
+         G1PbyMn7sBzB/FAexHBwILrWmBp6P1G/4M5uOUVQLkNsW2P5I3bLc2GPUs7LZjjtSO9O
+         Ch8IGpbIDpjevPasUz0cp7pUhOaiWIVSTgXS+QHjFys9KsFtKneaF0Fy6ukbd4LyOqib
+         6S9xcFvCj6qwp9eDjDCla06VHs3GaNHYwdXq26R4Vb6Zdqm4EX/P2yMDCydeLhTIMLfD
+         bYtQ==
+X-Gm-Message-State: AO0yUKWpvMGwDNHWJjcydbqsu7J2qbWhvMEkcF1YwrGx0XJPYuJkyW9F
+        haL5j+AYffOgj9gIs5xuvn7X8Q==
+X-Google-Smtp-Source: AK7set85l90lpdHO2bV1kTQ/3yTRpajQqMjEe/odNN3gnJgo+sMiHv2GHTm1cQHFVFP/XvyGojEY3A==
+X-Received: by 2002:a7b:c38a:0:b0:3ed:5d41:f95c with SMTP id s10-20020a7bc38a000000b003ed5d41f95cmr18193029wmj.11.1680187732905;
+        Thu, 30 Mar 2023 07:48:52 -0700 (PDT)
+Received: from google.com (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
+        by smtp.gmail.com with ESMTPSA id i22-20020a05600c355600b003ede6540190sm6665973wmq.0.2023.03.30.07.48.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 07:48:52 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 15:48:48 +0100
+From:   Vincent Donnefort <vdonnefort@google.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v2 1/2] ring-buffer: Introducing ring-buffer mapping
+ functions
+Message-ID: <ZCWhUJkD0cgSjwkW@google.com>
+References: <20230322102244.3239740-1-vdonnefort@google.com>
+ <20230322102244.3239740-2-vdonnefort@google.com>
+ <20230328224411.0d69e272@gandalf.local.home>
+ <ZCQCsD9+nNwBYIyH@google.com>
+ <20230329070353.1e1b443b@gandalf.local.home>
+ <ZCQtpbyWrjliJkdg@google.com>
+ <20230329084735.6c4a9229@rorschach.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] spi: s3c64xx: add no_cs description
-Content-Language: en-US
-To:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-References: <CGME20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a@epcas2p3.samsung.com>
- <20230306014239.80570-1-jaewon02.kim@samsung.com>
- <1b4f0367-a919-cd8a-17e1-a38998575e58@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1b4f0367-a919-cd8a-17e1-a38998575e58@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329084735.6c4a9229@rorschach.local.home>
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,22 +79,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2023 15:40, Jaewon Kim wrote:
-> Hello Mark
-> 
-> 
-> Could you apply this patch?
-> 
-> I missed you in the mail recipient.
-> 
-> 
-> https://lkml.org/lkml/2023/3/6/34
-> 
-> https://lkml.org/lkml/2023/3/6/232
+[...]
 
-I think you should resend. This time with entire output of
-scripts/get_maintainers.pl
+> > > struct ring_buffer_meta_page_header {
+> > > #if __BITS_PER_LONG == 64
+> > > 	__u64	entries;
+> > > 	__u64	overrun;
+> > > #else
+> > > 	__u32	entries;
+> > > 	__u32	overrun;
+> > > #endif
+> > > 	__u32	pages_touched;
+> > > 	__u32	meta_page_size;
+> > > 	__u32	reader_page;	/* page ID for the reader page */
+> > > 	__u32	nr_data_pages;	/* doesn't take into account the reader_page */
+> > > };
+> > > 
+> > > BTW, shouldn't the nr_data_pages take into account the reader page? As it
+> > > is part of the array we traverse isn't it?  
+> > 
+> > It depends if the reader page has ever been swapped out. If yes, the reader
+> > would have to start from reader_page and then switch to the data_pages.
+> > Which sounds like a fiddly interface for the userspace.
+> > 
+> > So yeah, consuming-read only feels like a better start.
+> > 
+> 
+> I agree. I'd like to get something in that can be extended, but simple
+> enough that it's not too much of a barrier wrt getting the API correct.
+> 
+> -- Steve
 
-Best regards,
-Krzysztof
+Something I just realized though. In the event of being able to upstream the
+hypervisor tracing based on the ring_buffer_meta_page, without non-consumming
+support, we wouldn't have the "trace" file which is used to reset the buffers.
 
+I'd guess we'd have to either create one that is read-only (a bit strange) or
+let trace_pipe reset the buffer(s).
