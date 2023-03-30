@@ -2,95 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A906D1085
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C169F6D1088
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjC3VK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 17:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
+        id S230017AbjC3VKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 17:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjC3VKW (ORCPT
+        with ESMTP id S229739AbjC3VK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 17:10:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDE7E04A
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 14:10:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B91C7B82A38
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 21:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 666F9C433A7;
-        Thu, 30 Mar 2023 21:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680210618;
-        bh=O+cjS7yD8pHdzp5zgruktqo14qk19j88CY4jY2VsQ60=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=XsQZrw4qX2tAz1ujPErzk7Jd3b0KRFzPlz6dPw5oJVkkL3kizsBhwQkTrF4Z+oDPk
-         tluXzJa9qA5ysmfMm7Ab9kwE/8I/z8woScFX2U5o3/7YfvKGcGt9MVq9uVDLfI5JiW
-         /x/7DanIoJrxEJth8NXlSJDXfZYWUpbntWnuDkfW1Xr2iUQQwuUQl1a62cEU2y4a2w
-         Z0zHKTlgdv77IbChVhadvsGKlKMG5v9VEt3uRN+cJgGELY/oloVOnX6fhPVBXtKM3c
-         4RuYDYp8kXPH+aXOZFKwzf6ATRS5tmaLbsKqAjx1H37t25wXyy16J0/0m+CFjVABKs
-         5j33IkwbFQuSA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 52B31E2A03F;
-        Thu, 30 Mar 2023 21:10:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v1 0/2] RISC-V: Fixes for riscv_has_extension[un]likely()'s
- alternative dependency
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <168021061833.10339.16976818508528489046.git-patchwork-notify@kernel.org>
+        Thu, 30 Mar 2023 17:10:29 -0400
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB50CE068
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 14:10:28 -0700 (PDT)
 Date:   Thu, 30 Mar 2023 21:10:18 +0000
-References: <20230324100538.3514663-1-conor.dooley@microchip.com>
-In-Reply-To: <20230324100538.3514663-1-conor.dooley@microchip.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        conor@kernel.org, paul.walmsley@sifive.com,
-        heiko.stuebner@vrull.eu, ajones@ventanamicro.com,
-        apatel@ventanamicro.com, jszhang@kernel.org, Jason@zx2c4.com,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1680210626; x=1680469826;
+        bh=CLgO8As5bEevfVZ/jlQ4M8lt0TNqWZbzE5S1UXMu7FY=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=pFBML9XxmyoxWjuk6ywiVWrCOW6OE8kh4TAkzA7CucR8s8/0Eh6POncencqSHcx6D
+         Ki+nVIErkEYsQYZ681qxbbtQO6PzfVebBXTBbuvS5AkjhRbNvCSf9jRpQCKkvP7Te4
+         uvLEsH3EAX3QHuWEY2sH9w17fMiIcDJoEKTtshc60IYLOS5uyth0b9fs0dLa5Cjssi
+         QhnPt6IPSKtPQ5batHvYhRFlJCJ3im/SgawP2QGBJ0w7dsR01GLMUZ+4WLnVYxwKcZ
+         O0xFishbiN03E5LaAJFe4v0zfTjYDG/C2HKp6q5Z2+LaJbdePRO69pysLhF5c9tEQO
+         r3mreGAdPb/gw==
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>
+Subject: Re: [PATCH 13/13] rust: sync: introduce `LockedBy`
+Message-ID: <8a5d6cf1-17eb-6cb9-fb45-0a4d454d385e@protonmail.com>
+In-Reply-To: <CANeycqotBmHkXAFbibp3BerEt=RA6sse+dgAkmpcy+oFMiA-vA@mail.gmail.com>
+References: <20230330043954.562237-1-wedsonaf@gmail.com> <20230330043954.562237-13-wedsonaf@gmail.com> <04034640-2d89-dd63-07e5-29fa612aa458@protonmail.com> <06a7c5e7-fc5f-3860-7f17-7f3609de669a@protonmail.com> <CANeycqotBmHkXAFbibp3BerEt=RA6sse+dgAkmpcy+oFMiA-vA@mail.gmail.com>
+Feedback-ID: 40624463:user:proton
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 30.03.23 23:04, Wedson Almeida Filho wrote:
+> On Thu, 30 Mar 2023 at 08:45, Benno Lossin <y86-dev@protonmail.com> wrote=
+:
+>>
+>> On 30.03.23 13:28, Benno Lossin wrote:
+>>       struct Outer {
+>>           mtx1: Mutex<()>,
+>>           mtx2: Mutex<()>,
+>>           inners: Vec<Inner>,
+>>       }
+>>
+>>       struct Inner {
+>>           count: LockedBy<usize, ()>,
+>>       }
+>>
+>>       fn new_inner(outer: &Outer) -> Inner {
+>>           Inner { count: LockedBy::new(&outer.mtx1, 0) }
+>>       }
+>>
+>>       fn evil(outer: &Outer) {
+>>           let inner =3D outer.inners.get(0).unwrap();
+>>           let mut guard1 =3D outer.mtx1.lock();
+>>           let mut guard2 =3D outer.mtx2.lock();
+>>          // The pointee of `guard1` and `guard2` have the same address.
+>>           let ref1 =3D inner.count.access_mut(&mut *guard1);
+>>           let ref2 =3D inner.count.access_mut(&mut *guard2);
+>>           mem::swap(ref1, ref2);
+>>       }
+>
+> This doesn't reproduce the issue because `mtx2` itself is not a ZST
+> (it contains a `struct mutex` before the data it protects).
+>
+> Something like the following should reproduce it though:
+>
+>      struct Outer {
+>           mtx1: Mutex<()>,
+>           zst: (),
+>       }
+>
+>       fn evil(outer: &Outer) {
+>           let lb =3D LockedBy::new(&outer.mtx1, 0u8);
+>           let value =3D lb.access(&outer.zst);
+>           // Accessing "value" without holding `mtx1`.
+>           pr_info!("{}", *value);
+>       }
 
-This series was applied to riscv/linux.git (fixes)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+You are correct, but in your example you also cannot be sure that it
+works, since the layout of the `Mutex` and `Outer` is `repr(Rust)`.
+And so you cannot be sure that `zst` has the same address as `value`
+inside of the `Mutex` (since the `struct mutex` could be in between).
+But regardless, lets just deny ZSTs in `LockedBy` since the fix is
+easy and it would be weird to put a ZST in a lock in the first place.
+(Not that you have argued against it)
 
-On Fri, 24 Mar 2023 10:05:37 +0000 you wrote:
-> Here's my attempt at fixing both the use of an FPU on XIP kernels and
-> the issue that Jason ran into where CONFIG_FPU, which needs the
-> alternatives frame work for has_fpu() checks, could be enabled without
-> the alternatives actually being present.
-> 
-> For the former, a "slow" fallback that does not use alternatives is
-> added to riscv_has_extension_[un]likely() that can be used with XIP.
-> Obviously, we want to make use of Jisheng's alternatives based approach
-> where possible, so any users of riscv_has_extension_[un]likely() will
-> want to make sure that they select RISCV_ALTERNATIVE.
-> If they don't however, they'll hit the fallback path which (should,
-> sparing a silly mistake from me!) behave in the same way, thus
-> succeeding silently. Sounds like a
-> 
-> [...]
-
-Here is the summary with links:
-  - [v1,1/2] RISC-V: add non-alternative fallback for riscv_has_extension_[un]likely()
-    https://git.kernel.org/riscv/c/1aa866931b80
-  - [v1,2/2] RISC-V: always select RISCV_ALTERNATIVE for non-xip kernels
-    https://git.kernel.org/riscv/c/1ee7fc3f4d0a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--
+Cheers,
+Benno
 
 
