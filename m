@@ -2,66 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8FA6D1046
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE1E6D104D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjC3Uuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
+        id S229932AbjC3UxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjC3Uut (ORCPT
+        with ESMTP id S229737AbjC3UxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:50:49 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7550249CF
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:50:47 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 20:50:36 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=w5elennuwrb37gnh6zxddmvypq.protonmail; t=1680209443; x=1680468643;
-        bh=W574/0kXNKnLUjX2uO+bsVEOsvWDq4+hEQzDObjXEgE=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-        b=mkT6oRLXxScdcc1+L8c9eUUCeF8nVob4SrH0sJd11CGimEod7PezQGLb0meWW/cyv
-         NHmcr6ThjWr6cOur2U/fSrUvd3woTmNst5/EP2ZMn20MIvREmoFmTCf/V6ZOZ6zlIP
-         BlfIyMUYSxYF2q6XlVwKW5Jw4pr2VsLH/ZvByFyZNaFd1Pm8U8Ar0aCsqH/QX3+tez
-         Dx15X60p+kQW+0ku6dUQw6v2XKYVBxXr6UFLG2Eu369OaFqS7iskxmr1EeEkXg2vie
-         LXj5BIxRjw8YET4hR3ZLUVsTzfkRL1BFH255NRPbTNE2WSKii3bTcSMPfTVLgIYQiJ
-         GkGNqbtB8DH1A==
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-From:   gabipr2023@proton.me
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kishon Vijay Abraham I <kvijayab@amd.com>,
-        David R <david@unsolicited.net>,
-        Borislav Petkov <bp@alien8.de>, eric.devolder@oracle.com
-Subject: Re: Panic starting 6.2.x and later 6.1.x kernels
-Message-ID: <788384b22962ff2fc716bd7cc82d08071bf440d1.camel@proton.me>
-Feedback-ID: 70468172:user:proton
+        Thu, 30 Mar 2023 16:53:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394A49029;
+        Thu, 30 Mar 2023 13:53:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC524620BE;
+        Thu, 30 Mar 2023 20:52:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBCAEC4339B;
+        Thu, 30 Mar 2023 20:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680209579;
+        bh=M3Gwz8bg9RQOf786ZiVKLz+aclgydGf92Mqzbu8XHcg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M8YQkpaV/iD350A2mNdyNvAiwzQQzx98i/ZPveWmVZeAWtcU1nbHhi45CTXpqgw9h
+         PfdO27N6TrB/AKqntWVKZ0sVwfGlrkhtO8X7kkbagkYGVlp5djUJAnFC8Oiz0gdZ4t
+         zwKg9yDmEymYHpl1rM3xjto2jjTSbExJrgIxsfas=
+Date:   Thu, 30 Mar 2023 22:52:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Danila Chernetsov <listdansp@mail.ru>
+Cc:     stable@vger.kernel.org, Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH 5.10 1/1] staging: rtl8192u: Add null check in
+ rtl8192_usb_initendpoints
+Message-ID: <ZCX2qLN1g6bmeKS7@kroah.com>
+References: <20230330201107.17647-1-listdansp@mail.ru>
+ <20230330201107.17647-2-listdansp@mail.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330201107.17647-2-listdansp@mail.ru>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-29 at 14:17 -0500, Limonciello, Mario wrote:
->=20
->=20
-> You mean specifically this change:
-> https://lore.kernel.org/all/20230327191026.3454-2-eric.devolder@oracle.co=
-m/
->=20
-> Yes; I suppose that still makes sense.
->=20
-Just tried this patch on 6.3rc4 and it boots correctly for me with just
-this.
+On Thu, Mar 30, 2023 at 08:11:07PM +0000, Danila Chernetsov wrote:
+> From: Dinghao Liu <dinghao.liu@zju.edu.cn>
+> 
+> commit 4d5f81506835f7c1e5c71787bed84984faf05884 upstream.
+> 
+> There is an allocation for priv->rx_urb[16] has no null check,
+> which may lead to a null pointer dereference.
+> 
+> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+> Link: https://lore.kernel.org/r/20201226080258.6576-1-dinghao.liu@zju.edu.cn
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Danila Chernetsov <listdansp@mail.ru>
+> ---
+>  drivers/staging/rtl8192u/r8192U_core.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/staging/rtl8192u/r8192U_core.c b/drivers/staging/rtl8192u/r8192U_core.c
+> index 7f90af8a7c7c..e0fec7d172da 100644
+> --- a/drivers/staging/rtl8192u/r8192U_core.c
+> +++ b/drivers/staging/rtl8192u/r8192U_core.c
+> @@ -1608,6 +1608,8 @@ static short rtl8192_usb_initendpoints(struct net_device *dev)
+>  		void *oldaddr, *newaddr;
+>  
+>  		priv->rx_urb[16] = usb_alloc_urb(0, GFP_KERNEL);
+> +		if (!priv->rx_urb[16])
+> +			return -ENOMEM;
 
-(Offtopic but also my name is Gabriela, a typo from my part lol. And
-this is another email since disroot is blocked my lkml)
+This was not marked for stable as it's impossible to hit in real-life.
+So absent that, it's not needed in any stable kernel tree, unless you
+can prove otherwise?
 
+thanks,
 
+greg k-h
