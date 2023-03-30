@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4292D6D081D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376A26D07F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbjC3OXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
+        id S232396AbjC3OUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232396AbjC3OXq (ORCPT
+        with ESMTP id S232338AbjC3OT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:23:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA23AC15E;
-        Thu, 30 Mar 2023 07:23:23 -0700 (PDT)
+        Thu, 30 Mar 2023 10:19:56 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C8CC160;
+        Thu, 30 Mar 2023 07:19:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680186204; x=1711722204;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FY8IX9SAO9iBATQiPxyU6DgWIpMVyTKKJh0RUHkpsWM=;
-  b=WhgQCXRYLbTUJZDSqUg9snjCL6hHVMUVy2hk0Tj6nZrjWYCAbAwBlNjq
-   2qEVJpuRmRbHe2qoRrALgm78RNQNtFq5EjjBuNyBz3kublCsfAsOOyW1t
-   KXRq2c5UvPIl8jgQ2AM/3oER3n6iZQdqIWrrPNzAUhZ4XzRMTx/ddZ+X5
-   NgHusZS4qlE2fVXEBrpReApcebwc/6ScIYK3Vr+9n2JjvPhkH3ppU2fc3
-   W6Jmjq5qTwRR/kBN/Tqgi+SJtEvlHy+plO3Pc1Qw5zkPx5r1V8f4f9LrD
-   9WTiHVLD2khO4SXUEVFZoHGgaONXrwWO38Q3PYSjk70wzxAnL8HJvJZiL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="406169619"
+  t=1680185977; x=1711721977;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=79LV+OrRl703R6iMPgkR0twJmLykHeDX2mMjxvwYOEg=;
+  b=OX9PRYjsnUiuG7c1SaP9xfxZGfbP96zFaeTUay8nMAz77C40tnMnpVlB
+   Elew9ZivchFIPDV5RoKBy4L9rco+6IxS6fzyRs2zYd9SWekU0PxS0huA3
+   B+uE0r8aiiDLcdYr9ijZk3lmX1SZvLP24/9+7qEUVtz7GjY3NhZzxiL2W
+   QNzbFA3L4IvzOooWkttSFdofLTCd7145DtIUUty7R8bx0pBnt6Wcw+nOj
+   0VnQCDInIcVt1OovRpDnh+y2ZtGD8yG3R1SWfJ42MbiXNLZ/UmRBvKl04
+   MmCfxeKCkk+bLaVxXBEvfqGThl34j5s5sohZDm+kn8L0gPB0E23SxcATE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="339903322"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="406169619"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:19:15 -0700
+   d="scan'208";a="339903322"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:19:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="634927548"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="749213928"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="634927548"
+   d="scan'208";a="749213928"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2023 07:19:13 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 30 Mar 2023 07:19:17 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8C97213A; Thu, 30 Mar 2023 17:15:37 +0300 (EEST)
+        id CD98814B; Thu, 30 Mar 2023 17:15:40 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -49,85 +49,86 @@ To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
 Cc:     Andreas Noever <andreas.noever@gmail.com>,
         Michael Jamet <michael.jamet@intel.com>,
         Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: [PATCH v1 1/2] iopoll: Introduce ioreadXX_poll_timeout() macros
-Date:   Thu, 30 Mar 2023 17:14:12 +0300
-Message-Id: <20230330141413.25569-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/2] thunderbolt: Make use of ioread32_poll_timeout()
+Date:   Thu, 30 Mar 2023 17:14:13 +0300
+Message-Id: <20230330141413.25569-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+In-Reply-To: <20230330141413.25569-1-andriy.shevchenko@linux.intel.com>
+References: <20230330141413.25569-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olliver Schinagl <oliver@schinagl.nl>
+Instead of open coding the same routine switch the code to use
+ioread32_poll_timeout().
 
-There are users in the Linux kernel that would benefit from using
-ioreadXX_poll_timeout() macros, such as ioread32_poll_timeout().
-Introduce those macros.
-
-Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
-Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- include/linux/iopoll.h | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ drivers/thunderbolt/nhi.c | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/iopoll.h b/include/linux/iopoll.h
-index 2c8860e406bd..30ba609175a7 100644
---- a/include/linux/iopoll.h
-+++ b/include/linux/iopoll.h
-@@ -140,6 +140,7 @@
- #define readx_poll_timeout_atomic(op, addr, val, cond, delay_us, timeout_us) \
- 	read_poll_timeout_atomic(op, val, cond, delay_us, timeout_us, false, addr)
+diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+index d76e923fbc6a..d0bf11b40131 100644
+--- a/drivers/thunderbolt/nhi.c
++++ b/drivers/thunderbolt/nhi.c
+@@ -16,8 +16,8 @@
+ #include <linux/dma-mapping.h>
+ #include <linux/interrupt.h>
+ #include <linux/iommu.h>
++#include <linux/iopoll.h>
+ #include <linux/module.h>
+-#include <linux/delay.h>
+ #include <linux/property.h>
+ #include <linux/string_helpers.h>
  
-+/* readX() */
- #define readb_poll_timeout(addr, val, cond, delay_us, timeout_us) \
- 	readx_poll_timeout(readb, addr, val, cond, delay_us, timeout_us)
+@@ -40,7 +40,7 @@
+ #define MSIX_MIN_VECS		6
+ #define MSIX_MAX_VECS		16
  
-@@ -164,6 +165,7 @@
- #define readq_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
- 	readx_poll_timeout_atomic(readq, addr, val, cond, delay_us, timeout_us)
+-#define NHI_MAILBOX_TIMEOUT	500 /* ms */
++#define NHI_MAILBOX_TIMEOUT_US	500000
  
-+/* readX_relaxed() */
- #define readb_relaxed_poll_timeout(addr, val, cond, delay_us, timeout_us) \
- 	readx_poll_timeout(readb_relaxed, addr, val, cond, delay_us, timeout_us)
+ /* Host interface quirks */
+ #define QUIRK_AUTO_CLEAR_INT	BIT(0)
+@@ -830,8 +830,8 @@ EXPORT_SYMBOL_GPL(tb_ring_free);
+  */
+ int nhi_mailbox_cmd(struct tb_nhi *nhi, enum nhi_mailbox_cmd cmd, u32 data)
+ {
+-	ktime_t timeout;
+ 	u32 val;
++	int ret;
  
-@@ -188,4 +190,29 @@
- #define readq_relaxed_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
- 	readx_poll_timeout_atomic(readq_relaxed, addr, val, cond, delay_us, timeout_us)
+ 	iowrite32(data, nhi->iobase + REG_INMAIL_DATA);
  
-+/* ioreadXX() */
-+#define ioread8_poll_timeout(addr, val, cond, delay_us, timeout_us) \
-+	readx_poll_timeout(ioread8, addr, val, cond, delay_us, timeout_us)
-+
-+#define ioread8_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
-+	readx_poll_timeout_atomic(ioread8, addr, val, cond, delay_us, timeout_us)
-+
-+#define ioread16_poll_timeout(addr, val, cond, delay_us, timeout_us) \
-+	readx_poll_timeout(ioread16, addr, val, cond, delay_us, timeout_us)
-+
-+#define ioread16_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
-+	readx_poll_timeout_atomic(ioread16, addr, val, cond, delay_us, timeout_us)
-+
-+#define ioread32_poll_timeout(addr, val, cond, delay_us, timeout_us) \
-+	readx_poll_timeout(ioread32, addr, val, cond, delay_us, timeout_us)
-+
-+#define ioread32_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
-+	readx_poll_timeout_atomic(ioread32, addr, val, cond, delay_us, timeout_us)
-+
-+#define ioread64_poll_timeout(addr, val, cond, delay_us, timeout_us) \
-+	readx_poll_timeout(ioread64, addr, val, cond, delay_us, timeout_us)
-+
-+#define ioread64_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
-+	readx_poll_timeout_atomic(ioread64, addr, val, cond, delay_us, timeout_us)
-+
- #endif /* _LINUX_IOPOLL_H */
+@@ -840,16 +840,12 @@ int nhi_mailbox_cmd(struct tb_nhi *nhi, enum nhi_mailbox_cmd cmd, u32 data)
+ 	val |= REG_INMAIL_OP_REQUEST | cmd;
+ 	iowrite32(val, nhi->iobase + REG_INMAIL_CMD);
+ 
+-	timeout = ktime_add_ms(ktime_get(), NHI_MAILBOX_TIMEOUT);
+-	do {
+-		val = ioread32(nhi->iobase + REG_INMAIL_CMD);
+-		if (!(val & REG_INMAIL_OP_REQUEST))
+-			break;
+-		usleep_range(10, 20);
+-	} while (ktime_before(ktime_get(), timeout));
++	ret = ioread32_poll_timeout(nhi->iobase + REG_INMAIL_CMD,
++				    val, !(val & REG_INMAIL_OP_REQUEST),
++				    40, NHI_MAILBOX_TIMEOUT_US);
++	if (ret)
++		return ret;
+ 
+-	if (val & REG_INMAIL_OP_REQUEST)
+-		return -ETIMEDOUT;
+ 	if (val & REG_INMAIL_ERROR)
+ 		return -EIO;
+ 
 -- 
 2.40.0.1.gaa8946217a0b
 
