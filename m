@@ -2,73 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096AA6D0477
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB396D0479
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbjC3MSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 08:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S231538AbjC3MS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 08:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjC3MSq (ORCPT
+        with ESMTP id S231535AbjC3MSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:18:46 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326FD76A2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:18:45 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso3331513wmo.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:18:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1680178723;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wyt/QKbfFqwXxgXngsVcjXvUcjSi2SpEjcCROkpNZHw=;
-        b=Eqmfhnq5IEFLLhAjAZRIobhW/2B13mAKES+/WX/G7vJ9k6+u98ggyXukQa0h3R3Pf3
-         hjsG7bZivizU1puj66d5NNFYaW+jHoYbxNV/lTSLJgMMevl4Go5+ZPboncgUDRXv+Pb5
-         GkG6JqvpkWG3I7zPRYUM/oVw8aPAfOctlVnYhW3XV6iph4MfSFnbNkEfkkUtUh3+FKZp
-         d9vZsJt5qH/TE/5iu76QwFEFI3Y6o0Et9QWOv86TCtRi04gMXrYrQfxpDNocZPH0N5AI
-         +FBeoAHbfb91soVmz+IvymSJvF+YbDnt0hX2v2zuIdsuZ1JNTbWQnLcpZ2QItLZ9R6eX
-         MdDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680178723;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wyt/QKbfFqwXxgXngsVcjXvUcjSi2SpEjcCROkpNZHw=;
-        b=j6pYC8GWpejEh9QOemJG6d01yoKxZc1aCFNsfZ1vEcHWQ+kh005CTZ8YOGCfO5lQ80
-         inyAzdzWkHUhkuW5mf0y7WJNcfjPnqPtyb51JLTV0bzK3DY6ToAsyCEfuOGe01o2z8sP
-         CMagFOPTrTTeE8v9jHuOjGi5eJPGhWadaM5Zr88xt+rja/Qn5oivva3XezXfZh88RRNt
-         iu/+pFaY8W/Od/rCw7xILi5XYcsVmMP6I+wDQW4CEp3w2wUipbugsql6WaHTGTn64jZj
-         Ig+ijg4WxamcRAzWnc9R0FTP6nGF9nGZMBM9wQporK94y/0B+G4z9aLGDCznXbujHkOK
-         th1Q==
-X-Gm-Message-State: AO0yUKVOJUNVIaB8Y84l/IjJuRBtew/SMeAnWmhVtRjannSzoyY2eVTd
-        N86jeSCalpCDWGuficMZq3xRbA==
-X-Google-Smtp-Source: AK7set8KZRCKiYFEeuKZGefi283mvYKlXVix1qHiiGvficshl2fwJ0ohFCGwM+wM6kXCzp8F9AjUWQ==
-X-Received: by 2002:a7b:cbc2:0:b0:3df:de28:f819 with SMTP id n2-20020a7bcbc2000000b003dfde28f819mr18146008wmi.15.1680178723657;
-        Thu, 30 Mar 2023 05:18:43 -0700 (PDT)
-Received: from localhost ([165.225.194.194])
-        by smtp.gmail.com with ESMTPSA id n23-20020a05600c3b9700b003ede04deb14sm5744936wms.48.2023.03.30.05.18.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 05:18:43 -0700 (PDT)
-References: <20230329223239.138757-1-y86-dev@protonmail.com>
- <20230329223239.138757-3-y86-dev@protonmail.com>
-User-agent: mu4e 1.9.18; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     y86-dev@protonmail.com
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v3 02/13] rust: sync: add `assume_init` to `UniqueArc`
-Date:   Thu, 30 Mar 2023 14:18:06 +0200
-In-reply-to: <20230329223239.138757-3-y86-dev@protonmail.com>
-Message-ID: <87y1ne4el9.fsf@metaspace.dk>
+        Thu, 30 Mar 2023 08:18:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2988B7A8F;
+        Thu, 30 Mar 2023 05:18:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ECBE42F4;
+        Thu, 30 Mar 2023 05:19:37 -0700 (PDT)
+Received: from [10.57.54.254] (unknown [10.57.54.254])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A06793F73F;
+        Thu, 30 Mar 2023 05:18:52 -0700 (PDT)
+Message-ID: <01c50370-002d-5e18-3edc-81c9527aedc9@arm.com>
+Date:   Thu, 30 Mar 2023 13:18:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [regression] Bug 217218 - Trying to boot Linux version 6-2.2
+ kernel with Marvell SATA controller 88SE9235
+Content-Language: en-GB
+To:     Christoph Hellwig <hch@lst.de>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>, iommu@lists.linux.dev,
+        baolu.lu@linux.intel.com
+References: <a79ea7f5-6a41-a6c9-cfec-ba01aa2a3cfa@leemhuis.info>
+ <20230328012231.GB21977@lst.de>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230328012231.GB21977@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,18 +49,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-03-28 02:22, Christoph Hellwig wrote:
+> 
+> I finally found some real time to look into this:
+> 
+> On Tue, Mar 21, 2023 at 02:52:00PM +0100, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>> The man errors I am getting are
+>>>
+>>> dmar_fault 8 callbacks suppressed
+>>> DMAR : DRHD: handling fault status req 2
+>>> DMAR : [DMA Write NO_PASID] Request device [07.00.1] fault addr
+>>> 0xfffe0000 [fault reason 0x82] Present bit in contect entry is clear
+> 
+> This clearly indicates that my original idea about the AMD gart was
+> completely bonkers, as we're obviously on an Intel platform.
+> 
+> And this indicates that the device is trying to do a DMA write to
+> something that isn't IOMMU mapped.  Getting this from an initialization
+> change (commit 78013eaadf6 (x86: remove the IOMMU table infrastructure")
+> feels very strange to me.
+> 
+> Can you maybe post the full dmesg?  I wonder if there is interesting
+> initialization error in here.
 
-y86-dev@protonmail.com writes:
+FWIW "Marvell SATA" instantly makes me suspect the phantom function 
+quirk. What *should* happen is the IOMMU driver sees the PCI DMA aliases 
+correctly and sets up context entries for both 07.00.0 and 07.00.1, but 
+it looks like that may be what's gone awry.
 
-> From: Benno Lossin <y86-dev@protonmail.com>
->
-> Adds the `assume_init` function to `UniqueArc<MaybeUninit<T>>` that
-> unsafely assumes the value to be initialized and yields a value of type
-> `UniqueArc<T>`. This function is used when manually initializing the
-> pointee of an `UniqueArc`.
->
-> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-> ---
-
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
-
+Robin.
