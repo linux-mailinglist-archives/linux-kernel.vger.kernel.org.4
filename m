@@ -2,163 +2,395 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD866D0205
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38D56D0213
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbjC3KrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S231352AbjC3Krt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjC3Kpy (ORCPT
+        with ESMTP id S229488AbjC3KqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:45:54 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421C08A6F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:45:17 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id b20so74693453edd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:45:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112; t=1680173115;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nJ4kHmOyB5GJCNT97r/CEXr1tfWeNmV/zja7PhdakrM=;
-        b=lGerEYp3RodGDGGbu9v46KqIKVUtY8TeLHCWxCyKo+lIj9VCOEqmYXb5Luv5Icdw83
-         /Q3ohcVMs8/k4KEjqUfKTm0pm1obz2hYyDJZEGwY4xvSV70Uh8/o0fRR62eoC40mv/Bv
-         UEBYsZ9wt18DBWpVrq6PHs0ItsJPyhMLJmMVYdRNaFyf6g5o43qmVx2ExIW9JPB5NAcT
-         SXRLeONaXaaxnx6NDDtdppC3NfBaEjMNaKyBR43dlSVVCegyF8RxQYNMsOAzUTzA2au6
-         2XuJdBK+c0uj4WiQDcWKQjhPoR9V9sl3rqUkq8GEkpgIesqP2468KV0nJR3pSnsRbAgW
-         ihWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680173115;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nJ4kHmOyB5GJCNT97r/CEXr1tfWeNmV/zja7PhdakrM=;
-        b=pMMmto/M+rDNJb81m8yITrra3823R2tL3ZixBbo9xUaf94pU/kedcE7saYf2dwtQry
-         jhmgmDjz/WuA1H0+kg4T8z3akb4ZbhU6Rx+CgO1ypD8utdlbBKjiZrLk4D+ewhHrvnMa
-         hxNupQmsGtP+XK5r3BiLDD7ugX2JJZaPSYOSe+VDTxQySXYb243fhQGv8uEQCYPWQIVN
-         2ofswaAlo752SLUOXrVtzX0nCHB0dq/Q4k/0AVGaWF2XEJD29CKzFAHTvDfPUdt4VQWr
-         rDlkGSsHCU5nEKaBjia1PjO3UxWGdz415eXHF9FotYrDckfHA01+WhJmZNE2o8o5r6Bs
-         Imvw==
-X-Gm-Message-State: AAQBX9dsB7JfyYSwRAAPibYo154vdVGQn6BuY3i9N8mSTOYfuWVIq1Tf
-        VRp0h6i5r4swNoWVVhdGPAJl4Q==
-X-Google-Smtp-Source: AKy350ZCwuMbyX3imXZjyklWc/tn6fTJgMv803a+AfMakTywcrCsiPGJxBzQ+0cpDFJ7UWixfjodXw==
-X-Received: by 2002:a17:906:738a:b0:878:58e6:f1eb with SMTP id f10-20020a170906738a00b0087858e6f1ebmr20132191ejl.23.1680173115494;
-        Thu, 30 Mar 2023 03:45:15 -0700 (PDT)
-Received: from [192.168.0.161] (62-73-72-43.ip.btc-net.bg. [62.73.72.43])
-        by smtp.gmail.com with ESMTPSA id p25-20020a50cd99000000b004bf76fdfdb3sm17878396edi.26.2023.03.30.03.45.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 03:45:15 -0700 (PDT)
-Message-ID: <6f0d0f2d-474b-caaf-78a7-289e660c3aa0@blackwall.org>
-Date:   Thu, 30 Mar 2023 13:45:13 +0300
+        Thu, 30 Mar 2023 06:46:10 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4159000;
+        Thu, 30 Mar 2023 03:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680173139; x=1711709139;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4xO0Ca7dc6A25R7wkMyQ1gL6C8V8HTsFmCj2sQxyz88=;
+  b=n4woWMX1OZznRoG/KGb8ltDEym90/74ekxIaM5bc2J6XmHTwod1KQVyN
+   QeF8REeAVovVqznVeHB2gqy7CsQttHP+f6W3KSu/L11MRY5m/CHuDVpqg
+   cbdVWcDItzsqkA07FCrNVH8Yr06Bfw4KhkOIK4WRYExIb++ukWjVQ/jP9
+   ROiF/rMJ59SfKdXJ6NKdMwzeK94L2U6HWEQ/mpvLr3Sj/UFC49vVypThQ
+   AKv9um1pYV9vB0t8fJLcBvpDF8lwM9+EE32/K0s30hUZvNl4TWiU1bNHj
+   b5AigMj+tTmlzO+XyTvXul0jmNW1xznZ9HWAcgV5UTJUX+Nw3VdWWZWUE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="343585473"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="343585473"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:45:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="717259540"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="717259540"
+Received: from qzhi-mobl.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.255.31.106])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:45:36 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal/core: Remove thermal_bind_params structure
+Date:   Thu, 30 Mar 2023 18:45:26 +0800
+Message-Id: <20230330104526.3196-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
- test
-Content-Language: en-US
-To:     Hans Schultz <netdev@kapio-technology.com>,
-        Ido Schimmel <idosch@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20230318141010.513424-1-netdev@kapio-technology.com>
- <20230318141010.513424-7-netdev@kapio-technology.com>
- <ZBgdAo8mxwnl+pEE@shredder> <87a5zzh65p.fsf@kapio-technology.com>
- <ZCMYbRqd+qZaiHfu@shredder> <87fs9ollmn.fsf@kapio-technology.com>
- <ZCUuMosWbyq1pK8R@shredder> <87mt3u7csh.fsf@kapio-technology.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <87mt3u7csh.fsf@kapio-technology.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=3.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2023 13:29, Hans Schultz wrote:
-> On Thu, Mar 30, 2023 at 09:37, Ido Schimmel <idosch@nvidia.com> wrote:
->> On Tue, Mar 28, 2023 at 09:30:08PM +0200, Hans Schultz wrote:
->>>
->>> Sorry, but I have sent you several emails telling you about the problems
->>> I have with running the selftests due to changes in the phy etc. Maybe
->>> you have just not received all those emails?
->>>
->>> Have you checked spamfilters?
->>>
->>> With the kernels now, I cannot even test with the software bridge and
->>> selftests as the compile fails - probably due to changes in uapi headers
->>> compared to what the packages my system uses expects.
->>
->> My spam filters are fine. I saw your emails where you basically said
->> that you are too lazy to setup a VM to test your patches and that your
->> time is more valuable than mine, which is why I should be testing them.
->> Stop making your problems our problems. It's hardly the first time. If
->> you are unable to test your patches, then invest the time in fixing your
->> setup instead of submitting completely broken patches and making it our
->> problem to test and fix them. I refuse to invest time in reviewing /
->> testing / reworking your submissions as long as you insist on doing less
->> than the bare minimum.
->>
->> Good luck
-> 
-> I never said or indicated that my time is more valuable than yours. I
-> have a VM to run these things that some have spent countless hours to
-> develop with the right tools etc installed and set up. Fixing that
-> system will take quite many hours for me, so I am asking for some simple
-> assistance from someone who already has a system running supporting the
-> newest kernel.
-> 
-> Alternatively if there is an open sourced system available that would be
-> great.
-> 
-> As this patch-set is for the community and some companies that would
-> like to use it and not for myself, I am asking for some help from the
-> community with a task that when someone has the system in place should
-> not take more than 15-20 minutes, maybe even less.
+Remove struct thermal_bind_params because no one is using it for thermal
+binding now.
 
-I'm sorry but this is absolutely the wrong way to go about this. Your setup's
-problems are yours to figure out and fix, if you are going to send *any* future
-patches make absolutely sure they build, run and work as intended.
-Please do not send any future patches without them being fully tested and, as
-Ido mentioned, cover at least the bare minimum for a submission.
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+ .../driver-api/thermal/sysfs-api.rst          |  40 ------
+ drivers/thermal/thermal_core.c                | 129 ++----------------
+ include/linux/thermal.h                       |  38 ------
+ 3 files changed, 11 insertions(+), 196 deletions(-)
 
-Thanks,
- Nik
+diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
+index 2e0f79a9e2ee..6c1175c6afba 100644
+--- a/Documentation/driver-api/thermal/sysfs-api.rst
++++ b/Documentation/driver-api/thermal/sysfs-api.rst
+@@ -304,42 +304,6 @@ temperature) and throttle appropriate devices.
+ 1.4 Thermal Zone Parameters
+ ---------------------------
+ 
+-    ::
+-
+-	struct thermal_bind_params
+-
+-    This structure defines the following parameters that are used to bind
+-    a zone with a cooling device for a particular trip point.
+-
+-    .cdev:
+-	     The cooling device pointer
+-    .weight:
+-	     The 'influence' of a particular cooling device on this
+-	     zone. This is relative to the rest of the cooling
+-	     devices. For example, if all cooling devices have a
+-	     weight of 1, then they all contribute the same. You can
+-	     use percentages if you want, but it's not mandatory. A
+-	     weight of 0 means that this cooling device doesn't
+-	     contribute to the cooling of this zone unless all cooling
+-	     devices have a weight of 0. If all weights are 0, then
+-	     they all contribute the same.
+-    .trip_mask:
+-	       This is a bit mask that gives the binding relation between
+-	       this thermal zone and cdev, for a particular trip point.
+-	       If nth bit is set, then the cdev and thermal zone are bound
+-	       for trip point n.
+-    .binding_limits:
+-		     This is an array of cooling state limits. Must have
+-		     exactly 2 * thermal_zone.number_of_trip_points. It is an
+-		     array consisting of tuples <lower-state upper-state> of
+-		     state limits. Each trip will be associated with one state
+-		     limit tuple when binding. A NULL pointer means
+-		     <THERMAL_NO_LIMITS THERMAL_NO_LIMITS> on all trips.
+-		     These limits are used when binding a cdev to a trip point.
+-    .match:
+-	    This call back returns success(0) if the 'tz and cdev' need to
+-	    be bound, as per platform data.
+-
+     ::
+ 
+ 	struct thermal_zone_params
+@@ -357,10 +321,6 @@ temperature) and throttle appropriate devices.
+ 	       will be created. when no_hwmon == true, nothing will be done.
+ 	       In case the thermal_zone_params is NULL, the hwmon interface
+ 	       will be created (for backward compatibility).
+-    .num_tbps:
+-	       Number of thermal_bind_params entries for this zone
+-    .tbp:
+-	       thermal_bind_params entries
+ 
+ 2. sysfs attributes structure
+ =============================
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index d51cacd66756..2e6a49dd527d 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -794,64 +794,18 @@ void print_bind_err_msg(struct thermal_zone_device *tz,
+ 		tz->type, cdev->type, ret);
+ }
+ 
+-static void __bind(struct thermal_zone_device *tz, int mask,
+-		   struct thermal_cooling_device *cdev,
+-		   unsigned long *limits,
+-		   unsigned int weight)
+-{
+-	int i, ret;
+-
+-	for (i = 0; i < tz->num_trips; i++) {
+-		if (mask & (1 << i)) {
+-			unsigned long upper, lower;
+-
+-			upper = THERMAL_NO_LIMIT;
+-			lower = THERMAL_NO_LIMIT;
+-			if (limits) {
+-				lower = limits[i * 2];
+-				upper = limits[i * 2 + 1];
+-			}
+-			ret = thermal_zone_bind_cooling_device(tz, i, cdev,
+-							       upper, lower,
+-							       weight);
+-			if (ret)
+-				print_bind_err_msg(tz, cdev, ret);
+-		}
+-	}
+-}
+-
+ static void bind_cdev(struct thermal_cooling_device *cdev)
+ {
+-	int i, ret;
+-	const struct thermal_zone_params *tzp;
++	int ret;
+ 	struct thermal_zone_device *pos = NULL;
+ 
+ 	mutex_lock(&thermal_list_lock);
+ 
+ 	list_for_each_entry(pos, &thermal_tz_list, node) {
+-		if (!pos->tzp && !pos->ops->bind)
+-			continue;
+-
+ 		if (pos->ops->bind) {
+ 			ret = pos->ops->bind(pos, cdev);
+ 			if (ret)
+ 				print_bind_err_msg(pos, cdev, ret);
+-			continue;
+-		}
+-
+-		tzp = pos->tzp;
+-		if (!tzp || !tzp->tbp)
+-			continue;
+-
+-		for (i = 0; i < tzp->num_tbps; i++) {
+-			if (tzp->tbp[i].cdev || !tzp->tbp[i].match)
+-				continue;
+-			if (tzp->tbp[i].match(pos, cdev))
+-				continue;
+-			tzp->tbp[i].cdev = cdev;
+-			__bind(pos, tzp->tbp[i].trip_mask, cdev,
+-			       tzp->tbp[i].binding_limits,
+-			       tzp->tbp[i].weight);
+ 		}
+ 	}
+ 
+@@ -1138,16 +1092,6 @@ void thermal_cooling_device_update(struct thermal_cooling_device *cdev)
+ }
+ EXPORT_SYMBOL_GPL(thermal_cooling_device_update);
+ 
+-static void __unbind(struct thermal_zone_device *tz, int mask,
+-		     struct thermal_cooling_device *cdev)
+-{
+-	int i;
+-
+-	for (i = 0; i < tz->num_trips; i++)
+-		if (mask & (1 << i))
+-			thermal_zone_unbind_cooling_device(tz, i, cdev);
+-}
+-
+ /**
+  * thermal_cooling_device_unregister - removes a thermal cooling device
+  * @cdev:	the thermal cooling device to remove.
+@@ -1157,8 +1101,6 @@ static void __unbind(struct thermal_zone_device *tz, int mask,
+  */
+ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
+ {
+-	int i;
+-	const struct thermal_zone_params *tzp;
+ 	struct thermal_zone_device *tz;
+ 
+ 	if (!cdev)
+@@ -1175,21 +1117,8 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
+ 
+ 	/* Unbind all thermal zones associated with 'this' cdev */
+ 	list_for_each_entry(tz, &thermal_tz_list, node) {
+-		if (tz->ops->unbind) {
++		if (tz->ops->unbind)
+ 			tz->ops->unbind(tz, cdev);
+-			continue;
+-		}
+-
+-		if (!tz->tzp || !tz->tzp->tbp)
+-			continue;
+-
+-		tzp = tz->tzp;
+-		for (i = 0; i < tzp->num_tbps; i++) {
+-			if (tzp->tbp[i].cdev == cdev) {
+-				__unbind(tz, tzp->tbp[i].trip_mask, cdev);
+-				tzp->tbp[i].cdev = NULL;
+-			}
+-		}
+ 	}
+ 
+ 	mutex_unlock(&thermal_list_lock);
+@@ -1200,41 +1129,20 @@ EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
+ 
+ static void bind_tz(struct thermal_zone_device *tz)
+ {
+-	int i, ret;
++	int ret;
+ 	struct thermal_cooling_device *pos = NULL;
+-	const struct thermal_zone_params *tzp = tz->tzp;
+ 
+-	if (!tzp && !tz->ops->bind)
++	if (!tz->ops->bind)
+ 		return;
+ 
+ 	mutex_lock(&thermal_list_lock);
+ 
+-	/* If there is ops->bind, try to use ops->bind */
+-	if (tz->ops->bind) {
+-		list_for_each_entry(pos, &thermal_cdev_list, node) {
+-			ret = tz->ops->bind(tz, pos);
+-			if (ret)
+-				print_bind_err_msg(tz, pos, ret);
+-		}
+-		goto exit;
+-	}
+-
+-	if (!tzp || !tzp->tbp)
+-		goto exit;
+-
+ 	list_for_each_entry(pos, &thermal_cdev_list, node) {
+-		for (i = 0; i < tzp->num_tbps; i++) {
+-			if (tzp->tbp[i].cdev || !tzp->tbp[i].match)
+-				continue;
+-			if (tzp->tbp[i].match(tz, pos))
+-				continue;
+-			tzp->tbp[i].cdev = pos;
+-			__bind(tz, tzp->tbp[i].trip_mask, pos,
+-			       tzp->tbp[i].binding_limits,
+-			       tzp->tbp[i].weight);
+-		}
++		ret = tz->ops->bind(tz, pos);
++		if (ret)
++			print_bind_err_msg(tz, pos, ret);
+ 	}
+-exit:
++
+ 	mutex_unlock(&thermal_list_lock);
+ }
+ 
+@@ -1491,15 +1399,13 @@ EXPORT_SYMBOL_GPL(thermal_zone_device_id);
+  */
+ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+ {
+-	int i, tz_id;
+-	const struct thermal_zone_params *tzp;
++	int tz_id;
+ 	struct thermal_cooling_device *cdev;
+ 	struct thermal_zone_device *pos = NULL;
+ 
+ 	if (!tz)
+ 		return;
+ 
+-	tzp = tz->tzp;
+ 	tz_id = tz->id;
+ 
+ 	mutex_lock(&thermal_list_lock);
+@@ -1514,22 +1420,9 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+ 	list_del(&tz->node);
+ 
+ 	/* Unbind all cdevs associated with 'this' thermal zone */
+-	list_for_each_entry(cdev, &thermal_cdev_list, node) {
+-		if (tz->ops->unbind) {
++	list_for_each_entry(cdev, &thermal_cdev_list, node)
++		if (tz->ops->unbind)
+ 			tz->ops->unbind(tz, cdev);
+-			continue;
+-		}
+-
+-		if (!tzp || !tzp->tbp)
+-			break;
+-
+-		for (i = 0; i < tzp->num_tbps; i++) {
+-			if (tzp->tbp[i].cdev == cdev) {
+-				__unbind(tz, tzp->tbp[i].trip_mask, cdev);
+-				tzp->tbp[i].cdev = NULL;
+-			}
+-		}
+-	}
+ 
+ 	mutex_unlock(&thermal_list_lock);
+ 
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index fef625f799ae..ab7460bfdcf6 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -207,41 +207,6 @@ struct thermal_governor {
+ 	struct list_head	governor_list;
+ };
+ 
+-/* Structure that holds binding parameters for a zone */
+-struct thermal_bind_params {
+-	struct thermal_cooling_device *cdev;
+-
+-	/*
+-	 * This is a measure of 'how effectively these devices can
+-	 * cool 'this' thermal zone. It shall be determined by
+-	 * platform characterization. This value is relative to the
+-	 * rest of the weights so a cooling device whose weight is
+-	 * double that of another cooling device is twice as
+-	 * effective. See Documentation/driver-api/thermal/sysfs-api.rst for more
+-	 * information.
+-	 */
+-	int weight;
+-
+-	/*
+-	 * This is a bit mask that gives the binding relation between this
+-	 * thermal zone and cdev, for a particular trip point.
+-	 * See Documentation/driver-api/thermal/sysfs-api.rst for more information.
+-	 */
+-	int trip_mask;
+-
+-	/*
+-	 * This is an array of cooling state limits. Must have exactly
+-	 * 2 * thermal_zone.number_of_trip_points. It is an array consisting
+-	 * of tuples <lower-state upper-state> of state limits. Each trip
+-	 * will be associated with one state limit tuple when binding.
+-	 * A NULL pointer means <THERMAL_NO_LIMITS THERMAL_NO_LIMITS>
+-	 * on all trips.
+-	 */
+-	unsigned long *binding_limits;
+-	int (*match) (struct thermal_zone_device *tz,
+-			struct thermal_cooling_device *cdev);
+-};
+-
+ /* Structure to define Thermal Zone parameters */
+ struct thermal_zone_params {
+ 	char governor_name[THERMAL_NAME_LENGTH];
+@@ -253,9 +218,6 @@ struct thermal_zone_params {
+ 	 */
+ 	bool no_hwmon;
+ 
+-	int num_tbps;	/* Number of tbp entries */
+-	struct thermal_bind_params *tbp;
+-
+ 	/*
+ 	 * Sustainable power (heat) that this thermal zone can dissipate in
+ 	 * mW
+-- 
+2.25.1
 
