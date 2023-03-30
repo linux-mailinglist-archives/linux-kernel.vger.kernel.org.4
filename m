@@ -2,200 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB84B6D07EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473326D07F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbjC3ORN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
+        id S232358AbjC3OSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbjC3OQr (ORCPT
+        with ESMTP id S232357AbjC3OSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:16:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D69DAD27
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:16:45 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 325CD6603195;
-        Thu, 30 Mar 2023 15:16:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680185802;
-        bh=eZ/KgEJ3/NtZRipFLNfrQ0jkavJVDGo3ZnqqWIgjfIo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CHlMbLXEvdEzvbDBs1TW7oa3xwSEoHjM2bENO0R5QP5j4s7rodfj4FGELpctOY9Ji
-         ohQqqKGmadC97bCZnJnFQdzs95a1lseDpDPM5beVOboMscZkrRP98Eo4cCelKGsJ7Y
-         WLgVPbegbzQWjritLRSisAzr3XcTxEMqJuFU8C03YuC5wmkDHB7PLTRMbUQzwLpqPq
-         C8bnz4FihZx0Orfs6jYQxlmNGxKmzcEdn1By6XRVWlJ308SGaQbNkcXBy+hZ6ZGLDf
-         fqrEvvx6WdLvc8hlWCNEH+vaFT3AKwOLqZH1ccCJWaaEKu4wfN7D92E4krjoMC7e22
-         Qltm04JGgSvjw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     chunkuang.hu@kernel.org
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        wenst@chromium.org
-Subject: [PATCH v1 8/8] drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
-Date:   Thu, 30 Mar 2023 16:16:31 +0200
-Message-Id: <20230330141631.190528-10-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230330141631.190528-1-angelogioacchino.delregno@collabora.com>
-References: <20230330141631.190528-1-angelogioacchino.delregno@collabora.com>
+        Thu, 30 Mar 2023 10:18:38 -0400
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2117.outbound.protection.outlook.com [40.107.11.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89431CC2C;
+        Thu, 30 Mar 2023 07:18:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iJA0rw38LOZ0HIY1jSLwJY3i3a4KEvs6VYr3ju3QTUYd/ZFxTNZAITaqbCT4g1aNoqQr7kzRJsGPolCrsmD6KqPznq+ss9kXh4/ARy/ZCavSDEKhKdWGJ1Vkge59LRckQVvwdhoDBNni4uPaOx7FetnvwkMN7mUbNi7bIrv3ZzoYf/vSfDttdZhchjJ5Guu7F/iHvHQOvIEsWx5+AGNkpoQrhSAWvcN6CSpwlA9OytYTGOURZPEfP5O+5y74c9ksLixSel2CaRHn+N4hQ6OJp/JTYzKoNyjAn/UGl0FVhoNRmEMqG3QMBcE/NegPOeXpF8EGbZKu2ajBUyhlkbR8cQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DQztMGI/Big+PDfTjOMsWQbqSuvcXJiht2yCGruKEI4=;
+ b=Q4zrC5cDVh6Ib+ygMB1Uf/jmbx1aVwR/3EVN/Xf5zPR0Il527bfrQnqJ3IzRAhUnV7fOhbuEbvc7vMrGN9Tih7Fm99cnHNp7fWkyzOIiXXyl83MTuLd2cy0iNGjDcqpdQAR75MwXGdA5aJCIawtqCbzsWxpkuhLeWn16ZFQtuC61qAMRZHW2VBNxGCp436Cw7QggeI/dxKBcGmwk/sma4ZcifjVEXYg78HhOjCcnIy8qs5H7yb9n3Jom9Ns2vVtMgpH4pTYTz1s8cZtbWP8xF+JhQWypb/hMb0uvz/+0obb6oJzwXWUX0kz22TkSAqivYxVc/hzSRAKSlHCVQlKa2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DQztMGI/Big+PDfTjOMsWQbqSuvcXJiht2yCGruKEI4=;
+ b=LgDRpZcxRaJtEtJKvgaAOSeHUMUvitzmYTt0GkjbHA4wUUT6Xt1cGkpUmhKp+QjNyd3boYGf1a5hlJQ/8+0s4Z+bWgAJ9OUfWRcZtITgHNZFsjJIUT5FzOgPnZSoINiOP15HYy9esMT0FtcASaRubxkxaBAoh+IzDKuazIuxPS8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LOYP265MB2256.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:11a::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.21; Thu, 30 Mar
+ 2023 14:17:29 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f2a:55d4:ea1d:dece%4]) with mapi id 15.20.6222.035; Thu, 30 Mar 2023
+ 14:17:29 +0000
+Date:   Thu, 30 Mar 2023 15:17:28 +0100
+From:   Gary Guo <gary@garyguo.net>
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>
+Subject: Re: [PATCH 08/13] rust: introduce `ARef`
+Message-ID: <20230330151728.5f84a692.gary@garyguo.net>
+In-Reply-To: <20230330043954.562237-8-wedsonaf@gmail.com>
+References: <20230330043954.562237-1-wedsonaf@gmail.com>
+        <20230330043954.562237-8-wedsonaf@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO6P123CA0035.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:2fe::8) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LOYP265MB2256:EE_
+X-MS-Office365-Filtering-Correlation-Id: 09877d05-75ee-4ffd-6e63-08db31297ef6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gLEX1F1oHlx7QtwBccZPxJlhl0VowH2RYQIMVTTjRP6hdw4IxHzvlxjH/ojX0NG8XHVMa+PLQwVbBcg0V8FFj5rnOfUqLIRip9uslECGHBA43UdzfpBa3WeY/RjV1tMJldJvVUCK00g9DqCvHLG5ZGFnMhq3QUIQoa6P+712tM1UkNWkuAKeoBbW9XqWQQqfTwSKhAz23aJn7LSu7rnS4AvMMm6JOb6FabVynWAQyAwA7LXpKphwGF7Qg9V7S9xtx3JsaZu9VH1V1e+7RnBrJevp0aGCLKMKsKzTFdONTIWBQmzAnR8nOR2F4UWaVLwsfT2csAqi0SV4yGDqNocLKEdkxPeFskyW5uYPPMKeKg/NTmONPmiBLZIPDkAheUN9dqvruiTEqncufCrLyi42XsqiZ60kjKGE16u2vofFZ7GyOKpVEvArqtcvKqcHrr0jnVQPfc00zSgrlDVRtJBsYWMtqUMRFBn6LVe+RYIScvrukowdWax7M7brIVzRS5MTzd7/aUgkI4rO3BgT7WfkFv2CEURN7ERRBR/gHcN2QJGM81y6KEHW0gJ3yc2TakvX2gwUxB7sr0uP1gwL0LaXfOLApCcFPp4dYbcnonNGXjw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(39840400004)(136003)(366004)(396003)(346002)(376002)(451199021)(38100700002)(6916009)(8936002)(5660300002)(66946007)(36756003)(66476007)(8676002)(41300700001)(66556008)(4326008)(6486002)(2616005)(54906003)(26005)(1076003)(86362001)(6506007)(2906002)(6512007)(186003)(478600001)(45080400002)(316002)(81973001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OgVTariO+ho7mcreQlWE/EWEtWvZmW5H1PFU3vNBWXOi1D0cIh/UsG3HAWjN?=
+ =?us-ascii?Q?IPHWWx56Rio+c6em33+3SG771YzttJdS0Ylr+W/bj/+u2oO8w5hNn2Jyi88D?=
+ =?us-ascii?Q?qmZZ30/hjAPkgOnXVdXdJRTwjMXqWWq8MrBauS13L+hsUtTQPO1kK/KOYiTS?=
+ =?us-ascii?Q?spJvlg9IaHvxSXMtyBzuHmkeFPEOMUjuiakxtqVX3FAYA70qW7MLccMhsNQH?=
+ =?us-ascii?Q?RnbXKBsZ/eNHc2gisXXiX4b0DZtHMjLOUXcM8EZZd7muPu0ewwWrZtR6EVoC?=
+ =?us-ascii?Q?SN1lxE1Tbqu/d5Un0PNPlOC4gD6/fTOBUJBwkEluw4AiX1mimZBW99AZpyb7?=
+ =?us-ascii?Q?yNmwJ4jqhR33jUQh+BwvQXbOOIv1j0fyC9EKYNakA8NpJqcxSYNRsSzPzr7Y?=
+ =?us-ascii?Q?wQr3lVyL5DVJw2w0wiobLLlik51UmgQh4qEQnb91A8gIrBUcwsmLKVFVGaeu?=
+ =?us-ascii?Q?zmAVh8Oywsdy54jexHZ7EiS+o0QbEa2K21zs3FKZjdbl8FnBHCcw4pYTz5Ft?=
+ =?us-ascii?Q?92Di4bQkuhz3x+fPXtnuYoFskbd2aeuY266MtLuOd5mV8YCWYcBJfTXi7L1X?=
+ =?us-ascii?Q?4Y2mcpYhdD9PVOmh1PoALpI5s7yAjGS0SaPjstpqePtQaiDJWjvbBjoASt0y?=
+ =?us-ascii?Q?JGx7Awq0t/6GRjaAkzzv96UkHFOk1AtJWA4NRGLKFtU0Ze072Qii7akJoRQa?=
+ =?us-ascii?Q?1HulJmH1gM2EygPnry8fpZAKYXF+ZO5O9eGwFUwgVUUEiU4L5DPZ0UPHi2m5?=
+ =?us-ascii?Q?xa4dEAko1hunXlfJBw/snr6m1wBNKSUTvjBDUqfUgSdIwm4Yv/5xB0lAdVq9?=
+ =?us-ascii?Q?QP5giMZjuW8cZsyQHX4goN1m/MUL9jpG5YRCHCty4Bba4uIAoQRQDUPco+Zi?=
+ =?us-ascii?Q?dQ7GZDNBAMNqVFO6eD01HawWhrSaUeTeYeVlzzI0KoXYG1jnAncqdGVKynWf?=
+ =?us-ascii?Q?CZZfNWGAULx0P51thlKutGuxGjCQaRfISR1pScFywbs84pTl/pCD43U0g/+O?=
+ =?us-ascii?Q?6sBK8uQ6AhnrEPs56sDTXv7SCYemi+FXaNFx0v3FTz2EnO1rJoo5gCr5yLMB?=
+ =?us-ascii?Q?9YtwU2VLAYgwcIHVY78yZVzLet715D1UQH5TnhXgwUVPoqYAmDl+9yFQCvBp?=
+ =?us-ascii?Q?to0fxlLFfUt1RyqRMjQDGl9lfqepV47j7P3rMZerJJj1E79z6Ub9Pyw48ZoS?=
+ =?us-ascii?Q?u9epAhZTzze5Bh71YlPx7cfalpRDkJRpUwuWX0OVX0qe2fxCBdaUpAGQFfxF?=
+ =?us-ascii?Q?HO+KM5OjE5G7+3XMAi4XSEHNJLkfrbuxWVip70O9tWyobkA0W2Vol9arKeBT?=
+ =?us-ascii?Q?PM1Csx33mttuJUDdlTlbc3Fwa95BhSpTHyUlN5BtCxkB6OPTdGDJlaxuJTnh?=
+ =?us-ascii?Q?5iEMB8U0lhg6ynxDOTs/Pz0f+k+Xk2lD6+1rKnZZg3h/6vQBTtqbJg8BYdwR?=
+ =?us-ascii?Q?SHGr9g/Hsos32FcLRFulifmUqw6LfqCKTmBQXxPBjPiIp7GfXy6u+gMM0zwS?=
+ =?us-ascii?Q?Dc+cIv8r5wZvtVYhxlkvMIxetybzmj9lIFECgjkr1BReU+xg1c/dyVkH+L8J?=
+ =?us-ascii?Q?JbQPUSTTDxsKC0nZUmA28lxJmsFI/gXtZsSkMijQ?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09877d05-75ee-4ffd-6e63-08db31297ef6
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 14:17:29.7938
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pPDbq3Z/uHNeyDF9GxTxV8dp7e5KC9HUWPlT9viQjt8HdTzR/dz/KHZLCNCFjsk2YSSm4wJkpZsQvo9XLMU0zA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LOYP265MB2256
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the eDP case we can support using aux-bus on MediaTek DP: this
-gives us the possibility to declare our panel as generic "panel-edp"
-which will automatically configure the timings and available modes
-via the EDID that we read from it.
+On Thu, 30 Mar 2023 01:39:49 -0300
+Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
 
-To do this, move the panel parsing at the end of the probe function
-so that the hardware is initialized beforehand and also power it on
-as, when we populate the aux-bus, the panel driver will trigger an
-EDID read as panel detection.
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
+> 
+> This is an owned reference to an object that is always ref-counted. This
+> is meant to be used in wrappers for C types that have their own ref
+> counting functions, for example, tasks, files, inodes, dentries, etc.
+> 
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 
-**** CUT ****
-Also, since the DP IP will always trigger a HPD interrupt at this
-stage, it was necessary to add a new `bridge_attached` member to
-the mtk_dp structure to make sure that `drm_helper_hpd_irq_event()`
-will not be called before the bridge gets actually attached, or
-otherwise we will get a NULL pointer KP due to mtk_dp->bridge.dev
-being uninitialized.
-**** CUT ****
+Reviewed-by: Gary Guo <gary@garyguo.net>
 
-Last but not least, since now the AUX transfers can happen in the
-separated aux-bus, it was necessary to add an exclusion for the
-cable_plugged_in check in `mtk_dp_aux_transfer()` and the easiest
-way to do this is to simply ignore checking that when the bridge
-type is eDP.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/gpu/drm/mediatek/mtk_dp.c | 56 +++++++++++++++++++++++++------
- 1 file changed, 46 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-index 62d53c4b3feb..f62ef24db67d 100644
---- a/drivers/gpu/drm/mediatek/mtk_dp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-@@ -4,6 +4,7 @@
-  * Copyright (c) 2022 BayLibre
-  */
- 
-+#include <drm/display/drm_dp_aux_bus.h>
- #include <drm/display/drm_dp.h>
- #include <drm/display/drm_dp_helper.h>
- #include <drm/drm_atomic_helper.h>
-@@ -2041,7 +2042,8 @@ static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
- 
- 	mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
- 
--	if (!mtk_dp->train_info.cable_plugged_in) {
-+	if (mtk_dp->bridge.type != DRM_MODE_CONNECTOR_eDP &&
-+	    !mtk_dp->train_info.cable_plugged_in) {
- 		ret = -EAGAIN;
- 		goto err;
- 	}
-@@ -2153,6 +2155,11 @@ static int mtk_dp_bridge_attach(struct drm_bridge *bridge,
- 	enable_irq(mtk_dp->irq);
- 	mtk_dp_hwirq_enable(mtk_dp, true);
- 
-+	if (mtk_dp->bridge.type == DRM_MODE_CONNECTOR_eDP /* && panel_on_aux_bus() */) {
-+		mtk_dp->train_info.cable_plugged_in = true;
-+		drm_helper_hpd_irq_event(mtk_dp->drm_dev);
-+	}
-+
- 	return 0;
- 
- err_bridge_attach:
-@@ -2482,6 +2489,20 @@ static int mtk_dp_register_audio_driver(struct device *dev)
- 	return PTR_ERR_OR_ZERO(mtk_dp->audio_pdev);
- }
- 
-+static int mtk_dp_edp_link_panel(struct drm_dp_aux *mtk_aux)
-+{
-+	struct mtk_dp *mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
-+	struct device *dev = mtk_aux->dev;
-+	struct drm_bridge *panel_aux_bridge;
-+
-+	panel_aux_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
-+	if (IS_ERR(panel_aux_bridge))
-+		return PTR_ERR(panel_aux_bridge);
-+
-+	mtk_dp->next_bridge = panel_aux_bridge;
-+	return 0;
-+}
-+
- static int mtk_dp_probe(struct platform_device *pdev)
- {
- 	struct mtk_dp *mtk_dp;
-@@ -2500,21 +2521,14 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, mtk_dp->irq,
- 				     "failed to request dp irq resource\n");
- 
--	mtk_dp->next_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
--	if (IS_ERR(mtk_dp->next_bridge) &&
--	    PTR_ERR(mtk_dp->next_bridge) == -ENODEV)
--		mtk_dp->next_bridge = NULL;
--	else if (IS_ERR(mtk_dp->next_bridge))
--		return dev_err_probe(dev, PTR_ERR(mtk_dp->next_bridge),
--				     "Failed to get bridge\n");
--
- 	ret = mtk_dp_dt_parse(mtk_dp, pdev);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to parse dt\n");
- 
--	drm_dp_aux_init(&mtk_dp->aux);
- 	mtk_dp->aux.name = "aux_mtk_dp";
-+	mtk_dp->aux.dev = dev;
- 	mtk_dp->aux.transfer = mtk_dp_aux_transfer;
-+	drm_dp_aux_init(&mtk_dp->aux);
- 
- 	spin_lock_init(&mtk_dp->irq_thread_lock);
- 
-@@ -2570,6 +2584,28 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 	mtk_dp->need_debounce = true;
- 	timer_setup(&mtk_dp->debounce_timer, mtk_dp_debounce_timer, 0);
- 
-+	if (mtk_dp->bridge.type == DRM_MODE_CONNECTOR_eDP) {
-+		/* Need to power on HW because aux-bus will read EDID */
-+		mtk_dp_aux_panel_poweron(mtk_dp, true);
-+
-+		ret = devm_of_dp_aux_populate_bus(&mtk_dp->aux, NULL);
-+
-+		/* Power off AUX and panel now as detection is done. */
-+		mtk_dp_aux_panel_poweron(mtk_dp, false);
-+
-+		/* We ignore -ENODEV error, as the panel may not be on aux-bus */
-+		if (ret && ret != -ENODEV)
-+			return ret;
-+
-+		/*
-+		 * Here we don't ignore any error, as if there's no panel to
-+		 * link, eDP is not configured correctly and will be unusable.
-+		 */
-+		ret = mtk_dp_edp_link_panel(&mtk_dp->aux);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 
--- 
-2.40.0
+> ---
+>  rust/kernel/types.rs | 107 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 107 insertions(+)
+> 
+> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+> index dbfae9bb97ce..b071730253c7 100644
+> --- a/rust/kernel/types.rs
+> +++ b/rust/kernel/types.rs
+> @@ -6,8 +6,10 @@ use crate::init::{self, PinInit};
+>  use alloc::boxed::Box;
+>  use core::{
+>      cell::UnsafeCell,
+> +    marker::PhantomData,
+>      mem::MaybeUninit,
+>      ops::{Deref, DerefMut},
+> +    ptr::NonNull,
+>  };
+>  
+>  /// Used to transfer ownership to and from foreign (non-Rust) languages.
+> @@ -295,6 +297,111 @@ opaque_init_funcs! {
+>      "Rust" manual_init4(arg1: A1, arg2: A2, arg3: A3, arg4: A4);
+>  }
+>  
+> +/// Types that are _always_ reference counted.
+> +///
+> +/// It allows such types to define their own custom ref increment and decrement functions.
+> +/// Additionally, it allows users to convert from a shared reference `&T` to an owned reference
+> +/// [`ARef<T>`].
+> +///
+> +/// This is usually implemented by wrappers to existing structures on the C side of the code. For
+> +/// Rust code, the recommendation is to use [`Arc`](crate::sync::Arc) to create reference-counted
+> +/// instances of a type.
+> +///
+> +/// # Safety
+> +///
+> +/// Implementers must ensure that increments to the reference count keep the object alive in memory
+> +/// at least until matching decrements are performed.
+> +///
+> +/// Implementers must also ensure that all instances are reference-counted. (Otherwise they
+> +/// won't be able to honour the requirement that [`AlwaysRefCounted::inc_ref`] keep the object
+> +/// alive.)
+> +pub unsafe trait AlwaysRefCounted {
+> +    /// Increments the reference count on the object.
+> +    fn inc_ref(&self);
+> +
+> +    /// Decrements the reference count on the object.
+> +    ///
+> +    /// Frees the object when the count reaches zero.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// Callers must ensure that there was a previous matching increment to the reference count,
+> +    /// and that the object is no longer used after its reference count is decremented (as it may
+> +    /// result in the object being freed), unless the caller owns another increment on the refcount
+> +    /// (e.g., it calls [`AlwaysRefCounted::inc_ref`] twice, then calls
+> +    /// [`AlwaysRefCounted::dec_ref`] once).
+> +    unsafe fn dec_ref(obj: NonNull<Self>);
+> +}
+> +
+> +/// An owned reference to an always-reference-counted object.
+> +///
+> +/// The object's reference count is automatically decremented when an instance of [`ARef`] is
+> +/// dropped. It is also automatically incremented when a new instance is created via
+> +/// [`ARef::clone`].
+> +///
+> +/// # Invariants
+> +///
+> +/// The pointer stored in `ptr` is non-null and valid for the lifetime of the [`ARef`] instance. In
+> +/// particular, the [`ARef`] instance owns an increment on the underlying object's reference count.
+> +pub struct ARef<T: AlwaysRefCounted> {
+> +    ptr: NonNull<T>,
+> +    _p: PhantomData<T>,
+> +}
+> +
+> +impl<T: AlwaysRefCounted> ARef<T> {
+> +    /// Creates a new instance of [`ARef`].
+> +    ///
+> +    /// It takes over an increment of the reference count on the underlying object.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// Callers must ensure that the reference count was incremented at least once, and that they
+> +    /// are properly relinquishing one increment. That is, if there is only one increment, callers
+> +    /// must not use the underlying object anymore -- it is only safe to do so via the newly
+> +    /// created [`ARef`].
+> +    pub unsafe fn from_raw(ptr: NonNull<T>) -> Self {
+> +        // INVARIANT: The safety requirements guarantee that the new instance now owns the
+> +        // increment on the refcount.
+> +        Self {
+> +            ptr,
+> +            _p: PhantomData,
+> +        }
+> +    }
+> +}
+> +
+> +impl<T: AlwaysRefCounted> Clone for ARef<T> {
+> +    fn clone(&self) -> Self {
+> +        self.inc_ref();
+> +        // SAFETY: We just incremented the refcount above.
+> +        unsafe { Self::from_raw(self.ptr) }
+> +    }
+> +}
+> +
+> +impl<T: AlwaysRefCounted> Deref for ARef<T> {
+> +    type Target = T;
+> +
+> +    fn deref(&self) -> &Self::Target {
+> +        // SAFETY: The type invariants guarantee that the object is valid.
+> +        unsafe { self.ptr.as_ref() }
+> +    }
+> +}
+> +
+> +impl<T: AlwaysRefCounted> From<&T> for ARef<T> {
+> +    fn from(b: &T) -> Self {
+> +        b.inc_ref();
+> +        // SAFETY: We just incremented the refcount above.
+> +        unsafe { Self::from_raw(NonNull::from(b)) }
+> +    }
+> +}
+> +
+> +impl<T: AlwaysRefCounted> Drop for ARef<T> {
+> +    fn drop(&mut self) {
+> +        // SAFETY: The type invariants guarantee that the `ARef` owns the reference we're about to
+> +        // decrement.
+> +        unsafe { T::dec_ref(self.ptr) };
+> +    }
+> +}
+> +
+>  /// A sum type that always holds either a value of type `L` or `R`.
+>  pub enum Either<L, R> {
+>      /// Constructs an instance of [`Either`] containing a value of type `L`.
 
