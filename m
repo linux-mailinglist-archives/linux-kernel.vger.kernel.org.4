@@ -2,377 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB766CF89A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013BC6CF89E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjC3BOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 21:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
+        id S229555AbjC3BP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 21:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjC3BOG (ORCPT
+        with ESMTP id S229510AbjC3BP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 21:14:06 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F2E10F3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 18:14:04 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-544f7c176easo326773927b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 18:14:04 -0700 (PDT)
+        Wed, 29 Mar 2023 21:15:58 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E0D19A;
+        Wed, 29 Mar 2023 18:15:57 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id z19so16671676plo.2;
+        Wed, 29 Mar 2023 18:15:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1680138843;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0uh3VI/HwfpxNl56FT1xl9IqF6BAOl2dSM/wtTtC3bw=;
-        b=JeZYP8GHQDMbu9LrTwpy3QA9QOUq0gJbeCfe6uOonoTC81udPCflAYQesKIMRi5JIO
-         fOx5Y52BIjQOE9vcXGlf6vFyu3GFhI/6SELZveaH20/uC7U96vVbK/QzDZd3sO1Ha01R
-         3tq+/pysm4ev45l/P4rAMNxOyuOTzlxqSuWY/WDAEQ/xPs3CnJcCerhWyVN7eu1X5haH
-         x/xohxsLoa/udipQ89vD7Zn1vEnZa1QKlCoio47Ayv7BoACrTIHUN69MWdgbaZMpuZkI
-         WrFpKmdwZW4yUDqDwysXPhz9g7yqulUmyt49808lR2CRhucpxamGSD2RnNxl+CdH/Cln
-         it5Q==
+        d=gmail.com; s=20210112; t=1680138956;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TihRUSuIbcyCr0lFNEjhUbfKbaamQ0uPf3hyuIDE6gQ=;
+        b=RTCry2uEnJf3RnYi048V1AACEOoeINBihN3daGEThrK7Bq+36P6NP1q9dkpULWbie8
+         uQ+5BgrxGjr7TFybutkeCUNROz8jAAU2iJAYvbAeJat1n3Y84fIlGB5JO8bQN2fILctV
+         weQomRf25JCSNirmMlrZaZXWqMY+Ndlv4D7ywqjsk4uGOFl2jRWEjPrDLVe+qEUwtVb7
+         gHIGhoXDOIjAZBJu0GAc9dXoeWWsZa95TZ3WNZxAeeqOtwj4ggXyBUQA91tbJh7MSABN
+         4Q8h5m17gFc6yi4pAJjEumavn5466GH9ZVOjZe9MX8KInbActnX91Mc0xDbj3tPgLqIk
+         M2tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680138843;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0uh3VI/HwfpxNl56FT1xl9IqF6BAOl2dSM/wtTtC3bw=;
-        b=rS5oNJ/tVtkmgdv5KDr8iashgJds/qvxk3NTki7fNe41oP7VtOQc82qHzneEPMUaUa
-         yAWaSIhLRbdtcPx7n2jUNcJUm2l6zc2RC6HnEQsfzclxRi7UsnJaTdhYu/ZT0mCehTWM
-         3oZrT8203k4SZ7u/ihpgnBXBWHZbE5/9mb4w54eM+shFUPwM+0QaE58oZ2gMg+KGHciD
-         LNNyzmb1unZDZgHLOCSRnV0N8ENirVTOv+/usYOdaxpyNBpXsZEdyvERGjtXcXsoeAPH
-         i9bQ6/I+u9h3ozDIR4JHp4oGE53iicBlNtjy9UWcy/2ZD7Vh8QRxand5p+dk2fgYax1B
-         xKWA==
-X-Gm-Message-State: AAQBX9fxcgUaU83rV9mj2rn2byem3W4cZoGGaMJ+8ITXq1q2grfYg5jV
-        qC7ZKd9i5R8xM1LDnsCIIMyvG0GRoIVHTqCphWBC
-X-Google-Smtp-Source: AKy350Y0gWk+uePKIPIJJoNpZDeRtLoxl6/NYOTwgxDyy8zUIat6be29joBLDaG3UBQL1+iuAKia6YHoPvP7wdjta3I=
-X-Received: by 2002:a81:bd4d:0:b0:541:359c:103a with SMTP id
- n13-20020a81bd4d000000b00541359c103amr10381430ywk.8.1680138843461; Wed, 29
- Mar 2023 18:14:03 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680138956;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TihRUSuIbcyCr0lFNEjhUbfKbaamQ0uPf3hyuIDE6gQ=;
+        b=a97sSIxFPhaBR4gUofMdtd0njRI9NNvGYc0hJree1Mpwtx+Gn12tm6SVTz4HqnK9tG
+         ytGf9e8vmBfWpLBxsvW0Yr7+/9DfE8x4QqcJK4yyiZSJfxa4mRhw7iXP46vj06maKiyx
+         iCFxFyMCSn+UA87kITzduEAPzEsvgxaptBQPZZgpjx5Pmak7yb0a/DrGmuSLDyNa/vqQ
+         Sxqw9ZAZmeWqSa3N0Ly1AbfJM1Ei376djTL7uYXs5DWzUT/QIbctv7AdU5tsFMPuUC5S
+         RWZO6KYYfpewE/wKWYsn/KbeVr4XHP/7VDljvPHUf+6P+XyQTdC92+Q4S3R56CNPWhO6
+         pd/w==
+X-Gm-Message-State: AAQBX9dCnhsDQhgfBQ0gMOub4YCto9HApE82OPBoKPCaDpiRm6evN33j
+        89OAhqtfIauuR2USCUM/IAc=
+X-Google-Smtp-Source: AKy350bTyshcbmCc+pIoeONIBpErKFE3Gxut0UYm4dqDCX6T8TbmlSk/RhFbqlgU82sSChm+gMnTgQ==
+X-Received: by 2002:a17:903:7c3:b0:19c:b4e3:c65b with SMTP id ko3-20020a17090307c300b0019cb4e3c65bmr16884174plb.8.1680138956389;
+        Wed, 29 Mar 2023 18:15:56 -0700 (PDT)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902ab8c00b001a1a9a5e53fsm6979478plr.136.2023.03.29.18.15.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 18:15:55 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 18:15:54 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Subject: Re: [PATCH v13 057/113] KVM: TDX: MTRR: implement get_mt_mask() for
+ TDX
+Message-ID: <20230330011554.GD1112017@ls.amr.corp.intel.com>
+References: <cover.1678643051.git.isaku.yamahata@intel.com>
+ <cbfaedb652dad85f4020a2dcd74ac4abb5c14ac5.1678643052.git.isaku.yamahata@intel.com>
+ <b3198a621a39d4c277ddf540e7a492953dc3637d.camel@intel.com>
+ <20230325011200.GB214881@ls.amr.corp.intel.com>
+ <a10d63840b02c4bbe1c027e5f230e4799f87ddda.camel@intel.com>
 MIME-Version: 1.0
-References: <20230315224704.2672-1-casey@schaufler-ca.com> <20230315224704.2672-11-casey@schaufler-ca.com>
-In-Reply-To: <20230315224704.2672-11-casey@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 29 Mar 2023 21:13:52 -0400
-Message-ID: <CAHC9VhTyMmyB5Yr8Zp+Xg3R=J9VLp-oChxJPcAv+fL8czVzcYg@mail.gmail.com>
-Subject: Re: [PATCH v7 10/11] SELinux: Add selfattr hooks
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     linux-security-module@vger.kernel.org, jmorris@namei.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net, selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a10d63840b02c4bbe1c027e5f230e4799f87ddda.camel@intel.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 6:52=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
-.com> wrote:
->
-> Add hooks for setselfattr and getselfattr. These hooks are not very
-> different from their setprocattr and getprocattr equivalents, and
-> much of the code is shared.
->
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> Cc: selinux@vger.kernel.org
-> Cc: Paul Moore <paul@paul-moore.com>
-> ---
->  security/selinux/hooks.c | 147 +++++++++++++++++++++++++++++++--------
->  1 file changed, 117 insertions(+), 30 deletions(-)
->
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 9403aee75981..8896edf80aa9 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -6348,8 +6348,7 @@ static void selinux_d_instantiate(struct dentry *de=
-ntry, struct inode *inode)
->                 inode_doinit_with_dentry(inode, dentry);
->  }
->
-> -static int selinux_getprocattr(struct task_struct *p,
-> -                              const char *name, char **value)
-> +static int do_getattr(unsigned int attr, struct task_struct *p, char **v=
-alue)
+On Mon, Mar 27, 2023 at 09:54:40AM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
 
-Are you ready for more naming nitpicks? ;)
+> > diff -u b/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > --- b/arch/x86/kvm/vmx/tdx.c
+> > +++ b/arch/x86/kvm/vmx/tdx.c
+> > @@ -347,6 +347,25 @@
+> >  	return 0;
+> >  }
+> >  
+> > +u8 tdx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> > +{
+> > +	/* TDX private GPA is always WB. */
+> > +	if (!(gfn & kvm_gfn_shared_mask(vcpu->kvm))) {
+> 
+> Are you still passing a "raw" GFN?  Could you explain why you choose this way?
+> 
+> > +		/* MMIO is only for shared GPA. */
+> > +		WARN_ON_ONCE(is_mmio);
+> > +		return  MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT;
+> 
+> I guess it's better to include VMX_EPT_IPAT_BIT bit.
 
-Let's call this 'selinux_lsm_getattr()', and the matching setter
-should be 'selinux_lsm_setattr()'.
+On second thought, there is no need to check it.  We can simply drop this check.
 
->  {
->         const struct task_security_struct *__tsec;
->         u32 sid;
-> @@ -6367,20 +6366,27 @@ static int selinux_getprocattr(struct task_struct=
- *p,
->                         goto bad;
->         }
->
-> -       if (!strcmp(name, "current"))
-> +       switch (attr) {
-> +       case LSM_ATTR_CURRENT:
->                 sid =3D __tsec->sid;
-> -       else if (!strcmp(name, "prev"))
-> +               break;
-> +       case LSM_ATTR_PREV:
->                 sid =3D __tsec->osid;
-> -       else if (!strcmp(name, "exec"))
-> +               break;
-> +       case LSM_ATTR_EXEC:
->                 sid =3D __tsec->exec_sid;
-> -       else if (!strcmp(name, "fscreate"))
-> +               break;
-> +       case LSM_ATTR_FSCREATE:
->                 sid =3D __tsec->create_sid;
-> -       else if (!strcmp(name, "keycreate"))
-> +               break;
-> +       case LSM_ATTR_KEYCREATE:
->                 sid =3D __tsec->keycreate_sid;
-> -       else if (!strcmp(name, "sockcreate"))
-> +               break;
-> +       case LSM_ATTR_SOCKCREATE:
->                 sid =3D __tsec->sockcreate_sid;
-> -       else {
-> -               error =3D -EINVAL;
-> +               break;
-> +       default:
-> +               error =3D -EOPNOTSUPP;
+u8 tdx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+{
+	if (is_mmio)
+		return MTRR_TYPE_UNCACHABLE << VMX_EPT_MT_EPTE_SHIFT;
 
-The error should probably be -EINVAL.
+	if (!kvm_arch_has_noncoherent_dma(vcpu->kvm))
+		return (MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT) | VMX_EPT_IPAT_BIT;
 
->                 goto bad;
->         }
->         rcu_read_unlock();
-> @@ -6398,7 +6404,7 @@ static int selinux_getprocattr(struct task_struct *=
-p,
->         return error;
->  }
->
-> -static int selinux_setprocattr(const char *name, void *value, size_t siz=
-e)
-> +static int do_setattr(u64 attr, void *value, size_t size)
->  {
->         struct task_security_struct *tsec;
->         struct cred *new;
-> @@ -6409,28 +6415,36 @@ static int selinux_setprocattr(const char *name, =
-void *value, size_t size)
->         /*
->          * Basic control over ability to set these attributes at all.
->          */
-> -       if (!strcmp(name, "exec"))
-> +       switch (attr) {
-> +       case LSM_ATTR_CURRENT:
-> +               error =3D avc_has_perm(&selinux_state,
-> +                                    mysid, mysid, SECCLASS_PROCESS,
-> +                                    PROCESS__SETCURRENT, NULL);
-> +               break;
-> +       case LSM_ATTR_EXEC:
->                 error =3D avc_has_perm(&selinux_state,
->                                      mysid, mysid, SECCLASS_PROCESS,
->                                      PROCESS__SETEXEC, NULL);
-> -       else if (!strcmp(name, "fscreate"))
-> +               break;
-> +       case LSM_ATTR_FSCREATE:
->                 error =3D avc_has_perm(&selinux_state,
->                                      mysid, mysid, SECCLASS_PROCESS,
->                                      PROCESS__SETFSCREATE, NULL);
-> -       else if (!strcmp(name, "keycreate"))
-> +               break;
-> +       case LSM_ATTR_KEYCREATE:
->                 error =3D avc_has_perm(&selinux_state,
->                                      mysid, mysid, SECCLASS_PROCESS,
->                                      PROCESS__SETKEYCREATE, NULL);
-> -       else if (!strcmp(name, "sockcreate"))
-> +               break;
-> +       case LSM_ATTR_SOCKCREATE:
->                 error =3D avc_has_perm(&selinux_state,
->                                      mysid, mysid, SECCLASS_PROCESS,
->                                      PROCESS__SETSOCKCREATE, NULL);
-> -       else if (!strcmp(name, "current"))
-> -               error =3D avc_has_perm(&selinux_state,
-> -                                    mysid, mysid, SECCLASS_PROCESS,
-> -                                    PROCESS__SETCURRENT, NULL);
-> -       else
-> -               error =3D -EINVAL;
-> +               break;
-> +       default:
-> +               error =3D -EOPNOTSUPP;
+	/* TDX enforces CR0.CD = 0 and KVM MTRR emulation enforces writeback. */
+	return MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT;
+}
 
-Same as above, should be -EINVAL.
-
-> +               break;
-> +       }
->         if (error)
->                 return error;
->
-> @@ -6442,13 +6456,14 @@ static int selinux_setprocattr(const char *name, =
-void *value, size_t size)
->                 }
->                 error =3D security_context_to_sid(&selinux_state, value, =
-size,
->                                                 &sid, GFP_KERNEL);
-> -               if (error =3D=3D -EINVAL && !strcmp(name, "fscreate")) {
-> +               if (error =3D=3D -EINVAL && attr =3D=3D LSM_ATTR_FSCREATE=
-) {
->                         if (!has_cap_mac_admin(true)) {
->                                 struct audit_buffer *ab;
->                                 size_t audit_size;
->
-> -                               /* We strip a nul only if it is at the en=
-d, otherwise the
-> -                                * context contains a nul and we should a=
-udit that */
-> +                               /* We strip a nul only if it is at the en=
-d,
-> +                                * otherwise the context contains a nul a=
-nd
-> +                                * we should audit that */
-
-You *do* get gold stars for fixing line lengths in close proximity ;)
-
-
->                                 if (str[size - 1] =3D=3D '\0')
->                                         audit_size =3D size - 1;
->                                 else
-> @@ -6459,7 +6474,8 @@ static int selinux_setprocattr(const char *name, vo=
-id *value, size_t size)
->                                 if (!ab)
->                                         return error;
->                                 audit_log_format(ab, "op=3Dfscreate inval=
-id_context=3D");
-> -                               audit_log_n_untrustedstring(ab, value, au=
-dit_size);
-> +                               audit_log_n_untrustedstring(ab, value,
-> +                                                           audit_size);
->                                 audit_log_end(ab);
->
->                                 return error;
-> @@ -6483,11 +6499,11 @@ static int selinux_setprocattr(const char *name, =
-void *value, size_t size)
->            checks and may_create for the file creation checks. The
->            operation will then fail if the context is not permitted. */
->         tsec =3D selinux_cred(new);
-> -       if (!strcmp(name, "exec")) {
-> +       if (attr =3D=3D LSM_ATTR_EXEC) {
->                 tsec->exec_sid =3D sid;
-> -       } else if (!strcmp(name, "fscreate")) {
-> +       } else if (attr =3D=3D LSM_ATTR_FSCREATE) {
->                 tsec->create_sid =3D sid;
-> -       } else if (!strcmp(name, "keycreate")) {
-> +       } else if (attr =3D=3D LSM_ATTR_KEYCREATE) {
->                 if (sid) {
->                         error =3D avc_has_perm(&selinux_state, mysid, sid=
-,
->                                              SECCLASS_KEY, KEY__CREATE, N=
-ULL);
-> @@ -6495,9 +6511,9 @@ static int selinux_setprocattr(const char *name, vo=
-id *value, size_t size)
->                                 goto abort_change;
->                 }
->                 tsec->keycreate_sid =3D sid;
-> -       } else if (!strcmp(name, "sockcreate")) {
-> +       } else if (attr =3D=3D LSM_ATTR_SOCKCREATE) {
->                 tsec->sockcreate_sid =3D sid;
-> -       } else if (!strcmp(name, "current")) {
-> +       } else if (attr =3D=3D LSM_ATTR_CURRENT) {
->                 error =3D -EINVAL;
->                 if (sid =3D=3D 0)
->                         goto abort_change;
-> @@ -6542,6 +6558,75 @@ static int selinux_setprocattr(const char *name, v=
-oid *value, size_t size)
->         return error;
->  }
->
-> +static int selinux_getselfattr(unsigned int __user attr,
-> +                              struct lsm_ctx __user *ctx, size_t *size,
-> +                              u32 __user flags)
-> +{
-> +       char *value;
-> +       size_t total_len;
-> +       int len;
-> +       int rc =3D 0;
-> +
-> +       len =3D do_getattr(attr, current, &value);
-> +       if (len < 0)
-> +               return len;
-> +
-> +       total_len =3D len + sizeof(*ctx);
-> +
-> +       if (total_len > *size)
-> +               rc =3D -E2BIG;
-> +       else
-> +               lsm_fill_user_ctx(ctx, value, len, LSM_ID_SELINUX, 0);
-> +
-> +       *size =3D total_len;
-> +       return rc;
-> +}
-> +
-> +static int selinux_setselfattr(unsigned int __user attr,
-> +                              struct lsm_ctx __user *ctx, size_t __user =
-size,
-> +                              u32 __user flags)
-> +{
-> +       struct lsm_ctx *lctx;
-> +       void *context;
-> +       int rc;
-> +
-> +       context =3D kmalloc(size, GFP_KERNEL);
-> +       if (context =3D=3D NULL)
-> +               return -ENOMEM;
-> +
-> +       lctx =3D (struct lsm_ctx *)context;
-> +       if (copy_from_user(context, ctx, size))
-> +               rc =3D -EFAULT;
-> +       else if (lctx->ctx_len > size)
-> +               rc =3D -EINVAL;
-> +       else
-> +               rc =3D do_setattr(attr, lctx + 1, lctx->ctx_len);
-> +
-> +       kfree(context);
-> +       if (rc > 0)
-> +               return 0;
-> +       return rc;
-> +}
-> +
-> +static int selinux_getprocattr(struct task_struct *p,
-> +                              const char *name, char **value)
-> +{
-> +       unsigned int attr =3D lsm_name_to_attr(name);
-> +
-> +       if (attr)
-> +               return do_getattr(attr, p, value);
-> +       return -EINVAL;
-> +}
-> +
-> +static int selinux_setprocattr(const char *name, void *value, size_t siz=
-e)
-> +{
-> +       int attr =3D lsm_name_to_attr(name);
-> +
-> +       if (attr)
-> +               return do_setattr(attr, value, size);
-> +       return -EINVAL;
-> +}
-> +
->  static int selinux_ismaclabel(const char *name)
->  {
->         return (strcmp(name, XATTR_SELINUX_SUFFIX) =3D=3D 0);
-> @@ -7183,6 +7268,8 @@ static struct security_hook_list selinux_hooks[] __=
-lsm_ro_after_init =3D {
->
->         LSM_HOOK_INIT(d_instantiate, selinux_d_instantiate),
->
-> +       LSM_HOOK_INIT(getselfattr, selinux_getselfattr),
-> +       LSM_HOOK_INIT(setselfattr, selinux_setselfattr),
->         LSM_HOOK_INIT(getprocattr, selinux_getprocattr),
->         LSM_HOOK_INIT(setprocattr, selinux_setprocattr),
->
-> --
-> 2.39.2
-
---
-paul-moore.com
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
