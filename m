@@ -2,268 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4932A6D0004
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4276D000E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjC3Jo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S230354AbjC3JqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjC3Joz (ORCPT
+        with ESMTP id S230014AbjC3Jpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:44:55 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2D165AD
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:44:52 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-536af432ee5so344749677b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:44:52 -0700 (PDT)
+        Thu, 30 Mar 2023 05:45:36 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3838A48
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:45:15 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id eg48so73994882edb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:45:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680169491;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=D5QhRmDJcF4XcN+YN/wMUr5xeRsIP0q2NHf6Lg2WSCU=;
-        b=rTytkproI4ZeYbf79ItQhzklZhvcyt1yC5XYKgZe0dIhEll6PC2xTx9HgbbCm3IRnq
-         YiBC0+N8Zg79EaS2SBKB+Lq6+DM/mBctgOMjgwHh8272j3J22OQOYpDviYU29Zwl3LJT
-         PdRhL7pLas02bTYcYPoxLpRG0lQ8rg+4baZ6KuaejUe+F4E4oxuTsHJFhVP/9ROHPsV3
-         Du+GTrKY9ungEXaKXuWcb8Q/qjRsnW/GaM+lJ/L8SZOTIYkf2ovvTQtzu4c3tH5cBgHI
-         AU/J320dB0t1i65FoXcyELdrMaF8W8XssqADPM3o3DCXMyW26MRVe/4vhaKpx8hRpL8J
-         XZ4Q==
+        d=chromium.org; s=google; t=1680169513;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AmFm2H2aOAkbQY/h2v5MAmP45SXRmGLw4e1al6CBI2I=;
+        b=PGpd/3k73zNpbvHVT1UNSiV5gtK0hy3DPGeYWoIayaboLOGFXTitshD+imYv2Js4WA
+         MM1Y6zOlUAy2AFVvLHyZtSslq5XKgyyZG3y39FnjeXLrlTVhDhAjXvJZMQx1Us3QGzMi
+         qb6Sl0zeTh2D/1f/uRItg4eljeiJoSj7Y+tCo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680169491;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1680169513;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=D5QhRmDJcF4XcN+YN/wMUr5xeRsIP0q2NHf6Lg2WSCU=;
-        b=qDrA01dsxqd2I9DpioIQQW2idWcVCerE6W/KDKrMXQnEE9fha/4egx4Ib/OW2zZRdA
-         huY4ftx3CTgk8PGl9ikAbklmveWYNB+O3yveyZuCvi3y+pAJ3RLgdUfesGladuy6Eo5V
-         1Q2JrgezNexgOFp6BC0YWDwkBZivAGMPg7tN42exp1HFBlsT7fQZFAVFdVE86ks9E66K
-         A8G7ocOaatEt7cPJV7zQbu1xL0G3pzGw9HmU723gXwzzzTRgw9e0VIL27NwMDHmrSRxP
-         gcBR5NUd/edhjOtwIXQ0YDOSDgFyodOcmAp99ZzG0XFUlIcGnBJ9sL5LE8GkpiwlIF1F
-         YDJg==
-X-Gm-Message-State: AAQBX9d0DgXtdn99GvGaKWcWf1ZcB/9FR5pxy126nMszf5di4tqutsjS
-        Tttb12xFYZqjKeUDsaUJshotnmLWc1+ZZohh0E/kDQ==
-X-Google-Smtp-Source: AKy350ZT55VVqmvU2dy3SDJwH+Sxn92AQif8rp45ZViwv5FDX92TYrmgN4KcoHsSxDwuItx9VzmbCUYV/wiH71Th1UU=
-X-Received: by 2002:a81:441e:0:b0:546:3252:385d with SMTP id
- r30-20020a81441e000000b005463252385dmr2256127ywa.5.1680169491491; Thu, 30 Mar
- 2023 02:44:51 -0700 (PDT)
+        bh=AmFm2H2aOAkbQY/h2v5MAmP45SXRmGLw4e1al6CBI2I=;
+        b=KxIAYi2cZ9Kr/3WZxTlkcO8/UaBymDNRoSERiiSkozqlpizwbxL4PT0mceydL3hwxD
+         gBzOsOV0ZwgJ3MAexDT/ziC9fHfEB+lIvLezaAWyg5D6j42PXCjw1QEwU6HaBkDyPg/9
+         qzjKWAxDxyoNeMLuhph1CFFbixkEzXZpQJePALKwJFnMSgAKOrm1rN5JiENROSdmNiHt
+         6BcAjvGesIlC9A8QCu0/lpm60zGrN3Rjlj7HiX62MCI1fuvhZeou3A+bxUlvZCnRrAyp
+         yiSMLMblDXrMWdT4mnodBocpw7WBeIxBv/6tTPxvGHpB8Q9cWl5y/XXGPZ6CYU5Yx3mq
+         0t9g==
+X-Gm-Message-State: AAQBX9cFVx85EWQy+ao8IqNwRLSzKbPo0nTMulkGuRXAd0MNgbrT0E7X
+        R98mZLGx2LYQg+GEUoxh5XDbfBEbumue5+uKu18xLA==
+X-Google-Smtp-Source: AKy350ahiWO+Fj4V7FTU9MC6Fk01PllpwoR7WJ4iOZ/5VlJFhikZNy2psVuFakzSi4JpxpkDOWltmw==
+X-Received: by 2002:a17:906:5a43:b0:8aa:be5c:b7c5 with SMTP id my3-20020a1709065a4300b008aabe5cb7c5mr24312480ejc.41.1680169513712;
+        Thu, 30 Mar 2023 02:45:13 -0700 (PDT)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:1396:ff5d:6e2a:df6d])
+        by smtp.gmail.com with ESMTPSA id k9-20020a17090666c900b0092b606cb803sm17683616ejp.140.2023.03.30.02.45.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 02:45:13 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v5 0/2] kexec: Fix kexec_file_load for llvm16
+Date:   Thu, 30 Mar 2023 11:44:46 +0200
+Message-Id: <20230321-kexec_clang16-v5-0-5563bf7c4173@chromium.org>
 MIME-Version: 1.0
-References: <cover.1680162377.git.quic_varada@quicinc.com> <c46b542b112b59002ab965be1d3fcae8c372d545.1680162377.git.quic_varada@quicinc.com>
-In-Reply-To: <c46b542b112b59002ab965be1d3fcae8c372d545.1680162377.git.quic_varada@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 30 Mar 2023 12:44:40 +0300
-Message-ID: <CAA8EJpo_ckJtYV4aU613X5L6+wj-1i9vZkud5p72PLdCSnj5ng@mail.gmail.com>
-Subject: Re: [PATCH v5 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA5aJWQC/33OzQrCMAwH8FeRnq00/dg6T76HiGxp5opzg1aHM
+ vbuBo+iO4Uk/H/JLDKlSFnsN7NINMUcx4Ebt90I7OrhQjIG7oVW2iijQV7pSXjGnndQSOtAoTY
+ BdIWCM02dSTapHrDj1PDoex52Md/H9PrcmIDL8R83gVSyLgvfosYSbThgl8ZbfNx2Y7qIE2OTX
+ gU0AwEUueCg9EX1AzCrgGHAtQoK9EGRL38AdhWwDICxyoFvK0/fHyzL8gYkFJwTdQEAAA==
+To:     Eric Biederman <ebiederm@xmission.com>
+Cc:     Baoquan He <bhe@redhat.com>, Philipp Rudo <prudo@redhat.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ross Zwisler <zwisler@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Simon Horman <horms@kernel.org>,
+        Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1562; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=SayQVLE6H72tjacCmNcmtcnOuUDgjnttSSVkCQO8nwU=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkJVoXZBZQgBE2mt6hnkD3x10Mo+77PbgkqAlUv
+ DUrdUN7lMCJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZCVaFwAKCRDRN9E+zzrE
+ iAdoD/9iPmpE6/UU41Svse7e7tdRS16SUUtYUJeo/EFBaOCBvwrfjzy8VWZRlbSxOLj6kZtGhxU
+ e9QmkiwAYz3MriXFz0LgSFPithiLGCwsyGKGLisVczcoCpN2Mh4gZ7mS0Iugy0rrChSnc0juGYq
+ yG2ZrJWuOwycDBefzYLh4UxL08GlvUIP9XC7fBTEcosZQl3k9i3F3F1uUzBqCIUgGDMHmF+9JW+
+ VrPi4F2Lz7d2+EVQihLq8QT6IoU+aiwDlHodOl04LQd9a92rzP7UGTqH7idqDJjH6vAXwMh0Qw4
+ udF9lMsdLFUqO5ikYkDMtlolratzqThH5Az/A9LFd+c3zpJvTQZ25v1sAKVPnKXUJDZwD2+pIkG
+ +KMCpHt02hPHttKKfxolte4FXkQzk1V4hKbdpahadN98uUPVityKckSZvuw5uFFWLJ8j3DRd0tm
+ ex5WZCiztgdnpWZ3Z23x7zk+/qVBk9Wn2AYVC8nsgDiJJ9AKa0RKCrDKeh+zIcPPLx/60U5/iDe
+ c3MQ7eQqNq1jsrfoET70+HpUDHw4TX7JsWPcMRXgNWjtkBgiRDC79LjlrJOMQoMgfjPMIj/cKCc
+ js4lKsxpS5AMD97rqiQKEIybAUTE1U/4s7iGp0UHDdnSaSn5kUJoGok+xMCGMvrrlnygTUIyYO/
+ dRH2kKxwSXes4qA==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Mar 2023 at 11:42, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> Add USB phy and controller related nodes
->
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  Changes in v5:
->         - Fix additional comments
->         - Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
->         - 'make dtbs_check' giving the following messages since
->           ipq9574 doesn't have power domains. Hope this is ok
->
->                 /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
->                 From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
->                 /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
->                 From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+When upreving llvm I realised that kexec stopped working on my test
+platform. This patch fixes it.
 
-No, I think it is not.
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Changes in v5:
+- Add warning when multiple text sections are found. Thanks Simon!
+- Add Fixes tag.
+- Link to v4: https://lore.kernel.org/r/20230321-kexec_clang16-v4-0-1340518f98e9@chromium.org
 
->
->
->  Changes in v4:
->         - Use newer bindings without subnodes
->         - Fix coding style issues
->
->  Changes in v3:
->         - Insert the nodes at proper location
->
->  Changes in v2:
->         - Fixed issues flagged by Krzysztof
->         - Fix issues reported by make dtbs_check
->         - Remove NOC related clocks (to be added with proper
->           interconnect support)
->
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 120 ++++++++++++++++++++++++++++++++++
->  1 file changed, 120 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> index 2bb4053..8fa9e1a 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> @@ -186,6 +186,33 @@
->                 method = "smc";
->         };
->
-> +       reg_usb_3p3: s3300 {
-> +               compatible = "regulator-fixed";
-> +               regulator-min-microvolt = <3300000>;
-> +               regulator-max-microvolt = <3300000>;
-> +               regulator-boot-on;
-> +               regulator-always-on;
-> +               regulator-name = "usb-phy-vdd-dummy";
-> +       };
-> +
-> +       reg_usb_1p8: s1800 {
-> +               compatible = "regulator-fixed";
-> +               regulator-min-microvolt = <1800000>;
-> +               regulator-max-microvolt = <1800000>;
-> +               regulator-boot-on;
-> +               regulator-always-on;
-> +               regulator-name = "usb-phy-pll-dummy";
-> +       };
-> +
-> +       reg_usb_0p925: s0925 {
-> +               compatible = "regulator-fixed";
-> +               regulator-min-microvolt = <925000>;
-> +               regulator-max-microvolt = <925000>;
-> +               regulator-boot-on;
-> +               regulator-always-on;
-> +               regulator-name = "usb-phy-dummy";
-> +       };
-> +
->         reserved-memory {
->                 #address-cells = <2>;
->                 #size-cells = <2>;
-> @@ -215,6 +242,52 @@
->                 #size-cells = <1>;
->                 ranges = <0 0 0 0xffffffff>;
->
-> +               qusb_phy_0: phy@7b000 {
-> +                       compatible = "qcom,ipq9574-qusb2-phy";
-> +                       reg = <0x0007b000 0x180>;
-> +                       #phy-cells = <0>;
-> +
-> +                       clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> +                                <&xo_board_clk>;
-> +                       clock-names = "cfg_ahb",
-> +                                     "ref";
-> +
-> +                       vdd-supply = <&reg_usb_0p925>;
-> +                       vdda-pll-supply = <&reg_usb_1p8>;
-> +                       vdda-phy-dpdm-supply = <&reg_usb_3p3>;
-> +
-> +                       resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               ssphy_0: phy@7d000 {
+Changes in v4:
+- Add Cc: stable
+- Add linker script for x86
+- Add a warning when the kernel image has overlapping sections.
+- Link to v3: https://lore.kernel.org/r/20230321-kexec_clang16-v3-0-5f016c8d0e87@chromium.org
 
-Nit: usually the label usb_0_qmpphy
+Changes in v3:
+- Fix initial value. Thanks Ross!
+- Link to v2: https://lore.kernel.org/r/20230321-kexec_clang16-v2-0-d10e5d517869@chromium.org
 
-> +                       compatible = "qcom,ipq9574-qmp-usb3-phy";
-> +                       reg = <0x0007d000 0xa00>;
-> +                       #phy-cells = <0>;
-> +
-> +                       clocks = <&gcc GCC_USB0_AUX_CLK>,
-> +                                <&xo_board_clk>,
-> +                                <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> +                                <&gcc GCC_USB0_PIPE_CLK>;
-> +                       clock-names = "aux",
-> +                                     "ref",
-> +                                     "com_aux",
-> +                                     "pipe";
-> +
-> +                       resets = <&gcc GCC_USB0_PHY_BCR>,
-> +                                <&gcc GCC_USB3PHY_0_PHY_BCR>;
-> +                       reset-names = "phy",
-> +                                     "phy_phy";
-> +
-> +                       vdda-pll-supply = <&reg_usb_1p8>;
-> +                       vdda-phy-supply = <&reg_usb_0p925>;
-> +
-> +                       status = "disabled";
-> +
-> +                       #clock-cells = <0>;
-> +                       clock-output-names = "usb0_pipe_clk";
-> +               };
-> +
->                 pcie0_phy: phy@84000 {
->                         compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
->                         reg = <0x00084000 0x1bc>; /* Serdes PLL */
-> @@ -436,6 +509,53 @@
->                         status = "disabled";
->                 };
->
-> +               usb3: usb@8a00000 {
-> +                       compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
-> +                       reg = <0x08af8800 0x400>;
-> +                       #address-cells = <1>;
-> +                       #size-cells = <1>;
-> +                       ranges;
-> +
-> +                       clocks = <&gcc GCC_SNOC_USB_CLK>,
-> +                                <&gcc GCC_ANOC_USB_AXI_CLK>,
-> +                                <&gcc GCC_USB0_MASTER_CLK>,
-> +                                <&gcc GCC_USB0_SLEEP_CLK>,
-> +                                <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> +
-> +                       clock-names = "sys_noc_axi",
-> +                                     "anoc_axi",
-> +                                     "master",
-> +                                     "sleep",
-> +                                     "mock_utmi";
-> +
-> +                       assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
-> +                                         <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> +                       assigned-clock-rates = <200000000>,
-> +                                              <24000000>;
-> +
-> +                       interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
-> +                       interrupt-names = "pwr_event";
-> +
-> +                       resets = <&gcc GCC_USB_BCR>;
-> +                       status = "disabled";
-> +
-> +                       dwc_0: usb@8a00000 {
-> +                               compatible = "snps,dwc3";
-> +                               reg = <0x8a00000 0xcd00>;
-> +                               clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> +                               clock-names = "ref";
-> +                               interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> +                               phys = <&qusb_phy_0>, <&ssphy_0>;
-> +                               phy-names = "usb2-phy", "usb3-phy";
-> +                               tx-fifo-resize;
-> +                               snps,is-utmi-l1-suspend;
-> +                               snps,hird-threshold = /bits/ 8 <0x0>;
-> +                               snps,dis_u2_susphy_quirk;
-> +                               snps,dis_u3_susphy_quirk;
-> +                               dr_mode = "host";
-> +                       };
-> +               };
-> +
->                 intc: interrupt-controller@b000000 {
->                         compatible = "qcom,msm-qgic2";
->                         reg = <0x0b000000 0x1000>,  /* GICD */
-> --
-> 2.7.4
->
+Changes in v2:
+- Fix if condition. Thanks Steven!.
+- Update Philipp email. Thanks Baoquan.
+- Link to v1: https://lore.kernel.org/r/20230321-kexec_clang16-v1-0-a768fc2c7c4d@chromium.org
 
+---
+Ricardo Ribalda (2):
+      kexec: Support purgatories with .text.hot sections
+      x86/purgatory: Add linker script
 
+ arch/x86/purgatory/.gitignore        |  2 ++
+ arch/x86/purgatory/Makefile          | 20 +++++++++----
+ arch/x86/purgatory/kexec-purgatory.S |  2 +-
+ arch/x86/purgatory/purgatory.lds.S   | 57 ++++++++++++++++++++++++++++++++++++
+ kernel/kexec_file.c                  | 14 ++++++++-
+ 5 files changed, 87 insertions(+), 8 deletions(-)
+---
+base-commit: 17214b70a159c6547df9ae204a6275d983146f6b
+change-id: 20230321-kexec_clang16-4510c23d129c
+
+Best regards,
 -- 
-With best wishes
-Dmitry
+Ricardo Ribalda <ribalda@chromium.org>
+
