@@ -2,72 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5F66D0FED
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D79346D0FE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjC3UWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
+        id S229736AbjC3UVN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 16:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjC3UWE (ORCPT
+        with ESMTP id S229755AbjC3UVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:22:04 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638EA40D3;
-        Thu, 30 Mar 2023 13:22:03 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id B62095FD0B;
-        Thu, 30 Mar 2023 23:22:01 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1680207721;
-        bh=meOX4aPLT7ua2fm3pAcRz2CPeAaR40Mrt2950POSbpg=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=qG7GNsMjtkXbQFcQ7fVw4vaA+go5me0j2pKq/X6PeOnJazC5MTLXr6oC63qaExTkv
-         uzSLbsCTYnKYroneJ8IxfM0WJYPS1lhBNCEpXp+9faTSdOWf0XJGYdiD+8zwwV/Sc4
-         9nDIseWtAthUDHeAVAQMAHXE36ZGHQeXuZK8ilmhgK9rSPsQmYgBr5efnGGO4L/aa5
-         KR+lrAgME/LSuNM46TLhrfB1x46LwVOqJk4g0gy7OO4/jFPpwq1OKhdW2s3e+JC0ZF
-         53dnZ7uRnexDPUML9OEZI/217N3i8Ph+PjX2taUT3OqvPHNZRfTo2ctDBMhbNID0RW
-         gYJ3AfzIYaapQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 30 Mar 2023 23:22:01 +0300 (MSK)
-Message-ID: <9fd06ca5-ace9-251d-34af-aca4db9c3ee0@sberdevices.ru>
-Date:   Thu, 30 Mar 2023 23:18:36 +0300
+        Thu, 30 Mar 2023 16:21:09 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC00440D3;
+        Thu, 30 Mar 2023 13:21:06 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1phylD-0006W9-Vs; Thu, 30 Mar 2023 22:20:40 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Arnd Bergmann <arnd@arndb.de>, Evan Green <evan@rivosinc.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor@kernel.org>, slewis@rivosinc.com,
+        Vineet Gupta <vineetg@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        guoren <guoren@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ruizhe Pan <c141028@gmail.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 2/7] RISC-V: Add a syscall for HW probing
+Date:   Thu, 30 Mar 2023 22:20:38 +0200
+Message-ID: <6540574.4vTCxPXJkl@diego>
+In-Reply-To: <CALs-HstAKtvORKwRWeh97SuAuYR61aiR-3jA2_0JCZGAJXVHbg@mail.gmail.com>
+References: <20230221190858.3159617-1-evan@rivosinc.com>
+ <605fb2fd-bda2-4922-92bf-e3e416d54398@app.fastmail.com>
+ <CALs-HstAKtvORKwRWeh97SuAuYR61aiR-3jA2_0JCZGAJXVHbg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v3 2/4] vsock/vmci: convert VMCI error code to -ENOMEM
- on receive
-Content-Language: en-US
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Bryan Tan <bryantan@vmware.com>, Vishnu Dasa <vdasa@vmware.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <pv-drivers@vmware.com>
-References: <4d34fac8-7170-5a3e-5043-42a9f7e4b5b3@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <4d34fac8-7170-5a3e-5043-42a9f7e4b5b3@sberdevices.ru>
+Content-Transfer-Encoding: 8BIT
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/30 18:07:00 #21069213
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,49 +61,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 30.03.2023 23:13, Arseniy Krasnov wrote:
-> This adds conversion of VMCI specific error code to general -ENOMEM. It
-> is needed, because af_vsock.c passes error value returned from transport
-> to the user, which does not expect to get VMCI_ERROR_* values.
-
-@Stefano, I have some doubts about this commit message, as it says "... af_vsock.c
-passes error value returned from transport to the user ...", but this
-behaviour is implemented only in the next patch. Is it ok, if both patches
-are in a single patchset?
-
-For patch 1 I think it is ok, as it fixes current implementation.
-
-Thanks, Arseniy
-
+Am Donnerstag, 30. März 2023, 20:30:29 CEST schrieb Evan Green:
+> On Thu, Feb 23, 2023 at 2:06 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Tue, Feb 21, 2023, at 20:08, Evan Green wrote:
+> > > We don't have enough space for these all in ELF_HWCAP{,2} and there's no
+> > > system call that quite does this, so let's just provide an arch-specific
+> > > one to probe for hardware capabilities.  This currently just provides
+> > > m{arch,imp,vendor}id, but with the key-value pairs we can pass more in
+> > > the future.
+> > >
+> > > Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > > Signed-off-by: Evan Green <evan@rivosinc.com>
+> >
+> > I'm still skeptical about the need for a custom syscall interface here.
+> > I had not looked at the interface so far, but there are a few things
+> > that stick out:
+> >
+> > > +RISC-V Hardware Probing Interface
+> > > +---------------------------------
+> > > +
+> > > +The RISC-V hardware probing interface is based around a single
+> > > syscall, which
+> > > +is defined in <asm/hwprobe.h>::
+> > > +
+> > > +    struct riscv_hwprobe {
+> > > +        __s64 key;
+> > > +        __u64 value;
+> > > +    };
+> >
+> > The way this is defined, the kernel will always have to know
+> > about the specific set of features, it can't just forward
+> > unknown features to user space after probing them from an
+> > architectured hardware interface or from DT.
 > 
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> ---
->  net/vmw_vsock/vmci_transport.c | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
+> You're correct that this interface wasn't intended to have usermode
+> come in with augmented data or additional key/value pairs. This was
+> purely meant to provide access to the kernel's repository of
+> architectural and microarchitectural details. If usermode wants to
+> provide extra info in this same form, maybe they could wrap this
+> interface.
+>
+> > If 'key' is just an enumerated value with a small number of
+> > possible values, I don't see anything wrong with using elf
+> > aux data. I understand it's hard to know how many keys
+> > might be needed in the long run, from the way you define
+> > the key/value pairs here, I would expect it to have a lot
+> > of the same limitations that the aux data has, except for
+> > a few bytes to be copied.
 > 
-> diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
-> index 95cc4d79ba29..b370070194fa 100644
-> --- a/net/vmw_vsock/vmci_transport.c
-> +++ b/net/vmw_vsock/vmci_transport.c
-> @@ -1831,10 +1831,17 @@ static ssize_t vmci_transport_stream_dequeue(
->  	size_t len,
->  	int flags)
->  {
-> +	ssize_t err;
-> +
->  	if (flags & MSG_PEEK)
-> -		return vmci_qpair_peekv(vmci_trans(vsk)->qpair, msg, len, 0);
-> +		err = vmci_qpair_peekv(vmci_trans(vsk)->qpair, msg, len, 0);
->  	else
-> -		return vmci_qpair_dequev(vmci_trans(vsk)->qpair, msg, len, 0);
-> +		err = vmci_qpair_dequev(vmci_trans(vsk)->qpair, msg, len, 0);
-> +
-> +	if (err < 0)
-> +		err = -ENOMEM;
-> +
-> +	return err;
->  }
->  
->  static ssize_t vmci_transport_stream_enqueue(
+> Correct, this makes allocating bits out of here cheaper by not
+> requiring that we actively copy them into every new process forever.
+> You're right that the aux vector would work as well, but the thinking
+> behind this series was that an interface like this might be better for
+> an architecture as extensible as risc-v.
+
+What would be the ramifications of defining some sort of vdso-like
+data-structure and just putting the address into AT_HWCAP2 ?
+(similar to what vdso does) - that could then even be re-usable
+with other OS kernels.
+
+And would also save declaring numerous new AT_* keys.
+
+
+Because there are already nearly 130 standard extensions and vendors
+are allowed to defines their own as well, and we will probably also want
+to tell userspace about them.
+
+
+Heiko
+
+
+> > > +    long sys_riscv_hwprobe(struct riscv_hwprobe *pairs, size_t
+> > > pair_count,
+> > > +                           size_t cpu_count, cpu_set_t *cpus,
+> > > +                           unsigned long flags);
+> >
+> > The cpu set argument worries me more: there should never be a
+> > need to optimize for broken hardware that has an asymmetric set
+> > of features. Just let the kernel figure out the minimum set
+> > of features that works across all CPUs and report that like we
+> > do with HWCAP. If there is a SoC that is so broken that it has
+> > important features on a subset of cores that some user might
+> > actually want to rely on, then have them go through the slow
+> > sysfs interface for probing the CPUs indidually, but don't make
+> > the broken case easier at the expense of normal users that
+> > run on working hardware.
+> 
+> I'm not so sure. While I agree with you for major classes of features
+> (eg one CPU has floating point support but another does not), I expect
+> these bits to contain more subtle details as well, which might vary
+> across asymmetric implementations without breaking ABI compatibility
+> per-se. Maybe some vendor has implemented exotic video decoding
+> acceleration instructions that only work on the big core. Or maybe the
+> big cores support v3.1 of some extension (where certain things run
+> faster), but the little cores only have v3.0, where it's a little
+> slower. Certain apps would likely want to know these things so they
+> can allocate their work optimally across cores.
+> 
+> >
+> > > +asmlinkage long sys_riscv_hwprobe(uintptr_t, uintptr_t, uintptr_t,
+> > > uintptr_t,
+> > > +                               uintptr_t, uintptr_t);
+> >
+> > Why 'uintptr_t' rather than the correct type?
+> 
+> Fixed.
+> -Evan
+> 
+
+
+
+
