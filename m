@@ -2,112 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D10B6D0F64
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891266D0F6F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbjC3Tw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 15:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
+        id S231797AbjC3TzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 15:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjC3TwZ (ORCPT
+        with ESMTP id S231698AbjC3TzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:52:25 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on20724.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::724])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC37FE;
-        Thu, 30 Mar 2023 12:52:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XWiyKOR3HRWpVgmyFMdIr6Iv6FlMvf97HPKahtOkWwCqojk/zytqqR5KJikCYMCKoTT28zPNPkAIBCYobqeC0qJoP9tOeNWqpYzDcaA/Wbj9TgHVPWzRADjkgToo60e+yHIgDBIK3kfilgm3Dqnu/HCRgBcQBwe9XOokTu7wADae+7/sL5f5bVJJGpq7PXrCFic56RK4I9DOA/CJlVFY6mDpWR/Es3r/wkAx2MAJzyy9FruKbABqv5q5E+AtOgd4UuLov0YOxI8fwJSqJQpUB4z3O7F3Sc09wyYoX/cHWGpS5NzVcimBQVGfNfSvSle8FgjuJMeVKxGWRpF7yBm6xQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9Wg8qnnVNtxtt0kyNrnsm2uXhs6rA02mVA9d7isQFEw=;
- b=KIgSiP/AREAFQhV362cuRaZAyKn5LcbLqPXj2+87Chc6368wdZu8rhnUAYkzE+d5EmozjZifLYLp6fRyQlKMCko2tIk3kVCCUrhU+QwaaZnjfZERgrYFe5ijBOrYEnqMi6tKWlKeTqi6D80OSzjoJjWIaBH+Vsw6dTrM1qxZLDJGJrIAJq4JNh05AEddh2kNvRrxpesCxDKrYnJvHpY82MSmCg4BsRQmgN8TimEW2YieR34vj/BowA4QsKhTZC1YKbNjnUL0jiPPAkJpwCrngY+EnuOvMYcseZgsJh7ZtvDT24KsQn01MdZrX9RK+J5TKk6gxA/sL+un/1WsjTEMJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Thu, 30 Mar 2023 15:55:05 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBFC10273
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:54:58 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id y35so12074663pgl.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:54:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9Wg8qnnVNtxtt0kyNrnsm2uXhs6rA02mVA9d7isQFEw=;
- b=M1dwV/ZuO5JUQ5kCk8u2k/xhJkTxgYiL/tB2rl0payZF6njjAhr81SLURCdVh32h7ZOIIysjABpmj2w1ULwBL1eZrIY1QeIYJ/3Sy2gNAweeKKWIm1Q/1fPFsNwTpT1GJbAReseHfauWslEeWUGXrd8Gzpvyv9wn0xmsH1jjMlI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH7PR13MB5574.namprd13.prod.outlook.com (2603:10b6:510:130::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.31; Thu, 30 Mar
- 2023 19:52:20 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::c506:5243:557e:82cb%5]) with mapi id 15.20.6254.021; Thu, 30 Mar 2023
- 19:52:19 +0000
-Date:   Thu, 30 Mar 2023 21:52:13 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Denis Plotnikov <den-plotnikov@yandex-team.ru>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rajur@chelsio.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Subject: Re: [PATCH] cxgb4: do conversion after string check
-Message-ID: <ZCXobRYAPfNkSOK5@corigine.com>
-References: <20230330154703.36958-1-den-plotnikov@yandex-team.ru>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330154703.36958-1-den-plotnikov@yandex-team.ru>
-X-ClientProxiedBy: AS4PR10CA0017.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d8::7) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=google.com; s=20210112; t=1680206098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G0C8x1Qfu5NpmV+FfqktLcV4MhMy0ca1jPVOTkp3rFw=;
+        b=AZaQzujqtCMFP3dj9NurzoSLTd7YNlA3x4AvbFl6yNXyvTRSrt8hxNQo76+F2XX8b2
+         GiyK3MF/+nNhJRwOwEBGYQFoskDRxy+Tz723ASGyytzdZ+oev8f+5Yc3/7Fg830AP+r+
+         oKJW/+Aq3gSB6SnmxzdzyfTvtw8sklU+CP3wKXnWh4y1CcCV2YzERiZl+0E8GvcdXFUf
+         KJj6XYN/ZiY/xdk34WYL58bZ2XB2cbuQG8LtXKH5yXwqhPivJg7qH1+EWG2q0xJXbEVK
+         5+KSa+2TJVgg0I7AfAJYSqxYYWFB0c8msazPYhaaaLVL8i5lXmhzYMS5YqEqzde5c5mc
+         6Ydw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680206098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G0C8x1Qfu5NpmV+FfqktLcV4MhMy0ca1jPVOTkp3rFw=;
+        b=VfSk5vnAnNcynI8xz/qTCIhrnDe8cL0kq8LatU7rua55dF59aVNw608qIXFJcUKlhq
+         fe1ahNlG7nvupDrEWt3l7o6UKm8/ceW88QkDaf1uHDk0NK2pCj2LFZlMx0taxXpawlKW
+         hUDBGvsZDfe7a990RQPumEmT1rFTKFjf1oJnVluD8dYAz9pLyJZFEePHf/1ictqhn8MP
+         oFnEdfULn32AAmy32iC4xIRlJSm8NaicXBtM7PcvOzKnE9WlBZZSLCL+EKkM9HOWHqOJ
+         d7O6XFgpC2SLASF5X87e0SMXLod8HnuxpDlEfHV4dTcX5FyRhFvP0fYXqmWrgBV3P37X
+         Cvcg==
+X-Gm-Message-State: AAQBX9fHx0AgqflKUyzPInKhDv+uHxzwdgZKxf+4dGsqfNrXcFNaw/xE
+        irzHfw+IG2fTB2YO+5L8L0T9nLnKpeJHIt1ikQNfbQ==
+X-Google-Smtp-Source: AKy350ZsSA2zMm7jiilzQo6BWFTqU1m42D9YuSsH/eu33F/LyA8ptMrsw8svd/C6JnFSEz6ZpCMVo8wtDnO9IipeFWc=
+X-Received: by 2002:a63:1b61:0:b0:50c:2b1:7a8f with SMTP id
+ b33-20020a631b61000000b0050c02b17a8fmr2203806pgm.6.1680206097475; Thu, 30 Mar
+ 2023 12:54:57 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB5574:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4ae928a9-b33f-44a9-12e2-08db31584540
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cWcTKLEITrPBBfx5MrpXMydFy5klozYOCpLxAqWqAwMKOxY4AFzvv2vlxB+GkhI7BM2d8yGO+ZcMugTF+X4Ea+RL+FLAnIZ5HNn8OFIvXWTtGZBT8DbbeFQ/aKB99rouc8Tv9BtOLVyYP5iTnmgpyK/u0SW54t6bFQNDUyc20R8w0Oilqg+DyOf+uXUQ2fTYYwmVLFYAGArxJ4VNj+Nl0KoNAsli6HlrNn3flG9XAA/z4TPRB7x5sq4LTUh+UYzrEFTehDTAzUImKFtAhPxIem2++F/4Qz57Ca/oT3QcD1owCho2S1aX4lbao1HwBu8F0dWZFzWOT4DvPcxYaFFKNxjAXQxbdfIP1YoHIKtrcavXXn7yQH2SOyhcE3qBEZyjqONT2yGWnODckWJ7jeJeptk1xuk4OhkEtNbP3HM+JDxzglbklOr/bX+cMGPCcqIr2ZtRrtVwIM8v1fqR84NomWzdHb4abT2RyLULJCIVpqoM+HZB7Xy0WOYewh5bbntzFxOnsYCkLnBv1c40S15bMIvhDxKK0Cnf8caPCTA0f7zs3Cypb+ULfZs3sjYi5OnI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(136003)(346002)(376002)(366004)(396003)(451199021)(86362001)(36756003)(2906002)(478600001)(6506007)(6666004)(83380400001)(38100700002)(2616005)(6512007)(6486002)(66946007)(66556008)(66476007)(5660300002)(4326008)(316002)(8936002)(44832011)(186003)(6916009)(41300700001)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WDEtLVe9GlqoGiS3INMox6V27empaesCmDRa/iZvE7y3OgDvL80jt2Vn/pDk?=
- =?us-ascii?Q?LF6Wnzze52LyjwI96ZwYDQC3rn+LYxOh4BN82RJKsylHMKe0HH3caSz8TO1t?=
- =?us-ascii?Q?EYmL9OgSh8Z9xhx9v1UcFasU7HvnnfFko+cQYHlGdOE7QB/Nz6SXOodzcDkz?=
- =?us-ascii?Q?T7SeOw6+RxTZkPjMAUe2jJNJU7zttsIhFblgZW0rMnSE9u3qXAGb8P8SIztL?=
- =?us-ascii?Q?ghYOrSG95g5LCVj5/AZwFY27SxsfWCVZ/pUQUtp/JVfUEIuyH2DPgwVjvEpg?=
- =?us-ascii?Q?d8dsKu71jx01dWB6aEZELpkE9wlt8GWsK7Wmr5bOIUEMHyC7ge/DSueXzwrE?=
- =?us-ascii?Q?IWeqnx1mkFQYAcK/8Bwoj84oRzHtxRd1qXPbbmZpAowG/6hW9TEIcXBrfKcG?=
- =?us-ascii?Q?Wm+0YisAA3GVQS6GM9TxQnshScpRCEhg+D43xd6V9Qf7KPLO3I5zR0Ys/vmB?=
- =?us-ascii?Q?H9TS9NJT6/ksTslSWLhyBZiTSRkQfyboDdjuKW0taH1nAwNVOcTpvyUi3Ecq?=
- =?us-ascii?Q?2rTB3umoXmIxhMOkBA5Rw9obDJbsjN5V9JXhga7p/HUUXpj2BXMBAGLQV9Lm?=
- =?us-ascii?Q?B5KSW/HT1zNhhZ0oq3kjlz212V1pqRuokdciOx7ifCIkp6etnxW5H38VUVar?=
- =?us-ascii?Q?Mez3Tawh9moxPqiGfUsOLnx6VDyB+KFdRrLsB0tpdFs2C0pF6JnRkkxqAkir?=
- =?us-ascii?Q?u/Uo3smEhv4QptdZOQjC7pHbtj4ITuqZH9yiIPQVgvkMxO4cqn6U3fnB+4F4?=
- =?us-ascii?Q?yyxF7Zq3kycYoNI9PNXoP1Yil33aeZJrmhlz3tXg16ajJBWaYobJl2MlVdnJ?=
- =?us-ascii?Q?hJAl5Z9aj9WLVhk7ExPj2G+KaAjk6ryuQQJa8XY+/fhb7VqVHMa3M+W6OnSJ?=
- =?us-ascii?Q?EEPMBdss4tLS+tmT8diYdg7s8TzE85ZPmqKIED75ImMzyaE5Zz1oL0uKOpym?=
- =?us-ascii?Q?bnWNB+qwD01Deu2MhGsGvamv9sYClZTVBz/FcASEv4qg2A8Npcx2d6lZOddK?=
- =?us-ascii?Q?XiCT2QpKCpWdMVp3j7V78eBY1HHVNA08r/Xx282LtVWfFxYtthtq6QNQpFZy?=
- =?us-ascii?Q?jljvp0vhsS3mB58oNJyT+rkHz6bdWNIqL18Q+uKmqHcu+bSEm6qS2BNjf5U3?=
- =?us-ascii?Q?0Y3rNdNoeHb7LED9obDeYPXSMTKxp836Yz2HaK2OhqwpcfVbgaZyk8mojASP?=
- =?us-ascii?Q?R+DTbICTabhk2X4M4zXctL0gBMHBkOUbY39/xAVsWErdgwluFd94WbOs1bSH?=
- =?us-ascii?Q?p2glGaEzGXBBcsSKNXPfDtmmgeExDKUIBbU7sDe5g5w2AloaNQiG3b6nbm/C?=
- =?us-ascii?Q?uYZCrkJv3czlc45iH0W7TM3sA2/d8PhPM2qjP46YyvHrw0E/zZWPIvN5ahBP?=
- =?us-ascii?Q?K2+FN6E3dWqgP8DJGil0YlgTfnz9iA/9YuCyinPo62G9NyqpNa5LtipW9DdK?=
- =?us-ascii?Q?Y8/PIjAHHNzgtVRR18rHASOZK4uxiTbGnf2id/vZ1FD5VGyUVF05Ub2QVTBS?=
- =?us-ascii?Q?C8SvJc/s+xHrYWzVtFc0TshKW1pcYtPPqHlbi79/bnccG05GzkBR2fRmEkOs?=
- =?us-ascii?Q?RvlyeqDXCYZZzOa0p9loTrsHUQArJkdq01WRfuZqSO4z3xaV6Iwv012zS3t4?=
- =?us-ascii?Q?3dYAHaDZcsW13JlHGtRbLSzmtDHISFlXkEFWE3mZd5A0XCBKzPW0CeLgmkCy?=
- =?us-ascii?Q?Lw2dUQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ae928a9-b33f-44a9-12e2-08db31584540
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 19:52:19.4015
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HUhTt3WxbwherpnTwfL0TT1BCpsWh7QjiW0z9YvytmDq4S7eH6v0rKAHO/7Kc9Wz9x7zVonU4oMhY/WQKWXgM/xbXf7Tj4pV9OwYIlMjLY8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB5574
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <e1fa546682ea4c8474ff997ab6244c5e11b6f8bc.1680182615.git.geert+renesas@glider.be>
+In-Reply-To: <e1fa546682ea4c8474ff997ab6244c5e11b6f8bc.1680182615.git.geert+renesas@glider.be>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 30 Mar 2023 12:54:21 -0700
+Message-ID: <CAGETcx9N_6cpkK=E3-ibtUgw4NaSgyV1a0hE9uGdd+DMWfY78w@mail.gmail.com>
+Subject: Re: [PATCH v3] treewide: Fix probing of devices in DT overlays
+To:     geert+renesas@glider.be
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,49 +82,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 06:47:03PM +0300, Denis Plotnikov wrote:
-> Static code analyzer complains to uncheck return value.
-> Indeed, the return value of kstrtouint "must be checked"
-> as the comment says.
-> Moreover, it looks like the string conversion  should be
-> after "end of string" or "new line" check.
-> This patch fixes these issues.
-> 
-> Signed-off-by: Denis Plotnikov <den-plotnikov@yandex-team.ru>
+On Thu, Mar 30, 2023 at 6:26=E2=80=AFAM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> When loading a DT overlay that creates a device, the device is not
+> probed, unless the DT overlay is unloaded and reloaded again.
+>
+> After the recent refactoring to improve fw_devlink, it no longer depends
+> on the "compatible" property to identify which device tree nodes will
+> become struct devices.   fw_devlink now picks up dangling consumers
+> (consumers pointing to descendent device tree nodes of a device that
+> aren't converted to child devices) when a device is successfully bound
+> to a driver.  See __fw_devlink_pickup_dangling_consumers().
+>
+> However, during DT overlay, a device's device tree node can have
+> sub-nodes added/removed without unbinding/rebinding the driver.  This
+> difference in behavior between the normal device instantiation and
+> probing flow vs. the DT overlay flow has a bunch of implications that
+> are pointed out elsewhere[1].  One of them is that the fw_devlink logic
+> to pick up dangling consumers is never exercised.
+>
+> This patch solves the fw_devlink issue by marking all DT nodes added by
+> DT overlays with FWNODE_FLAG_NOT_DEVICE (fwnode that won't become
+> device), and by clearing the flag when a struct device is actually
+> created for the DT node.  This way, fw_devlink knows not to have
+> consumers waiting on these newly added DT nodes, and to propagate the
+> dependency to an ancestor DT node that has the corresponding struct
+> device.
+>
+> Based on a patch by Saravana Kannan, which covered only platform and spi
+> devices.
+
+Doesn't make sense to give a Reviewed-by to something I partially wrote, so=
+:
+
+Acked-by: Saravana Kannan <saravanak@google.com>
+
+Thanks for making sure this is fixed Geert!
+
+-Saravana
+
+>
+> [1] https://lore.kernel.org/r/CAGETcx_bkuFaLCiPrAWCPQz+w79ccDp6=3D9e881qm=
+K=3Dvx3hBMyg@mail.gmail.com
+>
+> Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
+> Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=3DrWYnkC=
+Z6z5bGX-wj4w@mail.gmail.com
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
 > ---
->  drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c
-> index 14e0d989c3ba5..a8d3616630cc6 100644
-> --- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c
-> +++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c
-> @@ -1576,9 +1576,11 @@ inval:				count = -EINVAL;
->  		}
->  		if (*word == '@') {
->  			end = (char *)word + 1;
-> -			ret = kstrtouint(end, 10, &j);
->  			if (*end && *end != '\n')
->  				goto inval;
-
-I feel that I must be missing something very obvious.
-
-My reading is that the code only gets to this line
-if *end is either '\0' or '\n'. Which would not be the case
-if end points to the string representation of number.
-So I am confused about this code, both with and without your patch.
-
-Perhaps the check is assuming that end is pointing
-to the end of the string representation of the number.
-Something like the endptr after a call to libc's strtoul(3).
-But by my reading it is pointing to the beginning.
-
-> +			ret = kstrtouint(end, 10, &j);
-> +			if (ret)
-> +				goto inval;
->  			if (j & 7)          /* doesn't start at multiple of 8 */
->  				goto inval;
->  			j /= 8;
-> -- 
-> 2.25.1
-> 
+> v3:
+>   - Add Acked-by,
+>   - s/instantiate/probe/,
+>   - Improve commit description,
+>   - Add comment before clearing FWNODE_FLAG_NOT_DEVICE,
+>
+> v2:
+>   - Add Acked-by,
+>   - Drop RFC.
+> ---
+>  drivers/bus/imx-weim.c    | 6 ++++++
+>  drivers/i2c/i2c-core-of.c | 5 +++++
+>  drivers/of/dynamic.c      | 1 +
+>  drivers/of/platform.c     | 5 +++++
+>  drivers/spi/spi.c         | 5 +++++
+>  5 files changed, 22 insertions(+)
+>
+> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> index 36d42484142aede2..cf463c1d2102c6fb 100644
+> --- a/drivers/bus/imx-weim.c
+> +++ b/drivers/bus/imx-weim.c
+> @@ -329,6 +329,12 @@ static int of_weim_notify(struct notifier_block *nb,=
+ unsigned long action,
+>                                  "Failed to setup timing for '%pOF'\n", r=
+d->dn);
+>
+>                 if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+> +                       /*
+> +                        * Clear the flag before adding the device so tha=
+t
+> +                        * fw_devlink doesn't skip adding consumers to th=
+is
+> +                        * device.
+> +                        */
+> +                       rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE=
+;
+>                         if (!of_platform_device_create(rd->dn, NULL, &pde=
+v->dev)) {
+>                                 dev_err(&pdev->dev,
+>                                         "Failed to create child device '%=
+pOF'\n",
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index aa93467784c29c89..5c137638689799c8 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -178,6 +178,11 @@ static int of_i2c_notify(struct notifier_block *nb, =
+unsigned long action,
+>                         return NOTIFY_OK;
+>                 }
+>
+> +               /*
+> +                * Clear the flag before adding the device so that fw_dev=
+link
+> +                * doesn't skip adding consumers to this device.
+> +                */
+> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+>                 client =3D of_i2c_register_device(adap, rd->dn);
+>                 if (IS_ERR(client)) {
+>                         dev_err(&adap->dev, "failed to create client for =
+'%pOF'\n",
+> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> index 07d93753b12f5f4d..e311d406b1705306 100644
+> --- a/drivers/of/dynamic.c
+> +++ b/drivers/of/dynamic.c
+> @@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np)
+>         np->sibling =3D np->parent->child;
+>         np->parent->child =3D np;
+>         of_node_clear_flag(np, OF_DETACHED);
+> +       np->fwnode.flags |=3D FWNODE_FLAG_NOT_DEVICE;
+>  }
+>
+>  /**
+> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> index b2bd2e783445dd78..78ae8418744905c9 100644
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -737,6 +737,11 @@ static int of_platform_notify(struct notifier_block =
+*nb,
+>                 if (of_node_check_flag(rd->dn, OF_POPULATED))
+>                         return NOTIFY_OK;
+>
+> +               /*
+> +                * Clear the flag before adding the device so that fw_dev=
+link
+> +                * doesn't skip adding consumers to this device.
+> +                */
+> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+>                 /* pdev_parent may be NULL when no bus platform device */
+>                 pdev_parent =3D of_find_device_by_node(rd->dn->parent);
+>                 pdev =3D of_platform_device_create(rd->dn, NULL,
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 37a7be6c5a44c8f9..a12420e28640bbd4 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -4504,6 +4504,11 @@ static int of_spi_notify(struct notifier_block *nb=
+, unsigned long action,
+>                         return NOTIFY_OK;
+>                 }
+>
+> +               /*
+> +                * Clear the flag before adding the device so that fw_dev=
+link
+> +                * doesn't skip adding consumers to this device.
+> +                */
+> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+>                 spi =3D of_register_spi_device(ctlr, rd->dn);
+>                 put_device(&ctlr->dev);
+>
+> --
+> 2.34.1
+>
