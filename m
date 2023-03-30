@@ -2,228 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3731C6CF81A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68A86CF81B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjC3AOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 20:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
+        id S230296AbjC3AOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 20:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjC3AOJ (ORCPT
+        with ESMTP id S229895AbjC3AOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 20:14:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0151C423A;
-        Wed, 29 Mar 2023 17:14:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B2D5B82100;
-        Thu, 30 Mar 2023 00:13:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C48C433EF;
-        Thu, 30 Mar 2023 00:13:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680135238;
-        bh=tYHCEIojzv25PjRE2jg0W657UEBIQswj9r2DHDHUvvg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=acUaVla6O3YM6bwhRd8HTvmbv28UHoAb9mSKQ9Bi0BoXQGSmtgYIwkhFn1EJi7Y05
-         DIWWb6XNuHgf71tPlz44+HOSuRSNj6sj181IkYwGoVw1gHYrDpbY4866b9e4oDMpkq
-         0EgOpQL4JkTm7jsYnCQzRNF6FaxAun1PBaKyhQlQleIU3bLBdSx1twGX5i/43f4TE2
-         3RRXNOdxvqe92WwgZ+KFDUofIFCtsdc5JDXENZM16RD/ii0EiMq46MbK5YPS07ZgPo
-         nMk/nTpjmif9rJEAThOhRp9scbLonR5SAE4w6l0DEOCGuT+9Da8XrIyfkJMjiyuW2Y
-         finpuO0rXUyoQ==
-Date:   Thu, 30 Mar 2023 03:13:55 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     dhowells@redhat.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] keys: Fix linking a duplicate key to a keyring's
- assoc_array
-Message-ID: <20230330001355.dyazfwx4tyiyvux2@kernel.org>
-References: <20230323130412.32097-1-petr.pavlu@suse.com>
+        Wed, 29 Mar 2023 20:14:36 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F81BC0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:14:35 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id l14so11414260pfc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:14:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680135274;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OqTaJc++Fy4uDfLa9Ft8mislQO1Ik1i1kHjA6mm3OCE=;
+        b=RQwnmDixUP+HPRQomoP/B6+oWwXu7KGgw5gFVbJxVr6oc17bKo+QeJS1OtPAZ/jEUZ
+         eDCa/x0xH5hRckbJkWfj5F8gbC40EaTc5itNie86YmN+QLWeAtoUl70w+5W0MD1aUXUM
+         aAhKl+2NcSVYvC8c/ipD9kONgK8vP6KLbET8fJU7mCuNNOZoyrOzy7celiIbuCx6BFB+
+         BOBuCAFY3bHdVgOnkoIbbosIzo9CW3j7UxtnB2m5lK/BxDVugo+yTZ4cislAqz/UFQBK
+         /I3vh7D9VQ6gkLJ8iJZZ392GP1cSyz01oDa/jmGxQwkVtgq/fNWnvYAiSmMEnZMvOdDD
+         7MrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680135274;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OqTaJc++Fy4uDfLa9Ft8mislQO1Ik1i1kHjA6mm3OCE=;
+        b=0qYsW5fr14i55xT9udZCQMq1bhFZH3MjyTesuIRux/5HdgF9lnDM/KWR/ElqSuhejQ
+         xKhGQXcqIBuA0q//McVlAX+tPEaPREV9oyG5pNAuBT3OoY6c3zwCoi3Cl9fcXTFqBBk/
+         GdxPLq7olPr8VI7xkObv/rmIKNoIp4hQT7kBqZVl4aVUczPkHF248VdR3h3d79P5M+wc
+         vat9HnQ3GzUAIgs4X7WcPuS3fP0ufhubO0ompMJ0m1kD6/9u9aG3ABPqqqTag+iAS43n
+         Pc6HSwKXRP10uNJ82NRNigR0eDxZb6OT6rrxLBcRNfA2Du89nKh5M9i/oYDTARySaumt
+         cXLw==
+X-Gm-Message-State: AAQBX9e/1Ezp3tZHbdwV0rpFYkdUzqKPXSRSlOAtM6JB7qt76yGBN0tg
+        D+vG+0jGHXs2BTPYp6AJOdvXOQdUVnPCBcdWwao=
+X-Google-Smtp-Source: AKy350Zq2BBdKRE15QvmxRG+ExUHY5peBCSxcGVhTnap9IqgKRDor+A2f1W6nwzESs937NDCtQfvcBlrM34mtaECKnY=
+X-Received: by 2002:a05:6a00:b93:b0:62b:e52e:1bb with SMTP id
+ g19-20020a056a000b9300b0062be52e01bbmr9897401pfj.0.1680135274513; Wed, 29 Mar
+ 2023 17:14:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323130412.32097-1-petr.pavlu@suse.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230329145330.23191-1-ivan.orlov0322@gmail.com> <20230329145304.66add47ba9b9fafb71b1e13d@linux-foundation.org>
+In-Reply-To: <20230329145304.66add47ba9b9fafb71b1e13d@linux-foundation.org>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 29 Mar 2023 17:14:23 -0700
+Message-ID: <CAHbLzko=aWBPk5a1P2fgR9yAgc52WG-HX_OBV8=iWFy_D4_eNQ@mail.gmail.com>
+Subject: Re: [PATCH] mm: khugepaged: Fix kernel BUG in hpage_collapse_scan_file
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Zach O'Keefe" <zokeefe@google.com>
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, himadrispandya@gmail.com,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 02:04:12PM +0100, Petr Pavlu wrote:
-> When making a DNS query inside the kernel using dns_query(), the request
-> code can in rare cases end up creating a duplicate index key in the
-> assoc_array of the destination keyring. It is eventually found by
-> a BUG_ON() check in the assoc_array implementation and results in
-> a crash.
-> 
-> Example report:
-> [2158499.700025] kernel BUG at ../lib/assoc_array.c:652!
-> [2158499.700039] invalid opcode: 0000 [#1] SMP PTI
-> [2158499.700065] CPU: 3 PID: 31985 Comm: kworker/3:1 Kdump: loaded Not tainted 5.3.18-150300.59.90-default #1 SLE15-SP3
-> [2158499.700096] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
-> [2158499.700351] Workqueue: cifsiod cifs_resolve_server [cifs]
-> [2158499.700380] RIP: 0010:assoc_array_insert+0x85f/0xa40
-> [2158499.700401] Code: ff 74 2b 48 8b 3b 49 8b 45 18 4c 89 e6 48 83 e7 fe e8 95 ec 74 00 3b 45 88 7d db 85 c0 79 d4 0f 0b 0f 0b 0f 0b e8 41 f2 be ff <0f> 0b 0f 0b 81 7d 88 ff ff ff 7f 4c 89 eb 4c 8b ad 58 ff ff ff 0f
-> [2158499.700448] RSP: 0018:ffffc0bd6187faf0 EFLAGS: 00010282
-> [2158499.700470] RAX: ffff9f1ea7da2fe8 RBX: ffff9f1ea7da2fc1 RCX: 0000000000000005
-> [2158499.700492] RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000000
-> [2158499.700515] RBP: ffffc0bd6187fbb0 R08: ffff9f185faf1100 R09: 0000000000000000
-> [2158499.700538] R10: ffff9f1ea7da2cc0 R11: 000000005ed8cec8 R12: ffffc0bd6187fc28
-> [2158499.700561] R13: ffff9f15feb8d000 R14: ffff9f1ea7da2fc0 R15: ffff9f168dc0d740
-> [2158499.700585] FS:  0000000000000000(0000) GS:ffff9f185fac0000(0000) knlGS:0000000000000000
-> [2158499.700610] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [2158499.700630] CR2: 00007fdd94fca238 CR3: 0000000809d8c006 CR4: 00000000003706e0
-> [2158499.700702] Call Trace:
-> [2158499.700741]  ? key_alloc+0x447/0x4b0
-> [2158499.700768]  ? __key_link_begin+0x43/0xa0
-> [2158499.700790]  __key_link_begin+0x43/0xa0
-> [2158499.700814]  request_key_and_link+0x2c7/0x730
-> [2158499.700847]  ? dns_resolver_read+0x20/0x20 [dns_resolver]
-> [2158499.700873]  ? key_default_cmp+0x20/0x20
-> [2158499.700898]  request_key_tag+0x43/0xa0
-> [2158499.700926]  dns_query+0x114/0x2ca [dns_resolver]
-> [2158499.701127]  dns_resolve_server_name_to_ip+0x194/0x310 [cifs]
-> [2158499.701164]  ? scnprintf+0x49/0x90
-> [2158499.701190]  ? __switch_to_asm+0x40/0x70
-> [2158499.701211]  ? __switch_to_asm+0x34/0x70
-> [2158499.701405]  reconn_set_ipaddr_from_hostname+0x81/0x2a0 [cifs]
-> [2158499.701603]  cifs_resolve_server+0x4b/0xd0 [cifs]
-> [2158499.701632]  process_one_work+0x1f8/0x3e0
-> [2158499.701658]  worker_thread+0x2d/0x3f0
-> [2158499.701682]  ? process_one_work+0x3e0/0x3e0
-> [2158499.701703]  kthread+0x10d/0x130
-> [2158499.701723]  ? kthread_park+0xb0/0xb0
-> [2158499.701746]  ret_from_fork+0x1f/0x40
-> 
-> The situation occurs as follows:
-> * Some kernel facility invokes dns_query() to resolve a hostname, for
->   example, "abcdef". The function registers its global DNS resolver
->   cache as current->cred.thread_keyring and passes the query to
->   request_key_net() -> request_key_tag() -> request_key_and_link().
-> * Function request_key_and_link() creates a keyring_search_context
->   object. Its match_data.cmp method gets set via a call to
->   type->match_preparse() (resolves to dns_resolver_match_preparse()) to
->   dns_resolver_cmp().
-> * Function request_key_and_link() continues and invokes
->   search_process_keyrings_rcu() which returns that a given key was not
->   found. The control is then passed to request_key_and_link() ->
->   construct_alloc_key().
-> * Concurrently to that, a second task similarly makes a DNS query for
->   "abcdef." and its result gets inserted into the DNS resolver cache.
-> * Back on the first task, function construct_alloc_key() first runs
->   __key_link_begin() to determine an assoc_array_edit operation to
->   insert a new key. Index keys in the array are compared exactly as-is,
->   using keyring_compare_object(). The operation finds that "abcdef" is
->   not yet present in the destination keyring.
-> * Function construct_alloc_key() continues and checks if a given key is
->   already present on some keyring by again calling
->   search_process_keyrings_rcu(). This search is done using
->   dns_resolver_cmp() and "abcdef" gets matched with now present key
->   "abcdef.".
-> * The found key is linked on the destination keyring by calling
->   __key_link() and using the previously calculated assoc_array_edit
->   operation. This inserts the "abcdef." key in the array but creates
->   a duplicity because the same index key is already present.
-> 
-> Fix the problem by postponing __key_link_begin() in
-> construct_alloc_key() until an actual key which should be linked into
-> the destination keyring is determined.
-> 
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
->  security/keys/request_key.c | 35 ++++++++++++++++++++++++-----------
->  1 file changed, 24 insertions(+), 11 deletions(-)
-> 
-> diff --git a/security/keys/request_key.c b/security/keys/request_key.c
-> index 2da4404276f0..04eb7e4cedad 100644
-> --- a/security/keys/request_key.c
-> +++ b/security/keys/request_key.c
-> @@ -398,17 +398,21 @@ static int construct_alloc_key(struct keyring_search_context *ctx,
->  	set_bit(KEY_FLAG_USER_CONSTRUCT, &key->flags);
->  
->  	if (dest_keyring) {
-> -		ret = __key_link_lock(dest_keyring, &ctx->index_key);
-> +		ret = __key_link_lock(dest_keyring, &key->index_key);
->  		if (ret < 0)
->  			goto link_lock_failed;
-> -		ret = __key_link_begin(dest_keyring, &ctx->index_key, &edit);
-> -		if (ret < 0)
-> -			goto link_prealloc_failed;
->  	}
->  
-> -	/* attach the key to the destination keyring under lock, but we do need
-> +	/*
-> +	 * Attach the key to the destination keyring under lock, but we do need
->  	 * to do another check just in case someone beat us to it whilst we
-> -	 * waited for locks */
-> +	 * waited for locks.
-> +	 *
-> +	 * The caller might specify a comparison function which looks for keys
-> +	 * that do not exactly match but are still equivalent from the caller's
-> +	 * perspective. The __key_link_begin() operation must be done only after
-> +	 * an actual key is determined.
-> +	 */
->  	mutex_lock(&key_construction_mutex);
->  
->  	rcu_read_lock();
-> @@ -417,12 +421,16 @@ static int construct_alloc_key(struct keyring_search_context *ctx,
->  	if (!IS_ERR(key_ref))
->  		goto key_already_present;
->  
-> -	if (dest_keyring)
-> +	if (dest_keyring) {
-> +		ret = __key_link_begin(dest_keyring, &key->index_key, &edit);
-> +		if (ret < 0)
-> +			goto link_alloc_failed;
->  		__key_link(dest_keyring, key, &edit);
-> +	}
->  
->  	mutex_unlock(&key_construction_mutex);
->  	if (dest_keyring)
-> -		__key_link_end(dest_keyring, &ctx->index_key, edit);
-> +		__key_link_end(dest_keyring, &key->index_key, edit);
->  	mutex_unlock(&user->cons_lock);
->  	*_key = key;
->  	kleave(" = 0 [%d]", key_serial(key));
-> @@ -435,10 +443,13 @@ static int construct_alloc_key(struct keyring_search_context *ctx,
->  	mutex_unlock(&key_construction_mutex);
->  	key = key_ref_to_ptr(key_ref);
->  	if (dest_keyring) {
-> +		ret = __key_link_begin(dest_keyring, &key->index_key, &edit);
-> +		if (ret < 0)
-> +			goto link_alloc_failed_unlocked;
->  		ret = __key_link_check_live_key(dest_keyring, key);
->  		if (ret == 0)
->  			__key_link(dest_keyring, key, &edit);
-> -		__key_link_end(dest_keyring, &ctx->index_key, edit);
-> +		__key_link_end(dest_keyring, &key->index_key, edit);
->  		if (ret < 0)
->  			goto link_check_failed;
->  	}
-> @@ -453,8 +464,10 @@ static int construct_alloc_key(struct keyring_search_context *ctx,
->  	kleave(" = %d [linkcheck]", ret);
->  	return ret;
->  
-> -link_prealloc_failed:
-> -	__key_link_end(dest_keyring, &ctx->index_key, edit);
-> +link_alloc_failed:
-> +	mutex_unlock(&key_construction_mutex);
-> +link_alloc_failed_unlocked:
-> +	__key_link_end(dest_keyring, &key->index_key, edit);
->  link_lock_failed:
->  	mutex_unlock(&user->cons_lock);
->  	key_put(key);
-> -- 
-> 2.35.3
-> 
+On Wed, Mar 29, 2023 at 2:53=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> On Wed, 29 Mar 2023 18:53:30 +0400 Ivan Orlov <ivan.orlov0322@gmail.com> =
+wrote:
+>
+> > Syzkaller reported the following issue:
+> >
+> > ...
+> >
+> > The 'xas_store' call during page cache scanning can potentially
+> > translate 'xas' into the error state (with the reproducer provided
+> > by the syzkaller the error code is -ENOMEM). However, there are no
+> > further checks after the 'xas_store', and the next call of 'xas_next'
+> > at the start of the scanning cycle doesn't increase the xa_index,
+> > and the issue occurs.
+> >
+> > This patch will add the xarray state error checking after the
+> > 'xas_store' and the corresponding result error code.
+> >
+> > Tested via syzbot.
+> >
+> > Reported-by: syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
+> > Link: https://syzkaller.appspot.com/bug?id=3D7d6bb3760e026ece7524500fe4=
+4fb024a0e959fc
+> > Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+> > ---
+> >  mm/khugepaged.c | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index 92e6f56a932d..4d9850d9ea7f 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -55,6 +55,7 @@ enum scan_result {
+> >       SCAN_CGROUP_CHARGE_FAIL,
+> >       SCAN_TRUNCATED,
+> >       SCAN_PAGE_HAS_PRIVATE,
+> > +     SCAN_STORE_FAILED,
+> >  };
+> >
+> >  #define CREATE_TRACE_POINTS
+> > @@ -1840,6 +1841,15 @@ static int collapse_file(struct mm_struct *mm, u=
+nsigned long addr,
+> >                                       goto xa_locked;
+> >                               }
+> >                               xas_store(&xas, hpage);
+> > +                             if (xas_error(&xas)) {
+> > +                                     /* revert shmem_charge performed
+> > +                                      * in the previous condition
+> > +                                      */
+> > +                                     mapping->nrpages--;
+> > +                                     shmem_uncharge(mapping->host, 1);
+> > +                                     result =3D SCAN_STORE_FAILED;
+> > +                                     goto xa_locked;
+> > +                             }
+> >                               nr_none++;
+> >                               continue;
+> >                       }
+>
+> Needs this, I assume.
+>
+> --- a/include/trace/events/huge_memory.h~mm-khugepaged-fix-kernel-bug-in-=
+hpage_collapse_scan_file-fix
+> +++ a/include/trace/events/huge_memory.h
+> @@ -36,7 +36,8 @@
+>         EM( SCAN_ALLOC_HUGE_PAGE_FAIL,  "alloc_huge_page_failed")       \
+>         EM( SCAN_CGROUP_CHARGE_FAIL,    "ccgroup_charge_failed")        \
+>         EM( SCAN_TRUNCATED,             "truncated")                    \
+> -       EMe(SCAN_PAGE_HAS_PRIVATE,      "page_has_private")             \
+> +       EM( SCAN_PAGE_HAS_PRIVATE,      "page_has_private")             \
+> +       EMe(SCAN_STORE_FAILED,          "store_failed")
 
-A good catch, thanks.
+I'm a little bit reluctant to make the error code list longer, can we
+just return SCAN_FAIL? IIUC this issue should happen very rarely,
+maybe not worth a new error code.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Basically the rollback approach makes sense to me. IIRC Zach was
+looking into the same problem, loop him in. He may share some
+thoughts.
 
-BR, Jarkko
+>
+>  #undef EM
+>  #undef EMe
+> _
+>
+>
