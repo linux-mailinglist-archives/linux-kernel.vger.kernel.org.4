@@ -2,93 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D116D0FF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319BC6D1006
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjC3U2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S229602AbjC3Uas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjC3U2b (ORCPT
+        with ESMTP id S229521AbjC3Uap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:28:31 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FF7C9;
-        Thu, 30 Mar 2023 13:28:30 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 1907D3200959;
-        Thu, 30 Mar 2023 16:28:29 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 30 Mar 2023 16:28:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
-        :content-transfer-encoding:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1680208108; x=1680294508; bh=vQs4ynDb5KaPKtPAzLl0Rc9EXZoECrk6bMr
-        SAt43TCw=; b=DV2BCGAEYE89/0qB9BCxZL65j8OujS0AqVHYgP6geTlizxxKs+a
-        n+h1/Rq0qDKGEvXlhQ3O/WNsnR1iUWY5opFs1bthRv66hQkp2mSUsBFhJ365fqrc
-        uWVQjDkLbzhI9GwllS5MMma21dc+SJjKS91l+tC9sSGHCPWo+8H6n/Vxj9+whEwL
-        q/U2I1Cy3UsFHQyuS8n8rolINuuX/p0H5US0IQtqQh4QJRA3IUX6RgaOWaYVkxQA
-        nda80+Px8RfxpltFBmJn98UEWFHA8DLkegrG7PBbgVMF/vH9fzzreLw3H6EASD79
-        z3Mf3fHhdb1gpToC6TpqWN2+xHZPmk8jrwg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680208108; x=1680294508; bh=vQs4ynDb5KaPKtPAzLl0Rc9EXZoECrk6bMr
-        SAt43TCw=; b=bRz94HWqUtIeSEAzn9WBi4BZ43hv/ArbNIhDIIKZl6nL1zBd+Mp
-        Ny0EEMvuLcADVBfXvTvp4W4uT+lwMvjIz0CqAGyLB2j0hItCZIGMgUPK+6v8lzim
-        bNwZV/CR4DhR+pQDW08TC71bTSu//+oOs6BcbDH5gN248SatJxg/YxaDUB28s38Z
-        Z+4sG4kLIFAajLDA1HQEuat345FU4SBVXUdnmubK0VvGgAYTmLdAeBtCBtPS1xYE
-        ss5nvUNvlxpc+q6yCElrDpKQhZNFkw3y/cn8PbyvXVD0yrvzYHKR38Cy+ucnLDj3
-        iHzRN/qeEno8Zs8jHNmGDCCAkqGJS02kfCA==
-X-ME-Sender: <xms:7PAlZE4LdH6MfIWcK86D0nh3fEvpWyFbRVGPpqGqP4gM9PNddOetaQ>
-    <xme:7PAlZF4Ab3G-ixntqtRu8jRr-L8KdvGcBd7SDwWZxJTWxVDYa2tIrN2kz3chSSHcA
-    -yIRgpsWCU2_GNJsQ>
-X-ME-Received: <xmr:7PAlZDf0n9iBXwebCjcjH9hi2yNN6uhQwSLdMPSGALw0L6Sp_lzGL-aDOePtKwxrjI4Q34-GZZ-vc5qvklokLLJPeQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehledgheekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeetlhhi
-    tggvucfthihhlhcuoegrlhhitggvsehrhihhlhdrihhoqeenucggtffrrghtthgvrhhnpe
-    ehudduvdetkedvkedtudeludfgfffhudegjeeguedvvedtteevjeehheeiffefgeenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhitggvse
-    hrhihhlhdrihho
-X-ME-Proxy: <xmx:7PAlZJLRGwv-m5P859fhegQuoC4OXi1gbj8brIte6NvQJY-KQtCrGg>
-    <xmx:7PAlZIIr_cPRw5ujzGZp5TORke02iXhHqjz4pOJ5zsSajB-4k_HCQQ>
-    <xmx:7PAlZKzuoEDQkDo2dJDJamRTY6LRmmV2ICj127z9ifJA3RJZMzjVEA>
-    <xmx:7PAlZH9YIMHufS8oLxuw1Bwk8GgPgl_dhOnQAiRd9gsClXYKvvHwuA>
-Feedback-ID: i56684263:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Mar 2023 16:28:26 -0400 (EDT)
-Message-ID: <ae53994a-aaa5-8a57-4284-85000229249d@ryhl.io>
-Date:   Thu, 30 Mar 2023 22:28:25 +0200
+        Thu, 30 Mar 2023 16:30:45 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EDB198D
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:30:44 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id g17so26131842lfv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680208242; x=1682800242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ibqoW3aqug8lkTzee2r6dDS7STVhEoPrqifxRDlW8Ew=;
+        b=EKma1yxPhX7S7dNEjIgjcNMi1jPUfyn/Z3BVoYLK3q7ysAYFxDxRTekPFQ9THsHBU5
+         6SsdoxySmNSRlLIVgsPqfUeF7LJ7t6Thi/wNpKjGa/BhGaZX22sZgNgf39nFa/HSKsDa
+         Qee/o4Pp8Kh6MK6ca9kuNkG+QFScr+tuLmuMlCGGJJm4g9ysiXpO8aUsZCdRcPJdXbxV
+         VFV4hlVYP1+MMgb/j2GhIMCLDHrflioyiidAeg2NbJSLFcX/f3uU/g8uxYqEcaW4lMTU
+         4eubA30dTML5nAFdrOVdGzv62fj1XpDhpwPQutcmk+fmEho17pdJTDqNr1k7ukW0Q9Rk
+         pk4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680208242; x=1682800242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ibqoW3aqug8lkTzee2r6dDS7STVhEoPrqifxRDlW8Ew=;
+        b=2NUS0i2qOGEn1A82aNF2hQfclKb7a8N/vO2XOAwNAxOt78Ib5USd47s+aiih8cZGQ7
+         qXZQTpNthYyEuuDTivz7Z/7cIA4JRVaNDi1Aaw1FCQJKmp4zGKOuhJtXqu4eU+xLf3ID
+         0BQpikFZLtIbvoHpw2fVBnldtWNGD71A8qdVqWLahhUN+a40Qs7v3mgJzgN0o0KZKLrU
+         FvykZh1UioJylN2SDIpb9/5d4mID7qwAGGZeItmfig8XvsKpTyHXaVDNyxOs7/1vd/xs
+         N8GJrJDZ+u979+SPU9USOgcp0LyPZo6Wcvl+4s1EPSaO6VwJBS6lKGStR1/XfExmpPoa
+         0MuA==
+X-Gm-Message-State: AAQBX9dO6Ea+HWI2lhK/dcW0Uj1UxviQFJjvShjiJTbqHePNEVXFRofQ
+        +cV/I3N2WDN1cgXoratZSzwkBfx1QZT7EKq4P+QUqg==
+X-Google-Smtp-Source: AKy350aidLSuvX9vJo0uXrSBh5Sk3mH+O9VXXztPPBDn8TXDbKcIWfm/n73qRTubf0tO5RMGGRQK5WHyyA5yUAHn+G8=
+X-Received: by 2002:ac2:50c3:0:b0:4d5:ca32:6aea with SMTP id
+ h3-20020ac250c3000000b004d5ca326aeamr7392071lfm.10.1680208242140; Thu, 30 Mar
+ 2023 13:30:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 08/13] rust: init: add `stack_pin_init!` macro
-Content-Language: en-US-large
-To:     Benno Lossin <y86-dev@protonmail.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Gary Guo <gary@garyguo.net>
-References: <20230329223239.138757-1-y86-dev@protonmail.com>
- <20230329223239.138757-9-y86-dev@protonmail.com>
- <ada8307d-5177-2094-683f-bce619f1ea44@ryhl.io>
- <4b048bfc-e4fe-8c2f-ebfe-9b6a410cd8b8@protonmail.com>
-From:   Alice Ryhl <alice@ryhl.io>
-In-Reply-To: <4b048bfc-e4fe-8c2f-ebfe-9b6a410cd8b8@protonmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230330155707.3106228-1-peterx@redhat.com> <20230330160705.3106966-1-peterx@redhat.com>
+In-Reply-To: <20230330160705.3106966-1-peterx@redhat.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 30 Mar 2023 13:30:05 -0700
+Message-ID: <CAJHvVcgUGu+zDjOknKarQ2+MkYRuAyUR-=8HosfmNXkftNvGYQ@mail.gmail.com>
+Subject: Re: [PATCH 07/29] selftests/mm: Merge default_huge_page_size() into one
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,60 +76,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 17:19, Benno Lossin wrote:
-> On 30.03.23 17:00, Alice Ryhl wrote:
->> On 3/30/23 00:33, y86-dev@protonmail.com wrote:
->>> From: Benno Lossin <y86-dev@protonmail.com>
->>>
->>> The `stack_pin_init!` macro allows pin-initializing a value on the
->>> stack. It accepts a `impl PinInit<T, E>` to initialize a `T`. It allows
->>> propagating any errors via `?` or handling it normally via `match`.
->>>
->>> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
->>
->> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
->>
->>> ---
->>> +#[macro_export]
->>> +macro_rules! stack_pin_init {
->>> +    (let $var:ident $(: $t:ty)? = $val:expr) => {
->>> +        let mut $var = $crate::init::__internal::StackInit$(::<$t>)?::uninit();
->>> +        let mut $var = {
->>> +            let val = $val;
->>> +            unsafe { $crate::init::__internal::StackInit::init(&mut $var, val) }
->>> +        };
->>> +    };
->>> +    (let $var:ident $(: $t:ty)? =? $val:expr) => {
->>> +        let mut $var = $crate::init::__internal::StackInit$(::<$t>)?::uninit();
->>> +        let mut $var = {
->>> +            let val = $val;
->>> +            unsafe { $crate::init::__internal::StackInit::init(&mut $var, val)? }
->>> +        };
->>> +    };
->>> +}
->>
->> This will be inconvenient to use if the initializer is infallible and is
->> used inside an infallible function. However, I'm not sure what a better
->> alternative would be. Perhaps we should have three variants?
-> 
-> That could be an option, any ideas for the syntax though? Or should it
-> be a different macro like `stack_pin_init!` and `try_stack_pin_init!`?
+On Thu, Mar 30, 2023 at 9:07=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+>
+> There're already 3 same definitions of the three functions.  Move it into
+> vm_util.[ch].
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 
-You've also split up the other macros into a fallible and infallible 
-version, so I think the same would be fine here. Perhaps use 
-`stack_pin_try_init!` as the name?
+Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 
->> Also, maybe a `<-` rather than `=` would be more consistent?
-> 
-> That is sadly not possible, since `<-` is not allowed after `ty` fragments.
-> 
->> Anyway, I don't think this should block the PR. We can revisit it later
->> if it becomes a problem.
-> 
-> Sure.
-> 
+> ---
+>  tools/testing/selftests/mm/hugetlb-madvise.c | 25 +-------------------
+>  tools/testing/selftests/mm/thuge-gen.c       | 19 +--------------
+>  tools/testing/selftests/mm/userfaultfd.c     | 24 -------------------
+>  tools/testing/selftests/mm/vm_util.c         | 21 ++++++++++++++++
+>  tools/testing/selftests/mm/vm_util.h         |  1 +
+>  5 files changed, 24 insertions(+), 66 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing=
+/selftests/mm/hugetlb-madvise.c
+> index 9a127a8fe176..28426e30d9bc 100644
+> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
+> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+> @@ -18,6 +18,7 @@
+>  #include <unistd.h>
+>  #include <sys/mman.h>
+>  #include <fcntl.h>
+> +#include "vm_util.h"
+>
+>  #define MIN_FREE_PAGES 20
+>  #define NR_HUGE_PAGES  10      /* common number of pages to map/allocate=
+ */
+> @@ -35,30 +36,6 @@
+>  unsigned long huge_page_size;
+>  unsigned long base_page_size;
+>
+> -/*
+> - * default_huge_page_size copied from mlock2-tests.c
+> - */
+> -unsigned long default_huge_page_size(void)
+> -{
+> -       unsigned long hps =3D 0;
+> -       char *line =3D NULL;
+> -       size_t linelen =3D 0;
+> -       FILE *f =3D fopen("/proc/meminfo", "r");
+> -
+> -       if (!f)
+> -               return 0;
+> -       while (getline(&line, &linelen, f) > 0) {
+> -               if (sscanf(line, "Hugepagesize:       %lu kB", &hps) =3D=
+=3D 1) {
+> -                       hps <<=3D 10;
+> -                       break;
+> -               }
+> -       }
+> -
+> -       free(line);
+> -       fclose(f);
+> -       return hps;
+> -}
+> -
+>  unsigned long get_free_hugepages(void)
+>  {
+>         unsigned long fhp =3D 0;
+> diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selft=
+ests/mm/thuge-gen.c
+> index 361ef7192cc6..380ab5f0a534 100644
+> --- a/tools/testing/selftests/mm/thuge-gen.c
+> +++ b/tools/testing/selftests/mm/thuge-gen.c
+> @@ -24,6 +24,7 @@
+>  #include <unistd.h>
+>  #include <stdarg.h>
+>  #include <string.h>
+> +#include "vm_util.h"
+>
+>  #define err(x) perror(x), exit(1)
+>
+> @@ -74,24 +75,6 @@ void find_pagesizes(void)
+>         globfree(&g);
+>  }
+>
+> -unsigned long default_huge_page_size(void)
+> -{
+> -       unsigned long hps =3D 0;
+> -       char *line =3D NULL;
+> -       size_t linelen =3D 0;
+> -       FILE *f =3D fopen("/proc/meminfo", "r");
+> -       if (!f)
+> -               return 0;
+> -       while (getline(&line, &linelen, f) > 0) {
+> -               if (sscanf(line, "Hugepagesize:       %lu kB", &hps) =3D=
+=3D 1) {
+> -                       hps <<=3D 10;
+> -                       break;
+> -               }
+> -       }
+> -       free(line);
+> -       return hps;
+> -}
+> -
+>  void show(unsigned long ps)
+>  {
+>         char buf[100];
+> diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/sel=
+ftests/mm/userfaultfd.c
+> index a96d126cb40e..4cc80a0e8955 100644
+> --- a/tools/testing/selftests/mm/userfaultfd.c
+> +++ b/tools/testing/selftests/mm/userfaultfd.c
+> @@ -1703,30 +1703,6 @@ static int userfaultfd_stress(void)
+>                 || userfaultfd_events_test() || userfaultfd_minor_test();
+>  }
+>
+> -/*
+> - * Copied from mlock2-tests.c
+> - */
+> -unsigned long default_huge_page_size(void)
+> -{
+> -       unsigned long hps =3D 0;
+> -       char *line =3D NULL;
+> -       size_t linelen =3D 0;
+> -       FILE *f =3D fopen("/proc/meminfo", "r");
+> -
+> -       if (!f)
+> -               return 0;
+> -       while (getline(&line, &linelen, f) > 0) {
+> -               if (sscanf(line, "Hugepagesize:       %lu kB", &hps) =3D=
+=3D 1) {
+> -                       hps <<=3D 10;
+> -                       break;
+> -               }
+> -       }
+> -
+> -       free(line);
+> -       fclose(f);
+> -       return hps;
+> -}
+> -
+>  static void set_test_type(const char *type)
+>  {
+>         if (!strcmp(type, "anon")) {
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftes=
+ts/mm/vm_util.c
+> index 0204c469be43..12dc654b5be3 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -180,3 +180,24 @@ int64_t allocate_transhuge(void *ptr, int pagemap_fd=
+)
+>
+>         return -1;
+>  }
+> +
+> +unsigned long default_huge_page_size(void)
+> +{
+> +       unsigned long hps =3D 0;
+> +       char *line =3D NULL;
+> +       size_t linelen =3D 0;
+> +       FILE *f =3D fopen("/proc/meminfo", "r");
+> +
+> +       if (!f)
+> +               return 0;
+> +       while (getline(&line, &linelen, f) > 0) {
+> +               if (sscanf(line, "Hugepagesize:       %lu kB", &hps) =3D=
+=3D 1) {
+> +                       hps <<=3D 10;
+> +                       break;
+> +               }
+> +       }
+> +
+> +       free(line);
+> +       fclose(f);
+> +       return hps;
+> +}
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftes=
+ts/mm/vm_util.h
+> index 6edeb531afc6..d7163fff8fb7 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -35,6 +35,7 @@ bool check_huge_anon(void *addr, int nr_hpages, uint64_=
+t hpage_size);
+>  bool check_huge_file(void *addr, int nr_hpages, uint64_t hpage_size);
+>  bool check_huge_shmem(void *addr, int nr_hpages, uint64_t hpage_size);
+>  int64_t allocate_transhuge(void *ptr, int pagemap_fd);
+> +unsigned long default_huge_page_size(void);
+>
+>  /*
+>   * On ppc64 this will only work with radix 2M hugepage size
 > --
-> Cheers,
-> Benno
-> 
-> 
+> 2.39.1
+>
