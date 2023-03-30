@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84D76D054A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A646C6D054F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjC3MvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 08:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S231572AbjC3MwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 08:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjC3MvX (ORCPT
+        with ESMTP id S229895AbjC3MwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:51:23 -0400
+        Thu, 30 Mar 2023 08:52:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19A8A6;
-        Thu, 30 Mar 2023 05:51:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D5CA6;
+        Thu, 30 Mar 2023 05:52:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DAF662047;
-        Thu, 30 Mar 2023 12:51:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63714C433EF;
-        Thu, 30 Mar 2023 12:51:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9699B62067;
+        Thu, 30 Mar 2023 12:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ADA8C433D2;
+        Thu, 30 Mar 2023 12:52:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680180681;
-        bh=coIsgc+CiBcPlgInJagIMgb3EffrlH1xxW1EcxZen1Q=;
+        s=korg; t=1680180740;
+        bh=wefoDpNYgcLHplZv9DQcoycKi5+6BysKBqZMWUs93Yo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Np0P0NKXupGHOcio5+c3CZ39JYWgICbWKaEBjM44Aavq8WgcFLAodQanvl0bAmyC1
-         LdY5gkd+rC69rAHp2X/joIb/kLBMXvedMfElNJolGwa0fvEZDv/30GbFJo0giegJHb
-         yFIjrTewxY1usaE0TeHOBQjDXc2bL6ho0gg/l/9Q=
-Date:   Thu, 30 Mar 2023 14:51:19 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     stable@kernel.org, stable@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, boyu.mt@taobao.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        leejones@google.com, Ye Bin <yebin10@huawei.com>,
-        syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com,
-        Jun Nie <jun.nie@linaro.org>
-Subject: Re: [PATCH RESEND][for-stable 5.10, 5.4, 4.19, 4.14] ext4: fix
- kernel BUG in 'ext4_write_inline_data_end()'
-Message-ID: <ZCWFx_iRPRr1Afw0@kroah.com>
-References: <20230307103840.2603092-1-tudor.ambarus@linaro.org>
- <42739df1-8b63-dfd6-6ec5-6c59d5d41dd8@linaro.org>
- <ZCV6I-CBHVw2GPre@kroah.com>
- <661ff1fb-ab0d-e0a3-693c-073443f556df@linaro.org>
+        b=EOryz61/oPm1GWi2ELshR3m0eOKapazc271eNA7l1yAMbClMvM+eI9pQ+GUSFb9p4
+         VxxOp97NUwcM/VxrX1msGxxIdLr3oVMUw6N2tJCOpa3np6EDfddc8eGu8E+f5xOzZZ
+         GPocO1wIRDOxHEWT3Ez0u/DkwONTAUnGeqnKf2kM=
+Date:   Thu, 30 Mar 2023 14:52:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v9 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <ZCWF_Envuh3Qnaxm@kroah.com>
+References: <20230323071051.2184-1-tony@atomide.com>
+ <ZCQAF-nrrsfBtviT@kroah.com>
+ <20230330113231.GR7501@atomide.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <661ff1fb-ab0d-e0a3-693c-073443f556df@linaro.org>
+In-Reply-To: <20230330113231.GR7501@atomide.com>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -58,27 +60,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 01:21:55PM +0100, Tudor Ambarus wrote:
-> 
-> 
-> On 3/30/23 13:01, Greg KH wrote:
-> > On Thu, Mar 30, 2023 at 12:42:27PM +0100, Tudor Ambarus wrote:
-> >> + stable@vger.kernel.org
-> >>
-> >> Hi!
-> >>
-> >> Can we queue this to Linux stable, please?
+On Thu, Mar 30, 2023 at 02:32:31PM +0300, Tony Lindgren wrote:
+> * Greg Kroah-Hartman <gregkh@linuxfoundation.org> [230329 09:08]:
+> > On Thu, Mar 23, 2023 at 09:10:47AM +0200, Tony Lindgren wrote:
+> > > --- /dev/null
+> > > +++ b/drivers/tty/serial/serial_base.c
+> > > @@ -0,0 +1,142 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-or-later
 > > 
-> > Queue what exactly?
-> > 
+> > Given that the driver core is "GPL-2.0-only", why is this -or-later?
 > 
-> The patch on which we reply:
-> https://lore.kernel.org/all/20230307103840.2603092-1-tudor.ambarus@linaro.org/
+> Thanks for noticing, the intention was to set it to what serial_core.c has:
 > 
-> Shall I do something different next time?
+> $ git grep -e SPDX -e MODULE_LICENSE drivers/tty/serial/serial_core.c
+> drivers/tty/serial/serial_core.c:// SPDX-License-Identifier: GPL-2.0+
+> drivers/tty/serial/serial_core.c:MODULE_LICENSE("GPL");
 
-Please resend, your commit message is very confusing and this patch is
-long out of my review queue for some reason.
+Doesn't mean you have to copy it, it's your choice :)
 
 thanks,
 
