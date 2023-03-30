@@ -2,45 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08376CFD39
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FA86CFD48
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjC3Hps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
+        id S229710AbjC3HtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjC3Hpo (ORCPT
+        with ESMTP id S229635AbjC3Hsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:45:44 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030A0FA
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:45:43 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PnFmv5dTSzrZFP;
-        Thu, 30 Mar 2023 15:44:31 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 15:45:40 +0800
-From:   Longlong Xia <xialonglong1@huawei.com>
-To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
-CC:     <linmiaohe@huawei.com>, <wangkefeng.wang@huawei.com>,
-        <sunnanyong@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, Longlong Xia <xialonglong1@huawei.com>
-Subject: [PATCH 2/2] mm: ksm: Support hwpoison for ksm page
-Date:   Thu, 30 Mar 2023 15:45:01 +0800
-Message-ID: <20230330074501.205092-3-xialonglong1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230330074501.205092-1-xialonglong1@huawei.com>
-References: <20230330074501.205092-1-xialonglong1@huawei.com>
+        Thu, 30 Mar 2023 03:48:54 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A994C13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:48:49 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id l12so18064783wrm.10
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:48:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680162528;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=okeSFnANawi1LC1aBHEsxSK/GYfBSKiaqPeM+AamHZg=;
+        b=HzMJRijwdPPEPy8qvkSlWVtDrQWbV6dX/IL9jpBcjDXV5uqcfCKxOOzHCZbYFRAYG9
+         PusIZChCya8EGmAMCT6kgYuzD4J2gzg2TMrbZr/2YX4LHmNMTKGkwWb+1qc/m3Aouwo0
+         Pk8GcPYf09RdHiRVewn+Z085xM0Qb9aDCv1E+ZRCKQBq1j+mwW6mkzvRepX9pEnryCbo
+         LNK6+ZH8/UojXRD/l6SrrhXj6lreIAjsqW0h+a28rfzS1vPWYufZ7uObUt8gdDt931rC
+         S/gMa8KGdjKfyceVQVMUx5FjJS76Sc32y8i/cAO0ok/3Nnf/1vgP9lvisyAOrgPVObJQ
+         nypg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680162528;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=okeSFnANawi1LC1aBHEsxSK/GYfBSKiaqPeM+AamHZg=;
+        b=V8+2ImrNuAXtPZSxsk2RpoNpYdRQVvCPXwjSqsyCpxmOKJdHrx1wa50ttMbr9YEMu/
+         VeTgLJ4uI/D37A6qUDqja5z8AyBuPpuSxt2NI32dZA/nFYGmIlfuknqcO9WKnIiP0Kz7
+         g7JXc0VwZ++sMqT8+Fpcm1jEBcI6yfBM2LbqQhkzgJv+CrsmO9KD+QCygNpI54AvWJAd
+         vXU09ceQQ0I/Qvu5B0chdBtP3Vz5G257uOofmnmoCZKlk+inXu9B0lRIsmlgzQBa171C
+         AHGxytw//+s4Hy8RVupzzgk/GXcxzVtwY8OLaZM5uqYtu1VWSCuZHsobatTY68DRhV7I
+         g8Sg==
+X-Gm-Message-State: AAQBX9c7N2CBXvSXMvntOIdJ95NkxFf6MljexEkPXWhgJVmRyjyXHiC1
+        Mx8UZmlVpDvZc2wCgIwUQQybVw==
+X-Google-Smtp-Source: AKy350YBDtDK4PFtkzL9mw2TdTBg5d1e+av3yV0hQ8sa0sVV3ghf+fwGAiaHFlngdg878+Nut7sZlA==
+X-Received: by 2002:adf:f0ca:0:b0:2d3:f610:8417 with SMTP id x10-20020adff0ca000000b002d3f6108417mr16612494wro.0.1680162527868;
+        Thu, 30 Mar 2023 00:48:47 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:fe8e:8291:fc25:6c8f? ([2a01:e0a:982:cbb0:fe8e:8291:fc25:6c8f])
+        by smtp.gmail.com with ESMTPSA id z1-20020adff1c1000000b002c6e8af1037sm32115528wro.104.2023.03.30.00.48.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 00:48:47 -0700 (PDT)
+Message-ID: <d7f36a28-0cae-a035-791b-363754aefeee@linaro.org>
+Date:   Thu, 30 Mar 2023 09:48:45 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 18/21] ARM: drop SMP support for ARM11MPCore
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, Daniel Golle <daniel@makrotopia.org>
+References: <20230327121317.4081816-1-arnd@kernel.org>
+ <20230327121317.4081816-19-arnd@kernel.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230327121317.4081816-19-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,200 +109,377 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hwpoison_user_mappings() is updated to support ksm pages, and add
-collect_procs_ksm() to collect processes when the error hit an ksm
-page. The difference from collect_procs_anon() is that it also needs
-to traverse the rmap-item list on the stable node of the ksm page.
-At the same time, add_to_kill_ksm() is added to handle ksm pages. And
-task_in_to_kill_list() is added to avoid duplicate addition of tsk to
-the to_kill list. This is because when scanning the list, if the pages
-that make up the ksm page all come from the same process, they may be
-added repeatedly.
+On 27/03/2023 14:13, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The cache management operations for noncoherent DMA on ARMv6 work
+> in two different ways:
+> 
+>   * When CONFIG_DMA_CACHE_RWFO is set, speculative prefetches on in-flight
+>     DMA buffers lead to data corruption when the prefetched data is written
+>     back on top of data from the device.
+> 
+>   * When CONFIG_DMA_CACHE_RWFO is disabled, a cache flush on one CPU
+>     is not seen by the other core(s), leading to inconsistent contents
+>     accross the system.
+> 
+> As a consequence, neither configuration is actually safe to use in a
+> general-purpose kernel that is used on both MPCore systems and ARM1176
+> with prefetching enabled.
+> 
+> We could add further workarounds to make the behavior more dynamic based
+> on the system, but realistically, there are close to zero remaining
+> users on any ARM11MPCore anyway, and nobody seems too interested in it,
+> compared to the more popular ARM1176 used in BMC2835 and AST2500.
+> 
+> The Oxnas platform has some minimal support in OpenWRT, but most of the
+> drivers and dts files never made it into the mainline kernel, while the
+> Arm Versatile/Realview platform mainly serves as a reference system but
+> is not necessary to be kept working once all other ARM11MPCore are gone.
 
-Signed-off-by: Longlong Xia <xialonglong1@huawei.com>
----
- include/linux/ksm.h | 11 +++++++++++
- include/linux/mm.h  |  7 +++++++
- mm/ksm.c            | 45 +++++++++++++++++++++++++++++++++++++++++++++
- mm/memory-failure.c | 34 +++++++++++++++++++++++++---------
- 4 files changed, 88 insertions(+), 9 deletions(-)
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-diff --git a/include/linux/ksm.h b/include/linux/ksm.h
-index 7e232ba59b865..d9e701326a882 100644
---- a/include/linux/ksm.h
-+++ b/include/linux/ksm.h
-@@ -51,6 +51,10 @@ struct page *ksm_might_need_to_copy(struct page *page,
- void rmap_walk_ksm(struct folio *folio, struct rmap_walk_control *rwc);
- void folio_migrate_ksm(struct folio *newfolio, struct folio *folio);
- 
-+#ifdef CONFIG_MEMORY_FAILURE
-+void collect_procs_ksm(struct page *page, struct list_head *to_kill,
-+		       int force_early);
-+#endif
- #else  /* !CONFIG_KSM */
- 
- static inline int ksm_fork(struct mm_struct *mm, struct mm_struct *oldmm)
-@@ -62,6 +66,13 @@ static inline void ksm_exit(struct mm_struct *mm)
- {
- }
- 
-+#ifdef CONFIG_MEMORY_FAILURE
-+static inline void collect_procs_ksm(struct page *page,
-+				     struct list_head *to_kill, int force_early)
-+{
-+}
-+#endif
-+
- #ifdef CONFIG_MMU
- static inline int ksm_madvise(struct vm_area_struct *vma, unsigned long start,
- 		unsigned long end, int advice, unsigned long *vm_flags)
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 1f79667824eb6..812843008b701 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3453,6 +3453,7 @@ extern int __get_huge_page_for_hwpoison(unsigned long pfn, int flags,
- 					bool *migratable_cleared);
- void num_poisoned_pages_inc(unsigned long pfn);
- void num_poisoned_pages_sub(unsigned long pfn, long i);
-+struct task_struct *task_early_kill(struct task_struct *tsk, int force_early);
- #else
- static inline void memory_failure_queue(unsigned long pfn, int flags)
- {
-@@ -3473,6 +3474,12 @@ static inline void num_poisoned_pages_sub(unsigned long pfn, long i)
- }
- #endif
- 
-+#if defined(CONFIG_MEMORY_FAILURE) && defined(CONFIG_KSM)
-+void add_to_kill_ksm(struct task_struct *tsk, struct page *p,
-+		     struct vm_area_struct *vma, struct list_head *to_kill,
-+		     unsigned long addr);
-+#endif
-+
- #if defined(CONFIG_MEMORY_FAILURE) && defined(CONFIG_MEMORY_HOTPLUG)
- extern void memblk_nr_poison_inc(unsigned long pfn);
- extern void memblk_nr_poison_sub(unsigned long pfn, long i);
-diff --git a/mm/ksm.c b/mm/ksm.c
-index ad591b779d534..40720dcb6d490 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -2714,6 +2714,51 @@ void rmap_walk_ksm(struct folio *folio, struct rmap_walk_control *rwc)
- 		goto again;
- }
- 
-+#ifdef CONFIG_MEMORY_FAILURE
-+/*
-+ * Collect processes when the error hit an ksm page.
-+ */
-+void collect_procs_ksm(struct page *page, struct list_head *to_kill,
-+		       int force_early)
-+{
-+	struct ksm_stable_node *stable_node;
-+	struct ksm_rmap_item *rmap_item;
-+	struct folio *folio = page_folio(page);
-+	struct vm_area_struct *vma;
-+	struct task_struct *tsk;
-+
-+	stable_node = folio_stable_node(folio);
-+	if (!stable_node)
-+		return;
-+	hlist_for_each_entry(rmap_item, &stable_node->hlist, hlist) {
-+		struct anon_vma *av = rmap_item->anon_vma;
-+
-+		anon_vma_lock_read(av);
-+		read_lock(&tasklist_lock);
-+		for_each_process(tsk) {
-+			struct anon_vma_chain *vmac;
-+			unsigned long addr;
-+			struct task_struct *t =
-+				task_early_kill(tsk, force_early);
-+			if (!t)
-+				continue;
-+			anon_vma_interval_tree_foreach(vmac, &av->rb_root, 0,
-+						       ULONG_MAX)
-+			{
-+				vma = vmac->vma;
-+				if (vma->vm_mm == t->mm) {
-+					addr = rmap_item->address & PAGE_MASK;
-+					add_to_kill_ksm(t, page, vma, to_kill,
-+							addr);
-+				}
-+			}
-+		}
-+		read_unlock(&tasklist_lock);
-+		anon_vma_unlock_read(av);
-+	}
-+}
-+#endif
-+
- #ifdef CONFIG_MIGRATION
- void folio_migrate_ksm(struct folio *newfolio, struct folio *folio)
- {
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 9ca058f659121..7ef214630f273 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -455,6 +455,27 @@ static void add_to_kill_anon_file(struct task_struct *tsk, struct page *p,
- 	__add_to_kill(tsk, p, vma, to_kill, 0, FSDAX_INVALID_PGOFF);
- }
- 
-+#ifdef CONFIG_KSM
-+static bool task_in_to_kill_list(struct list_head *to_kill,
-+				 struct task_struct *tsk)
-+{
-+	struct to_kill *tk, *next;
-+
-+	list_for_each_entry_safe(tk, next, to_kill, nd) {
-+		if (tk->tsk == tsk)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+void add_to_kill_ksm(struct task_struct *tsk, struct page *p,
-+		     struct vm_area_struct *vma, struct list_head *to_kill,
-+		     unsigned long addr)
-+{
-+	if (!task_in_to_kill_list(to_kill, tsk))
-+		__add_to_kill(tsk, p, vma, to_kill, addr, FSDAX_INVALID_PGOFF);
-+}
-+#endif
- /*
-  * Kill the processes that have been collected earlier.
-  *
-@@ -534,8 +555,7 @@ static struct task_struct *find_early_kill_thread(struct task_struct *tsk)
-  * processes sharing the same error page,if the process is "early kill", the
-  * task_struct of the dedicated thread will also be returned.
-  */
--static struct task_struct *task_early_kill(struct task_struct *tsk,
--					   int force_early)
-+struct task_struct *task_early_kill(struct task_struct *tsk, int force_early)
- {
- 	if (!tsk->mm)
- 		return NULL;
-@@ -666,8 +686,9 @@ static void collect_procs(struct page *page, struct list_head *tokill,
- {
- 	if (!page->mapping)
- 		return;
--
--	if (PageAnon(page))
-+	if (unlikely(PageKsm(page)))
-+		collect_procs_ksm(page, tokill, force_early);
-+	else if (PageAnon(page))
- 		collect_procs_anon(page, tokill, force_early);
- 	else
- 		collect_procs_file(page, tokill, force_early);
-@@ -1522,11 +1543,6 @@ static bool hwpoison_user_mappings(struct page *p, unsigned long pfn,
- 	if (!page_mapped(hpage))
- 		return true;
- 
--	if (PageKsm(p)) {
--		pr_err("%#lx: can't handle KSM pages.\n", pfn);
--		return false;
--	}
--
- 	if (PageSwapCache(p)) {
- 		pr_err("%#lx: keeping poisoned page in swap cache\n", pfn);
- 		ttu |= TTU_IGNORE_HWPOISON;
--- 
-2.25.1
+It's sad but it's the reality, there's no chance full OXNAS support will
+ever come upstream and no real work has been done for years.
+
+I think OXNAS support can be programmed for removal for next release,
+it would need significant work to rework current support to make it acceptable
+before trying to upstream missing bits anyway.
+
+Thanks,
+Neil
+
+
+> 
+> Take the easy way out here and drop support for multiprocessing on
+> ARMv6, along with the CONFIG_DMA_CACHE_RWFO option and the cache
+> management implementation for it. This also helps with other ARMv6
+> issues, but for the moment leaves the ability to build a kernel that
+> can run on both ARMv7 SMP and single-processor ARMv6, which we probably
+> want to stop supporting as well, but not as part of this series.
+> 
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Daniel Golle <daniel@makrotopia.org>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: linux-oxnas@groups.io
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> I could use some help clarifying the above changelog text to describe
+> the exact problem, and how the CONFIG_DMA_CACHE_RWFO actually works on
+> MPCore. The TRMs for both 1176 and 11MPCore only describe prefetching
+> into the instruction cache, not the data cache, but this can end up in
+> the outercache as a result. The 1176 has some extra control bits to
+> control prefetching, but I found no reference that explains why an
+> MPCore does not run into the problem.
+> ---
+>   arch/arm/mach-oxnas/Kconfig                |  4 -
+>   arch/arm/mach-oxnas/Makefile               |  1 -
+>   arch/arm/mach-oxnas/headsmp.S              | 23 ------
+>   arch/arm/mach-oxnas/platsmp.c              | 96 ----------------------
+>   arch/arm/mach-versatile/platsmp-realview.c |  4 -
+>   arch/arm/mm/Kconfig                        | 19 -----
+>   arch/arm/mm/cache-v6.S                     | 31 -------
+>   7 files changed, 178 deletions(-)
+>   delete mode 100644 arch/arm/mach-oxnas/headsmp.S
+>   delete mode 100644 arch/arm/mach-oxnas/platsmp.c
+> 
+> diff --git a/arch/arm/mach-oxnas/Kconfig b/arch/arm/mach-oxnas/Kconfig
+> index a9ded7079268..a054235c3d6c 100644
+> --- a/arch/arm/mach-oxnas/Kconfig
+> +++ b/arch/arm/mach-oxnas/Kconfig
+> @@ -28,10 +28,6 @@ config MACH_OX820
+>   	bool "Support OX820 Based Products"
+>   	depends on ARCH_MULTI_V6
+>   	select ARM_GIC
+> -	select DMA_CACHE_RWFO if SMP
+> -	select HAVE_SMP
+> -	select HAVE_ARM_SCU if SMP
+> -	select HAVE_ARM_TWD if SMP
+>   	help
+>   	  Include Support for the Oxford Semiconductor OX820 SoC Based Products.
+>   
+> diff --git a/arch/arm/mach-oxnas/Makefile b/arch/arm/mach-oxnas/Makefile
+> index 0e78ecfe6c49..a4e40e534e6a 100644
+> --- a/arch/arm/mach-oxnas/Makefile
+> +++ b/arch/arm/mach-oxnas/Makefile
+> @@ -1,2 +1 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+> -obj-$(CONFIG_SMP)		+= platsmp.o headsmp.o
+> diff --git a/arch/arm/mach-oxnas/headsmp.S b/arch/arm/mach-oxnas/headsmp.S
+> deleted file mode 100644
+> index 9c0f1479f33a..000000000000
+> --- a/arch/arm/mach-oxnas/headsmp.S
+> +++ /dev/null
+> @@ -1,23 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-only */
+> -/*
+> - * Copyright (C) 2013 Ma Haijun <mahaijuns@gmail.com>
+> - * Copyright (c) 2003 ARM Limited
+> - * All Rights Reserved
+> - */
+> -#include <linux/linkage.h>
+> -#include <linux/init.h>
+> -
+> -	__INIT
+> -
+> -/*
+> - * OX820 specific entry point for secondary CPUs.
+> - */
+> -ENTRY(ox820_secondary_startup)
+> -	mov r4, #0
+> -	/* invalidate both caches and branch target cache */
+> -	mcr p15, 0, r4, c7, c7, 0
+> -	/*
+> -	 * we've been released from the holding pen: secondary_stack
+> -	 * should now contain the SVC stack for this core
+> -	 */
+> -	b	secondary_startup
+> diff --git a/arch/arm/mach-oxnas/platsmp.c b/arch/arm/mach-oxnas/platsmp.c
+> deleted file mode 100644
+> index f0a50b9e61df..000000000000
+> --- a/arch/arm/mach-oxnas/platsmp.c
+> +++ /dev/null
+> @@ -1,96 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-only
+> -/*
+> - * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
+> - * Copyright (C) 2013 Ma Haijun <mahaijuns@gmail.com>
+> - * Copyright (C) 2002 ARM Ltd.
+> - * All Rights Reserved
+> - */
+> -#include <linux/io.h>
+> -#include <linux/delay.h>
+> -#include <linux/of.h>
+> -#include <linux/of_address.h>
+> -
+> -#include <asm/cacheflush.h>
+> -#include <asm/cp15.h>
+> -#include <asm/smp_plat.h>
+> -#include <asm/smp_scu.h>
+> -
+> -extern void ox820_secondary_startup(void);
+> -
+> -static void __iomem *cpu_ctrl;
+> -static void __iomem *gic_cpu_ctrl;
+> -
+> -#define HOLDINGPEN_CPU_OFFSET		0xc8
+> -#define HOLDINGPEN_LOCATION_OFFSET	0xc4
+> -
+> -#define GIC_NCPU_OFFSET(cpu)		(0x100 + (cpu)*0x100)
+> -#define GIC_CPU_CTRL			0x00
+> -#define GIC_CPU_CTRL_ENABLE		1
+> -
+> -static int __init ox820_boot_secondary(unsigned int cpu,
+> -		struct task_struct *idle)
+> -{
+> -	/*
+> -	 * Write the address of secondary startup into the
+> -	 * system-wide flags register. The BootMonitor waits
+> -	 * until it receives a soft interrupt, and then the
+> -	 * secondary CPU branches to this address.
+> -	 */
+> -	writel(virt_to_phys(ox820_secondary_startup),
+> -			cpu_ctrl + HOLDINGPEN_LOCATION_OFFSET);
+> -
+> -	writel(cpu, cpu_ctrl + HOLDINGPEN_CPU_OFFSET);
+> -
+> -	/*
+> -	 * Enable GIC cpu interface in CPU Interface Control Register
+> -	 */
+> -	writel(GIC_CPU_CTRL_ENABLE,
+> -		gic_cpu_ctrl + GIC_NCPU_OFFSET(cpu) + GIC_CPU_CTRL);
+> -
+> -	/*
+> -	 * Send the secondary CPU a soft interrupt, thereby causing
+> -	 * the boot monitor to read the system wide flags register,
+> -	 * and branch to the address found there.
+> -	 */
+> -	arch_send_wakeup_ipi_mask(cpumask_of(cpu));
+> -
+> -	return 0;
+> -}
+> -
+> -static void __init ox820_smp_prepare_cpus(unsigned int max_cpus)
+> -{
+> -	struct device_node *np;
+> -	void __iomem *scu_base;
+> -
+> -	np = of_find_compatible_node(NULL, NULL, "arm,arm11mp-scu");
+> -	scu_base = of_iomap(np, 0);
+> -	of_node_put(np);
+> -	if (!scu_base)
+> -		return;
+> -
+> -	/* Remap CPU Interrupt Interface Registers */
+> -	np = of_find_compatible_node(NULL, NULL, "arm,arm11mp-gic");
+> -	gic_cpu_ctrl = of_iomap(np, 1);
+> -	of_node_put(np);
+> -	if (!gic_cpu_ctrl)
+> -		goto unmap_scu;
+> -
+> -	np = of_find_compatible_node(NULL, NULL, "oxsemi,ox820-sys-ctrl");
+> -	cpu_ctrl = of_iomap(np, 0);
+> -	of_node_put(np);
+> -	if (!cpu_ctrl)
+> -		goto unmap_scu;
+> -
+> -	scu_enable(scu_base);
+> -	flush_cache_all();
+> -
+> -unmap_scu:
+> -	iounmap(scu_base);
+> -}
+> -
+> -static const struct smp_operations ox820_smp_ops __initconst = {
+> -	.smp_prepare_cpus	= ox820_smp_prepare_cpus,
+> -	.smp_boot_secondary	= ox820_boot_secondary,
+> -};
+> -
+> -CPU_METHOD_OF_DECLARE(ox820_smp, "oxsemi,ox820-smp", &ox820_smp_ops);
+> diff --git a/arch/arm/mach-versatile/platsmp-realview.c b/arch/arm/mach-versatile/platsmp-realview.c
+> index 5d363385c801..fa31fd2d211d 100644
+> --- a/arch/arm/mach-versatile/platsmp-realview.c
+> +++ b/arch/arm/mach-versatile/platsmp-realview.c
+> @@ -18,16 +18,12 @@
+>   #define REALVIEW_SYS_FLAGSSET_OFFSET	0x30
+>   
+>   static const struct of_device_id realview_scu_match[] = {
+> -	{ .compatible = "arm,arm11mp-scu", },
+>   	{ .compatible = "arm,cortex-a9-scu", },
+>   	{ .compatible = "arm,cortex-a5-scu", },
+>   	{ }
+>   };
+>   
+>   static const struct of_device_id realview_syscon_match[] = {
+> -        { .compatible = "arm,core-module-integrator", },
+> -        { .compatible = "arm,realview-eb-syscon", },
+> -        { .compatible = "arm,realview-pb11mp-syscon", },
+>           { .compatible = "arm,realview-pbx-syscon", },
+>           { },
+>   };
+> diff --git a/arch/arm/mm/Kconfig b/arch/arm/mm/Kconfig
+> index c5bbae86f725..16b62bc0a970 100644
+> --- a/arch/arm/mm/Kconfig
+> +++ b/arch/arm/mm/Kconfig
+> @@ -937,25 +937,6 @@ config VDSO
+>   	  You must have glibc 2.22 or later for programs to seamlessly
+>   	  take advantage of this.
+>   
+> -config DMA_CACHE_RWFO
+> -	bool "Enable read/write for ownership DMA cache maintenance"
+> -	depends on CPU_V6K && SMP
+> -	default y
+> -	help
+> -	  The Snoop Control Unit on ARM11MPCore does not detect the
+> -	  cache maintenance operations and the dma_{map,unmap}_area()
+> -	  functions may leave stale cache entries on other CPUs. By
+> -	  enabling this option, Read or Write For Ownership in the ARMv6
+> -	  DMA cache maintenance functions is performed. These LDR/STR
+> -	  instructions change the cache line state to shared or modified
+> -	  so that the cache operation has the desired effect.
+> -
+> -	  Note that the workaround is only valid on processors that do
+> -	  not perform speculative loads into the D-cache. For such
+> -	  processors, if cache maintenance operations are not broadcast
+> -	  in hardware, other workarounds are needed (e.g. cache
+> -	  maintenance broadcasting in software via FIQ).
+> -
+>   config OUTER_CACHE
+>   	bool
+>   
+> diff --git a/arch/arm/mm/cache-v6.S b/arch/arm/mm/cache-v6.S
+> index abae7ff5defc..f6ee53c1de20 100644
+> --- a/arch/arm/mm/cache-v6.S
+> +++ b/arch/arm/mm/cache-v6.S
+> @@ -201,10 +201,6 @@ ENTRY(v6_flush_kern_dcache_area)
+>    *	- end     - virtual end address of region
+>    */
+>   ENTRY(v6_dma_inv_range)
+> -#ifdef CONFIG_DMA_CACHE_RWFO
+> -	ldrb	r2, [r0]			@ read for ownership
+> -	strb	r2, [r0]			@ write for ownership
+> -#endif
+>   	tst	r0, #D_CACHE_LINE_SIZE - 1
+>   	bic	r0, r0, #D_CACHE_LINE_SIZE - 1
+>   #ifdef HARVARD_CACHE
+> @@ -213,10 +209,6 @@ ENTRY(v6_dma_inv_range)
+>   	mcrne	p15, 0, r0, c7, c11, 1		@ clean unified line
+>   #endif
+>   	tst	r1, #D_CACHE_LINE_SIZE - 1
+> -#ifdef CONFIG_DMA_CACHE_RWFO
+> -	ldrbne	r2, [r1, #-1]			@ read for ownership
+> -	strbne	r2, [r1, #-1]			@ write for ownership
+> -#endif
+>   	bic	r1, r1, #D_CACHE_LINE_SIZE - 1
+>   #ifdef HARVARD_CACHE
+>   	mcrne	p15, 0, r1, c7, c14, 1		@ clean & invalidate D line
+> @@ -231,10 +223,6 @@ ENTRY(v6_dma_inv_range)
+>   #endif
+>   	add	r0, r0, #D_CACHE_LINE_SIZE
+>   	cmp	r0, r1
+> -#ifdef CONFIG_DMA_CACHE_RWFO
+> -	ldrlo	r2, [r0]			@ read for ownership
+> -	strlo	r2, [r0]			@ write for ownership
+> -#endif
+>   	blo	1b
+>   	mov	r0, #0
+>   	mcr	p15, 0, r0, c7, c10, 4		@ drain write buffer
+> @@ -248,9 +236,6 @@ ENTRY(v6_dma_inv_range)
+>   ENTRY(v6_dma_clean_range)
+>   	bic	r0, r0, #D_CACHE_LINE_SIZE - 1
+>   1:
+> -#ifdef CONFIG_DMA_CACHE_RWFO
+> -	ldr	r2, [r0]			@ read for ownership
+> -#endif
+>   #ifdef HARVARD_CACHE
+>   	mcr	p15, 0, r0, c7, c10, 1		@ clean D line
+>   #else
+> @@ -269,10 +254,6 @@ ENTRY(v6_dma_clean_range)
+>    *	- end     - virtual end address of region
+>    */
+>   ENTRY(v6_dma_flush_range)
+> -#ifdef CONFIG_DMA_CACHE_RWFO
+> -	ldrb	r2, [r0]		@ read for ownership
+> -	strb	r2, [r0]		@ write for ownership
+> -#endif
+>   	bic	r0, r0, #D_CACHE_LINE_SIZE - 1
+>   1:
+>   #ifdef HARVARD_CACHE
+> @@ -282,10 +263,6 @@ ENTRY(v6_dma_flush_range)
+>   #endif
+>   	add	r0, r0, #D_CACHE_LINE_SIZE
+>   	cmp	r0, r1
+> -#ifdef CONFIG_DMA_CACHE_RWFO
+> -	ldrblo	r2, [r0]			@ read for ownership
+> -	strblo	r2, [r0]			@ write for ownership
+> -#endif
+>   	blo	1b
+>   	mov	r0, #0
+>   	mcr	p15, 0, r0, c7, c10, 4		@ drain write buffer
+> @@ -301,13 +278,7 @@ ENTRY(v6_dma_map_area)
+>   	add	r1, r1, r0
+>   	teq	r2, #DMA_FROM_DEVICE
+>   	beq	v6_dma_inv_range
+> -#ifndef CONFIG_DMA_CACHE_RWFO
+>   	b	v6_dma_clean_range
+> -#else
+> -	teq	r2, #DMA_TO_DEVICE
+> -	beq	v6_dma_clean_range
+> -	b	v6_dma_flush_range
+> -#endif
+>   ENDPROC(v6_dma_map_area)
+>   
+>   /*
+> @@ -317,11 +288,9 @@ ENDPROC(v6_dma_map_area)
+>    *	- dir	- DMA direction
+>    */
+>   ENTRY(v6_dma_unmap_area)
+> -#ifndef CONFIG_DMA_CACHE_RWFO
+>   	add	r1, r1, r0
+>   	teq	r2, #DMA_TO_DEVICE
+>   	bne	v6_dma_inv_range
+> -#endif
+>   	ret	lr
+>   ENDPROC(v6_dma_unmap_area)
+>   
 
