@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F496D0010
+	by mail.lfdr.de (Postfix) with ESMTP id 961536D000F
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbjC3JqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
+        id S229748AbjC3JqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbjC3Jpl (ORCPT
+        with ESMTP id S229920AbjC3Jpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:45:41 -0400
+        Thu, 30 Mar 2023 05:45:42 -0400
 Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D788C8A4E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:45:17 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id eh3so74019505edb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:45:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC078A52
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:45:18 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id y4so74166353edo.2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:45:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680169514;
+        d=chromium.org; s=google; t=1680169515;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=P0ZT4tLV4pwIFoJoCyH/LTIscOWlu6sttcJkFj6RAJg=;
-        b=MKhXbw6KldDmbyijGdW2H7JuSKi026ZosGMSIpAUYa7SUhoSNajx2CAwoSK78pgnXv
-         9F1Q9tXqHnihud+Axk0aABNgz4iHDjH0mabEzb78y0ER0Y9LmD+SwmoeJePo8qY4ZTp+
-         nu/4byyaZZi3pZZV96rCwuaexyXd2rOqeDjNg=
+        bh=RP2whGHxY9E5x0G60FkplpO6Msu4rnrvVDst1YhxnH4=;
+        b=IjQBd/+yqDgfC6l8l+UQ4SJFT3mv4DXq/ugkc8lAzKIy9GkkF/9pE1Mh0myFCSFUvf
+         AgvtdkStMT3ma/7pbgLI2yp6RMAjeUgIw65Sb/ItJhK5mO2KlA1iv5423UNNCP1uAmpQ
+         3fg4rgiYgRyj9PGIrJ6n28XC6bc5KgfMh70K8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680169514;
+        d=1e100.net; s=20210112; t=1680169515;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=P0ZT4tLV4pwIFoJoCyH/LTIscOWlu6sttcJkFj6RAJg=;
-        b=0uHYX2ljEFY520kiOybAbtrWiE5eLqG1xa2sGVIDGbCb9TT3uhTm6NAfvWKB8hE/rK
-         h51ZtgllOtvCRa+foQDQ2DIPCb34BtOdP/Zwe3F62juFN1BDSBPfIobtAw3H6uHNEap8
-         Od3okKlykPPCCnY2y5uClhTOrnr1F+qDEOzdg4Et2UzyJm+UeLggBzpaGeF+hYvaZdsE
-         opLOWknB+7ifJxjcsUgTXdeFu82pR8yMxaZKDtBmFq4WphHFCgANwgXANppLuURtXmsp
-         mMrfYmH17Euugr0Ei902bi0MBa8vcJ0dpT4Ur3MlzVdrv2viZV9gdv9O9qkt+AqrGnXe
-         1jEA==
-X-Gm-Message-State: AAQBX9e0ydnYZ3EPzM9dMhzOZVHfU9S4I80M5PDvPZy9sebPQB/X6jJT
-        xDxS2Z/ZyT8fMejXhB6vDby5Pg==
-X-Google-Smtp-Source: AKy350Y3MhdwISO0SGhTHGP0tjb+EgKW1gK7KqgVklHI9iPI6buZ2tIhiSHfYod7GWEdeKrys5UvhA==
-X-Received: by 2002:a17:906:144a:b0:944:394:93f7 with SMTP id q10-20020a170906144a00b00944039493f7mr16259171ejc.61.1680169514692;
-        Thu, 30 Mar 2023 02:45:14 -0700 (PDT)
+        bh=RP2whGHxY9E5x0G60FkplpO6Msu4rnrvVDst1YhxnH4=;
+        b=us3CcyLMtQwvCuzUEbfHaBd2KFZzCPfF46KaEqS8I8YOAdvRUU/9QUZphWH+3cawNC
+         62CFN0pQFaNElHOs87+HN7QcIbpnsLw2Uze03LvJ8VdzNyINTSljrwpUpm5Ub3G/Rz/c
+         LFprr534bP7qQ+C8/sQKSifA847po3M11XqwVK3ORrGyou0IGLzARbVSFEgJFnfdRpbh
+         /Z3SJtALZ0xVdnqOTUZ9WDOnlIl22OpNtGssJG6I6HkQPJzQ2wjym/EYQIMsP0Q+JRPY
+         lQUeUdqcPQdZ9V2RkdbwE2g7+PEiIdEO/FwyebkKwc3q/RJajW6WqXkPdGwOgbfQJNpS
+         cItw==
+X-Gm-Message-State: AAQBX9frIv02r36U8EVwxa8nPZl6h/w2NOy/2fsnELK8MrK+LdjOzr6v
+        6PCKxqEYMydTAkEO93cXlvCtiQ==
+X-Google-Smtp-Source: AKy350Zg4BajluaYUf4mgS9VbyMFuNH43cmXIg7AlblB0LpT1FcprKQ69DnoDdlaFE0knJfDwaoqkg==
+X-Received: by 2002:a17:906:8392:b0:92c:5f1:8288 with SMTP id p18-20020a170906839200b0092c05f18288mr24186052ejx.13.1680169515396;
+        Thu, 30 Mar 2023 02:45:15 -0700 (PDT)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:1396:ff5d:6e2a:df6d])
-        by smtp.gmail.com with ESMTPSA id k9-20020a17090666c900b0092b606cb803sm17683616ejp.140.2023.03.30.02.45.13
+        by smtp.gmail.com with ESMTPSA id k9-20020a17090666c900b0092b606cb803sm17683616ejp.140.2023.03.30.02.45.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 02:45:14 -0700 (PDT)
+        Thu, 30 Mar 2023 02:45:15 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 30 Mar 2023 11:44:47 +0200
-Subject: [PATCH v5 1/2] kexec: Support purgatories with .text.hot sections
+Date:   Thu, 30 Mar 2023 11:44:48 +0200
+Subject: [PATCH v5 2/2] x86/purgatory: Add linker script
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230321-kexec_clang16-v5-1-5563bf7c4173@chromium.org>
+Message-Id: <20230321-kexec_clang16-v5-2-5563bf7c4173@chromium.org>
 References: <20230321-kexec_clang16-v5-0-5563bf7c4173@chromium.org>
 In-Reply-To: <20230321-kexec_clang16-v5-0-5563bf7c4173@chromium.org>
 To:     Eric Biederman <ebiederm@xmission.com>
@@ -62,22 +62,22 @@ Cc:     Baoquan He <bhe@redhat.com>, Philipp Rudo <prudo@redhat.com>,
         Ross Zwisler <zwisler@google.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Simon Horman <horms@kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org
+        Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2485; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=l/5U4QEZ8HewezM0SKo7DhSrv7EPFo5/mMqWDXwDLoo=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkJVofL0ZHdw3ddeiqI0n8LoN5gHxlFKFxXyM1S
- urlJaHanIOJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZCVaHwAKCRDRN9E+zzrE
- iBg1D/91C6RHT9QE0cVG0e+v65DsVYnvrTBce1q5oPhLB+VmdQz1sThWgK+n/xYoYX9kPacvf/z
- 6IDhkaLhHIQUVpdlui544DRnz6ShOt/8I3rM8gWQ4rD8jSJ52Qgc6Jd4CZu9gphgilDDor3kf+U
- gELhcxQkcHt+WlPPSiUYJ1cQw2LJWGMJiK1Pdosh6xEMM/lIz3zvuRTZz1ww/UhJ6CRQ5R9wyi8
- 6N8DggUWF8LDooOKLv1tDJptKXtOiyTqCrjjFUQ8oqK3DEcSsy3lvHTg42bJFqLanTknUJrsCU0
- f5OLuScX7v2fZKP6t/RzVbNJbNoMBc1BWVYsoqieeMxwHnEBeCzL/nhDjCgsawICPSJbkkbNH4A
- PIBr5S7JcxPJ+AAK1wDC7gSiv80UNRE093oL2GFWo6D4osNDiqWDAPGtEv25dLIqMpQ6YbbkCYa
- iM5Opq0IJXCKm+Zd8jJQO8/PwXnR5TgHsf4OeYYUAm45oEyBEr5F9XYgR9mvDLbGKMCY1wmRN8t
- 2RB1yHeR6VtZpkUdsFQfEfqD8w5jjh/qGLn77FIjPqh49Y64YZH0pdqscm1wpaHQYpJLFphTt/E
- PMV5yLjcLpgHIPop1pIp8gYl4cnmsm8T2+dAUcp1Jfj9CPUk6EenylzOoGoT+nk4Rq/fIP3CYL8
- dgSeZj8HENys/Ww==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4042; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=sl6K1VSwL+1LyYrdz/oxSd3LOsvL2UCVP6pzeLWPy1Q=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkJVok98RKwyzQtMEXTvDv5OfJerWqnGMS2NKs2
+ DJr6RojE4+JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZCVaJAAKCRDRN9E+zzrE
+ iHOqD/4szxWo11qcXn44Q+uzXQtETg3pZ52c8iQ3lFFyc+7YegOCvOXUXAkZv+wSL4uHyJRNzJT
+ nSiJeEc29WUlnRoTBrW2VEwG2ojXcrfo92B7FJTR8putcifU63Dby0pWa2r/JdlYEdEC8H+dMnk
+ ds2lqGOx6O/KEkprhp90mAzm1/SmsImuOcLF1IOT0tQwHT/8ESuTuXfsbpodSFtgM/IHEA6BWoW
+ 8jPhxkxvACuZxbEvp3j65I+VIUAjbd7zIodTy+cSv2+/JLPDRVE9Lq5g2NNg1gGLQS7E7tbxWLD
+ lED6W0GuMSqOrQyzt71I5v62Z3qmeEUweOwr5dRWl/sePzuD7sDzSvU434mbT46UaZXnsvTZIl5
+ vmNXhHLgqy2nQRDKMzyDV7MO7FXloVzIuvM6c+oEkrJ0EDxDC+b9PAmYbkHmMNMmuViLY/cysvz
+ hgP38Z4fDMZGlBZZibGLWOHR65aXPHKNuE2pxgQ3juv7zhyiyBoS4zBQUMz37jgmZXRAOH3zVnB
+ BU7l8TMuegLfJL8N2kW53iSp9vOTfLrS1fvKYtrqKiNykUUFM4S+6dH0nClgc0HoCGawEGa4+rb
+ H50Yv5+iQssPhEbNs6Dg14f+dmwfzCVauUcYBO097k6eLUrSd9TajkZGetSul9+gxGK07KvCVZh
+ rmjrfJTxyjszHWw==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
@@ -90,65 +90,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang16 links the purgatory text in two sections:
+Make sure that the .text section is not divided in multiple overlapping
+sections. This is not supported by kexec_file.
 
-  [ 1] .text             PROGBITS         0000000000000000  00000040
-       00000000000011a1  0000000000000000  AX       0     0     16
-  [ 2] .rela.text        RELA             0000000000000000  00003498
-       0000000000000648  0000000000000018   I      24     1     8
-  ...
-  [17] .text.hot.        PROGBITS         0000000000000000  00003220
-       000000000000020b  0000000000000000  AX       0     0     1
-  [18] .rela.text.hot.   RELA             0000000000000000  00004428
-       0000000000000078  0000000000000018   I      24    17     8
-
-And both of them have their range [sh_addr ... sh_addr+sh_size] on the
-area pointed by `e_entry`.
-
-This causes that image->start is calculated twice, once for .text and
-another time for .text.hot. The second calculation leaves image->start
-in a random location.
-
-Because of this, the system crashes immediately after:
-
-kexec_core: Starting new kernel
-
-Cc: stable@vger.kernel.org
-Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_puragory")
-Reviewed-by: Ross Zwisler <zwisler@google.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- kernel/kexec_file.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ arch/x86/purgatory/.gitignore        |  2 ++
+ arch/x86/purgatory/Makefile          | 20 +++++++++----
+ arch/x86/purgatory/kexec-purgatory.S |  2 +-
+ arch/x86/purgatory/purgatory.lds.S   | 57 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 74 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index f1a0e4e3fb5c..c7a0e51a6d87 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -901,10 +901,22 @@ static int kexec_purgatory_setup_sechdrs(struct purgatory_info *pi,
- 		}
+diff --git a/arch/x86/purgatory/.gitignore b/arch/x86/purgatory/.gitignore
+index d2be1500671d..1fe71fe5945d 100644
+--- a/arch/x86/purgatory/.gitignore
++++ b/arch/x86/purgatory/.gitignore
+@@ -1 +1,3 @@
+ purgatory.chk
++purgatory.lds
++purgatory
+diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+index 17f09dc26381..4dc96d409bec 100644
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@ -16,10 +16,11 @@ CFLAGS_sha256.o := -D__DISABLE_EXPORTS
  
- 		offset = ALIGN(offset, align);
+ # When linking purgatory.ro with -r unresolved symbols are not checked,
+ # also link a purgatory.chk binary without -r to check for unresolved symbols.
+-PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
+-LDFLAGS_purgatory.ro := -r $(PURGATORY_LDFLAGS)
+-LDFLAGS_purgatory.chk := $(PURGATORY_LDFLAGS)
+-targets += purgatory.ro purgatory.chk
++PURGATORY_LDFLAGS := -nostdlib -z nodefaultlib
++LDFLAGS_purgatory := -r $(PURGATORY_LDFLAGS) -T
++LDFLAGS_purgatory.chk := -e purgatory_start $(PURGATORY_LDFLAGS)
 +
-+		/*
-+		 * Check if the segment contains the entry point, if so,
-+		 * calculate the value of image->start based on it.
-+		 * If the compiler has produced more than one .text section
-+		 * (Eg: .text.hot), they are generally after the main .text
-+		 * section, and they shall not be used to calculate
-+		 * image->start. So do not re-calculate image->start if it
-+		 * is not set to the initial value, and warn the user so they
-+		 * have a chance to fix their purgatory's linker script.
-+		 */
- 		if (sechdrs[i].sh_flags & SHF_EXECINSTR &&
- 		    pi->ehdr->e_entry >= sechdrs[i].sh_addr &&
- 		    pi->ehdr->e_entry < (sechdrs[i].sh_addr
--					 + sechdrs[i].sh_size)) {
-+					 + sechdrs[i].sh_size) &&
-+		    !WARN_ON(kbuf->image->start != pi->ehdr->e_entry)) {
- 			kbuf->image->start -= sechdrs[i].sh_addr;
- 			kbuf->image->start += kbuf->mem + offset;
- 		}
++targets += purgatory.lds purgatory.ro purgatory.chk
+ 
+ # Sanitizer, etc. runtimes are unavailable and cannot be linked here.
+ GCOV_PROFILE	:= n
+@@ -72,10 +73,17 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+ AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
+ AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
+ 
+-$(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
++OBJCOPYFLAGS_purgatory.ro := -O elf64-x86-64
++OBJCOPYFLAGS_purgatory.ro += --remove-section='*debug*'
++OBJCOPYFLAGS_purgatory.ro += --remove-section='.comment'
++OBJCOPYFLAGS_purgatory.ro += --remove-section='.note.*'
++$(obj)/purgatory.ro: $(obj)/purgatory FORCE
++		$(call if_changed,objcopy)
++
++$(obj)/purgatory.chk: $(obj)/purgatory FORCE
+ 		$(call if_changed,ld)
+ 
+-$(obj)/purgatory.chk: $(obj)/purgatory.ro FORCE
++$(obj)/purgatory: $(obj)/purgatory.lds $(PURGATORY_OBJS) FORCE
+ 		$(call if_changed,ld)
+ 
+ $(obj)/kexec-purgatory.o: $(obj)/purgatory.ro $(obj)/purgatory.chk
+diff --git a/arch/x86/purgatory/kexec-purgatory.S b/arch/x86/purgatory/kexec-purgatory.S
+index 8530fe93b718..54b0d0b4dc42 100644
+--- a/arch/x86/purgatory/kexec-purgatory.S
++++ b/arch/x86/purgatory/kexec-purgatory.S
+@@ -5,7 +5,7 @@
+ 	.align	8
+ kexec_purgatory:
+ 	.globl	kexec_purgatory
+-	.incbin	"arch/x86/purgatory/purgatory.ro"
++	.incbin	"arch/x86/purgatory/purgatory"
+ .Lkexec_purgatory_end:
+ 
+ 	.align	8
+diff --git a/arch/x86/purgatory/purgatory.lds.S b/arch/x86/purgatory/purgatory.lds.S
+new file mode 100644
+index 000000000000..610da88aafa0
+--- /dev/null
++++ b/arch/x86/purgatory/purgatory.lds.S
+@@ -0,0 +1,57 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <asm-generic/vmlinux.lds.h>
++
++OUTPUT_FORMAT(CONFIG_OUTPUT_FORMAT)
++
++#undef i386
++
++#include <asm/cache.h>
++#include <asm/page_types.h>
++
++ENTRY(purgatory_start)
++
++SECTIONS
++{
++	. = 0;
++	.head.text : {
++		_head = . ;
++		HEAD_TEXT
++		_ehead = . ;
++	}
++	.rodata : {
++		_rodata = . ;
++		*(.rodata)	 /* read-only data */
++		*(.rodata.*)
++		_erodata = . ;
++	}
++	.text :	{
++		_text = .; 	/* Text */
++		*(.text)
++		*(.text.*)
++		*(.noinstr.text)
++		_etext = . ;
++	}
++	.data :	{
++		_data = . ;
++		*(.data)
++		*(.data.*)
++		*(.bss.efistub)
++		_edata = . ;
++	}
++	. = ALIGN(L1_CACHE_BYTES);
++	.bss : {
++		_bss = . ;
++		*(.bss)
++		*(.bss.*)
++		*(COMMON)
++		. = ALIGN(8);	/* For convenience during zeroing */
++		_ebss = .;
++	}
++
++	/* Sections to be discarded */
++	/DISCARD/ : {
++		*(.eh_frame)
++		*(*__ksymtab*)
++		*(___kcrctab*)
++	}
++}
 
 -- 
 2.40.0.348.gf938b09366-goog
