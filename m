@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4D86D0E52
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C8C6D0E60
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbjC3TIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 15:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
+        id S232001AbjC3TKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 15:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbjC3TIG (ORCPT
+        with ESMTP id S229475AbjC3TKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:08:06 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A2ED534
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:08:02 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id br6so25793384lfb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:08:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680203281; x=1682795281;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UkfHhmuNDtES3wYzezkCW7sqz9SEBsf93iKb4NtAWWA=;
-        b=OAORZJ8B+8ILUveEQSOditFI7MMuGWICgBkrpgTQ2xdhvDWj7J/d0D4CvFK7NkGQ+f
-         KkshquZXiFWKUu9VIJPRxmzVwn2aDGy0L+9JkgeaH7qOD3cd8G0WZSV+5erFU9jx8KOI
-         OxNzjaUcyKtiNUoumP5e8zlQycBurpLjhXrn4pjRBwTUfApID38epXge+2vkQjCD2gKr
-         Cr+42b1RJDE/kSlr1oaWM73CegUJ2A2GV1lHYoRyTL+PbabmBOaSWv9zc9YLr4nnfXZy
-         MLT7UJHXlwCmrgzV2qYlqkAmqxM54pdZUJM5aMMjpNtjy8qGsTOXkCR+JjVxYIeiAFD+
-         lp6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680203281; x=1682795281;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UkfHhmuNDtES3wYzezkCW7sqz9SEBsf93iKb4NtAWWA=;
-        b=3r58JAqkLi+9cZjMfSkOWCmmqq7Db+zab//DlUlNm3gJZz8CgMS7pEGkDalWV15jLc
-         AoqZm2YJzu7s8ej482wN+Tvo0NM8ULetLFTH6vi3f9zrQI1UDR5YGtqztvoBVf9m7b4j
-         uQFy31bw6ZKnci7wFMJH0lPVqome/Y70z3IZmDlpPSxNPnOCKp+aOcmsvOX4sRAjwT+B
-         kff69vpa0bMJlKl1fXYDxX2GGTn8CZEJGkFhgt1lpbw7CClWfiFrdfF4PcWUzvMYeauD
-         8HSibzrYMgcHwzkKOywQRI7uqcERJj7xrs8vp8N/WsXnysL++4T/Gj8rSRbIxCpIUOAx
-         tOzg==
-X-Gm-Message-State: AAQBX9cWQpXpg+hPJMj/n/LMqRhLhO3riGoLJXO+FELNFAhXDzPDb7dP
-        M2ItiGT/tUn7hXpKqOkd4dKdHktTubIZ738rT1tGEA==
-X-Google-Smtp-Source: AKy350YDDs/afajur7OK3Ca3KVN76ejnOJuk5Tc5kvk9hEjc+j+Mk0udD+7c4Hm707MMe6h5g0SuPMQWzFpnMlMK98U=
-X-Received: by 2002:ac2:50c3:0:b0:4d5:ca32:6aea with SMTP id
- h3-20020ac250c3000000b004d5ca326aeamr7320661lfm.10.1680203280564; Thu, 30 Mar
- 2023 12:08:00 -0700 (PDT)
+        Thu, 30 Mar 2023 15:10:48 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C291C174;
+        Thu, 30 Mar 2023 12:10:45 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id B3439188368C;
+        Thu, 30 Mar 2023 19:10:33 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id ABED62500389;
+        Thu, 30 Mar 2023 19:10:33 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id A2E849B403F4; Thu, 30 Mar 2023 19:10:33 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id EB58791201E3;
+        Thu, 30 Mar 2023 19:10:32 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
+ test
+In-Reply-To: <ZCMYbRqd+qZaiHfu@shredder>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-7-netdev@kapio-technology.com>
+ <ZBgdAo8mxwnl+pEE@shredder> <87a5zzh65p.fsf@kapio-technology.com>
+ <ZCMYbRqd+qZaiHfu@shredder>
+Date:   Thu, 30 Mar 2023 21:07:53 +0200
+Message-ID: <874jq22h2u.fsf@kapio-technology.com>
 MIME-Version: 1.0
-References: <20230330155707.3106228-1-peterx@redhat.com> <20230330160646.3106903-1-peterx@redhat.com>
-In-Reply-To: <20230330160646.3106903-1-peterx@redhat.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 30 Mar 2023 12:07:24 -0700
-Message-ID: <CAJHvVciUGEfdgTLHUxAxCpKxXbMt202nsPhArsckHm7bDOdqFg@mail.gmail.com>
-Subject: Re: [PATCH 03/29] selftests/mm: Dump a summary in run_vmtests.sh
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,65 +84,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 9:06=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+On Tue, Mar 28, 2023 at 19:40, Ido Schimmel <idosch@nvidia.com> wrote:
+> On Sun, Mar 26, 2023 at 05:41:06PM +0200, Hans Schultz wrote:
+>> On Mon, Mar 20, 2023 at 10:44, Ido Schimmel <idosch@nvidia.com> wrote:
+>> >> +	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
+>> >> +		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
+>> >> +	tc_check_packets "dev $swp2 egress" 1 1
+>> >> +	check_fail $? "Dynamic FDB entry did not age out"
+>> >
+>> > Shouldn't this be check_err()? After the FDB entry was aged you want to
+>> > make sure that packets received via $swp1 with SMAC being $mac are no
+>> > longer forwarded by the bridge.
+>> 
+>> I was thinking that check_fail() will pass when tc_check_packets() does
+>> not see any packets, thus the test passing here when no packets are forwarded?
 >
-> Dump a summary after running whatever test specified.  Useful for human
-> runners to identify any kind of failures (besides exit code).
+> What do you mean by "I was *thinking*"? How is it possible that you are
+> submitting a selftest that you didn't bother running?!
 >
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  tools/testing/selftests/mm/run_vmtests.sh | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> I see you trimmed my earlier question: "Does this actually work?"
 >
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/se=
-lftests/mm/run_vmtests.sh
-> index c0f93b668c0c..9cc33984aa9f 100644
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -5,6 +5,9 @@
->  # Kselftest framework requirement - SKIP code is 4.
->  ksft_skip=3D4
+> I tried it and it passed:
 >
-> +count_pass=3D0
-> +count_fail=3D0
-> +count_skip=3D0
->  exitcode=3D0
+> # ./bridge_locked_port.sh                         
+> TEST: Locked port ipv4                                              [ OK ]
+> TEST: Locked port ipv6                                              [ OK ]
+> TEST: Locked port vlan                                              [ OK ]            
+> TEST: Locked port MAB                                               [ OK ]            
+> TEST: Locked port MAB roam                                          [ OK ]
+> TEST: Locked port MAB configuration                                 [ OK ]
+> TEST: Locked port MAB FDB flush                                     [ OK ]
 >
->  usage() {
-> @@ -149,11 +152,14 @@ run_test() {
->                 "$@"
->                 local ret=3D$?
->                 if [ $ret -eq 0 ]; then
-> +                       count_pass=3D$(( $count_pass + 1 ))
+> And I couldn't understand how that's even possible. Then I realized that
+> the entire test is dead code because the patch is missing this
+> fundamental hunk:
+>
+> ```
+> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> index dbc7017fd45d..5bf6b2aa1098 100755
+> --- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> @@ -9,6 +9,7 @@ ALL_TESTS="
+>         locked_port_mab_roam
+>         locked_port_mab_config
+>         locked_port_mab_flush
+> +       locked_port_dyn_fdb
+>  "
+>  
+>  NUM_NETIFS=4
+> ```
+>
+> Which tells me that you didn't even try running it once.
 
-Actually, inside $(( )) there's no need to prefix variable names with
-$ too. Running "shellcheck" over the script written this way will
-generate a warning.
+Not true, it reveals that I forgot to put it in the patch, that's all. As
+I cannot run several of these tests because of memory constraints I link
+the file to a copy in a rw area where I modify the list and just run one
+of the subtests at a time. If I try to run the whole it always fails
+after a couple of sub-tests with an error.
 
-Same applies below.
-
->                         echo "[PASS]"
->                 elif [ $ret -eq $ksft_skip ]; then
-> +                       count_skip=3D$(( $count_skip + 1 ))
->                         echo "[SKIP]"
->                         exitcode=3D$ksft_skip
->                 else
-> +                       count_fail=3D$(( $count_fail + 1 ))
->                         echo "[FAIL]"
->                         exitcode=3D1
->                 fi
-> @@ -279,4 +285,6 @@ CATEGORY=3D"soft_dirty" run_test ./soft-dirty
->  # COW tests
->  CATEGORY=3D"cow" run_test ./cow
->
-> +echo "SUMMARY: PASS=3D${count_pass} SKIP=3D${count_skip} FAIL=3D${count_=
-fail}"
-> +
->  exit $exitcode
-> --
-> 2.39.1
->
-
-Besides the nitpick:
-
-Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+It seems to me that these scripts are quite memory consuming as they
+accumulate memory consuption in relation to what is loaded along the
+way. A major problem with my system.
