@@ -2,106 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A486D059B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D13F6D05A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjC3M77 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 08:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S231792AbjC3M7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 08:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjC3M7s (ORCPT
+        with ESMTP id S231721AbjC3M7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:59:48 -0400
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220259EE7;
-        Thu, 30 Mar 2023 05:59:43 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id h9so19514916ljq.2;
-        Thu, 30 Mar 2023 05:59:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680181180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZGoTpAkzvPXZTogVoj8kdq2GxGxpgvtqWQ8RuMpPxVo=;
-        b=KKyOlNAEflmYpHiQc6XuVmm/RTk0kRUjRqufi+EDudYI2OAYYPZ88FLphjs2cU7zm3
-         t0+PkGc5Z+2bwkZn7hNb2H7K5P0gpHcImyrOGoSOWNBeWcIUpFCRSONOE5tXfZxiEK1G
-         4XSl7GN4AJIVbXzjJw/hsSfe/ogGgoWo2S3MauXsNma+NAOKdeZfKV6PvIStQPyb7Etp
-         p9Ow3OUtFLt8gwjrXncf2UD2+mz0I8LcJ54VReTe84HTxMPUOi2ZIxkyooFO1lePWC+f
-         Gk3ZYPVGAGJIH/4apc4m2yaVVa+Kg1HWLumuYkuytebrffFwEnBhvVZHOBByI91Yvuts
-         rCGg==
-X-Gm-Message-State: AAQBX9fkv+3c98e8+yYEbqk5XEqQZzQKVLv4JoZT57UDwcjHbfPO0Ska
-        JyOymwbX02MZbU2HQ6zTuJYH4fFVbI8UcUxY
-X-Google-Smtp-Source: AKy350b5FEvUkeqbiPIF8q//VsLTZrSk/T6ulAPE9F8UaeGFJXwsUgS3FscdDnrnH/qsurtrosxsRQ==
-X-Received: by 2002:a2e:9e98:0:b0:29c:d0ef:481c with SMTP id f24-20020a2e9e98000000b0029cd0ef481cmr7029567ljk.28.1680181180446;
-        Thu, 30 Mar 2023 05:59:40 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id c1-20020a2e6801000000b002a421ac8629sm2514124lja.49.2023.03.30.05.59.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 05:59:38 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id q14so19488939ljm.11;
-        Thu, 30 Mar 2023 05:59:38 -0700 (PDT)
-X-Received: by 2002:a2e:b60d:0:b0:299:ac4e:a8a6 with SMTP id
- r13-20020a2eb60d000000b00299ac4ea8a6mr7200190ljn.9.1680181178291; Thu, 30 Mar
- 2023 05:59:38 -0700 (PDT)
+        Thu, 30 Mar 2023 08:59:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B6E9EF5;
+        Thu, 30 Mar 2023 05:59:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UL7W2tzjfyF4OgCjneaPuyZJqekRRwSCQhOyLLp43Jk=; b=nNmNcxwTdfBZooOAXeHgpqbzac
+        YmZZ8wDDt2nH3z0jCIVkowr8x23tD6YxwwOAk6rAj8pTshUdDULUJITs7DiMEnPIaQNNw3xdsb/qx
+        vSsgqu0QhfwhfmbKxgxIXjHuHfFU5wmgILJMSy7WPBjDxoisImaE5nTo6nCecH1MlxmDov5Gf6gqS
+        +v1s0zvqKVRA0nacCNdep+UhUke0JaJ65D8q2wX+C4CNd/qsv56zEftf/ztcO05U10c5QYSgWmK03
+        ygAc9exCCi/hEYF8wFxKH4oREB4Ggofzi4H4gbVTTvy+peteD+OVwOOjHTHWplCF33JVEeE1dtUYT
+        PM2lo0Pg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1phrsG-00AQFb-3c; Thu, 30 Mar 2023 12:59:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7BC07300134;
+        Thu, 30 Mar 2023 14:59:27 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 618F320134244; Thu, 30 Mar 2023 14:59:27 +0200 (CEST)
+Date:   Thu, 30 Mar 2023 14:59:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH 12/13] rust: sync: introduce `CondVar`
+Message-ID: <20230330125927.GD124812@hirez.programming.kicks-ass.net>
+References: <20230330043954.562237-1-wedsonaf@gmail.com>
+ <20230330043954.562237-12-wedsonaf@gmail.com>
 MIME-Version: 1.0
-References: <20230327205228.573456-1-robh@kernel.org>
-In-Reply-To: <20230327205228.573456-1-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 30 Mar 2023 14:59:23 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX742MrnXhYJUSRqXnG_ctzcH0ee=og_6-7K=62yFLaDQ@mail.gmail.com>
-Message-ID: <CAMuHMdX742MrnXhYJUSRqXnG_ctzcH0ee=og_6-7K=62yFLaDQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: sh-mobile: Use of_cpu_node_to_id() to read CPU
- node 'reg'
-To:     Rob Herring <robh@kernel.org>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330043954.562237-12-wedsonaf@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Thu, Mar 30, 2023 at 01:39:53AM -0300, Wedson Almeida Filho wrote:
 
-On Mon, Mar 27, 2023 at 10:52 PM Rob Herring <robh@kernel.org> wrote:
-> Replace open coded CPU nodes reading of "reg" and translation to logical
-> ID with of_cpu_node_to_id().
->
-> The original code called of_parse_phandle() CONFIG_NR_CPUS times
-> regardless of the length of 'cpus'. Optimize the loop to bail out once
-> of_parse_phandle() fails as the end of 'cpus' property has been reached.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> v2:
->  - Optimize the number of loop iterations
+> +impl CondVar {
+> +    /// Constructs a new condvar initialiser.
+> +    #[allow(clippy::new_ret_no_self)]
+> +    pub fn new(name: &'static CStr, key: &'static LockClassKey) -> impl PinInit<Self> {
+> +        pin_init!(Self {
+> +            _pin: PhantomPinned,
+> +            // SAFETY: `__init_waitqueue_head` initialises the waitqueue head, and both `name` and
+> +            // `key` have static lifetimes so they live indefinitely.
+> +            wait_list <- unsafe {
+> +                Opaque::ffi_init2(
+> +                    bindings::__init_waitqueue_head,
+> +                    name.as_char_ptr(),
+> +                    key.as_ptr(),
+> +                )
+> +            },
+> +        })
+> +    }
+> +
+> +    fn wait_internal<T: ?Sized, B: Backend>(&self, wait_state: u32, guard: &mut Guard<'_, T, B>) {
+> +        let wait = Opaque::<bindings::wait_queue_entry>::uninit();
+> +
+> +        // SAFETY: `wait` points to valid memory.
+> +        unsafe { bindings::init_wait(wait.get()) };
+> +
+> +        // SAFETY: Both `wait` and `wait_list` point to valid memory.
+> +        unsafe {
+> +            bindings::prepare_to_wait_exclusive(self.wait_list.get(), wait.get(), wait_state as _)
+> +        };
 
-Thanks for the update!
+I can't read this rust gunk, but where is the condition test gone?
 
-I have tested this on:
-  - R-Car H2: 4xCA15 + 4xCA7, booted from either CA15 or CA7,
-  - R-Car M2-W: 2xCA15,
-  - R-Car E2: 2xCA7.
+Also, where is the loop gone to?
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.4.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +
+> +        // SAFETY: No arguments, switches to another thread.
+> +        guard.do_unlocked(|| unsafe { bindings::schedule() });
+> +
+> +        // SAFETY: Both `wait` and `wait_list` point to valid memory.
+> +        unsafe { bindings::finish_wait(self.wait_list.get(), wait.get()) };
+> +    }
+> +
+> +    /// Releases the lock and waits for a notification in interruptible mode.
+> +    ///
+> +    /// Atomically releases the given lock (whose ownership is proven by the guard) and puts the
+> +    /// thread to sleep, reacquiring the lock on wake up. It wakes up when notified by
+> +    /// [`CondVar::notify_one`] or [`CondVar::notify_all`], or when the thread receives a signal.
+> +    /// It may also wake up spuriously.
+> +    ///
+> +    /// Returns whether there is a signal pending.
+> +    #[must_use = "wait returns if a signal is pending, so the caller must check the return value"]
+> +    pub fn wait<T: ?Sized, B: Backend>(&self, guard: &mut Guard<'_, T, B>) -> bool {
+> +        self.wait_internal(bindings::TASK_INTERRUPTIBLE, guard);
+> +        Task::current().signal_pending()
+> +    }
+> +
+> +    /// Releases the lock and waits for a notification in uninterruptible mode.
+> +    ///
+> +    /// Similar to [`CondVar::wait`], except that the wait is not interruptible. That is, the
+> +    /// thread won't wake up due to signals. It may, however, wake up supirously.
+> +    pub fn wait_uninterruptible<T: ?Sized, B: Backend>(&self, guard: &mut Guard<'_, T, B>) {
+> +        self.wait_internal(bindings::TASK_UNINTERRUPTIBLE, guard)
+> +    }
+> +
+> +    /// Calls the kernel function to notify the appropriate number of threads with the given flags.
+> +    fn notify(&self, count: i32, flags: u32) {
+> +        // SAFETY: `wait_list` points to valid memory.
+> +        unsafe {
+> +            bindings::__wake_up(
+> +                self.wait_list.get(),
+> +                bindings::TASK_NORMAL,
+> +                count,
+> +                flags as _,
+> +            )
+> +        };
+> +    }
+> +
+> +    /// Wakes a single waiter up, if any.
+> +    ///
+> +    /// This is not 'sticky' in the sense that if no thread is waiting, the notification is lost
+> +    /// completely (as opposed to automatically waking up the next waiter).
+> +    pub fn notify_one(&self) {
+> +        self.notify(1, 0);
+> +    }
+> +
+> +    /// Wakes all waiters up, if any.
+> +    ///
+> +    /// This is not 'sticky' in the sense that if no thread is waiting, the notification is lost
+> +    /// completely (as opposed to automatically waking up the next waiter).
+> +    pub fn notify_all(&self) {
+> +        self.notify(0, 0);
+> +    }
+> +}
