@@ -2,180 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB276CFE45
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C61E6CFE4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjC3I31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
+        id S230089AbjC3Ia3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjC3I3T (ORCPT
+        with ESMTP id S230420AbjC3IaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:29:19 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27EDF1987
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:29:17 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:33410.296234587
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 427711002EE;
-        Thu, 30 Mar 2023 16:29:14 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 2236815573ed4aa9a8a2226bd7b1ced1 for tzimmermann@suse.de;
-        Thu, 30 Mar 2023 16:29:16 CST
-X-Transaction-ID: 2236815573ed4aa9a8a2226bd7b1ced1
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <9f690167-cdfa-7581-9493-1a66ea42a247@189.cn>
-Date:   Thu, 30 Mar 2023 16:29:13 +0800
+        Thu, 30 Mar 2023 04:30:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B7CB7EDF;
+        Thu, 30 Mar 2023 01:29:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 015C12F4;
+        Thu, 30 Mar 2023 01:30:16 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E6CA3F73F;
+        Thu, 30 Mar 2023 01:29:29 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 09:29:23 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
+        nicola.mazzucato@arm.com, Tushar.Khandelwal@arm.com,
+        viresh.kumar@linaro.org, jassisinghbrar@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: mailbox : arm,mhuv2: Allow for more RX
+ interrupts
+Message-ID: <ZCVIVhtSLKTHs+to@e120937-lin>
+References: <20230329153936.394911-1-cristian.marussi@arm.com>
+ <20230329153936.394911-2-cristian.marussi@arm.com>
+ <20230329174431.yga3c233sazimane@bogus>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
- clause
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     David Airlie <airlied@linux.ie>, liyi <liyi@loongson.cn>,
-        linux-kernel@vger.kernel.org, Sui Jingfeng <15330273260@189.cn>,
-        dri-devel@lists.freedesktop.org
-References: <20230325074636.136833-1-15330273260@189.cn>
- <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
- <20230330041726.w7boceq7ljymvfq2@ldmartin-desk2>
- <f42d8ab8-c765-2517-7d25-6ce1dea320e8@suse.de>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <f42d8ab8-c765-2517-7d25-6ce1dea320e8@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329174431.yga3c233sazimane@bogus>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 29, 2023 at 06:44:31PM +0100, Sudeep Holla wrote:
+> On Wed, Mar 29, 2023 at 04:39:35PM +0100, Cristian Marussi wrote:
+> > The ARM MHUv2 Receiver block can indeed support more interrupts, up to the
+> > maximum number of available channels, but anyway no more than the maximum
+> > number of supported interrupt for an AMBA device.
+> > 
+> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > ---
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> > Cc: devicetree@vger.kernel.org
+> > 
+> >  .../devicetree/bindings/mailbox/arm,mhuv2.yaml      | 13 +++++++++----
+> >  1 file changed, 9 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml b/Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml
+> > index a4f1fe63659a..5a57f4e2a623 100644
+> > --- a/Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml
+> > +++ b/Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml
+> > @@ -69,10 +69,15 @@ properties:
+> >  
+> >    interrupts:
+> >      description: |
+> > -      The MHUv2 controller always implements an interrupt in the "receiver"
+> > -      mode, while the interrupt in the "sender" mode was not available in the
+> > -      version MHUv2.0, but the later versions do have it.
+> > -    maxItems: 1
+> > +      The MHUv2 controller always implements at least an interrupt in the
+> > +      "receiver" mode, while the interrupt in the "sender" mode was not
+> > +      available in the version MHUv2.0, but the later versions do have it.
+> > +      In "receiver" mode, beside a single combined interrupt, there could be
+> > +      multiple interrupts, up to the number of implemented channels but anyway
+> > +      no more than the maximum number of interrupts potentially supported by
+> > +      AMBA.
+> > +    minItems: 1
+> > +    maxItems: 9
+> 
 
-On 2023/3/30 14:57, Thomas Zimmermann wrote:
-> Hi
->
-> Am 30.03.23 um 06:17 schrieb Lucas De Marchi:
->> On Wed, Mar 29, 2023 at 11:04:17AM +0200, Thomas Zimmermann wrote:
->>> (cc'ing Lucas)
->>>
->>> Hi
->>>
->>> Am 25.03.23 um 08:46 schrieb Sui Jingfeng:
->>>>  The assignment already done in drm_client_buffer_vmap(),
->>>>  just trival clean, no functional change.
->>>>
->>>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->>>> ---
->>>>  drivers/gpu/drm/drm_fbdev_generic.c | 5 ++---
->>>>  1 file changed, 2 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
->>>> b/drivers/gpu/drm/drm_fbdev_generic.c
->>>> index 4d6325e91565..1da48e71c7f1 100644
->>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
->>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
->>>> @@ -282,7 +282,7 @@ static int drm_fbdev_damage_blit(struct 
->>>> drm_fb_helper *fb_helper,
->>>>                   struct drm_clip_rect *clip)
->>>>  {
->>>>      struct drm_client_buffer *buffer = fb_helper->buffer;
->>>> -    struct iosys_map map, dst;
->>>> +    struct iosys_map map;
->>>>      int ret;
->>>>      /*
->>>> @@ -302,8 +302,7 @@ static int drm_fbdev_damage_blit(struct 
->>>> drm_fb_helper *fb_helper,
->>>>      if (ret)
->>>>          goto out;
->>>> -    dst = map;
->>>> -    drm_fbdev_damage_blit_real(fb_helper, clip, &dst);
->>>> +    drm_fbdev_damage_blit_real(fb_helper, clip, &map);
->>>
->>> I see what you're doing and it's probably correct in this case.
->>>
->>> But there's a larger issue with this iosys interfaces. Sometimes the 
->>> address has to be modified (see calls of iosys_map_incr()). That can 
->>> prevent incorrect uses of the mapping in other places, especially in 
->>> unmap code.
->>
->> using a initializer for the cases it's needed IMO would make these kind
->> of problems go away, because then the intent is explicit
->>
->>>
->>> I think it would make sense to consider a separate structure for the 
->>> I/O location. The buffer as a whole would still be represented by 
->>> struct iosys_map.  And that new structure, let's call it struct 
->>> iosys_ptr, would point to an actual location within the buffer's
->>
->> sounds fine to me, but I'd have to take a deeper look later (or when
->> someone writes the patch).  It seems we'd replicate almost the entire
->> API to just accomodate the 2 structs.  And the different types will lead
->> to confusion when one or the other should be used
->
-> I think we can split the current interface onto two categories: 
-> mapping and I/O. The former would use iosys_map and the latter would 
-> use iosys_ptr. And we'd need a helper that turns gets a ptr for a 
-> given map.
->
-> If I find the tine, I'll probably type up a patch.
->
-This sound fine and interesting.
+Hi,
 
-I don't have enough time to do this,  as I'm focus on developing driver 
-for my company's hardware.
+> I am not sure 9 is the correct value here. IIUC it is just what Linux defines
+> as AMBA_NR_IRQS. Looking at the history it was bumped from 2 to 9 for use
+> by PL330 DMA driver. I couldn't find anything to relate this 9 in any
+> AMBA or other related specification.
+> 
 
-But I  will keep an eye on it, see what interesting will be happen.
+Yes, I could not find either where the 9 comes from, but it is what
+currently each amba device is limited to, at the software level, in terms of
+interrupts that can be detected.
 
-Becuase the fbdev related code  will also be used on my company's 
-ls7a1000 and ls7a2000 platform.
+> Ideally I would say we don't know what the max here. We just have a platform
+> implementing 2 interrupts now. Do we for with 2 for now and change it if some
+> new users require more in the future ?
+> 
 
-It is useful and interesting,  Our device  at least  can functional as a 
-big frame buffer and more than framebuffer.
+By the spec seems to me that the maximum number of interrupts are equal to
+the maximum possible channels (124), or one combined interrupt.
 
-The bandwidth for VRAM write is very high(when write combine is open). 
-at least 10+ times batter than aspeed bmc.
+But these in turn, as said, are capped by the AMBA_NR_IRQS and I have
+only seen one system using 2. (for which I need this series to work)
 
-glxgear on ls3a5000@2.5ghz+ls7a1000 can run above 1000+fps. while with 
-the aspeed bmc it is just 100+ fps all so.
+> I will leave that to the DT maintainers but 9 is simply random based on Linux
+> code so I would rather choose some other random number with a better reasoning
+> than 9 as AMBA code in the kernel is limiting it to 9.
+> 
+
+Agreed. Aiming to describe any possible hw in the DT, I would say 124 at
+this point. (even though implausible not to use the combined interrupt
+at that point...)
 
 
-> Best regards
-> Thomas
->
->>
->> thanks
->> Lucas De Marchi
->>
->>> memory range. A few locations and helpers would need changes, but 
->>> there are not so many callers that it's an issue.  This would also 
->>> allow for a few debugging tests that ensure that iosys_ptr always 
->>> operates within the bounds of an iosys_map.
->>>
->>> I've long considered this idea, but there was no pressure to work on 
->>> it. Maybe now.
->>>
->>> Best regards
->>> Thomas
->>>
->>>>      drm_client_buffer_vunmap(buffer);
->>>
->>> -- 
->>> Thomas Zimmermann
->>> Graphics Driver Developer
->>> SUSE Software Solutions Germany GmbH
->>> Maxfeldstr. 5, 90409 Nürnberg, Germany
->>> (HRB 36809, AG Nürnberg)
->>> Geschäftsführer: Ivo Totev
->>
->>
->>
->
+Thanks,
+Cristian
