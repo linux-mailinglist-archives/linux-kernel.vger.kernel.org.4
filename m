@@ -2,183 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D216CFBDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297596CFBD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjC3Grh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 02:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37662 "EHLO
+        id S229735AbjC3GrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 02:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjC3Grf (ORCPT
+        with ESMTP id S229590AbjC3Gq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 02:47:35 -0400
-Received: from mail.fintek.com.tw (mail.fintek.com.tw [59.120.186.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A7340C9;
-        Wed, 29 Mar 2023 23:47:30 -0700 (PDT)
-Received: from vmMailSRV.fintek.com.tw ([192.168.1.1])
-        by mail.fintek.com.tw with ESMTP id 32U6kGAt030478;
-        Thu, 30 Mar 2023 14:46:16 +0800 (+08)
-        (envelope-from peter_hong@fintek.com.tw)
-Received: from [192.168.1.132] (192.168.1.132) by vmMailSRV.fintek.com.tw
- (192.168.1.1) with Microsoft SMTP Server id 14.3.498.0; Thu, 30 Mar 2023
- 14:46:16 +0800
-Message-ID: <8f43fc07-39b1-4b1b-9dc6-257eb00c3a81@fintek.com.tw>
-Date:   Thu, 30 Mar 2023 14:46:16 +0800
+        Thu, 30 Mar 2023 02:46:58 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A94640E5;
+        Wed, 29 Mar 2023 23:46:55 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:49992.1004970275
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 05A171002CF;
+        Thu, 30 Mar 2023 14:46:51 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 8848f98944564ef38c37ea117c5c5e46 for lkp@intel.com;
+        Thu, 30 Mar 2023 14:46:53 CST
+X-Transaction-ID: 8848f98944564ef38c37ea117c5c5e46
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <83c392c9-52de-d819-70e5-651106341f20@189.cn>
+Date:   Thu, 30 Mar 2023 14:46:50 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH V3] can: usb: f81604: add Fintek F81604 support
+Subject: Re: [PATCH v9 2/2] drm: add kms driver for loongson display
+ controller
+To:     kernel test robot <lkp@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        Li Yi <liyi@loongson.cn>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, nathan@kernel.org,
+        linux-media@vger.kernel.org
+References: <20230329155033.1303550-3-15330273260@189.cn>
+ <202303301403.lRjtbd5K-lkp@intel.com>
 Content-Language: en-US
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-CC:     <wg@grandegger.com>, <mkl@pengutronix.de>,
-        <michal.swiatkowski@linux.intel.com>,
-        <Steen.Hegelund@microchip.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <frank.jungclaus@esd.eu>, <linux-kernel@vger.kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <hpeter+linux_kernel@gmail.com>
-References: <20230327051048.11589-1-peter_hong@fintek.com.tw>
- <CAMZ6Rq+ps1tLii1VfYyAqfD4ck_TGWBUo_ouK_vLfhoNEg-BPg@mail.gmail.com>
- <5bdee736-7868-81c3-e63f-a28787bd0007@fintek.com.tw>
- <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
-From:   Peter Hong <peter_hong@fintek.com.tw>
-In-Reply-To: <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <202303301403.lRjtbd5K-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.1.132]
-X-TM-AS-Product-Ver: SMEX-12.5.0.2055-9.0.1002-27534.001
-X-TM-AS-Result: No-6.128700-8.000000-10
-X-TMASE-MatchedRID: xcONGPdDH5r/9O/B1c/Qy3UVR7WQKpLPC/ExpXrHizwN76LiU8zntn38
-        DhskX88zx3iFO+XIjdu/eowh/j6Um43oygjMeK7edXu122+iJtqRgLeuORRdEr5TVqwOzxj8g9t
-        cUGEsbFi/s1GDQQhvSgZ9zGXanbSHylZSvmQ+LQ/cgUVP3Cp+vTKEtjy6tQe+TPm/MsQarwPL8H
-        XOTyBD/Epqkmsma/qjSStLDpMKadI6Vyyhf+5DyC9iVDu7EPf8KCXi8INqrihLWMri+QqmsfcLT
-        3NnoHhsA8l7UD+NOVgaHZJ0H9OHSy22mMFMFtfH8IK7yRWPRNHJ5SXtoJPLyBS1r4tCARkw3LFu
-        yqUR8Gz2kn1T4rnnxUrF/mVEVKMJOgYgCO6OAmY1yhbbA7We00SHIG5/MB3rGPh40PSDz6yGPne
-        COFgqRISbWwTw5+ybBK8aOafFdfy/WXZS/HqJ2lZ0V5tYhzdWxEHRux+uk8hxKpvEGAbTDsD+t6
-        ElWayBm+xY9xpNA0vfYqmHh24tZjg+MjKEa72hNRzQ9pfg2bVN+6bP0i/wWntZotgvfkXTjSn/v
-        dN28UuTh4s9IQvhLK8HNTat3IL0MX9Za3DD1UB2TpWhzRt8y+UdbwqxQvmt
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--6.128700-8.000000
-X-TMASE-Version: SMEX-12.5.0.2055-9.0.1002-27534.001
-X-TM-SNTS-SMTP: 9803C5386770317E68586C722A5D039EB0BE9672EA7B5719D78991E0136CAF842000:8
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL: mail.fintek.com.tw 32U6kGAt030478
-X-Spam-Status: No, score=0.0 required=5.0 tests=NICE_REPLY_A,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
 
-Vincent MAILHOL 於 2023/3/28 下午 12:49 寫道:
->>>> +static int f81604_set_reset_mode(struct net_device *netdev)
->>>> +{
->>>> +       struct f81604_port_priv *priv = netdev_priv(netdev);
->>>> +       int status, i;
->>>> +       u8 tmp;
->>>> +
->>>> +       /* disable interrupts */
->>>> +       status = f81604_set_sja1000_register(priv->dev, netdev->dev_id,
->>>> +                                            SJA1000_IER, IRQ_OFF);
->>>> +       if (status)
->>>> +               return status;
->>>> +
->>>> +       for (i = 0; i < F81604_SET_DEVICE_RETRY; i++) {
->>> Thanks for removing F81604_USB_MAX_RETRY.
->>>
->>> Yet, I still would like to understand why you need one hundred tries?
->>> Is this some paranoiac safenet? Or does the device really need so many
->>> attempts to operate reliably? If those are needed, I would like to
->>> understand the root cause.
->> This section is copy from sja1000.c. In my test, the operation/reset may
->> retry 1 times.
->> I'll reduce it from 100 to 10 times.
-> Is it because the device is not ready? Does this only appear at
-> startup or at random?
-
-I'm using ip link up/down to test open/close(). It's may not ready so fast.
-but the maximum retry is only 1 for test 10000 times.
-
->>>> +static int f81604_set_termination(struct net_device *netdev, u16 term)
->>>> +{
->>>> +       struct f81604_port_priv *port_priv = netdev_priv(netdev);
->>>> +       struct f81604_priv *priv;
->>>> +       u8 mask, data = 0;
->>>> +       int r;
->>>> +
->>>> +       priv = usb_get_intfdata(port_priv->intf);
->>>> +
->>>> +       if (netdev->dev_id == 0)
->>>> +               mask = F81604_CAN0_TERM;
->>>> +       else
->>>> +               mask = F81604_CAN1_TERM;
->>>> +
->>>> +       if (term == F81604_TERMINATION_ENABLED)
->>>> +               data = mask;
->>>> +
->>>> +       mutex_lock(&priv->mutex);
->>> Did you witness a race condition?
->>>
->>> As far as I know, this call back is only called while the network
->>> stack big kernel lock (a.k.a. rtnl_lock) is being hold.
->>> If you have doubt, try adding a:
->>>
->>>     ASSERT_RTNL()
->>>
->>> If this assert works, then another mutex is not needed.
->> It had added ASSERT_RTNL() into f81604_set_termination(). It only assert
->> in f81604_probe() -> f81604_set_termination(), not called via ip command:
->>       ip link set dev can0 type can termination 120
->>       ip link set dev can0 type can termination 0
->>
->> so I'll still use mutex on here.
-> Sorry, do you mean that the assert throws warnings for f81604_probe()
-> -> f81604_set_termination() but that it is OK (no warning) for ip
-> command?
+On 2023/3/30 14:28, kernel test robot wrote:
+> Hi Sui,
 >
-> I did not see that you called f81604_set_termination() internally.
-> Indeed, rtnl_lock is not held in probe(). But I think it is still OK.
-> In f81604_probe() you call f81604_set_termination() before
-> register_candev(). If the device is not yet registered,
-> f81604_set_termination() can not yet be called via ip command. Can you
-> describe more precisely where you think there is a concurrency issue?
-> I still do not see it.
-
-Sorry, I had inverse the mean of ASSERT_RTNL(). It like you said.
-     f81604_probe() not held rtnl_lock.
-     ip set terminator will held rtnl_lock.
-
-Due to f81604_set_termination() will called by f81604_probe() to 
-initialize, it may need mutex in
-situation as following:
-
-User is setting can0 terminator when f81604_probe() complete generate 
-can0 and generating can1.
-So IMO, the mutex may needed.
-
->>>> +               port_priv->can.do_get_berr_counter = f81604_get_berr_counter;
->>>> +               port_priv->can.ctrlmode_supported =
->>>> +                       CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_3_SAMPLES |
->>>> +                       CAN_CTRLMODE_ONE_SHOT | CAN_CTRLMODE_BERR_REPORTING |
->>>> +                       CAN_CTRLMODE_CC_LEN8_DLC | CAN_CTRLMODE_PRESUME_ACK;
->>> Did you test the CAN_CTRLMODE_CC_LEN8_DLC feature? Did you confirm
->>> that you can send and receive DLC greater than 8?
->> Sorry, I had misunderstand the define. This device is only support 0~8
->> data length,
->    ^^^^^^^^^^^
+> I love your patch! Perhaps something to improve:
 >
-> Data length or Data Length Code (DLC)? Classical CAN maximum data
-> length is 8 but maximum DLC is 15 (and DLC 8 to 15 mean a data length
-> of 8).
+> [auto build test WARNING on drm-misc/drm-misc-next]
+> [also build test WARNING on linus/master v6.3-rc4 next-20230329]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 >
+> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230329-235338
+> base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+> patch link:    https://lore.kernel.org/r/20230329155033.1303550-3-15330273260%40189.cn
+> patch subject: [PATCH v9 2/2] drm: add kms driver for loongson display controller
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230330/202303301403.lRjtbd5K-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/ed6a57085a2dc87999193a71c28399a56e29097b
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230329-235338
+>          git checkout ed6a57085a2dc87999193a71c28399a56e29097b
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/fpga/ drivers/gpu/drm/loongson/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303301403.lRjtbd5K-lkp@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>>> drivers/gpu/drm/loongson/lsdc_drv.c:342:11: warning: variable 'ddev' is uninitialized when used here [-Wuninitialized]
+>                     drm_err(ddev, "Not known device, the driver need update!\n");
+>                             ^~~~
+>     include/drm/drm_print.h:469:16: note: expanded from macro 'drm_err'
+>             __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
+>                           ^~~
+>     include/drm/drm_print.h:456:21: note: expanded from macro '__drm_printk'
+>             dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+>                                ^~~
+>     include/linux/dev_printk.h:144:44: note: expanded from macro 'dev_err'
+>             dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                                       ^~~
+>     include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+>                     _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>                             ^~~
+>     drivers/gpu/drm/loongson/lsdc_drv.c:326:25: note: initialize the variable 'ddev' to silence this warning
+>             struct drm_device *ddev;
+>                                    ^
+>                                     = NULL
+>     1 warning generated.
+>
+>
+> vim +/ddev +342 drivers/gpu/drm/loongson/lsdc_drv.c
+>
+>     321	
+>     322	static int lsdc_pci_probe(struct pci_dev *pdev,
+>     323				  const struct pci_device_id *ent)
+>     324	{
+>     325		const struct lsdc_desc *descp;
+>     326		struct drm_device *ddev;
+>     327		struct lsdc_device *ldev;
+>     328		int ret;
+>     329	
+>     330		ret = pcim_enable_device(pdev);
+>     331		if (ret)
+>     332			return ret;
+>     333	
+>     334		pci_set_master(pdev);
+>     335	
+>     336		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(40));
+>     337		if (ret)
+>     338			return ret;
+>     339	
+>     340		descp = lsdc_detect_chip(pdev, ent);
+>     341		if (IS_ERR_OR_NULL(descp)) {
+>   > 342			drm_err(ddev, "Not known device, the driver need update!\n");
+>     343			return -ENODEV;
+>     344		}
+>     345	
 
-This device can't support DLC > 8. It's only support 0~8.
+Right, i admit this.
 
-Thanks
 
+I move  lsdc_detect_chip() function out from lsdc_create_device() to 
+here in v9.
+
+Since i think the chip probe should be run as early as possible.
+
+Remove  line 342 `drm_err(ddev, "Not known device, the driver need 
+update!\n");` would solve the problem.
+
+This time robot win.
+
+I will wait one or two day before send next version, ok?
+
+>     346		dev_info(&pdev->dev, "%s found, revision: %u",
+>     347			 chip_to_str(descp->chip), pdev->revision);
+>     348	
+>     349		ldev = lsdc_create_device(pdev, descp, &lsdc_drm_driver);
+>     350		if (IS_ERR(ldev))
+>     351			return PTR_ERR(ldev);
+>     352	
+>     353		ddev = &ldev->base;
+>     354	
+>     355		pci_set_drvdata(pdev, ddev);
+>     356	
+>     357		ret = devm_request_irq(&pdev->dev,
+>     358				       pdev->irq,
+>     359				       lsdc_get_irq_handler(descp),
+>     360				       IRQF_SHARED,
+>     361				       dev_name(&pdev->dev),
+>     362				       ddev);
+>     363		if (ret) {
+>     364			drm_err(ddev, "Failed to register interrupt: %d\n", ret);
+>     365			return ret;
+>     366		}
+>     367	
+>     368		ret = drm_dev_register(ddev, 0);
+>     369		if (ret)
+>     370			return ret;
+>     371	
+>     372		drm_fbdev_generic_setup(ddev, 32);
+>     373	
+>     374		return 0;
+>     375	}
+>     376	
+>
