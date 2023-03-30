@@ -2,137 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B196CFD4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83CD6CFD51
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjC3Hte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
+        id S229872AbjC3Htg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjC3Ht0 (ORCPT
+        with ESMTP id S229798AbjC3Ht0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 30 Mar 2023 03:49:26 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33BB6EAC;
-        Thu, 30 Mar 2023 00:49:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37579659E;
+        Thu, 30 Mar 2023 00:49:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C7B66CE278E;
-        Thu, 30 Mar 2023 07:49:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48BB2C4339E;
-        Thu, 30 Mar 2023 07:49:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680162545;
-        bh=euhxm4vC64BtVaPf8+4nBzNG5RrVIhtI/ZRKJNYJ4sg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C98FLKJvzntj7hCOAMFU+R4Ws2Cbw7uabZMxqiC0wdz2w1IHHq2XM5KMoXNVKmYPv
-         PFaLDQCHLKa+8UAx3GZqxoe9eZJRy9Uku8aMFAmWIqaLogFSIZ7DV6LsVDSWN35/FN
-         2gevljv7PWHZsMiWFJbJ3D5dZTip61hCMQ5AJ5u9HtwySBMKK9Vgrd3qFCBojDY8Hb
-         0NAD1DiNzfME7co1LNBc+yoRlyXGeCdIaOPfMGDd1Cj/nhktZ5YokOKmSsmSbJeZI4
-         OllKSBfeUUcqQh8pOQBROp4Y6+Tzk+FlwdAiejZ+82VKOIjEpUxHNoqdDRFXm1xQrE
-         FJGJgOsHM/wIQ==
-Date:   Thu, 30 Mar 2023 09:48:59 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, Baoquan He <bhe@redhat.com>,
-        stable@vger.kernel.org, Ross Zwisler <zwisler@google.com>,
-        Philipp Rudo <prudo@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, kexec@lists.infradead.org
-Subject: Re: [PATCH v4 1/2] kexec: Support purgatories with .text.hot sections
-Message-ID: <ZCU+63H7GzPlL6QJ@kernel.org>
-References: <20230321-kexec_clang16-v4-0-1340518f98e9@chromium.org>
- <20230321-kexec_clang16-v4-1-1340518f98e9@chromium.org>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 82C051FE96;
+        Thu, 30 Mar 2023 07:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680162547; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zl6vnuhb0+tm4UNYVkua6ap4lB/Vnj1JGtAkmTbyth8=;
+        b=OtqKKjzUcmO/o0IDfFsZZQhAvhs/NKY4kJjUmP4UIDS3us0gtfDjwpZ5/hrmfHWxHHPzpI
+        dZ7X131mCHa/QAdw7J0fEZfW35910RAIMN0WuPe7lYwebuRZiekoQnwdQ8sA+rGDGkzp83
+        p1Te8uGBUwpnjYZ5L8u7t6zIzW2B6cI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8A2651348E;
+        Thu, 30 Mar 2023 07:49:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EG8lH/M+JWRDAgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 30 Mar 2023 07:49:07 +0000
+Date:   Thu, 30 Mar 2023 09:49:06 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Shakeel Butt <shakeelb@google.com>, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2 4/9] cgroup: rstat: add WARN_ON_ONCE() if flushing
+ outside task context
+Message-ID: <ZCU+8lSi+e4WgT3F@dhcp22.suse.cz>
+References: <20230328221644.803272-1-yosryahmed@google.com>
+ <20230328221644.803272-5-yosryahmed@google.com>
+ <ZCQfZJFufkJ10o01@dhcp22.suse.cz>
+ <CAJD7tkb-UpKm2QbjYzB=B=oGk6Hyj9cbUviZUPC+7VsvBecH7g@mail.gmail.com>
+ <20230329192059.2nlme5ubshzdbpg6@google.com>
+ <ZCU1Bp+5bKNJzWIu@dhcp22.suse.cz>
+ <CAJD7tka0CmRvcvB0k8DZuid1vC9OK_mFriHHbXNTUkVE7OjaTA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230321-kexec_clang16-v4-1-1340518f98e9@chromium.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJD7tka0CmRvcvB0k8DZuid1vC9OK_mFriHHbXNTUkVE7OjaTA@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 05:06:53PM +0200, Ricardo Ribalda wrote:
-> Clang16 links the purgatory text in two sections:
+On Thu 30-03-23 00:13:16, Yosry Ahmed wrote:
+> On Thu, Mar 30, 2023 at 12:06 AM Michal Hocko <mhocko@suse.com> wrote:
+[...]
+> > So the real question is. Do we really care so deeply? After all somebody
+> > might be calling this from within a spin lock or irq disabled section
+> > resulting in a similar situation without noticing.
 > 
->   [ 1] .text             PROGBITS         0000000000000000  00000040
->        00000000000011a1  0000000000000000  AX       0     0     16
->   [ 2] .rela.text        RELA             0000000000000000  00003498
->        0000000000000648  0000000000000018   I      24     1     8
->   ...
->   [17] .text.hot.        PROGBITS         0000000000000000  00003220
->        000000000000020b  0000000000000000  AX       0     0     1
->   [18] .rela.text.hot.   RELA             0000000000000000  00004428
->        0000000000000078  0000000000000018   I      24    17     8
+> There are discussions in [1] about making atomic rstat flush not
+> disable irqs throughout the process, so in that case it would only
+> result in a similar situation if the caller has irq disabled. The only
+> caller that might have irq disabled is the same caller that might be
+> in irq context before this series: mem_cgroup_usage().
 > 
-> And both of them have their range [sh_addr ... sh_addr+sh_size] on the
-> area pointed by `e_entry`.
-> 
-> This causes that image->start is calculated twice, once for .text and
-> another time for .text.hot. The second calculation leaves image->start
-> in a random location.
-> 
-> Because of this, the system crashes inmediatly after:
+> On that note, and while I have your attention, I was wondering if we
+> can eliminate the flush call completely from mem_cgroup_usage(), and
+> read the global stats counters for root memcg instead of the root
+> counters. There might be subtle differences, but the root memcg usage
+> isn't super accurate now anyway (e.g. it doesn't include kernel
+> memory).
 
-s/inmediatly/immediately/
+root memcg stats are imprecise indeed and I have to admit I do not
+really know why we are adding more work for that case. I have tried to
+dig into git history for that yesterday but couldn't find a satisfying
+answer. It goes all the way down to 2d146aa3aa842 which has done the
+switch to rstat. Maybe Johannes remembers.
 
-> 
-> kexec_core: Starting new kernel
-> 
-> Cc: stable@vger.kernel.org
-
-Maybe a fixes tag is warranted here.
-
-> Reviewed-by: Ross Zwisler <zwisler@google.com>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  kernel/kexec_file.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index f1a0e4e3fb5c..25a37d8f113a 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -901,10 +901,21 @@ static int kexec_purgatory_setup_sechdrs(struct purgatory_info *pi,
->  		}
->  
->  		offset = ALIGN(offset, align);
-> +
-> +		/*
-> +		 * Check if the segment contains the entry point, if so,
-> +		 * calculate the value of image->start based on it.
-> +		 * If the compiler has produced more than one .text sections
-
-nit: s/sections/section/
-
-> +		 * (Eg: .text.hot), they are generally after the main .text
-
-If this is the general case, then are there cases where this doesn't hold?
-
-> +		 * section, and they shall not be used to calculate
-> +		 * image->start. So do not re-calculate image->start if it
-> +		 * is not set to the initial value.
-> +		 */
->  		if (sechdrs[i].sh_flags & SHF_EXECINSTR &&
->  		    pi->ehdr->e_entry >= sechdrs[i].sh_addr &&
->  		    pi->ehdr->e_entry < (sechdrs[i].sh_addr
-> -					 + sechdrs[i].sh_size)) {
-> +					 + sechdrs[i].sh_size) &&
-> +		    kbuf->image->start == pi->ehdr->e_entry) {
->  			kbuf->image->start -= sechdrs[i].sh_addr;
->  			kbuf->image->start += kbuf->mem + offset;
->  		}
-> 
-> -- 
-> 2.40.0.348.gf938b09366-goog-b4-0.11.0-dev-696ae
-> 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
-> 
+Anyway, back to this particular patch. I still do not see strong reasons
+to be verbose about !in_task case so I would just drop this patch.
+-- 
+Michal Hocko
+SUSE Labs
