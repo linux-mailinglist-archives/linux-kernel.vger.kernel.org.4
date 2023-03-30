@@ -2,91 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912276CFFFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511D76CFFFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjC3Jmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S230051AbjC3JmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjC3Jm3 (ORCPT
+        with ESMTP id S229585AbjC3JmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:42:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE4846B4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:41:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680169297;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mdeKPljJ04L5Zu/e3M2HbmrNI2/PIT36ixWTFqAG+bc=;
-        b=d6scwfFDJm0FY377uZW/GE5YQUCslEKL56TfB7BKmfhFgPfqB/XxpJ4iumrmqH/brr4qPa
-        7wbzQZNlRlENJ70mhAuhExOj5Oni8VP3j0iCV74th5R8WWkA17yA7Bhm1bdPyuIk++Ig8m
-        3Q9rFGaxdzhrA279KvLEqm3Gm2Ede2k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-29-iTWDHOayP72Oh1RXlrE68w-1; Thu, 30 Mar 2023 05:41:21 -0400
-X-MC-Unique: iTWDHOayP72Oh1RXlrE68w-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F3986185A792;
-        Thu, 30 Mar 2023 09:41:19 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D4032492C3E;
-        Thu, 30 Mar 2023 09:41:17 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <6F2985FF-2474-4F36-BD94-5F8E97E46AC2@oracle.com>
-References: <6F2985FF-2474-4F36-BD94-5F8E97E46AC2@oracle.com> <20230329141354.516864-1-dhowells@redhat.com> <20230329141354.516864-41-dhowells@redhat.com>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 40/48] sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+        Thu, 30 Mar 2023 05:42:20 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4756E93
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:42:18 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id x17so23754284lfu.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680169337;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8k+ftPu1pOQhWJUqmpZoNXnka9ZSxidu9TmOjrsgsRc=;
+        b=ImBZjcN6EHm/FQr3czBlAuWIJeVX+PlaicLsHzO61GZjBUXjieonAJsgRnFybWa2Sb
+         tTxYFWfb2gllA7JO2j26JzZo4eJcepeWT2a8ab7uDhn5JGCXJo/ki/AASSeS6ho9KJ4Q
+         y3HjCd9cS4iUpgnD1yIzv0QfV2lpRS2nrRQN5C/6hfScWU4BCfjIC+ge3hQ9GkPujLJq
+         wyW7CxoUZrEYpSqpnRvJkLD8Ac7r7j4Wqz/2FHdvO88T1WJDZAwMdGa7ZFJHzViybs5b
+         l4WNMWfM2uW9QCMIZRCV6JnZQ4Srk04esGEO8lKebnNlM07bhZNSakF0TPWP7BcZTSkh
+         ehVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680169337;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8k+ftPu1pOQhWJUqmpZoNXnka9ZSxidu9TmOjrsgsRc=;
+        b=seLeVrTQsoDCPyscIUD8HNXHwZX1UnPV8/LCVQ9c3S4FuOsV7N0OlgSU8OMHdp3jBn
+         qodvJ8zEHRDHj3JlZT3Br8Fm61kJuwhsx+UWwzK1j3Yr9dm2KoDrOaBj/7zPySF9BxQ7
+         0NONzx/CP4bGlRZr01hoTwbXKXNClgbChdWikKSfTEJogMi+yf3tnIz36u/6MCp0uKay
+         a7F4BIJOlSnPFz9b6OThRqsmDAHWMejyd6SJk6J3QCd/m855v2OVhC5QBojKUON6Po74
+         ZDFWN59iq9nB6W5yapAj74rcxaEOfxrcNABEIu+yj34Lzo7kFsqBRSQdQSruUbSqkvNx
+         w3GQ==
+X-Gm-Message-State: AAQBX9eWNCUah+ndzYjXqHmfN7JAp4QnQIImiWxrKlAWmaelMUFvqYcI
+        FFbLnbnR7aapm1qUhDcdGBfEV+7kxdCsBTRVAZrrr5fu
+X-Google-Smtp-Source: AKy350aA2hRcKGMpD5L8ZSuM0W1ha9Ld0y2KHoHT5geFAS/zx0W87IbxWa+TjhaBL3smiced1VzNWBc44g/MloUnGIs=
+X-Received: by 2002:ac2:44d9:0:b0:4d5:ca42:e43b with SMTP id
+ d25-20020ac244d9000000b004d5ca42e43bmr6463457lfm.4.1680169337074; Thu, 30 Mar
+ 2023 02:42:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <778589.1680169277.1@warthog.procyon.org.uk>
-Date:   Thu, 30 Mar 2023 10:41:17 +0100
-Message-ID: <778590.1680169277@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <1680086855-7989-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <ZCRRaHHKVt7fpvmD@cmpxchg.org> <CAGWkznFRHbYv2ev3FU10zapka_6MDQ+g_-b0jufzqcAEAKUqFA@mail.gmail.com>
+ <ZCVXFLA+sarzGG18@cmpxchg.org>
+In-Reply-To: <ZCVXFLA+sarzGG18@cmpxchg.org>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Thu, 30 Mar 2023 17:41:55 +0800
+Message-ID: <CAGWkznEdSaZRritHazo301Zyaage_R_4Grr4m8EirH7j8_-oOg@mail.gmail.com>
+Subject: Re: [PATCH] mm: mark folio as workingset in lru_deactivate_fn
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chuck Lever III <chuck.lever@oracle.com> wrote:
-
-> > +	if (ret > 0)
-> > +		*sentp = ret;
-
-Should that be:
-
-		*sentp = ret - sizeof(marker);
-
-David
-
+On Thu, Mar 30, 2023 at 5:32=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.org=
+> wrote:
+>
+> On Thu, Mar 30, 2023 at 09:38:48AM +0800, Zhaoyang Huang wrote:
+> > On Wed, Mar 29, 2023 at 10:55=E2=80=AFPM Johannes Weiner <hannes@cmpxch=
+g.org> wrote:
+> > >
+> > > On Wed, Mar 29, 2023 at 06:47:35PM +0800, zhaoyang.huang wrote:
+> > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > >
+> > > > folio will skip of being set as workingset in lru_deactivate_fn.
+> > >
+> > > Can you please elaborate why that's undesirable? What's the problem
+> > > you're fixing?
+> > If I am correct, folio will skip being set as workingset when moving
+> > from active lru to inactive lru, which is performed on every folio in
+> > shrink_active_list during normal reclaim.
+>
+> shrink_active_list directly calls folio_set_workingset(). The function
+> you're editing is used for things like MADV_COLD and truncate().
+Yes.
+>
+> It sounds like there is just a misunderstanding of the code, not an
+> actual problem.
+Isn't that a problem? As my understanding, MADV_COLD could be deemed
+as a stimulation of normal reclaiming which turbo the folio towards
+eviction, while the page moving by it should be also delt in the same
+way(PG_active has been cleaned)
