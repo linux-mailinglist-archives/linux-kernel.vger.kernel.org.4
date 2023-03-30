@@ -2,215 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3A96CFA9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 07:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23ED96CFA98
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 07:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjC3FQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 01:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
+        id S229851AbjC3FOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 01:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC3FQt (ORCPT
+        with ESMTP id S229527AbjC3FOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 01:16:49 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11B05245;
-        Wed, 29 Mar 2023 22:16:45 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 31F0C5FD25;
-        Thu, 30 Mar 2023 08:16:42 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1680153402;
-        bh=gsOfma4lyrnLfMCE/+bHkDrhbc8nxtLfnG2vBKGjSSM=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=Qw8MY1vtgsYAnokKaNQqF8gVvlA5wi0remxRsT75tXYda5TGvQy4mxmjusPuL0XIv
-         D/8qWwy+2FQivrGj1phwfwvd98P41Bq6htKNX2cyXIK89jey8YknwPNQ9Bbryct0Py
-         4b9lEKRnUkhCGLYN8ENfIVQ5kUkrSu6BOVBSVFoJOIuH359eW0KhE9MFPgehEfRisl
-         S6FeTgCEQ7i1G5dNYuVxhVBOTJFcMa7OkvMbEmLFUQMxuB/wtQa1HyYvK9rSVGvsOJ
-         lmCeJRo/4NbDFyV6vQbfF6jXGQDX+r9/l4aPRxoL4AOqDhqaewHnTLkken4D1GOhFC
-         hn7Hm3wKlTRrw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 30 Mar 2023 08:16:36 +0300 (MSK)
-Message-ID: <3083bb71-45bd-0738-14b6-fe2860c61b09@sberdevices.ru>
-Date:   Thu, 30 Mar 2023 08:13:12 +0300
+        Thu, 30 Mar 2023 01:14:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7789E4EE4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 22:14:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00559B825AB
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:14:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA7B8C433EF;
+        Thu, 30 Mar 2023 05:13:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680153243;
+        bh=xnr6GkmuPQBX2CfvXMCyH+BeYqP+rDi3Om9oGJN4E6A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X88rXo6Kn8GpVuEer6q4mKi/UOgR67iY+NFv1SZi5qFZWw7tm4rKjjCD3qFqOfVEv
+         dgh8qWCazrmlWeonzBeCFQM8+78c14GqdgqjunzRW16W8K5eSzv4jBGIzlhRFQ7Tn1
+         d8xTBBlpLwnx9CdUdUWKn/A8t0lpa3ntUQ4UsrBnbPVcwUj3eSsp0wb2hnh+vt0T6W
+         wNhqd8+vy/y1+qnPrTtt4TPaJktJMrUWX8GPdrgY0oSXj7JivlPtngaQ8e5/9I3kUU
+         gI8oOaOKNf/eUFLC36X9ZSKWUeNGxPdNtcDc4JY/BWVb0CU5suOOK4ecX9DyK2uGNv
+         +VX3GpcPXiPpQ==
+Date:   Thu, 30 Mar 2023 08:13:48 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Song Liu <song@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+Message-ID: <ZCUajG1uTniQcmlN@kernel.org>
+References: <20230308094106.227365-2-rppt@kernel.org>
+ <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
+ <ZB6W1C88TU6CcjJH@kernel.org>
+ <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
+ <ZCKIX3de5AZfGggK@kernel.org>
+ <ZCKZuXxq38obmYpn@dhcp22.suse.cz>
+ <ZCMDmHSqOeCj1EIo@kernel.org>
+ <ZCMGwWmF9MGObSlt@dhcp22.suse.cz>
+ <ZCPoglyi7fDkXKmB@kernel.org>
+ <ZCPzI3ns2PusACi6@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v1 1/2] vsock: return errors other than -ENOMEM to
- socket
-Content-Language: en-US
-To:     Vishnu Dasa <vdasa@vmware.com>,
-        Stefano Garzarella <sgarzare@redhat.com>
-CC:     Bryan Tan <bryantan@vmware.com>,
-        Pv-drivers <Pv-drivers@vmware.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-References: <97f19214-ba04-c47e-7486-72e8aa16c690@sberdevices.ru>
- <99da938b-3e67-150c-2f74-41d917a95950@sberdevices.ru>
- <itjmw7vh3a7ggbodsu4mksu2hqbpdpxmu6cpexbra66nfhsw4x@hzpuzwldkfx5>
- <CAGxU2F648TyvAJN+Zk6YCnGUhn=0W_MZTox7RxQ45zHmHHO0SA@mail.gmail.com>
- <0f0a8603-e8a1-5fb2-23d9-5773c808ef85@sberdevices.ru>
- <ak74j6l2qesrixxmw7pfw56najqhdn32lv3xfxcb53nvmkyi3x@fr25vo2jlvbj>
- <64451c35-5442-73cb-4398-2b907dd810cc@sberdevices.ru>
- <B25B4275-957C-4052-B089-3714B6A7B0A3@vmware.com>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <B25B4275-957C-4052-B089-3714B6A7B0A3@vmware.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/30 01:24:00 #21043458
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCPzI3ns2PusACi6@dhcp22.suse.cz>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 29, 2023 at 10:13:23AM +0200, Michal Hocko wrote:
+> On Wed 29-03-23 10:28:02, Mike Rapoport wrote:
+> > On Tue, Mar 28, 2023 at 05:24:49PM +0200, Michal Hocko wrote:
+> > > On Tue 28-03-23 18:11:20, Mike Rapoport wrote:
+> > > > On Tue, Mar 28, 2023 at 09:39:37AM +0200, Michal Hocko wrote:
+> > > [...]
+> > > > > OK, so you want to reduce that direct map fragmentation?
+> > > > 
+> > > > Yes.
+> > > > 
+> > > > > Is that a real problem?
+> > > > 
+> > > > A while ago Intel folks published report [1] that showed better performance
+> > > > with large pages in the direct map for majority of benchmarks.
+> > > > 
+> > > > > My impression is that modules are mostly static thing. BPF
+> > > > > might be a different thing though. I have a recollection that BPF guys
+> > > > > were dealing with direct map fragmention as well.
+> > > > 
+> > > > Modules are indeed static, but module_alloc() used by anything that
+> > > > allocates code pages, e.g. kprobes, ftrace and BPF. Besides, Thomas
+> > > > mentioned that having code in 2M pages reduces iTLB pressure [2], but
+> > > > that's not only about avoiding the splits in the direct map but also about
+> > > > using large mappings in the modules address space.
+> > > > 
+> > > > BPF guys suggested an allocator for executable memory [3] mainly because
+> > > > they've seen performance improvement of 0.6% - 0.9% in their setups [4].
+> > > 
+> > > These are fair arguments and it would have been better to have them in
+> > > the RFC. Also it is not really clear to me what is the actual benefit of
+> > > the unmapping for those usecases. I do get they want to benefit from
+> > > caching on the same permission setup but do they need unmapping as well?
+> > 
+> > The pages allocated with module_alloc() get different permissions depending
+> > on whether they belong to text, rodata, data etc. The permissions are
+> > updated in both vmalloc address space and in the direct map. The updates to
+> > the direct map cause splits of the large pages.
+> 
+> That much is clear (wouldn't hurt to mention that in the changelog
+> though).
+> 
+> > If we cache large pages as
+> > unmapped we take out the entire 2M page from the direct map and then
+> > if/when it becomes free it can be returned to the direct map as a 2M page.
+> > 
+> > Generally, the unmapped allocations are intended for use-cases that anyway
+> > map the memory elsewhere than direct map and need to modify direct mappings
+> > of the memory, be it modules_alloc(), secretmem, PKS page tables or maybe
+> > even some of the encrypted VM memory.
+> 
+> I believe we are still not on the same page here. I do understand that
+> you want to re-use the caching capability of the unmapped_pages_alloc
+> for modules allocations as well. My question is whether module_alloc
+> really benefits from the fact that the memory is unmapped?
+> 
+> I guess you want to say that it does because it wouldn't have to change
+> the permission for the direct map but I do not see that anywhere in the
+> patch...
 
+This happens automagically outside the patch :)
 
-On 30.03.2023 00:44, Vishnu Dasa wrote:
-> 
-> 
->> On Mar 28, 2023, at 4:20 AM, Arseniy Krasnov <AVKrasnov@sberdevices.ru> wrote:
->>
->> !! External Email
->>
->> On 28.03.2023 14:19, Stefano Garzarella wrote:
->>> On Tue, Mar 28, 2023 at 01:42:19PM +0300, Arseniy Krasnov wrote:
->>>>
->>>>
->>>> On 28.03.2023 12:42, Stefano Garzarella wrote:
->>>>> I pressed send too early...
->>>>>
->>>>> CCing Bryan, Vishnu, and pv-drivers@vmware.com
->>>>>
->>>>> On Tue, Mar 28, 2023 at 11:39 AM Stefano Garzarella <sgarzare@redhat.com> wrote:
->>>>>>
->>>>>> On Sun, Mar 26, 2023 at 01:13:11AM +0300, Arseniy Krasnov wrote:
->>>>>>> This removes behaviour, where error code returned from any transport
->>>>>>> was always switched to ENOMEM. This works in the same way as:
->>>>>>> commit
->>>>>>> c43170b7e157 ("vsock: return errors other than -ENOMEM to socket"),
->>>>>>> but for receive calls.
->>>>>>>
->>>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>>>>>> ---
->>>>>>> net/vmw_vsock/af_vsock.c | 4 ++--
->>>>>>> 1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>>>
->>>>>>> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->>>>>>> index 19aea7cba26e..9262e0b77d47 100644
->>>>>>> --- a/net/vmw_vsock/af_vsock.c
->>>>>>> +++ b/net/vmw_vsock/af_vsock.c
->>>>>>> @@ -2007,7 +2007,7 @@ static int __vsock_stream_recvmsg(struct sock *sk, struct msghdr *msg,
->>>>>>>
->>>>>>>              read = transport->stream_dequeue(vsk, msg, len - copied, flags);
->>>>>>
->>>>>> In vmci_transport_stream_dequeue() vmci_qpair_peekv() and
->>>>>> vmci_qpair_dequev() return VMCI_ERROR_* in case of errors.
->>>>>>
->>>>>> Maybe we should return -ENOMEM in vmci_transport_stream_dequeue() if
->>>>>> those functions fail to keep the same behavior.
->>>>
->>>> Yes, seems i missed it, because several months ago we had similar question for send
->>>> logic:
->>>> https://nam04.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.spinics.net%2Flists%2Fkernel%2Fmsg4611091.html&data=05%7C01%7Cvdasa%40vmware.com%7C3b17793425384debe75708db2f7eec8c%7Cb39138ca3cee4b4aa4d6cd83d9dd62f0%7C0%7C0%7C638155994413494900%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=MMfFcKuFFvMcJrbToKvWvIB%2FZmzp%2BdGGVWFVWztuSzg%3D&reserved=0
->>>> And it was ok to not handle VMCI send path in this way. So i think current implementation
->>>> for tx is a little bit buggy, because VMCI specific error from 'vmci_qpair_enquev()' is
->>>> returned to af_vsock.c. I think error conversion must be added to VMCI transport for tx
->>>> also.
->>>
->>> Good point!
->>>
->>> These are negative values, so there are no big problems, but I don't
->>> know what the user expects in this case.
->>>
->>> @Vishnu Do we want to return an errno to the user or a VMCI_ERROR_*?
->>
->> Small remark, as i can see, VMCI_ERROR_ is not exported to user in include/uapi,
->> so IIUC user won't be able to interpret such values correctly.
->>
->> Thanks, Arseniy
-> 
-> Let's just return -ENOMEM from vmci transport in case of error in
-> vmci_transport_stream_enqueue and vmci_transport_stream_dequeue.
-> 
-> @Arseniy,
-> Could you please add a separate patch in this set to handle the above?
+Currently, to change memory permissions modules code calls set_memory APIs
+and passes vmalloced address to them. set_memory functions lookup the
+direct map alias and update the permissions there as well.
+If the memory allocated with module_alloc() is unmapped in the direct map,
+there won't be an alias for set_memory APIs to update.
 
-Sure, ack, in the next few days!
+> Also consinder the slow path where module_alloc needs to
+> allocate a fresh (huge)page and unmap it. Does the overhead of the
+> unmapping suits needs of all module_alloc users? Module loader is likely
+> not interesting as it tends to be rather static but what about BPF
+> programs?
 
-Thanks, Arseniy
+The overhead of unmapping pages in the direct map on allocation path will
+be offset by reduced overhead of updating permissions in the direct map
+after the allocation. Both are using the same APIs and if today the
+permission update causes a split of a large page, unmapping of a large page
+won't.
 
-> 
-> Thanks,
-> Vishnu
-> 
->>
->>>
->>> In both cases I think we should do the same for both enqueue and
->>> dequeue.
->>>
->>>>
->>>> Good thing is that Hyper-V uses general error codes.
->>>
->>> Yeah!
->>>
->>> Thanks,
->>> Stefano
->>>
->>>>
->>>> Thanks, Arseniy
->>>>>>
->>>>>> CCing Bryan, Vishnu, and pv-drivers@vmware.com
->>>>>>
->>>>>> The other transports seem okay to me.
->>>>>>
->>>>>> Thanks,
->>>>>> Stefano
->>>>>>
->>>>>>>              if (read < 0) {
->>>>>>> -                      err = -ENOMEM;
->>>>>>> +                      err = read;
->>>>>>>                      break;
->>>>>>>              }
->>>>>>>
->>>>>>> @@ -2058,7 +2058,7 @@ static int __vsock_seqpacket_recvmsg(struct sock *sk, struct msghdr *msg,
->>>>>>>      msg_len = transport->seqpacket_dequeue(vsk, msg, flags);
->>>>>>>
->>>>>>>      if (msg_len < 0) {
->>>>>>> -              err = -ENOMEM;
->>>>>>> +              err = msg_len;
->>>>>>>              goto out;
->>>>>>>      }
->>>>>>>
->>>>>>> --
->>>>>>> 2.25.1
->>>>>>>
->>>>>
->>>>
->>>
->>
->> !! External Email: This email originated from outside of the organization. Do not click links or open attachments unless you recognize the sender.
-> 
-> 
+Of course in a loaded system unmapped_alloc() won't be able to always
+allocated large pages to replenish the cache, but still there will be fewer
+updates to the direct map.
+ 
+> -- 
+> Michal Hocko
+> SUSE Labs
+
+-- 
+Sincerely yours,
+Mike.
