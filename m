@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355B36D0C62
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B5D6D0C67
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjC3RL7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 13:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
+        id S231254AbjC3RMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjC3RLy (ORCPT
+        with ESMTP id S229609AbjC3RMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:11:54 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96581EC43;
-        Thu, 30 Mar 2023 10:11:45 -0700 (PDT)
-Received: by mail-ed1-f54.google.com with SMTP id x3so79163266edb.10;
-        Thu, 30 Mar 2023 10:11:45 -0700 (PDT)
+        Thu, 30 Mar 2023 13:12:37 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B76198C
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:12:36 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id j3-20020a17090a94c300b0024018f0656cso6140434pjw.2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680196356;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ioBafc1jE3EEeqzwTNbBrZD3ovHkrs99FyUrXRF156A=;
+        b=msUO/9ThOjN8i56o4SeCuRAALYD7WOOSf1zpA1W56mqG3L+Cv5Oe+aSZKS4T2cDVwT
+         WJ+hwOZsYzOyKZhsv/GlCN0CRLRLHttB+BlxyPfewSSg8S78rBu3X66dvebHIL20ddAU
+         /D4exBXpre0+9enUknX1jwg9hNYxKigzHXBi00PeqBnV/ljoTM9O0SN9Z1/t+s4JQ/CI
+         E1DTIl+6/YviouTNy6L4GdVtH/DnU9TW9yndfEHEHm94to/sQYps+mgRZzvbtpvi44J9
+         kvSZqzcA05kR7fA9ql6k6SCqgVYXOQOKDJSdDE0/zu15gYHLCbO4zrFY7ljdYVzQh9+o
+         iXxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680196304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OCMgmjS8UFODcJkt3kQqePHkaAGXDwpBFfXsthPJWVE=;
-        b=6AqLo7oyinTlwYtuBjkTD2rmHnp/tTidJhQQBP+82ypMWw6nkItfazgxyFEYxxB8Zc
-         P/EkyO/Gk0kGNFUY7dFlGuevUhGsyJF//AOUvAghdh4qbWpg+J2NQuvdUL67sUUWjeKj
-         TRSXJHCBpdg6MOJV6HOsu9/XobeynCoAvCLw36VbpyhJJOUd2Fc9VudIo/zRK3riWaoG
-         UnOdsjcD/OveAiIwpk+3buDoDSljp6+SMIekoWvsJlkiv7hNAKMvitVnwP0XE2T7OjeJ
-         Aa0w5i21JPPchL1K6t9BTpWDtOyQP+jZuxf75KvSKT6MZUKCa7ewPdH9PAwoaKFy9qXO
-         0QBA==
-X-Gm-Message-State: AAQBX9fqZ/blFWaFNYxEAtpPhFDG3/RLDxqDRF4JnapcUITyrZ0rTQAf
-        G0qwwE60e+0ELgHhajhzxkx4g2OdjhmbtMmMH30=
-X-Google-Smtp-Source: AKy350YBLRVolaiG33XGszgunLQdNg89+CaDaO897cYvuvF61kL6SrANpgugsvFce4XT0ADWSXp1bAr/WzCrjymkPxw=
-X-Received: by 2002:a50:9fe3:0:b0:502:62ba:865b with SMTP id
- c90-20020a509fe3000000b0050262ba865bmr3180693edf.3.1680196303944; Thu, 30 Mar
- 2023 10:11:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230328031629.202268-1-yijiangshan@kylinos.cn>
-In-Reply-To: <20230328031629.202268-1-yijiangshan@kylinos.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Mar 2023 19:11:32 +0200
-Message-ID: <CAJZ5v0hPbH9BMOLbrGOKcy1sGAXbq=7OTyFECA966i37wBp_AQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: thermal: replace ternary operator with min_t()
-To:     Jiangshan Yi <yijiangshan@kylinos.cn>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        13667453960@163.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        d=1e100.net; s=20210112; t=1680196356;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ioBafc1jE3EEeqzwTNbBrZD3ovHkrs99FyUrXRF156A=;
+        b=vKS943+W2/faZ1BTNb4yUHKoMMwONBvAkkvqmPLv0PkuA5f+sItlPBH6gbpV5VVffb
+         POcR28mF0ia9fE2p+7RPIMI3GCYAOhtdcmTvr8vATJINix+OMNCw5M9WCMJ9p5nV6KZr
+         SM/KHWuSkJvxAkar1Jl5ialVWuYLsp8bPM0dPOCichy/o6S0U1OJN2tsj6FtO+tMr+NW
+         YYxGog6jxxAaIUGC1fZzBMtZeo52F7goyPtztAoVmEgquF8Gcxn/R1hUrto+q2JVwGfr
+         BpTlxn/4uVnO4BbLDwT9VQ7+6l674u0RV2mt+n5NziMnjYvYtSHTQJuE77zPc+8BiNcv
+         iijQ==
+X-Gm-Message-State: AAQBX9dTzbgVWAoFwdS6qte6WEfY9An2TdwvlAsXvSKBjmm2QrLGWVgE
+        fHyles30D6duDJwB0Umkk8QH5mO5L7M=
+X-Google-Smtp-Source: AKy350aMF5gEqFkS2yOuUw/kCM+VW9fHPk4cRIMrJsEobbypPXnitBkck2f9Ebysy8Gp2Z0Aqj6tLn6duPA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:aa7:9285:0:b0:626:1710:9b7d with SMTP id
+ j5-20020aa79285000000b0062617109b7dmr2998427pfa.0.1680196356061; Thu, 30 Mar
+ 2023 10:12:36 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 10:12:34 -0700
+In-Reply-To: <677169b4-051f-fcae-756b-9a3e1bb9f8fe@grsecurity.net>
+Mime-Version: 1.0
+References: <20230322013731.102955-1-minipli@grsecurity.net>
+ <20230322013731.102955-7-minipli@grsecurity.net> <677169b4-051f-fcae-756b-9a3e1bb9f8fe@grsecurity.net>
+Message-ID: <ZCXDAiUOnsL3fRBj@google.com>
+Subject: Re: [PATCH v4 6/6] KVM: VMX: Make CR0.WP a guest owned bit
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mathias Krause <minipli@grsecurity.net>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,49 +68,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 5:17 AM Jiangshan Yi <yijiangshan@kylinos.cn> wrote:
->
-> Fix the following coccicheck warning:
+On Thu, Mar 30, 2023, Mathias Krause wrote:
+> On 22.03.23 02:37, Mathias Krause wrote:
+> > Guests like grsecurity that make heavy use of CR0.WP to implement kernel
+> > level W^X will suffer from the implied VMEXITs.
+> > 
+> > With EPT there is no need to intercept a guest change of CR0.WP, so
+> > simply make it a guest owned bit if we can do so.
+> > 
+> > This implies that a read of a guest's CR0.WP bit might need a VMREAD.
+> > However, the only potentially affected user seems to be kvm_init_mmu()
+> > which is a heavy operation to begin with. But also most callers already
+> > cache the full value of CR0 anyway, so no additional VMREAD is needed.
+> > The only exception is nested_vmx_load_cr3().
+> > 
+> > This change is VMX-specific, as SVM has no such fine grained control
+> > register intercept control.
+> 
+> Just a heads up! We did more tests, especially with the backports we did
+> internally already, and ran into a bug when running a nested guest on an
+> ESXi host.
+> 
+> Setup is like: ESXi (L0) -> Linux (L1) -> Linux (L2)
+> 
+> The Linux system, especially the kernel, is the same for L1 and L2. It's
+> a grsecurity kernel, so makes use of toggling CR0.WP at runtime.
+> 
+> The bug we see is that when L2 disables CR0.WP and tries to write to an
+> r/o memory region (implicitly to the r/o GDT via LTR in our use case),
+> this triggers a fault (EPT violation?) that gets ignored by L1, as,
+> apparently, everything is fine from its point of view.
 
-This is not a fix, because the current code is correct AFAICS.
+It's not an EPT violation if there's a triple fault.  Given that you're dumping
+the VMCS from handle_triple_fault(), I assume that L2 gets an unexpected #PF that
+leads to a triple fault in L2.
 
-It merely makes the code follow the coccicheck recommendation, which
-is a cleanup (although arguably a good one).
+Just to make sure we're on the same page: L1 is still alive after this, correct?
 
-But because the new code is way more readable, I've applied this as
-6.4 material (with edits in the changelog).
+> I suspect the L0 VMM to be at fault here, as the VMCS structures look
+> good, IMO. Here is a dump of vmx->loaded_vmcs in handle_triple_fault():
 
-Thanks!
+...
 
-> drivers/acpi/thermal.c:422: WARNING opportunity for min().
->
-> min_t() macro is defined in include/linux/minmax.h. It avoids multiple
-> evaluations of the arguments when non-constant and performs strict
-> type-checking.
->
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
-> ---
->  drivers/acpi/thermal.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-> index 0b4b844f9d4c..179f41196a9d 100644
-> --- a/drivers/acpi/thermal.c
-> +++ b/drivers/acpi/thermal.c
-> @@ -419,10 +419,9 @@ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
->                                          * the next higher trip point
->                                          */
->                                         tz->trips.active[i-1].temperature =
-> -                                               (tz->trips.active[i-2].temperature <
-> -                                               celsius_to_deci_kelvin(act) ?
-> -                                               tz->trips.active[i-2].temperature :
-> -                                               celsius_to_deci_kelvin(act));
-> +                                               min_t(unsigned long,
-> +                                                     tz->trips.active[i-2].temperature,
-> +                                                     celsius_to_deci_kelvin(act));
->
->                                 break;
->                         } else {
-> --
-> 2.25.1
->
+> The "host" (which is our L1 VMM, I guess) has CR0.WP enabled and that is
+> what I think confuses ESXi to enforce the read-only property to the L2
+> guest as well -- for unknown reasons so far.
+
+...
+
+> I tried to reproduce the bug with different KVM based L0 VMMs (with and
+> without this series; vanilla and grsecurity kernels) but no luck. That's
+> why I'm suspecting a ESXi bug.
+   
+...
+
+> I'm leaning to make CR0.WP guest owned only iff we're running on bare
+> metal or the VMM is KVM to not play whack-a-mole for all the VMMs that
+> might have similar bugs. (Will try to test a few others here as well.)
+> However, that would prevent them from getting the performance gain, so
+> I'd rather have this fixed / worked around in KVM instead.
+
+Before we start putting bandaids on this, let's (a) confirm this appears to be
+an issue with ESXi and (b) pull in VMware folks to get their input.
+
+> Any ideas how to investigate this further?
+
+Does the host in question support UMIP?
+
+Can you capture a tracepoint log from L1 to verify that L1 KVM is _not_ injecting
+any kind of exception?  E.g. to get the KVM kitchen sink:
+
+  echo 1 > /sys/kernel/debug/tracing/tracing_on
+  echo 1 > /sys/kernel/debug/tracing/events/kvm/enable
+
+  cat /sys/kernel/debug/tracing/trace > log
+
+Or if that's too noisy, a more targeted trace (exception injection + emulation)
+woud be:
+
+  echo 1 > /sys/kernel/debug/tracing/tracing_on
+
+  echo 1 > /sys/kernel/debug/tracing/events/kvm/kvm_emulate_insn/enable
+  echo 1 > /sys/kernel/debug/tracing/events/kvm/kvm_inj_exception/enable
+  echo 1 > /sys/kernel/debug/tracing/events/kvm/kvm_entry/enable
+  echo 1 > /sys/kernel/debug/tracing/events/kvm/kvm_exit/enable
+
+> PS: ...should have left the chicken bit of v3 to be able to disable the
+> feature by a module parameter ;)
+
+A chicken bit isn't a good solution for this sort of thing.  Toggling a KVM module
+param requires (a) knowing that it exists and (b) knowing the conditions under which
+it is/isn't safe to toggle the bit.
+
+E.g. if this ends up being an ESXi L0 bug, then an option might be to add something
+in vmware_platform_setup() to communicate the bug to KVM so that KVM can precisely
+disable the optimization on affected platforms.
