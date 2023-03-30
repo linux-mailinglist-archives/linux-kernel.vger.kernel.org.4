@@ -2,113 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0811A6D08F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61A06D08F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbjC3O75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:59:57 -0400
+        id S232635AbjC3PAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:00:00 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbjC3O7v (ORCPT
+        with ESMTP id S232720AbjC3O74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:59:51 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9610FC16D;
-        Thu, 30 Mar 2023 07:59:34 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32UExMmc005030;
-        Thu, 30 Mar 2023 09:59:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680188362;
-        bh=8DZkW36nrbs0H4pGSSHQDlmnjQ7hcArGjyRNSZ2ArI0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=DJURShdBb3VPgHDdHzvooZv7J6L1mjzLtc/nkV4akeS/sg06lVKK+K3UR968fWf8D
-         kJ7VwOwnStbpJc0DxY8ZrGPDFUMVyWEXE+89TFRaS+2NZhXoQeDdj9j9bMAGrQysb7
-         uA/oCBpKtZKlybRezd3d9x2GWqX/UEUT7Aq/oK7c=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32UExLqB049658
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 30 Mar 2023 09:59:21 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 30
- Mar 2023 09:59:21 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 30 Mar 2023 09:59:21 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32UExLdO128517;
-        Thu, 30 Mar 2023 09:59:21 -0500
-Date:   Thu, 30 Mar 2023 09:59:21 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-CC:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next 0/2] arm64: dts: ti: Fixes for Beagleplay SD
-Message-ID: <20230330145921.5pnmcjgwl5wllhvq@await>
-References: <20230330105921.3639185-1-vigneshr@ti.com>
+        Thu, 30 Mar 2023 10:59:56 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C2C1BC;
+        Thu, 30 Mar 2023 07:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680188387; x=1711724387;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wAx1RbbU2lhx3HRgHK8oyu8lZK7aEcdm3MlmqjpZIBw=;
+  b=bhJ/taQYD+UGj3CosRpKrIbomRbTVcnoiS2LEQAApEjMyNjiY2Bi/SHY
+   8tnFKzL8aAoJoOZOM5qapfRwe5hljXCAj7On/0SUgFRqocNZNgOsO/2lS
+   AFQ7nkasQD3I8VuMfgAibDuHQa37BqYTtudTwrRp+uOFeUKMQeemqcw+A
+   gMI/PBZ4IgawgE4V83lQJSpEmy1aEhqp6bT/O+gQ8zmPWND0RMnlZqhON
+   aPQ+RfoHOpYijpIuuy6t4aGJmnxwMessOfIc92aoU5+yHnrHUBtOsstGA
+   mnkHV9gbtZANRisg5PTa2FSLHhhUSFvwjQzYj+c9e+gKcDd76rPCYI9in
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="368971303"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="368971303"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:59:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="678224001"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="678224001"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga007.jf.intel.com with ESMTP; 30 Mar 2023 07:59:47 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] platform/x86: intel-uncore-freq: Add client processors
+Date:   Thu, 30 Mar 2023 07:59:39 -0700
+Message-Id: <20230330145939.1022261-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230330105921.3639185-1-vigneshr@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16:29-20230330, Vignesh Raghavendra wrote:
-> Couple of fixups on top of ti-next branch:
-> 
-> The SD supply on Beagle is really coming from PMIC LDO1 even though its
-> controllable via GPIO, hence fix the DT accordingly, this also means
-> PMIC regulator drivers need to be built-in to allow SD card rootfs
-> 
-> Nishanth,
-> Better to squash into respetive commits if possible
-> 
-> Vignesh Raghavendra (2):
->   arm64: configs: defconfig: Make TPS65219 regulator built-in
->   arm64: dts: ti: k3-am625-beagleplay: Fixup SD card supply regulator
-> 
->  arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts | 2 +-
->  arch/arm64/configs/defconfig                   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> -- 
-> 2.40.0
-> 
-Thanks Vignesh, I will do the fixup.
+Make Intel uncore frequency driver support to client processor starting
+from Alder Lake.
 
-Chatting with Roger offline, also realized that the board circuitry will
-need the following change as it is using a 1/3 voltage divider on SoC's
-USB1 as well: I will add this fixup while at it.
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ .../platform/x86/intel/uncore-frequency/uncore-frequency.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
-index f75e79e54dfc..a4eb54722743 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
-@@ -484,6 +484,7 @@ &usb0 {
+diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+index 00ac7e381441..32e2515ee366 100644
+--- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
++++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+@@ -204,6 +204,13 @@ static const struct x86_cpu_id intel_uncore_cpu_ids[] = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,	NULL),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
+ 	X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, NULL),
+ 	{}
  };
- 
- &usbss1 {
-+	ti,vbus-divider;
- 	status = "okay";
- };
- 
-
+ MODULE_DEVICE_TABLE(x86cpu, intel_uncore_cpu_ids);
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.39.1
+
