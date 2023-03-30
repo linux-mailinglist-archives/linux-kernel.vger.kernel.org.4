@@ -2,146 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E09F6CFDB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8C16CFDAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjC3IFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
+        id S230134AbjC3IER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjC3IFH (ORCPT
+        with ESMTP id S230053AbjC3IEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:05:07 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AF75252
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YGhdC+q7ft0r1pievkNlyzP9/ac5GlE6AqCSli2aS4E=; b=rUFHErHuH4DEVhBC5y/Hdumteh
-        lRfE4uEFStoBpj6WOyHcDWDMjlCOTnwMMaVJux+CE45aZ3gfxlBnVldFWhW2LSTSiCNmivdVVLQDU
-        w10Vm6MiklYD857IlybuyQN0L5L+z6RlBsYjySwpoQOzWzE6jRr4AEMwPb6N93WVLF97FTobzBPRH
-        12LQub8Z1+nZpds27VYV9fuuJDDlfl4JqYDsPjgdv2abhHfydTOGz9AdOC6TqnbNxrWhHVpNWHhGd
-        ZY9QGsOcQM4JF/UyPL8jTM+FFA5s9HWG0JU2ws3x+PTxiW0tUt/jtryvzDNmNaAldhXpym7Z2UO12
-        yWeXKEJA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1phnEE-0076mI-0T;
-        Thu, 30 Mar 2023 08:03:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1E05B300134;
-        Thu, 30 Mar 2023 10:01:46 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EEE2A2421F039; Thu, 30 Mar 2023 10:01:45 +0200 (CEST)
-Date:   Thu, 30 Mar 2023 10:01:45 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, corbet@lwn.net, qyousef@layalina.io,
-        chris.hyser@oracle.com, patrick.bellasi@matbug.net, pjt@google.com,
-        pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
-        yu.c.chen@intel.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org, efault@gmx.de
-Subject: Re: [PATCH 08/17] sched/fair: Implement an EEVDF like policy
-Message-ID: <20230330080145.GA117836@hirez.programming.kicks-ass.net>
-References: <20230328092622.062917921@infradead.org>
- <20230328110354.141543852@infradead.org>
- <CAKfTPtDDBVD_N6NgBYi_5iArDXd4iL0-ddQZDKGzzLAD-2AUXg@mail.gmail.com>
+        Thu, 30 Mar 2023 04:04:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0117E6A54
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:03:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680163386;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BmvkK8fYK4TJ5NfFumKVdlTRthgnv0I/fv0iMmHm2zA=;
+        b=ASBY2Ca1P59Kk+DdbsVggqkapbHbMPf47kJHIEbOLOQzXPjm8FcX7JiKFaMO3nlyOt8WML
+        EGCnUdxpg1KoNVeg8DLa0/9fLSdFy4dFzfxptlqzJYjCtXe67QwrQhVuothNgtSBSjvN+G
+        EAL4Guz3h3jY8IYFxlkd0D8LyMOYHoY=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-379-o3YimaWvPw6KPO48rEwK9A-1; Thu, 30 Mar 2023 04:03:03 -0400
+X-MC-Unique: o3YimaWvPw6KPO48rEwK9A-1
+Received: by mail-qt1-f198.google.com with SMTP id b11-20020ac87fcb000000b003e37d72d532so11880624qtk.18
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:03:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680163383;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BmvkK8fYK4TJ5NfFumKVdlTRthgnv0I/fv0iMmHm2zA=;
+        b=D50XruEmixQy4ObzCf2g0JzdzRtvIQFUvwQL2wi2bqQlwk+sa2XbkF2qDaPWhgYZRj
+         +W46mJf7R1WFK+XenSqcPrM3Y7pAAPRFmxKSDflONOFCF03tCnQqWskEYzQNYY4m9PR8
+         spqyE/LJ38+gmiMpWtf9WaRr8DFZ2CpsanaSuN1mnKO76vClalyducIadTVcAQqTJpsC
+         1+gMslhVIBcHyuSPRpWwICG/3fMFUcgQrGphOiJjpbRHlVYKGt5CNWA98dFBaXIOm2AH
+         XJvPEPxpHJ/rcAoyFXky21Cub2SGhe01DhM7/YTWnheSy0moId8KXSDHyZ7k9cmdZTUc
+         k7iA==
+X-Gm-Message-State: AAQBX9dxZ4k6p4l5aRLD1WNNuo0rsZm+IyJlJ0QyhDNy797VI0PBcjMl
+        ci0xhwJi/k3+vvf+Irt0RINwzkC/96cMNlQlu/zR2MlRkKQdEsUMtxF4y7CBGo9nV1mzJwgmc01
+        /syq037vBuv55OxDqkUbYfbwt
+X-Received: by 2002:ad4:5dcd:0:b0:5a9:c0a1:d31a with SMTP id m13-20020ad45dcd000000b005a9c0a1d31amr32511904qvh.49.1680163383481;
+        Thu, 30 Mar 2023 01:03:03 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b/24uAmv6SuUb1n6/2cdmqOMqi4TQbiOPJWGZJaeeZPx69yK8YzSEPOHSxImFh4Y41wpxtEg==
+X-Received: by 2002:ad4:5dcd:0:b0:5a9:c0a1:d31a with SMTP id m13-20020ad45dcd000000b005a9c0a1d31amr32511878qvh.49.1680163383217;
+        Thu, 30 Mar 2023 01:03:03 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-57-51-130.retail.telecomitalia.it. [82.57.51.130])
+        by smtp.gmail.com with ESMTPSA id mh2-20020a056214564200b005dd8b934582sm5197140qvb.26.2023.03.30.01.02.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 01:03:02 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 10:02:57 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@sberdevices.ru,
+        oxffffaa@gmail.com, pv-drivers@vmware.com
+Subject: Re: [RFC PATCH v2 1/3] vsock: return errors other than -ENOMEM to
+ socket
+Message-ID: <p64mv3f2ujn4uokl5i7abhdbmed3zy2lrozqoam3llcf4r2qkv@gmyoyikbyiwj>
+References: <60abc0da-0412-6e25-eeb0-8e32e3ec21e7@sberdevices.ru>
+ <b910764f-a193-e684-a762-f941883a0745@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtDDBVD_N6NgBYi_5iArDXd4iL0-ddQZDKGzzLAD-2AUXg@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <b910764f-a193-e684-a762-f941883a0745@sberdevices.ru>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 04:35:25PM +0200, Vincent Guittot wrote:
+On Thu, Mar 30, 2023 at 10:05:45AM +0300, Arseniy Krasnov wrote:
+>This removes behaviour, where error code returned from any transport
+>was always switched to ENOMEM. This works in the same way as:
+>commit
+>c43170b7e157 ("vsock: return errors other than -ENOMEM to socket"),
+>but for receive calls.
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> net/vmw_vsock/af_vsock.c | 4 ++--
+> 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> IIUC how it works, Vd = ve + r / wi
-> 
-> So for a same weight, the vd will be earlier but it's no more alway
-> true for different weight
+We should first make sure that all transports return the right value,
+and then expose it to the user, so I would move this patch, after
+patch 2.
 
-Correct; but for a heavier task the time also goes slower and since it
-needs more time, you want it to go first. But yes, this is weird at
-first glance.
+Thanks,
+Stefano
 
-Let us consider a 3 task scenario, where one task (A) is double weight
-wrt to the other two (B,C), and let them run one quanta (q) at a time.
+>
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index 5f2dda35c980..413407bb646c 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -2043,7 +2043,7 @@ static int __vsock_stream_recvmsg(struct sock *sk, struct msghdr *msg,
+>
+> 		read = transport->stream_dequeue(vsk, msg, len - copied, flags);
+> 		if (read < 0) {
+>-			err = -ENOMEM;
+>+			err = read;
+> 			break;
+> 		}
+>
+>@@ -2094,7 +2094,7 @@ static int __vsock_seqpacket_recvmsg(struct sock *sk, struct msghdr *msg,
+> 	msg_len = transport->seqpacket_dequeue(vsk, msg, flags);
+>
+> 	if (msg_len < 0) {
+>-		err = -ENOMEM;
+>+		err = msg_len;
+> 		goto out;
+> 	}
+>
+>-- 
+>2.25.1
+>
 
-Each step will see V advance q/4.
-
-A: w=2, r=4q	B: w=1, r=4q	C: w=1, r=4q
-
-  1) A runs -- earliest deadline
-
-    A  |-------<
-    B  |---------------<
-    C  |---------------<
-    ---+---+---+---+---+---+---+-----------
-    V  ^
-
-  2) B runs (tie break with C) -- A is ineligible due to v_a > V
-
-    A    |-----<
-    B  |---------------<
-    C  |---------------<
-    ---+---+---+---+---+---+---+-----------
-    V   ^
-
-  3) A runs -- earliest deadline
-
-    A    |-----<
-    B      |-----------<
-    C  |---------------<
-    ---+---+---+---+---+---+---+-----------
-    V    ^
-
-  4) C runs -- only eligible task
-
-    A      |---<
-    B      |-----------<
-    C  |---------------<
-    ---+---+---+---+---+---+---+-----------
-    V     ^
-
-  5) similar to 1)
-
-    A      |---<
-    B      |-----------<
-    C      |-----------<
-    ---+---+---+---+---+---+---+-----------
-    V      ^
-
-And we see that we get a very nice ABAC interleave, with the only other
-possible schedule being ACAB.
-
-By virtue of the heaver task getting a shorter virtual deadline it gets
-nicely interleaved with the other tasks and you get a very consistent
-schedule with very little choice.
-
-Like already said, step 2) is the only place we had a choice, and if we
-were to have given either B or C a shorter request (IOW latency-nice)
-that choice would have been fully determined.
-
-So increasing w gets you more time (and the shorter deadline causes the
-above interleaving), while for the same w, reducing r gets you picked
-earlier.
-
-Perhaps another way to look at it is that since heavier tasks run more
-(often) you've got to compete against it more often for latency.
-
-
-Does that help?
