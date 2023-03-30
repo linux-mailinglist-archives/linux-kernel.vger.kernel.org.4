@@ -2,103 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D2A6D0A3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F856D0A46
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233384AbjC3PpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
+        id S233344AbjC3Pq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233338AbjC3PpO (ORCPT
+        with ESMTP id S232917AbjC3PqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:45:14 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84AFDBE9;
-        Thu, 30 Mar 2023 08:44:51 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id t4so14319378wra.7;
-        Thu, 30 Mar 2023 08:44:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680191086;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fI7AZ+BouKPLvpCbD8t+T2h0CHzY77rJJJKu+MTUpws=;
-        b=F3TtuF6hfWReD8hZK0XtAmOJIoUSpU1ag8x9zj8hcMFyLy+4usJWfOIalNvXCvKrls
-         ao3k2lFe4FItzV9lh+q2lLf4u69zdyKM2rzBmDmGsP0ocO2dTPBmPA7bDXlZZJAKTjQ2
-         gHdyu4oOBj+Cus7FVcWaG12NPJ7yO9MgZA9Bhux7673CVfraZWl5bycfWH+ppr0idW3l
-         jaoLPBNzczNuNB1ldqfG3sPlWkEkOungjKWmviLT8XERxeHIPvLT+ZEzBsxG4pVZ+T3s
-         4bfNrOhUc6FEMiFQU8MvGPWh5FpKtodFLF3xIttpJwgIP1TpWBgzUw9A9IfE890LXbw2
-         w6OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680191086;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fI7AZ+BouKPLvpCbD8t+T2h0CHzY77rJJJKu+MTUpws=;
-        b=PtXSkecqTShPoEqL0EjKaiKE8hpR9GYhbmjvQZ35bD99AXBDb/cTqmJ1m9e3v0AYiT
-         gFgXKfVhDcvgSK38zKfaHaEiQXOPaLyUo4tzLH9gZTsYWKWcDkxc75shkRlJ9wP1chmI
-         ofa/h9Q7xITpzZVwCl5VS9RI1aGd7yFNjKxUxOotnyElpZVf4ZoiPizcwHXriLAuOUIz
-         0Ga64E05QhpMF40dRCBbr9c2lRiODm1ke5RNg4mSUzIwEpnU+5z2wW/vuaQ/UhazZJxP
-         w0C7N7qqFxesdVfY3bUQ3MPgnnWv+GaoOH1ePRqfaY6BtfqqmmpQNL7SKX/5ALAtMoIL
-         jokw==
-X-Gm-Message-State: AAQBX9dW7Accs7Z1/GD+cWyD48rCa9yQM7b0LsEr5jNF9CeB5ujrhJiN
-        hVn7zVV3gKKR2DaNV7oa97A=
-X-Google-Smtp-Source: AKy350aVAFgCRzr5YIakavp46G17LfFoY8SAxHZMGfzkXyoCm4NU5ADBuxXOcGfcL9m/Zl5lEev7Mw==
-X-Received: by 2002:a5d:58c9:0:b0:2cf:e3a9:c189 with SMTP id o9-20020a5d58c9000000b002cfe3a9c189mr19937729wrf.3.1680191086562;
-        Thu, 30 Mar 2023 08:44:46 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id a8-20020a056000100800b002d8566128e5sm24689035wrx.25.2023.03.30.08.44.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:44:46 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 18:44:42 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [BUG] [PATCH RFC v2] selftests/firmware: copious kernel memory
- leaks in test_fw_run_batch_request()
-Message-ID: <5b103196-68d0-4d42-aa66-779af4d78532@kili.mountain>
-References: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
- <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
- <dce6ffbe-7580-db1a-dd24-798be27b3a26@alu.unizg.hr>
+        Thu, 30 Mar 2023 11:46:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28AD72A2;
+        Thu, 30 Mar 2023 08:45:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B51BB82623;
+        Thu, 30 Mar 2023 15:45:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D3A1C4339B;
+        Thu, 30 Mar 2023 15:45:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680191144;
+        bh=vBf3ZDCn9/BnGZpzaUPwfDKfdZZd0/B3ixt5lveXnIY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=qgzeyIjHgH9m7RMjjkGalBu1lyxVSDC6TDWKe1ZH8JknzxkqriYOVBYJTeR8KadYP
+         SCcq5p9cZzu7DDfUeSWueuU9TToSDCRvHHTqx+B3Cyx3lgPzxOxmJqsiocKZwqqn+k
+         KB/vGWWnmVX0e9Bm2Kt+bb0MamWVPjsIQcgicmIqP3+kWgU5Y6dsdlP3DlFope8Nxa
+         2GqsCGflzY3lt2L1DvzyXtOpOknWGwYVAYbTF2V5q0RLfJ+f4d1Nlxbd7VCgvCCULF
+         bkiG32luPdIDOtuf4hNDi+C/gzwWloQlvLPSA+FLPaqKw4Y6vN/X9qtN06bBwOBgIn
+         5ebvwK23UkPOQ==
+Date:   Thu, 30 Mar 2023 10:45:42 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
+ error recovery
+Message-ID: <20230330154542.GA3147375@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dce6ffbe-7580-db1a-dd24-798be27b3a26@alu.unizg.hr>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b6fd4af3-18f7-0a7e-96e7-4ca3c4ada279@linux.intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I admire your enthusiam.  :)  What about if we just did this?  Does it
-help with the leaks?
+On Wed, Mar 29, 2023 at 03:38:04PM -0700, Sathyanarayanan Kuppuswamy wrote:
+> On 3/29/23 3:09 PM, Bjorn Helgaas wrote:
+> > On Wed, Mar 15, 2023 at 04:54:49PM -0700, Kuppuswamy Sathyanarayanan wrote:
+> >> Commit 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
+> >> OS owns AER") adds support to clear error status in the Device Status
+> >> Register(DEVSTA) only if OS owns the AER support. But this change
+> >> breaks the requirement of the EDR feature which requires OS to cleanup
+> >> the error registers even if firmware owns the control of AER support.
 
-regards,
-dan carpenter
+> > I assume we should have a Fixes: tag here, since this patch should be
+> > backported to every kernel that contains 068c29a248b6.  Possibly even
+> > a stable tag, although it's arguable whether it's "critical" per
+> > Documentation/process/stable-kernel-rules.rst.
+> 
+> Yes. But this error is only reproducible in the EDR use case. So I
+> am not sure whether it can be considered a critical fix. 
 
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 05ed84c2fc4c..626b836895f4 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -895,6 +895,9 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 
-+	if (test_fw_config->reqs)
-+		return -EBUSY;
-+
- 	test_fw_config->reqs =
- 		vzalloc(array3_size(sizeof(struct test_batched_req),
- 				    test_fw_config->num_requests, 2));
+I don't know how widespread EDR implementation is.  What is the
+user-visible issue without this fix?  "lspci" shows status bits set
+even after recovery?  Subsequent EDR notifications cause us to report
+errors that were previously reported and recovered?  Spurious EDR
+notifications because of status bits that should have been cleared?
+This kind of information would be useful in the commit log anyway.
+
+Since the risk is low (the change only affects EDR processing) and the
+the experience without this change might be poor (please clarify what
+that experience is), I think I would be inclined to mark it for
+stable.
+
+> > It's a little weird to work around a change inside pcie_do_recovery()
+> > by clearing it here, and that means we clear it twice in the AER
+> > native case, but I don't see any simpler way to do this, so this seems
+> > fine as the fix for the current issue.
+> 
+> In AER native case, edr_handle_event() will never be triggered. So it
+> won't be cleared twice.
+
+This sounds like a plausible assumption.  But is there actually spec
+language that says EDR notification is not allowed in the AER native
+case (when OS owns the AER Capability)?  I looked but didn't find
+anything.
+
+> Other way is to add a new parameter to pcie_do_recovery(..., edr) and use
+> it to conditionally call pcie_clear_device_status(). But I think current
+> way is less complex.
+
+I agree.
+
+> > Question though: in the AER native case, pcie_do_recovery() calls
+> > both:
+> > 
+> >   pcie_clear_device_status() and
+> >   pci_aer_clear_nonfatal_status()
+> > 
+> > In this patch, you only call pcie_clear_device_status().  Do you care
+> > about pci_aer_clear_nonfatal_status(), too?
+> 
+> Yes, we care about it. Since we call dpc_process_error() in EDR handler,
+> it will eventually clear error status via pci_aer_clear_nonfatal_status()
+> and pci_aer_clear_fatal_status() within dpc_process_error().
+
+dpc_process_error() calls pci_aer_clear_nonfatal_status() in *some*
+(but not all) cases.  I didn't try to work out whether those match the
+cases where pcie_do_recovery() called it before 068c29a248b6.  I guess
+we can assume it's equivalent for now.
+
+> > The overall design for clearing status has gotten pretty complicated
+> > as we've added error handling methods (firmware-first, DPC, EDR), and
+> > there are so many different places and cases that it's hard to be sure
+> > we do them all correctly.
+> > 
+> > I don't really know how to clean this up, so I'm just attaching my
+> > notes about the current state:
+> 
+> Good summary! I can see a lot of overlap in clearing
+> PCI_ERR_UNCOR_STATUS and PCI_EXP_DEVSTA.
+
+Actually I do have one idea: in the firmware-first case, firmware
+collects all the status information, clears it, and then passes the
+status on to the OS.  In this case we don't need to clear the status
+registers in handle_error_source(), pcie_do_recovery(), etc.
+
+So I think the OS *should* be able to do something similar by
+collecting the status information and clearing it first, before
+starting error handling.  This might let us collect the status
+clearing together in one place and also converge the firmware-first
+and native error handling paths.
+
+Obviously that would be a major future project.
+
+Bjorn
