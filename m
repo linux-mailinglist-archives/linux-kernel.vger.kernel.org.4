@@ -2,158 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769B76CF8A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C626CF8B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjC3BXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 21:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
+        id S229708AbjC3B3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 21:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjC3BXm (ORCPT
+        with ESMTP id S229549AbjC3B3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 21:23:42 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B5C4EDB;
-        Wed, 29 Mar 2023 18:23:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680139420; x=1711675420;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VTxGweIAXTyub8ayicN0Qd452cPhoT+4Iswx+Pz3KLY=;
-  b=fjFCTQ51VMf+tMx7+zhOUwyaBhHTb84CQx3SGwJHiw6kRKnFg8LlchCS
-   COotoHsYZW3YouRBl7mbvDqUjrJVCVuJebqzxgQpy5h/H1neXGzNh46AT
-   oI8BEr2fHqrPR1p7QSE2mnapDg6u8rAJkpFd+DQ1XgNCj7016GywHd4kv
-   QCe5FoV4ZnzGowQnj4iG6tuTPR2C61k4KOUKDu6DPrunO12HnDZVgqb61
-   IEVqdhURMSo3n1GNpVXaCzi3OMAVeO7MUjXz8QYbnYxyKUkNi5i0nVElp
-   evdX0nE4W1di8of4bW2B3dI2MXzfEGQs2vyyJ6qfLPpPkkQ88C515goTB
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="343489873"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="343489873"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 18:23:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="678001234"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="678001234"
-Received: from dmi-pnp-i7.sh.intel.com ([10.239.159.155])
-  by orsmga007.jf.intel.com with ESMTP; 29 Mar 2023 18:23:35 -0700
-From:   Dapeng Mi <dapeng1.mi@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhang Tinghao <tinghao.zhang@intel.com>,
-        Zhuocheng Ding <zhuocheng.ding@intel.com>,
-        Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: [PATCH] perf/x86/intel: Define bit macros for FixCntrCtl MSR
-Date:   Thu, 30 Mar 2023 09:28:46 +0800
-Message-Id: <20230330012846.2927220-1-dapeng1.mi@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 29 Mar 2023 21:29:33 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569552132;
+        Wed, 29 Mar 2023 18:29:27 -0700 (PDT)
+X-UUID: 4be679f6ce9a11eda9a90f0bb45854f4-20230330
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=L/zOEaXONDhNZMFsIvxL84Y1YKRJDDGZ4D6js3PM4uA=;
+        b=AmLytvkUWxoEVModBDthdG5gBMWbfK9BYUx2L1VAAzBEAhvN026CyV4PeHm8ovq09hG6jgBaEKXJ1fkFY2cWPe2Rf6i1F10Ey9iYBuhsE+kWwirqB9BEHWyl+qyre8p4vOHEvwrbI1RWU08kDsiMHki4J2LhSEdwLXhY3pH5+Nk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:71fa2093-0352-4f26-bcc1-181654c7ab3d,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:120426c,CLOUDID:ac2bc8b4-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 4be679f6ce9a11eda9a90f0bb45854f4-20230330
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 759130459; Thu, 30 Mar 2023 09:29:21 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Thu, 30 Mar 2023 09:29:20 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Thu, 30 Mar 2023 09:29:20 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <bvanassche@acm.org>
+CC:     <stanley.chu@mediatek.com>
+Subject: [PATCH v1] scsi: core: Cleanup struct ufs_saved_pwr_info
+Date:   Thu, 30 Mar 2023 09:29:18 +0800
+Message-ID: <20230330012918.13748-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define bit macros for FixCntrCtl MSR and replace the bit hardcoding
-with these bit macros. This would make code be more human-readable.
+The "is_valid" field of the struct ufs_saved_pwr_info is no
+longer used, and this struct can be replaced by struct
+ufs_pa_layer_attr, without any changes to the functionality.
 
-Perf commands 'perf stat -e "instructions,cycles,ref-cycles"' and
-'perf record -e "instructions,cycles,ref-cycles"' pass.
-
-Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- arch/x86/events/intel/core.c      | 18 +++++++++---------
- arch/x86/include/asm/perf_event.h | 10 ++++++++++
- 2 files changed, 19 insertions(+), 9 deletions(-)
+ drivers/ufs/core/ufshcd.c | 7 +++----
+ include/ufs/ufshcd.h      | 7 +------
+ 2 files changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 070cc4ef2672..b7c0bb78ed59 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -2451,7 +2451,7 @@ static void intel_pmu_disable_fixed(struct perf_event *event)
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index c32a927ac5d1..97eb28a3006d 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -1269,7 +1269,7 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
+ 	struct ufs_pa_layer_attr new_pwr_info;
  
- 	intel_clear_masks(event, idx);
+ 	if (scale_up) {
+-		memcpy(&new_pwr_info, &hba->clk_scaling.saved_pwr_info.info,
++		memcpy(&new_pwr_info, &hba->clk_scaling.saved_pwr_info,
+ 		       sizeof(struct ufs_pa_layer_attr));
+ 	} else {
+ 		memcpy(&new_pwr_info, &hba->pwr_info,
+@@ -1278,7 +1278,7 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
+ 		if (hba->pwr_info.gear_tx > hba->clk_scaling.min_gear ||
+ 		    hba->pwr_info.gear_rx > hba->clk_scaling.min_gear) {
+ 			/* save the current power mode */
+-			memcpy(&hba->clk_scaling.saved_pwr_info.info,
++			memcpy(&hba->clk_scaling.saved_pwr_info,
+ 				&hba->pwr_info,
+ 				sizeof(struct ufs_pa_layer_attr));
  
--	mask = 0xfULL << ((idx - INTEL_PMC_IDX_FIXED) * 4);
-+	mask = intel_fixed_bits(idx - INTEL_PMC_IDX_FIXED, INTEL_FIXED_BITS_MASK);
- 	cpuc->fixed_ctrl_val &= ~mask;
- }
+@@ -8424,10 +8424,9 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
  
-@@ -2750,25 +2750,25 @@ static void intel_pmu_enable_fixed(struct perf_event *event)
- 	 * if requested:
- 	 */
- 	if (!event->attr.precise_ip)
--		bits |= 0x8;
-+		bits |= INTEL_FIXED_0_ENABLE_PMI;
- 	if (hwc->config & ARCH_PERFMON_EVENTSEL_USR)
--		bits |= 0x2;
-+		bits |= INTEL_FIXED_0_USER;
- 	if (hwc->config & ARCH_PERFMON_EVENTSEL_OS)
--		bits |= 0x1;
-+		bits |= INTEL_FIXED_0_KERNEL;
+ 	/* Initialize devfreq after UFS device is detected */
+ 	if (ufshcd_is_clkscaling_supported(hba)) {
+-		memcpy(&hba->clk_scaling.saved_pwr_info.info,
++		memcpy(&hba->clk_scaling.saved_pwr_info,
+ 			&hba->pwr_info,
+ 			sizeof(struct ufs_pa_layer_attr));
+-		hba->clk_scaling.saved_pwr_info.is_valid = true;
+ 		hba->clk_scaling.is_allowed = true;
  
- 	/*
- 	 * ANY bit is supported in v3 and up
- 	 */
- 	if (x86_pmu.version > 2 && hwc->config & ARCH_PERFMON_EVENTSEL_ANY)
--		bits |= 0x4;
-+		bits |= INTEL_FIXED_0_ANYTHREAD;
+ 		ret = ufshcd_devfreq_init(hba);
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index 431c3afb2ce0..2845fe7f45cd 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -394,11 +394,6 @@ struct ufs_clk_gating {
+ 	struct workqueue_struct *clk_gating_workq;
+ };
  
- 	idx -= INTEL_PMC_IDX_FIXED;
--	bits <<= (idx * 4);
--	mask = 0xfULL << (idx * 4);
-+	bits = intel_fixed_bits(idx, bits);
-+	mask = intel_fixed_bits(idx, INTEL_FIXED_BITS_MASK);
- 
- 	if (x86_pmu.intel_cap.pebs_baseline && event->attr.precise_ip) {
--		bits |= ICL_FIXED_0_ADAPTIVE << (idx * 4);
--		mask |= ICL_FIXED_0_ADAPTIVE << (idx * 4);
-+		bits |= intel_fixed_bits(idx, ICL_FIXED_0_ADAPTIVE);
-+		mask |= intel_fixed_bits(idx, ICL_FIXED_0_ADAPTIVE);
- 	}
- 
- 	cpuc->fixed_ctrl_val &= ~mask;
-diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-index 8fc15ed5e60b..bdaf015a620e 100644
---- a/arch/x86/include/asm/perf_event.h
-+++ b/arch/x86/include/asm/perf_event.h
-@@ -32,11 +32,21 @@
- #define ARCH_PERFMON_EVENTSEL_INV			(1ULL << 23)
- #define ARCH_PERFMON_EVENTSEL_CMASK			0xFF000000ULL
- 
-+#define INTEL_FIXED_BITS_MASK				0xFULL
-+#define INTEL_FIXED_BITS_STRIDE			4
-+#define INTEL_FIXED_0_KERNEL				(1ULL << 0)
-+#define INTEL_FIXED_0_USER				(1ULL << 1)
-+#define INTEL_FIXED_0_ANYTHREAD			(1ULL << 2)
-+#define INTEL_FIXED_0_ENABLE_PMI			(1ULL << 3)
-+
- #define HSW_IN_TX					(1ULL << 32)
- #define HSW_IN_TX_CHECKPOINTED				(1ULL << 33)
- #define ICL_EVENTSEL_ADAPTIVE				(1ULL << 34)
- #define ICL_FIXED_0_ADAPTIVE				(1ULL << 32)
- 
-+#define intel_fixed_bits(_idx, _bits)			\
-+	((_bits) << ((_idx) * INTEL_FIXED_BITS_STRIDE))
-+
- #define AMD64_EVENTSEL_INT_CORE_ENABLE			(1ULL << 36)
- #define AMD64_EVENTSEL_GUESTONLY			(1ULL << 40)
- #define AMD64_EVENTSEL_HOSTONLY				(1ULL << 41)
+-struct ufs_saved_pwr_info {
+-	struct ufs_pa_layer_attr info;
+-	bool is_valid;
+-};
+-
+ /**
+  * struct ufs_clk_scaling - UFS clock scaling related data
+  * @active_reqs: number of requests that are pending. If this is zero when
+@@ -428,7 +423,7 @@ struct ufs_clk_scaling {
+ 	ktime_t window_start_t;
+ 	ktime_t busy_start_t;
+ 	struct device_attribute enable_attr;
+-	struct ufs_saved_pwr_info saved_pwr_info;
++	struct ufs_pa_layer_attr saved_pwr_info;
+ 	struct workqueue_struct *workq;
+ 	struct work_struct suspend_work;
+ 	struct work_struct resume_work;
 -- 
-2.34.1
+2.18.0
 
