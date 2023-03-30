@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE916D09E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EE96D0957
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbjC3Pj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
+        id S232901AbjC3PV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233248AbjC3Pjr (ORCPT
+        with ESMTP id S232875AbjC3PVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:39:47 -0400
-X-Greylist: delayed 763 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Mar 2023 08:39:36 PDT
-Received: from mail-41103.protonmail.ch (mail-41103.protonmail.ch [185.70.41.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D70A35A1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:39:35 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 15:19:51 +0000
-Authentication-Results: mail-41103.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="EWfJX+CK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680189597; x=1680448797;
-        bh=Z3JCbWaaWUMZEyUU5ytYZUzOcZ8CnK3JDGgkqkS7+eI=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=EWfJX+CKcZmbhRYtFful5fvUIEi+TDwouuLODz7hj1r1918HfMDyWmRZFA7CEdBGa
-         MFSu1v9YXcYEHVMI5dI7lkiMhcjF3LTeMNPQRxUIOHo17qwuyX1Twuza49DxD4U+i7
-         JjL/CScn6HFXql4n8Cj5Vozl9xDbIulns4ebrZVUpSD7po9J9WmoHeJ1TKlXL/ZCmz
-         js4+NtwWITHIShFuzwi1eZ0e9c/WfErbn4klebzYePWA61DNiUL3TNT4KHrtMC8eEr
-         YYicgA9rE6pVOKM5FOa27XbxXKsM9hAtPIcPT52BTt8gGo1ItxzZWaD+07p8CYqnTW
-         57va7nW5NWcSQ==
-To:     Alice Ryhl <alice@ryhl.io>
-From:   Benno Lossin <y86-dev@protonmail.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Gary Guo <gary@garyguo.net>
-Subject: Re: [PATCH v3 08/13] rust: init: add `stack_pin_init!` macro
-Message-ID: <4b048bfc-e4fe-8c2f-ebfe-9b6a410cd8b8@protonmail.com>
-In-Reply-To: <ada8307d-5177-2094-683f-bce619f1ea44@ryhl.io>
-References: <20230329223239.138757-1-y86-dev@protonmail.com> <20230329223239.138757-9-y86-dev@protonmail.com> <ada8307d-5177-2094-683f-bce619f1ea44@ryhl.io>
-Feedback-ID: 40624463:user:proton
+        Thu, 30 Mar 2023 11:21:22 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFBDD33F;
+        Thu, 30 Mar 2023 08:20:17 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1phu4P-0006b7-1L;
+        Thu, 30 Mar 2023 17:20:09 +0200
+Date:   Thu, 30 Mar 2023 16:20:05 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        =?utf-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: [PATCH net-next 03/15] net: dsa: mt7530: use unlocked regmap
+ accessors
+Message-ID: <4fcca663d13c38679b615d4a1a76bf5d5d885304.1680180959.git.daniel@makrotopia.org>
+References: <cover.1680180959.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1680180959.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,59 +59,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.23 17:00, Alice Ryhl wrote:
-> On 3/30/23 00:33, y86-dev@protonmail.com wrote:
->> From: Benno Lossin <y86-dev@protonmail.com>
->>
->> The `stack_pin_init!` macro allows pin-initializing a value on the
->> stack. It accepts a `impl PinInit<T, E>` to initialize a `T`. It allows
->> propagating any errors via `?` or handling it normally via `match`.
->>
->> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
->
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
->
->> ---
->> +#[macro_export]
->> +macro_rules! stack_pin_init {
->> +    (let $var:ident $(: $t:ty)? =3D $val:expr) =3D> {
->> +        let mut $var =3D $crate::init::__internal::StackInit$(::<$t>)?:=
-:uninit();
->> +        let mut $var =3D {
->> +            let val =3D $val;
->> +            unsafe { $crate::init::__internal::StackInit::init(&mut $va=
-r, val) }
->> +        };
->> +    };
->> +    (let $var:ident $(: $t:ty)? =3D? $val:expr) =3D> {
->> +        let mut $var =3D $crate::init::__internal::StackInit$(::<$t>)?:=
-:uninit();
->> +        let mut $var =3D {
->> +            let val =3D $val;
->> +            unsafe { $crate::init::__internal::StackInit::init(&mut $va=
-r, val)? }
->> +        };
->> +    };
->> +}
->
-> This will be inconvenient to use if the initializer is infallible and is
-> used inside an infallible function. However, I'm not sure what a better
-> alternative would be. Perhaps we should have three variants?
+Instead of wrapping the locked register accessor functions, use the
+unlocked variants and add locking wrapper functions to let regmap
+handle the locking.
 
-That could be an option, any ideas for the syntax though? Or should it
-be a different macro like `stack_pin_init!` and `try_stack_pin_init!`?
+This is a preparation towards being able to always use regmap to
+access switch registers instead of open-coded accessor functions.
 
-> Also, maybe a `<-` rather than `=3D` would be more consistent?
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ drivers/net/dsa/mt7530.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
 
-That is sadly not possible, since `<-` is not allowed after `ty` fragments.
-
-> Anyway, I don't think this should block the PR. We can revisit it later
-> if it becomes a problem.
-
-Sure.
-
---
-Cheers,
-Benno
-
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index 5685c71bc9173..d8b041d79f2b7 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -2900,7 +2900,7 @@ static int mt7530_regmap_read(void *context, unsigned int reg, unsigned int *val
+ {
+ 	struct mt7530_priv *priv = context;
+ 
+-	*val = mt7530_read(priv, reg);
++	*val = mt7530_mii_read(priv, reg);
+ 	return 0;
+ };
+ 
+@@ -2908,23 +2908,25 @@ static int mt7530_regmap_write(void *context, unsigned int reg, unsigned int val
+ {
+ 	struct mt7530_priv *priv = context;
+ 
+-	mt7530_write(priv, reg, val);
++	mt7530_mii_write(priv, reg, val);
+ 	return 0;
+ };
+ 
+-static int mt7530_regmap_update_bits(void *context, unsigned int reg,
+-				     unsigned int mask, unsigned int val)
++static void
++mt7530_mdio_regmap_lock(void *mdio_lock)
+ {
+-	struct mt7530_priv *priv = context;
++	mutex_lock_nested(mdio_lock, MDIO_MUTEX_NESTED);
++}
+ 
+-	mt7530_rmw(priv, reg, mask, val);
+-	return 0;
+-};
++static void
++mt7530_mdio_regmap_unlock(void *mdio_lock)
++{
++	mutex_unlock(mdio_lock);
++}
+ 
+ static const struct regmap_bus mt7531_regmap_bus = {
+ 	.reg_write = mt7530_regmap_write,
+ 	.reg_read = mt7530_regmap_read,
+-	.reg_update_bits = mt7530_regmap_update_bits,
+ };
+ 
+ static int
+@@ -2950,6 +2952,9 @@ mt7531_create_sgmii(struct mt7530_priv *priv)
+ 		mt7531_pcs_config[i]->reg_stride = 4;
+ 		mt7531_pcs_config[i]->reg_base = MT7531_SGMII_REG_BASE(5 + i);
+ 		mt7531_pcs_config[i]->max_register = 0x17c;
++		mt7531_pcs_config[i]->lock = mt7530_mdio_regmap_lock;
++		mt7531_pcs_config[i]->unlock = mt7530_mdio_regmap_unlock;
++		mt7531_pcs_config[i]->lock_arg = &priv->bus->mdio_lock;
+ 
+ 		regmap = devm_regmap_init(priv->dev,
+ 					  &mt7531_regmap_bus, priv,
+-- 
+2.39.2
 
