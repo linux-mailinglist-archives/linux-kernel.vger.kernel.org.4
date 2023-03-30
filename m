@@ -2,164 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130756D125B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 478B26D125E
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjC3WnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 18:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
+        id S230498AbjC3Wna convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 18:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjC3WnI (ORCPT
+        with ESMTP id S230494AbjC3WnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 18:43:08 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4DCE381
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:43:06 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id iw3so19547924plb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1680216186;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UVKHLmtooHBiszVSX91jjnRbRPTxqeXvARSEkj4Iurw=;
-        b=z2kFmVF12PB+1USjihOQ2IkAvXl0N1fq/jInPodKNEs7dZqnaLzec5W8AfN38+JYpR
-         zAZJF0EXKNzxidG04g09ODyDuTNtunoJ0FckU7FOKtcFt1j3LCwGZr9V4+f5innvywQl
-         KN1s7uojLkpkUpPUHG/coZJlgnwU3ZGHI8yOrZTEtYsj9EU2vvE6uTvnD1YOhtwmykWy
-         mz72kBMnkJwwZaIwncskRsX8IlMweeoGrvHQyJ/zHu48rrND9RR3Y/2KoVFT68HicSHe
-         CL1IFJYFro0peH/q4d2JVM7Svt1miqeM6Lg7OErh4t0hI5xTT9YvSpfiY9h1Ok9RXpJv
-         MuEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680216186;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UVKHLmtooHBiszVSX91jjnRbRPTxqeXvARSEkj4Iurw=;
-        b=ky+93Nu3O1OO77hoTmJ4aTluq0+50rrQHNU6027Q2ZFTEt8r57XWlmdViwF1gcZaMR
-         y3c/aomUbBjMOSPr7QMV1uH9FTXcX7NA74WORW8lwfDGr8mkDHDC4p2u6BY9XxWQhgdU
-         PPz1KpgQjTds9Q9CgYf2BXl9vgVYNkEj0+8WEeOYp6LgXX3wNSzTfjVPXTfkQeMIG5d1
-         JWSd+yobR5e/DBZjL8TWaGCZmzxjqWH+J7MuftmsUuJ3Z/7eHPDJtfUcysv6p02DYuBV
-         NPVcfh5tdD94cOXT4MdfIA5fbPojTrMCcuMWHU9Wef69tmX9wNX+37uNgk4tqSkzkOa0
-         lfuw==
-X-Gm-Message-State: AAQBX9dvsd/LYDR/tBo2WD2GWOULholwXoNPp6b2X7RY4VE1W8XjGjL4
-        RPTUB3+BZtaWMuI71vmwJxqt9g==
-X-Google-Smtp-Source: AKy350bIjtlVfVX80X38+5e4xoQbHy5skXE1pdFXCHYx5imS4ccdijWGeyPFFpsTSHYeojG22LghLQ==
-X-Received: by 2002:a17:90a:190f:b0:233:c301:32b3 with SMTP id 15-20020a17090a190f00b00233c30132b3mr27210277pjg.3.1680216185974;
-        Thu, 30 Mar 2023 15:43:05 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-91-157.pa.nsw.optusnet.com.au. [49.181.91.157])
-        by smtp.gmail.com with ESMTPSA id mq6-20020a17090b380600b00233864f21a7sm3677742pjb.51.2023.03.30.15.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 15:43:05 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pi0z0-00F8FL-19; Fri, 31 Mar 2023 09:43:02 +1100
-Date:   Fri, 31 Mar 2023 09:43:02 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     syzbot <syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com>,
-        djwong@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [xfs?] WARNING in xfs_bmap_extents_to_btree
-Message-ID: <20230330224302.GG3223426@dread.disaster.area>
-References: <0000000000003da76805f8021fb5@google.com>
- <20230330012750.GF3223426@dread.disaster.area>
- <CANp29Y6XNE_wxx1Osa+RrfqOUP9PZhScGnMUDgQ-qqHzYe9KFg@mail.gmail.com>
+        Thu, 30 Mar 2023 18:43:25 -0400
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED651113E2;
+        Thu, 30 Mar 2023 15:43:17 -0700 (PDT)
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 41579140304;
+        Thu, 30 Mar 2023 22:43:15 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 8664F20028;
+        Thu, 30 Mar 2023 22:43:09 +0000 (UTC)
+Message-ID: <da9d8c2174e0813be2e0e6b31129e90fddaa128e.camel@perches.com>
+Subject: Re: [PATCH v3 3/4] checkpatch: allow Closes tags with links
+From:   Joe Perches <joe@perches.com>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Kai =?ISO-8859-1?Q?Wasserb=E4ch?= <kai@dev.carbon-project.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
+Date:   Thu, 30 Mar 2023 15:43:08 -0700
+In-Reply-To: <20230314-doc-checkpatch-closes-tag-v3-3-d1bdcf31c71c@tessares.net>
+References: <20230314-doc-checkpatch-closes-tag-v3-0-d1bdcf31c71c@tessares.net>
+         <20230314-doc-checkpatch-closes-tag-v3-3-d1bdcf31c71c@tessares.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANp29Y6XNE_wxx1Osa+RrfqOUP9PZhScGnMUDgQ-qqHzYe9KFg@mail.gmail.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 8664F20028
+X-Stat-Signature: o7s8y4yexe96pcmeht83bc8k1kmp4ytc
+X-Spam-Status: No, score=0.0 required=5.0 tests=FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
+        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1839bgV7wydgfXH7bCqxQ9k9vhrNnfor3U=
+X-HE-Tag: 1680216189-513749
+X-HE-Meta: U2FsdGVkX1+lgCVmV5KU3BNZtM6xwIk2/vlX9i6ZiIMH3ZU0YFPXMf/3WNcfaIuPazErrbphMTyQUkRCP/L9PA==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 10:52:37AM +0200, Aleksandr Nogikh wrote:
-> On Thu, Mar 30, 2023 at 3:27 AM 'Dave Chinner' via syzkaller-bugs
-> <syzkaller-bugs@googlegroups.com> wrote:
-> >
-> > On Tue, Mar 28, 2023 at 09:08:01PM -0700, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    1e760fa3596e Merge tag 'gfs2-v6.3-rc3-fix' of git://git.ke..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=16f83651c80000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=0c383e46e9b4827b01b1
-> > > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> > >
-> > > Unfortunately, I don't have any reproducer for this issue yet.
-> > >
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/17229b6e6fe0/disk-1e760fa3.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/69b5d310fba0/vmlinux-1e760fa3.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/0c65624aace9/bzImage-1e760fa3.xz
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com
-> > >
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 1 PID: 24101 at fs/xfs/libxfs/xfs_bmap.c:660 xfs_bmap_extents_to_btree+0xe1b/0x1190
-> >
-> > Allocation got an unexpected ENOSPC when it was supposed to have a
-> > valid reservation for the space. Likely because of an inconsistency
-> > that had been induced into the filesystem where superblock space
-> > accounting doesn't exactly match the AG space accounting and/or the
-> > tracked free space.
-> >
-> > Given this is a maliciously corrupted filesystem image, this sort of
-> > warning is expected and there's probably nothing we can do to avoid
-> > it short of a full filesystem verification pass during mount.
-> > That's not a viable solution, so I think we should just ignore
-> > syzbot when it generates this sort of warning....
+On Thu, 2023-03-30 at 20:13 +0200, Matthieu Baerts wrote:
+> As a follow-up of a previous patch modifying the documentation to
+> allow using the "Closes:" tag, checkpatch.pl is updated accordingly.
 > 
-> If it's not a warning about a kernel bug, then WARN_ON should probably
-> be replaced by some more suitable reporting mechanism. Kernel coding
-> style document explicitly says:
+> checkpatch.pl now no longer complain when the "Closes:" tag is used by
+> itself or after the "Reported-by:" tag.
 > 
-> "WARN*() must not be used for a condition that is expected to trigger
-> easily, for example, by user space actions.
+> Fixes: 76f381bb77a0 ("checkpatch: warn when unknown tags are used for links")
+> Fixes: d7f1d71e5ef6 ("checkpatch: warn when Reported-by: is not followed by Link:")
 
-That's exactly the case here. It should *never* happen in normal
-production workloads, and it if does then we have the *potential*
-for silent data loss occurring. That's *exactly* the sort of thing
-we should be warning admins about in no uncertain terms.  Also, we
-use WARN_ON_ONCE(), so it's not going to spam the logs.
+I don't think this _fixes_ anything.
+I believe it's merely a new capability.
 
-syzbot is a malicious program - it is injecting broken stuff into
-the kernel as root to try to trigger situations like this. That
-doesn't make a warning it triggers bad or incorrect - syzbot is
-pertubing tightly coupled structures in a way that makes the
-information shared across those structures inconsistent and
-eventually the code is going to trip over that inconsistency.
+> Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/373
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> ---
+> v3:
+>  - split into 2 patches: the previous one adds a list with all the
+>    "link" tags. This one only allows the "Closes" tag. (Joe Perches)
+>  - "Closes" is no longer printed between parenthesis. (Thorsten
+>    Leemhuis)
+> ---
+>  scripts/checkpatch.pl | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index 9d092ff4fc16..ca58c734ff22 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -620,7 +620,7 @@ our $signature_tags = qr{(?xi:
+>  	Cc:
+>  )};
+>  
+> -our @link_tags = qw(Link);
+> +our @link_tags = qw(Link Closes);
+>  
+>  #Create a search and print patterns for all these strings to be used directly below
+>  our $link_tags_search = "";
+> 
 
-IOWs, once someone has used root permissions to mount a maliciously
-crafted filesystem image, *all bets are off*. The machine is running
-a potentially compromised kernel at this point. Hence it is almost
-guaranteed that at some point the kernel is going to discover things
-are *badly wrong* and start dumping "this should never happen!"
-warnings into the logs. That's what the warnings are supposed to do,
-and the fact that syzbot can trigger them doesn't make the warnings
-wrong.
-
-> pr_warn_once() is a
-> possible alternative, if you need to notify the user of a problem."
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/coding-style.rst?id=1e760fa3596e8c7f08412712c168288b79670d78#n1223
-
-It is worth remembering that those are guidelines, not enforcable
-rules and any experienced kernel developer will tell you the same
-thing.  We know the guidelines, we know when to apply them, we know
-there are cases that the guidelines simply can't, don't or won't
-cover.
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
