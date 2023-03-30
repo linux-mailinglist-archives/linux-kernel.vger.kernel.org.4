@@ -2,116 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFAB6D135A
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2656D1356
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjC3Xdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 19:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
+        id S231201AbjC3XdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 19:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbjC3Xdw (ORCPT
+        with ESMTP id S231542AbjC3XdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 19:33:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C728A5FA
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 16:33:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680219186;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HFKIO15sTpdAt8JGYcoib0o9EwbibSfqk1NxeizxC3g=;
-        b=GQOtV3wTHTa3GJUQnSt9+ZXRuLp0ErCLwM/e9U57kA+WZ+/Vw91oIb6bfklil53zFyNhoy
-        gACnIit32GC2gF01hORkMQJwnDSpCxcKu7Fd41JWlYhtW1DRZ81tclCz8bOwS2MuOfMoql
-        J8sJ8MPEilF9fn4ob5ctPCzwg1LMNEU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-43-KMXxKy-dMLmNmEpxqNMX8w-1; Thu, 30 Mar 2023 19:33:01 -0400
-X-MC-Unique: KMXxKy-dMLmNmEpxqNMX8w-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 625BB3C0F231;
-        Thu, 30 Mar 2023 23:33:00 +0000 (UTC)
-Received: from localhost (ovpn-12-64.pek2.redhat.com [10.72.12.64])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0F368202701E;
-        Thu, 30 Mar 2023 23:32:58 +0000 (UTC)
-Date:   Fri, 31 Mar 2023 07:32:54 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "chenjiahao (C)" <chenjiahao16@huawei.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, guoren@kernel.org, heiko@sntech.de,
-        bjorn@rivosinc.com, alex@ghiti.fr, akpm@linux-foundation.org,
-        atishp@rivosinc.com, thunder.leizhen@huawei.com, horms@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH -next v2 1/2] riscv: kdump: Implement
- crashkernel=X,[high,low]
-Message-ID: <ZCYcJos4MLBvpP9/@MiWiFi-R3L-srv>
-References: <20230328115150.2700016-1-chenjiahao16@huawei.com>
- <20230328115150.2700016-2-chenjiahao16@huawei.com>
- <ZCQewkvSpaI52DSM@MiWiFi-R3L-srv>
- <b8a32e3c-c083-20de-16d1-f628b02b739b@huawei.com>
+        Thu, 30 Mar 2023 19:33:08 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22023901C
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 16:33:06 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-544787916d9so383964847b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 16:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1680219185;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=94cHCZl82A9XHBdyuyycOrzigntjL6kSnbJJ+8pRS1I=;
+        b=NE11GM+BTf/CpwCQcIfcVI9o0qRstmxulk194Pff9YhZcy0tnuk7ZQvpOVMGLkupU2
+         RFsUMuoXtd15daP5ryZm8upTsP+BgSm3SdNW3GO5bmIYndnRlOtfJwfiJX5r/Nvw6UOx
+         t/c7Ip4kHZaF1gb8r3FTaKaLhF4k/pZUJF73ZlyM9JTyt4rStTshwwU/WZunumRIsA4B
+         YBv7bnMdd7tlF0/oNG5YhZ2lvfVG/AHpgeot/r5b9t2fXlyCIXtAyezvdQoLFSUxGjeF
+         PpnvYfbq77h+u4OvzfjEKg/mzVpZufuR9ygDifBygXiG0Gdzm3MQ/7D6QJanR2HNW2Eg
+         Ou+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680219185;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=94cHCZl82A9XHBdyuyycOrzigntjL6kSnbJJ+8pRS1I=;
+        b=0Dya9DuHoGMh0HI0rpfK/308H2H4sfAAA74K7cs+0xzoB5B5HsstmuXKrUlL54FOYf
+         XnBwMh6qIVHo32rD/e4DqJmYFN8+Z+06NWXuCCUD6RCT0F95pw33I0HsLkY9afpS5B4Q
+         ewLohkUoBYq450pb5A1wbIRifwEQrVSIEll5PXU6b8+GXgiLFsZ9tHboLavZcuErJjCk
+         nzqIjMBcjtwy71vsDcU1CeSJ/7U+No/aazxvj+hEnpIPMlC8ihEo/ZyTiFSSOUjI0Eqh
+         rvyPTFEFWh8h6EMN4Ls0AlPt6XHspAxGi3h/RTwQUIaStXLDNdCWIZ3mo2+aNOatc37Q
+         VPZg==
+X-Gm-Message-State: AAQBX9flmCHT2WvdjvzPsA3aCRxjSrgqQNCmzFAf+F6Ui0DVFpT21u9k
+        4Y1H6tc1arsatj58PhHNd67r4GW9lVDGqV9elTvD
+X-Google-Smtp-Source: AKy350b1RGVoSJMOnOcg7Dlzg2s61atlBq/+cwye4xYhjekc2h3Kv8aLYSQgc4ZC5+nT125pSGhat9ufNhuNmhCveTg=
+X-Received: by 2002:a81:e405:0:b0:544:d5ce:eb33 with SMTP id
+ r5-20020a81e405000000b00544d5ceeb33mr11851343ywl.8.1680219185107; Thu, 30 Mar
+ 2023 16:33:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b8a32e3c-c083-20de-16d1-f628b02b739b@huawei.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230315224704.2672-1-casey@schaufler-ca.com> <20230315224704.2672-11-casey@schaufler-ca.com>
+ <CAHC9VhTyMmyB5Yr8Zp+Xg3R=J9VLp-oChxJPcAv+fL8czVzcYg@mail.gmail.com> <61d21f68-8e84-ad85-ef20-fced8c8b916d@schaufler-ca.com>
+In-Reply-To: <61d21f68-8e84-ad85-ef20-fced8c8b916d@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 30 Mar 2023 19:32:54 -0400
+Message-ID: <CAHC9VhS+rh-pRshAQcJPGYBx98=NW17XPKSAM8d7ahPBTv3_2A@mail.gmail.com>
+Subject: Re: [PATCH v7 10/11] SELinux: Add selfattr hooks
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     linux-security-module@vger.kernel.org, jmorris@namei.org,
+        keescook@chromium.org, john.johansen@canonical.com,
+        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        mic@digikod.net, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/30/23 at 09:40pm, chenjiahao (C) wrote:
-......
-> Agreed, I will clean this up later in next version.
-> > > +		if (ret || !crash_size)
-> > > +			return;
-> > > +
-> > > +		/*
-> > > +		 * crashkernel=Y,low is valid only when crashkernel=X,high
-> > > +		 * is passed and high memory is reserved successful.
-> > > +		 */
-> > > +		ret = parse_crashkernel_low(boot_command_line, 0, &crash_low_size, &crash_base);
-> > > +		if (ret == -ENOENT)
-> > > +			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
-> > > +		else if (ret)
-> > > +			return;
-> > > +
-> > > +		search_start = dma32_phys_limit;
-> > > +	} else if (ret || !crash_size) {
-> > > +		/* Invalid argument value specified */
-> > >   		return;
-> > > +	}
-> > >   	crash_size = PAGE_ALIGN(crash_size);
-> > > @@ -1201,16 +1246,26 @@ static void __init reserve_crashkernel(void)
-> > >   	 */
-> > >   	crash_base = memblock_phys_alloc_range(crash_size, PMD_SIZE,
-> > >   					       search_start,
-> > > -					       min(search_end, (unsigned long) SZ_4G));
-> > > +					       min(search_end, (unsigned long)dma32_phys_limit));
-> > >   	if (crash_base == 0) {
-> > The above conditional check isn't right. If crashkernel=size@offset
-> > specified, the reservation failure won't trigger retry. This seems to be
-> > originally introduced by old commit, while this need be fixed firstly.
-> 
-> Just a little curious about the rule to cope with this specific case. If
-> "crashkernel=size@offset" was passed
-> 
-> but reserve failed, should try again to allocate in high memory, regardless
-> the specified size@offset,
-> 
-> or just throw a warning and return? Since I noticed the current logic here
-> on Arm64 is to check if !fixed_base first
+On Thu, Mar 30, 2023 at 4:55=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
+.com> wrote:
+> On 3/29/2023 6:13 PM, Paul Moore wrote:
+> > On Wed, Mar 15, 2023 at 6:52=E2=80=AFPM Casey Schaufler <casey@schaufle=
+r-ca.com> wrote:
+> >> Add hooks for setselfattr and getselfattr. These hooks are not very
+> >> different from their setprocattr and getprocattr equivalents, and
+> >> much of the code is shared.
+> >>
+> >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> >> Cc: selinux@vger.kernel.org
+> >> Cc: Paul Moore <paul@paul-moore.com>
+> >> ---
+> >>  security/selinux/hooks.c | 147 +++++++++++++++++++++++++++++++-------=
+-
+> >>  1 file changed, 117 insertions(+), 30 deletions(-)
+> >>
+> >> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> >> index 9403aee75981..8896edf80aa9 100644
+> >> --- a/security/selinux/hooks.c
+> >> +++ b/security/selinux/hooks.c
+> >> @@ -6348,8 +6348,7 @@ static void selinux_d_instantiate(struct dentry =
+*dentry, struct inode *inode)
+> >>                 inode_doinit_with_dentry(inode, dentry);
+> >>  }
+> >>
+> >> -static int selinux_getprocattr(struct task_struct *p,
+> >> -                              const char *name, char **value)
+> >> +static int do_getattr(unsigned int attr, struct task_struct *p, char =
+**value)
+> > Are you ready for more naming nitpicks? ;)
+>
+> I would expect nothing less. :)
+>
+> > Let's call this 'selinux_lsm_getattr()', and the matching setter
+> > should be 'selinux_lsm_setattr()'.
+>
+> As you wish. It's your LSM.
+>
+>
+> >>  {
+> >>         const struct task_security_struct *__tsec;
+> >>         u32 sid;
+> >> @@ -6367,20 +6366,27 @@ static int selinux_getprocattr(struct task_str=
+uct *p,
+> >>                         goto bad;
+> >>         }
+> >>
+> >> -       if (!strcmp(name, "current"))
+> >> +       switch (attr) {
+> >> +       case LSM_ATTR_CURRENT:
+> >>                 sid =3D __tsec->sid;
+> >> -       else if (!strcmp(name, "prev"))
+> >> +               break;
+> >> +       case LSM_ATTR_PREV:
+> >>                 sid =3D __tsec->osid;
+> >> -       else if (!strcmp(name, "exec"))
+> >> +               break;
+> >> +       case LSM_ATTR_EXEC:
+> >>                 sid =3D __tsec->exec_sid;
+> >> -       else if (!strcmp(name, "fscreate"))
+> >> +               break;
+> >> +       case LSM_ATTR_FSCREATE:
+> >>                 sid =3D __tsec->create_sid;
+> >> -       else if (!strcmp(name, "keycreate"))
+> >> +               break;
+> >> +       case LSM_ATTR_KEYCREATE:
+> >>                 sid =3D __tsec->keycreate_sid;
+> >> -       else if (!strcmp(name, "sockcreate"))
+> >> +               break;
+> >> +       case LSM_ATTR_SOCKCREATE:
+> >>                 sid =3D __tsec->sockcreate_sid;
+> >> -       else {
+> >> -               error =3D -EINVAL;
+> >> +               break;
+> >> +       default:
+> >> +               error =3D -EOPNOTSUPP;
+> > The error should probably be -EINVAL.
+>
+> It's possible that we may add an attribute that SELinux doesn't
+> support, say LSM_ATTR_CRYPTO_KEY, that another LSM does. This is
+> the same behavior the other LSMs exhibit in the face of a request
+> for attributes such as LSM_ATTR_KEYCREATE that they don't support.
 
-Yeah, we need mark the "crashkernel=size@offset" case and avoid to
-retry. Because you won't succeed if  memblock has already failed to
-reserve an unavailable memory region, retry is meaningless. This has
-been done in x86, arm64.
+Okay, I'll accept that argument, but I would ask that add some
+additional handling in selinux_getprocattr() so that it returns
+-EINVAL in this case just as it does today.
 
+> >>                 goto bad;
+> >>         }
+> >>         rcu_read_unlock();
+> >> @@ -6398,7 +6404,7 @@ static int selinux_getprocattr(struct task_struc=
+t *p,
+> >>         return error;
+> >>  }
+> >>
+> >> -static int selinux_setprocattr(const char *name, void *value, size_t =
+size)
+> >> +static int do_setattr(u64 attr, void *value, size_t size)
+> >>  {
+> >>         struct task_security_struct *tsec;
+> >>         struct cred *new;
+> >> @@ -6409,28 +6415,36 @@ static int selinux_setprocattr(const char *nam=
+e, void *value, size_t size)
+> >>         /*
+> >>          * Basic control over ability to set these attributes at all.
+> >>          */
+> >> -       if (!strcmp(name, "exec"))
+> >> +       switch (attr) {
+> >> +       case LSM_ATTR_CURRENT:
+> >> +               error =3D avc_has_perm(&selinux_state,
+> >> +                                    mysid, mysid, SECCLASS_PROCESS,
+> >> +                                    PROCESS__SETCURRENT, NULL);
+> >> +               break;
+> >> +       case LSM_ATTR_EXEC:
+> >>                 error =3D avc_has_perm(&selinux_state,
+> >>                                      mysid, mysid, SECCLASS_PROCESS,
+> >>                                      PROCESS__SETEXEC, NULL);
+> >> -       else if (!strcmp(name, "fscreate"))
+> >> +               break;
+> >> +       case LSM_ATTR_FSCREATE:
+> >>                 error =3D avc_has_perm(&selinux_state,
+> >>                                      mysid, mysid, SECCLASS_PROCESS,
+> >>                                      PROCESS__SETFSCREATE, NULL);
+> >> -       else if (!strcmp(name, "keycreate"))
+> >> +               break;
+> >> +       case LSM_ATTR_KEYCREATE:
+> >>                 error =3D avc_has_perm(&selinux_state,
+> >>                                      mysid, mysid, SECCLASS_PROCESS,
+> >>                                      PROCESS__SETKEYCREATE, NULL);
+> >> -       else if (!strcmp(name, "sockcreate"))
+> >> +               break;
+> >> +       case LSM_ATTR_SOCKCREATE:
+> >>                 error =3D avc_has_perm(&selinux_state,
+> >>                                      mysid, mysid, SECCLASS_PROCESS,
+> >>                                      PROCESS__SETSOCKCREATE, NULL);
+> >> -       else if (!strcmp(name, "current"))
+> >> -               error =3D avc_has_perm(&selinux_state,
+> >> -                                    mysid, mysid, SECCLASS_PROCESS,
+> >> -                                    PROCESS__SETCURRENT, NULL);
+> >> -       else
+> >> -               error =3D -EINVAL;
+> >> +               break;
+> >> +       default:
+> >> +               error =3D -EOPNOTSUPP;
+> > Same as above, should be -EINVAL.
+>
+> Same as above, there may be attributes SELinux doesn't support.
+
+Also, same as above.
+
+> >> +               break;
+> >> +       }
+> >>         if (error)
+> >>                 return error;
+> >>
+> >> @@ -6442,13 +6456,14 @@ static int selinux_setprocattr(const char *nam=
+e, void *value, size_t size)
+> >>                 }
+> >>                 error =3D security_context_to_sid(&selinux_state, valu=
+e, size,
+> >>                                                 &sid, GFP_KERNEL);
+> >> -               if (error =3D=3D -EINVAL && !strcmp(name, "fscreate"))=
+ {
+> >> +               if (error =3D=3D -EINVAL && attr =3D=3D LSM_ATTR_FSCRE=
+ATE) {
+> >>                         if (!has_cap_mac_admin(true)) {
+> >>                                 struct audit_buffer *ab;
+> >>                                 size_t audit_size;
+> >>
+> >> -                               /* We strip a nul only if it is at the=
+ end, otherwise the
+> >> -                                * context contains a nul and we shoul=
+d audit that */
+> >> +                               /* We strip a nul only if it is at the=
+ end,
+> >> +                                * otherwise the context contains a nu=
+l and
+> >> +                                * we should audit that */
+> > You *do* get gold stars for fixing line lengths in close proximity ;)
+>
+> I guess I'm the Last User of the 80 character terminal.
+
+I'm still a big fan and I'm sticking to the 80 char limit for the LSM
+layer as well as the SELinux, audit, and labeled networking
+subsystems.  Longer lines either predate me or I simply didn't catch
+them during review/merge.
+
+--=20
+paul-moore.com
