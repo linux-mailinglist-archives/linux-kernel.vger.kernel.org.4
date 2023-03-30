@@ -2,97 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC4A6D03CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772A66D03D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjC3LuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        id S231479AbjC3LuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjC3LuA (ORCPT
+        with ESMTP id S231389AbjC3LuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:50:00 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C9CDD;
-        Thu, 30 Mar 2023 04:49:59 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id le6so17779128plb.12;
-        Thu, 30 Mar 2023 04:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680176998; x=1682768998;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MoqOvm+WmmcoOXasr1TBTGxRdpCYwDL2NJnL6pot/Mo=;
-        b=XDcT3KeY/F+zZmaoEHlButSpYGK1hJm15Bg8QjPwlU3C6Jr0iqSFXZM8wZoCA9pqbv
-         e6U4KdUeywBj238PKZ9zh2Xig4ijj9VwmEu0k2BWDnt+GxE4cG9sfJrjMIIhrMPTQb2z
-         2YO7rEfyuQfA7pIA73DTqWelIIxwkTZKmlrVLPZKMZRUTR+pJ3o/NokAAmjBoCSCKTm2
-         jp0dZI4TKfIFnje2WIIoM+rPjYtSO21p/vMNy57MwIzmaCOqADD9rSICEnuvAIw8nQ8y
-         euI1YDbQpCygr4cWHQgH9mWZX+d/Sifg4JiONxO+HFQrZLCj5cqZ5D1BqNVEuKyjr7yz
-         AF6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680176998; x=1682768998;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MoqOvm+WmmcoOXasr1TBTGxRdpCYwDL2NJnL6pot/Mo=;
-        b=fayGaSKOqXuLvnsGQ8ggFynHlGKis68KKRb79WLb7u82YoFGgCkMf5r3MRzs2sb8Kw
-         h79Na112OHoK8keEfpsDQQY8h6ZqxDKZBSIOA/4XLFQ2Y8SIV5rNluXpTRCG5Wq+lldW
-         TioavaWcsVFdxxRYEaI6caBiE3P5pN3VhxEzOMuXdPm8a7GcsMczojEY/Yo7Qz4j0App
-         dNCN94BwuVZnmMA2gkvYNhis4JgKiIGlLlztOsgjtSIWWFgrIKmS0VW+V9eIkK8rPdAL
-         U/9qzRhezmmN7/RRa6j41rPy6t5EjUXYNFwMc7HdNWVgvIkwbUSfuRTWwRNlvkshC9MZ
-         H3bQ==
-X-Gm-Message-State: AAQBX9dyCVdcnxv2kFX7RUA4TEK4CT+tcAVb1e9K/HZNahciCHfsGsha
-        GljlurPTZZWznBmG3xKrw+c=
-X-Google-Smtp-Source: AKy350b8sLf3HXxlyRrxUD3Ij2cj5uVAfYLc69sXgotjQ50h1YNbFqM32sqKp7j1CXa3AN3iKGGnpw==
-X-Received: by 2002:a17:902:e847:b0:19e:d6f2:feea with SMTP id t7-20020a170902e84700b0019ed6f2feeamr28744596plg.9.1680176998695;
-        Thu, 30 Mar 2023 04:49:58 -0700 (PDT)
-Received: from Erekir.lan ([103.147.22.100])
-        by smtp.gmail.com with ESMTPSA id s14-20020a170902b18e00b001a1ccb37847sm20430989plr.146.2023.03.30.04.49.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 04:49:58 -0700 (PDT)
-From:   weiliang1503 <weiliang1503@gmail.com>
-To:     corentin.chary@gmail.com
-Cc:     hdegoede@redhat.com, markgross@kernel.org,
-        acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        weiliang1503 <weiliang1503@gmail.com>
-Subject: [PATCH v1] asus-nb-wmi: Add quirk_asus_tablet_mode to other ROG Flow X13 models
-Date:   Thu, 30 Mar 2023 19:49:43 +0800
-Message-Id: <20230330114943.15057-1-weiliang1503@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Thu, 30 Mar 2023 07:50:20 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A515597;
+        Thu, 30 Mar 2023 04:50:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680177015; x=1711713015;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bJTThgoaEyMmVXYNTmAj3X3A0F/zyVZqqh7eNmMOpAY=;
+  b=PwZNdpynz1oHJnipIue42EO8/xdm+LpP0AuQT5t0/y6PXPgTGVy2Vzal
+   qQhzW7b/r2+WbjNOUvBPWuDCM3boCQ3Z10my3hMvnbbOphyeHtos6qrvz
+   wEDAF2N5k5e5uHN6AlZhK6W1Bh4CuBO5rOrfPnr8wH+XuEZ4V2FUjMWf/
+   Ib0iSOqDg3WedrxF8Fg7bpKnEoJ97GLAXxRDDoJgEj82ZMoUREveGCzQx
+   fCMHKnZ8J2QD0njcC90cZzcoewVhX+s+REWOG2OIN+gMIuRnNa70zfZod
+   kJwhT3rUt7XCAY/CG9k+KnLNUx3hYlFg3IZp0+LUrKCmnaf22y2/gt2+q
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="339868390"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="339868390"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:50:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="1014401427"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="1014401427"
+Received: from ngreburx-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.209.91])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:50:02 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id E46BE10438C; Thu, 30 Mar 2023 14:49:59 +0300 (+03)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [PATCHv9 01/14] x86/boot: Centralize __pa()/__va() definitions
+Date:   Thu, 30 Mar 2023 14:49:43 +0300
+Message-Id: <20230330114956.20342-2-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make quirk_asus_tablet_mode apply on other ROG Flow X13 devices,
-which only affects the GV301Q model before.
+Replace multiple __pa()/__va() definitions with a single one in misc.h.
 
-Signed-off-by: weiliang1503 <weiliang1503@gmail.com>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
+Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
 ---
- drivers/platform/x86/asus-nb-wmi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/boot/compressed/ident_map_64.c | 8 --------
+ arch/x86/boot/compressed/misc.h         | 9 +++++++++
+ arch/x86/boot/compressed/sev.c          | 2 --
+ 3 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/platform/x86/asus-nb-wmi.c b/drivers/platform/x86/asus-nb-wmi.c
-index cb15acdf1..e2c9a68d1 100644
---- a/drivers/platform/x86/asus-nb-wmi.c
-+++ b/drivers/platform/x86/asus-nb-wmi.c
-@@ -464,7 +464,8 @@ static const struct dmi_system_id asus_quirks[] = {
- 		.ident = "ASUS ROG FLOW X13",
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
--			DMI_MATCH(DMI_PRODUCT_NAME, "GV301Q"),
-+			/* Match GV301** */
-+			DMI_MATCH(DMI_PRODUCT_NAME, "GV301"),
- 		},
- 		.driver_data = &quirk_asus_tablet_mode,
- 	},
+diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
+index 321a5011042d..bcc956c17872 100644
+--- a/arch/x86/boot/compressed/ident_map_64.c
++++ b/arch/x86/boot/compressed/ident_map_64.c
+@@ -8,14 +8,6 @@
+  * Copyright (C)      2016  Kees Cook
+  */
+ 
+-/*
+- * Since we're dealing with identity mappings, physical and virtual
+- * addresses are the same, so override these defines which are ultimately
+- * used by the headers in misc.h.
+- */
+-#define __pa(x)  ((unsigned long)(x))
+-#define __va(x)  ((void *)((unsigned long)(x)))
+-
+ /* No PAGE_TABLE_ISOLATION support needed either: */
+ #undef CONFIG_PAGE_TABLE_ISOLATION
+ 
+diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+index 20118fb7c53b..2f155a0e3041 100644
+--- a/arch/x86/boot/compressed/misc.h
++++ b/arch/x86/boot/compressed/misc.h
+@@ -19,6 +19,15 @@
+ /* cpu_feature_enabled() cannot be used this early */
+ #define USE_EARLY_PGTABLE_L5
+ 
++/*
++ * Boot stub deals with identity mappings, physical and virtual addresses are
++ * the same, so override these defines.
++ *
++ * <asm/page.h> will not define them if they are already defined.
++ */
++#define __pa(x)  ((unsigned long)(x))
++#define __va(x)  ((void *)((unsigned long)(x)))
++
+ #include <linux/linkage.h>
+ #include <linux/screen_info.h>
+ #include <linux/elf.h>
+diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+index d63ad8f99f83..014b89c89088 100644
+--- a/arch/x86/boot/compressed/sev.c
++++ b/arch/x86/boot/compressed/sev.c
+@@ -104,9 +104,7 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
+ }
+ 
+ #undef __init
+-#undef __pa
+ #define __init
+-#define __pa(x)	((unsigned long)(x))
+ 
+ #define __BOOT_COMPRESSED
+ 
 -- 
-2.40.0
+2.39.2
 
