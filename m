@@ -2,217 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592CA6D00B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7B86D00B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjC3KKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S231159AbjC3KKe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 06:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjC3KKF (ORCPT
+        with ESMTP id S231191AbjC3KKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:10:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8DA7D93;
-        Thu, 30 Mar 2023 03:09:41 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 10:09:39 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680170979;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MzwYpHAlGFh2jcUeq4SdySXMk9iHC9iZ6y9++anDNoE=;
-        b=KM222hMi3A2IIcnhPjYwrQpr8XiHlwxM/zurbhYUwW3asTzbulzgIHuHPDtj2VLhsnus3k
-        tLmNJSxRCvVHTIpi1vWgvclkgS7X98iCa3YBKYeIPcwBu7w/W8UxwC7+iiH5cmlp3WMwH6
-        /xAnuieEaidnmu/VepjY+wKB3u5b9Oi07ePEJxY2nBjZ6JTEB4PKuGc50DRd2M9DFGFxDN
-        ljtPn2GGM29/nXGVKnBY2XL+JUVYzoB8FZqW2tKeUNKGqPrZTHK+Kkpe0FmmHhkatF8OXf
-        zjHdaY9xmVkG+lcbKFsorwFSV3d42qozjzg5IFZFfz9fjVRLpXY8oUlTeweDGg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680170979;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MzwYpHAlGFh2jcUeq4SdySXMk9iHC9iZ6y9++anDNoE=;
-        b=+bZu9CFZt+G66lzntjHFTd0Mcgmf5VI71aMmmY/JKMq00J0FLiaHi1LdhwmfToTEjgcLkV
-        btofhqMghNsItUCg==
-From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cc] x86/coco: Export cc_vendor
-Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230318115634.9392-2-bp@alien8.de>
-References: <20230318115634.9392-2-bp@alien8.de>
+        Thu, 30 Mar 2023 06:10:31 -0400
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74A676A4;
+        Thu, 30 Mar 2023 03:10:30 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id h8so74334222ede.8;
+        Thu, 30 Mar 2023 03:10:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680171029;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BDdNsyWqne+9Tfes3d7A/XkvFVpCBqtgOlpWLUY3XzQ=;
+        b=vl9NL5ZBWVYy6JbiXXan2N9yPA6GThbkaeA3cTA+OwUdXONBHhxVMDqu/DqDdluySf
+         hFOob5pyvZ8PlwoArs5BoPInDSjRMWWdVGVueHRDqnByhhG3pJyqg5zo1YEXEBdLRF78
+         pj8dA5AlWnGVC9ZdmECzxw2IOHiObXnCNEZxQFoHsVbHDOppxaSHgKFlpo8s1Lc0mKX5
+         rM8Ky6Xrm0R2oOORTQTuYKW/stjESxWEaqn6VEvsIYlJ1LU0x5Hvbs5avYnWOFknuf7g
+         MUl9BRTdFeG40gctNHp0Xs8KjMwpyFvficxSKxbgxn1A/jtSmUhhixqeVMgZ/JVqFSZQ
+         +qfA==
+X-Gm-Message-State: AAQBX9dHD68IDZ7Q1QlzLIoxsLvYTwMwOA3WqoAust9AHTP6QaqZXgAH
+        ID3SV46eGwhiDqcfDKACPvWg2lT3sJPMVIeB7E+jVsXD
+X-Google-Smtp-Source: AKy350Y4AcRU/Tt3JhFD3HUel3NqUJEPN/iuQgQP/6Bl3WvR0fmUP0+4R8mGIxxYk11mAyi1toRAAOBQXDL1+LLfczk=
+X-Received: by 2002:a17:907:3e8b:b0:931:ce20:db6e with SMTP id
+ hs11-20020a1709073e8b00b00931ce20db6emr12652089ejc.2.1680171029187; Thu, 30
+ Mar 2023 03:10:29 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <168017097924.404.15209284037516830804.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CAJZ5v0iWkJw3KP7sfyDOyYsEkdOxxPhkYiYZMvd78geofGEECQ@mail.gmail.com>
+ <20230329133600.908723-1-yajun.deng@linux.dev> <b0e52380c54775073d44bc97f823ec4f@linux.dev>
+ <20230330035715.hckcbf4xpsi5cwhz@vireshk-i7>
+In-Reply-To: <20230330035715.hckcbf4xpsi5cwhz@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Mar 2023 12:10:18 +0200
+Message-ID: <CAJZ5v0inRZgWEYUGaxObn-ZKdN8GUzBVq9xUBgsELWpRUCujuw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Fix policy->freq_table is NULL in __cpufreq_driver_target()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Yajun Deng <yajun.deng@linux.dev>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cc branch of tip:
+On Thu, Mar 30, 2023 at 5:57 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 30-03-23, 01:39, Yajun Deng wrote:
+> > March 29, 2023 10:21 PM, "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> >
+> > > On Wed, Mar 29, 2023 at 3:36 PM Yajun Deng <yajun.deng@linux.dev> wrote:
+> > >
+> > >> __resolve_freq() may be return target_freq if policy->freq_table is
+> > >> NULL. In this case, it should return -EINVAL before __target_index().
+> > >
+> > > Even so, __target_index() itself doesn't dereference freq_table
+> > > AFAICS, so arguably the driver should be prepared to deal with a NULL
+> > > freq_table which comes from it after all.
+> > >
+> >
+> > But there is a statement 'unsigned int newfreq = policy->freq_table[index].frequency;'
+> > in __target_index(), if driver doesn't provide freq_table, __target_index()
+> > will fault before the driver itself.
+>
+> Driver must provide a freq table here.
 
-Commit-ID:     52e490dcb9e47e8dcf9d915214c6b9d79580d03e
-Gitweb:        https://git.kernel.org/tip/52e490dcb9e47e8dcf9d915214c6b9d79580d03e
-Author:        Borislav Petkov (AMD) <bp@alien8.de>
-AuthorDate:    Sat, 18 Mar 2023 12:56:33 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 30 Mar 2023 11:59:58 +02:00
-
-x86/coco: Export cc_vendor
-
-It will be used in different checks in future changes. Export it
-directly and drop the setter as it is a __ro_after_init variable anyway.
-
-No functional changes.
-
-[ tglx: Add accessor function ]
-
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20230318115634.9392-2-bp@alien8.de
-
----
- arch/x86/coco/core.c               | 13 ++++---------
- arch/x86/coco/tdx/tdx.c            |  2 +-
- arch/x86/include/asm/coco.h        | 16 +++++++++++++---
- arch/x86/kernel/cpu/mshyperv.c     |  2 +-
- arch/x86/mm/mem_encrypt_identity.c |  2 +-
- 5 files changed, 20 insertions(+), 15 deletions(-)
-
-diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-index 49b44f8..684f0a9 100644
---- a/arch/x86/coco/core.c
-+++ b/arch/x86/coco/core.c
-@@ -13,7 +13,7 @@
- #include <asm/coco.h>
- #include <asm/processor.h>
- 
--static enum cc_vendor vendor __ro_after_init;
-+enum cc_vendor cc_vendor __ro_after_init;
- static u64 cc_mask __ro_after_init;
- 
- static bool intel_cc_platform_has(enum cc_attr attr)
-@@ -83,7 +83,7 @@ static bool hyperv_cc_platform_has(enum cc_attr attr)
- 
- bool cc_platform_has(enum cc_attr attr)
- {
--	switch (vendor) {
-+	switch (cc_vendor) {
- 	case CC_VENDOR_AMD:
- 		return amd_cc_platform_has(attr);
- 	case CC_VENDOR_INTEL:
-@@ -105,7 +105,7 @@ u64 cc_mkenc(u64 val)
- 	 * - for AMD, bit *set* means the page is encrypted
- 	 * - for Intel *clear* means encrypted.
- 	 */
--	switch (vendor) {
-+	switch (cc_vendor) {
- 	case CC_VENDOR_AMD:
- 		return val | cc_mask;
- 	case CC_VENDOR_INTEL:
-@@ -118,7 +118,7 @@ u64 cc_mkenc(u64 val)
- u64 cc_mkdec(u64 val)
- {
- 	/* See comment in cc_mkenc() */
--	switch (vendor) {
-+	switch (cc_vendor) {
- 	case CC_VENDOR_AMD:
- 		return val & ~cc_mask;
- 	case CC_VENDOR_INTEL:
-@@ -129,11 +129,6 @@ u64 cc_mkdec(u64 val)
- }
- EXPORT_SYMBOL_GPL(cc_mkdec);
- 
--__init void cc_set_vendor(enum cc_vendor v)
--{
--	vendor = v;
--}
--
- __init void cc_set_mask(u64 mask)
- {
- 	cc_mask = mask;
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 055300e..bab29cb 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -852,7 +852,7 @@ void __init tdx_early_init(void)
- 
- 	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
- 
--	cc_set_vendor(CC_VENDOR_INTEL);
-+	cc_vendor = CC_VENDOR_INTEL;
- 	tdx_parse_tdinfo(&cc_mask);
- 	cc_set_mask(cc_mask);
- 
-diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
-index 3d98c3a..35d7aa9 100644
---- a/arch/x86/include/asm/coco.h
-+++ b/arch/x86/include/asm/coco.h
-@@ -11,13 +11,23 @@ enum cc_vendor {
- 	CC_VENDOR_INTEL,
- };
- 
--void cc_set_vendor(enum cc_vendor v);
--void cc_set_mask(u64 mask);
--
- #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
-+extern enum cc_vendor cc_vendor;
-+
-+static inline enum cc_vendor cc_get_vendor(void)
-+{
-+	return cc_vendor;
-+}
-+
-+void cc_set_mask(u64 mask);
- u64 cc_mkenc(u64 val);
- u64 cc_mkdec(u64 val);
- #else
-+static inline enum cc_vendor cc_get_vendor(void)
-+{
-+	return CC_VENDOR_NONE;
-+}
-+
- static inline u64 cc_mkenc(u64 val)
- {
- 	return val;
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index f36dc2f..9f3fad3 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -412,7 +412,7 @@ static void __init ms_hyperv_init_platform(void)
- 		/* Isolation VMs are unenlightened SEV-based VMs, thus this check: */
- 		if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
- 			if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE)
--				cc_set_vendor(CC_VENDOR_HYPERV);
-+				cc_vendor = CC_VENDOR_HYPERV;
- 		}
- 	}
- 
-diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-index c6efcf5..bfe22fd 100644
---- a/arch/x86/mm/mem_encrypt_identity.c
-+++ b/arch/x86/mm/mem_encrypt_identity.c
-@@ -612,7 +612,7 @@ void __init sme_enable(struct boot_params *bp)
- out:
- 	if (sme_me_mask) {
- 		physical_mask &= ~sme_me_mask;
--		cc_set_vendor(CC_VENDOR_AMD);
-+		cc_vendor = CC_VENDOR_AMD;
- 		cc_set_mask(sme_me_mask);
- 	}
- }
+OK, so let's do the check when the driver gets registered.
