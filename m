@@ -2,248 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D946CFD44
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFD66CFD47
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjC3Hs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
+        id S229743AbjC3HtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjC3Hsy (ORCPT
+        with ESMTP id S229702AbjC3Hs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:48:54 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B5E5272
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:48:51 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id c83-20020a6bb356000000b00758333e1ddfso11106202iof.14
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:48:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680162530; x=1682754530;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vUsfODEsDzAR9EqvWlT1PM9QUz8OEaJY4GXMYUHR7zc=;
-        b=SK/INVLCR2/00NjXbp1/yqy7lN6nuFpXM2oNNPBb1ey4afdb238tHhqrkcxm28qXK6
-         GXK0lvtvQETS0hD8a2n7BjApDGALpT2fXIfD+88ssBMVdr7ZSuroBd53w8OcpPnf7BeY
-         lObXZl6OCwduNXt0fTbgsW8jW5HxGvCNWa9kGYdZNhvGG8+6HPgNnjAR1QyhytLAALlL
-         JOy9b5DfmwrsLfPv/VS9laSDOUydLL1gu+FqqE/0QZGcxzwYU0SJx9c8p734ldeKjGac
-         ByX9EfnuLROwRl4n/9dc3IGC5Qa+lD5bEEzIPI7EwJMD3ZQ5EAPzbXnXBwZOuEHjRvzi
-         2zXg==
-X-Gm-Message-State: AAQBX9dmi3ptzjM0BiyIRN8w17RJx5c4eIKt5CVpIeCwr0zJHMcqXr+A
-        Ulzcgd9CkHkPYSq8uWIyeA409T+/15AfgXu7FVDAFs5Y+ADR
-X-Google-Smtp-Source: AKy350b1Dj3CFZk+cHqn2IXzGI1Q97FSUeDDxWzStstwOIrJ/00+mw1jNVvvr/SqmR0xIVy/smQidgiwb8RQwJ8M6/dled2AlGdy
+        Thu, 30 Mar 2023 03:48:57 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F14E649FE
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:48:53 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:47488.1049430421
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 46AFD1002C5;
+        Thu, 30 Mar 2023 15:48:52 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-bkw2h with ESMTP id ce4be36be1844530b4e60d98cbcf0274 for tzimmermann@suse.de;
+        Thu, 30 Mar 2023 15:48:53 CST
+X-Transaction-ID: ce4be36be1844530b4e60d98cbcf0274
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <63f981ca-8ceb-2cc3-4b33-0cfa65699a85@189.cn>
+Date:   Thu, 30 Mar 2023 15:48:51 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20c8:b0:326:2db8:e61e with SMTP id
- 8-20020a056e0220c800b003262db8e61emr2351346ilq.5.1680162530653; Thu, 30 Mar
- 2023 00:48:50 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 00:48:50 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cdfab505f819529a@google.com>
-Subject: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in get_max_inline_xattr_value_size
-From:   syzbot <syzbot+1966db24521e5f6e23f7@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
+ clause
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     David Airlie <airlied@linux.ie>, liyi <liyi@loongson.cn>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230325074636.136833-1-15330273260@189.cn>
+ <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
+ <20230330041726.w7boceq7ljymvfq2@ldmartin-desk2>
+ <f42d8ab8-c765-2517-7d25-6ce1dea320e8@suse.de>
+ <2e6ec82f-dfde-0f3a-7980-136cea161d6b@189.cn>
+ <4e2a2222-59c2-2935-08a7-4a661d5073b2@suse.de>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <4e2a2222-59c2-2935-08a7-4a661d5073b2@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+On 2023/3/30 15:26, Thomas Zimmermann wrote:
+> Hi
+>
+> Am 30.03.23 um 09:17 schrieb Sui Jingfeng:
+>> Hi,
+>>
+>> On 2023/3/30 14:57, Thomas Zimmermann wrote:
+>>> Hi
+>>>
+>>> Am 30.03.23 um 06:17 schrieb Lucas De Marchi:
+>>>> On Wed, Mar 29, 2023 at 11:04:17AM +0200, Thomas Zimmermann wrote:
+>>>>> (cc'ing Lucas)
+>>>>>
+>>>>> Hi
+>>>>>
+>>>>> Am 25.03.23 um 08:46 schrieb Sui Jingfeng:
+>>>>>>  The assignment already done in drm_client_buffer_vmap(),
+>>>>>>  just trival clean, no functional change.
+>>>>>>
+>>>>>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+>>>>>> ---
+>>>>>>  drivers/gpu/drm/drm_fbdev_generic.c | 5 ++---
+>>>>>>  1 file changed, 2 insertions(+), 3 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
+>>>>>> b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> index 4d6325e91565..1da48e71c7f1 100644
+>>>>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> @@ -282,7 +282,7 @@ static int drm_fbdev_damage_blit(struct 
+>>>>>> drm_fb_helper *fb_helper,
+>>>>>>                   struct drm_clip_rect *clip)
+>>>>>>  {
+>>>>>>      struct drm_client_buffer *buffer = fb_helper->buffer;
+>>>>>> -    struct iosys_map map, dst;
+>>>>>> +    struct iosys_map map;
+>>>>>>      int ret;
+>>>>>>      /*
+>>>>>> @@ -302,8 +302,7 @@ static int drm_fbdev_damage_blit(struct 
+>>>>>> drm_fb_helper *fb_helper,
+>>>>>>      if (ret)
+>>>>>>          goto out;
+>>>>>> -    dst = map;
+>>>>>> -    drm_fbdev_damage_blit_real(fb_helper, clip, &dst);
+>>>>>> +    drm_fbdev_damage_blit_real(fb_helper, clip, &map);
+>>>>>
+>>>>> I see what you're doing and it's probably correct in this case.
+>>>>>
+>>>>> But there's a larger issue with this iosys interfaces. Sometimes 
+>>>>> the address has to be modified (see calls of iosys_map_incr()). 
+>>>>> That can prevent incorrect uses of the mapping in other places, 
+>>>>> especially in unmap code.
+>>>>
+>>>> using a initializer for the cases it's needed IMO would make these 
+>>>> kind
+>>>> of problems go away, because then the intent is explicit
+>>>>
+>>>>>
+>>>>> I think it would make sense to consider a separate structure for 
+>>>>> the I/O location. The buffer as a whole would still be represented 
+>>>>> by struct iosys_map.  And that new structure, let's call it struct 
+>>>>> iosys_ptr, would point to an actual location within the buffer's
+>>>>
+>>>> sounds fine to me, but I'd have to take a deeper look later (or when
+>>>> someone writes the patch).  It seems we'd replicate almost the entire
+>>>> API to just accomodate the 2 structs.  And the different types will 
+>>>> lead
+>>>> to confusion when one or the other should be used
+>>>
+>>> I think we can split the current interface onto two categories: 
+>>> mapping and I/O. The former would use iosys_map and the latter would 
+>>> use iosys_ptr. And we'd need a helper that turns gets a ptr for a 
+>>> given map.
+>>>
+>>> If I find the tine, I'll probably type up a patch.
+>>>
+>>   Here i fix a typo, 'tine' -> 'time'
+>>
+>> As far as i can see, they are two major type of memory in the system.
+>>
+>> System memory or VRAM,  for the gpu with dedicate video ram, VRAM is 
+>> belong to the IO memory category.
+>>
+>> But there are system choose carveout part of system ram as video 
+>> ram(i915?,  for example).
+>>
+>> the name iosys_map and iosys_ptr have no difference at the first 
+>> sight, tell me which one is for mapping system ram
+>>
+>> and which one is for mapping vram?
+>
+> As you say correctly, graphics buffers and be in various locations. 
+> They can even move between I/O and system memory. The idea behind 
+> iosys_map ("I/O and/or system mapping") is that it's a single 
+> interface that can handle both.
+>
+I somewhat miss the point, sound like const pointer(const void* const p) 
+V.S. plain pointer (void *)
 
-HEAD commit:    da8e7da11e4b Merge tag 'nfsd-6.3-4' of git://git.kernel.or..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=114fae51c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
-dashboard link: https://syzkaller.appspot.com/bug?extid=1966db24521e5f6e23f7
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1597fd0ec80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14149471c80000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/62e9c5f4bead/disk-da8e7da1.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c11aa933e2a7/vmlinux-da8e7da1.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7a21bdd49c84/bzImage-da8e7da1.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/58216d4aadcf/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1966db24521e5f6e23f7@syzkaller.appspotmail.com
-
-EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: none.
-EXT4-fs error (device loop0): ext4_xattr_ibody_get:669: inode #18: comm syz-executor366: corrupted in-inode xattr: bad magic number in in-inode xattr
-==================================================================
-BUG: KASAN: slab-use-after-free in get_max_inline_xattr_value_size+0x369/0x510 fs/ext4/inline.c:62
-Read of size 4 at addr ffff88807c4ac084 by task syz-executor366/5076
-
-CPU: 0 PID: 5076 Comm: syz-executor366 Not tainted 6.3.0-rc3-syzkaller-00338-gda8e7da11e4b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:319 [inline]
- print_report+0x163/0x540 mm/kasan/report.c:430
- kasan_report+0x176/0x1b0 mm/kasan/report.c:536
- get_max_inline_xattr_value_size+0x369/0x510 fs/ext4/inline.c:62
- ext4_get_max_inline_size+0x141/0x200 fs/ext4/inline.c:113
- ext4_prepare_inline_data+0x87/0x1d0 fs/ext4/inline.c:393
- ext4_da_write_inline_data_begin+0x208/0xe40 fs/ext4/inline.c:931
- ext4_da_write_begin+0x4da/0x960 fs/ext4/inode.c:3064
- generic_perform_write+0x300/0x5e0 mm/filemap.c:3926
- ext4_buffered_write_iter+0x122/0x3a0 fs/ext4/file.c:289
- ext4_file_write_iter+0x1d6/0x1930
- call_write_iter include/linux/fs.h:1851 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7b2/0xbb0 fs/read_write.c:584
- ksys_write+0x1a0/0x2c0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f63c54aea99
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff3f17f0c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f63c54aea99
-RDX: 0000000000000010 RSI: 0000000020000100 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 00007fff3f17f0f0 R09: 00007fff3f17f0f0
-R10: 00007fff3f17f0f0 R11: 0000000000000246 R12: 00007f63c546d960
-R13: 00007fff3f17f120 R14: 00007fff3f17f100 R15: 0000000000000000
- </TASK>
-
-Allocated by task 4998:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
- __kasan_slab_alloc+0x66/0x70 mm/kasan/common.c:328
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:769
- slab_alloc_node mm/slub.c:3452 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc+0x11f/0x2e0 mm/slub.c:3476
- anon_vma_chain_alloc mm/rmap.c:141 [inline]
- anon_vma_fork+0x1fa/0x580 mm/rmap.c:364
- dup_mmap kernel/fork.c:660 [inline]
- dup_mm kernel/fork.c:1545 [inline]
- copy_mm+0xae3/0x1670 kernel/fork.c:1594
- copy_process+0x1905/0x3fc0 kernel/fork.c:2264
- kernel_clone+0x222/0x800 kernel/fork.c:2679
- __do_sys_clone kernel/fork.c:2820 [inline]
- __se_sys_clone kernel/fork.c:2804 [inline]
- __x64_sys_clone+0x235/0x280 kernel/fork.c:2804
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 5013:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
- kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:521
- ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
- kasan_slab_free include/linux/kasan.h:162 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook mm/slub.c:1807 [inline]
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0x297/0x520 mm/slub.c:3809
- anon_vma_chain_free mm/rmap.c:146 [inline]
- unlink_anon_vmas+0x59e/0x5f0 mm/rmap.c:447
- free_pgtables+0x348/0x4f0 mm/memory.c:383
- exit_mmap+0x2c1/0x850 mm/mmap.c:3040
- __mmput+0x115/0x3c0 kernel/fork.c:1204
- exit_mm+0x227/0x310 kernel/exit.c:563
- do_exit+0x612/0x2290 kernel/exit.c:856
- do_group_exit+0x206/0x2c0 kernel/exit.c:1019
- __do_sys_exit_group kernel/exit.c:1030 [inline]
- __se_sys_exit_group kernel/exit.c:1028 [inline]
- __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1028
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff88807c4ac070
- which belongs to the cache anon_vma_chain of size 80
-The buggy address is located 20 bytes inside of
- freed 80-byte region [ffff88807c4ac070, ffff88807c4ac0c0)
-
-The buggy address belongs to the physical page:
-page:ffffea0001f12b00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7c4ac
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff888140007280 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000240024 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12800(GFP_NOWAIT|__GFP_NOWARN|__GFP_NORETRY), pid 4998, tgid 4998 (dhcpcd-run-hook), ts 47082738820, free_ts 47079213294
- prep_new_page mm/page_alloc.c:2553 [inline]
- get_page_from_freelist+0x3246/0x33c0 mm/page_alloc.c:4326
- __alloc_pages+0x255/0x670 mm/page_alloc.c:5592
- alloc_slab_page+0x6a/0x160 mm/slub.c:1851
- allocate_slab mm/slub.c:1998 [inline]
- new_slab+0x84/0x2f0 mm/slub.c:2051
- ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
- __slab_alloc mm/slub.c:3292 [inline]
- __slab_alloc_node mm/slub.c:3345 [inline]
- slab_alloc_node mm/slub.c:3442 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc+0x1b9/0x2e0 mm/slub.c:3476
- anon_vma_chain_alloc mm/rmap.c:141 [inline]
- anon_vma_clone+0x98/0x4d0 mm/rmap.c:288
- anon_vma_fork+0x87/0x580 mm/rmap.c:351
- dup_mmap kernel/fork.c:660 [inline]
- dup_mm kernel/fork.c:1545 [inline]
- copy_mm+0xae3/0x1670 kernel/fork.c:1594
- copy_process+0x1905/0x3fc0 kernel/fork.c:2264
- kernel_clone+0x222/0x800 kernel/fork.c:2679
- __do_sys_clone kernel/fork.c:2820 [inline]
- __se_sys_clone kernel/fork.c:2804 [inline]
- __x64_sys_clone+0x235/0x280 kernel/fork.c:2804
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1454 [inline]
- free_pcp_prepare mm/page_alloc.c:1504 [inline]
- free_unref_page_prepare+0xe2f/0xe70 mm/page_alloc.c:3388
- free_unref_page_list+0x596/0x830 mm/page_alloc.c:3529
- release_pages+0x219e/0x2470 mm/swap.c:1042
- tlb_batch_pages_flush mm/mmu_gather.c:97 [inline]
- tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
- tlb_flush_mmu+0x100/0x210 mm/mmu_gather.c:299
- tlb_finish_mmu+0xd4/0x1f0 mm/mmu_gather.c:391
- exit_mmap+0x2c9/0x850 mm/mmap.c:3042
- __mmput+0x115/0x3c0 kernel/fork.c:1204
- exit_mm+0x227/0x310 kernel/exit.c:563
- do_exit+0x612/0x2290 kernel/exit.c:856
- do_group_exit+0x206/0x2c0 kernel/exit.c:1019
- __do_sys_exit_group kernel/exit.c:1030 [inline]
- __se_sys_exit_group kernel/exit.c:1028 [inline]
- __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1028
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff88807c4abf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff88807c4ac000: fa fb fb fb fb fb fb fb fb fb fc fc fc fc fa fb
->ffff88807c4ac080: fb fb fb fb fb fb fb fb fc fc fc fc fa fb fb fb
-                   ^
- ffff88807c4ac100: fb fb fb fb fb fb fc fc fc fc fa fb fb fb fb fb
- ffff88807c4ac180: fb fb fb fb fc fc fc fc fa fb fb fb fb fb fb fb
-==================================================================
+I understand what you meant then.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> Best regards
+> Thomas
+>
+>>
+>>
+>>> Best regards
+>>> Thomas
+>>>
+>>>>
+>>>> thanks
+>>>> Lucas De Marchi
+>>>>
+>>>>> memory range. A few locations and helpers would need changes, but 
+>>>>> there are not so many callers that it's an issue.  This would also 
+>>>>> allow for a few debugging tests that ensure that iosys_ptr always 
+>>>>> operates within the bounds of an iosys_map.
+>>>>>
+>>>>> I've long considered this idea, but there was no pressure to work 
+>>>>> on it. Maybe now.
+>>>>>
+>>>>> Best regards
+>>>>> Thomas
+>>>>>
+>>>>>> drm_client_buffer_vunmap(buffer);
+>>>>>
+>>>>> -- 
+>>>>> Thomas Zimmermann
+>>>>> Graphics Driver Developer
+>>>>> SUSE Software Solutions Germany GmbH
+>>>>> Maxfeldstr. 5, 90409 Nürnberg, Germany
+>>>>> (HRB 36809, AG Nürnberg)
+>>>>> Geschäftsführer: Ivo Totev
+>>>>
+>>>>
+>>>>
+>>>
+>
