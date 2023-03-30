@@ -2,160 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C60E6D0615
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594786D061B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbjC3NMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
+        id S231925AbjC3NM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbjC3NMR (ORCPT
+        with ESMTP id S231901AbjC3NMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:12:17 -0400
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAC7AD30;
-        Thu, 30 Mar 2023 06:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Wf6MWb07ZNdojZiHGLU/UEUqS29HIvuV7xIdWH9ogCM=; b=TyTxXCYdiREo+cP3lUaBxvkN/8
-        tpK0TZMeXm/mhBjX0BvMy4tGzxhUeDjbqb7p2Iem87a7jkD59ToSTmpzLWUejh76EByNHNQxqYQJ2
-        Zsb0X+mEA5F40k5C8A48x+Yf6cuAkdpSo9smM3tzOF651z9ab/DvQM5ujQtHYHnXbe/M09vKKBjcP
-        fT8nr3Ed/YxP/GVZomhy8GGyScU5GEgnxkOpSOlCZyVUnT5iNaUpiKMBui7v6fos/wY1JBtqVzao3
-        DqBsWt50eO6OlYFMUG5/XFC3K5Q+Hk85+DJFHb/90y17XvD/WeBT3Q3YywCEuKPuPDZqhpT/k/Ff+
-        7is0QGcA==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1phs4F-000xOs-GC; Thu, 30 Mar 2023 16:11:51 +0300
-Message-ID: <a43eab2c-c634-0b36-57eb-fe657bb17004@kapsi.fi>
-Date:   Thu, 30 Mar 2023 16:11:50 +0300
+        Thu, 30 Mar 2023 09:12:23 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9F5AF15;
+        Thu, 30 Mar 2023 06:12:21 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-17aaa51a911so19645590fac.5;
+        Thu, 30 Mar 2023 06:12:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680181941;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sPQzQo8Jh5OaRP5hyosVWpCjhmgG+NE4MN/r3d8MCe4=;
+        b=Jyl5jQZ/WvPfTud9rDDg79M5pokrwCt/dzs2xU9TCCpX8TEEcZ9XYfkvHeYMqMkzkq
+         kxCh3lOANP8ilpJrRxk+r72Jsif4QgCq6j4DAUDU2GsAuwVEvW8TEopIjykbYuOgdzjO
+         PeWlVPHzILtGax4zQ4YG/MGT+LEd0TPdQtExJ3cFq9wHe25tPbErYTwSNSdTOIli3d3k
+         LfYQaor4mIcoSnV80326a3THKT9uf0OYMvso7YuecY7bXQJWZktNSHLeYOOqbX5r0F7X
+         gx37SCwrHu7KBf6YIFekq2BB+rA8yVbdpU76oPeqVtIpVB706TXADejwU8l/rM1ke3uQ
+         Mryg==
+X-Gm-Message-State: AAQBX9csP7JdBho63t7UP6VKLivjlzXoF9tqL4Fwx1IjCAPNi5PQOhhA
+        uZ2pmpMNkyq91WuGKMyg5Q==
+X-Google-Smtp-Source: AKy350YUGGhtzUhEfK9PPjVabQRIBlX6I3fqhjDdLsqM7UDzSDLbtMgV0AyCoAw0ZgMDft/Cr/REcg==
+X-Received: by 2002:a05:6870:f14b:b0:17f:f665:bc07 with SMTP id l11-20020a056870f14b00b0017ff665bc07mr2710863oac.52.1680181941040;
+        Thu, 30 Mar 2023 06:12:21 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id zq35-20020a0568718ea300b0017f647294f5sm3280997oab.16.2023.03.30.06.12.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 06:12:20 -0700 (PDT)
+Received: (nullmailer pid 1854642 invoked by uid 1000);
+        Thu, 30 Mar 2023 13:12:19 -0000
+Date:   Thu, 30 Mar 2023 08:12:19 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jacky Huang <ychuang570808@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v6 07/12] dt-bindings: serial: Document ma35d1 uart
+ controller
+Message-ID: <20230330131219.GA1849090-robh@kernel.org>
+References: <20230328021912.177301-1-ychuang570808@gmail.com>
+ <20230328021912.177301-8-ychuang570808@gmail.com>
+ <be0bf335-39fc-2eac-ed37-112881bac675@linaro.org>
+ <7b5e42bc-0788-5208-e97e-10502da1c238@gmail.com>
+ <4c1fa450-79c9-2c66-4bb8-b880f2cf07a5@linaro.org>
+ <8bf559ec-0f5f-7ac5-6400-ccd2395b3b95@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] thermal: tegra-bpmp: Handle offline zones
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230330094904.2589428-1-cyndis@kapsi.fi>
- <a09d8edf-9db1-0037-15a4-7ce329b82bf2@linaro.org>
- <204e0435-c544-8727-e892-9fc69b8d691d@kapsi.fi>
- <ff48b15c-f8ce-b971-c840-81458715d82b@linaro.org>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <ff48b15c-f8ce-b971-c840-81458715d82b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <8bf559ec-0f5f-7ac5-6400-ccd2395b3b95@gmail.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 15:36, Daniel Lezcano wrote:
-> On 30/03/2023 12:06, Mikko Perttunen wrote:
->> On 3/30/23 13:03, Daniel Lezcano wrote:
->>> On 30/03/2023 11:49, Mikko Perttunen wrote:
->>>> From: Mikko Perttunen <mperttunen@nvidia.com>
->>>>
->>>> Thermal zones located in power domains may not be accessible when
->>>> the domain is powergated. In this situation, reading the temperature
->>>> will return -BPMP_EFAULT. When evaluating trips, BPMP will internally
->>>> use -256C as the temperature for offline zones.
->>>
->>>> For smooth operation, for offline zones, return -EAGAIN when reading
->>>> the temperature and allow registration of zones even if they are
->>>> offline during probe.
->>>
->>> I think it makes more sense to check if the power domain associated 
->>> with the device is powered up and if not return -EPROBE_DEFER.
->>
->> The power domains in question are related to computer vision engines 
->> that only get powered on when in use, possibly never if the user 
->> doesn't run a computer vision workload on the system. We still want 
->> other thermal zones to be available.
+On Thu, Mar 30, 2023 at 06:52:11PM +0800, Jacky Huang wrote:
 > 
-> Ok, I see the point.
 > 
-> I'm worried about the semantic of the errors returned, the translation 
-> from BPMP_EFAULT to EAGAIN and the assumption it is a disabled (may be 
-> forever) thermal zone.
+> On 2023/3/30 下午 03:33, Krzysztof Kozlowski wrote:
+> > On 29/03/2023 10:44, Jacky Huang wrote:
+> > > Dear Krzysztof,
+> > > 
+> > > 
+> > > Thanks for your review.
+> > > 
+> > > 
+> > > On 2023/3/29 下午 04:20, Krzysztof Kozlowski wrote:
+> > > > On 28/03/2023 04:19, Jacky Huang wrote:
+> > > > > From: Jacky Huang <ychuang3@nuvoton.com>
+> > > > > 
+> > > > > Add documentation to describe nuvoton ma35d1 uart driver bindings.
+> > > > > 
+> > > > This depends on clock patches, so it must be taken together.
+> > > > 
+> > > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > 
+> > > > Best regards,
+> > > > Krzysztof
+> > > > 
+> > > OK, I will combine this patch with the clock patch.
+> > I don't know what you mean by "combine", but I don't think this is what
+> > we want. You must clearly state all dependencies and patch merging
+> > strategy/way.
+> > 
+> > Best regards,
+> > Krzysztof
+> > 
 > 
-> What does the documentation say for the error msg.rx.ret == -BPMP_EFAULT?
+> Dear Krzysztof,
 > 
-
-The documentation says
-
-Value          | Description
--------------- | -----------------------------------------
-0              | Temperature query succeeded.
--#BPMP_EINVAL  | Invalid request parameters.
--#BPMP_ENOENT  | No driver registered for thermal zone.
--#BPMP_EFAULT  | Problem reading temperature measurement.
-
-In practice, what BPMP_EFAULT means here is that the hardware has no 
-indicated temperature for the zone, which really only happens if the 
-power domain is powered off.
-
-Mikko
-
 > 
->>>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
->>>> ---
->>>> v2:
->>>> * Adjusted commit message.
->>>> * Patch 2/2 dropped for now since it is more controversial,
->>>>    and this patch is more critical.
->>>>
->>>>   drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
->>>>   1 file changed, 8 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c 
->>>> b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>>> index f5fd4018f72f..4ffc3bb3bf35 100644
->>>> --- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>>> +++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->>>> @@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct 
->>>> tegra_bpmp_thermal_zone *zone,
->>>>       err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
->>>>       if (err)
->>>>           return err;
->>>> +    if (msg.rx.ret == -BPMP_EFAULT)
->>>> +        return -EAGAIN;
->>>>       if (msg.rx.ret)
->>>>           return -EINVAL;
->>>> @@ -259,7 +261,12 @@ static int tegra_bpmp_thermal_probe(struct 
->>>> platform_device *pdev)
->>>>           zone->tegra = tegra;
->>>>           err = __tegra_bpmp_thermal_get_temp(zone, &temp);
->>>> -        if (err < 0) {
->>>> +
->>>> +        /*
->>>> +         * Sensors in powergated domains may temporarily fail to be 
->>>> read
->>>> +         * (-EAGAIN), but will become accessible when the domain is 
->>>> powered on.
->>>> +         */
->>>> +        if (err < 0 && err != -EAGAIN) {
->>>>               devm_kfree(&pdev->dev, zone);
->>>>               continue;
->>>>           }
->>>
->>
-> 
+> I may be misunderstanding your request.
+> I thought it was moving the "nuvoton,ma35d1-serial.yaml" to the patch of
+> nuvoton,ma35d1-clk.h.
+> Would you please provide guidance what should I do next on this [PATCH v6
+> 07/12]. Thank you.
 
+The only combining you should do is putting the 2 patches in the same 
+series. Combining to 1 patch would be wrong.
+
+Your other option is just drop the header in the example and use the 
+raw numbers. Then there is no dependency to manage and each subsystem 
+maintainer can take the relevant patches.
+
+Rob
