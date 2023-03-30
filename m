@@ -2,166 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD8A6CFF68
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A71376CFF6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjC3JBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35078 "EHLO
+        id S229869AbjC3JCh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 05:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjC3JBV (ORCPT
+        with ESMTP id S229491AbjC3JCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:01:21 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A5B46EAD
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:01:19 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:38472.1681716573
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id B4C161002CF;
-        Thu, 30 Mar 2023 17:01:17 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id f5b9e183632f48f099a5785df2746d73 for tzimmermann@suse.de;
-        Thu, 30 Mar 2023 17:01:18 CST
-X-Transaction-ID: f5b9e183632f48f099a5785df2746d73
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <740bb1d9-fca2-9171-b548-0422c9e94112@189.cn>
-Date:   Thu, 30 Mar 2023 17:01:17 +0800
+        Thu, 30 Mar 2023 05:02:35 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51372717;
+        Thu, 30 Mar 2023 02:02:33 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-536af432ee5so343191357b3.0;
+        Thu, 30 Mar 2023 02:02:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680166953;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YqG2Z6d0Pb8iORwk+e3Ro79KtXr2omWNescegmF+Vgw=;
+        b=bpwrZNIOp165hWwL3+FCbghUFU358553YFUquIAKZ9AaV6sQDGDDhXPyg/TPOpeUUJ
+         04P89k2MXfVCm3+lowyRNpNoNLggxEcP2OhAHGcoFi2DcUsuD8Q5kfcqhaORZUHxibU4
+         NIdKnZdSoolhNuIdDfraLLOTtSxR+mN4TAjeSmzTYTjlNo1aAaoBcR54zv2cxJOS9nzG
+         dyYMrWZVUaLLSb9G9kaYOOiZHgWN47wqnuYoOrXxXKOQSbUkak0Ck+lAai4yi467WPKg
+         IJV9txCfUZ7RHSuSpmk/w3BprvK1IV10OjsNaFbG0xdsZ965s/29J06cgeMWVhi2Hrwi
+         Bq+Q==
+X-Gm-Message-State: AAQBX9ezbwZZQqSdG7JzwVtIwn0hJ9lNS+cKwz8aDak9BnpRRIDsrzYl
+        9pAWELRQ9TduZefguPtG7Ql6DqdMTgrLcw==
+X-Google-Smtp-Source: AKy350aff33rXZwWHf0szL4sARp1j7U9xYXErkrMEc3O4TZfMxBUW2La7aVfSGNjyEmDESdz5Lk7dA==
+X-Received: by 2002:a0d:d7c4:0:b0:545:b05f:6722 with SMTP id z187-20020a0dd7c4000000b00545b05f6722mr20490288ywd.10.1680166952840;
+        Thu, 30 Mar 2023 02:02:32 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id cp33-20020a05690c0e2100b00545a08184c6sm3440426ywb.86.2023.03.30.02.02.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 02:02:32 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-5419d4c340aso342023437b3.11;
+        Thu, 30 Mar 2023 02:02:32 -0700 (PDT)
+X-Received: by 2002:a81:7e10:0:b0:52f:184a:da09 with SMTP id
+ o16-20020a817e10000000b0052f184ada09mr2923082ywn.2.1680166952237; Thu, 30 Mar
+ 2023 02:02:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
- clause
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     suijingfeng <suijingfeng@loongson.cn>,
-        David Airlie <airlied@linux.ie>, liyi <liyi@loongson.cn>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230325074636.136833-1-15330273260@189.cn>
- <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
- <20230330041726.w7boceq7ljymvfq2@ldmartin-desk2>
- <f42d8ab8-c765-2517-7d25-6ce1dea320e8@suse.de>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <f42d8ab8-c765-2517-7d25-6ce1dea320e8@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230122121129.28699-1-krzysztof.kozlowski@linaro.org>
+ <CAMuHMdXdZbJDTOzQG4=pRpR1OCU0=RTDZDH0MnPW8Ea2LJKs6A@mail.gmail.com> <082ab65b-09d3-e899-ef46-7fe04446109f@kernel.org>
+In-Reply-To: <082ab65b-09d3-e899-ef46-7fe04446109f@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 30 Mar 2023 11:02:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUf=X2eGpa9P0OF34b8yA8vrx_nFqW+P+Odu5S7P1xeng@mail.gmail.com>
+Message-ID: <CAMuHMdUf=X2eGpa9P0OF34b8yA8vrx_nFqW+P+Odu5S7P1xeng@mail.gmail.com>
+Subject: Re: [GIT PULL] memory: drivers for v6.3
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org, linux-kernel@vger.kernel.org,
+        JaimeLiao <jaimeliao.tw@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
-On 2023/3/30 14:57, Thomas Zimmermann wrote:
-> Hi
->
-> Am 30.03.23 um 06:17 schrieb Lucas De Marchi:
->> On Wed, Mar 29, 2023 at 11:04:17AM +0200, Thomas Zimmermann wrote:
->>> (cc'ing Lucas)
->>>
->>> Hi
->>>
->>> Am 25.03.23 um 08:46 schrieb Sui Jingfeng:
->>>>  The assignment already done in drm_client_buffer_vmap(),
->>>>  just trival clean, no functional change.
->>>>
->>>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->>>> ---
->>>>  drivers/gpu/drm/drm_fbdev_generic.c | 5 ++---
->>>>  1 file changed, 2 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
->>>> b/drivers/gpu/drm/drm_fbdev_generic.c
->>>> index 4d6325e91565..1da48e71c7f1 100644
->>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
->>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
->>>> @@ -282,7 +282,7 @@ static int drm_fbdev_damage_blit(struct 
->>>> drm_fb_helper *fb_helper,
->>>>                   struct drm_clip_rect *clip)
->>>>  {
->>>>      struct drm_client_buffer *buffer = fb_helper->buffer;
->>>> -    struct iosys_map map, dst;
->>>> +    struct iosys_map map;
->>>>      int ret;
->>>>      /*
->>>> @@ -302,8 +302,7 @@ static int drm_fbdev_damage_blit(struct 
->>>> drm_fb_helper *fb_helper,
->>>>      if (ret)
->>>>          goto out;
->>>> -    dst = map;
->>>> -    drm_fbdev_damage_blit_real(fb_helper, clip, &dst);
->>>> +    drm_fbdev_damage_blit_real(fb_helper, clip, &map);
->>>
->>> I see what you're doing and it's probably correct in this case.
->>>
->>> But there's a larger issue with this iosys interfaces. Sometimes the 
->>> address has to be modified (see calls of iosys_map_incr()). That can 
->>> prevent incorrect uses of the mapping in other places, especially in 
->>> unmap code.
->>
->> using a initializer for the cases it's needed IMO would make these kind
->> of problems go away, because then the intent is explicit
->>
->>>
->>> I think it would make sense to consider a separate structure for the 
->>> I/O location. The buffer as a whole would still be represented by 
->>> struct iosys_map.  And that new structure, let's call it struct 
->>> iosys_ptr, would point to an actual location within the buffer's
->>
->> sounds fine to me, but I'd have to take a deeper look later (or when
->> someone writes the patch).  It seems we'd replicate almost the entire
->> API to just accomodate the 2 structs.  And the different types will lead
->> to confusion when one or the other should be used
->
-> I think we can split the current interface onto two categories: 
-> mapping and I/O. The former would use iosys_map and the latter would 
-> use iosys_ptr. And we'd need a helper that turns gets a ptr for a 
-> given map.
->
-> If I find the tine, I'll probably type up a patch.
->
-Then merge this trivial patch first?
+On Mon, Jan 23, 2023 at 11:47 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> BTW, you might want to add separate Renesas RPC IF maintainer entry or
+> include it also in Renesas SoC. Otherwise you don't get CC on it.
 
-It will not prohibit anyone achieve a big goal or releasing a better 
-patch in the future.
+FYI, that should be taken care of for all DT-based drivers for Renesas
+on-SoC peripherals by
+https://lore.kernel.org/linux-renesas-soc/c1be1e97c5457eade25b0eb5118196677cecfc08.1679039809.git.geert+renesas@glider.be/
 
+Gr{oetje,eeting}s,
 
-> Best regards
-> Thomas
->
->>
->> thanks
->> Lucas De Marchi
->>
->>> memory range. A few locations and helpers would need changes, but 
->>> there are not so many callers that it's an issue.  This would also 
->>> allow for a few debugging tests that ensure that iosys_ptr always 
->>> operates within the bounds of an iosys_map.
->>>
->>> I've long considered this idea, but there was no pressure to work on 
->>> it. Maybe now.
->>>
->>> Best regards
->>> Thomas
->>>
->>>>      drm_client_buffer_vunmap(buffer);
->>>
->>> -- 
->>> Thomas Zimmermann
->>> Graphics Driver Developer
->>> SUSE Software Solutions Germany GmbH
->>> Maxfeldstr. 5, 90409 Nürnberg, Germany
->>> (HRB 36809, AG Nürnberg)
->>> Geschäftsführer: Ivo Totev
->>
->>
->>
->
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
