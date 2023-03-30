@@ -2,123 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE7A6D00BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0777A6D00BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjC3KKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
+        id S229923AbjC3KLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbjC3KKq (ORCPT
+        with ESMTP id S229833AbjC3KLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:10:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518E27DB2;
-        Thu, 30 Mar 2023 03:10:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8298B8258A;
-        Thu, 30 Mar 2023 10:10:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FD83C433D2;
-        Thu, 30 Mar 2023 10:10:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680171040;
-        bh=NXNwGsAYLBsQY9dA06ZnOE2S68dF14Wy6ldja64Ce0w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P8RuF43lX0HN67shTTXKZj0DzpruL+7nrAV5z1JxfN3TdehDEFeD/FFubfbzgAIMN
-         0CSG41hSJrtylhO0ylPmwChpwgZ/bYgPtIHg5JTzOeNmFzXug2qVqCMymMi7HVYQfn
-         WNwi6X1b07GeWa8wW3ckdJTxMB1CHYJPwXnt412g1H+I9k/pQlUz2uriJ7Sva+3/d5
-         /H1R1B3jxtHGoTksEpxFbnvMartPgwkxXuy/pLE0yih+nDS4o+0kGPnd+nlg7KoWia
-         w+ch6UaCfYtjygcofaFXx5BH0bAwdOiWcwbk3rc4SOeiHicb7OUPJCij8pp54JseeV
-         EdjwFWJsIES+w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1phpFC-0005NY-Gj; Thu, 30 Mar 2023 12:10:58 +0200
-Date:   Thu, 30 Mar 2023 12:10:58 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>,
-        Tim Jiang <quic_tjiang@quicinc.com>
-Subject: Re: [PATCH v8 2/4] Bluetooth: hci_qca: Add support for QTI Bluetooth
- chip wcn6855
-Message-ID: <ZCVgMuSdyMQhf/Ko@hovoldconsulting.com>
-References: <20230326233812.28058-1-steev@kali.org>
- <20230326233812.28058-3-steev@kali.org>
+        Thu, 30 Mar 2023 06:11:48 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F5F72A7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:11:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680171100; x=1711707100;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zbyNdV3eS+2sRqiPAQF1m42MYj6uTOjRyqXgBgtLQW0=;
+  b=jcvdfmLoVF3goEjJuGM8V4eCvELAWwhZrmw1eiSlCNlDNE/3uhww03Zk
+   b7zAWkC+g6pVOgeN7dGgn0l9TRPqr2IhKPrHBt4lPRlfXiIoYoWDrp1kL
+   0B1LfWwBUFQurtXWU4SQ83fhkhCvYHjdfxLp75iQqpYtJvVG3bB22AtsI
+   mmI6zRuy64Eih7c9aeqdNqi7K3qHHrfyFaT8r+j8GXrtD/XvXnP8XAOIH
+   4gX+8Cw1VNfBKOz7v7bEL+fWH5rcrGFV+v+yIlSH9GG18a11k5mtzLoRl
+   wagmglycRCJq7Qoc6/9xnFE9yIKQHw5l3FTFoVmlTQ9auL92nfDiC7ZzL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="339851659"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="339851659"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:11:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="714933818"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="714933818"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2023 03:11:38 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1phpFp-00ANwr-2Z;
+        Thu, 30 Mar 2023 13:11:37 +0300
+Date:   Thu, 30 Mar 2023 13:11:37 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bumwoo Lee <bw365.lee@samsung.com>, linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Subject: Re: [PATCH v1 00/14] extcon: Core cleanups and documentation fixes
+Message-ID: <ZCVgWX2t1fpGzZX9@smile.fi.intel.com>
+References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230326233812.28058-3-steev@kali.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 06:38:10PM -0500, Steev Klimaszewski wrote:
-> Add regulators, GPIOs and changes required to power on/off wcn6855.
-> Add support for firmware download for wcn6855 which is in the
-> linux-firmware repository as hpbtfw21.tlv and hpnv21.bin.
-> 
-> Based on the assumption that this is similar to the wcn6750
-> 
-> Tested-on: BTFW.HSP.2.1.0-00538-VER_PATCHZ-1
-> 
-> Signed-off-by: Steev Klimaszewski <steev@kali.org>
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-> Tested-by: Bjorn Andersson <andersson@kernel.org>
-> ---
-> Changes since v7:
->  * None
+On Wed, Mar 22, 2023 at 04:39:51PM +0200, Andy Shevchenko wrote:
+> A few fixes to the documentation and some cleanups against extcon core
+> module.
 
-Only noticed now when Luiz applied the patches, but why did you drop my
-reviewed-by and tested-by tags from this patch when submitting v8?
+Anything I should do with the series?
+Any comments on it?
 
-For the record:
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-Tested-by: Johan Hovold <johan+linaro@kernel.org>
- 
-> Changes since v6:
->  * Update commit message.
->  * Add Johan's R-b and T-b.
-> 
-> Changes since v5:
->  * Revert Set qcadev->initspeed since 6855 doesn't use it, don't touch.
->  * Convert get_fw_build_info to a switch statement
->  * Add poweroff handling
->  * Fix up line alignments
->  * Drop from microsoft extensions check since I don't actually know if we need
-> 
-> Changes since v4:
->  * Remove unused firmware check because we don't have mbn firmware.
->  * Set qcadev->init_speed if it hasn't been set.
-> 
-> Changes since v3:
->  * drop unused regulators
-> 
-> Changes since v2:
->  * drop unnecessary commit info
-> 
-> Changes since v1:
->  * None
 
-Johan
