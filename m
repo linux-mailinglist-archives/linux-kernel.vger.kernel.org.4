@@ -2,164 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B5D6D0C67
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94CE6D0C6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjC3RMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 13:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S231686AbjC3RNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjC3RMh (ORCPT
+        with ESMTP id S231458AbjC3RNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:12:37 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B76198C
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:12:36 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id j3-20020a17090a94c300b0024018f0656cso6140434pjw.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680196356;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ioBafc1jE3EEeqzwTNbBrZD3ovHkrs99FyUrXRF156A=;
-        b=msUO/9ThOjN8i56o4SeCuRAALYD7WOOSf1zpA1W56mqG3L+Cv5Oe+aSZKS4T2cDVwT
-         WJ+hwOZsYzOyKZhsv/GlCN0CRLRLHttB+BlxyPfewSSg8S78rBu3X66dvebHIL20ddAU
-         /D4exBXpre0+9enUknX1jwg9hNYxKigzHXBi00PeqBnV/ljoTM9O0SN9Z1/t+s4JQ/CI
-         E1DTIl+6/YviouTNy6L4GdVtH/DnU9TW9yndfEHEHm94to/sQYps+mgRZzvbtpvi44J9
-         kvSZqzcA05kR7fA9ql6k6SCqgVYXOQOKDJSdDE0/zu15gYHLCbO4zrFY7ljdYVzQh9+o
-         iXxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680196356;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ioBafc1jE3EEeqzwTNbBrZD3ovHkrs99FyUrXRF156A=;
-        b=vKS943+W2/faZ1BTNb4yUHKoMMwONBvAkkvqmPLv0PkuA5f+sItlPBH6gbpV5VVffb
-         POcR28mF0ia9fE2p+7RPIMI3GCYAOhtdcmTvr8vATJINix+OMNCw5M9WCMJ9p5nV6KZr
-         SM/KHWuSkJvxAkar1Jl5ialVWuYLsp8bPM0dPOCichy/o6S0U1OJN2tsj6FtO+tMr+NW
-         YYxGog6jxxAaIUGC1fZzBMtZeo52F7goyPtztAoVmEgquF8Gcxn/R1hUrto+q2JVwGfr
-         BpTlxn/4uVnO4BbLDwT9VQ7+6l674u0RV2mt+n5NziMnjYvYtSHTQJuE77zPc+8BiNcv
-         iijQ==
-X-Gm-Message-State: AAQBX9dTzbgVWAoFwdS6qte6WEfY9An2TdwvlAsXvSKBjmm2QrLGWVgE
-        fHyles30D6duDJwB0Umkk8QH5mO5L7M=
-X-Google-Smtp-Source: AKy350aMF5gEqFkS2yOuUw/kCM+VW9fHPk4cRIMrJsEobbypPXnitBkck2f9Ebysy8Gp2Z0Aqj6tLn6duPA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:9285:0:b0:626:1710:9b7d with SMTP id
- j5-20020aa79285000000b0062617109b7dmr2998427pfa.0.1680196356061; Thu, 30 Mar
- 2023 10:12:36 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 10:12:34 -0700
-In-Reply-To: <677169b4-051f-fcae-756b-9a3e1bb9f8fe@grsecurity.net>
-Mime-Version: 1.0
-References: <20230322013731.102955-1-minipli@grsecurity.net>
- <20230322013731.102955-7-minipli@grsecurity.net> <677169b4-051f-fcae-756b-9a3e1bb9f8fe@grsecurity.net>
-Message-ID: <ZCXDAiUOnsL3fRBj@google.com>
-Subject: Re: [PATCH v4 6/6] KVM: VMX: Make CR0.WP a guest owned bit
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mathias Krause <minipli@grsecurity.net>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 30 Mar 2023 13:13:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B85F0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:13:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5488FB8299A
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:13:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18153C433D2;
+        Thu, 30 Mar 2023 17:13:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680196415;
+        bh=wWSgR9AkZHCwKY4Gi/gf7WqROztpZ2hEKHfJXx6b3u8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R1ecYRM69Itk/EfYQffdZypCZbzSQEZ+rC6oOQdjFq6/esbz4pEOTkugAMIycwKPw
+         78OSDz7/q81PcC+TGoVl3qlUEySTYdam+4dYhVrKgoV4c5b0axjSE+Wa7Y1UgUl0i2
+         6p2W+hF58mawYX/Q+hf0CfezP31VnczduCqA1u/bKgz//qkiqPTUnbJXJpshPrDxJO
+         XEV5gxLd4mZBOap2mpAthe9JSavAZbmWYLXLl4YT5K2WJySIE8pQUVvNuSZ4i/B9Oa
+         6skHv/ISPGA8V6UcfM3GiDm3wBz/R5rtyI6PEI+rsWhSuiy4Mds0heKPGr2afkIBev
+         WxSjfbqEe+f2w==
+Date:   Thu, 30 Mar 2023 18:13:30 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH] mfd: intel-lpss: Add Intel Meteor Lake PCH-S LPSS PCI IDs
+Message-ID: <20230330171330.GD548901@google.com>
+References: <20230330132618.4108665-1-jarkko.nikula@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230330132618.4108665-1-jarkko.nikula@linux.intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023, Mathias Krause wrote:
-> On 22.03.23 02:37, Mathias Krause wrote:
-> > Guests like grsecurity that make heavy use of CR0.WP to implement kernel
-> > level W^X will suffer from the implied VMEXITs.
-> > 
-> > With EPT there is no need to intercept a guest change of CR0.WP, so
-> > simply make it a guest owned bit if we can do so.
-> > 
-> > This implies that a read of a guest's CR0.WP bit might need a VMREAD.
-> > However, the only potentially affected user seems to be kvm_init_mmu()
-> > which is a heavy operation to begin with. But also most callers already
-> > cache the full value of CR0 anyway, so no additional VMREAD is needed.
-> > The only exception is nested_vmx_load_cr3().
-> > 
-> > This change is VMX-specific, as SVM has no such fine grained control
-> > register intercept control.
-> 
-> Just a heads up! We did more tests, especially with the backports we did
-> internally already, and ran into a bug when running a nested guest on an
-> ESXi host.
-> 
-> Setup is like: ESXi (L0) -> Linux (L1) -> Linux (L2)
-> 
-> The Linux system, especially the kernel, is the same for L1 and L2. It's
-> a grsecurity kernel, so makes use of toggling CR0.WP at runtime.
-> 
-> The bug we see is that when L2 disables CR0.WP and tries to write to an
-> r/o memory region (implicitly to the r/o GDT via LTR in our use case),
-> this triggers a fault (EPT violation?) that gets ignored by L1, as,
-> apparently, everything is fine from its point of view.
+On Thu, 30 Mar 2023, Jarkko Nikula wrote:
 
-It's not an EPT violation if there's a triple fault.  Given that you're dumping
-the VMCS from handle_triple_fault(), I assume that L2 gets an unexpected #PF that
-leads to a triple fault in L2.
+> Add Intel Meteor Lake PCH-S also called as Meteor Point-S LPSS PCI IDs.
+>
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> ---
+>  drivers/mfd/intel-lpss-pci.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 
-Just to make sure we're on the same page: L1 is still alive after this, correct?
+Applied, thanks
 
-> I suspect the L0 VMM to be at fault here, as the VMCS structures look
-> good, IMO. Here is a dump of vmx->loaded_vmcs in handle_triple_fault():
-
-...
-
-> The "host" (which is our L1 VMM, I guess) has CR0.WP enabled and that is
-> what I think confuses ESXi to enforce the read-only property to the L2
-> guest as well -- for unknown reasons so far.
-
-...
-
-> I tried to reproduce the bug with different KVM based L0 VMMs (with and
-> without this series; vanilla and grsecurity kernels) but no luck. That's
-> why I'm suspecting a ESXi bug.
-   
-...
-
-> I'm leaning to make CR0.WP guest owned only iff we're running on bare
-> metal or the VMM is KVM to not play whack-a-mole for all the VMMs that
-> might have similar bugs. (Will try to test a few others here as well.)
-> However, that would prevent them from getting the performance gain, so
-> I'd rather have this fixed / worked around in KVM instead.
-
-Before we start putting bandaids on this, let's (a) confirm this appears to be
-an issue with ESXi and (b) pull in VMware folks to get their input.
-
-> Any ideas how to investigate this further?
-
-Does the host in question support UMIP?
-
-Can you capture a tracepoint log from L1 to verify that L1 KVM is _not_ injecting
-any kind of exception?  E.g. to get the KVM kitchen sink:
-
-  echo 1 > /sys/kernel/debug/tracing/tracing_on
-  echo 1 > /sys/kernel/debug/tracing/events/kvm/enable
-
-  cat /sys/kernel/debug/tracing/trace > log
-
-Or if that's too noisy, a more targeted trace (exception injection + emulation)
-woud be:
-
-  echo 1 > /sys/kernel/debug/tracing/tracing_on
-
-  echo 1 > /sys/kernel/debug/tracing/events/kvm/kvm_emulate_insn/enable
-  echo 1 > /sys/kernel/debug/tracing/events/kvm/kvm_inj_exception/enable
-  echo 1 > /sys/kernel/debug/tracing/events/kvm/kvm_entry/enable
-  echo 1 > /sys/kernel/debug/tracing/events/kvm/kvm_exit/enable
-
-> PS: ...should have left the chicken bit of v3 to be able to disable the
-> feature by a module parameter ;)
-
-A chicken bit isn't a good solution for this sort of thing.  Toggling a KVM module
-param requires (a) knowing that it exists and (b) knowing the conditions under which
-it is/isn't safe to toggle the bit.
-
-E.g. if this ends up being an ESXi L0 bug, then an option might be to add something
-in vmware_platform_setup() to communicate the bug to KVM so that KVM can precisely
-disable the optimization on affected platforms.
+--
+Lee Jones [李琼斯]
