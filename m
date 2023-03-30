@@ -2,121 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BD46D0983
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A436D6D0963
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233066AbjC3P1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
+        id S232917AbjC3PWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233083AbjC3P0p (ORCPT
+        with ESMTP id S232806AbjC3PWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:26:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A539E2111
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:25:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680189855;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PzFkckvDWfLP+fS3N43jVyaoo/K7ZKGXS7ytUztG/V8=;
-        b=WG+JKm5NmxilncyIAQkr3hfUnWTfahBzUZHYidreujuONYWBDix+eikpBvDo94P48ewkfZ
-        0nk0+HNRB1ku401i3tfZHMBZAJbE2vB2Z3VlGRQSj1ODufgfpJuAaml3dEArO5N/j775gy
-        fRjHM+BS6hQvqVIlqzdFKk1ucX9+7+w=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-37-3OLKAg20PtKFMUwYxsKlSQ-1; Thu, 30 Mar 2023 11:21:02 -0400
-X-MC-Unique: 3OLKAg20PtKFMUwYxsKlSQ-1
-Received: by mail-qv1-f71.google.com with SMTP id l18-20020ad44bd2000000b005a9cf5f609eso8376071qvw.15
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:21:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680189662;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PzFkckvDWfLP+fS3N43jVyaoo/K7ZKGXS7ytUztG/V8=;
-        b=eqzoRYgzwmHE8JJy1HaThl5SDwE3FsKW09iqlxp5wbZriI3PTJIA6Jwntm+ymu+aHy
-         xkglewFHj/JKysviQOgu15ym9E5ulmbeXLhs2QzhxhaQaIQasZwBBd/wxwqi1bT1rdKR
-         xVK6d8naOCJs8ueRQE5sFzOL/fB/iuq/v+W5bOhhEH3MtK5uRUJmVnH8lEnmEkoTXnVZ
-         4jCR94D8GvFAJuzgYwyOWKL1TZVLREH2exBJ7Ju+GmFzuAhdfu0dPJr88+xkU+eHyJqz
-         +d4t3S1MYKI45Aq2djjx7u1mZjOamlshac4P+S8j4WIs+5HW3PtwUaCr70ywbl2eTSv0
-         Sphg==
-X-Gm-Message-State: AAQBX9cdZthRrZcSpQwJEvAltRa8F5S1c1Sn796TwSYAHlwZUnVDtW8x
-        YBG5HI2XBH9frOLH1ExwWITNLEBGFEB9kAwkT0tU5zCwqSw7eq0LPI/SkAciQK8etScih4ieL88
-        OxKSwfaLCCFeiHlbhmWda6o4c
-X-Received: by 2002:a05:6214:1243:b0:56e:b1c8:381b with SMTP id r3-20020a056214124300b0056eb1c8381bmr43628858qvv.31.1680189662021;
-        Thu, 30 Mar 2023 08:21:02 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bnlSDboIbJVBw8O6nujKKyr0Y08gCZuIWQYE9jVjpUWoFJ1aWyINmV1swnxyoxwYXTAvU/Jw==
-X-Received: by 2002:a05:6214:1243:b0:56e:b1c8:381b with SMTP id r3-20020a056214124300b0056eb1c8381bmr43628820qvv.31.1680189661785;
-        Thu, 30 Mar 2023 08:21:01 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id d17-20020a0cc691000000b005dd8b9345absm2264239qvj.67.2023.03.30.08.20.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:21:00 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     Felix.Kuehling@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amdkfd: remove unused sq_int_priv variable
-Date:   Thu, 30 Mar 2023 11:20:40 -0400
-Message-Id: <20230330152040.1838353-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 30 Mar 2023 11:22:42 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289BFCDF6;
+        Thu, 30 Mar 2023 08:21:46 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1phu5F-0006cb-3D;
+        Thu, 30 Mar 2023 17:21:02 +0200
+Date:   Thu, 30 Mar 2023 16:20:57 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        =?utf-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: [PATCH net-next 04/15] net: dsa: mt7530: use regmap to access switch
+ register space
+Message-ID: <1763ab54a479458c4bb84342f32d4a2e379f1d26.1680180959.git.daniel@makrotopia.org>
+References: <cover.1680180959.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1680180959.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_int_process_v11.c:282:38: error: variable
-  'sq_int_priv' set but not used [-Werror,-Wunused-but-set-variable]
-        uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
-                                            ^
-This variable is not used so remove it.
+Use regmap API to access the switch register space.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/net/dsa/mt7530.c | 91 +++++++++++++++++++++++++---------------
+ drivers/net/dsa/mt7530.h |  2 +
+ 2 files changed, 60 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c b/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
-index 0d53f6067422..bbd646c0dee7 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
-@@ -279,7 +279,7 @@ static void event_interrupt_wq_v11(struct kfd_dev *dev,
- {
- 	uint16_t source_id, client_id, ring_id, pasid, vmid;
- 	uint32_t context_id0, context_id1;
--	uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
-+	uint8_t sq_int_enc, sq_int_errtype;
- 	struct kfd_vm_fault_info info = {0};
- 	struct kfd_hsa_memory_exception_data exception_data;
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index d8b041d79f2b7..e27a0e551cec0 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -183,9 +183,9 @@ core_clear(struct mt7530_priv *priv, u32 reg, u32 val)
+ }
  
-@@ -348,13 +348,6 @@ static void event_interrupt_wq_v11(struct kfd_dev *dev,
- 				break;
- 			case SQ_INTERRUPT_WORD_ENCODING_INST:
- 				print_sq_intr_info_inst(context_id0, context_id1);
--				sq_int_priv = REG_GET_FIELD(context_id0,
--						SQ_INTERRUPT_WORD_WAVE_CTXID0, PRIV);
--				/*if (sq_int_priv && (kfd_set_dbg_ev_from_interrupt(dev, pasid,
--						KFD_CTXID0_DOORBELL_ID(context_id0),
--						KFD_CTXID0_TRAP_CODE(context_id0),
--						NULL, 0)))
--					return;*/
- 				break;
- 			case SQ_INTERRUPT_WORD_ENCODING_ERROR:
- 				print_sq_intr_info_error(context_id0, context_id1);
+ static int
+-mt7530_mii_write(struct mt7530_priv *priv, u32 reg, u32 val)
++mt7530_regmap_write(void *context, unsigned int reg, unsigned int val)
+ {
+-	struct mii_bus *bus = priv->bus;
++	struct mii_bus *bus = context;
+ 	u16 page, r, lo, hi;
+ 	int ret;
+ 
+@@ -197,24 +197,34 @@ mt7530_mii_write(struct mt7530_priv *priv, u32 reg, u32 val)
+ 	/* MT7530 uses 31 as the pseudo port */
+ 	ret = bus->write(bus, 0x1f, 0x1f, page);
+ 	if (ret < 0)
+-		goto err;
++		return ret;
+ 
+ 	ret = bus->write(bus, 0x1f, r,  lo);
+ 	if (ret < 0)
+-		goto err;
++		return ret;
+ 
+ 	ret = bus->write(bus, 0x1f, 0x10, hi);
+-err:
++	return ret;
++}
++
++static int
++mt7530_mii_write(struct mt7530_priv *priv, u32 reg, u32 val)
++{
++	int ret;
++
++	ret = regmap_write(priv->regmap, reg, val);
++
+ 	if (ret < 0)
+-		dev_err(&bus->dev,
++		dev_err(priv->dev,
+ 			"failed to write mt7530 register\n");
++
+ 	return ret;
+ }
+ 
+-static u32
+-mt7530_mii_read(struct mt7530_priv *priv, u32 reg)
++static int
++mt7530_regmap_read(void *context, unsigned int reg, unsigned int *val)
+ {
+-	struct mii_bus *bus = priv->bus;
++	struct mii_bus *bus = context;
+ 	u16 page, r, lo, hi;
+ 	int ret;
+ 
+@@ -223,17 +233,32 @@ mt7530_mii_read(struct mt7530_priv *priv, u32 reg)
+ 
+ 	/* MT7530 uses 31 as the pseudo port */
+ 	ret = bus->write(bus, 0x1f, 0x1f, page);
+-	if (ret < 0) {
++	if (ret < 0)
++		return ret;
++
++	lo = bus->read(bus, 0x1f, r);
++	hi = bus->read(bus, 0x1f, 0x10);
++
++	*val = (hi << 16) | (lo & 0xffff);
++
++	return 0;
++}
++
++static u32
++mt7530_mii_read(struct mt7530_priv *priv, u32 reg)
++{
++	int ret;
++	u32 val;
++
++	ret = regmap_read(priv->regmap, reg, &val);
++	if (ret) {
+ 		WARN_ON_ONCE(1);
+-		dev_err(&bus->dev,
++		dev_err(priv->dev,
+ 			"failed to read mt7530 register\n");
+ 		return 0;
+ 	}
+ 
+-	lo = bus->read(bus, 0x1f, r);
+-	hi = bus->read(bus, 0x1f, 0x10);
+-
+-	return (hi << 16) | (lo & 0xffff);
++	return val;
+ }
+ 
+ static void
+@@ -2896,22 +2921,6 @@ static const struct phylink_pcs_ops mt7530_pcs_ops = {
+ 	.pcs_an_restart = mt7530_pcs_an_restart,
+ };
+ 
+-static int mt7530_regmap_read(void *context, unsigned int reg, unsigned int *val)
+-{
+-	struct mt7530_priv *priv = context;
+-
+-	*val = mt7530_mii_read(priv, reg);
+-	return 0;
+-};
+-
+-static int mt7530_regmap_write(void *context, unsigned int reg, unsigned int val)
+-{
+-	struct mt7530_priv *priv = context;
+-
+-	mt7530_mii_write(priv, reg, val);
+-	return 0;
+-};
+-
+ static void
+ mt7530_mdio_regmap_lock(void *mdio_lock)
+ {
+@@ -2924,7 +2933,7 @@ mt7530_mdio_regmap_unlock(void *mdio_lock)
+ 	mutex_unlock(mdio_lock);
+ }
+ 
+-static const struct regmap_bus mt7531_regmap_bus = {
++static const struct regmap_bus mt7530_regmap_bus = {
+ 	.reg_write = mt7530_regmap_write,
+ 	.reg_read = mt7530_regmap_read,
+ };
+@@ -2957,7 +2966,7 @@ mt7531_create_sgmii(struct mt7530_priv *priv)
+ 		mt7531_pcs_config[i]->lock_arg = &priv->bus->mdio_lock;
+ 
+ 		regmap = devm_regmap_init(priv->dev,
+-					  &mt7531_regmap_bus, priv,
++					  &mt7530_regmap_bus, priv->bus,
+ 					  mt7531_pcs_config[i]);
+ 		if (IS_ERR(regmap)) {
+ 			ret = PTR_ERR(regmap);
+@@ -3128,6 +3137,7 @@ MODULE_DEVICE_TABLE(of, mt7530_of_match);
+ static int
+ mt7530_probe(struct mdio_device *mdiodev)
+ {
++	static struct regmap_config *regmap_config;
+ 	struct mt7530_priv *priv;
+ 	struct device_node *dn;
+ 
+@@ -3207,6 +3217,21 @@ mt7530_probe(struct mdio_device *mdiodev)
+ 	mutex_init(&priv->reg_mutex);
+ 	dev_set_drvdata(&mdiodev->dev, priv);
+ 
++	regmap_config = devm_kzalloc(&mdiodev->dev, sizeof(*regmap_config),
++				     GFP_KERNEL);
++	if (!regmap_config)
++		return -ENOMEM;
++
++	regmap_config->reg_bits = 16;
++	regmap_config->val_bits = 32;
++	regmap_config->reg_stride = 4;
++	regmap_config->max_register = MT7530_CREV;
++	regmap_config->disable_locking = true;
++	priv->regmap = devm_regmap_init(priv->dev, &mt7530_regmap_bus,
++					priv->bus, regmap_config);
++	if (IS_ERR(priv->regmap))
++		return PTR_ERR(priv->regmap);
++
+ 	return dsa_register_switch(priv->ds);
+ }
+ 
+diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
+index c5d29f3fc1d80..39aaca50961bd 100644
+--- a/drivers/net/dsa/mt7530.h
++++ b/drivers/net/dsa/mt7530.h
+@@ -754,6 +754,7 @@ struct mt753x_info {
+  * @dev:		The device pointer
+  * @ds:			The pointer to the dsa core structure
+  * @bus:		The bus used for the device and built-in PHY
++ * @regmap:		The regmap instance representing all switch registers
+  * @rstc:		The pointer to reset control used by MCM
+  * @core_pwr:		The power supplied into the core
+  * @io_pwr:		The power supplied into the I/O
+@@ -774,6 +775,7 @@ struct mt7530_priv {
+ 	struct device		*dev;
+ 	struct dsa_switch	*ds;
+ 	struct mii_bus		*bus;
++	struct regmap		*regmap;
+ 	struct reset_control	*rstc;
+ 	struct regulator	*core_pwr;
+ 	struct regulator	*io_pwr;
 -- 
-2.27.0
+2.39.2
 
