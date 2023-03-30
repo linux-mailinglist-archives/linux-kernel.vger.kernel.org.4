@@ -2,129 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F2E6D018D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD866D0205
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjC3Knz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
+        id S231449AbjC3KrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbjC3Knn (ORCPT
+        with ESMTP id S230033AbjC3Kpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:43:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 214699762
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:43:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 185102F4;
-        Thu, 30 Mar 2023 03:44:21 -0700 (PDT)
-Received: from [10.57.54.254] (unknown [10.57.54.254])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 419A43F663;
-        Thu, 30 Mar 2023 03:43:35 -0700 (PDT)
-Message-ID: <068c45ae-dd60-7ab6-ee08-64f95a85f510@arm.com>
-Date:   Thu, 30 Mar 2023 11:43:29 +0100
+        Thu, 30 Mar 2023 06:45:54 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421C08A6F
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:45:17 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id b20so74693453edd.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:45:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112; t=1680173115;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nJ4kHmOyB5GJCNT97r/CEXr1tfWeNmV/zja7PhdakrM=;
+        b=lGerEYp3RodGDGGbu9v46KqIKVUtY8TeLHCWxCyKo+lIj9VCOEqmYXb5Luv5Icdw83
+         /Q3ohcVMs8/k4KEjqUfKTm0pm1obz2hYyDJZEGwY4xvSV70Uh8/o0fRR62eoC40mv/Bv
+         UEBYsZ9wt18DBWpVrq6PHs0ItsJPyhMLJmMVYdRNaFyf6g5o43qmVx2ExIW9JPB5NAcT
+         SXRLeONaXaaxnx6NDDtdppC3NfBaEjMNaKyBR43dlSVVCegyF8RxQYNMsOAzUTzA2au6
+         2XuJdBK+c0uj4WiQDcWKQjhPoR9V9sl3rqUkq8GEkpgIesqP2468KV0nJR3pSnsRbAgW
+         ihWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680173115;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nJ4kHmOyB5GJCNT97r/CEXr1tfWeNmV/zja7PhdakrM=;
+        b=pMMmto/M+rDNJb81m8yITrra3823R2tL3ZixBbo9xUaf94pU/kedcE7saYf2dwtQry
+         jhmgmDjz/WuA1H0+kg4T8z3akb4ZbhU6Rx+CgO1ypD8utdlbBKjiZrLk4D+ewhHrvnMa
+         hxNupQmsGtP+XK5r3BiLDD7ugX2JJZaPSYOSe+VDTxQySXYb243fhQGv8uEQCYPWQIVN
+         2ofswaAlo752SLUOXrVtzX0nCHB0dq/Q4k/0AVGaWF2XEJD29CKzFAHTvDfPUdt4VQWr
+         rDlkGSsHCU5nEKaBjia1PjO3UxWGdz415eXHF9FotYrDckfHA01+WhJmZNE2o8o5r6Bs
+         Imvw==
+X-Gm-Message-State: AAQBX9dsB7JfyYSwRAAPibYo154vdVGQn6BuY3i9N8mSTOYfuWVIq1Tf
+        VRp0h6i5r4swNoWVVhdGPAJl4Q==
+X-Google-Smtp-Source: AKy350ZCwuMbyX3imXZjyklWc/tn6fTJgMv803a+AfMakTywcrCsiPGJxBzQ+0cpDFJ7UWixfjodXw==
+X-Received: by 2002:a17:906:738a:b0:878:58e6:f1eb with SMTP id f10-20020a170906738a00b0087858e6f1ebmr20132191ejl.23.1680173115494;
+        Thu, 30 Mar 2023 03:45:15 -0700 (PDT)
+Received: from [192.168.0.161] (62-73-72-43.ip.btc-net.bg. [62.73.72.43])
+        by smtp.gmail.com with ESMTPSA id p25-20020a50cd99000000b004bf76fdfdb3sm17878396edi.26.2023.03.30.03.45.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 03:45:15 -0700 (PDT)
+Message-ID: <6f0d0f2d-474b-caaf-78a7-289e660c3aa0@blackwall.org>
+Date:   Thu, 30 Mar 2023 13:45:13 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] iommu: PGTABLE_LPAE is also for RISCV
-Content-Language: en-GB
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        iommu@lists.linux.dev, Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org, geert+renesas@glider.be
-References: <20230330060105.29460-1-rdunlap@infradead.org>
- <e1b6f12a-899b-4985-8725-556bcb5d0991@spud>
- <CAMuHMdW2r1f7C_BdXn9BnDktLwHjBA_0Kvq6OeLJ1sZ7azhqkg@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAMuHMdW2r1f7C_BdXn9BnDktLwHjBA_0Kvq6OeLJ1sZ7azhqkg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
+ test
+Content-Language: en-US
+To:     Hans Schultz <netdev@kapio-technology.com>,
+        Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-7-netdev@kapio-technology.com>
+ <ZBgdAo8mxwnl+pEE@shredder> <87a5zzh65p.fsf@kapio-technology.com>
+ <ZCMYbRqd+qZaiHfu@shredder> <87fs9ollmn.fsf@kapio-technology.com>
+ <ZCUuMosWbyq1pK8R@shredder> <87mt3u7csh.fsf@kapio-technology.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <87mt3u7csh.fsf@kapio-technology.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=3.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-30 08:31, Geert Uytterhoeven wrote:
-> Hi Conor,
-> 
-> On Thu, Mar 30, 2023 at 8:25 AM Conor Dooley <conor.dooley@microchip.com> wrote:
->> On Wed, Mar 29, 2023 at 11:01:05PM -0700, Randy Dunlap wrote:
->>> On riscv64, linux-next-20233030 (and for several days earlier),
->>> there is a kconfig warning:
+On 30/03/2023 13:29, Hans Schultz wrote:
+> On Thu, Mar 30, 2023 at 09:37, Ido Schimmel <idosch@nvidia.com> wrote:
+>> On Tue, Mar 28, 2023 at 09:30:08PM +0200, Hans Schultz wrote:
 >>>
->>> WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
->>>    Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
->>>    Selected by [y]:
->>>    - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
+>>> Sorry, but I have sent you several emails telling you about the problems
+>>> I have with running the selftests due to changes in the phy etc. Maybe
+>>> you have just not received all those emails?
 >>>
->>> and build errors:
+>>> Have you checked spamfilters?
 >>>
->>> riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L140':
->>> io-pgtable-arm.c:(.init.text+0x1e8): undefined reference to `alloc_io_pgtable_ops'
->>> riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L168':
->>> io-pgtable-arm.c:(.init.text+0xab0): undefined reference to `free_io_pgtable_ops'
->>> riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L140':
->>> ipmmu-vmsa.c:(.text+0xbc4): undefined reference to `free_io_pgtable_ops'
->>> riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L0 ':
->>> ipmmu-vmsa.c:(.text+0x145e): undefined reference to `alloc_io_pgtable_ops'
->>>
->>> Add RISCV as an allowed ARCH dependency to fix these problems.
->>>
->>> Fixes: d286a58bc8f4 ("iommu: Tidy up io-pgtable dependencies")
->>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->>> Cc: Joerg Roedel <joro@8bytes.org>
->>> Cc: Will Deacon <will@kernel.org>
->>> Cc: Robin Murphy <robin.murphy@arm.com>
->>> Cc: iommu@lists.linux.dev
->>> Cc: Conor Dooley <conor@kernel.org>
->>> Cc: linux-riscv@lists.infradead.org
->>> ---
->>>   drivers/iommu/Kconfig |    2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
->>> --- a/drivers/iommu/Kconfig
->>> +++ b/drivers/iommu/Kconfig
->>> @@ -32,7 +32,7 @@ config IOMMU_IO_PGTABLE
->>>   config IOMMU_IO_PGTABLE_LPAE
->>>        bool "ARMv7/v8 Long Descriptor Format"
+>>> With the kernels now, I cannot even test with the software bridge and
+>>> selftests as the compile fails - probably due to changes in uapi headers
+>>> compared to what the packages my system uses expects.
 >>
->> I'm probably missing something here, but why would we want to enable
->> "ARMv7/v8 Long Descriptor Format" on RISC-V?
+>> My spam filters are fine. I saw your emails where you basically said
+>> that you are too lazy to setup a VM to test your patches and that your
+>> time is more valuable than mine, which is why I should be testing them.
+>> Stop making your problems our problems. It's hardly the first time. If
+>> you are unable to test your patches, then invest the time in fixing your
+>> setup instead of submitting completely broken patches and making it our
+>> problem to test and fix them. I refuse to invest time in reviewing /
+>> testing / reworking your submissions as long as you insist on doing less
+>> than the bare minimum.
+>>
+>> Good luck
 > 
-> Indeed, we should not enable it, unless compile-testing.
+> I never said or indicated that my time is more valuable than yours. I
+> have a VM to run these things that some have spent countless hours to
+> develop with the right tools etc installed and set up. Fixing that
+> system will take quite many hours for me, so I am asking for some simple
+> assistance from someone who already has a system running supporting the
+> newest kernel.
 > 
->> Would it not be better to make the Renesas depend on, rather than
->> select the option? It does seem highly arch specific, and I feel like
->> Geert previously mentioned that the RZ/Five (their RISC-V offering)
->> didn't use it.
+> Alternatively if there is an open sourced system available that would be
+> great.
 > 
-> I think the IPMMU_VMSA dependency should gain
-> 
->          depends on ARM || ARM64 || COMPILE_TEST
+> As this patch-set is for the community and some companies that would
+> like to use it and not for myself, I am asking for some help from the
+> community with a task that when someone has the system in place should
+> not take more than 15-20 minutes, maybe even less.
 
-Indeed, I thought we'd settled on something like that in the previous 
-thread(s) on ARCH_RENESAS vs. RV32, but I guess nobody got round to 
-actually respininng the patch (possibly since my refactoring here ended 
-up papering over the immediate RV32 issue).
+I'm sorry but this is absolutely the wrong way to go about this. Your setup's
+problems are yours to figure out and fix, if you are going to send *any* future
+patches make absolutely sure they build, run and work as intended.
+Please do not send any future patches without them being fully tested and, as
+Ido mentioned, cover at least the bare minimum for a submission.
 
-Cheers,
-Robin.
+Thanks,
+ Nik
 
->>>        select IOMMU_IO_PGTABLE
->>> -     depends on ARM || ARM64 || COMPILE_TEST
->>> +     depends on ARM || ARM64 || RISCV || COMPILE_TEST
->>>        depends on !GENERIC_ATOMIC64    # for cmpxchg64()
->>>        help
->>>          Enable support for the ARM long descriptor pagetable format.
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
