@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D58F6D097B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADC56D0950
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbjC3PZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S232859AbjC3PUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbjC3PYt (ORCPT
+        with ESMTP id S232840AbjC3PUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:24:49 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29387D534
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:24:24 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CE2A81EC0691;
-        Thu, 30 Mar 2023 17:18:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680189509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Qd5om9gxT9ZJJOv9i3uITg1LtQmZSSw65wvXHgs9mtE=;
-        b=hCfQNGx/0JvRA587z1H5a9oPV7u3HC7TMyxb1X8zYxewgoIeJD0dUNQjNrpBySSdVTJi8s
-        Z3rfrWu6ADgFLY9yLRS+Qa4d0suBz9/qz0SmT4UhZYX+QgcEkgnUIcC73ZJZPp07iiXcIS
-        8E1IhfNkH68AfFV3yYu1FCP6gDbwSYs=
-Date:   Thu, 30 Mar 2023 17:18:26 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Baoquan He <bhe@redhat.com>, Philipp Rudo <prudo@redhat.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ross Zwisler <zwisler@google.com>,
-        Simon Horman <horms@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v5 2/2] x86/purgatory: Add linker script
-Message-ID: <20230330151826.GDZCWoQkQBj4BYbwWw@fat_crate.local>
-References: <20230321-kexec_clang16-v5-0-5563bf7c4173@chromium.org>
- <20230321-kexec_clang16-v5-2-5563bf7c4173@chromium.org>
- <20230330111523.4b98c8ce@gandalf.local.home>
+        Thu, 30 Mar 2023 11:20:33 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F90CDF5;
+        Thu, 30 Mar 2023 08:19:19 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1phu3Q-0006ZI-2u;
+        Thu, 30 Mar 2023 17:19:09 +0200
+Date:   Thu, 30 Mar 2023 16:19:04 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: [PATCH net-next 00/15] net: dsa: add support for MT7988
+Message-ID: <cover.1680180959.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230330111523.4b98c8ce@gandalf.local.home>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,18 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 11:15:23AM -0400, Steven Rostedt wrote:
-> > Make sure that the .text section is not divided in multiple overlapping
-> > sections. This is not supported by kexec_file.
+The MediaTek MT7988 SoC comes with a built-in switch very similar to
+previous MT7530 and MT7531. However, the switch address space is mapped
+into the SoCs memory space rather than being connected via MDIO.
+Using MMIO simplifies register access and also removes the need for a bus
+lock, and for that reason also makes interrupt handling more light-weight.
 
-And?
+Note that this is different from previous SoCs like MT7621 and MT7623N
+which also came with an integrated MT7530-like switch which yet had to be
+accessed via MDIO.
 
-What is the failure scenario? Why are you fixing it? Why do we care?
+Split-off the part of the driver registering an MDIO driver, then add
+another module acting as MMIO/platform driver.
 
-This is way too laconic.
+The whole series has been tested on various MediaTek boards:
+ * MT7623A + MT7530 (BPi-R2)
+ * MT7986A + MT7531 (BPi-R3)
+ * MT7988A reference board
 
+Changes since RFC v3:
+ * WARN_ON_ONCE if register read fails
+ * move probing of the reset GPIO and reset controller link out of
+   common  probe function, as they are not actually common
+
+Changes since RFC v2:
+ * split into many small commits to ease review
+ * introduce helper functions to reduce code duplication
+ * use helpers for locking to make lock-skipping easier and less ugly
+   to implement.
+ * add dt-bindings for mediatek,mt7988-switch
+
+Changes since initial RFC:
+ * use regmap for register access and move register access to bus-
+   specific driver
+ * move initialization of MT7531 SGMII PCS to MDIO driver
+
+Daniel Golle (15):
+  net: dsa: mt7530: make some noise if register read fails
+  net: dsa: mt7530: refactor SGMII PCS creation
+  net: dsa: mt7530: use unlocked regmap accessors
+  net: dsa: mt7530: use regmap to access switch register space
+  net: dsa: mt7530: move SGMII PCS creation to mt7530_probe function
+  net: dsa: mt7530: introduce mutex helpers
+  net: dsa: mt7530: move p5_intf_modes() function to mt7530.c
+  net: dsa: mt7530: introduce mt7530_probe_common helper function
+  net: dsa: mt7530: introduce mt7530_remove_common helper function
+  net: dsa: mt7530: split-off common parts from mt7531_setup
+  net: dsa: mt7530: introduce separate MDIO driver
+  net: dsa: mt7530: skip locking if MDIO bus isn't present
+  net: dsa: mt7530: add support for 10G link modes for CPU port
+  net: dsa: mt7530: introduce driver for MT7988 built-in switch
+  dt-bindings: net: dsa: mediatek,mt7530: add mediatek,mt7988-switch
+
+ .../bindings/net/dsa/mediatek,mt7530.yaml     |  26 +-
+ MAINTAINERS                                   |   3 +
+ drivers/net/dsa/Kconfig                       |  28 +-
+ drivers/net/dsa/Makefile                      |   4 +-
+ drivers/net/dsa/mt7530-mdio.c                 | 271 ++++++++++
+ drivers/net/dsa/mt7530-mmio.c                 | 101 ++++
+ drivers/net/dsa/mt7530.c                      | 511 ++++++++----------
+ drivers/net/dsa/mt7530.h                      |  38 +-
+ 8 files changed, 668 insertions(+), 314 deletions(-)
+ create mode 100644 drivers/net/dsa/mt7530-mdio.c
+ create mode 100644 drivers/net/dsa/mt7530-mmio.c
+
+
+base-commit: 4ddd6375c3ef6756d492ea5466408cace097121b
 -- 
-Regards/Gruss,
-    Boris.
+2.39.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
