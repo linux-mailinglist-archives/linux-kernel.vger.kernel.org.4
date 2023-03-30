@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53196D037E
+	by mail.lfdr.de (Postfix) with ESMTP id 4332F6D037C
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbjC3Ljk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
+        id S229749AbjC3Ljh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbjC3LjM (ORCPT
+        with ESMTP id S231764AbjC3LjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:39:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26C6A253
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:37:28 -0700 (PDT)
+        Thu, 30 Mar 2023 07:39:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E29A258
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:37:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680176248;
+        s=mimecast20190719; t=1680176252;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=litTAfSrcuMc4HupIpacq5wCRTNFJAvtr6mPltpyGGw=;
-        b=U3MLqOKAtzD9vhp7FYT13w57QJVN3U2hLwjSZKrc6UamyRtdZqMKAWBkd6M/SCIWQBYf9D
-        dSBh7fy/mv5Qj3yylxR0Q/LZ3TQ+DxEWMPq5GuQv344YwmYaMuRPv8csBkUCiL4/W5w2QY
-        7aZbLyfHUu3Znk3JAAP/PaGkK++njV0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Plah9oxK2vEYgPKSe8zMQk868IGL1eXPxQld6RUGB/s=;
+        b=V9msQqEGpKs3OKGNK2P5Bxv/WPmhQzDS0q5J2r1PQ17gtgGVIaNr4oVpmqd+T2Dul2E3LU
+        ktg48EWvUBTyYevmnsli6mnTC/WsmNU7/uiihREzJ0dBMaXX1ek6dQd50oCNrgDU5awzwL
+        8xuzu/Wn/2Bnf8sZSX4RctnsMkzCbFg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-553-Z5OlN6ElNumhZQ3Ooc8j3g-1; Thu, 30 Mar 2023 07:37:22 -0400
-X-MC-Unique: Z5OlN6ElNumhZQ3Ooc8j3g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+ us-mta-274-OlcWq4k8Nrismr90--zAhw-1; Thu, 30 Mar 2023 07:37:26 -0400
+X-MC-Unique: OlcWq4k8Nrismr90--zAhw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 948F628237CE;
-        Thu, 30 Mar 2023 11:37:21 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9FD2B884EC6;
+        Thu, 30 Mar 2023 11:37:25 +0000 (UTC)
 Received: from localhost (ovpn-8-19.pek2.redhat.com [10.72.8.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB2CF4042AC0;
-        Thu, 30 Mar 2023 11:37:20 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B3CC018EC7;
+        Thu, 30 Mar 2023 11:37:24 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
         linux-block@vger.kernel.org
@@ -49,14 +49,14 @@ Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
         Stefan Hajnoczi <stefanha@redhat.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V6 09/17] block: ublk_drv: add two helpers to clean up map/unmap request
-Date:   Thu, 30 Mar 2023 19:36:22 +0800
-Message-Id: <20230330113630.1388860-10-ming.lei@redhat.com>
+Subject: [PATCH V6 10/17] block: ublk_drv: clean up several helpers
+Date:   Thu, 30 Mar 2023 19:36:23 +0800
+Message-Id: <20230330113630.1388860-11-ming.lei@redhat.com>
 In-Reply-To: <20230330113630.1388860-1-ming.lei@redhat.com>
 References: <20230330113630.1388860-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -67,77 +67,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add two helpers for checking if map/unmap is needed, since we may have
-passthrough request which needs map or unmap in future, such as for
-supporting report zones.
-
-Meantime don't mark ublk_copy_user_pages as inline since this function
-is a bit fat now.
+Convert the following pattern in several helpers
+	if (Z)
+		return true
+	return false
+into:
+	return Z;
 
 Reviewed-by: Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/block/ublk_drv.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+ drivers/block/ublk_drv.c | 18 +++++-------------
+ 1 file changed, 5 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index c73b2dba25ce..f87597a7d679 100644
+index f87597a7d679..1c057003a40a 100644
 --- a/drivers/block/ublk_drv.c
 +++ b/drivers/block/ublk_drv.c
-@@ -488,8 +488,7 @@ static inline unsigned ublk_copy_io_pages(struct ublk_io_iter *data,
- 	return done;
+@@ -298,9 +298,7 @@ static inline bool ublk_can_use_task_work(const struct ublk_queue *ubq)
+ 
+ static inline bool ublk_need_get_data(const struct ublk_queue *ubq)
+ {
+-	if (ubq->flags & UBLK_F_NEED_GET_DATA)
+-		return true;
+-	return false;
++	return ubq->flags & UBLK_F_NEED_GET_DATA;
  }
  
--static inline int ublk_copy_user_pages(struct ublk_map_data *data,
--		bool to_vm)
-+static int ublk_copy_user_pages(struct ublk_map_data *data, bool to_vm)
+ static struct ublk_device *ublk_get_device(struct ublk_device *ub)
+@@ -349,25 +347,19 @@ static inline int ublk_queue_cmd_buf_size(struct ublk_device *ub, int q_id)
+ static inline bool ublk_queue_can_use_recovery_reissue(
+ 		struct ublk_queue *ubq)
  {
- 	const unsigned int gup_flags = to_vm ? FOLL_WRITE : 0;
- 	const unsigned long start_vm = data->io->addr;
-@@ -525,6 +524,16 @@ static inline int ublk_copy_user_pages(struct ublk_map_data *data,
- 	return done;
+-	if ((ubq->flags & UBLK_F_USER_RECOVERY) &&
+-			(ubq->flags & UBLK_F_USER_RECOVERY_REISSUE))
+-		return true;
+-	return false;
++	return (ubq->flags & UBLK_F_USER_RECOVERY) &&
++			(ubq->flags & UBLK_F_USER_RECOVERY_REISSUE);
  }
  
-+static inline bool ublk_need_map_req(const struct request *req)
-+{
-+	return ublk_rq_has_data(req) && req_op(req) == REQ_OP_WRITE;
-+}
-+
-+static inline bool ublk_need_unmap_req(const struct request *req)
-+{
-+	return ublk_rq_has_data(req) && req_op(req) == REQ_OP_READ;
-+}
-+
- static int ublk_map_io(const struct ublk_queue *ubq, const struct request *req,
- 		struct ublk_io *io)
+ static inline bool ublk_queue_can_use_recovery(
+ 		struct ublk_queue *ubq)
  {
-@@ -535,7 +544,7 @@ static int ublk_map_io(const struct ublk_queue *ubq, const struct request *req,
- 	 * context and the big benefit is that pinning pages in current
- 	 * context is pretty fast, see ublk_pin_user_pages
- 	 */
--	if (ublk_rq_has_data(req) && req_op(req) == REQ_OP_WRITE) {
-+	if (ublk_need_map_req(req)) {
- 		struct ublk_map_data data = {
- 			.ubq	=	ubq,
- 			.rq	=	req,
-@@ -556,7 +565,7 @@ static int ublk_unmap_io(const struct ublk_queue *ubq,
+-	if (ubq->flags & UBLK_F_USER_RECOVERY)
+-		return true;
+-	return false;
++	return ubq->flags & UBLK_F_USER_RECOVERY;
+ }
+ 
+ static inline bool ublk_can_use_recovery(struct ublk_device *ub)
  {
- 	const unsigned int rq_bytes = blk_rq_bytes(req);
+-	if (ub->dev_info.flags & UBLK_F_USER_RECOVERY)
+-		return true;
+-	return false;
++	return ub->dev_info.flags & UBLK_F_USER_RECOVERY;
+ }
  
--	if (req_op(req) == REQ_OP_READ && ublk_rq_has_data(req)) {
-+	if (ublk_need_unmap_req(req)) {
- 		struct ublk_map_data data = {
- 			.ubq	=	ubq,
- 			.rq	=	req,
-@@ -772,7 +781,7 @@ static inline void __ublk_rq_task_work(struct request *req,
- 		return;
- 	}
- 
--	if (ublk_need_get_data(ubq) && (req_op(req) == REQ_OP_WRITE)) {
-+	if (ublk_need_get_data(ubq) && ublk_need_map_req(req)) {
- 		/*
- 		 * We have not handled UBLK_IO_NEED_GET_DATA command yet,
- 		 * so immepdately pass UBLK_IO_RES_NEED_GET_DATA to ublksrv
+ static void ublk_free_disk(struct gendisk *disk)
 -- 
 2.39.2
 
