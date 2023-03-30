@@ -2,182 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E262E6D136E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 616BF6D1373
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjC3XnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 19:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
+        id S231624AbjC3XnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 19:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjC3Xm6 (ORCPT
+        with ESMTP id S231224AbjC3XnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 19:42:58 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C955258;
-        Thu, 30 Mar 2023 16:42:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680219777; x=1711755777;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CFJSYS3L7IITfkuAPvL450Q/OlTcyxe+FFkcSS4PzzA=;
-  b=iNOFH7+hRUlKHPBNl8tbninly5RKZS/vzQUndfyx1ifUbDTqZQPqdPeH
-   OTEQNN+UVmnQRP19BSyQcrC30bvYuC5Efm1qp3EYxrpLyHjvGcJ70u2Hw
-   XJwh+mcyFCDeH/0A8KLf9ReYvXCXt1E3qpnV8qg/qoUuCzshrqQ1WRAgi
-   ZHOdPaJx8f2pfG5FNb45GC5YPn+egXppB43y46z6+NbpvLW/ku9Vu6VSv
-   XTSF6tDs4vNNxkaJOs40ooYQnhuzUAVnGbCtiE5ks0krWxsEe1nlXm0Xq
-   558Wu13NEXkER1Sy88to47O9CEmWCZr+cB4v+ZdOAV+OSf9qlQOR4nhBG
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="329836695"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="329836695"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 16:42:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="808835638"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="808835638"
-Received: from mwest-mobl.amr.corp.intel.com (HELO [10.212.117.86]) ([10.212.117.86])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 16:42:56 -0700
-Message-ID: <627a4359-cac4-bef9-9033-ea782f47cbc7@intel.com>
-Date:   Thu, 30 Mar 2023 16:42:56 -0700
+        Thu, 30 Mar 2023 19:43:17 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93599CA05;
+        Thu, 30 Mar 2023 16:43:13 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id j7so25633850ybg.4;
+        Thu, 30 Mar 2023 16:43:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680219793;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VcZqAGUTPeSkDw23rK6dbBPBzMq/2/SptfrVxtDB0UQ=;
+        b=bPflKkHyODU8uuehrKfUxhncuo2AuQrCOUht50s5CP3/L5DWLKNVwCzJiTEaTHDA2R
+         W8PNyNrEL/0WuHRgTIyQeHwGjj3WYh/uc7eHmXOP2Kh0AN+uxMqgTjoR3Kn9SorMT9Xa
+         BfwCqqF98FxGxSGu5FYlwvOEc0tA51r61ZxLW00pRti5pfB/oy40Wd6fMETOY3FJusUT
+         VYxs32cXpTrNn3hevQUPsImIy8gUaJ4HrTXAx4x1ol/idJy9N3HmWOkgyKDe9Yu4aWTD
+         gS4+6/d5JLC7opUHk4WN7PMB8OjJ92hP00c9kz7k94SGP6D/hVQB9e7W+S1kT5ou6+wb
+         o/Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680219793;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VcZqAGUTPeSkDw23rK6dbBPBzMq/2/SptfrVxtDB0UQ=;
+        b=3TvQjPCxCF1l9y6L34SWMHuGbHXLHcYOwDs5u2YsT7qM2AFEIj7gfqz+BWBgGN1067
+         V67SCRW6YGlXPHN9aIcnDyQUA5eH2zwf3WKYeEegS6W797RwLgxFrGYVRoNftgB3B0VC
+         RkxkVgaqr9ZM4FSj0kNXVWn8tBHwKd+G54MzzbhuuaruQBbDDz9xZC95g6kdk+1Uputs
+         AXnDh23TOoul3pFyDwqEusq93C3CNtBJ8UqFW7d8yJlOFRkZmNUSedzJ5//MohUpgORY
+         bgt/zMbKT1Oz71sxvX07jzj8K20y/FKbCk9AOrTxHic374KwyCcqioWNOJvGJDm/JBqH
+         n/WA==
+X-Gm-Message-State: AAQBX9en69oR3u45z82VKkO7GMZ7dXzi19WIxOYSihLpRqTDRxfUjlaP
+        I73kdnyIwpA1Tt8QiiQag8yZbs1quzpdEuMohs0=
+X-Google-Smtp-Source: AKy350bqbzF6SrzHXSyol3UEFAY9jZj8xOWQlhMA5/OcrMr1OSBWBXFKxpU7bojSxQYKftTBFL5H45EMrnAbNzqKWXQ=
+X-Received: by 2002:a05:6902:1141:b0:b73:caa7:f06f with SMTP id
+ p1-20020a056902114100b00b73caa7f06fmr16639952ybu.5.1680219792765; Thu, 30 Mar
+ 2023 16:43:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH v10 6/6] tools/testing/cxl: Mock support for Get Poison
- List
-Content-Language: en-US
-To:     alison.schofield@intel.com,
-        Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <cover.1679448904.git.alison.schofield@intel.com>
- <bac0ec2f8afdb0c28790b1595af49ac6fada0672.1679448904.git.alison.schofield@intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <bac0ec2f8afdb0c28790b1595af49ac6fada0672.1679448904.git.alison.schofield@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221206221335.GA1363005@bhelgaas> <20230315213537.GA1788623@bhelgaas>
+In-Reply-To: <20230315213537.GA1788623@bhelgaas>
+From:   Justin Tee <justintee8345@gmail.com>
+Date:   Thu, 30 Mar 2023 16:43:01 -0700
+Message-ID: <CABPRKS-kMVpEEdJPR6_ru6hjqyjxcVaR+FRWNGS1RRChjeFhCg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/9] scsi: lpfc: Change to use pci_aer_clear_uncorrect_error_status()
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Zhuo Chen <chenzhuo.1@bytedance.com>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        Justin Tee <justin.tee@broadcom.com>,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bhelgaas@google.com,
+        ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
+        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bjorn,
 
+> But lpfc_aer_cleanup_state() is visible in the
+> "lpfc_aer_state_cleanup" sysfs file, so removing it would break any
+> userspace that uses it.
+>
+> If we can rely on the PCI core to clean up AER errors itself
+> (admittedly, that might be a big "if"), maybe lpfc_aer_cleanup_state()
+> could just become a no-op?
+>
+> Any comment from the LPFC folks?
 
-On 3/21/23 7:12 PM, alison.schofield@intel.com wrote:
-> From: Alison Schofield <alison.schofield@intel.com>
-> 
-> Make mock memdevs support the Get Poison List mailbox command.
-> Return a fake poison error record when the get poison list command
-> is issued.
-> 
-> This supports testing the kernel tracing and cxl list capabilities
-> for media errors.
-> 
-> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+We have notified all users of the lpfc_aer_cleanup_state sysfs entry,
+and Broadcom LPFC is okay to no-op.
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Regards,
+Justin
 
-> ---
->   tools/testing/cxl/test/mem.c | 42 ++++++++++++++++++++++++++++++++++++
->   1 file changed, 42 insertions(+)
-> 
-> diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-> index 9263b04d35f7..2fa9c18d4c2c 100644
-> --- a/tools/testing/cxl/test/mem.c
-> +++ b/tools/testing/cxl/test/mem.c
-> @@ -7,6 +7,7 @@
->   #include <linux/delay.h>
->   #include <linux/sizes.h>
->   #include <linux/bits.h>
-> +#include <asm/unaligned.h>
->   #include <cxlmem.h>
->   
->   #include "trace.h"
-> @@ -40,6 +41,10 @@ static struct cxl_cel_entry mock_cel[] = {
->   		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_HEALTH_INFO),
->   		.effect = cpu_to_le16(0),
->   	},
-> +	{
-> +		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_POISON),
-> +		.effect = cpu_to_le16(0),
-> +	},
->   };
->   
->   /* See CXL 2.0 Table 181 Get Health Info Output Payload */
-> @@ -471,6 +476,8 @@ static int mock_id(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
->   			cpu_to_le64(DEV_SIZE / CXL_CAPACITY_MULTIPLIER),
->   	};
->   
-> +	put_unaligned_le24(CXL_POISON_LIST_MAX, id.poison_list_max_mer);
-> +
->   	if (cmd->size_out < sizeof(id))
->   		return -EINVAL;
->   
-> @@ -888,6 +895,34 @@ static int mock_health_info(struct cxl_dev_state *cxlds,
->   	return 0;
->   }
->   
-> +static int mock_get_poison(struct cxl_dev_state *cxlds,
-> +			   struct cxl_mbox_cmd *cmd)
-> +{
-> +	struct cxl_mbox_poison_payload_in *pi = cmd->payload_in;
-> +
-> +	/* Mock one poison record at pi.offset for 64 bytes */
-> +	struct {
-> +		struct cxl_mbox_poison_payload_out po;
-> +		struct cxl_poison_record record;
-> +	} __packed mock_plist = {
-> +		.po = {
-> +			.count = cpu_to_le16(1),
-> +		},
-> +		.record = {
-> +			.length = cpu_to_le32(1),
-> +			.address = cpu_to_le64(le64_to_cpu(pi->offset) +
-> +					       CXL_POISON_SOURCE_INJECTED),
-> +		},
-> +	};
-> +
-> +	if (cmd->size_out < sizeof(mock_plist))
-> +		return -EINVAL;
-> +
-> +	memcpy(cmd->payload_out, &mock_plist, sizeof(mock_plist));
-> +	cmd->size_out = sizeof(mock_plist);
-> +	return 0;
-> +}
-> +
->   static int cxl_mock_mbox_send(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
->   {
->   	struct device *dev = cxlds->dev;
-> @@ -942,6 +977,9 @@ static int cxl_mock_mbox_send(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *
->   	case CXL_MBOX_OP_PASSPHRASE_SECURE_ERASE:
->   		rc = mock_passphrase_secure_erase(cxlds, cmd);
->   		break;
-> +	case CXL_MBOX_OP_GET_POISON:
-> +		rc = mock_get_poison(cxlds, cmd);
-> +		break;
->   	default:
->   		break;
->   	}
-> @@ -1010,6 +1048,10 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
->   	if (rc)
->   		return rc;
->   
-> +	rc = cxl_poison_state_init(cxlds);
-> +	if (rc)
-> +		return rc;
-> +
->   	rc = cxl_dev_state_identify(cxlds);
->   	if (rc)
->   		return rc;
+On Wed, Mar 15, 2023 at 2:39=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> =
+wrote:
+>
+> On Tue, Dec 06, 2022 at 04:13:35PM -0600, Bjorn Helgaas wrote:
+> > On Wed, Sep 28, 2022 at 06:59:41PM +0800, Zhuo Chen wrote:
+> > > lpfc_aer_cleanup_state() requires clearing both fatal and non-fatal
+> > > uncorrectable error status.
+> >
+> > I don't know what the point of lpfc_aer_cleanup_state() is.  AER
+> > errors should be handled and cleared by the PCI core, not by
+> > individual drivers.  Only lpfc, liquidio, and sky2 touch
+> > PCI_ERR_UNCOR_STATUS.
+> >
+> > But lpfc_aer_cleanup_state() is visible in the
+> > "lpfc_aer_state_cleanup" sysfs file, so removing it would break any
+> > userspace that uses it.
+> >
+> > If we can rely on the PCI core to clean up AER errors itself
+> > (admittedly, that might be a big "if"), maybe lpfc_aer_cleanup_state()
+> > could just become a no-op?
+> >
+> > Any comment from the LPFC folks?
+> >
+> > Ideally, I would rather not export pci_aer_clear_nonfatal_status() or
+> > pci_aer_clear_uncorrect_error_status() outside the PCI core at all.
+>
+> Resurrecting this old thread.  Zhuo, can you figure out where the PCI
+> core clears these errors, include that in the commit log, and propose
+> a patch that makes lpfc_aer_cleanup_state() a no-op, by removing the
+> pci_aer_clear_nonfatal_status() call completely?
+>
+> Such a patch could be sent to the SCSI maintainers since it doesn't
+> involve the PCI core.
+>
+> If it turns out that the PCI core *doesn't* clear these errors, we
+> should figure out *why* it doesn't and try to change the PCI core so
+> it does.
+>
+> > > But using pci_aer_clear_nonfatal_status()
+> > > will only clear non-fatal error status. To clear both fatal and
+> > > non-fatal error status, use pci_aer_clear_uncorrect_error_status().
+> > >
+> > > Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+> > > ---
+> > >  drivers/scsi/lpfc/lpfc_attr.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_a=
+ttr.c
+> > > index 09cf2cd0ae60..d835cc0ba153 100644
+> > > --- a/drivers/scsi/lpfc/lpfc_attr.c
+> > > +++ b/drivers/scsi/lpfc/lpfc_attr.c
+> > > @@ -4689,7 +4689,7 @@ static DEVICE_ATTR_RW(lpfc_aer_support);
+> > >   * Description:
+> > >   * If the @buf contains 1 and the device currently has the AER suppo=
+rt
+> > >   * enabled, then invokes the kernel AER helper routine
+> > > - * pci_aer_clear_nonfatal_status() to clean up the uncorrectable
+> > > + * pci_aer_clear_uncorrect_error_status() to clean up the uncorrecta=
+ble
+> > >   * error status register.
+> > >   *
+> > >   * Notes:
+> > > @@ -4715,7 +4715,7 @@ lpfc_aer_cleanup_state(struct device *dev, stru=
+ct device_attribute *attr,
+> > >             return -EINVAL;
+> > >
+> > >     if (phba->hba_flag & HBA_AER_ENABLED)
+> > > -           rc =3D pci_aer_clear_nonfatal_status(phba->pcidev);
+> > > +           rc =3D pci_aer_clear_uncorrect_error_status(phba->pcidev)=
+;
+> > >
+> > >     if (rc =3D=3D 0)
+> > >             return strlen(buf);
+> > > --
+> > > 2.30.1 (Apple Git-130)
+> > >
