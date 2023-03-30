@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C7F6CFA50
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 06:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FFF6CFA51
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 06:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjC3Elh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 00:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S230054AbjC3Elt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 00:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjC3ElW (ORCPT
+        with ESMTP id S229970AbjC3Elc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 00:41:22 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD2255B5;
-        Wed, 29 Mar 2023 21:41:08 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id d22-20020a9d5e16000000b0069b5252ced7so9390956oti.13;
-        Wed, 29 Mar 2023 21:41:08 -0700 (PDT)
+        Thu, 30 Mar 2023 00:41:32 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3D255AA;
+        Wed, 29 Mar 2023 21:41:12 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 6-20020a9d0106000000b006a177038dfeso230217otu.7;
+        Wed, 29 Mar 2023 21:41:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680151268;
+        d=gmail.com; s=20210112; t=1680151272;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u/B9dFAeaUqrqqXcKIk+Y/eQ9yVG9iQNTR7il5e9jLs=;
-        b=FBldUjeWmTnMcGDYtqPGJOtkr5qqAbx5XiPvKUIklDArae9Xj9CeCHqo5AgHV6DmJ8
-         7VYNkFwXjHt4PiCnF+qGoy4piOQ79h/06J07fzF9g5FmSl5EQ8XijZ7ko5HcBgGDj9VN
-         /4QFZCOftuHqdU3uFgL27j225r4bIsAFt1dSBzTyi08LjsDzas/byE1wbN1j+qk/reYm
-         notFF2U2pairKLHR4xcS/GOOvf5ZRL5zq8oTEYoeXLobavX7T7GvXuk79j2KjtecFyVK
-         OhnnTSq5hYySGzqeWDgy78MFf4lbW63A37vRGZWAKb+MzYToslbH527fdxj4M/YLnlNI
-         QUJA==
+        bh=2cn5PpHPjbVKiTpn7S4FdRJhabCdix+uDXiUAvFeLWQ=;
+        b=MLmE4Qc5UnH4btH/GC2TwCy+UCPp008eyBc8f+wKjsnmwOFtSq6B7qKG9mikCeMp0N
+         5Ynr1qpJcjIRFvjedJwWLo58Y7ensDgVtTwk+0grH6s1r7EuT+t32S25JhRXMdpSz9Fx
+         4LaLflnqOYvzjIeSKa5VJ5LdfO+56X3X/gxwRbRDX/251LJQFxjVUKCU2cM4qslOfzHO
+         MH9cGjfjS37ZQdQCOBpUeHDexsgexJJtNUr44DRxNhlIvwO/IxJgW3+d8tkmeZ0A6sDs
+         fXCvPurehpapPUZO1E9Km3uO55GeHhUeH0tdAQltEQuVvhNTMoyXkZzaudaC19cJ0/In
+         svXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680151268;
+        d=1e100.net; s=20210112; t=1680151272;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=u/B9dFAeaUqrqqXcKIk+Y/eQ9yVG9iQNTR7il5e9jLs=;
-        b=ITvSaEUzvQD8Kt+lA8J1CruVuHlwy3d8+9NLWQGviMt91kGCYuyJJZuDiYaq8jqc8O
-         lEaGEKKv8T6aMXqmOg1AyOEWp5VYYfyuotEyJrGdnAwFs6vLWgXWxcc1aogEZP0iR/j6
-         SKE8oiR8PbXMqBa/2RF5CnMI6jpvHXxEQi2VR9Ado/Gtj+C6y4yFtOMirOaclD6d5sSZ
-         dNC0LyW7pIRzWVWQWXA9Bo/eLE/icN2oqbJRWSXwM6V4ni7lH0HluNfnrx5vC5tOIuh/
-         dB45BDyXDoCahXFKwYvHryZf8fqkoDrxHRew0dt7Dg0dZHZpGSKFjr8a7E6D8696wgk5
-         Br9Q==
-X-Gm-Message-State: AO0yUKWxTYVW7LUCqfo8xKwas6Q0qu2UM+i0vP4gRkfMZkOSC3vZxpG+
-        IPiu6KB675tq7iP8dPymiYTWEd44G+NswA==
-X-Google-Smtp-Source: AK7set99jG8l4uyr3wxeKERjnAXMdcfXxE87b+Wva1bGOUnjb4oAkZzPLPlnQdrwX8lnBEcIj6h4Fw==
-X-Received: by 2002:a9d:6854:0:b0:693:d998:f50c with SMTP id c20-20020a9d6854000000b00693d998f50cmr10533454oto.5.1680151267883;
-        Wed, 29 Mar 2023 21:41:07 -0700 (PDT)
+        bh=2cn5PpHPjbVKiTpn7S4FdRJhabCdix+uDXiUAvFeLWQ=;
+        b=Sdjv2PGcj44RO5p+lXIYpcQjV5zyc4zQSTTdKrCN7uFI8LQrYya6e3qsSX3hb+t5Po
+         EiaikeAv51uWG2hbftGV+ffeO5Fm+JAaQqi9FJTyc3o7+xvxIWooMPwgPfPA9shHCwWc
+         +F/Fups4gEXQxYI/iTlGn1KyZKUWsdxR//fN46PDSO7fUj/p7TOQ9wt7/D7J8E5grZkH
+         +WI1QGchTyn1gJ9tAHc5b5pKrpUVowHbKAXA45besn1kP+Tk8GZvGRv5dZXF4xJ9YLqE
+         CMgd/OkAM2jlOHpqGTeduDnTiIyvRiotj+re5T4OuZymOlhzCg2eeSKYkC5npClIxQZA
+         F0XA==
+X-Gm-Message-State: AO0yUKV87asP5/2UNvaHlqmFXLaKbxByEJofLnLerQOssi5x5RbcJwL2
+        l32PImcALGMbhh3fkAJVIB7nPjgJr7fOtw==
+X-Google-Smtp-Source: AK7set8h8uCCq6lcLgErc/YqpcSJ/dZKJUBAxcgDIUqGTznEF45OGrkov8pj674yB80XwuAmloMmcw==
+X-Received: by 2002:a05:6830:1602:b0:699:f81a:14bd with SMTP id g2-20020a056830160200b00699f81a14bdmr10935792otr.30.1680151272285;
+        Wed, 29 Mar 2023 21:41:12 -0700 (PDT)
 Received: from wedsonaf-dev.home.lan ([189.124.190.154])
-        by smtp.googlemail.com with ESMTPSA id ea43-20020a056870072b00b0017e0c13b29asm7518599oab.36.2023.03.29.21.41.04
+        by smtp.googlemail.com with ESMTPSA id ea43-20020a056870072b00b0017e0c13b29asm7518599oab.36.2023.03.29.21.41.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 21:41:07 -0700 (PDT)
+        Wed, 29 Mar 2023 21:41:12 -0700 (PDT)
 From:   Wedson Almeida Filho <wedsonaf@gmail.com>
 To:     rust-for-linux@vger.kernel.org
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -57,10 +57,13 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
         linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>
-Subject: [PATCH 06/13] rust: lock: add support for `Lock::lock_irqsave`
-Date:   Thu, 30 Mar 2023 01:39:47 -0300
-Message-Id: <20230330043954.562237-6-wedsonaf@gmail.com>
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH 07/13] rust: lock: implement `IrqSaveBackend` for `SpinLock`
+Date:   Thu, 30 Mar 2023 01:39:48 -0300
+Message-Id: <20230330043954.562237-7-wedsonaf@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230330043954.562237-1-wedsonaf@gmail.com>
 References: <20230330043954.562237-1-wedsonaf@gmail.com>
@@ -78,70 +81,116 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wedson Almeida Filho <walmeida@microsoft.com>
 
-This allows locks like spinlocks and raw spinlocks to expose a
-`lock_irqsave` variant in Rust that corresponds to the C version.
+This allows Rust code to use the `lock_irqsave` variant of spinlocks.
 
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Waiman Long <longman@redhat.com>
 Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 ---
- rust/kernel/sync/lock.rs | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ rust/helpers.c                    | 16 +++++++++++++
+ rust/kernel/sync/lock/spinlock.rs | 38 ++++++++++++++++++++++++++-----
+ 2 files changed, 48 insertions(+), 6 deletions(-)
 
-diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
-index bca9af2a9a5a..491446c3a074 100644
---- a/rust/kernel/sync/lock.rs
-+++ b/rust/kernel/sync/lock.rs
-@@ -57,6 +57,29 @@ pub unsafe trait Backend {
-     unsafe fn unlock(ptr: *mut Self::State, guard_state: &Self::GuardState);
+diff --git a/rust/helpers.c b/rust/helpers.c
+index 05694e3f8f70..e42f5b446f92 100644
+--- a/rust/helpers.c
++++ b/rust/helpers.c
+@@ -59,6 +59,22 @@ void rust_helper_spin_unlock(spinlock_t *lock)
  }
+ EXPORT_SYMBOL_GPL(rust_helper_spin_unlock);
  
-+/// The "backend" of a lock that supports the irq-save variant.
-+///
-+/// # Safety
-+///
-+/// The same requirements wrt mutual exclusion in [`Backend`] apply for acquiring the lock via
-+/// [`IrqSaveBackend::lock_irqsave`].
-+///
-+/// Additionally, when [`IrqSaveBackend::lock_irqsave`] is used to acquire the lock, implementers
-+/// must disable interrupts on lock, and restore interrupt state on unlock. Implementers may use
-+/// [`Backend::GuardState`] to store state needed to keep track of the interrupt state.
-+pub unsafe trait IrqSaveBackend: Backend {
-+    /// Acquires the lock, making the caller its owner.
-+    ///
-+    /// Before acquiring the lock, it disables interrupts, and returns the previous interrupt state
-+    /// as its guard state so that the guard can restore it when it is dropped.
-+    ///
-+    /// # Safety
-+    ///
-+    /// Callers must ensure that [`Backend::init`] has been previously called.
-+    #[must_use]
-+    unsafe fn lock_irqsave(ptr: *mut Self::State) -> Self::GuardState;
-+}
++unsigned long rust_helper_spin_lock_irqsave(spinlock_t *lock)
++{
++	unsigned long flags;
 +
- /// A mutual exclusion primitive.
++	spin_lock_irqsave(lock, flags);
++
++	return flags;
++}
++EXPORT_SYMBOL_GPL(rust_helper_spin_lock_irqsave);
++
++void rust_helper_spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags)
++{
++	spin_unlock_irqrestore(lock, flags);
++}
++EXPORT_SYMBOL_GPL(rust_helper_spin_unlock_irqrestore);
++
+ refcount_t rust_helper_REFCOUNT_INIT(int n)
+ {
+ 	return (refcount_t)REFCOUNT_INIT(n);
+diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/spinlock.rs
+index a52d20fc9755..34dec09a97c0 100644
+--- a/rust/kernel/sync/lock/spinlock.rs
++++ b/rust/kernel/sync/lock/spinlock.rs
+@@ -61,6 +61,8 @@ macro_rules! new_spinlock {
+ /// assert_eq!(e.c, 10);
+ /// assert_eq!(e.d.lock().a, 20);
+ /// assert_eq!(e.d.lock().b, 30);
++/// assert_eq!(e.d.lock_irqsave().a, 20);
++/// assert_eq!(e.d.lock_irqsave().b, 30);
+ /// ```
  ///
- /// Exposes one of the kernel locking primitives. Which one is exposed depends on the lock banckend
-@@ -109,6 +132,21 @@ impl<T: ?Sized, B: Backend> Lock<T, B> {
-     }
- }
+ /// The following example shows how to use interior mutability to modify the contents of a struct
+@@ -79,6 +81,12 @@ macro_rules! new_spinlock {
+ ///     guard.a += 10;
+ ///     guard.b += 20;
+ /// }
++///
++/// fn example2(m: &SpinLock<Example>) {
++///     let mut guard = m.lock_irqsave();
++///     guard.a += 10;
++///     guard.b += 20;
++/// }
+ /// ```
+ ///
+ /// [`spinlock_t`]: ../../../../include/linux/spinlock.h
+@@ -90,7 +98,7 @@ pub struct SpinLockBackend;
+ // SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion.
+ unsafe impl super::Backend for SpinLockBackend {
+     type State = bindings::spinlock_t;
+-    type GuardState = ();
++    type GuardState = Option<core::ffi::c_ulong>;
  
-+impl<T: ?Sized, B: IrqSaveBackend> Lock<T, B> {
-+    /// Acquires the lock and gives the caller access to the data protected by it.
-+    ///
-+    /// Before acquiring the lock, it disables interrupts. When the guard is dropped, the interrupt
-+    /// state (either enabled or disabled) is restored to its state before
-+    /// [`lock_irqsave`](Self::lock_irqsave) was called.
-+    pub fn lock_irqsave(&self) -> Guard<'_, T, B> {
-+        // SAFETY: The constructor of the type calls `init`, so the existence of the object proves
-+        // that `init` was called.
-+        let state = unsafe { B::lock_irqsave(self.state.get()) };
-+        // SAFETY: The lock was just acquired.
-+        unsafe { Guard::new(self, state) }
+     unsafe fn init(
+         ptr: *mut Self::State,
+@@ -105,12 +113,30 @@ unsafe impl super::Backend for SpinLockBackend {
+     unsafe fn lock(ptr: *mut Self::State) -> Self::GuardState {
+         // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
+         // memory, and that it has been initialised before.
+-        unsafe { bindings::spin_lock(ptr) }
++        unsafe { bindings::spin_lock(ptr) };
++        None
+     }
+ 
+-    unsafe fn unlock(ptr: *mut Self::State, _guard_state: &Self::GuardState) {
+-        // SAFETY: The safety requirements of this function ensure that `ptr` is valid and that the
+-        // caller is the owner of the mutex.
+-        unsafe { bindings::spin_unlock(ptr) }
++    unsafe fn unlock(ptr: *mut Self::State, guard_state: &Self::GuardState) {
++        match guard_state {
++            // SAFETY: The safety requirements of this function ensure that `ptr` is valid and that
++            // the caller is the owner of the mutex.
++            Some(flags) => unsafe { bindings::spin_unlock_irqrestore(ptr, *flags) },
++            // SAFETY: The safety requirements of this function ensure that `ptr` is valid and that
++            // the caller is the owner of the mutex.
++            None => unsafe { bindings::spin_unlock(ptr) },
++        }
 +    }
 +}
 +
- /// A lock guard.
- ///
- /// Allows mutual exclusion primitives that implement the `Backend` trait to automatically unlock
++// SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion. We use the `irqsave`
++// variant of the C lock acquisition functions to disable interrupts and retrieve the original
++// interrupt state, and the `irqrestore` variant of the lock release functions to restore the state
++// in `unlock` -- we use the guard context to determine which method was used to acquire the lock.
++unsafe impl super::IrqSaveBackend for SpinLockBackend {
++    unsafe fn lock_irqsave(ptr: *mut Self::State) -> Self::GuardState {
++        // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
++        // memory, and that it has been initialised before.
++        Some(unsafe { bindings::spin_lock_irqsave(ptr) })
+     }
+ }
 -- 
 2.34.1
 
