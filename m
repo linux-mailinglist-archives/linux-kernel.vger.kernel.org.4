@@ -2,154 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B786CFFC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932536CFFC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjC3J2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S230050AbjC3J3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjC3J2R (ORCPT
+        with ESMTP id S229568AbjC3J3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:28:17 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492D8AC
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:28:15 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTP id 32U9RSYw099410;
-        Thu, 30 Mar 2023 17:27:28 +0800 (+08)
-        (envelope-from Ziwei.Dai@unisoc.com)
-Received: from ziwei-lenovo.spreadtrum.com (10.0.74.54) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 30 Mar 2023 17:27:26 +0800
-From:   Ziwei Dai <ziwei.dai@unisoc.com>
-To:     <paulmck@kernel.org>, <frederic@kernel.org>,
-        <quic_neeraju@quicinc.com>, <josh@joshtriplett.org>,
-        <rostedt@goodmis.org>, <mathieu.desnoyers@efficios.com>,
-        <jiangshanlai@gmail.com>, <joel@joelfernandes.org>,
-        <rcu@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <shuang.wang@unisoc.com>,
-        <yifan.xin@unisoc.com>, <ke.wang@unisoc.com>,
-        <xuewen.yan@unisoc.com>, <zhiguo.niu@unisoc.com>,
-        <ziwei.dai@unisoc.com>, <zhaoyang.huang@unisoc.com>
-Subject: [PATCH] rcu: Make sure new krcp free business is handled after the wanted rcu grace period.
-Date:   Thu, 30 Mar 2023 17:27:20 +0800
-Message-ID: <1680168440-20511-1-git-send-email-ziwei.dai@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Thu, 30 Mar 2023 05:29:08 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8EB6A56;
+        Thu, 30 Mar 2023 02:29:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680168547; x=1711704547;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=ktGP+X28KLFg19EgOz6YMIZNX+5DIradhPmvTcz+7ic=;
+  b=Naa8GoY4nGTY/jfgIe7h3fPj1zE5LYZ3ZjwFPoBdzI43OIWF9Nkxje/N
+   EwCyktZuOl9rUnYehE2eu4Q1vbAB6VLTh8fHsBRiQmwwD4Lj8aUkeuO65
+   kHAobl0ZNddQ9W/p/bGmozckfzW9uck18WTQEfDleHC00C4Ls9Qd8rYMW
+   Ku/HlmqVVaIo0ISIpxPJYASn+skIiyAqb9Lx7wi789YSsLHNM4VnB4+L7
+   xas8Z2o+o7LB+7VVh3Tqm+IkhHEYGUAIWB+eFMSZUH0zGm7+bWY+pHu03
+   pi47htllqxhVrvzJh5rWOYexBzqEmavsTx5GqsXn4FQCEBQtpHfQ+s3Uz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="427395219"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="427395219"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 02:29:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="858835265"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="858835265"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP; 30 Mar 2023 02:29:06 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 30 Mar 2023 02:29:06 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 30 Mar 2023 02:29:06 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 30 Mar 2023 02:29:06 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 30 Mar 2023 02:29:03 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fPoJ2GaXWzmJ9Phru+Xu7wlLNvm8hbAtlst714uDZgpm72FkRbM3nOEao0nNkgWPPs7d95wI5KRBs3kYprW1doTjj4+4hFhCRFbV0F6jL+ATyz3Ilh5TfPol6RK/9aMkt85bFU2oEjsLxOMtOqMkaQ+Yq5nNSUUR+mAXcn1K8lrjR72FNeUWgdZfTUHj9cg1X3idKkKIVASkIFRC7lJ2aF0LDgtiCppl8sXvtLHvJT8sXPF2s50p0WsN2QpGkSgqd6HFEBSWO+A8ZL9KLRZ2qcYB8SFHTJM5D3Kzh34F2thcUoOHhSlPRDIEEe4tEnkS1I6tDoauZ0ZHFkXbGFQAvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ktGP+X28KLFg19EgOz6YMIZNX+5DIradhPmvTcz+7ic=;
+ b=GnkjQvZz63h6usHzr0v90jf1j8fBgdlKnCpIZvI3gvfb2Lkhq+WmT7SWuclLG1SL6Xds1cSjNYISOTm3XI/getH4nsG/qZC6KTlifDxJvHMIDXbhtRrL07PYk20urEZjG2C0XyjtJOG7Okn/Z8yQ11iOj7q7acTH9nRtw6+/Ti1DD0+UWOwSZpjBN1qmKbBE4A/DRdl/frg73ms4TTSVu1QDO9x1e0Xda4X0IJC369RL/dfsGu4PIu95uoiEO90sx1to7PfsPCNT3WRIeOx2NMCYxt3FdKm7FhGANoYEq7yKompdBXj+2H10BFd7Y0ecmvzLm8y3n0NrSz2CFJW4yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH7PR11MB6605.namprd11.prod.outlook.com (2603:10b6:510:1b0::16)
+ by SN7PR11MB6728.namprd11.prod.outlook.com (2603:10b6:806:264::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20; Thu, 30 Mar
+ 2023 09:29:02 +0000
+Received: from PH7PR11MB6605.namprd11.prod.outlook.com
+ ([fe80::968d:9383:aae6:175c]) by PH7PR11MB6605.namprd11.prod.outlook.com
+ ([fe80::968d:9383:aae6:175c%2]) with mapi id 15.20.6178.037; Thu, 30 Mar 2023
+ 09:29:01 +0000
+From:   "Zhang, Rui" <rui.zhang@intel.com>
+To:     "bp@alien8.de" <bp@alien8.de>
+CC:     "Brown, Len" <len.brown@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "mario.limonciello@amd.com" <mario.limonciello@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "eric.devolder@oracle.com" <eric.devolder@oracle.com>
+Subject: Re: [PATCH] x86/ACPI/boot: Use FADT version to check support for
+ online capable
+Thread-Topic: [PATCH] x86/ACPI/boot: Use FADT version to check support for
+ online capable
+Thread-Index: AQHZYmZqwCMAvwKNHEqwiN/tJdsjC68Sg+yAgAB+F4CAAA1NgA==
+Date:   Thu, 30 Mar 2023 09:29:01 +0000
+Message-ID: <03ff7ae227378f5cb422c35dbbbb02075164a9bc.camel@intel.com>
+References: <20230329174536.6931-1-mario.limonciello@amd.com>
+         <27c83d42e9cd95a1bfc34fa278315224a63cc062.camel@intel.com>
+         <20230330084123.GBZCVLM8Wz8fBsKr7z@fat_crate.local>
+In-Reply-To: <20230330084123.GBZCVLM8Wz8fBsKr7z@fat_crate.local>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.5-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR11MB6605:EE_|SN7PR11MB6728:EE_
+x-ms-office365-filtering-correlation-id: 101d76a6-0d21-49ac-a808-08db31013293
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VnUKUZLf1eDW5wHZFWhLqhhTvlw40uJ1RLu/KwKRAzEsuiUrH5zgdg1g4oDNYpYhGtnTMLAOQYvoapYw3gFtbbwQszJbVs6PZR2ZF+xJ+gDpKDdFXnK1caK17Z7AT40ZnlCI58mhENuxnzQsxjQB+qA0QLt17cqBjfN0DlBPw/5bYrC7arPEC37HRCbQvvToZ4pK0KLDaEjH9PYM4KYXDjFzxBjWAwPpZEmJqbnFhy3dqauwTZ1RDiuVkM79bPprZOA2Nf6ePzoYARMtnnGlQFggDp0sN8F34YNGu73uRP/YNZImPkElAGnmaZGsMoTnpFYKg0BB6Dun+6ypYXvebh7nTOuKwLGKzfmDMo8LGf8pEP4aTvyU5OXu6GF9qkxOyxNK1071pHDkZ23EcpwEwX2QE2yVIM90jPX8f9bhOawRCw1o1dpafZ25sptyMz9r795si3Extc0eQQK9qCuxBY7g6kO/MM0Z27bUM8PXQOpb9Y5kAj6dJChjDIA50+b8BumLVYrvvabxGYdcYy9+WWjvraE6lwbXkd8Coa1ljtWEWAfe4MK2uPRw1ZirEyHtO044R1KdNJOE/QdrKAem5vCm9RqrLPgXEkgIfd58+2iVW0/pX5aLe4PiMG6o+yEIQJud2ne88pmkMUoErUxsOA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6605.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(376002)(136003)(366004)(346002)(451199021)(316002)(91956017)(186003)(54906003)(36756003)(2616005)(38100700002)(122000001)(6486002)(38070700005)(82960400001)(478600001)(26005)(966005)(6512007)(71200400001)(6506007)(7416002)(5660300002)(4744005)(2906002)(66556008)(41300700001)(66946007)(76116006)(6916009)(8676002)(66476007)(66446008)(4326008)(64756008)(8936002)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aDAwa01HM3lwQWFtM3dYdHFyVXozU1VJL3ZObUhHRWxBcFRENDdjUDZETnlH?=
+ =?utf-8?B?ZGJMVFNITFZpZk03WFZTRHUxN1o4Vk9vcnAyb1piQXZ6eUlaYU9NcWFkS1E4?=
+ =?utf-8?B?L3pmc0JVc3FkejBNYlIvaHVZQThHcDU1ZldHRVNJWUZFMUk3MkhsbUhpMjZa?=
+ =?utf-8?B?UmsxNURGNy9BeW42cVcrdGIwK1VscHJ1MWp4NFJmN0J5cnd0eHpOM2kxcjZU?=
+ =?utf-8?B?RG9GVmplOWVZZEg1dWdyTnZ6dXJhN1NEdlhVU05mUDhBUGNSdGJpdDZseURx?=
+ =?utf-8?B?ZFZ3UEFacUNueldjVWFCUWFBZUxtbVJwaUtqakx6ZktaYjl1NE5PYnZVTUEx?=
+ =?utf-8?B?N2J1UFhZZUNRYzJWYmxGNjNkeDhaeE9obHV1TWQ4V0k2NnZQRllLcTVlZkIy?=
+ =?utf-8?B?YTBEMHVheUVPZmF5OVJmQ3k1WU9OUEZNSGk5OEFQdkFQc1ZrYzNsd0lZWU5j?=
+ =?utf-8?B?S0dEUU9PY3J6Y3RHaENkdng4UUZOV2ZSQmJ1TDROa003Myt3cjFweEFVMXJL?=
+ =?utf-8?B?QjVnM0cveGFtU1dZcElCRG5EVmhZU1FyUm9wMkFQRjhON1B4am5FT1d2OXM4?=
+ =?utf-8?B?Vk9vOGZhY0lVc2Vva2Vxa3plWnYzZmMyYVVxdkJ3NjkxOFpOUEwrNFlhYnMv?=
+ =?utf-8?B?akprQVdJM3Y2T3k5eGFuemdxbktEelRpSWZBNVptNXpQRUtuS1QrVGJMc3l6?=
+ =?utf-8?B?QVNTanNJUVpIWHhhWnREb2plZjFxSHg2dHBoMit2aGN1M3ZsRCtHWlJIcndV?=
+ =?utf-8?B?YlIyTGN5VHNpc2RPWjU3TEM5aEg5T21nVFkwaUVLSFVwSFlnWkZRTGJXamlQ?=
+ =?utf-8?B?WVFmNHY1cklTRmNjbDMzcmRLMmkxeEYwTTFIVmp6aGQzb2lUUk5XcVkxTlVp?=
+ =?utf-8?B?SGZGdEF4QTFKcGJHb0M1ejZLRVpteWM0TTZFaFFXODY2cXozbyt3VTZMZFBK?=
+ =?utf-8?B?WGJXWThXTzluSEk1WHhsZGlJSzczTlpzczBhMSt0ZzlpNHk2THBMTEp3TS9v?=
+ =?utf-8?B?aVFBcmV5ZmNGakFaQ2J4VEhlY3BEQW9KanRCNGlWQ1lJamx1bGt6aFpNMElW?=
+ =?utf-8?B?STJIVUZWYWJxai9EWEs0K0Uyd3hIS1FuMENWNklhSkFLQ25QZ3k5Vk96dGQx?=
+ =?utf-8?B?dkFGazJ6bHVZcmhTaFRUTm04b3VzWGtXQVdYaHdWaXhIQ0RyL0hmWHRRWG9w?=
+ =?utf-8?B?Y2xoVStuakdrREY0R2NEOStlREJlbVMwSG04SUt2c1BDcW5EbnY4bTNvNktQ?=
+ =?utf-8?B?eEpmZ2FFdS9kWFJyeTZjN2UvS3RRb05zUU9md2czTG5zalRWWmhWZDJjcU5v?=
+ =?utf-8?B?ajlQRDBCcVZRY1VyTjhlNlVQbkY4aTRIaWlpT1UxV2FaRHFkTmVycFFPN3Zu?=
+ =?utf-8?B?SC8vQVEvYnAyNitxQytyQzA5SGhvLzJsM25vaTdXSFZiR2ZZMVpVdlpMQ0wv?=
+ =?utf-8?B?ajlqamxxZm9BYVNsYWNLNTlidWc0V1FzTVVyZVl5ZWx4d0tMYzRaVnlZNyts?=
+ =?utf-8?B?UTBIc1pJZWhYUlVIb1ZpeGxMYmcxbnAwdEtLazY1YU9kZXZURU1xejY0MDlJ?=
+ =?utf-8?B?cDVhYWJvSWlacVExWFNSdU1wZHlJaVBubUQ1UVdlSHNMN1I3U0VCY3RielRt?=
+ =?utf-8?B?MExuWHdRZXlUdWtjMkUrWHRHbnhRRTlORC8zLzNERXZlN2F5VjRoQldaUUZX?=
+ =?utf-8?B?WkRkT0ZkdXhzSVJ2S25aRC9YY0JISXZKajlyenFTZWhWOEJSR0ZHL3d6VHlM?=
+ =?utf-8?B?OGhyNnFrREp1T1UzVlVlNkcxaXREMmR5OUNmUEJCb0lTNFZPVncxOHliSkpt?=
+ =?utf-8?B?OU1ReStSUTF0T0sxdWxKb21EUnpUVkZ3RjdxTnpQRnJTaTVVem01SnhCbVpX?=
+ =?utf-8?B?N3pPZUNta0o0RUw1REgzMldLUVhRR2tDckRJdTlwWFNnRmVGa1FpTlI2YnZm?=
+ =?utf-8?B?Qmt1SnZoQzdnM1JoakE5S1BZWEhSbHN6NFN4Wm1zQm10U0drRWxzdkgxV01T?=
+ =?utf-8?B?aTBEVlZxTysxejRkelVYSXdpZVlOdmpBbm13bmQwSkJxK1dERjI3NnBTVVE0?=
+ =?utf-8?B?N0x0TXd3V3QwRVhBMmxYZTRuSERJa3FSd3JSOElLaEE1YkNxUDRWaThDeVFx?=
+ =?utf-8?B?YTNTQXZmQjRtb0lwa2RUcWU2YlFHejlpTjBsZGQ1bnF4ZFg0V05xVDJwaUFD?=
+ =?utf-8?B?ZUE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A92D2408E7F4CB46BB76215D1D141EF4@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.0.74.54]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 32U9RSYw099410
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
-        T_PDS_OTHER_BAD_TLD autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6605.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 101d76a6-0d21-49ac-a808-08db31013293
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2023 09:29:01.6010
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4F4NYuJ43uy0YyY1lusaICI4wdQkzTi2weCKbwj2PSIHXXtU/lHZEMs4YIg8gREcJE900PtimpEmbHKLumFtWA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6728
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: 代子为 (Ziwei Dai) <ziwei.dai@ziwei-lenovo.spreadtrum.com>
-
-In kfree_rcu_monitor(), new free business at krcp is attached to any free
-channel at krwp. kfree_rcu_monitor() is responsible to make sure new free
-business is handled after the rcu grace period. But if there is any none-free
-channel at krwp already, that means there is an on-going rcu work,
-which will cause the kvfree_call_rcu()-triggered free business is done
-before the wanted rcu grace period ends.
-
-This commit ignores krwp which has non-free channel at kfree_rcu_monitor(),
-to fix the issue that kvfree_call_rcu() loses effectiveness.
-
-Below is the css_set obj "from_cset" use-after-free issue caused by
-kvfree_call_rcu() losing effectiveness.
-Core 0 calls rcu_read_lock(), then use "from_cset", then hard irq comes.
-Core 1 calls kfree_rcu(cset, rcu_head), willing to free "from_cset" after new gp.
-Core 2 frees "from_cset" after current gp end. "from_cset" is reallocated.
-Core 0 references "from_cset"'s member, which causes crash.
-
-Core 0					Core 1				       	Core 2
-count_memcg_event_mm()
-|rcu_read_lock()  <---
-|mem_cgroup_from_task()
- |// <css_set ptr> is the "from_cset" mentioned on core 1
- |<css_set ptr> = rcu_dereference((task)->cgroups)
- |// Hard irq comes, current task is scheduled out.
-
-			Core 1:
-			cgroup_attach_task()
-			|cgroup_migrate()
-			 |cgroup_migrate_execute()
-			  |css_set_move_task(task, from_cset, to_cset, true)
-			  |cgroup_move_task(task, to_cset)
-			   |rcu_assign_pointer(.., to_cset)
-			   |...
-			|cgroup_migrate_finish()
-			 |put_css_set_locked(from_cset)
-			  |from_cset->refcount return 0
-			  |kfree_rcu(cset, rcu_head) <--- means to free from_cset after new gp
-			   |add_ptr_to_bulk_krc_lock()
-			   |schedule_delayed_work(&krcp->monitor_work, ..)
-
-			kfree_rcu_monitor()
-			|krcp->bulk_head[0]'s work attached to krwp->bulk_head_free[]
-			|queue_rcu_work(system_wq, &krwp->rcu_work)
-			 |if rwork->rcu.work is not in WORK_STRUCT_PENDING_BIT state,
-			 |call_rcu(&rwork->rcu, rcu_work_rcufn) <--- request a new gp
-
-								// There is a perious call_rcu(.., rcu_work_rcufn)
-								// gp end, rcu_work_rcufn() is called.
-								rcu_work_rcufn()
-								|__queue_work(.., rwork->wq, &rwork->work);
-								Core 2：
-								// or there is a pending kfree_rcu_work() work called.
-								|kfree_rcu_work()
-								|krwp->bulk_head_free[0] bulk is freed before new gp end!!!
-								|The "from_cset" mentioned on core 1 is freed before new gp end.
-Core 0:
-// the task is schedule in after many ms.
- |<css_set ptr>->subsys[(subsys_id) <--- caused kernel crash, because <css_set ptr>="from_cset" is freed.
-
-Signed-off-by: Ziwei Dai <ziwei.dai@unisoc.com>
-
-:#	modified:   tree.c
----
- kernel/rcu/tree.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 8e880c0..f6451a8 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -3107,15 +3107,16 @@ static void kfree_rcu_monitor(struct work_struct *work)
- 	for (i = 0; i < KFREE_N_BATCHES; i++) {
- 		struct kfree_rcu_cpu_work *krwp = &(krcp->krw_arr[i]);
- 
--		// Try to detach bulk_head or head and attach it over any
--		// available corresponding free channel. It can be that
--		// a previous RCU batch is in progress, it means that
--		// immediately to queue another one is not possible so
--		// in that case the monitor work is rearmed.
--		if ((!list_empty(&krcp->bulk_head[0]) && list_empty(&krwp->bulk_head_free[0])) ||
--			(!list_empty(&krcp->bulk_head[1]) && list_empty(&krwp->bulk_head_free[1])) ||
--				(READ_ONCE(krcp->head) && !krwp->head_free)) {
--
-+		// Try to detach bulk_head or head and attach it, only when
-+		// all channels are free.  Any channel is not free means at krwp
-+		// there is on-going rcu work to handle krwp's free business.
-+		if (!list_empty(&krwp->bulk_head_free[0]) ||
-+			!list_empty(&krwp->bulk_head_free[1]) ||
-+				krwp->head_free)
-+			continue;
-+		if (!list_empty(&krcp->bulk_head[0]) ||
-+			!list_empty(&krcp->bulk_head[1]) ||
-+			READ_ONCE(krcp->head)) {
- 			// Channel 1 corresponds to the SLAB-pointer bulk path.
- 			// Channel 2 corresponds to vmalloc-pointer bulk path.
- 			for (j = 0; j < FREE_N_CHANNELS; j++) {
--- 
-1.9.1
-
+T24gVGh1LCAyMDIzLTAzLTMwIGF0IDEwOjQxICswMjAwLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6
+DQo+IE9uIFRodSwgTWFyIDMwLCAyMDIzIGF0IDAxOjEwOjA3QU0gKzAwMDAsIFpoYW5nLCBSdWkg
+d3JvdGU6DQo+ID4gSW4gaHR0cHM6Ly91ZWZpLm9yZy9zaXRlcy9kZWZhdWx0L2ZpbGVzL3Jlc291
+cmNlcy9BQ1BJXzZfMi5wZGYsDQo+ID4gTUFEVCByZXZpc2lvbiBpcyA0Lg0KPiA+IA0KPiA+IElu
+IA0KPiA+IGh0dHBzOi8vdWVmaS5vcmcvc2l0ZXMvZGVmYXVsdC9maWxlcy9yZXNvdXJjZXMvQUNQ
+SSUyMDZfMl9BX1NlcHQyOS5wZGYsDQo+ID4gTUFEVCByZXZpc2lvbiBpcyA0NS4NCj4gDQo+IFRo
+aXMgaXMgYSBoYWNrIHRvIGZpeCBzb21lIEFDUEkgZXJyYXR1bSBvciB3aGF0ZXZlci4NCj4gDQo+
+ID4gSW4gDQo+ID4gaHR0cHM6Ly91ZWZpLm9yZy9zaXRlcy9kZWZhdWx0L2ZpbGVzL3Jlc291cmNl
+cy9BQ1BJXzZfMl9CX2ZpbmFsX0phbjMwLnBkZg0KPiA+IE1BRFQgcmV2aXNpb24gaXMgNS4NCj4g
+PiANCj4gPiBTbyB5b3UgcHJvYmFibHkgbWVhbiA2LjJhIGhhcyBNQURUIHJldmlzaW9uICI0NSIg
+aGVyZT8NCj4gDQo+IE5vLCBmb3JnZXQgTUFEVC4NCj4gDQo+IFRoZSB0aGluZyBzaG91bGQgY2hl
+Y2sgd2hldGhlciB0aGUgQUNQSSByZXZpc2lvbiBpcyA2LjMuIEFuZCB0aGlzIGlzDQo+IHdoYXQg
+aXQgZG9lcyBiZWxvdy4NCg0KWWVzLCBJIGFncmVlLg0KQXMgdGhlIG9yaWdpbmFsIGNoYW5nZWxv
+ZyBtZW50aW9uZWQgdGhhdCAiQUNQSSBzcGVjIDYuMmIgaGFzIE1BRFQNCnJldmlzaW9uIDQ1Iiwg
+SSB3YXMganVzdCBjaGVja2luZyBpZiB0aGF0IHN0YXRlbWVudCBpcyBhY2N1cmF0ZSBvciBub3Qu
+DQoNCnRoYW5rcywNCnJ1aQ0KDQo=
