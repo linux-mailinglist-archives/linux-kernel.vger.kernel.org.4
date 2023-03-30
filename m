@@ -2,136 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16726D0408
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8376D0411
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbjC3Lxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
+        id S231290AbjC3L4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjC3Lxm (ORCPT
+        with ESMTP id S230394AbjC3L4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:53:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414DFB460;
-        Thu, 30 Mar 2023 04:53:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5FC16204C;
-        Thu, 30 Mar 2023 11:52:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26940C433AA;
-        Thu, 30 Mar 2023 11:52:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680177127;
-        bh=Lg8Woq7ScP2NFdPayLKkYeMtRMZwMJRAR9+KtXakJhE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=szgi2AGJBTiRQ58jY7BtDVpishu6YXxB3MID/h/iLnY6weieQpEEBjD5U4dJKUZJo
-         NyrFHSlcuLma/JgU04Kyl/teOBwE2aqvJirDrSyFmIOb/MgyJ5jbYzY27e7K0/FB3v
-         CGl1zaVIaqHqL9jEmUV6o9JaD3e9FPV5dCV6/OyKRUcn2nGSc77XIBQZ4V3nd48tRE
-         MXMuKMr76f/IZcL1m1wvAHaMqdCUnLP5+1pyn+Oivk5n7icXvXAiLs6rb+QGNifsx4
-         s+2w00OYui+zTpJ8W2EjziNZVSk+jRvfupY8WA5Y6La/gJ22X/s8u0ZbXc6MKI1CFs
-         Gh6YkXLHZHYVw==
-Received: by mail-lf1-f52.google.com with SMTP id g19so11034911lfr.9;
-        Thu, 30 Mar 2023 04:52:07 -0700 (PDT)
-X-Gm-Message-State: AAQBX9ft5A7WJCknKgnZ3X+jipHPJIOsmWAmuopg6M9eJX6eQz3aA7s4
-        EQgGRwRdqFLaFGTSjQi+FLYILDCHpiUj7JnhrQg=
-X-Google-Smtp-Source: AKy350aaxBOgSqlP959KpS9cfZAsDCsvbSuFf+7QcLc+VlamdgSrDzoUdXNjAn81KSsW2remp6yjeVooIQhT3qtniP0=
-X-Received: by 2002:a19:f007:0:b0:4db:b4:c8d7 with SMTP id p7-20020a19f007000000b004db00b4c8d7mr1755725lfc.2.1680177124990;
- Thu, 30 Mar 2023 04:52:04 -0700 (PDT)
+        Thu, 30 Mar 2023 07:56:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE676114
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:55:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680177347; x=1711713347;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HnAIjzzdx2lB/b8PHKZcY6z2HpfZD2oCVe+1dUZS8So=;
+  b=Xy9POb6w6YKvh43PIP7/VV5pAm2bKY3kIaPhAyUyXjU2qhsL/uaw3gfz
+   Fd7Mn/1mzpXHqq65T5mwPrr+1KDrsg+JG7UrRAEDySYuzG8hrzbbspoET
+   pMo1TlddsXumXIgqH+CauZ9qro/S/Opiu0zq95yNev941wJQrwdPpycLp
+   FerxL3ksVb00+WLQdPeIo1Wzn3eX4udlhNT/B/8RSvRobJeGbuCUR9q2V
+   yBrVrNXJpSduOsh+8PzbHnszxJwN101DvPyzEFc+8INJmcx8ULqjUybhw
+   fk49KsEEAdU2nbYvcaQyKWa0wMYMurmVJHv8GghaspBgAEClQ9dosyTAB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="325069296"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="325069296"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:54:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="717285299"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="717285299"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:54:01 -0700
+Message-ID: <8d0d0478-1e45-ea52-f1b7-910b747d6282@linux.intel.com>
+Date:   Thu, 30 Mar 2023 13:53:59 +0200
 MIME-Version: 1.0
-References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-19-arnd@kernel.org>
-In-Reply-To: <20230327121317.4081816-19-arnd@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 30 Mar 2023 13:51:53 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGNjrmTr1R+-09UYtHSgvT6fSgZxvpbEOfeTFxhWtgGcQ@mail.gmail.com>
-Message-ID: <CAMj1kXGNjrmTr1R+-09UYtHSgvT6fSgZxvpbEOfeTFxhWtgGcQ@mail.gmail.com>
-Subject: Re: [PATCH 18/21] ARM: drop SMP support for ARM11MPCore
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Daniel Golle <daniel@makrotopia.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v10] ASoC: tas2781: Add tas2781 driver
+Content-Language: en-US
+To:     Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com
+Cc:     kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com
+References: <20230329100107.8181-1-13916275206@139.com>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <20230329100107.8181-1-13916275206@139.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 at 14:18, Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The cache management operations for noncoherent DMA on ARMv6 work
-> in two different ways:
->
->  * When CONFIG_DMA_CACHE_RWFO is set, speculative prefetches on in-flight
->    DMA buffers lead to data corruption when the prefetched data is written
->    back on top of data from the device.
->
->  * When CONFIG_DMA_CACHE_RWFO is disabled, a cache flush on one CPU
->    is not seen by the other core(s), leading to inconsistent contents
->    accross the system.
->
-> As a consequence, neither configuration is actually safe to use in a
-> general-purpose kernel that is used on both MPCore systems and ARM1176
-> with prefetching enabled.
->
-> We could add further workarounds to make the behavior more dynamic based
-> on the system, but realistically, there are close to zero remaining
-> users on any ARM11MPCore anyway, and nobody seems too interested in it,
-> compared to the more popular ARM1176 used in BMC2835 and AST2500.
->
-> The Oxnas platform has some minimal support in OpenWRT, but most of the
-> drivers and dts files never made it into the mainline kernel, while the
-> Arm Versatile/Realview platform mainly serves as a reference system but
-> is not necessary to be kept working once all other ARM11MPCore are gone.
->
-> Take the easy way out here and drop support for multiprocessing on
-> ARMv6, along with the CONFIG_DMA_CACHE_RWFO option and the cache
-> management implementation for it. This also helps with other ARMv6
-> issues, but for the moment leaves the ability to build a kernel that
-> can run on both ARMv7 SMP and single-processor ARMv6, which we probably
-> want to stop supporting as well, but not as part of this series.
->
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Daniel Golle <daniel@makrotopia.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: linux-oxnas@groups.io
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On 3/29/2023 12:01 PM, Shenghao Ding wrote:
+> Create tas2781 driver.
+> 
+> Signed-off-by: Shenghao Ding <13916275206@139.com>
+> 
+> ---
+> Changes in v10:
+>   - using be16_to_cpu and be32_to_cpu instead of SMS_HTONS and SMS_HTONL
+>   - optimize and reduce the boundary checks
+>   - Add comments on some kmemdup instead of kzalloc+memcpy
+>   Changes to be committed:
+> 	modified:   sound/soc/codecs/Kconfig
+> 	modified:   sound/soc/codecs/Makefile
+> 	new file:   sound/soc/codecs/tas2781-dsp.c
+> 	new file:   sound/soc/codecs/tas2781-dsp.h
+> 	new file:   sound/soc/codecs/tas2781-i2c.c
+> 	new file:   sound/soc/codecs/tas2781.h
+> ---
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+...
+
+> +
+> +static int fw_parse_block_data_kernel(struct tasdevice_fw *tas_fmw,
+> +	struct tasdev_blk *block, const struct firmware *fmw, int offset)
+> +{
+> +	const unsigned char *data = fmw->data;
+> +
+> +	if (offset + 16 > fmw->size) {
+> +		dev_err(tas_fmw->dev, "%s: File Size error\n", __func__);
+> +		offset = -EINVAL;
+> +		goto out;
+> +	}
+> +	block->type = be32_to_cpup((__be32 *)&data[offset]);
+
+Wouldn't just be32_to_cpu(data[offset]) work instead of be32_to_cpup? 
+Same in other cases.
+
+
