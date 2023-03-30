@@ -2,105 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 114886D09D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9DF6D09C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbjC3Pht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
+        id S233187AbjC3Pfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbjC3Phq (ORCPT
+        with ESMTP id S233045AbjC3Pfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:37:46 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A182976F;
-        Thu, 30 Mar 2023 08:37:26 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id BAD591883842;
-        Thu, 30 Mar 2023 15:37:22 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id AC9BA2500389;
-        Thu, 30 Mar 2023 15:37:22 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id A74189B403E2; Thu, 30 Mar 2023 15:37:22 +0000 (UTC)
-X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
-Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 04E2D91201E3;
-        Thu, 30 Mar 2023 15:37:22 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
- drivers
-In-Reply-To: <20230330150752.gdquw5kudtrqgzyz@skbuf>
-References: <20230327160009.bdswnalizdv2u77z@skbuf>
- <87pm8tooe1.fsf@kapio-technology.com>
- <20230327225933.plm5raegywbe7g2a@skbuf>
- <87ileljfwo.fsf@kapio-technology.com>
- <20230328114943.4mibmn2icutcio4m@skbuf>
- <87cz4slkx5.fsf@kapio-technology.com>
- <20230330124326.v5mqg7do25tz6izk@skbuf>
- <87wn2yxunb.fsf@kapio-technology.com>
- <20230330130936.hxme34qrqwolvpsh@skbuf>
- <875yaimgro.fsf@kapio-technology.com>
- <20230330150752.gdquw5kudtrqgzyz@skbuf>
-Date:   Thu, 30 Mar 2023 17:34:44 +0200
-Message-ID: <877cuy6ynf.fsf@kapio-technology.com>
+        Thu, 30 Mar 2023 11:35:36 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id CF5095BA1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:35:18 -0700 (PDT)
+Received: (qmail 200941 invoked by uid 1000); 30 Mar 2023 11:34:46 -0400
+Date:   Thu, 30 Mar 2023 11:34:46 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>,
+        Thomas Winischhofer <thomas@winischhofer.net>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in sisusb_send_bulk_msg/usb_submit_urb
+Message-ID: <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
+References: <00000000000096e4f905f81b2702@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000096e4f905f81b2702@google.com>
+X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 18:07, Vladimir Oltean <olteanv@gmail.com> wrote:
->
-> Then, make DSA decide whether to handle the "added_by_user && !is_static"
-> combination or not, based on the presence of the DSA_FDB_FLAG_DYNAMIC
-> flag, which will be set in ds->supported_fdb_flags only for the mv88e6xxx
-> driver.
+Reference: https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
 
-Okay, so this will require a new function in the DSA layer that sets
-which flags are supported and that the driver will call on
-initialization.
+The sisusbvga driver just assumes that the endpoints it uses will be 
+present, without checking.  I don't know anything about this driver, so 
+the fix below may not be entirely correct.
 
-Where (in the DSA layer) should such a function be placed and what
-should it be called?
+Alan Stern
+
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
+
+--- usb-devel.orig/drivers/usb/misc/sisusbvga/sisusbvga.c
++++ usb-devel/drivers/usb/misc/sisusbvga/sisusbvga.c
+@@ -2772,6 +2772,24 @@ static struct usb_class_driver usb_sisus
+ 	.minor_base =	SISUSB_MINOR
+ };
+ 
++/*
++ * Check whether the current altsetting for intf contains a bulk endpoint
++ * with the specified address (number and direction).
++ */
++static int check_bulk_ep(struct usb_interface *intf, unsigned int ep_addr)
++{
++	int n, i;
++	const struct usb_endpoint_descriptor *epd;
++
++	n = intf->cur_altsetting->desc.bNumEndpoints;
++	for (i = 0; i < n; ++i) {
++		epd = &intf->cur_altsetting->endpoint[i].desc;
++		if (epd->bEndpointAddress == ep_addr)
++			return usb_endpoint_xfer_bulk(epd);
++	}
++	return 0;
++}
++
+ static int sisusb_probe(struct usb_interface *intf,
+ 		const struct usb_device_id *id)
+ {
+@@ -2779,6 +2797,17 @@ static int sisusb_probe(struct usb_inter
+ 	struct sisusb_usb_data *sisusb;
+ 	int retval = 0, i;
+ 
++	/* Are the expected endpoints present? */
++	if (!check_bulk_ep(intf, SISUSB_EP_GFX_IN | USB_DIR_IN) ||
++	    !check_bulk_ep(intf, SISUSB_EP_GFX_OUT | USB_DIR_OUT) ||
++	    !check_bulk_ep(intf, SISUSB_EP_GFX_BULK_OUT | USB_DIR_OUT) ||
++	    !check_bulk_ep(intf, SISUSB_EP_GFX_LBULK_OUT | USB_DIR_OUT) ||
++	    !check_bulk_ep(intf, SISUSB_EP_BRIDGE_IN | USB_DIR_IN) ||
++	    !check_bulk_ep(intf, SISUSB_EP_BRIDGE_OUT | USB_DIR_OUT)) {
++		dev_err(&dev->dev, "Invalid USB2VGA device\n");
++		return -EINVAL;
++	}
++
+ 	dev_info(&dev->dev, "USB2VGA dongle found at address %d\n",
+ 			dev->devnum);
+ 
+
