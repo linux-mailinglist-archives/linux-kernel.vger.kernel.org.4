@@ -2,158 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC506CF824
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998C06CF83F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjC3ARo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 20:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S230481AbjC3A27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 20:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjC3ARm (ORCPT
+        with ESMTP id S229638AbjC3A25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 20:17:42 -0400
-Received: from out-40.mta1.migadu.com (out-40.mta1.migadu.com [95.215.58.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433F7C0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:17:40 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 00:17:25 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1680135457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dZ7CgR7LTAUcUKEiGOSUlgNQXWvEplmklKUnppCogvc=;
-        b=hRX9HcY4lHKvklyIm9h5vMkVivWZXvGwyJDd5XCTzM29yNzKcO7TXlGwIu+7wmffVDeVof
-        XgLEjtUm074mMAdnfFC0AGMUVl2/hrS6DpBuI9GVy6scElft++20vrOGXsNmvbt2Zh3bAr
-        8VYBc2aq4fHO3hc8+86ULT8PRGPctfE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] KVM: arm64: Break the table entries using TLBI
- range instructions
-Message-ID: <ZCTVFYd2oJnGR6O+@linux.dev>
-References: <20230206172340.2639971-1-rananta@google.com>
- <20230206172340.2639971-7-rananta@google.com>
+        Wed, 29 Mar 2023 20:28:57 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9D155AE
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:28:56 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id 187-20020a6b15c4000000b007590817bcfbso10802416iov.12
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:28:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680136135; x=1682728135;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tOFO6ix9K7hEKxkWoMSfJOZ7hN3aNlRJUo1TnYoWGk4=;
+        b=CoQJJfCWqSjoAFB5FlzWEWwiiu13dgyznrPBbBmbc3SR8Mg7o99kE1U+rRwg/+rpKN
+         qHC1dcAaw2nHGmsCr/K5sQHkwk+5BrTQLgP/7yrtEEx4dih3PuKw0vpLcoh70vSU4hTf
+         /ziPgyrQ5s6ur2uQLQCxdQJOz4DrpRs3tNd+KLJeo9v7BJ085O0PogcLbxq7OEF5kdrN
+         9ZF259cVlJlp1NX3lH+tSgNb5QaJ0G5gAfgGiEcpaieOJNJ6bZ0Cg8EcklC8cHS78dhn
+         Qb+ACoDdccoA+3TF3yYL0VVIzpSvOdC1m8AkFJqtOlDfAvT7vkle6/+GSH5C202g2h9a
+         Rs0Q==
+X-Gm-Message-State: AAQBX9cwLBlMBdLVw0aNHSKWBbPbO+sw55seJNYRO45l5KPeHf5g8iHY
+        iCKObK6m9ZMi8SHY5bBLJZjK9Ho6n87YL1H0j5XHktz3mSJX
+X-Google-Smtp-Source: AKy350ZFHYuEwSPSNjhCBN2Ly1E+uEsmLmnELVyr5i3aroBtkqbBciEynrcmC0cgfda+2x2aIvIRw1SbviT8xg3JbAcsjL22yeK3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206172340.2639971-7-rananta@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:7603:0:b0:323:cab8:3c0c with SMTP id
+ r3-20020a927603000000b00323cab83c0cmr11044041ilc.5.1680136135532; Wed, 29 Mar
+ 2023 17:28:55 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 17:28:55 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000088694505f8132d77@google.com>
+Subject: [syzbot] [fs?] KASAN: null-ptr-deref Read in ida_free (3)
+From:   syzbot <syzbot+8ac3859139c685c4f597@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-nit: s/break/invalidate/g
+Hello,
 
-There is a rather important degree of nuance there. 'Break' as it
-relates to break-before-make implies that the PTE is made invalid and
-visible to hardware _before_ a subsequent invalidation. There will be
-systems that relax this requirement and also support TLBIRANGE.
+syzbot found the following issue on:
 
-On Mon, Feb 06, 2023 at 05:23:39PM +0000, Raghavendra Rao Ananta wrote:
+HEAD commit:    da8e7da11e4b Merge tag 'nfsd-6.3-4' of git://git.kernel.or..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1266331ec80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
+dashboard link: https://syzkaller.appspot.com/bug?extid=8ac3859139c685c4f597
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11639815c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12128b1ec80000
 
-Some nitpicking on the changelog:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/62e9c5f4bead/disk-da8e7da1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c11aa933e2a7/vmlinux-da8e7da1.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7a21bdd49c84/bzImage-da8e7da1.xz
 
-> Currently, when breaking up the stage-2 table entries, KVM
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8ac3859139c685c4f597@syzkaller.appspotmail.com
 
-'breaking up stage-2 table entries' is rather ambiguous. Instead
-describe the operation taking place on the page tables (i.e. hugepage
-collapse).
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:72 [inline]
+BUG: KASAN: null-ptr-deref in _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
+BUG: KASAN: null-ptr-deref in ida_free+0x1b9/0x400 lib/idr.c:511
+Read of size 8 at addr 0000000000000000 by task syz-executor237/5830
 
-> would flush the entire VM's context using 'vmalls12e1is'
-> TLBI operation. One of the problematic situation is collapsing
-> table entries into a hugepage, specifically if the VM is
-> faulting on many hugepages (say after dirty-logging). This
-> creates a performance penality for the guest whose pages have
+CPU: 1 PID: 5830 Comm: syz-executor237 Not tainted 6.3.0-rc3-syzkaller-00338-gda8e7da11e4b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_report+0xe6/0x540 mm/kasan/report.c:433
+ kasan_report+0x176/0x1b0 mm/kasan/report.c:536
+ kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
+ instrument_atomic_read include/linux/instrumented.h:72 [inline]
+ _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
+ ida_free+0x1b9/0x400 lib/idr.c:511
+ mnt_release_group_id fs/namespace.c:160 [inline]
+ cleanup_group_ids fs/namespace.c:2093 [inline]
+ do_mount_setattr fs/namespace.c:4188 [inline]
+ __do_sys_mount_setattr fs/namespace.c:4375 [inline]
+ __se_sys_mount_setattr+0xc44/0x1b00 fs/namespace.c:4334
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7efc4b190919
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007efc4b142318 EFLAGS: 00000246 ORIG_RAX: 00000000000001ba
+RAX: ffffffffffffffda RBX: 00007efc4b2183e8 RCX: 00007efc4b190919
+RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000003
+RBP: 00007efc4b2183e0 R08: 0000000000000020 R09: 0000000000000000
+R10: 0000000020000140 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 00007ffe5a122bdf R14: 00007efc4b142400 R15: 0000000000022000
+ </TASK>
+==================================================================
 
-typo: penalty
 
-> already been faulted earlier as they would have to refill their
-> TLBs again.
-> 
-> Hence, if the system supports it, use __kvm_tlb_flush_range_vmid_ipa()
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> to flush only the range of pages governed by the table entry,
-> while leaving other TLB entries alone. An upcoming patch also
-> takes advantage of this when breaking up table entries during
-> the unmap operation.
-
-Language regarding an upcoming patch isn't necessary, as this one stands
-on its own (implements and uses a range-based invalidation helper).
-
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> ---
->  arch/arm64/kvm/hyp/pgtable.c | 23 ++++++++++++++++++++---
->  1 file changed, 20 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> index b11cf2c618a6c..0858d1fa85d6b 100644
-> --- a/arch/arm64/kvm/hyp/pgtable.c
-> +++ b/arch/arm64/kvm/hyp/pgtable.c
-> @@ -686,6 +686,20 @@ static bool stage2_try_set_pte(const struct kvm_pgtable_visit_ctx *ctx, kvm_pte_
->  	return cmpxchg(ctx->ptep, ctx->old, new) == ctx->old;
->  }
->  
-> +static void kvm_pgtable_stage2_flush_range(struct kvm_s2_mmu *mmu, u64 start, u64 end,
-> +						u32 level, u32 tlb_level)
-> +{
-> +	if (system_supports_tlb_range())
-
-You also check this in __kvm_tlb_flush_range(), ideally this should be
-done exactly once per call.
-
-> +		kvm_call_hyp(__kvm_tlb_flush_range_vmid_ipa, mmu, start, end, level, tlb_level);
-> +	else
-> +		/*
-> +		 * Invalidate the whole stage-2, as we may have numerous leaf
-> +		 * entries below us which would otherwise need invalidating
-> +		 * individually.
-> +		 */
-> +		kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
-> +}
-> +
->  /**
->   * stage2_try_break_pte() - Invalidates a pte according to the
->   *			    'break-before-make' requirements of the
-> @@ -721,10 +735,13 @@ static bool stage2_try_break_pte(const struct kvm_pgtable_visit_ctx *ctx,
->  	 * Perform the appropriate TLB invalidation based on the evicted pte
->  	 * value (if any).
->  	 */
-> -	if (kvm_pte_table(ctx->old, ctx->level))
-> -		kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
-> -	else if (kvm_pte_valid(ctx->old))
-> +	if (kvm_pte_table(ctx->old, ctx->level)) {
-> +		u64 end = ctx->addr + kvm_granule_size(ctx->level);
-> +
-> +		kvm_pgtable_stage2_flush_range(mmu, ctx->addr, end, ctx->level, 0);
-> +	} else if (kvm_pte_valid(ctx->old)) {
->  		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu, ctx->addr, ctx->level);
-> +	}
->  
->  	if (stage2_pte_is_counted(ctx->old))
->  		mm_ops->put_page(ctx->ptep);
-> -- 
-> 2.39.1.519.gcb327c4b5f-goog
-> 
-> 
-
--- 
-Thanks,
-Oliver
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
