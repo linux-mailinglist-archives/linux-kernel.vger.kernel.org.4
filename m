@@ -2,153 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2266D0E2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C506D0DAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbjC3Szu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 14:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        id S231168AbjC3SXz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 14:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjC3Szs (ORCPT
+        with ESMTP id S231127AbjC3SXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 14:55:48 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6D2DE;
-        Thu, 30 Mar 2023 11:55:46 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 796255C0140;
-        Thu, 30 Mar 2023 14:55:43 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 30 Mar 2023 14:55:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1680202543; x=1680288943; bh=TDo5jZQU9I
-        C6sywgEGOqzPOxZ7aUBvX49rI+0P5qm4M=; b=YUUnIRZLMok8GCi4FocI0W8ffH
-        OCnwU3bxzlbM5/7WDWYUo45uJ1bg8XOdyeuze5G16V52Aww+hYfVu1D0PKbBAgH4
-        zkQXOQaKQu0SXIqtObwFme1g4B4Vbp8uEdBqnFseJxGS4n1MLuwtaP6waWwLfOXr
-        KgxghKpkpR2g622ml3kXoBaZj0/vFGdIaERQxhoy8oQOtb7TcNlxFQ0140bFdmeq
-        q4qRzIJFVyzlV1TUN9sSIOyC/GtalhQKMWBKU4gZi/m/RE6N9Syg55ZRBglmvZIg
-        wxsNmk4zolUakgbsBB/gI5bRS/PGP/PFGwZY4n4CHSnGq4agNBujAg5iFgOw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680202543; x=1680288943; bh=TDo5jZQU9IC6s
-        ywgEGOqzPOxZ7aUBvX49rI+0P5qm4M=; b=ajTGmETHYzYFDrstGf22x7WNZofkA
-        NT8vzSXDCiLD64FmeN/IdTu7WOv2vl2NLzFTlpGQgZMavTYMrp2CRo5a2/mWZPWO
-        qz6v3pqocDBXEFJs+6Oxckah37XAJmfcHedQpQ2cpoL/2pqwuEhYyXWr76IEIkBK
-        iQJYf+7jIxDyPDZn1bPB6kq6thoItnnyGI9cmckDzjFM6hk1SLoCgzByblbLUfH2
-        mAxGgmqKJRnGOhZiPfMqh7/HcZqV9/+hgmF0RKwMR3qIqrLftdCDznRDzwL0FEDv
-        Ep39owL9m34YQLVXatTtxG/szBiYeRit+YG5WJWnpQ/qDpmnBtFMZaJ1Q==
-X-ME-Sender: <xms:LtslZH6_F25VBTpOAFRk0gSKxli1GSUkbbQWyUndO95RF6Y56khtWA>
-    <xme:LtslZM7YRUqU_xB5XRYRQo5T3gPE1pkQiR2XdfMRzIbA4b72YjFqW8shok9IKKd7y
-    dN5u-9Dr9V45t3r1w>
-X-ME-Received: <xmr:LtslZOe7ztlwA7GxRLBUrrirh73AZD4Sv3XAqDKBNh1LVp3_5Tda48DjHBMLL84JHgIF028L9UExtIG1wqtC6UO3ut-_uwwK>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehledgfeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehlhihsshgr
-    ucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhepueefie
-    dvheffveegieejjeevgfejjeduveekffeiveeuvedvtedvhfelieeutdfgnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehhihesrghlhihsshgrrdhish
-X-ME-Proxy: <xmx:LtslZIL3rkl7TX1GDdSypybenFWILqzROWAeeos8jvsYoI13L-PK-Q>
-    <xmx:LtslZLLy-bW9CXCjyB7dTbzS5NpayGemdVvygt9DAykZGpggMXaKaw>
-    <xmx:LtslZBzedqTWGZ0FoZ-wkJLpp6DPC74p5DUGlfrYSGHSm1oc7aTIgA>
-    <xmx:L9slZAdMAkfdHmY_WUtkjG1bTdRT_nNFH5DIHtHYZPftdRVLemcgPw>
-Feedback-ID: i12284293:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Mar 2023 14:55:42 -0400 (EDT)
-Received: by x220.qyliss.net (Postfix, from userid 1000)
-        id 3BF532412; Thu, 30 Mar 2023 18:55:41 +0000 (UTC)
-From:   Alyssa Ross <hi@alyssa.is>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alyssa Ross <hi@alyssa.is>, stable@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v3] purgatory: fix disabling debug info
-Date:   Thu, 30 Mar 2023 18:22:24 +0000
-Message-Id: <20230330182223.181775-1-hi@alyssa.is>
-X-Mailer: git-send-email 2.37.1
+        Thu, 30 Mar 2023 14:23:52 -0400
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E48FE072;
+        Thu, 30 Mar 2023 11:23:51 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id h8so80064264ede.8;
+        Thu, 30 Mar 2023 11:23:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680200629;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7j0TodEruv5k2n+iGGvRH1vWLP1TxquIM08eT58r8/Q=;
+        b=5UvL5CP/I7WM9GYFG43B89kFuu0ZP/q30aTUBJiMeli/BjR3km4YNxFw+1IMT/EyOT
+         oNijtVWs2IHGKpXrz59rj7wT1ZIGt+/2kmam5nRpR1CCvI8AdDD6znH0djVB4allHigz
+         aPmdFFNQfnEVZ8FdARLNrJPpa9PbMoAtQRzkoFE0f8VxE7Y6u0bpU8bcubuU5aD5qG1D
+         Lq1tjXrMmnODtdHpx34goP1IkikzbQ/z8vHaeJnq9goJoFpmun+NYtz9lcoPGEZV/JBD
+         KM+ZVtWmOhPoOig3Jm3TwWGgO3yn3G7nw99NcZGGCx3sSUl65uE3Di+Q5uh8NjAGYvrj
+         jsGg==
+X-Gm-Message-State: AAQBX9fJU85XgF13Ow2LFPj7d+cQb6sHAw5FoXVuqH//sYHZZUctK9Vj
+        ToCdh8efsdjjYJ4qpzUSV3UzrsJh5DxQSMn3eoo=
+X-Google-Smtp-Source: AKy350YUmI7pvkib+YOeWqKmPdNHv1IjhaEHQ3mMtxgcVfxAUucYlvMka6PCp1v3i7+U+XfRFPV6J+bmBvYrlk88s4c=
+X-Received: by 2002:a17:907:d48d:b0:93e:c1ab:ae67 with SMTP id
+ vj13-20020a170907d48d00b0093ec1abae67mr11209201ejc.2.1680200629495; Thu, 30
+ Mar 2023 11:23:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230329174536.6931-1-mario.limonciello@amd.com>
+In-Reply-To: <20230329174536.6931-1-mario.limonciello@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Mar 2023 20:23:38 +0200
+Message-ID: <CAJZ5v0i-ypLb9oPO8RqdQ6Vm3yD1ohP1sFei_BPNgiHZibdoQg@mail.gmail.com>
+Subject: Re: [PATCH] x86/ACPI/boot: Use FADT version to check support for
+ online capable
+To:     Mario Limonciello <mario.limonciello@amd.com>, x86@kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Eric DeVolder <eric.devolder@oracle.com>,
+        Borislav Petkob <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
-Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
--Wa versions of both of those if building with Clang and GNU as.  As a
-result, debug info was being generated for the purgatory objects, even
-though the intention was that it not be.
+On Wed, Mar 29, 2023 at 7:46 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> ACPI 6.3 introduced the online capable bit, and also introduced MADT
+> version 5.
+>
+> This was used to distinguish whether the offset storing online capable
+> could be used. However ACPI 6.2b has MADT version "45" which is for
+> an errata version of the ACPI 6.2 spec.  This means that the Linux code
+> for detecting availability of MADT will mistakingly flag ACPI 6.2b as
+> supporting online capable which is inaccurate as it's an ACPI 6.3 feature.
+>
+> Instead use the FADT major and minor revision fields to distingush this.
+>
+> Reported-by: Eric DeVolder <eric.devolder@oracle.com>
+> Reported-by: Borislav Petkob <bp@alien8.de>
 
-Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
-Signed-off-by: Alyssa Ross <hi@alyssa.is>
-Cc: stable@vger.kernel.org
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
----
-v2: https://lore.kernel.org/r/20230326182120.194541-1-hi@alyssa.is
+s/Petkob/Petkov/ I suppose?
 
-Difference from v2: replaced asflags-remove-y with every possible
-debug flag with asflags-y += -g0, as suggested by Nick Desaulniers.
+Would have been nice to CC this to linux-acpi (done now).
 
-Additionally, I've CCed the x86 maintainers this time, since Masahiro
-said he would like acks from subsystem maintainers, and
-get_maintainer.pl didn't pick them the first time around.
+Anyway, x86 guys, are you going to handle this or do you want me to do that?
 
- arch/riscv/purgatory/Makefile | 7 +------
- arch/x86/purgatory/Makefile   | 3 +--
- 2 files changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
-index d16bf715a586..9c1e71853ee7 100644
---- a/arch/riscv/purgatory/Makefile
-+++ b/arch/riscv/purgatory/Makefile
-@@ -84,12 +84,7 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
- CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
- 
--AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
-+asflags-y			+= -g0
- 
- $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- 		$(call if_changed,ld)
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index 17f09dc26381..8e6c81b1c8f7 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -69,8 +69,7 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
- CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
- 
--AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
-+asflags-y			+= -g0
- 
- $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- 		$(call if_changed,ld)
--- 
-2.37.1
-
+> Fixes: aa06e20f1be6 ("x86/ACPI: Don't add CPUs that are not online capable")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  arch/x86/kernel/acpi/boot.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+> index 1c38174b5f01..e92e3292fef7 100644
+> --- a/arch/x86/kernel/acpi/boot.c
+> +++ b/arch/x86/kernel/acpi/boot.c
+> @@ -146,7 +146,10 @@ static int __init acpi_parse_madt(struct acpi_table_header *table)
+>
+>                 pr_debug("Local APIC address 0x%08x\n", madt->address);
+>         }
+> -       if (madt->header.revision >= 5)
+> +
+> +       if (acpi_gbl_FADT.header.revision > 6 ||
+> +           (acpi_gbl_FADT.header.revision == 6 &&
+> +            acpi_gbl_FADT.minor_revision >= 3))
+>                 acpi_support_online_capable = true;
+>
+>         default_acpi_madt_oem_check(madt->header.oem_id,
+> --
+> 2.34.1
+>
