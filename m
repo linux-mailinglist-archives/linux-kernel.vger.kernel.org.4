@@ -2,203 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA656D00DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FA56D00E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjC3KOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
+        id S229379AbjC3KPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjC3KO2 (ORCPT
+        with ESMTP id S229749AbjC3KPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:14:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86272868B;
-        Thu, 30 Mar 2023 03:14:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31E71B82582;
-        Thu, 30 Mar 2023 10:14:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72054C433EF;
-        Thu, 30 Mar 2023 10:14:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680171258;
-        bh=1DRt/6//qsaRBAIrWLGXcGZabxxr4NuFgrQAGvbu1xY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=lcwmANd/nMY1RWYxVRtXhJPUcMXDbMg2N8O/bnT9Wkbt/SFTFf1sklp5TS70jRguH
-         9kA38taE8xcNfVX27S/odMrD4o5Wr7lKeHXcmNguTsunYose8kHuLTAOjm0Xa3Ygud
-         6pn/oBjDuZk67AphoPGuN0EZvsxWxskwcY5gkMEOi1TFzNXr67LKgFlHflgtCKDpTo
-         0/dQjfLtbzG+md7GcBcLYUihjx1mWMdDvsWptw4jZMihVkaLp2jwBqT5MQYHtHsfJ7
-         N8fNpSB6WQR9j+EFxM7kpejqiiQnx/CoaMg2XgxQjjO78Y5ryRZUkFi5C4hLVPrGGn
-         DXk+E8rSMxGmQ==
-Message-ID: <eba75b19eab0281f79632edc0317ea7bbda9cb58.camel@kernel.org>
-Subject: Re: [PATCH v2] fs: consolidate dt_type() helper definitions
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Date:   Thu, 30 Mar 2023 06:14:15 -0400
-In-Reply-To: <20230330-magma-struck-e1f80f624070@brauner>
-References: <20230330000157.297698-1-jlayton@kernel.org>
-         <20230330-magma-struck-e1f80f624070@brauner>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 30 Mar 2023 06:15:24 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8EE1FFB;
+        Thu, 30 Mar 2023 03:15:22 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id l14so12126979pfc.11;
+        Thu, 30 Mar 2023 03:15:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680171322;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M7LtPZVH4RMzF9XBfm4hBW5uXz/iaLJHkdbDSB+7F64=;
+        b=AUa6z5fwxkmqIEXU2H4JS8xNaBdaBvurgoNwkAY1SJznvW50gCQTPI1I8ckFWj5kqb
+         kILLCZZkqxVeLKxK7xLF2dEdnKGs6mnTtSgrsEJUPdnscu8y7u1tVgPU1/0EOx11SDcL
+         8HFd65yTz1tCg1xOHUlf7zm5r0If5skBqwZNeWJWKi9+v3FeCxA77lCM3zDLal89U8KI
+         QvGofperKbjpwahlLI2WmSonCj4IF1IWX669cuGhjqiuxpcv0n80n5DD5TEpWnB05Bti
+         WCmSJR9xs37Q1G2mZuPyrtnQ+v2KeAPHnUtZCJZxQLnBHSlI1AMDNl25wR8LrAp5esJk
+         fXBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680171322;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M7LtPZVH4RMzF9XBfm4hBW5uXz/iaLJHkdbDSB+7F64=;
+        b=Q24b6Eai2iJlBiK42R/yFQi/ngjBxq5g/LakfeyqXhqPUXy5f7MqGhInC1ZqaxP58L
+         +f3du5WCV5b/tI5VxEdcGCeJCdMut7VgB2uGkAIuS2c86UlEJiKU/B4+N5XboXUvXdnX
+         CxzkfIzxenQ1rKlWJwHUy8/tC7sqVDpll8u4N6gd2Sy0D+ydqHL2xxC907M2S0e3/xs4
+         a0C1YJcgU/TD9uSdgeHpTQP8rvSH0EObPe4FbAIEyTd2rayM/El6+9Vz7KXPbj0U3WJk
+         iRBCB83uqRLWQnRNdeQZWCkMxZBc9KQq/2MI1ty3Y2jdyJPyPpgBVYh/9DPVcG+EShuX
+         HM3g==
+X-Gm-Message-State: AAQBX9cImUXt8xamcgaAmu3wSLxv4C370O6IM/4OI+17r6lWmwKA4A5l
+        4HhbdJ4TUdZ0xizJALxw4xiELfS7Ih3k+w==
+X-Google-Smtp-Source: AKy350Y3Tbyj0a3V6M0/eIIO1fkoZCSjOo1+EjhuDLYwZd8uSV7koddvMYrs/i9z/ZS6qcSzaeGr7Q==
+X-Received: by 2002:aa7:9542:0:b0:625:7536:7b0e with SMTP id w2-20020aa79542000000b0062575367b0emr20395943pfq.29.1680171321860;
+        Thu, 30 Mar 2023 03:15:21 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
+        by smtp.gmail.com with ESMTPSA id x18-20020aa793b2000000b00627e55f383dsm22469210pff.3.2023.03.30.03.15.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 03:15:21 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH v2 0/3] Move Loongson1 PWM timer to clocksource framework
+Date:   Thu, 30 Mar 2023 18:15:03 +0800
+Message-Id: <20230330101506.545040-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-03-30 at 07:44 +0200, Christian Brauner wrote:
-> On Wed, Mar 29, 2023 at 08:01:55PM -0400, Jeff Layton wrote:
-> > There are 4 functions named dt_type() in the kernel. There is also the
-> > S_DT macro in fs_types.h.
-> >=20
-> > Replace the S_DT macro with a static inline named dt_type, and have all
-> > of the existing copies call that instead. The v9fs helper is renamed to
-> > distinguish it from the others.
-> >=20
-> > Cc: Chuck Lever <chuck.lever@oracle.com>
-> > Cc: Phillip Potter <phil@philpotter.co.uk>
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > ---
-> >  fs/9p/vfs_dir.c          | 6 +++---
-> >  fs/configfs/dir.c        | 8 +-------
-> >  fs/fs_types.c            | 2 +-
-> >  fs/kernfs/dir.c          | 8 +-------
-> >  fs/libfs.c               | 9 ++-------
-> >  include/linux/fs_types.h | 7 ++++++-
-> >  6 files changed, 14 insertions(+), 26 deletions(-)
-> >=20
-> > What about this one instead? This consolidates another copy and we use
-> > Phillip's version that uses named constants instead of magic numbers.
-> >=20
-> > There are some scary warnings in fs_types.h about not changing the
-> > definitions, but hopefully the rename from S_DT() to dt_type() is OK.
-> >=20
-> > diff --git a/fs/9p/vfs_dir.c b/fs/9p/vfs_dir.c
-> > index 3d74b04fe0de..80b331f7f446 100644
-> > --- a/fs/9p/vfs_dir.c
-> > +++ b/fs/9p/vfs_dir.c
-> > @@ -41,12 +41,12 @@ struct p9_rdir {
-> >  };
-> > =20
-> >  /**
-> > - * dt_type - return file type
-> > + * v9fs_dt_type - return file type
-> >   * @mistat: mistat structure
-> >   *
-> >   */
-> > =20
-> > -static inline int dt_type(struct p9_wstat *mistat)
-> > +static inline int v9fs_dt_type(struct p9_wstat *mistat)
-> >  {
-> >  	unsigned long perm =3D mistat->mode;
-> >  	int rettype =3D DT_REG;
-> > @@ -128,7 +128,7 @@ static int v9fs_dir_readdir(struct file *file, stru=
-ct dir_context *ctx)
-> >  			}
-> > =20
-> >  			over =3D !dir_emit(ctx, st.name, strlen(st.name),
-> > -					 v9fs_qid2ino(&st.qid), dt_type(&st));
-> > +					 v9fs_qid2ino(&st.qid), v9fs_dt_type(&st));
-> >  			p9stat_free(&st);
-> >  			if (over)
-> >  				return 0;
-> > diff --git a/fs/configfs/dir.c b/fs/configfs/dir.c
-> > index 4afcbbe63e68..43863a1696eb 100644
-> > --- a/fs/configfs/dir.c
-> > +++ b/fs/configfs/dir.c
-> > @@ -1599,12 +1599,6 @@ static int configfs_dir_close(struct inode *inod=
-e, struct file *file)
-> >  	return 0;
-> >  }
-> > =20
-> > -/* Relationship between s_mode and the DT_xxx types */
-> > -static inline unsigned char dt_type(struct configfs_dirent *sd)
-> > -{
-> > -	return (sd->s_mode >> 12) & 15;
-> > -}
-> > -
-> >  static int configfs_readdir(struct file *file, struct dir_context *ctx=
-)
-> >  {
-> >  	struct dentry *dentry =3D file->f_path.dentry;
-> > @@ -1654,7 +1648,7 @@ static int configfs_readdir(struct file *file, st=
-ruct dir_context *ctx)
-> >  		name =3D configfs_get_name(next);
-> >  		len =3D strlen(name);
-> > =20
-> > -		if (!dir_emit(ctx, name, len, ino, dt_type(next)))
-> > +		if (!dir_emit(ctx, name, len, ino, dt_type(next->s_mode)))
-> >  			return 0;
-> > =20
-> >  		spin_lock(&configfs_dirent_lock);
-> > diff --git a/fs/fs_types.c b/fs/fs_types.c
-> > index 78365e5dc08c..7dd5c0fb74fb 100644
-> > --- a/fs/fs_types.c
-> > +++ b/fs/fs_types.c
-> > @@ -76,7 +76,7 @@ static const unsigned char fs_ftype_by_dtype[DT_MAX] =
-=3D {
-> >   */
-> >  unsigned char fs_umode_to_ftype(umode_t mode)
-> >  {
-> > -	return fs_ftype_by_dtype[S_DT(mode)];
-> > +	return fs_ftype_by_dtype[dt_type(mode)];
-> >  }
-> >  EXPORT_SYMBOL_GPL(fs_umode_to_ftype);
->=20
-> Nice cleanup. But looking at this a bit it makes me wonder a little. It
-> seems there's a bit of indirection going on:
->=20
-> fs_umode_to_dtype()
-> -> fs_type_to_dtype()
->    -> fs_umode_to_ftype()
->       -> fs_ftype_by_dtype()
->          -> dt_type()
->=20
-> Presumably it exists so that unexpected return values from dt_type() are
-> caught and DT_UNKNOWN is returned instead of whatever raw value
-> dt_type() returned.
+Move Loongson1 PWM timer to clocksource framework
+and update the Kconfig/Makefile options accordingly.
 
-> If none of the filesystems we convert to dt_type() here expects "custom"
-> return values from dt_type(), i.e., would never get DT_UNKNOWN, we
-> should consider just switching all those places to fs_umode_to_dtype().
->=20
-> However, if they do expect custom dt_type() values and so we really need
-> to have them use dt_type() then we should remove fs_umode_to_dtype()
-> because it is curerntly unused if my grepping skills haven't left me.
+Changelog
+V1 -> V2: Delete the obsolete header file regs-pwm.h
 
-Good point.
+Keguang Zhang (3):
+  MIPS: Loongson32: Remove deprecated PWM timer clocksource
+  dt-bindings: timer: Add Loongson-1 clocksource
+  clocksource: loongson1: Move PWM timer to clocksource framework
 
-The dt_type returns are all handed to dir_emit, and it looks like most
-of the readdir actor functions just take that value as-is and stuff it
-into the appropriate readdir response.
+ .../timer/loongson,ls1x-pwmtimer.yaml         |  48 ++++
+ .../include/asm/mach-loongson32/regs-pwm.h    |  25 --
+ arch/mips/loongson32/Kconfig                  |  37 ---
+ arch/mips/loongson32/common/time.c            | 210 ----------------
+ drivers/clocksource/Kconfig                   |   9 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-loongson1-pwm.c     | 236 ++++++++++++++++++
+ 7 files changed, 294 insertions(+), 272 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-pwm.h
+ create mode 100644 drivers/clocksource/timer-loongson1-pwm.c
 
-Given that, we probably don't want to hand the actors any "custom"
-values and should switch these callers over to fs_umode_to_dtype
-instead.
 
-I'll plan to spin up a v3 series (and address HCH's comments in that
-too).
+base-commit: f7b5a248213f0976c7944925f3f3ab7ff199e581
+-- 
+2.34.1
 
-Thanks for the review, everyone!
---=20
-Jeff Layton <jlayton@kernel.org>
