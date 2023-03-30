@@ -2,91 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFF46D10B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1A26D10B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjC3VUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 17:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
+        id S229562AbjC3VVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 17:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjC3VUk (ORCPT
+        with ESMTP id S229505AbjC3VVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 17:20:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1801727;
-        Thu, 30 Mar 2023 14:20:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F652B82A41;
-        Thu, 30 Mar 2023 21:20:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5B99BC4339B;
-        Thu, 30 Mar 2023 21:20:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680211237;
-        bh=IkCYM13B50/wAM8vMkg9yJvVMrO3qig8JpAg9+sKiqY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Sv4JassikkVbOff48J/iFOIXFclC6ZzRgv96cAucgQXnkrOl9R1zx5xy0Qt0+5cyP
-         mn2j7xI++YeYcb1/j0zbf73MhJBsc0lAZTd1PosfAEQ1TNf7iUA8JxsNtvOUpXVyOp
-         tGaUMuAAhY0Ml7TqysfLbms/z6Uk2SqfFuolFHxfNhoT9MO9AluQ63fybTbwejCFXb
-         gteOdPXCZBttJNkRmmgAd/ik8yvUrE7qUWUsuTSyjrQiiLJboO5eBpBZlHGiMbLWHV
-         /ETfSV2CMUfcC5h9Tnqlv4lWHxdJpVq559SsMW/lvmLh6HDZRDvE1msU4IQy37wbfg
-         70WAxTDPhhJdQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3DCDAE49FA8;
-        Thu, 30 Mar 2023 21:20:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 30 Mar 2023 17:21:33 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D00476A5;
+        Thu, 30 Mar 2023 14:21:32 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id x8so15103293qvr.9;
+        Thu, 30 Mar 2023 14:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680211291;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QtOE0UMdyRWqW8gZrFdzTK9tdy2bCuRHI9iq9QcRs8U=;
+        b=YFrzgje9+BktWWsfijArlckeFM4ZwzHGvPVl1UoisAE3+PFchEH13Yb4PZaV1vPFQW
+         kFZA2kGvPdejGt4uN4dISDfE7lV2T9um8oBoJOwi1jn3mE/Eadx3JQnCL77B6WU/H6wc
+         3nosF6elcxP1Ugs66NbPFlmw/uuUDnSTvVB5vSWryTUYKjlbJg0d1eiLaPlp9hD2EM9N
+         m/rl1F2XwmqhKNgd4bkzf7Swc3mQb9J2nunymMMarwyAb0fhUL7Gym6M11V2JLS+kOk/
+         Bz50CyTRiFrvwSXhXaWCmq5+uJ4Y4PYw9j6TRvl38JwhBQdtu14ObXBe3MhzsOIbb+0U
+         qoCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680211291;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QtOE0UMdyRWqW8gZrFdzTK9tdy2bCuRHI9iq9QcRs8U=;
+        b=JbASzsfkGpEUJjmCy1S23trY2cPFygqLEVCphOBJnf2PJvmrlhbh+E4S9QoLc+wZ0w
+         SbUqi7PIy2ciIZ/3/i67cWym21LLhoDWjdYrXs9t0LJJwFRUCJ8pABRvj2pfiFGmOQt7
+         FPal1/YFnaGyhJGyhN+Jh2AX/Bjf4y8R2vwS92F2hRKaTn3eXIKm3TxYWLrGAiCvSq90
+         pQ2p39M04tF+NSA61DMg9b1uIWsyX773CrLRI1imoDyjrdvSfki2iko3WtCcBFF8pmoQ
+         rB+PcLrxvyRCPBoU//aeQaea5dLpYaxBckk5ntyIceM8Tin2JV9tWE+bMXPlImsuZJGA
+         isKw==
+X-Gm-Message-State: AAQBX9fonrPvSItomr5AdyRcDF5kNSLRyPl2udhCdj2m1ol/qkN3ywEu
+        ZJpjuASCOcTvAUYJ4ly0M9fMaec93NoXKcI=
+X-Google-Smtp-Source: AKy350YwogZzSCdVnLOQ8xz3NArRj7h88NOMJmHPk6DJwoLdAIK8qFrmrPteEvVqaHqaledt3Qav0A==
+X-Received: by 2002:a05:6214:1cc7:b0:56c:13cc:d21f with SMTP id g7-20020a0562141cc700b0056c13ccd21fmr40185191qvd.50.1680211291043;
+        Thu, 30 Mar 2023 14:21:31 -0700 (PDT)
+Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
+        by smtp.gmail.com with ESMTPSA id mx5-20020a0562142e0500b005dd8b9345desm110761qvb.118.2023.03.30.14.21.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 14:21:30 -0700 (PDT)
+From:   Gregory Price <gourry.memverge@gmail.com>
+X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
+        oleg@redhat.com, avagin@gmail.com, peterz@infradead.org,
+        luto@kernel.org, krisman@collabora.com, tglx@linutronix.de,
+        corbet@lwn.net, shuah@kernel.org, catalin.marinas@arm.com,
+        arnd@arndb.de, Gregory Price <gregory.price@memverge.com>
+Subject: [PATCH v15 0/4] Checkpoint Support for Syscall User Dispatch
+Date:   Thu, 30 Mar 2023 17:21:18 -0400
+Message-Id: <20230330212121.1688-1-gregory.price@memverge.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 1/2] bpf: Handle PTR_MAYBE_NULL case in PTR_TO_BTF_ID
- helper call arg
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168021123724.16527.2802678466803935794.git-patchwork-notify@kernel.org>
-Date:   Thu, 30 Mar 2023 21:20:37 +0000
-References: <20230330145203.80506-1-void@manifault.com>
-In-Reply-To: <20230330145203.80506-1-void@manifault.com>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        memxor@gmail.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+v15: drop task_access_ok variant, instead prefer to just untag the
+     selector address when validating the user pointer.
 
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+v14: implement task_access_ok variant for cross-task pointer checks
 
-On Thu, 30 Mar 2023 09:52:02 -0500 you wrote:
-> When validating a helper function argument, we use check_reg_type() to
-> ensure that the register containing the argument is of the correct type.
-> When the register's base type is PTR_TO_BTF_ID, there is some
-> supplemental logic where we do extra checks for various combinations of
-> PTR_TO_BTF_ID type modifiers. For example, for PTR_TO_BTF_ID,
-> PTR_TO_BTF_ID | PTR_TRUSTED, and PTR_TO_BTF_ID | MEM_RCU, we call
-> map_kptr_match_type() for bpf_kptr_xchg() calls, and
-> btf_struct_ids_match() for other helper calls.
-> 
-> [...]
+v13: sizeof consistency and cosmetic changes in patch 2
 
-Here is the summary with links:
-  - [bpf-next,1/2] bpf: Handle PTR_MAYBE_NULL case in PTR_TO_BTF_ID helper call arg
-    https://git.kernel.org/bpf/bpf-next/c/e4c2acab95a5
-  - [bpf-next,2/2] selftests/bpf: Add testcases for ptr_*_or_null_ in bpf_kptr_xchg
-    https://git.kernel.org/bpf/bpf-next/c/67efbd57bc6e
+v12: split test into its own patch
+     change from padding a u8 to using a u64
+     casting issues
+     checkpatch.pl
 
-You are awesome, thank you!
+[truncating version history]
+
+Syscall user dispatch makes it possible to cleanly intercept system
+calls from user-land.  However, most transparent checkpoint software
+presently leverages some combination of ptrace and system call
+injection to place software in a ready-to-checkpoint state.
+
+If Syscall User Dispatch is enabled at the time of being quiesced,
+injected system calls will subsequently be interposed upon and
+dispatched to the task's signal handler.
+
+Patch summary:
+
+- Refactor configuration setting interface to operate on a task
+  rather than current, so the set and error paths can be consolidated
+
+- Untag the selector address when being set in order to enable an
+  untagged tracer to set a tagged tracee's syscall dispatch selector.
+  Otherwise an untagged tracer will always fail to set a tagged address.
+
+- Implement a getter interface for Syscall User Dispatch config info.
+  To resume successfully, the checkpoint/resume software has to
+  save and restore this information.  Presently this configuration
+  is write-only, with no way for C/R software to save it.
+
+  This was done in ptrace because syscall user dispatch is not part of
+  uapi. The syscall_user_dispatch_config structure was added to the
+  ptrace exports.
+
+- Selftest for the new feature
+
+Gregory Price (4):
+  syscall_user_dispatch: helper function to operate on given task
+  syscall user dispatch: untag selector addresses before access_ok
+  ptrace,syscall_user_dispatch: checkpoint/restore support for SUD
+  selftest,ptrace: Add selftest for syscall user dispatch config api
+
+ .../admin-guide/syscall-user-dispatch.rst     |  4 +
+ include/linux/syscall_user_dispatch.h         | 18 +++++
+ include/uapi/linux/ptrace.h                   | 29 +++++++
+ kernel/entry/syscall_user_dispatch.c          | 78 ++++++++++++++++---
+ kernel/ptrace.c                               |  9 +++
+ tools/testing/selftests/ptrace/.gitignore     |  1 +
+ tools/testing/selftests/ptrace/Makefile       |  2 +-
+ tools/testing/selftests/ptrace/get_set_sud.c  | 72 +++++++++++++++++
+ 8 files changed, 203 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/ptrace/get_set_sud.c
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.1
 
