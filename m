@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94FE6CFEEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 337346CFF29
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjC3Is0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
+        id S229623AbjC3IxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjC3IsX (ORCPT
+        with ESMTP id S229563AbjC3Iww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:48:23 -0400
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C4972AB
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:48:14 -0700 (PDT)
-X-UUID: 95c3d5d40b12449182a0fc47d5634a4b-20230330
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:35947b3a-dbc1-498b-8dc5-b37239c5f76f,IP:-32
-        768,URL:-32768,TC:-32768,Content:-32768,EDM:-32768,RT:-32768,SF:-32768,FIL
-        E:-32768,BULK:-32768,RULE:Release_Ham,ACTION:release,TS:0
-X-CID-INFO: VERSION:1.1.22,REQID:35947b3a-dbc1-498b-8dc5-b37239c5f76f,IP:-3276
-        8,URL:-32768,TC:-32768,Content:-32768,EDM:-32768,RT:-32768,SF:-32768,FILE:
-        -32768,BULK:-32768,RULE:Release_Ham,ACTION:release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:nil,BulkID:nil,BulkQuantity:0,Recheck:
-        0,SF:nil,TC:nil,Content:nil,EDM:nil,IP:nil,URL:nil,File:nil,Bulk:nil,QS:ni
-        l,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 95c3d5d40b12449182a0fc47d5634a4b-20230330
-X-User: lienze@kylinos.cn
-Received: from localhost.localdomain [(210.12.40.82)] by mailgw
-        (envelope-from <lienze@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 798352864; Thu, 30 Mar 2023 16:47:40 +0800
-From:   Enze Li <lienze@kylinos.cn>
-To:     chenhuacai@kernel.org, kernel@xen0n.name
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        enze.li@gmx.com, lienze@kylinos.cn
-Subject: [PATCH] LoongArch: undefine pr_define macro when it's appropriate
-Date:   Thu, 30 Mar 2023 16:50:59 +0800
-Message-Id: <20230330085059.761204-1-lienze@kylinos.cn>
-X-Mailer: git-send-email 2.39.2
+        Thu, 30 Mar 2023 04:52:52 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8482D3AA5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:52:50 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3e0965f70ecso464521cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680166369;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/pUGbSJeXIbqbiydf5b6Zg3qCqAFB/oHTtk54OkF+CA=;
+        b=UL5A7+vSaNkedjf0RM940TocfhoumuI7tBaS0YWz+AHdmXrZAsaX8wgg+j5w7RF298
+         Ekgfde63pCUQs435mfNAHjovy4bNbY4sepG9CY+NHWzSERKuHVeenfS0xlvcOAc3APQ7
+         vbdswldNEjf9OgMR1peH6SZRFXCyErykMe0XvFX5aBgj1YS2y9b3ZrM8ZBkPRXLIvapG
+         gT+rAgFbSqezQkJTs8u5i/mu+uOUu17Ry9YM25/tirUXp0lFmsR4PwhRjtPvvznbAmC5
+         H0OTEqHc5CS0RO2tYLKZWyoL9owm0IDNggklzhiqErGjZMAmBziQW5MRyNb4ipAFwD7W
+         JzjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680166369;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/pUGbSJeXIbqbiydf5b6Zg3qCqAFB/oHTtk54OkF+CA=;
+        b=FTO2b/h5+YVziPs7nHr23DxlZg/sx5z8hCxCiY6OJ2aAEERWPonaMbpoP26HfVrMET
+         3OYue63UlLdHSdouAwEk05D6gOAuInuXnjjfDCdg4TqfRNaRhM7BracAZo2j90n3peqe
+         gFLbKlduRxrZtNISY3za+GLuJx42QTGIFuvvFnnQnyOLCMlnWG5QwsREOPIb1wMu6XAN
+         YuQi7OvkyaD3UWaSbVmDUyB3HwOrQbgWvp2oa9oerOPoFdS8AlptSbRiKYBm2dTbBNsd
+         xiLzdHwedcBxwVAA6X/2O4c0T79sM7+61BhwJpUJMYCtlT0fby7l56FlrPrkJCOThmsi
+         wfcw==
+X-Gm-Message-State: AAQBX9cSFwWYVFSXhiqHcYFLENm0hWqDzcqGtuXKlAVpzplxh9QctMP4
+        U8ptio+IMW6fEIJEz7pArr6CgWNbm8bAVAxXFyKigQ==
+X-Google-Smtp-Source: AKy350ZKnJPUXGH+1G0Afn3Z7bkEXPAEpBUNjaFNIywn5HYu6iVE5EFId6tutzAEuEg2L9ihnJWELlyjXRdqhcEtQqg=
+X-Received: by 2002:ac8:5dd0:0:b0:3bf:c406:3a5f with SMTP id
+ e16-20020ac85dd0000000b003bfc4063a5fmr75067qtx.7.1680166369621; Thu, 30 Mar
+ 2023 01:52:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+References: <0000000000003da76805f8021fb5@google.com> <20230330012750.GF3223426@dread.disaster.area>
+In-Reply-To: <20230330012750.GF3223426@dread.disaster.area>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Thu, 30 Mar 2023 10:52:37 +0200
+Message-ID: <CANp29Y6XNE_wxx1Osa+RrfqOUP9PZhScGnMUDgQ-qqHzYe9KFg@mail.gmail.com>
+Subject: Re: [syzbot] [xfs?] WARNING in xfs_bmap_extents_to_btree
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     syzbot <syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com>,
+        djwong@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,29 +72,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's a macro definition that is only used within the
-output_pgtable_bits_defines function.  We don't need to spread this
-macro elsewhere.  Therefore, it should be undefined when appropriate.
+On Thu, Mar 30, 2023 at 3:27=E2=80=AFAM 'Dave Chinner' via syzkaller-bugs
+<syzkaller-bugs@googlegroups.com> wrote:
+>
+> On Tue, Mar 28, 2023 at 09:08:01PM -0700, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    1e760fa3596e Merge tag 'gfs2-v6.3-rc3-fix' of git://git=
+.ke..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D16f83651c80=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dacdb62bf488=
+a8fe5
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D0c383e46e9b48=
+27b01b1
+> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for D=
+ebian) 2.35.2
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/17229b6e6fe0/d=
+isk-1e760fa3.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/69b5d310fba0/vmli=
+nux-1e760fa3.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/0c65624aace9=
+/bzImage-1e760fa3.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the co=
+mmit:
+> > Reported-by: syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com
+> >
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 1 PID: 24101 at fs/xfs/libxfs/xfs_bmap.c:660 xfs_bmap_ext=
+ents_to_btree+0xe1b/0x1190
+>
+> Allocation got an unexpected ENOSPC when it was supposed to have a
+> valid reservation for the space. Likely because of an inconsistency
+> that had been induced into the filesystem where superblock space
+> accounting doesn't exactly match the AG space accounting and/or the
+> tracked free space.
+>
+> Given this is a maliciously corrupted filesystem image, this sort of
+> warning is expected and there's probably nothing we can do to avoid
+> it short of a full filesystem verification pass during mount.
+> That's not a viable solution, so I think we should just ignore
+> syzbot when it generates this sort of warning....
 
-Signed-off-by: Enze Li <lienze@kylinos.cn>
----
- arch/loongarch/mm/tlb.c | 1 +
- 1 file changed, 1 insertion(+)
+If it's not a warning about a kernel bug, then WARN_ON should probably
+be replaced by some more suitable reporting mechanism. Kernel coding
+style document explicitly says:
 
-diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
-index 8bad6b0cff59..99f607afaf80 100644
---- a/arch/loongarch/mm/tlb.c
-+++ b/arch/loongarch/mm/tlb.c
-@@ -248,6 +248,7 @@ static void output_pgtable_bits_defines(void)
- 	pr_define("_PAGE_NO_EXEC_SHIFT %d\n", _PAGE_NO_EXEC_SHIFT);
- 	pr_define("_PFN_SHIFT %d\n", _PFN_SHIFT);
- 	pr_debug("\n");
-+#undef pr_define
- }
- 
- #ifdef CONFIG_NUMA
+"WARN*() must not be used for a condition that is expected to trigger
+easily, for example, by user space actions. pr_warn_once() is a
+possible alternative, if you need to notify the user of a problem."
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Doc=
+umentation/process/coding-style.rst?id=3D1e760fa3596e8c7f08412712c168288b79=
+670d78#n1223
 
-base-commit: fc89d7fb499b0162e081f434d45e8d1b47e82ece
--- 
-2.34.1
+--
+Aleksandr
 
+>
+> i.e. we actually want this warning to be issued if it happens in
+> normal production situations, but given that it's relatively trivial
+> to create an inconsistent filesystem image that can trigger this we
+> should just ignore it when it is generated by such means.
+>
+> -Dave.
+> --
+> Dave Chinner
+> david@fromorbit.com
+>
