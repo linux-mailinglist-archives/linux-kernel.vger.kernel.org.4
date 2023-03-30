@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8B06D02F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852A36D02F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbjC3LTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
+        id S230396AbjC3LVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbjC3LT2 (ORCPT
+        with ESMTP id S229486AbjC3LVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:19:28 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84341A5C1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:18:38 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id r7-20020a17090b050700b002404be7920aso17547186pjz.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:18:38 -0700 (PDT)
+        Thu, 30 Mar 2023 07:21:02 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D04C0;
+        Thu, 30 Mar 2023 04:21:01 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id c4so903915pjs.4;
+        Thu, 30 Mar 2023 04:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680175117;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tbArA3MR/dT7CNLjMYxDZhfmZYmOo9cX1NVqv86zJ4c=;
-        b=hTtVSiFY4xN0fvYJwLlpm17ZO5ll4khXg+/qgUGXs6sdunkjikGDYSGewaTC/aC1rr
-         i5OmZmgNWj+L1Ny2zTxncYLa5NyG/pq/56zlQIBjfJ5ICUlPDy2TZhuB4rMDb+ogbk/0
-         Ntld7PiCfoYVluMJdp2EDbo9bCeFv/oBCCga0Ay7yl4Qux6tFI6aHywBIYOif0MgVU6F
-         ynldFLRBf2kyQFFBY2TwnyW1DCml6Osn/zz2HZ8ZicxPRn2IspijHSgFFtXctcOVrkSs
-         IWqf8eP5X50sC/ZG3bq03LPdUma9kCADRZtX18/lH+CCQSybcZzwMpMtGE/EI9CICaA8
-         FkVA==
+        d=gmail.com; s=20210112; t=1680175260;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WxrtZ4Pc2V4sbXHyqD0vLqMXC2ShCz7l2J+XPW6TD5o=;
+        b=IpzESQup1HFCCHLA+X1sRFTro3aw2vth88AadIGDT74X5cONhM1w8ca0NFEWuSM5aY
+         aT9X1UgNoogYHnVbTsWVCHfyqTmP8LRTn0dzWPddzfcm8+As2w3MICdV/ghaky7gPn3u
+         kyPCLknhqYPPhbDqj15OO0QyBhpPDlh9FtTAdbBLE2FX4z9zVaJ6cvaHeyF4X0BnsMIs
+         vi+PRvTqP2u5rrIrlVDsrN3Qfs0+YaXaIB/Ob47QN2XqSh0J2KFsuEGz1KVh5BJCBmWU
+         alAKEV/hV5jogqtiEBghg5FaaDbStQWSZrSlpcT6KGy8FQy+dcRieJs6sbtmkYy+2QAR
+         gSCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680175117;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tbArA3MR/dT7CNLjMYxDZhfmZYmOo9cX1NVqv86zJ4c=;
-        b=ARc1opzNQpW81l9eTArv2gvgMZwoWi5Y6zHtQN/pnre5i3H67R99twXrJTsFPcxrQJ
-         9KiW137HRZGEYsuOLOaiAeR0jUXN9u0GlsbMGITcivz8Wl49ZPUOEOMRsJPPrbZuDUoc
-         2NP+sOu5GsBt9nkXh+e6K+gGxJhl+YpZdiWH0SDurWf38xemnFJ9qkIEAfgQiEjUsU/p
-         xGL+c2yqUxjGZBra1q2ODIKyDON7D5vjEbKx1KMM10A68rh4XM0erSuop5ibB/Iwp35w
-         DfO/+hJvFdcbsQcChrsO9lh0NsaEdvDQfE1PkGQH1cth4/DEQe/YKT7YEL6qujDVlfRI
-         fdVA==
-X-Gm-Message-State: AO0yUKUjunRyKAYlAsv7iSJoN0FV9dUMqWxY9LuRjOWYA+qw2jqk/zPG
-        GYVj+3VJMAUe4b7c3s6y77o=
-X-Google-Smtp-Source: AK7set/rloeBiAAnQD1zNjknSZ9Kjoor4sWEGwVY1JExx1EmSeKfMRhbltFlIY5iiJXwNS7+hMB5Rw==
-X-Received: by 2002:a05:6a20:3156:b0:db:3293:278f with SMTP id 22-20020a056a20315600b000db3293278fmr20355361pzk.44.1680175117204;
-        Thu, 30 Mar 2023 04:18:37 -0700 (PDT)
-Received: from dragonet (dragonet.kaist.ac.kr. [143.248.133.220])
-        by smtp.gmail.com with ESMTPSA id g67-20020a636b46000000b005035f5e1f9csm23205270pgc.2.2023.03.30.04.18.34
+        d=1e100.net; s=20210112; t=1680175260;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WxrtZ4Pc2V4sbXHyqD0vLqMXC2ShCz7l2J+XPW6TD5o=;
+        b=iAy9CUgtoc708nTSmruTkW1zk4E4zKrxhsWnw0K/TVp02CBKHbF+XqfDvLy5e28jRE
+         Mb8u5c9oTrvgIFHfAb+/4Ni2KJa1QX9bppzkLNtdWKrlPl5rvCRJfvCbz9EXR9AhphHn
+         7AnMpKDU4ae6KCPGByPM8y7Oc0lNtQiXzbhGMZoU0kx+gCD5RUf1aQtMPVRnE5x2EAHh
+         UNt2RsNBVabUyoYhYNuzynm9Z0304qIwJ6EufhUzykimLjXTINc9wTu5hktK7vPx6KK4
+         D/qNaAX/LYeQt0iEtIuj5BMzb3znoEKB2ztAochDqRn3XowwNt6ibhszX5C3mevGzh81
+         QxNw==
+X-Gm-Message-State: AAQBX9fpiE1fj3OetZbOdazc9V7XPABmEEbb6HwVgmH07vbzh1rzt0GJ
+        GO4eCQRmJRotS4a91eB9AEFP2naPHruEFA==
+X-Google-Smtp-Source: AKy350ZrYUoB2maY762H8wlc5kGOT+A6+d64+RuGw1ljSL10h4noHWzoWix+QAXRP9DFyJe6KlvRjQ==
+X-Received: by 2002:a17:90a:d583:b0:237:3f83:61f3 with SMTP id v3-20020a17090ad58300b002373f8361f3mr24046534pju.16.1680175260508;
+        Thu, 30 Mar 2023 04:21:00 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
+        by smtp.gmail.com with ESMTPSA id a13-20020a170902ee8d00b0019f11a68c42sm24444851pld.297.2023.03.30.04.20.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 04:18:36 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 20:18:32 +0900
-From:   "Dae R. Jeong" <threeearcat@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     bryantan@vmware.com, vdasa@vmware.com, pv-drivers@vmware.com,
-        arnd@arndb.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vmci_host: fix a race condition in vmci_host_poll()
- causing GPF
-Message-ID: <ZCVwCNbuLDmiZ58w@dragonet>
-References: <ZCGFsdBAU4cYww5l@dragonet>
- <ZCQPuaps5rCtGAb2@kroah.com>
+        Thu, 30 Mar 2023 04:21:00 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yang Ling <gnaygnil@gmail.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH v2 0/2] Move Loongson1 restart handler to watchdog driver
+Date:   Thu, 30 Mar 2023 19:20:49 +0800
+Message-Id: <20230330112051.551648-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCQPuaps5rCtGAb2@kroah.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -73,180 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 12:15:21PM +0200, Greg KH wrote:
-> On Mon, Mar 27, 2023 at 09:01:53PM +0900, Dae R. Jeong wrote:
-> > During fuzzing, a general protection fault is observed in
-> > vmci_host_poll().
-> > 
-> > general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] PREEMPT SMP KASAN
-> > KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
-> > RIP: 0010:__lock_acquire+0xf3/0x5e00 kernel/locking/lockdep.c:4926
-> > <- omitting registers ->
-> > Call Trace:
-> >  <TASK>
-> >  lock_acquire+0x1a4/0x4a0 kernel/locking/lockdep.c:5672
-> >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-> >  _raw_spin_lock_irqsave+0xb3/0x100 kernel/locking/spinlock.c:162
-> >  add_wait_queue+0x3d/0x260 kernel/sched/wait.c:22
-> >  poll_wait include/linux/poll.h:49 [inline]
-> >  vmci_host_poll+0xf8/0x2b0 drivers/misc/vmw_vmci/vmci_host.c:174
-> >  vfs_poll include/linux/poll.h:88 [inline]
-> >  do_pollfd fs/select.c:873 [inline]
-> >  do_poll fs/select.c:921 [inline]
-> >  do_sys_poll+0xc7c/0x1aa0 fs/select.c:1015
-> >  __do_sys_ppoll fs/select.c:1121 [inline]
-> >  __se_sys_ppoll+0x2cc/0x330 fs/select.c:1101
-> >  do_syscall_x64 arch/x86/entry/common.c:51 [inline]
-> >  do_syscall_64+0x4e/0xa0 arch/x86/entry/common.c:82
-> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> > 
-> > Example thread interleaving that causes the general protection fault
-> > is as follows:
-> > 
-> > CPU1 (vmci_host_poll)               CPU2 (vmci_host_do_init_context)
-> > -----                               -----
-> > // Read uninitialized context
-> > context = vmci_host_dev->context;
-> >                                     // Initialize context
-> >                                     vmci_host_dev->context = vmci_ctx_create();
-> >                                     vmci_host_dev->ct_type = VMCIOBJ_CONTEXT;
-> > 
-> > if (vmci_host_dev->ct_type == VMCIOBJ_CONTEXT) {
-> >     // Dereferencing the wrong pointer
-> >     poll_wait(..., &context->host_context);
-> > }
-> > 
-> > In this scenario, vmci_host_poll() reads vmci_host_dev->context first,
-> > and then reads vmci_host_dev->ct_type to check that
-> > vmci_host_dev->context is initialized. However, since these two reads
-> > are not atomically executed, there is a chance of a race condition as
-> > described above.
-> > 
-> > To fix this race condition, read vmci_host_dev->context after checking
-> > the value of vmci_host_dev->ct_type so that vmci_host_poll() always
-> > reads an initialized context.
-> > 
-> > Reported-by: Dae R. Jeong <threeearcat@gmail.com>
-> > Fixes: 8bf503991f87 ("VMCI: host side driver implementation.")
-> > Signed-off-by: Dae R. Jeong <threeearcat@gmail.com>
-> 
-> If you author and sign-off on the patch, no need for a Reported-by: as
-> that is obvious :)
+Move Loongson1 restart handler to watchdog driver
+and update the Makefile accordingly.
 
-For a student like me, two of my names are cooler than one... (shy smile :)...)
+Changelog
+V1 -> V2: Remove the reference to regs-wdt.h
 
-> And how did you test this change?
+Keguang Zhang (2):
+  MIPS: Loongson32: Remove reset.c
+  watchdog: loongson1_wdt: Implement restart handler
 
-I attach a simple C program used in testing at the end of this email.
-I used the same C program to trigger the crash before applying the
-patch, and to test the patch after applying it.
+ .../include/asm/mach-loongson32/loongson1.h   |  1 -
+ .../include/asm/mach-loongson32/regs-wdt.h    | 15 ------
+ arch/mips/loongson32/common/Makefile          |  2 +-
+ arch/mips/loongson32/common/reset.c           | 51 -------------------
+ drivers/watchdog/loongson1_wdt.c              | 19 ++++++-
+ 5 files changed, 19 insertions(+), 69 deletions(-)
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-wdt.h
+ delete mode 100644 arch/mips/loongson32/common/reset.c
 
-Before applying this patch, I inserted msleep() to trigger the crash
-easily as follows:
 
-diff --git a/drivers/misc/vmw_vmci/vmci_host.c b/drivers/misc/vmw_vmci/vmci_host.c
-index 857b9851402a..e925f7effac4 100644
---- a/drivers/misc/vmw_vmci/vmci_host.c
-+++ b/drivers/misc/vmw_vmci/vmci_host.c
-@@ -24,6 +24,7 @@
- #include <linux/smp.h>
- #include <linux/fs.h>
- #include <linux/io.h>
-+#include <linux/delay.h>
- 
- #include "vmci_handle_array.h"
- #include "vmci_queue_pair.h"
-@@ -168,6 +169,11 @@ static __poll_t vmci_host_poll(struct file *filp, poll_table *wait)
- 	struct vmci_ctx *context = vmci_host_dev->context;
- 	__poll_t mask = 0;
- 
-+	msleep(1000);
-+
-+	printk("%s, context=%px, ct_type=%d\n", __func__, context,
-+		   vmci_host_dev->ct_type);
-+
- 	if (vmci_host_dev->ct_type == VMCIOBJ_CONTEXT) {
- 		/* Check for VMCI calls to this VM context. */
- 		if (wait)
-@@ -341,6 +347,10 @@ static int vmci_host_do_init_context(struct vmci_host_dev *vmci_host_dev,
- 	}
- 
- 	vmci_host_dev->ct_type = VMCIOBJ_CONTEXT;
-+
-+	printk("%s, context=%px, ct_type=%d\n", __func__,
-+		   vmci_host_dev->context, vmci_host_dev->ct_type);
-+
- 	atomic_inc(&vmci_host_active_users);
- 
- 	vmci_call_vsock_callback(true);
+base-commit: cf3be7e82b129ed34f811f116f2b113f6299d449
+-- 
+2.34.1
 
-With this msleep(), the C program below can easily trigger the GPF.
-
-Then I applied the patch that I propose, and ran the same C
-program. After applying the patch, I couldn't observe the GPF.
-
-> thanks,
-> 
-> greg k-h
-
-Best regards,
-Dae R. Jeong
-
-------------->8-----------------
-#include <fcntl.h>
-#include <poll.h>
-#include <pthread.h>
-#include <signal.h>
-#include <stdio.h>
-#include <sys/ioctl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-
-struct init_block {
-  int cid;
-  int flags;
-};
-
-int fd;
-
-void *th1(void *a) {
-  struct init_block s = {
-      .cid = 2,
-      .flags = 0,
-  };
-  ioctl(fd, 0x7a0, &s);
-  return NULL;
-}
-
-void *th2(void *a) {
-  struct pollfd pfd = {.fd = fd};
-  poll(&pfd, 1, 20000);
-  return NULL;
-}
-
-int test() {
-#define filename "/dev/vmci"
-
-  fd = openat(AT_FDCWD, filename, 0x2, 0x0);
-  int var = 0x10000;
-  ioctl(fd, 0x7a7, &var);
-  pthread_t pth1, pth2;
-  pthread_create(&pth1, NULL, th1, NULL);
-  pthread_create(&pth2, NULL, th2, NULL);
-  pthread_join(pth1, NULL);
-  pthread_join(pth2, NULL);
-  return 0;
-}
-
-int main() {
-  for (;;) {
-    pid_t pid = fork();
-    if (pid == 0) {
-      test();
-    } else {
-      usleep(100 * 1000);
-      kill(pid, SIGKILL);
-    }
-  }
-}
