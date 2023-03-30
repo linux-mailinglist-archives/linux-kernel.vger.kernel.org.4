@@ -2,93 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2316D02AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4B26D02A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbjC3LLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48090 "EHLO
+        id S231531AbjC3LK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjC3LLn (ORCPT
+        with ESMTP id S231384AbjC3LKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:11:43 -0400
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574BDB8;
-        Thu, 30 Mar 2023 04:11:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
-        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=pQa4FjwEIC+MA7FNmv9xFvah27iKAgSUzcE4V5/VRP0=; b=pOmIKHOuEA6ktJzJBgODzsgr/J
-        tsEZyOoCOOjMYjLtsK4y+2MFEnr0BdljXWtMsbPjTQXcY2BH1qyFUGoJdn1uLm5VlChc887Iprmtz
-        s0/Gs7irP/5cGzI1ViOWccPaXB8gbop0k0/sB1DHudPLFLgmWH/8Bjgqeypiv00ZXCAo=;
-Received: from p54ae9730.dip0.t-ipconnect.de ([84.174.151.48] helo=nf.local)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1phqBp-008VVi-12; Thu, 30 Mar 2023 13:11:33 +0200
-Message-ID: <9281af68-d0d5-fbc0-6fa2-50f94bfcbed4@nbd.name>
-Date:   Thu, 30 Mar 2023 13:11:32 +0200
+        Thu, 30 Mar 2023 07:10:25 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D7AB8;
+        Thu, 30 Mar 2023 04:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680174624; x=1711710624;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NxNlRxKsoJQSH8kENdw2Ulaik6LeFrNEZuyYeIOnY98=;
+  b=I70KK4B+f8lhlY2/TumsFNKT1n0fPYpjztHF5k32nXAPspgaC4BPo9Fi
+   uScjPjn0RqtHiuzfQEu9QS7BNZ1RtoNlcgx9/8MPZHTaUZolYREPmITYH
+   b3LaIGxOB/CDEB4bnC+y2+q1RvDgtTfnLclQKXs0tjF2ZJ0LsbkaqDlxu
+   GaYGpYWjGuy1VWUd/hMVNRCWD8SmqqH09UV/hf6XDChRlqAeuHqZIf24H
+   bZtwfy3tjUW/ZW7jPNzQ/5Fr8VPPf3YEJA4j2OYyfeeXzgBnLIFzFvX80
+   9A6tpJ4AmH3TzV4e2wqTZ0iW6RQDsEn03wzHBislw2k1oOymbZnRtrF2T
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="427413972"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="427413972"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:10:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="749150470"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="749150470"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Mar 2023 04:10:22 -0700
+Message-ID: <2e727403-a566-8c48-9367-5daa7c87def7@linux.intel.com>
+Date:   Thu, 30 Mar 2023 14:11:44 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH] xhci: use pm_ptr() instead of #ifdef for CONFIG_PM
+ conditionals
 Content-Language: en-US
-To:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230328195925.94495-1-nbd@nbd.name>
- <20230328161642.3d2f101c@kernel.org>
- <e9e362e3a571bc32afb344cf35b54395e741de90.camel@redhat.com>
-From:   Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH net-next v2] net/core: add optional threading for backlog
- processing
-In-Reply-To: <e9e362e3a571bc32afb344cf35b54395e741de90.camel@redhat.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Josue David Hernandez Gutierrez 
+        <josue.d.hernandez.gutierrez@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230328131114.1296430-1-arnd@kernel.org>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20230328131114.1296430-1-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.23 13:01, Paolo Abeni wrote:
-> On Tue, 2023-03-28 at 16:16 -0700, Jakub Kicinski wrote:
->> On Tue, 28 Mar 2023 21:59:25 +0200 Felix Fietkau wrote:
->> > When dealing with few flows or an imbalance on CPU utilization, static RPS
->> > CPU assignment can be too inflexible. Add support for enabling threaded NAPI
->> > for backlog processing in order to allow the scheduler to better balance
->> > processing. This helps better spread the load across idle CPUs.
->> 
->> Can you share some numbers vs a system where RPS only spreads to 
->> the cores which are not running NAPI?
->> 
->> IMHO you're putting a lot of faith in the scheduler and you need 
->> to show that it actually does what you say it will do.
-I will run some more tests as soon as I have time for it.
-
-> I have the same feeling. From your description I think some gain is
-> possible if there are no other processes running except
-> ksoftirq/rps/threaded napi.
+On 28.3.2023 16.10, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> I guess that the above is expect average state for a small s/w router,
-> but if/when routing daemon/igmp proxy/local web server kicks-in you
-> should notice a measurable higher latency (compared to plain RPS in the
-> same scenario)???
-Depends on the process priority, I guess.
+> A recent patch caused an unused-function warning in builds with
+> CONFIG_PM disabled, after the function became marked 'static':
+> 
+> drivers/usb/host/xhci-pci.c:91:13: error: 'xhci_msix_sync_irqs' defined but not used [-Werror=unused-function]
+>     91 | static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
+>        |             ^~~~~~~~~~~~~~~~~~~
+> 
+> This could be solved by adding another #ifdef, but as there is
+> a trend towards removing CONFIG_PM checks in favor of helper
+> macros, do the same conversion here and use pm_ptr() to get
+> either a function pointer or NULL but avoid the warning.
+> 
+> As the hidden functions reference some other symbols, make
+> sure those are visible at compile time, at the minimal cost of
+> a few extra bytes for 'struct usb_device'.
+> 
+> Fixes: 9abe15d55dcc ("xhci: Move xhci MSI sync function to to xhci-pci")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-The main thing I'm trying to fix is the fact that RPS as implemented 
-right now is too static for devices routing traffic at CPU capacity limit.
-Even if you manage to tune properly for simple ethernet NAT, then adding 
-WLAN to the mix can easily throw a wrench into the picture as well, 
-because its hard to cover different shifting usage patterns with a 
-simple static assignment.
+Thanks for this.
+Looks like Greg already picked it.
 
-- Felix
+-Mathias
 
