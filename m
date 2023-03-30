@@ -2,436 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FD86D12D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EF26D12DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjC3XJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 19:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
+        id S231500AbjC3XKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 19:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjC3XJT (ORCPT
+        with ESMTP id S229717AbjC3XKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 19:09:19 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0AAFF2F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 16:09:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1680217755;
-        bh=DvPBNHtpLK4dMljweVlPBiWWZwj1994rwadAFIt5K6E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=wEBqhdsai5eJFUQzqRVm754fY+W00bZdUpwlx6lZ0d1p38az4ZIrYcQ48XPQZ4yCX
-         A/FpdV6K3VyvfRH5GgRDXMc5ry0BukA/PUTCnU1zd51CJ/JujFEIlYEWasn6OC0x3i
-         4LulvCDtb4Ad7grEcHjEklQsRAK2AnfX45Z75/RePlNVGNkhe8Dk2JmxynnrhuYAT1
-         Ryh5VvR/zrjrSTyqs783n/wV295LeCfdYR/7YV918xR0p295nalH4+Kq8FUD0UDlos
-         6LCOnISVz1afpygS/agcQh3LsU1YvPKK8gA+8oqpinVBJUcBSJ4jNZyceW/lOv9g5x
-         vtZ3XM68SHBBQ==
-Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PnfHv0CKrztYf;
-        Thu, 30 Mar 2023 19:09:15 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Aaron Lu <aaron.lu@intel.com>
-Subject: [RFC PATCH] sched: Introduce per-mm/cpu concurrency id state
-Date:   Thu, 30 Mar 2023 19:09:11 -0400
-Message-Id: <20230330230911.228720-1-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 30 Mar 2023 19:10:31 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94081CA0F;
+        Thu, 30 Mar 2023 16:10:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:To:
+        MIME-Version:Date:Message-ID:cc:content-disposition;
+        bh=IYoLxfXdh42eqgzRFxli7S0EgtfkxGlNhOSigI3GRE0=; b=mFbD8Eiz6E02+g22+F8QmHrMIl
+        ECPR2l8GJifrt2Qt4XWe/SvSy+3sncUvz5DH8XThRXq85qjisH7ouj0MfgPZfwcvnqHc0CJsSRYrF
+        WaSPuNLhRrTrpGsgXD5+ezprY+1U0hB450qMGXEOoEA+IjEsLfP54MaTqmgnnfZs//XpRKm8KLetC
+        Qy8OoOxyEXhidTZsAt21p8pHqCBHqYqhLsBG+1DKC26ltdGtRIRtQa3/4BzAEDtQUnKFdb8AqEChS
+        kbHajvKOxsbh3+bWerARbkca/rvQN/pDL7O7txN75VDUsTyKqMmgjboONdLYDm7uk7xrrNCtk7Sob
+        jdYyoCWA==;
+Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1pi1PT-00DmhG-5d; Thu, 30 Mar 2023 17:10:24 -0600
+Message-ID: <189e7cf7-3a90-d15e-4e45-f438b751a484@deltatee.com>
+Date:   Thu, 30 Mar 2023 17:10:22 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-CA
+To:     Kelvin Cao <kelvin.cao@microchip.com>, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230328011142.2107129-1-kelvin.cao@microchip.com>
+ <20230328011142.2107129-4-kelvin.cao@microchip.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <20230328011142.2107129-4-kelvin.cao@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 24.64.144.200
+X-SA-Exim-Rcpt-To: kelvin.cao@microchip.com, vkoul@kernel.org, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
+ engine PCI driver
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Keep track of the currently allocated mm_cid for each mm/cpu rather than
-freeing them immediately. This eliminates most atomic ops when context
-switching back and forth between threads belonging to different memory
-spaces in multi-threaded scenarios (many processes, each with many
-threads).
+Hi Kelvin,
 
-This patch is based on v6.3-rc4 with this patch applied:
+On 2023-03-27 19:11, Kelvin Cao wrote:
+> Some Switchtec Switches can expose DMA engines via extra PCI functions
+> on the upstream ports. At most one such function can be supported on
+> each upstream port. Each function can have one or more DMA channels.
+> 
+> Implement core PCI driver skeleton and register DMA engine callbacks.
+> 
+> Signed-off-by: Kelvin Cao <kelvin.cao@microchip.com>
+> Co-developed-by: George Ge <george.ge@microchip.com>
+> Signed-off-by: George Ge <george.ge@microchip.com>
 
-("mm: Fix memory leak on mm_init error handling")
+Looks largely good. I did a quick review on some of the code and have a
+few questions and nits.
 
-https://lore.kernel.org/lkml/20230330133822.66271-1-mathieu.desnoyers@efficios.com/
+> +static void switchtec_dma_release(struct dma_device *dma_dev)
+> +{
+> +	int i;
+> +	struct switchtec_dma_dev *swdma_dev =
+> +		container_of(dma_dev, struct switchtec_dma_dev, dma_dev);
+> +
+> +	for (i = 0; i < swdma_dev->chan_cnt; i++)
+> +		kfree(swdma_dev->swdma_chans[i]);
+> +
+> +	kfree(swdma_dev->swdma_chans);
+> +	kfree(swdma_dev);
+> +
+> +	put_device(dma_dev->dev);
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Aaron Lu <aaron.lu@intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- include/linux/mm_types.h | 32 ++++++++++++++++
- kernel/fork.c            |  7 +++-
- kernel/sched/core.c      | 79 ++++++++++++++++++++++++++++++++++-----
- kernel/sched/sched.h     | 81 ++++++++++++++++++++++++++++++----------
- 4 files changed, 169 insertions(+), 30 deletions(-)
+dma_dev is part of swdma_dev, but it was just kfree'd so this doesn't
+look valid.
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 0722859c3647..335af2da5b34 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -609,6 +609,7 @@ struct mm_struct {
- 		 * were being concurrently updated by the updaters.
- 		 */
- 		raw_spinlock_t cid_lock;
-+		int __percpu *pcpu_cid;
- #endif
- #ifdef CONFIG_MMU
- 		atomic_long_t pgtables_bytes;	/* size of all page tables */
-@@ -872,6 +873,16 @@ static inline void vma_iter_init(struct vma_iterator *vmi,
- }
- 
- #ifdef CONFIG_SCHED_MM_CID
-+
-+enum pcpu_cid_state {
-+	PCPU_CID_UNSET = -1U,
-+};
-+
-+static inline bool pcpu_cid_is_unset(int cid)
-+{
-+	return cid == PCPU_CID_UNSET;
-+}
-+
- /* Accessor for struct mm_struct's cidmask. */
- static inline cpumask_t *mm_cidmask(struct mm_struct *mm)
- {
-@@ -885,16 +896,37 @@ static inline cpumask_t *mm_cidmask(struct mm_struct *mm)
- 
- static inline void mm_init_cid(struct mm_struct *mm)
- {
-+	int i;
-+
- 	raw_spin_lock_init(&mm->cid_lock);
-+	for_each_possible_cpu(i)
-+		*per_cpu_ptr(mm->pcpu_cid, i) = PCPU_CID_UNSET;
- 	cpumask_clear(mm_cidmask(mm));
- }
- 
-+static inline int mm_alloc_cid(struct mm_struct *mm)
-+{
-+	mm->pcpu_cid = alloc_percpu(int);
-+	if (!mm->pcpu_cid)
-+		return -ENOMEM;
-+	mm_init_cid(mm);
-+	return 0;
-+}
-+
-+static inline void mm_destroy_cid(struct mm_struct *mm)
-+{
-+	free_percpu(mm->pcpu_cid);
-+	mm->pcpu_cid = NULL;
-+}
-+
- static inline unsigned int mm_cid_size(void)
- {
- 	return cpumask_size();
- }
- #else /* CONFIG_SCHED_MM_CID */
- static inline void mm_init_cid(struct mm_struct *mm) { }
-+static inline int mm_alloc_cid(struct mm_struct *mm) { return 0; }
-+static inline void mm_destroy_cid(struct mm_struct *mm) { }
- static inline unsigned int mm_cid_size(void)
- {
- 	return 0;
-diff --git a/kernel/fork.c b/kernel/fork.c
-index c983c4fe3090..57fdc96ffa49 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -790,6 +790,7 @@ void __mmdrop(struct mm_struct *mm)
- 	check_mm(mm);
- 	put_user_ns(mm->user_ns);
- 	mm_pasid_drop(mm);
-+	mm_destroy_cid(mm);
- 
- 	for (i = 0; i < NR_MM_COUNTERS; i++)
- 		percpu_counter_destroy(&mm->rss_stat[i]);
-@@ -1159,18 +1160,22 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
- 	if (init_new_context(p, mm))
- 		goto fail_nocontext;
- 
-+	if (mm_alloc_cid(mm))
-+		goto fail_cid;
-+
- 	for (i = 0; i < NR_MM_COUNTERS; i++)
- 		if (percpu_counter_init(&mm->rss_stat[i], 0, GFP_KERNEL_ACCOUNT))
- 			goto fail_pcpu;
- 
- 	mm->user_ns = get_user_ns(user_ns);
- 	lru_gen_init_mm(mm);
--	mm_init_cid(mm);
- 	return mm;
- 
- fail_pcpu:
- 	while (i > 0)
- 		percpu_counter_destroy(&mm->rss_stat[--i]);
-+	mm_destroy_cid(mm);
-+fail_cid:
- 	destroy_context(mm);
- fail_nocontext:
- 	mm_free_pgd(mm);
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 0d18c3969f90..f07b87d155bd 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2326,16 +2326,20 @@ static inline bool is_cpu_allowed(struct task_struct *p, int cpu)
- static struct rq *move_queued_task(struct rq *rq, struct rq_flags *rf,
- 				   struct task_struct *p, int new_cpu)
- {
-+	int cid;
-+
- 	lockdep_assert_rq_held(rq);
- 
- 	deactivate_task(rq, p, DEQUEUE_NOCLOCK);
- 	set_task_cpu(p, new_cpu);
-+	cid = sched_mm_cid_migrate_from(rq, p);
- 	rq_unlock(rq, rf);
- 
- 	rq = cpu_rq(new_cpu);
- 
- 	rq_lock(rq, rf);
- 	WARN_ON_ONCE(task_cpu(p) != new_cpu);
-+	sched_mm_cid_migrate_to(rq, p, cid);
- 	activate_task(rq, p, 0);
- 	check_preempt_curr(rq, p, 0);
- 
-@@ -11383,45 +11387,102 @@ void call_trace_sched_update_nr_running(struct rq *rq, int count)
- }
- 
- #ifdef CONFIG_SCHED_MM_CID
-+/*
-+ * Migration is from src cpu to dst cpu. Always called from stopper thread on
-+ * src cpu with rq lock held.
-+ */
-+int sched_mm_cid_migrate_from(struct rq *src_rq, struct task_struct *t)
-+{
-+	struct mm_struct *mm = t->mm;
-+	int src_cpu, src_cid;
-+	int *src_pcpu_cid;
-+
-+	if (!mm)
-+		return PCPU_CID_UNSET;
-+
-+	src_cpu = cpu_of(src_rq);
-+	src_pcpu_cid = per_cpu_ptr(mm->pcpu_cid, src_cpu);
-+	src_cid = *src_pcpu_cid;
-+	if (pcpu_cid_is_unset(src_cid)) {
-+		/* src_cid is unset, nothing to clear/grab. */
-+		return PCPU_CID_UNSET;
-+	}
-+	/* Set to PCPU_CID_UNSET, grab ownership. */
-+	*src_pcpu_cid = PCPU_CID_UNSET;
-+	return src_cid;
-+}
-+
-+void sched_mm_cid_migrate_to(struct rq *dst_rq, struct task_struct *t, int src_cid)
-+{
-+	struct mm_struct *mm = t->mm;
-+	int dst_cpu, dst_cid;
-+	int *dst_pcpu_cid;
-+
-+	if (!mm || pcpu_cid_is_unset(src_cid))
-+		return;
-+
-+	dst_cpu = cpu_of(dst_rq);
-+	dst_pcpu_cid = per_cpu_ptr(mm->pcpu_cid, dst_cpu);
-+
-+	/* *dst_pcpu_cid = min(src_cid, *dst_pcpu_cid) */
-+	dst_cid = *dst_pcpu_cid;
-+	if (!pcpu_cid_is_unset(dst_cid) && dst_cid < src_cid) {
-+		__mm_cid_put(mm, src_cid);
-+		return;
-+	}
-+	*dst_pcpu_cid = src_cid;
-+	if (!pcpu_cid_is_unset(dst_cid)) {
-+		/*
-+		 * Put dst_cid if not currently in use, else it will be
-+		 * lazy put.
-+		 */
-+		if (dst_rq->curr->mm != mm)
-+			__mm_cid_put(mm, dst_cid);
-+	}
-+}
-+
- void sched_mm_cid_exit_signals(struct task_struct *t)
- {
- 	struct mm_struct *mm = t->mm;
--	unsigned long flags;
-+	struct rq *rq = this_rq();
-+	struct rq_flags rf;
- 
- 	if (!mm)
- 		return;
--	local_irq_save(flags);
-+	rq_lock_irqsave(rq, &rf);
- 	mm_cid_put(mm, t->mm_cid);
- 	t->mm_cid = -1;
- 	t->mm_cid_active = 0;
--	local_irq_restore(flags);
-+	rq_unlock_irqrestore(rq, &rf);
- }
- 
- void sched_mm_cid_before_execve(struct task_struct *t)
- {
- 	struct mm_struct *mm = t->mm;
--	unsigned long flags;
-+	struct rq *rq = this_rq();
-+	struct rq_flags rf;
- 
- 	if (!mm)
- 		return;
--	local_irq_save(flags);
-+	rq_lock_irqsave(rq, &rf);
- 	mm_cid_put(mm, t->mm_cid);
- 	t->mm_cid = -1;
- 	t->mm_cid_active = 0;
--	local_irq_restore(flags);
-+	rq_unlock_irqrestore(rq, &rf);
- }
- 
- void sched_mm_cid_after_execve(struct task_struct *t)
- {
- 	struct mm_struct *mm = t->mm;
--	unsigned long flags;
-+	struct rq *rq = this_rq();
-+	struct rq_flags rf;
- 
- 	if (!mm)
- 		return;
--	local_irq_save(flags);
-+	rq_lock_irqsave(rq, &rf);
- 	t->mm_cid = mm_cid_get(mm);
- 	t->mm_cid_active = 1;
--	local_irq_restore(flags);
-+	rq_unlock_irqrestore(rq, &rf);
- 	rseq_set_notify_resume(t);
- }
- 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 3e8df6d31c1e..7b93847b89a3 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -3249,7 +3249,47 @@ static inline void update_current_exec_runtime(struct task_struct *curr,
- }
- 
- #ifdef CONFIG_SCHED_MM_CID
--static inline int __mm_cid_get(struct mm_struct *mm)
-+extern int sched_mm_cid_migrate_from(struct rq *src_rq, struct task_struct *t);
-+extern void sched_mm_cid_migrate_to(struct rq *dst_rq, struct task_struct *t, int cid);
-+
-+static inline void __mm_cid_put(struct mm_struct *mm, int cid)
-+{
-+	lockdep_assert_irqs_disabled();
-+	if (cid < 0)
-+		return;
-+	raw_spin_lock(&mm->cid_lock);
-+	__cpumask_clear_cpu(cid, mm_cidmask(mm));
-+	raw_spin_unlock(&mm->cid_lock);
-+}
-+
-+static inline void mm_cid_put(struct mm_struct *mm, int thread_cid)
-+{
-+	int *pcpu_cid, cid;
-+
-+	lockdep_assert_irqs_disabled();
-+	if (thread_cid < 0)
-+		return;
-+	pcpu_cid = this_cpu_ptr(mm->pcpu_cid);
-+	cid = *pcpu_cid;
-+	if (cid == thread_cid)
-+		*pcpu_cid = PCPU_CID_UNSET;
-+	__mm_cid_put(mm, thread_cid);
-+}
-+
-+static inline void mm_cid_put_lazy(struct mm_struct *mm, int thread_cid)
-+{
-+	int *pcpu_cid, cid;
-+
-+	lockdep_assert_irqs_disabled();
-+	if (thread_cid < 0)
-+		return;
-+	pcpu_cid = this_cpu_ptr(mm->pcpu_cid);
-+	cid = *pcpu_cid;
-+	if (cid != thread_cid)
-+		__mm_cid_put(mm, thread_cid);
-+}
-+
-+static inline int __mm_cid_get_locked(struct mm_struct *mm)
- {
- 	struct cpumask *cpumask;
- 	int cid;
-@@ -3262,40 +3302,38 @@ static inline int __mm_cid_get(struct mm_struct *mm)
- 	return cid;
- }
- 
--static inline void mm_cid_put(struct mm_struct *mm, int cid)
-+static inline int __mm_cid_get(struct mm_struct *mm)
- {
-+	int ret;
-+
- 	lockdep_assert_irqs_disabled();
--	if (cid < 0)
--		return;
- 	raw_spin_lock(&mm->cid_lock);
--	__cpumask_clear_cpu(cid, mm_cidmask(mm));
-+	ret = __mm_cid_get_locked(mm);
- 	raw_spin_unlock(&mm->cid_lock);
-+	return ret;
- }
- 
- static inline int mm_cid_get(struct mm_struct *mm)
- {
--	int ret;
-+	int *pcpu_cid, cid;
- 
- 	lockdep_assert_irqs_disabled();
--	raw_spin_lock(&mm->cid_lock);
--	ret = __mm_cid_get(mm);
--	raw_spin_unlock(&mm->cid_lock);
--	return ret;
-+	pcpu_cid = this_cpu_ptr(mm->pcpu_cid);
-+	cid = *pcpu_cid;
-+	if (pcpu_cid_is_unset(cid)) {
-+		raw_spin_lock(&mm->cid_lock);
-+		cid = __mm_cid_get_locked(mm);
-+		raw_spin_unlock(&mm->cid_lock);
-+		*pcpu_cid = cid;
-+		return cid;
-+	}
-+	return cid;
- }
- 
- static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *next)
- {
- 	if (prev->mm_cid_active) {
--		if (next->mm_cid_active && next->mm == prev->mm) {
--			/*
--			 * Context switch between threads in same mm, hand over
--			 * the mm_cid from prev to next.
--			 */
--			next->mm_cid = prev->mm_cid;
--			prev->mm_cid = -1;
--			return;
--		}
--		mm_cid_put(prev->mm, prev->mm_cid);
-+		mm_cid_put_lazy(prev->mm, prev->mm_cid);
- 		prev->mm_cid = -1;
- 	}
- 	if (next->mm_cid_active)
-@@ -3304,6 +3342,9 @@ static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *n
- 
- #else
- static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *next) { }
-+static inline void sched_mm_cid_migrate(struct rq *rq, struct task_struct *t, int new_cpu) { }
-+static inline int sched_mm_cid_migrate_from(struct rq *src_rq, struct task_struct *t) { return 0; }
-+static inline void sched_mm_cid_migrate_to(struct rq *src_rq, struct task_struct *t, int cid) { }
- #endif
- 
- #endif /* _KERNEL_SCHED_SCHED_H */
--- 
-2.25.1
+> +}
+> +
+> +static int switchtec_dma_create(struct pci_dev *pdev)
+> +{
+> +	struct switchtec_dma_dev *swdma_dev;
+> +	struct dma_device *dma;
+> +	struct dma_chan *chan;
+> +	struct device *dev = &pdev->dev;
+> +	void __iomem *bar;
+> +	int chan_cnt;
+> +	int nr_vecs;
+> +	int irq;
+> +	int rc;
+> +	int i;
+> +
+> +	/*
+> +	 * Create the switchtec dma device
+> +	 */
+> +	swdma_dev = kzalloc(sizeof(*swdma_dev), GFP_KERNEL);
+> +	if (!swdma_dev)
+> +		return -ENOMEM;
+> +
+> +	bar = pcim_iomap_table(pdev)[0];
+> +	swdma_dev->bar = bar;
+> +
+> +	swdma_dev->mmio_dmac_ver = bar + SWITCHTEC_DMAC_VERSION_OFFSET;
+> +	swdma_dev->mmio_dmac_cap = bar + SWITCHTEC_DMAC_CAPABILITY_OFFSET;
+> +	swdma_dev->mmio_dmac_status = bar + SWITCHTEC_DMAC_STATUS_OFFSET;
+> +	swdma_dev->mmio_dmac_ctrl = bar + SWITCHTEC_DMAC_CONTROL_OFFSET;
+> +	swdma_dev->mmio_chan_hw_all = bar + SWITCHTEC_DMAC_CHAN_CTRL_OFFSET;
+> +	swdma_dev->mmio_chan_fw_all = bar + SWITCHTEC_DMAC_CHAN_CFG_STS_OFFSET;
+> +
+> +	dev_info(dev, "Switchtec PSX/PFX DMA EP\n");
 
+Other prints in this function use the pci_version and pdev directly. As
+best as I can see 'dev' is unused except for these prints so could be
+removed and converted to pci_ functions.
+
+
+> +static void switchtec_dma_remove(struct pci_dev *pdev)
+> +{
+> +	struct switchtec_dma_dev *swdma_dev = pci_get_drvdata(pdev);
+> +
+> +	switchtec_dma_chans_release(swdma_dev);
+> +
+> +	tasklet_kill(&swdma_dev->chan_status_task);
+> +
+> +	rcu_assign_pointer(swdma_dev->pdev, NULL);
+> +	synchronize_rcu();
+
+switchtec_dma_remove() can be called while transactions are in progress.
+I'm not seeing anything here that might abort transactions that have
+been placed on the ring that might not have been finished by the
+hardware. Maybe I'm not seeing it. But have you tested unbind while
+active? Simply run a process that does dma transactions and then use
+sysfs to unbind the pci device and ensure there are no kernel hangs,
+panics or memory leaks.
+
+> +#define SWITCHTEC_PCI_DEVICE(device_id, is_fabric) \
+> +	{ \
+> +		.vendor     = MICROSEMI_VENDOR_ID, \
+> +		.device     = device_id, \
+> +		.subvendor  = PCI_ANY_ID, \
+> +		.subdevice  = PCI_ANY_ID, \
+> +		.class      = PCI_CLASS_SYSTEM_OTHER << 8, \
+> +		.class_mask = 0xFFFFFFFF, \
+> +		.driver_data = is_fabric, \
+> +	}
+
+Doesn't look like the .driver_data is used anywhere. Seems like it can
+be removed.
+
+> +static const struct pci_device_id switchtec_dma_pci_tbl[] = {
+> +	SWITCHTEC_PCI_DEVICE(0x4000, 0),  //PFX 100XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4084, 0),  //PFX 84XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4068, 0),  //PFX 68XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4052, 0),  //PFX 52XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4036, 0),  //PFX 36XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4028, 0),  //PFX 28XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4100, 0),  //PSX 100XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4184, 0),  //PSX 84XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4168, 0),  //PSX 68XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4152, 0),  //PSX 52XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4136, 0),  //PSX 36XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4128, 0),  //PSX 28XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4352, 0),  //PFXA 52XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4336, 0),  //PFXA 36XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4328, 0),  //PFXA 28XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4452, 0),  //PSXA 52XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4436, 0),  //PSXA 36XG4
+> +	SWITCHTEC_PCI_DEVICE(0x4428, 0),  //PSXA 28XG4
+> +	{0}
+> +};
+> +MODULE_DEVICE_TABLE(pci, switchtec_dma_pci_tbl);
+> +
+> +static struct pci_driver switchtec_dma_pci_driver = {
+> +	.name           = KBUILD_MODNAME,
+> +	.id_table       = switchtec_dma_pci_tbl,
+> +	.probe          = switchtec_dma_probe,
+> +	.remove		= switchtec_dma_remove,
+> +};
+> +module_pci_driver(switchtec_dma_pci_driver);
+
+
+Logan
