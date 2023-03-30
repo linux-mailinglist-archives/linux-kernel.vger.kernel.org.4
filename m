@@ -2,127 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 619546D0C2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5E16D0C2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbjC3REf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 13:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
+        id S231148AbjC3RFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbjC3REa (ORCPT
+        with ESMTP id S229470AbjC3RFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:04:30 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930F25B8E;
-        Thu, 30 Mar 2023 10:04:28 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id b20so79181301edd.1;
-        Thu, 30 Mar 2023 10:04:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680195867;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mpi+z+1m9c/5uRG/3aPiuMWiZMpS1q80gTEBOdR4q6Q=;
-        b=c4bCgw/UXvmKQisPMFDGVyNibLfbmS8Rm10f/D59iAwdXyB15AW0jvMLMqKgbxhEwe
-         Ok+jZtrcuftqFVLu3mv8RwD2j1MAcZfDydLrwd9SdX5yha/fKZReTDcoKZx9uKK+EBd2
-         k/ikHUqrHhlqet5+4twIpUVCBVKzMcLL+0Ef/z1NsjzV0jay7d/jOqJmfirnkmy0c7Bs
-         cJWqjRMc6CiNmFYtOaTma68JtQPjQSENu+ByRWeDSvbt54v0sKeN4SoIMBn9kMekm2Z6
-         iRsF9/4BjT0f3yXETUScGBScMQc4sZlGP07JjWFujWIfNUJ2hsWCBCQRAsW8No5MfilE
-         Afew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680195867;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mpi+z+1m9c/5uRG/3aPiuMWiZMpS1q80gTEBOdR4q6Q=;
-        b=JpzdhPook4a1v6QViL6DcOfmuDQ+WbrTz383/0llmEBUxvcUd9+qulboBZ4Y9Pq3jO
-         OJW0GIdG6E9pTLsc4EZqaINqdLFZGPBdxA1KHm8kvrZQT4m4P2uglWnfw7s144GUHtRs
-         /aA0CdVu5tzzdzGW0xQjkyMNeaW8SI3qyUOSbguNzIvBFKHhpK1YjiV2rImVslHqPF0z
-         0/BAefUKUm5i14/YmiQQcnplTXdTvLw5SySyiHPkwX9KrWAq5PlvLL8MTStoNhZOYbuI
-         GiaMVhZwfDeWCT+Peg//0/SnX4GASx767zjxK2AuYzA1Ytb0uLwruf99Jp28I+viciTC
-         aGzw==
-X-Gm-Message-State: AAQBX9eCKOvnGBxRdkeFm123Uri3UQI4if7o0HgfwoPvEzs5qhkfh1yR
-        DcvdOsBQngzzUvm6ew75hQ==
-X-Google-Smtp-Source: AKy350akG/cT7TWge0CvXUlRJpUrm1KLABeK22t+bLyqtpqkDQqmyaiVshjVor5jfLx5q+oxPQppaQ==
-X-Received: by 2002:aa7:db92:0:b0:4fd:2346:7225 with SMTP id u18-20020aa7db92000000b004fd23467225mr24541640edt.34.1680195866853;
-        Thu, 30 Mar 2023 10:04:26 -0700 (PDT)
-Received: from p183 ([46.53.250.0])
-        by smtp.gmail.com with ESMTPSA id z23-20020a50cd17000000b005021c7f08absm146947edi.29.2023.03.30.10.04.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 10:04:26 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 20:04:24 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>
-Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
-Message-ID: <683593a8-79db-4f3b-bc78-7917284683e4@p183>
-References: <4ce29654-4e1e-4680-9c25-715823ff5e02@p183>
+        Thu, 30 Mar 2023 13:05:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221CF10A;
+        Thu, 30 Mar 2023 10:05:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACEC1B8261D;
+        Thu, 30 Mar 2023 17:05:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54AEBC433D2;
+        Thu, 30 Mar 2023 17:05:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680195915;
+        bh=EF30fAGyUZun/5gZWGNZKE6r2K5Z9qpggd2xNHSKj4I=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=XlCrStym7zoiXAcuFy+ovUGRXaVfqwvoq8MGSyf7SRQptyXV8wK1+h3l+QQdSkITf
+         Z+K3RzdeMKyaBDSGIVl+yVDGzwSvG5WTWFWlRLuhHho+nWqMjlUU4B4XTk8BygAZRQ
+         15BiPcMO+k7IrIDb1rDE256+j3M0GyPch91wApeNSniR35re9vOp3spjvbFI5oMWiT
+         /qVC+WhrGCko00wypoT0XhGqx2bIJudVqjjoCC46VWJcj39xs+SOxp+caHpQeZ2zRK
+         wUCT84Cq/kLgmrT2klv7uDdHuaegjZQQnTZ9i6An395PUzK46C7NathKSADecOpXJW
+         yUyw8/DrM0uZQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id E91E21540476; Thu, 30 Mar 2023 10:05:14 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 10:05:14 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-team@meta.com" <kernel-team@meta.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "hch@lst.de" <hch@lst.de>,
+        "qiang.zhang1211@gmail.com" <qiang.zhang1211@gmail.com>
+Subject: Re: [PATCH RFC rcu 02/19] srcu: Use static init for statically
+ allocated in-module srcu_struct
+Message-ID: <2d15d553-4c58-4f71-aad8-681d3168c2b1@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop>
+ <20230324001938.3443499-2-paulmck@kernel.org>
+ <PH0PR11MB5880CA682074874FF64B3412DA8E9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <b66d52cb-ed73-4c7f-bab0-201dc13d164a@paulmck-laptop>
+ <PH0PR11MB58807EB1C375AE03F8586C92DA8E9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <PH0PR11MB588088F6212E9291D3E69244DA8E9@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4ce29654-4e1e-4680-9c25-715823ff5e02@p183>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <PH0PR11MB588088F6212E9291D3E69244DA8E9@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset somehow breaks the build of the simplest livepatch module:
+On Thu, Mar 30, 2023 at 03:20:15PM +0000, Zhang, Qiang1 wrote:
+> > >Further shrinking the srcu_struct structure is eased by requiring 
+> > >that in-module srcu_struct structures rely more heavily on static 
+> > >initialization.  In particular, this preserves the property that a 
+> > >module-load-time srcu_struct initialization can fail only due to 
+> > >memory-allocation failure of the per-CPU srcu_data structures.
+> > >It might also slightly improve robustness by keeping the number of 
+> > >memory allocations that must succeed down percpu_alloc() call.
+> > >
+> > >This is in preparation for splitting an srcu_usage structure out of 
+> > >the srcu_struct structure.
+> > >
+> > >[ paulmck: Fold in qiang1.zhang@intel.com feedback. ]
+> > >
+> > >Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > >Cc: Christoph Hellwig <hch@lst.de>
+> > >---
+> > > include/linux/srcutree.h | 19 ++++++++++++++-----
+> > > kernel/rcu/srcutree.c    | 19 +++++++++++++------
+> > > 2 files changed, 27 insertions(+), 11 deletions(-)
+> > >
+> > >diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h 
+> > >index ac8af12f93b3..428480152375 100644
+> > >--- a/include/linux/srcutree.h
+> > >+++ b/include/linux/srcutree.h
+> > >@@ -121,15 +121,24 @@ struct srcu_struct {
+> > > #define SRCU_STATE_SCAN1	1
+> > > #define SRCU_STATE_SCAN2	2
+> > > 
+> > >-#define __SRCU_STRUCT_INIT(name, pcpu_name)							\
+> > >-{												\
+> > >-	.sda = &pcpu_name,									\
+> > >+#define __SRCU_STRUCT_INIT_COMMON(name)								\
+> > > 	.lock = __SPIN_LOCK_UNLOCKED(name.lock),						\
+> > > 	.srcu_gp_seq_needed = -1UL,								\
+> > > 	.work = __DELAYED_WORK_INITIALIZER(name.work, NULL, 0),					\
+> > >-	__SRCU_DEP_MAP_INIT(name)								\
+> > >+	__SRCU_DEP_MAP_INIT(name)
+> > >+
+> > >+#define __SRCU_STRUCT_INIT_MODULE(name)								\
+> > >+{												\
+> > >+	__SRCU_STRUCT_INIT_COMMON(name)								\
+> > > }
+> > > 
+> > >+#define __SRCU_STRUCT_INIT(name, pcpu_name)							\
+> > >+{												\
+> > >+	.sda = &pcpu_name,									\
+> > >+	__SRCU_STRUCT_INIT_COMMON(name)								\
+> > >+}
+> > >+
+> > >+
+> > > /*
+> > >  * Define and initialize a srcu struct at build time.
+> > >  * Do -not- call init_srcu_struct() nor cleanup_srcu_struct() on it.
+> > >@@ -151,7 +160,7 @@ struct srcu_struct {
+> > >  */
+> > > #ifdef MODULE
+> > > # define __DEFINE_SRCU(name, is_static)								\
+> > >-	is_static struct srcu_struct name;							\
+> > >+	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name);			\
+> > > 	extern struct srcu_struct * const __srcu_struct_##name;					\
+> > > 	struct srcu_struct * const __srcu_struct_##name						\
+> > > 		__section("___srcu_struct_ptrs") = &name diff --git 
+> > >a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c index 
+> > >cd46fe063e50..7a6d9452a5d0 100644
+> > >--- a/kernel/rcu/srcutree.c
+> > >+++ b/kernel/rcu/srcutree.c
+> > >@@ -1895,13 +1895,14 @@ void __init srcu_init(void)  static int 
+> > >srcu_module_coming(struct module *mod)  {
+> > > 	int i;
+> > >+	struct srcu_struct *ssp;
+> > > 	struct srcu_struct **sspp = mod->srcu_struct_ptrs;
+> > >-	int ret;
+> > > 
+> > > 	for (i = 0; i < mod->num_srcu_structs; i++) {
+> > >-		ret = init_srcu_struct(*(sspp++));
+> > >-		if (WARN_ON_ONCE(ret))
+> > >-			return ret;
+> > >+		ssp = *(sspp++);
+> > >+		ssp->sda = alloc_percpu(struct srcu_data);
+> > >+		if (WARN_ON_ONCE(!ssp->sda))
+> > >+			return -ENOMEM;
+> > > 	}
+> > > 	return 0;
+> > > }
+> > >@@ -1910,10 +1911,16 @@ static int srcu_module_coming(struct module 
+> > >*mod)  static void srcu_module_going(struct module *mod)  {
+> > > 	int i;
+> > >+	struct srcu_struct *ssp;
+> > > 	struct srcu_struct **sspp = mod->srcu_struct_ptrs;
+> > > 
+> > >-	for (i = 0; i < mod->num_srcu_structs; i++)
+> > >-		cleanup_srcu_struct(*(sspp++));
+> > >+	for (i = 0; i < mod->num_srcu_structs; i++) {
+> > >+		ssp = *(sspp++);
+> > >+		if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
+> > >+		    !WARN_ON_ONCE(!ssp->srcu_sup->sda_is_static))
+> > >+				cleanup_srcu_struct(ssp);
+> > >+		free_percpu(ssp->sda);
+> > 
+> > 
+> > Hi Paul
+> > 
+> > About 037b80b8865fb ("srcu: Check for readers at module-exit time ")
+> > 
+> > --- a/kernel/rcu/srcutree.c
+> > +++ b/kernel/rcu/srcutree.c
+> > @@ -1911,7 +1911,8 @@ static void srcu_module_going(struct module *mod)
+> >                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
+> >                     !WARN_ON_ONCE(!ssp->srcu_sup->sda_is_static))
+> >                         cleanup_srcu_struct(ssp);
+> 
+> 
+> The srcu_sup->sda_is_static is true, in cleanup_srcu_struct(), the ssp->sda can not be freed.
 
-	make -f linux/linux-1/scripts/Makefile.modfinal
-	make[1]: *** No rule to make target 'linux/module-klp/main.tmp.ko', needed by 'linux/module-klp/main.ko'.  Stop.
+Very good, thank you!  I will fold your suggested fix into this commit:
 
-$ cat Kbuild
-obj-m := main.o
+037b80b8865f ("srcu: Check for readers at module-exit time")
 
-$ cat main.c
-#include <linux/module.h>
-#include <linux/kernel.h>
-#include <linux/livepatch.h>
-#include <linux/seq_file.h>
+							Thanx, Paul
 
-static int livepatch_cmdline_proc_show(struct seq_file *m, void *data)
-{
-	seq_puts(m, "REDACTED 001\n");
-	return 0;
-}
-
-static struct klp_func funcs[] = {
-	{
-		.old_name = "cmdline_proc_show",
-		.new_func = livepatch_cmdline_proc_show,
-	},
-	{}
-};
-
-static struct klp_object objs[] = {
-	{
-		.funcs = funcs,
-	},
-	{}
-};
-
-static struct klp_patch g_patch = {
-	.mod = THIS_MODULE,
-	.objs = objs,
-};
-
-static int livepatch_init(void)
-{
-	return klp_enable_patch(&g_patch);
-}
-
-static void livepatch_exit(void)
-{
-}
-module_init(livepatch_init);
-module_exit(livepatch_exit);
-MODULE_LICENSE("GPL");
-MODULE_INFO(livepatch, "Y");
+> > -               free_percpu(ssp->sda);
+> > +               else if (!WARN_ON(srcu_readers_active(ssp)))
+> > +                       free_percpu(ssp->sda);
+> > 
+> > Should the else statement be removed?  like this:
+> > 
+> > if (!WARN_ON(srcu_readers_active(ssp)))
+> > 	free_percpu(ssp->sda);
+> >
+> >Mightn't that cause us to double-free ssp->sda?  Once in free_percpu(), 
+> >and before that in cleanup_srcu_struct()?
+> 
+> 
+> how about this? any thought?
+> 
+> --- a/kernel/rcu/srcutree.c
+> +++ b/kernel/rcu/srcutree.c
+> @@ -1937,7 +1937,7 @@ static void srcu_module_going(struct module *mod)
+>                 if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)) &&
+>                     !WARN_ON_ONCE(!ssp->srcu_sup->sda_is_static))
+>                         cleanup_srcu_struct(ssp);
+> -               else if (!WARN_ON(srcu_readers_active(ssp)))
+> +               if (!WARN_ON(srcu_readers_active(ssp)))
+>                         free_percpu(ssp->sda);
+>         }
+>  }
+> 
+> Thanks
+> Zqiang
+> 
+> >
+> >							Thanx, Paul
+> >
+> > Thanks
+> > Zqiang
+> > 
+> > 
+> > >+	}
+> > > }
+> > > 
+> > > /* Handle one module, either coming or going. */
+> > >--
+> > >2.40.0.rc2
+> > >
