@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2166D005C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DFC6D0060
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjC3J6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
+        id S230165AbjC3J6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjC3J6X (ORCPT
+        with ESMTP id S230152AbjC3J6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:58:23 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0A4AB;
-        Thu, 30 Mar 2023 02:58:22 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32U8wVkn031996;
-        Thu, 30 Mar 2023 09:58:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=+5MOdgd+F9DOFkIAvbc9XGeePiUbARDP9UnLP6YhKxo=;
- b=dLFkDMHdHk9lCu8W//3UHsxeazPTdmqBxNuSV01GXgjSJMCe4RRrDMfWSBlyjQ/AEQPO
- yn34ZcMdOIoBgefYyH1MfAHNz0dXchrMLLdbTmEExqdDp79YOGthfWLmjwxHYfezEoz6
- q15ccFVa2ao813qw7NyBWTzzBGxlwZ1b3W32yha8HK1YnGL0qODteDCz5NI0QXrgXwt7
- CpjYfKEWxiC8LSvXmmN0BMHr0eWd4selofp6eLienXy0DudIK+BjJeBQ9GDh/MVLufiH
- lqhhjHfIq51alR2TZbiBeEJ2b1w2tZ4Kx09dcyPlP9wkTmPq1hw1aqg08zug5BMjBxu+ Xw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pn7by846f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 09:58:16 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32U9wF1w001527
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 09:58:15 GMT
-Received: from [10.201.3.182] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 30 Mar
- 2023 02:58:11 -0700
-Message-ID: <7da90524-37b3-0168-6326-a0a46b287736@quicinc.com>
-Date:   Thu, 30 Mar 2023 15:28:07 +0530
+        Thu, 30 Mar 2023 05:58:51 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A443A7DAF
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:58:44 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id v126-20020a6bac84000000b007587234a54cso11148818ioe.6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:58:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680170324; x=1682762324;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xGovrt1tYy7j+8AtskWTAwdmn8Xhh+IrCSWGXn5YPcQ=;
+        b=S0pLTYXeKnIRydTNw+pVmfuasLxz0jQsHCjqFJ9MDIKGbv7QgJbchrLs3Qr9liOQSu
+         8yOAk6RgIQHyDmUz7us86Pna1Jmd4XXp6w0HMiwdxWjWtT7pvazxunsbpDLHUGHEkGsM
+         Ul88+GAyETG+w/K/J9KVsUpaN/OhHOaXWw631WudwFmFrnsqHHkBC4kiu22Ic16ApAHA
+         x4V2i2sqVEiB3Bjm0aM3B3kvuQxtDHJdIGNW/E4zW5tr2wT2LVUoTtnHF5i9FslIw+r5
+         bhp+Xd9P0SReTubAMvo7LfwtoC0MkGS4zrd0Ca6AABSuoSMj6It2HIjgq/9RyNtLbsNr
+         C1Ow==
+X-Gm-Message-State: AO0yUKX9WjLZupBDrhVpTnTu9Mx2OA9GeMyUzY7IDtxyASRczChs3w4D
+        vnScUsdqDCqfXgTe6VOqoezFMxa3VfIG1/oKPnR0+ibSkhbm
+X-Google-Smtp-Source: AK7set/3qpUPZ/vKm9iQhB0jKlR95UM8plR+f7zsB8xlWGCd8sD3uW/SDnWAJSOd8mlrJQkL8A5+d85Za+lAuW2zjfwF2/QLoA5y
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] net: qrtr: Do not do DEL_SERVER broadcast after
- DEL_CLIENT
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <mani@kernel.org>, <manivannan.sadhasivam@linaro.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
-        <linux-arm-msm@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1680095250-21032-1-git-send-email-quic_srichara@quicinc.com>
- <20230329213216.7b0447e9@kernel.org>
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <20230329213216.7b0447e9@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ZS0G6pDsMpXHsRe609Ow0IiOUpDmzetz
-X-Proofpoint-GUID: ZS0G6pDsMpXHsRe609Ow0IiOUpDmzetz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-30_04,2023-03-30_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 bulkscore=0 priorityscore=1501 spamscore=0 clxscore=1015
- adultscore=0 mlxlogscore=998 malwarescore=0 mlxscore=0 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303300080
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a5d:9e12:0:b0:745:70d7:4962 with SMTP id
+ h18-20020a5d9e12000000b0074570d74962mr9108124ioh.0.1680170323973; Thu, 30 Mar
+ 2023 02:58:43 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 02:58:43 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000529f1805f81b23c2@google.com>
+Subject: [syzbot] Monthly xfs report
+From:   syzbot <syzbot+listea0b12829deaef4101fd@syzkaller.appspotmail.com>
+To:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello xfs maintainers/developers,
 
+This is a 30-day syzbot report for the xfs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/xfs
 
-On 3/30/2023 10:02 AM, Jakub Kicinski wrote:
-> On Wed, 29 Mar 2023 18:37:30 +0530 Sricharan R wrote:
->> When the qrtr socket is released, qrtr_port_remove gets called, which
->> broadcasts a DEL_CLIENT. After this DEL_SERVER is also additionally
->> broadcasted, which becomes NOP, but triggers the below error msg.
->>
->> "failed while handling packet from 2:-2", since remote node already
->> acted upon on receiving the DEL_CLIENT, once again when it receives
->> the DEL_SERVER, it returns -ENOENT.
->>
->> Fixing it by not sending a 'DEL_SERVER' to remote when a 'DEL_CLIENT'
->> was sent for that port.
-> 
-> You use the word "fix" so please add a Fixes tag.
-> 
+During the period, 5 new issues were detected and 0 were fixed.
+In total, 23 issues are still open and 15 have been fixed so far.
 
-  ok
+Some of the still happening issues:
 
->> Signed-off-by: Ram Kumar D <quic_ramd@quicinc.com>
->> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
-> 
-> Spell out full names, please.
+Crashes Repro Title
+327     Yes   INFO: task hung in xlog_grant_head_check
+              https://syzkaller.appspot.com/bug?extid=568245b88fbaedcb1959
+85      Yes   KASAN: stack-out-of-bounds Read in xfs_buf_lock
+              https://syzkaller.appspot.com/bug?extid=0bc698a422b5e4ac988c
+81      Yes   WARNING in xfs_qm_dqget_cache_insert
+              https://syzkaller.appspot.com/bug?extid=6ae213503fb12e87934f
+47      Yes   WARNING in xfs_bmapi_convert_delalloc
+              https://syzkaller.appspot.com/bug?extid=53b443b5c64221ee8bad
+44      Yes   INFO: task hung in xfs_buf_item_unpin
+              https://syzkaller.appspot.com/bug?extid=3f083e9e08b726fcfba2
+13      Yes   general protection fault in __xfs_free_extent
+              https://syzkaller.appspot.com/bug?extid=bfbc1eecdfb9b10e5792
+5       Yes   KASAN: use-after-free Read in xfs_btree_lookup_get_block
+              https://syzkaller.appspot.com/bug?extid=7e9494b8b399902e994e
 
-  ok
-
-Regards,
-  Sricharan
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
