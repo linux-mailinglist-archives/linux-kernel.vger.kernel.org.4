@@ -2,149 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D266D0CF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804D76D0CFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbjC3Rgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 13:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
+        id S230224AbjC3RiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbjC3Rgi (ORCPT
+        with ESMTP id S229831AbjC3RiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:36:38 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B2B6A47;
-        Thu, 30 Mar 2023 10:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680197797; x=1711733797;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=RBvzdW7pSSpZoGr/lhLmsN5VnHXIMJICoUqPvQK2N5Q=;
-  b=DLeQPrASHVmaxAqKK9uD5xx4gmQBbCVnK3MqduChJqHDNvUszkwXDaf2
-   snwReF1wD1JaLXm93RZHAhUA40ZOEapl+BOi6wf9PHVOihi+hj2RS34Yd
-   RVGDfId3WNFMPN/kwPi0TJKMe84picJN8RpxZmPG9M9KS8+ULd/SVVeMP
-   3s7L2irvS42FYA9brDYXkcF/3XeK4HKQWceF9K+yT2bTbZdMePk9WKD74
-   0bNomyailRjP4J+ZLxZiKWnfsLTKo2E8mfxvMhrA31k87qyLXWFwxvGkC
-   dlEEkMjHTZaUrfcZ2dOSYzeHOkMlRHUJiYFjNn/YXzVUF57xGQSwJwXS0
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="342883002"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="342883002"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 10:36:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="678277381"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="678277381"
-Received: from pabbey-mobl.amr.corp.intel.com ([10.212.62.67])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 10:36:35 -0700
-Message-ID: <9e65a37b8220943a540cc3aaf660a79cef4041dc.camel@linux.intel.com>
-Subject: Re: [PATCH] thermal: intel: powerclamp: Fix cpumask and max_idle
- module parameters
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     David Arcari <darcari@redhat.com>, linux-pm@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Chen Yu <yu.c.chen@intel.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Date:   Thu, 30 Mar 2023 10:36:33 -0700
-In-Reply-To: <20230330134218.1897786-1-darcari@redhat.com>
-References: <20230330134218.1897786-1-darcari@redhat.com>
+        Thu, 30 Mar 2023 13:38:01 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656C7CDF9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:38:00 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-53d277c1834so367727757b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:38:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1680197879;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0XDB6bTe9xJuphUqwevJuf9q/6RlzAPG9D8j9n2M9eI=;
+        b=OjP+fHOJg/qk/BlFRiLShClpzDz5RIhfJx4oJR+J6AEhaszRz0Q5mEaxRpZkd5ocUU
+         Pydm4D7geWRHXotQWusDrJeDK239l9eTmD3nH+hbdF/E+kATlZQpMPIukTeVxq0iU8Zt
+         zs7csmBHA4HWxFkMZzcYDKsCymsF4Jr3u9Og0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680197879;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0XDB6bTe9xJuphUqwevJuf9q/6RlzAPG9D8j9n2M9eI=;
+        b=kt3xQcJIjIgYPMd2gRYwgNjrlWNwSqy45SRVXCH6Om25Oq2QQh89EWEwcyc+DFNQyG
+         GcCCHAsry9VIGphGgZMvPOGoRmaNGldM94uwoQqQkaSbT2huvejGMTxD9Xi3xY6dVPIu
+         jBl+3Zez3X9Bw5nLpQk4erW+Oa6y3Agrvkq/4VPb36xOiaV8g5bHgdHM3GCtDUz2CI5c
+         WO5wCJ8tGaJGSgtLDStLZcTJpYwfbW8MYuTAFitX+LIjb7D4jlkfrwkxT/qBxoEbyUps
+         3q4DF+Gr78vVK9Lz2oR5Jn1ZThtfuj3ZGUSBNChMJWWHWKARCBxOtEnMkeneYYfA/gyi
+         3s1w==
+X-Gm-Message-State: AAQBX9e65wLvaG6vZIO3+63gaqVa/ohZ9llI3qPJOpcoMjcIobvDY4qV
+        Y8RYsKeD925a7OL4mUtEwvnNuZYHTptW9KnJJeTntw==
+X-Google-Smtp-Source: AKy350bck9a7Ac/7Hxwga/BHJXtbB6f6e+9uTSHoWqisMz7/ZongXR2S56Glacab1PDzNjzatDBkzP3s/3oiG7MFHD4=
+X-Received: by 2002:a81:ad04:0:b0:52e:e095:d840 with SMTP id
+ l4-20020a81ad04000000b0052ee095d840mr800164ywh.0.1680197879519; Thu, 30 Mar
+ 2023 10:37:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230330101752.429804-1-francesco@dolcini.it> <20230330101752.429804-2-francesco@dolcini.it>
+ <CAMty3ZAQPEnCgj9r+tsuqiOzRzHPnKSEXcDqE7LKHH16Zu2Wvw@mail.gmail.com> <ZCWkdc+x0LXDSohj@francesco-nb.int.toradex.com>
+In-Reply-To: <ZCWkdc+x0LXDSohj@francesco-nb.int.toradex.com>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Thu, 30 Mar 2023 23:07:47 +0530
+Message-ID: <CAMty3ZDwj5OuBzTBHrBitS0qD8QEv8=80YR2zZLDnL_nrmd3fg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] dt-bindings: display: bridge: sn65dsi83: Add DSI
+ video mode
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-03-30 at 09:42 -0400, David Arcari wrote:
-Reviewed-by: Srinivas Pandruvada <>> When cpumask is specified as a module =
-parameter the value is
-> overwritten by the module init routine.=C2=A0 This can easily be fixed
-> by checking to see if the mask has already been allocated in the
-> init routine.
->=20
-> When max_idle is specified as a module parameter a panic will occur.
-> The problem is that the idle_injection_cpu_mask is not allocated
-> until
-> the module init routine executes. This can easily be fixed by
-> allocating
-> the cpumask if it's not already allocated.
->=20
-> Fixes: ebf519710218 ("thermal: intel: powerclamp: Add two module
-> parameters")
->=20
-> Signed-off-by: David Arcari <darcari@redhat.com>
-Reviewed-by: Srinivas Pandruvada<srinivas.pandruvada@linux.intel.com>
+On Thu, Mar 30, 2023 at 8:32=E2=80=AFPM Francesco Dolcini <francesco@dolcin=
+i.it> wrote:
+>
+> On Thu, Mar 30, 2023 at 07:56:26PM +0530, Jagan Teki wrote:
+> > On Thu, Mar 30, 2023 at 3:48=E2=80=AFPM Francesco Dolcini <francesco@do=
+lcini.it> wrote:
+> > >
+> > > From: Francesco Dolcini <francesco.dolcini@toradex.com>
+> > >
+> > > SN65DSI8[34] device supports burst video mode and non-burst video mod=
+e
+> > > with sync events or with sync pulses packet transmission as described=
+ in
+> > > the DSI specification.
+> > >
+> > > Add property to select the expected mode, this allows for example to
+> > > select a mode that is compatible with the DSI host interface.
+> > >
+> > > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> > > ---
+> > >  .../devicetree/bindings/display/bridge/ti,sn65dsi83.yaml  | 8 ++++++=
+++
+> > >  1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/display/bridge/ti,sn65=
+dsi83.yaml b/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.=
+yaml
+> > > index 48a97bb3e2e0..ebee16726b02 100644
+> > > --- a/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.y=
+aml
+> > > +++ b/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.y=
+aml
+> > > @@ -35,6 +35,14 @@ properties:
+> > >    vcc-supply:
+> > >      description: A 1.8V power supply (see regulator/regulator.yaml).
+> > >
+> > > +  dsi-video-mode:
+> > > +    description: |
+> > > +      0 - burst-mode
+> > > +      1 - non-burst with sync event
+> > > +      2 - non-burst with sync pulse
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    enum: [0, 1, 2]
+> >
+> > I'm thinking this can go to dsi common code since the video modes are
+> > common across all controllers and make the core initialize the default
+> > and update if any sink devices are willing to change the modes. Sound
+> > like a big move but worth useful.
+>
+> Not sure I understood where do you want to move this.
 
->=20
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: David Arcari <darcari@redhat.com>
-> Cc: Chen Yu <yu.c.chen@intel.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: stable@vger.kernel.org
->=20
-> ---
-> =C2=A0drivers/thermal/intel/intel_powerclamp.c | 9 ++++++++-
-> =C2=A01 file changed, 8 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/thermal/intel/intel_powerclamp.c
-> b/drivers/thermal/intel/intel_powerclamp.c
-> index c7ba5680cd48..91fc7e239497 100644
-> --- a/drivers/thermal/intel/intel_powerclamp.c
-> +++ b/drivers/thermal/intel/intel_powerclamp.c
-> @@ -235,6 +235,12 @@ static int max_idle_set(const char *arg, const
-> struct kernel_param *kp)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0goto skip_limit_set;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> =C2=A0
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!cpumask_available(idle_in=
-jection_cpu_mask)) {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0ret =3D
-> allocate_copy_idle_injection_mask(cpu_present_mask);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0if (ret)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0goto skip=
-_limit_set;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> +
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (check_invalid(idle_in=
-jection_cpu_mask, new_max_idle)) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0ret =3D -EINVAL;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0goto skip_limit_set;
-> @@ -791,7 +797,8 @@ static int __init powerclamp_init(void)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0return retval;
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_lock(&powerclamp_lo=
-ck);
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0retval =3D allocate_copy_idle_=
-injection_mask(cpu_present_mask);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!cpumask_available(idle_in=
-jection_cpu_mask))
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0retval =3D
-> allocate_copy_idle_injection_mask(cpu_present_mask);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_unlock(&powerclamp_=
-lock);
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (retval)
+Yes, it can be new may be
+Documentation/devicetree/bindings/display/dsi-device.yaml
 
+>
+> In any case this is something about the display side of the DSI video
+> connection, with the bridge as a special case, not about the controller.
+> To my understanding the controller is supposed to support all the modes.
+
+Yes, that is what I'm saying. DSI sink will send this mode via
+mode_flags and the controller act accordingly.  The point here is
+these modes are generic across all DSI sink devices so having common
+bindings can make it easy for all devices to use. As I said it can be
+new, but worth trying - anyway let's see how others are commenting on
+this.
+
+Thanks,
+Jagan.
