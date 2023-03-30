@@ -2,90 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A316CFA48
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 06:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9B26CFA5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 06:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjC3EkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 00:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
+        id S229795AbjC3EpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 00:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjC3EkX (ORCPT
+        with ESMTP id S229890AbjC3EpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 00:40:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192E335A1;
-        Wed, 29 Mar 2023 21:40:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 30 Mar 2023 00:45:07 -0400
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B105FDA
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 21:44:50 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B57FB825BA;
-        Thu, 30 Mar 2023 04:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BF766C4339C;
-        Thu, 30 Mar 2023 04:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680151218;
-        bh=da0yoQXP+HETNK7ouOhqpiEF8FE6zBREr+34FNXiCQY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=oK+M2zD8cgSDhfsz8lrmyXywqP8S7PX6Jefg0rtgcRUqTh9h0iaURgW6PKPznhA7M
-         mU4Xq1y6WqKJQohM4F8n3V55N0XkIHZ38hupW0QoUob9XIlwrwjuEtI/Hu6kYpzIJE
-         84lAAatbVP+H9NVdhkXr7nfHBaW+AjFTaaOi2wRPomW92HV34YY3oXbludYpiwZAcE
-         TSqRDYHP5yY/6oB7aG1eL5nLE2+lrGZyX0RLR5e3VkHESSaHTOUKrLL6O9jxP4Xwni
-         1NvJQu3P2vYCsu7ybGG7Nm23FlfbFlsVpTtgj2gvpFG38WgeSHVxCOn0IzV0pKpKMb
-         dvn7TktzetCew==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9B2CEE49FA7;
-        Thu, 30 Mar 2023 04:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3] net: ipa: compute DMA pool size properly
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168015121862.8019.7512892342991706209.git-patchwork-notify@kernel.org>
-Date:   Thu, 30 Mar 2023 04:40:18 +0000
-References: <20230328162751.2861791-1-elder@linaro.org>
-In-Reply-To: <20230328162751.2861791-1-elder@linaro.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, quic_bjorande@quicinc.com, mbloch@nvidia.com,
-        caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        andersson@kernel.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Pn9nH5Xj3z9sW9;
+        Thu, 30 Mar 2023 06:44:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1680151475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+Scw9GnQ38qy4L9yW8NU1qFZ8sCslAjUOVuTv4AxjKs=;
+        b=0cAPL4EucscPGnjt8TkvhJ236LPfnYqc+03YuCGy7AVKY/Co+HQiHxKkXiDdC9cyAeUwy3
+        bwxhcRl58mVQii9a4u/SsB1IdpulDrkuXjGNUjBxK8/VJSTn6yAQG/17QOdTiNHSSRgEL9
+        p8faqcuKdAEofHpSmqGkuIKWqXMiXHqNzx1djrYNVr/LkGhr9Pqgyg53/PIGeeR7Lton+6
+        aFZU5ZictHNrzEmIaA5PAsyC7Gj6d717rVZJi4Kpf888qKc7alKuaHWFXFLGXPTh3ZaTN5
+        0ppHQn0B4qwyam1y3dDZ9lYbvPF+CwZ2EkkqhGDFHswpJx6G7pKIEqmJ4ILKjg==
+References: <20230320161636.24411-1-romanberanek@icloud.com>
+ <87wn356ni4.fsf@oltmanns.dev> <20230327202045.ceeqqwjug4ktxtsf@penduick>
+ <87bkkc3bzc.fsf@oltmanns.dev> <20230329195639.iep4rv5rcigu3gj2@penduick>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Roman Beranek <romanberanek@icloud.com>,
+        Chen-Yu Tsai <wens@csie.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
+ TCON0_DCLK_REG
+Date:   Thu, 30 Mar 2023 06:41:44 +0200
+In-reply-to: <20230329195639.iep4rv5rcigu3gj2@penduick>
+Message-ID: <87bkkaonkr.fsf@oltmanns.dev>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Rspamd-Queue-Id: 4Pn9nH5Xj3z9sW9
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Hi,
 
-On Tue, 28 Mar 2023 11:27:51 -0500 you wrote:
-> In gsi_trans_pool_init_dma(), the total size of a pool of memory
-> used for DMA transactions is calculated.  However the calculation is
-> done incorrectly.
-> 
-> For 4KB pages, this total size is currently always more than one
-> page, and as a result, the calculation produces a positive (though
-> incorrect) total size.  The code still works in this case; we just
-> end up with fewer DMA pool entries than we intended.
-> 
-> [...]
+On 2023-03-29 at 21:56:39 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
+> Hi,
+>
+> On Tue, Mar 28, 2023 at 09:28:19PM +0200, Frank Oltmanns wrote:
+>> --- a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
+>> +++ b/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
+>> @@ -819,6 +819,34 @@ static void sun6i_dsi_encoder_disable(struct drm_encoder *encoder)
+>>  	regulator_disable(dsi->regulator);
+>>  }
+>>
+>> +static bool sun6i_dsi_encoder_mode_fixup(
+>> +				   struct drm_encoder *encoder,
+>> +				   const struct drm_display_mode *mode,
+>> +				   struct drm_display_mode *adjusted_mode)
+>
+> So, mode_fixup is kind of deprecated in favour of atomic_check
 
-Here is the summary with links:
-  - [net,v3] net: ipa: compute DMA pool size properly
-    https://git.kernel.org/netdev/net/c/6c75dc94f2b2
+I see. Thanks for pointing that out.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>> +{
+>> +	if (encoder->encoder_type == DRM_MODE_ENCODER_DSI) {
+>> +		/*
+>> +		 * For DSI the PLL rate has to respect the bits per pixel and
+>> +		 * number of lanes.
+>> +		 *
+>> +		 * According to the BSP code:
+>> +		 * PLL rate = DOTCLOCK * bpp / lanes
+>> +		 *
+>> +		 * Therefore, the clock has to be adjusted in order to set the
+>> +		 * correct PLL rate when actually setting the clock.
+>> +		 */
+>> +		struct sun6i_dsi *dsi = encoder_to_sun6i_dsi(encoder);
+>> +		struct mipi_dsi_device *device = dsi->device;
+>> +		u8 bpp = mipi_dsi_pixel_format_to_bpp(device->format);
+>> +		u8 lanes = device->lanes;
+>> +
+>> +		adjusted_mode->crtc_clock = mode->crtc_clock
+>> +				 * bpp / (lanes * SUN6I_DSI_TCON_DIV);
+>
+> And that's visible to the userspace, so it's not where we should store
+> that value. I guess the best way to do something similar would be to
+> store it into crtc_state, and then reuse it there. But it starts to make
+> a lot of rather complicated code compared to your previous patch.
 
+Ah, interesting. But I agree, let's stick to the simpler aproach.
 
+Thanks,
+  Frank
+
+>
+> Maxime
+>
+> [[End of PGP Signed Part]]
+
+--
