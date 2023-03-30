@@ -2,231 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE916CFA2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 06:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45D56CFA2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 06:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjC3E1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 00:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
+        id S229512AbjC3E15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 00:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjC3E1F (ORCPT
+        with ESMTP id S229738AbjC3E1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 00:27:05 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA405259
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 21:27:03 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id y4so71626898edo.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 21:27:03 -0700 (PDT)
+        Thu, 30 Mar 2023 00:27:55 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2199C49D8;
+        Wed, 29 Mar 2023 21:27:53 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id kc4so16940162plb.10;
+        Wed, 29 Mar 2023 21:27:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680150421;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mPxXZwrGY9EQBVrz+rM6XeJQecrNiNwMGKoahuxks9c=;
-        b=UB9ilX9x0DFClvH2MBsafXYctyfQiMtqneVbDgIn8dlkb7SeJEzllIUHniTmROr9zA
-         QNEcN1WFlEJGxgMboHiWeAft9d3KIZB6LTea9dtS1hOwT9F0hILhYXmS0E6kIWINYTZy
-         vBEL04m8KhM3aacYuUlP7egfig+eopFO62We1ZE3+r978w7tMG7VVUF5nAvktNbztfWy
-         DPIUhgo3yBtBMUXACd+J8qLZYHzhxPnNgyVg366YOY7pdoxSIli5kTx+TEp3cf9hhDzv
-         kmAe2yK9UIVG5k/8muUa7zOO6grvclhgaCpWWvyR2kWnYuNTZ48TJfXwnL+iNuR2zeoS
-         O3lA==
+        d=gmail.com; s=20210112; t=1680150472;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1U9hRJb89Ko+9M6v6pJAp28XNpi16VYv1bAP4awuv0g=;
+        b=LIgQ14kRBiNS1bRbv5v25/KuQ/PArb3SXrTw6ysSwLa9pyG1xvTYw8rhkQt0tW+q+Z
+         9YBaZAZCopHQg0DB7qPA2tM96IW7mmvTKEa1jRzz6+KDh4CQhfFn7QNIRZSGNzXzjFjp
+         IIQe8RthM0YhPT/SMqM2uVZQG3Mf5LR+PtvDZsaZdFi1DdSrzgeem4xYc2Pjj7btWRiy
+         JHLm5lJPpUEH1Z3iVYyWufnuRaJOD4zd/vojI8FYOGyo5JkMXkGCtq9jNFmPiDA2v5Re
+         N7vu0ho1MKdOtye2g7G7XoNdVOi4bPGJe69dLeBoK7jHNGz923ry5kwni3H8xOOfTRQA
+         z7fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680150421;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mPxXZwrGY9EQBVrz+rM6XeJQecrNiNwMGKoahuxks9c=;
-        b=Y6xGFlDPge/FnRuqXigsxGT5LXmO5CrZAAbqupkAWLTGaiCguJEleKW0WLyf4XH/Zs
-         yM/bTzjbdp6O5EwbXtLf8hWA3/41ZOY5y2QrGPh6oS7Edf+SlvwwvRNMfvyg0AMlNihY
-         /S1kFz+GdRv0Pdeiu58yLUWW90Bp6uB14vMW8ZvmQ/vHobVeYzAVxdhBVc9iDXKoN6eF
-         HP0U6YgYGZEUNldlXIde696jGQI7rQ1dpuC7a0yAvgOYzZpEBqtmFMGRgJ9KnrUXvA+X
-         QmqVCkdYes3bIYafAKphMmKlAXiHeFrsdm3CdqwuC80YQBanmnUcYsOSZthnH7h2jmF6
-         7e6w==
-X-Gm-Message-State: AAQBX9eCFz+GzEaye7e8F6OFk2ddLW4Swd9gzhjCyCT/7MPQsGlVKosu
-        uHVoUT7j0X/s7QfK5TsljJUzRu0w0aiQpYNFHoruEw==
-X-Google-Smtp-Source: AKy350Y3jW8mXAik9Znw5lXXT0a3LkoBTafwWbTIHw4pWyMN7nAmXuXsz/YasuYog2yKCeL23uzXcExl0Qv0CZmiwXM=
-X-Received: by 2002:a50:d756:0:b0:4fc:e5c:902 with SMTP id i22-20020a50d756000000b004fc0e5c0902mr10775755edj.8.1680150421386;
- Wed, 29 Mar 2023 21:27:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <ZBz/V5a7/6PZeM7S@slm.duckdns.org> <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com>
- <ZB5UalkjGngcBDEJ@slm.duckdns.org> <CAJD7tkYhyMkD8SFf8b8L1W9QUrLOdw-HJ2NUbENjw5dgFnH3Aw@mail.gmail.com>
- <CALvZod6rF0D21hcV7xnqD+oRkn=x5NLi5GOkPpyaPa859uDH+Q@mail.gmail.com>
- <CAJD7tkY_ESpMYMw72bsATpp6tPphv8qS6VbfEUjpKZW6vUqQSQ@mail.gmail.com>
- <CALvZod41ecuCKmuFBNtAjoKJjQgWYzoe4_B8zRK37HYk-rYDkA@mail.gmail.com>
- <CAJD7tkZrp=4zWvjE9_010TAG1T_crCbf9P64UzJABspgcrGPKg@mail.gmail.com>
- <ZCSJDpPPOVvBYfOy@slm.duckdns.org> <f9b6410-ee17-635f-a35d-559fa0191dc3@google.com>
- <ZCSY8l/jVwszF6iA@slm.duckdns.org> <98cb3ce-7ed9-3d17-9015-ef7193d6627@google.com>
-In-Reply-To: <98cb3ce-7ed9-3d17-9015-ef7193d6627@google.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 29 Mar 2023 21:26:24 -0700
-Message-ID: <CAJD7tkaFhG39LHUNuKmxj2LEvojavOnpnREXz2vvuLrbBAHyEA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
- percpu lock
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Shakeel Butt <shakeelb@google.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
+        d=1e100.net; s=20210112; t=1680150472;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1U9hRJb89Ko+9M6v6pJAp28XNpi16VYv1bAP4awuv0g=;
+        b=xZO6zLAEbrlzy/CGSCLGInBP3ATEunVuCZkWbiWGyrKqxe2xnTnsSeYPpPJYSahRsX
+         NzRPcjmXRjjHOFBT8p1WVUKqcM4hhvwQ4NgkUH59RLTu9t3Qbp9vIrQa9GNTmXv1dTEV
+         DNNbN8Kl3XM4Av3/TdSlTlJcMI0obx9Ffkc1cv05qEflYv86YHIHYSrTXWj15+uM6s/z
+         IM1TDlTEME7ckM1r1OKMeH5/ccdg8o2I7S+2k9IEY9Lp7XPFdWW6X0cDNQBhzstXSpEy
+         6iUfED+RWmw49HhaybHeCu3iJP5n7cg0N6p1HIlsWHpfN2yhy8BSTz1oZTy5FkcEBXqq
+         fD8A==
+X-Gm-Message-State: AAQBX9ehdzt3XjmMXlY6GN620q6BpwjbyPb+VIagazYelNGGl0wKS3gd
+        N1uf802Cg+XAVEJthiP6MVg=
+X-Google-Smtp-Source: AKy350bUMcUm7OdolOcWYu5kDPquWvi2jXfjzFNmcp9lbP9AVHR+B2cSCowNhA5w6gvFCIeYfCmr/Q==
+X-Received: by 2002:a17:902:e88e:b0:19d:ee88:b4d7 with SMTP id w14-20020a170902e88e00b0019dee88b4d7mr26613416plg.25.1680150472557;
+        Wed, 29 Mar 2023 21:27:52 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-71.three.co.id. [180.214.232.71])
+        by smtp.gmail.com with ESMTPSA id c13-20020a170902c1cd00b0019f2328bef8sm23800979plc.34.2023.03.29.21.27.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 21:27:51 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 7D71F10672E; Thu, 30 Mar 2023 11:27:48 +0700 (WIB)
+Date:   Thu, 30 Mar 2023 11:27:48 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Feng Tang <feng.tang@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Joe Mario <jmario@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Eric Dumazet <edumazet@google.com>,
+        Shakeel Butt <shakeelb@google.com>, dave.hansen@intel.com,
+        ying.huang@intel.com, tim.c.chen@intel.com, andi.kleen@intel.com
+Subject: Re: [PATCH v2] Documentation: Add document for false sharing
+Message-ID: <ZCUPxMQPJ8ETvUbM@debian.me>
+References: <20230329073322.323177-1-feng.tang@intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+bc6jzHwCokGdRls"
+Content-Disposition: inline
+In-Reply-To: <20230329073322.323177-1-feng.tang@intel.com>
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for a great discussion, Tejun and Hugh.
 
-On Wed, Mar 29, 2023 at 1:38=E2=80=AFPM Hugh Dickins <hughd@google.com> wro=
-te:
->
-> On Wed, 29 Mar 2023, Tejun Heo wrote:
->
-> > Hello, Hugh. How have you been?
-> >
-> > On Wed, Mar 29, 2023 at 12:22:24PM -0700, Hugh Dickins wrote:
-> > > Hi Tejun,
-> > > Butting in here, I'm fascinated.  This is certainly not my area, I kn=
-ow
-> > > nothing about rstat, but this is the first time I ever heard someone
-> > > arguing for more disabling of interrupts rather than less.
-> > >
-> > > An interrupt coming in while holding a contended resource can certain=
-ly
-> > > add to latencies, that I accept of course.  But until now, I thought =
-it
-> > > was agreed best practice to disable irqs only regretfully, when stric=
-tly
-> > > necessary.
-> > >
-> > > If that has changed, I for one want to know about it.  How should we
-> > > now judge which spinlocks should disable interrupts and which should =
-not?
-> > > Page table locks are currently my main interest - should those be cha=
-nged?
-> >
-> > For rstat, it's a simple case because the global lock here wraps around
-> > per-cpu locks which have to be irq-safe, so the only difference we get
-> > between making the global irq-unsafe and keeping it so but releasing
-> > inbetween is:
-> >
-> >  Global lock held: G
-> >  IRQ disabled: I
-> >  Percpu lock held: P
-> >
-> > 1. IRQ unsafe
-> >
-> >  GGGGGGGGGGGGGGG~~GGGGG
-> >  IIII IIII IIII ~~ IIII
-> >  PPPP PPPP PPPP ~~ PPPP
-> >
-> > 2. IRQ safe released inbetween cpus
-> >
-> >  GGGG GGGG GGGG ~~ GGGG
-> >  IIII IIII IIII ~~ IIII
-> >  PPPP PPPP PPPP ~~ PPPP
-> >
-> > #2 seems like the obvious thing to do here given how the lock is used a=
-nd
-> > each P section may take a bit of time.
->
-> Many thanks for the detailed response.  I'll leave it to the rstat folks,
-> to agree or disagree with your analysis there.
+--+bc6jzHwCokGdRls
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the analysis, Tejun, it does indeed make sense. I perf'd
-releasing and reacquiring the lock at each CPU boundary and the
-overhead seems to be minimal. It would be higher with contention, but
-all memcg flushers should be held back by the memcg code, and flushers
-outside memcg are not frequent (reading blkcg and cpu base stats from
-user space, and when a cgroup is being removed).
+On Wed, Mar 29, 2023 at 03:33:22PM +0800, Feng Tang wrote:
+> +False sharing hurting performance cases are seen more frequently with
+> +core count increasing.  Because of these detrimental effects, many
+> +patches have been proposed across variety of subsystems (like
+> +networking and memory management) and merged.  Some common mitigations
+> +(with examples) are:
+> +
+> +* Separate hot global data in its own dedicated cache line, even if it
+> +  is just a 'short' type. The downside is more consumption of memory,
+> +  cache line and TLB entries.
+> +
+> +  - Commit 91b6d3256356 ("net: cache align tcp_memory_allocated, tcp_soc=
+kets_allocated")
+> +
+> +* Reorganize the data structure, separate the interfering members to
+> +  different cache lines.  One downside is it may introduce new false
+> +  sharing of other members.
+> +
+> +  - Commit 802f1d522d5f ("mm: page_counter: re-layout structure to reduc=
+e false sharing")
+> +
+> +* Replace 'write' with 'read' when possible, especially in loops.
+> +  Like for some global variable, use compare(read)-then-write instead
+> +  of unconditional write. For example, use::
+> +
+> +	if (!test_bit(XXX))
+> +		set_bit(XXX);
+> +
+> +  instead of directly "set_bit(XXX);", similarly for atomic_t data.
+"... The similar technique is also applicable to atomic_t data".
 
-I realized that after v2 of this patch series [1], we would only end
-up with two atomic flushing contexts, mem_cgroup_wb_stats() and
-mem_cgroup_usage(). The latter is already disabling irqs for other
-reasons, so anything we do within the rstat core code doesn't really
-help, it needs to be addressed separately. So only the call site in
-mem_cgroup_wb_stats() would benefit from not having irqs disabled
-throughout the flush.
+But how?
 
-I will hold off on sending a patch until I observe that this call site
-is causing us pain and/or other atomic call sites emerge (or we have
-to revert one of the ones we made non-atomic), so that we don't hurt
-other flushers unnecessarily. Does this make sense to you?
+> +
+> +  - Commit 7b1002f7cfe5 ("bcache: fixup bcache_dev_sectors_dirty_add() m=
+ultithreaded CPU false sharing")
+> +  - Commit 292648ac5cf1 ("mm: gup: allow FOLL_PIN to scale in SMP")
+> +
+> +* Turn hot global data to 'per-cpu data + global data' when possible,
+> +  or reasonably increase the threshold for syncing per-cpu data to
+> +  global data, to reduce or postpone the 'write' to that global data.
+> +
+> +  - Commit 520f897a3554 ("ext4: use percpu_counters for extent_status ca=
+che hits/misses")
+> +  - Commit 56f3547bfa4d ("mm: adjust vm_committed_as_batch according to =
+vm overcommit policy")
+> +
 
-[1] https://lore.kernel.org/linux-mm/20230328221644.803272-1-yosryahmed@goo=
-gle.com/
+Here's what I mean by bridging conjunctions to example commits as I reviewed
+in v1 [1]:
 
->
-> >
-> > So, in the rstat case, the choice is, at least to me, obvious, but even=
- for
-> > more generic cases where the bulk of actual work isn't done w/ irq disa=
-bled,
-> > I don't think the picture is as simple as "use the least protected vari=
-ant
-> > possible" anymore because the underlying hardware changed.
-> >
-> > For an SMP kernel running on an UP system, "the least protected variant=
-" is
-> > the obvious choice to make because you don't lose anything by holding a
-> > spinlock longer than necessary. However, as you increase the number of =
-CPUs,
-> > there rises a tradeoff between local irq servicing latency and global l=
-ock
-> > contention.
-> >
-> > Imagine a, say, 128 cpu system with a few cores servicing relatively hi=
-gh
-> > frequency interrupts. Let's say there's a mildly hot lock. Usually, it =
-shows
-> > up in the system profile but only just. Let's say something happens and=
- the
-> > irq rate on those cores went up for some reason to the point where it
-> > becomes a rather common occurrence when the lock is held on one of thos=
-e
-> > cpus, irqs are likely to intervene lengthening how long the lock is hel=
-d,
-> > sometimes, signficantly. Now because the lock is on average held for mu=
-ch
-> > longer, it become a lot hotter as more CPUs would stall on it and depen=
-ding
-> > on luck or lack thereof these stalls can span many CPUs on the system f=
-or
-> > quite a while. This is actually something we saw in production.
-> >
-> > So, in general, there's a trade off between local irq service latency a=
-nd
-> > inducing global lock contention when using unprotected locks. With more=
- and
-> > more CPUs, the balance keeps shifting. The balance still very much depe=
-nds
-> > on the specifics of a given lock but yeah I think it's something we nee=
-d to
-> > be a lot more careful about now.
->
-> And this looks a very plausible argument to me: I'll let it sink in.
->
-> But I hadn't heard that the RT folks were clamouring for more irq disabli=
-ng:
-> perhaps they partition their machines with more care, and are not devotee=
-s
-> of high CPU counts.
->
-> What I hope is that others will chime in one way or the other -
-> it does sound as if a reappraisal of the balances is overdue.
->
-> Thanks,
-> Hugh (disabling interrupts for as long as he can)
+---- >8 ----
+diff --git a/Documentation/kernel-hacking/false-sharing.rst b/Documentation=
+/kernel-hacking/false-sharing.rst
+index ceeaf20290eabd..3b08f6f16d442e 100644
+--- a/Documentation/kernel-hacking/false-sharing.rst
++++ b/Documentation/kernel-hacking/false-sharing.rst
+@@ -141,19 +141,18 @@ False sharing hurting performance cases are seen more=
+ frequently with
+ core count increasing.  Because of these detrimental effects, many
+ patches have been proposed across variety of subsystems (like
+ networking and memory management) and merged.  Some common mitigations
+-(with examples) are:
++are:
+=20
+ * Separate hot global data in its own dedicated cache line, even if it
+   is just a 'short' type. The downside is more consumption of memory,
+-  cache line and TLB entries.
+-
+-  - Commit 91b6d3256356 ("net: cache align tcp_memory_allocated, tcp_socke=
+ts_allocated")
++  cache line and TLB entries. The example implentation is in commit
++  91b6d3256356 ("net: cache align tcp_memory_allocated, tcp_sockets_alloca=
+ted").
+=20
+ * Reorganize the data structure, separate the interfering members to
+   different cache lines.  One downside is it may introduce new false
+-  sharing of other members.
+-
+-  - Commit 802f1d522d5f ("mm: page_counter: re-layout structure to reduce =
+false sharing")
++  sharing of other members. How it is done is illustrated by commit
++  802f1d522d5f ("mm: page_counter: re-layout structure to reduce false
++  sharing").
+=20
+ * Replace 'write' with 'read' when possible, especially in loops.
+   Like for some global variable, use compare(read)-then-write instead
+@@ -163,16 +162,21 @@ networking and memory management) and merged.  Some c=
+ommon mitigations
+ 		set_bit(XXX);
+=20
+   instead of directly "set_bit(XXX);", similarly for atomic_t data.
++  Example commits are:
+=20
+-  - Commit 7b1002f7cfe5 ("bcache: fixup bcache_dev_sectors_dirty_add() mul=
+tithreaded CPU false sharing")
+-  - Commit 292648ac5cf1 ("mm: gup: allow FOLL_PIN to scale in SMP")
++  - 7b1002f7cfe5 ("bcache: fixup bcache_dev_sectors_dirty_add() multithrea=
+ded
++    CPU false sharing")
++  - 292648ac5cf1 ("mm: gup: allow FOLL_PIN to scale in SMP")
+=20
+ * Turn hot global data to 'per-cpu data + global data' when possible,
+   or reasonably increase the threshold for syncing per-cpu data to
+   global data, to reduce or postpone the 'write' to that global data.
++  Examples are in commits:
+=20
+-  - Commit 520f897a3554 ("ext4: use percpu_counters for extent_status cach=
+e hits/misses")
+-  - Commit 56f3547bfa4d ("mm: adjust vm_committed_as_batch according to vm=
+ overcommit policy")
++  - 520f897a3554 ("ext4: use percpu_counters for extent_status cache
++    hits/misses")
++  - 56f3547bfa4d ("mm: adjust vm_committed_as_batch according to vm overco=
+mmit
++    policy")
+=20
+ Surely, all mitigations should be carefully verified to not cause side
+ effects.  And to avoid false sharing in advance during coding, it's
+
+Thanks.
+
+[1]: https://lore.kernel.org/linux-doc/ZB2baIDIPhxj5Vdl@debian.me/
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--+bc6jzHwCokGdRls
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCUPvwAKCRD2uYlJVVFO
+o6ngAQCe45mznyyZlyy4uLSGqihng7Df4U/iJd9SjCZBs5/2+gD9Ei5+SL30Pf4H
+NOpggsvX5sBAmHridg0qrx79tLN/pQE=
+=WQq6
+-----END PGP SIGNATURE-----
+
+--+bc6jzHwCokGdRls--
