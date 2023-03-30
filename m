@@ -2,110 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CE66CFB26
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53746CFB2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjC3GCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 02:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
+        id S230010AbjC3GCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 02:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjC3GCA (ORCPT
+        with ESMTP id S229717AbjC3GCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 02:02:00 -0400
-X-Greylist: delayed 48770 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Mar 2023 23:01:43 PDT
-Received: from forwardcorp1a.mail.yandex.net (forwardcorp1a.mail.yandex.net [178.154.239.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A308565BA;
-        Wed, 29 Mar 2023 23:01:42 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-corp-main-62.vla.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-62.vla.yp-c.yandex.net [IPv6:2a02:6b8:c0d:3786:0:640:7c97:0])
-        by forwardcorp1a.mail.yandex.net (Yandex) with ESMTP id 975765FEED;
-        Thu, 30 Mar 2023 09:01:37 +0300 (MSK)
-Received: from [IPV6:2a02:6b8:b081:b502::1:25] (unknown [2a02:6b8:b081:b502::1:25])
-        by mail-nwsmtp-smtp-corp-main-62.vla.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id Z1CoQ70OrW20-2kVAMQRA;
-        Thu, 30 Mar 2023 09:01:36 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1680156097; bh=WxZblk8zP/PpvV733dqP5OGbqFyUaHE6g96KWu2H4Nc=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=giPk5XoEoiMdCaRmRcd6Kwxxt0xxtX2pS+QpLy7JBX8rz3ip0UgZsktieGwFrd5Hx
-         bYtb7hpPsVHmzPCj647UhLQVwyMxIWnl1ZNoAcSkHdo7BQwJu/gCv+950kZIYoLLVR
-         kKoFlUOoC0IXi1z6pzBLvCoPnolZ3njcCxGpDNfE=
-Authentication-Results: mail-nwsmtp-smtp-corp-main-62.vla.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-Message-ID: <bd780d59-4e3d-34bc-a2e4-aece5c851028@yandex-team.ru>
-Date:   Thu, 30 Mar 2023 09:01:35 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] net: netxen: report error on version offset reading
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     GR-Linux-NIC-Dev@marvell.com, manishc@marvell.com,
-        rahulv@marvell.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-References: <20230329162629.96590-1-den-plotnikov@yandex-team.ru>
- <20230329185907.GE831478@unreal>
-Content-Language: en-US
-From:   Denis Plotnikov <den-plotnikov@yandex-team.ru>
-In-Reply-To: <20230329185907.GE831478@unreal>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 30 Mar 2023 02:02:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0E761B5;
+        Wed, 29 Mar 2023 23:02:30 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32U5cVhZ015618;
+        Thu, 30 Mar 2023 06:02:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=D8BLJKqTKr4rrKXsGkt3MWAUhN1P3ddzzG00QTMTrcA=;
+ b=CIgbVvP8nY4lSzLuwgFNXcbkpi0+yT2OAzGlRC+5Xf1sH7i6BE+m1AZPjX0MYkzPllSt
+ iNNjguigA39uPBENAZfX1cB+KjR28PFsjmCGwPLFGJr49g9+YGRqtNtv96m0zXmA2p4d
+ UfEKZUxd5z5TVgV4ugp9aELRGs0Xpk/1fJNSBTUXQyp4TrDXBDpSw+gW8CsoGig1rPO1
+ mRNiPHxZw7YXc8+AY1VbYpXdoCETJtfUyM1n24NZ/dq9O7G2hjSXiOPCcyc+vyAkox/t
+ bA17STqHKwXVy9rH7r+tte/exp1PVFL9ImCHQP5hWw5D4uXi3zzD/ZgQI6UxmPCMGWck rg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmph951bn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 06:02:01 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32U5qwwR026070;
+        Thu, 30 Mar 2023 06:02:01 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmph951au-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 06:02:00 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32U2JgfY002608;
+        Thu, 30 Mar 2023 06:01:59 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3phrk7jc4t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 06:01:59 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32U61wF239322280
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Mar 2023 06:01:58 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8AFCF580FF;
+        Thu, 30 Mar 2023 06:01:58 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DE5DF580F9;
+        Thu, 30 Mar 2023 06:01:53 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.174.114])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 30 Mar 2023 06:01:53 +0000 (GMT)
+Message-ID: <55b5c21ee1cf47aff0b2e5a94ec65fe326c8d6ba.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 5/6] KEYS: CA link restriction
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Eric Snowberg <eric.snowberg@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "pvorel@suse.cz" <pvorel@suse.cz>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>,
+        "erpalmer@linux.vnet.ibm.com" <erpalmer@linux.vnet.ibm.com>,
+        "coxu@redhat.com" <coxu@redhat.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Date:   Thu, 30 Mar 2023 02:01:52 -0400
+In-Reply-To: <20230329232735.dvmxvwis2psbvyw5@kernel.org>
+References: <20230302164652.83571-1-eric.snowberg@oracle.com>
+         <20230302164652.83571-6-eric.snowberg@oracle.com>
+         <ZAz8QlynTSMD7kuE@kernel.org>
+         <07FFED83-501D-418C-A4BB-862A547DD7B0@oracle.com>
+         <20230320182822.6xyh6ibatrz5yrhb@kernel.org>
+         <84d46fb108f6ce2a322b6486529fc6dd0f8deea5.camel@linux.ibm.com>
+         <20230329232735.dvmxvwis2psbvyw5@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -AYgNS0hJQzkaFq2dbj8oeeSCLCBxsU7
+X-Proofpoint-ORIG-GUID: dV2z4ZQOEAl_wn7WkpC7Te5PoSYskE6S
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-30_02,2023-03-30_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 priorityscore=1501 clxscore=1011
+ impostorscore=0 lowpriorityscore=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303300047
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2023-03-30 at 02:27 +0300, Jarkko Sakkinen wrote:
+> On Mon, Mar 20, 2023 at 04:35:33PM -0400, Mimi Zohar wrote:
+> > On Mon, 2023-03-20 at 20:28 +0200, Jarkko Sakkinen wrote:
+> > > On Mon, Mar 20, 2023 at 05:35:05PM +0000, Eric Snowberg wrote:
+> > > > 
+> > > > 
+> > > > > On Mar 11, 2023, at 3:10 PM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > > > 
+> > > > > On Thu, Mar 02, 2023 at 11:46:51AM -0500, Eric Snowberg wrote:
+> > > > >> Add a new link restriction.  Restrict the addition of keys in a keyring
+> > > > >> based on the key to be added being a CA.
+> > > > >> 
+> > > > >> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> > > > >> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > >> ---
+> > > > >> crypto/asymmetric_keys/restrict.c | 38 +++++++++++++++++++++++++++++++
+> > > > >> include/crypto/public_key.h       | 15 ++++++++++++
+> > > > >> 2 files changed, 53 insertions(+)
+> > > > >> 
+> > > > >> diff --git a/crypto/asymmetric_keys/restrict.c b/crypto/asymmetric_keys/restrict.c
+> > > > >> index 6b1ac5f5896a..48457c6f33f9 100644
+> > > > >> --- a/crypto/asymmetric_keys/restrict.c
+> > > > >> +++ b/crypto/asymmetric_keys/restrict.c
+> > > > >> @@ -108,6 +108,44 @@ int restrict_link_by_signature(struct key *dest_keyring,
+> > > > >> 	return ret;
+> > > > >> }
+> > > > >> 
+> > > > >> +/**
+> > > > >> + * restrict_link_by_ca - Restrict additions to a ring of CA keys
+> > > > >> + * @dest_keyring: Keyring being linked to.
+> > > > >> + * @type: The type of key being added.
+> > > > >> + * @payload: The payload of the new key.
+> > > > >> + * @trust_keyring: Unused.
+> > > > >> + *
+> > > > >> + * Check if the new certificate is a CA. If it is a CA, then mark the new
+> > > > >> + * certificate as being ok to link.
+> > > > >> + *
+> > > > >> + * Returns 0 if the new certificate was accepted, -ENOKEY if the
+> > > > >> + * certificate is not a CA. -ENOPKG if the signature uses unsupported
+> > > > >> + * crypto, or some other error if there is a matching certificate but
+> > > > >> + * the signature check cannot be performed.
+> > > > >> + */
+> > > > >> +int restrict_link_by_ca(struct key *dest_keyring,
+> > > > >> +			const struct key_type *type,
+> > > > >> +			const union key_payload *payload,
+> > > > >> +			struct key *trust_keyring)
+> > > > >> +{
+> > > > >> +	const struct public_key *pkey;
+> > > > >> +
+> > > > >> +	if (type != &key_type_asymmetric)
+> > > > >> +		return -EOPNOTSUPP;
+> > > > >> +
+> > > > >> +	pkey = payload->data[asym_crypto];
+> > > > >> +	if (!pkey)
+> > > > >> +		return -ENOPKG;
+> > > > >> +	if (!test_bit(KEY_EFLAG_CA, &pkey->key_eflags))
+> > > > >> +		return -ENOKEY;
+> > > > >> +	if (!test_bit(KEY_EFLAG_KEYCERTSIGN, &pkey->key_eflags))
+> > > > >> +		return -ENOKEY;
+> > > > >> +	if (test_bit(KEY_EFLAG_DIGITALSIG, &pkey->key_eflags))
+> > > > >> +		return -ENOKEY;
+> > > > > 
+> > > > > nit: would be more readable, if conditions were separated by
+> > > > > empty lines.
+> > > > 
+> > > > Ok, I will make this change in the next round.  Thanks.
+> > > 
+> > > Cool! Mimi have you tested these patches with IMA applied?
+> > 
+> > Yes, it's working as expected.
+> 
+> Thank you. Please check that I filled additional tags correctly:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/
+> 
+> I will then put these also to my 'next' branch and they will get mirrored
+> to linux-next.
 
-On 29.03.2023 21:59, Leon Romanovsky wrote:
-> On Wed, Mar 29, 2023 at 07:26:29PM +0300, Denis Plotnikov wrote:
->> A static analyzer complains for non-checking the function returning value.
->> Although, the code looks like not expecting any problems with version
->> reading on netxen_p3_has_mn call, it seems the error still may happen.
->> So, at least, add error reporting to ease problems investigation.
->>
->> Signed-off-by: Denis Plotnikov <den-plotnikov@yandex-team.ru>
->> ---
->>   drivers/net/ethernet/qlogic/netxen/netxen_nic_init.c | 9 +++++++--
->>   1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/qlogic/netxen/netxen_nic_init.c b/drivers/net/ethernet/qlogic/netxen/netxen_nic_init.c
->> index 35ec9aab3dc7b..92962dbb73ad0 100644
->> --- a/drivers/net/ethernet/qlogic/netxen/netxen_nic_init.c
->> +++ b/drivers/net/ethernet/qlogic/netxen/netxen_nic_init.c
->> @@ -1192,8 +1192,13 @@ netxen_p3_has_mn(struct netxen_adapter *adapter)
->>   	if (NX_IS_REVISION_P2(adapter->ahw.revision_id))
->>   		return 1;
->>   
->> -	netxen_rom_fast_read(adapter,
->> -			NX_FW_VERSION_OFFSET, (int *)&flashed_ver);
->> +	if (netxen_rom_fast_read(adapter,
->> +			NX_FW_VERSION_OFFSET, (int *)&flashed_ver)) {
-> 1. Mo callers of netxen_rom_fast_read() print debug messages, so this
-> shouldn't too.
-> 2. netxen_p3_has_mn() can't fail and by returning 0, you will cause to
-> unpredictable behaviour in netxen_validate_firmware().
->
-> Thanks
+Thanks, Jarkko.  The tags look good.
 
-Well, ok. Then patch isn't needed.
+-- 
+thanks,
 
-Thanks for reviewing!
+Mimi
 
-
-Denis
-
->
->> +		printk(KERN_ERR "%s: ERROR on flashed version reading",
->> +				netxen_nic_driver_name);
->> +		return 0;
->> +	}
->> +
->>   	flashed_ver = NETXEN_DECODE_VERSION(flashed_ver);
->>   
->>   	if (flashed_ver >= NETXEN_VERSION_CODE(4, 0, 220)) {
->> -- 
->> 2.25.1
->>
