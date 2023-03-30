@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D3A6D1385
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887DC6D13B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjC3XqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 19:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
+        id S231751AbjC3Xul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 19:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbjC3XqU (ORCPT
+        with ESMTP id S231752AbjC3XuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 19:46:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02928AD27
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 16:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680219936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=so5CzF3uSpQ4q5yJ+Vtdcu9v/Ulq+Us6gCTNf3OXbkU=;
-        b=gjv6GoRS4DA4xBld0wF9Mboqt4yT8cXudEx48MGN40qJ/D+SRVgaFZCKjOmWH/uDY84OfD
-        GzYhFyVur97NXCQbCwqNW3XtfyyrDY6icSxEuQRCn7IU29JGuFiWnEXM80hvEnK2QrEmmC
-        ycqgq9kh+JlI3xQ9Vgc6jY2FElfzkIk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-274-TsJt51_XNiSirUIcbSauZA-1; Thu, 30 Mar 2023 19:45:29 -0400
-X-MC-Unique: TsJt51_XNiSirUIcbSauZA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 30 Mar 2023 19:50:21 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332CA12CFD;
+        Thu, 30 Mar 2023 16:50:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4631A884EC3;
-        Thu, 30 Mar 2023 23:45:29 +0000 (UTC)
-Received: from localhost (ovpn-12-64.pek2.redhat.com [10.72.12.64])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7A9A3404DC50;
-        Thu, 30 Mar 2023 23:45:27 +0000 (UTC)
-Date:   Fri, 31 Mar 2023 07:45:23 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH v4 1/2] mm: vmalloc: Remove a global vmap_blocks xarray
-Message-ID: <ZCYfEwfYmff2lc6d@MiWiFi-R3L-srv>
-References: <20230330190639.431589-1-urezki@gmail.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PngBx54V5z4x1R;
+        Fri, 31 Mar 2023 10:50:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680220204;
+        bh=rCPjUHBP/pV9Uau0ptAEaLCUF3D9Ml3/OGmrv28mF4g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=S0ABsE+rmZ0++GhOZmrtmLwI8G76LtysR3QpaeEi92LTIh4SUJh1rwpwvJMCKOI7q
+         lDQQe7YbEXwImSz6IZpwH1ma9/Au4G4Z2BypT6ujcFzuOEX2G/9NHz6/DCfGrEbi+Q
+         A64GlyIb1Gzwwgw6aL5JnwOiN68JhmaJMvufvGaFAgUA8VBgRg+j+9a/PDIy3+OLKh
+         Y8kqUNyMSVTPIWCaJ62uwHb+CMmKme6MdTPVw3wNEH385RX6/V9bHe6GkWPhfTHyff
+         AWut5xijCh7NTYmR/hEK31y5k5zCAv5xIcqWhnwvs/V21STxBS5QWF+M2/CnFFZKeh
+         w5NAcv7nfHOSQ==
+Date:   Fri, 31 Mar 2023 10:49:59 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kalle Valo <kvalo@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     Wireless <linux-wireless@vger.kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>
+Subject: linux-next: manual merge of the wireless-next tree with the
+ wireless tree
+Message-ID: <20230331104959.0b30604d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330190639.431589-1-urezki@gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: multipart/signed; boundary="Sig_/Z75pzBwRDy.ne14p3qRShtd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,104 +56,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/30/23 at 09:06pm, Uladzislau Rezki (Sony) wrote:
-......
-> -static DEFINE_XARRAY(vmap_blocks);
-> +static struct xarray *
-> +addr_to_vb_xarray(unsigned long addr)
+--Sig_/Z75pzBwRDy.ne14p3qRShtd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I would call it addr_to_vb_xa() if other parts have taken abbreviation.
+Hi all,
 
-Other than this nit, this looks great to me.
+Today's linux-next merge of the wireless-next tree got a conflict in:
 
-Reviewed-by: Baoquan He <bhe@redhat.com>
+  net/mac80211/rx.c
 
-> +{
-> +	int index = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
-> +
-> +	return &per_cpu(vmap_block_queue, index).vmap_blocks;
-> +}
->  
->  /*
->   * We should probably have a fallback mechanism to allocate virtual memory
-> @@ -1970,6 +2014,7 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
->  	struct vmap_block_queue *vbq;
->  	struct vmap_block *vb;
->  	struct vmap_area *va;
-> +	struct xarray *xa;
->  	unsigned long vb_idx;
->  	int node, err;
->  	void *vaddr;
-> @@ -2003,8 +2048,9 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
->  	bitmap_set(vb->used_map, 0, (1UL << order));
->  	INIT_LIST_HEAD(&vb->free_list);
->  
-> +	xa = addr_to_vb_xarray(va->va_start);
->  	vb_idx = addr_to_vb_idx(va->va_start);
-> -	err = xa_insert(&vmap_blocks, vb_idx, vb, gfp_mask);
-> +	err = xa_insert(xa, vb_idx, vb, gfp_mask);
->  	if (err) {
->  		kfree(vb);
->  		free_vmap_area(va);
-> @@ -2022,8 +2068,10 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
->  static void free_vmap_block(struct vmap_block *vb)
->  {
->  	struct vmap_block *tmp;
-> +	struct xarray *xa;
->  
-> -	tmp = xa_erase(&vmap_blocks, addr_to_vb_idx(vb->va->va_start));
-> +	xa = addr_to_vb_xarray(vb->va->va_start);
-> +	tmp = xa_erase(xa, addr_to_vb_idx(vb->va->va_start));
->  	BUG_ON(tmp != vb);
->  
->  	spin_lock(&vmap_area_lock);
-> @@ -2135,6 +2183,7 @@ static void vb_free(unsigned long addr, unsigned long size)
->  	unsigned long offset;
->  	unsigned int order;
->  	struct vmap_block *vb;
-> +	struct xarray *xa;
->  
->  	BUG_ON(offset_in_page(size));
->  	BUG_ON(size > PAGE_SIZE*VMAP_MAX_ALLOC);
-> @@ -2143,7 +2192,10 @@ static void vb_free(unsigned long addr, unsigned long size)
->  
->  	order = get_order(size);
->  	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
-> -	vb = xa_load(&vmap_blocks, addr_to_vb_idx(addr));
-> +
-> +	xa = addr_to_vb_xarray(addr);
-> +	vb = xa_load(xa, addr_to_vb_idx(addr));
-> +
->  	spin_lock(&vb->lock);
->  	bitmap_clear(vb->used_map, offset, (1UL << order));
->  	spin_unlock(&vb->lock);
-> @@ -3486,6 +3538,7 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
->  {
->  	char *start;
->  	struct vmap_block *vb;
-> +	struct xarray *xa;
->  	unsigned long offset;
->  	unsigned int rs, re, n;
->  
-> @@ -3503,7 +3556,8 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
->  	 * Area is split into regions and tracked with vmap_block, read out
->  	 * each region and zero fill the hole between regions.
->  	 */
-> -	vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long)addr));
-> +	xa = addr_to_vb_xarray((unsigned long) addr);
-> +	vb = xa_load(xa, addr_to_vb_idx((unsigned long)addr));
->  	if (!vb)
->  		goto finished;
->  
-> @@ -4272,6 +4326,7 @@ void __init vmalloc_init(void)
->  		p = &per_cpu(vfree_deferred, i);
->  		init_llist_head(&p->list);
->  		INIT_WORK(&p->wq, delayed_vfree_work);
-> +		xa_init(&vbq->vmap_blocks);
->  	}
->  
->  	/* Import existing vmlist entries. */
-> -- 
-> 2.30.2
-> 
+between commit:
 
+  a16fc38315f2 ("wifi: mac80211: fix potential null pointer dereference")
+
+from the wireless tree and commit:
+
+  fe4a6d2db3ba ("wifi: mac80211: implement support for yet another mesh A-M=
+SDU format")
+
+from the wireless-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/mac80211/rx.c
+index 3e2176a730e6,1c957194554b..000000000000
+--- a/net/mac80211/rx.c
++++ b/net/mac80211/rx.c
+@@@ -2776,27 -2862,12 +2843,31 @@@ ieee80211_rx_mesh_data(struct ieee80211
+  		rcu_read_unlock();
+  	}
+ =20
+ +	/* Frame has reached destination.  Don't forward */
+ +	if (ether_addr_equal(sdata->vif.addr, eth->h_dest))
+ +		goto rx_accept;
+ +
+ +	if (!--mesh_hdr->ttl) {
+ +		if (multicast)
+ +			goto rx_accept;
+ +
+ +		IEEE80211_IFSTA_MESH_CTR_INC(ifmsh, dropped_frames_ttl);
+ +		return RX_DROP_MONITOR;
+ +	}
+ +
+ +	if (!ifmsh->mshcfg.dot11MeshForwarding) {
+ +		if (is_multicast_ether_addr(eth->h_dest))
+ +			goto rx_accept;
+ +
+ +		return RX_DROP_MONITOR;
+ +	}
+ +
+  	skb_set_queue_mapping(skb, ieee802_1d_to_ac[skb->priority]);
+ =20
++ 	if (!multicast &&
++ 	    ieee80211_rx_mesh_fast_forward(sdata, skb, mesh_hdrlen))
++ 		return RX_QUEUED;
++=20
+  	ieee80211_fill_mesh_addresses(&hdr, &hdr.frame_control,
+  				      eth->h_dest, eth->h_source);
+  	hdrlen =3D ieee80211_hdrlen(hdr.frame_control);
+@@@ -2914,14 -2982,24 +2985,24 @@@ __ieee80211_rx_h_amsdu(struct ieee80211
+  					  data_offset, true))
+  		return RX_DROP_UNUSABLE;
+ =20
+ -	if (rx->sta && rx->sta->amsdu_mesh_control < 0) {
+ +	if (rx->sta->amsdu_mesh_control < 0) {
+- 		bool valid_std =3D ieee80211_is_valid_amsdu(skb, true);
+- 		bool valid_nonstd =3D ieee80211_is_valid_amsdu(skb, false);
++ 		s8 valid =3D -1;
++ 		int i;
++=20
++ 		for (i =3D 0; i <=3D 2; i++) {
++ 			if (!ieee80211_is_valid_amsdu(skb, i))
++ 				continue;
++=20
++ 			if (valid >=3D 0) {
++ 				/* ambiguous */
++ 				valid =3D -1;
++ 				break;
++ 			}
+ =20
+- 		if (valid_std && !valid_nonstd)
+- 			rx->sta->amsdu_mesh_control =3D 1;
+- 		else if (valid_nonstd && !valid_std)
+- 			rx->sta->amsdu_mesh_control =3D 0;
++ 			valid =3D i;
++ 		}
++=20
++ 		rx->sta->amsdu_mesh_control =3D valid;
+  	}
+ =20
+  	ieee80211_amsdu_to_8023s(skb, &frame_list, dev->dev_addr,
+
+--Sig_/Z75pzBwRDy.ne14p3qRShtd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQmICcACgkQAVBC80lX
+0Gyc7Qf8CT58uZK2qOJyG/1i1sV+AZ51ZNKUlxXH4cQ/OcLOAlk6X/LuI0DTFfpE
+sG8KHR2fWI9oVQqhXStFTI3yPAUB9Y5NKJR8WCVN5sqVE2zdWbKax2dYo9wAZ9wa
+Sd7n7+QhdI8aJwBmM7cnOtRnYngpunTwGdRKDfaJZmftxKsPvmuM+jyBpBovIiZi
+3bmfvoSU61TRZ3pqIL363RsoWT7MiQ+XaEpx7gc9U7Wnuc0hKLbC+sMkAsEnks1E
+eVxukHXZhowsT+IhorkLBROpLDkD+75DoU6AFbNGAgS0+65T+OFkCymNmDYPZOGO
+sgnMs9gbQiAfHinB4riWu2MSIAdszw==
+=8hDd
+-----END PGP SIGNATURE-----
+
+--Sig_/Z75pzBwRDy.ne14p3qRShtd--
