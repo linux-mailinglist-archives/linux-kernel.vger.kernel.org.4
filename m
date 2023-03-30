@@ -2,71 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD736D0896
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3DB6D0897
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbjC3Op2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
+        id S229521AbjC3OqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbjC3Op0 (ORCPT
+        with ESMTP id S232115AbjC3OqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:45:26 -0400
-Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74F98691
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:45:21 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-91.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-91.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:4a05:0:640:40c8:0])
-        by forward500b.mail.yandex.net (Yandex) with ESMTP id A12DB5F188;
-        Thu, 30 Mar 2023 17:45:17 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-91.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id FjKuDP2Wsa60-57BudbbW;
-        Thu, 30 Mar 2023 17:45:17 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1680187517;
-        bh=VO0en26O8PrSdBFVkwG8Ovp3sfiCyZcbgKZ05t43wVo=;
-        h=In-Reply-To:Cc:Date:References:To:From:Subject:Message-ID;
-        b=O/7CKkWaZyOy3O41HRO8zV/wpVY3aZIpsOKGpwMZGKsuSAkXXcqUEudtVGNKe94/m
-         a9YJnF3pBF0u+pfblVjgQ3P4jLBNDlFDAOn9anDWCJILCaQhIluyFdvAirZB46bhjQ
-         lG+BmmXUYEoj3OAFLukyIz6yzC6A+sPaiwTUV2cU=
-Authentication-Results: mail-nwsmtp-smtp-production-main-91.myt.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <38c80313-ba1c-092c-ae31-f58fe6ffa82c@yandex.ru>
-Date:   Thu, 30 Mar 2023 19:45:14 +0500
+        Thu, 30 Mar 2023 10:46:10 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F2F7D91;
+        Thu, 30 Mar 2023 07:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680187569; x=1711723569;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5mKDr2z6KLzoFeta8l6hBRMMWoy+ScTEsc0zNTJUEpQ=;
+  b=fCVOoNfHfef/prgqhEyCMj3kb9zTsTOWdgIKsqcquLV15MLY3maPSUUm
+   TUvEvDnRnoZF8xCnt7fJNYdnfOh1yH1gEhjEX0jUsUHUP233T1Cz9FemR
+   TSboCd1IN0qrf4e2L6vI13Szbgp4q/dAgJ5V+Pfv5/YGpatCMJywOcYwe
+   CMb6Yg1sFlaNzIrgRx/DkAUm0dlEqAN4eBQ0yUqPnsVvGdcEsu2btSTSk
+   c11jzZw1aEWbKRwjrLWFgYp5MLvA3TNv31smbo/oG64xnJrTisnrafFC5
+   cKie0GtsKMMS1u434UbQoVlFDBmb0RpkB77UAak8RYMFbYj8OzOrC72s5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="320837250"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="320837250"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:46:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="687254198"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="687254198"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga007.fm.intel.com with ESMTP; 30 Mar 2023 07:46:05 -0700
+Received: from [10.212.220.88] (kliang2-mobl1.ccr.corp.intel.com [10.212.220.88])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 3F76C580919;
+        Thu, 30 Mar 2023 07:46:03 -0700 (PDT)
+Message-ID: <2bba1909-dac8-321f-e685-a793f1a4e170@linux.intel.com>
+Date:   Thu, 30 Mar 2023 10:46:01 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: MREMAP_DONTUNMAP corrupts initial mapping
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] perf/x86/intel: Define bit macros for FixCntrCtl MSR
 Content-Language: en-US
-From:   stsp <stsp2@yandex.ru>
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     linux-mm@kvack.org, Brian Geffon <bgeffon@google.com>,
-        Li Xinhai <lixinhai.lxh@gmail.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>
-References: <aee53ac3-6d25-5009-7416-3f7c5fe1f989@yandex.ru>
-In-Reply-To: <aee53ac3-6d25-5009-7416-3f7c5fe1f989@yandex.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Dapeng Mi <dapeng1.mi@linux.intel.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhang Tinghao <tinghao.zhang@intel.com>,
+        Zhuocheng Ding <zhuocheng.ding@intel.com>
+References: <20230330012846.2927220-1-dapeng1.mi@linux.intel.com>
+ <20230330130702.GF124812@hirez.programming.kicks-ass.net>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230330130702.GF124812@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a few CCs.
 
-30.03.2023 17:38, stsp пишет:
-> Hello.
->
-> Attached is a small test-case that
-> demonstrates the problem.
-> The problem happens if you change
-> some data in a file-backed private
-> mapping and then use mremap on
-> it with MREMAP_DONTUNMAP flag.
-> The result is:
-> - destination copy is valid
-> - source copy restored from the original file
->
-> So the 2 copies do not match.
+
+On 2023-03-30 9:07 a.m., Peter Zijlstra wrote:
+> On Thu, Mar 30, 2023 at 09:28:46AM +0800, Dapeng Mi wrote:
+>> Define bit macros for FixCntrCtl MSR and replace the bit hardcoding
+>> with these bit macros. This would make code be more human-readable.
+>>
+>> Perf commands 'perf stat -e "instructions,cycles,ref-cycles"' and
+>> 'perf record -e "instructions,cycles,ref-cycles"' pass.
+>>
+>> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+>> ---
+>>  arch/x86/events/intel/core.c      | 18 +++++++++---------
+>>  arch/x86/include/asm/perf_event.h | 10 ++++++++++
+>>  2 files changed, 19 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+>> index 070cc4ef2672..b7c0bb78ed59 100644
+>> --- a/arch/x86/events/intel/core.c
+>> +++ b/arch/x86/events/intel/core.c
+>> @@ -2451,7 +2451,7 @@ static void intel_pmu_disable_fixed(struct perf_event *event)
+>>  
+>>  	intel_clear_masks(event, idx);
+>>  
+>> -	mask = 0xfULL << ((idx - INTEL_PMC_IDX_FIXED) * 4);
+>> +	mask = intel_fixed_bits(idx - INTEL_PMC_IDX_FIXED, INTEL_FIXED_BITS_MASK);
+>>  	cpuc->fixed_ctrl_val &= ~mask;
+> 
+> So maybe it's me, but I find the original far easier to read :/ That new
+> things I need to look up every single identifier before I can tell wth
+> it does.
+
+The intel_fixed_bits() tries to replace the duplicate "bit << (idx *
+4);". I think it should be a good improvement. Maybe we should rename it
+to intel_shift_fixed_bits_by_idx(). Is it better?
+
+If not, I think at least we should use some macros to replace the magic
+number.
+
+Thanks,
+Kan
