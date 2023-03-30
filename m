@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD03C6D0A58
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24586D0A6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbjC3PuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S233405AbjC3PwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233422AbjC3PuA (ORCPT
+        with ESMTP id S233344AbjC3PwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:50:00 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963E6A245
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:49:34 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id ga7so18889288qtb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:49:34 -0700 (PDT)
+        Thu, 30 Mar 2023 11:52:04 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F475D524
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:51:34 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso22397184pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:51:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1680191368;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Vil2eKpiNnTMX9jA+HvlVZIvmGd1fQxhTcUQOW8Puig=;
-        b=e8Mih22wrNYCfAXGBK0vuNlm8UKe2HkzjWtxH7CV/4rx1Q4AibeFr4Xjfur15O4YmW
-         IMBHepmG+q913Bx4QnLZoUBIeClqEdkjLwYwbuWYb4HoJob09uNFDDyUbGW1PXzSgnaF
-         copoSVW03mRQqk12K5e6fSYri+EF723APIZRs=
+        d=linaro.org; s=google; t=1680191493;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+UiZ1OnVN4eKK6Y2ubWlnceTNBKlqFHwpFESVYfLs/8=;
+        b=S/vO94S1KrhqZU+6ElYPyVmX/X2aqQ0WwjpCi7kD9I/GGADZwABRLXuThUACybh9fW
+         Jc8vWoM54trxFU9jTD8vT9qv1/YzIAK+t/+iSWqMHV3VvmbMbsFpPNPkLOWtNmQdr2M+
+         NOOglXpvt8QOovjU6tyAronds4rHDHXiVsrcr4pHOxIf4Mkc2kMCPS9E9hbM0FRc8Xap
+         OQzVkVSSJebU6P3/ujxSbgclr7egmG7yYKWaU9hkWjPXB+5srf+8/G/mryMBSsZC5uOk
+         AkZ+twFDDAEi1OvD7mYJUYLc+FXyT2GV6BPHwciyaDhucZPypkEltVKvz07HzD3Kxq9w
+         tEFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680191368;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vil2eKpiNnTMX9jA+HvlVZIvmGd1fQxhTcUQOW8Puig=;
-        b=zzyQz97td5AjHruBJRKjkajR++/otUFtV14UR2YW9EFBGty9d4oTjw94BkXfHSLn21
-         /0SLMsd0353gQUZmT7wlcSIiG9jo+1ehcLp7OMjqqPDaX1GfwCT6FyCbgViHS+dUwu1P
-         2Ibx5/34Yx3UM0uygwgfZPye0XCpgapaDDNN0Y3BJz7bzLZSUC7x5A6v9i6OnDpBpVnc
-         XJPZA4LS4z8bILdb31ZyiVc1wnnbiM8zjc8Z01kEfR5W3KcIU2rxAndFqBMrz3uH5UMJ
-         leQ1LtvHNxrz1NzYRBQPcvsUqmh1/k7YJ3ovHcnlDTzEMx+fsbIGjeaIBBSUJTCwsCNP
-         jBgQ==
-X-Gm-Message-State: AO0yUKW3xLr05AeXYmUDRVUcZr3Uaxax3H3Vjb1yYkMpFk33zTW1VCmm
-        BZyud3mhBdoXr6TM2VjhX0wHcg==
-X-Google-Smtp-Source: AK7set9bulSBIubZM96NEfSd6rzIkSdshjJcrQkRFjuAatfnDeaSj2RhFiEPOJRm8OkE4MvfvHDfcA==
-X-Received: by 2002:ac8:5b96:0:b0:3bf:c9d1:4276 with SMTP id a22-20020ac85b96000000b003bfc9d14276mr38021954qta.5.1680191368416;
-        Thu, 30 Mar 2023 08:49:28 -0700 (PDT)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id s80-20020a37a953000000b00741a984943fsm11736875qke.40.2023.03.30.08.49.27
+        d=1e100.net; s=20210112; t=1680191493;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+UiZ1OnVN4eKK6Y2ubWlnceTNBKlqFHwpFESVYfLs/8=;
+        b=bWbVDgWsXMLwRGU5ms7cF7iRnV/R5UyH/oM8mHnjUfKc0G14Hv36pF8TkOJJKYCby2
+         KgZrPed1VhQa6Hm0nhN2zu5t5ckocAW3ybJW7dZnXSgfkEHbnO1X3tHEYg5WUbJvv8EH
+         9qprb0KP+58NWXhyf7iGWFcE7kLOa0c8n3rLyzbOrH74LwPWDlkeZBYciYklc82277gG
+         l7cp1S2zTHMFBhzvNK47VUU6+53cZ9jyZ9nMlZ9yRCkBVWzPjsPJtkYB/uMfd2gGUtQs
+         cSFrB6YwW+U9UUjTOM5L5qeXoD5LZB9EFtRBSTTi32rKOuLvYh8Uo0cTxFiLhWC9HCpq
+         6Hig==
+X-Gm-Message-State: AAQBX9cApDPbO40FymzNRhVUb9NZtRW9GGu+TWHviA0Ng8FEWbMFKFII
+        ps5GuOs1hloVJB3653tgGPrWf26TU+YmHxX0hVg=
+X-Google-Smtp-Source: AKy350Z/fQwD6SWUO0Js9b6F9iq2N+n6uG5uCtOKnAI5zH9aI+LgGmdPVVeCxTY1fZdDZEXa5GtkUA==
+X-Received: by 2002:a17:902:f543:b0:1a1:ce5d:5a15 with SMTP id h3-20020a170902f54300b001a1ce5d5a15mr25852068plf.50.1680191492871;
+        Thu, 30 Mar 2023 08:51:32 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c5e:53ce:1f39:30a5:d20f:f205])
+        by smtp.gmail.com with ESMTPSA id b2-20020a170902ed0200b0019c8ef78d52sm24799025pld.21.2023.03.30.08.51.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:49:27 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 15:49:27 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        rcu <rcu@vger.kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 04/13] tick/nohz: Fix cpu_is_hotpluggable() by
- checking with nohz subsystem
-Message-ID: <20230330154927.GJ2114899@google.com>
-References: <20230325173316.3118674-1-joel@joelfernandes.org>
- <20230325173316.3118674-5-joel@joelfernandes.org>
- <ZCCeS/VeGthUNgIY@localhost.localdomain>
+        Thu, 30 Mar 2023 08:51:32 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, andersson@kernel.org,
+        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org
+Subject: [PATCH v2 1/1] arm64: dts: qcom: sm6115: Add CPU idle-states
+Date:   Thu, 30 Mar 2023 21:21:22 +0530
+Message-Id: <20230330155122.591099-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCCeS/VeGthUNgIY@localhost.localdomain>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -81,121 +71,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 09:34:35PM +0200, Frederic Weisbecker wrote:
-> Le Sat, Mar 25, 2023 at 05:33:07PM +0000, Joel Fernandes (Google) a écrit :
-> > For CONFIG_NO_HZ_FULL systems, the tick_do_timer_cpu cannot be offlined.
-> > However, cpu_is_hotpluggable() still returns true for those CPUs. This causes
-> > torture tests that do offlining to end up trying to offline this CPU causing
-> > test failures. Such failure happens on all architectures.
-> 
-> It might be worth noting that hotplug failure is fine on hotplug testing.
-> The issue here is the repetitive error message in the logs.
-> 
-> Other than that:
-> 
-> Acked-by: Frederic Weisbecker <frederic@kernel.org>
+Add CPU idle-state nodes and power-domains in Qualcomm sm6115 SoC dtsi.
 
-Thank you, below is the reworded update. Let me know if any other comment.
-
--------8<-------
-
-From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: [PATCH] tick/nohz: Fix cpu_is_hotpluggable() by checking with nohz
- subsystem
-
-For CONFIG_NO_HZ_FULL systems, the tick_do_timer_cpu cannot be offlined.
-However, cpu_is_hotpluggable() still returns true for those CPUs. This causes
-torture tests that do offlining to end up trying to offline this CPU causing
-test failures. Such failure happens on all architectures.
-
-Fix the repeated error messages thrown as a result (even if the hotplug
-errors are harmless), by asking the opinion of the nohz subsystem on whether
-the CPU can be hotplugged.
-
-[ Apply Frederic Weisbecker feedback on refactoring tick_nohz_cpu_down(). ]
-
-For drivers/base/ portion:
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Acked-by: Frederic Weisbecker <frederic@kernel.org>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: rcu <rcu@vger.kernel.org>
-Cc: stable@vger.kernel.org
-Fixes: 2987557f52b9 ("driver-core/cpu: Expose hotpluggability to the rest of the kernel")
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- drivers/base/cpu.c       |  3 ++-
- include/linux/tick.h     |  2 ++
- kernel/time/tick-sched.c | 11 ++++++++---
- 3 files changed, 12 insertions(+), 4 deletions(-)
+Changes since v1:
+- v1 can be viewed here: https://lore.kernel.org/lkml/e5cda4cf-5c2a-a7ed-9e1d-1fe9f2cbef40@linaro.org
+- Addressed Konrad's comments on v1 and added GDHS and Power Collapse
+  cluster power states.
 
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index 182c6122f815..c1815b9dae68 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -487,7 +487,8 @@ static const struct attribute_group *cpu_root_attr_groups[] = {
- bool cpu_is_hotpluggable(unsigned int cpu)
- {
- 	struct device *dev = get_cpu_device(cpu);
--	return dev && container_of(dev, struct cpu, dev)->hotpluggable;
-+	return dev && container_of(dev, struct cpu, dev)->hotpluggable
-+		&& tick_nohz_cpu_hotpluggable(cpu);
- }
- EXPORT_SYMBOL_GPL(cpu_is_hotpluggable);
+ arch/arm64/boot/dts/qcom/sm6115.dtsi | 132 +++++++++++++++++++++++++++
+ 1 file changed, 132 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+index 2a51c938bbcb..c93677e97076 100644
+--- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+@@ -45,6 +45,8 @@ CPU0: cpu@0 {
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_0>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
++			power-domains = <&CPU_PD0>;
++			power-domain-names = "psci";
+ 			L2_0: l2-cache {
+ 				compatible = "cache";
+ 				cache-level = <2>;
+@@ -61,6 +63,8 @@ CPU1: cpu@1 {
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_0>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
++			power-domains = <&CPU_PD1>;
++			power-domain-names = "psci";
+ 		};
  
-diff --git a/include/linux/tick.h b/include/linux/tick.h
-index bfd571f18cfd..9459fef5b857 100644
---- a/include/linux/tick.h
-+++ b/include/linux/tick.h
-@@ -216,6 +216,7 @@ extern void tick_nohz_dep_set_signal(struct task_struct *tsk,
- 				     enum tick_dep_bits bit);
- extern void tick_nohz_dep_clear_signal(struct signal_struct *signal,
- 				       enum tick_dep_bits bit);
-+extern bool tick_nohz_cpu_hotpluggable(unsigned int cpu);
+ 		CPU2: cpu@2 {
+@@ -73,6 +77,8 @@ CPU2: cpu@2 {
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_0>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
++			power-domains = <&CPU_PD2>;
++			power-domain-names = "psci";
+ 		};
  
- /*
-  * The below are tick_nohz_[set,clear]_dep() wrappers that optimize off-cases
-@@ -280,6 +281,7 @@ static inline void tick_nohz_full_add_cpus_to(struct cpumask *mask) { }
+ 		CPU3: cpu@3 {
+@@ -85,6 +91,8 @@ CPU3: cpu@3 {
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_0>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
++			power-domains = <&CPU_PD3>;
++			power-domain-names = "psci";
+ 		};
  
- static inline void tick_nohz_dep_set_cpu(int cpu, enum tick_dep_bits bit) { }
- static inline void tick_nohz_dep_clear_cpu(int cpu, enum tick_dep_bits bit) { }
-+static inline bool tick_nohz_cpu_hotpluggable(unsigned int cpu) { return true; }
+ 		CPU4: cpu@100 {
+@@ -97,6 +105,8 @@ CPU4: cpu@100 {
+ 			dynamic-power-coefficient = <282>;
+ 			next-level-cache = <&L2_1>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
++			power-domains = <&CPU_PD4>;
++			power-domain-names = "psci";
+ 			L2_1: l2-cache {
+ 				compatible = "cache";
+ 				cache-level = <2>;
+@@ -113,6 +123,8 @@ CPU5: cpu@101 {
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_1>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
++			power-domains = <&CPU_PD5>;
++			power-domain-names = "psci";
+ 		};
  
- static inline void tick_dep_set(enum tick_dep_bits bit) { }
- static inline void tick_dep_clear(enum tick_dep_bits bit) { }
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index ba2ac1469d47..a46506f7ec6d 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -532,7 +532,7 @@ void __init tick_nohz_full_setup(cpumask_var_t cpumask)
- 	tick_nohz_full_running = true;
- }
+ 		CPU6: cpu@102 {
+@@ -125,6 +137,8 @@ CPU6: cpu@102 {
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_1>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
++			power-domains = <&CPU_PD6>;
++			power-domain-names = "psci";
+ 		};
  
--static int tick_nohz_cpu_down(unsigned int cpu)
-+bool tick_nohz_cpu_hotpluggable(unsigned int cpu)
- {
- 	/*
- 	 * The tick_do_timer_cpu CPU handles housekeeping duty (unbound
-@@ -540,8 +540,13 @@ static int tick_nohz_cpu_down(unsigned int cpu)
- 	 * CPUs. It must remain online when nohz full is enabled.
- 	 */
- 	if (tick_nohz_full_running && tick_do_timer_cpu == cpu)
--		return -EBUSY;
--	return 0;
-+		return false;
-+	return true;
-+}
+ 		CPU7: cpu@103 {
+@@ -137,6 +151,8 @@ CPU7: cpu@103 {
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_1>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
++			power-domains = <&CPU_PD7>;
++			power-domain-names = "psci";
+ 		};
+ 
+ 		cpu-map {
+@@ -176,6 +192,68 @@ core3 {
+ 				};
+ 			};
+ 		};
 +
-+static int tick_nohz_cpu_down(unsigned int cpu)
-+{
-+	return tick_nohz_cpu_hotpluggable(cpu) ? 0 : -EBUSY;
- }
++		idle-states {
++			entry-method = "psci";
++
++			LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
++				compatible = "arm,idle-state";
++				idle-state-name = "silver-rail-power-collapse";
++				arm,psci-suspend-param = <0x40000003>;
++				entry-latency-us = <290>;
++				exit-latency-us = <376>;
++				min-residency-us = <1182>;
++				local-timer-stop;
++			};
++
++			BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
++				compatible = "arm,idle-state";
++				idle-state-name = "gold-rail-power-collapse";
++				arm,psci-suspend-param = <0x40000003>;
++				entry-latency-us = <297>;
++				exit-latency-us = <324>;
++				min-residency-us = <1110>;
++				local-timer-stop;
++			};
++		};
++
++		domain-idle-states {
++			CLUSTER_0_SLEEP_0: cluster-sleep-0-0 {
++				/* GDHS */
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x40000022>;
++				entry-latency-us = <360>;
++				exit-latency-us = <421>;
++				min-residency-us = <782>;
++			};
++
++			CLUSTER_0_SLEEP_1: cluster-sleep-0-1 {
++				/* Power Collapse */
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x41000044>;
++				entry-latency-us = <800>;
++				exit-latency-us = <2118>;
++				min-residency-us = <7376>;
++			};
++
++			CLUSTER_1_SLEEP_0: cluster-sleep-1-0 {
++				/* GDHS */
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x40000042>;
++				entry-latency-us = <314>;
++				exit-latency-us = <345>;
++				min-residency-us = <660>;
++			};
++
++			CLUSTER_1_SLEEP_1: cluster-sleep-1-1 {
++				/* Power Collapse */
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x41000044>;
++				entry-latency-us = <640>;
++				exit-latency-us = <1654>;
++				min-residency-us = <8094>;
++			};
++		};
+ 	};
  
- void __init tick_nohz_init(void)
+ 	firmware {
+@@ -199,6 +277,60 @@ pmu {
+ 	psci {
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
++
++		CPU_PD0: power-domain-cpu0 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
++		};
++
++		CPU_PD1: power-domain-cpu1 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
++		};
++
++		CPU_PD2: power-domain-cpu2 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
++		};
++
++		CPU_PD3: power-domain-cpu3 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
++		};
++
++		CPU_PD4: power-domain-cpu4 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&BIG_CPU_SLEEP_0>;
++		};
++
++		CPU_PD5: power-domain-cpu5 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&BIG_CPU_SLEEP_0>;
++		};
++
++		CPU_PD6: power-domain-cpu6 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&BIG_CPU_SLEEP_0>;
++		};
++
++		CPU_PD7: power-domain-cpu7 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&BIG_CPU_SLEEP_0>;
++		};
++
++		CLUSTER_PD: power-domain-cpu-cluster0 {
++			#power-domain-cells = <0>;
++			domain-idle-states = <&CLUSTER_0_SLEEP_0>, <&CLUSTER_0_SLEEP_1>,
++					     <&CLUSTER_1_SLEEP_0>, <&CLUSTER_1_SLEEP_1>;
++		};
+ 	};
+ 
+ 	reserved_memory: reserved-memory {
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
+2.38.1
 
