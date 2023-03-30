@@ -2,119 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 619A26D073E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11216D0745
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbjC3NrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S231796AbjC3NuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbjC3NrS (ORCPT
+        with ESMTP id S232152AbjC3NuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:47:18 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7EE9F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:47:16 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id t10so76560957edd.12
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:47:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680184034;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7heuTSxTseGx6DRd1J0KDR2xUe+BJ0nlLM1TKQLexsI=;
-        b=eEvxUUcCgtdPkTaWnlq98JyD0YDBwGyNzMkarDDRXGioMx58qsAhiHXVP7Pm8k3ptY
-         OQLxjeR882CPmERFLOTrQzAtlK29YMs0aqG8uQ+lcvpSXixQ4stGS8zpD/XENfBphQ9M
-         dla9t94zuHDmU5ndx9dtNEW72X656Jadqf5ke/nKA6oGkTarWt/Dv458LWmIVlPbTD4O
-         c+oIIN6lq+MQTT1UKYDeBnqJVODDkq2VNXQTrTk8XBkWmt2IKZ52dA0uLZA78cMXJZzw
-         XNqWWUdQ3veIon5RS4OQ8LowOhgBJka6wvwuYvuHMEHsezcUn2YNjfCG3UwzG+5qgWYb
-         QExw==
+        Thu, 30 Mar 2023 09:50:03 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA7A4EDE;
+        Thu, 30 Mar 2023 06:50:02 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id bi31so14167938oib.9;
+        Thu, 30 Mar 2023 06:50:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680184034;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7heuTSxTseGx6DRd1J0KDR2xUe+BJ0nlLM1TKQLexsI=;
-        b=W3CPcV3AUnqirb0Wy7Er4YKCWhVgMFL8w4vQcQZfntoXTUVQPXRoMnG7jIkD3fA1xK
-         8DJv7BgDRCf3veqsMJ8ruboDX5J20G/as6xBou/6jYSLIsu8xjWR5cv4cOYJJD3BD3n4
-         ZqkckbzKjuGja2UD4sojCQw7y2vRD3EmgCInnZ91vr/YQId1gIFs0eyX0WRFkar1b2/r
-         Nx9o/HYLW5J+5AAgb3X+dzcQH6ktllE/7zKfNjJxADMZH/CljvS5mCXmSXG4YG9BrkS/
-         cvgooKT9JiMCYeQbzVsYPlaF4GncSPH/Ia3TKLtxCACuGNNSO+48Lj6MmpUpKrPE3XPF
-         pbiw==
-X-Gm-Message-State: AAQBX9fiyOU/nMhN0U6C3R16SdwNG0FskA9xINhRuwv2+tNqffcZQxi4
-        kj8Qn3InhNd2byqaj9vc3n4uoQ==
-X-Google-Smtp-Source: AKy350avsdzd2DtKve0wHEmyKWZ5v7Q4Wzltkvqn3YQnOvRP0aU79AWzKoxvtbhSShhNLd7Mz298RQ==
-X-Received: by 2002:a17:906:801:b0:92e:efa:b9b4 with SMTP id e1-20020a170906080100b0092e0efab9b4mr27892658ejd.22.1680184034684;
-        Thu, 30 Mar 2023 06:47:14 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id u20-20020a50c054000000b004aeeb476c5bsm18060637edd.24.2023.03.30.06.47.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 06:47:14 -0700 (PDT)
-Message-ID: <1f3d50b0-0528-befb-4fc6-8b5a96fc41b6@linaro.org>
-Date:   Thu, 30 Mar 2023 14:47:12 +0100
+        d=1e100.net; s=20210112; t=1680184202;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CKdeKXMZKkzRzmYzogTN+akOjOk8EAmTZBQ/2FEAwgg=;
+        b=5I/G/T9bn3WMdtobQ55G4BFKMmSfPDG/EkrI1hpf4mGHdYWa5WH2xejbi+3DS1UGtq
+         +DgpI66YvsmcFxKRBiU6a8EDLkiaqYUkgT++r9014JLJU4Zy6K+9NxdJJa/qE5YY/NXq
+         P8avfxbNxbpdi4QiefemCerHslRBaVUe0n685J9RLCze8Ucgbhg6YmqJ+chha9gFvAUy
+         N0NQ8qlIKyZZvMsrcSthWCpt0jbccZhLlYAiaT4yP1hdZcW4NNOHw3gbbkEaEg6ah30h
+         qHX7KGqiImElMr+3mQIVyDSqx9suYsNxvdptJhev3lRZFjD9No5Z9ief9utMyOiiMUS3
+         1i/Q==
+X-Gm-Message-State: AAQBX9dvDBrRRNM5NQtxrdfSi7DZUFNzyo7pDBXPVqBjcahDfpJwLXIw
+        PKDwsDPcXuonzgYayXudEg==
+X-Google-Smtp-Source: AKy350bFeV3x8EQIVtLXWGoO3fQp/HyP946oOhe7XGW6LnNcoGBq+6UaL8exWCu6W4e++Ed/2NEAcg==
+X-Received: by 2002:aca:280c:0:b0:389:72d5:f16f with SMTP id 12-20020aca280c000000b0038972d5f16fmr1649086oix.28.1680184201780;
+        Thu, 30 Mar 2023 06:50:01 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o184-20020acabec1000000b0038934c5b400sm4334154oif.25.2023.03.30.06.50.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 06:50:01 -0700 (PDT)
+Received: (nullmailer pid 1903371 invoked by uid 1000);
+        Thu, 30 Mar 2023 13:50:00 -0000
+Date:   Thu, 30 Mar 2023 08:50:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Bernhard =?iso-8859-1?Q?Rosenkr=E4nzer?= <bero@baylibre.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: mediatek: deprecate custom
+ drive strength property
+Message-ID: <20230330135000.GA1898063-robh@kernel.org>
+References: <20230327-cleanup-pinctrl-binding-v1-0-b695e32e4f2e@baylibre.com>
+ <20230327-cleanup-pinctrl-binding-v1-1-b695e32e4f2e@baylibre.com>
+ <334089fd-f0e8-bf63-5100-d8632c478ccc@collabora.com>
+ <3fbb78e9-a450-3741-070b-2caedbaa47a5@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH RESEND][for-stable 5.10, 5.4, 4.19, 4.14] ext4: fix kernel
- BUG in 'ext4_write_inline_data_end()'
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     stable@kernel.org, stable@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, boyu.mt@taobao.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        leejones@google.com, Ye Bin <yebin10@huawei.com>,
-        syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com,
-        Jun Nie <jun.nie@linaro.org>
-References: <20230307103840.2603092-1-tudor.ambarus@linaro.org>
- <42739df1-8b63-dfd6-6ec5-6c59d5d41dd8@linaro.org>
- <ZCV6I-CBHVw2GPre@kroah.com>
- <661ff1fb-ab0d-e0a3-693c-073443f556df@linaro.org>
- <ZCWFx_iRPRr1Afw0@kroah.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <ZCWFx_iRPRr1Afw0@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3fbb78e9-a450-3741-070b-2caedbaa47a5@linaro.org>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/30/23 13:51, Greg KH wrote:
-> On Thu, Mar 30, 2023 at 01:21:55PM +0100, Tudor Ambarus wrote:
->>
->>
->> On 3/30/23 13:01, Greg KH wrote:
->>> On Thu, Mar 30, 2023 at 12:42:27PM +0100, Tudor Ambarus wrote:
->>>> + stable@vger.kernel.org
->>>>
->>>> Hi!
->>>>
->>>> Can we queue this to Linux stable, please?
->>>
->>> Queue what exactly?
->>>
->>
->> The patch on which we reply:
->> https://lore.kernel.org/all/20230307103840.2603092-1-tudor.ambarus@linaro.org/
->>
->> Shall I do something different next time?
+On Wed, Mar 29, 2023 at 09:58:57AM +0200, Krzysztof Kozlowski wrote:
+> On 28/03/2023 15:41, AngeloGioacchino Del Regno wrote:
+> > Il 28/03/23 15:06, Alexandre Mergnat ha scritto:
+> >> Deprecate mediatek,drive-strength-adv which shall not exist, that was an
+> >> unnecessary property that leaked upstream from downstream kernels and
+> >> there's no reason to use it.
+> >>
+> >> The generic property drive-strength-microamp should be used instead.
+> >>
+> >> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> >> ---
+> >>   .../devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml      | 8 ++++++--
+> >>   .../devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml      | 6 +++++-
+> >>   2 files changed, 11 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
+> >> index c30cd0d010dd..b82a066b91ec 100644
+> >> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
+> >> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
+> > 
+> > Thanks for doing MT8183!!!
+> > 
+> >> @@ -110,8 +110,13 @@ patternProperties:
+> >>             drive-strength:
+> > 
+> > ..snip..
+> > 
+> >> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+> >> index 4b96884a1afc..347f533776ba 100644
+> >> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+> >> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+> >> @@ -91,8 +91,13 @@ patternProperties:
+> >>   
+> >>             input-schmitt-disable: true
+> >>   
+> >> +          drive-strength-microamp:
+> >> +            enum: [125, 250, 500, 1000]
+> >> +
+> >>             mediatek,drive-strength-adv:
+> >> +            deprecated: true
+> > 
+> > In the case of MT8365, since there's *no* devicetree using this property, *at all*,
+> > I think you can even just entirely remove this block, as that should not be
+> > considered an ABI breakage in that case.
+> > 
+> > Krzysztof, can you please confirm?
 > 
-> Please resend, your commit message is very confusing and this patch is
+> If it is defined as ABI in a released kernel, then should be rather
+> deprecated.
 
-Indeed.
-> long out of my review queue for some reason.
-> 
+Yes, but if no one notices it's not an ABI. It's up to the platform 
+maintainers really. I only care that the commits indicate they know what 
+they are doing (usually not).
 
-Replaced the blurb with a 2 line explanation in the [] section above my
-S-o-b:
-https://lore.kernel.org/stable/20230330134233.3407390-1-tudor.ambarus@linaro.org/T/#u
-
-Cheers,
-ta
+Rob
