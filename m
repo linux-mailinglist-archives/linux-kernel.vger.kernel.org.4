@@ -2,121 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5776D0A71
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FB76D0A36
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233496AbjC3PwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        id S233266AbjC3Poh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233482AbjC3PwS (ORCPT
+        with ESMTP id S233179AbjC3Pof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:52:18 -0400
-Received: from mail-41104.protonmail.ch (mail-41104.protonmail.ch [185.70.41.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275D9E053
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:51:56 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 15:41:35 +0000
-Authentication-Results: mail-41104.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="Zy9gNGHf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680190900; x=1680450100;
-        bh=4UQL5YU3GftVLCSKg9iIuP0+cp+0sOxbHm9DzBH9Tg8=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=Zy9gNGHfDtFL19Ml2z4VGj5D2hEpJeOKewnLCxj76Fz6YTlOfIwIPGj/g6bf/cpZe
-         OqoSfa2dUkE1qG5KJls8+BBQvsVJc1FWRdzHi6WzD0JkEsI2q3I7NTPjbAleNUb0d/
-         ZyqMUx2LL5juEOBjz18LTzwfnisHNahB0saoEzE8kWBiQlX1S25xOGzZxiud8JnV5a
-         fCC+a0LO1i8maYLYsTFr99OMLPNb/xbaiRmqefe2u2itsKBNXyldDSUrRNy5gNUS3O
-         xgr7NFpwW7L6tR7NCrWfMcebpkz17O3RnA9je3xnOnuPhX2BWySRjlasmMDosSsPE8
-         fH/v/QpA3YihQ==
-To:     Gary Guo <gary@garyguo.net>
-From:   Benno Lossin <y86-dev@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v3 07/13] rust: init: add `PinnedDrop` trait and macros
-Message-ID: <bf492337-1a4d-cca3-f12a-d5f4eaf742f0@protonmail.com>
-In-Reply-To: <20230330120103.2baaeb1b.gary@garyguo.net>
-References: <20230329223239.138757-1-y86-dev@protonmail.com> <20230329223239.138757-8-y86-dev@protonmail.com> <20230330120103.2baaeb1b.gary@garyguo.net>
-Feedback-ID: 40624463:user:proton
+        Thu, 30 Mar 2023 11:44:35 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC579CA3D;
+        Thu, 30 Mar 2023 08:43:45 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id k37so25132347lfv.0;
+        Thu, 30 Mar 2023 08:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680190998;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=K+snN28zGpqdGdh0F8mLob3cT7QxGO9Mm/LKoyV1UaQ=;
+        b=gagKM4RTkR+kg03jLaMHmV8lXtW8Fy4u6OS1fiDqgdrX4jV/HJqnlFRQZ86miITzAP
+         TizipNShN1NIZPKhOHdDvII94p0PFcZMcxVRH8+IxXZJD91N0VCFV4qNpMYDRMnXdmJV
+         L+30Kz4hIap3S36Jk7WwNgI717IjtSqc9Cj7IK6aBBP1V2XhnTvuzdSylkWKGMnyGl1L
+         fRrQrLKuQ69EegT5nEgWraOcTVBJMeD3rxBgMlyEbmy4JkCv02N/HNcVanc8e12kG11w
+         c9OduTlTMmdeYoslWRTgUv63iRVcwaDBKtozFqqvQMBrbbqt9k9DWn1oMWItHLK7kqx5
+         Xw7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680190998;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K+snN28zGpqdGdh0F8mLob3cT7QxGO9Mm/LKoyV1UaQ=;
+        b=yJlZqCwb5g6Wn7Q1xEEJRIv4G+m5yHB283qf7ZdsH+w5keBun4OhK3fXZHJp26f2Nt
+         zAqQFNLl70CGF2f4AyWzmh1vFtYGO7dnAKqGFQG6HpIdvK8JvZzK2dCy+pzLSUPbamCZ
+         09OvQRovuUogEjvYz9C1eH/RAvGMjwHXYR6y4cMD0420/1zP5myP0G3Zfndl9rH4ZfUP
+         JrDTrDwaAMIc76Ohz6j9Bfch7UmqE6iTL1uJXcSVu9WsesfXwX3vefM7+PuCCiCQEJWv
+         XbmNby7uHvwIub/kcXEqPi358yuctnF8o6Pc7i5mLnY5HcvEPd91sE2DEOZSBsNy2zdE
+         vNAw==
+X-Gm-Message-State: AAQBX9eB+ONvSD8GQnPTbp8kicRZMjEkhFv1j31Y9VNUcszSD6BcwYLx
+        5cy6TSeukZ8u40O3ciAr7t0=
+X-Google-Smtp-Source: AKy350YWo9ixOeCQIogabUOy4+LcErTfIgi6CAX9/qN9OKu0g/kQngikDEc8YgB6bBXuVsDRuI1fHA==
+X-Received: by 2002:ac2:5e88:0:b0:4eb:c4e:bd87 with SMTP id b8-20020ac25e88000000b004eb0c4ebd87mr5439021lfq.58.1680190998199;
+        Thu, 30 Mar 2023 08:43:18 -0700 (PDT)
+Received: from pc636 (host-90-233-209-50.mobileonline.telia.com. [90.233.209.50])
+        by smtp.gmail.com with ESMTPSA id w6-20020a2e9986000000b00290679ebac1sm5962840lji.9.2023.03.30.08.43.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 08:43:17 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Thu, 30 Mar 2023 17:43:15 +0200
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, RCU <rcu@vger.kernel.org>,
+        quic_neeraju@quicinc.com, Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH 1/1] Reduce synchronize_rcu() waiting time
+Message-ID: <ZCWuE+b+QDApqgWG@pc636>
+References: <ca153af5-bd66-4d48-afa5-ace3a13aec3c@paulmck-laptop>
+ <FC49F388-0480-4687-8DD3-94049FCBC92B@joelfernandes.org>
+ <2cd8f407-2b77-48b1-9f17-9aa8e4ce9c64@paulmck-laptop>
+ <20230330150933.GB2114899@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230330150933.GB2114899@google.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.23 13:01, Gary Guo wrote:
-> On Wed, 29 Mar 2023 22:33:24 +0000
-> y86-dev@protonmail.com wrote:
->
->> From: Benno Lossin <y86-dev@protonmail.com>
->>
->> The `PinnedDrop` trait that facilitates destruction of pinned types.
->> It has to be implemented via the `#[pinned_drop]` macro, since the
->> `drop` function should not be called by normal code, only by other
->> destructors. It also only works on structs that are annotated with
->> `#[pin_data(PinnedDrop)]`.
->>
->> Co-developed-by: Gary Guo <gary@garyguo.net>
->> Signed-off-by: Gary Guo <gary@garyguo.net>
->> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
->> ---
->>   rust/kernel/init.rs            | 111 ++++++++++++++
->>   rust/kernel/init/__internal.rs |  15 ++
->>   rust/kernel/init/macros.rs     | 263 +++++++++++++++++++++++++++++++++
->>   rust/macros/lib.rs             |  49 ++++++
->>   rust/macros/pinned_drop.rs     |  49 ++++++
->>   5 files changed, 487 insertions(+)
->>   create mode 100644 rust/macros/pinned_drop.rs
->>
->> diff --git a/rust/kernel/init/__internal.rs b/rust/kernel/init/__interna=
-l.rs
->> index 692942a008b3..4a3c7bf27a06 100644
->> --- a/rust/kernel/init/__internal.rs
->> +++ b/rust/kernel/init/__internal.rs
->> @@ -132,3 +132,18 @@ impl<T: ?Sized> Drop for DropGuard<T> {
->>           }
->>       }
->>   }
->> +
->> +/// Token used by `PinnedDrop` to prevent calling the function without =
-creating this unsafely
->> +/// created struct. This is needed, because the `drop` function is safe=
-, but should not be called
->> +/// manually.
->> +pub struct OnlyCallFromDrop(());
->> +
->> +impl OnlyCallFromDrop {
->> +    /// # Safety
->> +    ///
->> +    /// This function should only be called from the [`Drop::drop`] fun=
-ction and only be used to
->> +    /// delegate the destruction to the pinned destructor [`PinnedDrop:=
-:drop`] of the same type.
->> +    pub unsafe fn create() -> Self {
->
-> Although this is impl detail and the name doesn't really matter, but I
-> am wondering why this is called `create` instead of just `new`.
-Not really a good reason, I associate `new()` with 'unburdened' creation
-(i.e. a safe function). Will change this.
+On Thu, Mar 30, 2023 at 03:09:33PM +0000, Joel Fernandes wrote:
+> On Tue, Mar 28, 2023 at 08:26:13AM -0700, Paul E. McKenney wrote:
+> > On Mon, Mar 27, 2023 at 10:29:31PM -0400, Joel Fernandes wrote:
+> > > Hello,
+> > > 
+> > > > On Mar 27, 2023, at 9:06 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > 
+> > > > ﻿On Mon, Mar 27, 2023 at 11:21:23AM +0000, Zhang, Qiang1 wrote:
+> > > >>>> From: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > >>>> Sent: Tuesday, March 21, 2023 6:28 PM
+> > > >>>> [...]
+> > > >>>> Subject: [PATCH 1/1] Reduce synchronize_rcu() waiting time
+> > > >>>> 
+> > > >>>> A call to a synchronize_rcu() can be expensive from time point of view.
+> > > >>>> Different workloads can be affected by this especially the ones which use this
+> > > >>>> API in its time critical sections.
+> > > >>>> 
+> > > >>> 
+> > > >>> This is interesting and meaningful research. ;-)
+> > > >>> 
+> > > >>>> For example in case of NOCB scenario the wakeme_after_rcu() callback
+> > > >>>> invocation depends on where in a nocb-list it is located. Below is an example
+> > > >>>> when it was the last out of ~3600 callbacks:
+> > > >>> 
+> > > >> 
+> > > >> 
+> > > >> 
+> > > >> Can it be implemented separately as follows?  it seems that the code is simpler
+> > > >> (only personal opinion)  😊.
+> > > >> 
+> > > >> But I didn't test whether this reduce synchronize_rcu() waiting time
+> > > >> 
+> > > >> +static void rcu_poll_wait_gp(struct rcu_tasks *rtp)
+> > > >> +{
+> > > >> +       unsigned long gp_snap;
+> > > >> +
+> > > >> +       gp_snap = start_poll_synchronize_rcu();
+> > > >> +       while (!poll_state_synchronize_rcu(gp_snap))
+> > > >> +               schedule_timeout_idle(1);
+> > > > 
+> > > > I could be wrong, but my guess is that the guys working with
+> > > > battery-powered devices are not going to be very happy with this loop.
+> > > > 
+> > > > All those wakeups by all tasks waiting for a grace period end up
+> > > > consuming a surprisingly large amount of energy.
+> > > 
+> > > Is that really the common case? On the general topic of wake-ups:
+> > > Most of the time there should be only one
+> > > task waiting synchronously on a GP to end. If that is
+> > > true, then it feels like waking
+> > > up nocb Kthreads which indirectly wake other threads is doing more work than usual?
+> > 
+> > A good question, and the number of outstanding synchronize_rcu()
+> > calls will of course be limited by the number of tasks in the system.
+> > But I myself have raised the ire of battery-powered embedded folks with
+> > a rather small number of wakeups, so...
+> 
+> But unless I am missing something, even if there is single synchronize_rcu(),
+> you have a flurry of potential wakeups right now, instead of the bare minimum
+> I think. I have not measured how many wake ups, but I'd love to when I get
+> time. Maybe Vlad has some numbers.
+> 
+I will measure and have a look at wake-ups. But, what we have for now is
+if there are two callers of synchronize_rcu() on different CPUs, i guess
+two nocb-kthreads have to handle it, thus two nocb-kthreads have to be
+awaken to do the work. This patch needs only one wake-up to serve all
+users.
+
+Anyway, i will provide some data and analysis of it.
 
 --
-Cheers,
-Benno
-
->
->> +        Self(())
->> +    }
->> +}
-
+Uladzislau Rezki
