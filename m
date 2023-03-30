@@ -2,83 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBF66CFE0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99A26CFE16
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjC3IT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
+        id S230499AbjC3IUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjC3ITz (ORCPT
+        with ESMTP id S230288AbjC3IUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:19:55 -0400
+        Thu, 30 Mar 2023 04:20:22 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8C140CA
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:19:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0EF1BEF
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:19:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680164348;
+        s=mimecast20190719; t=1680164374;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=j6eqKpHQyukUldknWnkYJ906zqmkvEYnde83ajid2aw=;
-        b=TJgXybOZeBO9gyKO8o2hnCpH78RqCWx6fbHnTRfvw0GhooGSnfvUAFFZ9h9BauTQw4pMhI
-        00ftn/6NJvv4Rc6717JPb0dQrS7gK5V8OOjM2+YGY97pMVUQR1kfH71NValgWYalflOP9Z
-        DvetYy9brqSte1EhqyaGOBbBlGsPtis=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=F6jCDp5R5UTDCRaJgvAusDHOREnAzeh37U4DgZVNJuM=;
+        b=cAIrlPIG5njsVVlW0HKNysgG0csXoyGqeyhzugJ65zhvFwlFLwMV8RytU6XrFnu+riB10c
+        ZWV8qf4mdCHh9bWSWXMn7q2iByjRzJ71eXe1JrgpmKG9rP5vkFIKtCjsrbmgGJaV3oV+Bn
+        IWQbzLhKUCetZDwOJrsNX6lyfcaqTy4=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-674-k8Tw6VqDPi-m64XkD33aig-1; Thu, 30 Mar 2023 04:19:07 -0400
-X-MC-Unique: k8Tw6VqDPi-m64XkD33aig-1
-Received: by mail-qk1-f197.google.com with SMTP id x80-20020a376353000000b0074681bc7f42so8533717qkb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:19:07 -0700 (PDT)
+ us-mta-70-RXm2-DtFOfOn3FLA6EyefQ-1; Thu, 30 Mar 2023 04:19:32 -0400
+X-MC-Unique: RXm2-DtFOfOn3FLA6EyefQ-1
+Received: by mail-ed1-f69.google.com with SMTP id x35-20020a50baa6000000b005021d1b1e9eso26249428ede.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:19:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680164347;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j6eqKpHQyukUldknWnkYJ906zqmkvEYnde83ajid2aw=;
-        b=DlrWEW3raqqxlqdkMOAix7L+67VSLhasYE1rI937b0v/CVb1qo3UrABUsu7xFOMnoM
-         DjT7XqAZOg4v/nQexGIfIRHKqWbdB7UrULC+2wxGSvNgMRUFss5jhuViXRE88EW1JAbb
-         rCichV0q96BtIlpU6wOECZMepYjIGIDgo7eZnwN7Zr0HjQ9AvOb8MGYJi630I0mXaWud
-         4VjI9N4Ki5kbpf34YXrNIqqxjN9UqPvnB6CXUuDEODIAmvpH4XNJ9tFl16INV2H8GMGQ
-         HuUhvTDkQ0YyB8Ql7aXrC1y1Sxe/V/FILF5Y0aZe+LGJelNYJTu4DuncXQJ4nEEKR3e4
-         n7Og==
-X-Gm-Message-State: AO0yUKVENuK4ZZhibzAd4b7oaqfMdkxgd7koJKG962Kylz7mBHNJH9pI
-        9IVjyqbe0Ekja991ehqmf9P0KGfN3b44noYKssFqdL/EiQGpzy/utgNWVE6VTNeV/SuuZz0hUyi
-        FR4s+zGpcg3HxGuhWh/d3uIRB
-X-Received: by 2002:ac8:5852:0:b0:3dd:f4cd:9457 with SMTP id h18-20020ac85852000000b003ddf4cd9457mr33846455qth.10.1680164347091;
-        Thu, 30 Mar 2023 01:19:07 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9ZSR8zCgeepFuAa6Qdv4Dz8GV22rVmnZtGEo7xGCKbU5A+Z7X8US2CvtEhcqENxoJDdCpmFg==
-X-Received: by 2002:ac8:5852:0:b0:3dd:f4cd:9457 with SMTP id h18-20020ac85852000000b003ddf4cd9457mr33846439qth.10.1680164346857;
-        Thu, 30 Mar 2023 01:19:06 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-57-51-130.retail.telecomitalia.it. [82.57.51.130])
-        by smtp.gmail.com with ESMTPSA id r14-20020ac867ce000000b003c034837d8fsm16827815qtp.33.2023.03.30.01.19.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 01:19:06 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 10:19:00 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
-        Vishnu Dasa <vdasa@vmware.com>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Bryan Tan <bryantan@vmware.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@sberdevices.ru,
-        oxffffaa@gmail.com, pv-drivers@vmware.com
-Subject: Re: [RFC PATCH v2 2/3] vsock/vmci: convert VMCI error code to -ENOMEM
-Message-ID: <wzkkagpfxfi7nioixpcmz4uscxojilwhuj4joslwevkm25m6h7@z4yl33oe7wqu>
-References: <60abc0da-0412-6e25-eeb0-8e32e3ec21e7@sberdevices.ru>
- <94d33849-d3c1-7468-72df-f87f897bafd2@sberdevices.ru>
+        d=1e100.net; s=20210112; t=1680164371;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F6jCDp5R5UTDCRaJgvAusDHOREnAzeh37U4DgZVNJuM=;
+        b=MpwZGj2DmAO286LM9Fe94Z0vfb/mRg7PI9Cg+OaWI3Pi7AW5buY0QBrSlAT1PRE42P
+         /Kiczyz8AY4WoTBYCgtYxEWOzZAjWG6p+uC3oUPOSBnaFvNcejLTHXZrEfPICvI4prK5
+         uXCB8bya4761hERGDdrFD8Nf9gDr9yehYC0tATFRq02olcXf9e2yzMVgVevlVbuvUbzE
+         s0Rf4GVpAmnpsTXyOFNyjxdnKGNtvBFKbo3zpPQRxcFjwuliBqfJqil99iH0O5TJM6bv
+         JxIlWvIZvttn7YgYFLloLjeDNRFJa/4I9PC9nuTD3jWScf1wLfcedP6d/mZc/Rbp7ZZg
+         rvCw==
+X-Gm-Message-State: AAQBX9e4nS+qeHfn9FtnWtnmwiM+XnPXraFB+pn7xWxPb7fEXyrWjbjT
+        fSy3xTYTjcXlRqLX35FDlA4kNb+F6qSeupPMYF4M8+8BPlzK8vSCBVU+qNgfOxlsI/zk7cY2U79
+        45c0CQ8IEiFJoHnXa3s0HScEG
+X-Received: by 2002:aa7:ccc7:0:b0:4ac:b614:dd00 with SMTP id y7-20020aa7ccc7000000b004acb614dd00mr20695724edt.30.1680164371220;
+        Thu, 30 Mar 2023 01:19:31 -0700 (PDT)
+X-Google-Smtp-Source: AKy350apSQp5MBlS/cA/cdZpOW4RsJ11da4ieQjuIibFRO7HEAy3t2ntlH34TjEdg6AUTexNtD9DcA==
+X-Received: by 2002:aa7:ccc7:0:b0:4ac:b614:dd00 with SMTP id y7-20020aa7ccc7000000b004acb614dd00mr20695718edt.30.1680164370986;
+        Thu, 30 Mar 2023 01:19:30 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id v15-20020a50c40f000000b004d8d2735251sm18024701edf.43.2023.03.30.01.19.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 01:19:30 -0700 (PDT)
+Message-ID: <1e6460f9-5dbe-57a4-2986-ff3cbf5a39ad@redhat.com>
+Date:   Thu, 30 Mar 2023 10:19:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <94d33849-d3c1-7468-72df-f87f897bafd2@sberdevices.ru>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] fs: vboxsf: remove unused out_len variable
+Content-Language: en-US, nl
+To:     Tom Rix <trix@redhat.com>, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20230329230310.1816101-1-trix@redhat.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230329230310.1816101-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,68 +82,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 10:07:36AM +0300, Arseniy Krasnov wrote:
->This adds conversion of VMCI specific error code to general -ENOMEM. It
->is needed, because af_vsock.c passes error value returned from transport
->to the user.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> net/vmw_vsock/vmci_transport.c | 19 ++++++++++++++++---
-> 1 file changed, 16 insertions(+), 3 deletions(-)
->
->diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
->index 36eb16a40745..45de3e75597f 100644
->--- a/net/vmw_vsock/vmci_transport.c
->+++ b/net/vmw_vsock/vmci_transport.c
->@@ -1831,10 +1831,17 @@ static ssize_t vmci_transport_stream_dequeue(
-> 	size_t len,
-> 	int flags)
-> {
->+	int err;
+Hi,
 
-Please, use the same type returned by the function.
+On 3/30/23 01:03, Tom Rix wrote:
+> clang with W=1 reports
+> fs/vboxsf/utils.c:442:9: error: variable
+>   'out_len' set but not used [-Werror,-Wunused-but-set-variable]
+>         size_t out_len;
+>                ^
+> This variable is not used so remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
->+
-> 	if (flags & MSG_PEEK)
->-		return vmci_qpair_peekv(vmci_trans(vsk)->qpair, msg, len, 0);
->+		err = vmci_qpair_peekv(vmci_trans(vsk)->qpair, msg, len, 0);
-> 	else
->-		return vmci_qpair_dequev(vmci_trans(vsk)->qpair, msg, len, 0);
->+		err = vmci_qpair_dequev(vmci_trans(vsk)->qpair, msg, len, 0);
->+
->+	if (err < 0)
->+		err = -ENOMEM;
->+
->+	return err;
-> }
->
-> static ssize_t vmci_transport_stream_enqueue(
->@@ -1842,7 +1849,13 @@ static ssize_t vmci_transport_stream_enqueue(
-> 	struct msghdr *msg,
-> 	size_t len)
-> {
->-	return vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
->+	int err;
+Thanks, patch looks good to me:
 
-Ditto.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
->+
->+	err = vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
->+	if (err < 0)
->+		err = -ENOMEM;
->+
->+	return err;
-> }
+Regards,
 
-@Vishnu: should we backport the change for
-vmci_transport_stream_enqueue() to stable branches?
+Hans
 
-In this case I would split this patch and I would send the
-vmci_transport_stream_enqueue() change to the net branch including:
 
-Fixes: c43170b7e157 ("vsock: return errors other than -ENOMEM to socket")
 
-Thanks,
-Stefano
+> ---
+>  fs/vboxsf/utils.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/fs/vboxsf/utils.c b/fs/vboxsf/utils.c
+> index dd0ae1188e87..ab0c9b01a0c2 100644
+> --- a/fs/vboxsf/utils.c
+> +++ b/fs/vboxsf/utils.c
+> @@ -439,7 +439,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+>  {
+>  	const char *in;
+>  	char *out;
+> -	size_t out_len;
+>  	size_t out_bound_len;
+>  	size_t in_bound_len;
+>  
+> @@ -447,7 +446,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+>  	in_bound_len = utf8_len;
+>  
+>  	out = name;
+> -	out_len = 0;
+>  	/* Reserve space for terminating 0 */
+>  	out_bound_len = name_bound_len - 1;
+>  
+> @@ -468,7 +466,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+>  
+>  		out += nb;
+>  		out_bound_len -= nb;
+> -		out_len += nb;
+>  	}
+>  
+>  	*out = 0;
 
