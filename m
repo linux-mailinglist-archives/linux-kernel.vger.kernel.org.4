@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616BF6D1373
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BC86D1378
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbjC3XnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 19:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
+        id S231609AbjC3XoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 19:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbjC3XnR (ORCPT
+        with ESMTP id S231735AbjC3XoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 19:43:17 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93599CA05;
-        Thu, 30 Mar 2023 16:43:13 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id j7so25633850ybg.4;
-        Thu, 30 Mar 2023 16:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680219793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VcZqAGUTPeSkDw23rK6dbBPBzMq/2/SptfrVxtDB0UQ=;
-        b=bPflKkHyODU8uuehrKfUxhncuo2AuQrCOUht50s5CP3/L5DWLKNVwCzJiTEaTHDA2R
-         W8PNyNrEL/0WuHRgTIyQeHwGjj3WYh/uc7eHmXOP2Kh0AN+uxMqgTjoR3Kn9SorMT9Xa
-         BfwCqqF98FxGxSGu5FYlwvOEc0tA51r61ZxLW00pRti5pfB/oy40Wd6fMETOY3FJusUT
-         VYxs32cXpTrNn3hevQUPsImIy8gUaJ4HrTXAx4x1ol/idJy9N3HmWOkgyKDe9Yu4aWTD
-         gS4+6/d5JLC7opUHk4WN7PMB8OjJ92hP00c9kz7k94SGP6D/hVQB9e7W+S1kT5ou6+wb
-         o/Jg==
+        Thu, 30 Mar 2023 19:44:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33048C148
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 16:43:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680219789;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sxdUBC3+7/+FoRE3AV8lIbZMqGBJVuxDsooJhZM+Js0=;
+        b=XhpjhzhlCl9o4t9L7XPe81ywFngSnHEBhkJE4zuNr8OoXa2laHCbKCDd89ilfOlxxR2dXS
+        k+g/d5QP1+kDKwx+/qTySSpGidJdH+eR/T+HvGQs6qNlpUGVJNebPPL1Aywc4+Fy4fLS9F
+        Efa3/Yt1Mlb0UPcaQUpTkx1nY9tATa0=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-619-OEfhCQ2bPuWTFdYvkcAxpw-1; Thu, 30 Mar 2023 19:43:08 -0400
+X-MC-Unique: OEfhCQ2bPuWTFdYvkcAxpw-1
+Received: by mail-qv1-f72.google.com with SMTP id px9-20020a056214050900b005d510cdfc41so9102983qvb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 16:43:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680219793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VcZqAGUTPeSkDw23rK6dbBPBzMq/2/SptfrVxtDB0UQ=;
-        b=3TvQjPCxCF1l9y6L34SWMHuGbHXLHcYOwDs5u2YsT7qM2AFEIj7gfqz+BWBgGN1067
-         V67SCRW6YGlXPHN9aIcnDyQUA5eH2zwf3WKYeEegS6W797RwLgxFrGYVRoNftgB3B0VC
-         RkxkVgaqr9ZM4FSj0kNXVWn8tBHwKd+G54MzzbhuuaruQBbDDz9xZC95g6kdk+1Uputs
-         AXnDh23TOoul3pFyDwqEusq93C3CNtBJ8UqFW7d8yJlOFRkZmNUSedzJ5//MohUpgORY
-         bgt/zMbKT1Oz71sxvX07jzj8K20y/FKbCk9AOrTxHic374KwyCcqioWNOJvGJDm/JBqH
-         n/WA==
-X-Gm-Message-State: AAQBX9en69oR3u45z82VKkO7GMZ7dXzi19WIxOYSihLpRqTDRxfUjlaP
-        I73kdnyIwpA1Tt8QiiQag8yZbs1quzpdEuMohs0=
-X-Google-Smtp-Source: AKy350bqbzF6SrzHXSyol3UEFAY9jZj8xOWQlhMA5/OcrMr1OSBWBXFKxpU7bojSxQYKftTBFL5H45EMrnAbNzqKWXQ=
-X-Received: by 2002:a05:6902:1141:b0:b73:caa7:f06f with SMTP id
- p1-20020a056902114100b00b73caa7f06fmr16639952ybu.5.1680219792765; Thu, 30 Mar
- 2023 16:43:12 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680219787;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sxdUBC3+7/+FoRE3AV8lIbZMqGBJVuxDsooJhZM+Js0=;
+        b=T/DH4vc2FfVrssUn1dd90AOqm3T+snPdYnnBF3OKcXPBk38o+0zxxqeRPou2MjIwVM
+         tTjoxe6caUgWWPjYerYI12inK81+CztfP1q9nuLMfwsSnIhscBd+dZW5DNcpn2zXpJrW
+         6INRVFXukrYBVBHdCdMXkhRlk4AX78Bumk7d3grTWk3RJ+c31CNHYgG3YWhS5JOVvIhe
+         x7Q/2IwEWOMoYvUzJf8FJgMTHY59GvcV5xo9h93KywNsxBF3rMYf1nRoQj3AJMfNcPsm
+         k23mp5oURJDvIEX7eOS9ZrtQJJZyMBPIOniu2QUmPQSyeOWGorNfMHiMzH3tH0DU05yV
+         QpiQ==
+X-Gm-Message-State: AO0yUKVChELPMc1+q1nTU4PvdqleWSnhzy2M28fOg22l9B2cl76v8oBd
+        Gf+g6wcI/yDSU0Wp9sVTQasSpjYlsMy4frVqvXStLKzE/3Jy1xFxSynnc56uAZlI9VLSCzoJQZS
+        GYRGK7BRqyhQygohuBOeRWVe/
+X-Received: by 2002:a05:622a:1a98:b0:3d8:9b45:d362 with SMTP id s24-20020a05622a1a9800b003d89b45d362mr38620994qtc.28.1680219787540;
+        Thu, 30 Mar 2023 16:43:07 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8e+7pjqcJzugW+87SA4B2ztfpVpwfdIdmQmFB4Xnk8pbSHqG3Dep8cVHiY/IIHhrhVsGayJA==
+X-Received: by 2002:a05:622a:1a98:b0:3d8:9b45:d362 with SMTP id s24-20020a05622a1a9800b003d89b45d362mr38620961qtc.28.1680219787200;
+        Thu, 30 Mar 2023 16:43:07 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id q19-20020ac87353000000b003e387a2fbdfsm235015qtp.0.2023.03.30.16.43.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 16:43:06 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
+        HaoPing.Liu@amd.com, aric.cyr@amd.com, chiahsuan.chung@amd.com,
+        felipe.clark@amd.com, Angus.Wang@amd.com, hanghong.ma@amd.com,
+        lv.ruyi@zte.com.cn, Dillon.Varone@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/display: remove unused average_render_time_in_us and i variables
+Date:   Thu, 30 Mar 2023 19:43:03 -0400
+Message-Id: <20230330234303.1845377-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20221206221335.GA1363005@bhelgaas> <20230315213537.GA1788623@bhelgaas>
-In-Reply-To: <20230315213537.GA1788623@bhelgaas>
-From:   Justin Tee <justintee8345@gmail.com>
-Date:   Thu, 30 Mar 2023 16:43:01 -0700
-Message-ID: <CABPRKS-kMVpEEdJPR6_ru6hjqyjxcVaR+FRWNGS1RRChjeFhCg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/9] scsi: lpfc: Change to use pci_aer_clear_uncorrect_error_status()
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Zhuo Chen <chenzhuo.1@bytedance.com>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        Justin Tee <justin.tee@broadcom.com>,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bhelgaas@google.com,
-        ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
-        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,98 +82,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+clang with W=1 reports
+drivers/gpu/drm/amd/amdgpu/../display/modules/freesync/freesync.c:1132:15: error: variable
+  'average_render_time_in_us' set but not used [-Werror,-Wunused-but-set-variable]
+        unsigned int average_render_time_in_us = 0;
+                     ^
+This variable is not used so remove it, which caused i to be unused so remove that as well.
 
-> But lpfc_aer_cleanup_state() is visible in the
-> "lpfc_aer_state_cleanup" sysfs file, so removing it would break any
-> userspace that uses it.
->
-> If we can rely on the PCI core to clean up AER errors itself
-> (admittedly, that might be a big "if"), maybe lpfc_aer_cleanup_state()
-> could just become a no-op?
->
-> Any comment from the LPFC folks?
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ .../drm/amd/display/modules/freesync/freesync.c    | 14 --------------
+ 1 file changed, 14 deletions(-)
 
-We have notified all users of the lpfc_aer_cleanup_state sysfs entry,
-and Broadcom LPFC is okay to no-op.
+diff --git a/drivers/gpu/drm/amd/display/modules/freesync/freesync.c b/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
+index 315da61ee897..5c41a4751db4 100644
+--- a/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
++++ b/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
+@@ -1129,7 +1129,6 @@ void mod_freesync_handle_preflip(struct mod_freesync *mod_freesync,
+ {
+ 	struct core_freesync *core_freesync = NULL;
+ 	unsigned int last_render_time_in_us = 0;
+-	unsigned int average_render_time_in_us = 0;
+ 
+ 	if (mod_freesync == NULL)
+ 		return;
+@@ -1138,7 +1137,6 @@ void mod_freesync_handle_preflip(struct mod_freesync *mod_freesync,
+ 
+ 	if (in_out_vrr->supported &&
+ 			in_out_vrr->state == VRR_STATE_ACTIVE_VARIABLE) {
+-		unsigned int i = 0;
+ 		unsigned int oldest_index = plane->time.index + 1;
+ 
+ 		if (oldest_index >= DC_PLANE_UPDATE_TIMES_MAX)
+@@ -1147,18 +1145,6 @@ void mod_freesync_handle_preflip(struct mod_freesync *mod_freesync,
+ 		last_render_time_in_us = curr_time_stamp_in_us -
+ 				plane->time.prev_update_time_in_us;
+ 
+-		/* Sum off all entries except oldest one */
+-		for (i = 0; i < DC_PLANE_UPDATE_TIMES_MAX; i++) {
+-			average_render_time_in_us +=
+-					plane->time.time_elapsed_in_us[i];
+-		}
+-		average_render_time_in_us -=
+-				plane->time.time_elapsed_in_us[oldest_index];
+-
+-		/* Add render time for current flip */
+-		average_render_time_in_us += last_render_time_in_us;
+-		average_render_time_in_us /= DC_PLANE_UPDATE_TIMES_MAX;
+-
+ 		if (in_out_vrr->btr.btr_enabled) {
+ 			apply_below_the_range(core_freesync,
+ 					stream,
+-- 
+2.27.0
 
-Regards,
-Justin
-
-On Wed, Mar 15, 2023 at 2:39=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> =
-wrote:
->
-> On Tue, Dec 06, 2022 at 04:13:35PM -0600, Bjorn Helgaas wrote:
-> > On Wed, Sep 28, 2022 at 06:59:41PM +0800, Zhuo Chen wrote:
-> > > lpfc_aer_cleanup_state() requires clearing both fatal and non-fatal
-> > > uncorrectable error status.
-> >
-> > I don't know what the point of lpfc_aer_cleanup_state() is.  AER
-> > errors should be handled and cleared by the PCI core, not by
-> > individual drivers.  Only lpfc, liquidio, and sky2 touch
-> > PCI_ERR_UNCOR_STATUS.
-> >
-> > But lpfc_aer_cleanup_state() is visible in the
-> > "lpfc_aer_state_cleanup" sysfs file, so removing it would break any
-> > userspace that uses it.
-> >
-> > If we can rely on the PCI core to clean up AER errors itself
-> > (admittedly, that might be a big "if"), maybe lpfc_aer_cleanup_state()
-> > could just become a no-op?
-> >
-> > Any comment from the LPFC folks?
-> >
-> > Ideally, I would rather not export pci_aer_clear_nonfatal_status() or
-> > pci_aer_clear_uncorrect_error_status() outside the PCI core at all.
->
-> Resurrecting this old thread.  Zhuo, can you figure out where the PCI
-> core clears these errors, include that in the commit log, and propose
-> a patch that makes lpfc_aer_cleanup_state() a no-op, by removing the
-> pci_aer_clear_nonfatal_status() call completely?
->
-> Such a patch could be sent to the SCSI maintainers since it doesn't
-> involve the PCI core.
->
-> If it turns out that the PCI core *doesn't* clear these errors, we
-> should figure out *why* it doesn't and try to change the PCI core so
-> it does.
->
-> > > But using pci_aer_clear_nonfatal_status()
-> > > will only clear non-fatal error status. To clear both fatal and
-> > > non-fatal error status, use pci_aer_clear_uncorrect_error_status().
-> > >
-> > > Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
-> > > ---
-> > >  drivers/scsi/lpfc/lpfc_attr.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_a=
-ttr.c
-> > > index 09cf2cd0ae60..d835cc0ba153 100644
-> > > --- a/drivers/scsi/lpfc/lpfc_attr.c
-> > > +++ b/drivers/scsi/lpfc/lpfc_attr.c
-> > > @@ -4689,7 +4689,7 @@ static DEVICE_ATTR_RW(lpfc_aer_support);
-> > >   * Description:
-> > >   * If the @buf contains 1 and the device currently has the AER suppo=
-rt
-> > >   * enabled, then invokes the kernel AER helper routine
-> > > - * pci_aer_clear_nonfatal_status() to clean up the uncorrectable
-> > > + * pci_aer_clear_uncorrect_error_status() to clean up the uncorrecta=
-ble
-> > >   * error status register.
-> > >   *
-> > >   * Notes:
-> > > @@ -4715,7 +4715,7 @@ lpfc_aer_cleanup_state(struct device *dev, stru=
-ct device_attribute *attr,
-> > >             return -EINVAL;
-> > >
-> > >     if (phba->hba_flag & HBA_AER_ENABLED)
-> > > -           rc =3D pci_aer_clear_nonfatal_status(phba->pcidev);
-> > > +           rc =3D pci_aer_clear_uncorrect_error_status(phba->pcidev)=
-;
-> > >
-> > >     if (rc =3D=3D 0)
-> > >             return strlen(buf);
-> > > --
-> > > 2.30.1 (Apple Git-130)
-> > >
