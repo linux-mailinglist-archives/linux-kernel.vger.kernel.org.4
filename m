@@ -2,111 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A434A6D0235
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD05D6D0239
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbjC3Kzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        id S231262AbjC3K4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbjC3Kzd (ORCPT
+        with ESMTP id S231254AbjC3K4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:55:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F298B9009;
-        Thu, 30 Mar 2023 03:55:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DDE4F2F4;
-        Thu, 30 Mar 2023 03:56:05 -0700 (PDT)
-Received: from [10.57.56.86] (unknown [10.57.56.86])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 19F533F73F;
-        Thu, 30 Mar 2023 03:55:18 -0700 (PDT)
-Message-ID: <20c28979-53a7-19eb-16fd-4d8535454d4e@arm.com>
-Date:   Thu, 30 Mar 2023 11:55:17 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v8 1/3] perf: cs-etm: Move mapping of Trace ID and cpu
- into helper function
-To:     Leo Yan <leo.yan@linaro.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Mike Leach <mike.leach@linaro.org>,
-        linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, gankulkarni@os.amperecomputing.com,
-        darren@os.amperecomputing.com, James Clark <james.clark@arm.com>
-References: <20230329111422.3693-1-mike.leach@linaro.org>
- <20230329111422.3693-2-mike.leach@linaro.org> <ZCQx5HlPnxCIFaNQ@kernel.org>
- <ZCQyNnk/vfHZkSda@kernel.org>
- <CAJ9a7VhhoGoOVL4sqcgpDYnZzzce_2=-wupK8K178tzZnoqrPA@mail.gmail.com>
- <ZCQ7nhrISA+jCfnI@kernel.org>
- <CAJ9a7VhJRnRe0A43=_X463432LvjL=S5buVgeq6rB8K8nDZb6A@mail.gmail.com>
- <ZCSRU8zvjjBHhq+x@kernel.org> <ZCS4XJaWg7NvaWb7@kernel.org>
- <20230330031307.GD252145@leoy-yangtze.lan>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230330031307.GD252145@leoy-yangtze.lan>
+        Thu, 30 Mar 2023 06:56:48 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2087.outbound.protection.outlook.com [40.107.244.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DDE8A62
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:56:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e8c76S1m8068GT3XxUneb0MyFOl8pw6hB3I79qhLC5LbG+H1KRZzN6w1n7nKI4SEN1IF4tIiPJfp8OPQeyNf7wfX/YVtfFtZKiZ0rRi7YMC6N19syMwYU6HReRBzRRzvwHiPQJb9oy7Nt+PyV0/6/5qtqdTH8Ku/IPJX+E2pvEJ9+WGRoTSsHRzokvdWyp+bi42NaNf5XAWMyyToJsrunhxoWsGopCnNSLelIfMiQMvbcCDXeN9dp6ifsdD0/qvW9gvwaiQ3f+L75hAdp1Hmg/mqvEcIzGumy3FKvhM0CW6SC/2NH7sqGNoqxm5Lv7ghBzJrsPnsTlVd+Nmhzd0J+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xBKJgTvVMUw6WSjprv+iFaGtvY7zpB1L8rMB2wzx57g=;
+ b=IDHN6l+CRFZLkJBXVS5FVJvMHK4cutOyTodA0zjmXaw2mo1l9zarfZ/zbddcdGuyWs5BYhfmv8BslSpTR1KY/Q7ZudKq7bDaibtuyh6dGYg1Okusduy4OXcI5CNOc3Q9lxyhO3jiC50odTT9NlHytutbSzwHL/N+4dHr7PTO1qMK2P9VkvmrE+GrVdsxgPpe7/UwdVViQt7kwGqSTcz4OV7ws6/eWumChThOHEteNUniUY3jk+L+CApHjB9ER6ga3NUz8jyb9saH/Cbfa/kboDP5vOO5aVwGNXnMYPH8Q5uB+Ve6kMj6vJgDftMcpU/TBydh8e8gMzeWTJALJlAMAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xBKJgTvVMUw6WSjprv+iFaGtvY7zpB1L8rMB2wzx57g=;
+ b=qeA8kCNRSurGDHZjsoUJjoBWCprKjVIfiQQP5VIO3zrU2GBHqnPciZlTyVLxG/n6TgJPYJ74jspNm4sbzH729T0cMCI0ll9eUng3ZzUF+pFdXBFgANvqpykaWGfauW3ghBEq3r+NFtrvlHmqUqyPdMWKMAD7dNdF8n7jrKO6F+0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM6PR12MB4265.namprd12.prod.outlook.com (2603:10b6:5:211::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Thu, 30 Mar
+ 2023 10:56:33 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4624:dc39:943e:6ae]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4624:dc39:943e:6ae%5]) with mapi id 15.20.6254.022; Thu, 30 Mar 2023
+ 10:56:32 +0000
+Message-ID: <e1af591e-a183-9b22-f533-297934e15e30@amd.com>
+Date:   Thu, 30 Mar 2023 12:56:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] drm: buddy_allocator: Fix buddy allocator init on
+ 32-bit systems
+Content-Language: en-US
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        David Gow <davidgow@google.com>,
+        =?UTF-8?Q?Lu=c3=ads_Mendes?= <luis.p.mendes@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        Arthur Grillo <arthurgrillo@riseup.net>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230329065532.2122295-1-davidgow@google.com>
+ <878rfe4iis.fsf@intel.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <878rfe4iis.fsf@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FRYP281CA0004.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::14)
+ To BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM6PR12MB4265:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0fecfa18-a45c-4845-206f-08db310d6bed
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hYTZXPhQgANCBTKvrU+khI5dmp0xwuU3+yrTCezmP8LuHcxbPhR4dBw/0vzQzhmtofqWKtiQe/o9sl9hfYigk0MmtV4cetT8y++4jdmyaa5bAKZoHom4uXup5cvpB04LSQ23Kryje2FnJbyjkQwuPVGKRwFEb/3kTnzvJEWzYTmZZInvrbKoFQYpRoYg8TeRfkO9RZIWLMpHIHFlKVv8MvlqwNCr5tyUKm0F/kLvw6LP2Wnd2RdTTltv0ZtwkQNKCY3gfTQerWk1rbbsfCcAdJgGJ/xaerk91zlOxECV/yjOMttXbfH6WqKD7ZiNS/g0umIEhfyhspS+IYCsL1YhW4NjUtKC8dAfKxbuvNVWg6AIsqTU+dY02hrDjSDRl1fWVKfdncVgPrPYHwIrTFFeQsIND8TwuzraSOginkvlgSvFDH3eauf0IWNBMkc2s7Zk4CvpXpZYeKtIuyFGxAYxUfu2jRpSpmsMzIN3QUfEV+FBabxGJhQyBuebHxR22J74bdqPQ04KNpuwwc2Adnz6AGnb1tFYnl5hbset/vRvDImZqae9g9izAgXgpaWD3yA3DoyF9+iZ8VNMdZ/ckxiQ4YzcM4RVV03pYD//oSCz2heUw3y1UQthm0b8wvNCAM4CJk3ay9mXRwT4QaYQ+ywSPWsiCrgqnl4PdMc9McpFUWQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(396003)(136003)(39860400002)(451199021)(31686004)(2906002)(83380400001)(66574015)(7416002)(26005)(8936002)(5660300002)(6506007)(6666004)(316002)(36756003)(966005)(6486002)(110136005)(66946007)(478600001)(6512007)(66476007)(2616005)(186003)(66556008)(4326008)(38100700002)(8676002)(41300700001)(31696002)(921005)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmp5YVBId0Z6VFpPSjFIdTZmTFVsYmgzaXNmaFJ1THRwcFhnbmhZcHpZWlhR?=
+ =?utf-8?B?VXE1TWZ6dHBrTEZoSzBFM01mbnBBOUZpY3A3R2ZTUW02M05DQkRWS3lyemFm?=
+ =?utf-8?B?ZkhqRW1uUWRYc3BGWFhVUVU2dHZLenNDTnAyVS9rd1BrN1Zmb1ByVU1KcGxh?=
+ =?utf-8?B?NGlpL0dST2Q4M3Qrck8rY2hRRWlZK1hNQXVmSng1MGsrWTJrTnR5L3lVRjVn?=
+ =?utf-8?B?SmoydHAzQlJHcDFrbjg5eExQejlhQ1cxeEs1cVdjZUVGSkJEL2MzWklpS3lx?=
+ =?utf-8?B?bUpyNnNLNG1odW5uZDEzMEh2TGdvdGZmbU85NFFZcThlYmovQnRHSHZISk12?=
+ =?utf-8?B?Qko0ZllZTlh4d0hqUXllSFBPeWdnZ3lxOWlEZTN4K2ZwMUpUSitJR2tDQUxB?=
+ =?utf-8?B?N3ZrUHdRcTRpNldvSyttYjBQRUg1dDd2a21ObVM5VEJVZVo0ckZabHJvRzE3?=
+ =?utf-8?B?djhRSEVVVGVKRXZBeFV5aFVOVTgvdTg2MVJwTUtrUStzRkF0b2RtbStoQi9y?=
+ =?utf-8?B?amRaR3ZGMVA0VU1NMVY1Q1lmeWt6YXNLN2w2MitDNnE4WmwrNDg2L3J4aDdx?=
+ =?utf-8?B?TTRWbnN4YVoveEFBMC9HanpUR3BmdnRhQ1R1MjkvY0FlT2VnMFRJaUFqWXVS?=
+ =?utf-8?B?WHJ4VVdhYkpUNzQwa3JKdFYyaTlvekFvSlRLM2dIZGs4Y2J3UUF4V3gwYVNt?=
+ =?utf-8?B?NEh5ME10Sit2LytJdWdPejJmZEZQVUtsSXQyUEpXM28veUNuRmxNWVhEVFlP?=
+ =?utf-8?B?RFJiTXFxcFJlWkNHS1lWR0ZRTEZrYmVUKytFcit0RVY3cE9yNUJ0NGxKOXZl?=
+ =?utf-8?B?aWR2VEhJVjUwa3dpNWpRc3cyY0twV0hhd0o4ejl4R0FFMDF3bTBiUHFWOE1o?=
+ =?utf-8?B?SE5qOXEyS0FBNEZDd0N0dGY1WTVhZUFoNy9iVDF5VzBsWFhVWEEvMTlocitw?=
+ =?utf-8?B?NWoraGNPUTRiaXJDeU9lWVBUK1pvL0ttZ0EzUWtrbWd4ajZFZ0E5UjFwd0hX?=
+ =?utf-8?B?eEwwSFgxeDN5TXdLWU41dVVkRkxpdHVQck84RytaRlFIS2VjSGJuenlQTWd3?=
+ =?utf-8?B?YnJQQlR3U1E2bXNwaURLQ0UrWTN5M0VwNVdQYU8xbmZRN1ViNG55VzVEclk1?=
+ =?utf-8?B?VzB5UGtGcThHUXdoTVp6OGJiWWxsMFVOQmpIMmpDWXB4ajRpVGlHcURFQVFL?=
+ =?utf-8?B?T2FSU3dDNHdPcExxaVJ5dVl4djY4Sm5aSm4rS1VJMVBVcTFEclRzQ3p6bTFF?=
+ =?utf-8?B?ZUk2Mm9kVm02dWZoMVM0Sno0RUphMVg0VWYweEszK09wY2ZIdDJOZlh1NHhM?=
+ =?utf-8?B?Nk54S09QeXZkYnVkbmovKzNJdkhyZkpLSXlvSjcxQlFXdUY2K2ZNZWJjZnBj?=
+ =?utf-8?B?aFJtandsdmVzUkhidkl2OHlrWGlWZFFzb2x3S0Y5ckIxZjF6dWo3WVpWQjZq?=
+ =?utf-8?B?L0ZNT05lQ2pLNE45U3A5dzNGa2ZiY0RSTkZFL3dQYnpzandSZUtTbEFydHB6?=
+ =?utf-8?B?amp3VmozRzJudnQ1RzZKR0FSclJIZGRKT2QwTWZBdnNSTmw4QUlBM2QrMkVy?=
+ =?utf-8?B?SDkxalc0V0ZyN0FhSHgrNTVuSlg2QlV0Wm9rd2tVcUxUa29MYk9tTWMrYkZL?=
+ =?utf-8?B?WHFNeEQrVzB3ekQvS29ZeE00WXdGRHhRWFdDZFdDc2k5aHNHMXM4ZmFuWUFw?=
+ =?utf-8?B?ZTZCQzRMRE9tRzE5VUl5eXRJTDhtalFqT0dCSm5NTUtWS0QyR25md1ZjVHJo?=
+ =?utf-8?B?OTEzN0NIazlobUNWOEYzZVV5bkErdThNWFh6NERub2ZmRGlOd0hKUS9ZZ1h4?=
+ =?utf-8?B?S3g2ZVd4WGNVOWN5VlNmNXZyaWk2UXdoUUU0QTBoSkpvaXdueEtYY0luYi96?=
+ =?utf-8?B?ek1Na0dDUUZ2RCtFeU1qVWJ6NVo4NG80Z3EzNlNrNEFMTVkrNkhzc0pwWHdD?=
+ =?utf-8?B?Vm55bVFEZVRKbDJMUFhRM2NjOUdTVzFIcTdXQWhsTzZJWGV5d2RFS3NsY2NS?=
+ =?utf-8?B?TDl1bDVFTVFMd1dUQ0JHRnRIbzJ1QjlXV1cvam82K1o3OGlMdXBlUTNzcUg3?=
+ =?utf-8?B?UHdOcmtZQkNzTnJhUDQ3Uk91cFdWR2FhMTBUZGVxdGJNRHA4MW1jWjdFTk9I?=
+ =?utf-8?Q?hQDI=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fecfa18-a45c-4845-206f-08db310d6bed
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 10:56:32.0399
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CNRadyi83x+X2Mk7L+EoIz682MNWjFaBT/bj8nKhTxZEX/EgmVmnVMZ84h6wv0Qo
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4265
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2023 04:13, Leo Yan wrote:
-> On Wed, Mar 29, 2023 at 07:14:52PM -0300, Arnaldo Carvalho de Melo wrote:
-> 
-> [...]
-> 
->>> Not here, I'll check after a call:
->>>
->>>    50     9.90 ubuntu:18.04-x-arm            : FAIL gcc version 7.5.0 (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04)
->>>      arch/arm/util/cs-etm.c: In function 'cs_etm_save_ete_header':
->>>      arch/arm/util/cs-etm.c:720:29: error: implicit declaration of function 'coresight_get_trace_id' [-Werror=implicit-function-declaration]
->>>        data[CS_ETE_TRCTRACEIDR] = coresight_get_trace_id(cpu);
->>>                                   ^~~~~~~~~~~~~~~~~~~~~~
+Am 30.03.23 um 12:53 schrieb Jani Nikula:
+> On Wed, 29 Mar 2023, David Gow <davidgow@google.com> wrote:
+>> The drm buddy allocator tests were broken on 32-bit systems, as
+>> rounddown_pow_of_two() takes a long, and the buddy allocator handles
+>> 64-bit sizes even on 32-bit systems.
 >>
->> This function was removed in:
+>> This can be reproduced with the drm_buddy_allocator KUnit tests on i386:
+>> 	./tools/testing/kunit/kunit.py run --arch i386 \
+>> 	--kunitconfig ./drivers/gpu/drm/tests drm_buddy
 >>
->> Author: Mike Leach <mike.leach@linaro.org>
->> Date:   Wed Mar 29 12:14:21 2023 +0100
+>> (It results in kernel BUG_ON() when too many blocks are created, due to
+>> the block size being too small.)
 >>
->>      perf cs-etm: Update record event to use new Trace ID protocol
+>> This was independently uncovered (and fixed) by Luís Mendes, whose patch
+>> added a new u64 variant of rounddown_pow_of_two(). This version instead
+>> recalculates the size based on the order.
 >>
->>      Trace IDs are now dynamically allocated.
+>> Reported-by: Luís Mendes <luis.p.mendes@gmail.com>
+>> Link: https://lore.kernel.org/lkml/CAEzXK1oghXAB_KpKpm=-CviDQbNaH0qfgYTSSjZgvvyj4U78AA@mail.gmail.com/T/
+>> Signed-off-by: David Gow <davidgow@google.com>
+>> ---
+>>   drivers/gpu/drm/drm_buddy.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
 >>
->> I'm removing this series from perf-tools-next, please address this issue
->> and send a v9.
-> 
-> I can reproduce this building failure.  I am curious for how to verify
-> building for patch wise, the link [1] gives me some hints and below
-> command works for me:
-> 
->    $ git rebase -i --exec "make -C tools/perf clean && \
->      make -C tools/perf VF=1 DEBUG=1 CORESIGHT=1 && \
->      make -C tools/perf clean && \
->      make -C tools/perf VF=1 DEBUG=1" HEAD~3
+>> diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
+>> index 3d1f50f481cf..7098f125b54a 100644
+>> --- a/drivers/gpu/drm/drm_buddy.c
+>> +++ b/drivers/gpu/drm/drm_buddy.c
+>> @@ -146,8 +146,8 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
+>>   		unsigned int order;
+>>   		u64 root_size;
+>>   
+>> -		root_size = rounddown_pow_of_two(size);
+>> -		order = ilog2(root_size) - ilog2(chunk_size);
+>> +		order = ilog2(size) - ilog2(chunk_size);
+>> +		root_size = chunk_size << order;
+> Just noticed near the beginning of the function there's also:
+>
+> 	if (!is_power_of_2(chunk_size))
+> 		return -EINVAL;
+>
+> which is also wrong for 32-bit.
 
-Looks like perf-tools-next has some changes that has not reflected 
-elsewhere. The ts_source patches are queued there, which is causing
-the above build failure.
+Yeah, but that isn't vital. We just use u64 for the chunk_size for 
+consistency.
 
-Mike,
+In reality I wouldn't except more than 256K here.
 
-Are you able to rebase your patches on perf-tools-next branch ?
+Regards,
+Christian.
 
-Kind regards
-Suzuki
-
-> 
-> Thanks,
-> Leo
-> 
-> [1] https://stackoverflow.com/questions/26983700/git-run-shell-command-for-each-commit
+>
+>
+> BR,
+> Jani.
+>
+>
+>>   
+>>   		root = drm_block_alloc(mm, NULL, order, offset);
+>>   		if (!root)
 
