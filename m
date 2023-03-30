@@ -2,136 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884086D004D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1716D0055
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjC3J43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
+        id S229792AbjC3J5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjC3J40 (ORCPT
+        with ESMTP id S229710AbjC3J5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:56:26 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC42AB
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:56:25 -0700 (PDT)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0F4483F22F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1680170184;
-        bh=AZI/9tbSPLmQm8ZhqrIexR+U4JXRSltU4xypQpnDQwc=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=ISAetmcoP7cVoAFnKZQiW/LrPZ++Og9fxnfGmTwDJYn2LwrMEx/13+6ReHmNnsvh6
-         NpzcIRh4AVPm35yB273KfHzhdKljS5VdTt+u1HzM7QXl1R68EbI1lNsloPA2u5iuQS
-         3XIJrNpSuVzifcEgKp/HPoSo52qTlnAaNmnJ3QcKj6Oayc9dWW9NITCDHeCDbPg959
-         evktrStJphqeuIuk1cWZIgpLpd+RylxNA1TrxX7rRx4/rskzPYAR+pA+CTtVEZKVrD
-         VLeUKPHPFRQzk+ilq3mqVjUurti6dVXL6Atzxx+Gkz2ha3bXn06L8baTm8s19fitV9
-         DXi37KbRc/QuA==
-Received: by mail-ed1-f72.google.com with SMTP id es16-20020a056402381000b004fa3e04c882so26361243edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:56:24 -0700 (PDT)
+        Thu, 30 Mar 2023 05:57:22 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848D52681
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:57:20 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id r14so8060272oiw.12
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:57:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680170240;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o4Oatc22JtM+BUIo6e3BXQa+qIqHhhXX2E3hXuu3jy0=;
+        b=MEIRUDSeSjsJ/ubDYsAUNK0KzimC9z9adja8vOF/p1LCpI0ung7zn/59XCdiAefKi0
+         rbdjjF2WMgQxgVQdeml7QOpR6PhHb+IvoKzitL30HfQEMow9CzrFI/1e4/u2jzUjqLGI
+         GJ6Rdyk8wRtzCjbp7xwYrKzNQsOdKQ4NeGcyeSGNTPdmY7AlrrWPNvAjPM5cP5ipf+bz
+         zhwyMzFuyhy9RxtqePjMtTt9z5ICqlGc4x8IrSeAUebrpE2M2XCja9ohWTaq7jN7mZf/
+         bN290Ojg2RS4zDK1CzCio0OKG484QUVo5EmHtyC7FndYb0Nrh5jO5zOx512tqhaFo0Fz
+         uJ9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680170183; x=1682762183;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AZI/9tbSPLmQm8ZhqrIexR+U4JXRSltU4xypQpnDQwc=;
-        b=UwHgl/fULsH4TSPqIgnQe/iA8hyL8k2gshy3FJZbjQ00nbT8qODSVRGFJ7XVX/RZLu
-         nUSx1JCmzVMlXmthn4EUB8G/R6a0DMzsVFhO1AiU8mUfRGaWa8mHZGacGXrTpMOjIVVZ
-         uaiuEUf4FqEjnzis0xblszo6qIUMzpaHRJQyX0vasI5hW9EgJxfX/I3WBeM78cFLZk3t
-         QKhqGFa41uzk/67GkQJYLtCbnkZFg3PR5lhrlewL1cjuz3eSp/EcIclVX4Uo/jwo0f6w
-         1lT47MD4Rzfr1aZkQqsJoEo/SIAt9/9Q28QcZWcAcZoYcjIP/JUkYyrrGfxkfDMPzbHd
-         sFuQ==
-X-Gm-Message-State: AAQBX9dldqlhTJxx0aq1FeHOYDIsaLNOTw9KV5SJDwfhHrGFvEMIBz06
-        khy9sJEZrSYmG2wakas30GwIEgGnI/iW5BdK7/26DRIwf5TRd0il/wABnkVtOSesG6NyDWEzbPn
-        7FmsUvBTwtFe3NYp56rwyKDDSHPhL1pas2q3XvDOyLQ==
-X-Received: by 2002:a05:6402:1145:b0:4fb:9b54:ccbf with SMTP id g5-20020a056402114500b004fb9b54ccbfmr22011726edw.22.1680170183757;
-        Thu, 30 Mar 2023 02:56:23 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YR1kwKTqODnE5v0DxubYYhbzglj4TXyldNDiKy5Yrnb2F1avr/+jDRD5v0+SXX36H22T1slg==
-X-Received: by 2002:a05:6402:1145:b0:4fb:9b54:ccbf with SMTP id g5-20020a056402114500b004fb9b54ccbfmr22011708edw.22.1680170183514;
-        Thu, 30 Mar 2023 02:56:23 -0700 (PDT)
-Received: from localhost (host-79-33-132-140.retail.telecomitalia.it. [79.33.132.140])
-        by smtp.gmail.com with ESMTPSA id q30-20020a50aa9e000000b004fadc041e13sm18010598edc.42.2023.03.30.02.56.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 02:56:23 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 11:56:22 +0200
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     "Drewek, Wojciech" <wojciech.drewek@intel.com>
-Cc:     Guillaume Nault <gnault@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: selftests: net: l2tp.sh regression starting with 6.1-rc1
-Message-ID: <ZCVcxkCkgBmwjnIX@righiandr-XPS-13-7390>
-References: <ZCQt7hmodtUaBlCP@righiandr-XPS-13-7390>
- <MW4PR11MB57763144FE1BE9756FD3176BFD899@MW4PR11MB5776.namprd11.prod.outlook.com>
- <ZCRYpDehyDxsrnfi@debian>
- <MW4PR11MB5776F1B04976CB59D9FE41BFFD899@MW4PR11MB5776.namprd11.prod.outlook.com>
- <ZCRsxERSZiGf5H5e@debian>
- <ZCUv+8tbH3H5tZKe@righiandr-XPS-13-7390>
- <PH0PR11MB57829AF31406D3EA4B1D9112FD8E9@PH0PR11MB5782.namprd11.prod.outlook.com>
+        d=1e100.net; s=20210112; t=1680170240;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o4Oatc22JtM+BUIo6e3BXQa+qIqHhhXX2E3hXuu3jy0=;
+        b=kDCjAOjEJkUznwv3HBKs/Lph6l4IQa3MWCdKE8wLK7hZh6U9SJkuKJ4quF8c1bM1ZO
+         pYuM0B7pHRVVafRgGOhY/dVbaW+TGYWFJm5prfcWfqgj1Jl1Qs77qVuYQM3sql/kktF+
+         HvWVL2cy5Sk4Tzgc+KXB0ZbDDYYV5x9mo+hpb665CqXL2Xra4PXfSiDugGuW9qo5ypDR
+         4OHV9uv41XJX8uKqtt9srt3QfdEYLinM/wb/KFpQ+fbNr9eXV4YEwGr09JyLM6yXgR5M
+         Wwzd5QcskHdOw3YHxzvfkGGUvfwdS4np6gtevU/CPyoLluuUI/NJ6WqO/OJ3LT2Y2N+5
+         tvDg==
+X-Gm-Message-State: AO0yUKWiXrf/F7UlTGO9STTZiZesfvhfQ88d30spGAyJBeqdgkul9UIg
+        G5f8HNC3NSozvFVJU+4xLpGnTeYBGHIagyM86aE=
+X-Google-Smtp-Source: AK7set9fd3/b4YgdH7gqUa4rLLW+uB3iN9Z0Dt+EXxCjKRxuFKM+/lgXuT4zgllZzIxrJo+mDH5RzQydj3BdH2KlwmA=
+X-Received: by 2002:aca:3cc6:0:b0:386:e33f:84f2 with SMTP id
+ j189-20020aca3cc6000000b00386e33f84f2mr6081414oia.1.1680170239678; Thu, 30
+ Mar 2023 02:57:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB57829AF31406D3EA4B1D9112FD8E9@PH0PR11MB5782.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:6870:a549:b0:17e:e69:91e9 with HTTP; Thu, 30 Mar 2023
+ 02:57:19 -0700 (PDT)
+Reply-To: justinekevin013@gmail.com
+From:   justine <warrene.buffett022@gmail.com>
+Date:   Thu, 30 Mar 2023 09:57:19 +0000
+Message-ID: <CAKPpSizvxQ9KrS8g6a=xk0xRM9jVBeg5BXiER2SOmLGfDH_RPQ@mail.gmail.com>
+Subject: Good day,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY,URG_BIZ autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:233 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [warrene.buffett022[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [warrene.buffett022[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [justinekevin013[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.9 URG_BIZ Contains urgent matter
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 09:26:06AM +0000, Drewek, Wojciech wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Andrea Righi <andrea.righi@canonical.com>
-> > Sent: czwartek, 30 marca 2023 08:45
-> > To: Guillaume Nault <gnault@redhat.com>
-> > Cc: Drewek, Wojciech <wojciech.drewek@intel.com>; David S. Miller <davem@davemloft.net>; Eric Dumazet
-> > <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Shuah Khan <shuah@kernel.org>;
-> > netdev@vger.kernel.org; linux-kselftest@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: Re: selftests: net: l2tp.sh regression starting with 6.1-rc1
-> > 
-> > On Wed, Mar 29, 2023 at 06:52:20PM +0200, Guillaume Nault wrote:
-> > > On Wed, Mar 29, 2023 at 03:39:13PM +0000, Drewek, Wojciech wrote:
-> > > >
-> > > >
-> > > > > -----Original Message-----
-> > > > > -MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 2, IPPROTO_L2TP);
-> > > > > -MODULE_ALIAS_NET_PF_PROTO(PF_INET6, IPPROTO_L2TP);
-> > > > > +MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 2, 115 /* IPPROTO_L2TP */);
-> > > > > +MODULE_ALIAS_NET_PF_PROTO(PF_INET6, 115 /* IPPROTO_L2TP */);
-> > > >
-> > > > Btw, am I blind or the alias with type was wrong the whole time?
-> > > > pf goes first, then proto and type at the end according to the definition of MODULE_ALIAS_NET_PF_PROTO_TYPE
-> > > > and here type (2) is 2nd and proto (115) is 3rd
-> > >
-> > > You're not blind :). The MODULE_ALIAS_NET_PF_PROTO_TYPE(...) is indeed
-> > > wrong. Auto-loading the l2tp_ip and l2tp_ip6 modules only worked
-> > > because of the extra MODULE_ALIAS_NET_PF_PROTO() declaration (as
-> > > inet_create() and inet6_create() fallback to "net-pf-%d-proto-%d" if
-> > > "net-pf-%d-proto-%d-type-%d" fails).
-> > 
-> > At this point I think using 115 directly is probably the best solution,
-> > that is also what we do already with SOCK_DGRAM, but I would just update
-> > the comment up above, instead of adding the inline comments.
-> 
-> Agree,
-> 
-> I verified the fix on my machine, 
-> Do you want me to send the patch or you'll just send below one?
-
-Sent already. :)
-
--Andrea
+ I have very important information for you, but due to the sensitivity
+and importance of the information, I want to make sure I am
+communicating with the correct person owner of this email address. I
+await your urgent response and thank you for your understanding.
+Email: justinekevin013@gmail.com
