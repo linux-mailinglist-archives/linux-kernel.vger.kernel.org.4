@@ -2,109 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF946D0464
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C3D6D046A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbjC3MKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 08:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S231391AbjC3MMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 08:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjC3MKI (ORCPT
+        with ESMTP id S229923AbjC3MMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:10:08 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2744202;
-        Thu, 30 Mar 2023 05:10:07 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id t10so75404019edd.12;
-        Thu, 30 Mar 2023 05:10:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680178206;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GiRnxJYGLZl9gkE3Btj0DPwx3kYOXRqdQVjP40JuFAY=;
-        b=F1ak3hFr6X15BX5WccChl/IPbvU4a7NsfyYFRjtDQM6zmbxrqsLndm7btSBas8MJug
-         5tYIT50GpNMwK+mHzCvXXbZVNnOXh5Kqlpiz7/pvAOPxajXyiqpMrZM/SUUkzgNZPvEf
-         cW1+Epw8vv8URa2lBH4luvQP9dCvDn+Nr/nENjnZdhJ136wYh7uJMEZvOUbZSDaCKf46
-         48uA6AavC3uxBWsja340ItGoXOtQjd5Is0gBDpjjpq39kHdTlu0bf1N4rgv/CrhMSoOT
-         WRdXGG89dDMtxDhnM4gY5A1A+ScbIebdypev6ZMAag0pkpColvlhIu3fXpXsfusDWI1O
-         mZ7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680178206;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GiRnxJYGLZl9gkE3Btj0DPwx3kYOXRqdQVjP40JuFAY=;
-        b=i8bCWKCf/kbGxxKQZ/hXz5Cra1hkj+7Ziq7bCehs0ZZyfkFbAEckWNcwpRxOCuWy97
-         th99z5Tmz8GICYfbWaHG3q5WEunBWXaKl2Zzvq1gCQXLP4N0QOT3424BHSObgnzFpp9H
-         DilCzRu5sYv4OGsk6QVF7bwoDwqdYlJcaM1e51w9zv7fIMks8ZPuXK7/bgRlvelZk+YI
-         kTc9t5AP44dFEcdcSBDl5N6CACm8xCeyG8wojOBHEqX2RZvXonuAa1FA+DwF+goDMAkt
-         +kn4+wScbmhDCdgouVOTpUZbzGT8Fp3XskqUNnoTZQBNojJ1C2wizxq9xfqvTHztOrnW
-         wVTQ==
-X-Gm-Message-State: AAQBX9de+xzZe30nhlOnWL9j7B8f0n66kWkGRqvdBKKPkIxj/5K8xFxZ
-        6jXG4QQcl/ZN6oaLBzpOjQ==
-X-Google-Smtp-Source: AKy350Zt+zKYRtASMyO2Hfp4ote3ijZixO0WLMsgGlHbfFsFILT/LFdYa7SPhV+hemG7ymdoyq/vEg==
-X-Received: by 2002:a17:907:9725:b0:93f:9594:d97d with SMTP id jg37-20020a170907972500b0093f9594d97dmr20670831ejc.14.1680178205762;
-        Thu, 30 Mar 2023 05:10:05 -0700 (PDT)
-Received: from p183 ([46.53.250.0])
-        by smtp.gmail.com with ESMTPSA id i11-20020a170906264b00b009255b14e91dsm17519658ejc.46.2023.03.30.05.10.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 05:10:05 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 15:10:03 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>
-Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
-Message-ID: <4ce29654-4e1e-4680-9c25-715823ff5e02@p183>
+        Thu, 30 Mar 2023 08:12:23 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C84D420B;
+        Thu, 30 Mar 2023 05:12:07 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 12:12:03 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680178324;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V+JuhT5uJ9g2/YYYFJ/EjWALSEY8vu20u5ts54xdaiI=;
+        b=CU9TlKqTDYTbfJU10SlCEiIBUyzCePgw2KVZ3QTc5BZlnARLXWgCkf9jZ2nNANsrfVESlW
+        VSJ79lSTxDpSMUJJHBG3Ms4rIvqxjjtCjLzHYG2S5EJr/GPTf61+VFtHhe689xypK5XPRl
+        O6YFBIP38XN/DaVkvfl9kuQxfYOMIuOWDimIfiEIiheFTCDqsRDp5qY1cQn0FIyBklkyuN
+        zIh7FzWQkKzje5a+QS9gItoZYwFsbpnZamFryC/WC3vuGpdIWObhkW2N+n7FJtZc4qdE2g
+        6zurRcJCvATVe27xA3bw+NQdafjd7vGbGbxqi16tydXIoq49hW/yYuYtBHKjkw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680178324;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V+JuhT5uJ9g2/YYYFJ/EjWALSEY8vu20u5ts54xdaiI=;
+        b=LSUdl0ot0d8bVhAU6XVyu4AVrIk+u4PgZRIsiTRgXOD+HEWS377OImx7zc903YpbuiJx++
+        XYcAi61vQpx4CQDg==
+From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cc] x86/coco: Export cc_vendor
+Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230318115634.9392-2-bp@alien8.de>
+References: <20230318115634.9392-2-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <168017832388.404.10347137104098194414.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Joe Lawrence wrote:
-> +static int update_strtab(struct elf *elf)
-> +{
->
-> +	buf = malloc(new_size);
-> +	if (!buf) {
-> +		WARN("malloc failed");
-> +		return -1;
-> +	}
-> +	memcpy(buf, (void *)strtab->data, orig_size);
+The following commit has been merged into the x86/cc branch of tip:
 
-This code is called realloc(). :-)
+Commit-ID:     3d91c537296794d5d0773f61abbe7b63f2f132d8
+Gitweb:        https://git.kernel.org/tip/3d91c537296794d5d0773f61abbe7b63f2f132d8
+Author:        Borislav Petkov (AMD) <bp@alien8.de>
+AuthorDate:    Sat, 18 Mar 2023 12:56:33 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 30 Mar 2023 14:06:28 +02:00
 
-> +static int write_file(struct elf *elf, const char *file)
-> +{
->
-> +	fd = creat(file, 0664);
-> +	e = elf_begin(fd, ELF_C_WRITE, NULL);
+x86/coco: Export cc_vendor
 
-elf_end() doesn't close descriptor, so there is potentially corrupted
-data. There is no unlink() call if writes fail as well.
+It will be used in different checks in future changes. Export it directly
+and provide accessor functions and stubs so this can be used in general
+code when CONFIG_ARCH_HAS_CC_PLATFORM is not set.
 
-> +void elf_close(struct elf *elf)
-> +{
-> +
-> +	if (elf->fd > 0)
-> +		close(elf->fd);
+No functional changes.
 
-Techically, it is "fd >= 0".
+[ tglx: Add accessor functions ]
 
-> +filechk_klp_map = \
-> +	echo "klp-convert-symbol-data.0.1";		\
-> +	echo "*vmlinux";				\
-> +	$(NM) -f posix vmlinux | cut -d\  -f1;		\
-> +	sort $(MODORDER) $(MODULES_LIVEPATCH) |		\
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/20230318115634.9392-2-bp@alien8.de
 
-This probably should be "LC_ALL=C sort" for speed and reproducibility (?).
+---
+ arch/x86/coco/core.c        | 13 ++++---------
+ arch/x86/include/asm/coco.h | 23 ++++++++++++++++++++---
+ 2 files changed, 24 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+index 49b44f8..684f0a9 100644
+--- a/arch/x86/coco/core.c
++++ b/arch/x86/coco/core.c
+@@ -13,7 +13,7 @@
+ #include <asm/coco.h>
+ #include <asm/processor.h>
+ 
+-static enum cc_vendor vendor __ro_after_init;
++enum cc_vendor cc_vendor __ro_after_init;
+ static u64 cc_mask __ro_after_init;
+ 
+ static bool intel_cc_platform_has(enum cc_attr attr)
+@@ -83,7 +83,7 @@ static bool hyperv_cc_platform_has(enum cc_attr attr)
+ 
+ bool cc_platform_has(enum cc_attr attr)
+ {
+-	switch (vendor) {
++	switch (cc_vendor) {
+ 	case CC_VENDOR_AMD:
+ 		return amd_cc_platform_has(attr);
+ 	case CC_VENDOR_INTEL:
+@@ -105,7 +105,7 @@ u64 cc_mkenc(u64 val)
+ 	 * - for AMD, bit *set* means the page is encrypted
+ 	 * - for Intel *clear* means encrypted.
+ 	 */
+-	switch (vendor) {
++	switch (cc_vendor) {
+ 	case CC_VENDOR_AMD:
+ 		return val | cc_mask;
+ 	case CC_VENDOR_INTEL:
+@@ -118,7 +118,7 @@ u64 cc_mkenc(u64 val)
+ u64 cc_mkdec(u64 val)
+ {
+ 	/* See comment in cc_mkenc() */
+-	switch (vendor) {
++	switch (cc_vendor) {
+ 	case CC_VENDOR_AMD:
+ 		return val & ~cc_mask;
+ 	case CC_VENDOR_INTEL:
+@@ -129,11 +129,6 @@ u64 cc_mkdec(u64 val)
+ }
+ EXPORT_SYMBOL_GPL(cc_mkdec);
+ 
+-__init void cc_set_vendor(enum cc_vendor v)
+-{
+-	vendor = v;
+-}
+-
+ __init void cc_set_mask(u64 mask)
+ {
+ 	cc_mask = mask;
+diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
+index 3d98c3a..91b9448 100644
+--- a/arch/x86/include/asm/coco.h
++++ b/arch/x86/include/asm/coco.h
+@@ -11,13 +11,30 @@ enum cc_vendor {
+ 	CC_VENDOR_INTEL,
+ };
+ 
+-void cc_set_vendor(enum cc_vendor v);
+-void cc_set_mask(u64 mask);
+-
+ #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
++extern enum cc_vendor cc_vendor;
++
++static inline enum cc_vendor cc_get_vendor(void)
++{
++	return cc_vendor;
++}
++
++static inline void cc_set_vendor(enum cc_vendor vendor)
++{
++	cc_vendor = vendor;
++}
++
++void cc_set_mask(u64 mask);
+ u64 cc_mkenc(u64 val);
+ u64 cc_mkdec(u64 val);
+ #else
++static inline enum cc_vendor cc_get_vendor(void)
++{
++	return CC_VENDOR_NONE;
++}
++
++static inline void cc_set_vendor(enum cc_vendor vendor) { }
++
+ static inline u64 cc_mkenc(u64 val)
+ {
+ 	return val;
