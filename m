@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916E86D028C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC096D0291
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjC3LH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
+        id S231491AbjC3LHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjC3LHZ (ORCPT
+        with ESMTP id S231400AbjC3LHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:07:25 -0400
+        Thu, 30 Mar 2023 07:07:44 -0400
 Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2115.outbound.protection.outlook.com [40.107.11.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473A19ED6;
-        Thu, 30 Mar 2023 04:07:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E2476A6;
+        Thu, 30 Mar 2023 04:07:25 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d4ipyu24IddGbUA1ciVjZLrs20h0T+FTFxMHwjobbQbT401uEKtbqGjAkz2AIeyljsQID2S2TZMhURUOnPVD/aTgKkMarvQz/kZQFVB4YLwrZEq+iiWvto4PNNzcb0EAU75fpMFu5LmL1fPN27dIToR4cOxS03jixE9+eFg0ysqcNXtKVffN8IIEj/KNZmAxsW8maMNhNF11cFS0L4AZZ34NLBPzjp2F3haK79z/kd9U5WIcFd9N7j9Qrgqg5gaHZSYls0QBoHRjhRnMw05n0OZ8ycT5pKHWz5tGaqeFBZvZlracBtGyYJesx9xA3J+FI/YqrCUXtTyJt6LSJkNxZg==
+ b=VvFUQ0MsE1zTzIeCoHsm19yfCVQygua2K1BhBmdDg8qZHh3lHA73ux93patPFTvFoNmhBP2K2LvDYHnCR40s9wAdp5Pcu3zcfmaaEWv3P4eVrnrnoZSjY8iQUy9KqYADW7AKgwhhRcne5DeLA0isGjG1V/GxjfHsDy9cjjoLEhpWZO/yWQWKZ5As1U7BIqK6oNk1Ps/bjyQm8a91RucYKitZu2fbcN/ZJeWU0C8XSeg2Yf5YQVIEpWsqAA5MxebUU8VE1RGzJgjICfmZlV2gbC6C11MZr2vIe72ERIq42UH8P+K306g2S93t46PtkZkVijUDdQG7VhJnseuPi/4j4Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TY1gpTEAdn1puIybMfWTMkDK6PVPe6och5DB9uPX3W8=;
- b=ENvpN7KDka5yzZMVpxBCpW8IYmZKlnbA8+qaMfVVgDpqM+xqkiGV6hM1yC5M5/tbplubXO+eSbXOCrSoPKlpq/HbMAkAip1OLfsHgtJpkyHEUeAsixVYNwuAHHUBtLEe3utLomNpp4yOyKvFN7CQ2W8V7bKdAIClle18e4R4JzXQikWSIhZExbqLnCcS8gqAMyXLCvW6DuJqsb2UIhAQ6NXMou/6KzqqSoVIS4dIAxjnaWJIAFAmvwvjL6z6F2zAuRqRWhMi7UlUf0kV8PPtfISht9dO1ZjL0afAmc4lEjDHT0EQwBbPey6VWNzO48PRdu8VZWDdmYdt1ar3Sw6ceQ==
+ bh=xqPUIDU2qXj9FhAqs6lJucwbiW6plfupQvwjwmH+30M=;
+ b=T7KFzIRVy3v+Oqj3P0MBdHxt4a9J5TfklVDGLD4wVqADT/ZSnuLo+y+ptGW2G82Po6ZzZFVZHrvLzCdaa+J5Q1CUFe4SkKeEgePdUys5lL3LIcOqxWAhJG6h8qCnMDlsJ3qwV1d5BNaY71dd9Rk1Q/4EjNhEamw09a7Dz51PrQ1v93DWfwgBpX1slHRbcaJJqNZz55rVtL8Y9M4l+RS834kVOcSCwvJxCpyvGNvgTP1PH3roQTJbkneetdEPyUWmmNVD93TyJBZ8hglGLuj2izEOsiMpJ9yGjblMptV45V3vVzNj3LC3CHfF9zEuPrv+IHhj1wI9caWRZ4QoNkNZPg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
  dkim=pass header.d=garyguo.net; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TY1gpTEAdn1puIybMfWTMkDK6PVPe6och5DB9uPX3W8=;
- b=zICc89YGd6LHMgELv1mZPoYje6dSnZGSNaMlJ/+LzTMwptkJ5QbigUFWSVXh/eCKt8Wmdtt+IQ4NyVBL7JSHI4UGXjTDFNSzexd7FATp/yvF0fYHh7vGWYZlfMrhLCobKA0lttHDcU+zkgU2ONb6F5qsvzZy8IQ9f5d3B1l17rY=
+ bh=xqPUIDU2qXj9FhAqs6lJucwbiW6plfupQvwjwmH+30M=;
+ b=cGDAmb7Pobiv404PDgp3DQyStV+fKb1YnIOWqTCfXbwEKHgnp4YZZNG10tG/KnBwoK0UjJal7ZCTwsgGHoj/H/A+jP42rPvc3871EaEHJQYSFzA/AkjZ2gSW9U2JMBMX/XDja6hqshGx0IC+MGaqCjxNTRERIFxmUPAo/85SV68=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=garyguo.net;
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
  by LO4P265MB6823.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:349::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Thu, 30 Mar
- 2023 11:06:46 +0000
+ 2023 11:07:03 +0000
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::2f2a:55d4:ea1d:dece%4]) with mapi id 15.20.6222.035; Thu, 30 Mar 2023
- 11:06:45 +0000
-Date:   Thu, 30 Mar 2023 12:06:43 +0100
+ 11:07:03 +0000
+Date:   Thu, 30 Mar 2023 12:07:02 +0100
 From:   Gary Guo <gary@garyguo.net>
 To:     y86-dev@protonmail.com
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -51,64 +51,64 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
         Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
         linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v3 09/13] rust: init: add `Zeroable` trait and
- `init::zeroed` function
-Message-ID: <20230330120643.11f92c38.gary@garyguo.net>
-In-Reply-To: <20230329223239.138757-10-y86-dev@protonmail.com>
-References: <20230329223239.138757-10-y86-dev@protonmail.com>
+Subject: Re: [PATCH v3 10/13] rust: prelude: add `pin-init` API items to
+ prelude
+Message-ID: <20230330120702.7974461f.gary@garyguo.net>
+In-Reply-To: <20230329223239.138757-11-y86-dev@protonmail.com>
+References: <20230329223239.138757-11-y86-dev@protonmail.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0258.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:194::11) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-ClientProxiedBy: LO4P123CA0401.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:189::10) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  (2603:10a6:600:253::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO4P265MB6823:EE_
-X-MS-Office365-Filtering-Correlation-Id: 34c1f314-2ae1-4f06-0302-08db310ed95e
+X-MS-Office365-Filtering-Correlation-Id: ed96b5e8-8035-40e8-baff-08db310ee497
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nYq6eMAqnc1qLsO62C8eT19cMJDHZwdemHv/nomAygkPARB5QLG/X3hr7Y71C6bdEt9asxcmPcCy6he1d9z0lwWtKX8E9YG6Ovq7M++0fLknCHOJXx6ylSgc9p0eWL22ySvbFGzWFoky67aqNx2LTLjhI0+ObB3y1xSHsvTre+FHiHYy+2Sg0KGA9THVAWJyj3gEBqP9nl9T9cmPMciQ39dd4V3Y+jDWB0nssdu8yrnGx0Xvm0zcKsLCGPn9Wo1CelcKRc7iVBbyKFJxasaRrtueCpGmzf0Ctnva4KtrWSaIDbPNjWHlWXZwI3yHb3fbjJkLJeF4d5A2YjZwti3Pm6mn6hI4hVe6kQ4ajO3DxlV0RSuht/Nd9OVV4oXbYPsAAYCWkrGVqOEmJLKoFlxpOMWoRYfg026XgDBc2eH6pam6hbXlPQ12nPHWpdOwLry2Jmkd7v/T+ad4uvO3N8Yp7a7oyyyHQ1j+MpsqAa+KPH/KLqoRIw/mVW1q2ol/bldAMcQeozNFGKMgulFcZ7LUxos9CdkX5G7ulCzsb4nbdDNvqyHINWhCYRR9HxtEVHmq3plR+cPR+Ijv3+zH27nmV0s3u2PL8b288sPp3Xuij+I=
+X-Microsoft-Antispam-Message-Info: +stjW/AHenPTQw8BPMzgAQZ2+WJC6aZHSAojJ4TRmgNGyhsXnAcyElO9B15nIuhjqUYO58h2ePiiXcM1nWfbrMqzjx1HpxwmuPcO0mED3vWs7Yn1mXXz+KUIGTM73djTX5cV+jh3K/g2aCPTEL88P+MNxYQHSiKA9VFxhGiy3yihjd1xefmAExJBzEzzfN3vS+euzL0svpiSOmh76750V8sc4L6uJM53sOXgGjgUP6CYfGO7WOW/w4cFlCPmBrHBDHlzBgtOq1L3xKNWGm+LUON3ijwecjouGCSPtx9+TztJMaoovgxAY4RneC4M/26Xx5eO4HEpDsq58KXGX4hrbRH2WeMRD5alwVI0owLAdaOzMwX6/4Q10jlbRecnAV12EfxG3YNeAzqwtgCroL3SZlBaAdhNsLuA7a2r+6LV6+bIDDczgjognYsYdE9W3gYq9Ck+mogJ0KJTWkS6Zzv96nECpE8ncs0gsC68FK4vi7Em9/vXvDOmXP5EE4qx5LuR0jYqT4HwVe8cLIgoOOQ44Lc1JrozySp+Zwu7/z0jOILCp6IDjJuDjN4bJGSNP/YSrQgeq5QQziHo84IeuwdPGGSkJnM14eHGqKnaSZx5XpM=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(396003)(366004)(39840400004)(376002)(451199021)(41300700001)(8936002)(83380400001)(7416002)(5660300002)(2616005)(8676002)(66476007)(4326008)(66556008)(66946007)(6916009)(6512007)(1076003)(86362001)(26005)(316002)(6506007)(2906002)(36756003)(478600001)(186003)(6486002)(54906003)(38100700002)(81973001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0JQ6I4slB19ggEHIY+q0EtZTW5gRX696t3QW3UJbqsV6D0ETT43cHoZVHeo3?=
- =?us-ascii?Q?mRS2Eyf5RnRDia51bRFE3ckgg31kq15WTKSsXMiiajv6vXaR5VLUQff5yjaw?=
- =?us-ascii?Q?UY1r0J+ms3dNkw/GI7jEcQSsGt4g4wrPa1UiCP7aDbLFSzUDDUt2wrPEOiEK?=
- =?us-ascii?Q?Cx1LWkcdOjgzmjG0lkqax1Xo/2MzQiciyCQ2VO77fYcgC3kILehjHGLmKMfh?=
- =?us-ascii?Q?6CoXFn1D3FSo0gMRBm5yHoOR1DZAp094CcSZe5jG/ivjG4TQHH9kQBJhyQ9D?=
- =?us-ascii?Q?xO//TG46jsGD2hDW2yMvO31GTRsFDYHbRQ+RiPVq8ZA5ca8qp2pJfHfFpx5Y?=
- =?us-ascii?Q?Tztnpd8I60YsuzAKorrpy031PvkCfe2X2REwnH/n1DkkSNWgrY0qniLwLCL+?=
- =?us-ascii?Q?7nKuQPPAvvclL47m/n+Jmw/AhnK6xkvQNPCqcNYIXglGdxtQDlLplpMjnWE0?=
- =?us-ascii?Q?Az/OwZ0kfrRwOXF9IVOTij7DhZPGBrTcNATRj8t3ziCM2AOzEycMFcU4Uf6+?=
- =?us-ascii?Q?mHXsEqP8euHSZUGhDkbaNkaxljXyE8lsyRCz8ndnnqME2BIV7KQ6x+EcmtqI?=
- =?us-ascii?Q?KP+p1UNg8bERfgxDV3p/j1lcfgKFYtbsiZRMRdbxiPG2Ffvn19Q8v2z6YjWK?=
- =?us-ascii?Q?+7DIrYk2rYub+gprLRa/VAe72cM5vr+Xy/R+5t4o39qk6nXhkHm0q5lpVx/b?=
- =?us-ascii?Q?HamcLAx/MLPBtDL3UzSKiikaNtOPBxZnNSNghWQGHE206iV9or8dmUK/gkjz?=
- =?us-ascii?Q?CJ/J2jJji/f1NbBJ3AZdY/jrRg3WKBVtBSfi/VXAtGP8zD332R9yoh1YDAx0?=
- =?us-ascii?Q?cD+GcBsHi+sQvFCOuwAovnUj62zgzZDyMkCmUGqJXROVz9QOePKPmiee5Pg+?=
- =?us-ascii?Q?6yk9bj+/QLiPzlE7lhyzTH+C/2DRJtYVUVn/vJ6RJWBUCI+J8ovIb7mAJt92?=
- =?us-ascii?Q?oA4rOOsOKKscIWx+5gBEZDXajGEP6j8wr2pmfpYinKdpeqPyu8ypZT3WeteW?=
- =?us-ascii?Q?mqxH2V7uURN6ctP9veZd6I1Q6YnrQrmDP+P+czGcxQ3Hr1B0jh9YZO229DG3?=
- =?us-ascii?Q?Xgx2VUvqaFSfxJU033R8uXVLz32Es9KfvCiULjDwnmyvOs9dnUwLkdtDwvmj?=
- =?us-ascii?Q?JupslFyJ3jY2ATo3Y9WekCtvINUeZ5r+B3GyykUwbluYpOyG1HneeKI1mOWg?=
- =?us-ascii?Q?2mZQKmE960cv1i/WeMByZwoHdVsylolckis1cEGuY1nzvXmZTokrkJ4L7D7N?=
- =?us-ascii?Q?M34zFkPGxcX1KInIsomjwcJU2+nf5VHtb9xyjDX8Aq9EAUENvPt3zTuc+D4G?=
- =?us-ascii?Q?KrNFLoQlxvpimOMBwQfojdQu1EDAH8QOhJrzMXRKtPg15VVZQYBlLsJbdPyb?=
- =?us-ascii?Q?n5cYgNH6+WVMacMkq1WGy7yp3QXdjcWRQG2U5/4RLLYtqwru/dQOsuPeNTlW?=
- =?us-ascii?Q?lfl4plGC03103kpD4+eviOI4Zi9xpWx3goxgpwXhbWfnff07Z5jdtnYX25QZ?=
- =?us-ascii?Q?pA4Bjh3ocBk1R5EH1mm4x+V/b2STRHpt5s8kvwIH+852nQcZNpCrOcfSuLli?=
- =?us-ascii?Q?z6Z8MsD5ArlfdrEmyHSK2cumse+tdHG3yP7qHnzB?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zPt8zlx0MDe/uxR6moQuPl82jSj2F89qGFY8PqoAQpQzgA5JEGhJPeoDbNwa?=
+ =?us-ascii?Q?7KKcU78TKxj5XBYY25jGPTFq5HZlcPRSYMvaaK3ROl2t3S9KS8h0S1o6aSnU?=
+ =?us-ascii?Q?n227WyUhjvSrE7EUYoA40zvKF5jGHXOTr27jOgAG4dOWpHRwHmwB1/igI39U?=
+ =?us-ascii?Q?I41/5PHQR5slIHrKEbvGHWvLHppKZL5wm2stI6stK6Epx0cg/o+2LSYYK2uu?=
+ =?us-ascii?Q?XPoMvg/u47HVxfTnwHcFv182wDFXw3hzR8GNZgZKTZE5KTZbePfHVNg4plTp?=
+ =?us-ascii?Q?44T5dJJLiEU0g1N/5SeZpbjnKe4scxLkmuK7B5y3RjhlUgWkr4UCIOQtmCIX?=
+ =?us-ascii?Q?dGhuArbHdYYicRsaPNx8rlnmnXT2nwG9mZswqUXFu1b+VS7FExOtSdkz/EXZ?=
+ =?us-ascii?Q?EQZLxKJbl2uucDR1wQlZVnWxC+6mxW8r03jLZEvhE8x1waSC9EWq70Y6qy5g?=
+ =?us-ascii?Q?qsQAVGpDGT5fUc3DPKeAGd9oXghrBuR2XxBTbobdd6NEfapF1mIjXadAoIYp?=
+ =?us-ascii?Q?M1SW0KUqvzxT07fs1SQGtmJb6YcMl9yXlQpRAnyndNcYzpfLxzm5XLWYKiMg?=
+ =?us-ascii?Q?1mA6E2j7JFrSL30TtZbEfgWYMoxamc8Ck71lU+2mQ9HhuNU/M7WdaJrdxfMx?=
+ =?us-ascii?Q?4B3wRUJRVTwphT3dLYiUSHMFWORanWtH2KMKqB6CT0crZwFM256uIlXHPIsS?=
+ =?us-ascii?Q?YRorEq0NgKXSXkryhsdzfZ9H1/GiD6gnmk39N8mzoVqKE9Qhl+NjbniAAd7Q?=
+ =?us-ascii?Q?0HmESmFYUfQ7T/zCuAVubHj5eXljv1Mayn7wSadSizoJrQWQZ3x5nJ6TXmMu?=
+ =?us-ascii?Q?BvDOWfbznD8OtzR16ZIEa7mpAg8R7GQuChzbrrSgaFpaVhi4HiZlDUEacoRh?=
+ =?us-ascii?Q?1AEfTN2NLiAg0DAamX8mPGnBwcS2zbY074fzoOH7ePfK6dhFeCpoVrKoRn+k?=
+ =?us-ascii?Q?wV7r43UJEyAPF0F0xSVAQAcO9KByXHytLVNlZV1kp1xmL2z0P/J9xINbyViV?=
+ =?us-ascii?Q?ak5EuqoxaoBGMJHHrNM/cWc6Fe3x2T+w1f6dJT5Yii9dP2eUj9mUcMd7YQI6?=
+ =?us-ascii?Q?9b71Z40OKW2243qoQD0xL67C1+Z45blCpKWcNn3aH8ygWhgTaDsRF74kVkNT?=
+ =?us-ascii?Q?w+UTWf9xCoWceq8uP6fuFT9KVCn2dSCOBhpZEc/r7Nkl1OhNu0Voe+N2V0za?=
+ =?us-ascii?Q?HdZcYIYz5LmG/5vR56hmi1KH1Igu04J+YLIH3Bp8xR3/N4d75ebx0sD3sJMq?=
+ =?us-ascii?Q?lTfbsYM7VmeLvkLbDnjkySlpEiWRmZCnYljO74Tlav6Fj6VybxzD2+Chfb4L?=
+ =?us-ascii?Q?NNuQ84B2Y98ijVOOqEwCpLRm6hIe4zNVvCBaHlTHyMTjl0N/gK6lPvXjby9m?=
+ =?us-ascii?Q?8GLnyYEXN8+FOAddBF29ZPWqQm8VjEWV98NXAaPaHWOuvfrjy3wuVrawJ7nq?=
+ =?us-ascii?Q?+h+mJ0bVXzQY5AbSaUfBuEEQnWLXwSGC7G0mcowE80iG3+wAga+hiFfYZJxY?=
+ =?us-ascii?Q?+KPZ9Nu2Zi4tTVGGNlesTAR0OMc8H4WtBTpO7RB6a7VdsAaghOEd10M5v3jo?=
+ =?us-ascii?Q?1PphYlWkKeKfOdXXaQXtoE6cylWac/JiFAwUtnT/?=
 X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34c1f314-2ae1-4f06-0302-08db310ed95e
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed96b5e8-8035-40e8-baff-08db310ee497
 X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 11:06:45.0638
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 11:07:03.8714
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3J2PXmnSPzVcCvwsgytTBLM0PhIUnmxPQqFCx8OG06OtFGmI9G3oZvkYnEPSn7jpsMqyl0jDBJODHff2lmJRPQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8qEMyRT2GoWiMeSdr9siVioz0YmssjHVFwtElMIc8XqCfGruD3VrUFXBz7oaFddh+8I51mQDxoPTpSxHXa7j5w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO4P265MB6823
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -120,97 +120,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023 22:33:35 +0000
+On Wed, 29 Mar 2023 22:33:40 +0000
 y86-dev@protonmail.com wrote:
 
 > From: Benno Lossin <y86-dev@protonmail.com>
 > 
-> Add the `Zeroable` trait which marks types that can be initialized by
-> writing `0x00` to every byte of the type. Also add the `init::zeroed`
-> function that creates an initializer for a `Zeroable` type that writes
-> `0x00` to every byte.
+> Add `pin-init` API macros and traits to the prelude.
 > 
 > Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
 
 Reviewed-by: Gary Guo <gary@garyguo.net>
 
 > ---
->  rust/kernel/init.rs | 65 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
+>  rust/kernel/prelude.rs | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-> index 3358f14beffb..a923546696ce 100644
-> --- a/rust/kernel/init.rs
-> +++ b/rust/kernel/init.rs
-> @@ -1254,3 +1254,68 @@ pub unsafe trait PinnedDrop: __internal::HasPinData {
->      /// automatically.
->      fn drop(self: Pin<&mut Self>, only_call_from_drop: __internal::OnlyCallFromDrop);
->  }
+> diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+> index 0bc1c97e5604..fcdc511d2ce8 100644
+> --- a/rust/kernel/prelude.rs
+> +++ b/rust/kernel/prelude.rs
+> @@ -18,7 +18,7 @@ pub use core::pin::Pin;
+>  pub use alloc::{boxed::Box, vec::Vec};
+> 
+>  #[doc(no_inline)]
+> -pub use macros::{module, vtable};
+> +pub use macros::{module, pin_data, pinned_drop, vtable};
+> 
+>  pub use super::build_assert;
+> 
+> @@ -27,8 +27,12 @@ pub use super::build_assert;
+>  pub use super::dbg;
+>  pub use super::{pr_alert, pr_crit, pr_debug, pr_emerg, pr_err, pr_info, pr_notice, pr_warn};
+> 
+> +pub use super::{init, pin_init, try_init, try_pin_init};
 > +
-> +/// Marker trait for types that can be initialized by writing just zeroes.
-> +///
-> +/// # Safety
-> +///
-> +/// The bit pattern consisting of only zeroes is a valid bit pattern for this type. In other words,
-> +/// this is not UB:
-> +///
-> +/// ```rust,ignore
-> +/// let val: Self = unsafe { core::mem::zeroed() };
-> +/// ```
-> +pub unsafe trait Zeroable {}
+>  pub use super::static_assert;
+> 
+>  pub use super::error::{code::*, Error, Result};
+> 
+>  pub use super::{str::CStr, ThisModule};
 > +
-> +/// Create a new zeroed T.
-> +///
-> +/// The returned initializer will write `0x00` to every byte of the given `slot`.
-> +#[inline]
-> +pub fn zeroed<T: Zeroable + Unpin>() -> impl Init<T> {
-> +    // SAFETY: Because `T: Zeroable`, all bytes zero is a valid bit pattern for `T`
-> +    // and because we write all zeroes, the memory is initialized.
-> +    unsafe {
-> +        init_from_closure(|slot: *mut T| {
-> +            slot.write_bytes(0, 1);
-> +            Ok(())
-> +        })
-> +    }
-> +}
-> +
-> +macro_rules! impl_zeroable {
-> +    ($($t:ty, )*) => {
-> +        $(unsafe impl Zeroable for $t {})*
-> +    };
-> +}
-> +
-> +impl_zeroable! {
-> +    // SAFETY: All primitives that are allowed to be zero.
-> +    bool,
-> +    char,
-> +    u8, u16, u32, u64, u128, usize,
-> +    i8, i16, i32, i64, i128, isize,
-> +    f32, f64,
-> +    // SAFETY: There is nothing to zero.
-> +    core::marker::PhantomPinned, Infallible, (),
-> +}
-> +
-> +// SAFETY: We are allowed to zero padding bytes.
-> +unsafe impl<const N: usize, T: Zeroable> Zeroable for [T; N] {}
-> +
-> +// SAFETY: There is nothing to zero.
-> +unsafe impl<T: ?Sized> Zeroable for PhantomData<T> {}
-> +
-> +// SAFETY: `null` pointer is valid.
-> +unsafe impl<T: ?Sized> Zeroable for *mut T {}
-> +unsafe impl<T: ?Sized> Zeroable for *const T {}
-> +
-> +macro_rules! impl_tuple_zeroable {
-> +    ($(,)?) => {};
-> +    ($first:ident, $($t:ident),* $(,)?) => {
-> +        // SAFETY: All elements are zeroable and padding can be zero.
-> +        unsafe impl<$first: Zeroable, $($t: Zeroable),*> Zeroable for ($first, $($t),*) {}
-> +        impl_tuple_zeroable!($($t),* ,);
-> +    }
-> +}
-> +
-> +impl_tuple_zeroable!(A, B, C, D, E, F, G, H, I, J);
+> +pub use super::init::{InPlaceInit, Init, PinInit};
 > --
 > 2.39.2
 > 
