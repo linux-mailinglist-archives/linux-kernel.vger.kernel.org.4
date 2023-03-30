@@ -2,126 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594786D061B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18046D061E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbjC3NM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S231922AbjC3NMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231901AbjC3NMX (ORCPT
+        with ESMTP id S231887AbjC3NMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:12:23 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9F5AF15;
-        Thu, 30 Mar 2023 06:12:21 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-17aaa51a911so19645590fac.5;
-        Thu, 30 Mar 2023 06:12:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680181941;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sPQzQo8Jh5OaRP5hyosVWpCjhmgG+NE4MN/r3d8MCe4=;
-        b=Jyl5jQZ/WvPfTud9rDDg79M5pokrwCt/dzs2xU9TCCpX8TEEcZ9XYfkvHeYMqMkzkq
-         kxCh3lOANP8ilpJrRxk+r72Jsif4QgCq6j4DAUDU2GsAuwVEvW8TEopIjykbYuOgdzjO
-         PeWlVPHzILtGax4zQ4YG/MGT+LEd0TPdQtExJ3cFq9wHe25tPbErYTwSNSdTOIli3d3k
-         LfYQaor4mIcoSnV80326a3THKT9uf0OYMvso7YuecY7bXQJWZktNSHLeYOOqbX5r0F7X
-         gx37SCwrHu7KBf6YIFekq2BB+rA8yVbdpU76oPeqVtIpVB706TXADejwU8l/rM1ke3uQ
-         Mryg==
-X-Gm-Message-State: AAQBX9csP7JdBho63t7UP6VKLivjlzXoF9tqL4Fwx1IjCAPNi5PQOhhA
-        uZ2pmpMNkyq91WuGKMyg5Q==
-X-Google-Smtp-Source: AKy350YUGGhtzUhEfK9PPjVabQRIBlX6I3fqhjDdLsqM7UDzSDLbtMgV0AyCoAw0ZgMDft/Cr/REcg==
-X-Received: by 2002:a05:6870:f14b:b0:17f:f665:bc07 with SMTP id l11-20020a056870f14b00b0017ff665bc07mr2710863oac.52.1680181941040;
-        Thu, 30 Mar 2023 06:12:21 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id zq35-20020a0568718ea300b0017f647294f5sm3280997oab.16.2023.03.30.06.12.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 06:12:20 -0700 (PDT)
-Received: (nullmailer pid 1854642 invoked by uid 1000);
-        Thu, 30 Mar 2023 13:12:19 -0000
-Date:   Thu, 30 Mar 2023 08:12:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jacky Huang <ychuang570808@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v6 07/12] dt-bindings: serial: Document ma35d1 uart
- controller
-Message-ID: <20230330131219.GA1849090-robh@kernel.org>
-References: <20230328021912.177301-1-ychuang570808@gmail.com>
- <20230328021912.177301-8-ychuang570808@gmail.com>
- <be0bf335-39fc-2eac-ed37-112881bac675@linaro.org>
- <7b5e42bc-0788-5208-e97e-10502da1c238@gmail.com>
- <4c1fa450-79c9-2c66-4bb8-b880f2cf07a5@linaro.org>
- <8bf559ec-0f5f-7ac5-6400-ccd2395b3b95@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8bf559ec-0f5f-7ac5-6400-ccd2395b3b95@gmail.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Thu, 30 Mar 2023 09:12:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97659B755
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:12:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 03BF61F892;
+        Thu, 30 Mar 2023 13:12:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680181952; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=1Hj/P1PkeINS5pQegZmJ9YKE6RzT8cls6VwvIACDJFc=;
+        b=J/RazyycNUYLw2kZO0VRaXCQeG9neWtOa2d+j1NAGJKfoTa2uQSTwb+TDNhmCZ83UAjcxy
+        gXFiO3BKzjRCfkQFVelOvg+ZFU2hXRbTo+Dp8D1OuWjHZCvPlEL/NmJhSQsZtyc2x2Ij6a
+        YfH0hACijhOB/SjEN6rXM2939wbCpCA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680181952;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=1Hj/P1PkeINS5pQegZmJ9YKE6RzT8cls6VwvIACDJFc=;
+        b=dQTNkWxaM8FSt9pwBdmxaN9EgBgyLG8HwFzuD5weAy1TFhJ+DWTXCK/PijVMnaCsJTHwNT
+        b9jMVIWgHYxu3eDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DE5DE1348E;
+        Thu, 30 Mar 2023 13:12:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mIN+Nb+KJWRNfwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 30 Mar 2023 13:12:31 +0000
+Date:   Thu, 30 Mar 2023 15:12:31 +0200
+Message-ID: <87v8iil6ww.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.3-rc5
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 06:52:11PM +0800, Jacky Huang wrote:
-> 
-> 
-> On 2023/3/30 下午 03:33, Krzysztof Kozlowski wrote:
-> > On 29/03/2023 10:44, Jacky Huang wrote:
-> > > Dear Krzysztof,
-> > > 
-> > > 
-> > > Thanks for your review.
-> > > 
-> > > 
-> > > On 2023/3/29 下午 04:20, Krzysztof Kozlowski wrote:
-> > > > On 28/03/2023 04:19, Jacky Huang wrote:
-> > > > > From: Jacky Huang <ychuang3@nuvoton.com>
-> > > > > 
-> > > > > Add documentation to describe nuvoton ma35d1 uart driver bindings.
-> > > > > 
-> > > > This depends on clock patches, so it must be taken together.
-> > > > 
-> > > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > > 
-> > > > Best regards,
-> > > > Krzysztof
-> > > > 
-> > > OK, I will combine this patch with the clock patch.
-> > I don't know what you mean by "combine", but I don't think this is what
-> > we want. You must clearly state all dependencies and patch merging
-> > strategy/way.
-> > 
-> > Best regards,
-> > Krzysztof
-> > 
-> 
-> Dear Krzysztof,
-> 
-> 
-> I may be misunderstanding your request.
-> I thought it was moving the "nuvoton,ma35d1-serial.yaml" to the patch of
-> nuvoton,ma35d1-clk.h.
-> Would you please provide guidance what should I do next on this [PATCH v6
-> 07/12]. Thank you.
+Linus,
 
-The only combining you should do is putting the 2 patches in the same 
-series. Combining to 1 patch would be wrong.
+please pull sound fixes for v6.3-rc5 from:
 
-Your other option is just drop the header in the example and use the 
-raw numbers. Then there is no dependency to manage and each subsystem 
-maintainer can take the relevant patches.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.3-rc5
 
-Rob
+The topmost commit is 52aad39385e1bfdb34a1b405f699a8ef302c58b0
+
+----------------------------------------------------------------
+
+sound fixes for 6.3-rc5
+
+A collection of small fixes:
+- A potential deadlock fix for USB-audio, involving some change
+  in PCM core side
+- A regression fix for probes of USB-audio devices with the
+  vendor-specific PCM format bits
+- Two regression fixes for the old YMFPCI driver
+- A few HD-audio quirks as usual
+
+----------------------------------------------------------------
+
+Jaroslav Kysela (1):
+      ALSA: hda/realtek: Fix support for Dell Precision 3260
+
+Takashi Iwai (3):
+      ALSA: hda/conexant: Partial revert of a quirk for Lenovo
+      ALSA: usb-audio: Fix recursive locking at XRUN during syncing
+      ALSA: usb-audio: Fix regression on detection of Roland VS-100
+
+Tasos Sahanidis (2):
+      ALSA: ymfpci: Create card with device-managed snd_devm_card_new()
+      ALSA: ymfpci: Fix BUG_ON in probe function
+
+Tim Crawford (1):
+      ALSA: hda/realtek: Add quirks for some Clevo laptops
+
+huangwenhui (1):
+      ALSA: hda/realtek: Add quirk for Lenovo ZhaoYang CF4620Z
+
+---
+ sound/core/pcm_lib.c           |  2 ++
+ sound/pci/hda/patch_conexant.c |  6 +++++-
+ sound/pci/hda/patch_realtek.c  |  7 ++++++-
+ sound/pci/ymfpci/ymfpci.c      |  2 +-
+ sound/pci/ymfpci/ymfpci_main.c |  2 +-
+ sound/usb/endpoint.c           | 22 ++++++++++++++--------
+ sound/usb/endpoint.h           |  4 ++--
+ sound/usb/format.c             |  8 ++++++--
+ sound/usb/pcm.c                |  2 +-
+ 9 files changed, 38 insertions(+), 17 deletions(-)
+
