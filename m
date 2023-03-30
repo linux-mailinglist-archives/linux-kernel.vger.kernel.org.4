@@ -2,89 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C1A6D0CEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB8E6D0CF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232546AbjC3Res (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 13:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S232550AbjC3RgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232434AbjC3Req (ORCPT
+        with ESMTP id S231867AbjC3RgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:34:46 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BE25FD9;
-        Thu, 30 Mar 2023 10:34:45 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id h17so19874022wrt.8;
-        Thu, 30 Mar 2023 10:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680197684;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aKcsS9RzCGec1E//KXDqFuO125uv1xUjBzG3GmeKye8=;
-        b=dNK04s5t55ImmI318ms5Q5vMBO6oGsmgyndXUx2HwP0KcT03d4xUijqy9mx9MidUla
-         oqnhQbfNk27Gv4tSdtc9YCZqR9JnL83ry2Ph5XWSSkjhQXQzOFZkN48wR8eRDOMVqh65
-         /zGwapoRE4auJbHsNTt+aaVjCyO+2Y6MvnMKQaTJ1ueAUS8b98TgPaTj3h6ntiSP9O9E
-         wp8IWnm1g7WKdojuXFP1+q7hApx+SmDNfWbnF7oeTOG3QljXLNb7fa35PK6kbTpwxdfT
-         JP53oDnNjI+IOjOMCylwS/S+SqPzybQh93EOpgRw1RW+NaIf/eupOZWphDnVZijch8Tt
-         3Bcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680197684;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aKcsS9RzCGec1E//KXDqFuO125uv1xUjBzG3GmeKye8=;
-        b=uZmkMh9lrozd/lEgN4DnsYzN8oMnGBnKXcaN+Lgic1ZbJZsW10uGsMIxEVJ0TA5yce
-         TPFEJU3tUDh9QNb/LVAO5+ZWG25NLr5yobBkEdJ0wufcB/QlcHapfzK0H59XtcRuWhem
-         zI/A/DNsrVlDOySa9/K0EWFwtPXk2cHYW52sQyE1QtuHsqMsB69+to8A2Iwy1zTJMiST
-         wT46BQZVo4Pm8Tq0Sr6t2HNWglp8RpPcz3lhylyJt4j/3AMg64PZXjkw24gZMyCHORCp
-         rbLQkTj4I+F362JJHNfSYiK3xHak1Zfwo5IAMKHVxqzLI14/v9C1OCgUSSv5WQpSp0Qv
-         YRUA==
-X-Gm-Message-State: AAQBX9d47/1iDPjNPHb6YdeoM+S5vb1k3v5z44oG9B2Aass22H0KqfiO
-        jwEZqfEeYVVXONlO+acGnR8=
-X-Google-Smtp-Source: AKy350aqPaeaRaIzLq93xnKLSwV1qqKksBHcvZw5qKcC1QEWi7p3c+y9jOvEB5VB6d4m4y575WhvRQ==
-X-Received: by 2002:a05:6000:ca:b0:2d6:5afe:7b91 with SMTP id q10-20020a05600000ca00b002d65afe7b91mr4918787wrx.30.1680197684064;
-        Thu, 30 Mar 2023 10:34:44 -0700 (PDT)
-Received: from [192.168.1.135] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id n13-20020a5d67cd000000b002e40d124460sm4189268wrw.97.2023.03.30.10.34.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 10:34:43 -0700 (PDT)
-Message-ID: <8c917be2-e15a-921f-aaa9-b8753d2463de@gmail.com>
-Date:   Thu, 30 Mar 2023 19:34:41 +0200
+        Thu, 30 Mar 2023 13:36:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC27C6A47
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:36:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7658662150
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:36:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D232BC433EF;
+        Thu, 30 Mar 2023 17:36:10 +0000 (UTC)
+Date:   Thu, 30 Mar 2023 18:36:08 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     Qun-wei Lin =?utf-8?B?KOael+e+pOW0tCk=?= 
+        <Qun-wei.Lin@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "surenb@google.com" <surenb@google.com>,
+        "david@redhat.com" <david@redhat.com>,
+        Chinwen Chang =?utf-8?B?KOW8temMpuaWhyk=?= 
+        <chinwen.chang@mediatek.com>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        Kuan-Ying Lee =?utf-8?B?KOadjuWGoOepjik=?= 
+        <Kuan-Ying.Lee@mediatek.com>,
+        Casper Li =?utf-8?B?KOadjuS4reamrik=?= <casper.li@mediatek.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Subject: Re: [BUG] Usersapce MTE error with allocation tag 0 when low on
+ memory
+Message-ID: <ZCXIiCtjFt19wBAM@arm.com>
+References: <5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com>
+ <ZCRtVW9Q0WOKEQVX@arm.com>
+ <f468f934-40b6-3547-d3ea-88a0aac5bd6a@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 16/17] arm64: dts: mediatek: fix systimer properties
-Content-Language: en-US
-To:     amergnat@baylibre.com, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>
-References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
- <20230203-evk-board-support-v3-16-0003e80e0095@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230203-evk-board-support-v3-16-0003e80e0095@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f468f934-40b6-3547-d3ea-88a0aac5bd6a@arm.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,50 +60,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 30, 2023 at 02:56:50PM +0100, Steven Price wrote:
+> > On Wed, Mar 29, 2023 at 02:55:49AM +0000, Qun-wei Lin (林群崴) wrote:
+> >> Having compared the differences between Kernel-5.15 and Kernel-6.1,
+> >> We found the order of swap_free() and set_pte_at() is changed in
+> >> do_swap_page().
+> >>
+> >> When fault in, do_swap_page() will call swap_free() first:
+> >> do_swap_page() -> swap_free() -> __swap_entry_free() ->
+> >> free_swap_slot() -> swapcache_free_entries() -> swap_entry_free() ->
+> >> swap_range_free() -> arch_swap_invalidate_page() ->
+> >> mte_invalidate_tags_area() ->  mte_invalidate_tags() -> xa_erase()
+> >>
+> >> and then call set_pte_at():
+> >> do_swap_page() -> set_pte_at() -> __set_pte_at() -> mte_sync_tags() ->
+> >> mte_sync_page_tags() -> mte_restore_tags() -> xa_load()
+> >>
+> >> This means that the swap slot is invalidated before pte mapping, and
+> >> this will cause the mte tag in XArray to be released before tag
+> >> restore.
+> 
+> This analysis looks correct to me. The MTE swap code works on the
+> assumption that the set_pte_at() will restore the tags to the page
+> before the swap entry is removed. The reordering which has happened
+> since has broken this assumption and as you observed can cause the tags
+> to be unavailable by the time set_pte_at() is called.
+> 
+> >> After I moved swap_free() to the next line of set_pte_at(), the problem
+> >> is disappeared.
+> >>
+> >> We suspect that the following patches, which have changed the order, do
+> >> not consider the mte tag restoring in page fault flow:
+> >> https://lore.kernel.org/all/20220131162940.210846-5-david@redhat.com/
+> 
+> I'm not sure I entirely follow the reasoning in this patch, so I'm not
+> sure whether it's safe to just move swap_free() down to below
+> set_pte_at() or if that reintroduces the information leak.
+> 
+> I also wonder if sparc has a similar issue as the arch_do_swap()
+> callback is located next to set_pte_at().
 
+SPARC has a potential race here since the page is made visible to the
+user but the tags are not restored yet (I raised this before). But even
+ignoring this small window, arch_do_swap() needs to have the metadata
+available.
 
-On 29/03/2023 10:54, amergnat@baylibre.com wrote:
-> From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> >> Any suggestion is appreciated.
 > 
-> MT8365 has a SYST timer (System Timer), therefore the compatible node
-> should be "mediatek,mt6765-timer" instead of "mediatek,mt6795-systimer"
-> (which corresponds to ARM/ARM64 System Timer).
-> 
-> Plus, register range should be 0x100 instead of 0x10.
-> 
-> Finally, interrupt polarity of systimer is LEVEL_HIGH.
-> 
-> Fix the above properties accordingly.
-> 
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> The other possibility is to add a(nother) callback for MTE in
+> arch_do_swap() that calls mte_restore_tags() on the page before the
+> swap_free() call rather than depending on the hook in set_pte_at().
 
-Patch looks good but does not apply cleanly because of previous patches that I 
-didn't take and need rework. Please resend the patches I didn't queue with the 
-comments addressed.
+I think we should move arch_do_swap_page() earlier before swap_free()
+and in arm64 we copy the tags to pte_page(pte). I don't think SPARC
+would have any issues with this change (and it also fixes their race).
 
-Regards,
-Matthias
-
-> ---
->   arch/arm64/boot/dts/mediatek/mt8365.dtsi | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-> index c3ea3cc97a47..959d8533c24c 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-> @@ -575,9 +575,9 @@ system_clk: dummy13m {
->   	};
->   
->   	systimer: timer@10017000 {
-> -		compatible = "mediatek,mt8365-systimer", "mediatek,mt6795-systimer";
-> -		reg = <0 0x10017000 0 0x10>;
-> -		interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_LOW>;
-> +		compatible = "mediatek,mt8365-systimer", "mediatek,mt6765-timer";
-> +		reg = <0 0x10017000 0 0x100>;
-> +		interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
->   		clocks = <&system_clk>;
->   		clock-names = "clk13m";
->   	};
-> 
+-- 
+Catalin
