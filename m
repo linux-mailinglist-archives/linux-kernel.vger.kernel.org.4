@@ -2,99 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895DA6CF9B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 05:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A666CF9BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 05:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjC3Dvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 23:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
+        id S229708AbjC3DxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 23:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjC3Dvw (ORCPT
+        with ESMTP id S229588AbjC3DxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 23:51:52 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894774EFC
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 20:51:51 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id d13so16095136pjh.0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 20:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680148311;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e4e9QyhcBsAQeSGpoYgMIf5LsrO1sB7K1qNfkG2NcBE=;
-        b=IGlK+xAx2+0Yo/GwhQoVnpdG7PEmhwII1RKRSM+GOod/c9lLkaPb6XcM5TKoWxk0z7
-         mSWqiPkChriRIgax0x6qEs5jQ70FlVyEitlkwg9XRKImNomzVXU6+ULPtfkyH5WNT3m5
-         Iq1Tm1idufhE/EMzdd1yUnBmm7PRZ42kdRxAqsYsqPvlpW314mWYnkjru2ld3TAYIQlq
-         nGGaJo6GoyuqyeESgf4SNVmIgoQpCSUJCPlntSL99grtrcaqKM/Xxukzy2b4qQugf1P4
-         44q43Le8uo+fwG9/Cwk8FcNvbQvrDaK895vkWL7y6XzyGVjJoImyzy4w4pjkb8bQJcDa
-         FXtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680148311;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e4e9QyhcBsAQeSGpoYgMIf5LsrO1sB7K1qNfkG2NcBE=;
-        b=PjwsfaV3OcE3RWTbG3MLGiGNuPmS7NRkJIOyUKTwY1h8USlcioDqMT6RM/RI3e2YLS
-         XW0hqux3afvJq3N0NqUET5UsL/icrYGxXE3Oagz8wL4bTbhJ6bfFRnw2iLnwPZH+VqcX
-         oMkOnhi21ytmkIrkaGIChZwolTglCc7V10QJl8paXJ0HX/pDg3zhpBPOKXcrltyUj2Bc
-         rTluVcNnX60Srf9DnSQYkHzz/cnbqS017NIjryVosWigwJ0HqkPS1PzAeF7MPQdBj3Xo
-         Z/OkhQle6+1QpU4OBT464KNbfGXGRV66GKaHmllx0Ob1aYNUgRcmykvPNtSBgRffG7pZ
-         4BiA==
-X-Gm-Message-State: AAQBX9dG4mQrZ5ct0Yt8wgESKBEhlIWyJirYg+v/bbMJ7BuNP6ysFCv0
-        UcBIY/ZQjJHtxIYcqtXj5I3ySQ==
-X-Google-Smtp-Source: AKy350Y2dh1VU9r3ACKQ4ZdXYifXV0CkfmucICJZvfWMZ7ipucNyg7ut3lHP/KU0xY8PtNRF+CaEiA==
-X-Received: by 2002:a17:90b:4b4e:b0:23f:7e2e:fe13 with SMTP id mi14-20020a17090b4b4e00b0023f7e2efe13mr24105018pjb.0.1680148310985;
-        Wed, 29 Mar 2023 20:51:50 -0700 (PDT)
-Received: from localhost ([122.172.85.168])
-        by smtp.gmail.com with ESMTPSA id iz4-20020a170902ef8400b0019f9fd5c24asm23670525plb.207.2023.03.29.20.51.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 20:51:50 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 09:21:48 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: Add SM7225 to cpufreq-dt-platdev blocklist
-Message-ID: <20230330035148.7twrszrlmog2rdzt@vireshk-i7>
-References: <20230324-sm7225-cpufreq-v1-1-7c2e9a4ab7e3@fairphone.com>
+        Wed, 29 Mar 2023 23:53:18 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B80B4C15;
+        Wed, 29 Mar 2023 20:53:17 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Pn8dT2LXCzKqdc;
+        Thu, 30 Mar 2023 11:52:45 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 30 Mar 2023 11:53:15 +0800
+CC:     <yangyicong@hisilicon.com>, <mathieu.poirier@linaro.org>,
+        <suzuki.poulose@arm.com>, <corbet@lwn.net>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <helgaas@kernel.org>,
+        <linux-pci@vger.kernel.org>, <prime.zeng@huawei.com>,
+        <linuxarm@huawei.com>
+Subject: Re: [PATCH 1/4] hwtracing: hisi_ptt: Make cpumask only present online
+ CPUs
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+References: <20230315094316.26772-1-yangyicong@huawei.com>
+ <20230315094316.26772-2-yangyicong@huawei.com>
+ <20230328172409.000021f5@Huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <94e7d85a-d580-94c5-ae2c-fe6a77c21487@huawei.com>
+Date:   Thu, 30 Mar 2023 11:53:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230324-sm7225-cpufreq-v1-1-7c2e9a4ab7e3@fairphone.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230328172409.000021f5@Huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24-03-23, 15:06, Luca Weiss wrote:
-> The Qualcomm SM7225 platform uses the qcom-cpufreq-hw driver, so add
-> it to the cpufreq-dt-platdev driver's blocklist.
+On 2023/3/29 0:24, Jonathan Cameron wrote:
+> On Wed, 15 Mar 2023 17:43:13 +0800
+> Yicong Yang <yangyicong@huawei.com> wrote:
 > 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
->  1 file changed, 1 insertion(+)
+>> From: Yicong Yang <yangyicong@hisilicon.com>
+>>
+>> perf will try to start PTT trace on every CPU presented in cpumask sysfs
+>> attribute and it will fail to start on offline CPUs(see the comments in
+>> perf_event_open()). But the driver is using cpumask_of_node() to export
+>> the available cpumask which may include offline CPUs and may fail the
+>> perf unintendedly. Fix this by only export the online CPUs of the node.
 > 
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index 5ac6b9e5270e..452181434735 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -152,6 +152,7 @@ static const struct of_device_id blocklist[] __initconst = {
->  	{ .compatible = "qcom,sm6115", },
->  	{ .compatible = "qcom,sm6350", },
->  	{ .compatible = "qcom,sm6375", },
-> +	{ .compatible = "qcom,sm7225", },
->  	{ .compatible = "qcom,sm8150", },
->  	{ .compatible = "qcom,sm8250", },
->  	{ .compatible = "qcom,sm8350", },
+> There isn't clear documentation that I can find for cpumask_of_node()
+> and chasing through on arm64 (which is what we care about for this driver)
+> it's maintained via numa_add_cpu() numa_remove_cpu()
+> Those are called in arch/arm64/kernel/smp.c in locations that are closely coupled
+> with set_cpu_online(cpu, XXX);
+> https://elixir.bootlin.com/linux/v6.3-rc4/source/arch/arm64/kernel/smp.c#L246
+> https://elixir.bootlin.com/linux/v6.3-rc4/source/arch/arm64/kernel/smp.c#L303
+> 
+> Now there are races when the two might not be in sync but in this case
+> we are just exposing the result to userspace, so chances of a race
+> after this sysfs attribute has been read seems much higher to me and
+> I don't think we can do anything about that.
+> 
+> Is there another path that I'm missing where online and node masks are out
+> of sync?
 > 
 
-Applied. Thanks.
+maybe no. This patch maybe incorrect and I need more investigation, so let's me
+drop it from the series. Tested and everything seems fine now.
 
--- 
-viresh
+I found this problem and referred to commit 064f0e9302af ("mm: only display online cpus of the numa node")
+which might be the same problem. But seems unnecessary that cpumask_of_node()
+already include online CPUs only.
+
+Thanks.
+
+> Jonathan
+> 
+> 
+>>
+>> Fixes: ff0de066b463 ("hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe Tune and Trace device")
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> 
+>> ---
+>>  drivers/hwtracing/ptt/hisi_ptt.c | 13 +++++++++++--
+>>  1 file changed, 11 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
+>> index 30f1525639b5..0a10c7ec46ad 100644
+>> --- a/drivers/hwtracing/ptt/hisi_ptt.c
+>> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
+>> @@ -487,9 +487,18 @@ static ssize_t cpumask_show(struct device *dev, struct device_attribute *attr,
+>>  			    char *buf)
+>>  {
+>>  	struct hisi_ptt *hisi_ptt = to_hisi_ptt(dev_get_drvdata(dev));
+>> -	const cpumask_t *cpumask = cpumask_of_node(dev_to_node(&hisi_ptt->pdev->dev));
+>> +	cpumask_var_t mask;
+>> +	ssize_t n;
+>>  
+>> -	return cpumap_print_to_pagebuf(true, buf, cpumask);
+>> +	if (!alloc_cpumask_var(&mask, GFP_KERNEL))
+>> +		return 0;
+>> +
+>> +	cpumask_and(mask, cpumask_of_node(dev_to_node(&hisi_ptt->pdev->dev)),
+>> +		    cpu_online_mask);
+>> +	n = cpumap_print_to_pagebuf(true, buf, mask);
+>> +	free_cpumask_var(mask);
+>> +
+>> +	return n;
+>>  }
+>>  static DEVICE_ATTR_RO(cpumask);
+>>  
+> 
+> .
+> 
