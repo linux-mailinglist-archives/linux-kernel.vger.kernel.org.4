@@ -2,302 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FA46D09D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6776D09E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbjC3PiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
+        id S233208AbjC3Pjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233242AbjC3Ph7 (ORCPT
+        with ESMTP id S233179AbjC3Pj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:37:59 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2054.outbound.protection.outlook.com [40.107.117.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986A4124
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:37:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kz6BwLgWmRoyXQq80DYUDtNIRW+IcS4LvXBolQVN+8sKKx3fxlGbSWB90NTwwe4jfOqu6R2QoSdM8ffi7eiZRFBtntq8rlqhoX67D+O8Rr+x0v41uRVWgnMDznqvBeiY1SZOb8AQ2JyAVE6aHpSvaN2IOFqgXKOsUkxbP4vqiysd4josDGRhcwIhGFOEOrVkKQqaMwB5b8YfKfHpT5sKVycWvG23EGwn7Hec/5eGzmazYlbUTR5QnMflU42E2F98LEMGh32MCSHrc3Su9KOEQiBskV+jyoGit6xqJICtTd1XWVWvOxQ09l5sW7VuneUUPq42/hpJ5khIrpXsC+t0DQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D5GnJ5XgGnJGhMgT4ne+3mtU9fx/t9qTuiA3Re2+zpQ=;
- b=X3EoRqypKOqeoId2wApzkocsYYAarI9ySZ04l5lP3c1FYDrF0D9iRs3TgnH6OyGC7CfKVrW/FIRtyhsqheAkjZM/DdWfCoqziZqP+Z6cuaRNk/I470QU8aTdGpSzb7T6dMeZlwoYcf6DDWxMm6cmBODhgGngBSqj2gCHaMQI43X/Aob2OiFwWSq0AcumOUVHYwPzhwTFwG2DeMEtwTZs5PXt+I2ZlN8/6kmuPmPoTUK/WIGrATSbwucS38u0nIbYnQjrHT/wIQnbBvE2RB8OQ7Y0boGJSW6hXP3jTwH/ABtPNnqp4CCTFDJhcRR75CjCEYNDQx7B7CrgE+4u7FjVOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D5GnJ5XgGnJGhMgT4ne+3mtU9fx/t9qTuiA3Re2+zpQ=;
- b=qPWRbfqfWpLzHDljTqrEQyKNASVAtorY5MxVqV5ERw1NciMC1Zb/z/71mkexEMLPylG5mAWpfIGxw0wk2D0gdCpsdKEaw0Srb19dH0qIQLG66ZjHWQKMN6UkPV2ROdT1hfJD3xZrNjOuCmTxF/u+VPAbCZwZI8eHwVdsMcmvG4w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
- SEZPR02MB5663.apcprd02.prod.outlook.com (2603:1096:101:4f::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.22; Thu, 30 Mar 2023 15:37:42 +0000
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::9a8c:cd43:d810:b523]) by SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::9a8c:cd43:d810:b523%3]) with mapi id 15.20.6254.021; Thu, 30 Mar 2023
- 15:37:41 +0000
-From:   Sheng Yong <shengyong@oppo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     linux-kernel@vger.kernel.org, Sheng Yong <shengyong@oppo.com>
-Subject: [RFC PATCH] f2fs: expand f2fs_compr_option to allow ioctl setting compression level
-Date:   Thu, 30 Mar 2023 23:37:19 +0800
-Message-Id: <20230330153719.3085164-1-shengyong@oppo.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0104.apcprd02.prod.outlook.com
- (2603:1096:4:92::20) To SI2PR02MB5148.apcprd02.prod.outlook.com
- (2603:1096:4:153::6)
+        Thu, 30 Mar 2023 11:39:27 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF1DC176;
+        Thu, 30 Mar 2023 08:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680190749; x=1711726749;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2y+Qd+RESrzEa/F9wmN52tzUziPss+ZxjSltCa9P/hk=;
+  b=XUaJ54oMztjo5zzZAkUUI/cSufWKwCGk+SyH47VZs38IDrlrmW3ZKHva
+   d8mrCiGnHwlU15WMqeXtQPbsHokH70DPzWNsrSSPjMZshuD2s7OZrmWk/
+   pyn1QvXDiS3PaLGXT1/WqAIbH8AUaq8X9WAEkH5+T6DjYthBwUq7uczGS
+   s9hd8Xfemsao9ZYhuJ+76SsdxN2A5eulLFlOpPxJuoQJGqrxqbIHzVuPb
+   n/LwNNKYiRkILgJC4y03jcTttlmIvNg2WLzqrDdoqsUU4VDdGuLaOZ5D5
+   EFf+sM5VEQhKstIf42nlzAagMYyu+km6IvzlCl+uFN3EXbo3iq202khQL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="368984331"
+X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
+   d="scan'208";a="368984331"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 08:39:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="678241953"
+X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
+   d="scan'208";a="678241953"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 30 Mar 2023 08:38:56 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1phuMV-00AURJ-0P;
+        Thu, 30 Mar 2023 18:38:51 +0300
+Date:   Thu, 30 Mar 2023 18:38:50 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Juergen Gross <jgross@suse.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Anatolij Gustschin <agust@denx.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH v7 3/6] PCI: Allow pci_bus_for_each_resource() to take
+ less arguments
+Message-ID: <ZCWtCpQBAM7oR6ra@smile.fi.intel.com>
+References: <20230323173610.60442-4-andriy.shevchenko@linux.intel.com>
+ <202303302009.55848372-oliver.sang@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|SEZPR02MB5663:EE_
-X-MS-Office365-Filtering-Correlation-Id: 14f6b3fb-deed-4350-547f-08db3134b329
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NikSk3lUGm94LuojxBmSsrZQeVrEX+aneJPwUNCSiTzUj6LmgQsif14543jWmS6SgEOBxU2GJgOKt+Dnecf9BHnN3iIsFEEz1pQy9xy8PM+0J3x51TL4sMnaU2SASC2ptw48bxvQXZDJnL1WNtGg8S1nfXyqw1+hJMj0s8/xOJE9UbefZOmpT/v6rDQ8OP9XmhC2zjCMK6ttN3ypQtO8UH5qoUjXbCzZ9QE6cMfhQSukHIu01TpRo+n+ybFd017XViL1lqdEXOpFXNy/HOxNoJpTiq1yiSfkr8uoGuoaNpR5PbAxru5FM/70isSvmU1ErvkgA33AQYLrQU84By3g5FKWb58QoyJKnZxFQFW4boiKDP6Ld//6uXA82iRltARUCVvFKqhzXanfLq9XavwofsR8kQuZVSEkuur8TOuuwvIY4pIdYssymqrMEVAj8QdpKrQ1WmzgtbOw5aslc3HtwOYT0Dio1ZW6MtoRnQjEYxwNV48BXGzwweFxIDkkBoc8aPHy4uc4n2wIpXmbjftiW6gWifhPe2c2en4f4pQjEEFpBHAfCfxjmOBEXpP5LAujEVIwdP0cY/rIkd8CLoWCMdZhZdbOFJrs9uPha350REU8i4LH/R0NOkkctntvNJIM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(451199021)(2616005)(107886003)(26005)(83380400001)(86362001)(1076003)(186003)(6512007)(6506007)(38100700002)(38350700002)(316002)(8676002)(8936002)(41300700001)(6666004)(6486002)(478600001)(36756003)(5660300002)(52116002)(4326008)(66556008)(66946007)(66476007)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dPda5ank+fQg7wQWrGrYkhyAFB4ED5HeV6xD3O5iaiGyOnDd4/kjs03bB6yp?=
- =?us-ascii?Q?Sp4z586lWzSPIwHhtPhie7ESX5MBxW8MnZHIp1J8WTYAQxXVPSc47Arj/tur?=
- =?us-ascii?Q?S4GwT/oHXp/ehGFP1gR3HvHsaP18drYO8mn0RMTkZXugbYnNhIRMKGI+3+Gp?=
- =?us-ascii?Q?OKx1u6JqRwPE5xpDqPFIjzBQALUOIrUaj8CZpBFdVZgF2aJw5TANlkryr3Xz?=
- =?us-ascii?Q?FU+Qd8DhV4bOwkPWx9pni2lKjp6O6FcK9jBitgj4UQNBJMaw1uziytNv0e/v?=
- =?us-ascii?Q?UuyJSGrOAH6g06hg6oy/TBv65toHi9Tj7AUEa6XaDJK3vuSDUwY4hC5vhEIA?=
- =?us-ascii?Q?puBvK5wPEmjm8E0qJEnCkPblLyqCnOgM2bPYF1CWTc9qsJjM03bJPGmRO3QB?=
- =?us-ascii?Q?BqtEfMUiwcLhrKS+32n1jrn+Lgbh77hNSvQHhzcSosU9dtHzprIC3Rk9bVx1?=
- =?us-ascii?Q?nUgOcqrV8DBHkkndPW3YX0wgiywxH5C0tNjvgZIccLbjGIqQX+K9sLmrJO+O?=
- =?us-ascii?Q?UjbpvQ/h4gdQ8n/z0nji+s9f/59h7YcuwZ6dU/i4g6TuEIwh08n+VZjyxQ2b?=
- =?us-ascii?Q?TwesAJR3oppSsLUcE1jkn69Emwo9ogBFiijuFjpqblDKWpSv4yZ3+t8TdcEM?=
- =?us-ascii?Q?jtw4FdQ9bTxfNF6G/K2SG0PKhP0QPGAycRpCPWIsOXWRdfrNyNfuttEL7TQy?=
- =?us-ascii?Q?v/4AZ47zT3Z7AdlNPHHZ/3ZpP69hsurgMuUjTSS1UPHpH1rkGkcJaEGkuKKr?=
- =?us-ascii?Q?t0EioX3AdcidcAY4+Mo5VhkBMsASQw+VxE6BGmf9JRiYzHJ+4ZXBdNDoOhal?=
- =?us-ascii?Q?1azWyiFfLsRtkzNDjGn83JMwpgdnQfFpkh7uDqMWLeq09oZKdTK2K3qXMIeJ?=
- =?us-ascii?Q?LT1dkCwlNlewLTZJvAYfJAH+99JMaszAyvtXl5gcoYxJbIOB/Lktymisz+1X?=
- =?us-ascii?Q?OIpfXL2/RXH6Mj39/Jgb6bJK3mtKk/rVHzOWeGX753VYaWwD3geXaE+aM+ji?=
- =?us-ascii?Q?Z3vfD8uMt2Ajml8y8zLV0eQJ530IwqarFoAKnE8kdl0rBCsLB313s9iKhXkg?=
- =?us-ascii?Q?rqImTdRLWRsviABYX30T/cWuKw3jLPHjkpby+PeuHQmNClrTGJUEJQ4q6fiR?=
- =?us-ascii?Q?4tAQX3Sc/wM+aDHPorq2BJMpo3DzXNQXukXz4A0nPZ2EMHyasulBtI9ocEbR?=
- =?us-ascii?Q?zB8/Y9XmnTZ2++5b+wANKJIPbWokwGKEPw+s/E90GCKVK/xTE/6glJFyBoBA?=
- =?us-ascii?Q?mtZKrYE48s3t2206VheFgy91zbmLE7E6Oc+HgqkhMagUxPJrEBWyK7acCN+c?=
- =?us-ascii?Q?7i+HGkr0UHcELNbfk4RxW7K1DUVvUFKFOD7OROI6ojSKOwYMjI5d3WDZOAJx?=
- =?us-ascii?Q?qkSHFA6byQam6ctie7j839v71NYfxdc+ckgYfm3AGmA0LCYLVJz8jEpjkZVN?=
- =?us-ascii?Q?j4hOmj11Xk99+lM5J6zqcyyWvNtm/kjdSZQlxfOe82NlcxWgSIvGofDStn1l?=
- =?us-ascii?Q?+Amqehncg1pUgsGcrV8NKygQWUWlOTlZa/nbbRNJ2+vgqgzA25M8WpdRGLW/?=
- =?us-ascii?Q?Pp6NW5g978LKyslM8yO02SS9XJzVvW1mndyPTRJr?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14f6b3fb-deed-4350-547f-08db3134b329
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 15:37:41.8932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0f3tCewMOrHa6bdLU/ib5YLPZQzhInS3Nd8K/p6dYDcYYGXKV06Woh9JAKviebzDp5/kexQD+YQoBbVhAV9Xag==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR02MB5663
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202303302009.55848372-oliver.sang@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds `level` in `struct f2fs_compr_option` to allow ioctl
-setting compression level.
+On Thu, Mar 30, 2023 at 09:24:21PM +0800, kernel test robot wrote:
+> 
+> Greeting,
+> 
+> FYI, we noticed various errors such like
+>     "i40e: probe of 0000:3d:00.0 failed with error -12"
+> due to commit (built with gcc-11):
+> 
+> commit: d23d5938fd7ced817d6aa1ff86cd671ebbaebfc2 ("[PATCH v7 3/6] PCI: Allow pci_bus_for_each_resource() to take less arguments")
+> url: https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/kernel-h-Split-out-COUNT_ARGS-and-CONCATENATE/20230324-013857
+> base: https://git.kernel.org/cgit/linux/kernel/git/pci/pci.git next
+> patch link: https://lore.kernel.org/all/20230323173610.60442-4-andriy.shevchenko@linux.intel.com/
+> patch subject: [PATCH v7 3/6] PCI: Allow pci_bus_for_each_resource() to take less arguments
+> 
+> in testcase: boot
+> 
+> on test machine: 96 threads 2 sockets Intel(R) Xeon(R) Gold 6252 CPU @ 2.10GHz (Cascade Lake) with 512G memory
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> If you fix the issue, kindly add following tag
+> | Reported-by: kernel test robot <oliver.sang@intel.com>
+> | Link: https://lore.kernel.org/oe-lkp/202303302009.55848372-oliver.sang@intel.com
 
-The first byte of original f2fs_compr_option indicates which algorithm
-is used. While the new f2fs_compr_option splits the first byte into two
-parts:
-  * the MBS 4 bits indicate the version
-  * the LBS 4 bits indicate the algorithm
+Thanks, that is useful test!
 
-The original f2fs_compr_option is renamed to f2fs_compr_option_base,
-which is used to calculate ioctl command. For now, the version could
-be 0 or 1.
-
-When getting and setting compression option, the first byte should be
-copied from userspace in advance to get the version. Then copy the
-whole option according to version size.
-
-The new f2fs_compr_option could be compatible with old userspace tool:
-    Old tool does not set the MSB 4 bits, which keep all 0. F2FS
-    detects option is version 0, and will not return or set level.
-
-But if new tool is used on old F2FS:
-    New tool sets the MSB 4 bits to 1, get_option could return V0
-    values, but set_option will fail.
-
-Signed-off-by: Sheng Yong <shengyong@oppo.com>
----
- fs/f2fs/file.c            | 41 ++++++++++++++++++++++++++++++++++-----
- include/uapi/linux/f2fs.h | 39 ++++++++++++++++++++++++++++++++++---
- 2 files changed, 72 insertions(+), 8 deletions(-)
-
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 14e9a20e68df3..909da18208d76 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -3904,10 +3904,27 @@ static int f2fs_ioc_get_compress_option(struct file *filp, unsigned long arg)
- {
- 	struct inode *inode = file_inode(filp);
- 	struct f2fs_comp_option option;
-+	__u8 ver;
-+	size_t copt_sz;
- 
- 	if (!f2fs_sb_has_compression(F2FS_I_SB(inode)))
- 		return -EOPNOTSUPP;
- 
-+	if (copy_from_user(&option.value, (__u8 __user *)arg, 1))
-+		return -EFAULT;
-+
-+	ver = COPTION_VERSION(option.value);
-+	copt_sz = COPTION_SIZE(ver);
-+	if (copt_sz == UINT_MAX) {
-+		/*
-+		 * In order to be compatible with old version option, whose
-+		 * algorithm is not initialized, the V0 option is returned
-+		 * instead of error.
-+		 */
-+		ver = F2FS_COPTION_V0;
-+		copt_sz = COPTION_SIZE(ver);
-+	}
-+
- 	inode_lock_shared(inode);
- 
- 	if (!f2fs_compressed_file(inode)) {
-@@ -3915,13 +3932,14 @@ static int f2fs_ioc_get_compress_option(struct file *filp, unsigned long arg)
- 		return -ENODATA;
- 	}
- 
--	option.algorithm = F2FS_I(inode)->i_compress_algorithm;
-+	option.value = COPTION_VALUE(ver, F2FS_I(inode)->i_compress_algorithm);
- 	option.log_cluster_size = F2FS_I(inode)->i_log_cluster_size;
-+	option.level = F2FS_I(inode)->i_compress_level;
- 
- 	inode_unlock_shared(inode);
- 
- 	if (copy_to_user((struct f2fs_comp_option __user *)arg, &option,
--				sizeof(option)))
-+				copt_sz))
- 		return -EFAULT;
- 
- 	return 0;
-@@ -3932,6 +3950,8 @@ static int f2fs_ioc_set_compress_option(struct file *filp, unsigned long arg)
- 	struct inode *inode = file_inode(filp);
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
- 	struct f2fs_comp_option option;
-+	__u8 ver, alg;
-+	size_t copt_sz;
- 	int ret = 0;
- 
- 	if (!f2fs_sb_has_compression(sbi))
-@@ -3940,14 +3960,23 @@ static int f2fs_ioc_set_compress_option(struct file *filp, unsigned long arg)
- 	if (!(filp->f_mode & FMODE_WRITE))
- 		return -EBADF;
- 
-+	if (copy_from_user(&option.value, (__u8 __user *)arg, 1))
-+		return -EFAULT;
-+
-+	ver = COPTION_VERSION(option.value);
-+	alg = COPTION_ALGORITHM(option.value);
-+	copt_sz = COPTION_SIZE(ver);
-+	if (copt_sz == UINT_MAX)
-+		return -EFAULT;
-+
- 	if (copy_from_user(&option, (struct f2fs_comp_option __user *)arg,
--				sizeof(option)))
-+				copt_sz))
- 		return -EFAULT;
- 
- 	if (!f2fs_compressed_file(inode) ||
- 			option.log_cluster_size < MIN_COMPRESS_LOG_SIZE ||
- 			option.log_cluster_size > MAX_COMPRESS_LOG_SIZE ||
--			option.algorithm >= COMPRESS_MAX)
-+			alg >= COMPRESS_MAX)
- 		return -EINVAL;
- 
- 	file_start_write(filp);
-@@ -3963,9 +3992,11 @@ static int f2fs_ioc_set_compress_option(struct file *filp, unsigned long arg)
- 		goto out;
- 	}
- 
--	F2FS_I(inode)->i_compress_algorithm = option.algorithm;
-+	F2FS_I(inode)->i_compress_algorithm = alg;
- 	F2FS_I(inode)->i_log_cluster_size = option.log_cluster_size;
- 	F2FS_I(inode)->i_cluster_size = BIT(option.log_cluster_size);
-+	if (ver == F2FS_COPTION_V1)
-+		F2FS_I(inode)->i_compress_level = option.level;
- 	f2fs_mark_inode_dirty_sync(inode, true);
- 
- 	if (!f2fs_is_compress_backend_ready(inode))
-diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
-index 955d440be1046..940cf46174357 100644
---- a/include/uapi/linux/f2fs.h
-+++ b/include/uapi/linux/f2fs.h
-@@ -37,9 +37,9 @@
- #define F2FS_IOC_SEC_TRIM_FILE		_IOW(F2FS_IOCTL_MAGIC, 20,	\
- 						struct f2fs_sectrim_range)
- #define F2FS_IOC_GET_COMPRESS_OPTION	_IOR(F2FS_IOCTL_MAGIC, 21,	\
--						struct f2fs_comp_option)
-+						struct f2fs_comp_option_base)
- #define F2FS_IOC_SET_COMPRESS_OPTION	_IOW(F2FS_IOCTL_MAGIC, 22,	\
--						struct f2fs_comp_option)
-+						struct f2fs_comp_option_base)
- #define F2FS_IOC_DECOMPRESS_FILE	_IO(F2FS_IOCTL_MAGIC, 23)
- #define F2FS_IOC_COMPRESS_FILE		_IO(F2FS_IOCTL_MAGIC, 24)
- #define F2FS_IOC_START_ATOMIC_REPLACE	_IO(F2FS_IOCTL_MAGIC, 25)
-@@ -91,9 +91,42 @@ struct f2fs_sectrim_range {
- 	__u64 flags;
- };
- 
--struct f2fs_comp_option {
-+#define F2FS_COPTION_V0	0
-+#define F2FS_COPTION_V1	1
-+
-+#define COPTION_VER_SHIFT	4
-+#define COPTION_VER_MASK	(~((1 << COPTION_VER_SHIFT) - 1))
-+
-+struct f2fs_comp_option_base {
- 	__u8 algorithm;
- 	__u8 log_cluster_size;
- };
- 
-+struct f2fs_comp_option {
-+	union {
-+		struct f2fs_comp_option_base base;
-+		struct {
-+			__u8 value; // MSB 4 bit is version, LSB 4 bit is algorithm
-+			__u8 log_cluster_size;
-+		};
-+	};
-+	__u8 level;
-+};
-+
-+#define COPTION_VERSION(val) ((val) >> COPTION_VER_SHIFT)
-+#define COPTION_ALGORITHM(val) ((val) & ((1 << COPTION_VER_SHIFT) - 1))
-+#define COPTION_VALUE(ver, alg) (((__u8)(ver) << COPTION_VER_SHIFT) | (__u8)(alg))
-+#define COPTION_SIZE(ver) ({					\
-+	size_t sz = UINT_MAX;					\
-+	switch (ver) {						\
-+	case F2FS_COPTION_V0:					\
-+		sz = offsetof(struct f2fs_comp_option, level);	\
-+		break;						\
-+	case F2FS_COPTION_V1:					\
-+		sz = sizeof(struct f2fs_comp_option);		\
-+		break;						\
-+	}							\
-+	sz;							\
-+})
-+
- #endif /* _UAPI_LINUX_F2FS_H */
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
