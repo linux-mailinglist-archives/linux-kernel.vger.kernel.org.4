@@ -2,146 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9706D09DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF49F6D09E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbjC3Pj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S233239AbjC3Pjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233153AbjC3Pj0 (ORCPT
+        with ESMTP id S233010AbjC3Pj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:39:26 -0400
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EF883E7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:39:07 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 15:38:54 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680190744; x=1680449944;
-        bh=78dr7bQ+n1CF5BDMkt72hk6Mu6tYllNVNQReiUB0IjI=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=JGzM4eUkMb2oKzbtBusmrJvRD2L8QnkKxZtArCmw0bGeVW/gzfBagKYDIOFvMXgTX
-         zzqdOjM5qc/ZysddzD8REBjEkoimegRnJnqNn3MuBjtOiWcX+yicS69x2D02Z8RXfW
-         k1woEYcHMUsdNKJrhyv4gF4ZWKeibAh0kBlHugsy7p2OcwtlXSVx2TYZI6YQ94xu0u
-         OcmOPeXjPvGFba00XAH6u4xUYZA2wzCHw8JpcvJgYB9O8POjE3tVVaXkTAUO7Utbv/
-         p9+CijLBTzJRZ/THBoUMPfnzRsmj2P/qrp+V+Rc0v1fQwEzYbgjvFnXGO3UYpNd/9q
-         9xBbAy0ia7lLA==
-To:     Alice Ryhl <alice@ryhl.io>
-From:   Benno Lossin <y86-dev@protonmail.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH v3 05/13] rust: init: add initialization macros
-Message-ID: <226e4772-0e10-6593-7cfe-e1e290a0216c@protonmail.com>
-In-Reply-To: <f9f1d67f-5c89-d508-d582-528273b635db@ryhl.io>
-References: <20230329223239.138757-1-y86-dev@protonmail.com> <20230329223239.138757-6-y86-dev@protonmail.com> <f9f1d67f-5c89-d508-d582-528273b635db@ryhl.io>
-Feedback-ID: 40624463:user:proton
+        Thu, 30 Mar 2023 11:39:28 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2061.outbound.protection.outlook.com [40.107.244.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1929C109
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:39:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NdqXpa+INCtizJJpN2U2d5zFm9yOXIL3z/mbyiWGBKRes9oKSuA0U3pd8OM/3neWSgnAfdhIjxXhUunmPJA7abGRExEevQ/aHLLYjQJHyD9YovRMZxaK13V2DXX3+f290S+3ZYD1helUvJx314gardLBASJFg3tETKx8axV858B00eQPgkcf3bzhvIm27SUMSr75gtM8MafYcxKchFZf7DaC1AUva2DxjnxKeD9XD3W8uagcjNIiBg/OJBjLRyZXLXDexRw6jk0JwgFN8exIKV4OdyHqikR1rzSzZqU/K6OUpEsFBm5Di1xQ2SHYKcfxVur2vVU05ES9eJR9Kq5eSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xrhEFEDd7CfyXVczW+2j1LB9t9aXGZSucV0Ar/6AWVs=;
+ b=TAvFhmc9qP54CQRzMYo2JjMP4ywm5lEE5ZfdbxX83D9XAeaOQTE3FKq2ROCSggx4RU/VcMFL1vGUitkrNfpwnE5I+K6S+tM/3n6TL7dDxEwM2r4v4Cs7n6lpJ/3APlXVr6pGoZ0tlPBch+Nf6IQcJWC0Vf4my+dshEGPOV/cR8gxMajqyfObKN1Y6jZxCKWc8tly4WNTxwDxRihWH5cd1NP9dAX8sKPPCBe37yfSjTTUrOG99nsB6L8FCJuNoo+Pysn4RBtBb7OvADfO7OPrWWNe7z506sJ6uoGPDWQHE6Q+MKtDrAoF0/V66BZGms7DRCPA97kJeXB8I9vtrP8xWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xrhEFEDd7CfyXVczW+2j1LB9t9aXGZSucV0Ar/6AWVs=;
+ b=tlQvUTJqUh4MOrnhByOACIYktVjC9tnNcuokZa0yQXlVcpsMWqDMLdhelxn41oYTPitCClAG260zhTl2/KVSIlT9nEZawo8SgmsoIPt3dwtzJeAma4u3ZS9jZTHVm3wEdCDzInH6sYXub/h0FnjQOdwWZBgSIMWsf4cvxc12jQw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
+ by DS0PR12MB8071.namprd12.prod.outlook.com (2603:10b6:8:df::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6254.22; Thu, 30 Mar 2023 15:39:08 +0000
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::f170:8d72:ca64:bb26]) by BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::f170:8d72:ca64:bb26%5]) with mapi id 15.20.6254.022; Thu, 30 Mar 2023
+ 15:39:08 +0000
+Message-ID: <6dac0c4b-a792-849b-97be-31ad3a527e7b@amd.com>
+Date:   Thu, 30 Mar 2023 11:39:05 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm/amdkfd: remove unused sq_int_priv variable
+Content-Language: en-US
+To:     Tom Rix <trix@redhat.com>, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
+        "Kim, Jonathan" <Jonathan.Kim@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230330152040.1838353-1-trix@redhat.com>
+From:   Felix Kuehling <felix.kuehling@amd.com>
+In-Reply-To: <20230330152040.1838353-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQBPR0101CA0230.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:66::34) To BN9PR12MB5115.namprd12.prod.outlook.com
+ (2603:10b6:408:118::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|DS0PR12MB8071:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4afb4611-a003-4be9-01c2-08db3134e681
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ypXS+7APuGI8q3x1Kou3jDu4+qg1GaPN6/ILE64b4TQwxSoUgDM/NDb8FjOuxEuEFVmkIzNRrNfKuMiQaFzX0FaA/9Of9Urkiuyg/cql8ENSIej9G8FEM2TcWhpuxVZP2Mb0zAx7+TipgW3Fx5QU/XseG39SiPomxNseH9c9m2DLA+zrgbs/efC6aGQp00rH0eZFElVkUWHDg4r5BDxve5R49Iu2lkWOxrUVcJqzvaZ4AAGYyF8lZMKxsnxiUciYWv+0XvR1IoN1QvoqicjKT0J2jkFIk/fk2V3zAHPYWG/hHg99cuX2x/137b3tofnSYSet6jTPNduIwIEevbAUBVLKPvOLJ/qGz6ONCcwYhl/yIaycQEioTKZSUd6DJJNo9LihNE0pOBXafAqiSg+iUC6NaKskOmQXKODYtd4EXxximv39cKeUxl1XqwJJe2GxOQdt2wGZHYUwbpbJZCMR+WCpwS2T9TheMmGt9CnysNiUgHWpMVJFExmlBd3sAQZWetSKjuucrRPiTD/JPbR9wcmMhAOhHaJMWk4hTxtAwUoWHk9xRSEvH5OXC6yRsSHtgHqUIgYlUUfL8x5jBSFUy3fMuoi8UAyC982eqJB8NmnYmiqqAyqRIZAzi9hM3HO35e7TzUs97PJWCBEcI5gVt9H4ApABOFvMVIMTnTi8lGE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(366004)(396003)(451199021)(31686004)(2906002)(44832011)(66476007)(8936002)(8676002)(41300700001)(66556008)(110136005)(36756003)(6636002)(316002)(4326008)(66946007)(6666004)(478600001)(6486002)(31696002)(86362001)(186003)(921005)(6512007)(6506007)(2616005)(26005)(83380400001)(5660300002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MjljWE55K1NoRWoyZGpuKzFSY1pMTUorVjc0TDNiY0kxbUxLTjR3dmNPYTlL?=
+ =?utf-8?B?MnhtVEhOV3VKak5sWlZlMzVzQndIbFpiazQ3TlRmZW5VN0pNRjR2K2ZHQTZR?=
+ =?utf-8?B?L3NESmRRTHhBZml5cExteXBFSFNYS2JTdTNQSC9pd1loRnVnQy80Y2RNaTBa?=
+ =?utf-8?B?dGNJdXY1WTZzbDQzTTZQRUxoR0RqSHB1Tlc3VlMxeS9LMDVCQklQTlVjRy9Z?=
+ =?utf-8?B?bEVxbnp0azR1MzZDMkFpOEU1QzNBRHh2SUhhSTlPVjBvS3JVTmtqSTdtZHRL?=
+ =?utf-8?B?cXY4bS81blVpc05nR2E0YkFmWUI2L0lUR0dsSERPVnFYYVRmYzRkNkR6dDZF?=
+ =?utf-8?B?RlhWK2ZkaU9WZ1VaYTlIMTR0b05yb1RWellXT1JkZy84WXlSUHowQlEwb0NG?=
+ =?utf-8?B?MjJoZWhQNk0xbjBSQkdKSk81L0x1MW9rb3BSanRmdEY4NndwenlwVU4rNjdC?=
+ =?utf-8?B?Uit6cGZLS01BRCtuQXVtZHM0TW9TbkNsTW1oRk1obmpvaUxDNGZDV0MvVENL?=
+ =?utf-8?B?ZC9sdEtXd214U01vVlc2UTRNVTZET1J2TWRPTjhWcVVORnQ2ZmdoekY4WnE2?=
+ =?utf-8?B?dkJHVDFPSDZWT0dqRUV0U0NzL2pybnE2bElGRlBwRTQ0N2wvVHNNZVFjTlVS?=
+ =?utf-8?B?WVpqM3J6TjFKWVdJaEdZWGhjWHlnOTl2K0NwM1BVLzNnZ3RlNGpFVGV1VUVt?=
+ =?utf-8?B?Y0dkTU9pOG5ZUWN1T2RqajAxdllpY3FlZkoxclpHOUVpUm5acldyWklKSURa?=
+ =?utf-8?B?ejNoeERnOGh5ZVY0a0dhbWJlWWNGcE1UVHE1dXd2dTA4SU5GT1JuYkp5R3Nn?=
+ =?utf-8?B?VDBLNy9pR09EN0ZtL2ZHU3hBd0hjd0hwRGZPd0swQkNyYktYSW85RjlCTml5?=
+ =?utf-8?B?S3l0SXVJbHE1UGtqTU9QRXBsS0hUK284ZW5jS21ZYXJzcFYwOTJDYUVxeSt2?=
+ =?utf-8?B?R1Naam91RitXcHlycXJycE5UOUFockZDQ282S1hzem9YU2NJeXB4WTl2cTNr?=
+ =?utf-8?B?L2p0alRUb041KzNkVEEyU2JRWVJqcXlEdzV6eUhNUnpsejRBT2ZkeGFaMzBL?=
+ =?utf-8?B?NE9lYjRPamVrZ1dybjNReTZjYnVsZmFqNVlSdkZObURnY293TWRaRktVSWl5?=
+ =?utf-8?B?TVQ5bVVDVmtGUTBXY2lBcDAwZTN4NFVpNUNnMmFFRmVVa2FMQXBSRW54R0J1?=
+ =?utf-8?B?MkJBRlpyVHAvL3gwc0h4ZkhlL0hYSUhZbUxzbDVDSG1aUTk5UUYwUkNZZmJs?=
+ =?utf-8?B?UW5WSHc4VjFvN0hZUmk4aEswWis2d1RRKzNvNnJycXBHdS9RVGJtWnRPZkdt?=
+ =?utf-8?B?eTVXalUraWhLMEdBclREWUpRVUIydkdJcm1rNHBGd0ZKa1NCc040WGp0QTJI?=
+ =?utf-8?B?aDF3SG53blplcmtvYU01L2RWdVZ5czlPVW9GQ2U2bnVLYkYwMnVpQ3lkanpa?=
+ =?utf-8?B?c2hJSTVJUDZvZEd4eWh3cmdIMXg0YjFINnRYaXJPWTF0bHVjTWllYk14Zi94?=
+ =?utf-8?B?cTdxd2V0SklLbkpadStRbFVBaEF1dndtRHZsZExOYnl0bDFZWnVWWWljcVJl?=
+ =?utf-8?B?TCtjOCtqREVsd0kyeFpiUW4vR3BlVWNGMWtmVHhuZXA3a0syRnNjMDJxaVBF?=
+ =?utf-8?B?dHhUWUR1TDZ3aDFaZERCcEpHTTRvSU9XUmxNak1aYVJyaHVpajZtZGpadVln?=
+ =?utf-8?B?UVFlbWZMUHZNd0l5WXFlVXY2UVp2K2d6TWlxWittZXQwWTJRK0ZMRnIyWWxB?=
+ =?utf-8?B?cWFUTm56V3FXd3dLUUF4WWJNeXVLQm01a2p6U1djSDVjUlV3R1hpL1BhVm9B?=
+ =?utf-8?B?NmJSRVhqQlArSmdxaXNnem0vYlpja2FZSTBDTjNyelNwdi9sbUk3bURCMzh2?=
+ =?utf-8?B?NnNaOG1jRURlMEpjQmVJd290MlFVUVIrL3cxV3hJVS9OQ05rWmpUV1R4Z0M0?=
+ =?utf-8?B?Wng4MFg5d092UWN3WmhheXJ5RjZGNzVJQ0kzdHR5blc1UThsYjFOYXVWQmps?=
+ =?utf-8?B?NmtXUEdmY2tkbWhYbWpVL1g0bWhHQThkMHh3dVRXaS9Zb2dSNFNKamw2N1ZJ?=
+ =?utf-8?B?d1lHdWFTZkI2MnFPT2IyQ2FZeEhHS09zQ3piVXZZVndQeGdKVTV6TXdUZDdF?=
+ =?utf-8?Q?+I1X9sEFfEQOarLcYvDcyPsCp?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4afb4611-a003-4be9-01c2-08db3134e681
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 15:39:08.0938
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sBB51qP1A7Uz/07TI15r+TXWxGJMuBmcF0YQaZ01M0l2OaAbmfOiITfNG2vfc8Vu8kWFuDQNZ0hlhLDyxIGkaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8071
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.23 16:21, Alice Ryhl wrote:
-> On 3/30/23 00:33, y86-dev@protonmail.com wrote:
->> From: Benno Lossin <y86-dev@protonmail.com>
->>
->> Add the following initializer macros:
->> - `#[pin_data]` to annotate structurally pinned fields of structs,
->>     needed for `pin_init!` and `try_pin_init!` to select the correct
->>     initializer of fields.
->> - `pin_init!` create a pin-initializer for a struct with the
->>     `Infallible` error type.
->> - `try_pin_init!` create a pin-initializer for a struct with a custom
->>     error type (`kernel::error::Error` is the default).
->> - `init!` create an in-place-initializer for a struct with the
->>     `Infallible` error type.
->> - `try_init!` create an in-place-initializer for a struct with a custom
->>     error type (`kernel::error::Error` is the default).
->>
->> Also add their needed internal helper traits and structs.
->>
->> Co-developed-by: Gary Guo <gary@garyguo.net>
->> Signed-off-by: Gary Guo <gary@garyguo.net>
->> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
->
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
->
->> +/// ```rust
->> +/// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
->> +/// # use kernel::{init, pin_init, prelude::*, init::*};
->> +/// # use core::pin::Pin;
->> +/// # #[pin_data]
->> +/// # struct Foo {
->> +/// #     a: usize,
->> +/// #     b: Bar,
->> +/// # }
->> +/// # #[pin_data]
->> +/// # struct Bar {
->> +/// #     x: u32,
->> +/// # }
->> +///
->> +/// impl Foo {
->> +///     fn new() -> impl PinInit<Self> {
->
-> I would remove the empty line above `impl Foo` so that the example
-> doesn't start with an empty line when rendered.
+Am 2023-03-30 um 11:20 schrieb Tom Rix:
+> clang with W=1 reports
+> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_int_process_v11.c:282:38: error: variable
+>    'sq_int_priv' set but not used [-Werror,-Wunused-but-set-variable]
+>          uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
+>                                              ^
+> This variable is not used so remove it.
 
-Sure.
+Hi Jon,
+
+I think your debugger patches are going to start using this. Can you 
+comment?
+
+I'd prefer not to apply this patch now, as Jon's patches are expected to 
+land soon, once Alex is done upstreaming GFX 9.4.3 support.
+
+Regards,
+   Felix
+
 
 >
->> +/// # Syntax
->> +///
->> +/// As already mentioned in the examples above, inside of `pin_init!` a=
- `struct` initializer with
->> +/// the following modifications is expected:
->> +/// - Fields that you want to initialize in-place have to use `<-` inst=
-ead of `:`.
->> +/// - In front of the initializer you can write `&this in` to have acce=
-ss to a [`NonNull<Self>`]
->> +///   pointer named `this` inside of the initializer.
->> +///
->> +/// For instance:
->> +///
->> +/// ```rust
->> +/// # use kernel::pin_init;
->> +/// # use macros::pin_data;
->> +/// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
->> +/// #[pin_data]
->> +/// struct Buf {
->> +///     ptr: *mut u8,
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>   drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c | 9 +--------
+>   1 file changed, 1 insertion(+), 8 deletions(-)
 >
-> I'd add a comment on the `ptr` field saying "points at `buf`".
-
-Sure.
-
->
->> +/// impl BigBuf {
->> +///     fn new() -> impl PinInit<Self, Error> {
->> +///         try_pin_init!(Self {
->> +///             big: {
->> +///                 let zero =3D Box::try_new_zeroed()?;
->> +///                 unsafe { zero.assume_init() }
->> +///             },
->
-> Is there a reason for not using `Box::init(kernel::init::zeroed())?` here=
-?
-
-No, this was probably designed prior to `zeroed`, will change it.
-
---
-Cheers,
-Benno
-
+> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c b/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
+> index 0d53f6067422..bbd646c0dee7 100644
+> --- a/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
+> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
+> @@ -279,7 +279,7 @@ static void event_interrupt_wq_v11(struct kfd_dev *dev,
+>   {
+>   	uint16_t source_id, client_id, ring_id, pasid, vmid;
+>   	uint32_t context_id0, context_id1;
+> -	uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
+> +	uint8_t sq_int_enc, sq_int_errtype;
+>   	struct kfd_vm_fault_info info = {0};
+>   	struct kfd_hsa_memory_exception_data exception_data;
+>   
+> @@ -348,13 +348,6 @@ static void event_interrupt_wq_v11(struct kfd_dev *dev,
+>   				break;
+>   			case SQ_INTERRUPT_WORD_ENCODING_INST:
+>   				print_sq_intr_info_inst(context_id0, context_id1);
+> -				sq_int_priv = REG_GET_FIELD(context_id0,
+> -						SQ_INTERRUPT_WORD_WAVE_CTXID0, PRIV);
+> -				/*if (sq_int_priv && (kfd_set_dbg_ev_from_interrupt(dev, pasid,
+> -						KFD_CTXID0_DOORBELL_ID(context_id0),
+> -						KFD_CTXID0_TRAP_CODE(context_id0),
+> -						NULL, 0)))
+> -					return;*/
+>   				break;
+>   			case SQ_INTERRUPT_WORD_ENCODING_ERROR:
+>   				print_sq_intr_info_error(context_id0, context_id1);
