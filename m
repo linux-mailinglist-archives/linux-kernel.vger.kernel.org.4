@@ -2,104 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198D06D10A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535DF6D10AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjC3VPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 17:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
+        id S229762AbjC3VQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 17:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjC3VOu (ORCPT
+        with ESMTP id S230087AbjC3VPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 17:14:50 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52ACC19A6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 14:14:43 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id q19so17353068wrc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 14:14:43 -0700 (PDT)
+        Thu, 30 Mar 2023 17:15:54 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0BCEF98
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 14:15:51 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id r187so25250864ybr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 14:15:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680210882;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=svitRmAwfjSzCiTV3iUGu1W95ui5xUmfJsnHH3NKzfI=;
-        b=Rss+c7+JE5WyxT+VVG/iOwxZVc8YNHKmivBSMRMVaBeJ9bdsZX88XJniTyN8h23gsX
-         ypDL2EQadCUGFEJqsAPaRGz2BiGTQxSx/dn0UI3QB0tJJbNZJLzumZPkKbipUOWVlQIc
-         B5P/iN4aTa397B02f5L8k4L2E7Ta8NeckYfzZ1dmqZls10f5FO6swRQcVPBQ+1Vw33nP
-         S6/nUbYIuYag2O/V1N0g9hf5b6B+U47nDXZfAu4GMBf3r5DGoBwgG0D4N8jmnV8dVdGQ
-         M6A2BO94NIUMb78mrE7oI0zc1V3mirIgu5L1oFIEq5VtDwPp+7U2LJOeWth8n95TWXQx
-         zuRg==
+        d=paul-moore.com; s=google; t=1680210951;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qF+oDwPkmVm7Qzdori7BA3QXVGteSFkr5JVJlHDMV5M=;
+        b=Uyr/tXATNpJkiRXDw5jPhZvgg3yTmAqevZZQdIgzznbFGsdDGcvLYswsrKbDTlEbMp
+         0LSn4lVMaDd0wz6FRdC83zkC9WXvs5MZLt8Ezz/yEAUr5XD9sPPFK9RjoAgsIn3U0h4I
+         gYuL5Ayy9wn8jZjai/fRYcKSYspooI5ovRLEaMHzzo8NCkszVDJxZmVNhxkVp7ZPUAYe
+         6X+7REVFzscjLqZp5XXx+ntsKfb1TTkOJgq8WTSlHnLpbq6nMEoKVm3W8LmnAyFmswVt
+         km2jGPsYbdVJAS1gD6b2EUDdbT8pq8TG2onjt1eCr+gUVqqUdyce819NSJz/07NP0ZIj
+         4YDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680210882;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=svitRmAwfjSzCiTV3iUGu1W95ui5xUmfJsnHH3NKzfI=;
-        b=wTlW7V0tkthqKWc6rb7BL6bqQYDX9RsOy7v3crpYn7nEb9Mb0MFyLRod9gdJzl/r7v
-         f0FmbVCcL0R5WMNPrJPVbAnL+sRBBKxTyTpQrK+CeOpJbqfzOBjE/XkTxtVs/k4hI+H6
-         KRNECGPpq8xyOx1y6OdyUKYIrKx1u84c4WfsUhtmDkT8OvR+iwC2SUyDQ01xaiPwAR5N
-         WSUGSoDEFbpikYY9yh+oRIXB8M0ClauA8hxvjy0uDQzI58Eux05+KPaIfB1Iycor2ANa
-         12+GGGBMIKK7FNPOtpGv9KWzPyPrGagqbgy0P6NKNmOhug0AoBu1gZUHTvPpVnsTshUp
-         kQpg==
-X-Gm-Message-State: AAQBX9cHhFCMs1u7HoHP1BsYL2mvwX9GAYNzVTUaub2IUPMl+4uB699K
-        p6FUjzMs4ikzQqog8/+yHAxi8Q==
-X-Google-Smtp-Source: AKy350YaiKIoamW1LIp23ecuuhJKv2CmTkC9MN9Posn6KiVuywUpfE2+nyKS9604rK8MW3YV5PxixA==
-X-Received: by 2002:a05:6000:8a:b0:2d1:e517:4992 with SMTP id m10-20020a056000008a00b002d1e5174992mr17772196wrx.69.1680210881643;
-        Thu, 30 Mar 2023 14:14:41 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:17ff:909e:1b73:8366? ([2a05:6e02:1041:c10:17ff:909e:1b73:8366])
-        by smtp.googlemail.com with ESMTPSA id t17-20020adff611000000b002c5a790e959sm376235wrp.19.2023.03.30.14.14.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 14:14:41 -0700 (PDT)
-Message-ID: <f0d51904-d363-cb76-cd6f-f1ebefd0aa5a@linaro.org>
-Date:   Thu, 30 Mar 2023 23:14:40 +0200
+        d=1e100.net; s=20210112; t=1680210951;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qF+oDwPkmVm7Qzdori7BA3QXVGteSFkr5JVJlHDMV5M=;
+        b=OeYAnnyo3JFcp0rOcaAebkt7hpMRDfr64PoSuL1E9ggKcXdWbmr9LVEnTPqvaiy2BN
+         TvbcihaXx5WAv4tARfojBpYbEhjuyqzzxSQhPa53dtCM0gj9ZE7uEooy5426iX/KwkxZ
+         uysl+eIV6tq6WCnH03HDFzBf+6X4efXYiXABQWGMEM51dVf29mm2jgV78kgqglaNReUC
+         5+RhNCfzPGZF5U65dhsBzj4bSCdEGse2hLOV70CmyhKghVEL4bhz9pP9QTS+jNwbpeRV
+         8wvO3qkISgVZsVdC0EWG/5TqyR3E1Fw+2UH76lYrqegGT5mU5OCvf3EgTgsqghEniUCd
+         qHYQ==
+X-Gm-Message-State: AAQBX9cS6mp+NKKk75CCZ1b7eZQkcWmBS1TgapXhJvs85aSl43i8GmCK
+        YA4TD8PMjbguwO9LrNbXeA4n7D9XmofYu3jqOjNo
+X-Google-Smtp-Source: AKy350bjJ+D3+gXwrEw2lcCPM+Y4L8ToBkt7wQW0VhUQUCBX571TFxcGzOeeLA6px4laNdFZKwMWsEs+KGpCrB5zv1s=
+X-Received: by 2002:a05:6902:70a:b0:b6e:361a:c86 with SMTP id
+ k10-20020a056902070a00b00b6e361a0c86mr13662579ybt.3.1680210950900; Thu, 30
+ Mar 2023 14:15:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2] thermal: tegra-bpmp: Handle offline zones
-Content-Language: en-US
-To:     Mikko Perttunen <cyndis@kapsi.fi>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230330094904.2589428-1-cyndis@kapsi.fi>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230330094904.2589428-1-cyndis@kapsi.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230329130415.2312521-1-roberto.sassu@huaweicloud.com> <20230329130415.2312521-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230329130415.2312521-2-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 30 Mar 2023 17:15:40 -0400
+Message-ID: <CAHC9VhRg7twUWXLH0xTaWc2MeSFExkGr9tJztYopzD0JEM-npw@mail.gmail.com>
+Subject: Re: [PATCH v9 1/4] reiserfs: Add security prefix to xattr name in reiserfs_security_write()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2023 11:49, Mikko Perttunen wrote:
-> From: Mikko Perttunen <mperttunen@nvidia.com>
-> 
-> Thermal zones located in power domains may not be accessible when
-> the domain is powergated. In this situation, reading the temperature
-> will return -BPMP_EFAULT. When evaluating trips, BPMP will internally
-> use -256C as the temperature for offline zones.
-> 
-> For smooth operation, for offline zones, return -EAGAIN when reading
-> the temperature and allow registration of zones even if they are
-> offline during probe.
-> 
-> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+On Wed, Mar 29, 2023 at 9:05=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Reiserfs sets a security xattr at inode creation time in two stages: firs=
+t,
+> it calls reiserfs_security_init() to obtain the xattr from active LSMs;
+> then, it calls reiserfs_security_write() to actually write that xattr.
+>
+> Unfortunately, it seems there is a wrong expectation that LSMs provide th=
+e
+> full xattr name in the form 'security.<suffix>'. However, LSMs always
+> provided just the suffix, causing reiserfs to not write the xattr at all
+> (if the suffix is shorter than the prefix), or to write an xattr with the
+> wrong name.
+>
+> Add a temporary buffer in reiserfs_security_write(), and write to it the
+> full xattr name, before passing it to reiserfs_xattr_set_handle().
+>
+> Since the 'security.' prefix is always prepended, remove the name length
+> check.
+>
+> Cc: stable@vger.kernel.org # v2.6.x
+> Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes=
+ during inode creation")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  fs/reiserfs/xattr_security.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.c
+> index 6bffdf9a4fd..b0c354ab113 100644
+> --- a/fs/reiserfs/xattr_security.c
+> +++ b/fs/reiserfs/xattr_security.c
+> @@ -95,11 +95,13 @@ int reiserfs_security_write(struct reiserfs_transacti=
+on_handle *th,
+>                             struct inode *inode,
+>                             struct reiserfs_security_handle *sec)
+>  {
+> +       char xattr_name[XATTR_NAME_MAX + 1];
+>         int error;
+> -       if (strlen(sec->name) < sizeof(XATTR_SECURITY_PREFIX))
+> -               return -EINVAL;
 
-Applied, thanks
+If one really wanted to be paranoid they could verify that
+'XATTR_SECURITY_PREFIX_LEN + strlen(sec->name) <=3D XATTR_NAME_MAX' and
+return EINVAL, but that really shouldn't be an issue and if the
+concatenation does result in a xattr name that is too big, the
+snprintf() will safely truncate/managle it.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Regardless, this patch is fine with me, but it would be nice if at
+least of the reiserfs/VFS folks could provide an ACK/Reviewed-by tag,
+although I think we can still move forward on this without one of
+those.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> -       error =3D reiserfs_xattr_set_handle(th, inode, sec->name, sec->va=
+lue,
+> +       snprintf(xattr_name, sizeof(xattr_name), "%s%s", XATTR_SECURITY_P=
+REFIX,
+> +                sec->name);
+> +
+> +       error =3D reiserfs_xattr_set_handle(th, inode, xattr_name, sec->v=
+alue,
+>                                           sec->length, XATTR_CREATE);
+>         if (error =3D=3D -ENODATA || error =3D=3D -EOPNOTSUPP)
+>                 error =3D 0;
+> --
+> 2.25.1
 
+--=20
+paul-moore.com
