@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9D26D0ABE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CABDF6D0AC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjC3QKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 12:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
+        id S232358AbjC3QK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 12:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231873AbjC3QKO (ORCPT
+        with ESMTP id S231431AbjC3QKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 12:10:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423CDA25A
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:09:09 -0700 (PDT)
+        Thu, 30 Mar 2023 12:10:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CE2E192
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:09:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680192513;
+        s=mimecast20190719; t=1680192515;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oTM5xtnArxH9EHNqMOFW/9fpO7KeYtGodOd2BXmVLVI=;
-        b=SDTLvsUcY7iVfkJHxCTyLiYbyRT6r8AIagBTkN0Sut/j65SmgY/+P9n9XhQ3EuB8C4aW1X
-        1ekhhTH7RestBx+ZOlhT5XHO8BG2T+OnWEokvSrBDRuXl6WSjuKbueXSDV/+SBoYp+8D7E
-        /7Mb3mqIIADJy4vJS2lDZUiL9/sOMYs=
+        bh=Roeuk409dPF2L2QvtyDeIj99sNqVdIN74Z+r6aghdT8=;
+        b=QI8EXuMuCOyJ/kvc3umd6ObUulcgKJ+NOMU8WW04rxPDNT9FOw0mczyUNCAMDxC3m6fjpL
+        meaUBS2+w+BFyNvuwB8xApne0qc9/tMRXXbVa1u8sCqs7bLtSBMHT35/E5iXa/Da5AF1YG
+        +tu01Rtp3vC/jWMGCqTGRTX0FOWAAjI=
 Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
  [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-401-XOZYRgdAMlqLt9gBC6VKvg-1; Thu, 30 Mar 2023 12:08:32 -0400
-X-MC-Unique: XOZYRgdAMlqLt9gBC6VKvg-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-746bae78af3so60183685a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:08:32 -0700 (PDT)
+ us-mta-630-7jHPJga7OUOvRWmxRCvmVA-1; Thu, 30 Mar 2023 12:08:34 -0400
+X-MC-Unique: 7jHPJga7OUOvRWmxRCvmVA-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-746bae78af3so60184885a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:08:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680192510;
+        d=1e100.net; s=20210112; t=1680192513;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oTM5xtnArxH9EHNqMOFW/9fpO7KeYtGodOd2BXmVLVI=;
-        b=7qXZVxffRayvF1hD9yN5YGoUHcazYUjgKn2u1oe0jQqmUnxuvtvW4V0YwtDZTQqU36
-         VO2dvG5nzBkolDa6UyQ4/YxPZbaWvhXxXN1NXpiePKLzNnP4sZta09DKg7jkRSOgWyeP
-         GwDJ0o0BA1rbs/E/mpOAYZMCo05FjZwlflGG8nML71AGrIs0XXKn1dLV5rqpO35hD/Rm
-         opaLFtqNwp9xqiDa2nEegttt9lKYZAe7yVjhod7McdoQ+03dl/iOIGbkpsVxyjXGAs3N
-         D5+/t4VQqNIW/jU1KVUGW7KPDk65EWMoCipUftC+8A70VAhZaOwxksNscC89vC/C5ss7
-         p5lQ==
-X-Gm-Message-State: AAQBX9c3QEMmzSRyNGhtcdr25EGyxY35l7ajlCfzuLiCF/BrDbBjC1lc
-        NXRsokApu0DhfhV2k3L2+Fqugkn9qDn18YoEhtD22XWMrdweaFMDuUMSwFnXEwMNjsS8suG4gm1
-        wn8spP0tHDNX4j7vIPlOtHdnoGL+nZK0F/Hdrt1gXNuE+qnywjvTG2vC3HPUDAchIcExr2KX+hI
-        N/M02gTA==
-X-Received: by 2002:a05:622a:1aa1:b0:3e3:8e1a:c30b with SMTP id s33-20020a05622a1aa100b003e38e1ac30bmr4584678qtc.1.1680192510217;
-        Thu, 30 Mar 2023 09:08:30 -0700 (PDT)
-X-Google-Smtp-Source: AKy350avriHt3XCOjyRNwFhAa+6n3UwABlp02KxPIJQDVusPVqqtc5AFGtAyQG20QSUpJkKO74s2mA==
-X-Received: by 2002:a05:622a:1aa1:b0:3e3:8e1a:c30b with SMTP id s33-20020a05622a1aa100b003e38e1ac30bmr4584621qtc.1.1680192509724;
-        Thu, 30 Mar 2023 09:08:29 -0700 (PDT)
+        bh=Roeuk409dPF2L2QvtyDeIj99sNqVdIN74Z+r6aghdT8=;
+        b=IZorTI/m1ksi98iKVUZnIYNKKvnPsjajDCakD07phMGjegZ62ecrykF0AsPcZUAqm6
+         mEMpiqkb1EPHnJGAxwr+lmkKvJImmPCxKjjGij793AcvScO1K8QL4t021gJ4TqKhCr/f
+         VZpz9fZTydQSX+sdswleJrBXRMzzxF6G3/QLXlBWQ5TrYsnfPaF33D9UKj9NaEuvCAhb
+         /AMDlL6Awj6NPff95+VwItnpDNp1z5DWunXysopI7AvausEpKuZ0jPJNGhx6IG801sHH
+         5v0A+4TusLLj9Hfm3ISaR6BBDG7lzRgpqPK3t4CDRcEeHwVH4Oo3Hp9WOy9bGrl9Az+b
+         gcYA==
+X-Gm-Message-State: AAQBX9cfpPyVVtlQ+jur69pVvW3n5pvrLMBuNShnsTbx5dsSKqRLWPLS
+        ovGOm8dF9JSyW/jIfIJ80tj1qPWzCaIG3+BxzWI/UrD4JF4A745fhjPJQd8jiA3BXzXYML/Ochs
+        txEBkbfXeKWdLVWnJoezR92Tm//aQOasRBeH53xsDlXrUv89+7OKIT3dFwFbpqjm8DgmL+sPMLk
+        z2CGfUzw==
+X-Received: by 2002:a05:622a:199a:b0:3e4:eb39:eb8b with SMTP id u26-20020a05622a199a00b003e4eb39eb8bmr4380210qtc.5.1680192513186;
+        Thu, 30 Mar 2023 09:08:33 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Zj+eN5QPeQ5wVil623hZvzJrIMImI+/YUsY/jqTUUYPanRTL0PgneBxr/Nlg9DU4Nsp1MaQg==
+X-Received: by 2002:a05:622a:199a:b0:3e4:eb39:eb8b with SMTP id u26-20020a05622a199a00b003e4eb39eb8bmr4380140qtc.5.1680192512678;
+        Thu, 30 Mar 2023 09:08:32 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id n14-20020ac8674e000000b003d65e257f10sm8616359qtp.79.2023.03.30.09.08.28
+        by smtp.gmail.com with ESMTPSA id s13-20020ac8758d000000b003e4e1ea3cb5sm3925874qtq.51.2023.03.30.09.08.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 09:08:29 -0700 (PDT)
+        Thu, 30 Mar 2023 09:08:32 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
@@ -67,9 +67,9 @@ Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         David Hildenbrand <david@redhat.com>,
         Axel Rasmussen <axelrasmussen@google.com>,
         Nadav Amit <nadav.amit@gmail.com>
-Subject: [PATCH 24/29] selftests/mm: Move uffd sig/events tests into uffd unit tests
-Date:   Thu, 30 Mar 2023 12:08:27 -0400
-Message-Id: <20230330160827.3107580-1-peterx@redhat.com>
+Subject: [PATCH 25/29] selftests/mm: Move zeropage test into uffd unit tests
+Date:   Thu, 30 Mar 2023 12:08:29 -0400
+Message-Id: <20230330160829.3107591-1-peterx@redhat.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230330155707.3106228-1-peterx@redhat.com>
 References: <20230330155707.3106228-1-peterx@redhat.com>
@@ -85,582 +85,240 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the two tests into the unit test, and convert it into 20 standalone
-tests:
-
-  - events test on all 5 mem types, with wp on/off
-  - signal test on all 5 mem types, with wp on/off
-
-  Testing sigbus on anon... done
-  Testing sigbus on shmem... done
-  Testing sigbus on shmem-private... done
-  Testing sigbus on hugetlb... done
-  Testing sigbus on hugetlb-private... done
-  Testing sigbus-wp on anon... done
-  Testing sigbus-wp on shmem... done
-  Testing sigbus-wp on shmem-private... done
-  Testing sigbus-wp on hugetlb... done
-  Testing sigbus-wp on hugetlb-private... done
-  Testing events on anon... done
-  Testing events on shmem... done
-  Testing events on shmem-private... done
-  Testing events on hugetlb... done
-  Testing events on hugetlb-private... done
-  Testing events-wp on anon... done
-  Testing events-wp on shmem... done
-  Testing events-wp on shmem-private... done
-  Testing events-wp on hugetlb... done
-  Testing events-wp on hugetlb-private... done
-
-It'll also remove a lot of global references along the way,
-e.g. test_uffdio_wp will be replaced with the wp value passed over.
+Simplifies it a bit along the way, e.g., drop the never used offset
+field (which was always the 1st page so offset=0).
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- tools/testing/selftests/mm/uffd-stress.c     | 227 +---------------
- tools/testing/selftests/mm/uffd-unit-tests.c | 263 +++++++++++++++++++
- 2 files changed, 264 insertions(+), 226 deletions(-)
+ tools/testing/selftests/mm/uffd-stress.c     | 94 +-------------------
+ tools/testing/selftests/mm/uffd-unit-tests.c | 94 ++++++++++++++++++++
+ 2 files changed, 95 insertions(+), 93 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-index 49fa61e5c54a..f3046ae13a90 100644
+index f3046ae13a90..a6f3609c1ad1 100644
 --- a/tools/testing/selftests/mm/uffd-stress.c
 +++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -274,133 +274,6 @@ static int stress(struct uffd_stats *uffd_stats)
+@@ -110,15 +110,6 @@ static inline uint64_t uffd_minor_feature(void)
+ 		return 0;
+ }
+ 
+-static int my_bcmp(char *str1, char *str2, size_t n)
+-{
+-	unsigned long i;
+-	for (i = 0; i < n; i++)
+-		if (str1[i] != str2[i])
+-			return 1;
+-	return 0;
+-}
+-
+ static void *locking_thread(void *arg)
+ {
+ 	unsigned long cpu = (unsigned long) arg;
+@@ -274,89 +265,6 @@ static int stress(struct uffd_stats *uffd_stats)
  	return 0;
  }
  
--sigjmp_buf jbuf, *sigbuf;
--
--static void sighndl(int sig, siginfo_t *siginfo, void *ptr)
+-static void retry_uffdio_zeropage(int ufd,
+-				  struct uffdio_zeropage *uffdio_zeropage,
+-				  unsigned long offset)
 -{
--	if (sig == SIGBUS) {
--		if (sigbuf)
--			siglongjmp(*sigbuf, 1);
--		abort();
+-	uffd_test_ops->alias_mapping(&uffdio_zeropage->range.start,
+-				     uffdio_zeropage->range.len,
+-				     offset);
+-	if (ioctl(ufd, UFFDIO_ZEROPAGE, uffdio_zeropage)) {
+-		if (uffdio_zeropage->zeropage != -EEXIST)
+-			err("UFFDIO_ZEROPAGE error: %"PRId64,
+-			    (int64_t)uffdio_zeropage->zeropage);
+-	} else {
+-		err("UFFDIO_ZEROPAGE error: %"PRId64,
+-		    (int64_t)uffdio_zeropage->zeropage);
 -	}
 -}
 -
--/*
-- * For non-cooperative userfaultfd test we fork() a process that will
-- * generate pagefaults, will mremap the area monitored by the
-- * userfaultfd and at last this process will release the monitored
-- * area.
-- * For the anonymous and shared memory the area is divided into two
-- * parts, the first part is accessed before mremap, and the second
-- * part is accessed after mremap. Since hugetlbfs does not support
-- * mremap, the entire monitored area is accessed in a single pass for
-- * HUGETLB_TEST.
-- * The release of the pages currently generates event for shmem and
-- * anonymous memory (UFFD_EVENT_REMOVE), hence it is not checked
-- * for hugetlb.
-- * For signal test(UFFD_FEATURE_SIGBUS), signal_test = 1, we register
-- * monitored area, generate pagefaults and test that signal is delivered.
-- * Use UFFDIO_COPY to allocate missing page and retry. For signal_test = 2
-- * test robustness use case - we release monitored area, fork a process
-- * that will generate pagefaults and verify signal is generated.
-- * This also tests UFFD_FEATURE_EVENT_FORK event along with the signal
-- * feature. Using monitor thread, verify no userfault events are generated.
-- */
--static int faulting_process(int signal_test, bool wp)
+-static int __uffdio_zeropage(int ufd, unsigned long offset)
 -{
--	unsigned long nr;
--	unsigned long long count;
--	unsigned long split_nr_pages;
--	unsigned long lastnr;
--	struct sigaction act;
--	volatile unsigned long signalled = 0;
+-	struct uffdio_zeropage uffdio_zeropage;
+-	int ret;
+-	bool has_zeropage = !(test_type == TEST_HUGETLB);
+-	__s64 res;
 -
--	split_nr_pages = (nr_pages + 1) / 2;
--
--	if (signal_test) {
--		sigbuf = &jbuf;
--		memset(&act, 0, sizeof(act));
--		act.sa_sigaction = sighndl;
--		act.sa_flags = SA_SIGINFO;
--		if (sigaction(SIGBUS, &act, 0))
--			err("sigaction");
--		lastnr = (unsigned long)-1;
--	}
--
--	for (nr = 0; nr < split_nr_pages; nr++) {
--		volatile int steps = 1;
--		unsigned long offset = nr * page_size;
--
--		if (signal_test) {
--			if (sigsetjmp(*sigbuf, 1) != 0) {
--				if (steps == 1 && nr == lastnr)
--					err("Signal repeated");
--
--				lastnr = nr;
--				if (signal_test == 1) {
--					if (steps == 1) {
--						/* This is a MISSING request */
--						steps++;
--						if (copy_page(uffd, offset, wp))
--							signalled++;
--					} else {
--						/* This is a WP request */
--						assert(steps == 2);
--						wp_range(uffd,
--							 (__u64)area_dst +
--							 offset,
--							 page_size, false);
--					}
--				} else {
--					signalled++;
--					continue;
--				}
--			}
+-	if (offset >= nr_pages * page_size)
+-		err("unexpected offset %lu", offset);
+-	uffdio_zeropage.range.start = (unsigned long) area_dst + offset;
+-	uffdio_zeropage.range.len = page_size;
+-	uffdio_zeropage.mode = 0;
+-	ret = ioctl(ufd, UFFDIO_ZEROPAGE, &uffdio_zeropage);
+-	res = uffdio_zeropage.zeropage;
+-	if (ret) {
+-		/* real retval in ufdio_zeropage.zeropage */
+-		if (has_zeropage)
+-			err("UFFDIO_ZEROPAGE error: %"PRId64, (int64_t)res);
+-		else if (res != -EINVAL)
+-			err("UFFDIO_ZEROPAGE not -EINVAL");
+-	} else if (has_zeropage) {
+-		if (res != page_size) {
+-			err("UFFDIO_ZEROPAGE unexpected size");
+-		} else {
+-			retry_uffdio_zeropage(ufd, &uffdio_zeropage,
+-					      offset);
+-			return 1;
 -		}
--
--		count = *area_count(area_dst, nr);
--		if (count != count_verify[nr])
--			err("nr %lu memory corruption %llu %llu\n",
--			    nr, count, count_verify[nr]);
--		/*
--		 * Trigger write protection if there is by writing
--		 * the same value back.
--		 */
--		*area_count(area_dst, nr) = count;
--	}
--
--	if (signal_test)
--		return signalled != split_nr_pages;
--
--	area_dst = mremap(area_dst, nr_pages * page_size,  nr_pages * page_size,
--			  MREMAP_MAYMOVE | MREMAP_FIXED, area_src);
--	if (area_dst == MAP_FAILED)
--		err("mremap");
--	/* Reset area_src since we just clobbered it */
--	area_src = NULL;
--
--	for (; nr < nr_pages; nr++) {
--		count = *area_count(area_dst, nr);
--		if (count != count_verify[nr]) {
--			err("nr %lu memory corruption %llu %llu\n",
--			    nr, count, count_verify[nr]);
--		}
--		/*
--		 * Trigger write protection if there is by writing
--		 * the same value back.
--		 */
--		*area_count(area_dst, nr) = count;
--	}
--
--	uffd_test_ops->release_pages(area_dst);
--
--	for (nr = 0; nr < nr_pages; nr++)
--		if (my_bcmp(area_dst + nr * page_size, zeropage, page_size))
--			err("nr %lu is not zero", nr);
+-	} else
+-		err("UFFDIO_ZEROPAGE succeeded");
 -
 -	return 0;
 -}
 -
- static void retry_uffdio_zeropage(int ufd,
- 				  struct uffdio_zeropage *uffdio_zeropage,
- 				  unsigned long offset)
-@@ -484,103 +357,6 @@ static int userfaultfd_zeropage_test(void)
- 	return 0;
- }
- 
--static int userfaultfd_events_test(void)
+-static int uffdio_zeropage(int ufd, unsigned long offset)
 -{
--	pthread_t uffd_mon;
--	int err, features;
--	pid_t pid;
--	char c;
--	struct uffd_stats stats = { 0 };
--
--	printf("testing events (fork, remap, remove): ");
--	fflush(stdout);
--
--	features = UFFD_FEATURE_EVENT_FORK | UFFD_FEATURE_EVENT_REMAP |
--		UFFD_FEATURE_EVENT_REMOVE;
--	uffd_test_ctx_init(features);
--
--	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
--
--	if (uffd_register(uffd, area_dst, nr_pages * page_size,
--			  true, test_uffdio_wp, false))
--		err("register failure");
--
--	stats.apply_wp = test_uffdio_wp;
--	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, &stats))
--		err("uffd_poll_thread create");
--
--	pid = fork();
--	if (pid < 0)
--		err("fork");
--
--	if (!pid)
--		exit(faulting_process(0, test_uffdio_wp));
--
--	waitpid(pid, &err, 0);
--	if (err)
--		err("faulting process failed");
--	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
--		err("pipe write");
--	if (pthread_join(uffd_mon, NULL))
--		return 1;
--
--	uffd_stats_report(&stats, 1);
--
--	return stats.missing_faults != nr_pages;
+-	return __uffdio_zeropage(ufd, offset);
 -}
 -
--static int userfaultfd_sig_test(void)
+-/* exercise UFFDIO_ZEROPAGE */
+-static int userfaultfd_zeropage_test(void)
 -{
--	unsigned long userfaults;
--	pthread_t uffd_mon;
--	int err, features;
--	pid_t pid;
--	char c;
--	struct uffd_stats stats = { 0 };
--
--	printf("testing signal delivery: ");
+-	printf("testing UFFDIO_ZEROPAGE: ");
 -	fflush(stdout);
 -
--	features = UFFD_FEATURE_EVENT_FORK|UFFD_FEATURE_SIGBUS;
--	uffd_test_ctx_init(features);
--
--	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+-	uffd_test_ctx_init(0);
 -
 -	if (uffd_register(uffd, area_dst, nr_pages * page_size,
 -			  true, test_uffdio_wp, false))
 -		err("register failure");
 -
--	if (faulting_process(1, test_uffdio_wp))
--		err("faulting process failed");
+-	if (area_dst_alias) {
+-		/* Needed this to test zeropage-retry on shared memory */
+-		if (uffd_register(uffd, area_dst_alias, nr_pages * page_size,
+-				  true, test_uffdio_wp, false))
+-			err("register failure");
+-	}
 -
--	uffd_test_ops->release_pages(area_dst);
--
--	stats.apply_wp = test_uffdio_wp;
--	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, &stats))
--		err("uffd_poll_thread create");
--
--	pid = fork();
--	if (pid < 0)
--		err("fork");
--
--	if (!pid)
--		exit(faulting_process(2, test_uffdio_wp));
--
--	waitpid(pid, &err, 0);
--	if (err)
--		err("faulting process failed");
--	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
--		err("pipe write");
--	if (pthread_join(uffd_mon, (void **)&userfaults))
--		return 1;
+-	if (uffdio_zeropage(uffd, 0))
+-		if (my_bcmp(area_dst, zeropage, page_size))
+-			err("zeropage is not zero");
 -
 -	printf("done.\n");
--	if (userfaults)
--		err("Signal test failed, userfaults: %ld", userfaults);
--
--	return userfaults != 0;
+-	return 0;
 -}
 -
  static int userfaultfd_stress(void)
  {
  	void *area;
-@@ -692,8 +468,7 @@ static int userfaultfd_stress(void)
+@@ -468,7 +376,7 @@ static int userfaultfd_stress(void)
  		uffd_stats_report(uffd_stats, nr_cpus);
  	}
  
--	return userfaultfd_zeropage_test() || userfaultfd_sig_test()
--	    || userfaultfd_events_test();
-+	return userfaultfd_zeropage_test();
+-	return userfaultfd_zeropage_test();
++	return 0;
  }
  
  static void set_test_type(const char *type)
 diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index ecb8ba658736..ebf45cb0eca8 100644
+index ebf45cb0eca8..376dfa320b6f 100644
 --- a/tools/testing/selftests/mm/uffd-unit-tests.c
 +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -18,6 +18,9 @@
- #define  MEM_HUGETLB                      BIT_ULL(3)
- #define  MEM_HUGETLB_PRIVATE              BIT_ULL(4)
- 
-+#define  MEM_ALL  (MEM_ANON | MEM_SHMEM | MEM_SHMEM_PRIVATE | \
-+		   MEM_HUGETLB | MEM_HUGETLB_PRIVATE)
-+
- struct mem_type {
- 	const char *name;
- 	unsigned int mem_flag;
-@@ -429,6 +432,237 @@ void uffd_minor_collapse_test(void)
- 	uffd_minor_test_common(true, false);
+@@ -663,7 +663,101 @@ static void uffd_events_wp_test(void)
+ 	uffd_events_test_common(true);
  }
  
-+static sigjmp_buf jbuf, *sigbuf;
-+
-+static void sighndl(int sig, siginfo_t *siginfo, void *ptr)
++static void retry_uffdio_zeropage(int ufd,
++				  struct uffdio_zeropage *uffdio_zeropage)
 +{
-+	if (sig == SIGBUS) {
-+		if (sigbuf)
-+			siglongjmp(*sigbuf, 1);
-+		abort();
++	uffd_test_ops->alias_mapping(&uffdio_zeropage->range.start,
++				     uffdio_zeropage->range.len,
++				     0);
++	if (ioctl(ufd, UFFDIO_ZEROPAGE, uffdio_zeropage)) {
++		if (uffdio_zeropage->zeropage != -EEXIST)
++			err("UFFDIO_ZEROPAGE error: %"PRId64,
++			    (int64_t)uffdio_zeropage->zeropage);
++	} else {
++		err("UFFDIO_ZEROPAGE error: %"PRId64,
++		    (int64_t)uffdio_zeropage->zeropage);
 +	}
 +}
 +
-+/*
-+ * For non-cooperative userfaultfd test we fork() a process that will
-+ * generate pagefaults, will mremap the area monitored by the
-+ * userfaultfd and at last this process will release the monitored
-+ * area.
-+ * For the anonymous and shared memory the area is divided into two
-+ * parts, the first part is accessed before mremap, and the second
-+ * part is accessed after mremap. Since hugetlbfs does not support
-+ * mremap, the entire monitored area is accessed in a single pass for
-+ * HUGETLB_TEST.
-+ * The release of the pages currently generates event for shmem and
-+ * anonymous memory (UFFD_EVENT_REMOVE), hence it is not checked
-+ * for hugetlb.
-+ * For signal test(UFFD_FEATURE_SIGBUS), signal_test = 1, we register
-+ * monitored area, generate pagefaults and test that signal is delivered.
-+ * Use UFFDIO_COPY to allocate missing page and retry. For signal_test = 2
-+ * test robustness use case - we release monitored area, fork a process
-+ * that will generate pagefaults and verify signal is generated.
-+ * This also tests UFFD_FEATURE_EVENT_FORK event along with the signal
-+ * feature. Using monitor thread, verify no userfault events are generated.
-+ */
-+static int faulting_process(int signal_test, bool wp)
++static bool do_uffdio_zeropage(int ufd, bool has_zeropage)
 +{
-+	unsigned long nr, i;
-+	unsigned long long count;
-+	unsigned long split_nr_pages;
-+	unsigned long lastnr;
-+	struct sigaction act;
-+	volatile unsigned long signalled = 0;
++	struct uffdio_zeropage uffdio_zeropage = { 0 };
++	int ret;
++	__s64 res;
 +
-+	split_nr_pages = (nr_pages + 1) / 2;
++	uffdio_zeropage.range.start = (unsigned long) area_dst;
++	uffdio_zeropage.range.len = page_size;
++	uffdio_zeropage.mode = 0;
++	ret = ioctl(ufd, UFFDIO_ZEROPAGE, &uffdio_zeropage);
++	res = uffdio_zeropage.zeropage;
++	if (ret) {
++		/* real retval in ufdio_zeropage.zeropage */
++		if (has_zeropage)
++			err("UFFDIO_ZEROPAGE error: %"PRId64, (int64_t)res);
++		else if (res != -EINVAL)
++			err("UFFDIO_ZEROPAGE not -EINVAL");
++	} else if (has_zeropage) {
++		if (res != page_size)
++			err("UFFDIO_ZEROPAGE unexpected size");
++		else
++			retry_uffdio_zeropage(ufd, &uffdio_zeropage);
++		return true;
++	} else
++		err("UFFDIO_ZEROPAGE succeeded");
 +
-+	if (signal_test) {
-+		sigbuf = &jbuf;
-+		memset(&act, 0, sizeof(act));
-+		act.sa_sigaction = sighndl;
-+		act.sa_flags = SA_SIGINFO;
-+		if (sigaction(SIGBUS, &act, 0))
-+			err("sigaction");
-+		lastnr = (unsigned long)-1;
-+	}
++	return false;
++}
 +
-+	for (nr = 0; nr < split_nr_pages; nr++) {
-+		volatile int steps = 1;
-+		unsigned long offset = nr * page_size;
++/* exercise UFFDIO_ZEROPAGE */
++static void uffd_zeropage_test_common(bool has_zeropage)
++{
++	if (uffd_register(uffd, area_dst, page_size,
++			  true, false, false))
++		err("register");
 +
-+		if (signal_test) {
-+			if (sigsetjmp(*sigbuf, 1) != 0) {
-+				if (steps == 1 && nr == lastnr)
-+					err("Signal repeated");
++	if (area_dst_alias)
++		if (uffd_register(uffd, area_dst_alias, page_size,
++				  true, false, false))
++			err("register");
 +
-+				lastnr = nr;
-+				if (signal_test == 1) {
-+					if (steps == 1) {
-+						/* This is a MISSING request */
-+						steps++;
-+						if (copy_page(uffd, offset, wp))
-+							signalled++;
-+					} else {
-+						/* This is a WP request */
-+						assert(steps == 2);
-+						wp_range(uffd,
-+							 (__u64)area_dst +
-+							 offset,
-+							 page_size, false);
-+					}
-+				} else {
-+					signalled++;
-+					continue;
-+				}
-+			}
-+		}
++	if (do_uffdio_zeropage(uffd, has_zeropage)) {
++		int i;
 +
-+		count = *area_count(area_dst, nr);
-+		if (count != count_verify[nr])
-+			err("nr %lu memory corruption %llu %llu\n",
-+			    nr, count, count_verify[nr]);
-+		/*
-+		 * Trigger write protection if there is by writing
-+		 * the same value back.
-+		 */
-+		*area_count(area_dst, nr) = count;
-+	}
-+
-+	if (signal_test)
-+		return signalled != split_nr_pages;
-+
-+	area_dst = mremap(area_dst, nr_pages * page_size,  nr_pages * page_size,
-+			  MREMAP_MAYMOVE | MREMAP_FIXED, area_src);
-+	if (area_dst == MAP_FAILED)
-+		err("mremap");
-+	/* Reset area_src since we just clobbered it */
-+	area_src = NULL;
-+
-+	for (; nr < nr_pages; nr++) {
-+		count = *area_count(area_dst, nr);
-+		if (count != count_verify[nr]) {
-+			err("nr %lu memory corruption %llu %llu\n",
-+			    nr, count, count_verify[nr]);
-+		}
-+		/*
-+		 * Trigger write protection if there is by writing
-+		 * the same value back.
-+		 */
-+		*area_count(area_dst, nr) = count;
-+	}
-+
-+	uffd_test_ops->release_pages(area_dst);
-+
-+	for (nr = 0; nr < nr_pages; nr++)
 +		for (i = 0; i < page_size; i++)
-+			if (*(area_dst + nr * page_size + i) != 0)
-+				err("page %lu offset %lu is not zero", nr, i);
++			if (area_dst[i] != 0)
++				err("data non-zero at offset %d\n", i);
++	}
 +
-+	return 0;
++
++	if (uffd_unregister(uffd, area_dst, page_size * nr_pages))
++		err("unregister");
++
++	uffd_test_pass();
 +}
 +
-+static void uffd_sigbus_test_common(bool wp)
++static void uffd_zeropage_test(void)
 +{
-+	unsigned long userfaults;
-+	pthread_t uffd_mon;
-+	pid_t pid;
-+	int err;
-+	char c;
-+	struct uffd_stats stats = { 0 };
-+
-+	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
-+
-+	if (uffd_register(uffd, area_dst, nr_pages * page_size,
-+			  true, wp, false))
-+		err("register failure");
-+
-+	if (faulting_process(1, wp))
-+		err("faulting process failed");
-+
-+	uffd_test_ops->release_pages(area_dst);
-+
-+	stats.apply_wp = wp;
-+	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &stats))
-+		err("uffd_poll_thread create");
-+
-+	pid = fork();
-+	if (pid < 0)
-+		err("fork");
-+
-+	if (!pid)
-+		exit(faulting_process(2, wp));
-+
-+	waitpid(pid, &err, 0);
-+	if (err)
-+		err("faulting process failed");
-+	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
-+		err("pipe write");
-+	if (pthread_join(uffd_mon, (void **)&userfaults))
-+		err("pthread_join()");
-+
-+	if (userfaults)
-+		uffd_test_fail("Signal test failed, userfaults: %ld", userfaults);
-+	else
-+		uffd_test_pass();
++	uffd_zeropage_test_common(true);
 +}
 +
-+static void uffd_sigbus_test(void)
++static void uffd_zeropage_hugetlb_test(void)
 +{
-+	uffd_sigbus_test_common(false);
-+}
-+
-+static void uffd_sigbus_wp_test(void)
-+{
-+	uffd_sigbus_test_common(true);
-+}
-+
-+static void uffd_events_test_common(bool wp)
-+{
-+	pthread_t uffd_mon;
-+	pid_t pid;
-+	int err;
-+	char c;
-+	struct uffd_stats stats = { 0 };
-+
-+	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
-+	if (uffd_register(uffd, area_dst, nr_pages * page_size,
-+			  true, wp, false))
-+		err("register failure");
-+
-+	stats.apply_wp = wp;
-+	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &stats))
-+		err("uffd_poll_thread create");
-+
-+	pid = fork();
-+	if (pid < 0)
-+		err("fork");
-+
-+	if (!pid)
-+		exit(faulting_process(0, wp));
-+
-+	waitpid(pid, &err, 0);
-+	if (err)
-+		err("faulting process failed");
-+	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
-+		err("pipe write");
-+	if (pthread_join(uffd_mon, NULL))
-+		err("pthread_join()");
-+
-+	if (stats.missing_faults != nr_pages)
-+		uffd_test_fail("Fault counts wrong");
-+	else
-+		uffd_test_pass();
-+}
-+
-+static void uffd_events_test(void)
-+{
-+	uffd_events_test_common(false);
-+}
-+
-+static void uffd_events_wp_test(void)
-+{
-+	uffd_events_test_common(true);
++	uffd_zeropage_test_common(false);
 +}
 +
  uffd_test_case_t uffd_tests[] = {
++	{
++		.name = "zeropage",
++		.uffd_fn = uffd_zeropage_test,
++		.mem_targets = MEM_ANON | MEM_SHMEM | MEM_SHMEM_PRIVATE,
++		.uffd_feature_required = 0,
++	},
++	{
++		.name = "zeropage-hugetlb",
++		.uffd_fn = uffd_zeropage_hugetlb_test,
++		.mem_targets = MEM_HUGETLB | MEM_HUGETLB_PRIVATE,
++		.uffd_feature_required = 0,
++	},
  	{
  		.name = "pagemap",
-@@ -466,6 +700,35 @@ uffd_test_case_t uffd_tests[] = {
- 		/* We can't test MADV_COLLAPSE, so try our luck */
- 		.uffd_feature_required = UFFD_FEATURE_MINOR_SHMEM,
- 	},
-+	{
-+		.name = "sigbus",
-+		.uffd_fn = uffd_sigbus_test,
-+		.mem_targets = MEM_ALL,
-+		.uffd_feature_required = UFFD_FEATURE_SIGBUS |
-+		UFFD_FEATURE_EVENT_FORK,
-+	},
-+	{
-+		.name = "sigbus-wp",
-+		.uffd_fn = uffd_sigbus_wp_test,
-+		.mem_targets = MEM_ALL,
-+		.uffd_feature_required = UFFD_FEATURE_SIGBUS |
-+		UFFD_FEATURE_EVENT_FORK | UFFD_FEATURE_PAGEFAULT_FLAG_WP,
-+	},
-+	{
-+		.name = "events",
-+		.uffd_fn = uffd_events_test,
-+		.mem_targets = MEM_ALL,
-+		.uffd_feature_required = UFFD_FEATURE_EVENT_FORK |
-+		UFFD_FEATURE_EVENT_REMAP | UFFD_FEATURE_EVENT_REMOVE,
-+	},
-+	{
-+		.name = "events-wp",
-+		.uffd_fn = uffd_events_wp_test,
-+		.mem_targets = MEM_ALL,
-+		.uffd_feature_required = UFFD_FEATURE_EVENT_FORK |
-+		UFFD_FEATURE_EVENT_REMAP | UFFD_FEATURE_EVENT_REMOVE |
-+		UFFD_FEATURE_PAGEFAULT_FLAG_WP,
-+	},
- };
- 
- int main(int argc, char *argv[])
+ 		.uffd_fn = uffd_pagemap_test,
 -- 
 2.39.1
 
