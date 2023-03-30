@@ -2,169 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCF26D0474
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096AA6D0477
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbjC3MO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 08:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        id S231391AbjC3MSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 08:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjC3MO5 (ORCPT
+        with ESMTP id S229741AbjC3MSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:14:57 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF9C5240;
-        Thu, 30 Mar 2023 05:14:56 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 47AA6604F5;
-        Thu, 30 Mar 2023 14:14:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680178493; bh=ayb2pw3hYDC8jjRZeWBH2bOVAIBgOuzroltwMc1VMjM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mj/0XOpY7sVZQil6CUxe+KCSXpX1n7uKC5blLGN6geabRYzoz52iKs+MK8vXKqB92
-         AYX2Mt3bpzyFNYky4P3qgmq27Wyr03V2INb+HiC/IS6BvACeax1e+gO3WIuMiUKlWe
-         iiKxn4C0K9GW8xbZWRIHKnv/TFXkVbI7lSLEqEr94DH10SdS39o6omlGzzDBEGOgFh
-         UTI3k/lbadEITbzuRD+sicffJzuKaKYwNHGRryvIEIMROvscw8q4bBJ+Jkv59OO9Sv
-         o/Ousf6I2hRy0f7rkKPGQ2eSGFOQ0uXfTgG/9XDlTUsLQYhZjUbPQtxXBFiNkZzyPL
-         3ZZeEfNIqqV+w==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id iELGCEV9WoEr; Thu, 30 Mar 2023 14:14:51 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id DE5AC604F0;
-        Thu, 30 Mar 2023 14:14:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680178491; bh=ayb2pw3hYDC8jjRZeWBH2bOVAIBgOuzroltwMc1VMjM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qeX8d+NyOObPJrSDDgx9T9KgoivY84PcB8mgRGFBU/zI1v077ptC2JMlbQGsAWA/Z
-         Mny1KPEoeOYgYrlox4cwrGP7N4H/lmmxlvdLg+biNxQGkDqi2dz/vLJzFPn2cXMLnQ
-         Ucx8HoIG7WA1/t/xfnaydpkwjc4wPF/4GySQoxH05pm7myFLT2T4sSFLnK04PpknNM
-         1h1GDx+N0b++foxqI5gMLI8yORQRzuIHSDVBWSsElylomhBi+tNsyoH1R4Xs35r93Q
-         L3FOe3FXZVGbGpSRIf8qEmYRnFZJ0ws5KroB0D0agROvA9U+D29tSrQN0XzezKrDGH
-         VruvG7O5RH34g==
-Message-ID: <4280de3f-0866-a904-78bc-5eb759dae248@alu.unizg.hr>
-Date:   Thu, 30 Mar 2023 14:14:50 +0200
+        Thu, 30 Mar 2023 08:18:46 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326FD76A2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:18:45 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso3331513wmo.0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:18:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1680178723;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wyt/QKbfFqwXxgXngsVcjXvUcjSi2SpEjcCROkpNZHw=;
+        b=Eqmfhnq5IEFLLhAjAZRIobhW/2B13mAKES+/WX/G7vJ9k6+u98ggyXukQa0h3R3Pf3
+         hjsG7bZivizU1puj66d5NNFYaW+jHoYbxNV/lTSLJgMMevl4Go5+ZPboncgUDRXv+Pb5
+         GkG6JqvpkWG3I7zPRYUM/oVw8aPAfOctlVnYhW3XV6iph4MfSFnbNkEfkkUtUh3+FKZp
+         d9vZsJt5qH/TE/5iu76QwFEFI3Y6o0Et9QWOv86TCtRi04gMXrYrQfxpDNocZPH0N5AI
+         +FBeoAHbfb91soVmz+IvymSJvF+YbDnt0hX2v2zuIdsuZ1JNTbWQnLcpZ2QItLZ9R6eX
+         MdDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680178723;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wyt/QKbfFqwXxgXngsVcjXvUcjSi2SpEjcCROkpNZHw=;
+        b=j6pYC8GWpejEh9QOemJG6d01yoKxZc1aCFNsfZ1vEcHWQ+kh005CTZ8YOGCfO5lQ80
+         inyAzdzWkHUhkuW5mf0y7WJNcfjPnqPtyb51JLTV0bzK3DY6ToAsyCEfuOGe01o2z8sP
+         CMagFOPTrTTeE8v9jHuOjGi5eJPGhWadaM5Zr88xt+rja/Qn5oivva3XezXfZh88RRNt
+         iu/+pFaY8W/Od/rCw7xILi5XYcsVmMP6I+wDQW4CEp3w2wUipbugsql6WaHTGTn64jZj
+         Ig+ijg4WxamcRAzWnc9R0FTP6nGF9nGZMBM9wQporK94y/0B+G4z9aLGDCznXbujHkOK
+         th1Q==
+X-Gm-Message-State: AO0yUKVOJUNVIaB8Y84l/IjJuRBtew/SMeAnWmhVtRjannSzoyY2eVTd
+        N86jeSCalpCDWGuficMZq3xRbA==
+X-Google-Smtp-Source: AK7set8KZRCKiYFEeuKZGefi283mvYKlXVix1qHiiGvficshl2fwJ0ohFCGwM+wM6kXCzp8F9AjUWQ==
+X-Received: by 2002:a7b:cbc2:0:b0:3df:de28:f819 with SMTP id n2-20020a7bcbc2000000b003dfde28f819mr18146008wmi.15.1680178723657;
+        Thu, 30 Mar 2023 05:18:43 -0700 (PDT)
+Received: from localhost ([165.225.194.194])
+        by smtp.gmail.com with ESMTPSA id n23-20020a05600c3b9700b003ede04deb14sm5744936wms.48.2023.03.30.05.18.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 05:18:43 -0700 (PDT)
+References: <20230329223239.138757-1-y86-dev@protonmail.com>
+ <20230329223239.138757-3-y86-dev@protonmail.com>
+User-agent: mu4e 1.9.18; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     y86-dev@protonmail.com
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v3 02/13] rust: sync: add `assume_init` to `UniqueArc`
+Date:   Thu, 30 Mar 2023 14:18:06 +0200
+In-reply-to: <20230329223239.138757-3-y86-dev@protonmail.com>
+Message-ID: <87y1ne4el9.fsf@metaspace.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [BUG] [PATCH RFC v1] selftests/firmware: copious kernel memory
- leaks in test_fw_run_batch_request()
-Content-Language: en-US, hr
-To:     Dan Carpenter <error27@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
- <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 12:06, Dan Carpenter wrote:
-> On Tue, Mar 28, 2023 at 11:23:00AM +0200, Mirsad Todorovac wrote:
->> The leaks are in chunks of 1024 bytes (+ overhead), but so far I could not
->> reproduce w/o root privileges, as tests refuse to run as unprivileged user.
->> (This is not the proof of non-existence of an unprivileged automated exploit
->> that would exhaust the kernel memory at approx. rate 4 MB/hour on our setup.
->>
->> This would mean about 96 MB / day or 3 GB / month (of kernel memory).
-> 
-> This is firmware testing stuff.  In the real world people aren't going
-> to run their test scripts in a loop for days.
-> 
-> There is no security implications.  This is root only.  Also if the
-> user could load firmware then that would be the headline.  Once someone
-> is can already load firmware then who cares if they leak 100MB per day?
-> 
-> It looks like if you call trigger_batched_requests_store() twice in a
-> row then it will leak memory.  Definitely test_fw_config->reqs is leaked.
-> That's different from what the bug report is complaining about, but the
-> point is that there are some obvious leaks.  It looks like you're
-> supposed to call trigger_batched_requests_store() in between runs?
-> 
-> There are other races like config_num_requests_store() should hold the
-> mutex over the call to test_dev_config_update_u8() instead of dropping
-> and retaking it.
 
-Hi Dan,
+y86-dev@protonmail.com writes:
 
-Following your insight and advice, I tried to mend this racing condition
-like this:
+> From: Benno Lossin <y86-dev@protonmail.com>
+>
+> Adds the `assume_init` function to `UniqueArc<MaybeUninit<T>>` that
+> unsafely assumes the value to be initialized and yields a value of type
+> `UniqueArc<T>`. This function is used when manually initializing the
+> pointee of an `UniqueArc`.
+>
+> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+> ---
 
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 05ed84c2fc4c..6723c234ccbb 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -402,6 +402,8 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
-         return snprintf(buf, PAGE_SIZE, "%d\n", val);
-  }
+Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
 
-+static DEFINE_MUTEX(test_fw_mutex_update);
-+
-  static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-  {
-         u8 val;
-@@ -411,9 +413,9 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-         if (ret)
-                 return ret;
-
--       mutex_lock(&test_fw_mutex);
-+       mutex_lock(&test_fw_mutex_update);
-         *(u8 *)cfg = val;
--       mutex_unlock(&test_fw_mutex);
-+       mutex_unlock(&test_fw_mutex_update);
-
-         /* Always return full write size even if we didn't consume all */
-         return size;
-@@ -471,10 +473,10 @@ static ssize_t config_num_requests_store(struct device *dev,
-                 mutex_unlock(&test_fw_mutex);
-                 goto out;
-         }
--       mutex_unlock(&test_fw_mutex);
-
-         rc = test_dev_config_update_u8(buf, count,
-                                        &test_fw_config->num_requests);
-+       mutex_unlock(&test_fw_mutex);
-
-  out:
-         return rc;
-
-For the second trigger_batched_requests_store(), probably the desired behaviour
-would be to extend the list of test_fw_config->reqs, rather than destroying them
-and allocating the new ones?
-
-I am not certain about the desired semantics and where is it documented.
-
-Thank you.
-
-Best regards,
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-
-"What’s this thing suddenly coming towards me very fast? Very very fast.
-... I wonder if it will be friends with me?"
