@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9939E6D022B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACEEF6D0230
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjC3Kx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        id S231160AbjC3Kyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjC3Kxy (ORCPT
+        with ESMTP id S230478AbjC3Kyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:53:54 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2F64C2F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:53:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680173633; x=1711709633;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=/a2NUyQvjACpQ05kbhWwDQBqs0dGUOck0k692foQm/k=;
-  b=RljzMu/RZkHzBbdI5hVRMg0edt12gI3DcLsIi3T91okiRtlfYTwiYLKu
-   +D3y8KAUHhLum0z3UhHwQchCAJRx0gQPPCkXAAco8P2wCHmojSJk2AE15
-   JsIhOY9fXO1cZZ7BspJJZTA5rfUqYkdvv4gEcov6eEB3hD9J0Dk54fXoc
-   f9nNm/c7PcdSYL4FKwoy2PpFwq7YtCb9MBZtfO17X7zaKea0ig78fEbAG
-   VvbEVMpSJJUKqpuK0XXw66yN+tLH6TGeBoEO+nLPsVrVLy1reqIvmwxYu
-   ASQ3HFIuBnywz39/se6g6fTtW5M1otHyMUX7UZBElAlD9NjwI5Kxsk43B
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="329628463"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="329628463"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:53:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="1014392291"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="1014392291"
-Received: from unknown (HELO localhost) ([10.237.66.160])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:53:49 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     David Gow <davidgow@google.com>,
-        =?utf-8?Q?Lu=C3=ADs?= Mendes <luis.p.mendes@gmail.com>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?utf-8?Q?Ma=C3=ADra?= Canal <mairacanal@riseup.net>,
-        Arthur Grillo <arthurgrillo@riseup.net>
-Cc:     dri-devel@lists.freedesktop.org, David Gow <davidgow@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] drm: buddy_allocator: Fix buddy allocator init on
- 32-bit systems
-In-Reply-To: <20230329065532.2122295-1-davidgow@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230329065532.2122295-1-davidgow@google.com>
-Date:   Thu, 30 Mar 2023 13:53:47 +0300
-Message-ID: <878rfe4iis.fsf@intel.com>
+        Thu, 30 Mar 2023 06:54:36 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4269A7A9B
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:54:34 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id t10so74600568edd.12
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680173672;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OqUGHUrm43RLGTh9JpU7D6RY+mMjCNqmEMvavWfCE+k=;
+        b=i1tw7IUVN9J9Y//YEW9fGNzDVe3ddS4yYbipPUepEfbMEZlq8mlqN21Jl/M16PXRt7
+         DeTeWG2DWMIW3M6PBoidWqmVoXvgdStRpQkKYKi5BCjvjqjivQJfPfPIlhMg5KgMgyKj
+         /ZWfBOZ8ROIcunQTF85L0HdzSjL9+QytM7rUJTt37i7uH5y7+ItGE7aHKQkWWhsd2Aix
+         xd5vCSYmTOdk87iH8CVkgyOuXhnIivhuIrG7aYs2wKUJ8KPJugdGB22d9NCT4f1Sz1pb
+         ExtdYYaLl/eETyz52i9nfrIYn0ZzmoKvWV2W6W7J6omzTvcVf6Qkb6+CX040FRLTq953
+         Flgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680173672;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OqUGHUrm43RLGTh9JpU7D6RY+mMjCNqmEMvavWfCE+k=;
+        b=QRDW6x4Me7WQdctzu1vYNGBy8cTFTBmTTQOUhWZu5ROiAsACvPICF+KWgXk96GTPgN
+         9QK/aHyNRs2yNunXywdXgo3jFG6fSg0WLEdXqbls5sMVXTSf1zsoJIGoBeNT6fv+3wKz
+         LDhy7XV5dge7Ll061s32o5hbHFeLvBOP1QRpuHfr8DOJiNXTc/nNxiYsIRUos0MoA44m
+         4GwXD8kzguzydFxPR4DuzFkorJ3S4kQKXwa4I1vmzQd7u+cp+jyf8hqoJxEaFrWn9tB7
+         pbGh9DyJTEsHzdEgYOo8OPctrghAbgIe5AdYKODFOzZd5aLyG/Sr2e9ZCZ4hSkUasqsE
+         c1Tw==
+X-Gm-Message-State: AAQBX9eGsPZLbfU/uh4d8NX5/Mb21kawyOiv47S53D8nVLXoMMXuqFTm
+        ZOzfS9bGVWwMYzw2avTAKnt7RAKf426OcA==
+X-Google-Smtp-Source: AKy350bzKEQCG6GDsYiBs9L2k+YnYWevEj41NyveTFA56DrwWQFNl8Fd+kMU/hKFZhI4nR5pthnZ/A==
+X-Received: by 2002:a17:906:980b:b0:932:4eea:17ce with SMTP id lm11-20020a170906980b00b009324eea17cemr23754693ejb.39.1680173672274;
+        Thu, 30 Mar 2023 03:54:32 -0700 (PDT)
+Received: from lelloman-5950.. (host-80-182-134-1.pool80182.interbusiness.it. [80.182.134.1])
+        by smtp.gmail.com with ESMTPSA id hb6-20020a170906b88600b0093120a11a5dsm17639628ejb.92.2023.03.30.03.54.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 03:54:31 -0700 (PDT)
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     peterz@infradead.org, surenb@google.com, brauner@kernel.org,
+        chris@chrisdown.name, hannes@cmpxchg.org,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Subject: [PATCH v6 0/4] sched/psi: Allow unprivileged PSI polling
+Date:   Thu, 30 Mar 2023 12:54:14 +0200
+Message-Id: <20230330105418.77061-1-cerasuolodomenico@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023, David Gow <davidgow@google.com> wrote:
-> The drm buddy allocator tests were broken on 32-bit systems, as
-> rounddown_pow_of_two() takes a long, and the buddy allocator handles
-> 64-bit sizes even on 32-bit systems.
->
-> This can be reproduced with the drm_buddy_allocator KUnit tests on i386:
-> 	./tools/testing/kunit/kunit.py run --arch i386 \
-> 	--kunitconfig ./drivers/gpu/drm/tests drm_buddy
->
-> (It results in kernel BUG_ON() when too many blocks are created, due to
-> the block size being too small.)
->
-> This was independently uncovered (and fixed) by Lu=C3=ADs Mendes, whose p=
-atch
-> added a new u64 variant of rounddown_pow_of_two(). This version instead
-> recalculates the size based on the order.
->
-> Reported-by: Lu=C3=ADs Mendes <luis.p.mendes@gmail.com>
-> Link: https://lore.kernel.org/lkml/CAEzXK1oghXAB_KpKpm=3D-CviDQbNaH0qfgYT=
-SSjZgvvyj4U78AA@mail.gmail.com/T/
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->  drivers/gpu/drm/drm_buddy.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
-> index 3d1f50f481cf..7098f125b54a 100644
-> --- a/drivers/gpu/drm/drm_buddy.c
-> +++ b/drivers/gpu/drm/drm_buddy.c
-> @@ -146,8 +146,8 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u6=
-4 chunk_size)
->  		unsigned int order;
->  		u64 root_size;
->=20=20
-> -		root_size =3D rounddown_pow_of_two(size);
-> -		order =3D ilog2(root_size) - ilog2(chunk_size);
-> +		order =3D ilog2(size) - ilog2(chunk_size);
-> +		root_size =3D chunk_size << order;
+PSI offers 2 mechanisms to get information about a specific resource
+pressure. One is reading from /proc/pressure/<resource>, which gives
+average pressures aggregated every 2s. The other is creating a pollable
+fd for a specific resource and cgroup.
 
-Just noticed near the beginning of the function there's also:
+The trigger creation requires CAP_SYS_RESOURCE, and gives the
+possibility to pick specific time window and threshold, spawing an RT
+thread to aggregate the data.
 
-	if (!is_power_of_2(chunk_size))
-		return -EINVAL;
+Systemd would like to provide containers the option to monitor pressure
+on their own cgroup and sub-cgroups. For example, if systemd launches a
+container that itself then launches services, the container should have
+the ability to poll() for pressure in individual services. But neither
+the container nor the services are privileged.
 
-which is also wrong for 32-bit.
+The series is implemented in 4 steps in order to reduce the noise of
+the change.
 
+V6:
+-fix trigger creation logic now using proper locks
 
-BR,
-Jani.
+V5:
+- few suggested code style changes in psi.c and psy_types.h
+- fix trigger destruction logic now using proper locks
 
+V4:
+- fixed psi_open leftover usage in IRQ accounting (patch 4/4)
 
->=20=20
->  		root =3D drm_block_alloc(mm, NULL, order, offset);
->  		if (!root)
+V3:
+- restored renaming patch (#2 of 4) as suggested in review
+- rebased #3 and #4 on the renaming commit
 
---=20
-Jani Nikula, Intel Open Source Graphics Center
+V2:
+- removed renaming patch (previous 2/4) and applied suggested solution
+- changed update_triggers side effect removal as suggested in review
+- rebased core patch on other V2 changes
+
+Domenico Cerasuolo (4):
+  sched/psi: rearrange polling code in preparation
+  sched/psi: rename existing poll members in preparation
+  sched/psi: extract update_triggers side effect
+  sched/psi: allow unprivileged polling of N*2s period
+
+ Documentation/accounting/psi.rst |   4 +
+ include/linux/psi.h              |   2 +-
+ include/linux/psi_types.h        |  43 +--
+ kernel/cgroup/cgroup.c           |   2 +-
+ kernel/sched/psi.c               | 473 +++++++++++++++++--------------
+ 5 files changed, 289 insertions(+), 235 deletions(-)
+
+-- 
+2.34.1
+
