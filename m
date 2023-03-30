@@ -2,146 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366226CFFED
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F096CFFF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjC3Jjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S230019AbjC3Jk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjC3Jjm (ORCPT
+        with ESMTP id S229874AbjC3JkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:39:42 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5EC6E91
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:39:41 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-545e907790fso227951907b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:39:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680169181;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+KF3Ej0zA5vUsAy03E3uvbCGHCj2rR2h+cgAo56vcSY=;
-        b=XMzC2GHrO/8LfQ2aF3jdBJuAoAavxiNQuWfxljRs8SSZB223Vy6gKXq8lIxlvbo5Rh
-         61k6tYXlbAGXehWTjVPqLri1D03gVJoGcUXUOH3PsPIHJc/noOjuYYqooeFFg70dSNjo
-         J8X8pl4w2xqanq7XlhVxGBqwbB39cp4zM3CYYGZ3A6180YwGKiXfkRrFVRSEeEMxllvf
-         BH83sjDB5BmtIX7D/eKKrPxH3sAEqcldv4ha47iuHa7Z3Tf3JV7WlJnqKJ42NY0SShVq
-         bO4jsOO7inoRCS2pNoUY+O3iSCI+0NqnrtUaX3tZobzpuU/fM2EXaflsdDLgvfQkpeRp
-         b18g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680169181;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+KF3Ej0zA5vUsAy03E3uvbCGHCj2rR2h+cgAo56vcSY=;
-        b=d8vqqQejAtccKjETG7TWFHWmhKOqedDIZa5fkMGzcDG5nv7akwnQ2/pwpH3bsEtoSQ
-         He/0U4PnRpdpgZzU1TL1K2k5CH8qgCrAcuaBPdb9ONA8js5q/FTrp5ZwB1VyTETHFXhc
-         vSrVaKrc4C00ZRDxNwpFQyI4ZrJFs24wWDhL20lHEVycvfhkFErGqrlqdnlXxVNoOf2H
-         IrYm49RAei/rQHhDTVaUYPimWPdOoI6Z82Hf1AAgn6LdjGHWjPD9HiWQBrv8zewC3M8Q
-         eQsYjipHzIM6Hvty35SMhwFfQGfJQ9JcJAYoQS+s+PCalugppl1rMwXv0/b+Hwdls3A5
-         Yv+g==
-X-Gm-Message-State: AAQBX9f6G8N7sZbUt5V/qX4+lpTGFsQOWl90u2XO+8SDd3YctXh9jvDT
-        CWdQB7XVyaFTtNuC3wSNm724t3yly36pAfvs0kR2PA==
-X-Google-Smtp-Source: AKy350Y9NxPb3viIr2gzUpn3/4183c/Hd9fNIbqB/+mt9JjjNP5tyVonZiZsUTV2u+aJtwZ2ZC3uPbmUCiAJfBuAGXU=
-X-Received: by 2002:a81:ae4f:0:b0:545:ed8e:f4f6 with SMTP id
- g15-20020a81ae4f000000b00545ed8ef4f6mr7051275ywk.5.1680169180845; Thu, 30 Mar
- 2023 02:39:40 -0700 (PDT)
+        Thu, 30 Mar 2023 05:40:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC58E5BAB
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:40:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B89161FB9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:40:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2775C4339C
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:40:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680169222;
+        bh=TZ7+QJNcppwvyxngwgi947mNMBOSswS1rVlzdkVli48=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lfAihpfQY4n8VZcs8s+DD6cIWE13gYPGFrdhTZ4+I35sJUFiKr4BQCKwHdNbdGf9q
+         GCdUnjO4XQ18yWSqyXoyRUDP7P8H9hzppi3Ib9RXd1mhfY1vyLzOvSgAFb/pFxGHVh
+         ePDphAHRAY+JasL8xWaGDueljXmmwOG+a8BFPTi5AcDwQI6do04zveA4fyFL4SGwAs
+         tD4BpGk9SSGBaihYWcn6AKLdHJQJ7QD51lpAX4O73BurxaphY8y18mEsLFEtNFFd4b
+         KbRSWigfVgInAZgU1YCBpwZxl56Q1MsjtrGqQrYIiUw8Y91BVNzjFWHYyjasp7vSXZ
+         pk6FIT1VZ8u/g==
+Received: by mail-pl1-f180.google.com with SMTP id u10so17532460plz.7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:40:22 -0700 (PDT)
+X-Gm-Message-State: AAQBX9drWOUHQZUiMkkF//JW7QxvK6O4eMXJIN9FvlkQfycKhCcR6925
+        ehXhj0F1ZkIYd6jzmO55RGs8nUA5vRZt6gFgLxdPWw==
+X-Google-Smtp-Source: AKy350Zc060ocRd8FeXDfv9ppwm12XZxKMuK6TCTjOSTZiTrlfJZ3EJN88IehlFDe/vgfu9DrYctMQcRdfywnEtBmxc=
+X-Received: by 2002:a17:902:b18a:b0:1a1:8f72:e9b with SMTP id
+ s10-20020a170902b18a00b001a18f720e9bmr8239215plr.7.1680169222352; Thu, 30 Mar
+ 2023 02:40:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1680162377.git.quic_varada@quicinc.com> <cb8f2ba0ff39951aeada479ed3895d19c9f72617.1680162377.git.quic_varada@quicinc.com>
-In-Reply-To: <cb8f2ba0ff39951aeada479ed3895d19c9f72617.1680162377.git.quic_varada@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 30 Mar 2023 12:39:30 +0300
-Message-ID: <CAA8EJprQhrqWo5s8hNq=z4DL=hw9wde4ZHHwb+JoKCMQk3rU7w@mail.gmail.com>
-Subject: Re: [PATCH v5 3/8] dt-bindings: usb: dwc3: Add IPQ9574 compatible
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20230330093131.424828-1-francesco@dolcini.it>
+In-Reply-To: <20230330093131.424828-1-francesco@dolcini.it>
+From:   Robert Foss <rfoss@kernel.org>
+Date:   Thu, 30 Mar 2023 11:40:11 +0200
+X-Gmail-Original-Message-ID: <CAN6tsi6DB4wsxAriDWimRE2-FW80LMOsX9DDkNQdifYFCUMjGg@mail.gmail.com>
+Message-ID: <CAN6tsi6DB4wsxAriDWimRE2-FW80LMOsX9DDkNQdifYFCUMjGg@mail.gmail.com>
+Subject: Re: [PATCH v1] drm/bridge: lt8912b: Fix DSI Video Mode
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Adrien Grassein <adrien.grassein@gmail.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Mar 2023 at 11:42, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
+On Thu, Mar 30, 2023 at 11:31=E2=80=AFAM Francesco Dolcini <francesco@dolci=
+ni.it> wrote:
 >
-> Document the IPQ9574 dwc3 compatible.
+> From: Francesco Dolcini <francesco.dolcini@toradex.com>
 >
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> LT8912 DSI port supports only Non-Burst mode video operation with Sync
+> Events and continuous clock on clock lane, correct dsi mode flags
+> according to that removing MIPI_DSI_MODE_VIDEO_BURST flag.
+>
+> Cc: <stable@vger.kernel.org>
+> Fixes: 30e2ae943c26 ("drm/bridge: Introduce LT8912B DSI to HDMI bridge")
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 > ---
->  Changes in v5:
->         - Restore removed constraints
+>  drivers/gpu/drm/bridge/lontium-lt8912b.c | 1 -
+>  1 file changed, 1 deletion(-)
 >
->  Changes in v4:
->         - Update other relevant sections
->         - Remove constraints not applicable to IPQ9574
-> ---
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
+> diff --git a/drivers/gpu/drm/bridge/lontium-lt8912b.c b/drivers/gpu/drm/b=
+ridge/lontium-lt8912b.c
+> index b40baced1331..13c131ade268 100644
+> --- a/drivers/gpu/drm/bridge/lontium-lt8912b.c
+> +++ b/drivers/gpu/drm/bridge/lontium-lt8912b.c
+> @@ -504,7 +504,6 @@ static int lt8912_attach_dsi(struct lt8912 *lt)
+>         dsi->format =3D MIPI_DSI_FMT_RGB888;
 >
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> index a2aabda..8def6a3 100644
-> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> @@ -17,6 +17,7 @@ properties:
->            - qcom,ipq6018-dwc3
->            - qcom,ipq8064-dwc3
->            - qcom,ipq8074-dwc3
-> +          - qcom,ipq9574-dwc3
->            - qcom,msm8953-dwc3
->            - qcom,msm8994-dwc3
->            - qcom,msm8996-dwc3
-> @@ -242,6 +243,24 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> +              - qcom,ipq9574-dwc3
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 5
-> +        clock-names:
-> +          items:
-> +            - const: sys_noc_axi
-> +            - const: anoc_axi
-> +            - const: master
-> +            - const: sleep
-> +            - const: mock_utmi
-
-Is there any chance of using clock names that are close to the names
-used by existing platforms?
-
-I think this fits into the third 'if' bucket:
-
-cfg_noc = sys_noc_axi
-core = master
-iface = anoc_axi
-sleep = sleep
-mock_utmi = mock_utmi
-
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
->                - qcom,msm8994-dwc3
->                - qcom,qcs404-dwc3
->      then:
+>         dsi->mode_flags =3D MIPI_DSI_MODE_VIDEO |
+> -                         MIPI_DSI_MODE_VIDEO_BURST |
+>                           MIPI_DSI_MODE_LPM |
+>                           MIPI_DSI_MODE_NO_EOT_PACKET;
+>
 > --
-> 2.7.4
+> 2.25.1
 >
 
+Letting this sleep for a few days before applying.
 
--- 
-With best wishes
-Dmitry
+Reviewed-by: Robert Foss <rfoss@kernel.org>
