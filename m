@@ -2,115 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA6B6D076C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7EE16D078A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjC3N5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
+        id S232245AbjC3OCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbjC3N5K (ORCPT
+        with ESMTP id S230035AbjC3OCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:57:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C91F27EED
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:56:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC2632F4;
-        Thu, 30 Mar 2023 06:57:38 -0700 (PDT)
-Received: from [10.1.35.23] (e122027.cambridge.arm.com [10.1.35.23])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F77F3F663;
-        Thu, 30 Mar 2023 06:56:52 -0700 (PDT)
-Message-ID: <f468f934-40b6-3547-d3ea-88a0aac5bd6a@arm.com>
-Date:   Thu, 30 Mar 2023 14:56:50 +0100
+        Thu, 30 Mar 2023 10:02:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C29C5259;
+        Thu, 30 Mar 2023 07:02:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680184927; x=1711720927;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kGqql32tY2qK8YOyl2Nxe92xv5mmZXxmhttRivAFbQY=;
+  b=ZnnCRmfAsvkr4rMJQqhaLcwuAGo38VwF3qpkQaENxf8oGNz2qtA+ocMH
+   XFQ7VARnvcN5LBWvcUQLg8yTptP0hsp6z0ztGywvoJXEpSYS5wpmSGsbS
+   G+0t8wsldEAnaz5cyrVqjmrIE5jR0IJL97BC+O9bfGV8z3BI6FDCLjD13
+   auJBPax9b3fh9TNRzsvVbF5AG7JSzBqxQ0NQzdDXpI4K2Xt/f7FMvUqy/
+   mhFk+Wjqbvlnmjddh5T8Tgz7H5wlVBlIjdDnABfwGUN/LEcSCKu/2ChHr
+   u8F4pfOgub7oCbBGoz4q6Okl6zrluR3BDeqPOTsSxlfMvtdc3/qYAsmQV
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="338672814"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="338672814"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:01:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="1014430014"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="1014430014"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Mar 2023 07:01:28 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D6A1313A; Thu, 30 Mar 2023 16:57:50 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] i2c: mlxbf: Use readl_poll_timeout_atomic() for polling
+Date:   Thu, 30 Mar 2023 16:57:47 +0300
+Message-Id: <20230330135747.15684-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [BUG] Usersapce MTE error with allocation tag 0 when low on
- memory
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        =?UTF-8?B?UXVuLXdlaSBMaW4gKOael+e+pOW0tCk=?= 
-        <Qun-wei.Lin@mediatek.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "surenb@google.com" <surenb@google.com>,
-        "david@redhat.com" <david@redhat.com>,
-        =?UTF-8?B?Q2hpbndlbiBDaGFuZyAo5by16Yym5paHKQ==?= 
-        <chinwen.chang@mediatek.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        =?UTF-8?B?S3Vhbi1ZaW5nIExlZSAo5p2O5Yag56mOKQ==?= 
-        <Kuan-Ying.Lee@mediatek.com>,
-        =?UTF-8?B?Q2FzcGVyIExpICjmnY7kuK3mpq4p?= <casper.li@mediatek.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-References: <5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com>
- <ZCRtVW9Q0WOKEQVX@arm.com>
-Content-Language: en-GB
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <ZCRtVW9Q0WOKEQVX@arm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2023 17:54, Catalin Marinas wrote:
-> + Steven Price who added the MTE swap support.
-> 
-> On Wed, Mar 29, 2023 at 02:55:49AM +0000, Qun-wei Lin (林群崴) wrote:
+Convert the usage of an open-coded custom tight poll while loop
+with the provided readl_poll_timeout_atomic() macro.
 
-<snip>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-mlxbf.c | 106 ++++++++-------------------------
+ 1 file changed, 26 insertions(+), 80 deletions(-)
 
->>
->> Having compared the differences between Kernel-5.15 and Kernel-6.1,
->> We found the order of swap_free() and set_pte_at() is changed in
->> do_swap_page().
->>
->> When fault in, do_swap_page() will call swap_free() first:
->> do_swap_page() -> swap_free() -> __swap_entry_free() ->
->> free_swap_slot() -> swapcache_free_entries() -> swap_entry_free() ->
->> swap_range_free() -> arch_swap_invalidate_page() ->
->> mte_invalidate_tags_area() ->  mte_invalidate_tags() -> xa_erase()
->>
->> and then call set_pte_at():
->> do_swap_page() -> set_pte_at() -> __set_pte_at() -> mte_sync_tags() ->
->> mte_sync_page_tags() -> mte_restore_tags() -> xa_load()
->>
->> This means that the swap slot is invalidated before pte mapping, and
->> this will cause the mte tag in XArray to be released before tag
->> restore.
-
-This analysis looks correct to me. The MTE swap code works on the
-assumption that the set_pte_at() will restore the tags to the page
-before the swap entry is removed. The reordering which has happened
-since has broken this assumption and as you observed can cause the tags
-to be unavailable by the time set_pte_at() is called.
-
->> After I moved swap_free() to the next line of set_pte_at(), the problem
->> is disappeared.
->>
->> We suspect that the following patches, which have changed the order, do
->> not consider the mte tag restoring in page fault flow:
->> https://lore.kernel.org/all/20220131162940.210846-5-david@redhat.com/
-
-I'm not sure I entirely follow the reasoning in this patch, so I'm not
-sure whether it's safe to just move swap_free() down to below
-set_pte_at() or if that reintroduces the information leak.
-
-I also wonder if sparc has a similar issue as the arch_do_swap()
-callback is located next to set_pte_at().
-
->> Any suggestion is appreciated.
-
-The other possibility is to add a(nother) callback for MTE in
-arch_do_swap() that calls mte_restore_tags() on the page before the
-swap_free() call rather than depending on the hook in set_pte_at().
-
-Steve
+diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
+index 1810d5791b3d..8087c556694d 100644
+--- a/drivers/i2c/busses/i2c-mlxbf.c
++++ b/drivers/i2c/busses/i2c-mlxbf.c
+@@ -12,6 +12,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/i2c.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+@@ -495,65 +496,6 @@ static u8 mlxbf_i2c_bus_count;
+ 
+ static struct mutex mlxbf_i2c_bus_lock;
+ 
+-/*
+- * Function to poll a set of bits at a specific address; it checks whether
+- * the bits are equal to zero when eq_zero is set to 'true', and not equal
+- * to zero when eq_zero is set to 'false'.
+- * Note that the timeout is given in microseconds.
+- */
+-static u32 mlxbf_i2c_poll(void __iomem *io, u32 addr, u32 mask,
+-			    bool eq_zero, u32  timeout)
+-{
+-	u32 bits;
+-
+-	timeout = (timeout / MLXBF_I2C_POLL_FREQ_IN_USEC) + 1;
+-
+-	do {
+-		bits = readl(io + addr) & mask;
+-		if (eq_zero ? bits == 0 : bits != 0)
+-			return eq_zero ? 1 : bits;
+-		udelay(MLXBF_I2C_POLL_FREQ_IN_USEC);
+-	} while (timeout-- != 0);
+-
+-	return 0;
+-}
+-
+-/*
+- * SW must make sure that the SMBus Master GW is idle before starting
+- * a transaction. Accordingly, this function polls the Master FSM stop
+- * bit; it returns false when the bit is asserted, true if not.
+- */
+-static bool mlxbf_i2c_smbus_master_wait_for_idle(struct mlxbf_i2c_priv *priv)
+-{
+-	u32 mask = MLXBF_I2C_SMBUS_MASTER_FSM_STOP_MASK;
+-	u32 addr = priv->chip->smbus_master_fsm_off;
+-	u32 timeout = MLXBF_I2C_SMBUS_TIMEOUT;
+-
+-	if (mlxbf_i2c_poll(priv->mst->io, addr, mask, true, timeout))
+-		return true;
+-
+-	return false;
+-}
+-
+-/*
+- * wait for the lock to be released before acquiring it.
+- */
+-static bool mlxbf_i2c_smbus_master_lock(struct mlxbf_i2c_priv *priv)
+-{
+-	if (mlxbf_i2c_poll(priv->mst->io, MLXBF_I2C_SMBUS_MASTER_GW,
+-			   MLXBF_I2C_MASTER_LOCK_BIT, true,
+-			   MLXBF_I2C_SMBUS_LOCK_POLL_TIMEOUT))
+-		return true;
+-
+-	return false;
+-}
+-
+-static void mlxbf_i2c_smbus_master_unlock(struct mlxbf_i2c_priv *priv)
+-{
+-	/* Clear the gw to clear the lock */
+-	writel(0, priv->mst->io + MLXBF_I2C_SMBUS_MASTER_GW);
+-}
+-
+ static bool mlxbf_i2c_smbus_transaction_success(u32 master_status,
+ 						u32 cause_status)
+ {
+@@ -583,6 +525,7 @@ static int mlxbf_i2c_smbus_check_status(struct mlxbf_i2c_priv *priv)
+ {
+ 	u32 master_status_bits;
+ 	u32 cause_status_bits;
++	u32 bits;
+ 
+ 	/*
+ 	 * GW busy bit is raised by the driver and cleared by the HW
+@@ -591,9 +534,9 @@ static int mlxbf_i2c_smbus_check_status(struct mlxbf_i2c_priv *priv)
+ 	 * then read the cause and master status bits to determine if
+ 	 * errors occurred during the transaction.
+ 	 */
+-	mlxbf_i2c_poll(priv->mst->io, MLXBF_I2C_SMBUS_MASTER_GW,
+-			 MLXBF_I2C_MASTER_BUSY_BIT, true,
+-			 MLXBF_I2C_SMBUS_TIMEOUT);
++	readl_poll_timeout_atomic(priv->mst->io + MLXBF_I2C_SMBUS_MASTER_GW,
++				  bits, !(bits & MLXBF_I2C_MASTER_BUSY_BIT),
++				  MLXBF_I2C_POLL_FREQ_IN_USEC, MLXBF_I2C_SMBUS_TIMEOUT);
+ 
+ 	/* Read cause status bits. */
+ 	cause_status_bits = readl(priv->mst_cause->io +
+@@ -740,7 +683,8 @@ mlxbf_i2c_smbus_start_transaction(struct mlxbf_i2c_priv *priv,
+ 	u8 read_en, write_en, block_en, pec_en;
+ 	u8 slave, flags, addr;
+ 	u8 *read_buf;
+-	int ret = 0;
++	u32 bits;
++	int ret;
+ 
+ 	if (request->operation_cnt > MLXBF_I2C_SMBUS_MAX_OP_CNT)
+ 		return -EINVAL;
+@@ -760,11 +704,22 @@ mlxbf_i2c_smbus_start_transaction(struct mlxbf_i2c_priv *priv,
+ 	 * Try to acquire the smbus gw lock before any reads of the GW register since
+ 	 * a read sets the lock.
+ 	 */
+-	if (WARN_ON(!mlxbf_i2c_smbus_master_lock(priv)))
++	ret = readl_poll_timeout_atomic(priv->mst->io + MLXBF_I2C_SMBUS_MASTER_GW,
++					bits, !(bits & MLXBF_I2C_MASTER_LOCK_BIT),
++					MLXBF_I2C_POLL_FREQ_IN_USEC,
++					MLXBF_I2C_SMBUS_LOCK_POLL_TIMEOUT);
++	if (WARN_ON(ret))
+ 		return -EBUSY;
+ 
+-	/* Check whether the HW is idle */
+-	if (WARN_ON(!mlxbf_i2c_smbus_master_wait_for_idle(priv))) {
++	/*
++	 * SW must make sure that the SMBus Master GW is idle before starting
++	 * a transaction. Accordingly, this call polls the Master FSM stop bit;
++	 * it returns 0 when the bit is asserted, -ETIMEDOUT if not.
++	 */
++	ret = readl_poll_timeout_atomic(priv->mst->io + priv->chip->smbus_master_fsm_off,
++					bits, !(bits & MLXBF_I2C_SMBUS_MASTER_FSM_STOP_MASK),
++					MLXBF_I2C_POLL_FREQ_IN_USEC, MLXBF_I2C_SMBUS_TIMEOUT);
++	if (WARN_ON(ret)) {
+ 		ret = -EBUSY;
+ 		goto out_unlock;
+ 	}
+@@ -855,7 +810,8 @@ mlxbf_i2c_smbus_start_transaction(struct mlxbf_i2c_priv *priv,
+ 	}
+ 
+ out_unlock:
+-	mlxbf_i2c_smbus_master_unlock(priv);
++	/* Clear the gw to clear the lock */
++	writel(0, priv->mst->io + MLXBF_I2C_SMBUS_MASTER_GW);
+ 
+ 	return ret;
+ }
+@@ -1835,18 +1791,6 @@ static bool mlxbf_i2c_has_coalesce(struct mlxbf_i2c_priv *priv, bool *read,
+ 	return true;
+ }
+ 
+-static bool mlxbf_i2c_slave_wait_for_idle(struct mlxbf_i2c_priv *priv,
+-					    u32 timeout)
+-{
+-	u32 mask = MLXBF_I2C_CAUSE_S_GW_BUSY_FALL;
+-	u32 addr = MLXBF_I2C_CAUSE_ARBITER;
+-
+-	if (mlxbf_i2c_poll(priv->slv_cause->io, addr, mask, false, timeout))
+-		return true;
+-
+-	return false;
+-}
+-
+ static struct i2c_client *mlxbf_i2c_get_slave_from_addr(
+ 			struct mlxbf_i2c_priv *priv, u8 addr)
+ {
+@@ -1949,7 +1893,9 @@ static int mlxbf_i2c_irq_send(struct mlxbf_i2c_priv *priv, u8 recv_bytes)
+ 	 * Wait until the transfer is completed; the driver will wait
+ 	 * until the GW is idle, a cause will rise on fall of GW busy.
+ 	 */
+-	mlxbf_i2c_slave_wait_for_idle(priv, MLXBF_I2C_SMBUS_TIMEOUT);
++	readl_poll_timeout_atomic(priv->slv_cause->io + MLXBF_I2C_CAUSE_ARBITER,
++				  data32, data32 & MLXBF_I2C_CAUSE_S_GW_BUSY_FALL,
++				  MLXBF_I2C_POLL_FREQ_IN_USEC, MLXBF_I2C_SMBUS_TIMEOUT);
+ 
+ clear_csr:
+ 	/* Release the Slave GW. */
+-- 
+2.40.0.1.gaa8946217a0b
 
