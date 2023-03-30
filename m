@@ -2,122 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01216D09A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DC86D09BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbjC3PcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
+        id S233203AbjC3PdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233115AbjC3Pb6 (ORCPT
+        with ESMTP id S233153AbjC3PdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:31:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B207B7EC4;
-        Thu, 30 Mar 2023 08:31:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 30 Mar 2023 11:33:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1F0E07D
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:32:39 -0700 (PDT)
+Received: from arch-x395 (unknown [IPv6:2a00:5f00:102:0:38b0:2479:c2d8:9a86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29088620BE;
-        Thu, 30 Mar 2023 15:31:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F9F6C433A0;
-        Thu, 30 Mar 2023 15:31:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680190295;
-        bh=zWpYYIuYTJgHtpRIFKGjq97qGd3ak9fMCXilbjSs6k8=;
+        (Authenticated sender: evelikov)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 22E266603182;
+        Thu, 30 Mar 2023 16:32:14 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680190334;
+        bh=p9xh2PGZwQUEhazq04vRmfAksY+FnI7rW348g3zN2ac=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CeZlAwWxbJ/bSZ4un7FNN3IwfDFkF57yLnYL5VB3GqWTc+RtBL1ZbCJKgkCiCyhCe
-         W9bxnsrfYa3nY8YragtJajwGpLOlNq8xCJ1l6N5NW+wggEG2DHJN+mIHJi4BYBgAKi
-         X+3u/R3OTq8wo6QU2I82zI6SaRv2we2sUxJkjfTHyldFPo0uefwu6seN2mMgB/LWTN
-         lZ2HHx84EA4CQrTwxkVnV2r6HHpn4QGib1M01Jyr8EQTyF+xGTfknYGoRuej3EV4v4
-         CM90jK5JiAUGUPj40gfJQsD/wZjyqbdCQ7dOed1fdDTIvoUVFSQYUscQs+BAtuLdYh
-         xmrs4ZPpbL+TQ==
-Date:   Thu, 30 Mar 2023 16:31:30 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Walker Chen <walker.chen@starfivetech.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 3/3] riscv: dts: starfive: add tdm node and sound card
-Message-ID: <0d108d6c-e892-418b-b9af-6c2dd133dd71@spud>
-References: <20230329153320.31390-1-walker.chen@starfivetech.com>
- <20230329153320.31390-4-walker.chen@starfivetech.com>
- <d455a90a-7e63-2254-75cb-70cb26ae7483@linaro.org>
- <af015701-f1ff-4b1e-9b1b-c635fc684ce6@spud>
- <2d5a8dae-73fd-b1f8-089e-041637d66b0d@starfivetech.com>
+        b=WpafA6xLX8wNLW7t10cXCU1KfzEIcmMuics5cKSh6JH1h8wYUfEMvgoQSQWRLjia0
+         eJaYZp59H06LB7g0RxRhK9epvk4tdPdGOh3ih+QXtb9sGa292ImluHraX4ZPkhuS//
+         +1cWUhK+nR8TPSUh5JEadRtr4gmbvhW1jDbe1CRyLWgw4YwDQlkvyT4eREvPdustP7
+         dD36PeBBkprVDuKPz1H6BZJAbt2TYmXQWbivzUQXDK9b4wegLMufO4Q2qusE2njfnm
+         7+y2EyywSKbtgMqdeVDxQcBy9A3eRdZtTpB+/xyGeDrDMSISYjI2puTaDx6Pwg7QS6
+         oK6O/t0Nm6A6A==
+Date:   Thu, 30 Mar 2023 16:32:11 +0100
+From:   Emil Velikov <emil.velikov@collabora.com>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>,
+        Marek =?utf-8?B?T2zFocOhaw==?= <maraeo@gmail.com>,
+        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v4 1/2] drm/virtio: Refactor job submission code path
+Message-ID: <ZCWre6oy0vHNyIkW@arch-x395>
+References: <20230323230755.1094832-1-dmitry.osipenko@collabora.com>
+ <20230323230755.1094832-2-dmitry.osipenko@collabora.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="524gvXDbAwMwRBbT"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d5a8dae-73fd-b1f8-089e-041637d66b0d@starfivetech.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230323230755.1094832-2-dmitry.osipenko@collabora.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hey Dmitry,
 
---524gvXDbAwMwRBbT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2023/03/24, Dmitry Osipenko wrote:
+> Move virtio_gpu_execbuffer_ioctl() into separate virtgpu_submit.c file
+> and refactor the code along the way to ease addition of new features to
+> the ioctl.
+> 
 
-On Thu, Mar 30, 2023 at 11:16:08PM +0800, Walker Chen wrote:
-> On 2023/3/30 15:58, Conor Dooley wrote:
+At a glance, we have a handful of no-op as well as some functional
+changes - let's split those up in separate patches.
 
-> > Excuse me for not following here, but Walker, could you point me at
-> > where in the schematic for the VisionFive 2 that this wm8960 actually
-> > is?
-> > I know ~nothing about audio, but good old Google tells me that this is a
-> > dedicated codec chip and I was looking at [1] and could not easily find
-> > it on the schematic.
+> Reviewed-by: Rob Clark <robdclark@gmail.com>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
 
-> > 1 https://doc-en.rvspace.org/VisionFive2/PDF/SCH_RV002_V1.2A_20221216.p=
-df
 
-> The TDM need work together with external codec WM8960 by plugging the ras=
-pberry pie
->  audio board into the 40-pin, which is found in sheet 21 of the schematic=
-=2E Because the
->  40-pin of VisionFive2 is fully compatible with the pins of Raspberry pie=
- audio board.=20
->=20
-> For more information of the audio board, you can take a look at the follo=
-wing webpage:
-> https://wiki.seeedstudio.com/ReSpeaker_2_Mics_Pi_HAT/
->=20
-> The schematic of audio board:
-> https://files.seeedstudio.com/wiki/MIC_HATv1.0_for_raspberrypi/src/ReSpea=
-ker%202-Mics%20Pi%20HAT_SCH.pdf
+> +static int virtio_gpu_dma_fence_wait(struct virtio_gpu_submit *submit,
+> +				     struct dma_fence *fence)
+> +{
+> +	struct dma_fence_unwrap itr;
+> +	struct dma_fence *f;
+> +	int err;
+> +
+> +	dma_fence_unwrap_for_each(f, &itr, fence) {
 
-Ahh, I feared that this was the case. If it's not on the board, then it
-shouldn't be in the dts (and certainly nothing should be in
-jh7110.dtsi!).
-I suppose this should be a dt-overlay, but I don't know anything about
-the upstream infrastructure for those. Nor do I know what is permitted
-in terms of overlays.
+The dma_fence_unwrap_for_each() change should be a separate patch,
+highlighting why we want it.
 
-Thanks,
-Conor.
+> +		err = virtio_gpu_do_fence_wait(submit, f);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
 
---524gvXDbAwMwRBbT
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+> +	ret = virtio_gpu_init_submit(&submit, exbuf, dev, file,
+> +				     fence_ctx, ring_idx);
+> +	if (ret)
+> +		goto cleanup;
+> +
+> +	ret = virtio_gpu_wait_in_fence(&submit);
+> +	if (ret)
+> +		goto cleanup;
+> +
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCWrTgAKCRB4tDGHoIJi
-0thyAP9IOF81Os1a6pA5/JU5Af3gbxCn4Cc3tX9CYpHYnbRm9gD/VG+H1kKtvfr1
-pLpzYaEOOfN3raDJEzVDTJIcLmCSJwg=
-=ORTa
------END PGP SIGNATURE-----
+We have reshuffled the order around in_fence waiting, out_fence install,
+handles, cmdbuf, drm events, etc. Can we get that split up a bit, with
+some comments.
 
---524gvXDbAwMwRBbT--
+If it were me, I would keep the wait_in_fence early and inline
+virtio_gpu_init_submit (the nesting/abstraction seems a bit much). This
+means one can omit the virtio_gpu_submit::exbuf all together.
+
+
+HTH
+Emil
