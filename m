@@ -2,148 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115906D0886
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7306D0869
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232115AbjC3OmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
+        id S232118AbjC3Og5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbjC3OmL (ORCPT
+        with ESMTP id S231396AbjC3Ogy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:42:11 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CBC3AB2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680187329; x=1711723329;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=xB0J3/kyzFO8fJCA2S6PrbdJQ5KMvNZfUN+7pIKfYdc=;
-  b=MyS7GvWHgunx8Vs1Tq/pvWzwUE+NinF6YL6gWArFovHWAjQBYIOSKE60
-   eBjSauk/tYjy04M9NqC4ArWmuMU3Z4C34zvh+Wf2EKgHDnLvf19BvIArb
-   vKkjKjLXV/tsmXLtB4s9nrwOQ3rHSFoCUdvjL0NgxwV8poJHcMEApqZXh
-   yeQQaJdDrelJ2Cu+a9bzBWz+iIwAkEjE0C/sPIRBlaTRB15GhoLZNWawd
-   zYbAuU0FXDvonGSgqCyP9dF4BpZ9InsBg3yRTeBlQla21e6Tj4NIhGhxS
-   oQTwrbdgF1UGfKFgQNFacARixQrFllqd1vYRqQsI8N6eGCNCofC6AJUZf
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="343667726"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="343667726"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:36:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="662039139"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="662039139"
-Received: from lab-ah.igk.intel.com ([10.102.138.202])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 07:35:58 -0700
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Date:   Thu, 30 Mar 2023 16:35:39 +0200
-Subject: [PATCH] drm/i915/gt: Hold a wakeref for the active VM
+        Thu, 30 Mar 2023 10:36:54 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3AC5BA0;
+        Thu, 30 Mar 2023 07:36:53 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 5C848320092D;
+        Thu, 30 Mar 2023 10:36:52 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Thu, 30 Mar 2023 10:36:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680187011; x=1680273411; bh=mEU0nion2muXlTfUR8cesDV/AWMQCwWe/7k
+        pJqZM+CM=; b=lOcePaeEvFUwkff08Ll9SURQYawK4c3C361GvZCwPNO8rSTU1vg
+        srgt5wYHN1Yy40ktgnBGN0nd3E3TsYANDXNm9/Ozsp55ZAoFXN4VZ3Z2QkbhL6jN
+        hdWhhPsgTK/DBP8IEvRTtPD1VsIKmszGKwp21ztfYvT4sWTWLUyIJ8CjdynUooII
+        g7KufWKRbsCK4z+CVq0dUPvraGm8nGf5vU8R2FpDFI+RYwEiFzkQ+9HT/bBNFdCU
+        AxeH8n1EkukN7daXHS4H8FpOOVPKr+08KlXq28/ENZIMDzWQlkqaOZblQ9qD3U39
+        oJNz4/eioT5pmdrZdgYlKcvdrcHjObCryqA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680187011; x=1680273411; bh=mEU0nion2muXlTfUR8cesDV/AWMQCwWe/7k
+        pJqZM+CM=; b=U+1Ihw8g8cVw3w0tdthGsHQW7Sg73ShV9oapDg+bYlxpaITQJpF
+        fOzcy6YWltiSJp9TFqtLRiS1R/PA20uF8f2t/j9oadz1isaD6OvLQ78TdlWRdYk9
+        KrCAfDgJlou6E8VcCM/VNnLpfqal0YXiD1WyH6E/C2mLRc5dTpzsyDl9WCn9B5jk
+        /kMZKcQjkM82Eb5yfrKFMZexfgV3jBChJXpnS7YC/P7asXQV2p5edjEZHOISA+eo
+        AdYqnlQiRiERUpgPa7eubr1Pb/Wgdw7nkFgl8QKsIECfbQARGi5yW6JgrXd2dU1+
+        Fa2accxo1rTadDmsrOUb2mUXjxJ0HO2akdw==
+X-ME-Sender: <xms:g54lZOB8RWwbfUdP-D5bdUHz7zOyDrUybfCnvvu--9FMsli_EVmbHQ>
+    <xme:g54lZIiHPS6I74Wp0Dh7Jq7xXPXpWwBN6ZFcL-ksCIuij_12u6j9DJF202M9Ou3Xu
+    hZCi3edGxwvKr-sxQ>
+X-ME-Received: <xmr:g54lZBk9t9Ao68W-pCXjJtsXJcL5u_F0ADlMyDtQ0_WH1viM1C4SRU3ftULEIMABppQ3byGBXy2kI0h4fD8Y6ELdzw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehkedgjeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeetlhhi
+    tggvucfthihhlhcuoegrlhhitggvsehrhihhlhdrihhoqeenucggtffrrghtthgvrhhnpe
+    ehudduvdetkedvkedtudeludfgfffhudegjeeguedvvedtteevjeehheeiffefgeenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhitggvse
+    hrhihhlhdrihho
+X-ME-Proxy: <xmx:g54lZMzl2MQKpXrn4Wletjsbn7txpcmKyElTTielHY319dlscAOaQA>
+    <xmx:g54lZDTkIqtNEKVGhmUfiqhf2Sq8TorCRlfOT3kLjyyPaB2DY-tTkA>
+    <xmx:g54lZHZ-uC-atbcq6IGYswS_zopJwyERLc00TctXQr1l-4U9bRRxNQ>
+    <xmx:g54lZOGdA7QC66m6Firw3oWfIqCU-FJH5ikTynN7TOaPNNg9bbFZnw>
+Feedback-ID: i56684263:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Mar 2023 10:36:49 -0400 (EDT)
+Message-ID: <1f93a045-5bd8-e07f-cf1b-7b1196c8ab54@ryhl.io>
+Date:   Thu, 30 Mar 2023 16:37:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 06/13] rust: init/sync: add `InPlaceInit` trait to
+ pin-initialize smart pointers
+Content-Language: en-US
+To:     y86-dev@protonmail.com
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+References: <20230329223239.138757-1-y86-dev@protonmail.com>
+ <20230329223239.138757-7-y86-dev@protonmail.com>
+From:   Alice Ryhl <alice@ryhl.io>
+In-Reply-To: <20230329223239.138757-7-y86-dev@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230330-hold_wakeref_for_active_vm-v1-1-baca712692f6@intel.com>
-X-B4-Tracking: v=1; b=H4sIADueJWQC/x2NUQrDIBAFrxL2u4KJgdJepRTZ6FqXNhrWYAohd
- 6/p5zC8eTsUEqYC924HocqFc2rQXzpwEdOLFPvGMOjBaGO0ivnj7YZvEgo2ZLHoVq5k66yuQfcG
- x/FGwUALTFhITYLJxTPhZVYrL6dZ2pi//9vH8zh+lfN+Y4YAAAA=
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Chris Wilson <chris.p.wilson@linux.intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>
-X-Mailer: b4 0.11.1
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Wilson <chris@chris-wilson.co.uk>
+On 3/30/23 00:33, y86-dev@protonmail.com wrote:
+> From: Benno Lossin <y86-dev@protonmail.com>
+> 
+> The `InPlaceInit` trait that provides two functions, for initializing
+> using `PinInit<T, E>` and `Init<T>`. It is implemented by `Arc<T>`,
+> `UniqueArc<T>` and `Box<T>`.
+> 
+> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+ > ---
+ >
+> +/// Smart pointer that can initialize memory in-place.
+> +pub trait InPlaceInit<T>: Sized {
+> +    /// Use the given initializer to in-place initialize a `T`.
+> +    ///
+> +    /// If `T: !Unpin` it will not be able to move afterwards.
+> +    fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
+> +    where
+> +        Error: From<E>;
+> +
+> +    /// Use the given initializer to in-place initialize a `T`.
+> +    fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
+> +    where
+> +        Error: From<E>;
+> +}
 
-There may be a disconnect between the GT used by the engine and the GT
-used for the VM, requiring us to hold a wakeref on both while the GPU is
-active with this request.
+This definition is potentially rather limiting, because it can only be 
+used with error types that can be converted into a `kernel::Error`. What 
+do you think of this alternative?
 
-Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-[ahajda: removed not-yet-upstremed wakeref tracking bits]
-Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
----
- drivers/gpu/drm/i915/gt/intel_context.h   | 15 +++++++++++----
- drivers/gpu/drm/i915/gt/intel_engine_pm.c |  3 +++
- 2 files changed, 14 insertions(+), 4 deletions(-)
+pub trait InPlaceInit<T>: Sized {
+     fn pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
+     where
+         E: From<AllocError>;
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_context.h b/drivers/gpu/drm/i915/gt/intel_context.h
-index 0a8d553da3f439..48f888c3da083b 100644
---- a/drivers/gpu/drm/i915/gt/intel_context.h
-+++ b/drivers/gpu/drm/i915/gt/intel_context.h
-@@ -14,6 +14,7 @@
- #include "i915_drv.h"
- #include "intel_context_types.h"
- #include "intel_engine_types.h"
-+#include "intel_gt_pm.h"
- #include "intel_ring_types.h"
- #include "intel_timeline_types.h"
- #include "i915_trace.h"
-@@ -207,8 +208,11 @@ void intel_context_exit_engine(struct intel_context *ce);
- static inline void intel_context_enter(struct intel_context *ce)
- {
- 	lockdep_assert_held(&ce->timeline->mutex);
--	if (!ce->active_count++)
--		ce->ops->enter(ce);
-+	if (ce->active_count++)
-+		return;
-+
-+	ce->ops->enter(ce);
-+	intel_gt_pm_get(ce->vm->gt);
- }
- 
- static inline void intel_context_mark_active(struct intel_context *ce)
-@@ -222,8 +226,11 @@ static inline void intel_context_exit(struct intel_context *ce)
- {
- 	lockdep_assert_held(&ce->timeline->mutex);
- 	GEM_BUG_ON(!ce->active_count);
--	if (!--ce->active_count)
--		ce->ops->exit(ce);
-+	if (--ce->active_count)
-+		return;
-+
-+	intel_gt_pm_put_async(ce->vm->gt);
-+	ce->ops->exit(ce);
- }
- 
- static inline struct intel_context *intel_context_get(struct intel_context *ce)
-diff --git a/drivers/gpu/drm/i915/gt/intel_engine_pm.c b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
-index e971b153fda976..ac0566c5e99e17 100644
---- a/drivers/gpu/drm/i915/gt/intel_engine_pm.c
-+++ b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
-@@ -114,6 +114,9 @@ __queue_and_release_pm(struct i915_request *rq,
- 
- 	ENGINE_TRACE(engine, "parking\n");
- 
-+	GEM_BUG_ON(rq->context->active_count != 1);
-+	__intel_gt_pm_get(engine->gt);
-+
- 	/*
- 	 * We have to serialise all potential retirement paths with our
- 	 * submission, as we don't want to underflow either the
-
----
-base-commit: 3385d6482cd60f2a0bbb0fa97b70ae7dbba4f95c
-change-id: 20230330-hold_wakeref_for_active_vm-7f013a449ef3
-
-Best regards,
--- 
-Andrzej Hajda <andrzej.hajda@intel.com>
+     fn init<E>(init: impl Init<T, E>) -> Result<Self, E>
+     where
+         E: From<AllocError>;
+}
