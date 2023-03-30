@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F076D0955
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE916D09E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232882AbjC3PVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
+        id S233179AbjC3Pj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232875AbjC3PVL (ORCPT
+        with ESMTP id S233248AbjC3Pjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:21:11 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606CAD315;
-        Thu, 30 Mar 2023 08:20:11 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1phu41-0006Zz-0w;
-        Thu, 30 Mar 2023 17:19:45 +0200
-Date:   Thu, 30 Mar 2023 16:19:41 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        =?utf-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
-Subject: [PATCH net-next 02/15] net: dsa: mt7530: refactor SGMII PCS creation
-Message-ID: <a79a93ce887b792b9cfb4ef572f5eb0636e76e6e.1680180959.git.daniel@makrotopia.org>
-References: <cover.1680180959.git.daniel@makrotopia.org>
+        Thu, 30 Mar 2023 11:39:47 -0400
+X-Greylist: delayed 763 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Mar 2023 08:39:36 PDT
+Received: from mail-41103.protonmail.ch (mail-41103.protonmail.ch [185.70.41.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D70A35A1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:39:35 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 15:19:51 +0000
+Authentication-Results: mail-41103.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="EWfJX+CK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1680189597; x=1680448797;
+        bh=Z3JCbWaaWUMZEyUU5ytYZUzOcZ8CnK3JDGgkqkS7+eI=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=EWfJX+CKcZmbhRYtFful5fvUIEi+TDwouuLODz7hj1r1918HfMDyWmRZFA7CEdBGa
+         MFSu1v9YXcYEHVMI5dI7lkiMhcjF3LTeMNPQRxUIOHo17qwuyX1Twuza49DxD4U+i7
+         JjL/CScn6HFXql4n8Cj5Vozl9xDbIulns4ebrZVUpSD7po9J9WmoHeJ1TKlXL/ZCmz
+         js4+NtwWITHIShFuzwi1eZ0e9c/WfErbn4klebzYePWA61DNiUL3TNT4KHrtMC8eEr
+         YYicgA9rE6pVOKM5FOa27XbxXKsM9hAtPIcPT52BTt8gGo1ItxzZWaD+07p8CYqnTW
+         57va7nW5NWcSQ==
+To:     Alice Ryhl <alice@ryhl.io>
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Gary Guo <gary@garyguo.net>
+Subject: Re: [PATCH v3 08/13] rust: init: add `stack_pin_init!` macro
+Message-ID: <4b048bfc-e4fe-8c2f-ebfe-9b6a410cd8b8@protonmail.com>
+In-Reply-To: <ada8307d-5177-2094-683f-bce619f1ea44@ryhl.io>
+References: <20230329223239.138757-1-y86-dev@protonmail.com> <20230329223239.138757-9-y86-dev@protonmail.com> <ada8307d-5177-2094-683f-bce619f1ea44@ryhl.io>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1680180959.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,114 +57,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of macro templates use a dedidated function and allocated
-regmap_config when creating the regmaps for the pcs-mtk-lynxi
-instances.
-This is in preparation to switching to use unlocked regmap accessors
-and have regmap's locking API handle locking for us.
+On 30.03.23 17:00, Alice Ryhl wrote:
+> On 3/30/23 00:33, y86-dev@protonmail.com wrote:
+>> From: Benno Lossin <y86-dev@protonmail.com>
+>>
+>> The `stack_pin_init!` macro allows pin-initializing a value on the
+>> stack. It accepts a `impl PinInit<T, E>` to initialize a `T`. It allows
+>> propagating any errors via `?` or handling it normally via `match`.
+>>
+>> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+>
+>> ---
+>> +#[macro_export]
+>> +macro_rules! stack_pin_init {
+>> +    (let $var:ident $(: $t:ty)? =3D $val:expr) =3D> {
+>> +        let mut $var =3D $crate::init::__internal::StackInit$(::<$t>)?:=
+:uninit();
+>> +        let mut $var =3D {
+>> +            let val =3D $val;
+>> +            unsafe { $crate::init::__internal::StackInit::init(&mut $va=
+r, val) }
+>> +        };
+>> +    };
+>> +    (let $var:ident $(: $t:ty)? =3D? $val:expr) =3D> {
+>> +        let mut $var =3D $crate::init::__internal::StackInit$(::<$t>)?:=
+:uninit();
+>> +        let mut $var =3D {
+>> +            let val =3D $val;
+>> +            unsafe { $crate::init::__internal::StackInit::init(&mut $va=
+r, val)? }
+>> +        };
+>> +    };
+>> +}
+>
+> This will be inconvenient to use if the initializer is infallible and is
+> used inside an infallible function. However, I'm not sure what a better
+> alternative would be. Perhaps we should have three variants?
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/dsa/mt7530.c | 74 +++++++++++++++++++++++++++-------------
- 1 file changed, 50 insertions(+), 24 deletions(-)
+That could be an option, any ideas for the syntax though? Or should it
+be a different macro like `stack_pin_init!` and `try_stack_pin_init!`?
 
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index 18d4aa6bb9968..5685c71bc9173 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -2927,26 +2927,56 @@ static const struct regmap_bus mt7531_regmap_bus = {
- 	.reg_update_bits = mt7530_regmap_update_bits,
- };
- 
--#define MT7531_PCS_REGMAP_CONFIG(_name, _reg_base) \
--	{				\
--		.name = _name,		\
--		.reg_bits = 16,		\
--		.val_bits = 32,		\
--		.reg_stride = 4,	\
--		.reg_base = _reg_base,	\
--		.max_register = 0x17c,	\
--	}
--
--static const struct regmap_config mt7531_pcs_config[] = {
--	MT7531_PCS_REGMAP_CONFIG("port5", MT7531_SGMII_REG_BASE(5)),
--	MT7531_PCS_REGMAP_CONFIG("port6", MT7531_SGMII_REG_BASE(6)),
--};
-+static int
-+mt7531_create_sgmii(struct mt7530_priv *priv)
-+{
-+	struct regmap_config *mt7531_pcs_config[2];
-+	struct phylink_pcs *pcs;
-+	struct regmap *regmap;
-+	int i, ret = 0;
-+
-+	for (i = 0; i < 2; i++) {
-+		mt7531_pcs_config[i] = devm_kzalloc(priv->dev,
-+						    sizeof(struct regmap_config),
-+						    GFP_KERNEL);
-+		if (!mt7531_pcs_config[i]) {
-+			ret = -ENOMEM;
-+			break;
-+		}
-+
-+		mt7531_pcs_config[i]->name = i ? "port6" : "port5";
-+		mt7531_pcs_config[i]->reg_bits = 16;
-+		mt7531_pcs_config[i]->val_bits = 32;
-+		mt7531_pcs_config[i]->reg_stride = 4;
-+		mt7531_pcs_config[i]->reg_base = MT7531_SGMII_REG_BASE(5 + i);
-+		mt7531_pcs_config[i]->max_register = 0x17c;
-+
-+		regmap = devm_regmap_init(priv->dev,
-+					  &mt7531_regmap_bus, priv,
-+					  mt7531_pcs_config[i]);
-+		if (IS_ERR(regmap)) {
-+			ret = PTR_ERR(regmap);
-+			break;
-+		}
-+		pcs = mtk_pcs_lynxi_create(priv->dev, regmap,
-+					   MT7531_PHYA_CTRL_SIGNAL3, 0);
-+		if (!pcs) {
-+			ret = -ENXIO;
-+			break;
-+		}
-+		priv->ports[5 + i].sgmii_pcs = pcs;
-+	}
-+
-+	if (ret && i)
-+		mtk_pcs_lynxi_destroy(priv->ports[5].sgmii_pcs);
-+
-+	return ret;
-+}
- 
- static int
- mt753x_setup(struct dsa_switch *ds)
- {
- 	struct mt7530_priv *priv = ds->priv;
--	struct regmap *regmap;
- 	int i, ret;
- 
- 	/* Initialise the PCS devices */
-@@ -2968,15 +2998,11 @@ mt753x_setup(struct dsa_switch *ds)
- 	if (ret && priv->irq)
- 		mt7530_free_irq_common(priv);
- 
--	if (priv->id == ID_MT7531)
--		for (i = 0; i < 2; i++) {
--			regmap = devm_regmap_init(ds->dev,
--						  &mt7531_regmap_bus, priv,
--						  &mt7531_pcs_config[i]);
--			priv->ports[5 + i].sgmii_pcs =
--				mtk_pcs_lynxi_create(ds->dev, regmap,
--						     MT7531_PHYA_CTRL_SIGNAL3, 0);
--		}
-+	if (priv->id == ID_MT7531) {
-+		ret = mt7531_create_sgmii(priv);
-+		if (ret && priv->irq)
-+			mt7530_free_irq_common(priv);
-+	}
- 
- 	return ret;
- }
--- 
-2.39.2
+> Also, maybe a `<-` rather than `=3D` would be more consistent?
+
+That is sadly not possible, since `<-` is not allowed after `ty` fragments.
+
+> Anyway, I don't think this should block the PR. We can revisit it later
+> if it becomes a problem.
+
+Sure.
+
+--
+Cheers,
+Benno
+
 
