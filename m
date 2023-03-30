@@ -2,96 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3EA6D1218
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59256D0FDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjC3W1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 18:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
+        id S229744AbjC3URd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjC3W1V (ORCPT
+        with ESMTP id S229738AbjC3URb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 18:27:21 -0400
-X-Greylist: delayed 135 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Mar 2023 15:27:20 PDT
-Received: from omta39.uswest2.a.cloudfilter.net (omta39.uswest2.a.cloudfilter.net [35.89.44.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58777CA23;
-        Thu, 30 Mar 2023 15:27:20 -0700 (PDT)
-Received: from eig-obgw-6007a.ext.cloudfilter.net ([10.0.30.247])
-        by cmsmtp with ESMTP
-        id hxrrpqykCCarni0gAph4Fd; Thu, 30 Mar 2023 22:23:34 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTP
-        id i0gApxqzmurZ1i0gApxrKi; Thu, 30 Mar 2023 22:23:34 +0000
-X-Authority-Analysis: v=2.4 cv=KefBDCUD c=1 sm=1 tr=0 ts=64260be6
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=wTog8WU66it3cfrESHnF4A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=k__wU0fu6RkA:10
- a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8 a=mDV3o1hIAAAA:8 a=VwQbUJbxAAAA:8
- a=rQwXfPfrytjjklgZoK0A:9 a=QEXdDO2ut3YA:10 a=3IOs8h2EC4YA:10
- a=_FVE-zBwftR9WsbkzFJk:22 a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=l3o/jyRjjYZtQS+y9ls2XWWXSrLf5eob4Q58hRXkotc=; b=d8yLKcJFndnMbJmR3zRsn2dza4
-        G7p4kIHYaNVYcDlrsHYSkPnl2HvEad2rDhE0Ic93bdQZHeS5NYGza4UOUMm5A450bffe7Dlksvq4B
-        tTOhabpqHsGMoI0BXsgoF58Gb5mtpiFilerFq60kk60MapiSB6gPu5eQEQXn9xjRbRkGgWAUPAGkR
-        Poguy6K4ynIkt9m0kLHL8jZ71Zh8RDE5Xo5eUreRfdtX8e27TKUvs2LWlIYXD9Xaq7KsVWsLg2d25
-        EFrZ3BOjWj+SFgJB4zAYQW80S9RDtsUckufSC9Jpd9ka3qQ2FNR+TLOYlOOw4ybQdbUUCFaQS6JFW
-        v9sSo9lQ==;
-Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:34400 helo=[192.168.15.7])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1phyg1-002tZP-BD;
-        Thu, 30 Mar 2023 15:15:17 -0500
-Message-ID: <ee4915e0-4b51-5ca8-daf9-f6d2f23b5b6f@embeddedor.com>
-Date:   Thu, 30 Mar 2023 14:15:52 -0600
+        Thu, 30 Mar 2023 16:17:31 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5DAD53B
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:17:27 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id p203so25030611ybb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680207446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gzh6eI1GYxdNdH+4rpYvp9dduxXVCoivN5HMe4ZBEcs=;
+        b=UpGdDentEB0loG38lw9t1HqyDxw0B/PKmgViCi/O2YJRQtC0WFl8tCojsLji2dzhqU
+         qQrtxoeuhfLx2ZikK0T+Kn6yuD/RyVxTi8dgfoRH7S3gO0MuEwmO7As+sOPC+YM9PKyL
+         jeutGkXIbhmS09f9NUD2p1JkJLfC/GRXwnqC5ok/KQO3GUQJfkWbSEvIJuqnoGY32ita
+         rHXa9ATFofPvAW0zsOVVYUsmvnRuuh5KxgXJbjodFRmf8TsaF175e1aMhLHj0AXZQvZt
+         VtdCZDB9MMxyaCOIIVpiEmygaAclV5Zf9SA+oaDa7NkLAYbYH+ps5MRf1DcjUmkXhXmQ
+         je3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680207446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Gzh6eI1GYxdNdH+4rpYvp9dduxXVCoivN5HMe4ZBEcs=;
+        b=3G1FGOPHVW9BqTc5EAz/cY1pzjvUC6m146ExfZJ0f5eWh8/5FLMf8kKvDvYY6r8q4A
+         1XtpOFgodobrjKzROkhrIVVzOcWK3aOZdmY9/jSMkT5gJOnAtVo9MMpGqIBWya8d+xNd
+         RAiU29UTnPFBuLzqFtMGbErcjAclVd1sTnq5E4YjCZdqIKM5NIgo+bNNpupEDcVqPJrw
+         FvZqHwceiDyf8f7fpifJxJkV7ail6ahz84d72nf8Wux2v7OsAHdU7Q1MiXHKIhA4m+z5
+         LDTO6b5Cc7pjnfIyvhysIIP4R1UJMSSEcDwou+7U08ek3KkAGMn6IK7/dPqjZcCjRkrD
+         BMxw==
+X-Gm-Message-State: AAQBX9dt0GAYNeJDs+dLKH7AuIqTHe5y55Hfl1byNbkGMGKtG3/XHwK7
+        pTomVT88yOHQXzEZdMWk3x22MnDZcJYAbrHiLtSvehSCXhB91vvwqhLVlg==
+X-Google-Smtp-Source: AKy350a/hRLfpI4hUXINP4+CnKP31C4Bf+8Wp9DUuqP9pQCMEvX6i7imax2gDovTaP0NPJXrcAy6nNbWuSQHKyFAl7E=
+X-Received: by 2002:a25:2749:0:b0:a99:de9d:d504 with SMTP id
+ n70-20020a252749000000b00a99de9dd504mr16211798ybn.12.1680207445985; Thu, 30
+ Mar 2023 13:17:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH][next] rxrpc: Replace fake flex-array with flexible-array
- member
-Content-Language: en-US
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-afs@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <ZAZT11n4q5bBttW0@work>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <ZAZT11n4q5bBttW0@work>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.31.110
-X-Source-L: No
-X-Exim-ID: 1phyg1-002tZP-BD
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.7]) [187.162.31.110]:34400
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 0
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfAfXMEzYIUfgduhk6qX0iN2lhGPBkLUWEVQNjifpOqzuy8HZD0mKSsVgCc1a6KsyWzgX1KsuH4lX+gWYiNC7GGOublUi+jvoss4iWdlxCWwc/smvrwl3
- EsRNJlaXWZCuIFZ8nRq0H/LG9IIbpw64dzJMT/KNiOTlqf/RTN3LKXphZwUhpb1TjGz9FbzY4E5U5obt3PVf/OHZotXTLhxXCjkBAUMOUbHlx7JDzwvnZGPD
- Bj+DfUs0VrtGSVI475XJIigOj9TwR/2kmCZpOdA6ZXfnon2JnaHVRQIBkAZ6p0pE
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230330200614.132354-1-cerasuolodomenico@gmail.com>
+In-Reply-To: <20230330200614.132354-1-cerasuolodomenico@gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 30 Mar 2023 13:17:15 -0700
+Message-ID: <CAJuCfpGY6=byoSQqNUc9cXHFAdhnY9HGScc+aT9D9qbhGBEu3A@mail.gmail.com>
+Subject: Re: [PATCH v7 0/4] sched/psi: Allow unprivileged PSI polling
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        brauner@kernel.org, chris@chrisdown.name, hannes@cmpxchg.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,47 +70,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Thu, Mar 30, 2023 at 1:06=E2=80=AFPM Domenico Cerasuolo
+<cerasuolodomenico@gmail.com> wrote:
+>
+> PSI offers 2 mechanisms to get information about a specific resource
+> pressure. One is reading from /proc/pressure/<resource>, which gives
+> average pressures aggregated every 2s. The other is creating a pollable
+> fd for a specific resource and cgroup.
+>
+> The trigger creation requires CAP_SYS_RESOURCE, and gives the
+> possibility to pick specific time window and threshold, spawing an RT
+> thread to aggregate the data.
+>
+> Systemd would like to provide containers the option to monitor pressure
+> on their own cgroup and sub-cgroups. For example, if systemd launches a
+> container that itself then launches services, the container should have
+> the ability to poll() for pressure in individual services. But neither
+> the container nor the services are privileged.
+>
+> The series is implemented in 4 steps in order to reduce the noise of
+> the change.
 
-Friendly ping: who can take this, please? 😄
+Thanks! For the entire series
+Acked-by: Suren Baghdasaryan <surenb@google.com>
 
-Thanks
--- 
-Gustavo
-
-On 3/6/23 14:57, Gustavo A. R. Silva wrote:
-> Zero-length arrays as fake flexible arrays are deprecated and we are
-> moving towards adopting C99 flexible-array members instead.
-> 
-> Transform zero-length array into flexible-array member in struct
-> rxrpc_ackpacket.
-> 
-> Address the following warnings found with GCC-13 and
-> -fstrict-flex-arrays=3 enabled:
-> net/rxrpc/call_event.c:149:38: warning: array subscript i is outside array bounds of ‘uint8_t[0]’ {aka ‘unsigned char[]’} [-Warray-bounds=]
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
-> 
-> Link: https://github.com/KSPP/linux/issues/21
-> Link: https://github.com/KSPP/linux/issues/263
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->   net/rxrpc/protocol.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/rxrpc/protocol.h b/net/rxrpc/protocol.h
-> index 6760cb99c6d6..e8ee4af43ca8 100644
-> --- a/net/rxrpc/protocol.h
-> +++ b/net/rxrpc/protocol.h
-> @@ -126,7 +126,7 @@ struct rxrpc_ackpacket {
->   	uint8_t		nAcks;		/* number of ACKs */
->   #define RXRPC_MAXACKS	255
->   
-> -	uint8_t		acks[0];	/* list of ACK/NAKs */
-> +	uint8_t		acks[];		/* list of ACK/NAKs */
->   #define RXRPC_ACK_TYPE_NACK		0
->   #define RXRPC_ACK_TYPE_ACK		1
->   
+>
+> V7:
+> - fix code style in psi trigger create/destroy aggregators paths
+>
+> V6:
+> - fix trigger creation logic now using proper locks
+>
+> V5:
+> - few suggested code style changes in psi.c and psy_types.h
+> - fix trigger destruction logic now using proper locks
+>
+> V4:
+> - fixed psi_open leftover usage in IRQ accounting (patch 4/4)
+>
+> V3:
+> - restored renaming patch (#2 of 4) as suggested in review
+> - rebased #3 and #4 on the renaming commit
+>
+> V2:
+> - removed renaming patch (previous 2/4) and applied suggested solution
+> - changed update_triggers side effect removal as suggested in review
+> - rebased core patch on other V2 changes
+>
+> Domenico Cerasuolo (4):
+>   sched/psi: rearrange polling code in preparation
+>   sched/psi: rename existing poll members in preparation
+>   sched/psi: extract update_triggers side effect
+>   sched/psi: allow unprivileged polling of N*2s period
+>
+>  Documentation/accounting/psi.rst |   4 +
+>  include/linux/psi.h              |   2 +-
+>  include/linux/psi_types.h        |  43 +--
+>  kernel/cgroup/cgroup.c           |   2 +-
+>  kernel/sched/psi.c               | 443 +++++++++++++++++--------------
+>  5 files changed, 276 insertions(+), 218 deletions(-)
+>
+> --
+> 2.34.1
+>
