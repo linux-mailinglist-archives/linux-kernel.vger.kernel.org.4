@@ -2,162 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DFA6CF95F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 04:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF0A6CF963
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 05:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjC3C7w convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Mar 2023 22:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
+        id S229718AbjC3DAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 23:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjC3C7u (ORCPT
+        with ESMTP id S229449AbjC3DAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 22:59:50 -0400
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903A92111;
-        Wed, 29 Mar 2023 19:59:49 -0700 (PDT)
-Received: by mail-pj1-f54.google.com with SMTP id j13so15994286pjd.1;
-        Wed, 29 Mar 2023 19:59:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680145189;
-        h=content-transfer-encoding:fcc:content-language:user-agent
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MyiOuYElhRICJI3D0PJA148VTpJc2bGE9WKOTKleOq8=;
-        b=OVqtWI41LKNKz5FSVNstBD0IxoM8cwcpLYVlO7Bhz68z8pcEMnPDcw7GliVSMQLuEl
-         fCx5DHrJ60wVpW0G9OBMsxfCqugg36JbRwy79SUwN+3wDh8WGWRruUF/eYAS+wS4IP/B
-         L3T+yvDuxn8HtAbP10u5UUzWPl5oUNE/F9UNxV5pjHxJ0/qGBQjLv2ay+yLkNpP6ARxc
-         fBk8DWS2eP1X92+2bxpQJTolo752L9N7yNEM74Y4XXY/U17LG00W/VKwvVPVzgMjNvOY
-         2DmskcVMepXyrNSzd9V1kNGS9RM7AMRbHUvfpLZmDXQIkzH6nokIv5vm++8yLMg1x91u
-         GARg==
-X-Gm-Message-State: AAQBX9fygfhJdCquhYFZ6RFB2iPk3IoopDpzJCF9k31vOCnlkTfbNQ65
-        xoF7gmSk4unCXoMl+XRmFgw3MMv+0oVGjg==
-X-Google-Smtp-Source: AKy350boGkhs/gbvGNKtpPaSEc4HaVUwU+oVgIsS+OdhxK/JAla3ArdI9wUsFz4DT4mMXrbnRKTqyg==
-X-Received: by 2002:a17:90a:190f:b0:237:50b6:9838 with SMTP id 15-20020a17090a190f00b0023750b69838mr25440663pjg.45.1680145188929;
-        Wed, 29 Mar 2023 19:59:48 -0700 (PDT)
-Received: from localhost ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id g4-20020a655804000000b0050bd71ed66fsm2014953pgr.92.2023.03.29.19.59.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 19:59:48 -0700 (PDT)
-From:   Hongyu Xie <xiehongyu1@kylinos.cn>
-To:     mathias.nyman@linux.intel.com, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, sunke <sunke@kylinos.cn>,
-        Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: Re: [PATCH -next v2] usb: xhci: do not free an empty cmd ring
-Date:   Thu, 30 Mar 2023 10:58:57 +0800
-Message-Id: <eff504ed-d5b0-171a-8eb8-f073f2ee9271@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <086a7af9-0a33-1a37-2bf3-1338adf96b12@linux.intel.com>
-References: <20230327011117.33953-1-xiehongyu1@kylinos.cn> <086a7af9-0a33-1a37-2bf3-1338adf96b12@linux.intel.com>
+        Wed, 29 Mar 2023 23:00:48 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2153F269E;
+        Wed, 29 Mar 2023 20:00:45 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Axkk5c+yRkaC8UAA--.30958S3;
+        Thu, 30 Mar 2023 11:00:44 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxLL5a+yRkke8QAA--.13237S3;
+        Thu, 30 Mar 2023 11:00:42 +0800 (CST)
+Subject: Re: [PATCH v4 1/2] dt-bindings: spi: add loongson spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        Mark Brown <broonie@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, zhuyinbo@loongson.cn
+References: <20230328112210.23089-1-zhuyinbo@loongson.cn>
+ <20230328112210.23089-2-zhuyinbo@loongson.cn>
+ <168000761529.3001360.2224316097077012976.robh@kernel.org>
+ <8336d5ba-1150-81ca-bd5a-7862bd10ef58@loongson.cn>
+ <f62c07d4-cda8-9873-8890-3411cd2f3b03@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <e0688f22-005f-974c-f835-f69ae799f705@loongson.cn>
+Date:   Thu, 30 Mar 2023 11:00:42 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Thunderbird/102.8.0
+In-Reply-To: <f62c07d4-cda8-9873-8890-3411cd2f3b03@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0; attachmentreminder=0; deliveryformat=1
-X-Identity-Key: id1
-Fcc:    imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxLL5a+yRkke8QAA--.13237S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7KrWxXw45tF15Xr1UGFy3Arb_yoW8KrWDpa
+        1rCanYkF4DJr12k3ySq347Kw1YvrWkWFZFqrZxKr12yas0va4rJF4fKr1q9r4xur4fGF17
+        Xa1jg3s3G3WUZF7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
+        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
+        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzgAwDUUUU
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-在 2023/3/27 22:58, Mathias Nyman 写道:
-> On 27.3.2023 4.11, Hongyu Xie wrote:
->> It was first found on HUAWEI Kirin 9006C platform with a builtin xhci
->> controller during stress cycle test(stress-ng, glmark2, x11perf, S4...).
->>
->> phase one:
->> [26788.706878] PM: dpm_run_callback(): platform_pm_thaw+0x0/0x68 returns -12
->> [26788.706878] PM: Device xhci-hcd.1.auto failed to thaw async: error -12
->> ...
->> phase two:
->> [28650.583496] [2023:01:19 04:43:29]Unable to handle kernel NULL pointer dereference at virtual address 0000000000000028
->> ...
->> [28650.583526] user pgtable: 4k pages, 39-bit VAs, pgdp=000000027862a000
->> [28650.583557] [0000000000000028] pgd=0000000000000000
->> ...
->> [28650.583587] pc : xhci_suspend+0x154/0x5b0
->> [28650.583618] lr : xhci_suspend+0x148/0x5b0
->> [28650.583618] sp : ffffffc01c7ebbd0
->> [28650.583618] x29: ffffffc01c7ebbd0 x28: ffffffec834d0000
->> [28650.583618] x27: ffffffc0106a3cc8 x26: ffffffb2c540c848
->> [28650.583618] x25: 0000000000000000 x24: ffffffec82ee30b0
->> [28650.583618] x23: ffffffb43b31c2f8 x22: 0000000000000000
->> [28650.583618] x21: 0000000000000000 x20: ffffffb43b31c000
->> [28650.583648] x19: ffffffb43b31c2a8 x18: 0000000000000001
->> [28650.583648] x17: 0000000000000803 x16: 00000000fffffffe
->> [28650.583648] x15: 0000000000001000 x14: ffffffb150b67e00
->> [28650.583648] x13: 00000000f0000000 x12: 0000000000000001
->> [28650.583648] x11: 0000000000000000 x10: 0000000000000a80
->> [28650.583648] x9 : ffffffc01c7eba00 x8 : ffffffb43ad10ae0
->> [28650.583648] x7 : ffffffb84cd98dc0 x6 : 0000000cceb6a101
->> [28650.583679] x5 : 00ffffffffffffff x4 : 0000000000000001
->> [28650.583679] x3 : 0000000000000011 x2 : 0000000000e2cfa8
->> [28650.583679] x1 : 00000000823535e1 x0 : 0000000000000000
->>
->> gdb:
->> (gdb) l *(xhci_suspend+0x154)
->> 0xffffffc010b6cd44 is in xhci_suspend (/.../drivers/usb/host/xhci.c:854).
->> 849	{
->> 850		struct xhci_ring *ring;
->> 851		struct xhci_segment *seg;
->> 852
->> 853		ring = xhci->cmd_ring;
->> 854		seg = ring->deq_seg;
->> (gdb) disassemble 0xffffffc010b6cd44
->> ...
->> 0xffffffc010b6cd40 <+336>:	ldr	x22, [x19, #160]
->> 0xffffffc010b6cd44 <+340>:	ldr	x20, [x22, #40]
->> 0xffffffc010b6cd48 <+344>:	mov	w1, #0x0                   	// #0
->>
->> During phase one, platform_pm_thaw called xhci_plat_resume which called
->> xhci_resume. The rest possible calling routine might be
->> xhci_resume->xhci_init->xhci_mem_init, and xhci->cmd_ring was cleaned in
->> xhci_mem_cleanup before xhci_mem_init returned -ENOMEM.
->>
->> During phase two, systemd was tring to hibernate again and called
->> xhci_suspend, then xhci_clear_command_ring dereferenced xhci->cmd_ring
->> which was already NULL.
->>
-> 
-> Any comments on the questions I had on the first version of the patch?
-Sorry, didn't notice your reply in the first version.
-> 
-> xhci_mem_init() failing with -ENOMEM looks like the real problem here.
-> 
-> Are we really running out of memory? does kmemleak say anything?
-It looks like running out of memory, since it was running a stress test. 
-But can't go any further without more details. Didn't run with kmemleak 
-open.
-> Any chance you could look into where exactly xhci_mem_init() fails as
-> xhci_mem_init() always returns -ENOMEM on failure?
-Can't reproduce the problem for a very long time. Still don't know where 
-did it fail in xhci_mem_init. But I think you can't blame xhci driver 
-for memory shortage, and you can't fix that.
-> 
->> So if xhci->cmd_ring is NULL, xhci_clear_command_ring just return.
-> 
-> This hides the problem more than solves it. Root cause is still unknown
-You were saying "If xhci_mem_init() failed then...it shouldn't be...", 
-and I agree with it. Further more, I think functions that calling 
-xhci_mem_init needs to check xhci_mem_init's return value, but it needs 
-another patch to do this. This patch is saying that 
-xhci_clear_command_ring should check a pointer before using it, because 
-somewhere else might clear cmd_ring, that's all.
-> 
-> Thanks
-> Mathias
-> 
-> 
-Thanks
 
-Hongyu Xie
+在 2023/3/29 下午7:37, Krzysztof Kozlowski 写道:
+> On 29/03/2023 12:39, zhuyinbo wrote:
+>>
+>>
+>> 在 2023/3/28 下午8:57, Rob Herring 写道:
+>>>
+>>> On Tue, 28 Mar 2023 19:22:09 +0800, Yinbo Zhu wrote:
+>>>> Add the Loongson platform spi binding with DT schema format using
+>>>> json-schema.
+>>>>
+>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>> ---
+>>>>    .../bindings/spi/loongson,ls-spi.yaml         | 43 +++++++++++++++++++
+>>>>    MAINTAINERS                                   |  6 +++
+>>>>    2 files changed, 49 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>>>>
+>>>
+>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>>
+>>> yamllint warnings/errors:
+>>>
+>>> dtschema/dtc warnings/errors:
+>>> Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
+>>> FATAL ERROR: Unable to parse input tree
+>>> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
+>>> make[1]: *** Waiting for unfinished jobs....
+>>> make: *** [Makefile:1512: dt_binding_check] Error 2
+>>>
+>>> doc reference errors (make refcheckdocs):
+>>>
+>>> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230328112210.23089-2-zhuyinbo@loongson.cn
+>>>
+>>> The base for the series is generally the latest rc1. A different dependency
+>>> should be noted in *this* patch.
+>> Hi Rob,
+>>
+>> I'm sorry, actually, I don't know what the specific operation I should
+>> do when I received the check warning
+>> from your bot. Does it means that I should add dependency note into this
+>> patch's changelog ?
+> 
+> Yes, this is explicitly mentioned in the sentence you quoted.
+okay, I got it, thanks!
+> 
+>> or something else, I really
+>> don't know. Actually, I'm always bothered by these things that how to
+>> resolve the dependency issue for two
+>> dependent patches that do not belong to the same series.
+> 
+> Another approach, as Rob suggested last time, would be to just get rid
+> of the dependency and open-code the clock IDs...
+Thank you very much for your suggestion,  I will open-code the clock
+IDs and fix that checkpatch issue then resend this series patch.
+> 
+> Best regards,
+> Krzysztof
+> 
+
