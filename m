@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB7C6D0247
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E066D0246
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbjC3LAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
+        id S229847AbjC3K77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbjC3K7z (ORCPT
+        with ESMTP id S231431AbjC3K7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:59:55 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C8C83DD;
-        Thu, 30 Mar 2023 03:59:52 -0700 (PDT)
+        Thu, 30 Mar 2023 06:59:54 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75BE86AB;
+        Thu, 30 Mar 2023 03:59:49 -0700 (PDT)
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32UAxXGJ027953;
-        Thu, 30 Mar 2023 05:59:33 -0500
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32UAxbbi111162;
+        Thu, 30 Mar 2023 05:59:37 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680173973;
-        bh=ztIlZN8rT9PZjYhYtmtwP6APC5vRSZr684pdKkF3wRU=;
+        s=ti-com-17Q1; t=1680173977;
+        bh=8U97SW0iELIQ4Bzrc6N656YmkNLmEnpIbYP25OEB2SY=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Xa7905kkannsQx5tmQTY9wk730krnc+GvHifTLhOx+0V8iABDzdX5/gqmar0tEbaM
-         MKNipr3leM10fiyAXlCngHiTsbRTUlY8NIghCTMSUPFSasuQXFXKYZ8UQ0CuKGtOUt
-         +zsPau1tqxtbEdqATkh5MhSuuxtytPBGVrnY9MT4=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32UAxXkG046368
+        b=YTAMreWZ4i+gYP4Td1gKtZye8V5CkTCUNrSlZKzU/qnI5rkUPV5Ff82An9k3vzTfq
+         qZTWUZpSVyX3RdxOYjM7rwXq0s0P2MJ5mzrjftLS6KL99pLihiRIJ7RsspvdmInHcN
+         XYG2yjdce6AGq++JRGgwFlLF2WOFo2aR1td7vD0s=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32UAxbFj046397
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 30 Mar 2023 05:59:33 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 30 Mar 2023 05:59:37 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 30
- Mar 2023 05:59:33 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 05:59:36 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 30 Mar 2023 05:59:33 -0500
+ Frontend Transport; Thu, 30 Mar 2023 05:59:36 -0500
 Received: from uda0132425.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32UAxQaG002400;
-        Thu, 30 Mar 2023 05:59:30 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32UAxQaH002400;
+        Thu, 30 Mar 2023 05:59:33 -0500
 From:   Vignesh Raghavendra <vigneshr@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         Tero Kristo <kristo@kernel.org>,
@@ -51,9 +51,9 @@ CC:     Catalin Marinas <catalin.marinas@arm.com>,
         Arnd Bergmann <arnd@arndb.de>,
         <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/2] arm64: configs: defconfig: Make TPS65219 regulator built-in
-Date:   Thu, 30 Mar 2023 16:29:20 +0530
-Message-ID: <20230330105921.3639185-2-vigneshr@ti.com>
+Subject: [PATCH 2/2] arm64: dts: ti: k3-am625-beagleplay: Fixup SD card supply regulator
+Date:   Thu, 30 Mar 2023 16:29:21 +0530
+Message-ID: <20230330105921.3639185-3-vigneshr@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230330105921.3639185-1-vigneshr@ti.com>
 References: <20230330105921.3639185-1-vigneshr@ti.com>
@@ -70,41 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These regulators control SD card power supply and thus need to be
-built-in to support SD card rootfs, which is common for embedded
-devkits and EVMs.
-
-bloat-o-meter:
-add/remove: 13/0 grow/shrink: 0/0 up/down: 1724/0 (1724)
-Total: Before=17068776, After=17070500, chg +0.01%
+The SD card supply is really coming from PMIC LDO1 even though its
+controllable via GPIO.
 
 Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
 ---
- arch/arm64/configs/defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index d206a9120ee4..a502d9dc4b57 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -691,7 +691,7 @@ CONFIG_MFD_SPMI_PMIC=y
- CONFIG_MFD_RK808=y
- CONFIG_MFD_SEC_CORE=y
- CONFIG_MFD_SL28CPLD=y
--CONFIG_MFD_TPS65219=m
-+CONFIG_MFD_TPS65219=y
- CONFIG_MFD_ROHM_BD718XX=y
- CONFIG_MFD_WCD934X=m
- CONFIG_REGULATOR_FIXED_VOLTAGE=y
-@@ -721,7 +721,7 @@ CONFIG_REGULATOR_QCOM_SPMI=y
- CONFIG_REGULATOR_RK808=y
- CONFIG_REGULATOR_S2MPS11=y
- CONFIG_REGULATOR_TPS65132=m
--CONFIG_REGULATOR_TPS65219=m
-+CONFIG_REGULATOR_TPS65219=y
- CONFIG_REGULATOR_VCTRL=m
- CONFIG_RC_CORE=m
- CONFIG_RC_DECODERS=y
+diff --git a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+index f75e79e54dfc..abf997de4279 100644
+--- a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
++++ b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+@@ -139,7 +139,7 @@ vdd_sd_dv: regulator-5 {
+ 		regulator-min-microvolt = <1800000>;
+ 		regulator-max-microvolt = <3300000>;
+ 		regulator-boot-on;
+-		vin-supply = <&vdd_3v3>;
++		vin-supply = <&ldo1_reg>;
+ 		gpios = <&main_gpio1 49 GPIO_ACTIVE_HIGH>;
+ 		states = <1800000 0x0>,
+ 			 <3300000 0x1>;
 -- 
 2.40.0
 
