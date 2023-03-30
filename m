@@ -2,101 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2DC6D0B64
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 411206D0B6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjC3Qec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 12:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
+        id S231725AbjC3Qf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 12:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbjC3Qea (ORCPT
+        with ESMTP id S231402AbjC3QfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 12:34:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F232C168
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:34:29 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11E892F4;
-        Thu, 30 Mar 2023 09:35:13 -0700 (PDT)
-Received: from [10.57.54.254] (unknown [10.57.54.254])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B4883F6C4;
-        Thu, 30 Mar 2023 09:34:27 -0700 (PDT)
-Message-ID: <2529dd93-2cb2-6ed8-20c0-c424e6613717@arm.com>
-Date:   Thu, 30 Mar 2023 17:34:21 +0100
+        Thu, 30 Mar 2023 12:35:25 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E320C66E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:35:24 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id cn12so78852238edb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google; t=1680194122;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2afhFpL4Acf26QforwyN/SKoshRKH28ySdYgRhAiXUQ=;
+        b=m9EbkV4Ikp57UTGtRPDa92b5AreZqnzqxROsPeI0DMDpZzWQO2G+Zoi/EKP5p4j0ek
+         xy1M+RYE1RzJ+INEKbv+8ePFicHFouy+1zKe6Jtp1nGoJsZaSzn6ShSqLi3ODdO8xmB6
+         pg2CN8ghHHLripQCP/UP+wjI/Ak5vTRT/YfZdmOdxju4ejfakkxQ1LGZ0dJsFw0a3CkV
+         oghCLR6M+wOARsyS43ykPSbIZVKCJAWelleyfBKeaJVtQAtVK/ryEiDMqFP+6U6jt2yl
+         crekKZ3+6BwvSgW2yqYtwaO2Vme9Nim7cHuln8k1u5Zdm0h5XOGvNDEnoN8yoC6nLMlY
+         M/1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680194122;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2afhFpL4Acf26QforwyN/SKoshRKH28ySdYgRhAiXUQ=;
+        b=k9DgQPxAFrAr4/CIPOu4BLJ97caiQIvDo1i+rnlVpmkA4E9o33Oskq+1BpXfKa2Yda
+         eJxEh9XJJIcpyZXyYIhbhR/c8fEFnUvej4afH2491ilff6e7oPz8qkoKUnegdg32MoYp
+         1DEfa0zG5PxbP5keHX1T6x0/vkS6kqUkBGVEhLYPC/mTxa88ymNwEoqkgnj9EjtjSsP2
+         3Uu7En1+dnJ7p5wkumtsTBCVyGFcE2yceMOvOjlRhJ0GruM7yJOwowaJEcZPedmrYYsp
+         khBdIXPOpqfv0TPQj7dKYls/YIUp3KfIU1WMSpcIujwDhNi6WKuhRsG7YURMuYgdOqPk
+         OjiQ==
+X-Gm-Message-State: AAQBX9fm8QUuHnAqqLLmXfLZLQU1w9T6mY3kSc045+xVv8m4lge9mO3J
+        ACPcT0jqsvHpuUWs6nuWEPKm/hZ6/GTBl08S0i6pdA==
+X-Google-Smtp-Source: AKy350aXiFqW8V2PTtFhJKzVi+bMGpPo+NgxY6yBV90NYIfNp+gCb26N5e2z695S5ywSjJTjE+jEoLTEEKT+eQ56plU=
+X-Received: by 2002:a17:906:7217:b0:932:6a2:ba19 with SMTP id
+ m23-20020a170906721700b0093206a2ba19mr12346955ejk.14.1680194122338; Thu, 30
+ Mar 2023 09:35:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] iommu: PGTABLE_LPAE is also for RISCV
-Content-Language: en-GB
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        iommu@lists.linux.dev, Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org
-References: <20230330060105.29460-1-rdunlap@infradead.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230330060105.29460-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230326233812.28058-1-steev@kali.org> <20230326233812.28058-3-steev@kali.org>
+ <ZCVgMuSdyMQhf/Ko@hovoldconsulting.com>
+In-Reply-To: <ZCVgMuSdyMQhf/Ko@hovoldconsulting.com>
+From:   Steev Klimaszewski <steev@kali.org>
+Date:   Thu, 30 Mar 2023 11:35:11 -0500
+Message-ID: <CAKXuJqjJjd6SY1g3JW8w53rEVCqgDkJXQ=1iA3qXcF+C9qv1SQ@mail.gmail.com>
+Subject: Re: [PATCH v8 2/4] Bluetooth: hci_qca: Add support for QTI Bluetooth
+ chip wcn6855
+To:     Johan Hovold <johan@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        Tim Jiang <quic_tjiang@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-30 07:01, Randy Dunlap wrote:
-> On riscv64, linux-next-20233030 (and for several days earlier),
-> there is a kconfig warning:
-> 
-> WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
->    Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
->    Selected by [y]:
->    - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
-> 
-> and build errors:
-> 
-> riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L140':
-> io-pgtable-arm.c:(.init.text+0x1e8): undefined reference to `alloc_io_pgtable_ops'
-> riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L168':
-> io-pgtable-arm.c:(.init.text+0xab0): undefined reference to `free_io_pgtable_ops'
-> riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L140':
-> ipmmu-vmsa.c:(.text+0xbc4): undefined reference to `free_io_pgtable_ops'
-> riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L0 ':
-> ipmmu-vmsa.c:(.text+0x145e): undefined reference to `alloc_io_pgtable_ops'
-> 
-> Add RISCV as an allowed ARCH dependency to fix these problems.
-> 
-> Fixes: d286a58bc8f4 ("iommu: Tidy up io-pgtable dependencies")
+Hi Johan,
 
-BTW that doesn't look like the right fix target - this presumably dates 
-back as far as when ARCH_RENESAS was added to RISCV, such that it was 
-possible to start selecting IPMMU_VMSA without COMPILE_TEST?
-
-Thanks,
-Robin.
-
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: iommu@lists.linux.dev
-> Cc: Conor Dooley <conor@kernel.org>
-> Cc: linux-riscv@lists.infradead.org
-> ---
->   drivers/iommu/Kconfig |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-> --- a/drivers/iommu/Kconfig
-> +++ b/drivers/iommu/Kconfig
-> @@ -32,7 +32,7 @@ config IOMMU_IO_PGTABLE
->   config IOMMU_IO_PGTABLE_LPAE
->   	bool "ARMv7/v8 Long Descriptor Format"
->   	select IOMMU_IO_PGTABLE
-> -	depends on ARM || ARM64 || COMPILE_TEST
-> +	depends on ARM || ARM64 || RISCV || COMPILE_TEST
->   	depends on !GENERIC_ATOMIC64	# for cmpxchg64()
->   	help
->   	  Enable support for the ARM long descriptor pagetable format.
+On Thu, Mar 30, 2023 at 5:10=E2=80=AFAM Johan Hovold <johan@kernel.org> wro=
+te:
+>
+> On Sun, Mar 26, 2023 at 06:38:10PM -0500, Steev Klimaszewski wrote:
+> > Add regulators, GPIOs and changes required to power on/off wcn6855.
+> > Add support for firmware download for wcn6855 which is in the
+> > linux-firmware repository as hpbtfw21.tlv and hpnv21.bin.
+> >
+> > Based on the assumption that this is similar to the wcn6750
+> >
+> > Tested-on: BTFW.HSP.2.1.0-00538-VER_PATCHZ-1
+> >
+> > Signed-off-by: Steev Klimaszewski <steev@kali.org>
+> > Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> > Tested-by: Bjorn Andersson <andersson@kernel.org>
+> > ---
+> > Changes since v7:
+> >  * None
+>
+> Only noticed now when Luiz applied the patches, but why did you drop my
+> reviewed-by and tested-by tags from this patch when submitting v8?
+>
+> For the record:
+>
+> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+> Tested-by: Johan Hovold <johan+linaro@kernel.org>
+>
+Oops, that wasn't intentional! I only meant to drop it on the dts bits
+as that part I wanted to make sure I got right based on your comments,
+my apologies!
+--steev
