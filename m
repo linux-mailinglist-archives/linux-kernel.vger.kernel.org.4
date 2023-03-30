@@ -2,118 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D036CFD03
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6540C6CFD09
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjC3Hkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
+        id S230255AbjC3HlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjC3Hk3 (ORCPT
+        with ESMTP id S229624AbjC3HlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:40:29 -0400
-Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F21A4488
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:40:28 -0700 (PDT)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 9A81610047D83
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:40:26 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id hmtWpTR9FaaYZhmtWp3OkR; Thu, 30 Mar 2023 07:40:26 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=b813XvKx c=1 sm=1 tr=0 ts=64253cea
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=k__wU0fu6RkA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=PqiCKZqhoxXZXdxUJgXaniL/P5m3NeYeSl0q1E2m6JE=; b=Iig6KSQFTDANLsq+M04WZCoCqJ
-        1mFPU4jmy91OXme+so6VVVdVLwH1Lx0/SdAc1UydhsC1Oj5vKUQV+TmUi761A6sz6dcz7LArc6H34
-        7/6O7GdE1n7SmT2i21YbRc43gJFkEYjBO6Bbc2bZ5zPN8ib74hRddV1Olp+SUCziObfoi1ethhk5V
-        4H7Opui7yawyRN/5h27dQgDT7vCnO+MfsITOfHUicWkKVrYOlV0jk/R557NxzUJqGeBGwcI8GcaI9
-        p/DMq8x7xEkI4P3SLZ0IGpjzFXz7Xj+a+F40RrgjaHToIXWZrWwkjb3rRbXW9Gpxn7NN3bKl259J2
-        ztkdV31w==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33706 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1phmtV-000kGq-CN;
-        Thu, 30 Mar 2023 01:40:25 -0600
-Subject: Re: [PATCH 5.15 000/146] 5.15.105-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230328142602.660084725@linuxfoundation.org>
-In-Reply-To: <20230328142602.660084725@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <d2e33121-4bf4-2af5-d578-2b1d214a7e07@w6rz.net>
-Date:   Thu, 30 Mar 2023 00:40:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 30 Mar 2023 03:41:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106BD44B8;
+        Thu, 30 Mar 2023 00:40:58 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id ABA6921B01;
+        Thu, 30 Mar 2023 07:40:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680162056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BKxsqFuPBiJOzp/911MeVFEqQ254isRtT/UBAD5emFQ=;
+        b=sTAn42JSwbAgamjaUYbp6+y54yG/0D5tCvLe1EAk35Y48Mnk7UsdkmVOu2kuNympONNMUv
+        XI4XZBzDBYJE2KgYltVPWCpNfPg3NcQMmw8eox7urLMBPMd205E8khnA3qaf66WIhHGAdW
+        az9nTYr3M/QZeuiGHvSRPVIWHVOsqSk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 83F111348E;
+        Thu, 30 Mar 2023 07:40:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qtK5HQg9JWQUfQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 30 Mar 2023 07:40:56 +0000
+Date:   Thu, 30 Mar 2023 09:40:55 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2 8/9] vmscan: memcg: sleep when flushing stats during
+ reclaim
+Message-ID: <ZCU9ByZybEi5G5sl@dhcp22.suse.cz>
+References: <20230328221644.803272-1-yosryahmed@google.com>
+ <20230328221644.803272-9-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1phmtV-000kGq-CN
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:33706
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328221644.803272-9-yosryahmed@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 7:41 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.105 release.
-> There are 146 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.105-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue 28-03-23 22:16:43, Yosry Ahmed wrote:
+> Memory reclaim is a sleepable context. Allow sleeping when flushing
+> memcg stats to avoid unnecessarily performing a lot of work without
+> sleeping. This can slow down reclaim code if flushing stats is taking
+> too long, but there is already multiple cond_resched()'s in reclaim
+> code.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Why is this preferred? Memory reclaim is surely a slow path but what is
+the advantage of calling mem_cgroup_flush_stats here?
 
-Tested-by: Ron Economos <re@w6rz.net>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> ---
+>  mm/vmscan.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index a9511ccb936f..9c1c5e8b24b8 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2845,7 +2845,7 @@ static void prepare_scan_count(pg_data_t *pgdat, struct scan_control *sc)
+>  	 * Flush the memory cgroup stats, so that we read accurate per-memcg
+>  	 * lruvec stats for heuristics.
+>  	 */
+> -	mem_cgroup_flush_stats_atomic();
+> +	mem_cgroup_flush_stats();
+>  
+>  	/*
+>  	 * Determine the scan balance between anon and file LRUs.
+> -- 
+> 2.40.0.348.gf938b09366-goog
 
+-- 
+Michal Hocko
+SUSE Labs
