@@ -2,91 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171BA6CFDB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55066CFDBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjC3IGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S230142AbjC3IHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjC3IF7 (ORCPT
+        with ESMTP id S230107AbjC3IHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:05:59 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47031986
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:05:57 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id q16so23432073lfe.10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:05:57 -0700 (PDT)
+        Thu, 30 Mar 2023 04:07:06 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5311A7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:07:04 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id cn12so73210685edb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:07:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680163556;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WiRopAYWrlOAC1Vw+B3xdKoDxUuDD/+lpWfHOMaxovk=;
-        b=IHGd1OQ/isgJp0gMoS4OP3W3ehG1gUai099okoPJL3aG8Apa/RcutH6oMEguYBjKxT
-         yRk/9ce5tuUxyLo0RWtqZ5rf0wdBXL3IwlZbZI3JvmdF515gWCAXwoFePp/T+vHwlcuz
-         MnrlUyHnKT/98f9QASxS+UJYvqjtxs/2Xir/zvzBncLm18ZFuuFQV9P0VvGxY3ZENQlt
-         ZkVHoAPRsECsqI6Djfpi4tkuG30/utQuYRx/g/wufi6Tb+z2SxFiRlBc13dFrK1/jlEc
-         gfpI5aS6UWz6+33AxltnL7IAxamnCMzi+smVQ7R1tHqpMczfYXY1ED7yMdKTpQWSVhi4
-         eHjQ==
+        d=google.com; s=20210112; t=1680163623;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I9/OZbBvN+GYY+k6VNhkbPsCuwIDJGgvOD15HQAmaC4=;
+        b=Dsrmlf6SQ7dieSEewhGmRqcjAnISmY3AXD9YHFTWUr8d+rNOpPZJaTLj6dySdAJBmS
+         2QtMKaqtURSXtYTkG0ZC4UmNj6SQdXGiCRKn4ol9GUN33Z9cvEGcATJXOWKZqMvTfIwf
+         QhPCIRe1EuHaGXZkRDNRZSBsvvOSCKbdsMoAnDpHTvNBHEdWh2VFjjbS2q3CAxFG3btu
+         9+MI5lzCPRk1D1xVAU7NB+C21NNfqBlxd2VKiRIhMGqXWDHEF52eu7YEHYU0MDOcj+bg
+         5qY4+RVkbmlN5SerigkhW3HND52Iysgu6N4mDyqx0XKW8vxxRsMx5p6SzsEYAB9yGwzi
+         J4rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680163556;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WiRopAYWrlOAC1Vw+B3xdKoDxUuDD/+lpWfHOMaxovk=;
-        b=oBuL7xB5hzqsSrG5ywyerk24/lAo+dNfo9TAHe36a7qoblDebJmCXR/owiLP3Re3D/
-         Vy5P7TiAJQ+gRUOsV50L79Oi8EldDuG1SlhUszDjY4Id4H64PjxNUFQBr/SOUKIarZxp
-         QYYh5yBuxgormdiga9W9qaWFLUOriccDh5vc71zmtdwHCnzWaeDNGJVB1YAvnzBK0Jgm
-         tQDbWFqCU02K6ekL8UX+AZfICN+qw+ObvIGAPk6R5q0MAbLOVCDcC1Soy5vHi0hxbJOU
-         o+DWhqj/pnMQN18h21YWiE1H3X1m0RNMDGHO39nDObiCXKc3M67ldY7phAY1d7myYdZc
-         TEOw==
-X-Gm-Message-State: AAQBX9enDYWJRpmYG4Pb9vYdLo5ypJoVY0hh+dCNaidJH+/i4bYILfWf
-        /8M5if8ZvgKafa52j5jxMWlnSA==
-X-Google-Smtp-Source: AKy350axLrl0hGO1L+AxecGYvf8f5noF8YPxt8umUlmjOpIagxRyfwQwgr/xfamvUSLkswyD1J7owA==
-X-Received: by 2002:a05:6512:910:b0:4e8:5df6:8ff9 with SMTP id e16-20020a056512091000b004e85df68ff9mr6879378lft.18.1680163556101;
-        Thu, 30 Mar 2023 01:05:56 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v16-20020ac25590000000b004eb0c12df21sm2095078lfg.128.2023.03.30.01.05.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 01:05:55 -0700 (PDT)
-Message-ID: <9a300a4d-484c-45e9-dd97-bee6c4b2e285@linaro.org>
-Date:   Thu, 30 Mar 2023 10:05:54 +0200
+        d=1e100.net; s=20210112; t=1680163623;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I9/OZbBvN+GYY+k6VNhkbPsCuwIDJGgvOD15HQAmaC4=;
+        b=QnVu89gG5aYWNbpDZb1QytOEmafpvmn6xvHRihV4RfaTlTyxqcCRyF17KcZQ0mEP3w
+         eCzLBAsUBLdA9wwA8oAJ1EVIcjGakjCv5IxTO+A2KVF+V10U+tpRJ/tyNTI7DZ9m0VyO
+         GIsX6g+xOR/iXjYDjF9xadcBkpXOMqgWuvUHtM5UkTQUF13CKkTgI+TeKEIqZCK7dFzK
+         UrzspcYUv52w9J55UDlapoe+psdQKC09Z0hajemVljX4cZT+XImuanSnIJQIn3x42qet
+         JT4bIh8BPj29l4M9koh4W+2P4sEztsk7580CrYQn8K/cLh4ESok/GchxgWLnE1hCE+D+
+         0Svw==
+X-Gm-Message-State: AAQBX9eq2GgcGBJwenhMaQWENbcOiHsrsXC/B4HT8EQys4XA0DLI8nAS
+        sHI6DuCfElejYY1P/v2QnpaoJ7/JBI8IFNH+iAX+sw==
+X-Google-Smtp-Source: AKy350bAfMXdd5ybBW9MntO/LYBeu0+13bGoVOKRQbfwOov/1/I9J3qNCI1MgUJs6HRYlq94hLg/UkBhLlt4JxBxOF0=
+X-Received: by 2002:a17:907:6a95:b0:947:72cd:9325 with SMTP id
+ ri21-20020a1709076a9500b0094772cd9325mr229031ejc.15.1680163623142; Thu, 30
+ Mar 2023 01:07:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v6 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Content-Language: en-US
-To:     Okan Sahin <okan.sahin@analog.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Haibo Chen <haibo.chen@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-References: <20230307112835.81886-1-okan.sahin@analog.com>
- <20230307112835.81886-6-okan.sahin@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230307112835.81886-6-okan.sahin@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230328221644.803272-1-yosryahmed@google.com>
+ <20230328221644.803272-5-yosryahmed@google.com> <ZCQfZJFufkJ10o01@dhcp22.suse.cz>
+ <CAJD7tkb-UpKm2QbjYzB=B=oGk6Hyj9cbUviZUPC+7VsvBecH7g@mail.gmail.com>
+ <20230329192059.2nlme5ubshzdbpg6@google.com> <ZCU1Bp+5bKNJzWIu@dhcp22.suse.cz>
+ <CAJD7tka0CmRvcvB0k8DZuid1vC9OK_mFriHHbXNTUkVE7OjaTA@mail.gmail.com> <ZCU+8lSi+e4WgT3F@dhcp22.suse.cz>
+In-Reply-To: <ZCU+8lSi+e4WgT3F@dhcp22.suse.cz>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 30 Mar 2023 01:06:26 -0700
+Message-ID: <CAJD7tkaKd9Bcb2-e83Q-kzF7G+crr1U+7uqUPBARXWq-LpyKvw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] cgroup: rstat: add WARN_ON_ONCE() if flushing
+ outside task context
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,44 +86,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 12:28, Okan Sahin wrote:
-> MFD driver for MAX77541/MAX77540 to enable its sub
-> devices.
+On Thu, Mar 30, 2023 at 12:49=E2=80=AFAM Michal Hocko <mhocko@suse.com> wro=
+te:
+>
+> On Thu 30-03-23 00:13:16, Yosry Ahmed wrote:
+> > On Thu, Mar 30, 2023 at 12:06=E2=80=AFAM Michal Hocko <mhocko@suse.com>=
+ wrote:
+> [...]
+> > > So the real question is. Do we really care so deeply? After all someb=
+ody
+> > > might be calling this from within a spin lock or irq disabled section
+> > > resulting in a similar situation without noticing.
+> >
+> > There are discussions in [1] about making atomic rstat flush not
+> > disable irqs throughout the process, so in that case it would only
+> > result in a similar situation if the caller has irq disabled. The only
+> > caller that might have irq disabled is the same caller that might be
+> > in irq context before this series: mem_cgroup_usage().
+> >
+> > On that note, and while I have your attention, I was wondering if we
+> > can eliminate the flush call completely from mem_cgroup_usage(), and
+> > read the global stats counters for root memcg instead of the root
+> > counters. There might be subtle differences, but the root memcg usage
+> > isn't super accurate now anyway (e.g. it doesn't include kernel
+> > memory).
+>
+> root memcg stats are imprecise indeed and I have to admit I do not
+> really know why we are adding more work for that case. I have tried to
+> dig into git history for that yesterday but couldn't find a satisfying
+> answer. It goes all the way down to 2d146aa3aa842 which has done the
+> switch to rstat. Maybe Johannes remembers.
 
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+I think it goes back even before that. Even before rstat, we used to
+get the root usage by iterating over the hierarchy. Maybe we didn't
+have the global counters at some point or they weren't in line with
+the root memcg (e.g. use_hierarchy =3D 0). It would be great if we can
+just use the global counters here. Hopefully Johannes can confirm or
+deny this.
 
-> 
-> The MAX77541 is a multi-function devices. It includes
-> buck converter and ADC.
-> 
-> The MAX77540 is a high-efficiency buck converter
-> with two 3A switching phases.
-> 
-> They have same regmap except for ADC part of MAX77541.
-> 
+>
+> Anyway, back to this particular patch. I still do not see strong reasons
+> to be verbose about !in_task case so I would just drop this patch.
 
+I will drop this patch in the next iteration. If I implement a patch
+that makes rstat flushing not disable irqs all throughout (like [1]),
+whether part of this series or not, and we remove flushing from
+mem_cgroup_usage(), then at this point:
+- No existing flushers will be disabling irqs.
+- rstat flushing itself will not be disabling irqs throughout the entire fl=
+ush.
 
-> +static int max77541_probe(struct i2c_client *client)
-> +{
-> +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
-> +	struct device *dev = &client->dev;
-> +	struct max77541 *max77541;
-> +
-> +	max77541 = devm_kzalloc(dev, sizeof(*max77541), GFP_KERNEL);
-> +	if (!max77541)
-> +		return -ENOMEM;
-> +
-> +	i2c_set_clientdata(client, max77541);
-> +	max77541->i2c = client;
-> +
-> +	max77541->chip  = device_get_match_data(dev);
-> +	if (!max77541->chip)
-> +		max77541->chip  = (struct chip_info *)id->driver_data;
+If we achieve that, do you think it makes sense to add
+WARN_ON_ONCE(irqs_disabled()) instead to prevent future users from
+flushing while disabling irqs or in irq context?
 
-You have odd indentation/coding style before '='. Use Linux coding style.
+All I am trying to achieve here is make sure we don't regress. I don't
+want to minimize the current atomic flushers now only to have them
+increase later.
 
-Best regards,
-Krzysztof
+[1] https://lore.kernel.org/lkml/CAJD7tkZrp=3D4zWvjE9_010TAG1T_crCbf9P64UzJ=
+ABspgcrGPKg@mail.gmail.com/
 
+> --
+> Michal Hocko
+> SUSE Labs
