@@ -2,73 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099936D05A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E9D6D05C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjC3NBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
+        id S231822AbjC3NCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjC3NBT (ORCPT
+        with ESMTP id S231795AbjC3NCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:01:19 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B55AA260;
-        Thu, 30 Mar 2023 06:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=iZumIeXl4HeZrBWMKcDLhreN5huMTw07n6pSDNiiTBg=; b=ANc5+coFvAoz53qhvpUAreVboa
-        PsfomhUa8aNd4agC0fRueuOdESvYrkBYzMtJRLaNKI2DSNdhyqjbyXzz2n+o+KmzNtyQUud/JPRcF
-        1nDjybv1exWiIepldSL6sEHax3/Pox6daZlQdCFkmM23nG2dLjxwl+kBMNcVm1QRSU/IOkz0W1P0u
-        vlbDS3BpmtzIL8GmOLChTIHTQ5S125tD1kzQCU4tAtHskD3ujvuQvAjbQK9L+Vd2c7kzhWI7hna81
-        W1CSXG+ijYNiwx4qoQw0V31iqfNJ+cuZc3+crBBs/8EJpNFt7Xuh0coh19ij0xw+BQ6YCSCC0JvBF
-        gHQTb4RA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1phrts-00AQL8-Rd; Thu, 30 Mar 2023 13:01:09 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 63684300134;
-        Thu, 30 Mar 2023 15:01:08 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4AA8F20134244; Thu, 30 Mar 2023 15:01:08 +0200 (CEST)
-Date:   Thu, 30 Mar 2023 15:01:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH 03/13] rust: lock: introduce `Mutex`
-Message-ID: <20230330130108.GE124812@hirez.programming.kicks-ass.net>
-References: <20230330043954.562237-1-wedsonaf@gmail.com>
- <20230330043954.562237-3-wedsonaf@gmail.com>
+        Thu, 30 Mar 2023 09:02:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567D59EE7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 06:01:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680181293;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HxqtYWKgKbfjvx86WVpEFEl8GyNFF30+hE41KO//gFo=;
+        b=CP6xJEhUzaA7pA8VOuWbu8fhwxeVjyZfAhFqGDQSrfV+EtTPOrhJm3PrPIopNCiJdRyhZG
+        scn8ZTEyhScqSyyXp2oMTwdy+mjP5mNJtWUFriuz2M8J7Hzt+JWsdQbKoyo2fK8ueSuhST
+        3XSGsZ9vEuWd7+hawF4wUelAxoxHGag=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-262-WjAFCiU1Pgy2CiKK5qhhIw-1; Thu, 30 Mar 2023 09:01:30 -0400
+X-MC-Unique: WjAFCiU1Pgy2CiKK5qhhIw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18845884EC5;
+        Thu, 30 Mar 2023 13:01:28 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A8A721402C07;
+        Thu, 30 Mar 2023 13:01:25 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <6F2985FF-2474-4F36-BD94-5F8E97E46AC2@oracle.com>
+References: <6F2985FF-2474-4F36-BD94-5F8E97E46AC2@oracle.com> <20230329141354.516864-1-dhowells@redhat.com> <20230329141354.516864-41-dhowells@redhat.com>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 40/48] sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330043954.562237-3-wedsonaf@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <812033.1680181285.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 30 Mar 2023 14:01:25 +0100
+Message-ID: <812034.1680181285@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 01:39:44AM -0300, Wedson Almeida Filho wrote:
-> From: Wedson Almeida Filho <walmeida@microsoft.com>
-> 
-> This is the `struct mutex` lock backend and allows Rust code to use the
-> kernel mutex idiomatically.
+Chuck Lever III <chuck.lever@oracle.com> wrote:
 
-What, if anything, are the plans to support the various lockdep
-annotations? Idem for the spinlock thing in the other patch I suppose.
+> Simply replacing the kernel_sendpage() loop would be a
+> straightforward change and easy to evaluate and test, and
+> I'd welcome that without hesitation.
+
+How about the attached for a first phase?
+
+It does three sendmsgs, one for the marker + header, one for the body and =
+one
+for the tail.
+
+David
+---
+sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+
+When transmitting data, call down into TCP using sendmsg with
+MSG_SPLICE_PAGES to indicate that content should be spliced rather than
+performing sendpage calls to transmit header, data pages and trailer.
+
+The marker and the header are passed in an array of kvecs.  The marker wil=
+l
+get copied and the header will get spliced.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+cc: Anna Schumaker <anna@kernel.org>
+cc: Chuck Lever <chuck.lever@oracle.com>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: linux-nfs@vger.kernel.org
+cc: netdev@vger.kernel.org
+---
+ include/linux/sunrpc/svc.h |   11 +++---
+ net/sunrpc/svcsock.c       |   75 ++++++++++++++-------------------------=
+------
+ 2 files changed, 29 insertions(+), 57 deletions(-)
+
+diff --git a/include/linux/sunrpc/svc.h b/include/linux/sunrpc/svc.h
+index 877891536c2f..456ae554aa11 100644
+--- a/include/linux/sunrpc/svc.h
++++ b/include/linux/sunrpc/svc.h
+@@ -161,16 +161,15 @@ static inline bool svc_put_not_last(struct svc_serv =
+*serv)
+ extern u32 svc_max_payload(const struct svc_rqst *rqstp);
+ =
+
+ /*
+- * RPC Requsts and replies are stored in one or more pages.
++ * RPC Requests and replies are stored in one or more pages.
+  * We maintain an array of pages for each server thread.
+  * Requests are copied into these pages as they arrive.  Remaining
+  * pages are available to write the reply into.
+  *
+- * Pages are sent using ->sendpage so each server thread needs to
+- * allocate more to replace those used in sending.  To help keep track
+- * of these pages we have a receive list where all pages initialy live,
+- * and a send list where pages are moved to when there are to be part
+- * of a reply.
++ * Pages are sent using ->sendmsg with MSG_SPLICE_PAGES so each server th=
+read
++ * needs to allocate more to replace those used in sending.  To help keep=
+ track
++ * of these pages we have a receive list where all pages initialy live, a=
+nd a
++ * send list where pages are moved to when there are to be part of a repl=
+y.
+  *
+  * We use xdr_buf for holding responses as it fits well with NFS
+  * read responses (that have a header, and some data pages, and possibly
+diff --git a/net/sunrpc/svcsock.c b/net/sunrpc/svcsock.c
+index 03a4f5615086..14efcc08c6f8 100644
+--- a/net/sunrpc/svcsock.c
++++ b/net/sunrpc/svcsock.c
+@@ -1060,16 +1060,8 @@ static int svc_tcp_recvfrom(struct svc_rqst *rqstp)
+ 	return 0;	/* record not complete */
+ }
+ =
+
+-static int svc_tcp_send_kvec(struct socket *sock, const struct kvec *vec,
+-			      int flags)
+-{
+-	return kernel_sendpage(sock, virt_to_page(vec->iov_base),
+-			       offset_in_page(vec->iov_base),
+-			       vec->iov_len, flags);
+-}
+-
+ /*
+- * kernel_sendpage() is used exclusively to reduce the number of
++ * MSG_SPLICE_PAGES is used exclusively to reduce the number of
+  * copy operations in this path. Therefore the caller must ensure
+  * that the pages backing @xdr are unchanging.
+  *
+@@ -1081,13 +1073,9 @@ static int svc_tcp_sendmsg(struct socket *sock, str=
+uct xdr_buf *xdr,
+ {
+ 	const struct kvec *head =3D xdr->head;
+ 	const struct kvec *tail =3D xdr->tail;
+-	struct kvec rm =3D {
+-		.iov_base	=3D &marker,
+-		.iov_len	=3D sizeof(marker),
+-	};
+-	struct msghdr msg =3D {
+-		.msg_flags	=3D 0,
+-	};
++	struct kvec kv[2];
++	struct msghdr msg =3D { .msg_flags =3D MSG_SPLICE_PAGES | MSG_MORE, };
++	size_t sent;
+ 	int ret;
+ =
+
+ 	*sentp =3D 0;
+@@ -1095,51 +1083,36 @@ static int svc_tcp_sendmsg(struct socket *sock, st=
+ruct xdr_buf *xdr,
+ 	if (ret < 0)
+ 		return ret;
+ =
+
+-	ret =3D kernel_sendmsg(sock, &msg, &rm, 1, rm.iov_len);
++	kv[0].iov_base =3D &marker;
++	kv[0].iov_len =3D sizeof(marker);
++	kv[1] =3D *head;
++	iov_iter_kvec(&msg.msg_iter, ITER_SOURCE, kv, 2, sizeof(marker) + head->=
+iov_len);
++	ret =3D sock_sendmsg(sock, &msg);
+ 	if (ret < 0)
+ 		return ret;
+-	*sentp +=3D ret;
+-	if (ret !=3D rm.iov_len)
+-		return -EAGAIN;
++	sent =3D ret;
+ =
+
+-	ret =3D svc_tcp_send_kvec(sock, head, 0);
++	if (!tail->iov_len)
++		msg.msg_flags &=3D ~MSG_MORE;
++	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, xdr->bvec,
++		      xdr_buf_pagecount(xdr), xdr->page_len);
++	ret =3D sock_sendmsg(sock, &msg);
+ 	if (ret < 0)
+ 		return ret;
+-	*sentp +=3D ret;
+-	if (ret !=3D head->iov_len)
+-		goto out;
+-
+-	if (xdr->page_len) {
+-		unsigned int offset, len, remaining;
+-		struct bio_vec *bvec;
+-
+-		bvec =3D xdr->bvec + (xdr->page_base >> PAGE_SHIFT);
+-		offset =3D offset_in_page(xdr->page_base);
+-		remaining =3D xdr->page_len;
+-		while (remaining > 0) {
+-			len =3D min(remaining, bvec->bv_len - offset);
+-			ret =3D kernel_sendpage(sock, bvec->bv_page,
+-					      bvec->bv_offset + offset,
+-					      len, 0);
+-			if (ret < 0)
+-				return ret;
+-			*sentp +=3D ret;
+-			if (ret !=3D len)
+-				goto out;
+-			remaining -=3D len;
+-			offset =3D 0;
+-			bvec++;
+-		}
+-	}
++	sent +=3D ret;
+ =
+
+ 	if (tail->iov_len) {
+-		ret =3D svc_tcp_send_kvec(sock, tail, 0);
++		msg.msg_flags &=3D ~MSG_MORE;
++		iov_iter_kvec(&msg.msg_iter, ITER_SOURCE, tail, 1, tail->iov_len);
++		ret =3D sock_sendmsg(sock, &msg);
+ 		if (ret < 0)
+ 			return ret;
+-		*sentp +=3D ret;
++		sent +=3D ret;
+ 	}
+-
+-out:
++	if (sent > 0)
++		*sentp =3D sent;
++	if (sent !=3D sizeof(marker) + xdr->len)
++		return -EAGAIN;
+ 	return 0;
+ }
+ =
+
