@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B8E6D0567
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6816D0570
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbjC3MzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 08:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
+        id S231634AbjC3Mzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 08:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjC3My7 (ORCPT
+        with ESMTP id S230019AbjC3Mzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:54:59 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780FF44B8;
-        Thu, 30 Mar 2023 05:54:58 -0700 (PDT)
-Received: from kwepemm600012.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PnNbH4DGMz17QBR;
-        Thu, 30 Mar 2023 20:51:39 +0800 (CST)
-Received: from build.huawei.com (10.175.101.6) by
- kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 20:54:56 +0800
-From:   Wenchao Hao <haowenchao2@huawei.com>
-To:     Jens Axboe <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linfeilong@huawei.com>, <louhongxiang@huawei.com>,
-        <haowenchao2@huawei.com>
-Subject: [PATCH] blk-mq: rename blk_complete_request to blk_end_request
-Date:   Thu, 30 Mar 2023 20:54:02 +0800
-Message-ID: <20230330125402.764676-1-haowenchao2@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 30 Mar 2023 08:55:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A902F13E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:55:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42944B8275C
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:55:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC2AC433EF;
+        Thu, 30 Mar 2023 12:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680180943;
+        bh=tw4EWixF8PGRw7jO0QMNBUt+pAExnrct3H/J1gtKHvo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rQ3X3z598ITygPAiuRyDJVsJ+SX9HeqnAAwtJp7JV52HNSN0PDDKxJnzIeZ3/DQPT
+         xnhjyHTyowvxFaliyJKoBiB79f7TxGqRwFOeeUYZ67b7xKcopQxXFNKeRcNuzTUOMJ
+         2xMb+ApVLlTIDmhQSR4nEpi7H06BacbxVTrRiaOGKHiO/Hhb6XfXH/5Bp5Ap/WIsj6
+         pVNl5HNdtU7u6sZ8zu+Ie8100FhUAmwgRF2h0KUyA0Bag5OVGjOjvmaVA5nP+7wt5h
+         HKoXzQyX0cxy8JeBBOGdlTxNESs/S4iMMWW1FPm4bCnLN67GEXQGJCNqXTVPcP8HjJ
+         30XqlgaQV/ZfA==
+Date:   Thu, 30 Mar 2023 13:55:40 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mfd: arizona-spi: Add missing MODULE_DEVICE_TABLE
+Message-ID: <20230330125540.GM434339@google.com>
+References: <20230323134138.834369-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600012.china.huawei.com (7.193.23.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230323134138.834369-1-ckeepax@opensource.cirrus.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The name blk_complete_request makes people wonder whether it is a variant
-of blk_mq_complete_request, but there is actually no relationship between
-them. So rename blk_complete_request to blk_end_request to make it more
-appropriate.
+On Thu, 23 Mar 2023, Charles Keepax wrote:
 
-Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
----
- block/blk-mq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> This patch adds missing MODULE_DEVICE_TABLE definition
+> which generates correct modalias for automatic loading
+> of this driver when it is built as a module.
+>
+> Fixes: 3f65555c417c ("mfd: arizona: Split of_match table into I2C and SPI versions")
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> ---
+>  drivers/mfd/arizona-spi.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index cf1a39adf9a5..0aa9fd9aacb6 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -824,7 +824,7 @@ static void blk_print_req_error(struct request *req, blk_status_t status)
-  * Fully end IO on a request. Does not support partial completions, or
-  * errors.
-  */
--static void blk_complete_request(struct request *req)
-+static void blk_end_request(struct request *req)
- {
- 	const bool is_flush = (req->rq_flags & RQF_FLUSH_SEQ) != 0;
- 	int total_bytes = blk_rq_bytes(req);
-@@ -1089,7 +1089,7 @@ void blk_mq_end_request_batch(struct io_comp_batch *iob)
- 		prefetch(rq->bio);
- 		prefetch(rq->rq_next);
- 
--		blk_complete_request(rq);
-+		blk_end_request(rq);
- 		if (iob->need_ts)
- 			__blk_mq_end_request_acct(rq, now);
- 
--- 
-2.35.3
+Applied, thanks
 
+--
+Lee Jones [李琼斯]
