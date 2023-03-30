@@ -2,58 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738DF6CFE01
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396886CFE0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbjC3IS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
+        id S229862AbjC3ITj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjC3ISD (ORCPT
+        with ESMTP id S229521AbjC3ITg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:18:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81C8019B3;
-        Thu, 30 Mar 2023 01:17:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 37F841FB;
-        Thu, 30 Mar 2023 01:18:40 -0700 (PDT)
-Received: from [10.57.18.220] (unknown [10.57.18.220])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0318C3F73F;
-        Thu, 30 Mar 2023 01:17:53 -0700 (PDT)
-Message-ID: <c2244382-8696-a27b-e817-32a7b146fc13@arm.com>
-Date:   Thu, 30 Mar 2023 09:17:52 +0100
+        Thu, 30 Mar 2023 04:19:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9513F19B3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680164332;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=t7eECtwVNg9V18DvuwK2iZYXBSAw49aJkmw0hqJ5qzY=;
+        b=Gv5ac868GpQ8ovNnqG7G3lQhb/r6Lv/lkD8sel7PlSKUPsQdDNKG/6vxO+9PJiIM8lxIrI
+        3aOV9uJk3MDoSynuUozJhsATJ6m0C7ty8qnhso+SFd39BkeYwJeUhxFcbu7ZgJBrfqvD5B
+        4OppP12/+gMODTasZ5KohHU/+hXgejM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-79-sEbqvZosOCa_9yIBUTGpYQ-1; Thu, 30 Mar 2023 04:18:51 -0400
+X-MC-Unique: sEbqvZosOCa_9yIBUTGpYQ-1
+Received: by mail-wm1-f69.google.com with SMTP id l18-20020a05600c1d1200b003ef7b61e2fdso3370774wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:18:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680164329;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t7eECtwVNg9V18DvuwK2iZYXBSAw49aJkmw0hqJ5qzY=;
+        b=ZsYRJTUJAdIed3gTxqrYwv9+tGwkRQ6jPPDGn6kayXRTWdVOlGZ+c+GgaNvufaOSqC
+         wTkiusDZtx6bHbxlBK3MWffpwc3xc3Ij6rZSJN+Dc4Q+6iPus10lc6geMPXq0LHRGk0O
+         OxZD59FYBu+5IBl4Yy2DS31dtFEsQWUQpTL5y02SkBygcamEDHPsxgC5TmGORfBnjuMz
+         Lzo1zyYyc24Ict1H5UR4BqsxpyGs5CozOMIJ7t3m2MjQiF/n5xWwjjcQE7l7ll8IwWmI
+         w/dcH8siEMKqNh6NwJl27yQOs2OY0roc5Td3RpReAYNc0rFnpyAbEWj0xKn8CzbmfmvU
+         7V5g==
+X-Gm-Message-State: AAQBX9dhrgSQqtiOBfe6EbOgoIEsvg7uZvgy8BPfiuU84wE7HnkulvHh
+        gFjcAardJ5FMqdLX4fQQqjeWbbgTMyinO4irOb7ozeqXmw+VgMSk2gEzOFTRdeKpp/biMvR9+z7
+        JTQSWUARreF9MJp1wV8ND4QtQ0BpZ2JOwGCFQxp0rRL/solyRXlV8uxMZwrlESIk539hs1KBNYM
+        1ocVTaZ9E=
+X-Received: by 2002:a5d:53c8:0:b0:2dd:2a04:b73f with SMTP id a8-20020a5d53c8000000b002dd2a04b73fmr14836590wrw.49.1680164329663;
+        Thu, 30 Mar 2023 01:18:49 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YHmCn199HtVyO5MEs1UEbLsArdPXVMMRghyJj0jOBpNRBnC3gHUBArUxmR5qR0AZzRBzXpAg==
+X-Received: by 2002:a5d:53c8:0:b0:2dd:2a04:b73f with SMTP id a8-20020a5d53c8000000b002dd2a04b73fmr14836558wrw.49.1680164329215;
+        Thu, 30 Mar 2023 01:18:49 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id b9-20020adfde09000000b002daeb108304sm19070458wrm.33.2023.03.30.01.18.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 01:18:49 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Enric Balletbo i Serra <eballetbo@redhat.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Subject: [PATCH v2] Input: Add KUnit tests for some of the input core helper functions
+Date:   Thu, 30 Mar 2023 10:18:31 +0200
+Message-Id: <20230330081831.2291351-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [BUG] perf: No samples found when using kcore + coresight
-Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        coresight@lists.linaro.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mathieu.poirier@linaro.org, adrian.hunter@intel.com,
-        Jiri Olsa <jolsa@kernel.org>, acme@redhat.com,
-        mike.leach@linaro.org, Will Deacon <will@kernel.org>,
-        suzuki.poulose@arm.com, yang@os.amperecomputing.com
-References: <CAHbLzkrJQTrYBtPkf=jf3OpQ-yBcJe7XkvQstX9j2frz4WF-SQ@mail.gmail.com>
- <8ca2b07e-674e-afb6-ff12-87504f51f252@arm.com>
- <CAHbLzkpf4RUZugKdn-uXC5m3RpAQH5aDmRXdsxPZi0Cbf-yiyw@mail.gmail.com>
- <CAHbLzkq_7aXcys1cpgGFsfMDDDKMsT3e7zdNW=0jAkw7kBtJ0Q@mail.gmail.com>
- <20230309113851.GF19253@leoy-yangtze.lan>
- <CAHbLzkpvLHnyL5J5kB_ke3CWVq2=MOEdEQsGex56+Esfgqh1=g@mail.gmail.com>
- <20230313121420.GB2426758@leoy-yangtze.lan>
- <CAHbLzkpZjrd401DEKnnCNMdra0f6kGRe1Nh_rTovNTmyD8aBpg@mail.gmail.com>
- <20230314003610.GD2426758@leoy-yangtze.lan>
- <64db6d95-8aca-48cc-80e1-e68211922071@arm.com>
- <CAHbLzkoFkxpLuaW93nPrxxvtuHiRmObOnZfRY9YPXcGumzv33A@mail.gmail.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <CAHbLzkoFkxpLuaW93nPrxxvtuHiRmObOnZfRY9YPXcGumzv33A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,60 +85,256 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The input subsystem doesn't currently have any unit tests, let's add a
+CONFIG_INPUT_KUNIT_TEST option that builds a test suite to be executed
+with the KUnit test infrastructure.
 
+For now, only three tests were added for some of the input core helper
+functions that are trivial to test:
 
-On 30/03/2023 00:25, Yang Shi wrote:
-> On Wed, Mar 29, 2023 at 9:08 AM James Clark <james.clark@arm.com> wrote:
->>
->>
->>
->> On 14/03/2023 00:36, Leo Yan wrote:
->>> On Mon, Mar 13, 2023 at 11:15:44AM -0700, Yang Shi wrote:
->>>
->>> [...]
->>>
->>>>> Just a quick summary, here we have two issues:
->>>>>
->>>>> - With command:
->>>>>   perf record -e cs_etm/@tmc_etf63/k --kcore --per-thread \
->>>>>   -- taskset --cpu-list 1 uname",
->>>>>
->>>>>   perf doesn't enable "text poke" attribution.
->>>>
->>>> No, it enables "text poke" and perf fails to decode coresight trace
->>>> data too. It doesn't matter whether "--kcore" is after or before "-e
->>>> cs/etm/@tmc_etf63/k".
->>>
->>> Understand now.  Thanks for correction, if so we can ignore this one.
->>>
->>> Leo
->>
->> To me it looks like it's only --per-thread and --kcore together that
->> cause the issue. I can't see if that was mentioned previously in this
->> thread.
-> 
-> If "--pre-thread" is not passed in, perf record failed with "failed to
-> mmap with 12 (Cannot allocate memory)". Sorry for not mentioning this
-> in the first place. I was quite focused on --kcore and didn't realize
-> they may be related.
+  * input_test_polling: set/get poll interval and set-up a poll handler.
 
-That's unrelated. That's because you have specified a sink and without
---per-thread it tries to open the event on all cores. If the sink can't
-be reached from all cores it will fail to open. You can make it work
-without --per-thread if you limit it to a valid core like this, although
-I don't know which ones exactly would be valid for your system:
+  * input_test_timestamp: set/get input event timestamps.
 
+  * input_test_match_device_id: match a device by bus, vendor, product,
+                                version and events capable of handling.
 
-  perf record -e cs_etm/@tmc_etf63/k --kcore -C 0 \
-     -- taskset --cpu-list 1 uname
+But having the minimal KUnit support allows to add more tests and suites
+as follow-up changes. The tests can be run with the following command:
 
-> 
->>
->> If it is --per-thread that's causing the issue then I think I have an
->> idea why it might be. There are some assumptions and different paths
->> taken in decoding in that mode that aren't correct. It causes some other
->> issues to do with ordering and timestamps as well and I wanted to fix it
->> previously. I wouldn't say that the text-poke change has caused a
->> regression, as decoding in this mode was always a bit buggy.
->>
->> Maybe this is another reason to fix it properly.
+  $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/input/tests/
+
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Tested-by: Enric Balletbo i Serra <eballetbo@redhat.com>
+---
+
+Changes in v2:
+- Add Enric's Tested-by tag.
+- Drop the .kunitconfig from the example command (Daniel Latypov).
+- Add .kunitconfig that wasn't added by mistake (Daniel Latypov).
+- Remove ref to KUnit docs in the Kconfig help text (Daniel Latypov).
+- Inline function calls in the KUNIT_ASSERT_*() calls (Daniel Latypov).
+- Add some comments to explain why a fail or success is expected.
+
+ drivers/input/Kconfig            |  10 +++
+ drivers/input/Makefile           |   1 +
+ drivers/input/tests/.kunitconfig |   3 +
+ drivers/input/tests/Makefile     |   3 +
+ drivers/input/tests/input_test.c | 150 +++++++++++++++++++++++++++++++
+ 5 files changed, 167 insertions(+)
+ create mode 100644 drivers/input/tests/.kunitconfig
+ create mode 100644 drivers/input/tests/Makefile
+ create mode 100644 drivers/input/tests/input_test.c
+
+diff --git a/drivers/input/Kconfig b/drivers/input/Kconfig
+index e2752f7364bc..735f90b74ee5 100644
+--- a/drivers/input/Kconfig
++++ b/drivers/input/Kconfig
+@@ -166,6 +166,16 @@ config INPUT_EVBUG
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called evbug.
+ 
++config INPUT_KUNIT_TEST
++	tristate "KUnit tests for Input" if !KUNIT_ALL_TESTS
++	depends on INPUT && KUNIT=y
++	default KUNIT_ALL_TESTS
++	help
++	  Say Y here if you want to build the KUnit tests for the input
++	  subsystem.
++
++	  If in doubt, say "N".
++
+ config INPUT_APMPOWER
+ 	tristate "Input Power Event -> APM Bridge" if EXPERT
+ 	depends on INPUT && APM_EMULATION
+diff --git a/drivers/input/Makefile b/drivers/input/Makefile
+index 2266c7d010ef..c78753274921 100644
+--- a/drivers/input/Makefile
++++ b/drivers/input/Makefile
+@@ -26,6 +26,7 @@ obj-$(CONFIG_INPUT_JOYSTICK)	+= joystick/
+ obj-$(CONFIG_INPUT_TABLET)	+= tablet/
+ obj-$(CONFIG_INPUT_TOUCHSCREEN)	+= touchscreen/
+ obj-$(CONFIG_INPUT_MISC)	+= misc/
++obj-$(CONFIG_INPUT_KUNIT_TEST)	+= tests/
+ 
+ obj-$(CONFIG_INPUT_APMPOWER)	+= apm-power.o
+ 
+diff --git a/drivers/input/tests/.kunitconfig b/drivers/input/tests/.kunitconfig
+new file mode 100644
+index 000000000000..2f5bedf8028e
+--- /dev/null
++++ b/drivers/input/tests/.kunitconfig
+@@ -0,0 +1,3 @@
++CONFIG_KUNIT=y
++CONFIG_INPUT=y
++CONFIG_INPUT_KUNIT_TEST=y
+diff --git a/drivers/input/tests/Makefile b/drivers/input/tests/Makefile
+new file mode 100644
+index 000000000000..90cf954181bc
+--- /dev/null
++++ b/drivers/input/tests/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++
++obj-$(CONFIG_INPUT_KUNIT_TEST) += input_test.o
+diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/input_test.c
+new file mode 100644
+index 000000000000..e5a6c1ad2167
+--- /dev/null
++++ b/drivers/input/tests/input_test.c
+@@ -0,0 +1,150 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit test for the input core.
++ *
++ * Copyright (c) 2023 Red Hat Inc
++ */
++
++#include <linux/delay.h>
++#include <linux/input.h>
++
++#include <kunit/test.h>
++
++#define POLL_INTERVAL 100
++
++static int input_test_init(struct kunit *test)
++{
++	struct input_dev *input_dev;
++	int ret;
++
++	input_dev = input_allocate_device();
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, input_dev);
++
++	input_dev->name = "Test input device";
++	input_dev->id.bustype = BUS_VIRTUAL;
++	input_dev->id.vendor = 1;
++	input_dev->id.product = 1;
++	input_dev->id.version = 1;
++	input_set_capability(input_dev, EV_KEY, BTN_LEFT);
++	input_set_capability(input_dev, EV_KEY, BTN_RIGHT);
++
++	ret = input_register_device(input_dev);
++	if (ret) {
++		input_free_device(input_dev);
++		KUNIT_ASSERT_FAILURE(test, "Register device failed: %d", ret);
++	}
++
++	test->priv = input_dev;
++
++	return 0;
++}
++
++static void input_test_exit(struct kunit *test)
++{
++	struct input_dev *input_dev = test->priv;
++
++	input_unregister_device(input_dev);
++	input_free_device(input_dev);
++}
++
++static void input_test_poll(struct input_dev *input) { }
++
++static void input_test_polling(struct kunit *test)
++{
++	struct input_dev *input_dev = test->priv;
++
++	/* Must fail because a poll handler has not been set-up yet */
++	KUNIT_ASSERT_EQ(test, input_get_poll_interval(input_dev), -EINVAL);
++
++	KUNIT_ASSERT_EQ(test, input_setup_polling(input_dev, input_test_poll), 0);
++
++	input_set_poll_interval(input_dev, POLL_INTERVAL);
++
++	/* Must succeed because poll handler was set-up and poll interval set */
++	KUNIT_ASSERT_EQ(test, input_get_poll_interval(input_dev), POLL_INTERVAL);
++}
++
++static void input_test_timestamp(struct kunit *test)
++{
++	const ktime_t invalid_timestamp = ktime_set(0, 0);
++	struct input_dev *input_dev = test->priv;
++	ktime_t *timestamp, time;
++
++	timestamp = input_get_timestamp(input_dev);
++	time = timestamp[INPUT_CLK_MONO];
++
++	/* The returned timestamp must always be valid */
++	KUNIT_ASSERT_EQ(test, ktime_compare(time, invalid_timestamp), 1);
++
++	time = ktime_get();
++	input_set_timestamp(input_dev, time);
++
++	timestamp = input_get_timestamp(input_dev);
++	/* The timestamp must be the same than set before */
++	KUNIT_ASSERT_EQ(test, ktime_compare(timestamp[INPUT_CLK_MONO], time), 0);
++}
++
++static void input_test_match_device_id(struct kunit *test)
++{
++	struct input_dev *input_dev = test->priv;
++	struct input_device_id id;
++
++	/*
++	 * Must match when the input device bus, vendor, product, version
++	 * and events capable of handling are the same and fail to match
++	 * otherwise.
++	 */
++	id.flags = INPUT_DEVICE_ID_MATCH_BUS;
++	id.bustype = BUS_VIRTUAL;
++	KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
++
++	id.bustype = BUS_I2C;
++	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
++
++	id.flags = INPUT_DEVICE_ID_MATCH_VENDOR;
++	id.vendor = 1;
++	KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
++
++	id.vendor = 2;
++	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
++
++	id.flags = INPUT_DEVICE_ID_MATCH_PRODUCT;
++	id.product = 1;
++	KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
++
++	id.product = 2;
++	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
++
++	id.flags = INPUT_DEVICE_ID_MATCH_VERSION;
++	id.version = 1;
++	KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
++
++	id.version = 2;
++	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
++
++	id.flags = INPUT_DEVICE_ID_MATCH_EVBIT;
++	__set_bit(EV_KEY, id.evbit);
++	KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
++
++	__set_bit(EV_ABS, id.evbit);
++	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
++}
++
++static struct kunit_case input_tests[] = {
++	KUNIT_CASE(input_test_polling),
++	KUNIT_CASE(input_test_timestamp),
++	KUNIT_CASE(input_test_match_device_id),
++	{ /* sentinel */ }
++};
++
++static struct kunit_suite input_test_suite = {
++	.name = "input_core",
++	.init = input_test_init,
++	.exit = input_test_exit,
++	.test_cases = input_tests,
++};
++
++kunit_test_suite(input_test_suite);
++
++MODULE_AUTHOR("Javier Martinez Canillas <javierm@redhat.com>");
++MODULE_LICENSE("GPL");
+
+base-commit: 3a93e40326c8f470e71d20b4c42d36767450f38f
+-- 
+2.40.0
+
