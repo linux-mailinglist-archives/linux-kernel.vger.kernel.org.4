@@ -2,82 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0C46D120C
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD826D120E
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjC3WUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 18:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
+        id S230263AbjC3WVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 18:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjC3WUb (ORCPT
+        with ESMTP id S229914AbjC3WVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 18:20:31 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F01B74B
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:20:30 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-54606036bb3so216352147b3.6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:20:30 -0700 (PDT)
+        Thu, 30 Mar 2023 18:21:09 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F54B761
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:21:04 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso21317372pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:21:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680214829;
+        d=google.com; s=20210112; t=1680214864;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1XHbYcIgrFHrYvAFgKxf4i1nvwZgCPxOVsUNf1NNENs=;
-        b=XUlxAl8du6o4u/LV1RNVFNvw7n3F7NCnc5aU2soy13kDVY6OC2+6IadcPrBEv7pf3A
-         ftrDS1KsftjQmiYSNS/rmQb5R3qIabtbFTOumMp0SkG3mhthWgvPEJ6Uh5e5bp8xVGIn
-         vsLEhwwB3R8HrOvqHzm9upBbJGRYI0qZQ02XE=
+        bh=ugtukTfVbDV/8BLzVhb0qFtwrdmFXjkERveHQp9G65k=;
+        b=QZW1GJVAmZz3qfIMiei04YZkmBfPBmo9pjKDJ0qIuljXSgJnrQfiMXpSTDlZ3uIfCK
+         cjDiVcujfjVO0lTG8UoYtP3BX8zbOy24sgjzQhp4lxBlv/vjHz2NGjgLsiu3amflo2Wi
+         iU39U0/7TViaKVt3ek+fdn1/FrYJLAGPyPBStfAtvbZuwl6j9tq7rYpkhxbGKvSGuJio
+         DxX2qWP+h93Bw2S7dLJi4JPrX5xg+AitcnTeK6DuJ9B+uDWpBPfDtsOrhEj+vqav3nAQ
+         AD34aKGZzXypuB5br7F2mU7PW1XxsQl0l2wfI84qTJfb18gZO2Auel2N2sEsfv6SeZM/
+         IPuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680214829;
+        d=1e100.net; s=20210112; t=1680214864;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1XHbYcIgrFHrYvAFgKxf4i1nvwZgCPxOVsUNf1NNENs=;
-        b=xK+SDAA6fBaQVHFB9ohUd9D6aEwnwpSe+GTBaI2nI+5LazyrC796FqekWe7dkLo5hM
-         wS3/jQB9PZNimF5FcU5LJ9xflamLhYjd5rL/vWpURjxy6JQtaoNoOhBUcBGcoKMuuepR
-         dM1cf7hD4YFTB/6u6+l54CoOhHGT5NA3IEV0+EF8Ou7CIAF3Ecs0mzYmtV9zwH8JaqRp
-         VqVtWzdM28xGLhR8Q8OnL3+kh+VhZq1YuRtxKuYi8jTjtdTqV7ny1At5pU4bu/lyQWer
-         2kT8VjqjZjj7Wbgsb6rY73XuFYRHfR9vqjLad9YcTrxxVJPptGOUSrjTCI42XvEtwZdo
-         Y3KQ==
-X-Gm-Message-State: AAQBX9e9/DhWsoqWf1EyQqRxpjV8/8kkYT929KwuAuwuQAp1MqPFlKe2
-        kZxs8TV41kJThh23O8coBIcUOZnx9NYi1HN24Kc=
-X-Google-Smtp-Source: AKy350Zwcy/+1NIU4GraQHQjbbQGRklfjeHhhDslDG8jKZuFKs83uyRRTw3ObP6BFVMekzkaChrGtQ==
-X-Received: by 2002:a0d:cb45:0:b0:538:4f61:494e with SMTP id n66-20020a0dcb45000000b005384f61494emr22415124ywd.47.1680214829562;
-        Thu, 30 Mar 2023 15:20:29 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id z4-20020a81e244000000b005463239c018sm124139ywl.74.2023.03.30.15.20.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 15:20:28 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id n125so25392013ybg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:20:28 -0700 (PDT)
-X-Received: by 2002:a05:6902:1501:b0:b6d:80ab:8bb6 with SMTP id
- q1-20020a056902150100b00b6d80ab8bb6mr16743748ybu.1.1680214828159; Thu, 30 Mar
- 2023 15:20:28 -0700 (PDT)
+        bh=ugtukTfVbDV/8BLzVhb0qFtwrdmFXjkERveHQp9G65k=;
+        b=Q8Q+HaaYleqNQXy+MIOHwAViFipJ9epnLHQ6QMcHInRIcfecCxudfTvoLBXNIb9CZG
+         VTb70lENplT22oxIL3K0b6MAGXcOH7IW37ib8Bm57GP4j4Ii2Zw2C1kHkNR8a1CrtcyU
+         dM4UdFXPc6EWWlH7g/o889dqBLY8w3VdLYQ94ytoxzk3ZUl10VfucJsnLK4vmn8tWTFw
+         kc7jKqYBx16QmzXDQq8Ht+ooyf58TIvg/SJbRr5Vuoify1nvX4Rs3mUjOHcNjoDZZGMJ
+         7Ds1H4Dx7g3oT90WUqX9nP4RETP9rmnr5iGqVdtr25nIRUkcTYrvb2KEDYC+jXHIxyE3
+         fIcg==
+X-Gm-Message-State: AAQBX9c7ttem9GVYB+O08dMiPK6YfM9MYzielK21PArnZ1LaSTEt3wTP
+        B1LxicUj+4Qu5RxDIy9m9SHW9JIudkYgY6aPdnfYRA==
+X-Google-Smtp-Source: AKy350a64NmP0+Q1R1KoNiSqZ1E4LGky7ImztC0tAFffBWnHiJgqrB9cVB40cwkL6Jij9puwY4+MFQmWIsrgYuQbaS0=
+X-Received: by 2002:a17:902:ea0c:b0:1a0:527b:9189 with SMTP id
+ s12-20020a170902ea0c00b001a0527b9189mr9224011plg.11.1680214863803; Thu, 30
+ Mar 2023 15:21:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230330220251.2388494-1-javierm@redhat.com>
-In-Reply-To: <20230330220251.2388494-1-javierm@redhat.com>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Thu, 30 Mar 2023 15:20:16 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXOtyBgr0o+bhjOScjs2h3oUKdouoAi4m+Z=R=Bho=iRFA@mail.gmail.com>
-Message-ID: <CA+ASDXOtyBgr0o+bhjOScjs2h3oUKdouoAi4m+Z=R=Bho=iRFA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: rockchip: Remove non-existing pwm-delay-us DT property
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Enric Balletbo i Serra <eballetbo@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lin Huang <hl@rock-chips.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, zain wang <wzz@rock-chips.com>
+References: <20230330220506.1399796-1-rmoar@google.com>
+In-Reply-To: <20230330220506.1399796-1-rmoar@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 30 Mar 2023 15:20:52 -0700
+Message-ID: <CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr+f+mOVKT1bGvA@mail.gmail.com>
+Subject: Re: [PATCH v1] kunit: add tests for using current KUnit test field
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,40 +71,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 3:03=E2=80=AFPM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> There is no neither a driver that parses this nor a DT binding schema tha=
-t
-> documents it so let's remove it from the DTS files that make use of this.
->
-> The properties that exist are post-pwm-on-delay-ms and pwm-off-delay-ms,
-> defined in the pwm-backlight DT binding. So probably what these DTS want
-> is something like following:
->
->         backlight: backlight {
->                 compatible =3D "pwm-backlight";
->                 enable-gpios =3D <&gpio4 21 GPIO_ACTIVE_HIGH>;
->                 pinctrl-names =3D "default";
->                 pinctrl-0 =3D <&bl_en>;
->                 pwms =3D <&pwm1 0 1000000 0>;
->                 post-pwm-on-delay-ms =3D <10>;
->                 pwm-off-delay-ms =3D <10>;
->         };
->
-> But that should be follow-up change if that is the case. Because otherwis=
-e
-> it would be change in behaviour, since currently pwm-delay-us is a no-op.
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+I've got a few minor comments below, but this otherwise looks good.
+I like the idea of testing knuit_fail_current_test().
 
-pwm-delay-us seems to have been a downstream-only ("CHROMIUM", if
-you're familiar with ChromiumOS kernel parlance) change that seems
-like a combination of the two now-upstream properties you point at. I
-looked through the first use of pwm-delay-us on RK3399 Gru systems,
-and I can't find a spec reference that said it was needed; perhaps it
-was needless copy/paste imitation?
 
-So, simple deletion is probably fine:
+On Thu, Mar 30, 2023 at 3:05=E2=80=AFPM Rae Moar <rmoar@google.com> wrote:
+>
+> +static void kunit_current_kunit_test_field(struct kunit *test)
+> +{
+> +       struct kunit *current_test;
+> +
+> +       /* Check to ensure the result of current->kunit_test
+> +        * is equivalent to current test.
+> +        */
+> +       current_test =3D current->kunit_test;
+> +       KUNIT_EXPECT_PTR_EQ(test, test, current_test);
 
-Reviewed-by: Brian Norris <briannorris@chromium.org>
+Perhaps we can combine this and the next test case down to
+static void kunit_current_test(struct kunit *test) {
+  /* There are two different ways of getting the current test */
+  KUNIT_EXPECT_PTR_EQ(test, test, current->kunit_test);
+  KUNIT_EXPECT_PTR_EQ(test, test, kunit_get_current_test());
+}
+?
+
+> +}
+> +
+> +static void kunit_current_get_current_test(struct kunit *test)
+> +{
+> +       struct kunit *current_test1, *current_test2;
+> +
+> +       /* Check to ensure the result of kunit_get_current_test()
+> +        * is equivalent to current test.
+> +        */
+> +       current_test1 =3D kunit_get_current_test();
+> +       KUNIT_EXPECT_PTR_EQ(test, test, current_test1);
+> +
+> +       /* Check to ensure the result of kunit_get_current_test()
+> +        * is equivalent to current->kunit_test.
+> +        */
+> +       current_test2 =3D current->kunit_test;
+> +       KUNIT_EXPECT_PTR_EQ(test, current_test1, current_test2);
+
+> +}
+> +
+> +static void kunit_current_fail_current_test(struct kunit *test)
+> +{
+> +       struct kunit fake;
+> +
+> +       /* Initialize fake test and set as current->kunit_test. */
+
+Nit: I think the code is self-explanatory enough that we can drop this comm=
+ent.
+
+> +       kunit_init_test(&fake, "fake test", NULL);
+> +       KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
+> +       current->kunit_test =3D &fake;
+> +
+> +       /* Fail current test and expect status of fake test to be failed.=
+ */
+
+Nit: I think this comment could also be dropped or maybe shortened to
+  kunit_fail_current_test("This should make `fake` fail");
+
+or
+  /* Now kunit_fail_current_test() should modify `fake`, not `test` */
+  kunit_fail_current_test("This should make `fake` fail");
+
+> +       kunit_fail_current_test("This test is supposed to fail.");
+> +       KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAILU=
+RE);
+> +
+
+Hmm, should we try calling
+  kunit_cleanup(&fake);
+?
+
+Right now this does resource cleanups, but we might have other state
+to cleanup for our `fake` test object in the future.
+
+Daniel
