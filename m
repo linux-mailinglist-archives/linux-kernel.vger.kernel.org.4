@@ -2,134 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59256D0FDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5F66D0FED
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjC3URd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
+        id S229787AbjC3UWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjC3URb (ORCPT
+        with ESMTP id S229771AbjC3UWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:17:31 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5DAD53B
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:17:27 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id p203so25030611ybb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:17:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680207446;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gzh6eI1GYxdNdH+4rpYvp9dduxXVCoivN5HMe4ZBEcs=;
-        b=UpGdDentEB0loG38lw9t1HqyDxw0B/PKmgViCi/O2YJRQtC0WFl8tCojsLji2dzhqU
-         qQrtxoeuhfLx2ZikK0T+Kn6yuD/RyVxTi8dgfoRH7S3gO0MuEwmO7As+sOPC+YM9PKyL
-         jeutGkXIbhmS09f9NUD2p1JkJLfC/GRXwnqC5ok/KQO3GUQJfkWbSEvIJuqnoGY32ita
-         rHXa9ATFofPvAW0zsOVVYUsmvnRuuh5KxgXJbjodFRmf8TsaF175e1aMhLHj0AXZQvZt
-         VtdCZDB9MMxyaCOIIVpiEmygaAclV5Zf9SA+oaDa7NkLAYbYH+ps5MRf1DcjUmkXhXmQ
-         je3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680207446;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gzh6eI1GYxdNdH+4rpYvp9dduxXVCoivN5HMe4ZBEcs=;
-        b=3G1FGOPHVW9BqTc5EAz/cY1pzjvUC6m146ExfZJ0f5eWh8/5FLMf8kKvDvYY6r8q4A
-         1XtpOFgodobrjKzROkhrIVVzOcWK3aOZdmY9/jSMkT5gJOnAtVo9MMpGqIBWya8d+xNd
-         RAiU29UTnPFBuLzqFtMGbErcjAclVd1sTnq5E4YjCZdqIKM5NIgo+bNNpupEDcVqPJrw
-         FvZqHwceiDyf8f7fpifJxJkV7ail6ahz84d72nf8Wux2v7OsAHdU7Q1MiXHKIhA4m+z5
-         LDTO6b5Cc7pjnfIyvhysIIP4R1UJMSSEcDwou+7U08ek3KkAGMn6IK7/dPqjZcCjRkrD
-         BMxw==
-X-Gm-Message-State: AAQBX9dt0GAYNeJDs+dLKH7AuIqTHe5y55Hfl1byNbkGMGKtG3/XHwK7
-        pTomVT88yOHQXzEZdMWk3x22MnDZcJYAbrHiLtSvehSCXhB91vvwqhLVlg==
-X-Google-Smtp-Source: AKy350a/hRLfpI4hUXINP4+CnKP31C4Bf+8Wp9DUuqP9pQCMEvX6i7imax2gDovTaP0NPJXrcAy6nNbWuSQHKyFAl7E=
-X-Received: by 2002:a25:2749:0:b0:a99:de9d:d504 with SMTP id
- n70-20020a252749000000b00a99de9dd504mr16211798ybn.12.1680207445985; Thu, 30
- Mar 2023 13:17:25 -0700 (PDT)
+        Thu, 30 Mar 2023 16:22:04 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638EA40D3;
+        Thu, 30 Mar 2023 13:22:03 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id B62095FD0B;
+        Thu, 30 Mar 2023 23:22:01 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1680207721;
+        bh=meOX4aPLT7ua2fm3pAcRz2CPeAaR40Mrt2950POSbpg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=qG7GNsMjtkXbQFcQ7fVw4vaA+go5me0j2pKq/X6PeOnJazC5MTLXr6oC63qaExTkv
+         uzSLbsCTYnKYroneJ8IxfM0WJYPS1lhBNCEpXp+9faTSdOWf0XJGYdiD+8zwwV/Sc4
+         9nDIseWtAthUDHeAVAQMAHXE36ZGHQeXuZK8ilmhgK9rSPsQmYgBr5efnGGO4L/aa5
+         KR+lrAgME/LSuNM46TLhrfB1x46LwVOqJk4g0gy7OO4/jFPpwq1OKhdW2s3e+JC0ZF
+         53dnZ7uRnexDPUML9OEZI/217N3i8Ph+PjX2taUT3OqvPHNZRfTo2ctDBMhbNID0RW
+         gYJ3AfzIYaapQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 30 Mar 2023 23:22:01 +0300 (MSK)
+Message-ID: <9fd06ca5-ace9-251d-34af-aca4db9c3ee0@sberdevices.ru>
+Date:   Thu, 30 Mar 2023 23:18:36 +0300
 MIME-Version: 1.0
-References: <20230330200614.132354-1-cerasuolodomenico@gmail.com>
-In-Reply-To: <20230330200614.132354-1-cerasuolodomenico@gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 30 Mar 2023 13:17:15 -0700
-Message-ID: <CAJuCfpGY6=byoSQqNUc9cXHFAdhnY9HGScc+aT9D9qbhGBEu3A@mail.gmail.com>
-Subject: Re: [PATCH v7 0/4] sched/psi: Allow unprivileged PSI polling
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        brauner@kernel.org, chris@chrisdown.name, hannes@cmpxchg.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v3 2/4] vsock/vmci: convert VMCI error code to -ENOMEM
+ on receive
+Content-Language: en-US
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Bryan Tan <bryantan@vmware.com>, Vishnu Dasa <vdasa@vmware.com>
+CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
+        <pv-drivers@vmware.com>
+References: <4d34fac8-7170-5a3e-5043-42a9f7e4b5b3@sberdevices.ru>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <4d34fac8-7170-5a3e-5043-42a9f7e4b5b3@sberdevices.ru>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/30 18:07:00 #21069213
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 1:06=E2=80=AFPM Domenico Cerasuolo
-<cerasuolodomenico@gmail.com> wrote:
->
-> PSI offers 2 mechanisms to get information about a specific resource
-> pressure. One is reading from /proc/pressure/<resource>, which gives
-> average pressures aggregated every 2s. The other is creating a pollable
-> fd for a specific resource and cgroup.
->
-> The trigger creation requires CAP_SYS_RESOURCE, and gives the
-> possibility to pick specific time window and threshold, spawing an RT
-> thread to aggregate the data.
->
-> Systemd would like to provide containers the option to monitor pressure
-> on their own cgroup and sub-cgroups. For example, if systemd launches a
-> container that itself then launches services, the container should have
-> the ability to poll() for pressure in individual services. But neither
-> the container nor the services are privileged.
->
-> The series is implemented in 4 steps in order to reduce the noise of
-> the change.
 
-Thanks! For the entire series
-Acked-by: Suren Baghdasaryan <surenb@google.com>
 
->
-> V7:
-> - fix code style in psi trigger create/destroy aggregators paths
->
-> V6:
-> - fix trigger creation logic now using proper locks
->
-> V5:
-> - few suggested code style changes in psi.c and psy_types.h
-> - fix trigger destruction logic now using proper locks
->
-> V4:
-> - fixed psi_open leftover usage in IRQ accounting (patch 4/4)
->
-> V3:
-> - restored renaming patch (#2 of 4) as suggested in review
-> - rebased #3 and #4 on the renaming commit
->
-> V2:
-> - removed renaming patch (previous 2/4) and applied suggested solution
-> - changed update_triggers side effect removal as suggested in review
-> - rebased core patch on other V2 changes
->
-> Domenico Cerasuolo (4):
->   sched/psi: rearrange polling code in preparation
->   sched/psi: rename existing poll members in preparation
->   sched/psi: extract update_triggers side effect
->   sched/psi: allow unprivileged polling of N*2s period
->
->  Documentation/accounting/psi.rst |   4 +
->  include/linux/psi.h              |   2 +-
->  include/linux/psi_types.h        |  43 +--
->  kernel/cgroup/cgroup.c           |   2 +-
->  kernel/sched/psi.c               | 443 +++++++++++++++++--------------
->  5 files changed, 276 insertions(+), 218 deletions(-)
->
-> --
-> 2.34.1
->
+On 30.03.2023 23:13, Arseniy Krasnov wrote:
+> This adds conversion of VMCI specific error code to general -ENOMEM. It
+> is needed, because af_vsock.c passes error value returned from transport
+> to the user, which does not expect to get VMCI_ERROR_* values.
+
+@Stefano, I have some doubts about this commit message, as it says "... af_vsock.c
+passes error value returned from transport to the user ...", but this
+behaviour is implemented only in the next patch. Is it ok, if both patches
+are in a single patchset?
+
+For patch 1 I think it is ok, as it fixes current implementation.
+
+Thanks, Arseniy
+
+> 
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> ---
+>  net/vmw_vsock/vmci_transport.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+> index 95cc4d79ba29..b370070194fa 100644
+> --- a/net/vmw_vsock/vmci_transport.c
+> +++ b/net/vmw_vsock/vmci_transport.c
+> @@ -1831,10 +1831,17 @@ static ssize_t vmci_transport_stream_dequeue(
+>  	size_t len,
+>  	int flags)
+>  {
+> +	ssize_t err;
+> +
+>  	if (flags & MSG_PEEK)
+> -		return vmci_qpair_peekv(vmci_trans(vsk)->qpair, msg, len, 0);
+> +		err = vmci_qpair_peekv(vmci_trans(vsk)->qpair, msg, len, 0);
+>  	else
+> -		return vmci_qpair_dequev(vmci_trans(vsk)->qpair, msg, len, 0);
+> +		err = vmci_qpair_dequev(vmci_trans(vsk)->qpair, msg, len, 0);
+> +
+> +	if (err < 0)
+> +		err = -ENOMEM;
+> +
+> +	return err;
+>  }
+>  
+>  static ssize_t vmci_transport_stream_enqueue(
