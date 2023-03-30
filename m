@@ -2,69 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596346D0FB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641066D1B69
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjC3UGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
+        id S231615AbjCaJJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjC3UGn (ORCPT
+        with ESMTP id S230239AbjCaJJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:06:43 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C761042E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:06:28 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id b20so81200152edd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680206786;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ab6RM1SXfHf1aco0WeQ1+JYQ9lDmnvAO+T2tlcY879g=;
-        b=FkZhDbDe5bNnzW4OMf5ENN8yEpSDWu38Js62WxK0zh4vl7lC0HnWtL0rBkLmTFXOBR
-         jOPe8Sok6rowJdMW+5xXaItYGcXfYEJe8dDfEIr+S7yVOJFpntzlNoqMSVcD7CyPcEyC
-         sfQ8zEuWXnzceMCxPbGcP/tQEP5bhjRRYw+Nj1TdraSjbwn6hnEhyxu2udfPX7ZyopbK
-         2yXVPQdymz6QI5oEZZY7DqL2w3HN4llN476v+fy6GxoeP+c0ACsQVGYpFpiC54R50qDR
-         Zs/POmUvnn9bCIVPQtajBCDI/hZKCjtFKX/SGYmN41Kgm2gTeCXqjbbZ67oy1yvSWwjR
-         Oomw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680206786;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ab6RM1SXfHf1aco0WeQ1+JYQ9lDmnvAO+T2tlcY879g=;
-        b=hoGTHXBrjREdO3wYSy0R8hhfJWy/gXa55knfUdGP0A+IURTBNWPT5ZhTFODoKlxWHT
-         51LV03hTrQatGhR1Sz0usoiZ8zL3gZwI6x3pn/8KXM3DYlkauDcpkaVDXB9FgcFowyRa
-         iYc22RfrQowEGcYCSnn0dSb5WytlTtt/yBAgxPvUvuMmwvIwId9JrwcwjxA77NObejs1
-         xZxXBVfit5b19fI01wHlA+JHzOqgWOB4i0UqL/YAI5JVkVtBi6juTDH9AiQ1L0eM94fJ
-         pq8PM4RZJo/bsDOVdAUU9sSB/N3TxXdlDCJ5CwZ1eQa6dCt3SDsYQsosiRz9vzX/AWfz
-         rQug==
-X-Gm-Message-State: AAQBX9cX1wUtpgw1D2m6aUSDxzHzEVKRsrfbYRV2KN75zcpfs68pNtKa
-        p4TNdglnBMMPOa0qsBGjEyt9A5DXMdfWMw==
-X-Google-Smtp-Source: AKy350bs5FnCXxFMxLPC64hCcWFrxcX2hYn6NZQu5mhvdo2KAd/5QagXEuYUR6PSbzKauk+RkZIftQ==
-X-Received: by 2002:a17:906:4796:b0:93f:3084:d6f with SMTP id cw22-20020a170906479600b0093f30840d6fmr24620894ejc.18.1680206786348;
-        Thu, 30 Mar 2023 13:06:26 -0700 (PDT)
-Received: from lelloman-5950.. (host-80-182-134-1.retail.telecomitalia.it. [80.182.134.1])
-        by smtp.gmail.com with ESMTPSA id g17-20020a1709064e5100b009312cc428e4sm161101ejw.165.2023.03.30.13.06.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 13:06:25 -0700 (PDT)
-From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, surenb@google.com, brauner@kernel.org,
-        chris@chrisdown.name, hannes@cmpxchg.org,
-        Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Subject: [PATCH v7 4/4] sched/psi: allow unprivileged polling of N*2s period
-Date:   Thu, 30 Mar 2023 22:06:14 +0200
-Message-Id: <20230330200614.132354-5-cerasuolodomenico@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230330200614.132354-1-cerasuolodomenico@gmail.com>
-References: <20230330200614.132354-1-cerasuolodomenico@gmail.com>
+        Fri, 31 Mar 2023 05:09:20 -0400
+Received: from omta037.useast.a.cloudfilter.net (omta037.useast.a.cloudfilter.net [44.202.169.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E0EF77B;
+        Fri, 31 Mar 2023 02:09:19 -0700 (PDT)
+Received: from eig-obgw-6004a.ext.cloudfilter.net ([10.0.30.197])
+        by cmsmtp with ESMTP
+        id i0wmp51qxElIgiAl3p9ZK1; Fri, 31 Mar 2023 09:09:18 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with ESMTP
+        id iAl2p9L7X1O1NiAl2ps9Ay; Fri, 31 Mar 2023 09:09:17 +0000
+X-Authority-Analysis: v=2.4 cv=NsHCzuRJ c=1 sm=1 tr=0 ts=6426a33d
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=wTog8WU66it3cfrESHnF4A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=k__wU0fu6RkA:10
+ a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8 a=mDV3o1hIAAAA:8 a=VwQbUJbxAAAA:8
+ a=9ic7p0EMSS3MKrTfbvcA:9 a=QEXdDO2ut3YA:10 a=3IOs8h2EC4YA:10
+ a=_FVE-zBwftR9WsbkzFJk:22 a=AjGcO6oz07-iQ99wixmX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QYBk0OPmCB6p8kOb/XVyJI7inLkUJjeV0vKcdLVXoPM=; b=Lf3+WC2x3Wbp3hXFbidKhgntw4
+        wwL1Apr+wOS9AnVSyg2qMwVZ9S4nByhAtC5urYdc5RUvQRjUk1qruCzdqBC/LXOJ9Dyj+iazWA7pN
+        2cqZFxcPrfW6qZKcCunoHBFRASPeOlejYSJwJh2AvUFG+sGFeC4qgrnMkOorw/3iSXBPJNwlwKtJE
+        yS5dwOdsiwRWGJqrr3pZo80Q8g+OX9XB5oYArXpTpQDdgJ3ghhLXNtiChrM1EJmzYj8nvxmuVXiuc
+        wezx1mznuADHn3pA0pWiUp63ZJjDV4AyzqsdgUJqi2LVDdr4oRt6SLXCWZa194jM54KUz14znoiMj
+        Xy+GZzmQ==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:48012 helo=[192.168.15.7])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1phyZh-002gVr-HQ;
+        Thu, 30 Mar 2023 15:08:45 -0500
+Message-ID: <cfd01e87-6edc-2547-894a-72e7cd5ba9ef@embeddedor.com>
+Date:   Thu, 30 Mar 2023 14:09:20 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH][next] wifi: rndis_wlan: Replace fake flex-array with
+ flexible-array member
+Content-Language: en-US
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <ZBtIbU77L9eXqa4j@work>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <ZBtIbU77L9eXqa4j@work>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1phyZh-002gVr-HQ
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.7]) [187.162.31.110]:48012
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 0
+X-Org:  HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfC3oJgzMAK1i4Dizj7Hh56BS73gmpDXb9iDKgZAv5SMl6nhjVIuANcuUZZQkZ0hzm0SLAy3tIAAS1nNEnhil6kycbSJjq6mQHC5LHbujFcVgcYUBE6Gx
+ BcWEQlETfv7ZOn1xQTo7VJgYuQTY5ZZ+PwXV+1IWf2upc3AAG1JzcWFPRmEtIv+BoD842HndB+pGhoW7dZ+wzV/PaqhQS9Y6X20KISV2RS+iUddiH+qfmj97
+ WbUe+picvSkMlLoj1IqMP0U7ej0wgHR6xMT+APth+OlPYdUwB17Jo+ZvGE0fZaazTk7icYzSqhUgF6n92B7Yyrr+bZ505T2zdw6KCMWocO3FkCN+dXg2H4+o
+ y/onHFCB
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,347 +99,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PSI offers 2 mechanisms to get information about a specific resource
-pressure. One is reading from /proc/pressure/<resource>, which gives
-average pressures aggregated every 2s. The other is creating a pollable
-fd for a specific resource and cgroup.
+Hi all,
 
-The trigger creation requires CAP_SYS_RESOURCE, and gives the
-possibility to pick specific time window and threshold, spawing an RT
-thread to aggregate the data.
+Friendly ping: who can take this, please? 😄
 
-Systemd would like to provide containers the option to monitor pressure
-on their own cgroup and sub-cgroups. For example, if systemd launches a
-container that itself then launches services, the container should have
-the ability to poll() for pressure in individual services. But neither
-the container nor the services are privileged.
-
-This patch implements a mechanism to allow unprivileged users to create
-pressure triggers. The difference with privileged triggers creation is
-that unprivileged ones must have a time window that's a multiple of 2s.
-This is so that we can avoid unrestricted spawning of rt threads, and
-use instead the same aggregation mechanism done for the averages, which
-runs independently of any triggers.
-
-Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
-Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
----
- Documentation/accounting/psi.rst |  4 ++
- include/linux/psi.h              |  2 +-
- include/linux/psi_types.h        |  7 +++
- kernel/cgroup/cgroup.c           |  2 +-
- kernel/sched/psi.c               | 97 +++++++++++++++++++++++---------
- 5 files changed, 84 insertions(+), 28 deletions(-)
-
-diff --git a/Documentation/accounting/psi.rst b/Documentation/accounting/psi.rst
-index 5e40b3f437f9..df6062eb3abb 100644
---- a/Documentation/accounting/psi.rst
-+++ b/Documentation/accounting/psi.rst
-@@ -105,6 +105,10 @@ prevent overly frequent polling. Max limit is chosen as a high enough number
- after which monitors are most likely not needed and psi averages can be used
- instead.
- 
-+Unprivileged users can also create monitors, with the only limitation that the
-+window size must be a multiple of 2s, in order to prevent excessive resource
-+usage.
-+
- When activated, psi monitor stays active for at least the duration of one
- tracking window to avoid repeated activations/deactivations when system is
- bouncing in and out of the stall state.
-diff --git a/include/linux/psi.h b/include/linux/psi.h
-index b029a847def1..ab26200c2803 100644
---- a/include/linux/psi.h
-+++ b/include/linux/psi.h
-@@ -24,7 +24,7 @@ void psi_memstall_leave(unsigned long *flags);
- 
- int psi_show(struct seq_file *s, struct psi_group *group, enum psi_res res);
- struct psi_trigger *psi_trigger_create(struct psi_group *group,
--			char *buf, enum psi_res res);
-+			char *buf, enum psi_res res, struct file *file);
- void psi_trigger_destroy(struct psi_trigger *t);
- 
- __poll_t psi_trigger_poll(void **trigger_ptr, struct file *file,
-diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-index 1819afa8b198..040c089581c6 100644
---- a/include/linux/psi_types.h
-+++ b/include/linux/psi_types.h
-@@ -151,6 +151,9 @@ struct psi_trigger {
- 
- 	/* Deferred event(s) from previous ratelimit window */
- 	bool pending_event;
-+
-+	/* Trigger type - PSI_AVGS for unprivileged, PSI_POLL for RT */
-+	enum psi_aggregators aggregator;
- };
- 
- struct psi_group {
-@@ -171,6 +174,10 @@ struct psi_group {
- 	/* Aggregator work control */
- 	struct delayed_work avgs_work;
- 
-+	/* Unprivileged triggers against N*PSI_FREQ windows */
-+	struct list_head avg_triggers;
-+	u32 avg_nr_triggers[NR_PSI_STATES - 1];
-+
- 	/* Total stall times and sampled pressure averages */
- 	u64 total[NR_PSI_AGGREGATORS][NR_PSI_STATES - 1];
- 	unsigned long avg[NR_PSI_STATES - 1][3];
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 935e8121b21e..dead36969bba 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -3761,7 +3761,7 @@ static ssize_t pressure_write(struct kernfs_open_file *of, char *buf,
- 	}
- 
- 	psi = cgroup_psi(cgrp);
--	new = psi_trigger_create(psi, buf, res);
-+	new = psi_trigger_create(psi, buf, res, of->file);
- 	if (IS_ERR(new)) {
- 		cgroup_put(cgrp);
- 		return PTR_ERR(new);
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index f3df6a8ff493..2a7d1fa2e45b 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -186,9 +186,14 @@ static void group_init(struct psi_group *group)
- 		seqcount_init(&per_cpu_ptr(group->pcpu, cpu)->seq);
- 	group->avg_last_update = sched_clock();
- 	group->avg_next_update = group->avg_last_update + psi_period;
--	INIT_DELAYED_WORK(&group->avgs_work, psi_avgs_work);
- 	mutex_init(&group->avgs_lock);
--	/* Init trigger-related members */
-+
-+	/* Init avg trigger-related members */
-+	INIT_LIST_HEAD(&group->avg_triggers);
-+	memset(group->avg_nr_triggers, 0, sizeof(group->avg_nr_triggers));
-+	INIT_DELAYED_WORK(&group->avgs_work, psi_avgs_work);
-+
-+	/* Init rtpoll trigger-related members */
- 	atomic_set(&group->rtpoll_scheduled, 0);
- 	mutex_init(&group->rtpoll_trigger_lock);
- 	INIT_LIST_HEAD(&group->rtpoll_triggers);
-@@ -430,21 +435,32 @@ static u64 window_update(struct psi_window *win, u64 now, u64 value)
- 	return growth;
- }
- 
--static u64 update_triggers(struct psi_group *group, u64 now, bool *update_total)
-+static u64 update_triggers(struct psi_group *group, u64 now, bool *update_total,
-+						   enum psi_aggregators aggregator)
- {
- 	struct psi_trigger *t;
--	u64 *total = group->total[PSI_POLL];
-+	u64 *total = group->total[aggregator];
-+	struct list_head *triggers;
-+	u64 *aggregator_total;
- 	*update_total = false;
- 
-+	if (aggregator == PSI_AVGS) {
-+		triggers = &group->avg_triggers;
-+		aggregator_total = group->avg_total;
-+	} else {
-+		triggers = &group->rtpoll_triggers;
-+		aggregator_total = group->rtpoll_total;
-+	}
-+
- 	/*
- 	 * On subsequent updates, calculate growth deltas and let
- 	 * watchers know when their specified thresholds are exceeded.
- 	 */
--	list_for_each_entry(t, &group->rtpoll_triggers, node) {
-+	list_for_each_entry(t, triggers, node) {
- 		u64 growth;
- 		bool new_stall;
- 
--		new_stall = group->rtpoll_total[t->state] != total[t->state];
-+		new_stall = aggregator_total[t->state] != total[t->state];
- 
- 		/* Check for stall activity or a previous threshold breach */
- 		if (!new_stall && !t->pending_event)
-@@ -546,6 +562,7 @@ static void psi_avgs_work(struct work_struct *work)
- 	struct delayed_work *dwork;
- 	struct psi_group *group;
- 	u32 changed_states;
-+	bool update_total;
- 	u64 now;
- 
- 	dwork = to_delayed_work(work);
-@@ -563,8 +580,10 @@ static void psi_avgs_work(struct work_struct *work)
- 	 * Once restarted, we'll catch up the running averages in one
- 	 * go - see calc_avgs() and missed_periods.
- 	 */
--	if (now >= group->avg_next_update)
-+	if (now >= group->avg_next_update) {
-+		update_triggers(group, now, &update_total, PSI_AVGS);
- 		group->avg_next_update = update_averages(group, now);
-+	}
- 
- 	if (changed_states & PSI_STATE_RESCHEDULE) {
- 		schedule_delayed_work(dwork, nsecs_to_jiffies(
-@@ -574,7 +593,7 @@ static void psi_avgs_work(struct work_struct *work)
- 	mutex_unlock(&group->avgs_lock);
- }
- 
--static void init_triggers(struct psi_group *group, u64 now)
-+static void init_rtpoll_triggers(struct psi_group *group, u64 now)
- {
- 	struct psi_trigger *t;
- 
-@@ -667,7 +686,7 @@ static void psi_rtpoll_work(struct psi_group *group)
- 	if (changed_states & group->rtpoll_states) {
- 		/* Initialize trigger windows when entering polling mode */
- 		if (now > group->rtpoll_until)
--			init_triggers(group, now);
-+			init_rtpoll_triggers(group, now);
- 
- 		/*
- 		 * Keep the monitor active for at least the duration of the
-@@ -684,7 +703,7 @@ static void psi_rtpoll_work(struct psi_group *group)
- 	}
- 
- 	if (now >= group->rtpoll_next_update) {
--		group->rtpoll_next_update = update_triggers(group, now, &update_total);
-+		group->rtpoll_next_update = update_triggers(group, now, &update_total, PSI_POLL);
- 		if (update_total)
- 			memcpy(group->rtpoll_total, group->total[PSI_POLL],
- 				   sizeof(group->rtpoll_total));
-@@ -1254,16 +1273,23 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
- }
- 
- struct psi_trigger *psi_trigger_create(struct psi_group *group,
--			char *buf, enum psi_res res)
-+			char *buf, enum psi_res res, struct file *file)
- {
- 	struct psi_trigger *t;
- 	enum psi_states state;
- 	u32 threshold_us;
-+	bool privileged;
- 	u32 window_us;
- 
- 	if (static_branch_likely(&psi_disabled))
- 		return ERR_PTR(-EOPNOTSUPP);
- 
-+	/*
-+	 * Checking the privilege here on file->f_cred implies that a privileged user
-+	 * could open the file and delegate the write to an unprivileged one.
-+	 */
-+	privileged = cap_raised(file->f_cred->cap_effective, CAP_SYS_RESOURCE);
-+
- 	if (sscanf(buf, "some %u %u", &threshold_us, &window_us) == 2)
- 		state = PSI_IO_SOME + res * 2;
- 	else if (sscanf(buf, "full %u %u", &threshold_us, &window_us) == 2)
-@@ -1283,6 +1309,13 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
- 		window_us > WINDOW_MAX_US)
- 		return ERR_PTR(-EINVAL);
- 
-+	/*
-+	 * Unprivileged users can only use 2s windows so that averages aggregation
-+	 * work is used, and no RT threads need to be spawned.
-+	 */
-+	if (!privileged && window_us % 2000000)
-+		return ERR_PTR(-EINVAL);
-+
- 	/* Check threshold */
- 	if (threshold_us == 0 || threshold_us > window_us)
- 		return ERR_PTR(-EINVAL);
-@@ -1302,7 +1335,18 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
- 	t->last_event_time = 0;
- 	init_waitqueue_head(&t->event_wait);
- 	t->pending_event = false;
-+	t->aggregator = privileged ? PSI_POLL : PSI_AVGS;
-+
-+	if (t->aggregator == PSI_AVGS) {
-+		mutex_lock(&group->avgs_lock);
- 
-+		list_add(&t->node, &group->avg_triggers);
-+		group->avg_nr_triggers[t->state]++;
-+
-+		mutex_unlock(&group->avgs_lock);
-+		return t;
-+	}
-+	/* else, PSI_POLL privileged trigger */
- 	mutex_lock(&group->rtpoll_trigger_lock);
- 
- 	if (!rcu_access_pointer(group->rtpoll_task)) {
-@@ -1350,8 +1394,17 @@ void psi_trigger_destroy(struct psi_trigger *t)
- 	 */
- 	wake_up_pollfree(&t->event_wait);
- 
--	mutex_lock(&group->rtpoll_trigger_lock);
-+	if (t->aggregator == PSI_AVGS) {
-+		mutex_lock(&group->avgs_lock);
-+		if (!list_empty(&t->node)) {
-+			list_del(&t->node);
-+			group->avg_nr_triggers[t->state]--;
-+		}
-+		mutex_unlock(&group->avgs_lock);
-+		goto out;
-+	}
- 
-+	mutex_lock(&group->rtpoll_trigger_lock);
- 	if (!list_empty(&t->node)) {
- 		struct psi_trigger *tmp;
- 		u64 period = ULLONG_MAX;
-@@ -1375,9 +1428,9 @@ void psi_trigger_destroy(struct psi_trigger *t)
- 			del_timer(&group->rtpoll_timer);
- 		}
- 	}
--
- 	mutex_unlock(&group->rtpoll_trigger_lock);
- 
-+out:
- 	/*
- 	 * Wait for psi_schedule_rtpoll_work RCU to complete its read-side
- 	 * critical section before destroying the trigger and optionally the
-@@ -1437,27 +1490,19 @@ static int psi_cpu_show(struct seq_file *m, void *v)
- 	return psi_show(m, &psi_system, PSI_CPU);
- }
- 
--static int psi_open(struct file *file, int (*psi_show)(struct seq_file *, void *))
--{
--	if (file->f_mode & FMODE_WRITE && !capable(CAP_SYS_RESOURCE))
--		return -EPERM;
--
--	return single_open(file, psi_show, NULL);
--}
--
- static int psi_io_open(struct inode *inode, struct file *file)
- {
--	return psi_open(file, psi_io_show);
-+	return single_open(file, psi_io_show, NULL);
- }
- 
- static int psi_memory_open(struct inode *inode, struct file *file)
- {
--	return psi_open(file, psi_memory_show);
-+	return single_open(file, psi_memory_show, NULL);
- }
- 
- static int psi_cpu_open(struct inode *inode, struct file *file)
- {
--	return psi_open(file, psi_cpu_show);
-+	return single_open(file, psi_cpu_show, NULL);
- }
- 
- static ssize_t psi_write(struct file *file, const char __user *user_buf,
-@@ -1491,7 +1536,7 @@ static ssize_t psi_write(struct file *file, const char __user *user_buf,
- 		return -EBUSY;
- 	}
- 
--	new = psi_trigger_create(&psi_system, buf, res);
-+	new = psi_trigger_create(&psi_system, buf, res, file);
- 	if (IS_ERR(new)) {
- 		mutex_unlock(&seq->lock);
- 		return PTR_ERR(new);
-@@ -1571,7 +1616,7 @@ static int psi_irq_show(struct seq_file *m, void *v)
- 
- static int psi_irq_open(struct inode *inode, struct file *file)
- {
--	return psi_open(file, psi_irq_show);
-+	return single_open(file, psi_irq_show, NULL);
- }
- 
- static ssize_t psi_irq_write(struct file *file, const char __user *user_buf,
+Thanks
 -- 
-2.34.1
+Gustavo
 
+On 3/22/23 12:26, Gustavo A. R. Silva wrote:
+> Zero-length arrays as fake flexible arrays are deprecated and we are
+> moving towards adopting C99 flexible-array members instead.
+> 
+> Address the following warning found with GCC-13 and
+> -fstrict-flex-array=3 enabled:
+> drivers/net/wireless/rndis_wlan.c:2902:23: warning: array subscript 0 is outside array bounds of ‘struct ndis_80211_auth_request[0]’ [-Warray-bounds=]
+> 
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
+> 
+> Link: https://github.com/KSPP/linux/issues/21
+> Link: https://github.com/KSPP/linux/issues/274
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>   drivers/net/wireless/legacy/rndis_wlan.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/legacy/rndis_wlan.c b/drivers/net/wireless/legacy/rndis_wlan.c
+> index bf72e5fd39cf..54c347fa54c4 100644
+> --- a/drivers/net/wireless/legacy/rndis_wlan.c
+> +++ b/drivers/net/wireless/legacy/rndis_wlan.c
+> @@ -209,7 +209,7 @@ struct ndis_80211_status_indication {
+>   	union {
+>   		__le32					media_stream_mode;
+>   		__le32					radio_status;
+> -		struct ndis_80211_auth_request		auth_request[0];
+> +		DECLARE_FLEX_ARRAY(struct ndis_80211_auth_request, auth_request);
+>   		struct ndis_80211_pmkid_cand_list	cand_list;
+>   	} u;
+>   } __packed;
