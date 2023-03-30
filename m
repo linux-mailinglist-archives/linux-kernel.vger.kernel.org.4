@@ -2,67 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBA26D08FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4C56D08FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbjC3PBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
+        id S232635AbjC3PCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbjC3PBG (ORCPT
+        with ESMTP id S232607AbjC3PCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:01:06 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DE41BC;
-        Thu, 30 Mar 2023 08:00:59 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5BCA04000B;
-        Thu, 30 Mar 2023 15:00:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680188458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W+fF9+hXUqTVKBtkjbyAVsPYf8+Z/jN24amAbg/Esug=;
-        b=I+eZwnKw0YV2yA5a4IdM7h2HHx5PsrKBF1G1q4qjSO6ZYs51TqyH6E5IBd5X/8Wu4kkerR
-        6Tkxv3H5hA+c2t1pYmpEpowHKsVfugebbuJPcq5R0sqEC+1AHxwh4rzwZ19xrbz3uev6bH
-        9/zNs4+GUSvgxaWMjSKjnG1Ly6+nWXAL+YwrnOBdHHjd+JStyxLo8dnR0mJ43lyu98tubX
-        nNCccyGgNP7acXQv8IluJ400Nlo9vXYwSnE9xAAjb9suS6oklgyT5HbTU/q9Aqh9Cqa7BI
-        p6bn+6roXHtvowBYnu6mo+a97MTSRv6dw0ZelkCCAtTbzBpsgQ59iO6PHOmASw==
-Date:   Thu, 30 Mar 2023 17:01:34 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Alexis =?UTF-8?B?TG90aG9yw6k=?= <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH net-next 1/2] net: dsa: rzn1-a5psw: enable DPBU for CPU
- port and fix STP states
-Message-ID: <20230330170134.2f0cd3d1@fixe.home>
-In-Reply-To: <20230330145623.z5q44euny3zj3uat@skbuf>
-References: <20230330083408.63136-1-clement.leger@bootlin.com>
-        <20230330083408.63136-2-clement.leger@bootlin.com>
-        <20230330104828.6badaaad@fixe.home>
-        <20230330145623.z5q44euny3zj3uat@skbuf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Thu, 30 Mar 2023 11:02:21 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2F3A2;
+        Thu, 30 Mar 2023 08:02:19 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        by mail11.truemail.it (Postfix) with ESMTPA id AECEA20378;
+        Thu, 30 Mar 2023 17:02:17 +0200 (CEST)
+Date:   Thu, 30 Mar 2023 17:02:13 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Jagan Teki <jagan@amarulasolutions.com>
+Cc:     Francesco Dolcini <francesco@dolcini.it>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] dt-bindings: display: bridge: sn65dsi83: Add DSI
+ video mode
+Message-ID: <ZCWkdc+x0LXDSohj@francesco-nb.int.toradex.com>
+References: <20230330101752.429804-1-francesco@dolcini.it>
+ <20230330101752.429804-2-francesco@dolcini.it>
+ <CAMty3ZAQPEnCgj9r+tsuqiOzRzHPnKSEXcDqE7LKHH16Zu2Wvw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMty3ZAQPEnCgj9r+tsuqiOzRzHPnKSEXcDqE7LKHH16Zu2Wvw@mail.gmail.com>
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,32 +52,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, 30 Mar 2023 17:56:23 +0300,
-Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
+On Thu, Mar 30, 2023 at 07:56:26PM +0530, Jagan Teki wrote:
+> On Thu, Mar 30, 2023 at 3:48 PM Francesco Dolcini <francesco@dolcini.it> wrote:
+> >
+> > From: Francesco Dolcini <francesco.dolcini@toradex.com>
+> >
+> > SN65DSI8[34] device supports burst video mode and non-burst video mode
+> > with sync events or with sync pulses packet transmission as described in
+> > the DSI specification.
+> >
+> > Add property to select the expected mode, this allows for example to
+> > select a mode that is compatible with the DSI host interface.
+> >
+> > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> > ---
+> >  .../devicetree/bindings/display/bridge/ti,sn65dsi83.yaml  | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.yaml b/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.yaml
+> > index 48a97bb3e2e0..ebee16726b02 100644
+> > --- a/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.yaml
+> > +++ b/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.yaml
+> > @@ -35,6 +35,14 @@ properties:
+> >    vcc-supply:
+> >      description: A 1.8V power supply (see regulator/regulator.yaml).
+> >
+> > +  dsi-video-mode:
+> > +    description: |
+> > +      0 - burst-mode
+> > +      1 - non-burst with sync event
+> > +      2 - non-burst with sync pulse
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    enum: [0, 1, 2]
+> 
+> I'm thinking this can go to dsi common code since the video modes are
+> common across all controllers and make the core initialize the default
+> and update if any sink devices are willing to change the modes. Sound
+> like a big move but worth useful.
 
-> On Thu, Mar 30, 2023 at 10:48:28AM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Actually, after leaving a bridge, it seems like the DSA core put the
-> > port in STP DISABLED state. Which means it will potentially leave that
-> > port with TX disable... Since this TX enable is applying not only on
-> > bridge port but also on standalone port, it seems like this also needs
-> > to be reenabled in bridge_leave(). =20
->=20
-> That's... not true? dsa_port_switchdev_unsync_attrs() has:
->=20
-> 	/* Port left the bridge, put in BR_STATE_DISABLED by the bridge layer,
-> 	 * so allow it to be in BR_STATE_FORWARDING to be kept functional
-> 	 */
-> 	dsa_port_set_state_now(dp, BR_STATE_FORWARDING, true);
->=20
-> a dump_stack() could help explain what's going on in your system?
+Not sure I understood where do you want to move this.
 
-Indeed, I was referring to the messages displayed by the STP setp state
-function (br0: port 2(lan1) entered disabled state). But the DSA core
-indeed calls the stp_set_state() to enable forwarding which then
-reenables the Tx path so I guess we are all good with this series.
-Sorry for that.
+In any case this is something about the display side of the DSI video
+connection, with the bridge as a special case, not about the controller.
+To my understanding the controller is supposed to support all the modes.
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+Francesco
+
