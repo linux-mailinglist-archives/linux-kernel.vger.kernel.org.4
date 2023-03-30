@@ -2,134 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8A16D030D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6266D0311
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbjC3LYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
+        id S231256AbjC3LZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjC3LYd (ORCPT
+        with ESMTP id S229590AbjC3LZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:24:33 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFFDA265
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:24:21 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id t13so13790704qvn.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:24:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1680175461;
-        h=content-transfer-encoding:mime-version:subject:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fdKipMhEB4vdHlMiUNkGlf7Pph62xlLHFGj7LA3sLc4=;
-        b=GhqPwpwm5+aLWZSGZL6KHY5T3Ky+2petggxGW82jJbcYqQ+weEcb2ErZbOnLTPrize
-         CLPG2oWR5Nc5kmNfj4GpSPLJez/OcRkgPdBAicUHTzYD3kOqrDDYrPLD7JDj/HvaeYtK
-         kicvzLF9Y3Bb2n4SQbyxFYlo5vV2K2otGONB/PPXBlJ/PqBVwM6pFOalEYNaVZ8N1DYj
-         qYMxEa1HNTKRkgu75YjuRkDwSeBtllf0mbDI++YFOh2gBaoVTB1XW6KCYDsWm1QXTZBF
-         CwkCfv3U6QJ2iEeTDMnyyLcZuFWnWJTp+4RM8S7g0hbJx8tik9HQK5AJ9F70Xbca6LMt
-         Rqow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680175461;
-        h=content-transfer-encoding:mime-version:subject:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fdKipMhEB4vdHlMiUNkGlf7Pph62xlLHFGj7LA3sLc4=;
-        b=z2wSEGed5SmJ0jJ8obpzHD9MN8ts0h0tOgfyjSBmTeQHa9wdLgU6B5qvWueIOChP37
-         fsbrY1QeTxGh+Alzo3Q1vRvoFTdWVgX13tA1K2JrdPxpPwTS3of2bJA6rDw7p9/pVhoB
-         2Ohl062Fo4yo8sCNy1VrHQoeTxHRiiCtEmG8lrer6dG1DsVqXpscXaiP/qe/xRGKMOr0
-         vs+d0C7+o+qsgeS1+/cuvjMk/nX/88nJhjJ3RPjnEsK4jdIFURvSPxa0F87rkK/AHrtY
-         sj2SaqPOziXvARqOATveQ/L30Pd5QXlbmwVvnC6Fzd0sXkFV6A1VSsWoy/X6o7apDE1Q
-         uTow==
-X-Gm-Message-State: AAQBX9eW7wwLr7Ini2Y064dX0LnX/sgv1qMU8FxCsNQqaFarCnQzqO2Z
-        mK0ZjRSpF0Ntu8arxDd+9bFX
-X-Google-Smtp-Source: AKy350a6oy3DHYMDNZaU05eApS6TE1WaIFpW/qqCnUoroDzzZn+WcUIYOnzzHq9JqNYcTgvToFTJJw==
-X-Received: by 2002:a05:6214:27e8:b0:5bc:7989:ea31 with SMTP id jt8-20020a05621427e800b005bc7989ea31mr33839189qvb.38.1680175460900;
-        Thu, 30 Mar 2023 04:24:20 -0700 (PDT)
-Received: from [192.168.7.217] (pool-108-26-161-203.bstnma.fios.verizon.net. [108.26.161.203])
-        by smtp.gmail.com with ESMTPSA id z6-20020a0cfec6000000b005dd8b9345a0sm5385498qvs.56.2023.03.30.04.24.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 30 Mar 2023 04:24:20 -0700 (PDT)
-From:   Paul Moore <paul@paul-moore.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-CC:     <linux-security-module@vger.kernel.org>, <jmorris@namei.org>,
-        <keescook@chromium.org>, <john.johansen@canonical.com>,
-        <penguin-kernel@i-love.sakura.ne.jp>,
-        <stephen.smalley.work@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <linux-api@vger.kernel.org>, <mic@digikod.net>
-Date:   Thu, 30 Mar 2023 07:24:19 -0400
-Message-ID: <1873242bbd8.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
-In-Reply-To: <CAHC9VhRuKqaYD=WCzuuk4=+qFSvCjCEMEsPjAh9pQe-=LyMthA@mail.gmail.com>
-References: <20230315224704.2672-1-casey@schaufler-ca.com>
- <20230315224704.2672-5-casey@schaufler-ca.com>
- <CAHC9VhRuKqaYD=WCzuuk4=+qFSvCjCEMEsPjAh9pQe-=LyMthA@mail.gmail.com>
-User-Agent: AquaMail/1.43.0 (build: 104300275)
-Subject: Re: [PATCH v7 04/11] LSM: syscalls for current process attributes
+        Thu, 30 Mar 2023 07:25:11 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0BE8A46
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:25:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680175509; x=1711711509;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=F5r1hQ7cUkUBDcgkzl+YhbbYgvKadrwOMiLaWgNj7YI=;
+  b=hPj2s7lEldqpnXihXsZv7L/qd1LXYFhJ5aDk+xulMt3dA0MXnBnLAOeV
+   231I+L5chaiu7kNfTL6foqNp+55T31AdxnNm9JDba+42emD/Zb/UGcpqA
+   S8X/bjAJ2DQLnGedMDtZEBT0P3HlvwV8T7exsEVJmU5jgGfm1EFRZimbf
+   02fgzrzRjEtNv2fScDfEtwW4YfMMYEC9fQb8miWolNNoAWexPMzDQzvm2
+   SGmfST7f4jyb5lVM0tl6kq4zvbKF4vj8kXZbNhWmh+Qc1591ktqwCyw8S
+   RzJfsUNPaEZFTllu6uHGUI5/mT+Hz5bnq0puCFRrRbs3e4CihJofC1o9X
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="338638366"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="338638366"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:24:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="717277836"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="717277836"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 30 Mar 2023 04:24:51 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phqOh-000Kny-0I;
+        Thu, 30 Mar 2023 11:24:51 +0000
+Date:   Thu, 30 Mar 2023 19:24:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Boon Khai Ng <boon.khai.ng@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Tien Sung Ang <tien.sung.ang@intel.com>,
+        Boon Khai Ng <boon.khai.ng@intel.com>
+Subject: Re: [PATCH v1 2/8] drivers: net: stmmac_main: fix vlan toggle option.
+Message-ID: <202303301902.TxsoXxWD-lkp@intel.com>
+References: <20230330070305.18808-1-boon.khai.ng@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330070305.18808-1-boon.khai.ng@intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Boon,
 
-On March 29, 2023 9:12:19 PM Paul Moore <paul@paul-moore.com> wrote:
-> On Wed, Mar 15, 2023 at 6:48 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+Thank you for the patch! Yet something to improve:
 
-...
+[auto build test ERROR on net-next/main]
+[also build test ERROR on net/main linus/master v6.3-rc4 next-20230330]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
->> +/**
->> + * security_setselfattr - Set an LSM attribute on the current process.
->> + * @attr: which attribute to set
->> + * @ctx: the user-space source for the information
->> + * @size: the size of the data
->> + * @flags: reserved for future use, must be 0
->> + *
->> + * Set an LSM attribute for the current process. The LSM, attribute
->> + * and new value are included in @ctx.
->> + *
->> + * Returns 0 on success, an LSM specific value on failure.
->> + */
->> +int security_setselfattr(unsigned int __user attr, struct lsm_ctx __user *ctx,
->> +                        size_t __user size, u32 __user flags)
->> +{
->> +       struct security_hook_list *hp;
->> +       struct lsm_ctx lctx;
->
-> Shouldn't we check @attr for valid values and return -EINVAL if bogus?
->
->> +       if (flags != 0)
->> +               return -EINVAL;
->> +       if (size < sizeof(*ctx))
->> +               return -EINVAL;
->
-> If we're only going to support on 'lsm_ctx' entry in this function we
-> should verify that the 'len' and 'ctx_len' fields are sane.  Although
-> more on this below ...
->
->> +       if (copy_from_user(&lctx, ctx, sizeof(*ctx)))
->> +               return -EFAULT;
->> +
->> +       hlist_for_each_entry(hp, &security_hook_heads.setselfattr, list)
->> +               if ((hp->lsmid->id) == lctx.id)
->> +                       return hp->hook.setselfattr(attr, ctx, size, flags);
->
-> Can anyone think of any good reason why we shouldn't support setting
-> multiple LSMs in one call, similar to what we do with
-> security_getselfattr()?  It seems like it might be a nice thing to
-> have ...
+url:    https://github.com/intel-lab-lkp/linux/commits/Boon-Khai-Ng/drivers-net-stmmac_main-Add-support-for-HW-accelerated-VLAN-Stripping/20230330-150648
+patch link:    https://lore.kernel.org/r/20230330070305.18808-1-boon.khai.ng%40intel.com
+patch subject: [PATCH v1 2/8] drivers: net: stmmac_main: fix vlan toggle option.
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20230330/202303301902.TxsoXxWD-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/fb80bd4d4331439d42a4c555121e4bc27ddcd16f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Boon-Khai-Ng/drivers-net-stmmac_main-Add-support-for-HW-accelerated-VLAN-Stripping/20230330-150648
+        git checkout fb80bd4d4331439d42a4c555121e4bc27ddcd16f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/
 
-Scratch that, I just reminded myself why attempting to set an attribute on 
-multiple LSMs in one operation would be a nightmare. Sorry about the confusion.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303301902.TxsoXxWD-lkp@intel.com/
 
---
-paul-moore.com
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:5687:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
+           }
+           ^
+>> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:5689:2: error: expected identifier or '('
+           return 0;
+           ^
+>> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:5690:1: error: extraneous closing brace ('}')
+   }
+   ^
+   3 errors generated.
 
 
+vim +5687 drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 
+  5656	
+  5657	static int stmmac_set_features(struct net_device *netdev,
+  5658				       netdev_features_t features)
+  5659	{
+  5660		struct stmmac_priv *priv = netdev_priv(netdev);
+  5661	
+  5662		netdev_features_t changed;
+  5663	
+  5664		changed = netdev->features ^ features;
+  5665	
+  5666		/* Keep the COE Type in case of csum is supporting */
+  5667		if (features & NETIF_F_RXCSUM)
+  5668			priv->hw->rx_csum = priv->plat->rx_coe;
+  5669		else
+  5670			priv->hw->rx_csum = 0;
+  5671		/* No check needed because rx_coe has been set before and it will be
+  5672		 * fixed in case of issue.
+  5673		 */
+  5674		stmmac_rx_ipc(priv, priv->hw);
+  5675	
+  5676		if (priv->sph_cap) {
+  5677			bool sph_en = (priv->hw->rx_csum > 0) && priv->sph;
+  5678			u32 chan;
+  5679	
+  5680			for (chan = 0; chan < priv->plat->rx_queues_to_use; chan++)
+  5681				stmmac_enable_sph(priv, priv->ioaddr, sph_en, chan);
+  5682		}
+  5683	
+  5684		if (changed & NETIF_F_HW_VLAN_CTAG_RX)
+  5685			stmmac_set_hw_vlan_mode(priv, priv->ioaddr, features);
+  5686			priv->plat->use_hw_vlan = features & NETIF_F_HW_VLAN_CTAG_RX;
+> 5687		}
+  5688	
+> 5689		return 0;
+> 5690	}
+  5691	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
