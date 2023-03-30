@@ -2,100 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6331B6D0852
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DBA6D0855
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjC3O2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S232118AbjC3O33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbjC3O2r (ORCPT
+        with ESMTP id S230015AbjC3O32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:28:47 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB92CC0D
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:28:38 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id e13so8377054ioc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680186517; x=1682778517;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Suf7F5Ot9u5BanXJLGAuWzI2nJgTXB4l/VJRGV98nU=;
-        b=NFDMDJmzddEBSzn0vv/MN2MzJibflVBIDnciMLl7pBLVrvPJtmqL/EQD5jE5ztD8pa
-         HGOEntwnAUTpsYsBLSit1ZqyBKeNwQTjivhuqVasAtlEfDCF8N56xmjonLSY7mQ4q2AA
-         qbsniumQWmr9BlOjB7/ZgJJVogVB1oCLU+d8M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680186517; x=1682778517;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4Suf7F5Ot9u5BanXJLGAuWzI2nJgTXB4l/VJRGV98nU=;
-        b=FHv+llwSLWSESJuv8+DUekjAQeVeBmoodxGOOBcw06HGGBp9pB8l3JO4Z0joHIT3ol
-         5ju9S2OcuffUeB1a9xcJv/MO2Q+c0kUhygPIV650tqp1IrHOiG6FR9wH1Hf/IXJExVVG
-         5vtXOLJwu+6UTRK8jNrSl0k7CF3AqVHKXICiKljFbuIzS5nBBbfFPkxXpQQA+xK11yYY
-         FQwmmC9x38faxRQ0tqzJC+oVYbmO3c6vEgDj15tBQFdb/4JnSLi8IGELLMdYqePFAXbU
-         +y64imNMGFAYP+MDs3lHYkOW++P1Dh54iJWSu+4Pt9jsE/H/PcVUpvPWbTYiXl8jWeXh
-         Db4g==
-X-Gm-Message-State: AO0yUKVn9QtxLTkX2zHrcbeZls9bHReF5fuB3xNkGqvN1vX5e1uoWxUu
-        zCDAVPhQediUCO5yTuvnGdoOQ+V/krfInVYZ3TYmpXwXAeZhJKaNNU8=
-X-Google-Smtp-Source: AK7set+UC8TAnQAjplV9msLDwOsKaMouu2/+pKt3IuG6bQDBe8ZnZJfz3e/UYjyZqrEhoAl/EZMkHqpHB1WJ9Mvjg04=
-X-Received: by 2002:a6b:f215:0:b0:745:6c2f:61dd with SMTP id
- q21-20020a6bf215000000b007456c2f61ddmr8809080ioh.2.1680186517458; Thu, 30 Mar
- 2023 07:28:37 -0700 (PDT)
+        Thu, 30 Mar 2023 10:29:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE59114;
+        Thu, 30 Mar 2023 07:29:27 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32UDwCuZ001613;
+        Thu, 30 Mar 2023 14:29:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to : sender :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=vAJbS5/a+lyQTEOIx+8F7yJCVx2VLOAAsawZaDWelcA=;
+ b=iuZUfdh8iJH8/ZVPApZuE2/F24zo9grVV8u9loj9A10vvWDZE3yi44lRzV7ONJ41XKkq
+ nuCm3Mzu/QlU1sBB4wA7hg1unFk3RkMzJzTSH5coGg4fQosP8SJNgihJNZxsGVQDruFw
+ vbow7e5g/yceDz++xe9dcbyIUJa5jwWV2RorrX93q9wNlQL9YpXY+BmzdI0zU97uIkO4
+ 9cUrUQjYetxdYk4FFdxbRcMBG6SKVonzn4UHY8zpOEiTh6zDWboBe4jlaRu6SSqiTw/e
+ rP8oetJuWfpcRd2klB1C4jgfMLINGcU+JNpg3b2nDWW1m9Jzpn1CucL/glD8ZaK+noB5 Ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmp7k31mw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 14:29:20 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32UDNfcw004799;
+        Thu, 30 Mar 2023 14:29:19 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmp7k31gf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 14:29:19 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32UBLh2V030969;
+        Thu, 30 Mar 2023 14:29:10 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3phrk6cw9e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 14:29:09 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32UET6Xv19595644
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Mar 2023 14:29:06 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 500C920049;
+        Thu, 30 Mar 2023 14:29:06 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D90820043;
+        Thu, 30 Mar 2023 14:29:06 +0000 (GMT)
+Received: from t480-pf1aa2c2 (unknown [9.152.212.191])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu, 30 Mar 2023 14:29:06 +0000 (GMT)
+Received: from bblock by t480-pf1aa2c2 with local (Exim 4.96)
+        (envelope-from <bblock@linux.ibm.com>)
+        id 1phtGz-002tcJ-2m;
+        Thu, 30 Mar 2023 16:29:05 +0200
+Date:   Thu, 30 Mar 2023 14:29:05 +0000
+From:   Benjamin Block <bblock@linux.ibm.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com, nathan@kernel.org,
+        ndesaulniers@google.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] scsi: scsi_transport_fc: remove unused desc_cnt variable
+Message-ID: <20230330142905.GC10558@t480-pf1aa2c2.fritz.box>
+References: <20230326003222.1343671-1-trix@redhat.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20230326003222.1343671-1-trix@redhat.com>
+Sender: Benjamin Block <bblock@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8f0qs-GbdrqlkCN6nQLAHbW_01uxQQtu
+X-Proofpoint-GUID: q2DXUZWSd_Er_yRTQIqg94g-xhUzTY19
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20230330142818.7efb6d05@canb.auug.org.au>
-In-Reply-To: <20230330142818.7efb6d05@canb.auug.org.au>
-From:   Rob Clark <robdclark@chromium.org>
-Date:   Thu, 30 Mar 2023 07:28:26 -0700
-Message-ID: <CAJs_Fx67+VQwveGE3i7Nyp+5R2+Z5mEeDJ9ZMTZEY_gnYtc5Sw@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the drm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Airlie <airlied@redhat.com>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gustavo Padovan <gustavo.padovan@collabora.co.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-30_09,2023-03-30_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 adultscore=0
+ suspectscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303300106
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 8:28=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> After merging the drm tree, today's linux-next build (htmldocs) produced
-> this warning:
->
-> include/uapi/linux/sync_file.h:77: warning: Function parameter or member =
-'num_fences' not described in 'sync_file_info'
->
+On Sat, Mar 25, 2023 at 08:32:22PM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/scsi/scsi_transport_fc.c:908:6: error: variable
+>   'desc_cnt' set but not used [-Werror,-Wunused-but-set-variable]
+>         u32 desc_cnt = 0, bytes_remain;
+>             ^
+> This variable is not used so remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/scsi/scsi_transport_fc.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
 
-thanks, should be fixed by:
+Looks good to me.
 
-https://patchwork.freedesktop.org/series/115871/
 
-> Revealed by commit
->
->   d71c11cc79d2 ("dma-buf/sync_file: Surface sync-file uABI")
->
-> Introduced by commit
->
->   2d75c88fefb2 ("staging/android: refactor SYNC IOCTLs")
->
-> in 2016.
->
-> --
-> Cheers,
-> Stephen Rothwell
+Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
+
+-- 
+Best Regards, Benjamin Block        /        Linux on IBM Z Kernel Development
+IBM Deutschland Research & Development GmbH    /   https://www.ibm.com/privacy
+Vors. Aufs.-R.: Gregor Pillen         /         Geschäftsführung: David Faller
+Sitz der Ges.: Böblingen     /    Registergericht: AmtsG Stuttgart, HRB 243294
