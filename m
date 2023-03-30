@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77E46D092E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D916D0938
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232762AbjC3PMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
+        id S232810AbjC3PPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbjC3PMp (ORCPT
+        with ESMTP id S232758AbjC3PPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:12:45 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61270CDED
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:11:23 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id ga7so18761215qtb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1680189076;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JmHpwm89pWrI8+6OS0monEOe56tLHQh2CsA0FSzqqvg=;
-        b=tG1dSrXb5l8pbi4VLLd0NwzaA6dRt/+ZqbfXkFn/vbhAR95JcbUbAe8D3RcKQLiTWa
-         bWeqd7xSb11OGSz1VC4VefdKFkiDosOA1o4iOJgDIkEIJay+recFQeoesW/JED6qTG73
-         XVRnj5Lgc3le8mY+8S4hL/Bgq/MRLD8hCRqLs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680189076;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JmHpwm89pWrI8+6OS0monEOe56tLHQh2CsA0FSzqqvg=;
-        b=ZMZEpef2H+P+h1EQrvP4xJ2KZVg31q7b1nCbjk1kk0NhGUe38kMlHo600jYfmiKY+I
-         Q/JTqh0qtXaIMNYUlscEalguWF+54s9MlzQIp0LcCrXZ8JA5NGGsl0f1GA8vLYu+iE7X
-         pQmqpt1iY4OJgoAo2DazXV/BKL9aAR/yJ/V1h64xVSRC/fVGJg0ZZMyz21PAtElEz44p
-         Je1Z+4gm5+fJRIyXbg+FA0DBb3PUyL4sUThvt4AuDGfjBIE0TQXO3O/+Y2RInib1+Zg/
-         PgnRQe846f+xfbGd8+6gp2nsbQMhzYGnsh8l+8Vv6Z0ZyT/2hnWX09DQygrVC2vCtEr1
-         FwzA==
-X-Gm-Message-State: AAQBX9dVJ5i4a6U9KFhDN3Amd74fFifJXOSxIcwKaOEPc+rdMNTejsO6
-        KW1fmoN3XrPFSnTkLui9IhsDdg==
-X-Google-Smtp-Source: AKy350aPfZWmWy7znasYAo+wTG6nSM6DSMMGSXTDnO88naK53Ze+glU+Tk/lspBnxDhub/xku92KIw==
-X-Received: by 2002:a05:622a:152:b0:3e4:e2bb:3297 with SMTP id v18-20020a05622a015200b003e4e2bb3297mr28803208qtw.31.1680189075766;
-        Thu, 30 Mar 2023 08:11:15 -0700 (PDT)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id u23-20020a37ab17000000b0071f0d0aaef7sm16228569qke.80.2023.03.30.08.11.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:11:15 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 15:11:15 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, RCU <rcu@vger.kernel.org>,
-        quic_neeraju@quicinc.com, Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-Message-ID: <20230330151115.GC2114899@google.com>
-References: <ca153af5-bd66-4d48-afa5-ace3a13aec3c@paulmck-laptop>
- <FC49F388-0480-4687-8DD3-94049FCBC92B@joelfernandes.org>
- <2cd8f407-2b77-48b1-9f17-9aa8e4ce9c64@paulmck-laptop>
- <b4977530-d989-47df-ab7a-d326cdd8dd14@paulmck-laptop>
+        Thu, 30 Mar 2023 11:15:00 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1C3D314;
+        Thu, 30 Mar 2023 08:13:37 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 8E9D0604F5;
+        Thu, 30 Mar 2023 17:12:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680189138; bh=shGwIupjSJQsuWpYYdpBmXkymR9GYlLQyNnU5Tla32o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mqUJQosuZcgTKuqatETxiao7zsDPoOyBuoiyZIC6CasXw/pYjAsDgRO6BGai0K6Aq
+         X5M12nSwkg7wNRf272SZCbh9S60XZZmP4/Dvkc4BRvoz6Q3H7tchyi2S4XUgkCwp6d
+         00yxReP1IwY5Zjmu7Xl0luqAaeUIaAyn6RdKNOdbCbFOYjpitD/EDZouwAv7B+EpbL
+         TOzHdRVhEMzw2K53KVJ3OgpSEVuNl070vmKi3+/MH7HV1d/0tbRCZQDFbON2aM1A3p
+         EG18Q5V9AoPEa0909W3C1ZOU9+VFYXPPqsyteUfwHDjjX80IKqw8I6gGzdiqy8e4Ds
+         o/FaNvvJyfckw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id rriEOJylei56; Thu, 30 Mar 2023 17:12:15 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 65C0F604F0;
+        Thu, 30 Mar 2023 17:12:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680189135; bh=shGwIupjSJQsuWpYYdpBmXkymR9GYlLQyNnU5Tla32o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bdqj8UGbXsCLfH6WZZjs6e6YqF1erDT1qBburWs2FagBNYmt4+IXMttLVzJr3dia9
+         zepVpyjZgqOGdIcWr23+4GN1ZGe5DxbunM+0uLHQ8Jdjoc2ofFPtL46n5LLuYmuaAV
+         w7UryKGXW+W9KDsI0PHvF6A+/unRSQfEiwK9KwauLLPcM3wYhKX2CAEmA0w8Mx0Vn5
+         kc2082eGaG7zwkwVtSA5TZjyA67IXMKR9RDeeVxXoln6DTssMqJVmrtOV1EzfNgT7/
+         /2PyLRai2R8UAKlRK3kRur+pe+/49PEfA7NEIRn28BTy12ogz5cWRLQCfaYD2M2jll
+         Xo8Qe0MgTz0lQ==
+Message-ID: <dce6ffbe-7580-db1a-dd24-798be27b3a26@alu.unizg.hr>
+Date:   Thu, 30 Mar 2023 17:12:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [BUG] [PATCH RFC v2] selftests/firmware: copious kernel memory
+ leaks in test_fw_run_batch_request()
+To:     Dan Carpenter <error27@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
+ <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
+Content-Language: en-US, hr
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b4977530-d989-47df-ab7a-d326cdd8dd14@paulmck-laptop>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,200 +77,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 03:14:32PM -0700, Paul E. McKenney wrote:
-> On Tue, Mar 28, 2023 at 08:26:13AM -0700, Paul E. McKenney wrote:
-> > On Mon, Mar 27, 2023 at 10:29:31PM -0400, Joel Fernandes wrote:
-> > > Hello,
-> > > 
-> > > > On Mar 27, 2023, at 9:06 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > 
-> > > > ﻿On Mon, Mar 27, 2023 at 11:21:23AM +0000, Zhang, Qiang1 wrote:
-> > > >>>> From: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > >>>> Sent: Tuesday, March 21, 2023 6:28 PM
-> > > >>>> [...]
-> > > >>>> Subject: [PATCH 1/1] Reduce synchronize_rcu() waiting time
-> > > >>>> 
-> > > >>>> A call to a synchronize_rcu() can be expensive from time point of view.
-> > > >>>> Different workloads can be affected by this especially the ones which use this
-> > > >>>> API in its time critical sections.
-> > > >>>> 
-> > > >>> 
-> > > >>> This is interesting and meaningful research. ;-)
-> > > >>> 
-> > > >>>> For example in case of NOCB scenario the wakeme_after_rcu() callback
-> > > >>>> invocation depends on where in a nocb-list it is located. Below is an example
-> > > >>>> when it was the last out of ~3600 callbacks:
-> > > >>> 
-> > > >> 
-> > > >> 
-> > > >> 
-> > > >> Can it be implemented separately as follows?  it seems that the code is simpler
-> > > >> (only personal opinion)  😊.
-> > > >> 
-> > > >> But I didn't test whether this reduce synchronize_rcu() waiting time
-> > > >> 
-> > > >> +static void rcu_poll_wait_gp(struct rcu_tasks *rtp)
-> > > >> +{
-> > > >> +       unsigned long gp_snap;
-> > > >> +
-> > > >> +       gp_snap = start_poll_synchronize_rcu();
-> > > >> +       while (!poll_state_synchronize_rcu(gp_snap))
-> > > >> +               schedule_timeout_idle(1);
-> > > > 
-> > > > I could be wrong, but my guess is that the guys working with
-> > > > battery-powered devices are not going to be very happy with this loop.
-> > > > 
-> > > > All those wakeups by all tasks waiting for a grace period end up
-> > > > consuming a surprisingly large amount of energy.
-> > > 
-> > > Is that really the common case? On the general topic of wake-ups:
-> > > Most of the time there should be only one
-> > > task waiting synchronously on a GP to end. If that is
-> > > true, then it feels like waking
-> > > up nocb Kthreads which indirectly wake other threads is doing more work than usual?
-> > 
-> > A good question, and the number of outstanding synchronize_rcu()
-> > calls will of course be limited by the number of tasks in the system.
-> > But I myself have raised the ire of battery-powered embedded folks with
-> > a rather small number of wakeups, so...
-> > 
-> > And on larger systems there can be a tradeoff between contention on
-> > the one hand and number of wakeups on the other.
-> > 
-> > The original nocb implementation in fact had the grace-period kthead
-> > waking up all of what are now called rcuoc kthreads.  The indirect scheme
-> > reduced the total number of wakeups by up to 50% and also reduced the
-> > CPU consumption of the grace-period kthread, which otherwise would have
-> > become a bottleneck on large systems.
-> > 
-> > And also, a scheme that directly wakes tasks waiting in synchronize_rcu()
-> > might well use the same ->nocb_gp_wq[] waitqueues that are used by the
-> > rcuog kthreads, if that is what you were getting at.
+Hi, all,
+
+This is not a formal patch, but please see if you think the way the
+locking and race are solved correctly this time.
+
+(Having two mutexes over the same set of resources is obviously a hazard.)
+
+On 3/28/23 12:06, Dan Carpenter wrote:
+> On Tue, Mar 28, 2023 at 11:23:00AM +0200, Mirsad Todorovac wrote:
+>> The leaks are in chunks of 1024 bytes (+ overhead), but so far I could not
+>> reproduce w/o root privileges, as tests refuse to run as unprivileged user.
+>> (This is not the proof of non-existence of an unprivileged automated exploit
+>> that would exhaust the kernel memory at approx. rate 4 MB/hour on our setup.
+>>
+>> This would mean about 96 MB / day or 3 GB / month (of kernel memory).
 > 
-> And on small systems, you might of course have the rcuog kthread directly
-> invoke callbacks if there are not very many of them.  This would of
-> course need to be done quite carefully to avoid any number of races
-> with the rcuoc kthreads.  You could do the same thing on a large system,
-> but on a per-rcuog basis.
+> This is firmware testing stuff.  In the real world people aren't going
+> to run their test scripts in a loop for days.
 > 
-> I vaguely recall discussing this in one of our sessions, but who knows?
+> There is no security implications.  This is root only.  Also if the
+> user could load firmware then that would be the headline.  Once someone
+> is can already load firmware then who cares if they leak 100MB per day?
 > 
-> Would this really be of benefit?  Or did you have something else in mind?
-
-Yes, this is what I was also referring to.
-
-Not sure about benefit, depends on workloads and measurement.
-
-thanks,
-
- - Joel
-
-
+> It looks like if you call trigger_batched_requests_store() twice in a
+> row then it will leak memory.  Definitely test_fw_config->reqs is leaked.
+> That's different from what the bug report is complaining about, but the
+> point is that there are some obvious leaks.  It looks like you're
+> supposed to call trigger_batched_requests_store() in between runs?
 > 
-> 							Thanx, Paul
-> 
-> > > I am curious to measure how much does Vlad patch reduce wakeups in the common case.
-> > 
-> > Sounds like a good thing to measure!
-> > 
-> > > I was also wondering how Vlad patch effects RCU-barrier ordering. I guess
-> > > we want the wake up to happen in the order of
-> > > other callbacks also waiting.
-> > 
-> > OK, I will bite.  Why would rcu_barrier() need to care about the
-> > synchronize_rcu() invocations if they no longer used call_rcu()?
-> > 
-> > > One last note, most battery powered systems are perhaps already using expedited RCU ;-)
-> > 
-> > Good point.  And that does raise the question of exactly what workloads
-> > and systems want faster wakeups from synchronize_rcu() and cannot get
-> > this effect from expedited grace periods.
-> > 
-> > 							Thanx, Paul
-> > 
-> > > Thoughts?
-> > > 
-> > >  - Joel 
-> > > 
-> > > > 
-> > > >                            Thanx, Paul
-> > > > 
-> > > >> +}
-> > > >> +
-> > > >> +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func);
-> > > >> +DEFINE_RCU_TASKS(rcu_poll, rcu_poll_wait_gp, call_rcu_poll,
-> > > >> +                 "RCU Poll");
-> > > >> +void call_rcu_poll(struct rcu_head *rhp, rcu_callback_t func)
-> > > >> +{
-> > > >> +       call_rcu_tasks_generic(rhp, func, &rcu_poll);
-> > > >> +}
-> > > >> +EXPORT_SYMBOL_GPL(call_rcu_poll);
-> > > >> +
-> > > >> +void synchronize_rcu_poll(void)
-> > > >> +{
-> > > >> +       synchronize_rcu_tasks_generic(&rcu_poll);
-> > > >> +}
-> > > >> +EXPORT_SYMBOL_GPL(synchronize_rcu_poll);
-> > > >> +
-> > > >> +static int __init rcu_spawn_poll_kthread(void)
-> > > >> +{
-> > > >> +       cblist_init_generic(&rcu_poll);
-> > > >> +       rcu_poll.gp_sleep = HZ / 10;
-> > > >> +       rcu_spawn_tasks_kthread_generic(&rcu_poll);
-> > > >> +       return 0;
-> > > >> +}
-> > > >> 
-> > > >> Thanks
-> > > >> Zqiang
-> > > >> 
-> > > >> 
-> > > >>>> 
-> > > >>>> <snip>
-> > > >>>>  <...>-29      [001] d..1. 21950.145313: rcu_batch_start: rcu_preempt
-> > > >>>> CBs=3613 bl=28
-> > > >>>> ...
-> > > >>>>  <...>-29      [001] ..... 21950.152578: rcu_invoke_callback: rcu_preempt
-> > > >>>> rhp=00000000b2d6dee8 func=__free_vm_area_struct.cfi_jt
-> > > >>>>  <...>-29      [001] ..... 21950.152579: rcu_invoke_callback: rcu_preempt
-> > > >>>> rhp=00000000a446f607 func=__free_vm_area_struct.cfi_jt
-> > > >>>>  <...>-29      [001] ..... 21950.152580: rcu_invoke_callback: rcu_preempt
-> > > >>>> rhp=00000000a5cab03b func=__free_vm_area_struct.cfi_jt
-> > > >>>>  <...>-29      [001] ..... 21950.152581: rcu_invoke_callback: rcu_preempt
-> > > >>>> rhp=0000000013b7e5ee func=__free_vm_area_struct.cfi_jt
-> > > >>>>  <...>-29      [001] ..... 21950.152582: rcu_invoke_callback: rcu_preempt
-> > > >>>> rhp=000000000a8ca6f9 func=__free_vm_area_struct.cfi_jt
-> > > >>>>  <...>-29      [001] ..... 21950.152583: rcu_invoke_callback: rcu_preempt
-> > > >>>> rhp=000000008f162ca8 func=wakeme_after_rcu.cfi_jt
-> > > >>>>  <...>-29      [001] d..1. 21950.152625: rcu_batch_end: rcu_preempt CBs-
-> > > >>>> invoked=3612 idle=....
-> > > >>>> <snip>
-> > > >>>> 
-> > > >>> 
-> > > >>> Did the results above tell us that CBs-invoked=3612 during the time 21950.145313 ~ 21950.152625?
-> > > >>> 
-> > > >>> Yes.
-> > > >>> 
-> > > >>> 
-> > > >>> If possible, may I know the steps, commands, and related parameters to produce the results above?
-> > > >>> Thank you!
-> > > >>> 
-> > > >>> Build the kernel with CONFIG_RCU_TRACE configuration. Update your "set_event"
-> > > >>> file with appropriate traces:
-> > > >>> 
-> > > >>> <snip>
-> > > >>> XQ-DQ54:/sys/kernel/tracing # echo rcu:rcu_batch_start rcu:rcu_batch_end rcu:rcu_invoke_callback > set_event
-> > > >>> 
-> > > >>> XQ-DQ54:/sys/kernel/tracing # cat set_event
-> > > >>> rcu:rcu_batch_start
-> > > >>> rcu:rcu_invoke_callback
-> > > >>> rcu:rcu_batch_end
-> > > >>> XQ-DQ54:/sys/kernel/tracing #
-> > > >>> <snip>
-> > > >>> 
-> > > >>> Collect traces as much as you want: XQ-DQ54:/sys/kernel/tracing # echo 1 > tracing_on; sleep 10; echo 0 > tracing_on
-> > > >>> Next problem is how to parse it. Of course you will not be able to parse
-> > > >>> megabytes of traces. For that purpose i use a special C trace parser.
-> > > >>> If you need an example please let me know i can show here.
-> > > >>> 
-> > > >>> --
-> > > >>> Uladzislau Rezki
+> There are other races like config_num_requests_store() should hold the
+> mutex over the call to test_dev_config_update_u8() instead of dropping
+> and retaking it.
+
+COMMENT: Like in libc putc() family of functions, there is also
+putc_unlocked() The similar approach is applied here.
+
+As the functions are callable from within both locked and non-locked
+environment, we have to either:
+
+1. have two or more locks, which is dubious in terms of concurrency
+2. have locked and unlocked version of each function, for we cannot
+    lock the same lock twice.
+
+NOTE: Memory leaks are not solved with this patch, only a couple of
+racing conditions.
+
+---
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 05ed84c2fc4c..d6ed20bd1eb0 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -353,6 +353,19 @@ static ssize_t config_test_show_str(char *dst,
+         return len;
+  }
+
++static inline int test_dev_config_update_bool_unlocked(const char *buf, size_t size,
++                                      bool *cfg)
++{
++       int ret;
++
++       if (kstrtobool(buf, cfg) < 0)
++               ret = -EINVAL;
++       else
++               ret = size;
++
++       return ret;
++}
++
+  static int test_dev_config_update_bool(const char *buf, size_t size,
+                                        bool *cfg)
+  {
+@@ -373,6 +386,24 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
+         return snprintf(buf, PAGE_SIZE, "%d\n", val);
+  }
+
++static int test_dev_config_update_size_t_unlocked(
++                                        const char *buf,
++                                        size_t size,
++                                        size_t *cfg)
++{
++       int ret;
++       long new;
++
++       ret = kstrtol(buf, 10, &new);
++       if (ret)
++               return ret;
++
++       *(size_t *)cfg = new;
++
++       /* Always return full write size even if we didn't consume all */
++       return size;
++}
++
+  static int test_dev_config_update_size_t(const char *buf,
+                                          size_t size,
+                                          size_t *cfg)
+@@ -402,6 +433,21 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
+         return snprintf(buf, PAGE_SIZE, "%d\n", val);
+  }
+
++static int test_dev_config_update_u8_unlocked(const char *buf, size_t size, u8 *cfg)
++{
++       u8 val;
++       int ret;
++
++       ret = kstrtou8(buf, 10, &val);
++       if (ret)
++               return ret;
++
++       *(u8 *)cfg = val;
++
++       /* Always return full write size even if we didn't consume all */
++       return size;
++}
++
+  static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+  {
+         u8 val;
+@@ -471,10 +517,10 @@ static ssize_t config_num_requests_store(struct device *dev,
+                 mutex_unlock(&test_fw_mutex);
+                 goto out;
+         }
+-       mutex_unlock(&test_fw_mutex);
+
+-       rc = test_dev_config_update_u8(buf, count,
+-                                      &test_fw_config->num_requests);
++       rc = test_dev_config_update_u8_unlocked(buf, count,
++                                               &test_fw_config->num_requests);
++       mutex_unlock(&test_fw_mutex);
+
+  out:
+         return rc;
+@@ -518,10 +564,10 @@ static ssize_t config_buf_size_store(struct device *dev,
+                 mutex_unlock(&test_fw_mutex);
+                 goto out;
+         }
+-       mutex_unlock(&test_fw_mutex);
+
+-       rc = test_dev_config_update_size_t(buf, count,
+-                                          &test_fw_config->buf_size);
++       rc = test_dev_config_update_size_t_unlocked(buf, count,
++                                                   &test_fw_config->buf_size);
++       mutex_unlock(&test_fw_mutex);
+
+  out:
+         return rc;
+@@ -548,10 +594,10 @@ static ssize_t config_file_offset_store(struct device *dev,
+                 mutex_unlock(&test_fw_mutex);
+                 goto out;
+         }
+-       mutex_unlock(&test_fw_mutex);
+
+-       rc = test_dev_config_update_size_t(buf, count,
+-                                          &test_fw_config->file_offset);
++       rc = test_dev_config_update_size_t_unlocked(buf, count,
++                                                   &test_fw_config->file_offset);
++       mutex_unlock(&test_fw_mutex);
+
+  out:
+         return rc;
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+
+"What’s this thing suddenly coming towards me very fast? Very very fast.
+... I wonder if it will be friends with me?"
