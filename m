@@ -2,149 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2876CFD01
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D036CFD03
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjC3Hjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39990 "EHLO
+        id S230401AbjC3Hkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjC3Hjl (ORCPT
+        with ESMTP id S229732AbjC3Hk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:39:41 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB114449A
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:39:39 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id k37so23426406lfv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:39:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680161978;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z1BFQFEcp+Yc7eK7+gRqJuLKGd2zLsXk3LDs9OcFmZs=;
-        b=ruldmbq64NM+hwrT/y0is2vQMgd+GIg71Oboaq2lJYwssqBaw6eK86sRZ2/R9RWiWb
-         qZGN+9RZW8Hob34SVoK1OPpL7PTvxVES2P37JZsx/bI5K3VPsMxTmqbIwMAsAFDP3jgR
-         T9C9SpPHR2VTbi2RXgEVjnJ881PG78j/N1bSrbfYc8FyzzmbDrY1kNi4QESoxY7PWhXX
-         Zz+UC8n1m+4CUFohK0Yzqz7RbGeBP6u84ND8MOgCw5xw1EZOC1LX63X5yQwcNFxVM3P0
-         Z3ublQZNxVx67c9jRHkN7OFj4gfp82jHCEmbRP2axY0oiNuIwEHShdjoVOaKESnCGBcB
-         3hZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680161978;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z1BFQFEcp+Yc7eK7+gRqJuLKGd2zLsXk3LDs9OcFmZs=;
-        b=Yx/cuqbwTwKLLw8FH0Wo0sKwC8YNLnIJvxBKzaul3ErSHhQICBa9I9TDV1XvvOzvkW
-         S+4zbtcaozJkrISq+NE1LgGe5DupKRoAvZ/quqJb/X+YEkFNhJ3EvYjt6sJdNbTnbcEZ
-         D6z3alGbf57/IjlhjihelNJVT1oKJ75tOW3PEB/FbN2J/KgG267qv7DUvGbTrxMPppgq
-         mHRhroHOD+b+oQ3cAtldiqsjIS1mnS4DWhRYs6Q8b9zTaE2qVbvYA8RwucCug7zcM/aj
-         vz85FjU578c2/jIGidjrEAmQM5rsS4MioyPkvqdSkSIsXb1f1tjYBwFZpbnVdmWh4LSO
-         j9mw==
-X-Gm-Message-State: AAQBX9feFxys4fhO67pScvomlc7Ww8kwl4Boy50sDFPuqiFVNqT+jUPv
-        iWRwHzAV6ow0uJJHysidVjFmYQ==
-X-Google-Smtp-Source: AKy350bAQUuZJ9AdRREDwN63mloWL2b2FNGC4p1ekLCHdHGiBahv9ED14kOttKyL58M6k3Pwu6iDbA==
-X-Received: by 2002:ac2:5458:0:b0:4ea:fabb:4db1 with SMTP id d24-20020ac25458000000b004eafabb4db1mr6418948lfn.1.1680161978106;
-        Thu, 30 Mar 2023 00:39:38 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b16-20020a056512219000b004d85895d7e0sm3956796lft.147.2023.03.30.00.39.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 00:39:37 -0700 (PDT)
-Message-ID: <c999da90-1cb9-c767-23bc-c28d37708cf2@linaro.org>
-Date:   Thu, 30 Mar 2023 09:39:36 +0200
+        Thu, 30 Mar 2023 03:40:29 -0400
+Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F21A4488
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:40:28 -0700 (PDT)
+Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
+        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 9A81610047D83
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:40:26 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id hmtWpTR9FaaYZhmtWp3OkR; Thu, 30 Mar 2023 07:40:26 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=b813XvKx c=1 sm=1 tr=0 ts=64253cea
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=k__wU0fu6RkA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=PqiCKZqhoxXZXdxUJgXaniL/P5m3NeYeSl0q1E2m6JE=; b=Iig6KSQFTDANLsq+M04WZCoCqJ
+        1mFPU4jmy91OXme+so6VVVdVLwH1Lx0/SdAc1UydhsC1Oj5vKUQV+TmUi761A6sz6dcz7LArc6H34
+        7/6O7GdE1n7SmT2i21YbRc43gJFkEYjBO6Bbc2bZ5zPN8ib74hRddV1Olp+SUCziObfoi1ethhk5V
+        4H7Opui7yawyRN/5h27dQgDT7vCnO+MfsITOfHUicWkKVrYOlV0jk/R557NxzUJqGeBGwcI8GcaI9
+        p/DMq8x7xEkI4P3SLZ0IGpjzFXz7Xj+a+F40RrgjaHToIXWZrWwkjb3rRbXW9Gpxn7NN3bKl259J2
+        ztkdV31w==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33706 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1phmtV-000kGq-CN;
+        Thu, 30 Mar 2023 01:40:25 -0600
+Subject: Re: [PATCH 5.15 000/146] 5.15.105-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230328142602.660084725@linuxfoundation.org>
+In-Reply-To: <20230328142602.660084725@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <d2e33121-4bf4-2af5-d578-2b1d214a7e07@w6rz.net>
+Date:   Thu, 30 Mar 2023 00:40:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 1/3] dt-bindings: sound: Add TDM for StarFive JH7110
-Content-Language: en-US
-To:     Walker Chen <walker.chen@starfivetech.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20230329153320.31390-1-walker.chen@starfivetech.com>
- <20230329153320.31390-2-walker.chen@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230329153320.31390-2-walker.chen@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1phmtV-000kGq-CN
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:33706
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2023 17:33, Walker Chen wrote:
-> Add bindings to describe the TDM driver for the StarFive JH7110 SoC.
-> 
-> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
-> ---
->  .../bindings/sound/starfive,jh7110-tdm.yaml   | 95 +++++++++++++++++++
->  1 file changed, 95 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml b/Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
-> new file mode 100644
-> index 000000000000..d65b9ed781ef
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
-> @@ -0,0 +1,95 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/starfive,jh7110-tdm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JH7110 TDM Controller
-> +
-> +description: |
-> +  The TDM Controller is a Time Division Multiplexed audio interface
-> +  integrated in StarFive JH7110 SoC, allowing up to 8 channels of
-> +  audio over a serial interface. The TDM controller can operate both
-> +  in master and slave mode.
-> +
-> +maintainers:
-> +  - Walker Chen <walker.chen@starfivetech.com>
-> +
+On 3/28/23 7:41 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.105 release.
+> There are 146 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 30 Mar 2023 14:25:33 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.105-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Missing allOf: with $ref to dai-common.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - starfive,jh7110-tdm
-> +
-> +  reg:
-> +    maxItems: 1
-
-(...)
-
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - dmas
-> +  - dma-names
-> +  - "#sound-dai-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    tdm: tdm@10090000 {
-
-Drop tdm label, not used.
-
-Best regards,
-Krzysztof
+Tested-by: Ron Economos <re@w6rz.net>
 
