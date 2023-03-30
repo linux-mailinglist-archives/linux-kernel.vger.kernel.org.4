@@ -2,86 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209906D0969
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4626D0966
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232972AbjC3PXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S232937AbjC3PW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232958AbjC3PXJ (ORCPT
+        with ESMTP id S232920AbjC3PWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:23:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50280D31D;
-        Thu, 30 Mar 2023 08:22:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AAE5620D0;
-        Thu, 30 Mar 2023 15:21:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53AD1C4339B;
-        Thu, 30 Mar 2023 15:21:05 +0000 (UTC)
-Date:   Thu, 30 Mar 2023 11:21:03 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Vincent Donnefort <vdonnefort@google.com>
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v2 1/2] ring-buffer: Introducing ring-buffer mapping
- functions
-Message-ID: <20230330112103.00c3f422@gandalf.local.home>
-In-Reply-To: <ZCVk26InuXhy+Lmg@google.com>
-References: <20230328224411.0d69e272@gandalf.local.home>
-        <ZCQCsD9+nNwBYIyH@google.com>
-        <20230329070353.1e1b443b@gandalf.local.home>
-        <20230329085106.046a8991@rorschach.local.home>
-        <ZCQ2jW5Jl/cWCG7s@google.com>
-        <20230329091107.408d63a8@rorschach.local.home>
-        <ZCQ9m5K34Qa9ZkUd@google.com>
-        <20230329093602.2b3243f0@rorschach.local.home>
-        <ZCRDXaTVfNwxdRJZ@google.com>
-        <20230329113234.3285209c@gandalf.local.home>
-        <ZCVk26InuXhy+Lmg@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 30 Mar 2023 11:22:53 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1510B3C3D;
+        Thu, 30 Mar 2023 08:22:07 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1phu5R-0006dD-2W;
+        Thu, 30 Mar 2023 17:21:13 +0200
+Date:   Thu, 30 Mar 2023 16:21:09 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        =?utf-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: [PATCH net-next 05/15] net: dsa: mt7530: move SGMII PCS creation to
+ mt7530_probe function
+Message-ID: <f8f157ca470ffb54c03be821c72478b2563a1106.1680180959.git.daniel@makrotopia.org>
+References: <cover.1680180959.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1680180959.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Mar 2023 11:30:51 +0100
-Vincent Donnefort <vdonnefort@google.com> wrote:
+Move creating the SGMII PCS from mt753x_setup() to the more appropriate
+mt7530_probe() function.
+This is done also in preparation of moving all functions related to
+MDIO-connected MT753x switches to a separate module.
 
-> How about?
-> 
-> userspace:
-> 
->   prev_read = meta->read;
->   ioctl(TRACE_MMAP_IOCTL_GET_READER_PAGE)
-> 
-> kernel:
->     ring_buffer_get_reader_page()
->       rb_get_reader_page(cpu_buffer);
->       cpu_buffer->reader_page->read = rb_page_size(reader);
->       meta->read = cpu_buffer->reader_page->read;
-> 
-> userspace:
->    /* if new page prev_read = 0 */
->    /* read between prev_read and meta->read */
-> 
-> If the writer does anything in-between, wouldn't rb_get_reader_page() handle it
-> nicely by returning the same reader as more would be there to read?
-> 
-> It is similar to rb_advance_reader() except we'd be moving several events at
-> once?
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ drivers/net/dsa/mt7530.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-Yeah, I think that can work. So we just need to make sure that the meta
-page has the "read" variable passed through.
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index e27a0e551cec0..803809b430c85 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -3012,12 +3012,6 @@ mt753x_setup(struct dsa_switch *ds)
+ 	if (ret && priv->irq)
+ 		mt7530_free_irq_common(priv);
+ 
+-	if (priv->id == ID_MT7531) {
+-		ret = mt7531_create_sgmii(priv);
+-		if (ret && priv->irq)
+-			mt7530_free_irq_common(priv);
+-	}
+-
+ 	return ret;
+ }
+ 
+@@ -3140,6 +3134,7 @@ mt7530_probe(struct mdio_device *mdiodev)
+ 	static struct regmap_config *regmap_config;
+ 	struct mt7530_priv *priv;
+ 	struct device_node *dn;
++	int ret;
+ 
+ 	dn = mdiodev->dev.of_node;
+ 
+@@ -3232,6 +3227,12 @@ mt7530_probe(struct mdio_device *mdiodev)
+ 	if (IS_ERR(priv->regmap))
+ 		return PTR_ERR(priv->regmap);
+ 
++	if (priv->id == ID_MT7531) {
++		ret = mt7531_create_sgmii(priv);
++		if (ret)
++			return ret;
++	}
++
+ 	return dsa_register_switch(priv->ds);
+ }
+ 
+-- 
+2.39.2
 
--- Steve
