@@ -2,420 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AD66D0F95
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE436D0F98
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjC3UA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
+        id S229612AbjC3UBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjC3UAY (ORCPT
+        with ESMTP id S229491AbjC3UBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:00:24 -0400
-Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6EE10252
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680206412; bh=u3QrSZL9GD+I3EK2EiLGx3xYjxMky3iipWsag5yff+U=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=XiwZ98fyTkFQTEGz/Cn5qa8LO6cYpMFuTmbxGabdn3IhbdnDXFyOj0Sc7L8qcIbypu726Vt/z78xD+G/2OWTkK9XoWGqHkLcidQdmOCVcG5rlBKUL7L+Q5v4CKUf09pQYhskIfezugpZ8HDTmcg7zhgYTyNZiOLZjm4WB3bizFTIAZm7K5fOlutTTKSrUjrk1u+hfP9DH3CtAmMSOTzJdUTUH6Nxe9xAz2+RMQ2EI64EAtO1knzPemv/cYv2LcH1kyZCJGUXJoqn2NE4CREQCGkpruA0HD+Fvgfm/n0RLbTCTYEqqv1og9xqBc84AgVLMN5mCI/LGBZVbCz8X2WyEg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680206412; bh=UbCDl79TExKYofKVQMiEGKemz+dxzI1dVaATmWR9xql=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=F5vffjLsEUfK3bL3cYzdAuWjU3S152kQ4wOJIyIhnFVYf3eDUX7rg0whAlCjDzgbrtyg6Jps5MCtKQkYOtkl1AqDTGtNd+Yskc/ep6Oqk1nbOKI/guIQivaQMGWUnIHjj8ZtXqYz+gAYy3ZopvP1zPDUFSQ7SIYtAjbsF3b37+6BrGridIMofWH6MAS0PRY8YgSNlvHJUmSC+r0o1Xqd+fr4XKd9lF+zC9zltnayDSY3kdxA8orhispjlZT5WcPc8VsLA6ga/zlIxYHrliU51wVBLxWw9zT8jhAbUplm/kW00vr8OrUWhlM5ZnA8LxEYZ/tGCFNAG/EJbNephl00QA==
-X-YMail-OSG: UHCvQ_gVM1nzjp5qD6GjdqQ0u5XRPBbgOYUf7RRUGHjmNJPDlBe0AYTAvnRzbkM
- ku3cACi9KB_bvbkGN7XJ_IGPUMDXVoBs6PGPoTJ_eyCNklEgeChsz5xAyitu.DLuL1smt1H_4hIn
- TEW.R3seKGD5xGxsdz_XlGBUdYpewZUhpv1TvgwburNjJfIuYSsS3p9nQTQ.tBBgqEb7mdgiBau7
- ZZmdVJza4yNtEjVq086DwU1ppb7v8uyw26hmZV2W2z8KIZcpQK8yPK.uqoxYpmrqT9zIMj2Faj6G
- m7NvaIXZrJ4.CDH1FOJkdFTf5paVvq7wNiZGypiRpkMkoYDrzscXJkj2LfRdpi9xlNssAPnuypMS
- AbJ03MmCCxqEbDL9vgpPywZZ14eAn3qVcBcYVlYuTlE0uzd8SYXJfDhIiZYJ4R5in1Iilr7HeLDp
- rVz.HvMhqLFOYksM6uWTOFfaKuj39sOxNiWFTJDQVyK7ZmMfhqvwp8PSvLhW.1sqMCrASzCsFCaG
- 3vGdeEc2yhc9_z5HZcktt.dGZvqt1eSg7VRTJv9F2YWNsweKQWlAvZkAy7nf3aZjNPFWtJ1zmIPx
- Cpt11GjfCa8Vl5EpoX.lvn4vqyEVNBW3U1HpEnMOw98WYLsQJWPogEcNSPVmXQeU3hXSpSuN9EU.
- 9BUb2Y4zjczQu8IioH8dBax_pmjhDDAcOaet0sJa1mt7EuUm2f3Dqsq0BEgB8VtIgxzNOFa1Em2Y
- 9_y1xy6QtLGOgKMfnyKtrCBnMJXaGsSsI0i5XdNgYXZdwLr0tlfH53PkuOPgXHvKMIu8WmTeV5rs
- uzdyHuWRZLErbNdq0j59rXM1R1qus629zPARjerrp_gjg6TFjaru7HJLR.3WpKXYavOAAcgUn2ZJ
- MEkZDk_OeBjFGhOead9UuJtLBR9f8DFNmU55Jzocsm4NJFeBR7rprjyddfXRnLslLNarM7ogPMza
- waDSTS9AQ61i5C4RXmC04w3frQCeYxWHoYTZDRdVKPPazgBer.ZGFNMB6O8sY0oHZW0avV83fCWS
- QTxNbLuVuTXkKlCsGBCQNvoIgN55D2WKurXz0IiEC_j5K3AVtihMj9s2VX_AmCzLdhJYmmp9LT3E
- KZMUP4B88c3t92SsWS7xVb6EZ1ThapSGPcSgoXfBxjdhgHnq9Aow9.YpGz7CKFbpPZOdP3JPbdxV
- SbqIb1l0SY8Zhp7a1eozeEVdfiw.AWHouNSkGaMuS9BtB57PtZ_6Nr59I1gxoBUnZTJbG1kCmQLM
- AKiuinAEDO_GNqxnWmgQmqtoWqtcN1mWfkMpboHtrY7n0GKiTYe6gBsIH5OwtKFO4fxjKkKdEzio
- m6wb.0Wc4CV0tWgyVni1dW36KAW5a9yaEmlhwH2PJ8O21a5bHzkfIvFaJ2c3AzQo_c94tyVuhtjC
- eKvjjUGIg0K3XO5urV6kIyGkUgHvZ0uqPBhUQENvIMF17k7Z4NCYlZrsZqvhztTFpDo6jNfb43Yj
- kLOteXh9pjeJJPkDekVRSSJrSEmyG8cOlrJ8M56B.rIha42jB0TK0VwStE2aLH2yzdb21wdWRquM
- q0UDKSlJhnL2DKk0aFIM7jrjFT8blFt1oL2nFtHUrHVNA6_ywzp.oKCFWEzNfYwXwtpZ79_YaSQ0
- S8DHcpchQciCLfZEnJ9m9wxAwPbI5.KyIEfrlSoqDigaZC_n4E73wN3TX03z17Gg0qjO0eKux6ee
- BUPJdhYWx0oRCsvRYn.7AYgY8G0LAKLPhlo.7UUv2C7kdQMd.14Ee.egHY5lZHRra..sDwYENOCv
- CmR_WJvqD7Wb4yAs6YN6uwN2TGZCTzNZbQQq9uJz1.Zd_h3xCpWzH3SCKlEJsyxmafg0AWK0J.Ks
- 1NLzmEeHD51I93M8NNif9rqMLSxPYkpa9BoY0tDScTLvteTelWFDspD6N5L3lbfDv6WqjcfbS1XZ
- CG5_nlD7r8rtmrGedDVwDG42T5X9z4oxwlFKts4KVlPQUyFfEHi51lWK4bBa.QmOpdYBUksSemB5
- 4Y_5iF.Ev7Hl8qvJZ_ap4zvMHKZngu8_GgqCVbDfoW8kVV0cH7aa2KNsD7AOPLUsJ4pEA.J4xpyG
- 9i.iykZq.WqAWUznToJp0cFS.wyemz7A7u..5OUIXfYSXy1f5L_UI2uu09NWlpDthsJUVom4rHOC
- UCJ3NhX5umLMZKHJgEQI7HRlFJX5CVzVibXTiw9gBojW5hvnRZydMK6q73WRXsp1Lj5NyerO4oXu
- vuCtq3HHmuJb2T2ostjHIYwUrqv9BpQUB2yfGkS6vAdYyNa.MVbJV6hrnzQLK9h9ao5uuzca0k6m
- iTcMuDZY-
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 31fe1430-440c-4cf2-84a6-0cfb46e4bdf4
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Thu, 30 Mar 2023 20:00:12 +0000
-Received: by hermes--production-bf1-5f9df5c5c4-84ds6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 142d9d5fc61c35bfe36f490518e2974b;
-          Thu, 30 Mar 2023 20:00:11 +0000 (UTC)
-Message-ID: <6cbbe6eb-d808-7a99-9ca9-43f816b99833@schaufler-ca.com>
-Date:   Thu, 30 Mar 2023 13:00:07 -0700
+        Thu, 30 Mar 2023 16:01:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B957692;
+        Thu, 30 Mar 2023 13:01:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0BCE0B82A13;
+        Thu, 30 Mar 2023 20:01:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937F8C433D2;
+        Thu, 30 Mar 2023 20:01:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680206461;
+        bh=PYKd29ps6N67LeZvsmVnYBhuTVwdyeGRiChtNIXSeHQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=S+oibyQxxpYvubGfh5KQbWiJbB7VA5yBttxCH59NKsKves+SC2lGFGg17rlXQf7Vh
+         Xh93zVN5FL1eRz6Jx4YxiG0tkmedKnOHLr+TvhkXWItwWI1Ey5J3KNecbcfsrsxWtC
+         q/taQ2IbFZNzScPZugnF6wXfbgN0R7AnNHR3RA3190SNQHnDZBFVayQV+djU65dgpb
+         3Z+4memLcUYdMhbEMtiiqqQ3qgFhBcQ8j4o9AYqWJQj4BeEjTFHPkqh0b+Yhq2tmj6
+         W7WTLVbq+YC/GrNQiDd+DREY52IcS571oOYAA87JLx9ohutHX1c4klumVBDQy9xKf+
+         T/wvEHb93OQ1Q==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com
+Subject: [PULL] Networking for v6.3-rc5
+Date:   Thu, 30 Mar 2023 13:01:00 -0700
+Message-Id: <20230330200100.78996-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v7 04/11] LSM: syscalls for current process attributes
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     linux-security-module@vger.kernel.org, jmorris@namei.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net, Casey Schaufler <casey@schaufler-ca.com>
-References: <20230315224704.2672-1-casey@schaufler-ca.com>
- <20230315224704.2672-5-casey@schaufler-ca.com>
- <CAHC9VhRuKqaYD=WCzuuk4=+qFSvCjCEMEsPjAh9pQe-=LyMthA@mail.gmail.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhRuKqaYD=WCzuuk4=+qFSvCjCEMEsPjAh9pQe-=LyMthA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.21284 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/2023 6:12 PM, Paul Moore wrote:
-> On Wed, Mar 15, 2023 at 6:48 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->> Create a system call lsm_get_self_attr() to provide the security
->> module maintained attributes of the current process.
->> Create a system call lsm_set_self_attr() to set a security
->> module maintained attribute of the current process.
->> Historically these attributes have been exposed to user space via
->> entries in procfs under /proc/self/attr.
->>
->> The attribute value is provided in a lsm_ctx structure. The structure
->> identifys the size of the attribute, and the attribute value. The format
-> "identifies"
->
->> of the attribute value is defined by the security module. A flags field
->> is included for LSM specific information. It is currently unused and must
->> be 0. The total size of the data, including the lsm_ctx structure and any
->> padding, is maintained as well.
->>
->> struct lsm_ctx {
->>         __u64   id;
->>         __u64   flags;
->>         __u64   len;
->>         __u64   ctx_len;
->>         __u8    ctx[];
->> };
->>
->> Two new LSM hooks are used to interface with the LSMs.
->> security_getselfattr() collects the lsm_ctx values from the
->> LSMs that support the hook, accounting for space requirements.
->> security_setselfattr() identifies which LSM the attribute is
->> intended for and passes it along.
->>
->> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->> ---
->>  Documentation/userspace-api/lsm.rst | 15 +++++
->>  include/linux/lsm_hook_defs.h       |  4 ++
->>  include/linux/lsm_hooks.h           |  9 +++
->>  include/linux/security.h            | 19 ++++++
->>  include/linux/syscalls.h            |  5 ++
->>  include/uapi/linux/lsm.h            | 33 ++++++++++
->>  kernel/sys_ni.c                     |  4 ++
->>  security/Makefile                   |  1 +
->>  security/lsm_syscalls.c             | 55 ++++++++++++++++
->>  security/security.c                 | 97 +++++++++++++++++++++++++++++
->>  10 files changed, 242 insertions(+)
->>  create mode 100644 security/lsm_syscalls.c
-> ..
->
->> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
->> index 32285ce65419..3c2c4916bd53 100644
->> --- a/include/linux/lsm_hooks.h
->> +++ b/include/linux/lsm_hooks.h
->> @@ -503,6 +504,14 @@
->>   *     and writing the xattrs as this hook is merely a filter.
->>   * @d_instantiate:
->>   *     Fill in @inode security information for a @dentry if allowed.
->> + * @getselfattr:
->> + *     Read attribute @attr for the current process and store it into @ctx.
->> + *     Return 0 on success, -EOPNOTSUPP if the attribute is not supported,
->> + *     or another negative value otherwise.
->> + * @setselfattr:
->> + *     Set attribute @attr for the current process.
->> + *     Return 0 on success, -EOPNOTSUPP if the attribute is not supported,
->> + *     or another negative value otherwise.
->>   * @getprocattr:
->>   *     Read attribute @name for process @p and store it into @value if allowed.
->>   *     Return the length of @value on success, a negative value otherwise.
-> I'm sure you're already aware of this, but the above will need to be
-> moved to security.c due to the changes in the lsm/next branch.  That
-> said, if you're basing on Linus' tree that's fine too, I'll fix it up
-> during the merge; thankfully it's not a significant merge conflict.
+Hi Linus!
 
-I'm based on Linus' tree.
+Still quite a few bugs from this release. PR is a bit smaller
+because major subtrees went into the previous one. Or maybe
+people took spring break off?
 
->> diff --git a/include/linux/security.h b/include/linux/security.h
->> index 8faed81fc3b4..329cd9d2be50 100644
->> --- a/include/linux/security.h
->> +++ b/include/linux/security.h
->> @@ -1343,6 +1348,20 @@ static inline void security_d_instantiate(struct dentry *dentry,
->>                                           struct inode *inode)
->>  { }
->>
->> +static inline int security_getselfattr(unsigned int __user attr,
->> +                                      struct lsm_ctx __user *ctx,
->> +                                      size_t __user *size, u32 __user flags)
->> +{
->> +       return -EINVAL;
->> +}
->> +
->> +static inline int security_setselfattr(unsigned int __user attr,
->> +                                      struct lsm_ctx __user *ctx,
->> +                                      size_t __user size, u32 __user flags)
->> +{
->> +       return -EINVAL;
->> +}
-> It seems like EOPNOTSUPP might be more appropriate than EINVAL for
-> both of these dummy implementations.
+The following changes since commit 608f1b136616ff09d717776922c9ea9e9f9f3947:
 
-Sure.
+  Merge tag 'net-6.3-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-03-24 08:48:12 -0700)
 
->> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
->> index 33a0ee3bcb2e..3feca00cb0c1 100644
->> --- a/include/linux/syscalls.h
->> +++ b/include/linux/syscalls.h
->> @@ -1058,6 +1059,10 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
->>  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
->>                                             unsigned long home_node,
->>                                             unsigned long flags);
->> +asmlinkage long sys_lsm_get_self_attr(unsigned int attr, struct lsm_ctx *ctx,
->> +                                     size_t *size, __u64 flags);
->> +asmlinkage long sys_lsm_set_self_attr(unsigned int attr, struct lsm_ctx *ctx,
->> +                                     __u64 flags);
-> As the kernel test robot already pointed out, the above needs to be updated.
->
->>  /*
->>   * Architecture-specific system calls
->> diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
->> index aa3e01867739..adfb55dce2fd 100644
->> --- a/include/uapi/linux/lsm.h
->> +++ b/include/uapi/linux/lsm.h
->> @@ -9,6 +9,39 @@
->>  #ifndef _UAPI_LINUX_LSM_H
->>  #define _UAPI_LINUX_LSM_H
->>
->> +#include <linux/types.h>
->> +#include <linux/unistd.h>
->> +
->> +/**
->> + * struct lsm_ctx - LSM context information
->> + * @id: the LSM id number, see LSM_ID_XXX
->> + * @flags: LSM specific flags
->> + * @len: length of the lsm_ctx struct, @ctx and any other data or padding
->> + * @ctx_len: the size of @ctx
->> + * @ctx: the LSM context value
->> + *
->> + * The @len field MUST be equal to the size of the lsm_ctx struct
->> + * plus any additional padding and/or data placed after @ctx.
->> + *
->> + * In all cases @ctx_len MUST be equal to the length of @ctx.
->> + * If @ctx is a string value it should be nul terminated with
->> + * @ctx_len equal to `strlen(@ctx) + 1`.  Binary values are
->> + * supported.
->> + *
->> + * The @flags and @ctx fields SHOULD only be interpreted by the
->> + * LSM specified by @id; they MUST be set to zero/0 when not used.
->> + */
->> +struct lsm_ctx {
->> +       __u64   id;
->> +       __u64   flags;
->> +       __u64   len;
->> +       __u64   ctx_len;
->> +       __u8    ctx[];
->> +};
->> +
->> +#include <linux/types.h>
->> +#include <linux/unistd.h>
-> I'm pretty sure the repeated #includes are a typo, right?  Or is there
-> some uapi trick I'm missing ...
+are available in the Git repository at:
 
-An artifact of patch (mis)management. Thanks for noticing.
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.3-rc5
 
->> diff --git a/security/security.c b/security/security.c
->> index 87c8796c3c46..2c57fe28c4f7 100644
->> --- a/security/security.c
->> +++ b/security/security.c
->> @@ -2168,6 +2168,103 @@ void security_d_instantiate(struct dentry *dentry, struct inode *inode)
->>  }
->>  EXPORT_SYMBOL(security_d_instantiate);
->>
->> +/**
->> + * security_getselfattr - Read an LSM attribute of the current process.
->> + * @attr: which attribute to return
->> + * @ctx: the user-space destination for the information, or NULL
->> + * @size: the size of space available to receive the data
->> + * @flags: reserved for future use, must be 0
->> + *
->> + * Returns the number of attributes found on success, negative value
->> + * on error. @size is reset to the total size of the data.
->> + * If @size is insufficient to contain the data -E2BIG is returned.
->> + */
->> +int security_getselfattr(unsigned int __user attr, struct lsm_ctx __user *ctx,
->> +                        size_t __user *size, u32 __user flags)
->> +{
->> +       struct security_hook_list *hp;
->> +       void __user *base = (void *)ctx;
-> The casting seems wrong for a couple of reasons: I don't believe you
-> need to cast the right side when the left side is a void pointer, and
-> the right side cast drops the '__user' attribute when the left side is
-> also a '__user' pointer value.
->
-> That said, I think we may want @base to be 'u8 __user *base', more on
-> that below ...
->
->> +       size_t total = 0;
->> +       size_t this;
-> Naming is hard, but 'this'?  You can do better ...
+for you to fetch changes up to 924531326e2dd4ceabe7240f2b55a88e7d894ec2:
 
-It seemed like a good idea at the time, but a rose by any other
-name still has thorns. I'll come up with something "better".
+  net: ethernet: mtk_eth_soc: add missing ppe cache flush when deleting a flow (2023-03-30 11:44:59 -0700)
 
+----------------------------------------------------------------
+Including fixes from CAN and WPAN.
 
->> +       size_t left;
->> +       bool istoobig = false;
-> Sorry, more naming nits and since it looks like you need to respin
-> anyway ... please rename @istoobig to @toobig or something else.  The
-> phrases-as-variable-names has always grated on me.
+Current release - regressions:
 
-Sure.
+ - phy: micrel: correct KSZ9131RNX EEE capabilities and advertisement
 
->> +       int count = 0;
->> +       int rc;
->> +
->> +       if (attr == 0)
->> +               return -EINVAL;
->> +       if (flags != 0)
->> +               return -EINVAL;
->> +       if (size == NULL)
->> +               return -EINVAL;
->> +       if (get_user(left, size))
->> +               return -EFAULT;
->> +
->> +       hlist_for_each_entry(hp, &security_hook_heads.getselfattr, list) {
->> +               this = left;
->> +               if (base)
->> +                       ctx = (struct lsm_ctx __user *)(base + total);
-> Pointer math on void pointers always makes me nervous.  Why not set
-> @base's type to a 'u8' just to remove any concerns?
+Current release - new code bugs:
 
-I can do that. I made it a void pointer to reflect the notion that
-the attributes aren't necessarily strings. Making it a u8 may suggest that
-the data is a string to some developers.
+ - eth: wangxun: fix vector length of interrupt cause
 
->> +               rc = hp->hook.getselfattr(attr, ctx, &this, flags);
->> +               switch (rc) {
->> +               case -EOPNOTSUPP:
->> +                       rc = 0;
->> +                       continue;
->> +               case -E2BIG:
->> +                       istoobig = true;
->> +                       left = 0;
->> +                       break;
->> +               case 0:
->> +                       left -= this;
->> +                       break;
->> +               default:
->> +                       return rc;
-> I think the @getselfattr hook should behave similarly to the
-> associated syscall, returning a non-negative number should indicate
-> that @rc entries have been added to the @ctx array.  Right now all the
-> LSMs would just be adding one entry to the array, but we might as well
-> code this up to be flexible.
+ - vsock/loopback: consistently protect the packet queue with
+   sk_buff_head.lock
 
-Yes, some LSM may decide to have multiple "contexts".
+ - virtio/vsock: fix header length on skb merging
 
->> +               }
->> +               total += this;
->> +               count++;
->> +       }
->> +       if (count == 0)
->> +               return LSM_RET_DEFAULT(getselfattr);
->> +       if (put_user(total, size))
->> +               return -EFAULT;
->> +       if (rc)
->> +               return rc;
-> Is the 'if (rc)' check needed here?  Shouldn't the switch-statement
-> after the hook catch everything that this check would catch?
+ - wpan: ca8210: fix unsigned mac_len comparison with zero
 
-It's necessary because of BPF, which doesn't follow the LSM rules.
+Previous releases - regressions:
 
->> +       if (istoobig)
->> +               return -E2BIG;
->> +       return count;
->> +}
->> +
->> +/**
->> + * security_setselfattr - Set an LSM attribute on the current process.
->> + * @attr: which attribute to set
->> + * @ctx: the user-space source for the information
->> + * @size: the size of the data
->> + * @flags: reserved for future use, must be 0
->> + *
->> + * Set an LSM attribute for the current process. The LSM, attribute
->> + * and new value are included in @ctx.
->> + *
->> + * Returns 0 on success, an LSM specific value on failure.
->> + */
->> +int security_setselfattr(unsigned int __user attr, struct lsm_ctx __user *ctx,
->> +                        size_t __user size, u32 __user flags)
->> +{
->> +       struct security_hook_list *hp;
->> +       struct lsm_ctx lctx;
-> Shouldn't we check @attr for valid values and return -EINVAL if bogus?
+ - eth: stmmac: don't reject VLANs when IFF_PROMISC is set
 
-Sure.
+ - eth: smsc911x: avoid PHY being resumed when interface is not up
 
->> +       if (flags != 0)
->> +               return -EINVAL;
->> +       if (size < sizeof(*ctx))
->> +               return -EINVAL;
-> If we're only going to support on 'lsm_ctx' entry in this function we
-> should verify that the 'len' and 'ctx_len' fields are sane.  Although
-> more on this below ...
+ - eth: mtk_eth_soc: fix tx throughput regression with direct 1G links
 
-The LSM is going to have to do its own version of sanity checking. Having
-sanity checking here as well seems excessive.
+ - eth: bnx2x: use the right build_skb() helper after core rework
 
->> +       if (copy_from_user(&lctx, ctx, sizeof(*ctx)))
->> +               return -EFAULT;
->> +
->> +       hlist_for_each_entry(hp, &security_hook_heads.setselfattr, list)
->> +               if ((hp->lsmid->id) == lctx.id)
->> +                       return hp->hook.setselfattr(attr, ctx, size, flags);
-> Can anyone think of any good reason why we shouldn't support setting
-> multiple LSMs in one call, similar to what we do with
-> security_getselfattr()?  It seems like it might be a nice thing to
-> have ...
+ - wwan: iosm: fix 7560 modem crash on use on unsupported channel
 
-If you're setting the context for multiple LSMs and one fails the recovery
-process is horrendous. Putting values you've already changed back to their
-previous state may not even be possible. We could have a two pass scheme, one
-to verify that the request would succeed and a second to do the work. That
-doesn't address all the issues, including how to report which attribute failed.
-I had planned to do multiple settings, but the weight of the mechanism to
-deal with the failure case is considerable for a "nice to have".
+Previous releases - always broken:
 
->> +       return LSM_RET_DEFAULT(setselfattr);
->> +}
->> +
->>  int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
->>                          char **value)
->>  {
->> --
->> 2.39.2
-> --
-> paul-moore.com
+ - eth: sfc: don't overwrite offload features at NIC reset
+
+ - eth: r8169: fix RTL8168H and RTL8107E rx crc error
+
+ - can: j1939: prevent deadlock by moving j1939_sk_errqueue()
+
+ - virt: vmxnet3: use GRO callback when UPT is enabled
+
+ - virt: xen: don't do grant copy across page boundary
+
+ - phy: dp83869: fix default value for tx-/rx-internal-delay
+
+ - dsa: ksz8: fix multiple issues with ksz8_fdb_dump
+
+ - eth: mvpp2: fix classification/RSS of VLAN and fragmented packets
+
+ - eth: mtk_eth_soc: fix flow block refcounting logic
+
+Misc:
+
+ - constify fwnode pointers in SFP handling
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+----------------------------------------------------------------
+Ahmad Fatoum (1):
+      net: dsa: realtek: fix out-of-bounds access
+
+Alex Elder (1):
+      net: ipa: compute DMA pool size properly
+
+Arseniy Krasnov (3):
+      virtio/vsock: fix header length on skb merging
+      virtio/vsock: WARN_ONCE() for invalid state of socket
+      test/vsock: new skbuff appending test
+
+Brett Creeley (1):
+      ice: Fix ice_cfg_rdma_fltr() to only update relevant fields
+
+ChunHao Lin (1):
+      r8169: fix RTL8168H and RTL8107E rx crc error
+
+David S. Miller (2):
+      Merge branch 'ksz-fixes'
+      Merge branch 'constify-sfp-phy-nodes'
+
+Dongliang Mu (1):
+      net: ieee802154: remove an unnecessary null pointer check
+
+Faicker Mo (1):
+      net/net_failover: fix txq exceeding warning
+
+Felix Fietkau (4):
+      net: ethernet: mtk_eth_soc: fix tx throughput regression with direct 1G links
+      net: ethernet: mtk_eth_soc: fix flow block refcounting logic
+      net: ethernet: mtk_eth_soc: fix L2 offloading with DSA untag offload
+      net: ethernet: mtk_eth_soc: add missing ppe cache flush when deleting a flow
+
+Harshit Mogalapalli (1):
+      ca8210: Fix unsigned mac_len comparison with zero in ca8210_skb_tx()
+
+Ivan Orlov (1):
+      can: bcm: bcm_tx_setup(): fix KMSAN uninit-value in vfs_write
+
+Jakob Koschel (1):
+      ice: fix invalid check for empty list in ice_sched_assoc_vsi_to_agg()
+
+Jakub Kicinski (5):
+      Merge tag 'linux-can-fixes-for-6.3-20230327' of git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can
+      bnx2x: use the right build_skb() helper
+      Merge tag 'ieee802154-for-net-2023-03-29' of git://git.kernel.org/pub/scm/linux/kernel/git/wpan/wpan
+      Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
+      Merge branch 'bnxt_en-3-bug-fixes'
+
+Jesse Brandeburg (1):
+      ice: fix W=1 headers mismatch
+
+Jiawen Wu (1):
+      net: wangxun: Fix vector length of interrupt cause
+
+Josua Mayer (1):
+      net: phy: dp83869: fix default value for tx-/rx-internal-delay
+
+Juergen Gross (3):
+      xen/netback: don't do grant copy across page boundary
+      xen/netback: remove not needed test in xenvif_tx_build_gops()
+      xen/netback: use same error messages for same errors
+
+Junfeng Guo (1):
+      ice: add profile conflict check for AVF FDIR
+
+Kalesh AP (2):
+      bnxt_en: Fix reporting of test result in ethtool selftest
+      bnxt_en: Fix typo in PCI id to device description string mapping
+
+Lukas Bulwahn (1):
+      MAINTAINERS: remove the linux-nfc@lists.01.org list
+
+M Chetan Kumar (1):
+      net: wwan: iosm: fixes 7560 modem crash
+
+Michael Chan (1):
+      bnxt_en: Add missing 200G link speed reporting
+
+Oleksij Rempel (8):
+      net: dsa: microchip: ksz8: fix ksz8_fdb_dump()
+      net: dsa: microchip: ksz8: fix ksz8_fdb_dump() to extract all 1024 entries
+      net: dsa: microchip: ksz8: fix offset for the timestamp filed
+      net: dsa: microchip: ksz8: ksz8_fdb_dump: avoid extracting ghost entry from empty dynamic MAC table.
+      net: dsa: microchip: ksz8863_smi: fix bulk access
+      net: dsa: microchip: ksz8: fix MDB configuration with non-zero VID
+      net: phy: micrel: correct KSZ9131RNX EEE capabilities and advertisement
+      can: j1939: prevent deadlock by moving j1939_sk_errqueue()
+
+Paolo Abeni (3):
+      Merge branch 'net-mvpp2-rss-fixes'
+      Merge branch 'xen-netback-fix-issue-introduced-recently'
+      Merge branch 'fix-header-length-on-skb-merging'
+
+Radoslaw Tyl (1):
+      i40e: fix registers dump after run ethtool adapter self test
+
+Ronak Doshi (1):
+      vmxnet3: use gro callback when UPT is enabled
+
+Russell King (Oracle) (4):
+      net: sfp: make sfp_bus_find_fwnode() take a const fwnode
+      net: sfp: constify sfp-bus internal fwnode uses
+      net: phy: constify fwnode_get_phy_node() fwnode argument
+      net: mvneta: fix potential double-frees in mvneta_txq_sw_deinit()
+
+Sean Anderson (1):
+      net: fman: Add myself as a reviewer
+
+SongJingyi (1):
+      ptp_qoriq: fix memory leak in probe()
+
+Stefano Garzarella (1):
+      vsock/loopback: use only sk_buff_head.lock to protect the packet queue
+
+Steffen Bätz (1):
+      net: dsa: mv88e6xxx: Enable IGMP snooping on user ports only
+
+Sven Auhagen (3):
+      net: mvpp2: classifier flow fix fragmentation flags
+      net: mvpp2: parser fix QinQ
+      net: mvpp2: parser fix PPPoE
+
+Vladimir Oltean (2):
+      net: stmmac: don't reject VLANs when IFF_PROMISC is set
+      net: dsa: sync unicast and multicast addresses for VLAN filters too
+
+Wolfram Sang (1):
+      smsc911x: avoid PHY being resumed when interface is not up
+
+Álvaro Fernández Rojas (1):
+      net: dsa: b53: mmap: add phy ops
+
+Íñigo Huguet (1):
+      sfc: ef10: don't overwrite offload features at NIC reset
+
+ MAINTAINERS                                        |   7 +-
+ drivers/net/dsa/b53/b53_mmap.c                     |  14 +++
+ drivers/net/dsa/microchip/ksz8795.c                |  11 +-
+ drivers/net/dsa/microchip/ksz8863_smi.c            |   9 --
+ drivers/net/dsa/microchip/ksz_common.c             |  12 +-
+ drivers/net/dsa/mv88e6xxx/chip.c                   |   9 +-
+ drivers/net/dsa/realtek/realtek-mdio.c             |   5 +-
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c    |  16 ++-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          |   8 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h          |   1 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c  |   3 +
+ drivers/net/ethernet/intel/i40e/i40e_diag.c        |  11 +-
+ drivers/net/ethernet/intel/i40e/i40e_diag.h        |   2 +-
+ drivers/net/ethernet/intel/ice/ice_sched.c         |   8 +-
+ drivers/net/ethernet/intel/ice/ice_switch.c        |  26 ++++-
+ drivers/net/ethernet/intel/ice/ice_txrx.c          |   2 +-
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c      |   1 +
+ drivers/net/ethernet/intel/ice/ice_virtchnl_fdir.c |  73 +++++++++++++
+ drivers/net/ethernet/marvell/mvneta.c              |   2 +
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_cls.c     |  30 +++--
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_prs.c     |  86 ++++++---------
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c        |   8 +-
+ drivers/net/ethernet/mediatek/mtk_ppe.c            |   6 +-
+ drivers/net/ethernet/mediatek/mtk_ppe_offload.c    |   3 +-
+ drivers/net/ethernet/realtek/r8169_phy_config.c    |   3 +
+ drivers/net/ethernet/sfc/ef10.c                    |  38 +++++--
+ drivers/net/ethernet/sfc/efx.c                     |  17 ++-
+ drivers/net/ethernet/smsc/smsc911x.c               |   7 +-
+ drivers/net/ethernet/stmicro/stmmac/common.h       |   1 -
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c  |  61 +----------
+ drivers/net/ethernet/wangxun/libwx/wx_type.h       |   2 +-
+ drivers/net/ethernet/wangxun/ngbe/ngbe_main.c      |   2 +-
+ drivers/net/ethernet/wangxun/txgbe/txgbe_main.c    |   3 +-
+ drivers/net/ieee802154/ca8210.c                    |   3 +-
+ drivers/net/ipa/gsi_trans.c                        |   2 +-
+ drivers/net/net_failover.c                         |   8 +-
+ drivers/net/phy/dp83869.c                          |   6 +-
+ drivers/net/phy/micrel.c                           |   1 +
+ drivers/net/phy/phy_device.c                       |   2 +-
+ drivers/net/phy/sfp-bus.c                          |   6 +-
+ drivers/net/vmxnet3/vmxnet3_drv.c                  |   4 +-
+ drivers/net/wwan/iosm/iosm_ipc_imem.c              |   7 ++
+ drivers/net/xen-netback/common.h                   |   2 +-
+ drivers/net/xen-netback/netback.c                  |  35 ++++--
+ drivers/ptp/ptp_qoriq.c                            |   2 +-
+ include/linux/phy.h                                |   2 +-
+ include/linux/sfp.h                                |   5 +-
+ net/can/bcm.c                                      |  16 ++-
+ net/can/j1939/transport.c                          |   8 +-
+ net/dsa/slave.c                                    | 121 ++++++++++++++++++++-
+ net/ieee802154/nl802154.c                          |   3 +-
+ net/vmw_vsock/virtio_transport_common.c            |   9 +-
+ net/vmw_vsock/vsock_loopback.c                     |  10 +-
+ tools/testing/vsock/vsock_test.c                   |  90 +++++++++++++++
+ 54 files changed, 567 insertions(+), 262 deletions(-)
