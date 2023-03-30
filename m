@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C2A6CFC7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1C06CFC85
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbjC3HOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S230312AbjC3HP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbjC3HO1 (ORCPT
+        with ESMTP id S231157AbjC3HPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:14:27 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFC65FEB
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:14:02 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id bi9so23273520lfb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:14:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680160440;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=loyEBhBPXJSd2oDq+EoAXwWIzrLOsQjO8pe3fhmwgiY=;
-        b=U3YRPvTpjRpsvPS7VgrRRocB1If0hzy/qEXZOGuz1Qk8AwHtevj58Q3gIp31dIn4Cm
-         /Wg7apuNcR/ZghtFLX1rbKEFCVSidlxmh9bmR7bk6hXRRF8Q8KFdWIKUVI7uaLLjh5cq
-         6v5zbzkeKiAJrhMCEMswb4zNv/4qbIGsDYKAYtcTs8XpbYCMn8cCJVpTfnbOn9Rhf04s
-         ON57Tu+OVdS3FOyKFoQQiq/UOpWvsz8SYPDcCZDxzR17NWozVIgzFOyxEEIEeimhR1Aq
-         QWMIlonPYn5CtZFnXCt9a9n2Pg88JZgbNsTQZIZ12cyg0WKn69SPD0IWiRXrbCwYdw5g
-         SyNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680160440;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=loyEBhBPXJSd2oDq+EoAXwWIzrLOsQjO8pe3fhmwgiY=;
-        b=H0Er1/+5Hy4vmGOuQudoHQYgqPAdR0LejOKW6j2VplFl4jVTp9VjS6ziZR2FKVcbqE
-         7ePA7e7gcC6oTHoBhEOlfrmI9yp3ukHBGfaNClEZ943Ir5GPLKd09d0vGn3VkPqJ2nGk
-         zQAmiaktEBdNEmofO5st/kbjdvsQVOgrzNuX1aeNscUQ1E5woRb+0/w5Pl3GazE0QJoC
-         rcUIAt1B4fyGC5n+fIccJhhCFllPK1NI13jyDKzazGwWZFg39mkD7yTMXJBUpzS2Vkw6
-         /wcqMRkz0wq6yfCq0eGyP6diBO3pA4DPvRiFn/9oL6lAzRwb2YChAyEdv4VYfG10JDcs
-         0uhw==
-X-Gm-Message-State: AAQBX9fKy/A5KJdqx9sStxXnpzX+GvTcQBKRlNhOCeFXcpKYeQsqd4Ox
-        khmS42VGNZcIRntuoa/eZCs66g==
-X-Google-Smtp-Source: AKy350b3y9O6CwWcsVsGYE/JWxP5ddszJslLziesflMMk+TImPwhlH4vJ9XHMRo03nUhcvsYp7n7qQ==
-X-Received: by 2002:ac2:5547:0:b0:4db:1bab:98a4 with SMTP id l7-20020ac25547000000b004db1bab98a4mr5013932lfk.32.1680160440483;
-        Thu, 30 Mar 2023 00:14:00 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b16-20020a056512219000b004d85895d7e0sm3949103lft.147.2023.03.30.00.13.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 00:14:00 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        stable@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: [RESEND PATCH] ASoC: dt-bindings: qcom,lpass-rx-macro: correct minItems for clocks
-Date:   Thu, 30 Mar 2023 09:13:33 +0200
-Message-Id: <20230330071333.24308-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 30 Mar 2023 03:15:51 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0282672A6;
+        Thu, 30 Mar 2023 00:15:26 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32U4WN1A016233;
+        Thu, 30 Mar 2023 07:15:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=53EwoSOqGcFv+GPKJMNnPLY5ppj7b/ty96gmmBLJBNU=;
+ b=jsoK0HfLwbYj9wM9DCCkdYSQkZaF2kghWqkUeCtj6odyGHock1oRrtpD1tOyEdLL5vkw
+ bvYZ4lC6Odf8VAPJ9kmantqbXC8Ce0oP8kFuLTDvUyXRNHZkZ/kBrOLJ5X4IXpozVozO
+ keYed1xSKuHexdVVe5eau8azDzptApPw83Kjunw7sIjDhVm8TalhHmDiQdNwGTq0qehy
+ 4A7Hv8AQMoire0F+nAo4ldGTwBZeQNBQZXWEoDT5XDXDntIquihr/D2Ukqse3+xPO1r4
+ rhN0XdU7xPibqbAFc1m21bSi6+5HWuTHmW09yvikkIN82r1/ENSrpEnc+ORHJNFP5csa IQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pmq1vae4p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 07:15:11 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32U7FALO017238
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 07:15:10 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 30 Mar 2023 00:15:04 -0700
+Date:   Thu, 30 Mar 2023 12:45:00 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v4 3/8] dt-bindings: usb: dwc3: Add IPQ9574 compatible
+Message-ID: <20230330071459.GD13508@varda-linux.qualcomm.com>
+References: <cover.1679909245.git.quic_varada@quicinc.com>
+ <526f822a4d2397284f70ba632d92feaa3db0143e.1679909245.git.quic_varada@quicinc.com>
+ <a68c7693-9d43-0aa9-c77b-26183e5a0a06@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <a68c7693-9d43-0aa9-c77b-26183e5a0a06@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3r039srvontuDpRgRZZeZKar5ZxYqgH7
+X-Proofpoint-ORIG-GUID: 3r039srvontuDpRgRZZeZKar5ZxYqgH7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-30_02,2023-03-30_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=774
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0 spamscore=0
+ suspectscore=0 adultscore=0 priorityscore=1501 clxscore=1015 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303300057
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,32 +84,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RX macro codec comes on some platforms in two variants - ADSP
-and ADSP bypassed - thus the clock-names varies from 3 to 5.  The clocks
-must vary as well:
+On Tue, Mar 28, 2023 at 09:11:38AM +0200, Krzysztof Kozlowski wrote:
+> On 27/03/2023 11:30, Varadarajan Narayanan wrote:
+> > Document the IPQ9574 dwc3 compatible.
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  Changes in v4:
+> > 	- Update other relevant sections
+> > 	- Remove constraints not applicable to IPQ9574
+>
+> No, that's not way to go. These are required.
 
-  sc7280-idp.dtb: codec@3200000: clocks: [[202, 8], [202, 7], [203]] is too short
+Yes. Misinterpreted an earlier comment.
+Will fix this.
 
-Fixes: 852fda58d99a ("ASoC: qcom: dt-bindings: Update bindings for clocks in lpass digital codes")
-Cc: <stable@vger.kernel.org>
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml | 1 +
- 1 file changed, 1 insertion(+)
+> > ---
+> >  .../devicetree/bindings/usb/qcom,dwc3.yaml         | 22 +++++++++++++++++++---
+> >  1 file changed, 19 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > index a2aabda..3fc8c3c 100644
+> > --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > @@ -17,6 +17,7 @@ properties:
+> >            - qcom,ipq6018-dwc3
+> >            - qcom,ipq8064-dwc3
+> >            - qcom,ipq8074-dwc3
+> > +          - qcom,ipq9574-dwc3
+> >            - qcom,msm8953-dwc3
+> >            - qcom,msm8994-dwc3
+> >            - qcom,msm8996-dwc3
+> > @@ -132,11 +133,8 @@ required:
+> >    - "#address-cells"
+> >    - "#size-cells"
+> >    - ranges
+> > -  - power-domains
+> >    - clocks
+> >    - clock-names
+> > -  - interrupts
+> > -  - interrupt-names
+> >
+> >  allOf:
+> >    - if:
+> > @@ -242,6 +240,24 @@ allOf:
+> >          compatible:
+> >            contains:
+> >              enum:
+> > +              - qcom,ipq9574-dwc3
+> > +    then:
+> > +      properties:
+> > +        clocks:
+> > +          maxItems: 5
+> > +        clock-names:
+> > +          items:
+> > +            - const: sys_noc_axi
+> > +            - const: anoc_axi
+>
+> Heh, do we really need entirely different clock names for each new variant?
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
-index f8972769cc6a..ec4b0ac8ad68 100644
---- a/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
-+++ b/Documentation/devicetree/bindings/sound/qcom,lpass-rx-macro.yaml
-@@ -28,6 +28,7 @@ properties:
-     const: 0
- 
-   clocks:
-+    minItems: 3
-     maxItems: 5
- 
-   clock-names:
--- 
-2.34.1
+Will fix and post a new patch.
 
+Thanks
+Varada
+
+> Best regards,
+> Krzysztof
+>
