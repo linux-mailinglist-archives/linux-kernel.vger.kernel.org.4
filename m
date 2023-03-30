@@ -2,240 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5F56CFA38
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 06:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859206CFA3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 06:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjC3EeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 00:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
+        id S229640AbjC3EfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 00:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjC3EeI (ORCPT
+        with ESMTP id S229459AbjC3EfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 00:34:08 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2044.outbound.protection.outlook.com [40.107.220.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB531FF0;
-        Wed, 29 Mar 2023 21:34:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JKYBZzYnFuZGMzyW6tnZDDIcdyPY8F2UUavnlUvOcBA3bGPO41x9ZfZuqNec9CbOmmjP70pH8p1LUvRt+TmgfsdQar/IWlVuEdkoSXhR9EuGP8aGBKV0Qt1Bjc7XDOd/4bDqA9llfoilEAaA01ETUOa+eO1yWbpyHADEaXBvV/9sUBWgSI1VgYqEZz4F/ZglDYwVAqk5/wzJSXo/ocmwZvzjwJ6Xe34llQkZ9klLydfUIoGeXBxFIvJPGu/KvKf8DAhPWtSx0GiXGwGKAvl/NDHjtK053OBugT/rabbAuJfHd6x9xf4GyRFc3U2B2u3V4YD8r2VHUbo82sziS3M7ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l8CILBHzkkxr67ZIABQgyclgTamCC61w0QQghFp26U8=;
- b=mVKtP/77XYlu7ocdoO914n9GQjsCOIpndXeinO1v9CAss93S6DWLcr+NtgKpIM+5i7KeGUM44ncFiOD/pp1/SVuX2Wg1DaEE5IbyJCIv3cuikWn91VObKux+S032AD3eo2Qavp+/Y+AnMRmzdivLPUS1822ewEXDtIFcdwWtYJBnOxRlKdANZZK79ewzyI/IJ5mFSv76HPDDnQKtTZJ79eeV7bpKFTUFSYNGfzAJuXf5TXxah2xXJMQVCr2ro8f117lQr1qTqkTo1J3xv2aksomMhBiXHAswdKWnGEsPu83MmEs4RGGgmiw+c/Bfgyen7CIQnERXt48x0sA52ZV8QQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l8CILBHzkkxr67ZIABQgyclgTamCC61w0QQghFp26U8=;
- b=OEv83ik0zyFsE9Sat0AqX2KAfqh0/l09UaVUc7rLrvt23/gVmGWbE5FFBrkRMRFyvlK4z+lh2mFb2BjHNfJhdzYOInkPIPUlLQ/UMMTSmSc/FplHtIenrL22vTsCYv/HIJyra1YU7rWRxloFpho2itDDaOnC/bfUVLiN9F/vubc=
-Received: from DM6PR12MB3082.namprd12.prod.outlook.com (2603:10b6:5:11b::12)
- by PH7PR12MB5950.namprd12.prod.outlook.com (2603:10b6:510:1d9::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Thu, 30 Mar
- 2023 04:34:03 +0000
-Received: from DM6PR12MB3082.namprd12.prod.outlook.com
- ([fe80::8d69:5417:b5e9:92a1]) by DM6PR12MB3082.namprd12.prod.outlook.com
- ([fe80::8d69:5417:b5e9:92a1%7]) with mapi id 15.20.6178.041; Thu, 30 Mar 2023
- 04:34:03 +0000
-From:   "Gupta, Nipun" <Nipun.Gupta@amd.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
-        "saravanak@google.com" <saravanak@google.com>,
-        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>, "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "okaya@kernel.org" <okaya@kernel.org>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Jansen Van Vuuren, Pieter" <pieter.jansen-van-vuuren@amd.com>,
-        "Cascon, Pablo" <pablo.cascon@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: RE: [PATCH v10 2/7] iommu: Add iommu probe for CDX bus
-Thread-Topic: [PATCH v10 2/7] iommu: Add iommu probe for CDX bus
-Thread-Index: AQHZVa+GCjncBc+ZC0CHdbkvy/BocK8RpkEAgAEuTQA=
-Date:   Thu, 30 Mar 2023 04:34:02 +0000
-Message-ID: <DM6PR12MB30823A9CA118E1890BAC2260E88E9@DM6PR12MB3082.namprd12.prod.outlook.com>
-References: <20230313132636.31850-1-nipun.gupta@amd.com>
- <20230313132636.31850-3-nipun.gupta@amd.com> <ZCQSJmcb7W4dT2yS@kroah.com>
-In-Reply-To: <ZCQSJmcb7W4dT2yS@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-03-30T04:33:58Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=cce45402-1a1f-4c6d-a2bd-7f68d62186b6;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR12MB3082:EE_|PH7PR12MB5950:EE_
-x-ms-office365-filtering-correlation-id: a7325343-9568-435a-5f67-08db30d7fd33
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yk3qMJjkU1fufdieKBrc/hfILSY0bauIEy9iO/Fog7TCVJ6ScsqDz6XHkikNeL/biUn6vEKLHrELNkmZmuzUEnjfFT2Wl6QVCkgAWbFRRWe+GiBYYgXKM4p4n9CppO/D+h1I/gfHqk1ABwpGYE/l7gwsxiDJRhPtV73s7c8URh9sUc5pWxWEkfogmIQgpKrZLhTn6yxo+9G2ferie8CdcOxg0kxqc97jiB1k/nrN2Ou4JWSa4VaHaAWnNHMSUpH2Aa6WDNT49/zlhj8lMtShh1M8N/DxymuWBDxbeMA2NVIR6z6OGOaHmJOVzDXn2/Lx6JGBDn0kflAhZmRcT769x8Z4lwn0BW2WiXlLFWHdFl8JYOk7N2QxlVAN2cxi594J1lGV+S7OP2feeA0x9GWV3LrxEK3d+Zt/ZhuQVEwvr9W08+1pNBOrqvCYFP0T8s2266YDgTQLC5YGUeFDflVP1dF6l8mtzEfEROqBgP5+gl03/SaWYFTuFU9jVqNZuFoR09G9pWoYTpmcmloDGI1oQIFkR/oVlnz97SzzInqDvHKrep+jED0tTwC0yigLjw8gWbkQJjrul+YDeI4tp5Pn47MK6KAWz5P+6pf6LHTbVFfszxW7AYrQKNelmtGZMCvH
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3082.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(451199021)(52536014)(5660300002)(186003)(55016003)(8676002)(8936002)(41300700001)(66946007)(66556008)(66476007)(66446008)(64756008)(76116006)(4326008)(6916009)(33656002)(71200400001)(7696005)(122000001)(38070700005)(38100700002)(86362001)(9686003)(53546011)(316002)(83380400001)(26005)(6506007)(7416002)(7406005)(2906002)(478600001)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fHOGZGtAi7DlTwGScX4DRHjrJGsLe8ZYpc/x+Am43r472x+MxX56k2MrvwBO?=
- =?us-ascii?Q?zR1dxAPVdHxZhDoyKgfWQv5RQxrmzGFhSZKdXkCZU25yLLRPrjAmG84bOH4D?=
- =?us-ascii?Q?YsFUVpt8wFZsctOtFx/EBWMF2FB0btkFJ8qu1mJEEL0SiqKwlw/4MVWR7bVw?=
- =?us-ascii?Q?n6wEjmCYOlpVyzm6Rtuj9QSVQafvRUi/PC/2tZjK8QwGYyOVanL/GPupUmxL?=
- =?us-ascii?Q?JCCgqR16ttAzJOCKLcZWcyh0pbAeR3V10C9U5o7m6lZASkKyF1l/xNKNW1YP?=
- =?us-ascii?Q?UPdOBncGT/M4lvB2GLm/xOV8a0c6bktT8mSmG9HvQJSXvhnQGSlE8lvpegdC?=
- =?us-ascii?Q?qwNPQy/9+4vYNrGvfSQiQIRIXrUqmWoWPK5VpLz5cIRLi3VZzeoCtDW7P4kq?=
- =?us-ascii?Q?gVeeFhhFJFg38Ce1JBuFzcZ5/UydL17YEGCfpqBFQWj/v5XWg+u9hWZazyqy?=
- =?us-ascii?Q?/+i1V+9YSo9uNdH1rGvDrFpkB/gfBrjyv8nBqvPq7axCryKVMQdRYbC1MiBA?=
- =?us-ascii?Q?fGmlLgsWgfp261aMuCFMmou955WqviuHLm4MNpOUqAqus/GL13Qh4h4a0qpw?=
- =?us-ascii?Q?cxdsicqGUpbZAyqZA6wlQ+8PTzG7wJ+fq/wEk0TWsKSF+/DcR1/9XR8zCieA?=
- =?us-ascii?Q?XDeymk4g1CAFdZ0Gcw7mBuiq375wvyx8aS2cW2nv7RNvfvaGpEEahNDPxRY4?=
- =?us-ascii?Q?0RL6ejGB8gPFPyKaokInkVZE3yzDgfLiiz6PACDBE/HNp18Ea/B1VfU9+sXT?=
- =?us-ascii?Q?77b5C79rcxz2skkGK4kUSfga+Swd66Ab7LP9JrhKECJDcjBOnbPHd8CgVCSw?=
- =?us-ascii?Q?ghmGyzctH4hQclhHYnXfnrO+g5SoNZ6umi4M3e2jeFWctIWLS87XzN3vJOmZ?=
- =?us-ascii?Q?jxqvJnJvFuL11fn6dGplX3IkmZtOwEXuBi//NBymSvrBzfPg3T/vj0J2IsLw?=
- =?us-ascii?Q?6IBSncZpaXC5r1dVYEniWTinFSwcyZme6j7U1pbuPWLy8heKfxfZFlTjsIJU?=
- =?us-ascii?Q?RRKlQNTKHCSqjqxbiOn/EuAiqF17tNcNNEPwQSNg4So3XkXAs0fxFg24bxIu?=
- =?us-ascii?Q?p/IEJecr9A7F8TTJiszdWKw6Vx25ZfJrKCfarEi8Fo3jWTbAWB4di6LUBi9t?=
- =?us-ascii?Q?tQ1qHTGHxuYitf8yDm7JW/BUEJrHnid6tfmdjVdrM3fbU/AVqP7xEemTVd1T?=
- =?us-ascii?Q?frNqm4o22YDq5Gnhnu9VMgaArAcRdUP3DDXkzWkh4QnS4sCowB2F3BcuoM9G?=
- =?us-ascii?Q?OVaoF0IfLsxiUuxUxkZUnLuCUm6FYmGvR7N9lk2b7TnL5ESjkJfH6DPqZa2F?=
- =?us-ascii?Q?hgiEJiNtrpAyNTUPyRlXNesp3IFi2IZs4GjFAFTpJGX4st0pBO2SXk6sLAyB?=
- =?us-ascii?Q?fJqIVnQLweAEfaQWFd2Nc8WDrJMx4IUzqOc7yli+Hk2RDOCsjovOKxweHsLE?=
- =?us-ascii?Q?r+zNYLQot8DOD+VwGSIXOlKp3/q3g++KkyVFp014rzv6VjAvxWy786AWoClJ?=
- =?us-ascii?Q?grYgOSLb6xDxoQjHPQRzHPOZ3kP1rBYKZqah5CITFv48d5+KpFyXJcWm2045?=
- =?us-ascii?Q?9zvdfWtLYzPyrPxOtDo=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 30 Mar 2023 00:35:13 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF9119A5;
+        Wed, 29 Mar 2023 21:35:11 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32U4LxvI020549;
+        Thu, 30 Mar 2023 04:35:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=RsX6NWee23nxvAB1JI1JyTvHa7goVLB95IsUo/P280s=;
+ b=j1wvZczXrrPb7tL2jqZjtUtGM7O955xEVG3RJny/slSdmDHjs4tkl+dehMDgO8unIytF
+ 5xDI5HlfropGdcEEqLN1e6acE5oxkNGPkWrher1b7iR/SZ2iXRHmrW5sEldUL5nkPK7g
+ BaKDSllUNJk9+g5R6NrvWhbxkvpJfBX2WP3xnFnvQQ729XiUqHeFnQ34evvCvUGagA1i
+ xi5jAhT0sEuZwg24cJ5K2HdO+p9qc3rd3jA8oPN9/+4DD8q2+1GQP54PQ3RS9GUIBJ8T
+ X84IS71zZy/SPTK/uOJP93EgulJ1aNF34ouM1OBXf1pFySmF0UsNhDPwxEuGE0MJmdxT xA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pmq1v9uva-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 04:35:06 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32U4Z5xr012279
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 04:35:05 GMT
+Received: from [10.216.23.227] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 29 Mar
+ 2023 21:35:01 -0700
+Message-ID: <12b602ce-ce0b-1d36-1a41-c8d5e9e67a79@quicinc.com>
+Date:   Thu, 30 Mar 2023 10:04:58 +0530
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3082.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7325343-9568-435a-5f67-08db30d7fd33
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2023 04:34:02.6536
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iSL2+CH3+IB488B6VLuUzcnXVNxZ/0PkUDxoZQncaxZMcjUGY75ZHfil6e8BMIP+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5950
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v4] venus: Enable sufficient sequence change support for
+ sc7180 and fix for Decoder STOP command issue.
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stanimir.k.varbanov@gmail.com>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <quic_dikshita@quicinc.com>,
+        Viswanath Boma <quic_vboma@quicinc.com>
+References: <20230323130153.8229-1-quic_vboma@quicinc.com>
+ <c611c390-2cf3-2abe-82aa-67538b823d62@linaro.org>
+ <9f5bce7e-2b8a-0b71-3a80-0b4f86d9f908@quicinc.com>
+ <E98548DB-5085-4036-9F6C-DC22A604A0C2@linaro.org>
+ <b2e16887-bc35-c933-2107-6e8faa439770@quicinc.com>
+ <CAA8EJpotBtz8Dw9QsLX5Li2ON=QuxWFGZkaiYw9Ac-XerNEEag@mail.gmail.com>
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <CAA8EJpotBtz8Dw9QsLX5Li2ON=QuxWFGZkaiYw9Ac-XerNEEag@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: fV1nkPoP2WL88lfCaE_vvbMdQ44ztEH3
+X-Proofpoint-ORIG-GUID: fV1nkPoP2WL88lfCaE_vvbMdQ44ztEH3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-30_01,2023-03-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0 spamscore=0
+ suspectscore=0 adultscore=0 priorityscore=1501 clxscore=1015 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303300035
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
-
-
-> -----Original Message-----
-> From: Greg KH <gregkh@linuxfoundation.org>
-> Sent: Wednesday, March 29, 2023 3:56 PM
-> To: Gupta, Nipun <Nipun.Gupta@amd.com>
-> Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
-> rafael@kernel.org; eric.auger@redhat.com; alex.williamson@redhat.com;
-> cohuck@redhat.com; song.bao.hua@hisilicon.com;
-> mchehab+huawei@kernel.org; maz@kernel.org; f.fainelli@gmail.com;
-> jeffrey.l.hugo@gmail.com; saravanak@google.com;
-> Michael.Srba@seznam.cz; mani@kernel.org; yishaih@nvidia.com;
-> jgg@ziepe.ca; jgg@nvidia.com; robin.murphy@arm.com; will@kernel.org;
-> joro@8bytes.org; masahiroy@kernel.org; ndesaulniers@google.com;
-> rdunlap@infradead.org; baolu.lu@linux.intel.com; linux-arm-
-> kernel@lists.infradead.org; linux-kbuild@vger.kernel.org; linux-
-> kernel@vger.kernel.org; devicetree@vger.kernel.org; okaya@kernel.org;
-> Anand, Harpreet <harpreet.anand@amd.com>; Agarwal, Nikhil
-> <nikhil.agarwal@amd.com>; Simek, Michal <michal.simek@amd.com>;
-> Jansen Van Vuuren, Pieter <pieter.jansen-van-vuuren@amd.com>; Cascon,
-> Pablo <pablo.cascon@amd.com>; git (AMD-Xilinx) <git@amd.com>
-> Subject: Re: [PATCH v10 2/7] iommu: Add iommu probe for CDX bus
->=20
-> Caution: This message originated from an External Source. Use proper
-> caution when opening attachments, clicking links, or responding.
->=20
->=20
-> On Mon, Mar 13, 2023 at 06:56:31PM +0530, Nipun Gupta wrote:
-> > Add CDX bus to iommu_buses so that IOMMU probe is called
-> > for it.
-> >
-> > Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-> > Reviewed-by: Pieter Jansen van Vuuren <pieter.jansen-van-
-> vuuren@amd.com>
-> > Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-> > Tested-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-> > ---
-> >  drivers/iommu/iommu.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> > index 10db680acaed..0025a631b8e1 100644
-> > --- a/drivers/iommu/iommu.c
-> > +++ b/drivers/iommu/iommu.c
-> > @@ -28,6 +28,7 @@
-> >  #include <linux/fsl/mc.h>
-> >  #include <linux/module.h>
-> >  #include <linux/cc_platform.h>
-> > +#include <linux/cdx/cdx_bus.h>
-> >  #include <trace/events/iommu.h>
-> >  #include <linux/sched/mm.h>
-> >  #include <linux/msi.h>
-> > @@ -129,6 +130,9 @@ static struct bus_type * const iommu_buses[] =3D {
-> >  #ifdef CONFIG_TEGRA_HOST1X_CONTEXT_BUS
-> >       &host1x_context_device_bus_type,
-> >  #endif
-> > +#ifdef CONFIG_CDX_BUS
-> > +     &cdx_bus_type,
-> > +#endif
-> >  };
->=20
-> Note, this prevents the ability for this struct bus_type from being
-> moved into read-only memory in the future.  But hopefully that will be
-> fixed up eventually, you are in good company with some other busses
-> here...
->=20
-> Other than that, this series looks good, I'll queue this up through my
-> tree for now as I seem to collect new subsystems.  Feel free to send
-> future patches through me as well until you get tired of that and want
-> to send stuff to Linus directly.
-
-Thanks, Greg, for the review and helping get the series in : )
-
-Regards,
-Nipun
-
->=20
-> thanks,
->=20
-> greg k-h
+On 3/29/2023 11:03 PM, Dmitry Baryshkov wrote:
+> On Wed, 29 Mar 2023 at 20:16, Vikash Garodia <quic_vgarodia@quicinc.com> wrote:
+>>
+>> On 3/29/2023 7:06 PM, Dmitry Baryshkov wrote:
+>>> 29 марта 2023 г. 10:48:23 GMT+03:00, Vikash Garodia <quic_vgarodia@quicinc.com> пишет:
+>>>> On 3/29/2023 3:49 AM, Dmitry Baryshkov wrote:
+>>>>> On 23/03/2023 15:01, Viswanath Boma wrote:
+>>>>>> For VP9 bitstreams, there could be a change in resolution at interframe,
+>>>>>> for driver to get notified of such resolution change,
+>>>>>> enable the property in video firmware.
+>>>>>> Also, EOS handling is now made same in video firmware across all V6 SOCs,
+>>>>>> hence above a certain firmware version, the driver handling is
+>>>>>> made generic for all V6s
+>>>>> Having "Do abc. Also do defgh." is a clear sign that this patch should be split into two.
+>>>> I agree, it could have split into patches. The patch introduces way to store venus firmware
+>>>>
+>>>> version and take some decision for various version. For ex. here STOP handling and enabling
+>>>>
+>>>> DRC event for specific firmware revision and onwards. Since both the handling was primarily
+>>>>
+>>>> dependent of firmware version, and since the handlings were smaller, it was combined as single
+>>>>
+>>>> patch. Let me know, if you have any further review comments, else, will raise a new version with
+>>>>
+>>>> 2 patches probably.
+>>> Thanks!
+>>>
+>>>>>> Signed-off-by: Vikash Garodia <vgarodia@qti.qualcomm.com>
+>>>>>> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
+>>>>>> Tested-by: Nathan Hebert <nhebert@chromium.org>
+>>>>>> ---
+>>>>>> Since v3 : Addressed comments to rectify email address.
+>>>>>>
+>>>>>>     drivers/media/platform/qcom/venus/core.h       | 18 ++++++++++++++++++
+>>>>>>     drivers/media/platform/qcom/venus/hfi_cmds.c   |  1 +
+>>>>>>     drivers/media/platform/qcom/venus/hfi_helper.h |  2 ++
+>>>>>>     drivers/media/platform/qcom/venus/hfi_msgs.c   | 11 +++++++++--
+>>>>>>     drivers/media/platform/qcom/venus/vdec.c       | 12 +++++++++++-
+>>>>>>     5 files changed, 41 insertions(+), 3 deletions(-)
+>>>>>>
+>>> (Skipped)
+>>>
+>>>
+>>>
+>>>>>> @@ -671,6 +671,16 @@ static int vdec_set_properties(struct venus_inst *inst)
+>>>>>>                 return ret;
+>>>>>>         }
+>>>>>>     +    /* Enabling sufficient sequence change support for VP9 */
+>>>>>> +    if (of_device_is_compatible(inst->core->dev->of_node, "qcom,sc7180-venus")) {
+>>>>> Let me repeat my question from v3:
+>>>>>
+>>>>> Is it really specific just to sc7180 or will it be applicable to any
+>>>>> other platform using venus-5.4 firmware?
+>>>> The HFI "HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT" is implemented
+>>>>
+>>>> only for sc7180. Calling this for any other venus-5.4 would error out the session with error as
+>>>>
+>>>> unsupported property from firmware.
+>>> How can we be sure that other platforms do not end up using sc7180 firmware? Or that sc7180 didn't end up using some other firmware?
+>>>
+>>> I see generic  qcom/venus-5.4/venus.mbn in Linux firmware. It's version is VIDEO.VE.5.4-00053-PROD-1. It can be used with any unfused device which uses firmware 5.4
+>> Driver defines resources for every platforms and there it specifies the
+>> firmware to be used for that platform. For ex, for sc7180, the firmware
+>> is specified at [1].
+> And note that the firmware doesn't have an SoC name in it. This file
+> will be used by all unfused devices that use 5.4 firmware family.
+>
+>> The various firmware supported by different platforms are also available
+>> in linux firmware.
+>>
+>> [1]
+>> https://elixir.bootlin.com/linux/v6.3-rc4/source/drivers/media/platform/qcom/venus/core.c#L765
+> And in that file sc7180 is the only platform having firmware 5.4.
+>
+> I think that the check for sc7180 is redundant. Just check that the
+> firmware is from 5.4 family and it is 5.4.51 or newer.
+I agree. sc7180 check can be removed as the feature is applicable for 
+all 5.4 firmwares, irrespective of platform.
+>
+>>>>>> +        if (is_fw_rev_or_newer(inst->core, 5, 4, 51)) {
+>>>>>> +            ptype = HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT;
+>>>>>> +            ret = hfi_session_set_property(inst, ptype, &en);
+>>>>>> +            if (ret)
+>>>>>> +                return ret;
+>>>>>> +        }
+>>>>>> +    }
+>>>>>> +
+>>>>>>         ptype = HFI_PROPERTY_PARAM_VDEC_CONCEAL_COLOR;
+>>>>>>         conceal = ctr->conceal_color & 0xffff;
+>>>>>>         conceal |= ((ctr->conceal_color >> 16) & 0xffff) << 10;
+>
+>
