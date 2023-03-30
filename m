@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C86B6D033D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E19A6D0348
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbjC3Lcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
+        id S231261AbjC3LeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbjC3Lcm (ORCPT
+        with ESMTP id S231666AbjC3LeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:32:42 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE5086AB
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:32:41 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id j11so24059615lfg.13
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:32:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680175959;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ML54njYnRDk7o4HcEtvBM1tdyqleAobA4f6MiXOsND0=;
-        b=a/g+QQMgnVz1l1tCLbVoEfKvVrzG4Xjf9B/g2JnuhGkNI4tS1LKGp1kHbW4YojKXJP
-         Ku6fYadkn41YpAXh6gfuoR19XBByfRsf+RL7L7hWXCOUEeYxV0AYmurCdxeKIpD8RPss
-         PH8d1/1V+EoHMV+xfrP1f0DwGPhHQNgfzWwGZJD4KkBOBxZIIMv7oURArB/WMsSkHX3h
-         VVSDTx9HY6t6ViPQAbDKHYyxvr+oLuos8cOinpMc9vfwWqUQF8ktCMuSXpObwAIhahoG
-         +bwkrBcFsuOwsueSArm8r8Tws1djOqLQ/+dDrJIGdhdWTFRY8hRcyi5iOcB8tHeyAbtC
-         /kLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680175959;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ML54njYnRDk7o4HcEtvBM1tdyqleAobA4f6MiXOsND0=;
-        b=6WqgCK9w+MiX/tTY1JAkXrML4YmA7MV7hHxzgBNtudyCkTdvEzCvLaUjHF3V5UKWD3
-         mnSM/W/NYonXbyCncexc4syOTvhYv4XswDnQKMGDfw4gd4PwG+lRRQA4s+rB5VR5/DiQ
-         RwpZIH+h0MSis0NM/EoWVQSWZnFFObG2h5WkXNXfCoDCsjnKp7ZXjPxNMNZOcHD1WHx7
-         YTrtQmwBBbCPetudvS9wdzwQUrN/tQlYmQTJbGEV6beSrRgElX7rp4rTEZRO+eda7H4g
-         3N+rgC/bQFg8QU6xKDOxidFVgGeRxolfdBUhsiozfgisAKVDfe8GPTRfQqCWSaXZVvca
-         KWdg==
-X-Gm-Message-State: AAQBX9ds0yDPxqOCXstTpx7u59UiPwZm575fpQRCy3qn7kWBlq1kRNKw
-        Rz+b2VJ4bZH0VCFW7kx4SeOT4g==
-X-Google-Smtp-Source: AKy350bMZjydyBjP+bF1x8VvhUrc9aWFBhqR/qTQGnyb2aqUrAWzyEDsIgUBBXfUgRNjjkMMx0iANw==
-X-Received: by 2002:ac2:4903:0:b0:4db:3928:d66d with SMTP id n3-20020ac24903000000b004db3928d66dmr6644024lfi.42.1680175959204;
-        Thu, 30 Mar 2023 04:32:39 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id r17-20020a056512103100b004e8483bff82sm5830343lfr.271.2023.03.30.04.32.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 04:32:38 -0700 (PDT)
-Message-ID: <e10bb710-3515-8350-b3be-cb740751c130@linaro.org>
-Date:   Thu, 30 Mar 2023 13:32:37 +0200
+        Thu, 30 Mar 2023 07:34:13 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C244C30D2;
+        Thu, 30 Mar 2023 04:34:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=YSIs52b21zyInxWClUTq6s+3r8CYhc2j57pfS1jP3gk=; b=VOF4Yh5YMeiyC/WDVqSSjtymBZ
+        37JiST8TqyXEOeq53+EKVBRWs3BX8WUE518j5bz5rFarhSwt8oM3OpQJHlwbYfLbGBLW4nKGM+BmJ
+        JZedwNrHNb21Jo7LbsSyA1DrUSXshJrE3GsKb4L65mXr8N8WgKkIKr7Gji6ENi3TufjlkmzBvq/RL
+        7zZJfK4Uxb/4apPvViqidyw1tfopJQMf7RCYhQ3hn8MsH55gVVMJ1tTUWVhIkyj7bQUg8+/7pub09
+        HM7j0Q8iHYwhbW7VJohScomZVImnoD687uFYDGdVouL9WhDDbDW62eC482mCPT3U0XDqGydtY3GP1
+        bH/uWR9A==;
+Received: from [177.34.168.16] (helo=[192.168.0.3])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1phqXe-001G8V-Rd; Thu, 30 Mar 2023 13:34:07 +0200
+Message-ID: <ac3ec611-f7f5-af08-ec25-00c820d73b87@igalia.com>
+Date:   Thu, 30 Mar 2023 08:33:58 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v4] ASoC: dt-bindings: qcom,lpass-va-macro: Add missing
- NPL clock
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230330070342.19448-1-krzysztof.kozlowski@linaro.org>
- <ZCVxTlb+qQXXuaay@sirena.org.uk>
+Subject: Re: [PATCH] .gitignore: Exclude KUnit config dot-files
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZCVxTlb+qQXXuaay@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org, David Gow <davidgow@google.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        kunit-dev@googlegroups.com, Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>, Andrew Davis <afd@ti.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+References: <20230330112743.2331141-1-javierm@redhat.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20230330112743.2331141-1-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2023 13:23, Mark Brown wrote:
-> On Thu, Mar 30, 2023 at 09:03:42AM +0200, Krzysztof Kozlowski wrote:
->> Several devices (e.g. SC8280XP and SM8450) expect a NPL (Near Pad Logic)
->> clock.  Add the clock and customize allowed clocks per each variant.
->> The clocks are also required by ADSP in all variants.
+Hi Javier,
+
+On 3/30/23 08:27, Javier Martinez Canillas wrote:
+> There's a rule to ignore all the dot-files (.*) but we want to exclude the
+> config files used by KUnit (.kunitconfig) since those are usually added to
+> allow executing test suites without having to enable custom config symbols.
 > 
-> This doesn't apply against current code, please check and resend.
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-Indeed, there is a minor change going through Rob's tree. I'll rebase.
+This seems like a pretty nice improvement for the KUnit development.
 
-Best regards,
-Krzysztof
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
 
+Best Regards,
+- Maíra Canal
+
+> ---
+> 
+>   .gitignore | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/.gitignore b/.gitignore
+> index 70ec6037fa7a..7f86e0837909 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -103,6 +103,7 @@ modules.order
+>   !.get_maintainer.ignore
+>   !.gitattributes
+>   !.gitignore
+> +!.kunitconfig
+>   !.mailmap
+>   !.rustfmt.toml
+>   
+> 
+> base-commit: ffe78bbd512166e0ef1cc4858010b128c510ed7d
