@@ -2,103 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C8E6D0AC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61CD6D0ACB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjC3QLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 12:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
+        id S230083AbjC3QNc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 12:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjC3QLn (ORCPT
+        with ESMTP id S229655AbjC3QNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 12:11:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BBE4EDB;
-        Thu, 30 Mar 2023 09:11:14 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 9E2422184D;
-        Thu, 30 Mar 2023 16:11:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1680192672; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b+9DVFdYT3Dn3D+NXxYza3T0qXNz8w53/vwp8HX6fMg=;
-        b=B7zgWGt2zN1mzEhkbs4Ul1m9BgWC5hFUQB5DS8wUzwv76gpHJ2cACiO2YNe6URYw2DBw3N
-        EpwJmnh0uXSwDLbHp27rK6dLISY0yTJL3NIYWYUvLZRZbDStF9IKdOHK7LXYD7sYUJe+3i
-        1In9k8g5ygOn6gVIEGkJUAcedscPaAM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1680192672;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b+9DVFdYT3Dn3D+NXxYza3T0qXNz8w53/vwp8HX6fMg=;
-        b=dPtqdhjZ0KYPGNw+a++Z/y4a/G70Pq0Ygyrt2H1H4volxnQdYSg46aepJUl0h66RE/YwL6
-        rwD+Eqhik1t4bhBg==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 7C6AD2C141;
-        Thu, 30 Mar 2023 16:11:09 +0000 (UTC)
-Date:   Thu, 30 Mar 2023 18:11:09 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Seth Forshee <sforshee@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v3 0/3] livepatch,sched: Add livepatch task switching to
- cond_resched()
-In-Reply-To: <cover.1677257135.git.jpoimboe@kernel.org>
-Message-ID: <alpine.LSU.2.21.2303301810250.24187@pobox.suse.cz>
-References: <cover.1677257135.git.jpoimboe@kernel.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Thu, 30 Mar 2023 12:13:30 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0433E3A4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:13:04 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-545cb3c9898so288219307b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:13:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680192720;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1ASMwRAXSxQ56uzRQV9rpj0YNrKR/hLF/lFweUlSAcY=;
+        b=yFftUyuEFnhd5imrtSqwj6kRE+XB0WLfBmQnXan3GFIhF7NCgb1P4kuIzlCwC2/8oG
+         Eqwbbhccu/vFB5eHehHIjisVP3ERIhDX7fj8OtO12HipiMT4Co63ehOvttGRThY7Jps9
+         rDns6TyZ3Vazlzg58RFa73wP30Abk2VCufJhfzecj7U2tKYiTb5/3i9owyqB3jRdGMPU
+         a5O9Vmkaa9zFO2mSN2t536YkE9ibMiQCmtCEwmltz2fdLHtidRn7TtkE7B+jYjOGURb0
+         4bzWm32vmbrWVH7hdWKrfi34etmnLHquwTWnOoH3nCUJme0SeQnWFoPfNZfK15kw0z10
+         i9cg==
+X-Gm-Message-State: AAQBX9ebbXgp7BR/gS/iF6jUqAJJdTrM2OTv0hEGnS56oBIxCVvgoiIz
+        toPq/TbWg2RVdBw3PpU8P8rub8eDrebnSLf/
+X-Google-Smtp-Source: AKy350ZdS7vE6864BG2lq5SPTQP6zIW/Pw9RAaNMc3MpAzN8OPUgfNa2VDT/tp141vGPjobf9hRYHg==
+X-Received: by 2002:a81:52d2:0:b0:544:179f:528 with SMTP id g201-20020a8152d2000000b00544179f0528mr23538412ywb.32.1680192720297;
+        Thu, 30 Mar 2023 09:12:00 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id bp3-20020a05690c068300b00545ce97d474sm2737838ywb.39.2023.03.30.09.11.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 09:11:59 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-545cb3c9898so288218247b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:11:59 -0700 (PDT)
+X-Received: by 2002:a81:b65f:0:b0:545:611c:8d19 with SMTP id
+ h31-20020a81b65f000000b00545611c8d19mr12055261ywk.4.1680192719618; Thu, 30
+ Mar 2023 09:11:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230330060105.29460-1-rdunlap@infradead.org> <e1b6f12a-899b-4985-8725-556bcb5d0991@spud>
+ <CAMuHMdW2r1f7C_BdXn9BnDktLwHjBA_0Kvq6OeLJ1sZ7azhqkg@mail.gmail.com> <b712f5c8-9486-8e4a-63cd-6b176572244f@infradead.org>
+In-Reply-To: <b712f5c8-9486-8e4a-63cd-6b176572244f@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 30 Mar 2023 18:11:47 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX_=T9EB=rE_p9XO2-MtaV3jNkX76_PxYd9wi17NhaYHQ@mail.gmail.com>
+Message-ID: <CAMuHMdX_=T9EB=rE_p9XO2-MtaV3jNkX76_PxYd9wi17NhaYHQ@mail.gmail.com>
+Subject: Re: [PATCH] iommu: PGTABLE_LPAE is also for RISCV
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-kernel@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        Conor Dooley <conor@kernel.org>,
+        linux-riscv@lists.infradead.org, geert+renesas@glider.be
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Feb 2023, Josh Poimboeuf wrote:
+Hi Randy,
 
-> v3:
-> - Add barriers (pmladek)
-> - Update comments
-> 
-> v2:
-> - Avoid calling klp_cond_resched_disable() in klp_cancel_transition()
-> - Fix race in klp_reverse_transition()
-> 
-> Fix patching stalls caused by busy kthreads.
-> 
-> Josh Poimboeuf (3):
->   livepatch: Skip task_call_func() for current task
->   livepatch,sched: Add livepatch task switching to cond_resched()
->   vhost: Fix livepatch timeouts in vhost_worker()
-> 
->  drivers/vhost/vhost.c           |   3 +-
->  include/linux/livepatch.h       |   1 +
->  include/linux/livepatch_sched.h |  29 ++++++++
->  include/linux/sched.h           |  20 ++++--
->  kernel/livepatch/core.c         |   1 +
->  kernel/livepatch/transition.c   | 113 +++++++++++++++++++++++++++-----
->  kernel/sched/core.c             |  64 +++++++++++++++---
->  7 files changed, 200 insertions(+), 31 deletions(-)
->  create mode 100644 include/linux/livepatch_sched.h
+On Thu, Mar 30, 2023 at 5:48 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+> On 3/30/23 00:31, Geert Uytterhoeven wrote:
+> > On Thu, Mar 30, 2023 at 8:25 AM Conor Dooley <conor.dooley@microchip.com> wrote:
+> >> On Wed, Mar 29, 2023 at 11:01:05PM -0700, Randy Dunlap wrote:
+> >>> On riscv64, linux-next-20233030 (and for several days earlier),
+> >>> there is a kconfig warning:
+> >>>
+> >>> WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
+> >>>   Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
+> >>>   Selected by [y]:
+> >>>   - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
+> >>>
+> >>> and build errors:
+> >>>
+> >>> riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L140':
+> >>> io-pgtable-arm.c:(.init.text+0x1e8): undefined reference to `alloc_io_pgtable_ops'
+> >>> riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L168':
+> >>> io-pgtable-arm.c:(.init.text+0xab0): undefined reference to `free_io_pgtable_ops'
+> >>> riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L140':
+> >>> ipmmu-vmsa.c:(.text+0xbc4): undefined reference to `free_io_pgtable_ops'
+> >>> riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L0 ':
+> >>> ipmmu-vmsa.c:(.text+0x145e): undefined reference to `alloc_io_pgtable_ops'
+> >>>
+> >>> Add RISCV as an allowed ARCH dependency to fix these problems.
+> >>>
+> >>> Fixes: d286a58bc8f4 ("iommu: Tidy up io-pgtable dependencies")
+> >>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> >>> Cc: Joerg Roedel <joro@8bytes.org>
+> >>> Cc: Will Deacon <will@kernel.org>
+> >>> Cc: Robin Murphy <robin.murphy@arm.com>
+> >>> Cc: iommu@lists.linux.dev
+> >>> Cc: Conor Dooley <conor@kernel.org>
+> >>> Cc: linux-riscv@lists.infradead.org
+> >>> ---
+> >>>  drivers/iommu/Kconfig |    2 +-
+> >>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>> diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+> >>> --- a/drivers/iommu/Kconfig
+> >>> +++ b/drivers/iommu/Kconfig
+> >>> @@ -32,7 +32,7 @@ config IOMMU_IO_PGTABLE
+> >>>  config IOMMU_IO_PGTABLE_LPAE
+> >>>       bool "ARMv7/v8 Long Descriptor Format"
+> >>
+> >> I'm probably missing something here, but why would we want to enable
+> >> "ARMv7/v8 Long Descriptor Format" on RISC-V?
+> >
+> > Indeed, we should not enable it, unless compile-testing.
+> >
+> >> Would it not be better to make the Renesas depend on, rather than
+> >> select the option? It does seem highly arch specific, and I feel like
+> >> Geert previously mentioned that the RZ/Five (their RISC-V offering)
+> >> didn't use it.
+> >
+> > I think the IPMMU_VMSA dependency should gain
+> >
+> >         depends on ARM || ARM64 || COMPILE_TEST
+>
+> so like this?
+> Or did you mean to drop the ARCH_RENESAS part also?
+>
+>
+>  config IPMMU_VMSA
+>         bool "Renesas VMSA-compatible IPMMU"
+> -       depends on ARCH_RENESAS || COMPILE_TEST
+> +       depends on ARCH_RENESAS || ARM || ARM64 || COMPILE_TEST
 
-Late, so just recording it here...
+No, you want "depends on (ARCH_RENESAS && (ARM || ARM64)) || COMPILE_TEST",
+which is a bit hard to read.
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+Hence I really meant adding that line, i.e.:
 
-Thanks for improving the situation, Josh.
+     config IPMMU_VMSA
+           bool "Renesas VMSA-compatible IPMMU"
+           depends on ARCH_RENESAS || COMPILE_TEST
+    +      depends on ARM || ARM64 || COMPILE_TEST
 
-M
+>
+> The failing config file has ARCH_RENESAS=y.  After the change above, I still get:
+>
+> WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
+>   Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
+>   Selected by [y]:
+>   - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || ARM || ARM64 || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
+-- 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
