@@ -2,99 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BA06D0154
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9016D0156
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbjC3Kep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
+        id S230397AbjC3Kf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjC3Kel (ORCPT
+        with ESMTP id S229807AbjC3KfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:34:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B40CB211C;
-        Thu, 30 Mar 2023 03:34:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 488202F4;
-        Thu, 30 Mar 2023 03:35:15 -0700 (PDT)
-Received: from [10.57.54.254] (unknown [10.57.54.254])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3FED43F663;
-        Thu, 30 Mar 2023 03:34:29 -0700 (PDT)
-Message-ID: <3b95e362-300a-12af-0d55-76672c60be9f@arm.com>
-Date:   Thu, 30 Mar 2023 11:34:22 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] perf/arm-cmn: fix regitster offset of
- CMN_MXP__CONNECT_INFO_P2-5
-To:     Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        Ruidong Tian <tianruidong@linux.alibaba.com>
-References: <1680169620-26012-1-git-send-email-renyu.zj@linux.alibaba.com>
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1680169620-26012-1-git-send-email-renyu.zj@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 30 Mar 2023 06:35:25 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E027C170C;
+        Thu, 30 Mar 2023 03:35:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7A2C81FEBF;
+        Thu, 30 Mar 2023 10:35:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680172522; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gkIZ+XM+mZxqivNdtYPp+H6kD5za7YStD4JUihghJco=;
+        b=PHZkns74uCye98DCA/r8dxQW0mlpIVNtomLw4bBzAhGClfN0Fe5/yQ1PEfmCRloVNn4N7p
+        5rIsfvO2UwYfhwWu1nI98kriNhKwI9SSiHFmSvbup9nkOss0NsKQW1DQAYh+yCVMQbrzs9
+        Bn0a60havtQWsQw+XY/sPmrbNWj+YMo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680172522;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gkIZ+XM+mZxqivNdtYPp+H6kD5za7YStD4JUihghJco=;
+        b=zetrntkdx62RC4gL1eDjmM4AT0cdLgRGb/YXcM2VQXZJPHaCbTTpv/5WdrFyGEoPluHIGR
+        qaOM4+5qeBuzuNCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4AF71133E0;
+        Thu, 30 Mar 2023 10:35:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id V5eREeplJWQgLAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 30 Mar 2023 10:35:22 +0000
+Date:   Thu, 30 Mar 2023 12:35:21 +0200
+Message-ID: <87edp6msra.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Sasha Neftin <sasha.neftin@intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [Intel-wired-lan] [REGRESSION] e1000e probe/link detection fails since 6.2 kernel
+In-Reply-To: <87wn2yn43q.wl-tiwai@suse.de>
+References: <87jzz13v7i.wl-tiwai@suse.de>
+        <652a9a96-f499-f31f-2a55-3c80b6ac9c75@molgen.mpg.de>
+        <ZCP5jOTNypwG4xK6@debian.me>
+        <87a5zwosd7.wl-tiwai@suse.de>
+        <20230329121232.7873ad95@kernel.org>
+        <87wn2yn43q.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-2022-JP
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-30 10:47, Jing Zhang wrote:
-> In the CMN700 specification, it is described that the address offset
-> of the mxp_device_connect_info_p0-5 register is 16'h8 + #{8*index}.
-> Therefore, the address offset of the CMN_MXP__CONNECT_INFO_P2-5 macro
-> defined in the code is wrong, which causes the cmn700 topology map
-> incorrect printed in debugfs.
+On Thu, 30 Mar 2023 08:30:17 +0200,
+Takashi Iwai wrote:
 > 
-> So correct the address offset value to make the cmn700 topology map
-> correct in debugfs.
+> On Wed, 29 Mar 2023 21:12:32 +0200,
+> Jakub Kicinski wrote:
+> > 
+> > On Wed, 29 Mar 2023 10:48:36 +0200 Takashi Iwai wrote:
+> > > On Wed, 29 Mar 2023 10:40:44 +0200,
+> > > Bagas Sanjaya wrote:
+> > > > 
+> > > > On Tue, Mar 28, 2023 at 04:39:01PM +0200, Paul Menzel wrote:  
+> > > > > Does openSUSE Tumbleweed make it easy to bisect the regression at least on
+> > > > > “rc level”? It be great if narrow it more down, so we know it for example
+> > > > > regressed in 6.2-rc7.
+> > > > >   
+> > > > 
+> > > > Alternatively, can you do bisection using kernel sources from Linus's
+> > > > tree (git required)?  
+> > > 
+> > > That'll be a last resort, if no one has idea at all :)
+> > 
+> > I had a quick look yesterday, there's only ~6 or so commits to e1000e.
+> > Should be a fairly quick bisection, hopefully?
 > 
-> Fixes: 60d1504070c2 ("perf/arm-cmn: Support new IP features")
-
-Ugh, these offsets are correct for CI-700, so strictly that commit is 
-fine. What I failed to notice is that CMN-700 shuffled the 
-mesh_port_connect_info registers out of the way, so it's commit 
-23760a014417 which should have added more handling for this difference.
-
-Thanks,
-Robin.
-
-> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
-> Signed-off-by: Ruidong Tian <tianruidong@linux.alibaba.com>
-> ---
->   drivers/perf/arm-cmn.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
+> *IFF* it's an e1000e-specific bug, right?
 > 
-> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
-> index 1deb61b..e9f844b 100644
-> --- a/drivers/perf/arm-cmn.c
-> +++ b/drivers/perf/arm-cmn.c
-> @@ -59,10 +59,10 @@
->   /* XPs also have some local topology info which has uses too */
->   #define CMN_MXP__CONNECT_INFO_P0	0x0008
->   #define CMN_MXP__CONNECT_INFO_P1	0x0010
-> -#define CMN_MXP__CONNECT_INFO_P2	0x0028
-> -#define CMN_MXP__CONNECT_INFO_P3	0x0030
-> -#define CMN_MXP__CONNECT_INFO_P4	0x0038
-> -#define CMN_MXP__CONNECT_INFO_P5	0x0040
-> +#define CMN_MXP__CONNECT_INFO_P2	0x0018
-> +#define CMN_MXP__CONNECT_INFO_P3	0x0020
-> +#define CMN_MXP__CONNECT_INFO_P4	0x0028
-> +#define CMN_MXP__CONNECT_INFO_P5	0x0030
->   #define CMN__CONNECT_INFO_DEVICE_TYPE	GENMASK_ULL(4, 0)
->   
->   /* PMU registers occupy the 3rd 4KB page of each node's region */
+> Through a quick glance, the only significant change in e1000e is the
+> commit 1060707e3809
+>     ptp: introduce helpers to adjust by scaled parts per million
+> 
+> Others are only for MTP/ADP and new devices, which must be irrelevant.
+> The tracing must be irrelevant, and the kmap change must be OK.
+> 
+> Can 1060707e3809 be the cause of such a bug?
+
+The bug reporter updated the entry and informed that this can be
+false-positive; the problem could be triggered with the older kernel
+out of sudden.  So he closed the bug as WORKSFORME.
+
+#regzbot invalid: Problems likely not in kernel changes
+
+
+thanks,
+
+Takashi
