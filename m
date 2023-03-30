@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716196D021F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815016D0224
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjC3Ku0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S230443AbjC3Kuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjC3KuO (ORCPT
+        with ESMTP id S231191AbjC3Ku2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:50:14 -0400
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com (mail-gv0che01on2133.outbound.protection.outlook.com [40.107.23.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9388F40C5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:50:11 -0700 (PDT)
+        Thu, 30 Mar 2023 06:50:28 -0400
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com (mail-gv0che01on2102.outbound.protection.outlook.com [40.107.23.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA67719B3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:50:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=duagon.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kLnVEeIGFmJd6FPITdJFHhFod/XGqrM1sCgKxr0mahg=;
- b=BAFt1lSQQiNRtFshHvkV6QTJOIMphjefOxf0YGwFnpDn7VAizOLUhLjvEN+KoTUIjkOe5Aczs81K6njDXurzpj68yu7ln34Jn8VLYPlEAsEghjKatXi3eeT5iTvfikUvkvGCEJhhxnHH65z/fzIKjZvvPQTj1OeX8kb4S2rg2f8=
-Received: from ZR2P278CA0061.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:52::19)
- by ZR0P278MB0872.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:4f::9) with
+ bh=dgNLfxaXgcNY0MEnfTtIoeaDFDqyb6LMJhchKfD6VaM=;
+ b=CeagGJpTHw6hHLTepNmEV4qpdfKoYXV0Yv53cCdzyiqc2xhjXbi/pw3+F77mx+Y8sRJdGUdc2F2BwUDaSUwjXnMQIZJApU4V+JP6Gp5LKuf4gf+m9KzOKSai9ZNufTaPuJOV4Beit0yfzWT3vDkHJFXznXqR8wk93JfSzPWBca0=
+Received: from DB6PR0202CA0030.eurprd02.prod.outlook.com (2603:10a6:4:a5::16)
+ by GVAP278MB0056.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:23::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.21; Thu, 30 Mar
- 2023 10:50:09 +0000
-Received: from VE1EUR01FT060.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:910:52:cafe::8a) by ZR2P278CA0061.outlook.office365.com
- (2603:10a6:910:52::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22; Thu, 30 Mar
+ 2023 10:50:12 +0000
+Received: from DB5EUR01FT068.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:4:a5:cafe::7f) by DB6PR0202CA0030.outlook.office365.com
+ (2603:10a6:4:a5::16) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.43 via Frontend
- Transport; Thu, 30 Mar 2023 10:50:08 +0000
+ Transport; Thu, 30 Mar 2023 10:50:12 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.79.220.33)
  smtp.mailfrom=duagon.com; dkim=pass (signature was verified)
  header.d=duagon.com;dmarc=pass action=none header.from=duagon.com;
@@ -37,19 +37,19 @@ Received-SPF: Pass (protection.outlook.com: domain of duagon.com designates
  20.79.220.33 as permitted sender) receiver=protection.outlook.com;
  client-ip=20.79.220.33; helo=de1-emailsignatures-cloud.codetwo.com; pr=C
 Received: from de1-emailsignatures-cloud.codetwo.com (20.79.220.33) by
- VE1EUR01FT060.mail.protection.outlook.com (10.152.3.93) with Microsoft SMTP
+ DB5EUR01FT068.mail.protection.outlook.com (10.152.5.168) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.22 via Frontend Transport; Thu, 30 Mar 2023 10:50:08 +0000
-Received: from CHE01-ZR0-obe.outbound.protection.outlook.com (104.47.22.108) by de1-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Thu, 30 Mar 2023 10:50:07 +0000
+ 15.20.6222.22 via Frontend Transport; Thu, 30 Mar 2023 10:50:11 +0000
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com (104.47.22.109) by de1-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Thu, 30 Mar 2023 10:50:10 +0000
 ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
- b=OpqTWSdOHwQPagfFwL/RFHusgjbQFSxkvyip/SWOfpQ6CF/+jRaX0O6xOLf9qnRIUUsxJbPXmsMZpnQMjf/WxSyG/+azG9qnbRi/u/zpqr4rxdCMmqhv8Bqk92F0Qzx6B4T1LxvXt09xRpZTxoa+TFNe1qZZOriZtU7gGufzh81xfDcOX9wMCaRuHkmdlQSVibT2MaAF8RPhCK1576p8/7fXKfHQuBotAFwG5KXZ4UQmemyKvzyRaCBHcv5nVscZDbsrje+gpbxsqVj7pvS15BnYfUGBlfV7OmnDj6O3gYMULQyrA3iUBIYwXGUNmxYhB3QbGPPcK7xbeASgbgoE5A==
+ b=aXRnbzsFohAl3m4bwTaosOPrw9slzGqeGbU0GnMSReHYl11sfEEPIjlEyVFdWfUzU+e/fRGT7NdNRdx2tK001r6dxkIuBiUOPiX4Fj3m7WKQhjBv2o0gGUd1FsgQUhHhwcGOux3MuQFtnVEFf+Ta7fE1HEacOjPOjIm4E25Hp8LHnCFYN3vzBNkvQ4gSfPjwraoIU8/bPoaiICb6NtGBzV5W2gQf5FK1Zj2w8svMdBa2qlPKN0QU1pzqXUI4yfEQqisrbffOn0OW92JHqF/0kiBtjupmVnnfVHKDKAHkaCWttm2PMcfhZBVUAL651KtOm+QOou2jvu0fu3iD1lcXQA==
 ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kLnVEeIGFmJd6FPITdJFHhFod/XGqrM1sCgKxr0mahg=;
- b=Q+IyD3BWNMHq+K83kRsIAOdy3Y+zJKjQd9HSjNJrxgtnR+dGQALjf4d1XCGGW7TFncsU+jyc3SsA2q9KJ4vyckXpv4TMttwE2+oNl3JjOBib5aVfnf4Cw7LjGmmGKk8JYBS8mBSbLpKRlLOFVI88cqQm/ZlopoOVL/HRl7cvmyXuTEQf0PS3Akv4DDoAW8L3H5SXzk33gXyUwh/fyfIrjpekQE5BuRmQtlGsTcwqtMR/WpDzy/AuWfnYB003FkjUfXmi8GmW91vzgZkCWepC+1C58/NTGh9drD2LxgX6Zac2Evsirin6yeDljYL+MQRdAs2kMIg3uLPXH0NCUWjsqQ==
+ bh=dgNLfxaXgcNY0MEnfTtIoeaDFDqyb6LMJhchKfD6VaM=;
+ b=fWIgXHzAzEZheZyUz+yB6jIOB3jxd4udLvzKvf5dvlBIYz6CMEalj016HwoAt0Vu4+mchv1CR3SCVLJVINF0yn84ltc/RKOkIDOzIZ3q7t2gaJfH8+h00IlP6EV5Q2SBI38+VfnF12dutBq37Nvgbu1E6JXUm31dCAlQnkhhk3y36CgF0uXdetnOXiEXDXt+uStqrrivn82ETzMwK71DVZsR6HzWDiOWJ1XAKzdglvtUPn5kQwjSJ/BpCn4jyo2s+u19nNfFMa5D5PB25Yy8E+Iyk9XgB5A6cXxWbuiKe1g7q9bKzmcI9LKHT3WRlxX/7X1UPwrSbDEGgLtQ2J9OyQ==
 ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 104.47.22.40) smtp.rcpttodomain=gmail.com smtp.mailfrom=duagon.com;
+ 104.47.22.43) smtp.rcpttodomain=gmail.com smtp.mailfrom=duagon.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=duagon.com;
  dkim=pass (signature was verified) header.d=duagon.com; arc=pass (0 oda=1
  ltdi=1 spf=[1,1,smtp.mailfrom=duagon.com] dkim=[1,1,header.d=duagon.com]
@@ -57,57 +57,58 @@ ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=duagon.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kLnVEeIGFmJd6FPITdJFHhFod/XGqrM1sCgKxr0mahg=;
- b=BAFt1lSQQiNRtFshHvkV6QTJOIMphjefOxf0YGwFnpDn7VAizOLUhLjvEN+KoTUIjkOe5Aczs81K6njDXurzpj68yu7ln34Jn8VLYPlEAsEghjKatXi3eeT5iTvfikUvkvGCEJhhxnHH65z/fzIKjZvvPQTj1OeX8kb4S2rg2f8=
-Received: from FR0P281CA0181.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:ab::8) by
- GV0P278MB0081.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:1e::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.22; Thu, 30 Mar 2023 10:50:05 +0000
-Received: from VE1EUR01FT107.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:d10:ab:cafe::86) by FR0P281CA0181.outlook.office365.com
- (2603:10a6:d10:ab::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20 via Frontend
- Transport; Thu, 30 Mar 2023 10:50:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 104.47.22.40)
+ bh=dgNLfxaXgcNY0MEnfTtIoeaDFDqyb6LMJhchKfD6VaM=;
+ b=CeagGJpTHw6hHLTepNmEV4qpdfKoYXV0Yv53cCdzyiqc2xhjXbi/pw3+F77mx+Y8sRJdGUdc2F2BwUDaSUwjXnMQIZJApU4V+JP6Gp5LKuf4gf+m9KzOKSai9ZNufTaPuJOV4Beit0yfzWT3vDkHJFXznXqR8wk93JfSzPWBca0=
+Received: from FR2P281CA0174.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:9f::11)
+ by ZR0P278MB0976.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:51::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.34; Thu, 30 Mar
+ 2023 10:50:09 +0000
+Received: from VE1EUR01FT091.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:d10:9f:cafe::b8) by FR2P281CA0174.outlook.office365.com
+ (2603:10a6:d10:9f::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.13 via Frontend
+ Transport; Thu, 30 Mar 2023 10:50:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 104.47.22.43)
  smtp.mailfrom=duagon.com; dkim=pass (signature was verified)
  header.d=duagon.com;dmarc=pass action=none header.from=duagon.com;
 Received-SPF: Pass (protection.outlook.com: domain of duagon.com designates
- 104.47.22.40 as permitted sender) receiver=protection.outlook.com;
- client-ip=104.47.22.40; helo=CHE01-GV0-obe.outbound.protection.outlook.com;
+ 104.47.22.43 as permitted sender) receiver=protection.outlook.com;
+ client-ip=104.47.22.43; helo=CHE01-GV0-obe.outbound.protection.outlook.com;
  pr=C
 Received: from securemail.duagon.com (91.135.65.126) by
- VE1EUR01FT107.mail.protection.outlook.com (10.152.3.130) with Microsoft SMTP
+ VE1EUR01FT091.mail.protection.outlook.com (10.152.3.27) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.22 via Frontend Transport; Thu, 30 Mar 2023 10:50:05 +0000
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com (mail-gv0che01lp2040.outbound.protection.outlook.com [104.47.22.40])
+ 15.20.6222.17 via Frontend Transport; Thu, 30 Mar 2023 10:50:08 +0000
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com (mail-gv0che01lp2043.outbound.protection.outlook.com [104.47.22.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         by securemail.duagon.com (Postfix) with ESMTPS;
-        Thu, 30 Mar 2023 12:50:04 +0200 (CEST)
+        Thu, 30 Mar 2023 12:50:07 +0200 (CEST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WAG7ZTxVDnSNWxPNfGTxeM7Gj9t5mDgVXmg+JQ3lAg/hH87JDmrCkgWSoRGW9FsDkbf5s+Io7Egnx0L0aMK9QLZLopI2ioVt1U6CRo21cuwjC3fsKle3UDWn8s5OdUWmeAW53836CU6GQKdvB2fnnqx0W9mghEGhIx1/YYo0DutpATfkOMo9JMptUvBRXczByv8c3nmp8AC5Th6ly7hFveQeOqwsHtGLD2StNUb85bVpwawncMpHBreOQJTlQda9uhCwfv15Q2jt6bMwT2gKAtfqsl3AgLffVJ/PkKBpkAGnfjkyshHG0VDjEPUdMTjCfajfYG3PRzwIPPEPIjMEdQ==
+ b=nMyzhh3/1JadOqgIDhD6ZF2v1ZOToi/lDawyLbDe3B/U0rWoeyzWT/7Cxob63LnOE69AbiEhe6cHRjyHO1m4j5yoPgmr++uOqBNDz1JRI2cW/g3YwlSEiEk38NvXAfRa0BitpT5dy6kvTXKG8Rz547DCT0X0iR4MVo3JV3t2Xvw5EphvuEYZTWnxp1QstLYUG9k/3OKIkI+c0/webrlpPXUKZsmTWfTSvv/TCWkd94SwY4Y78qdwjST8WofPc+ZOvPTDeCEJ8T9K1udiDKGs3d+to73vzD9dOfpka4x/O478XEdOWJk7++K1ekhbzeqmGW9rZXqa1g6Nc1wMSQZtoA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kLnVEeIGFmJd6FPITdJFHhFod/XGqrM1sCgKxr0mahg=;
- b=IS9GuVDVZfFoBuoZ9TI+4YowBPcJ4WFU+fdV8Dwqcp6dmdVsylxcPr5GaT4rakljVk2BZcjfCacXYspH5ITbs4tbrtNFMteuB56z1bDPCM8ZQJRYVUf2fh49TlQEenbMCNIKwlLaoc+oAhiJ0dXMpqrNy/5TqJQz2zT5X9gJDHstl4YVtoNyF3IGMQEvA+oJPSNr8RYr52FIbvTTa8IT8f3OiW3MzsD4+IZfuO2Ys+WhEIqPbVjqvl6Vud/+RQuw9n+p3K2UHUnuNYtl3XYJ1eU8tCT2XLXay9zI428xmEUv64jXKsY+HEO1/KE11FxvpeiMksLuckSNf2zQqq+mKg==
+ bh=dgNLfxaXgcNY0MEnfTtIoeaDFDqyb6LMJhchKfD6VaM=;
+ b=heogFVibaL45bmPni5b1+bJvjISeFxsxyH2DEmdInpmNiAxh4+T6V1UiPcE3z7uL1kPWD5BUoS1S4ZicabJjTb4lf5t6yHD0xaYK6vxPv6xmiqIk73hrTA4B+Fp6o8rUGF0GCPyVDkgZXdUTbvzFP2zFsAJmKDQIeCTtADJlS3HZOnl+S9RD0RpvJXbSSgQ8qx9NKUqCr/r0JsAfRRGPHzlh1uVVk9+VxDHMmh6E1mDa0NkgjjXpxf77qLsKqyNlubtn+aqZbmpQLhSQJON9vIolY6tkWdqBVlX/t3K9aLYqHoqjfILngpmqhNbLatjFL58bhJzw9tnU0KfFOYCeTQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=duagon.com; dmarc=pass action=none header.from=duagon.com;
  dkim=pass header.d=duagon.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=duagon.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kLnVEeIGFmJd6FPITdJFHhFod/XGqrM1sCgKxr0mahg=;
- b=BAFt1lSQQiNRtFshHvkV6QTJOIMphjefOxf0YGwFnpDn7VAizOLUhLjvEN+KoTUIjkOe5Aczs81K6njDXurzpj68yu7ln34Jn8VLYPlEAsEghjKatXi3eeT5iTvfikUvkvGCEJhhxnHH65z/fzIKjZvvPQTj1OeX8kb4S2rg2f8=
+ bh=dgNLfxaXgcNY0MEnfTtIoeaDFDqyb6LMJhchKfD6VaM=;
+ b=CeagGJpTHw6hHLTepNmEV4qpdfKoYXV0Yv53cCdzyiqc2xhjXbi/pw3+F77mx+Y8sRJdGUdc2F2BwUDaSUwjXnMQIZJApU4V+JP6Gp5LKuf4gf+m9KzOKSai9ZNufTaPuJOV4Beit0yfzWT3vDkHJFXznXqR8wk93JfSzPWBca0=
 Received: from GV0P278MB0996.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:4f::13)
  by ZR0P278MB0741.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:42::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Thu, 30 Mar
- 2023 10:50:02 +0000
+ 2023 10:50:06 +0000
 Received: from GV0P278MB0996.CHEP278.PROD.OUTLOOK.COM
  ([fe80::96b8:de96:db9:cded]) by GV0P278MB0996.CHEP278.PROD.OUTLOOK.COM
  ([fe80::96b8:de96:db9:cded%8]) with mapi id 15.20.6222.035; Thu, 30 Mar 2023
- 10:50:01 +0000
+ 10:50:05 +0000
 From:   =?iso-8859-1?Q?Rodr=EDguez_Barbarin=2C_Jos=E9_Javier?= 
         <JoseJavier.Rodriguez@duagon.com>
 To:     "morbidrsa@gmail.com" <morbidrsa@gmail.com>,
@@ -117,24 +118,28 @@ CC:     "jth@kernel.org" <jth@kernel.org>,
         <Jorge.SanjuanGarcia@duagon.com>,
         =?iso-8859-1?Q?Rodr=EDguez_Barbarin=2C_Jos=E9_Javier?= 
         <JoseJavier.Rodriguez@duagon.com>
-Subject: [PATCH v3 0/3] mcb-pci: fix memory overlapping on MCB devices
-Thread-Topic: [PATCH v3 0/3] mcb-pci: fix memory overlapping on MCB devices
-Thread-Index: AQHZYvVgBQRzpjq/6UytHW0GteYdvQ==
-Date:   Thu, 30 Mar 2023 10:50:01 +0000
-Message-ID: <20230330104949.21918-1-josejavier.rodriguez@duagon.com>
+Subject: [PATCH v3 1/3] mcb: Return actual parsed size when reading chameleon
+ table
+Thread-Topic: [PATCH v3 1/3] mcb: Return actual parsed size when reading
+ chameleon table
+Thread-Index: AQHZYvVjgML0XJKdG0uVZhMs/U3cPg==
+Date:   Thu, 30 Mar 2023 10:50:05 +0000
+Message-ID: <20230330104949.21918-2-josejavier.rodriguez@duagon.com>
+References: <20230330104949.21918-1-josejavier.rodriguez@duagon.com>
+In-Reply-To: <20230330104949.21918-1-josejavier.rodriguez@duagon.com>
 Accept-Language: es-ES, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 Authentication-Results-Original: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=duagon.com;
-x-ms-traffictypediagnostic: GV0P278MB0996:EE_|ZR0P278MB0741:EE_|VE1EUR01FT107:EE_|GV0P278MB0081:EE_|VE1EUR01FT060:EE_|ZR0P278MB0872:EE_
-X-MS-Office365-Filtering-Correlation-Id: 290f597c-e4b7-4cab-02a9-08db310c87a8
+x-ms-traffictypediagnostic: GV0P278MB0996:EE_|ZR0P278MB0741:EE_|VE1EUR01FT091:EE_|ZR0P278MB0976:EE_|DB5EUR01FT068:EE_|GVAP278MB0056:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9d19d82b-cf2c-48f8-6a4c-08db310c8991
 x-seppmail-processed: true
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: k72hEauuG9CCf0e7OzSYIYSav3kIAx/z8pPJAAfNlz0i+xXpF5iWI/FOm20m5JP4u2oOhDSvNVxS3BTk+5nyq+NnCgDskaR3t5OZvO+9TMzULQntXp2lr9eXyrU96WLlirZPOCy+jcm/6alir30k96i0bs0uWgP3iTwzwvJS9ONHu7hr4f1FqGS0sh8pQnwKiS8jHmKYXak2Y6zEpCGmxi99Xt+NhzbRDfUBnAS15GUWunVqLv9Fq01qQwO9kUYDyMap1B3PawpJwj2ib9QkJlj9jZ+TQRtw8F3eNUNlFu0TfNBSySCe2Fg1AyqKCBfwV4JxwxJ35L3ZOiywkkBSnuI0Kur1RVed5ren760OmTLQIPoDYu9T+7OPlgSpNTR5yefQZ06P1lzP1MZsVGYyC9nByTprPBxNK+AlRF0mq9BBHnzbj6FQFwpom9/cw4Gtg6OKBIF1u+eEDMZjxST63qDsJO0+6VDTSNd9QIgOAcLMT6EFwmZ+xn00juBOzfPoB+zZSSlMJ1tXFnWfsYNF0Bq2acCFzywCXD39U6FRcsXnT5aBjeD7jvP8XiQ5GY36M/zhWBpcnezA3tBP5Xlb4bAurOQZFVXxAK7ehtbxMN9WmrfFH+q51SCvpUVe33Y2
+X-Microsoft-Antispam-Message-Info-Original: dSb5Ihcea9ekJu0AhBpBOsTy334n50ti24HCKSkHk4kkHR6wFLitpo+HNp+O5GN7TSPYEBQO9tQxC3zla+4PS8jUzhWjoROPNiRoEYQOPPPawpvTmwu5126eQwSCqY6Q6asjbaETRRp+M4t+F5lDsIN2Thdaja40/XZcNSx5HevPxP7VAv97DXFm1kK1uBtBN3HLbnCUj9pPZVc7vYkETiixSyQjZnl2a6pkrzncvUaMZOvPpnWP/gd1fOlsUcqaVr+CCL1LIFa4OrhALKG3J8sXQEgVFwwNhLsLO44EhYEAzGkZbDdSFTRuvcX4Z/hsJg5UEOpoyMzcdcFYw0439loZTnhlt/IjCe6osFBb/hezxwwQ8b37xBbpVIszhsytsRmMPKHy7fYHiR+i/Blbn9/4MqoEPDoJsbqPrRASiJeWkCzKuMuMnspYOo+skvs0zfRv7YT7fRleKQwmESMGcG/ThDQXNMbiN+BdIPq1LSTY0mzrZNhcamLNVZrhEFREvRG62+izWkgqcCFSYQu9cJAgoc3mHlu3KlQXrQFZKZFMGvWZE7dtW+Re2jVHKUD2RvzDr+Wrcv6MzhQi+fzsdqPe5ehNbwc3RwbanCA0NkO8IZS3xaw4tAclEUbj0Hxg
 X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV0P278MB0996.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(396003)(376002)(39850400004)(346002)(451199021)(83380400001)(2906002)(5660300002)(8936002)(36756003)(38070700005)(38100700002)(86362001)(122000001)(6512007)(6506007)(316002)(64756008)(66446008)(54906003)(4326008)(66556008)(6486002)(8676002)(66946007)(76116006)(66476007)(26005)(91956017)(186003)(1076003)(71200400001)(107886003)(478600001)(41300700001)(2616005)(110136005);DIR:OUT;SFP:1102;
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -142,31 +147,31 @@ MIME-Version: 1.0
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0741
 X-SM-outgoing: yes
 X-EOPAttributedMessage: 1
-X-MS-Exchange-SkipListedInternetSender: ip=[104.47.22.40];domain=CHE01-GV0-obe.outbound.protection.outlook.com
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR01FT107.eop-EUR01.prod.protection.outlook.com
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 8000ec28-19cb-43c8-eb52-08db310c8335
+X-MS-Exchange-SkipListedInternetSender: ip=[104.47.22.43];domain=CHE01-GV0-obe.outbound.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR01FT091.eop-EUR01.prod.protection.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 3b7b109c-edf4-40ec-834f-08db310c85b2
 X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: 5yxrVyOJIcnf84YxplzHTe/PwhfQKM+kLMNQJbI/Ybrb6v58cONZfhWFBYS+uIuXgS+wyPOPUkXNqwxeX04tyAN7n41VoQp8Hs3sBYjIvvx/JJMbL1vvWR9NPEKdJnvM1hMSiLKCUHPymSc+XlqeAyBUg1TUJIVfTHKVwC/P4xWpa8PURkSSQGMz1KuL7jx12pyHi9JXYEXcyEIJn0isAK2bj9FYGyP2ZXY+OTtu+io4pm7WWhhRllG8o8xdwQCO9ImhiVy1gPa8QDwbQNTwIKCZQc9TUoQ+hOuCoAbpVhVw4atJsnsLV2xJ0Hi3qDRSKlM1FT0x1MIFga8nPeNCgu9h9Gj/ZSoTP/swyFz2ZP08KRbuc8sHesg1RM7r8eiYiB/hZzhOeWeQpRPsSPiopkeAtqvb0t2EVJ7wAlabGbZYg3I5Ok6eiDJN0fgI1nkZ2tJrVFFctrGwhVb7IEXu0LJDjyAV2JBoKaL0eIHz6yesDiDilg4xTxf8gjd8dqmTqDq+Z/n88Ey44FQAUMVKnnTlnlsvUNtuQvQhxdaSMXSE5LxntJpQEdu2k419oMTPZ0hObFpx4gRswA7CgTwc4qOjSqjWbGaJ+2oTxbT4zKy/ph7mhcFp1L09K80B6ElWqNd3NhxmFfyGTWEZYX6yJgbyOccZVoXCjXd40/R+7U5TGAyJQV2PBPbuvsASV6F4s26C05ZtXnSMEpCBi7JI9TvAXpObRW3fpaM4ZChMNP3yiD1cpRwGrin5ZC6sCm4aOiIqSOhChgSoEz2x7QpyKSuNwq5/Z1miT9yCx+iSMbIXnmXOU4kbqcd4Cek4EQQA
-X-Forefront-Antispam-Report-Untrusted: CIP:91.135.65.126;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHE01-GV0-obe.outbound.protection.outlook.com;PTR:mail-gv0che01lp2040.outbound.protection.outlook.com;CAT:NONE;SFS:(13230028)(396003)(376002)(39850400004)(346002)(136003)(451199021)(36840700001)(46966006)(40480700001)(316002)(70206006)(156005)(110136005)(32850700003)(36860700001)(70586007)(54906003)(5660300002)(4326008)(8936002)(82740400003)(7636003)(41300700001)(8676002)(186003)(83380400001)(47076005)(336012)(107886003)(6486002)(478600001)(26005)(6512007)(1076003)(6506007)(82310400005)(86362001)(36756003)(2616005)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0081
-X-CodeTwo-MessageID: 56c78edf-5b03-4b54-9025-43f57628988f.20230330105007@de1-emailsignatures-cloud.codetwo.com
+X-Microsoft-Antispam-Message-Info-Original: BK4DtIljL+OnslKJ8KNxml/29geYY9/Dy4UqF7XvOyqoZtGhd3q/U5WcojWdL4yJbp+eNE1VbF9J08+OmUv25pKuSExD3zR1VmEf5dCyGLyO6F+3SvEgldQKrS7R9hlIbBLnaCxpGp/heD4Cy5u+P1IpCc7Mc1PX8joE51jAQDCjmP6iIkxisIvCqB6tFtN0N8h/xP+Hhxco/qSkrFdnwtSF5rAF9oVyEQ5o1yHxgHdSeAtDXKhxQjCSSaTRVFF6WSzKkGUSjCUo69vY8W4J/d96XPTNTBNueKH3yrEgJo7kXE0JKjQR3T54kS9wNVglfSWHmLITqgweLg6+CHTih6j4l90foWDYpznZklbeb+fjekXn+YUhEusrK2L6KEbuPJiI8ic4EvqHx2pTC+K4flaEKCQsqRrvz4OKHpAqqJ6bC2Eksjj5/FqPUvLh1nixsydRTOFnuCh5Te0hQhkRWgKvaJIJuvMtFJ+rnFRzsX8XZ48Ph9rmk0CRSt3ObnT9uxU1fjZq7nrOjxWNx0qToNsev6v5IH+p9JOTr4We6kaKml+hNXr+6hH+9U+hOOwnPJHgcaUQbff9hLPc/x0T7lDak9SkDakRxLy2aYJZUvS+imNOoPXXOpNOxwnCO35F3JEbXkPOH5KoTwpX31Uwki6fB2xsBQuQxpNyLUVyQIVIvJv4ZHmZkHcKE8h9C61YNncEAtwfU0nRGBHujB3mqVqDSdu25eCtjDZaPcLL6sI46js3meK2C5TWrzrkkp4udKMkGXdSkv5wLiP6eRLUeLMcwqXN/zbtVuDvwfPp+qy397XigtQluihkrcu8cZNW
+X-Forefront-Antispam-Report-Untrusted: CIP:91.135.65.126;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHE01-GV0-obe.outbound.protection.outlook.com;PTR:mail-gv0che01lp2043.outbound.protection.outlook.com;CAT:NONE;SFS:(13230028)(39850400004)(376002)(396003)(136003)(346002)(451199021)(46966006)(36840700001)(40480700001)(36860700001)(54906003)(110136005)(32850700003)(156005)(70586007)(70206006)(4326008)(8676002)(82740400003)(7636003)(1076003)(316002)(47076005)(26005)(186003)(336012)(478600001)(83380400001)(6506007)(2616005)(41300700001)(6512007)(107886003)(6486002)(86362001)(2906002)(82310400005)(36756003)(8936002)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0976
+X-CodeTwo-MessageID: d722aca6-5578-4f0d-a897-42661d1b6853.20230330105010@de1-emailsignatures-cloud.codetwo.com
 X-CodeTwoProcessed: true
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR01FT060.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR01FT068.eop-EUR01.prod.protection.outlook.com
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 0b3de307-b889-46c9-12b8-08db310c859b
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 69eec4fd-7765-4c01-aa07-08db310c87df
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2B/3tJtrJDHk4PbJ1HUVecvmT2u1M5U6WACHzfKr4TDyrF7zG90LEQsFJ3L5Q73Zja9fnGw6uaUfrBbjZsGuuRPQ4UU5yLgsNHq7YqdFshEEW7yHbNznOh6wMmeWtA+Na6s/hCXrHzUyRCi4/aEJNdmyVYdB7JrRmwTlTAIgbpKwBJdxlMiyXJcNXcPgpoozYZXIlTiwy0mHcw4oVeWAsR6ii7umo1fOmcdE64hKrMSnTNl8/0M4sfmAnnNDYIM8imMJMXhQDkPOHBUGvlns3vvG2OcUG9O01Ck7vhuWJ/2XSgh5CVFTBmsB3zz5Y0TqlfUhgds2bruBrK9LmXXXkksv3OXs7owz40Wp1pvcDaYscV/fYpRPsTAsC+xj+4Qknd4NvMYlL44LwWoalRr9geZRES2duD+9d7NqAcUQqgNfZpPv6L+Q9VlhC/OzeExBwJwpzVTpXOwg/UMeJnqDOygL0EgGChl8GEFk1KxggYZ+Nj5Yo7woryC/CFieVbDoozRSahp5Zes5sXC+O7+SkOE0sK9qX8K8vC8erYcqu/vww2wCchDlwdr2x7/mBd3JRmlJsmwm8Lkb0GiC+wfHQWMHMReuAvvHtMhzQ5boesTvQlN6CwRTlT2s1OPJ/kSL3rbBEQbtOa+wlqnQr/d4xgH/yX4E5/jjEa6mlpGAV1Y=
-X-Forefront-Antispam-Report: CIP:20.79.220.33;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:de1-emailsignatures-cloud.codetwo.com;PTR:de1-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230028)(39850400004)(136003)(376002)(346002)(396003)(451199021)(46966006)(36840700001)(47076005)(36756003)(7596003)(7636003)(8936002)(5660300002)(82310400005)(4326008)(70206006)(70586007)(41300700001)(8676002)(86362001)(82740400003)(40480700001)(6486002)(36860700001)(83380400001)(336012)(2616005)(1076003)(54906003)(26005)(6506007)(2906002)(6512007)(478600001)(107886003)(186003)(110136005)(316002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: iCtE1Iy1Erp7GAaRWQMxarbLRU1lU6Pocc0f+Poxp3lAaOLfi3trbyx7w8kDbw4tr6bCLsUsZT87ey6VWw5fUsoWTdDjr1BbBYqm4cDs10SPuySvOihP3mlUo3ZhFQqN6bOXdCm9C6/95s0JFz4uV+bVcThhWdjIAWh25pc4W00rpX3dygFDL2mwuZsYLwIj8IdNjaNE1aS6hB9J1IbZHLZJw2Z3SQKqjLm78JHJKE4zuOAgyJS+vGUukbAOZoSzdqAYKmslc3sE8rJ6WDi3GynHkFpuudRkcE3Y1gNk3UARzT0ewSS2tNPyO2tz1eRvEudjysJM3LTSMyJNvYGmIg368tcOwn8W66znwyuPxNBYvnzPYdpEzoU+wBcfgMfaV/z0jHqhVF8/PprEDNVh1mke73InTpn8/R2kv2fOOIOlEBSOg3st/1DnOqtUL0TXRnws2yqtTZLaKl+tGn5eyN3qzcj+OJVUEIGp73+EvNRreUBBI6Eo46qj4VLMQvcYMroseaQFK8iJBPBEzX1WQ6lWMoLjAG0/b5A05vkIbr1tt1SVCuGV8x4VjdFXuiS2iNKECebrplxGSM/QFJqbggqgHGrvCa4F5qV/58vPIJcxkeSzPrCmnm6j1nIhNjoMK1n4wTKM18FcUXfWcbBgmvSV8qcnzEYiGDXqNKjlXTM=
+X-Forefront-Antispam-Report: CIP:20.79.220.33;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:de1-emailsignatures-cloud.codetwo.com;PTR:de1-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230028)(396003)(346002)(136003)(376002)(39850400004)(451199021)(36840700001)(46966006)(47076005)(2616005)(83380400001)(336012)(36860700001)(6486002)(478600001)(186003)(316002)(110136005)(107886003)(26005)(1076003)(2906002)(54906003)(6512007)(6506007)(82310400005)(5660300002)(4326008)(36756003)(7636003)(8936002)(7596003)(70586007)(70206006)(8676002)(41300700001)(40480700001)(86362001)(82740400003);DIR:OUT;SFP:1102;
 X-OriginatorOrg: duagon.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 10:50:08.7735
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 10:50:11.9184
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 290f597c-e4b7-4cab-02a9-08db310c87a8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d19d82b-cf2c-48f8-6a4c-08db310c8991
 X-MS-Exchange-CrossTenant-Id: e5e7e96e-8a28-45d6-9093-a40dd5b51a57
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5e7e96e-8a28-45d6-9093-a40dd5b51a57;Ip=[20.79.220.33];Helo=[de1-emailsignatures-cloud.codetwo.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT060.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT068.eop-EUR01.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0872
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0056
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -177,54 +182,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mcb-pci driver is allocating the memory region for the "chameleon table"
-with a fixed size of 0x200. This region is only use to do a initial
-parsing to discover the devices implemented as IP Cores.
+The function chameleon_parse_cells() returns the number of cells
+parsed which has an undetermined size. This return value is only
+used for error checking but the number of cells is never used.
 
-If the "chameleon table" is actually smalled than 0x200 and the first
-device offset happen to be within 0x200, a memory overlapping can ocurr.
+Change return value to be number of bytes parsed to allow for
+memory management improvements.
 
-Here an extract of the memory overlapping when registering a 16z125 IP Core=
-:
-
-[   31.016972] 8250_men_mcb mcb0-16z125-0:0:0: can't request region for res=
-ource [mem 0xa8200100-0xa820010f]
-[   31.016994] 8250_men_mcb: probe of mcb0-16z125-0:0:0 failed with error -=
-16
-[   31.017010] 8250_men_mcb mcb0-16z125-1:0:0: can't request region for res=
-ource [mem 0xa8200110-0xa820011f]
-
-And here, the memory allocated for the chameleon table parsing:
-
-user@host:$ sudo /proc/iomem
-...
-a8200000-a82001ff : mcb_pci
-...
-
-This patch solves this problem by dropping/reallocating the memory region o=
-f the
-"chamelon table" with the actual size once it has been parsed.
-
-This patch is based on linux-next (next-20230323)
-
-Changes for V3:
- * handle return value if no chameleon cells found.
- * remove stray newline.
- * reword typo in PATCH 1 commit message.
-
-Changes for V2:
- * make parsing function return the size of "chameleon table".
- * reallocate instead of not requesting the memory region.
-
-Javier Rodriguez (3):
-  mcb: Return actual parsed size when reading chameleon table
-  mcb-pci: Reallocate memory region to avoid memory overlapping
-  mcb-lpc: Reallocate memory region to avoid memory overlapping
-
- drivers/mcb/mcb-lpc.c   | 35 +++++++++++++++++++++++++++++++----
+Co-developed-by: Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>
+Signed-off-by: Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>
+Signed-off-by: Javier Rodriguez <josejavier.rodriguez@duagon.com>
+---
  drivers/mcb/mcb-parse.c | 15 ++++++++++-----
- drivers/mcb/mcb-pci.c   | 27 +++++++++++++++++++++++++--
- 3 files changed, 66 insertions(+), 11 deletions(-)
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/mcb/mcb-parse.c b/drivers/mcb/mcb-parse.c
+index aa6938da0db8..2aef990f379f 100644
+--- a/drivers/mcb/mcb-parse.c
++++ b/drivers/mcb/mcb-parse.c
+@@ -130,7 +130,7 @@ static void chameleon_parse_bar(void __iomem *base,
+ 	}
+ }
+=20
+-static int chameleon_get_bar(char __iomem **base, phys_addr_t mapbase,
++static int chameleon_get_bar(void __iomem **base, phys_addr_t mapbase,
+ 			     struct chameleon_bar **cb)
+ {
+ 	struct chameleon_bar *c;
+@@ -179,12 +179,13 @@ int chameleon_parse_cells(struct mcb_bus *bus, phys_a=
+ddr_t mapbase,
+ {
+ 	struct chameleon_fpga_header *header;
+ 	struct chameleon_bar *cb;
+-	char __iomem *p =3D base;
++	void __iomem *p =3D base;
+ 	int num_cells =3D 0;
+ 	uint32_t dtype;
+ 	int bar_count;
+ 	int ret;
+ 	u32 hsize;
++	u32 table_size;
+=20
+ 	hsize =3D sizeof(struct chameleon_fpga_header);
+=20
+@@ -239,12 +240,16 @@ int chameleon_parse_cells(struct mcb_bus *bus, phys_a=
+ddr_t mapbase,
+ 		num_cells++;
+ 	}
+=20
+-	if (num_cells =3D=3D 0)
+-		num_cells =3D -EINVAL;
++	if (num_cells =3D=3D 0) {
++		ret =3D -EINVAL;
++		goto free_bar;
++	}
+=20
++	table_size =3D p - base;
++	pr_debug("%d cell(s) found. Chameleon table size: 0x%04x bytes\n", num_ce=
+lls, table_size);
+ 	kfree(cb);
+ 	kfree(header);
+-	return num_cells;
++	return table_size;
+=20
+ free_bar:
+ 	kfree(cb);
 --=20
 2.34.1
