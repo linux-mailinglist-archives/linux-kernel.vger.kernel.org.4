@@ -2,97 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4B26D02A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B87E6D02AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjC3LK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
+        id S231536AbjC3LMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjC3LKZ (ORCPT
+        with ESMTP id S229795AbjC3LMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:10:25 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D7AB8;
-        Thu, 30 Mar 2023 04:10:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680174624; x=1711710624;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NxNlRxKsoJQSH8kENdw2Ulaik6LeFrNEZuyYeIOnY98=;
-  b=I70KK4B+f8lhlY2/TumsFNKT1n0fPYpjztHF5k32nXAPspgaC4BPo9Fi
-   uScjPjn0RqtHiuzfQEu9QS7BNZ1RtoNlcgx9/8MPZHTaUZolYREPmITYH
-   b3LaIGxOB/CDEB4bnC+y2+q1RvDgtTfnLclQKXs0tjF2ZJ0LsbkaqDlxu
-   GaYGpYWjGuy1VWUd/hMVNRCWD8SmqqH09UV/hf6XDChRlqAeuHqZIf24H
-   bZtwfy3tjUW/ZW7jPNzQ/5Fr8VPPf3YEJA4j2OYyfeeXzgBnLIFzFvX80
-   9A6tpJ4AmH3TzV4e2wqTZ0iW6RQDsEn03wzHBislw2k1oOymbZnRtrF2T
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="427413972"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="427413972"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:10:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="749150470"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="749150470"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Mar 2023 04:10:22 -0700
-Message-ID: <2e727403-a566-8c48-9367-5daa7c87def7@linux.intel.com>
-Date:   Thu, 30 Mar 2023 14:11:44 +0300
+        Thu, 30 Mar 2023 07:12:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38819770
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:11:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BE226200A
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:11:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A961EC433EF;
+        Thu, 30 Mar 2023 11:11:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680174717;
+        bh=VazfsNN0HKVU/vlqWe4mJ8uHxWTQN5z65oUqPF2fABM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iLHLEgUW6O7WfuF/l4TUf6qQD+9QastfYaE11UsfpOAXDNv9TW2jxTIyab363Ukqv
+         QhPYXO1HUaOy7j9Q57TCIfBw0b6RGCyVjbVxBOq48TrLQJG3r3lWklXgHOQ65ecMXb
+         nzTrOrUTXs1Wc8uVGAPDaHeWNgBF+Fph1wGpBfwdSYkoXMCTost1vglscmJcpH0Lqj
+         ITZp5lsz8LtJ4+iIBLnEljSWzm2ey+9hHneda+s5hGWlHglbtn2HCrMwdGnxntrwLi
+         RCZIdHhmOVHth8ZfXuuD6+eBm0rgB8KPas2XXACwP+A1gw3Tvqph0KRt2CSCJarjHB
+         tV2WlG1iqgGAw==
+Date:   Thu, 30 Mar 2023 12:11:53 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     =?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
+Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH] mfd: arizona-i2c: add the missing device table IDs for of
+Message-ID: <20230330111153.GA434339@google.com>
+References: <20230319124153.35294-1-git@apitzsch.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH] xhci: use pm_ptr() instead of #ifdef for CONFIG_PM
- conditionals
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Josue David Hernandez Gutierrez 
-        <josue.d.hernandez.gutierrez@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230328131114.1296430-1-arnd@kernel.org>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20230328131114.1296430-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230319124153.35294-1-git@apitzsch.eu>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.3.2023 16.10, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> A recent patch caused an unused-function warning in builds with
-> CONFIG_PM disabled, after the function became marked 'static':
-> 
-> drivers/usb/host/xhci-pci.c:91:13: error: 'xhci_msix_sync_irqs' defined but not used [-Werror=unused-function]
->     91 | static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
->        |             ^~~~~~~~~~~~~~~~~~~
-> 
-> This could be solved by adding another #ifdef, but as there is
-> a trend towards removing CONFIG_PM checks in favor of helper
-> macros, do the same conversion here and use pm_ptr() to get
-> either a function pointer or NULL but avoid the warning.
-> 
-> As the hidden functions reference some other symbols, make
-> sure those are visible at compile time, at the minimal cost of
-> a few extra bytes for 'struct usb_device'.
-> 
-> Fixes: 9abe15d55dcc ("xhci: Move xhci MSI sync function to to xhci-pci")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Sun, 19 Mar 2023, André Apitzsch wrote:
 
-Thanks for this.
-Looks like Greg already picked it.
+> This patch adds missing MODULE_DEVICE_TABLE definition
+> which generates correct modalias for automatic loading
+> of this driver when it is built as a module.
 
--Mathias
+Next time please wrap at a more suitable point (~80-chars).
 
+I've fixed this for you this time.
+
+> Signed-off-by: André Apitzsch <git@apitzsch.eu>
+> ---
+>  drivers/mfd/arizona-i2c.c | 1 +
+>  1 file changed, 1 insertion(+)
+
+Applied, thanks
+
+--
+Lee Jones [李琼斯]
