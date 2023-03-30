@@ -2,161 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3596CFFB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F36B6CFFB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjC3JT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
+        id S229764AbjC3JVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjC3JTt (ORCPT
+        with ESMTP id S229552AbjC3JVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:19:49 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF861725
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:19:45 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id o24-20020a05600c511800b003ef59905f26so11267850wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:19:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680167983;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=CbeX3b3mkNU5KCreV7qGDGfkWXIVSy5iikXXRCofrt4=;
-        b=Em1thZ80LnmvFydE9lDwXBYXKGD1PpQp8O4whHafhmwL1rSD+XG2INd+ggxm69Wn9e
-         Ez3mwMf6WpDIjytF1hucvi1yCzgFfE2O0W2NJqfm2G0XcmqGgvm1VPydx6jtLqrCdYqn
-         90bH5eFlz12AAvp2XbDSYeV3mHiLzqKXiN3TcxDwuuQ+NTAe8KTCirNZ2aRREpmEaM5q
-         JapCiyEACTmL9aGOlMB6ak75/t3fmtUMqgGO81wOomxCKIVe4shZspy0OP7OGGICG2Mg
-         gp28vNO0nxZHXerkyoNWLfvQVR8DStz23RQV2xo2Yfj1X4UqjssAlQjYK7hNxHnskdMq
-         3yFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680167983;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CbeX3b3mkNU5KCreV7qGDGfkWXIVSy5iikXXRCofrt4=;
-        b=eoaOLBvnGX+D5d/wkuEBRknBKDEVi7HsmY0gpExDhCts8NR0j58g0Xi5Jxpc1WBEdS
-         NdPaqt8p96G+jOf2adZKHTkY0QN3HHSL4Wj+k5L88g2NPKCQYt0muY329ozT4Joh40dp
-         lcalzn/lLoUWml1t6FBdZ1zzVWOd8n+FVDPS46vLRysdSY7tdZXuZlmvjZoTjkRNr/xa
-         V3ehRWoV7PE6TCsxtHUpoE2l9goiNWfVmqk1KFTz3/FjjghoiteDfFxL3vyKQ2njq7uo
-         QGoOgVj5TD9Zti2cVfJP+CfS+Mrc80VgxS+ker3pHr7/oJA+aefmIpR+1T1cuQyhjMsy
-         Sluw==
-X-Gm-Message-State: AAQBX9dV4Q4u4cjtgQaS4rcykEFp1D5GgQHEU7tdSSrBb6EdPfwKOt31
-        W7VAbZHWRX+6cJUQcFGgFSf3bQ==
-X-Google-Smtp-Source: AKy350bWernDSucGomHC3DsmFroBEfGa1UdA19ER598biAVvnw/YlqWmIh9FqC7BItHOIFjpzaGtmg==
-X-Received: by 2002:a05:600c:b49:b0:3ef:5fe3:c57c with SMTP id k9-20020a05600c0b4900b003ef5fe3c57cmr15666956wmr.23.1680167983346;
-        Thu, 30 Mar 2023 02:19:43 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:fe8e:8291:fc25:6c8f? ([2a01:e0a:982:cbb0:fe8e:8291:fc25:6c8f])
-        by smtp.gmail.com with ESMTPSA id z15-20020a05600c220f00b003ef5f77901dsm5055067wml.45.2023.03.30.02.19.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 02:19:43 -0700 (PDT)
-Message-ID: <9c8e9516-8297-3eb9-2682-5de9b089ac85@linaro.org>
-Date:   Thu, 30 Mar 2023 11:19:41 +0200
+        Thu, 30 Mar 2023 05:21:51 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11305AC;
+        Thu, 30 Mar 2023 02:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680168107; x=1711704107;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6mGTlpU1IVuvQh1ixKK/vHqK4uu3Vh62qa1dPLBFytg=;
+  b=ZgDhQMmoQ4299meqMytdAM2Hp0iFcoD8qWdeZ7eoN5fsL5wXs2Ianw15
+   4GfHA5ZeBJFLvRS28/Z5oI00rEMTGwja2q/hRbBh6Q2fqrG3Yov4/9HQT
+   2mQGVAO4k6qsUlb+puHutEvrda2JPDd0RNppq4jl0arE3ojiHu/w2dkO+
+   OlD+zsR2MU19quEdDQUKdTl8iayiLJ81iN/sh4BVh7scgUXPVItfkdBHa
+   t4BQCIUr6NWh1qG6sN53zNVU9u7HxKOk6c/zCL0yICAPRhkW9aEv/Ie9m
+   v8UJqvl5j5NdtGN/WOSDTzhRa5+nKG+vicRZTQnvnmukt3IB9B+BvnbYT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="343569205"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="343569205"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 02:21:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="753926770"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="753926770"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Mar 2023 02:21:45 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phoTY-000KgO-15;
+        Thu, 30 Mar 2023 09:21:44 +0000
+Date:   Thu, 30 Mar 2023 17:21:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Manish Mandlik <mmandlik@google.com>, marcel@holtmann.org,
+        luiz.dentz@gmail.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        linux-bluetooth@vger.kernel.org,
+        Manish Mandlik <mmandlik@google.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 2/4] Bluetooth: Add vhci devcoredump support
+Message-ID: <202303301732.rPkAOhqw-lkp@intel.com>
+References: <20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc@changeid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: spi: add Amlogic Meson A1 SPI
- controller
-Content-Language: en-US
-To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru
-References: <20230327211351.686831-1-mmkurbanov@sberdevices.ru>
- <20230327211351.686831-2-mmkurbanov@sberdevices.ru>
-Organization: Linaro Developer Services
-In-Reply-To: <20230327211351.686831-2-mmkurbanov@sberdevices.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc@changeid>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Manish,
 
-On 27/03/2023 23:13, Martin Kurbanov wrote:
-> Add YAML devicetree Amlogic Meson A113L (A1 family) SPIFC Driver.
-> 
-> This patch has dependencies on the A1 clock series which is still under
-> review - https://lore.kernel.org/all/20230321193014.26349-1-ddrokosov@sberdevices.ru/
-> 
-> Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
-> ---
->   .../bindings/spi/amlogic,meson-a1-spifc.yaml  | 42 +++++++++++++++++++
->   1 file changed, 42 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
+Thank you for the patch! Yet something to improve:
 
-I think it's time to drop "Meson" from bindings, please drop Meson here and in all the file
-down to the compatible which should be "amlogic,a1-spifc"
+[auto build test ERROR on bluetooth/master]
+[also build test ERROR on bluetooth-next/master linus/master v6.3-rc4 next-20230330]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
-> new file mode 100644
-> index 000000000000..d2b1c754a6e1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/amlogic,meson-a1-spifc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic Meson A1 SPI Flash Controller
-> +
-> +maintainers:
-> +  - Martin Kurbanov <mmkurbanov@sberdevices.ru>
-> +
-> +allOf:
-> +  - $ref: spi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - amlogic,meson-a1-spifc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/amlogic,a1-clkc.h>
-> +    spi@fd000400 {
-> +        compatible = "amlogic,meson-a1-spifc";
-> +        reg = <0xfd000400 0x290>;
-> +        clocks = <&clkc_periphs CLKID_SPIFC>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +    };
+url:    https://github.com/intel-lab-lkp/linux/commits/Manish-Mandlik/Bluetooth-Add-vhci-devcoredump-support/20230330-140719
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+patch link:    https://lore.kernel.org/r/20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc%40changeid
+patch subject: [PATCH v12 2/4] Bluetooth: Add vhci devcoredump support
+config: csky-randconfig-r034-20230329 (https://download.01.org/0day-ci/archive/20230330/202303301732.rPkAOhqw-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a96b21e272af3d91f47b77b297f1289c867259b4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Manish-Mandlik/Bluetooth-Add-vhci-devcoredump-support/20230330-140719
+        git checkout a96b21e272af3d91f47b77b297f1289c867259b4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash drivers/bluetooth/
 
-Drop the include and use fake label phandles instead.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303301732.rPkAOhqw-lkp@intel.com/
 
-Thanks,
-Neil
+All errors (new ones prefixed by >>):
 
+   drivers/bluetooth/hci_vhci.c: In function 'force_devcd_write':
+>> drivers/bluetooth/hci_vhci.c:334:21: error: 'struct hci_dev' has no member named 'dump'
+     334 |                 hdev->dump.timeout = msecs_to_jiffies(dump_data.timeout * 1000);
+         |                     ^~
+
+
+vim +334 drivers/bluetooth/hci_vhci.c
+
+   310	
+   311	static ssize_t force_devcd_write(struct file *file, const char __user *user_buf,
+   312					 size_t count, loff_t *ppos)
+   313	{
+   314		struct vhci_data *data = file->private_data;
+   315		struct hci_dev *hdev = data->hdev;
+   316		struct sk_buff *skb = NULL;
+   317		struct devcoredump_test_data dump_data;
+   318		int ret;
+   319	
+   320		ret = simple_write_to_buffer(&dump_data, sizeof(dump_data), ppos,
+   321					     user_buf, count);
+   322		if (ret < count)
+   323			return ret;
+   324	
+   325		skb = alloc_skb(sizeof(dump_data.data), GFP_ATOMIC);
+   326		if (!skb)
+   327			return -ENOMEM;
+   328		skb_put_data(skb, &dump_data.data, sizeof(dump_data.data));
+   329	
+   330		hci_devcd_register(hdev, vhci_coredump, vhci_coredump_hdr, NULL);
+   331	
+   332		/* Force the devcoredump timeout */
+   333		if (dump_data.timeout)
+ > 334			hdev->dump.timeout = msecs_to_jiffies(dump_data.timeout * 1000);
+   335	
+   336		ret = hci_devcd_init(hdev, skb->len);
+   337		if (ret) {
+   338			BT_ERR("Failed to generate devcoredump");
+   339			kfree_skb(skb);
+   340			return ret;
+   341		}
+   342	
+   343		hci_devcd_append(hdev, skb);
+   344	
+   345		switch (dump_data.state) {
+   346		case HCI_DEVCOREDUMP_DONE:
+   347			hci_devcd_complete(hdev);
+   348			break;
+   349		case HCI_DEVCOREDUMP_ABORT:
+   350			hci_devcd_abort(hdev);
+   351			break;
+   352		case HCI_DEVCOREDUMP_TIMEOUT:
+   353			/* Do nothing */
+   354			break;
+   355		default:
+   356			return -EINVAL;
+   357		}
+   358	
+   359		return count;
+   360	}
+   361	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
