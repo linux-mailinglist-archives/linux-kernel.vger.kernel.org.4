@@ -2,53 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887DC6D13B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EBE6D13C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 01:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbjC3Xul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 19:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
+        id S231759AbjC3XzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 19:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbjC3XuV (ORCPT
+        with ESMTP id S231717AbjC3XzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 19:50:21 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332CA12CFD;
-        Thu, 30 Mar 2023 16:50:08 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PngBx54V5z4x1R;
-        Fri, 31 Mar 2023 10:50:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680220204;
-        bh=rCPjUHBP/pV9Uau0ptAEaLCUF3D9Ml3/OGmrv28mF4g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=S0ABsE+rmZ0++GhOZmrtmLwI8G76LtysR3QpaeEi92LTIh4SUJh1rwpwvJMCKOI7q
-         lDQQe7YbEXwImSz6IZpwH1ma9/Au4G4Z2BypT6ujcFzuOEX2G/9NHz6/DCfGrEbi+Q
-         A64GlyIb1Gzwwgw6aL5JnwOiN68JhmaJMvufvGaFAgUA8VBgRg+j+9a/PDIy3+OLKh
-         Y8kqUNyMSVTPIWCaJ62uwHb+CMmKme6MdTPVw3wNEH385RX6/V9bHe6GkWPhfTHyff
-         AWut5xijCh7NTYmR/hEK31y5k5zCAv5xIcqWhnwvs/V21STxBS5QWF+M2/CnFFZKeh
-         w5NAcv7nfHOSQ==
-Date:   Fri, 31 Mar 2023 10:49:59 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>
-Cc:     Wireless <linux-wireless@vger.kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>
-Subject: linux-next: manual merge of the wireless-next tree with the
- wireless tree
-Message-ID: <20230331104959.0b30604d@canb.auug.org.au>
+        Thu, 30 Mar 2023 19:55:07 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4782CA26;
+        Thu, 30 Mar 2023 16:55:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680220506; x=1711756506;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=cixcBaVxCryMA/SKOMCoTL6UmFfFC27pjmCf07aJ3zw=;
+  b=h8DzM+95zSFlyRfzVPo+w4Ikkobo9tn3Mtr9jMQGBhFfdrga2IIfQBAn
+   TiGLF7YvrIIiTVd1KD3fgoil3qlVG4K4QKvBFjNnUmd+ggZ85b6XRjYTf
+   8ffGJthkOYfPU0MaGetG1shoSe6fOEx53ts8bwbspNJ/rVV3VxW1m+7Zh
+   t7sQGkCrW50XwACy2sUEwv4ZsH438QN9EslhfOwkOf7pjTzfVfistQZzM
+   m7Wyk1uRtnVbhrUqtG/15xnLQaQIJCOJgdXEz9mk3L4y53mz2FqWLxYUG
+   NXZLShHVIWEwULg4HBuFdQeUCpgMIuu1VnFS9kPGM/EGyrJipEQqj+n0P
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="406314964"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="406314964"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 16:55:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="754200232"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="754200232"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Mar 2023 16:55:05 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 30 Mar 2023 16:55:05 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 30 Mar 2023 16:55:05 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.175)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 30 Mar 2023 16:55:04 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZO12mPRpzTzp25u7h8mrrwms64JmQS/aVoQdiNgKf5jpi1OfK9LRdi5HuDgKneg369M+Elwith2UKS77yukeUvMMw51Z4zvbT8higuqhk0aoCUCetATkH0jHAzSDCUDFxiASlaGubZVAByrG72L3wrY3V8JvdKJcn+T337kjdNqoZqb7QAJCnIxLitgwP5wuq1Ftj+BdV1ePU2tTEv1wxQ/6O6IR3J7YQDz6nFe76N/vml8FC2aLTBZhRLqihjgA/NFGPzSgRRz69gs39YBpX4hl8eLkFIYLfuu3509LW6xppufHqMp6bP6xYRHmNLfqIi7dZULMnbCShL7JaPZU2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vbSX1H9w5IeTCqGdTRyYJ/t4WLJL48W0zir3cOEd9TE=;
+ b=jjzdghbui7qp2SyxxvYnfZ36r9dWp0lYXvjUkOcdwSOVokp/Bi5A3BNwcIUtWNPFIuDvR6mifH/FevCcClcmMf2X2eR3CxWOTiaeex/5FvARjo+jP08F5Pe/2kULNjSfZ/nL36WM2zWkvutN9rtUtyCppOgCxgVAVQcHiz1oBIlJipU4E/xml4SltOUMKN+RQwTvZ98rZRJ/2qrr7IR2v127HRtixduPuG+b/zfT2apIdiKm81bozjbQO5AJa99hftgAvtfshBsWPt7pAuxtToK/hwfP8vsBQdx4VvwACBZAfojeDtk9SPlukcPB/9HfzV7VnIVooU18WpfZIvRmAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by DM6PR11MB4593.namprd11.prod.outlook.com (2603:10b6:5:2a3::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Thu, 30 Mar
+ 2023 23:55:02 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::d651:ac39:526d:604f]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::d651:ac39:526d:604f%12]) with mapi id 15.20.6254.022; Thu, 30 Mar
+ 2023 23:55:02 +0000
+Message-ID: <65669f7f-e1fd-5b6b-f879-9166bd9a474c@intel.com>
+Date:   Thu, 30 Mar 2023 16:54:59 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH V2 2/8] vfio/pci: Remove negative check on unsigned vector
+Content-Language: en-US
+To:     Alex Williamson <alex.williamson@redhat.com>
+CC:     <jgg@nvidia.com>, <yishaih@nvidia.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <kevin.tian@intel.com>,
+        <tglx@linutronix.de>, <darwi@linutronix.de>, <kvm@vger.kernel.org>,
+        <dave.jiang@intel.com>, <jing2.liu@intel.com>,
+        <ashok.raj@intel.com>, <fenghua.yu@intel.com>,
+        <tom.zanussi@linux.intel.com>, <linux-kernel@vger.kernel.org>
+References: <cover.1680038771.git.reinette.chatre@intel.com>
+ <0dc2a0c8e25b13a3a41db75ab192f387a1548c80.1680038771.git.reinette.chatre@intel.com>
+ <20230330142657.3930c68b.alex.williamson@redhat.com>
+ <460fdc5f-7613-5164-0247-254939cedc71@intel.com>
+ <20230330165445.7bf7cdd6.alex.williamson@redhat.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20230330165445.7bf7cdd6.alex.williamson@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR05CA0035.namprd05.prod.outlook.com
+ (2603:10b6:a03:33f::10) To CY4PR11MB1862.namprd11.prod.outlook.com
+ (2603:10b6:903:124::18)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Z75pzBwRDy.ne14p3qRShtd";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|DM6PR11MB4593:EE_
+X-MS-Office365-Filtering-Correlation-Id: ff46f854-8b3e-4ca3-ef46-08db317a2d8a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qjs6rAxWCTIl7anyFZ5ubFUbyxsRIJ/Ow92hrcAPzRp5rhl1Y7LEZckxfmrf4MYUbjrHNN5PMxDgyWvsAateUT5TFi2tPSCyatw5IOIBuHe+n063VR+999I/7cUnrVRSD64nRxfn85UzzHTybvMV7lrWtJ3Z/cKNmNWBTwzHflnb5AdK+DzLlDYbu5sCdoFoS9vIsYUajIQqiSgdtb7+Gam6dmK1wMrPDuhh4fYksZzwPvmGvIu0Z2vFUaqL+nSvXLDElqw8Vb4wGEQhRCTdSTXgkHIEq0cNc7W5L3aQZUJ4H3/voLg0+STs1q8wQtEfXqz1lfrI5neaPhGjNNUvISvDAKaBS5elzVSZW3UOF4Nkdp1bGmr4Sy00fPL2LvIg3B9pD0+WIPUvT6vMWxO3KTj/cjI5ozLeq+qNQaOZUKp76ZGvRrtzrlYsW5yBpRHcF5WJRZ5M+ROduQY39C6z9JygsfQBeoqRT75QY0JlHXBL+6uBwATEgQ4omrC2t38GDPNoWQsuNkFsAskKfhv5eyWlKrL7IVcEHxUpI6QTiRc5/QsmvoACI0jaTQUk/BPD6k7Oi1/xsR2JwN2HQ7A3g9x2PK4dkvGJPtodda7OaxtpO8QMuurqlQXSTVG5wpMVNZTozNYw9w/889wYIHPCtQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(346002)(39860400002)(136003)(376002)(451199021)(6512007)(6506007)(316002)(6666004)(86362001)(82960400001)(8936002)(5660300002)(2616005)(31696002)(41300700001)(66946007)(6916009)(36756003)(8676002)(66476007)(4326008)(66556008)(53546011)(186003)(26005)(38100700002)(83380400001)(44832011)(478600001)(2906002)(31686004)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a1ZJdThydFMreXppT0p4M0Z2YTNtUFgwQlhyanN5dUFaSm9lYnhTTVJBa1Y0?=
+ =?utf-8?B?RS9DbzdMV0l2VVdSNW8vdmNpUEFpandHQzdyWWthWGp1S0RCNFpobmVsem9V?=
+ =?utf-8?B?VXE2VnZOaUpBb3RTMzNObkdoSmJPYkpyTHRaOTNTdFVuSVQrZmVoK3lxQzcz?=
+ =?utf-8?B?bkorSXp3MFdpbm1XV3l4WnZwcmVIRENrcGx3N21vUG9UMmpuUjJjRFlvbkxU?=
+ =?utf-8?B?WGlybGkxQWZHTlpwTDl3VmQ4TFVFYTZWUklQbGpQM2NGbXNQVTdZZkRleDdk?=
+ =?utf-8?B?YzNZcEtwcEFuM2ovV2Y0QU1tazdvZVJVMU5vMFpWZDEySU5rYS9Odm4rK0NY?=
+ =?utf-8?B?dVcva2dpQm1rZCtkdE56N0dOZG1BbnJPa2lDZW1pZFREZ0psdHNTNjFRay9N?=
+ =?utf-8?B?eVV5QVR1QmxxUDBwQk1uczlOMDlhbm5sK051djRSMDhCQzZwRWFjZWxjT2wy?=
+ =?utf-8?B?Y3RkV0tmRUkrdTJqRDQvbHplVTFuMC9yNEdEZWtLVjZENFFzcURKMjFSbDRz?=
+ =?utf-8?B?YWxnYmwwd2Nsdmh1dktlNzI3OUhtanNPaE0rZGV6aWNCL216Q1Q0VmVaOWc1?=
+ =?utf-8?B?alFxSVpDZFZCVlB6MDBkMjRuYkwvQ1lhTWtQYzVuL1BJeHppa2JLN3FBcG1i?=
+ =?utf-8?B?a0FYRWhQc1QzVlZFdittUnRmUTdFa2dacUF6c3plcXZKNW1TNXl6V2FqVVVO?=
+ =?utf-8?B?UnNYUW1Oc2ZZVUhSZWgvK3JuaDl6RGJHVDNsa3g3TjVOWmNHa2lnMTQxb2dX?=
+ =?utf-8?B?N0h1dHpNTlZlOHNDOER5V3F1TUJ1eDV0cEdRbWo3V2VMKzc5MFdzQXFuYks0?=
+ =?utf-8?B?ZVhXam51TG5NR0dlVDBza1Zkcm13SW5JRjJMbzl6L1NBbTRWVWRIQ0drb2w2?=
+ =?utf-8?B?RU1rVXJPcEZ1dnJJZXRjNWwrK01iN3BodHRDVlpCbFprenFCWVd1clVkcnQy?=
+ =?utf-8?B?UUg4a2dlQy9VbmE3V3llajl6ZnJoVkgrazFFQXl5VVZ1aFQrd2NEcEplaE4w?=
+ =?utf-8?B?eFptamVSU0J1M2RJUXRVY1A1SC8zV1Vxb0IzTmFiNEthU0NsN1M4aWRSQ0Y3?=
+ =?utf-8?B?WHhqM3ZmR0EvRjBiMWJiWllxeFREQXVMdk85VkRhOW5CU2ZKenFONjNNd1BW?=
+ =?utf-8?B?N1FVL0l4MEQyYU9ST1BKbXlaUzFkTmM5YU5FNWViV3lxeUxDcnY3eER5aFVk?=
+ =?utf-8?B?Z01YRVZWM1BGWFR4dE9JZzNrWWhYSjFNZ3RsdXZuTGVkNk9GcUswckhxaC85?=
+ =?utf-8?B?NDY2aEI2UFVRSUJmc0NnMFZFZW9RV0RwQkFnWFFmajJaZHlCQitvMHpYU0dD?=
+ =?utf-8?B?bVVJZ3ErYVp3aHBxWThoRXp0Y28ySHhzMjd0RHVKR1owUE1mQmdPUXVFR3dE?=
+ =?utf-8?B?SzBrWVhsNkRyN1dTR3FlY3luNEhta1RPZ3FMTEdWTXEwUFU5WnYwU3JvOVY3?=
+ =?utf-8?B?SkxxMXBxendhUGxtUmVMRithdzJvVmNWdTBvdzVCT1M5c2dreVI5QlgwRnNx?=
+ =?utf-8?B?NnVyY1BMWVJMbGhwY3k0bjFmRFlNbmpTVXVJdEdBUkxERXFRa1VrN0ZlQjc2?=
+ =?utf-8?B?bXdldExRbDgwMXppTkhVbmg1RDVidFJnOExzOHYrRjE1OXVZZEoxVmM5WUNi?=
+ =?utf-8?B?K2pKRXhrNUc3ajREYi9wcnVyYitoZWRlOXJtb3hDOGRxWUdNbEpsYzhlc1Mv?=
+ =?utf-8?B?ZVV1TWJpNVNNQTUwSHEvbEVzbWprMnUraFZvdW5Rdnd2ZWFWNUhFc1c5bGJr?=
+ =?utf-8?B?OGtwR0p3Qm9ERno4RmtJVkhIbEFpS3gzWnM5QzdIUTF6MURoelkxYURSa0g1?=
+ =?utf-8?B?RmZraWxNMmFHaFhRVVN5ck9wVzh6VmpudlMxS3RiZWRNdHF3bHpvQUNOTWpl?=
+ =?utf-8?B?TERNanUwTXRhWHFENUlkQTVzdDVXMWYrcFpPVENsLytXM0srVTVNZTJwL3Vs?=
+ =?utf-8?B?NWJJYWVWei96eVV1aGNTNDZRWDVrZVU5REUvMzRRKzdmVzNiWlpLRWhEeW5W?=
+ =?utf-8?B?SWlrMm1LVTFRUHJKdzlJd2tTN2cxWVdxOEUvdnlsV0czVVlLdHF3amNZNXZ2?=
+ =?utf-8?B?MFltY2lUTGQ5YVhVdExFOHJ3R2ZPN2RyVUZ0WC9Fa3YwRDBpQzFjRFBYUWdE?=
+ =?utf-8?B?bkkzU0h0QkFLMDBFNktmVHJkTjhqN3FRalBqWUo3dFYwYU9tYkNWd0x1R2ZQ?=
+ =?utf-8?B?K1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff46f854-8b3e-4ca3-ef46-08db317a2d8a
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 23:55:02.5799
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2kjrKk8gu3bkA2am8wODkqPXS75IVZ3auwC4h6+ObsI3pk4nigas7n0x0RIx3thUCTyiv6TDiF1sGYdxmyF7jag3/98JQ39s9ANTKnexiQA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4593
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,121 +165,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Z75pzBwRDy.ne14p3qRShtd
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Alex,
 
-Hi all,
+On 3/30/2023 3:54 PM, Alex Williamson wrote:
+> On Thu, 30 Mar 2023 15:32:20 -0700
+> Reinette Chatre <reinette.chatre@intel.com> wrote:
+>> On 3/30/2023 1:26 PM, Alex Williamson wrote:
+>>> On Tue, 28 Mar 2023 14:53:29 -0700
+>>> Reinette Chatre <reinette.chatre@intel.com> wrote:  
+>> ...
+>>
+>>>> @@ -399,7 +399,8 @@ static int vfio_msi_set_vector_signal(struct vfio_pci_core_device *vdev,
+>>>>  static int vfio_msi_set_block(struct vfio_pci_core_device *vdev, unsigned start,
+>>>>  			      unsigned count, int32_t *fds, bool msix)
+>>>>  {
+>>>> -	int i, j, ret = 0;
+>>>> +	int i, ret = 0;
+>>>> +	unsigned int j;
+>>>>  
+>>>>  	if (start >= vdev->num_ctx || start + count > vdev->num_ctx)
+>>>>  		return -EINVAL;  
+>>>
+>>> Unfortunately this turns the unwind portion of the function into an
+>>> infinite loop in the common case when @start is zero:
+>>>
+>>>                 for (--j; j >= (int)start; j--)
+>>>                         vfio_msi_set_vector_signal(vdev, j, -1, msix);
+>>>
+>>>   
+>>
+>> Thank you very much for catching this. It is not clear to me how you
+>> would prefer to resolve this. Would you prefer that the vector parameter
+>> in vfio_msi_set_vector_signal() continue to be an int and this patch be
+>> dropped and the "if (vector < 0)" check remains (option A)? Or, alternatively,
+>> I see two other possible solutions where the vector parameter in
+>> vfio_msi_set_vector_signal() becomes an unsigned int and the above snippet
+>> could be one of:
+>>
+>> option B:
+>> vfio_msi_set_block()
+>> {
+>> 	int i, j, ret = 0;
+>>
+>> 	...
+>> 		for (--j; j >= (int)start; j--)
+>> 			vfio_msi_set_vector_signal(vdev, (unsigned int)j, -1, msix);
+>> }
+>>
+>> option C:
+>> vfio_msi_set_block()
+>> {
+>> 	int i, ret = 0;
+>> 	unsigned int j;
+>>
+>> 	...
+>> 		for (--j; j >= start && j < start + count; j--)
+>> 			vfio_msi_set_vector_signal(vdev, j, -1, msix);
+>> }
+>>
+>> What would you prefer?
+> 
+> 
+> Hmm, C is fine, it avoids casting.  I think we could also do:
+> 
+> 	unsigned int i, j;
+> 	int ret = 0;
+> 
+> 	...
+> 
+> 		for (i = start; i < j; i++)
+> 			vfio_msi_set_vector_signal(vdev, i, -1, msix);
+> 
 
-Today's linux-next merge of the wireless-next tree got a conflict in:
+Much better. Will do. Thank you very much.
 
-  net/mac80211/rx.c
-
-between commit:
-
-  a16fc38315f2 ("wifi: mac80211: fix potential null pointer dereference")
-
-from the wireless tree and commit:
-
-  fe4a6d2db3ba ("wifi: mac80211: implement support for yet another mesh A-M=
-SDU format")
-
-from the wireless-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc net/mac80211/rx.c
-index 3e2176a730e6,1c957194554b..000000000000
---- a/net/mac80211/rx.c
-+++ b/net/mac80211/rx.c
-@@@ -2776,27 -2862,12 +2843,31 @@@ ieee80211_rx_mesh_data(struct ieee80211
-  		rcu_read_unlock();
-  	}
- =20
- +	/* Frame has reached destination.  Don't forward */
- +	if (ether_addr_equal(sdata->vif.addr, eth->h_dest))
- +		goto rx_accept;
- +
- +	if (!--mesh_hdr->ttl) {
- +		if (multicast)
- +			goto rx_accept;
- +
- +		IEEE80211_IFSTA_MESH_CTR_INC(ifmsh, dropped_frames_ttl);
- +		return RX_DROP_MONITOR;
- +	}
- +
- +	if (!ifmsh->mshcfg.dot11MeshForwarding) {
- +		if (is_multicast_ether_addr(eth->h_dest))
- +			goto rx_accept;
- +
- +		return RX_DROP_MONITOR;
- +	}
- +
-  	skb_set_queue_mapping(skb, ieee802_1d_to_ac[skb->priority]);
- =20
-+ 	if (!multicast &&
-+ 	    ieee80211_rx_mesh_fast_forward(sdata, skb, mesh_hdrlen))
-+ 		return RX_QUEUED;
-+=20
-  	ieee80211_fill_mesh_addresses(&hdr, &hdr.frame_control,
-  				      eth->h_dest, eth->h_source);
-  	hdrlen =3D ieee80211_hdrlen(hdr.frame_control);
-@@@ -2914,14 -2982,24 +2985,24 @@@ __ieee80211_rx_h_amsdu(struct ieee80211
-  					  data_offset, true))
-  		return RX_DROP_UNUSABLE;
- =20
- -	if (rx->sta && rx->sta->amsdu_mesh_control < 0) {
- +	if (rx->sta->amsdu_mesh_control < 0) {
-- 		bool valid_std =3D ieee80211_is_valid_amsdu(skb, true);
-- 		bool valid_nonstd =3D ieee80211_is_valid_amsdu(skb, false);
-+ 		s8 valid =3D -1;
-+ 		int i;
-+=20
-+ 		for (i =3D 0; i <=3D 2; i++) {
-+ 			if (!ieee80211_is_valid_amsdu(skb, i))
-+ 				continue;
-+=20
-+ 			if (valid >=3D 0) {
-+ 				/* ambiguous */
-+ 				valid =3D -1;
-+ 				break;
-+ 			}
- =20
-- 		if (valid_std && !valid_nonstd)
-- 			rx->sta->amsdu_mesh_control =3D 1;
-- 		else if (valid_nonstd && !valid_std)
-- 			rx->sta->amsdu_mesh_control =3D 0;
-+ 			valid =3D i;
-+ 		}
-+=20
-+ 		rx->sta->amsdu_mesh_control =3D valid;
-  	}
- =20
-  	ieee80211_amsdu_to_8023s(skb, &frame_list, dev->dev_addr,
-
---Sig_/Z75pzBwRDy.ne14p3qRShtd
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQmICcACgkQAVBC80lX
-0Gyc7Qf8CT58uZK2qOJyG/1i1sV+AZ51ZNKUlxXH4cQ/OcLOAlk6X/LuI0DTFfpE
-sG8KHR2fWI9oVQqhXStFTI3yPAUB9Y5NKJR8WCVN5sqVE2zdWbKax2dYo9wAZ9wa
-Sd7n7+QhdI8aJwBmM7cnOtRnYngpunTwGdRKDfaJZmftxKsPvmuM+jyBpBovIiZi
-3bmfvoSU61TRZ3pqIL363RsoWT7MiQ+XaEpx7gc9U7Wnuc0hKLbC+sMkAsEnks1E
-eVxukHXZhowsT+IhorkLBROpLDkD+75DoU6AFbNGAgS0+65T+OFkCymNmDYPZOGO
-sgnMs9gbQiAfHinB4riWu2MSIAdszw==
-=8hDd
------END PGP SIGNATURE-----
-
---Sig_/Z75pzBwRDy.ne14p3qRShtd--
+Reinette
