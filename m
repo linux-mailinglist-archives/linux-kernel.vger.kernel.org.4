@@ -2,100 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B016CF81E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC506CF824
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbjC3APb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 20:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
+        id S231346AbjC3ARo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 20:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjC3AP1 (ORCPT
+        with ESMTP id S230296AbjC3ARm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 20:15:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A903C0;
-        Wed, 29 Mar 2023 17:15:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B16AD61E7C;
-        Thu, 30 Mar 2023 00:15:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3AAC4339B;
-        Thu, 30 Mar 2023 00:15:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680135326;
-        bh=SaIyAyIEWPkCOiTbcEAAhLZPQpGrVicNNzSuEc0r0CQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W5aAij/ePqjFcpoij5+qOeXhFYRUXzZzThXwXjkLGT0WGbKycfH+EqBxDxLFth0Mx
-         uq5l+kRLWvX31xJw4UXGMAnfv9RY5Ob9bj0pfDEguNQk3rxWLrukyYi39qtAW+/9VK
-         IwbbUdVPUdKO0pNnJwG35WhpZ7KWFxP8Gg/Tvety1vIpNBXtiFO8LORMMAMmmS2We3
-         aN5htjW3vCMMYYlQWRP3mrdCTvw0RkxdHkDjx3BcM7Hr9N9thBNyL5to3yrcktUkSZ
-         15yOMjgVOTSRmzy+RTE/00Tj8tNjKwEcp4oq4D6lDJoaeoxakm1qiCZT8lTnCSBWvk
-         b7YDGp4rP1OGQ==
-Date:   Thu, 30 Mar 2023 01:15:23 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     "Yang.Lee" <yang.lee@linux.alibaba.com>, heiko <heiko@sntech.de>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-rockchip <linux-rockchip@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] spi: rockchip-sfc: Use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <ZCTUm7XRKwTotda8@sirena.org.uk>
-References: <20230328062118.86336-1-yang.lee@linux.alibaba.com>
- <48f1ee32-a030-8188-3a9d-612888b9678f@linaro.org>
- <e6d8f4ce-8b3b-4cce-be94-cd5902c676ae.yang.lee@linux.alibaba.com>
- <e01a753e-aea2-5489-e436-2ec0f3fedb64@linaro.org>
+        Wed, 29 Mar 2023 20:17:42 -0400
+Received: from out-40.mta1.migadu.com (out-40.mta1.migadu.com [95.215.58.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433F7C0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:17:40 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 00:17:25 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1680135457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dZ7CgR7LTAUcUKEiGOSUlgNQXWvEplmklKUnppCogvc=;
+        b=hRX9HcY4lHKvklyIm9h5vMkVivWZXvGwyJDd5XCTzM29yNzKcO7TXlGwIu+7wmffVDeVof
+        XgLEjtUm074mMAdnfFC0AGMUVl2/hrS6DpBuI9GVy6scElft++20vrOGXsNmvbt2Zh3bAr
+        8VYBc2aq4fHO3hc8+86ULT8PRGPctfE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 6/7] KVM: arm64: Break the table entries using TLBI
+ range instructions
+Message-ID: <ZCTVFYd2oJnGR6O+@linux.dev>
+References: <20230206172340.2639971-1-rananta@google.com>
+ <20230206172340.2639971-7-rananta@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="voc5FpAxHeBmyvcz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e01a753e-aea2-5489-e436-2ec0f3fedb64@linaro.org>
-X-Cookie: Single tasking: Just Say No.
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230206172340.2639971-7-rananta@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+nit: s/break/invalidate/g
 
---voc5FpAxHeBmyvcz
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There is a rather important degree of nuance there. 'Break' as it
+relates to break-before-make implies that the PTE is made invalid and
+visible to hardware _before_ a subsequent invalidation. There will be
+systems that relax this requirement and also support TLBIRANGE.
 
-On Wed, Mar 29, 2023 at 08:18:27AM +0100, Tudor Ambarus wrote:
-> On 3/29/23 07:06, Yang.Lee wrote:
+On Mon, Feb 06, 2023 at 05:23:39PM +0000, Raghavendra Rao Ananta wrote:
 
-> > Because=A0the=A0maintainer=A0list=A0of=A0each=A0SPI=A0driver=A0file=A0i=
-s=A0not=A0identical,=A0I=A0am=A0worried=A0about=A0causing=A0trouble=A0for=
-=A0too=A0many=A0people,=A0so=A0I=A0split=A0it=A0into=A0multiple=A0patches=
-=A0based=A0on=A0this.
+Some nitpicking on the changelog:
 
-> The change is trivial enough to don't bother at all. Here's an example:
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
-t/?id=3D4b23603a251d24022f2fa48ee67610eb245a4115
+> Currently, when breaking up the stage-2 table entries, KVM
 
-No, it's fine - it doesn't really get in the way and can be
-helpful to people doing backports.
+'breaking up stage-2 table entries' is rather ambiguous. Instead
+describe the operation taking place on the page tables (i.e. hugepage
+collapse).
 
---voc5FpAxHeBmyvcz
-Content-Type: application/pgp-signature; name="signature.asc"
+> would flush the entire VM's context using 'vmalls12e1is'
+> TLBI operation. One of the problematic situation is collapsing
+> table entries into a hugepage, specifically if the VM is
+> faulting on many hugepages (say after dirty-logging). This
+> creates a performance penality for the guest whose pages have
 
------BEGIN PGP SIGNATURE-----
+typo: penalty
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQk1JoACgkQJNaLcl1U
-h9AkrQf/X5y8FOFpN9XpUUUQDvbu/UJFxu6wK5iAYMpdiS1tcPNdyOKXEOfOGbjz
-OFBNsc/UWQPllZqggDyemxNw7x2WAKcF6JWCV2uRn2ptzYrEr+zQMeO3k83I3Eam
-Ji35vaalvmXG92tSk70DOrJIGmC6yL5OMkSnZU2dWM+eIgiLxjJos/8sShx3zd5d
-ODoO2h1qsUetCkrz9uw9yGU6yWYuZRLkP9kJETwF5AVgjVhrDkt2CtJMKQC8nNzE
-LHkMmIRLAIQm6KIjivd4jGYdBOhw5TRWszIFdrNWLcUgAJEZ2YOadZFClwhhthT7
-GKogxOITZyeUdFT/a5sG2HDCMoapkA==
-=UTll
------END PGP SIGNATURE-----
+> already been faulted earlier as they would have to refill their
+> TLBs again.
+> 
+> Hence, if the system supports it, use __kvm_tlb_flush_range_vmid_ipa()
 
---voc5FpAxHeBmyvcz--
+> to flush only the range of pages governed by the table entry,
+> while leaving other TLB entries alone. An upcoming patch also
+> takes advantage of this when breaking up table entries during
+> the unmap operation.
+
+Language regarding an upcoming patch isn't necessary, as this one stands
+on its own (implements and uses a range-based invalidation helper).
+
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>  arch/arm64/kvm/hyp/pgtable.c | 23 ++++++++++++++++++++---
+>  1 file changed, 20 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> index b11cf2c618a6c..0858d1fa85d6b 100644
+> --- a/arch/arm64/kvm/hyp/pgtable.c
+> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> @@ -686,6 +686,20 @@ static bool stage2_try_set_pte(const struct kvm_pgtable_visit_ctx *ctx, kvm_pte_
+>  	return cmpxchg(ctx->ptep, ctx->old, new) == ctx->old;
+>  }
+>  
+> +static void kvm_pgtable_stage2_flush_range(struct kvm_s2_mmu *mmu, u64 start, u64 end,
+> +						u32 level, u32 tlb_level)
+> +{
+> +	if (system_supports_tlb_range())
+
+You also check this in __kvm_tlb_flush_range(), ideally this should be
+done exactly once per call.
+
+> +		kvm_call_hyp(__kvm_tlb_flush_range_vmid_ipa, mmu, start, end, level, tlb_level);
+> +	else
+> +		/*
+> +		 * Invalidate the whole stage-2, as we may have numerous leaf
+> +		 * entries below us which would otherwise need invalidating
+> +		 * individually.
+> +		 */
+> +		kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
+> +}
+> +
+>  /**
+>   * stage2_try_break_pte() - Invalidates a pte according to the
+>   *			    'break-before-make' requirements of the
+> @@ -721,10 +735,13 @@ static bool stage2_try_break_pte(const struct kvm_pgtable_visit_ctx *ctx,
+>  	 * Perform the appropriate TLB invalidation based on the evicted pte
+>  	 * value (if any).
+>  	 */
+> -	if (kvm_pte_table(ctx->old, ctx->level))
+> -		kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
+> -	else if (kvm_pte_valid(ctx->old))
+> +	if (kvm_pte_table(ctx->old, ctx->level)) {
+> +		u64 end = ctx->addr + kvm_granule_size(ctx->level);
+> +
+> +		kvm_pgtable_stage2_flush_range(mmu, ctx->addr, end, ctx->level, 0);
+> +	} else if (kvm_pte_valid(ctx->old)) {
+>  		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu, ctx->addr, ctx->level);
+> +	}
+>  
+>  	if (stage2_pte_is_counted(ctx->old))
+>  		mm_ops->put_page(ctx->ptep);
+> -- 
+> 2.39.1.519.gcb327c4b5f-goog
+> 
+> 
+
+-- 
+Thanks,
+Oliver
