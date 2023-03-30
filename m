@@ -2,51 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFD46D098E
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4D26D098F
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232984AbjC3P3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
+        id S233095AbjC3P3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232993AbjC3P3V (ORCPT
+        with ESMTP id S232983AbjC3P3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:29:21 -0400
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C033E04F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:29:03 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 15:28:17 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680190102; x=1680449302;
-        bh=kpaOTyrKqsw1XHAwXmaqpibdDWFN/5HsmHgDh0lZUrg=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=odsQp3kuPYH79BQTdgIjYANBF/X5AwTkHo+Rx+bFHO+jN8jDLzyn/3n3aV3s5tX+S
-         bUUbfGNFYEz9U7kyM7IJxHptVFFoh9xJC4OzG2tvcX1aPlBVT/Og0t42oiFq7VX4bg
-         ZNv1QBD/PHk8n6EFgpLYq9lECnxEvb2FZUPbXGr84UXs82YAm34zWk/lDWt2B0CjX5
-         5bdOAOi5zwpCtvpYrEonpP296gvgJRfTzA5j6qTMwkcV8tsfo5j2vikdhtAGEuEIvb
-         NctaMjaE+N187DL9lX+jQES9OGdzCMkWerxcpRStLoDW5fuvSgc/KxVGiz72rdeSv9
-         h3hthoAXLcpPA==
-To:     Alice Ryhl <alice@ryhl.io>
-From:   Benno Lossin <y86-dev@protonmail.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH v3 06/13] rust: init/sync: add `InPlaceInit` trait to pin-initialize smart pointers
-Message-ID: <3ea5cd8d-84ca-59bd-de50-fef185233a50@protonmail.com>
-In-Reply-To: <1f93a045-5bd8-e07f-cf1b-7b1196c8ab54@ryhl.io>
-References: <20230329223239.138757-1-y86-dev@protonmail.com> <20230329223239.138757-7-y86-dev@protonmail.com> <1f93a045-5bd8-e07f-cf1b-7b1196c8ab54@ryhl.io>
-Feedback-ID: 40624463:user:proton
+        Thu, 30 Mar 2023 11:29:23 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5237D53D
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:29:04 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id l37so11172946wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:29:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680190132;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dGsCmW7EUS3nfy+7BnW+WgqTabyFkZU2nitm+ST7mKI=;
+        b=gfO4wBAMcJ8t0kHqH3xynuzyyJtZvI+YL4+NG4UxqIGIKLSk/xeTl9+QRt0iGEMX78
+         lQuRe1xmTJx/kG4vG/MRGVaWIzpRw4kxDOewTMPZ3zQZOrnYPQUv1elti0HcD6zry7iE
+         QpFJlXVAw/c0/QOdVRskbll0h55wlArViYWeAxqpnFZaq14KttfJuCEzqqL4Ic+KdNeZ
+         vGMKORaRMZUmXug8ZScqebP7bntofChz5sdm1Y8o+Q+ojC8BcpbzprXgt3Zr45HhqhW6
+         Uo51KawFOXgSypTUNxCjaszoGWxh05pyb1jB5kL7NQM7g+ZHZv3Ri7ISt/sK7ZvPadGS
+         xFZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680190132;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dGsCmW7EUS3nfy+7BnW+WgqTabyFkZU2nitm+ST7mKI=;
+        b=S9FHJs1VqDWaiBPeF647bti5MaEoTSLAtQIUYfWFfqI4cPtWPJhtfoHwrcilkPRCxu
+         R+fDvSHFE+2RxtpodfUdnhWN4aNh3/BYLHHqIN/5o/UFnre0cb51qyjId1OpEb048EXB
+         yhkJnjFZgGFAklqLARTZJYkrnxT3rVsDVtWQmkun92ROcOpZq/REWsOwrWd6EN+SbfXr
+         VgpSGr8qXH1ijbcpBOghxxpLgmvxKtFo/T2eJSEcFiwpstsKMIGPCv/pXyu34sPN/ZI4
+         ACVib7rz5CvHoFRVBD9NC3L/2ZbTC8I/ey1VnLchZ2fJclqktihkODy9ijI6/dTxJjMC
+         bKGQ==
+X-Gm-Message-State: AO0yUKVpBdd5bZqoeMxkHS3DI7GRixbvCXCbQ0lEmChnke4NwI5DrD8T
+        CPUWQhIWqjCJlC/rAE/hRVfPZA==
+X-Google-Smtp-Source: AK7set9JBCqQOXk+u/rw68P8YwukfO3REwzC5Umey4FtmvcIbY6E6CbTxzim81BNiRT8Js8+wSeCng==
+X-Received: by 2002:a7b:cc98:0:b0:3ed:2702:feea with SMTP id p24-20020a7bcc98000000b003ed2702feeamr16821936wma.41.1680190132118;
+        Thu, 30 Mar 2023 08:28:52 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:9ee7:40a0:eee0:62cc? ([2a05:6e02:1041:c10:9ee7:40a0:eee0:62cc])
+        by smtp.googlemail.com with ESMTPSA id s15-20020a05600c45cf00b003eb2e33f327sm13485297wmo.2.2023.03.30.08.28.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 08:28:51 -0700 (PDT)
+Message-ID: <95fce357-87f5-93b2-c57f-f561a79dfc34@linaro.org>
+Date:   Thu, 30 Mar 2023 17:28:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RESEND] [PATCHv3 1/7] thermal: rockchip: Simplify getting match
+ data
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230308112253.15659-1-sebastian.reichel@collabora.com>
+ <20230308112253.15659-2-sebastian.reichel@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230308112253.15659-2-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,59 +84,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.23 16:37, Alice Ryhl wrote:
-> On 3/30/23 00:33, y86-dev@protonmail.com wrote:
->> From: Benno Lossin <y86-dev@protonmail.com>
->>
->> The `InPlaceInit` trait that provides two functions, for initializing
->> using `PinInit<T, E>` and `Init<T>`. It is implemented by `Arc<T>`,
->> `UniqueArc<T>` and `Box<T>`.
->>
->> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
->   > ---
->   >
->> +/// Smart pointer that can initialize memory in-place.
->> +pub trait InPlaceInit<T>: Sized {
->> +    /// Use the given initializer to in-place initialize a `T`.
->> +    ///
->> +    /// If `T: !Unpin` it will not be able to move afterwards.
->> +    fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>=
->
->> +    where
->> +        Error: From<E>;
->> +
->> +    /// Use the given initializer to in-place initialize a `T`.
->> +    fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
->> +    where
->> +        Error: From<E>;
->> +}
->
-> This definition is potentially rather limiting, because it can only be
-> used with error types that can be converted into a `kernel::Error`. What
-> do you think of this alternative?
->
-> pub trait InPlaceInit<T>: Sized {
->       fn pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
->       where
->           E: From<AllocError>;
->
->       fn init<E>(init: impl Init<T, E>) -> Result<Self, E>
->       where
->           E: From<AllocError>;
-> }
+On 08/03/2023 12:22, Sebastian Reichel wrote:
+> It's possible to directly get the match data in a generic
+> way nowadays.
+> 
+> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
 
-I initially implemented it like this, but it required almost always that
-`E` is specified, I will try and see if the situation is any different now,
-but I do not think so. In the user-space version of this API (see [1]) I
-have four functions, normal variants that return an `AllocError` and `try`
-variants that look exactly like what you suggested. In the kernel, we could
-make the normal variants as they are now and add the `try` variants as you
-described.
+Applied, thanks
 
-[1]: https://docs.rs/pinned-init/0.0.5/pinned_init/trait.InPlaceInit.html
 
---
-Cheers,
-Benno
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
