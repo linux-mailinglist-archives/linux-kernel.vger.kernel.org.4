@@ -2,273 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2BD6CFEDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0F96CFEE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjC3Iox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
+        id S230081AbjC3Ipv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjC3Iov (ORCPT
+        with ESMTP id S230165AbjC3Ipl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:44:51 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02587D87;
-        Thu, 30 Mar 2023 01:44:21 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32U4g0Qb008340;
-        Thu, 30 Mar 2023 08:43:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=49Q5JyUQMSYAGwSNEQOCBP+0mXdjzBTrPT7B9ELXkUs=;
- b=flBoVFCExGq3SJVB/reofqxLxATNfiD3Hp5deKk4mh7y/J0gwBsoRCAZqslg3/XEqlUk
- mEdhqzCj2wAmPEBdc1HmDlDLdS8Wu5AutMHbyXSIRrRGk8OZMa1MgMii6oUqv5RMGzo9
- jJmPx14SmZuiSEy4IW8lOmUlZ8crx7qm6UWQFKky3/eOQnlb8tFI/kvEBtVVD92ufGAR
- pM6Fk20/z4fMp4fKQH1Lvnidz1pR1wP16TCRh3E0DM9NwkZwvGH7NggPCfnZWbp5fj54
- 6Y2XPJ1iDbUJs5DRO5WpM+ncv+URxpP1IAvAzCUZ7e96RZ4EeKtA1v3e9el9etQhdVea Zw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pn3mf8r1c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 08:43:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32U8hCvc012454
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Mar 2023 08:43:12 GMT
-Received: from hu-mkshah-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 30 Mar 2023 01:43:07 -0700
-From:   Maulik Shah <quic_mkshah@quicinc.com>
-To:     <andersson@kernel.org>, <ulf.hansson@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <wingers@google.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <sudeep.holla@arm.com>,
-        <jwerner@chromium.org>, <quic_lsrao@quicinc.com>,
-        <quic_rjendra@quicinc.com>, Maulik Shah <quic_mkshah@quicinc.com>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH v2 2/2] arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
-Date:   Thu, 30 Mar 2023 14:12:50 +0530
-Message-ID: <20230330084250.32600-3-quic_mkshah@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230330084250.32600-1-quic_mkshah@quicinc.com>
-References: <20230330084250.32600-1-quic_mkshah@quicinc.com>
+        Thu, 30 Mar 2023 04:45:41 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37D27D84
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:45:16 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id ek18so73557467edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:45:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=grsecurity.net; s=grsec; t=1680165914;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vlpuagoHdNHyoDKKcfJ1S9LVllL6EOMCzIQgoSyOcDw=;
+        b=Tx7bJzrQxgZuGXRYSDpUU6tW0DHmt2iTn6ML51phHbdXfKxP8AaIs4F6Wu0CMU2E8k
+         TAyetfg9DZEHcSJF6/mUGYM4lpnqW9Z6jKPTkWhlX+u2FNpgbVSzV1c5UwASf+i/ucID
+         qpQd1ptvMyraYyazc1t299COIfXj86PJWnqWTiApvUTNAivQL9jSLNAbcn4+YwCYaSeD
+         cPls0ICIaZVH7QNEN3UHPJDrPSkJ++IMf6xeCyroBPSfDQOpCFs+DfwX2EHT2qJhadNH
+         N1PrrLkl88YEEu7OCgbPZSXxK/lHmt2qyol14Smh0MFP9mxNWPtW48jJoEasrsNXYXTV
+         /21w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680165914;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vlpuagoHdNHyoDKKcfJ1S9LVllL6EOMCzIQgoSyOcDw=;
+        b=pioF2DH4eeykWNATJKrKqkDRufvt+bmPJBrjkPbNujZZstxS6/auINiX/iFFSWKBs4
+         1DE4ZTADxguYcfFEXuGH/mHOsCojOOtT3TaNRwWn5DpSxgP53ly6/WR8pAJiUShur041
+         BHMKJCVbdaGT+PIWup0/JXlm5aBKopgF4E1psAXLz9uBU6brG0lIN0p016tVardCbJws
+         1zJRdDa6EBwJwWlAn1/eW/JRAwe5LL3SotFP7dp9deSi5Z8dlWchzFiLojCr/VEGk1Mz
+         oB3XuxBZYEtQGssjODMeTbtG9PUW/aiVy3PJUm3H96s3ltgs3FO9plt4pYI3vb+RLe+X
+         eyhA==
+X-Gm-Message-State: AAQBX9cXQvQZoRqRHpoCxaa72Szgf4o/RvkRtif/aU2e6FzZsH5P4LI5
+        Z9hxSMrJs/ikVmrMPG0XAJGGUw==
+X-Google-Smtp-Source: AKy350bMXqRfsSuPyYXNvM8oNnrCj7oeuGoy0aRHd5nvAQf2BmF+qkwqfSM4zYWn2ggMUBDiceiR2Q==
+X-Received: by 2002:a17:907:6d0b:b0:930:9cec:2fb9 with SMTP id sa11-20020a1709076d0b00b009309cec2fb9mr25165267ejc.77.1680165913889;
+        Thu, 30 Mar 2023 01:45:13 -0700 (PDT)
+Received: from ?IPV6:2003:f6:af13:8b00:c684:f698:a009:dbf2? (p200300f6af138b00c684f698a009dbf2.dip0.t-ipconnect.de. [2003:f6:af13:8b00:c684:f698:a009:dbf2])
+        by smtp.gmail.com with ESMTPSA id qh7-20020a170906eca700b0092bea699124sm17411276ejb.106.2023.03.30.01.45.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 01:45:13 -0700 (PDT)
+Message-ID: <677169b4-051f-fcae-756b-9a3e1bb9f8fe@grsecurity.net>
+Date:   Thu, 30 Mar 2023 10:45:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6NowLMuVgq1uUnoC9B-tcoh4RTo6RzVV
-X-Proofpoint-GUID: 6NowLMuVgq1uUnoC9B-tcoh4RTo6RzVV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-30_04,2023-03-30_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
- bulkscore=0 mlxscore=0 suspectscore=0 spamscore=0 adultscore=0
- impostorscore=0 mlxlogscore=943 lowpriorityscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303300069
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 6/6] KVM: VMX: Make CR0.WP a guest owned bit
+Content-Language: en-US, de-DE
+To:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <20230322013731.102955-1-minipli@grsecurity.net>
+ <20230322013731.102955-7-minipli@grsecurity.net>
+From:   Mathias Krause <minipli@grsecurity.net>
+In-Reply-To: <20230322013731.102955-7-minipli@grsecurity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add power-domains for cpuidle states to use psci os-initiated idle states.
+On 22.03.23 02:37, Mathias Krause wrote:
+> Guests like grsecurity that make heavy use of CR0.WP to implement kernel
+> level W^X will suffer from the implied VMEXITs.
+> 
+> With EPT there is no need to intercept a guest change of CR0.WP, so
+> simply make it a guest owned bit if we can do so.
+> 
+> This implies that a read of a guest's CR0.WP bit might need a VMREAD.
+> However, the only potentially affected user seems to be kvm_init_mmu()
+> which is a heavy operation to begin with. But also most callers already
+> cache the full value of CR0 anyway, so no additional VMREAD is needed.
+> The only exception is nested_vmx_load_cr3().
+> 
+> This change is VMX-specific, as SVM has no such fine grained control
+> register intercept control.
 
-Cc: devicetree@vger.kernel.org
-Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 98 +++++++++++++++++++++-------
- 1 file changed, 73 insertions(+), 25 deletions(-)
+Just a heads up! We did more tests, especially with the backports we did
+internally already, and ran into a bug when running a nested guest on an
+ESXi host.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 5e6f9f441f1a..1a232eb4dde6 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -170,9 +170,8 @@
- 			reg = <0x0 0x0>;
- 			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
--			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
--					   &LITTLE_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD0>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_0>;
- 			operating-points-v2 = <&cpu0_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -196,9 +195,8 @@
- 			reg = <0x0 0x100>;
- 			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
--			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
--					   &LITTLE_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD1>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_100>;
- 			operating-points-v2 = <&cpu0_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -218,9 +216,8 @@
- 			reg = <0x0 0x200>;
- 			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
--			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
--					   &LITTLE_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD2>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_200>;
- 			operating-points-v2 = <&cpu0_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -240,9 +237,8 @@
- 			reg = <0x0 0x300>;
- 			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
--			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
--					   &LITTLE_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD3>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_300>;
- 			operating-points-v2 = <&cpu0_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -262,9 +258,8 @@
- 			reg = <0x0 0x400>;
- 			clocks = <&cpufreq_hw 1>;
- 			enable-method = "psci";
--			cpu-idle-states = <&BIG_CPU_SLEEP_0
--					   &BIG_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD4>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_400>;
- 			operating-points-v2 = <&cpu4_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -284,9 +279,8 @@
- 			reg = <0x0 0x500>;
- 			clocks = <&cpufreq_hw 1>;
- 			enable-method = "psci";
--			cpu-idle-states = <&BIG_CPU_SLEEP_0
--					   &BIG_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD5>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_500>;
- 			operating-points-v2 = <&cpu4_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -306,9 +300,8 @@
- 			reg = <0x0 0x600>;
- 			clocks = <&cpufreq_hw 1>;
- 			enable-method = "psci";
--			cpu-idle-states = <&BIG_CPU_SLEEP_0
--					   &BIG_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD6>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_600>;
- 			operating-points-v2 = <&cpu4_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -328,9 +321,8 @@
- 			reg = <0x0 0x700>;
- 			clocks = <&cpufreq_hw 2>;
- 			enable-method = "psci";
--			cpu-idle-states = <&BIG_CPU_SLEEP_0
--					   &BIG_CPU_SLEEP_1
--					   &CLUSTER_SLEEP_0>;
-+			power-domains = <&CPU_PD7>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_700>;
- 			operating-points-v2 = <&cpu7_opp_table>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-@@ -422,9 +414,11 @@
- 				min-residency-us = <5555>;
- 				local-timer-stop;
- 			};
-+		};
- 
-+		domain-idle-states {
- 			CLUSTER_SLEEP_0: cluster-sleep-0 {
--				compatible = "arm,idle-state";
-+				compatible = "domain-idle-state";
- 				idle-state-name = "cluster-power-down";
- 				arm,psci-suspend-param = <0x40003444>;
- 				entry-latency-us = <3263>;
-@@ -790,6 +784,59 @@
- 	psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
-+
-+		CPU_PD0: cpu0 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD1: cpu1 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD2: cpu2 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD3: cpu3 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD4: cpu4 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD5: cpu5 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD6: cpu6 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD7: cpu7 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-+		};
-+
-+		CLUSTER_PD: cpu-cluster0 {
-+			#power-domain-cells = <0>;
-+			domain-idle-states = <&CLUSTER_SLEEP_0>;
-+		};
- 	};
- 
- 	qspi_opp_table: opp-table-qspi {
-@@ -5280,6 +5327,7 @@
- 					  <SLEEP_TCS   3>,
- 					  <WAKE_TCS    3>,
- 					  <CONTROL_TCS 1>;
-+			power-domains = <&CLUSTER_PD>;
- 
- 			apps_bcm_voter: bcm-voter {
- 				compatible = "qcom,bcm-voter";
--- 
-2.17.1
+Setup is like: ESXi (L0) -> Linux (L1) -> Linux (L2)
 
+The Linux system, especially the kernel, is the same for L1 and L2. It's
+a grsecurity kernel, so makes use of toggling CR0.WP at runtime.
+
+The bug we see is that when L2 disables CR0.WP and tries to write to an
+r/o memory region (implicitly to the r/o GDT via LTR in our use case),
+this triggers a fault (EPT violation?) that gets ignored by L1, as,
+apparently, everything is fine from its point of view.
+
+I suspect the L0 VMM to be at fault here, as the VMCS structures look
+good, IMO. Here is a dump of vmx->loaded_vmcs in handle_triple_fault():
+
+[…] VMX: TRIPLE FAULT!
+[…] VMCS ffff8883a9f18000, last attempted VM-entry on CPU 8
+[…] *** Guest State ***
+[…] CR0: actual=0x0000000080040033, shadow=0x0000000080050033,
+gh_mask=fffffffffffefff7
+
+CR0 in the L2 VM has CR0.WP disabled. However, it is set in the shadow
+CR0 but masked out via CR0_MASK, so should be read as the guest's value,
+according to the SDM.
+
+I also tried masking the shadow CR0 value in vmx_set_cr0(), but that
+makes no difference.
+
+[…] CR4: actual=0x00000000003220f0, shadow=0x00000000003208b0,
+gh_mask=fffffffffffff871
+[…] CR3 = 0x0000000002684000
+[…] PDPTR0 = 0x0000000007d39001  PDPTR1 = 0x00000000033b5001
+[…] PDPTR2 = 0x000000000238c001  PDPTR3 = 0x0000000001c54001
+[…] RSP = 0xfffffe8040087f50  RIP = 0xffffffff8105d435
+[…] RFLAGS=0x00010006         DR7 = 0x0000000000000400
+[…] Sysenter RSP=0000000000000000 CS:RIP=0000:0000000000000000
+[…] CS:   sel=0x0010, attr=0x0a09b, limit=0xffffffff,
+base=0x0000000000000000
+[…] DS:   sel=0x0000, attr=0x1c001, limit=0xffffffff,
+base=0x0000000000000000
+[…] SS:   sel=0x0000, attr=0x1c001, limit=0xffffffff,
+base=0x0000000000000000
+[…] ES:   sel=0x0000, attr=0x1c001, limit=0xffffffff,
+base=0x0000000000000000
+[…] FS:   sel=0x0000, attr=0x1c001, limit=0xffffffff,
+base=0x0000000000000000
+[…] GS:   sel=0x0000, attr=0x1c001, limit=0xffffffff,
+base=0xffff888232e00000
+[…] GDTR:                           limit=0x00000097,
+base=0xfffffe0000201000
+[…] LDTR: sel=0x0000, attr=0x00082, limit=0x0000ffff,
+base=0x0000000000000000
+[…] IDTR:                           limit=0x000001ff,
+base=0xffffffff84004000
+[…] TR:   sel=0x0000, attr=0x0008b, limit=0x0000ffff,
+base=0x0000000000000000
+[…] EFER= 0x0000000000000d01 (effective)
+[…] PAT = 0x0007040600070406
+[…] DebugCtl = 0x0000000000000000  DebugExceptions = 0x0000000000000000
+[…] Interruptibility = 00000000  ActivityState = 00000000
+[…] *** Host State ***
+[…] RIP = 0xffffffff86d28db6  RSP = 0xfffffe8040927d50
+[…] CS=0010 SS=0018 DS=0000 ES=0000 FS=0000 GS=0000 TR=0040
+[…] FSBase=0000639563fce700 GSBase=ffff88881a800000 TRBase=fffffe0001003000
+[…] GDTBase=fffffe0001001000 IDTBase=fffffe0000000000
+[…] CR0=0000000080050033 CR3=00000000026a0004 CR4=00000000007626f0
+
+The "host" (which is our L1 VMM, I guess) has CR0.WP enabled and that is
+what I think confuses ESXi to enforce the read-only property to the L2
+guest as well -- for unknown reasons so far.
+
+[…] Sysenter RSP=fffffe0001003000 CS:RIP=0010:ffffffff810031a0
+[…] PAT = 0x0407050600070106
+[…] *** Control State ***
+[…] PinBased=0000003f CPUBased=b5a06dfa SecondaryExec=001034ee
+[…] EntryControls=000053ff ExitControls=000befff
+[…] ExceptionBitmap=00060042 PFECmask=00000000 PFECmatch=00000000
+[…] VMEntry: intr_info=00000000 errcode=00000003 ilen=00000000
+[…] VMExit: intr_info=00000000 errcode=00000000 ilen=00000000
+[…]         reason=00000002 qualification=0000000000000000
+[…] IDTVectoring: info=00000000 errcode=00000000
+[…] TSC Offset = 0xffffad7a1057f4cc
+[…] TPR Threshold = 0x00
+[…] virt-APIC addr = 0x000000015716b000
+[…] EPT pointer = 0x0000000583c1e05e
+[…] PLE Gap=00000080 Window=00001000
+[…] Virtual processor ID = 0x0002
+
+I tried to reproduce the bug with different KVM based L0 VMMs (with and
+without this series; vanilla and grsecurity kernels) but no luck. That's
+why I'm suspecting a ESXi bug.
+
+I'm leaning to make CR0.WP guest owned only iff we're running on bare
+metal or the VMM is KVM to not play whack-a-mole for all the VMMs that
+might have similar bugs. (Will try to test a few others here as well.)
+However, that would prevent them from getting the performance gain, so
+I'd rather have this fixed / worked around in KVM instead.
+
+Any ideas how to investigate this further?
+
+Thanks,
+Mathias
+
+PS: ...should have left the chicken bit of v3 to be able to disable the
+feature by a module parameter ;)
+
+> 
+> Suggested-and-co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+> ---
+>  arch/x86/kvm/kvm_cache_regs.h |  2 +-
+>  arch/x86/kvm/vmx/nested.c     |  4 ++--
+>  arch/x86/kvm/vmx/vmx.c        |  2 +-
+>  arch/x86/kvm/vmx/vmx.h        | 18 ++++++++++++++++++
+>  4 files changed, 22 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/kvm_cache_regs.h b/arch/x86/kvm/kvm_cache_regs.h
+> index 4c91f626c058..e50d353b5c1c 100644
+> --- a/arch/x86/kvm/kvm_cache_regs.h
+> +++ b/arch/x86/kvm/kvm_cache_regs.h
+> @@ -4,7 +4,7 @@
+>  
+>  #include <linux/kvm_host.h>
+>  
+> -#define KVM_POSSIBLE_CR0_GUEST_BITS X86_CR0_TS
+> +#define KVM_POSSIBLE_CR0_GUEST_BITS	(X86_CR0_TS | X86_CR0_WP)
+>  #define KVM_POSSIBLE_CR4_GUEST_BITS				  \
+>  	(X86_CR4_PVI | X86_CR4_DE | X86_CR4_PCE | X86_CR4_OSFXSR  \
+>  	 | X86_CR4_OSXMMEXCPT | X86_CR4_PGE | X86_CR4_TSD | X86_CR4_FSGSBASE)
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index f63b28f46a71..61d940fc91ba 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -4481,7 +4481,7 @@ static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
+>  	 * CR0_GUEST_HOST_MASK is already set in the original vmcs01
+>  	 * (KVM doesn't change it);
+>  	 */
+> -	vcpu->arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
+> +	vcpu->arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
+>  	vmx_set_cr0(vcpu, vmcs12->host_cr0);
+>  
+>  	/* Same as above - no reason to call set_cr4_guest_host_mask().  */
+> @@ -4632,7 +4632,7 @@ static void nested_vmx_restore_host_state(struct kvm_vcpu *vcpu)
+>  	 */
+>  	vmx_set_efer(vcpu, nested_vmx_get_vmcs01_guest_efer(vmx));
+>  
+> -	vcpu->arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
+> +	vcpu->arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
+>  	vmx_set_cr0(vcpu, vmcs_readl(CR0_READ_SHADOW));
+>  
+>  	vcpu->arch.cr4_guest_owned_bits = ~vmcs_readl(CR4_GUEST_HOST_MASK);
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 8fc1a0c7856f..e501f6864a72 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -4790,7 +4790,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
+>  	/* 22.2.1, 20.8.1 */
+>  	vm_entry_controls_set(vmx, vmx_vmentry_ctrl());
+>  
+> -	vmx->vcpu.arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
+> +	vmx->vcpu.arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
+>  	vmcs_writel(CR0_GUEST_HOST_MASK, ~vmx->vcpu.arch.cr0_guest_owned_bits);
+>  
+>  	set_cr4_guest_host_mask(vmx);
+> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+> index 2acdc54bc34b..423e9d3c9c40 100644
+> --- a/arch/x86/kvm/vmx/vmx.h
+> +++ b/arch/x86/kvm/vmx/vmx.h
+> @@ -640,6 +640,24 @@ BUILD_CONTROLS_SHADOW(tertiary_exec, TERTIARY_VM_EXEC_CONTROL, 64)
+>  				(1 << VCPU_EXREG_EXIT_INFO_1) | \
+>  				(1 << VCPU_EXREG_EXIT_INFO_2))
+>  
+> +static inline unsigned long vmx_l1_guest_owned_cr0_bits(void)
+> +{
+> +	unsigned long bits = KVM_POSSIBLE_CR0_GUEST_BITS;
+> +
+> +	/*
+> +	 * CR0.WP needs to be intercepted when KVM is shadowing legacy paging
+> +	 * in order to construct shadow PTEs with the correct protections.
+> +	 * Note!  CR0.WP technically can be passed through to the guest if
+> +	 * paging is disabled, but checking CR0.PG would generate a cyclical
+> +	 * dependency of sorts due to forcing the caller to ensure CR0 holds
+> +	 * the correct value prior to determining which CR0 bits can be owned
+> +	 * by L1.  Keep it simple and limit the optimization to EPT.
+> +	 */
+> +	if (!enable_ept)
+> +		bits &= ~X86_CR0_WP;
+> +	return bits;
+> +}
+> +
+>  static __always_inline struct kvm_vmx *to_kvm_vmx(struct kvm *kvm)
+>  {
+>  	return container_of(kvm, struct kvm_vmx, kvm);
