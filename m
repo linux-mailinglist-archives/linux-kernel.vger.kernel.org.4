@@ -2,49 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304F66D0799
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35D96D07B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjC3OFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S232310AbjC3OH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232265AbjC3OFa (ORCPT
+        with ESMTP id S232333AbjC3OHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:05:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A84C7A9B;
-        Thu, 30 Mar 2023 07:05:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFBF06209A;
-        Thu, 30 Mar 2023 14:05:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A08C433D2;
-        Thu, 30 Mar 2023 14:05:09 +0000 (UTC)
-Date:   Thu, 30 Mar 2023 15:05:07 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Gregory Price <gregory.price@memverge.com>
-Cc:     Gregory Price <gourry.memverge@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        oleg@redhat.com, avagin@gmail.com, peterz@infradead.org,
-        luto@kernel.org, krisman@collabora.com, tglx@linutronix.de,
-        corbet@lwn.net, shuah@kernel.org, arnd@arndb.de, will@kernel.org,
-        mark.rutland@arm.com, tongtiangen@huawei.com, robin.murphy@arm.com
-Subject: Re: [PATCH v14 1/4] asm-generic,arm64: create task variant of
- access_ok
-Message-ID: <ZCWXE04nLZ4pXEtM@arm.com>
-References: <20230328164811.2451-1-gregory.price@memverge.com>
- <20230328164811.2451-2-gregory.price@memverge.com>
- <ZCRl2ZDsNK2nKAfy@arm.com>
- <ZCO/vNYlGdwthZX2@memverge.com>
+        Thu, 30 Mar 2023 10:07:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DFBAD0C
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680185149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R4zCvOc1mMH56XgSR/h8YQ6LP3eLzSrZLD7OODqShKc=;
+        b=McFGJYodP73y6IottNzJ6yX0TZJrfAIN30PV3nYKswcSuRh/NON7F69iL9BsOFr5pSBpem
+        g7zU2XzJAuafhVST54AZFgWIsaF/UoaahnMJt0hDnA7wQ5SQGpPy6FB2uIydS7OioMRapC
+        OcH7PZRJzWgv8q31JCPTKMtGaje62ik=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-665-DJKpS5O_PjC4oCAJ9HoPVQ-1; Thu, 30 Mar 2023 10:05:42 -0400
+X-MC-Unique: DJKpS5O_PjC4oCAJ9HoPVQ-1
+Received: by mail-oi1-f200.google.com with SMTP id f18-20020a05680814d200b003877ce3bfb4so4449881oiw.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:05:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680185141;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R4zCvOc1mMH56XgSR/h8YQ6LP3eLzSrZLD7OODqShKc=;
+        b=h+i4iraN33TcENOKx3tKTIIVMr0+5uBrOpihFsfVrRtZ2mJvv/xjOATHnoEgECFeWo
+         lUL9rN+GJJ+LwH7UmawrCDc2WZ/lKC3JZN1Xt83cyxPggRx+cgy/Zu9WgwNh9tLa+ljl
+         vKI9LvBu+cPuCGUnBlcaRAblnOwkINZAHsGiLjkrgsxmVOK1Wz1KSkwfkmcBDmDJ1ltF
+         RD/PRl8pGuDG/nr041gWIcK0fbnGtoJ5IRKbcDMqFqxtV1EBX3jDc3wAqUq2wowzjjQG
+         YuG/3XWyXtlvqY4q9oPes5CmeMpY3jRIh5X8oPR+smEmBCaJZTwGmHtRUDxwT+J2W7yg
+         jyrw==
+X-Gm-Message-State: AO0yUKUbyBjXonak+b/T/GtyMyrcMRjRig1VmTWjFoRGBbCnoIEvDJ1G
+        GOQxDO5/FmKFG8bh+h0lYAbZ8wIkInnX1H2zXr3Z6/IDc126Fi0po6nhd7RbUQNQgzEQFbQbAiZ
+        X4pkogxH2up4cWil4vxOuxotE
+X-Received: by 2002:a9d:73c2:0:b0:68f:2134:9a3a with SMTP id m2-20020a9d73c2000000b0068f21349a3amr13731355otk.30.1680185141707;
+        Thu, 30 Mar 2023 07:05:41 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/zNPcgN/WnTgj0au7XovwmrXUXk9Y34tj4Bl9Gf9AZeZXE4KpUqaqWU4dfJz20w/H+BfTr3A==
+X-Received: by 2002:a9d:73c2:0:b0:68f:2134:9a3a with SMTP id m2-20020a9d73c2000000b0068f21349a3amr13731343otk.30.1680185141411;
+        Thu, 30 Mar 2023 07:05:41 -0700 (PDT)
+Received: from x1 ([2600:381:4303:f0c4:d889:8469:3106:3568])
+        by smtp.gmail.com with ESMTPSA id a20-20020a9d74d4000000b006a11998d20esm7092278otl.45.2023.03.30.07.05.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 07:05:40 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 10:05:37 -0400
+From:   Brian Masney <bmasney@redhat.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: add debug message showing which unused clocks are
+ disabled on boot
+Message-ID: <ZCWXMXdaLdBb9KzL@x1>
+References: <20221117105829.256717-1-bmasney@redhat.com>
+ <27ded6a4ebd67cef0d4b472a2aea442e.sboyd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZCO/vNYlGdwthZX2@memverge.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+In-Reply-To: <27ded6a4ebd67cef0d4b472a2aea442e.sboyd@kernel.org>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,129 +80,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 12:34:04AM -0400, Gregory Price wrote:
-> On Wed, Mar 29, 2023 at 05:22:49PM +0100, Catalin Marinas wrote:
-> > On Tue, Mar 28, 2023 at 12:48:08PM -0400, Gregory Price wrote:
-> > > diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-> > > index 5c7b2f9d5913..1a51a54f264f 100644
-> > > --- a/arch/arm64/include/asm/uaccess.h
-> > > +++ b/arch/arm64/include/asm/uaccess.h
-> > > @@ -35,7 +35,9 @@ static inline int __access_ok(const void __user *ptr, unsigned long size);
-> > >   * This is equivalent to the following test:
-> > >   * (u65)addr + (u65)size <= (u65)TASK_SIZE_MAX
-> > >   */
-> > > -static inline int access_ok(const void __user *addr, unsigned long size)
-> > > +static inline int task_access_ok(struct task_struct *task,
-> > > +				 const void __user *addr,
-> > > +				 unsigned long size)
-> > >  {
-> > >  	/*
-> > >  	 * Asynchronous I/O running in a kernel thread does not have the
-> > > @@ -43,11 +45,18 @@ static inline int access_ok(const void __user *addr, unsigned long size)
-> > >  	 * the user address before checking.
-> > >  	 */
-> > >  	if (IS_ENABLED(CONFIG_ARM64_TAGGED_ADDR_ABI) &&
-> > > -	    (current->flags & PF_KTHREAD || test_thread_flag(TIF_TAGGED_ADDR)))
-> > > +	    (task->flags & PF_KTHREAD || test_ti_thread_flag(task, TIF_TAGGED_ADDR)))
-> > >  		addr = untagged_addr(addr);
-> > >  
-> > >  	return likely(__access_ok(addr, size));
-> > >  }
-> > > +
-> > > +static inline int access_ok(const void __user *addr, unsigned long size)
-> > > +{
-> > > +	return task_access_ok(current, addr, size);
-> > > +}
-> > > +
-> > > +#define task_access_ok task_access_ok
+On Wed, Mar 29, 2023 at 02:49:50PM -0700, Stephen Boyd wrote:
+> Quoting Brian Masney (2022-11-17 02:58:29)
+> > The clk framework on bootup will automatically disable all unused clocks
+> > on bootup unless the clk_ignore_unused kernel parameter is present.
+> > Let's add a basic debugging log statement here that shows which clocks
+> > are disabled. There is already tracepoint present here as well, but
+> > there's nothing like a simple, good ol' fashioned printk for simplicity.
 > > 
-> > I'd not bother with this at all. In the generic code you can either do
-> > an __access_ok() check directly or just
-> > access_ok(untagged_addr(selector), ...) with a comment that address
-> > tagging of the ptraced task may not be enabled.
+> > Signed-off-by: Brian Masney <bmasney@redhat.com>
+> > ---
 > 
-> This was my original proposal, but the comment that lead to this patch
-> was the following:
-> 
-> """
-> If this would be correct, then access_ok() on arm64 would
-> unconditionally untag the checked address, but it does not. Simply
-> because untagging is only valid if the task enabled pointer tagging. If
-> it didn't a tagged pointer is obviously invalid.
-> 
-> Why would ptrace make this suddenly valid?
-> """
-> 
-> https://lore.kernel.org/all/87a605anvx.ffs@tglx/
+> I'd like to see a documentation update instead that covers how to enable
+> the tracepoint on the kernel commandline and have it print to the serial
+> console.
 
-Ah, thanks for the pointer.
+Sure, I can do that. I see there's a section 'Disabling clock gating of
+unused clocks' in Documentation/driver-api/clk.rst where I think this
+would be appropriate.
 
-For ptrace(), we live with this relaxation as there's no easy way to
-check. Take __access_remote_vm() for example, it ends up in
-get_user_pages_remote() -> ... -> __get_user_pages() which just untags
-the address. Even if it would want to do this conditionally, the tag
-pointer is enabled per thread (and inherited) but the GUP API only takes
-the mm.
+Brian
 
-While we could improve it as ptrace() can tell which thread it is
-tracing, I don't think it's worth the effort. On arm64, top-byte-ignore
-was enabled from the start for in-user accesses but not at the syscall
-level. We wanted to avoid breaking some use-cases with untagging all
-user pointers, hence the explicit opt-in to catch some issues (glibc did
-have a problem with brk() ignoring the top byte -
-https://bugzilla.redhat.com/show_bug.cgi?id=1797052).
-
-So yeah, this access_ok() in a few places is a best effort to catch some
-potential ABI regressions like the one above and also as a way to force
-the old ABI (mostly) via sysctl. But we do have places like GUP where we
-don't have the thread information (only the mm), so we just
-indiscriminately untag the pointer.
-
-Note that there is no security risk for the access itself. The Arm
-architecture selects the user vs kernel address spaces based on bit 55
-rather than 63. Untagging a pointer sign-extends bit 55.
-
-> I did not have a sufficient answer for this so I went down this path.
-> 
-> It does seem simpler to simply untag the address, however it didn't seem
-> like a good solution to simply leave an identified bad edge case.
-> 
-> with access_ok(untagged_addr(addr), ...) it breaks down like this:
-> 
-> (tracer,tracee) : result 
-> 
-> tag,tag     : untagged - (correct)
-> tag,untag   : untagged - incorrect as this would have been an impossible
->               state to reach through the standard prctl interface.  Will
-> 	      lead to a SIGSEGV in the tracee upon next syscall
-
-Well, even without untagging the pointer, the tracer can set a random
-address that passes access_ok() but still faults in the tracee. It's the
-tracer that should ensure the pointer is valid in the context of the
-tracee.
-
-Now, even if the selector pointer is tagged, the accesses still work
-fine (top-byte-ignore) unless MTE is enabled in the tracee and the tag
-should match the region's colour. But, again, that's no different from a
-debugger changing pointer variables in the debugged process, they should
-be valid and it's not for the kernel to sanitise them.
-
-> untag,tag   : untagged - (correct)
-> untag,untag : no-op - (correct), tagged address will fail to set
-> 
-> Basically if the tracer is a tagged process while the tracee is not, it
-> would become possible to set the tracee's selector to a tagged pointer.
-
-Yes, but does it matter? You'd trust the tracer to work correctly. There
-are multiple ways it can break the tracee here even if access_ok()
-worked as intended.
-
-> It's beyond me to say whether or not this situation is "ok" and "the
-> user's fault", but it does feel like an addressable problem.
-
-To me, the situation looks fine. While it's addressable, we have other
-places where the tag is ignored on the ptrace() path, so I don't think
-it's worth the effort.
-
--- 
-Catalin
