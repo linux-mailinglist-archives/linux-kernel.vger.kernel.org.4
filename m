@@ -2,86 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334F46D023E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD86A6D023F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbjC3K5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S231314AbjC3K6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbjC3K5X (ORCPT
+        with ESMTP id S231225AbjC3K6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:57:23 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE6461A4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:57:22 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id g19so10851259lfr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:57:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680173840;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fEeZR+WcM39xhpEXHe4o33Q+UWFLjkaYXxsz/SpALV0=;
-        b=ap0PmGpEjOfv2nUrxeYfNyJjPZMDfcKXuBbxzGaRAAPQ+EoUPnXPPUnwvm0mhZIxIp
-         wSrcSzDwkPl6zD1gtzkxtoPXsELvPtUhQUKjq/kcGOmfywtmBsWZMdFwtFz6Gkt8jt4X
-         1xYqe0jFL1GdN5LP9Cft3qyzy8PrBKYUb4CHwGlGw71FkMYUqx84boxjguNgO9h+t4yu
-         FZ4uza72h/VodF59WruDDzowT2xLnGbmJyIS9Zco7JG9H3e5dgAQQzr6RMKhnsgsfuTX
-         PZCrbrnV/gy53rwYDueBKk+i88MKJwUme7Pb0fOpvLfPEqPox3g/xHSznD14dUQfZtT7
-         OqNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680173840;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fEeZR+WcM39xhpEXHe4o33Q+UWFLjkaYXxsz/SpALV0=;
-        b=BzBYd7dZWRo3ccout43uXYdDa2T+giqHDKD4VftUr4XOQIcC9QjNZBbDEFeuOTuc8D
-         RLDlRg31viuuRmsC5u27WzeMnRis3n/M5Hzw3OMqr9D+HxXLzV89xqJyTlAMYHRXTLSG
-         M7i2P1E3m9e2Gtq0y4sN0Wiu+iIpp71HisJf1ChC7/CtH9YKMsYsqQirz4bqp+wZ1dOb
-         LBhYFtu39V8aSA3Us2dJYA3XzpDHfvE/nwJeMAuLMQ07pKbHYwikXsRG6W80zB0QuCJG
-         voTcCsWKeTj/ZDuemE/2piEA2rLVS1UkX1R+fzretJIzOITF2gr0MzWm9r3AU9C6fTpu
-         tjbA==
-X-Gm-Message-State: AAQBX9eRzUtXq68iCvox0z3hocE1hGuWq42y47g4cvo9WXOaVOE518I8
-        dkhwMZmvnwrY3tMLoPF0j/A3JA==
-X-Google-Smtp-Source: AKy350ZbNlhbm9DQxukLP3ML+9FgpDYCaeTXB86XDbiFJ0YpbMmqdtHJQxXD09YjvMnEjlF5JuzyAg==
-X-Received: by 2002:ac2:50d9:0:b0:4e8:44c1:f170 with SMTP id h25-20020ac250d9000000b004e844c1f170mr6951040lfm.54.1680173840314;
-        Thu, 30 Mar 2023 03:57:20 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id t18-20020ac243b2000000b004e92c0ed7a0sm5823486lfl.100.2023.03.30.03.57.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 03:57:19 -0700 (PDT)
-Message-ID: <bc5dd7d1-e001-8bd2-55c6-b6827c418371@linaro.org>
-Date:   Thu, 30 Mar 2023 12:57:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 3/4] arm64: dts: qcom: msm8996: Improve GPU OPP table
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vivek Gautam <vivek.gautam@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>
-References: <20230329-topic-adreno_opp-v1-0-24d34ac6f007@linaro.org>
- <20230329-topic-adreno_opp-v1-3-24d34ac6f007@linaro.org>
- <CAA8EJpprgiXWZC2W3JSgG3jtTZDtbwoeQ6LBK=pqfpk0oMvNRw@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAA8EJpprgiXWZC2W3JSgG3jtTZDtbwoeQ6LBK=pqfpk0oMvNRw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Thu, 30 Mar 2023 06:58:14 -0400
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2103.outbound.protection.outlook.com [40.107.11.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08367EC3;
+        Thu, 30 Mar 2023 03:58:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e3fQZhs8L4ZlJ8n7sH5YJsVfR36PtHP6z6SGBVBEsX+5Og3TS4+cKYoVdLOapR2tmFUh+v+/fe7KB3X+PBfVURJ3jwXeftP6X3m7gw+ejBQ5TNF/ExLfJf7bkiP0JNhRcQ4faA5vQBg9x1cqN3LbLf41/tXEAkgln3dO9qbEdVT0WHJOcNf4naPFXMb/kt5NyXES+YqQEuPSjkPzBmKNJ1MFBwrqnEkbcyBUw0rI+/rue+wgnCFUX/8YjPTuw8WpO83ZfViQcY6U7j6fcw56AhFvKcoO1Lju7a1x5stP17wIoCM103A0WlB/9MKw2o0N0A5ol/zlldfM/EcemaXLKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7IkwZtjPJ9Wn0ZKe/3NyngbqzUtimVrUVmEDqp5U+TM=;
+ b=faBxXU/oriATdDhXbnRUDmkoSkP1w5zyJLMIeRD1w/ql9tDAlitWMqroJl2Ko4bGR/k1CPydwff7Dlf7bSukqb+yo2mdvZQBwQoSOXjqOxX+5lWud3Z6bD2tuk6ujcCK0XOaNZRh8h5WZD+xw8U0PycBMedCWSt0sAic92vwKcIfDrMY1Zb4RJ9LSwd6iJmsHTZKbyUXfj6QQmntswv8zVmyXLsy+42U6gKEBzc36TorXKrnHyBQrVXpdk/ncccun+egyoQCTmaNOazbyOml0srfGVpTKUb2T4MvLQWeTzBL7axBVuaMy9yazTB/nTYmf6NBE5QpfxkJfdtry4QcfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7IkwZtjPJ9Wn0ZKe/3NyngbqzUtimVrUVmEDqp5U+TM=;
+ b=k88C7a02WzoVOnhNHwj9gU8hRNkzMFs1m7c2K4BfWhydhQD7qLU8cKeWoG8YzW0GMQ0CmnJTpEq3SRB3WE4Oj7wVvuoPgmBSRQslGC7NjrfaijOTQk8ASzR2aNonwJzjqZ/F96bSr9zKUdtDriRGdDifmC3fhfyakCHJS8EbiNs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LO6P265MB6126.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2b8::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.37; Thu, 30 Mar
+ 2023 10:58:10 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f2a:55d4:ea1d:dece%4]) with mapi id 15.20.6222.035; Thu, 30 Mar 2023
+ 10:58:10 +0000
+Date:   Thu, 30 Mar 2023 11:58:08 +0100
+From:   Gary Guo <gary@garyguo.net>
+To:     y86-dev@protonmail.com
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v3 06/13] rust: init/sync: add `InPlaceInit` trait to
+ pin-initialize smart pointers
+Message-ID: <20230330115808.65f8c01d.gary@garyguo.net>
+In-Reply-To: <20230329223239.138757-7-y86-dev@protonmail.com>
+References: <20230329223239.138757-1-y86-dev@protonmail.com>
+        <20230329223239.138757-7-y86-dev@protonmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0208.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:33a::6) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO6P265MB6126:EE_
+X-MS-Office365-Filtering-Correlation-Id: b023ae9c-e4b7-414d-08da-08db310da6c9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1T867qwJohZIBKI6MYeRq39w1XLBSXVOPT87T4Iy6O8+5Yg9URNMAG7JoJHZ6PPLpX8vFDtHse9vXMeTS+G42BbdwGiOdv8T1wSylWnQB4BUYaTpddZxbqSy8ZbWsIKbpncc44oSCHLWVSiW5tsGJpSEpMjQcar2AkwHzg0kHsZLNzl1Rwq63D8kiIkN/kHlCSMvruqK1A3CT3zP45iWYnrN41UXPWzXdU0xH6FqcgrS2BxH8S1HqtgkcxT08L4KK1BZwj9SyEMKGE8V6tQm9UHMme2ACAwgXxmuqIjXDnC/pPQC8DObL/tMwP9zAM394Y368hhjOA8IwQvP8Os1dsWVqDCh8kCnGQSyVL2XOSxPJd3ls2kaZSr2Z7kOMzUDdcVVfrSyjt3yPaxE2oJVQ1KJxc0I/9iSa1Em0X7JIWiF1jD7TEslAYJRC82lyMHBtAsMlikq3nb2NhEvxda3f881NvLYIV1UgqXScydY7tun53acHP9emycHuDiyGl0FoJ19NfgX19vwGbeZ8sHCkQu0q6YBpR+b4sdUxGvyKjScCjPuV8yLFamKGDj7tLmZ7pAyEA4ToCCxXUYFKXYJ7Gnt1Kp9WF4bj2wPsf9AxHM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(6029001)(376002)(346002)(136003)(396003)(366004)(39830400003)(451199021)(2616005)(83380400001)(6486002)(478600001)(186003)(316002)(26005)(1076003)(54906003)(6512007)(2906002)(6506007)(5660300002)(7416002)(36756003)(4326008)(8936002)(38100700002)(6916009)(8676002)(66946007)(41300700001)(66476007)(66556008)(86362001)(66899021)(81973001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yYe3IoM8AoVHi3TUYcTnOJ4bSp86amIzw8RE6j3Tq1CmoAd/3jMCJOgBRyTF?=
+ =?us-ascii?Q?x9P3USRNrIcnn3bYIae8aBbkmylzoVktbANUdYcuLhiXNMEIoTpGlewKosOA?=
+ =?us-ascii?Q?m7nK2pJJaS8VVwZAJ+PKEycDWT8zbd+1Of7qoa76dZQgPOE+qBI45aOc1VTy?=
+ =?us-ascii?Q?PopLTfmavCdjpPAQMBx/0sSho14QUZe0hMaXB25DOuxKIVe7kjQZDw+04suc?=
+ =?us-ascii?Q?kGZ3bcemgtWu2bxn8ON1Zz65L+qJwyz+njHAFiODYDBDLVJmvKlKsbu53Hp+?=
+ =?us-ascii?Q?OCA0QtQvYuYaffy/fydp6AxhNTi02iyJELtKaNlSkWhwbYEQ48AcWHUpAecE?=
+ =?us-ascii?Q?veeHSEhoe7PHcK1Eq1S9y+4bMofT8FMbRu+6XTg5L5Q7zgTnXw1Pnybe7fH+?=
+ =?us-ascii?Q?43Sz6aR4iYkuzcP/E9qpiStPBHZ8kze1dTIyR8Bo/TI1UzJRbYigFr9JVUnL?=
+ =?us-ascii?Q?PbMJS2c7/CdvAxeVU6pZUSgZ2/DgYUeUGhFbDplBTw6pO8Ugx1BVlR8g/mB3?=
+ =?us-ascii?Q?KHGQ1FAwwL5ynU67ZY/KHAgd7QOUr4bdWueHbySHlhYkkI8rhh/nr6H8Kzuy?=
+ =?us-ascii?Q?AoL5fTmcSmfOXfZSd5rWzqGkKtbSkYKvuGJ3nPLu6okbcrdQPJlTgU44K2hN?=
+ =?us-ascii?Q?6pJ0TVnb7RxBY3qPMDTPsKTOX57kEypZ4xNjB+ZsSUVGbL7/hg8VrlVOmh9d?=
+ =?us-ascii?Q?+8ku/vKnC3epbrHa8g0OR4/B/J+9m0qDC8hGqazXDA0Rh/N1n2P4Sw8W3VTJ?=
+ =?us-ascii?Q?Ps+mgBmnSBxf7+M3M92PlVirFGMtUnxhnI7dU78LsiP1bauWq02vYvMlFDPt?=
+ =?us-ascii?Q?dsJ26zNNnuo3EjOBr835reSTIgSK/xHXfKzO+x4SVtUnh7BQMkCPiCytasHa?=
+ =?us-ascii?Q?hgh8TplgOEvJJA73i7X3Zj7agZ9/sRWrlkuipMB0rw5pRdwFhW8le0kJk7t/?=
+ =?us-ascii?Q?9jni6A1Y6ashpEcKnCZ5MBOgL2HPjmI5ZeAasRrxRY1JUhjP05fKpbY5izkc?=
+ =?us-ascii?Q?0Rl9lsnM7qRF4YqHeVf77L6RkaUluFqTfmK4O1gf3i3tF1nlBGByVuN4W4l+?=
+ =?us-ascii?Q?/UoCA7QOXpUvk9C45KJdULqcbNIwRveBJgsbySg1t4hSQYQ3GQsYnodB1iJm?=
+ =?us-ascii?Q?jG4tUYes5meflVWB01m/XQCmF4xPQ8AG0HroBbhCVpKysHZibmVVOA/YvC5K?=
+ =?us-ascii?Q?v9hviBRx3eorGx5qYHqflhpKfumfyxur8ww+9xOoHXBhwDigs+fE2l1Ov9mf?=
+ =?us-ascii?Q?52kN7X7r1VqFw4N8HLLNoH44TezPm0e8Gn1stDX9TSyP2Rh+FwTaHC/yH1Eg?=
+ =?us-ascii?Q?TW3by1nqZZNFmbuwiHGQX+z0W3NJW4pbInc7uq9yZkEhDDU1AX+YA+wty8Uh?=
+ =?us-ascii?Q?WFzRYA6knwnb5RiS71rXMNLlEZPTk+/VW3hllWTXFIZLvnapJsdkcC7i5kIq?=
+ =?us-ascii?Q?EgUooMA8o0JOOT1JWR5X6pnSE8k8e8AvNbIEe2v6RLbmduY8+DoU7t1bRPRR?=
+ =?us-ascii?Q?Y54T2oXx6WPK3ObUz+RYL6uE3CTLTeQ4/ilsifLxP2aMkOfY6zm4mrNrEiqO?=
+ =?us-ascii?Q?WYlFZJf9RMcKMJoQsphQ3NGEfZo/TWMdXn8jTE5u?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: b023ae9c-e4b7-414d-08da-08db310da6c9
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 10:58:10.6382
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: J21lU1i1uV/Z0Y90zprzG9gPWC2yndCZPAm9xOY9HWGxz7TqYJHvox6QHMlwlFH8r/32TBmALHCEe/NxThXeeQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P265MB6126
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,91 +121,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 29 Mar 2023 22:33:18 +0000
+y86-dev@protonmail.com wrote:
 
+> From: Benno Lossin <y86-dev@protonmail.com>
+> 
+> The `InPlaceInit` trait that provides two functions, for initializing
+> using `PinInit<T, E>` and `Init<T>`. It is implemented by `Arc<T>`,
+> `UniqueArc<T>` and `Box<T>`.
+> 
+> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+> ---
+>  rust/kernel/init.rs     | 97 +++++++++++++++++++++++++++++++++++------
+>  rust/kernel/sync/arc.rs | 25 ++++++++++-
+>  2 files changed, 108 insertions(+), 14 deletions(-)
+> 
+> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
+> index 85e8d5f41b60..3d89c7e3bdb5 100644
+> --- a/rust/kernel/init.rs
+> +++ b/rust/kernel/init.rs
+> @@ -114,10 +114,13 @@
+>  //! [`impl Init<T, E>`]: Init
+>  //! [`Opaque`]: kernel::types::Opaque
+>  //! [`pin_data`]: ::macros::pin_data
+> -//! [`UniqueArc<T>`]: kernel::sync::UniqueArc
+> 
+> +use crate::{
+> +    error::{self, Error},
+> +    sync::UniqueArc,
+> +};
+>  use alloc::boxed::Box;
+> -use core::{cell::Cell, convert::Infallible, marker::PhantomData, mem::MaybeUninit, ptr};
+> +use core::{cell::Cell, convert::Infallible, marker::PhantomData, mem::MaybeUninit, pin::Pin, ptr};
+> 
+>  #[doc(hidden)]
+>  pub mod __internal;
+> @@ -309,7 +312,6 @@ pub mod macros;
+>  ///
+>  /// [`try_pin_init!`]: kernel::try_pin_init
+>  /// [`NonNull<Self>`]: core::ptr::NonNull
+> -/// [`Error`]: kernel::error::Error
+>  // For a detailed example of how this macro works, see the module documentation of the hidden
+>  // module `__internal` inside of `init/__internal.rs`.
+>  #[macro_export]
+> @@ -366,8 +368,6 @@ macro_rules! pin_init {
+>  ///     }
+>  /// }
+>  /// ```
+> -///
+> -/// [`Error`]: kernel::error::Error
+>  // For a detailed example of how this macro works, see the module documentation of the hidden
+>  // module `__internal` inside of `init/__internal.rs`.
+>  #[macro_export]
+> @@ -589,8 +589,6 @@ macro_rules! try_pin_init {
+>  ///
+>  /// This initializer is for initializing data in-place that might later be moved. If you want to
+>  /// pin-initialize, use [`pin_init!`].
+> -///
+> -/// [`Error`]: kernel::error::Error
+>  // For a detailed example of how this macro works, see the module documentation of the hidden
+>  // module `__internal` inside of `init/__internal.rs`.
+>  #[macro_export]
+> @@ -641,8 +639,6 @@ macro_rules! init {
+>  ///     }
+>  /// }
+>  /// ```
+> -///
+> -/// [`Error`]: kernel::error::Error
+>  // For a detailed example of how this macro works, see the module documentation of the hidden
+>  // module `__internal` inside of `init/__internal.rs`.
+>  #[macro_export]
+> @@ -848,7 +844,8 @@ macro_rules! try_init {
+>  /// A pinned initializer for `T`.
+>  ///
+>  /// To use this initializer, you will need a suitable memory location that can hold a `T`. This can
+> -/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`].
+> +/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Use the [`InPlaceInit::pin_init`] function of a
+> +/// smart pointer like [`Arc<T>`] on this.
+>  ///
+>  /// Also see the [module description](self).
+>  ///
+> @@ -867,7 +864,6 @@ macro_rules! try_init {
+>  ///
+>  /// [`Arc<T>`]: crate::sync::Arc
+>  /// [`Arc::pin_init`]: crate::sync::Arc::pin_init
+> -/// [`UniqueArc<T>`]: kernel::sync::UniqueArc
+>  #[must_use = "An initializer must be used in order to create its value."]
+>  pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
+>      /// Initializes `slot`.
+> @@ -884,7 +880,8 @@ pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
+>  /// An initializer for `T`.
+>  ///
+>  /// To use this initializer, you will need a suitable memory location that can hold a `T`. This can
+> -/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Because [`PinInit<T, E>`] is a super trait, you can
+> +/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Use the [`InPlaceInit::init`] function of a smart
+> +/// pointer like [`Arc<T>`] on this. Because [`PinInit<T, E>`] is a super trait, you can
+>  /// use every function that takes it as well.
+>  ///
+>  /// Also see the [module description](self).
+> @@ -909,7 +906,6 @@ pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
+>  /// move the pointee after initialization.
+>  ///
+>  /// [`Arc<T>`]: crate::sync::Arc
+> -/// [`UniqueArc<T>`]: kernel::sync::UniqueArc
+>  #[must_use = "An initializer must be used in order to create its value."]
+>  pub unsafe trait Init<T: ?Sized, E = Infallible>: PinInit<T, E> {
+>      /// Initializes `slot`.
+> @@ -1014,3 +1010,78 @@ unsafe impl<T> Init<T> for T {
+>          Ok(())
+>      }
+>  }
+> +
+> +/// Smart pointer that can initialize memory in-place.
+> +pub trait InPlaceInit<T>: Sized {
+> +    /// Use the given initializer to in-place initialize a `T`.
+> +    ///
+> +    /// If `T: !Unpin` it will not be able to move afterwards.
+> +    fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
+> +    where
+> +        Error: From<E>;
+> +
+> +    /// Use the given initializer to in-place initialize a `T`.
+> +    fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
+> +    where
+> +        Error: From<E>;
+> +}
+> +
+> +impl<T> InPlaceInit<T> for Box<T> {
+> +    #[inline]
+> +    fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
+> +    where
+> +        Error: From<E>,
+> +    {
+> +        let mut this = Box::try_new_uninit()?;
+> +        let slot = this.as_mut_ptr();
+> +        // SAFETY: When init errors/panics, slot will get deallocated but not dropped,
+> +        // slot is valid and will not be moved because of the `Pin::new_unchecked`
+> +        unsafe { init.__pinned_init(slot)? };
+> +        // SAFETY: All fields have been initialized.
+> +        Ok(unsafe { Pin::new_unchecked(this.assume_init()) })
 
-On 29.03.2023 23:32, Dmitry Baryshkov wrote:
-> On Wed, 29 Mar 2023 at 22:17, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->> Remove the self-explanatory comment about opp-supported-hw contents,
->> add required-opps to ensure reasonable power domain levels are voted
->> for (currently we've been piggybacking off of miracles and MDP votes)
->> and add newlines between each subnode.
-> 
-> I'm not sure this is 100% correct. The values that you add are correct
-> for the voltage scaling case. However, based on the vendor kernel
-> sources I think that MX should only be scaled if the voltage is scaled
-> too. I might be wrong here.
-MX must be >= CX (and GX), so this should bring no harm.
+This can be either `Box::into_pin` or just `into()`.
 
-(citation needed, but that seems to hold true..)
-
-Konrad
-> 
->>
->> Fixes: 69cc3114ab0f ("arm64: dts: Add Adreno GPU definitions")
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  arch/arm64/boot/dts/qcom/msm8996.dtsi | 18 +++++++++++++-----
->>  1 file changed, 13 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
->> index 4dd37f72e018..62ad30e94f40 100644
->> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
->> @@ -1244,37 +1244,45 @@ gpu: gpu@b00000 {
->>                         gpu_opp_table: opp-table {
->>                                 compatible = "operating-points-v2";
->>
->> -                               /*
->> -                                * 624Mhz is only available on speed bins 0 and 3.
->> -                                * 560Mhz is only available on speed bins 0, 2 and 3.
->> -                                * All the rest are available on all bins of the hardware.
->> -                                */
->>                                 opp-624000000 {
->>                                         opp-hz = /bits/ 64 <624000000>;
->> +                                       required-opps = <&rpmpd_opp_turbo>;
->>                                         opp-supported-hw = <0x09>;
->>                                 };
->> +
->>                                 opp-560000000 {
->>                                         opp-hz = /bits/ 64 <560000000>;
->> +                                       required-opps = <&rpmpd_opp_turbo>;
->>                                         opp-supported-hw = <0x0d>;
->>                                 };
->> +
->>                                 opp-510000000 {
->>                                         opp-hz = /bits/ 64 <510000000>;
->> +                                       required-opps = <&rpmpd_opp_nom>;
->>                                         opp-supported-hw = <0xff>;
->>                                 };
->> +
->>                                 opp-401800000 {
->>                                         opp-hz = /bits/ 64 <401800000>;
->> +                                       required-opps = <&rpmpd_opp_nom>;
->>                                         opp-supported-hw = <0xff>;
->>                                 };
->> +
->>                                 opp-315000000 {
->>                                         opp-hz = /bits/ 64 <315000000>;
->> +                                       required-opps = <&rpmpd_opp_svs>;
->>                                         opp-supported-hw = <0xff>;
->>                                 };
->> +
->>                                 opp-214000000 {
->>                                         opp-hz = /bits/ 64 <214000000>;
->> +                                       required-opps = <&rpmpd_opp_svs>;
->>                                         opp-supported-hw = <0xff>;
->>                                 };
->> +
->>                                 opp-133000000 {
->>                                         opp-hz = /bits/ 64 <133000000>;
->> +                                       required-opps = <&rpmpd_opp_svs>;
->>                                         opp-supported-hw = <0xff>;
->>                                 };
->>                         };
->>
->> --
->> 2.40.0
->>
-> 
-> 
+> +    }
+> +
+> +    #[inline]
+> +    fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
+> +    where
+> +        Error: From<E>,
+> +    {
+> +        let mut this = Box::try_new_uninit()?;
+> +        let slot = this.as_mut_ptr();
+> +        // SAFETY: When init errors/panics, slot will get deallocated but not dropped,
+> +        // slot is valid
+> +        unsafe { init.__init(slot)? };
+> +        // SAFETY: All fields have been initialized.
+> +        Ok(unsafe { this.assume_init() })
+> +    }
+> +}
