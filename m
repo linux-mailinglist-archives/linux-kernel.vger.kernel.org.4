@@ -2,116 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0216D0016
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2787E6D0021
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjC3JrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S230469AbjC3Jrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjC3Jqn (ORCPT
+        with ESMTP id S229718AbjC3JrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:46:43 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1902D9020
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:46:13 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id r11so74122472edd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1680169570;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lPgtvlf/qIcPSIDm9oie4jBONsd+NAifAYT84sgHmuU=;
-        b=UAOZ8f5FgutdQdCpEMiKfWKeP5NfNwWFvCLsZ02lBz8DBAUgsP6Gk5XjLVhtoyghWF
-         giCRsHrL2oDi5PRFsP+J2jXI9zfMWovn0FMyXo63XcklkF+4shxBMCoIcnLJldTgessy
-         bc1pobCxt1PJqk9Wxqdg4srdVOgIAV72Do3fKCOAvFTX3JQOGLcE3CkhX2r6J9cEvZdN
-         Z816itFG2QpyeI5SQPrRynyCuzTqSTcWFSqfDS+u/UEuHTtVb2ZyxgC0CmffKgGqTwyJ
-         Jb4cbqo72aqghoHyFLuwkXz/GE7C0oG3mZv6qWqi4ZxidO2WpRpDLOg4Xdwse8bij6hF
-         GkTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680169570;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lPgtvlf/qIcPSIDm9oie4jBONsd+NAifAYT84sgHmuU=;
-        b=s3GXbTHQ7yEAbT7XqdnPFInb4rf8MTBBOzmIXKaeZUmVMWlV2z+2GeCSnLHxj5FGsk
-         4oTM/a+rU+pq0AjzcgtgkvWxMMR0JQ8AcrfVJqJqiNhUyNJjfxQPugDMl04A9avMSA2a
-         z3Cp5C51oAHQlJu/4/NEtMyMKCW5oKCPsnc9bGK2ZoeKSxv1njF1A1Ql3wO3vjnYLjJ4
-         IvMxRkLixiQ69aPxss4QbByl0SatR3E0b4sXOfL+ILGsMNMJdbAxeZEODavnYpyxbcLc
-         L3u58uKImkEGp9PD39Lhu8j4OYJGzzLDcD6XZrnY5m/hT7dSGl4sS5td9pmFy9bnSgIl
-         e7Pw==
-X-Gm-Message-State: AAQBX9cpLNs7F0F2qCph9SDsB1GJ35j+c9D0e3hvcqbGgO8aaVuTIXb5
-        jUHvdBi9Q2x0fDFvVfkuATMSxV/cjZu1/zPhXoHWFA==
-X-Google-Smtp-Source: AKy350YwQTox/HJ1lOGaXvTEU6nrQP9MbYXFj9UA5+0pdBW//mgcPofpajDduOgwKKAnXNortfjcQg==
-X-Received: by 2002:a17:906:54cc:b0:932:c315:b0d with SMTP id c12-20020a17090654cc00b00932c3150b0dmr22690353ejp.34.1680169570355;
-        Thu, 30 Mar 2023 02:46:10 -0700 (PDT)
-Received: from localhost ([2a02:8070:6387:ab20:5139:4abd:1194:8f0e])
-        by smtp.gmail.com with ESMTPSA id h5-20020a50c385000000b004f9e6495f94sm18113646edf.50.2023.03.30.02.46.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 02:46:10 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 05:46:09 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        surenb@google.com, brauner@kernel.org, chris@chrisdown.name
-Subject: Re: [PATCH v5 4/4] sched/psi: allow unprivileged polling of N*2s
- period
-Message-ID: <ZCVaYYmPZsFmc+/1@cmpxchg.org>
-References: <20230330081100.11871-1-cerasuolodomenico@gmail.com>
- <20230330081100.11871-5-cerasuolodomenico@gmail.com>
+        Thu, 30 Mar 2023 05:47:15 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1616586B4;
+        Thu, 30 Mar 2023 02:46:36 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 892C2E0010;
+        Thu, 30 Mar 2023 09:46:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1680169595;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tDZMFFeXlhTNHv0SPx6QXJ/W5qsCoVxWgCf1SwG+2Wo=;
+        b=jl1v7xa81tnvUJc7h0fegAZMWr2Di8Zr9J7ucrXYdEnehswb+2ISKV+RyjocaWIoYTH9AI
+        E6HMrrTV2eX7J5osIb34clZX6kQL46SOnjqcZp21jqhUhT349ljsSeaeAgNxIkihlvfyzz
+        jFpIaOsBrejO1VxvmqNtSnW3zoW8biP5QIYg8ykBeby1NdknwWVUkJBOcNMZKMvGSlD81g
+        z2Ou6jivSsdrTQlSYQwHjN0rhBQxUhdnO1h191oRXFqOYBjkY27a1ofnierJaW25hor1ZX
+        m/xHqnOfqLrcT5viVwqpARBqIFc5mo9FkOKqageu4oA8v1RNvSjT/Npb4G5mSg==
+Date:   Thu, 30 Mar 2023 11:46:31 +0200
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rafael@kernel.org, Colin Foster <colin.foster@in-advantage.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee@kernel.org>, davem@davemloft.net,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        thomas.petazzoni@bootlin.com
+Subject: Re: [RFC 4/7] mfd: ocelot-spi: Change the regmap stride to reflect
+ the real one
+Message-ID: <20230330114631.6afa041c@pc-7.home>
+In-Reply-To: <826e295b-6a0b-4015-85bc-5ba6015678dc@lunn.ch>
+References: <20230324093644.464704-1-maxime.chevallier@bootlin.com>
+        <20230324093644.464704-5-maxime.chevallier@bootlin.com>
+        <c87cd0b0-9ea4-493d-819d-217334c299dd@lunn.ch>
+        <20230324134817.50358271@pc-7.home>
+        <826e295b-6a0b-4015-85bc-5ba6015678dc@lunn.ch>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330081100.11871-5-cerasuolodomenico@gmail.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Domenico,
+Hello Andrew,
 
-thanks, the destruction path looks right to me now.
+On Mon, 27 Mar 2023 02:02:55 +0200
+Andrew Lunn <andrew@lunn.ch> wrote:
 
-On Thu, Mar 30, 2023 at 10:11:00AM +0200, Domenico Cerasuolo wrote:
-> @@ -1319,11 +1353,16 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
->  		rcu_assign_pointer(group->rtpoll_task, task);
->  	}
->  
-> -	list_add(&t->node, &group->rtpoll_triggers);
-> -	group->rtpoll_min_period = min(group->rtpoll_min_period,
-> -		div_u64(t->win.size, UPDATES_PER_WINDOW));
-> -	group->rtpoll_nr_triggers[t->state]++;
-> -	group->rtpoll_states |= (1 << t->state);
-> +	if (privileged) {
-> +		list_add(&t->node, &group->rtpoll_triggers);
-> +		group->rtpoll_min_period = min(group->rtpoll_min_period,
-> +			div_u64(t->win.size, UPDATES_PER_WINDOW));
-> +		group->rtpoll_nr_triggers[t->state]++;
-> +		group->rtpoll_states |= (1 << t->state);
-> +	} else {
-> +		list_add(&t->node, &group->avg_triggers);
-> +		group->avg_nr_triggers[t->state]++;
-> +	}
->  
->  	mutex_unlock(&group->rtpoll_trigger_lock);
+> > > >  static const struct regmap_config ocelot_spi_regmap_config = {
+> > > >  	.reg_bits = 24,
+> > > > -	.reg_stride = 4,
+> > > > +	.reg_stride = 1,
+> > > >  	.reg_shift = REGMAP_DOWNSHIFT(2),
+> > > >  	.val_bits = 32,    
+> > > 
+> > > This does not look like a bisectable change? Or did it never work
+> > > before?  
+> > 
+> > Actually this works in all cases because of "regmap: check for
+> > alignment on translated register addresses" in this series. Before
+> > this series, I think using a stride of 1 would have worked too, as
+> > any 4-byte-aligned accesses are also 1-byte aligned.  
+> 
+> This is the sort of think which is good to explain in the commit
+> message. That is the place to answer questions reviewers are likely to
+> ask for things which are not obvious from just the patch.
 
-But creation needs the same treatment. group->avg_triggers and
-avg_nr_triggers are protected by the avgs_lock, not the
-rtpoll_trigger_lock.
+That's right, I will include this explanation in the next iteration.
+Thanks for the review,
 
-I suppose the lock taking and the group->rtpoll_task creation
-(anything with rtpoll in the name, really) should be within a big
+Maxime
 
-	if (privileged) {
-		rtpoll_trigger_lock()
-		kthread_create()
-		init-and-link()
-		rtpoll_trigger_unlock()
-	} else {
-		avgs_lock()
-		...
-	}
+>     Andrew
+
