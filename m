@@ -2,149 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A121A6D0787
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 177D46D0794
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbjC3OCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
+        id S232248AbjC3OFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjC3OCF (ORCPT
+        with ESMTP id S232081AbjC3OE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:02:05 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9344EC6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:02:03 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id t10so76751689edd.12
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:02:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680184922;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zprVqURmoIr8Yjxlxe5JE5AiP0aq2hBtyHd/myx7ajE=;
-        b=QLKQXBahF2ITMq84r0Q6nmjqbgt6GKoFY7x2lSKY6hyNqtjVC99dgSgDC+BgwobBXP
-         UJvoBdyd16qrrR+JZ/haUILOY6lEC2kEXQInCUzSSX8r8PbYYw+X74rp2PJdCGbDixkY
-         cbUfvnUJ0eDHybU53nIBeGxbm8bb8pyfPSKjPoC4gB4qpLGWvWSni2zBWflfoNHIz9fT
-         54WjzYSjs/1GwFM4Bcj/8+MnBnyW4bVFmVqerQzQnUUxN6rNsdJ3rcExpvuQr52gvTnd
-         k3S0pAFmkQI54pqr5MyO1pckk/v8ZkSFMggEawocoM9oyCOCg7gQvZwBb025SVf2vdFV
-         HWoQ==
+        Thu, 30 Mar 2023 10:04:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517FD7ED3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680185050;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tTBdaSwbBU7yvMf5yJjwPQAmSwIig1jMctqroIy2Uf0=;
+        b=cnFFvQVkp98do7iie8CpIs6S/nQglUuF/kOBZoqpai/qNvxiG2XgtyhBRNCfoQDMjZPYxp
+        NzDGDpSxGZh1z26m6Zvlo4bPqfLcZSowUeUw5ufyw+YQSvFptgyZuWVdkr42FCWNJGGFQC
+        0sRSV6lT9cjGCQHUsh93bHYX9JDrFFk=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-628-VXshoszeOq26ku0gDVrI2g-1; Thu, 30 Mar 2023 10:04:08 -0400
+X-MC-Unique: VXshoszeOq26ku0gDVrI2g-1
+Received: by mail-wr1-f69.google.com with SMTP id h18-20020adfa4d2000000b002cea098a651so2013614wrb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:04:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680184922;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zprVqURmoIr8Yjxlxe5JE5AiP0aq2hBtyHd/myx7ajE=;
-        b=rnohh8S+tl1N2T+MBALVFskJba0y12+DCw6BzvlJ6PHf9nejubdFv7URVwI6Qe3bbt
-         O8i6aNlYo+9BHGnvAsUXXomfk76e9a3BRglklriVIy1Vb42tMZiQmCVPU68xQmRmYGif
-         HlJL9FJ92P5iNBChlwsxiJ6MTn019YvXzBaLqtooqm9Vz1+MzSXgMZNMOT+F1+9XJ6zF
-         /LJ1PSErPPq9kDfGl9unAjBtR8jLt4t+c4pyQr/1Zdmw/evh9C2WyNDBORRdheHDF4q8
-         IpyZyIcFEiflLeo9YUp1G2P1gYymaoWlYuPnPHMZfbcx2XoPJOvM8O749WyeYvFkgTiG
-         FNtA==
-X-Gm-Message-State: AAQBX9e1/UuDKqtmobcFacXp8k8oDdpRm2vkemr4IMX6qbGZwJeQujwQ
-        ATQ3GF4OsViRdh7UFQL3aBGecuHcZLjrPq78lbY=
-X-Google-Smtp-Source: AKy350aSo5k1iU5/O40DGLfkS2FKNLFXD9noE38a8J2MW2gNBMR1lZYXrAjG056k7+WA2UGB/T0a66wBmiMxPXxRT1A=
-X-Received: by 2002:a17:907:720e:b0:947:46e0:9e51 with SMTP id
- dr14-20020a170907720e00b0094746e09e51mr1372549ejc.11.1680184922043; Thu, 30
- Mar 2023 07:02:02 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680185047;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tTBdaSwbBU7yvMf5yJjwPQAmSwIig1jMctqroIy2Uf0=;
+        b=S1zSSHnTA9zUhH4ZSrzhKK8iUaVZPjiBYEu7X2lJAboAf8IwyqRiFDy9/wpGsaMhQK
+         sE5zYyPpA+ZyBCLDsmCXkI0TGVgmlKNyfRwNsjo/0kHgaJlZIUhIbSlMfAJ4YPsHwR/S
+         McUd+LbwQi8lADi4VKtxYwNw7TYupl0V4KewX7xQTq6M0y2VMDMKr38nm2wiaR28BAQD
+         SdYrSFT92eJFL4GdPXny9LILX115+K7S7oo6cF6EYxgvQycvQ79nAjzIfKK69Z5vsGMg
+         3woQasFORj/Q/zRtzUFa397zDE4AtMjQGuBVLJOj8NrGljK/j5sgE+HyG/FpM0UR1SLU
+         y/vA==
+X-Gm-Message-State: AAQBX9dZZNy0jm3hzi8dZLcHPGW7iqpmrBVe32iAv6gcVnuF+9Hu4TFf
+        CCM7AEdxUgOCurwXiI7Ltj9jaFrQ+n0JqtuuypMkPadxP+EDAKRmaxItQvMQ5LHIism2X9izVbd
+        +0XMOH/WvKL9BaxN+ybFWBU2o
+X-Received: by 2002:adf:fd47:0:b0:2dc:cad4:87b9 with SMTP id h7-20020adffd47000000b002dccad487b9mr20764971wrs.68.1680185047554;
+        Thu, 30 Mar 2023 07:04:07 -0700 (PDT)
+X-Google-Smtp-Source: AKy350baz3ZKnOOUo2PwHSQ/hKwGrXzV97e3RmZVOT6SkIIWFbJS2PWUhgbo4anxuinm8NAuAgc/Ow==
+X-Received: by 2002:adf:fd47:0:b0:2dc:cad4:87b9 with SMTP id h7-20020adffd47000000b002dccad487b9mr20764942wrs.68.1680185047192;
+        Thu, 30 Mar 2023 07:04:07 -0700 (PDT)
+Received: from redhat.com ([2.52.159.107])
+        by smtp.gmail.com with ESMTPSA id e9-20020adffc49000000b002be5bdbe40csm32969834wrs.27.2023.03.30.07.04.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 07:04:06 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 10:04:03 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Jakub Kicinski <kuba@kernel.org>, Wei Wang <weiwan@google.com>,
+        David Miller <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] virtio: fix up virtio_disable_cb
+Message-ID: <20230330100219-mutt-send-email-mst@kernel.org>
+References: <20210526082423.47837-1-mst@redhat.com>
+ <20210526082423.47837-4-mst@redhat.com>
+ <1680156457.5551112-5-xuanzhuo@linux.alibaba.com>
+ <20230330024220-mutt-send-email-mst@kernel.org>
+ <1680159261.1588428-1-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7208:4282:b0:65:6bd4:9c4e with HTTP; Thu, 30 Mar 2023
- 07:02:01 -0700 (PDT)
-Reply-To: mrspatriciawilsons@gmail.com
-From:   POST OFFICE SERVICE <mrkelvinogene927@gmail.com>
-Date:   Thu, 30 Mar 2023 07:02:01 -0700
-Message-ID: <CA+SUeDFQLxt-JEr0PGhi0XVXu3HAcGJyE_YbLP4eBvvbqfxfFw@mail.gmail.com>
-Subject: =?UTF-8?B?7Y6A65OcIOyImOy3qOyduCDsnbTrqZTsnbwg7IaM7Jyg7J6Q64uY6ruYLA==?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:544 listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrkelvinogene927[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrkelvinogene927[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.8 UPPERCASE_50_75 message body is 50-75% uppercase
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  1.1 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1680159261.1588428-1-xuanzhuo@linux.alibaba.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-7Y6A65OcIOyImOy3qOyduCDsnbTrqZTsnbwg7IaM7Jyg7J6Q64uY6ruYLA0KDQrsmrDrpqzripQg
-VU4g7J2066aE7J2EIOyCrOyaqe2VmOuKlCDsgqzquLDqvrzsnbQg7IaN7JWY64uk64qUIOyGjOyc
-oOyekOulvCDtmLzrnoDsiqTrn73qsowg66eM65OgIFVOIOygleu2gCDrsJTqtazri4jsl5Ag7Jik
-656r64+Z7JWIIOyngOu2iO2VtOyVvCDtlZjripQg66+47IiY6riIDQrsnpDquIjsnYQg7KGw7IKs
-7ZWY64+E66GdIOuMgO2GteugueqzvCBVTiDqtIDrpqwg6riw6rWs66Gc67aA7YSwIOyalOyyreyd
-hCDrsJvslZjsirXri4jri6QuIOyhsOyCrCDspJEg6reA7ZWY7J2YIOydtOuplOydvCDso7zshozq
-sIAg7Y+s7ZWo65CcIOuLueyCrCDsi5zsiqTthZzsnZgg642w7J207YSwDQrsoIDsnqUg6riw66Gd
-7JeQIOuUsOultOuptCDqt4DtlZjsnZgg7KeA67aI7J2AIOuLpOydjOqzvCDqsJnsnbQg67aE66WY
-65CcIDE1MOuqheydmCDsiJjsi6DsnpAg66qp66Gd7JeQIO2PrO2VqOuQqeuLiOuLpC4NCg0K7Jqw
-66as64qUIOq3gO2VmOydmCDsnpDquIjsnYQg7IaN7J2066Ck64qUIOyLnOuPhOuhnCDrtoDtjKjt
-lZwg7J2A7ZaJIOyngeybkOyXkCDsnZjtlbQg6reA7ZWY7J2YIOyngOu2iOydtCDrtojtlYTsmpTt
-lZjqsowg7KeA7Jew65CY7Ja0IOq3gO2VmOydmCDsuKHsl5DshJwg66eO7J2AIOyGkOyLpOydhA0K
-7LSI656Y7ZWY6rOgIOq3gO2VmOydmCDsp4DrtojsnYQg67Cb64qUIOuNsCDrtojtlYTsmpTtlZwg
-7KeA7Jew7J20IOuwnOyDne2WiOuLpOuKlCDsgqzsi6Tsl5Ag6rK97JWF7J2EIOq4iOy5mCDrqrvt
-lanri4jri6QuIOycoOyXlOqzvCDqta3soJzthrXtmZTquLDquIgoSU1GKeydgCDquIDroZzrsowN
-CuqysOygnOyduCDrp4ztgbwg67aB66+4LCDrgqjrr7gsIOuvuOq1rSwg7Jyg65+9LCDslYTsi5zs
-lYQg65OxIOyghCDshLjqs4QgMTUw66qF7J2YIOyImOugueyduOyXkOqyjCBBVE0g67mE7J6Q7Lm0
-65Oc66W8IO2Gte2VtCDrqqjrk6Ag67O07IOB6riI7J2EDQrsp4DquIntlZjquLDroZwg7ZaI64uk
-LiDshozruYTsnpAsIOq4sOyXhSwg6riI7Jy1IOq4sOq0gCDrsI8g7KCV67aA6rCAIO2YhOq4iCDr
-sI8g7IiY7ZGcIOuMgOyLoCDrlJTsp4DthLgg7Ya17ZmU66W8IOyCrOyaqe2VoCDsiJgg7J6I64+E
-66GdIO2VmOuKlCDquLDsiKDsnoXri4jri6QuDQoNCuq3gO2VmOydmCDsnbTrpoTsnLzroZwg67Cc
-6riJ65CY6rOgIERITCDrmJDripQg6reA7ZWY7J2YIOq1reqwgOyXkOyEnCDsgqzsmqkg6rCA64ql
-7ZWcIO2DneuwsCDshJzruYTsiqTrpbwg7Ya17ZW0IOq3gO2VmOydmCDso7zshozroZwg7KeB7KCR
-IOuwnOyGoeuQmOuKlCBBVE0NClZpc2Eg7Lm065Oc66W8IO2Gte2VtCDqsrDsoJzqsIAg7J2066Oo
-7Ja07KeA64+E66GdIOuztOyepe2VqeuLiOuLpC4g7Jew6529IO2bhCAkODAwLDAwMC4wMOqwgCDq
-t4DtlZjsnZggQVRNIFZpc2Eg7Lm065Oc7JeQIOyggeumveuQmOyWtA0K7ZWY66OoIOy1nOyGjCAk
-MTAsMDAw7J2YIOyduOy2nOuhnCDtlbTri7kg6rWt6rCA7J2YIOuqqOuToCBBVE3sl5DshJwg7J6Q
-6riI7J2EIOyduOy2nO2VoCDsiJgg7J6I7Iq164uI64ukLiDsmpTssq0g7IucIO2VnOuPhOulvCDt
-lZjro6gNCiQyMCwwMDAuMDDquYzsp4Ag64qY66a0IOyImCDsnojsirXri4jri6QuDQoNCuydtOyZ
-gCDqtIDroKjtlZjsl6wg6reA7ZWY64qUIOuLpOydjOqzvCDqsJnsnbQg6rWt7KCcIOyngOu2iCDr
-sI8g7Iah6riI7J2EIOychO2VnCDsnbTsgqztmozsl5Ag7Jew65297ZWY7JesIO2VhOyalO2VnCDs
-oJXrs7Trpbwg7KCc6rO17ZW07JW8IO2VqeuLiOuLpC4NCg0KMS4g7ISx66qFKOyEseqzvCDsnbTr
-poQpPT09PQ0KMi4g6rGw7KO87KeAIOuwjyDqta3qsIDsnZgg7KCE7LK0IOyjvOyGjD09PQ0KMy4g
-6rWt7KCBPT09DQo0LiDsg53rhYTsm5Tsnbwv7ISx67OEPT09DQo1LiDsp4Hsl4U9PT09PQ0KNi4g
-7KCE7ZmUL+2MqeyKpCDrsojtmLjsi6DrtoTspp0g7IKs67O4OiA9PT09DQo3LiDtmozsgqwg7J20
-66mU7J28IOyjvOyGjCAvIOqwnOyduCDsnbTrqZTsnbwg7KO87IaMLiA9PT09DQoNCuydtCDsvZTr
-k5woUmVmOiBDTElFTlQtNjAxKeulvCDsnbTrqZTsnbwg7KO87IaM7J2YIOygnOuqqeycvOuhnCDs
-gqzsmqntlZjsl6wg7Iud67OE7ZWY6rOgIEFUTSBWaXNhIOy5tOuTnCDrsJzquIkg67CPIOuwsOyG
-oeydhCDsnITtlbQNCuychOydmCDsoJXrs7Trpbwg7JWE656YIOuLtOuLueyekOyXkOqyjCDsoJzq
-s7XtlZjsi63si5zsmKQuDQoNCuyasOumrOuKlCDqt4DtlZjsnZgg7J6Q6riI7J20IOy2lOqwgOuh
-nCDsp4Dsl7DrkJjqsbDrgpgg7J6Y66q7IOyghOuLrOuQmOuKlCDqsoPsnYQg67Cp7KeA7ZWY6riw
-IOychO2VtCDsnbQg7KeA67aIIOuwjyDshqHquIgg7Ya17Iug7J2EIOy2lOygge2VoCDsiJgg7J6I
-64+E66GdDQrsl5DsnbTsoITtirjsl5Dqsowg7IOIIOuyiO2YuOuhnCDqsJzsnbgg7J2066mU7J28
-IOyjvOyGjOulvCDsl7Trj4TroZ0g7KGw7Ja47ZaI7Iq164uI64ukLg0KDQrslYTrnpgg7Jew6529
-7LKYIOygleuztOulvCDsgqzsmqntlZjsl6wg64yA66as7J247JeQ6rKMIOusuOydmO2VmOyLreyL
-nOyYpC4g7Jew65297LKYOiBNUlMuIFBBVFJJQ0lBIFdJTFNPTiDsnbTsgqwg67O07IOBIOq4sOq4
-iA0K67aA7IScKFVuaXRlZCBCYW5rIEFUTSBWSVNBIENBUkQpDQoNCuydtOygnCBNUlPsl5Ag66y4
-7J2Y7ZWY7Iut7Iuc7JikLiDtjKjtirjrpqzsg6Qg7JyM7IqoLCDqsJDrj4UNCuydtOuplOydvDog
-KG1yc3BhdHJpY2lhd2lsc29uc0BnbWFpbC5jb20pDQoNCuy2lOqwgCDsp4Dsl7DsnYQg67Cp7KeA
-7ZWY6riwIOychO2VtCDsp4Dsuajsl5Ag65Sw6528IOydtCDsnbTrqZTsnbzsl5Ag6ri06riJIOyd
-keuLteydhCDsmpTssq3tlojsirXri4jri6QuDQoNCuusuOyViCDsnbjsgqwNCk1SUy5LUklTVEFM
-SU5BIEdFT1JHSUVWQSwg6rO167O06rSALuq1reygnO2Gte2ZlOq4sOq4iC4NCg==
+On Thu, Mar 30, 2023 at 02:54:21PM +0800, Xuan Zhuo wrote:
+> On Thu, 30 Mar 2023 02:44:44 -0400, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > On Thu, Mar 30, 2023 at 02:07:37PM +0800, Xuan Zhuo wrote:
+> > > On Wed, 26 May 2021 04:24:40 -0400, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > > > virtio_disable_cb is currently a nop for split ring with event index.
+> > > > This is because it used to be always called from a callback when we know
+> > > > device won't trigger more events until we update the index.  However,
+> > > > now that we run with interrupts enabled a lot we also poll without a
+> > > > callback so that is different: disabling callbacks will help reduce the
+> > > > number of spurious interrupts.
+> > > > Further, if using event index with a packed ring, and if being called
+> > > > from a callback, we actually do disable interrupts which is unnecessary.
+> > > >
+> > > > Fix both issues by tracking whenever we get a callback. If that is
+> > > > the case disabling interrupts with event index can be a nop.
+> > > > If not the case disable interrupts. Note: with a split ring
+> > > > there's no explicit "no interrupts" value. For now we write
+> > > > a fixed value so our chance of triggering an interupt
+> > > > is 1/ring size. It's probably better to write something
+> > > > related to the last used index there to reduce the chance
+> > > > even further. For now I'm keeping it simple.
+> > >
+> > >
+> > > Don't understand, is this patch necessary? For this patch set, we can do without
+> > > this patch.
+> > >
+> > > So doest this patch optimize virtqueue_disable_cb() by reducing a modification of
+> > > vring_used_event(&vq-> split.vring)?
+> > >
+> > > Or I miss something.
+> > >
+> > > Thanks.
+> >
+> > Before this patch virtqueue_disable_cb did nothing at all
+> > for the common case of event index enabled, so
+> > calling it from virtio net would not help matters.
+> 
+> I agree with these codes:
+> 
+> -		if (!vq->event)
+> +		if (vq->event)
+> +			/* TODO: this is a hack. Figure out a cleaner value to write. */
+> +			vring_used_event(&vq->split.vring) = 0x0;
+> +		else
+> 
+> 
+> I just don't understand event_triggered.
+
+
+The comment near it says it all:
+        /* Hint for event idx: already triggered no need to disable. */
+the write into event idx is potentially expensive since it can
+invalidate cache for another processor (depending on the CPU).
+
+> >
+> > But the patch is from 2021, isn't it a bit too late to argue?
+> > If you have a cleanup or an optimization in mind, please
+> > post a patch.
+> 
+> Sorry, I just have some problems, I don't oppose it. At least it can reduce the
+> modification of vring_used_event(&vq->split.vring). I think it is also beneficial.
+> 
+> Thanks very much.
+> 
+> 
+> >
+> > > >
+> > > > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> > > > ---
+> > > >  drivers/virtio/virtio_ring.c | 26 +++++++++++++++++++++++++-
+> > > >  1 file changed, 25 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > > index 71e16b53e9c1..88f0b16b11b8 100644
+> > > > --- a/drivers/virtio/virtio_ring.c
+> > > > +++ b/drivers/virtio/virtio_ring.c
+> > > > @@ -113,6 +113,9 @@ struct vring_virtqueue {
+> > > >  	/* Last used index we've seen. */
+> > > >  	u16 last_used_idx;
+> > > >
+> > > > +	/* Hint for event idx: already triggered no need to disable. */
+> > > > +	bool event_triggered;
+> > > > +
+> > > >  	union {
+> > > >  		/* Available for split ring */
+> > > >  		struct {
+> > > > @@ -739,7 +742,10 @@ static void virtqueue_disable_cb_split(struct virtqueue *_vq)
+> > > >
+> > > >  	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)) {
+> > > >  		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
+> > > > -		if (!vq->event)
+> > > > +		if (vq->event)
+> > > > +			/* TODO: this is a hack. Figure out a cleaner value to write. */
+> > > > +			vring_used_event(&vq->split.vring) = 0x0;
+> > > > +		else
+> > > >  			vq->split.vring.avail->flags =
+> > > >  				cpu_to_virtio16(_vq->vdev,
+> > > >  						vq->split.avail_flags_shadow);
+> > > > @@ -1605,6 +1611,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> > > >  	vq->weak_barriers = weak_barriers;
+> > > >  	vq->broken = false;
+> > > >  	vq->last_used_idx = 0;
+> > > > +	vq->event_triggered = false;
+> > > >  	vq->num_added = 0;
+> > > >  	vq->packed_ring = true;
+> > > >  	vq->use_dma_api = vring_use_dma_api(vdev);
+> > > > @@ -1919,6 +1926,12 @@ void virtqueue_disable_cb(struct virtqueue *_vq)
+> > > >  {
+> > > >  	struct vring_virtqueue *vq = to_vvq(_vq);
+> > > >
+> > > > +	/* If device triggered an event already it won't trigger one again:
+> > > > +	 * no need to disable.
+> > > > +	 */
+> > > > +	if (vq->event_triggered)
+> > > > +		return;
+> > > > +
+> > > >  	if (vq->packed_ring)
+> > > >  		virtqueue_disable_cb_packed(_vq);
+> > > >  	else
+> > > > @@ -1942,6 +1955,9 @@ unsigned virtqueue_enable_cb_prepare(struct virtqueue *_vq)
+> > > >  {
+> > > >  	struct vring_virtqueue *vq = to_vvq(_vq);
+> > > >
+> > > > +	if (vq->event_triggered)
+> > > > +		vq->event_triggered = false;
+> > > > +
+> > > >  	return vq->packed_ring ? virtqueue_enable_cb_prepare_packed(_vq) :
+> > > >  				 virtqueue_enable_cb_prepare_split(_vq);
+> > > >  }
+> > > > @@ -2005,6 +2021,9 @@ bool virtqueue_enable_cb_delayed(struct virtqueue *_vq)
+> > > >  {
+> > > >  	struct vring_virtqueue *vq = to_vvq(_vq);
+> > > >
+> > > > +	if (vq->event_triggered)
+> > > > +		vq->event_triggered = false;
+> > > > +
+> > > >  	return vq->packed_ring ? virtqueue_enable_cb_delayed_packed(_vq) :
+> > > >  				 virtqueue_enable_cb_delayed_split(_vq);
+> > > >  }
+> > > > @@ -2044,6 +2063,10 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+> > > >  	if (unlikely(vq->broken))
+> > > >  		return IRQ_HANDLED;
+> > > >
+> > > > +	/* Just a hint for performance: so it's ok that this can be racy! */
+> > > > +	if (vq->event)
+> > > > +		vq->event_triggered = true;
+> > > > +
+> > > >  	pr_debug("virtqueue callback for %p (%p)\n", vq, vq->vq.callback);
+> > > >  	if (vq->vq.callback)
+> > > >  		vq->vq.callback(&vq->vq);
+> > > > @@ -2083,6 +2106,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+> > > >  	vq->weak_barriers = weak_barriers;
+> > > >  	vq->broken = false;
+> > > >  	vq->last_used_idx = 0;
+> > > > +	vq->event_triggered = false;
+> > > >  	vq->num_added = 0;
+> > > >  	vq->use_dma_api = vring_use_dma_api(vdev);
+> > > >  #ifdef DEBUG
+> > > > --
+> > > > MST
+> > > >
+> > > > _______________________________________________
+> > > > Virtualization mailing list
+> > > > Virtualization@lists.linux-foundation.org
+> > > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+> >
+
