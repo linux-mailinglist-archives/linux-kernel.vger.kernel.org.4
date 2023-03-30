@@ -2,79 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F936D011A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 907EE6D011F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbjC3KXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S231183AbjC3K1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjC3KXw (ORCPT
+        with ESMTP id S229564AbjC3K1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:23:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B4172AE
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:23:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680171788;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=59FDE+8LM1RTgNxCSNxSrwpKtHARF1ER91IIjRZ5nx4=;
-        b=c/Tfi6O+Q5UPXfRx7n428Eho3OILFOGFH4Jipf7jlUg9nyijGHjAesM44GUN45lkKypUZ0
-        tmNP7VgAjtpkkC7TUmdbOefSkJjt0nPZRRWBmOcRhAeeG32zRp+QG12q2AsKbWjc72VXkx
-        yOlkwoT6GnkcdK8H86zoJOC+7POqaew=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-6-PurBrOjrMeuwI1ZqyLkjaw-1; Thu, 30 Mar 2023 06:23:07 -0400
-X-MC-Unique: PurBrOjrMeuwI1ZqyLkjaw-1
-Received: by mail-qv1-f69.google.com with SMTP id f3-20020a0cc303000000b005c9966620daso7929382qvi.4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:23:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680171786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=59FDE+8LM1RTgNxCSNxSrwpKtHARF1ER91IIjRZ5nx4=;
-        b=jd8jNo1UnwjdpCzd7/0e0G7yA+ppyoQ+AGlVfTl+vIN5KlqVALpto2R2NXpy/g27XD
-         0Zlt2NdoHl+RMGCZgMW7l2ZowkBrd+lQdWBS+S1t52LpqBa7/SjO2X6gkWz1xBabodG4
-         fzWQyZhQUUK7t95BFDJDfFUrrQ3NoY/Oeff6LsZi+nhJ1ZhYCLZGgeJI0SaVqJzai+T9
-         HX7Ar2twjX9TSan4TAF2dB3f2hUCoES+twl/k8Wbsvj/f8/iz+NLgeDoemgIXQHw/E6b
-         hyFJfUF1Xs1KNyoZ/2AZ+h0DrcGxj2c8JxFqMxi1b+jBCGdJQqwQY/LFGQbbAwFzBGCM
-         ZDRQ==
-X-Gm-Message-State: AO0yUKVtRJ4g/HsZj+vqzeYJ8peIX0cD1DlKVgs1d/9BiU3SRjNNTsl4
-        lLRxm8QHOUR3qI45pj38EaZR8sCCKUnnWLghET6pC2HWxKbCfVNBf57Hdwkp6Q71DXPRBPxnJzt
-        1B/XFZYe5hmF/iAfPhn1+asMH
-X-Received: by 2002:a05:622a:14c7:b0:3ba:151a:d300 with SMTP id u7-20020a05622a14c700b003ba151ad300mr35694849qtx.60.1680171786535;
-        Thu, 30 Mar 2023 03:23:06 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9hwJzPdjL3B3XEC/SRjMmxy4i5zJ3rFc0P7bDk8NNBjognN6HOVj4HrMl2WPZD3H6XIItrvA==
-X-Received: by 2002:a05:622a:14c7:b0:3ba:151a:d300 with SMTP id u7-20020a05622a14c700b003ba151ad300mr35694825qtx.60.1680171786267;
-        Thu, 30 Mar 2023 03:23:06 -0700 (PDT)
-Received: from debian (2a01cb058918ce003af3a313a65b3409.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:3af3:a313:a65b:3409])
-        by smtp.gmail.com with ESMTPSA id d140-20020a376892000000b007467a4d8691sm15500145qkc.47.2023.03.30.03.23.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 03:23:05 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 12:23:02 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Wojciech Drewek <wojciech.drewek@intel.com>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] l2tp: generate correct module alias strings
-Message-ID: <ZCVjBkdySj5BhMja@debian>
-References: <20230330095442.363201-1-andrea.righi@canonical.com>
+        Thu, 30 Mar 2023 06:27:44 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718CE72A7;
+        Thu, 30 Mar 2023 03:27:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680172063; x=1711708063;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vsso8X59jkwfS8FUc+qT+mBVmfIXBVin+KTPPha6LF8=;
+  b=h0yHz4lMGE6+yemI1twXONAwf5J+Ls+iqorfH4gisWaVW9fULVhuWBcg
+   dzqtzzoFongDoWSVQEANyJNkTVeByc6NisOnM/cRGgRotuhSru7/61Hgg
+   4pNUu/BGbF5OILtF1oKVT6DDFmLW7TqV2El/c1LZd3n8BrRO0LM7WeHqS
+   wnMZs1i8lP4MGBwNZ5NbdGVE3pJpEKAU4soowpld8QMeqcz4OUmtrYz+1
+   qTPk+v/3GgPx8nCRfm4XmPJpqv/WXj37exUgqcVjN3g0xe2VHxHuxjBTh
+   1nwyuidinAWrqTa0H9K324UpD19x3zXApT28tEhMZ2p4s6C4qVN/tUILn
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="368909798"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="368909798"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:27:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="634831399"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="634831399"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2023 03:27:39 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6AF2D80A; Thu, 30 Mar 2023 13:23:49 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] thunderbolt: Introduce usb4_port_sb_opcode_err_to_errno() helper
+Date:   Thu, 30 Mar 2023 13:23:42 +0300
+Message-Id: <20230330102342.44090-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330095442.363201-1-andrea.righi@canonical.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,79 +64,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 11:54:42AM +0200, Andrea Righi wrote:
-> Commit 65b32f801bfb ("uapi: move IPPROTO_L2TP to in.h") moved the
-> definition of IPPROTO_L2TP from a define to an enum, but since
-> __stringify doesn't work properly with enums, we ended up breaking the
-> modalias strings for the l2tp modules:
-> 
->  $ modinfo l2tp_ip l2tp_ip6 | grep alias
->  alias:          net-pf-2-proto-IPPROTO_L2TP
->  alias:          net-pf-2-proto-2-type-IPPROTO_L2TP
->  alias:          net-pf-10-proto-IPPROTO_L2TP
->  alias:          net-pf-10-proto-2-type-IPPROTO_L2TP
-> 
-> Use the resolved number directly in MODULE_ALIAS_*() macros (as we
-> already do with SOCK_DGRAM) to fix the alias strings:
-> 
-> $ modinfo l2tp_ip l2tp_ip6 | grep alias
-> alias:          net-pf-2-proto-115
-> alias:          net-pf-2-proto-115-type-2
-> alias:          net-pf-10-proto-115
-> alias:          net-pf-10-proto-115-type-2
-> 
-> Moreover, fix the ordering of the parameters passed to
-> MODULE_ALIAS_NET_PF_PROTO_TYPE() by switching proto and type.
+The usb4_port_sb_opcode_err_to_errno() converts from USB4 error codes
+to the Linux errno space. In particular, this makes the intention
+of the repeating usb4_port_retimer_read() call in the
+usb4_port_retimer_nvm_authenticate_status() clearer.
 
-Thanks!
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/thunderbolt/usb4.c | 41 +++++++++++++++++++-------------------
+ 1 file changed, 20 insertions(+), 21 deletions(-)
 
-Just to be explicit to the maintainers, this patch is for the net tree
-(next time, you can use [PATCH net] to make that clear).
-
-> Fixes: 65b32f801bfb ("uapi: move IPPROTO_L2TP to in.h")
-> Link: https://lore.kernel.org/lkml/ZCQt7hmodtUaBlCP@righiandr-XPS-13-7390
-> Signed-off-by: Guillaume Nault <gnault@redhat.com>
-> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-> ---
->  net/l2tp/l2tp_ip.c  | 8 ++++----
->  net/l2tp/l2tp_ip6.c | 8 ++++----
->  2 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/net/l2tp/l2tp_ip.c b/net/l2tp/l2tp_ip.c
-> index 4db5a554bdbd..41a74fc84ca1 100644
-> --- a/net/l2tp/l2tp_ip.c
-> +++ b/net/l2tp/l2tp_ip.c
-> @@ -677,8 +677,8 @@ MODULE_AUTHOR("James Chapman <jchapman@katalix.com>");
->  MODULE_DESCRIPTION("L2TP over IP");
->  MODULE_VERSION("1.0");
->  
-> -/* Use the value of SOCK_DGRAM (2) directory, because __stringify doesn't like
-> - * enums
-> +/* Use the values of SOCK_DGRAM (2) as type and IPPROTO_L2TP (115) as protocol,
-> + * because __stringify doesn't like enums
->   */
-> -MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET, 2, IPPROTO_L2TP);
-> -MODULE_ALIAS_NET_PF_PROTO(PF_INET, IPPROTO_L2TP);
-> +MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET, 115, 2);
-> +MODULE_ALIAS_NET_PF_PROTO(PF_INET, 115);
-> diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
-> index 2478aa60145f..5137ea1861ce 100644
-> --- a/net/l2tp/l2tp_ip6.c
-> +++ b/net/l2tp/l2tp_ip6.c
-> @@ -806,8 +806,8 @@ MODULE_AUTHOR("Chris Elston <celston@katalix.com>");
->  MODULE_DESCRIPTION("L2TP IP encapsulation for IPv6");
->  MODULE_VERSION("1.0");
->  
-> -/* Use the value of SOCK_DGRAM (2) directory, because __stringify doesn't like
-> - * enums
-> +/* Use the values of SOCK_DGRAM (2) as type and IPPROTO_L2TP (115) as protocol,
-> + * because __stringify doesn't like enums
->   */
-> -MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 2, IPPROTO_L2TP);
-> -MODULE_ALIAS_NET_PF_PROTO(PF_INET6, IPPROTO_L2TP);
-> +MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 115, 2);
-> +MODULE_ALIAS_NET_PF_PROTO(PF_INET6, 115);
-> -- 
-> 2.39.2
-> 
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 12355929e586..485b6e430686 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -1303,6 +1303,20 @@ static int usb4_port_sb_write(struct tb_port *port, enum usb4_sb_target target,
+ 	return 0;
+ }
+ 
++static int usb4_port_sb_opcode_err_to_errno(u32 val)
++{
++	switch (val) {
++	case 0:
++		return 0;
++	case USB4_SB_OPCODE_ERR:
++		return -EAGAIN;
++	case USB4_SB_OPCODE_ONS:
++		return -EOPNOTSUPP;
++	default:
++		return -EIO;
++	}
++}
++
+ static int usb4_port_sb_op(struct tb_port *port, enum usb4_sb_target target,
+ 			   u8 index, enum usb4_sb_opcode opcode, int timeout_msec)
+ {
+@@ -1325,21 +1339,8 @@ static int usb4_port_sb_op(struct tb_port *port, enum usb4_sb_target target,
+ 		if (ret)
+ 			return ret;
+ 
+-		switch (val) {
+-		case 0:
+-			return 0;
+-
+-		case USB4_SB_OPCODE_ERR:
+-			return -EAGAIN;
+-
+-		case USB4_SB_OPCODE_ONS:
+-			return -EOPNOTSUPP;
+-
+-		default:
+-			if (val != opcode)
+-				return -EIO;
+-			break;
+-		}
++		if (val != opcode)
++			return usb4_port_sb_opcode_err_to_errno(val);
+ 	} while (ktime_before(ktime_get(), timeout));
+ 
+ 	return -ETIMEDOUT;
+@@ -1814,12 +1815,13 @@ int usb4_port_retimer_nvm_authenticate_status(struct tb_port *port, u8 index,
+ 	if (ret)
+ 		return ret;
+ 
+-	switch (val) {
++	ret = usb4_port_sb_opcode_err_to_errno(val);
++	switch (ret) {
+ 	case 0:
+ 		*status = 0;
+ 		return 0;
+ 
+-	case USB4_SB_OPCODE_ERR:
++	case -EAGAIN:
+ 		ret = usb4_port_retimer_read(port, index, USB4_SB_METADATA,
+ 					     &metadata, sizeof(metadata));
+ 		if (ret)
+@@ -1828,11 +1830,8 @@ int usb4_port_retimer_nvm_authenticate_status(struct tb_port *port, u8 index,
+ 		*status = metadata & USB4_SB_METADATA_NVM_AUTH_WRITE_MASK;
+ 		return 0;
+ 
+-	case USB4_SB_OPCODE_ONS:
+-		return -EOPNOTSUPP;
+-
+ 	default:
+-		return -EIO;
++		return ret;
+ 	}
+ }
+ 
+-- 
+2.40.0.1.gaa8946217a0b
 
