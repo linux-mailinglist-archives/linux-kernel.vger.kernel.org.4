@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B566D09D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93EE6D09CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233168AbjC3Phl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
+        id S233153AbjC3PhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233196AbjC3Phh (ORCPT
+        with ESMTP id S233132AbjC3PhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:37:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE7E2137
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:36:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680190577;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Mb7nuWgkDOaubTvnFO5OdcmmhR8tNP6kd6NFt0+SpiE=;
-        b=P0ng1csKEJfPx1A76vPNmmRBQiG9/S1NKp7dU0BvuCP+waUyuGgHnq9LbVuNHgacNg9noZ
-        OUJMnFRSOZsa2kU2OYvqTMkO1XNZPNzN1iHRCQn5/gW5Gsk9cSbPNdJx8JCMdsS7rZTLCK
-        EylYewGN7VZ6q+e4WxIilFMhbkkms/c=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-381-WKzufUe4O6miC-LHNYL_bw-1; Thu, 30 Mar 2023 11:36:13 -0400
-X-MC-Unique: WKzufUe4O6miC-LHNYL_bw-1
-Received: by mail-qv1-f70.google.com with SMTP id m3-20020a0cbf03000000b005de7233ca79so6220222qvi.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:36:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680190572;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mb7nuWgkDOaubTvnFO5OdcmmhR8tNP6kd6NFt0+SpiE=;
-        b=qXGJOZ+5bG4UZsoPRBvgWmdrMvxEQj2UjU61hGFFeNMh2EsQPSOudsLY4DJFHgMl46
-         59QTKXuHNpwhNdxrl8Hp+l++p1qINP2KqP2QvE5kI/RszV9cNPa40Nl8xmAEwskyk4Lc
-         7ShFUWjBfL/RuS0jn08lLCxgL2SlYjzTGJQOPDn29j6ij18KLYToAiZORz2hTqmLV++m
-         kBzoWo8LA81RBcdSBGU4LKVY6xVC2sd9F3Sm1ExYZW9agFkKIoZY2SrwCOdQPXI9cN9y
-         36qd/U+yy2uBKGm4cyuqK2C7YaRTv54akEPv7YMjFAao+8YlYnMMfiMJ9RiKVibPUI3J
-         HSSA==
-X-Gm-Message-State: AAQBX9d9CkLi0rQUn7MdMImATb6a4PsN4kyOL53iXpfxGly94g5pxbUJ
-        4MZn9sVdAZGcuYi6p1Jh+fHUMvgVVgJGx6najJb2oiOn7LJtt3KelwQOmERnpOXqDQEFxrz0rFp
-        ziNen8uKv/GntJv8zlKdjsbcB
-X-Received: by 2002:a05:6214:3002:b0:5df:5533:6fb3 with SMTP id ke2-20020a056214300200b005df55336fb3mr8308390qvb.5.1680190572556;
-        Thu, 30 Mar 2023 08:36:12 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZxnliOeH26xtjwgD2x1M5kHN0/tinm4772AhLlyfC8256JgzS/09VWGCpsmcHxshLjBJzC+A==
-X-Received: by 2002:a05:6214:3002:b0:5df:5533:6fb3 with SMTP id ke2-20020a056214300200b005df55336fb3mr8308365qvb.5.1680190572308;
-        Thu, 30 Mar 2023 08:36:12 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id mg18-20020a056214561200b005dd8b93457dsm5456912qvb.21.2023.03.30.08.36.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:36:11 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     leon@kernel.org, jgg@ziepe.ca, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] RDMA/mlx5: remove unused num_alloc_xa_entries variable
-Date:   Thu, 30 Mar 2023 11:36:07 -0400
-Message-Id: <20230330153607.1838750-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 30 Mar 2023 11:37:08 -0400
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF83CD517
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:36:36 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 15:36:29 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1680190593; x=1680449793;
+        bh=BFhSFq3J8IyHD8N/GJl+CpIhHOZfQHYWPId2eeLRAZk=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=snCcK7u/bNBcYmywMJ1/hoYfNPUpab5DYWsPfsI3mGFS8NicIrzagfnFvjI9ZyRpq
+         VR6j0ZFWmed3XNnGh+0jSJHV/dedOil8FAdU5FA0qybzAyfiwhE3/pMP5dYevTZcb7
+         zrmtfZDxkOl9XROZZB3ElybjbhMzgNr6aMmfAnlUd78xRyGs2Dyj8YXAsKj9T9qOMg
+         C1BrnOmTGriTcz2dPtOvJc6cGOrXN/GmGoiOzFA9uQ58kZmnybTyArmkuq0/9euS+P
+         ARJcLS4trYz/hIMZtVBS7RRoieU4VLFuav2RsWqIPpSkqi0Xw/+Wn3fosq+qgvH+OS
+         hcGhA9prSYwng==
+To:     Alice Ryhl <alice@ryhl.io>
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Subject: Re: [PATCH v3 04/13] rust: add pin-init API core
+Message-ID: <9c2d4516-f0d7-73ca-d64b-df60e9bd6df1@protonmail.com>
+In-Reply-To: <ce17f68e-521f-f55e-8ae2-35bcd6ebd709@ryhl.io>
+References: <20230329223239.138757-1-y86-dev@protonmail.com> <20230329223239.138757-5-y86-dev@protonmail.com> <ce17f68e-521f-f55e-8ae2-35bcd6ebd709@ryhl.io>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/infiniband/hw/mlx5/devx.c:1996:6: error: variable
-  'num_alloc_xa_entries' set but not used [-Werror,-Wunused-but-set-variable]
-        int num_alloc_xa_entries = 0;
-            ^
-This variable is not used so remove it.
+On 30.03.23 15:33, Alice Ryhl wrote:
+> On 3/30/23 00:33, y86-dev@protonmail.com wrote:
+>> From: Benno Lossin <y86-dev@protonmail.com>
+>>
+>> This API is used to facilitate safe pinned initialization of structs. It
+>> replaces cumbersome `unsafe` manual initialization with elegant safe mac=
+ro
+>> invocations.
+>>
+>> Due to the size of this change it has been split into six commits:
+>> 1. This commit introducing the basic public interface: traits and
+>>      functions to represent and create initializers.
+>> 2. Adds the `#[pin_data]`, `pin_init!`, `try_pin_init!`, `init!` and
+>>      `try_init!` macros along with their internal types.
+>> 3. Adds the `InPlaceInit` trait that allows using an initializer to crea=
+te
+>>      an object inside of a `Box<T>` and other smart pointers.
+>> 4. Adds the `PinnedDrop` trait and adds macro support for it in
+>>      the `#[pin_data]` macro.
+>> 5. Adds the `stack_pin_init!` macro allowing to pin-initialize a struct =
+on
+>>      the stack.
+>> 6. Adds the `Zeroable` trait and `init::zeroed` function to initialize
+>>      types that have `0x00` in all bytes as a valid bit pattern.
+>>
+>> Co-developed-by: Gary Guo <gary@garyguo.net>
+>> Signed-off-by: Gary Guo <gary@garyguo.net>
+>> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+>
+>> +//! Aside from pinned initialization, this API also supports in-place c=
+onstruction without pinning,
+>> +//! the marcos/types/functions are generally named like the pinned vari=
+ants without the `pin`
+>> +//! prefix.
+>
+> Typo: Should be "macros".
+>
+>> +type Invariant<T> =3D PhantomData<fn(*mut T) -> *mut T>;
+>
+> I think it would make sense to include a link to the nomicon on the
+> documentation for the Invariant type.
+>
+> E.g. this link: https://doc.rust-lang.org/nomicon/subtyping.html
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/infiniband/hw/mlx5/devx.c | 2 --
- 1 file changed, 2 deletions(-)
+Sure that is a good idea.
 
-diff --git a/drivers/infiniband/hw/mlx5/devx.c b/drivers/infiniband/hw/mlx5/devx.c
-index 2211a0be16f3..07037b829c7e 100644
---- a/drivers/infiniband/hw/mlx5/devx.c
-+++ b/drivers/infiniband/hw/mlx5/devx.c
-@@ -1993,7 +1993,6 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_SUBSCRIBE_EVENT)(
- 	int redirect_fd;
- 	bool use_eventfd = false;
- 	int num_events;
--	int num_alloc_xa_entries = 0;
- 	u16 obj_type = 0;
- 	u64 cookie = 0;
- 	u32 obj_id = 0;
-@@ -2075,7 +2074,6 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_SUBSCRIBE_EVENT)(
- 		if (err)
- 			goto err;
- 
--		num_alloc_xa_entries++;
- 		event_sub = kzalloc(sizeof(*event_sub), GFP_KERNEL);
- 		if (!event_sub) {
- 			err = -ENOMEM;
--- 
-2.27.0
+>> +// This is the module-internal type implementing `PinInit` and `Init`. =
+It is unsafe to create this
+>> +// type, since the closure needs to fulfill the same safety requirement=
+ as the
+>> +// `__pinned_init`/`__init` functions.
+>> +struct InitClosure<F, T: ?Sized, E>(F, Invariant<(E, T)>);
+>
+> Documentation for a type should use /// rather than //.
+>
+> I think it would help to call out explicitly in the documentation on
+> this type that it is an implementation detail of the
+> pin_init_from_closure and init_from_closure methods.
+
+Yeah, I will also move this into `__internal.rs` and add the comment.
+
+--
+Cheers,
+Benno
 
