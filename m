@@ -2,78 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 090106CFFE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 366226CFFED
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 11:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjC3JiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 05:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S230049AbjC3Jjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 05:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjC3JiO (ORCPT
+        with ESMTP id S229874AbjC3Jjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 05:38:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1809E4204;
-        Thu, 30 Mar 2023 02:38:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D5292F4;
-        Thu, 30 Mar 2023 02:38:57 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3851C3F663;
-        Thu, 30 Mar 2023 02:38:11 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 10:38:08 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     andersson@kernel.org, ulf.hansson@linaro.org,
-        dianders@chromium.org, Sudeep Holla <sudeep.holla@arm.com>,
-        swboyd@chromium.org, wingers@google.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, jwerner@chromium.org,
-        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
-Subject: Re: [PATCH v2 0/2] Use PSCI OS initiated mode for sc7280
-Message-ID: <20230330093808.iytdskjjawgnvu23@bogus>
-References: <20230330084250.32600-1-quic_mkshah@quicinc.com>
+        Thu, 30 Mar 2023 05:39:42 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5EC6E91
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:39:41 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-545e907790fso227951907b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 02:39:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680169181;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+KF3Ej0zA5vUsAy03E3uvbCGHCj2rR2h+cgAo56vcSY=;
+        b=XMzC2GHrO/8LfQ2aF3jdBJuAoAavxiNQuWfxljRs8SSZB223Vy6gKXq8lIxlvbo5Rh
+         61k6tYXlbAGXehWTjVPqLri1D03gVJoGcUXUOH3PsPIHJc/noOjuYYqooeFFg70dSNjo
+         J8X8pl4w2xqanq7XlhVxGBqwbB39cp4zM3CYYGZ3A6180YwGKiXfkRrFVRSEeEMxllvf
+         BH83sjDB5BmtIX7D/eKKrPxH3sAEqcldv4ha47iuHa7Z3Tf3JV7WlJnqKJ42NY0SShVq
+         bO4jsOO7inoRCS2pNoUY+O3iSCI+0NqnrtUaX3tZobzpuU/fM2EXaflsdDLgvfQkpeRp
+         b18g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680169181;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+KF3Ej0zA5vUsAy03E3uvbCGHCj2rR2h+cgAo56vcSY=;
+        b=d8vqqQejAtccKjETG7TWFHWmhKOqedDIZa5fkMGzcDG5nv7akwnQ2/pwpH3bsEtoSQ
+         He/0U4PnRpdpgZzU1TL1K2k5CH8qgCrAcuaBPdb9ONA8js5q/FTrp5ZwB1VyTETHFXhc
+         vSrVaKrc4C00ZRDxNwpFQyI4ZrJFs24wWDhL20lHEVycvfhkFErGqrlqdnlXxVNoOf2H
+         IrYm49RAei/rQHhDTVaUYPimWPdOoI6Z82Hf1AAgn6LdjGHWjPD9HiWQBrv8zewC3M8Q
+         eQsYjipHzIM6Hvty35SMhwFfQGfJQ9JcJAYoQS+s+PCalugppl1rMwXv0/b+Hwdls3A5
+         Yv+g==
+X-Gm-Message-State: AAQBX9f6G8N7sZbUt5V/qX4+lpTGFsQOWl90u2XO+8SDd3YctXh9jvDT
+        CWdQB7XVyaFTtNuC3wSNm724t3yly36pAfvs0kR2PA==
+X-Google-Smtp-Source: AKy350Y9NxPb3viIr2gzUpn3/4183c/Hd9fNIbqB/+mt9JjjNP5tyVonZiZsUTV2u+aJtwZ2ZC3uPbmUCiAJfBuAGXU=
+X-Received: by 2002:a81:ae4f:0:b0:545:ed8e:f4f6 with SMTP id
+ g15-20020a81ae4f000000b00545ed8ef4f6mr7051275ywk.5.1680169180845; Thu, 30 Mar
+ 2023 02:39:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330084250.32600-1-quic_mkshah@quicinc.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <cover.1680162377.git.quic_varada@quicinc.com> <cb8f2ba0ff39951aeada479ed3895d19c9f72617.1680162377.git.quic_varada@quicinc.com>
+In-Reply-To: <cb8f2ba0ff39951aeada479ed3895d19c9f72617.1680162377.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 30 Mar 2023 12:39:30 +0300
+Message-ID: <CAA8EJprQhrqWo5s8hNq=z4DL=hw9wde4ZHHwb+JoKCMQk3rU7w@mail.gmail.com>
+Subject: Re: [PATCH v5 3/8] dt-bindings: usb: dwc3: Add IPQ9574 compatible
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 02:12:48PM +0530, Maulik Shah wrote:
-> Changes in v2:
-> - Add new change to Move enabling OSI mode after power domains creation
-> - Fix compatible string to domains-idle-states for cluster idle state.
-> - Update cover letter with some more details on OSI and PC mode comparision
-> 
-> The dependency [2] is now merged in trustedfirmware project.
-> 
-> Stats comparision between OSI and PC mode are captured at [3] with usecase
-> details, where during multiple CPUs online the residency in cluster idle
-> state is better with OSI and also inline with single CPU mode. In PC mode
-> with multiple CPUs cluster idle state residency is dropping compare to
-> single CPU mode.
-> 
-> Recording of this meeting is also available at [4].
-> 
-> This change adds power-domains for cpuidle states to use PSCI OS
-> initiated mode for sc7280.
-> 
-> This change depends on external project changes [1] & [2] which are
-> under review/discussion to add PSCI os-initiated support in Arm Trusted
-> Firmware.
+On Thu, 30 Mar 2023 at 11:42, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
+>
+> Document the IPQ9574 dwc3 compatible.
+>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>  Changes in v5:
+>         - Restore removed constraints
+>
+>  Changes in v4:
+>         - Update other relevant sections
+>         - Remove constraints not applicable to IPQ9574
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index a2aabda..8def6a3 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -17,6 +17,7 @@ properties:
+>            - qcom,ipq6018-dwc3
+>            - qcom,ipq8064-dwc3
+>            - qcom,ipq8074-dwc3
+> +          - qcom,ipq9574-dwc3
+>            - qcom,msm8953-dwc3
+>            - qcom,msm8994-dwc3
+>            - qcom,msm8996-dwc3
+> @@ -242,6 +243,24 @@ allOf:
+>          compatible:
+>            contains:
+>              enum:
+> +              - qcom,ipq9574-dwc3
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 5
+> +        clock-names:
+> +          items:
+> +            - const: sys_noc_axi
+> +            - const: anoc_axi
+> +            - const: master
+> +            - const: sleep
+> +            - const: mock_utmi
+
+Is there any chance of using clock names that are close to the names
+used by existing platforms?
+
+I think this fits into the third 'if' bucket:
+
+cfg_noc = sys_noc_axi
+core = master
+iface = anoc_axi
+sleep = sleep
+mock_utmi = mock_utmi
+
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+>                - qcom,msm8994-dwc3
+>                - qcom,qcs404-dwc3
+>      then:
+> --
+> 2.7.4
 >
 
-I will wait for your response to understand the issue in 1/2. If it is
-firmware issue, I prefer we fix it in the firmware and no quirks or work
-around for this in the kernel while it is still fresh out of oven.
 
 -- 
-Regards,
-Sudeep
+With best wishes
+Dmitry
