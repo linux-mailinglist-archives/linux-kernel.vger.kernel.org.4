@@ -2,152 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD826D120E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5346D1211
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjC3WVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 18:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S230299AbjC3WXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 18:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjC3WVJ (ORCPT
+        with ESMTP id S230282AbjC3WW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 18:21:09 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F54B761
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:21:04 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso21317372pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680214864;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ugtukTfVbDV/8BLzVhb0qFtwrdmFXjkERveHQp9G65k=;
-        b=QZW1GJVAmZz3qfIMiei04YZkmBfPBmo9pjKDJ0qIuljXSgJnrQfiMXpSTDlZ3uIfCK
-         cjDiVcujfjVO0lTG8UoYtP3BX8zbOy24sgjzQhp4lxBlv/vjHz2NGjgLsiu3amflo2Wi
-         iU39U0/7TViaKVt3ek+fdn1/FrYJLAGPyPBStfAtvbZuwl6j9tq7rYpkhxbGKvSGuJio
-         DxX2qWP+h93Bw2S7dLJi4JPrX5xg+AitcnTeK6DuJ9B+uDWpBPfDtsOrhEj+vqav3nAQ
-         AD34aKGZzXypuB5br7F2mU7PW1XxsQl0l2wfI84qTJfb18gZO2Auel2N2sEsfv6SeZM/
-         IPuw==
+        Thu, 30 Mar 2023 18:22:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CAAB74B
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680214932;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UCtYmcIVveJt1GygL0WFSLaZcObhg2mwhCm1ywrGMFo=;
+        b=KwtMWL9szy3jYzJp/9lLPOehI6U6TPEL9YsT9iaVFxcRFxkWmA9JRtBFydLIntpxq8wRe2
+        s/aJ62pl+tF+EhuJsO7mS+TOTdSdjD73oxm8Rcl/kMXbU1wIvPQ2RcGDJihFgRCLLN9t3l
+        tCfszjscm0FL9tlhtoC7l74GwVjsRow=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-228-9h84g_VCM1ySDNdGkvNipg-1; Thu, 30 Mar 2023 18:22:11 -0400
+X-MC-Unique: 9h84g_VCM1ySDNdGkvNipg-1
+Received: by mail-qt1-f197.google.com with SMTP id w13-20020ac857cd000000b003e37d3e6de2so13422285qta.16
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:22:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680214864;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ugtukTfVbDV/8BLzVhb0qFtwrdmFXjkERveHQp9G65k=;
-        b=Q8Q+HaaYleqNQXy+MIOHwAViFipJ9epnLHQ6QMcHInRIcfecCxudfTvoLBXNIb9CZG
-         VTb70lENplT22oxIL3K0b6MAGXcOH7IW37ib8Bm57GP4j4Ii2Zw2C1kHkNR8a1CrtcyU
-         dM4UdFXPc6EWWlH7g/o889dqBLY8w3VdLYQ94ytoxzk3ZUl10VfucJsnLK4vmn8tWTFw
-         kc7jKqYBx16QmzXDQq8Ht+ooyf58TIvg/SJbRr5Vuoify1nvX4Rs3mUjOHcNjoDZZGMJ
-         7Ds1H4Dx7g3oT90WUqX9nP4RETP9rmnr5iGqVdtr25nIRUkcTYrvb2KEDYC+jXHIxyE3
-         fIcg==
-X-Gm-Message-State: AAQBX9c7ttem9GVYB+O08dMiPK6YfM9MYzielK21PArnZ1LaSTEt3wTP
-        B1LxicUj+4Qu5RxDIy9m9SHW9JIudkYgY6aPdnfYRA==
-X-Google-Smtp-Source: AKy350a64NmP0+Q1R1KoNiSqZ1E4LGky7ImztC0tAFffBWnHiJgqrB9cVB40cwkL6Jij9puwY4+MFQmWIsrgYuQbaS0=
-X-Received: by 2002:a17:902:ea0c:b0:1a0:527b:9189 with SMTP id
- s12-20020a170902ea0c00b001a0527b9189mr9224011plg.11.1680214863803; Thu, 30
- Mar 2023 15:21:03 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680214930; x=1682806930;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UCtYmcIVveJt1GygL0WFSLaZcObhg2mwhCm1ywrGMFo=;
+        b=wX9mMLSJb34m2amU9VLwknexO+VQqCo6OlwqfvJjOuGl68Sak5WwxvRE/3MpUVAgX5
+         uVZb00vouv5XayV1ACxz0DBW4ed3LIdRgMgoUWtbSrO9S4kNHZ0Y3hHo+6+IB2696DO1
+         KOZwLII6SikqvQU/Y2+wMIY6sqTLEW14GXSDwB9x1WJfnQLoDFKkc0CGkjxmJAd2bMhV
+         DobygTDlHWABCojJS1O1b3oUmrZfiAefaRSeVlWSFbur/Djrm6vNL6NIervAxnfUeTNx
+         lRrBaBB6vKpp7iDI/OsaQKd6tH9y5YC5j609IOnR6EEmh8rgM3Iql7GoOEmP2VaeGzrL
+         PWbg==
+X-Gm-Message-State: AO0yUKVycB1sOXaxBYHWEh8SG4EdADcIXpl7rhKMnFZucJw2q+esd++G
+        qcbdvKxjqWcNNieoSustTtpRtlNlMvudh4jGjUyoS0rnL43SiIjRg/EVPsjETgGwfTmIqzh/uRd
+        lWhQ5EvU/lsvhfD+Fs9hLlguX
+X-Received: by 2002:a05:622a:14f:b0:3bf:a3d0:9023 with SMTP id v15-20020a05622a014f00b003bfa3d09023mr41854327qtw.5.1680214930618;
+        Thu, 30 Mar 2023 15:22:10 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+1rDPUb5agPSUAJx2zyqakmqGt6Gwrb53dQzVWPlFXTq0vAm9ooO7dNYFeBYNa7GdVMbgwwQ==
+X-Received: by 2002:a05:622a:14f:b0:3bf:a3d0:9023 with SMTP id v15-20020a05622a014f00b003bfa3d09023mr41854302qtw.5.1680214930387;
+        Thu, 30 Mar 2023 15:22:10 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id x16-20020ae9e910000000b00746aa080eefsm205950qkf.6.2023.03.30.15.22.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 15:22:09 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 18:22:08 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        linux-stable <stable@vger.kernel.org>
+Subject: Re: [PATCH 01/29] Revert "userfaultfd: don't fail on unrecognized
+ features"
+Message-ID: <ZCYLkA9MM7yhpYBr@x1n>
+References: <20230330155707.3106228-1-peterx@redhat.com>
+ <20230330155707.3106228-2-peterx@redhat.com>
+ <6eb02bdd-e69e-d277-c44c-0aefb23430bb@redhat.com>
 MIME-Version: 1.0
-References: <20230330220506.1399796-1-rmoar@google.com>
-In-Reply-To: <20230330220506.1399796-1-rmoar@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 30 Mar 2023 15:20:52 -0700
-Message-ID: <CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr+f+mOVKT1bGvA@mail.gmail.com>
-Subject: Re: [PATCH v1] kunit: add tests for using current KUnit test field
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6eb02bdd-e69e-d277-c44c-0aefb23430bb@redhat.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've got a few minor comments below, but this otherwise looks good.
-I like the idea of testing knuit_fail_current_test().
+On Thu, Mar 30, 2023 at 08:31:30PM +0200, David Hildenbrand wrote:
+> On 30.03.23 17:56, Peter Xu wrote:
+> > This is a proposal to revert commit 914eedcb9ba0ff53c33808.
+> > 
+> > I found this when writting a simple UFFDIO_API test to be the first unit
+> > test in this set.  Two things breaks with the commit:
+> > 
+> >    - UFFDIO_API check was lost and missing.  According to man page, the
+> >    kernel should reject ioctl(UFFDIO_API) if uffdio_api.api != 0xaa.  This
+> >    check is needed if the api version will be extended in the future, or
+> >    user app won't be able to identify which is a new kernel.
+> 
+> Agreed.
+> 
+> > 
+> >    - Feature flags checks were removed, which means UFFDIO_API with a
+> >    feature that does not exist will also succeed.  According to the man
+> >    page, we should (and it makes sense) to reject ioctl(UFFDIO_API) if
+> >    unknown features passed in.
+> > 
+> 
+> Agreed.
+> 
+> I understand the motivation of the original commit, but it should not have
+> changed existing checks/functionality. Introducing a different way to enable
+> such functionality on explicit request would be better. But maybe simple
+> feature probing (is X support? is Y supported? is Z supported) might be
+> easier without requiring ABI changes.
 
+Yes, I mentioned a similar "proposal" of UFFDIO_FEATURES here too, simply
+returning the feature bitmask before UFFDIO_API:
 
-On Thu, Mar 30, 2023 at 3:05=E2=80=AFPM Rae Moar <rmoar@google.com> wrote:
->
-> +static void kunit_current_kunit_test_field(struct kunit *test)
-> +{
-> +       struct kunit *current_test;
-> +
-> +       /* Check to ensure the result of current->kunit_test
-> +        * is equivalent to current test.
-> +        */
-> +       current_test =3D current->kunit_test;
-> +       KUNIT_EXPECT_PTR_EQ(test, test, current_test);
+https://lore.kernel.org/all/ZCSUTSbAcwBINiNk@x1n/
 
-Perhaps we can combine this and the next test case down to
-static void kunit_current_test(struct kunit *test) {
-  /* There are two different ways of getting the current test */
-  KUNIT_EXPECT_PTR_EQ(test, test, current->kunit_test);
-  KUNIT_EXPECT_PTR_EQ(test, test, kunit_get_current_test());
-}
-?
+But I think current way is still fine; so maybe we'd just not bother.
 
-> +}
-> +
-> +static void kunit_current_get_current_test(struct kunit *test)
-> +{
-> +       struct kunit *current_test1, *current_test2;
-> +
-> +       /* Check to ensure the result of kunit_get_current_test()
-> +        * is equivalent to current test.
-> +        */
-> +       current_test1 =3D kunit_get_current_test();
-> +       KUNIT_EXPECT_PTR_EQ(test, test, current_test1);
-> +
-> +       /* Check to ensure the result of kunit_get_current_test()
-> +        * is equivalent to current->kunit_test.
-> +        */
-> +       current_test2 =3D current->kunit_test;
-> +       KUNIT_EXPECT_PTR_EQ(test, current_test1, current_test2);
+> 
+> I assume we better add
+> 
+> Fixes: 914eedcb9ba0 ("userfaultfd: don't fail on unrecognized features")
 
-> +}
-> +
-> +static void kunit_current_fail_current_test(struct kunit *test)
-> +{
-> +       struct kunit fake;
-> +
-> +       /* Initialize fake test and set as current->kunit_test. */
+Yes I'll add it.
 
-Nit: I think the code is self-explanatory enough that we can drop this comm=
-ent.
+> Acked-by: David Hildenbrand <david@redhat.com>
 
-> +       kunit_init_test(&fake, "fake test", NULL);
-> +       KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
-> +       current->kunit_test =3D &fake;
-> +
-> +       /* Fail current test and expect status of fake test to be failed.=
- */
+Thanks,
 
-Nit: I think this comment could also be dropped or maybe shortened to
-  kunit_fail_current_test("This should make `fake` fail");
+-- 
+Peter Xu
 
-or
-  /* Now kunit_fail_current_test() should modify `fake`, not `test` */
-  kunit_fail_current_test("This should make `fake` fail");
-
-> +       kunit_fail_current_test("This test is supposed to fail.");
-> +       KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAILU=
-RE);
-> +
-
-Hmm, should we try calling
-  kunit_cleanup(&fake);
-?
-
-Right now this does resource cleanups, but we might have other state
-to cleanup for our `fake` test object in the future.
-
-Daniel
