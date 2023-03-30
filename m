@@ -2,152 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C418C6D0677
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 131736D067B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbjC3NXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 09:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
+        id S231765AbjC3NYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbjC3NXi (ORCPT
+        with ESMTP id S231673AbjC3NYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:23:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DA719A6;
-        Thu, 30 Mar 2023 06:23:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9457B828C9;
-        Thu, 30 Mar 2023 13:23:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD2B7C433EF;
-        Thu, 30 Mar 2023 13:23:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680182613;
-        bh=TGIs6JDAlrKBTqIgEGbRkwj7I9yX6LExss8MV4sE0Dg=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=IhqSs3U9BRjzWl3cNjUqNg+tMH+PCRo4kJPCn0mYm9obGiqp9QNaMGPxZPhu8EK+E
-         ErL1Q3dpywuho9ewjW56W2vraeeWKdpVnjoO5MNXmeUQKiLMPDPpe/bJNJlGv7iHBC
-         5IbgN0DvPBoRAZ1YVBPW4gnwx0XFVqhGr/JVVijT7CkcU8pdmAVpOI5GtvXBdB8ghH
-         QsH3E5R6YI/At+Bf5xh7WLsASsULlGpvbDtfXweCPLPoHTkaSCZSgR2mDVRx8Oh9vZ
-         CUh9grxANKApX5wybxAhTq0Ht4iFTNpQP9x+qLn7ZKkaIAolwOgEqCgyPb8Hg93sgx
-         o4FUTelOSKQsA==
-Message-ID: <44470d45-32c2-d07f-108e-5cb709ffcdfc@kernel.org>
-Date:   Thu, 30 Mar 2023 21:23:29 +0800
+        Thu, 30 Mar 2023 09:24:09 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A79B2;
+        Thu, 30 Mar 2023 06:24:06 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-17997ccf711so19720798fac.0;
+        Thu, 30 Mar 2023 06:24:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680182646;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J4O6ptW8FC1twDFPrgTGFy4o+XCv7mfWBX2HQc2Vl6w=;
+        b=upgWykZyPnj93MygVpVC7ULndI0ijhLBnaa6Ce0lwkZO3+i6GDUpm+b14W9FIygnYq
+         fFkDKjU/97KrDM33b31RWtziqxI2j/bQf/rWAn+dHTRA6FvKlygHjmnJBPyC+GrGqLCu
+         xs1aBNAuECxaSSNwsbHlrElh1tg2MBwVUdOMTfn0hEjE5G+wkIRKBqjTdeJWMSNNxKfR
+         8U1Z6k9IBTbKB715Q11tM0fljEGpztI4UZ9g09RqYeu+tYS9a6ORmcFGZjuAEdSsYJnR
+         fUa3cw7gTZdzfszXJdNPpzrjw6wH9+5Hsl0Vic2KpV2hlL+diVNwrsXz2Ysx1YcEKDX7
+         ybzQ==
+X-Gm-Message-State: AAQBX9dpPEeFKQgI55qfvUe45vAtg6uvnAy08ANxa3q9zvcSLzjJmjSg
+        QJSwZYixZ2emfDKQ+ljhQUmQQyQumw==
+X-Google-Smtp-Source: AKy350YAsIqse17BcOxR/9AaOp189fBun9Jx72PRABkn09nrRspeoN7LJ9+LlXCVTX1hmu+zO87WVg==
+X-Received: by 2002:a05:6870:56a6:b0:177:b2fa:3740 with SMTP id p38-20020a05687056a600b00177b2fa3740mr3186551oao.23.1680182645741;
+        Thu, 30 Mar 2023 06:24:05 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id tk6-20020a05687189c600b0017703cd8ff6sm12755790oab.7.2023.03.30.06.24.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 06:24:05 -0700 (PDT)
+Received: (nullmailer pid 1868179 invoked by uid 1000);
+        Thu, 30 Mar 2023 13:24:04 -0000
+Date:   Thu, 30 Mar 2023 08:24:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v3 0/3] Move Loongson1 PWM timer to clocksource framework
+Message-ID: <20230330132404.GA1865737-robh@kernel.org>
+References: <20230330110512.549704-1-keguang.zhang@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org,
-        willy@infradead.org
-References: <20230323213919.1876157-1-jaegeuk@kernel.org>
- <8aea02b0-86f9-539a-02e9-27b381e68b66@kernel.org>
- <ZCG2mfviZfY1dqb4@google.com>
-From:   Chao Yu <chao@kernel.org>
-Subject: Re: [f2fs-dev] [PATCH] f2fs: get out of a repeat loop when getting a
- locked data page
-In-Reply-To: <ZCG2mfviZfY1dqb4@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330110512.549704-1-keguang.zhang@gmail.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 30, 2023 at 07:05:09PM +0800, Keguang Zhang wrote:
+> Move Loongson1 PWM timer to clocksource framework
+> and update the Kconfig/Makefile options accordingly.
 
+Why?
 
-On 2023/3/27 23:30, Jaegeuk Kim wrote:
-> On 03/26, Chao Yu wrote:
->> On 2023/3/24 5:39, Jaegeuk Kim wrote:
->>> https://bugzilla.kernel.org/show_bug.cgi?id=216050
->>>
->>> Somehow we're getting a page which has a different mapping.
->>> Let's avoid the infinite loop.
->>>
->>> Cc: <stable@vger.kernel.org>
->>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
->>> ---
->>>    fs/f2fs/data.c | 8 ++------
->>>    1 file changed, 2 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->>> index bf51e6e4eb64..80702c93e885 100644
->>> --- a/fs/f2fs/data.c
->>> +++ b/fs/f2fs/data.c
->>> @@ -1329,18 +1329,14 @@ struct page *f2fs_get_lock_data_page(struct inode *inode, pgoff_t index,
->>>    {
->>>    	struct address_space *mapping = inode->i_mapping;
->>>    	struct page *page;
->>> -repeat:
->>> +
->>>    	page = f2fs_get_read_data_page(inode, index, 0, for_write, NULL);
->>>    	if (IS_ERR(page))
->>>    		return page;
->>>    	/* wait for read completion */
->>>    	lock_page(page);
->>> -	if (unlikely(page->mapping != mapping)) {
->>
->> How about using such logic only for move_data_page() to limit affect for
->> other paths?
-> 
-> Why move_data_page() only? If this happens, we'll fall into a loop in anywhere?
-
-Actually, we only suffer dead loop from foreground GC path, right? I suspect the
-bug was triggered in this path only.
-
-It looks there are a lot of cases in where we repeat triggering read once
-two mappings are mismatched, e.g.
-- __get_meta_page
-- __get_node_page
-- f2fs_write_begin
-- f2fs_quota_read
-
-Thanks,
+What does this have to do with the binding? Did the h/w change? No.
 
 > 
->>
->> Jaegeuk, any thoughts about why mapping is mismatch in between page's one and
->> inode->i_mapping?
+> Changelog
+> V2 -> V3: Remove the reference to regs-pwm.h
+> V1 -> V2: Delete the obsolete header file regs-pwm.h
 > 
->>
->> After several times code review, I didn't get any clue about why f2fs always
->> get the different mapping in a loop.
+> Keguang Zhang (3):
+>   MIPS: Loongson32: Remove deprecated PWM timer clocksource
+>   dt-bindings: timer: Add Loongson-1 clocksource
+>   clocksource: loongson1: Move PWM timer to clocksource framework
 > 
-> I couldn't find the path to happen this. So weird. Please check the history in the
-> bug.
+>  .../timer/loongson,ls1x-pwmtimer.yaml         |  48 ++++
+>  .../include/asm/mach-loongson32/loongson1.h   |   1 -
+>  .../include/asm/mach-loongson32/regs-pwm.h    |  25 --
+>  arch/mips/loongson32/Kconfig                  |  37 ---
+>  arch/mips/loongson32/common/time.c            | 210 ----------------
+>  drivers/clocksource/Kconfig                   |   9 +
+>  drivers/clocksource/Makefile                  |   1 +
+>  drivers/clocksource/timer-loongson1-pwm.c     | 236 ++++++++++++++++++
+>  8 files changed, 294 insertions(+), 273 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
+>  delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-pwm.h
+>  create mode 100644 drivers/clocksource/timer-loongson1-pwm.c
 > 
->>
->> Maybe we can loop MM guys to check whether below folio_file_page() may return
->> page which has different mapping?
 > 
-> Matthew may have some idea on this?
+> base-commit: f7b5a248213f0976c7944925f3f3ab7ff199e581
+> -- 
+> 2.34.1
 > 
->>
->> struct page *pagecache_get_page(struct address_space *mapping, pgoff_t index,
->> 		int fgp_flags, gfp_t gfp)
->> {
->> 	struct folio *folio;
->>
->> 	folio = __filemap_get_folio(mapping, index, fgp_flags, gfp);
->> 	if (IS_ERR(folio))
->> 		return NULL;
->> 	return folio_file_page(folio, index);
->> }
->>
->> Thanks,
->>
->>> -		f2fs_put_page(page, 1);
->>> -		goto repeat;
->>> -	}
->>> -	if (unlikely(!PageUptodate(page))) {
->>> +	if (unlikely(page->mapping != mapping || !PageUptodate(page))) {
->>>    		f2fs_put_page(page, 1);
->>>    		return ERR_PTR(-EIO);
->>>    	}
