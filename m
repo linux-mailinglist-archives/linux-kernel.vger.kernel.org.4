@@ -2,235 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47ED46D0C3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B6B6D0C43
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjC3RHg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 13:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
+        id S231552AbjC3RIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbjC3RHc (ORCPT
+        with ESMTP id S230153AbjC3RIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:07:32 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447F6AF08;
-        Thu, 30 Mar 2023 10:07:28 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1phvjz-0005WC-Tv; Thu, 30 Mar 2023 19:07:11 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [RESEND] [PATCHv3 4/7] thermal: rockchip: Simplify channel id logic
-Date:   Thu, 30 Mar 2023 19:07:11 +0200
-Message-ID: <2066924.KlZ2vcFHjT@diego>
-In-Reply-To: <bae80282-cb80-462d-e554-1934d090e216@linaro.org>
-References: <20230308112253.15659-1-sebastian.reichel@collabora.com>
- <ec66d4e7-cb82-46c6-84ae-bd51df7cab7c@mercury.local>
- <bae80282-cb80-462d-e554-1934d090e216@linaro.org>
+        Thu, 30 Mar 2023 13:08:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6501DBD8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:07:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680196068;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vEiCemmKyXQlz2Hqo8bHOiogjHXuOrfjM9gWP+5n7L0=;
+        b=b2FN/j18cou8hheFsfwf/DYlTEvytfaAsEAGNsteyloroUdbJf8mM25pDXd3k0DUuM48UO
+        iU9YZp7AmZR/X7lL0vEWuvwKmgR7Ijl4eSzz+4OIIHnNkC8glyfAHwJr+JI1/7NbGsprNS
+        npU6PSij7cvGrQurBN4UCr54o/MFos8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-76-v7LVQCxVMTC5u30CO1FbKg-1; Thu, 30 Mar 2023 13:07:43 -0400
+X-MC-Unique: v7LVQCxVMTC5u30CO1FbKg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 583F53810B1C;
+        Thu, 30 Mar 2023 17:07:42 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.45.242.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DAB96492B02;
+        Thu, 30 Mar 2023 17:07:41 +0000 (UTC)
+Received: from [10.1.1.1] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id B0C8A30736C72;
+        Thu, 30 Mar 2023 19:07:40 +0200 (CEST)
+Subject: [PATCH bpf RFC-V3 0/5] XDP-hints: API change for RX-hash kfunc
+ bpf_xdp_metadata_rx_hash
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net
+Date:   Thu, 30 Mar 2023 19:07:40 +0200
+Message-ID: <168019602958.3557870.9960387532660882277.stgit@firesoul>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 16. März 2023, 11:05:25 CEST schrieb Daniel Lezcano:
-> 
-> Hi Heiko,
-> 
-> On 08/03/2023 19:42, Sebastian Reichel wrote:
-> > Hi Daniel,
-> > 
-> > On Wed, Mar 08, 2023 at 07:13:22PM +0100, Daniel Lezcano wrote:
-> >> On 08/03/2023 12:22, Sebastian Reichel wrote:
-> >>> Replace the channel ID lookup table by a simple offset, since
-> >>> the channel IDs are consecutive.
-> >>>
-> >>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> >>
-> >> As all the other patches are reviewed by Heiko, is the tag missing here?
-> > 
-> > Heiko was not happy with this in PATCHv2, when he reviewed most
-> > of the patches:
-> > 
-> > https://lore.kernel.org/all/3601039.e9J7NaK4W3@phil/
-> > 
-> > I replied, but never got a response, so I kept it as is:
-> > 
-> > https://lore.kernel.org/all/20221206170232.xsm4kcbfwrmlrriw@mercury.elektranox.org/
-> > 
-> > FWIW it is essential for the series and cannot be dropped, because
-> > RK3588 has more than 2 channels.
-> 
-> Do you have a suggestion to improve the proposed change ?
+Notice targeted 6.3-rc kernel via bpf git tree.
 
-I guess it's fine after all.
+Current API for bpf_xdp_metadata_rx_hash() returns the raw RSS hash value,
+but doesn't provide information on the RSS hash type (part of 6.3-rc).
 
-Sebastian's response makes sense and there is not really a reason to keep
-infrastructure around for a hypothetical case that may never happen.
+This patchset proposal is to change the function call signature via adding
+a pointer value argument for provide the RSS hash type.
 
-If that really changes with some SoC in the far future we can always
-re-evaluate.
+Alternatively we disable bpf_xdp_metadata_rx_hash() in 6.3-rc, and have
+more time to nitpick the RSS hash-type bits.
+
+---
+
+Jesper Dangaard Brouer (5):
+      xdp: rss hash types representation
+      mlx5: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      veth: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      mlx4: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      selftests/bpf: Adjust bpf_xdp_metadata_rx_hash for new arg
 
 
-So,
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c    | 22 ++++++-
+ drivers/net/ethernet/mellanox/mlx4/mlx4_en.h  |  3 +-
+ .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 63 ++++++++++++++++++-
+ drivers/net/veth.c                            | 11 +++-
+ include/linux/mlx5/device.h                   | 14 ++++-
+ include/linux/netdevice.h                     |  3 +-
+ include/net/xdp.h                             | 49 +++++++++++++++
+ net/core/xdp.c                                | 10 ++-
+ .../selftests/bpf/prog_tests/xdp_metadata.c   |  2 +
+ .../selftests/bpf/progs/xdp_hw_metadata.c     | 14 +++--
+ .../selftests/bpf/progs/xdp_metadata.c        |  6 +-
+ .../selftests/bpf/progs/xdp_metadata2.c       |  7 ++-
+ tools/testing/selftests/bpf/xdp_hw_metadata.c |  2 +-
+ tools/testing/selftests/bpf/xdp_metadata.h    |  1 +
+ 14 files changed, 183 insertions(+), 24 deletions(-)
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-Sorry for dropping the ball on this
-Heiko
-
-
-> >>> ---
-> >>>    drivers/thermal/rockchip_thermal.c | 48 +++++++++++++-----------------
-> >>>    1 file changed, 21 insertions(+), 27 deletions(-)
-> >>>
-> >>> diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-> >>> index 9ed45b318344..bcbdd618daae 100644
-> >>> --- a/drivers/thermal/rockchip_thermal.c
-> >>> +++ b/drivers/thermal/rockchip_thermal.c
-> >>> @@ -39,15 +39,6 @@ enum tshut_polarity {
-> >>>    	TSHUT_HIGH_ACTIVE,
-> >>>    };
-> >>> -/*
-> >>> - * The system has two Temperature Sensors.
-> >>> - * sensor0 is for CPU, and sensor1 is for GPU.
-> >>> - */
-> >>> -enum sensor_id {
-> >>> -	SENSOR_CPU = 0,
-> >>> -	SENSOR_GPU,
-> >>> -};
-> >>> -
-> >>>    /*
-> >>>     * The conversion table has the adc value and temperature.
-> >>>     * ADC_DECREMENT: the adc value is of diminishing.(e.g. rk3288_code_table)
-> >>> @@ -82,7 +73,7 @@ struct chip_tsadc_table {
-> >>>    /**
-> >>>     * struct rockchip_tsadc_chip - hold the private data of tsadc chip
-> >>> - * @chn_id: array of sensor ids of chip corresponding to the channel
-> >>> + * @chn_offset: the channel offset of the first channel
-> >>>     * @chn_num: the channel number of tsadc chip
-> >>>     * @tshut_temp: the hardware-controlled shutdown temperature value
-> >>>     * @tshut_mode: the hardware-controlled shutdown mode (0:CRU 1:GPIO)
-> >>> @@ -98,7 +89,7 @@ struct chip_tsadc_table {
-> >>>     */
-> >>>    struct rockchip_tsadc_chip {
-> >>>    	/* The sensor id of chip correspond to the ADC channel */
-> >>> -	int chn_id[SOC_MAX_SENSORS];
-> >>> +	int chn_offset;
-> >>>    	int chn_num;
-> >>>    	/* The hardware-controlled tshut property */
-> >>> @@ -925,8 +916,8 @@ static void rk_tsadcv2_tshut_mode(int chn, void __iomem *regs,
-> >>>    }
-> >>>    static const struct rockchip_tsadc_chip px30_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 2, /* 2 channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
-> >>> @@ -949,7 +940,8 @@ static const struct rockchip_tsadc_chip px30_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> +	/* cpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 1, /* one channel for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -973,7 +965,8 @@ static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> +	/* cpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 1, /* one channel for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -997,8 +990,8 @@ static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 1, /* cpu sensor is channel 1 */
-> >>> -	.chn_id[SENSOR_GPU] = 2, /* gpu sensor is channel 2 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 1,
-> >>>    	.chn_num = 2, /* two channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -1022,7 +1015,8 @@ static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> +	/* cpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 1, /* one channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
-> >>> @@ -1045,8 +1039,8 @@ static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 2, /* two channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -1070,8 +1064,8 @@ static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 2, /* two channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -1095,8 +1089,8 @@ static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 2, /* two channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -1120,8 +1114,8 @@ static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
-> >>>    };
-> >>>    static const struct rockchip_tsadc_chip rk3568_tsadc_data = {
-> >>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> >>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> >>> +	/* cpu, gpu */
-> >>> +	.chn_offset = 0,
-> >>>    	.chn_num = 2, /* two channels for tsadc */
-> >>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> >>> @@ -1404,7 +1398,7 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
-> >>>    	for (i = 0; i < thermal->chip->chn_num; i++) {
-> >>>    		error = rockchip_thermal_register_sensor(pdev, thermal,
-> >>>    						&thermal->sensors[i],
-> >>> -						thermal->chip->chn_id[i]);
-> >>> +						thermal->chip->chn_offset + i);
-> >>>    		if (error)
-> >>>    			return dev_err_probe(&pdev->dev, error,
-> >>>    				"failed to register sensor[%d].\n", i);
-> >>
-> >>
-> >> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> >> <http://twitter.com/#!/linaroorg> Twitter |
-> >> <http://www.linaro.org/linaro-blog/> Blog
-> >>
-> 
-> 
-
-
-
+--
 
