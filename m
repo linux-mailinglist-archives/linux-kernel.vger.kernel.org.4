@@ -2,47 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7AC6CF91C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 04:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75CC26CF924
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 04:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjC3C0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 22:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
+        id S229705AbjC3Cc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 22:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjC3C0I (ORCPT
+        with ESMTP id S229624AbjC3Cc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 22:26:08 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBA64C2D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 19:26:06 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Pn6dc6crXz17Q8s;
-        Thu, 30 Mar 2023 10:22:44 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 10:26:00 +0800
-Subject: Re: [PATCH] ubifs: Free memory for tmpfile name
-To:     =?UTF-8?Q?M=c3=a5rten_Lindahl?= <marten.lindahl@axis.com>,
-        Richard Weinberger <richard@nod.at>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@axis.com>
-References: <20230329-memleak-fix-v1-1-7133da56ea8f@axis.com>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <cec30bcb-85d2-5de0-186b-6838ce94e3f7@huawei.com>
-Date:   Thu, 30 Mar 2023 10:25:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Wed, 29 Mar 2023 22:32:27 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1055245
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 19:32:25 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id a16so15917920pjs.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 19:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680143545;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t3cJZfEXazIu0RyCr6dj5L3jtGo+WiGbTKxGLGBfEyo=;
+        b=MBFKxmiUeIKmhWq8oeCh+GRAwRucQ7yAnW5myJl/xjb/CMm18Irj+t0hkbFJZetlZg
+         kp28RJDE75Xsd3aEcaQU5aQngMEaNkTiVd96w/qk2FYx7aqvAyMfPDjtn9hWJDgt12cK
+         bocoOOYGFfslK50UwpBKfY5BaV7cFLhdvCxJhjSkA8DenK5FE+zj5YiduMfEXM/2t5l3
+         I4B0QFPB9pYefBbSwYnFLPYcD9ODLH+asd6vlOytqQuGee8nrFB1hI8dPpA63tz3LJb1
+         IaEtm234YrJxi8dtZJ+NfxZDN+QJK9m3K+meSq9CsSenPhBtriMnR5icR8cZlw5WeibR
+         6H4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680143545;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t3cJZfEXazIu0RyCr6dj5L3jtGo+WiGbTKxGLGBfEyo=;
+        b=AgeuOP6TDd1q3a5TXWPkx5I1hmOxTDl4BWldeeVJLRyceJYyGyh1q0QWo/VLDZa+fT
+         xVvRrCkR5cfPcSqnwxqxxWIXyuBbLJtnqxliZT2LrTZbkzQppaZr6BTl7DGyXlODmU6/
+         QNvhYN0pu+Tp39/JYH2k0TjjQlXVqm/7BOs+DFkPkcHKYR7I49riQ/m69o/UaUpEHMH8
+         Z0t8btrxO3+z/aM8vKS1h2OdCYHQ2SMkRwh9r/OBnhzPLIebRaKtLRy3HBx4WVMK1dBV
+         /DbgIb1eB7DQgBgdaBrzqmHHJiPsQjLXkjVwk6y9JIGPAqEMjTea6VP7qdH5xDqmtAy1
+         EVPw==
+X-Gm-Message-State: AO0yUKW1aBoIP+LIl4quLY+yow/ICoGUUyCDSCpyghDNHccj/ypZjqjU
+        uPqevOsURiekWdJGhtACchUpx+alZl9EsSI/Xjlgpw==
+X-Google-Smtp-Source: AK7set8R0cmMRUfzW0dAO2ZSj8Ig0qWUemT7PvM0jB5gvDRukyHROfrLICELC4ok8IJX4z2tNJ2wPg==
+X-Received: by 2002:a05:6a20:e1e:b0:da:b92c:a949 with SMTP id ej30-20020a056a200e1e00b000dab92ca949mr18496286pzb.36.1680143544883;
+        Wed, 29 Mar 2023 19:32:24 -0700 (PDT)
+Received: from leoy-yangtze.lan ([156.59.100.185])
+        by smtp.gmail.com with ESMTPSA id c4-20020aa78804000000b005dd65169628sm24486846pfo.144.2023.03.29.19.32.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 19:32:24 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 10:32:19 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf arm-spe: Add raw decoding for SPEv1.3 MTE and MOPS
+ load/store
+Message-ID: <20230330023219.GC252145@leoy-yangtze.lan>
+References: <20230327162057.4057188-1-robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20230329-memleak-fix-v1-1-7133da56ea8f@axis.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327162057.4057188-1-robh@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,60 +78,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mårten,
-> When opening a ubifs tmpfile on an encrypted directory, function
-> fscrypt_setup_filename allocates memory for the name that is to be
-> stored in the directory entry, but after the name has been copied to the
-> directory entry inode, the memory is not freed.
+On Mon, Mar 27, 2023 at 11:20:57AM -0500, Rob Herring wrote:
+> Arm SPEv1.3 adds new load/store operation subclasses for Memory Tagging
+> Extension (MTE) and memory operations (MOPS). The memory operations
+> are memcpy and memset. Add support for decoding these new subclasses in
+> the raw decoding.
 > 
-> When running kmemleak on it we see that it is registered as a leak. The
-> report below is triggered by a simple program 'tmpfile' just opening a
-> tmpfile:
-> 
->    unreferenced object 0xffff88810178f380 (size 32):
->      comm "tmpfile", pid 509, jiffies 4294934744 (age 1524.742s)
->      backtrace:
->        __kmem_cache_alloc_node
->        __kmalloc
->        fscrypt_setup_filename
->        ubifs_tmpfile
->        vfs_tmpfile
->        path_openat
-> 
-> Free this memory after it has been copied to the inode.
-> 
-> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
-> ---
->   fs/ubifs/dir.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/fs/ubifs/dir.c b/fs/ubifs/dir.c
-> index 0f29cf201136..089ca6910124 100644
-> --- a/fs/ubifs/dir.c
-> +++ b/fs/ubifs/dir.c
-> @@ -491,6 +491,7 @@ static int ubifs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
->   		goto out_cancel;
->   	unlock_2_inodes(dir, inode);
->   
-> +	fscrypt_free_filename(&nm);
->   	ubifs_release_budget(c, &req);
->   
->   	return finish_open_simple(file, 0);
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Looks good, just one small nit. I'd prefer to add 
-fscrypt_free_filename() after ubifs_release_budget() just like 
-ubifs_create/link does, so that ubifs can get unused budget earlier.
-
-After looking through the code, I found another place create_whiteout 
-has the same problem(Imported in 278d9a243635f26c05("ubifs: Rename 
-whiteout atomically") by me). Would you mind fixing this point just by 
-removing unused 'nm' in create_whiteout()?
-
-> 
-> ---
-> base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
-> change-id: 20230329-memleak-fix-87a01daf469e
-> 
-> Best regards,
-> 
-
+Reviewed-by: Leo Yan <leo.yan@linaro.org
