@@ -2,204 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF1A6CF911
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 04:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2386CF900
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 04:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjC3CQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 22:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
+        id S229635AbjC3CFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 22:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjC3CQa (ORCPT
+        with ESMTP id S229535AbjC3CFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 22:16:30 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17E446B4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 19:16:03 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id h11so15697710lfu.8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 19:16:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680142562;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qtgc8H66e/eBsAwlgPMTsl3jdeSANqq4C7cxYJodiTQ=;
-        b=g6cUVpR186hbMppXVGOMxes+kpKCF9XhHdINbvtoXVg1+gVzJLucgrskclYeTSLy47
-         RVS/9TVUvFZ7BEf/0EX5TGT1VfS9E5vkU2eYkw1rDV7C4YDlqMcp0RQkBLEPQ/5FnJU8
-         f3ve/YVwC2aCQvTnjhBX/fK+e4LVw32hJQKBAc5p1uwn7x1xeDINH/ecgw2bkzledDvu
-         vCwfberKfR1v2TZvhSGNSVyFfyHo7rort4he8/uYyezF0YJtnsaZ2s2QeRT8TzARjL8s
-         mMm4UsvCj8WsvWxEsutf68pIw9AL0izd9+2C5NhzSfU+nVe3l3RMwSGkt6xEz7xe5Fij
-         zfrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680142562;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qtgc8H66e/eBsAwlgPMTsl3jdeSANqq4C7cxYJodiTQ=;
-        b=7DIg3sEq7QBktcDv00wqjqB3/hqBklmZnU3oK5n350t2ryrNFz9Km3kDiIb+dgyS5+
-         o4Z8zSvxiPAPRF7x2cWA6fFZqEfN6KBPg8QBA8uC6OmSCMu+AHEMuNWGH1j+6S6nPqE1
-         mkvrEYzn3v2uSACELfz7mCgVb0FMKCpkpbSdITrbJyUCp0xuwb3iwK+CLTtFh3Sjer9k
-         AKzmwNJ/CuO+8CZwFYHbOH5ChUezZW3T8N7BQv5+iNE364KEMNGifEiTi+QuPBeFp2et
-         hTpsQHzR0s/yFIMvA8N/MnNI62lcvQqPCIPPrGB7Hq6NcC+eFHMlKNeqwE3svun/18xK
-         sn6Q==
-X-Gm-Message-State: AAQBX9euiztklpcKsapJwnnze9VKHtYowuRFnssKqjDD5SKeZVXXtTzn
-        sLvfMLcBQJR2/Zmva1kWnrq8I7evx8acqn+j25P03ZUkPzqmMVeSfoo=
-X-Google-Smtp-Source: AKy350amXLyR9ZmfPWIjG2BbTYmkWEsNkPevbbYMd69+i2rehoQ84uIVavVURCQvW75xxq5AOUkbcZykH7PNqyxQmW8=
-X-Received: by 2002:ac2:5a5c:0:b0:4ea:fc8f:7852 with SMTP id
- r28-20020ac25a5c000000b004eafc8f7852mr6304258lfn.12.1680142561830; Wed, 29
- Mar 2023 19:16:01 -0700 (PDT)
+        Wed, 29 Mar 2023 22:05:11 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BCF1BC;
+        Wed, 29 Mar 2023 19:05:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680141911; x=1711677911;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=zDLHnp7f6/gRaeT/OTofMpHjg3g6plw+5DJPulgggY4=;
+  b=bzqbj0XXO0I+qiE1xWttr1xWMmFCEEmfXQi0cLQ2Xn6xX++S9nSeHOut
+   jc1bfldzeuUdsKA4057ji8iGdZyKBTWtV5u6Sqt2XejSfynWHIFGaZpQP
+   4Pyzu0IQTb8TlRVVRpYO7kQEMaeBSRMuwh5aETnqCM3gr2hVn9aguV/My
+   XF0npGWKLOOHPl9WNU94mtup496qIy/+SRfGfR6lGqHKlNOQKlhWJYdV7
+   GzGhtp4x7987CSB7WbNFdPs1+2bYmbJmUUJ2nVFoluloII3q2/RJP3SAu
+   Hqi3B/WKbPEBf4TkZA9xi1pxC2BuZSLj+5wcWEJSOEky5V9NhXcHhQHOT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="368825508"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="368825508"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 19:05:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="828125258"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="828125258"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Mar 2023 19:05:10 -0700
+Date:   Wed, 29 Mar 2023 19:15:54 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v3 13/24] thermal: intel: hfi: Store per-CPU IPCC scores
+Message-ID: <20230330021554.GC26315@ranerica-svr.sc.intel.com>
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207051105.11575-14-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0hooaHtM8=KCx6XYZjPFh66kVBSbPTX4GwiMTgovxoVzg@mail.gmail.com>
+ <20230328234315.GD8958@ranerica-svr.sc.intel.com>
+ <CAJZ5v0iUg+BBfTkXfkc5X2SFm1icekYOU2Ow+5_4riJjs1v43A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230329102300.61000-1-huangjie.albert@bytedance.com> <20230329123959-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230329123959-mutt-send-email-mst@kernel.org>
-From:   =?UTF-8?B?6buE5p2w?= <huangjie.albert@bytedance.com>
-Date:   Thu, 30 Mar 2023 10:15:50 +0800
-Message-ID: <CABKxMyPc54yyFnajxkMypnDibL6Je7RFyvUyPxypomF=2-GkEA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v4] virtio_ring: interrupt disable flag
- updated to vq even with event_triggered is set
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0iUg+BBfTkXfkc5X2SFm1icekYOU2Ow+5_4riJjs1v43A@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michael S. Tsirkin <mst@redhat.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=8830=E6=
-=97=A5=E5=91=A8=E5=9B=9B 00:40=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Wed, Mar 29, 2023 at 06:23:00PM +0800, Albert Huang wrote:
-> > From: "huangjie.albert" <huangjie.albert@bytedance.com>
+On Wed, Mar 29, 2023 at 02:08:30PM +0200, Rafael J. Wysocki wrote:
+> On Wed, Mar 29, 2023 at 1:32 AM Ricardo Neri
+> <ricardo.neri-calderon@linux.intel.com> wrote:
 > >
-> > in virtio_net, if we disable the napi_tx, when we triger a tx interrupt=
-,
-> > the vq->event_triggered will be set to true. It will no longer be set t=
-o
-> > false. Unless we explicitly call virtqueue_enable_cb_delayed or
-> > virtqueue_enable_cb_prepare.
+> > On Mon, Mar 27, 2023 at 06:37:32PM +0200, Rafael J. Wysocki wrote:
+> > > On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
+> > > <ricardo.neri-calderon@linux.intel.com> wrote:
+> > > >
+> > > > The scheduler reads the IPCC scores when balancing load. These reads can
+> > > > be quite frequent. Hardware can also update the HFI table frequently.
+> > > > Concurrent access may cause a lot of lock contention. It gets worse as the
+> > > > number of CPUs increases.
+> > > >
+> > > > Instead, create separate per-CPU IPCC scores that the scheduler can read
+> > > > without the HFI table lock.
+> > > >
+> > > > Cc: Ben Segall <bsegall@google.com>
+> > > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > > > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> > > > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > Cc: Len Brown <len.brown@intel.com>
+> > > > Cc: Lukasz Luba <lukasz.luba@arm.com>
+> > > > Cc: Mel Gorman <mgorman@suse.de>
+> > > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > > > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > > > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > > > Cc: Valentin Schneider <vschneid@redhat.com>
+> > > > Cc: x86@kernel.org
+> > > > Cc: linux-pm@vger.kernel.org
+> > > > Cc: linux-kernel@vger.kernel.org
+> > > > Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > > > ---
+> > > > Changes since v2:
+> > > >  * Only create these per-CPU variables when Intel Thread Director is
+> > > >    supported.
+> > > >
+> > > > Changes since v1:
+> > > >  * Added this patch.
+> > > > ---
+> > > >  drivers/thermal/intel/intel_hfi.c | 46 +++++++++++++++++++++++++++++++
+> > > >  1 file changed, 46 insertions(+)
+> > > >
+> > > > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> > > > index 2527ae3836c7..b06021828892 100644
+> > > > --- a/drivers/thermal/intel/intel_hfi.c
+> > > > +++ b/drivers/thermal/intel/intel_hfi.c
+> > > > @@ -29,6 +29,7 @@
+> > > >  #include <linux/kernel.h>
+> > > >  #include <linux/math.h>
+> > > >  #include <linux/mutex.h>
+> > > > +#include <linux/percpu.h>
+> > > >  #include <linux/percpu-defs.h>
+> > > >  #include <linux/printk.h>
+> > > >  #include <linux/processor.h>
+> > > > @@ -170,6 +171,43 @@ static struct workqueue_struct *hfi_updates_wq;
+> > > >  #define HFI_UPDATE_INTERVAL            HZ
+> > > >  #define HFI_MAX_THERM_NOTIFY_COUNT     16
+> > > >
+> > > > +#ifdef CONFIG_IPC_CLASSES
+> > >
+> > > It would be good to provide a (concise) description of this variable.
+> > >
+> > > > +static int __percpu *hfi_ipcc_scores;
 > >
-> > If we disable the napi_tx, it will only be called when the tx ring
-> > buffer is relatively small.
-> >
-> > Because event_triggered is true. Therefore, VRING_AVAIL_F_NO_INTERRUPT =
-or
-> > VRING_PACKED_EVENT_FLAG_DISABLE will not be set. So we update
-> > vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
-> > every time we call virtqueue_get_buf_ctx.This bring more interruptions.
-> >
-> > To summarize:
-> > 1) event_triggered was set to true in vring_interrupt()
-> > 2) after this nothing will happen for virtqueue_disable_cb() so
-> >    VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
-> > 3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
-> >    then it tries to publish new event
-> >
-> > To fix:
-> > update VRING_AVAIL_F_NO_INTERRUPT or VRING_PACKED_EVENT_FLAG_DISABLE to=
- vq
-> > when we call virtqueue_disable_cb even the event_triggered is set to tr=
-ue.
-> >
-> > Tested with iperf:
-> > iperf3 tcp stream:
-> > vm1 -----------------> vm2
-> > vm2 just receives tcp data stream from vm1, and sends the ack to vm1,
-> > there are many tx interrupts in vm2.
-> > but without event_triggered there are just a few tx interrupts.
-> >
-> > v2->v3:
-> > -update the interrupt disable flag even with the event_triggered is set=
-,
-> > -instead of checking whether event_triggered is set in
-> > -virtqueue_get_buf_ctx_{packed/split}, will cause the drivers  which ha=
-ve
-> > -not called virtqueue_{enable/disable}_cb to miss notifications.
-> >
-> > v3->v4:
-> > -remove change for
-> > -"if (vq->packed.event_flags_shadow !=3D VRING_PACKED_EVENT_FLAG_DISABL=
-E)"
-> > -in virtqueue_disable_cb_packed
-> >
-> > Fixes: 8d622d21d248 ("virtio: fix up virtio_disable_cb")
-> > Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
-> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> > Signed-off-by: Jason Wang <jasowang@redhat.com>
->
-> Can you confirm you tested 9p and it still works fine?
->
+> > Do you mean hfi_ipcc_scores or CONFIG_IPC_CLASSES?
+> 
+> hfi_ipcc_scores (as the latter is not a variable).
 
-Yes, I tested it in my local environment. After applying this patch,
-9p works fine.
-
-Thanks.
-> > ---
-> >  drivers/virtio/virtio_ring.c | 22 ++++++++++++++++------
-> >  1 file changed, 16 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.=
-c
-> > index cbeeea1b0439..ec7ab8e04846 100644
-> > --- a/drivers/virtio/virtio_ring.c
-> > +++ b/drivers/virtio/virtio_ring.c
-> > @@ -931,6 +931,14 @@ static void virtqueue_disable_cb_split(struct virt=
-queue *_vq)
-> >
-> >       if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT))=
- {
-> >               vq->split.avail_flags_shadow |=3D VRING_AVAIL_F_NO_INTERR=
-UPT;
-> > +
-> > +             /*
-> > +              * If device triggered an event already it won't trigger =
-one again:
-> > +              * no need to disable.
-> > +              */
-> > +             if (vq->event_triggered)
-> > +                     return;
-> > +
-> >               if (vq->event)
-> >                       /* TODO: this is a hack. Figure out a cleaner val=
-ue to write. */
-> >                       vring_used_event(&vq->split.vring) =3D 0x0;
-> > @@ -1761,6 +1769,14 @@ static void virtqueue_disable_cb_packed(struct v=
-irtqueue *_vq)
-> >
-> >       if (vq->packed.event_flags_shadow !=3D VRING_PACKED_EVENT_FLAG_DI=
-SABLE) {
-> >               vq->packed.event_flags_shadow =3D VRING_PACKED_EVENT_FLAG=
-_DISABLE;
-> > +
-> > +             /*
-> > +              * If device triggered an event already it won't trigger =
-one again:
-> > +              * no need to disable.
-> > +              */
-> > +             if (vq->event_triggered)
-> > +                     return;
-> > +
-> >               vq->packed.vring.driver->flags =3D
-> >                       cpu_to_le16(vq->packed.event_flags_shadow);
-> >       }
-> > @@ -2462,12 +2478,6 @@ void virtqueue_disable_cb(struct virtqueue *_vq)
-> >  {
-> >       struct vring_virtqueue *vq =3D to_vvq(_vq);
-> >
-> > -     /* If device triggered an event already it won't trigger one agai=
-n:
-> > -      * no need to disable.
-> > -      */
-> > -     if (vq->event_triggered)
-> > -             return;
-> > -
-> >       if (vq->packed_ring)
-> >               virtqueue_disable_cb_packed(_vq);
-> >       else
-> > --
-> > 2.20.1
->
+I thought so. Thank you for clarifying.
