@@ -2,122 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557866D04D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53FF6D04DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjC3MgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 08:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
+        id S231234AbjC3Mgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 08:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjC3MgF (ORCPT
+        with ESMTP id S230019AbjC3Mgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:36:05 -0400
-Received: from out0-196.mail.aliyun.com (out0-196.mail.aliyun.com [140.205.0.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3867D7EC0;
-        Thu, 30 Mar 2023 05:36:04 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R221e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047199;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---.S3-w4rS_1680179757;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.S3-w4rS_1680179757)
-          by smtp.aliyun-inc.com;
-          Thu, 30 Mar 2023 20:35:58 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] KVM: x86: Detect KVM_CPUID_FEATURES base before KVM PV feature CPUID updating
-Date:   Thu, 30 Mar 2023 20:35:54 +0800
-Message-Id: <712ea6c3db34d5b488888648c1eb2db655eaa5b9.1680179693.git.houwenlong.hwl@antgroup.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <9227068821b275ac547eb2ede09ec65d2281fe07.1680179693.git.houwenlong.hwl@antgroup.com>
-References: <9227068821b275ac547eb2ede09ec65d2281fe07.1680179693.git.houwenlong.hwl@antgroup.com>
+        Thu, 30 Mar 2023 08:36:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BB47A8B;
+        Thu, 30 Mar 2023 05:36:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C7F3B828A2;
+        Thu, 30 Mar 2023 12:36:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA578C433D2;
+        Thu, 30 Mar 2023 12:36:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680179779;
+        bh=apjuJydxqBhPZhcIQdOGZhWg7a9aRiJmg/9aojOU6Xs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RXaFiCOOxBKkVMcldHGDcX6733J33G2LEWE5xW6ucRxTHIWhm0oq7BtWWwcJY5q2p
+         WE+0gRNRZNf5aON1M4JNrLmVbZLA5vPBvtvc8P06F66dRMmP/6iNHaKtiwlWgPWQAZ
+         9sv3/AoChFrvBnml58hsP8OwG9JTFmSU2kCJCJoONWE+6K8H6GT5+wDflwAm/HyphD
+         8ckzN2KJfBwpd1bqPij40bRNUC6y8t3UM8ZqRKJ+YIVbQYsXnNmPpehopi7v4rV8qh
+         KjRfAn8Pi02/WqTe5a9tedvFFrPxjklyudHWPscom1ReRc41Y9PT+1RFi/aSN8ih5q
+         mmLMdszS/4DUA==
+Date:   Thu, 30 Mar 2023 13:36:14 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     tony@atomide.com, nathan@kernel.org, ndesaulniers@google.com,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] mfd: omap-usb-tll: remove unused usbtll_readb function
+Message-ID: <20230330123614.GH434339@google.com>
+References: <20230322125803.2570968-1-trix@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230322125803.2570968-1-trix@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM_CPUID_FEATURES is detected after CPUID updating in kvm_set_cpuid(),
-then 'vcpu->arch.kvm_cpuid_base' is NULL and KVM PV feature CPUID
-updating wouldn't work. So detect it early before CPUID updating in
-kvm_set_cpuid().
+On Wed, 22 Mar 2023, Tom Rix wrote:
 
-Fixes: ee3a5f9e3d9b ("KVM: x86: Do runtime CPUID update before updating vcpu->arch.cpuid_entries")
-Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
----
- arch/x86/kvm/cpuid.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+> clang with W=1 reports
+> drivers/mfd/omap-usb-tll.c:128:18: error: unused function
+>   'usbtll_readb' [-Werror,-Wunused-function]
+> static inline u8 usbtll_readb(void __iomem *base, u32 reg)
+>                  ^
+> This function is not used so remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/mfd/omap-usb-tll.c | 5 -----
+>  1 file changed, 5 deletions(-)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index af92d3422c79..0c8658fdb6c1 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -176,15 +176,15 @@ static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2
- 	return 0;
- }
- 
--static struct kvm_hypervisor_cpuid kvm_get_hypervisor_cpuid(struct kvm_vcpu *vcpu,
--							    const char *sig)
-+static struct kvm_hypervisor_cpuid __kvm_get_hypervisor_cpuid(struct kvm_cpuid_entry2 *entries,
-+							      int nent, const char *sig)
- {
- 	struct kvm_hypervisor_cpuid cpuid = {};
- 	struct kvm_cpuid_entry2 *entry;
- 	u32 base;
- 
- 	for_each_possible_hypervisor_cpuid_base(base) {
--		entry = kvm_find_cpuid_entry(vcpu, base);
-+		entry = cpuid_entry2_find(entries, nent, base, KVM_CPUID_INDEX_NOT_SIGNIFICANT);
- 
- 		if (entry) {
- 			u32 signature[3];
-@@ -202,6 +202,14 @@ static struct kvm_hypervisor_cpuid kvm_get_hypervisor_cpuid(struct kvm_vcpu *vcp
- 	}
- 
- 	return cpuid;
-+
-+}
-+
-+static struct kvm_hypervisor_cpuid kvm_get_hypervisor_cpuid(struct kvm_vcpu *vcpu,
-+							    const char *sig)
-+{
-+	return __kvm_get_hypervisor_cpuid(vcpu->arch.cpuid_entries,
-+					  vcpu->arch.cpuid_nent, sig);
- }
- 
- static struct kvm_cpuid_entry2 *__kvm_find_kvm_cpuid_features(struct kvm_vcpu *vcpu,
-@@ -406,9 +414,12 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
-                         int nent)
- {
- 	int r;
-+	struct kvm_hypervisor_cpuid kvm_cpuid;
- 
- 	__kvm_update_cpuid_runtime(vcpu, e2, nent);
--	kvm_update_pv_cpuid(vcpu, e2, nent);
-+	kvm_cpuid = __kvm_get_hypervisor_cpuid(e2, nent, KVM_SIGNATURE);
-+	if (kvm_cpuid.base)
-+		kvm_update_pv_cpuid(vcpu, e2, nent);
- 
- 	/*
- 	 * KVM does not correctly handle changing guest CPUID after KVM_RUN, as
-@@ -444,7 +455,7 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
- 	vcpu->arch.cpuid_entries = e2;
- 	vcpu->arch.cpuid_nent = nent;
- 
--	vcpu->arch.kvm_cpuid = kvm_get_hypervisor_cpuid(vcpu, KVM_SIGNATURE);
-+	vcpu->arch.kvm_cpuid = kvm_cpuid;
- 	vcpu->arch.xen.cpuid = kvm_get_hypervisor_cpuid(vcpu, XEN_SIGNATURE);
- 	kvm_vcpu_after_set_cpuid(vcpu);
- 
--- 
-2.31.1
+Applied, thanks
 
+--
+Lee Jones [李琼斯]
