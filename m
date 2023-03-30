@@ -2,156 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907EE6D011F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2609D6D011C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjC3K1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
+        id S230496AbjC3K0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjC3K1o (ORCPT
+        with ESMTP id S229760AbjC3K0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:27:44 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718CE72A7;
-        Thu, 30 Mar 2023 03:27:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680172063; x=1711708063;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vsso8X59jkwfS8FUc+qT+mBVmfIXBVin+KTPPha6LF8=;
-  b=h0yHz4lMGE6+yemI1twXONAwf5J+Ls+iqorfH4gisWaVW9fULVhuWBcg
-   dzqtzzoFongDoWSVQEANyJNkTVeByc6NisOnM/cRGgRotuhSru7/61Hgg
-   4pNUu/BGbF5OILtF1oKVT6DDFmLW7TqV2El/c1LZd3n8BrRO0LM7WeHqS
-   wnMZs1i8lP4MGBwNZ5NbdGVE3pJpEKAU4soowpld8QMeqcz4OUmtrYz+1
-   qTPk+v/3GgPx8nCRfm4XmPJpqv/WXj37exUgqcVjN3g0xe2VHxHuxjBTh
-   1nwyuidinAWrqTa0H9K324UpD19x3zXApT28tEhMZ2p4s6C4qVN/tUILn
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="368909798"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="368909798"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:27:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="634831399"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="634831399"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2023 03:27:39 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6AF2D80A; Thu, 30 Mar 2023 13:23:49 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] thunderbolt: Introduce usb4_port_sb_opcode_err_to_errno() helper
-Date:   Thu, 30 Mar 2023 13:23:42 +0300
-Message-Id: <20230330102342.44090-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+        Thu, 30 Mar 2023 06:26:49 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7705272A7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:26:48 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id h11so16903202lfu.8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:26:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680172006;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PTH+j6/V++4K4Z8NqQR+xHb1s1fBTfyw/reivrtPp7s=;
+        b=l/gqP4GKwbc535yMjz0V1QOXEiQi+WaCQ5PTmcfzmYoYusnUf/IZ7v1V2NxpHwn3Wt
+         Oyjt0FJ/JftnkJ7mj+soT2iI4nf9r9jSNJB4nJNxPwbluF7wwKF6z+pCFOTjGfcZQWWh
+         w63CN5EVDZhxqT2pdqAK4qVRAscLV48GuGmUuAJFzyCBV42xU8zcSK1HPrnL7kGewUW2
+         f1iL3Uc6fS0Ykn98/epnxuzKkHHv2GWZS8t5WSv7x3XefKbuIgrrqn9OUwXQaoRqqUPa
+         lu0bRZS+YBT/aNhFaxZ2Vsp8E9JlMYu2pid78XEhvA3XvEN5uo1zadr4tLuSl4y2++B5
+         eVKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680172006;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PTH+j6/V++4K4Z8NqQR+xHb1s1fBTfyw/reivrtPp7s=;
+        b=dORTOvbGofpXhqXg1pyTIWkzk4VbpHsdjKdzzaJt9VSDJ2JOoXayt2Y+0extszKtew
+         5X54A8JwCbKXozIU3nO15ywZsIRRBNlberWT5MGkB+SUk/J/2XhC3NzSAc1Fvqo/Nm20
+         JjEap9c8wMzfNbeM/zoMg+XfWNgjER1v7EqxjK4/Vq7huR2HiYMchWYeh/mjG/QoOYL0
+         phDPJlAxVcVojWzUyCBObgTWzsVWEojOMD1m04OUT7I1afbFhUMauwSj8mwDBtSjvhW9
+         uA6/YEhhvJS9rzndfC/M3lSUj5aazG527ka3eG4BKSHeCz390K8+0nK7KUHbnxNFqyxm
+         Hhuw==
+X-Gm-Message-State: AAQBX9dHJ3Z4K0hvgePYYZmiv2cv8ehbiXMtx4TnTOZgInlf5fI//G/v
+        27P+JDV6AYfLmWLlphDezDpoUCfj06pckDzRtQ==
+X-Google-Smtp-Source: AKy350Zk0TmaHMtGbOCxtxyb6qaV1+8/DC6dvWEFKs5Gcs6sKwad6l4wniydXfJ49w/bPAb4grmAkHDnp/V5iVJNyBg=
+X-Received: by 2002:a05:6512:ea7:b0:4e8:3ee1:db14 with SMTP id
+ bi39-20020a0565120ea700b004e83ee1db14mr2513971lfb.6.1680172005940; Thu, 30
+ Mar 2023 03:26:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:ab3:7655:0:b0:222:4fad:76ea with HTTP; Thu, 30 Mar 2023
+ 03:26:45 -0700 (PDT)
+From:   margreta Zuta1 <mzuta207@gmail.com>
+Date:   Thu, 30 Mar 2023 12:26:45 +0200
+Message-ID: <CAJcbbv6UiBwVfR54c28hqBZySRpP5ziemWxecdYqpYYGa-iw_Q@mail.gmail.com>
+Subject: Royalty Investment Fund
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        FREEMAIL_REPLY,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The usb4_port_sb_opcode_err_to_errno() converts from USB4 error codes
-to the Linux errno space. In particular, this makes the intention
-of the repeating usb4_port_retimer_read() call in the
-usb4_port_retimer_nvm_authenticate_status() clearer.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/thunderbolt/usb4.c | 41 +++++++++++++++++++-------------------
- 1 file changed, 20 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index 12355929e586..485b6e430686 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -1303,6 +1303,20 @@ static int usb4_port_sb_write(struct tb_port *port, enum usb4_sb_target target,
- 	return 0;
- }
- 
-+static int usb4_port_sb_opcode_err_to_errno(u32 val)
-+{
-+	switch (val) {
-+	case 0:
-+		return 0;
-+	case USB4_SB_OPCODE_ERR:
-+		return -EAGAIN;
-+	case USB4_SB_OPCODE_ONS:
-+		return -EOPNOTSUPP;
-+	default:
-+		return -EIO;
-+	}
-+}
-+
- static int usb4_port_sb_op(struct tb_port *port, enum usb4_sb_target target,
- 			   u8 index, enum usb4_sb_opcode opcode, int timeout_msec)
- {
-@@ -1325,21 +1339,8 @@ static int usb4_port_sb_op(struct tb_port *port, enum usb4_sb_target target,
- 		if (ret)
- 			return ret;
- 
--		switch (val) {
--		case 0:
--			return 0;
--
--		case USB4_SB_OPCODE_ERR:
--			return -EAGAIN;
--
--		case USB4_SB_OPCODE_ONS:
--			return -EOPNOTSUPP;
--
--		default:
--			if (val != opcode)
--				return -EIO;
--			break;
--		}
-+		if (val != opcode)
-+			return usb4_port_sb_opcode_err_to_errno(val);
- 	} while (ktime_before(ktime_get(), timeout));
- 
- 	return -ETIMEDOUT;
-@@ -1814,12 +1815,13 @@ int usb4_port_retimer_nvm_authenticate_status(struct tb_port *port, u8 index,
- 	if (ret)
- 		return ret;
- 
--	switch (val) {
-+	ret = usb4_port_sb_opcode_err_to_errno(val);
-+	switch (ret) {
- 	case 0:
- 		*status = 0;
- 		return 0;
- 
--	case USB4_SB_OPCODE_ERR:
-+	case -EAGAIN:
- 		ret = usb4_port_retimer_read(port, index, USB4_SB_METADATA,
- 					     &metadata, sizeof(metadata));
- 		if (ret)
-@@ -1828,11 +1830,8 @@ int usb4_port_retimer_nvm_authenticate_status(struct tb_port *port, u8 index,
- 		*status = metadata & USB4_SB_METADATA_NVM_AUTH_WRITE_MASK;
- 		return 0;
- 
--	case USB4_SB_OPCODE_ONS:
--		return -EOPNOTSUPP;
--
- 	default:
--		return -EIO;
-+		return ret;
- 	}
- }
- 
 -- 
-2.40.0.1.gaa8946217a0b
-
+Sir/Madam,
+I have USD$15 Million royalty fund to be transfer  to you for
+investment purposes. I am waiting urgently for your email reply .
+Mrs Margret  Zuta .
+email  margretzutaer01@mail.com
