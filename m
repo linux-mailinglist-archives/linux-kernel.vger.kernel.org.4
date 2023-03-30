@@ -2,147 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F856D0A46
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270AE6D0A49
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233344AbjC3Pq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        id S233346AbjC3Pqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232917AbjC3PqZ (ORCPT
+        with ESMTP id S233269AbjC3Pqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:46:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28AD72A2;
-        Thu, 30 Mar 2023 08:45:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B51BB82623;
-        Thu, 30 Mar 2023 15:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D3A1C4339B;
-        Thu, 30 Mar 2023 15:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680191144;
-        bh=vBf3ZDCn9/BnGZpzaUPwfDKfdZZd0/B3ixt5lveXnIY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=qgzeyIjHgH9m7RMjjkGalBu1lyxVSDC6TDWKe1ZH8JknzxkqriYOVBYJTeR8KadYP
-         SCcq5p9cZzu7DDfUeSWueuU9TToSDCRvHHTqx+B3Cyx3lgPzxOxmJqsiocKZwqqn+k
-         KB/vGWWnmVX0e9Bm2Kt+bb0MamWVPjsIQcgicmIqP3+kWgU5Y6dsdlP3DlFope8Nxa
-         2GqsCGflzY3lt2L1DvzyXtOpOknWGwYVAYbTF2V5q0RLfJ+f4d1Nlxbd7VCgvCCULF
-         bkiG32luPdIDOtuf4hNDi+C/gzwWloQlvLPSA+FLPaqKw4Y6vN/X9qtN06bBwOBgIn
-         5ebvwK23UkPOQ==
-Date:   Thu, 30 Mar 2023 10:45:42 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
- error recovery
-Message-ID: <20230330154542.GA3147375@bhelgaas>
+        Thu, 30 Mar 2023 11:46:30 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD669D509
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:46:01 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id r11so19548173wrr.12
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680191147; x=1682783147;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Bt3Z+HMoJYIzkmSX3sH1ZTn84Gu0acDcqEVk57vmUoI=;
+        b=3D+C33AbHdSHXYv18ienRAtfdFpzZ3HGGjwnhBgBnkBxOVCdiOOmIxbIs/A17m2jjx
+         Amxp6qXtSLzSwG+IBCtWr+XITprahLzidhD5x+1k35lI2fRsH//KKruBlWHqBrtC5MpQ
+         uQiVV3e/1ePh2wp3gdy707KSaKtT8k/xcbSr27TaYEKSJzlu+XfqCc6Cq80DkXhRMZxD
+         zFrLdIFowEVg1uhzw44jt0ghV6gngV0M5ySA/OKM/ZSqNwT4TqXNRi5/5IJWWZcEzvj+
+         4RiCBQ35FcioVLKonv7WSjsVFS60QuPyBvgdtjjQ7IroBlfsv37Hv9EwP0/4/B/hb4ZA
+         /LAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680191147; x=1682783147;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bt3Z+HMoJYIzkmSX3sH1ZTn84Gu0acDcqEVk57vmUoI=;
+        b=6Km3Q1AAyI2CCC1Upe8eQGmIx42zuzKtSIVc3PvnB3nALV4/a3oPLcqowPv77HV1du
+         2buxXnuM+kI+vd18/WCqynrXymLfUIxAsolCPqrHx9hCxsJ1hEy5vZl+GG3eWspBkhVI
+         xrtz3JbVKPtS/4kGIbvreR5vTsf5A095K5TCxLdtPPynY8biYBTjRiwjm+2t9A1zg5nh
+         vznxIY3Wd0ngjEfGDBrud31B+citRFtat7wanV619c/34guMwONjgaZy/mxj1VtPYGmw
+         8u+3j0tL0ZjcKn+FSvjgKiUttGU3zmmhKHQytrEj6+6H+YMpjoGMtshaPMVwtl85b0en
+         5EpA==
+X-Gm-Message-State: AAQBX9cuVOgibhVtO4wQCt8aOdF7alVO1gV4tKwK+wn0cLGVkgUIAenj
+        Ve/R6u0Anyv2QPv/JY24S+XR1w==
+X-Google-Smtp-Source: AKy350aTnQVJ29GM9xhQgheOavkMe1pxyqllfaF/IZQFD2jWnj0+YK6CpqAFqB/fJBS71FuSwSdJkw==
+X-Received: by 2002:a05:6000:1044:b0:2dd:a3:c2e8 with SMTP id c4-20020a056000104400b002dd00a3c2e8mr18562410wrx.44.1680191146970;
+        Thu, 30 Mar 2023 08:45:46 -0700 (PDT)
+Received: from [192.168.1.70] (151.31.102.84.rev.sfr.net. [84.102.31.151])
+        by smtp.gmail.com with ESMTPSA id p10-20020a056000018a00b002c3f9404c45sm33560000wrx.7.2023.03.30.08.45.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 08:45:46 -0700 (PDT)
+Message-ID: <68fb2d6f-9434-7bcd-0f13-2132612888e5@baylibre.com>
+Date:   Thu, 30 Mar 2023 17:45:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6fd4af3-18f7-0a7e-96e7-4ca3c4ada279@linux.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v5 4/4] misc: tps6594-pfsm: Add driver for TI TPS6594 PFSM
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
+        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
+        yi.l.liu@intel.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, prabhakar.csengg@gmail.com,
+        contact@emersion.fr, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        sterzik@ti.com, u-kumar1@ti.com, eblanc@baylibre.com,
+        jneanne@baylibre.com
+References: <20230330082006.11216-1-jpanis@baylibre.com>
+ <20230330082006.11216-5-jpanis@baylibre.com> <ZCVJv-erahM_Jdug@kroah.com>
+From:   Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <ZCVJv-erahM_Jdug@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 03:38:04PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> On 3/29/23 3:09 PM, Bjorn Helgaas wrote:
-> > On Wed, Mar 15, 2023 at 04:54:49PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> >> Commit 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
-> >> OS owns AER") adds support to clear error status in the Device Status
-> >> Register(DEVSTA) only if OS owns the AER support. But this change
-> >> breaks the requirement of the EDR feature which requires OS to cleanup
-> >> the error registers even if firmware owns the control of AER support.
 
-> > I assume we should have a Fixes: tag here, since this patch should be
-> > backported to every kernel that contains 068c29a248b6.  Possibly even
-> > a stable tag, although it's arguable whether it's "critical" per
-> > Documentation/process/stable-kernel-rules.rst.
-> 
-> Yes. But this error is only reproducible in the EDR use case. So I
-> am not sure whether it can be considered a critical fix. 
 
-I don't know how widespread EDR implementation is.  What is the
-user-visible issue without this fix?  "lspci" shows status bits set
-even after recovery?  Subsequent EDR notifications cause us to report
-errors that were previously reported and recovered?  Spurious EDR
-notifications because of status bits that should have been cleared?
-This kind of information would be useful in the commit log anyway.
+On 3/30/23 10:35, Greg KH wrote:
+> On Thu, Mar 30, 2023 at 10:20:06AM +0200, Julien Panis wrote:
+>> This PFSM controls the operational modes of the PMIC:
+>> - STANDBY and LP_STANDBY,
+>> - ACTIVE state,
+>> - MCU_ONLY state,
+>> - RETENTION state, with or without DDR and/or GPIO retention.
+>> Depending on the current operational mode, some voltage domains
+>> remain energized while others can be off.
+>>
+>> This PFSM is also used to trigger a firmware update, and provides
+>> R/W access to device registers.
+> What userspace code uses these new ioctls?  Do you have a pointer to it
+> anywhere?
 
-Since the risk is low (the change only affects EDR processing) and the
-the experience without this change might be poor (please clarify what
-that experience is), I think I would be inclined to mark it for
-stable.
+I will provide a user app in 'samples' directory in v6.
 
-> > It's a little weird to work around a change inside pcie_do_recovery()
-> > by clearing it here, and that means we clear it twice in the AER
-> > native case, but I don't see any simpler way to do this, so this seems
-> > fine as the fix for the current issue.
-> 
-> In AER native case, edr_handle_event() will never be triggered. So it
-> won't be cleared twice.
+>
+>> --- /dev/null
+>> +++ b/include/uapi/linux/tps6594_pfsm.h
+>> @@ -0,0 +1,45 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>> +/*
+>> + * Userspace ABI for TPS6594 PMIC Pre-configurable Finite State Machine
+>> + *
+>> + * Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
+>> + */
+>> +
+>> +#ifndef __TPS6594_PFSM_H
+>> +#define __TPS6594_PFSM_H
+>> +
+>> +#include <linux/const.h>
+>> +#include <linux/ioctl.h>
+>> +#include <linux/types.h>
+>> +
+>> +/* PFSM state definitions */
+>> +enum pfsm_state {
+>> +	PMIC_ACTIVE_STATE,
+>> +	PMIC_MCU_ONLY_STATE,
+>> +	PMIC_RETENTION_STATE
+>> +};
+>> +
+>> +/**
+>> + * struct pmic_state - PMIC state identification
+>> + * @state:   PFSM destination state
+>> + * @options: options for destination state
+>> + */
+>> +struct pmic_state {
+>> +	enum pfsm_state state;
+>> +	__u8 options;
+>> +};
+>> +
+>> +/* Commands */
+>> +#define	PMIC_BASE			'P'
+>> +
+>> +#define	PMIC_GOTO_STANDBY		_IO(PMIC_BASE, 0)
+>> +#define	PMIC_GOTO_LP_STANDBY		_IO(PMIC_BASE, 1)
+>> +#define	PMIC_UPDATE_PGM			_IO(PMIC_BASE, 2)
+>> +#define	PMIC_SET_STATE			_IOW(PMIC_BASE, 3, struct pmic_state)
+>> +
+>> +/* Options for destination state */
+>> +#define PMIC_GPIO_RETENTION		_BITUL(0)
+>> +#define PMIC_DDR_RETENTION		_BITUL(1)
+>> +#define PMIC_MCU_ONLY_STARTUP_DEST	_BITUL(2)
+> Please read Documentation/driver-api/ioctl.rst which says:
+>
+> * Bitfields and enums generally work as one would expect them to,
+>    but some properties of them are implementation-defined, so it is
+>    better to avoid them completely in ioctl interfaces.
+>
+> For a brand-new ioctl interface, you did both of these unrecommended
+> things.  Why set yourself for complexity when you do not need to?
 
-This sounds like a plausible assumption.  But is there actually spec
-language that says EDR notification is not allowed in the AER native
-case (when OS owns the AER Capability)?  I looked but didn't find
-anything.
+I will fix that. Thank you for your feedback.
 
-> Other way is to add a new parameter to pcie_do_recovery(..., edr) and use
-> it to conditionally call pcie_clear_device_status(). But I think current
-> way is less complex.
+Julien
 
-I agree.
-
-> > Question though: in the AER native case, pcie_do_recovery() calls
-> > both:
-> > 
-> >   pcie_clear_device_status() and
-> >   pci_aer_clear_nonfatal_status()
-> > 
-> > In this patch, you only call pcie_clear_device_status().  Do you care
-> > about pci_aer_clear_nonfatal_status(), too?
-> 
-> Yes, we care about it. Since we call dpc_process_error() in EDR handler,
-> it will eventually clear error status via pci_aer_clear_nonfatal_status()
-> and pci_aer_clear_fatal_status() within dpc_process_error().
-
-dpc_process_error() calls pci_aer_clear_nonfatal_status() in *some*
-(but not all) cases.  I didn't try to work out whether those match the
-cases where pcie_do_recovery() called it before 068c29a248b6.  I guess
-we can assume it's equivalent for now.
-
-> > The overall design for clearing status has gotten pretty complicated
-> > as we've added error handling methods (firmware-first, DPC, EDR), and
-> > there are so many different places and cases that it's hard to be sure
-> > we do them all correctly.
-> > 
-> > I don't really know how to clean this up, so I'm just attaching my
-> > notes about the current state:
-> 
-> Good summary! I can see a lot of overlap in clearing
-> PCI_ERR_UNCOR_STATUS and PCI_EXP_DEVSTA.
-
-Actually I do have one idea: in the firmware-first case, firmware
-collects all the status information, clears it, and then passes the
-status on to the OS.  In this case we don't need to clear the status
-registers in handle_error_source(), pcie_do_recovery(), etc.
-
-So I think the OS *should* be able to do something similar by
-collecting the status information and clearing it first, before
-starting error handling.  This might let us collect the status
-clearing together in one place and also converge the firmware-first
-and native error handling paths.
-
-Obviously that would be a major future project.
-
-Bjorn
