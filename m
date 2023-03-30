@@ -2,125 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9826CF965
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 05:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE536CF969
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 05:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjC3DBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 23:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
+        id S229635AbjC3DEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 23:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjC3DBF (ORCPT
+        with ESMTP id S229448AbjC3DE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 23:01:05 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3316C59DA;
-        Wed, 29 Mar 2023 20:01:01 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32U30lbZ049077;
-        Wed, 29 Mar 2023 22:00:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680145247;
-        bh=OcCwE395WH/NUHl18D/5rlo2l+Ejn/+/wFOqolmzQhA=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=vOCulW2lJ0vZPyz40lFGIEW70umemc8dJanffwW7+KqDn6rtNHcHmsC9otgLrjU/w
-         CASzqqOcH7RvXDD9WVntaaGA3hgEKTflHn7JTkdm42R0ZyP8rYc+bOdPV+AzqxxDoY
-         zYnuD+QHYde4E7wyyBcQ4r97bud8fjS0wj0Jt1JA=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32U30lil113092
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 29 Mar 2023 22:00:47 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 29
- Mar 2023 22:00:46 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 29 Mar 2023 22:00:46 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32U30kjj020074;
-        Wed, 29 Mar 2023 22:00:46 -0500
-Date:   Wed, 29 Mar 2023 22:00:46 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Esteban Blanc <eblanc@baylibre.com>
-CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sterzik@ti.com>, <u-kumar1@ti.com>, <jneanne@baylibre.com>,
-        <jpanis@baylibre.com>
-Subject: Re: [PATCH v1 0/4] Add TPS6594 PMIC support on several boards
-Message-ID: <20230330030046.qr5dnft6klejkxkp@ungreased>
-References: <20230329142948.833800-1-eblanc@baylibre.com>
+        Wed, 29 Mar 2023 23:04:28 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793D45240
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 20:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680145467; x=1711681467;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9EltCdudEdttZj7/KIfLl6F8Q1jp/dfvDazeWeBsh+Q=;
+  b=CYRKDQDbRxaOBgsJePOjy+hUDk8h5/FJMU5g3KtC4hrPcmelHxioetao
+   4pt2wSmvdNgeydSpWsNdxUIg9xe/W3H2+3tqW8lX+1pphBJwm841TKpBa
+   6T/OAYV7VuQoDyL96czEaQp/YZCq4xfxHJemFv2L+s5e07Rd9N6Ksnq8f
+   aIE2d+5wL4Fx613k/R6ajDQdc6acN93SltO3pxuwsVSNtsAjYO2rzZIpm
+   NRhmj2q3y/e0qVasNQNItmAdE9u4SC979+aaeexqJn6WQ/VZsigCq0jhU
+   lxQtHSk53MUWxwylHlDr/4buv/K1Kwur12jwrpGGwyVBYfUFYMIsxYFAj
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="341073689"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="341073689"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 20:04:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="930563232"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="930563232"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 29 Mar 2023 20:04:25 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phiaO-000KFe-1w;
+        Thu, 30 Mar 2023 03:04:24 +0000
+Date:   Thu, 30 Mar 2023 11:03:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: [tip:locking/rcuref 2/2] arch/arm64/include/asm/cmpxchg.h:174:1:
+ sparse: sparse: cast truncates bits from constant value (ffffffffe0000000
+ becomes 0)
+Message-ID: <202303301144.szF9LGFj-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230329142948.833800-1-eblanc@baylibre.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-$subject: minor comment: you don't need a v1 for the first version of
-the patch series.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/rcuref
+head:   ee1ee6db07795d9637bc5e8993a8ddcf886541ef
+commit: ee1ee6db07795d9637bc5e8993a8ddcf886541ef [2/2] atomics: Provide rcuref - scalable reference counting
+config: arm64-randconfig-s041-20230329 (https://download.01.org/0day-ci/archive/20230330/202303301144.szF9LGFj-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=ee1ee6db07795d9637bc5e8993a8ddcf886541ef
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip locking/rcuref
+        git checkout ee1ee6db07795d9637bc5e8993a8ddcf886541ef
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-On 16:29-20230329, Esteban Blanc wrote:
-> TPS6594 is a Power Management IC which provides regulators and others
-> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
-> PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
-> communicate through the I2C or SPI interfaces.
-> TPS6594 is the super-set device while TPS6593 and LP8764 are derivatives.
-> 
-> This should be applied on top of other patch series:
-> - https://lore.kernel.org/all/20230327154101.211732-1-jpanis@baylibre.com/
->   For core MFD driver
-> - https://lore.kernel.org/all/20230328091448.648452-1-eblanc@baylibre.com/
->   For regulator driver
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303301144.szF9LGFj-lkp@intel.com/
 
-OK - lets see these driver support get into an kernel rc1 tag before
-looking at these patches for merge in this cycle, though this does
-hold up other series
+sparse warnings: (new ones prefixed by >>)
+   lib/rcuref.c: note: in included file (through arch/arm64/include/asm/atomic.h, include/linux/atomic.h, include/linux/rcuref.h):
+>> arch/arm64/include/asm/cmpxchg.h:174:1: sparse: sparse: cast truncates bits from constant value (ffffffffe0000000 becomes 0)
+>> arch/arm64/include/asm/cmpxchg.h:174:1: sparse: sparse: cast truncates bits from constant value (ffffffffe0000000 becomes 0)
 
-Such as https://lore.kernel.org/all/20230313-mcasp_upstream-v9-6-6d937efe4ec4@ti.com/
+vim +174 arch/arm64/include/asm/cmpxchg.h
 
-> 
-> This serie adds device tree nodes for TI TPS6594 PMICs found in the
-> following boards:
-> - j721eXSOMXEVM:
-> Link: https://www.ti.com/tool/J721EXSOMXEVM
-> - j721s2:
-> Link: https://www.ti.com/tool/J721S2XSOMXEVM
-> - j7200XSOMXEVM:
-> Link: https://www.ti.com/tool/J7200XSOMXEVM
-> - AM62A-SKEVM:
-> Link: https://www.ti.com/tool/SK-AM62A-LP
-> 
-> Esteban Blanc (2):
->   arm64: dts: ti: k3-j7200-som-p0: Add TP6594 family PMICs
->   arm64: dts: ti: k3-j721s2-som-p0: Add TP6594 family PMICs
-> 
-> Jerome Neanne (1):
->   arm64: dts: ti: k3-j721e-som-p0: Add TP6594 family PMICs
-> 
-> Julien Panis (1):
->   arm64: dts: ti: k3-am62a7-sk: Add support for TPS6593 PMIC
-> 
->  arch/arm64/boot/dts/ti/k3-am62a7-sk.dts      |  94 +++++++++
->  arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi  | 170 +++++++++++++++
->  arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi  | 169 +++++++++++++++
->  arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi | 208 +++++++++++++++++++
->  4 files changed, 641 insertions(+)
-> 
-> -- 
-> 2.39.2
-> 
+10b663aef1c247 Catalin Marinas 2012-03-05  171  
+305d454aaa292b Will Deacon     2015-10-08  172  __CMPXCHG_GEN()
+305d454aaa292b Will Deacon     2015-10-08  173  __CMPXCHG_GEN(_acq)
+305d454aaa292b Will Deacon     2015-10-08 @174  __CMPXCHG_GEN(_rel)
+305d454aaa292b Will Deacon     2015-10-08  175  __CMPXCHG_GEN(_mb)
+10b663aef1c247 Catalin Marinas 2012-03-05  176  
+
+:::::: The code at line 174 was first introduced by commit
+:::::: 305d454aaa292be3a09a9d674e6c35f5b4249a13 arm64: atomics: implement native {relaxed, acquire, release} atomics
+
+:::::: TO: Will Deacon <will.deacon@arm.com>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
