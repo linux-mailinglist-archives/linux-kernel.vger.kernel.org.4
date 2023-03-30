@@ -2,241 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EDE6D060D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA3C6D0617
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 15:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjC3NLk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Mar 2023 09:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S231906AbjC3NMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 09:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbjC3NLh (ORCPT
+        with ESMTP id S231814AbjC3NMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 09:11:37 -0400
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7BB8A5A;
-        Thu, 30 Mar 2023 06:11:34 -0700 (PDT)
-Received: by mail-pg1-f176.google.com with SMTP id s19so11299848pgi.0;
-        Thu, 30 Mar 2023 06:11:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680181894;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WF/k+smNF0wtDIvwvnJjHksafUxKVuwmCptDceQP0aU=;
-        b=8Ffs5vX9nn5hsSQDP71QnYvGUXKgVZPokOS5Joqe5nzZ0wy1ziz8v/NYVT/1NaYWzi
-         9xHnAKauiQ7bA8cW3dOQkAUT+6Ntok5r45wstg4Hm+VsEtZZoCIh0A6FhhzVIKB2Jx/y
-         ROlBmtreMyA67b/L+z7CFKYe3IPybZJWxOxyuu6GthfzMsFEVfxZE517Y5/aHau9Tl4y
-         RHetxs9KjOSbiVaWo2NEewfovGREqp/xcgM7NVGzENkRE7FDhBGcwU9wonXPuyv5SDXX
-         cx6H8eRWIgEl9jUbp8hZb4kxXqKImceeynrt5VY+rHStdQBAWTb1Kz8r3MCkwwle6sLF
-         2F6A==
-X-Gm-Message-State: AAQBX9c5vHpeYOHVt+i6S3EucZLRMv6ofwnW4iiTZz38c/3AMhNO5bUv
-        esFexRLYQulq65ryoLIoBu0EqHOSnXeK20xlo0MeWhPIvbk=
-X-Google-Smtp-Source: AKy350apEVm4QjI+SfyqcgMcIZVm8PoBxu+KF9LohzrSLU8Q3Hf8U6iOpoh6H5x37ntsWyNn/OgjDrCfckr0ehMjRUg=
-X-Received: by 2002:a05:6a00:1a15:b0:62a:56ce:f90b with SMTP id
- g21-20020a056a001a1500b0062a56cef90bmr12216796pfv.2.1680181893612; Thu, 30
- Mar 2023 06:11:33 -0700 (PDT)
+        Thu, 30 Mar 2023 09:12:20 -0400
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2117.outbound.protection.outlook.com [40.107.11.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABED8A52;
+        Thu, 30 Mar 2023 06:12:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b+DO4IVEXKwUC5aTt7ZyIHmIM3ujwVWRwXsHqVh3G495tW0cJcrWrRvPm9dZvAFkHmN7Xz4YQ6Nxsh1k42+96D0MhV7FuSRBvArqfwmb0ZJrPh8Iu3yaW9DV1hHOYFvPfIDYZpdPl4wTToD/pkzCCt06fht/wQkqfMserTN2yqeymF2aleeq740RUm6J/crwHixj7mZSl4TQljJeW5Qd7ZxWuyoYDqTeYSFyrUJeYnbL6pFlM5dd6zWv/zw5LpODGrSJnwwU0PTmgK6in7nm0paalUYQj1B4TnE6Y6V7/X/Vf+wKSCENJlFEqC38BiF4mu4xrzaLJKH2JvbbFTvShQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fDmbHx9nMFKvqLWtDIhPn9iXjpJUtmra1+iXb848A+U=;
+ b=HgComkvBK0a71RFUGmM6nhQVaf0NSxv7tFkjPRpfpj1awWOreJeJnW9cod6TWKPZ0s+Gn49/jmAqqYDaJztp1wrzaeKNdJkmlxOyFFC7Tq3ymEdTiiCG9+XTeLv04WPXVoR+5N7JlA2l3vRUNn68RTwXiJPqJfjwJp6fCuO5kuP9YGvgc5O7otjrlFHSejmYqNqYAED81aZprDoYh05emVwJqcriDKNwv+ArsUd5y6B7r5BdAit7OtBRXkD6r3C6eTJcexedTckWwpUnVnmXSW6J/wF+gb4O355UklmRkfULt6/Rrw6h7h4M4rbZagXaBQhuJ0srLqgNNFDWhILmFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fDmbHx9nMFKvqLWtDIhPn9iXjpJUtmra1+iXb848A+U=;
+ b=zWjAzQNwQZGCk0RxMHs0uXInWlcMfP8BsIwrApzL9Q3nVeo+EfKfujfcii/9dDmRiK7viAtWwuL0TxPIKPacrk9d6kvr8S9ozwFNCZj7nwuAm0ZrEYGqEHa/ZXapIpycMTbQqt3uGM3h5213VwHBElobVE7EvJsU1UyhLdutVQk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by CWLP265MB1764.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:50::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.21; Thu, 30 Mar
+ 2023 13:12:12 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f2a:55d4:ea1d:dece%4]) with mapi id 15.20.6222.035; Thu, 30 Mar 2023
+ 13:12:12 +0000
+Date:   Thu, 30 Mar 2023 14:11:34 +0100
+From:   Gary Guo <gary@garyguo.net>
+To:     Andreas Hindborg <nmi@metaspace.dk>
+Cc:     y86-dev@protonmail.com, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v3 01/13] rust: macros: add `quote!` macro
+Message-ID: <20230330141134.6d13090d.gary@garyguo.net>
+In-Reply-To: <877cuy5ur2.fsf@metaspace.dk>
+References: <20230329223239.138757-1-y86-dev@protonmail.com>
+        <20230329223239.138757-2-y86-dev@protonmail.com>
+        <877cuy5ur2.fsf@metaspace.dk>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0609.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:314::11) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 MIME-Version: 1.0
-References: <20230327051048.11589-1-peter_hong@fintek.com.tw>
- <CAMZ6Rq+ps1tLii1VfYyAqfD4ck_TGWBUo_ouK_vLfhoNEg-BPg@mail.gmail.com>
- <5bdee736-7868-81c3-e63f-a28787bd0007@fintek.com.tw> <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
- <8f43fc07-39b1-4b1b-9dc6-257eb00c3a81@fintek.com.tw>
-In-Reply-To: <8f43fc07-39b1-4b1b-9dc6-257eb00c3a81@fintek.com.tw>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 30 Mar 2023 22:11:22 +0900
-Message-ID: <CAMZ6RqLnWARxkJx0gBsee4NsyQicpg6=bPaysmoFo6KRc-j23g@mail.gmail.com>
-Subject: Re: [PATCH V3] can: usb: f81604: add Fintek F81604 support
-To:     Peter Hong <peter_hong@fintek.com.tw>
-Cc:     wg@grandegger.com, mkl@pengutronix.de,
-        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, frank.jungclaus@esd.eu,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWLP265MB1764:EE_
+X-MS-Office365-Filtering-Correlation-Id: 88601aaa-56dc-4059-2720-08db31205fdf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BFSHT5TzT1awJ4YFv0+jSETCadHAfKL7trvRJD6cuci0KyZXo9+z+oaAC85nnjG/OAW+vEhjn8fFPNkeTl/2KH1MkFQaCjH5RdpbVVquWMFzUGbv70sIKHptyv6rr42ApXy28UZHSug0JyAd9bJ6c5lr/tEhJ/jjuEoWqQ+yyIiz5scG86FbivS82Mpz78IwEoMP/qtt5MTGXt81l9g3FGRQgwm4bj5MZnHd5YghJtmDE+Cqqq1hsjJT6NEQ/KwiaKBFnVZncT5bbMA4nNN6fKAK/w40NXbspsQN2xxn2ucvjkVvrxExpI5+7OtcRGjSvG4XzFTVCG5DWtJgMcIHSyOr3eIYHN+Unep7IZtsm/XG/gM7DbN2Fuu9SR2SJIQnH0BOo29IKIDniE17o9u44BxGDMOdx726VaUkbZk8/84LBe6RKy7mz1RfWzPOSvYu/WkKD1+HH0gz8e+sTGQbkKhokicDiPNy/qfQwIC0MYp7+v3OeMxhvDfR2y2P/HtSaAYbvr90oy0Npa8vqAb+J1Hbstgl4CNx6BmFvUNrX10plJyNWoZFdCjfSeoxNEWAYdAZPQwfWOnteSfhgvfFfR4rNgoaK3j8JqFwA0pZ4Ho=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(39840400004)(136003)(396003)(376002)(366004)(346002)(451199021)(2616005)(36756003)(86362001)(2906002)(6486002)(478600001)(186003)(6506007)(1076003)(6666004)(26005)(6512007)(66556008)(66476007)(6916009)(66946007)(316002)(8676002)(8936002)(7416002)(41300700001)(4326008)(38100700002)(54906003)(5660300002)(81973001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RDXf3vmCxjkxuEZZqpzKlmT0ulZP3vB29X1aVnATizFcI6ZuVsaccKRtpLP/?=
+ =?us-ascii?Q?GAd6kw2i8nSWHjxiRd7CiNIuzIJFcsKoSnp3OXw7bnCD7S23F+d5jwpCsLiN?=
+ =?us-ascii?Q?vs7pLe6tqyELi4VyWwOghiXk9Fpsgo4B1XLFuOyQjY+wJJOjN9cl4FNI06NM?=
+ =?us-ascii?Q?dchLnczqI7RPDylpaP++blTlIN1+oVQt3J47GRkxSHVcYs0Z93nSRrAYOatG?=
+ =?us-ascii?Q?5aB8eVlXs+OMLMVJ3LLm39V909I9ASAw5CXzPDmDfmEMziCv9pt2pHR65Csv?=
+ =?us-ascii?Q?w6BXqfIIakc0MhFXMj9PKmCDAHs0qs0WR4CKK27pu5UZNuuTIjCcA74/cKgL?=
+ =?us-ascii?Q?cDcCMliQALGftnou+TuDp2T9SX9/ph9il6juhRuAVHH/vKfWiJR7/xCrFzRt?=
+ =?us-ascii?Q?/Jr1ZjsjB2+U1cZM41tooDd5Qpo4Sfdf+dR/Tg7oEzvyaivnoCle9FIAsip2?=
+ =?us-ascii?Q?1oljCohSZIl5l8mNQGBcErAdG4lFIxKpqcBYZ4/S1kAbLzNrVs0TeVZhfttF?=
+ =?us-ascii?Q?VdV0PmE1stPcbrIMUdGUDnTiBG2G5KfwkTnpbchSI6jjuN6NfwmoYVpYb95p?=
+ =?us-ascii?Q?/swqe832S4l+bVtIceM/fPMUSTgCCSfJtUGQPHT8oUonKP1FLqjDJgE/kiiA?=
+ =?us-ascii?Q?St+sTyVqcaBBlw3IdqOaelU9IApA3/O5ui2AluvlXhcMsoMOO1JzJjDTiKnp?=
+ =?us-ascii?Q?/200LZ0G7dXztjzfn6qrkkRDJp1lwziAllQdlZ6Fvdh2HF92jI5lZBrZx6x/?=
+ =?us-ascii?Q?ZfvpAY4MvW2x5wPbid++PC/sEjigkXB84gwU5jhgBv9wTolnJvYHS/4uVyZ/?=
+ =?us-ascii?Q?NnGHAAhCfT8GdtWPjMPFNdwBcXcyfloezbf0LSDFklXkE6I423MoYreCjFVx?=
+ =?us-ascii?Q?Y3xPw6pa5bySokIyGc/GFbtJIEW/YvWSnulBQ5U3Djb3hkAJQ3DUtqz2nB1Y?=
+ =?us-ascii?Q?32UpSvf8pjUngfYN2rYhYarw0K2KoijFaVGYjPsqCCqI8iyQSoAYPg84gZNe?=
+ =?us-ascii?Q?JWm9k/+TyeRy5sWKjN/wLQfBLxNYZfyHse8GkKBPBx/NCfDMkYSlDEVWLuwm?=
+ =?us-ascii?Q?ZexeVg3Za7Ggkh17BgIrOLxlZCVitdRfwWluqCR9yFzdvfRCxdC86wOSElrK?=
+ =?us-ascii?Q?EJEay7R9gwa7hLvx5BfGDHwmeX7fcm4XkjCTy8/5oGdQ1p/oUhMsM/Q30k2y?=
+ =?us-ascii?Q?R6NlZHneI7pzM0tM+h05UUt2edE+9RhoW1yabUbYG3My3g9/WpwDXZHHKG6M?=
+ =?us-ascii?Q?vjJnd/d/VfzFqyxAaHa5pQbm3K4sE++JaW/KxLwOLRNeECyDpStlbrO3r9Jg?=
+ =?us-ascii?Q?B3pwCiyKVOc7Bs95NKnZ1Eg2PTr416CksSYipXeVOdkbbdyCcHOUgi1rHgfk?=
+ =?us-ascii?Q?dM/a3IaiklG13Ar5ham7GRKUdwx4Co4TGVRrB9su3L0mhVGZ12Qo9rmPhdmb?=
+ =?us-ascii?Q?m9jODhJgqs4tkfaBNinfp0buOnHkyax7IPw1uqqAddgDHZkGYlCF43+gcmAo?=
+ =?us-ascii?Q?rrQa+QXX8ezbTviM1zbxKxTG9T0ViescLiipJWKm9v7+lwuyZUgpVzQtWdfo?=
+ =?us-ascii?Q?n4TX39VrwhyeZuoyK3wvo3+82MN0sXFpehC3IVlW?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88601aaa-56dc-4059-2720-08db31205fdf
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 13:12:12.1595
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uJ7XgMjt5GMr+TFo30adYp2S6xAI/7+KKn2dW6lvps0eSB+qFcWSrmW61cyaWxW0RCt/DNaDiK0gIIw0P/YTEg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB1764
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu. 30 Mars 2023 at 15:49, Peter Hong <peter_hong@fintek.com.tw> wrote:
-> Hi Vincent,
->
-> Vincent MAILHOL 於 2023/3/28 下午 12:49 寫道:
-> >>>> +static int f81604_set_reset_mode(struct net_device *netdev)
-> >>>> +{
-> >>>> +       struct f81604_port_priv *priv = netdev_priv(netdev);
-> >>>> +       int status, i;
-> >>>> +       u8 tmp;
-> >>>> +
-> >>>> +       /* disable interrupts */
-> >>>> +       status = f81604_set_sja1000_register(priv->dev, netdev->dev_id,
-> >>>> +                                            SJA1000_IER, IRQ_OFF);
-> >>>> +       if (status)
-> >>>> +               return status;
-> >>>> +
-> >>>> +       for (i = 0; i < F81604_SET_DEVICE_RETRY; i++) {
-> >>> Thanks for removing F81604_USB_MAX_RETRY.
-> >>>
-> >>> Yet, I still would like to understand why you need one hundred tries?
-> >>> Is this some paranoiac safenet? Or does the device really need so many
-> >>> attempts to operate reliably? If those are needed, I would like to
-> >>> understand the root cause.
-> >> This section is copy from sja1000.c. In my test, the operation/reset may
-> >> retry 1 times.
-> >> I'll reduce it from 100 to 10 times.
-> > Is it because the device is not ready? Does this only appear at
-> > startup or at random?
->
-> I'm using ip link up/down to test open/close(). It's may not ready so fast.
-> but the maximum retry is only 1 for test 10000 times.
+On Thu, 30 Mar 2023 13:42:29 +0200
+Andreas Hindborg <nmi@metaspace.dk> wrote:
 
-Ack, thanks for the explanation.
-
-> >>>> +static int f81604_set_termination(struct net_device *netdev, u16 term)
-> >>>> +{
-> >>>> +       struct f81604_port_priv *port_priv = netdev_priv(netdev);
-> >>>> +       struct f81604_priv *priv;
-> >>>> +       u8 mask, data = 0;
-> >>>> +       int r;
-> >>>> +
-> >>>> +       priv = usb_get_intfdata(port_priv->intf);
-> >>>> +
-> >>>> +       if (netdev->dev_id == 0)
-> >>>> +               mask = F81604_CAN0_TERM;
-> >>>> +       else
-> >>>> +               mask = F81604_CAN1_TERM;
-> >>>> +
-> >>>> +       if (term == F81604_TERMINATION_ENABLED)
-> >>>> +               data = mask;
-> >>>> +
-> >>>> +       mutex_lock(&priv->mutex);
-> >>> Did you witness a race condition?
-> >>>
-> >>> As far as I know, this call back is only called while the network
-> >>> stack big kernel lock (a.k.a. rtnl_lock) is being hold.
-> >>> If you have doubt, try adding a:
-> >>>
-> >>>     ASSERT_RTNL()
-> >>>
-> >>> If this assert works, then another mutex is not needed.
-> >> It had added ASSERT_RTNL() into f81604_set_termination(). It only assert
-> >> in f81604_probe() -> f81604_set_termination(), not called via ip command:
-> >>       ip link set dev can0 type can termination 120
-> >>       ip link set dev can0 type can termination 0
-> >>
-> >> so I'll still use mutex on here.
-> > Sorry, do you mean that the assert throws warnings for f81604_probe()
-> > -> f81604_set_termination() but that it is OK (no warning) for ip
-> > command?
+> y86-dev@protonmail.com writes:
+> 
+> > From: Gary Guo <gary@garyguo.net>
 > >
-> > I did not see that you called f81604_set_termination() internally.
-> > Indeed, rtnl_lock is not held in probe(). But I think it is still OK.
-> > In f81604_probe() you call f81604_set_termination() before
-> > register_candev(). If the device is not yet registered,
-> > f81604_set_termination() can not yet be called via ip command. Can you
-> > describe more precisely where you think there is a concurrency issue?
-> > I still do not see it.
->
-> Sorry, I had inverse the mean of ASSERT_RTNL(). It like you said.
->      f81604_probe() not held rtnl_lock.
->      ip set terminator will held rtnl_lock.
->
-> Due to f81604_set_termination() will called by f81604_probe() to
-> initialize, it may need mutex in
-> situation as following:
->
-> User is setting can0 terminator when f81604_probe() complete generate
-> can0 and generating can1.
-> So IMO, the mutex may needed.
-
-Hmm, I am still not a fan of setting a mutex for a single concurrency
-issue which can only happen during probing.
-
-What about this:
-
-  static int __f81604_set_termination(struct net_device *netdev, u16 term)
-  {
-          struct f81604_port_priv *port_priv = netdev_priv(netdev);
-          u8 mask, data = 0;
-
-          if (netdev->dev_id == 0)
-                  mask = F81604_CAN0_TERM;
-          else
-                  mask = F81604_CAN1_TERM;
-
-          if (term == F81604_TERMINATION_ENABLED)
-                  data = mask;
-
-          return f81604_mask_set_register(port_priv->dev, F81604_TERMINATOR_REG,
-                                          mask, data);
-  }
-
-  static int f81604_set_termination(struct net_device *netdev, u16 term)
-  {
-          ASSERT_RTNL();
-
-          return __f81604_set_termination(struct net_device *netdev, u16 term);
-  }
-
-  static int f81604_init_termination(struct f81604_priv *priv)
-  {
-          int i, ret;
-
-          for (i = 0; i < ARRAY_SIZE(f81604_priv->netdev); i++) {
-                  ret = __f81604_set_termination(f81604_priv->netdev[i],
-                                                 F81604_TERMINATION_DISABLED);
-                  if (ret)
-                          return ret;
-          }
-  }
-
-  static int f81604_probe(struct usb_interface *intf,
-                          const struct usb_device_id *id)
-  {
-          /* ... */
-
-          err = f81604_init_termination(priv);
-          if (err)
-                  goto failure_cleanup;
-
-          for (i = 0; i < ARRAY_SIZE(f81604_priv->netdev); i++) {
-                  /* ... */
-          }
-
-          /* ... */
-  }
-
-Initialise all resistors with __f81604_set_termination() in probe()
-before registering any network device. Use f81604_set_termination()
-which has the lock assert elsewhere.
-
-Also, looking at your probe() function, in label clean_candev:, if the
-second can channel fails its initialization, you do not clean the
-first can channel. I suggest adding a f81604_init_netdev() and
-handling the netdev issue and cleanup in that function.
-
-> >>>> +               port_priv->can.do_get_berr_counter = f81604_get_berr_counter;
-> >>>> +               port_priv->can.ctrlmode_supported =
-> >>>> +                       CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_3_SAMPLES |
-> >>>> +                       CAN_CTRLMODE_ONE_SHOT | CAN_CTRLMODE_BERR_REPORTING |
-> >>>> +                       CAN_CTRLMODE_CC_LEN8_DLC | CAN_CTRLMODE_PRESUME_ACK;
-> >>> Did you test the CAN_CTRLMODE_CC_LEN8_DLC feature? Did you confirm
-> >>> that you can send and receive DLC greater than 8?
-> >> Sorry, I had misunderstand the define. This device is only support 0~8
-> >> data length,
-> >    ^^^^^^^^^^^
+> > Add the `quote!` macro for creating `TokenStream`s directly via the
+> > given Rust tokens. It also supports repetitions using iterators.
 > >
-> > Data length or Data Length Code (DLC)? Classical CAN maximum data
-> > length is 8 but maximum DLC is 15 (and DLC 8 to 15 mean a data length
-> > of 8).
+> > It will be used by the pin-init API proc-macros to generate code.
 > >
->
-> This device can't support DLC > 8. It's only support 0~8.
+> > Signed-off-by: Gary Guo <gary@garyguo.net>
+> > Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+> > ---
+> >  rust/macros/lib.rs   |   2 +
+> >  rust/macros/quote.rs | 145 +++++++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 147 insertions(+)
+> >  create mode 100644 rust/macros/quote.rs
+> >
+> > diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+> > index c1d385e345b9..82b520f024dd 100644
+> > --- a/rust/macros/lib.rs
+> > +++ b/rust/macros/lib.rs
+> > @@ -2,6 +2,8 @@
+> >
+> >  //! Crate for all kernel procedural macros.
+> >
+> > +#[macro_use]
+> > +mod quote;
+> >  mod concat_idents;
+> >  mod helpers;
+> >  mod module;
+> > diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
+> > new file mode 100644
+> > index 000000000000..7efb009c25a9
+> > --- /dev/null
+> > +++ b/rust/macros/quote.rs
+> > @@ -0,0 +1,145 @@
+> > +// SPDX-License-Identifier: Apache-2.0 OR MIT
+> > +
+> > +use proc_macro::{TokenStream, TokenTree};
+> > +
+> > +pub(crate) trait ToTokens {
+> > +    fn to_tokens(&self, tokens: &mut TokenStream);
+> > +}
+> > +
+> > +impl<T: ToTokens> ToTokens for Option<T> {
+> > +    fn to_tokens(&self, tokens: &mut TokenStream) {
+> > +        if let Some(v) = self {
+> > +            v.to_tokens(tokens);
+> > +        }
+> > +    }
+> > +}
+> > +
+> > +impl ToTokens for proc_macro::Group {
+> > +    fn to_tokens(&self, tokens: &mut TokenStream) {
+> > +        tokens.extend([TokenTree::from(self.clone())]);
+> > +    }
+> > +}
+> > +
+> > +impl ToTokens for TokenTree {
+> > +    fn to_tokens(&self, tokens: &mut TokenStream) {
+> > +        tokens.extend([self.clone()]);
+> > +    }
+> > +}
+> > +
+> > +impl ToTokens for TokenStream {
+> > +    fn to_tokens(&self, tokens: &mut TokenStream) {
+> > +        tokens.extend(self.clone());
+> > +    }
+> > +}
+> > +
+> > +/// Converts tokens into [`proc_macro::TokenStream`] and performs variable interpolations with
+> > +/// the given span.
+> > +///
+> > +/// This is a similar to the
+> > +/// [`quote_spanned!`](https://docs.rs/quote/latest/quote/macro.quote_spanned.html) macro from the
+> > +/// `quote` crate but provides only just enough functionality needed by the current `macros` crate.
+> > +#[allow(unused_macros)]
+> > +macro_rules! quote_spanned {
+> > +    ($span:expr => $($tt:tt)*) => {
+> > +    #[allow(clippy::vec_init_then_push)]
+> > +    {
+> > +        let mut tokens = Vec::new();
+> > +        let span = $span;
+> > +        quote_spanned!(@proc tokens span $($tt)*);
+> > +        proc_macro::TokenStream::from_iter(tokens)  
+> 
+> Should this be `::alloc::vec::Vec` and
+> `::proc_macro::TokenStream::from_iter` ?
+> 
+> Best regards,
+> Andreas
 
-Ack.
+Hi Andres,
+
+This macro is used only internally, so I didn't really bother to fully
+qualify all the names.
+
+Best,
+Gary
