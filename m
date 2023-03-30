@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA8F6D127F
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D2F6D1283
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbjC3WsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 18:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        id S231331AbjC3WsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 18:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjC3Wru (ORCPT
+        with ESMTP id S231199AbjC3Wry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 18:47:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABEF1114B;
-        Thu, 30 Mar 2023 15:47:31 -0700 (PDT)
+        Thu, 30 Mar 2023 18:47:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731F21205E;
+        Thu, 30 Mar 2023 15:47:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2918621BB;
-        Thu, 30 Mar 2023 22:47:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52401C433D2;
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2C8EB82A5C;
+        Thu, 30 Mar 2023 22:47:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AFEFC433EF;
         Thu, 30 Mar 2023 22:47:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1680216448;
-        bh=E9GTy32jkGXjdmoTYxiGB6g5bP4dr0pfdets2Um+Or8=;
+        bh=K70gMvYhGvFQm2RTfPHGhx5QhVRNYr3RZRGehe7G6d8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u+uDNVTC3lJmsZ4zrN0/meReh7P86RPhejFgW8UZcT8mLI8U9KWrnSLNGCwdTcDAO
-         Jr4q4p6UXtOQjklFwhWVZVW+AmxW8rK/+l3Cpqxpr2j0gZWsXu2GhFH+FHd/LUR0pn
-         nZkYmpfbiN37yMvPvJm+1/1OBsSIQ6Evh7AWyTPu0+9LB+j/TIgD4CE9o/gLVzqrjz
-         bT7iytN6w8QjGpDaHda8rYf8oAKbjjECZlHmwZRSkNo1z3oamujrB4vi8Wr2v2y2f1
-         ctdA3zdUXvEemNfUu3pX5YpKew8TZd4XlmEVhr387auhS7tIWaYMwgPVd+rskpW6YD
-         efUAYG28klMKQ==
+        b=gzb039to+vuZqj9zxtsNtJiv/Jsjbh/tlLhFhdaz59TRzIlvnTMqtwQGi/cv4d3j7
+         0SQqRgI/QC5DGAS8eL9CqG1G/0ZkA0Z/5DyaT4BEeZ6Omc2c1c0f6dvhtc3hexdSYX
+         Shh4vZ4G8t4XAfhkml9ADN8A0FfnmfHYhEud1kVYTnxxU67OkHHkb50KtcydTpOhY+
+         fieZ49gHssFXVWCaHV0gPIr1ZjxUckCAto0HF0kYlUDcgcWi9y0p8ygakBLs7ME4qM
+         1cOS+jQ4nAUJcSuBCN19LJH9rz/b8ZL8FnIticHqKXgBbmOMi4C50YUbfz1nO4qJpz
+         UCGsj7+uYdgwQ==
 Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id EC2791540476; Thu, 30 Mar 2023 15:47:27 -0700 (PDT)
+        id F1057154047E; Thu, 30 Mar 2023 15:47:27 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, hch@lst.de,
         "Paul E. McKenney" <paulmck@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH rcu 01/20] rcu-tasks: Fix warning for unused tasks_rcu_exit_srcu
-Date:   Thu, 30 Mar 2023 15:47:07 -0700
-Message-Id: <20230330224726.662344-1-paulmck@kernel.org>
+        Sachin Sant <sachinp@linux.ibm.com>,
+        "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Subject: [PATCH rcu 02/20] srcu: Add whitespace to __SRCU_STRUCT_INIT() & __DEFINE_SRCU()
+Date:   Thu, 30 Mar 2023 15:47:08 -0700
+Message-Id: <20230330224726.662344-2-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc2
 In-Reply-To: <f1b6cd5f-f0b7-4748-abd5-0dcfef0ce126@paulmck-laptop>
 References: <f1b6cd5f-f0b7-4748-abd5-0dcfef0ce126@paulmck-laptop>
@@ -57,36 +58,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tasks_rcu_exit_srcu variable is used only by kernels built
-with CONFIG_TASKS_RCU=y, but is defined for all kernesl with
-CONFIG_TASKS_RCU_GENERIC=y.  Therefore, in kernels built with
-CONFIG_TASKS_RCU_GENERIC=y but CONFIG_TASKS_RCU=n, this gives
-a "defined but not used" warning.
+This is a whitespace-only commit with no change in functionality.
+Its purpose is to prepare for later commits that: (1) Cause statically
+allocated srcu_struct structures to rely on compile-time initialization
+and (2) Move fields from the srcu_struct structure to a new srcu_usage
+structure.
 
-This commit therefore moves this variable under CONFIG_TASKS_RCU.
-
-Link: https://lore.kernel.org/oe-kbuild-all/202303191536.XzMSyzTl-lkp@intel.com/
-Reported-by: kernel test robot <lkp@intel.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Tested-by: Sachin Sant <sachinp@linux.ibm.com>
+Tested-by: "Zhang, Qiang1" <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tasks.h | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/srcutree.h | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index bfb5e1549f2b..185358c2f08d 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -136,8 +136,10 @@ static struct rcu_tasks rt_name =							\
- 	.kname = #rt_name,								\
+diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+index 558057b517b7..488d0e5d1ba3 100644
+--- a/include/linux/srcutree.h
++++ b/include/linux/srcutree.h
+@@ -108,13 +108,13 @@ struct srcu_struct {
+ #define SRCU_STATE_SCAN1	1
+ #define SRCU_STATE_SCAN2	2
+ 
+-#define __SRCU_STRUCT_INIT(name, pcpu_name)				\
+-{									\
+-	.sda = &pcpu_name,						\
+-	.lock = __SPIN_LOCK_UNLOCKED(name.lock),			\
+-	.srcu_gp_seq_needed = -1UL,					\
+-	.work = __DELAYED_WORK_INITIALIZER(name.work, NULL, 0),		\
+-	__SRCU_DEP_MAP_INIT(name)					\
++#define __SRCU_STRUCT_INIT(name, pcpu_name)							\
++{												\
++	.sda = &pcpu_name,									\
++	.lock = __SPIN_LOCK_UNLOCKED(name.lock),						\
++	.srcu_gp_seq_needed = -1UL,								\
++	.work = __DELAYED_WORK_INITIALIZER(name.work, NULL, 0),					\
++	__SRCU_DEP_MAP_INIT(name)								\
  }
  
-+#ifdef CONFIG_TASKS_RCU
- /* Track exiting tasks in order to allow them to be waited for. */
- DEFINE_STATIC_SRCU(tasks_rcu_exit_srcu);
-+#endif
- 
- /* Avoid IPIing CPUs early in the grace period. */
- #define RCU_TASK_IPI_DELAY (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB) ? HZ / 2 : 0)
+ /*
+@@ -137,15 +137,15 @@ struct srcu_struct {
+  * See include/linux/percpu-defs.h for the rules on per-CPU variables.
+  */
+ #ifdef MODULE
+-# define __DEFINE_SRCU(name, is_static)					\
+-	is_static struct srcu_struct name;				\
+-	extern struct srcu_struct * const __srcu_struct_##name;		\
+-	struct srcu_struct * const __srcu_struct_##name			\
++# define __DEFINE_SRCU(name, is_static)								\
++	is_static struct srcu_struct name;							\
++	extern struct srcu_struct * const __srcu_struct_##name;					\
++	struct srcu_struct * const __srcu_struct_##name						\
+ 		__section("___srcu_struct_ptrs") = &name
+ #else
+-# define __DEFINE_SRCU(name, is_static)					\
+-	static DEFINE_PER_CPU(struct srcu_data, name##_srcu_data);	\
+-	is_static struct srcu_struct name =				\
++# define __DEFINE_SRCU(name, is_static)								\
++	static DEFINE_PER_CPU(struct srcu_data, name##_srcu_data);				\
++	is_static struct srcu_struct name =							\
+ 		__SRCU_STRUCT_INIT(name, name##_srcu_data)
+ #endif
+ #define DEFINE_SRCU(name)		__DEFINE_SRCU(name, /* not static */)
 -- 
 2.40.0.rc2
 
