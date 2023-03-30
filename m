@@ -2,158 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9876D121E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473846D1222
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjC3W3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 18:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S230336AbjC3W3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 18:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjC3W3F (ORCPT
+        with ESMTP id S229733AbjC3W3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 18:29:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04577C17E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:28:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680215291;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ULC/HBV/7CZFRuQfLV54dZLIGK3tnK9UHOG46WhNr2I=;
-        b=KPvIU9sgqGahtvwgGlV3CNDN63OPOyQgw+p/LN5yZ98B7I5QcTihMmkYaR1iyzIuX9ibz0
-        TG7bAIysj8kuI3BWc16d7cj1Q9sjymczZ3zzZggEMMcb+UiHVvHxtYDZSgyXXwCoUwn+7r
-        Xvwwh/EiZcCOzku9d5gHQTmjEbbFsjw=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-B5TSYhsnMWq-76UWUjDOkA-1; Thu, 30 Mar 2023 18:28:09 -0400
-X-MC-Unique: B5TSYhsnMWq-76UWUjDOkA-1
-Received: by mail-qv1-f72.google.com with SMTP id l18-20020ad44bd2000000b005a9cf5f609eso8960192qvw.15
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:28:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680215289; x=1682807289;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ULC/HBV/7CZFRuQfLV54dZLIGK3tnK9UHOG46WhNr2I=;
-        b=QakCgfu99JtdrJ4UOMbsnAd+lwV8DQif6wzZ6DP6NuvEzaXbhIffZya+vYeA7IJJ5y
-         lnz/jkZWyLReoPjpT8KBFGnGXgNcvtHuI24oir/VqKx213Pxvf8XX7wDTCZKaSO90BDq
-         W0PGn7asnUgTJtrMY2WRgDP1bIKrRP8yuwgRk6RVdfGFyQgrzasMdXahmqW0vvZMJiSm
-         mrcpas6RLcS7qYqtrvRp3TQRds4M1eSTSJ2PFD6ny1HDzS7snZo6F86iczNlP5HgaSuS
-         jPiX0Z3H6LuVICEb+HeERjOE3UYXWLa5HNgUjK26vRKIdZf1gdE2fUrHW2Yo2U0QPZj/
-         GkSQ==
-X-Gm-Message-State: AAQBX9dlcE0T/25WezjAS1vuHCag2d1AYyABAaye+AgCRSqgs1iwVw5t
-        /iHQXh7Tpuu1UjT4EFBZgLDCYuz+xIf5gXypbK+CoqsxGFnak1o0CxJyXwsLN17Q5cCVKqAT9L8
-        cc1Sm9t2bbBBzKCDco7zQ2yfK
-X-Received: by 2002:ac8:7d56:0:b0:3e2:ccf9:bf96 with SMTP id h22-20020ac87d56000000b003e2ccf9bf96mr6542356qtb.1.1680215289387;
-        Thu, 30 Mar 2023 15:28:09 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YKjAMLZAUVJh4CtZ5TZF8rqQt4SfPZZvlrc2tPeFEO2G6SSONhU0BamzMoZ1+Ak6vhWHrDpA==
-X-Received: by 2002:ac8:7d56:0:b0:3e2:ccf9:bf96 with SMTP id h22-20020ac87d56000000b003e2ccf9bf96mr6542339qtb.1.1680215289166;
-        Thu, 30 Mar 2023 15:28:09 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id q12-20020ac8450c000000b003dd8ad765dcsm169428qtn.76.2023.03.30.15.28.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 15:28:08 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 18:28:07 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: Re: [PATCH 03/29] selftests/mm: Dump a summary in run_vmtests.sh
-Message-ID: <ZCYM94ifcsZYCkJq@x1n>
-References: <20230330155707.3106228-1-peterx@redhat.com>
- <20230330160646.3106903-1-peterx@redhat.com>
- <CAJHvVciUGEfdgTLHUxAxCpKxXbMt202nsPhArsckHm7bDOdqFg@mail.gmail.com>
+        Thu, 30 Mar 2023 18:29:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2484211F;
+        Thu, 30 Mar 2023 15:29:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64BDC621C1;
+        Thu, 30 Mar 2023 22:29:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC7A5C433D2;
+        Thu, 30 Mar 2023 22:29:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680215370;
+        bh=u2AAe8FW/d2n59lqS7oxavb/IFRSqDdeC/+2NOlYXK4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AUlflJsHxIOWgUT8O51/LP3fvE+9CyMewxcLGkAwdlQZ/H6ZsEKF2KE3nKN1Ne6Wl
+         ub3IbFjL4UMTqa/YilAfGgiGN7fKyCAmN15sdnrUCuvaSu0ex3iJ+ROlvHaLbOutTM
+         r2MOJff0meJ5288S/Vy8745DraPnWP33+SqkeHd7MIctbhNWtJj3af4Fx8pBkPYM1z
+         mZufZAet1ZMNREpUalbCkfJLP9VjwZH4tDbiQnFMitrYNon+zYhEyEylGIMbz1A//r
+         fhAtB2eaMa202c6M0GWDq5KpMctuL2nPH5Dv9+WZypHfUujGzukIGVRRwTJvFrFQEy
+         RDtSQJIxPstIA==
+Date:   Thu, 30 Mar 2023 15:29:28 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Alyssa Ross <hi@alyssa.is>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v3] purgatory: fix disabling debug info
+Message-ID: <20230330222928.GA644044@dev-arch.thelio-3990X>
+References: <20230330182223.181775-1-hi@alyssa.is>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJHvVciUGEfdgTLHUxAxCpKxXbMt202nsPhArsckHm7bDOdqFg@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230330182223.181775-1-hi@alyssa.is>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 12:07:24PM -0700, Axel Rasmussen wrote:
-> On Thu, Mar 30, 2023 at 9:06 AM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > Dump a summary after running whatever test specified.  Useful for human
-> > runners to identify any kind of failures (besides exit code).
-> >
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  tools/testing/selftests/mm/run_vmtests.sh | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> > index c0f93b668c0c..9cc33984aa9f 100644
-> > --- a/tools/testing/selftests/mm/run_vmtests.sh
-> > +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> > @@ -5,6 +5,9 @@
-> >  # Kselftest framework requirement - SKIP code is 4.
-> >  ksft_skip=4
-> >
-> > +count_pass=0
-> > +count_fail=0
-> > +count_skip=0
-> >  exitcode=0
-> >
-> >  usage() {
-> > @@ -149,11 +152,14 @@ run_test() {
-> >                 "$@"
-> >                 local ret=$?
-> >                 if [ $ret -eq 0 ]; then
-> > +                       count_pass=$(( $count_pass + 1 ))
+On Thu, Mar 30, 2023 at 06:22:24PM +0000, Alyssa Ross wrote:
+> Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
+> Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
+> -Wa versions of both of those if building with Clang and GNU as.  As a
+> result, debug info was being generated for the purgatory objects, even
+> though the intention was that it not be.
 > 
-> Actually, inside $(( )) there's no need to prefix variable names with
-> $ too. Running "shellcheck" over the script written this way will
-> generate a warning.
+> Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
+> Signed-off-by: Alyssa Ross <hi@alyssa.is>
+> Cc: stable@vger.kernel.org
+> Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+
+This is definitely more future proof.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+> v2: https://lore.kernel.org/r/20230326182120.194541-1-hi@alyssa.is
 > 
-> Same applies below.
-
-Sure, I'll fix.
-
+> Difference from v2: replaced asflags-remove-y with every possible
+> debug flag with asflags-y += -g0, as suggested by Nick Desaulniers.
 > 
-> >                         echo "[PASS]"
-> >                 elif [ $ret -eq $ksft_skip ]; then
-> > +                       count_skip=$(( $count_skip + 1 ))
-> >                         echo "[SKIP]"
-> >                         exitcode=$ksft_skip
-> >                 else
-> > +                       count_fail=$(( $count_fail + 1 ))
-> >                         echo "[FAIL]"
-> >                         exitcode=1
-> >                 fi
-> > @@ -279,4 +285,6 @@ CATEGORY="soft_dirty" run_test ./soft-dirty
-> >  # COW tests
-> >  CATEGORY="cow" run_test ./cow
-> >
-> > +echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}"
-> > +
-> >  exit $exitcode
-> > --
-> > 2.39.1
-> >
+> Additionally, I've CCed the x86 maintainers this time, since Masahiro
+> said he would like acks from subsystem maintainers, and
+> get_maintainer.pl didn't pick them the first time around.
 > 
-> Besides the nitpick:
+>  arch/riscv/purgatory/Makefile | 7 +------
+>  arch/x86/purgatory/Makefile   | 3 +--
+>  2 files changed, 2 insertions(+), 8 deletions(-)
 > 
-> Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
-
-Thanks!
-
--- 
-Peter Xu
-
+> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
+> index d16bf715a586..9c1e71853ee7 100644
+> --- a/arch/riscv/purgatory/Makefile
+> +++ b/arch/riscv/purgatory/Makefile
+> @@ -84,12 +84,7 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+>  CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
+>  
+> -AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
+> +asflags-y			+= -g0
+>  
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>  		$(call if_changed,ld)
+> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+> index 17f09dc26381..8e6c81b1c8f7 100644
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@ -69,8 +69,7 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
+>  CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+>  
+> -AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
+> +asflags-y			+= -g0
+>  
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>  		$(call if_changed,ld)
+> -- 
+> 2.37.1
+> 
+> 
