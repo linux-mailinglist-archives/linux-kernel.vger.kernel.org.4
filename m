@@ -2,46 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E895D6D093F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA9F6D0944
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 17:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbjC3PRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 11:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
+        id S232848AbjC3PTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 11:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbjC3PRP (ORCPT
+        with ESMTP id S232801AbjC3PTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:17:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15920CA33
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 08:15:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5AB8620D0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:15:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12418C433EF;
-        Thu, 30 Mar 2023 15:15:24 +0000 (UTC)
-Date:   Thu, 30 Mar 2023 11:15:23 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Baoquan He <bhe@redhat.com>, Philipp Rudo <prudo@redhat.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ross Zwisler <zwisler@google.com>,
-        Simon Horman <horms@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v5 2/2] x86/purgatory: Add linker script
-Message-ID: <20230330111523.4b98c8ce@gandalf.local.home>
-In-Reply-To: <20230321-kexec_clang16-v5-2-5563bf7c4173@chromium.org>
-References: <20230321-kexec_clang16-v5-0-5563bf7c4173@chromium.org>
-        <20230321-kexec_clang16-v5-2-5563bf7c4173@chromium.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 30 Mar 2023 11:19:10 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E22CDC8;
+        Thu, 30 Mar 2023 08:18:08 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9596F24DEAE;
+        Thu, 30 Mar 2023 23:16:09 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 30 Mar
+ 2023 23:16:09 +0800
+Received: from [192.168.125.96] (113.72.144.76) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 30 Mar
+ 2023 23:16:08 +0800
+Message-ID: <2d5a8dae-73fd-b1f8-089e-041637d66b0d@starfivetech.com>
+Date:   Thu, 30 Mar 2023 23:16:08 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 3/3] riscv: dts: starfive: add tdm node and sound card
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+References: <20230329153320.31390-1-walker.chen@starfivetech.com>
+ <20230329153320.31390-4-walker.chen@starfivetech.com>
+ <d455a90a-7e63-2254-75cb-70cb26ae7483@linaro.org>
+ <af015701-f1ff-4b1e-9b1b-c635fc684ce6@spud>
+Content-Language: en-US
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <af015701-f1ff-4b1e-9b1b-c635fc684ce6@spud>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Originating-IP: [113.72.144.76]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,148 +63,86 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Hmm, this patch may need some more eyes. At least from the x86 maintainers.
 
--- Steve
-
-
-On Thu, 30 Mar 2023 11:44:48 +0200
-Ricardo Ribalda <ribalda@chromium.org> wrote:
-
-> Make sure that the .text section is not divided in multiple overlapping
-> sections. This is not supported by kexec_file.
+On 2023/3/30 15:58, Conor Dooley wrote:
+> On Thu, Mar 30, 2023 at 09:43:10AM +0200, Krzysztof Kozlowski wrote:
+>> On 29/03/2023 17:33, Walker Chen wrote:
+>> > Add the tdm controller node and sound card for the StarFive JH7110 SoC.
 > 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  arch/x86/purgatory/.gitignore        |  2 ++
->  arch/x86/purgatory/Makefile          | 20 +++++++++----
->  arch/x86/purgatory/kexec-purgatory.S |  2 +-
->  arch/x86/purgatory/purgatory.lds.S   | 57 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 74 insertions(+), 7 deletions(-)
+>> > +		compatible = "fixed-clock";
+>> > +		clock-output-names = "wm8960_mclk";
+>> > +		#clock-cells = <0>;
+>> > +	};
+>> > +
+>> >  	i2srx_bclk_ext: i2srx-bclk-ext-clock {
+>> >  		compatible = "fixed-clock";
+>> >  		clock-output-names = "i2srx_bclk_ext";
+>> > @@ -375,6 +381,27 @@
+>> >  			status = "disabled";
+>> >  		};
+>> >  
+>> > +		tdm: tdm@10090000 {
+>> > +			compatible = "starfive,jh7110-tdm";
+>> > +			reg = <0x0 0x10090000 0x0 0x1000>;
+>> > +			clocks = <&syscrg JH7110_SYSCLK_TDM_AHB>,
+>> > +				 <&syscrg JH7110_SYSCLK_TDM_APB>,
+>> > +				 <&syscrg JH7110_SYSCLK_TDM_INTERNAL>,
+>> > +				 <&syscrg JH7110_SYSCLK_TDM_TDM>,
+>> > +				 <&syscrg JH7110_SYSCLK_MCLK_INNER>,
+>> > +				 <&tdm_ext>;
+>> > +			clock-names = "tdm_ahb", "tdm_apb",
+>> > +				      "tdm_internal", "tdm",
+>> > +				      "mclk_inner", "tdm_ext";
+>> > +			resets = <&syscrg JH7110_SYSRST_TDM_AHB>,
+>> > +				 <&syscrg JH7110_SYSRST_TDM_APB>,
+>> > +				 <&syscrg JH7110_SYSRST_TDM_CORE>;
+>> > +			dmas = <&dma 20>, <&dma 21>;
+>> > +			dma-names = "rx","tx";
+>> > +			#sound-dai-cells = <0>;
+>> > +			status = "disabled";
+>> > +		};
+>> > +
+>> >  		stgcrg: clock-controller@10230000 {
+>> >  			compatible = "starfive,jh7110-stgcrg";
+>> >  			reg = <0x0 0x10230000 0x0 0x10000>;
+>> > @@ -601,5 +628,12 @@
+>> >  			#reset-cells = <1>;
+>> >  			power-domains = <&pwrc JH7110_PD_VOUT>;
+>> >  		};
+>> > +
+>> > +		sound0: snd-card0 {
+>> 
+>> 1. Why card0?
+>> 2. Where is this node located? In MMIO bus? Run some basic checks on
+>> your DTS before submitting upstream.
+>> dtbs_check
+>> dtbs W=1
+>> 
+>> 3. Why this is even in the DTSI? This really looks wrong.
 > 
-> diff --git a/arch/x86/purgatory/.gitignore b/arch/x86/purgatory/.gitignore
-> index d2be1500671d..1fe71fe5945d 100644
-> --- a/arch/x86/purgatory/.gitignore
-> +++ b/arch/x86/purgatory/.gitignore
-> @@ -1 +1,3 @@
->  purgatory.chk
-> +purgatory.lds
-> +purgatory
-> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-> index 17f09dc26381..4dc96d409bec 100644
-> --- a/arch/x86/purgatory/Makefile
-> +++ b/arch/x86/purgatory/Makefile
-> @@ -16,10 +16,11 @@ CFLAGS_sha256.o := -D__DISABLE_EXPORTS
->  
->  # When linking purgatory.ro with -r unresolved symbols are not checked,
->  # also link a purgatory.chk binary without -r to check for unresolved symbols.
-> -PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
-> -LDFLAGS_purgatory.ro := -r $(PURGATORY_LDFLAGS)
-> -LDFLAGS_purgatory.chk := $(PURGATORY_LDFLAGS)
-> -targets += purgatory.ro purgatory.chk
-> +PURGATORY_LDFLAGS := -nostdlib -z nodefaultlib
-> +LDFLAGS_purgatory := -r $(PURGATORY_LDFLAGS) -T
-> +LDFLAGS_purgatory.chk := -e purgatory_start $(PURGATORY_LDFLAGS)
-> +
-> +targets += purgatory.lds purgatory.ro purgatory.chk
->  
->  # Sanitizer, etc. runtimes are unavailable and cannot be linked here.
->  GCOV_PROFILE	:= n
-> @@ -72,10 +73,17 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
->  AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
->  AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
->  
-> -$(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
-> +OBJCOPYFLAGS_purgatory.ro := -O elf64-x86-64
-> +OBJCOPYFLAGS_purgatory.ro += --remove-section='*debug*'
-> +OBJCOPYFLAGS_purgatory.ro += --remove-section='.comment'
-> +OBJCOPYFLAGS_purgatory.ro += --remove-section='.note.*'
-> +$(obj)/purgatory.ro: $(obj)/purgatory FORCE
-> +		$(call if_changed,objcopy)
-> +
-> +$(obj)/purgatory.chk: $(obj)/purgatory FORCE
->  		$(call if_changed,ld)
->  
-> -$(obj)/purgatory.chk: $(obj)/purgatory.ro FORCE
-> +$(obj)/purgatory: $(obj)/purgatory.lds $(PURGATORY_OBJS) FORCE
->  		$(call if_changed,ld)
->  
->  $(obj)/kexec-purgatory.o: $(obj)/purgatory.ro $(obj)/purgatory.chk
-> diff --git a/arch/x86/purgatory/kexec-purgatory.S b/arch/x86/purgatory/kexec-purgatory.S
-> index 8530fe93b718..54b0d0b4dc42 100644
-> --- a/arch/x86/purgatory/kexec-purgatory.S
-> +++ b/arch/x86/purgatory/kexec-purgatory.S
-> @@ -5,7 +5,7 @@
->  	.align	8
->  kexec_purgatory:
->  	.globl	kexec_purgatory
-> -	.incbin	"arch/x86/purgatory/purgatory.ro"
-> +	.incbin	"arch/x86/purgatory/purgatory"
->  .Lkexec_purgatory_end:
->  
->  	.align	8
-> diff --git a/arch/x86/purgatory/purgatory.lds.S b/arch/x86/purgatory/purgatory.lds.S
-> new file mode 100644
-> index 000000000000..610da88aafa0
-> --- /dev/null
-> +++ b/arch/x86/purgatory/purgatory.lds.S
-> @@ -0,0 +1,57 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <asm-generic/vmlinux.lds.h>
-> +
-> +OUTPUT_FORMAT(CONFIG_OUTPUT_FORMAT)
-> +
-> +#undef i386
-> +
-> +#include <asm/cache.h>
-> +#include <asm/page_types.h>
-> +
-> +ENTRY(purgatory_start)
-> +
-> +SECTIONS
-> +{
-> +	. = 0;
-> +	.head.text : {
-> +		_head = . ;
-> +		HEAD_TEXT
-> +		_ehead = . ;
-> +	}
-> +	.rodata : {
-> +		_rodata = . ;
-> +		*(.rodata)	 /* read-only data */
-> +		*(.rodata.*)
-> +		_erodata = . ;
-> +	}
-> +	.text :	{
-> +		_text = .; 	/* Text */
-> +		*(.text)
-> +		*(.text.*)
-> +		*(.noinstr.text)
-> +		_etext = . ;
-> +	}
-> +	.data :	{
-> +		_data = . ;
-> +		*(.data)
-> +		*(.data.*)
-> +		*(.bss.efistub)
-> +		_edata = . ;
-> +	}
-> +	. = ALIGN(L1_CACHE_BYTES);
-> +	.bss : {
-> +		_bss = . ;
-> +		*(.bss)
-> +		*(.bss.*)
-> +		*(COMMON)
-> +		. = ALIGN(8);	/* For convenience during zeroing */
-> +		_ebss = .;
-> +	}
-> +
-> +	/* Sections to be discarded */
-> +	/DISCARD/ : {
-> +		*(.eh_frame)
-> +		*(*__ksymtab*)
-> +		*(___kcrctab*)
-> +	}
-> +}
+> Excuse me for not following here, but Walker, could you point me at
+> where in the schematic for the VisionFive 2 that this wm8960 actually
+> is?
+> I know ~nothing about audio, but good old Google tells me that this is a
+> dedicated codec chip and I was looking at [1] and could not easily find
+> it on the schematic.
 > 
+> Thanks,
+> Conor.
+> 
+> 1 https://doc-en.rvspace.org/VisionFive2/PDF/SCH_RV002_V1.2A_20221216.pdf
 
+Hi Conor,
+
+The TDM need work together with external codec WM8960 by plugging the raspberry pie
+ audio board into the 40-pin, which is found in sheet 21 of the schematic. Because the
+ 40-pin of VisionFive2 is fully compatible with the pins of Raspberry pie audio board. 
+
+For more information of the audio board, you can take a look at the following webpage:
+https://wiki.seeedstudio.com/ReSpeaker_2_Mics_Pi_HAT/
+
+The schematic of audio board:
+https://files.seeedstudio.com/wiki/MIC_HATv1.0_for_raspberrypi/src/ReSpeaker%202-Mics%20Pi%20HAT_SCH.pdf
+
+Best regards,
+Walker
