@@ -2,91 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7306D0869
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 059AA6D086F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbjC3Og5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        id S232184AbjC3Oi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbjC3Ogy (ORCPT
+        with ESMTP id S229685AbjC3Oi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:36:54 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3AC5BA0;
-        Thu, 30 Mar 2023 07:36:53 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 5C848320092D;
-        Thu, 30 Mar 2023 10:36:52 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Thu, 30 Mar 2023 10:36:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
-        :content-transfer-encoding:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1680187011; x=1680273411; bh=mEU0nion2muXlTfUR8cesDV/AWMQCwWe/7k
-        pJqZM+CM=; b=lOcePaeEvFUwkff08Ll9SURQYawK4c3C361GvZCwPNO8rSTU1vg
-        srgt5wYHN1Yy40ktgnBGN0nd3E3TsYANDXNm9/Ozsp55ZAoFXN4VZ3Z2QkbhL6jN
-        hdWhhPsgTK/DBP8IEvRTtPD1VsIKmszGKwp21ztfYvT4sWTWLUyIJ8CjdynUooII
-        g7KufWKRbsCK4z+CVq0dUPvraGm8nGf5vU8R2FpDFI+RYwEiFzkQ+9HT/bBNFdCU
-        AxeH8n1EkukN7daXHS4H8FpOOVPKr+08KlXq28/ENZIMDzWQlkqaOZblQ9qD3U39
-        oJNz4/eioT5pmdrZdgYlKcvdrcHjObCryqA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680187011; x=1680273411; bh=mEU0nion2muXlTfUR8cesDV/AWMQCwWe/7k
-        pJqZM+CM=; b=U+1Ihw8g8cVw3w0tdthGsHQW7Sg73ShV9oapDg+bYlxpaITQJpF
-        fOzcy6YWltiSJp9TFqtLRiS1R/PA20uF8f2t/j9oadz1isaD6OvLQ78TdlWRdYk9
-        KrCAfDgJlou6E8VcCM/VNnLpfqal0YXiD1WyH6E/C2mLRc5dTpzsyDl9WCn9B5jk
-        /kMZKcQjkM82Eb5yfrKFMZexfgV3jBChJXpnS7YC/P7asXQV2p5edjEZHOISA+eo
-        AdYqnlQiRiERUpgPa7eubr1Pb/Wgdw7nkFgl8QKsIECfbQARGi5yW6JgrXd2dU1+
-        Fa2accxo1rTadDmsrOUb2mUXjxJ0HO2akdw==
-X-ME-Sender: <xms:g54lZOB8RWwbfUdP-D5bdUHz7zOyDrUybfCnvvu--9FMsli_EVmbHQ>
-    <xme:g54lZIiHPS6I74Wp0Dh7Jq7xXPXpWwBN6ZFcL-ksCIuij_12u6j9DJF202M9Ou3Xu
-    hZCi3edGxwvKr-sxQ>
-X-ME-Received: <xmr:g54lZBk9t9Ao68W-pCXjJtsXJcL5u_F0ADlMyDtQ0_WH1viM1C4SRU3ftULEIMABppQ3byGBXy2kI0h4fD8Y6ELdzw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehkedgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeetlhhi
-    tggvucfthihhlhcuoegrlhhitggvsehrhihhlhdrihhoqeenucggtffrrghtthgvrhhnpe
-    ehudduvdetkedvkedtudeludfgfffhudegjeeguedvvedtteevjeehheeiffefgeenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhitggvse
-    hrhihhlhdrihho
-X-ME-Proxy: <xmx:g54lZMzl2MQKpXrn4Wletjsbn7txpcmKyElTTielHY319dlscAOaQA>
-    <xmx:g54lZDTkIqtNEKVGhmUfiqhf2Sq8TorCRlfOT3kLjyyPaB2DY-tTkA>
-    <xmx:g54lZHZ-uC-atbcq6IGYswS_zopJwyERLc00TctXQr1l-4U9bRRxNQ>
-    <xmx:g54lZOGdA7QC66m6Firw3oWfIqCU-FJH5ikTynN7TOaPNNg9bbFZnw>
-Feedback-ID: i56684263:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Mar 2023 10:36:49 -0400 (EDT)
-Message-ID: <1f93a045-5bd8-e07f-cf1b-7b1196c8ab54@ryhl.io>
-Date:   Thu, 30 Mar 2023 16:37:01 +0200
+        Thu, 30 Mar 2023 10:38:26 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83F6DE
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:38:24 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1phtPr-0002m4-U6; Thu, 30 Mar 2023 16:38:15 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1phtPp-0001ax-BT; Thu, 30 Mar 2023 16:38:13 +0200
+Date:   Thu, 30 Mar 2023 16:38:13 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Andreas Henriksson <andreas@fatal.se>
+Cc:     Jun Li <jun.li@nxp.com>, "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Xu Yang <xu.yang_2@nxp.com>
+Subject: Re: [PATCH] arm64: dts: imx8mp-evk: add dual-role usb port1 support
+Message-ID: <20230330143813.teid36w24a4esjsx@pengutronix.de>
+References: <20230323105826.2058003-1-m.felsch@pengutronix.de>
+ <PA4PR04MB964081F4DB2E16D8E300B08389849@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <20230327084947.dcguxgyo2lfen2ms@fatal.se>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 06/13] rust: init/sync: add `InPlaceInit` trait to
- pin-initialize smart pointers
-Content-Language: en-US
-To:     y86-dev@protonmail.com
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-References: <20230329223239.138757-1-y86-dev@protonmail.com>
- <20230329223239.138757-7-y86-dev@protonmail.com>
-From:   Alice Ryhl <alice@ryhl.io>
-In-Reply-To: <20230329223239.138757-7-y86-dev@protonmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327084947.dcguxgyo2lfen2ms@fatal.se>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,41 +60,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 00:33, y86-dev@protonmail.com wrote:
-> From: Benno Lossin <y86-dev@protonmail.com>
+Hi,
+
+On 23-03-27, Andreas Henriksson wrote:
+> On Fri, Mar 24, 2023 at 10:18:17AM +0000, Jun Li wrote:
+> > 
+> > 
+> > > -----Original Message-----
+> > > From: Marco Felsch <m.felsch@pengutronix.de>
+> > > Sent: Thursday, March 23, 2023 6:58 PM
+> > > To: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> > > shawnguo@kernel.org; dl-linux-imx <linux-imx@nxp.com>; festevam@gmail.com
+> > > Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+> > > kernel@pengutronix.de
+> > > Subject: [PATCH] arm64: dts: imx8mp-evk: add dual-role usb port1 support
+> > > 
+> > > The i.MX8MP-EVK has a dual-role usb-type-c port marked as PORT1. By this
+> > > commit the dual-role support is added which allows the user-space to assign
+> > > usb-gadget functions to it via the configFS.
+> > 
+> > So just ignore the orientation switch will make this port cannot work
+> > at super speed, this is actually why this port is not enabled at upstream.
+> > I see the orientation switch via GPIO for SBU is already merged:
+> > drivers/usb/typec/mux/gpio-sbu-mux.c
+> > Do you have interest to expand this driver to support super speed
+> > switch for this case? 
+> [...]
 > 
-> The `InPlaceInit` trait that provides two functions, for initializing
-> using `PinInit<T, E>` and `Init<T>`. It is implemented by `Arc<T>`,
-> `UniqueArc<T>` and `Box<T>`.
+> FWIW This is what I ended up with (after backporting the gpio-sbu-mux patches)
+> a little while ago trying to get the usb-c ports going on imx8mp-evk. I've not
+> yet had the time to fully test this (only done host/device, not tested: SS,
+> orientation, etc), so beware that it might be completely wrong.
 > 
-> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
- > ---
- >
-> +/// Smart pointer that can initialize memory in-place.
-> +pub trait InPlaceInit<T>: Sized {
-> +    /// Use the given initializer to in-place initialize a `T`.
-> +    ///
-> +    /// If `T: !Unpin` it will not be able to move afterwards.
-> +    fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
-> +    where
-> +        Error: From<E>;
-> +
-> +    /// Use the given initializer to in-place initialize a `T`.
-> +    fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
-> +    where
-> +        Error: From<E>;
-> +}
+> #include "dt-bindings/usb/pd.h"
+> 
+> &usb3_phy0 {
+>     vbus-power-supply = <&ptn5110>;
+>     status = "okay";
+> };
+> 
+> &usb3_0 {
+>     status = "okay";
+> };
+> 
+> &usb_dwc3_0 {
+>     dr_mode = "otg";
+>     hnp-disable;
+>     srp-disable;
+>     adp-disable;
+>     usb-role-switch;
+>     role-switch-default-mode = "peripheral";
+>     snps,dis-u1-entry-quirk;
+>     snps,dis-u2-entry-quirk;
+>     status = "okay";
+> 
+>     port {
+>         usb3_drd_sw: endpoint {
+>             remote-endpoint = <&typec_dr_sw>;
+>         };
+>     };
+> };
+> 
+> &i2c2 {
+>     clock-frequency = <100000>;
+>     pinctrl-names = "default";
+>     pinctrl-0 = <&pinctrl_i2c2>;
+>     status = "okay";
+> 
+>     ptn5110: tcpc@50 {
+>         compatible = "nxp,ptn5110";
+>         pinctrl-names = "default";
+>         pinctrl-0 = <&pinctrl_typec>;
+>         reg = <0x50>;
+> 
+>         interrupt-parent = <&gpio4>;
+>         interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
+>         status = "okay";
+> 
+>         port {
+>             typec_dr_sw: endpoint {
+>                 remote-endpoint = <&usb3_drd_sw>;
+>             };
+>         };
+> 
+>         usb_con: connector {
+>             compatible = "usb-c-connector";
+>             label = "USB-C";
+>             power-role = "dual";
+>             data-role = "dual";
+>             try-power-role = "sink";
+>             source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+>             sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+>                      PDO_VAR(5000, 20000, 3000)>;
+>             op-sink-microwatt = <15000000>;
+>             self-powered;
+> 
+>             ports {
+>                 #address-cells = <1>;
+>                 #size-cells = <0>;
+> 
+>                 port@1 {
+>                     reg = <1>;
+>                     typec_con_ss: endpoint {
+>                         remote-endpoint = <&usb3_data_ss>;
+>                     };
+>                 };
+>             };
+>         };
+>     };
+> 
+> };
+> 
+> &iomuxc {
+>     pinctrl_typec: typec1grp {
+>         fsl,pins = <
+>             MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19    0x1c4
+>         >;
+>     };
+> 
+>     pinctrl_typec_mux: typec1muxgrp {
+>         fsl,pins = <
+>             MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20    0x16
+>             MX8MP_IOMUXC_SD2_WP__GPIO2_IO20        0x16
+>         >;
+>     };
+> 
+> 
+>     pinctrl_i2c2: i2c2grp {
+>         fsl,pins = <
+>             MX8MP_IOMUXC_I2C2_SCL__I2C2_SCL        0x400001c2
+>             MX8MP_IOMUXC_I2C2_SDA__I2C2_SDA        0x400001c2
+>         >;
+>     };
+> };
+> 
+> / {
+>     gpio-sbu-mux {
+>         compatible = "gpio-sbu-mux";
+> 
+>         pinctrl-names = "default";
+>         pinctrl-0 = <&pinctrl_typec_mux>;
+>         select-gpios = <&gpio4 20 GPIO_ACTIVE_LOW>; // (PAD_)SAI1_MCLK -> USB1_SS_SEL
+>         enable-gpios = <&gpio2 20 GPIO_ACTIVE_LOW>; // (PAD_)SD2_WP -> USB1_TYPEC_EN_B -> TYPEC_EN_B
+> 
+>         //mode-switch;
+>         orientation-switch;
+> 
+>         port {
+>             usb3_data_ss: endpoint {
+>                 remote-endpoint = <&typec_con_ss>;
+>             };
+>         };
+>     };
+> };
+> 
+> Hope it might help.
 
-This definition is potentially rather limiting, because it can only be 
-used with error types that can be converted into a `kernel::Error`. What 
-do you think of this alternative?
+I didn't tested it but at the moment I don't see the problem with my
+patch. Sure the ID pin is not connected but if I understood it correctly
+(please correct me) the tcpc will handle the orientation. I can set the
+mode to device from user-space which worked. I didn't verified the
+SuperSpeed mode nor the host mode since I don't have a USB-C flash
+drive.
 
-pub trait InPlaceInit<T>: Sized {
-     fn pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
-     where
-         E: From<AllocError>;
+Without the patch the port is just unused albeit the port is really
+useful for bootloaders like barebox to provide a usbgadget/fastboot
+device to flash the system.
 
-     fn init<E>(init: impl Init<T, E>) -> Result<Self, E>
-     where
-         E: From<AllocError>;
-}
+Regards,
+  Marco
