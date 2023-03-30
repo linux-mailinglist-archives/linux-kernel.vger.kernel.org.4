@@ -2,474 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1076CFE48
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB276CFE45
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjC3I3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S230466AbjC3I31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjC3I32 (ORCPT
+        with ESMTP id S230416AbjC3I3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:29:28 -0400
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44577769C
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:29:22 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R791e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Vezms5K_1680164958;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0Vezms5K_1680164958)
-          by smtp.aliyun-inc.com;
-          Thu, 30 Mar 2023 16:29:18 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2 8/8] erofs: use separate xattr parsers for listxattr/getxattr
-Date:   Thu, 30 Mar 2023 16:29:10 +0800
-Message-Id: <20230330082910.125374-9-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230330082910.125374-1-jefflexu@linux.alibaba.com>
-References: <20230330082910.125374-1-jefflexu@linux.alibaba.com>
+        Thu, 30 Mar 2023 04:29:19 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27EDF1987
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:29:17 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:33410.296234587
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 427711002EE;
+        Thu, 30 Mar 2023 16:29:14 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 2236815573ed4aa9a8a2226bd7b1ced1 for tzimmermann@suse.de;
+        Thu, 30 Mar 2023 16:29:16 CST
+X-Transaction-ID: 2236815573ed4aa9a8a2226bd7b1ced1
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <9f690167-cdfa-7581-9493-1a66ea42a247@189.cn>
+Date:   Thu, 30 Mar 2023 16:29:13 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
+ clause
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     David Airlie <airlied@linux.ie>, liyi <liyi@loongson.cn>,
+        linux-kernel@vger.kernel.org, Sui Jingfeng <15330273260@189.cn>,
+        dri-devel@lists.freedesktop.org
+References: <20230325074636.136833-1-15330273260@189.cn>
+ <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
+ <20230330041726.w7boceq7ljymvfq2@ldmartin-desk2>
+ <f42d8ab8-c765-2517-7d25-6ce1dea320e8@suse.de>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <f42d8ab8-c765-2517-7d25-6ce1dea320e8@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's a callback styled xattr parser, i.e. xattr_foreach(), which is
-shared among listxattr and getxattr.  Convert it to two separate xattr
-parsers for listxattr and getxattr.
 
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/xattr.c | 347 ++++++++++++++++++++++-------------------------
- 1 file changed, 159 insertions(+), 188 deletions(-)
+On 2023/3/30 14:57, Thomas Zimmermann wrote:
+> Hi
+>
+> Am 30.03.23 um 06:17 schrieb Lucas De Marchi:
+>> On Wed, Mar 29, 2023 at 11:04:17AM +0200, Thomas Zimmermann wrote:
+>>> (cc'ing Lucas)
+>>>
+>>> Hi
+>>>
+>>> Am 25.03.23 um 08:46 schrieb Sui Jingfeng:
+>>>>  The assignment already done in drm_client_buffer_vmap(),
+>>>>  just trival clean, no functional change.
+>>>>
+>>>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+>>>> ---
+>>>>  drivers/gpu/drm/drm_fbdev_generic.c | 5 ++---
+>>>>  1 file changed, 2 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
+>>>> b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>> index 4d6325e91565..1da48e71c7f1 100644
+>>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>> @@ -282,7 +282,7 @@ static int drm_fbdev_damage_blit(struct 
+>>>> drm_fb_helper *fb_helper,
+>>>>                   struct drm_clip_rect *clip)
+>>>>  {
+>>>>      struct drm_client_buffer *buffer = fb_helper->buffer;
+>>>> -    struct iosys_map map, dst;
+>>>> +    struct iosys_map map;
+>>>>      int ret;
+>>>>      /*
+>>>> @@ -302,8 +302,7 @@ static int drm_fbdev_damage_blit(struct 
+>>>> drm_fb_helper *fb_helper,
+>>>>      if (ret)
+>>>>          goto out;
+>>>> -    dst = map;
+>>>> -    drm_fbdev_damage_blit_real(fb_helper, clip, &dst);
+>>>> +    drm_fbdev_damage_blit_real(fb_helper, clip, &map);
+>>>
+>>> I see what you're doing and it's probably correct in this case.
+>>>
+>>> But there's a larger issue with this iosys interfaces. Sometimes the 
+>>> address has to be modified (see calls of iosys_map_incr()). That can 
+>>> prevent incorrect uses of the mapping in other places, especially in 
+>>> unmap code.
+>>
+>> using a initializer for the cases it's needed IMO would make these kind
+>> of problems go away, because then the intent is explicit
+>>
+>>>
+>>> I think it would make sense to consider a separate structure for the 
+>>> I/O location. The buffer as a whole would still be represented by 
+>>> struct iosys_map.  And that new structure, let's call it struct 
+>>> iosys_ptr, would point to an actual location within the buffer's
+>>
+>> sounds fine to me, but I'd have to take a deeper look later (or when
+>> someone writes the patch).  It seems we'd replicate almost the entire
+>> API to just accomodate the 2 structs.  And the different types will lead
+>> to confusion when one or the other should be used
+>
+> I think we can split the current interface onto two categories: 
+> mapping and I/O. The former would use iosys_map and the latter would 
+> use iosys_ptr. And we'd need a helper that turns gets a ptr for a 
+> given map.
+>
+> If I find the tine, I'll probably type up a patch.
+>
+This sound fine and interesting.
 
-diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-index 541d508e7758..8851c38e8ca7 100644
---- a/fs/erofs/xattr.c
-+++ b/fs/erofs/xattr.c
-@@ -21,6 +21,7 @@ struct erofs_xattr_iter {
- 	struct qstr name;
- 	struct dentry *dentry;
- 	struct inode *inode;
-+	unsigned int remaining; /* size of inline xattrs to be iterated */
- 	bool getxattr;
- };
- 
-@@ -141,153 +142,6 @@ static int erofs_init_inode_xattrs(struct inode *inode)
- 	return ret;
- }
- 
--/*
-- * the general idea for these return values is
-- * if    0 is returned, go on processing the current xattr;
-- *       1 (> 0) is returned, skip this round to process the next xattr;
-- *    -err (< 0) is returned, an error (maybe ENOXATTR) occurred
-- *                            and need to be handled
-- */
--struct xattr_iter_handlers {
--	int (*entry)(struct erofs_xattr_iter *it, struct erofs_xattr_entry *entry);
--	int (*name)(struct erofs_xattr_iter *it, unsigned int processed, char *buf,
--		    unsigned int len);
--	int (*alloc_buffer)(struct erofs_xattr_iter *it, unsigned int value_sz);
--	void (*value)(struct erofs_xattr_iter *it, unsigned int processed, char *buf,
--		      unsigned int len);
--};
--
--/*
-- * Regardless of success or failure, `xattr_foreach' will end up with
-- * `ofs' pointing to the next xattr item rather than an arbitrary position.
-- */
--static int xattr_foreach(struct erofs_xattr_iter *it,
--			 const struct xattr_iter_handlers *op,
--			 unsigned int *tlimit)
--{
--	struct erofs_xattr_entry entry;
--	unsigned int value_sz, processed, slice;
--	int err;
--
--	/* 0. fixup blkaddr, ofs, ipage */
--	err = erofs_xattr_iter_fixup(it);
--	if (err)
--		return err;
--
--	/*
--	 * 1. read xattr entry to the memory,
--	 *    since we do EROFS_XATTR_ALIGN
--	 *    therefore entry should be in the page
--	 */
--	entry = *(struct erofs_xattr_entry *)(it->kaddr + it->ofs);
--	if (tlimit) {
--		unsigned int entry_sz = erofs_xattr_entry_size(&entry);
--
--		/* xattr on-disk corruption: xattr entry beyond xattr_isize */
--		if (*tlimit < entry_sz) {
--			DBG_BUGON(1);
--			return -EFSCORRUPTED;
--		}
--		*tlimit -= entry_sz;
--	}
--
--	it->ofs += sizeof(struct erofs_xattr_entry);
--	value_sz = le16_to_cpu(entry.e_value_size);
--
--	/* handle entry */
--	err = op->entry(it, &entry);
--	if (err) {
--		it->ofs += entry.e_name_len + value_sz;
--		goto out;
--	}
--
--	/* 2. handle xattr name (ofs will finally be at the end of name) */
--	processed = 0;
--
--	while (processed < entry.e_name_len) {
--		err = erofs_xattr_iter_fixup_aligned(it);
--		if (err)
--			goto out;
--
--		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
--			      entry.e_name_len - processed);
--
--		/* handle name */
--		err = op->name(it, processed, it->kaddr + it->ofs, slice);
--		if (err) {
--			it->ofs += entry.e_name_len - processed + value_sz;
--			goto out;
--		}
--
--		it->ofs += slice;
--		processed += slice;
--	}
--
--	/* 3. handle xattr value */
--	processed = 0;
--
--	if (op->alloc_buffer) {
--		err = op->alloc_buffer(it, value_sz);
--		if (err) {
--			it->ofs += value_sz;
--			goto out;
--		}
--	}
--
--	while (processed < value_sz) {
--		err = erofs_xattr_iter_fixup_aligned(it);
--		if (err)
--			goto out;
--
--		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
--			      value_sz - processed);
--		op->value(it, processed, it->kaddr + it->ofs, slice);
--		it->ofs += slice;
--		processed += slice;
--	}
--
--out:
--	/* xattrs should be 4-byte aligned (on-disk constraint) */
--	it->ofs = EROFS_XATTR_ALIGN(it->ofs);
--	return err < 0 ? err : 0;
--}
--
--static int xattr_entrymatch(struct erofs_xattr_iter *it,
--			    struct erofs_xattr_entry *entry)
--{
--	return (it->index != entry->e_name_index ||
--		it->name.len != entry->e_name_len) ? -ENOATTR : 0;
--}
--
--static int xattr_namematch(struct erofs_xattr_iter *it,
--			   unsigned int processed, char *buf, unsigned int len)
--{
--	return memcmp(buf, it->name.name + processed, len) ? -ENOATTR : 0;
--}
--
--static int xattr_checkbuffer(struct erofs_xattr_iter *it,
--			     unsigned int value_sz)
--{
--	int err = it->buffer_size < value_sz ? -ERANGE : 0;
--
--	it->buffer_ofs = value_sz;
--	return !it->buffer ? 1 : err;
--}
--
--static void xattr_copyvalue(struct erofs_xattr_iter *it,
--			    unsigned int processed,
--			    char *buf, unsigned int len)
--{
--	memcpy(it->buffer + processed, buf, len);
--}
--
--static const struct xattr_iter_handlers find_xattr_handlers = {
--	.entry = xattr_entrymatch,
--	.name = xattr_namematch,
--	.alloc_buffer = xattr_checkbuffer,
--	.value = xattr_copyvalue
--};
--
- static bool erofs_xattr_user_list(struct dentry *dentry)
- {
- 	return test_opt(&EROFS_SB(dentry->d_sb)->opt, XATTR_USER);
-@@ -344,62 +198,178 @@ const struct xattr_handler *erofs_xattr_handlers[] = {
- 	NULL,
- };
- 
--static int xattr_entrylist(struct erofs_xattr_iter *it,
--			   struct erofs_xattr_entry *entry)
-+/*
-+ * the general idea for these return values is
-+ * if    0 is returned, go on processing the current xattr;
-+ *       1 (> 0) is returned, skip this round to process the next xattr;
-+ *    -err (< 0) is returned, an error (maybe ENOXATTR) occurred
-+ *                            and need to be handled
-+ */
-+typedef int (*erofs_xattr_body_handler)(struct erofs_xattr_iter *it,
-+					unsigned int processed,
-+					char *buf, unsigned int len);
-+
-+static int erofs_xattr_namematch(struct erofs_xattr_iter *it,
-+		unsigned int processed, char *buf, unsigned int len)
-+{
-+	return memcmp(buf, it->name.name + processed, len) ? -ENOATTR : 0;
-+}
-+
-+static int erofs_xattr_copy(struct erofs_xattr_iter *it,
-+		unsigned int unused, char *buf, unsigned int len)
-+{
-+	memcpy(it->buffer + it->buffer_ofs, buf, len);
-+	it->buffer_ofs += len;
-+	return 0;
-+}
-+
-+static int erofs_xattr_body(struct erofs_xattr_iter *it, unsigned int len,
-+			    erofs_xattr_body_handler handler)
-+{
-+	unsigned int slice, processed = 0;
-+
-+	while (processed < len) {
-+		int err = erofs_xattr_iter_fixup_aligned(it);
-+		if (err)
-+			return err;
-+
-+		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
-+			      len - processed);
-+		err = handler(it, processed, it->kaddr + it->ofs, slice);
-+		if (err) {
-+			it->ofs += len - processed;
-+			return err;
-+		}
-+
-+		it->ofs += slice;
-+		processed += slice;
-+	}
-+	return 0;
-+}
-+
-+static int erofs_xattr_check_entry(struct erofs_xattr_iter *it)
- {
--	unsigned int prefix_len;
-+	int err;
-+
-+	err = erofs_xattr_iter_fixup(it);
-+	if (err)
-+		return err;
-+
-+	if (it->remaining) {
-+		struct erofs_xattr_entry *entry = it->kaddr + it->ofs;
-+		unsigned int entry_sz = erofs_xattr_entry_size(entry);
-+		/* xattr on-disk corruption: xattr entry beyond xattr_isize */
-+		if (it->remaining < entry_sz) {
-+			DBG_BUGON(1);
-+			return -EFSCORRUPTED;
-+		}
-+		it->remaining -= entry_sz;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * Wen returning 0 or ENOATTR, erofs_[get|list]xattr_foreach() will end up
-+ * with `ofs' pointing to the next xattr item rather than an arbitrary position.
-+ */
-+static int erofs_listxattr_foreach(struct erofs_xattr_iter *it)
-+{
-+	struct erofs_xattr_entry entry;
-+	const struct xattr_handler *h;
- 	const char *prefix;
-+	unsigned int value_sz, prefix_len, name_sz;
-+	int err;
- 
--	const struct xattr_handler *h =
--		erofs_xattr_handler(entry->e_name_index);
-+	err = erofs_xattr_check_entry(it);
-+	if (err)
-+		return err;
- 
--	if (!h || (h->list && !h->list(it->dentry)))
--		return 1;
-+	/* 1. handle xattr entry */
-+	entry = *(struct erofs_xattr_entry *)(it->kaddr + it->ofs);
-+	it->ofs += sizeof(struct erofs_xattr_entry);
-+	value_sz = le16_to_cpu(entry.e_value_size);
-+
-+	h = erofs_xattr_handler(entry.e_name_index);
-+	if (!h || (h->list && !h->list(it->dentry))) {
-+		it->ofs += entry.e_name_len + value_sz;
-+		goto out;
-+	}
- 
- 	prefix = xattr_prefix(h);
- 	prefix_len = strlen(prefix);
-+	name_sz = prefix_len + entry.e_name_len + 1;
- 
- 	if (!it->buffer) {
--		it->buffer_ofs += prefix_len + entry->e_name_len + 1;
--		return 1;
-+		it->buffer_ofs += name_sz;
-+		it->ofs += entry.e_name_len + value_sz;
-+		goto out;
- 	}
--
--	if (it->buffer_ofs + prefix_len
--		+ entry->e_name_len + 1 > it->buffer_size)
-+	if (it->buffer_ofs + name_sz > it->buffer_size)
- 		return -ERANGE;
- 
- 	memcpy(it->buffer + it->buffer_ofs, prefix, prefix_len);
- 	it->buffer_ofs += prefix_len;
--	return 0;
--}
- 
--static int xattr_namelist(struct erofs_xattr_iter *it,
--			  unsigned int processed, char *buf, unsigned int len)
--{
--	memcpy(it->buffer + it->buffer_ofs, buf, len);
--	it->buffer_ofs += len;
-+	/* 2. handle xattr name (err can't be ENOATTR) */
-+	err = erofs_xattr_body(it, entry.e_name_len, erofs_xattr_copy);
-+	if (err)
-+		return err;
-+
-+	it->buffer[it->buffer_ofs++] = '\0';
-+	it->ofs += value_sz;
-+out:
-+	it->ofs = EROFS_XATTR_ALIGN(it->ofs);
- 	return 0;
- }
- 
--static int xattr_skipvalue(struct erofs_xattr_iter *it,
--			   unsigned int value_sz)
-+static int erofs_getxattr_foreach(struct erofs_xattr_iter *it)
- {
--	it->buffer[it->buffer_ofs++] = '\0';
--	return 1;
--}
-+	struct erofs_xattr_entry entry;
-+	unsigned int value_sz;
-+	int err;
- 
--static const struct xattr_iter_handlers list_xattr_handlers = {
--	.entry = xattr_entrylist,
--	.name = xattr_namelist,
--	.alloc_buffer = xattr_skipvalue,
--	.value = NULL
--};
-+	err = erofs_xattr_check_entry(it);
-+	if (err)
-+		return err;
-+
-+	/* 1. handle xattr entry */
-+	entry = *(struct erofs_xattr_entry *)(it->kaddr + it->ofs);
-+	it->ofs += sizeof(struct erofs_xattr_entry);
-+	value_sz = le16_to_cpu(entry.e_value_size);
-+
-+	if (it->index != entry.e_name_index || it->name.len != entry.e_name_len) {
-+		it->ofs += entry.e_name_len + value_sz;
-+		err = -ENOATTR;
-+		goto out;
-+	}
-+
-+	/* 2. handle xattr name */
-+	err = erofs_xattr_body(it, entry.e_name_len, erofs_xattr_namematch);
-+	if (err) {
-+		it->ofs += value_sz;
-+		goto out;
-+	}
-+
-+	/* 3. handle xattr value */
-+	if (!it->buffer) {
-+		it->buffer_ofs = value_sz;
-+		it->ofs += value_sz;
-+		goto out; /* err == 0 */
-+	}
-+	if (it->buffer_size < value_sz)
-+		return -ERANGE;
-+
-+	/* no need updating ofs on error (err can't be ENOATTR) */
-+	err = erofs_xattr_body(it, value_sz, erofs_xattr_copy);
-+out:
-+	it->ofs = EROFS_XATTR_ALIGN(it->ofs);
-+	return err;
-+}
- 
- static int erofs_iter_inline_xattr(struct erofs_xattr_iter *it)
- {
- 	struct erofs_inode *const vi = EROFS_I(it->inode);
--	const struct xattr_iter_handlers *op;
--	unsigned int xattr_header_sz, remaining;
-+	unsigned int xattr_header_sz;
- 	erofs_off_t pos;
- 	int ret;
- 
-@@ -417,11 +387,12 @@ static int erofs_iter_inline_xattr(struct erofs_xattr_iter *it)
- 	if (IS_ERR(it->kaddr))
- 		return PTR_ERR(it->kaddr);
- 
--	remaining = vi->xattr_isize - xattr_header_sz;
--	op = it->getxattr ? &find_xattr_handlers : &list_xattr_handlers;
--
--	while (remaining) {
--		ret = xattr_foreach(it, op, &remaining);
-+	it->remaining = vi->xattr_isize - xattr_header_sz;
-+	while (it->remaining) {
-+		if (it->getxattr)
-+			ret = erofs_getxattr_foreach(it);
-+		else
-+			ret = erofs_listxattr_foreach(it);
- 		if ((it->getxattr && ret != -ENOATTR) || (!it->getxattr && ret))
- 			break;
- 	}
-@@ -432,12 +403,9 @@ static int erofs_iter_shared_xattr(struct erofs_xattr_iter *it)
- {
- 	struct erofs_inode *const vi = EROFS_I(it->inode);
- 	struct super_block *const sb = it->sb;
--	const struct xattr_iter_handlers *op;
- 	unsigned int i, xsid;
- 	int ret = -ENOATTR;
- 
--	op = it->getxattr ? &find_xattr_handlers : &list_xattr_handlers;
--
- 	for (i = 0; i < vi->xattr_shared_count; ++i) {
- 		xsid = vi->xattr_shared_xattrs[i];
- 		it->blkaddr = EROFS_SB(sb)->xattr_blkaddr +
-@@ -447,7 +415,10 @@ static int erofs_iter_shared_xattr(struct erofs_xattr_iter *it)
- 		if (IS_ERR(it->kaddr))
- 			return PTR_ERR(it->kaddr);
- 
--		ret = xattr_foreach(it, op, NULL);
-+		if (it->getxattr)
-+			ret = erofs_getxattr_foreach(it);
-+		else
-+			ret = erofs_listxattr_foreach(it);
- 		if ((it->getxattr && ret != -ENOATTR) || (!it->getxattr && ret))
- 			break;
- 	}
--- 
-2.19.1.6.gb485710b
+I don't have enough time to do this,  as I'm focus on developing driver 
+for my company's hardware.
 
+But I  will keep an eye on it, see what interesting will be happen.
+
+Becuase the fbdev related code  will also be used on my company's 
+ls7a1000 and ls7a2000 platform.
+
+It is useful and interesting,  Our device  at least  can functional as a 
+big frame buffer and more than framebuffer.
+
+The bandwidth for VRAM write is very high(when write combine is open). 
+at least 10+ times batter than aspeed bmc.
+
+glxgear on ls3a5000@2.5ghz+ls7a1000 can run above 1000+fps. while with 
+the aspeed bmc it is just 100+ fps all so.
+
+
+> Best regards
+> Thomas
+>
+>>
+>> thanks
+>> Lucas De Marchi
+>>
+>>> memory range. A few locations and helpers would need changes, but 
+>>> there are not so many callers that it's an issue.  This would also 
+>>> allow for a few debugging tests that ensure that iosys_ptr always 
+>>> operates within the bounds of an iosys_map.
+>>>
+>>> I've long considered this idea, but there was no pressure to work on 
+>>> it. Maybe now.
+>>>
+>>> Best regards
+>>> Thomas
+>>>
+>>>>      drm_client_buffer_vunmap(buffer);
+>>>
+>>> -- 
+>>> Thomas Zimmermann
+>>> Graphics Driver Developer
+>>> SUSE Software Solutions Germany GmbH
+>>> Maxfeldstr. 5, 90409 Nürnberg, Germany
+>>> (HRB 36809, AG Nürnberg)
+>>> Geschäftsführer: Ivo Totev
+>>
+>>
+>>
+>
