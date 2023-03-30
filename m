@@ -2,64 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8376D0411
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3DA6D040C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjC3L4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S229734AbjC3Lyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbjC3L4K (ORCPT
+        with ESMTP id S231590AbjC3Lys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:56:10 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE676114
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:55:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680177347; x=1711713347;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HnAIjzzdx2lB/b8PHKZcY6z2HpfZD2oCVe+1dUZS8So=;
-  b=Xy9POb6w6YKvh43PIP7/VV5pAm2bKY3kIaPhAyUyXjU2qhsL/uaw3gfz
-   Fd7Mn/1mzpXHqq65T5mwPrr+1KDrsg+JG7UrRAEDySYuzG8hrzbbspoET
-   pMo1TlddsXumXIgqH+CauZ9qro/S/Opiu0zq95yNev941wJQrwdPpycLp
-   FerxL3ksVb00+WLQdPeIo1Wzn3eX4udlhNT/B/8RSvRobJeGbuCUR9q2V
-   yBrVrNXJpSduOsh+8PzbHnszxJwN101DvPyzEFc+8INJmcx8ULqjUybhw
-   fk49KsEEAdU2nbYvcaQyKWa0wMYMurmVJHv8GghaspBgAEClQ9dosyTAB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="325069296"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="325069296"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:54:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="717285299"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="717285299"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:54:01 -0700
-Message-ID: <8d0d0478-1e45-ea52-f1b7-910b747d6282@linux.intel.com>
-Date:   Thu, 30 Mar 2023 13:53:59 +0200
+        Thu, 30 Mar 2023 07:54:48 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A979760
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:54:31 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 71FA11F37E;
+        Thu, 30 Mar 2023 11:54:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680177268; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yTxuytMBR6QQoX8yIHFqLLHRnVYtbbdBFCds6FGzcxc=;
+        b=PydK+RAOysv+l3mDhvE1oUFYSo2qb29bQoO3h/rz8OkZJF1DzCvLXOnzE5SAxVXfBikmXp
+        5iFrd1VVG7cdiK6tpJaUdGQBwy7JJfDAOgDgaQkiNXqgdsy8u19t1hj1rurYOoiNXHmEqa
+        c9MM13JpvlemEuJlI48xrz9DU42I5tE=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 120182C14F;
+        Thu, 30 Mar 2023 11:54:27 +0000 (UTC)
+Date:   Thu, 30 Mar 2023 13:54:27 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: buffer write race: Re: [PATCH printk v1 09/18] printk: nobkl:
+ Add print state functions
+Message-ID: <ZCV4c+Sbywttsq/v@alley>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
+ <20230302195618.156940-10-john.ogness@linutronix.de>
+ <ZCRD7oOcTzOM5cXe@alley>
+ <87edp7pqy5.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v10] ASoC: tas2781: Add tas2781 driver
-Content-Language: en-US
-To:     Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz,
-        pierre-louis.bossart@linux.intel.com
-Cc:     kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
-        navada@ti.com
-References: <20230329100107.8181-1-13916275206@139.com>
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <20230329100107.8181-1-13916275206@139.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87edp7pqy5.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,41 +59,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/2023 12:01 PM, Shenghao Ding wrote:
-> Create tas2781 driver.
+On Wed 2023-03-29 16:39:54, John Ogness wrote:
+> On 2023-03-29, Petr Mladek <pmladek@suse.com> wrote:
+> >> +/**
+> >> + * console_can_proceed - Check whether printing can proceed
+> >> + * @wctxt:	The write context that was handed to the write function
+> >> + *
+> >> + * Returns:	True if the state is correct. False if a handover
+> >> + *		has been requested or if the console was taken
+> >> + *		over.
+> >> + *
+> >> + * Must be invoked after the record was dumped into the assigned record
+> >> + * buffer
+> >
+> > The word "after" made me think about possible races when the record
+> > buffer is being filled. The owner might loose the lock a hostile
+> > way during this action. And we should prevent using the same buffer
+> > when the other owner is still modifying the content.
+> >
+> > It should be safe when the same buffer might be used only by nested
+> > contexts. It does not matter if the outer context finishes writing
+> > later. The nested context should not need the buffer anymore.
+> >
+> > But a problem might happen when the same buffer is shared between
+> > more non-nested contexts. One context might loose the lock a hostile way.
+> > The other context might get the access after the hostile context
+> > released the lock.
 > 
-> Signed-off-by: Shenghao Ding <13916275206@139.com>
+> Hostile takeovers _only occur during panic_.
+>
+> > NORMAL and PANIC contexts are safe. These priorities have only
+> > one context and both have their own buffers.
+> >
+> > A problem might be with EMERGENCY contexts. Each CPU might have
+> > its own EMERGENCY context. We might prevent this problem if
+> > we do not allow to acquire the lock in EMERGENCY (and NORMAL)
+> > context when panic() is running or after the first hostile
+> > takeover.
 > 
-> ---
-> Changes in v10:
->   - using be16_to_cpu and be32_to_cpu instead of SMS_HTONS and SMS_HTONL
->   - optimize and reduce the boundary checks
->   - Add comments on some kmemdup instead of kzalloc+memcpy
->   Changes to be committed:
-> 	modified:   sound/soc/codecs/Kconfig
-> 	modified:   sound/soc/codecs/Makefile
-> 	new file:   sound/soc/codecs/tas2781-dsp.c
-> 	new file:   sound/soc/codecs/tas2781-dsp.h
-> 	new file:   sound/soc/codecs/tas2781-i2c.c
-> 	new file:   sound/soc/codecs/tas2781.h
-> ---
+> A hostile takeover means a CPU took ownership with PANIC priority. No
+> CPU can steal ownership from the PANIC owner. Once the PANIC owner
+> releases ownership, the panic message has been output to the atomic
+> consoles. Do we really care what happens after that?
 
-...
+I see. The hostile take over is allowed only in
+cons_atomic_exit(CONS_PRIO_PANIC, prev_prio) that is called at the
+very end of panic() before the infinite blinking.
 
-> +
-> +static int fw_parse_block_data_kernel(struct tasdevice_fw *tas_fmw,
-> +	struct tasdev_blk *block, const struct firmware *fmw, int offset)
-> +{
-> +	const unsigned char *data = fmw->data;
-> +
-> +	if (offset + 16 > fmw->size) {
-> +		dev_err(tas_fmw->dev, "%s: File Size error\n", __func__);
-> +		offset = -EINVAL;
-> +		goto out;
-> +	}
-> +	block->type = be32_to_cpup((__be32 *)&data[offset]);
+It is true that we do not care at this moment. It is actually called
+after "suppress_printk = 1;" so that there should not be any
+new messages.
 
-Wouldn't just be32_to_cpu(data[offset]) work instead of be32_to_cpup? 
-Same in other cases.
+Anyway, it would be nice to document this subtle race somewhere.
+I could imagine that people would want to risk the hostile
+takeover even earlier so the race might get introduced.
 
-
+Best Regards,
+Petr
