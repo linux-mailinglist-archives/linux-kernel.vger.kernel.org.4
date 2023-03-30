@@ -2,126 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE6D6D07F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461846D07F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbjC3OTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        id S232336AbjC3OUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232326AbjC3OSr (ORCPT
+        with ESMTP id S232081AbjC3OUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:18:47 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D47BBDFD
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:18:18 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PnQS067PMzKxNw;
-        Thu, 30 Mar 2023 22:15:28 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 22:17:52 +0800
-Subject: Re: [PATCH] ubifs: Fix memory leak in do_rename
-To:     =?UTF-8?Q?M=c3=a5rten_Lindahl?= <marten.lindahl@axis.com>,
-        Richard Weinberger <richard@nod.at>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@axis.com>
-References: <20230330-memleak_rename-fix-v1-1-99789e908fdf@axis.com>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <bc8aaf0a-0b21-99a8-4c50-92edeff8edd7@huawei.com>
-Date:   Thu, 30 Mar 2023 22:17:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Thu, 30 Mar 2023 10:20:43 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB26AC
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:20:41 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A0F6B66030CD;
+        Thu, 30 Mar 2023 15:20:39 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680186040;
+        bh=z67vNzKi9aaIqAtcwOlUEH/djDA/nzpldmj/FIyFeFE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SmUL/fcPVWMP9xKCbKnTdqhI6xu8GRuh0Zi1NBwpLtsx9mTCG8Ul+uSFZ5bAV6Okm
+         V8FNs7jaUTWYRylJVu3sHHPC58NTPNmVPRhsFRq2UQHFq+1hIOrj/4SLTRkGwQejyF
+         fHqB5FJy8V2zJNjxibyFvbI1I9SRkigAJzpaUMjyHIk/KajqkhkjLORwwOVQnxJKtY
+         ivDZlTVRsAXuSGTI3F7Bokq4NxiGPX9PatVYPpYKxLY709DwmM3DfRikyIapP9HZTs
+         eJ3Dg1Xs/wNoI8qarNNTy8TFePa8xIbdLbvjmASgRJBcx7jezG2FAH8bq5TCkKCND4
+         qXHkXzHzFGzAw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+        wenst@chromium.org
+Subject: [PATCH v2 0/8] MediaTek DisplayPort: support eDP and aux-bus
+Date:   Thu, 30 Mar 2023 16:20:27 +0200
+Message-Id: <20230330142035.191399-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-In-Reply-To: <20230330-memleak_rename-fix-v1-1-99789e908fdf@axis.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> If renaming a file in an encrypted directory, function
-> fscrypt_setup_filename allocates memory for a file name. This name is
-> never used, and before returning to the caller the memory for it is not
-> freed.
-> 
-> When running kmemleak on it we see that it is registered as a leak. The
-> report below is triggered by a simple program 'rename' that renames a
-> file in an encrypted directory:
-> 
->    unreferenced object 0xffff888101502840 (size 32):
->      comm "rename", pid 9404, jiffies 4302582475 (age 435.735s)
->      backtrace:
->        __kmem_cache_alloc_node
->        __kmalloc
->        fscrypt_setup_filename
->        do_rename
->        ubifs_rename
->        vfs_rename
->        do_renameat2
-> 
-> To fix this we can remove the call to fscrypt_setup_filename as it's not
-> needed.
-> 
-> Reported-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
-> ---
->   fs/ubifs/dir.c | 6 ------
->   1 file changed, 6 deletions(-)
-> 
+Changes in v2:
+ - Sorry, the v1 send got broken as I forgot to remove old patches
+   in my send folder.
 
-I'm okay with this modification. It would be better to add a fix tag. 
-(Fixes: 278d9a243635f26 ("ubifs: Rename whiteout atomically"))
+This series adds "real" support for eDP in the mtk-dp DisplayPort driver.
+
+Explaining the "real":
+Before this change, the DisplayPort driver did support eDP to some
+extent, but it was treating it entirely like a regular DP interface
+which is partially fine, after all, embedded DisplayPort *is* actually
+DisplayPort, but there might be some differences to account for... and
+this is for both small performance improvements and, more importantly,
+for correct functionality in some systems.
+
+Functionality first:
+
+One of the common differences found in various boards implementing eDP
+and machines using an eDP panel is that many times the HPD line is not
+connected. This *must* be accounted for: at startup, this specific IP
+will raise a HPD interrupt (which should maybe be ignored... as it does
+not appear to be a "real" event...) that will make the eDP panel to be
+detected and to actually work but, after a suspend-resume cycle, there
+will be no HPD interrupt (as there's no HPD line in my case!) producing
+a functionality issue - specifically, the DP Link Training fails because
+the panel doesn't get powered up, then it stays black and won't work
+until rebooting the machine (or removing and reinserting the module I
+think, but I haven't tried that).
+
+Now for.. both:
+eDP panels are *e*DP because they are *not* removable (in the sense that
+you can't unplug the cable without disassembling the machine, in which
+case, the machine shall be powered down..!): this (correct) assumption
+makes us able to solve some issues and to also gain a little performance
+during PM operations.
+
+What was done here is:
+ - Caching the EDID if the panel is eDP: we're always going to read the
+   same data everytime, so we can just cache that (as it's small enough)
+   shortening PM resume times for the eDP driver instance;
+ - Always return connector_status_connected if it's eDP: non-removable
+   means connector_status_disconnected can't happen during runtime...
+   this also saves us some time and even power, as we won't have to
+   perform yet another power cycle of the HW;
+ - Added aux-bus support!
+   This makes us able to rely on panel autodetection from the EDID,
+   avoiding to add more and more panel timings to panel-edp and, even
+   better, allowing to use one panel node in devicetrees for multiple
+   variants of the same machine since, at that point, it's not important
+   to "preventively know" what panel we have (eh, it's autodetected...!).
+
+This was tested on a MT8195 Cherry Tomato Chromebook (panel-edp on aux-bus)
 
 
-Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
+P.S.: For your own testing commodity, here's a reference devicetree:
+&edp_tx {
+	status = "okay";
 
-> diff --git a/fs/ubifs/dir.c b/fs/ubifs/dir.c
-> index 0f29cf201136..4c2dda1346e7 100644
-> --- a/fs/ubifs/dir.c
-> +++ b/fs/ubifs/dir.c
-> @@ -358,7 +358,6 @@ static struct inode *create_whiteout(struct inode *dir, struct dentry *dentry)
->   	umode_t mode = S_IFCHR | WHITEOUT_MODE;
->   	struct inode *inode;
->   	struct ubifs_info *c = dir->i_sb->s_fs_info;
-> -	struct fscrypt_name nm;
->   
->   	/*
->   	 * Create an inode('nlink = 1') for whiteout without updating journal,
-> @@ -369,10 +368,6 @@ static struct inode *create_whiteout(struct inode *dir, struct dentry *dentry)
->   	dbg_gen("dent '%pd', mode %#hx in dir ino %lu",
->   		dentry, mode, dir->i_ino);
->   
-> -	err = fscrypt_setup_filename(dir, &dentry->d_name, 0, &nm);
-> -	if (err)
-> -		return ERR_PTR(err);
-> -
->   	inode = ubifs_new_inode(c, dir, mode, false);
->   	if (IS_ERR(inode)) {
->   		err = PTR_ERR(inode);
-> @@ -395,7 +390,6 @@ static struct inode *create_whiteout(struct inode *dir, struct dentry *dentry)
->   	make_bad_inode(inode);
->   	iput(inode);
->   out_free:
-> -	fscrypt_free_filename(&nm);
->   	ubifs_err(c, "cannot create whiteout file, error %d", err);
->   	return ERR_PTR(err);
->   }
-> 
-> ---
-> base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
-> change-id: 20230330-memleak_rename-fix-6f94a6f99350
-> 
-> Best regards,
-> 
+	pinctrl-names = "default";
+	pinctrl-0 = <&edptx_pins_default>;
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@0 {
+			reg = <0>;
+			edp_in: endpoint {
+				remote-endpoint = <&dp_intf0_out>;
+			};
+		};
+
+		port@1 {
+			reg = <1>;
+			edp_out: endpoint {
+				data-lanes = <0 1 2 3>;
+				remote-endpoint = <&panel_in>;
+			};
+		};
+	};
+
+	aux-bus {
+		panel: panel {
+			compatible = "edp-panel";
+			power-supply = <&pp3300_disp_x>;
+			backlight = <&backlight_lcd0>;
+			port {
+				panel_in: endpoint {
+					remote-endpoint = <&edp_out>;
+				};
+			};
+		};
+	};
+};
+
+AngeloGioacchino Del Regno (8):
+  drm/mediatek: dp: Cache EDID for eDP panel
+  drm/mediatek: dp: Move AUX and panel poweron/off sequence to function
+  drm/mediatek: dp: Always return connected status for eDP in .detect()
+  drm/mediatek: dp: Always set cable_plugged_in at resume for eDP panel
+  drm/mediatek: dp: Change logging to dev for mtk_dp_aux_transfer()
+  drm/mediatek: dp: Enable event interrupt only when bridge attached
+  drm/mediatek: dp: Use devm variant of drm_bridge_add()
+  drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
+
+ drivers/gpu/drm/mediatek/mtk_dp.c | 172 ++++++++++++++++++------------
+ 1 file changed, 106 insertions(+), 66 deletions(-)
+
+-- 
+2.40.0
 
