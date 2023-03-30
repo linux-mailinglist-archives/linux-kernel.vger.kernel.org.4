@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75BA6CF838
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA146CF7F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 02:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbjC3A1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 20:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
+        id S230173AbjC3AJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 20:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjC3A1P (ORCPT
+        with ESMTP id S229638AbjC3AJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 20:27:15 -0400
+        Wed, 29 Mar 2023 20:09:34 -0400
 Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C794C3B
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:27:14 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id l14so11427685pfc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:27:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068E24236
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:09:33 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id fb38so11423269pfb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 17:09:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112; t=1680136034;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i7VcmXdqZtNcPeKWqqyIJTPXJmEo1KcutXG7+M0aesE=;
-        b=R1M/CIP/JQFpeVL8E0F5bZ0UWFsJqCCz8R59Fiw3Tk3q9Wrlr2N61iOMQ2JnulyEF4
-         0GArupJYHX8F4t5Yd0a1Upgj1llOuYx/0F1qixzjDBvgiIgXctf1+t8AMK+Q8Dr380lR
-         jJNnJYB/Mk4Wl/yYtmIfVdlHGdHgNWnyS8daheiEgOgxJedfOaJeOn0IRS2NmW8OjgUn
-         67K+50TfZRp1Q0T+xEsxrqxFe29fx/0+X0mOE8q5EbsAWf89Xb/HG+dJzmHzdGqU/bsO
-         b44XzdgRmN3fFFisVB65b4/XIiJWDkkE4/tBicItHVydnFQHvRoiqWt7Gb2JG5JCfC8H
-         fztw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680134971;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/f6kuz/aoEQ4OdZFUZeQhJ2qbcXsJoCNBezisNQzSyA=;
+        b=5Kg0RdKhyt1ID55+N/2TYj6ASuDLlE9kRuP0jfiHD4WW7DHikuXWKM2Wa7enwDIIr2
+         gHlkiUBISnQXA9MZiTvb2L7nCORsEoGs6XoF+wsbiSQtLp/7J6DseD+18SbWFxpI4biV
+         hQqxeFg7tKw1YsyWeuU8P/xbxdpa4pmuQPIoHXo3alTyYmN6tUAtJ7Xt8GHhts7ujCmH
+         nmucmTfbtQPVS1TZsAvug12n2oGmAGh4M7rY4dAn9wuJiBRL/PWq59a3lMLkVvET/tI6
+         1/jqnqK85F1+ixeZDTcYh4MwV0DmzPcq1a9gFhhYTKq6jpWEoILS9qgt94YioVUj+1wr
+         w+fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680136034;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i7VcmXdqZtNcPeKWqqyIJTPXJmEo1KcutXG7+M0aesE=;
-        b=A8ZRKuFnf0VLYKNiJzH03ritEYn6VpNDtzZzH33NhX+s+fKXJNcSUA9xPhv8wBZhev
-         TVTqD/fKoxIjLYPxz9wYP3hnbP0IRNauIok9UOVft8oh0zqudEfMxsdiiJUztPrBNPAf
-         Dwv8e9ZigX7g0f9Wa60KNwb8lhdYj9oB3QEvx8zkRjcCTlrtcRYbGyfy3HeYH5GFwIV5
-         gYqiFJMsEA4SAz2uV1+F/hAJdQqQ2EUXQQBzI+kQfPeBhnMqEes9Ntad2i0q1LkvFd4T
-         J9kN7/BSLvxmo+p0nNacITiuuhjlqBWd5ML4ujbUYG/m8i4jozy4WCRwigJTrnSvnu+p
-         lp2g==
-X-Gm-Message-State: AAQBX9fIapO3xh/3uZUiyf6deBN1FFj8J/fl8JOdPeUYkC9j75nwMFuM
-        TEEM6Iq+1UeOdHQscsau6yd5p/1i3FH9B/FOKVQ2Xw==
-X-Google-Smtp-Source: AKy350ZNgBTk/Bl4y/6vvaNgvZiKUvk17nRG9kMC7zx9X0sp3nTZlxV9bWZ4SpbZLulQWGN39+CX3JMU46PBItELf1Q=
-X-Received: by 2002:a05:6a00:2385:b0:5aa:310c:e65b with SMTP id
- f5-20020a056a00238500b005aa310ce65bmr10810754pfc.2.1680136033965; Wed, 29 Mar
- 2023 17:27:13 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680134971;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/f6kuz/aoEQ4OdZFUZeQhJ2qbcXsJoCNBezisNQzSyA=;
+        b=vREOmnRoOsBg8LPGL6oVQVhY451w2/HKJ4db7KmKlE/W9/BfNAd1HU+Nnr1kTYo350
+         3GKAXm1gpXmL5G+oLtEPdBCi9Vj9a4i7jL0F0Zp7jzB8iRtjytHK2R9Eq5bQZNqVCrbU
+         y1Z/A3n82EPTM+aPyhWqzhit1Cf5U5yYs5ogKEY97KpU2tdWsniApvNnavHVjRV7MhVM
+         3947FavdMcBWM/r7G31o72DNEKXHPykXKwCjiIRGGy/JqtI/S7ONRcfUdf2xDTDOBVkl
+         gxr6tJdCCTircfkkifQ8QlyJnubjNZ3whJBkzug2YpjsIv1ObcY5SWokIp6LGPETJxjD
+         P1rg==
+X-Gm-Message-State: AAQBX9ffVWGObZzWPXC0M+uSwNv6Tg/U4M6beJyhbRfNQYFjRDye27Fp
+        tUfXosU8KUCn0/RSdhHFMLc8xQ==
+X-Google-Smtp-Source: AKy350ZqpWfQPvqSLpocQ8IdxE8V92Qac7/wDI/66IsLf2Y5AbMcbw++dG5+dtf9jgtCifCda5nNOg==
+X-Received: by 2002:a62:1885:0:b0:623:d058:8661 with SMTP id 127-20020a621885000000b00623d0588661mr17961473pfy.28.1680134971465;
+        Wed, 29 Mar 2023 17:09:31 -0700 (PDT)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id p14-20020a62ab0e000000b0062505afff9fsm23574889pff.126.2023.03.29.17.09.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 17:09:30 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Bernhard =?utf-8?Q?Rosenkr=C3=A4n?= =?utf-8?Q?zer?= 
+        <bero@baylibre.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 00/17] Improve the MT8365 SoC and EVK board support
+In-Reply-To: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
+References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
+Date:   Wed, 29 Mar 2023 17:09:30 -0700
+Message-ID: <7h8rffyu9x.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <20230329104546.108016-1-andrew@daynix.com> <1680090663.603155-2-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <1680090663.603155-2-xuanzhuo@linux.alibaba.com>
-From:   Andrew Melnichenko <andrew@daynix.com>
-Date:   Thu, 30 Mar 2023 03:09:22 +0300
-Message-ID: <CABcq3pFGhGpRmOBQEaCWhW89ANPqvnDJoSQrPn4O0SmGPGnaKQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/4] eBPF RSS through QMP support.
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     yan@daynix.com, yuri.benditovich@daynix.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mst@redhat.com, jasowang@redhat.com, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,57 +89,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oh yeah, I'll fix that. Thank you!
+Alexandre Mergnat <amergnat@baylibre.com> writes:
 
-On Wed, Mar 29, 2023 at 2:52=E2=80=AFPM Xuan Zhuo <xuanzhuo@linux.alibaba.c=
-om> wrote:
+> This commits are based on the Fabien Parent <fparent@baylibre.com> work.
 >
-> Is this a patch-set of QEMU? If yes, why are the email lists all kernel m=
-ail
-> list without QEMU mail list?
+> The purpose of this series is to add the following HWs / IPs support for
+> the mt8365-evk board:
+> - Watchdog
+> - Power Management Integrated Circuit "PMIC" wrapper
+>   - MT6357 PMIC
+> - MultiMediaCard "MMC" & Secure Digital "SD" controller
+> - USB controller
+> - Ethernet MAC controller
 >
-> Thanks.
+> Add CPU Freq & IDLE support for this board.
 >
-> On Wed, 29 Mar 2023 13:45:41 +0300, Andrew Melnychenko <andrew@daynix.com=
-> wrote:
-> > This series of patches provides the ability to retrieve eBPF program
-> > through qmp, so management application may load bpf blob with proper ca=
-pabilities.
-> > Now, virtio-net devices can accept eBPF programs and maps through prope=
-rties
-> > as external file descriptors. Access to the eBPF map is direct through =
-mmap()
-> > call, so it should not require additional capabilities to bpf* calls.
-> > eBPF file descriptors can be passed to QEMU from parent process or by u=
-nix
-> > socket with sendfd() qmp command.
-> >
-> > Overall, the basic scenario of using the helper looks like this:
-> >  * Libvirt checks for ebpf_fds property.
-> >  * Libvirt requests eBPF blob through QMP.
-> >  * Libvirt loads blob for virtio-net.
-> >  * Libvirt launches the QEMU with eBPF fds passed.
-> >
-> > Andrew Melnychenko (4):
-> >   ebpf: Added eBPF initialization by fds and map update.
-> >   virtio-net: Added property to load eBPF RSS with fds.
-> >   ebpf: Added declaration/initialization routines.
-> >   qmp: Added new command to retrieve eBPF blob.
-> >
-> >  ebpf/ebpf.c                    |  48 +++++++++++++
-> >  ebpf/ebpf.h                    |  25 +++++++
-> >  ebpf/ebpf_rss-stub.c           |   6 ++
-> >  ebpf/ebpf_rss.c                | 124 +++++++++++++++++++++++++++------
-> >  ebpf/ebpf_rss.h                |  10 +++
-> >  ebpf/meson.build               |   1 +
-> >  hw/net/virtio-net.c            |  77 ++++++++++++++++++--
-> >  include/hw/virtio/virtio-net.h |   1 +
-> >  monitor/qmp-cmds.c             |  17 +++++
-> >  qapi/misc.json                 |  25 +++++++
-> >  10 files changed, 307 insertions(+), 27 deletions(-)
-> >  create mode 100644 ebpf/ebpf.c
-> >  create mode 100644 ebpf/ebpf.h
-> >
-> > --
-> > 2.39.1
-> >
+> This series depends to another one which add support for MT8365 SoC and
+> EVK board [1].
+
+It seems to depend on more than that series.  In order to test this, I
+tried applying this series on top of Bero's minimal support (now in
+linux-next), and it does not apply cleanly.
+
+Could you please list all the dependencies that are not yet upstream.
+
+Thanks,
+
+Kevin
