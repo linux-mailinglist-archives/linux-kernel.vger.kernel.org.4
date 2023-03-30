@@ -2,272 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929FE6D010C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9086D0103
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 12:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjC3KVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 06:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S231234AbjC3KU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 06:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbjC3KVE (ORCPT
+        with ESMTP id S231223AbjC3KUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:21:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BD77689
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 03:20:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680171616;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Pfge3RhdSXeiKxAh+OaaSFWWizy9sFj72RKo7NiLqdc=;
-        b=RtPyXkvX4pGnNhnnH7ibhgol2KQjFBqnuD9723Kwh5+pX86B7Q3b5RapaosrUHzrdO+IRn
-        dzMiynbwr+VBmA2PLDUMGRPohyjsuggDZsx/AeUgWTI4xgWmCn1iQ1WHsLEaRL0ns8Exrc
-        QkmufK9/DzH+qlx1ULL/uwf3dRv4+kE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-546-JqmxZjgbOpW7pxXpy1e5Ww-1; Thu, 30 Mar 2023 06:20:13 -0400
-X-MC-Unique: JqmxZjgbOpW7pxXpy1e5Ww-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83B0A886461;
-        Thu, 30 Mar 2023 10:20:12 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.45.225.103])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1BDD12166B34;
-        Thu, 30 Mar 2023 10:20:07 +0000 (UTC)
-From:   Viktor Malik <vmalik@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Viktor Malik <vmalik@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
-Subject: [PATCH bpf-next v2] kallsyms: move module-related functions under correct configs
-Date:   Thu, 30 Mar 2023 12:20:01 +0200
-Message-Id: <20230330102001.2183693-1-vmalik@redhat.com>
+        Thu, 30 Mar 2023 06:20:24 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CE17DA4;
+        Thu, 30 Mar 2023 03:20:23 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id l7so16779092pjg.5;
+        Thu, 30 Mar 2023 03:20:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680171622;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hzeT2+6D1T6rgkfSZiDiZzDR0t3EEp4P5XvtUA+hmiE=;
+        b=QDc6FfC5YwebP52JHx9BRtO24zMjNrTcVaqvW3qYO0SK2XCPwC3R4MaJ/6mbHv7H+V
+         QMwJj6qsT4X/ZQpabtG9rdOcKjb5gkbv6eWgiVQehFcLn6kK0Z99QsP2KeZuYcjTMZvf
+         PvyedTM84rXk6wV1Y/PG9FWbo0xV9k/nN65DOMQLba/VvvfahavtxDpKAYzNWblD67lK
+         1HNubC5LvN2SBOCXEKkSAdZUdAItyt77PE9wV0nVfDmJXN5Il2rzInWp0dA53+SK2fap
+         Ijiblj9GPyPiNXDBuD8YE/w/ApcJe+79WEZyNNY03xUOv1JBaLF6GadSK/wP57x/7vJ1
+         aYbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680171622;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hzeT2+6D1T6rgkfSZiDiZzDR0t3EEp4P5XvtUA+hmiE=;
+        b=SMcX21ItwhrdKjrpSueOrycMDjKbSa/W8Ks3E8AtmqC1hyJxItcKz9jLidPg626eOT
+         3zcXf4ttVKFBW1Fv5jNnu0bqgzoo53ZowucReJt6bhAd0Y7h5XT/nBZMXSNsSWc6aV2b
+         6yEeGQt8DqbC3iSnnJ8GIvMRRIHT1vzjJVl4UE9KEJPq7U95HnYNAv5cqHYwuWmrtOa1
+         SZtBQpPTUAkFyqe8cjD8IVD3A7bTC110aJk33J01A+/UfH7mpBOHflBpeppsn3yvE45E
+         GgDoOnFMUZxR0XCjbOM4cOI1vy9SANifxJ4vdUUrw8tcxZmle4SsNc6PjffKdhSu8Foh
+         2h8w==
+X-Gm-Message-State: AAQBX9dMfy/0PpAAKC7kovv4rte1Z5wB/7MTOaSPQoXqxAae8qGcmhiQ
+        Ay/ndqZ+vW5oX+j7nSG4Vmk9BXclm0QIOw==
+X-Google-Smtp-Source: AKy350Yv0cypxbGBwqh/pPR6IiX2tEXNMFYDqR/TkZwwIx3MHOEpGPNCR7xKWeQ8rnOKSbxfbf0a7w==
+X-Received: by 2002:a17:90a:190f:b0:233:c301:32b3 with SMTP id 15-20020a17090a190f00b00233c30132b3mr24582386pjg.3.1680171622637;
+        Thu, 30 Mar 2023 03:20:22 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
+        by smtp.gmail.com with ESMTPSA id v8-20020a17090abb8800b002376d85844dsm2860416pjr.51.2023.03.30.03.20.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 03:20:22 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yang Ling <gnaygnil@gmail.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH 0/2] Move Loongson1 restart handler to watchdog driver
+Date:   Thu, 30 Mar 2023 18:20:11 +0800
+Message-Id: <20230330102013.545588-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Functions for searching module kallsyms should have non-empty
-definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
-only CONFIG_MODULES check was used for many of these, which may have
-caused complilation errors on some configs.
+Move Loongson1 restart handler to watchdog driver
+and update the Makefile accordingly.
 
-This patch moves all relevant functions under the correct configs.
+Keguang Zhang (2):
+  MIPS: Loongson32: Remove reset.c
+  watchdog: loongson1_wdt: Implement restart handler
 
-Fixes: bd5314f8dd2d ("kallsyms, bpf: Move find_kallsyms_symbol_value out of internal header")
-Signed-off-by: Viktor Malik <vmalik@redhat.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
----
-v2:
-- keep dereference_module_function_descriptor() in original place to
-  avoid compilation errors
-- fix indentation
-- add the "Fixes" tag
+ .../include/asm/mach-loongson32/regs-wdt.h    | 15 ------
+ arch/mips/loongson32/common/Makefile          |  2 +-
+ arch/mips/loongson32/common/reset.c           | 51 -------------------
+ drivers/watchdog/loongson1_wdt.c              | 19 ++++++-
+ 4 files changed, 19 insertions(+), 68 deletions(-)
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-wdt.h
+ delete mode 100644 arch/mips/loongson32/common/reset.c
 
- include/linux/module.h | 135 ++++++++++++++++++++++-------------------
- 1 file changed, 74 insertions(+), 61 deletions(-)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 41cfd3be57e5..886d24877c7c 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -608,16 +608,6 @@ static inline bool within_module(unsigned long addr, const struct module *mod)
- /* Search for module by name: must be in a RCU-sched critical section. */
- struct module *find_module(const char *name);
- 
--/* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
--   symnum out of range. */
--int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
--			char *name, char *module_name, int *exported);
--
--/* Look for this name: can be of form module:name. */
--unsigned long module_kallsyms_lookup_name(const char *name);
--
--unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
--
- extern void __noreturn __module_put_and_kthread_exit(struct module *mod,
- 			long code);
- #define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
-@@ -664,17 +654,6 @@ static inline void __module_get(struct module *module)
- /* Dereference module function descriptor */
- void *dereference_module_function_descriptor(struct module *mod, void *ptr);
- 
--/* For kallsyms to ask for address resolution.  namebuf should be at
-- * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
-- * found, otherwise NULL. */
--const char *module_address_lookup(unsigned long addr,
--			    unsigned long *symbolsize,
--			    unsigned long *offset,
--			    char **modname, const unsigned char **modbuildid,
--			    char *namebuf);
--int lookup_module_symbol_name(unsigned long addr, char *symname);
--int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name);
--
- int register_module_notifier(struct notifier_block *nb);
- int unregister_module_notifier(struct notifier_block *nb);
- 
-@@ -765,45 +744,6 @@ static inline void module_put(struct module *module)
- 
- #define module_name(mod) "kernel"
- 
--/* For kallsyms to ask for address resolution.  NULL means not found. */
--static inline const char *module_address_lookup(unsigned long addr,
--					  unsigned long *symbolsize,
--					  unsigned long *offset,
--					  char **modname,
--					  const unsigned char **modbuildid,
--					  char *namebuf)
--{
--	return NULL;
--}
--
--static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
--{
--	return -ERANGE;
--}
--
--static inline int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name)
--{
--	return -ERANGE;
--}
--
--static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
--					char *type, char *name,
--					char *module_name, int *exported)
--{
--	return -ERANGE;
--}
--
--static inline unsigned long module_kallsyms_lookup_name(const char *name)
--{
--	return 0;
--}
--
--static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
--						       const char *name)
--{
--	return 0;
--}
--
- static inline int register_module_notifier(struct notifier_block *nb)
- {
- 	/* no events will happen anyway, so this can always succeed */
-@@ -899,7 +839,36 @@ int module_kallsyms_on_each_symbol(const char *modname,
- 				   int (*fn)(void *, const char *,
- 					     struct module *, unsigned long),
- 				   void *data);
--#else
-+
-+/* For kallsyms to ask for address resolution.  namebuf should be at
-+ * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
-+ * found, otherwise NULL.
-+ */
-+const char *module_address_lookup(unsigned long addr,
-+				  unsigned long *symbolsize,
-+				  unsigned long *offset,
-+				  char **modname, const unsigned char **modbuildid,
-+				  char *namebuf);
-+int lookup_module_symbol_name(unsigned long addr, char *symname);
-+int lookup_module_symbol_attrs(unsigned long addr,
-+			       unsigned long *size,
-+			       unsigned long *offset,
-+			       char *modname,
-+			       char *name);
-+
-+/* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
-+ * symnum out of range.
-+ */
-+int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
-+		       char *name, char *module_name, int *exported);
-+
-+/* Look for this name: can be of form module:name. */
-+unsigned long module_kallsyms_lookup_name(const char *name);
-+
-+unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
-+
-+#else	/* CONFIG_MODULES && CONFIG_KALLSYMS */
-+
- static inline int module_kallsyms_on_each_symbol(const char *modname,
- 						 int (*fn)(void *, const char *,
- 						 struct module *, unsigned long),
-@@ -907,6 +876,50 @@ static inline int module_kallsyms_on_each_symbol(const char *modname,
- {
- 	return -EOPNOTSUPP;
- }
-+
-+/* For kallsyms to ask for address resolution.  NULL means not found. */
-+static inline const char *module_address_lookup(unsigned long addr,
-+						unsigned long *symbolsize,
-+						unsigned long *offset,
-+						char **modname,
-+						const unsigned char **modbuildid,
-+						char *namebuf)
-+{
-+	return NULL;
-+}
-+
-+static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
-+{
-+	return -ERANGE;
-+}
-+
-+static inline int lookup_module_symbol_attrs(unsigned long addr,
-+					     unsigned long *size,
-+					     unsigned long *offset,
-+					     char *modname,
-+					     char *name)
-+{
-+	return -ERANGE;
-+}
-+
-+static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
-+				     char *type, char *name,
-+				     char *module_name, int *exported)
-+{
-+	return -ERANGE;
-+}
-+
-+static inline unsigned long module_kallsyms_lookup_name(const char *name)
-+{
-+	return 0;
-+}
-+
-+static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
-+						       const char *name)
-+{
-+	return 0;
-+}
-+
- #endif  /* CONFIG_MODULES && CONFIG_KALLSYMS */
- 
- #endif /* _LINUX_MODULE_H */
+base-commit: cf3be7e82b129ed34f811f116f2b113f6299d449
 -- 
-2.39.2
+2.34.1
 
