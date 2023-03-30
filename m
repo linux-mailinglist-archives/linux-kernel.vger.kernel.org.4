@@ -2,198 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD746D0347
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9616D0353
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 13:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbjC3LeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 07:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S230224AbjC3Lhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 07:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjC3LeL (ORCPT
+        with ESMTP id S231325AbjC3Lhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:34:11 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B79110D7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:34:10 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id j11so24064799lfg.13
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:34:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680176049;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cYbYycdmup7ooDPSWSxlw+wfKu3e5N7WtJR3yxq44lc=;
-        b=m5vCBuGJqx23A5v6T6OBZyfULIxy1bEKyorWAYsxthAaAh8Ux79BG67VzvWO2dAw0v
-         HzpXSAVyZlV2PXHkKaI9klWO20uBj9Y5D9PiqlGESLiioNu4mewtsVuUhmj6rC47FDMQ
-         9R2Fcwg1NptgNmfG2JthKxOnyGHykCR9X0F0eTCJCL7SaUWDTYJPwIokZKQpvuriFr2K
-         z45zgkJGpZZrkMTfsNjmatrlCjCt0MYqw/kQVZeh9hDAQi5mrHJAj9RnJ8DgE2Leke+E
-         1bppdiJVzOtkLqBNWEd+L3Vz+45u3whZeUa9Kr5aL82S5GIEBheMp2UQw1QbOocBzLcx
-         NQmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680176049;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cYbYycdmup7ooDPSWSxlw+wfKu3e5N7WtJR3yxq44lc=;
-        b=A0r4J5+XAf1dGIDZHbaNzOnfCJ5sCOvOXRU4reNOsZcik0nUYWrs3qadL1/xlAtwwU
-         ZkPE83cmJf04VgG0vptDZLoPcGAjIY4oo9VqaXluN/WaSpoLpn1SFVtK2cT2wGxxtBJ5
-         m0EUXlhn3O9fXgkF615U2G6CVdcPwobCEeZctqb5iusX2oSduCUVdKddcXRPozu9iq/T
-         DXYa7zhcrbpcw0h+HY3zBHNGe6LqSP73YV645dFMf8/m5bP6zgsos9up8ceHu6589shR
-         azmgXReQMCWG4MvkLlNTOPgP8H5VZLWOI4ccLxbwwTbnCfeUVl9USvP6DgBxaawbBpua
-         iLRw==
-X-Gm-Message-State: AAQBX9eAgzC+INOV6DE5l5wMaPTJ94hYEOvjXZiBg+JFjRBGgQnF53jM
-        KYWBzRbMksYAjxWhBT+S96evYQ==
-X-Google-Smtp-Source: AKy350a2EDWQYZVhflo+GOFEPA/WWu3pQ/gL6jWPerrjJR9OygRe+bysk5u936muBYaB+ATgDKZ6jQ==
-X-Received: by 2002:ac2:5623:0:b0:4eb:c24:205b with SMTP id b3-20020ac25623000000b004eb0c24205bmr4787726lff.69.1680176048706;
-        Thu, 30 Mar 2023 04:34:08 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 21-20020ac24855000000b004d5a720e689sm5877690lfy.126.2023.03.30.04.34.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 04:34:08 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v5] ASoC: dt-bindings: qcom,lpass-va-macro: Add missing NPL clock
-Date:   Thu, 30 Mar 2023 13:34:05 +0200
-Message-Id: <20230330113405.55722-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 30 Mar 2023 07:37:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A3F19A9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 04:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680176210;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=FQbJpo8DfRhF5qSisIUk4m0kSC7VBBioGITHpw45wmo=;
+        b=GJsvA/5Ia3nA5SJUTfmDathx5rroHXZ0/h5lI9GakgpIQAfSOEfW4cVqEPdjJYUoR7665j
+        MZVwZ6CiD6g/cO7H6aGojASZVyhiqfcQsM8RNPMmXyxMS9ZrWF76s4I1HnFapyIy3I/U0W
+        +E+jG5mI2H9Sw7a2Z76f05ckZIDQALk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-130-lUZBAN4vPMiFAq0RTvAnVA-1; Thu, 30 Mar 2023 07:36:47 -0400
+X-MC-Unique: lUZBAN4vPMiFAq0RTvAnVA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ABA80185A792;
+        Thu, 30 Mar 2023 11:36:46 +0000 (UTC)
+Received: from localhost (ovpn-8-19.pek2.redhat.com [10.72.8.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B326B2166B33;
+        Thu, 30 Mar 2023 11:36:44 +0000 (UTC)
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-block@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Bernd Schubert <bschubert@ddn.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Ming Lei <ming.lei@redhat.com>
+Subject: [PATCH V6 00/17] io_uring/ublk: add generic IORING_OP_FUSED_CMD
+Date:   Thu, 30 Mar 2023 19:36:13 +0800
+Message-Id: <20230330113630.1388860-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several devices (e.g. SC8280XP and SM8450) expect a NPL (Near Pad Logic)
-clock.  Add the clock and customize allowed clocks per each variant.
-The clocks are also required by ADSP in all variants.
+Hello Jens and Guys,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Add generic fused command, which can include one primary command and multiple
+secondary requests. This command provides one safe way to share resource between
+primary command and secondary requests, and primary command is always
+completed after all secondary requests are done, and resource lifetime
+is bound with primary command.
 
----
+With this way, it is easy to support zero copy for ublk/fuse device, and
+there could be more potential use cases, such as offloading complicated logic
+into userspace, or decouple kernel subsystems.
 
-Changes since v4:
-1. Rebased on:
-   git://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-6.4
+Follows ublksrv code, which implements zero copy for loop, nbd and
+qcow2 targets with fused command:
 
-Changes since v3:
-1. Only rebase. Other patches from this set were applied:
-https://lore.kernel.org/all/168010864198.3244592.2114017565664183933.b4-ty@kernel.org/
+https://github.com/ming1/ubdsrv/tree/fused-cmd-zc-for-v6
 
-Changes since v1:
-1. New patch.
----
- .../bindings/sound/qcom,lpass-va-macro.yaml   | 68 ++++++++++++++++---
- 1 file changed, 57 insertions(+), 11 deletions(-)
+All three(loop, nbd and qcow2) ublk targets have supported zero copy by passing:
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
-index 4cf778e3afdd..4a56108c444b 100644
---- a/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
-+++ b/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
-@@ -9,9 +9,6 @@ title: LPASS(Low Power Audio Subsystem) VA Macro audio codec
- maintainers:
-   - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
- 
--allOf:
--  - $ref: dai-common.yaml#
--
- properties:
-   compatible:
-     enum:
-@@ -31,16 +28,12 @@ properties:
-     const: 0
- 
-   clocks:
--    maxItems: 3
-+    minItems: 1
-+    maxItems: 4
- 
-   clock-names:
--    oneOf:
--      - items:   #for ADSP based platforms
--          - const: mclk
--          - const: macro
--          - const: dcodec
--      - items:   #for ADSP bypass based platforms
--          - const: mclk
-+    minItems: 1
-+    maxItems: 4
- 
-   clock-output-names:
-     maxItems: 1
-@@ -64,6 +57,59 @@ required:
-   - compatible
-   - reg
-   - "#sound-dai-cells"
-+  - clock-names
-+  - clocks
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: qcom,sc7280-lpass-va-macro
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 1
-+        clock-names:
-+          items:
-+            - const: mclk
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: qcom,sm8250-lpass-va-macro
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 3
-+          maxItems: 3
-+        clock-names:
-+          items:
-+            - const: mclk
-+            - const: macro
-+            - const: dcodec
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sc8280xp-lpass-va-macro
-+              - qcom,sm8450-lpass-va-macro
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 4
-+          maxItems: 4
-+        clock-names:
-+          items:
-+            - const: mclk
-+            - const: macro
-+            - const: dcodec
-+            - const: npl
- 
-   - if:
-       properties:
+	ublk add -t [loop|nbd|qcow2] -z .... 
+
+Also add liburing test case for covering fused command based on miniublk
+of blktest.
+
+https://github.com/ming1/liburing/tree/fused_cmd_miniublk_for_v6
+
+Performance improvement is obvious on memory bandwidth related workloads,
+such as, 1~2X improvement on 64K/512K BS IO test on loop with ramfs backing file.
+ublk-null shows 5X IOPS improvement on big BS test when the copy is avoided.
+
+Please review and consider for v6.4.
+
+V6:
+	- re-design fused command, and make it more generic, moving sharing buffer
+	as one plugin of fused command, so in future we can implement more plugins
+	- document potential other use cases of fused command
+	- drop support for builtin secondary sqe in SQE128, so all secondary
+	  requests has standalone SQE
+	- make fused command as one feature
+	- cleanup & improve naming
+
+V5:
+	- rebase on for-6.4/io_uring
+	- rename to primary/secondary as suggested by Jens
+	- reserve interface for extending to support multiple secondary OPs in future,
+	which isn't a must, because it can be done by submitting multiple fused
+	commands with same primary request
+	- rename to primary/secondary in ublksrv and liburing test code
+
+V4:
+	- improve APIs naming(patch 1 ~ 4)
+	- improve documents and commit log(patch 2)
+	- add buffer direction bit to opdef, suggested by Jens(patch 2)
+	- add ublk zero copy document for cover: technical requirements(most related with
+	buffer lifetime), and explains why splice isn't good and how fused command solves it(patch 17)
+	- fix sparse warning(patch 7)
+	- supports 64byte SQE fused command(patch 3)
+
+V3:
+	- fix build warning reported by kernel test robot
+	- drop patch for checking fused flags on existed drivers with
+	  ->uring_command(), which isn't necessary, since we do not do that
+      when adding new ioctl or uring command
+    - inline io_init_rq() for core code, so just export io_init_secondary_req
+	- return result of failed secondary request unconditionally since REQ_F_CQE_SKIP
+	will be cleared
+	- pass xfstest over ublk-loop
+
+V2:
+	- don't resue io_mapped_ubuf (io_uring)
+	- remove REQ_F_FUSED_MASTER_BIT (io_uring)
+	- fix compile warning (io_uring)
+	- rebase on v6.3-rc1 (io_uring)
+	- grabbing io request reference when handling fused command 
+	- simplify ublk_copy_user_pages() by iov iterator
+	- add read()/write() for userspace to read/write ublk io buffer, so
+	that some corner cases(read zero, passthrough request(report zones)) can
+	be handled easily in case of zero copy; this way also helps to switch to
+	zero copy completely
+	- misc cleanup
+
+
+Ming Lei (17):
+  io_uring: increase io_kiocb->flags into 64bit
+  io_uring: use ctx->cached_sq_head to calculate left sqes
+  io_uring: add generic IORING_OP_FUSED_CMD
+  io_uring: support providing buffer by IORING_OP_FUSED_CMD
+  io_uring: support OP_READ/OP_WRITE for fused secondary request
+  io_uring: support OP_SEND_ZC/OP_RECV for fused secondary request
+  block: ublk_drv: add common exit handling
+  block: ublk_drv: don't consider flush request in map/unmap io
+  block: ublk_drv: add two helpers to clean up map/unmap request
+  block: ublk_drv: clean up several helpers
+  block: ublk_drv: cleanup 'struct ublk_map_data'
+  block: ublk_drv: cleanup ublk_copy_user_pages
+  block: ublk_drv: grab request reference when the request is handled by
+    userspace
+  block: ublk_drv: support to copy any part of request pages
+  block: ublk_drv: add read()/write() support for ublk char device
+  block: ublk_drv: don't check buffer in case of zero copy
+  block: ublk_drv: apply io_uring FUSED_CMD for supporting zero copy
+
+ Documentation/block/ublk.rst   | 126 ++++++-
+ drivers/block/ublk_drv.c       | 603 ++++++++++++++++++++++++++-------
+ include/linux/io_uring.h       |  41 ++-
+ include/linux/io_uring_types.h |  76 +++--
+ include/uapi/linux/io_uring.h  |  22 +-
+ include/uapi/linux/ublk_cmd.h  |  37 +-
+ io_uring/Makefile              |   2 +-
+ io_uring/fused_cmd.c           | 239 +++++++++++++
+ io_uring/fused_cmd.h           |  16 +
+ io_uring/io_uring.c            |  57 +++-
+ io_uring/io_uring.h            |   5 +
+ io_uring/net.c                 |  30 +-
+ io_uring/opdef.c               |  22 ++
+ io_uring/opdef.h               |   7 +
+ io_uring/rw.c                  |  21 ++
+ 15 files changed, 1124 insertions(+), 180 deletions(-)
+ create mode 100644 io_uring/fused_cmd.c
+ create mode 100644 io_uring/fused_cmd.h
+
 -- 
-2.34.1
+2.39.2
 
