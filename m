@@ -2,89 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E3F6D0834
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69EAB6D0839
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbjC3O0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S232446AbjC3O0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbjC3OZ6 (ORCPT
+        with ESMTP id S231852AbjC3O0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:25:58 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2A3187;
-        Thu, 30 Mar 2023 07:25:57 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id be10so950325oib.6;
-        Thu, 30 Mar 2023 07:25:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680186356;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Thu, 30 Mar 2023 10:26:40 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AFA114
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:26:39 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id e65so23644008ybh.10
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1680186398;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sFW2Fxi2txULIRe3DJUc5qXrtounXXEIdQOAl1fQLSk=;
-        b=ZJwYphP6TxIkWg89f+FtoA6XI+k8IK4uPoGQeQtPtPrs7koz2LCNUloggYAvNumrKL
-         SZScFYiZniQQXVyYQ9P9GZ1GTWTn6Tnl9iBzZMUTvh0Hu/xn4xHOP3c3K7KuRUuP3nM7
-         r1Yrmlp1PoK6g18gSqbELCP134EcXnFaG7mmbgAsmnpzUk31+EzNiRT0htLQYm452k9x
-         0w8pHXunf9cxRo/A0HLXSl8XXVNPtZDn/+ludVnHxrA6e7NA/C8AfkCuO6WhmSPSAhvU
-         Hq2DgYgWkkFV5AKPlyTAizeGCJRRbG1+RCPDnHIY/1LpBCFER+sFm7KrYSixpUCk6vOT
-         ypDg==
-X-Gm-Message-State: AAQBX9e7J/gJgW4BsNHfa8WXfHCEzgvXaym2V8x1OG9ajWR3fuUi9Yqk
-        IbSG0S5KOYR+Q4oQuLAqag==
-X-Google-Smtp-Source: AKy350ZidEg0WyM99bAmG60tXImF4uhx11/uXQd5Ggh/HE1bnuQq5Qgc2+9/Wv8CgF0SLC4fuMtIMQ==
-X-Received: by 2002:a05:6808:1a06:b0:389:21:9483 with SMTP id bk6-20020a0568081a0600b0038900219483mr10034574oib.59.1680186356186;
-        Thu, 30 Mar 2023 07:25:56 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z6-20020a4aae06000000b0051763d6497fsm14653566oom.38.2023.03.30.07.25.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 07:25:55 -0700 (PDT)
-Received: (nullmailer pid 1959245 invoked by uid 1000);
-        Thu, 30 Mar 2023 14:25:54 -0000
-Date:   Thu, 30 Mar 2023 09:25:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     arnd@arndb.de, jneanne@baylibre.com, robh+dt@kernel.org,
-        razor@blackwall.org, eblanc@baylibre.com,
-        devicetree@vger.kernel.org, stephen@networkplumber.org,
-        derek.kiernan@xilinx.com, yi.l.liu@intel.com, jgg@ziepe.ca,
-        u-kumar1@ti.com, dragan.cvetic@xilinx.com,
-        gregkh@linuxfoundation.org, contact@emersion.fr,
-        krzysztof.kozlowski+dt@linaro.org, sterzik@ti.com,
-        linux-doc@vger.kernel.org, lee@kernel.org,
-        prabhakar.csengg@gmail.com, linux-kernel@vger.kernel.org,
-        corbet@lwn.net
-Subject: Re: [PATCH v5 1/4] dt-bindings: mfd: Add TI TPS6594 PMIC
-Message-ID: <168018635391.1959190.9703045344955071020.robh@kernel.org>
-References: <20230330082006.11216-1-jpanis@baylibre.com>
- <20230330082006.11216-2-jpanis@baylibre.com>
+        bh=YYAj9pqSL7hDBw0RLOL8GO8jrfaq2Goh8quwi8z2P+U=;
+        b=o+Dzd58+BP9xg6ilalPvcpuhfUPZR3bAjkdMgibJu8M4CaBS+4HpGC8nrvhXslDKi5
+         R9ko5gdcv4ZXVQMu0pWzS75IsVcF1Ton2sDrpHiZBqUMI7Yz5iqXkHTN6D3PcqbHvvYy
+         6cQ7sBlSC6cI6kQwBTscSXjNqYmxod8+5Ol0c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680186398;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YYAj9pqSL7hDBw0RLOL8GO8jrfaq2Goh8quwi8z2P+U=;
+        b=c//Cn8kpr8MBT1xlQ9SGSS2rcFSfRzr0+0CBtBzpZo20jVbsdXmi62ciTeR9F9OY2q
+         4LtGehNuIcQ4ir5v1BLPet6vzyiWBJHW8+FHpVosO927Wfdvx9qRaptTfefFs8bBDCE7
+         JsfIoITMxQZ3xYQS7Bp6r+qr8lNQcZJxEUqI7Hd7760Z22tilEvjSMBza3JdW9NT6wwH
+         PYPlZt+OTQQc8qrdEA2CgY5rPh7WXDclu2OpYS5JghpM+W4sHf9Phq7UHjOZSYTiFweR
+         q365BTXNbwT1AIWf0JkOsqJ82ROqPJd4y20qGEZNbiybVcVkATo0kPQ9nYHbfsnOOUJF
+         Lj9Q==
+X-Gm-Message-State: AAQBX9emAtg+iLb0Vi4joBNogSrGtujtBLf8FHVjbv5zjrBW5FhqHYdn
+        2gM56SpquLrOb5XrFv09z/T7TC60jCj5ATRlXSCMNw==
+X-Google-Smtp-Source: AKy350YNV+2K9E9YDUGfrkxdbFk0oBtF0klAUoQNYSyuJPRoz9XL+Uy7LTLKyvnC+os/wbNNqOe+3HzdkUlRBHdlxGw=
+X-Received: by 2002:a05:6902:154a:b0:b3c:637f:ad00 with SMTP id
+ r10-20020a056902154a00b00b3c637fad00mr16184012ybu.5.1680186398403; Thu, 30
+ Mar 2023 07:26:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330082006.11216-2-jpanis@baylibre.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230330101752.429804-1-francesco@dolcini.it> <20230330101752.429804-2-francesco@dolcini.it>
+In-Reply-To: <20230330101752.429804-2-francesco@dolcini.it>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Thu, 30 Mar 2023 19:56:26 +0530
+Message-ID: <CAMty3ZAQPEnCgj9r+tsuqiOzRzHPnKSEXcDqE7LKHH16Zu2Wvw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] dt-bindings: display: bridge: sn65dsi83: Add DSI
+ video mode
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu, 30 Mar 2023 10:20:03 +0200, Julien Panis wrote:
-> TPS6594 is a Power Management IC which provides regulators and others
-> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
-> PFSM (Pre-configurable Finite State Machine) managing the state of the
-> device.
-> TPS6594 is the super-set device while TPS6593 and LP8764 are derivatives.
-> 
-> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+On Thu, Mar 30, 2023 at 3:48=E2=80=AFPM Francesco Dolcini <francesco@dolcin=
+i.it> wrote:
+>
+> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+>
+> SN65DSI8[34] device supports burst video mode and non-burst video mode
+> with sync events or with sync pulses packet transmission as described in
+> the DSI specification.
+>
+> Add property to select the expected mode, this allows for example to
+> select a mode that is compatible with the DSI host interface.
+>
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 > ---
->  .../devicetree/bindings/mfd/ti,tps6594.yaml   | 193 ++++++++++++++++++
->  1 file changed, 193 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
-> 
+>  .../devicetree/bindings/display/bridge/ti,sn65dsi83.yaml  | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi8=
+3.yaml b/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.yaml
+> index 48a97bb3e2e0..ebee16726b02 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.yaml
+> @@ -35,6 +35,14 @@ properties:
+>    vcc-supply:
+>      description: A 1.8V power supply (see regulator/regulator.yaml).
+>
+> +  dsi-video-mode:
+> +    description: |
+> +      0 - burst-mode
+> +      1 - non-burst with sync event
+> +      2 - non-burst with sync pulse
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1, 2]
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+I'm thinking this can go to dsi common code since the video modes are
+common across all controllers and make the core initialize the default
+and update if any sink devices are willing to change the modes. Sound
+like a big move but worth useful.
 
+Thanks,
+Jagan.
