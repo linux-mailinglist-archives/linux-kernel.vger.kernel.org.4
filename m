@@ -2,127 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25A86CFB10
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 07:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655A26CFB1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 08:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjC3F6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 01:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        id S229970AbjC3GBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 02:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjC3F63 (ORCPT
+        with ESMTP id S229517AbjC3GBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 01:58:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB09E4;
-        Wed, 29 Mar 2023 22:58:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E93DB825DA;
-        Thu, 30 Mar 2023 05:58:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CAA0C433D2;
-        Thu, 30 Mar 2023 05:58:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680155906;
-        bh=vx/Rnvlz/DgN2zpFUitn4sJ61icshhEzaPkBFQHilaA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hqMaP3HREd0etYbIDJDe3wFNh2yBBggwgWJnYQhMaiWD9UbeD5IyvNh5E230ustkC
-         bVdvPiwvs8fFeb4lYFWXiXkZv85cYyiSLP35vyyxGrSCzoeTG9+tn39sVOg0d9xnCb
-         zlyfb7MK3rmCnayaKeoL51E3hJpm0po69Y7dh9fY=
-Date:   Thu, 30 Mar 2023 07:58:23 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        "quic_jhugo@quicinc.com" <quic_jhugo@quicinc.com>,
-        "quic_carlv@quicinc.com" <quic_carlv@quicinc.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH v2] PCI: hv: Fix the definition of vector in
- hv_compose_msi_msg()
-Message-ID: <ZCUk_9YQGSfedCOR@kroah.com>
-References: <20221027205256.17678-1-decui@microsoft.com>
- <ZCTsPFb7dBj2IZmo@boqun-archlinux>
- <ZCT6JEK/yGpKHVLn@boqun-archlinux>
- <SA1PR21MB13354973735A5E727F94A169BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
+        Thu, 30 Mar 2023 02:01:11 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA3DE4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 23:01:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=7zxKJM+hffyzY8/mnbPlZjh2fBXL9zN4AP03zResViY=; b=c11kkHW1gkFJ1DDyT7B7Lq4ggE
+        elct902Q3wmKH6ivTqzkxq1kIRLCVebdk+0lefqrqgPmmW3OzkXwLG40UAqboNlENMi1KCODtF3P0
+        Shr/S+4CazLK+B/7ftHazEpioiTtuZ4wZzTuAS3H1LX5bi5IXJKZBGo1UV2XNDDizxS4aEGYRBtkM
+        VYRm3K/RrsZnMJGQ27wEp3eC6jZ4VZpi6x9vDzdFvopfIFx9cmQ7l2+iXo68Y9fYYB1Yqe8ma2PlK
+        6A0qUx+04xqOAOWLKKlcuPDySZHbhkmKgIE//glpNni26064xWleSL1/4DMSse8O8JLXg+DFSHVh5
+        /UrfNPYQ==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1phlLQ-002hoJ-0x;
+        Thu, 30 Mar 2023 06:01:08 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        Conor Dooley <conor@kernel.org>,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH] iommu: PGTABLE_LPAE is also for RISCV
+Date:   Wed, 29 Mar 2023 23:01:05 -0700
+Message-Id: <20230330060105.29460-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SA1PR21MB13354973735A5E727F94A169BF8E9@SA1PR21MB1335.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 03:23:45AM +0000, Dexuan Cui wrote:
-> > From: Boqun Feng <boqun.feng@gmail.com>
-> > Sent: Wednesday, March 29, 2023 7:56 PM
-> > To: Dexuan Cui <decui@microsoft.com>
-> >  ...
-> > On Wed, Mar 29, 2023 at 06:56:12PM -0700, Boqun Feng wrote:
-> > > [Cc stable]
-> > >
-> > > On Thu, Oct 27, 2022 at 01:52:56PM -0700, Dexuan Cui wrote:
-> > > > The local variable 'vector' must be u32 rather than u8: see the
-> > > > struct hv_msi_desc3.
-> > > >
-> > > > 'vector_count' should be u16 rather than u8: see struct hv_msi_desc,
-> > > > hv_msi_desc2 and hv_msi_desc3.
-> > > >
-> > >
-> > > Dexuan, I think this patch should only be in 5.15, because...
-> > >
-> > 
-> > Sorry, I meant:
-> > 
-> > "this patch should also be backported in 5.15"
-> > 
-> > Regards,
-> > Boqun
-> > 
-> > > > Fixes: a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
-> > >
-> > > ^^^ this commit is already in 5.15.y (commit id 92dcb50f7f09).
-> > >
-> > > Upstream id e70af8d040d2b7904dca93d942ba23fb722e21b1
-> > > Cc: <stable@vger.kernel.org> # 5.15.x
-> 
-> The faulty commit a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
-> is in all the stable branches, even including 4.14.y, so yes, the commit
-> e70af8d040d2 ("PCI: hv: Fix the definition of vector in hv_compose_msi_msg()")
-> should be backported to all the stable branches as well, including
-> v5.15.y, v5.10.y, v5.4.y, v4.19.y, v4.14.y.
-> 
-> e70af8d040d2 has a Fixes tag. Not sure why it's not automatically backported.
+On riscv64, linux-next-20233030 (and for several days earlier),
+there is a kconfig warning:
 
-Because "Fixes:" is not the flag that we are sure to trigger off of.
-Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
+  Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
+  Selected by [y]:
+  - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
 
-That being said, because some subsystem maintainers do NOT put cc:
-stable in their patches, we do sometimes sweep the tree and try to pick
-up things with only "Fixes:" but we don't always catch everything.
+and build errors:
 
-So if you want to be sure a patch is applied, please always add a cc:
-stable in the patch.
+riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L140':
+io-pgtable-arm.c:(.init.text+0x1e8): undefined reference to `alloc_io_pgtable_ops'
+riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L168':
+io-pgtable-arm.c:(.init.text+0xab0): undefined reference to `free_io_pgtable_ops'
+riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L140':
+ipmmu-vmsa.c:(.text+0xbc4): undefined reference to `free_io_pgtable_ops'
+riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L0 ':
+ipmmu-vmsa.c:(.text+0x145e): undefined reference to `alloc_io_pgtable_ops'
 
-thanks,
+Add RISCV as an allowed ARCH dependency to fix these problems.
 
-greg k-h
+Fixes: d286a58bc8f4 ("iommu: Tidy up io-pgtable dependencies")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: iommu@lists.linux.dev
+Cc: Conor Dooley <conor@kernel.org>
+Cc: linux-riscv@lists.infradead.org
+---
+ drivers/iommu/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+--- a/drivers/iommu/Kconfig
++++ b/drivers/iommu/Kconfig
+@@ -32,7 +32,7 @@ config IOMMU_IO_PGTABLE
+ config IOMMU_IO_PGTABLE_LPAE
+ 	bool "ARMv7/v8 Long Descriptor Format"
+ 	select IOMMU_IO_PGTABLE
+-	depends on ARM || ARM64 || COMPILE_TEST
++	depends on ARM || ARM64 || RISCV || COMPILE_TEST
+ 	depends on !GENERIC_ATOMIC64	# for cmpxchg64()
+ 	help
+ 	  Enable support for the ARM long descriptor pagetable format.
