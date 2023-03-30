@@ -2,163 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAAE6D0FF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D116D0FF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 22:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjC3U1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 16:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S229796AbjC3U2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 16:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjC3U1v (ORCPT
+        with ESMTP id S229552AbjC3U2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:27:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AB761A8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680208022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vt0KFJq/b5KK7W4Ol+edVgEMMqXF5UAxWg/JBmJvnDU=;
-        b=hQHTjMsQk8D22rMVjhtm9GE8vntSTZFKsI0hVAxtKkx3YDEsSONIC5CR9tK9K2FmGOaHgq
-        ByXwVZXTrO26ikb5vBVRSXrjKjI495q61voCJ6AFtSn0Kys/XPZ8KAk9PfhV0lumZOkb9X
-        Ne/tPqQCZ6SPtTHbn3qO6V5ZXLjH4Zk=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-20-bH1hP7k0OyaB6YcY3Ao7iA-1; Thu, 30 Mar 2023 16:27:00 -0400
-X-MC-Unique: bH1hP7k0OyaB6YcY3Ao7iA-1
-Received: by mail-io1-f71.google.com with SMTP id j4-20020a6b5504000000b00758646159fbso12297051iob.20
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 13:27:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680208020;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vt0KFJq/b5KK7W4Ol+edVgEMMqXF5UAxWg/JBmJvnDU=;
-        b=llJfMkmomeK/ki/a8JZWCAKMI48c250D9RwfGz1t42TrnB+13jpWmEG+tgyNcgZiTW
-         iHtB2BtPAbdaAffOaSKk4TLdTZ4L7EUMy4XCHh03oyjStU7ayOFpznLaagAclmtld95i
-         b+57BgeVox6MVo2Izb1niEbedxJU+ez4fAxVlVxYyXVPRf5eBTEHDR2WldJClGH/kqDV
-         cCoN+aYxzz7OmNqjyLdlHYneVJbrNXTdSmem3spphv9CYLsTv/lUXkxCXa4cS8Q/0eh8
-         W/K9lFZcuPO0xYJHl0LrU2BONezAQ29CyGUxKo6t6yPQ5n+efy0zUOW9B2nUlVTAOJwV
-         aE1Q==
-X-Gm-Message-State: AAQBX9eSUnhvh7eSRYiVsjXf2MmsBpgdrSKYkz/CjuTWT0ovYoBHg2rR
-        UuXX1PBs2+52n22diwFjS3zcikT9qaUAxkisCc9IBfKxxmq8EpUufpqgCMR/EBewDTsAoIuNYoU
-        YcL5f0oQ+hEsCzwsRgG+w1UA+
-X-Received: by 2002:a05:6e02:686:b0:325:b505:f8f2 with SMTP id o6-20020a056e02068600b00325b505f8f2mr16576443ils.30.1680208019911;
-        Thu, 30 Mar 2023 13:26:59 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZQYaVnzgIKA/vjDO7WhZFxUg9kON2oJiWeH/Tmsm7FSPPVzJez1lK1KDotRGL5CgkSrvI4Ew==
-X-Received: by 2002:a05:6e02:686:b0:325:b505:f8f2 with SMTP id o6-20020a056e02068600b00325b505f8f2mr16576431ils.30.1680208019647;
-        Thu, 30 Mar 2023 13:26:59 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id b14-20020a92340e000000b0032305b53b56sm153537ila.87.2023.03.30.13.26.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 13:26:59 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 14:26:57 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     jgg@nvidia.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        tglx@linutronix.de, darwi@linutronix.de, kvm@vger.kernel.org,
-        dave.jiang@intel.com, jing2.liu@intel.com, ashok.raj@intel.com,
-        fenghua.yu@intel.com, tom.zanussi@linux.intel.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/8] vfio/pci: Remove negative check on unsigned
- vector
-Message-ID: <20230330142657.3930c68b.alex.williamson@redhat.com>
-In-Reply-To: <0dc2a0c8e25b13a3a41db75ab192f387a1548c80.1680038771.git.reinette.chatre@intel.com>
-References: <cover.1680038771.git.reinette.chatre@intel.com>
-        <0dc2a0c8e25b13a3a41db75ab192f387a1548c80.1680038771.git.reinette.chatre@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Thu, 30 Mar 2023 16:28:31 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FF7C9;
+        Thu, 30 Mar 2023 13:28:30 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 1907D3200959;
+        Thu, 30 Mar 2023 16:28:29 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 30 Mar 2023 16:28:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680208108; x=1680294508; bh=vQs4ynDb5KaPKtPAzLl0Rc9EXZoECrk6bMr
+        SAt43TCw=; b=DV2BCGAEYE89/0qB9BCxZL65j8OujS0AqVHYgP6geTlizxxKs+a
+        n+h1/Rq0qDKGEvXlhQ3O/WNsnR1iUWY5opFs1bthRv66hQkp2mSUsBFhJ365fqrc
+        uWVQjDkLbzhI9GwllS5MMma21dc+SJjKS91l+tC9sSGHCPWo+8H6n/Vxj9+whEwL
+        q/U2I1Cy3UsFHQyuS8n8rolINuuX/p0H5US0IQtqQh4QJRA3IUX6RgaOWaYVkxQA
+        nda80+Px8RfxpltFBmJn98UEWFHA8DLkegrG7PBbgVMF/vH9fzzreLw3H6EASD79
+        z3Mf3fHhdb1gpToC6TpqWN2+xHZPmk8jrwg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680208108; x=1680294508; bh=vQs4ynDb5KaPKtPAzLl0Rc9EXZoECrk6bMr
+        SAt43TCw=; b=bRz94HWqUtIeSEAzn9WBi4BZ43hv/ArbNIhDIIKZl6nL1zBd+Mp
+        Ny0EEMvuLcADVBfXvTvp4W4uT+lwMvjIz0CqAGyLB2j0hItCZIGMgUPK+6v8lzim
+        bNwZV/CR4DhR+pQDW08TC71bTSu//+oOs6BcbDH5gN248SatJxg/YxaDUB28s38Z
+        Z+4sG4kLIFAajLDA1HQEuat345FU4SBVXUdnmubK0VvGgAYTmLdAeBtCBtPS1xYE
+        ss5nvUNvlxpc+q6yCElrDpKQhZNFkw3y/cn8PbyvXVD0yrvzYHKR38Cy+ucnLDj3
+        iHzRN/qeEno8Zs8jHNmGDCCAkqGJS02kfCA==
+X-ME-Sender: <xms:7PAlZE4LdH6MfIWcK86D0nh3fEvpWyFbRVGPpqGqP4gM9PNddOetaQ>
+    <xme:7PAlZF4Ab3G-ixntqtRu8jRr-L8KdvGcBd7SDwWZxJTWxVDYa2tIrN2kz3chSSHcA
+    -yIRgpsWCU2_GNJsQ>
+X-ME-Received: <xmr:7PAlZDf0n9iBXwebCjcjH9hi2yNN6uhQwSLdMPSGALw0L6Sp_lzGL-aDOePtKwxrjI4Q34-GZZ-vc5qvklokLLJPeQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehledgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeetlhhi
+    tggvucfthihhlhcuoegrlhhitggvsehrhihhlhdrihhoqeenucggtffrrghtthgvrhhnpe
+    ehudduvdetkedvkedtudeludfgfffhudegjeeguedvvedtteevjeehheeiffefgeenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhitggvse
+    hrhihhlhdrihho
+X-ME-Proxy: <xmx:7PAlZJLRGwv-m5P859fhegQuoC4OXi1gbj8brIte6NvQJY-KQtCrGg>
+    <xmx:7PAlZIIr_cPRw5ujzGZp5TORke02iXhHqjz4pOJ5zsSajB-4k_HCQQ>
+    <xmx:7PAlZKzuoEDQkDo2dJDJamRTY6LRmmV2ICj127z9ifJA3RJZMzjVEA>
+    <xmx:7PAlZH9YIMHufS8oLxuw1Bwk8GgPgl_dhOnQAiRd9gsClXYKvvHwuA>
+Feedback-ID: i56684263:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Mar 2023 16:28:26 -0400 (EDT)
+Message-ID: <ae53994a-aaa5-8a57-4284-85000229249d@ryhl.io>
+Date:   Thu, 30 Mar 2023 22:28:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 08/13] rust: init: add `stack_pin_init!` macro
+Content-Language: en-US-large
+To:     Benno Lossin <y86-dev@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Gary Guo <gary@garyguo.net>
+References: <20230329223239.138757-1-y86-dev@protonmail.com>
+ <20230329223239.138757-9-y86-dev@protonmail.com>
+ <ada8307d-5177-2094-683f-bce619f1ea44@ryhl.io>
+ <4b048bfc-e4fe-8c2f-ebfe-9b6a410cd8b8@protonmail.com>
+From:   Alice Ryhl <alice@ryhl.io>
+In-Reply-To: <4b048bfc-e4fe-8c2f-ebfe-9b6a410cd8b8@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023 14:53:29 -0700
-Reinette Chatre <reinette.chatre@intel.com> wrote:
-
-> User space provides the vector as an unsigned int that is checked
-> early for validity (vfio_set_irqs_validate_and_prepare()).
+On 3/30/23 17:19, Benno Lossin wrote:
+> On 30.03.23 17:00, Alice Ryhl wrote:
+>> On 3/30/23 00:33, y86-dev@protonmail.com wrote:
+>>> From: Benno Lossin <y86-dev@protonmail.com>
+>>>
+>>> The `stack_pin_init!` macro allows pin-initializing a value on the
+>>> stack. It accepts a `impl PinInit<T, E>` to initialize a `T`. It allows
+>>> propagating any errors via `?` or handling it normally via `match`.
+>>>
+>>> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+>>
+>> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+>>
+>>> ---
+>>> +#[macro_export]
+>>> +macro_rules! stack_pin_init {
+>>> +    (let $var:ident $(: $t:ty)? = $val:expr) => {
+>>> +        let mut $var = $crate::init::__internal::StackInit$(::<$t>)?::uninit();
+>>> +        let mut $var = {
+>>> +            let val = $val;
+>>> +            unsafe { $crate::init::__internal::StackInit::init(&mut $var, val) }
+>>> +        };
+>>> +    };
+>>> +    (let $var:ident $(: $t:ty)? =? $val:expr) => {
+>>> +        let mut $var = $crate::init::__internal::StackInit$(::<$t>)?::uninit();
+>>> +        let mut $var = {
+>>> +            let val = $val;
+>>> +            unsafe { $crate::init::__internal::StackInit::init(&mut $var, val)? }
+>>> +        };
+>>> +    };
+>>> +}
+>>
+>> This will be inconvenient to use if the initializer is infallible and is
+>> used inside an infallible function. However, I'm not sure what a better
+>> alternative would be. Perhaps we should have three variants?
 > 
-> A later negative check of the provided vector is not necessary.
+> That could be an option, any ideas for the syntax though? Or should it
+> be a different macro like `stack_pin_init!` and `try_stack_pin_init!`?
+
+You've also split up the other macros into a fallible and infallible 
+version, so I think the same would be fine here. Perhaps use 
+`stack_pin_try_init!` as the name?
+
+>> Also, maybe a `<-` rather than `=` would be more consistent?
 > 
-> Remove the negative check and ensure the type used
-> for the vector is consistent as an unsigned int.
+> That is sadly not possible, since `<-` is not allowed after `ty` fragments.
 > 
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> ---
->  drivers/vfio/pci/vfio_pci_intrs.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
+>> Anyway, I don't think this should block the PR. We can revisit it later
+>> if it becomes a problem.
 > 
-> diff --git a/drivers/vfio/pci/vfio_pci_intrs.c b/drivers/vfio/pci/vfio_pci_intrs.c
-> index 6a9c6a143cc3..3f64ccdce69f 100644
-> --- a/drivers/vfio/pci/vfio_pci_intrs.c
-> +++ b/drivers/vfio/pci/vfio_pci_intrs.c
-> @@ -317,14 +317,14 @@ static int vfio_msi_enable(struct vfio_pci_core_device *vdev, int nvec, bool msi
->  }
->  
->  static int vfio_msi_set_vector_signal(struct vfio_pci_core_device *vdev,
-> -				      int vector, int fd, bool msix)
-> +				      unsigned int vector, int fd, bool msix)
->  {
->  	struct pci_dev *pdev = vdev->pdev;
->  	struct eventfd_ctx *trigger;
->  	int irq, ret;
->  	u16 cmd;
->  
-> -	if (vector < 0 || vector >= vdev->num_ctx)
-> +	if (vector >= vdev->num_ctx)
->  		return -EINVAL;
->  
->  	irq = pci_irq_vector(pdev, vector);
-> @@ -399,7 +399,8 @@ static int vfio_msi_set_vector_signal(struct vfio_pci_core_device *vdev,
->  static int vfio_msi_set_block(struct vfio_pci_core_device *vdev, unsigned start,
->  			      unsigned count, int32_t *fds, bool msix)
->  {
-> -	int i, j, ret = 0;
-> +	int i, ret = 0;
-> +	unsigned int j;
->  
->  	if (start >= vdev->num_ctx || start + count > vdev->num_ctx)
->  		return -EINVAL;
-
-Unfortunately this turns the unwind portion of the function into an
-infinite loop in the common case when @start is zero:
-
-                for (--j; j >= (int)start; j--)
-                        vfio_msi_set_vector_signal(vdev, j, -1, msix);
-
-Thanks,
-Alex
-
-
-> @@ -420,7 +421,7 @@ static int vfio_msi_set_block(struct vfio_pci_core_device *vdev, unsigned start,
->  static void vfio_msi_disable(struct vfio_pci_core_device *vdev, bool msix)
->  {
->  	struct pci_dev *pdev = vdev->pdev;
-> -	int i;
-> +	unsigned int i;
->  	u16 cmd;
->  
->  	for (i = 0; i < vdev->num_ctx; i++) {
-> @@ -542,7 +543,7 @@ static int vfio_pci_set_msi_trigger(struct vfio_pci_core_device *vdev,
->  				    unsigned index, unsigned start,
->  				    unsigned count, uint32_t flags, void *data)
->  {
-> -	int i;
-> +	unsigned int i;
->  	bool msix = (index == VFIO_PCI_MSIX_IRQ_INDEX) ? true : false;
->  
->  	if (irq_is(vdev, index) && !count && (flags & VFIO_IRQ_SET_DATA_NONE)) {
-
+> Sure.
+> 
+> --
+> Cheers,
+> Benno
+> 
+> 
