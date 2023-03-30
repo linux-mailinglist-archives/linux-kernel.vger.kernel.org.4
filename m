@@ -2,145 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804D76D0CFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B176D0D00
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 19:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjC3RiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 13:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
+        id S232569AbjC3RkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 13:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjC3RiB (ORCPT
+        with ESMTP id S230225AbjC3RkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:38:01 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656C7CDF9
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:38:00 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-53d277c1834so367727757b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 10:38:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1680197879;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0XDB6bTe9xJuphUqwevJuf9q/6RlzAPG9D8j9n2M9eI=;
-        b=OjP+fHOJg/qk/BlFRiLShClpzDz5RIhfJx4oJR+J6AEhaszRz0Q5mEaxRpZkd5ocUU
-         Pydm4D7geWRHXotQWusDrJeDK239l9eTmD3nH+hbdF/E+kATlZQpMPIukTeVxq0iU8Zt
-         zs7csmBHA4HWxFkMZzcYDKsCymsF4Jr3u9Og0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680197879;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0XDB6bTe9xJuphUqwevJuf9q/6RlzAPG9D8j9n2M9eI=;
-        b=kt3xQcJIjIgYPMd2gRYwgNjrlWNwSqy45SRVXCH6Om25Oq2QQh89EWEwcyc+DFNQyG
-         GcCCHAsry9VIGphGgZMvPOGoRmaNGldM94uwoQqQkaSbT2huvejGMTxD9Xi3xY6dVPIu
-         jBl+3Zez3X9Bw5nLpQk4erW+Oa6y3Agrvkq/4VPb36xOiaV8g5bHgdHM3GCtDUz2CI5c
-         WO5wCJ8tGaJGSgtLDStLZcTJpYwfbW8MYuTAFitX+LIjb7D4jlkfrwkxT/qBxoEbyUps
-         3q4DF+Gr78vVK9Lz2oR5Jn1ZThtfuj3ZGUSBNChMJWWHWKARCBxOtEnMkeneYYfA/gyi
-         3s1w==
-X-Gm-Message-State: AAQBX9e65wLvaG6vZIO3+63gaqVa/ohZ9llI3qPJOpcoMjcIobvDY4qV
-        Y8RYsKeD925a7OL4mUtEwvnNuZYHTptW9KnJJeTntw==
-X-Google-Smtp-Source: AKy350bck9a7Ac/7Hxwga/BHJXtbB6f6e+9uTSHoWqisMz7/ZongXR2S56Glacab1PDzNjzatDBkzP3s/3oiG7MFHD4=
-X-Received: by 2002:a81:ad04:0:b0:52e:e095:d840 with SMTP id
- l4-20020a81ad04000000b0052ee095d840mr800164ywh.0.1680197879519; Thu, 30 Mar
- 2023 10:37:59 -0700 (PDT)
+        Thu, 30 Mar 2023 13:40:07 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78F1E068;
+        Thu, 30 Mar 2023 10:40:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680198007; x=1711734007;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sqgOwOsqqyepaLfZuCrGHGV3YpOJJxs0Oj6uM3Ok6mI=;
+  b=IdQ7+uNDhgwZNpmMpPopIOggggVhjXXciSJaXG6GR9Sx8HWD/Q8p5Fiz
+   UWreJ7kTPfPCy68peKpXBepBaO4CMDYFIrEfVr6Sf50E6eU5nMRVKtKEZ
+   o6ZKu7X7d4uo2eOnXQjI00xaR96UAFWvDJdxnerGgLPFsd1aAhFW9SWPh
+   KtgMGgkJDOPGnsZRv/zpwbNSMQHiZStHrCUxuCCJreaKnKNzgyWn2yALq
+   V3nnk0CCAnkP4qnLPj4I18jlHYTudTZqMrXEsSvfJV/2nndzY9dLyqwRf
+   vGIBbyD4SrYEGNG6/Cc3e0MUClxW0EGJMmglis7sJAQwA6hScLOXSD3F8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="343736487"
+X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
+   d="scan'208";a="343736487"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 10:40:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="808739829"
+X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
+   d="scan'208";a="808739829"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2023 10:40:03 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phwFn-000L3Y-0c;
+        Thu, 30 Mar 2023 17:40:03 +0000
+Date:   Fri, 31 Mar 2023 01:39:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Piyush Malgujar <pmalgujar@marvell.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wsa@kernel.org, rric@kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        jannadurai@marvell.com, cchavva@marvell.com,
+        Suneel Garapati <sgarapati@marvell.com>,
+        Piyush Malgujar <pmalgujar@marvell.com>
+Subject: Re: [PATCH 2/3] i2c: thunderx: Add support for High speed mode
+Message-ID: <202303310153.yx2xXH8s-lkp@intel.com>
+References: <20230330133953.21074-3-pmalgujar@marvell.com>
 MIME-Version: 1.0
-References: <20230330101752.429804-1-francesco@dolcini.it> <20230330101752.429804-2-francesco@dolcini.it>
- <CAMty3ZAQPEnCgj9r+tsuqiOzRzHPnKSEXcDqE7LKHH16Zu2Wvw@mail.gmail.com> <ZCWkdc+x0LXDSohj@francesco-nb.int.toradex.com>
-In-Reply-To: <ZCWkdc+x0LXDSohj@francesco-nb.int.toradex.com>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Thu, 30 Mar 2023 23:07:47 +0530
-Message-ID: <CAMty3ZDwj5OuBzTBHrBitS0qD8QEv8=80YR2zZLDnL_nrmd3fg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: display: bridge: sn65dsi83: Add DSI
- video mode
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330133953.21074-3-pmalgujar@marvell.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 8:32=E2=80=AFPM Francesco Dolcini <francesco@dolcin=
-i.it> wrote:
->
-> On Thu, Mar 30, 2023 at 07:56:26PM +0530, Jagan Teki wrote:
-> > On Thu, Mar 30, 2023 at 3:48=E2=80=AFPM Francesco Dolcini <francesco@do=
-lcini.it> wrote:
-> > >
-> > > From: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > >
-> > > SN65DSI8[34] device supports burst video mode and non-burst video mod=
-e
-> > > with sync events or with sync pulses packet transmission as described=
- in
-> > > the DSI specification.
-> > >
-> > > Add property to select the expected mode, this allows for example to
-> > > select a mode that is compatible with the DSI host interface.
-> > >
-> > > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > ---
-> > >  .../devicetree/bindings/display/bridge/ti,sn65dsi83.yaml  | 8 ++++++=
-++
-> > >  1 file changed, 8 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/display/bridge/ti,sn65=
-dsi83.yaml b/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.=
-yaml
-> > > index 48a97bb3e2e0..ebee16726b02 100644
-> > > --- a/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.y=
-aml
-> > > +++ b/Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.y=
-aml
-> > > @@ -35,6 +35,14 @@ properties:
-> > >    vcc-supply:
-> > >      description: A 1.8V power supply (see regulator/regulator.yaml).
-> > >
-> > > +  dsi-video-mode:
-> > > +    description: |
-> > > +      0 - burst-mode
-> > > +      1 - non-burst with sync event
-> > > +      2 - non-burst with sync pulse
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > +    enum: [0, 1, 2]
-> >
-> > I'm thinking this can go to dsi common code since the video modes are
-> > common across all controllers and make the core initialize the default
-> > and update if any sink devices are willing to change the modes. Sound
-> > like a big move but worth useful.
->
-> Not sure I understood where do you want to move this.
+Hi Piyush,
 
-Yes, it can be new may be
-Documentation/devicetree/bindings/display/dsi-device.yaml
+Thank you for the patch! Yet something to improve:
 
->
-> In any case this is something about the display side of the DSI video
-> connection, with the bridge as a special case, not about the controller.
-> To my understanding the controller is supposed to support all the modes.
+[auto build test ERROR on wsa/i2c/for-next]
+[also build test ERROR on linus/master v6.3-rc4 next-20230330]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Yes, that is what I'm saying. DSI sink will send this mode via
-mode_flags and the controller act accordingly.  The point here is
-these modes are generic across all DSI sink devices so having common
-bindings can make it easy for all devices to use. As I said it can be
-new, but worth trying - anyway let's see how others are commenting on
-this.
+url:    https://github.com/intel-lab-lkp/linux/commits/Piyush-Malgujar/i2c-thunderx-Clock-divisor-logic-changes/20230330-214626
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+patch link:    https://lore.kernel.org/r/20230330133953.21074-3-pmalgujar%40marvell.com
+patch subject: [PATCH 2/3] i2c: thunderx: Add support for High speed mode
+config: riscv-randconfig-r042-20230329 (https://download.01.org/0day-ci/archive/20230331/202303310153.yx2xXH8s-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/c7866465c9142bf77cc1bc651704bfbfc9b0b411
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Piyush-Malgujar/i2c-thunderx-Clock-divisor-logic-changes/20230330-214626
+        git checkout c7866465c9142bf77cc1bc651704bfbfc9b0b411
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/i2c/busses/
 
-Thanks,
-Jagan.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303310153.yx2xXH8s-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/i2c/busses/i2c-octeon-core.c:74:5: error: call to undeclared function '__udelay'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                   __udelay(1);
+                                   ^
+   drivers/i2c/busses/i2c-octeon-core.c:74:5: note: did you mean '__delay'?
+   arch/riscv/include/asm/delay.h:18:13: note: '__delay' declared here
+   extern void __delay(unsigned long cycles);
+               ^
+   1 error generated.
+
+
+vim +/__udelay +74 drivers/i2c/busses/i2c-octeon-core.c
+
+    39	
+    40	/**
+    41	 * octeon_i2c_wait - wait for the IFLG to be set
+    42	 * @i2c: The struct octeon_i2c
+    43	 *
+    44	 * Returns 0 on success, otherwise a negative errno.
+    45	 */
+    46	static int octeon_i2c_wait(struct octeon_i2c *i2c)
+    47	{
+    48		long time_left;
+    49	
+    50		/*
+    51		 * Some chip revisions don't assert the irq in the interrupt
+    52		 * controller. So we must poll for the IFLG change.
+    53		 */
+    54		if (i2c->broken_irq_mode) {
+    55			u64 end = get_jiffies_64() + i2c->adap.timeout;
+    56	
+    57			while (!octeon_i2c_test_iflg(i2c) &&
+    58			       time_before64(get_jiffies_64(), end))
+    59				usleep_range(I2C_OCTEON_EVENT_WAIT / 2, I2C_OCTEON_EVENT_WAIT);
+    60	
+    61			return octeon_i2c_test_iflg(i2c) ? 0 : -ETIMEDOUT;
+    62		}
+    63	
+    64		if (IS_LS_FREQ(i2c->twsi_freq)) {
+    65			i2c->int_enable(i2c);
+    66			time_left = wait_event_timeout(i2c->queue,
+    67						       octeon_i2c_test_iflg(i2c),
+    68						       i2c->adap.timeout);
+    69			i2c->int_disable(i2c);
+    70		} else {
+    71			time_left = 1000; /* 1ms */
+    72			do {
+    73				if (time_left--)
+  > 74					__udelay(1);
+    75			} while (!octeon_i2c_test_iflg(i2c) && time_left);
+    76		}
+    77	
+    78		if (i2c->broken_irq_check && !time_left &&
+    79		    octeon_i2c_test_iflg(i2c)) {
+    80			dev_err(i2c->dev, "broken irq connection detected, switching to polling mode.\n");
+    81			i2c->broken_irq_mode = true;
+    82			return 0;
+    83		}
+    84	
+    85		if (!time_left)
+    86			return -ETIMEDOUT;
+    87	
+    88		return 0;
+    89	}
+    90	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
