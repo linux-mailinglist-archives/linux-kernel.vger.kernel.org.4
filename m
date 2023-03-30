@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B996D1234
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5686D1207
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjC3Wf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 18:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
+        id S230075AbjC3WSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 18:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjC3Wf4 (ORCPT
+        with ESMTP id S229487AbjC3WSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 18:35:56 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Mar 2023 15:35:55 PDT
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93E2CC36;
-        Thu, 30 Mar 2023 15:35:54 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id 2F0F39C067A;
-        Thu, 30 Mar 2023 18:16:48 -0400 (EDT)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id G_mheA3hoNBf; Thu, 30 Mar 2023 18:16:47 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id 733949C119B;
-        Thu, 30 Mar 2023 18:16:47 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 733949C119B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-        t=1680214607; bh=7qo2rLKAL25Z9760f+RGPuYG7UZYqwlNSMksNKRTGTA=;
-        h=From:To:Date:Message-Id:MIME-Version;
-        b=SQAHrKHfuT4FlJlNfTjKbYeCIewoNNosgmWi3Lawo3N2rsgfpOo6CsY0O/L2ba22r
-         6Hr37b15xggCKWIV8QPUIs/fQUrJIpirvOhznDLr4L8Z5ofhGjUCo0NZQURmAbZmyb
-         LgkNxR28p/bhKolzH8Tzw3PJj5bZrV5d0y3OfQTvG7eb7iht7e2VGOT0+RbL6sKKCf
-         pbnL3FCKmjA9sCpRWgJaSYfAcUemEXqYUeycbBTjumlstx5hwrAm9WFRl229JQ5FGS
-         CMMxEDj/0P28Jt3E8BHlig6TNrQXkdxw52z10TBql7tYKAAMk0Be7VbYYApA73U4B+
-         EMZDdmIy+QdeA==
-X-Virus-Scanned: amavisd-new at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id amYl8MsB-nNT; Thu, 30 Mar 2023 18:16:47 -0400 (EDT)
-Received: from j1-slave-ryzen-3900-indu.sfl.team (unknown [192.168.51.254])
-        by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 5B9099C067A;
-        Thu, 30 Mar 2023 18:16:47 -0400 (EDT)
-From:   Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>
-Subject: [PATCH] usb: chipidea: imx: avoid unnecessary probe defer
-Date:   Thu, 30 Mar 2023 18:16:37 -0400
-Message-Id: <20230330221637.1605161-1-thomas.ballasi@savoirfairelinux.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 30 Mar 2023 18:18:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11128B47F
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:18:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C2A5621BB
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 22:18:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8D3C433EF;
+        Thu, 30 Mar 2023 22:18:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1680214727;
+        bh=J6+yEMlbNsjNChezrO163A6g35jo86cAh2v0lik6h6M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iZ/wQMpkWb4s0aY/X31v5rqUAUvTqDBmTw7ZekRAv+F0th/P+6EEZFRNNobe8SWcz
+         FCDN+oQE7zdIdgp01NP3R8bu4Lv77fXpSJk/3f5a6o7XFVcIfmWd3taWcjGrdK4ZCP
+         HVund6J9Uejk+L/1aBCT00wUt8jhxQEvurav9wUk=
+Date:   Thu, 30 Mar 2023 15:18:46 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     Jani Nikula <jani.nikula@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        David Gow <davidgow@google.com>
+Subject: Re: [PATCH 0/4] log2: make is_power_of_2() more generic
+Message-Id: <20230330151846.fdbc8edbfbaa6eaddb056dc7@linux-foundation.org>
+In-Reply-To: <549987e4967d45159573901d330c96a0@AcuMS.aculab.com>
+References: <20230330104243.2120761-1-jani.nikula@intel.com>
+        <20230330125041.83b0f39fa3a4ec1a42dfd95f@linux-foundation.org>
+        <549987e4967d45159573901d330c96a0@AcuMS.aculab.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The changes brought by commit 73de93440186 have been inadvertidly
-removed, causing ci_hdrc_imx's probe to be loaded before usbmisc_imx's,
-despite ci_hdrc_imx needing usbmisc_imx.
+On Thu, 30 Mar 2023 21:53:03 +0000 David Laight <David.Laight@ACULAB.COM> wrote:
 
-This condition may cause unexpected behaviors, especially when the
-ChipIdea node is being referred to under /sys/class/udc/:
+> > But wouldn't all these issues be addressed by simply doing
+> > 
+> > #define is_power_of_2(n) (n != 0 && ((n & (n - 1)) == 0))
+> > 
+> > ?
+> > 
+> > (With suitable tweaks to avoid evaluating `n' more than once)
+> 
+> I think you need to use the 'horrid tricks' from min() to get
+> a constant expression from constant inputs.
 
-$ ls -l /sys/class/udc/
-$
+This
 
-when it should show as the following:
+--- a/include/linux/log2.h~a
++++ a/include/linux/log2.h
+@@ -41,11 +41,11 @@ int __ilog2_u64(u64 n)
+  * *not* considered a power of two.
+  * Return: true if @n is a power of 2, otherwise false.
+  */
+-static inline __attribute__((const))
+-bool is_power_of_2(unsigned long n)
+-{
+-	return (n != 0 && ((n & (n - 1)) == 0));
+-}
++#define is_power_of_2(_n)				\
++	({						\
++		typeof(_n) n = (_n);			\
++		n != 0 && ((n & (n - 1)) == 0);		\
++	})
+ 
+ /**
+  * __roundup_pow_of_two() - round up to nearest power of two
+_
 
-$ ls -l /sys/class/udc/
-ci_hdrc.0 -> ../../devices/[...]/ci_hdrc.0/udc/ci_hdrc.0
+worked for me in a simple test.
 
-Some userspace tools may depend on this feature[1].
+--- a/fs/open.c~b
++++ a/fs/open.c
+@@ -1564,3 +1564,10 @@ int stream_open(struct inode *inode, str
+ }
+ 
+ EXPORT_SYMBOL(stream_open);
++
++#include <linux/log2.h>
++
++int foo(void)
++{
++	return is_power_of_2(43);
++}
+_
 
-[1]: https://github.com/nxp-imx/imx-uuc/blob/69029e71b0642ded83a6c9bfa031=
-02bb310c88ed/linuxrc#L148
 
-Fixes: 95caa2ae70fd ("usb: chipidea: allow disabling glue drivers if EMBE=
-DDED")
-Signed-off-by: Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>
----
- drivers/usb/chipidea/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+foo:
+# fs/open.c:1573: }
+	xorl	%eax, %eax	#
+	ret	
 
-diff --git a/drivers/usb/chipidea/Makefile b/drivers/usb/chipidea/Makefil=
-e
-index 6f4a3deced359..71afeab97e837 100644
---- a/drivers/usb/chipidea/Makefile
-+++ b/drivers/usb/chipidea/Makefile
-@@ -14,5 +14,5 @@ ci_hdrc-$(CONFIG_USB_OTG_FSM)		+=3D otg_fsm.o
- obj-$(CONFIG_USB_CHIPIDEA_GENERIC)	+=3D ci_hdrc_usb2.o
- obj-$(CONFIG_USB_CHIPIDEA_MSM)		+=3D ci_hdrc_msm.o
- obj-$(CONFIG_USB_CHIPIDEA_PCI)		+=3D ci_hdrc_pci.o
--obj-$(CONFIG_USB_CHIPIDEA_IMX)		+=3D ci_hdrc_imx.o usbmisc_imx.o
-+obj-$(CONFIG_USB_CHIPIDEA_IMX)		+=3D usbmisc_imx.o ci_hdrc_imx.o
- obj-$(CONFIG_USB_CHIPIDEA_TEGRA)	+=3D ci_hdrc_tegra.o
---=20
-2.25.1
 
+Is there some more tricky situation where it breaks?
