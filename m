@@ -2,113 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36AA6D0E98
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE346D0E99
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 21:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjC3TTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 15:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
+        id S230114AbjC3TTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 15:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbjC3TSj (ORCPT
+        with ESMTP id S232076AbjC3TTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:18:39 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A235410259
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:18:19 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536a4eba107so199127387b3.19
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 12:18:19 -0700 (PDT)
+        Thu, 30 Mar 2023 15:19:10 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55FA11158;
+        Thu, 30 Mar 2023 12:18:49 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id cn12so80690560edb.4;
+        Thu, 30 Mar 2023 12:18:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680203898;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WbNC07VGnJucfMQdaVru/HWxeCTMcNM6hFkgQ/MCeFU=;
-        b=PUv9MA0n+Z8fm7ErrGvHySjECm+JmVMmb7yIewlfjR/61XxilLPkk2HWdbFMTfUOaL
-         VEd5S3Db2lj6fZaM1EVkiIBt/SsoMNdbAydQDGkFf9C+290T1e1uwhZ4tZ9DFf8Phq0h
-         P4OVDvENTCX+3IndK3Cvs6OkRD4foG1c4Yew7PAGOLNrfjOHkmrszhM9+d8Istzt+wK/
-         krUK3yorRZOqS1BM/g9ye1FRB5jRNaXtQwUxDYcXcRNeFj0C93RhkVtRFak+8MvkC/U9
-         MW/LMGQgSZbJ8G2s7XbIxfyCgArJtDyQ9vNCBWNE1utNTCLeMAHTcanEcYFbU2EbD5hm
-         feog==
+        d=gmail.com; s=20210112; t=1680203928;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4q03OZ6Bg+GlvpSvY95+tuvETzAF1mWv6O6MJqkSOes=;
+        b=O28g3NA8Tb2ES1tEbLmVheLCFjUEgDzVflxrsrNJwK1AdjLkgJjOE/tVKCDdaxXwZp
+         WCCzlOKVnTYxDR0HmhVnIXFreE08BxTQJmc+dawdjtYyiD4iiYk78b654B4auVB/dslq
+         7DG48ByHnzkwesNqh7Ya3zL1QwK5gLt5lZ2AT4OfGaN5TDHv7qKi/n7YatPRh2BU2CrN
+         GSbJhL5cpyaywuayFC9N8fb9+ordoHFCZE8D/VxBG46PcFNWtnrviOvEOklA0b34kLN7
+         e48ViFQuhHD7bJ/psalH7wvJXbbkEiZO89lq0Xrw9rA9bmkJTqRF1wb8dQFjNsR1oD52
+         iNJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680203898;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WbNC07VGnJucfMQdaVru/HWxeCTMcNM6hFkgQ/MCeFU=;
-        b=tOz4v1yYLzEzlMUzAOAqarTvkyysRXrn0DkGvLvp4KsUJr4a/lEUlPuJedGq3A20tM
-         CiuupulDq9kngdFtAzoxMM0eyxrBhGkv5ysL6aNiTZ0ZbBrbjeiCM7HiJ54hHGcZtmT8
-         LQnuhEkJP2+EBtDfWigvgggk7eUOErqAN59o1cjz5YSqtI68WTAL8V5e4O0OU1vJN5tl
-         EwITSFyH/yhFxpPb4Q8ssxYUjOY+GriuZu2a6o4ULD9PU1X7DRS8O93MFVCzsufHl0Pc
-         zjVQVD411ndepVqoywEzhs8UugxWVuC1SutfpXE7xhwOQpodwgCMVevHkpyb87UaAL9b
-         M3ww==
-X-Gm-Message-State: AAQBX9et5wStuWm3CuZTeLGVkKBnQZBieK+t2HHniP39sCUteQz+HErZ
-        RTL7dJvsFZOFA5UksfMRppNBAuWMefl/yiFq
-X-Google-Smtp-Source: AKy350Z/bGsj2O9Q2OanxyiTVpU0KIn4cOhMHnfEJjh1llR4Xo1YrB6Sk31TDPAteoghtoX9TuixuaLotnLFVi3d
-X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a25:12d4:0:b0:b6e:d788:eba4 with SMTP
- id 203-20020a2512d4000000b00b6ed788eba4mr12664999ybs.6.1680203898630; Thu, 30
- Mar 2023 12:18:18 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 19:18:01 +0000
-In-Reply-To: <20230330191801.1967435-1-yosryahmed@google.com>
-Mime-Version: 1.0
-References: <20230330191801.1967435-1-yosryahmed@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230330191801.1967435-9-yosryahmed@google.com>
-Subject: [PATCH v3 8/8] memcg: do not modify rstat tree for zero updates
-From:   Yosry Ahmed <yosryahmed@google.com>
-To:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>
-Cc:     Vasily Averin <vasily.averin@linux.dev>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, bpf@vger.kernel.org,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Michal Hocko <mhocko@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1680203928;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4q03OZ6Bg+GlvpSvY95+tuvETzAF1mWv6O6MJqkSOes=;
+        b=rPtsllWO/vvkjOizn2uAp4v5Ty05fvWc2ba7PqU8xN3KW+x9YT/YB40LrSRt84KCHV
+         w+AWNhjHxnPVXx9xTrxxFaAuv8A4hTabgGimkdj9eXV2kv5xjbPt0KfGO5drAccf40Qh
+         1vifHAesTdLfXGd5llFaNCe5zXOhxTlLufTMwOj5xPgFwjmSlcbSMJmW+F7aF0SiErUZ
+         e1vnzUGitZZYN+DPtfSrjlGvVl2ICZ0WUTVW/YFBzSLtql8UQJ01BE5GNr8ZXNR8d38n
+         nDoHy4f2VzznTjglwzhM0VjScu+zIO6ZpgjPkD0BjyFdOY6ir7Maj5LA9kBcwrrMm+TW
+         8iFg==
+X-Gm-Message-State: AAQBX9eB97ptDTicu8cgiufnHBA9FL4/zZYsprjItnlwKb2RXHIkwUex
+        fAnSgoLpXkqOnVeRqOX43rs=
+X-Google-Smtp-Source: AKy350ZdUzEUad/4w3uOLqChw1DiPg/T2noGNa6IvE9m7OI0oF76V4MwVBeh2pIG9pR/FXdp1KIMnQ==
+X-Received: by 2002:a17:907:9d1a:b0:92e:eecf:b742 with SMTP id kt26-20020a1709079d1a00b0092eeecfb742mr24362906ejc.2.1680203927685;
+        Thu, 30 Mar 2023 12:18:47 -0700 (PDT)
+Received: from pc636 ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id gx20-20020a1709068a5400b00931faf03db0sm139005ejc.27.2023.03.30.12.18.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 12:18:47 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Thu, 30 Mar 2023 21:18:44 +0200
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, RCU <rcu@vger.kernel.org>,
+        quic_neeraju@quicinc.com, Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH 1/1] Reduce synchronize_rcu() waiting time
+Message-ID: <ZCXglNnT9EpeBf4t@pc636>
+References: <ca153af5-bd66-4d48-afa5-ace3a13aec3c@paulmck-laptop>
+ <FC49F388-0480-4687-8DD3-94049FCBC92B@joelfernandes.org>
+ <2cd8f407-2b77-48b1-9f17-9aa8e4ce9c64@paulmck-laptop>
+ <20230330150933.GB2114899@google.com>
+ <ZCWuE+b+QDApqgWG@pc636>
+ <f529af35-557a-4a19-b14d-295e88aace9c@paulmck-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f529af35-557a-4a19-b14d-295e88aace9c@paulmck-laptop>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some situations, we may end up calling memcg_rstat_updated() with a
-value of 0, which means the stat was not actually updated. An example is
-if we fail to reclaim any pages in shrink_folio_list().
+On Thu, Mar 30, 2023 at 11:58:41AM -0700, Paul E. McKenney wrote:
+> On Thu, Mar 30, 2023 at 05:43:15PM +0200, Uladzislau Rezki wrote:
+> > On Thu, Mar 30, 2023 at 03:09:33PM +0000, Joel Fernandes wrote:
+> > > On Tue, Mar 28, 2023 at 08:26:13AM -0700, Paul E. McKenney wrote:
+> > > > On Mon, Mar 27, 2023 at 10:29:31PM -0400, Joel Fernandes wrote:
+> > > > > Hello,
+> > > > > 
+> > > > > > On Mar 27, 2023, at 9:06 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > > > 
+> > > > > > ﻿On Mon, Mar 27, 2023 at 11:21:23AM +0000, Zhang, Qiang1 wrote:
+> > > > > >>>> From: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > > > >>>> Sent: Tuesday, March 21, 2023 6:28 PM
+> > > > > >>>> [...]
+> > > > > >>>> Subject: [PATCH 1/1] Reduce synchronize_rcu() waiting time
+> > > > > >>>> 
+> > > > > >>>> A call to a synchronize_rcu() can be expensive from time point of view.
+> > > > > >>>> Different workloads can be affected by this especially the ones which use this
+> > > > > >>>> API in its time critical sections.
+> > > > > >>>> 
+> > > > > >>> 
+> > > > > >>> This is interesting and meaningful research. ;-)
+> > > > > >>> 
+> > > > > >>>> For example in case of NOCB scenario the wakeme_after_rcu() callback
+> > > > > >>>> invocation depends on where in a nocb-list it is located. Below is an example
+> > > > > >>>> when it was the last out of ~3600 callbacks:
+> > > > > >>> 
+> > > > > >> 
+> > > > > >> 
+> > > > > >> 
+> > > > > >> Can it be implemented separately as follows?  it seems that the code is simpler
+> > > > > >> (only personal opinion)  😊.
+> > > > > >> 
+> > > > > >> But I didn't test whether this reduce synchronize_rcu() waiting time
+> > > > > >> 
+> > > > > >> +static void rcu_poll_wait_gp(struct rcu_tasks *rtp)
+> > > > > >> +{
+> > > > > >> +       unsigned long gp_snap;
+> > > > > >> +
+> > > > > >> +       gp_snap = start_poll_synchronize_rcu();
+> > > > > >> +       while (!poll_state_synchronize_rcu(gp_snap))
+> > > > > >> +               schedule_timeout_idle(1);
+> > > > > > 
+> > > > > > I could be wrong, but my guess is that the guys working with
+> > > > > > battery-powered devices are not going to be very happy with this loop.
+> > > > > > 
+> > > > > > All those wakeups by all tasks waiting for a grace period end up
+> > > > > > consuming a surprisingly large amount of energy.
+> > > > > 
+> > > > > Is that really the common case? On the general topic of wake-ups:
+> > > > > Most of the time there should be only one
+> > > > > task waiting synchronously on a GP to end. If that is
+> > > > > true, then it feels like waking
+> > > > > up nocb Kthreads which indirectly wake other threads is doing more work than usual?
+> > > > 
+> > > > A good question, and the number of outstanding synchronize_rcu()
+> > > > calls will of course be limited by the number of tasks in the system.
+> > > > But I myself have raised the ire of battery-powered embedded folks with
+> > > > a rather small number of wakeups, so...
+> > > 
+> > > But unless I am missing something, even if there is single synchronize_rcu(),
+> > > you have a flurry of potential wakeups right now, instead of the bare minimum
+> > > I think. I have not measured how many wake ups, but I'd love to when I get
+> > > time. Maybe Vlad has some numbers.
+> > > 
+> > I will measure and have a look at wake-ups. But, what we have for now is
+> > if there are two callers of synchronize_rcu() on different CPUs, i guess
+> > two nocb-kthreads have to handle it, thus two nocb-kthreads have to be
+> > awaken to do the work. This patch needs only one wake-up to serve all
+> > users.
+> 
+> One wakeup per synchronize_rcu(), right?
+> 
+The gp-kthread wake-ups only one work, in its turn a worker wake-ups all
+registered users of synchronize_rcu() for which a gp was passed. How many
+users of synchonize_rcu() awaken by one worker depends on how many were
+registered before initiating a new GP by the gp-kthread.
 
-Do not add the cgroup to the rstat updated tree in this case, to avoid
-unnecessarily flushing it.
+> > Anyway, i will provide some data and analysis of it.
+> 
+> Looking forward to seeing it!
+> 
+Good. I will switch fully on it soon. I need to sort out some perf.
+issues at work.
 
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-Acked-by: Shakeel Butt <shakeelb@google.com>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-Acked-by: Michal Hocko <mhocko@suse.com>
----
- mm/memcontrol.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 361c0bbf7283..a63ee2efa780 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -618,6 +618,9 @@ static inline void memcg_rstat_updated(struct mem_cgroup *memcg, int val)
- {
- 	unsigned int x;
- 
-+	if (!val)
-+		return;
-+
- 	cgroup_rstat_updated(memcg->css.cgroup, smp_processor_id());
- 
- 	x = __this_cpu_add_return(stats_updates, abs(val));
--- 
-2.40.0.348.gf938b09366-goog
-
+--
+Uladzislau Rezki
