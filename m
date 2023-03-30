@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0476D0A9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91AF86D0AA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 18:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbjC3QFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 12:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
+        id S230385AbjC3QHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 12:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjC3QFT (ORCPT
+        with ESMTP id S229543AbjC3QHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 12:05:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7AA900D;
-        Thu, 30 Mar 2023 09:05:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4644662110;
-        Thu, 30 Mar 2023 16:05:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26820C433D2;
-        Thu, 30 Mar 2023 16:05:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680192316;
-        bh=viaViRHbOUE2fhuaH9npts1s3lqVVfNzJID7p/qGxNE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m6OZfS5Z2VvyJAEylOF2nv/gh9VcA5FP+BQRkidlgpB/DisvueL3Sd/6WTynINVHl
-         +n7axNxIfrchWxNOAnb1Ej6EVtw4BaFq0Sdnqmopp1uO5TBTiiqE+l7OeYcJJCkxrr
-         MDCQUrjfXukhfzXX+LeDpypxjeMOUAs/lPFCBJ93hmMbD2L13rdvW2zawmYSLP5OQ6
-         wOdrM08QFaR3WJPoVfXxiUSLOVZO2b1ELtzeVPh+Y0bFea+2RQg6QIHuriF0h5WAME
-         61J3oK4B7sxLfoeMZIy9ssFDi3CEgSEnWEwN859ZDCv+fxpHc4SarvuLZZa1suYQVW
-         P36jrUUrMRJBQ==
-Date:   Thu, 30 Mar 2023 17:05:10 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 2/5] mfd: Add support for the Lantiq PEF2256 framer
-Message-ID: <20230330160510.GB489249@google.com>
-References: <20230328092645.634375-1-herve.codina@bootlin.com>
- <20230328092645.634375-3-herve.codina@bootlin.com>
+        Thu, 30 Mar 2023 12:07:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F218A7D
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:06:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680192409;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YTYh+E3AEUbIuKqZIO8jsHd8WLvzzX9QzK3UcbYoR1Y=;
+        b=FkbnxmbQ+HS4mWJSUWx1fAgHuw0hNwb2B4Hug/dUxQ2dBJ2P82nRIuZ51nPm8x+xPEBiOp
+        IGuCLLnQP2lsFeJfwEnyDs/nS0RPq5a/IM9On4rvK/TPGtIOTWHLnGr8oY2olnFLTAWTCd
+        QO48g+JZTBKz9xixBk3Ng3qELKDNiX4=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-561-S9C5sULqPeCvmUFKY6xBPQ-1; Thu, 30 Mar 2023 12:06:46 -0400
+X-MC-Unique: S9C5sULqPeCvmUFKY6xBPQ-1
+Received: by mail-qv1-f71.google.com with SMTP id w2-20020a0cc242000000b00583d8e55181so8444510qvh.23
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 09:06:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680192406; x=1682784406;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YTYh+E3AEUbIuKqZIO8jsHd8WLvzzX9QzK3UcbYoR1Y=;
+        b=lNgcfMumbktVd/xSk83qsnTKjjQGzyBAj/vQkOaTQ0CQGiGQRSInJU6/eHSyhannYi
+         vMLxhXYIH7Y8/OzbpQTDxLeJYmMA7cPA5MZum51WmElDA4+YsIFeGBe12F0+WPWj5H2B
+         NMhk6jP1qXtdl7IrO6MN9xZhanRiPwAHHT39dCvmjfEjauppYSwzxWxEzI4kNXIZFl3Q
+         NYe/Sn8WoxevKtLLYhdLyJvYrLPJYiqi7CJTAGM6ZB9XbyDS8nT395S+j1DMIrmKu8Hi
+         V6yiQa1ydxvuM+opVtzvNuXzu5Ig0QY9sjWCvAxpJMQNQjLiN6tgiK+UkE8ylNrqmy+h
+         hxug==
+X-Gm-Message-State: AO0yUKVvLRmh7D8mpqeRQxW6fc+hZIY0avXe9iLAYLAno/QBQ+fkkOLG
+        Hw0aEbprt+yBmbRoMpKf2N0FzqV+Bxok5x2Rx+Q9Gngke3fNzo0BwToU6YArysHZCxLEWkzCFW0
+        PpQNiAKemjzUX70NcBtoeG3Qt
+X-Received: by 2002:a05:622a:1886:b0:3d1:16f4:ae58 with SMTP id v6-20020a05622a188600b003d116f4ae58mr37192710qtc.2.1680192406271;
+        Thu, 30 Mar 2023 09:06:46 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+DfmwmgvSk/9QMK33YSWaZ+XaRstViNG93WHdzarb6l0ctIK/zH2ncD77kXk8cljlX9EelRg==
+X-Received: by 2002:a05:622a:1886:b0:3d1:16f4:ae58 with SMTP id v6-20020a05622a188600b003d116f4ae58mr37192679qtc.2.1680192406057;
+        Thu, 30 Mar 2023 09:06:46 -0700 (PDT)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id 66-20020a370b45000000b0071eddd3bebbsm11294515qkl.81.2023.03.30.09.06.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 09:06:44 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>, peterx@redhat.com,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: [PATCH 02/29] selftests/mm: Update .gitignore with two missing tests
+Date:   Thu, 30 Mar 2023 12:06:43 -0400
+Message-Id: <20230330160643.3106892-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230330155707.3106228-1-peterx@redhat.com>
+References: <20230330155707.3106228-1-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230328092645.634375-3-herve.codina@bootlin.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023, Herve Codina wrote:
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ tools/testing/selftests/mm/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> The Lantiq PEF2256 is a framer and line interface component designed to
-> fulfill all required interfacing between an analog E1/T1/J1 line and the
-> digital PCM system highway/H.100 bus.
+diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+index 1f8c36a9fa10..347277f2adc3 100644
+--- a/tools/testing/selftests/mm/.gitignore
++++ b/tools/testing/selftests/mm/.gitignore
+@@ -36,3 +36,5 @@ split_huge_page_test
+ ksm_tests
+ local_config.h
+ local_config.mk
++ksm_functional_tests
++mdwe_test
+-- 
+2.39.1
 
-My goodness!
-
-It's been a long time since I've seen anything quite like this.
-
-My suggestion to you:
-
-* Split this up into components that fit functional subsystems
-* Run checkpatch.pl
-* Remove all of the debug prints
-* Move all of the defines out to a header file
-* Be more verbose in your documentation / comments
-* Consider using simple-mfd to probe child devices.
-
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  drivers/mfd/Kconfig         |   17 +
->  drivers/mfd/Makefile        |    1 +
->  drivers/mfd/pef2256.c       | 1355 +++++++++++++++++++++++++++++++++++
->  include/linux/mfd/pef2256.h |   28 +
->  4 files changed, 1401 insertions(+)
->  create mode 100644 drivers/mfd/pef2256.c
->  create mode 100644 include/linux/mfd/pef2256.h
-
---
-Lee Jones [李琼斯]
