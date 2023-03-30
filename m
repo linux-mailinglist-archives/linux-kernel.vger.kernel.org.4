@@ -2,151 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81246CFDBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA8C6CFDC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjC3IHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
+        id S230155AbjC3IKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjC3IHI (ORCPT
+        with ESMTP id S229912AbjC3IKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:07:08 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7B01A7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:07:06 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id z42so18709097ljq.13
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:07:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680163625;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/wP52M2xnlem1ysVvkycZnKW6GmRMB71AsDVKGOMpBk=;
-        b=tOosVUxXWsUiu1apm/6HlpSjhtiaXJHDAF1Em1UsTGAimLisFooCIZcn6niHf5rg1V
-         WfldBse/bniQEVZVKIpTQLsmo10P1IeZQxHoo90wIbxAeAJujXRBehWI+/NeRYpoSCls
-         x8Hi+SqWAp3wLgfu6wgFTxwjgry8OwpCiHH6r0vzzXzgS2nDKq8NzeKhKn2lU561EFTk
-         VDYdcQNO3zofOMoTcyvXHWAgU5ER+Ym6tXMCZUlIUtOw2dDJ4WfyB1fV9AvxnN2MFols
-         dheeamVynlKhB6zNgSfynIPp8jFvw6BYjzs/JiyAqmW/hZH3iKGxEN/89piZO2/RGjbJ
-         VrtQ==
+        Thu, 30 Mar 2023 04:10:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEB835AD
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:09:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680163793;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j+kZDFg3lmlfEXt7vrPYf2wFRjTPUJsHa1umgwkaIJU=;
+        b=AVFAU5zmx76goUKiFszEHoPv9unmiRg98GR+P26Jh8Lyt/XLvJDKcbHnd1uZPUJqFirVIq
+        9woGMAsAPRUKAIzZATpFBekIf0bGVw1mWHKSuuvaNf+9vSfG1agKn2GQfcmmvqqMvgCSqp
+        820P6ke6gnLKs34YPZq48mpS1f6rTdw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-501-Bj0dyLtDO0qJRRVo_e2-2g-1; Thu, 30 Mar 2023 04:09:52 -0400
+X-MC-Unique: Bj0dyLtDO0qJRRVo_e2-2g-1
+Received: by mail-wm1-f70.google.com with SMTP id j22-20020a05600c1c1600b003ef95cef641so2780158wms.8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:09:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680163625;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/wP52M2xnlem1ysVvkycZnKW6GmRMB71AsDVKGOMpBk=;
-        b=71N+iA4vT2k54R75kRapBMouTGcVaTy9V0STz8oiyy8IrQx9ax6mrOce6+/ntgFpZ3
-         I1boPcOoO9V2tvWNrkGlGECX8awxIZMLb2TvhZLueqIKToOFa66QH+rjG7BmGmINe4X6
-         pKwx1bR6kIvPv5mLveFp/9QCk7Y+DKZYrduuWDQ8nDmt9fp8QspBaTOpj7+3l8fRxAsP
-         GOLwCPqwLBxC5DEx+GBh5zQnnyD3DunR0lK684/xIkKUTP6e3rrXTtPi8Br9gjToZGJV
-         6OQhMpHUHYa6Bswt+yDv2qR5JAEEx5R+2jQ72T4J3TVyQhYmvm6b9u5KNJbwROCa69wI
-         xidw==
-X-Gm-Message-State: AAQBX9frJWVcocdyCzkOfSZRDIZ0FzQsCatM1Bnf10XeCdMJTMNjcXGh
-        wGFFof+1XC471l+DahwXNQNLCg==
-X-Google-Smtp-Source: AKy350YV9pRleUwP3lY5sESfJRaKTCXO/kVILqADm1QzHo7Y6RtlUOsxaPvVX8uPexJdtm/0QkhS5w==
-X-Received: by 2002:a05:651c:83:b0:298:b161:feb0 with SMTP id 3-20020a05651c008300b00298b161feb0mr6245507ljq.49.1680163625221;
-        Thu, 30 Mar 2023 01:07:05 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id s26-20020a2e9c1a000000b00298dc945e9bsm5778851lji.125.2023.03.30.01.07.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 01:07:04 -0700 (PDT)
-Message-ID: <c2dd982e-b6ee-089f-dd4f-30280a396f4b@linaro.org>
-Date:   Thu, 30 Mar 2023 10:07:03 +0200
+        d=1e100.net; s=20210112; t=1680163791;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j+kZDFg3lmlfEXt7vrPYf2wFRjTPUJsHa1umgwkaIJU=;
+        b=LW3bla5zaOXFpqUijdVEYTmGEXZehDyGZKFY0RcknltVaw8NnRyoNDAlNz33ZuoWi0
+         zLP7KuzklwQVOi+6b4D1nF78sfJK6B5jKX20JT4COe9hDz+5tuCNxctueGEyw0IZBUhd
+         bW4WY0uSa/J1cUUp53TVHHHbcqhFOGfZyF59Mu/pszRbEZDSaOeW44Q0nMT15jFcUDXu
+         9mXWH1D7CrlN+0OmOCAbmCLdnX1Ki8WZ7Gq57fKtAB6yMx5qp3HP3Zy4TxEqGqQuYhDK
+         6EsTCzGGIt5piXT+XntCLl4USVBNJAQ/BFxlMIcCmCHP6V62zJLrOf6o7ZOTnChpJuVw
+         bTtw==
+X-Gm-Message-State: AAQBX9ecGpxlEpBKRROmarm7RXeBjm8pNCiTEqilKmcKnWPPl3PRDWKa
+        +mVhVz9PmUKeQffQOo/+bWLeCD5MKROZe5+mBikOnFjfMbCW66hN1diAhOfnUZMmIEL6CivofGr
+        SdC2BVY4ROqkY+HSMWzZKTwF7
+X-Received: by 2002:adf:ef09:0:b0:2ce:a944:2c6c with SMTP id e9-20020adfef09000000b002cea9442c6cmr17202652wro.12.1680163791149;
+        Thu, 30 Mar 2023 01:09:51 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b+lhfU3YqiOsoIgk9QUtyARFh7zv1+Jz6/tkkgpyht/XGLopg8s5IdYP+a7WiC4h4LY7zpqg==
+X-Received: by 2002:adf:ef09:0:b0:2ce:a944:2c6c with SMTP id e9-20020adfef09000000b002cea9442c6cmr17202635wro.12.1680163790813;
+        Thu, 30 Mar 2023 01:09:50 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id s8-20020a1cf208000000b003e203681b26sm4855785wmc.29.2023.03.30.01.09.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 01:09:50 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-kselftest@vger.kernel.org,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
+        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH] Input: Add KUnit tests for some of the input core
+ helper functions
+In-Reply-To: <CAGS_qxpEzXRWqy2Xd8qJn7GRxv+8HF40Lxt8esD-59CzeePZSw@mail.gmail.com>
+References: <20230329092332.2143623-1-javierm@redhat.com>
+ <CAGS_qxpEzXRWqy2Xd8qJn7GRxv+8HF40Lxt8esD-59CzeePZSw@mail.gmail.com>
+Date:   Thu, 30 Mar 2023 10:09:49 +0200
+Message-ID: <87cz4qfynm.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v6 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Lee Jones <lee@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-References: <20230307112835.81886-1-okan.sahin@analog.com>
- <20230307112835.81886-6-okan.sahin@analog.com>
- <20230315175223.GI9667@google.com> <20230315175257.GJ9667@google.com>
- <MN2PR03MB5168249900206433A082875EE7889@MN2PR03MB5168.namprd03.prod.outlook.com>
- <20230329143615.GS2673958@google.com> <ZCROpw0il1VQCLPu@smile.fi.intel.com>
- <20230329145636.GV2673958@google.com> <20230329150605.GW2673958@google.com>
- <f4692540-4be0-4140-0a9c-e38f2e9515ba@linaro.org>
-In-Reply-To: <f4692540-4be0-4140-0a9c-e38f2e9515ba@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2023 10:04, Krzysztof Kozlowski wrote:
-> On 29/03/2023 17:06, Lee Jones wrote:
->> On Wed, 29 Mar 2023, Lee Jones wrote:
->>
->>> On Wed, 29 Mar 2023, Andy Shevchenko wrote:
->>>
->>>> On Wed, Mar 29, 2023 at 03:36:15PM +0100, Lee Jones wrote:
->>>>> On Tue, 28 Mar 2023, Sahin, Okan wrote:
->>>>>>> On Wed, 15 Mar 2023, Lee Jones wrote:
->>>>>>>> On Tue, 07 Mar 2023, Okan Sahin wrote:
->>>>
->>>> ...
->>>>
->>>>>> +static const struct i2c_device_id max77541_i2c_id[] = {
->>>>>> +	{ "max77540", (kernel_ulong_t)&chip[MAX77540] },
->>>>>> +	{ "max77541", (kernel_ulong_t)&chip[MAX77541] },
->>>>>
->>>>> Just 'MAX77540' is fine.
->>>>
->>>> I tend to disagree.
->>>>
->>>> There is an error prone approach esp. when we talk with some functions
->>>> that unifies OF/ACPI driver data retrieval with legacy ID tables.
->>>> In such a case the 0 from enum is hard to distinguish from NULL when
->>>> the driver data is not set or not found. On top of that the simple integer
->>>> in the legacy driver data will require additional code to be added in
->>>> the ->probe().
->>>
->>> Use a !0 enum?
->>>
->>> The extra handling is expected and normal.
->>
->> I've always disliked mixing platform initialisation strategies.  Passing
->> pointers to MFD structs through I2C/Device Tree registration opens the
->> doors to all sorts of funky interlaced nonsense.
->>
->> Pass the device ID and then match in C-code please.
-> 
-> I agree. Especially that casting through ulong_t drops the const, so the
-> cast back needs const which can be forgotten. The patch already makes
-> here mistake!
+Daniel Latypov <dlatypov@google.com> writes:
 
-Uh, no, the code is correct - chip_info member is const. Yet it is a
-mistake easy to make for the device ID tables using void * or ulong.
+Hello Daniel,
 
+Thanks a lot for your feedback!
+
+> On Wed, Mar 29, 2023 at 2:23=E2=80=AFAM Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
+
+[...]
+
+>>
+>>   $ ./tools/testing/kunit/kunit.py run \
+>>     --kunitconfig=3Ddrivers/input/tests/.kunitconfig
+>
+> Nice!
+> A few small suggestions below as someone who has worked on KUnit.
+>
+> FYI, to save a few keystrokes, you can omit the "/.kunitconfig" and
+> just pass the dir, i.e.
+>   --kunitconfig=3Ddrivers/input/tests
+>
+
+Ah, cool. I didn't know that.
+
+[...]
+
+>>  drivers/input/tests/input_test.c | 144 +++++++++++++++++++++++++++++++
+>
+> I don't see the .kunitconfig in the diff.
+> Was it accidentally forgotten or does this patch apply to a tree that
+> already has the file?
+>
+> (it's easy to forget since git will still ignore it by default, IIRC)
+>
+
+I did indeed forgot because as you mentioned git add complained and I
+missed that needed to force to add it.
+
+[...]
+
+>> +         Say Y here if you want to build the KUnit tests for the input
+>> +         subsystem. For more information about KUnit and unit tests in
+>> +         general, please refer to the KUnit documentation in
+>> +         Documentation/dev-tools/kunit/.
+>> +
+>> +         If in doubt, say "N".
+>
+> FYI, I know this is in the style guide, but I'd personally feel free
+> to leave out this paragraph.
+>
+> Having such "advertising" about what KUnit is made more sense when
+> less people knew about it.
+> It's not known by everyone in the community yet, but we might be
+> getting to a point where this turns into repetitive bloat.
+>
+
+Ok, I'll drop these.
+
+[...]
+
+>> +
+>> +       ret =3D input_register_device(input_dev);
+>> +       KUNIT_ASSERT_EQ(test, ret, 0);
+>
+> (very unlikely that this matters, but...)
+> Hmm, should we call input_free_device() if this fails?
+> i.e. something like
+>
+> ret =3D ...;
+> if (ret) {
+>   input_free_device(input_dev);
+>   KUNIT_ASSERT_FAILURE(test, "failed to register device: %d", ret);
+> }
+>
+
+Indeed. I'll do this too.
+
+[...]
+
+>> +
+>> +       ret =3D input_get_poll_interval(input_dev);
+>> +       KUNIT_ASSERT_EQ(test, ret, -EINVAL);
+>
+> minor suggestion: can we inline these? E.g.
+>   KUNIT_ASSERT_EQ(test, -EINVAL, input_get_poll_interval(input_dev));
+> This way on failure, KUnit can print the function call instead of just `r=
+et`.
+>
+> Users could always find out what failed by the line #, but including
+> it in the output would be a bit nicer.
+>
+> E.g. w/ KUNIT_EXPECT_EQ(test, 0, ...)
+>
+>     # example_simple_test: EXPECTATION FAILED at
+> lib/kunit/kunit-example-test.c:29
+>     Expected 0 =3D=3D input_get_poll_interval(input_dev), but
+>         input_get_poll_interval(input_dev) =3D=3D 42 (0x2a)
+>
+> verus
+>
+>     # example_simple_test: EXPECTATION FAILED at
+> lib/kunit/kunit-example-test.c:28
+>     Expected ret =3D=3D 0, but
+>         ret =3D=3D 42 (0x2a)
+>
+
+Great suggestion. I'll change too, it would also get rid of the ret variabl=
+e.
+
+--=20
 Best regards,
-Krzysztof
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
