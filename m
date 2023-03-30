@@ -2,205 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC606CFC69
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F846CFC70
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjC3HMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
+        id S230490AbjC3HNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjC3HMo (ORCPT
+        with ESMTP id S230383AbjC3HNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:12:44 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259AE6A41
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:12:42 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id eg48so72599328edb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:12:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680160360;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j8/ouX+YMZS0bbwjsx1bXH6jzX2LC2Te4TwuT8s0n2M=;
-        b=YtZNq/EQEp0FzqlN+y0/uDWNOj7WUgMXwTuyx/9a1igPairphmML0iiUtIODlJ4Jkv
-         PiLgo+sJ5rZJh6Uqgtl2QaZxji6mI683/k9LB3mDKpYSSAc/LWusEDPJ8s/rQvZAGhI/
-         K150jn/Hxrd1qsufoa3q7c92tsfohqAtu0ls93Cs1d9vtDP1wH/UPhj6Qven+XlST1lg
-         0XupexKCnMNW1exEnCDMtiIz/DEGsTCashVJjxH/xaEILnJtgNctkXvNrndajJgjWtSE
-         AmTd6e+WlCeFUBykqnTHc9X59/2r86THfNqRBe5VlcX1tbvf7k0sXyK/5AvUd+vLkQpr
-         AO/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680160360;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j8/ouX+YMZS0bbwjsx1bXH6jzX2LC2Te4TwuT8s0n2M=;
-        b=wPxrcvlroDP62ttdlKuYJ3T3/fL/lDNP8XUWgQ5Hzr5cOc5JePv/N8D4aYZt5iyBnh
-         xDM08LNlcS38QriZjtlKDVIlh6MLWzY5/t9MZ4go/AKYKJdyo3DNlazWluYjtLuNv+kC
-         jYvon4kNT2nAvanmSUlB1ZrVAv1FVDCjaQoif9JkJIP3n3UnZBdYv7RD24I/Z21JvT/n
-         KsRrdH/HNBi0rMFMJTKe2jgUKyh6NM/IkK0J5+1zRbI+wAR9jOq0Gh42SAv48KlWkCZI
-         ml7aq+2rs8OeWLT/66Lz/qcrqEFzYaOIJ+q1EiStxoVHd4SxPbtqwcWx3cpZignTDUaD
-         A9yA==
-X-Gm-Message-State: AAQBX9dT5SEwti1b+rUCq+4yEP3Wd7u1D1ECe43ooxgxLLSsZgh5JTph
-        YBM1ImXht1F17nQDT65K8WAHmg==
-X-Google-Smtp-Source: AKy350aOlcBc4/1kCg8vVxzEt8v8oE9E7cIpwB2TprpFHcFsldRGn1pEK+MrPQ45nq+Q30qqfuzNXw==
-X-Received: by 2002:a17:906:278a:b0:8b1:fc1a:7d21 with SMTP id j10-20020a170906278a00b008b1fc1a7d21mr25986113ejc.5.1680160360554;
-        Thu, 30 Mar 2023 00:12:40 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id s12-20020a50d48c000000b005023aaf52desm6101228edi.95.2023.03.30.00.12.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 00:12:40 -0700 (PDT)
-Message-ID: <ab6f161e-59fd-0ad7-d0ce-2edfc9e6bc18@linaro.org>
-Date:   Thu, 30 Mar 2023 08:12:38 +0100
+        Thu, 30 Mar 2023 03:13:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2F96E8B;
+        Thu, 30 Mar 2023 00:13:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D39C61F1B;
+        Thu, 30 Mar 2023 07:13:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 913F7C4339B;
+        Thu, 30 Mar 2023 07:13:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680160402;
+        bh=G/raK3ocYVegw3OGWU88n2Ffrz9wyE2LoLFozbjp/Q0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=r+buEN7fejd0laG635oaSqHZcv+5essLQfQu1v4G4/qQggbkeNNimQ0XxuTzSkIj1
+         JIxbGYaR5b1w+ob2xDSpqSU5GsghUwnusFvsKFHeROCnV9l+wlEXuOk9X+9uJvUzCo
+         FSdE1bsMJsb7uwXfUcmnoEzkCMSz+pBhjJhGfzBjY/UCikmksHZ20KmMMxslkc6bca
+         yMQcM424mIg+YLovsX+pykjnwfUbaoDNnPOmpT0An4t+m+E5/mNWTEytUgf9iWs/f7
+         YkT0w/6MwUz3xwSgVkKeShrFrwQQYp6xR7v34S/b24AWi5i+F6K/FKWPjPsUVcFnIT
+         PQNKn+OmY66YA==
+Date:   Thu, 30 Mar 2023 09:13:16 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk,
+        syzbot+8ac3859139c685c4f597@syzkaller.appspotmail.com,
+        stable@vger.kernel.org, Christian Brauner <brauner@kernel.org>
+Subject: [PATCH] fs: drop peer group ids under namespace lock
+Message-ID: <20230330-vfs-mount_setattr-propagation-fix-v1-1-37548d91533b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAI41JWQC/x2NwQqDMBBEf0Vy7kJqaKX9lVLKJm40B5Owu0pB/
+ PfGHh8z82Y3QpxIzLPbDdOWJJXc4HrpTJgxTwRpbGx62zvrnIUtCixlzfoRUlRlqFwqTqhtCTF
+ 9wd2dH8LtMQ7Rm+bxKASeMYf5NC0oSnwGlan1/+ev93H8ALwgrQGMAAAA
+X-Mailer: b4 0.13-dev-00303
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1119; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=6ePqaCE6h84elZe3L+tFR/+iRaxe2PhzaSxvtZilVWk=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSomvbZHl0dvkNr6p0/qf2pTvd1ZL1jnm659dggr78+yX9t
+ 74ZTHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABM5v56RYWWKc6K0ae2qulSBhx8UmK
+ /OqRFXigmKTlQSWGOgvnHuL0aGRfyfXvXtnpq9T9j3dVMBi4yN8sb5XKvu565YXr9ctS+NGwA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 07/26] KVM: VMX: Move preemption timer <=> hrtimer
- dance to common x86
-Content-Language: en-US
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Lee Jones <joneslee@google.com>
-References: <20211208015236.1616697-1-seanjc@google.com>
- <20211208015236.1616697-8-seanjc@google.com>
- <1548c1a4-4681-4d98-ee43-44bc97b3bdee@linaro.org>
- <244097d2-3d14-6031-7733-62be75036d88@redhat.com>
- <ff078de7-1af8-19fd-2d8c-7a02792245cd@linaro.org>
-In-Reply-To: <ff078de7-1af8-19fd-2d8c-7a02792245cd@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <00000000000088694505f8132d77@google.com>
+ <000000000000a0139105f81888eb@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Paolo,
+When cleaning up peer group ids in the failure path we need to make sure
+to hold on to the namespace lock. Otherwise another thread might just
+turn the mount from a shared into a non-shared mount concurrently.
 
-On 3/29/23 16:22, Tudor Ambarus wrote:
-> 
-> 
-> On 3/29/23 14:47, Paolo Bonzini wrote:
-> 
-> Hi, Paolo!
-> 
->> On 3/29/23 14:34, Tudor Ambarus wrote:
->>> This patch fixes the bug reported at:
->>> LINK:
->>> https://syzkaller.appspot.com/bug?id=489beb3d76ef14cc6cd18125782dc6f86051a605
->>>
->>> One may find the strace at:
->>> LINK:https://syzkaller.appspot.com/text?tag=CrashLog&x=1798b54ec80000
->>> and the c reproducer at:
->>> LINK:https://syzkaller.appspot.com/text?tag=ReproC&x=10365781c80000
->>>
->>> Since I've no experience with kvm, it would be helpful if one of you can
->>> provide some guidance. Do you think it is worth to backport this patch
->>> to stable (together with its prerequisite patches), or shall I try to
->>> get familiar with the code and try to provide a less invasive fix?
->>
->> I think it is enough to fix the conflicts in vmx_pre_block and
->> vmx_post_block, there are no prerequisites:
->>
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index 0718658268fe..895069038856 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -7577,17 +7577,11 @@ static int vmx_pre_block(struct kvm_vcpu *vcpu)
->>      if (pi_pre_block(vcpu))
->>          return 1;
->>  
->> -    if (kvm_lapic_hv_timer_in_use(vcpu))
->> -        kvm_lapic_switch_to_sw_timer(vcpu);
->> -
->>      return 0;
->>  }
->>  
->>  static void vmx_post_block(struct kvm_vcpu *vcpu)
->>  {
->> -    if (kvm_x86_ops.set_hv_timer)
->> -        kvm_lapic_switch_to_hv_timer(vcpu);
->> -
->>      pi_post_block(vcpu);
->>  }
->>  
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index fcfa3fedf84f..4eca3ec38afd 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -10022,12 +10022,28 @@ static int vcpu_enter_guest(struct kvm_vcpu
->> *vcpu)
->>  
->>  static inline int vcpu_block(struct kvm *kvm, struct kvm_vcpu *vcpu)
->>  {
->> +    bool hv_timer;
->> +
->>      if (!kvm_arch_vcpu_runnable(vcpu) &&
->>          (!kvm_x86_ops.pre_block || static_call(kvm_x86_pre_block)(vcpu)
->> == 0)) {
->> +        /*
->> +         * Switch to the software timer before halt-polling/blocking as
->> +         * the guest's timer may be a break event for the vCPU, and the
->> +         * hypervisor timer runs only when the CPU is in guest mode.
->> +         * Switch before halt-polling so that KVM recognizes an expired
->> +         * timer before blocking.
->> +         */
->> +        hv_timer = kvm_lapic_hv_timer_in_use(vcpu);
->> +        if (hv_timer)
->> +            kvm_lapic_switch_to_sw_timer(vcpu);
->> +
->>          srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
->>          kvm_vcpu_block(vcpu);
->>          vcpu->srcu_idx = srcu_read_lock(&kvm->srcu);
->>  
->> +        if (hv_timer)
->> +            kvm_lapic_switch_to_hv_timer(vcpu);
->> +
->>          if (kvm_x86_ops.post_block)
->>              static_call(kvm_x86_post_block)(vcpu);
->>  
->> @@ -10266,6 +10282,11 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
->>              r = -EINTR;
->>              goto out;
->>          }
->> +        /*
->> +         * It should be impossible for the hypervisor timer to be in
->> +         * use before KVM has ever run the vCPU.
->> +         */
->> +        WARN_ON_ONCE(kvm_lapic_hv_timer_in_use(vcpu));
->>          kvm_vcpu_block(vcpu);
->>          if (kvm_apic_accept_events(vcpu) < 0) {
->>              r = 0;
->>
->> The fix is due to the second "if" changing from
->> kvm_x86_ops.set_hv_timer to hv_timer.
->>
-> 
-> Thanks for the prompt answer! I fixed the conflicts as per your
-> suggestion and tested the patch with the reproducer on top of
-> stable/linux-5.15.y and I confirm the reproducer is silenced. Sent the
-> patch proposal (with you in To:) at:
-> https://lore.kernel.org/all/20230329151747.2938509-1-tudor.ambarus@linaro.org/T/#u
-> Feel free to ACK/NACK it.
-> 
+Reported-by: syzbot+8ac3859139c685c4f597@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/lkml/00000000000088694505f8132d77@google.com
+Fixes: 2a1867219c7b ("fs: add mount_setattr()")
+Cc: stable@vger.kernel.org # 5.12+
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ fs/namespace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Wanted to let you know that I've tried the reproducer on
-stable/linux-5.{10, 4}.y and the bug is not hit. The only long term
-maintained kernel that seems affected is 5.15, so I backported the patch
-just for it. If you think it would be good to backport the patch further
-or you want me to do some other tests, I'll be glad to do so.
+diff --git a/fs/namespace.c b/fs/namespace.c
+index bc0f15257b49..6836e937ee61 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -4183,9 +4183,9 @@ static int do_mount_setattr(struct path *path, struct mount_kattr *kattr)
+ 	unlock_mount_hash();
+ 
+ 	if (kattr->propagation) {
+-		namespace_unlock();
+ 		if (err)
+ 			cleanup_group_ids(mnt, NULL);
++		namespace_unlock();
+ 	}
+ 
+ 	return err;
 
-Thanks for the guidance!
-ta
+---
+base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+change-id: 20230330-vfs-mount_setattr-propagation-fix-363b7c59d7fb
+
