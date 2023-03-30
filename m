@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A14F6CFE6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB48D6CFE86
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjC3Ifq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        id S229675AbjC3IiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjC3IfZ (ORCPT
+        with ESMTP id S229577AbjC3IiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:35:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29F36EA5;
-        Thu, 30 Mar 2023 01:35:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E8EAB82682;
-        Thu, 30 Mar 2023 08:35:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB43C433EF;
-        Thu, 30 Mar 2023 08:35:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680165313;
-        bh=VexdsD+y0VorUzO1MJy7DQZ7xA7FoNIWym8yR4KmJ4I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0qsid/tmIiqipI6TTO1pmVAFTJ5IAuwfkPXVuXigieT2h1COo7U8zUF/yjFQWvnqv
-         4sVpN25psc6F3OU2NBmE6ce+cZJTYaXz0P2l2A4jXNPo+If619sul0c8rrQIIYD3wu
-         80UWeRkhSG8VsRJy+8pjFCRDtlok8OiQegg/aRys=
-Date:   Thu, 30 Mar 2023 10:35:11 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
-        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
-        yi.l.liu@intel.com, jgg@ziepe.ca, razor@blackwall.org,
-        stephen@networkplumber.org, prabhakar.csengg@gmail.com,
-        contact@emersion.fr, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        sterzik@ti.com, u-kumar1@ti.com, eblanc@baylibre.com,
-        jneanne@baylibre.com
-Subject: Re: [PATCH v5 4/4] misc: tps6594-pfsm: Add driver for TI TPS6594 PFSM
-Message-ID: <ZCVJv-erahM_Jdug@kroah.com>
-References: <20230330082006.11216-1-jpanis@baylibre.com>
- <20230330082006.11216-5-jpanis@baylibre.com>
+        Thu, 30 Mar 2023 04:38:09 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5A44EFE;
+        Thu, 30 Mar 2023 01:38:08 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PnGtQ0zQ0z6J9tP;
+        Thu, 30 Mar 2023 16:34:22 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 30 Mar
+ 2023 09:38:06 +0100
+Date:   Thu, 30 Mar 2023 09:38:05 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+CC:     Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Michael Hennerich" <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        "Jonathan Hunter" <jonathanh@nvidia.com>,
+        Marc Zyngier <maz@kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-staging@lists.linux.dev>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 1/5] iio: adc: ad7292: Add explicit include for of.h
+Message-ID: <20230330093805.00003bb4@Huawei.com>
+In-Reply-To: <ZCThn87xFr3wGtzP@marsc.168.1.7>
+References: <20230329-acpi-header-cleanup-v1-0-8dc5cd3c610e@kernel.org>
+        <20230329-acpi-header-cleanup-v1-1-8dc5cd3c610e@kernel.org>
+        <ZCThn87xFr3wGtzP@marsc.168.1.7>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330082006.11216-5-jpanis@baylibre.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 10:20:06AM +0200, Julien Panis wrote:
-> This PFSM controls the operational modes of the PMIC:
-> - STANDBY and LP_STANDBY,
-> - ACTIVE state,
-> - MCU_ONLY state,
-> - RETENTION state, with or without DDR and/or GPIO retention.
-> Depending on the current operational mode, some voltage domains
-> remain energized while others can be off.
+On Wed, 29 Mar 2023 22:10:55 -0300
+Marcelo Schmitt <marcelo.schmitt1@gmail.com> wrote:
+
+> On 03/29, Rob Herring wrote:
+> > With linux/acpi.h no longer implicitly including of.h, add an explicit
+> > include of of.h to fix the following error:
+> > 
+> > drivers/iio/adc/ad7292.c:307:9: error: implicit declaration of function 'for_each_available_child_of_node'; did you mean 'fwnode_for_each_available_child_node'? [-Werror=implicit-function-declaration]
+> > 
+> > Signed-off-by: Rob Herring <robh@kernel.org>  
 > 
-> This PFSM is also used to trigger a firmware update, and provides
-> R/W access to device registers.
+> Acked-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-What userspace code uses these new ioctls?  Do you have a pointer to it
-anywhere?
+> 
+> Thanks,
+> Marcelo
+> 
+> > ---
+> >  drivers/iio/adc/ad7292.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/iio/adc/ad7292.c b/drivers/iio/adc/ad7292.c
+> > index a2f9fda25ff3..cccacec5db6d 100644
+> > --- a/drivers/iio/adc/ad7292.c
+> > +++ b/drivers/iio/adc/ad7292.c
+> > @@ -8,6 +8,7 @@
+> >  #include <linux/bitfield.h>
+> >  #include <linux/device.h>
+> >  #include <linux/module.h>
+> > +#include <linux/of.h>
+> >  #include <linux/regulator/consumer.h>
+> >  #include <linux/spi/spi.h>
+> >  
+> > 
+> > -- 
+> > 2.39.2
+> >   
 
-> --- /dev/null
-> +++ b/include/uapi/linux/tps6594_pfsm.h
-> @@ -0,0 +1,45 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +/*
-> + * Userspace ABI for TPS6594 PMIC Pre-configurable Finite State Machine
-> + *
-> + * Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
-> + */
-> +
-> +#ifndef __TPS6594_PFSM_H
-> +#define __TPS6594_PFSM_H
-> +
-> +#include <linux/const.h>
-> +#include <linux/ioctl.h>
-> +#include <linux/types.h>
-> +
-> +/* PFSM state definitions */
-> +enum pfsm_state {
-> +	PMIC_ACTIVE_STATE,
-> +	PMIC_MCU_ONLY_STATE,
-> +	PMIC_RETENTION_STATE
-> +};
-> +
-> +/**
-> + * struct pmic_state - PMIC state identification
-> + * @state:   PFSM destination state
-> + * @options: options for destination state
-> + */
-> +struct pmic_state {
-> +	enum pfsm_state state;
-> +	__u8 options;
-> +};
-> +
-> +/* Commands */
-> +#define	PMIC_BASE			'P'
-> +
-> +#define	PMIC_GOTO_STANDBY		_IO(PMIC_BASE, 0)
-> +#define	PMIC_GOTO_LP_STANDBY		_IO(PMIC_BASE, 1)
-> +#define	PMIC_UPDATE_PGM			_IO(PMIC_BASE, 2)
-> +#define	PMIC_SET_STATE			_IOW(PMIC_BASE, 3, struct pmic_state)
-> +
-> +/* Options for destination state */
-> +#define PMIC_GPIO_RETENTION		_BITUL(0)
-> +#define PMIC_DDR_RETENTION		_BITUL(1)
-> +#define PMIC_MCU_ONLY_STARTUP_DEST	_BITUL(2)
-
-Please read Documentation/driver-api/ioctl.rst which says:
-
-* Bitfields and enums generally work as one would expect them to,
-  but some properties of them are implementation-defined, so it is
-  better to avoid them completely in ioctl interfaces.
-
-For a brand-new ioctl interface, you did both of these unrecommended
-things.  Why set yourself for complexity when you do not need to?
-
-thanks,
-
-greg k-h
