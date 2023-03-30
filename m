@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205D56D1074
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7132E6D1076
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 23:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjC3VDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 17:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
+        id S229913AbjC3VD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 17:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjC3VC6 (ORCPT
+        with ESMTP id S229827AbjC3VD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 17:02:58 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B6ABDD6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 14:02:57 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso21149125pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 14:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680210177;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X/xsTJDZlQeJOjmK2KOoGoYyGsO3o/mIzwXJZJba2dQ=;
-        b=JnrYslCBdaBmWFrna8dF7+I4WqGxOyf1SdneNgW+b/qZFufmf5ZQCa0Y6BG+iYP76c
-         HRTmL4LAemn5IosIpP833RVUcqQc2cOrvgS1s6WhlUCk7U73yRTQcaSHm7SDLmtQvQed
-         zG2xpg+eD0/A887w+kdvbPsNJs1JCtKdd9dfGETiQRkpHLCieKgoQccyXKvo9wxRBfBM
-         /W1J2VzYUccdg4s/JgajcqJ4/qrWUFrYgI7jahcjsvrbdB3lD0c7krw+PVpxk8qtSfB+
-         WWHv/fU6I17C4IzxKnCEKZmB0Obj6AWc8dYOLrKJRd4P9+JTlo1ZM0F9il7uDJm2jBI3
-         JE5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680210177;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X/xsTJDZlQeJOjmK2KOoGoYyGsO3o/mIzwXJZJba2dQ=;
-        b=5pMwZfzaqT/BctoYi3W8n/0Un5coymnYBt3Fy0y/zLkRhs3pfsoE6pqYQcnNHfZlyc
-         PjWDPUDfdLUfUFj7KzU38u1t1uikgq3iaIXzGlmBXNU3+PHoZrL+tibjGfKDcsb7S7FO
-         5ULA61cmbXuoyVhEtidCMlL7Sn+DN/Whompm8BU5IqKZ18HDvKdAfqgf4YAhyyQOQWy4
-         9+E/vugioq9ip3xnMDW3eeLv+NB/2DyJtSQzX8Nl3wkIzdB66T2nNB4tysqqCZ80Qnvy
-         TU88HwN7Rb95WmD+SgWTnQJpIoaFoVRU0uNbaDn+p9OtszsETOl2UQvp1vLQTfzO4tJw
-         xPkw==
-X-Gm-Message-State: AO0yUKUl9ZC35s85Mr/F2fPnhMOYXJEeaiEkZRVNyCVdW+bRCPS4XdVk
-        gBjMLNeQX2sYyZmr5F2Zu/dLvA==
-X-Google-Smtp-Source: AK7set8Tu5xQiv2POaFwMPQARW9IYLHTrFmIgYV0fJYXtvJptVdt71Q4oVmfS4TbYWoY9B6XBctZow==
-X-Received: by 2002:a05:6a20:3a9c:b0:d9:77f7:d62e with SMTP id d28-20020a056a203a9c00b000d977f7d62emr19771027pzh.36.1680210176765;
-        Thu, 30 Mar 2023 14:02:56 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id u19-20020aa78493000000b00627df85cd72sm272683pfn.199.2023.03.30.14.02.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 14:02:55 -0700 (PDT)
-In-Reply-To: <20230324100538.3514663-1-conor.dooley@microchip.com>
-References: <20230324100538.3514663-1-conor.dooley@microchip.com>
-Subject: Re: [PATCH v1 0/2] RISC-V: Fixes for
- riscv_has_extension[un]likely()'s alternative dependency
-Message-Id: <168021016598.24378.3655010932034321812.b4-ty@rivosinc.com>
-Date:   Thu, 30 Mar 2023 14:02:45 -0700
+        Thu, 30 Mar 2023 17:03:57 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718A3E068;
+        Thu, 30 Mar 2023 14:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=P4o/Cj1xJY/GvgxgLFSwpwnxIiEruRDJKJu5rzeHPS8=; b=ZOYNoZH7cE6S22POgLgRlpTAPp
+        4lS5hqJOgTgsqI1yHj/QvUZbFCTHP5RtrT2sGH/yB+Le2IM1AaiZfYO+JYKmjPWZM60ULOqyPV2bq
+        /BVJB3x3QB+DlVbLndnlMw4pG8/egWPYzJOP0Fgsvo0sx+vTpReOQzmgibzliC61nx/0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1phzQz-008w0S-63; Thu, 30 Mar 2023 23:03:49 +0200
+Date:   Thu, 30 Mar 2023 23:03:49 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH net-next 14/15] net: dsa: mt7530: introduce driver for
+ MT7988 built-in switch
+Message-ID: <b8db273d-27b5-4d05-b128-3d53ecc5f139@lunn.ch>
+References: <cover.1680180959.git.daniel@makrotopia.org>
+ <fef2cb2fe3d2b70fa46e93107a0c862f53bb3bfa.1680180959.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-901c5
-Cc:     Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fef2cb2fe3d2b70fa46e93107a0c862f53bb3bfa.1680180959.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 24 Mar 2023 10:05:37 +0000, Conor Dooley wrote:
-> Here's my attempt at fixing both the use of an FPU on XIP kernels and
-> the issue that Jason ran into where CONFIG_FPU, which needs the
-> alternatives frame work for has_fpu() checks, could be enabled without
-> the alternatives actually being present.
+On Thu, Mar 30, 2023 at 04:23:42PM +0100, Daniel Golle wrote:
+> Add driver for the built-in Gigabit Ethernet switch which can be found
+> in the MediaTek MT7988 SoC.
 > 
-> For the former, a "slow" fallback that does not use alternatives is
-> added to riscv_has_extension_[un]likely() that can be used with XIP.
-> Obviously, we want to make use of Jisheng's alternatives based approach
-> where possible, so any users of riscv_has_extension_[un]likely() will
-> want to make sure that they select RISCV_ALTERNATIVE.
-> If they don't however, they'll hit the fallback path which (should,
-> sparing a silly mistake from me!) behave in the same way, thus
-> succeeding silently. Sounds like a
+> The switch shares most of its design with MT7530 and MT7531, but has
+> it's registers mapped into the SoCs register space rather than being
+> connected externally or internally via MDIO.
 > 
-> [...]
+> Introduce a new platform driver to support that.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 
-Applied, thanks!
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-[1/2] RISC-V: add non-alternative fallback for riscv_has_extension_[un]likely()
-      https://git.kernel.org/palmer/c/1aa866931b80
-[2/2] RISC-V: always select RISCV_ALTERNATIVE for non-xip kernels
-      https://git.kernel.org/palmer/c/1ee7fc3f4d0a
-
-Best regards,
--- 
-Palmer Dabbelt <palmer@rivosinc.com>
-
+    Andrew
