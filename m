@@ -2,54 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5686D1207
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0C46D120C
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 00:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjC3WSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 18:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        id S230148AbjC3WUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 18:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjC3WSt (ORCPT
+        with ESMTP id S229505AbjC3WUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 18:18:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11128B47F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:18:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C2A5621BB
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 22:18:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8D3C433EF;
-        Thu, 30 Mar 2023 22:18:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1680214727;
-        bh=J6+yEMlbNsjNChezrO163A6g35jo86cAh2v0lik6h6M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iZ/wQMpkWb4s0aY/X31v5rqUAUvTqDBmTw7ZekRAv+F0th/P+6EEZFRNNobe8SWcz
-         FCDN+oQE7zdIdgp01NP3R8bu4Lv77fXpSJk/3f5a6o7XFVcIfmWd3taWcjGrdK4ZCP
-         HVund6J9Uejk+L/1aBCT00wUt8jhxQEvurav9wUk=
-Date:   Thu, 30 Mar 2023 15:18:46 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        David Gow <davidgow@google.com>
-Subject: Re: [PATCH 0/4] log2: make is_power_of_2() more generic
-Message-Id: <20230330151846.fdbc8edbfbaa6eaddb056dc7@linux-foundation.org>
-In-Reply-To: <549987e4967d45159573901d330c96a0@AcuMS.aculab.com>
-References: <20230330104243.2120761-1-jani.nikula@intel.com>
-        <20230330125041.83b0f39fa3a4ec1a42dfd95f@linux-foundation.org>
-        <549987e4967d45159573901d330c96a0@AcuMS.aculab.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Thu, 30 Mar 2023 18:20:31 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F01B74B
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:20:30 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-54606036bb3so216352147b3.6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:20:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680214829;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1XHbYcIgrFHrYvAFgKxf4i1nvwZgCPxOVsUNf1NNENs=;
+        b=XUlxAl8du6o4u/LV1RNVFNvw7n3F7NCnc5aU2soy13kDVY6OC2+6IadcPrBEv7pf3A
+         ftrDS1KsftjQmiYSNS/rmQb5R3qIabtbFTOumMp0SkG3mhthWgvPEJ6Uh5e5bp8xVGIn
+         vsLEhwwB3R8HrOvqHzm9upBbJGRYI0qZQ02XE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680214829;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1XHbYcIgrFHrYvAFgKxf4i1nvwZgCPxOVsUNf1NNENs=;
+        b=xK+SDAA6fBaQVHFB9ohUd9D6aEwnwpSe+GTBaI2nI+5LazyrC796FqekWe7dkLo5hM
+         wS3/jQB9PZNimF5FcU5LJ9xflamLhYjd5rL/vWpURjxy6JQtaoNoOhBUcBGcoKMuuepR
+         dM1cf7hD4YFTB/6u6+l54CoOhHGT5NA3IEV0+EF8Ou7CIAF3Ecs0mzYmtV9zwH8JaqRp
+         VqVtWzdM28xGLhR8Q8OnL3+kh+VhZq1YuRtxKuYi8jTjtdTqV7ny1At5pU4bu/lyQWer
+         2kT8VjqjZjj7Wbgsb6rY73XuFYRHfR9vqjLad9YcTrxxVJPptGOUSrjTCI42XvEtwZdo
+         Y3KQ==
+X-Gm-Message-State: AAQBX9e9/DhWsoqWf1EyQqRxpjV8/8kkYT929KwuAuwuQAp1MqPFlKe2
+        kZxs8TV41kJThh23O8coBIcUOZnx9NYi1HN24Kc=
+X-Google-Smtp-Source: AKy350Zwcy/+1NIU4GraQHQjbbQGRklfjeHhhDslDG8jKZuFKs83uyRRTw3ObP6BFVMekzkaChrGtQ==
+X-Received: by 2002:a0d:cb45:0:b0:538:4f61:494e with SMTP id n66-20020a0dcb45000000b005384f61494emr22415124ywd.47.1680214829562;
+        Thu, 30 Mar 2023 15:20:29 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id z4-20020a81e244000000b005463239c018sm124139ywl.74.2023.03.30.15.20.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 15:20:28 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id n125so25392013ybg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 15:20:28 -0700 (PDT)
+X-Received: by 2002:a05:6902:1501:b0:b6d:80ab:8bb6 with SMTP id
+ q1-20020a056902150100b00b6d80ab8bb6mr16743748ybu.1.1680214828159; Thu, 30 Mar
+ 2023 15:20:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230330220251.2388494-1-javierm@redhat.com>
+In-Reply-To: <20230330220251.2388494-1-javierm@redhat.com>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Thu, 30 Mar 2023 15:20:16 -0700
+X-Gmail-Original-Message-ID: <CA+ASDXOtyBgr0o+bhjOScjs2h3oUKdouoAi4m+Z=R=Bho=iRFA@mail.gmail.com>
+Message-ID: <CA+ASDXOtyBgr0o+bhjOScjs2h3oUKdouoAi4m+Z=R=Bho=iRFA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: rockchip: Remove non-existing pwm-delay-us DT property
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Enric Balletbo i Serra <eballetbo@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lin Huang <hl@rock-chips.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, zain wang <wzz@rock-chips.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,64 +85,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Mar 2023 21:53:03 +0000 David Laight <David.Laight@ACULAB.COM> wrote:
+On Thu, Mar 30, 2023 at 3:03=E2=80=AFPM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+>
+> There is no neither a driver that parses this nor a DT binding schema tha=
+t
+> documents it so let's remove it from the DTS files that make use of this.
+>
+> The properties that exist are post-pwm-on-delay-ms and pwm-off-delay-ms,
+> defined in the pwm-backlight DT binding. So probably what these DTS want
+> is something like following:
+>
+>         backlight: backlight {
+>                 compatible =3D "pwm-backlight";
+>                 enable-gpios =3D <&gpio4 21 GPIO_ACTIVE_HIGH>;
+>                 pinctrl-names =3D "default";
+>                 pinctrl-0 =3D <&bl_en>;
+>                 pwms =3D <&pwm1 0 1000000 0>;
+>                 post-pwm-on-delay-ms =3D <10>;
+>                 pwm-off-delay-ms =3D <10>;
+>         };
+>
+> But that should be follow-up change if that is the case. Because otherwis=
+e
+> it would be change in behaviour, since currently pwm-delay-us is a no-op.
+>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-> > But wouldn't all these issues be addressed by simply doing
-> > 
-> > #define is_power_of_2(n) (n != 0 && ((n & (n - 1)) == 0))
-> > 
-> > ?
-> > 
-> > (With suitable tweaks to avoid evaluating `n' more than once)
-> 
-> I think you need to use the 'horrid tricks' from min() to get
-> a constant expression from constant inputs.
+pwm-delay-us seems to have been a downstream-only ("CHROMIUM", if
+you're familiar with ChromiumOS kernel parlance) change that seems
+like a combination of the two now-upstream properties you point at. I
+looked through the first use of pwm-delay-us on RK3399 Gru systems,
+and I can't find a spec reference that said it was needed; perhaps it
+was needless copy/paste imitation?
 
-This
+So, simple deletion is probably fine:
 
---- a/include/linux/log2.h~a
-+++ a/include/linux/log2.h
-@@ -41,11 +41,11 @@ int __ilog2_u64(u64 n)
-  * *not* considered a power of two.
-  * Return: true if @n is a power of 2, otherwise false.
-  */
--static inline __attribute__((const))
--bool is_power_of_2(unsigned long n)
--{
--	return (n != 0 && ((n & (n - 1)) == 0));
--}
-+#define is_power_of_2(_n)				\
-+	({						\
-+		typeof(_n) n = (_n);			\
-+		n != 0 && ((n & (n - 1)) == 0);		\
-+	})
- 
- /**
-  * __roundup_pow_of_two() - round up to nearest power of two
-_
-
-worked for me in a simple test.
-
---- a/fs/open.c~b
-+++ a/fs/open.c
-@@ -1564,3 +1564,10 @@ int stream_open(struct inode *inode, str
- }
- 
- EXPORT_SYMBOL(stream_open);
-+
-+#include <linux/log2.h>
-+
-+int foo(void)
-+{
-+	return is_power_of_2(43);
-+}
-_
-
-
-foo:
-# fs/open.c:1573: }
-	xorl	%eax, %eax	#
-	ret	
-
-
-Is there some more tricky situation where it breaks?
+Reviewed-by: Brian Norris <briannorris@chromium.org>
