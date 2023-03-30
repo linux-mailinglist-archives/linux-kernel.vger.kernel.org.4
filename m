@@ -2,98 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F636D0D75
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C746D0D7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 20:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbjC3SK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 14:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
+        id S229967AbjC3SNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 14:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbjC3SK0 (ORCPT
+        with ESMTP id S229379AbjC3SNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 14:10:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40FEEB6F;
-        Thu, 30 Mar 2023 11:10:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 446B16215E;
-        Thu, 30 Mar 2023 18:10:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 92F0EC433D2;
-        Thu, 30 Mar 2023 18:10:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680199824;
-        bh=DwOUP2sC5a3Y4i+2avGuq1jTgRQ93tyP+6+l0yyjMGQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TS/hNse95qXp1BpIaZgmTsV36A/sDyd193Iup5fBfsBM7y27Yb48oCpRWuPZXo+Hj
-         xZWjCMNvgxBVViBn+e9AYfMdQ4b1zUmCiAgmratRyeX0qxDqSoyQbsUJuyXSW3B9TW
-         px4FCjGasOFGKHcLAGdtevEbRfiKWwcElEn/uh4pL2D4GFYWD9r19jab7fG/0Ie19g
-         oZ1kggYcxaCt2UMkFESG1yYC8u935PfPI6lW8w0mW/bYCwRiBrknGiUokAgwWbzKf4
-         Xnpe9ySB3sQPlwoVVXyhNtKRJCSS6bHp33HVuGzyBbAjkg3z+qcjfaXQKJ2mlPEE8y
-         ++e/ds7klCfnA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 781D6E2A037;
-        Thu, 30 Mar 2023 18:10:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 30 Mar 2023 14:13:47 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA2DD314
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:13:45 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r29so19960385wra.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 11:13:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1680200024;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8rBDKsgZ0c2Ea0fhfHATR3kgGwH9tv06KM69SIB7yXs=;
+        b=bBsrNAMNDg2hmM1g5ZjEmgb4OtN2iPjzRQAn2q9/9UE+XsxVYH+8x3ewcsS2i1Cqqs
+         tddFU2LH+8uz4LEejwQv6lqh2kRwiKseLyLPvzhScAjC1bntXWJijgiHsMAmNYXQ52lt
+         yMpwvxwgZABQthiThFH0dG3QB8/iWbxFNFhhHUP/PJ6qqbI30R4RSMjVGT6dT/6YkeGs
+         vLxjOlIgEioRIZ/9rNzkjMm4rXpjv215vNUhXMZsxXcw/Z4UPSaJ4Ofkqo5hvz5vZ1V0
+         ZExrnBlTPNyJrSV3TjJYMc7BLf4K1Pj+ydhxizIWYG8n7DjsyMFKRgq0vjBpEhYnhnPJ
+         0bIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680200024;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8rBDKsgZ0c2Ea0fhfHATR3kgGwH9tv06KM69SIB7yXs=;
+        b=h0zz1HqyUbPlZ5pjK66kUYxWTL3RzZV278Mh0KMoCg4PHB9aixOuOa+ZpkVfSC2Jbq
+         6CYEPfA3woUPcH/oNjUfNhr1dDcSXW7HUboByUEUv+PWx6bKkzLp/YqIFxfciWTkXjCP
+         VqioFCZZdWSay+VUDlfugjugIE4qpFjHOmyoUZfmTPGcRznWw8dTHkIXS1HDy4gcriaa
+         SuhyEZ453cE2vMelQULzcWTDHrfPjXoYgYVwZ+lRLchiRJG1Dg84kp+R1+8k5cjcq9S5
+         od07u7hFXkeuhCgWlL/8ORof9yLopGDyR50GHmwpbq0vNniCNJtaB3VUXezQk/YMMn1w
+         croQ==
+X-Gm-Message-State: AAQBX9d0Ogz1TZJH6hdex+/YQBf+ZPtuzIGawzBXhmDs+H+XpPXlrgko
+        VxzgOc8GvSfznK6qtA7usxKbtg==
+X-Google-Smtp-Source: AKy350bpf17pIYUtctW1UmQYRPMkHHfIjNcaEq9b/wtBb4XXFWdqt7apDJceS74tZ2toNjiTf4y38A==
+X-Received: by 2002:adf:fb0d:0:b0:2e5:17a4:7d65 with SMTP id c13-20020adffb0d000000b002e517a47d65mr1582583wrr.39.1680200023887;
+        Thu, 30 Mar 2023 11:13:43 -0700 (PDT)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id e18-20020a056000121200b002d24a188b64sm33459741wrx.112.2023.03.30.11.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 11:13:43 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH v3 0/4] docs & checkpatch: allow Closes tags with links
+Date:   Thu, 30 Mar 2023 20:13:22 +0200
+Message-Id: <20230314-doc-checkpatch-closes-tag-v3-0-d1bdcf31c71c@tessares.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v13 1/4] Bluetooth: Add support for hci devcoredump
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <168019982448.20045.10207710004218277745.git-patchwork-notify@kernel.org>
-Date:   Thu, 30 Mar 2023 18:10:24 +0000
-References: <20230330095714.v13.1.I9b4e4818bab450657b19cda3497d363c9baa616e@changeid>
-In-Reply-To: <20230330095714.v13.1.I9b4e4818bab450657b19cda3497d363c9baa616e@changeid>
-To:     Manish Mandlik <mmandlik@google.com>
-Cc:     marcel@holtmann.org, luiz.dentz@gmail.com,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        linux-bluetooth@vger.kernel.org, abhishekpandit@chromium.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        johan.hedberg@gmail.com, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAELRJWQC/42OS67CMAxFt4IyxlAn/cAbsQ/EwEldEsFLURwqE
+ OreSRkyYnh85XPvSwmnwKL+Vi+VeAoSxljArFfKeYpnhtAXVrrSpjJYQz86cJ7d5UbZeXDXUVg
+ g0xmwM2ibrmlai6r8WxIGmyg6vxiuId5l+0+SOS3xLfEQHp/q46mwD5LH9PwsmXC5/lI6IVSAd
+ meqTvOe9nTILEKJZRM5q0U86Z9lusiGmmrsdi0Obf8lm+f5DeOHyqExAQAA
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        =?utf-8?q?Kai_Wasserb=C3=A4ch?= <kai@dev.carbon-project.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3054;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=P6AoCjPKkmZgS1nv0s1/YpaDCkuDnCn+pulVbPGi3fU=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkJdFWd6L1EDibjVLoRL8MVbW7B74nKBeqWTkWV
+ jLorHcm6OaJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZCXRVgAKCRD2t4JPQmmg
+ cwnXD/9PUHGS5kFofgqXyvh4xymo63lE27hUiy16eFTdsOmc5RBXX1wJRyv+p4K3iJOs1kK7t1B
+ 6iHAQT9+YDDdwjKgMHHUM3P6RG14+PXH3taTgL8FPWeM9CCHbWhmT7t1WF102Z4sFH4FiYfoehc
+ PyUKmGHUnkrITvb28LN5r7wdxTqiphQIS72Ed8R+C3AfahWr9poP0GiMTrWMNPKmI70VTT2Wh7N
+ PGvQ4io348yw80+QT3KuXkxE/cgG/5SlWYkOev8Q1QpKTcO3tvtG4anudQ+J06YSEQg4DDYXzk8
+ tvQaQV8k+2E9f7SqbOu0nXfUIr8RPjfAOpz901UXTs6EIdcqmxqJqS1sHlO0Chrc1YbHOZYK0Al
+ HgtoCk31vLqtyv+p983bnY5oTRaDpoU2AAY2BujS3WKs49KcN7HIBSXvkFyOpRF2PP9BzQCc6CC
+ zDwWuLB8p/Wk8+8fe6/Dxca0/WejYdwkZAeyH/I90tBvl/qgTyCw2EeOCyG4lB8G9aZiaYxSeum
+ R7a3LKBY64/c6YlQiO8a157JTWFsEsmComat6PC59/RzpCoHb70KlH73dGHS2le+KPPISCoVw0d
+ xIP2thgk9hRIAuWniP/I2vE8hEGFxtEkZ7+NhVwavemfbe+a8L/70qilEcVBuEFm0fMswWWHRzY
+ DkeoZYcleOGd2ZQ==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Since v6.3, checkpatch.pl now complains about the use of "Closes:" tags
+followed by a link [1]. It also complains if a "Reported-by:" tag is
+followed by a "Closes:" one [2].
 
-This series was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
+As detailed in the first patch, this "Closes:" tag is used for a bit of
+time, mainly by DRM and MPTCP subsystems. It is used by some bug
+trackers to automate the closure of issues when a patch is accepted.
+It is even planned to use this tag with bugzilla.kernel.org [3].
 
-On Thu, 30 Mar 2023 09:58:23 -0700 you wrote:
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> 
-> Add devcoredump APIs to hci core so that drivers only have to provide
-> the dump skbs instead of managing the synchronization and timeouts.
-> 
-> The devcoredump APIs should be used in the following manner:
->  - hci_devcoredump_init is called to allocate the dump.
->  - hci_devcoredump_append is called to append any skbs with dump data
->    OR hci_devcoredump_append_pattern is called to insert a pattern.
->  - hci_devcoredump_complete is called when all dump packets have been
->    sent OR hci_devcoredump_abort is called to indicate an error and
->    cancel an ongoing dump collection.
-> 
-> [...]
+The first patch updates the documentation to explain what is this
+"Closes:" tag and how/when to use it. The second patch modifies
+checkpatch.pl to stop complaining about it.
 
-Here is the summary with links:
-  - [v13,1/4] Bluetooth: Add support for hci devcoredump
-    (no matching commit)
-  - [v13,2/4] Bluetooth: Add vhci devcoredump support
-    https://git.kernel.org/bluetooth/bluetooth-next/c/d5d5df6da0aa
-  - [v13,3/4] Bluetooth: btusb: Add btusb devcoredump support
-    https://git.kernel.org/bluetooth/bluetooth-next/c/1078959dcb5c
-  - [v13,4/4] Bluetooth: btintel: Add Intel devcoredump support
-    https://git.kernel.org/bluetooth/bluetooth-next/c/0b93eeba4454
+The DRM maintainers and their mailing list have been added in Cc as they
+are probably interested by these two patches as well.
 
-You are awesome, thank you!
+[1] https://lore.kernel.org/all/3b036087d80b8c0e07a46a1dbaaf4ad0d018f8d5.1674217480.git.linux@leemhuis.info/
+[2] https://lore.kernel.org/all/bb5dfd55ea2026303ab2296f4a6df3da7dd64006.1674217480.git.linux@leemhuis.info/
+[3] https://lore.kernel.org/linux-doc/20230315181205.f3av7h6owqzzw64p@meerkat.local/
+
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+Note: After having re-read the comments from the v1, it is still unclear
+to me if this "Closes:" can be accepted or not. But because it seems
+that the future Bugzilla bot for kernel.org and regzbot would like to
+use it as well, I'm sending here new versions. I'm sorry if I
+misunderstood the comments from v1. Please tell me if I did.
+
+Changes in v3:
+- Patch 1/4 now allow using the "Closes" tag with any kind of bug
+  reports, as long as the link is public. (Thorsten)
+- The former patch 2/2 has been split in two: first to use a list for
+  the different "link" tags (Joe). Then to allow the 'Closes' tag.
+- A new patch has been added to let checkpatch.pl checking if "Closes"
+  and "Links" are used with a URL.
+- Link to v2: https://lore.kernel.org/r/20230314-doc-checkpatch-closes-tag-v2-0-f4a417861f6d@tessares.net
+
+Changes in v2:
+- The text on patch 1/2 has been reworked thanks to Jon, Bagas and
+  Thorsten. See the individual changelog on the patch for more details.
+- Private bug trackers and invalid URLs are clearly marked as forbidden
+  to avoid being misused. (Linus)
+- Rebased on top of Linus' repo.
+- Link to v1: https://lore.kernel.org/r/20230314-doc-checkpatch-closes-tag-v1-0-1b83072e9a9a@tessares.net
+
+---
+Matthieu Baerts (4):
+      docs: process: allow Closes tags with links
+      checkpatch: use a list of "link" tags
+      checkpatch: allow Closes tags with links
+      checkpatch: check for misuse of the link tags
+
+ Documentation/process/5.Posting.rst          | 10 +++++++
+ Documentation/process/submitting-patches.rst | 10 +++++++
+ scripts/checkpatch.pl                        | 43 ++++++++++++++++++++++------
+ 3 files changed, 55 insertions(+), 8 deletions(-)
+---
+base-commit: ffe78bbd512166e0ef1cc4858010b128c510ed7d
+change-id: 20230314-doc-checkpatch-closes-tag-1731b57556b1
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Matthieu Baerts <matthieu.baerts@tessares.net>
 
