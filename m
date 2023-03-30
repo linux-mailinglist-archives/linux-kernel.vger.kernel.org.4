@@ -2,96 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E866CFDF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 738DF6CFE01
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 10:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjC3IQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 04:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        id S230214AbjC3IS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 04:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjC3IQk (ORCPT
+        with ESMTP id S229475AbjC3ISD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:16:40 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB3176A6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:16:25 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id k37so23537505lfv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 01:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680164183;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KaDyW6z6XuYhRtr0QA2BxgBT9mFk6zOPgn6BDQB/clc=;
-        b=tceJLeFJ1+iCkdm97eVxZvU9flLgSis4gO3XGnszaE4I82F7leGqF306RA7Pu3W4pL
-         +BmVBDBfMpSUvfoPlbQv+F+WsJJrJnXnrzPa+dQ30P0KsvfGFClkHH71INxqIDStBRJa
-         Se6qWPZxa0tvkqYR6VVXHUGHv8YkqXD0NIjXcuXA6pLdHlH4AvflPxGiSreK5p9pr300
-         CpoRvx1iYHTLk4x83BV6pIR/N7XRwqNncxWsHDktw5zhBReNI2PQdEWJLBjIVxvtHBzE
-         7WpGBtuA6q5zeGpErkGy4eHHvLqGACFnDwrHRdMaWebPoTfyB244f+KKxPD1NrFQ01Et
-         xdHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680164183;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KaDyW6z6XuYhRtr0QA2BxgBT9mFk6zOPgn6BDQB/clc=;
-        b=d/IBRgwOjdQAjzLJGkLPogrCB+GS0KtgniuZdWXA+oSC9xnwRLxsOiYOjBS067qAJG
-         gyTEP4v5JJplXDB+FFcKIqAzNk+0fXEx1T4ZyVHzjc568OMvf/bCkDPUrXYAIpSO/WaT
-         BzbqRqQmRoI60PRbO5UoAIRoYqYqf3L1rkeY/or5um9MjAA+6G5ZP5cldNb/gLTQ3A7Z
-         egIl/mXMutCqr0AMlAAAzT3YmxcQVtdLOiI7JjvXJivnua9AdDs1WlMeZFb3H9QPpIbV
-         WT7O33LHdzl4CkpNs+Ji7u29HgeeT1oYjSFlxuihHB6rY0Sz+lLrAqBLhAQWy04Ds1YQ
-         fbgA==
-X-Gm-Message-State: AAQBX9cRy+F7HpNRacAYtjkhhkQwKhDy9CH1ohVAOCBiIFalGZlR7mtt
-        C7oFg3t5ff1Ad2dUyZCnvL2yqJ1Iloflyiy+WME=
-X-Google-Smtp-Source: AKy350YHij+FTXrBHe1yofTEvB7NvFe8x3XC5Pl4Mkxm+AfAM30UwgMEBfzreMB46mYkPwd0+PHcKQ==
-X-Received: by 2002:a19:ad48:0:b0:4ea:ea00:5d45 with SMTP id s8-20020a19ad48000000b004eaea005d45mr6342262lfd.44.1680164183388;
-        Thu, 30 Mar 2023 01:16:23 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05651238d000b004e8508899basm5823667lft.86.2023.03.30.01.16.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 01:16:23 -0700 (PDT)
-Message-ID: <05535da9-474d-eb14-44af-4621020400fb@linaro.org>
-Date:   Thu, 30 Mar 2023 10:16:22 +0200
+        Thu, 30 Mar 2023 04:18:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81C8019B3;
+        Thu, 30 Mar 2023 01:17:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 37F841FB;
+        Thu, 30 Mar 2023 01:18:40 -0700 (PDT)
+Received: from [10.57.18.220] (unknown [10.57.18.220])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0318C3F73F;
+        Thu, 30 Mar 2023 01:17:53 -0700 (PDT)
+Message-ID: <c2244382-8696-a27b-e817-32a7b146fc13@arm.com>
+Date:   Thu, 30 Mar 2023 09:17:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v3 4/9] dt-bindings: qcom-qce: Add compatibles for SM6115
- and QCM2290
+Subject: Re: [BUG] perf: No samples found when using kcore + coresight
 Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
-        rfoss@kernel.org, neil.armstrong@linaro.org
-References: <20230328092815.292665-1-bhupesh.sharma@linaro.org>
- <20230328092815.292665-5-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230328092815.292665-5-bhupesh.sharma@linaro.org>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        coresight@lists.linaro.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mathieu.poirier@linaro.org, adrian.hunter@intel.com,
+        Jiri Olsa <jolsa@kernel.org>, acme@redhat.com,
+        mike.leach@linaro.org, Will Deacon <will@kernel.org>,
+        suzuki.poulose@arm.com, yang@os.amperecomputing.com
+References: <CAHbLzkrJQTrYBtPkf=jf3OpQ-yBcJe7XkvQstX9j2frz4WF-SQ@mail.gmail.com>
+ <8ca2b07e-674e-afb6-ff12-87504f51f252@arm.com>
+ <CAHbLzkpf4RUZugKdn-uXC5m3RpAQH5aDmRXdsxPZi0Cbf-yiyw@mail.gmail.com>
+ <CAHbLzkq_7aXcys1cpgGFsfMDDDKMsT3e7zdNW=0jAkw7kBtJ0Q@mail.gmail.com>
+ <20230309113851.GF19253@leoy-yangtze.lan>
+ <CAHbLzkpvLHnyL5J5kB_ke3CWVq2=MOEdEQsGex56+Esfgqh1=g@mail.gmail.com>
+ <20230313121420.GB2426758@leoy-yangtze.lan>
+ <CAHbLzkpZjrd401DEKnnCNMdra0f6kGRe1Nh_rTovNTmyD8aBpg@mail.gmail.com>
+ <20230314003610.GD2426758@leoy-yangtze.lan>
+ <64db6d95-8aca-48cc-80e1-e68211922071@arm.com>
+ <CAHbLzkoFkxpLuaW93nPrxxvtuHiRmObOnZfRY9YPXcGumzv33A@mail.gmail.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <CAHbLzkoFkxpLuaW93nPrxxvtuHiRmObOnZfRY9YPXcGumzv33A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2023 11:28, Bhupesh Sharma wrote:
-> Crypto Engine block on Qualcomm SoCs SM6115 and QCM2290
-> do not require clocks strictly, so add compatibles for these
-> SoCs, indicating that they are similar to the flavour
-> found on SM8150.
+
+
+On 30/03/2023 00:25, Yang Shi wrote:
+> On Wed, Mar 29, 2023 at 9:08 AM James Clark <james.clark@arm.com> wrote:
+>>
+>>
+>>
+>> On 14/03/2023 00:36, Leo Yan wrote:
+>>> On Mon, Mar 13, 2023 at 11:15:44AM -0700, Yang Shi wrote:
+>>>
+>>> [...]
+>>>
+>>>>> Just a quick summary, here we have two issues:
+>>>>>
+>>>>> - With command:
+>>>>>   perf record -e cs_etm/@tmc_etf63/k --kcore --per-thread \
+>>>>>   -- taskset --cpu-list 1 uname",
+>>>>>
+>>>>>   perf doesn't enable "text poke" attribution.
+>>>>
+>>>> No, it enables "text poke" and perf fails to decode coresight trace
+>>>> data too. It doesn't matter whether "--kcore" is after or before "-e
+>>>> cs/etm/@tmc_etf63/k".
+>>>
+>>> Understand now.  Thanks for correction, if so we can ignore this one.
+>>>
+>>> Leo
+>>
+>> To me it looks like it's only --per-thread and --kcore together that
+>> cause the issue. I can't see if that was mentioned previously in this
+>> thread.
 > 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
+> If "--pre-thread" is not passed in, perf record failed with "failed to
+> mmap with 12 (Cannot allocate memory)". Sorry for not mentioning this
+> in the first place. I was quite focused on --kcore and didn't realize
+> they may be related.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+That's unrelated. That's because you have specified a sink and without
+--per-thread it tries to open the event on all cores. If the sink can't
+be reached from all cores it will fail to open. You can make it work
+without --per-thread if you limit it to a valid core like this, although
+I don't know which ones exactly would be valid for your system:
 
-Best regards,
-Krzysztof
 
+  perf record -e cs_etm/@tmc_etf63/k --kcore -C 0 \
+     -- taskset --cpu-list 1 uname
+
+> 
+>>
+>> If it is --per-thread that's causing the issue then I think I have an
+>> idea why it might be. There are some assumptions and different paths
+>> taken in decoding in that mode that aren't correct. It causes some other
+>> issues to do with ordering and timestamps as well and I wanted to fix it
+>> previously. I wouldn't say that the text-poke change has caused a
+>> regression, as decoding in this mode was always a bit buggy.
+>>
+>> Maybe this is another reason to fix it properly.
