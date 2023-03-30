@@ -2,121 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8314A6CF8B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769B76CF8A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 03:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbjC3B17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Mar 2023 21:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
+        id S229674AbjC3BXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Mar 2023 21:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjC3B14 (ORCPT
+        with ESMTP id S229475AbjC3BXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Mar 2023 21:27:56 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6223B559B
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 18:27:54 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso4988016pjc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Mar 2023 18:27:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1680139674;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7LG6zXCslOH9ykBZv6LzrhqoYBSGwMfp0vnybvkLtvU=;
-        b=7cwCfUZihuwFWuyjGpryi3QxY+znpqBQL/fcVMbx9a9FMGQ758jNlvp6w23kygFdWg
-         WfKMJ+K0Bd7CYIwZWELQ4zaddZsh34aZsKMiR7Joo0DvUg/1/wIWfgJ8llMUdq7/h/lB
-         DYtokS+Hgms4LetTxbyetQItSWriDKNasjVILiBbMdzrCiSlIVJIIyWvBfAWyEIQZoFB
-         ClMJgwSzbt6KvGVvRL1kH+T1Y20JiOMQjQMqzBMSCe7MrIXRgwzK1ImjDiZR2lv5AFEh
-         JY3eE5wH0wxauurmVfUKeBPASYH3Bim3wntM1UnLnLoBgtZfWxs0p21/8pa2ppAbboyZ
-         y4eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680139674;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7LG6zXCslOH9ykBZv6LzrhqoYBSGwMfp0vnybvkLtvU=;
-        b=62QKlt9JSq/scniqOhen1otj1GmZnHPJbwL+O0+TrqTZVxYsFZ4qW30kA46aJIZI4J
-         LThO8DRiPFF5BHrShLiHxDMbm9F6YNVqghsSpSlTeXen2PoNNxfUimIfFcamNSrspMBX
-         v+m2Af+oEdX/gXoSZBnJ08qj5ShsCXvPrIZ3IauJJs2UNAx7L0K4Y7iyWXmCtJtrRwc4
-         JjDMJAQoY559sb0jt7IATnWVX35jC7vZjQmw7hyBTp+NeXVVm1Z29UugQ8bhiHoQzGbe
-         xHZobLNIoIt9SBBK0NugUq093Sc7oaSHez4knBqtit1qahr3QSBDzCSUlCcAmqiT6ZGu
-         39GA==
-X-Gm-Message-State: AAQBX9c7AjUjlzQ6gL1PZAGOYb//XWmbz3qDgHTLOWxetmvM+vlnuJol
-        vbSmnkisb0RXVI7bzWrCUnjNrA==
-X-Google-Smtp-Source: AKy350YNia8nunEpPiMYAsmXC+XRMQnuqnKoMOd3eQc8oJChyk2J10Q7EoYfJ/ROs/AL3g3Q1/AYpw==
-X-Received: by 2002:a17:902:e743:b0:1a2:19c1:a96d with SMTP id p3-20020a170902e74300b001a219c1a96dmr4877567plf.23.1680139673792;
-        Wed, 29 Mar 2023 18:27:53 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-91-157.pa.nsw.optusnet.com.au. [49.181.91.157])
-        by smtp.gmail.com with ESMTPSA id q13-20020a170902bd8d00b0019e8c3cd3f4sm23541416pls.201.2023.03.29.18.27.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 18:27:53 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1phh4w-00EmYd-FB; Thu, 30 Mar 2023 12:27:50 +1100
-Date:   Thu, 30 Mar 2023 12:27:50 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     syzbot <syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com>
-Cc:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [xfs?] WARNING in xfs_bmap_extents_to_btree
-Message-ID: <20230330012750.GF3223426@dread.disaster.area>
-References: <0000000000003da76805f8021fb5@google.com>
+        Wed, 29 Mar 2023 21:23:42 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B5C4EDB;
+        Wed, 29 Mar 2023 18:23:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680139420; x=1711675420;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VTxGweIAXTyub8ayicN0Qd452cPhoT+4Iswx+Pz3KLY=;
+  b=fjFCTQ51VMf+tMx7+zhOUwyaBhHTb84CQx3SGwJHiw6kRKnFg8LlchCS
+   COotoHsYZW3YouRBl7mbvDqUjrJVCVuJebqzxgQpy5h/H1neXGzNh46AT
+   oI8BEr2fHqrPR1p7QSE2mnapDg6u8rAJkpFd+DQ1XgNCj7016GywHd4kv
+   QCe5FoV4ZnzGowQnj4iG6tuTPR2C61k4KOUKDu6DPrunO12HnDZVgqb61
+   IEVqdhURMSo3n1GNpVXaCzi3OMAVeO7MUjXz8QYbnYxyKUkNi5i0nVElp
+   evdX0nE4W1di8of4bW2B3dI2MXzfEGQs2vyyJ6qfLPpPkkQ88C515goTB
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="343489873"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="343489873"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 18:23:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="678001234"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="678001234"
+Received: from dmi-pnp-i7.sh.intel.com ([10.239.159.155])
+  by orsmga007.jf.intel.com with ESMTP; 29 Mar 2023 18:23:35 -0700
+From:   Dapeng Mi <dapeng1.mi@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhang Tinghao <tinghao.zhang@intel.com>,
+        Zhuocheng Ding <zhuocheng.ding@intel.com>,
+        Dapeng Mi <dapeng1.mi@linux.intel.com>
+Subject: [PATCH] perf/x86/intel: Define bit macros for FixCntrCtl MSR
+Date:   Thu, 30 Mar 2023 09:28:46 +0800
+Message-Id: <20230330012846.2927220-1-dapeng1.mi@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000003da76805f8021fb5@google.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 09:08:01PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    1e760fa3596e Merge tag 'gfs2-v6.3-rc3-fix' of git://git.ke..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16f83651c80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=0c383e46e9b4827b01b1
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/17229b6e6fe0/disk-1e760fa3.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/69b5d310fba0/vmlinux-1e760fa3.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/0c65624aace9/bzImage-1e760fa3.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 1 PID: 24101 at fs/xfs/libxfs/xfs_bmap.c:660 xfs_bmap_extents_to_btree+0xe1b/0x1190
+Define bit macros for FixCntrCtl MSR and replace the bit hardcoding
+with these bit macros. This would make code be more human-readable.
 
-Allocation got an unexpected ENOSPC when it was supposed to have a
-valid reservation for the space. Likely because of an inconsistency
-that had been induced into the filesystem where superblock space
-accounting doesn't exactly match the AG space accounting and/or the
-tracked free space.
+Perf commands 'perf stat -e "instructions,cycles,ref-cycles"' and
+'perf record -e "instructions,cycles,ref-cycles"' pass.
 
-Given this is a maliciously corrupted filesystem image, this sort of
-warning is expected and there's probably nothing we can do to avoid
-it short of a full filesystem verification pass during mount.
-That's not a viable solution, so I think we should just ignore
-syzbot when it generates this sort of warning....
+Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+---
+ arch/x86/events/intel/core.c      | 18 +++++++++---------
+ arch/x86/include/asm/perf_event.h | 10 ++++++++++
+ 2 files changed, 19 insertions(+), 9 deletions(-)
 
-i.e. we actually want this warning to be issued if it happens in
-normal production situations, but given that it's relatively trivial
-to create an inconsistent filesystem image that can trigger this we
-should just ignore it when it is generated by such means.
-
--Dave.
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 070cc4ef2672..b7c0bb78ed59 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -2451,7 +2451,7 @@ static void intel_pmu_disable_fixed(struct perf_event *event)
+ 
+ 	intel_clear_masks(event, idx);
+ 
+-	mask = 0xfULL << ((idx - INTEL_PMC_IDX_FIXED) * 4);
++	mask = intel_fixed_bits(idx - INTEL_PMC_IDX_FIXED, INTEL_FIXED_BITS_MASK);
+ 	cpuc->fixed_ctrl_val &= ~mask;
+ }
+ 
+@@ -2750,25 +2750,25 @@ static void intel_pmu_enable_fixed(struct perf_event *event)
+ 	 * if requested:
+ 	 */
+ 	if (!event->attr.precise_ip)
+-		bits |= 0x8;
++		bits |= INTEL_FIXED_0_ENABLE_PMI;
+ 	if (hwc->config & ARCH_PERFMON_EVENTSEL_USR)
+-		bits |= 0x2;
++		bits |= INTEL_FIXED_0_USER;
+ 	if (hwc->config & ARCH_PERFMON_EVENTSEL_OS)
+-		bits |= 0x1;
++		bits |= INTEL_FIXED_0_KERNEL;
+ 
+ 	/*
+ 	 * ANY bit is supported in v3 and up
+ 	 */
+ 	if (x86_pmu.version > 2 && hwc->config & ARCH_PERFMON_EVENTSEL_ANY)
+-		bits |= 0x4;
++		bits |= INTEL_FIXED_0_ANYTHREAD;
+ 
+ 	idx -= INTEL_PMC_IDX_FIXED;
+-	bits <<= (idx * 4);
+-	mask = 0xfULL << (idx * 4);
++	bits = intel_fixed_bits(idx, bits);
++	mask = intel_fixed_bits(idx, INTEL_FIXED_BITS_MASK);
+ 
+ 	if (x86_pmu.intel_cap.pebs_baseline && event->attr.precise_ip) {
+-		bits |= ICL_FIXED_0_ADAPTIVE << (idx * 4);
+-		mask |= ICL_FIXED_0_ADAPTIVE << (idx * 4);
++		bits |= intel_fixed_bits(idx, ICL_FIXED_0_ADAPTIVE);
++		mask |= intel_fixed_bits(idx, ICL_FIXED_0_ADAPTIVE);
+ 	}
+ 
+ 	cpuc->fixed_ctrl_val &= ~mask;
+diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+index 8fc15ed5e60b..bdaf015a620e 100644
+--- a/arch/x86/include/asm/perf_event.h
++++ b/arch/x86/include/asm/perf_event.h
+@@ -32,11 +32,21 @@
+ #define ARCH_PERFMON_EVENTSEL_INV			(1ULL << 23)
+ #define ARCH_PERFMON_EVENTSEL_CMASK			0xFF000000ULL
+ 
++#define INTEL_FIXED_BITS_MASK				0xFULL
++#define INTEL_FIXED_BITS_STRIDE			4
++#define INTEL_FIXED_0_KERNEL				(1ULL << 0)
++#define INTEL_FIXED_0_USER				(1ULL << 1)
++#define INTEL_FIXED_0_ANYTHREAD			(1ULL << 2)
++#define INTEL_FIXED_0_ENABLE_PMI			(1ULL << 3)
++
+ #define HSW_IN_TX					(1ULL << 32)
+ #define HSW_IN_TX_CHECKPOINTED				(1ULL << 33)
+ #define ICL_EVENTSEL_ADAPTIVE				(1ULL << 34)
+ #define ICL_FIXED_0_ADAPTIVE				(1ULL << 32)
+ 
++#define intel_fixed_bits(_idx, _bits)			\
++	((_bits) << ((_idx) * INTEL_FIXED_BITS_STRIDE))
++
+ #define AMD64_EVENTSEL_INT_CORE_ENABLE			(1ULL << 36)
+ #define AMD64_EVENTSEL_GUESTONLY			(1ULL << 40)
+ #define AMD64_EVENTSEL_HOSTONLY				(1ULL << 41)
 -- 
-Dave Chinner
-david@fromorbit.com
+2.34.1
+
