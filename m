@@ -2,116 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA806D0543
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035B36D04CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 14:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbjC3Mt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 08:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
+        id S230083AbjC3MfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 08:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjC3Mtw (ORCPT
+        with ESMTP id S229661AbjC3MfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:49:52 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFF5A6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:49:51 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso13398610wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 05:49:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1680180590;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=9+K5/0WWDeVeEe+OTVzrXk5PiHrboI0Tjgq0g0AOhqY=;
-        b=5yrrhu0VweMt6Y3/KG3eiBCU7L/Ncld4Yj1Q9vbwylygiYJJp37Y3Yl9ZYbOARjBR/
-         Uqnvrm9o266KXf5oiCGk5Y+79SMIZR4Xw76rnVYg+bI8T1wyW2UdJlf/+1K86rPDOG1S
-         wSgUtYC0o1iQFAKJg1RWG6D+5BfRhb61YmR6/6vXgYILDxy9u/BMX7Day95N/DB9Ia44
-         eTSgQ8M8sDk8BMfmiwpI8sSGJlGIkVh5q0Par+BJP43CMnEW1RgqbojWzOVYJBCxNsbY
-         uYthcb8eV04lThKYQNhenWK5KI2lgyRO0Y37Aji3sII21IrL0OH0GqPft0Qaq0siR9Mk
-         ZOrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680180590;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9+K5/0WWDeVeEe+OTVzrXk5PiHrboI0Tjgq0g0AOhqY=;
-        b=vrJqC6a7UzCRDU/hPNPPiGWgD3XnEtSsZfuGLo/zNRvAaJ8KnAwKxKHZ6+mFr9Zv7f
-         O+AcyXgs1qxGNuIx+e+k2kfEtVuFmjt9pnymntQOBqAAUDeBox8e8vlGZellCeM0TPBX
-         DeADV2fqHyZ6Wjm/HNnjI2Z+/4D5vP2tZOVoS4WACvL65CuIDwoRxjJjV0lPCR0xqMaz
-         cbuIfR4t4xLRnHXfDggn8/X7Sti2J1TNH1fmyfDLsAmnItsLYJ+IekBU98iFTy6rY7qU
-         SH9uyCQfQTTPQB0ToPI5TTaYaUJ7mr9bmBSoNmB6smURjITR26YjiXq3pBCd0N4PmCPh
-         uWrw==
-X-Gm-Message-State: AAQBX9cAoR8GB5Am5EeBmB1+attlbHUlcv/b63q61Ng/RBlScaLUxT0t
-        cJXUIPrWaFPpBOPDYvbd3qZ7TQ==
-X-Google-Smtp-Source: AKy350YVrGbxE3Bd4v1m+F3ok9Nrusg2V+E0fusX9dtc6+f5OdSxphjAN8y5r7KCDqNoGUKoYKHcGw==
-X-Received: by 2002:a1c:f20e:0:b0:3ef:6ae7:89bd with SMTP id s14-20020a1cf20e000000b003ef6ae789bdmr11318687wmc.6.1680180589697;
-        Thu, 30 Mar 2023 05:49:49 -0700 (PDT)
-Received: from localhost ([194.62.217.4])
-        by smtp.gmail.com with ESMTPSA id h16-20020a05600c315000b003eda46d6792sm6175846wmo.32.2023.03.30.05.49.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 05:49:49 -0700 (PDT)
-References: <20230329223239.138757-1-y86-dev@protonmail.com>
- <20230329223239.138757-4-y86-dev@protonmail.com>
-User-agent: mu4e 1.9.18; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     y86-dev@protonmail.com
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Andreas Hindborg <a.hindborg@samsung.com>
-Subject: Re: [PATCH v3 03/13] rust: types: add `Opaque::raw_get`
-Date:   Thu, 30 Mar 2023 14:32:19 +0200
-In-reply-to: <20230329223239.138757-4-y86-dev@protonmail.com>
-Message-ID: <87leje4d5f.fsf@metaspace.dk>
+        Thu, 30 Mar 2023 08:35:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939FB768A;
+        Thu, 30 Mar 2023 05:35:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0E87B828A6;
+        Thu, 30 Mar 2023 12:35:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2767C433EF;
+        Thu, 30 Mar 2023 12:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680179705;
+        bh=y+2gCE8/Cx3zjDhG3ki9NXZfOdNfIYHBd/3JGB6uaN8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Cp6aBBHtwV3qcj9lLsSRv592j/zDoiXol/xJlrebkCiGucvZc8NaB9TBp+GFWXotV
+         0UXL9RsflBhWhnQEO3CtDQD8DuHlAOsN1OrlX16EX0EHLu45mnk4Zfo055ugiLtyVF
+         AzbWZAMM7hb/1H/KKx3wGtFg0YS+0AoX2bvifG2tf1ABoIDsNs8uZkCNjlJ51j1PCh
+         Kjm0JzTyzTuUkYKUKm+42O/N4vw8mqYTxRHdKNFWTTe+0ePBwfJUio+LyllE33HRCu
+         eXohTgchQwJxLUGJlJetQJaard0E6ljRoIZ0WwHSwdkiMxu98BDq+Jrzu1DIfTqqiD
+         omBwPg+jlYTtg==
+Date:   Thu, 30 Mar 2023 13:35:00 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     tony@atomide.com, nathan@kernel.org, ndesaulniers@google.com,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] mfd: twl-core: remove unused add_child and
+ add_numbered_child functions
+Message-ID: <20230330123500.GG434339@google.com>
+References: <20230322115838.2569414-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230322115838.2569414-1-trix@redhat.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 22 Mar 2023, Tom Rix wrote:
 
-y86-dev@protonmail.com writes:
-
-> From: Benno Lossin <y86-dev@protonmail.com>
+> clang with W=1 reports
+> drivers/mfd/twl-core.c:654:30: error: unused function 'add_child' [-Werror,-Wunused-function]
+> static inline struct device *add_child(unsigned mod_no, const char *name,
+>                              ^
+> add_numbered_child and its only caller add_child are not used, so remove them.
 >
-> This function mirrors `UnsafeCell::raw_get`. It avoids creating a
-> reference and allows solely using raw pointers.
-> The `pin-init` API will be using this, since uninitialized memory
-> requires raw pointers.
->
-> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
+>  drivers/mfd/twl-core.c | 65 ------------------------------------------
+> 1 file changed, 65 deletions(-)
 
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
+I chopped around the commit message a bit and:
 
->  rust/kernel/types.rs | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-> index 9d0fdbc55843..ff2b2fac951d 100644
-> --- a/rust/kernel/types.rs
-> +++ b/rust/kernel/types.rs
-> @@ -238,6 +238,14 @@ impl<T> Opaque<T> {
->      pub fn get(&self) -> *mut T {
->          UnsafeCell::raw_get(self.0.as_ptr())
->      }
-> +
-> +    /// Gets the value behind `this`.
-> +    ///
-> +    /// This function is useful to get access to the value without creating intermediate
-> +    /// references.
-> +    pub const fn raw_get(this: *const Self) -> *mut T {
-> +        UnsafeCell::raw_get(this.cast::<UnsafeCell<T>>())
-> +    }
->  }
->
->  /// A sum type that always holds either a value of type `L` or `R`.
+Applied, thanks
 
+--
+Lee Jones [李琼斯]
