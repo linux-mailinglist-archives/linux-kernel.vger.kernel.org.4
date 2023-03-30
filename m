@@ -2,168 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA996D08B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9D56D08BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 16:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbjC3OwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 10:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        id S232431AbjC3Owo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 10:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbjC3OwK (ORCPT
+        with ESMTP id S232457AbjC3Owl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:52:10 -0400
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6C91FE8;
-        Thu, 30 Mar 2023 07:52:09 -0700 (PDT)
-Received: by mail-qv1-f41.google.com with SMTP id o44so14203242qvo.4;
-        Thu, 30 Mar 2023 07:52:09 -0700 (PDT)
+        Thu, 30 Mar 2023 10:52:41 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A654976D
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:52:34 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id h25so24858678lfv.6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 07:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680187952;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kFDNA5O4BRFjY00+Z1LJW119elAYOYVUw4CBAie71cg=;
+        b=eJWBU//eJrHG5mc3MWkqYZSyeiQVk3i4eaOJaS41ZDWBEDAUymCfUZpzw4Pa3onpqz
+         fxSBz4CVxHV4C26hz68gTIB7+KPV6LMDDuTcrf9WHS6GBTTtSBLyNjrobEakV77CPSXb
+         hnCSvLwk9tDgMA1LICJA9RS1zI5gShpEJev6LHd3x+QMwBgh1IwH2mkaxalD7ekwD6rG
+         94FcZ9oMOdJEF4173i0w4lthkEKj+E7ny6cjXPk5/NYfW0Kp6A6rdQLXII9w43spK3Lg
+         3px+6MCY3Ev88K6PUL95C1q2ctf/xYudq4ASG49tVVzgCEzMygzgtNL7cL0Ri1WwABfV
+         jhXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680187928; x=1682779928;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9hN4YpD3U3sRZPulOttvL6oVrqEryb/pVBJ8w7pJKAg=;
-        b=EXnDaT/dFZV4LQ+PtQX1xCezzJhjEcJwUwekjb4T1czTVuhXPdqe4vSK4KW2huj94p
-         Wt7AHOKXHOFQfaVD3SVSHf1fuOFa04BrcSK6lOpeWmexQWPd3kQLFc2l1HDqsVOrWnNb
-         /ct72PYixjUeQusyU2iuucWj4aOXv7pkLxYTj13mJNzdn+lXASD6f+B23hvI3ZNz5YbM
-         oWP7eAp4QUufHQrc3pdf4Edbr7LsA5KtSQxs/MQ5EYlTga8DSKHUeEHHONrTHeUYJAH3
-         uQ2H8MYz3GdKgc35oNpCo5jb60I3Pbd1H4BNSVAghM3PbPLDfrAlePaUp4tKU5DLHa5a
-         hBUg==
-X-Gm-Message-State: AAQBX9flgsZuhueeepe8w7Wf7QXmTEIJ8+WVtSHTL9xB9N/kBy5+anW1
-        6FGa/V0/oryxztcX8uOd3jipAfyTL6aNx9CK
-X-Google-Smtp-Source: AKy350bUImW3YQRiXc0ZivxPhjvV5wcP7dHaEwn3ZVeNgZicsadVYsu3ifvTiFEubWvYRRW3EUJdSA==
-X-Received: by 2002:a05:6214:f22:b0:5df:5167:c420 with SMTP id iw2-20020a0562140f2200b005df5167c420mr11051724qvb.38.1680187928464;
-        Thu, 30 Mar 2023 07:52:08 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:d9ee])
-        by smtp.gmail.com with ESMTPSA id dm4-20020ad44e24000000b005dd8b934569sm5530533qvb.1.2023.03.30.07.52.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 07:52:08 -0700 (PDT)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, memxor@gmail.com
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add testcases for ptr_*_or_null_ in bpf_kptr_xchg
-Date:   Thu, 30 Mar 2023 09:52:03 -0500
-Message-Id: <20230330145203.80506-2-void@manifault.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230330145203.80506-1-void@manifault.com>
-References: <20230330145203.80506-1-void@manifault.com>
+        d=1e100.net; s=20210112; t=1680187952;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kFDNA5O4BRFjY00+Z1LJW119elAYOYVUw4CBAie71cg=;
+        b=ckYos/32IqUT265Kr+NBN6UuuNt3tl5CobXF0K7Pyeen09YElS1yBLK6sbKVpM6HGz
+         +hb3o1lG08SYFsdehsVgA5mqGBj5iumUaqBamJZkG1gg9WkDem+SBmOu/GfSRJdBjCOr
+         vXExWLiv3NGAVbdqQj7ekKRKPG8se52ibESTAHKPH5FYmwpk4Hdpq5XW+irdgNmn73qf
+         UWWU1Gd04mnfAsqB8ZjGc/4t381F/satS56NrDuIUynNx4Eg0NZqoL7DzWrb2e5iuSgj
+         /M6sCz4pyCm+Ez1wRrLGfaDjTefog7UOfL6suoqH12ap3MTZRiYh9ZkbL+XjV3FdUH2N
+         ZPcw==
+X-Gm-Message-State: AAQBX9e5e5J7kepQL6lWvEHJUmpLYlzgjew4xuVHYVWOS4JmP6l4gKA8
+        ZkF2iO9nSj6RHZmIQgjZuqDE/g==
+X-Google-Smtp-Source: AKy350bV2TIdi9zQe23PfA/0zCWQl3PFtYMIVplNdHrQIPV+NXfL02RAP+7MfBDh5lc4xKsVFwO3VQ==
+X-Received: by 2002:a19:7919:0:b0:4e8:3cfe:98c7 with SMTP id u25-20020a197919000000b004e83cfe98c7mr1915967lfc.4.1680187952252;
+        Thu, 30 Mar 2023 07:52:32 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id q29-20020ac2511d000000b004eb09820adbsm2385504lfb.105.2023.03.30.07.52.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 07:52:31 -0700 (PDT)
+Message-ID: <2eff49b1-f0ad-8d44-5902-93937867178b@linaro.org>
+Date:   Thu, 30 Mar 2023 17:52:31 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/msm/adreno: adreno_gpu: Use suspend() instead of
+ idle() on load error
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
+        andersson@kernel.org, agross@kernel.org,
+        marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230329140445.2180662-1-konrad.dybcio@linaro.org>
+ <ZCRNFitcrAeH27Pn@hovoldconsulting.com>
+ <83986fa9-c9eb-ae5a-b239-584092f2cea5@linaro.org>
+ <CAA8EJpohEo+kMw7fx5112m+z7JHSLDmsqOL4T7hmyvr2fPP8vQ@mail.gmail.com>
+ <b985e536-227d-df86-0f23-b58882e9654b@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <b985e536-227d-df86-0f23-b58882e9654b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The second argument of the bpf_kptr_xchg() helper function is
-ARG_PTR_TO_BTF_ID_OR_NULL. A recent patch fixed a bug whereby the
-verifier would fail with an internal error message if a program invoked
-the helper with a PTR_TO_BTF_ID | PTR_MAYBE_NULL register. This testcase
-adds some testcases to ensure that it fails gracefully moving forward.
+On 30/03/2023 17:34, Konrad Dybcio wrote:
+> 
+> 
+> On 29.03.2023 21:45, Dmitry Baryshkov wrote:
+>> On Wed, 29 Mar 2023 at 18:48, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>>
+>>>
+>>>
+>>> On 29.03.2023 16:37, Johan Hovold wrote:
+>>>> On Wed, Mar 29, 2023 at 04:04:44PM +0200, Konrad Dybcio wrote:
+>>>>> If we fail to initialize the GPU for whatever reason (say we don't
+>>>>> embed the GPU firmware files in the initrd), the error path involves
+>>>>> pm_runtime_put_sync() which then calls idle() instead of suspend().
+>>>>>
+>>>>> This is suboptimal, as it means that we're not going through the
+>>>>> clean shutdown sequence. With at least A619_holi, this makes the GPU
+>>>>> not wake up until it goes through at least one more start-fail-stop
+>>>>> cycle. Fix that by using pm_runtime_put_sync_suspend to force a clean
+>>>>> shutdown.
+>>>>
+>>>> This does not sound right. If pm_runtime_put_sync() fails to suspend the
+>>>> device when the usage count drops to zero, then you have a bug somewhere
+>>>> else.
+>>> I was surprised to see that it was not called as well, but I wasn't able
+>>> to track it down before..
+>>
+>> Could you please check that it's autosuspend who kicks in? In other
+>> words, if we disable autosuspend, the pm_runtime_put_sync is enough()?
+>>
+>> That would probably mean that we lack some kind of reset in the hw_init path.
+>>
+>> On the other hand, I do not know how the device will react to the
+>> error-in-the-middle state. Modems for example, can enter the state
+>> where you can not properly turn it off once it starts the boot
+>> process.
+>>
+>> And if we remember the efforts that Akhil has put into making sure
+>> that the GPU is properly reset in case of an _error_, it might be
+>> nearly impossible to shut it down in a proper way.
+>>
+>> Thus said, I think that unless there is an obvious way to restart the
+>> init process, Korad's pm_runtime_put_sync_suspend() looks like a
+>> correct fix to me.
+> On the GPU side, when you cut GX and CX GDSCs, the hardware is off.
+> Some clock / gdsc logic may be retained, but the GPU itself gets
+> cut off. Parking the clocks and shuttting down VDD_GX (if exists)
+> only makes that stronger.
 
-Before the fix, these testcases would have failed an error resembling
-the following:
+If I remember correctly, GX and CX GPU GDSCs might be voted by other 
+users. Again, I'd direct you here to the series at [1]
 
-; p = bpf_kfunc_call_test_acquire(&(unsigned long){0});
-99: (7b) *(u64 *)(r10 -16) = r7       ; frame1: ...
-100: (bf) r1 = r10                    ; frame1: ...
-101: (07) r1 += -16                   ; frame1: ...
-; p = bpf_kfunc_call_test_acquire(&(unsigned long){0});
-102: (85) call bpf_kfunc_call_test_acquire#13908
-; frame1: R0_w=ptr_or_null_prog_test_ref_kfunc...
-; p = bpf_kptr_xchg(&v->ref_ptr, p);
-103: (bf) r1 = r6                     ; frame1: ...
-104: (bf) r2 = r0
-; frame1: R0_w=ptr_or_null_prog_test_ref_kfunc...
-105: (85) call bpf_kptr_xchg#194
-verifier internal error: invalid PTR_TO_BTF_ID register for type match
+[1]: https://patchwork.freedesktop.org/series/111966/
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- .../selftests/bpf/progs/cpumask_failure.c     | 25 +++++++++++++++++++
- .../selftests/bpf/progs/map_kptr_fail.c       | 23 +++++++++++++++++
- 2 files changed, 48 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-index db4f94e72b61..a9bf6ea336cf 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
-+++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-@@ -165,3 +165,28 @@ int BPF_PROG(test_global_mask_no_null_check, struct task_struct *task, u64 clone
- 
- 	return 0;
- }
-+
-+SEC("tp_btf/task_newtask")
-+__failure __msg("Possibly NULL pointer passed to helper arg2")
-+int BPF_PROG(test_global_mask_rcu_no_null_check, struct task_struct *task, u64 clone_flags)
-+{
-+	struct bpf_cpumask *prev, *curr;
-+
-+	curr = bpf_cpumask_create();
-+	if (!curr)
-+		return 0;
-+
-+	prev = bpf_kptr_xchg(&global_mask, curr);
-+	if (prev)
-+		bpf_cpumask_release(prev);
-+
-+	bpf_rcu_read_lock();
-+	curr = global_mask;
-+	/* PTR_TO_BTF_ID | PTR_MAYBE_NULL | MEM_RCU passed to bpf_kptr_xchg() */
-+	prev = bpf_kptr_xchg(&global_mask, curr);
-+	bpf_rcu_read_unlock();
-+	if (prev)
-+		bpf_cpumask_release(prev);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-index 08f9ec18c345..15bf3127dba3 100644
---- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-@@ -20,6 +20,7 @@ struct array_map {
- } array_map SEC(".maps");
- 
- extern struct prog_test_ref_kfunc *bpf_kfunc_call_test_acquire(unsigned long *sp) __ksym;
-+extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
- extern struct prog_test_ref_kfunc *
- bpf_kfunc_call_test_kptr_get(struct prog_test_ref_kfunc **p, int a, int b) __ksym;
- 
-@@ -442,4 +443,26 @@ int kptr_get_ref_state(struct __sk_buff *ctx)
- 	return 0;
- }
- 
-+SEC("?tc")
-+__failure __msg("Possibly NULL pointer passed to helper arg2")
-+int kptr_xchg_possibly_null(struct __sk_buff *ctx)
-+{
-+	struct prog_test_ref_kfunc *p;
-+	struct map_value *v;
-+	int key = 0;
-+
-+	v = bpf_map_lookup_elem(&array_map, &key);
-+	if (!v)
-+		return 0;
-+
-+	p = bpf_kfunc_call_test_acquire(&(unsigned long){0});
-+
-+	/* PTR_TO_BTF_ID | PTR_MAYBE_NULL passed to bpf_kptr_xchg() */
-+	p = bpf_kptr_xchg(&v->ref_ptr, p);
-+	if (p)
-+		bpf_kfunc_call_test_release(p);
-+
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
 -- 
-2.39.0
+With best wishes
+Dmitry
 
