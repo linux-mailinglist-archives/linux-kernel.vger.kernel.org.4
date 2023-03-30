@@ -2,276 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60176CFC5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447926CFC6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Mar 2023 09:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjC3HML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 03:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S230269AbjC3HNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 03:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjC3HMH (ORCPT
+        with ESMTP id S230482AbjC3HNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 03:12:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707455FEB
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 00:11:53 -0700 (PDT)
+        Thu, 30 Mar 2023 03:13:32 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0959326A4;
+        Thu, 30 Mar 2023 00:13:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680160313; x=1711696313;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=pBbTar/GWetK+itGYOHgB172Nh02ABsplEQVDiEzDQs=;
-  b=Y5WuV29lFNNRoatHhRMSNQLcOAYo43p+jl/InTWIjZDmrpTZNhGLmQOa
-   ul6TvUAyuC3cMLv77nKgeLU3swAW1OJNk9pM8ULVdHy9wDJWnE6A4lQOa
-   pMcpp2emQHHsZIi13NoUJwV6zO92d5cIz8zu21l1WfskThMkFY7XikFD+
-   GeIh1K2zqu5crKDRcz771+nQdY3L+i6Ti0fXMKHiSdvD0cQ61dah7bvQX
-   l629aN3tbu1OTI0J9tNlCD279RTMwANuKDTlIxHEMeuJNygnnLe9CiriR
-   D7m9ih/Ym4WNMdelo4akElbnwiC8r9IGx0q/Txkn+1vvPKF9Zl5dHPved
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="342702086"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="342702086"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 00:11:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="930616620"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="930616620"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Mar 2023 00:11:52 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680160386; x=1711696386;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Yhc7Flvtw7DygHF2DgeNSHPYJ8ZzS+g4efc4mrx+3WI=;
+  b=w5bqRV/I1ETRn1oJyo7iBcjYV0f60FTFuVKYtlSJTwcNWISnhTfkFaXQ
+   R6uKFq/rHbVNkt5IKxHAqoxsD9YjtirLhoJHKzKJfHZn+SePFxSjpz/j+
+   aV6WVqBCbFvnJMPCI0GFw5m0MKe1TgTDijhJL//RKuJJjQfomiUV0Q0lw
+   5KFd0UcILSa7jSM5U1Aw4XUMDkuK8t3a3YFiIymHmePk60uXoUVcFY78M
+   LTZMxH0uZ1Jc086VxrNIKyYP+rH8LtK5hlxmYfmjSnujQ199J5oG4n8wz
+   q9YOpcFvKv0zfDto33j7cr86FrfvM1FfNBQ9HPEXS8ydWD7BSvUdGCe7V
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,303,1673938800"; 
+   d="scan'208";a="144635864"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Mar 2023 00:12:37 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 00:11:52 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 00:11:51 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 30 Mar 2023 00:11:51 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.177)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 30 Mar 2023 00:11:50 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=euQKIkg92gv5KmErFcmVkN9mW+klUytOPWGUAUFHjb2o5kgaww57UowdaBOtZK+41ClMmfv0sxB6f6OoRVH4wEDX4qnakyRCtuvXj6waNx7MAdZaG+Y4JZ5Jwdoyy0FrQ5JXO1KQwrIzmMwNVGnj1WErFkQzWnywJVU1hAZsnHezax4uR+Za/Ch2G+VBAY3g6y4mOsnYuwiCNpLdsZMPzLnBl9NTor/sjqasIh05hiLZZoLuDCF+MKp0ie/dd/WBRCow2SOuMlLSfzvsk4rYYZJzvB+jBh1wr3mrw7aCdAsg/iwXhTsaV6MAQRMIqN+BxcSfv49JAsxis+pH+UXD0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+4q+VUy0j3+TKut/u1g1rorfDgoLS47v8omJFYsvWfQ=;
- b=UF7NHysgV11+laU6ht4tAfHcityuHuMA6yADHinJ+YEUPILpeDAV1HPImOmp3iFwHPdO/TJTtk6Ej2DlGbUJiD8r+eyOS4fSSvV/eX45k/myOlBXdAlkRI3ufbBDnFOYdIYZDdhpqyrlkktlii968RqDZBlCsq5ayQre7Zig3p1jJQAGlq2+9pcCbiOYKhUvlOrzJbLGprEge2gZdFZb+1MC9swFRiSFVfl3dXp4N5F6Csio0WqvDHkKY5/3N3oWWAYfXvZnJC1t8Ki+zHBJPuP/yDv2qoGLw/s1kgtONtw9Si5tPwZROnErAe8IJRgF7ETFVx7ckfCGPODHWs0UmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by BN0PR11MB5710.namprd11.prod.outlook.com (2603:10b6:408:14a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Thu, 30 Mar
- 2023 07:11:48 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::2629:fb12:6221:3745]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::2629:fb12:6221:3745%5]) with mapi id 15.20.6254.022; Thu, 30 Mar 2023
- 07:11:48 +0000
-Date:   Thu, 30 Mar 2023 01:11:21 -0600
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-CC:     suijingfeng <suijingfeng@loongson.cn>,
-        David Airlie <airlied@linux.ie>, liyi <liyi@loongson.cn>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        Sui Jingfeng <15330273260@189.cn>
-Subject: Re: [PATCH] drm/fbdev-generic: optimize out a redundant assignment
- clause
-Message-ID: <20230330071121.pf4tg4pkwrfv2amc@ldmartin-desk2>
-References: <20230325074636.136833-1-15330273260@189.cn>
- <a3370ae7-8c78-8170-f9c3-7f616a1fa382@suse.de>
- <20230330041726.w7boceq7ljymvfq2@ldmartin-desk2>
- <f42d8ab8-c765-2517-7d25-6ce1dea320e8@suse.de>
-Content-Type: text/plain; charset="iso-8859-1"; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f42d8ab8-c765-2517-7d25-6ce1dea320e8@suse.de>
-X-ClientProxiedBy: BYAPR05CA0083.namprd05.prod.outlook.com
- (2603:10b6:a03:e0::24) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+ 15.1.2507.21; Thu, 30 Mar 2023 00:12:35 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Thu, 30 Mar 2023 00:12:34 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Daire McNamara <daire.mcnamara@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v15 0/2] Microchip Soft IP corePWM driver
+Date:   Thu, 30 Mar 2023 08:12:02 +0100
+Message-ID: <20230330071203.286972-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|BN0PR11MB5710:EE_
-X-MS-Office365-Filtering-Correlation-Id: e825ad95-9744-4e35-31f2-08db30ee0711
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a8zgWz/V2JDK0LOr8EgiG0wo1zzMX4sTDzylg+OliL2eDOQFy1F/VoZm+Rw83M5Jm6XYeywHnXhlav6bQPV6sJ32YUmSHocflMxjZWycjXyjUBrw81Xf6agQZAonO3LmlgxX5QPnzUfWv9IC1Ut0yOBXt26dOJXvRVoLClW4jws1KTYDXYSYqXQ0A33ZR6YMRuZburSc4yQO7Lye+WVjrFkTI0xrbS05KEToakMY9IvX/Y5ZInXs1DRx1uR3AlSyxL+S2/uPVJkmVb8iJM8BuDrb8X16GtH5HirCkDQLIe26sM1bkARGY9eAzZlvnn97/uTjNLGmBJnmNEsVOnQ0KIFgVi1iMj6TM888ComN94lh8fJRO1m4NzBD9k78SjDTt+E0wljaCZnFA2kyd4fug8P5IZD40/A5UWq5yQKTWxsj1lqzcHQ8IBdxqfdWkETHi4CJXIHJWddNmdKCWCzQ1l0DUqW9fVBJqzKWNZMgALr0JtMjEC/nwZo6K/8ZD1QcuDPR4/pxJEb4KkFAMpZmsmiPrWN819cp4aGyq44aJTxoOBySztvMAdtcZ0bSrBO/Kr610NXh5RDSsR9jWExLA9sqtRTSwqLfGvXJnx5HxWA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(376002)(39860400002)(346002)(366004)(136003)(396003)(451199021)(186003)(6512007)(54906003)(6666004)(316002)(6506007)(9686003)(1076003)(26005)(83380400001)(6486002)(478600001)(8936002)(38100700002)(5660300002)(86362001)(4326008)(66946007)(41300700001)(66556008)(8676002)(6916009)(66476007)(33716001)(2906002)(82960400001)(41533002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?R7FoF7IVNsXIrNMPniKvxd9iNYnK2ZZ8h1hvVmZwHQmiE2IXZh7xJEOI4w?=
- =?iso-8859-1?Q?6isdBzw1ovtw5WHmCnkDk0k+RtwFcR98IBjOLOCG+Fl98meW1XYfQymwH3?=
- =?iso-8859-1?Q?ICD/J5Lq+RqK/GK9+8DKy3buYxp0cmF4GxQgM/dd6G/It3fefQRaNT7ytv?=
- =?iso-8859-1?Q?v3By/LoJIY+LsjEuCLHPPZR4k+q0arG2ub4oxWgOYl5fB1iOzrrkNkiPTM?=
- =?iso-8859-1?Q?VBpUl5AjhuHlnVKdx30dU5Wkmtf8FTtqwBCw+9fj8RtoEngLAkLmyGbETX?=
- =?iso-8859-1?Q?rbjcX+uquMH0GSEXWxwG8TuI6GKF9pNDxjrPr5uM2PEG2qyosR6+Z09s4q?=
- =?iso-8859-1?Q?r+nlMtxzXIBbIRu4FXiwZmYUKILQBIAi6lJM2pMaemrjRzbSVBX50FjnuX?=
- =?iso-8859-1?Q?CBcvrmVZKTpWy6igVGLmXvGzzGCL4o710YYE3cYZSsdaaLgpspFUJwHI0q?=
- =?iso-8859-1?Q?iTf80qk54qjP6wSiUOo7UY9cwHO6tMvloK7Fn4KFFt1kGCK7+dsmVEgCca?=
- =?iso-8859-1?Q?CVZq+QwcU8t0uJfT11PgSqIhNfGzbueDmuo+/SeqzbEVOHMYgGXHqv4MqH?=
- =?iso-8859-1?Q?53M5+S9vjsR892Cz9sqBvzaR1TPgLEgZ7ABQ/DIqkZkCIWFpzbo+JD6PCS?=
- =?iso-8859-1?Q?nVtLtAyALIsshS5NOuuiAhcJGCJ0XKSWWaYmdS/L4rLbN6qA+FxEIjFlwc?=
- =?iso-8859-1?Q?6/ha5k81yK/fvawY26pAtjsEn0gG0pFM2J+FakkjDiSQnXFeodACUYuKSE?=
- =?iso-8859-1?Q?rgbDFkmPTLqrfY4w6S/QQ+h1rM6JaJklzWpIDilCyw7qHOD6iHFIrQZqbs?=
- =?iso-8859-1?Q?+XLjrRO5+yE7EVNhQfY7ifjNze+AIaIwQJwno9bNDaGnKga0ofMYsH9+UO?=
- =?iso-8859-1?Q?T41iA6YzvU63FWJZj8SMNWJcPnIDrJq2dov12dA5ED+FHEJpLJ1dwntITd?=
- =?iso-8859-1?Q?V7J5EO9GMyDpym0QoV0rsiveWGm1wbbR8UUEAVgy6IHl1tSXMNMbtVsufj?=
- =?iso-8859-1?Q?ZB4K9suMX8haH0hoDo20ck62pIbyzA7EE2lg680xSE1U1yjOe7B68D5END?=
- =?iso-8859-1?Q?R4xWduzED4WpgbLv/KKM+r0iE8lqGHpQBQW0VEUSzKWXzg7BG+IOAOYuIk?=
- =?iso-8859-1?Q?s28nPz7SIm/Y7kdTFjzRYzAvGnwML9xjJn2lMJVAsH1kBFWl8X6ENmgGad?=
- =?iso-8859-1?Q?7ie3xxcC1TkTB2yv95HIUezlzLu3vQE3BMj+aUods4274NIS62Umrwc8Mh?=
- =?iso-8859-1?Q?scpxtboQBdQH1/1LStEMQp4pl2QNKL3fo4jXMRrOIphhyhuq6uxvcjqUD9?=
- =?iso-8859-1?Q?T2+lIyDFLh9WkyjXnakxMOjXE0Pai3Xx1DQ9YMsIZuwNnLMbQIBcp9f0Oz?=
- =?iso-8859-1?Q?0zWv89rpvEzblLaypr4p6iizLWjZskopjzFN3zt3iUrSgCiuXbj2RW8bd3?=
- =?iso-8859-1?Q?rMKGkkkm53yQ/0tlXhgLVwYl9K0JrNq4SSKNpivaBaHNrXHyeI3o1AaNx4?=
- =?iso-8859-1?Q?I0zEbKGcLwgD1l9vtHsX9/VgzhR3fTKklf5inHACcseoatLVqMOnJnrnyA?=
- =?iso-8859-1?Q?d5n8bnvcQGDD3dHDVhYV81baEoCiZn07v27Uc2oa9GAn/sFBRo5kwbfYiY?=
- =?iso-8859-1?Q?jhEmhG7K0boS6Roq1THQrlljy3qMtfC9LpLP4pq6AyAgAukXppYVE96Q?=
- =?iso-8859-1?Q?=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e825ad95-9744-4e35-31f2-08db30ee0711
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 07:11:48.4268
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gx5wFsG1Lp1TIffyKBMWuqCS6Wvulql7tsTvn1Xi7TD0XFdxtM0A5w9rZ+3l92G4shVIb+KNVyXlznJ7Jshdq4spXUbPPOsZ03W2EWTUOJ4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR11MB5710
-X-OriginatorOrg: intel.com
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5109; i=conor.dooley@microchip.com; h=from:subject; bh=Yhc7Flvtw7DygHF2DgeNSHPYJ8ZzS+g4efc4mrx+3WI=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCmqZs7M+sffl+YqNccp2R9ZWMzUv3TuQmXmXzJzchwy3EO5 rrJ1lLIwiHEwyIopsiTe7muRWv/HZYdzz1uYOaxMIEMYuDgFYCI9Zxn+Cofu3t5W8nyKp8Lytj9XAg 8qNYatvmn7PH3F8WXzXoUXVTAyXKo8NTnDNym99USnUvubO73bHQ3P3Qh1/nA9ov2E5KF6PgA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 08:57:36AM +0200, Thomas Zimmermann wrote:
->Hi
->
->Am 30.03.23 um 06:17 schrieb Lucas De Marchi:
->>On Wed, Mar 29, 2023 at 11:04:17AM +0200, Thomas Zimmermann wrote:
->>>(cc'ing Lucas)
->>>
->>>Hi
->>>
->>>Am 25.03.23 um 08:46 schrieb Sui Jingfeng:
->>>> The assignment already done in drm_client_buffer_vmap(),
->>>> just trival clean, no functional change.
->>>>
->>>>Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->>>>---
->>>> drivers/gpu/drm/drm_fbdev_generic.c | 5 ++---
->>>> 1 file changed, 2 insertions(+), 3 deletions(-)
->>>>
->>>>diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
->>>>b/drivers/gpu/drm/drm_fbdev_generic.c
->>>>index 4d6325e91565..1da48e71c7f1 100644
->>>>--- a/drivers/gpu/drm/drm_fbdev_generic.c
->>>>+++ b/drivers/gpu/drm/drm_fbdev_generic.c
->>>>@@ -282,7 +282,7 @@ static int drm_fbdev_damage_blit(struct 
->>>>drm_fb_helper *fb_helper,
->>>>                  struct drm_clip_rect *clip)
->>>> {
->>>>     struct drm_client_buffer *buffer = fb_helper->buffer;
->>>>-    struct iosys_map map, dst;
->>>>+    struct iosys_map map;
->>>>     int ret;
->>>>     /*
->>>>@@ -302,8 +302,7 @@ static int drm_fbdev_damage_blit(struct 
->>>>drm_fb_helper *fb_helper,
->>>>     if (ret)
->>>>         goto out;
->>>>-    dst = map;
->>>>-    drm_fbdev_damage_blit_real(fb_helper, clip, &dst);
->>>>+    drm_fbdev_damage_blit_real(fb_helper, clip, &map);
->>>
->>>I see what you're doing and it's probably correct in this case.
->>>
->>>But there's a larger issue with this iosys interfaces. Sometimes 
->>>the address has to be modified (see calls of iosys_map_incr()). 
->>>That can prevent incorrect uses of the mapping in other places, 
->>>especially in unmap code.
->>
->>using a initializer for the cases it's needed IMO would make these kind
->>of problems go away, because then the intent is explicit
->>
->>>
->>>I think it would make sense to consider a separate structure for 
->>>the I/O location. The buffer as a whole would still be represented 
->>>by struct iosys_map.  And that new structure, let's call it struct 
->>>iosys_ptr, would point to an actual location within the buffer's
->>
->>sounds fine to me, but I'd have to take a deeper look later (or when
->>someone writes the patch).  It seems we'd replicate almost the entire
->>API to just accomodate the 2 structs.  And the different types will lead
->>to confusion when one or the other should be used
->
->I think we can split the current interface onto two categories: 
->mapping and I/O. The former would use iosys_map and the latter would 
->use iosys_ptr. And we'd need a helper that turns gets a ptr for a 
->given map.
->
->If I find the tine, I'll probably type up a patch.
+Hey Uwe, all,
 
-yeah, a split would make it better rather than just make iosys_ptr
-replace the current cases where we copy the struct. In this case most
-places passing a buffer around in the same driver would migrate to
-iosys_ptr.
+Uwe & I had a long back and forth about period calculations on v13,
+my ultimate conclusion being that, after some testing of the "corrected"
+calculation in hardware, the original calculation was correct.
+I think we had gotten sucked into discussion the calculation of the
+period itself, when we were in fact trying to calculate a bound on the
+period instead. That discussion is here:
+https://lore.kernel.org/linux-pwm/Y+ow8tfAHo1yv1XL@wendy/
 
-thanks
-Lucas De Marchi
+There was, of course, another chat about the niche bits of this
+calculation on v14 too:
+https://lore.kernel.org/linux-pwm/20230322105536.kgt3ffowefqlg6eu@pengutronix.de/
 
->
->Best regards
->Thomas
->
->>
->>thanks
->>Lucas De Marchi
->>
->>>memory range. A few locations and helpers would need changes, but 
->>>there are not so many callers that it's an issue.  This would also 
->>>allow for a few debugging tests that ensure that iosys_ptr always 
->>>operates within the bounds of an iosys_map.
->>>
->>>I've long considered this idea, but there was no pressure to work 
->>>on it. Maybe now.
->>>
->>>Best regards
->>>Thomas
->>>
->>>>     drm_client_buffer_vunmap(buffer);
->>>
->>>-- 
->>>Thomas Zimmermann
->>>Graphics Driver Developer
->>>SUSE Software Solutions Germany GmbH
->>>Maxfeldstr. 5, 90409 Nürnberg, Germany
->>>(HRB 36809, AG Nürnberg)
->>>Geschäftsführer: Ivo Totev
->>
->>
->>
->
->-- 
->Thomas Zimmermann
->Graphics Driver Developer
->SUSE Software Solutions Germany GmbH
->Maxfeldstr. 5, 90409 Nürnberg, Germany
->(HRB 36809, AG Nürnberg)
->Geschäftsführer: Ivo Totev
+Thanks,
+Conor.
 
+Changes since v14:
+- change period_steps calculation logic to correctly handle the cases
+  where tmp % (254 + 1) == 0, by swapping implicit truncation for
+  explicit rounding upwards and subtracting zero
+- special case periods < 1/clk_rate & add a note in limitations about
+  this, although I think this issue wasn't present prior to v15's
+  changes
+- check for smaller suitable values of prescale, which picks the "more
+  correct" value in about half of all cases, particularly those where
+  tmp is large.
+- explain what I mean by the "optimal" values for prescale/period steps
+  re-fix use of defines
+- add a comment about how sync_upd mode works
+- make the use of period_steps and prescale consistently refer to the
+  register values rather than, in comments, using these to mean the
+  resulting values after 1 has been added
+- drop the PREG_TO_VAL() macro, as most of its users are now gone & it
+  only added to the register value versus "real" value problem
+- report pwmchip_add() failures
 
+Changes since v13:
+- couple bits of cleanup to apply_locked(), suggested by Uwe
+- move the overhead waiting for a change to be applied, for channels
+  with shadow registers, to subsequent calls to apply(). This has the
+  benefit of only waiting when two calls to apply() are close in time
+  rather than eating the delay in every call.
+
+Changes since v11:
+- swap a "bare" multiply & divide for the corresponding helper to
+  prevent overflow
+- factor out duplicate clk rate acquisition & period calculation
+- make the period calculation return void by checking the validity of
+  the clock rate in the caller
+- drop the binding & dt patch, they're on-track for v6.2 via my tree
+
+Changes since v10:
+- reword some comments
+- try to assign the period if a disable is requested
+- drop a cast around a u8 -> u16 conversion
+- fix a check on period_steps that should be on the hw_ variant
+- split up the period calculation in get_state() to fix the result on
+  32 bit
+- add a rate variable in get_state() to only call get_rate() once
+- redo the locking as suggested to make it more straightforward.
+- stop checking for enablement in get_state() that was working around
+ intended behaviour of the sysfs interface
+
+Changes since v9:
+- fixed the missing unlock that Dan reported
+
+Changes since v8:
+- fixed a(nother) raw 64 bit division (& built it for riscv32!)
+- added a check to make sure we don't try to sleep for 0 us
+
+Changes since v7:
+- rebased on 6.0-rc1
+- reworded comments you highlighted in v7
+- fixed the overkill sleeping
+- removed the unused variables in calc_duty
+- added some extra comments to explain behaviours you questioned in v7
+- make the mutexes un-interruptible
+- fixed added the 1s you suggested for the if(period_locked) logic
+- added setup of the channel_enabled shadowing
+- fixed the period reporting for the negedge == posedge case in
+  get_state() I had to add the enabled check, as otherwise it broke
+  setting the period for the first time out of reset.
+- added a test for invalid PERIOD_STEPS values, in which case we abort
+  if we cannot fix the period
+
+Changes from v6:
+- Dropped an unused variable that I'd missed
+- Actually check the return values of the mutex lock()s
+- Re-rebased on -next for the MAINTAINERS patch (again...)
+
+Changes from v5:
+- switched to a mutex b/c we must sleep with the lock taken
+- simplified the locking in apply() and added locking to get_state()
+- reworked apply() as requested
+- removed the loop in the period calculation (thanks Uwe!)
+- add a copy of the enable registers in the driver to save on reads.
+- remove the second (useless) write to sync_update
+- added some missing rounding in get_state()
+- couple other minor cleanups as requested in:
+https://lore.kernel.org/linux-riscv/20220709160206.cw5luo7kxdshoiua@pengutronix.de/
+
+Changes from v4:
+- dropped some accidentally added files
+
+Changes before v4:
+https://lore.kernel.org/linux-pwm/20220721172109.941900-1-mail@conchuod.ie
+
+Conor Dooley (2):
+  pwm: add microchip soft ip corePWM driver
+  MAINTAINERS: add pwm to PolarFire SoC entry
+
+ MAINTAINERS                      |   1 +
+ drivers/pwm/Kconfig              |  10 +
+ drivers/pwm/Makefile             |   1 +
+ drivers/pwm/pwm-microchip-core.c | 507 +++++++++++++++++++++++++++++++
+ 4 files changed, 519 insertions(+)
+ create mode 100644 drivers/pwm/pwm-microchip-core.c
+
+-- 
+2.39.2
 
