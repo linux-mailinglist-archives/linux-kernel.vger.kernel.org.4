@@ -2,103 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410AC6D20B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3126D20B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbjCaMpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
+        id S232582AbjCaMqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjCaMpq (ORCPT
+        with ESMTP id S232464AbjCaMqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:45:46 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBB72063F;
-        Fri, 31 Mar 2023 05:45:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=kBywTnPm98K4P6whYiX2rvcllzM1t6Zix8WFENn7dyQ=; b=KqMXOvG33G8QTvnyKl/bzvRcMq
-        zhiVH2CBklpNfSSxBlIcUVZlzs1blc6QDBaVsCdpZPL5rIUxzKOrHcPIA8Bz+XcXJlls+beSFZUhF
-        l10FhK4iKQaCd1eqwIY3Vgyyj0yIfuhdi+bibCLJVtA1dpxofOSGK3bm4iSseTr202jo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1piE7p-0091hJ-FY; Fri, 31 Mar 2023 14:45:01 +0200
-Date:   Fri, 31 Mar 2023 14:45:01 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Shih <Sam.Shih@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Subject: Re: [PATCH net-next 14/15] net: dsa: mt7530: introduce driver for
- MT7988 built-in switch
-Message-ID: <387b3105-2d70-4906-9573-cfac20a55d3a@lunn.ch>
-References: <cover.1680180959.git.daniel@makrotopia.org>
- <fef2cb2fe3d2b70fa46e93107a0c862f53bb3bfa.1680180959.git.daniel@makrotopia.org>
- <6a7c5f81-a8a3-27b5-4af3-7175a3313f9a@arinc9.com>
- <ZCazDBJvFvjcQfKo@makrotopia.org>
- <7d0acaef-0cec-91b9-a5c6-d094b71e3dbd@arinc9.com>
+        Fri, 31 Mar 2023 08:46:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F5220638;
+        Fri, 31 Mar 2023 05:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680266747; x=1711802747;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XSJ9xYx7OKiDUOZcxx839tz93MC5ZSo3mvtiQkoZYKA=;
+  b=apPXsXgOBVZMM8Jmpf+q/nzqbBP3gwMIx9dKKO5zuE7FF+LeOcDnpupP
+   C6d7I+sCMppP0eK+OJfcp1vbVjmbNdckTE3k6C3tD0erRKa/v2EdJFcWB
+   ZXzSCfP2C/0EExQ4PxCmeiWGMs35I4x+TTgpPcXIAjzN/aHp1A0XrBi+C
+   CR9b+W/Ns13Jm/FmuzP9SsXnhqQJBpzvm23BdofdHLAGNuRLdJYAGJXtQ
+   QYA4m7J02TPVQfRm6ByI2is8cgHsy4/tRhfj33MxsuZZouU6jAMz9cuYF
+   MA3yqEL0yxvS24w4LtkDIixvDYSoJ2EY/SwXWiR4d1wiB5QcdEHL6qL7A
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,307,1673938800"; 
+   d="asc'?scan'208";a="207589991"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Mar 2023 05:45:45 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 31 Mar 2023 05:45:44 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 31 Mar 2023 05:45:41 -0700
+Date:   Fri, 31 Mar 2023 13:45:27 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        <linux-riscv@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v7 5/6] cache: Add L2 cache management for Andes AX45MP
+ RISC-V core
+Message-ID: <5468019d-e688-4019-882f-6f9611443408@spud>
+References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230330204217.47666-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ujmC02K2mc/43jGi"
 Content-Disposition: inline
-In-Reply-To: <7d0acaef-0cec-91b9-a5c6-d094b71e3dbd@arinc9.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230330204217.47666-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Firstly, all of the functions on the mt7530-mmio driver should be changed
-> from mt7988_* to mt7530_mmio_*. Same goes for the mt7530-mdio driver too as
-> some of the functions don't start with mt7530_mdio_*. The MDIO and MMIO
-> drivers are supposed to be used for the switches the MT7530 DSA driver
-> supports. The mt7530_ prefix is derived from that. The mmio_ or mdio_ prefix
-> is derived from, well, the driver itself.
+--ujmC02K2mc/43jGi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-There are examples of similar naming schemes in other DSA drivers. For
-the marvell mv88e6xxx driver, all generic functions use the mv88e6xxx_
-prefix. For functions which are specific to a family of marvell
-switches, we use a prefix for when the feature was introduced. So for
-example we have mv88e6352_g1_reset(), where that method of resetting
-the devices was introduced in the mv88e6352. This also gives us some
-namespace space, so we can also have mv88e6185_g1_reset() which is
-used for a different family.
+On Thu, Mar 30, 2023 at 09:42:16PM +0100, Prabhakar wrote:
 
-So i personally don't have a problem using different prefixes within
-one driver, if it helps with understanding and name space issues.
+> +STANDALONE CACHE CONTROLLER DRIVERS
 
-> What I'm going to say next depends on how generic the MMIO and MDIO drivers
-> are so that they can be used on all MediaTek architecture switches. Let's
-> say, a new MediaTek switch is introduced. It seems likely that either the
-> MMIO or MDIO driver will be used to control the switch. Maybe the driver for
-> this new switch won't be under mt7530.c, like on Realtek, but that doesn't
-> change the outcome.
+> +F:	include/cache
 
-My experience with silicon vendors is that they like to change the
-hardware in none backwards compatible ways. So i would actually avoid
-generic names, it makes it harder to deal with different variants.
+This can go since the file no longer exists.
 
-	Andrew
+> +config AX45MP_L2_CACHE
+> +	bool "Andes Technology AX45MP L2 Cache controller"
+> +	depends on RISCV && RISCV_DMA_NONCOHERENT
+
+This can just be depends on RISCV_DMA_NONCOHERENT, since that's only
+defined on RISC-V.
+
+> +static void ax45mp_get_l2_line_size(struct platform_device *pdev)
+> +{
+> +	struct device_node *np = pdev->dev.of_node;
+> +	struct device *dev = &pdev->dev;
+> +	int ret;
+> +
+> +	ret = of_property_read_u32(np, "cache-line-size", &ax45mp_priv->ax45mp_cache_line_size);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to get cache-line-size, defaulting to 64 bytes\n");
+> +		ax45mp_priv->ax45mp_cache_line_size = AX45MP_CACHE_LINE_SIZE;
+> +	}
+> +
+> +	if (ax45mp_priv->ax45mp_cache_line_size != AX45MP_CACHE_LINE_SIZE) {
+> +		dev_err(dev, "Expected cache-line-size to be 64 bytes (found:%u). Defaulting to 64 bytes\n",
+> +			ax45mp_priv->ax45mp_cache_line_size);
+> +		ax45mp_priv->ax45mp_cache_line_size = AX45MP_CACHE_LINE_SIZE;
+> +	}
+
+I forget, why are we doing this defaulting rather than falling over
+immediately if we detect the property is missing or wrong?
+
+> +}
+
+> +static const struct riscv_cache_ops ax45mp_cmo_ops = {
+> +	.clean_range = &ax45mp_cpu_dma_wb_range,
+> +	.inv_range = &ax45mp_cpu_dma_inval_range,
+> +	.flush_range = &ax45mp_cpu_dma_flush_range,
+> +};
+
+I think it would be nice if your driver functions matched the names used
+by the ops. (and as I said on the other patch, I think the ops should
+match the cross-arch naming.
+
+Otherwise, looks grand - although I think I was mostly happy with the
+last revision too.a
+
+Cheers,
+Conor.
+
+--ujmC02K2mc/43jGi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCbV5wAKCRB4tDGHoIJi
+0jXXAP0Wzcz5s99w4wfN/xL5lC591ZxAOt8+z4NTdIBaxn4mzQD+PLdKyy6NKLib
+xz7hD43NmKAe5yK/zmiimoEH/rNnTA4=
+=25N2
+-----END PGP SIGNATURE-----
+
+--ujmC02K2mc/43jGi--
