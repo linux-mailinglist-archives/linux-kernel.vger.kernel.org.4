@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F41856D1559
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 03:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 522596D1561
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 03:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjCaBvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 21:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S229804AbjCaB7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 21:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCaBvj (ORCPT
+        with ESMTP id S229768AbjCaB7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 21:51:39 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D663C4;
-        Thu, 30 Mar 2023 18:51:38 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso7327637pjc.1;
-        Thu, 30 Mar 2023 18:51:38 -0700 (PDT)
+        Thu, 30 Mar 2023 21:59:48 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B476BB95
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 18:59:45 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id bi9so27010084lfb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 18:59:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680227498; x=1682819498;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6XM31ZrRumkictGFOXR0ExRhhRTlkDKTwiG7dCR1Fgc=;
-        b=JBYKiS094xTcv4zZS7qtqmMLeJJI3CBby4kLAUuMziXHD4GQX8kl0rVXktvDBOeoyg
-         kE039cqtRpT4ykTduffb4U40BvtNgW7zV0FAZz2WV0BqlSt5QYJpN8xupFHalEgYBWe2
-         Mcsh414OYAuBY4FJEwUvve3aBfy2EszbwJEObj//xKUmnHYc/UwK6WW03t6iLjufAyn2
-         ssTRNhrXIek059u92KiSZc+dkINIxwv0V3n+b0U3qPZgOYecnTJr8KDPd568UBe+Om+Y
-         JRzenMRK0Ov48J93rRexsFGKtXgwJ4lg877M0D9vxz9Zn9cUrB6aoYizchAGUP6OU+k8
-         mySQ==
+        d=linaro.org; s=google; t=1680227984;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/LrdqQsi+Mv3ed2QJ1tyPoG21t02ZSNOqBkB39/94wo=;
+        b=qB9NCJVH3f7foEU/lFWOL4l1MEcM5bQ47YJ9FMnJZBP6lyBF4JCM+r6AEz8PmgEXvq
+         5Dod30us/1aeeuXeq+vmdY7uktAjE39LblJfgZq14ObZleDQHeqxKnMGYRkAIDse2nTc
+         h1zdzn9iQR3TJvEWlxAnDx4f7WUPVJJ6M/LQa0887qau/KHFQIH7Drq5aMEbbkbGo5Km
+         OUI2y8d8hqnWw1GPxWFLsdAIYa1sWUxJka4GRwVl5v/c40yC/5IBeSwmjvdl+m/WR+F9
+         UKLYxDPsZ33fIlDTNdgv3++lf9cZHEt2tTd59veHamuVALWBttejjQqqCRFYcjcxSudS
+         E4rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680227498; x=1682819498;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6XM31ZrRumkictGFOXR0ExRhhRTlkDKTwiG7dCR1Fgc=;
-        b=Uu4kLQFVfW8/YOQHC61hjDkn8UFrpE091wKQ8D/5jl8vfA4afcDiJQwh1o007IN0Oj
-         13Q0/7/kLaaVqpuUlRT1yka8IblIyILK7ooQiHGSSYCIO1MjkdWFq933Phi5ABpzzpSj
-         bbwOXUYKPkIlg/8SHIWnhOsli5l/8gavcdvm1W+BrnT+fU5lABOxHVVRsZ/JkSugUJJj
-         iWXNYxDazy0zl9VSkW2vnLbJEr4v7Dud2BlJzqN0l4bzepWBU4cyzmPt12yhesdygC0b
-         rJ/gt9osChXO19nNEsGrfzVXXyr0YLdgTloFFdmUEGw79PalB+20xTRttiIHKp1UX8I6
-         dGcw==
-X-Gm-Message-State: AO0yUKWB8Ii21XFQ7+0jCC+/PAJCJ0uDtPzEUm3eZLkDDo+ag5E9uSxk
-        za1SquZxFXX1L6kEPBJe8K8=
-X-Google-Smtp-Source: AK7set+UsxaaL85PLpysrGl07KRn5Za7qkDJ8HMzgvL3jq6cxWJYGFqxj4m0ugsbcUIAh+0HWFj1QQ==
-X-Received: by 2002:a05:6a20:b291:b0:ce:ca9:ab56 with SMTP id ei17-20020a056a20b29100b000ce0ca9ab56mr23322786pzb.34.1680227497775;
-        Thu, 30 Mar 2023 18:51:37 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id i17-20020aa787d1000000b00627ed4e23e0sm497016pfo.101.2023.03.30.18.51.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 18:51:37 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 30 Mar 2023 15:51:35 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
- percpu lock
-Message-ID: <ZCY8p/i6DR2tXPLP@slm.duckdns.org>
-References: <ZB5UalkjGngcBDEJ@slm.duckdns.org>
- <CAJD7tkYhyMkD8SFf8b8L1W9QUrLOdw-HJ2NUbENjw5dgFnH3Aw@mail.gmail.com>
- <CALvZod6rF0D21hcV7xnqD+oRkn=x5NLi5GOkPpyaPa859uDH+Q@mail.gmail.com>
- <CAJD7tkY_ESpMYMw72bsATpp6tPphv8qS6VbfEUjpKZW6vUqQSQ@mail.gmail.com>
- <CALvZod41ecuCKmuFBNtAjoKJjQgWYzoe4_B8zRK37HYk-rYDkA@mail.gmail.com>
- <CAJD7tkZrp=4zWvjE9_010TAG1T_crCbf9P64UzJABspgcrGPKg@mail.gmail.com>
- <ZCSJDpPPOVvBYfOy@slm.duckdns.org>
- <f9b6410-ee17-635f-a35d-559fa0191dc3@google.com>
- <ZCSY8l/jVwszF6iA@slm.duckdns.org>
- <98cb3ce-7ed9-3d17-9015-ef7193d6627@google.com>
+        d=1e100.net; s=20210112; t=1680227984;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/LrdqQsi+Mv3ed2QJ1tyPoG21t02ZSNOqBkB39/94wo=;
+        b=1veWT9hMOlWp7U+jmjlDWVj+L6vjfOa2t227ORGNuMZeWy+09xxI352rxrjuCfIOcy
+         3MJUC4uFFpzTCRgwVPu1cPdmz6EnTPFygXibL1YQhWaatwEnwdgP7LRH4JGFLvId16DB
+         fqPgnhZZmK+1THgjTgRDs0mHBwVOlOOzymfBifT4PC31leTWdENvCbHlhUkI2dzN+y95
+         kvtPxyCMBycJvuJAfvMSJxszvIovuZHKjzCOMvbaNdxcHN4o8uDH89lMD19U9KlsghTT
+         4mKI454ei9/zu/9DhYi2HgBXplJ4sxSiXUq3aPARXi3hIBxWF0gXTxc6dEDjv3+jVeE+
+         Yezg==
+X-Gm-Message-State: AAQBX9cISKlw1l+mryhiT1aCq+37JYNPZ0mhYIpkoFgDNDsR5T3+KcOR
+        LjnbLn0jyn+C4yAOlDnkYktmlA==
+X-Google-Smtp-Source: AKy350YTg42fxzLzvv5IArCBgg9jsiA1Qq4UQ9ia9aY1W9yEjkRlMwePF5gbvqFPyTgqdB52/KIJzg==
+X-Received: by 2002:ac2:5581:0:b0:4e8:3b51:e7ec with SMTP id v1-20020ac25581000000b004e83b51e7ecmr7246518lfg.48.1680227983726;
+        Thu, 30 Mar 2023 18:59:43 -0700 (PDT)
+Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
+        by smtp.gmail.com with ESMTPSA id w26-20020a05651204da00b004e88a166eb6sm170513lfq.46.2023.03.30.18.59.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 18:59:43 -0700 (PDT)
+Message-ID: <ee6bc89e-fbe1-fda0-e028-f16f78070dd2@linaro.org>
+Date:   Fri, 31 Mar 2023 03:59:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <98cb3ce-7ed9-3d17-9015-ef7193d6627@google.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 3/4] dts: arm64: qcom: sdm845-oneplus: enable SLPI
+Content-Language: en-US
+To:     Dylan Van Assche <me@dylanvanassche.be>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230330165322.118279-1-me@dylanvanassche.be>
+ <20230330165322.118279-4-me@dylanvanassche.be>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230330165322.118279-4-me@dylanvanassche.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Hugh.
 
-On Wed, Mar 29, 2023 at 01:38:48PM -0700, Hugh Dickins wrote:
-> > So, in general, there's a trade off between local irq service latency and
-> > inducing global lock contention when using unprotected locks. With more and
-> > more CPUs, the balance keeps shifting. The balance still very much depends
-> > on the specifics of a given lock but yeah I think it's something we need to
-> > be a lot more careful about now.
+
+On 30.03.2023 18:53, Dylan Van Assche wrote:
+> Enable the SLPI DSP on the Oneplus 6 phone with a Qualcomm SDM845 SoC.
 > 
-> And this looks a very plausible argument to me: I'll let it sink in.
+> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Another somewhat relevant change is that flipping irq on/off used to be
-relatively expensive on older x86 cpus. I forget all details about when and
-how much but they should be a lot cheaper now. No idea about !x86 cpus tho.
-
-> But I hadn't heard that the RT folks were clamouring for more irq disabling:
-> perhaps they partition their machines with more care, and are not devotees
-> of high CPU counts.
-
-I think RT folks care a lot more about raw IRQ disables. These shouldn't
-actually disable IRQs on RT kernels.
-
-Thanks.
-
--- 
-tejun
+Konrad
+>  arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> index b01542d79ae2..3bd15984990c 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> @@ -552,6 +552,11 @@ &qup_uart9_tx {
+>  	bias-disable;
+>  };
+>  
+> +&slpi_pas {
+> +	firmware-name = "qcom/sdm845/oneplus6/slpi.mbn";
+> +	status = "okay";
+> +};
+> +
+>  &sound {
+>  	compatible = "qcom,sdm845-sndcard";
+>  	pinctrl-0 = <&quat_mi2s_active &quat_mi2s_sd0_active &quat_mi2s_sd1_active>;
