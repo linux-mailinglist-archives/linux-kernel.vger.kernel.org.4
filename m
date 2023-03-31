@@ -2,253 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A826D27B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB0E6D27BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbjCaSWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 14:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56926 "EHLO
+        id S232975AbjCaSYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 14:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbjCaSW3 (ORCPT
+        with ESMTP id S232048AbjCaSX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:22:29 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229E023698;
-        Fri, 31 Mar 2023 11:22:25 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id f14so3771079oiw.10;
-        Fri, 31 Mar 2023 11:22:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680286944;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f9UhKBRFdSgZY4m5Cd2DHq4T/UdvqVuy09n+C4WToZs=;
-        b=ALIEDEb7F3zhoqVBkEAouZxdGOx4Sv06SoqhzXpKv3i6KMOnAyO4AS5DhkU664je9A
-         BhbIQk8pAILsEzWXBDl/BtxqrFGry1ZtKqhRzAk8fY9CmC+HWnhSw4Gv4V2u0iPLSH1P
-         u8wvNHPO39D7yTm5VKnoddVJKOy8iH4ktYy85nWw8JBZEK6KGSuZNfFfbidIP//mqigZ
-         GiGk3u5XcKtzRZSKPXxoc91WnTYT/E6yMue5DxISx1AkKBSuKW68dZN3wJs+hbEnujG5
-         oyvq/Hwdbq0MJiGDtkKi5isHiW320ZFuAdMiYpo+XsQzkZ7KODfWwuHZXzVF094Pm/Aq
-         i8Fw==
-X-Gm-Message-State: AO0yUKWd7pcP7z+LnysHF0XWezdOTM72aWHW+8DGX/DZ7oe4hr8hd4hh
-        ziPLvJ5sJGLXU26dDYTQUA==
-X-Google-Smtp-Source: AK7set/MjJxdPOwhbnT0as9wkVA7qitTRNGhdShXi4Ohvymt2oXKN1QtMgqIHyEoftvZkk8LVBvXkQ==
-X-Received: by 2002:a05:6808:ab8:b0:387:cfb5:98f1 with SMTP id r24-20020a0568080ab800b00387cfb598f1mr11176985oij.27.1680286944194;
-        Fri, 31 Mar 2023 11:22:24 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q189-20020acad9c6000000b0038756901d1esm1243952oig.35.2023.03.31.11.22.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 11:22:23 -0700 (PDT)
-Received: (nullmailer pid 1901110 invoked by uid 1000);
-        Fri, 31 Mar 2023 18:22:23 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH] dt-bindings: arm: nvidia: Drop unneeded quotes
-Date:   Fri, 31 Mar 2023 13:21:59 -0500
-Message-Id: <20230331182159.1900674-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 31 Mar 2023 14:23:58 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585321D2DD;
+        Fri, 31 Mar 2023 11:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680287036; x=1711823036;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RfULin+IQkEIXF2U8/tMLOvTdsd0rNfXguvY06ABEEY=;
+  b=OlehgERxMqxiKS5DrK+I39W5yfZEY268Gx8vnQJlmUSXHr4A4wkI1trj
+   Ra0NEfY5yxj5E6uhskqiTZNvHyDLKcMyVftElSSj3MSzzmNT5ClIMWGsV
+   kr1IYuZTAkF22kXOUfqsR5UiAyNRSWSpMmeqZ0KvlYM5kL2+rlHAvFi79
+   0ljUGd1+Rjq9GKen/RHLrUWSGqiFt85tXyqKGfTrzlUr0apoXxsO5Hd+a
+   1TWVh0d4NwJFrDYLn9ZMNV26k9Q4XDXQhCjflUlYO58Qy3DL7PJWe2OPT
+   X0UQ9jB/JSENgZGVPK+2dglrdEUqo8/FB7xNaibgybBTzaDyNVp7kPaXB
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="406551718"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="406551718"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 11:23:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="717827064"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="717827064"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 31 Mar 2023 11:23:50 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1piJPh-000M2G-1G;
+        Fri, 31 Mar 2023 18:23:49 +0000
+Date:   Sat, 1 Apr 2023 02:23:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>, bpf@vger.kernel.org,
+        Stanislav Fomichev <sdf@google.com>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
+        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
+        yoong.siang.song@intel.com, boon.leong.ong@intel.com,
+        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
+        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
+        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net,
+        tariqt@nvidia.com
+Subject: Re: [PATCH bpf V4 1/5] xdp: rss hash types representation
+Message-ID: <202304010239.Jw6bKkWC-lkp@intel.com>
+References: <168027498690.3941176.99100635661990098.stgit@firesoul>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <168027498690.3941176.99100635661990098.stgit@firesoul>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-checking for this can be enabled in yamllint.
+Hi Jesper,
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml   | 6 +++---
- .../bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml   | 6 +++---
- .../bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml       | 4 ++--
- .../bindings/arm/tegra/nvidia,tegra194-cbb.yaml           | 8 ++++----
- .../bindings/arm/tegra/nvidia,tegra234-cbb.yaml           | 4 ++--
- .../bindings/gpu/host1x/nvidia,tegra210-nvdec.yaml        | 4 ++--
- .../bindings/gpu/host1x/nvidia,tegra210-nvenc.yaml        | 4 ++--
- .../bindings/gpu/host1x/nvidia,tegra210-nvjpg.yaml        | 4 ++--
- .../bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml        | 4 ++--
- 9 files changed, 22 insertions(+), 22 deletions(-)
+I love your patch! Yet something to improve:
 
-diff --git a/Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml b/Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml
-index b6f57d79a753..84dc6b7512af 100644
---- a/Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml
-+++ b/Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/arm/nvidia,tegra194-ccplex.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/arm/nvidia,tegra194-ccplex.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: NVIDIA Tegra194 CPU Complex
- 
-@@ -25,7 +25,7 @@ properties:
-       - nvidia,tegra194-ccplex
- 
-   nvidia,bpmp:
--    $ref: '/schemas/types.yaml#/definitions/phandle'
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: |
-       Specifies the bpmp node that needs to be queried to get
-       operating point data for all CPUs.
-diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
-index 6089a96eae4f..36dbd0838f2d 100644
---- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
-+++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/arm/tegra/nvidia,tegra-ccplex-cluster.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/arm/tegra/nvidia,tegra-ccplex-cluster.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: NVIDIA Tegra CPU COMPLEX CLUSTER area
- 
-@@ -29,7 +29,7 @@ properties:
-     maxItems: 1
- 
-   nvidia,bpmp:
--    $ref: '/schemas/types.yaml#/definitions/phandle'
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: |
-       Specifies the BPMP node that needs to be queried to get
-       operating point data for all CPUs.
-diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml
-index 788a13f8aa93..5e0f1dc542b0 100644
---- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml
-+++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/arm/tegra/nvidia,tegra194-axi2apb.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/arm/tegra/nvidia,tegra194-axi2apb.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: NVIDIA Tegra194 AXI2APB bridge
- 
-diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
-index dd3a4770c6a1..d9c54c32c6b9 100644
---- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
-+++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/arm/tegra/nvidia,tegra194-cbb.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/arm/tegra/nvidia,tegra194-cbb.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: NVIDIA Tegra194 CBB 1.0
- 
-@@ -64,13 +64,13 @@ properties:
-       - description: secure interrupt
- 
-   nvidia,axi2apb:
--    $ref: '/schemas/types.yaml#/definitions/phandle'
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description:
-       Specifies the node having all axi2apb bridges which need to be checked
-       for any error logged in their status register.
- 
-   nvidia,apbmisc:
--    $ref: '/schemas/types.yaml#/definitions/phandle'
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description:
-       Specifies the apbmisc node which need to be used for reading the ERD
-       register.
-diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
-index 44184ee01449..fcdf03131323 100644
---- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
-+++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/arm/tegra/nvidia,tegra234-cbb.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/arm/tegra/nvidia,tegra234-cbb.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: NVIDIA Tegra CBB 2.0
- 
-diff --git a/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvdec.yaml b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvdec.yaml
-index ed9554c837ef..ba4c6473ff92 100644
---- a/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvdec.yaml
-+++ b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvdec.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/gpu/host1x/nvidia,tegra210-nvdec.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/gpu/host1x/nvidia,tegra210-nvdec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: NVIDIA Tegra NVDEC
- 
-diff --git a/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvenc.yaml b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvenc.yaml
-index 8199e5fa8211..c23dae713eb8 100644
---- a/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvenc.yaml
-+++ b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvenc.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/gpu/host1x/nvidia,tegra210-nvenc.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/gpu/host1x/nvidia,tegra210-nvenc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: NVIDIA Tegra NVENC
- 
-diff --git a/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvjpg.yaml b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvjpg.yaml
-index 895fb346ac72..99a33a5eac3f 100644
---- a/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvjpg.yaml
-+++ b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra210-nvjpg.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/gpu/host1x/nvidia,tegra210-nvjpg.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/gpu/host1x/nvidia,tegra210-nvjpg.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: NVIDIA Tegra NVJPG
- 
-diff --git a/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml
-index 4bdc19a2bccf..0b7561c8b9bb 100644
---- a/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml
-+++ b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/gpu/host1x/nvidia,tegra234-nvdec.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/gpu/host1x/nvidia,tegra234-nvdec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: NVIDIA Tegra234 NVDEC
- 
+[auto build test ERROR on bpf/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jesper-Dangaard-Brouer/xdp-rss-hash-types-representation/20230331-230552
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+patch link:    https://lore.kernel.org/r/168027498690.3941176.99100635661990098.stgit%40firesoul
+patch subject: [PATCH bpf V4 1/5] xdp: rss hash types representation
+config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20230401/202304010239.Jw6bKkWC-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9fcbbefa76e6e88a86426d13ed79ea24aacffe76
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jesper-Dangaard-Brouer/xdp-rss-hash-types-representation/20230331-230552
+        git checkout 9fcbbefa76e6e88a86426d13ed79ea24aacffe76
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304010239.Jw6bKkWC-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/veth.c:1685:43: error: initialization of 'int (*)(const struct xdp_md *, u32 *, enum xdp_rss_hash_type *)' {aka 'int (*)(const struct xdp_md *, unsigned int *, enum xdp_rss_hash_type *)'} from incompatible pointer type 'int (*)(const struct xdp_md *, u32 *)' {aka 'int (*)(const struct xdp_md *, unsigned int *)'} [-Werror=incompatible-pointer-types]
+    1685 |         .xmo_rx_hash                    = veth_xdp_rx_hash,
+         |                                           ^~~~~~~~~~~~~~~~
+   drivers/net/veth.c:1685:43: note: (near initialization for 'veth_xdp_metadata_ops.xmo_rx_hash')
+   cc1: some warnings being treated as errors
+
+
+vim +1685 drivers/net/veth.c
+
+4456e7bdf74c9f Stephen Hemminger  2008-11-19  1682  
+306531f0249f4e Stanislav Fomichev 2023-01-19  1683  static const struct xdp_metadata_ops veth_xdp_metadata_ops = {
+306531f0249f4e Stanislav Fomichev 2023-01-19  1684  	.xmo_rx_timestamp		= veth_xdp_rx_timestamp,
+306531f0249f4e Stanislav Fomichev 2023-01-19 @1685  	.xmo_rx_hash			= veth_xdp_rx_hash,
+306531f0249f4e Stanislav Fomichev 2023-01-19  1686  };
+306531f0249f4e Stanislav Fomichev 2023-01-19  1687  
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
