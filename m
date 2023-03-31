@@ -2,122 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5417F6D2463
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354A06D2465
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjCaPsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 11:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S232940AbjCaPtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 11:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232901AbjCaPst (ORCPT
+        with ESMTP id S232720AbjCaPtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 11:48:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00C692032D
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:48:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A96A416F2;
-        Fri, 31 Mar 2023 08:49:08 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D7083F6C4;
-        Fri, 31 Mar 2023 08:48:21 -0700 (PDT)
-Message-ID: <7360f190-784c-8e49-7b3c-bea28e0456d9@arm.com>
-Date:   Fri, 31 Mar 2023 17:48:12 +0200
+        Fri, 31 Mar 2023 11:49:16 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B653F20DA6
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:49:07 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3e632769c5eso323681cf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680277746;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iUOEBkfqFyDCBC8ECDHsPP9QVPu8ZlPnlnebW3bc4Wk=;
+        b=FY953/CnzlwXU3r1VaUDCjpKU3/FnptXqMVBTcFFdpOiaNBzMrpEDeIuFcWlKor7Kn
+         lFFhCvjaBgKh7SxjnFBNv6uNosDKUfuW+LTfhRPMIGnHdUBybMPH5KDYKg6w3JBVeZ/n
+         F5uogEgSeVOqBktcX9OhMBmv+FrZZfr/IjS0BXLmTTrF7l5ZBRroUkUuNIbCYyR4B/W6
+         t28pBBawCuMqIJJz4+Wh+CgPl/+vVNMjWsydcdfM+IL3qpUZOFD1MdF8zDa1BH5QXuze
+         rYmP4lyHFFYJIlB7R5kOYJfyGsOPqtYBIFlBha4fzASc93k/j1FT75YboKPSc8W3T0V1
+         fsfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680277746;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iUOEBkfqFyDCBC8ECDHsPP9QVPu8ZlPnlnebW3bc4Wk=;
+        b=KQE3EQw8CfFHoUfRov0oRqdPH1Ato8uzBUyD55U6uXCBokKAWTTtri9zzZX3pVs9+W
+         XmQy7mcX5vchKoi+joYm12+QbzMr+DalnSdhuhmbeUp0rPy2k2BnrJJqHHINlb1OmoDF
+         s7x9F7h2HG2M+hSRyQzBZt8p6eYhRsE5PscyzeURSZEld0LR+fPPt3xuKjer+U6GyqRm
+         car24+y5RoSyvgxgazEWtJTemTpqrS//iULRot4EZSPxfUV1szIfCnKZnuNSFPQ3IngL
+         5qiRWKPrbfR0Cw5yRFMQMqQTMs69PNuBtgqPsg9ypEWqQt383oWEPt0cyNd3/uLssWrv
+         iGCA==
+X-Gm-Message-State: AAQBX9f/rtrEUvmk6rPR3hAQfQBSW4s/3GfGEy8OKPltyBRg2F9Lff8F
+        Uij/3l907pF4MIy4q/uIWzF3FhhM4xNkCpEPuNdytw==
+X-Google-Smtp-Source: AKy350ag99cJ/JEGuKnsMSmBASTRl+ZXG21PE7l3bKosWkqKptj6CG0C5aWUVPT4lPH4wD1HF4kzYv2oTCBy7ERfqKQ=
+X-Received: by 2002:ac8:5bca:0:b0:3e2:3de:3732 with SMTP id
+ b10-20020ac85bca000000b003e203de3732mr346582qtb.7.1680277746464; Fri, 31 Mar
+ 2023 08:49:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] sched/fair: Make tg->load_avg per node
-Content-Language: en-US
-To:     Aaron Lu <aaron.lu@intel.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Nitin Tekchandani <nitin.tekchandani@intel.com>,
-        Waiman Long <longman@redhat.com>,
-        Yu Chen <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
-References: <20230327053955.GA570404@ziqianlu-desk2>
- <943d44f7-1fa9-8545-dc1d-890e4dd20854@arm.com>
- <20230328125624.GA6130@ziqianlu-desk2>
- <76939bf6-1d9d-5f8f-f15c-f03b2322d684@arm.com>
- <20230329135455.GA108864@ziqianlu-desk2>
- <20230330174557.m6jsgb6hsni4mxwq@parnassus.localdomain>
- <20230330195157.afbqtusnnbnvtlyz@parnassus.localdomain>
- <20230331040609.GA184843@ziqianlu-desk2>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230331040609.GA184843@ziqianlu-desk2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <000000000000a5c9be05ed85b31b@google.com> <00000000000020d46805f8340e6b@google.com>
+In-Reply-To: <00000000000020d46805f8340e6b@google.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Fri, 31 Mar 2023 17:48:54 +0200
+Message-ID: <CANp29Y4gA0D=O5CL3bxhYjT3mYtifXU-J-SXBiOTxfpYsfvTdw@mail.gmail.com>
+Subject: Re: [syzbot] [block?] KASAN: use-after-free Read in netdev_core_pick_tx
+To:     syzbot <syzbot+10a7a8ca6e94600110ec@syzkaller.appspotmail.com>
+Cc:     axboe@kernel.dk, gakula@marvell.com, hdanton@sina.com,
+        jiasheng@iscas.ac.cn, justin@coraid.com, kuba@kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.swiatkowski@linux.intel.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-13.2 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2023 06:06, Aaron Lu wrote:
-> Hi Daniel,
-> 
-> Thanks for taking a look.
-> 
-> On Thu, Mar 30, 2023 at 03:51:57PM -0400, Daniel Jordan wrote:
->> On Thu, Mar 30, 2023 at 01:46:02PM -0400, Daniel Jordan wrote:
->>> Hi Aaron,
->>>
->>> On Wed, Mar 29, 2023 at 09:54:55PM +0800, Aaron Lu wrote:
->>>> On Wed, Mar 29, 2023 at 02:36:44PM +0200, Dietmar Eggemann wrote:
->>>>> On 28/03/2023 14:56, Aaron Lu wrote:
->>>>>> On Tue, Mar 28, 2023 at 02:09:39PM +0200, Dietmar Eggemann wrote:
->>>>>>> On 27/03/2023 07:39, Aaron Lu wrote:
+On Fri, Mar 31, 2023 at 5:42=E2=80=AFPM syzbot
+<syzbot+10a7a8ca6e94600110ec@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit f038f3917baf04835ba2b7bcf2a04ac93fbf8a9c
+> Author: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> Date:   Fri Mar 17 06:43:37 2023 +0000
+>
+>     octeontx2-vf: Add missing free for alloc_percpu
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D133a3d2ec8=
+0000
+> start commit:   42226c989789 Linux 5.18-rc7
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dd84df8e1a4c4d=
+5a4
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D10a7a8ca6e94600=
+110ec
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D11ed1369f00=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D166b22cef0000=
+0
+>
+> If the result looks correct, please mark the issue as fixed by replying w=
+ith:
 
-[...]
+No, the commit is unfortunately unrelated.
 
->>> AMD EPYC 7J13 64-Core Processor
->>>     2 sockets * 64 cores * 2 threads = 256 CPUs
-> 
-> I have a vague memory AMD machine has a smaller LLC and cpus belonging
-> to the same LLC is also not many, 8-16?
-> 
-> I tend to think cpu number of LLC play a role here since that's the
-> domain where idle cpu is searched on task wake up time.
-> 
->>>
->>> sysbench: nr_threads=256
->>>
->>> All observability data was taken at one minute in and using one tool at
->>> a time.
->>>
->>>     @migrations[1]: 1113
->>>     @migrations[0]: 6152
->>>     @wakeups[1]: 8871744
->>>     @wakeups[0]: 9773321
-
-Just a thought: Could the different behaviour come from different
-CPU numbering schemes (consecutive/alternate)?
-
-(1) My Arm server:
-
-numactl -H
-available: 4 nodes (0-3)
-node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
-node 1 cpus: 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47
-node 2 cpus: 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
-node 3 cpus: 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95
-
-
-(2) Intel(R) Xeon(R) Silver 4314
-
-$ numactl -H
-available: 2 nodes (0-1)
-node 0 cpus: 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62
-node 1 cpus: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55 57 59 61 63
-
-[...]
+>
+> #syz fix: octeontx2-vf: Add missing free for alloc_percpu
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/00000000000020d46805f8340e6b%40google.com.
