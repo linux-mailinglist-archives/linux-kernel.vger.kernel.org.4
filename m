@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A176D156E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 04:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53026D1579
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 04:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjCaCDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 22:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
+        id S229524AbjCaCKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 22:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjCaCDb (ORCPT
+        with ESMTP id S229531AbjCaCI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 22:03:31 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941A11883A
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 19:03:28 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id a11so21561391lji.6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 19:03:28 -0700 (PDT)
+        Thu, 30 Mar 2023 22:08:28 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4A0191FC;
+        Thu, 30 Mar 2023 19:06:50 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-17786581fe1so21771975fac.10;
+        Thu, 30 Mar 2023 19:06:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680228207;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Teb3RkoKLbXHatcrqXDgj+FPUExuCZUr8HBNb56xUco=;
-        b=d7aZ8dhKOVXSWTpf3jbqTcXtKRjPfvNgTKsatDsCDUAqG2bOHdgxVGq83s7Ue7kz2l
-         BN9yw8/paWv+Kui59POlRRQTytJYALFVixHxJjN62xfC/I98wDOYsa6vXGir8vROuMnJ
-         2GCoDfeUWG7LxxzrUpXLqx5B/nkbbgSKnc5E9f0mFf2NK0b6YIeimOrfWGtMxrL+61E5
-         CKODdwSLggSAbCu6aOI/wrlnbVb6oM+f/Q/om+dVatVYYu45MDWvxspmGuLmEN1BC3RE
-         7svcXvd780yvf+kJmrOY2mo+EdgSHqgTiuCh03jPoq8yaqtTUywKV3pffmVveDKLJIlr
-         fzAQ==
+        d=gmail.com; s=20210112; t=1680228410;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pvM334uaDN62u5CXBwDPRhi1Ml5Rc/k9LOkZNPsfO9U=;
+        b=OUha1buX9Iya3CjbsVobPGHSOMWmpDrZzKS4TD3RmS+O87YOx/sthAzdlI6Mpq6c2x
+         uSD9IFLRH4VFtCWCAxURoqL0IG4NSpM4EueoLgGiZTipQjByWnk4Qo/h02rFOlYOzGsM
+         HSviKdKTOdMu8KOcJV4AD4hZJS4OPmpsBKvppGrEIYPVUu0b3QX5IoLc4OzGLkHSwBx5
+         rT2xr3XB3hifVhNdNG0LwszasFVR9vR7eO/1p+cHFUJwYkK7XNnRsDcsn/WFhbO959yU
+         O5C8Uf+LWjM4gkF1CM4NBLcbFgJPAWMudClmTTablSrajbt1Bc3O7TLUL7Z9qyEmrDTy
+         fyJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680228207;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Teb3RkoKLbXHatcrqXDgj+FPUExuCZUr8HBNb56xUco=;
-        b=DdEaH4s6lZoiJLG4rPFObBUq9e29bN0dOSvtauCjYEa2U8EqjLxB+48JTlyVj03Hdd
-         RIoENXXh9Rc1RXO9VUJ7Xl0dLoIdVyI9j6tn37IUs1o9Fjo+Z4a/XT+KupIPOVJ1e+vM
-         0upArciKrcDpXI5s9vmnwifDs8QMtA5F+bYkAcLKvSN3m1ZUVFO/Eczeq9zwQOUTFqjG
-         S+tvCTUPbkC4sekhGOq8sxuZhgSVJxmfpXPfNVMPZuDPgSHLpeXVS0WdZVpvNCMLBGDx
-         roWvGb31E3EcmxY1O1Jfj2E/mVMCjkMuxyxWNOqj0g5DX5OOJc/cToV3A5HIyOPMcvHJ
-         XiLw==
-X-Gm-Message-State: AAQBX9eFEdLRvh6DyjkUxCqkVJL+AyRnjGqbhgKmMXopMNfP8ZhOwdcy
-        gkGCF8j1x38WMfCyAJeKiGntAw==
-X-Google-Smtp-Source: AKy350ZJd0VKknxcJhfO+myFGnaqZHPGraALBp0worrJzEDUq+0qlSBXcrrlLKK3R6RGPIa6Xq9MSg==
-X-Received: by 2002:a2e:7a0d:0:b0:2a6:199a:bd49 with SMTP id v13-20020a2e7a0d000000b002a6199abd49mr1223209ljc.46.1680228206779;
-        Thu, 30 Mar 2023 19:03:26 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id u24-20020a2ea178000000b002a61bd34f63sm145777ljl.84.2023.03.30.19.03.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 19:03:26 -0700 (PDT)
-Message-ID: <f9a4a2de-42f8-676a-ae6d-d20391206f83@linaro.org>
-Date:   Fri, 31 Mar 2023 04:03:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 2/4] dts: arm64: qcom: sdm845: add SLPI FastRPC support
-Content-Language: en-US
-To:     Dylan Van Assche <me@dylanvanassche.be>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        d=1e100.net; s=20210112; t=1680228410;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pvM334uaDN62u5CXBwDPRhi1Ml5Rc/k9LOkZNPsfO9U=;
+        b=ePyoJ+/rt0DdLust3fJWH77JtSzlyrxWCZekCtxBReL7hVv3NQLqMNKESc7m8laNIS
+         RQhVHZ9i2t2jegzkAqZV/RDV4uXFG8igWoWUlMmm3E2klFPzl5H2kVSyKSZK9i9irLCU
+         wW0B28hvR7WhBROiyJnYuW7JPv6hFrDF6IO8Vpbur06bo2jLv4ZokqUomhb4q3276am4
+         fdOv+TgRGkqvAUyuQqL0rRnkMs4SfO45447MA5VELOvZeZaWFCws4z5c8OlCom4Gb/2K
+         qR/ySoVpLb3xCa5A05zlp9smXIAnHkHfuP072eL30iPkxU7ORaqHzn7RRXwUX+ZWNO0h
+         2plg==
+X-Gm-Message-State: AO0yUKWL65QAfPmSuCLEdTp08rA5y5/1MOumC3qWIVh3gaynWItQBh07
+        fR775FKbMO6KLZ4otXLtSjY=
+X-Google-Smtp-Source: AK7set9SVdoBv4Z6z/5U2LbxssB3wFAqZk8t0GCibw/+1rXEmQsRBHijgZAq1yj9AKxTzVChxWYNVA==
+X-Received: by 2002:a05:6870:3396:b0:177:c4c1:db8a with SMTP id w22-20020a056870339600b00177c4c1db8amr15470422oae.0.1680228409807;
+        Thu, 30 Mar 2023 19:06:49 -0700 (PDT)
+Received: from heimdal.localdomain ([2804:431:cfec:20b3:d050:3c82:2c34:f704])
+        by smtp.gmail.com with ESMTPSA id yv2-20020a05687c228200b0016e8726f0d4sm548177oab.3.2023.03.30.19.06.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 19:06:49 -0700 (PDT)
+From:   =?UTF-8?q?Andr=C3=A9=20Morishita?= <andremorishita@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230330165322.118279-1-me@dylanvanassche.be>
- <20230330165322.118279-3-me@dylanvanassche.be>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230330165322.118279-3-me@dylanvanassche.be>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        anish kumar <yesanishhere@gmail.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     mairacanal@riseup.net, dri-devel@lists.freedesktop.org,
+        daniel.baluta@nxp.com,
+        =?UTF-8?q?Andr=C3=A9=20Morishita?= <andremorishita@gmail.com>
+Subject: [PATCH] dt-bindings: maxim,max98371: Convert to DT schema
+Date:   Thu, 30 Mar 2023 23:05:25 -0300
+Message-Id: <20230331020527.482991-1-andremorishita@gmail.com>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,77 +77,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Convert the Maxim Integrated MAX98371 audio codec bindings to DT schema.
 
+Signed-off-by: André Morishita <andremorishita@gmail.com>
+---
+ .../devicetree/bindings/sound/max98371.txt    | 17 --------
+ .../bindings/sound/maxim,max98371.yaml        | 41 +++++++++++++++++++
+ 2 files changed, 41 insertions(+), 17 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/sound/max98371.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/maxim,max98371.yaml
 
-On 30.03.2023 18:53, Dylan Van Assche wrote:
-> Qualcomm SDM845 SoC features a SLPI DSP which uses FastRPC through
-> an allocated memory region to load files from the host filesystem
-> such as sensor configuration files.
-> 
-> Add a FastRPC node at /dev/fastrpc-sdsp and a DMA region, similar to
-> downstream, to allow userspace to communicate with the SLPI via the
-> FastRPC interface for initializing the sensors on the SLPI.
-> 
-> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
-> ---
->  arch/arm64/boot/dts/qcom/sdm845.dtsi | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 3b547cb7aeb8..8ea4944f3ad6 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -878,6 +878,14 @@ mdata_mem: mpss-metadata {
->  			size = <0 0x4000>;
->  			no-map;
->  		};
-> +
-> +		fastrpc_mem: fastrpc {
-> +			compatible = "shared-dma-pool";
-> +			reusable;
-Please move it last to get a nice reverse-Christmas-tree layout.
+diff --git a/Documentation/devicetree/bindings/sound/max98371.txt b/Documentation/devicetree/bindings/sound/max98371.txt
+deleted file mode 100644
+index 8b2b2704b574..000000000000
+--- a/Documentation/devicetree/bindings/sound/max98371.txt
++++ /dev/null
+@@ -1,17 +0,0 @@
+-max98371 codec
+-
+-This device supports I2C mode only.
+-
+-Required properties:
+-
+-- compatible : "maxim,max98371"
+-- reg : The chip select number on the I2C bus
+-
+-Example:
+-
+-&i2c {
+-	max98371: max98371@31 {
+-		compatible = "maxim,max98371";
+-		reg = <0x31>;
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/sound/maxim,max98371.yaml b/Documentation/devicetree/bindings/sound/maxim,max98371.yaml
+new file mode 100644
+index 000000000000..df0262473399
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/maxim,max98371.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/maxim,max98371.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Maxim MAX98371 audio codec
++
++maintainers:
++  - anish kumar <yesanishhere@gmail.com>
++
++allOf:
++  - $ref: dai-common.yaml#
++
++properties:
++  compatible:
++    const: maxim,max98371
++
++  '#sound-dai-cells':
++    const: 0
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        max98371: max98371@31 {
++            compatible = "maxim,max98371";
++            reg = <0x31>;
++        };
++    };
+-- 
+2.40.0
 
-> +			alloc-ranges = <0 0x00000000 0 0xffffffff>;
-Would there be any issues with it starting over (1<<31 - 1)?
-
-> +			alignment = <0 0x400000>;
-Please use 0x0 for the 0 here, as it's essentially reg.size with
-size-cells = 2
-
-> +			size = <0 0x1000000>;
-Ditto
-
-> +		};
->  	};
->  
->  	adsp_pas: remoteproc-adsp {
-> @@ -3344,6 +3352,22 @@ glink-edge {
->  				label = "dsps";
->  				qcom,remote-pid = <3>;
->  				mboxes = <&apss_shared 24>;
-> +
-> +				fastrpc {
-> +					compatible = "qcom,fastrpc";
-> +					qcom,glink-channels = "fastrpcglink-apps-dsp";
-> +					label = "sdsp";
-> +					qcom,non-secure-domain;
-> +					qcom,vmids = <0x3 0xF 0x5 0x6>;
-Please use the recently-introduced header and depend on (and
-make a patch atop)
-
-https://lore.kernel.org/linux-arm-msm/8685b710-b74d-556a-815d-0ffef2b0eeff@linaro.org/T/#t
-
-Konrad
-
-> +					memory-region = <&fastrpc_mem>;
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					compute-cb@0 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <0>;
-> +					};
-> +				};
->  			};
->  		};
->  
