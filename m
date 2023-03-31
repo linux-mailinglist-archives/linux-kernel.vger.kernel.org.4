@@ -2,126 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A846D2BD8
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 01:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5DE6D2BDF
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 01:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbjCaXyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 19:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60958 "EHLO
+        id S233357AbjCaX4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 19:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjCaXyP (ORCPT
+        with ESMTP id S233288AbjCaXzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 19:54:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8381C1F7;
-        Fri, 31 Mar 2023 16:54:14 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8C1A1660000F;
-        Sat,  1 Apr 2023 00:54:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680306852;
-        bh=YHlphjJ47UZM78sQZbxHJaPtfyy0JtsbqGEYFMBvjug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T61qRYR9D2V4zDhoi3erfn3IYnFrhSo5iAgPf3R1wn+XJZimSiW1Ih7jCGeO+yXM6
-         Yrbxdauw3Mi48TuDfzP4+eW3CqEqBBu+bs+t6c43BDStkgC7PgOjUii+6/TaJzqYo9
-         aB3TF3/UVxHcAb9cncdNESGxRopHMYMBNXl7iwE9BkGmw/kNtQQMHUxN338RL3Mck5
-         D8OYJMWG9i/iVy2M6Xq0/SDakOKcHxvt8l8LbFqppiik4J1D5lsTzPO54S8Y5AuX4U
-         Kx6j+0eYWbjY2NCOJO3UxoiZmNWKITJ8kpOjvMaOyNJmDOjFahxJhHM+npgWHnyLqW
-         aN6Hczqq6sn1w==
-Received: by mercury (Postfix, from userid 1000)
-        id E69ED106279C; Sat,  1 Apr 2023 01:54:09 +0200 (CEST)
-Date:   Sat, 1 Apr 2023 01:54:09 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Alistair <alistair@alistair23.me>
-Cc:     Linus Walleij <linus.walleij@linaro.org>, ye.xingchen@zte.com.cn,
-        pali@kernel.org, sravanhome@gmail.com, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: power_supply_show_property Kernel Oops
-Message-ID: <20230331235409.tub5oxes4cse7wne@mercury.elektranox.org>
-References: <0dcc1aac-9a6a-4d17-be68-a895cb6120da@app.fastmail.com>
- <CACRpkdZSJCZZEkD0V_wint+a1XKsbCQFuArFvPdFP8RSDsGLMQ@mail.gmail.com>
- <20230329224736.qzidpkzkdth2lvuq@mercury.elektranox.org>
- <3cd2ef19-f902-4493-ad90-00c410aca176@app.fastmail.com>
+        Fri, 31 Mar 2023 19:55:54 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E621C1F0;
+        Fri, 31 Mar 2023 16:55:53 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32VKsDYj018042;
+        Fri, 31 Mar 2023 23:55:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=GgX7VEeBj7SLEWDmUbJhn1hsn//HWaA7pJ0MQlhURws=;
+ b=I4G8+JOxN6N+LTigPcXuBasgpbqD+Sh0yqXxF/Pt/fAqkdVV0eDaDcaODiLvuym/U5WK
+ bK9EkAzYsH/EHRs2dVft3GmgpYdmNLlzc2+unGyFQn4Idz2KLRthj2iBU48kpRVLd7iO
+ 59e/zW29XF1Bbhv8WSvjLkwsKBhx4wjLjdJF+kBwJye03sAxFE4G2DgaimhRv9zpqeZL
+ c0la0wBT41b1WgCX5vYHaVeDUt1p7i8H3e7ZA9rvhEuKPSBV8nmL5h91YfSNximH3ZHr
+ hgHbqzf26LaaLduiI0BzYujUGB2eRdGuJ9m1efgvv57ZuL/pgDBbIxPPcAT/TA78a760 hg== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pmpmpf8bh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 Mar 2023 23:55:33 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32VLp81b023516;
+        Fri, 31 Mar 2023 23:55:31 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3phqdkm2pu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 Mar 2023 23:55:31 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32VNtUIZ019347;
+        Fri, 31 Mar 2023 23:55:31 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3phqdkm2p9-1;
+        Fri, 31 Mar 2023 23:55:30 +0000
+From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To:     davem@davemloft.net
+Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        zbr@ioremap.net, brauner@kernel.org, johannes@sipsolutions.net,
+        ecree.xilinx@gmail.com, leon@kernel.org, keescook@chromium.org,
+        socketcan@hartkopp.net, petrm@nvidia.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        anjali.k.kulkarni@oracle.com
+Subject: [PATCH v4 0/6] Process connector bug fixes & enhancements
+Date:   Fri, 31 Mar 2023 16:55:22 -0700
+Message-Id: <20230331235528.1106675-1-anjali.k.kulkarni@oracle.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2o6gmr26ich5y7ua"
-Content-Disposition: inline
-In-Reply-To: <3cd2ef19-f902-4493-ad90-00c410aca176@app.fastmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-31_07,2023-03-31_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 spamscore=0
+ phishscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303310196
+X-Proofpoint-GUID: TWNJ3LkP2jE3xwyuoSLbuzXosJnMncl-
+X-Proofpoint-ORIG-GUID: TWNJ3LkP2jE3xwyuoSLbuzXosJnMncl-
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 
---2o6gmr26ich5y7ua
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In this series, we add filtering to the proc connector module. This
+is required to fix some bugs and also will enable the addition of event
+based filtering, which will improve performance for anyone interested
+in a subset of process events, as compared to the current approach,
+which is to send all event notifications.
 
-Hi,
+Thus, a client can register to listen for only exit or fork or a mix or
+all of the events. This greatly enhances performance - currently, we
+need to listen to all events, and there are 9 different types of events.
+For eg. handling 3 types of events - 8K-forks + 8K-exits + 8K-execs takes
+200ms, whereas handling 2 types - 8K-forks + 8K-exits takes about 150ms,
+and handling just one type - 8K exits takes about 70ms.
 
-On Thu, Mar 30, 2023 at 06:00:41PM +1000, Alistair wrote:
-> > I did not look deeply, but it's at least missing an update to
-> > power_supply_attrs. I guess you were 'lucky' that it did not crash
-> > with v6.2.
->=20
-> Do you mind pointing to an example that does this correctly? I don't see
-> anything obviously wrong compared to the in-tree max* drivers.
->=20
-> Anything to help point me in the right direction would be greatly
-> appreciated :)
+Reason why we need the above changes and also a new event type
+PROC_EVENT_NONZERO_EXIT, which is only sent by kernel to a listening
+application when any process exiting has a non-zero exit status is:
 
-I am talking about the extra additions to the core, that have been
-done incorrectly. You cannot see that in other max* drivers. The
-additions to the core basically break the core and thus the drivers
-are broken.
+Oracle DB runs on a large scale with 100000s of short lived processes,
+starting up and exiting quickly. A process monitoring DB daemon which
+tracks and cleans up after processes that have died without a proper exit
+needs notifications only when a process died with a non-zero exit code
+(which should be rare).
 
-> > None of the extra properties are acceptable upstream btw.:
-> >=20
-> > POWER_SUPPLY_PROP_CURRENT_MAX2:
-> >     The driver seems to use CURRENT_MAX2 for input current;
-> >     POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT should be used for that
-> >=20
-> > POWER_SUPPLY_PROP_CHARGER_MODE:
-> >     OTG should be handled via a regulator
-> >=20
-> > POWER_SUPPLY_PROP_STATUS_EX:
-> >     Use extcon for connectors
->=20
-> Thanks! I figured as much. These are just taken from the vendor
-> tree, I need to clean everything up for upstreaming. I just wanted
-> to have a working base point to start.
+This change will give Oracle DB substantial performance savings - it takes
+50ms to scan about 8K PIDs in /proc, about 500ms for 100K PIDs. DB does
+this check every 3 secs, so over an hour we save 10secs for 100K PIDs.
 
-That did not turn out that well so far... :)
+Measuring the time using pidfds for monitoring 8K process exits took 4
+times longer - 200ms, as compared to 70ms using only exit notifications
+of proc connector. Hence, we cannot use pidfd for our use case.
 
--- Sebastian
+This kind of a new event could also be useful to other applications like
+Google's lmkd daemon, which needs a killed process's exit notification.
 
---2o6gmr26ich5y7ua
-Content-Type: application/pgp-signature; name="signature.asc"
+This patch series is organized as follows -
 
------BEGIN PGP SIGNATURE-----
+Patch 1 : Needed for patch 3 to work.
+Patch 2 : Needed for patch 3 to work.
+Patch 3 : Fixes some bugs in proc connector, details in the patch.
+Patch 4 : Test code for proc connector.
+Patch 5 : Adds event based filtering for performance enhancements.
+Patch 6 : Allow non-root users access to proc connector events.
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQncp4ACgkQ2O7X88g7
-+pqSNA/+OhSIKjmO8LExFGPc60OFNOZwKDQG909gAZQd8JFTJgT4a9S5T5ocsVP3
-kCxPx45nrfRXCCxxqQWN4BM/qqLZZb13uuxs3lSjU+q5ha7lhD10Bk7s5sm54vOa
-xNUKJwI+Eq1lXB12MNGHsSc7wPQPGLkqC927NLptGq/oERbQiPgia5oSu9zYgGpr
-2FbWbnxThcWPbC2wxZzwpD2N7HmyhEm+kevZyv42Qxbx7K0YCXyiqY0eEbhP/ICt
-xSrhPjabTpOC5Xix5dNlnI9iqAimB35YvF7/fx4ZM37MmS1wdMCf7vTfSRy/f7qv
-qMGQiJbNx2mVlNDTCljh/OniMceutcZdeoXm4T5UDFbNK4anJc1HUmKPyRQTeFd3
-7+xdFPOT3UjTudcCgOwYf+dRR+gD44GHC8IocsO52QfaMv/2Gbm4sIXEOKgDbjnV
-ORLgA5sDjjvhDlJFOBfQr69Xmp5IwgxBHnesg+NBikVdD0fsDJ5PdcBrUqlRLXje
-2BXpQsSKD41j6ZYVWWcVujoubr0YYbn8RxY6wi5hKCRJw8QzpPf5TbRsv2/yilfy
-SeJPof6zMZ2dwNG0n+l6eqbeKUp2ycyS1bjWk4XslnBWHfc6ntsld2kcfsO++phN
-+lJrQxhv4u8ctt03xwgkvUbxoMUqggbQj70hLPQhDMYAvaAELpc=
-=rmUF
------END PGP SIGNATURE-----
+v3->v4 changes;
+- Fix comments by Jakub Kicinski to incorporate root access changes
+  within bind call of connector
 
---2o6gmr26ich5y7ua--
+v2->v3 changes:
+- Fix comments by Jakub Kicinski to separate netlink (patch 2) (after
+  layering) from connector fixes (patch 3). 
+- Minor fixes suggested by Jakub.
+- Add new multicast group level permissions check at netlink layer.
+  Split this into netlink & connector layers (patches 6 & 7)
+
+v1->v2 changes:
+- Fix comments by Jakub Kicinski to keep layering within netlink and
+  update kdocs.
+- Move non-root users access patch last in series so remaining patches
+  can go in first.
+
+v->v1 changes:
+- Changed commit log in patch 4 as suggested by Christian Brauner
+- Changed patch 4 to make more fine grained access to non-root users
+- Fixed warning in cn_proc.c, 
+  Reported-by: kernel test robot <lkp@intel.com>
+- Fixed some existing warnings in cn_proc.c
+
+Anjali Kulkarni (6):
+  netlink: Reverse the patch which removed filtering
+  netlink: Add new netlink_release function
+  connector/cn_proc: Add filtering to fix some bugs
+  connector/cn_proc: Test code for proc connector
+  connector/cn_proc: Performance improvements
+  connector/cn_proc: Allow non-root users access
+
+ drivers/connector/cn_proc.c     | 105 +++++++++--
+ drivers/connector/connector.c   |  35 +++-
+ drivers/w1/w1_netlink.c         |   6 +-
+ include/linux/connector.h       |   8 +-
+ include/linux/netlink.h         |   6 +
+ include/uapi/linux/cn_proc.h    |  62 +++++--
+ net/netlink/af_netlink.c        |  31 +++-
+ net/netlink/af_netlink.h        |   4 +
+ samples/connector/proc_filter.c | 301 ++++++++++++++++++++++++++++++++
+ 9 files changed, 515 insertions(+), 43 deletions(-)
+ create mode 100644 samples/connector/proc_filter.c
+
+-- 
+2.40.0
+
