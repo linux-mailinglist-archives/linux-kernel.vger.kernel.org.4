@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84CA6D2A35
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79FE6D2A32
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjCaVrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 17:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
+        id S233118AbjCaVrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 17:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbjCaVri (ORCPT
+        with ESMTP id S230444AbjCaVri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 31 Mar 2023 17:47:38 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FE221A9E
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:46:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B3E21AA7
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680299176;
+        s=mimecast20190719; t=1680299179;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BWAjKcn7KmjDYRHOryY9yAx4ZqStu9DbyRutO1cNTys=;
-        b=huEX8FDoUeXu7LPk8aBsQ5gZ8oTexg5COB+PgI07XUrEi2HHVVLVNFVwr09XCefm49O6e3
-        Zv4nTFCOidO1DD1EFixyiR4GiCK9NkSgaSNTdh9O4/3FBEkRP0wIn1ycNw/jvIs4eJ/iac
-        X1sNk/gGihvU1L0XFcLFYdysNI26qLI=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=8lcrUOTtZQ8Y8eq1MxEjtzOYPZBObLg5qooJNdijlKM=;
+        b=JXZZzlpIXl+B8QmxybzRhWx9NB7THU12s21Ge8LnZptAN7JyRy2TyrUZvQS9IRTGhoZ6Fp
+        z+VBvkeeZi0hsppOKDOIzp73QERyo7jvY5CrjCnAF7ZxyzUzA6UX/Ut6hTk8oNtzuIpe+W
+        UT4XZuNqc4u7hxBA1rwPYVG4WwEObw0=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-642-gNgPSdJMN5mIUZbxUfss0Q-1; Fri, 31 Mar 2023 17:46:15 -0400
-X-MC-Unique: gNgPSdJMN5mIUZbxUfss0Q-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-17ab1d11480so12063113fac.13
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:46:14 -0700 (PDT)
+ us-mta-436-so5mwNxRMSiphcPCbAx7vw-1; Fri, 31 Mar 2023 17:46:18 -0400
+X-MC-Unique: so5mwNxRMSiphcPCbAx7vw-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-17a03f26ff8so11962485fac.8
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:46:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680299174;
+        d=1e100.net; s=20210112; t=1680299177;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BWAjKcn7KmjDYRHOryY9yAx4ZqStu9DbyRutO1cNTys=;
-        b=cCRla2Gy+zz9M68kszSfdkqbMXvfCxD74CdXCTDtSiVQpY+JuSpm0SbeykEALUvDTf
-         rddP3eoWP0F8k3loP7VVi+cSeecuUFrGLKF5zH58JtRej54Jh+j5Mx72IM1fisUdOvd0
-         4MAdk/H1Ug/6COFbY2X1h/GVv5fuIKmJB3L0nhIgmsskNRIVKuHO8/IS2iO4onZbc19c
-         1GuWc5TBZXLX4jAtv4LSNXMMTIItrgkWJenfRnc7KYtYua3SbTM4mxYpzycgfuaE1+rG
-         yR53wZlbQYnum+lQfEiDfVewKnR/ks9oLeyXQ0/mKs2sRAJhhkVBXNFoz0bl2/LMqtb7
-         xy3A==
-X-Gm-Message-State: AAQBX9dYVzPjfoTjrVK7hcHqwc2mT3672iCVPE+zUtpAAuov0UL7XSVG
-        nod6wvnN5NFr+QhD4un23KPX0wz4haczR4mdpc/fPY/X6Bgofzat9LORQcDcM24dW0mRqsITDyN
-        PvmduJMrUqVXUktLkcyn63OhbJnxJJsmS57XTwWi8a3GVC2UVr7bDl9nAdOXHCcz7gGskoKNCPl
-        2pRz7F0xBPCqM=
-X-Received: by 2002:a54:4519:0:b0:389:2d2b:4b1b with SMTP id l25-20020a544519000000b003892d2b4b1bmr8396925oil.43.1680299173835;
-        Fri, 31 Mar 2023 14:46:13 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Zx2tJIil7EtW85aEQyo8RTGjEHt7aKU8TOLaUPn71QidrVG+oC5h5rPNpRYe4KMVFNW/3RtA==
-X-Received: by 2002:a54:4519:0:b0:389:2d2b:4b1b with SMTP id l25-20020a544519000000b003892d2b4b1bmr8396874oil.43.1680299173054;
-        Fri, 31 Mar 2023 14:46:13 -0700 (PDT)
+        bh=8lcrUOTtZQ8Y8eq1MxEjtzOYPZBObLg5qooJNdijlKM=;
+        b=E6O9VIE1v78sL1ZIgXzDnB3sJsCdxkhq3eumTQtVHSyARjLj7wkZtPstwUtCB5kTv/
+         2VpvUdGMGEywpv4hUOX5ugeNgMGlZM7KQJru+8qqyLqFamScu6IAaneRw9Od1AprULDH
+         uaUoR8lOCkdXvalwNa83/tbuOyYchQHnCPoRwXb+Za/uEy9bjxRkV2wvqYc7nxIIam7J
+         69hxpeMDbpFUpBAQlA83pYAIhzilOsaYzdvqbOkc5iZlGYjH7/hY2n75vVlyZ7LheS6Z
+         82kO2OAiNs1BBdT8vJ77cFMnLPL6CRs4QYdz5mZO8ggfP4+uDuxZoRK7XDJE7OlBcVZ1
+         fLmw==
+X-Gm-Message-State: AAQBX9fkVIKu9csPUo/i9gsR1Lh2C2MtaCz3KUF2vMzIB9nMxRUiig4V
+        1WvavclCeBhxXQU9O9GOYb7PDQqXYFz9G4YwtI9eORsXCePgJKoq9rQQ5IhUTVKmiAhStWkRn24
+        7vaUyEYGyVbr6z50k6YCbHcU6Z2gS0r9jgPQDkjgAupE6QMQ7n/DJLDtGzi9SpyZPTmWSUTQCWR
+        JLUbWxCXC0U6A=
+X-Received: by 2002:a9d:6a4a:0:b0:6a1:6cf9:49ee with SMTP id h10-20020a9d6a4a000000b006a16cf949eemr4413187otn.9.1680299177396;
+        Fri, 31 Mar 2023 14:46:17 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aUQ7W33R935fGo9TuSQD3HX9RxY871Aop63H4kyUDTxL9RxaeaTlk4Ws52w4rzbyNf1gKQ5Q==
+X-Received: by 2002:a9d:6a4a:0:b0:6a1:6cf9:49ee with SMTP id h10-20020a9d6a4a000000b006a16cf949eemr4413139otn.9.1680299177094;
+        Fri, 31 Mar 2023 14:46:17 -0700 (PDT)
 Received: from halaney-x13s.attlocal.net (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id x80-20020a4a4153000000b0053d9be4be68sm1328531ooa.19.2023.03.31.14.46.11
+        by smtp.gmail.com with ESMTPSA id x80-20020a4a4153000000b0053d9be4be68sm1328531ooa.19.2023.03.31.14.46.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 14:46:12 -0700 (PDT)
+        Fri, 31 Mar 2023 14:46:16 -0700 (PDT)
 From:   Andrew Halaney <ahalaney@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -77,9 +77,9 @@ Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH net-next v3 01/12] dt-bindings: net: snps,dwmac: Update interrupt-names
-Date:   Fri, 31 Mar 2023 16:45:38 -0500
-Message-Id: <20230331214549.756660-2-ahalaney@redhat.com>
+Subject: [PATCH net-next v3 02/12] dt-bindings: net: snps,dwmac: Add Qualcomm Ethernet ETHQOS compatibles
+Date:   Fri, 31 Mar 2023 16:45:39 -0500
+Message-Id: <20230331214549.756660-3-ahalaney@redhat.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230331214549.756660-1-ahalaney@redhat.com>
 References: <20230331214549.756660-1-ahalaney@redhat.com>
@@ -98,41 +98,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 
-As commit fc191af1bb0d ("net: stmmac: platform: Fix misleading
-interrupt error msg") noted, not every stmmac based platform
-makes use of the 'eth_wake_irq' or 'eth_lpi' interrupts.
-
-So, update the 'interrupt-names' inside 'snps,dwmac' YAML
-bindings to reflect the same.
+Add Qualcomm Ethernet ETHQOS compatible checks
+in snps,dwmac YAML binding document.
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 ---
 
-Changes since v2:
-    * Add Krzysztof's Reviewed-by tag
+Changes since v1 and v2:
+    * None
 
-Changes since v1:
-    * Dropped Krzysztof's Acked-by since changes requested
-    * Changed interrupt-names items per Krzysztof
-
- Documentation/devicetree/bindings/net/snps,dwmac.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/net/snps,dwmac.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-index 74f2ddc12018..5a4737e969a3 100644
+index 5a4737e969a3..1e7982704114 100644
 --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
 +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-@@ -105,7 +105,7 @@ properties:
-     minItems: 1
-     items:
-       - const: macirq
--      - const: eth_wake_irq
-+      - enum: [eth_wake_irq, eth_lpi]
-       - const: eth_lpi
- 
-   clocks:
+@@ -65,6 +65,8 @@ properties:
+         - ingenic,x2000-mac
+         - loongson,ls2k-dwmac
+         - loongson,ls7a-dwmac
++        - qcom,qcs404-ethqos
++        - qcom,sm8150-ethqos
+         - renesas,r9a06g032-gmac
+         - renesas,rzn1-gmac
+         - rockchip,px30-gmac
+@@ -625,6 +627,8 @@ allOf:
+               - ingenic,x1600-mac
+               - ingenic,x1830-mac
+               - ingenic,x2000-mac
++              - qcom,qcs404-ethqos
++              - qcom,sm8150-ethqos
+               - snps,dwmac-4.00
+               - snps,dwmac-4.10a
+               - snps,dwmac-4.20a
 -- 
 2.39.2
 
