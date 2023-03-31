@@ -2,79 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6336D22E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30316D231D
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbjCaOqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
+        id S233057AbjCaOxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbjCaOq0 (ORCPT
+        with ESMTP id S232948AbjCaOxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:46:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FA42031B;
-        Fri, 31 Mar 2023 07:46:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93E6A629C6;
-        Fri, 31 Mar 2023 14:46:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60811C4339B;
-        Fri, 31 Mar 2023 14:46:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680273979;
-        bh=teWUDEWRNjOrCokuMkC7iMtqqgjV3KHiiJPzrW2yqoo=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=L457bPwNtr2YNzRK2HvoBzV05ESkOo/S+oq8r9GbEonbmV+2uIl5kFRcm0faje5er
-         bEO+2DJ40eK/kQrT8K4WZZdKcQAly0+dXsNqzSEtkfvENLUBtYzuM8vjL1+dwRvR5f
-         zGDpkQzyNhkJRaZQOep/X9kwYLjy2KUfyiX4aA0XYkc2r8knZPf1CMPqS8ZkY7aNWi
-         SQQatA9A+6x6WB6Tkgw1jeQoVSFwgGRjKOcPwnw82LK5H5e59OQXquKlVm0oAjqRyU
-         ypMwXkC31WhlM0C0qigg8ipieLmOOPCHybg/7CZbmPUwdX8AKwq36mnJOTkIvwBHfo
-         fkt406DwAcxYw==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 31 Mar 2023 10:53:05 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7B01BF74
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:52:41 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.187.55])
+        by albert.telenet-ops.be with bizsmtp
+        id f2se2900P1C8whw062sej4; Fri, 31 Mar 2023 16:52:39 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1piG2N-00FUga-4H;
+        Fri, 31 Mar 2023 16:48:16 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1piG36-008fIP-Gz;
+        Fri, 31 Mar 2023 16:48:16 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/5] drm: shmobile: Fixes and enhancements
+Date:   Fri, 31 Mar 2023 16:48:06 +0200
+Message-Id: <cover.1680273039.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wifi: rtw88: remove unused rtw_pci_get_tx_desc function
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230320233448.1729899-1-trix@redhat.com>
-References: <20230320233448.1729899-1-trix@redhat.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     tony0620emma@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
-        ndesaulniers@google.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <168027397456.32751.13158951931785484475.kvalo@kernel.org>
-Date:   Fri, 31 Mar 2023 14:46:16 +0000 (UTC)
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tom Rix <trix@redhat.com> wrote:
+	Hi all,
 
-> clang with W=1 reports
-> drivers/net/wireless/realtek/rtw88/pci.c:92:21: error:
->   unused function 'rtw_pci_get_tx_desc' [-Werror,-Wunused-function]
-> static inline void *rtw_pci_get_tx_desc(struct rtw_pci_tx_ring *tx_ring, u8 idx)
->                     ^
-> This function is not used, so remove it.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+Currently, there are two drivers for the LCD controller on Renesas
+SuperH-based and ARM-based SH-Mobile and R-Mobile SoCs:
+  1. sh_mobile_lcdcfb, using the fbdev framework,
+  2. shmob_drm, using the DRM framework.
+However, only the former driver can be used, as all platform support
+integrates the former.  None of these drivers support DT-based systems.
 
-Patch applied to wireless-next.git, thanks.
+This patch series is a first step to enable the SH-Mobile DRM driver for
+Renesas ARM-based SH-Mobile and R-Mobile SoCs.  The next step planned is
+to add DT support.
 
-c9b6111a6f94 wifi: rtw88: remove unused rtw_pci_get_tx_desc function
+This has been tested on the R-Mobile A1-based Atmark Techno
+Armadillo-800-EVA development board, using a temporary
+platform-enablement patch[1].
+
+Thanks for your comments!
+
+[1] https://lore.kernel.org/r/c03d4edbd650836bf6a96504df82338ec6d800ff.1680272980.git.geert+renesas@glider.be
+
+Geert Uytterhoeven (5):
+  drm: shmobile: Use %p4cc to print fourcc codes
+  drm: shmobile: Add support for DRM_FORMAT_XRGB8888
+  drm: shmobile: Switch to drm_crtc_init_with_planes()
+  drm: shmobile: Add missing call to drm_fbdev_generic_setup()
+  drm: shmobile: Make DRM_SHMOBILE visible on Renesas SoC platforms
+
+ drivers/gpu/drm/shmobile/Kconfig           |  2 +-
+ drivers/gpu/drm/shmobile/shmob_drm_crtc.c  | 35 +++++++++++++++++++---
+ drivers/gpu/drm/shmobile/shmob_drm_drv.c   |  3 ++
+ drivers/gpu/drm/shmobile/shmob_drm_kms.c   |  9 ++++--
+ drivers/gpu/drm/shmobile/shmob_drm_plane.c |  5 ++++
+ 5 files changed, 47 insertions(+), 7 deletions(-)
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230320233448.1729899-1-trix@redhat.com/
+2.34.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Gr{oetje,eeting}s,
 
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
