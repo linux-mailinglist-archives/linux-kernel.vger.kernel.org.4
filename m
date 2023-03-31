@@ -2,100 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCC96D259F
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2C46D2593
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbjCaQdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 12:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S229817AbjCaQcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbjCaQdc (ORCPT
+        with ESMTP id S232273AbjCaQce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:33:32 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502502293D;
-        Fri, 31 Mar 2023 09:30:02 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id er13so50830648edb.9;
-        Fri, 31 Mar 2023 09:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680280200;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ckUy8IxYVWgbUK827JnEfOoFEUFnEUlcGnp3eVCTYI0=;
-        b=pP54FJOBGDs8tRw7ZYZsyKU0Vaa3IivmckjMNXZcsDmBaNdZ4mSUYalPKh/L2hQJ5o
-         YOvwK/QtDIaPVnTzgFgjFDDAauMV4OkwzK1Ag8jnlkzXyvqkbfpyahtXC3TPyGErvOTx
-         i41G5vh7nTB77vajIx2ZRRbZuwrllJyrzK2zBvLrLQuUTRDqLysoDVEOteb3cOIHvhMZ
-         qmCq8D4USZ3yKk/ztETPM5PNeLcNJaAeUyovoSs9IsQTU5YLn3DgqiXd3dMn0/4UfZwl
-         JgYuGu148r3aoD+zpGINjDS8OCWn+WLMAQCpQRPXEkbMa+kOJ0hye/PEzvRvhNdYrvV2
-         9xOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680280200;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ckUy8IxYVWgbUK827JnEfOoFEUFnEUlcGnp3eVCTYI0=;
-        b=dBhb+z7JTDQ86oLwdxq8HyDV9v2pNZKuE2bve/KqKVukEHPtsfhpTL9mZskV2kV1Vw
-         XnY1506xeDkmJC0jwj3fF/YvUILF7FHOxYD6rGWBhuP7xZgMPAr1Yz706up0zVjeDaxd
-         NHwNkGMLky6xK4HQUpOTH9DQX0JNweP0w4MgUQymlQdF+UCzgn25BSS5bGqw61wJo9Id
-         7qq3C2NMEMUH8H9BmPsKQBgteX7wmV3AkroipcwWFcXzCV1xjX29dtMmFoekWcrwo/Ef
-         60686VWWJyypNqaTu1sSZvh8qK1JXiM4zGxTs5LBz5K4iWHkktVeKuwp7PmPvZ2Fu1IG
-         Tk4w==
-X-Gm-Message-State: AAQBX9dCRLEOq5miwx4aM7pMTOkJn0s7TnJ2uIyhEkzDILBF99hy4jeV
-        MKXiGDf+6lPHj7RwggSl/UA=
-X-Google-Smtp-Source: AKy350aAzlOhZvg2SBc1PyNMNIgN2T20jkwD8ago2aKKNI2LoO92XkP8D55K3CmcnYuOKhpYzuQwUg==
-X-Received: by 2002:a17:906:25d5:b0:932:40f4:5c44 with SMTP id n21-20020a17090625d500b0093240f45c44mr27405360ejb.36.1680280200627;
-        Fri, 31 Mar 2023 09:30:00 -0700 (PDT)
-Received: from [192.168.8.100] (188.28.114.40.threembb.co.uk. [188.28.114.40])
-        by smtp.gmail.com with ESMTPSA id a22-20020a17090682d600b0092c8da1e5ecsm1132988ejy.21.2023.03.31.09.30.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 09:30:00 -0700 (PDT)
-Message-ID: <6eaadad2-d6a6-dfbb-88aa-8ae68af2f89d@gmail.com>
-Date:   Fri, 31 Mar 2023 17:27:45 +0100
+        Fri, 31 Mar 2023 12:32:34 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B3522233;
+        Fri, 31 Mar 2023 09:28:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8989BCE303D;
+        Fri, 31 Mar 2023 16:28:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5BD8C433D2;
+        Fri, 31 Mar 2023 16:28:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680280120;
+        bh=73IgJtnFs2TGSAjju6TrDNqdmySf1qlRHQ3Dsp/nG/0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sVqKIsAAgSmsFGZ07bdHiEQctl6mIt2BmwFbxffGTlp1gfp/4owkzIEgCwUOxeiSs
+         oJyjQIlfIRiUg9ZDwJhhMVYdWuIYzy8tzM0V/4zgo099W2vOnYGSikMWU9r2XMFWxU
+         251Rr5VIpMk9BQiTavizQ4NpzwyPkD3CXLnmkMLEaFkuiwcmHHNC+pxxiOUSI4N76u
+         5R+O0OtEC0xflg3/rcfq+w3fnCbNkpPzMOHpEAu2/T/1s0ifHHQkozWV2DvRvkVr0m
+         RNub9dq8rI5HAvmlGINbb5cEmX6yFN2h4x0xrxV77NbzteAIMpCIq7VUVc4XpOT+Kd
+         4NmwQR3SWhmGQ==
+Received: by mail-yb1-f182.google.com with SMTP id r187so28051248ybr.6;
+        Fri, 31 Mar 2023 09:28:40 -0700 (PDT)
+X-Gm-Message-State: AAQBX9e0rBDwESX1G/VqeDeuJs/ir6x0hLDLlBzWM9i2ITGkJbXXd8hc
+        pjrNy/+zqu2vMybj30FKVODFZelzRYYxPRDaKA==
+X-Google-Smtp-Source: AKy350YYHHZOKkd+6rbSZojhyMrcgt5V7WRPtHLi1eZqzNDmhN2F/7X0OcFlMu4lT31y3sbpuZVSo26tzqvlloI5gWo=
+X-Received: by 2002:a05:6902:10c3:b0:b79:4826:e8e3 with SMTP id
+ w3-20020a05690210c300b00b794826e8e3mr12562188ybu.1.1680280120025; Fri, 31 Mar
+ 2023 09:28:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 10/11] io_uring/rsrc: cache struct io_rsrc_node
-Content-Language: en-US
-To:     Gabriel Krisman Bertazi <krisman@suse.de>
-Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+References: <cover.1680248888.git.geert+renesas@glider.be> <b8701c04d27e51618444a747c4f4be5cc889ce28.1680248888.git.geert+renesas@glider.be>
+In-Reply-To: <b8701c04d27e51618444a747c4f4be5cc889ce28.1680248888.git.geert+renesas@glider.be>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 31 Mar 2023 11:28:28 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJJoTGjTihcCiX8qOowb7tSjxg-rjLVskVPuWvSn=0ikA@mail.gmail.com>
+Message-ID: <CAL_JsqJJoTGjTihcCiX8qOowb7tSjxg-rjLVskVPuWvSn=0ikA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] of: address: Reshuffle to remove forward declarations
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <cover.1680187408.git.asml.silence@gmail.com>
- <7f5eb1b89e8dcf93739607c79bbf7aec1784cbbe.1680187408.git.asml.silence@gmail.com>
- <87cz4p1083.fsf@suse.de>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <87cz4p1083.fsf@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/23 15:09, Gabriel Krisman Bertazi wrote:
-> Pavel Begunkov <asml.silence@gmail.com> writes:
-> 
->> Add allocation cache for struct io_rsrc_node, it's always allocated and
->> put under ->uring_lock, so it doesn't need any extra synchronisation
->> around caches.
-> 
-> Hi Pavel,
-> 
-> I'm curious if you considered using kmem_cache instead of the custom
-> cache for this case?  I'm wondering if this provokes visible difference in
-> performance in your benchmark.
+On Fri, Mar 31, 2023 at 2:52=E2=80=AFAM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> Reshuffle the code to get rid of the forward declarations, which
+> improves readability.
 
-I didn't try it, but kmem_cache vs kmalloc, IIRC, doesn't bring us
-much, definitely doesn't spare from locking, and the overhead
-definitely wasn't satisfactory for requests before.
+Is git blame smart enough to ignore this move? If not, I'd rather keep
+the blame than save 3 lines.
 
-A quick note that I want to further limit the cache size,
-IO_ALLOC_CACHE_MAX=512 for nodes doesn't sound great.
-
--- 
-Pavel Begunkov
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/of/address.c | 271 +++++++++++++++++++++----------------------
+>  1 file changed, 133 insertions(+), 138 deletions(-)
