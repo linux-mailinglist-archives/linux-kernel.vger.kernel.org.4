@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6DE6D1CBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7FA6D1CBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbjCaJl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
+        id S230356AbjCaJmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbjCaJlw (ORCPT
+        with ESMTP id S232282AbjCaJl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:41:52 -0400
+        Fri, 31 Mar 2023 05:41:59 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0776AC
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:41:50 -0700 (PDT)
-Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PnwJQ00C4zrYS7;
-        Fri, 31 Mar 2023 17:40:37 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697FD72BB
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:41:51 -0700 (PDT)
+Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PnwJQ5znfzrYkH;
+        Fri, 31 Mar 2023 17:40:38 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.125) by
  kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 31 Mar 2023 17:41:47 +0800
+ 15.1.2507.21; Fri, 31 Mar 2023 17:41:48 +0800
 From:   Peng Zhang <zhangpeng362@huawei.com>
 To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <akpm@linux-foundation.org>, <willy@infradead.org>,
@@ -29,10 +29,12 @@ To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
 CC:     <vishal.moola@gmail.com>, <muchun.song@linux.dev>,
         <wangkefeng.wang@huawei.com>, <sunnanyong@huawei.com>,
         ZhangPeng <zhangpeng362@huawei.com>
-Subject: [PATCH v5 0/6] userfaultfd: convert userfaultfd functions to use folios
-Date:   Fri, 31 Mar 2023 17:39:31 +0800
-Message-ID: <20230331093937.945725-1-zhangpeng362@huawei.com>
+Subject: [PATCH v5 1/6] userfaultfd: convert mfill_atomic_pte_copy() to use a folio
+Date:   Fri, 31 Mar 2023 17:39:32 +0800
+Message-ID: <20230331093937.945725-2-zhangpeng362@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230331093937.945725-1-zhangpeng362@huawei.com>
+References: <20230331093937.945725-1-zhangpeng362@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -51,55 +53,101 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ZhangPeng <zhangpeng362@huawei.com>
 
-This patch series converts several userfaultfd functions to use folios.
+Call vma_alloc_folio() directly instead of alloc_page_vma() and convert
+page_kaddr to kaddr in mfill_atomic_pte_copy(). Removes several calls to
+compound_head().
 
-Change log:
+Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+Reviewed-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+---
+ mm/userfaultfd.c | 33 +++++++++++++++++----------------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
 
-v4->v5:
-- Update commit description and change page_kaddr to kaddr, suggested by
-  Matthew Wilcox. (patch 1,6)
-- Remove pages_per_huge_page from copy_user_folio(), suggested by
-  Matthew Wilcox. (patch 5)
-- Add RB from Sidhartha Kumar. (patch 1,3,4)
-
-v3->v4:
-- Rebase onto mm-unstable per Andrew Morton. Update commit description
-  because some function names are changed. (patch 1,4,6)
-
-v2->v3:
-- Split patch 2 into three patches, suggested by Mike Kravetz. (patch
-  2-4)
-- Add a new patch to convert copy_user_huge_page to copy_user_folio,
-  suggested by Mike Kravetz. (patch 5)
-- Fix two uninitialized bugs, thanks to Dan Carpenter. (patch 6)
-- Do some indenting cleanups.
-
-v1->v2:
-Modified patch 2, suggested by Matthew Wilcox:
-- Rename copy_large_folio_from_user() to copy_folio_from_user().
-- Delete the inner_folio.
-- kmap() and kmap_atomic() are converted to kmap_local_page(). Use
-  pagefault_disable() to ensure that a deadlock will not occur.
-- flush_dcache_folio() is placed outside the loop.
-
-ZhangPeng (6):
-  userfaultfd: convert mfill_atomic_pte_copy() to use a folio
-  userfaultfd: use kmap_local_page() in copy_huge_page_from_user()
-  userfaultfd: convert copy_huge_page_from_user() to
-    copy_folio_from_user()
-  userfaultfd: convert mfill_atomic_hugetlb() to use a folio
-  mm: convert copy_user_huge_page() to copy_user_folio()
-  userfaultfd: convert mfill_atomic() to use a folio
-
- include/linux/hugetlb.h  |  4 +-
- include/linux/mm.h       | 14 +++----
- include/linux/shmem_fs.h |  4 +-
- mm/hugetlb.c             | 39 ++++++++----------
- mm/memory.c              | 64 ++++++++++++++---------------
- mm/shmem.c               | 16 ++++----
- mm/userfaultfd.c         | 89 ++++++++++++++++++++--------------------
- 7 files changed, 110 insertions(+), 120 deletions(-)
-
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 7f1b5f8b712c..24d6ed7ff302 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -135,17 +135,18 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
+ 				 uffd_flags_t flags,
+ 				 struct page **pagep)
+ {
+-	void *page_kaddr;
++	void *kaddr;
+ 	int ret;
+-	struct page *page;
++	struct folio *folio;
+ 
+ 	if (!*pagep) {
+ 		ret = -ENOMEM;
+-		page = alloc_page_vma(GFP_HIGHUSER_MOVABLE, dst_vma, dst_addr);
+-		if (!page)
++		folio = vma_alloc_folio(GFP_HIGHUSER_MOVABLE, 0, dst_vma,
++					dst_addr, false);
++		if (!folio)
+ 			goto out;
+ 
+-		page_kaddr = kmap_local_page(page);
++		kaddr = kmap_local_folio(folio, 0);
+ 		/*
+ 		 * The read mmap_lock is held here.  Despite the
+ 		 * mmap_lock being read recursive a deadlock is still
+@@ -162,45 +163,45 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
+ 		 * and retry the copy outside the mmap_lock.
+ 		 */
+ 		pagefault_disable();
+-		ret = copy_from_user(page_kaddr,
+-				     (const void __user *) src_addr,
++		ret = copy_from_user(kaddr, (const void __user *) src_addr,
+ 				     PAGE_SIZE);
+ 		pagefault_enable();
+-		kunmap_local(page_kaddr);
++		kunmap_local(kaddr);
+ 
+ 		/* fallback to copy_from_user outside mmap_lock */
+ 		if (unlikely(ret)) {
+ 			ret = -ENOENT;
+-			*pagep = page;
++			*pagep = &folio->page;
+ 			/* don't free the page */
+ 			goto out;
+ 		}
+ 
+-		flush_dcache_page(page);
++		flush_dcache_folio(folio);
+ 	} else {
+-		page = *pagep;
++		folio = page_folio(*pagep);
++		VM_BUG_ON_FOLIO(folio_test_large(folio), folio);
+ 		*pagep = NULL;
+ 	}
+ 
+ 	/*
+-	 * The memory barrier inside __SetPageUptodate makes sure that
++	 * The memory barrier inside __folio_mark_uptodate makes sure that
+ 	 * preceding stores to the page contents become visible before
+ 	 * the set_pte_at() write.
+ 	 */
+-	__SetPageUptodate(page);
++	__folio_mark_uptodate(folio);
+ 
+ 	ret = -ENOMEM;
+-	if (mem_cgroup_charge(page_folio(page), dst_vma->vm_mm, GFP_KERNEL))
++	if (mem_cgroup_charge(folio, dst_vma->vm_mm, GFP_KERNEL))
+ 		goto out_release;
+ 
+ 	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
+-				       page, true, flags);
++				       &folio->page, true, flags);
+ 	if (ret)
+ 		goto out_release;
+ out:
+ 	return ret;
+ out_release:
+-	put_page(page);
++	folio_put(folio);
+ 	goto out;
+ }
+ 
 -- 
 2.25.1
 
