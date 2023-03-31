@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DAA6D1F87
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9194B6D1F89
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbjCaLzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 07:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
+        id S231694AbjCaLzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 07:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjCaLza (ORCPT
+        with ESMTP id S231628AbjCaLzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:55:30 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30181A976;
-        Fri, 31 Mar 2023 04:55:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=NyQSP08kdZEIibjO78bHM9DPbMJs/ttUyH/VRXm9krE=; b=AJOIJtFoowQW3ArNJBBHr89lSG
-        lRiYC0eqVguobMzRquug9ADUvwOy87GnHD3DcFJ5YYW2vFW5RhVX6E5Q0qyIEz1X4sfVwhLY4XMya
-        DkSoD9dFPX5V3J/MVwacGc5ZF/MgwTnvUtRxExVnflZ9K8048zLY9jcBDFpS2KJGBp8Y=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1piDLe-0091Qr-03; Fri, 31 Mar 2023 13:55:14 +0200
-Date:   Fri, 31 Mar 2023 13:55:13 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, stefan@agner.ch, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH V2 2/2] dt-bindings: gpio: vf610: update gpio-ranges
-Message-ID: <960c6591-5c04-4385-aabf-b93fa03d5f4e@lunn.ch>
-References: <20230330100550.2049687-1-peng.fan@oss.nxp.com>
- <20230330100550.2049687-2-peng.fan@oss.nxp.com>
+        Fri, 31 Mar 2023 07:55:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9461D86C;
+        Fri, 31 Mar 2023 04:55:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61FB9B82EC5;
+        Fri, 31 Mar 2023 11:55:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D309C433EF;
+        Fri, 31 Mar 2023 11:55:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680263739;
+        bh=DZjPgvsvx+QFSuqOVUmOJTZFeEdqJ5FO+fnshzW85Eg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fZf7OpVvRwRP/6DDgpf+1tze1rwrDsE5IepX1Eo2hM7x6h7dsYzBIDxibvjKH+P7G
+         KIWe0Fh5jTgkPRcyQxwtV0+MDHHHBa5xYU3PEQZSzN/GGtR41+CKXeCtGyCt7hc++v
+         tSvRG/ncfzNipVZ/mGKhXGbyaujaYEKXGPkZsKCagUW5dHi8rEIEinG34nlJI7H0Or
+         p100K0bknhNzOJjHk1SWE/ihCJ6tKbn++wVBpiz/CXTnxe/yrLv4UGra61wEtp7JbB
+         NjWDJDjSLzkldN6Qq0e1lo3wt4LCf3QC5jw/oliZWdLN+ls0ANZb7cKlnAgdMUQSRJ
+         Na6eK2loyEb0g==
+Date:   Fri, 31 Mar 2023 17:25:34 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Fenghua Yu <fenghua.yu@intel.com>
+Cc:     Dave Jiang <dave.jiang@intel.com>, dmaengine@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] Add descriptor definitions for a few new DSA
+ operations
+Message-ID: <ZCbKNtJvGtwwrPv+@matsya>
+References: <20230303213413.3357431-1-fenghua.yu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230330100550.2049687-2-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230303213413.3357431-1-fenghua.yu@intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 06:05:50PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On 03-03-23, 13:34, Fenghua Yu wrote:
+> A few new DSA operations are introduced [1]:
+> 1. Memory fill with 16 bytes of pattern.
+> 2. Translation fetch.
+> 3. Data Integrity Extension (DIX) generate.
 > 
-> And bounds for gpio-ranges to address dtbs_error.
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> This series adds descriptor definitions for the new DSA operations.
+> With the definitions, user can issue the DSA operations to optimize
+> corresponding transactions.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Applied, thanks
 
-    Andrew
+-- 
+~Vinod
