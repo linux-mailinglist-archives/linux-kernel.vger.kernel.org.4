@@ -2,326 +2,507 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0186D197B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E546D196E
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjCaILe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
+        id S231349AbjCaII7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjCaILd (ORCPT
+        with ESMTP id S230491AbjCaII4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:11:33 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5831135A1;
-        Fri, 31 Mar 2023 01:11:30 -0700 (PDT)
-Received: from loongson.cn (unknown [192.168.200.1])
-        by gateway (Coremail) with SMTP id _____8AxJ_BdlSZkvuAUAA--.32184S3;
-        Fri, 31 Mar 2023 16:10:06 +0800 (CST)
-Received: from [0.0.0.0] (unknown [192.168.200.1])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxtrzZlCZkDuoRAA--.12556S3;
-        Fri, 31 Mar 2023 16:08:09 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: Add kernel address sanitizer support
-To:     Qing Zhang <zhangqing@loongson.cn>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230328111714.2056-1-zhangqing@loongson.cn>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <8b472ba9-a39d-b9cc-d515-c1a9d42ae865@loongson.cn>
-Date:   Fri, 31 Mar 2023 16:07:53 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Fri, 31 Mar 2023 04:08:56 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359A11B7D9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:08:54 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id s1so11140903ild.6
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:08:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680250134;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YXskskyk5NWWWpuFIiBZnYCbry+zJmmatsttCV4Yelo=;
+        b=d4YlV6hG4OC1PS9dLYvbIA/B8uh5ywrFFg/XMVfZ5lj87AqjFedJd0Lv3MJBA6wRv9
+         jxpsvgZNlS0+9i5hPloxA6XJwHU4fbDIC9lKNmRoAXgw76NYClBOQhlMkMmz+5MBa25p
+         gd6XrJ1z5C4nphc0NVjalyp1jRbs1DGE9jGvwAd9TwCW1givaFAXSNPjQEDPxYkZzryJ
+         aZ8a5uBDSdVJ9NutE3SwnUaTGwHVQVoxlcVM2J4Wdl3T6GfMUo2a0UhRDOvury/bhelT
+         iyGKBBvoE7On3gZwAiCj54IcdYh9UovZ1tZwfH0yXapf3JJVWFmyWd/0371hjMkfIj5G
+         3+IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680250134;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YXskskyk5NWWWpuFIiBZnYCbry+zJmmatsttCV4Yelo=;
+        b=Ng1kTBxriQDukpYEAab7D1iMQ76eUqj+/XVw/U9i4mP4NZu7pkFcVCOgN7q0RfCdJp
+         IidgQhbYdSrU6N9+x0ifPljcVXfpymZf6tuqsjLRar+hKCXWP8VDb5LpPNcuqIosD5uD
+         gDe+gyHyuqYbvGOvGZP79p5vivouGztG9Fc7/4o5qXm9V37qnPXbtCe6pmQqJvKGwuip
+         5BqVLZiK/+v8Fkvlo7ce2G/582VQwtqtJ7ohSwo0OSKV7jc4o05t9YNYeJX8y+1qS6Zo
+         ChpnSFZvwOsl2lBFUL7OA6wxNlAhCeQZYo8J0P4Gz2krLvMMvVaEPdF4A96cfeLJEh3f
+         GLJg==
+X-Gm-Message-State: AAQBX9f1u4RoGsXGP8FlgBm1XootGm3LqayWVl1hE+vRu/RYrBzuUHuH
+        zW0ZW9pCw9Y1qbiZpfWxFKWdtmykUU22t9ObdFqqAA==
+X-Google-Smtp-Source: AKy350aLGnhwlA6xGd1wCV7e2FwTACBbcnm5tTRc/zKzwBwOKecQZYKQJuam8DkwaJrhmRn0SErGxlXPq9nqNyQwAdU=
+X-Received: by 2002:a05:6e02:de9:b0:313:fa72:d9aa with SMTP id
+ m9-20020a056e020de900b00313fa72d9aamr13252138ilj.0.1680250134109; Fri, 31 Mar
+ 2023 01:08:54 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230328111714.2056-1-zhangqing@loongson.cn>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxtrzZlCZkDuoRAA--.12556S3
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3GF43try5WF4rZF13AryrJFb_yoWDGF47pr
-        WkCFyvgrWktF1Ig3yrKr1UJr1DJrs3Ga12gF13JFWfCF4xu3s2gr1DKFWkta4UXw4kJFyF
-        gFn5uayjq39rt37anT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bsAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7
-        CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6c
-        x26rWlOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8V
-        WrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAF
-        wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
-        0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AK
-        xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
-        1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUUGjg7UU
-        UUU==
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230331064528.3764174-1-sadiyakazi@google.com>
+In-Reply-To: <20230331064528.3764174-1-sadiyakazi@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 31 Mar 2023 16:08:41 +0800
+Message-ID: <CABVgOSnC5rcO-tf6GSwa4Pgkk0wZfhOdWJFdo4xy6Zjn66mULg@mail.gmail.com>
+Subject: Re: [PATCH v2] list: test: Test the klist structure
+To:     Sadiya Kazi <sadiyakazi@google.com>
+Cc:     brendanhiggins@google.com, skhan@linuxfoundation.org,
+        corbet@lwn.net, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000067bef405f82db8cd"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Qing
+--00000000000067bef405f82db8cd
+Content-Type: text/plain; charset="UTF-8"
 
-On 03/28/2023 07:17 PM, Qing Zhang wrote:
-> 1/8 of kernel addresses reserved for shadow memory. But for LoongArch,
-> There are a lot of holes between different segments and valid address
-> space(256T available) is insufficient to map all these segments to kasan
-> shadow memory with the common formula provided by kasan core, saying
-> addr >> KASAN_SHADOW_SCALE_SHIFT) + KASAN_SHADOW_OFFSET
+On Fri, 31 Mar 2023 at 14:45, Sadiya Kazi <sadiyakazi@google.com> wrote:
 >
-> So Loongarch has a ARCH specific mapping formula,different segments
-> are mapped individually, and only limited length of space of that
-> specific segment is mapped to shadow.
+> Add KUnit tests to the klist linked-list structure.
+> These perform testing for different variations of node add
+> and node delete in the klist data structure (<linux/klist.h>).
 >
-> At early boot stage the whole shadow region populated with just
-> one physical page (kasan_early_shadow_page). Later, this page is
-> reused as readonly zero shadow for some memory that Kasan currently
-> don't track.
-> After mapping the physical memory, pages for shadow memory are
-> allocated and mapped.
+> Limitation: Since we use a static global variable, and if
+> multiple instances of this test are run concurrently, the test may fail.
 >
-> Functions like memset/memmove/memcpy do a lot of memory accesses.
-> If bad pointer passed to one of these function it is important
-> to catch this. Compiler's instrumentation cannot do this since
-> these functions are written in assembly.
-> KASan replaces memory functions with manually instrumented variants.
-> Original functions declared as weak symbols so strong definitions
-> in mm/kasan/kasan.c could replace them. Original functions have aliases
-> with '__' prefix in name, so we could call non-instrumented variant
-> if needed.
->
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
 > ---
->  Documentation/dev-tools/kasan.rst             |   4 +-
->  .../features/debug/KASAN/arch-support.txt     |   2 +-
->  arch/loongarch/Kconfig                        |   7 +
->  arch/loongarch/include/asm/kasan.h            | 120 +++++++++
->  arch/loongarch/include/asm/pgtable.h          |   7 +
->  arch/loongarch/include/asm/setup.h            |   2 +-
->  arch/loongarch/include/asm/string.h           |  20 ++
->  arch/loongarch/kernel/Makefile                |   3 +
->  arch/loongarch/kernel/head.S                  |  14 +-
->  arch/loongarch/kernel/relocate.c              |   8 +-
->  arch/loongarch/kernel/setup.c                 |   4 +
->  arch/loongarch/lib/memcpy.S                   |   4 +-
->  arch/loongarch/lib/memmove.S                  |  13 +-
->  arch/loongarch/lib/memset.S                   |   4 +-
->  arch/loongarch/mm/Makefile                    |   2 +
->  arch/loongarch/mm/kasan_init.c                | 255 ++++++++++++++++++
->  arch/loongarch/vdso/Makefile                  |   4 +
->  include/linux/kasan.h                         |   2 +
->  mm/kasan/generic.c                            |   5 +
->  mm/kasan/init.c                               |  10 +-
->  mm/kasan/kasan.h                              |   6 +
->  21 files changed, 470 insertions(+), 26 deletions(-)
->  create mode 100644 arch/loongarch/include/asm/kasan.h
->  create mode 100644 arch/loongarch/mm/kasan_init.c
+> Thank you Brendan and David for reviewing this patch. I have addressed
+> the review comments in this iteration.
 >
-> diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
-> index e66916a483cd..ee91f2872767 100644
-> --- a/Documentation/dev-tools/kasan.rst
-> +++ b/Documentation/dev-tools/kasan.rst
-> @@ -41,8 +41,8 @@ Support
->  Architectures
->  ~~~~~~~~~~~~~
+> Changes since v1:
+> https://lore.kernel.org/linux-kselftest/20230329110723.3458843-1-sadiyakazi@google.com/
 >
-> -Generic KASAN is supported on x86_64, arm, arm64, powerpc, riscv, s390, and
-> -xtensa, and the tag-based KASAN modes are supported only on arm64.
-> +Generic KASAN is supported on x86_64, arm, arm64, powerpc, riscv, s390, xtensa,
-> +and loongarch, and the tag-based KASAN modes are supported only on arm64.
+> - Corrected the commenting style
+> - Deleted the comment /* counts the number of nodes*/
+> - Renamed last_node_count to last_node
+>
+>
+> ---
 
-Maybe you need to update `Documentation/translations/zh_CN/dev-tools
-/kasan.rst` synchronously.
+Looks good now, thanks!
 
+-- David
+
+>  lib/list-test.c | 300 +++++++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 299 insertions(+), 1 deletion(-)
 >
->  Compilers
->  ~~~~~~~~~
-> diff --git a/Documentation/features/debug/KASAN/arch-support.txt b/Documentation/features/debug/KASAN/arch-support.txt
-> index bf0124fae643..c4581c2edb28 100644
-> --- a/Documentation/features/debug/KASAN/arch-support.txt
-> +++ b/Documentation/features/debug/KASAN/arch-support.txt
-> @@ -13,7 +13,7 @@
->      |        csky: | TODO |
->      |     hexagon: | TODO |
->      |        ia64: | TODO |
-> -    |   loongarch: | TODO |
-> +    |   loongarch: |  ok  |
->      |        m68k: | TODO |
->      |  microblaze: | TODO |
->      |        mips: | TODO |
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 72dd00f48b8c..61f883c51045 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -7,6 +7,7 @@ config LOONGARCH
->  	select ACPI_MCFG if ACPI
->  	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
->  	select ARCH_BINFMT_ELF_STATE
-> +	select ARCH_DISABLE_KASAN_INLINE
->  	select ARCH_ENABLE_MEMORY_HOTPLUG
->  	select ARCH_ENABLE_MEMORY_HOTREMOVE
->  	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
-> @@ -83,6 +84,7 @@ config LOONGARCH
->  	select HAVE_ARCH_AUDITSYSCALL
->  	select HAVE_ARCH_MMAP_RND_BITS if MMU
->  	select HAVE_ARCH_SECCOMP_FILTER
-> +	select HAVE_ARCH_KASAN if 64BIT
->  	select HAVE_ARCH_TRACEHOOK
->  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
->  	select HAVE_ASM_MODVERSIONS
-> @@ -626,6 +628,11 @@ config ARCH_MMAP_RND_BITS_MIN
->  config ARCH_MMAP_RND_BITS_MAX
->  	default 18
+> diff --git a/lib/list-test.c b/lib/list-test.c
+> index d374cf5d1a57..0cc27de9cec8 100644
+> --- a/lib/list-test.c
+> +++ b/lib/list-test.c
+> @@ -8,6 +8,7 @@
+>  #include <kunit/test.h>
 >
-> +config KASAN_SHADOW_OFFSET
-> +	hex
-> +	default 0x0
-> +	depends on KASAN
-> +
->  menu "Power management options"
+>  #include <linux/list.h>
+> +#include <linux/klist.h>
 >
->  config ARCH_SUSPEND_POSSIBLE
-> diff --git a/arch/loongarch/include/asm/kasan.h b/arch/loongarch/include/asm/kasan.h
-> new file mode 100644
-> index 000000000000..582bcded311e
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/kasan.h
-> @@ -0,0 +1,120 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __ASM_KASAN_H
-> +#define __ASM_KASAN_H
+>  struct list_test_struct {
+>         int data;
+> @@ -1199,6 +1200,303 @@ static struct kunit_suite hlist_test_module = {
+>         .test_cases = hlist_test_cases,
+>  };
+>
+> -kunit_test_suites(&list_test_module, &hlist_test_module);
 > +
-> +#ifndef __ASSEMBLY__
+> +struct klist_test_struct {
+> +       int data;
+> +       struct klist klist;
+> +       struct klist_node klist_node;
+> +};
 > +
-> +#include <linux/linkage.h>
-> +#include <linux/mmzone.h>
-> +#include <asm/addrspace.h>
-> +#include <asm/io.h>
-> +#include <asm/pgtable.h>
+> +static int node_count;
+> +static struct klist_node *last_node;
 > +
-> +#define __HAVE_ARCH_SHADOW_MAP
-> +
-> +#define KASAN_SHADOW_SCALE_SHIFT 3
-> +#define KASAN_SHADOW_OFFSET	_AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
-> +
-> +#define XRANGE_SHIFT (48)
-> +
-> +/* Valid address length */
-> +#define XRANGE_SHADOW_SHIFT	(PGDIR_SHIFT + PAGE_SHIFT - 3)
-> +/* Used for taking out the valid address */
-> +#define XRANGE_SHADOW_MASK	GENMASK_ULL(XRANGE_SHADOW_SHIFT - 1, 0)
-> +/* One segment whole address space size */
-> +#define	XRANGE_SIZE		(XRANGE_SHADOW_MASK + 1)
-> +
-> +/* 64-bit segment value. */
-> +#define XKPRANGE_UC_SEG		(0x8000)
-> +#define XKPRANGE_CC_SEG		(0x9000)
-> +#define XKVRANGE_VC_SEG		(0xffff)
-> +
-> +/* Cached */
-> +#define XKPRANGE_CC_START		CACHE_BASE
-> +#define XKPRANGE_CC_SIZE		XRANGE_SIZE
-> +#define XKPRANGE_CC_KASAN_OFFSET	(0)
-> +#define XKPRANGE_CC_SHADOW_SIZE		(XKPRANGE_CC_SIZE >> KASAN_SHADOW_SCALE_SHIFT)
-> +#define XKPRANGE_CC_SHADOW_END		(XKPRANGE_CC_KASAN_OFFSET + XKPRANGE_CC_SHADOW_SIZE)
-> +
-> +/* UnCached */
-> +#define XKPRANGE_UC_START		UNCACHE_BASE
-> +#define XKPRANGE_UC_SIZE		XRANGE_SIZE
-> +#define XKPRANGE_UC_KASAN_OFFSET	XKPRANGE_CC_SHADOW_END
-> +#define XKPRANGE_UC_SHADOW_SIZE		(XKPRANGE_UC_SIZE >> KASAN_SHADOW_SCALE_SHIFT)
-> +#define XKPRANGE_UC_SHADOW_END		(XKPRANGE_UC_KASAN_OFFSET + XKPRANGE_UC_SHADOW_SIZE)
-> +
-> +/* VMALLOC (Cached or UnCached)  */
-> +#define XKVRANGE_VC_START		MODULES_VADDR
-> +#define XKVRANGE_VC_SIZE		round_up(VMEMMAP_END - MODULES_VADDR + 1, PGDIR_SIZE)
-> +#define XKVRANGE_VC_KASAN_OFFSET	XKPRANGE_UC_SHADOW_END
-> +#define XKVRANGE_VC_SHADOW_SIZE		(XKVRANGE_VC_SIZE >> KASAN_SHADOW_SCALE_SHIFT)
-> +#define XKVRANGE_VC_SHADOW_END		(XKVRANGE_VC_KASAN_OFFSET + XKVRANGE_VC_SHADOW_SIZE)
-> +
-> +/* Kasan shadow memory start right after vmalloc. */
-> +#define KASAN_SHADOW_START		round_up(VMEMMAP_END, PGDIR_SIZE)
-> +#define KASAN_SHADOW_SIZE		(XKVRANGE_VC_SHADOW_END - XKPRANGE_CC_KASAN_OFFSET)
-> +#define KASAN_SHADOW_END		round_up(KASAN_SHADOW_START + KASAN_SHADOW_SIZE, PGDIR_SIZE)
-> +
-> +#define XKPRANGE_CC_SHADOW_OFFSET	(KASAN_SHADOW_START + XKPRANGE_CC_KASAN_OFFSET)
-> +#define XKPRANGE_UC_SHADOW_OFFSET	(KASAN_SHADOW_START + XKPRANGE_UC_KASAN_OFFSET)
-> +#define XKVRANGE_VC_SHADOW_OFFSET	(KASAN_SHADOW_START + XKVRANGE_VC_KASAN_OFFSET)
-> +
-> +extern bool kasan_early_stage;
-> +extern unsigned char kasan_early_shadow_page[PAGE_SIZE];
-> +
-> +static inline void *kasan_mem_to_shadow(const void *addr)
+> +static void check_node(struct klist_node *node_ptr)
 > +{
-> +	if (kasan_early_stage) {
-> +		return (void *)(kasan_early_shadow_page);
-> +	} else {
-> +		unsigned long maddr = (unsigned long)addr;
-> +		unsigned long xrange = (maddr >> XRANGE_SHIFT) & 0xffff;
-> +		unsigned long offset = 0;
+> +       node_count++;
+> +       last_node = node_ptr;
+> +}
 > +
-> +		maddr &= XRANGE_SHADOW_MASK;
-> +		switch (xrange) {
-> +		case XKPRANGE_CC_SEG:
-> +			offset = XKPRANGE_CC_SHADOW_OFFSET;
-> +			break;
-> +		case XKPRANGE_UC_SEG:
-> +			offset = XKPRANGE_UC_SHADOW_OFFSET;
-> +			break;
-> +		case XKVRANGE_VC_SEG:
-> +			offset = XKVRANGE_VC_SHADOW_OFFSET;
-> +			break;
-> +		default:
-> +			WARN_ON(1);
-> +			return NULL;
+> +static void check_delete_node(struct klist_node *node_ptr)
+> +{
+> +       node_count--;
+> +       last_node = node_ptr;
+> +}
+> +
+> +static void klist_test_add_tail(struct kunit *test)
+> +{
+> +       struct klist_node a, b;
+> +       struct klist mylist;
+> +       struct klist_iter i;
+> +
+> +       node_count = 0;
+> +       klist_init(&mylist, &check_node, NULL);
+> +
+> +       klist_add_tail(&a, &mylist);
+> +       KUNIT_EXPECT_EQ(test, node_count, 1);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &a);
+> +
+> +       klist_add_tail(&b, &mylist);
+> +       KUNIT_EXPECT_EQ(test, node_count, 2);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &b);
+> +
+> +       /* should be [list] -> a -> b */
+> +       klist_iter_init(&mylist, &i);
+> +
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
+> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
+> +
+> +       klist_iter_exit(&i);
+> +
+> +}
+> +
+> +static void klist_test_add_head(struct kunit *test)
+> +{
+> +       struct klist_node a, b;
+> +       struct klist mylist;
+> +       struct klist_iter i;
+> +
+> +       node_count = 0;
+> +       klist_init(&mylist, &check_node, NULL);
+> +
+> +       klist_add_head(&a, &mylist);
+> +       KUNIT_EXPECT_EQ(test, node_count, 1);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &a);
+> +
+> +       klist_add_head(&b, &mylist);
+> +       KUNIT_EXPECT_EQ(test, node_count, 2);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &b);
+> +
+> +       /* should be [list] -> b -> a */
+> +       klist_iter_init(&mylist, &i);
+> +
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
+> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
+> +
+> +       klist_iter_exit(&i);
+> +
+> +}
+> +
+> +static void klist_test_add_behind(struct kunit *test)
+> +{
+> +       struct klist_node a, b, c, d;
+> +       struct klist mylist;
+> +       struct klist_iter i;
+> +
+> +       node_count = 0;
+> +       klist_init(&mylist, &check_node, NULL);
+> +
+> +       klist_add_head(&a, &mylist);
+> +       klist_add_head(&b, &mylist);
+> +
+> +       klist_add_behind(&c, &a);
+> +       KUNIT_EXPECT_EQ(test, node_count, 3);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &c);
+> +
+> +       klist_add_behind(&d, &b);
+> +       KUNIT_EXPECT_EQ(test, node_count, 4);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &d);
+> +
+> +       klist_iter_init(&mylist, &i);
+> +
+> +       /* should be [list] -> b -> d -> a -> c*/
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
+> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
+> +
+> +       klist_iter_exit(&i);
+> +
+> +}
+> +
+> +static void klist_test_add_before(struct kunit *test)
+> +{
+> +       struct klist_node a, b, c, d;
+> +       struct klist mylist;
+> +       struct klist_iter i;
+> +
+> +       node_count = 0;
+> +       klist_init(&mylist, &check_node, NULL);
+> +
+> +       klist_add_head(&a, &mylist);
+> +       klist_add_head(&b, &mylist);
+> +       klist_add_before(&c, &a);
+> +       KUNIT_EXPECT_EQ(test, node_count, 3);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &c);
+> +
+> +       klist_add_before(&d, &b);
+> +       KUNIT_EXPECT_EQ(test, node_count, 4);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &d);
+> +
+> +       klist_iter_init(&mylist, &i);
+> +
+> +       /* should be [list] -> b -> d -> a -> c*/
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
+> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
+> +
+> +       klist_iter_exit(&i);
+> +
+> +}
+> +
+> +/*
+> + * Verify that klist_del() delays the deletion of a node until there
+> + * are no other references to it
+> + */
+> +static void klist_test_del_refcount_greater_than_zero(struct kunit *test)
+> +{
+> +       struct klist_node a, b, c, d;
+> +       struct klist mylist;
+> +       struct klist_iter i;
+> +
+> +       node_count = 0;
+> +       klist_init(&mylist, &check_node, &check_delete_node);
+> +
+> +       /* Add nodes a,b,c,d to the list*/
+> +       klist_add_tail(&a, &mylist);
+> +       klist_add_tail(&b, &mylist);
+> +       klist_add_tail(&c, &mylist);
+> +       klist_add_tail(&d, &mylist);
+> +
+> +       klist_iter_init(&mylist, &i);
+> +
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
+> +       /* Advance the iterator to point to node c*/
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
+> +
+> +       /* Try to delete node c while there is a reference to it*/
+> +       klist_del(&c);
+> +
+> +       /*
+> +        * Verify that node c is still attached to the list even after being
+> +        * deleted. Since the iterator still points to c, the reference count is not
+> +        * decreased to 0
+> +        */
+> +       KUNIT_EXPECT_TRUE(test, klist_node_attached(&c));
+> +
+> +       /* Check that node c has not been removed yet*/
+> +       KUNIT_EXPECT_EQ(test, node_count, 4);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &d);
+> +
+> +       klist_iter_exit(&i);
+> +
+> +       /*
+> +        * Since the iterator is no longer pointing to node c, node c is removed
+> +        * from the list
+> +        */
+> +       KUNIT_EXPECT_EQ(test, node_count, 3);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &c);
+> +
+> +}
+> +
+> +/*
+> + * Verify that klist_del() deletes a node immediately when there are no
+> + * other references to it.
+> + */
+> +static void klist_test_del_refcount_zero(struct kunit *test)
+> +{
+> +       struct klist_node a, b, c, d;
+> +       struct klist mylist;
+> +       struct klist_iter i;
+> +
+> +       node_count = 0;
+> +       klist_init(&mylist, &check_node, &check_delete_node);
+> +
+> +       /* Add nodes a,b,c,d to the list*/
+> +       klist_add_tail(&a, &mylist);
+> +       klist_add_tail(&b, &mylist);
+> +       klist_add_tail(&c, &mylist);
+> +       klist_add_tail(&d, &mylist);
+> +       /* Delete node c*/
+> +       klist_del(&c);
+> +
+> +       /* Check that node c is deleted from the list*/
+> +       KUNIT_EXPECT_EQ(test, node_count, 3);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &c);
+> +
+> +       /* Should be [list] -> a -> b -> d*/
+> +       klist_iter_init(&mylist, &i);
+> +
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
+> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
+> +
+> +       klist_iter_exit(&i);
+> +
+> +}
+> +
+> +static void klist_test_remove(struct kunit *test)
+> +{
+> +       /* This test doesn't check correctness under concurrent access */
+> +       struct klist_node a, b, c, d;
+> +       struct klist mylist;
+> +       struct klist_iter i;
+> +
+> +       node_count = 0;
+> +       klist_init(&mylist, &check_node, &check_delete_node);
+> +
+> +       /* Add nodes a,b,c,d to the list*/
+> +       klist_add_tail(&a, &mylist);
+> +       klist_add_tail(&b, &mylist);
+> +       klist_add_tail(&c, &mylist);
+> +       klist_add_tail(&d, &mylist);
+> +       /* Delete node c*/
+> +       klist_remove(&c);
+> +
+> +       /* Check the nodes in the list*/
+> +       KUNIT_EXPECT_EQ(test, node_count, 3);
+> +       KUNIT_EXPECT_PTR_EQ(test, last_node, &c);
+> +
+> +       /* should be [list] -> a -> b -> d*/
+> +       klist_iter_init(&mylist, &i);
+> +
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
+> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
+> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
+> +
+> +       klist_iter_exit(&i);
+> +
+> +}
+> +
+> +static void klist_test_node_attached(struct kunit *test)
+> +{
+> +       struct klist_node a = {};
+> +       struct klist mylist;
+> +
+> +       klist_init(&mylist, NULL, NULL);
+> +
+> +       KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
+> +       klist_add_head(&a, &mylist);
+> +       KUNIT_EXPECT_TRUE(test, klist_node_attached(&a));
+> +       klist_del(&a);
+> +       KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
+> +
+> +}
+> +
+> +static struct kunit_case klist_test_cases[] = {
+> +       KUNIT_CASE(klist_test_add_tail),
+> +       KUNIT_CASE(klist_test_add_head),
+> +       KUNIT_CASE(klist_test_add_behind),
+> +       KUNIT_CASE(klist_test_add_before),
+> +       KUNIT_CASE(klist_test_del_refcount_greater_than_zero),
+> +       KUNIT_CASE(klist_test_del_refcount_zero),
+> +       KUNIT_CASE(klist_test_remove),
+> +       KUNIT_CASE(klist_test_node_attached),
+> +       {},
+> +};
+> +
+> +static struct kunit_suite klist_test_module = {
+> +       .name = "klist",
+> +       .test_cases = klist_test_cases,
+> +};
+> +
+> +kunit_test_suites(&list_test_module, &hlist_test_module, &klist_test_module);
+>
+>  MODULE_LICENSE("GPL v2");
+> --
+> 2.40.0.348.gf938b09366-goog
+>
 
-When the "earlycon=uart,mmio,0x1fe001e0,115200n8" cmdline parameter is
-added under CONFIG_KASAN, the kernel will not start normally and stay
-at the following position:
-...
-[    0.000000] On node 0, zone DMA32: 4 pages in unavailable ranges
-[    0.000000] On node 0, zone Normal: 8 pages in unavailable ranges
-[    0.000000] On node 0, zone Normal: 8 pages in unavailable ranges
-[    0.000000] On node 0, zone Normal: 160 pages in unavailable ranges
-[    0.000000] On node 0, zone Normal: 256 pages in unavailable ranges
+--00000000000067bef405f82db8cd
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-
-The reason is that when accessing the serial port address `0x1fe001e0`,
-kasan will add relevant checks, such as inserting `__asan_load1()`, and
-will eventually enter the `default` branch in kasan_mem_to_shadow(),
-causing the kernel to fail to start.
-
-Add the following modification to avoid inserting the kasan check in
-8250_early.o, and it will be able to start successfully.
-
-diff --git a/drivers/tty/serial/8250/Makefile 
-b/drivers/tty/serial/8250/Makefile
-index 4fc2fc1f41b6..3c17d0e72c83 100644
---- a/drivers/tty/serial/8250/Makefile
-+++ b/drivers/tty/serial/8250/Makefile
-@@ -3,6 +3,8 @@
-  # Makefile for the 8250 serial device drivers.
-  #
-
-+KASAN_SANITIZE_8250_early.o            := n
-+
-  obj-$(CONFIG_SERIAL_8250)              += 8250.o 8250_base.o
-  8250-y                                 := 8250_core.o
-  8250-$(CONFIG_ALPHA_GENERIC)           += 8250_alpha.o
-
-Thanks,
-Youling
-
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDR
+ZhDR1GkiWSb5Ytzh1OQoOucpJxCdscDJqCU+Rh35BTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMzEwODA4NTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAXQLl5x2IdFNNPBnD4Btv
++wlLySLocKvQoeZwboTSNCJ5DKhQPSZDLijptSP3cMqJXyOWEqJpQ+6/L0ubwG0NcbhdZBFsF8H6
+3qjW1CQcb9Q8OrGaP2vBQA+lXKW1uNyVa0uLfGgymTTuIt3PppUwLQ++szX5P08mDiHX1SqFN69I
+zneB7qLZxkC1Ls7UaRlnAj9oCt815uHZhc39A5tnTDKqp1jN/7vqJPk/KlpikHojFjyHcZWRcBQ7
+fSNroDmrQlJOEhZ9DEKQfc1A9uXlXMoPQ4UqJ/e9txYHrcx8C60gYp2ygqHm3Vw6HzEOCDNeNHYR
+GR2LhkYnOVEK89vvjA==
+--00000000000067bef405f82db8cd--
