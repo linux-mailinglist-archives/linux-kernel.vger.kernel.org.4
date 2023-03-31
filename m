@@ -2,140 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8217D6D2908
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24C66D290C
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbjCaUAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S233145AbjCaUBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbjCaT7k (ORCPT
+        with ESMTP id S232876AbjCaUAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 15:59:40 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865791DFA5
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:59:37 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id v1so23578836wrv.1
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:59:37 -0700 (PDT)
+        Fri, 31 Mar 2023 16:00:44 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F109725576
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:00:11 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id s20so3969861ljp.7
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:00:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680292776;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T51w85qNGZ/wH1d68t5C4IE+YzS6I1k1IrcXjbzYMqE=;
-        b=z59upxBH9VlBuY/hlmuYlAIN3ukfPRl0X+jMR2BPQpQBHGAsW5XK2K7cZBSo/eJUvx
-         2vGjfZIYqN2LSuH/EbBbldGuJwdS4xX62ZKcEY8MNEJ57AP79h3LohWWRJuANyzxFmFf
-         Dkgz3ew+pKfAQSda32nF1Qw0hgM6L6Iwoo1fEODS0e+BRMEw5eRr8/XWFbQXD2OsO5B5
-         p05iCaavhDNJrqbMv/vPl0FXniYxI/pXMEqyhX0B6VqQseipt8Hgy9pBqiYzjb0sHGvv
-         1mYIz7m1/2nUBiyEgQw5I+Q/WDw0D1AnxXMxrJ5QEYpxfpyKywcmMqGGP8MLZkXNtS8O
-         tkZA==
+        d=linaro.org; s=google; t=1680292806;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5WRlDF1f+RCLCDuo7Nfqb1nCqlJyXHPq1o27PEf7SPE=;
+        b=NokzOMs9ypNdf54DrpoI1sz7OzAWoQZgpz2r0YXMSaZrlGMBk/M975gm5UwGJHOBrZ
+         9MeNzr3klGRPVzh53J2K+cDaicAXw1hbm0z+beUEpRNmqi8EZEnrN4rtHdC2sCb297Ma
+         8HdFIFr72y8Et/v6fjgxMsVx6TX1ahEh8zhk4RARPFilLlY3S6VId94pLMH20AXrY30z
+         az9boddNIbb7Z90edpbV7Il/fMsMkJHsR8Ml+aRen5OdD5ZxzlFkAEH/mrQ7kk0BMRWQ
+         sZJLI+A4mzpPduWmlvSpafz8Q6D3bvfXq2tgc+u7xVEb9QfyugAzXyumQHxTdhchLset
+         9bvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680292776;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T51w85qNGZ/wH1d68t5C4IE+YzS6I1k1IrcXjbzYMqE=;
-        b=Cjs6Xzue0ZLz+dMH57W5ePpJKRmlewilLzZ2utPBbaKRty3PWNfoMtFrsilXwxA08S
-         Dand7vSYLUAR/Ovseck73Vu5MW7psn7EzrN6+Xh0qZ/lLzMhGR39g5NAuksMdbWjC1jj
-         EagfHzyHcfdB7kGl3TW2RZ954no/fzcKsZ+XRmKUIBfuTOj/tr6x+ezpciLqGF+Q4LmH
-         MXWbbQqOT1rW/T6JZ1WYDzH0jkXts088hy9p0ceFltVE87wVmY29n2JyQE+eXarlMbrZ
-         g/kHsapeIcWSqoMwtKiec/COi8Hihli4kxjPjcA5vUdm6EL2MylnJw78hBjLNQ7SKpXV
-         ciEQ==
-X-Gm-Message-State: AAQBX9eFjm0BHan0zgFea6Sn4LIjGOL4xAIC/HB10FxNVOv2wivtJyut
-        F1YUg37G58l0DPVs1dK75pzbfw==
-X-Google-Smtp-Source: AKy350Zhy7Qpe3qgnCTosWHd18eYouna/DwThhMA1L/29rY6f8iHBVUSHTCA4Krfzcgilg01o61tBQ==
-X-Received: by 2002:a5d:4a51:0:b0:2d3:33d4:1cfb with SMTP id v17-20020a5d4a51000000b002d333d41cfbmr21995080wrs.36.1680292776104;
-        Fri, 31 Mar 2023 12:59:36 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:1dc:d1f:e44f:2a1d])
-        by smtp.gmail.com with ESMTPSA id c13-20020a5d4ccd000000b002cff0e213ddsm2990286wrt.14.2023.03.31.12.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 12:59:35 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
+        d=1e100.net; s=20210112; t=1680292806;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5WRlDF1f+RCLCDuo7Nfqb1nCqlJyXHPq1o27PEf7SPE=;
+        b=nsTsJ/3IaFchPA+cpWR/1uWjln+id5s0uVKrDmQTPlvWIufFJgzxLxi4PXlLAl8qJw
+         0I5GwOe2i9UhU5l8epCJwgeKgaFiUH6tCacIXQMfVGC2nMGZwMwvPZ4KqEcfXZmpaUvR
+         Fb8B1c/xCwgMg2r+4OGh0/C5bseVTx1OwgNYjlviWGuWImWj1Vl/moh73oLGu453JqkE
+         lBgV0Hv1hJVqbNoobyGAt7W8kxqx/oDIsVfPcAqjuxhplC6GQh2CnN2prB4BX3tZU850
+         jd0Jv3m7+41/zUvxw3ZtJAHyVrZdY02ljLEPi1Ng+gJVNUuxP6RQhzAvxtx2n6eDTX4c
+         4PQw==
+X-Gm-Message-State: AAQBX9cbYKWIQwzPOVXoa5UmR5mCG8mEQPtFky+P2JQ0QMFjeg56uRRB
+        DPQBvUnZvcX5LHhr6vIH6+WADw==
+X-Google-Smtp-Source: AKy350aSM2VSOwLxTJJjuHgN7ck0iL6bvz9jdioxcllAtJLs/0g5hoqbSCrMJ8d/FlfuNELYKiqdlw==
+X-Received: by 2002:a2e:9bcf:0:b0:29e:a3a0:ee2f with SMTP id w15-20020a2e9bcf000000b0029ea3a0ee2fmr8134125ljj.30.1680292806126;
+        Fri, 31 Mar 2023 13:00:06 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z6-20020a2e8e86000000b002a06cebd555sm495914ljk.75.2023.03.31.13.00.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 13:00:05 -0700 (PDT)
+Message-ID: <423085ec-95d8-377f-39cb-58836ab724ec@linaro.org>
+Date:   Fri, 31 Mar 2023 22:00:04 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH tty-next 1/2] dt-bindings: serial: ni,ni16650: add
+ bindings
+To:     Brenda Streiff <brenda.streiff@ni.com>
+Cc:     Gratian Crisan <gratian.crisan@ni.com>,
+        Jason Smith <jason.smith@ni.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 5/5] arm64: dts: qcom: sa8775p-ride: enable UFS
-Date:   Fri, 31 Mar 2023 21:59:20 +0200
-Message-Id: <20230331195920.582620-6-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230331195920.582620-1-brgl@bgdev.pl>
-References: <20230331195920.582620-1-brgl@bgdev.pl>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230329154235.615349-1-brenda.streiff@ni.com>
+ <20230329154235.615349-2-brenda.streiff@ni.com>
+ <9cd03cb0-0924-3431-8fe3-4d5f4a27b1a1@linaro.org>
+ <b47c51dc-a4c3-ed7b-65ae-3938971f453b@ni.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b47c51dc-a4c3-ed7b-65ae-3938971f453b@ni.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 31/03/2023 19:59, Brenda Streiff wrote:
+> 
+> 
+> On 3/30/23 02:28, Krzysztof Kozlowski wrote
+>>> +      - enum:
+>>> +          - ni,ni16550
+>>
+>> As Rob pointed out - you did not test it at all.
+>>
+> 
+> I did, with dt-schema 2023.1 and the 'make dt_binding_check' command as
+> described in Documentation/devicetree/bindings/writing-schema.rst
+> (with no DT_CHECKER_FLAGS, because I was unaware of it until Rob's post)
 
-Enable the UFS and its PHY on sa8775p-ride.
+No need to use it...
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+> 
+> Is this a documentation gap, or is the DT_CHECKER_FLAGS option slated to
+> become the default for 'make dt_binding_check' in the future?
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-index fdd229d232d1..e921093a9f08 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-@@ -5,6 +5,7 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- 
- #include "sa8775p.dtsi"
-@@ -20,6 +21,7 @@ aliases {
- 		serial2 = &uart17;
- 		i2c18 = &i2c18;
- 		spi16 = &spi16;
-+		ufshc1 = &ufs_mem_hc;
- 	};
- 
- 	chosen {
-@@ -426,6 +428,23 @@ &uart17 {
- 	status = "okay";
- };
- 
-+&ufs_mem_hc {
-+	reset-gpios = <&tlmm 149 GPIO_ACTIVE_LOW>;
-+	vcc-supply = <&vreg_l8a>;
-+	vcc-max-microamp = <1100000>;
-+	vccq-supply = <&vreg_l4c>;
-+	vccq-max-microamp = <1200000>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l4a>;
-+	vdda-pll-supply = <&vreg_l1c>;
-+
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <38400000>;
- };
--- 
-2.37.2
+You shouldn't need any flags. Regular testing shows errors:
+
+ni,ni16550.example.dtb: serial@80000000: compatible: 'oneOf' conditional
+failed, one must be fixed:
+	['ni,ni16550', 'ns16550a'] is too long
+	['ni,ni16550', 'ns16550a'] is too short
+
+
+Best regards,
+Krzysztof
 
