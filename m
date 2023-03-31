@@ -2,80 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A976D2301
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D50636D2309
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbjCaOvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
+        id S232470AbjCaOwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbjCaOvi (ORCPT
+        with ESMTP id S232932AbjCaOwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:51:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAC120620;
-        Fri, 31 Mar 2023 07:51:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A635B83025;
-        Fri, 31 Mar 2023 14:51:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CF50C433EF;
-        Fri, 31 Mar 2023 14:51:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680274273;
-        bh=D+XXgjf2UQtBlW5uI89248mmOKHwBzaPnjYvu6vzuVc=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=o+INfz7QFJPaGxF/SL2LEnvjN1sS3PcOs9l70p3f6JdyC4A4I94RlpwJKqEbSEf7d
-         sK+a5MeZHB6d1x9R9FDUQjzuQ9k7/LZBozzjusvPqtatGcypef+sE3ge6jRUsoeW85
-         XVLd7YVpouIwn1vgHfR1ykVKb+S3MdQ/K4aIuh41xj98TjpMfWcD3xVLPXfiVUtWnZ
-         Fhd3WX2nKmrCP3sn+NVWD/uXUaQU72qsjOpJpvNncCvcJvJcoJvrt9s1dc0pCAp6C8
-         laaoQK+v9c5QwTGhuKCa/6w0OS/55/jusbRs0CjCnDA6hsIR8Qkafl49Tt8ffpaXUg
-         rXTT7+LRt2vXw==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 31 Mar 2023 10:52:16 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4909B21A84
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:51:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680274317; x=1711810317;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KNTROMmrQDGMIqNaw58W/qUu3KXgBuSUINmQI12vqQM=;
+  b=dQgdE1MWLEKiLPUZ4HwzEv/dE4BHZoQtqaLUCNqT8MmZ4jFEMdQm2MAb
+   ADRrAKJnFe+kHMXEChlZcWTys5BsfkFkjbwVlTRpqAfGPBII5Lx0pPBze
+   PE+EWhobNFjQNLqqyLSsRvsLZHX7Fq59jkN6UtJPEoP6CvdrD/jS5pW8I
+   8YQA0SuKU/UKOIrL/VamzCahjQ1hnnNXF2UCFwJJ5XD6Uf1RFZXnsd160
+   /e2LqUyRZd2PTHQxx7Ao8ABx8/wRmY5Xud3VvvUzzKD5OFlxkwiuONdTo
+   nsS4H7qIY+YwMtvcbqCi9ffXzAfytIphO1QY6d7rvw1JCpcEtTLmDsxGe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="321859370"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="321859370"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 07:51:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="774382258"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="774382258"
+Received: from bpower-mobl3.ger.corp.intel.com (HELO [10.213.225.27]) ([10.213.225.27])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 07:51:53 -0700
+Message-ID: <6807bede-7e95-d53a-5fed-0e7513b91d50@linux.intel.com>
+Date:   Fri, 31 Mar 2023 15:51:51 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] drm/i915/gt: Hold a wakeref for the active VM
+Content-Language: en-US
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Chris Wilson <chris.p.wilson@linux.intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>
+References: <20230330-hold_wakeref_for_active_vm-v2-1-724d201499c2@intel.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <20230330-hold_wakeref_for_active_vm-v2-1-724d201499c2@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Subject: Re: [v2] wifi: rtlwifi: fix incorrect error codes in
- rtl_debugfs_set_write_rfreg()
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230326053138.91338-1-harperchen1110@gmail.com>
-References: <20230326053138.91338-1-harperchen1110@gmail.com>
-To:     Wei Chen <harperchen1110@gmail.com>
-Cc:     pkshih@realtek.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Chen <harperchen1110@gmail.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <168027426945.32751.18184826221598610178.kvalo@kernel.org>
-Date:   Fri, 31 Mar 2023 14:51:10 +0000 (UTC)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wei Chen <harperchen1110@gmail.com> wrote:
 
-> If there is a failure during copy_from_user or user-provided data buffer
-> is invalid, rtl_debugfs_set_write_rfreg should return negative error code
-> instead of a positive value count.
+On 31/03/2023 15:16, Andrzej Hajda wrote:
+> From: Chris Wilson <chris@chris-wilson.co.uk>
 > 
-> Fix this bug by returning correct error code. Moreover, the check of buffer
-> against null is removed since it will be handled by copy_from_user.
+> There may be a disconnect between the GT used by the engine and the GT
+> used for the VM, requiring us to hold a wakeref on both while the GPU is
+> active with this request.
 > 
-> Fixes: 610247f46feb ("rtlwifi: Improve debugging by using debugfs")
-> Signed-off-by: Wei Chen <harperchen1110@gmail.com>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> v2: added explanation to __queue_and_release_pm
+> 
+> Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
+> [ahajda: removed not-yet-upstremed wakeref tracking bits]
+> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> ---
+> Changes in v2:
+> - Link to v1: https://lore.kernel.org/r/20230330-hold_wakeref_for_active_vm-v1-1-baca712692f6@intel.com
+> ---
+>   drivers/gpu/drm/i915/gt/intel_context.h   | 15 +++++++++++----
+>   drivers/gpu/drm/i915/gt/intel_engine_pm.c |  9 +++++++++
+>   2 files changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gt/intel_context.h b/drivers/gpu/drm/i915/gt/intel_context.h
+> index 0a8d553da3f439..48f888c3da083b 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_context.h
+> +++ b/drivers/gpu/drm/i915/gt/intel_context.h
+> @@ -14,6 +14,7 @@
+>   #include "i915_drv.h"
+>   #include "intel_context_types.h"
+>   #include "intel_engine_types.h"
+> +#include "intel_gt_pm.h"
+>   #include "intel_ring_types.h"
+>   #include "intel_timeline_types.h"
+>   #include "i915_trace.h"
+> @@ -207,8 +208,11 @@ void intel_context_exit_engine(struct intel_context *ce);
+>   static inline void intel_context_enter(struct intel_context *ce)
+>   {
+>   	lockdep_assert_held(&ce->timeline->mutex);
+> -	if (!ce->active_count++)
+> -		ce->ops->enter(ce);
+> +	if (ce->active_count++)
+> +		return;
+> +
+> +	ce->ops->enter(ce);
+> +	intel_gt_pm_get(ce->vm->gt);
+>   }
+>   
+>   static inline void intel_context_mark_active(struct intel_context *ce)
+> @@ -222,8 +226,11 @@ static inline void intel_context_exit(struct intel_context *ce)
+>   {
+>   	lockdep_assert_held(&ce->timeline->mutex);
+>   	GEM_BUG_ON(!ce->active_count);
+> -	if (!--ce->active_count)
+> -		ce->ops->exit(ce);
+> +	if (--ce->active_count)
+> +		return;
+> +
+> +	intel_gt_pm_put_async(ce->vm->gt);
+> +	ce->ops->exit(ce);
+>   }
+>   
+>   static inline struct intel_context *intel_context_get(struct intel_context *ce)
+> diff --git a/drivers/gpu/drm/i915/gt/intel_engine_pm.c b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
+> index e971b153fda976..ee531a5c142c77 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_engine_pm.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
+> @@ -114,6 +114,15 @@ __queue_and_release_pm(struct i915_request *rq,
+>   
+>   	ENGINE_TRACE(engine, "parking\n");
+>   
+> +	/*
+> +	 * Open coded one half of intel_context_enter, which we have to omit
+> +	 * here (see the large comment below) and because the other part must
+> +	 * not be called due constructing directly with __i915_request_create
+> +	 * which increments active count via intel_context_mark_active.
+> +	 */
+> +	GEM_BUG_ON(rq->context->active_count != 1);
+> +	__intel_gt_pm_get(engine->gt);
+> +
+>   	/*
+>   	 * We have to serialise all potential retirement paths with our
+>   	 * submission, as we don't want to underflow either the
 
-Patch applied to wireless-next.git, thanks.
+Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 
-905a9241e4e8 wifi: rtlwifi: fix incorrect error codes in rtl_debugfs_set_write_rfreg()
+Regards,
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230326053138.91338-1-harperchen1110@gmail.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Tvrtko
