@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665FF6D19B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E856D19BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjCaIZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
+        id S231645AbjCaIZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjCaIYW (ORCPT
+        with ESMTP id S230266AbjCaIZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:24:22 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F661B7C8
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:23:33 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id j11so27863256lfg.13
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:23:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680251012;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SFM/eoJq62VMd0BThJcIsWt0E57OGZL4qf+KcrA3TXM=;
-        b=qjBLAWtwVkcMJKOf/T/zHVv1LHnyI0dYBudnw1wyesrWNPDE/UH+dZ0bG6t4MrjHmm
-         rBBbOTK8Fivj12NbFtEWthmJU/vyNbHTvSbwlJR+rM7ufQWTGDagP2WH+qCt8kmePvov
-         iiiIN4fyAPCHSIIkTxkdd2OOEWlYEZSzirBzt8JJDkqotaDfQcE/c4KTAb2rAj/vMGs1
-         lVAsOZlgc3GgEE3fx6OoAyTQXbVHZSOQM5UrZaMEzlmPY2ZrVz/zbb7qt7TxpxJMniwq
-         b9CdtqGL46fkIm5Wdigo2zj+ersnKnkARaSgqFUbz5TMzvxmRp6Bdke6LF6T2BgEI2JE
-         G5IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680251012;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SFM/eoJq62VMd0BThJcIsWt0E57OGZL4qf+KcrA3TXM=;
-        b=btlIi1JLooFpz6Dj6yfGPM3WQwSp9sHx+FK4xRzvGxxWdBTYcvMJpeEyuIak2nkyoL
-         9g7ZRxRf9jSucZV6kIzKYL3eyCwjcSgea/8H24/ondshO5tl6Ue1n7Ihder1ZUCfNVHm
-         BPDNN2AzDcd3/MpBhfzy9ZwIW59QdLZrA2dYUOV4O5L6dVODS6+9SE2iCmG8GJXIv4ch
-         LXhnFg8QKEPciiKSnXzbZvCGjrtPlEx0US+6K5+VZwmWxsA8nITydfp7PJapD+ZZ8JXh
-         n+1QaYWd31PSl5w84ThbbVyCIbp1sPMY7pIAN9CWx7vR6PLfeEHTMDNb6EQXmupUPjNT
-         lEMw==
-X-Gm-Message-State: AAQBX9djsbbcFUl2FpvnrGGkHcccZ9262QVNCIH/Vi9OhPKLHbHXHjg0
-        xE+ubnGsRpDowboqeHsJxcS2FA==
-X-Google-Smtp-Source: AKy350Yx2sdKgu8tI9CRCsLXniSwS6JAiBf3Jf4pjSYqbo9lRR7T1GxMyik5Jl1LaHt+KwpoJ99OCw==
-X-Received: by 2002:a19:7003:0:b0:4dd:af76:d3c with SMTP id h3-20020a197003000000b004ddaf760d3cmr8275543lfc.48.1680251011806;
-        Fri, 31 Mar 2023 01:23:31 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v11-20020ac2558b000000b004d85316f2d6sm282684lfg.118.2023.03.31.01.23.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 01:23:31 -0700 (PDT)
-Message-ID: <a4d235ea-8476-23ad-6678-1ecbce93ade6@linaro.org>
-Date:   Fri, 31 Mar 2023 10:23:30 +0200
+        Fri, 31 Mar 2023 04:25:07 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3511C1F9;
+        Fri, 31 Mar 2023 01:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=WSWDDda2TuuKrdshOYENayNcESV0rnA62FdNuHFuLds=; b=rSt0ft84kxxHG7oCIx7ZquEpCk
+        sk24e6a/mww4k20spQGqKRdesiGO4AA4Nnvkv0EqtIZ8fDVCxc7+LYR3xzy4mZiM/zzoz6aL8ro+O
+        chl6gSHryzZIUqd4FpTr74LIivICRlOyCTmociIfABZPb/D74uaEbW09bvAIBtSbo9EeB3ccvQLVT
+        hZjZIkSYxaOb1hzk6bCaV5BFC1kBqVcFAdLSDCoeZ+BNnAuxJz4tjECdmGRaMiNdzHm+C0gZazvNx
+        labBIErkCe3exzLnjzhlRAAs+idajKeQgtlxuUJJEFrvuQWvKvhi7hyb/xZpiIoWdC8fXYr3mjJF1
+        9WcY7xUA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58736)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1piA3i-0004I0-4W; Fri, 31 Mar 2023 09:24:30 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1piA3h-0000zs-1E; Fri, 31 Mar 2023 09:24:29 +0100
+Date:   Fri, 31 Mar 2023 09:24:29 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, rogerq@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srk@ti.com
+Subject: Re: [PATCH net-next 2/2] net: ethernet: ti: am65-cpsw: Enable
+ USXGMII mode for J784S4 CPSW9G
+Message-ID: <ZCaYve8wYl15YRxh@shell.armlinux.org.uk>
+References: <20230331065110.604516-1-s-vadapalli@ti.com>
+ <20230331065110.604516-3-s-vadapalli@ti.com>
+ <ZCaSXQFZ/e/JIDEj@shell.armlinux.org.uk>
+ <54c3964b-5dd8-c55e-08db-61df4a07797c@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] dt-bindings: pinctrl: xway: drop the deprecated
- compatible strings
-Content-Language: en-US
-To:     Aleksander Jan Bajkowski <olek2@wp.pl>, linus.walleij@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230330212225.10214-1-olek2@wp.pl>
- <20230330212225.10214-2-olek2@wp.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230330212225.10214-2-olek2@wp.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <54c3964b-5dd8-c55e-08db-61df4a07797c@ti.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2023 23:22, Aleksander Jan Bajkowski wrote:
-> This code are marked as deprecated since kernel 4.5[1]. Downstream OpenWRT
+On Fri, Mar 31, 2023 at 01:35:10PM +0530, Siddharth Vadapalli wrote:
+> Hello Russell,
+> 
+> Thank you for reviewing the patch.
+> 
+> On 31/03/23 13:27, Russell King (Oracle) wrote:
+> > On Fri, Mar 31, 2023 at 12:21:10PM +0530, Siddharth Vadapalli wrote:
+> >> TI's J784S4 SoC supports USXGMII mode. Add USXGMII mode to the
+> >> extra_modes member of the J784S4 SoC data. Additionally, configure the
+> >> MAC Control register for supporting USXGMII mode. Also, for USXGMII
+> >> mode, include MAC_5000FD in the "mac_capabilities" member of struct
+> >> "phylink_config".
+> > 
+> > I don't think TI "get" phylink at all...
+> > 
+> >> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >> index 4b4d06199b45..ab33e6fe5b1a 100644
+> >> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >> @@ -1555,6 +1555,8 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
+> >>  		mac_control |= CPSW_SL_CTL_GIG;
+> >>  	if (interface == PHY_INTERFACE_MODE_SGMII)
+> >>  		mac_control |= CPSW_SL_CTL_EXT_EN;
+> >> +	if (interface == PHY_INTERFACE_MODE_USXGMII)
+> >> +		mac_control |= CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN;
+> > 
+> > The configuration of the interface mode should *not* happen in
+> > mac_link_up(), but should happen in e.g. mac_config().
+> 
+> I will move all the interface mode associated configurations to mac_config() in
+> the v2 series.
 
-References to commits do not use [1] bookmarks.
+Looking at the whole of mac_link_up(), could you please describe what
+effect these bits are having:
 
-"since commit ....., in v4.5 kernel."
+	CPSW_SL_CTL_GIG
+	CPSW_SL_CTL_EXT_EN
+	CPSW_SL_CTL_IFCTL_A
 
+Thanks.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
