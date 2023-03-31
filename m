@@ -2,69 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896D56D2013
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19CAB6D2016
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbjCaMWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
+        id S232252AbjCaMXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjCaMWB (ORCPT
+        with ESMTP id S232260AbjCaMW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:22:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279A220C12;
-        Fri, 31 Mar 2023 05:21:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 31 Mar 2023 08:22:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED17220624;
+        Fri, 31 Mar 2023 05:22:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72C5B6252C;
-        Fri, 31 Mar 2023 12:21:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 006BAC433EF;
-        Fri, 31 Mar 2023 12:21:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680265288;
-        bh=qjxhFHgRDKgQd0YZIE0gdI9Qd2axFPOwPWgUbDSQUaA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mjfOzE6l1QTG4/mErNaWoZBjJ1alTHmmqTbWlj+5N5HCCooR637lHTBfQHwEeFt4D
-         vFGQhHaBZrNjWvp9vTdQxKhhu16ybMT0JOUWFoGHJk1kKZmP22DF5JExOyCQeQ2ZWh
-         ldx8cQqIlk+32qX7cItCeZ5ghpVN7/iAcL2qDhOsdcM+ZYc38/l0Q3wSmB8HV5tz9C
-         OYd8gnolfbdxFl3IV6GfRZt4/B+Sp8MiHkc9Hdul58p9biodYvaZyu9vkUWISrCGU5
-         5ORZvdqa6C79BB4N8yxxXwXXhSlgZSmWqEGCNyNGvEDrGldPKlR4WUiD38iNWhwqEg
-         7zMd2cwPOsfFA==
-Date:   Fri, 31 Mar 2023 17:51:24 +0530
-From:   Vinod Koul <vkoul@kernel.org>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B170621996;
+        Fri, 31 Mar 2023 12:21:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1680265306; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3GnhdEVRiXpY8fy5LwSvQ63l1Tv95/C9yEYwE8xQJFI=;
+        b=N3AdQR8s1TpV+AIiNrFfqeZy5037pMRRncNNTN3rVp2pe18xJ4gOo8krnHaamj4CAwfSMJ
+        6hfvdnwbCEtFbldvm4Nqb3UJMDAGVD568HeGtT7fdK2KLDwJQU0ftYJeRDM5MbNOk8QE7h
+        6YwYLuH5fmPWULZzs+jKsWpVy+JJpGY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1680265306;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3GnhdEVRiXpY8fy5LwSvQ63l1Tv95/C9yEYwE8xQJFI=;
+        b=J1L5ruveSfJbRzEnimD3K36YgonuEJferAtuRSPRvGN2nTxLuFeATWN5VftGwUvqgMco/b
+        QpQuM8adArlSXoCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9EE97134F7;
+        Fri, 31 Mar 2023 12:21:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jue6JlrQJmSsIwAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 31 Mar 2023 12:21:46 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 2637DA071E; Fri, 31 Mar 2023 14:21:46 +0200 (CEST)
+Date:   Fri, 31 Mar 2023 14:21:46 +0200
+From:   Jan Kara <jack@suse.cz>
 To:     Tom Rix <trix@redhat.com>
-Cc:     ldewangan@nvidia.com, jonathanh@nvidia.com,
-        thierry.reding@gmail.com, nathan@kernel.org,
-        ndesaulniers@google.com, dmaengine@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] dmaengine: tegra-apb: remove unused tdma_read function
-Message-ID: <ZCbQRE9MS1Jg43uP@matsya>
-References: <20230322121001.2569909-1-trix@redhat.com>
+Cc:     nathan@kernel.org, ndesaulniers@google.com, axboe@kernel.dk,
+        akpm@linux-foundation.org, bvanassche@acm.org, jack@suse.cz,
+        yi.zhang@huawei.com, reiserfs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] reiserfs: remove unused iter variable
+Message-ID: <20230331122146.3rmw3dqv6y573pg2@quack3>
+References: <20230331120325.1855111-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322121001.2569909-1-trix@redhat.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230331120325.1855111-1-trix@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-03-23, 08:10, Tom Rix wrote:
+On Fri 31-03-23 08:03:25, Tom Rix wrote:
 > clang with W=1 reports
-> drivers/dma/tegra20-apb-dma.c:236:19: error: unused function
->   'tdma_read' [-Werror,-Wunused-function]
-> static inline u32 tdma_read(struct tegra_dma *tdma, u32 reg)
->                   ^
-> This function is not used so remove it.
+> fs/reiserfs/stree.c:1265:6: error: variable
+>   'iter' set but not used [-Werror,-Wunused-but-set-variable]
+>         int iter = 0;
+>             ^
+> This variable is not used so remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Applied, thanks
+Thanks. I've merged the patch to my tree.
 
+								Honza
+
+> ---
+>  fs/reiserfs/stree.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/fs/reiserfs/stree.c b/fs/reiserfs/stree.c
+> index 84c12a1947b2..ce5003986789 100644
+> --- a/fs/reiserfs/stree.c
+> +++ b/fs/reiserfs/stree.c
+> @@ -1262,7 +1262,6 @@ int reiserfs_delete_item(struct reiserfs_transaction_handle *th,
+>  
+>  #ifdef CONFIG_REISERFS_CHECK
+>  	char mode;
+> -	int iter = 0;
+>  #endif
+>  
+>  	BUG_ON(!th->t_trans_id);
+> @@ -1274,7 +1273,6 @@ int reiserfs_delete_item(struct reiserfs_transaction_handle *th,
+>  		removed = 0;
+>  
+>  #ifdef CONFIG_REISERFS_CHECK
+> -		iter++;
+>  		mode =
+>  #endif
+>  		    prepare_for_delete_or_cut(th, inode, path,
+> -- 
+> 2.27.0
+> 
 -- 
-~Vinod
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
