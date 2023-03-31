@@ -2,117 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B246D15F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 05:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A348B6D15F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 05:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjCaDXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 23:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S229485AbjCaDZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 23:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjCaDXY (ORCPT
+        with ESMTP id S229452AbjCaDZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 23:23:24 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4F2B3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:23:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680233003; x=1711769003;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FHeqoCfyEo2zGt5byWFolwR2+nLbLafxGYsHyOAYIpc=;
-  b=d8HSBAUFXYw52NkvcBySad6erDLXgzNRvlknvTFlT9MnwTy9BDNPMzB7
-   0Ww6URs8vIlkmdIkO4aDw5DZz7PEX/zhcmIGVmBlpK9s2P7CqFM+uMRNY
-   bLQHU7a3QWqSbzf3wn3f+yDSfbOCURP672pKqpPcRvLn6fdSZ0UmLm8z2
-   4HkOi8M4eaPmLGjIulda8c4XatPB+KtAZ65yZvsKjDFs5k7OHWhymdKMA
-   uFP+amUtV6QUP1zO5BItk0gIX0ifisuAFqLXBsJXHtoa26ULTK+g6/SHi
-   olL0ZE0hWuM3LMVsb8Irha+Z22Q3plV0/uXfAKo8h8sLzRT8GFsM2xPfm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="320994753"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="320994753"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 20:23:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="717557683"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="717557683"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 30 Mar 2023 20:23:21 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pi5MG-000LSC-2N;
-        Fri, 31 Mar 2023 03:23:20 +0000
-Date:   Fri, 31 Mar 2023 11:23:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: error: no previous
- prototype for '__vdso_getcpu'
-Message-ID: <202303311104.UfM3VgM1-lkp@intel.com>
+        Thu, 30 Mar 2023 23:25:35 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714FD3A91
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1680233130; bh=882S7QFXm5n//3nqg1xYTL7PCI7LqWbNY4wq4uGr7zQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WNZASJgpIHXh9KJlbjD56lxOmxbZB+osCc6R7kMJHZYmvRy2Zm8SpMIxRbNC/39Vb
+         8rTs98eR2BeIqLbs5BSGsDF19vOfL9GVOkdbZO1PPeRnsegeyD9UbTgaDSpmOpSpSx
+         B7PAnZZg9qD9ySM3brfMZUiA3hMSMfShWuCJF3yw=
+Received: from [100.100.33.167] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 3C0A560148;
+        Fri, 31 Mar 2023 11:25:30 +0800 (CST)
+Message-ID: <0942af8b-64f5-2ed5-d8dc-a56a0761741e@xen0n.name>
+Date:   Fri, 31 Mar 2023 11:25:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH] LoongArch: Fix build error if CONFIG_SUSPEND is not set
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+References: <20230331025322.442337-1-chenhuacai@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20230331025322.442337-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+On 2023/3/31 10:53, Huacai Chen wrote:
+> We can see the following build error on LoongArch if CONFIG_SUSPEND is
+> not set:
+> 
+>    ld: drivers/acpi/sleep.o: in function 'acpi_pm_prepare':
+>    sleep.c:(.text+0x2b8): undefined reference to 'loongarch_wakeup_start'
+> 
+> Here is the call trace:
+> 
+>    acpi_pm_prepare()
+>      __acpi_pm_prepare()
+>        acpi_sleep_prepare()
+>          acpi_get_wakeup_address()
+>            loongarch_wakeup_start()
+> 
+> Root cause: loongarch_wakeup_start() is defined in arch/loongarch/power/
+> suspend_asm.S which is only built under CONFIG_SUSPEND. In order to fix
+> the build error, just let acpi_get_wakeup_address() return 0 if CONFIG_
+> SUSPEND is not set.
+> 
+> Fixes: 366bb35a8e48 ("LoongArch: Add suspend (ACPI S3) support")
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Link: https://lore.kernel.org/all/11215033-fa3c-ecb1-2fc0-e9aeba47be9b@infradead.org/
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>   arch/loongarch/include/asm/acpi.h | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/asm/acpi.h
+> index 4198753aa1d0..976a810352c6 100644
+> --- a/arch/loongarch/include/asm/acpi.h
+> +++ b/arch/loongarch/include/asm/acpi.h
+> @@ -41,8 +41,11 @@ extern void loongarch_suspend_enter(void);
+>   
+>   static inline unsigned long acpi_get_wakeup_address(void)
+>   {
+> +#ifdef CONFIG_SUSPEND
+>   	extern void loongarch_wakeup_start(void);
+>   	return (unsigned long)loongarch_wakeup_start;
+> +#endif
+> +	return 0UL;
+>   }
+>   
+>   #endif /* _ASM_LOONGARCH_ACPI_H */
 
-FYI, the error/warning still remains.
+Reviewed-by: WANG Xuerui <git@xen0n.name>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   62bad54b26db8bc98e28749cd76b2d890edb4258
-commit: 92d33063c081a82d25dd08a9cce03947c8ed9164 x86/vdso: Provide getcpu for x86-32.
-date:   8 weeks ago
-config: x86_64-sof-customedconfig-edison-defconfig (https://download.01.org/0day-ci/archive/20230331/202303311104.UfM3VgM1-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=92d33063c081a82d25dd08a9cce03947c8ed9164
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 92d33063c081a82d25dd08a9cce03947c8ed9164
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303311104.UfM3VgM1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
->> arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: error: no previous prototype for '__vdso_getcpu' [-Werror=missing-prototypes]
-      13 | __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
-         | ^~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-
-
-vim +/__vdso_getcpu +13 arch/x86/entry/vdso/vdso32/../vgetcpu.c
-
-2aae950b21e4bc7 arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  11  
-23adec554a7648f arch/x86/vdso/vgetcpu.c       Steven Rostedt 2008-05-12  12  notrace long
-23adec554a7648f arch/x86/vdso/vgetcpu.c       Steven Rostedt 2008-05-12 @13  __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
-2aae950b21e4bc7 arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  14  {
-22245bdf0ad805d arch/x86/entry/vdso/vgetcpu.c Ingo Molnar    2018-10-08  15  	vdso_read_cpunode(cpu, node);
-ec3a94188df7d28 arch/x86/entry/vdso/vgetcpu.c Ingo Molnar    2018-10-08  16  
-2aae950b21e4bc7 arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  17  	return 0;
-2aae950b21e4bc7 arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  18  }
-2aae950b21e4bc7 arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  19  
-
-:::::: The code at line 13 was first introduced by commit
-:::::: 23adec554a7648f99c8acc0caf49c66320cd2b84 x86: add notrace annotations to vsyscall.
-
-:::::: TO: Steven Rostedt <srostedt@redhat.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+Thanks!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+
