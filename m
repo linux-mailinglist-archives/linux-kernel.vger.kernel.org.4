@@ -2,159 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E33E6D13FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D75556D13FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjCaAXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 20:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S229521AbjCaAXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 20:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjCaAXq (ORCPT
+        with ESMTP id S229546AbjCaAXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 20:23:46 -0400
-Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2099.outbound.protection.outlook.com [40.107.11.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F43830F0;
-        Thu, 30 Mar 2023 17:23:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hF7qdhPA99Kaw7EXrwfFFZNL1Em8ntlzkwG+XAl+1Q1HCzYSB1ngNPhc62y0UWAhGaH6zdy5osLaLPuMXJ1qeAzVppl4q89OAaf4nSaJAJ0+GLFQaAond0UYvunVejwkVHWf7Nzt9pzPC2QQ8wQK5Wr088Z1AQ/VlvuDlVqaokT3Ka4/bKNxbGF8na24j9tPXBZp76pi6BVn/zoH4K8mIjQkRohe0Y7aOwiHiaB62c7wtsbg+zgGSgqcdMLO1vv33e6mRNaDfi1wIVMmeR11KGK+L0KYwKMQybXkZMJVG2k6dQfZVDzUE2diJnc7lrUzRX4YIkW2tJ/VqyA0iCDZjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1b7qRBup3CJcHR6OEG/XJENBYsk0Y8IorVUD1/1ssdY=;
- b=KIOWffBG1CR8W8t1xU6SaDdZLEcYQA/zRiZoQu/6uS/M7zbkTH3e90EFnrRIO1erEUMTxfHimT7jYK38s958RKTDGsmlsTaCiv2+GTiJ+PKfJTULN95vsIMe7fcCjxDw7vnBJ10NKXhPJDKt5efkgd+5Vy/OudxnbxLdV5C6wqaWauebfUIwXZoYWeiFBNEtuahpJETDKKKx/Ow5soyB2fGel1kE/VhWjX/1WAUIF098sW0VV9ME+gKKSh+yXLTvtDHNdC5z0FpWINnkE6x0Fdt+FvetIHaPjyFmBFdxPB9xSVosvBxoNw1U6xaEODxzyQcvpYcqUMeYZexrPrfkfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1b7qRBup3CJcHR6OEG/XJENBYsk0Y8IorVUD1/1ssdY=;
- b=FLLS1jidbR6+cZZRdTQKPHDCpII6Vv6vCY7rYnKD0QkD/D3H1lt4Osmfm9OKAmcW4/TD5m/O+RwcHHJSxeCzu+46xuHbXRdy24D1235oyy6leAMVjt8AfSDjo6PnBTBg0IiKoXtpdO9Lg1p470/OJ2Y1W1yZCccuX0qHK8cxQxY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:15f::14)
- by LO0P265MB5525.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:274::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.23; Fri, 31 Mar
- 2023 00:20:29 +0000
-Received: from CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
- ([fe80::714d:960c:b616:d73f]) by CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
- ([fe80::714d:960c:b616:d73f%9]) with mapi id 15.20.6254.022; Fri, 31 Mar 2023
- 00:20:29 +0000
-Date:   Fri, 31 Mar 2023 01:20:06 +0100
-From:   Gary Guo <gary@garyguo.net>
-To:     Alice Ryhl <alice@ryhl.io>
-Cc:     y86-dev@protonmail.com, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH v3 09/13] rust: init: add `Zeroable` trait and
- `init::zeroed` function
-Message-ID: <20230331012006.251b5729.gary@garyguo.net>
-In-Reply-To: <19db6213-297b-a33d-7331-3c1a5b72fad9@ryhl.io>
-References: <20230329223239.138757-10-y86-dev@protonmail.com>
-        <19db6213-297b-a33d-7331-3c1a5b72fad9@ryhl.io>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0101.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:191::16) To CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:400:15f::14)
+        Thu, 30 Mar 2023 20:23:37 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A5D12CE6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:23:00 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id c83-20020a6bb356000000b00758333e1ddfso12600303iof.14
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:23:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680222106; x=1682814106;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wU3dsEsxwHYF6HXDRCFRaWfh3xqSaIzoCCqFezx/r6I=;
+        b=7q2aQ+jnF4Qy6O/DaDYpvB65Nu17qj543UCVETLq+V356RXUmez2MUcRQpyZrKPSyG
+         UhcHeFLJTcLJw2T8rizL0hVvaCUTr9MbDozFv2Ag99Oun8HtFdAZOrnlc8QpHaez3BT+
+         gPQT+VC/Px+M20O65yG4/ryLHTkpjWfID4wQbEPoczpCrAzZWTjXcZ78eeBy679Ca3V1
+         SeHUSpSi1Nw42KMClakYMCZnnJZp3LpuDuhq/kPV7UCPSP/XLcDXr+sRfhBGiXr1IW28
+         Ja8jMxHNQofc0i95HYAF4EDT7wNBpT4JQz2z9zgx8hR1d/CX2D+y0NjFR6dGb9o+LcDH
+         /odA==
+X-Gm-Message-State: AAQBX9euY6mMqHjttoC4N+TvQBT+v4j71S3wFGaMz58NtZ6PlG1MXxFQ
+        SKw0xPW3cfm2Qja+ZYEGDfyJ6jvWcvcZtQEEfDKvdechG9kE
+X-Google-Smtp-Source: AKy350brf8se8epDL+qiI1wWlLUR0gu8CIhNfsbUiX07/oxqiaUUVHncBye5KHlQTInZg4TXxXsEp11AGYEbME7A45PwGenmnIFr
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP265MB5186:EE_|LO0P265MB5525:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3bec74f5-5e68-48e4-8f0e-08db317dbbcd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZGTg/pENA5Aa0JAl6uUVAEphGeyiZnEMTtgO/R255x7og258CnHER+DkGjwANmHPhXzd819y0OXZpKmGXGv6VBoAhuGgWcbxThRvvTygQ4aAiDH51AsaUTCgq3hI0TnrAh8Tvosmi18r8vXa1NripN8bsgViPsH7XYnWA3EMQUojvs604vmam/ZJK7kiabw8PohaYCuCDjqlNRteNmoOAEaAbl5pKsrJN006OGLfcx6u4pEK/5pfKbaZlDKdd+GPHTdw3lETPkM9H/pPGpTWyuOdiRNx9BOWa+rezjpH3/JIlikoFCEBoJaXq70c4JBxKl+zNlihbh/TeK9iIKxp/CeJf63KE61hRHK21XdW3rZKa69ypzZsgJkvpIZNzO2D5JkZse2wsjmg5x/GHzSLAHVDTLvKNCsbvzcS/GnU6S28Gyg5wNZbtLKreCXKDa9xN1SUGry+A6CyfvC5Po1euJFZF5iyYhCcNFOT8YCRI/98CZwLbTxhjTx2UN8xBgS2ygPgZXl8fTsUGcS77EKSrjW0HSSTrufHCbAUkyD9/pYTDllE0aue0JbTcBPSla//VHVT7rUarEZCE5RhUYf6MDLMhSDUH0mjcy/tb3DimYY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(39840400004)(136003)(376002)(366004)(396003)(346002)(451199021)(36756003)(6916009)(54906003)(8676002)(4326008)(66556008)(66946007)(66476007)(6486002)(966005)(316002)(5660300002)(8936002)(478600001)(41300700001)(7416002)(2906002)(86362001)(38100700002)(2616005)(6666004)(6512007)(6506007)(1076003)(53546011)(26005)(186003)(81973001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?g3zOGwd39VI0uE1hDVMDVIdYMlH+Tgt7oJN2vAvjXL4oMunnsSxqNvm0uh3J?=
- =?us-ascii?Q?MHS/8MjLlbmndgyQ7R7myr0Dm5q/JlRh1MMo+QeuBJ8pD4txqdrTBfkza5RM?=
- =?us-ascii?Q?ZLjU96f1VlKK330TRvBhb+2rvoz7F3zUgyFv8q+Rtm59UbRdk4nwmrZIK8sR?=
- =?us-ascii?Q?FFhctHQ8x4bj0FXI+0vgFE7wbacJ6uTO9zHOLlGNU0GiVngY2QNM3gaKC57R?=
- =?us-ascii?Q?Q+EjXhEXLENl7ncoIMbqslCMrCQCWVllhApF5l2xW3i2xp/9+fKixSkoBRt/?=
- =?us-ascii?Q?UzXyZLWUF3X3/Nr5vaGVy4c63xMq1+1ylz3+aSscxaxT27xF33+qxTEL/F9u?=
- =?us-ascii?Q?EOq4ZiRlPLWLVWwrlzkO2bxuODAXr5QMjUnYrBg5iY/XWWmwhpXF9u8qOcpU?=
- =?us-ascii?Q?pHZ8vgwyMikybEBbSKHTK/XsmmEGZux53NJ3dg5lydHl/mymUHYWY/6NT7jn?=
- =?us-ascii?Q?ZndiOFJRpH+2BESsur1uXp2MovxmoRxsouq8Au3VjdA8zJ3k+LCTDilpKEOA?=
- =?us-ascii?Q?7WTHQWrrMDhjBQCKsrI+MvMxK2X9eZHPx2ICLeFVTWbwVMglUVqTKI7pbcWk?=
- =?us-ascii?Q?7c8e44+OZZSthstfHZABPD8P0DFsmgTxkenhzQRztFV5cFOGfOzH4+Xrpv2V?=
- =?us-ascii?Q?qOxkISyRatRDJsQHNEZphN8ZPOoqy/CsKplARLAsoRnUC8JAvFZAjYHgpBq8?=
- =?us-ascii?Q?kLhMmE0apErwjPnK8X+B7QbSna4gwF1ZlzkD+58yRESigyKLYarWhtnL0JIN?=
- =?us-ascii?Q?x/LE0oWd6RuSXBUsXU0wdrTCLO5wxPznGqK+7XjJzpetJ2RkBR7Ektq2bMM7?=
- =?us-ascii?Q?Sl1Z74z+glbgMlva4NpHCZL6wTU84qs1HG2LoY100Fm4gJvjpGjtwYQhJ2P/?=
- =?us-ascii?Q?2iTxEWkUkVBntanWGZj8pqYr9Lz1Rg6iumfaENstlOKm/+M4xJGZWe9XnCYy?=
- =?us-ascii?Q?hG4eKj9GZ7mK6zLuk+GfiE1c7BbnxmyL39XwOVJ4C+nRRr5L1sy6B8ORjw2x?=
- =?us-ascii?Q?G5qwOjjYTtlCb37Sa8zcDD2agrlilbT94DSyswtru3bV45WjaWUO7p1csik2?=
- =?us-ascii?Q?lEh6OGxpr3eXawPt1dzMudbyZR9QpHNOzjBE09CF/NtDjCsGpmqM+xo5vRcc?=
- =?us-ascii?Q?7DaFNDfVcictPBT1Mae1K1JQA4kyd4H25EVEPz05CmCMs1+/LFNMxQgxlzrn?=
- =?us-ascii?Q?quoLP8h+XSXR/MQMYKAaWcFSOlyE+E3tOhNyF099+MPLnU5CAsEhhcE/kDJO?=
- =?us-ascii?Q?s/T4fmjVbLQRNFn4uuHHIHiRizX/mG1auPaXcm2c0PyGNuXuvytzd8lmlDbz?=
- =?us-ascii?Q?mHyf24aE34av+r+CuGDdirdcel67AKG9Cf0f9TerEvDKUEmfTk2n7FmdCDAM?=
- =?us-ascii?Q?G5QyVJ62Te6FbGjAMgdYEvHkVQHlLMzOCCWqe0KB07Yi9G/z9jyJxmih41cF?=
- =?us-ascii?Q?iQEQaJAwm/HrWp/cUMrisyc6Vglz9AaSSelpWPZraJHAKFeKtjsD9PQFiqmV?=
- =?us-ascii?Q?1xu9Cupo117kkZcs+NMPyCdbuJUHHOegTZYrFnrWWBwckHzz0KFVw/pSf5pl?=
- =?us-ascii?Q?PCzJt6km7ZmOS9nQL7oLrbYvp+kroixufXH8FWrr?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3bec74f5-5e68-48e4-8f0e-08db317dbbcd
-X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 00:20:29.5908
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aHsjOZ8LRFShUJlHo0FJ3dfjXpSa/bJs7n2eWtRqrJTXOxYScSPYEbsdItnIUDilGiDpRKZYqupLkD7KGkC4Gw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB5525
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:b46:b0:316:fa49:3705 with SMTP id
+ f6-20020a056e020b4600b00316fa493705mr13243005ilu.1.1680222106282; Thu, 30 Mar
+ 2023 17:21:46 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 17:21:46 -0700
+In-Reply-To: <0000000000006477b305f2b48b58@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c9f2ae05f82731c0@google.com>
+Subject: Re: [syzbot] [bluetooth?] possible deadlock in rfcomm_dlc_exists
+From:   syzbot <syzbot+b69a625d06e8ece26415@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, yangyingliang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Mar 2023 00:40:34 +0200
-Alice Ryhl <alice@ryhl.io> wrote:
+syzbot has found a reproducer for the following issue on:
 
-> On 3/30/23 00:33, y86-dev@protonmail.com wrote:
-> > From: Benno Lossin <y86-dev@protonmail.com>
-> > 
-> > Add the `Zeroable` trait which marks types that can be initialized by
-> > writing `0x00` to every byte of the type. Also add the `init::zeroed`
-> > function that creates an initializer for a `Zeroable` type that writes
-> > `0x00` to every byte.
-> > 
-> > Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-> > ---
-> > +// SAFETY: `null` pointer is valid.
-> > +unsafe impl<T: ?Sized> Zeroable for *mut T {}
-> > +unsafe impl<T: ?Sized> Zeroable for *const T {}  
-> 
-> Actually, I just realized that this is not ok for unsized types. When T 
-> is unsized, the raw pointer is a fat pointer with a vtable, and the 
-> vtable part is not necessarily zeroable.
-> 
-> However, it would be ok to do it for `*const [T]` since the fat part of 
-> the pointer is just the length in this case, and a length of zero is fine.
-> 
-> See more here:
-> https://github.com/Lokathor/bytemuck/blob/8391afa876ba2e99dffb0c991cc7fa775287d106/src/zeroable.rs#L56-L65
+HEAD commit:    a6d9e3034536 Add linux-next specific files for 20230330
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=152adc3ec80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aceb117f7924508e
+dashboard link: https://syzkaller.appspot.com/bug?extid=b69a625d06e8ece26415
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=153acb85c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=179d1ed1c80000
 
-Good catch. vtable completely slipped my mind when I am reviewing this
-code.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ec1f900ea929/disk-a6d9e303.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fabbf89c0d22/vmlinux-a6d9e303.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1ed05d6192fa/bzImage-a6d9e303.xz
 
-Vtable is not *not necessary zeroable*, but actually never zeroable.
-Although currently not yet formally specified, the compiler has always
-assumed vtable part of fat pointers to be non-null, well aligned and
-dereferenceable.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b69a625d06e8ece26415@syzkaller.appspotmail.com
 
-Best,
-Gary
+======================================================
+WARNING: possible circular locking dependency detected
+6.3.0-rc4-next-20230330-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor363/5115 is trying to acquire lock:
+ffffffff8e357cc8 (rfcomm_mutex){+.+.}-{3:3}, at: rfcomm_dlc_exists+0x58/0x190 net/bluetooth/rfcomm/core.c:546
+
+but task is already holding lock:
+ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_create_dev net/bluetooth/rfcomm/tty.c:484 [inline]
+ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_dev_ioctl+0x8a2/0x1c00 net/bluetooth/rfcomm/tty.c:587
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #3 (rfcomm_ioctl_mutex){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       rfcomm_create_dev net/bluetooth/rfcomm/tty.c:484 [inline]
+       rfcomm_dev_ioctl+0x8a2/0x1c00 net/bluetooth/rfcomm/tty.c:587
+       rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
+       sock_do_ioctl+0xcc/0x230 net/socket.c:1199
+       sock_ioctl+0x1f8/0x680 net/socket.c:1316
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #2 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}:
+       lock_sock_nested+0x3a/0xf0 net/core/sock.c:3474
+       lock_sock include/net/sock.h:1697 [inline]
+       rfcomm_sk_state_change+0x6d/0x3a0 net/bluetooth/rfcomm/sock.c:73
+       __rfcomm_dlc_close+0x1b1/0x890 net/bluetooth/rfcomm/core.c:493
+       rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:524
+       __rfcomm_sock_close+0x17a/0x2f0 net/bluetooth/rfcomm/sock.c:220
+       rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:912
+       rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:933
+       __sock_release+0xcd/0x290 net/socket.c:653
+       sock_close+0x1c/0x20 net/socket.c:1395
+       __fput+0x27c/0xa90 fs/file_table.c:321
+       task_work_run+0x16f/0x270 kernel/task_work.c:179
+       exit_task_work include/linux/task_work.h:38 [inline]
+       do_exit+0xb0d/0x29f0 kernel/exit.c:869
+       do_group_exit+0xd4/0x2a0 kernel/exit.c:1019
+       get_signal+0x2315/0x25b0 kernel/signal.c:2859
+       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:307
+       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+       exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (&d->lock){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       __rfcomm_dlc_close+0x15d/0x890 net/bluetooth/rfcomm/core.c:491
+       rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:524
+       __rfcomm_sock_close+0x17a/0x2f0 net/bluetooth/rfcomm/sock.c:220
+       rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:912
+       rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:933
+       __sock_release+0xcd/0x290 net/socket.c:653
+       sock_close+0x1c/0x20 net/socket.c:1395
+       __fput+0x27c/0xa90 fs/file_table.c:321
+       task_work_run+0x16f/0x270 kernel/task_work.c:179
+       exit_task_work include/linux/task_work.h:38 [inline]
+       do_exit+0xb0d/0x29f0 kernel/exit.c:869
+       do_group_exit+0xd4/0x2a0 kernel/exit.c:1019
+       get_signal+0x2315/0x25b0 kernel/signal.c:2859
+       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:307
+       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+       exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (rfcomm_mutex){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3108 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+       validate_chain kernel/locking/lockdep.c:3842 [inline]
+       __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
+       lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5691
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       rfcomm_dlc_exists+0x58/0x190 net/bluetooth/rfcomm/core.c:546
+       __rfcomm_create_dev net/bluetooth/rfcomm/tty.c:414 [inline]
+       rfcomm_create_dev net/bluetooth/rfcomm/tty.c:485 [inline]
+       rfcomm_dev_ioctl+0x966/0x1c00 net/bluetooth/rfcomm/tty.c:587
+       rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
+       sock_do_ioctl+0xcc/0x230 net/socket.c:1199
+       sock_ioctl+0x1f8/0x680 net/socket.c:1316
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  rfcomm_mutex --> sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM --> rfcomm_ioctl_mutex
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(rfcomm_ioctl_mutex);
+                               lock(sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM);
+                               lock(rfcomm_ioctl_mutex);
+  lock(rfcomm_mutex);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor363/5115:
+ #0: ffff888146eb7130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1697 [inline]
+ #0: ffff888146eb7130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: rfcomm_sock_ioctl+0xaa/0xe0 net/bluetooth/rfcomm/sock.c:879
+ #1: ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_create_dev net/bluetooth/rfcomm/tty.c:484 [inline]
+ #1: ffffffff8e35cc88 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_dev_ioctl+0x8a2/0x1c00 net/bluetooth/rfcomm/tty.c:587
+
+stack backtrace:
+CPU: 0 PID: 5115 Comm: syz-executor363 Not tainted 6.3.0-rc4-next-20230330-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2188
+ check_prev_add kernel/locking/lockdep.c:3108 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+ validate_chain kernel/locking/lockdep.c:3842 [inline]
+ __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
+ lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5691
+ __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+ __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+ rfcomm_dlc_exists+0x58/0x190 net/bluetooth/rfcomm/core.c:546
+ __rfcomm_create_dev net/bluetooth/rfcomm/tty.c:414 [inline]
+ rfcomm_create_dev net/bluetooth/rfcomm/tty.c:485 [inline]
+ rfcomm_dev_ioctl+0x966/0x1c00 net/bluetooth/rfcomm/tty.c:587
+ rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
+ sock_do_ioctl+0xcc/0x230 net/socket.c:1199
+ sock_ioctl+0x1f8/0x680 net/socket.c:1316
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fdd90dc3379
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 d1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc287c58b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fdd90dc3379
+RDX: 0000000020000100 RSI: 00000000400452c8 RDI: 0000000000000006
+RBP: 0000000000000000 R08: 0000000000000000 R09: 00007ffc287c58e8
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffc287c5900
+R13: 00007ffc287c5910 R14: 000000000001c039 R15: 00007ffc287c58d0
+ </TASK>
+
