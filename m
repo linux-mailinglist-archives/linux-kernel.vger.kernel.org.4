@@ -2,67 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3034B6D19EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75306D19F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbjCaIdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
+        id S231204AbjCaIew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjCaIdp (ORCPT
+        with ESMTP id S231165AbjCaIer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:33:45 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8789C2129;
-        Fri, 31 Mar 2023 01:33:43 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1piACX-0003qa-00; Fri, 31 Mar 2023 10:33:37 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id C5446C1ED0; Fri, 31 Mar 2023 10:33:30 +0200 (CEST)
-Date:   Fri, 31 Mar 2023 10:33:30 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes for v6.3
-Message-ID: <20230331083330.GA6643@alpha.franken.de>
+        Fri, 31 Mar 2023 04:34:47 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D032686
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:34:45 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id l27so21596769wrb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680251684;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wKmFDwBzmqKaD1W7wuLHbQZgTpJgWQagzC13l4DdTqw=;
+        b=ez7Y8DKhU9m8mENWYc8eLh3UjQj04JKUYpk8LZc0Cgj82lGXgAqKThXbmY29WwZFpa
+         8iJCKddXPmrHzPzXLQ682kWfEp0XTxPc6/GH5fWihQi5njtBGVCzQSKchgik6ZjPxGVs
+         LJ6kI8ENaL4ylviyHLejBooWU1vyhc5pUBM2V6BzXIypiwp1tF0C80ee0BcHRFohBjvs
+         PS3KjixZZ5L0SEv7mF4LYg/aatUGXQwxrjYjN3GBCSHubljOca4C/g7Smtoai9yEYKM2
+         MPuBgGNvstDtP1p1JijRIUW+SkbLI/c5/0B4ugSh+dx2vHET0l1a/8etg25rGkrvIHls
+         EkFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680251684;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wKmFDwBzmqKaD1W7wuLHbQZgTpJgWQagzC13l4DdTqw=;
+        b=s0tGrE/23+DHaVXglnoC9eDS8kevrBlAzc8SkDt21XLS1CBjh17kfV4HPsvsXUx2Ak
+         ZmJ2BKX1MF604bmgMYdsn+ubcQt1y8vYni+EiFtwy+ifEb+gHGJzljSdx4l3Atgqk8eA
+         75DuH07ICLhJ+IisAmwXMB5W+BXyUHlX17Cdwf0ozxQjXvSskFXEK8E9i8zJTwtyUmlN
+         CiBEJsxbOClKnrsDwhM9CFrTLoyCyNS7Aq8MPm7qIRRz30j4hOVBG0j8qdVBksheP2l5
+         cjUPLDwiKJXVXCl9X42CycmpJskLdlf9RADAaLE8/fNaLbs16nQjhbN1898USR9Adgb6
+         tgLg==
+X-Gm-Message-State: AAQBX9eTP80ocbvg+mUkFTBPRETOQpVVNEOfQeYjDKPG1C8QGPGXHbvw
+        +xweqWVpVe7dy1D1z9HiwLSU5esuNs0JhkJdZDiJ+A==
+X-Google-Smtp-Source: AKy350ZffcjiZSGBVm/JblhOGFpZodzn92ieAjz2v27srUZ+zaxOkeHyJPQUex2yEMscYYMGa2NW2w==
+X-Received: by 2002:a5d:58c9:0:b0:2cf:e34c:a229 with SMTP id o9-20020a5d58c9000000b002cfe34ca229mr22477632wrf.8.1680251684116;
+        Fri, 31 Mar 2023 01:34:44 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.34.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 01:34:43 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH RFC 00/20] ARM: oxnas support removal
+Date:   Fri, 31 Mar 2023 10:34:38 +0200
+Message-Id: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB6bJmQC/x2NwQqDMBAFf0X23AVNQLDXQj+g19JDjM+6oEnIq
+ gjivzf0OHOYOUmRBUr36qSMXVRiKNDcKvKTC1+wDIXJ1MbW1ja8xiSe4xGc8pZ0zXALZyxxB7v
+ WoBu6dgRApdA7BffZBT+VRtjmuciUMcrxX77p9XzQ57p+JL2B/4cAAAA=
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+With [1] removing MPCore SMP support, this makes the OX820 barely usable,
+associated with a clear lack of maintainance, development and migration to
+dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
 
-  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+In addition, the OX810 hasn't been booted for years and isn't even present
+in an ARM config file.
 
-are available in the Git repository at:
+For the OX820, lack of USB and SATA support makes the platform not usable
+in the current Linux support and relies on off-tree drivers hacked from the
+vendor (defunct for years) sources.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.3_1
+The last users are in the OpenWRT distribution, and today's removal means
+support will still be in stable 6.1 LTS kernel until end of 2026.
 
-for you to fetch changes up to ab327f8acdf8d06601fbf058859a539a9422afff:
+If someone wants to take over the development even with lack of SMP, I'll
+be happy to hand off maintainance.
 
-  mips: bmips: BCM6358: disable RAC flush for TP1 (2023-03-18 14:36:06 +0100)
+The plan is to apply the first 4 patches first, then the drivers
+followed by bindings. Finally the MAINTAINANCE entry can be removed.
 
-----------------------------------------------------------------
-Fix to avoid crash on BCM6358 platforms
+I'm not sure about the process of bindings removal, but perhaps the bindings
+should be marked as deprecated first then removed later on ?
 
-----------------------------------------------------------------
-Álvaro Fernández Rojas (1):
-      mips: bmips: BCM6358: disable RAC flush for TP1
+It has been a fun time adding support for this architecture, but it's time
+to get over!
 
- arch/mips/bmips/dma.c   | 5 +++++
- arch/mips/bmips/setup.c | 8 ++++++++
- 2 files changed, 13 insertions(+)
+Patch 2 obviously depends on [1].
 
+[1] https://lore.kernel.org/all/20230327121317.4081816-1-arnd@kernel.org/
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (20):
+      ARM: dts: oxnas: remove obsolete device tree files
+      ARM: oxnas: remove OXNAS support
+      ARM: configs: remove oxnas_v6_defconfig
+      dt-bindings: arm: oxnas: remove obsolete bindings
+      clk: oxnas: remove obsolete clock driver
+      dt-bindings: clk: oxnas: remove obsolete bindings
+      clksource: timer-oxnas-rps: remove obsolete timer driver
+      dt-bindings: timer: oxsemi,rps-timer: remove obsolete bindings
+      nand: oxnas_nand: remove obsolete raw nand driver
+      dt-bindings: mtd: oxnas-nand: remove obsolete bindings
+      net: stmmac: dwmac-oxnas: remove obsolete dwmac glue driver
+      dt-bindings: net: oxnas-dwmac: remove obsolete bindings
+      pinctrl: pinctrl-oxnas: remove obsolete pinctrl driver
+      dt-bindings: pinctrl: oxnas,pinctrl: remove obsolete bindings
+      dt-bindings: gpio: gpio_oxnas: remove obsolete bindings
+      power: reset: oxnas-restart: remove obsolete restart driver
+      reset: oxnas: remove obsolete reset driver
+      irqchip: irq-versatile-fpga: remove obsolete oxnas compatible
+      dt-bindings: interrupt-controller: arm,versatile-fpga-irq: mark oxnas compatible as deprecated
+      MAINTAINERS: remove OXNAS entry
+
+ Documentation/devicetree/bindings/arm/oxnas.txt    |   14 -
+ .../devicetree/bindings/clock/oxnas,stdclk.txt     |   28 -
+ .../devicetree/bindings/gpio/gpio_oxnas.txt        |   47 -
+ .../arm,versatile-fpga-irq.txt                     |    4 +-
+ .../devicetree/bindings/mtd/oxnas-nand.txt         |   41 -
+ .../devicetree/bindings/net/oxnas-dwmac.txt        |   41 -
+ .../devicetree/bindings/pinctrl/oxnas,pinctrl.txt  |   56 -
+ .../devicetree/bindings/reset/oxnas,reset.txt      |   32 -
+ .../devicetree/bindings/timer/oxsemi,rps-timer.txt |   17 -
+ MAINTAINERS                                        |   10 -
+ arch/arm/Makefile                                  |    1 -
+ arch/arm/boot/dts/Makefile                         |    3 -
+ arch/arm/boot/dts/ox810se-wd-mbwe.dts              |  115 --
+ arch/arm/boot/dts/ox810se.dtsi                     |  357 ------
+ .../dts/ox820-cloudengines-pogoplug-series-3.dts   |   93 --
+ arch/arm/boot/dts/ox820.dtsi                       |  299 -----
+ arch/arm/configs/oxnas_v6_defconfig                |   92 --
+ arch/arm/mach-oxnas/Kconfig                        |   34 -
+ arch/arm/mach-oxnas/Makefile                       |    1 -
+ drivers/clk/Kconfig                                |    7 -
+ drivers/clk/Makefile                               |    1 -
+ drivers/clk/clk-oxnas.c                            |  251 ----
+ drivers/clocksource/Kconfig                        |    7 -
+ drivers/clocksource/Makefile                       |    1 -
+ drivers/clocksource/timer-oxnas-rps.c              |  288 -----
+ drivers/irqchip/irq-versatile-fpga.c               |    1 -
+ drivers/mtd/nand/raw/Kconfig                       |    7 -
+ drivers/mtd/nand/raw/Makefile                      |    1 -
+ drivers/mtd/nand/raw/oxnas_nand.c                  |  211 ----
+ drivers/net/ethernet/stmicro/stmmac/Kconfig        |   11 -
+ drivers/net/ethernet/stmicro/stmmac/Makefile       |    1 -
+ drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c  |  245 ----
+ drivers/pinctrl/Kconfig                            |   11 -
+ drivers/pinctrl/Makefile                           |    1 -
+ drivers/pinctrl/pinctrl-oxnas.c                    | 1292 --------------------
+ drivers/power/reset/Kconfig                        |    7 -
+ drivers/power/reset/Makefile                       |    1 -
+ drivers/power/reset/oxnas-restart.c                |  233 ----
+ drivers/reset/Kconfig                              |    3 -
+ drivers/reset/Makefile                             |    1 -
+ drivers/reset/reset-oxnas.c                        |  114 --
+ 41 files changed, 3 insertions(+), 3977 deletions(-)
+---
+base-commit: df45499b419b31c4d44ef9f1d1656d1fc0897014
+change-id: 20230331-topic-oxnas-upstream-remove-a62e9d96feee
+
+Best regards,
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Neil Armstrong <neil.armstrong@linaro.org>
+
