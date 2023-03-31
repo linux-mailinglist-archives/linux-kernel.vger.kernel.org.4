@@ -2,140 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7276D27F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C90AD6D27F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232910AbjCaSjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 14:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
+        id S233022AbjCaSj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 14:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232721AbjCaSjR (ORCPT
+        with ESMTP id S232842AbjCaSjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:39:17 -0400
+        Fri, 31 Mar 2023 14:39:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2C349E9;
-        Fri, 31 Mar 2023 11:39:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D7B20C12;
+        Fri, 31 Mar 2023 11:39:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D785B62B10;
-        Fri, 31 Mar 2023 18:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3256CC433EF;
-        Fri, 31 Mar 2023 18:39:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50EE962B10;
+        Fri, 31 Mar 2023 18:39:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02A2C4339E;
+        Fri, 31 Mar 2023 18:39:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680287955;
-        bh=eqEkQdcItulIBYfu63tsCeTblX411ylkWCoUY/V/uWs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CBQ+Ry2iM7+5i9TV/gOsUHqOL/h49W1vS9TeUUVJ9gJtWjuI+vRd9yHkwrGpjrmn8
-         W0N4XstXsBEomURTXLS6AEwngiWkZ/UcMOeyRSJ+xVP50JxxJaZ6s9epZaJ8nfOtpJ
-         ad2Wylb7EtVa6kXpe2J1S8BsEf+IE/h8rUuDjl5BzMPUNMHniUO9Eo9RHwDioYBDVO
-         npuOA+mZBcWz7b69M/NXBfWIrPRgI51acgb/du9+JUEHKIY39+Ti90f0BQWXQwLHr4
-         cRfSjYpXTDnqehIiCcEolchbHALgutD+6rDaBTcYknnl3ZcL+0v99sBx+7CGb8+ctE
-         MXKlJ7dXbu63Q==
-Date:   Fri, 31 Mar 2023 19:39:09 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     linux-sunxi@lists.linux.dev, conor.dooley@microchip.com,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Trevor Woerner <twoerner@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [RFC PATCH] riscv: dts: nezha-d1: Add memory
-Message-ID: <25837ca5-b709-4d20-912b-ab13e6353069@spud>
-References: <20230331182727.4062790-1-evan@rivosinc.com>
+        s=k20201202; t=1680287956;
+        bh=acVPnBMJt0hUCMkiZhSY7H0emae9RIGRERfPiV5sZ+0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=FMXD1DHWft8HrouqOCBFSlxsCMSfkcTY6f2OslWcu6rkAP3bTxvnq9gLLI61+Q0YY
+         ex7XZiEnNRDEOPcHgJm11EdihBJKAlLIGwDDzxhJflK7eHZR9oFFvd8qoWvfQ8EONa
+         qHj+sYf5LZnZa/O7OsmHwfp6hT+IJlpZSKbyDiSGG9HtCqOALAccdatVp2tIV9hlK1
+         rQJS4N04mWRUPTWmrjVNYbzHJ0q/FJjOjmEv4QL/hHxM3MhZR/5+S2qNAmYrcPbGey
+         yXepH0C8C2PuKdUtjPvIczSpgZZd/dlvqdCKozDH8ALLgEtfLjbPYfrvWjRgXRzBqy
+         KBr4jR8v+FquA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 47ED41540476; Fri, 31 Mar 2023 11:39:16 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 11:39:16 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, RCU <rcu@vger.kernel.org>,
+        quic_neeraju@quicinc.com, Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH 1/1] Reduce synchronize_rcu() waiting time
+Message-ID: <fcbeabc5-4951-4339-b056-91e9c3921074@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <ca153af5-bd66-4d48-afa5-ace3a13aec3c@paulmck-laptop>
+ <FC49F388-0480-4687-8DD3-94049FCBC92B@joelfernandes.org>
+ <2cd8f407-2b77-48b1-9f17-9aa8e4ce9c64@paulmck-laptop>
+ <20230330150933.GB2114899@google.com>
+ <ZCWuE+b+QDApqgWG@pc636>
+ <f529af35-557a-4a19-b14d-295e88aace9c@paulmck-laptop>
+ <ZCXglNnT9EpeBf4t@pc636>
+ <d4d42909-bf1b-45a8-8ef1-e4a1fc8cb742@paulmck-laptop>
+ <ZCa8KB7Os9yJWz3P@pc636>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="TnwQBgyZeUS8jdJs"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230331182727.4062790-1-evan@rivosinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZCa8KB7Os9yJWz3P@pc636>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 31, 2023 at 12:55:36PM +0200, Uladzislau Rezki wrote:
+> On Thu, Mar 30, 2023 at 02:16:36PM -0700, Paul E. McKenney wrote:
+> > On Thu, Mar 30, 2023 at 09:18:44PM +0200, Uladzislau Rezki wrote:
+> > > On Thu, Mar 30, 2023 at 11:58:41AM -0700, Paul E. McKenney wrote:
+> > > > On Thu, Mar 30, 2023 at 05:43:15PM +0200, Uladzislau Rezki wrote:
+> > > > > On Thu, Mar 30, 2023 at 03:09:33PM +0000, Joel Fernandes wrote:
+> > > > > > On Tue, Mar 28, 2023 at 08:26:13AM -0700, Paul E. McKenney wrote:
+> > > > > > > On Mon, Mar 27, 2023 at 10:29:31PM -0400, Joel Fernandes wrote:
+> > > > > > > > Hello,
+> > > > > > > > 
+> > > > > > > > > On Mar 27, 2023, at 9:06 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > > > > > > 
+> > > > > > > > > ﻿On Mon, Mar 27, 2023 at 11:21:23AM +0000, Zhang, Qiang1 wrote:
+> > > > > > > > >>>> From: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > > > > > > >>>> Sent: Tuesday, March 21, 2023 6:28 PM
+> > > > > > > > >>>> [...]
+> > > > > > > > >>>> Subject: [PATCH 1/1] Reduce synchronize_rcu() waiting time
+> > > > > > > > >>>> 
+> > > > > > > > >>>> A call to a synchronize_rcu() can be expensive from time point of view.
+> > > > > > > > >>>> Different workloads can be affected by this especially the ones which use this
+> > > > > > > > >>>> API in its time critical sections.
+> > > > > > > > >>>> 
+> > > > > > > > >>> 
+> > > > > > > > >>> This is interesting and meaningful research. ;-)
+> > > > > > > > >>> 
+> > > > > > > > >>>> For example in case of NOCB scenario the wakeme_after_rcu() callback
+> > > > > > > > >>>> invocation depends on where in a nocb-list it is located. Below is an example
+> > > > > > > > >>>> when it was the last out of ~3600 callbacks:
+> > > > > > > > >>> 
+> > > > > > > > >> 
+> > > > > > > > >> 
+> > > > > > > > >> 
+> > > > > > > > >> Can it be implemented separately as follows?  it seems that the code is simpler
+> > > > > > > > >> (only personal opinion)  😊.
+> > > > > > > > >> 
+> > > > > > > > >> But I didn't test whether this reduce synchronize_rcu() waiting time
+> > > > > > > > >> 
+> > > > > > > > >> +static void rcu_poll_wait_gp(struct rcu_tasks *rtp)
+> > > > > > > > >> +{
+> > > > > > > > >> +       unsigned long gp_snap;
+> > > > > > > > >> +
+> > > > > > > > >> +       gp_snap = start_poll_synchronize_rcu();
+> > > > > > > > >> +       while (!poll_state_synchronize_rcu(gp_snap))
+> > > > > > > > >> +               schedule_timeout_idle(1);
+> > > > > > > > > 
+> > > > > > > > > I could be wrong, but my guess is that the guys working with
+> > > > > > > > > battery-powered devices are not going to be very happy with this loop.
+> > > > > > > > > 
+> > > > > > > > > All those wakeups by all tasks waiting for a grace period end up
+> > > > > > > > > consuming a surprisingly large amount of energy.
+> > > > > > > > 
+> > > > > > > > Is that really the common case? On the general topic of wake-ups:
+> > > > > > > > Most of the time there should be only one
+> > > > > > > > task waiting synchronously on a GP to end. If that is
+> > > > > > > > true, then it feels like waking
+> > > > > > > > up nocb Kthreads which indirectly wake other threads is doing more work than usual?
+> > > > > > > 
+> > > > > > > A good question, and the number of outstanding synchronize_rcu()
+> > > > > > > calls will of course be limited by the number of tasks in the system.
+> > > > > > > But I myself have raised the ire of battery-powered embedded folks with
+> > > > > > > a rather small number of wakeups, so...
+> > > > > > 
+> > > > > > But unless I am missing something, even if there is single synchronize_rcu(),
+> > > > > > you have a flurry of potential wakeups right now, instead of the bare minimum
+> > > > > > I think. I have not measured how many wake ups, but I'd love to when I get
+> > > > > > time. Maybe Vlad has some numbers.
+> > > > > > 
+> > > > > I will measure and have a look at wake-ups. But, what we have for now is
+> > > > > if there are two callers of synchronize_rcu() on different CPUs, i guess
+> > > > > two nocb-kthreads have to handle it, thus two nocb-kthreads have to be
+> > > > > awaken to do the work. This patch needs only one wake-up to serve all
+> > > > > users.
+> > > > 
+> > > > One wakeup per synchronize_rcu(), right?
+> > > > 
+> > > The gp-kthread wake-ups only one work, in its turn a worker wake-ups all
+> > > registered users of synchronize_rcu() for which a gp was passed. How many
+> > > users of synchonize_rcu() awaken by one worker depends on how many were
+> > > registered before initiating a new GP by the gp-kthread.
+> > > 
+> > > > > Anyway, i will provide some data and analysis of it.
+> > > > 
+> > > > Looking forward to seeing it!
+> > > > 
+> > > Good. I will switch fully on it soon. I need to sort out some perf.
+> > > issues at work.
+> > 
+> > And if you are looking for reduced wakeups instead of lower latency for
+> > synchronize_rcu(), I could see where the extra workqueue wakeup might
+> > be a problem for you.
+> > 
+> > Assuming that this is all default-off, you could keep a count of the
+> > number of required wakeups for each grace period (indexed as usual by
+> > the bottom few bits of the grace-period counter without the low-order
+> > state bits), and do the wakeups directly from the grace-period kthread
+> > if there are not all that many of them.
+> > 
+> At least if there is only one user of synchronize_rcu(), we can wake
+> it directly, i mean to invoke comlete() from the gp-kthread. I think
+> we should split such parts into different patches.
 
---TnwQBgyZeUS8jdJs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Agreed, especially given that some experimentation will be required
+to work out which techniques actually help.
 
-On Fri, Mar 31, 2023 at 11:27:27AM -0700, Evan Green wrote:
-> Add memory info for the D1 Nezha, which seems to be required for it to
-> boot with the stock firmware. Note that this hardcodes 1GB, which is
-> not technically correct as they also make models with different amounts
-> of RAM.
+> > Except that, given that workqueues try hard to make the handler be on the
+> > same CPU as the one that did the corresponding schedule_work() invocation,
+> > it is not clear that this particular wakeup is really costing you enough
+> > to notice.  (That CPU is not idle, after all.)  But there is nothing
+> > quite like measuring the actual energy consumption on real hardware!
+> > 
+> AFAICR the schedule_work() wants to use current CPU, indeed. For few
+> users it might be OK to comlete() them directly. Energy wise, +1 wake-up
+> of our worker to kick all users, if not "direct" option. I do not think
+> energy is a problem here.
 
-> Is the firmware supposed to populate this?
+Agreed, estimating/modeling energy consumption is as far as I know still
+is more of an art than a science.  I did something like eight or nine
+rewrites of the old NO_HZ_FULL code learning that one.  ;-)
 
-Yup. Samuel intentionally did it this way:
-https://lore.kernel.org/linux-riscv/8a2194bf-93bd-de4d-8d39-0cd72aabb0a9@sh=
-olland.org/
-
-Since I don't like using the firmware provided stuff to more easily
-test I do this in my u-boot boot script:
-
-tftp 0x54000000 d1-fitImage.fit
-bootm start 0x54000000
-bootm loados 0x54000000
-bootm ramdisk;
-bootm prep;
-fdt memory 0x40000000 0x20000000
-bootm go;
-
-Hope either of the above are helpful,
-Conor.
-
->=20
-> Signed-off-by: Evan Green <evan@rivosinc.com>
->=20
-> ---
->=20
->  arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts | 6 ++++++
->  1 file changed, 6 insertions(+)
->=20
-> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts b/arch/ris=
-cv/boot/dts/allwinner/sun20i-d1-nezha.dts
-> index 4ed33c1e7c9c..6aba68cf5541 100644
-> --- a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
-> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
-> @@ -32,6 +32,12 @@ / {
->  	model =3D "Allwinner D1 Nezha";
->  	compatible =3D "allwinner,d1-nezha", "allwinner,sun20i-d1";
-> =20
-> +	// FIXME: this is temporary.
-> +	memory@40000000 {
-> +		device_type =3D "memory";
-> +		reg =3D <0x40000000 0x40000000>; /* 1 GB */
-> +	};
-> +
->  	aliases {
->  		ethernet0 =3D &emac;
->  		ethernet1 =3D &xr829;
-> --=20
-> 2.25.1
->=20
-
---TnwQBgyZeUS8jdJs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCcozQAKCRB4tDGHoIJi
-0htEAP0diQJ9Zbhuux3uzUrGT5BnDcXMtCUEsij5CLqMnsP97wD+MhvYerrIgPU2
-VSRJF3YaWTBm0hqklFNbFU7LFRj0sg0=
-=cDyc
------END PGP SIGNATURE-----
-
---TnwQBgyZeUS8jdJs--
+							Thanx, Paul
