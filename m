@@ -2,94 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025C66D18A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE66A6D18A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjCaHcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32968 "EHLO
+        id S230411AbjCaHdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjCaHcj (ORCPT
+        with ESMTP id S229529AbjCaHdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:32:39 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C941733;
-        Fri, 31 Mar 2023 00:32:37 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 836655C01A0;
-        Fri, 31 Mar 2023 03:32:36 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 31 Mar 2023 03:32:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
-        :content-transfer-encoding:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1680247956; x=1680334356; bh=Q/B4T30X2b42IMrzFs3a89ZTi4QhgYECDXb
-        6nVPSW5A=; b=NpHCzPVvzQkWspa1jPiArUmeZnAMnV/8Oz2XjI3WUwjT1iYdzyB
-        V5gcj750cF49YujRsHDchMi/LDmj2hcWfThm+DH/Ow0Psh7d746j1iZDk7rocxIR
-        3SX7shBBZs2jHmZcFIsECJLo7GWkgs+DaQG3E01wYXo3kva6vc+0n1W7pkD0Mhdt
-        umwj0aVqLA3CXqa/Uy+fuMal+85vMs/R9tuUd60uex6syyf2j5oE8NQF5ir/Qcna
-        /1yS+jzefpbl+EJL0RNa06gVj0do6nBYaZiq42jKvan6IGjdKAb9PmHCKl69wcTo
-        CiSc1v6qegflCFp/5QF7A//G7hjMl3b+caQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680247956; x=1680334356; bh=Q/B4T30X2b42IMrzFs3a89ZTi4QhgYECDXb
-        6nVPSW5A=; b=nSO1DzntpFog/z6bDkbpzfkwPhpqy8Ds8OiZ9kCGpUAzUbcmaJ9
-        mQH2ryUbZp58matfZSM1yWXs4/vzV6px+m4F+KsyxRK6hHjXyKhQwnPuYmfTeN1p
-        o4tm7UEg4ZsqKrPLtof++yaNloH30D004+nPN/w5hrcktznkV4SVc2LJ+ETMRi0Y
-        CCLp1zMh2pkO48azGLSDJHJ9HytegHhChxbemYPC/nVQoqMKQL1U2mQtUeF7ZL/M
-        fHzxD7cAJuYBm70xweQV5MntQY6AwCglo+3sFTr2ADX54Db5XmJXEEgeEqghSdUK
-        KpqsWkNbKgVSaN2Z9/DDc13q9CBsVRUjFqA==
-X-ME-Sender: <xms:lIwmZMIciDCA0VenndYavsqi4wkjPxeHIdUlK5uReEw-lrbivYaZAQ>
-    <xme:lIwmZMKmmPogCzJCjedqIU48CLFZjcRBfCqoORcEnAPkhywCUFiISbqaCPGTdpXeI
-    mAPGgKWhcdV6OGQtA>
-X-ME-Received: <xmr:lIwmZMukCccwyqFodfwEDVlVrLB37SwHorW551lH3xHcGUpYwNKsDNZ8hIBwfPY0UVNe8K-r68yD5Zcyfi49jrAjxQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeitddguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomheptehl
-    ihgtvgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnh
-    epheduuddvteekvdektdduledugfffhfdugeejgeeuvdevtdetveejheehiefffeegnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
-    esrhihhhhlrdhioh
-X-ME-Proxy: <xmx:lIwmZJb4MKMauQkpP1-skLWPkl2SETIBoM1p31mJjbH6flgJ_5hyqw>
-    <xmx:lIwmZDZgvPUS5sf-4YOQFGRMiGH61uWfhXSpYm831eJNkCWvbJOnYg>
-    <xmx:lIwmZFAXVOazdH7PvXpN16GXKZK1WlbcdtYJEeVEVH_sv1frBbGC7A>
-    <xmx:lIwmZNlqbdJQoB4evwBoYQatjdwkV4fbovTPhWjwZKpx2HyMBIjJbA>
-Feedback-ID: i56684263:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 31 Mar 2023 03:32:34 -0400 (EDT)
-Message-ID: <283f3831-a51c-1798-6871-cd19584bc03e@ryhl.io>
-Date:   Fri, 31 Mar 2023 09:32:46 +0200
+        Fri, 31 Mar 2023 03:33:32 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCA0199B;
+        Fri, 31 Mar 2023 00:33:30 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PnsH7568Dz9xGmp;
+        Fri, 31 Mar 2023 15:24:19 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDHSweojCZkXurjAQ--.5929S2;
+        Fri, 31 Mar 2023 08:33:07 +0100 (CET)
+Message-ID: <bfe74fff24a5a7a8059acc00c29ac957bf0b7880.camel@huaweicloud.com>
+Subject: Re: [PATCH v9 3/4] evm: Align evm_inode_init_security() definition
+ with LSM infrastructure
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 31 Mar 2023 09:32:52 +0200
+In-Reply-To: <CAHC9VhSDVv30ce2652kridRU7iaQQ19tiGubWpyP0mi7pf+JJw@mail.gmail.com>
+References: <20230329130415.2312521-1-roberto.sassu@huaweicloud.com>
+         <20230329130415.2312521-4-roberto.sassu@huaweicloud.com>
+         <CAHC9VhSDVv30ce2652kridRU7iaQQ19tiGubWpyP0mi7pf+JJw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 10/13] rust: introduce `Task::current`
-Content-Language: en-US
-To:     Gary Guo <gary@garyguo.net>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230330043954.562237-1-wedsonaf@gmail.com>
- <20230330043954.562237-10-wedsonaf@gmail.com>
- <20230331034701.0657d5f2.gary@garyguo.net>
-From:   Alice Ryhl <alice@ryhl.io>
-In-Reply-To: <20230331034701.0657d5f2.gary@garyguo.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwDHSweojCZkXurjAQ--.5929S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuw4DuryUXF1rAF4UGrykKrg_yoW7urWDpF
+        Z8ta1Uurs8JFy5WryFyF4Uu3WS93yrGr4UKrZ3K34jyFnrtrn7try0yr15uFyrXrW8Gr1v
+        qa12vr1fuwn0y3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQANBF1jj4tjOgAAsr
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,133 +70,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/23 04:47, Gary Guo wrote:
-> On Thu, 30 Mar 2023 01:39:51 -0300
-> Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
+On Thu, 2023-03-30 at 18:55 -0400, Paul Moore wrote:
+> On Wed, Mar 29, 2023 at 9:05 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Change the evm_inode_init_security() definition to align with the LSM
+> > infrastructure. Keep the existing behavior of including in the HMAC
+> > calculation only the first xattr provided by LSMs.
+> > 
+> > Changing the evm_inode_init_security() definition requires passing the
+> > xattr array allocated by security_inode_init_security(), and the number of
+> > xattrs filled by previously invoked LSMs.
+> > 
+> > Use the newly introduced lsm_find_xattr_slot() to position EVM correctly in
+> > the xattrs array, like a regular LSM, and to increment the number of filled
+> > slots. For now, the LSM infrastructure allocates enough xattrs slots to
+> > store the EVM xattr, without using the reservation mechanism.
+> > 
+> > Finally, make evm_inode_init_security() return value compatible with the
+> > inode_init_security hook conventions, i.e. return -EOPNOTSUPP if it is not
+> > setting an xattr.
+> > 
+> > EVM is a bit tricky, because xattrs is both an input and an output. If it
+> > was just output, EVM should have returned zero if xattrs is NULL. But,
+> > since xattrs is also input, EVM is unable to do its calculations, so return
+> > -EOPNOTSUPP and handle this error in security_inode_init_security().
 > 
->> From: Wedson Almeida Filho <walmeida@microsoft.com>
->>
->> This allows Rust code to get a reference to the current task without
->> having to increment the refcount, but still guaranteeing memory safety.
->>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
->> ---
->>   rust/helpers.c      |  6 ++++
->>   rust/kernel/task.rs | 83 ++++++++++++++++++++++++++++++++++++++++++++-
->>   2 files changed, 88 insertions(+), 1 deletion(-)
->>
->> diff --git a/rust/helpers.c b/rust/helpers.c
->> index 58a194042c86..96441744030e 100644
->> --- a/rust/helpers.c
->> +++ b/rust/helpers.c
->> @@ -100,6 +100,12 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r)
->>   }
->>   EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
->>   
->> +struct task_struct *rust_helper_get_current(void)
->> +{
->> +	return current;
->> +}
->> +EXPORT_SYMBOL_GPL(rust_helper_get_current);
->> +
->>   void rust_helper_get_task_struct(struct task_struct *t)
->>   {
->>   	get_task_struct(t);
->> diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
->> index 8d7a8222990f..8b2b56ba9c6d 100644
->> --- a/rust/kernel/task.rs
->> +++ b/rust/kernel/task.rs
->> @@ -5,7 +5,7 @@
->>   //! C header: [`include/linux/sched.h`](../../../../include/linux/sched.h).
->>   
->>   use crate::bindings;
->> -use core::{cell::UnsafeCell, ptr};
->> +use core::{cell::UnsafeCell, marker::PhantomData, ops::Deref, ptr};
->>   
->>   /// Wraps the kernel's `struct task_struct`.
->>   ///
->> @@ -13,6 +13,46 @@ use core::{cell::UnsafeCell, ptr};
->>   ///
->>   /// Instances of this type are always ref-counted, that is, a call to `get_task_struct` ensures
->>   /// that the allocation remains valid at least until the matching call to `put_task_struct`.
->> +///
->> +/// # Examples
->> +///
->> +/// The following is an example of getting the PID of the current thread with zero additional cost
->> +/// when compared to the C version:
->> +///
->> +/// ```
->> +/// use kernel::task::Task;
->> +///
->> +/// let pid = Task::current().pid();
->> +/// ```
->> +///
->> +/// Getting the PID of the current process, also zero additional cost:
->> +///
->> +/// ```
->> +/// use kernel::task::Task;
->> +///
->> +/// let pid = Task::current().group_leader().pid();
->> +/// ```
->> +///
->> +/// Getting the current task and storing it in some struct. The reference count is automatically
->> +/// incremented when creating `State` and decremented when it is dropped:
->> +///
->> +/// ```
->> +/// use kernel::{task::Task, ARef};
->> +///
->> +/// struct State {
->> +///     creator: ARef<Task>,
->> +///     index: u32,
->> +/// }
->> +///
->> +/// impl State {
->> +///     fn new() -> Self {
->> +///         Self {
->> +///             creator: Task::current().into(),
->> +///             index: 0,
->> +///         }
->> +///     }
->> +/// }
->> +/// ```
->>   #[repr(transparent)]
->>   pub struct Task(pub(crate) UnsafeCell<bindings::task_struct>);
->>   
->> @@ -25,6 +65,20 @@ unsafe impl Sync for Task {}
->>   type Pid = bindings::pid_t;
->>   
->>   impl Task {
->> +    /// Returns a task reference for the currently executing task/thread.
->> +    pub fn current<'a>() -> TaskRef<'a> {
->> +        // SAFETY: Just an FFI call with no additional safety requirements.
->> +        let ptr = unsafe { bindings::get_current() };
->> +
->> +        TaskRef {
->> +            // SAFETY: If the current thread is still running, the current task is valid. Given
->> +            // that `TaskRef` is not `Send`, we know it cannot be transferred to another thread
->> +            // (where it could potentially outlive the caller).
->> +            task: unsafe { &*ptr.cast() },
->> +            _not_send: PhantomData,
->> +        }
->> +    }
->> +
-> 
-> I don't think this API is sound, as you can do `&*Task::current()` and
-> get a `&'static Task`, which is very problematic.
-> 
-> A sound API would be
-> 
-> 	pub fn with_current<R>(f: imp FnOnce(&Task) -> R) -> R { ... }
-> 
-> (which also is how thread local works in Rust)
-> 
-> You would have to write `Task::with_current(|cur| cur.pid())` though,
-> which unfortunately is a bit less ergonomic.
-> 
-> Best,
-> Gary
+> I don't quite understand why EVM would return EOPNOTSUPP if it is
+> enabled but there are not xattrs to measure.  It seems like EVM should
+> return success/0 in the no-xattr case; there were no xattrs to
+> measure, so it succeeded in measuring nothing.  Am I missing
+> something?
 
-This is true, unfortunately. It would be possible to write a macro with 
-a more similar API to the current implementation.
+From a very quick look at what other LSMs do, it seems that they return
+zero even if they are not initialized.
+
+So, it makes sense to return zero also here.
+
+Thanks
+
+Roberto
+
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  include/linux/evm.h               | 14 ++++++++------
+> >  security/integrity/evm/evm_main.c | 18 +++++++++++-------
+> >  security/security.c               |  6 +++---
+> >  3 files changed, 22 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/include/linux/evm.h b/include/linux/evm.h
+> > index 7dc1ee74169..3c0e8591b69 100644
+> > --- a/include/linux/evm.h
+> > +++ b/include/linux/evm.h
+> > @@ -56,9 +56,10 @@ static inline void evm_inode_post_set_acl(struct dentry *dentry,
+> >  {
+> >         return evm_inode_post_setxattr(dentry, acl_name, NULL, 0);
+> >  }
+> > -extern int evm_inode_init_security(struct inode *inode,
+> > -                                  const struct xattr *xattr_array,
+> > -                                  struct xattr *evm);
+> > +extern int evm_inode_init_security(struct inode *inode, struct inode *dir,
+> > +                                  const struct qstr *qstr,
+> > +                                  struct xattr *xattrs,
+> > +                                  int *num_filled_xattrs);
+> >  extern bool evm_revalidate_status(const char *xattr_name);
+> >  extern int evm_protected_xattr_if_enabled(const char *req_xattr_name);
+> >  extern int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
+> > @@ -157,9 +158,10 @@ static inline void evm_inode_post_set_acl(struct dentry *dentry,
+> >         return;
+> >  }
+> > 
+> > -static inline int evm_inode_init_security(struct inode *inode,
+> > -                                         const struct xattr *xattr_array,
+> > -                                         struct xattr *evm)
+> > +static inline int evm_inode_init_security(struct inode *inode, struct inode *dir,
+> > +                                         const struct qstr *qstr,
+> > +                                         struct xattr *xattrs,
+> > +                                         int *num_filled_xattrs)
+> >  {
+> >         return 0;
+> >  }
+> > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> > index cf24c525558..9e75759150c 100644
+> > --- a/security/integrity/evm/evm_main.c
+> > +++ b/security/integrity/evm/evm_main.c
+> > @@ -21,6 +21,7 @@
+> >  #include <linux/evm.h>
+> >  #include <linux/magic.h>
+> >  #include <linux/posix_acl_xattr.h>
+> > +#include <linux/lsm_hooks.h>
+> > 
+> >  #include <crypto/hash.h>
+> >  #include <crypto/hash_info.h>
+> > @@ -864,23 +865,26 @@ void evm_inode_post_setattr(struct dentry *dentry, int ia_valid)
+> >  /*
+> >   * evm_inode_init_security - initializes security.evm HMAC value
+> >   */
+> > -int evm_inode_init_security(struct inode *inode,
+> > -                                const struct xattr *lsm_xattr,
+> > -                                struct xattr *evm_xattr)
+> > +int evm_inode_init_security(struct inode *inode, struct inode *dir,
+> > +                           const struct qstr *qstr, struct xattr *xattrs,
+> > +                           int *num_filled_xattrs)
+> >  {
+> >         struct evm_xattr *xattr_data;
+> > +       struct xattr *evm_xattr;
+> >         int rc;
+> > 
+> > -       if (!(evm_initialized & EVM_INIT_HMAC) ||
+> > -           !evm_protected_xattr(lsm_xattr->name))
+> > -               return 0;
+> > +       if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs ||
+> > +           !evm_protected_xattr(xattrs->name))
+> > +               return -EOPNOTSUPP;
+> > +
+> > +       evm_xattr = lsm_find_xattr_slot(xattrs, num_filled_xattrs);
+> > 
+> >         xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
+> >         if (!xattr_data)
+> >                 return -ENOMEM;
+> > 
+> >         xattr_data->data.type = EVM_XATTR_HMAC;
+> > -       rc = evm_init_hmac(inode, lsm_xattr, xattr_data->digest);
+> > +       rc = evm_init_hmac(inode, xattrs, xattr_data->digest);
+> >         if (rc < 0)
+> >                 goto out;
+> > 
+> > diff --git a/security/security.c b/security/security.c
+> > index be33d643a81..22ab4fb7ebf 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -1674,9 +1674,9 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+> >         if (!num_filled_xattrs)
+> >                 goto out;
+> > 
+> > -       ret = evm_inode_init_security(inode, new_xattrs,
+> > -                                     new_xattrs + num_filled_xattrs);
+> > -       if (ret)
+> > +       ret = evm_inode_init_security(inode, dir, qstr, new_xattrs,
+> > +                                     &num_filled_xattrs);
+> > +       if (ret && ret != -EOPNOTSUPP)
+> >                 goto out;
+> >         ret = initxattrs(inode, new_xattrs, fs_data);
+> >  out:
+> > --
+> > 2.25.1
+> > 
+> 
+> 
+
