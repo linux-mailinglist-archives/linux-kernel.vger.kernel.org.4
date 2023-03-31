@@ -2,289 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F14D6D1F07
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61EE6D1F0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjCaLab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 07:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37774 "EHLO
+        id S230185AbjCaLbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 07:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbjCaLaM (ORCPT
+        with ESMTP id S229983AbjCaLbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:30:12 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5E21EA27;
-        Fri, 31 Mar 2023 04:30:07 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32VBTqd8086085;
-        Fri, 31 Mar 2023 06:29:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680262192;
-        bh=PSEF9PKaq4DqE7eetCOk74X05JZ9Cnh2P7vAE2yAcTY=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=YBweCO6PxjYmvFzfnSMUlEy9Jm47S2gI34445yldmlcKRnhpl26FGwFkm5YNPriLe
-         3Kpjlh8J7V5WeBlZzlm6t2oKk7htuTDNxEnBbcKG4RVXtxjRnH+9r9DMn8PLqtRtCx
-         Qq7OJC9n3ttm0VK8R3jtDk2iyZrzLez9QvH7eoqM=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32VBTq9V119220
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 31 Mar 2023 06:29:52 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 31
- Mar 2023 06:29:52 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 31 Mar 2023 06:29:52 -0500
-Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32VBTqX0012418;
-        Fri, 31 Mar 2023 06:29:52 -0500
-Received: from localhost (a0501179-pc.dhcp.ti.com [10.24.69.114])
-        by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 32VBTpZn014996;
-        Fri, 31 Mar 2023 06:29:51 -0500
-From:   MD Danish Anwar <danishanwar@ti.com>
-To:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <srk@ti.com>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-Subject: [PATCH v6 4/4] soc: ti: pruss: Add helper functions to set GPI mode, MII_RT_event and XFR
-Date:   Fri, 31 Mar 2023 16:59:41 +0530
-Message-ID: <20230331112941.823410-5-danishanwar@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230331112941.823410-1-danishanwar@ti.com>
-References: <20230331112941.823410-1-danishanwar@ti.com>
+        Fri, 31 Mar 2023 07:31:50 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD8D1D92B
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 04:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680262276; x=1711798276;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gy2iUMMoAkiXA84t4PlX410aMEkTzJ8H2TfoEMCYKy8=;
+  b=ldPPvK5wdASRhT8JmPg5P308owqyrKrN9ixv2eiIlPwVY/yy/QeNKA9P
+   PzwhBmZbXloxHF2+6QSOejSvYqKl3iaW/HGv7ITzjK1PbvxPyTDmr4YOV
+   RTQsaKcXQXr1aPSuxwJpRRe8vQR8fwTUAr5SjVISw7IsyTMekGDcN/02I
+   yMXFlmI55fAYEDSFr47n9YGPsPlgprkrVIO2sOAfbxUdbNDe2vovnrMQ0
+   lTPk4yM85O+gRQV2OaBQY0K7pghsNH8PehvC5DCLyFizI6Od2kcs5QhOi
+   8Nw7frEaYHt8TyXDnFkpy+7XNckQYI7urmdgXLoRvQWGdfsEe5XSWsKS6
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="321082192"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="321082192"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 04:30:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="687623165"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="687623165"
+Received: from bpower-mobl3.ger.corp.intel.com (HELO [10.213.225.27]) ([10.213.225.27])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 04:30:22 -0700
+Message-ID: <fdc8a470-1e6b-815d-e367-a9df1b0b14dd@linux.intel.com>
+Date:   Fri, 31 Mar 2023 12:30:20 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 9/9] drm/i915: Use kmap_local_page() in
+ gem/i915_gem_execbuffer.c
+Content-Language: en-US
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Zhao Liu <zhao1.liu@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>
+References: <20230329073220.3982460-1-zhao1.liu@linux.intel.com>
+ <20230329073220.3982460-10-zhao1.liu@linux.intel.com>
+ <64265ef8725fe_375f7e294a@iweiny-mobl.notmuch>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <64265ef8725fe_375f7e294a@iweiny-mobl.notmuch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suman Anna <s-anna@ti.com>
 
-The PRUSS CFG module is represented as a syscon node and is currently
-managed by the PRUSS platform driver. Add easy accessor functions to set
-GPI mode, MII_RT event enable/disable and XFR (XIN XOUT) enable/disable
-to enable the PRUSS Ethernet usecase. These functions reuse the generic
-pruss_cfg_update() API function.
+On 31/03/2023 05:18, Ira Weiny wrote:
+> Zhao Liu wrote:
+>> From: Zhao Liu <zhao1.liu@intel.com>
+>>
+>> The use of kmap_atomic() is being deprecated in favor of
+>> kmap_local_page()[1], and this patch converts the calls from
+>> kmap_atomic() to kmap_local_page().
+>>
+>> The main difference between atomic and local mappings is that local
+>> mappings doesn't disable page faults or preemption (the preemption is
+>> disabled for !PREEMPT_RT case, otherwise it only disables migration).
+>>
+>> With kmap_local_page(), we can avoid the often unwanted side effect of
+>> unnecessary page faults and preemption disables.
+>>
+>> In i915_gem_execbuffer.c, eb->reloc_cache.vaddr is mapped by
+>> kmap_atomic() in eb_relocate_entry(), and is unmapped by
+>> kunmap_atomic() in reloc_cache_reset().
+> 
+> First off thanks for the series and sticking with this.  That said this
+> patch kind of threw me for a loop because tracing the map/unmap calls did
+> not make sense to me.  See below.
+> 
+>>
+>> And this mapping/unmapping occurs in two places: one is in
+>> eb_relocate_vma(), and another is in eb_relocate_vma_slow().
+>>
+>> The function eb_relocate_vma() or eb_relocate_vma_slow() doesn't
+>> need to disable pagefaults and preemption during the above mapping/
+>> unmapping.
+>>
+>> So it can simply use kmap_local_page() / kunmap_local() that can
+>> instead do the mapping / unmapping regardless of the context.
+>>
+>> Convert the calls of kmap_atomic() / kunmap_atomic() to
+>> kmap_local_page() / kunmap_local().
+>>
+>> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
+>>
+>> v2: No code change since v1. Added description of the motivation of
+>>      using kmap_local_page() and "Suggested-by" tag of Fabio.
+>>
+>> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+>> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+>> Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+>> ---
+>> Suggested by credits:
+>>    Ira: Referred to his task document, review comments.
+>>    Fabio: Referred to his boiler plate commit message and his description
+>>           about why kmap_local_page() should be preferred.
+>> ---
+>>   drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c | 10 +++++-----
+>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+>> index 9dce2957b4e5..805565edd148 100644
+>> --- a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+>> +++ b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+>> @@ -1151,7 +1151,7 @@ static void reloc_cache_unmap(struct reloc_cache *cache)
+>>   
+>>   	vaddr = unmask_page(cache->vaddr);
+>>   	if (cache->vaddr & KMAP)
+>> -		kunmap_atomic(vaddr);
+>> +		kunmap_local(vaddr);
+> 
+> In the cover letter you don't mention this unmap path.  Rather you mention
+> only reloc_cache_reset().
+> 
+> After digging into this and considering these are kmap_atomic() calls I
+> _think_ what you have is ok.  But I think I'd like to see the call paths
+> documented a bit more clearly.  Or perhaps cleaned up a lot.
+> 
+> For example I see the following call possibility from a user ioctl.  In
+> this trace I see 2 examples where something is unmapped first.  I don't
+> understand why that is required?  I would assume reloc_cache_unmap() and
+> reloc_kmap() are helpers called from somewhere else requiring a remapping
+> of the cache but I don't see it.
 
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
-Reviewed-by: Tony Lindgren <tony@atomide.com>
-Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
----
- drivers/remoteproc/pru_rproc.c   | 15 -------
- drivers/soc/ti/pruss.c           | 74 ++++++++++++++++++++++++++++++++
- include/linux/remoteproc/pruss.h | 51 ++++++++++++++++++++++
- 3 files changed, 125 insertions(+), 15 deletions(-)
+Reloc_cache_unmap is called from eb_relocate_entry.
 
-diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-index 4ddd5854d56e..a88861737dec 100644
---- a/drivers/remoteproc/pru_rproc.c
-+++ b/drivers/remoteproc/pru_rproc.c
-@@ -81,21 +81,6 @@ enum pru_iomem {
- 	PRU_IOMEM_MAX,
- };
- 
--/**
-- * enum pru_type - PRU core type identifier
-- *
-- * @PRU_TYPE_PRU: Programmable Real-time Unit
-- * @PRU_TYPE_RTU: Auxiliary Programmable Real-Time Unit
-- * @PRU_TYPE_TX_PRU: Transmit Programmable Real-Time Unit
-- * @PRU_TYPE_MAX: just keep this one at the end
-- */
--enum pru_type {
--	PRU_TYPE_PRU = 0,
--	PRU_TYPE_RTU,
--	PRU_TYPE_TX_PRU,
--	PRU_TYPE_MAX,
--};
--
- /**
-  * struct pru_private_data - device data for a PRU core
-  * @type: type of the PRU core (PRU, RTU, Tx_PRU)
-diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-index 0e37fe142615..64a1880ba4ee 100644
---- a/drivers/soc/ti/pruss.c
-+++ b/drivers/soc/ti/pruss.c
-@@ -213,6 +213,80 @@ int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux)
- }
- EXPORT_SYMBOL_GPL(pruss_cfg_set_gpmux);
- 
-+/**
-+ * pruss_cfg_gpimode() - set the GPI mode of the PRU
-+ * @pruss: the pruss instance handle
-+ * @pru_id: id of the PRU core within the PRUSS
-+ * @mode: GPI mode to set
-+ *
-+ * Sets the GPI mode for a given PRU by programming the
-+ * corresponding PRUSS_CFG_GPCFGx register
-+ *
-+ * Return: 0 on success, or an error code otherwise
-+ */
-+int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
-+		      enum pruss_gpi_mode mode)
-+{
-+	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
-+		return -EINVAL;
-+
-+	if (mode < 0 || mode > PRUSS_GPI_MODE_MAX)
-+		return -EINVAL;
-+
-+	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
-+				PRUSS_GPCFG_PRU_GPI_MODE_MASK,
-+				mode << PRUSS_GPCFG_PRU_GPI_MODE_SHIFT);
-+}
-+EXPORT_SYMBOL_GPL(pruss_cfg_gpimode);
-+
-+/**
-+ * pruss_cfg_miirt_enable() - Enable/disable MII RT Events
-+ * @pruss: the pruss instance
-+ * @enable: enable/disable
-+ *
-+ * Enable/disable the MII RT Events for the PRUSS.
-+ *
-+ * Return: 0 on success, or an error code otherwise
-+ */
-+int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
-+{
-+	u32 set = enable ? PRUSS_MII_RT_EVENT_EN : 0;
-+
-+	return pruss_cfg_update(pruss, PRUSS_CFG_MII_RT,
-+				PRUSS_MII_RT_EVENT_EN, set);
-+}
-+EXPORT_SYMBOL_GPL(pruss_cfg_miirt_enable);
-+
-+/**
-+ * pruss_cfg_xfr_enable() - Enable/disable XIN XOUT shift functionality
-+ * @pruss: the pruss instance
-+ * @pru_type: PRU core type identifier
-+ * @enable: enable/disable
-+ *
-+ * Return: 0 on success, or an error code otherwise
-+ */
-+int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
-+			 bool enable)
-+{
-+	u32 mask, set;
-+
-+	switch (pru_type) {
-+	case PRU_TYPE_PRU:
-+		mask = PRUSS_SPP_XFER_SHIFT_EN;
-+		break;
-+	case PRU_TYPE_RTU:
-+		mask = PRUSS_SPP_RTU_XFR_SHIFT_EN;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	set = enable ? mask : 0;
-+
-+	return pruss_cfg_update(pruss, PRUSS_CFG_SPP, mask, set);
-+}
-+EXPORT_SYMBOL_GPL(pruss_cfg_xfr_enable);
-+
- static void pruss_of_free_clk_provider(void *data)
- {
- 	struct device_node *clk_mux_np = data;
-diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
-index 5641153459a7..b68ab8735247 100644
---- a/include/linux/remoteproc/pruss.h
-+++ b/include/linux/remoteproc/pruss.h
-@@ -34,6 +34,33 @@ enum pruss_gp_mux_sel {
- 	PRUSS_GP_MUX_SEL_MAX,
- };
- 
-+/*
-+ * enum pruss_gpi_mode - PRUSS GPI configuration modes, used
-+ *			 to program the PRUSS_GPCFG0/1 registers
-+ */
-+enum pruss_gpi_mode {
-+	PRUSS_GPI_MODE_DIRECT = 0,
-+	PRUSS_GPI_MODE_PARALLEL,
-+	PRUSS_GPI_MODE_28BIT_SHIFT,
-+	PRUSS_GPI_MODE_MII,
-+	PRUSS_GPI_MODE_MAX,
-+};
-+
-+/**
-+ * enum pru_type - PRU core type identifier
-+ *
-+ * @PRU_TYPE_PRU: Programmable Real-time Unit
-+ * @PRU_TYPE_RTU: Auxiliary Programmable Real-Time Unit
-+ * @PRU_TYPE_TX_PRU: Transmit Programmable Real-Time Unit
-+ * @PRU_TYPE_MAX: just keep this one at the end
-+ */
-+enum pru_type {
-+	PRU_TYPE_PRU = 0,
-+	PRU_TYPE_RTU,
-+	PRU_TYPE_TX_PRU,
-+	PRU_TYPE_MAX,
-+};
-+
- /**
-  * enum pruss_pru_id - PRU core identifiers
-  * @PRUSS_PRU0: PRU Core 0.
-@@ -98,6 +125,11 @@ int pruss_release_mem_region(struct pruss *pruss,
- 			     struct pruss_mem_region *region);
- int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux);
- int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux);
-+int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
-+		      enum pruss_gpi_mode mode);
-+int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable);
-+int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
-+			 bool enable);
- 
- #else
- 
-@@ -133,6 +165,25 @@ static inline int pruss_cfg_set_gpmux(struct pruss *pruss,
- 	return ERR_PTR(-EOPNOTSUPP);
- }
- 
-+static inline int pruss_cfg_gpimode(struct pruss *pruss,
-+				    enum pruss_pru_id pru_id,
-+				    enum pruss_gpi_mode mode)
-+{
-+	return ERR_PTR(-EOPNOTSUPP);
-+}
-+
-+static inline int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
-+{
-+	return ERR_PTR(-EOPNOTSUPP);
-+}
-+
-+static inline int pruss_cfg_xfr_enable(struct pruss *pruss,
-+				       enum pru_type pru_type,
-+				       bool enable);
-+{
-+	return ERR_PTR(-EOPNOTSUPP);
-+}
-+
- #endif /* CONFIG_TI_PRUSS */
- 
- #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
--- 
-2.25.1
+The confusing part unmap appears first is just because reloc_cache is a 
+stateful setup. The previous mapping is kept around until reset (callers 
+moves to a different parent object), and unampped/remapped once moved to 
+a different page within that object.
 
+However I am unsure if disabling pagefaulting is needed or not. Thomas, 
+Matt, being the last to touch this area, perhaps you could have a look? 
+Because I notice we have a fallback iomap path which still uses 
+io_mapping_map_atomic_wc. So if kmap_atomic to kmap_local conversion is 
+safe, does the iomap side also needs converting to 
+io_mapping_map_local_wc? Or they have separate requirements?
+
+Regards,
+
+Tvrtko
+
+> 
+> i915_gem_execbuffer2_ioctl()
+> eb_relocate_parse()
+> eb_relocate_parse_slow()
+> eb_relocate_vma_slow()
+> 	eb_relocate_entry()
+> 		reloc_cache_unmap()
+> 			kunmap_atomic()  <=== HERE!
+> 		reloc_cache_remap()
+> 			kmap_atomic()
+> 		relocate_entry()
+> 			reloc_vaddr()
+> 				reloc_kmap()
+> 					kunmap_atomic() <== HERE!
+> 					kmap_atomic()
+> 
+> 	reloc_cache_reset()
+> 		kunmap_atomic()
+> 
+> Could these mappings be cleaned up a lot more?  Perhaps by removing some
+> of the helper functions which AFAICT are left over from older versions of
+> the code?
+> 
+> Also as an aside I think it is really bad that eb_relocate_entry() returns
+> negative errors in a u64.  Better to get the types right IMO.
+> 
+> Thanks for the series!
+> Ira
+> 
+>>   	else
+>>   		io_mapping_unmap_atomic((void __iomem *)vaddr);
+>>   }
+>> @@ -1167,7 +1167,7 @@ static void reloc_cache_remap(struct reloc_cache *cache,
+>>   	if (cache->vaddr & KMAP) {
+>>   		struct page *page = i915_gem_object_get_page(obj, cache->page);
+>>   
+>> -		vaddr = kmap_atomic(page);
+>> +		vaddr = kmap_local_page(page);
+>>   		cache->vaddr = unmask_flags(cache->vaddr) |
+>>   			(unsigned long)vaddr;
+>>   	} else {
+>> @@ -1197,7 +1197,7 @@ static void reloc_cache_reset(struct reloc_cache *cache, struct i915_execbuffer
+>>   		if (cache->vaddr & CLFLUSH_AFTER)
+>>   			mb();
+>>   
+>> -		kunmap_atomic(vaddr);
+>> +		kunmap_local(vaddr);
+>>   		i915_gem_object_finish_access(obj);
+>>   	} else {
+>>   		struct i915_ggtt *ggtt = cache_to_ggtt(cache);
+>> @@ -1229,7 +1229,7 @@ static void *reloc_kmap(struct drm_i915_gem_object *obj,
+>>   	struct page *page;
+>>   
+>>   	if (cache->vaddr) {
+>> -		kunmap_atomic(unmask_page(cache->vaddr));
+>> +		kunmap_local(unmask_page(cache->vaddr));
+>>   	} else {
+>>   		unsigned int flushes;
+>>   		int err;
+>> @@ -1251,7 +1251,7 @@ static void *reloc_kmap(struct drm_i915_gem_object *obj,
+>>   	if (!obj->mm.dirty)
+>>   		set_page_dirty(page);
+>>   
+>> -	vaddr = kmap_atomic(page);
+>> +	vaddr = kmap_local_page(page);
+>>   	cache->vaddr = unmask_flags(cache->vaddr) | (unsigned long)vaddr;
+>>   	cache->page = pageno;
+>>   
+>> -- 
+>> 2.34.1
+>>
+> 
+> 
