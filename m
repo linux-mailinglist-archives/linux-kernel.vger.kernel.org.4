@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DB06D1441
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C5F6D1442
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjCaAn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 20:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
+        id S229760AbjCaAna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 20:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjCaAnW (ORCPT
+        with ESMTP id S229711AbjCaAnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 30 Mar 2023 20:43:22 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CAAB465
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953F7CA0F
         for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:43:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1680223400; x=1711759400;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=bjn7ll07kRwryQ3NUDA/uissp2h7i+dMWzBICn9f4uU=;
-  b=hu/zm+obqULuFLwF2eBeFAF7DJFANlteE14gwTtvJInr4T8735phyg/8
-   IB3rkBS72hO0qTHOODvhGNOYeL5gnTZdJJxwxDfwAdvspKFRIyVU3YA/R
-   f4wGtL8rxs5SWcw2YOqipzolyvOVhVa0N+WGWR03GCftbkz8T/akITuqu
-   R05wudi2mDsbhTSY0t/vCVvuAzplfbm6KZhpyNmim7EwLQW1oWcu3FOfd
-   ufdu6M15WLEFvXiEwhiYKl6+AAJzg2dDvMBK9gg6+LCnUhEMJ7ZDXrk/G
-   LThHiT/61VCKQWS3NSEOUGcHOtfjBo212+waMmmW86rKqFf55bhZmmLnt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="342966935"
+  bh=rtbESJyytOQL+i3kc5h/WLoei7643r+mI0OlAlHKn50=;
+  b=f6gF48JYiJVCg67L8MrH6944DY7OJQTQ8fLJwePc8grJNl5tkLbtcSGc
+   Zd93gWYwja2gmlDSvxSQWbCS80ZcJsmInO+sTFnJJo8MnKioLOJke7wN6
+   ZOph+gP508qc5Cka2F14tf02/zP7mausloXbdhKfYyHgS+NWzM2z+alXu
+   RHEe+a/s99P5+SQSsxLKH6A4VIXgjoNXVHQEpYi9QSz74bUwtN/BhZZg3
+   fCwx1pqBwk8X6jk9oEj3YhFaK6W/wZ90xvGB5MiS1KciRNU1jaZN9f5x9
+   jadrmSs/0Kbkx2BjLvAi4cWm6PqzXX0zKKdBgkw+SM/qK73LF495oTswB
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="321706623"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="342966935"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 17:43:20 -0700
+   d="scan'208";a="321706623"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 17:43:20 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="859099990"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="635108993"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="859099990"
+   d="scan'208";a="635108993"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 30 Mar 2023 17:43:18 -0700
+  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2023 17:43:18 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pi2rN-000LMM-21;
+        id 1pi2rN-000LMK-1k;
         Fri, 31 Mar 2023 00:43:17 +0000
-Date:   Fri, 31 Mar 2023 08:42:58 +0800
+Date:   Fri, 31 Mar 2023 08:43:09 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/apic] BUILD SUCCESS
- 5b422b9bb7318b5ab8d0c124d623db4d3f6b2771
-Message-ID: <64262c92.ERMkVlKgCf/6vsqU%lkp@intel.com>
+Subject: [tip:x86/cc] BUILD SUCCESS
+ 3d91c537296794d5d0773f61abbe7b63f2f132d8
+Message-ID: <64262c9d.u1mQYb8s0IY76SDw%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/apic
-branch HEAD: 5b422b9bb7318b5ab8d0c124d623db4d3f6b2771  Merge branch 'x86/cc' into x86/apic
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cc
+branch HEAD: 3d91c537296794d5d0773f61abbe7b63f2f132d8  x86/coco: Export cc_vendor
 
 elapsed time: 723m
 
-configs tested: 200
-configs skipped: 155
+configs tested: 195
+configs skipped: 158
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -101,7 +100,6 @@ arm64        buildonly-randconfig-r001-20230329   gcc
 arm64        buildonly-randconfig-r002-20230329   gcc  
 arm64        buildonly-randconfig-r005-20230329   gcc  
 arm64                               defconfig   gcc  
-arm64                randconfig-r001-20230329   gcc  
 arm64                randconfig-r025-20230329   clang
 arm64                randconfig-r026-20230329   clang
 arm64                randconfig-r032-20230329   gcc  
@@ -138,7 +136,6 @@ ia64                             allmodconfig   gcc
 ia64         buildonly-randconfig-r003-20230329   gcc  
 ia64                                defconfig   gcc  
 ia64                      gensparse_defconfig   gcc  
-ia64                 randconfig-r002-20230329   gcc  
 ia64                 randconfig-r003-20230329   gcc  
 ia64                 randconfig-r004-20230329   gcc  
 ia64                 randconfig-r005-20230329   gcc  
@@ -219,7 +216,6 @@ riscv                             allnoconfig   gcc
 riscv                               defconfig   gcc  
 riscv                randconfig-r002-20230329   gcc  
 riscv                randconfig-r005-20230329   gcc  
-riscv                randconfig-r006-20230329   gcc  
 riscv                randconfig-r013-20230329   clang
 riscv                randconfig-r016-20230329   clang
 riscv                randconfig-r022-20230329   clang
@@ -237,7 +233,6 @@ s390                 randconfig-r023-20230329   clang
 s390                 randconfig-r044-20230329   clang
 sh                               allmodconfig   gcc  
 sh                         ecovec24_defconfig   gcc  
-sh                   randconfig-r005-20230329   gcc  
 sh                           sh2007_defconfig   gcc  
 sh                   sh7724_generic_defconfig   gcc  
 sparc        buildonly-randconfig-r003-20230329   gcc  
@@ -248,7 +243,6 @@ sparc                randconfig-r036-20230329   gcc
 sparc64      buildonly-randconfig-r003-20230329   gcc  
 sparc64      buildonly-randconfig-r005-20230329   gcc  
 sparc64      buildonly-randconfig-r006-20230329   gcc  
-sparc64              randconfig-r003-20230329   gcc  
 sparc64              randconfig-r005-20230329   gcc  
 sparc64              randconfig-r006-20230329   gcc  
 sparc64              randconfig-r012-20230329   gcc  
