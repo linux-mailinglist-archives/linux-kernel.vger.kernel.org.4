@@ -2,77 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5456A6D1415
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4311A6D1425
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjCaAar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 20:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
+        id S229660AbjCaAfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 20:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjCaAao (ORCPT
+        with ESMTP id S229573AbjCaAfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 20:30:44 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A0EEFAC
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:30:35 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id t10so83295461edd.12
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:30:34 -0700 (PDT)
+        Thu, 30 Mar 2023 20:35:03 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F409CCA0F
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:35:01 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id fb38so13762124pfb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:35:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680222633;
+        d=google.com; s=20210112; t=1680222901;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s3r5eQncDU04l860YNWqLD6wbbCGIfGDlp9mbjOhdOU=;
-        b=dQ93Wk+Ks0MpqcGc+XVhyiMMrBUMuOTlnyUdvZTqVp0bN0Nmlc332OAwEYAAl4bdOb
-         rMvMFpmV/ShWfjSwJCQQlIG8eLhnJAG6GIFRRac4zR3uNqv31lS4gB+893Ba8gr7luBu
-         NYPe2fAf2Jbhe561F22ak4DIq2XkXoPQMnFZA=
+        bh=MH3dmPhc4+moh1k942OUVlyMUe+0ay7bXGCHlOkXk5M=;
+        b=mcRHDdbzbUBalM4xQm/dV4O4CAnvmP60HNvjCNMdG0V0+RzDyWZ0twOaW7gPPckYmh
+         l6ySSh+J6l2SUwYdNua4gOFnU3dU90B7eresyjvGu1Qr4U+Pj8rikdAKAjnIu+opqWv5
+         kF8AfcEWyaQh/MZC+lFbK1FD6OKf0kXA4qCNugDXVGm6Li5IDFcUxzJYSiqmEFri/Wq9
+         t8nQvJtUyXtfhLC44XDz0jH5RX8uokYwNCWedoV/wim5XdiwnilST7RPGaceM+Y7QDnQ
+         zkdOcCS/92CcMiU3awafEkmrvo3Te/s2SVlcm5b8vtLZ7p1qPLy6FW0w6x3rV75P7/v+
+         G+gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680222633;
+        d=1e100.net; s=20210112; t=1680222901;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s3r5eQncDU04l860YNWqLD6wbbCGIfGDlp9mbjOhdOU=;
-        b=M0BWAbHRXSj4VsSwpx+D8TgT9igG0dCA2ahk7T9ASyrrJ/BRemX1dkBRM/i6uTuHyR
-         Xi7KhDJ592Io8r96SlPWmp4sDHTyo/SHvEA6esOjax5XfWXoTW7wFBw54CLQ8XLoaTg4
-         NpRJrsn7BaxOoqkFAebHj7ItE27mDKfccogZ4oBcr0KB1HOKWPvRbhj9n1qwZ798HLBx
-         Cd+KL6ysvX69Twl09kScg4wAH8GsGS1IADpSwMNhyaHNtAzYK5x3LayWvm33qfNE+vOw
-         oYpdO5zVofYAPNBowQUieN9icXyNoqhCKvSBOKqCr8/ZehfSm/7n/sJphFpihLuijodA
-         V4AQ==
-X-Gm-Message-State: AAQBX9chSgCjHERW7lvBCDfk1nlfx5MDhyN2W1bbKkdPzLKAvQ6r/fMX
-        oQ6ww77meQ6xuqBkqUCSpS0Ozsf6dw63TrPgWOJY5w==
-X-Google-Smtp-Source: AKy350bUrFjid7TXbTeqMBKOpuNLpzymdFUzXKXUsWM99Dh5ebCTsP5lJJEB9dpSdwE6OtCHBeIdQ5BHXLCCKNvPA98=
-X-Received: by 2002:a17:907:d687:b0:93d:a14f:c9b4 with SMTP id
- wf7-20020a170907d68700b0093da14fc9b4mr12727665ejc.2.1680222633437; Thu, 30
- Mar 2023 17:30:33 -0700 (PDT)
+        bh=MH3dmPhc4+moh1k942OUVlyMUe+0ay7bXGCHlOkXk5M=;
+        b=30cU1tVQPpESMvADO/VOwZNyXAdweyWiGhLFllE14aMlKFFCgD42eKP0s2dn8lOydx
+         tDI7hvNQCmFc/Pg7z+qgudpT8LWHHD2IoI6FaXf4DzQavoysN6GCdoglSC8xP9Q6ANqb
+         isCjvHnvaUD+BZyBe6FA+ICJthF/Fg63yrYBqCB5S0PgVx5d2EL5QBSImgD/snMljL1C
+         4nZk6FWyqhDGsk1MZdJYXDiOwEO4gRhJa8KdEINiBC5ggnE9MKBy6VHl9hgVESs2j9/l
+         cGfndK51Y+2InDlS7hwF5kYmFGrcSKv4kfNdpPPH85qDhwCp+lR9MC3d7FBVo6360r71
+         9zXQ==
+X-Gm-Message-State: AAQBX9dhpjiWTZfnm4qASmHABv8LutoS4mwgqmeHR1cHQghbC0XxUz/6
+        8ExbQkshc2dVzMB54HBUybuKmO/OEL+G3hWcZok0/Q==
+X-Google-Smtp-Source: AKy350a4DeFNtiT0puMpHPQRz//ZqQ7b+CicsE7u8pb1b0QPYo1NzBe7x2L2DYaneQRuVTtUr1bNCZzzLBDtrXjhewY=
+X-Received: by 2002:a05:6a00:2da5:b0:624:c7cc:3d0e with SMTP id
+ fb37-20020a056a002da500b00624c7cc3d0emr12953815pfb.6.1680222901270; Thu, 30
+ Mar 2023 17:35:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221229081252.452240-1-sarthakkukreti@chromium.org>
- <20221229081252.452240-3-sarthakkukreti@chromium.org> <Y7biAQyLKJDjsAlz@bfoster>
-In-Reply-To: <Y7biAQyLKJDjsAlz@bfoster>
-From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-Date:   Thu, 30 Mar 2023 17:30:22 -0700
-Message-ID: <CAG9=OMNLAL8M2AqzSWzecXJzR7jfC_3Ckc_L24MzNBgz_+u-wQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] dm: Add support for block provisioning
-To:     Brian Foster <bfoster@redhat.com>
-Cc:     sarthakkukreti@google.com, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
+References: <20230330224348.1006691-1-davidai@google.com> <ZCYZRIbPh+f3v26v@linux.dev>
+ <CAGETcx_P27-=wkAkCETTR2Q0edA01M5jArS_t-zZFn61YM9Muw@mail.gmail.com> <ZCYd7kH2f/Ku8b0D@linux.dev>
+In-Reply-To: <ZCYd7kH2f/Ku8b0D@linux.dev>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 30 Mar 2023 17:34:24 -0700
+Message-ID: <CAGETcx9CHZCpUsAaEdJGmBFuwJzdp+Mr81=4JQdG0zVy42AZDw@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     David Dai <davidai@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,251 +98,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 6:42=E2=80=AFAM Brian Foster <bfoster@redhat.com> wr=
-ote:
+On Thu, Mar 30, 2023 at 4:40=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
 >
-> On Thu, Dec 29, 2022 at 12:12:47AM -0800, Sarthak Kukreti wrote:
-> > Add support to dm devices for REQ_OP_PROVISION. The default mode
-> > is to pass through the request and dm-thin will utilize it to provision
-> > blocks.
+> On Thu, Mar 30, 2023 at 04:36:52PM -0700, Saravana Kannan wrote:
+> > On Thu, Mar 30, 2023 at 4:20=E2=80=AFPM Oliver Upton <oliver.upton@linu=
+x.dev> wrote:
+> > >
+> > > On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
+> > >
+> > > [...]
+> > >
+> > > > David Dai (6):
+> > > >   sched/fair: Add util_guest for tasks
+> > > >   kvm: arm64: Add support for get_cur_cpufreq service
+> > > >   kvm: arm64: Add support for util_hint service
+> > > >   kvm: arm64: Add support for get_freqtbl service
+> > > >   dt-bindings: cpufreq: add bindings for virtual kvm cpufreq
+> > > >   cpufreq: add kvm-cpufreq driver
+> > >
+> > > I only received patches 2-4 in my inbox (same goes for the mailing li=
+sts
+> > > AFAICT). Mind sending the rest? :)
 > >
-> > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > ---
-> >  drivers/md/dm-crypt.c         |  4 +-
-> >  drivers/md/dm-linear.c        |  1 +
-> >  drivers/md/dm-snap.c          |  7 +++
-> >  drivers/md/dm-table.c         | 25 ++++++++++
-> >  drivers/md/dm-thin.c          | 90 ++++++++++++++++++++++++++++++++++-
-> >  drivers/md/dm.c               |  4 ++
-> >  include/linux/device-mapper.h | 11 +++++
-> >  7 files changed, 139 insertions(+), 3 deletions(-)
+> > Oliver,
 > >
-> ...
-> > diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
-> > index 64cfcf46881d..ab3f1abfabaf 100644
-> > --- a/drivers/md/dm-thin.c
-> > +++ b/drivers/md/dm-thin.c
-> ...
-> > @@ -1980,6 +1992,70 @@ static void process_cell(struct thin_c *tc, stru=
-ct dm_bio_prison_cell *cell)
-> >       }
-> >  }
+> > Sorry about that. Actually even I'm not cc'ed in the cover letter :)
 > >
-> > +static void process_provision_cell(struct thin_c *tc, struct dm_bio_pr=
-ison_cell *cell)
-> > +{
-> > +     int r;
-> > +     struct pool *pool =3D tc->pool;
-> > +     struct bio *bio =3D cell->holder;
-> > +     dm_block_t begin, end;
-> > +     struct dm_thin_lookup_result lookup_result;
-> > +
-> > +     if (tc->requeue_mode) {
-> > +             cell_requeue(pool, cell);
-> > +             return;
-> > +     }
-> > +
-> > +     get_bio_block_range(tc, bio, &begin, &end);
-> > +
-> > +     while (begin !=3D end) {
-> > +             r =3D ensure_next_mapping(pool);
-> > +             if (r)
-> > +                     /* we did our best */
-> > +                     return;
-> > +
-> > +             r =3D dm_thin_find_block(tc->td, begin, 1, &lookup_result=
-);
+> > Is it okay if we fix this when we send the next version? Mainly to
+> > avoid some people responding to this vs other responding to a new
+> > series (where the patches are the same).
 >
-> Hi Sarthak,
+> Fine by me, as long as the full series arrived somewhere.
 >
-> I think we discussed this before.. but remind me if/how we wanted to
-> handle the case if the thin blocks are shared..? Would a provision op
-> carry enough information to distinguish an FALLOC_FL_UNSHARE_RANGE
-> request from upper layers to conditionally provision in that case?
+> > We used a script for --to-cmd and --cc-cmd but looks like it needs
+> > some more fixes.
+> >
+> > Here is the full series to anyone who's wondering where the rest of
+> > the patches are:
+> > https://lore.kernel.org/lkml/20230330224348.1006691-1-davidai@google.co=
+m/T/#t
 >
-I think that should depend on how the filesystem implements unsharing:
-assuming that we use provision on first allocation, unsharing on xfs
-should result in xfs calling REQ_OP_PROVISION on the newly allocated
-blocks first. But for ext4, we'd fail UNSHARE_RANGE unless provision
-(instead of noprovision, provision_on_alloc), in which case, we'd send
-REQ_OP_PROVISION.
+> Gah, a bit of noodling would've dug up the full series. Thanks for the
+> link.
 
-Best
-Sarthak
+Actually, we'll send out a new RFC v2 series with the To's and Cc's
+fixed with some minor cover letter fixes. So everyone can ignore this
+series and just wait for the RFC v2 series later today.
 
 
-Sarthak
-
-> Brian
->
-> > +             switch (r) {
-> > +             case 0:
-> > +                     begin++;
-> > +                     break;
-> > +             case -ENODATA:
-> > +                     bio_inc_remaining(bio);
-> > +                     provision_block(tc, bio, begin, cell);
-> > +                     begin++;
-> > +                     break;
-> > +             default:
-> > +                     DMERR_LIMIT(
-> > +                             "%s: dm_thin_find_block() failed: error =
-=3D %d",
-> > +                             __func__, r);
-> > +                     cell_defer_no_holder(tc, cell);
-> > +                     bio_io_error(bio);
-> > +                     begin++;
-> > +                     break;
-> > +             }
-> > +     }
-> > +     bio_endio(bio);
-> > +     cell_defer_no_holder(tc, cell);
-> > +}
-> > +
-> > +static void process_provision_bio(struct thin_c *tc, struct bio *bio)
-> > +{
-> > +     dm_block_t begin, end;
-> > +     struct dm_cell_key virt_key;
-> > +     struct dm_bio_prison_cell *virt_cell;
-> > +
-> > +     get_bio_block_range(tc, bio, &begin, &end);
-> > +     if (begin =3D=3D end) {
-> > +             bio_endio(bio);
-> > +             return;
-> > +     }
-> > +
-> > +     build_key(tc->td, VIRTUAL, begin, end, &virt_key);
-> > +     if (bio_detain(tc->pool, &virt_key, bio, &virt_cell))
-> > +             return;
-> > +
-> > +     process_provision_cell(tc, virt_cell);
-> > +}
-> > +
-> >  static void process_bio(struct thin_c *tc, struct bio *bio)
-> >  {
-> >       struct pool *pool =3D tc->pool;
-> > @@ -2200,6 +2276,8 @@ static void process_thin_deferred_bios(struct thi=
-n_c *tc)
-> >
-> >               if (bio_op(bio) =3D=3D REQ_OP_DISCARD)
-> >                       pool->process_discard(tc, bio);
-> > +             else if (bio_op(bio) =3D=3D REQ_OP_PROVISION)
-> > +                     process_provision_bio(tc, bio);
-> >               else
-> >                       pool->process_bio(tc, bio);
-> >
-> > @@ -2716,7 +2794,8 @@ static int thin_bio_map(struct dm_target *ti, str=
-uct bio *bio)
-> >               return DM_MAPIO_SUBMITTED;
-> >       }
-> >
-> > -     if (op_is_flush(bio->bi_opf) || bio_op(bio) =3D=3D REQ_OP_DISCARD=
-) {
-> > +     if (op_is_flush(bio->bi_opf) || bio_op(bio) =3D=3D REQ_OP_DISCARD=
- ||
-> > +         bio_op(bio) =3D=3D REQ_OP_PROVISION) {
-> >               thin_defer_bio_with_throttle(tc, bio);
-> >               return DM_MAPIO_SUBMITTED;
-> >       }
-> > @@ -3355,6 +3434,8 @@ static int pool_ctr(struct dm_target *ti, unsigne=
-d argc, char **argv)
-> >       pt->low_water_blocks =3D low_water_blocks;
-> >       pt->adjusted_pf =3D pt->requested_pf =3D pf;
-> >       ti->num_flush_bios =3D 1;
-> > +     ti->num_provision_bios =3D 1;
-> > +     ti->provision_supported =3D true;
-> >
-> >       /*
-> >        * Only need to enable discards if the pool should pass
-> > @@ -4053,6 +4134,7 @@ static void pool_io_hints(struct dm_target *ti, s=
-truct queue_limits *limits)
-> >               blk_limits_io_opt(limits, pool->sectors_per_block << SECT=
-OR_SHIFT);
-> >       }
-> >
-> > +
-> >       /*
-> >        * pt->adjusted_pf is a staging area for the actual features to u=
-se.
-> >        * They get transferred to the live pool in bind_control_target()
-> > @@ -4243,6 +4325,9 @@ static int thin_ctr(struct dm_target *ti, unsigne=
-d argc, char **argv)
-> >               ti->num_discard_bios =3D 1;
-> >       }
-> >
-> > +     ti->num_provision_bios =3D 1;
-> > +     ti->provision_supported =3D true;
-> > +
-> >       mutex_unlock(&dm_thin_pool_table.mutex);
-> >
-> >       spin_lock_irq(&tc->pool->lock);
-> > @@ -4457,6 +4542,7 @@ static void thin_io_hints(struct dm_target *ti, s=
-truct queue_limits *limits)
-> >
-> >       limits->discard_granularity =3D pool->sectors_per_block << SECTOR=
-_SHIFT;
-> >       limits->max_discard_sectors =3D 2048 * 1024 * 16; /* 16G */
-> > +     limits->max_provision_sectors =3D 2048 * 1024 * 16; /* 16G */
-> >  }
-> >
-> >  static struct target_type thin_target =3D {
-> > diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-> > index e1ea3a7bd9d9..4d19bae9da4a 100644
-> > --- a/drivers/md/dm.c
-> > +++ b/drivers/md/dm.c
-> > @@ -1587,6 +1587,7 @@ static bool is_abnormal_io(struct bio *bio)
-> >               case REQ_OP_DISCARD:
-> >               case REQ_OP_SECURE_ERASE:
-> >               case REQ_OP_WRITE_ZEROES:
-> > +             case REQ_OP_PROVISION:
-> >                       return true;
-> >               default:
-> >                       break;
-> > @@ -1611,6 +1612,9 @@ static blk_status_t __process_abnormal_io(struct =
-clone_info *ci,
-> >       case REQ_OP_WRITE_ZEROES:
-> >               num_bios =3D ti->num_write_zeroes_bios;
-> >               break;
-> > +     case REQ_OP_PROVISION:
-> > +             num_bios =3D ti->num_provision_bios;
-> > +             break;
-> >       default:
-> >               break;
-> >       }
-> > diff --git a/include/linux/device-mapper.h b/include/linux/device-mappe=
-r.h
-> > index 04c6acf7faaa..b4d97d5d75b8 100644
-> > --- a/include/linux/device-mapper.h
-> > +++ b/include/linux/device-mapper.h
-> > @@ -333,6 +333,12 @@ struct dm_target {
-> >        */
-> >       unsigned num_write_zeroes_bios;
-> >
-> > +     /*
-> > +      * The number of PROVISION bios that will be submitted to the tar=
-get.
-> > +      * The bio number can be accessed with dm_bio_get_target_bio_nr.
-> > +      */
-> > +     unsigned num_provision_bios;
-> > +
-> >       /*
-> >        * The minimum number of extra bytes allocated in each io for the
-> >        * target to use.
-> > @@ -357,6 +363,11 @@ struct dm_target {
-> >        */
-> >       bool discards_supported:1;
-> >
-> > +     /* Set if this target needs to receive provision requests regardl=
-ess of
-> > +      * whether or not its underlying devices have support.
-> > +      */
-> > +     bool provision_supported:1;
-> > +
-> >       /*
-> >        * Set if we need to limit the number of in-flight bios when swap=
-ping.
-> >        */
-> > --
-> > 2.37.3
-> >
->
+-Saravana
