@@ -2,326 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9EF6D25AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601176D25C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbjCaQe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 12:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S232740AbjCaQgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbjCaQe0 (ORCPT
+        with ESMTP id S232456AbjCaQfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:34:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464201FD2E;
-        Fri, 31 Mar 2023 09:31:10 -0700 (PDT)
-Received: from jupiter.universe (dyndsl-091-248-213-136.ewe-ip-backbone.de [91.248.213.136])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0A834660319B;
-        Fri, 31 Mar 2023 17:31:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680280268;
-        bh=i9BGs9btRS2BixYzGSGiY/eZWnra7PBJGPH/Gfsqa5Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SJ/LjGbI66nhSuRZXYkGXnqnwz0uAZB+ruqqNBAOrtyg0QpLNdNIJ+rU4ykx28gEA
-         uIEEwak+ANqFBVilGO47JbjBB/i9GszhHec58FO/R4M/94lHcTgIPqrZP3UHmsGCUb
-         tyVYrSN3v9ZraU3WeqATVPtr3x1gcLCKo+WSa2Po+q9xZwti2H+pkgeInEZrFlAHbr
-         00J1JR1XsWclHnmyv5Iuy+dGoMwzD7wdbm7gunxqyfj7t8fIzHH9x5ujTG1vzyr9mg
-         K2jaIjkOV5OOMlaqwlsuHZMzQgyXusyrYbToZfVvXh82fmiMIHjIhDSaixGk64C+6k
-         QYdfO+CK05xTw==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id 5C1344807E3; Fri, 31 Mar 2023 18:31:06 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org
-Cc:     Peter Geis <pgwipeout@gmail.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Finley Xiao <finley.xiao@rock-chips.com>,
-        Jagan Teki <jagan@edgeble.ai>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCHv1 2/2] soc: rockchip: power-domain: add rk3588 mem module support
-Date:   Fri, 31 Mar 2023 18:30:58 +0200
-Message-Id: <20230331163058.5688-3-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230331163058.5688-1-sebastian.reichel@collabora.com>
-References: <20230331163058.5688-1-sebastian.reichel@collabora.com>
-MIME-Version: 1.0
+        Fri, 31 Mar 2023 12:35:37 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2045.outbound.protection.outlook.com [40.107.104.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE02D22923;
+        Fri, 31 Mar 2023 09:32:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WSzZh53HkmvG7K7OgJ//T4VMselaKGH3eFhP164I5gW9DDQ6KDdVPVGtUPbUcFz2XuFFnfyLfkLtXZNihXCsyLeomZ+QwWD77DA0ixnt1aVJl4bcBGKwf/KZt/uQZNQVtNCgUAJB//R0vSfGUcx9djRURczDy8NepBeJQM8z81YheThCRYRxpHoL3tpJSxxZUTQgT5kUI9nBpfHQ0MgjREVU5mJp9g/iOnGsC5gK645vCMrxQ36PLGagkIiw7LUc3en6RibrRVmj1W11AVdmXH6bfcxfoV2iCiIIkZfJFdifmgLddNz2MhjXfREJzyWJdod5Qn1eWOCTuQ35GHcwLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uR6d0AOWvtLiSX9/sXhFUbQrY/UmzvZ18zgbWJkzZqs=;
+ b=FDalpYYtq7cNFX7dLIcLdAgv9Rf1AIzyPtz2TrU0IhW9tE+tW8s1LdU6Emm5UOf8FjEjp3WafmUt7WAt83NwA3QjFKVA6a9Y+8gcF6TNEM+r8d2ip5Z7gQLL1t16gZwQajxUzbaQFyov9uJFuAbdOZIn6X8D44DSbLjYIugN5PLcnlpT4+YZKm0AQqzSDfyz3mAuQ8NMGBeAPJoLVOYf2lE95G+ke6XDoGJxDLXD0pa0zx0PloZFYlolwDwEQl3Oq8RPmx71LaLq6ky8vVVcpG7G3nBc88E4wlzoX0I2z8lx7kzL/AdlRZ+RJ/s0YJNNJ6DCOshPlz24lxlltaf/nw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uR6d0AOWvtLiSX9/sXhFUbQrY/UmzvZ18zgbWJkzZqs=;
+ b=Pxm3Gk+Bd8lcMxxyzrrl43jcruT28snIA02gfDPNXjk/mMxP2zLnIk+xfsiD4/TzXcP/5Y15CLAWhhRi/C5Jd38w1oM/fq5vrV1mb4jv77CmzFaqYJ57hFmHwVg1Q6Olrj/+malx5OdXPpzjXprLtFjubvjVSTycUe0DL4laajE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
+ by VE1PR04MB7213.eurprd04.prod.outlook.com (2603:10a6:800:1b3::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.23; Fri, 31 Mar
+ 2023 16:32:09 +0000
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::28fb:82ec:7a6:62f3]) by PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::28fb:82ec:7a6:62f3%3]) with mapi id 15.20.6254.023; Fri, 31 Mar 2023
+ 16:32:09 +0000
+From:   Shenwei Wang <shenwei.wang@nxp.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Revanth Kumar Uppala <ruppala@nvidia.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org, imx@lists.linux.dev
+Subject: [PATCH v2 1/2] net: stmmac: add support for platform specific reset
+Date:   Fri, 31 Mar 2023 11:31:42 -0500
+Message-Id: <20230331163143.52506-1-shenwei.wang@nxp.com>
+X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR05CA0040.namprd05.prod.outlook.com
+ (2603:10b6:a03:39b::15) To PAXPR04MB9185.eurprd04.prod.outlook.com
+ (2603:10a6:102:231::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|VE1PR04MB7213:EE_
+X-MS-Office365-Filtering-Correlation-Id: c1f7d365-bcfe-402b-a490-08db32057896
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jva/LY7BrcwxKaTnPvRNCJpTv2pNnIB8BTS2T+nkB3Z3hWY6wHTEe9p3APgabXjQqMc3+M7oLfWX2/zWxqdqddPGrDxtii/c58AGUOgonrgUyI6xKbe8qqzvsC8Fp2qHNXnyR/5KS0/gMX5y/QRso8B/0oHn6tlTG/hkNEgRCFSHQHYcfLQpP8EooZUpAlIT3tuQWLCgpw3zRzBALnisOrN3l2H82fb314Wl60oo2Qq2ye7ywF+FmCGv1nXzeRCL7tEhIswlO0mAhtsuoEVNKtngMlOQ3QS96HVZYxBFSPul+eUcNMOO5QvM6YOd3atEuZkl71HapzsecP8A529lrvZf8mGFy2lkvem1PjhEZkIYwY3t+DmekclLgqQL7zbmZQc5SocE5gOJlUl+j3f7XWaMRV1EHktFKuUtnqQoRommSJMhqGnonNuSTX/yXa6bZ+jxh6ADlus066ut32U2fJMjy/m9cy01rNE7IHA9z/qn3SON5l3QZlBR7ICVbHBvShchUVqZKRqjQUgBDb9Kdhvb1r6W0cHL5yas1cYYNIiHDSgylXtw9FKlAM04CrSiLvX2RtBuiXaU2Op/WwTsV/vSmGGJT1WTX6l1Z1A8ZqXjwqY4bfLKEJvqJHdcmZ9e
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(366004)(376002)(39860400002)(451199021)(7416002)(44832011)(1076003)(2616005)(83380400001)(6666004)(86362001)(55236004)(6506007)(26005)(6512007)(38100700002)(38350700002)(186003)(8936002)(5660300002)(478600001)(41300700001)(66946007)(54906003)(6486002)(36756003)(8676002)(66476007)(110136005)(4326008)(52116002)(66556008)(316002)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ifm6RgLClBmtlAcHad7CbBnhKTtRe60nA8Yhg8RdGmgT4MZsrXSIjn5oTdbF?=
+ =?us-ascii?Q?EZ4IGwj4r3gGo5r3Uia3U3WeQNLYWTsJKpTXldCEzFgsAlSsQrObbDYMckya?=
+ =?us-ascii?Q?YPXQ4rM50D4ksO+m0OtU1St3aZbpQdmE2T2oM3oi0myMMDpzmlxYEQaZFhhj?=
+ =?us-ascii?Q?23H5Z/ELqan4zowmXL0WXGSbzFvqhejIWli+AzqTJl8BOZdyqW4BuNrQvb7O?=
+ =?us-ascii?Q?AyGeMfw/7Q3mkbHGF/0F9i4PltC3mpiTEDB8sZ3qvWyVUnm0mOHgI32Q/47j?=
+ =?us-ascii?Q?p60WOtO6n2pkA1s0hS7HYMsYXFqskQLMCOJlQuLtmvgN08FSrU1uoo6UgcdN?=
+ =?us-ascii?Q?7VIZZ6MavL1TzD1gSK8UTLMZqp7KliP3XdQV/B+dWcgdCxtwVjyNc5WsUk5N?=
+ =?us-ascii?Q?G1/44d0SY3wrsQRlMlAJwh6+QAGDhAAJDiLjM7oKuvf2puTZMrxq+Vt3NStI?=
+ =?us-ascii?Q?Di4upT3os9ACtW/csYhcpU6QGsmCIr3Xlv/6p8xr6ZmbOJt/x5oEDvLUHKNP?=
+ =?us-ascii?Q?y66S5WACkYW/Afns/Zw72+ziGJf44jvD55MiK77Adm8i07j1vI/CcL4tfii/?=
+ =?us-ascii?Q?6w37xmvANw28bU8fftKxNWbUeTc0kNjhkQnZU7x4l5qx0woGThf1vf0u+Eiv?=
+ =?us-ascii?Q?qV1odZYJsOZQVGV5awDB5diTxCkUcYLTov/nYCl1m/aGecDkhCIvzmHS0hdW?=
+ =?us-ascii?Q?f612UbGcDQHYi3vPo6AvLpOcU8Zh4SxU0vDuXEdQi+P95c/1Jm/0eI4fPeL1?=
+ =?us-ascii?Q?YXicw5ZJDVi+Ozdxea0iFM4QR2QtLP5FRimg3RyWkDDvPiL7UDawLxdJfS7l?=
+ =?us-ascii?Q?quI6FvNTVlRkHfthMWSBsGsVlywwYcGXn9W/LrTNOaiAXo52dwamJiZZZg9J?=
+ =?us-ascii?Q?Ue2c6fXuv7vEaOvaudVX/GbndfN8fXtR6uZC+MhyWW5Ux/3kTBXmT+S4ds0s?=
+ =?us-ascii?Q?+pZad/6jOtlfhV4F29fbK73RiqwnnugWMr/PsmF3vIaVgx4cOcJafha0VN5S?=
+ =?us-ascii?Q?aqPaJiNOwASAf393Fuxa3OnDjUzOKQOjJrgVg/PH8TPdGsBRWp6hH4oohMJE?=
+ =?us-ascii?Q?dV5pib0HRWyvBBbdffkdS+Wwfq9fZ9ElpFVcXmG1rMm1A7iOoq3EWT7RaiC8?=
+ =?us-ascii?Q?hd1BEhzfmmIc7TaaCxZHDyTyD1snEKsVris5L32lqIMhfCnSPfKeIuSWsLkA?=
+ =?us-ascii?Q?+zQrTRD/arbt/Y7TpnIB/QItzD9dsxCpHyLsxIJtojywxI4am07cgbD7BULC?=
+ =?us-ascii?Q?UGPzNauWh7zz7m8odUCt7GA+whpvUERqX5Us/c49FTr6wb9J/9oGYl6KVBNt?=
+ =?us-ascii?Q?BbopHT+XtVQ3oJy8YYseVT2JkZ4cC2w7sfpcFhKt1LO7qzoIFVcYZI2ToDv2?=
+ =?us-ascii?Q?cjt2iVCQcn2UyigW2bjXPTlCISnEONJZ+ibmIB/mjtHkjDUuaYKACuB0yw0x?=
+ =?us-ascii?Q?pXe3i4WBNYa5PGnxH5As1eqCE8ZsjStj9sHTs1p9iwMmXNw6fXD2pd2XcSPR?=
+ =?us-ascii?Q?AwCNnrKAujFbpXSkXyynDEX37CCK5PyIzMieaYZ0dqD24m4o2oJEi3cMVxN4?=
+ =?us-ascii?Q?x6KCySTTgo+nVWu2apv/hHtUjy044mhFtQDiyOek?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1f7d365-bcfe-402b-a490-08db32057896
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 16:32:09.2489
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: I4AePp57Bi0oJ3K+dYz390t9gYnVPZlHUeqizDaawzaTXg53f/xhg8xN55z/FVFYW11e2elx4lgO4rZbKyZVxQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7213
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Boris Brezillon <boris.brezillon@collabora.com>
+This patch adds support for platform-specific reset logic in the
+stmmac driver. Some SoCs require a different reset mechanism than
+the standard dwmac IP reset. To support these platforms, a new function
+pointer 'fix_soc_reset' is added to the plat_stmmacenet_data structure.
+The stmmac_reset macro in hwif.h is modified to call the 'fix_soc_reset'
+function if it exists. This enables the driver to use the platform-specific
+reset logic when necessary.
 
-On RK3588 it's also possible to power down the memory used by the
-particular power domains via PMU_MEM_PWR_GATE_SFTCON. This adds
-support for this feature.
-
-Co-Developed-by: Finley Xiao <finley.xiao@rock-chips.com>
-Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
-Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
 ---
- drivers/soc/rockchip/pm_domains.c | 160 +++++++++++++++++++++++-------
- 1 file changed, 125 insertions(+), 35 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/hwif.c | 10 ++++++++++
+ drivers/net/ethernet/stmicro/stmmac/hwif.h |  3 +--
+ include/linux/stmmac.h                     |  1 +
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/soc/rockchip/pm_domains.c b/drivers/soc/rockchip/pm_domains.c
-index 84bc022f9e5b..8b3c745925a3 100644
---- a/drivers/soc/rockchip/pm_domains.c
-+++ b/drivers/soc/rockchip/pm_domains.c
-@@ -43,8 +43,10 @@ struct rockchip_domain_info {
- 	bool active_wakeup;
- 	int pwr_w_mask;
- 	int req_w_mask;
-+	int mem_status_mask;
- 	int repair_status_mask;
- 	u32 pwr_offset;
-+	u32 mem_offset;
- 	u32 req_offset;
- };
- 
-@@ -54,6 +56,9 @@ struct rockchip_pmu_info {
- 	u32 req_offset;
- 	u32 idle_offset;
- 	u32 ack_offset;
-+	u32 mem_pwr_offset;
-+	u32 chain_status_offset;
-+	u32 mem_status_offset;
- 	u32 repair_status_offset;
- 
- 	u32 core_pwrcnt_offset;
-@@ -119,13 +124,15 @@ struct rockchip_pmu {
- 	.active_wakeup = wakeup,			\
- }
- 
--#define DOMAIN_M_O_R(_name, p_offset, pwr, status, r_status, r_offset, req, idle, ack, wakeup)	\
-+#define DOMAIN_M_O_R(_name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, ack, wakeup)	\
- {							\
- 	.name = _name,					\
- 	.pwr_offset = p_offset,				\
- 	.pwr_w_mask = (pwr) << 16,			\
- 	.pwr_mask = (pwr),				\
- 	.status_mask = (status),			\
-+	.mem_offset = m_offset,				\
-+	.mem_status_mask = (m_status),			\
- 	.repair_status_mask = (r_status),		\
- 	.req_offset = r_offset,				\
- 	.req_w_mask = (req) << 16,			\
-@@ -269,8 +276,8 @@ void rockchip_pmu_unblock(void)
- }
- EXPORT_SYMBOL_GPL(rockchip_pmu_unblock);
- 
--#define DOMAIN_RK3588(name, p_offset, pwr, status, r_status, r_offset, req, idle, wakeup)	\
--	DOMAIN_M_O_R(name, p_offset, pwr, status, r_status, r_offset, req, idle, idle, wakeup)
-+#define DOMAIN_RK3588(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, wakeup)	\
-+	DOMAIN_M_O_R(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, idle, wakeup)
- 
- static bool rockchip_pmu_domain_is_idle(struct rockchip_pm_domain *pd)
- {
-@@ -408,17 +415,92 @@ static bool rockchip_pmu_domain_is_on(struct rockchip_pm_domain *pd)
- 	return !(val & pd->info->status_mask);
- }
- 
-+static bool rockchip_pmu_domain_is_mem_on(struct rockchip_pm_domain *pd)
-+{
-+	struct rockchip_pmu *pmu = pd->pmu;
-+	unsigned int val;
-+
-+	regmap_read(pmu->regmap,
-+		    pmu->info->mem_status_offset + pd->info->mem_offset, &val);
-+
-+	/* 1'b0: power on, 1'b1: power off */
-+	return !(val & pd->info->mem_status_mask);
-+}
-+
-+static bool rockchip_pmu_domain_is_chain_on(struct rockchip_pm_domain *pd)
-+{
-+	struct rockchip_pmu *pmu = pd->pmu;
-+	unsigned int val;
-+
-+	regmap_read(pmu->regmap,
-+		    pmu->info->chain_status_offset + pd->info->mem_offset, &val);
-+
-+	/* 1'b1: power on, 1'b0: power off */
-+	return val & pd->info->mem_status_mask;
-+}
-+
-+static int rockchip_pmu_domain_mem_reset(struct rockchip_pm_domain *pd)
-+{
-+	struct rockchip_pmu *pmu = pd->pmu;
-+	struct generic_pm_domain *genpd = &pd->genpd;
-+	bool is_on;
-+	int ret = 0;
-+
-+	ret = readx_poll_timeout_atomic(rockchip_pmu_domain_is_chain_on, pd, is_on,
-+					is_on == true, 0, 10000);
-+	if (ret) {
-+		dev_err(pmu->dev,
-+			"failed to get chain status '%s', target_on=1, val=%d\n",
-+			genpd->name, is_on);
-+		goto error;
-+	}
-+
-+	udelay(20);
-+
-+	regmap_write(pmu->regmap, pmu->info->mem_pwr_offset + pd->info->pwr_offset,
-+		     (pd->info->pwr_mask | pd->info->pwr_w_mask));
-+	dsb(sy);
-+
-+	ret = readx_poll_timeout_atomic(rockchip_pmu_domain_is_mem_on, pd, is_on,
-+					is_on == false, 0, 10000);
-+	if (ret) {
-+		dev_err(pmu->dev,
-+			"failed to get mem status '%s', target_on=0, val=%d\n",
-+			genpd->name, is_on);
-+		goto error;
-+	}
-+
-+	regmap_write(pmu->regmap, pmu->info->mem_pwr_offset + pd->info->pwr_offset,
-+		     pd->info->pwr_w_mask);
-+	dsb(sy);
-+
-+	ret = readx_poll_timeout_atomic(rockchip_pmu_domain_is_mem_on, pd, is_on,
-+					is_on == true, 0, 10000);
-+	if (ret) {
-+		dev_err(pmu->dev,
-+			"failed to get mem status '%s', target_on=1, val=%d\n",
-+			genpd->name, is_on);
-+	}
-+
-+error:
-+	return ret;
-+}
-+
- static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
- 					     bool on)
- {
- 	struct rockchip_pmu *pmu = pd->pmu;
- 	struct generic_pm_domain *genpd = &pd->genpd;
- 	u32 pd_pwr_offset = pd->info->pwr_offset;
--	bool is_on;
-+	bool is_on, is_mem_on = false;
- 
- 	if (pd->info->pwr_mask == 0)
- 		return;
--	else if (pd->info->pwr_w_mask)
-+
-+	if (on && pd->info->mem_status_mask)
-+		is_mem_on = rockchip_pmu_domain_is_mem_on(pd);
-+
-+	if (pd->info->pwr_w_mask)
- 		regmap_write(pmu->regmap, pmu->info->pwr_offset + pd_pwr_offset,
- 			     on ? pd->info->pwr_w_mask :
- 			     (pd->info->pwr_mask | pd->info->pwr_w_mask));
-@@ -428,6 +510,9 @@ static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
- 
- 	wmb();
- 
-+	if (is_mem_on && rockchip_pmu_domain_mem_reset(pd))
-+		return;
-+
- 	if (readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, pd, is_on,
- 				      is_on == on, 0, 10000)) {
- 		dev_err(pmu->dev,
-@@ -645,7 +730,9 @@ static int rockchip_pm_add_one_domain(struct rockchip_pmu *pmu,
- 	pd->genpd.flags = GENPD_FLAG_PM_CLK;
- 	if (pd_info->active_wakeup)
- 		pd->genpd.flags |= GENPD_FLAG_ACTIVE_WAKEUP;
--	pm_genpd_init(&pd->genpd, NULL, !rockchip_pmu_domain_is_on(pd));
-+	pm_genpd_init(&pd->genpd, NULL,
-+		      !rockchip_pmu_domain_is_on(pd) ||
-+		      (pd->info->mem_status_mask && !rockchip_pmu_domain_is_mem_on(pd)));
- 
- 	pmu->genpd_data.domains[id] = &pd->genpd;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.c b/drivers/net/ethernet/stmicro/stmmac/hwif.c
+index bb7114f970f8..0eefa697ffe8 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/hwif.c
++++ b/drivers/net/ethernet/stmicro/stmmac/hwif.c
+@@ -87,6 +87,16 @@ static int stmmac_dwxlgmac_quirks(struct stmmac_priv *priv)
  	return 0;
-@@ -1024,35 +1111,35 @@ static const struct rockchip_domain_info rk3568_pm_domains[] = {
+ }
+ 
++int stmmac_reset(struct stmmac_priv *priv, void __iomem *ioaddr)
++{
++	struct plat_stmmacenet_data *plat = priv ? priv->plat : NULL;
++
++	if (plat && plat->fix_soc_reset)
++		return plat->fix_soc_reset(plat, ioaddr);
++
++	return stmmac_do_callback(priv, dma, reset, ioaddr);
++}
++
+ static const struct stmmac_hwif_entry {
+ 	bool gmac;
+ 	bool gmac4;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.h b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+index 16a7421715cb..47a68f506c10 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/hwif.h
++++ b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+@@ -214,8 +214,6 @@ struct stmmac_dma_ops {
+ 	int (*enable_tbs)(void __iomem *ioaddr, bool en, u32 chan);
  };
  
- static const struct rockchip_domain_info rk3588_pm_domains[] = {
--	[RK3588_PD_GPU]		= DOMAIN_RK3588("gpu",     0x0, BIT(0),  0,       BIT(1),  0x0, BIT(0),  BIT(0),  false),
--	[RK3588_PD_NPU]		= DOMAIN_RK3588("npu",     0x0, BIT(1),  BIT(1),  0,       0x0, 0,       0,       false),
--	[RK3588_PD_VCODEC]	= DOMAIN_RK3588("vcodec",  0x0, BIT(2),  BIT(2),  0,       0x0, 0,       0,       false),
--	[RK3588_PD_NPUTOP]	= DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       BIT(2),  0x0, BIT(1),  BIT(1),  false),
--	[RK3588_PD_NPU1]	= DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       BIT(3),  0x0, BIT(2),  BIT(2),  false),
--	[RK3588_PD_NPU2]	= DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       BIT(4),  0x0, BIT(3),  BIT(3),  false),
--	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       BIT(5),  0x0, BIT(4),  BIT(4),  false),
--	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       BIT(6),  0x0, BIT(5),  BIT(5),  false),
--	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       BIT(7),  0x0, BIT(6),  BIT(6),  false),
--	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       BIT(8),  0x0, BIT(7),  BIT(7),  false),
--	[RK3588_PD_VDPU]	= DOMAIN_RK3588("vdpu",    0x0, BIT(10), 0,       BIT(9),  0x0, BIT(8),  BIT(8),  false),
--	[RK3588_PD_RGA30]	= DOMAIN_RK3588("rga30",   0x0, BIT(11), 0,       BIT(10), 0x0, 0,       0,       false),
--	[RK3588_PD_AV1]		= DOMAIN_RK3588("av1",     0x0, BIT(12), 0,       BIT(11), 0x0, BIT(9),  BIT(9),  false),
--	[RK3588_PD_VI]		= DOMAIN_RK3588("vi",      0x0, BIT(13), 0,       BIT(12), 0x0, BIT(10), BIT(10), false),
--	[RK3588_PD_FEC]		= DOMAIN_RK3588("fec",     0x0, BIT(14), 0,       BIT(13), 0x0, 0,       0,       false),
--	[RK3588_PD_ISP1]	= DOMAIN_RK3588("isp1",    0x0, BIT(15), 0,       BIT(14), 0x0, BIT(11), BIT(11), false),
--	[RK3588_PD_RGA31]	= DOMAIN_RK3588("rga31",   0x4, BIT(0),  0,       BIT(15), 0x0, BIT(12), BIT(12), false),
--	[RK3588_PD_VOP]		= DOMAIN_RK3588("vop",     0x4, BIT(1),  0,       BIT(16), 0x0, BIT(13) | BIT(14), BIT(13) | BIT(14), false),
--	[RK3588_PD_VO0]		= DOMAIN_RK3588("vo0",     0x4, BIT(2),  0,       BIT(17), 0x0, BIT(15), BIT(15), false),
--	[RK3588_PD_VO1]		= DOMAIN_RK3588("vo1",     0x4, BIT(3),  0,       BIT(18), 0x4, BIT(0),  BIT(16), false),
--	[RK3588_PD_AUDIO]	= DOMAIN_RK3588("audio",   0x4, BIT(4),  0,       BIT(19), 0x4, BIT(1),  BIT(17), false),
--	[RK3588_PD_PHP]		= DOMAIN_RK3588("php",     0x4, BIT(5),  0,       BIT(20), 0x4, BIT(5),  BIT(21), false),
--	[RK3588_PD_GMAC]	= DOMAIN_RK3588("gmac",    0x4, BIT(6),  0,       BIT(21), 0x0, 0,       0,       false),
--	[RK3588_PD_PCIE]	= DOMAIN_RK3588("pcie",    0x4, BIT(7),  0,       BIT(22), 0x0, 0,       0,       true),
--	[RK3588_PD_NVM]		= DOMAIN_RK3588("nvm",     0x4, BIT(8),  BIT(24), 0,       0x4, BIT(2),  BIT(18), false),
--	[RK3588_PD_NVM0]	= DOMAIN_RK3588("nvm0",    0x4, BIT(9),  0,       BIT(23), 0x0, 0,       0,       false),
--	[RK3588_PD_SDIO]	= DOMAIN_RK3588("sdio",    0x4, BIT(10), 0,       BIT(24), 0x4, BIT(3),  BIT(19), false),
--	[RK3588_PD_USB]		= DOMAIN_RK3588("usb",     0x4, BIT(11), 0,       BIT(25), 0x4, BIT(4),  BIT(20), true),
--	[RK3588_PD_SDMMC]	= DOMAIN_RK3588("sdmmc",   0x4, BIT(13), 0,       BIT(26), 0x0, 0,       0,       false),
-+	[RK3588_PD_GPU]		= DOMAIN_RK3588("gpu",     0x0, BIT(0),  0,       0x0, 0,       BIT(1),  0x0, BIT(0),  BIT(0),  false),
-+	[RK3588_PD_NPU]		= DOMAIN_RK3588("npu",     0x0, BIT(1),  BIT(1),  0x0, 0,       0,       0x0, 0,       0,       false),
-+	[RK3588_PD_VCODEC]	= DOMAIN_RK3588("vcodec",  0x0, BIT(2),  BIT(2),  0x0, 0,       0,       0x0, 0,       0,       false),
-+	[RK3588_PD_NPUTOP]	= DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       0x0, BIT(11), BIT(2),  0x0, BIT(1),  BIT(1),  false),
-+	[RK3588_PD_NPU1]	= DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       0x0, BIT(12), BIT(3),  0x0, BIT(2),  BIT(2),  false),
-+	[RK3588_PD_NPU2]	= DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       0x0, BIT(13), BIT(4),  0x0, BIT(3),  BIT(3),  false),
-+	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false),
-+	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false),
-+	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false),
-+	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false),
-+	[RK3588_PD_VDPU]	= DOMAIN_RK3588("vdpu",    0x0, BIT(10), 0,       0x0, BIT(18), BIT(9),  0x0, BIT(8),  BIT(8),  false),
-+	[RK3588_PD_RGA30]	= DOMAIN_RK3588("rga30",   0x0, BIT(11), 0,       0x0, BIT(19), BIT(10), 0x0, 0,       0,       false),
-+	[RK3588_PD_AV1]		= DOMAIN_RK3588("av1",     0x0, BIT(12), 0,       0x0, BIT(20), BIT(11), 0x0, BIT(9),  BIT(9),  false),
-+	[RK3588_PD_VI]		= DOMAIN_RK3588("vi",      0x0, BIT(13), 0,       0x0, BIT(21), BIT(12), 0x0, BIT(10), BIT(10), false),
-+	[RK3588_PD_FEC]		= DOMAIN_RK3588("fec",     0x0, BIT(14), 0,       0x0, BIT(22), BIT(13), 0x0, 0,       0,       false),
-+	[RK3588_PD_ISP1]	= DOMAIN_RK3588("isp1",    0x0, BIT(15), 0,       0x0, BIT(23), BIT(14), 0x0, BIT(11), BIT(11), false),
-+	[RK3588_PD_RGA31]	= DOMAIN_RK3588("rga31",   0x4, BIT(0),  0,       0x0, BIT(24), BIT(15), 0x0, BIT(12), BIT(12), false),
-+	[RK3588_PD_VOP]		= DOMAIN_RK3588("vop",     0x4, BIT(1),  0,       0x0, BIT(25), BIT(16), 0x0, BIT(13) | BIT(14), BIT(13) | BIT(14), false),
-+	[RK3588_PD_VO0]		= DOMAIN_RK3588("vo0",     0x4, BIT(2),  0,       0x0, BIT(26), BIT(17), 0x0, BIT(15), BIT(15), false),
-+	[RK3588_PD_VO1]		= DOMAIN_RK3588("vo1",     0x4, BIT(3),  0,       0x0, BIT(27), BIT(18), 0x4, BIT(0),  BIT(16), false),
-+	[RK3588_PD_AUDIO]	= DOMAIN_RK3588("audio",   0x4, BIT(4),  0,       0x0, BIT(28), BIT(19), 0x4, BIT(1),  BIT(17), false),
-+	[RK3588_PD_PHP]		= DOMAIN_RK3588("php",     0x4, BIT(5),  0,       0x0, BIT(29), BIT(20), 0x4, BIT(5),  BIT(21), false),
-+	[RK3588_PD_GMAC]	= DOMAIN_RK3588("gmac",    0x4, BIT(6),  0,       0x0, BIT(30), BIT(21), 0x0, 0,       0,       false),
-+	[RK3588_PD_PCIE]	= DOMAIN_RK3588("pcie",    0x4, BIT(7),  0,       0x0, BIT(31), BIT(22), 0x0, 0,       0,       true),
-+	[RK3588_PD_NVM]		= DOMAIN_RK3588("nvm",     0x4, BIT(8),  BIT(24), 0x4, 0,       0,       0x4, BIT(2),  BIT(18), false),
-+	[RK3588_PD_NVM0]	= DOMAIN_RK3588("nvm0",    0x4, BIT(9),  0,       0x4, BIT(1),  BIT(23), 0x0, 0,       0,       false),
-+	[RK3588_PD_SDIO]	= DOMAIN_RK3588("sdio",    0x4, BIT(10), 0,       0x4, BIT(2),  BIT(24), 0x4, BIT(3),  BIT(19), false),
-+	[RK3588_PD_USB]		= DOMAIN_RK3588("usb",     0x4, BIT(11), 0,       0x4, BIT(3),  BIT(25), 0x4, BIT(4),  BIT(20), true),
-+	[RK3588_PD_SDMMC]	= DOMAIN_RK3588("sdmmc",   0x4, BIT(13), 0,       0x4, BIT(5),  BIT(26), 0x0, 0,       0,       false),
- };
+-#define stmmac_reset(__priv, __args...) \
+-	stmmac_do_callback(__priv, dma, reset, __args)
+ #define stmmac_dma_init(__priv, __args...) \
+ 	stmmac_do_void_callback(__priv, dma, init, __args)
+ #define stmmac_init_chan(__priv, __args...) \
+@@ -640,6 +638,7 @@ extern const struct stmmac_mmc_ops dwxgmac_mmc_ops;
+ #define GMAC_VERSION		0x00000020	/* GMAC CORE Version */
+ #define GMAC4_VERSION		0x00000110	/* GMAC4+ CORE Version */
  
- static const struct rockchip_pmu_info px30_pmu = {
-@@ -1207,6 +1294,9 @@ static const struct rockchip_pmu_info rk3588_pmu = {
- 	.req_offset = 0x10c,
- 	.idle_offset = 0x120,
- 	.ack_offset = 0x118,
-+	.mem_pwr_offset = 0x1a0,
-+	.chain_status_offset = 0x1f0,
-+	.mem_status_offset = 0x1f8,
- 	.repair_status_offset = 0x290,
++int stmmac_reset(struct stmmac_priv *priv, void *ioaddr);
+ int stmmac_hwif_init(struct stmmac_priv *priv);
  
- 	.num_domains = ARRAY_SIZE(rk3588_pm_domains),
+ #endif /* __STMMAC_HWIF_H__ */
+diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
+index a152678b82b7..9044477fad61 100644
+--- a/include/linux/stmmac.h
++++ b/include/linux/stmmac.h
+@@ -223,6 +223,7 @@ struct plat_stmmacenet_data {
+ 	struct stmmac_rxq_cfg rx_queues_cfg[MTL_MAX_RX_QUEUES];
+ 	struct stmmac_txq_cfg tx_queues_cfg[MTL_MAX_TX_QUEUES];
+ 	void (*fix_mac_speed)(void *priv, unsigned int speed);
++	int (*fix_soc_reset)(void *priv, void __iomem *ioaddr);
+ 	int (*serdes_powerup)(struct net_device *ndev, void *priv);
+ 	void (*serdes_powerdown)(struct net_device *ndev, void *priv);
+ 	void (*speed_mode_2500)(struct net_device *ndev, void *priv);
 -- 
-2.39.2
+2.34.1
 
