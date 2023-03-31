@@ -2,142 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CAA6D193B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0026D1942
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjCaICo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S231381AbjCaIDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjCaICm (ORCPT
+        with ESMTP id S230241AbjCaIDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:02:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA00EB63;
-        Fri, 31 Mar 2023 01:02:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B15AB82C92;
-        Fri, 31 Mar 2023 08:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F3FAC4339B;
-        Fri, 31 Mar 2023 08:02:36 +0000 (UTC)
-Date:   Fri, 31 Mar 2023 13:32:16 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Cc:     mani@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] net: qrtr: Do not do DEL_SERVER broadcast after
- DEL_CLIENT
-Message-ID: <20230331080216.GA6352@thinkpad>
-References: <1680248937-16617-1-git-send-email-quic_srichara@quicinc.com>
+        Fri, 31 Mar 2023 04:03:38 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8D21024E;
+        Fri, 31 Mar 2023 01:03:37 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso22559306pjb.3;
+        Fri, 31 Mar 2023 01:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680249816;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X2YYDqaXEe+OlABx7nR00XL22NbKcMoWA4HV8o8wFw4=;
+        b=jd4QUO4qQCCNMeP1y1kdFNasUVZNXLbfLZh3Ef7q2XkFJDggudlgm1SvUp3KwtL6mg
+         rff482SM+B2v52u0U0heU18u3X2B+YPqj15IG4EgxmfC0rdEt8z37NxWic2kbBzYkS+7
+         qBin4exH+KLnro6Fxt+orrT1TNi4uWcn7QtMOS4wI5qdAg5hn6WkaRlW62Vf1mKcWAB2
+         1YI5ZDox5dvQ+EmxzNNcc6WCw3CqirZd8IrgdMTkvmLFzvPSgQoJbEm/HhExrJxGHw20
+         PwuZvTtwERtCFkdYWE3ZhRlgnihB7JVCZjx/PJYavY0KBMekYHqcLORWIl6oISQGw3wm
+         z2FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680249816;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X2YYDqaXEe+OlABx7nR00XL22NbKcMoWA4HV8o8wFw4=;
+        b=atEw4uip5yjeh8D3AFyWV7c03eWU0D0fjwfrnxJW8+NYnp4yxrVVYT1k0D4JAlVaQ6
+         0z9tpv4vVcEmbSCXI4qO87DKJ+FGl7/zofjkFC0st5hYgsqLDtZgNnKrjam9BMu/vIgX
+         gZaHJszoDTQa0nKYGuA0PYJcXbY6oUuuKCYEqEsv3/AaKye8skYLXlUmFcnkks29BSzc
+         jaT/5XZAv2NYwpGDZPRMHOlHnteimNIvAEZfmnGUcrS6YiqQ0gtonSJBD3q3NaMStC7Y
+         k+5ke3LesIhWlAQXaDlNJU2LA3FaDDF+bEyiNMnkfq32rY+q0Yn/LPAb5A50PI4VTVDR
+         SnoQ==
+X-Gm-Message-State: AAQBX9cs2mltxJo6qMdfawh/8/ugE2Gct6qvsFDjojAsubGFPwdRtUIk
+        1ZSubcXfqmOwcHm0D6z9XQJmmUEHvtdJfk0COcg=
+X-Google-Smtp-Source: AKy350bagh6xUTSk+gvpPAa/yBG4/ITbe87XXMZ7yUIaLH9rNwAaG8B08G54xTGRY+lSZg9nJWrLengD7VdxDHcqS+U=
+X-Received: by 2002:a17:902:8bc4:b0:19f:1d62:4393 with SMTP id
+ r4-20020a1709028bc400b0019f1d624393mr8775321plo.7.1680249816556; Fri, 31 Mar
+ 2023 01:03:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1680248937-16617-1-git-send-email-quic_srichara@quicinc.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230327075838.5403-1-xin3.li@intel.com> <20230327075838.5403-28-xin3.li@intel.com>
+In-Reply-To: <20230327075838.5403-28-xin3.li@intel.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Fri, 31 Mar 2023 16:03:24 +0800
+Message-ID: <CAJhGHyDQSHkfxVS1o+rqA4JaaOpvyVH0C5JNLKdDuzNtncQiTw@mail.gmail.com>
+Subject: Re: [PATCH v6 27/33] x86/fred: fixup fault on ERETU by jumping to fred_entrypoint_user
+To:     Xin Li <xin3.li@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
+        andrew.cooper3@citrix.com, seanjc@google.com, pbonzini@redhat.com,
+        ravi.v.shankar@intel.com, shan.kang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 01:18:57PM +0530, Sricharan Ramabadhran wrote:
-> On the remote side, when QRTR socket is removed, af_qrtr will call
-> qrtr_port_remove() which broadcasts the DEL_CLIENT packet to all neighbours
-> including local NS. NS upon receiving the DEL_CLIENT packet, will remove
-> the lookups associated with the node:port and broadcasts the DEL_SERVER
-> packet.
-> 
-> But on the host side, due to the arrival of the DEL_CLIENT packet, the NS
-> would've already deleted the server belonging to that port. So when the
-> remote's NS again broadcasts the DEL_SERVER for that port, it throws below
-> error message on the host:
-> 
-> "failed while handling packet from 2:-2"
-> 
-> So fix this error by not broadcasting the DEL_SERVER packet when the
-> DEL_CLIENT packet gets processed."
-> 
-> Fixes: 0c2204a4ad71 ("net: qrtr: Migrate nameservice to kernel from userspace")
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> Signed-off-by: Ram Kumar Dharuman <quic_ramd@quicinc.com>
+On Mon, Mar 27, 2023 at 4:24=E2=80=AFPM Xin Li <xin3.li@intel.com> wrote:
+>
+> If the stack frame contains an invalid user context (e.g. due to invalid =
+SS,
+> a non-canonical RIP, etc.) the ERETU instruction will trap (#SS or #GP).
+>
+> From a Linux point of view, this really should be considered a user space
+> failure, so use the standard fault fixup mechanism to intercept the fault=
+,
+> fix up the exception frame, and redirect execution to fred_entrypoint_use=
+r.
+> The end result is that it appears just as if the hardware had taken the
+> exception immediately after completing the transition to user space.
+>
+> Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Tested-by: Shan Kang <shan.kang@intel.com>
+> Signed-off-by: Xin Li <xin3.li@intel.com>
 > ---
-> [v2] Fixed comments from Manivannan and Jakub Kicinski
-> Note: Functionally tested on 5.4 and compile tested on 6.3 TOT
-> 
->  net/qrtr/ns.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/net/qrtr/ns.c b/net/qrtr/ns.c
-> index 722936f..0f25a38 100644
-> --- a/net/qrtr/ns.c
-> +++ b/net/qrtr/ns.c
-> @@ -274,7 +274,7 @@ static struct qrtr_server *server_add(unsigned int service,
->  	return NULL;
+>
+> Changes since v5:
+> * Move the NMI bit from an invalid stack frame, which caused ERETU to fau=
+lt,
+>   to the fault handler's stack frame, thus to unblock NMI ASAP if NMI is =
+blocked
+>   (Lai Jiangshan).
+> ---
+>  arch/x86/entry/entry_64_fred.S             |  8 +++--
+>  arch/x86/include/asm/extable_fixup_types.h |  4 ++-
+>  arch/x86/mm/extable.c                      | 36 ++++++++++++++++++++++
+>  3 files changed, 45 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/entry/entry_64_fred.S b/arch/x86/entry/entry_64_fre=
+d.S
+> index d975cacd060f..efe2bcd11273 100644
+> --- a/arch/x86/entry/entry_64_fred.S
+> +++ b/arch/x86/entry/entry_64_fred.S
+> @@ -5,8 +5,10 @@
+>   * The actual FRED entry points.
+>   */
+>  #include <linux/linkage.h>
+> -#include <asm/errno.h>
+> +#include <asm/asm.h>
+>  #include <asm/asm-offsets.h>
+> +#include <asm/errno.h>
+> +#include <asm/export.h>
+>  #include <asm/fred.h>
+>
+>  #include "calling.h"
+> @@ -38,7 +40,9 @@ SYM_CODE_START_NOALIGN(fred_entrypoint_user)
+>         call    fred_entry_from_user
+>  SYM_INNER_LABEL(fred_exit_user, SYM_L_GLOBAL)
+>         FRED_EXIT
+> -       ERETU
+> +1:     ERETU
+> +
+> +       _ASM_EXTABLE_TYPE(1b, fred_entrypoint_user, EX_TYPE_ERETU)
+>  SYM_CODE_END(fred_entrypoint_user)
+>
+>  .fill fred_entrypoint_kernel - ., 1, 0xcc
+> diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/includ=
+e/asm/extable_fixup_types.h
+> index 991e31cfde94..1585c798a02f 100644
+> --- a/arch/x86/include/asm/extable_fixup_types.h
+> +++ b/arch/x86/include/asm/extable_fixup_types.h
+> @@ -64,6 +64,8 @@
+>  #define        EX_TYPE_UCOPY_LEN4              (EX_TYPE_UCOPY_LEN | EX_D=
+ATA_IMM(4))
+>  #define        EX_TYPE_UCOPY_LEN8              (EX_TYPE_UCOPY_LEN | EX_D=
+ATA_IMM(8))
+>
+> -#define EX_TYPE_ZEROPAD                        20 /* longword load with =
+zeropad on fault */
+> +#define        EX_TYPE_ZEROPAD                 20 /* longword load with =
+zeropad on fault */
+> +
+> +#define        EX_TYPE_ERETU                   21
+>
+>  #endif
+> diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
+> index 60814e110a54..a5d75b27a993 100644
+> --- a/arch/x86/mm/extable.c
+> +++ b/arch/x86/mm/extable.c
+> @@ -6,6 +6,7 @@
+>  #include <xen/xen.h>
+>
+>  #include <asm/fpu/api.h>
+> +#include <asm/fred.h>
+>  #include <asm/sev.h>
+>  #include <asm/traps.h>
+>  #include <asm/kdebug.h>
+> @@ -195,6 +196,37 @@ static bool ex_handler_ucopy_len(const struct except=
+ion_table_entry *fixup,
+>         return ex_handler_uaccess(fixup, regs, trapnr);
 >  }
->  
-> -static int server_del(struct qrtr_node *node, unsigned int port)
-> +static int server_del(struct qrtr_node *node, unsigned int port, bool bcast)
+>
+> +#ifdef CONFIG_X86_FRED
+> +static bool ex_handler_eretu(const struct exception_table_entry *fixup,
+> +                            struct pt_regs *regs, unsigned long error_co=
+de)
+> +{
+> +       struct pt_regs *uregs =3D (struct pt_regs *)(regs->sp - offsetof(=
+struct pt_regs, ip));
+> +       unsigned short ss =3D uregs->ss;
+> +       unsigned short cs =3D uregs->cs;
+> +
+> +       /*
+> +        * Move the NMI bit from the invalid stack frame, which caused ER=
+ETU
+> +        * to fault, to the fault handler's stack frame, thus to unblock =
+NMI
+> +        * with the fault handler's ERETS instruction ASAP if NMI is bloc=
+ked.
+> +        */
+> +       regs->nmi =3D uregs->nmi;
+> +
+> +       fred_info(uregs)->edata =3D fred_event_data(regs);
+> +       uregs->ssx =3D regs->ssx;
+> +       uregs->ss =3D ss;
+> +       uregs->csx =3D regs->csx;
+> +       uregs->nmi =3D 0; /* The NMI bit was moved away above */
+> +       uregs->current_stack_level =3D 0;
+> +       uregs->cs =3D cs;
+> +
+> +       /* Copy error code to uregs and adjust stack pointer accordingly =
+*/
+> +       uregs->orig_ax =3D error_code;
+
+The address of uregs->orig_ax is below regs->sp, so I think
+some comments are needed here to state why it is safe to
+write to uregs->orig_ax (a.k.a it is not verlapped with regs).
+
+
+
+Thanks
+Lai
+
+> +       regs->sp -=3D 8;
+> +
+> +       return ex_handler_default(fixup, regs);
+> +}
+> +#endif
+> +
+>  int ex_get_fixup_type(unsigned long ip)
 >  {
->  	struct qrtr_lookup *lookup;
->  	struct qrtr_server *srv;
-> @@ -287,7 +287,7 @@ static int server_del(struct qrtr_node *node, unsigned int port)
->  	radix_tree_delete(&node->servers, port);
->  
->  	/* Broadcast the removal of local servers */
-> -	if (srv->node == qrtr_ns.local_node)
-> +	if (srv->node == qrtr_ns.local_node && bcast)
->  		service_announce_del(&qrtr_ns.bcast_sq, srv);
->  
->  	/* Announce the service's disappearance to observers */
-> @@ -373,7 +373,7 @@ static int ctrl_cmd_bye(struct sockaddr_qrtr *from)
->  		}
->  		slot = radix_tree_iter_resume(slot, &iter);
->  		rcu_read_unlock();
-> -		server_del(node, srv->port);
-> +		server_del(node, srv->port, true);
->  		rcu_read_lock();
->  	}
->  	rcu_read_unlock();
-> @@ -459,10 +459,13 @@ static int ctrl_cmd_del_client(struct sockaddr_qrtr *from,
->  		kfree(lookup);
->  	}
->  
-> -	/* Remove the server belonging to this port */
-> +	/* Remove the server belonging to this port but don't broadcast
-
-This is still not as per the multi line comment style perferred in kernel.
-Please read: https://www.kernel.org/doc/html/latest/process/coding-style.html#commenting
-
-- Mani
-
-> +	 * DEL_SERVER. Neighbours would've already removed the server belonging
-> +	 * to this port due to the DEL_CLIENT broadcast from qrtr_port_remove().
-> +	 */
->  	node = node_get(node_id);
->  	if (node)
-> -		server_del(node, port);
-> +		server_del(node, port, false);
->  
->  	/* Advertise the removal of this client to all local servers */
->  	local_node = node_get(qrtr_ns.local_node);
-> @@ -567,7 +570,7 @@ static int ctrl_cmd_del_server(struct sockaddr_qrtr *from,
->  	if (!node)
->  		return -ENOENT;
->  
-> -	return server_del(node, port);
-> +	return server_del(node, port, true);
+>         const struct exception_table_entry *e =3D search_exception_tables=
+(ip);
+> @@ -272,6 +304,10 @@ int fixup_exception(struct pt_regs *regs, int trapnr=
+, unsigned long error_code,
+>                 return ex_handler_ucopy_len(e, regs, trapnr, reg, imm);
+>         case EX_TYPE_ZEROPAD:
+>                 return ex_handler_zeropad(e, regs, fault_addr);
+> +#ifdef CONFIG_X86_FRED
+> +       case EX_TYPE_ERETU:
+> +               return ex_handler_eretu(e, regs, error_code);
+> +#endif
+>         }
+>         BUG();
 >  }
->  
->  static int ctrl_cmd_new_lookup(struct sockaddr_qrtr *from,
-> -- 
-> 2.7.4
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+> --
+> 2.34.1
+>
