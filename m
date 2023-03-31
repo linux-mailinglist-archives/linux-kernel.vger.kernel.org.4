@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D546D27ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADCA6D27F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjCaSgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 14:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S232429AbjCaShD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 14:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjCaSgo (ORCPT
+        with ESMTP id S232619AbjCaShA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:36:44 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFD51CBA0;
-        Fri, 31 Mar 2023 11:36:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=YE7GfOrERWcu2MD4hsCVsKkg8asC+YWQG3+Pv6uwbqk=; b=uEqp76fQYC/dZmRiYmKKO0zAom
-        ZoB3UFNy+UtNl5yJRIrqU/CTlfpVSM+gJ7zG/HAQIPWEJKwiQZp9pVmGtTigRksP0GieeeGZa5Xd+
-        HCDdjUd8/Wpi0h5ogPOJYaVs9rCqika3mc+IAnnS4JggKcEso9vLel1P3BD3jTBu4lZJsmnoaxqhr
-        UiKc4Zy8F9bFcGyS0KOp7N/uzpEcu9BMY20AwDyBb7iRwvwqd294PwuxZkNc1AeDT3zidgzxhYbl6
-        sXNyqw9Z0s1kSTtkYMbGBS/3WhW2jrgyMQEUtJSVcZ9uuH/76BKCypqP1kwXRA9aZ6NiYJKUcVe7w
-        ow6TpxuQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1piJbx-00BfMF-56; Fri, 31 Mar 2023 18:36:29 +0000
-Date:   Fri, 31 Mar 2023 19:36:29 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>,
-        Dave Chinner <david@fromorbit.com>
-Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
-Message-ID: <ZCcoLcncAVeKOZRL@casper.infradead.org>
-References: <20230316170149.4106586-1-jolsa@kernel.org>
- <ZBNTMZjEoETU9d8N@casper.infradead.org>
- <ZBV3beyxYhKv/kMp@krava>
- <ZBXV3crf/wX5D9lo@casper.infradead.org>
- <ZBsihOYrMCILT2cI@kernel.org>
- <CAEf4BzakHh3qm2JBsWE8qnMmZMeM7w5vZGneKAsLM_vktPbc9g@mail.gmail.com>
+        Fri, 31 Mar 2023 14:37:00 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77286236A3;
+        Fri, 31 Mar 2023 11:36:58 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-17683b570b8so24084644fac.13;
+        Fri, 31 Mar 2023 11:36:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680287818;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+bjD1EcJNKzAi8wncOI0Nv9d4Dm2eSpivDuCUZ0uj+Q=;
+        b=YSXAVDJxZlnP5rNK4AcZzldroEqDbpdAA0yuUytbn4ubDAyR2lWl7ovQDRiSXXspf/
+         KEILaGN1MEqyDeDoOzdpI0wLjGPKwophEEkIPnz5hHQUxJSiugKAh9KsMukmc2yXwtc/
+         6twOGxO6yJn2myXjPw4CtFQ7rlKX/xNyBMnwGUglNT29pGx14wY4kvm5og3Hbt0/sNSs
+         BJFKAYS7pIQNnShCy2p9ayinx3Q2svq+UB3c6GWOxUD1GXEG9KKG7gzRl2LoLdLNQS+A
+         PGtFHoKwk3PgenEPeZT4eQ0PJqWWisCnESQjiaJCHefa/6B85syhN5REp8HbM6HWuYhN
+         48wQ==
+X-Gm-Message-State: AAQBX9eFTegTJMPBW7AI2Va9LH7lT+bb32CKvzKXey4DIEO/PxLC6Svm
+        0p62TcBRU02yxgYFelutTg==
+X-Google-Smtp-Source: AKy350Y886xOZ+2ooL5E3zJvqqPPH1/c5nOufsJ+DfqnVrTuBrB0nKcCnpq/FFcxJ0fp42lzvWwBTg==
+X-Received: by 2002:a05:6870:d191:b0:177:a92e:ee6 with SMTP id a17-20020a056870d19100b00177a92e0ee6mr17583742oac.54.1680287817716;
+        Fri, 31 Mar 2023 11:36:57 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k24-20020a056830169800b0069f95707335sm1369913otr.69.2023.03.31.11.36.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 11:36:57 -0700 (PDT)
+Received: (nullmailer pid 1920516 invoked by uid 1000);
+        Fri, 31 Mar 2023 18:36:56 -0000
+Date:   Fri, 31 Mar 2023 13:36:56 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-renesas-soc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        devicetree@vger.kernel.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] dt-bindings: timer: renesas: ostm: Document RZ/Five SoC
+Message-ID: <168028781598.1920458.10411321215956149029.robh@kernel.org>
+References: <20230323185112.13855-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzakHh3qm2JBsWE8qnMmZMeM7w5vZGneKAsLM_vktPbc9g@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230323185112.13855-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 11:19:45AM -0700, Andrii Nakryiko wrote:
-> On Wed, Mar 22, 2023 at 8:45 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> > Having said that, it seems there will be no extra memory overhead at
-> > least for a fedora:36 x86_64 kernel:
+
+On Thu, 23 Mar 2023 18:51:12 +0000, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > 
-> Makes sense to me as well. Whatever the solution, as long as it's
-> usable from NMI contexts would be fine for the purposes of fetching
-> build ID. It would be good to hear from folks that are opposing adding
-> a pointer field to struct file whether they prefer this way instead?
+> The OSTM block on the RZ/Five SoC is identical to one found on the RZ/G2UL
+> SoC. "renesas,r9a07g043-ostm" compatible string will be used on the
+> RZ/Five SoC so to make this clear, update the comment to include RZ/Five
+> SoC.
+> 
+> No driver changes are required as generic compatible string
+> "renesas,ostm" will be used as a fallback on RZ/Five SoC.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  Documentation/devicetree/bindings/timer/renesas,ostm.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Still no.  While it may not take up any room right now, this will
-surely not be the last thing added to struct file.  When something
-which is genuinely useful needs to be added, that person should
-not have to sort out your mess first,
+Acked-by: Rob Herring <robh@kernel.org>
 
-NAK now, NAK tomorrow, NAK forever.  Al told you how you could do it
-without trampling on core data structures.
