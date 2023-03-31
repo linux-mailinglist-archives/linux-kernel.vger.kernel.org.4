@@ -2,180 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7696D2106
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1012E6D210A
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 15:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232667AbjCaM7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
+        id S232673AbjCaNCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 09:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbjCaM7T (ORCPT
+        with ESMTP id S232376AbjCaNCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:59:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A08AF18
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:59:17 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1piELT-0007HC-29; Fri, 31 Mar 2023 14:59:07 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1piELS-0002LD-Oy; Fri, 31 Mar 2023 14:59:06 +0200
-Date:   Fri, 31 Mar 2023 14:59:06 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-wireless@vger.kernel.org, tony0620emma@gmail.com,
-        kvalo@kernel.org, pkshih@realtek.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] wifi: rtw88: Move register access from
- rtw_bf_assoc() outside the RCU
-Message-ID: <20230331125906.GF15436@pengutronix.de>
-References: <20230108211324.442823-1-martin.blumenstingl@googlemail.com>
- <20230108211324.442823-2-martin.blumenstingl@googlemail.com>
+        Fri, 31 Mar 2023 09:02:34 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848741BCE;
+        Fri, 31 Mar 2023 06:02:32 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 02D7431A;
+        Fri, 31 Mar 2023 13:02:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 02D7431A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1680267752; bh=lHPjSDZteLZA06uiq0aIjI330xz6NFY+UFe790PqJP0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Jdwqt4L1nuZbnDnZ0Lc9EGCPZ0GbGpqUentJFyOW1mNdaEBU1WR5o6t1BGF0LBvmA
+         jlPVCRSTxHTXONxY8PLpDOgF5MuXkGxbRhzG7QUiseBxYXtWm90B1Qz5WFHH8G9KxY
+         PQEchHulyCNevg67FM64okHXeLzzbabPVYZBwYOU2TUvvY7LjFOZRKrVZu6/+CTMmr
+         jLXAetQgzp6+eV6MiLBTQC9PYRbgK8RUbUeV30PtLBsX77rt0OzWLdyT20OD0jTsDR
+         16Y3EzCIXWot4qMLMWeoXBNtcXU295nmRG0T5xtUi2Dd2B8Fd+MoOHM2jl7OsUGDW2
+         aRo0vqKDxcUOA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH 4/4] docs: move m68k architecture documentation under
+ Documentation/arch/
+In-Reply-To: <CAMuHMdU=yyEciJD6iU-g90T3Qxg+t27Vz6VuojkhbxdODDJGwA@mail.gmail.com>
+References: <20230330195604.269346-1-corbet@lwn.net>
+ <20230330195604.269346-5-corbet@lwn.net>
+ <CAMuHMdU=yyEciJD6iU-g90T3Qxg+t27Vz6VuojkhbxdODDJGwA@mail.gmail.com>
+Date:   Fri, 31 Mar 2023 07:02:31 -0600
+Message-ID: <87cz4pdqfs.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230108211324.442823-2-martin.blumenstingl@googlemail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 08, 2023 at 10:13:22PM +0100, Martin Blumenstingl wrote:
-> USB and (upcoming) SDIO support may sleep in the read/write handlers.
-> Shrink the RCU critical section so it only cover the call to
-> ieee80211_find_sta() and finding the ic_vht_cap/vht_cap based on the
-> found station. This moves the chip's BFEE configuration outside the
-> rcu_read_lock section and thus prevent "scheduling while atomic" or
-> "Voluntary context switch within RCU read-side critical section!"
-> warnings when accessing the registers using an SDIO card (which is
-> where this issue has been spotted in the real world - but it also
-> affects USB cards).
+Geert Uytterhoeven <geert@linux-m68k.org> writes:
 
-Unfortunately this introduces a regression on my RTW8821CU chip. With
-this it constantly looses connection to the AP and reconnects shortly
-after:
+>> diff --git a/Documentation/translations/zh_CN/arch/parisc/debugging.rst b/Documentation/translations/zh_CN/arch/parisc/debugging.rst
+>> index 9bd197eb0d41..c6b9de6d3175 100644
+>> --- a/Documentation/translations/zh_CN/arch/parisc/debugging.rst
+>> +++ b/Documentation/translations/zh_CN/arch/parisc/debugging.rst
+>> @@ -1,4 +1,4 @@
+>> -.. include:: ../disclaimer-zh_CN.rst
+>> +.. include:: ../../disclaimer-zh_CN.rst
+>>
+>>  :Original: Documentation/arch/parisc/debugging.rst
+>>
+>> diff --git a/Documentation/translations/zh_CN/arch/parisc/index.rst b/Documentation/translations/zh_CN/arch/parisc/index.rst
+>> index 848742539550..9f69283bd1c9 100644
+>> --- a/Documentation/translations/zh_CN/arch/parisc/index.rst
+>> +++ b/Documentation/translations/zh_CN/arch/parisc/index.rst
+>> @@ -1,5 +1,5 @@
+>>  .. SPDX-License-Identifier: GPL-2.0
+>> -.. include:: ../disclaimer-zh_CN.rst
+>> +.. include:: ../../disclaimer-zh_CN.rst
+>>
+>>  :Original: Documentation/arch/parisc/index.rst
+>>
+>> diff --git a/Documentation/translations/zh_CN/arch/parisc/registers.rst b/Documentation/translations/zh_CN/arch/parisc/registers.rst
+>> index caf5f258248b..a55250afcc27 100644
+>> --- a/Documentation/translations/zh_CN/arch/parisc/registers.rst
+>> +++ b/Documentation/translations/zh_CN/arch/parisc/registers.rst
+>> @@ -1,4 +1,4 @@
+>> -.. include:: ../disclaimer-zh_CN.rst
+>> +.. include:: ../../disclaimer-zh_CN.rst
+>>
+>>  :Original: Documentation/arch/parisc/registers.rst
+>>
+>
+> These changes do not belong in this patch.
 
-[  199.771143] wlan0: authenticate with b0:be:76:5e:7b:34
-[  201.447301] wlan0: send auth to b0:be:76:5e:7b:34 (try 1/3)
-[  201.456789] wlan0: authenticated
-[  201.462356] wlan0: associate with b0:be:76:5e:7b:34 (try 1/3)
-[  201.477263] wlan0: RX AssocResp from b0:be:76:5e:7b:34 (capab=0x431 status=0 aid=2)
-[  201.512995] wlan0: associated
-[  213.790399] wlan0: authenticate with b0:be:76:5e:7b:34
-[  215.467302] wlan0: send auth to b0:be:76:5e:7b:34 (try 1/3)
-[  215.470532] wlan0: authenticated
-[  215.490355] wlan0: associate with b0:be:76:5e:7b:34 (try 1/3)
-[  215.503777] wlan0: RX AssocResp from b0:be:76:5e:7b:34 (capab=0x431 status=0 aid=2)
-[  215.539608] wlan0: associated
-[  227.770596] wlan0: authenticate with b0:be:76:5e:7b:34
-[  229.443302] wlan0: send auth to b0:be:76:5e:7b:34 (try 1/3)
-[  229.451209] wlan0: authenticated
-[  229.462487] wlan0: associate with b0:be:76:5e:7b:34 (try 1/3)
-[  229.476077] wlan0: RX AssocResp from b0:be:76:5e:7b:34 (capab=0x431 status=0 aid=2)
-[  229.513499] wlan0: associated
-[  241.738494] wlan0: authenticate with b0:be:76:5e:7b:34
-[  243.407301] wlan0: send auth to b0:be:76:5e:7b:34 (try 1/3)
-[  243.411207] wlan0: authenticated
-[  243.423213] wlan0: associate with b0:be:76:5e:7b:34 (try 1/3)
-[  243.439822] wlan0: RX AssocResp from b0:be:76:5e:7b:34 (capab=0x431 status=0 aid=2)
-[  243.476731] wlan0: associated
+Why not?  If I don't make those changes when moving the files, the
+documentation build will break.
 
-I haven't got any further information yet, I just realized this when I
-rebased my own RTW88 bugfix series from v6.2.2 to v6.3-rc4 before
-sending it.
+Thanks,
 
-RTW8723D and RTW8822CU seem unaffected though.
-
-Sascha
-
-> 
-> Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
-> Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
-> v1 -> v2:
-> - Added Ping-Ke's Reviewed-by (thank you!)
-> 
-> v2 -> v3:
-> - Added Sascha's Tested-by (thank you!)
-> - added "wifi" prefix to the subject and reworded the title accordingly
-> 
-> 
->  drivers/net/wireless/realtek/rtw88/bf.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw88/bf.c b/drivers/net/wireless/realtek/rtw88/bf.c
-> index 038a30b170ef..c827c4a2814b 100644
-> --- a/drivers/net/wireless/realtek/rtw88/bf.c
-> +++ b/drivers/net/wireless/realtek/rtw88/bf.c
-> @@ -49,19 +49,23 @@ void rtw_bf_assoc(struct rtw_dev *rtwdev, struct ieee80211_vif *vif,
->  
->  	sta = ieee80211_find_sta(vif, bssid);
->  	if (!sta) {
-> +		rcu_read_unlock();
-> +
->  		rtw_warn(rtwdev, "failed to find station entry for bss %pM\n",
->  			 bssid);
-> -		goto out_unlock;
-> +		return;
->  	}
->  
->  	ic_vht_cap = &hw->wiphy->bands[NL80211_BAND_5GHZ]->vht_cap;
->  	vht_cap = &sta->deflink.vht_cap;
->  
-> +	rcu_read_unlock();
-> +
->  	if ((ic_vht_cap->cap & IEEE80211_VHT_CAP_MU_BEAMFORMEE_CAPABLE) &&
->  	    (vht_cap->cap & IEEE80211_VHT_CAP_MU_BEAMFORMER_CAPABLE)) {
->  		if (bfinfo->bfer_mu_cnt >= chip->bfer_mu_max_num) {
->  			rtw_dbg(rtwdev, RTW_DBG_BF, "mu bfer number over limit\n");
-> -			goto out_unlock;
-> +			return;
->  		}
->  
->  		ether_addr_copy(bfee->mac_addr, bssid);
-> @@ -75,7 +79,7 @@ void rtw_bf_assoc(struct rtw_dev *rtwdev, struct ieee80211_vif *vif,
->  		   (vht_cap->cap & IEEE80211_VHT_CAP_SU_BEAMFORMER_CAPABLE)) {
->  		if (bfinfo->bfer_su_cnt >= chip->bfer_su_max_num) {
->  			rtw_dbg(rtwdev, RTW_DBG_BF, "su bfer number over limit\n");
-> -			goto out_unlock;
-> +			return;
->  		}
->  
->  		sound_dim = vht_cap->cap &
-> @@ -98,9 +102,6 @@ void rtw_bf_assoc(struct rtw_dev *rtwdev, struct ieee80211_vif *vif,
->  
->  		rtw_chip_config_bfee(rtwdev, rtwvif, bfee, true);
->  	}
-> -
-> -out_unlock:
-> -	rcu_read_unlock();
->  }
->  
->  void rtw_bf_init_bfer_entry_mu(struct rtw_dev *rtwdev,
-> -- 
-> 2.39.0
-> 
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+jon
