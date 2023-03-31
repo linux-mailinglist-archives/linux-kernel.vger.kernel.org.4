@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9DBC6D207A
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8266D2080
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbjCaMgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S231313AbjCaMj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjCaMgG (ORCPT
+        with ESMTP id S232256AbjCaMis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:36:06 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CA42033A
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:35:43 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id m2so22232327wrh.6
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:35:43 -0700 (PDT)
+        Fri, 31 Mar 2023 08:38:48 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DEF1D2F9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:37:09 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id le6so21073174plb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:37:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680266141;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=swOeWot85GIaEePp91l98DkNomzcOh+V2vppc9loIuU=;
-        b=BkF/FqSsbVjbR1KVsiSpp7SQNoMqEdlMojmSrjeDo+9LbCdA3wvvUQ2FqFFr4Z1N+R
-         CqvWeyyswgPkG4UhnYDxHpGST9/tVFnwd96DXgIG09uDl11pUyymaTp6BErulwzQCzS9
-         LIX3VrPMQTBXcHtZss4xxMBJeUUWPwCH5qAfyRhPj9kLH+T+B7MEsnt6YD6Cyjv10KxI
-         sdNVD328u7TA54082Z2OjMePKjVajcHwBGjsI3stsu3m+FyrqMwMlBxWuq76N8mgry6n
-         Sni/ScuRCDhOSWwvi2IYqsRGLekiVM+jOxz7cWEgYpgLannbfs8iknnC5J2uwsNQtqhD
-         9b7g==
+        d=ventanamicro.com; s=google; t=1680266229; x=1682858229;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9WubBxQcFlbrCivsI8ygmIt3wyTH8vV0otzELm2BxuY=;
+        b=S8SEwMexthg418jcoc/l0ZCHyde7NLs7axCIcKNjXn6/pDmhwVH7MN1pRPCb78KzNa
+         FDVWax2ZvK8RuMsbxJ9XKNWUkQDiXGIfqxohzOe3qHDrdZwZTqMl+J89OFKRme09kbun
+         5ZSa23mTHJibfrCSRY2z0luvXS3fkAqg0B4rjFpGnOUGPnQBReNCO4bYrpRSW0GYmJPK
+         en1NRd3WTFXOB0T0egm20HwRfpWcMnspTvUc0tcufRTjHCDCQ/hFGn2QKMIXn0/a9082
+         HclH91MlF0fbpypjtJh9lqtcA6+52YstOjrNZ+KXLwD1896ipDTHN6Ixdn3a+V1Ym1ku
+         q0nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680266141;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=swOeWot85GIaEePp91l98DkNomzcOh+V2vppc9loIuU=;
-        b=IMkendx+BcXAOdLOhrioO3967DV+bOz5pg2HV5KGfUSAEVqsQ/QgxRCgFQvXpW5hX6
-         g0Rz1+1g+5jbvg1mp07tKM6VgAVH1Lbx9yc2Bop15NY4dnM85D5Jwcx0khugxxSj3kOQ
-         KrRpfn683QNXcrS9zIXgYRRj4+I3IFso/opXFFw3hfAktYWqKztDcYtfAns4FXRHftDY
-         eyqWL7DMG+zb38/6BOz/GjWrU8StqiHHrlDqRVAiQtdibiY4W6+2KkZWmZrKgfIYHN08
-         PDAGL/nyrm6OB7JjIqItCKBrj5hKKBbmfR9l9gttxFOwbTulwYzmfk1gQJ5FRoMURHJu
-         +Ghg==
-X-Gm-Message-State: AAQBX9c+tJFRtKpGhaTsvfePcEgF1VSM7X3X1tXcQ6PHtoZj4dimnBvX
-        wH6vIwZwdYRLAbZpDpcflUHmEg==
-X-Google-Smtp-Source: AKy350b9EDA4FRXrfvd4zTIm9hwFtXN5pA+QlBIcWSVxOH0R42o/XjmxtvUN+8Tr/9+SP05WzOhqIA==
-X-Received: by 2002:adf:dd87:0:b0:2ce:aa62:ff79 with SMTP id x7-20020adfdd87000000b002ceaa62ff79mr20600624wrl.40.1680266140773;
-        Fri, 31 Mar 2023 05:35:40 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id v12-20020a5d4b0c000000b002cfed482e9asm2109776wrq.61.2023.03.31.05.35.39
+        d=1e100.net; s=20210112; t=1680266229; x=1682858229;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9WubBxQcFlbrCivsI8ygmIt3wyTH8vV0otzELm2BxuY=;
+        b=YBOJNkIoWQfVk5XmPfVuyoeGBxzgLHE3wV8fEJ6IzNGN6nIfQS9Hd3UT0OJLkTk70B
+         c3DN9hazPhBz293VfEEq7r12bcbQp9YHxDUL9vwwMIfkOK1POM21C0UcW0PfKqRoor0v
+         5XzOW+vSRsZOtnl63Fp20NY7VMF7enZFmqmwl065z0XhJ4mISU1v5RX7bxgvgQz89nYX
+         8vGsyv16dEYSDGYx0PKvuOn4MvHBeKLsa5SG9W6OzNPt9KGX5EyvWy7W1BlQtE/V9/m+
+         jWNcGLU2Tl7NwcmkyrgyFq4YX7/rOuDT2A/xapNvEP+LZF2Bu8go+8mInWmnew41yw/N
+         Z1CQ==
+X-Gm-Message-State: AO0yUKUqjFUzwfK3m5zS4qJ9WhGJo0p5CSYdVC40vqseh1VmT1Zr5BJy
+        8F1Q0Z15EijKGEIjBlEeT5ZpKw==
+X-Google-Smtp-Source: AK7set8oJnl1XWMelKBd0trRwj/ADq3c2QeaJ5pMHFOAmAusZzI9flMITHfHrm2lvXn9Zm+3OMJV6g==
+X-Received: by 2002:a05:6a20:4c2a:b0:d4:f108:d8d0 with SMTP id fm42-20020a056a204c2a00b000d4f108d8d0mr22359696pzb.36.1680266228643;
+        Fri, 31 Mar 2023 05:37:08 -0700 (PDT)
+Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
+        by smtp.gmail.com with ESMTPSA id c2-20020aa78802000000b005a8a5be96b2sm876470pfo.104.2023.03.31.05.37.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 05:35:40 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 15:35:38 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-clk@vger.kernel.org, aford@beaconembedded.com,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 0/4] clk: imx: Improve imx8mm/imx8mn LCDIF clocks
-Message-ID: <ZCbTmitvBTQu26PX@linaro.org>
-References: <20230323230127.120883-1-aford173@gmail.com>
+        Fri, 31 Mar 2023 05:37:08 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v3 0/1] RISC-V KVM ONE_REG interface for SBI
+Date:   Fri, 31 Mar 2023 18:06:54 +0530
+Message-Id: <20230331123655.1991260-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323230127.120883-1-aford173@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -78,62 +73,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-03-23 18:01:23, Adam Ford wrote:
-> Both the i.MX8M Mini and Nano have a video_pll which can be used 
-> to source a clock which feeds the lcdif interface.  This interface
-> currently fixes video_pll and divides down the clock feeding LCDIF.
-> However, when connected to an HDMI bridge chip that supports a
-> variety of video resolutions and refresh rates, the only settings
-> that properly sync are ones that evenly divide from the video_pll_out
-> clock.
-> 
-> This series adds the ability for the clk-compolsite-8m to
-> request a better parent clock rate if the proper clock flag is
-> enable and sets that flag in the corresponding imx8mm and 
-> imx8mn video_pll clocks to increase the number of resolutions
-> and refresh rates timings that the LCDIF can produce.
-> 
-> This also has a side benefit of allowing the video-pll to run
-> at a lower clock speed which can potentially save some power
-> depending on the requested resolution and refresh rate.
-> 
+This series first does few cleanups/fixes (PATCH1 to PATCH5) and adds
+ONE-REG interface for customizing the SBI interface visible to the
+Guest/VM.
 
-Applied, thanks!
+The testing of this series has been done with KVMTOOL changes in
+riscv_sbi_imp_v1 branch at:
+https://github.com/avpatel/kvmtool.git
 
-[1/4] clk: imx: composite-8m: Add support to determine_rate
-      commit: 156e96ff2172518b6f83e97d8f11f677bc668e22
-[2/4] clk: imx: Add imx8m_clk_hw_composite_flags macro
-      commit: 784a9b3916e949c00666588fd167c4ab245ec9d6
-[3/4] clk: imx8mm: Let IMX8MM_CLK_LCDIF_PIXEL set parent rate
-      commit: 5fe6ec93f10b0765d59e0efb6ecba419a6a49d48
-[4/4] clk: imx: Let IMX8MN_CLK_DISP_PIXEL set parent rate
-      commit: 46a974433ea7fa468b45db70536f7cea81feb87c
+These patches can also be found in the riscv_kvm_sbi_imp_v3 branch at:
+https://github.com/avpatel/linux.git
 
+Changes since v2:
+ - Improve ONE_REG interface to allow enabling/disabling multiple SBI
+   extensions in one ioctl().
 
-Best regards,
---
-Abel Vesa <abel.vesa@linaro.org>
+Changes since v1:
+ - Dropped patches 1 to 8 since these are already merged.
+ - Rebased on Linux-6.3-rc4
 
+Anup Patel (1):
+  RISC-V: KVM: Add ONE_REG interface to enable/disable SBI extensions
 
+ arch/riscv/include/asm/kvm_vcpu_sbi.h |   8 +-
+ arch/riscv/include/uapi/asm/kvm.h     |  32 ++++
+ arch/riscv/kvm/vcpu.c                 |   2 +
+ arch/riscv/kvm/vcpu_sbi.c             | 245 ++++++++++++++++++++++++--
+ arch/riscv/kvm/vcpu_sbi_base.c        |   2 +-
+ 5 files changed, 270 insertions(+), 19 deletions(-)
 
-> v4:  Sorry for the noise.  I forgot to 'git ammend' so V4
->      is what V3 should have been.
-> V3:  Change the name of clk_divider_determine_rate to
->       imx8m_clk_divider_determine_rate
-> V2:  Split off the new imx8m_clk_hw_composite_flags definition
->      into its own patch and re-order to fix build error.
->       
-> Adam Ford (3):
->   clk: imx: composite-8m: Add support to determine_rate
->   clk: imx8mm: Let IMX8MM_CLK_LCDIF_PIXEL set parent rate
->   clk: imx: Let IMX8MN_CLK_DISP_PIXEL set parent rate
-> 
->  drivers/clk/imx/clk-composite-8m.c | 7 +++++++
->  drivers/clk/imx/clk-imx8mm.c       | 2 +-
->  drivers/clk/imx/clk-imx8mn.c       | 2 +-
->  drivers/clk/imx/clk.h              | 4 ++++
->  4 files changed, 13 insertions(+), 2 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+-- 
+2.34.1
+
