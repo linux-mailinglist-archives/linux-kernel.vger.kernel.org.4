@@ -2,233 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D3C6D297B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3252B6D2985
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbjCaUak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
+        id S232696AbjCaUeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233257AbjCaUaY (ORCPT
+        with ESMTP id S229967AbjCaUeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:30:24 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D1C22928;
-        Fri, 31 Mar 2023 13:30:05 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so24637135pjz.1;
-        Fri, 31 Mar 2023 13:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680294605; x=1682886605;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VszdLpAL7WqW9IxkGHXAfoIlaDcuh12lplT2Sv91rgM=;
-        b=fJTPcqNjyxIKGGtqdvBiSEHrCMcmx8ZiItq9Z5trLCfiBkGu9Wm1Hbc18e7T+EJeiw
-         LTe15kEhlp9pxxdNNl61QBW2DMakNHw307l9JIOqBuw9kje28RcSQ4i8qmiBF44zwioW
-         OFRjZVuPkMuJBCPXgL1F2mT81a/nPDVnrfrCVPkfkOgyos8IaiBW4w4n3bU6R2WXkxgk
-         0dQFIDMek5uVuVONmkqeYpuSR3zGi7ziZngQOqB8p22myN0BgFQiekaWATJTKLHy+pqI
-         1s749Dlp50qjsCs0tVQJag9LNlhmeseuQd05FbxiIEvGMhoQMZ/+AeII2mGe2d3GS4GK
-         4d6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680294605; x=1682886605;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VszdLpAL7WqW9IxkGHXAfoIlaDcuh12lplT2Sv91rgM=;
-        b=aeN0HurK0b5OuiMiBJx7jptIpamnla58kYU6IVuWmhzgWyWD2/qEHKaJhQ8a/oHBo7
-         SGIwW+B/7KbghJbTpR2JIvHdL6rp07OqR4o9i88V0xKcP9VH0FZifo8I2S4hDm7QOWoM
-         An9qjZg6zmJrw3N0SiMririv8Ju6XciLo4rLiQNAtdljXFdWI1ouri9uYF01gwKdwGnj
-         PNUz6/eB7Q1uqAKS7q5Q+AOba9/9/dY9/Sh+jo7TjgHtCpG1iCqs6PsGZdmwJD5LHrLv
-         MeLlkslFDGMF5DmQmpxe5IwIx0qBHmEs4SAAUXGt8Q518R5m6CG7Dub0GS1sKIM9o9Fm
-         TSPQ==
-X-Gm-Message-State: AAQBX9fEAdRRlv+lxyk/0oNnkVWvsiwzuZ0/pNs/fPCceO02NAPhRW1v
-        YAWfWCODRev0v/rmVmEyEE8=
-X-Google-Smtp-Source: AKy350arHlvmF6DIyZbkP9LcdFyyG3+qB4Th0ZjhnVAbe1BAKpnzxP1XVTMU1ToXoBk6tFW6Q5/Oxg==
-X-Received: by 2002:a17:903:32d0:b0:19c:dbce:dce8 with SMTP id i16-20020a17090332d000b0019cdbcedce8mr31103443plr.15.1680294605042;
-        Fri, 31 Mar 2023 13:30:05 -0700 (PDT)
-Received: from bangji.hsd1.ca.comcast.net ([2601:647:6780:44b0:5cfb:ad2c:e6f5:d42f])
-        by smtp.gmail.com with ESMTPSA id t14-20020a1709028c8e00b001a1dc2be791sm1916803plo.259.2023.03.31.13.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 13:30:04 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH 9/9] perf intel-pt: Use perf_pmu__scan_file_at() if possible
-Date:   Fri, 31 Mar 2023 13:29:49 -0700
-Message-Id: <20230331202949.810326-10-namhyung@kernel.org>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-In-Reply-To: <20230331202949.810326-1-namhyung@kernel.org>
-References: <20230331202949.810326-1-namhyung@kernel.org>
+        Fri, 31 Mar 2023 16:34:05 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04491B7C3;
+        Fri, 31 Mar 2023 13:34:03 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1piLRa-0007Dg-1j;
+        Fri, 31 Mar 2023 22:33:54 +0200
+Date:   Fri, 31 Mar 2023 21:33:50 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Shih <Sam.Shih@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Subject: Re: [PATCH net-next 14/15] net: dsa: mt7530: introduce driver for
+ MT7988 built-in switch
+Message-ID: <ZCdDrrynf5fg16VM@makrotopia.org>
+References: <cover.1680180959.git.daniel@makrotopia.org>
+ <fef2cb2fe3d2b70fa46e93107a0c862f53bb3bfa.1680180959.git.daniel@makrotopia.org>
+ <6a7c5f81-a8a3-27b5-4af3-7175a3313f9a@arinc9.com>
+ <ZCazDBJvFvjcQfKo@makrotopia.org>
+ <7d0acaef-0cec-91b9-a5c6-d094b71e3dbd@arinc9.com>
+ <28d048c9-6389-749b-d0eb-18a9c2d83c4e@arinc9.com>
+ <56adf82a-3db0-5909-e948-e21717e3fe03@arinc9.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <56adf82a-3db0-5909-e948-e21717e3fe03@arinc9.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intel-PT calls perf_pmu__scan_file() a lot, let's use relative address
-when it accesses multiple files at one place.
+On Fri, Mar 31, 2023 at 11:07:51PM +0300, Arınç ÜNAL wrote:
+> On 31.03.2023 16:18, Arınç ÜNAL wrote:
+> > On 31.03.2023 15:06, Arınç ÜNAL wrote:
+> > > On 31.03.2023 13:16, Daniel Golle wrote:
+> > > > On Fri, Mar 31, 2023 at 08:50:28AM +0300, Arınç ÜNAL wrote:
+> > > > > On 30.03.2023 18:23, Daniel Golle wrote:
+> > > > > > Add driver for the built-in Gigabit Ethernet switch which can be found
+> > > > > > in the MediaTek MT7988 SoC.
+> > > > > > 
+> > > > > > The switch shares most of its design with MT7530 and MT7531, but has
+> > > > > > it's registers mapped into the SoCs register space rather than being
+> > > > > > connected externally or internally via MDIO.
+> > > > > > 
+> > > > > > Introduce a new platform driver to support that.
+> > > > > > 
+> > > > > > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> > > > > > ---
+> > > > > >    MAINTAINERS                   |   2 +
+> > > > > >    drivers/net/dsa/Kconfig       |  12 ++++
+> > > > > >    drivers/net/dsa/Makefile      |   1 +
+> > > > > >    drivers/net/dsa/mt7530-mmio.c | 101
+> > > > > > ++++++++++++++++++++++++++++++++++
+> > > > > >    drivers/net/dsa/mt7530.c      |  86 ++++++++++++++++++++++++++++-
+> > > > > >    drivers/net/dsa/mt7530.h      |  12 ++--
+> > > > > >    6 files changed, 206 insertions(+), 8 deletions(-)
+> > > > > >    create mode 100644 drivers/net/dsa/mt7530-mmio.c
+> > > > > > 
+> > > > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > > > index 14924aed15ca7..674673dbdfd8b 100644
+> > > > > > --- a/MAINTAINERS
+> > > > > > +++ b/MAINTAINERS
+> > > > > > @@ -13174,9 +13174,11 @@ MEDIATEK SWITCH DRIVER
+> > > > > >    M:    Sean Wang <sean.wang@mediatek.com>
+> > > > > >    M:    Landen Chao <Landen.Chao@mediatek.com>
+> > > > > >    M:    DENG Qingfang <dqfext@gmail.com>
+> > > > > > +M:    Daniel Golle <daniel@makrotopia.org>
+> > > > > >    L:    netdev@vger.kernel.org
+> > > > > >    S:    Maintained
+> > > > > >    F:    drivers/net/dsa/mt7530-mdio.c
+> > > > > > +F:    drivers/net/dsa/mt7530-mmio.c
+> > > > > >    F:    drivers/net/dsa/mt7530.*
+> > > > > >    F:    net/dsa/tag_mtk.c
+> > > > > > diff --git a/drivers/net/dsa/Kconfig b/drivers/net/dsa/Kconfig
+> > > > > > index c2551b13324c2..de4d86e37973f 100644
+> > > > > > --- a/drivers/net/dsa/Kconfig
+> > > > > > +++ b/drivers/net/dsa/Kconfig
+> > > > > > @@ -52,6 +52,18 @@ config NET_DSA_MT7530
+> > > > > >          Multi-chip module MT7530 in MT7621AT, MT7621DAT, MT7621ST and
+> > > > > >          MT7623AI SoCs is supported as well.
+> > > > > > +config NET_DSA_MT7988
+> > > > > > +    tristate "MediaTek MT7988 built-in Ethernet switch support"
+> > > > > > +    select NET_DSA_MT7530_COMMON
+> > > > > > +    depends on HAS_IOMEM
+> > > > > > +    help
+> > > > > > +      This enables support for the built-in Ethernet switch found
+> > > > > > +      in the MediaTek MT7988 SoC.
+> > > > > > +      The switch is a similar design as MT7531, however, unlike
+> > > > > > +      other MT7530 and MT7531 the switch registers are directly
+> > > > > > +      mapped into the SoCs register space rather than
+> > > > > > being accessible
+> > > > > > +      via MDIO.
+> > > > > > +
+> > > > > >    config NET_DSA_MV88E6060
+> > > > > >        tristate "Marvell 88E6060 ethernet switch chip support"
+> > > > > >        select NET_DSA_TAG_TRAILER
+> > > > > > diff --git a/drivers/net/dsa/Makefile b/drivers/net/dsa/Makefile
+> > > > > > index 71250d7dd41af..103a33e20de4b 100644
+> > > > > > --- a/drivers/net/dsa/Makefile
+> > > > > > +++ b/drivers/net/dsa/Makefile
+> > > > > > @@ -8,6 +8,7 @@ endif
+> > > > > >    obj-$(CONFIG_NET_DSA_LANTIQ_GSWIP) += lantiq_gswip.o
+> > > > > >    obj-$(CONFIG_NET_DSA_MT7530_COMMON) += mt7530.o
+> > > > > >    obj-$(CONFIG_NET_DSA_MT7530)    += mt7530-mdio.o
+> > > > > > +obj-$(CONFIG_NET_DSA_MT7988)    += mt7530-mmio.o
+> > > > > 
+> > > > > I'm not fond of this way. Wouldn't it be better if we split
+> > > > > the mdio and
+> > > > > mmio drivers to separate modules and kept switch hardware support on
+> > > > > mt7530.c?
+> > > > 
+> > > > You mean this in terms of Kconfig symbols?
+> > > > Because the way you describe is basically what I'm doing here:
+> > > >   * mt7530.c is the shared/common switch hardware driver
+> > > >   * mt7530-mdio.c contains the MDIO accessors and MDIO device
+> > > > drivers for
+> > > >     MT7530, MT7531, MT7621, MT7623, ...
+> > > >   * mt7530-mmio.c contains the platform device driver for in-SoC
+> > > > switches
+> > > >     which are accessed via MMIO, ie. MT7988 (and yes, this could be
+> > > >     extended to also support MT7620A/N).
+> > > 
+> > > Ok great.
+> > > 
+> > > > 
+> > > > In early drafts I also named the Kconfig symbols
+> > > > CONFIG_NET_DSA_MT7530 for mt7530.c (ie. the common part)
+> > > > CONFIG_NET_DSA_MT7530_MDIO for the MDIO driver
+> > > > CONFIG_NET_DSA_MT7530_MMIO for the MMIO driver
+> > > > 
+> > > > However, as existing kernel configurations expect
+> > > > CONFIG_NET_DSA_MT7530 to
+> > > > select the MDIO driver, I decided it would be better to hide the
+> > > > symbol of
+> > > > the common part and have CONFIG_NET_DSA_MT7530 select the MDIO
+> > > > driver like
+> > > > it was before.
+> > > 
+> > > You can "imply NET_DSA_MT7530_MDIO" from NET_DSA_MT7530 so the MDIO
+> > > driver is also enabled when NET_DSA_MT7530 is selected. For example,
+> > > on Realtek, both MDIO and SMI drivers are enabled by default when
+> > > either of the main drivers are selected.
+> > > 
+> > > config NET_DSA_MT7530
+> > >      tristate "MediaTek MT7530 and MT7531 Ethernet switch support"
+> > >      select NET_DSA_TAG_MTK
+> > >      select MEDIATEK_GE_PHY
+> > >      select PCS_MTK_LYNXI
+> > >      imply NET_DSA_MT7530_MDIO
+> > >      imply NET_DSA_MT7530_MMIO
+> > 
+> > The final kconfig should look like this:
+> > 
+> > config NET_DSA_MT7530
+> >      tristate "MediaTek MT7530 and MT7531 Ethernet switch support"
+> >      select NET_DSA_TAG_MTK
+> >      select MEDIATEK_GE_PHY
+> >      select PCS_MTK_LYNXI
+> 
+> Looks like PCS_MTK_LYNXI is used on NET_DSA_MT7530_MDIO instead now. I also
+> see '#include <linux/pcs/pcs-mtk-lynxi.h>' on mt7530.c but don't see any
+> functions called on it. Leftover?
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/arch/x86/util/intel-pt.c | 52 ++++++++++++++++++-----------
- 1 file changed, 32 insertions(+), 20 deletions(-)
+Yes, you are right, it's only used in mt7530-mdio.c and the #include in
+mt7530.c is a left-over which I shall remove.
 
-diff --git a/tools/perf/arch/x86/util/intel-pt.c b/tools/perf/arch/x86/util/intel-pt.c
-index 1e39a034cee9..2cff11de9d8a 100644
---- a/tools/perf/arch/x86/util/intel-pt.c
-+++ b/tools/perf/arch/x86/util/intel-pt.c
-@@ -194,16 +194,19 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
- 	int pos = 0;
- 	u64 config;
- 	char c;
-+	int dirfd;
-+
-+	dirfd = perf_pmu__event_source_devices_fd();
- 
- 	pos += scnprintf(buf + pos, sizeof(buf) - pos, "tsc");
- 
--	if (perf_pmu__scan_file(intel_pt_pmu, "caps/mtc", "%d",
--				&mtc) != 1)
-+	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/mtc", "%d",
-+				   &mtc) != 1)
- 		mtc = 1;
- 
- 	if (mtc) {
--		if (perf_pmu__scan_file(intel_pt_pmu, "caps/mtc_periods", "%x",
--					&mtc_periods) != 1)
-+		if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/mtc_periods", "%x",
-+					   &mtc_periods) != 1)
- 			mtc_periods = 0;
- 		if (mtc_periods) {
- 			mtc_period = intel_pt_pick_bit(mtc_periods, 3);
-@@ -212,13 +215,13 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
- 		}
- 	}
- 
--	if (perf_pmu__scan_file(intel_pt_pmu, "caps/psb_cyc", "%d",
--				&psb_cyc) != 1)
-+	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/psb_cyc", "%d",
-+				   &psb_cyc) != 1)
- 		psb_cyc = 1;
- 
- 	if (psb_cyc && mtc_periods) {
--		if (perf_pmu__scan_file(intel_pt_pmu, "caps/psb_periods", "%x",
--					&psb_periods) != 1)
-+		if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "caps/psb_periods", "%x",
-+					   &psb_periods) != 1)
- 			psb_periods = 0;
- 		if (psb_periods) {
- 			psb_period = intel_pt_pick_bit(psb_periods, 3);
-@@ -227,8 +230,8 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
- 		}
- 	}
- 
--	if (perf_pmu__scan_file(intel_pt_pmu, "format/pt", "%c", &c) == 1 &&
--	    perf_pmu__scan_file(intel_pt_pmu, "format/branch", "%c", &c) == 1)
-+	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "format/pt", "%c", &c) == 1 &&
-+	    perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "format/branch", "%c", &c) == 1)
- 		pos += scnprintf(buf + pos, sizeof(buf) - pos, ",pt,branch");
- 
- 	pr_debug2("%s default config: %s\n", intel_pt_pmu->name, buf);
-@@ -236,6 +239,7 @@ static u64 intel_pt_default_config(struct perf_pmu *intel_pt_pmu)
- 	intel_pt_parse_terms(intel_pt_pmu->name, &intel_pt_pmu->format, buf,
- 			     &config);
- 
-+	close(dirfd);
- 	return config;
- }
- 
-@@ -488,7 +492,7 @@ static void intel_pt_valid_str(char *str, size_t len, u64 valid)
- 	}
- }
- 
--static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu,
-+static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu, int dirfd,
- 				    const char *caps, const char *name,
- 				    const char *supported, u64 config)
- {
-@@ -498,11 +502,11 @@ static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu,
- 	u64 bits;
- 	int ok;
- 
--	if (perf_pmu__scan_file(intel_pt_pmu, caps, "%llx", &valid) != 1)
-+	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, caps, "%llx", &valid) != 1)
- 		valid = 0;
- 
- 	if (supported &&
--	    perf_pmu__scan_file(intel_pt_pmu, supported, "%d", &ok) == 1 && !ok)
-+	    perf_pmu__scan_file_at(intel_pt_pmu, dirfd, supported, "%d", &ok) == 1 && !ok)
- 		valid = 0;
- 
- 	valid |= 1;
-@@ -531,37 +535,45 @@ static int intel_pt_val_config_term(struct perf_pmu *intel_pt_pmu,
- static int intel_pt_validate_config(struct perf_pmu *intel_pt_pmu,
- 				    struct evsel *evsel)
- {
--	int err;
-+	int err, dirfd;
- 	char c;
- 
- 	if (!evsel)
- 		return 0;
- 
-+	dirfd = perf_pmu__event_source_devices_fd();
-+	if (dirfd < 0)
-+		return dirfd;
-+
- 	/*
- 	 * If supported, force pass-through config term (pt=1) even if user
- 	 * sets pt=0, which avoids senseless kernel errors.
- 	 */
--	if (perf_pmu__scan_file(intel_pt_pmu, "format/pt", "%c", &c) == 1 &&
-+	if (perf_pmu__scan_file_at(intel_pt_pmu, dirfd, "format/pt", "%c", &c) == 1 &&
- 	    !(evsel->core.attr.config & 1)) {
- 		pr_warning("pt=0 doesn't make sense, forcing pt=1\n");
- 		evsel->core.attr.config |= 1;
- 	}
- 
--	err = intel_pt_val_config_term(intel_pt_pmu, "caps/cycle_thresholds",
-+	err = intel_pt_val_config_term(intel_pt_pmu, dirfd, "caps/cycle_thresholds",
- 				       "cyc_thresh", "caps/psb_cyc",
- 				       evsel->core.attr.config);
- 	if (err)
--		return err;
-+		goto out;
- 
--	err = intel_pt_val_config_term(intel_pt_pmu, "caps/mtc_periods",
-+	err = intel_pt_val_config_term(intel_pt_pmu, dirfd, "caps/mtc_periods",
- 				       "mtc_period", "caps/mtc",
- 				       evsel->core.attr.config);
- 	if (err)
--		return err;
-+		goto out;
- 
--	return intel_pt_val_config_term(intel_pt_pmu, "caps/psb_periods",
-+	err = intel_pt_val_config_term(intel_pt_pmu, dirfd, "caps/psb_periods",
- 					"psb_period", "caps/psb_cyc",
- 					evsel->core.attr.config);
-+
-+out:
-+	close(dirfd);
-+	return err;
- }
- 
- static void intel_pt_config_sample_mode(struct perf_pmu *intel_pt_pmu,
--- 
-2.40.0.348.gf938b09366-goog
+> 
+> >      imply NET_DSA_MT7530_MDIO
+> >      imply NET_DSA_MT7530_MMIO
+> >      help
+> >        This enables support for the MediaTek MT7530 and MT7531 Ethernet
+> >        switch chips. Multi-chip module MT7530 in MT7621AT, MT7621DAT,
+> >        MT7621ST and MT7623AI SoCs, and built-in switch in MT7688 SoC is
+> >        supported.
+> > 
+> > config NET_DSA_MT7530_MDIO
+> >      tristate "MediaTek MT7530 MDIO interface driver"
+> 
+> Should go here:
+> 
+> select PCS_MTK_LYNXI
 
+Yeah, in Kconfig I had taken care of this already, but forgot to remove
+the include in mt7530.c...
+
+
+Thank you for spotting this. I'll soon post v2 which includes these fixes.
