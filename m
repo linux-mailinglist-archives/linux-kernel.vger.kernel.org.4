@@ -2,122 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B3A6D1883
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520C36D188B
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjCaHWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
+        id S230171AbjCaH0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbjCaHWn (ORCPT
+        with ESMTP id S230077AbjCaHZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:22:43 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED681A464;
-        Fri, 31 Mar 2023 00:22:39 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32V6OcCp016236;
-        Fri, 31 Mar 2023 09:22:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=bP/5RW3i6naWflHN3PftdHEk430wto9gy+Tuw6UIrio=;
- b=qaGyz4XNS/l5Qe6GoGQbFAE0R5bGZi0+Eyn9C9/O1Ftq2VqkQwlTEcytiBQnpbRIedkf
- CELUpP45dcYZQ4WHmQLw5V01yYZ1kPVzNkLJd9uz9H8GSuxs5vpdbs2ZAN3Y1qgjyl+o
- 85sZNXOfCYmqgnCwX/FywuHGwvRar8ytGjYTjCreJsa2iv5zuEWyvlN+Nq2kZ2ZRTlVy
- 2fobL1uwzw+yjqvhOs43ySNDqvKdWHGOgwHXsTr++Z+oXvh1G7OykLgaYtHbFVZtokty
- NUAm17MMhnJzcTnL+YZltcqbpSRJhFRvC2Da8IQF8o1HwjkqMsjhP+nw1ZBAZeZu7sDD /Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pkwvsw30k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Mar 2023 09:22:29 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0DD5510002A;
-        Fri, 31 Mar 2023 09:22:29 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 074162115F8;
-        Fri, 31 Mar 2023 09:22:29 +0200 (CEST)
-Received: from [10.201.21.26] (10.201.21.26) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 31 Mar
- 2023 09:22:28 +0200
-Message-ID: <7b9864d9-dc36-f719-29ea-21036763c375@foss.st.com>
-Date:   Fri, 31 Mar 2023 09:22:28 +0200
+        Fri, 31 Mar 2023 03:25:57 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5C0210B
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:25:52 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3ee6c339cceso153355e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680247551;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pw4kStS7rzbbLRqrWs4BjnS/rfPwq6lyL0n3r//piM4=;
+        b=BD2fSO1ioVmfH8kTUKFk4RCIgml6T+ntV2pSMl6FqHKLjBbsMywpSB7JFDCoHurnLI
+         V9o1X7oCj9Jv5ac882+AMXAfxTwK6hLy+/NK3ZJi40FJTY+CbC1IQQLS+YMLkwbtbzOw
+         H3sh2XMfB1LLIlPQbZUAdPb93N3AvQGMds9a+yyZpaDSCaJRwSpUPqMLTuR1u3z+/Ur5
+         68nP8o+u0Th7+o5O4AlPzpPsLH/f/sblbW/IGfzEWBSXq4hUwKdloV4cMx/+7YLbpiPM
+         pAqmx55DTfBdGh74Xl6PY3KG+bjnX/S2cqxeLC1pOy22SVlDFDHPpiwk8k6bVUcElsQ3
+         dWwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680247551;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pw4kStS7rzbbLRqrWs4BjnS/rfPwq6lyL0n3r//piM4=;
+        b=pivGnZQdiAdBUKNpW4HwILmbqjlPL0ddtBlCNybeeJ8+EpxW+O6YJ9MxCr6NAiBUDi
+         uWZpuHeCUdmumrUDwwB4lvPLFdzven4ZU0Sus/zMkqtV9rnAy3llzclNi07HNWx5I3LG
+         9MTOLzpEFcPiLZ5BMvHXm4wFvG+QgsXAiSepr3IbUD9YeScUHyQR2rlWm160T+iPB7cO
+         xTqaQz8IAcu5m+gtwpMlDHlF0lSwrF4Ap2fMMAoUIqhgUm73VVXPWZZGHh1rlDCgRakl
+         NG3bYckFdRuFrlYDNZCmP5Wr5DoRQ6v3RCGbKACTZvzophVfCi9WKqFScdPP6YAMPqB2
+         CJqw==
+X-Gm-Message-State: AAQBX9eUiGAyKGrwpXdxgu2/cekjQXK9bvDWxeU3oUSQWOGjqNNQ2R9w
+        TxfZRbKVpKQCWuUoAJMCk6GtBUiuJGhyoHDGFJ8d/w==
+X-Google-Smtp-Source: AKy350abOVAkC/dx0dxQVe8vtvq9YDRYyGvhn/EWZ6txiXHe82kTuCLaKsXWJ3VDTDrFx6WCn8woIMYCmAHVCwAovDk=
+X-Received: by 2002:a05:600c:1e26:b0:3df:f3ce:be44 with SMTP id
+ ay38-20020a05600c1e2600b003dff3cebe44mr81129wmb.3.1680247551038; Fri, 31 Mar
+ 2023 00:25:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] reset: sti: simplify driver's config and build
-Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230330112347.31137-1-lukas.bulwahn@gmail.com>
- <20230330112347.31137-2-lukas.bulwahn@gmail.com>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20230330112347.31137-2-lukas.bulwahn@gmail.com>
+References: <20230331070818.2792558-1-yosryahmed@google.com> <20230331070818.2792558-4-yosryahmed@google.com>
+In-Reply-To: <20230331070818.2792558-4-yosryahmed@google.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Fri, 31 Mar 2023 01:25:14 -0600
+Message-ID: <CAOUHufY2NieQ8x7-Kv8PSzMVEOjJtBhi6QwKeu-Ojxnia4-TpQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.26]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-31_02,2023-03-30_04,2023-02-09_01
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 31, 2023 at 1:08=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com>=
+ wrote:
 
+...
 
-On 3/30/23 13:23, Lukas Bulwahn wrote:
-> With commit 64933513e461 ("reset: sti: Remove STiH415/6 reset support"),
-> there is only one sti reset driver left and there no need to define a
-> dedicated config STI_RESET_SYSCFG, which is selected by the config for the
-> STiH407 reset driver.
-> 
-> Simply add reset-syscfg.c to the build for the STiH407 reset driver.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  drivers/reset/sti/Kconfig  | 4 ----
->  drivers/reset/sti/Makefile | 4 +---
->  2 files changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/drivers/reset/sti/Kconfig b/drivers/reset/sti/Kconfig
-> index 9455e1c7a5aa..a2622e146b8b 100644
-> --- a/drivers/reset/sti/Kconfig
-> +++ b/drivers/reset/sti/Kconfig
-> @@ -1,11 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  if ARCH_STI
->  
-> -config STI_RESET_SYSCFG
-> -	bool
-> -
->  config STIH407_RESET
->  	bool
-> -	select STI_RESET_SYSCFG
->  
->  endif
-> diff --git a/drivers/reset/sti/Makefile b/drivers/reset/sti/Makefile
-> index 3eb30f7e8e3d..5e833496cee3 100644
-> --- a/drivers/reset/sti/Makefile
-> +++ b/drivers/reset/sti/Makefile
-> @@ -1,4 +1,2 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> -obj-$(CONFIG_STI_RESET_SYSCFG) += reset-syscfg.o
-> -
-> -obj-$(CONFIG_STIH407_RESET) += reset-stih407.o
-> +obj-$(CONFIG_STIH407_RESET) += reset-stih407.o reset-syscfg.o
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index a3e38851b34ac..bf9d8e175e92a 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -533,7 +533,35 @@ EXPORT_SYMBOL(mm_account_reclaimed_pages);
+>  static void flush_reclaim_state(struct scan_control *sc,
+>                                 struct reclaim_state *rs)
+>  {
+> -       if (rs) {
+> +       /*
+> +        * Currently, reclaim_state->reclaimed includes three types of pa=
+ges
+> +        * freed outside of vmscan:
+> +        * (1) Slab pages.
+> +        * (2) Clean file pages from pruned inodes.
+> +        * (3) XFS freed buffer pages.
+> +        *
+> +        * For all of these cases, we have no way of finding out whether =
+these
+> +        * pages were related to the memcg under reclaim. For example, a =
+freed
+> +        * slab page could have had only a single object charged to the m=
+emcg
+> +        * under reclaim. Also, populated inodes are not on shrinker LRUs
+> +        * anymore except on highmem systems.
+> +        *
+> +        * Instead of over-reporting the reclaimed pages in a memcg recla=
+im,
+> +        * only count such pages in system-wide reclaim. This prevents
+> +        * unnecessary retries during memcg charging and false positive f=
+rom
+> +        * proactive reclaim (memory.reclaim).
 
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+What happens when writing to the root memory.reclaim?
 
-Thanks
-Patrice
+> +        *
+> +        * For uncommon cases were the freed pages were actually signific=
+antly
+> +        * charged to the memcg under reclaim, and we end up under-report=
+ing, it
+> +        * should be fine. The freed pages will be uncharged anyway, even=
+ if
+> +        * they are not reported properly, and we will be able to make fo=
+rward
+> +        * progress in charging (which is usually in a retry loop).
+> +        *
+> +        * We can go one step further, and report the uncharged objcg pag=
+es in
+> +        * memcg reclaim, to make reporting more accurate and reduce
+> +        * under-reporting, but it's probably not worth the complexity fo=
+r now.
+> +        */
+> +       if (rs && !cgroup_reclaim(sc)) {
+
+To answer the question above, global_reclaim() would be preferred.
