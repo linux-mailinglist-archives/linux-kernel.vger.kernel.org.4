@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EA16D2BE5
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 01:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5B16D2BF3
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 01:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbjCaX4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 19:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34572 "EHLO
+        id S233428AbjCaX5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 19:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233368AbjCaX4C (ORCPT
+        with ESMTP id S233466AbjCaX5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 19:56:02 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABA31D847;
-        Fri, 31 Mar 2023 16:55:56 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32VKr7Ic014473;
-        Fri, 31 Mar 2023 23:55:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2022-7-12;
- bh=gXl2kPXJPf/jSKBw0vAfbHVROAJisKoHzvhm0NlxHu4=;
- b=xLQaYELm8o7UC4DPnvEtAHanZdqgDJJb261230BLm4J66tzYsQXJIyTHzHIZez16tQs4
- mnIGPbDEDO0Ip0qLm1itbuz6apUyV6nG9gu0IF4BsBswF0q2/iRpprSD3xertSpG6pQx
- /YYEtenP0DeqSUHCEWOHio55utVEEn2g4HRjj9blcMf9vkaazIE6j+szXQK2z+VjaC3z
- TUTZdOLy5jTLoP1rBsv2705M07nuLeuZRKWasxb1xbxfImaX/odD0FHifuG8ndMLIyhf
- EH4W5LuZYUZN3JnW8YsoQxIkfCCd8XgAYJ3bBq9r0uN6k/5hvWTd8bN0amzt0rRLNG3b 8A== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pmqbyy9cx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 31 Mar 2023 23:55:42 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32VM7sO4023475;
-        Fri, 31 Mar 2023 23:55:42 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3phqdkm2ta-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 31 Mar 2023 23:55:42 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32VNtUIl019347;
-        Fri, 31 Mar 2023 23:55:41 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3phqdkm2p9-7;
-        Fri, 31 Mar 2023 23:55:41 +0000
-From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-To:     davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        zbr@ioremap.net, brauner@kernel.org, johannes@sipsolutions.net,
-        ecree.xilinx@gmail.com, leon@kernel.org, keescook@chromium.org,
-        socketcan@hartkopp.net, petrm@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        anjali.k.kulkarni@oracle.com
-Subject: [PATCH v4 6/6] connector/cn_proc: Allow non-root users access
-Date:   Fri, 31 Mar 2023 16:55:28 -0700
-Message-Id: <20230331235528.1106675-7-anjali.k.kulkarni@oracle.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230331235528.1106675-1-anjali.k.kulkarni@oracle.com>
-References: <20230331235528.1106675-1-anjali.k.kulkarni@oracle.com>
+        Fri, 31 Mar 2023 19:57:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34C12032D
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 16:56:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680306966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NL54WwypdfaSjaxUxBBBx0hRcNBlMPANtnUbzkWfNYM=;
+        b=KOpEl1uKssNlGVB5KYauJa1r3RVPQeFk39b36mptPYUn5w5xjbn6CWq7uSTh6XqgSg0w0b
+        2PiFFpLKZsbmWa8JhiaXonPp9rLB9GLnHIX8TVMPE9P6Dy+SgAw0YKOc5dv7r6rwU4QkmR
+        IS1axO9pfQQC+xTUmnBdAHHrYw0yaH8=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-16-hKbwK1UsNEelfybxP-ftDA-1; Fri, 31 Mar 2023 19:56:05 -0400
+X-MC-Unique: hKbwK1UsNEelfybxP-ftDA-1
+Received: by mail-qt1-f200.google.com with SMTP id p22-20020a05622a00d600b003e38f7f800bso15476222qtw.9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 16:56:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680306965;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NL54WwypdfaSjaxUxBBBx0hRcNBlMPANtnUbzkWfNYM=;
+        b=Mn/Xu7NgdIrTzVGTxiJcgGUaciuxKO5r7Y4/kKuDEaarZXI4xQMAbMoCW+x3Vdk68K
+         cbFb4AJWi/QboxgMR8bo1XBOYzRcoVxEhp/7OJUFaRFc4xi0FtiINL+K/n+191R0llQO
+         qFDv7+wPGEEn6T0QYsUQQJqEsuA6FnHlvCFLVV5XKwagh409PJxHTPtTQKkxyv4VOJkV
+         Y2flOkIvmX/POjOjkM9lLBZ2n9tG1MbRuW8NxunRwtBaokf4lf6KvpUwite+GWW2fp1X
+         1QI8ZkrB8Thv4dXkHM3jMbwuB18X40ScBq50Ie4cMtRBb3YYmAA8Giy9lsZeI914sErq
+         X6LQ==
+X-Gm-Message-State: AAQBX9eKOXuyJ+8sSH2ZoprUL0JP//USVZjQBEp6jL4Ep65wxkOQQvDh
+        02vt5PECpwKtC/HV2wsA+6IJ4M2mTMoarVKC4vYpI2/faQrumuUXsDYp5VX6znASd5ddywgn1Sh
+        KCctbQ+Bu10TNHqdevat3wQLE
+X-Received: by 2002:ac8:5a87:0:b0:3e6:454f:9a89 with SMTP id c7-20020ac85a87000000b003e6454f9a89mr4220237qtc.14.1680306965040;
+        Fri, 31 Mar 2023 16:56:05 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZnxJYCYjCfNczshNPHN4pv+/C1fm/oK1ineW0RTnU6Ldeblpw0pQ6aZRBHQoOTm1TNEsQNzw==
+X-Received: by 2002:ac8:5a87:0:b0:3e6:454f:9a89 with SMTP id c7-20020ac85a87000000b003e6454f9a89mr4220222qtc.14.1680306964805;
+        Fri, 31 Mar 2023 16:56:04 -0700 (PDT)
+Received: from ?IPv6:2600:4040:5c57:b700::feb? ([2600:4040:5c57:b700::feb])
+        by smtp.gmail.com with ESMTPSA id t18-20020a37ea12000000b0074860fcfbecsm1031786qkj.21.2023.03.31.16.56.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 16:56:04 -0700 (PDT)
+Message-ID: <c5e49ef29c50715f8fa5086fec999c0fa6d84dac.camel@redhat.com>
+Subject: Re: [PATCH] Revert "x86/acpi/boot: Do not register processors that
+ cannot be onlined for x2APIC"
+From:   Lyude Paul <lyude@redhat.com>
+To:     linux-acpi@vger.kernel.org
+Cc:     Leo Duran <leo.duran@amd.com>,
+        Kishon Vijay Abraham I <kvijayab@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Date:   Fri, 31 Mar 2023 19:56:03 -0400
+In-Reply-To: <20230331235328.4312-1-lyude@redhat.com>
+References: <20230331235328.4312-1-lyude@redhat.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-31_07,2023-03-31_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 spamscore=0
- phishscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2303310196
-X-Proofpoint-GUID: kQL8zfhycsoasLgugdG-uq01-aH7M4Kz
-X-Proofpoint-ORIG-GUID: kQL8zfhycsoasLgugdG-uq01-aH7M4Kz
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,96 +93,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There were a couple of reasons for not allowing non-root users access
-initially  - one is there was some point no proper receive buffer
-management in place for netlink multicast. But that should be long
-fixed. See link below for more context.
+On Fri, 2023-03-31 at 19:53 -0400, Lyude Paul wrote:
+> This reverts commit e2869bd7af608c343988429ceb1c2fe99644a01f. This commit
+> unfortunately seems to have resulted in one of my machines no longer
+> booting. Specifically, this machine is a custom build with a MS-7A39/A320=
+M
+> GAMING PRO motherboard with firmware version v1.10. I'm not entirely sure
+> of the cause yet, but starting it up with "earlycon=3Defifb keep_bootcon"=
+ has
+> informed me that the kernel panics like so:
+>=20
+> Call Trace:
+>   <TASK>
+>   dump_stack_lvl+0x33/0x46
+>   panic+0x105/0x2b1
+>   ? timer_irq_works+0x53/0xef
+>   panic_if_irq_remap.cold+0x5/0x5
+>   setup_IO_APIC+0x3c4/0x831
+>   ? __pfx_native_io_apic_read+0x10/0x10
+>   ? __ioapic_read_entry+0x34/0x50
+>   ? _raw_spin_unlock_irqrestore+0x1b/0x40
+>   ? clear_IO_APIC_pin+0x16b/0x240
+>   apic_intr_mode_init+0x101/0x106
+>   x86_late_time_init+0x20/0x34
+>   start_kernel+0x8b4/0x95f
+>   secondary_startup_64_no_verify+0x5e/0xeb
+>   </TASK>
+> ---[ end Kernel panic - not syncing: timer doesn't work through
+>  interrupt-mapped IO-APIC ]---
 
-Second is that some of the messages may contain data that is root only. But
-this should be handled with a finer granularity, which is being done at the
-protocol layer.  The only problematic protocols are nf_queue and the
-firewall netlink. Hence, this restriction for non-root access was relaxed
-for NETLINK_ROUTE initially:
-https://lore.kernel.org/all/20020612013101.A22399@wotan.suse.de/
+Agh, I totally forgot to actually decode the stacktrace on this before send=
+ing
+it out. I can do that if anyone would think it would help, but I have a
+feeling the stacktrace here isn't particularly useful in the first place
+considering the culprit commit here.
 
-This restriction has also been removed for following protocols:
-NETLINK_KOBJECT_UEVENT, NETLINK_AUDIT, NETLINK_SOCK_DIAG,
-NETLINK_GENERIC, NETLINK_SELINUX.
+As well, hopefully it goes without saying but: I'm happy to try any kind of
+fixes or provide any more information from this machine. Just let me know =
+=E2=99=A5
 
-Since process connector messages are not sensitive (process fork, exit
-notifications etc.), and anyone can read /proc data, we can allow non-root
-access here. However, since process event notification is not the only
-consumer of NETLINK_CONNECTOR, we can make this change even more
-fine grained than the protocol level, by checking for multicast group
-within the protocol.
+>=20
+> My assumption is there's probably something funky with the firmware on th=
+e
+> machine seeing as it's a random gaming motherboard, but that also probabl=
+y
+> means there are other boards out there like this that are cold, afraid, a=
+nd
+> unable to boot. We could warm their hearts by reverting this, or maybe by
+> figuring out a proper fix.
+>=20
+> Signed-off-by: Lyude Paul <lyude@redhat.com>
+> Fixes: e2869bd7af60 ("x86/acpi/boot: Do not register processors that cann=
+ot be onlined for x2APIC")
+> Cc: Leo Duran <leo.duran@amd.com>
+> Cc: Kishon Vijay Abraham I <kvijayab@amd.com>
+> Cc: Borislav Petkov (AMD) <bp@alien8.de>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: linux-acpi@vger.kernel.org
+> ---
+>  arch/x86/kernel/acpi/boot.c | 19 +++----------------
+>  1 file changed, 3 insertions(+), 16 deletions(-)
+>=20
+> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+> index 1c38174b5f019..4177577c173bf 100644
+> --- a/arch/x86/kernel/acpi/boot.c
+> +++ b/arch/x86/kernel/acpi/boot.c
+> @@ -188,17 +188,6 @@ static int acpi_register_lapic(int id, u32 acpiid, u=
+8 enabled)
+>  	return cpu;
+>  }
+> =20
+> -static bool __init acpi_is_processor_usable(u32 lapic_flags)
+> -{
+> -	if (lapic_flags & ACPI_MADT_ENABLED)
+> -		return true;
+> -
+> -	if (acpi_support_online_capable && (lapic_flags & ACPI_MADT_ONLINE_CAPA=
+BLE))
+> -		return true;
+> -
+> -	return false;
+> -}
+> -
+>  static int __init
+>  acpi_parse_x2apic(union acpi_subtable_headers *header, const unsigned lo=
+ng end)
+>  {
+> @@ -223,10 +212,6 @@ acpi_parse_x2apic(union acpi_subtable_headers *heade=
+r, const unsigned long end)
+>  	if (apic_id =3D=3D 0xffffffff)
+>  		return 0;
+> =20
+> -	/* don't register processors that cannot be onlined */
+> -	if (!acpi_is_processor_usable(processor->lapic_flags))
+> -		return 0;
+> -
+>  	/*
+>  	 * We need to register disabled CPU as well to permit
+>  	 * counting disabled CPUs. This allows us to size
+> @@ -265,7 +250,9 @@ acpi_parse_lapic(union acpi_subtable_headers * header=
+, const unsigned long end)
+>  		return 0;
+> =20
+>  	/* don't register processors that can not be onlined */
+> -	if (!acpi_is_processor_usable(processor->lapic_flags))
+> +	if (acpi_support_online_capable &&
+> +	    !(processor->lapic_flags & ACPI_MADT_ENABLED) &&
+> +	    !(processor->lapic_flags & ACPI_MADT_ONLINE_CAPABLE))
+>  		return 0;
+> =20
+>  	/*
 
-Allow non-root access for NETLINK_CONNECTOR via NL_CFG_F_NONROOT_RECV
-but add new bind function cn_bind(), which allows non-root access only
-for CN_IDX_PROC multicast group.
-
-Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
----
- drivers/connector/cn_proc.c   |  7 -------
- drivers/connector/connector.c | 14 ++++++++++++++
- 2 files changed, 14 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/connector/cn_proc.c b/drivers/connector/cn_proc.c
-index 35bec1fd7ee0..046a8c1d8577 100644
---- a/drivers/connector/cn_proc.c
-+++ b/drivers/connector/cn_proc.c
-@@ -408,12 +408,6 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
- 	    !task_is_in_init_pid_ns(current))
- 		return;
- 
--	/* Can only change if privileged. */
--	if (!__netlink_ns_capable(nsp, &init_user_ns, CAP_NET_ADMIN)) {
--		err = EPERM;
--		goto out;
--	}
--
- 	if (msg->len == sizeof(*pinput)) {
- 		pinput = (struct proc_input *)msg->data;
- 		mc_op = pinput->mcast_op;
-@@ -460,7 +454,6 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
- 		break;
- 	}
- 
--out:
- 	cn_proc_ack(err, msg->seq, msg->ack);
- }
- 
-diff --git a/drivers/connector/connector.c b/drivers/connector/connector.c
-index d1179df2b0ba..193d3056de64 100644
---- a/drivers/connector/connector.c
-+++ b/drivers/connector/connector.c
-@@ -166,6 +166,18 @@ static int cn_call_callback(struct sk_buff *skb)
- 	return err;
- }
- 
-+static int cn_bind(struct net *net, int group)
-+{
-+	unsigned long groups = 0;
-+	groups = (unsigned long) group;
-+
-+	if (ns_capable(net->user_ns, CAP_NET_ADMIN))
-+		return 0;
-+	if (test_bit(CN_IDX_PROC - 1, &groups))
-+		return 0;
-+	return -EPERM;
-+}
-+
- static void cn_release(struct sock *sk, unsigned long *groups)
- {
- 	if (groups && test_bit(CN_IDX_PROC - 1, groups)) {
-@@ -261,6 +273,8 @@ static int cn_init(void)
- 	struct netlink_kernel_cfg cfg = {
- 		.groups	= CN_NETLINK_USERS + 0xf,
- 		.input	= cn_rx_skb,
-+		.flags  = NL_CFG_F_NONROOT_RECV,
-+		.bind   = cn_bind,
- 		.release = cn_release,
- 	};
- 
--- 
-2.40.0
+--=20
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
