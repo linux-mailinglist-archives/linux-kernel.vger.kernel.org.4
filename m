@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A856D1A7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 188466D1A82
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbjCaIiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
+        id S231939AbjCaIiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbjCaIhK (ORCPT
+        with ESMTP id S231722AbjCaIhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:37:10 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45107D4F8D
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:35:35 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id q19so18517792wrc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:35:35 -0700 (PDT)
+        Fri, 31 Mar 2023 04:37:15 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289A21D841
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:35:37 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id y14so21603761wrq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:35:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680251711;
+        d=linaro.org; s=google; t=1680251712;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5S8DS7MwX0eSMjECdngcIupXRvdIfBFKmoZZhwAEom0=;
-        b=tnfnYtQdWHkb+imXQ5cdS0qz5r299xH4jhkGPSnNJ2hyhvDgzphIZ+JrRafIpmAM9p
-         AYZ75Po2o2Z0SH8MZ2PJlbzGo/n61VmC8VnuZ2JuYUqUV2XrQWwn3l07chxkJqnSXjPP
-         5f1CEgxiSVpvn2h1nzoHxbtdANfxsiKSj6kGo5Gn+zXB98k4Ll0nq2FYEQMcqg9qKycl
-         SaFHJ31SA4vogcCrvZnJv61gFMikTvHDNS7J+H+by9jPFBPOVQx/EaIZbfwOl1I2Oqqc
-         0h4V53L2ZH7bwDuc5XrqWaqkZAcFFMRby1EyH50XYnZmPSj9SLb8FRQWZxdM2RBBTVHm
-         BCmw==
+        bh=Lfco65EqQfHZJxTK1kxWA78ZamfCWUWZKPHL0Bp1xH4=;
+        b=SqOTTD4EeiNGBszaNOzDLqviTo9jI0ZhAKSeRT3l5LeAaBvHoV1VbnUiNYxQjrF5S5
+         UUujdXiQCveG/Iy+PsAnxgkKeorfMhJAmQ2J1mYgkX8eg020zgf6nL/f/EExNZqkpRUx
+         XcdDXQ5bnCtHLOcSYFcdnuXeE9b+QxZG2/mH1nfNDIA7j4YtTmk1Al3zY4k3rR5puTQU
+         l2NatRLdUPmY31rjFWxbQkcwmbAI5FXvErZOPP+aB0G/SM/9J1u6rMIIFKuvCVysu2q3
+         VMSa4Jt860AaDpWD2pjM4fb8tv0/a2sxwe3l0seQy7PhpYace6EYCoZskI6VrPmid9Ji
+         W8oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680251711;
+        d=1e100.net; s=20210112; t=1680251712;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5S8DS7MwX0eSMjECdngcIupXRvdIfBFKmoZZhwAEom0=;
-        b=zus2La7X1zdxN8TPq4XZDcVmbn0FFQ86a7qCTGplmeiOUWEv549fProw+xc+mJDBwD
-         M3eR4SaPfRAldAOzKLROKhd3x0J3R18ZEbbf7GtsUT8e11MfnxDxqP3Y3zlRGeLJx7BU
-         huGEcZWflLV211zb+MUGlQXKqXo6piVLBf7DmBQVvM3iIPn6qjsJ4ARKHYEqX/ezsQNV
-         qFTWtn4NCiv95v8i5WALRiNF7fg3+GMLUASvzVJz0B0TDtjPSd34YzucAGd3l9Ufs2V9
-         nYq1Zg9G5n0mY+KHyqaAnpLU28vatlfKCB8N9ynwq4J9exh62yjgNgIbpQ1KvBhQILvt
-         UE8A==
-X-Gm-Message-State: AAQBX9cAO9Yxp6y/qf/CwOCL2WbHLz6YduCE6nL8pzKiYTA1LwoLoaSz
-        7IetP0WJB5iZNt0RS2SJ7WpK8qk4DEcdprOeG+kAmA==
-X-Google-Smtp-Source: AKy350bVO2xvOdcujlPweNogfEF/aS/RwRjRN7oD1rhoaEfLODuiLQvDCF4zUxggrf8oM3l2ae/tZg==
-X-Received: by 2002:adf:fa09:0:b0:2dd:cb8:2299 with SMTP id m9-20020adffa09000000b002dd0cb82299mr20102833wrr.11.1680251710872;
-        Fri, 31 Mar 2023 01:35:10 -0700 (PDT)
+        bh=Lfco65EqQfHZJxTK1kxWA78ZamfCWUWZKPHL0Bp1xH4=;
+        b=c8uvwUBDAHa4ZWYm1mOsRzdJFeK3RxAOoG7NtIB20L4Rh5UXvE0c49pSetghVOrjCq
+         fyBubUGuWHp9MXfC27kxjK/uuBtKk5kJcTz6elyM5sGIJ3GD8767esrzzHpPmAV2Ipgb
+         GZd+JU32ECFuaMCe5pQKHpGLs0pcAyNW50i/AJq+vKeMiAxjRo2c0tAlPl84lYauGQBG
+         4BskqcJYzrC61wm/xeyKOcq5ZWyR4Egg8JZyfVTUk36Sfmr65+sRpnQGtUNL8Zvrd58i
+         csPuKYfFks0w25gS3oQnDiO1CDc5HweVmIU+FFx+CSGiS++0rOSXDZLKArSdLLU+WXdi
+         Tf7Q==
+X-Gm-Message-State: AAQBX9cGDSNeNAWa9h8OxkLvrMxuA4ug0A7S1ykCV4JIiWGoN70KeHO4
+        +PvZ3aGiwZDthgBasFNOnK2L3I9+Nt9TavtMFFcjYw==
+X-Google-Smtp-Source: AKy350YfLJVXZRDyUNg84s43q40a428Zli09J7iKvodwvFp3SatohdxhFRTG46DXiPWYNxkqIkfYZA==
+X-Received: by 2002:adf:f348:0:b0:2d7:9206:488d with SMTP id e8-20020adff348000000b002d79206488dmr20315336wrp.36.1680251712356;
+        Fri, 31 Mar 2023 01:35:12 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.35.09
+        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.35.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 01:35:10 -0700 (PDT)
+        Fri, 31 Mar 2023 01:35:11 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 31 Mar 2023 10:34:57 +0200
-Subject: [PATCH RFC 19/20] dt-bindings: interrupt-controller:
- arm,versatile-fpga-irq: mark oxnas compatible as deprecated
+Date:   Fri, 31 Mar 2023 10:34:58 +0200
+Subject: [PATCH RFC 20/20] MAINTAINERS: remove OXNAS entry
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230331-topic-oxnas-upstream-remove-v1-19-5bd58fd1dd1f@linaro.org>
+Message-Id: <20230331-topic-oxnas-upstream-remove-v1-20-5bd58fd1dd1f@linaro.org>
 References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
@@ -101,36 +100,35 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Due to lack of maintainance and stall of development for a few years now,
-and since no new features will ever be added upstream, mark the
-OX810 and OX820 IRQ compatible as deprecated.
+and since no new features will ever be added upstream, remove MAINTAINERS
+entry for OXNAS files.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../bindings/interrupt-controller/arm,versatile-fpga-irq.txt          | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ MAINTAINERS | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/arm,versatile-fpga-irq.txt b/Documentation/devicetree/bindings/interrupt-controller/arm,versatile-fpga-irq.txt
-index 2a1d16bdf834..ea939f54c5eb 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/arm,versatile-fpga-irq.txt
-+++ b/Documentation/devicetree/bindings/interrupt-controller/arm,versatile-fpga-irq.txt
-@@ -6,7 +6,7 @@ controllers are OR:ed together and fed to the CPU tile's IRQ input. Each
- instance can handle up to 32 interrupts.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8d5bc223f305..c9a29d839ea2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2551,16 +2551,6 @@ S:	Maintained
+ W:	http://www.digriz.org.uk/ts78xx/kernel
+ F:	arch/arm/mach-orion5x/ts78xx-*
  
- Required properties:
--- compatible: "arm,versatile-fpga-irq" or "oxsemi,ox810se-rps-irq"
-+- compatible: "arm,versatile-fpga-irq"
- - interrupt-controller: Identifies the node as an interrupt controller
- - #interrupt-cells: The number of cells to define the interrupts.  Must be 1
-   as the FPGA IRQ controller has no configuration options for interrupt
-@@ -19,6 +19,8 @@ Required properties:
-   the system till not make it possible for devices to request these
-   interrupts.
- 
-+The "oxsemi,ox810se-rps-irq" compatible is deprecated.
-+
- Example:
- 
- pic: pic@14000000 {
+-ARM/OXNAS platform support
+-M:	Neil Armstrong <neil.armstrong@linaro.org>
+-L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+-L:	linux-oxnas@groups.io (moderated for non-subscribers)
+-S:	Maintained
+-F:	arch/arm/boot/dts/ox8*.dts*
+-F:	arch/arm/mach-oxnas/
+-F:	drivers/power/reset/oxnas-restart.c
+-N:	oxnas
+-
+ ARM/QUALCOMM SUPPORT
+ M:	Andy Gross <agross@kernel.org>
+ M:	Bjorn Andersson <andersson@kernel.org>
 
 -- 
 2.34.1
