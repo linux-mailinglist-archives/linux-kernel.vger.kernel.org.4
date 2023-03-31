@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8F86D2ADE
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 00:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6FA6D2AEC
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 00:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbjCaWEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 18:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
+        id S233425AbjCaWHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 18:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjCaWEd (ORCPT
+        with ESMTP id S232039AbjCaWHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 18:04:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB0A1FD3E
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 15:04:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E134562C22
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 22:04:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F77FC433D2;
-        Fri, 31 Mar 2023 22:04:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1680300271;
-        bh=y75tzqtO/00AP4h3NcC3yhpaClgjp49viV/Jpgl25Gc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vs6Lz4cAD8QohfCI437uO557Vnvq0b76OWFRvJsAKCHGygOsdzzGReFzksV2buL80
-         IHi8KOP1IFpIlRbVJrWEZuv3VitjFuV0Hj64kw1dokZLWh9Gq4bPOQ7hpjnCTQA382
-         ex71kxhcZ2X+w+BMMWP0+1G9c6+RY5vpRDAogG8I=
-Date:   Fri, 31 Mar 2023 15:04:30 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     willy@infradead.org, lstoakes@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm: swap: use folio_batch_reinit() in
- folio_batch_move_lru()
-Message-Id: <20230331150430.546de954b0a7918f042c562e@linux-foundation.org>
-In-Reply-To: <20230331095858.51810-1-zhengqi.arch@bytedance.com>
-References: <20230331095858.51810-1-zhengqi.arch@bytedance.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 31 Mar 2023 18:07:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431942222B
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 15:06:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680300379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u4U8Z/tCC6KI1ZHcEPqkuT5mdoVjDaEr2xngNPO60lM=;
+        b=IlEqMEPojEaikvMp5LySoJ751uXtc1NLG4FFP/JG1WTCopoqbb2qa9cDfQheQNX+6+XvZm
+        lzJ2Y1DeXnHnw0GFlAHvCadgUa+7Urm24NMPXMS5df0vsUTn2nLmF6Etu3YVx+rrDHsznw
+        44Y5APrQ66U/sU5tTp1y44xe1F2raLo=
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
+ [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-370-A6dwCGj6OoSf5kVHcP-mIA-1; Fri, 31 Mar 2023 18:06:18 -0400
+X-MC-Unique: A6dwCGj6OoSf5kVHcP-mIA-1
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-17714741d9dso11895494fac.4
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 15:06:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680300377;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u4U8Z/tCC6KI1ZHcEPqkuT5mdoVjDaEr2xngNPO60lM=;
+        b=h6z2prU+fAo62X0ktJwrE4Lrlertjfl8T04K2eST/ktd/F0iiu/zgseFfsRYCp0Ufw
+         2D6f7gGzwFTDUvFq+O5rfGcjSz5YLJwlIx/86dmdoyD12ZZDeBQpWbPRH2XfumUhtllB
+         T8VgC2Hj7ZaA18Ai1jZccF3tnudKCm2mXIioYmzEUmJZ0iLWfTQGOqMv30F1i6Dm9fMC
+         fEs5OFywTbhgbQ9ovVqB3TshyApBp7TQpCU9IFkuSKp5ixp9nqOkGhMntgW5x7G1r7tb
+         LHygkH6uiOEsrGs0ZnRrvpChSL/2lacRJBv4Gcct1VNLahC14T7Jv4+TvZm327TmG2rX
+         y8kg==
+X-Gm-Message-State: AAQBX9dSlgjah6vU9Yu58dO+Rh6inNT9CmrTQAqDG8knpV1egXiTpmgc
+        d6iWUfuIu5xF0bQFKuddrT5b0goL5QJ2L0Kv8rXg9WvFSSbCk3hynfyy6cc046CuOxN69bF+D/s
+        htvQffNl0poNRPRlKXYL0lZCQdXEftKJ/3tfx6Soz0ZBRcQJEiP/z9uBsVQ6WQgKVk/MmvAhaFl
+        ya9u+1n4f1Vp8=
+X-Received: by 2002:a05:6871:282:b0:172:80fd:8482 with SMTP id i2-20020a056871028200b0017280fd8482mr19329679oae.5.1680300376920;
+        Fri, 31 Mar 2023 15:06:16 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bGGsF2laKAGdPP0P41FMsK9S+A2djDpOUWZkU3NZ+9W7d4GHZmrs+i2VfMoBvGhIEn0N/dew==
+X-Received: by 2002:a05:6871:282:b0:172:80fd:8482 with SMTP id i2-20020a056871028200b0017280fd8482mr19329633oae.5.1680300376680;
+        Fri, 31 Mar 2023 15:06:16 -0700 (PDT)
+Received: from halaney-x13s (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
+        by smtp.gmail.com with ESMTPSA id h11-20020a9d798b000000b0069f74706056sm641395otm.9.2023.03.31.15.06.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 15:06:16 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 17:06:13 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        bhupesh.sharma@linaro.org, wens@csie.org, jernej.skrabec@gmail.com,
+        samuel@sholland.org, mturquette@baylibre.com,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
+        richardcochran@gmail.com, linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
+Subject: Re: [PATCH net-next v3 00/12] Add EMAC3 support for sa8540p-ride
+Message-ID: <20230331220613.2cr2r5mcf2wwse4j@halaney-x13s>
+References: <20230331214549.756660-1-ahalaney@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331214549.756660-1-ahalaney@redhat.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Mar 2023 17:58:57 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
-
-> In folio_batch_move_lru(), the folio_batch is not freshly
-> initialised, so it should call folio_batch_reinit() as
-> pagevec_lru_move_fn() did before.
+On Fri, Mar 31, 2023 at 04:45:37PM -0500, Andrew Halaney wrote:
+> This is a forward port / upstream refactor of code delivered
+> downstream by Qualcomm over at [0] to enable the DWMAC5 based
+> implementation called EMAC3 on the sa8540p-ride dev board.
 > 
-> ...
->
-> --- a/mm/swap.c
-> +++ b/mm/swap.c
-> @@ -222,7 +222,7 @@ static void folio_batch_move_lru(struct folio_batch *fbatch, move_fn_t move_fn)
->  	if (lruvec)
->  		unlock_page_lruvec_irqrestore(lruvec, flags);
->  	folios_put(fbatch->folios, folio_batch_count(fbatch));
-> -	folio_batch_init(fbatch);
-> +	folio_batch_reinit(fbatch);
->  }
->  
->  static void folio_batch_add_and_move(struct folio_batch *fbatch,
+> From what I can tell with the board schematic in hand,
+> as well as the code delivered, the main changes needed are:
+> 
+>     1. A new address space layout for /dwmac5/EMAC3 MTL/DMA regs
+>     2. A new programming sequence required for the EMAC3 base platforms
+> 
+> This series makes the change for 1 above as well as other housekeeping items
+> such as converting dt-bindings to yaml, etc.
+> 
+> As requested[1], it has been split up by compile time / maintainer tree.
+> I will post a link to the associated devicetree changes that together
+> with this series get the hardware functioning.
 
-Well...  why?  This could leave the kernel falsely thinking that the
-folio's pages have been drained from the per-cpu LRU addition
-magazines.
+As promised: https://lore.kernel.org/netdev/20230331215804.783439-1-ahalaney@redhat.com/T/#t
 
-Maybe that's desirable, maybe not, but I think this change needs much
-much more explanation describing why it is beneficial.
-
-
-folio_batch_reinit() seems to be a custom thing for the mlock code -
-perhaps it just shouldn't exist, and its operation should instead be
-open-coded in mlock_folio_batch().
-
-
-The dynamics and rules around ->percpu_pvec_drained are a bit
-mysterious.  A code comment which explains all of this would be
-useful.
+Thanks in advance for any reviews!
+- Andrew
 
