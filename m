@@ -2,109 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8176D1646
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 06:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04936D164A
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 06:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjCaEPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 00:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
+        id S229659AbjCaERx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 00:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjCaEP2 (ORCPT
+        with ESMTP id S229515AbjCaERv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 00:15:28 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5168DD323;
-        Thu, 30 Mar 2023 21:15:27 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so22083096pjz.1;
-        Thu, 30 Mar 2023 21:15:27 -0700 (PDT)
+        Fri, 31 Mar 2023 00:17:51 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02021287A
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 21:17:49 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id e65so26040235ybh.10
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 21:17:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680236127;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wwB+gbYNlN/hJQCONryj4KagzH8OwzCp7h0EU9aVCXo=;
-        b=IQ5TWysAyoyV2pAdHElJDi1Dh/nE17X1VAluEvisr2b5DdP3YTiFCj0mfzL6VP3fDl
-         yMhG91NdNLu78SN8X6cdG3xN2aRXdbsraAgt1YszS+LDi0i8mpJg/9mJIAU1J5YtvK+R
-         TFkW/QSd8Omq3sRGqpY8PZye7KOPhTTDtUYWlncqVmstl025QYwKieWdeE9GXBOQ1HGq
-         RyjM53QTSFM18rLS6ZdqyxZOqbV/C1GtxmFDjKwACXSUUn1Gz++8Y9Chd0+j0PyZ5xOJ
-         HBP0zGrsTA0bcQmR/wxyKQtKfSAElXQ7IerniA4eU4wUBvJ3FCVTx6l5EgxrWVK7UWOi
-         cSYw==
+        d=linaro.org; s=google; t=1680236269;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Awmt2R8QdeQ6LlMv7k0ieRniqF2o3/eCQObkBo9Ae0=;
+        b=DgsBRKwRYkHurWnkEnW4FMOIiDteXU3//J00uOtHMGYtxOQ2mEeXTwvyRSdXmd52a5
+         RlUkroYu+9xpTTSShpOpsmw8u6g35P7aVGkJJtcOZF8WiB2aJ6Cy8+oaisCJlSq0WExz
+         8gOUIDWP4R8LP+Rj7wC9MDSPT2g1+I8B3rGjhek0MuFUKfnHkFk478+TYYPUzYoB9Tdo
+         GtOybAFSpl2I87sqll9UuIGrVxLW82/jbBPJDREQINpiQb820OSTflAV21NLy+ATiDkm
+         GVRtgrPZv0VACJii12D139PRjQxj4lCfEC3rEzawuTxDZLct635RX2i/gtdOt1Sz8Mfr
+         03lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680236127;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wwB+gbYNlN/hJQCONryj4KagzH8OwzCp7h0EU9aVCXo=;
-        b=hktj2/eSz7pTs3sS0zhZ/2Ur8omtzgrHB/5/Bck2QJCtgTON59FXyLBN4xTZhI3E8A
-         JTeGB79CNCz2lBTLuQzzqICXy2688RnTjOBXq1e9OCuMWigEBuR2JJhdrCA8TyO8VaPu
-         CynTVcYQR5WaQWG1pmOjSUha328u2t9heB5VdtufLKoio+ktfZpcYVpUg7Z9S4K9CjSl
-         649xVKQCE6aoWf+U53IveWdsvjFnuBiUxd+11Ynbj0hVXcLHzrn37fZ9owil0jXhkIsf
-         DyTEfI8iWbT61iIZrDF5LGCb65QibQZn/InzevE+rEmU573zELqjqtwcjqO3P3x5nPVc
-         g/WQ==
-X-Gm-Message-State: AAQBX9cQFUga9CN5eR3TECxfBD5a+rOOPRavF5Ty6Q2k7zeUzOOWSXib
-        FL2ilnFJCOfvnPX0JoqwcGc=
-X-Google-Smtp-Source: AKy350Zfhwe3Ic2BfPr01L8tuEMFw0RJVUzUsWe0y2UFDKost6KpxREtdxFsQFqIX67SOR00+l8h0A==
-X-Received: by 2002:a05:6a20:a11b:b0:e4:152:e920 with SMTP id q27-20020a056a20a11b00b000e40152e920mr3892736pzk.11.1680236126748;
-        Thu, 30 Mar 2023 21:15:26 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-78.three.co.id. [180.214.233.78])
-        by smtp.gmail.com with ESMTPSA id t38-20020a634466000000b00502f4c62fd3sm595886pgk.33.2023.03.30.21.15.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 21:15:26 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id DA0731067D9; Fri, 31 Mar 2023 11:15:22 +0700 (WIB)
-Date:   Fri, 31 Mar 2023 11:15:22 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Takahiro Itazuri <itazur@amazon.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zulinx86@gmail.com
-Subject: Re: [PATCH] docs: kvm: x86: Fix a broken field list
-Message-ID: <ZCZeWlhQ8GK7gYSi@debian.me>
-References: <20230330233956.78246-1-itazur@amazon.com>
+        d=1e100.net; s=20210112; t=1680236269;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/Awmt2R8QdeQ6LlMv7k0ieRniqF2o3/eCQObkBo9Ae0=;
+        b=gAOEwmmsNvgAUgkQol8Y3lHucvyGcC0RlsxNsiVp7wGJyHnwND+X9/adM5QKb4Sxqx
+         XmPFXzXyBx68UK6CTz8xSa2L1d3H6qHz8l7cfELe0aczhK31QwkAbD5i4cW6rwL/cgWC
+         d+Bp5Rn0uHSm6pkYejRxQwRpdm7NkNRgy/GkCy95IMPjuAUyRa18grPulzLY5alATOtr
+         SUupkt+VpcyzDqtiPTa8w7eoG4Vfc6kMqZNf3eMB0A9bXaRRUJ0u6U5zutcTLsqfB6gs
+         /E55sD3LMxcCQyIBAnD3UiMYMgaPDfV950x9eSXu6xf9dGPXKh1CGs7AdYBbnwGAgvSK
+         BnxA==
+X-Gm-Message-State: AAQBX9ci0g1pKym0QzX5puxqZR+hC8jdmX7DL6+5lfR8NWp6dbMV5tNS
+        gYFopjWDK9wQaNhePIU4vllF4mbNevvXLjCPEzO6Hg==
+X-Google-Smtp-Source: AKy350bmqNhiibMax6oW4ot4bQpSBl90+Lz8uv/LuZqI9MkWL/BzSv4Pr01iXwUlCpe7TWk8nmmsCVQafhV1ASTSY6o=
+X-Received: by 2002:a05:6902:102b:b0:b46:4a5e:3651 with SMTP id
+ x11-20020a056902102b00b00b464a5e3651mr16787785ybt.9.1680236268945; Thu, 30
+ Mar 2023 21:17:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tdxjAvrHOWglhTOm"
-Content-Disposition: inline
-In-Reply-To: <20230330233956.78246-1-itazur@amazon.com>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20230330165117.26348-1-quic_gokukris@quicinc.com> <8685b710-b74d-556a-815d-0ffef2b0eeff@linaro.org>
+In-Reply-To: <8685b710-b74d-556a-815d-0ffef2b0eeff@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 31 Mar 2023 07:17:38 +0300
+Message-ID: <CAA8EJpqAzaGa9quhgQYSNEPtrC7bwxpXBmbuk4F85RsMSjTm+A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] dt-bindings: firmware: qcom: scm: Updating VMID list
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 31 Mar 2023 at 01:57, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 30.03.2023 18:51, Gokul krishna Krishnakumar wrote:
+> > Adding the full list of VMID's, which are used by different clients to
+> > pass to the secure world.
+> >
+> > Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+> > ---
+> > V2 Fixed allignment issues in [1]
+> >
+> > [1] https://lore.kernel.org/lkml/20230328214703.12093-1-quic_gokukris@quicinc.com/
+> > ---
+> They're weirdly ordered now.. I think Dmitry's comment was
+> just about the usage of space/tab such that git would not get
+> confused. With that fixed, you should be able to get a diff like:
+>
+> +#define QCOM_SCM_VMID_LPASS            0x16
+> #define QCOM_SCM_VMID_WLAN_CE           0x19
+> +#define QCOM_SCM_VMID_CP_SPSS_SP       0x1A
+> [...]
+> +#define QCOM_SCM_VMID_CP_CDSP          0x2A
+> #define QCOM_SCM_VMID_NAV               0x2B
+> +#define QCOM_SCM_VMID_TVM              0x2D
 
---tdxjAvrHOWglhTOm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes. Konrad is correct here. Please keep them sorted. I just asked to
+keep old lines intact so that we see what was really changed and what
+was left intact.
 
-On Fri, Mar 31, 2023 at 12:39:56AM +0100, Takahiro Itazuri wrote:
-> This commit adds a missing `:` to fix a broken field list.
+>
+> Still, I really appreciate you providing that information to the kernel!
+>
+> Konrad
+>
+> >  include/dt-bindings/firmware/qcom,scm.h | 22 ++++++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> >
+> > diff --git a/include/dt-bindings/firmware/qcom,scm.h b/include/dt-bindings/firmware/qcom,scm.h
+> > index 1a4e68fa0744..7ad6cbe623d3 100644
+> > --- a/include/dt-bindings/firmware/qcom,scm.h
+> > +++ b/include/dt-bindings/firmware/qcom,scm.h
+> > @@ -2,6 +2,7 @@
+> >  /*
+> >   * Copyright (c) 2010-2015, 2018-2019 The Linux Foundation. All rights reserved.
+> >   * Copyright (C) 2015 Linaro Ltd.
+> > + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> >   */
+> >
+> >  #ifndef _DT_BINDINGS_FIRMWARE_QCOM_SCM_H
+> > @@ -13,4 +14,25 @@
+> >  #define QCOM_SCM_VMID_WLAN_CE                0x19
+> >  #define QCOM_SCM_VMID_NAV            0x2B
+> >
+> > +#define QCOM_SCM_VMID_TZ             0x1
+> > +#define QCOM_SCM_VMID_CP_TOUCH               0x8
+> > +#define QCOM_SCM_VMID_CP_BITSTREAM   0x9
+> > +#define QCOM_SCM_VMID_CP_PIXEL               0xA
+> > +#define QCOM_SCM_VMID_CP_NON_PIXEL   0xB
+> > +#define QCOM_SCM_VMID_CP_CAMERA              0xD
+> > +#define QCOM_SCM_VMID_HLOS_FREE              0xE
+> > +#define QCOM_SCM_VMID_MSS_NONMSA     0x10
+> > +#define QCOM_SCM_VMID_CP_SEC_DISPLAY 0x11
+> > +#define QCOM_SCM_VMID_CP_APP         0x12
+> > +#define QCOM_SCM_VMID_LPASS          0x16
+> > +#define QCOM_SCM_VMID_CP_SPSS_SP     0x1A
+> > +#define QCOM_SCM_VMID_CP_CAMERA_PREVIEW      0x1D
+> > +#define QCOM_SCM_VMID_CDSP           0x1E
+> > +#define QCOM_SCM_VMID_CP_SPSS_SP_SHARED      0x22
+> > +#define QCOM_SCM_VMID_CP_SPSS_HLOS_SHARED    0x24
+> > +#define QCOM_SCM_VMID_ADSP_HEAP              0x25
+> > +#define QCOM_SCM_VMID_CP_CDSP                0x2A
+> > +#define QCOM_SCM_VMID_TVM            0x2D
+> > +#define QCOM_SCM_VMID_OEMVM          0x31
+> > +
+> >  #endif
 
-Please don't say "This commit does foo", but rather "Do foo".
-Also, add:
-Fixes: ba7bb663f5547e ("KVM: x86: Provide per VM capability for disabling P=
-MU virtualization")
 
-Thanks.
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---tdxjAvrHOWglhTOm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCZeVwAKCRD2uYlJVVFO
-o6RlAP9FwwZyvAaLbpW6snjP6yMTYA89vjLr5NDUXS66DWe32AD/W1p3wQobD7ab
-P/3MrKM43jU06fP36xJBMGCX62tAewY=
-=9XUK
------END PGP SIGNATURE-----
-
---tdxjAvrHOWglhTOm--
+-- 
+With best wishes
+Dmitry
