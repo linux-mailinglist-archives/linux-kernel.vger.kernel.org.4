@@ -2,81 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27F06D1961
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDB06D1973
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbjCaIGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
+        id S231186AbjCaIJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbjCaIG2 (ORCPT
+        with ESMTP id S229629AbjCaIJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:06:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747CC12CF5;
-        Fri, 31 Mar 2023 01:06:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F665B82CD7;
-        Fri, 31 Mar 2023 08:06:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 417E4C433D2;
-        Fri, 31 Mar 2023 08:06:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680249972;
-        bh=hwI8O7moMEGKvJAw99qM33KgYZAC18q5nJaBazMJeU8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rPd8f4Y1fzyJ2H/C8lzIiZnigs4/n2M2AoPnGAVoIruPfK3TYFLfC8tw1XYmoCmiZ
-         KoJtcdPWqSWzpzyGt6AJrbop30nsqwesiVI1gIzY0pWuHffyus4ZJzR7J/p8tpRWO8
-         nLJM/ly+G1qQBRCSWuSNUWTVeU562tcdVbvrLSbquhkSnVmw7GdQSkLkkrouzEFn8u
-         ClAccJCotZYVrFGLMGPCWjvnA9ChTgSvEh6hpY4s977rsnWoCfjbpmwyDgtcDfMQE+
-         LkmOS48WYYO9Zsb7VfQyKM6RhjH0imj9V5l31GM2yBYDKG1tCapg6ai1dRvPB/8Kot
-         aQLkft/yf2xXg==
-Date:   Fri, 31 Mar 2023 13:36:08 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [RESEND PATCH v2] dmaengine: ti: k3-udma: Add system
- suspend/resume support
-Message-ID: <ZCaUcFXeOLRemD7J@matsya>
-References: <20230329155349.2566010-1-vigneshr@ti.com>
+        Fri, 31 Mar 2023 04:09:26 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA8126BD;
+        Fri, 31 Mar 2023 01:09:16 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E758E18844A7;
+        Fri, 31 Mar 2023 08:09:14 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id C2F5F2503962;
+        Fri, 31 Mar 2023 08:09:14 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id B5F069B403E2; Fri, 31 Mar 2023 08:09:14 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id C9DC291201E3;
+        Fri, 31 Mar 2023 08:09:13 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
+ test
+In-Reply-To: <20230330192714.oqosvifrftirshej@skbuf>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-7-netdev@kapio-technology.com>
+ <ZBgdAo8mxwnl+pEE@shredder> <87a5zzh65p.fsf@kapio-technology.com>
+ <ZCMYbRqd+qZaiHfu@shredder> <874jq22h2u.fsf@kapio-technology.com>
+ <20230330192714.oqosvifrftirshej@skbuf>
+Date:   Fri, 31 Mar 2023 10:06:34 +0200
+Message-ID: <871ql5mjjp.fsf@kapio-technology.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329155349.2566010-1-vigneshr@ti.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-03-23, 21:23, Vignesh Raghavendra wrote:
-> The K3 platforms configure the DMA resources with the
-> help of the TI's System Firmware's Device Manager(DM)
-> over TISCI. The group of DMA related Resource Manager[1]
-> TISCI messages includes: INTA, RINGACC, UDMAP, and PSI-L.
-> This configuration however, does not persist in the DM
-> after leaving from Suspend-to-RAM state. We have to restore
-> the DMA channel configuration over TISCI for all configured
-> channels when returning from suspend.
-> 
-> The TISCI resource management calls for each DMA type (UDMA,
-> PKTDMA, BCDMA) happen in device_free_chan_resources() and
-> device_alloc_chan_resources(). In pm_suspend() we store
-> the current udma_chan_config for channels that still have
-> attached clients and call device_free_chan_resources().
-> In pm_resume() restore the udma_channel_config from backup
-> and call device_alloc_chan_resources() for those channels.
-> 
-> Drivers like CPSW that use k3-udma-glue already do their own
-> DMA resource management so use the late system suspend/resume hooks.
+On Thu, Mar 30, 2023 at 22:27, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Thu, Mar 30, 2023 at 09:07:53PM +0200, Hans Schultz wrote:
+>> Not true, it reveals that I forgot to put it in the patch, that's all. As
+>> I cannot run several of these tests because of memory constraints I link
+>> the file to a copy in a rw area where I modify the list and just run one
+>> of the subtests at a time. If I try to run the whole it always fails
+>> after a couple of sub-tests with an error.
+>> 
+>> It seems to me that these scripts are quite memory consuming as they
+>> accumulate memory consuption in relation to what is loaded along the
+>> way. A major problem with my system.
+>
+> I'm sorry for perhaps asking something entirely obvious, but have you tried:
+>
+> kernel-dir $ rsync -avr tools/testing/selftests/ root@$board:selftests/
+> board $ cd selftests/drivers/net/dsa/
+> board $ ./bridge_locked_port.sh lan0 lan1 lan2 lan3
+>
+> ?
+>
+> This is how I always run them, and it worked fine with both Debian
+> (where it's easy to add missing packages to the rootfs) or with a more
+> embedded-oriented Buildroot.
 
-Applied, thanks
+The memory problems are of course on the embedded target. In that case I
+think it would be a very good idea to do something to design the system
+better, so that it frees memory between the subtests.
 
--- 
-~Vinod
+If all tests are always run on the bridge only, I think they don't make
+much sense as these patchsets are directed towards switchcores.
