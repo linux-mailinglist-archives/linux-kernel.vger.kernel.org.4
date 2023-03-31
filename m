@@ -2,74 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA966D1E28
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB0D6D1E21
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjCaKh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 06:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S230304AbjCaKhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 06:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjCaKhd (ORCPT
+        with ESMTP id S231220AbjCaKg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 06:37:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4061A95A;
-        Fri, 31 Mar 2023 03:37:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0363CB82E4C;
-        Fri, 31 Mar 2023 10:37:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEFF1C433D2;
-        Fri, 31 Mar 2023 10:37:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680259038;
-        bh=dWyWOIVj1SDA63kPOq2AZvxwTmgsi+yXkOt75ifTxnI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b3jEO53zGo6fMMXI1G8vyajMLtx3QGWLDUxqpbgU9KhUN2Wo+wff1KfOrTsQ2hoyf
-         bxtrqr1eGU6Ny4XJv7KlJ9KJW83ZD6l0NLx7KUx0oH2MLQMuxwt5qefUNTsyxkG85n
-         BrVy4PnfuBF3C2Hz8hg7AV2T5PQC8t4ho/jAMHbBOaYyxANeNU5XX6k52SdIOmNy1c
-         oEoVb+fQmT1y7UENmmeJaWaHsx70UsIWcqirMuj65SP4H6WdZXpHJkYB6Ee+GrRuMw
-         WwyVJCYj6jT5EZyAYF1ymLKk0nSptwt03/XEFIl49utgtRfRkmEjtIzoQg0my+aci8
-         rGwDeF9ulECZQ==
-From:   Christian Brauner <brauner@kernel.org>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk,
-        syzbot+8ac3859139c685c4f597@syzkaller.appspotmail.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] fs: drop peer group ids under namespace lock
-Date:   Fri, 31 Mar 2023 12:36:06 +0200
-Message-Id: <20230331-angler-enjoyer-820f825d7646@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230330-vfs-mount_setattr-propagation-fix-v1-1-37548d91533b@kernel.org>
-References: <20230330-vfs-mount_setattr-propagation-fix-v1-1-37548d91533b@kernel.org>
+        Fri, 31 Mar 2023 06:36:58 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7B41116E;
+        Fri, 31 Mar 2023 03:36:39 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1piC7S-0008GB-RZ; Fri, 31 Mar 2023 12:36:30 +0200
+Date:   Fri, 31 Mar 2023 12:36:30 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     edumazet@google.com, davem@davemloft.net, dsahern@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, threeearcat@gmail.com
+Subject: Re: general protection fault in raw_seq_start
+Message-ID: <20230331103630.GE22079@breakpoint.cc>
+References: <CANn89iK5D75-SNg28ALi4Zr9JEHnreBpfu_pq0_zLe4jDLT5rw@mail.gmail.com>
+ <20230331071725.66950-1-kuniyu@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=481; i=brauner@kernel.org; h=from:subject:message-id; bh=gzgJPQ/tJyke88n1gF9CwJBXokKvoTocUw+rhclugD8=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSobTeziTIqqmI6G33g1X7ujabubtEHK6P9jSvs9p+Mfmm/ 9tPljlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgInoxjIyXPFT/CF6dsPh/bfW67zfn/ 9loUDfvuvngmICTBd7/Dl7tpyR4XSH9yOzNtOjhuri6x9mzzuydJ6Z2o4aLSUO7phdm09nsgAA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331071725.66950-1-kuniyu@amazon.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu, 30 Mar 2023 09:13:16 +0200, Christian Brauner wrote:
-> When cleaning up peer group ids in the failure path we need to make sure
-> to hold on to the namespace lock. Otherwise another thread might just
-> turn the mount from a shared into a non-shared mount concurrently.
+Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+> And I found this seems wrong.
 > 
-> 
+> c25b7a7a565e ("inet: ping: use hlist_nulls rcu iterator during lookup")
 
-Ok, syzbot is happy with this as well so let's get this fixed and backported,
-
-tree: git://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git
-branch: vfs.misc.fixes
-[1/1] fs: drop peer group ids under namespace lock
-      commit: cb2239c198ad9fbd5aced22cf93e45562da781eb
+How so?
