@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E1A6D1AC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5806D1AC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjCaIuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
+        id S230348AbjCaIuM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 04:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjCaIuN (ORCPT
+        with ESMTP id S231451AbjCaIuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:50:13 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA741A478;
-        Fri, 31 Mar 2023 01:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680252603; x=1711788603;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G+kxJZEIE+GVMqJqP/vS09+4cvaoQgOrzIwz7KkJRuE=;
-  b=n+TYM3PySxyyKD22LwJEGTGqtcMn3mZ0B+Rr40SWjESrD5Y0zCjRNCW9
-   97KM8sI8wjRaPURAZPpSelRUnKR8fPuC4608cNzCXW8/SFytnsxK3XcRo
-   JkJtCKcAC34H69hbSJ89xwKtWXel6jE+OD/kap3Yhi++axsIL2xNPLZsG
-   Y2al6+TH+Brh5k4h9MBwNqwo7YBIMRSxRew+ALXMAkaV3lRnasVLMiAx7
-   hZv5ZiDWn9siXyUJcHW7A5YVLYdlWmH7wYYlgnZ6Swhx8pJTXJ9/asjFq
-   QfARlvRaCUdmWDAG8OQA4D9SMGId48NEKDZO3hfNOgctmixE1dK8NOQ7/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="325365066"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="325365066"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 01:49:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="808972514"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="808972514"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 01:49:41 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id B491911FAD0;
-        Fri, 31 Mar 2023 11:49:38 +0300 (EEST)
-Date:   Fri, 31 Mar 2023 11:49:38 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Jimmy Su <jimmy.su@intel.com>, stable@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Max Staudt <mstaudt@chromium.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: ov8856: Do not check for for module version
-Message-ID: <ZCaeojsCxe39+zVE@kekkonen.localdomain>
-References: <20230323-ov8856-otp-v1-0-604f7fd23729@chromium.org>
+        Fri, 31 Mar 2023 04:50:08 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50743E053
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:49:55 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-80-JFvASr4sPtGH8Goypuzf7g-1; Fri, 31 Mar 2023 09:49:51 +0100
+X-MC-Unique: JFvASr4sPtGH8Goypuzf7g-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 31 Mar
+ 2023 09:49:48 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 31 Mar 2023 09:49:48 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Wu Zongyong' <wuzongyong@linux.alibaba.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wutu.xq2@linux.alibaba.com" <wutu.xq2@linux.alibaba.com>
+Subject: RE: [RFC PATCH] x86/insn: support decode MOVSXD instruction for MMIO
+Thread-Topic: [RFC PATCH] x86/insn: support decode MOVSXD instruction for MMIO
+Thread-Index: AQHZY3fogCXZ9lyaeEGX/VkAF56JI68Uk4Wg
+Date:   Fri, 31 Mar 2023 08:49:48 +0000
+Message-ID: <94c3f7ba1caa45f7ba503cde6e0c79d2@AcuMS.aculab.com>
+References: <1655f5dc49ab77f94e350ecbdc93e8d9b31acf61.1680058548.git.wuzongyong@linux.alibaba.com>
+ <20230330123951.b5vujv67c7q3dhay@box.shutemov.name>
+ <20230331022414.GB435@L-PF27918B-1352.localdomain>
+In-Reply-To: <20230331022414.GB435@L-PF27918B-1352.localdomain>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323-ov8856-otp-v1-0-604f7fd23729@chromium.org>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.0 required=5.0 tests=PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,30 +65,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
-
-On Thu, Mar 23, 2023 at 11:44:20PM +0100, Ricardo Ribalda wrote:
-> It the device is probed in non-zero ACPI D state, the module
-> identification is delayed until the first streamon.
+From: Wu Zongyong
+> Sent: 31 March 2023 03:24
 > 
-> The module identification has two parts: deviceID and version. To rea
-> the version we have to enable OTP read. This cannot be done during
-> streamon, becase it modifies REG_MODE_SELECT.
+> On Thu, Mar 30, 2023 at 03:39:51PM +0300, kirill.shutemov@linux.intel.com wrote:
+> > On Wed, Mar 29, 2023 at 10:59:37AM +0800, Wu Zongyong wrote:
+> > > It seems MOVSXD which opcode is 0x63 is not handled, support
+> > > to decode it in insn_decode_mmio().
+> >
+> > Do you have a particular user in mind?
+> To be honest, I don't find a specific user which uses the MOVSXD.
 > 
-> Since the driver has the same behaviour for all the module versions, do
-> not read the module version from the sensor's OTP.
+> But both Intel and AMD's instructions reference contains MOVSXD and lots
+> of MOVSXD instructions occur when I "objdump -S vmlinux", so I think it
+> may be useful to support it in insn_decode_mmio().
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 0e014f1a8d54 ("media: ov8856: support device probe in non-zero ACPI D state")
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> Are there some special consideration about this instruction?
 
-I guess the identification could be done from pre_streamon() callback
-instead, but the driver doesn't implement it. But the information isn't
-used for anything indeed so I'll just take this.
+It is a sign-extending memory read (32bit to 64bit).
+You pretty much never want to do that to a device register.
+Also kernel code should be using readl() (etc) which do
+unsigned reads.
+So they should never happen for mmio.
 
-Thanks.
+Of course, if you mmap() PCIe space directly into a program's
+address space anything might happen ...
 
--- 
-Kind regards,
+	David
 
-Sakari Ailus
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
