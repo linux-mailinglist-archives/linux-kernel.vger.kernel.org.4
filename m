@@ -2,60 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178776D18AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E73946D18B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjCaHdu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 03:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
+        id S230444AbjCaHhU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 03:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCaHdr (ORCPT
+        with ESMTP id S229529AbjCaHhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:33:47 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1451166B
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:33:42 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-159-jibixo4mNCSA74dvMNHr1Q-1; Fri, 31 Mar 2023 08:33:40 +0100
-X-MC-Unique: jibixo4mNCSA74dvMNHr1Q-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 31 Mar
- 2023 08:33:39 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 31 Mar 2023 08:33:38 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andrew Morton' <akpm@linux-foundation.org>
-CC:     Jani Nikula <jani.nikula@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        =?iso-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
-        David Gow <davidgow@google.com>
-Subject: RE: [PATCH 0/4] log2: make is_power_of_2() more generic
-Thread-Topic: [PATCH 0/4] log2: make is_power_of_2() more generic
-Thread-Index: AQHZY0DwWI19nDCca0eIs2l7T1UA9K8T1qTw///9RgCAAKpk8A==
-Date:   Fri, 31 Mar 2023 07:33:38 +0000
-Message-ID: <37671dff9b6b4e6bb07862c11cb69874@AcuMS.aculab.com>
-References: <20230330104243.2120761-1-jani.nikula@intel.com>
-        <20230330125041.83b0f39fa3a4ec1a42dfd95f@linux-foundation.org>
-        <549987e4967d45159573901d330c96a0@AcuMS.aculab.com>
- <20230330151846.fdbc8edbfbaa6eaddb056dc7@linux-foundation.org>
-In-Reply-To: <20230330151846.fdbc8edbfbaa6eaddb056dc7@linux-foundation.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 31 Mar 2023 03:37:17 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE67199B;
+        Fri, 31 Mar 2023 00:37:17 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5463fa0c2bfso69789997b3.1;
+        Fri, 31 Mar 2023 00:37:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680248236;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vMCPBKqa5X7qdxmutmPXldx9K7gy/4RLJ6RttIJMQZE=;
+        b=bYb5Hlx4fJLVvInPcmj4uLtRfeQvc5uPYKTCLQhd5IGqZ4b8UbpdDBn0zEof7dJT7M
+         lpZ29AZNfPpaDgI+fXN4Qd4jy3IGonC+WUrfu/aIaQosCFG4e60FCxSsvRjr1YBPUEXi
+         KxwfvZZCzXEUBL8mBIYK5/Z1PqEuWLGlikzBcJaG5auq6Uw6GFWyUEOSt4tvqf1CfsRi
+         VvvzGVuwOrqVOGb+kyKubMPHDJCfORjJnTEvjDIjK0m0qsEVTujdanTo5Zefu+bV6W4d
+         MSQ0UeEJz8d7ukhx4JKcR2WTq1wD+SAFdkfNst9nZCRTdW61hU4uembXzjgBGOYFJM03
+         DQZg==
+X-Gm-Message-State: AAQBX9c4PvbXZ9Ge3Oh7ZJCm7387MvT6pj8p+z/poqy+tJUQHMRT7RQV
+        Fo83X+IBT+3LIPBc/IelV3XatDke6+N9W6fl
+X-Google-Smtp-Source: AKy350YKTTRDcNXIjTfJDfEOv4ZMgswwLd47ihrHjWmjOf9Eca3Yfg5BdZ4ylcvIVx3BEFa4Sm/M7w==
+X-Received: by 2002:a81:6141:0:b0:52e:cd73:f927 with SMTP id v62-20020a816141000000b0052ecd73f927mr22476359ywb.48.1680248236195;
+        Fri, 31 Mar 2023 00:37:16 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id l133-20020a81258b000000b00545a08184e5sm368272ywl.117.2023.03.31.00.37.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 00:37:15 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id f188so7980218ybb.3;
+        Fri, 31 Mar 2023 00:37:15 -0700 (PDT)
+X-Received: by 2002:a25:24c3:0:b0:a02:a3a6:78fa with SMTP id
+ k186-20020a2524c3000000b00a02a3a678famr13492502ybk.12.1680248235245; Fri, 31
+ Mar 2023 00:37:15 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
+References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230330204217.47666-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20230330204217.47666-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 31 Mar 2023 09:37:03 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWz=Vf1svs3TJrCSq8ED0rEy-NURQ++bUspo73zfct50A@mail.gmail.com>
+Message-ID: <CAMuHMdWz=Vf1svs3TJrCSq8ED0rEy-NURQ++bUspo73zfct50A@mail.gmail.com>
+Subject: Re: [PATCH v7 6/6] soc: renesas: Kconfig: Select the required configs
+ for RZ/Five SoC
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.0 required=5.0 tests=PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,80 +79,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Morton
-> Sent: 30 March 2023 23:19
-> 
-> On Thu, 30 Mar 2023 21:53:03 +0000 David Laight <David.Laight@ACULAB.COM> wrote:
-> 
-> > > But wouldn't all these issues be addressed by simply doing
-> > >
-> > > #define is_power_of_2(n) (n != 0 && ((n & (n - 1)) == 0))
-> > >
-> > > ?
-> > >
-> > > (With suitable tweaks to avoid evaluating `n' more than once)
-> >
-> > I think you need to use the 'horrid tricks' from min() to get
-> > a constant expression from constant inputs.
-> 
-> This
-> 
-> --- a/include/linux/log2.h~a
-> +++ a/include/linux/log2.h
-> @@ -41,11 +41,11 @@ int __ilog2_u64(u64 n)
->   * *not* considered a power of two.
->   * Return: true if @n is a power of 2, otherwise false.
->   */
-> -static inline __attribute__((const))
-> -bool is_power_of_2(unsigned long n)
-> -{
-> -	return (n != 0 && ((n & (n - 1)) == 0));
-> -}
-> +#define is_power_of_2(_n)				\
-> +	({						\
-> +		typeof(_n) n = (_n);			\
-> +		n != 0 && ((n & (n - 1)) == 0);		\
-> +	})
-> 
->  /**
->   * __roundup_pow_of_two() - round up to nearest power of two
-> _
-> 
-> worked for me in a simple test.
-> 
-> --- a/fs/open.c~b
-> +++ a/fs/open.c
-> @@ -1564,3 +1564,10 @@ int stream_open(struct inode *inode, str
->  }
-> 
->  EXPORT_SYMBOL(stream_open);
-> +
-> +#include <linux/log2.h>
-> +
-> +int foo(void)
-> +{
-> +	return is_power_of_2(43);
-> +}
-> _
-> 
-> 
-> foo:
-> # fs/open.c:1573: }
-> 	xorl	%eax, %eax	#
-> 	ret
-> 
-> 
-> Is there some more tricky situation where it breaks?
+On Thu, Mar 30, 2023 at 10:42 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Explicitly select the required Cache management and Errata configs
+> required for the RZ/Five SoC.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Try:
-static int x = is_power_of_2(43);
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I suspect that some (all?) of the compile-time assert checks won't
-like ({...}) either.
+Gr{oetje,eeting}s,
 
-	David
+                        Geert
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
