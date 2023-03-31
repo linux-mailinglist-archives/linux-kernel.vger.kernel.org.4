@@ -2,64 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726376D1F7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86CF66D1F81
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbjCaLxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 07:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S231694AbjCaLxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 07:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjCaLxV (ORCPT
+        with ESMTP id S230185AbjCaLxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:53:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B1C12CD2;
-        Fri, 31 Mar 2023 04:53:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F355B82EC1;
-        Fri, 31 Mar 2023 11:53:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C69C433EF;
-        Fri, 31 Mar 2023 11:53:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680263597;
-        bh=hhd9nbbSJ5RTG1k98hUY9XQbJXehPQvw/S7adZu0qHM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cN/o1EkNaMPJceihagehs5ghNOVUaMPhLLNIvRdkABKEFgvSZnN1zyLDYeLldU/53
-         /VDlFdBkp9EebsFMLa81R6ebJly/VsWcyIBYEMDEGxQqBmafUltWxoN5xkUt5H66vm
-         SaINmpFr3eN/aMNqGNOd2GKkupJC569U+90APOJSjY/4jfOhvwqu9lvuLpwrHm2ZOA
-         Q7Z6BsP4iBx+Uw81YFIsLplIQlh9NFHj8WF1ZZ8OZGMe4dK0mXYMznAOTV42KOAPFj
-         Jm9Ov7p438Lp6eNT3rIoHTdH9anSJdnKOizY5ecxvpElh1t7NBBVKbe5oJgtyXD89E
-         qLsUeWFuFNXqg==
-Date:   Fri, 31 Mar 2023 17:23:13 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Rob Herring <robh@kernel.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        dmaengine@vger.kernel.org
-Subject: Re: [PATCH 1/2] dmaengine: mv_xor_v2: Fix an error code.
-Message-ID: <ZCbJqfUtP0YeueF8@matsya>
-References: <201170dff832a3c496d125772e10070cd834ebf2.1679814350.git.christophe.jaillet@wanadoo.fr>
+        Fri, 31 Mar 2023 07:53:44 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F8510C1;
+        Fri, 31 Mar 2023 04:53:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680263622; x=1711799622;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TiD7kBj7hPUvnVmeWbsYTqnEqugIerIB3YPInRd7EuU=;
+  b=Hdk2z7S5+YOfjDrqzd6kMDgEi6w8SzK0Ug9vbyUq4Gp3bshVodU31IjL
+   OY5oVDsTiUhb2JZoDbYWRdqOodO4pNJOk4jupvfOzAQ2UQWP3cT6Lek+P
+   a7zGSs06lldplWXHHSGRS1qFAEaBKQwHzk0EOyXxuHpFizz/o0c9CCuda
+   DxXSykIKDveerMiRWSRNPu8DH8d/zIv3SxNv2GbjOwJqA1Xg0DYlo70rY
+   bGZ4TzQiSvbeRv5AteasiVFfdsDcfA6ctmvzMAdHIGjc3GXyXGD/WlNLy
+   mQDDD/E+Gpfc9Bf6IY2YfBTds96M1k+DQSUwWg7W1VIETtIi7TKzKidkY
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="325398821"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="325398821"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 04:53:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="828681733"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="828681733"
+Received: from unknown (HELO [10.237.72.51]) ([10.237.72.51])
+  by fmsmga001.fm.intel.com with ESMTP; 31 Mar 2023 04:53:39 -0700
+Message-ID: <c298b247-1bdc-340c-ad7d-df3653cc9027@linux.intel.com>
+Date:   Fri, 31 Mar 2023 14:53:38 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201170dff832a3c496d125772e10070cd834ebf2.1679814350.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH v7 5/6] i2c: designware: Use PCI PSP driver for
+ communication
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Mark Hasemeyer <markhas@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Felix Held <Felix.Held@amd.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230329220753.7741-1-mario.limonciello@amd.com>
+ <20230329220753.7741-6-mario.limonciello@amd.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20230329220753.7741-6-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26-03-23, 09:06, Christophe JAILLET wrote:
-> If the probe is deferred, -EPROBE_DEFER should be returned, not
-> +EPROBE_DEFER.
+On 3/30/23 01:07, Mario Limonciello wrote:
+> Currently the PSP semaphore communication base address is discovered
+> by using an MSR that is not architecturally guaranteed for future
+> platforms.  Also the mailbox that is utilized for communication with
+> the PSP may have other consumers in the kernel, so it's better to
+> make all communication go through a single driver.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v6->v7:
+>   * Also imply CRYPTO_DEV_CCP_DD to fix build errors
+>   * Fix error message acquire/release inversion
+> v5->v6:
+>   * Drop now unnecessary asm/msr.h header
+>   * Fix IS_REACHABLE
+>   * Drop tags
+>   * Fix status code handling for Cezanne
+> v4->v5:
+>   * Pick up tags
+> v3->v4:
+>   * Pick up tags
+> v1->v2:
+>   * Fix Kconfig to use imply
+>   * Use IS_REACHABLE
+> ---
+>   drivers/i2c/busses/Kconfig                  |   3 +-
+>   drivers/i2c/busses/i2c-designware-amdpsp.c  | 177 +++-----------------
+>   drivers/i2c/busses/i2c-designware-core.h    |   1 -
+>   drivers/i2c/busses/i2c-designware-platdrv.c |   1 -
+>   include/linux/psp-platform-access.h         |   1 +
+>   5 files changed, 29 insertions(+), 154 deletions(-)
+> 
+One note below in case there is a need to have another version of if you 
+want. Not a show stopper for this.
 
-Applied both, thanks
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
--- 
-~Vinod
+> @@ -214,7 +95,7 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+>   	if (ret) {
+>   		dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
+>   			(i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
+> -			"release" : "acquire");
+> +			"acquire" : "release");
+>   		goto cleanup;
+>   	}
+>   
+This looks like worth of being an own patch. Maybe even for the 
+linux-stable. I think it's very useful to have an error message to show 
+correct information what operation actually failed.
