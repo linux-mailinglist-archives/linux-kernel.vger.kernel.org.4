@@ -2,154 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67756D14FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 03:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7EA6D1505
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 03:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjCaBZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 21:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
+        id S229549AbjCaBa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 21:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjCaBZm (ORCPT
+        with ESMTP id S229459AbjCaBa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 21:25:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5079EEB72;
-        Thu, 30 Mar 2023 18:25:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7297B82B74;
-        Fri, 31 Mar 2023 01:25:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D0BFC433EF;
-        Fri, 31 Mar 2023 01:25:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680225938;
-        bh=hyEQNk4gCLE8LnrQ9ZdJYtZ/9Y5DNSu/BT/9X3D1jpk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FyPVSQbl3+l9v6zcC5DYacAv7Prc7G1nk6UD3kcY717Q6ByGp0hT+jJk4JURNemoL
-         EUsNfiWTPlXladqYrdROsWOIKlr09nDdPYYlcVztdftvWe94aU0D9OAoyIStcEpd4O
-         mIxdYQ6tp8XKMoMdijTNOT5r0EEh4V95yecWL3c1htgqbeyKjDP0Pq7pIDaNybIrX3
-         Hh653VbYSItnQPTDf+c1bAvM2Q+BR80wEopV83kSFgBFIVo+O11BWNRdkyP0J/nwcP
-         hdU/5mPK+iKqXZRhtFkIgBEtDQux7laWaO6c6pe4BeHqCVy1amKMK5ln4oXcxSjRzo
-         lJw20Nin24RAA==
-Date:   Thu, 30 Mar 2023 18:25:37 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Aleksandr Nogikh <nogikh@google.com>,
-        syzbot <syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [xfs?] WARNING in xfs_bmap_extents_to_btree
-Message-ID: <20230331012537.GC4126677@frogsfrogsfrogs>
-References: <0000000000003da76805f8021fb5@google.com>
- <20230330012750.GF3223426@dread.disaster.area>
- <CANp29Y6XNE_wxx1Osa+RrfqOUP9PZhScGnMUDgQ-qqHzYe9KFg@mail.gmail.com>
- <20230330224302.GG3223426@dread.disaster.area>
+        Thu, 30 Mar 2023 21:30:57 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2040.outbound.protection.outlook.com [40.107.117.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC65BEB76
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 18:30:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SNBQCH17j0dzIqIj1/3ZVXHVfC/ciBk5X1zsusESDwvEjLyg0V+DEzPPpDHil1L03IndH/InuEnljfP7+u4HGNiXWSZVPjUx43OoDKSEkcTUwV0bZSYC8HygHImKe/wb0B7tRPVv4yD6WM/DCP9j72j/coN9cCi3ETT2rOFM/ArNaPuYfL7MZgJEcVUrlUM5VKzogEfFny3dlGKuN3RPMOpi8919d11shKqgdon/gP3OrId2KWWAnyNv61knyhdMP/e8QMet7am1aDZYW6sGfa9ej4QvEv0x5gfAQa8mSTIf83t71+dES+AeCK3OTJ+PusuNJBILK8k8kZM4aIZX8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m5KMu5gYXKcFL8cSlHpUbxdcLr5Db8D2yeDxnKEamNE=;
+ b=GmJteXAjbAe1+bJDz4J6+1H8jKYVjeobfJiKTgal3YWykqUrlzLCqLgTCVb+BoWWn51lN/HiALdli32Acj7+mM7FyYGFFJLE+HVEAE57/bhWo6zA/5HQkpk6TvtWdsUv8hzDeMwpVQti2nriqy1PwBaeh6IIaOBfMFS8f7nSDRhZYYAwXpH313nNykK7Hkq9H2wmduP65M0l7D984vFMVSEjPF0TAxtogpiFAT0E1dUMrXEWjsSBnsNnHDPfbTinvuMUMnjbihFtiwnkXU2V5UyCIBdjN1D1QEw2m9hSQH6tvZEZb8I+uEL8itLnQbGqoJx8r4joFKXyrIaA/Dn76w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m5KMu5gYXKcFL8cSlHpUbxdcLr5Db8D2yeDxnKEamNE=;
+ b=rMCRIalqgQE2C5a0XWqphb2+lFy3WTVqD7mhbVXXmmYuNywFIzAOUhRmuCWbDrRaU/uwfzA51q0g7KaSvZ8jnl4bwRUPOsWIry0VhSGYmzFHS0pEPfd0ZJAnpTO+xzRgnFOACFCNqg28UZagCgNblLfjb+yUgNLyR+RedoaJ0d0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
+ PUZPR02MB6307.apcprd02.prod.outlook.com (2603:1096:301:f9::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6254.23; Fri, 31 Mar 2023 01:30:52 +0000
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::9a8c:cd43:d810:b523]) by SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::9a8c:cd43:d810:b523%3]) with mapi id 15.20.6254.021; Fri, 31 Mar 2023
+ 01:30:51 +0000
+Message-ID: <6d7ce8e0-216c-0d53-6d13-e33be6365a2f@oppo.com>
+Date:   Fri, 31 Mar 2023 09:30:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH] f2fs: expand f2fs_compr_option to allow ioctl setting
+ compression level
+To:     Yangtao Li <frank.li@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     chao@kernel.org, jaegeuk@kernel.org, linux-kernel@vger.kernel.org
+References: <20230330153719.3085164-1-shengyong@oppo.com>
+ <20230330161538.13233-1-frank.li@vivo.com>
+Content-Language: en-US
+From:   Sheng Yong <shengyong@oppo.com>
+In-Reply-To: <20230330161538.13233-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR01CA0045.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::19) To SI2PR02MB5148.apcprd02.prod.outlook.com
+ (2603:1096:4:153::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230330224302.GG3223426@dread.disaster.area>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|PUZPR02MB6307:EE_
+X-MS-Office365-Filtering-Correlation-Id: 158f05c8-9a40-4a57-4f4c-08db31879016
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xV8TbqmQlZ6+fLWWE2LCFZSOot52NRUzpurPrnGYHWIOAicImH4xpxjYF2YmZQYjffHrgMjL7w0bImBm40FsbwsZYJKZyQ+CCCQD8aeOGuT7lhP85DAXfNQS9fhvwZ8ysC2BP1Iv7XGCgkeMhBPda60DABOO7UIkmg/so0zLZNy/z34R7P2KANdyQ/JwnkduU/lxruG0wvS1uuOqR+SjJ7mdSkDChPtSa+FCZ3FsKDq7/agSdtWgQUioxaiGXL6Bk435ErSAt/m5o9wAChI5uuDMBn5whUt/WYLm6SjSXe61t3+47gWFh6RTc4OGXOAtoO2Y2gSsWV7fATJTau2ujkSAdPrU5y8g39J104y+00fcml2+jYd5gUsjBE5tnn6Ueg+s3FF7YEqlEJNZA9XrP7G8xMB/h18xE0ATACvIKP4WcGJRkTZmHe8iv/Zuu+HhOMhmtVE4oCj5cwezXSkWxHeiZW2ozF6ALsVeXzh907xe50rFj5mWwxBbSGE1z+iErN7KBaAR34kgjrqsehgFfq4wmMRSeiaHtrviz287XPI5I5+K1e2kZh0y60yVfMlwL+21w3UADhcgkcqU4ZpyY5xtJf+cvgPh2TCGLIgD+UPl8pXLsUuAoJQRJ8SDETRc
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(136003)(366004)(396003)(451199021)(478600001)(83380400001)(316002)(26005)(6512007)(186003)(53546011)(6506007)(2616005)(38100700002)(86362001)(31696002)(6666004)(36756003)(966005)(41300700001)(6486002)(4744005)(2906002)(66946007)(66476007)(66556008)(4326008)(31686004)(8936002)(8676002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cjdoOXZuR3BTOEpFK3FuTVQ3eTFRUG9DLzRHZHVtZjhJbk9oYk12M1JNdnZm?=
+ =?utf-8?B?ZHpDV3R0NXd4bGxPMHk1SWZqbU9sQUdkVEllZVllTmpLNkIxOGlXUU1DL1FW?=
+ =?utf-8?B?NXA0bkZOWE9UT0N4K3B1aUlMQ0NCZElvd1FjcjRxbWU5S1Nabmt1WmUyMlB6?=
+ =?utf-8?B?emo4ME8ySTBSSURJZytmaHFMVVZZbnFlbnFjSXI0M25hRDZ6MG40ZXFKM2M2?=
+ =?utf-8?B?UElnOGhSdkNramZra1BvQy84cnF3cVJiaEdFOW5kUGN5cC84NksrUG95L3gx?=
+ =?utf-8?B?Q0xuNmpUMWhIazJIL3NpMnN6MGdqK2xwY2pobTFzMFdtZkFVTkYycjYxb0dL?=
+ =?utf-8?B?WUpRRGxQbjdtbktjVmpGek05QzVMcXk0REpheE84MDlIc1p4M3kvTndrK3JM?=
+ =?utf-8?B?cXNab3I3dXV0ZVpRWnpSNzBtbjcrL0VlU2kxaDMvckpLNU13WTZmTXRZbkFr?=
+ =?utf-8?B?S2ZiSmYwZ1gvOEhsUDhvaVV1bnV4VmplODFPMVZTSTNXVTQ1UEtaeFNScG1j?=
+ =?utf-8?B?bVZSVXQ2cUlYbkRKVXJXdXJqV25xdGNOS3VmbW1ZK0N6MGpGTjFEUVBJbFpF?=
+ =?utf-8?B?RlY3dnI4eWZLWEM1YlhxUXFobXZ4Qi9KMzBLa0JIMGdHV0d1bFBzenVwQXlP?=
+ =?utf-8?B?Rk84Rm1WZEE4K0ZZTVVoOXJLVytSL0pYeGs2N1IrYWc2S3NwcmxMSmRhaTVs?=
+ =?utf-8?B?dzlWWEtFQkQ3WmlscEtOb0tzdXdJcnNhUHFybDF5Z01UNG4vbmFORjc5Yzhv?=
+ =?utf-8?B?S3JMaFlZMXVKR1crRlNSTXZmejFFN1cxWmFYMld3QVBSNU16Y1MyWThXdjZU?=
+ =?utf-8?B?R2UrTzNRcjhyc2dUcisyd3h6cmxXdVlBVFg1eFRvbDBUcFlYRGJLbnF2bWUv?=
+ =?utf-8?B?RmFBTkhjZ2Rnb3Zwc0ZYbjA3R25YSTV3djQvQ25ZdHVIb0xhdTA1NytpeUc2?=
+ =?utf-8?B?bGlMWml3MVhOSS94TUlrbldoS0ptVTZmYkh6c3hmY2dEbUFJODNtemhyVzJs?=
+ =?utf-8?B?R3lRTC9vNmRESEZ0K0g0YWE1SzkxNUl2Zk92cFhRT3ZadG5ldUsrOUNVWHdn?=
+ =?utf-8?B?Mk9DRXZwZ0xZWlMwNFdQOTZBaHJRK0VKUFY2L01BRDBlMlZYeVBWV3pYeFRP?=
+ =?utf-8?B?cElkTVV6SHRYeFpOUVQzVExWQXMrZ3Z3YkFpNWwvWmo4MGVMa2hBWDE3bC9V?=
+ =?utf-8?B?VEliRWpiUkRLNGZTdml6L2VMVGRqZnJrTTBMY1duSGNnUTF2aDQyb3VwZEp5?=
+ =?utf-8?B?NkVwNU5GRU5OZk1wU1JvYWlrUEgwdmRzMmYxcWJHNGV6bXdKTnpxVDlDQTd0?=
+ =?utf-8?B?T21YNEFjMmpWblRpSUZLRk1kSW9DbDBJWEJmbVNCaXBhSnk5SEluNFlxT1cw?=
+ =?utf-8?B?dmN2eDVKTnplTlQrTmY0Z0lyN0tiVGZmaGhpNDBodEhRakoxSWRSSS9TekhF?=
+ =?utf-8?B?eHhCZXJhVEhGRE1kazkyRy9VV1dTWlRMQmo4cXgzSzRGMW9hQ2l1ZW5WVVVu?=
+ =?utf-8?B?eG1rN3lUdlVpMUM0T056MmZqNzNIdzk4Z0JqUmt5cjJ6UHljRXVvRHZmc1pU?=
+ =?utf-8?B?UlBUUXpjaHRCd3hyRllDcFRxbjRjMjlvemRCRkY0NVFvRkk2MHF0S3pGbmRk?=
+ =?utf-8?B?dExYZkpDWlJHUURzZGJqSXZWaS8rSEpmbkswVTcySG9DNzJvRXBOQXdDOW5w?=
+ =?utf-8?B?b05McGM4ZXNTWEhMbmRob3d0SzZQVXNOR3drRWR1YUI4WTVYWU9OVDJHekFD?=
+ =?utf-8?B?bnUvbWk2MWptREpGWTJYaUdibUlyTXFyK1UzbmtGTG5OcmZiRkxZb3dNVy9h?=
+ =?utf-8?B?SW9hd2tCbllBZGtISEI5T2xTVzZZVVZIV09BSGVsdkRqQ1B6aFg1VmxzaGRa?=
+ =?utf-8?B?dWUxL0xoeTYzcSt1SFFHYUp6Zzgra1J4NTFtQkRyZ0hLc3k4RS9wbzZ0Z0ls?=
+ =?utf-8?B?NkpTcU16KzRtODlLWkxIMUNiNEdyNTB3bFdxU280VXYrSTBYOGM1SE1nUWNk?=
+ =?utf-8?B?YzdoVEZoMXRCSEcyQmdFS3h0RU0zQ1h5SWRZVTRnK3dqTXZrN1Vmb0JnZHFy?=
+ =?utf-8?B?dTlGWmtsYStGci9scWpVa0VEdDVkeW9vS0RHNUYycmowaE1YT05LOWtxR1pj?=
+ =?utf-8?Q?i9M2HnP/5MzAHH4Nmj9/5tJ+1?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 158f05c8-9a40-4a57-4f4c-08db31879016
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 01:30:51.3828
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XTfNO5qGPbMVPpY3RR9N7zujDa64D8BJ8qWkfubshmE9iSZsrDZJuB9H7SlZeWKziYqJSZwmORmuP5NrcGkA4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR02MB6307
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 09:43:02AM +1100, Dave Chinner wrote:
-> On Thu, Mar 30, 2023 at 10:52:37AM +0200, Aleksandr Nogikh wrote:
-> > On Thu, Mar 30, 2023 at 3:27 AM 'Dave Chinner' via syzkaller-bugs
-> > <syzkaller-bugs@googlegroups.com> wrote:
-> > >
-> > > On Tue, Mar 28, 2023 at 09:08:01PM -0700, syzbot wrote:
-> > > > Hello,
-> > > >
-> > > > syzbot found the following issue on:
-> > > >
-> > > > HEAD commit:    1e760fa3596e Merge tag 'gfs2-v6.3-rc3-fix' of git://git.ke..
-> > > > git tree:       upstream
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=16f83651c80000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=0c383e46e9b4827b01b1
-> > > > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > >
-> > > > Unfortunately, I don't have any reproducer for this issue yet.
-> > > >
-> > > > Downloadable assets:
-> > > > disk image: https://storage.googleapis.com/syzbot-assets/17229b6e6fe0/disk-1e760fa3.raw.xz
-> > > > vmlinux: https://storage.googleapis.com/syzbot-assets/69b5d310fba0/vmlinux-1e760fa3.xz
-> > > > kernel image: https://storage.googleapis.com/syzbot-assets/0c65624aace9/bzImage-1e760fa3.xz
-> > > >
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > Reported-by: syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com
-> > > >
-> > > > ------------[ cut here ]------------
-> > > > WARNING: CPU: 1 PID: 24101 at fs/xfs/libxfs/xfs_bmap.c:660 xfs_bmap_extents_to_btree+0xe1b/0x1190
-> > >
-> > > Allocation got an unexpected ENOSPC when it was supposed to have a
-> > > valid reservation for the space. Likely because of an inconsistency
-> > > that had been induced into the filesystem where superblock space
-> > > accounting doesn't exactly match the AG space accounting and/or the
-> > > tracked free space.
-> > >
-> > > Given this is a maliciously corrupted filesystem image, this sort of
-> > > warning is expected and there's probably nothing we can do to avoid
-> > > it short of a full filesystem verification pass during mount.
-> > > That's not a viable solution, so I think we should just ignore
-> > > syzbot when it generates this sort of warning....
-> > 
-> > If it's not a warning about a kernel bug, then WARN_ON should probably
-> > be replaced by some more suitable reporting mechanism. Kernel coding
-> > style document explicitly says:
-> > 
-> > "WARN*() must not be used for a condition that is expected to trigger
-> > easily, for example, by user space actions.
-> 
-> That's exactly the case here. It should *never* happen in normal
-> production workloads, and it if does then we have the *potential*
-> for silent data loss occurring. That's *exactly* the sort of thing
-> we should be warning admins about in no uncertain terms.  Also, we
-> use WARN_ON_ONCE(), so it's not going to spam the logs.
-> 
-> syzbot is a malicious program - it is injecting broken stuff into
-> the kernel as root to try to trigger situations like this. That
-> doesn't make a warning it triggers bad or incorrect - syzbot is
-> pertubing tightly coupled structures in a way that makes the
-> information shared across those structures inconsistent and
-> eventually the code is going to trip over that inconsistency.
-> 
-> IOWs, once someone has used root permissions to mount a maliciously
-> crafted filesystem image, *all bets are off*. The machine is running
-> a potentially compromised kernel at this point. Hence it is almost
-> guaranteed that at some point the kernel is going to discover things
-> are *badly wrong* and start dumping "this should never happen!"
-> warnings into the logs. That's what the warnings are supposed to do,
-> and the fact that syzbot can trigger them doesn't make the warnings
-> wrong.
-> 
-> > pr_warn_once() is a
-> > possible alternative, if you need to notify the user of a problem."
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/coding-style.rst?id=1e760fa3596e8c7f08412712c168288b79670d78#n1223
-> 
-> It is worth remembering that those are guidelines, not enforcable
-> rules and any experienced kernel developer will tell you the same
-> thing.  We know the guidelines, we know when to apply them, we know
-> there are cases that the guidelines simply can't, don't or won't
-> cover.
 
-...and perhaps the WARNs that can result from corrupted metadata should
-be changed to XFS_IS_CORRUPT() ?
 
-We still get a kernel log about something going wrong, only now the
-report doesn't trigger everyone's WARN triggers, and we tell the user to
-go run xfs_repair.
+On 2023/3/31 0:15, Yangtao Li wrote:
+> Hi Sheng Yong,
+> 
+> Your idea, I also put forward before.
+> 
+> And has been sent to version 2, but Chao and Jaegeuk have no comments yet.
+> Time to talk about the series?
+> 
+> https://lore.kernel.org/linux-f2fs-devel/20230112133503.16802-1-frank.li@vivo.com/
+> 
+Hi, Yangtao
 
---D
+Thanks for giving me the information. The f2fs_comp_option_v2 could also help
+to get/set more options for compression. And I suggest to add a version or size
+at the beginning of the struct so that it is easy to expand the struct in the
+future.
 
-> -Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
+Thanks,
+shengyong
+
+> Thx,
+> Yangtao
