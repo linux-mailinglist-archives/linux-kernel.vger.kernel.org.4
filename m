@@ -2,168 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D696D20F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF85E6D20F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCaMxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
+        id S231905AbjCaMzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231718AbjCaMx3 (ORCPT
+        with ESMTP id S230356AbjCaMzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:53:29 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E091BF51
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:53:25 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id eg48so89092159edb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112; t=1680267204;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YIZnVNAeusSw2DklqSF0RmxvOxwbV5Dj+erXFtgfBtA=;
-        b=WzN8sl+ja+DSJjEqAeZpmG8GXY9GKJuU8urNlcQdUzweq6Uu3o5ks6Ju9S74aGupiR
-         HzV2uKx/E9/Pj4I7qg1mHYPxO1pdtSQ87bT/eU0ZQD9BPaZojeN086LXpX+0a4y1IrhJ
-         uF/f+zQDB/jDpRYyHR7/2GfCCB9VhQ33mlYwKH1Jd+VAy5ulzlOPrmczkiKTIICqUXya
-         xU9TGe94YFKPmlE2btyW2PE0Qv/ymnr+0NKGmFvq7NXYesbNYZrMV5ZWCLj0tmUhX647
-         TQROSUPOZ2ocj3iWDrm6DUEB9JGcHWR2/FFLvt/aqFZAFwdNyTP9Zd8tK/PvTnfg78zE
-         vLmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680267204;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YIZnVNAeusSw2DklqSF0RmxvOxwbV5Dj+erXFtgfBtA=;
-        b=6URBpjfyQ/hiyzhMTn+WcfTqh8g0QKMlnbiizNbI5mKomFbHfvoFpWjTt6E7KLXRgd
-         Rmq+aDzYB2bwn/BGY8F12D6dbuLQYapPWWr7iczC9FNs9xA1eDOaGsggjvomtoaJo0G8
-         e6w0kwR1ZXO8Koac2ZSS444zM8UFaROm4RphTn8ccUp/74VoUJ+0d498fVxF535FD9yk
-         Nmn0jE4gx9MKrK0esZye4m0PkmRGIVc6C49Aq5hYZVv4llo68xlrMkXa7Z7plGMgOkKk
-         QRjIC5r/Sb5I32bmY7p/uHUPhvXixDhiPrRvUCvKhzv1uMovsg+4GK3nth7sgE7p1PsL
-         Mh3Q==
-X-Gm-Message-State: AAQBX9cqNKmF9k7mCU6zY/+/UfOD+2nv9AFd3HSbff5HdKE7hS/iDEZI
-        WIFpPGwKmIg7EbaP0hCd+UACBC6x1icDNpqujZt06aNLk4gscD/ce6U=
-X-Google-Smtp-Source: AKy350aXJtieoI5T98QbeE9lxz4pl2omhYkDSZLjnzLzVIg3TVO430qunA++yOjjQfcGF1NH3RBLqUE4qLo4jY8BK6w=
-X-Received: by 2002:a17:907:9623:b0:93e:aac:bb8d with SMTP id
- gb35-20020a170907962300b0093e0aacbb8dmr13612957ejc.13.1680267203799; Fri, 31
- Mar 2023 05:53:23 -0700 (PDT)
+        Fri, 31 Mar 2023 08:55:48 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1D2199
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:55:45 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3FB2C1EC063A;
+        Fri, 31 Mar 2023 14:55:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680267344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=uPa2/Ud1iB+5P4b9t4uXV+laCBDJ/WtIqvondW19vOs=;
+        b=eU471Cjt5jAD35CbsemfxcfNE9JqnLXRIwADatzZYPkhFt7GISj5W9KG28DmREHkvJuG4m
+        gXqRMRYIqOTyPi8htZiIuBB59yCVsGIHzixqeZWvD1+dyzq9PDD5bICHuCrlp+c/hHtBbP
+        3TCu/SdhFYQYjXT7cts2EHo8SpM1TKM=
+Date:   Fri, 31 Mar 2023 14:55:38 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v4 09/12] x86/mtrr: construct a memory map with cache
+ modes
+Message-ID: <20230331125538.GBZCbYSqr8kMP4bpwS@fat_crate.local>
+References: <20230306163425.8324-1-jgross@suse.com>
+ <20230306163425.8324-10-jgross@suse.com>
+ <20230329125128.GAZCQ0UJUj48VKdG//@fat_crate.local>
+ <a6c02861-f01d-fcfd-82e0-8c5695f581b6@suse.com>
 MIME-Version: 1.0
-References: <20230128072737.2995881-3-apatel@ventanamicro.com> <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9>
-In-Reply-To: <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 31 Mar 2023 18:23:11 +0530
-Message-ID: <CAAhSdy3vPQw1OcRx3kQwt8UHgKa+18Ut-SzZkb8gQTHDRK7e2w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] RISC-V: Detect AIA CSRs from ISA string
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     apatel@ventanamicro.com, pbonzini@redhat.com,
-        atishp@atishpatra.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        ajones@ventanamicro.com, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a6c02861-f01d-fcfd-82e0-8c5695f581b6@suse.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer
+On Wed, Mar 29, 2023 at 03:39:35PM +0200, Juergen Gross wrote:
+> No. :-)
 
-On Fri, Feb 3, 2023 at 5:54=E2=80=AFAM Palmer Dabbelt <palmer@dabbelt.com> =
-wrote:
->
-> On Fri, 27 Jan 2023 23:27:32 PST (-0800), apatel@ventanamicro.com wrote:
-> > We have two extension names for AIA ISA support: Smaia (M-mode AIA CSRs=
-)
-> > and Ssaia (S-mode AIA CSRs).
->
-> This has pretty much the same problem that we had with the other
-> AIA-related ISA string patches, where there's that ambiguity with the
-> non-ratified chapters.  IIRC when this came up in GCC the rough idea was
-> to try and document that we're going to interpret the standard ISA
-> strings that way, but now that we're doing custom ISA extensions it
-> seems saner to just define on here that removes the ambiguity.
->
-> I just sent
-> <https://lore.kernel.org/r/20230203001201.14770-1-palmer@rivosinc.com/>
-> which documents that.
+Because?
 
-The IOMMU and AIA chapter8 are frozen and in public review.
-Refer, https://lists.riscv.org/g/tech-aia/message/346
+> The final form of the code is the result of an iterative process. :-)
 
-This means the entire AIA specification is now frozen (i.e. no
-chapters in draft state).
+I have a similar iterative process: until it hasn't been reviewed and
+explained properly, this is not going anywhere.
 
-I will rebase this series and send-out v3. It would be great if you
-can ACK the PATCH2 of this series.
+So however you wanna do it, fine by me.
 
-Thanks,
-Anup
+> I've reused the wording from cleanup.c (just above amd_special_default_mtrr()).
 
->
-> > We extend the ISA string parsing to detect Smaia and Ssaia extensions.
-> >
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > ---
-> >  arch/riscv/include/asm/hwcap.h | 2 ++
-> >  arch/riscv/kernel/cpu.c        | 2 ++
-> >  arch/riscv/kernel/cpufeature.c | 2 ++
-> >  3 files changed, 6 insertions(+)
-> >
-> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hw=
-cap.h
-> > index 86328e3acb02..341ef30a3718 100644
-> > --- a/arch/riscv/include/asm/hwcap.h
-> > +++ b/arch/riscv/include/asm/hwcap.h
-> > @@ -59,6 +59,8 @@ enum riscv_isa_ext_id {
-> >       RISCV_ISA_EXT_ZIHINTPAUSE,
-> >       RISCV_ISA_EXT_SSTC,
-> >       RISCV_ISA_EXT_SVINVAL,
-> > +     RISCV_ISA_EXT_SMAIA,
-> > +     RISCV_ISA_EXT_SSAIA,
-> >       RISCV_ISA_EXT_ID_MAX
-> >  };
-> >  static_assert(RISCV_ISA_EXT_ID_MAX <=3D RISCV_ISA_EXT_MAX);
-> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > index 1b9a5a66e55a..a215ec929160 100644
-> > --- a/arch/riscv/kernel/cpu.c
-> > +++ b/arch/riscv/kernel/cpu.c
-> > @@ -162,6 +162,8 @@ arch_initcall(riscv_cpuinfo_init);
-> >   *    extensions by an underscore.
-> >   */
-> >  static struct riscv_isa_ext_data isa_ext_arr[] =3D {
-> > +     __RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
-> > +     __RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
->
-> This will conflict with that ISA string refactoring I just merged.  It
-> should be a pretty mechanical merge conflict, but if you want we can do
-> a shared tag with the first few patches and I can handle the merge
-> conflict locally.
->
-> >       __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
-> >       __RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
-> >       __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeat=
-ure.c
-> > index 93e45560af30..3c5b51f519d5 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -228,6 +228,8 @@ void __init riscv_fill_hwcap(void)
-> >                               SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_=
-EXT_ZIHINTPAUSE);
-> >                               SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SST=
-C);
-> >                               SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_=
-SVINVAL);
-> > +                             SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SM=
-AIA);
-> > +                             SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SS=
-AIA);
-> >                       }
-> >  #undef SET_ISA_EXT_MAP
-> >               }
+That got added with K8. K8 is ancient history so nothing magic about
+that anymore. It is basically a bit in the SYSCFG MSR which says that
+
+	[4G ... TOP_MEM2]
+
+is WB.
+
+> > Why not in mtrr_bp_init()? That is the first CPU.
+> 
+> Yeah, but generic_set_mtrr() can be called after boot, too.
+
+That function sets a single MTRR register so you'd have to merge the
+ranges, AFAICT. Not rebuild the whole map...
+
+> Umm, not really. I want to do the copy even in the Xen PV case.
+
+How about some comments? Or you're expecting me to be able to read your
+mind?!
+
+;-\
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
