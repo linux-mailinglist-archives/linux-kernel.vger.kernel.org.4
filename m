@@ -2,35 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B5C6D1DAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD866D1DAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjCaKL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 06:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
+        id S230360AbjCaKMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 06:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjCaKKp (ORCPT
+        with ESMTP id S230434AbjCaKK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 06:10:45 -0400
+        Fri, 31 Mar 2023 06:10:58 -0400
 Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CAF1D843;
-        Fri, 31 Mar 2023 03:05:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336892291C;
+        Fri, 31 Mar 2023 03:06:00 -0700 (PDT)
 Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
         by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1piBd5-00AlZZ-3l; Fri, 31 Mar 2023 18:05:08 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 31 Mar 2023 18:05:07 +0800
-Date:   Fri, 31 Mar 2023 18:05:07 +0800
+        id 1piBdm-00AlZk-B0; Fri, 31 Mar 2023 18:05:51 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 31 Mar 2023 18:05:50 +0800
+Date:   Fri, 31 Mar 2023 18:05:50 +0800
 From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Jayesh Choudhary <j-choudhary@ti.com>
-Cc:     davem@davemloft.net, j-keerthy@ti.com, kristo@kernel.org,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: sa2ul - Add CRYPTO_DES to CRYPTO_DEV_SA2UL
-Message-ID: <ZCawU2ISLAFE6lUH@gondor.apana.org.au>
-References: <20230324145812.315334-1-j-choudhary@ti.com>
+Subject: Re: [PATCH v3] crypto - img-hash: Depend on OF and silence compile
+ test warning
+Message-ID: <ZCawfhD05h37HLk0@gondor.apana.org.au>
+References: <20230326085027.4759-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230324145812.315334-1-j-choudhary@ti.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230326085027.4759-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=4.3 required=5.0 tests=HELO_DYNAMIC_IPADDR2,
         PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP
         autolearn=no autolearn_force=no version=3.4.6
@@ -41,29 +43,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 08:28:12PM +0530, Jayesh Choudhary wrote:
-> From: Suman Anna <s-anna@ti.com>
+On Sun, Mar 26, 2023 at 10:50:27AM +0200, Krzysztof Kozlowski wrote:
+> The driver is specific to OF platforms (can match only via OF table),
+> thus add dependency on CONFIG_OF.  Mark the of_device_id table as
+> unused.  This also fixes W=1 warning:
 > 
-> The SA2UL Crypto driver provides support for couple of
-> DES3 algos "cbc(des3_ede)" and "ecb(des3_ede)", and enabling
-> the crypto selftest throws the following errors (as seen on
-> K3 J721E SoCs):
->   saul-crypto 4e00000.crypto: Error allocating fallback algo cbc(des3_ede)
->   alg: skcipher: failed to allocate transform for cbc-des3-sa2ul: -2
->   saul-crypto 4e00000.crypto: Error allocating fallback algo ecb(des3_ede)
->   alg: skcipher: failed to allocate transform for ecb-des3-sa2ul: -2
+>   drivers/crypto/img-hash.c:930:34: error: ‘img_hash_match’ defined but not used [-Werror=unused-const-variable=]
 > 
-> Fix this by selecting CRYPTO_DES which was missed while
-> adding base driver support.
-> 
-> Fixes: 7694b6ca649f ("crypto: sa2ul - Add crypto driver")
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-> ---
->  drivers/crypto/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Patch applied.  Thanks.
+...
+
+> diff --git a/drivers/crypto/img-hash.c b/drivers/crypto/img-hash.c
+> index fe93d19e3044..2be364d9f592 100644
+> --- a/drivers/crypto/img-hash.c
+> +++ b/drivers/crypto/img-hash.c
+> @@ -927,7 +927,7 @@ static void img_hash_done_task(unsigned long data)
+>  	img_hash_finish_req(hdev->req, err);
+>  }
+>  
+> -static const struct of_device_id img_hash_match[] = {
+> +static const struct of_device_id img_hash_match[] __maybe_unused = {
+>  	{ .compatible = "img,hash-accelerator" },
+>  	{}
+>  };
+
+I have applied this hunk as it renders the Kconfig change unnecessary.
+
+Thanks,
 -- 
 Email: Herbert Xu <herbert@gondor.apana.org.au>
 Home Page: http://gondor.apana.org.au/~herbert/
