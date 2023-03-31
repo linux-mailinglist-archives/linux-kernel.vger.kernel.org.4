@@ -2,207 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425FC6D17BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F736D17BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjCaGqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 02:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
+        id S230284AbjCaGrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 02:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjCaGqr (ORCPT
+        with ESMTP id S230212AbjCaGrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 02:46:47 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EE310F6;
-        Thu, 30 Mar 2023 23:46:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680245206; x=1711781206;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=EhMCDSwQob+c4u0KaI/ukw2TtiR9tPLGW4cQPSgtyhc=;
-  b=a+P0R/MZZy9wrWvMawjnCvdnw/hyhu+JLIlPoopcX9cdMndiGjdNAemE
-   MrvQyl6/l+XDLHF/O6460ZRvbLrR/fWO5v4usVbxingSWiVc0gRUSgcet
-   jER7b/bFxj1BQQp22oeOW3I4y+75NnNZVh4kcNDuZYjecspBOK1dbCg3R
-   Z5VtNIgs7ICddN+zeg2DVVh7dEePmH4LjthlV3xz1IffPfZuPu8UuwtgN
-   f+WxrhR6gL6+vJn23n/4TB2I5r0aw7YQUH704EeHvTxJSaOR3ZPq3jpRQ
-   pl7EPDyzVbXPe+g3ESsqtz0fhIGtTa6eEqZuhTBkT72O6V21KtxmoA3NE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="321763562"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="321763562"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 23:46:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="635182658"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="635182658"
-Received: from trichard-mobl.amr.corp.intel.com (HELO [10.209.38.7]) ([10.209.38.7])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 23:46:46 -0700
-Message-ID: <17f5c023-910a-f88f-e7c4-c5a1c3c3ac0e@linux.intel.com>
-Date:   Thu, 30 Mar 2023 23:46:45 -0700
+        Fri, 31 Mar 2023 02:47:14 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2166C10F6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 23:47:10 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id ew6so85717642edb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 23:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680245228; x=1682837228;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jua4gde8du/TNpJ/ggqcjgKQp6GcI0FDmy/rSVOi32s=;
+        b=NxEF3sYvh1iIM5RIATjDcILbq1foy1eGmaSEMRyr1IUhrIR67C+d2kIl2JNuL7ZGHF
+         lEi46w9nGSGORYDZjZ7AHi72saYCISE5nfM/pSAv2M7bukwAoL3Q1lU9c3jPNQo/kTOS
+         4qZTDP/wo2qU5TKnAs68YD8kZTk9A29W3QR1saT875LRiVpgiMS5COKsYYXSZ9SzYN5K
+         PXuZyAy3ZEB07qAGrzi3XfPnfZhkKlwJi+tEbQWqAh9UmPIVGCuxJALqFOwlzm0nCiNy
+         J50EymvdjXSL5NIOBkf+NKnkSZnvgsuVbuNB8XEh66Ec9n++sQGlE0s7M5tWiRptqyII
+         EXNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680245228; x=1682837228;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jua4gde8du/TNpJ/ggqcjgKQp6GcI0FDmy/rSVOi32s=;
+        b=PwLbMmVPWoDJEw2G7iaQNccgyXIa+XHwX1PMxbguhEEhaI55BDDa2qIPV/Ib7MkqSq
+         g1pmRVFUDE1ECZEd+hwW+rHkP2GgT1dre+rNYFfxJGQxC1tfYXJjuksx9H16SINQ5zkH
+         mET+9JhD6tS5OLp1rdE2tUxx+pUgyxHUrDCQqf0e/+3UJscTI5m6ldWZQY3f/xe/S7T8
+         uNYm6xDr2oAKjRW86lTw6JDzyDFslFhPFyNgnQ06rTPdCfUPOn+6gKEIip/KAqI4IgJ5
+         CaYu128UpxpoNKv0fBwevjGEqy66yxPK9BnmLzXznGfstPvARKDjQNuyQ9uoA9kXn+S1
+         6x1w==
+X-Gm-Message-State: AAQBX9cm/fdKIpRRXczHE14IvSNlU0SL2H2Hpw8D8skl/qM3/G7KG0zD
+        LIDjszr8ShVnZP99Eeyd/QtqrL02O6guzA==
+X-Google-Smtp-Source: AKy350b2Iqmv44lD93m8YIgp3BTPaucZOgE+Uv7xecc4F3v+HsnNCqRs5RdZSfBP0Lw8Hr6y9hu4dw==
+X-Received: by 2002:a05:6402:2803:b0:502:e50:3358 with SMTP id h3-20020a056402280300b005020e503358mr5398408ede.3.1680245228301;
+        Thu, 30 Mar 2023 23:47:08 -0700 (PDT)
+Received: from [192.168.10.16] ([37.252.81.51])
+        by smtp.gmail.com with ESMTPSA id d7-20020a50cd47000000b005027ecc148esm277087edj.65.2023.03.30.23.47.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 23:47:08 -0700 (PDT)
+Message-ID: <d7354d2d-8464-2cdd-a42c-582ea518c76b@gmail.com>
+Date:   Fri, 31 Mar 2023 10:47:06 +0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
- error recovery
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <20230330154542.GA3147375@bhelgaas>
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] mm: khugepaged: Fix kernel BUG in
+ hpage_collapse_scan_file
 Content-Language: en-US
-In-Reply-To: <20230330154542.GA3147375@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
+To:     Zach O'Keefe <zokeefe@google.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, himadrispandya@gmail.com,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        shy828301@gmail.com,
+        syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
+References: <20230330155305.423051-1-ivan.orlov0322@gmail.com>
+ <20230331013301.ecgkjymaf3ws6rfb@google.com>
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <20230331013301.ecgkjymaf3ws6rfb@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+On 3/31/23 05:33, Zach O'Keefe wrote:
 
-On 3/30/23 8:45 AM, Bjorn Helgaas wrote:
-> On Wed, Mar 29, 2023 at 03:38:04PM -0700, Sathyanarayanan Kuppuswamy wrote:
->> On 3/29/23 3:09 PM, Bjorn Helgaas wrote:
->>> On Wed, Mar 15, 2023 at 04:54:49PM -0700, Kuppuswamy Sathyanarayanan wrote:
->>>> Commit 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
->>>> OS owns AER") adds support to clear error status in the Device Status
->>>> Register(DEVSTA) only if OS owns the AER support. But this change
->>>> breaks the requirement of the EDR feature which requires OS to cleanup
->>>> the error registers even if firmware owns the control of AER support.
+> Thanks, Ivan.
 > 
->>> I assume we should have a Fixes: tag here, since this patch should be
->>> backported to every kernel that contains 068c29a248b6.  Possibly even
->>> a stable tag, although it's arguable whether it's "critical" per
->>> Documentation/process/stable-kernel-rules.rst.
+> In the process of reviewing this, I starting thinking if the !shmem case was
+> also susceptible to a similar race, and I *think* it might be. Unfortunately, my
+> time has ran out, and I haven't been able to validate ; I'm less familiar with
+> the file-side of things.
+> 
+> The underlying problem is race with truncation/hole-punch  under OOM condition.
+> The nice do-while loop near the top of collapse_file() attempts to avoid this
+> scenario by making sure enough slots are available. However, when we drop xarray
+> lock, we open ourselves up to concurrent removal + slot deletion. Those slots
+> then need to be allocated again -- which under OOM condition is failable.
+> 
+> The syzbot reproducer picks on shmem, but I think this can occur for file as
+> well. If we find a hole, we unlock the xarray and call
+> page_cache_sync_readahead(), which if it succeeds, IIUC, will have allocated a
+> new slot in our mapping pointing to the new page. We *then* locks the page. Only
+> after the page is locked are we protected from concurrent removal (Note: this is
+> what provides us protection in many of the xas_store() cases ; we've held the
+> slot's contained page-lock since verifying the slot exists, protecting us from
+> removal / reallocation races).
+> 
+> Maybe I'm just low on caffeine at the end of the day, and am missing something,
+> but if I had more time, I'd be looking into the file-side some more to verify.
+> Apologies that hasn't occurred to me until now ; I was looking at one of your
+> comments and double-checked why I *thought* we were safe.
+> 
+> Anyways, irrespective of that looming issues, some more notes to follow:
+> 
+>> The 'xas_store' call during page cache scanning can potentially
+>> translate 'xas' into the error state (with the reproducer provided
+>> by the syzkaller the error code is -ENOMEM). However, there are no
+>> further checks after the 'xas_store', and the next call of 'xas_next'
+>> at the start of the scanning cycle doesn't increase the xa_index,
+>> and the issue occurs.
 >>
->> Yes. But this error is only reproducible in the EDR use case. So I
->> am not sure whether it can be considered a critical fix. 
+>> This patch will add the xarray state error checking after the
+>> 'xas_store' and the corresponding result error code. It will
+>> also add xarray state error checking via WARN_ON_ONCE macros,
+>> to be sure that ENOMEM or other possible errors don't occur
+>> at the places they shouldn't.
 > 
-> I don't know how widespread EDR implementation is.  What is the
-
-I believe it is used by a few vendors (Nvidia, Intel, Dell, etc).
-I have seen EDR related messages in some of the posted DPC related
-dmesg logs.
-
-> user-visible issue without this fix?  "lspci" shows status bits set
-> even after recovery?  Subsequent EDR notifications cause us to report
-> errors that were previously reported and recovered?  Spurious EDR
-> notifications because of status bits that should have been cleared?
-> This kind of information would be useful in the commit log anyway.
-
-I don't think we will get spurious EDR notifications. Since the only
-stale entry is in DEVSTA status register, the user will at most see
-errors bits set, even after successful recovery. However, if the user
-relies on some automation scripts to check the device status after
-error recovery, it may have an impact.
-
+> Thanks for the additions here. I think it's worthwhile providing even more
+> details about the specifics of the race we are fixing and/or guarding against to
+> help ppl understand how that -ENOMEM comes about if the do-while loop has
+> "Ensured" we have slots available (additionally, I think that comment can be
+> augmented).
 > 
-> Since the risk is low (the change only affects EDR processing) and the
-> the experience without this change might be poor (please clarify what
-> that experience is), I think I would be inclined to mark it for
-> stable.
-
-Ok. IMO, since it will be visible to the user (although not fatal),
-we can send it to the stable. But I will let you decide on it.
-
-> 
->>> It's a little weird to work around a change inside pcie_do_recovery()
->>> by clearing it here, and that means we clear it twice in the AER
->>> native case, but I don't see any simpler way to do this, so this seems
->>> fine as the fix for the current issue.
+>> Tested via syzbot.
 >>
->> In AER native case, edr_handle_event() will never be triggered. So it
->> won't be cleared twice.
-> 
-> This sounds like a plausible assumption.  But is there actually spec
-> language that says EDR notification is not allowed in the AER native
-> case (when OS owns the AER Capability)?  I looked but didn't find
-> anything.
-> 
-
-In the PCIe firmware specification v3.3, table "Table 4-6: Interpretation of
-the _OSC Control Field, Returned Value", field "PCI Express Downstream Port
-Containment configuration control", it explains that the firmware can use
-EDR notification only when OS DPC control is not requested or denied by
-firmware.
-
->> Other way is to add a new parameter to pcie_do_recovery(..., edr) and use
->> it to conditionally call pcie_clear_device_status(). But I think current
->> way is less complex.
-> 
-> I agree.
-> 
->>> Question though: in the AER native case, pcie_do_recovery() calls
->>> both:
->>>
->>>   pcie_clear_device_status() and
->>>   pci_aer_clear_nonfatal_status()
->>>
->>> In this patch, you only call pcie_clear_device_status().  Do you care
->>> about pci_aer_clear_nonfatal_status(), too?
+>> Reported-by: syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
+>> Link: https://syzkaller.appspot.com/bug?id=7d6bb3760e026ece7524500fe44fb024a0e959fc
+>> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+>> ---
+>> V1 -> V2: Add WARN_ON_ONCE error checking and comments
 >>
->> Yes, we care about it. Since we call dpc_process_error() in EDR handler,
->> it will eventually clear error status via pci_aer_clear_nonfatal_status()
->> and pci_aer_clear_fatal_status() within dpc_process_error().
-> 
-> dpc_process_error() calls pci_aer_clear_nonfatal_status() in *some*
-> (but not all) cases.  I didn't try to work out whether those match the
-> cases where pcie_do_recovery() called it before 068c29a248b6.  I guess
-> we can assume it's equivalent for now.
-
-We also call pci_aer_raw_clear_status() in dpc_process_error() which also
-should clear the fatal and non-fatal errors.
-
-> 
->>> The overall design for clearing status has gotten pretty complicated
->>> as we've added error handling methods (firmware-first, DPC, EDR), and
->>> there are so many different places and cases that it's hard to be sure
->>> we do them all correctly.
->>>
->>> I don't really know how to clean this up, so I'm just attaching my
->>> notes about the current state:
+>>   mm/khugepaged.c | 20 ++++++++++++++++++++
+>>   1 file changed, 20 insertions(+)
 >>
->> Good summary! I can see a lot of overlap in clearing
->> PCI_ERR_UNCOR_STATUS and PCI_EXP_DEVSTA.
+>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+>> index 92e6f56a932d..8b6580b13339 100644
+>> --- a/mm/khugepaged.c
+>> +++ b/mm/khugepaged.c
+>> @@ -55,6 +55,7 @@ enum scan_result {
+>>   	SCAN_CGROUP_CHARGE_FAIL,
+>>   	SCAN_TRUNCATED,
+>>   	SCAN_PAGE_HAS_PRIVATE,
+>> +	SCAN_STORE_FAILED,
+>>   };
 > 
-> Actually I do have one idea: in the firmware-first case, firmware
-> collects all the status information, clears it, and then passes the
-> status on to the OS.  In this case we don't need to clear the status
-> registers in handle_error_source(), pcie_do_recovery(), etc.
-
-So the idea is to get the error info in a particular format using
-something like _DSM call? What about the legacy use case? For legacy
-firmware, we still need to support the old format, right?
-
+> I'm still reluctant to add a new error code for this as this seems like quite a
+> rare race that requires OOM to trigger. I'd be happier just reusing SCAN_FAIL,
+> or, something we might get some millage out of later: SCAN_OOM.
 > 
-> So I think the OS *should* be able to do something similar by
-> collecting the status information and clearing it first, before
-
-Something similar to updating struct aer_stats and struct aer_err_src?
-
-> starting error handling.  This might let us collect the status
-> clearing together in one place and also converge the firmware-first
-> and native error handling paths.
+> Also, a reminder to update include/trace/events/huge_memory.h, if you go that
+> route.
 > 
-> Obviously that would be a major future project.
-
-Agree. It would require changes to firmware spec, AER and DPC driver.
-Maybe we can start with cleaning up the native mode first. I would be
-happy to contribute to it. Let me think about the possible methods
-and get back to you.
-
-
+>>   
+>>   #define CREATE_TRACE_POINTS
+>> @@ -1840,6 +1841,15 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+>>   					goto xa_locked;
+>>   				}
+>>   				xas_store(&xas, hpage);
+>> +				if (xas_error(&xas)) {
+>> +					/* revert shmem_charge performed
+>> +					 * in the previous condition
+>> +					 */
 > 
-> Bjorn
+> Nit: Here, and following, I think standard convention for multiline comment is
+> to have an empty first and last line, eg:
+> 
+>   +					/*
+>   +					 * revert shmem_charge performed
+>   +					 * in the previous condition
+>   +					 */
+> 
+> Though, checkpatch.pl --strict didn't seem to care.
+> 
+>> +					mapping->nrpages--;
+>> +					shmem_uncharge(mapping->host, 1);
+>> +					result = SCAN_STORE_FAILED;
+>> +					goto xa_locked;
+>> +				}
+>>   				nr_none++;
+>>   				continue;
+>>   			}
+>> @@ -1992,6 +2002,11 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+>>   
+>>   		/* Finally, replace with the new page. */
+>>   		xas_store(&xas, hpage);
+>> +		/* We can't get an ENOMEM here (because the allocation happened before)
+>> +		 * but let's check for errors (XArray implementation can be
+>> +		 * changed in the future)
+>> +		 */
+>> +		WARN_ON_ONCE(xas_error(&xas));
+> 
+> Nit: it's not just that allocation happened before -- need some guarantee we've
+> been protected from concurrent removal. This is what made me look at the file
+> side.
+> 
+>>   		continue;
+>>   out_unlock:
+>>   		unlock_page(page);
+>> @@ -2029,6 +2044,11 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+>>   	/* Join all the small entries into a single multi-index entry */
+>>   	xas_set_order(&xas, start, HPAGE_PMD_ORDER);
+>>   	xas_store(&xas, hpage);
+>> +	/* Here we can't get an ENOMEM (because entries were
+>> +	 * previously allocated) But let's check for errors
+>> +	 * (XArray implementation can be changed in the future)
+>> +	 */
+>> +	WARN_ON_ONCE(xas_error(&xas));
+> 
+> Ditto.
+> 
+> Apologies I won't be around to see this change through -- I'm just out of time,
+> and will be shutting my computer down tomorrow for 3 months.  Sorry for the poor
+> timing, for raising issues, then disappearing. Hopefully I'm wrong and the
+> file-side isn't a concern.
+> 
+> Best,
+> Zach
+> 
+>>   xa_locked:
+>>   	xas_unlock_irq(&xas);
+>>   xa_unlocked:
+>> -- 
+>> 2.34.1
+>>
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Hello, Zach! Thank you very much for the detailed review! I thought that 
+locking is our guarantee to not get an -ENOMEM, but I didn't have the 
+deep understanding of the problem's cause, due to the fact I'm just 
+starting my memory management journey :) In any case, I will do a 
+research about this problem, and hopefully after you get out of the 
+vacation you will see a new patch fully fixes this problem. Have a nice 
+vacation! Thanks again!
