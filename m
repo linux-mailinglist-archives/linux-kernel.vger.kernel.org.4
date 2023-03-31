@@ -2,68 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27046D18FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221B26D1906
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjCaHvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S229643AbjCaHvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbjCaHus (ORCPT
+        with ESMTP id S231229AbjCaHvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:50:48 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED991CBA9
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:49:36 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32V7nC89032086;
-        Fri, 31 Mar 2023 02:49:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680248952;
-        bh=M9rGFzZVAKQIHFo+6Vrn0/FJ6eEqdHqLhsMOa8+fA2g=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=i+p210SuKELCHvyTRorWzQJSGHo4Nglx39hmKW2uZZNPiaSfJBLEudFl5jocVGgaZ
-         aKzj93o2mr9EIE6gQkX3YxqcAEieRAQ0pqCASd+dYS5j9UkmpCPGubRmUDW444aFNZ
-         nF8w5fIw7ctpmHqhWJxzITaei0WvNjA6nMJoNxUs=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32V7nCb1116419
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 31 Mar 2023 02:49:12 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 31
- Mar 2023 02:49:12 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 31 Mar 2023 02:49:12 -0500
-Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32V7n9xx084053;
-        Fri, 31 Mar 2023 02:49:10 -0500
-Message-ID: <b5e426fb-8af9-c372-1076-63194e4de781@ti.com>
-Date:   Fri, 31 Mar 2023 13:19:09 +0530
+        Fri, 31 Mar 2023 03:51:14 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BE61A96B
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:50:11 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id by14so2966450ljb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680249010;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=rp61AZrrrJ7L6Ea4XSRLHJ/Ln9sIYk2x6qqY8rh7zM4=;
+        b=qM+oBIBD6/4I26sY9lrDp/o6uOQD+VJqjveehx5YKQ5U4XVIIJdQyWfIqLGrjSRFGM
+         OVSGuWvmjg4bHjNyx4hooahb8ZMXIF/FKcH4A5/DTX/UO0KoQpdLzBt1duQeuwiyQlIr
+         NegaXc/uhq0C1G8dE3Fpmy8fAcmOIGLaYTrPkO3pkKx0T4Hi4XcEedrpVbXhpqhG7rQ3
+         S0+dsfpQTRhlfRl1DUePVmMgOpbBV8Ti9hlTG8cxeRVgJUvjsTDqVIWBJDPXYasUVgeO
+         4y13tVzzYjdCDj469LKssnOgESUixPCxtuHXtIPKnoFh1PDNs+6opz42G4RdfEUCKu+V
+         f2vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680249010;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rp61AZrrrJ7L6Ea4XSRLHJ/Ln9sIYk2x6qqY8rh7zM4=;
+        b=L7oAZAwptkX0TJLIGzZTBAdcPOpt+TMPYnbixsJhtRxCjXpz6CiGST49lWJFoXF4Zi
+         XLTkmO9e72abTf6G2qu6eunpzAoHvycRI8C5m0Xi4+htQge0cqI9LJ+sR4hcVpsOJ77E
+         PVyY5BWwWaZpMxkaJw0kD+395VOjiZ7WOSS1VsdYItDjO9SOibtUS5F+zCm5xLg9pOs3
+         8c/glDIvs3GNc9lbygy5eJFYrvuMF86PyGaoBDjdcnaRWV5k+O6HbFqmSeIiZXGqW01Z
+         JHqW73FkNfV1mMbpoQzH7veK/XlPMH52kWmTStfnANzJ2nyWpkcc918H5/3oiuuOLyiH
+         aLQQ==
+X-Gm-Message-State: AAQBX9e36yaZseGct95qcvjc1SjyW6KG/C8yQyc6+v3aWVb+MvaxpKKf
+        IYa/KN82n3um3vcGKxmr7VgmTRNCrJgTen4whAc=
+X-Google-Smtp-Source: AKy350aP0sVxOVbRdfaxygjd9Zkval2nVvpFquxKpaz0Y8pPfwIPacIOwyKNqxo+YZny2UHLm+5AUQ==
+X-Received: by 2002:a2e:9ccc:0:b0:2a6:183a:9a13 with SMTP id g12-20020a2e9ccc000000b002a6183a9a13mr1625313ljj.46.1680249009752;
+        Fri, 31 Mar 2023 00:50:09 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id p23-20020a2ea417000000b002934abfb109sm249539ljn.45.2023.03.31.00.50.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 00:50:09 -0700 (PDT)
+Message-ID: <2872b939-a617-90ee-2249-9eb535559f07@linaro.org>
+Date:   Fri, 31 Mar 2023 09:50:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-CC:     <vkoul@kernel.org>, <kishon@kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH 1/2] phy: ti: gmii-sel: Add support for CPSW9G GMII SEL in
- J784S4
-To:     Roger Quadros <rogerq@kernel.org>
-References: <20230331062521.529005-1-s-vadapalli@ti.com>
- <20230331062521.529005-2-s-vadapalli@ti.com>
- <cfcdb25b-5426-2532-ab8c-224a5e33baf3@kernel.org>
+Subject: Re: [PATCH V4 2/2] ASoC: dt-bindings: max98363: add soundwire
+ amplifier
+To:     =?UTF-8?B?4oCcUnlhbg==?= <ryan.lee.analog@gmail.com>,
+        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, rf@opensource.cirrus.com,
+        ckeepax@opensource.cirrus.com,
+        pierre-louis.bossart@linux.intel.com, herve.codina@bootlin.com,
+        wangweidong.a@awinic.com, james.schulman@cirrus.com,
+        ajye_huang@compal.corp-partner.google.com, shumingf@realtek.com,
+        povik+lin@cutebit.org, flatmax@flatmax.com,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        ryans.lee@analog.com
+References: <20230330234319.6841-1-ryan.lee.analog@gmail.com>
+ <20230330234319.6841-2-ryan.lee.analog@gmail.com>
 Content-Language: en-US
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <cfcdb25b-5426-2532-ab8c-224a5e33baf3@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230330234319.6841-2-ryan.lee.analog@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,38 +85,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Roger,
-
-On 31/03/23 13:15, Roger Quadros wrote:
+On 31/03/2023 01:43, “Ryan wrote:
+> From: Ryan Lee <ryans.lee@analog.com>
 > 
+> Add dt-bindings information for Analog Devices MAX98363 SoundWire Amplifier
 > 
-> On 31/03/2023 09:25, Siddharth Vadapalli wrote:
->> Each of the CPSW9G ports in TI's J784S4 SoC support modes such as QSGMII.
->>
->> Add a new compatible for it and allow the usage of "ti,qsgmii-main-ports"
->> property for J784S4.
->>
->> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->> ---
->>  drivers/phy/ti/phy-gmii-sel.c | 13 +++++++++++++
->>  1 file changed, 13 insertions(+)
->>
->> diff --git a/drivers/phy/ti/phy-gmii-sel.c b/drivers/phy/ti/phy-gmii-sel.c
->> index c87118cb2af9..fba5c0c0771c 100644
->> --- a/drivers/phy/ti/phy-gmii-sel.c
->> +++ b/drivers/phy/ti/phy-gmii-sel.c
->> @@ -235,6 +235,15 @@ struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw9g_soc_j721e = {
->>  	.num_qsgmii_main_ports = 2,
->>  };
->>  
->> +static const
->> +struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw9g_soc_j784s4 = {
-> 
-> Please make it into one line
+> Signed-off-by: Ryan Lee <ryans.lee@analog.com>
+> ---
 
-I was simply following the convention used for other SoC data structs in the
-same file. Please let me know why this has to be an exception and I will post
-the v2 series with the change accordingly.
 
-Regards,
-Siddharth.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
