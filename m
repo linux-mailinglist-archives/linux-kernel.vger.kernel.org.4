@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352856D2972
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BA86D2973
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbjCaU34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
+        id S233082AbjCaU37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCaU3x (ORCPT
+        with ESMTP id S230193AbjCaU3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:29:53 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8721BB76E;
-        Fri, 31 Mar 2023 13:29:52 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so26666938pjt.2;
-        Fri, 31 Mar 2023 13:29:52 -0700 (PDT)
+        Fri, 31 Mar 2023 16:29:54 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04151A96F;
+        Fri, 31 Mar 2023 13:29:53 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id z19so22399376plo.2;
+        Fri, 31 Mar 2023 13:29:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680294592; x=1682886592;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=EM4VZff1q+6h3vaykd1WLHQlMObm8C8qOyNRp5sdWMA=;
-        b=WCRyLmo7uPfZViqaH0L7lGJ+YbXI5HyzZ2r6/Y2oi98sbgCf6eQwEBFQcsybQ+Tl8c
-         V1d4XIchh9l43w25NOWoONUSenF0lHRGt1te+NvTdqgvhsagC86TwQwaQy+PyfayIDpa
-         ARUy66BIMF025vVABrqUmFC/ALEuHiiTNNeYDNhNF+HQ1m3WdeEpw6T7scbBn5U09p3i
-         J7+FYnwcMe6gll77jxjen01FCBqX4KIibVH807N4q0nDLTYkFplVgNiX4fjGEljy9AAa
-         ezJRTkqgaGVqZbGEhNUWiuRL+54lj/QfR5aZp8IIaJMD0W6y7lim7TbC49YhvYZlo3Ln
-         mv8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680294592; x=1682886592;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1680294593; x=1682886593;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EM4VZff1q+6h3vaykd1WLHQlMObm8C8qOyNRp5sdWMA=;
-        b=LB3dXIIXNmmluNRvsvsplRfNTN/KIMKB5jPtpYH7Fe0sn2xdVIbWKs2wJlXndI4J6a
-         g1ceVGnQPaQGjVSj9ePUnAFOFhPu5Vlwh+XY540gVtS+uADYGDEKJvoOXa5znC8tUL5F
-         rYGwzSAlPo5o5zu3NSmfmptMPeKbqskN3bW1/sYK1maVTfqK0YXeACWkkEsjRDHlQTJV
-         rHGE5XuOJYpj8YOsiOwUmMop2cz4J6N7GsKCmrWGmsrirC7HdLabLzP6ZQW6ygEs+83E
-         +m3ebdOIvbN6cYarvY0ORYzZe/DUXKQitzRQN5UWKcVlakWGZAa46790ioIIq4teQxD4
-         Dq7Q==
-X-Gm-Message-State: AAQBX9eyJxZHCkPk0GtEy/khHoCa6SKHYFVQi67dvIk4xvlXVH3OtAdL
-        fOG7RGv77XuuvO2z2OGuCdU=
-X-Google-Smtp-Source: AKy350a0hkv5Sk3dyUFuLyV1+BV3PdFVTOayILfVN3QyjN+ruH8ofDTi9Ow+wQUxI9rSK85vlku+vw==
-X-Received: by 2002:a17:903:22c4:b0:1a2:8924:224a with SMTP id y4-20020a17090322c400b001a28924224amr10763591plg.25.1680294591631;
-        Fri, 31 Mar 2023 13:29:51 -0700 (PDT)
+        bh=PLhh5lXY8mRzGTGozorwCPHUrnN37AS+DlWp1fZ57Ms=;
+        b=PvobSiVqjZzQJUcSIk/NI+SPYWuV2Nz3Hlt7g2jd0iCPqdnUnbU4PzRkNpdH8c+u+Y
+         1cF6Dx8r6hPGf3zgke+nPrA38Mdn94Fd/UIUv4HagZUVxHlYCm9tpty+nCLy234NXqOB
+         Ig4bFULimXNrEzcgbLkHvZw1u0qZUEjVcFVcL2MOX0aYd8mqv/8gX9+8Fv1VGS3itjwn
+         c7KuhQuUAo6wVAYBnby5flX3cJwP7Cj9u/oX8s8ifF2r5FSFcnBHTXb+37aRDxA92QUd
+         nOCPk7W1PiEEetdSDpEnQWM1MABcTe3PPeY/jDoonJEWRThpWnvSqHDsfURWjzogKkCG
+         c2SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680294593; x=1682886593;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PLhh5lXY8mRzGTGozorwCPHUrnN37AS+DlWp1fZ57Ms=;
+        b=RPOFpK+UKSl6sHW0u2BF6jcrc9RSongPPkH/g77e7r6CLKnZe/59dtfktRe/5z1a3C
+         nPOb57BqZtl0D6RW29wZD7zoqi5TuCv0jiN73ppjv1+B4qFdK+VfrAlStB6dAfB3Kwhh
+         P6EeVzmve3aXj3maK21HOwAmow09IdEG1yhcb4dS8P5ey1HME7f3r9NsfmM6cRvojry1
+         P0+qIa3GNEmH2Ku77di5dWg0YsiXOVaNvbc1xis9IwKdWEHcZP/07uWCN1dfSjoQ0ov5
+         LbYZEzlr/atA000fJJRdzeQC2+RAQeYBHkRhnodkVQohVuNXnS7BydVsR/67FKKSP76c
+         pcXw==
+X-Gm-Message-State: AAQBX9dcpHmGN0XMj+egaKuMz7tFugjQtteA83q6hXUcWPw+Z1Mfwldb
+        YU9hKFJrbKo6P/p/TPlkGJc=
+X-Google-Smtp-Source: AKy350btZovMwuvH45elymxAvNu1RTnI3xj0P4HEgarw/FzpW8DFFHE6reVTElr7E3AeK3aefC6mUA==
+X-Received: by 2002:a17:903:2290:b0:1a1:a727:a802 with SMTP id b16-20020a170903229000b001a1a727a802mr11880427plh.19.1680294593101;
+        Fri, 31 Mar 2023 13:29:53 -0700 (PDT)
 Received: from bangji.hsd1.ca.comcast.net ([2601:647:6780:44b0:5cfb:ad2c:e6f5:d42f])
-        by smtp.gmail.com with ESMTPSA id t14-20020a1709028c8e00b001a1dc2be791sm1916803plo.259.2023.03.31.13.29.50
+        by smtp.gmail.com with ESMTPSA id t14-20020a1709028c8e00b001a1dc2be791sm1916803plo.259.2023.03.31.13.29.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 13:29:51 -0700 (PDT)
+        Fri, 31 Mar 2023 13:29:52 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -61,12 +62,13 @@ Cc:     Ian Rogers <irogers@google.com>,
         linux-perf-users@vger.kernel.org,
         Kan Liang <kan.liang@linux.intel.com>,
         Leo Yan <leo.yan@linaro.org>
-Subject: [PATCHSET 0/9] perf tools: Update pmu scan using openat() (v1)
-Date:   Fri, 31 Mar 2023 13:29:40 -0700
-Message-Id: <20230331202949.810326-1-namhyung@kernel.org>
+Subject: [PATCH 1/9] perf list: Use relative path for tracepoint scan
+Date:   Fri, 31 Mar 2023 13:29:41 -0700
+Message-Id: <20230331202949.810326-2-namhyung@kernel.org>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+In-Reply-To: <20230331202949.810326-1-namhyung@kernel.org>
+References: <20230331202949.810326-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -78,98 +80,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/print-events.c | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
 
-This patchset changes PMU info scanning on sysfs using openat()
-basically.  I got reports of occasional contention on the
-opening files in sysfs.  While the root cause was a separate
-issue, I discovered some inefficiencies in the perf code.
-
-To scan PMUs, it roughly does something like below:
-
-  dir = opendir("/sys/bus/event_source/devices");
-  while (dentry = readdir(dir)) {
-    char buf[PATH_MAX];
-
-    snprintf(buf, sizeof(buf), "%s/%s",
-             "/sys/bus/event_source/devices", dentry->d_name);
-    fd = open(buf, O_RDONLY);
-    ...
-  }
-
-But this is not good since it needs to copy the string to build the
-absolute pathname, and it makes redundant pathname walk (from the /sys)
-in the kernel unnecessarily.  We can use openat(2) to open the file in
-the given directory.
-
-Add a couple of new helper to return the file descriptor of PMU
-directory so that it can use it with relative paths.
-
- * perf_pmu__event_source_devices_fd()
-   - returns a fd for the PMU root ("/sys/bus/event_source/devices")
-
- * perf_pmu__pathname_fd()
-   - returns a fd for "<pmu>/<file>" under the PMU root
-
-Now the above code can be converted something like below:
-
-  dirfd = perf_pmu__event_source_devices_fd();
-  dir = fdopendir(dirfd);
-  while (dentry = readdir(dir)) {
-    fd = openat(dirfd, dentry->d_name, O_RDONLY);
-    ...
-  }
-
-I added a benchmark for pmu-scan and it showed a slight speedup
-in the normal case too.
-
-  $ ./perf.old bench internals pmu-scan
-  # Running 'internals/pmu-scan' benchmark:
-  Computing performance of sysfs PMU event scan for 100 times
-    Average PMU scanning took: 6670.970 usec (+- 13.022 usec)
-
-  $ ./perf.new bench internals pmu-scan
-  # Running 'internals/pmu-scan' benchmark:
-  Computing performance of sysfs PMU event scan for 100 times
-    Average PMU scanning took: 6296.980 usec (+- 14.891 usec)
-
-The 5~6% of improvement might be small but it may have bigger impact
-when the system is contended.
-
-You can get the code from 'perf/pmu-scan-v1' branch in
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-
-Thanks,
-Namhyung
-
-Namhyung Kim (9):
-  perf list: Use relative path for tracepoint scan
-  perf tools: Fix a asan issue in parse_events_multi_pmu_add()
-  perf pmu: Add perf_pmu__destroy() function
-  perf bench: Add pmu-scan benchmark
-  perf pmu: Use relative path for sysfs scan
-  perf pmu: Use relative path in perf_pmu__caps_parse()
-  perf pmu: Use relative path in setup_pmu_alias_list()
-  perf pmu: Add perf_pmu__{open,scan}_file_at()
-  perf intel-pt: Use perf_pmu__scan_file_at() if possible
-
- tools/perf/arch/x86/util/intel-pt.c |  52 ++++--
- tools/perf/arch/x86/util/pmu.c      |  13 +-
- tools/perf/bench/Build              |   1 +
- tools/perf/bench/bench.h            |   1 +
- tools/perf/bench/pmu-scan.c         | 184 ++++++++++++++++++
- tools/perf/builtin-bench.c          |   1 +
- tools/perf/tests/pmu.c              |   9 +-
- tools/perf/util/parse-events.c      |   2 +-
- tools/perf/util/pmu.c               | 278 ++++++++++++++++++++--------
- tools/perf/util/pmu.h               |  12 +-
- tools/perf/util/print-events.c      |  26 ++-
- 11 files changed, 466 insertions(+), 113 deletions(-)
- create mode 100644 tools/perf/bench/pmu-scan.c
-
-
-base-commit: 417c6adfb155f906f0441cc1034827f6e2b3c372
+diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
+index 62e9ea7dcf40..26a7e017c928 100644
+--- a/tools/perf/util/print-events.c
++++ b/tools/perf/util/print-events.c
+@@ -4,6 +4,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <fcntl.h>
+ #include <sys/param.h>
+ 
+ #include <api/fs/tracing_path.h>
+@@ -59,12 +60,20 @@ static const struct event_symbol event_symbols_tool[PERF_TOOL_MAX] = {
+ void print_tracepoint_events(const struct print_callbacks *print_cb, void *print_state)
+ {
+ 	struct dirent **sys_namelist = NULL;
++	char *events_path = get_tracing_file("events");
+ 	int sys_items = tracing_events__scandir_alphasort(&sys_namelist);
++	int events_fd = open(events_path, O_PATH);
++
++	put_tracing_file(events_path);
++	if (events_fd < 0) {
++		printf("Error: failed to open tracing events directory\n");
++		return;
++	}
+ 
+ 	for (int i = 0; i < sys_items; i++) {
+ 		struct dirent *sys_dirent = sys_namelist[i];
+ 		struct dirent **evt_namelist = NULL;
+-		char *dir_path;
++		int dir_fd;
+ 		int evt_items;
+ 
+ 		if (sys_dirent->d_type != DT_DIR ||
+@@ -72,22 +81,26 @@ void print_tracepoint_events(const struct print_callbacks *print_cb, void *print
+ 		    !strcmp(sys_dirent->d_name, ".."))
+ 			continue;
+ 
+-		dir_path = get_events_file(sys_dirent->d_name);
+-		if (!dir_path)
++		dir_fd = openat(events_fd, sys_dirent->d_name, O_PATH);
++		if (dir_fd < 0)
+ 			continue;
+ 
+-		evt_items = scandir(dir_path, &evt_namelist, NULL, alphasort);
++		evt_items = scandirat(events_fd, sys_dirent->d_name, &evt_namelist, NULL, alphasort);
+ 		for (int j = 0; j < evt_items; j++) {
+ 			struct dirent *evt_dirent = evt_namelist[j];
+ 			char evt_path[MAXPATHLEN];
++			int evt_fd;
+ 
+ 			if (evt_dirent->d_type != DT_DIR ||
+ 			    !strcmp(evt_dirent->d_name, ".") ||
+ 			    !strcmp(evt_dirent->d_name, ".."))
+ 				continue;
+ 
+-			if (tp_event_has_id(dir_path, evt_dirent) != 0)
++			snprintf(evt_path, sizeof(evt_path), "%s/id", evt_dirent->d_name);
++			evt_fd = openat(dir_fd, evt_path, O_RDONLY);
++			if (evt_fd < 0)
+ 				continue;
++			close(evt_fd);
+ 
+ 			snprintf(evt_path, MAXPATHLEN, "%s:%s",
+ 				 sys_dirent->d_name, evt_dirent->d_name);
+@@ -103,10 +116,11 @@ void print_tracepoint_events(const struct print_callbacks *print_cb, void *print
+ 					/*long_desc=*/NULL,
+ 					/*encoding_desc=*/NULL);
+ 		}
+-		free(dir_path);
++		close(dir_fd);
+ 		free(evt_namelist);
+ 	}
+ 	free(sys_namelist);
++	close(events_fd);
+ }
+ 
+ void print_sdt_events(const struct print_callbacks *print_cb, void *print_state)
 -- 
 2.40.0.348.gf938b09366-goog
 
