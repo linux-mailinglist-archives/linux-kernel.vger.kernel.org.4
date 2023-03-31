@@ -2,209 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AD46D160B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 05:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730EC6D160E
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 05:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjCaDhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 23:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
+        id S229869AbjCaDh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 23:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjCaDg5 (ORCPT
+        with ESMTP id S229850AbjCaDh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 23:36:57 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AADCA27
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680233816; x=1711769816;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=ITeIKSCZb2ML9jNy4q96p8GX9m674UHPjhUZb6Aif/g=;
-  b=gTYEV7tquQm1VnMVYio/hZzdA11hTl+yAgacp0kqSBTgR6/FnhB+pZ4W
-   P5GnC1bCEBcnDxuuL7HPG9jfYPLFh6l7LsgVYeVqOIwWb0hiokkC/y8fM
-   U7iAeFiBGAMGs/E7jpkE7RPOjzOJwCN4D7Ie5WJrwtCVY3RtdKrX+4aNP
-   qeSib4yu7EGaBEWb/OAyEaLevOvGZI5WMcPnM3T5mXxQMR6/zshJFVgfp
-   RSgp4BAct2+rZ2vGbz5qfsTy/59F7WUkr08w5PASiItjsfo6XjwIBN3Qk
-   aMPKihaDOw5ejM8SgJMMOwcIx7ANZNuNhfKt69Drgwm5U38sRdarviGL8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="369132303"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="369132303"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 20:36:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="795945664"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="795945664"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Mar 2023 20:36:56 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 20:36:55 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 30 Mar 2023 20:36:55 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.172)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 30 Mar 2023 20:36:54 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AKjZneCUOCxJa4V/aOpc8BpV2FEvRrZbcL3x8h5Tvgejcj4oD0ZxMUqSh1HlVLug/oofYGpAvgoIZfKScYZjcvvTpGZuPsLcVwNJ8DHZBZ9H1x/FFvM7Zm8aNSIKsuw7fADwIaHA45+vC2jsZ7tbDVTUtgM0D3UPH10fm9Ddrg4TjrTkELDhdzh8z7gDRQcqSBJzUMyF3DoGVLoTrkO6cq3+7EUD+84wvyP73wDJOFkfhR/Svkn68rgX5edhaFcWkNCmSXpiYSEZ/E2cAEVEPxF3t8PPMpQAEvZ2HMXbNaPkkxuEq6FJxTNs1Eg3A5QlmukI2Ib0aqeBbvMOvYcv4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l9rVXGSjG479BtmK2inO00NUHDmZ08YV+7vJmpcFYbE=;
- b=FGdjZXyXUEijsd6uBtC7snvQ9P8wz3I5SbMMfdu/IrREec2ro/1eMmysYebHtdmIbkv2aKZ0O+UsIa/am7rOTe9pTJ6PIcq+V4AQyfAA9MIPRY1h6XVBDcEi43iDRP6BRowrc5WP1L6X21ZtoQp1evMIPgueB9pZtoIRivQ1V6Mu1HToU+zLEuxD0ZJ4Q/jyvJACAo1vPG9BFh0lvEXYlhZjnXRM1WDk+IcLMxqpvnpWoQhg0pPQb3lkvTiMvxDEhHD0PYZwkdI2E6bcEZckzH2976eZaY5qB0urfIFXubh5zxie0356jb5aE+TPXE9MNKOSTQI6lgkMNx7+CfIkZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by BL3PR11MB6411.namprd11.prod.outlook.com (2603:10b6:208:3ba::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.22; Fri, 31 Mar
- 2023 03:36:49 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::c5b2:6996:5aee:91db]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::c5b2:6996:5aee:91db%5]) with mapi id 15.20.6222.033; Fri, 31 Mar 2023
- 03:36:49 +0000
-Date:   Thu, 30 Mar 2023 20:36:44 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Zhao Liu <zhao1.liu@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        <intel-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-CC:     Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v2 8/9] drm/i915: Use kmap_local_page() in
- i915_cmd_parser.c
-Message-ID: <6426554c3db9a_375f7e294af@iweiny-mobl.notmuch>
-References: <20230329073220.3982460-1-zhao1.liu@linux.intel.com>
- <20230329073220.3982460-9-zhao1.liu@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230329073220.3982460-9-zhao1.liu@linux.intel.com>
-X-ClientProxiedBy: BY3PR05CA0029.namprd05.prod.outlook.com
- (2603:10b6:a03:254::34) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Thu, 30 Mar 2023 23:37:26 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBAE18835
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:37:22 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id d204-20020a6bb4d5000000b00758cfdd36c3so12711533iof.0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:37:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680233841; x=1682825841;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7wRPt33fvQzQbl0Q85E9TKuuYff5U0Hgngn0Gl0Ha+I=;
+        b=E8RqpEgR+veKO/TOQF3F7BU7dJhO4eFH+16YrAq+qv1DX5I0zwj55DRY3hEziqqNX6
+         lcVWX3AcfpzWMwyZQo1iwDmKpRCKbANtcTzDkSLGFyKsv/xOKrPITHw5EAZWmIR1V9Fu
+         UqtGA7J7esY5xqVa2iWuuWejByvkEY6ZDBmv90b36BFzAKDsEWT7t4gqbyvGuBkzP2j/
+         FJJnNTGrGt5bdg7rs5wEuGZUWF01JY/1fq0DRcUBRp1/NwhOCNXGEQuPsbIUY7GgRmJP
+         p3UGKj50gcsKcM9lcSpMqv4KlpcYmvReP6eodBKC9BePObeiL1eiO2pSyFrYMYOq9C7t
+         ohaA==
+X-Gm-Message-State: AAQBX9fufXTAlq4LPKwy7b6KuIf78ETNf+8eSHaDDksRMTqJaLi6tXGN
+        UQ03whONJK87f2rGXdppb3ete85+sLHlQGZsg2MfPtYNw/HD
+X-Google-Smtp-Source: AKy350abvGpivuGi0t0g/feQ1O3pfLJ7M6k5C56o6jxtm+jxchcL6Ku/0FXAuLuBGyrc/h607V9l1Kux7h8sVjg5P1KQX7pFp6u0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|BL3PR11MB6411:EE_
-X-MS-Office365-Filtering-Correlation-Id: b01cc12b-6b1c-44c3-1924-08db319928a5
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aBmPN+WeAn4Zv8MRV7jcdeT62dWFoNSYUjiCqou/sp7ua2x7MOPxn019h/oaXLQoPkyWklu7ENpnlUCXp+pXKNXqCTkFvxtvUn6SR655G8Gkr9gCwG9061pjE+lgyPc14gE1GvlbqvhmEmkH6U9Q9pvU8XyEPj3LhSG9cW6GFTXelWVCSJtaOkEPSyYMY8kB8tXHzVXvpIyQsNTAuvAhDMFm+STJvShWy9UjtauYnsP4WcPrMz/Sbntm+qhPblb438LLe6ZbHxKI/b56aJDuTHK4ap8MvYA6gAyzgqWSJj1BZCiKIS7JXlNJqpFP6JvOht7Py45J3FkC6inoicKQm7swo9HluKqY9MjYjWKiOjaYl9XmqicC76rfy1jV+LoTMnMAJLGm/QoFCSD0IAFLX8wV2tebRCsUAFOdCql7NtpBop7PBWdeditnKc4cBc1nsmDDhNPbsT8ROxle9BiEWO5I3HuCRv3JDzhA4Z+7UjXi6gaPd4bLvAwEAMPQ89J6Ak9K9at8qTuQ0PaLr+yEQBQkxFmhAjpF4jh7WnxGGw5d0vSnwkiLAsQF+Jt87gwx4rSxtkR4N1p9oA8XWbZ0MEHSdroOFMZoGJ6hcPiL5rs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(136003)(366004)(376002)(39860400002)(396003)(451199021)(26005)(66946007)(9686003)(921005)(7416002)(8936002)(6486002)(83380400001)(6506007)(41300700001)(66476007)(316002)(2906002)(38100700002)(54906003)(5660300002)(6512007)(478600001)(86362001)(186003)(44832011)(6666004)(66556008)(966005)(82960400001)(8676002)(110136005)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zNVHNJctuHkkDWe0lKDFm+AZSt8f/aSe0WfX0bYsKsRiAbdE/PkKZTrBH55B?=
- =?us-ascii?Q?boBsCG9WVAry6apmf6mMhUYv5SGg02673HMsF6tDs8UBz60b09EFFgjxv9d6?=
- =?us-ascii?Q?i1WFao+YwqqFoWZgpayKV0NR0tnVRUVyn0Olt1KZnoL6Z16gN+FXjoEpHV3E?=
- =?us-ascii?Q?0EWy3wzpSMDdzOOraZhartchuKLG6IEbPIcyONLGfp47Hi1v3tSjsJRUXBek?=
- =?us-ascii?Q?4+8mNEhe3IWx3wo6HDompUuPCbSSP6kFB+URng3sS3kWdbMxLeuj5n1coNP8?=
- =?us-ascii?Q?r1LsgDw+VE8gsOY/WT8IJz8OeIaDW6ZdWgMAkdSaHyEoGAYumRFZvKGidB/1?=
- =?us-ascii?Q?kZloObge0/PczNrsNrcZk01b/0sA9/U1foDy8Y5n5LQfmdQERNhzF74ZY/VW?=
- =?us-ascii?Q?TtJ+ZPzMUr3saIy/LFqsGtjLJWUH77mdIUwqxvGj/1TWLXXqQDDb8tztsMiI?=
- =?us-ascii?Q?Udxltf7tQ8ueXEBGaVtftJCP9bRzmnVde1XbGlHMKLQbLkuT5YMP64T4uM26?=
- =?us-ascii?Q?L0Oxu/gTWozADlG+pJ61hTO0cafhdM2jbJNBrzBsF0XRboI65GUCUL6k/842?=
- =?us-ascii?Q?zty4hcnzeQksrFt2BgHtWmLXXAtEAgi0uVhITkzcK9rFrgonewqjWQilH3Th?=
- =?us-ascii?Q?SEEJGPZA1x21cQEDFYssDN83TBC1Ze+RgOmOZqn3JiwlGz67nsnHHAu2DDNk?=
- =?us-ascii?Q?zg1XlGZifB77lbEuicLFc6XRs0GkTEtuUMUYKZt6QCE14zM0BcbuoB6vYl6P?=
- =?us-ascii?Q?T1WAr7YQRZ150H0SCEhEDhACZdBQsRCJXfOHbBt0TlrKeQ16EFJE5LC10/uy?=
- =?us-ascii?Q?uRZsx8uSlTJXDKBb5BEytWwMz9bPgOvF/CF+bCzCFlVUEGUf35EqT3Vzv0+I?=
- =?us-ascii?Q?F8se9QYGVszfnLhBm0g8lYbBDJ5hC2IoanWZ2pqT8uVywjGgqnIKxjIYD1f0?=
- =?us-ascii?Q?3ope22w2AbQlchu29CK0DH9Pmi8vFxQ9qOYZb3k24EFsX0L05R44hIFplfyJ?=
- =?us-ascii?Q?Uaq7l8LxVI3ORjKtzLr9oyxM53PhBw/xJS9atwKeetZEVyFJcLJZrwZbaA0s?=
- =?us-ascii?Q?kqnoIT8J+zfOvLFIhSFQsGyNmtbHln8VhNvJFp3lHfZj67ON0BAryEZujXFm?=
- =?us-ascii?Q?jcAW9GdEJKC3JdUCdiCsTirsmZAP9uhafZPJujFk4BBO5B5MSS7V3oZPLDHp?=
- =?us-ascii?Q?GRgIZM6PH/V3oRRAZG7dnHryCchp9TEkxMOCJ+k1MySRAoG55aJQ1pl92EoQ?=
- =?us-ascii?Q?BlzbPslAJYsCLLNfnquJa333xC4HQMGHEp2mnqB/uQabaP6k9rTRdmZy+/PA?=
- =?us-ascii?Q?+QlEKS4lkTWVElHmbCOc8hyhT3UTlrMVH9/FxzdLXXNHL4o0/NGjJvi5ip4v?=
- =?us-ascii?Q?P16PCQpbF++WceYxMlBq53dorh2vsQoORT5rkPnQ3MZEPMTkymYMutR35+7K?=
- =?us-ascii?Q?UnG0ozJAmc/4Nt7cokEVoly7KKMyx3z4pO3siMvvp4YB9ku41IMJuJ0aoRGz?=
- =?us-ascii?Q?2leGSVeLg4l+4r4LCPsicE3q1n2Ut/jE1GuCeKvO84N9o11VCsvR2ZOthT1M?=
- =?us-ascii?Q?5iTKjzn9X9vQMx0nu2QK3/8zabAIBWdDhElUhZJQ?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b01cc12b-6b1c-44c3-1924-08db319928a5
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 03:36:48.7428
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q3zBTSqK0GlvSmDc3ftQ11OuHn5dizsrMvIEgF0N8NGH3D2Uo3sKH2O4EZvu3uCgehIR0U8j1PfjEE9i/+Ll9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6411
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:f46:b0:326:37b4:e190 with SMTP id
+ y6-20020a056e020f4600b0032637b4e190mr2716386ilj.3.1680233841504; Thu, 30 Mar
+ 2023 20:37:21 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 20:37:21 -0700
+In-Reply-To: <20230331032008.3067-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004337aa05f829ed06@google.com>
+Subject: Re: [syzbot] [bluetooth?] possible deadlock in rfcomm_dlc_exists
+From:   syzbot <syzbot+b69a625d06e8ece26415@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zhao Liu wrote:
-> From: Zhao Liu <zhao1.liu@intel.com>
-> 
-> The use of kmap_atomic() is being deprecated in favor of
-> kmap_local_page()[1], and this patch converts the call from
-> kmap_atomic() to kmap_local_page().
-> 
-> The main difference between atomic and local mappings is that local
-> mappings doesn't disable page faults or preemption (the preemption is
-> disabled for !PREEMPT_RT case, otherwise it only disables migration).
-> 
-> With kmap_local_page(), we can avoid the often unwanted side effect of
-> unnecessary page faults and preemption disables.
-> 
-> There're 2 reasons why function copy_batch() doesn't need to disable
-> pagefaults and preemption for mapping:
-> 
-> 1. The flush operation is safe. In i915_cmd_parser.c, copy_batch() calls
-> drm_clflush_virt_range() to use CLFLUSHOPT or WBINVD to flush.
-> Since CLFLUSHOPT is global on x86 and WBINVD is called on each cpu
-> in drm_clflush_virt_range(), the flush operation is global.
-> 
-> 2. Any context switch caused by preemption or page faults (page fault
-> may cause sleep) doesn't affect the validity of local mapping.
-> 
-> Therefore, copy_batch() is a function where the use of
-> kmap_local_page() in place of kmap_atomic() is correctly suited.
-> 
-> Convert the calls of kmap_atomic() / kunmap_atomic() to
-> kmap_local_page() / kunmap_local().
-> 
-> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
-> 
-> v2:
-> * Dropped hot plug related description since it has nothing to do with
->   kmap_local_page().
-> * No code change since v1, and added description of the motivation of
->   using kmap_local_page().
-> 
-> Suggested-by: Dave Hansen <dave.hansen@intel.com>
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Hello,
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+possible deadlock in rfcomm_sk_state_change
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.3.0-rc4-next-20230330-syzkaller-dirty #0 Not tainted
+------------------------------------------------------
+syz-executor.0/5614 is trying to acquire lock:
+ffff888028fb5130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1697 [inline]
+ffff888028fb5130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: rfcomm_sk_state_change+0x6d/0x3a0 net/bluetooth/rfcomm/sock.c:73
+
+but task is already holding lock:
+ffffffff8e357cc8 (rfcomm_mutex){+.+.}-{3:3}, at: rfcomm_dlc_close+0x33/0x240 net/bluetooth/rfcomm/core.c:511
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (rfcomm_mutex){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       rfcomm_dlc_exists+0x58/0x190 net/bluetooth/rfcomm/core.c:546
+       __rfcomm_create_dev net/bluetooth/rfcomm/tty.c:414 [inline]
+       rfcomm_create_dev net/bluetooth/rfcomm/tty.c:485 [inline]
+       rfcomm_dev_ioctl+0x966/0x1c00 net/bluetooth/rfcomm/tty.c:587
+       rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
+       sock_do_ioctl+0xcc/0x230 net/socket.c:1199
+       sock_ioctl+0x1f8/0x680 net/socket.c:1316
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (rfcomm_ioctl_mutex){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       rfcomm_create_dev net/bluetooth/rfcomm/tty.c:484 [inline]
+       rfcomm_dev_ioctl+0x8a2/0x1c00 net/bluetooth/rfcomm/tty.c:587
+       rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
+       sock_do_ioctl+0xcc/0x230 net/socket.c:1199
+       sock_ioctl+0x1f8/0x680 net/socket.c:1316
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3108 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+       validate_chain kernel/locking/lockdep.c:3842 [inline]
+       __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
+       lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5691
+       lock_sock_nested+0x3a/0xf0 net/core/sock.c:3474
+       lock_sock include/net/sock.h:1697 [inline]
+       rfcomm_sk_state_change+0x6d/0x3a0 net/bluetooth/rfcomm/sock.c:73
+       __rfcomm_dlc_close+0x1b9/0x890 net/bluetooth/rfcomm/core.c:494
+       rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:524
+       __rfcomm_sock_close+0x17a/0x2f0 net/bluetooth/rfcomm/sock.c:220
+       rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:912
+       rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:933
+       __sock_release+0xcd/0x290 net/socket.c:653
+       sock_close+0x1c/0x20 net/socket.c:1395
+       __fput+0x27c/0xa90 fs/file_table.c:321
+       task_work_run+0x16f/0x270 kernel/task_work.c:179
+       get_signal+0x1c7/0x25b0 kernel/signal.c:2635
+       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:307
+       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+       exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM --> rfcomm_ioctl_mutex --> rfcomm_mutex
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(rfcomm_mutex);
+                               lock(rfcomm_ioctl_mutex);
+                               lock(rfcomm_mutex);
+  lock(sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.0/5614:
+ #0: ffff888074585c10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:761 [inline]
+ #0: ffff888074585c10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: __sock_release+0x86/0x290 net/socket.c:652
+ #1: ffffffff8e357cc8 (rfcomm_mutex){+.+.}-{3:3}, at: rfcomm_dlc_close+0x33/0x240 net/bluetooth/rfcomm/core.c:511
+
+stack backtrace:
+CPU: 1 PID: 5614 Comm: syz-executor.0 Not tainted 6.3.0-rc4-next-20230330-syzkaller-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2188
+ check_prev_add kernel/locking/lockdep.c:3108 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+ validate_chain kernel/locking/lockdep.c:3842 [inline]
+ __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
+ lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5691
+ lock_sock_nested+0x3a/0xf0 net/core/sock.c:3474
+ lock_sock include/net/sock.h:1697 [inline]
+ rfcomm_sk_state_change+0x6d/0x3a0 net/bluetooth/rfcomm/sock.c:73
+ __rfcomm_dlc_close+0x1b9/0x890 net/bluetooth/rfcomm/core.c:494
+ rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:524
+ __rfcomm_sock_close+0x17a/0x2f0 net/bluetooth/rfcomm/sock.c:220
+ rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:912
+ rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:933
+ __sock_release+0xcd/0x290 net/socket.c:653
+ sock_close+0x1c/0x20 net/socket.c:1395
+ __fput+0x27c/0xa90 fs/file_table.c:321
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ get_signal+0x1c7/0x25b0 kernel/signal.c:2635
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:307
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe4d528c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fe4d602c168 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+RAX: fffffffffffffffc RBX: 00007fe4d53abf80 RCX: 00007fe4d528c0f9
+RDX: 000000000000000a RSI: 0000000020000040 RDI: 0000000000000003
+RBP: 00007fe4d52e7b39 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe4d1bd46f R14: 00007fe4d602c300 R15: 0000000000022000
+ </TASK>
+
+
+Tested on:
+
+commit:         a6d9e303 Add linux-next specific files for 20230330
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=15f008c9c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aceb117f7924508e
+dashboard link: https://syzkaller.appspot.com/bug?extid=b69a625d06e8ece26415
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1032965dc80000
+
