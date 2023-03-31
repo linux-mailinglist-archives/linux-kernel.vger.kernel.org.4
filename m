@@ -2,105 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F8D6D19A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F3F6D19A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjCaISn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
+        id S230492AbjCaISa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjCaISk (ORCPT
+        with ESMTP id S230477AbjCaIS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:18:40 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3FDB46F
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:18:38 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id i5so86738481eda.0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:18:38 -0700 (PDT)
+        Fri, 31 Mar 2023 04:18:28 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC769023
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:18:27 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id h7so11156596ila.5
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:18:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1680250717;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=uMJy1C9/3QR5jjuw5Xv2+S7pMfTZMnWAxKSE4c5qidM=;
-        b=fmzfl9IOs735tXSv5WRpDWImpl7qScBJ0TpByEkzL0uKL4RNFRy8fFPjWqyMz5M76F
-         zlBJtzL56YDZmviRE03XGtIWzaq/Z5rnScnRHJi4Qf8YeWnlRV52yVtAGlxWwGzBnGV/
-         3x06jpXMum2HJ7t4VmxOiJYCAte4E3jW9sPhA9FjXT2zUJbx3TdzfCKY23+b4HDb5fxA
-         jLyy9mQd04BST5ySdlp+y4TF0gG+wy36ROKjnHL7FJ5FEEzjxEwid5sWV4SdY7iv7oMW
-         rXHUoo2PfyxJE+hbktrKRbWfZ4hne/HlDFy8GGPTc0QVxS4CsKAUokZEVsnoFVcYBSPu
-         4kGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680250717;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1680250707;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uMJy1C9/3QR5jjuw5Xv2+S7pMfTZMnWAxKSE4c5qidM=;
-        b=jBVDKiqriEidKTu7uKJPsEntzvl6M1ILcofOf0lDNuUNsxYoqQBaDnagdobrAmvXsW
-         FtaxCymZezZnKt5axp8k/G9RteATvaHiOeCW6PLWpxHjD8+DGp1jojJhMzhmOZIJ4wyu
-         Y6mbXbGBUagHwiz2TtARk6EzkKCUW7YBumfU2O5AV76YKk6z2iQUF4bv2eTyyTOfCLB8
-         Ipyc5+QmpY06nm5WvpViG4JV3I3X0xHIHziQg9u9W/JAak+qRSBF74O7nembdLVPvqX7
-         SFeWeShbOj0DRiVLt7Pw3atm9lLvX9V/hxOd2NMZXDrkxe4Ps5IiQSz4DncOFRzYJjhL
-         Y3Qg==
-X-Gm-Message-State: AAQBX9d/YlsIYwkFwI8GzFxfgIpfA/jy1UBL69zgJR1Lr6rxxak6ilRm
-        8SMDnoCg0CFhhUj/N2DPnmcwqg==
-X-Google-Smtp-Source: AKy350b3Wzo7SMpS0QCe0HFcHDRnX9Y5vwvxvTXiZ+KLr1OZAOTr3A0/ZUOsuDwzc/Tz3MJU6jY50A==
-X-Received: by 2002:a17:906:5a94:b0:933:15c0:6e05 with SMTP id l20-20020a1709065a9400b0093315c06e05mr25588433ejq.7.1680250717477;
-        Fri, 31 Mar 2023 01:18:37 -0700 (PDT)
-Received: from localhost ([194.62.217.4])
-        by smtp.gmail.com with ESMTPSA id h13-20020a1709066d8d00b009475bd8f441sm719038ejt.60.2023.03.31.01.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 01:18:36 -0700 (PDT)
-References: <20230329223239.138757-1-y86-dev@protonmail.com>
- <20230329223239.138757-5-y86-dev@protonmail.com>
- <87h6u24bip.fsf@metaspace.dk>
- <6c3985d3-6b81-df0e-5c22-12a0d8044119@protonmail.com>
-User-agent: mu4e 1.9.18; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Benno Lossin <y86-dev@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v3 04/13] rust: add pin-init API core
-Date:   Fri, 31 Mar 2023 10:16:56 +0200
-In-reply-to: <6c3985d3-6b81-df0e-5c22-12a0d8044119@protonmail.com>
-Message-ID: <871ql549lv.fsf@metaspace.dk>
+        bh=15rDcrIff0PTvVCq0tQDwJDEOeJZgLwD9Ed2/S9KM9c=;
+        b=CsrdmNsZwi1KGRE7i+x82HeVKBUi7m/OpmIM3Th+keNveYpbwuAO0CD177mDO3OcgC
+         EnvFU72NaWpiWT94z3NnDqBNGQpW0p9cWPMIWbcZCHP7vD5/iSZEAjyI+3X4oo4zYzRU
+         GtHGkepUcXXaaYU0H2SO0r8Xou2lVWX0vr668=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680250707;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=15rDcrIff0PTvVCq0tQDwJDEOeJZgLwD9Ed2/S9KM9c=;
+        b=s2G3WtEtlxhHNcrEIEDaKxQLnGXHm2svnH2lpRVBhF8Mfmd3FpcRYnGZjYhaWduoxo
+         xQl+UazTlKz0wI+NAL2Mnh/2PT9lCzZbrmsRcDtkr7My03th+n6SxjmGWC4StSUlXxvG
+         u63/SMTKMoe4FjHnr0v4JluNWEBorn/UrM7fayIlakKG1PXHkfRm04gO1HAF2zyDPiiu
+         X5TgENZQKDRxDb/hSF+//aZnGvIxlZw8GPag5B4oh1mjZCVBYJD0agMRHE4oo6NTKot3
+         pS5ZFKFmTveLT2U8y8Dm+m5rMWN8SzJqaYy4UdQIZVUj+Yr+bPPq1hMY5tcTcVEr2BRA
+         qdug==
+X-Gm-Message-State: AAQBX9c9LG2Ml+bldGIjNz9CXEVsy3rnuaYR9cCleGb070096ejo21Dj
+        H5eGJva7rgVfHoh6dQJFe//9ECKEC79F/ioW/xUb1g==
+X-Google-Smtp-Source: AKy350Z3p01NgJ4vdkP75NR5+P4+C3oTh8ECvyef/jQWRCRu0D9MDV65Ai5oehSlp4QQBqxR3znKFnqONmw9lPWNA8Y=
+X-Received: by 2002:a92:c54b:0:b0:316:f93f:6f83 with SMTP id
+ a11-20020a92c54b000000b00316f93f6f83mr13750083ilj.6.1680250707090; Fri, 31
+ Mar 2023 01:18:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230322104639.221402-1-treapking@chromium.org>
+ <20230322104639.221402-8-treapking@chromium.org> <ZBrjZj0VL20y1MUC@smile.fi.intel.com>
+In-Reply-To: <ZBrjZj0VL20y1MUC@smile.fi.intel.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Fri, 31 Mar 2023 17:18:16 +0900
+Message-ID: <CAEXTbpd1kQWbJazRSvLabH26teiWvo75+rKOTL0A9Jm3eXeACQ@mail.gmail.com>
+Subject: Re: [PATCH v14 07/10] drm/bridge: anx7625: Register Type C mode switches
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-acpi@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Lyude Paul <lyude@redhat.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Stephen Boyd <swboyd@chromium.org>,
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andy,
 
-Benno Lossin <y86-dev@protonmail.com> writes:
+Thanks for the review.
 
-> On 30.03.23 15:05, Andreas Hindborg wrote:
->>> +//! [`Arc<T>`]: crate::sync::Arc
->>> +//! [`impl PinInit<Foo>`]: PinInit
->>> +//! [`impl PinInit<T, E>`]: PinInit
->>> +//! [`impl Init<T, E>`]: Init
->>> +//! [`Opaque`]: kernel::types::Opaque
->>> +//! [`pin_data`]: ::macros::pin_data
->>> +//! [`UniqueArc<T>`]: kernel::sync::UniqueArc
->>> +//! [`Box<T>`]: alloc::boxed::Box
->>> +
->>> +use core::{convert::Infallible, marker::PhantomData, mem::MaybeUninit};
->>> +
->>> +/// A pinned initializer for `T`.
->>
->> "An initializer for a pinned `T`" instead?
+On Wed, Mar 22, 2023 at 8:16=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> To me this does not really make sense, since the type `T` cannot be
-> pinned, only an instance can be. But maybe I should use the term
-> `pin-initializer` instead.
+> On Wed, Mar 22, 2023 at 06:46:36PM +0800, Pin-yen Lin wrote:
+> > Register USB Type-C mode switches when the "mode-switch" property and
+> > relevant ports are available in Device Tree. Configure the crosspoint
+> > switch based on the entered alternate mode for a specific Type-C
+> > connector.
+> >
+> > Crosspoint switch can also be used for switching the output signal for
+> > different orientations of a single USB Type-C connector, but the
+> > orientation switch is not implemented yet. A TODO is added for this.
+>
+> ...
+>
+> > +static int anx7625_typec_mux_set(struct typec_mux_dev *mux,
+> > +                              struct typec_mux_state *state)
+> > +{
+> > +     struct drm_dp_typec_port_data *port =3D typec_mux_get_drvdata(mux=
+);
+> > +     struct anx7625_data *ctx =3D port->data;
+> > +     struct device *dev =3D ctx->dev;
+> > +     struct drm_dp_typec_switch_desc switch_desc =3D ctx->switch_desc;
+> > +     bool new_dp_connected, old_dp_connected;
+> > +
+> > +     if (switch_desc.num_typec_switches =3D=3D 1)
+> > +             return 0;
+>
+> > +     wait_for_completion(&ctx->mux_register);
+>
+> How do we guarantee this won't become an infinite waiting?
+> Perhaps a comment explaining that?
+>
+> > +     old_dp_connected =3D ctx->port_data[0].dp_connected ||
+> > +                        ctx->port_data[1].dp_connected;
+> > +
+> > +     ctx->port_data[port->port_num].dp_connected =3D
+> > +             state->alt &&
+> > +             state->alt->svid =3D=3D USB_TYPEC_DP_SID &&
+> > +             state->alt->mode =3D=3D USB_TYPEC_DP_MODE;
+> > +
+> > +     dev_dbg(dev, "mux_set dp_connected: c0=3D%d, c1=3D%d\n",
+> > +             ctx->port_data[0].dp_connected, ctx->port_data[1].dp_conn=
+ected);
+> > +
+> > +     new_dp_connected =3D ctx->port_data[0].dp_connected ||
+> > +                        ctx->port_data[1].dp_connected;
+> > +
+> > +     /* DP on, power on first */
+> > +     if (!old_dp_connected && new_dp_connected)
+> > +             pm_runtime_get_sync(dev);
+> > +
+> > +     anx7625_typec_two_ports_update(ctx);
+> > +
+> > +     /* DP off, power off last */
+> > +     if (old_dp_connected && !new_dp_connected)
+> > +             pm_runtime_put_sync(dev);
+> > +
+> > +     return 0;
+> > +}
+>
+> ...
+>
+> > +     struct device_node *port_node =3D of_graph_get_port_by_id(dev->of=
+_node, 1);
+>
+> You use fwnode below, so why not fwnode_graph_...(dev_fwnode(dev), ...) ?
 
-I see. Could be "An initializer for a pinned instance of `T`" then. Just
-to clarify that the initializer itself is not the thing that is pinned.
+There is no existing helper like `fwnode_graph_get_port_by_id`, so
+using of_graph variant is easier here. Should I add a
+`fwnode_graph_get_port_by_id` helper for this?
+>
+> > +     struct drm_dp_typec_switch_desc *switch_desc =3D &ctx->switch_des=
+c;
+> > +     int ret;
+> > +     u32 dp_lanes[4];
+> > +     unsigned int i, num_lanes;
+> > +
+> > +     /*
+> > +      * Currently, only mode switch is implemented.
+> > +      * TODO: Implement Type-C orientation switch for anx7625.
+> > +      */
+> > +     ret =3D drm_dp_register_typec_switches(dev, &port_node->fwnode,
+> > +                                          &ctx->switch_desc, ctx,
+> > +                                          anx7625_typec_mux_set);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     ctx->port_data =3D devm_kcalloc(dev, switch_desc->num_typec_switc=
+hes,
+> > +                                   sizeof(struct anx7625_typec_port_da=
+ta),
+>
+>                                       sizeof(*ctx->port_data),
+>
+> ?
+>
+> > +                                   GFP_KERNEL);
+> > +     if (!ctx->port_data) {
+> > +             ret =3D -ENOMEM;
+> > +             goto unregister_mux;
+> > +     }
+>
+> ...
+>
+> > +struct anx7625_typec_port_data {
+> > +     bool dp_connected;
+> > +     enum typec_orientation orientation;
+>
+> Most likely enum will be 32-bit and bool 8-bit. Which means that the data=
+ type
+> size become 8 bytes for no reason. Can you swap the lines and perhaps che=
+ck this
+> with `pahole` tool?
+>
+> > +};
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
+Best regards,
+Pin-yen
