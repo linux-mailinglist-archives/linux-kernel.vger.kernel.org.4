@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C679A6D1C5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E2B6D1C5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbjCaJah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
+        id S231607AbjCaJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232164AbjCaJaW (ORCPT
+        with ESMTP id S231698AbjCaJam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:30:22 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F4320303
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:29:48 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id bx10so4046461ljb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:29:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680254964;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xyrQEWBcGQCcQKMuIMGnsKsvjpO5SyMCKXO50u/A5dE=;
-        b=tKXbS1L9XTVfMWeRoYRRKqXRi97Op1WJixOALHsNXtvCESO9rv2JDp+JY18uDKO1gK
-         U46MJWSv6IxwnepmJysSNdWPY57JfYEGrHAFhnPB/w+U+UTkCT5tgfdOoYTd92U7NyfO
-         3AcHj7ZbCV8nGMF5tsQd19JdtlyFYjJWPIUYurYXrBe90CX1/Z19vTKuGyqSHqb9Yq4b
-         cTMQXikZ8FtrqLso/VFzRfwtjVH0fTzLNf3swDHKOIX1XMg+DzQg9EgcUrnpH0RW9uDp
-         Bv3djpOP5u1GkYs9nTYnVduvmNSQUyq28slonnC29KJ0l7rsfn9jtNRV3E1sF3mTPieU
-         QUPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680254964;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xyrQEWBcGQCcQKMuIMGnsKsvjpO5SyMCKXO50u/A5dE=;
-        b=i1nW7V1afx8ZpKSn4NDT2TSiYtV4R28M4PyyvEAXqfv+aRsEkOn81idid5SlW5a9GT
-         CxYbCaWjkwer8FwgWwnyfTUXASIjlTHyZYXQgtOODjE5gBGznlPQbIL+MlrWPX1+UaT0
-         0vlUs6Wcr2mC8m9Fxa8SuKUvqZQU6w+iVgz5V2aM+HhalZNyBNxjGtPzLi+9IXnkeuuJ
-         ZDFjxEkzWHHMlf1jgWWxy94z2bb9nUKxFCPTwopHDrqtTbjbQYNFJiVzXNI5VeDmT5VV
-         0OCfVOYVBpDp6Nhpj2hf2/FdG8CORlcskAzbgPEXCVrHquXiMtQ55b5jMgSBDRPX7vLh
-         HYxA==
-X-Gm-Message-State: AAQBX9eZLY8gy8WuOIxBlKMbSyiNHiNa1/zufJWk2aAVyYzpEvNjkQg2
-        W1RNXFmj/5LQJqht5iUU2cQ/rA==
-X-Google-Smtp-Source: AKy350ZDwEg4Xan2DyhIEy8uX4nlR8olcULIN/U+W69y/RV9ibzr1WBEDgNNRTI5ZWPq4sD3dAFpqg==
-X-Received: by 2002:a2e:2c0a:0:b0:2a6:72:f321 with SMTP id s10-20020a2e2c0a000000b002a60072f321mr4116961ljs.51.1680254963989;
-        Fri, 31 Mar 2023 02:29:23 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u24-20020a2ea178000000b002a61bd34f63sm282052ljl.84.2023.03.31.02.29.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 02:29:23 -0700 (PDT)
-Message-ID: <83ecc1fa-2e45-b47b-557e-4345c185eb35@linaro.org>
-Date:   Fri, 31 Mar 2023 11:29:22 +0200
+        Fri, 31 Mar 2023 05:30:42 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465AF1B7F4;
+        Fri, 31 Mar 2023 02:30:19 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 50BE66603130;
+        Fri, 31 Mar 2023 10:29:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680254975;
+        bh=lMAebDq17jh7DdNz0cBlqr1fwRmhsP03/MJGfkU1R+8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EPBOOuTWx/PQ4Jo1UY5Tr8aSNr+DKcHxRpQT9tov4AyHcg8SvcD7zt/LzzgIoDRtB
+         w51cc+rm15Z4WQmg1oZ5iDhLV6/JQf7Um3d7mAmyVkIakqT4ucQLvxqHjnqLIE3h2d
+         XFJJA6hV5ldZ4z2dnTzMcsEglkbGJQGnAX4SO/dSguxe6zagccaIPi6AQl0VQGCnPu
+         3Io9CUJdL140asZCXYIW1mT8jWKx0wxWMO9bRTtHN4qNomLqqcEBHHfHx4KiQuXJiC
+         NC3GzF1JzNdu9/J+B/fbWsgpSad5gfrdDFxvyl1fzvpC1wyWs0OpxEDIui4H87FOKZ
+         be8yyv1mbztbQ==
+Date:   Fri, 31 Mar 2023 11:29:32 +0200
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, steven.price@arm.com,
+        robh+dt@kernel.org, alyssa.rosenzweig@collabora.com,
+        wenst@chromium.org, kernel@collabora.com
+Subject: Re: [PATCH v1 RESEND 2/2] drm/panfrost: Add basic support for speed
+ binning
+Message-ID: <20230331112932.73b39d5a@collabora.com>
+In-Reply-To: <fb19c82b-f2bf-7f22-ba5c-e1a1c98f987f@collabora.com>
+References: <20230323090822.61766-1-angelogioacchino.delregno@collabora.com>
+        <20230323090822.61766-3-angelogioacchino.delregno@collabora.com>
+        <5814d779-0635-43fe-3fe8-31c130f05b3a@collabora.com>
+        <20230331104914.708b194e@collabora.com>
+        <fb19c82b-f2bf-7f22-ba5c-e1a1c98f987f@collabora.com>
+Organization: Collabora
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 2/4] dt-bindings: clock: qcom,sc7280-lpasscc: Remove
- qdsp6ss register region
-Content-Language: en-US
-To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>, swboyd@chromium.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org, broonie@kernel.org,
-        quic_plai@quicinc.com, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
-        quic_visr@quicinc.com
-References: <20230327163249.1081824-1-quic_mohs@quicinc.com>
- <20230327163249.1081824-3-quic_mohs@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230327163249.1081824-3-quic_mohs@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2023 18:32, Mohammad Rafi Shaik wrote:
-> The qdsp6ss memory region 0x3000000 is being shared by ADSP remoteproc
-> device and lpasscc clock device, hence causing memory conflict and 
-> as the qdsp6ss clocks are being enabled in remoteproc driver,
-> remove the qdsp6ss register from lpasscc.
+On Fri, 31 Mar 2023 10:57:46 +0200
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+wrote:
+
+> Il 31/03/23 10:49, Boris Brezillon ha scritto:
+> > On Fri, 31 Mar 2023 10:11:07 +0200
+> > AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > wrote:
+> >   
+> >> Il 23/03/23 10:08, AngeloGioacchino Del Regno ha scritto:  
+> >>> Some SoCs implementing ARM Mali GPUs are subject to speed binning:
+> >>> this means that some versions of the same SoC model may need to be
+> >>> limited to a slower frequency compared to the other:
+> >>> this is being addressed by reading nvmem (usually, an eFuse array)
+> >>> containing a number that identifies the speed binning of the chip,
+> >>> which is usually related to silicon quality.
+> >>>
+> >>> To address such situation, add basic support for reading the
+> >>> speed-bin through nvmem, as to make it possible to specify the
+> >>> supported hardware in the OPP table for GPUs.
+> >>> This commit also keeps compatibility with any platform that does
+> >>> not specify (and does not even support) speed-binning.
+> >>>
+> >>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>  
+> >>
+> >> Hello maintainers,
+> >> I've seen that this got archived in the dri-devel patchwork; because of that and
+> >> only that, I'm sending this ping to get this patch reviewed.  
+> > 
+> > Looks good to me. If you can get a DT maintainer to review the binding
+> > (Rob?), I'd be happy to queue the series to drm-misc-next.
+> >   
 > 
-> Changing the base address of lpasscc based on the first register memory.
+> The binding was acked by Krzysztof already... so, just to be sure:
 > 
-> Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+> Krzysztof, can the binding [1] get picked?
 
-What this patch is not saying is that several clocks are going to
-disappear as well. It clearly should cause some impact on users of the
-binding and driver however commit msg lacks explanation here.
-
-Best regards,
-Krzysztof
-
+Oops, sorry, I didn't realize Krzysztof is a DT maintainer.
