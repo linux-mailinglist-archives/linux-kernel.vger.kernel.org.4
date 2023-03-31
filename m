@@ -2,217 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837656D216C
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 15:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCF26D2174
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 15:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbjCaNXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 09:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
+        id S232190AbjCaN0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 09:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjCaNXQ (ORCPT
+        with ESMTP id S229792AbjCaN0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 09:23:16 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48731A453
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 06:23:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 31 Mar 2023 09:26:44 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05791D2C6;
+        Fri, 31 Mar 2023 06:26:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680269203; x=1711805203;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aj9UVU10nk+SSrkG/0LsLStugM/6Ixl3SYYPuFOAiFI=;
+  b=jsj3D8BmrpXw9cd09T6RNBDYNeZjhLrylyzyBljzVCg1PhAOB9LOFQco
+   dQS3QqWpyh+QUiAWD41Q4+sb5QEF7CLSVpLYY+XSXBJEgKb4D4V9KfTgA
+   VrBGDSVn0Ye2g1xDPG4d6kZa3l4k/t6gcgUtm9MKJNJtt12TPIS40lUEM
+   EtzNrWoFYv7yFVm2RncRWWbyOXeuwCkyGkq1acHbk4aySlTuiZosUnUyW
+   GBuJu+7J4z/Wy6EM0WAcXu+D2+BunPJv79VbwzvSahEMEFx0XGeM38MAT
+   iD3Lvptm+pcHV8ds7JSTS+uuvpSuRchQbd+TAkU5peMAC2OkL/4ECNgW1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="321839694"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="321839694"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 06:26:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="685127540"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="685127540"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga002.jf.intel.com with ESMTP; 31 Mar 2023 06:26:41 -0700
+Received: from [10.209.36.4] (kliang2-mobl1.ccr.corp.intel.com [10.209.36.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 72F281F38D;
-        Fri, 31 Mar 2023 13:23:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680268994; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ohS0kh5Hd5zKyHG8WvBBFaYGz6nCgb+MCzx2JDykYl0=;
-        b=gi/jQvL9m0BUn8sxhJBWcFqPgftfpejMgHHjeo/baWOpddSdcbRm32uVpfLEtQ1cZSDaCw
-        Hxeit0PjiUvkaWECkzclAetAVMXrJtDPaA6+Kau9WDaIQIR+q+ZRHb3GPTftkVzRRWLRgj
-        rAO1fyzeCBcXdhDK6w67xsA0F8LTm/g=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 33076133B6;
-        Fri, 31 Mar 2023 13:23:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ktT6CsLeJmS8RgAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 31 Mar 2023 13:23:14 +0000
-Message-ID: <8860c326-3ba5-bd4c-1dab-17772e8fcda0@suse.com>
-Date:   Fri, 31 Mar 2023 15:23:13 +0200
+        by linux.intel.com (Postfix) with ESMTPS id 6DEFD580D74;
+        Fri, 31 Mar 2023 06:26:40 -0700 (PDT)
+Message-ID: <9557fa1f-57f7-3114-5710-0600b1835db3@linux.intel.com>
+Date:   Fri, 31 Mar 2023 09:26:39 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3] perf/x86: use hexidecimal value for cpuid
 Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
+To:     Zhenyu Wang <zhenyuw@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20230306163425.8324-1-jgross@suse.com>
- <20230306163425.8324-10-jgross@suse.com>
- <20230329125128.GAZCQ0UJUj48VKdG//@fat_crate.local>
- <a6c02861-f01d-fcfd-82e0-8c5695f581b6@suse.com>
- <20230331125538.GBZCbYSqr8kMP4bpwS@fat_crate.local>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH v4 09/12] x86/mtrr: construct a memory map with cache
- modes
-In-Reply-To: <20230331125538.GBZCbYSqr8kMP4bpwS@fat_crate.local>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Izbf0aKKtrrEdH1AfrqRyCoX"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        CodyYao-oc <CodyYao-oc@zhaoxin.com>
+References: <20230312132633.228006-1-zhenyuw@linux.intel.com>
+ <20230322053746.4888-1-zhenyuw@linux.intel.com>
+ <e60623a4-57e1-dde6-1c76-d9c7f956d3f1@linux.intel.com>
+ <ZCYssdebU2L+f4YC@debian-scheme>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <ZCYssdebU2L+f4YC@debian-scheme>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Izbf0aKKtrrEdH1AfrqRyCoX
-Content-Type: multipart/mixed; boundary="------------8PfGovudlXTNqu0310ilmdOj";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <8860c326-3ba5-bd4c-1dab-17772e8fcda0@suse.com>
-Subject: Re: [PATCH v4 09/12] x86/mtrr: construct a memory map with cache
- modes
-References: <20230306163425.8324-1-jgross@suse.com>
- <20230306163425.8324-10-jgross@suse.com>
- <20230329125128.GAZCQ0UJUj48VKdG//@fat_crate.local>
- <a6c02861-f01d-fcfd-82e0-8c5695f581b6@suse.com>
- <20230331125538.GBZCbYSqr8kMP4bpwS@fat_crate.local>
-In-Reply-To: <20230331125538.GBZCbYSqr8kMP4bpwS@fat_crate.local>
 
---------------8PfGovudlXTNqu0310ilmdOj
-Content-Type: multipart/mixed; boundary="------------Pnfg8CI0p0Ti2PJ8pe7nhMoQ"
 
---------------Pnfg8CI0p0Ti2PJ8pe7nhMoQ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 2023-03-30 8:43 p.m., Zhenyu Wang wrote:
+> 
+> On 2023.03.24 09:33:19 -0400, Liang, Kan wrote:
+>>
+> 
+> sorry that I missed this one in my inbox...
+> 
+>> On 2023-03-22 1:37 a.m., Zhenyu Wang wrote:
+>>> It's easier to use hexidecimal value instead of decimal for reading
+>>> and following with SDM doc, also align with other cpuid calls. As new
+>>> cpuid leaf would be added in future, this tries to convert current
+>>> forms and would take it as convention for new leaf definition.
+>>>
+>>> This changes name for both cpuid type and cpuid calls.
+>>
+>> It seems the patch touches 3 CPUIDs, 0xa, 0x1c and 0x14, right?
+>> The patch also crosses several different subsystems and drivers.
+>> I think it may be better to divide the patch by CPUID. Each patch to
+>> handle one CPUID. It's easier for review.
+> 
+> ok, I can do that.
+> 
+>>
+>> Also, can you please add a macro for the CPUID leaf number?
+>> Please refer ARCH_PERFMON_EXT_LEAF (0x23).
+>>
+> 
+> As originally the purpose of this change is to use hex value in cpuid
+> call and struct name, good to see that use for 0x23.  If define every
+> macro for these, e.g ARCH_PERFMON_LEAF(0xa), PT_LEAF(0x14),
+> LBR_LEAF(0x1c), struct name needs change too?  As in context of what
+> source file you're reading, you already get idea what these cpuid
+> numbers are for what kind of leaf...
+>
 
-T24gMzEuMDMuMjMgMTQ6NTUsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gV2VkLCBN
-YXIgMjksIDIwMjMgYXQgMDM6Mzk6MzVQTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IE5vLiA6LSkNCj4gDQo+IEJlY2F1c2U/DQoNCkluIGdlbmVyYWwgdGhlIGNyaXRpY2Fs
-IGNhc2UgaXMgYWRkX21hcF9lbnRyeV9hdCgpIHJldHVybmluZyAyIChpbiB0aGUNCmNhc2Ug
-aXQgaXMgcmV0dXJuaW5nIDEsIHRoZSBpbmRleCBjYW4gYmUgc2V0IHRvIC0xLCBidXQgdGhl
-cmUgaXMgYWx3YXlzDQp0aGUgImNvbnRpbnVlIiBzdGF0ZW1lbnQgcmlnaHQgYWZ0ZXIgdGhh
-dCwgd2hpY2ggd291bGQgZXhlY3V0ZSB0aGUgImkrKyINCm9mIHRoZSAiZm9yIiBzdGF0ZW1l
-bnQpLg0KDQphZGRfbWFwX2VudHJ5X2F0KCkgY2FuIHJldHVybiAyIG9ubHksIGlmIGl0IGRl
-dGVjdHMgIm1lcmdlX3ByZXYiIGFuZA0KIm1lcmdlX25leHQiLiAibWVyZ2VfcHJldiIgY2Fu
-IGJlIHNldCBvbmx5IGlmIHRoZSBjdXJyZW50IGluZGV4IHdhcyA+IDAsDQp3aGljaCBtYWtl
-cyBpdCBpbXBvc3NpYmxlIHRvIHJldHVybiAyIGlmIHRoZSBpbmRleCB3YXMgMC4NCg0KPj4g
-VGhlIGZpbmFsIGZvcm0gb2YgdGhlIGNvZGUgaXMgdGhlIHJlc3VsdCBvZiBhbiBpdGVyYXRp
-dmUgcHJvY2Vzcy4gOi0pDQo+IA0KPiBJIGhhdmUgYSBzaW1pbGFyIGl0ZXJhdGl2ZSBwcm9j
-ZXNzOiB1bnRpbCBpdCBoYXNuJ3QgYmVlbiByZXZpZXdlZCBhbmQNCj4gZXhwbGFpbmVkIHBy
-b3Blcmx5LCB0aGlzIGlzIG5vdCBnb2luZyBhbnl3aGVyZS4NCg0KT2YgY291cnNlLg0KDQo+
-IFNvIGhvd2V2ZXIgeW91IHdhbm5hIGRvIGl0LCBmaW5lIGJ5IG1lLg0KPiANCj4+IEkndmUg
-cmV1c2VkIHRoZSB3b3JkaW5nIGZyb20gY2xlYW51cC5jIChqdXN0IGFib3ZlIGFtZF9zcGVj
-aWFsX2RlZmF1bHRfbXRycigpKS4NCj4gDQo+IFRoYXQgZ290IGFkZGVkIHdpdGggSzguIEs4
-IGlzIGFuY2llbnQgaGlzdG9yeSBzbyBub3RoaW5nIG1hZ2ljIGFib3V0DQo+IHRoYXQgYW55
-bW9yZS4gSXQgaXMgYmFzaWNhbGx5IGEgYml0IGluIHRoZSBTWVNDRkcgTVNSIHdoaWNoIHNh
-eXMgdGhhdA0KPiANCj4gCVs0RyAuLi4gVE9QX01FTTJdDQo+IA0KPiBpcyBXQi4NCg0KSG93
-IHNob3VsZCBpdCBiZSBuYW1lZD8gQU1EIFRPUF9NRU0yIE1TUj8NCg0KPj4+IFdoeSBub3Qg
-aW4gbXRycl9icF9pbml0KCk/IFRoYXQgaXMgdGhlIGZpcnN0IENQVS4NCj4+DQo+PiBZZWFo
-LCBidXQgZ2VuZXJpY19zZXRfbXRycigpIGNhbiBiZSBjYWxsZWQgYWZ0ZXIgYm9vdCwgdG9v
-Lg0KPiANCj4gVGhhdCBmdW5jdGlvbiBzZXRzIGEgc2luZ2xlIE1UUlIgcmVnaXN0ZXIgc28g
-eW91J2QgaGF2ZSB0byBtZXJnZSB0aGUNCj4gcmFuZ2VzLCBBRkFJQ1QuIE5vdCByZWJ1aWxk
-IHRoZSB3aG9sZSBtYXAuLi4NCg0KVGhlIHByb2JsZW0gaXNuJ3QgYW4gYWRkZWQgTVRSUiBy
-ZWdpc3RlciwgYnV0IGEgcG9zc2libHkgcmVwbGFjZWQgb3IgcmVtb3ZlZA0Kb25lLiBIYW5k
-bGluZyB0aGF0IGlzIG11Y2ggbW9yZSBjb21wbGljYXRlZCwgc28gSSd2ZSBjaG9zZW4gdG8g
-ZG8gaXQgdGhlIHNpbXBsZQ0Kd2F5Lg0KDQpJbiB0aGUgZW5kIEknZCBleHBlY3Qgc2V0dGlu
-ZyBvZiBNVFJScyB0byBiZSBhIHJhcmUgZXZlbnQsIHNvIHRoZXJlIHNob3VsZG4ndCBiZQ0K
-YSBwZXJmb3JtYW5jZSBpc3N1ZSB3aXRoIHRoYXQgYXBwcm9hY2guDQoNCj4gDQo+PiBVbW0s
-IG5vdCByZWFsbHkuIEkgd2FudCB0byBkbyB0aGUgY29weSBldmVuIGluIHRoZSBYZW4gUFYg
-Y2FzZS4NCj4gDQo+IEhvdyBhYm91dCBzb21lIGNvbW1lbnRzPyBPciB5b3UncmUgZXhwZWN0
-aW5nIG1lIHRvIGJlIGFibGUgdG8gcmVhZCB5b3VyDQo+IG1pbmQ/IQ0KDQpPa2F5LCBJJ2xs
-IGFkZCBzb21lIG1vcmUgY29tbWVudHMuDQoNCk9UT0gsIHdoYXQgd2FzIGhhcmQgdG8gd3Jp
-dGUgc2hvdWxkIGJlIGhhcmQgdG8gcmVhZCAoanVzdCBraWRkaW5nKS4NCg0KDQpKdWVyZ2Vu
-DQo=
---------------Pnfg8CI0p0Ti2PJ8pe7nhMoQ
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+No, only the hex value is good enough for an union name.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+What I want is a consistent style for the leaf definition of the entire
+X86 perf code.
+For a union, e.g., cpuid_$hex_eax
+For the leaf, e.g., #define __meaning_name_macro	__hex
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+I think AMD has already done it. See EXT_PERFMON_DEBUG_FEATURES and
+union cpuid_0x80000022_ebx.
+If we have the same style, the code style will be consistent.
 
---------------Pnfg8CI0p0Ti2PJ8pe7nhMoQ--
+Thanks,
+Kan
 
---------------8PfGovudlXTNqu0310ilmdOj--
-
---------------Izbf0aKKtrrEdH1AfrqRyCoX
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmQm3sEFAwAAAAAACgkQsN6d1ii/Ey9I
-hQf8D5JON87843r0t9zuf+/fotjBJIF6ASIfOj9XF7iNCK+ZhRWQr77paCPiP9t4NpKhnBAqXosX
-9JyWpxyPPqc1E0gMJixYF0JCu+yOgEqzj3UpYVXL7EcisMI+iC1x0nt8L1Ot9zEUCsfuAa5AfAy6
-DTMHg2S1SZ/8narWri3W6zFuwD6BElsy7Xuw30qDoxsAdFMP/MT2aqTl64CHip9/jaTLn/njHDn4
-zG+kjDqpgdSCQVMHoiaFh6mAnBtWb5cCzqxavoKFc17QaUsvoNckksf1TzlF+vv9wWKtT/UUzk7k
-DoNWSq4mBlyGNiAljamXGQGkp/47oQRWh9vbAijk3g==
-=b83F
------END PGP SIGNATURE-----
-
---------------Izbf0aKKtrrEdH1AfrqRyCoX--
+>>
+>>>
+>>> Cc: Peter Zijlstra <peterz@infradead.org>
+>>> Cc: Ingo Molnar <mingo@redhat.com>
+>>> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+>>> Cc: Mark Rutland <mark.rutland@arm.com>
+>>> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+>>> Cc: Jiri Olsa <jolsa@kernel.org>
+>>> Cc: Namhyung Kim <namhyung@kernel.org>
+>>> Cc: Kan Liang <kan.liang@linux.intel.com>
+>>> Cc: CodyYao-oc <CodyYao-oc@zhaoxin.com>
+>>> Signed-off-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+>>> ---
+>>> v3:
+>>> - add more explanation in commit message for purpose of this
+>>> - use lowercase number in call to align with current code
+>>>
+>>> v2:
+>>> - rename in cpuid data type as well
+>>>
+>>>  arch/x86/events/intel/core.c      | 10 +++++-----
+>>>  arch/x86/events/intel/lbr.c       |  8 ++++----
+>>>  arch/x86/events/intel/pt.c        |  2 +-
+>>>  arch/x86/events/zhaoxin/core.c    |  8 ++++----
+>>>  arch/x86/include/asm/perf_event.h | 12 ++++++------
+>>>  arch/x86/kvm/cpuid.c              |  4 ++--
+>>>  arch/x86/kvm/vmx/pmu_intel.c      |  4 ++--
+>>>  7 files changed, 24 insertions(+), 24 deletions(-)
+>>>
+>>> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+>>> index a3fb996a86a1..5487a39d4975 100644
+>>> --- a/arch/x86/events/intel/core.c
+>>> +++ b/arch/x86/events/intel/core.c
+>>> @@ -5170,7 +5170,7 @@ static __init void intel_arch_events_quirk(void)
+>>>  
+>>>  static __init void intel_nehalem_quirk(void)
+>>>  {
+>>> -	union cpuid10_ebx ebx;
+>>> +	union cpuid_0xa_ebx ebx;
+>>>  
+>>>  	ebx.full = x86_pmu.events_maskl;
+>>>  	if (ebx.split.no_branch_misses_retired) {
+>>> @@ -5878,9 +5878,9 @@ __init int intel_pmu_init(void)
+>>>  	struct attribute **td_attr    = &empty_attrs;
+>>>  	struct attribute **mem_attr   = &empty_attrs;
+>>>  	struct attribute **tsx_attr   = &empty_attrs;
+>>> -	union cpuid10_edx edx;
+>>> -	union cpuid10_eax eax;
+>>> -	union cpuid10_ebx ebx;
+>>> +	union cpuid_0xa_edx edx;
+>>> +	union cpuid_0xa_eax eax;
+>>> +	union cpuid_0xa_ebx ebx;
+>>>  	unsigned int fixed_mask;
+>>>  	bool pmem = false;
+>>>  	int version, i;
+>>> @@ -5903,7 +5903,7 @@ __init int intel_pmu_init(void)
+>>>  	 * Check whether the Architectural PerfMon supports
+>>>  	 * Branch Misses Retired hw_event or not.
+>>>  	 */
+>>> -	cpuid(10, &eax.full, &ebx.full, &fixed_mask, &edx.full);
+>>> +	cpuid(0xa, &eax.full, &ebx.full, &fixed_mask, &edx.full);
+>>>  	if (eax.split.mask_length < ARCH_PERFMON_EVENTS_COUNT)
+>>>  		return -ENODEV;
+>>>  
+>>> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+>>> index c3b0d15a9841..616a6904af03 100644
+>>> --- a/arch/x86/events/intel/lbr.c
+>>> +++ b/arch/x86/events/intel/lbr.c
+>>> @@ -1497,16 +1497,16 @@ static bool is_arch_lbr_xsave_available(void)
+>>>  void __init intel_pmu_arch_lbr_init(void)
+>>>  {
+>>>  	struct pmu *pmu = x86_get_pmu(smp_processor_id());
+>>> -	union cpuid28_eax eax;
+>>> -	union cpuid28_ebx ebx;
+>>> -	union cpuid28_ecx ecx;
+>>> +	union cpuid_0x1c_eax eax;
+>>> +	union cpuid_0x1c_ebx ebx;
+>>> +	union cpuid_0x1c_ecx ecx;
+>>>  	unsigned int unused_edx;
+>>>  	bool arch_lbr_xsave;
+>>>  	size_t size;
+>>>  	u64 lbr_nr;
+>>>  
+>>>  	/* Arch LBR Capabilities */
+>>> -	cpuid(28, &eax.full, &ebx.full, &ecx.full, &unused_edx);
+>>> +	cpuid(0x1c, &eax.full, &ebx.full, &ecx.full, &unused_edx);
+>>>  
+>>>  	lbr_nr = fls(eax.split.lbr_depth_mask) * 8;
+>>>  	if (!lbr_nr)
+>>> diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
+>>> index 42a55794004a..da3c5d748365 100644
+>>> --- a/arch/x86/events/intel/pt.c
+>>> +++ b/arch/x86/events/intel/pt.c
+>>> @@ -235,7 +235,7 @@ static int __init pt_pmu_hw_init(void)
+>>>  	}
+>>>  
+>>>  	for (i = 0; i < PT_CPUID_LEAVES; i++) {
+>>> -		cpuid_count(20, i,
+>>> +		cpuid_count(0x14, i,
+>>>  			    &pt_pmu.caps[CPUID_EAX + i*PT_CPUID_REGS_NUM],
+>>>  			    &pt_pmu.caps[CPUID_EBX + i*PT_CPUID_REGS_NUM],
+>>>  			    &pt_pmu.caps[CPUID_ECX + i*PT_CPUID_REGS_NUM],
+>>> diff --git a/arch/x86/events/zhaoxin/core.c b/arch/x86/events/zhaoxin/core.c
+>>> index 3e9acdaeed1e..1d071974f4db 100644
+>>> --- a/arch/x86/events/zhaoxin/core.c
+>>> +++ b/arch/x86/events/zhaoxin/core.c
+>>> @@ -504,9 +504,9 @@ static __init void zhaoxin_arch_events_quirk(void)
+>>>  
+>>>  __init int zhaoxin_pmu_init(void)
+>>>  {
+>>> -	union cpuid10_edx edx;
+>>> -	union cpuid10_eax eax;
+>>> -	union cpuid10_ebx ebx;
+>>> +	union cpuid_0xa_edx edx;
+>>> +	union cpuid_0xa_eax eax;
+>>> +	union cpuid_0xa_ebx ebx;
+>>>  	struct event_constraint *c;
+>>>  	unsigned int unused;
+>>>  	int version;
+>>> @@ -517,7 +517,7 @@ __init int zhaoxin_pmu_init(void)
+>>>  	 * Check whether the Architectural PerfMon supports
+>>>  	 * hw_event or not.
+>>>  	 */
+>>> -	cpuid(10, &eax.full, &ebx.full, &unused, &edx.full);
+>>> +	cpuid(0xa, &eax.full, &ebx.full, &unused, &edx.full);
+>>>  
+>>>  	if (eax.split.mask_length < ARCH_PERFMON_EVENTS_COUNT - 1)
+>>>  		return -ENODEV;
+>>> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+>>> index 8fc15ed5e60b..0d2d735c8167 100644
+>>> --- a/arch/x86/include/asm/perf_event.h
+>>> +++ b/arch/x86/include/asm/perf_event.h
+>>> @@ -125,7 +125,7 @@
+>>>   * Intel "Architectural Performance Monitoring" CPUID
+>>>   * detection/enumeration details:
+>>>   */
+>>> -union cpuid10_eax {
+>>> +union cpuid_0xa_eax {
+>>>  	struct {
+>>>  		unsigned int version_id:8;
+>>>  		unsigned int num_counters:8;
+>>> @@ -135,7 +135,7 @@ union cpuid10_eax {
+>>>  	unsigned int full;
+>>>  };
+>>>  
+>>> -union cpuid10_ebx {
+>>> +union cpuid_0xa_ebx {
+>>>  	struct {
+>>>  		unsigned int no_unhalted_core_cycles:1;
+>>>  		unsigned int no_instructions_retired:1;
+>>> @@ -148,7 +148,7 @@ union cpuid10_ebx {
+>>>  	unsigned int full;
+>>>  };
+>>>  
+>>> -union cpuid10_edx {
+>>> +union cpuid_0xa_edx {
+>>>  	struct {
+>>>  		unsigned int num_counters_fixed:5;
+>>>  		unsigned int bit_width_fixed:8;
+>>> @@ -170,7 +170,7 @@ union cpuid10_edx {
+>>>  /*
+>>>   * Intel Architectural LBR CPUID detection/enumeration details:
+>>>   */
+>>> -union cpuid28_eax {
+>>> +union cpuid_0x1c_eax {
+>>>  	struct {
+>>>  		/* Supported LBR depth values */
+>>>  		unsigned int	lbr_depth_mask:8;
+>>> @@ -183,7 +183,7 @@ union cpuid28_eax {
+>>>  	unsigned int		full;
+>>>  };
+>>>  
+>>> -union cpuid28_ebx {
+>>> +union cpuid_0x1c_ebx {
+>>>  	struct {
+>>>  		/* CPL Filtering Supported */
+>>>  		unsigned int    lbr_cpl:1;
+>>> @@ -195,7 +195,7 @@ union cpuid28_ebx {
+>>>  	unsigned int            full;
+>>>  };
+>>>  
+>>> -union cpuid28_ecx {
+>>> +union cpuid_0x1c_ecx {
+>>>  	struct {
+>>>  		/* Mispredict Bit Supported */
+>>>  		unsigned int    lbr_mispred:1;
+>>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+>>> index 599aebec2d52..57f43dc87538 100644
+>>> --- a/arch/x86/kvm/cpuid.c
+>>> +++ b/arch/x86/kvm/cpuid.c
+>>> @@ -967,8 +967,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>>>  		}
+>>>  		break;
+>>>  	case 0xa: { /* Architectural Performance Monitoring */
+>>> -		union cpuid10_eax eax;
+>>> -		union cpuid10_edx edx;
+>>> +		union cpuid_0xa_eax eax;
+>>> +		union cpuid_0xa_edx edx;
+>>>  
+>>>  		if (!static_cpu_has(X86_FEATURE_ARCH_PERFMON)) {
+>>>  			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+>>> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+>>> index e8a3be0b9df9..f4b165667ca9 100644
+>>> --- a/arch/x86/kvm/vmx/pmu_intel.c
+>>> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+>>> @@ -512,8 +512,8 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+>>>  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>>>  	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
+>>>  	struct kvm_cpuid_entry2 *entry;
+>>> -	union cpuid10_eax eax;
+>>> -	union cpuid10_edx edx;
+>>> +	union cpuid_0xa_eax eax;
+>>> +	union cpuid_0xa_edx edx;
+>>>  	u64 perf_capabilities;
+>>>  	u64 counter_mask;
+>>>  	int i;
