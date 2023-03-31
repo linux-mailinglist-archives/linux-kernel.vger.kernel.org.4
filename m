@@ -2,91 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2E46D17E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC906D17E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjCaG6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 02:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S230262AbjCaG72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 02:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjCaG6O (ORCPT
+        with ESMTP id S229448AbjCaG70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 02:58:14 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC40A5C8;
-        Thu, 30 Mar 2023 23:58:13 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id E691D5C0069;
-        Fri, 31 Mar 2023 02:58:09 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Fri, 31 Mar 2023 02:58:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
-        :content-transfer-encoding:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1680245889; x=1680332289; bh=8IpmWURAGLXzpk2/68wVTrU3Oyo9uKazty3
-        0tpmDzO8=; b=akT/HpRjKbLjMjGic77CXRJ5Yi+oFj9PN4me1PCdCMOMc4hrbKz
-        pon9d19Ui6iwjn2Bt0C9/dldJDdu2BvcS+zblwdCuGATk+6/oubPGOUwQzbShp18
-        PdHo6tUCf8iNI0xRTF+TpKCtJaCOM5rmlo6QQHlP4BTEUTCnmGIr8K0qy2RC+nLY
-        7xzTCRGRzYZ8oGXiCnc9sI+UW2w7XsqlVLDiPRPfj3UmCnVzwu7igAwAJikxZNCc
-        ZaQocA4mY3C+/oNghQu8nC4aUteiOlxp8SqEViGzXhFvHlnRCx6zg70T8oSaM9bk
-        QDLxcgBe7stGsVFVZ9Ic8j6uHg9ivM4/PEg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680245889; x=1680332289; bh=8IpmWURAGLXzpk2/68wVTrU3Oyo9uKazty3
-        0tpmDzO8=; b=uQWSX4t0M2WL3SHmjSkDwV9Q5JVgB5CcJnwnd7EG0kenju0YRXV
-        Rb+jnQ5W47pKUgunSPOaca61D27Aq6r1LpeRUGeSv2wUM3breBX5tnIF1pPjwVyk
-        G4bKzcptdQL2M0xF/9eX3dpSLJukIlm8e5IJhgeSnfKsSgKeoEwZmRxd2QvKbKD6
-        G6hwjTIUPDoCwmmyQQg/yXA78zr5UhCZGm9QGLOenySs56hHxy5yi34O+28yuTSu
-        XZ/qxdQbpEqvY5kv62nqUROCQgMz02OM3xdGMZq682EXiXVXDZQxe/NgVj1Rrn3n
-        FzJI55UvOONClqei6vQUnEJHGwF+PLw1gnw==
-X-ME-Sender: <xms:gYQmZMXUUG8_5v5RJFJaosFUjuCCJmAe8yBoGS0Dkfr-4GOeW17xfA>
-    <xme:gYQmZAmyJUg0Z0bKMjPxh8YxwhpptWyLrxQ6DKrmsD-Laxu_JsSuarH9do9-db0jC
-    uUIGVZT6ZBsDdYZ4g>
-X-ME-Received: <xmr:gYQmZAY8rXt8SruSDyXnjWYhoGCS8uR-xcIHoabkvsXfH13yMf0E7ysngIfW8HoaI23RC4J2nLxY7dt_3bwb_2b3zA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeitddguddufecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomheptehl
-    ihgtvgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnh
-    epheduuddvteekvdektdduledugfffhfdugeejgeeuvdevtdetveejheehiefffeegnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
-    esrhihhhhlrdhioh
-X-ME-Proxy: <xmx:gYQmZLVeGxufjlbym8N4cWhhbRKTaPuI8lmNDOjRp6t3o-zk5ZAMEg>
-    <xmx:gYQmZGm13aKEv4Xx2F6TarPsU_0hwnj4Nwt1FS_No4uZnP1W7GT7RA>
-    <xmx:gYQmZAcwFVViOP5hBpQYnt9PzSLhy3IEVVp7IaotYN6jYA3fHHQ8MQ>
-    <xmx:gYQmZA4y22s5LxhIz7KjE6haUnSiFhRAR8Yg2X2Qpg7uyV44nosVXg>
-Feedback-ID: i56684263:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 31 Mar 2023 02:58:07 -0400 (EDT)
-Message-ID: <e93426bb-cc4a-c52b-5a9b-3416f9012b45@ryhl.io>
-Date:   Fri, 31 Mar 2023 08:58:17 +0200
+        Fri, 31 Mar 2023 02:59:26 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E296EA5C8;
+        Thu, 30 Mar 2023 23:59:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680245965; x=1711781965;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=B14wSSeuy/BQ80OZrpBUeZ0EHeHcF77aIQAwlArz8sg=;
+  b=Q+N6kksvXhC3yMVIJ3i+4Z02vXGEux/8CWZri2F5zCJzk+yCK+kP7o8B
+   fvGIY1UEuG3j3VatB+hds8gZ/cSDg0h1gmCmgib6YQ/YeuRJoFGsMrqR1
+   Ym44Ibj0JYeCPTdMREL8t1KtUo69jQrjeUWqehdm7gvDtv+SIvfkzg/GQ
+   WMUmHgwZaDF3MG0D2AeCRzlsZsRASy3W2+b1G2egK2n0XVqIzLyqevpE6
+   KJzWG37Sso44HnO5TwQVPzMjaXzVgBYIHIQ98gt34zRVKfHEQDPe9pC/H
+   25lw2E/5aG7nm9Jw8ghNfJ1EZzqW4XaqxYlyLMF/Oe+3OLIflr4CEScre
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="321031999"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="321031999"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 23:59:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="754308888"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="754308888"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.173.97]) ([10.249.173.97])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 23:59:21 -0700
+Message-ID: <fc642000-7db8-9944-e57e-db54f0d1336d@intel.com>
+Date:   Fri, 31 Mar 2023 14:59:18 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 10/13] rust: prelude: add `pin-init` API items to
- prelude
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.1
+Subject: Re: [PATCH v13 016/113] KVM: TDX: x86: Add ioctl to get TDX
+ systemwide parameters
 Content-Language: en-US
-To:     y86-dev@protonmail.com
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>
-References: <20230329223239.138757-11-y86-dev@protonmail.com>
-From:   Alice Ryhl <alice@ryhl.io>
-In-Reply-To: <20230329223239.138757-11-y86-dev@protonmail.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>, isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+References: <cover.1678643051.git.isaku.yamahata@intel.com>
+ <cb0ae8b4941aaa45e1e5856dde644f9b2f53d9a6.1678643052.git.isaku.yamahata@intel.com>
+ <20230325104306.00004585@gmail.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20230325104306.00004585@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,11 +72,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 00:33, y86-dev@protonmail.com wrote:
-> From: Benno Lossin <y86-dev@protonmail.com>
+On 3/25/2023 4:43 PM, Zhi Wang wrote:
+> On Sun, 12 Mar 2023 10:55:40 -0700
+> isaku.yamahata@intel.com  wrote:
 > 
-> Add `pin-init` API macros and traits to the prelude.
+> Does this have to be a new generic ioctl with a dedicated new x86_ops? SNP
+> does not use it at all and all the system-scoped ioctl of SNP going through
+> the CCP driver. So getting system-scope information of TDX/SNP will end up
+> differently.
 > 
-> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+> Any thought, Sean? Moving getting SNP system-wide information to
+> KVM dev ioctl seems not ideal and TDX does not have a dedicated driver like
+> CCP. Maybe make this ioctl TDX-specific? KVM_TDX_DEV_OP?
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+What's the real different of it? For me, it's just renaming 
+KVM_MEMORY_ENCRYPT_OP to KVM_TDX_DEV_OP and maybe add some error message 
+if the IOCTL is issued for AMD plaform.
+
