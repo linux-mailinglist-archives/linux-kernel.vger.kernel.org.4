@@ -2,86 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EF86D2188
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 15:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0562C6D218A
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 15:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232783AbjCaNiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 09:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
+        id S232800AbjCaNjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 09:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjCaNiO (ORCPT
+        with ESMTP id S232750AbjCaNjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 09:38:14 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4CCB459;
-        Fri, 31 Mar 2023 06:38:13 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1piExE-0000vt-HN; Fri, 31 Mar 2023 15:38:08 +0200
-Message-ID: <fc75aceb-1973-b29f-f026-de9345afcad1@leemhuis.info>
-Date:   Fri, 31 Mar 2023 15:38:07 +0200
+        Fri, 31 Mar 2023 09:39:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81456B459
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 06:39:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 136CBB82F78
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:39:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D640C433EF;
+        Fri, 31 Mar 2023 13:38:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680269938;
+        bh=9Ont13GCZOGcHqmKRrh5cFvPZ59+SXkgaQM1wrfLLz8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TC5vimUVWe9dr2dpx3CZ5QghYIyL4v/LknOzZWt6UFn+fX0JXAlDLipCoBeNbC+kc
+         im3UN8alv8woUfpsP3h9p0+SJ8yHH1O9bcjTqqie3qxpd5DJRAr7K2EG/AlGewi8Vw
+         M9BZqmQUp0U6HCnVvaZMIJqdX1iO/l12ueihtxBXLrRKxVR0Fmyu8CAasOPMKIAjOI
+         GxPWVUciJI2rQ7qqyPAnLMBnpcRd3b4+7jPF4JBmljy2XllEO+P79yRK+aFQVJM2i9
+         PXVKrDAtVYUzXa1arXXZ2lw0G5VZK/secucFxDZdvvgJvdgRpjXtsOGUe4voD0rRxE
+         7hcHsf3wgDy0w==
+Date:   Fri, 31 Mar 2023 19:08:54 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc:     laurent.pinchart@ideasonboard.com, kishon@kernel.org,
+        michal.simek@xilinx.com, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, git@amd.com
+Subject: Re: [PATCH v2] phy: xilinx: phy-zynqmp: mention SGMII as supported
+ protocol
+Message-ID: <ZCbibnS856BjpBwS@matsya>
+References: <1679940407-13131-1-git-send-email-radhey.shyam.pandey@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [REGRESSION] wrong coord from Thinkpad TrackPoint since 6.2
- kernel
-Content-Language: en-US, de-DE
-To:     Hans de Goede <hdegoede@redhat.com>, Takashi Iwai <tiwai@suse.de>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     regressions@lists.linux.dev, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <87h6u4otuc.wl-tiwai@suse.de>
- <3dec29bf-b772-d82d-fff9-6c8bcca5f464@redhat.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <3dec29bf-b772-d82d-fff9-6c8bcca5f464@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680269893;d62d2798;
-X-HE-SMSGID: 1piExE-0000vt-HN
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1679940407-13131-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.03.23 11:22, Hans de Goede wrote:
-> On 3/29/23 10:16, Takashi Iwai wrote:
->> we've received a bug report about Thinkpad TrackPoint (ALPS DualPoint
->> Stick) on 6.2 kernel:
->>   https://bugzilla.opensuse.org/show_bug.cgi?id=1209805
->
-> [...]
-> 
-> I believe this is caused by the kernel now using -funsigned-char
-> everywhere and this should be fixed by this commit:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git/commit/?h=for-linus&id=754ff5060daf5a1cf4474eff9b4edeb6c17ef7ab
-> 
-> And there is a similar issue in the focaltech touchpad driver:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git/commit/?h=for-linus&id=8980f190947ba29f23110408e712444884b74251
-> 
-> Dmitry, since this is hitting 6.2 users, perhaps you can send
-> a pull-req for your current for-linus branch to get the fix
-> on its way to stable ?
+On 27-03-23, 23:36, Radhey Shyam Pandey wrote:
+> SGMII is validated on kria KR260 robotics starter kit. So modify the
+> comment description to include it in supported controllers list.
 
-Hmm, no reply from Dmitry here or any other mail from him on lore since
-a week. No big deal, but nevertheless a bit unfortunate, as I totally
-agree: it would be really good to get this regressions fixed rather
-sooner than later.
+Applied, thanks
 
-Is there any in-official de-facto co-maintainer for input that could
-help out? CCing Jonathan, who according to get_maintainer.pl regularly
-contributes to the input subsystem.
-
-Guess if nothing happens soon I'll ask Linus to merge those two changes
-directly, maybe he'll take them.
-
-Ciao, Thorsten
+-- 
+~Vinod
