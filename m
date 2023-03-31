@@ -2,294 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB9F6D1EB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 965DA6D1EB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbjCaLH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 07:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S232049AbjCaLIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 07:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbjCaLHL (ORCPT
+        with ESMTP id S231915AbjCaLIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:07:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2B524415;
-        Fri, 31 Mar 2023 04:05:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B0B6B82E72;
-        Fri, 31 Mar 2023 11:05:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58009C433A0;
-        Fri, 31 Mar 2023 11:05:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680260739;
-        bh=A1cZxqPUMjy57fMXRIVXYs1O7SfJcHuzfuomx9UXdI8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gvScvkxx1+F0vlWLkQuNfuHkPuHlbE7IX2PWmHJZkZn798n9D+FDjOzAhz50tq3Lm
-         q0gzpHcGS4vMToNqkBHGSmnIu85UbOyRSC+MtWTwjWzMFT3ZveudkvrZ9WQfleSefO
-         9n7ZL2yqC3gwQ+ka62VoiNJrsq+Wcv4rrhL0z587gUsenEC+FiirUO4CVFL1SoDGJW
-         HNOkVj2brbQVuOFSMTlCK0FW8h/DS05gutn+AXyH6s/C7WL+sOMiJuVVwvH7Qa5X6X
-         akUn6q/+kMbE6HfT+Kyg1xMN0fd28NHvycqoNLYFd207b9Nq4N2adHJL+pU3uAf8yR
-         J5f2SPDNQ2Mmw==
-Message-ID: <4d2f628e-6adc-5190-61b3-cc9d61f34a84@kernel.org>
-Date:   Fri, 31 Mar 2023 14:05:33 +0300
+        Fri, 31 Mar 2023 07:08:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF2FA21A95;
+        Fri, 31 Mar 2023 04:06:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C886C2F4;
+        Fri, 31 Mar 2023 04:07:17 -0700 (PDT)
+Received: from [10.57.54.53] (unknown [10.57.54.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A9D423F6C4;
+        Fri, 31 Mar 2023 04:06:30 -0700 (PDT)
+Message-ID: <d995fec6-1d3f-df37-724e-67d929e9e0db@arm.com>
+Date:   Fri, 31 Mar 2023 12:06:28 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH 2/2] usb: dwc3: Support
- 'snps,gadget-keep-connect-sys-sleep' feature
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "vigneshr@ti.com" <vigneshr@ti.com>, "srk@ti.com" <srk@ti.com>,
-        "r-gunasekaran@ti.com" <r-gunasekaran@ti.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230320093447.32105-1-rogerq@kernel.org>
- <20230320093447.32105-3-rogerq@kernel.org>
- <20230320185206.a4o4bmhml7rlg6f7@synopsys.com>
- <48814d21-24d9-3141-68c8-316d071de1a8@kernel.org>
- <20230321184346.dxmqwq5rcsc2otrj@synopsys.com>
- <20230321190458.6uqlbtyfh3hc6ilg@synopsys.com>
- <7db7eb59-68fc-b7b2-5a29-00b698f68cbb@kernel.org>
- <20230322173150.nscqyzwcrecxjuaa@synopsys.com>
- <20230323021737.pv2nrb2md54a5pdg@synopsys.com>
- <624243b4-3fb5-6e60-e324-8df6b853205f@kernel.org>
- <20230323205139.4on6vx555ohdec7y@synopsys.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230323205139.4on6vx555ohdec7y@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH V2 3/5] coresight: etm4x: Drop pid argument from
+ etm4_probe()
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org
+Cc:     scclevenger@os.amperecomputing.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230327050537.30861-1-anshuman.khandual@arm.com>
+ <20230327050537.30861-4-anshuman.khandual@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20230327050537.30861-4-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 23/03/2023 22:51, Thinh Nguyen wrote:
-> On Thu, Mar 23, 2023, Roger Quadros wrote:
->>
->>
->> On 23/03/2023 04:17, Thinh Nguyen wrote:
->>> On Wed, Mar 22, 2023, Thinh Nguyen wrote:
->>>> On Wed, Mar 22, 2023, Roger Quadros wrote:
->>>>> On 21/03/2023 21:05, Thinh Nguyen wrote:
->>>>>> On Tue, Mar 21, 2023, Thinh Nguyen wrote:
->>>>>>> On Tue, Mar 21, 2023, Roger Quadros wrote:
->>>>>>>> Hi Thinh,
->>>>>>>>
->>>>>>>> On 20/03/2023 20:52, Thinh Nguyen wrote:
->>>>>>>>> Hi,
->>>>>>>>>
->>>>>>>>> On Mon, Mar 20, 2023, Roger Quadros wrote:
->>>>>>>>>> Implement 'snps,gadget-keep-connect-sys-sleep' property.
->>>>>>>>>>
->>>>>>>>>> Do not stop the gadget controller and disconnect if this
->>>>>>>>>> property is present and we are connected to a USB Host.
->>>>>>>>>>
->>>>>>>>>> Prevent System sleep if Gadget is not in USB suspend.
->>>>>>>>>>
->>>>>>>>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->>>>>>>>>> ---
->>>>>>>>>>  drivers/usb/dwc3/core.c   | 25 +++++++++++++++++++------
->>>>>>>>>>  drivers/usb/dwc3/core.h   |  2 ++
->>>>>>>>>>  drivers/usb/dwc3/gadget.c | 25 +++++++++++++++++++++++--
->>>>>>>>>>  3 files changed, 44 insertions(+), 8 deletions(-)
->>>>>>>>>>
->>>>>>>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>>>>>>>>> index 476b63618511..a47bbaa27302 100644
->>>>>>>>>> --- a/drivers/usb/dwc3/core.c
->>>>>>>>>> +++ b/drivers/usb/dwc3/core.c
->>>>>>>>>> @@ -1575,6 +1575,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>>>>>>>>>  	dwc->dis_split_quirk = device_property_read_bool(dev,
->>>>>>>>>>  				"snps,dis-split-quirk");
->>>>>>>>>>  
->>>>>>>>>> +	dwc->gadget_keep_connect_sys_sleep = device_property_read_bool(dev,
->>>>>>>>>> +				"snps,gadget-keep-connect-sys-sleep");
->>>>>>>>>> +
->>>>>>>>>>  	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
->>>>>>>>>>  	dwc->tx_de_emphasis = tx_de_emphasis;
->>>>>>>>>>  
->>>>>>>>>> @@ -2027,14 +2030,20 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>>>>>>>>>  {
->>>>>>>>>>  	unsigned long	flags;
->>>>>>>>>>  	u32 reg;
->>>>>>>>>> +	int ret;
->>>>>>>>>>  
->>>>>>>>>>  	switch (dwc->current_dr_role) {
->>>>>>>>>>  	case DWC3_GCTL_PRTCAP_DEVICE:
->>>>>>>>>>  		if (pm_runtime_suspended(dwc->dev))
->>>>>>>>>>  			break;
->>>>>>>>>> -		dwc3_gadget_suspend(dwc);
->>>>>>>>>> +		ret = dwc3_gadget_suspend(dwc);
->>>>>>>>>> +		if (ret) {
->>>>>>>>>> +			dev_err(dwc->dev, "gadget not suspended: %d\n", ret);
->>>>>>>>>> +			return ret;
->>>>>>>>>> +		}
->>>>>>>>>>  		synchronize_irq(dwc->irq_gadget);
->>>>>>>>>> -		dwc3_core_exit(dwc);
->>>>>>>>>> +		if(!dwc->gadget_keep_connect_sys_sleep)
->>>>>>>>>> +			dwc3_core_exit(dwc);
->>>>>>>>>>  		break;
->>>>>>>>>>  	case DWC3_GCTL_PRTCAP_HOST:
->>>>>>>>>>  		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
->>>>>>>>>> @@ -2088,11 +2097,15 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->>>>>>>>>>  
->>>>>>>>>>  	switch (dwc->current_dr_role) {
->>>>>>>>>>  	case DWC3_GCTL_PRTCAP_DEVICE:
->>>>>>>>>> -		ret = dwc3_core_init_for_resume(dwc);
->>>>>>>>>> -		if (ret)
->>>>>>>>>> -			return ret;
->>>>>>>>>> +		if (!dwc->gadget_keep_connect_sys_sleep)
->>>>>>>>>> +		{
->>>>>>>>>> +			ret = dwc3_core_init_for_resume(dwc);
->>>>>>>>>> +			if (ret)
->>>>>>>>>> +				return ret;
->>>>>>>>>> +
->>>>>>>>>> +			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
->>>>>>>>>> +		}
->>>>>>>>>>  
->>>>>>>>>> -		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
->>>>>>>>>>  		dwc3_gadget_resume(dwc);
->>>>>>>>>>  		break;
->>>>>>>>>>  	case DWC3_GCTL_PRTCAP_HOST:
->>>>>>>>>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->>>>>>>>>> index 582ebd9cf9c2..f84bac815bed 100644
->>>>>>>>>> --- a/drivers/usb/dwc3/core.h
->>>>>>>>>> +++ b/drivers/usb/dwc3/core.h
->>>>>>>>>> @@ -1328,6 +1328,8 @@ struct dwc3 {
->>>>>>>>>>  	unsigned		dis_split_quirk:1;
->>>>>>>>>>  	unsigned		async_callbacks:1;
->>>>>>>>>>  
->>>>>>>>>> +	unsigned		gadget_keep_connect_sys_sleep:1;
->>>>>>>>>> +
->>>>>>>>>>  	u16			imod_interval;
->>>>>>>>>>  
->>>>>>>>>>  	int			max_cfg_eps;
->>>>>>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>>>>>>>> index 3c63fa97a680..8062e44f63f6 100644
->>>>>>>>>> --- a/drivers/usb/dwc3/gadget.c
->>>>>>>>>> +++ b/drivers/usb/dwc3/gadget.c
->>>>>>>>>> @@ -4572,12 +4572,23 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
->>>>>>>>>>  int dwc3_gadget_suspend(struct dwc3 *dwc)
->>>>>>>>>>  {
->>>>>>>>>>  	unsigned long flags;
->>>>>>>>>> +	int link_state;
->>>>>>>>>>  
->>>>>>>>>>  	if (!dwc->gadget_driver)
->>>>>>>>>>  		return 0;
->>>>>>>>>>  
->>>>>>>>>> -	dwc3_gadget_run_stop(dwc, false, false);
->>>>>>>>>> +	if (dwc->gadget_keep_connect_sys_sleep && dwc->connected) {
->>>>>>>>>> +		link_state = dwc3_gadget_get_link_state(dwc);
->>>>>>>>>> +		/* Prevent PM Sleep if not in U3/L2 */
->>>>>>>>>> +		if (link_state != DWC3_LINK_STATE_U3)
->>>>>>>>>> +			return -EBUSY;
->>>>>>>>>> +
->>>>>>>>>> +		/* don't stop/disconnect */
->>>>>>>>>> +		dwc3_gadget_disable_irq(dwc);
->>>>>>>>>
->>>>>>>>> We shouldn't disable event interrupt here. What will happen if the
->>>>>>>>
->>>>>>>> Due to some reason, if I don't disable the event interrupts here then
->>>>>>>> after USB resume the USB controller is malfunctioning.
->>>>>>>> It no longer responds to any requests from Host.
->>>>>>>
->>>>>>> You should look into this. These events are important as they can tell
->>>>>>> whether the host initiates resume.
->>>>>>>
->>>>>>>>
->>>>>>>>> device is disconnected and reconnect to the host while the device is
->>>>>>>>> still in system suspend? The host would not be able to communicate with
->>>>>>>>> the device then.
->>>>>>>>
->>>>>>>> In the TI platform, The system is woken up on any VBUS/linestate change
->>>>>>>> and in dwc3_gadget_resume we enable the events again and check for pending
->>>>>>>> events. Is it pointless to check for pending events there?
->>>>>>>>
->>>>>>>
->>>>>>> It seems fragile for the implementation to be dependent on platform
->>>>>>> specific feature right?
->>>>>>>
->>>>>>> Also, what will happen in a typical case when the host puts the device
->>>>>>> in suspend and initiates resume while the device is in system suspend
->>>>>>> (and stay in suspend over a period of time)? There is no VBUS change.
->>>>>>> There will be problem if host detects no response from device in time.
->>>>>>>
->>>>>>> Don't we need these events to wakeup the device?
->>>>>
->>>>> That's why the TI implementation has line-state change detection to
->>>>> detect a USB resume. We are doing a out-of-band wake-up. The wake up
->>>>> events are configured in the wrapper driver (dwc3-am62.c).
->>>>>
->>>>> Do you know of any dwc3 implementation that uses in-band mechanism
->>>>> to wake up the System. i.e. it relies on events enabled in DEVTEN register?
->>>>>
->>>>
->>>> We rely on PME. The PME is generated from the PMU of the usb controller
->>>> when it detects a resume. If your platform supports hibernation and if
->>>> the resume signal is connected to the lower layer power manager of your
->>>> device, then you can wakeup the system one level at a time. For example,
->>>> if your device is a pci device, that wakeup signal would tie to the pci
->>>> power manager, waking up the pci layer before waking up the core of the
->>>> usb controller. That's how the host wakes up the host system (e.g. from
->>>> remote wakeup). For this to work, we expect something similar on the
->>>> device side.
->>>>
->>>>>>>
->>>>>>
->>>>>> We may not be able to suspend everything in system suspend for this
->>>>>> case. I'm thinking of treating these events as if they are PME to wakeup
->>>>>> the device, but they are not the same. It may not be simple to handle
->>>>>> this. The lower layers may need to stay awake for the dwc3 to handle
->>>>>> these events. Hm... it gets a bit complicated.
->>>>>
->>>>> As we are going into suspend, we are not really in a position to handle any
->>>>> (DEVTEN) events till we have fully resumed.
->>>>> So yes, we need to rely on platform specific implementation to wake
->>>>> the System on any USB event.
->>>>>
->>>>
->>>> You may be able to detect vbus change through the connector controller.
->>>> However, the usb controller is the one that detects host resume. What
->>>> platform specific implementation do you have outside of the usb
->>>> controller do you have to get around that?
->>>>
->>>> I'm not sure if your platform supports hibernation or if the PME signal
->>>> on your platform can wakeup the system, but currently dwc3 driver
->>>> doesn't handle hibernation (device side). If there's no hibernation,
->>>> there's no PME.
->>
->> No, in this TI SoC, hibernation feature is not supported in the dwc3 core.
->>
->>>>
->>>
->>> Actually, I think the dwc3 core is still on during system suspend for
->>> you right? Then I think we can use the wakeup event to wakeup system
->>> suspend on host resume? You can ignore about PME in this case. You may
->>> need to look into what needs stay awake to allow for handling of the
->>> dwc3 event.
->>
->> But in SoC deep-sleep state, all clocks to the dwc3 core are stopped.
->> So I'm not sure if dwc3 events will work.
->>
+On 27/03/2023 06:05, Anshuman Khandual wrote:
+> Coresight device pid can be retrieved from its iomem base address, which is
+> stored in 'struct etm4x_drvdata'. This drops pid argument from etm4_probe()
+> and 'struct etm4_init_arg'. Instead etm4_check_arch_features() derives the
+> coresight device pid with a new helper coresight_get_pid(), right before it
+> is consumed in etm4_hisi_match_pid().
 > 
-> Right, you need to keep those clocks running to detect host resume.
-> There's still some power saving through the dwc3 controller's handling
-> in suspend. You may have some limited power saving from other suspended
-> devices on your setup. However, I don't think we can expect the platform
-> to go into deep-sleep and also handle host resume.
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Mike Leach <mike.leach@linaro.org>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Cc: coresight@lists.linaro.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>   .../coresight/coresight-etm4x-core.c          | 21 +++++++------------
+>   include/linux/coresight.h                     | 12 +++++++++++
+>   2 files changed, 20 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index 5d77571a8df9..3521838ab4fb 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -66,7 +66,6 @@ static u64 etm4_get_access_type(struct etmv4_config *config);
+>   static enum cpuhp_state hp_online;
+>   
+>   struct etm4_init_arg {
+> -	unsigned int		pid;
+>   	struct device		*dev;
+>   	struct csdev_access	*csa;
+>   };
+> @@ -370,8 +369,10 @@ static void etm4_disable_arch_specific(struct etmv4_drvdata *drvdata)
+>   }
+>   
+>   static void etm4_check_arch_features(struct etmv4_drvdata *drvdata,
+> -				      unsigned int id)
+> +				     struct csdev_access *csa)
+>   {
+> +	unsigned int id = coresight_get_pid(csa);
+> +
 
-Why not? if the PHY can detect the host resume and wake up the SoC it will
-work right?
+This throws up the following error on an ETE.
 
-cheers,
--roger
+ete: trying to read unsupported register @fe0
+
+So, I guess this must be performed only for iomem based
+devices. System instruction based device must be identified
+by MIDR_EL1/REVIDR_EL1 if needed for specific erratum.
+This is not required now. So, we could bail out early
+if we are system instruction based device.
+
+
+>   	if (etm4_hisi_match_pid(id))
+>   		set_bit(ETM4_IMPDEF_HISI_CORE_COMMIT, drvdata->arch_features);
+>   }
+> @@ -385,7 +386,7 @@ static void etm4_disable_arch_specific(struct etmv4_drvdata *drvdata)
+>   }
+>   
+>   static void etm4_check_arch_features(struct etmv4_drvdata *drvdata,
+> -				     unsigned int id)
+> +				     struct csdev_access *csa)
+>   {
+>   }
+>   #endif /* CONFIG_ETM4X_IMPDEF_FEATURE */
+> @@ -1165,7 +1166,7 @@ static void etm4_init_arch_data(void *info)
+>   	etm4_os_unlock_csa(drvdata, csa);
+>   	etm4_cs_unlock(drvdata, csa);
+>   
+> -	etm4_check_arch_features(drvdata, init_arg->pid);
+> +	etm4_check_arch_features(drvdata, csa);
+>   
+>   	/* find all capabilities of the tracing unit */
+>   	etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
+> @@ -2048,7 +2049,7 @@ static int etm4_add_coresight_dev(struct etm4_init_arg *init_arg)
+>   	return 0;
+>   }
+>   
+> -static int etm4_probe(struct device *dev, u32 etm_pid)
+> +static int etm4_probe(struct device *dev)
+>   {
+>   	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev);
+>   	struct csdev_access access = { 0 };
+> @@ -2077,7 +2078,6 @@ static int etm4_probe(struct device *dev, u32 etm_pid)
+>   
+>   	init_arg.dev = dev;
+>   	init_arg.csa = &access;
+> -	init_arg.pid = etm_pid;
+>   
+>   	/*
+>   	 * Serialize against CPUHP callbacks to avoid race condition
+> @@ -2124,7 +2124,7 @@ static int etm4_probe_amba(struct amba_device *adev, const struct amba_id *id)
+>   
+>   	drvdata->base = base;
+>   	dev_set_drvdata(dev, drvdata);
+> -	ret = etm4_probe(dev, id->id);
+> +	ret = etm4_probe(dev);
+>   	if (!ret)
+>   		pm_runtime_put(&adev->dev);
+>   
+> @@ -2146,12 +2146,7 @@ static int etm4_probe_platform_dev(struct platform_device *pdev)
+>   	pm_runtime_set_active(&pdev->dev);
+>   	pm_runtime_enable(&pdev->dev);
+>   
+> -	/*
+> -	 * System register based devices could match the
+> -	 * HW by reading appropriate registers on the HW
+> -	 * and thus we could skip the PID.
+> -	 */
+> -	ret = etm4_probe(&pdev->dev, 0);
+> +	ret = etm4_probe(&pdev->dev);
+>   
+>   	pm_runtime_put(&pdev->dev);
+>   	return ret;
+> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+> index f19a47b9bb5a..f85b041ea475 100644
+> --- a/include/linux/coresight.h
+> +++ b/include/linux/coresight.h
+> @@ -370,6 +370,18 @@ static inline u32 csdev_access_relaxed_read32(struct csdev_access *csa,
+>   	return csa->read(offset, true, false);
+>   }
+>   
+> +#define CORESIGHT_PIDRn(i)	(0xFE0 + ((i) * 4))
+> +
+> +static inline u32 coresight_get_pid(struct csdev_access *csa)
+> +{
+> +	u32 i, pid = 0;
+> +
+> +	for (i = 0; i < 4; i++)
+> +		pid |= csdev_access_relaxed_read32(csa, CORESIGHT_PIDRn(i)) << (i * 8);
+
+Given the above, we could make this iomem specific.
+
+Suzuki
+
+
+> +
+> +	return pid;
+> +}
+> +
+>   static inline u64 csdev_access_relaxed_read_pair(struct csdev_access *csa,
+>   						 u32 lo_offset, u32 hi_offset)
+>   {
+
