@@ -2,92 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE5B6D203D
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBFC6D2048
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbjCaM1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
+        id S232422AbjCaM2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbjCaM1L (ORCPT
+        with ESMTP id S230137AbjCaM2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:27:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD241EFD6
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680265580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DH2TEGtbu6b5LqxnMSb70uBmRZl7fmkRGu9vSpf9xqk=;
-        b=i8/ZevfIEEKjY49zjeVNPUASff5cam28/XNkCdvGDevIjNfKZxpivbkUHA0pK20JhV2ohW
-        XbdfNR8GrBLxVnXn3lKaql2d8jX8GMxaeIbvtNu8Z2d1HmRHlpceXqVjYfUtDQUVkoppAS
-        wmOLUyLPZQdWOGbOxQgG3kz/hJRBjQs=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-300-7_lP8Y_ZM9WJuMwB326EEA-1; Fri, 31 Mar 2023 08:26:19 -0400
-X-MC-Unique: 7_lP8Y_ZM9WJuMwB326EEA-1
-Received: by mail-qv1-f71.google.com with SMTP id a10-20020a0ccdca000000b005d70160fbb0so9588739qvn.21
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:26:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680265579;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DH2TEGtbu6b5LqxnMSb70uBmRZl7fmkRGu9vSpf9xqk=;
-        b=huhaQ7MZ0ZC1dn0mH287SzetMzyb0rWA+/5Goee5UZA32hwKjtLIN0c1aQv4P4UWiH
-         g051rwFsO12/Ds/+8DWgTryxskSsueD00tF4Ne0Zr/m2NxIR63yShgK0oBzSF/GGWjZY
-         dfTSw970k9wt/ZhILqu97/odkanWkabHPRRPgKV4h/k/wbeShDdHTPUGc7StKMLeKK+A
-         eferQA3l2vPTbxkxs8of/48HhlWtxeWGOpzKH5oIw3zl3+L21IWQ2Z4+f+IHHBuvmOwc
-         O4m9aC9n1JyvS2jvG5BXi9pGXH6drkhVS28Q1Pc/2ao6iCNJlyHgKhcupn07DoNjq/Gw
-         LjxQ==
-X-Gm-Message-State: AAQBX9dGzWBUFUumMKtK+MC0/GtTWQhqVhdTewLuZakUMwh77XazUeJj
-        I5FBjmJcsLkNIZ0adK2XQrvHoKLt5o+2kk7fuuPdbs4kdaUT22L3EXlIX3L/aY1ZRor0xr3zYMS
-        fRd+5EBCNwHdAvIKtQlunLMrh
-X-Received: by 2002:ad4:5dc9:0:b0:5ac:fb9a:677f with SMTP id m9-20020ad45dc9000000b005acfb9a677fmr34608102qvh.34.1680265578981;
-        Fri, 31 Mar 2023 05:26:18 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z6rYxqMC+gfIXFXxm8RLwpDPGgPB876v8cq7C6XuwWCma4+tnHWKvrv1GKg+lUyow88OEGQA==
-X-Received: by 2002:ad4:5dc9:0:b0:5ac:fb9a:677f with SMTP id m9-20020ad45dc9000000b005acfb9a677fmr34608064qvh.34.1680265578627;
-        Fri, 31 Mar 2023 05:26:18 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id s11-20020a05621412cb00b005dd8b9345efsm536061qvv.135.2023.03.31.05.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 05:26:18 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 08:28:17 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     sarthakkukreti@google.com, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
-Subject: Re: [PATCH v2 2/7] dm: Add support for block provisioning
-Message-ID: <ZCbR4euMpUauJ0iI@bfoster>
-References: <20221229081252.452240-1-sarthakkukreti@chromium.org>
- <20221229081252.452240-3-sarthakkukreti@chromium.org>
- <Y7biAQyLKJDjsAlz@bfoster>
- <CAG9=OMNLAL8M2AqzSWzecXJzR7jfC_3Ckc_L24MzNBgz_+u-wQ@mail.gmail.com>
+        Fri, 31 Mar 2023 08:28:37 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2040.outbound.protection.outlook.com [40.107.22.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841581EFFF;
+        Fri, 31 Mar 2023 05:28:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S+ojmDpyl1jQNJdF3JSHzzJXO3YkpDndCwj4sTcj8XUXpVoDj5XZhqAuwBCZ4zomuzVgxmvPmgptM6j+4mQLaZUNzJqZGSPxWRTrpadCbr/rgchJj90shVlekugBP5XaEz9/6gw6wAih5B2jyGPjNc/EqIa18yGtl0Y8xObaQmyHb/Yooxeostb5qSYziDkjs8dNdVymjshGXLLrE7DLdhWLz02yYfUo/WVN6WU4qUn2I1Q3ZBakAmcczQA4vBAFB1HpOM2l2YPr/56aoqz1ChFPT1CfPSWp8WBpCXBhbvvZh2dFol6SZjdnOKdTC5g+EXNm4iD48G58TN7h1H3Tkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hBdfNw9JePE/MlyJmPN1s7AREZnzKi7yeZyymiwBXpo=;
+ b=nO3ViVnG1MSwID3lI/W6L+SMRVld7ycawmH4QpXg5W5hfB6vQZntI+LnrYsFH8uEy7Xn99yoaBmwXju8NoP1sP7BQmUoKup3K7iVXjkDP+60ZqmpXryQtr5dWKW8EdkRYWkhlDKWQDRctQ+LkykE3Wb+QcYzH57lphpfpwXZ7ixDbsAizR+HwLbf2s0REIfFxX0D6QBcY/FvUOsTbKstndOBRa7oIkYN+1UUDLo47pFZbhpnZ9ZE2EoyIvsryGWkfZ74EQBnJu6RNqhla5LXxDnNwqYTuPldStTwz73dxQZeODq4rXu5qH8bR9HDHI1Ie6DpWa6Kmr8TKWy4DZ5Gmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hBdfNw9JePE/MlyJmPN1s7AREZnzKi7yeZyymiwBXpo=;
+ b=WD843wUXCxymJvfIiy6H2uaCwAF4L8lZtg9b5p4FBs01EzLTpahQEKzN2n7m/c6PhFdBJXc+8N2B1CZDS+3Qo3CIwyaKTol+366+cjazJfvNL2qYCN4276EX7lzygWyBl1Gc3ivCu1XCR3NZJxzLyaZn6nyi0pCgMVFIETG/PFM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
+ by AS2PR08MB8903.eurprd08.prod.outlook.com (2603:10a6:20b:5f7::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Fri, 31 Mar
+ 2023 12:28:20 +0000
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::6f4d:f868:c89:4db1]) by DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::6f4d:f868:c89:4db1%5]) with mapi id 15.20.6222.033; Fri, 31 Mar 2023
+ 12:28:20 +0000
+Message-ID: <a8f0aaa1-e412-18c1-452f-753e0a6b6d51@wolfvision.net>
+Date:   Fri, 31 Mar 2023 14:28:17 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCHv1 3/7] drm/panel: sitronix-st7789v: add SPI ID table
+Content-Language: en-US
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+References: <20230317232355.1554980-1-sre@kernel.org>
+ <20230317232355.1554980-4-sre@kernel.org>
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+In-Reply-To: <20230317232355.1554980-4-sre@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZR2P278CA0041.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:47::10) To DU0PR08MB9155.eurprd08.prod.outlook.com
+ (2603:10a6:10:416::5)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG9=OMNLAL8M2AqzSWzecXJzR7jfC_3Ckc_L24MzNBgz_+u-wQ@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|AS2PR08MB8903:EE_
+X-MS-Office365-Filtering-Correlation-Id: 333b3f07-8d4c-4354-2fc7-08db31e3697a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4UOL76oHztQlgqUReUnA77ezp7Jm0wyeLFF/lf82/Zk2inAQq4b5eoio01a8QPTnSv9FflXl5UBTJW5RJYY0lybAqY79CgAsHTEOYGccUjVB6qQgkwhZB7u1l3WmnNCTgvEwcnEg8MCnZ0XGQ0pT4qEivpFEoZdQF3VNLeXHJj9zvF4lrYaPA33nCo+BcJ7JfOPoRgjjQk66+4VQckgE7p/VooPJzQ1A6OcWG8XJ3hFoL++T+i6ladKaLgesXIkk1nWhguRWGH9ZI74+AdcRzOA6nmdfvBVsRvHpae4qw739CHjLqo1HFlXXG/PDfZk5x2Td2a3KP3Y/UKolBXg8ok6K/1PBTKhOIotD3YRx5mgaE9ziK3BTeCSJ4Bjl+YokqrOyLZ0tda6LPDtRMl5KZ1UslopEGPOqj07uAYJSQF7pgOiV51VA1TTW4A/Ee9I6XE6WZduDna1SlQJ3Qd4jlXnj6gYcvSq3xmnJM+F+T4a5hka38w0j5+45zPBavTytce62ardcpfudS772VKP81V+n0xpGaQI6EG3XJDnTB6nbHFSRnAz6s5W8D+qlNi+1N5wlM1Sy3PHDfZHsdjtAYGP4icCGM1GNuTkvxiD0FSeXHoju/xNWZVKeKM5CHiLlWl4LG/1GproMKGh3HgodKw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39850400004)(136003)(366004)(396003)(376002)(451199021)(2906002)(2616005)(31686004)(44832011)(478600001)(41300700001)(54906003)(6666004)(7416002)(66476007)(66556008)(5660300002)(8676002)(36756003)(6486002)(186003)(31696002)(8936002)(316002)(66946007)(6916009)(4326008)(6506007)(6512007)(53546011)(86362001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SkcxY2IxQUE5MkVLQXpjVHQyYnNNUWNlaExGUkhnSGdtVmlyNlExdTVncU5O?=
+ =?utf-8?B?RUUvM09wR0RPNjBJWC9TQ3BzRlE3WnQ2WmUyM3RGcHVjNzJFT0krYU1YUjln?=
+ =?utf-8?B?S1UwcTFlZVNQVEZwZjlLM1E4aUtwWUV3YWhKY0VpbUJxd2s2ejM1UHJGNTNP?=
+ =?utf-8?B?WVVMZDdYNGgrSzFXL3pzYmFVaHdxaUhtUFdQMEJaNm9RT08rK2xha3g4VEVr?=
+ =?utf-8?B?ejFmNFNLeWhIamtURjc2RC9JQkJPZGlnVFRTZFFIMzZESkpSUENuL28yOS9j?=
+ =?utf-8?B?ZGFZSkV4UVR2YTFQd3BoSWJ6cEEwMGk5cy9BV2R3ZVF2UHlzVWtQVkEzSURQ?=
+ =?utf-8?B?Um54aXVSZTd3SFBWaWRhTTc3d3NzS1RwcEJ6cnRBdHFuYnBYYXdYK0pDZVBw?=
+ =?utf-8?B?Y3pVeHVGOXhzRmJOQ1kwd3BmbkFaNUlid3lST0pnRCs4UkN5VVdUSnBqM1BF?=
+ =?utf-8?B?SWJxd1ZwQnZ1a21NNjJ4UGtXZEZtSmYxUHdQRFVMRThuUGw0bVRUaWVFc0Rs?=
+ =?utf-8?B?N3lHS0RrRVV1Z2RJcnJXV3d6cEs1V1QyVkVobjF6UldRMEtXRGJ2UGVwVXpu?=
+ =?utf-8?B?dGVZaFhlNVVIanNLNXFBZHIwZEgwdUhaWURWcWg5WG9VdjFxc0VJZjhTSnZV?=
+ =?utf-8?B?bmZPNVI1Q2t3c3Y5SkpSckN1ZnhTWUltTURzd1dSbTJrZ0ZET2src1pVb1Mz?=
+ =?utf-8?B?bHdLaksvR3ZNQ0phOUd4a0VWczdhb1dHVFNENDJvcXEwdlBLUVg0cWtNOVJU?=
+ =?utf-8?B?eHZwQ21RS0JiclRUdnZuRzB0N2JFMmRtVXVrVG1MaU9LbkRnNWtRaGl0NlF3?=
+ =?utf-8?B?YWJUUHlVcG9jZXpuamdkYllRemZwYUlsckQ3c0FUdnVoS1daZXVPNVZGTzlo?=
+ =?utf-8?B?NERCT3VDQjJPVnRWdWV3NUlLamZ1WEtKSXN6enFWUmNuc0VuLzFKd2Ricloy?=
+ =?utf-8?B?aEVoRGVxbVVnc3VWdE1ZaHFpdVhpTGo3N2xPOWZLVm9KNURVdmNvMXA4ZDYy?=
+ =?utf-8?B?R0F0bDRuTXcxRFNnNnlXaDY1NFlVMHBtTHI5MG1YaUJwbDQrVW1mVkpDT2dp?=
+ =?utf-8?B?MlM5anJoazlFSjd1YjBXYVpIcXJSSDM4Tm9EZUE2c0o5bGhYMWMvdFdnMG1s?=
+ =?utf-8?B?RUZLQ3hjbDRYZXJLUDA3bUJ2TzRycXc2emxiU0Y4WTc3RmpTQ0RqSzU3RHdw?=
+ =?utf-8?B?N2drTFZOZWR5Rm5zUnh5T080K21QZzRoMEE5Tjd4Z3JMU0MzRTBJT2U3NGxu?=
+ =?utf-8?B?OWxrUGx0bndQMHMxRUE2elVtT2FlbGs2SWFFYldmSVFXRzd4bWRNUks2MDh0?=
+ =?utf-8?B?WE1hVSttRlliYmlhRXlkd2NPbVRQUnFJNzNndk90dGVMNUtQQ2ovMUZGQjdr?=
+ =?utf-8?B?Tm1FNVdlKzB4L3k1NmcxbmNyOGRVdlZzQXVjOElKYUt6TUJ0MUhTUzg4eE1Q?=
+ =?utf-8?B?M1JEOGtsUk5qWkJYYW9od3pXZ0pBVWpBa2xseTQzVWFBR3FrMythR3lHVnpw?=
+ =?utf-8?B?aFV3R3BVYUkvK0dhc24xalRkMmYrdmtCVFdpYmE4S1lpalpBaCtrMFJlNG05?=
+ =?utf-8?B?cWtqMFNoaHBhR1JRUEJDZmtDWVBQUmNWYzI3Ny9xZmMvZUdXYTc1SmRlaXZK?=
+ =?utf-8?B?SnRlVFM1aTZrTEJrZjY2dFZ2VlM3RmpQSm1TSHFFelgrY0dDVytKT09mazc1?=
+ =?utf-8?B?Q2ZYUzROL3BrdHkzZkp1cm5VNjFGbmErSUlSb3NHY1dvcStndmVIcnZLZklK?=
+ =?utf-8?B?Mk1UYUhSTnlJM0xhMDM0NXdsQ1Jzc0VFaTRzK01uMVpTdzhENUxiVjYyL0NR?=
+ =?utf-8?B?N1lOSUhvM2xyTnhDQmZmWE0vd0Erd1FVdVJIU1E3T2xrMWVKK1JzMmtLS3hx?=
+ =?utf-8?B?RTk2NDl1TmlnMGVTR3cyOUEyaTQrRmtuR0o1U3BJeVB3UG1ncENiMXU5cWhv?=
+ =?utf-8?B?c0xwL09Faml6OHk1RGRFRm0vVnFIWnZsOUJVbDZOVHRmdGx0M2c4K1R1YzBR?=
+ =?utf-8?B?OFZaLzI3SnZzOGpGeXVkU0FVakduWEQ2ditEYnd3amQxVzhiTkdlUE5TMHdh?=
+ =?utf-8?B?SitBRnRnd01PRGZjZElkYzNoTlpjOWdjdC90Wm0xQTk0MWJJN1gyNFM4cTZr?=
+ =?utf-8?B?a2N5Z3pwL2JhWURINGczZjBpZVllaVllZlZva2psQ2J2VHdzdG9nZWxUSXZ1?=
+ =?utf-8?B?R1NhdkFJclJtdVR1N1MyOVU3WW5tVjhTaFFKZzd6dE4xL282Vjh2Nk5FaG1t?=
+ =?utf-8?B?V0ZiQU9Sclk2bFRrTXd1cEthQlZ3PT0=?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 333b3f07-8d4c-4354-2fc7-08db31e3697a
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 12:28:20.1355
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sSwc73q9mRiHmS+VUrvlrVrs0Kz5ea5xo22FmbyCtjNuc7Py+25EDj62JT6TxVenMwmZD7zarEVjqD3YXAtL+zWpOs0MaRG9lMIZNoJjHj0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB8903
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,249 +135,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 05:30:22PM -0700, Sarthak Kukreti wrote:
-> On Thu, Jan 5, 2023 at 6:42 AM Brian Foster <bfoster@redhat.com> wrote:
-> >
-> > On Thu, Dec 29, 2022 at 12:12:47AM -0800, Sarthak Kukreti wrote:
-> > > Add support to dm devices for REQ_OP_PROVISION. The default mode
-> > > is to pass through the request and dm-thin will utilize it to provision
-> > > blocks.
-> > >
-> > > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > > ---
-> > >  drivers/md/dm-crypt.c         |  4 +-
-> > >  drivers/md/dm-linear.c        |  1 +
-> > >  drivers/md/dm-snap.c          |  7 +++
-> > >  drivers/md/dm-table.c         | 25 ++++++++++
-> > >  drivers/md/dm-thin.c          | 90 ++++++++++++++++++++++++++++++++++-
-> > >  drivers/md/dm.c               |  4 ++
-> > >  include/linux/device-mapper.h | 11 +++++
-> > >  7 files changed, 139 insertions(+), 3 deletions(-)
-> > >
-> > ...
-> > > diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
-> > > index 64cfcf46881d..ab3f1abfabaf 100644
-> > > --- a/drivers/md/dm-thin.c
-> > > +++ b/drivers/md/dm-thin.c
-> > ...
-> > > @@ -1980,6 +1992,70 @@ static void process_cell(struct thin_c *tc, struct dm_bio_prison_cell *cell)
-> > >       }
-> > >  }
-> > >
-> > > +static void process_provision_cell(struct thin_c *tc, struct dm_bio_prison_cell *cell)
-> > > +{
-> > > +     int r;
-> > > +     struct pool *pool = tc->pool;
-> > > +     struct bio *bio = cell->holder;
-> > > +     dm_block_t begin, end;
-> > > +     struct dm_thin_lookup_result lookup_result;
-> > > +
-> > > +     if (tc->requeue_mode) {
-> > > +             cell_requeue(pool, cell);
-> > > +             return;
-> > > +     }
-> > > +
-> > > +     get_bio_block_range(tc, bio, &begin, &end);
-> > > +
-> > > +     while (begin != end) {
-> > > +             r = ensure_next_mapping(pool);
-> > > +             if (r)
-> > > +                     /* we did our best */
-> > > +                     return;
-> > > +
-> > > +             r = dm_thin_find_block(tc->td, begin, 1, &lookup_result);
-> >
-> > Hi Sarthak,
-> >
-> > I think we discussed this before.. but remind me if/how we wanted to
-> > handle the case if the thin blocks are shared..? Would a provision op
-> > carry enough information to distinguish an FALLOC_FL_UNSHARE_RANGE
-> > request from upper layers to conditionally provision in that case?
-> >
-> I think that should depend on how the filesystem implements unsharing:
-> assuming that we use provision on first allocation, unsharing on xfs
-> should result in xfs calling REQ_OP_PROVISION on the newly allocated
-> blocks first. But for ext4, we'd fail UNSHARE_RANGE unless provision
-> (instead of noprovision, provision_on_alloc), in which case, we'd send
-> REQ_OP_PROVISION.
+Hi Sebastian,
+
+On 3/18/23 00:23, Sebastian Reichel wrote:
+> SPI device drivers should also have a SPI ID table.
 > 
-
-I think my question was unclear... It doesn't necessarily have much to
-do with the filesystem or associated provision policy. Since dm-thin can
-share blocks internally via snapshots, do you intend to support
-FL_UNSHARE_RANGE via blkdev_fallocate() and REQ_OP_PROVISION?
-
-If so, then presumably this wants an UNSHARE request flag to pair with
-REQ_OP_PROVISION. Also, the dm-thin code above needs to check whether an
-existing block it finds is shared and basically do whatever COW breaking
-is necessary during the PROVISION request.
-
-If not, why? And what is expected behavior if blkdev_fallocate() is
-called with FL_UNSHARE_RANGE?
-
-Brian 
-
-> Best
-> Sarthak
+> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+> ---
+>  drivers/gpu/drm/panel/panel-sitronix-st7789v.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> 
-> Sarthak
-> 
-> > Brian
-> >
-> > > +             switch (r) {
-> > > +             case 0:
-> > > +                     begin++;
-> > > +                     break;
-> > > +             case -ENODATA:
-> > > +                     bio_inc_remaining(bio);
-> > > +                     provision_block(tc, bio, begin, cell);
-> > > +                     begin++;
-> > > +                     break;
-> > > +             default:
-> > > +                     DMERR_LIMIT(
-> > > +                             "%s: dm_thin_find_block() failed: error = %d",
-> > > +                             __func__, r);
-> > > +                     cell_defer_no_holder(tc, cell);
-> > > +                     bio_io_error(bio);
-> > > +                     begin++;
-> > > +                     break;
-> > > +             }
-> > > +     }
-> > > +     bio_endio(bio);
-> > > +     cell_defer_no_holder(tc, cell);
-> > > +}
-> > > +
-> > > +static void process_provision_bio(struct thin_c *tc, struct bio *bio)
-> > > +{
-> > > +     dm_block_t begin, end;
-> > > +     struct dm_cell_key virt_key;
-> > > +     struct dm_bio_prison_cell *virt_cell;
-> > > +
-> > > +     get_bio_block_range(tc, bio, &begin, &end);
-> > > +     if (begin == end) {
-> > > +             bio_endio(bio);
-> > > +             return;
-> > > +     }
-> > > +
-> > > +     build_key(tc->td, VIRTUAL, begin, end, &virt_key);
-> > > +     if (bio_detain(tc->pool, &virt_key, bio, &virt_cell))
-> > > +             return;
-> > > +
-> > > +     process_provision_cell(tc, virt_cell);
-> > > +}
-> > > +
-> > >  static void process_bio(struct thin_c *tc, struct bio *bio)
-> > >  {
-> > >       struct pool *pool = tc->pool;
-> > > @@ -2200,6 +2276,8 @@ static void process_thin_deferred_bios(struct thin_c *tc)
-> > >
-> > >               if (bio_op(bio) == REQ_OP_DISCARD)
-> > >                       pool->process_discard(tc, bio);
-> > > +             else if (bio_op(bio) == REQ_OP_PROVISION)
-> > > +                     process_provision_bio(tc, bio);
-> > >               else
-> > >                       pool->process_bio(tc, bio);
-> > >
-> > > @@ -2716,7 +2794,8 @@ static int thin_bio_map(struct dm_target *ti, struct bio *bio)
-> > >               return DM_MAPIO_SUBMITTED;
-> > >       }
-> > >
-> > > -     if (op_is_flush(bio->bi_opf) || bio_op(bio) == REQ_OP_DISCARD) {
-> > > +     if (op_is_flush(bio->bi_opf) || bio_op(bio) == REQ_OP_DISCARD ||
-> > > +         bio_op(bio) == REQ_OP_PROVISION) {
-> > >               thin_defer_bio_with_throttle(tc, bio);
-> > >               return DM_MAPIO_SUBMITTED;
-> > >       }
-> > > @@ -3355,6 +3434,8 @@ static int pool_ctr(struct dm_target *ti, unsigned argc, char **argv)
-> > >       pt->low_water_blocks = low_water_blocks;
-> > >       pt->adjusted_pf = pt->requested_pf = pf;
-> > >       ti->num_flush_bios = 1;
-> > > +     ti->num_provision_bios = 1;
-> > > +     ti->provision_supported = true;
-> > >
-> > >       /*
-> > >        * Only need to enable discards if the pool should pass
-> > > @@ -4053,6 +4134,7 @@ static void pool_io_hints(struct dm_target *ti, struct queue_limits *limits)
-> > >               blk_limits_io_opt(limits, pool->sectors_per_block << SECTOR_SHIFT);
-> > >       }
-> > >
-> > > +
-> > >       /*
-> > >        * pt->adjusted_pf is a staging area for the actual features to use.
-> > >        * They get transferred to the live pool in bind_control_target()
-> > > @@ -4243,6 +4325,9 @@ static int thin_ctr(struct dm_target *ti, unsigned argc, char **argv)
-> > >               ti->num_discard_bios = 1;
-> > >       }
-> > >
-> > > +     ti->num_provision_bios = 1;
-> > > +     ti->provision_supported = true;
-> > > +
-> > >       mutex_unlock(&dm_thin_pool_table.mutex);
-> > >
-> > >       spin_lock_irq(&tc->pool->lock);
-> > > @@ -4457,6 +4542,7 @@ static void thin_io_hints(struct dm_target *ti, struct queue_limits *limits)
-> > >
-> > >       limits->discard_granularity = pool->sectors_per_block << SECTOR_SHIFT;
-> > >       limits->max_discard_sectors = 2048 * 1024 * 16; /* 16G */
-> > > +     limits->max_provision_sectors = 2048 * 1024 * 16; /* 16G */
-> > >  }
-> > >
-> > >  static struct target_type thin_target = {
-> > > diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-> > > index e1ea3a7bd9d9..4d19bae9da4a 100644
-> > > --- a/drivers/md/dm.c
-> > > +++ b/drivers/md/dm.c
-> > > @@ -1587,6 +1587,7 @@ static bool is_abnormal_io(struct bio *bio)
-> > >               case REQ_OP_DISCARD:
-> > >               case REQ_OP_SECURE_ERASE:
-> > >               case REQ_OP_WRITE_ZEROES:
-> > > +             case REQ_OP_PROVISION:
-> > >                       return true;
-> > >               default:
-> > >                       break;
-> > > @@ -1611,6 +1612,9 @@ static blk_status_t __process_abnormal_io(struct clone_info *ci,
-> > >       case REQ_OP_WRITE_ZEROES:
-> > >               num_bios = ti->num_write_zeroes_bios;
-> > >               break;
-> > > +     case REQ_OP_PROVISION:
-> > > +             num_bios = ti->num_provision_bios;
-> > > +             break;
-> > >       default:
-> > >               break;
-> > >       }
-> > > diff --git a/include/linux/device-mapper.h b/include/linux/device-mapper.h
-> > > index 04c6acf7faaa..b4d97d5d75b8 100644
-> > > --- a/include/linux/device-mapper.h
-> > > +++ b/include/linux/device-mapper.h
-> > > @@ -333,6 +333,12 @@ struct dm_target {
-> > >        */
-> > >       unsigned num_write_zeroes_bios;
-> > >
-> > > +     /*
-> > > +      * The number of PROVISION bios that will be submitted to the target.
-> > > +      * The bio number can be accessed with dm_bio_get_target_bio_nr.
-> > > +      */
-> > > +     unsigned num_provision_bios;
-> > > +
-> > >       /*
-> > >        * The minimum number of extra bytes allocated in each io for the
-> > >        * target to use.
-> > > @@ -357,6 +363,11 @@ struct dm_target {
-> > >        */
-> > >       bool discards_supported:1;
-> > >
-> > > +     /* Set if this target needs to receive provision requests regardless of
-> > > +      * whether or not its underlying devices have support.
-> > > +      */
-> > > +     bool provision_supported:1;
-> > > +
-> > >       /*
-> > >        * Set if we need to limit the number of in-flight bios when swapping.
-> > >        */
-> > > --
-> > > 2.37.3
-> > >
-> >
-> 
+> diff --git a/drivers/gpu/drm/panel/panel-sitronix-st7789v.c b/drivers/gpu/drm/panel/panel-sitronix-st7789v.c
+> index bbc4569cbcdc..e4d8dea1db36 100644
+> --- a/drivers/gpu/drm/panel/panel-sitronix-st7789v.c
+> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7789v.c
+> @@ -394,6 +394,12 @@ static void st7789v_remove(struct spi_device *spi)
+>  	drm_panel_remove(&ctx->panel);
+>  }
+>  
+> +static const struct spi_device_id st7789v_spi_id[] = {
+> +	{ "st7789v" },
 
+Minor suggestion: The format
+
+static const struct spi_device_id st7789v_spi_id[] = {
+	{
+		.name = "st7789v",
+	},
+	{ }
+};
+
+is more verbose, but can be extended easily.
+
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(spi, st7789v_spi_id);
+> +
+>  static const struct of_device_id st7789v_of_match[] = {
+>  	{ .compatible = "sitronix,st7789v" },
+>  	{ }
+
+The same holds for this structure here (you may want to consider this
+when adding the .data field in patch 6/7.
+
+Best regards,
+Michael
+
+> @@ -403,6 +409,7 @@ MODULE_DEVICE_TABLE(of, st7789v_of_match);
+>  static struct spi_driver st7789v_driver = {
+>  	.probe = st7789v_probe,
+>  	.remove = st7789v_remove,
+> +	.id_table = st7789v_spi_id,
+>  	.driver = {
+>  		.name = "st7789v",
+>  		.of_match_table = st7789v_of_match,
