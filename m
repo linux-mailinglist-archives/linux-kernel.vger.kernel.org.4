@@ -2,161 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53026D1579
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 04:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9572D6D155E
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 03:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjCaCKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 22:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
+        id S229787AbjCaB5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 21:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjCaCI2 (ORCPT
+        with ESMTP id S229640AbjCaB47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 22:08:28 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4A0191FC;
-        Thu, 30 Mar 2023 19:06:50 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-17786581fe1so21771975fac.10;
-        Thu, 30 Mar 2023 19:06:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680228410;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pvM334uaDN62u5CXBwDPRhi1Ml5Rc/k9LOkZNPsfO9U=;
-        b=OUha1buX9Iya3CjbsVobPGHSOMWmpDrZzKS4TD3RmS+O87YOx/sthAzdlI6Mpq6c2x
-         uSD9IFLRH4VFtCWCAxURoqL0IG4NSpM4EueoLgGiZTipQjByWnk4Qo/h02rFOlYOzGsM
-         HSviKdKTOdMu8KOcJV4AD4hZJS4OPmpsBKvppGrEIYPVUu0b3QX5IoLc4OzGLkHSwBx5
-         rT2xr3XB3hifVhNdNG0LwszasFVR9vR7eO/1p+cHFUJwYkK7XNnRsDcsn/WFhbO959yU
-         O5C8Uf+LWjM4gkF1CM4NBLcbFgJPAWMudClmTTablSrajbt1Bc3O7TLUL7Z9qyEmrDTy
-         fyJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680228410;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pvM334uaDN62u5CXBwDPRhi1Ml5Rc/k9LOkZNPsfO9U=;
-        b=ePyoJ+/rt0DdLust3fJWH77JtSzlyrxWCZekCtxBReL7hVv3NQLqMNKESc7m8laNIS
-         RQhVHZ9i2t2jegzkAqZV/RDV4uXFG8igWoWUlMmm3E2klFPzl5H2kVSyKSZK9i9irLCU
-         wW0B28hvR7WhBROiyJnYuW7JPv6hFrDF6IO8Vpbur06bo2jLv4ZokqUomhb4q3276am4
-         fdOv+TgRGkqvAUyuQqL0rRnkMs4SfO45447MA5VELOvZeZaWFCws4z5c8OlCom4Gb/2K
-         qR/ySoVpLb3xCa5A05zlp9smXIAnHkHfuP072eL30iPkxU7ORaqHzn7RRXwUX+ZWNO0h
-         2plg==
-X-Gm-Message-State: AO0yUKWL65QAfPmSuCLEdTp08rA5y5/1MOumC3qWIVh3gaynWItQBh07
-        fR775FKbMO6KLZ4otXLtSjY=
-X-Google-Smtp-Source: AK7set9SVdoBv4Z6z/5U2LbxssB3wFAqZk8t0GCibw/+1rXEmQsRBHijgZAq1yj9AKxTzVChxWYNVA==
-X-Received: by 2002:a05:6870:3396:b0:177:c4c1:db8a with SMTP id w22-20020a056870339600b00177c4c1db8amr15470422oae.0.1680228409807;
-        Thu, 30 Mar 2023 19:06:49 -0700 (PDT)
-Received: from heimdal.localdomain ([2804:431:cfec:20b3:d050:3c82:2c34:f704])
-        by smtp.gmail.com with ESMTPSA id yv2-20020a05687c228200b0016e8726f0d4sm548177oab.3.2023.03.30.19.06.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 19:06:49 -0700 (PDT)
-From:   =?UTF-8?q?Andr=C3=A9=20Morishita?= <andremorishita@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        anish kumar <yesanishhere@gmail.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     mairacanal@riseup.net, dri-devel@lists.freedesktop.org,
-        daniel.baluta@nxp.com,
-        =?UTF-8?q?Andr=C3=A9=20Morishita?= <andremorishita@gmail.com>
-Subject: [PATCH] dt-bindings: maxim,max98371: Convert to DT schema
-Date:   Thu, 30 Mar 2023 23:05:25 -0300
-Message-Id: <20230331020527.482991-1-andremorishita@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Thu, 30 Mar 2023 21:56:59 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89F183DD;
+        Thu, 30 Mar 2023 18:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680227816; x=1711763816;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=8SlofZbcMcD0+JkUlFd/7aCCZzVk4mK26b59Mn3vQ8g=;
+  b=QjXwGn9p1Khur3oVFN7MrBXc2pGEshrf46Y+EVWgfPozbnshtWsXPVNO
+   dUHOzulMHPnPub7uhizWq7oCLLIQB1xkFdFaAahltoAKpcBm0DgKYXuFk
+   Z9pImIqV4qM6exnbt6KxRS/rHNl7YA5MsohVHlOFIranUw4dRpMDsmDq4
+   b70fh6WYXdvXpm1ht6S7x2jBMrp2uGA6MMY0H7unef4zn/JDv3GzvkWwl
+   lVAucVZPCd+aF0BDRXhUKeDmrSDkmaaR7qsfvGbfiM8aLSeyU2VKYDgpF
+   2mWOLHpbko9MZKPxI1g+rVHncSs35/FfSrsCBMfsQYmRwc8gLafi5O96H
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="329856792"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="329856792"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 18:56:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="859109747"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="859109747"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga005.jf.intel.com with ESMTP; 30 Mar 2023 18:56:55 -0700
+Date:   Thu, 30 Mar 2023 19:07:41 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v3 15/24] thermal: intel: hfi: Report the IPC class score
+ of a CPU
+Message-ID: <20230331020741.GA1283@ranerica-svr.sc.intel.com>
+References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207051105.11575-16-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0iidC0LxqpE60J5HHQhvv8iHjMGdxM89-7p-QQE99qVEQ@mail.gmail.com>
+ <20230328234119.GA8958@ranerica-svr.sc.intel.com>
+ <CAJZ5v0jgSObZnVHJed_qPtGLcryZsTpysVHFgFdZNzYOuhbc2Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAJZ5v0jgSObZnVHJed_qPtGLcryZsTpysVHFgFdZNzYOuhbc2Q@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Maxim Integrated MAX98371 audio codec bindings to DT schema.
+On Wed, Mar 29, 2023 at 02:17:01PM +0200, Rafael J. Wysocki wrote:
+> On Wed, Mar 29, 2023 at 1:30 AM Ricardo Neri
+> <ricardo.neri-calderon@linux.intel.com> wrote:
+> >
+> > On Mon, Mar 27, 2023 at 06:50:13PM +0200, Rafael J. Wysocki wrote:
+> > > On Tue, Feb 7, 2023 at 6:02 AM Ricardo Neri
+> > > <ricardo.neri-calderon@linux.intel.com> wrote:
+> > > >
+> > > > Implement the arch_get_ipcc_score() interface of the scheduler. Use the
+> > > > performance capabilities of the extended Hardware Feedback Interface table
+> > > > as the IPC score.
+> > > >
+> > > > Cc: Ben Segall <bsegall@google.com>
+> > > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > > > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> > > > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > Cc: Len Brown <len.brown@intel.com>
+> > > > Cc: Lukasz Luba <lukasz.luba@arm.com>
+> > > > Cc: Mel Gorman <mgorman@suse.de>
+> > > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > > > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > > > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > > > Cc: Valentin Schneider <vschneid@redhat.com>
+> > > > Cc: x86@kernel.org
+> > > > Cc: linux-pm@vger.kernel.org
+> > > > Cc: linux-kernel@vger.kernel.org
+> > > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > > > ---
+> > > > Changes since v2:
+> > > >  * None
+> > > >
+> > > > Changes since v1:
+> > > >  * Adjusted the returned HFI class (which starts at 0) to match the
+> > > >    scheduler IPCC class (which starts at 1). (PeterZ)
+> > > >  * Used the new interface names.
+> > > > ---
+> > > >  arch/x86/include/asm/topology.h   |  2 ++
+> > > >  drivers/thermal/intel/intel_hfi.c | 27 +++++++++++++++++++++++++++
+> > > >  2 files changed, 29 insertions(+)
+> > > >
+> > > > diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+> > > > index ffcdac3f398f..c4fcd9c3c634 100644
+> > > > --- a/arch/x86/include/asm/topology.h
+> > > > +++ b/arch/x86/include/asm/topology.h
+> > > > @@ -229,8 +229,10 @@ void init_freq_invariance_cppc(void);
+> > > >
+> > > >  #if defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL)
+> > > >  void intel_hfi_update_ipcc(struct task_struct *curr);
+> > > > +unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu);
+> > > >
+> > > >  #define arch_update_ipcc intel_hfi_update_ipcc
+> > > > +#define arch_get_ipcc_score intel_hfi_get_ipcc_score
+> > > >  #endif /* defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL) */
+> > > >
+> > > >  #endif /* _ASM_X86_TOPOLOGY_H */
+> > > > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> > > > index 530dcf57e06e..fa9b4a678d92 100644
+> > > > --- a/drivers/thermal/intel/intel_hfi.c
+> > > > +++ b/drivers/thermal/intel/intel_hfi.c
+> > > > @@ -206,6 +206,33 @@ void intel_hfi_update_ipcc(struct task_struct *curr)
+> > > >         curr->ipcc = msr.split.classid + 1;
+> > > >  }
+> > > >
+> > > > +unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu)
+> > > > +{
+> > > > +       unsigned short hfi_class;
+> > >
+> > > It looks like the variable above is only used to save a subtraction or
+> > > addition of 1 to something going forward.
+> > >
+> > > > +       int *scores;
+> > > > +
+> > > > +       if (cpu < 0 || cpu >= nr_cpu_ids)
+> > > > +               return -EINVAL;
+> > > > +
+> > > > +       if (ipcc == IPC_CLASS_UNCLASSIFIED)
+> > > > +               return -EINVAL;
+> > > > +
+> > > > +       /*
+> > > > +        * Scheduler IPC classes start at 1. HFI classes start at 0.
+> > > > +        * See note intel_hfi_update_ipcc().
+> > > > +        */
+> > > > +       hfi_class = ipcc - 1;
+> > > > +
+> > > > +       if (hfi_class >= hfi_features.nr_classes)
+> > >
+> > > Personally, I would do
+> > >
+> > > if (ipcc >= hfi_features.nr_classes + 1)
+> > >
+> > > here and ->
+> > >
+> > > > +               return -EINVAL;
+> > > > +
+> > > > +       scores = per_cpu_ptr(hfi_ipcc_scores, cpu);
+> > > > +       if (!scores)
+> > > > +               return -ENODEV;
+> > > > +
+> > >
+> > > -> scores[ipcc - 1]
+> >
+> > Sure, I can get rid of hfi_class.
+> >
+> > >
+> > > below.
+> > >
+> > > > +       return READ_ONCE(scores[hfi_class]);
+> > >
+> > > And why does this need to use READ_ONCE()?
+> >
+> > This is the corresponding read of the WRITE_ONCE in patch 13. The CPU
+> > handling the HFI interrupt, very likely a different CPU, updates
+> > scores[hfi_class]. My intention is to let that write to complete before
+> > reading the score here.
+> 
+> However, READ_ONCE()/WRITE_ONCE() only affect compiler optimizations
+> AFAICS.  What if the CPUs running the code reorder the instructions?
 
-Signed-off-by: André Morishita <andremorishita@gmail.com>
----
- .../devicetree/bindings/sound/max98371.txt    | 17 --------
- .../bindings/sound/maxim,max98371.yaml        | 41 +++++++++++++++++++
- 2 files changed, 41 insertions(+), 17 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/sound/max98371.txt
- create mode 100644 Documentation/devicetree/bindings/sound/maxim,max98371.yaml
+True, this implementation may not be complete and may need a memory
+barrier. I will look at it more closely.
 
-diff --git a/Documentation/devicetree/bindings/sound/max98371.txt b/Documentation/devicetree/bindings/sound/max98371.txt
-deleted file mode 100644
-index 8b2b2704b574..000000000000
---- a/Documentation/devicetree/bindings/sound/max98371.txt
-+++ /dev/null
-@@ -1,17 +0,0 @@
--max98371 codec
--
--This device supports I2C mode only.
--
--Required properties:
--
--- compatible : "maxim,max98371"
--- reg : The chip select number on the I2C bus
--
--Example:
--
--&i2c {
--	max98371: max98371@31 {
--		compatible = "maxim,max98371";
--		reg = <0x31>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/sound/maxim,max98371.yaml b/Documentation/devicetree/bindings/sound/maxim,max98371.yaml
-new file mode 100644
-index 000000000000..df0262473399
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/maxim,max98371.yaml
-@@ -0,0 +1,41 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/maxim,max98371.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim MAX98371 audio codec
-+
-+maintainers:
-+  - anish kumar <yesanishhere@gmail.com>
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: maxim,max98371
-+
-+  '#sound-dai-cells':
-+    const: 0
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        max98371: max98371@31 {
-+            compatible = "maxim,max98371";
-+            reg = <0x31>;
-+        };
-+    };
--- 
-2.40.0
+> 
+> In any case, IMV the reason why READ_ONCE() is used needs to be clear
+> to the reviewers from the patch itself (and to a casual reader of the
+> code from the code itself).
 
+Sure. I will make sure this is clear in the commit message and/or
+inline comments.
+
+Thanks and BR,
+Ricardo
