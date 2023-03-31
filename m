@@ -2,58 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F626D1DDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78426D1DE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbjCaKVj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 06:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
+        id S231337AbjCaKWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 06:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbjCaKUz (ORCPT
+        with ESMTP id S231220AbjCaKVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 06:20:55 -0400
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9171F7B0;
-        Fri, 31 Mar 2023 03:17:06 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id x3so87541618edb.10;
-        Fri, 31 Mar 2023 03:17:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680257824;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ArFrGlAU2OpYNIclmKzpTEfPyjrwUtX0FtxsW7QpR38=;
-        b=NCbFRh7X8v8NmgGpEHLRz6afZle6CS3jWwf2QYDbDz6t5Z/TanRrMBWEyaCedi+HP0
-         FcMl35WJiqIoAiPvhMhHHWS/HX4dlq7GIdTGY4f0i3GK6pbSWoecBdPLT/mQJvQv89bH
-         FjQeTYl6rSxllW2LJawMA83Y6Z2veRiuty/jgkGJnTA38BvvsipM7c/vsjWlaC9ifwZF
-         7bxz1nc3bW9LQqPJ1v5/o/nk6tqIXiQ+mB1cAYS9guuPmvMDDnXbj/b3W9/98/zQ71DF
-         ZpjT+0witxjTPOg7vXAb7xlPY8SXj+bJsAIKa+Z04YrFBmpjVLL2jwT5VozbYgJVYPXm
-         oQOw==
-X-Gm-Message-State: AAQBX9ethkvaSGtMrh7IdNnv8o6DxpeZfgT72JS/HT/q25yHyMjHett8
-        cdwI3TU6iEGMoYz7nNreDrL6HmPGVdYYtMJp4+gfvsT22bo=
-X-Google-Smtp-Source: AKy350Z77MXttLvxuFLq/k6lWnjVW3HycYoUvROKKTEoRE0M8kp7TLNTpupISW5o+GDXK8SvSQhc9z6NGEUoETqWOz4=
-X-Received: by 2002:a17:906:8683:b0:939:a51a:dc30 with SMTP id
- g3-20020a170906868300b00939a51adc30mr4423763ejx.2.1680257824669; Fri, 31 Mar
- 2023 03:17:04 -0700 (PDT)
+        Fri, 31 Mar 2023 06:21:17 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2071.outbound.protection.outlook.com [40.107.237.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69A02D44;
+        Fri, 31 Mar 2023 03:18:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UfA5yCBEbbAERPPaGzS08KoZu8IMA370vYl+5/uYD09HZ2J1LvwEiaUAsGIRm1IGExc4kxrELlBin9lcb8jn3BQTZak6lnQLkze4Mn+kGWE+mYYmzWM3Yd4tbClHfJAamZWG1xBnI22SDFMhZpM+xp23btoRQplpYbC8s8jg4tu6L3wdjBMCpYqlvu4WWLuIKcQmWo6s+w1YJ2/Gi2XCKc568rN7qdrt/ADHij5C9gq9hhmwNuUriaYNWrgrsFOfLeqVygF/hLVnqtSPCTutVQ5locl/T/K82E16ZOyGtaiLlp8b75TV/hWtYgm+JLfy5HOGfIUXEGAtXzE5l9huYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0zs6kRUG3GDOldgYyvK7ZjTymV1riXpxbU5xMrJODhE=;
+ b=Z7RVaz7EtPHdSN8Lij7g7nsj1OiSN5twBJu3H0/r9lhOh3n0BCywxYxe/OX4JlgRK9FDgP3whNbsTrQ7L9qP40BKcaoqU5Sv/CQD21dsbYTAIZNk0WzeO7exZaSNkHUKyQ1OcVZbFJB8LD4Ij1KfpZEbGcCeUYh/U1SjcCzpwcU2I0RC1ZQajVX5U8JL8YUI3s6Dik76kAnDu0Uyfw04UfouJr67mHwxUEMuDrO0y6iisjIJ0DHCh7RtgA06I2FdHAX9Wb50qjSXsZHSX19IdtvtLBck1cKJZYC4Aok36H4k3aGLi8exofnwKr1toPOkq0rQQonO3/4QiU6uSYbhbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0zs6kRUG3GDOldgYyvK7ZjTymV1riXpxbU5xMrJODhE=;
+ b=IxJiIMJ8RYro4XWJECj8K6vhrN0o8w2XbenK/orfTyqamuR5m3kvpT7N+t1mbtppWkDJG6goRHfP4Yxes40VOvOxE50hF0yXwoVZlV3rZ/5e23uAIdgQ3CozlX/2dJWODN5rtuRDUWGVDpfzczRXCjN2b1b0aC5/mV+QtnN2EGw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by BY1PR12MB8446.namprd12.prod.outlook.com (2603:10b6:a03:52d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.24; Fri, 31 Mar
+ 2023 10:18:45 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::d1cf:3d4a:4882:7fd3]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::d1cf:3d4a:4882:7fd3%4]) with mapi id 15.20.6254.022; Fri, 31 Mar 2023
+ 10:18:45 +0000
+Date:   Fri, 31 Mar 2023 15:48:28 +0530
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     viresh.kumar@linaro.org, ray.huang@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Kardashevskiy <aik@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>
+Subject: Re: [PATCH] amd-pstate: Fix amd_pstate mode switch
+Message-ID: <ZCazdI9puSXLd0D4@bhagirati.amd.com>
+References: <20230330141314.1364083-1-wyes.karny@amd.com>
+ <CAJZ5v0jxwuAnTVdnThGmHmptB7qeKc34-keUOdHcugeADYSL+w@mail.gmail.com>
+ <ZCZ5zjw+O3gS6trx@bhagirati.amd.com>
+ <CAJZ5v0iwmvnTFVKhox11gKxM8UBR+=748zPB0tr_O5mPBbkpiA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0iwmvnTFVKhox11gKxM8UBR+=748zPB0tr_O5mPBbkpiA@mail.gmail.com>
+X-ClientProxiedBy: PN2PR01CA0205.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:e9::12) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
 MIME-Version: 1.0
-References: <20230331093318.82288-1-gregkh@linuxfoundation.org> <20230331093318.82288-2-gregkh@linuxfoundation.org>
-In-Reply-To: <20230331093318.82288-2-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 31 Mar 2023 12:16:53 +0200
-Message-ID: <CAJZ5v0hvLJi=ssm-vTHy_amarys7MSsc2VPZUigrdL+BSTYuAw@mail.gmail.com>
-Subject: Re: [PATCH 2/7] driver core: create class_is_registered()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sebastian Reichel <sre@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-gpio@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|BY1PR12MB8446:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3093516b-8cd5-495f-e405-08db31d14f3f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5WCkbwpgA5hgReKzL3aeGgGWtx77OvTRyHfwkisJjGwQGLHCd06ETcLNG5/xLdtutD1A32KZlGrJiOVvHX/PE/35dZcKcFOYu/chYsj+ODh25YAMuxLx0OCtAazQyZMB7qQtokK9qCYv6MnE3ny9GBupppg2GFc4/whO6FGHFhdXk1dIMs+RzUheHyO9U5PVQOLfZQxbv6F1QkwKxrkV7UR0Qwfwt8b8cZa5HiszVWzImbh6upJj4GKKFxhlO8HRbOEbEHGqKYqjWUrSjs12PJilJhTwxgc6WJBFsbR6YHpGtWZRSqVuor0r1HkPcp0/LXpmu2zRudYZ3dQ8L4XUV8AKa5s9XoRrLpzCpPocW1uKqXc9h3kfftxCoNLf8t+Y3hHsfGUWvjwdn7m8RkM1/UpSwiWXYQAudTnTP/iedpWzjeZw5W4t6S1YPBVp7QG6FsdJcPF7XtEIehC5ZMFJpeBDquRJcICHaSIqqoSARBSP2+94u/+ghX1ahfsUr9Z9Co6vClaWq4Zb4945AgGxoR21dt4LBf01MMIzhlpbzzY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(396003)(366004)(136003)(451199021)(44832011)(6666004)(83380400001)(26005)(6512007)(6506007)(53546011)(186003)(86362001)(38100700002)(8936002)(5660300002)(478600001)(966005)(6486002)(54906003)(66556008)(316002)(6916009)(4326008)(8676002)(41300700001)(66476007)(66946007)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZFJxTGdTMUg4aVhUdEF4Y0pIQmZKamVKQWxrWVRlZWlobUZnY3FUc0NjcWhW?=
+ =?utf-8?B?REFudk5EQ081cHVPWkZLbUJPVnJhK1B2YjZWaWlOV3AvYm12OWhIVjJBay9i?=
+ =?utf-8?B?Z1FtLy9TeVQvUHF6aW9YMktESllPVXdqQ1NUSnhHYzdJNytpWUNsMCt6UHV5?=
+ =?utf-8?B?bjRVV2V2Zit1V2VWVjJBWlQwUDhDZFZqVy9BTkdVYmg0NEp5MFI3N0hzcXVI?=
+ =?utf-8?B?UkcyRDh6ZE5mN0JFNnI1dUVrWU44QjNMaGhCZjY2ZDlVbDd2UGdqTGhCN0t3?=
+ =?utf-8?B?VHJZbWJDNWJGVWFyOHIvMk03NnlERmUzZFllS1MrRkNrY1VQcEsvamhGT2ZJ?=
+ =?utf-8?B?Q2RQbEgzSklLQm9tT0w1Y081VE5BUmRBMUYzQTZQRHNPbVozN2hjblJqVEho?=
+ =?utf-8?B?WjlES2l1UVVrVUF3djZDM2V2MGl1UTNyQ0FDSWhEZmtLWWlEWW9KWllwWllX?=
+ =?utf-8?B?RWtpVmxVUFYyNnVSTCtLekdJM0llLzFBRUV3N2tld1dVRjNCME15VG16UHNt?=
+ =?utf-8?B?VVJTYnR5bjBFU0RwaDljYmVocEtaRkhyMXlkTEU0b1lmVUxHaWpYTkJId21U?=
+ =?utf-8?B?ZmJnT1oyZThSRjAxVEsvbVFYaGlFaUV1emRZakp5MnpZREV0elRrYlFQMVlX?=
+ =?utf-8?B?S1hTUDJVRkg2UlFsR1dDR0JXQ1ZHSCtvM3hDdlF6Qm9URFpQZStEVzVURmxC?=
+ =?utf-8?B?SWxBSnJwK0tYNEZkdzVoNzRlUDNBSzVLaTl3SExRUjA2d3hhbXI5dFNGK1ZR?=
+ =?utf-8?B?Z1cvbVdpZWZyMGZQQ3o0TTNBTVdxaXNZY1BYS0g5SCsrWS8xMm9QNHU2dlB6?=
+ =?utf-8?B?ekJDejJpQkZIZmJENmVJQ291UFBaSk9uR3ZLZDV4WExDTnc3YlA2RVZzTWkw?=
+ =?utf-8?B?WENLRlhkTndQZVZJNzUxZ1k5MWxHbDJJZDdXSFJHS0VvcGZLL1ZReFpSK3RL?=
+ =?utf-8?B?cUZqMk9KN0g1YzVLUk9GYS9XRlRwTFRrbjBxNTA1T2ZQZnhrZm1iQnRaSCs0?=
+ =?utf-8?B?RVprS1ZWZ2Z3MVZXSnU1WWNnZHpHS3c4QmRMdC9QcDF5UDlaSFhhUkZwYnR6?=
+ =?utf-8?B?em9Vdkl5ZlRjNmlweUttdWxhRHJtMUx0djJIYXZCQ3lyUWpHbEtEMTBrSU4x?=
+ =?utf-8?B?RmdDQ3B3QW8rcUhENmJPYUZnNFUrR1ZORy8rcmNNV2ViK1c4L0FzamVmNlNI?=
+ =?utf-8?B?M2ViOEcxMURsZ0wxQVFNNURVVVIxc1ZlMUZIcDlHbVhUd29DbmphYlh6YTZK?=
+ =?utf-8?B?dGtWMS9VTGhOaWlTQXpiYy85WlB6cUw4elNLUzRsUDBqSXFxYW03aUt5WEpz?=
+ =?utf-8?B?SXUwaG96Q3FZWGFtaFBsVml5M3lFWjRvaEdseEhGQnA2WTJrbS9OUU83bDVy?=
+ =?utf-8?B?Nk5lZzAxbStJeVRXVlIvK1QySEtnVkdZbUEzYjVSd1NqUXdUa1dZZ0tMejRS?=
+ =?utf-8?B?bWo3Q2xIN2I3T2x6WFUxcXR3UlM3V1oxaklhUHd0bG5OWWpGYlFhQkZYRGxu?=
+ =?utf-8?B?NVR2SFJwTGRLMkxYWlNFc3dTRUoySW9jMDBpUE1LTTlDMVVYNlkzbFdrMUl2?=
+ =?utf-8?B?UXBsMFVYVlVzZUhuZ0Q3TnVvYVF4OElkUE5Ecml2TitHZ3FsT0Zlc0prSlIv?=
+ =?utf-8?B?N09lZDBPcXVTb0hmeUZkMElMZW5sVjZLeGJwVWFBVFFtWHloUzVzYVAzU2cy?=
+ =?utf-8?B?WkoxN1kzbkJtSnI0VHdFTWRzNHpmOGFLcW82RGpKeG9nY0UwaWd1MGhMS2FO?=
+ =?utf-8?B?cmpGM0IyT3BXVzFLTDlReVg2TnVZaExIRExpV3Nyem8xakVpenpXMXgzSVpR?=
+ =?utf-8?B?cXk1T1MxTGYxaWpqREhLSEROem5PYkJRR1piU0puT0F2dUhoSGJPY1NQU0ZM?=
+ =?utf-8?B?Z25XM3Z0NFlRNGxzblR6TzZuS2xicGw1WjZJNHVzRVI1b1ozQkJkampxdVkw?=
+ =?utf-8?B?WURKTUlXVnU5cWVQUzYzVE9QMEorQlVOakMrcjNVNzFYMksvNmNTSTdyK09R?=
+ =?utf-8?B?R2JOSGpSMjdDZWYyNmJOaXdUWGZ3MXdDSXh3WXBBcm9LMzVJQlRSR05vb3gv?=
+ =?utf-8?B?UjlyYmt6aXBhQkR3dTV2blhOWGY3ZlFTRC9NYzYrMnZDRy9MMmlJT1NTQkJ6?=
+ =?utf-8?Q?7nvDt+cql7+sBVN4hIuFePkig?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3093516b-8cd5-495f-e405-08db31d14f3f
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 10:18:45.2235
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7yE1NrN05OaKdrdfD+BHW/dLakS1db58hXn5tAsHtaaB2dgzlhit12tVJdSvvznl2CMK76rvQYgOhAe+zgzOnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR12MB8446
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,109 +128,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 11:33 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> Some classes (i.e. gpio), want to know if they have been registered or
-> not, and poke around in the class's internal structures to try to figure
-> this out.  Because this is not really a good idea, provide a function
-> for classes to call to try to figure this out.
->
-> Note, this is racy as the state of the class could change at any moment
-> in time after the call is made, but as usually a class only wants to
-> know if it has been registered yet or not, it should be fairly safe to
-> use, and is just as safe as the previous "poke at the class internals"
-> check was.
->
-> Move the gpiolib code to use this function as proof that it works
-> properly.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> Cc: linux-gpio@vger.kernel.org
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On 31 Mar 11:11, Rafael J. Wysocki wrote:
+> On Fri, Mar 31, 2023 at 8:12 AM Wyes Karny <wyes.karny@amd.com> wrote:
+> >
+> > Hi Rafael,
+> >
+> > On 30 Mar 20:19, Rafael J. Wysocki wrote:
+> > > On Thu, Mar 30, 2023 at 4:13 PM Wyes Karny <wyes.karny@amd.com> wrote:
+> > > >
+> > > > amd_pstate mode can be changed by writing the mode name to the `status`
+> > > > sysfs. But some combinations are not working. Fix this issue by taking
+> > > > care of the edge cases.
+> > > >
+> > > > Before the fix the mode change combination test fails:
+> > > >
+> > > >  #./pst_test.sh
+> > > > Test passed: from: disable, to
+> > > > Test passed: from: disable, to disable
+> > > > Test failed: 1, From mode: disable, to mode: passive
+> > > > Test failed: 1, From mode: disable, to mode: active
+> > > > Test failed: 1, From mode: passive, to mode: active
+> > > > Test passed: from: passive, to disable
+> > > > Test failed: 1, From mode: passive, to mode: passive
+> > > > Test failed: 1, From mode: passive, to mode: active
+> > > > Test failed: 1, From mode: active, to mode: active
+> > > > Test passed: from: active, to disable
+> > > > Test failed: 1, From mode: active, to mode: passive
+> > > > Test failed: 1, From mode: active, to mode: active
+> > > >
+> > > > After the fix test passes:
+> > > >
+> > > >  #./pst_test.sh
+> > > > Test passed: from: disable, to
+> > > > Test passed: from: disable, to disable
+> > > > Test passed: from: disable, to passive
+> > > > Test passed: from: disable, to active
+> > > > Test passed: from: passive, to active
+> > > > Test passed: from: passive, to disable
+> > > > Test passed: from: passive, to passive
+> > > > Test passed: from: passive, to active
+> > > > Test passed: from: active, to active
+> > > > Test passed: from: active, to disable
+> > > > Test passed: from: active, to passive
+> > > > Test passed: from: active, to active
+> > > >
+> > > > Fixes: abd61c08ef349 ("cpufreq: amd-pstate: add driver working mode switch support")
+> > > >
+> > > > Acked-by: Huang Rui <ray.huang@amd.com>
+> > > > Reviewed-by: Alexey Kardashevskiy <aik@amd.com>
+> > > > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> > > >
+> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > > Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> > > > Cc: Mario Limonciello <mario.limonciello@amd.com>
+> > > > Cc: Perry Yuan <Perry.Yuan@amd.com>
+> > >
+> > > This is all fine, but you need to tell me how it interacts with the
+> > > amd-pstate changes in linux-next.
+> > >
+> > > Does it affect the code in linux-next at all or is it only for 6.3-rc?
+> > >
+> >
+> > This is only for 6.3-rc.
+> > The commit 3ca7bc818d8c ("cpufreq: amd-pstate: Add guided mode control
+> > support via sysfs") in linux-next may not apply cleanly after this fix.
+> > Please let me know if I need to rebase and send the guided mode patches [1].
+> >
+> > [1]: https://lore.kernel.org/linux-pm/20230307112740.132338-1-wyes.karny@amd.com/
+> 
+> Well, instead, you please let me know how to resolve the merge
+> conflict between the patch below and your series.
+> 
+> Can I simply assume that the code added by commit 3ca7bc818d8c
+> replaces the code modified by the $subject patch?
 
-Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+Yes, commit 3ca7bc818d8c replaces the whole `amd_pstate_update_status`
+function with new implementation.
 
-> ---
->  drivers/base/class.c         | 25 +++++++++++++++++++++++++
->  drivers/gpio/gpiolib-sysfs.c |  4 ++--
->  include/linux/device/class.h |  1 +
->  3 files changed, 28 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/base/class.c b/drivers/base/class.c
-> index 68a6f9b56d19..a8a1bf976290 100644
-> --- a/drivers/base/class.c
-> +++ b/drivers/base/class.c
-> @@ -634,6 +634,31 @@ void class_compat_remove_link(struct class_compat *cls, struct device *dev,
->  }
->  EXPORT_SYMBOL_GPL(class_compat_remove_link);
->
-> +/**
-> + * class_is_registered - determine if at this moment in time, a class is
-> + *                      registered in the driver core or not.
-> + * @class: the class to check
-> + *
-> + * Returns a boolean to state if the class is registered in the driver core
-> + * or not.  Note that the value could switch right after this call is made,
-> + * so only use this in places where you "know" it is safe to do so (usually
-> + * to determine if the specific class has been registered yet or not).
-> + *
-> + * Be careful in using this.
-> + */
-> +bool class_is_registered(const struct class *class)
-> +{
-> +       struct subsys_private *sp = class_to_subsys(class);
-> +       bool is_initialized = false;
-> +
-> +       if (sp) {
-> +               is_initialized = true;
-> +               subsys_put(sp);
-> +       }
-> +       return is_initialized;
-> +}
-> +EXPORT_SYMBOL_GPL(class_is_registered);
-> +
->  int __init classes_init(void)
->  {
->         class_kset = kset_create_and_add("class", NULL, NULL);
-> diff --git a/drivers/gpio/gpiolib-sysfs.c b/drivers/gpio/gpiolib-sysfs.c
-> index a895915affa5..1a9b21731cc9 100644
-> --- a/drivers/gpio/gpiolib-sysfs.c
-> +++ b/drivers/gpio/gpiolib-sysfs.c
-> @@ -554,7 +554,7 @@ int gpiod_export(struct gpio_desc *desc, bool direction_may_change)
->         int                     offset;
->
->         /* can't export until sysfs is available ... */
-> -       if (!gpio_class.p) {
-> +       if (!class_is_registered(&gpio_class)) {
->                 pr_debug("%s: called too early!\n", __func__);
->                 return -ENOENT;
->         }
-> @@ -728,7 +728,7 @@ int gpiochip_sysfs_register(struct gpio_device *gdev)
->          * register later, in gpiolib_sysfs_init() ... here we just
->          * verify that _some_ field of gpio_class got initialized.
->          */
-> -       if (!gpio_class.p)
-> +       if (!class_is_registered(&gpio_class))
->                 return 0;
->
->         /*
-> diff --git a/include/linux/device/class.h b/include/linux/device/class.h
-> index b53728ca56fb..9cb5db0588c8 100644
-> --- a/include/linux/device/class.h
-> +++ b/include/linux/device/class.h
-> @@ -84,6 +84,7 @@ extern struct kobject *sysfs_dev_block_kobj;
->
->  int __must_check class_register(struct class *class);
->  void class_unregister(const struct class *class);
-> +bool class_is_registered(const struct class *class);
->
->  struct class_compat;
->  struct class_compat *class_compat_register(const char *name);
-> --
-> 2.40.0
->
+> 
+> > > > ---
+> > > >  drivers/cpufreq/amd-pstate.c | 18 ++++++++----------
+> > > >  1 file changed, 8 insertions(+), 10 deletions(-)
+> > > >
+> > > > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> > > > index 73c7643b2697..8dd46fad151e 100644
+> > > > --- a/drivers/cpufreq/amd-pstate.c
+> > > > +++ b/drivers/cpufreq/amd-pstate.c
+> > > > @@ -840,22 +840,20 @@ static int amd_pstate_update_status(const char *buf, size_t size)
+> > > >
+> > > >         switch(mode_idx) {
+> > > >         case AMD_PSTATE_DISABLE:
+> > > > -               if (!current_pstate_driver)
+> > > > -                       return -EINVAL;
+> > > > -               if (cppc_state == AMD_PSTATE_ACTIVE)
+> > > > -                       return -EBUSY;
+> > > > -               cpufreq_unregister_driver(current_pstate_driver);
+> > > > -               amd_pstate_driver_cleanup();
+> > > > +               if (current_pstate_driver) {
+> > > > +                       cpufreq_unregister_driver(current_pstate_driver);
+> > > > +                       amd_pstate_driver_cleanup();
+> > > > +               }
+> > > >                 break;
+> > > >         case AMD_PSTATE_PASSIVE:
+> > > >                 if (current_pstate_driver) {
+> > > >                         if (current_pstate_driver == &amd_pstate_driver)
+> > > >                                 return 0;
+> > > >                         cpufreq_unregister_driver(current_pstate_driver);
+> > > > -                       cppc_state = AMD_PSTATE_PASSIVE;
+> > > > -                       current_pstate_driver = &amd_pstate_driver;
+> > > >                 }
+> > > >
+> > > > +               current_pstate_driver = &amd_pstate_driver;
+> > > > +               cppc_state = AMD_PSTATE_PASSIVE;
+> > > >                 ret = cpufreq_register_driver(current_pstate_driver);
+> > > >                 break;
+> > > >         case AMD_PSTATE_ACTIVE:
+> > > > @@ -863,10 +861,10 @@ static int amd_pstate_update_status(const char *buf, size_t size)
+> > > >                         if (current_pstate_driver == &amd_pstate_epp_driver)
+> > > >                                 return 0;
+> > > >                         cpufreq_unregister_driver(current_pstate_driver);
+> > > > -                       current_pstate_driver = &amd_pstate_epp_driver;
+> > > > -                       cppc_state = AMD_PSTATE_ACTIVE;
+> > > >                 }
+> > > >
+> > > > +               current_pstate_driver = &amd_pstate_epp_driver;
+> > > > +               cppc_state = AMD_PSTATE_ACTIVE;
+> > > >                 ret = cpufreq_register_driver(current_pstate_driver);
+> > > >                 break;
+> > > >         default:
+> > > > --
+> > > > 2.34.1
+> > > >
