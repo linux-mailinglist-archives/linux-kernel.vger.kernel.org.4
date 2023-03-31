@@ -2,141 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599D46D1605
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 05:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCF16D1607
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 05:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjCaDcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 23:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
+        id S229819AbjCaDdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 23:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjCaDcB (ORCPT
+        with ESMTP id S229749AbjCaDdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 23:32:01 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC37CA19
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:31:58 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id o2so20046945plg.4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:31:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680233517;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z+9ZPtRrjL6zYn8USHZp7DIBp0J7SJ4SjTl0hBaFZwU=;
-        b=DCa6KQxGG6AzMQVouFVFhw+hOgFCcmaF1zjXTSBVZFn3cRWwVJMldaTcDG/bcHarIn
-         wKN527uYemylzJGjuDKerFk0a1H1DxfYo0pWhoAM2XeqMrO/zWP7A4j2eKcsklyP5nYO
-         6iLv41misbE4Ld549/Mpg0xZ0xvDmWDPHdldwhJ0tKWt8eZteEbQaixaP83kHwVdThhX
-         FNYYiN/01zrYghz6igEjQwEA47ScJQf/uEjLsppkLDXuoWrkLBkMYRStm7guSPHSL0Ve
-         WKhcgrWCVPP4yZOltI4ItQJGBVwY39oGinS+lAAVzuVw6H1dj8B8hbE1qmAghoPRhWgZ
-         aFCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680233517;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z+9ZPtRrjL6zYn8USHZp7DIBp0J7SJ4SjTl0hBaFZwU=;
-        b=zn1kbVSVgFN78jhwNNRxNX66gcmEUayTlUcCKuUPLtMyJqTaFXvgv9uhzE4Iim95vJ
-         fs8/FonSi3GYoryqtF4n7Z+4hp2OmnoCwYzXoj225Tq6mHQCAMZzdm2vjojHGw1oDUea
-         331qB03VS3dFfxe+XttyA5yq4RyKMDXeeZoatCGJlFHSA80LGXOpwm8b6oVk+UoT/63K
-         ghvgkYT8zmfdMEgnZuLrI1DH0/ZLJAc/CNHSHR5O1zwq9uKKJme3a7ooQv86xeU+fCC1
-         pjbH42T0GD7S2/FpLyoUZnxKVbKKYrCiwiIX5e0VzfKkHoXzjUrCb7ODhBW2JNrSatOv
-         cSAg==
-X-Gm-Message-State: AAQBX9fS94BML7gKlXO5N6zENCyheNlKkkw+KRNmJjrwh4VwbXGw/vAP
-        FCxXtb3VJT5o/tT8uNdajfE=
-X-Google-Smtp-Source: AKy350YKL1xfmb6bn3n7spfcte0bMvhxDHTazP/SFUMAnfe0dfrEdD/Hy8m6gTAtym+NDyPM1lg3XQ==
-X-Received: by 2002:a17:90b:33cc:b0:237:40a5:7cb9 with SMTP id lk12-20020a17090b33cc00b0023740a57cb9mr28369711pjb.5.1680233517522;
-        Thu, 30 Mar 2023 20:31:57 -0700 (PDT)
-Received: from ubt.spreadtrum.com ([138.113.14.245])
-        by smtp.gmail.com with ESMTPSA id p4-20020a170902eac400b001a239325f1csm449128pld.100.2023.03.30.20.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 20:31:57 -0700 (PDT)
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     iommu@lists.linux.dev, Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [RESEND PATCH V3 2/2] iommu: sprd: Add support for reattaching an existing domain
-Date:   Fri, 31 Mar 2023 11:31:24 +0800
-Message-Id: <20230331033124.864691-3-zhang.lyra@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230331033124.864691-1-zhang.lyra@gmail.com>
-References: <20230331033124.864691-1-zhang.lyra@gmail.com>
+        Thu, 30 Mar 2023 23:33:40 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05420CA26
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 20:33:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680233619; x=1711769619;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=HqsnVLFJcMHIFYJonezlot/+j7212JT2r5A3EyTKJmk=;
+  b=XxmJX07AEMvI38R/ysbKRVSf5ZaKsotmTBx7z7+gVsTZfbtgjpB2QoWi
+   Dpcsys+AN4+8dlSkK26pp0awNoV5SVtzL0/ug0FeH2w7ZIaL5yeUT5XdE
+   jxW+RbjtoyAoXx3LKGEC9S9NtAN6NQllXjNmnQGw/EaJT0y6fHTTkXei3
+   bbefpOhw7q/bM9KwN8z86VtjVOGurVhFeb7CV9kmZP+Dk6Ritomgi5yOn
+   XjEDsmLP0NFLpMEaQn8YhVW91Y/TdpjONYGfQc/+gx+7zDLNZj/b6WhRw
+   zUmxWOvhcJa0cl13tu7GWqtbRAUb3+v2b+M2zMGMpLBH3yqjR1JyKBOMD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="427619937"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="427619937"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 20:33:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="754257864"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="754257864"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Mar 2023 20:33:39 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 30 Mar 2023 20:33:39 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 30 Mar 2023 20:33:39 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 30 Mar 2023 20:33:39 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X5rLgPAbQTj/QntU547sGDt9YfQIgDNFPuWjrfyVZaLg7KNmfHrXAqd6gs7xruN4bbrsZOBRv/JXA+1QRbl345eyUJHeISkvL62wfKrdpWX2WGCkRq4LiL98tfZfUs0kytPWYP6Sy+Z4d87UeaiSX3Jd2ZQGj65OYefy4Z3ZxmxpN3iCtT332RxsXnbYcR7fTfiIrUEWdiPWozEsqwD92Vxp+uY2TOi6YKqq0SA7DACtPUntwfVFjSfXOPUld3EhmnY4Sa23XdkLweqa4Gl/FVPDmKMWRgqyCkzdoz/HFahX76Z7SByf3ElsIzZn1kc+dbo6xzUraQq2g2ITGHfWyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eyAWrXvGJViHi9tLJwfXpSJjm9oICby3OocUfZSLGVQ=;
+ b=Va2+J8lKsvnxXcGb7UXtZp984hwj56z3SEnnBVIq8Ul850CqWSHm9gl5T0ZWc7ISYlRn1bGWimm3GtcXTD7yAYpWppmp8bI4QwXlphMhTkVR+w7IsbNBqn5LM/x5jRBlkio5lY6J5ckSlzh6f4+wXnol6Kf0Czg3RNjdcF8hmqYPgEjTeXLW4yWP4NZjnr1lHSc96wISol/bC04RP1H6tqFjFV5gDvwTOy5BfsVDKKN+llGxwAhPMmGmYsF5d9L0IweNzxIL6SROqSN1A31/Eh2xo5wv6sAOl+3NYj+cuUNs11y/NkqkGPdTAY3sGylaI47tfzb/aEOtNrlj4G9JUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by BL3PR11MB6411.namprd11.prod.outlook.com (2603:10b6:208:3ba::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.22; Fri, 31 Mar
+ 2023 03:33:32 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::c5b2:6996:5aee:91db]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::c5b2:6996:5aee:91db%5]) with mapi id 15.20.6222.033; Fri, 31 Mar 2023
+ 03:33:32 +0000
+Date:   Thu, 30 Mar 2023 20:33:27 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Zhao Liu <zhao1.liu@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+CC:     Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v2 6/9] drm/i915: Use kmap_local_page() in
+ gem/selftests/i915_gem_context.c
+Message-ID: <642654876a503_375f7e294e@iweiny-mobl.notmuch>
+References: <20230329073220.3982460-1-zhao1.liu@linux.intel.com>
+ <20230329073220.3982460-7-zhao1.liu@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230329073220.3982460-7-zhao1.liu@linux.intel.com>
+X-ClientProxiedBy: SJ0PR13CA0154.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c7::9) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|BL3PR11MB6411:EE_
+X-MS-Office365-Filtering-Correlation-Id: 822d6e08-1489-4996-d110-08db3198b3a5
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ryy6dv6AUGZnjIQH6RW76aVsateaeIhyd4/ECbsa3GyPzbIV/KIzv+jVRXslhSOYGcmfCwVdd6wL2K24eqTDPZwsY0Y2QNb3cy/nVqIEgna2zSZ9zaCI+nXnaoFCr1ilKhGUUA+aktQgxySaDgHBDx/fYtyaJ778Hfi2voVyg0R2aVxzEJWDhz2U5IdY+GieTAbCIyQzTxhl2N0Z8ZNUOhKklJtgAMyATZT5iklENgwtFyCJBGf8tNVKET364Yma0Snz+/gLBhb8UalRt52Ll9M6TF7t3RoZGjw0aE6uaMcoOeWuHfBiPeW3y4YoTqtnJwtRiWg1CLwSUGrCEy5vccYypwJquplmOUbdZaYC9DWC261NalloZEvfqzWjEazf+/fEZZS9TV6amS2cnR8f0a7eVlSq3beM+8r7LpXcc1ouwq6QgNQBZrQMVcfp7Mpc+wX/BMA4o0ihFjq8gPR29HLOkyIGNpGoKSvuA6rFQ+9AetBDbs+8fzN0fL2HwCuCXqMirrgOsix+qRlkPtelNJsWrCTuTuHoR8ECffNc0uOKrLAIJJ16m81q1aztPjROwINBwAev3fWU1Zp0XlRaGJf3n4CR++FJuovyNBib5Hw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(136003)(366004)(376002)(39860400002)(396003)(451199021)(26005)(66946007)(9686003)(921005)(7416002)(8936002)(6486002)(83380400001)(6506007)(41300700001)(66476007)(316002)(2906002)(38100700002)(54906003)(5660300002)(6512007)(478600001)(86362001)(186003)(44832011)(6666004)(66556008)(966005)(82960400001)(8676002)(110136005)(4326008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HMn8hFxIZz2vxlrFmnjuMcGWWaWhgOZc6apR6zFGCwNeSvgsldYskcCAxycr?=
+ =?us-ascii?Q?u7EjM+Xg50TyXQ7P+wx1Ge+J/CkUxlNdOyXaHCDz4vYX6RIU9vGaXW6NH53d?=
+ =?us-ascii?Q?PG9rs1hjojXrn057N1ZlhOpaUXkqSScP5E5hy2dA8BVNfVLA9QlPSqxO6/03?=
+ =?us-ascii?Q?7JDlcJAP35t3uSo80cV2fv7OKCUnd8EGytOaExzyJS0De0auxV+YmngsBMhW?=
+ =?us-ascii?Q?psR/zT8pyPPrwDTCS6tpVH5GX99/EkAfXhi2BnCJpDdnNJDrxzsN0lPM3pbZ?=
+ =?us-ascii?Q?WBosiur6SGwbwmkQns9dfpEe9aZxzuw+z+sfkFtCup/NGYh50cjL0CBZoq/v?=
+ =?us-ascii?Q?tWMIEPEVq437f1XbhbfXvhhYpNGUJMnffkL0yxIKesR2X98X8uidtZAsgdjE?=
+ =?us-ascii?Q?pQtSE8k47r+zq78Vns+zBLNIXOZ2pG7MUk5B5L0hpbpTAE3560y/CrJzat6v?=
+ =?us-ascii?Q?BxYBpaDzSVsb8KD6pgrCvUmc473R+5KUUU6ckCWuXIvM1q61IeYjuG7Wb9Fu?=
+ =?us-ascii?Q?xgSaAz6naW0EKc644J7r5w/YqvNiAHltzaEDnku2RdTAnD2h8CBY8PNXxZbO?=
+ =?us-ascii?Q?3QWiM4t89aScKsspvprQIvv4tCVwjt7fOzwZ4P/AStlobGnMr6Z8xMzfoVsd?=
+ =?us-ascii?Q?xZtkpJeKY93SYB5jrZL554GDaDQVx6TUK38Nnqsg+olaJOGBptheY+EppRgq?=
+ =?us-ascii?Q?0RWGVaWbqu5Tuv4W4JZNlVPcFv/F9kRMqKKABjMTlMybISuwwDIx0Drn846Z?=
+ =?us-ascii?Q?582DCBHjnmx6ljY7ksWcfYsPN3VSv3r/ZDBlk2XNQTc5EmNDrZkytYz9uVVv?=
+ =?us-ascii?Q?axeCB8dpLsjEAPZID9KSZ3g3opyttyQyqg7U8QpT8svmyMqFy7jGcljZ1eHC?=
+ =?us-ascii?Q?+A4PCwcRZy3CV7M6gRJHhs5ghTdoXEgLOPUJ7vi5g5mPqIA0U933JRpT6/Yr?=
+ =?us-ascii?Q?K994jueTDU1BuP2cOUlDQ0W4Q1AIJ9vBOLsWbv0lTvLMPopcDNoKoT5b2Cd1?=
+ =?us-ascii?Q?uCnDM+DYLoPjcn9HLJvi11Gs5gxgn6NWJr7+vumt8LFsLe5J1X596JYF/IKe?=
+ =?us-ascii?Q?yI7DoPzXFQOufCyu968ZQmLxS51Lmqz0E0pa6fpjIoNLR6qnXeFCOWkcXOlv?=
+ =?us-ascii?Q?f4H6k/JLmnTl6ALD9CYSUpiOZtKIkJ9org3GBvOXG+Hgiv7FMYRVdinuqdHZ?=
+ =?us-ascii?Q?PrxcOpNg4hcUkmnU/0j0qvPw/qwKP4w8akJiVUHa+JT2afOGKqBo0IxcRon9?=
+ =?us-ascii?Q?KG0ZPTnWucSG9fB6IZkWvNpDR+sb1z6QvcxVXIBD/VUYn92+liKLOO5TjyIe?=
+ =?us-ascii?Q?FGwu8eKFkszautwjzxL8SzV+gvDCqz8BZKossoY+D9SpzxcXTR7eaOaPwdZI?=
+ =?us-ascii?Q?0t7RDW8a+u9Y/4yK98MYXdo/AERyy4CgqnHXkrB13ywJKZTxDhodcuza8eZE?=
+ =?us-ascii?Q?w9p8/3ek/e9+CJBTc15xQay5XWCiZURRsTyD7TD6TUA+eDzsOVV7vFQoQZxy?=
+ =?us-ascii?Q?/PbJD57Sf3DOiJuZ7i+SIbMFlhLfi59sWOsyxIOPZwLu2rF/ajI3nqMKNyW9?=
+ =?us-ascii?Q?6LO2Cv3zZ3b5GxyL0bI88qo/A2RUsiYSKlew/GGX?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 822d6e08-1489-4996-d110-08db3198b3a5
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 03:33:32.3907
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +AT3HilBv4kYx1+rcXQ31cF4d5U+/PByCeSWWKQpIwj7PPRGX687u3jkT5szZuyleM+8No47MzA3FejVljudDg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6411
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Zhao Liu wrote:
+> From: Zhao Liu <zhao1.liu@intel.com>
+> 
+> The use of kmap_atomic() is being deprecated in favor of
+> kmap_local_page()[1], and this patch converts the call from
+> kmap_atomic() to kmap_local_page().
+> 
+> The main difference between atomic and local mappings is that local
+> mappings doesn't disable page faults or preemption.
+> 
+> With kmap_local_page(), we can avoid the often unwanted side effect of
+> unnecessary page faults or preemption disables.
+> 
+> In drm/i915/gem/selftests/i915_gem_context.c, functions cpu_fill() and
+> cpu_check() mainly uses mapping to flush cache and check/assign the
+> value.
+> 
+> There're 2 reasons why cpu_fill() and cpu_check() don't need to disable
+> pagefaults and preemption for mapping:
+> 
+> 1. The flush operation is safe. cpu_fill() and cpu_check() call
+> drm_clflush_virt_range() to use CLFLUSHOPT or WBINVD to flush. Since
+> CLFLUSHOPT is global on x86 and WBINVD is called on each cpu in
+> drm_clflush_virt_range(), the flush operation is global.
+> 
+> 2. Any context switch caused by preemption or page faults (page fault
+> may cause sleep) doesn't affect the validity of local mapping.
+> 
+> Therefore, cpu_fill() and cpu_check() are functions where the use of
+> kmap_local_page() in place of kmap_atomic() is correctly suited.
+> 
+> Convert the calls of kmap_atomic() / kunmap_atomic() to
+> kmap_local_page() / kunmap_local().
+> 
+> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
+> 
+> v2:
+> * Dropped hot plug related description since it has nothing to do with
+>   kmap_local_page().
+> * No code change since v1, and added description of the motivation of
+>   using kmap_local_page().
+> 
+> Suggested-by: Dave Hansen <dave.hansen@intel.com>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
 
-This IOMMU driver should allow a domain to be attached more than once.
+First off I think this is fine.
 
-If IOMMU is reattaching to the same domain which is attached, there's
-nothing to be done.
+But as I looked at this final selftests patch I began to wonder how the
+memory being mapped here and in the previous selftests patches are
+allocated.  Does highmem need to be considered at all?  Unfortunately, I
+could not determine where the memory in the SG list of this test gem
+object was allocated.
 
-If reattching to a previously-used domain, do not alloc DMA buffer
-again which stores address mapping table to avoid memory leak.
+AFAICS cpu_fill() is only called in create_test_object().  Digging into
+huge_gem_object() did not reveal where these pages were allocated from.
 
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
----
- drivers/iommu/sprd-iommu.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
+I wonder if these kmap_local_page() calls could be removed entirely based
+on knowing that the pages were allocated from low mem?  Removing yet
+another user of highmem altogether would be best if possible.
 
-diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
-index 7df1f730c778..3513b2b108bf 100644
---- a/drivers/iommu/sprd-iommu.c
-+++ b/drivers/iommu/sprd-iommu.c
-@@ -62,6 +62,7 @@ enum sprd_iommu_version {
-  * @eb: gate clock which controls IOMMU access
-  */
- struct sprd_iommu_device {
-+	struct sprd_iommu_domain	*dom;
- 	enum sprd_iommu_version	ver;
- 	u32			*prot_page_va;
- 	dma_addr_t		prot_page_pa;
-@@ -252,15 +253,27 @@ static int sprd_iommu_attach_device(struct iommu_domain *domain,
- 	struct sprd_iommu_domain *dom = to_sprd_domain(domain);
- 	size_t pgt_size = sprd_iommu_pgt_size(domain);
- 
--	if (dom->sdev)
--		return -EINVAL;
-+	/* The device is attached to this domain */
-+	if (sdev->dom == dom)
-+		return 0;
- 
--	dom->pgt_va = dma_alloc_coherent(sdev->dev, pgt_size, &dom->pgt_pa, GFP_KERNEL);
--	if (!dom->pgt_va)
--		return -ENOMEM;
-+	/* The first time that domain is attaching to a device */
-+	if (!dom->pgt_va) {
-+		dom->pgt_va = dma_alloc_coherent(sdev->dev, pgt_size, &dom->pgt_pa, GFP_KERNEL);
-+		if (!dom->pgt_va)
-+			return -ENOMEM;
-+
-+		dom->sdev = sdev;
-+	}
- 
--	dom->sdev = sdev;
-+	sdev->dom = dom;
- 
-+	/*
-+	 * One sprd IOMMU serves one client device only, disabled it before
-+	 * configure mapping table to avoid access conflict in case other
-+	 * mapping table is stored in.
-+	 */
-+	sprd_iommu_hw_en(sdev, false);
- 	sprd_iommu_first_ppn(dom);
- 	sprd_iommu_first_vpn(dom);
- 	sprd_iommu_vpn_range(dom);
--- 
-2.25.1
+Do you know how these test objects are created?  Do the pages come from
+user space somehow?
+
+Regardless this is still a step in the right direction so:
+
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+
+> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+> ---
+> Suggested by credits:
+>   Dave: Referred to his explanation about cache flush.
+>   Ira: Referred to his task document, review comments and explanation
+>        about cache flush.
+>   Fabio: Referred to his boiler plate commit message and his description
+>          about why kmap_local_page() should be preferred.
+> ---
+>  drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
+> index a81fa6a20f5a..dcbc0b8e3323 100644
+> --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
+> +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
+> @@ -481,12 +481,12 @@ static int cpu_fill(struct drm_i915_gem_object *obj, u32 value)
+>  	for (n = 0; n < real_page_count(obj); n++) {
+>  		u32 *map;
+>  
+> -		map = kmap_atomic(i915_gem_object_get_page(obj, n));
+> +		map = kmap_local_page(i915_gem_object_get_page(obj, n));
+>  		for (m = 0; m < DW_PER_PAGE; m++)
+>  			map[m] = value;
+>  		if (!has_llc)
+>  			drm_clflush_virt_range(map, PAGE_SIZE);
+> -		kunmap_atomic(map);
+> +		kunmap_local(map);
+>  	}
+>  
+>  	i915_gem_object_finish_access(obj);
+> @@ -512,7 +512,7 @@ static noinline int cpu_check(struct drm_i915_gem_object *obj,
+>  	for (n = 0; n < real_page_count(obj); n++) {
+>  		u32 *map, m;
+>  
+> -		map = kmap_atomic(i915_gem_object_get_page(obj, n));
+> +		map = kmap_local_page(i915_gem_object_get_page(obj, n));
+>  		if (needs_flush & CLFLUSH_BEFORE)
+>  			drm_clflush_virt_range(map, PAGE_SIZE);
+>  
+> @@ -538,7 +538,7 @@ static noinline int cpu_check(struct drm_i915_gem_object *obj,
+>  		}
+>  
+>  out_unmap:
+> -		kunmap_atomic(map);
+> +		kunmap_local(map);
+>  		if (err)
+>  			break;
+>  	}
+> -- 
+> 2.34.1
+> 
+
 
