@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6906D1DFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1106D1DF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjCaKZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 06:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
+        id S231293AbjCaKYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 06:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbjCaKYe (ORCPT
+        with ESMTP id S230206AbjCaKY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 06:24:34 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79B621A85;
-        Fri, 31 Mar 2023 03:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1680258126; x=1711794126;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O97ADEtm/OjO7nPRNILELGyEc11czzC4AfiYhLq7BVU=;
-  b=HmgZ2yvpCgu50LcQ0XZdjkdbu8zEj0yTXiq1sYpUSN3f4wrFbmtQ0XDG
-   YIDq4+uHX/6nbnH1hkO/rgDCcCR60riM5mOkesZFqyiLW0SiD+9WFsgXE
-   SS0NXziZJSAy5hT5dPIs5r4yUB/Ap1Vs0JYGPq/zVp/StDNf/M2tb6Z9n
-   HgOB44RS2JS5WH2PI3Oy5aPIIMJ8g+ghSGRdywYoHCoQR4q7T4m5hnlXc
-   KPmh9hnbbp3grfaG3Plg2R0optrAkrYCQDTpeNQIVbaMLXT/MnJiVv7eT
-   1DMSgRP0YxBAMNVvcJymWfZ5JkXR8Jh0c7tErM2KvKB064ScKoJ49iQZw
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,307,1673938800"; 
-   d="asc'?scan'208";a="207167804"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Mar 2023 03:22:05 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 31 Mar 2023 03:22:05 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 31 Mar 2023 03:22:02 -0700
-Date:   Fri, 31 Mar 2023 11:21:48 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        <linux-riscv@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v7 4/6] dt-bindings: cache: r9a07g043f-l2-cache: Add DT
- binding documentation for L2 cache controller
-Message-ID: <65394572-33ae-4241-8936-0ccc8353d1a2@spud>
-References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230330204217.47666-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ZaakkSvjL3VDjlgv"
-Content-Disposition: inline
-In-Reply-To: <20230330204217.47666-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Fri, 31 Mar 2023 06:24:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C6720DB6
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 03:22:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7C1562769
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 10:21:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BE3FC433EF;
+        Fri, 31 Mar 2023 10:21:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680258119;
+        bh=C1WMkoOxoybDfk1/IJGTeuzoGrCkYsIqojJIkyZbsJg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ddhmyrh0jYbgQqMIpmLBv8HgCw+VUc69d6G5klZw6WWhXDzUcJ7PNmdiA2ZqRdV+6
+         f4h4OpOp0qGQO5xdxnFQ/JDtJyWqM7lXG/sahwshIG5IafnQcvcYCzIBUz/sFZL9Dz
+         47h7RdzhnegCZ/9WVjvqy44wn2Kgw3HevDWTkwnplAVl16kPI6PPldOIKLUvbwpAWL
+         P9wXrOpopiJmYU4YhxaB62jgIUl9G8S8SCjMa/gXVGWABmeI8IZl4mLjcT0wd4PUYt
+         PXGZ6Asg+oVIMD3iX1IA+Eu1VzKYeZz1GCMg6U+a9RzXCAwa+Tbg4YSZQPm95flnje
+         us0NexRnuVmZg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1piBtN-004en5-3e;
+        Fri, 31 Mar 2023 11:21:57 +0100
+Date:   Fri, 31 Mar 2023 11:21:56 +0100
+Message-ID: <868rfdw797.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peng Fan <peng.fan@nxp.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: gic700 shareability question
+In-Reply-To: <DU0PR04MB9417388F9BDD73080294FA8E88889@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <DU0PR04MB9417388F9BDD73080294FA8E88889@DU0PR04MB9417.eurprd04.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: peng.fan@nxp.com, lpieralisi@kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---ZaakkSvjL3VDjlgv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
++ Lorenzo
 
-$subject: t-bindings: cache: r9a07g043f-l2-cache: Add DT binding documentation for L2 cache controller
-                             ^^^^^^^^^^^^^^^^^^^
-I assume this should be updated to be ax45mp-foo instead?
+On Tue, 28 Mar 2023 13:48:19 +0100,
+Peng Fan <peng.fan@nxp.com> wrote:
+> 
+> Hi Marc,
+> 
+> We have an SoC that use GIC-700, but not support shareability,
 
-Cheers,
-Conor.
+Define this. The IP does support shareability, but your integration
+doesn't?
 
---ZaakkSvjL3VDjlgv
-Content-Type: application/pgp-signature; name="signature.asc"
+> Currently I just hack the code as below. Do you think it is feasible
+> to add firmware bindings such that these can be used to define 
+> the correct shareability/cacheability instead of relying on the
+> programmability of the CBASER register?
+> 
+> Saying with "broken-shareability", we just clear all the shareability
+> settings.
 
------BEGIN PGP SIGNATURE-----
+This is the same thing as the Rockchip crap, so you are in good
+company.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCa0PAAKCRB4tDGHoIJi
-0p5iAP9SWWenRmTwVMmV5yA0RKo8s1JsMjzzWaOTHtxbXLVfuAEArMTwVtQ8gzTS
-RxcRbytq2gWtJbpyS6svV1wo0kiDews=
-=ilmE
------END PGP SIGNATURE-----
+I've repeatedly stated that this needs to be handled:
 
---ZaakkSvjL3VDjlgv--
+- either by describing the full system topology and describe what is
+  in the same inner-shareable domain as the CPUs, which needs to
+  encompass both DT and ACPI (starting with DT seems reasonable),
+
+- or as a SoC specific erratum, but not as a general "sh*t happened"
+  property.
+
+AFAIK, Lorenzo is looking into this.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
