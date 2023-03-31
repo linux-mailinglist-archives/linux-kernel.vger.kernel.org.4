@@ -2,81 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1797D6D16D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 07:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6AD6D16DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 07:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjCaFgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 01:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S229957AbjCaFjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 01:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCaFgJ (ORCPT
+        with ESMTP id S229437AbjCaFjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 01:36:09 -0400
-Received: from pv50p00im-zteg10011401.me.com (pv50p00im-zteg10011401.me.com [17.58.6.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F21383C8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 22:36:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1680240968;
-        bh=sKGRoi8TeZzYLNcSuhfkFHZh2ruRuMHAHIi1NUfW1Nk=;
-        h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To;
-        b=YfLElU2Ymf/i7Ge+KOBYztYdfyRgC6f6dwW6rf7hWSEDNfS6mqDRuG1iwPe8a2w6O
-         7h7bjp2x2BP+G/qRj5njtsX0LQtic/6fmaQf0zuqtwaGOex7CGIApAHDYPcuUbP49l
-         kHrczWSLy6Z/ljWE0RVbimXTtgIKhPLTNGEu+NqTrqZrxEojQAtfcKhQjuwbozCP79
-         lq34BaM83M8o44jP0bQZ4ShHrdxEy5dzluDfnQZn9ZE4oBgrijwiVPVE7Mapiceq6b
-         4LAWSNeXudl09L66wPxGQHsuCbWY4nvspjV362rOJn65XXF9dlemhbeUPD9GdD37LP
-         YhYr7hRwOzQkw==
-Received: from localhost (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-        by pv50p00im-zteg10011401.me.com (Postfix) with ESMTPSA id 28B4FDC02DC;
-        Fri, 31 Mar 2023 05:36:04 +0000 (UTC)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 31 Mar 2023 07:36:02 +0200
-Message-Id: <CRKBPM6IOSJS.3RBNRJ8TSZX9U@iMac.local>
-Cc:     "Maxime Ripard" <maxime@cerno.tech>,
-        "Chen-Yu Tsai" <wens@csie.org>, "David Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Samuel Holland" <samuel@sholland.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
- TCON0_DCLK_REG
-From:   "Roman Beranek" <romanberanek@icloud.com>
-To:     "Frank Oltmanns" <frank@oltmanns.dev>
-X-Mailer: aerc 0.14.0
-References: <20230320161636.24411-1-romanberanek@icloud.com>
- <87wn356ni4.fsf@oltmanns.dev> <20230327202045.ceeqqwjug4ktxtsf@penduick>
- <CRHKFX934UA0.1MCKCD8SJSPIE@iMac.local>
- <20230329195802.veybo3367zifw77n@penduick> <877cuyon5e.fsf@oltmanns.dev>
-In-Reply-To: <877cuyon5e.fsf@oltmanns.dev>
-X-Proofpoint-GUID: 1DKQc4fsLyT6il9NAOZ-x1dK75Ip_PH6
-X-Proofpoint-ORIG-GUID: 1DKQc4fsLyT6il9NAOZ-x1dK75Ip_PH6
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.883,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-06-21=5F08:2022-06-21=5F01,2022-06-21=5F08,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 phishscore=0
- mlxlogscore=252 spamscore=0 clxscore=1015 suspectscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2303310043
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 31 Mar 2023 01:39:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB771165F;
+        Thu, 30 Mar 2023 22:39:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3E1DB82BBF;
+        Fri, 31 Mar 2023 05:39:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14755C433D2;
+        Fri, 31 Mar 2023 05:38:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680241144;
+        bh=RaxOmDnV17uzrPhgXJeKsuN/oSdrW0+Jw7YKYzsy6Kk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aO1fswx90sOS8FTXRoScvoQjtO+Bqvy/lmaGcRk0w93FRUwofux+6XSUSMBrU4KQF
+         OuCbLvSndWB37fWqyS+8j67J+Tz8i8sdBNXteTxaDG1FPeQKWx3yexDY98wDPS2odv
+         RwiAx3V0HONe45JRUWotEmnpjPFhndOAtFpQQiTlEhqJDQANIn0h1kgHcF+Cew6WHT
+         igokLN0v5tne8BS11Eus1dSwBsvgVBwyOwI5etu8fqKbRpZYc8ev09gFwTv1SbB7FL
+         kOlb7apU2B9kF/PjjtySsgCKJxpHOzp2gwI97Y9qy5g/Cg8nuSVRRbXIxF0fPm3mhP
+         Zs7InFKtu2tDA==
+Date:   Fri, 31 Mar 2023 11:08:50 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Shunsuke Mie <mie@igel.co.jp>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Frank Li <Frank.Li@nxp.com>, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [RFC PATCH 00/11] Introduce a test for continuous transfer
+Message-ID: <20230331053850.GE4973@thinkpad>
+References: <20230317113238.142970-1-mie@igel.co.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230317113238.142970-1-mie@igel.co.jp>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Frank,
+On Fri, Mar 17, 2023 at 08:32:27PM +0900, Shunsuke Mie wrote:
+> This patchset introduces testing through continuous transfer to the PCI
+> endpoint tests. The purpose is to find bugs that may exist in the endpoint
+> controller driver. This changes able to find bugs in the DW EDMA driver and
+> this patchset includes the fix.
+> 
+> This bug does not appear in the current tests because these synchronize to
+> finish with every data transfer. However, the problem occurs with
+> continuous DMA issuances. The continuous transfers are required to get high
+> throughput and low latency. Therefore, the added tests will enable
+> realistic transfer testing.
+> 
+> This patchset is divided into three parts:
+> - Remove duplicated definitions and improve some code [1-6/11]
+> - Add continuous transfer tests [7-9/11]
+> - Fix for the DW EDMA driver bug [10,11/11]
+> 
+> This patchset has beed tested on RCar Spidar that has dw pci edma chip.
+> 
 
-On Thu Mar 30, 2023 at 6:45 AM CEST, Frank Oltmanns wrote:
-> Roman, will you please submit a V2 of the patch I submitted then? Or do
-> you want me to do it?
+If you want maintainers to review the patches separately, please remove the RFC
+tag. Unless you are looking for some overall feedback about the approach.
 
-Yes, I'm already on it, only missing a cover letter.
+But we are in the process of migrating the existing test under tools to
+Kselftest framework [1]. Until then, we cannot accept patches improving the
+existing test code. So please respin the patches on top of the Kselftest patch
+once it got posted. It's already due for some time :/
 
-Roman
+Also the subject should mention "PCI endpoint".
+
+- Mani
+
+[1] https://lore.kernel.org/all/20221007053934.5188-1-aman1.gupta@samsung.com/
+
+> Shunsuke Mie (11):
+>   misc: pci_endpoint_test: Aggregate irq_type checking
+>   misc: pci_endpoint_test: Remove an unused variable
+>   pci: endpoint: function/pci-epf-test: Unify a range of time
+>     measurement
+>   PCI: endpoint: functions/pci-epf-test: Move common difinitions to
+>     header file
+>   MAINTAINERS: Add a header file for pci-epf-test
+>   misc: pci_endpoint_test: Use a common header file between endpoint
+>     driver
+>   PCI: endpoint: functions/pci-epf-test: Extend the test for continuous
+>     transfers
+>   misc: pci_endpoint_test: Support a test of continuous transfer
+>   tools: PCI: Add 'C' option to support continuous transfer
+>   dmaengine: dw-edma: Fix to change for continuous transfer
+>   dmaengine: dw-edma: Fix to enable to issue dma request on DMA
+>     processing
+> 
+>  MAINTAINERS                                   |   1 +
+>  drivers/dma/dw-edma/dw-edma-core.c            |  30 ++-
+>  drivers/misc/pci_endpoint_test.c              | 132 ++++--------
+>  drivers/pci/endpoint/functions/pci-epf-test.c | 199 ++++++++----------
+>  include/linux/pci-epf-test.h                  |  67 ++++++
+>  include/uapi/linux/pcitest.h                  |   1 +
+>  tools/pci/pcitest.c                           |  13 +-
+>  7 files changed, 231 insertions(+), 212 deletions(-)
+>  create mode 100644 include/linux/pci-epf-test.h
+> 
+> -- 
+> 2.25.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
