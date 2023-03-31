@@ -2,80 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BF86D1DB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026E86D1DA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbjCaKOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 06:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        id S230239AbjCaKJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 06:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbjCaKNP (ORCPT
+        with ESMTP id S230463AbjCaKIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 06:13:15 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8CF24AC1;
-        Fri, 31 Mar 2023 03:07:48 -0700 (PDT)
-Received: from legion.. ([172.16.0.254])
-        (user=lidaxian@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 32V9tmlN007322-32V9tmlO007322
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 31 Mar 2023 17:56:17 +0800
-From:   Li Yang <lidaxian@hust.edu.cn>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Li Yang <lidaxian@hust.edu.cn>, Dan Carpenter <error27@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] soc: renesas: renesas-soc: release 'chipid' from ioremap()
-Date:   Fri, 31 Mar 2023 17:55:44 +0800
-Message-Id: <20230331095545.31823-1-lidaxian@hust.edu.cn>
+        Fri, 31 Mar 2023 06:08:55 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AC64696
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 03:03:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680256992; x=1711792992;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wlywgRdYFCMfwefUgirPB5xmOD3K8zqnz1V+H3PCcUM=;
+  b=0JI8mZGJtUmLL8sa3NqCdLmAewc1sh+hCdDHRnRKFlNhht2Ew+88c7Ia
+   fCmTCe72N+R6//Gu+mgH7yYOfE6R/306vIbvdVr1Mg7l67Rzfee3zVnXB
+   Wd3kgtLYcPEmnf/+P6583XI4BllvU9eJSqNBKm0IxQoIJkHfU49cUsOmv
+   md81w4+YlFyW9xB4AQ0Hd7UNQsz67ph7IYzsg6b2o1mDxnCcj+RKJHmdJ
+   oQm6HXeeShyZLO+3aTO1Rn5SpU+x330jZdj1E1YyXjQtwLVWQX/CCdXFZ
+   bDksK5aEwpKigQGdzwOwuPvI174HBQkJmjFP2lqrO6VvUTV6tgWB87a9c
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,307,1673938800"; 
+   d="scan'208";a="204368686"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Mar 2023 02:56:11 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 31 Mar 2023 02:56:08 -0700
+Received: from ROU-LT-M43238L.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 31 Mar 2023 02:56:06 -0700
+From:   <nicolas.ferre@microchip.com>
+To:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tudor.ambarus@linaro.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>
+CC:     Varshini Rajendran <varshini.rajendran@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <linux-mtd@lists.infradead.org>,
+        "Guillaume Socquet" <guillaume.socquet@microchip.com>
+Subject: [PATCH] mtd: spi-nor: sst: Unlock addition for sst26vf016
+Date:   Fri, 31 Mar 2023 11:55:49 +0200
+Message-ID: <20230331095549.16393-1-nicolas.ferre@microchip.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: lidaxian@hust.edu.cn
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports:
+From: Guillaume Socquet <guillaume.socquet@microchip.com>
 
-drivers/soc/renesas/renesas-soc.c:536 renesas_soc_init() warn:
-'chipid' from ioremap() not released on lines: 475.
+Modify sst26vf016 flash_info struct so when such device is detected by
+the driver it may be unlocked for write operation as sst26vf064.
 
-If soc_dev_atrr allocation is failed, function renesas_soc_init()
-will return without releasing 'chipid' from ioremap().
-
-Fix this by adding function iounmap().
-
-Fixes: cb5508e47e60 ("soc: renesas: Add support for reading product revision for RZ/G2L family")
-Signed-off-by: Li Yang <lidaxian@hust.edu.cn>
-Reviewed-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Guillaume Socquet <guillaume.socquet@microchip.com>
+Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 ---
- drivers/soc/renesas/renesas-soc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/mtd/spi-nor/sst.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
-index 468ebce1ea88..51191d1a6dd1 100644
---- a/drivers/soc/renesas/renesas-soc.c
-+++ b/drivers/soc/renesas/renesas-soc.c
-@@ -471,8 +471,11 @@ static int __init renesas_soc_init(void)
- 	}
- 
- 	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
--	if (!soc_dev_attr)
-+	if (!soc_dev_attr) {
-+		if (chipid)
-+			iounmap(chipid);
- 		return -ENOMEM;
-+	}
- 
- 	np = of_find_node_by_path("/");
- 	of_property_read_string(np, "model", &soc_dev_attr->machine);
+diff --git a/drivers/mtd/spi-nor/sst.c b/drivers/mtd/spi-nor/sst.c
+index 63bcc97bf978..99c8a19493f5 100644
+--- a/drivers/mtd/spi-nor/sst.c
++++ b/drivers/mtd/spi-nor/sst.c
+@@ -110,7 +110,9 @@ static const struct flash_info sst_nor_parts[] = {
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+ 			      SPI_NOR_QUAD_READ) },
+ 	{ "sst26vf016b", INFO(0xbf2641, 0, 64 * 1024, 32)
+-		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ) },
++		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE)
++		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ)
++		.fixups = &sst26vf_nor_fixups },
+ 	{ "sst26vf064b", INFO(0xbf2643, 0, 64 * 1024, 128)
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
 -- 
 2.34.1
 
