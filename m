@@ -2,139 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C486C6D16D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 07:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 941086D16E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 07:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjCaFez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 01:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
+        id S229976AbjCaFk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 01:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCaFex (ORCPT
+        with ESMTP id S229437AbjCaFk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 01:34:53 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A4D83C8;
-        Thu, 30 Mar 2023 22:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680240891; x=1711776891;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dFJBTEI0i8alvBIKkAgPGcwUbxekbkcw2MQoL9eKAOk=;
-  b=N3apkt2cChnko4CQGHD/Xj69cXSh+Zaz2/PeNZP/Sky6T4zpWIf95iL7
-   BhQHcoTwk3E4Q3M/fLLrBRWrfv2pOHHoIT9mSxojsnxDUoRcuVFpU2mcq
-   NWXmQg7ryorx9X2PTOIL5wC1hyJDYyK/3bewd2ErL8DfJMjfKH1FE3gXl
-   Cn3dvL/+2NuybmIhbgwsbtpSiIgIiTikDwZHXvm7mV4sefU/4Fj3FnW1q
-   NV4ez/xctQ1HyjFzWjYULa2TcBnMN7T+l3L1rFMvlndc5rqCnyJuTxStK
-   GrpDFitXhN5TAv+hwKwfMTOO18XAI8FEjnaba2W2hgLDbOvjeYWmDZeku
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="406372370"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="406372370"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 22:34:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="635168694"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="635168694"
-Received: from dmi-pnp-i7.sh.intel.com (HELO localhost) ([10.239.159.155])
-  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2023 22:34:47 -0700
-Date:   Fri, 31 Mar 2023 13:40:11 +0800
-From:   Dapeng Mi <dapeng1.mi@linux.intel.com>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhang Tinghao <tinghao.zhang@intel.com>,
-        Zhuocheng Ding <zhuocheng.ding@intel.com>
-Subject: Re: [PATCH] perf/x86/intel: Define bit macros for FixCntrCtl MSR
-Message-ID: <ZCZyOyvfNgKsYVLy@dmi-pnp-i7>
-References: <20230330012846.2927220-1-dapeng1.mi@linux.intel.com>
- <20230330130702.GF124812@hirez.programming.kicks-ass.net>
- <2bba1909-dac8-321f-e685-a793f1a4e170@linux.intel.com>
+        Fri, 31 Mar 2023 01:40:57 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AD91165F;
+        Thu, 30 Mar 2023 22:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
+  s=amazon201209; t=1680241255; x=1711777255;
+  h=from:to:cc:subject:date:message-id:content-id:
+   content-transfer-encoding:mime-version;
+  bh=TerRkkOhYulIR3eY0r3qMdPIhyHpNoDR4DJnSez0h7Y=;
+  b=LvnFnL/PB6aqB3o/6lwWP0vJhi5VeC2GTFcIYf6T6kv9uajolqZWm+ds
+   ap/B5X1146x0U7z4tMh4LsX6D+yJUoZ8OtmPWGkdduNDgKgE8BLpkHSeW
+   sel9ezQGlrerPRNEEWHH32XZJjyLlAx/jayE8r+1NZtQeQoLuHTmX4YDl
+   4=;
+X-IronPort-AV: E=Sophos;i="5.98,306,1673913600"; 
+   d="scan'208";a="1118167628"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 05:40:55 +0000
+Received: from EX19MTAUWA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com (Postfix) with ESMTPS id 997FF40D4D;
+        Fri, 31 Mar 2023 05:40:54 +0000 (UTC)
+Received: from EX19D004ANA004.ant.amazon.com (10.37.240.146) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.22; Fri, 31 Mar 2023 05:40:51 +0000
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19D004ANA004.ant.amazon.com (10.37.240.146) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
+ Fri, 31 Mar 2023 05:40:50 +0000
+Received: from EX19D004ANA001.ant.amazon.com ([fe80::f099:cbca:cc6b:91ec]) by
+ EX19D004ANA001.ant.amazon.com ([fe80::f099:cbca:cc6b:91ec%5]) with mapi id
+ 15.02.1118.026; Fri, 31 Mar 2023 05:40:50 +0000
+From:   "Iwashima, Kuniyuki" <kuniyu@amazon.co.jp>
+To:     Jason Xing <kerneljasonxing@gmail.com>
+CC:     "threeearcat@gmail.com" <threeearcat@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "dsahern@kernel.org" <dsahern@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "Iwashima, Kuniyuki" <kuniyu@amazon.co.jp>
+Subject: Re: general protection fault in raw_seq_start
+Thread-Topic: general protection fault in raw_seq_start
+Thread-Index: AQHZY5NZrKTe0Qe+8UWbUvzoGB47rA==
+Date:   Fri, 31 Mar 2023 05:40:50 +0000
+Message-ID: <0429FBD6-9BCC-4E97-BB7D-71D694D19797@amazon.co.jp>
+Accept-Language: ja-JP, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.106.100.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <762FAEBC71764C4D9A09C643A159F6C0@amazon.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2bba1909-dac8-321f-e685-a793f1a4e170@linux.intel.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 10:46:01AM -0400, Liang, Kan wrote:
-> Date: Thu, 30 Mar 2023 10:46:01 -0400
-> From: "Liang, Kan" <kan.liang@linux.intel.com>
-> Subject: Re: [PATCH] perf/x86/intel: Define bit macros for FixCntrCtl MSR
-> 
-> 
-> 
-> On 2023-03-30 9:07 a.m., Peter Zijlstra wrote:
-> > On Thu, Mar 30, 2023 at 09:28:46AM +0800, Dapeng Mi wrote:
-> >> Define bit macros for FixCntrCtl MSR and replace the bit hardcoding
-> >> with these bit macros. This would make code be more human-readable.
-> >>
-> >> Perf commands 'perf stat -e "instructions,cycles,ref-cycles"' and
-> >> 'perf record -e "instructions,cycles,ref-cycles"' pass.
-> >>
-> >> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
-> >> ---
-> >>  arch/x86/events/intel/core.c      | 18 +++++++++---------
-> >>  arch/x86/include/asm/perf_event.h | 10 ++++++++++
-> >>  2 files changed, 19 insertions(+), 9 deletions(-)
-> >>
-> >> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> >> index 070cc4ef2672..b7c0bb78ed59 100644
-> >> --- a/arch/x86/events/intel/core.c
-> >> +++ b/arch/x86/events/intel/core.c
-> >> @@ -2451,7 +2451,7 @@ static void intel_pmu_disable_fixed(struct perf_event *event)
-> >>  
-> >>  	intel_clear_masks(event, idx);
-> >>  
-> >> -	mask = 0xfULL << ((idx - INTEL_PMC_IDX_FIXED) * 4);
-> >> +	mask = intel_fixed_bits(idx - INTEL_PMC_IDX_FIXED, INTEL_FIXED_BITS_MASK);
-> >>  	cpuc->fixed_ctrl_val &= ~mask;
-> > 
-> > So maybe it's me, but I find the original far easier to read :/ That new
-> > things I need to look up every single identifier before I can tell wth
-> > it does.
-> 
-> The intel_fixed_bits() tries to replace the duplicate "bit << (idx *
-> 4);". I think it should be a good improvement. Maybe we should rename it
-> to intel_shift_fixed_bits_by_idx(). Is it better?
-> 
-> If not, I think at least we should use some macros to replace the magic
-> number.
-> 
-> Thanks,
-> Kan
-
-Comparing previous magic numbers, the following macros can help developers
-to know the meaning of the piece of code rapidly and don't need to
-check the hardware specs and get its meaning, and developers could more
-easily confirm his code logic is correct and don't confirm with spec
-again.
-
-+#define INTEL_FIXED_0_KERNEL				(1ULL << 0)
-+#define INTEL_FIXED_0_USER				(1ULL << 1)
-+#define INTEL_FIXED_0_ANYTHREAD			(1ULL << 2)
-+#define INTEL_FIXED_0_ENABLE_PMI			(1ULL << 3)
-
-As for the macro intel_fixed_bits, it indeed hides some details, but it
-make the code looks cleaner and developer can use it more easily and don't
-worry about the details. Like what Kan said, maybe we can get a new name to
-make it be more understandably. 
--- 
-Thanks,
-Dapeng Mi
+RnJvbTogSmFzb24gWGluZyA8a2VybmVsamFzb254aW5nQGdtYWlsLmNvbT4NCkRhdGU6IEZyaSwg
+MzEgTWFyIDIwMjMgMTM6MzE6MDEgKzA4MDANCj4gT24gRnJpLCBNYXIgMzEsIDIwMjMgYXQgNjow
+OD1FMj04MD1BRkFNIEt1bml5dWtpIEl3YXNoaW1hIDxrdW5peXVAYW1hem9uLmNvbT4gd3JvDQo+
+IHRlOg0KPiA+DQo+ID4gRnJvbTogICAiRGFlIFIuIEplb25nIiA8dGhyZWVlYXJjYXRAZ21haWwu
+Y29tPg0KPiA+IERhdGU6ICAgU3VuLCAyNiBNYXIgMjAyMyAyMToxMjowOCArMDkwMA0KPiA+ID4g
+SGksDQo+ID4gPg0KPiA+ID4gV2Ugb2JzZXJ2ZWQgYW4gaXNzdWUgImdlbmVyYWwgcHJvdGVjdGlv
+biBmYXVsdCBpbiByYXdfc2VxX3N0YXJ0Ig0KPiA+ID4gZHVyaW5nIGZ1enppbmcuDQo+ID4gPg0K
+PiA+ID4gVW5mb3J0dW5hdGVseSwgd2UgaGF2ZSBub3QgZm91bmQgYSByZXByb2R1Y2VyIGZvciB0
+aGUgY3Jhc2ggeWV0LiBXZQ0KPiA+ID4gd2lsbCBpbmZvcm0geW91IGlmIHdlIGhhdmUgYW55IHVw
+ZGF0ZSBvbiB0aGlzIGNyYXNoLg0KPiA+ID4gRGV0YWlsZWQgY3Jhc2ggaW5mb3JtYXRpb24gaXMg
+YXR0YWNoZWQgYmVsb3cuDQo+ID4gPg0KPiA+ID4gQmVzdCByZWdhcmRzLA0KPiA+ID4gRGFlIFIu
+IEplb25nDQo+ID4gPg0KPiA+ID4gLS0tLS0NCj4gPiA+DQo+ID4gPiAtIEtlcm5lbCB2ZXJzaW9u
+DQo+ID4gPiAgIDYuMg0KPiA+ID4NCj4gPiA+IC0gTGFzdCBleGVjdXRlZCBpbnB1dA0KPiA+ID4g
+ICB1bnNoYXJlKDB4NDAwNjAyMDApDQo+ID4gPiAgIHIwID0zRCBzeXpfb3Blbl9wcm9jZnMoMHgw
+LCAmKDB4N2YwMDAwMDAyMDgwKT0zRCduZXQvcmF3XHgwMCcpDQo+ID4gPiAgIHNvY2tldCRpbmV0
+X2ljbXBfcmF3KDB4MiwgMHgzLCAweDEpDQo+ID4gPiAgIHBwb2xsKDB4MCwgMHgwLCAweDAsIDB4
+MCwgMHgwKQ0KPiA+ID4gICBzb2NrZXQkaW5ldF9pY21wX3JhdygweDIsIDB4MywgMHgxKQ0KPiA+
+ID4gICBwcmVhZDY0KHIwLCAmKDB4N2YwMDAwMDAwMDAwKT0zRCIiLzEwLCAweGEsIDB4MTAwMDAw
+MDAwMDdmKQ0KPiA+DQo+ID4gVGhhbmtzIGZvciByZXBvcnRpbmcgdGhlIGlzc3VlLg0KPiA+DQo+
+ID4gSXQgc2VlbXMgd2UgbmVlZCB0byB1c2UgUkNVIHZhcmlhbnQgaW4gcmF3X2dldF9maXJzdCgp
+Lg0KPiA+IEknbGwgcG9zdCBhIHBhdGNoLg0KPiA+DQo+ID4gLS0tDQo+ID4gZGlmZiAtLWdpdCBh
+L25ldC9pcHY0L3Jhdy5jIGIvbmV0L2lwdjQvcmF3LmMNCj4gPiBpbmRleCAzY2Y2ODY5NWI0MGQu
+LmZlMGQxYWQyMGIzNSAxMDA2NDQNCj4gPiAtLS0gYS9uZXQvaXB2NC9yYXcuYw0KPiA+ICsrKyBi
+L25ldC9pcHY0L3Jhdy5jDQo+ID4gQEAgLTk1Nyw3ICs5NTcsNyBAQCBzdGF0aWMgc3RydWN0IHNv
+Y2sgKnJhd19nZXRfZmlyc3Qoc3RydWN0IHNlcV9maWxlICpzZQ0KPiBxLCBpbnQgYnVja2V0KQ0K
+PiA+ICAgICAgICAgZm9yIChzdGF0ZS0+YnVja2V0ID0zRCBidWNrZXQ7IHN0YXRlLT5idWNrZXQg
+PCBSQVdfSFRBQkxFX1NJWkU7DQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgKytzdGF0ZS0+
+YnVja2V0KSB7DQo+ID4gICAgICAgICAgICAgICAgIGhsaXN0ID0zRCAmaC0+aHRbc3RhdGUtPmJ1
+Y2tldF07DQo+ID4gLSAgICAgICAgICAgICAgIHNrX251bGxzX2Zvcl9lYWNoKHNrLCBobm9kZSwg
+aGxpc3QpIHsNCj4gPiArICAgICAgICAgICAgICAgc2tfbnVsbHNfZm9yX2VhY2hfcmN1KHNrLCBo
+bm9kZSwgaGxpc3QpIHsNCj4gDQo+IEhlbGxvIEt1bml5dWtpLA0KPiANCj4gSSdtIHdvbmRlcmlu
+ZyBpZiB3ZSBzaG91bGQgYWxzbyB1c2UgcmN1X3JlYWRfbG9jaygpL191bmxvY2soKSBwYWlyIHRv
+IHByb3RlDQo+IGN0Pw0KDQpJdCdzIHVzZWQuICBTZWUgcmF3X3NlcV9zdGFydCgpIGFuZCByYXdf
+c2VxX3N0b3AoKS4NCg0KDQo+IA0KPiBDQzogRXJpYw0KPiANCj4gSXQgc2VlbXMgdGhhdCB3ZSBo
+YXZlIHRvIGNvbnZlcnQgYWxsIHRoZSBza19udWxsc19mb3JfZWFjaCgpIHRvDQo+IHNrX251bGxz
+X2Zvcl9lYWNoX3JjdSgpIHdpdGggdGhlIHJjdV9yZWFkX2xvY2svX3VubG9jayBwcm90ZWN0aW9u
+IGluDQo+IG5ldC9pcHY0L3Jhdy5jPw0KDQpZZXMsIEknbSBwcmVwYXJpbmcgdGhlIGNoYW5nZSBp
+bmNsdWRpbmcgcmF3X2RpYWcuYywgYW5kIEkgdGhpbmsgd2UgDQpuZWVkIHNrX251bGxfbmV4dF9y
+Y3UoKSBhcyB0aGUgaXNzdWUgaGFwcGVuZCBpbiByYXdfZ2V0X25leHQoKSB0aGlzDQp0aW1lLg0K
+DQpBbHNvLCBJIGhhdmUgdGhlIHNhbWUgY2hhbmdlIGZvciBwaW5nLmMNCg0KVGhhbmtzLA0KS3Vu
+aXl1a2kNCg0KDQo+IA0KPiBUaGFua3MsDQo+IEphc29uDQo+IA0KPiA+ICAgICAgICAgICAgICAg
+ICAgICAgICAgIGlmIChzb2NrX25ldChzaykgPTNEPTNEIHNlcV9maWxlX25ldChzZXEpKQ0KPiA+
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIHNrOw0KPiA+ICAgICAgICAg
+ICAgICAgICB9DQo+ID4gLS0tDQo+ID4NCj4gPiBUaGFua3MsDQo+ID4gS3VuaXl1a2kNCj4gPg0K
+PiA+DQo+ID4NCj4gPiA+DQo+ID4gPiAtIENyYXNoIHJlcG9ydA0KPiA+ID4gZ2VuZXJhbCBwcm90
+ZWN0aW9uIGZhdWx0LCBwcm9iYWJseSBmb3Igbm9uLWNhbm9uaWNhbCBhZGRyZXNzIDB4ZGZmZmZj
+MDANCj4gMDAwMDAwMDU6IDAwMDAgWyMxXSBQUkVFTVBUIFNNUCBLQVNBTg0KPiA+ID4gS0FTQU46
+IG51bGwtcHRyLWRlcmVmIGluIHJhbmdlIFsweDAwMDAwMDAwMDAwMDAwMjgtMHgwMDAwMDAwMDAw
+MDAwMDJmXQ0KPiA+ID4gQ1BVOiAyIFBJRDogMjA5NTIgQ29tbTogc3l6LWV4ZWN1dG9yLjAgTm90
+IHRhaW50ZWQgNi4yLjAtZzA0OGVjODY5YmFmZC0NCj4gZGlydHkgIzcNCj4gPiA+IEhhcmR3YXJl
+IG5hbWU6IFFFTVUgU3RhbmRhcmQgUEMgKGk0NDBGWCArIFBJSVgsIDE5OTYpLCBCSU9TIHJlbC0x
+LjE0LjAtDQo+IDAtZzE1NTgyMWExOTkwYi1wcmVidWlsdC5xZW11Lm9yZyAwNC8wMS8yMDE0DQo+
+ID4gPiBSSVA6IDAwMTA6cmVhZF9wbmV0IGluY2x1ZGUvbmV0L25ldF9uYW1lc3BhY2UuaDozODMg
+W2lubGluZV0NCj4gPiA+IFJJUDogMDAxMDpzb2NrX25ldCBpbmNsdWRlL25ldC9zb2NrLmg6NjQ5
+IFtpbmxpbmVdDQo+ID4gPiBSSVA6IDAwMTA6cmF3X2dldF9uZXh0IG5ldC9pcHY0L3Jhdy5jOjk3
+NCBbaW5saW5lXQ0KPiA+ID4gUklQOiAwMDEwOnJhd19nZXRfaWR4IG5ldC9pcHY0L3Jhdy5jOjk4
+NiBbaW5saW5lXQ0KPiA+ID4gUklQOiAwMDEwOnJhd19zZXFfc3RhcnQrMHg0MzEvMHg4MDAgbmV0
+L2lwdjQvcmF3LmM6OTk1DQo+ID4gPiBDb2RlOiBlZiBlOCAzMyAzZCA5NCBmNyA0OSA4YiA2ZCAw
+MCA0YyA4OSBlZiBlOCBiNyA2NSA1ZiBmNyA0OSA4OSBlZCA0OQ0KPiAgODMgYzUgOTggMGYgODQg
+OWEgMDAgMDAgMDAgNDggODMgYzUgYzggNDggODkgZTggNDggYzEgZTggMDMgPDQyPiA4MCAzYyAz
+MCAwDQo+IDAgNzQgMDggNDggODkgZWYgZTggMDAgM2QgOTQgZjcgNGMgOGIgN2QgMDAgNDggODkg
+ZWYNCj4gPiA+IFJTUDogMDAxODpmZmZmYzkwMDExNTRmOWIwIEVGTEFHUzogMDAwMTAyMDYNCj4g
+PiA+IFJBWDogMDAwMDAwMDAwMDAwMDAwNSBSQlg6IDFmZmZmMTEwMDMwMmM4ZmQgUkNYOiAwMDAw
+MDAwMDAwMDAwMDAwDQo+ID4gPiBSRFg6IDAwMDAwMDAwMDAwMDAwMjggUlNJOiBmZmZmYzkwMDEx
+NTRmOTg4IFJESTogZmZmZmM5MDAwZjc3YTMzOA0KPiA+ID4gUkJQOiAwMDAwMDAwMDAwMDAwMDI5
+IFIwODogZmZmZmZmZmY4YTUwZmZiNCBSMDk6IGZmZmZmYmZmZjI0YjZiZDkNCj4gPiA+IFIxMDog
+ZmZmZmZiZmZmMjRiNmJkOSBSMTE6IDAwMDAwMDAwMDAwMDAwMDAgUjEyOiBmZmZmODg4MDFkYjcz
+Yjc4DQo+ID4gPiBSMTM6IGZmZmZmZmZmZmZmZmZmZjkgUjE0OiBkZmZmZmMwMDAwMDAwMDAwIFIx
+NTogMDAwMDAwMDAwMDAwMDAzMA0KPiA+ID4gRlM6ICAwMDAwN2Y4NDNhZThlNzAwKDAwMDApIEdT
+OmZmZmY4ODgwNjM3MDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDANCj4gMDAwMDANCj4gPiA+
+IENTOiAgMDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMNCj4gPiA+
+IENSMjogMDAwMDU1YmI5NjE0YjM1ZiBDUjM6IDAwMDAwMDAwM2M2NzIwMDAgQ1I0OiAwMDAwMDAw
+MDAwMzUwNmUwDQo+ID4gPiBEUjA6IDAwMDAwMDAwMDAwMDAwMDAgRFIxOiAwMDAwMDAwMDAwMDAw
+MDAwIERSMjogMDAwMDAwMDAwMDAwMDAwMA0KPiA+ID4gRFIzOiAwMDAwMDAwMDAwMDAwMDAwIERS
+NjogMDAwMDAwMDBmZmZlMGZmMCBEUjc6IDAwMDAwMDAwMDAwMDA0MDANCj4gPiA+IENhbGwgVHJh
+Y2U6DQo+ID4gPiAgPFRBU0s+DQo+ID4gPiAgc2VxX3JlYWRfaXRlcisweDRjNi8weDEwZjAgZnMv
+c2VxX2ZpbGUuYzoyMjUNCj4gPiA+ICBzZXFfcmVhZCsweDIyNC8weDMyMCBmcy9zZXFfZmlsZS5j
+OjE2Mg0KPiA+ID4gIHBkZV9yZWFkIGZzL3Byb2MvaW5vZGUuYzozMTYgW2lubGluZV0NCj4gPiA+
+ICBwcm9jX3JlZ19yZWFkKzB4MjNmLzB4MzMwIGZzL3Byb2MvaW5vZGUuYzozMjgNCj4gPiA+ICB2
+ZnNfcmVhZCsweDMxZS8weGQzMCBmcy9yZWFkX3dyaXRlLmM6NDY4DQo+ID4gPiAga3N5c19wcmVh
+ZDY0IGZzL3JlYWRfd3JpdGUuYzo2NjUgW2lubGluZV0NCj4gPiA+ICBfX2RvX3N5c19wcmVhZDY0
+IGZzL3JlYWRfd3JpdGUuYzo2NzUgW2lubGluZV0NCj4gPiA+ICBfX3NlX3N5c19wcmVhZDY0IGZz
+L3JlYWRfd3JpdGUuYzo2NzIgW2lubGluZV0NCj4gPiA+ICBfX3g2NF9zeXNfcHJlYWQ2NCsweDFl
+OS8weDI4MCBmcy9yZWFkX3dyaXRlLmM6NjcyDQo+ID4gPiAgZG9fc3lzY2FsbF94NjQgYXJjaC94
+ODYvZW50cnkvY29tbW9uLmM6NTEgW2lubGluZV0NCj4gPiA+ICBkb19zeXNjYWxsXzY0KzB4NGUv
+MHhhMCBhcmNoL3g4Ni9lbnRyeS9jb21tb24uYzo4Mg0KPiA+ID4gIGVudHJ5X1NZU0NBTExfNjRf
+YWZ0ZXJfaHdmcmFtZSsweDYzLzB4Y2QNCj4gPiA+IFJJUDogMDAzMzoweDQ3OGQyOQ0KPiA+ID4g
+Q29kZTogZjcgZDggNjQgODkgMDIgYjggZmYgZmYgZmYgZmYgYzMgNjYgMGYgMWYgNDQgMDAgMDAg
+NDggODkgZjggNDggODkNCj4gIGY3IDQ4IDg5IGQ2IDQ4IDg5IGNhIDRkIDg5IGMyIDRkIDg5IGM4
+IDRjIDhiIDRjIDI0IDA4IDBmIDA1IDw0OD4gM2QgMDEgZjAgZg0KPiBmIGZmIDczIDAxIGMzIDQ4
+IGM3IGMxIGJjIGZmIGZmIGZmIGY3IGQ4IDY0IDg5IDAxIDQ4DQo+ID4gPiBSU1A6IDAwMmI6MDAw
+MDdmODQzYWU4ZGJlOCBFRkxBR1M6IDAwMDAwMjQ2IE9SSUdfUkFYOiAwMDAwMDAwMDAwMDAwMDEx
+DQo+ID4gPiBSQVg6IGZmZmZmZmZmZmZmZmZmZGEgUkJYOiAwMDAwMDAwMDAwNzkxNDA4IFJDWDog
+MDAwMDAwMDAwMDQ3OGQyOQ0KPiA+ID4gUkRYOiAwMDAwMDAwMDAwMDAwMDBhIFJTSTogMDAwMDAw
+MDAyMDAwMDAwMCBSREk6IDAwMDAwMDAwMDAwMDAwMDMNCj4gPiA+IFJCUDogMDAwMDAwMDBmNDc3
+OTA5YSBSMDg6IDAwMDAwMDAwMDAwMDAwMDAgUjA5OiAwMDAwMDAwMDAwMDAwMDAwDQo+ID4gPiBS
+MTA6IDAwMDAxMDAwMDAwMDAwN2YgUjExOiAwMDAwMDAwMDAwMDAwMjQ2IFIxMjogMDAwMDAwMDAw
+MDc5MTc0MA0KPiA+ID4gUjEzOiAwMDAwMDAwMDAwNzkxNDE0IFIxNDogMDAwMDAwMDAwMDc5MTQw
+OCBSMTU6IDAwMDA3ZmZjMmViNDhhNTANCj4gPiA+ICA8L1RBU0s+DQo+ID4gPiBNb2R1bGVzIGxp
+bmtlZCBpbjoNCj4gPiA+IC0tLVsgZW5kIHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAgXS0tLQ0KPiA+
+ID4gUklQOiAwMDEwOnJlYWRfcG5ldCBpbmNsdWRlL25ldC9uZXRfbmFtZXNwYWNlLmg6MzgzIFtp
+bmxpbmVdDQo+ID4gPiBSSVA6IDAwMTA6c29ja19uZXQgaW5jbHVkZS9uZXQvc29jay5oOjY0OSBb
+aW5saW5lXQ0KPiA+ID4gUklQOiAwMDEwOnJhd19nZXRfbmV4dCBuZXQvaXB2NC9yYXcuYzo5NzQg
+W2lubGluZV0NCj4gPiA+IFJJUDogMDAxMDpyYXdfZ2V0X2lkeCBuZXQvaXB2NC9yYXcuYzo5ODYg
+W2lubGluZV0NCj4gPiA+IFJJUDogMDAxMDpyYXdfc2VxX3N0YXJ0KzB4NDMxLzB4ODAwIG5ldC9p
+cHY0L3Jhdy5jOjk5NQ0KPiA+ID4gQ29kZTogZWYgZTggMzMgM2QgOTQgZjcgNDkgOGIgNmQgMDAg
+NGMgODkgZWYgZTggYjcgNjUgNWYgZjcgNDkgODkgZWQgNDkNCj4gIDgzIGM1IDk4IDBmIDg0IDlh
+IDAwIDAwIDAwIDQ4IDgzIGM1IGM4IDQ4IDg5IGU4IDQ4IGMxIGU4IDAzIDw0Mj4gODAgM2MgMzAg
+MA0KPiAwIDc0IDA4IDQ4IDg5IGVmIGU4IDAwIDNkIDk0IGY3IDRjIDhiIDdkIDAwIDQ4IDg5IGVm
+DQo+ID4gPiBSU1A6IDAwMTg6ZmZmZmM5MDAxMTU0ZjliMCBFRkxBR1M6IDAwMDEwMjA2DQo+ID4g
+PiBSQVg6IDAwMDAwMDAwMDAwMDAwMDUgUkJYOiAxZmZmZjExMDAzMDJjOGZkIFJDWDogMDAwMDAw
+MDAwMDAwMDAwMA0KPiA+ID4gUkRYOiAwMDAwMDAwMDAwMDAwMDI4IFJTSTogZmZmZmM5MDAxMTU0
+Zjk4OCBSREk6IGZmZmZjOTAwMGY3N2EzMzgNCj4gPiA+IFJCUDogMDAwMDAwMDAwMDAwMDAyOSBS
+MDg6IGZmZmZmZmZmOGE1MGZmYjQgUjA5OiBmZmZmZmJmZmYyNGI2YmQ5DQo+ID4gPiBSMTA6IGZm
+ZmZmYmZmZjI0YjZiZDkgUjExOiAwMDAwMDAwMDAwMDAwMDAwIFIxMjogZmZmZjg4ODAxZGI3M2I3
+OA0KPiA+ID4gUjEzOiBmZmZmZmZmZmZmZmZmZmY5IFIxNDogZGZmZmZjMDAwMDAwMDAwMCBSMTU6
+IDAwMDAwMDAwMDAwMDAwMzANCj4gPiA+IEZTOiAgMDAwMDdmODQzYWU4ZTcwMCgwMDAwKSBHUzpm
+ZmZmODg4MDYzNzAwMDAwKDAwMDApIGtubEdTOjAwMDAwMDAwMDAwDQo+IDAwMDAwDQo+ID4gPiBD
+UzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzDQo+ID4gPiBD
+UjI6IDAwMDA3ZjkyZmYxNjYwMDAgQ1IzOiAwMDAwMDAwMDNjNjcyMDAwIENSNDogMDAwMDAwMDAw
+MDM1MDZlMA0KPiA+ID4gRFIwOiAwMDAwMDAwMDAwMDAwMDAwIERSMTogMDAwMDAwMDAwMDAwMDAw
+MCBEUjI6IDAwMDAwMDAwMDAwMDAwMDANCj4gPiA+IERSMzogMDAwMDAwMDAwMDAwMDAwMCBEUjY6
+IDAwMDAwMDAwZmZmZTBmZjAgRFI3OiAwMDAwMDAwMDAwMDAwNDAwDQoNCg==
