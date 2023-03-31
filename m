@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A686D1814
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA596D1815
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjCaHFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
+        id S230179AbjCaHGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjCaHFh (ORCPT
+        with ESMTP id S229974AbjCaHGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:05:37 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0520B1B37E
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:05:06 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id q6so9373385iot.2
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:05:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680246299;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3rNqd0R6uZ87QEvrC+b3tYk7NmTqwJbiMttF/TqyvLo=;
-        b=SV73hhUYeNECirBjzFQHECDp8iA2UY+lvxT9oH766LjB5QO6fkZ/SC3sqpjXV8qKXG
-         vriqrCo1PUyDcl57uvEbsCgyDr2ia/vCiXFuOiX59d+eFoFQtpJj2RUqnnAPRKhjnYtI
-         iJOIWnubdHdrlz2M13wIg8IUJ5Z4rD2Szu8thmho7wVuP64X3HGXV8qUh321Kz7NvRmh
-         HYy0p++MG2Xudoivog+M+au5Hri8FY1icZS0hKCra+XtZ2ibFBLnhaI6W7dEJMP/F/xe
-         90RD5JiFYvnEn0uSBANz+YkuAFewx0oc5RgXSo81fha3uO3PgttLPNatvTwq19XfT14a
-         rkyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680246299;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3rNqd0R6uZ87QEvrC+b3tYk7NmTqwJbiMttF/TqyvLo=;
-        b=nVFai77Vy7Tfv1277oA45RK7EVxVgWkebdoqug38wuSckaDvJ8t5Z3iZ3MIsw7Tugb
-         nfEqQom2WKN76hTF6aH9T91cbetEfVJmb/G1MXmmh9SrfOEAOCqGwV57GjIRCjcAvecj
-         cEFQt28j5f2hYoimbkz0nffHpmJiGkN/5UOBHmAMtPZbOEtPMNUysWxbuO+W+4fvLDY0
-         5v4OpZ5IixCtT/N5UMcWzqbszQ2a6sLIZVW0XzZt0atS3yJ6lplSjh0dzsGYHTOPSdxW
-         y08yy7MHpp8qM47Pt1pzSugtI+Hy+/6gr7ungbEVV9WrA2pZW0mQf1eBshRsMsMJ4byA
-         axYg==
-X-Gm-Message-State: AAQBX9co6qsH7i00MZuX0c433kHuaicxgRySRrcH0xpjRLAp3LGu8yGa
-        6xcoY9SvxB18towVk1C/ZqL9EwxWWsTf6bn8CvXTxA==
-X-Google-Smtp-Source: AKy350bbq1kxngMe2Xqo4557i36QfCmq/VHYYN9GagOVSk70y7aHOb1HKGgUhdkuAfthDEmtErlo2T5h/LCAtGNZzyI=
-X-Received: by 2002:a02:a182:0:b0:406:c43f:6320 with SMTP id
- n2-20020a02a182000000b00406c43f6320mr3896110jah.0.1680246299092; Fri, 31 Mar
- 2023 00:04:59 -0700 (PDT)
+        Fri, 31 Mar 2023 03:06:17 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7338A1CB8D;
+        Fri, 31 Mar 2023 00:05:52 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id F37B05C00EB;
+        Fri, 31 Mar 2023 03:05:15 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 31 Mar 2023 03:05:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680246315; x=1680332715; bh=jwSBLhduLUSok4WjC4KaatdQySnT3Bd+oD4
+        A9p2QnUE=; b=EZP9geKZrG+OZyfI4TI1Aa3sc0Z1fpqPyhDugA5v/1XwD3/FURB
+        /hV8UIBEMKi6Htr0AaDf68ZnBBB1EXq22YhulDDaqT/S5yJ8ol1k/KQhvljqcrz8
+        B31a7/GKKPn6w0mQMKo3Adm665w5aMkYXH3YLElV9vcigVp5wiLRe0ShF3OR6xXe
+        75rhMwVx8pmdpFmP0HQ2ILz5/ctQ+zrLIgM0+LyZ+n+n2PcqzgY6Hc4BblA7kh2L
+        Ij2wTQWDUzAsfSmlar8J7dS8bLUnrRZ05YNVnp9suoSC5kjDbruJYTmZaXgGXRvq
+        Qrq9gqEuVJr+/asg+n3pi59fc0aaPX6o6eg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680246315; x=1680332715; bh=jwSBLhduLUSok4WjC4KaatdQySnT3Bd+oD4
+        A9p2QnUE=; b=PUDx69DxCJgwkSqMb+t8dPBlxQDBgRsCaubR2xHmj/OBZtLxmWF
+        EsNVt/qW4Zm+7wIOb6NL8pNluwZD0B49QR2UMXFnjVDz9ywBgH7CiF3qV74BbY6B
+        iUHL/xCydlCU76kq6gGMBP9KHbp2FUdICebC5cYlzQNuSktOnB46wSvJVh0HizXE
+        pg1fy712nqsnJi0E0W/fPEM4yGsZy3L+WruOBjrTQwYCCleluNGSVRLUUezW6JVg
+        dBykvsZMSmLLbIBES68XtE51ssnePbCcxT+fEorph5W35gvXJxCR45UbPIIooQFv
+        vctTEuGJqxcj2RkCvAE9MysvUF3MnJ1a7Dw==
+X-ME-Sender: <xms:K4YmZLroYsWFyJhxAYOX8aPhgRoQJZMTcIgkE0BSz2VkCMOyzu2Blg>
+    <xme:K4YmZFpPogfh9K3LCDIxLh3L7_PdF5pKANOmm3tuDRygLq93h1EhfiOsXQ4MP1fm-
+    PSz8HzagDvoLjeGvA>
+X-ME-Received: <xmr:K4YmZIP9vj1UzgbRN5hEO5MBeNsEq3q8AlDfzRUhHIAVr3frW0UuCBX_llMp4tKJXS5sLaQo8FBBTs55pYabKkVcjw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeitddgudduhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomheptehl
+    ihgtvgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnh
+    epheduuddvteekvdektdduledugfffhfdugeejgeeuvdevtdetveejheehiefffeegnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
+    esrhihhhhlrdhioh
+X-ME-Proxy: <xmx:K4YmZO4OvXX5BJBgkddE-DFupTfPw90qwyjkv4zIl1yE4P7gE-bp1w>
+    <xmx:K4YmZK7zlGB27qXRAZLZTdH-dE2-B9DJUWpyfT-B-fZ_S_qDUvdtvA>
+    <xmx:K4YmZGixqPsHLcBuB5EBohhytD_pXNDM8lGq0nK304OZpcxmgzcb_Q>
+    <xmx:K4YmZMtMhGL7ivK_R3sytFuUnzLH4TlyM2QWR_DpoX2zpZdDxITzTg>
+Feedback-ID: i56684263:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 31 Mar 2023 03:05:14 -0400 (EDT)
+Message-ID: <3c628166-b836-4ea8-bc4b-d25902e75b49@ryhl.io>
+Date:   Fri, 31 Mar 2023 09:05:26 +0200
 MIME-Version: 1.0
-References: <ZCA2mGV_cmq7lIfV@dragonet> <20230330215507.56509-1-kuniyu@amazon.com>
-In-Reply-To: <20230330215507.56509-1-kuniyu@amazon.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 31 Mar 2023 09:04:47 +0200
-Message-ID: <CANn89iK5D75-SNg28ALi4Zr9JEHnreBpfu_pq0_zLe4jDLT5rw@mail.gmail.com>
-Subject: Re: general protection fault in raw_seq_start
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     threeearcat@gmail.com, davem@davemloft.net, dsahern@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 12/13] rust: sync: reduce stack usage of
+ `UniqueArc::try_new_uninit`
+Content-Language: en-US
+To:     y86-dev@protonmail.com
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+References: <20230329223239.138757-13-y86-dev@protonmail.com>
+From:   Alice Ryhl <alice@ryhl.io>
+In-Reply-To: <20230329223239.138757-13-y86-dev@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 11:55=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.c=
-om> wrote:
+On 3/30/23 00:33, y86-dev@protonmail.com wrote:
+> From: Benno Lossin <y86-dev@protonmail.com>
+> 
+> `UniqueArc::try_new_uninit` calls `Arc::try_new(MaybeUninit::uninit())`.
+> This results in the uninitialized memory being placed on the stack,
+> which may be arbitrarily large due to the generic `T` and thus could
+> cause a stack overflow for large types.
+> 
+> Change the implementation to use the pin-init API which enables in-place
+> initialization. In particular it avoids having to first construct and
+> then move the uninitialized memory from the stack into the final location.
+> 
+> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
 
-> Thanks for reporting the issue.
->
-> It seems we need to use RCU variant in raw_get_first().
-> I'll post a patch.
->
-> ---
-> diff --git a/net/ipv4/raw.c b/net/ipv4/raw.c
-> index 3cf68695b40d..fe0d1ad20b35 100644
-> --- a/net/ipv4/raw.c
-> +++ b/net/ipv4/raw.c
-> @@ -957,7 +957,7 @@ static struct sock *raw_get_first(struct seq_file *se=
-q, int bucket)
->         for (state->bucket =3D bucket; state->bucket < RAW_HTABLE_SIZE;
->                         ++state->bucket) {
->                 hlist =3D &h->ht[state->bucket];
-> -               sk_nulls_for_each(sk, hnode, hlist) {
-> +               sk_nulls_for_each_rcu(sk, hnode, hlist) {
->                         if (sock_net(sk) =3D=3D seq_file_net(seq))
->                                 return sk;
->
-
-No, we do not want this.
-You missed that sk_nulls_for_each_rcu() needs a specific protocol
-(see Documentation/RCU/rculist_nulls.rst for details)
-
-RCU is needed in the data path, not for this control path.
-
-My patch went too far in the RCU conversion. I did not think about
-syzbot harassing /proc files :)
-
-We need raw_seq_start and friends to go back to use the lock.
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
