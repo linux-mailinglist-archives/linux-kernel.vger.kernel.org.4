@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9BD6D1BC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7096D1BD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbjCaJQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
+        id S230472AbjCaJSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbjCaJQP (ORCPT
+        with ESMTP id S230185AbjCaJSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:16:15 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDAC812BCE;
-        Fri, 31 Mar 2023 02:16:05 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxrtrUpCZkwuQUAA--.20587S3;
-        Fri, 31 Mar 2023 17:16:04 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxC77OpCZkVfMRAA--.14538S5;
-        Fri, 31 Mar 2023 17:16:03 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH 3/3] module: Ignore L0 and rename is_arm_mapping_symbol()
-Date:   Fri, 31 Mar 2023 17:15:53 +0800
-Message-Id: <1680254153-14582-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1680254153-14582-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1680254153-14582-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8DxC77OpCZkVfMRAA--.14538S5
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxJw4kWw48Ar4fXFWxZFyrWFg_yoW7JrW8pr
-        y5Cr45GF48Ar1DGay7Wa4Dtr15W3s7uFs7Cry5K3s7Crn0qr1Ivw4DK3W3uwnrAr45Gay8
-        uFsayFyakFy5JaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8l38UUUUUU==
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        Fri, 31 Mar 2023 05:18:34 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6DAD50E;
+        Fri, 31 Mar 2023 02:18:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=zICmNz0LQot+6Vmr74x/QKcyOggp99GsmNnVZkLk70M=;
+        t=1680254296; x=1681463896; b=tWV8uw6eS4/j6uDZ0iKkQphz+UWm4mMGf3YYhxCqSLFa3x4
+        GzDQ0o2iH3cKzkpXEz2JHKoZYkPK60pGtaVx0ALm4loHML3fyGM9YMT7mcHKKvQNfqh/gF5+uPbxi
+        BTCX22p9US3lY8k4AmuL7wwh2QVN/+cC20+D8rSpVlAojTGOFiHI8Po82g8V8eyI3WG9hSX2fWc6r
+        pqMBLoy/svgwZdBcp4v666GQs0IobgH+azv14U1b2qzH0Y8V7YsWovxVQA63mGZc6nn+RqEIsa3aD
+        AhWYZFlk95QQF1jsBy5GtB8L6gPREFgzfBaYfhBrcn4lkC2sNSZ1Kvf+WW3usL2Q==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1piAtS-0029P5-1b;
+        Fri, 31 Mar 2023 11:17:58 +0200
+Message-ID: <51ccdfaee8deff0c172fafcec4bf427e8b54371e.camel@sipsolutions.net>
+Subject: Re: linux-next: manual merge of the wireless-next tree with the
+ wireless tree
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Kalle Valo <kvalo@kernel.org>, netdev@vger.kernel.org
+Cc:     Wireless <linux-wireless@vger.kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>
+Date:   Fri, 31 Mar 2023 11:17:57 +0200
+In-Reply-To: <20230331104959.0b30604d@canb.auug.org.au>
+References: <20230331104959.0b30604d@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,163 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The L0 symbol is generated when build module on LoongArch, ignore it in
-modpost and when looking at module symbols, otherwise we can not see the
-expected call trace.
+On Fri, 2023-03-31 at 10:49 +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the wireless-next tree got a conflict in:
+>=20
+>   net/mac80211/rx.c
+>=20
+> between commit:
+>=20
+>   a16fc38315f2 ("wifi: mac80211: fix potential null pointer dereference")
+>=20
+> from the wireless tree and commit:
+>=20
+>   fe4a6d2db3ba ("wifi: mac80211: implement support for yet another mesh A=
+-MSDU format")
+>=20
+> from the wireless-next tree.
 
-Now is_arm_mapping_symbol() is not only for ARM, in order to reflect the
-reality, rename is_arm_mapping_symbol() to is_mapping_symbol().
+Thanks for the heads-up. I sort of expected this, but didn't want to do
+a merge or wireless into wireless-next before it was pulled, maybe I
+should've staggered the pull requests, but you would've seen the merge
+issue anyway.
 
-This is related with commit c17a2538704f ("mksysmap: Fix the mismatch of
-'L0' symbols in System.map").
+Anyway, I've now pulled wireless into wireless-next, so you might
+continue seeing this issue (*) if you merge net/net-next before merging
+wireless-next, but it'll be completely resolved when we send the next
+pull request to net-next (next week).
 
-(1) Simple test case
+Thanks!
 
-  [loongson@linux hello]$ cat hello.c
-  #include <linux/init.h>
-  #include <linux/module.h>
-  #include <linux/printk.h>
+(*) and another one in nl80211 policy, I think?
 
-  static void test_func(void)
-  {
-  	  pr_info("This is a test\n");
-	  dump_stack();
-  }
-
-  static int __init hello_init(void)
-  {
-	  pr_warn("Hello, world\n");
-	  test_func();
-
-	  return 0;
-  }
-
-  static void __exit hello_exit(void)
-  {
-	  pr_warn("Goodbye\n");
-  }
-
-  module_init(hello_init);
-  module_exit(hello_exit);
-  MODULE_LICENSE("GPL");
-  [loongson@linux hello]$ cat Makefile
-  obj-m:=hello.o
-
-  ccflags-y += -g -Og
-
-  all:
-	  make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) modules
-  clean:
-	  make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) clean
-
-(2) Test environment
-
-system: LoongArch CLFS 5.5
-https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/tag/5.0
-It needs to update grub to avoid booting error "invalid magic number".
-
-kernel: 6.3-rc1 with loongson3_defconfig + CONFIG_DYNAMIC_FTRACE=y
-
-(3) Test result
-
-Without this patch:
-
-  [root@linux hello]# insmod hello.ko
-  [root@linux hello]# dmesg
-  ...
-  Hello, world
-  This is a test
-  ...
-  Call Trace:
-  [<9000000000223728>] show_stack+0x68/0x18c
-  [<90000000013374cc>] dump_stack_lvl+0x60/0x88
-  [<ffff800002050028>] L0\x01+0x20/0x2c [hello]
-  [<ffff800002058028>] L0\x01+0x20/0x30 [hello]
-  [<900000000022097c>] do_one_initcall+0x88/0x288
-  [<90000000002df890>] do_init_module+0x54/0x200
-  [<90000000002e1e18>] __do_sys_finit_module+0xc4/0x114
-  [<90000000013382e8>] do_syscall+0x7c/0x94
-  [<9000000000221e3c>] handle_syscall+0xbc/0x158
-
-With this patch:
-
-  [root@linux hello]# insmod hello.ko
-  [root@linux hello]# dmesg
-  ...
-  Hello, world
-  This is a test
-  ...
-  Call Trace:
-  [<9000000000223728>] show_stack+0x68/0x18c
-  [<90000000013374cc>] dump_stack_lvl+0x60/0x88
-  [<ffff800002050028>] test_func+0x28/0x34 [hello]
-  [<ffff800002058028>] hello_init+0x28/0x38 [hello]
-  [<900000000022097c>] do_one_initcall+0x88/0x288
-  [<90000000002df890>] do_init_module+0x54/0x200
-  [<90000000002e1e18>] __do_sys_finit_module+0xc4/0x114
-  [<90000000013382e8>] do_syscall+0x7c/0x94
-  [<9000000000221e3c>] handle_syscall+0xbc/0x158
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- include/linux/module_symbol.h | 4 +++-
- kernel/module/kallsyms.c      | 2 +-
- scripts/mod/modpost.c         | 4 ++--
- 3 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/module_symbol.h b/include/linux/module_symbol.h
-index 9fa4173..7ace7ba 100644
---- a/include/linux/module_symbol.h
-+++ b/include/linux/module_symbol.h
-@@ -3,10 +3,12 @@
- #define _LINUX_MODULE_SYMBOL_H
- 
- /* This ignores the intensely annoying "mapping symbols" found in ELF files. */
--static inline int is_arm_mapping_symbol(const char *str)
-+static inline int is_mapping_symbol(const char *str)
- {
- 	if (str[0] == '.' && str[1] == 'L')
- 		return true;
-+	if (str[0] == 'L' && str[1] == '0')
-+		return true;
- 	return str[0] == '$' &&
- 	       (str[1] == 'a' || str[1] == 'd' || str[1] == 't' || str[1] == 'x')
- 	       && (str[2] == '\0' || str[2] == '.');
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 5de3207..d8e426a 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -289,7 +289,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
- 		 * and inserted at a whim.
- 		 */
- 		if (*kallsyms_symbol_name(kallsyms, i) == '\0' ||
--		    is_arm_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
-+		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
- 			continue;
- 
- 		if (thisval <= addr && thisval > bestval) {
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 7241db8..5cddf76 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1115,7 +1115,7 @@ static int secref_whitelist(const struct sectioncheck *mismatch,
- 
- /*
-  * If there's no name there, ignore it; likewise, ignore it if it's
-- * one of the magic symbols emitted used by current ARM tools.
-+ * one of the magic symbols emitted used by current tools.
-  *
-  * Otherwise if find_symbols_between() returns those symbols, they'll
-  * fail the whitelist tests and cause lots of false alarms ... fixable
-@@ -1128,7 +1128,7 @@ static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
- 
- 	if (!name || !strlen(name))
- 		return 0;
--	return !is_arm_mapping_symbol(name);
-+	return !is_mapping_symbol(name);
- }
- 
- /**
--- 
-2.1.0
-
+joahnnes
