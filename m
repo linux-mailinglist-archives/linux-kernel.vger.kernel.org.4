@@ -2,244 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF026D195B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5646C6D195C
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjCaIGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
+        id S231485AbjCaIGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjCaIGI (ORCPT
+        with ESMTP id S230434AbjCaIGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:06:08 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C36D1A440
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680249954; x=1711785954;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tCEPtMFHwMiPnIQhrk5UuQkBneCkpsHzNe9u71qZH+U=;
-  b=fd388OWFN5sASH4Rf7hYuJVETDkOuAqzdNm5PLh6UmB7tRZv+Ww/pfOk
-   HdPZZ7KC4WtuGC9RXahLGG27onTCWVnFc5crb80DXBi16U1H+w2rr6X2g
-   B1H5PH23qbEn6LaGik2zfewgFBpw3sIYP7FgrGc3EEkzxFP1D+09z4zJh
-   ZFGredSWizxRfTUb4LksXrk7SNDgCn4/Nr0dIHiYIcu5gSj2SH/n+xjNy
-   sCRnLJCmx6028ZtiDaJyV7m6J9oKGnqFy/Jej4YJg5FWIVzNR/SZmx7Iy
-   +hxdsmcwGFscqc98TvWYrvvjLO8w3GJBdY5clpZMUesAnao/tgF1ZmWVU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="343047699"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="343047699"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 01:05:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="662339930"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="662339930"
-Received: from bpower-mobl3.ger.corp.intel.com (HELO [10.213.225.27]) ([10.213.225.27])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 01:05:26 -0700
-Message-ID: <78821fe7-a22d-d731-0f5c-b9bcace06e1f@linux.intel.com>
-Date:   Fri, 31 Mar 2023 09:05:24 +0100
+        Fri, 31 Mar 2023 04:06:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C219191CE;
+        Fri, 31 Mar 2023 01:05:53 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8F0681FE3F;
+        Fri, 31 Mar 2023 08:05:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680249952; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+yE/ElG/1JpRXabfjyDkXIDLPL4NCS4hNuektaT+pZc=;
+        b=pBGRzBhCwblY4cH5PfbPazP0AAH8fDx/EeOAVNkAAR9AfzJF0UKffpv6nfN8JLc0wKK8nq
+        MdioBBmsdz4Tlk/WdgrZG6RgICd9lF91+9CXZtjciNUwCZ71K9WM2BWqZdu8KA6OKRjhxR
+        HY18hGaovwsWjLT5L3MM5FgmY+idds0=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A179D2C141;
+        Fri, 31 Mar 2023 08:05:51 +0000 (UTC)
+Date:   Fri, 31 Mar 2023 10:05:48 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Luis Chamberlain <mcgrof@kernel.org>, david@redhat.com,
+        patches@lists.linux.dev, linux-modules@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        petr.pavlu@suse.com, prarit@redhat.com, gregkh@linuxfoundation.org,
+        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        song@kernel.org, rppt@kernel.org, willy@infradead.org,
+        vbabka@suse.cz, mhocko@suse.com, dave.hansen@linux.intel.com
+Subject: Re: [PATCH 4/7] sempahore: add a helper for a concurrency limiter
+Message-ID: <ZCaUXHxYiPolI/lu@alley>
+References: <20230329053149.3976378-1-mcgrof@kernel.org>
+ <20230329053149.3976378-5-mcgrof@kernel.org>
+ <20230329072112.GG4253@hirez.programming.kicks-ass.net>
+ <ZCPuFLDgU5fBFtug@bombadil.infradead.org>
+ <20230329091935.GP4253@hirez.programming.kicks-ass.net>
+ <CAHk-=whF6Ta_KcJP2eC78+Mstv+vAku8ATRMbv98sf9VhdvySQ@mail.gmail.com>
+ <20230330115626.GA124812@hirez.programming.kicks-ass.net>
+ <CAHk-=wgF34MkhZnM_Kc1zggTWCAQ=BzEgAaAbE5wDM07bWiYeg@mail.gmail.com>
+ <20230331034209.GA12892@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 6/9] drm/i915: Use kmap_local_page() in
- gem/selftests/i915_gem_context.c
-Content-Language: en-US
-To:     Ira Weiny <ira.weiny@intel.com>,
-        Zhao Liu <zhao1.liu@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-References: <20230329073220.3982460-1-zhao1.liu@linux.intel.com>
- <20230329073220.3982460-7-zhao1.liu@linux.intel.com>
- <642654876a503_375f7e294e@iweiny-mobl.notmuch>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <642654876a503_375f7e294e@iweiny-mobl.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331034209.GA12892@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 31/03/2023 04:33, Ira Weiny wrote:
-> Zhao Liu wrote:
->> From: Zhao Liu <zhao1.liu@intel.com>
->>
->> The use of kmap_atomic() is being deprecated in favor of
->> kmap_local_page()[1], and this patch converts the call from
->> kmap_atomic() to kmap_local_page().
->>
->> The main difference between atomic and local mappings is that local
->> mappings doesn't disable page faults or preemption.
->>
->> With kmap_local_page(), we can avoid the often unwanted side effect of
->> unnecessary page faults or preemption disables.
->>
->> In drm/i915/gem/selftests/i915_gem_context.c, functions cpu_fill() and
->> cpu_check() mainly uses mapping to flush cache and check/assign the
->> value.
->>
->> There're 2 reasons why cpu_fill() and cpu_check() don't need to disable
->> pagefaults and preemption for mapping:
->>
->> 1. The flush operation is safe. cpu_fill() and cpu_check() call
->> drm_clflush_virt_range() to use CLFLUSHOPT or WBINVD to flush. Since
->> CLFLUSHOPT is global on x86 and WBINVD is called on each cpu in
->> drm_clflush_virt_range(), the flush operation is global.
->>
->> 2. Any context switch caused by preemption or page faults (page fault
->> may cause sleep) doesn't affect the validity of local mapping.
->>
->> Therefore, cpu_fill() and cpu_check() are functions where the use of
->> kmap_local_page() in place of kmap_atomic() is correctly suited.
->>
->> Convert the calls of kmap_atomic() / kunmap_atomic() to
->> kmap_local_page() / kunmap_local().
->>
->> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
->>
->> v2:
->> * Dropped hot plug related description since it has nothing to do with
->>    kmap_local_page().
->> * No code change since v1, and added description of the motivation of
->>    using kmap_local_page().
->>
->> Suggested-by: Dave Hansen <dave.hansen@intel.com>
->> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+On Fri 2023-03-31 12:42:09, Sergey Senozhatsky wrote:
+> On (23/03/30 09:23), Linus Torvalds wrote:
+> > Although we also do have some other issues - I think down_trylock() is
+> > ok in irq contexts, but mutex_trylock() is not. Maybe that's why
+> > printk uses semaphores? I forget.
 > 
-> First off I think this is fine.
-> 
-> But as I looked at this final selftests patch I began to wonder how the
-> memory being mapped here and in the previous selftests patches are
-> allocated.  Does highmem need to be considered at all?  Unfortunately, I
-> could not determine where the memory in the SG list of this test gem
-> object was allocated.
-> 
-> AFAICS cpu_fill() is only called in create_test_object().  Digging into
-> huge_gem_object() did not reveal where these pages were allocated from.
-> 
-> I wonder if these kmap_local_page() calls could be removed entirely based
-> on knowing that the pages were allocated from low mem?  Removing yet
-> another user of highmem altogether would be best if possible.
-> 
-> Do you know how these test objects are created?  Do the pages come from
-> user space somehow?
+> Yes, correct. IIRC we also cannot safely call mutex_unlock() from IRQ
+> context because it takes some internal mutex spin_lock in a non-IRQ-safe
+> manner. Semaphore is OK in this regard, both semaphore try_lock() and
+> unlock() can be called from IRQ.
 
-FWIW
+One more reason is that mutex must be released in the same context
+that took it. And printk() tries to pass console_sem() to another context.
 
-create_test_object
-  -> huge_gem_object
-      -> i915_gem_object_init(obj, &huge_ops, &lock_class, 0);
+It was added by the commit dbdda842fe96 ("printk: Add console owner
+and waiter logic to load balance console writes"). It was relatively
+effective in reducing the risk of soft lockups.
 
-Which is:
-
-static const struct drm_i915_gem_object_ops huge_ops = {
-	.name = "huge-gem",
-	.get_pages = huge_get_pages,
-	.put_pages = huge_put_pages,
-};
-
-And:
-
-huge_get_pages()
-...
-#define GFP (GFP_KERNEL | __GFP_NOWARN | __GFP_RETRY_MAYFAIL)
-...
-		page = alloc_page(GFP | __GFP_HIGHMEM);
-
-> 
-> Regardless this is still a step in the right direction so:
-> 
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-
-Yeah LGTM.
-
-FYI I am yet to read through the rest of the series, but I don't think 
-there will be anything problematic and it passed our CI so likely is 
-good to pull in.
-
-Regards,
-
-Tvrtko
-
-> 
->> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
->> Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
->> ---
->> Suggested by credits:
->>    Dave: Referred to his explanation about cache flush.
->>    Ira: Referred to his task document, review comments and explanation
->>         about cache flush.
->>    Fabio: Referred to his boiler plate commit message and his description
->>           about why kmap_local_page() should be preferred.
->> ---
->>   drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
->> index a81fa6a20f5a..dcbc0b8e3323 100644
->> --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
->> +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
->> @@ -481,12 +481,12 @@ static int cpu_fill(struct drm_i915_gem_object *obj, u32 value)
->>   	for (n = 0; n < real_page_count(obj); n++) {
->>   		u32 *map;
->>   
->> -		map = kmap_atomic(i915_gem_object_get_page(obj, n));
->> +		map = kmap_local_page(i915_gem_object_get_page(obj, n));
->>   		for (m = 0; m < DW_PER_PAGE; m++)
->>   			map[m] = value;
->>   		if (!has_llc)
->>   			drm_clflush_virt_range(map, PAGE_SIZE);
->> -		kunmap_atomic(map);
->> +		kunmap_local(map);
->>   	}
->>   
->>   	i915_gem_object_finish_access(obj);
->> @@ -512,7 +512,7 @@ static noinline int cpu_check(struct drm_i915_gem_object *obj,
->>   	for (n = 0; n < real_page_count(obj); n++) {
->>   		u32 *map, m;
->>   
->> -		map = kmap_atomic(i915_gem_object_get_page(obj, n));
->> +		map = kmap_local_page(i915_gem_object_get_page(obj, n));
->>   		if (needs_flush & CLFLUSH_BEFORE)
->>   			drm_clflush_virt_range(map, PAGE_SIZE);
->>   
->> @@ -538,7 +538,7 @@ static noinline int cpu_check(struct drm_i915_gem_object *obj,
->>   		}
->>   
->>   out_unmap:
->> -		kunmap_atomic(map);
->> +		kunmap_local(map);
->>   		if (err)
->>   			break;
->>   	}
->> -- 
->> 2.34.1
->>
-> 
-> 
+Best Regards,
+Petr
