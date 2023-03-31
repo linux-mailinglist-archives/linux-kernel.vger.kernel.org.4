@@ -2,282 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0C06D1A8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7766D1A8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbjCaIl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
+        id S231916AbjCaIlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbjCaIlG (ORCPT
+        with ESMTP id S231911AbjCaIk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:41:06 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E4F1BF43
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680252029; x=1711788029;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=vmUvUQVi8XE3DYCFw5BLinLPoyYGoO6i7NoLOv8v/1Y=;
-  b=jyHgpSjczf0RQvQ20AqbWoiXt+HKOCOVHfk367RBAFt2ZN24d1ek/5tk
-   7Ow6yxNj5LdPIMI88DZFubX3HnVLm1aPtmnNcBevi76L8oBBfBi8p5eBd
-   8UVNLS06tIONndAQMFgrLGzGjt2xmgXHP8vjMMCp7yFX9h8VZlpCpsuKe
-   ZRwPUe35p3te89c0aO3bPZwiRe203Q9YvB9JrrU+1Q5KN3LJlD6DrdKrq
-   ne1aNDEXvmUpdlgT3p9vGCVF6winjzNEoQvMxcCP8yKI9a+lRCws/vw1l
-   +Ghnay5VogIX0dz9phRPjPgjT3XCUbScUFkh6kOLb1rxAH92xCQfORirA
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="406409550"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="406409550"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 01:38:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="754331781"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="754331781"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga004.fm.intel.com with ESMTP; 31 Mar 2023 01:38:41 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 31 Mar 2023 01:38:41 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 31 Mar 2023 01:38:41 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.49) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Fri, 31 Mar 2023 01:38:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JVVkZ+uXUVa9a6QFUbwjR+Vo5/mfmB6nc2Dt8VssHqI1DvO8/B/N/MOz3xssPNEX+IsdrrveHQfoFPKy1nWzxGHFo/3fIf1zrf7IA0GL/zQfeUg/hSwm5GVIOPlS6+phM/Q/LIJE+oggFjM1pcXnBLR1Hqr88LU0DuUkeV4RvsTIth4UV2WyfyqK2euEBvKaV2IQ6eoQRjgoslsqqHtIL1OZVKnmp7tfjBcWXdutEP5r0rIAs+SQWDdX2exFN/74lT27uW19MwU60vlnoskggD81iclQzo/zeIcVreAxqJkpYC/cnmxhLG91fQVEvETRXPyq04ed7+czs9dHYzuOuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YYfIgK0B+5p5fVjQOulRvvtclPtFs9xMH+8F4s4wQls=;
- b=avA7EvgV8camXh0YmXjlC6s/ikh77Up58GRZD4J/2TyeJRE8crKEiVXimuQi1lAsUoDHubRgOxZZ1Yez0JVYmG43Dhlk6MIMQ/2338cOCBkeeEpZZQD3gZqKJK29CV8OOgEFdkY7c87+trqhNmVI/8wHP7MOgrjAZhNxMZGeRz/wIE1eLopXZCaHw01v8ekNqg1IGTrJCi/CU/K+1eA/qbPTTNLQhYfdJMpFA+qO+sr6fZdCw5CMHIKuD/KpOsxMxQv0wvHKtpDUp7Or0Yb4r+67N7NWKz0LfKDO323qjxujKvrYkWGMWh5lRMOwGRFtdShjA4hhwzoKTK4haUxZGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
- by DM4PR11MB6550.namprd11.prod.outlook.com (2603:10b6:8:b4::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.24; Fri, 31 Mar
- 2023 08:38:39 +0000
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::78d1:41fe:eae2:1f6d]) by BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::78d1:41fe:eae2:1f6d%7]) with mapi id 15.20.6222.035; Fri, 31 Mar 2023
- 08:38:39 +0000
-Date:   Fri, 31 Mar 2023 16:38:30 +0800
-From:   Aaron Lu <aaron.lu@intel.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] sched: Introduce per-mm/cpu concurrency id state
-Message-ID: <20230331083830.GA186694@ziqianlu-desk2>
-References: <20230330230911.228720-1-mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230330230911.228720-1-mathieu.desnoyers@efficios.com>
-X-ClientProxiedBy: SG2P153CA0034.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::21)
- To BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
+        Fri, 31 Mar 2023 04:40:59 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EDE1A478
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:40:18 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id n19so12436971wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:40:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680251931;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u0O+1iDiHGqqkLLtzjSrhhvTogFFIDtpqH3SLB/+nZA=;
+        b=qwp+45yDU/8FeUG/mb5yQk4Baj8bRTtm7Uvuw+61kXsPy6YmBE2gAX1gI+C2nCvB6x
+         2+vrFgyZFFI9Uzw5jTqV1uFcnrLNuEFy3puFk5QDI9+zZPS72PKlQ7kg9TWY+k9DkKil
+         jBNbcLCVOqXWQQxpjnMWudYmjIo0ZdvSKmStlm5lXx5zn1c1tGBUEfKu+i9QZS2mkSFU
+         4DpXDUiiDevAsNhouW7Rp3s9uaCQpI+nb2lMyUeD5PU3ZSfsSZltG9xDpFLbFbkNbt+R
+         gMshyalbmyFewULoENqAnQH+Q/YUqQA8AfXvjoTSdk0ykLEKTiqytW+FOtcETcvtfRA5
+         TQGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680251931;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u0O+1iDiHGqqkLLtzjSrhhvTogFFIDtpqH3SLB/+nZA=;
+        b=CGSu8cKHlIZ/ct6DG9i3/2j5Th3Jmp42MGZO4vkIT5Szj52DjswyR/kfhDkoWTW+3F
+         S1G00w5KfCaHsZRIPbi4bh3rK8mOc1RuZ6H0KF6axiNj8CjW32Ffblb2p6Xh7jFPjid2
+         LR9Z+5M81Po9fqx+91ktdhjBgwsLdIqQV1lMfpb7MwKh0X1ura2PZuOQ3++G2e85eLiJ
+         P3Y/w4o+LMrq6gZdjVMpFnfDSARpszJUtu2r5KTu+Yx0Iv9JP/MimKGNABxPuzmN43Fw
+         figN1GgNrD2ewYnfkFLjL+X9FTdzbsCcIw9j+HQdaQFmDzt9hF9z/z5CHhSWmj11hG2D
+         QZfg==
+X-Gm-Message-State: AO0yUKVpvJaZHwZXESmk2CMsOc+cGCo1Wx7n7Qphoe/9tVfzmYQV+J3s
+        DAILbsWPhoZGiqTVZnJD0E8=
+X-Google-Smtp-Source: AK7set+teNQZei3rKQqSvoEESvdaLQj7q7z52K6Cha/Jmf1FC3DFlCf6DqwjFwk0c+uOGDCgCLCl/Q==
+X-Received: by 2002:a1c:7919:0:b0:3ee:da1:1346 with SMTP id l25-20020a1c7919000000b003ee0da11346mr20639774wme.36.1680251931504;
+        Fri, 31 Mar 2023 01:38:51 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id c3-20020a05600c0ac300b003edf2dc7ca3sm1913937wmr.34.2023.03.31.01.38.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 01:38:50 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 09:38:49 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 1/1] mm: vmalloc: Rename addr_to_vb_xarray() function
+Message-ID: <65a19f0a-be4d-42c9-a75d-1356996acdda@lucifer.local>
+References: <20230331073727.6968-1-urezki@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3062:EE_|DM4PR11MB6550:EE_
-X-MS-Office365-Filtering-Correlation-Id: c7a2dd31-7b91-4d8b-4024-08db31c3530e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n8WEBYojDvmIK3Gi7Ta5Ib9PbsynWlvJqf3C65S8U8UGQNsO+tMJhTYQAsnLdAryStmogrr/2xO9kVsUU10rdQy5qaJeg/+r14Yij6XhaUZjbKnWo/qLfMBu/n2aZBzCJy077MIN+clAWPnjZqgwcnD/BcPBEn4ulc4bX/ImV5EPnb+tZ+8c2nD7UWi1JmFPy3NL43VHDo062UXs64puFidioJ8sEI5a8jZxFPf45maV4FMW9Ly6B4zNZAmtTkQ0SqTtUbBArPcGV77Ss3Br7mM0ZwzIwXU90Kz8AMK6ZPkQI2clsabDIgADx6E9xUkQuGVtF+YGdr9VgS51c6SacdXCJXvO1+YUbm690yg1IK5N3UM+YOI4Uwh3OajxA02GqzWk1fb1pdWLxu2vAivIr8aHNa/ZZlW89Kzd0YtAJaRQhcZQGnKsKKwU5LVGmJT3w1s+flvhxPy1dZB+fajvbK7hX9dCkXjEV8EiOWiX4GxKAQOeqLB2hPl719ExmIqneYs9Gg6Ht+7XpF8hZV9veeo0tvSD6gQX85OpAiFV12wCfQWIYe9BRV3wd4IQeT0u
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(376002)(39860400002)(346002)(396003)(136003)(366004)(451199021)(6666004)(83380400001)(66476007)(1076003)(26005)(6512007)(9686003)(6506007)(186003)(8676002)(66946007)(66556008)(41300700001)(86362001)(82960400001)(38100700002)(8936002)(4326008)(6916009)(2906002)(44832011)(316002)(33656002)(478600001)(33716001)(5660300002)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0/GoH4+RYFqeYVQqHfMkKXgtnbVP+VWnQicnJZlXBTVRgWJC6vdRw6jkrgat?=
- =?us-ascii?Q?+0+erI/ZlxilPuIrdVGfawcuOPcXeoUFw9Z4BBwvioEI9/mRFUucZtosbQhA?=
- =?us-ascii?Q?dE+JhuiTVRhWh0+AiptMUmxWzcwXvbTNT7NDdn2Lhp4WHscwjeyZ6QidK8Qc?=
- =?us-ascii?Q?49GkCYfUq28NY0D+c5CTbWaol+gVGI2r6cIjlAB12REDkPJbZG+6I9x1eMpr?=
- =?us-ascii?Q?CVlpmGU5uKFvTEl0g8GPmYqZtfcTxTtCb24VKgIPJZzlgDxt0kPVCp+DMtcU?=
- =?us-ascii?Q?Bb/ZDi2mrmfqfVAkJps8BuOU4YGtiJ6A2BFbvKqfeu1iQhyHEQVx46xYxVaJ?=
- =?us-ascii?Q?wvkmpKQupt2nNAmAfaxtgWGXy4o3hKomNbDL4gtkAlPJ00HmxzdPJvH+jfhG?=
- =?us-ascii?Q?YjSSaUXEJcU7LqcFy2yAEHPpqfNFvLjZaeYNyXMHSmEmPpA8e289TYQFxIhF?=
- =?us-ascii?Q?5xw7rhxtBI2Yh2OesUleehwnV3dwMGd12t8GhoZvTLWi/3CSSLaSGD0Wnozs?=
- =?us-ascii?Q?/iRxnNLWanjT8GpBcnQTH/95eLMrydmwMT41JsG0pVsKwmkVKFk4tUOh+nRc?=
- =?us-ascii?Q?KvZDwnVZwMRGFp4yxjilqqiQGsQ8l/wkbaO3n9I3NEtX666qAbhBho0O6o4c?=
- =?us-ascii?Q?+mGzLdOe/vgyediK5FHU3DbC1ceN1atlfd8jkIiRNnq9/yfzLliagTSOG4SE?=
- =?us-ascii?Q?ZVcYlnM1veUb5m4RqwUIw+EoTi63CtK5M8whqWXm6C6WBF5PvH4OYCa1HB55?=
- =?us-ascii?Q?14dIsY5rAKHAzOZndEtuxt5KG7qIuZOzvpgaIg1otxBOrlSlqP1z0E0Znaf+?=
- =?us-ascii?Q?wHofhaobGx481SCZFn3ie6keI159n6Y1hrm/ooSTk8N8y7QrSTfYru+EmY+l?=
- =?us-ascii?Q?ZRls6rz8HPlhn+jQooGCO6F1HXBobREN4HRHOdiHWoO7xxr76UzLe4XvDgql?=
- =?us-ascii?Q?Lgyywx58dtSfzP7Cb2ijtQNv+utd+wUX61DjPt4RuNWeuAqXD+v5QsQRxXJB?=
- =?us-ascii?Q?/mVKBOIf4MR81dfEpjJ4/+BUK8z3bE8bd1tyfuYdAkaIcUyoWY7QiFeydcky?=
- =?us-ascii?Q?OMCFvTG4ak8eIXnp8HGVGXuOogNBQglHxsC3MySby5x9nxNt07Tpi9c8a+2z?=
- =?us-ascii?Q?O/6nsqivg7OzKS4u8h0HeXjaTrGJwvkG743T6U807esYOQxaTK+Ywt5MvK2L?=
- =?us-ascii?Q?Om6/q6Z4fcLl+0b+LGWB7sMb+R/klrOKh8MXniIWXnHNH80rRHRfMIoG97Bg?=
- =?us-ascii?Q?i35yJHTETlg6TfxxRmnn7biwW4QlDcN4MCLm14OI+DTcWZqZZue0oHEu3Z41?=
- =?us-ascii?Q?SUJg+fQe+7/JYQ6heLd023FfaiiAbTRa2dbsgKvI9l34IZNx7mTthXfDz9PA?=
- =?us-ascii?Q?ou+UbyYmfGNuvzup+BBRHStuvqQLe86xbIhbhg6qNO/R5akCi29kQqdGr0rJ?=
- =?us-ascii?Q?GQKxMyMtVNi+aRtJo96eRi5wtTN8TNO9RW58j4pu21QcU9tILMj+dzYWbcxA?=
- =?us-ascii?Q?Jr/dKDVNLOhZk7bt+QH03daZkRQwBgoeAOylIWL3P5tSZnK+Dk3a6AXkxOap?=
- =?us-ascii?Q?myuyLImMcM44bNtQX5vb1+JYM/bmP4XKTD/D9mf+?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7a2dd31-7b91-4d8b-4024-08db31c3530e
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 08:38:38.7655
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XhNn1Olxe2J9CMYj3XRdXYcVhlHLZwS+UsoATWDAog37Ojs+hg6U+16iNSCqhuil2UPz1us3qJ1zIyZOUnh6zg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6550
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331073727.6968-1-urezki@gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 07:09:11PM -0400, Mathieu Desnoyers wrote:
-
->  void sched_mm_cid_exit_signals(struct task_struct *t)
+On Fri, Mar 31, 2023 at 09:37:27AM +0200, Uladzislau Rezki (Sony) wrote:
+> Short the name of the addr_to_vb_xarray() function to the
+> addr_to_vb_xa(). This aligns with other internal function
+> abbreviations.
+>
+> Suggested-by: Baoquan He <bhe@redhat.com>
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> ---
+>  mm/vmalloc.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 671d6d5d5b78..b8b646f8a00d 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -1945,7 +1945,7 @@ static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
+>   * used as a hash table. When used as a hash a 'cpu' passed to
+>   * per_cpu() is not actually a CPU but rather a hash index.
+>   *
+> - * A hash function is addr_to_vb_xarray() which hashes any address
+> + * A hash function is addr_to_vb_xa() which hashes any address
+>   * to a specific index(in a hash) it belongs to. This then uses a
+>   * per_cpu() macro to access an array with generated index.
+>   *
+> @@ -1971,7 +1971,7 @@ static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
+>   * however xarray spinlocks protect against any contention that remains.
+>   */
+>  static struct xarray *
+> -addr_to_vb_xarray(unsigned long addr)
+> +addr_to_vb_xa(unsigned long addr)
 >  {
->  	struct mm_struct *mm = t->mm;
-> -	unsigned long flags;
-> +	struct rq *rq = this_rq();
+>  	int index = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
+>
+> @@ -2048,7 +2048,7 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+>  	bitmap_set(vb->used_map, 0, (1UL << order));
+>  	INIT_LIST_HEAD(&vb->free_list);
+>
+> -	xa = addr_to_vb_xarray(va->va_start);
+> +	xa = addr_to_vb_xa(va->va_start);
+>  	vb_idx = addr_to_vb_idx(va->va_start);
+>  	err = xa_insert(xa, vb_idx, vb, gfp_mask);
+>  	if (err) {
+> @@ -2070,7 +2070,7 @@ static void free_vmap_block(struct vmap_block *vb)
+>  	struct vmap_block *tmp;
+>  	struct xarray *xa;
+>
+> -	xa = addr_to_vb_xarray(vb->va->va_start);
+> +	xa = addr_to_vb_xa(vb->va->va_start);
+>  	tmp = xa_erase(xa, addr_to_vb_idx(vb->va->va_start));
+>  	BUG_ON(tmp != vb);
+>
+> @@ -2193,7 +2193,7 @@ static void vb_free(unsigned long addr, unsigned long size)
+>  	order = get_order(size);
+>  	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
+>
+> -	xa = addr_to_vb_xarray(addr);
+> +	xa = addr_to_vb_xa(addr);
+>  	vb = xa_load(xa, addr_to_vb_idx(addr));
+>
+>  	spin_lock(&vb->lock);
+> @@ -3556,7 +3556,7 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
+>  	 * Area is split into regions and tracked with vmap_block, read out
+>  	 * each region and zero fill the hole between regions.
+>  	 */
+> -	xa = addr_to_vb_xarray((unsigned long) addr);
+> +	xa = addr_to_vb_xa((unsigned long) addr);
+>  	vb = xa_load(xa, addr_to_vb_idx((unsigned long)addr));
+>  	if (!vb)
+>  		goto finished;
+> --
+> 2.30.2
+>
 
-Got many below messages due to the above line:
+I have no problem with this patch but it's a bit of a pain to apply, as
+doesn't apply to mm-unstable or -next as it doesn't take into account my
+vread_iter changes, however Andrew can probably figure it out :)
 
-[   19.294089] BUG: using smp_processor_id() in preemptible [00000000] code: kworker/u449:0/1621
+I checked it manually and it's fine, so:-
 
-> +	struct rq_flags rf;
->  
->  	if (!mm)
->  		return;
-> -	local_irq_save(flags);
-> +	rq_lock_irqsave(rq, &rf);
->  	mm_cid_put(mm, t->mm_cid);
->  	t->mm_cid = -1;
->  	t->mm_cid_active = 0;
-> -	local_irq_restore(flags);
-> +	rq_unlock_irqrestore(rq, &rf);
->  }
->  
->  void sched_mm_cid_before_execve(struct task_struct *t)
->  {
->  	struct mm_struct *mm = t->mm;
-> -	unsigned long flags;
-> +	struct rq *rq = this_rq();
-
-Also here;
-
-> +	struct rq_flags rf;
->  
->  	if (!mm)
->  		return;
-> -	local_irq_save(flags);
-> +	rq_lock_irqsave(rq, &rf);
->  	mm_cid_put(mm, t->mm_cid);
->  	t->mm_cid = -1;
->  	t->mm_cid_active = 0;
-> -	local_irq_restore(flags);
-> +	rq_unlock_irqrestore(rq, &rf);
->  }
->  
->  void sched_mm_cid_after_execve(struct task_struct *t)
->  {
->  	struct mm_struct *mm = t->mm;
-> -	unsigned long flags;
-> +	struct rq *rq = this_rq();
-
-And here.
-
-> +	struct rq_flags rf;
->  
->  	if (!mm)
->  		return;
-> -	local_irq_save(flags);
-> +	rq_lock_irqsave(rq, &rf);
->  	t->mm_cid = mm_cid_get(mm);
->  	t->mm_cid_active = 1;
-> -	local_irq_restore(flags);
-> +	rq_unlock_irqrestore(rq, &rf);
->  	rseq_set_notify_resume(t);
->  }
-
-I used below diff to get rid of these messages without understanding the
-purpose of these functions:
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index f07b87d155bd..7194c29f3c91 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -11444,45 +11444,57 @@ void sched_mm_cid_migrate_to(struct rq *dst_rq, struct task_struct *t, int src_c
- void sched_mm_cid_exit_signals(struct task_struct *t)
- {
- 	struct mm_struct *mm = t->mm;
--	struct rq *rq = this_rq();
- 	struct rq_flags rf;
-+	struct rq *rq;
- 
- 	if (!mm)
- 		return;
-+
-+	preempt_disable();
-+	rq = this_rq();
- 	rq_lock_irqsave(rq, &rf);
- 	mm_cid_put(mm, t->mm_cid);
- 	t->mm_cid = -1;
- 	t->mm_cid_active = 0;
- 	rq_unlock_irqrestore(rq, &rf);
-+	preempt_enable();
- }
- 
- void sched_mm_cid_before_execve(struct task_struct *t)
- {
- 	struct mm_struct *mm = t->mm;
--	struct rq *rq = this_rq();
- 	struct rq_flags rf;
-+	struct rq *rq;
- 
- 	if (!mm)
- 		return;
-+
-+	preempt_disable();
-+	rq = this_rq();
- 	rq_lock_irqsave(rq, &rf);
- 	mm_cid_put(mm, t->mm_cid);
- 	t->mm_cid = -1;
- 	t->mm_cid_active = 0;
- 	rq_unlock_irqrestore(rq, &rf);
-+	preempt_enable();
- }
- 
- void sched_mm_cid_after_execve(struct task_struct *t)
- {
- 	struct mm_struct *mm = t->mm;
--	struct rq *rq = this_rq();
- 	struct rq_flags rf;
-+	struct rq *rq;
- 
- 	if (!mm)
- 		return;
-+
-+	preempt_disable();
-+	rq = this_rq();
- 	rq_lock_irqsave(rq, &rf);
- 	t->mm_cid = mm_cid_get(mm);
- 	t->mm_cid_active = 1;
- 	rq_unlock_irqrestore(rq, &rf);
-+	preempt_enable();
- 	rseq_set_notify_resume(t);
- }
- 
--- 
-2.34.1
-
+Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
