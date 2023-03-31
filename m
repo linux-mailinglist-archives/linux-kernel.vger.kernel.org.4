@@ -2,102 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A156D2934
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F80E6D2938
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjCaUOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
+        id S232788AbjCaUPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjCaUOI (ORCPT
+        with ESMTP id S231241AbjCaUPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:14:08 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E514422207
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:14:07 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id h11so23430225lfu.8
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:14:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680293646;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n67xfSkcpEtzX5QMjPKd5APTdmzHsGNsYGFEMF9r3z4=;
-        b=j/nQxlj0CtORf51Pr4WGYWNzsSg94CijuqLmO5HqGRUpTcW1xvZumxFBZ4jBBRzCDc
-         49Uugh0CRE502QRobTEjgpZb8t9POu1D6koVJ5KvCUIpwB1OHcQJnsYacgl7rApgUaUp
-         dg873Kh7NYt79jaTHRR/0C/XBt04gKiFswvW5OGpf8prQId7c/i6BW2HAGOapMozHaVP
-         Exey2FR9oJkHtffmEO/uHjtzBnN6e/wTOQ05reb5rBW3kDTrZ/IfWRDVpKbNy9yHLnxr
-         LTVQ1mIQcWoe7zM5beLtq2bSN5BuBAbmHwWEov0NkqbU8DEXvm3ppV4WFpMTdMs1t3qg
-         WfhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680293646;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n67xfSkcpEtzX5QMjPKd5APTdmzHsGNsYGFEMF9r3z4=;
-        b=xhC4zzPL4SZHcP8+limNRkakKqtpnKeH4gVZqtTbwDpfBqpPGIqJ2ihFRvOB1yqZAC
-         FDgRWNKXgIq9EiolWX6obTKKZJH/WgINbdKAlY9OwzPmL39yIecZgWlo/lesX1i8Ly5q
-         QIjxTeQt4Q4EifYnCMeI9C9zHy6//OVMnkOKztein2J9t4zgZZEJOA+ouCfp0Ix+cvRZ
-         Nqk8DJsSMx84Qxao4Ga+zUt/zkXZKOelG+bk/1nCdQeS/+4qkKDmYbpZaLGHCfqdQp8H
-         2H86Ovask1TBK/F8l7PuBO2w2bMOF21j+UzPOteEWOJBn3ihx0FsM/LX3ehwNIeW+4aK
-         bBkg==
-X-Gm-Message-State: AAQBX9fodwm3CquKfbnTJkTBGgdWQags8MlqcpuaNL/AnQvY9d2v0L19
-        6RkyhwXWIZdWkoDO++zQ5b74/Q==
-X-Google-Smtp-Source: AKy350Ze34MZWNhO2btm8AEIkdzcD7WnSrrBXF/Z9Y+QYP4+BZrisSzYXWjbJE4HnkbB3oP1ygYaug==
-X-Received: by 2002:a19:ee05:0:b0:4eb:680:391c with SMTP id g5-20020a19ee05000000b004eb0680391cmr7159612lfb.10.1680293646193;
-        Fri, 31 Mar 2023 13:14:06 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id w8-20020ac254a8000000b004e83f386878sm504872lfk.153.2023.03.31.13.14.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 13:14:05 -0700 (PDT)
-Message-ID: <80e42b88-fd86-1692-4e52-a3629165c5c5@linaro.org>
-Date:   Fri, 31 Mar 2023 22:14:04 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 5/9] media: dt-bindings: cadence-csi2rx: Add starfive
- compatible
-Content-Language: en-US
-To:     Jack Zhu <jack.zhu@starfivetech.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
-References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
- <20230331121826.96973-6-jack.zhu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230331121826.96973-6-jack.zhu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 31 Mar 2023 16:15:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926F82220C
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:14:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AD1662BAA
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 20:14:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 83A8FC433EF;
+        Fri, 31 Mar 2023 20:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680293696;
+        bh=ZxtofbXaRHzWyE7ctF4k25q3TsjckVXj63uEHJmZ+34=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=iITz1Eq6GsPBfdOGjlQ0r2chLjAJUeOwNDfTHHdmM3fnvOpaCIKMoTjUTEYCoOCR/
+         q+idw2CnCMZoXTUcuyn23liOL3/StBUzb97ZuXhXE57tBtMypq53J/pUi7NJ2HohKH
+         /+/ZvufUqfr+FVUOHP30sxojHJujS8Z5xvi4OUNNURICy8DpzPZKN7Rp9950B/3vKg
+         VqLufjZkM3wi/vSFXAHITZScyww5lgf8ZvQ/RIgzaMAzgFkZi6fVHHpAECJKnRxxCj
+         FD7Isdg8onscshxUtgMMaqDll9jHLDWv+0fLGCJTLfmXkl2vsrISqfWvf1nvYGzags
+         TSDyqJcXPSq4Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 720E0C395C3;
+        Fri, 31 Mar 2023 20:14:56 +0000 (UTC)
+Subject: Re: [GIT PULL] regulator fixes for v6.3-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230331161139.398CBC4339E@smtp.kernel.org>
+References: <20230331161139.398CBC4339E@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230331161139.398CBC4339E@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v6.3-rc4
+X-PR-Tracked-Commit-Id: 02bcba0b9f9da706d5bd1e8cbeb83493863e17b5
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3df82e4201f5415f4773d4ca8f0ee5a71d5b88fa
+Message-Id: <168029369645.23236.6522505578779156772.pr-tracker-bot@kernel.org>
+Date:   Fri, 31 Mar 2023 20:14:56 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2023 14:18, Jack Zhu wrote:
-> Add starfive compatible for Starfive JH7110 SoC which has a
-> Cadence MIPI-CSI2 RX controller.
-> 
-> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
-> ---
+The pull request you sent on Fri, 31 Mar 2023 17:11:21 +0100:
 
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v6.3-rc4
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3df82e4201f5415f4773d4ca8f0ee5a71d5b88fa
 
-Best regards,
-Krzysztof
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
