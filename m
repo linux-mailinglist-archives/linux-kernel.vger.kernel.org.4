@@ -2,120 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CF66D1F81
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA446D1F83
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjCaLxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 07:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
+        id S231777AbjCaLy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 07:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjCaLxo (ORCPT
+        with ESMTP id S229629AbjCaLy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:53:44 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F8510C1;
-        Fri, 31 Mar 2023 04:53:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680263622; x=1711799622;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TiD7kBj7hPUvnVmeWbsYTqnEqugIerIB3YPInRd7EuU=;
-  b=Hdk2z7S5+YOfjDrqzd6kMDgEi6w8SzK0Ug9vbyUq4Gp3bshVodU31IjL
-   OY5oVDsTiUhb2JZoDbYWRdqOodO4pNJOk4jupvfOzAQ2UQWP3cT6Lek+P
-   a7zGSs06lldplWXHHSGRS1qFAEaBKQwHzk0EOyXxuHpFizz/o0c9CCuda
-   DxXSykIKDveerMiRWSRNPu8DH8d/zIv3SxNv2GbjOwJqA1Xg0DYlo70rY
-   bGZ4TzQiSvbeRv5AteasiVFfdsDcfA6ctmvzMAdHIGjc3GXyXGD/WlNLy
-   mQDDD/E+Gpfc9Bf6IY2YfBTds96M1k+DQSUwWg7W1VIETtIi7TKzKidkY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="325398821"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="325398821"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 04:53:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="828681733"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="828681733"
-Received: from unknown (HELO [10.237.72.51]) ([10.237.72.51])
-  by fmsmga001.fm.intel.com with ESMTP; 31 Mar 2023 04:53:39 -0700
-Message-ID: <c298b247-1bdc-340c-ad7d-df3653cc9027@linux.intel.com>
-Date:   Fri, 31 Mar 2023 14:53:38 +0300
+        Fri, 31 Mar 2023 07:54:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F27712CD2;
+        Fri, 31 Mar 2023 04:54:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 205EA6280F;
+        Fri, 31 Mar 2023 11:54:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57965C433D2;
+        Fri, 31 Mar 2023 11:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680263694;
+        bh=Z9WDinB4HAD4+ej+KHX2YQpkyN011VRo+nzW6UoXFGY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Oo1TrPYNGd8nHLWdOKsxsdNiwQa797E7PgKK3FmyPSd1LXbaYpp3Xto3iulKgVwPe
+         3jy64DZST+DnbkVEBw8E87rxAjNz6z7Led9a5LTxbY72frLGtam+PnQOe6Zy95yapz
+         1H3gpV970ra9/gpWH3XZpF+Nqc5HTwlU+5GLVe+okoQP2Y1zhVO01cmdDHxlFW5PEc
+         2GNY/ZxAkSJWIUBKA9hfICq3RmhjxtAdhOekxSJYO7SKURCpChrWQ+OJjS+KIK+B0V
+         2jeBhyzygyzlGqhtchgb3OM9kCmtGvoH/b9Kig15UuTAgAKgEnLm29ujfN+cI1SUsa
+         u4S4paNcUiR0w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id EBA324052D; Fri, 31 Mar 2023 08:54:51 -0300 (-03)
+Date:   Fri, 31 Mar 2023 08:54:51 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, ravi.bangoria@amd.com, sandipan.das@amd.com,
+        ananth.narayan@amd.com, gautham.shenoy@amd.com, eranian@google.com
+Subject: Re: [RFC PATCH 1/4] perf: Read cache instance ID when building cache
+ topology
+Message-ID: <ZCbKCwJDf3PrjSLH@kernel.org>
+References: <20230331045117.1266-1-kprateek.nayak@amd.com>
+ <20230331045117.1266-2-kprateek.nayak@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH v7 5/6] i2c: designware: Use PCI PSP driver for
- communication
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Felix Held <Felix.Held@amd.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230329220753.7741-1-mario.limonciello@amd.com>
- <20230329220753.7741-6-mario.limonciello@amd.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20230329220753.7741-6-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331045117.1266-2-kprateek.nayak@amd.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/23 01:07, Mario Limonciello wrote:
-> Currently the PSP semaphore communication base address is discovered
-> by using an MSR that is not architecturally guaranteed for future
-> platforms.  Also the mailbox that is utilized for communication with
-> the PSP may have other consumers in the kernel, so it's better to
-> make all communication go through a single driver.
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> v6->v7:
->   * Also imply CRYPTO_DEV_CCP_DD to fix build errors
->   * Fix error message acquire/release inversion
-> v5->v6:
->   * Drop now unnecessary asm/msr.h header
->   * Fix IS_REACHABLE
->   * Drop tags
->   * Fix status code handling for Cezanne
-> v4->v5:
->   * Pick up tags
-> v3->v4:
->   * Pick up tags
-> v1->v2:
->   * Fix Kconfig to use imply
->   * Use IS_REACHABLE
-> ---
->   drivers/i2c/busses/Kconfig                  |   3 +-
->   drivers/i2c/busses/i2c-designware-amdpsp.c  | 177 +++-----------------
->   drivers/i2c/busses/i2c-designware-core.h    |   1 -
->   drivers/i2c/busses/i2c-designware-platdrv.c |   1 -
->   include/linux/psp-platform-access.h         |   1 +
->   5 files changed, 29 insertions(+), 154 deletions(-)
-> 
-One note below in case there is a need to have another version of if you 
-want. Not a show stopper for this.
+Em Fri, Mar 31, 2023 at 10:21:14AM +0530, K Prateek Nayak escreveu:
+> CPU cache level data currently stores cache level, type, line size,
+> associativity, sets, total cache size, and the CPUs sharing the cache.
+> Also read and store the cache instance ID from
+> "/sys/devices/system/cpu/cpuX/cache/indexY/id" in the cache level data.
+> Use instance ID as well when comparing cache levels.
 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+And if a new perf tool is used in an older kernel without this new 'id'
+file?
 
-> @@ -214,7 +95,7 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
->   	if (ret) {
->   		dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
->   			(i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
-> -			"release" : "acquire");
-> +			"acquire" : "release");
->   		goto cleanup;
->   	}
->   
-This looks like worth of being an own patch. Maybe even for the 
-linux-stable. I think it's very useful to have an error message to show 
-correct information what operation actually failed.
+Please check if the file exists, if it doesn't don't fail, just
+initialize with a zero, this way the latest perf will be usable in older
+kernels.
+
+- Arnaldo
+ 
+> Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
+> ---
+>  tools/perf/util/env.h    | 1 +
+>  tools/perf/util/header.c | 7 +++++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/tools/perf/util/env.h b/tools/perf/util/env.h
+> index 4566c51f2fd9..d761bfae76af 100644
+> --- a/tools/perf/util/env.h
+> +++ b/tools/perf/util/env.h
+> @@ -17,6 +17,7 @@ struct cpu_topology_map {
+>  
+>  struct cpu_cache_level {
+>  	u32	level;
+> +	u32	id;
+>  	u32	line_size;
+>  	u32	sets;
+>  	u32	ways;
+> diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+> index 404d816ca124..5c3f5d260612 100644
+> --- a/tools/perf/util/header.c
+> +++ b/tools/perf/util/header.c
+> @@ -1131,6 +1131,9 @@ static bool cpu_cache_level__cmp(struct cpu_cache_level *a, struct cpu_cache_lev
+>  	if (a->level != b->level)
+>  		return false;
+>  
+> +	if (a->id != b->id)
+> +		return false;
+> +
+>  	if (a->line_size != b->line_size)
+>  		return false;
+>  
+> @@ -1168,6 +1171,10 @@ static int cpu_cache_level__read(struct cpu_cache_level *cache, u32 cpu, u16 lev
+>  	if (sysfs__read_int(file, (int *) &cache->level))
+>  		return -1;
+>  
+> +	scnprintf(file, PATH_MAX, "%s/id", path);
+> +	if (sysfs__read_int(file, (int *) &cache->id))
+> +		return -1;
+> +
+>  	scnprintf(file, PATH_MAX, "%s/coherency_line_size", path);
+>  	if (sysfs__read_int(file, (int *) &cache->line_size))
+>  		return -1;
+> -- 
+> 2.34.1
+> 
+
+-- 
+
+- Arnaldo
