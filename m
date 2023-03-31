@@ -2,150 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EF46D1978
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3BF6D1980
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjCaILP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
+        id S231454AbjCaIMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjCaILN (ORCPT
+        with ESMTP id S231140AbjCaIMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:11:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E620626BD;
-        Fri, 31 Mar 2023 01:11:11 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E4DB6603130;
-        Fri, 31 Mar 2023 09:11:09 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680250270;
-        bh=eLIqrRye+6wN0NKeakPjuTqIkvbMUkhOj6K5fUjYHQ0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TpmHQG8Kj4+EqwCZ/xIQoeeZVWeAL+0kbNCBwBIzkiXe/IOCr17X198j5XMT0oEHs
-         7yI2hZ/1LM3BRwZ8m4BCifdhfZsim3JDxX8nYTDsXeMJ/F+pgrLI4JE2jEdfZkk+xU
-         Vz/kpEhJljekn0ysAAmsj285znG4V0zbaLXKIEUhHxU0CNybcLX1rwbzFjKNm7wM7A
-         c/7d+O45nBqHVUowUcD/TsCQzjvLC2ZFL0Rubaa2uHiy5hwQHWES54rvAe9mw/Z2Q3
-         AB1kG7nQ6z7pSA7enBQjybCqQB8OLgTKtC6qHAuQqh57EqKgBRPyQW/q+SbEDlxf8r
-         czG+qasfrfwRA==
-Message-ID: <5814d779-0635-43fe-3fe8-31c130f05b3a@collabora.com>
-Date:   Fri, 31 Mar 2023 10:11:07 +0200
+        Fri, 31 Mar 2023 04:12:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C1F26BD
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:12:20 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1pi9rc-00078K-Vo; Fri, 31 Mar 2023 10:12:01 +0200
+Message-ID: <809d5523-e0b4-cad4-f6ab-ddc0e4fe482d@pengutronix.de>
+Date:   Fri, 31 Mar 2023 10:11:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 RESEND 2/2] drm/panfrost: Add basic support for speed
- binning
-To:     airlied@gmail.com, boris.brezillon@collabora.com
-Cc:     daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wenst@chromium.org,
-        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
-        robh@kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230323090822.61766-1-angelogioacchino.delregno@collabora.com>
- <20230323090822.61766-3-angelogioacchino.delregno@collabora.com>
+ Thunderbird/102.7.2
+Subject: Re: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk
+ ctrl
 Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230323090822.61766-3-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Greg Ungerer <gerg@kernel.org>,
+        Marco Felsch <m.felsch@pengutronix.de>
+Cc:     peng.fan@nxp.com,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        abailon@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
+        festevam@gmail.com, abelvesa@kernel.org, marex@denx.de,
+        paul.elder@ideasonboard.com, linux-imx@nxp.com,
+        devicetree@vger.kernel.org,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, linux-pm@vger.kernel.org,
+        s.hauer@pengutronix.de, robh+dt@kernel.org, aford173@gmail.com,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, djakov@kernel.org, shawnguo@kernel.org,
+        l.stach@pengutronix.de
+References: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
+ <20230327045037.593326-1-gerg@linux-m68k.org> <2678294.mvXUDI8C0e@steina-w>
+ <b23a44ab-3666-8a41-d2a0-0d2fbdbd9f00@pengutronix.de>
+ <ecd3a92b-ba1e-e7c1-088a-371bd1a2c100@linux-m68k.org>
+ <20230328073302.jj64u5hvdpc6axa5@pengutronix.de>
+ <426b4776-104c-cb47-c8cc-c26515fcb6e3@linux-m68k.org>
+ <20230328134201.yaxrdtetjygkgkmz@pengutronix.de>
+ <20230328135100.rbmnfelphe7juhxo@pengutronix.de>
+ <c368a0f8-41f0-69ac-04f4-459e5fc8b9d6@linux-m68k.org>
+ <20230328151100.msl46qupstwplkgw@pengutronix.de>
+ <792028b9-cd4c-4ff4-a7cb-e60c518aa573@kernel.org>
+ <2924b1a62f126678870160bdbbf4e5d51aceb8d4.camel@ew.tq-group.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <2924b1a62f126678870160bdbbf4e5d51aceb8d4.camel@ew.tq-group.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/03/23 10:08, AngeloGioacchino Del Regno ha scritto:
-> Some SoCs implementing ARM Mali GPUs are subject to speed binning:
-> this means that some versions of the same SoC model may need to be
-> limited to a slower frequency compared to the other:
-> this is being addressed by reading nvmem (usually, an eFuse array)
-> containing a number that identifies the speed binning of the chip,
-> which is usually related to silicon quality.
+On 31.03.23 09:45, Markus Niebel wrote:
+> Am Freitag, dem 31.03.2023 um 15:55 +1000 schrieb Greg Ungerer:
+>> On 29/3/23 01:11, Marco Felsch wrote:
+>>> On 23-03-29, Greg Ungerer wrote:
+>> I agree this is the problem, I don't agree that the boot loader is
+>> the
+>> only place to fix this :-)  I should be able to generate a working
+>> devicetree
+>> blob from the kernel that is good, and ready to use no runtime
+>> changes
+>> required I figure.
+>>
 > 
-> To address such situation, add basic support for reading the
-> speed-bin through nvmem, as to make it possible to specify the
-> supported hardware in the OPP table for GPUs.
-> This commit also keeps compatibility with any platform that does
-> not specify (and does not even support) speed-binning.
+> Just to point out: the approach of run time fixing in boot loader is
+> used for the other i.MX8M SOC, too. If you know exactly what SOC type
+> is assembled, you could disable non available IP in the board part of
+> your tree.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> It is not overly difficult to break out the vpu nodes and have them
+>> only included when you have a board that has the iMX8MP-quad with the
+>> VPU hardware blocks.
 
-Hello maintainers,
-I've seen that this got archived in the dri-devel patchwork; because of that and
-only that, I'm sending this ping to get this patch reviewed.
+This breaks out-of-tree DTs that include imx8mp.dtsi. Logic should be the
+other way round: imx8mp.dtsi is full-featured SoC and any new includes
+strip away, not add nodes.
 
-(perhaps we can even get it picked for v6.4?)
+> Depending on the SOC type there is more to look for than the VPU: core
+> count, ISP, NPU - just to mention a few. Current approach allows to
+> keep a single tree for all types.
 
-Regards,
-Angelo
++1.
 
-> ---
->   drivers/gpu/drm/panfrost/panfrost_devfreq.c | 30 +++++++++++++++++++++
->   1 file changed, 30 insertions(+)
+@Greg, does your board always ship with an i.MX8MPLite? If so, just
+disable VPUs in your board DT.
+
+If it ships with either VPUs available or not and you don't want to do
+bootloader fixups, you may want to check out Kbuild's ability to apply
+DT overlays at build time. This would give you separate DTs for each
+variant while not having an extra file for every combination.
+
+Cheers,
+Ahmad
+
+
 > 
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> index fe5f12f16a63..58dfb15a8757 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> @@ -4,6 +4,7 @@
->   #include <linux/clk.h>
->   #include <linux/devfreq.h>
->   #include <linux/devfreq_cooling.h>
-> +#include <linux/nvmem-consumer.h>
->   #include <linux/platform_device.h>
->   #include <linux/pm_opp.h>
->   
-> @@ -82,6 +83,31 @@ static struct devfreq_dev_profile panfrost_devfreq_profile = {
->   	.get_dev_status = panfrost_devfreq_get_dev_status,
->   };
->   
-> +static int panfrost_read_speedbin(struct device *dev)
-> +{
-> +	u32 val;
-> +	int ret;
-> +
-> +	ret = nvmem_cell_read_variable_le_u32(dev, "speed-bin", &val);
-> +	if (ret) {
-> +		/*
-> +		 * -ENOENT means that this platform doesn't support speedbins
-> +		 * as it didn't declare any speed-bin nvmem: in this case, we
-> +		 * keep going without it; any other error means that we are
-> +		 * supposed to read the bin value, but we failed doing so.
-> +		 */
-> +		if (ret != -ENOENT) {
-> +			DRM_DEV_ERROR(dev, "Cannot read speed-bin (%d).", ret);
-> +			return ret;
-> +		}
-> +
-> +		return 0;
-> +	}
-> +	DRM_DEV_DEBUG(dev, "Using speed-bin = 0x%x\n", val);
-> +
-> +	return devm_pm_opp_set_supported_hw(dev, &val, 1);
-> +}
-> +
->   int panfrost_devfreq_init(struct panfrost_device *pfdev)
->   {
->   	int ret;
-> @@ -101,6 +127,10 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->   		return 0;
->   	}
->   
-> +	ret = panfrost_read_speedbin(dev);
-> +	if (ret)
-> +		return ret;
-> +
->   	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names);
->   	if (ret) {
->   		/* Continue if the optional regulator is missing */
+> Regards, Markus
+> 
 
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
