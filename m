@@ -2,112 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CCD6D1ECC
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4D66D1ECE
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjCaLMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 07:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
+        id S231423AbjCaLMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 07:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbjCaLMH (ORCPT
+        with ESMTP id S231146AbjCaLMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:12:07 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80142D52
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 04:12:06 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id h8so88151716ede.8
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 04:12:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680261125;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RnhVEWPY3LI3WG9Svxz8cvgWKx4Gl9EpZwq0srqQMr8=;
-        b=xq4n2KuvPi65onmp9ypTuv04b5ojmuuFLk/ZRJzgD/BrlBvW4YGewuAtP6VC5kbTSK
-         ey80Wblfa744lKvJkqHXJZUCOjYBuBevkWPvH427nbSt1RIMmrX6zvSrtrHivxOS+PK+
-         DSFbRCzORTCoUBAnZklX3646x/DVoZVTJTmH533ybteQVVjrjLzHaLxvp/ZKhNZh4eW+
-         npPQxmLKAF+kM3nsEDNLzUSXafiSa0jEJ8YQXlQkIhtc1YEgc5tPC74TbBki/yS0l9w/
-         jlERXEv38wD5KLwCZgIQ/mIrslbONLdwZmR56vcWt4l6mBE6umNJ4USyv5vn0BYpPGdU
-         rpww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680261125;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RnhVEWPY3LI3WG9Svxz8cvgWKx4Gl9EpZwq0srqQMr8=;
-        b=B3wA16P1lceOAvZrokN7I69RHeMRtVfQkt+LE6gKfJEieL3qLoj30sEDWxBxmdhFVE
-         qV3IKuzfGdS9EObfr+sDqqA49LgoPE5LixCtRvQn1g5BABimw7A+1jxQlTB4x60Annbn
-         SiTdMeqvCttGaQqGxznJ5xsuJG7el+Slooozidu88JOZJaVKXW0vB5+IzhdX9dzQLZNQ
-         AoKryioYb49iT6EW9+Y6Hfmxckvq9gbmaTfQldBd8SW2nV5/uapzLMMIudglJVcxttoo
-         DCt1y1R++mW+UdD3UwgGeJdpxN1bgpYT7XEdcpKmsgXHHd9BoMfGWr5zJ00rpnHTKwa+
-         RCkw==
-X-Gm-Message-State: AAQBX9degi4NWtUclp3YgCSat8FchNmaabDiX5ewxVOsATr6JwMEaktE
-        qbxui86lsnqa1vhN71iNJq0Yt+U1bxhqvA/hMkE5jw==
-X-Google-Smtp-Source: AKy350azlQfzBnLoPq7rtYMIv00ABiMzIBIBlYFONAJZctR5m3rtXPk16+owY2z1t0tNFwozIYO4yrgn1BJTKVFHSXA=
-X-Received: by 2002:a17:906:4a94:b0:947:c623:2c84 with SMTP id
- x20-20020a1709064a9400b00947c6232c84mr418421eju.2.1680261124928; Fri, 31 Mar
- 2023 04:12:04 -0700 (PDT)
+        Fri, 31 Mar 2023 07:12:30 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707992D52;
+        Fri, 31 Mar 2023 04:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=qLb75RwFmgNl6ZqqzFCzpYGIZT6emt47PE/6Jtu3p9w=; b=F7ksBtKCQ1QP1A/Qottd+yLJan
+        YVB9I94f9E9gnJnskzXMzP0BBVReI96RgSnd/c56hrnDJV6dk1s6OGVqc2Np7AaYQs1irSmd2SShM
+        dj443eUXA5BCB+WISZL6WwaSSXU4J4vcSNoGJAw+JQrzvHoZsLcDlgDiSTTF/5t+ZYe1LFbRg7WOm
+        VbVsgM0Rhx0t+h/Pt9dlj7/sfbbT7y1XwbDKEkBHEgWQY5fu73Rjkq0w/mgSdWhwfmy/sK3GsJyXv
+        1cn+mkyr3WaevuJnnfXoC0v2Jesgwk/+2Fj3Rlv4sdY4PA4gFeftylulnFgxUXHIjD01wlNqUS+uf
+        ANUChXig==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:59146)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1piCg8-0004qq-3E; Fri, 31 Mar 2023 12:12:20 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1piCg7-00016m-4t; Fri, 31 Mar 2023 12:12:19 +0100
+Date:   Fri, 31 Mar 2023 12:12:19 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, rogerq@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srk@ti.com
+Subject: Re: [PATCH net-next 2/2] net: ethernet: ti: am65-cpsw: Enable
+ USXGMII mode for J784S4 CPSW9G
+Message-ID: <ZCbAE7IIc8HcOdxl@shell.armlinux.org.uk>
+References: <20230331065110.604516-1-s-vadapalli@ti.com>
+ <20230331065110.604516-3-s-vadapalli@ti.com>
+ <ZCaSXQFZ/e/JIDEj@shell.armlinux.org.uk>
+ <54c3964b-5dd8-c55e-08db-61df4a07797c@ti.com>
+ <ZCaYve8wYl15YRxh@shell.armlinux.org.uk>
+ <7a9c96f4-6a94-4a2c-18f5-95f7246e10d5@ti.com>
+ <ZCasBMNxaWk2+XVO@shell.armlinux.org.uk>
+ <dea9ae26-e7f2-1052-58cd-f7975165aa96@ti.com>
 MIME-Version: 1.0
-References: <20230209105628.50294-1-bchihi@baylibre.com> <20230209105628.50294-7-bchihi@baylibre.com>
- <CAGuA+oqOgprdu0dVcmB=qJd5HJjada3d8ZazMpoG-SBPizzuPQ@mail.gmail.com>
- <80c60f09-56eb-cb84-43f0-7b055ea4b32c@collabora.com> <CAGuA+oqJVTXE5YHm6rSv4pPWsGxR8nZD-T5EM7LS9gPtdcu4HA@mail.gmail.com>
- <CAGuA+oroM1XmLTDZcFx5F+tHvbOJXUGuj8SnZnUxD56+9XAb2Q@mail.gmail.com> <a1fde974-f392-1493-b48a-b4cce05f3ea3@gmail.com>
-In-Reply-To: <a1fde974-f392-1493-b48a-b4cce05f3ea3@gmail.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Fri, 31 Mar 2023 13:11:28 +0200
-Message-ID: <CAGuA+opkB0KHm8ngf6+U_o8B91Qv4Keo2XJb4UXfJe-DainRDQ@mail.gmail.com>
-Subject: Re: [PATCH v14 6/6] arm64: dts: mediatek: mt8195: Add temperature
- mitigation threshold
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dea9ae26-e7f2-1052-58cd-f7975165aa96@ti.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
+On Fri, Mar 31, 2023 at 04:23:16PM +0530, Siddharth Vadapalli wrote:
+> 
+> 
+> On 31/03/23 15:16, Russell King (Oracle) wrote:
+> > On Fri, Mar 31, 2023 at 02:55:56PM +0530, Siddharth Vadapalli wrote:
+> >> Russell,
+> >>
+> >> On 31/03/23 13:54, Russell King (Oracle) wrote:
+> >>> On Fri, Mar 31, 2023 at 01:35:10PM +0530, Siddharth Vadapalli wrote:
+> >>>> Hello Russell,
+> >>>>
+> >>>> Thank you for reviewing the patch.
+> >>>>
+> >>>> On 31/03/23 13:27, Russell King (Oracle) wrote:
+> >>>>> On Fri, Mar 31, 2023 at 12:21:10PM +0530, Siddharth Vadapalli wrote:
+> >>>>>> TI's J784S4 SoC supports USXGMII mode. Add USXGMII mode to the
+> >>>>>> extra_modes member of the J784S4 SoC data. Additionally, configure the
+> >>>>>> MAC Control register for supporting USXGMII mode. Also, for USXGMII
+> >>>>>> mode, include MAC_5000FD in the "mac_capabilities" member of struct
+> >>>>>> "phylink_config".
+> >>>>>
+> >>>>> I don't think TI "get" phylink at all...
+> >>>>>
+> >>>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >>>>>> index 4b4d06199b45..ab33e6fe5b1a 100644
+> >>>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >>>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >>>>>> @@ -1555,6 +1555,8 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
+> >>>>>>  		mac_control |= CPSW_SL_CTL_GIG;
+> >>>>>>  	if (interface == PHY_INTERFACE_MODE_SGMII)
+> >>>>>>  		mac_control |= CPSW_SL_CTL_EXT_EN;
+> >>>>>> +	if (interface == PHY_INTERFACE_MODE_USXGMII)
+> >>>>>> +		mac_control |= CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN;
+> >>>>>
+> >>>>> The configuration of the interface mode should *not* happen in
+> >>>>> mac_link_up(), but should happen in e.g. mac_config().
+> >>>>
+> >>>> I will move all the interface mode associated configurations to mac_config() in
+> >>>> the v2 series.
+> >>>
+> >>> Looking at the whole of mac_link_up(), could you please describe what
+> >>> effect these bits are having:
+> >>>
+> >>> 	CPSW_SL_CTL_GIG
+> >>> 	CPSW_SL_CTL_EXT_EN
+> >>> 	CPSW_SL_CTL_IFCTL_A
+> >>
+> >> CPSW_SL_CTL_GIG corresponds to enabling Gigabit mode (full duplex only).
+> >> CPSW_SL_CTL_EXT_EN when set enables in-band mode of operation and when cleared
+> >> enables forced mode of operation.
+> >> CPSW_SL_CTL_IFCTL_A is used to set the RMII link speed (0=10 mbps, 1=100 mbps).
+> > 
+> > Okay, so I would do in mac_link_up():
+> > 
+> > 	/* RMII needs to be manually configured for 10/100Mbps */
+> > 	if (interface == PHY_INTERFACE_MODE_RMII && speed == SPEED_100)
+> > 		mac_control |= CPSW_SL_CTL_IFCTL_A;
+> > 
+> > 	if (speed == SPEED_1000)
+> > 		mac_control |= CPSW_SL_CTL_GIG;
+> > 	if (duplex)
+> > 		mac_control |= CPSW_SL_CTL_FULLDUPLEX;
+> > 
+> > I would also make mac_link_up() do a read-modify-write operation to
+> > only affect the bits that it is changing.
+> 
+> This is the current implementation except for the SGMII mode associated
+> operation that I had recently added. I will fix that. Also, the
+> cpsw_sl_ctl_set() function which writes the mac_control value performs a read
+> modify write operation.
+> 
+> > 
+> > Now, for SGMII, I would move setting CPSW_SL_CTL_EXT_EN to mac_config()
+> > to enable in-band mode - don't we want in-band mode enabled all the
+> > time while in SGMII mode so the PHY gets the response from the MAC?
+> 
+> Thank you for pointing it out. I will move that to mac_config().
+> 
+> > 
+> > Lastly, for RGMII at 10Mbps, you seem to suggest that you need RGMII
+> > in-band mode enabled for that - but if you need RGMII in-band for
+> > 10Mbps, wouldn't it make sense for the other speeds as well? If so,
+> > wouldn't that mean that CPSW_SL_CTL_EXT_EN can always be set for
+> > RGMII no matter what speed is being used?
+> 
+> The CPSW MAC does not support forced mode at 10 Mbps RGMII. For this reason, if
+> RGMII 10 Mbps is requested, it is set to in-band mode.
 
-On Fri, Mar 31, 2023 at 12:36=E2=80=AFPM Matthias Brugger
-<matthias.bgg@gmail.com> wrote:
->
->
->
-> On 07/03/2023 12:10, Balsam CHIHI wrote:
-> > Hi Matthias,
-> >
-> > Is it time to apply those last two patches of the series "Add LVTS
-> > Thermal Architecture"?
-> >
-> > [v14,6/6] arm64: dts: mediatek: mt8195: Add temperature mitigation thre=
-shold
-> > https://lore.kernel.org/all/20230209105628.50294-7-bchihi@baylibre.com/
-> > and
-> > [v14,5/6] arm64: dts: mediatek: mt8195: Add thermal zones and thermal n=
-odes
-> > https://lore.kernel.org/all/20230209105628.50294-6-bchihi@baylibre.com/
-> >
-> > Is there anything that I could do from my side, to make it possible?
-> >
->
-> Both applied now. Thanks!
+What I'm saying is that if we have in-band signalling that is reliable
+for a particular interface mode, why not always use it, rather than
+singling out one specific speed as an exception? Does it not work in
+100Mbps and 1Gbps?
 
-Great, Thank you!
-
-Best Regards,
-Balsam
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
