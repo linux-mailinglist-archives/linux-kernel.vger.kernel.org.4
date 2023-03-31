@@ -2,71 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2337C6D2245
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6916D2251
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbjCaOXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
+        id S232350AbjCaOYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231940AbjCaOW7 (ORCPT
+        with ESMTP id S231311AbjCaOY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:22:59 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60791D2C8
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:22:51 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id t10so90096241edd.12
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:22:51 -0700 (PDT)
+        Fri, 31 Mar 2023 10:24:28 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E5649DE
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:24:27 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id n1so10848492ili.10
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:24:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680272570;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DALbSHEn4AqSZILtcopWk6ItUnpljvj/yr+9gMsLC6Q=;
-        b=OvOCpPtOH+9NxFOTq/R9b14rcLyyaA8lnRaHHFPPuLkxH3F/YDghfWgEVXJmiTYrHM
-         vZD8zr08GIT5zuzE9ftaRWWVcDgpOM14VzyUqk0rqKoEfJ5R/NrfDdJ1blJvAB6UK/az
-         sNSM9BlCq9ryuwatU6nvTl54xgH+DQkz3unVFRhJvTfJNaJe+1z9IejpuZ/4JSMUHO3/
-         TaKuZYVKfYRPMsGlKCrVlolCdgtL/O4EivH5KeMyaIX2+s+FAdCXQRXWXbdgNSzI0vvv
-         f+U0eFVETd+0l9v7ittCVzkOSp7R8w+LBCZ0PzhVuV5eaoGQqbZ81yRCZyVj+6D/nZpc
-         JSPA==
+        d=linaro.org; s=google; t=1680272666; x=1682864666;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6UCEBU5mLz9QdxPqNmojtQa38OeHK3XeLs0yM78qHDU=;
+        b=ysa2qjifmTJO9JHHygIj29NmPqr7X++zxe0C5SngoNEYEgnb6q3wTU0Ve8V3Hk83qq
+         xyyQcuFNn2Joc/XP++7VT03IfLitF+LM8DOP0xJ/cRTKpR8InW0+3C31Mbh7F4ztZUnN
+         zCwyOiMRX2fzNPiOUI2aIg9/HgN+XbXvLdihCmNm2Bn3LDgvSfYnMYm8EToTOrGMPf4J
+         osR6kfHsUdXfrRt0vB+TpSvVef8YETc489yJTl/1WCscdnWZZqFjVrNKxgL4vB/EFSrR
+         ZsF7jEu35iOjh6Q4RD19FIcrALibJKiLmUQfYeA4xvDxLcjtld6MgCvxU/RzPK2vfkfP
+         Ae1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680272570;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1680272666; x=1682864666;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DALbSHEn4AqSZILtcopWk6ItUnpljvj/yr+9gMsLC6Q=;
-        b=IR/CeWzkhIgd6FawwApYHBw2LnKkH5NuzgpXH+Pc01p+AKS0jYa8TKmHkNp+F49dbU
-         C+T+0V45K2wODpStRA9MfXv/OQ//eGZwgilNmCT9N6AtHQZDni89l6V7p9TpKVFcKWlr
-         e3cBNWZGLtcdKTqTmElX6sn9INl+Bywrbyw5219hdVrP6YCKx18D8kqOHSDKazVxJYIU
-         rBcS2VWZZmWupreJSrZK7PV4O76Ns2OlGJgj2Yt5Awr0VkZTRoJRNTAJIFQPpbtY33P3
-         P9Xc4HSMN+Gb9JSrZDVXtUK8LYmPHTitblVCtmk9YruCaGhu+vMnjFm7ocMSgWlCbkG1
-         QORg==
-X-Gm-Message-State: AAQBX9ezM39jV4guS2UJM1yPyXt27J9AuNjvDUCKgawFzdyzKqvQKRsp
-        lGAsXA6QEU/m56ysCqQA0jxlzg==
-X-Google-Smtp-Source: AKy350a8XVvZ48xZMQYC78wiy/ZgV53SZYI4rk4oZhyHioBEZ8JOv3u/hLwfN9XG/5wXPj0wZUyDZA==
-X-Received: by 2002:a05:6402:10d8:b0:4fb:2296:30b3 with SMTP id p24-20020a05640210d800b004fb229630b3mr26057313edu.15.1680272570271;
-        Fri, 31 Mar 2023 07:22:50 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id h3-20020a1709067cc300b0094776b4ef04sm1057862ejp.10.2023.03.31.07.22.48
+        bh=6UCEBU5mLz9QdxPqNmojtQa38OeHK3XeLs0yM78qHDU=;
+        b=SaqKkV7yXH3tLR4vsv6DvJBos1gAFMBxz/I3ALBAeNBiSQjNX14KAq3RwZOgvE/VLu
+         WgpHLnaMDagQiSH2Tokn1Ub4KYjtpz6khU0MU8qlBrJt2Oqg0D5wQwRo7lLw05ZZ9uZ3
+         J1gsTfUvtUKdgbba/InZBIiLfpVWRCz8h/CBC4Q92jksHhA/H9IPEe4huSqPvxK895o7
+         yUfgfyGy8BMgQX0LJ8zrSNJxkRIdeBltE03mLHq8qEhTV45uzbxYj/0N/VpzAFLwCGIY
+         DTHaq6gCMIbKoWoCa2XGw7yR7ZGszGyaQg4R4hNTvmU/liJxPB9FdKOFz8EaiiFJtqrx
+         qZUg==
+X-Gm-Message-State: AAQBX9f2JC3Bb8/YKtu86ZNtvk39s5WD6Iojo+CI0ShS0YCcb1pSDP1l
+        XCw8gpoIuI1AydmVQ1Qgb2W1Wg==
+X-Google-Smtp-Source: AKy350YVgRKOO4Y8oepZkwpgSMnl2j7X6N2/BaBvJ1LPgAjZRmKLiJF6tNiaXZIiQzSXa2KbugpiaA==
+X-Received: by 2002:a05:6e02:4cb:b0:323:f57c:806d with SMTP id f11-20020a056e0204cb00b00323f57c806dmr14994799ils.3.1680272666593;
+        Fri, 31 Mar 2023 07:24:26 -0700 (PDT)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id g3-20020a056e020d0300b003230c7d6a3csm657043ilj.67.2023.03.31.07.24.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 07:22:49 -0700 (PDT)
-Message-ID: <280400a1-2dfa-fc8f-92e0-0087b10b37e8@linaro.org>
-Date:   Fri, 31 Mar 2023 15:22:48 +0100
+        Fri, 31 Mar 2023 07:24:25 -0700 (PDT)
+Message-ID: <88a4808c-5f45-cb07-83bb-039f9d832b5b@linaro.org>
+Date:   Fri, 31 Mar 2023 09:24:24 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [f2fs-dev] [PATCH v3] f2fs: change the current atomic write way
+ Thunderbird/102.8.0
+From:   Alex Elder <elder@linaro.org>
+Subject: Re: [PATCH v11 00/26] Drivers for gunyah hypervisor
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
 Content-Language: en-US
-To:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
-        jaegeuk@kernel.org
-Cc:     Daeho Jeong <daehojeong@google.com>,
-        Lee Jones <joneslee@google.com>,
-        syzbot <syzbot+b9c67110e04430822b08@syzkaller.appspotmail.com>
-References: <20220428181809.2352352-1-daeho43@gmail.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20220428181809.2352352-1-daeho43@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20230304010632.2127470-1-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -78,63 +94,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-
-On 4/28/22 19:18, Daeho Jeong wrote:
-> From: Daeho Jeong <daehojeong@google.com>
+On 3/3/23 7:06 PM, Elliot Berman wrote:
+> Gunyah is a Type-1 hypervisor independent of any
+> high-level OS kernel, and runs in a higher CPU privilege level. It does
+> not depend on any lower-privileged OS kernel/code for its core
+> functionality. This increases its security and can support a much smaller
+> trusted computing base than a Type-2 hypervisor.
 > 
-> Current atomic write has three major issues like below.
->  - keeps the updates in non-reclaimable memory space and they are even
->    hard to be migrated, which is not good for contiguous memory
->    allocation.
->  - disk spaces used for atomic files cannot be garbage collected, so
->    this makes it difficult for the filesystem to be defragmented.
->  - If atomic write operations hit the threshold of either memory usage
->    or garbage collection failure count, All the atomic write operations
->    will fail immediately.
+> Gunyah is an open source hypervisor. The source repo is available at
+> https://github.com/quic/gunyah-hypervisor.
+
+I've done a pretty detailed review again, and got further along
+than I did last time.  Things are definitely looking better, but
+I have found some bugs that need to be addressed.
+
+I also make a lot of comments about grouping certain sets of
+definitions into enumerated types.  Also I tend to notice when
+things aren't done consistently, and I mention that a lot.
+
+There are silly suggestions all over about alignment of
+things--these are mainly to make the code look prettier,
+though that's a matter of opinion.
+
+I still prefer having lines generally closer to 80 columns
+wide, but I've already mentioned that...
+
+I really focused on the code, and not the documentation.
+In fact I didn't even pay much attention to your patch
+headers either.  I did not review the SCM calls yet.
+
+So in summary I have not reviewed patches 1, 2, 16, 17,
+and 26.  I try to look at everything in my next review,
+which I hope will be final (or very close).
+
+					-Alex
+
+> The diagram below shows the architecture.
 > 
-> To resolve the issues, I will keep a COW inode internally for all the
-> updates to be flushed from memory, when we need to flush them out in a
-> situation like high memory pressure. These COW inodes will be tagged
-> as orphan inodes to be reclaimed in case of sudden power-cut or system
-> failure during atomic writes.
+> ::
 > 
-> Signed-off-by: Daeho Jeong <daehojeong@google.com>
-> ---
-> v2: removed inmem tracepoints. changed page flush timing. fixed hole
-> handling.
-> v3: removed unused atomic related page flag.
-> ---
->  fs/f2fs/data.c              | 180 +++++++++++------
->  fs/f2fs/debug.c             |  12 +-
->  fs/f2fs/f2fs.h              |  33 +---
->  fs/f2fs/file.c              |  48 ++---
->  fs/f2fs/gc.c                |  27 +--
->  fs/f2fs/inode.c             |   3 +-
->  fs/f2fs/namei.c             |  28 ++-
->  fs/f2fs/node.c              |   4 -
->  fs/f2fs/node.h              |   1 -
->  fs/f2fs/segment.c           | 380 ++++++++++++------------------------
->  fs/f2fs/segment.h           |   4 +-
->  fs/f2fs/super.c             |   6 +-
->  include/trace/events/f2fs.h |  22 ---
->  13 files changed, 302 insertions(+), 446 deletions(-)
+>           VM A                    VM B
+>       +-----+ +-----+  | +-----+ +-----+ +-----+
+>       |     | |     |  | |     | |     | |     |
+>   EL0 | APP | | APP |  | | APP | | APP | | APP |
+>       |     | |     |  | |     | |     | |     |
+>       +-----+ +-----+  | +-----+ +-----+ +-----+
+>   ---------------------|-------------------------
+>       +--------------+ | +----------------------+
+>       |              | | |                      |
+>   EL1 | Linux Kernel | | |Linux kernel/Other OS |   ...
+>       |              | | |                      |
+>       +--------------+ | +----------------------+
+>   --------hvc/smc------|------hvc/smc------------
+>       +----------------------------------------+
+>       |                                        |
+>   EL2 |            Gunyah Hypervisor           |
+>       |                                        |
+>       +----------------------------------------+
+> 
+> Gunyah provides these following features.
+> 
 
-This patch fixes the bug reported at:
-LINK:
-https://syzkaller.appspot.com/bug?id=50ac8d898487cade14315bf673e8d74fd4716ecf
+. . .
 
-One may find the strace log at:
-LINK: https://syzkaller.appspot.com/text?tag=CrashLog&x=11f5de2ac80000
-and the C reproducer at:
-LINK: https://syzkaller.appspot.com/text?tag=ReproC&x=111facdcc80000
-
-The patch does not apply cleanly on stable/linux-5.15.y. Backporting the
-patch is a bit risky for me as I'm not familiar with f2fs. I'm seeking
-for some guidance. Is there a plan to backport this patch to Linux
-stable? If not, shall I try to backport it? Would you advise me to try
-to find all the prerequisite patches for this patch to apply cleanly on
-stable/linux-5.15.y, or just to fix the conflicts?
-
-Thanks,
-ta
