@@ -2,90 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC906D17E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8170F6D17D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 08:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjCaG72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 02:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
+        id S229875AbjCaGwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 02:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjCaG70 (ORCPT
+        with ESMTP id S230304AbjCaGwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 02:59:26 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E296EA5C8;
-        Thu, 30 Mar 2023 23:59:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680245965; x=1711781965;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=B14wSSeuy/BQ80OZrpBUeZ0EHeHcF77aIQAwlArz8sg=;
-  b=Q+N6kksvXhC3yMVIJ3i+4Z02vXGEux/8CWZri2F5zCJzk+yCK+kP7o8B
-   fvGIY1UEuG3j3VatB+hds8gZ/cSDg0h1gmCmgib6YQ/YeuRJoFGsMrqR1
-   Ym44Ibj0JYeCPTdMREL8t1KtUo69jQrjeUWqehdm7gvDtv+SIvfkzg/GQ
-   WMUmHgwZaDF3MG0D2AeCRzlsZsRASy3W2+b1G2egK2n0XVqIzLyqevpE6
-   KJzWG37Sso44HnO5TwQVPzMjaXzVgBYIHIQ98gt34zRVKfHEQDPe9pC/H
-   25lw2E/5aG7nm9Jw8ghNfJ1EZzqW4XaqxYlyLMF/Oe+3OLIflr4CEScre
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="321031999"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="321031999"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 23:59:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="754308888"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="754308888"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.173.97]) ([10.249.173.97])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 23:59:21 -0700
-Message-ID: <fc642000-7db8-9944-e57e-db54f0d1336d@intel.com>
-Date:   Fri, 31 Mar 2023 14:59:18 +0800
+        Fri, 31 Mar 2023 02:52:50 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5FE1A449
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 23:52:37 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so22405255pjl.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 23:52:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680245557;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qbDWzZeJfLQK7RD7XE5y+qJ0xX1vHzacok5EfQJ98yI=;
+        b=mOLK2yZxZK6G7HZe/KTvq8dTFjTcpCJjilfy/4qdnBMaFrQuNkTwLnh0PExWTMAdkh
+         9D0WoEhAmf0BIrFqXT7WbNY9NNYVRDDcb7GmeesDwJqxmLVv85jK14Z/6DOQ32uzPUnI
+         UAW2omAZgucdh3+3wvFBJ/vi++6LXQuzBOu+ZLuPKbu7VtnUybPnqOvOo+OcS8nTzF99
+         wZshpImXAixj7S257lZpEq9htYT60BKkkT4woafOGq5MI52tSs/QqBl7CfEBqCNd46Qv
+         nCQadqJqJ5lwNmM6QvFwWC9fAMLpjSPjJOIPxV6Zb2G9djXrIokhcdTw63MLX0ajTA6g
+         sNOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680245557;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qbDWzZeJfLQK7RD7XE5y+qJ0xX1vHzacok5EfQJ98yI=;
+        b=gGe9HYgkt0PLSpGp2kioVLP/yzRE8Bwe9h/Z1CZOaIRD1/1f/if5rS53DuHUOoiUIf
+         h8SlYez/Az0JIBEvqqh4MxMnlxELNgAW1Soc+fj6RKrFQe1N4HWB6ioWTwpNIdWRDWrW
+         KX1lcikIWwVZwyLokIlkoOsp/SZBy22SdQLvM0bzbDNds2lcv/QQp9WsIJ4tFjcDaEo6
+         NfSgpaYg4A5Ypr+YfbiIx1ESpPShh5wg5u72/Qkct29DEFiyl5ZQixt3mL8ZLN7V9hZS
+         pcou7DmG1XRK3eM5m8XiiLoMo7fnH5Ew7ABgUxnW0Ta119AhPpHfgRwy5QRGaE+zh3cx
+         ASpg==
+X-Gm-Message-State: AAQBX9eIFsCjKA6mvJQn3diq622UymxPwDNfNq3u+Bfo/T7+1Q65NEdb
+        04IhziGS6OfspD/kpJhyuHwdVqXHD9I=
+X-Google-Smtp-Source: AKy350aalS9c8kO1V87B28++Z7kKjFTJ38PPIKG6Lhd1Jw1yjzpnuUkqFRkreLkt9ViEdCocowjGbA==
+X-Received: by 2002:a17:902:cad1:b0:19e:e39b:6d90 with SMTP id y17-20020a170902cad100b0019ee39b6d90mr21061326pld.25.1680245557250;
+        Thu, 30 Mar 2023 23:52:37 -0700 (PDT)
+Received: from localhost ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id bf12-20020a170902b90c00b001a1ed2fce9asm781989plb.235.2023.03.30.23.52.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 30 Mar 2023 23:52:37 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 14:59:28 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, LMKL <linux-kernel@vger.kernel.org>,
+        huyue2@coolpad.com
+Subject: Re: [PATCH v2] erofs: tidy up EROFS on-disk naming
+Message-ID: <20230331145928.00002cc0.zbestahu@gmail.com>
+In-Reply-To: <20230331063149.25611-1-hsiangkao@linux.alibaba.com>
+References: <20230329054935.78763-1-hsiangkao@linux.alibaba.com>
+        <20230331063149.25611-1-hsiangkao@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.1
-Subject: Re: [PATCH v13 016/113] KVM: TDX: x86: Add ioctl to get TDX
- systemwide parameters
-Content-Language: en-US
-To:     Zhi Wang <zhi.wang.linux@gmail.com>, isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
- <cb0ae8b4941aaa45e1e5856dde644f9b2f53d9a6.1678643052.git.isaku.yamahata@intel.com>
- <20230325104306.00004585@gmail.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20230325104306.00004585@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/2023 4:43 PM, Zhi Wang wrote:
-> On Sun, 12 Mar 2023 10:55:40 -0700
-> isaku.yamahata@intel.com  wrote:
-> 
-> Does this have to be a new generic ioctl with a dedicated new x86_ops? SNP
-> does not use it at all and all the system-scoped ioctl of SNP going through
-> the CCP driver. So getting system-scope information of TDX/SNP will end up
-> differently.
-> 
-> Any thought, Sean? Moving getting SNP system-wide information to
-> KVM dev ioctl seems not ideal and TDX does not have a dedicated driver like
-> CCP. Maybe make this ioctl TDX-specific? KVM_TDX_DEV_OP?
+On Fri, 31 Mar 2023 14:31:49 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-What's the real different of it? For me, it's just renaming 
-KVM_MEMORY_ENCRYPT_OP to KVM_TDX_DEV_OP and maybe add some error message 
-if the IOCTL is issued for AMD plaform.
+>  - Get rid of all "vle" (variable-length extents) expressions
+>    since they only expand overall name lengths unnecessarily;
+>  - Rename COMPRESSION_LEGACY to COMPRESSED_FULL;
+>  - Move on-disk directory definitions ahead of compression;
+>  - Drop unused extended attribute definitions;
+>  - Move inode ondisk union `i_u` out as `union erofs_inode_i_u`.
+> 
+> No actual logical change.
+> 
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
+Reviewed-by: Yue Hu <huyue2@coolpad.com>
