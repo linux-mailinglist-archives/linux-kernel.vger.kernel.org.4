@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F536D1BD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E4D6D1992
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjCaJSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
+        id S231520AbjCaIQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjCaJSe (ORCPT
+        with ESMTP id S231548AbjCaIQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:18:34 -0400
-X-Greylist: delayed 3301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 31 Mar 2023 02:18:11 PDT
-Received: from 7of9.schinagl.nl (7of9.connected.by.freedominter.net [185.238.129.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385974691;
-        Fri, 31 Mar 2023 02:18:11 -0700 (PDT)
-Received: from [10.2.12.76] (unknown [10.2.12.76])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by 7of9.schinagl.nl (Postfix) with ESMTPSA id A09A318BAEF4;
-        Fri, 31 Mar 2023 10:12:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
-        t=1680250351; bh=QpypCl+gi6eZXlgEKjMDUcBtOKgQfLWBPF+SVmhU6bk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=pwdUJlOI5KDI5b+KwS+9DhH57kCHmeLCeNWwFgMpC0WbyagUPfZ2FeEiBQ5UezgFb
-         EsW+Uk7H5mQySSxxq5ywmWaY0Se4RXaNuZZUlAoIcxeTkX3dw5s7mr3j8fhvPUGdYL
-         FDxXaTWq7KeajyRW18eO7N+2Df/HcFf071GbU/u8=
-Message-ID: <3a348abc-d1f3-364f-88de-a0012fbc0fde@schinagl.nl>
-Date:   Fri, 31 Mar 2023 10:12:31 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v1 1/2] iopoll: Introduce ioreadXX_poll_timeout() macros
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-References: <20230330141413.25569-1-andriy.shevchenko@linux.intel.com>
-Content-Language: nl, en-US
-From:   Olliver Schinagl <oliver@schinagl.nl>
-In-Reply-To: <20230330141413.25569-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        Fri, 31 Mar 2023 04:16:09 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71CF118F
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:16:07 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8DxUOWiliZkDuEUAA--.32107S3;
+        Fri, 31 Mar 2023 16:15:30 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axmr1FliZkPusRAA--.12839S2;
+        Fri, 31 Mar 2023 16:13:58 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH] LoongArch: Clean up plat_swiotlb_setup() related code
+Date:   Fri, 31 Mar 2023 16:13:52 +0800
+Message-Id: <1680250432-9396-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Axmr1FliZkPusRAA--.12839S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7KFWDAF1UCw18AryDWr1rWFg_yoW8WrW3pF
+        9rZrykJF48Gr97Za4DAw1kuFy5Jw1kGw12ga17uas5ArnrWr1DXr1vqr9xZF10qayrJF4F
+        ga4rKasIv3WUJ3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b3kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82
+        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2Iq
+        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
+        126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY
+        6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
+        AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x
+        07jepB-UUUUU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,53 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Andy,
+After commit c78c43fe7d42 ("LoongArch: Use acpi_arch_dma_setup()
+and remove ARCH_HAS_PHYS_TO_DMA"), plat_swiotlb_setup() has been
+deleted, clean up the related code.
 
-On 30-03-2023 16:14, Andy Shevchenko wrote:
-> From: Olliver Schinagl <oliver@schinagl.nl>
->
-> There are users in the Linux kernel that would benefit from using
-> ioreadXX_poll_timeout() macros, such as ioread32_poll_timeout().
-> Introduce those macros.
->
-> Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
-> Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   include/linux/iopoll.h | 27 +++++++++++++++++++++++++++
->   1 file changed, 27 insertions(+)
->
-> diff --git a/include/linux/iopoll.h b/include/linux/iopoll.h
-> index 2c8860e406bd..30ba609175a7 100644
-> --- a/include/linux/iopoll.h
-> +++ b/include/linux/iopoll.h
-> @@ -140,6 +140,7 @@
->   #define readx_poll_timeout_atomic(op, addr, val, cond, delay_us, timeout_us) \
->   	read_poll_timeout_atomic(op, val, cond, delay_us, timeout_us, false, addr)
->   
-> +/* readX() */
->   #define readb_poll_timeout(addr, val, cond, delay_us, timeout_us) \
->   	readx_poll_timeout(readb, addr, val, cond, delay_us, timeout_us)
->   
-> <snip>
->   #endif /* _LINUX_IOPOLL_H */
-Thanks for re-posting this? (I don't recall If I actually posted the 
-first time around).
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/loongarch/include/asm/bootinfo.h | 1 -
+ arch/loongarch/kernel/setup.c         | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-But I actually have a small addendum for this series, as it will break 
-`drivers/net/wwan/t7xx/t7xx_dpmaif.c` due to a redefinition (yeah I know).
-
-So I have:
-https://gitlab.com/olliver/linux/-/commit/c9e591f2dabb2dbaeceebee61fa70b70fdbffc2a
-https://gitlab.com/olliver/linux/-/commit/41e0f8c08a1c55940813a240215910336ad7bec2
-https://gitlab.com/olliver/linux/-/commit/f36562f09b0185d403415864ef7218b46a742cdc
-https://gitlab.com/olliver/linux/-/commit/66237fd97bc42d272602b01dc0cca541c619b2be
-
-Which actually replaces silly calls like readx_poll_timeout(ioread32, ... .
-
-Do you want me to (re-?)post this as a series? I can put your 
-thunderbolt (and your changes here) and post as one big series (or you 
-can do the same obviously).
-
-Olliver
+diff --git a/arch/loongarch/include/asm/bootinfo.h b/arch/loongarch/include/asm/bootinfo.h
+index 0051b52..c607968 100644
+--- a/arch/loongarch/include/asm/bootinfo.h
++++ b/arch/loongarch/include/asm/bootinfo.h
+@@ -13,7 +13,6 @@ const char *get_system_type(void);
+ extern void init_environ(void);
+ extern void memblock_init(void);
+ extern void platform_init(void);
+-extern void plat_swiotlb_setup(void);
+ extern int __init init_numa_memory(void);
+ 
+ struct loongson_board_info {
+diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+index 27f71f9..4444b13 100644
+--- a/arch/loongarch/kernel/setup.c
++++ b/arch/loongarch/kernel/setup.c
+@@ -389,8 +389,8 @@ static void __init arch_mem_init(char **cmdline_p)
+ 	/*
+ 	 * In order to reduce the possibility of kernel panic when failed to
+ 	 * get IO TLB memory under CONFIG_SWIOTLB, it is better to allocate
+-	 * low memory as small as possible before plat_swiotlb_setup(), so
+-	 * make sparse_init() using top-down allocation.
++	 * low memory as small as possible before swiotlb_init(), so make
++	 * sparse_init() using top-down allocation.
+ 	 */
+ 	memblock_set_bottom_up(false);
+ 	sparse_init();
+-- 
+2.1.0
 
