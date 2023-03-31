@@ -2,203 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994DD6D2076
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3436B6D2096
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbjCaMeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
+        id S229894AbjCaMlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbjCaMdy (ORCPT
+        with ESMTP id S232533AbjCaMlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:33:54 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC5E20C23;
-        Fri, 31 Mar 2023 05:33:34 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PnzwS1CsSz9v7Yt;
-        Fri, 31 Mar 2023 20:23:36 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDnumHa0iZkr6ziAQ--.5882S6;
-        Fri, 31 Mar 2023 13:33:10 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v10 4/4] evm: Support multiple LSMs providing an xattr
-Date:   Fri, 31 Mar 2023 14:32:21 +0200
-Message-Id: <20230331123221.3273328-5-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
-References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDnumHa0iZkr6ziAQ--.5882S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxGryktFy8JF1rur15Kw48WFg_yoWrKr1Dpa
-        98tas8Arn5JFy7Wr9aya18ua4SgrW8Cw1UK393JryjyFnIqr1IvryIyr15ur98WrW8JrnI
-        yw4Yvw15Cw15t3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
-        kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
-        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
-        v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvE
-        c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
-        pf9x07jxwIDUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgANBF1jj4dsJQABs1
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 31 Mar 2023 08:41:12 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D011F799;
+        Fri, 31 Mar 2023 05:40:50 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 47574582093;
+        Fri, 31 Mar 2023 08:33:08 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 31 Mar 2023 08:33:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680265988; x=1680273188; bh=I/
+        XjvTAePbFVwUGfSz8rPi8M5dxtpkHpG1vd7Vude4c=; b=iuNZAdk6Ya9vr/N/zU
+        3t/+cX/F0A+q88l6Qahs7Uj1CYoWxSa8Eu5OD+Ct23B44MXMq4BCsnbr8qUNSlk5
+        jOx6no330KaPyJVwkdA64ngV79uiGX4UVSt+8qLYU6x8k0skGKkacFHXFT+4yVoK
+        U6XKaO/Jy3YZOjfH4+/yenwfGReew2hQQUQdhH3RVkckJOXJo94KR5LwOWh0szbZ
+        rPwvnmbdKdguGaVvbONliIgg4m+CeTJ1KZaQyfX90PeptO2l+WyXh9qslgcvFuPX
+        Oxcm45KxbnA9f0abON8VinWMCFl5E/z/tMyvRgEoCdXBCyvxtdEaPao0ugezvcUU
+        k6fg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680265988; x=1680273188; bh=I/XjvTAePbFVw
+        UGfSz8rPi8M5dxtpkHpG1vd7Vude4c=; b=NI3JQqrb1FRHMe5nE5wfinxBX/1mQ
+        nSGlERt9dUU3gRApIGMeDzB0UgHLLw2CCn9bpKLbHeusGMHpb1gpqCiZUb7Mmlu1
+        i7qaXzWNCMRng9IBx99SAXpy98tdrD1OPcWbT56cyhuOCHD89yiyIPu/LCbN+8Ml
+        fMxrCXWxuL3U9gM29T5yHdqMB82p4V+cMY8Fo5XGNuifGCMGxu99hnO1/9hv7xAp
+        jzQqG1ouRlprhg0SGGHemyAUBb4ojTyQUgeSmG3grpwp5zlg4UBG9K1BgHnUh36W
+        mnZAPYAc3Wj9DISiZL6YQw+vJ+t6oquGLuctAR/f7srdAHn7lZQgZRLyA==
+X-ME-Sender: <xms:AdMmZIBbatqXGeNOMfbC2yM1UTEHf5t1O_Ny6GHrJYaymaPARYQseA>
+    <xme:AdMmZKgRdC-oO_hhRg07gpiVNMqHiAwC2zW1iahhdyz4W42oovQyay3b9s-8VtDak
+    XIDpt5T1CbMQPswLyU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiuddghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:AdMmZLnMiGrKVuUtaQVRQlRtHYW58JiQ9P0q9APMOT9CJJRyl8hHmA>
+    <xmx:AdMmZOzMnLFjNaRcp14svdP1B-JrKpp5unv7qIoHJ5lDmFpc_UcSVg>
+    <xmx:AdMmZNQMs00AiqBUxbeFx4D4RhVdyZ0OwbnhjcjVis5DY3KkimzZhQ>
+    <xmx:BNMmZDBgsPHtCy93eTqu2EUN111zCpLg0yHlOaE6A-yvIMj2UhorKQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D0239B6008F; Fri, 31 Mar 2023 08:33:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
+Mime-Version: 1.0
+Message-Id: <709bcaf5-4dfd-4562-b34b-ea833690c0b8@app.fastmail.com>
+In-Reply-To: <ZCa/FlTVT/GSl1af@shell.armlinux.org.uk>
+References: <20230327121317.4081816-1-arnd@kernel.org>
+ <20230327121317.4081816-16-arnd@kernel.org>
+ <ZCai0FmZiOqsMkzc@shell.armlinux.org.uk>
+ <ZCapXlrqMOpRxkSu@shell.armlinux.org.uk>
+ <a8a90181-a003-47a1-8257-fcbf55752249@app.fastmail.com>
+ <ZCa/FlTVT/GSl1af@shell.armlinux.org.uk>
+Date:   Fri, 31 Mar 2023 14:32:44 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Russell King" <linux@armlinux.org.uk>
+Cc:     "Arnd Bergmann" <arnd@kernel.org>, linux-kernel@vger.kernel.org,
+        "Vineet Gupta" <vgupta@kernel.org>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, guoren <guoren@kernel.org>,
+        "Brian Cain" <bcain@quicinc.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Michal Simek" <monstr@monstr.eu>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Stafford Horne" <shorne@gmail.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Rich Felker" <dalias@libc.org>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Max Filippov" <jcmvbkbc@gmail.com>,
+        "Christoph Hellwig" <hch@lst.de>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org,
+        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH 15/21] ARM: dma-mapping: always invalidate WT caches before DMA
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Fri, Mar 31, 2023, at 13:08, Russell King (Oracle) wrote:
+> On Fri, Mar 31, 2023 at 12:38:45PM +0200, Arnd Bergmann wrote:
+>> On Fri, Mar 31, 2023, at 11:35, Russell King (Oracle) wrote:
+>> > On Fri, Mar 31, 2023 at 10:07:28AM +0100, Russell King (Oracle) wrote:
+>> >> On Mon, Mar 27, 2023 at 02:13:11PM +0200, Arnd Bergmann wrote:
+>> >> > From: Arnd Bergmann <arnd@arndb.de>
+>> >> > 
+>> >> > Most ARM CPUs can have write-back caches and that require
+>> >> > cache management to be done in the dma_sync_*_for_device()
+>> >> > operation. This is typically done in both writeback and
+>> >> > writethrough mode.
+>> >> > 
+>> >> > The cache-v4.S (arm720/740/7tdmi/9tdmi) and cache-v4wt.S
+>> >> > (arm920t, arm940t) implementations are the exception here,
+>> >> > and only do the cache management after the DMA is complete,
+>> >> > in the dma_sync_*_for_cpu() operation.
+>> >> > 
+>> >> > Change this for consistency with the other platforms. This
+>> >> > should have no user visible effect.
+>> >> 
+>> >> NAK...So t
+>> >> 
+>> >> The reason we do cache management _after_ is to ensure that there
+>> >> is no stale data. The kernel _has_ (at the very least in the past)
+>> >> performed DMA to data structures that are embedded within other
+>> >> data structures, resulting in cache lines being shared. If one of
+>> >> those cache lines is touched while DMA is progressing, then we
+>> >> must to cache management _after_ the DMA operation has completed.
+>> >> Doing it before is no good.
+>> 
+>> What I'm trying to address here is the inconsistency between
+>> implementations. If we decide that we always want to invalidate
+>> after FROM_DEVICE, I can do that as part of the series, but then
+>> I have to change most of the other arm implementations.
+>
+> Why?
+>
+> First thing to say is that DMA to buffers where the cache lines are
+> shared with data the CPU may be accessing need to be outlawed - they
+> are a recipe for data corruption - always have been. Sadly, some folk
+> don't see it that way because of a passed "x86 just works and we demand
+> that all architectures behave like x86!" attitude. The SCSI sense
+> buffer has historically been a big culpret for that.
 
-Currently, evm_inode_init_security() processes a single LSM xattr from the
-array passed by security_inode_init_security(), and calculates the HMAC on
-it and other inode metadata.
+I think that part is pretty much agree by everyone, the difference
+between architectures is to what extend they try to work around
+drivers that get it wrong.
 
-As the LSM infrastructure now can pass to EVM an array with multiple
-xattrs, scan them until the terminator (xattr name NULL), and calculate the
-HMAC on all of them.
+> For WT, FROM_DEVICE, invalidating after DMA is the right thing to do,
+> because we want to ensure that the DMA'd data is properly readable upon
+> completion of the DMA. If overlapping cache lines haveDoes that mean you take back you NAK on this patch tehn? been touched
+> while DMA is proSo tgressing, and we invalidate before DMA, then the cache
+> will contain stale data that will remain in the cache after DMA has
+> completed. Invalidating a WT cache does not destroy any data, so is
+> safe to do. So the safest approach is to invalidate after DMA has
+> completed in this instance.
 
-Also, double check that the xattrs array terminator is the first non-filled
-slot (obtained with lsm_get_xattr_slot()). Consumers of the xattrs array,
-such as the initxattrs() callbacks, rely on the terminator.
+> For WB, FROM_DEVICE, we have the problem of dirty cache lines which
+> we have to get rid of. For the overlapping cache lines, we have to
+> clean those before DMA begins to ensure that data written to the
+> non-DMA-buffer part is preserved. All other cache lines need to be
+> invalidated before DMA begins to ensure that writebacks do not
+> corrupt data from the device. Hence why it's different.
 
-Finally, change the name of the lsm_xattr parameter of evm_init_hmac() to
-xattrs, to reflect the new type of information passed.
+I don't see how WB and Wt caches being different implies that we
+should give extra guarantees to (broken) drivers when WT caches on
+other architectures. Always doing it first in the absence of
+prefetching avoids a special case in the generic implementation
+and makes the driver interface on Arm/sparc32/xtensa WT caches
+no different from what everything provides.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/evm/evm.h        |  4 +++-
- security/integrity/evm/evm_crypto.c | 11 +++++++++--
- security/integrity/evm/evm_main.c   | 29 +++++++++++++++++++++++++----
- 3 files changed, 37 insertions(+), 7 deletions(-)
+The writeback before DMA_FROM_DEVICE is another issue that we
+have to address at some point, as there are clearly incompatible
+expectations here. It makes no sense that a device driver can
+rely on the entire to be written back on a 64-bit arm kernel
+but not on a 32-bit kernel.
 
-diff --git a/security/integrity/evm/evm.h b/security/integrity/evm/evm.h
-index f8b8c5004fc..53bd7fec93f 100644
---- a/security/integrity/evm/evm.h
-+++ b/security/integrity/evm/evm.h
-@@ -46,6 +46,8 @@ struct evm_digest {
- 	char digest[IMA_MAX_DIGEST_SIZE];
- } __packed;
- 
-+int evm_protected_xattr(const char *req_xattr_name);
-+
- int evm_init_key(void);
- int evm_update_evmxattr(struct dentry *dentry,
- 			const char *req_xattr_name,
-@@ -58,7 +60,7 @@ int evm_calc_hash(struct dentry *dentry, const char *req_xattr_name,
- 		  const char *req_xattr_value,
- 		  size_t req_xattr_value_len, char type,
- 		  struct evm_digest *data);
--int evm_init_hmac(struct inode *inode, const struct xattr *xattr,
-+int evm_init_hmac(struct inode *inode, const struct xattr *xattrs,
- 		  char *hmac_val);
- int evm_init_secfs(void);
- 
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index 033804f5a5f..0fdd382b58e 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -385,10 +385,11 @@ int evm_update_evmxattr(struct dentry *dentry, const char *xattr_name,
- 	return rc;
- }
- 
--int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
-+int evm_init_hmac(struct inode *inode, const struct xattr *xattrs,
- 		  char *hmac_val)
- {
- 	struct shash_desc *desc;
-+	const struct xattr *xattr;
- 
- 	desc = init_desc(EVM_XATTR_HMAC, HASH_ALGO_SHA1);
- 	if (IS_ERR(desc)) {
-@@ -396,7 +397,13 @@ int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
- 		return PTR_ERR(desc);
- 	}
- 
--	crypto_shash_update(desc, lsm_xattr->value, lsm_xattr->value_len);
-+	for (xattr = xattrs; xattr->name != NULL; xattr++) {
-+		if (!evm_protected_xattr(xattr->name))
-+			continue;
-+
-+		crypto_shash_update(desc, xattr->value, xattr->value_len);
-+	}
-+
- 	hmac_add_misc(desc, inode, EVM_XATTR_HMAC, hmac_val);
- 	kfree(desc);
- 	return 0;
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 475196ce712..e9441419a81 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -306,7 +306,7 @@ static int evm_protected_xattr_common(const char *req_xattr_name,
- 	return found;
- }
- 
--static int evm_protected_xattr(const char *req_xattr_name)
-+int evm_protected_xattr(const char *req_xattr_name)
- {
- 	return evm_protected_xattr_common(req_xattr_name, false);
- }
-@@ -870,14 +870,35 @@ int evm_inode_init_security(struct inode *inode, struct inode *dir,
- 			    int *xattr_count)
- {
- 	struct evm_xattr *xattr_data;
--	struct xattr *evm_xattr;
-+	struct xattr *xattr, *evm_xattr;
-+	bool evm_protected_xattrs = false;
- 	int rc;
- 
--	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs ||
--	    !evm_protected_xattr(xattrs->name))
-+	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs)
-+		return 0;
-+
-+	/*
-+	 * security_inode_init_security() makes sure that the xattrs array is
-+	 * contiguous, there is enough space for security.evm, and that there is
-+	 * a terminator at the end of the array.
-+	 */
-+	for (xattr = xattrs; xattr->name != NULL; xattr++) {
-+		if (evm_protected_xattr(xattr->name))
-+			evm_protected_xattrs = true;
-+	}
-+
-+	/* EVM xattr not needed. */
-+	if (!evm_protected_xattrs)
- 		return 0;
- 
- 	evm_xattr = lsm_get_xattr_slot(xattrs, xattr_count);
-+	/*
-+	 * Array terminator (xattr name = NULL) must be the first non-filled
-+	 * xattr slot.
-+	 */
-+	WARN_ONCE(evm_xattr != xattr,
-+		  "%s: xattrs terminator is not the first non-filled slot\n",
-+		  __func__);
- 
- 	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
- 	if (!xattr_data)
--- 
-2.25.1
+> And hence why the ARM implementation is based around buffer ownership.
+> And hence why they're called dma_map_area()/dma_unmap_area() rather
+> than the cache operations themselves. This is an intentional change,
+> one that was done when ARMv6 came along.
 
+The bit that has changed in the meantime though is that the buffer
+ownership interfaces has moved up in the stack and is now handled
+mostly in the common kernel/dma/*.c that multiplexes between the
+direct/iommu/swiotlb dma_map_ops, except for the bit about
+noncoherent devices. Right now, we have 37 implementations that
+are mostly identical, and all the differences are either bugs
+or disagreements about the API guarantees but not related to
+architecture specific requirements.
+
+>> OTOH, most machines that are actually in use today (armv6+,
+>> powerpc, later mips, microblaze, riscv, nios2) also have to
+>> deal with speculative accesses, so they end up having to
+>> invalidate or flush both before and after a DMA_FROM_DEVICE
+>> and DMA_BIDIRECTIONAL.
+>
+> Again, these are implementation details of the cache, and this is
+> precisely why having the map/unmap interface is so much better than
+> having generic code explicitly call "clean" and "invalidate"
+> interfaces into arch code.
+>
+> If we treat everything as a speculative cache, then we're doing
+> needless extra work for those caches that aren't speculative. So,
+> ARM would have to step through every cache line for every DMA
+> buffer at 32-byte intervals performing cache maintenance whether
+> the cache is speculative or not. That is expensive, and hurts
+> performance.
+
+Dop that mean that you agree with this patch 15 then after all?
+
+If you think we don't need an invalidation after DMA_FROM_DEVICE
+on non-speculating CPUs, it should be fine to make the WT case
+consistent with the rest.
+
+      Arnd
