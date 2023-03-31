@@ -2,77 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AADE6D2589
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54C36D2594
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbjCaQbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 12:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
+        id S232384AbjCaQdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbjCaQbY (ORCPT
+        with ESMTP id S232302AbjCaQck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:31:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0CF26249;
-        Fri, 31 Mar 2023 09:27:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 31 Mar 2023 12:32:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D171265A2
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680280073;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dzj4wq9FaG2NZQlDvyNIG6SZjlNuX69PXAW+edzOmqo=;
+        b=WVjc/SUc5OFn6ISZc4lXVdlkxBFD+amHiLU1iDMGCBS1WvYGKlH5fTt+cQa13HQkF7XShV
+        KVUJ5LXx4xfFGnLjPgXi141B6yKV6VpRgs/rBx2W8nY5aSgtDDXGFkfaMKpAj+uU6L03li
+        Klem48yrm92EJ2Ei57wvCOfneOHXJSM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-584-E3iaPG3wNlaU_2VbzkuVhw-1; Fri, 31 Mar 2023 12:27:48 -0400
+X-MC-Unique: E3iaPG3wNlaU_2VbzkuVhw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 575366296C;
-        Fri, 31 Mar 2023 16:27:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BF83C433EF;
-        Fri, 31 Mar 2023 16:27:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680280035;
-        bh=eP8/B3AzdH6BqhzV/6e2SjkXVUjAStqU1rkXicnS8PY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BJFD9wvNuTpFYQY9pNDYsrPHKtOH+7Me/eyYUYWdAIzo/H200uYkjilxt+jMdyQk8
-         fuWezglKiWhtRcujm1cN2KsxoI8K+gePViaoLTBlwrvgdNEFFhx9gzTlvimV381xWV
-         GC8FIQv/ZGZAqCLGe65h6FLi32qI13mwU6m/8LY0v5fAbGD8R6MaY6SW86kvbaUZjz
-         nUq6uX19HAOik205wnd7YELysNX2AeVPo26NNUOacfV3HXHMibAmb9BSHBnid19eIH
-         poUjRGH5nLzeeuPlx5zHOn6txOjZpCZT9RMs6GYzj8+akgeHq6wPEnd1T8KQ+yG1S5
-         o+6jKJN7MdVzw==
-Date:   Fri, 31 Mar 2023 11:27:14 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Serge Semin <fancer.lancer@gmail.com>
-Subject: [GIT PULL] PCI fixes for v6.3
-Message-ID: <20230331162714.GA3232819@bhelgaas>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2D2331C0879A;
+        Fri, 31 Mar 2023 16:27:47 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2A3E4492C3E;
+        Fri, 31 Mar 2023 16:27:45 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230331160914.1608208-30-dhowells@redhat.com>
+References: <20230331160914.1608208-30-dhowells@redhat.com> <20230331160914.1608208-1-dhowells@redhat.com>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: Trivial TLS server
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1610390.1680280064.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 31 Mar 2023 17:27:44 +0100
+Message-ID: <1610391.1680280064@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+Here's a trivial TLS server that can be used to test this.
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+David
+---
+/*
+ * TLS-over-TCP sink server
+ */
 
-are available in the Git repository at:
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <linux/tls.h>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git tags/pci-v6.3-fixes-1
+#define OSERROR(X, Y) do { if ((long)(X) =3D=3D -1) { perror(Y); exit(1); =
+} } while(0)
 
-for you to fetch changes up to cdce67099117ece371582f706c6eff7d3a65326d:
+static unsigned char buffer[512 * 1024] __attribute__((aligned(4096)));
 
-  PCI: dwc: Fix PORT_LINK_CONTROL update when CDM check enabled (2023-03-21 13:06:24 -0500)
+static void set_tls(int sock)
+{
+	struct tls12_crypto_info_aes_gcm_128 crypto_info;
 
-----------------------------------------------------------------
-- Fix DesignWare PORT_LINK_CONTROL setup, which was corrupted when the DT
-  "snps,enable-cdm-check" property was present (Yoshihiro Shimoda)
+	crypto_info.info.version =3D TLS_1_2_VERSION;
+	crypto_info.info.cipher_type =3D TLS_CIPHER_AES_GCM_128;
+	memset(crypto_info.iv,		0, TLS_CIPHER_AES_GCM_128_IV_SIZE);
+	memset(crypto_info.rec_seq,	0, TLS_CIPHER_AES_GCM_128_REC_SEQ_SIZE);
+	memset(crypto_info.key,		0, TLS_CIPHER_AES_GCM_128_KEY_SIZE);
+	memset(crypto_info.salt,	0, TLS_CIPHER_AES_GCM_128_SALT_SIZE);
 
-----------------------------------------------------------------
-Yoshihiro Shimoda (1):
-      PCI: dwc: Fix PORT_LINK_CONTROL update when CDM check enabled
+	OSERROR(setsockopt(sock, SOL_TCP, TCP_ULP, "tls", sizeof("tls")),
+		"TCP_ULP");
+	OSERROR(setsockopt(sock, SOL_TLS, TLS_TX, &crypto_info, sizeof(crypto_inf=
+o)),
+		"TLS_TX");
+	OSERROR(setsockopt(sock, SOL_TLS, TLS_RX, &crypto_info, sizeof(crypto_inf=
+o)),
+		"TLS_RX");
+}
 
- drivers/pci/controller/dwc/pcie-designware.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+int main(int argc, char *argv[])
+{
+	struct sockaddr_in sin =3D { .sin_family =3D AF_INET, .sin_port =3D htons=
+(5556) };
+	int sfd, afd;
+
+	sfd =3D socket(AF_INET, SOCK_STREAM, 0);
+	OSERROR(sfd, "socket");
+	OSERROR(bind(sfd, (struct sockaddr *)&sin, sizeof(sin)), "bind");
+	OSERROR(listen(sfd, 1), "listen");
+
+	for (;;) {
+		afd =3D accept(sfd, NULL, NULL);
+		if (afd !=3D -1) {
+			set_tls(afd);
+			while (read(afd, buffer, sizeof(buffer)) > 0) {}
+			close(afd);
+		}
+	}
+}
+
