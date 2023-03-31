@@ -2,144 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA436D1BCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6737F6D1BC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbjCaJRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        id S230294AbjCaJQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231620AbjCaJQz (ORCPT
+        with ESMTP id S231782AbjCaJQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:16:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8696840CF
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:15:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680254150;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HpBwJNhntZe6FD93wLKDtIdc8Lkqkr2A8dw0SyVmm8A=;
-        b=cKBL36liGchPHqomUFxLYtGIP/nybcP7cP2iF1GSC9prCPzKzHdQ2pn06QtlCWIYk6+ENh
-        q8SqGYXw3ooqvR/Y2KEBCY4xb2seiWGzqOMz8zN48bHxzBiCMOLJ3+I2cyy9X1ax7p7yaz
-        YNBoCvf3tLygKVsaVvU0cUtSm361114=
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
- [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-202-ONUtGfeDOD2XCJNYEjvJXQ-1; Fri, 31 Mar 2023 05:15:49 -0400
-X-MC-Unique: ONUtGfeDOD2XCJNYEjvJXQ-1
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-177c2fb86b7so11241559fac.20
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:15:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680254148; x=1682846148;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HpBwJNhntZe6FD93wLKDtIdc8Lkqkr2A8dw0SyVmm8A=;
-        b=jLi3TBs4SZxYBoNRg2MwIIMRuPLge8mM/Zzxau+I+V4fREwFetyCjvWetR4n1h+enF
-         n1+j9iEuKMFZAd/mtnIAWUjrJfMZu88XTlBfMYg9cvTducpBg+S3j+jCblUpI8cZ3Rka
-         ZPhANmMFCKQQVAteEeTBmZJwtmS7E07Rb3GZWGPhoytPR+K8y+UFPtc1pB2OxhH2jdHr
-         IygKGYNi2ZwFQsjQCPzmz6BVl51+Do1kZTf6e8Vju0GpaeMfuCeZ54oXu0OpiAD351W4
-         LEiDd/cmZZbw8kbf7VDsasJqiKuJ/k9+iqeNmGG+2HZVupIDo0F2zO6UjF2gT7yuP2Ef
-         w1+g==
-X-Gm-Message-State: AAQBX9f3psZdK5iMal+a8ZLY8LWN7pugitln94Jc814fJlVZDIMzNLEk
-        FfStVc+nVhJN69hlkroCy5EzNk4OLXRdK1ww73NzB/vWzye6JfgLMg201JkkmSyzfvIs7sXmGz/
-        sm1boeH1A+u7ZZ46jbfZ3l+FOQMIdukYTaJn9rFuC
-X-Received: by 2002:a05:6830:119:b0:69f:15f4:aa8 with SMTP id i25-20020a056830011900b0069f15f40aa8mr2912057otp.0.1680254148655;
-        Fri, 31 Mar 2023 02:15:48 -0700 (PDT)
-X-Google-Smtp-Source: AKy350au0t5wmkRH4+94dmbo4lZGEFFNChh74aKhB9ea6YK9dFKBXZt8OcEd3YmdzM4pRCxTfdprrA7hujgUD9BK6aI=
-X-Received: by 2002:a05:6830:119:b0:69f:15f4:aa8 with SMTP id
- i25-20020a056830011900b0069f15f40aa8mr2912054otp.0.1680254148451; Fri, 31 Mar
- 2023 02:15:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230331080208.17002-1-sgarzare@redhat.com>
-In-Reply-To: <20230331080208.17002-1-sgarzare@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 31 Mar 2023 17:15:37 +0800
-Message-ID: <CACGkMEvjLWY39jb4LR_nMaB9cBoPYOKmtpuuN8XwB6pA+zBL7w@mail.gmail.com>
-Subject: Re: [PATCH] vringh: fix typos in the vringh_init_* documentation
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 31 Mar 2023 05:16:14 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A987576AD;
+        Fri, 31 Mar 2023 02:16:02 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxUU_RpCZkuOQUAA--.20662S3;
+        Fri, 31 Mar 2023 17:16:01 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxC77OpCZkVfMRAA--.14538S2;
+        Fri, 31 Mar 2023 17:15:59 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH 0/3] Modify is_arm_mapping_symbol() related code
+Date:   Fri, 31 Mar 2023 17:15:50 +0800
+Message-Id: <1680254153-14582-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8DxC77OpCZkVfMRAA--.14538S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
+        67AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2
+        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20x
+        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-e5UUUUU==
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 4:02=E2=80=AFPM Stefano Garzarella <sgarzare@redhat=
-.com> wrote:
->
-> Replace `userpace` with `userspace`.
->
-> Cc: Simon Horman <simon.horman@corigine.com>
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+Based on "MODULE SUPPORT" tree:
+git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+Tiezhu Yang (3):
+  module: Sync code of is_arm_mapping_symbol()
+  module: Move is_arm_mapping_symbol() to module_symbol.h
+  module: Ignore L0 and rename is_arm_mapping_symbol()
 
-Thanks
+ include/linux/module_symbol.h | 17 +++++++++++++++++
+ kernel/module/kallsyms.c      | 15 ++-------------
+ scripts/mod/modpost.c         | 12 +++---------
+ 3 files changed, 22 insertions(+), 22 deletions(-)
+ create mode 100644 include/linux/module_symbol.h
 
-> ---
->  drivers/vhost/vringh.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> index a1e27da54481..694462ba3242 100644
-> --- a/drivers/vhost/vringh.c
-> +++ b/drivers/vhost/vringh.c
-> @@ -636,9 +636,9 @@ static inline int xfer_to_user(const struct vringh *v=
-rh,
->   * @features: the feature bits for this ring.
->   * @num: the number of elements.
->   * @weak_barriers: true if we only need memory barriers, not I/O.
-> - * @desc: the userpace descriptor pointer.
-> - * @avail: the userpace avail pointer.
-> - * @used: the userpace used pointer.
-> + * @desc: the userspace descriptor pointer.
-> + * @avail: the userspace avail pointer.
-> + * @used: the userspace used pointer.
->   *
->   * Returns an error if num is invalid: you should check pointers
->   * yourself!
-> @@ -911,9 +911,9 @@ static inline int kern_xfer(const struct vringh *vrh,=
- void *dst,
->   * @features: the feature bits for this ring.
->   * @num: the number of elements.
->   * @weak_barriers: true if we only need memory barriers, not I/O.
-> - * @desc: the userpace descriptor pointer.
-> - * @avail: the userpace avail pointer.
-> - * @used: the userpace used pointer.
-> + * @desc: the userspace descriptor pointer.
-> + * @avail: the userspace avail pointer.
-> + * @used: the userspace used pointer.
->   *
->   * Returns an error if num is invalid.
->   */
-> @@ -1306,9 +1306,9 @@ static inline int putused_iotlb(const struct vringh=
- *vrh,
->   * @features: the feature bits for this ring.
->   * @num: the number of elements.
->   * @weak_barriers: true if we only need memory barriers, not I/O.
-> - * @desc: the userpace descriptor pointer.
-> - * @avail: the userpace avail pointer.
-> - * @used: the userpace used pointer.
-> + * @desc: the userspace descriptor pointer.
-> + * @avail: the userspace avail pointer.
-> + * @used: the userspace used pointer.
->   *
->   * Returns an error if num is invalid.
->   */
-> --
-> 2.39.2
->
+-- 
+2.1.0
 
