@@ -2,186 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFB56D2996
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E78D6D299B
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232622AbjCaUoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S232897AbjCaUqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjCaUoT (ORCPT
+        with ESMTP id S231609AbjCaUqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:44:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D4F1E73E
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:44:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70839B8324F
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 20:44:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C2F5C433EF;
-        Fri, 31 Mar 2023 20:44:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680295455;
-        bh=IjNpgGo5a3tZmrMexWmEJ8p/LvAfP8U2IA7zS+CVMu8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XMkaKzFSj5EhqAYwtwHnHeNiBshH7tA3JXtUsIYt3LxZiPR2flebb8yz9l5/9wKFk
-         4LS7ui2OOFarQFhNBoZjh3uc33qX+THSRBf/7RqAGyRDAVc099LOPhnwc2qIb/Lq8R
-         APlUT03WIZvlgDZFpLTO4AwWcU9x5m3U+YgbNxlQ55sTiQRqUE5HQpiwBQVv53U75a
-         MFf8mHnFmdR+TeyD1oV6R2HThSlpxS1046Qb4yuBbpxsOX5EKWAPo/72HuCuCzvJrm
-         3cy1MD8knl0JEe80/4YzX/U5ycG7xfRcn7uVcS4SjZr3cuNS3yGepHF4jZdRIqr52m
-         aNCsLzK4p4I5g==
-Date:   Fri, 31 Mar 2023 13:44:12 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Rob Clark <robdclark@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10 11/15] drm/atomic-helper: Set fence deadline for
- vblank
-Message-ID: <20230331204412.GA396777@dev-arch.thelio-3990X>
-References: <20230308155322.344664-1-robdclark@gmail.com>
- <20230308155322.344664-12-robdclark@gmail.com>
+        Fri, 31 Mar 2023 16:46:32 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DC22220E
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:46:31 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id q20so4470448pfs.2
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:46:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1680295591;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yvQa5duEFmv21oECF91MpJhqxo4SC69A1svuPHKziuc=;
+        b=KhVXzwIWCeYgb1lZI5Yha5mNmFpNFAJqlC0Egm6HvFwWgb8Ki2n4SSpvugRY3D7BkR
+         s1fg44MShT6ti7TmbJ79LYprwI882/Fr4a77KAADJnzA4VJR6b1Jgmklh5BBwWFDF1SU
+         ZUQ1Nvc4tRsdwUhgNV+GfDF4ysFpvn3hWx25MLLdCX5KuKYS+MCfxG1vlpHbrl2l24Yb
+         AknVvu0jfrSD133BhKNQ5ZXlH1faApCoWGgr/6thHtXalF72GX86hiBrI1MKX9eorMiP
+         3Oz03NZcqXK+VkTJRCzIYyVJX5+OPHiOzkIm1AhN5j9kldHmGj52qDyl6vTjy+8tAxMI
+         7d7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680295591;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yvQa5duEFmv21oECF91MpJhqxo4SC69A1svuPHKziuc=;
+        b=K4+lBt7L2Mib2TfD5x/vPspj7gqPQcmzmptJw+qs/tsE3znO/WWQivpJkGlc6bZw0C
+         cRDxY2OFgJcJY7B0dGDupdxFqROhBdEVpMS+/emlc1FFJvv9xulU3YYstXYm5ISzReqX
+         /TH18YaiB+LBvhdEjC3EjYmxkbgmZhNJypvvE7KpGAasZ5GqY5UjX1YJuL40i4d0clNI
+         Fv4ifyRZW3DpM5NC/GOYkxNuUUA7ju5uEYeQbu2w9DwYYh9CKtMbNHxmiBM+giFt47Wn
+         FIfYxw6A8EjILRO0uvro1T/K8UDBdk6Y7T1S27zPYWS/ISRdv610x0jxMwb6Li4Q2hXi
+         P1Tg==
+X-Gm-Message-State: AAQBX9cBSs8OTRWtzand+X2HWf2xbgpe/ZJJ2M/OJqKKicHHEQI8f49c
+        oJSZazDjpMGW1p/GOL/vZvtD+w==
+X-Google-Smtp-Source: AKy350aw0znO4Oeu3iK9sCJXE4hgEGZz5IvcwXA9QAxhyhMtSSd2RJp67WN+A+KF6JXYg+3wrjWBvQ==
+X-Received: by 2002:a62:4ec9:0:b0:575:b783:b6b3 with SMTP id c192-20020a624ec9000000b00575b783b6b3mr25452388pfb.28.1680295590838;
+        Fri, 31 Mar 2023 13:46:30 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-91-157.pa.nsw.optusnet.com.au. [49.181.91.157])
+        by smtp.gmail.com with ESMTPSA id a3-20020a62bd03000000b005abc0d426c4sm2225403pff.54.2023.03.31.13.46.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 13:46:30 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1piLdj-00FUjp-5i; Sat, 01 Apr 2023 07:46:27 +1100
+Date:   Sat, 1 Apr 2023 07:46:27 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Aleksandr Nogikh <nogikh@google.com>,
+        syzbot <syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [xfs?] WARNING in xfs_bmap_extents_to_btree
+Message-ID: <20230331204627.GH3223426@dread.disaster.area>
+References: <0000000000003da76805f8021fb5@google.com>
+ <20230330012750.GF3223426@dread.disaster.area>
+ <CANp29Y6XNE_wxx1Osa+RrfqOUP9PZhScGnMUDgQ-qqHzYe9KFg@mail.gmail.com>
+ <20230330224302.GG3223426@dread.disaster.area>
+ <20230331012537.GC4126677@frogsfrogsfrogs>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230308155322.344664-12-robdclark@gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230331012537.GC4126677@frogsfrogsfrogs>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-On Wed, Mar 08, 2023 at 07:53:02AM -0800, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
+On Thu, Mar 30, 2023 at 06:25:37PM -0700, Darrick J. Wong wrote:
+> On Fri, Mar 31, 2023 at 09:43:02AM +1100, Dave Chinner wrote:
+> > On Thu, Mar 30, 2023 at 10:52:37AM +0200, Aleksandr Nogikh wrote:
+> > > On Thu, Mar 30, 2023 at 3:27 AM 'Dave Chinner' via syzkaller-bugs
+> > > <syzkaller-bugs@googlegroups.com> wrote:
+> > > >
+> > > > On Tue, Mar 28, 2023 at 09:08:01PM -0700, syzbot wrote:
+> > > > > Hello,
+> > > > >
+> > > > > syzbot found the following issue on:
+> > > > >
+> > > > > HEAD commit:    1e760fa3596e Merge tag 'gfs2-v6.3-rc3-fix' of git://git.ke..
+> > > > > git tree:       upstream
+> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=16f83651c80000
+> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
+> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=0c383e46e9b4827b01b1
+> > > > > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > >
+> > > > > Unfortunately, I don't have any reproducer for this issue yet.
+> > > > >
+> > > > > Downloadable assets:
+> > > > > disk image: https://storage.googleapis.com/syzbot-assets/17229b6e6fe0/disk-1e760fa3.raw.xz
+> > > > > vmlinux: https://storage.googleapis.com/syzbot-assets/69b5d310fba0/vmlinux-1e760fa3.xz
+> > > > > kernel image: https://storage.googleapis.com/syzbot-assets/0c65624aace9/bzImage-1e760fa3.xz
+> > > > >
+> > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > > Reported-by: syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com
+> > > > >
+> > > > > ------------[ cut here ]------------
+> > > > > WARNING: CPU: 1 PID: 24101 at fs/xfs/libxfs/xfs_bmap.c:660 xfs_bmap_extents_to_btree+0xe1b/0x1190
+> > > >
+> > > > Allocation got an unexpected ENOSPC when it was supposed to have a
+> > > > valid reservation for the space. Likely because of an inconsistency
+> > > > that had been induced into the filesystem where superblock space
+> > > > accounting doesn't exactly match the AG space accounting and/or the
+> > > > tracked free space.
+> > > >
+> > > > Given this is a maliciously corrupted filesystem image, this sort of
+> > > > warning is expected and there's probably nothing we can do to avoid
+> > > > it short of a full filesystem verification pass during mount.
+> > > > That's not a viable solution, so I think we should just ignore
+> > > > syzbot when it generates this sort of warning....
+> > > 
+> > > If it's not a warning about a kernel bug, then WARN_ON should probably
+> > > be replaced by some more suitable reporting mechanism. Kernel coding
+> > > style document explicitly says:
+> > > 
+> > > "WARN*() must not be used for a condition that is expected to trigger
+> > > easily, for example, by user space actions.
+> > 
+> > That's exactly the case here. It should *never* happen in normal
+> > production workloads, and it if does then we have the *potential*
+> > for silent data loss occurring. That's *exactly* the sort of thing
+> > we should be warning admins about in no uncertain terms.  Also, we
+> > use WARN_ON_ONCE(), so it's not going to spam the logs.
+> > 
+> > syzbot is a malicious program - it is injecting broken stuff into
+> > the kernel as root to try to trigger situations like this. That
+> > doesn't make a warning it triggers bad or incorrect - syzbot is
+> > pertubing tightly coupled structures in a way that makes the
+> > information shared across those structures inconsistent and
+> > eventually the code is going to trip over that inconsistency.
+> > 
+> > IOWs, once someone has used root permissions to mount a maliciously
+> > crafted filesystem image, *all bets are off*. The machine is running
+> > a potentially compromised kernel at this point. Hence it is almost
+> > guaranteed that at some point the kernel is going to discover things
+> > are *badly wrong* and start dumping "this should never happen!"
+> > warnings into the logs. That's what the warnings are supposed to do,
+> > and the fact that syzbot can trigger them doesn't make the warnings
+> > wrong.
+> > 
+> > > pr_warn_once() is a
+> > > possible alternative, if you need to notify the user of a problem."
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/coding-style.rst?id=1e760fa3596e8c7f08412712c168288b79670d78#n1223
+> > 
+> > It is worth remembering that those are guidelines, not enforcable
+> > rules and any experienced kernel developer will tell you the same
+> > thing.  We know the guidelines, we know when to apply them, we know
+> > there are cases that the guidelines simply can't, don't or won't
+> > cover.
 > 
-> For an atomic commit updating a single CRTC (ie. a pageflip) calculate
-> the next vblank time, and inform the fence(s) of that deadline.
-> 
-> v2: Comment typo fix (danvet)
-> v3: If there are multiple CRTCs, consider the time of the soonest vblank
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ...and perhaps the WARNs that can result from corrupted metadata should
+> be changed to XFS_IS_CORRUPT() ?
 
-I apologize if this has already been reported or fixed, I searched lore
-but did not find anything.
+Well, I think in the case it isn't -corrupt- metadata, more the case
+that there is an inconsistency between different structures that are
+internally consistent.
 
-This change as commit d39e48ca80c0 ("drm/atomic-helper: Set fence
-deadline for vblank") in -next causes a hang while running LTP's
-read_all test on /proc on my Ampere Altra system (it seems it is hanging
-on a pagemap file?). Additionally, I have this splat in dmesg, which
-seems related based on the call stack.
+e.g. remove a free space extent from the freespace tree without
+removing the space from the global free space counters.  Now
+delalloc reservation is allowed by the global counters, but when we
+got to allocate the extent - or the bmap btree block to index it -
+we fail the allocation because the free space btrees are empty.
 
-[   20.542591] fbcon: Taking over console
-[   20.550772] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000074
-[   20.550776] Mem abort info:
-[   20.550777]   ESR = 0x0000000096000004
-[   20.550779]   EC = 0x25: DABT (current EL), IL = 32 bits
-[   20.550781]   SET = 0, FnV = 0
-[   20.550782]   EA = 0, S1PTW = 0
-[   20.550784]   FSC = 0x04: level 0 translation fault
-[   20.550785] Data abort info:
-[   20.550786]   ISV = 0, ISS = 0x00000004
-[   20.550788]   CM = 0, WnR = 0
-[   20.550789] user pgtable: 4k pages, 48-bit VAs, pgdp=0000080009d16000
-[   20.550791] [0000000000000074] pgd=0000000000000000, p4d=0000000000000000
-[   20.550796] Internal error: Oops: 0000000096000004 [#1] SMP
-[   20.550800] Modules linked in: ip6table_nat tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc binfmt_misc vfat fat xfs snd_usb_audio snd_hwdep snd_usbmidi_lib snd_seq snd_pcm snd_rawmidi snd_timer snd_seq_device snd soundcore joydev mc ipmi_ssif ipmi_devintf ipmi_msghandler arm_spe_pmu arm_cmn arm_dsu_pmu arm_dmc620_pmu cppc_cpufreq loop zram crct10dif_ce polyval_ce nvme polyval_generic ghash_ce sbsa_gwdt igb nvme_core ast nvme_common i2c_algo_bit xgene_hwmon gpio_dwapb scsi_dh_rdac scsi_dh_emc scsi_dh_alua ip6_tables ip_tables dm_multipath fuse
-[   20.550869] CPU: 12 PID: 469 Comm: kworker/12:1 Not tainted 6.3.0-rc2-00008-gd39e48ca80c0 #1
-[   20.550872] Hardware name: ADLINK AVA Developer Platform/AVA Developer Platform, BIOS TianoCore 2.04.100.07 (SYS: 2.06.20220308) 09/08/2022
-[   20.550875] Workqueue: events fbcon_register_existing_fbs
-[   20.550884] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   20.550888] pc : drm_crtc_next_vblank_start+0x2c/0x98
-[   20.550894] lr : drm_atomic_helper_wait_for_fences+0x90/0x240
-[   20.550898] sp : ffff80000d583960
-[   20.550900] x29: ffff80000d583960 x28: ffff07ff8fc187b0 x27: 0000000000000000
-[   20.550904] x26: ffff07ff99c08c00 x25: 0000000000000038 x24: ffff07ff99c0c000
-[   20.550908] x23: 0000000000000001 x22: 0000000000000038 x21: 0000000000000000
-[   20.550912] x20: ffff07ff9640a280 x19: 0000000000000000 x18: ffffffffffffffff
-[   20.550915] x17: 0000000000000000 x16: ffffb24d2eece1c0 x15: 0000003038303178
-[   20.550919] x14: 3032393100000048 x13: 0000000000000000 x12: 0000000000000000
-[   20.550923] x11: 0000000000000000 x10: 0000000000000000 x9 : ffffb24d2eeeaca0
-[   20.550926] x8 : ffff80000d583628 x7 : 0000080077783000 x6 : 0000000000000000
-[   20.550930] x5 : ffff80000d584000 x4 : ffff07ff99c0c000 x3 : 0000000000000130
-[   20.550934] x2 : 0000000000000000 x1 : ffff80000d5839c0 x0 : ffff07ff99c0cc08
-[   20.550937] Call trace:
-[   20.550939]  drm_crtc_next_vblank_start+0x2c/0x98
-[   20.550942]  drm_atomic_helper_wait_for_fences+0x90/0x240
-[   20.550946]  drm_atomic_helper_commit+0xb0/0x188
-[   20.550949]  drm_atomic_commit+0xb0/0xf0
-[   20.550953]  drm_client_modeset_commit_atomic+0x218/0x280
-[   20.550957]  drm_client_modeset_commit_locked+0x64/0x1a0
-[   20.550961]  drm_client_modeset_commit+0x38/0x68
-[   20.550965]  __drm_fb_helper_restore_fbdev_mode_unlocked+0xb0/0xf8
-[   20.550970]  drm_fb_helper_set_par+0x44/0x88
-[   20.550973]  fbcon_init+0x1e0/0x4a8
-[   20.550976]  visual_init+0xbc/0x118
-[   20.550981]  do_bind_con_driver.isra.0+0x194/0x3a0
-[   20.550984]  do_take_over_console+0x50/0x70
-[   20.550987]  do_fbcon_takeover+0x74/0xf8
-[   20.550989]  do_fb_registered+0x13c/0x158
-[   20.550992]  fbcon_register_existing_fbs+0x78/0xc0
-[   20.550995]  process_one_work+0x1ec/0x478
-[   20.551000]  worker_thread+0x74/0x418
-[   20.551002]  kthread+0xec/0x100
-[   20.551005]  ret_from_fork+0x10/0x20
-[   20.551011] Code: f9400004 b9409013 f940a082 9ba30a73 (b9407662) 
-[   20.551013] ---[ end trace 0000000000000000 ]---
+The allocation structures are not internally inconsistent or
+corrupt, so it's done the right thing by returning ENOSPC. The
+global counters are not obviously inconsistent or corrupt, either.
+So it can be triggered by just the right sort of corruption at
+exactly the right time (i.e at 100% ENOSPC), but the chances of this
+convoluted set of circumstances happening in production systems is
+pretty much infintesimal.
 
-If there is any additional information that I can provide or patches I
-can test, I am more than happy to do so.
+> We still get a kernel log about something going wrong, only now the
+> report doesn't trigger everyone's WARN triggers, and we tell the user to
+> go run xfs_repair.
 
-Cheers,
-Nathan
+I think that is exactly the wrong thing to do.
 
-# bad: [4b0f4525dc4fe8af17b3daefe585f0c2eb0fe0a5] Add linux-next specific files for 20230331
-# good: [b2bc47e9b2011a183f9d3d3454a294a938082fb9] Merge tag 'net-6.3-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
-git bisect start '4b0f4525dc4fe8af17b3daefe585f0c2eb0fe0a5' 'b2bc47e9b2011a183f9d3d3454a294a938082fb9'
-# good: [ed5f95f3349003d74a4a11b27b0f05d6794c382a] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect good ed5f95f3349003d74a4a11b27b0f05d6794c382a
-# bad: [85f7d1bfa30a05df2c9d8a0e9f6b1f23b4a6f13b] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git
-git bisect bad 85f7d1bfa30a05df2c9d8a0e9f6b1f23b4a6f13b
-# bad: [fbd0f79f200f8e5cb73fb3d7b788de09a8f33a6f] Merge branch 'msm-next' of https://gitlab.freedesktop.org/drm/msm.git
-git bisect bad fbd0f79f200f8e5cb73fb3d7b788de09a8f33a6f
-# good: [90031bc33f7525f0cc7a9ef0b1df62a1a4463382] Merge tag 'amd-drm-next-6.4-2023-03-17' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
-git bisect good 90031bc33f7525f0cc7a9ef0b1df62a1a4463382
-# good: [d4e04817db670083aed73de1fadd3b21758e69ba] drm/amdgpu: Return from switch early for EEPROM I2C address
-git bisect good d4e04817db670083aed73de1fadd3b21758e69ba
-# good: [70e360f9b548d99f959668d4f047d1363d42fe8e] drm: exynos: dsi: Consolidate component and bridge
-git bisect good 70e360f9b548d99f959668d4f047d1363d42fe8e
-# bad: [0b43595d0cbb06736d1e572e79e29a410a273573] Merge branch 'drm-next' of https://gitlab.freedesktop.org/agd5f/linux
-git bisect bad 0b43595d0cbb06736d1e572e79e29a410a273573
-# good: [fbb3b3500f76ec8b741bd2d0e761ca3e856ad924] dt-bindings: display: boe,tv101wum-nl6: document rotation
-git bisect good fbb3b3500f76ec8b741bd2d0e761ca3e856ad924
-# bad: [82bbec189ab34873688484cd14189a5392946fbb] Merge v6.3-rc4 into drm-next
-git bisect bad 82bbec189ab34873688484cd14189a5392946fbb
-# bad: [d39e48ca80c0960b039cb38633957f0040f63e1a] drm/atomic-helper: Set fence deadline for vblank
-git bisect bad d39e48ca80c0960b039cb38633957f0040f63e1a
-# good: [d7d5a21dd6b4706c04fbba5d25db8da5f25aab68] dma-buf/dma-resv: Add a way to set fence deadline
-git bisect good d7d5a21dd6b4706c04fbba5d25db8da5f25aab68
-# good: [f3823da7e4ba7d4781375c2bb786a8a78efc6591] drm/scheduler: Add fence deadline support
-git bisect good f3823da7e4ba7d4781375c2bb786a8a78efc6591
-# good: [b2c077d001b612b1f34f7e528b2dc6072bd6794e] drm/vblank: Add helper to get next vblank time
-git bisect good b2c077d001b612b1f34f7e528b2dc6072bd6794e
-# first bad commit: [d39e48ca80c0960b039cb38633957f0040f63e1a] drm/atomic-helper: Set fence deadline for vblank
+We have a history of this WARN firing as a result of software bugs
+in XFS - typically a transaction space reservation or allocation
+parameter setup issue - in which case a WARN_ON_ONCE is more
+appropriate here than declaring the filesystem corrupt.
+
+That's the bottom line - this specific WARN has been placed because
+it is an indicator of a bug in the code, not because it is something
+that occurs because of filesystem corruption. The WARN is an
+indicator that the bug needs to be reported, not simply put back on
+the user to clean up the mess and continue on blissfully unaware
+that they tripped over a kernel bug rather than some nebulous,
+unexplainable corruption.
+
+syzbot being able to trip over it by corrupting the fs in just the
+right way doesn't mean we should change it - syzbot is a malicious
+attacker, not a production workload, and I really don't think we
+should be changing warnings that we actually want users to report
+just to shut up syzbot.
+
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
