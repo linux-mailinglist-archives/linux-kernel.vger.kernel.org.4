@@ -2,88 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2EF6D1A94
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BDB6D1A98
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbjCaImM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S231714AbjCaIm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbjCaIlt (ORCPT
+        with ESMTP id S231921AbjCaIl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:41:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5191D909;
-        Fri, 31 Mar 2023 01:41:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 31 Mar 2023 04:41:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2548D1D90E;
+        Fri, 31 Mar 2023 01:41:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FA6CB82D3F;
-        Fri, 31 Mar 2023 08:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01E3DC433D2;
-        Fri, 31 Mar 2023 08:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680252019;
-        bh=2awnFRbwlRr0wF/0EtqlcbkmL5UREFWPCl9PiidbMaQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Aj0SZjErK7rbaciHhkIeW+Po5O2r/L4KUs0628aJBB0/T1a23yHlzHe7dZpvNCNKm
-         qxIJ7Tdt7d+YAg8n2svRf0ZjMoHAUR+yHd+bjcl5CAv1ReZ93Mcs60p5OdevjtP4B2
-         fy28p4fbt1T9K4OHCfSSwW/jE3c+0g618cRp2fjVthRrMMrJZqcb18GwXIPvwnB3hz
-         99xZAJ7sFL94zZV/UXHS86mK2NH7yRu1/hg5Z2+YOTSdTyueIN3O6pVZezkpH3HCLq
-         Pg2P2E4tm/GwgtihAhxGrRrrBXYru81xhuB9fO46jikmjef+D1Gbh3/HWTVZMF2PUP
-         OpjbLsEzW+kPQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C77F5C73FE0;
-        Fri, 31 Mar 2023 08:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 71EBC1FE77;
+        Fri, 31 Mar 2023 08:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680252040; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=foIa7jbtP7Rg9nUkM8izU/GS17m8DG7SvLf2kEzCXj4=;
+        b=Ofh1tn/+4BxdgIFwxB+zPWOZ1FDU2BYSj6+gQsUMQtDMZRfXKJmcZzd1vUQKh9wFhQi62I
+        ihIfOQR90PRlYQM+h2JI9jtMu3KzF5yKXe3VJgsEmoy/XJykJlD/8dQQOO5fQFT7ggJ9cf
+        ngQPw1yQGuTFD3kCdBfMpNwRjIzIIvM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 54F04133B6;
+        Fri, 31 Mar 2023 08:40:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dcTaEYicJmQfIwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 31 Mar 2023 08:40:40 +0000
+Date:   Fri, 31 Mar 2023 10:40:39 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Shaun Tancheff <shaun.tancheff@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Shaun Tancheff <shaun@tancheff.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        "stable @ vger . kernel . org . Shaun Tancheff" 
+        <shaun.tancheff@hpe.com>
+Subject: Re: [PATCH] memcg: Set memory min, low, high values along with max
+Message-ID: <ZCach73AHtwcdbbq@dhcp22.suse.cz>
+References: <20230330202232.355471-1-shaun.tancheff@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] l2tp: generate correct module alias strings
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168025201881.3875.10346861679226207793.git-patchwork-notify@kernel.org>
-Date:   Fri, 31 Mar 2023 08:40:18 +0000
-References: <20230330095442.363201-1-andrea.righi@canonical.com>
-In-Reply-To: <20230330095442.363201-1-andrea.righi@canonical.com>
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, wojciech.drewek@intel.com,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330202232.355471-1-shaun.tancheff@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 30 Mar 2023 11:54:42 +0200 you wrote:
-> Commit 65b32f801bfb ("uapi: move IPPROTO_L2TP to in.h") moved the
-> definition of IPPROTO_L2TP from a define to an enum, but since
-> __stringify doesn't work properly with enums, we ended up breaking the
-> modalias strings for the l2tp modules:
+On Fri 31-03-23 03:22:32, Shaun Tancheff wrote:
+> From: Shaun Tancheff <shaun@tancheff.com>
 > 
->  $ modinfo l2tp_ip l2tp_ip6 | grep alias
->  alias:          net-pf-2-proto-IPPROTO_L2TP
->  alias:          net-pf-2-proto-2-type-IPPROTO_L2TP
->  alias:          net-pf-10-proto-IPPROTO_L2TP
->  alias:          net-pf-10-proto-2-type-IPPROTO_L2TP
+> memcg-v1 does not expose memory min, low, and high.
 > 
-> [...]
+> These values should to be set to reasonable non-zero values
+> when max is set.
+> 
+> This patch sets them to 10%, 20% and 80% respective to max.
+> 
+> This fixes an issue with memory pressure with file systems
+> do an unbounded high rate of I/O hitting oom.
 
-Here is the summary with links:
-  - l2tp: generate correct module alias strings
-    https://git.kernel.org/netdev/net/c/154e07c16485
+Cgroup v1 has some inherent issues with the dirty data throttling and
+that is a well known problem. Especially when those FS allocations are
+GFP_NOFS where we cannot throttle direct in the memory reclaim path (see
+shrink_folio_list). There are some hacks^Wworkarounds to help out, e.g.
+81a70c21d917 ("mm/cgroup/reclaim: fix dirty pages throttling on cgroup
+v1") but the issue is inherent to how v1 operates so nothing will work
+100%. A more appropriate way forward is to use v2 instead.
 
-You are awesome, thank you!
+But maybe you are hitting a different problem so please tell us more.
+
+> Signed-off-by: Shaun Tancheff <shaun.tancheff@hpe.com>
+
+min, low and high are v2 concepts and v1 cannot/won't really use them.
+Besides that hard coded policies do not belong to the kernel. So no to
+this patch. We definitely want to hear more about the underlying problem
+and see what we can do about that.
+
+Nacked-by: Michal Hocko <mhocko@suse.com>
+
+> ---
+>  mm/memcontrol.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 2eee092f8f11..0f5918d9dd2a 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -3491,6 +3491,15 @@ static int mem_cgroup_resize_max(struct mem_cgroup *memcg,
+>  		if (max > counter->max)
+>  			enlarge = true;
+>  		ret = page_counter_set_max(counter, max);
+> +		if (!ret && !memsw) {
+> +			unsigned long min = (max / 10) + 1;
+> +			unsigned long low = min * 2;
+> +			unsigned long high = max - low;
+> +
+> +			page_counter_set_min(counter, min);
+> +			page_counter_set_low(counter, low);
+> +			page_counter_set_high(counter, high);
+> +		}
+>  		mutex_unlock(&memcg_max_mutex);
+>  
+>  		if (!ret)
+> -- 
+> 2.34.1
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Michal Hocko
+SUSE Labs
