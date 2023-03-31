@@ -2,124 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCAF16D2644
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD336D2646
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbjCaQyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 12:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S232358AbjCaQy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbjCaQyC (ORCPT
+        with ESMTP id S233087AbjCaQyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:54:02 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2082.outbound.protection.outlook.com [40.107.94.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F8FE04F;
-        Fri, 31 Mar 2023 09:53:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QIHtD0MI0ji6RMLzCDHW/vAmcSjQrcGsl5pgvIoQG+H4SXKFJFJsSfN4uWNTiHC7xBh1jHHVDxVi1YT7WXlmtcxcNneGJEBs5nnf1l80hx05pmuXPWzlntUnQmW+VncO44rW3rmiyEdQINHFV8RbKYO75ecCdJKqZPKq0IeCnd3vNo1EO0Rq5wFdAzm5+LoTniCLrN+LpThiIX51HlV0IL6In/IDoQQeGEerdjrSLoLRAUdgYuMfaOloAB03zWQmAjAzw9RU9GCiQHUEwZbfJhRYqaz42TK/29I5h6zE7UYXDf5wPRwpNzgrllx0UvIc8N2Q3OeaRG8NfBOgsXGm5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zcGd6nphsQKWLYKsablrYt5t0K4UQVmlowFKDJ7H0Pg=;
- b=ORTArhs1TxFpHarOJJSdUzRuh94pfPRIQvI/qPLV/zDWxIpj3dGcpLtVBOkWtDtrXOhV1tCTf7AtgKJBHovb8775aDAhD62ft+0B/UOCgLiAsHDoM3EZX+dCi4dWbIJJerbdd7zYOxMH9AfM9udLQZ+FuNcGULwPzx8DsOlLUQOKLRD/zkC6pdD6HLmJTtF7/LSlYdrTp3g9gN3QdiBCV1JdDmxrxl5aBazMYdyzKUG18xuBk5NOxQxoadtugkCrn0nXtThV7qsLMlRz3PMvpd9CvaJcUKCBcp3gzhxLkFya4jcnLRGJzRf7mWRk7FZbx8S55tzLXJeJGCcFHhFJUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lwn.net smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zcGd6nphsQKWLYKsablrYt5t0K4UQVmlowFKDJ7H0Pg=;
- b=cUCtiaEJa0cFhlFN92UZPNY0UVqmz0PzOnWeELx7FgOrstmnKGiiiyvkFyXsIkbTeZnAMhMja+6vsLA6J5hujBNEUR5F8J92ry7yy8AoocVpVTwaWwsi5hXv8VJxiy6f6mbbNQ5uaiTuax1ou9mc8oFBeIKwriLnBF6uvS4W/Rc=
-Received: from CYZPR12CA0023.namprd12.prod.outlook.com (2603:10b6:930:8b::19)
- by SJ2PR12MB8720.namprd12.prod.outlook.com (2603:10b6:a03:539::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.24; Fri, 31 Mar
- 2023 16:53:18 +0000
-Received: from CY4PEPF0000C96D.namprd02.prod.outlook.com
- (2603:10b6:930:8b:cafe::9b) by CYZPR12CA0023.outlook.office365.com
- (2603:10b6:930:8b::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.43 via Frontend
- Transport; Fri, 31 Mar 2023 16:53:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000C96D.mail.protection.outlook.com (10.167.242.5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.30 via Frontend Transport; Fri, 31 Mar 2023 16:53:18 +0000
-Received: from fritz.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 31 Mar
- 2023 11:53:14 -0500
-From:   Kim Phillips <kim.phillips@amd.com>
-To:     Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>,
-        <linux-doc@vger.kernel.org>
-CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Kim Phillips" <kim.phillips@amd.com>
-Subject: [PATCH] docs/mm: Physical Memory: Fix grammar
-Date:   Fri, 31 Mar 2023 11:52:54 -0500
-Message-ID: <20230331165254.207526-1-kim.phillips@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 31 Mar 2023 12:54:05 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251F72688;
+        Fri, 31 Mar 2023 09:53:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680281619; x=1711817619;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=maGKeUkvCQI8zY1Lp+jGdEdPFdmHPUreRuRmB/aQUGQ=;
+  b=Axwt7v1bacNC4I4eEzT9kVjdWHmVjX53bORqKdEfK0l3qLb5cHPBNNXz
+   ILOV86PJZvpx0X8y3XZQUKPVg951eLHtscb3SEK5rqOO3pTAyx9JLOGb3
+   Swl22MSC09zOrqzo6oslcnbbJo4mZBFencpa6NTjgXc2rkcgM8mAJZYKe
+   NHpfNa+Fqsj8yXN68/8qS4uywsWDEwMaTmWFkPXZldmHKUpAHrxxIVNYP
+   guBE7udoD4bcZ1ISMzJwi/1L0NO6xdSlQu8hjbMi6Z8Uks0KJLo5VUVTd
+   20nrOMYyXhRu+xz4CmXC7tErfCwrgIjPdjSiHZp2c0aqLSXM/TgcTrOuR
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="404236613"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="404236613"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 09:53:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="774423360"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="774423360"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by FMSMGA003.fm.intel.com with ESMTP; 31 Mar 2023 09:53:38 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal/drivers/intel/int340x: Add DLVR support
+Date:   Fri, 31 Mar 2023 09:53:36 -0700
+Message-Id: <20230331165336.1047102-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000C96D:EE_|SJ2PR12MB8720:EE_
-X-MS-Office365-Filtering-Correlation-Id: abd276a9-11e6-4981-311a-08db32086dc2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SR3tp1oa7SAN2dLjHqBPKIYdbafOP137PS5AXHaPVb6jHiITIS0GNWgRilivb+yn0mrlzzcRZtYvSNADWs3ei7QDoNoimQa0z/bJ23G6wSybfH3Jq1/9ziXQfCrpM4W4e45nuk76lfrmgsYDYjNr5hEfYqPYJk4ftBFnParEYW1S/dCtokHBB1I7ivjEuKi+DzlRSeGf2Ye3XbJhR9GAwpEGqbbz3Ma34LZPx4OH9wSGorDdT3eAmscykzne4EiC4FbkfkTjg7jmsyrde7yzm8LazECDIgcM8Ai5+W8m9r37ptiCTuESsbkcaV4LZtuQ1spMzLiYPs+B9GfpqGjzH109Lszw75t1yJFPRSLUPlauQ7k3ZfjP1gzFZSUOHKX4mT0i5ors642IzmJsZxrM0amVHcvzSzh3pmWpjdSP6k/WgvWkG9RmdhvllB5FhtRsMV7/bwhZf/MBda1vcGgNezQx+8dQ2zRbMIxkzxclaoOe0gam97uI2XK4fBGk14SP/tgZMtbI/OiQrPL30EG8Fqhw9Rjsk7O3y5YNb5cWNz1ewyaQ8x9gORV9RAehktu0hm6kqfLJgh5JUk3r9NjBHFOCMdiyy8d02l+8TzMLnT+m6RlBZ9HFi1/yqVK7HyIc2B8gUZMvxLtkkedMR9PlKFrhgpdaC1f4E6m4UrqK4cBavKtB2LNenN/L5+Xh3UOVJJ/tHgb/CeGlhVJ9BXdbeSEgZqZp9izHiFMWO7FjB+E=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(346002)(136003)(451199021)(36840700001)(46966006)(40470700004)(36756003)(47076005)(83380400001)(16526019)(186003)(426003)(336012)(82310400005)(26005)(1076003)(7696005)(6666004)(2616005)(36860700001)(54906003)(478600001)(110136005)(8676002)(70586007)(70206006)(4326008)(316002)(81166007)(5660300002)(8936002)(41300700001)(82740400003)(356005)(86362001)(2906002)(40480700001)(40460700003)(44832011)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 16:53:18.4533
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: abd276a9-11e6-4981-311a-08db32086dc2
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C96D.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8720
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-it's -> its
-referenced to by -> referenced by
+Add support for DLVR (Digital Linear Voltage Regulator) attributes,
+which can be used to control RFIM.
+Here instead of "fivr" another directory "dlvr" is created with DLVR
+attributes:
 
-Fixes: 5d8c5e430a63 ("docs/mm: Physical Memory: add structure, introduction and nodes description")
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+/sys/bus/pci/devices/0000:00:04.0/dlvr
+├── dlvr_freq_mhz
+├── dlvr_freq_select
+├── dlvr_hardware_rev
+├── dlvr_pll_busy
+├── dlvr_rfim_enable
+└── dlvr_spread_spectrum_pct
+
+Attributes
+dlvr_freq_mhz (RO):
+Current DLVR PLL frequency in MHz.
+
+dlvr_freq_select (RW):
+Sets DLVR PLL clock frequency.
+
+dlvr_hardware_rev (RO):
+DLVR hardware revision.
+
+dlvr_pll_busy (RO):
+PLL can't accept frequency change when set.
+
+dlvr_rfim_enable (RW):
+0: Disable RF frequency hopping, 1: Enable RF frequency hopping.
+
+dlvr_spread_spectrum_pct (RW)
+A write to this register updates the DLVR spread spectrum percent value.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- Documentation/mm/physical_memory.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../driver-api/thermal/intel_dptf.rst         | 25 ++++++
+ .../processor_thermal_device.c                |  3 +-
+ .../processor_thermal_device.h                |  1 +
+ .../processor_thermal_device_pci.c            |  2 +-
+ .../int340x_thermal/processor_thermal_rfim.c  | 80 +++++++++++++++++--
+ 5 files changed, 104 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
-index 1bc888d36ea1..df2ed81e3639 100644
---- a/Documentation/mm/physical_memory.rst
-+++ b/Documentation/mm/physical_memory.rst
-@@ -19,7 +19,7 @@ a bank of memory very suitable for DMA near peripheral devices.
+diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
+index f5c193cccbda..da906deb6a7d 100644
+--- a/Documentation/driver-api/thermal/intel_dptf.rst
++++ b/Documentation/driver-api/thermal/intel_dptf.rst
+@@ -264,6 +264,31 @@ DVFS attributes
+ ``rfi_disable (RW)``
+ 	Disable DDR rate change feature
  
- Each bank is called a node and the concept is represented under Linux by a
- ``struct pglist_data`` even if the architecture is UMA. This structure is
--always referenced to by it's typedef ``pg_data_t``. ``A pg_data_t`` structure
-+always referenced by its typedef ``pg_data_t``. A ``pg_data_t`` structure
- for a particular node can be referenced by ``NODE_DATA(nid)`` macro where
- ``nid`` is the ID of that node.
++DLVR attributes
++
++:file:`/sys/bus/pci/devices/0000\:00\:04.0/dlvr/`
++
++``dlvr_hardware_rev`` (RO)
++	DLVR hardware revision.
++
++``dlvr_freq_mhz`` (RO)
++	Current DLVR PLL frequency in MHz.
++
++``dlvr_freq_select`` (RW)
++	Sets DLVR PLL clock frequency. Once set, and enabled via
++	dlvr_rfim_enable, the dlvr_freq_mhz will show the current
++	DLVR PLL frequency.
++
++``dlvr_pll_busy`` (RO)
++	PLL can't accept frequency change when set.
++
++``dlvr_rfim_enable`` (RW)
++	0: Disable RF frequency hopping, 1: Enable RF frequency hopping.
++
++``dlvr_spread_spectrum_pct`` (RW)
++	Sets DLVR spread spectrum percent value.
++
++
+ DPTF Power supply and Battery Interface
+ ----------------------------------------
  
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+index a1dc18be7609..3ca0a2f5937f 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+@@ -337,7 +337,8 @@ int proc_thermal_mmio_add(struct pci_dev *pdev,
+ 	}
+ 
+ 	if (feature_mask & PROC_THERMAL_FEATURE_FIVR ||
+-	    feature_mask & PROC_THERMAL_FEATURE_DVFS) {
++	    feature_mask & PROC_THERMAL_FEATURE_DVFS ||
++	    feature_mask & PROC_THERMAL_FEATURE_DLVR) {
+ 		ret = proc_thermal_rfim_add(pdev, proc_priv);
+ 		if (ret) {
+ 			dev_err(&pdev->dev, "failed to add RFIM interface\n");
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+index 7d52fcff4937..7acaa8f1b896 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+@@ -60,6 +60,7 @@ struct rapl_mmio_regs {
+ #define PROC_THERMAL_FEATURE_FIVR	0x02
+ #define PROC_THERMAL_FEATURE_DVFS	0x04
+ #define PROC_THERMAL_FEATURE_MBOX	0x08
++#define PROC_THERMAL_FEATURE_DLVR	0x10
+ 
+ #if IS_ENABLED(CONFIG_PROC_THERMAL_MMIO_RAPL)
+ int proc_thermal_rapl_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+index 90526f46c9b1..aaff67377250 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+@@ -352,7 +352,7 @@ static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
+ 
+ static const struct pci_device_id proc_thermal_pci_ids[] = {
+ 	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+-	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
++	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX | PROC_THERMAL_FEATURE_DLVR) },
+ 	{ PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+ 	{ },
+ };
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+index 92ed1213fe37..951a0869982a 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+@@ -39,6 +39,25 @@ static const struct mmio_reg tgl_fivr_mmio_regs[] = {
+ 	{ 1, 0x5A14, 2, 0x3, 1}, /* fivr_fffc_rev */
+ };
+ 
++static const char * const dlvr_strings[] = {
++	"dlvr_spread_spectrum_pct",
++	"dlvr_rfim_enable",
++	"dlvr_freq_select",
++	"dlvr_hardware_rev",
++	"dlvr_freq_mhz",
++	"dlvr_pll_busy",
++	NULL
++};
++
++static const struct mmio_reg dlvr_mmio_regs[] = {
++	{ 0, 0x15A08, 5, 0x1F, 0}, /* dlvr_spread_spectrum_pct */
++	{ 0, 0x15A08, 1, 0x1, 7}, /* dlvr_rfim_enable */
++	{ 0, 0x15A08, 12, 0xFFF, 8}, /* dlvr_freq_select */
++	{ 1, 0x15A10, 2, 0x3, 30}, /* dlvr_hardware_rev */
++	{ 1, 0x15A10, 16, 0xFFFF, 0}, /* dlvr_freq_mhz */
++	{ 1, 0x15A10, 1, 0x1, 16}, /* dlvr_pll_busy */
++};
++
+ /* These will represent sysfs attribute names */
+ static const char * const dvfs_strings[] = {
+ 	"rfi_restriction_run_busy",
+@@ -78,14 +97,16 @@ static ssize_t suffix##_show(struct device *dev,\
+ 	int ret;\
+ \
+ 	proc_priv = pci_get_drvdata(pdev);\
+-	if (table) {\
++	if (table == 1) {\
+ 		match_strs = (const char **)dvfs_strings;\
+ 		mmio_regs = adl_dvfs_mmio_regs;\
+-	} else { \
++	} else if (table == 2) { \
++		match_strs = (const char **)dlvr_strings;\
++		mmio_regs = dlvr_mmio_regs;\
++	} else {\
+ 		match_strs = (const char **)fivr_strings;\
+ 		mmio_regs = tgl_fivr_mmio_regs;\
+ 	} \
+-	\
+ 	ret = match_string(match_strs, -1, attr->attr.name);\
+ 	if (ret < 0)\
+ 		return ret;\
+@@ -109,10 +130,13 @@ static ssize_t suffix##_store(struct device *dev,\
+ 	u32 mask;\
+ \
+ 	proc_priv = pci_get_drvdata(pdev);\
+-	if (table) {\
++	if (table == 1) {\
+ 		match_strs = (const char **)dvfs_strings;\
+ 		mmio_regs = adl_dvfs_mmio_regs;\
+-	} else { \
++	} else if (table == 2) { \
++		match_strs = (const char **)dlvr_strings;\
++		mmio_regs = dlvr_mmio_regs;\
++	} else {\
+ 		match_strs = (const char **)fivr_strings;\
+ 		mmio_regs = tgl_fivr_mmio_regs;\
+ 	} \
+@@ -147,6 +171,39 @@ RFIM_STORE(spread_spectrum_clk_enable, 0)
+ RFIM_STORE(rfi_vco_ref_code, 0)
+ RFIM_STORE(fivr_fffc_rev, 0)
+ 
++RFIM_SHOW(dlvr_spread_spectrum_pct, 2)
++RFIM_SHOW(dlvr_hardware_rev, 2)
++RFIM_SHOW(dlvr_freq_mhz, 2)
++RFIM_SHOW(dlvr_pll_busy, 2)
++RFIM_SHOW(dlvr_freq_select, 2)
++RFIM_SHOW(dlvr_rfim_enable, 2)
++
++RFIM_STORE(dlvr_spread_spectrum_pct, 2)
++RFIM_STORE(dlvr_rfim_enable, 2)
++RFIM_STORE(dlvr_freq_select, 2)
++
++static DEVICE_ATTR_RW(dlvr_spread_spectrum_pct);
++static DEVICE_ATTR_RW(dlvr_freq_select);
++static DEVICE_ATTR_RO(dlvr_hardware_rev);
++static DEVICE_ATTR_RO(dlvr_freq_mhz);
++static DEVICE_ATTR_RO(dlvr_pll_busy);
++static DEVICE_ATTR_RW(dlvr_rfim_enable);
++
++static struct attribute *dlvr_attrs[] = {
++	&dev_attr_dlvr_spread_spectrum_pct.attr,
++	&dev_attr_dlvr_freq_select.attr,
++	&dev_attr_dlvr_hardware_rev.attr,
++	&dev_attr_dlvr_freq_mhz.attr,
++	&dev_attr_dlvr_pll_busy.attr,
++	&dev_attr_dlvr_rfim_enable.attr,
++	NULL
++};
++
++static const struct attribute_group dlvr_attribute_group = {
++	.attrs = dlvr_attrs,
++	.name = "dlvr"
++};
++
+ static DEVICE_ATTR_RW(vco_ref_code_lo);
+ static DEVICE_ATTR_RW(vco_ref_code_hi);
+ static DEVICE_ATTR_RW(spread_spectrum_pct);
+@@ -277,12 +334,22 @@ int proc_thermal_rfim_add(struct pci_dev *pdev, struct proc_thermal_device *proc
+ 			return ret;
+ 	}
+ 
++	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
++		ret = sysfs_create_group(&pdev->dev.kobj, &dlvr_attribute_group);
++		if (ret)
++			return ret;
++	}
++
+ 	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS) {
+ 		ret = sysfs_create_group(&pdev->dev.kobj, &dvfs_attribute_group);
+ 		if (ret && proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR) {
+ 			sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
+ 			return ret;
+ 		}
++		if (ret && proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR) {
++			sysfs_remove_group(&pdev->dev.kobj, &dlvr_attribute_group);
++			return ret;
++		}
+ 	}
+ 
+ 	return 0;
+@@ -296,6 +363,9 @@ void proc_thermal_rfim_remove(struct pci_dev *pdev)
+ 	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_FIVR)
+ 		sysfs_remove_group(&pdev->dev.kobj, &fivr_attribute_group);
+ 
++	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DLVR)
++		sysfs_remove_group(&pdev->dev.kobj, &dlvr_attribute_group);
++
+ 	if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_DVFS)
+ 		sysfs_remove_group(&pdev->dev.kobj, &dvfs_attribute_group);
+ }
 -- 
 2.34.1
 
