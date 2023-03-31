@@ -2,71 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26926D2081
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563C86D2089
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbjCaMkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S232477AbjCaMkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjCaMjW (ORCPT
+        with ESMTP id S232489AbjCaMjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:39:22 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB521F7AF
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:37:14 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id kc4so21074968plb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:37:14 -0700 (PDT)
+        Fri, 31 Mar 2023 08:39:47 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9837E20C04
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:37:33 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5463fa0c2bfso81726377b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:37:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680266234; x=1682858234;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1680266252;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/fCfIj1/s38aKDJAHiSdrEBcPZ3fuP83sHva5sYdujk=;
-        b=CEuYlIUCas/POfLXhYveHIMJIj8+CriUCj+8aGjyGLOArYgtdPIRLazhUQOxz1ngzA
-         ET+6DIsp900F/g2HfUeQ5MPRHEDngyAUUYSuaPipg9UB7gF/4khX40saiZtsxty9Z6lX
-         Mt1hTfiKkknjt6hOZU46kFV2I+KBxYxGbDIZJ0EJmzXmUhQvNr0hjJBHr72Kgq+U018o
-         SaRYIpAWJzTW+Ku88efX3KhgaxXIO7zTI8vSxXz+8pupz6N6AcO+x9zdxQY4vZLZBan0
-         KlLP6jkywN2icHLxA45k/EIWJd6Ca/noTmFr4gmn7Bxgw0Lm40YG90kIiPEsqKNpFuNw
-         UmZg==
+        bh=E6lKdgk6THqQzNp4VvxVKewKaHaWOnEhQknxk2acjn0=;
+        b=ZMrC7RQQSpVfgy/SHMpfC+E2QpLMDaY5/yaDkSHUKYAESGTlYtEL7g/qRUeknQy91P
+         zUvgfNL0L6h3FNfh9c8D2HFAFVYOCP9WG625XToYyxYEiXALrCS5KsLDkaIeSbXlXde1
+         eg6UEhsSIBdX6MmhPhtTRLpJ9X4gdd+QI1NZNQSGtPnmNcH0Md5Wv/wDx/8mZJzSNT7K
+         vAZIJkR9VzoIqc5aO0g4o0xB+IpDOheOKDhB6ttu5EMPirHAV26dyaOz/pB9Dw1cQhWl
+         Nw5HjfOlvF3F0OheAjfDdZPbDekSVJ+CefyXJevdAGQrjbRZSi8YsUnd1+evdQw6Mb3h
+         4YIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680266234; x=1682858234;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680266252;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/fCfIj1/s38aKDJAHiSdrEBcPZ3fuP83sHva5sYdujk=;
-        b=LVYsyCqZkJFAIV0vL2tr/m7EhHkeB/41DcrOiCjVnRmKI3cG7rDKhvjrezG0VPJuDC
-         dvAEtNuXr51cHIwhNEl+t9CRX8tdDW+Kf1poCnGvHAwnaS68hIm5Y3j8dFHyeKjlpFsP
-         bexI1z4gSkKMZagKNHMyQV1TKJeq3IDnmFtW+1fs+HISOtLC9s/uijNBJQQMl2G5Hoek
-         cZ0VTnqwV57PuKxQK1zLIqkAKM4P7RnVquu/gQ0VU8CL+gqWqiHyGwU+kT7ibNeLCkGE
-         RtbHYl5fP8bnchRDJZzdGhjmFRz8fz+opmt6xsY+8NBu70WcyGigYLMA4QMrriLP8MiK
-         WunQ==
-X-Gm-Message-State: AO0yUKVKWcFQYaqcVB6HedaRuVFGcIuAQWxlSMlHwxvsPEd3+4vBSwuh
-        umKDAW8gFKSZKnaMx/2qvpNh4g==
-X-Google-Smtp-Source: AK7set+ZZGDqzKoT6aOFsnmkE4XGWBKv+20qegj59MdFy+2mn2f6ro7kmMjtOU9hhvaIzqMyhJFWRQ==
-X-Received: by 2002:a05:6a20:8b14:b0:da:c40:8d8 with SMTP id l20-20020a056a208b1400b000da0c4008d8mr25354343pzh.4.1680266234114;
-        Fri, 31 Mar 2023 05:37:14 -0700 (PDT)
-Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id c2-20020aa78802000000b005a8a5be96b2sm876470pfo.104.2023.03.31.05.37.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 05:37:13 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH v3 1/1] RISC-V: KVM: Add ONE_REG interface to enable/disable SBI extensions
-Date:   Fri, 31 Mar 2023 18:06:55 +0530
-Message-Id: <20230331123655.1991260-2-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230331123655.1991260-1-apatel@ventanamicro.com>
-References: <20230331123655.1991260-1-apatel@ventanamicro.com>
+        bh=E6lKdgk6THqQzNp4VvxVKewKaHaWOnEhQknxk2acjn0=;
+        b=Tu1P5vOyjh7vk4vh9PiDaAnXJvuaxK9TF7P15L+C0f2kUnoyrmBEEdFpaOD6iVyV+h
+         4MfBe7g3dsaQFgQiA2elU4KvA2jTZB7xPn/jcv8g+/vCp5nmudLJNeUuPkNtsJlm4xIV
+         MZWDt1bptTa/jZIKibtVB6UMcfSeq5OBd1kGb1oW8jgkM2ifpr2i/apne684r1PePCY4
+         Q2/v1BcEX1HnRZdXlv6L+YODw4YCp8PDn2ykcYmShRVq/c4OSYwL86ExDqdsyA5LSiLF
+         /nCCOrspsUh8IWTCW3VXaRJT6QoM6R9NT8oXGBGdZw/VuebKqvYtIEuQicKMfbqZHvrT
+         0vrg==
+X-Gm-Message-State: AAQBX9fyCWEXahW8mm+CBPwlUPO9RCgY2MofOgaljvomZmAFu1RE4TlW
+        murw3mtsp7gVZDzcguB9KCzDKdpOWyuWa8kk3SObMg==
+X-Google-Smtp-Source: AKy350aQG4pTb9063C5UpGPTZlWu/1jB1S9bOfbEf1bci1cyW8YxugalTaCiIXNAm4RWMBbCrWxYKS+tBxFA+9FzOXI=
+X-Received: by 2002:a81:c84a:0:b0:541:753d:32f9 with SMTP id
+ k10-20020a81c84a000000b00541753d32f9mr13384037ywl.9.1680266252481; Fri, 31
+ Mar 2023 05:37:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230330200402.2731992-1-robh@kernel.org>
+In-Reply-To: <20230330200402.2731992-1-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 31 Mar 2023 14:37:21 +0200
+Message-ID: <CACRpkdYwM5Kw4XB9S5qoqdK-boiYp2iu=LRZ-B-vJb1k9fNnig@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: pinctrl: Drop unneeded quotes
+To:     Rob Herring <robh@kernel.org>
+Cc:     =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jianlong Huang <jianlong.huang@starfivetech.com>,
+        Dvorkin Dmitry <dvorkin@tibbo.com>,
+        Wells Lu <wellslutw@gmail.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?Q?Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        - <patches@opensource.cirrus.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Rahul Tanwar <rahul.tanwar@linux.intel.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, asahi@lists.linux.dev,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, alsa-devel@alsa-project.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -76,409 +140,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We add ONE_REG interface to enable/disable SBI extensions (just
-like the ONE_REG interface for ISA extensions). This allows KVM
-user-space to decide the set of SBI extension enabled for a Guest
-and by default all SBI extensions are enabled.
+On Thu, Mar 30, 2023 at 10:05=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
+e:
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- arch/riscv/include/asm/kvm_vcpu_sbi.h |   8 +-
- arch/riscv/include/uapi/asm/kvm.h     |  32 ++++
- arch/riscv/kvm/vcpu.c                 |   2 +
- arch/riscv/kvm/vcpu_sbi.c             | 245 ++++++++++++++++++++++++--
- arch/riscv/kvm/vcpu_sbi_base.c        |   2 +-
- 5 files changed, 270 insertions(+), 19 deletions(-)
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Acked-by: Hector Martin <marcan@marcan.st>
+> Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Reviewed-by: Heiko Stuebner <heiko@sntech.de> #rockchip
+> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> v2:
+>  - Rebase on pinctrl tree
 
-diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-index 8425556af7d1..4278125a38a5 100644
---- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
-+++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-@@ -16,6 +16,7 @@
- 
- struct kvm_vcpu_sbi_context {
- 	int return_handled;
-+	bool extension_disabled[KVM_RISCV_SBI_EXT_MAX];
- };
- 
- struct kvm_vcpu_sbi_return {
-@@ -45,7 +46,12 @@ void kvm_riscv_vcpu_sbi_system_reset(struct kvm_vcpu *vcpu,
- 				     struct kvm_run *run,
- 				     u32 type, u64 flags);
- int kvm_riscv_vcpu_sbi_return(struct kvm_vcpu *vcpu, struct kvm_run *run);
--const struct kvm_vcpu_sbi_extension *kvm_vcpu_sbi_find_ext(unsigned long extid);
-+int kvm_riscv_vcpu_set_reg_sbi_ext(struct kvm_vcpu *vcpu,
-+				   const struct kvm_one_reg *reg);
-+int kvm_riscv_vcpu_get_reg_sbi_ext(struct kvm_vcpu *vcpu,
-+				   const struct kvm_one_reg *reg);
-+const struct kvm_vcpu_sbi_extension *kvm_vcpu_sbi_find_ext(
-+				struct kvm_vcpu *vcpu, unsigned long extid);
- int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run);
- 
- #ifdef CONFIG_RISCV_SBI_V01
-diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-index 92af6f3f057c..d8ead5952ed9 100644
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@ -12,6 +12,7 @@
- #ifndef __ASSEMBLY__
- 
- #include <linux/types.h>
-+#include <asm/bitsperlong.h>
- #include <asm/ptrace.h>
- 
- #define __KVM_HAVE_READONLY_MEM
-@@ -108,6 +109,23 @@ enum KVM_RISCV_ISA_EXT_ID {
- 	KVM_RISCV_ISA_EXT_MAX,
- };
- 
-+/*
-+ * SBI extension IDs specific to KVM. This is not the same as the SBI
-+ * extension IDs defined by the RISC-V SBI specification.
-+ */
-+enum KVM_RISCV_SBI_EXT_ID {
-+	KVM_RISCV_SBI_EXT_V01 = 0,
-+	KVM_RISCV_SBI_EXT_TIME,
-+	KVM_RISCV_SBI_EXT_IPI,
-+	KVM_RISCV_SBI_EXT_RFENCE,
-+	KVM_RISCV_SBI_EXT_SRST,
-+	KVM_RISCV_SBI_EXT_HSM,
-+	KVM_RISCV_SBI_EXT_PMU,
-+	KVM_RISCV_SBI_EXT_EXPERIMENTAL,
-+	KVM_RISCV_SBI_EXT_VENDOR,
-+	KVM_RISCV_SBI_EXT_MAX,
-+};
-+
- /* Possible states for kvm_riscv_timer */
- #define KVM_RISCV_TIMER_STATE_OFF	0
- #define KVM_RISCV_TIMER_STATE_ON	1
-@@ -118,6 +136,8 @@ enum KVM_RISCV_ISA_EXT_ID {
- /* If you need to interpret the index values, here is the key: */
- #define KVM_REG_RISCV_TYPE_MASK		0x00000000FF000000
- #define KVM_REG_RISCV_TYPE_SHIFT	24
-+#define KVM_REG_RISCV_SUBTYPE_MASK	0x0000000000FF0000
-+#define KVM_REG_RISCV_SUBTYPE_SHIFT	16
- 
- /* Config registers are mapped as type 1 */
- #define KVM_REG_RISCV_CONFIG		(0x01 << KVM_REG_RISCV_TYPE_SHIFT)
-@@ -152,6 +172,18 @@ enum KVM_RISCV_ISA_EXT_ID {
- /* ISA Extension registers are mapped as type 7 */
- #define KVM_REG_RISCV_ISA_EXT		(0x07 << KVM_REG_RISCV_TYPE_SHIFT)
- 
-+/* SBI extension registers are mapped as type 8 */
-+#define KVM_REG_RISCV_SBI_EXT		(0x08 << KVM_REG_RISCV_TYPE_SHIFT)
-+#define KVM_REG_RISCV_SBI_SINGLE	(0x0 << KVM_REG_RISCV_SUBTYPE_SHIFT)
-+#define KVM_REG_RISCV_SBI_MULTI_EN	(0x1 << KVM_REG_RISCV_SUBTYPE_SHIFT)
-+#define KVM_REG_RISCV_SBI_MULTI_DIS	(0x2 << KVM_REG_RISCV_SUBTYPE_SHIFT)
-+#define KVM_REG_RISCV_SBI_MULTI_REG(__ext_id)	\
-+		((__ext_id) / __BITS_PER_LONG)
-+#define KVM_REG_RISCV_SBI_MULTI_MASK(__ext_id)	\
-+		(1UL << ((__ext_id) % __BITS_PER_LONG))
-+#define KVM_REG_RISCV_SBI_MULTI_REG_LAST	\
-+		KVM_REG_RISCV_SBI_MULTI_REG(KVM_RISCV_SBI_EXT_MAX - 1)
-+
- #endif
- 
- #endif /* __LINUX_KVM_RISCV_H */
-diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-index 7d010b0be54e..311fd347c5a8 100644
---- a/arch/riscv/kvm/vcpu.c
-+++ b/arch/riscv/kvm/vcpu.c
-@@ -601,6 +601,8 @@ static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
- 						 KVM_REG_RISCV_FP_D);
- 	case KVM_REG_RISCV_ISA_EXT:
- 		return kvm_riscv_vcpu_set_reg_isa_ext(vcpu, reg);
-+	case KVM_REG_RISCV_SBI_EXT:
-+		return kvm_riscv_vcpu_set_reg_sbi_ext(vcpu, reg);
- 	default:
- 		break;
- 	}
-diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
-index 15fde15f9fb8..89e3e7bace6c 100644
---- a/arch/riscv/kvm/vcpu_sbi.c
-+++ b/arch/riscv/kvm/vcpu_sbi.c
-@@ -30,17 +30,52 @@ static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
- };
- #endif
- 
--static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
--	&vcpu_sbi_ext_v01,
--	&vcpu_sbi_ext_base,
--	&vcpu_sbi_ext_time,
--	&vcpu_sbi_ext_ipi,
--	&vcpu_sbi_ext_rfence,
--	&vcpu_sbi_ext_srst,
--	&vcpu_sbi_ext_hsm,
--	&vcpu_sbi_ext_pmu,
--	&vcpu_sbi_ext_experimental,
--	&vcpu_sbi_ext_vendor,
-+struct kvm_riscv_sbi_extension_entry {
-+	enum KVM_RISCV_SBI_EXT_ID dis_idx;
-+	const struct kvm_vcpu_sbi_extension *ext_ptr;
-+};
-+
-+static const struct kvm_riscv_sbi_extension_entry sbi_ext[] = {
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_V01,
-+		.ext_ptr = &vcpu_sbi_ext_v01,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_MAX, /* Can't be disabled */
-+		.ext_ptr = &vcpu_sbi_ext_base,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_TIME,
-+		.ext_ptr = &vcpu_sbi_ext_time,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_IPI,
-+		.ext_ptr = &vcpu_sbi_ext_ipi,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_RFENCE,
-+		.ext_ptr = &vcpu_sbi_ext_rfence,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_SRST,
-+		.ext_ptr = &vcpu_sbi_ext_srst,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_HSM,
-+		.ext_ptr = &vcpu_sbi_ext_hsm,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_PMU,
-+		.ext_ptr = &vcpu_sbi_ext_pmu,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_EXPERIMENTAL,
-+		.ext_ptr = &vcpu_sbi_ext_experimental,
-+	},
-+	{
-+		.dis_idx = KVM_RISCV_SBI_EXT_VENDOR,
-+		.ext_ptr = &vcpu_sbi_ext_vendor,
-+	},
- };
- 
- void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run)
-@@ -99,14 +134,190 @@ int kvm_riscv_vcpu_sbi_return(struct kvm_vcpu *vcpu, struct kvm_run *run)
- 	return 0;
- }
- 
--const struct kvm_vcpu_sbi_extension *kvm_vcpu_sbi_find_ext(unsigned long extid)
-+static int riscv_vcpu_set_sbi_ext_single(struct kvm_vcpu *vcpu,
-+					 unsigned long reg_num,
-+					 unsigned long reg_val)
-+{
-+	unsigned long i;
-+	const struct kvm_riscv_sbi_extension_entry *sext = NULL;
-+	struct kvm_vcpu_sbi_context *scontext = &vcpu->arch.sbi_context;
-+
-+	if (reg_num >= KVM_RISCV_SBI_EXT_MAX ||
-+	    (reg_val != 1 && reg_val != 0))
-+		return -EINVAL;
-+
-+	for (i = 0; i < ARRAY_SIZE(sbi_ext); i++) {
-+		if (sbi_ext[i].dis_idx == reg_num) {
-+			sext = &sbi_ext[i];
-+			break;
-+		}
-+	}
-+	if (!sext)
-+		return -ENOENT;
-+
-+	scontext->extension_disabled[sext->dis_idx] = !reg_val;
-+
-+	return 0;
-+}
-+
-+static int riscv_vcpu_get_sbi_ext_single(struct kvm_vcpu *vcpu,
-+					 unsigned long reg_num,
-+					 unsigned long *reg_val)
-+{
-+	unsigned long i;
-+	const struct kvm_riscv_sbi_extension_entry *sext = NULL;
-+	struct kvm_vcpu_sbi_context *scontext = &vcpu->arch.sbi_context;
-+
-+	if (reg_num >= KVM_RISCV_SBI_EXT_MAX)
-+		return -EINVAL;
-+
-+	for (i = 0; i < ARRAY_SIZE(sbi_ext); i++) {
-+		if (sbi_ext[i].dis_idx == reg_num) {
-+			sext = &sbi_ext[i];
-+			break;
-+		}
-+	}
-+	if (!sext)
-+		return -ENOENT;
-+
-+	*reg_val = !scontext->extension_disabled[sext->dis_idx];
-+
-+	return 0;
-+}
-+
-+static int riscv_vcpu_set_sbi_ext_multi(struct kvm_vcpu *vcpu,
-+					unsigned long reg_num,
-+					unsigned long reg_val, bool enable)
-+{
-+	unsigned long i, ext_id;
-+
-+	if (reg_num > KVM_REG_RISCV_SBI_MULTI_REG_LAST)
-+		return -EINVAL;
-+
-+	for_each_set_bit(i, &reg_val, BITS_PER_LONG) {
-+		ext_id = i + reg_num * BITS_PER_LONG;
-+		if (ext_id >= KVM_RISCV_SBI_EXT_MAX)
-+			break;
-+
-+		riscv_vcpu_set_sbi_ext_single(vcpu, ext_id, enable);
-+	}
-+
-+	return 0;
-+}
-+
-+static int riscv_vcpu_get_sbi_ext_multi(struct kvm_vcpu *vcpu,
-+					unsigned long reg_num,
-+					unsigned long *reg_val)
-+{
-+	unsigned long i, ext_id, ext_val;
-+
-+	if (reg_num > KVM_REG_RISCV_SBI_MULTI_REG_LAST)
-+		return -EINVAL;
-+
-+	for (i = 0; i < BITS_PER_LONG; i++) {
-+		ext_id = i + reg_num * BITS_PER_LONG;
-+		if (ext_id >= KVM_RISCV_SBI_EXT_MAX)
-+			break;
-+
-+		ext_val = 0;
-+		riscv_vcpu_get_sbi_ext_single(vcpu, ext_id, &ext_val);
-+		if (ext_val)
-+			*reg_val |= KVM_REG_RISCV_SBI_MULTI_MASK(ext_id);
-+	}
-+
-+	return 0;
-+}
-+
-+int kvm_riscv_vcpu_set_reg_sbi_ext(struct kvm_vcpu *vcpu,
-+				   const struct kvm_one_reg *reg)
-+{
-+	unsigned long __user *uaddr =
-+			(unsigned long __user *)(unsigned long)reg->addr;
-+	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
-+					    KVM_REG_SIZE_MASK |
-+					    KVM_REG_RISCV_SBI_EXT);
-+	unsigned long reg_val, reg_subtype;
-+
-+	if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
-+		return -EINVAL;
-+
-+	if (vcpu->arch.ran_atleast_once)
-+		return -EBUSY;
-+
-+	reg_subtype = reg_num & KVM_REG_RISCV_SUBTYPE_MASK;
-+	reg_num &= ~KVM_REG_RISCV_SUBTYPE_MASK;
-+
-+	if (copy_from_user(&reg_val, uaddr, KVM_REG_SIZE(reg->id)))
-+		return -EFAULT;
-+
-+	switch (reg_subtype) {
-+	case KVM_REG_RISCV_SBI_SINGLE:
-+		return riscv_vcpu_set_sbi_ext_single(vcpu, reg_num, reg_val);
-+	case KVM_REG_RISCV_SBI_MULTI_EN:
-+		return riscv_vcpu_set_sbi_ext_multi(vcpu, reg_num, reg_val, true);
-+	case KVM_REG_RISCV_SBI_MULTI_DIS:
-+		return riscv_vcpu_set_sbi_ext_multi(vcpu, reg_num, reg_val, false);
-+	default:
-+		return -EINVAL;
-+	};
-+
-+	return 0;
-+}
-+
-+int kvm_riscv_vcpu_get_reg_sbi_ext(struct kvm_vcpu *vcpu,
-+				   const struct kvm_one_reg *reg)
-+{
-+	int rc;
-+	unsigned long __user *uaddr =
-+			(unsigned long __user *)(unsigned long)reg->addr;
-+	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
-+					    KVM_REG_SIZE_MASK |
-+					    KVM_REG_RISCV_SBI_EXT);
-+	unsigned long reg_val, reg_subtype;
-+
-+	if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
-+		return -EINVAL;
-+
-+	reg_subtype = reg_num & KVM_REG_RISCV_SUBTYPE_MASK;
-+	reg_num &= ~KVM_REG_RISCV_SUBTYPE_MASK;
-+
-+	reg_val = 0;
-+	switch (reg_subtype) {
-+	case KVM_REG_RISCV_SBI_SINGLE:
-+		rc = riscv_vcpu_get_sbi_ext_single(vcpu, reg_num, &reg_val);
-+		break;
-+	case KVM_REG_RISCV_SBI_MULTI_EN:
-+	case KVM_REG_RISCV_SBI_MULTI_DIS:
-+		rc = riscv_vcpu_get_sbi_ext_multi(vcpu, reg_num, &reg_val);
-+		break;
-+	default:
-+		rc = -EINVAL;
-+	};
-+	if (rc)
-+		return rc;
-+
-+	if (copy_to_user(uaddr, &reg_val, KVM_REG_SIZE(reg->id)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+const struct kvm_vcpu_sbi_extension *kvm_vcpu_sbi_find_ext(
-+				struct kvm_vcpu *vcpu, unsigned long extid)
- {
--	int i = 0;
-+	int i;
-+	const struct kvm_riscv_sbi_extension_entry *sext;
-+	struct kvm_vcpu_sbi_context *scontext = &vcpu->arch.sbi_context;
- 
- 	for (i = 0; i < ARRAY_SIZE(sbi_ext); i++) {
--		if (sbi_ext[i]->extid_start <= extid &&
--		    sbi_ext[i]->extid_end >= extid)
--			return sbi_ext[i];
-+		sext = &sbi_ext[i];
-+		if (sext->ext_ptr->extid_start <= extid &&
-+		    sext->ext_ptr->extid_end >= extid) {
-+			if (sext->dis_idx < KVM_RISCV_SBI_EXT_MAX &&
-+			    scontext->extension_disabled[sext->dis_idx])
-+				return NULL;
-+			return sbi_ext[i].ext_ptr;
-+		}
- 	}
- 
- 	return NULL;
-@@ -126,7 +337,7 @@ int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
- 	};
- 	bool ext_is_v01 = false;
- 
--	sbi_ext = kvm_vcpu_sbi_find_ext(cp->a7);
-+	sbi_ext = kvm_vcpu_sbi_find_ext(vcpu, cp->a7);
- 	if (sbi_ext && sbi_ext->handler) {
- #ifdef CONFIG_RISCV_SBI_V01
- 		if (cp->a7 >= SBI_EXT_0_1_SET_TIMER &&
-diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
-index 9945aff34c14..5bc570b984f4 100644
---- a/arch/riscv/kvm/vcpu_sbi_base.c
-+++ b/arch/riscv/kvm/vcpu_sbi_base.c
-@@ -44,7 +44,7 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 			kvm_riscv_vcpu_sbi_forward(vcpu, run);
- 			retdata->uexit = true;
- 		} else {
--			sbi_ext = kvm_vcpu_sbi_find_ext(cp->a0);
-+			sbi_ext = kvm_vcpu_sbi_find_ext(vcpu, cp->a0);
- 			*out_val = sbi_ext && sbi_ext->probe ?
- 					   sbi_ext->probe(vcpu) : !!sbi_ext;
- 		}
--- 
-2.34.1
+I applied it quickly before something else changes!
 
+Thanks for respinning, and thanks as always for driving these changes.
+
+Yours,
+Linus Walleij
