@@ -2,179 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECA86D1487
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68E76D148C
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjCaA5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 20:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
+        id S229567AbjCaA6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 20:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjCaA5r (ORCPT
+        with ESMTP id S229942AbjCaA5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 20:57:47 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DB212BD0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:57:35 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id b6so1409368ljr.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 17:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680224254;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vZaMDq9dZew9R8a4yZBxEJWmvmP67z1j88DeAGmSTaI=;
-        b=vZMTgndKf12QkvcBBR3Upd1OpDS5EV5fn7s03OBMy6DUiqfmmuBNQawRS9R0QACK/j
-         FqGv3N/l64h09f5Zgaxg5VccA44cJyV4VRZS1msiiz1XzUzdHwDyxY3vdo1ozQ+KXnxU
-         9ffWy+tAXohyAfz9wH0madGm/BtPwnTcSzaMGeWtxzcr++WqlVR7n6vFxRSp4F1BUyPD
-         /+1DlyJT+OuEEikctTl2NVZqPqjA3G4dcwMU/511iBEcV+zLPntSHbjpC8euRgKdHa3I
-         XYEGFx86gNmd2NwRyA5RvdD5vLzXMy33kgDjnGEQSTph5qcbx5BRc/aBSi+/QagVjv2M
-         S9Ag==
+        Thu, 30 Mar 2023 20:57:51 -0400
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0E21287A;
+        Thu, 30 Mar 2023 17:57:42 -0700 (PDT)
+Received: by mail-qv1-f54.google.com with SMTP id on15so2200994qvb.7;
+        Thu, 30 Mar 2023 17:57:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680224254;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vZaMDq9dZew9R8a4yZBxEJWmvmP67z1j88DeAGmSTaI=;
-        b=Sv0WeJCbds7WDU47Ka1CY/yVVUTvQ/kJxIFOpzuLC3AA537YG69SuSjZxN4GVboeI4
-         T2h5abuX2KBe53vrQ46p5tlpvncjo4hwkLvQPjQyfwdCZtAIox+iupQseKfS/94DQxsh
-         UidM+heqJjCFSZgTaDO+mjxDxtZFg2/yiLW9tHlX1N65eRDgbAHMZZTvqTYbFhQSLCgu
-         BziEGiUE+w1NBsYhmAN5jvRtrf5BIn0OykIASZINzBCwqLGoZmEdLZ8UYZLiriOlfiA0
-         EpqFb/v9qpH37XO6ej5Fioy4nY5O6HJS2ZOkhH60ehDT/IB75Mbj91SVgXiF2ndLxvcp
-         uNtQ==
-X-Gm-Message-State: AAQBX9e+TG2+lN7WnIhPTFPAEQ77S8Y1FLpzru+eIZqJzK8n3BNBvBwr
-        6CifkprM6rZnZNpza/mpswvA/A==
-X-Google-Smtp-Source: AKy350brZb+GGY3S7Y3PSzBguQoQB6oKAeypVRnGywSlfxLfnc4qqy143IHGEIkSeiA/646ZWSL8eQ==
-X-Received: by 2002:a2e:3201:0:b0:2a4:1421:370c with SMTP id y1-20020a2e3201000000b002a41421370cmr6473058ljy.45.1680224253971;
-        Thu, 30 Mar 2023 17:57:33 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id x10-20020a2e7c0a000000b0029ee7bc0114sm125331ljc.64.2023.03.30.17.57.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 17:57:33 -0700 (PDT)
-Message-ID: <fa47f382-e1c7-cd75-0c33-e98fca02c383@linaro.org>
-Date:   Fri, 31 Mar 2023 02:57:32 +0200
+        d=1e100.net; s=20210112; t=1680224262; x=1682816262;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a2HAELiYxMwO28bC3+J9qfIMUXe3QPmftJ2DsQn4LZo=;
+        b=TfD18HyLQtJeiv2iyc29Hb1AFGuW4AL1/YrVXkw6jjWgkUHaOG6ETfAYM3h/CmIz5G
+         iregs9hK02ZpTGmFFBd57trMDHqxtwWLRzYYD6gjAg7d09TTIx7FBLXK6Qf1LI2/x6st
+         KQuO7IqNIHTDxRVEbbGA3kdW/ZlbI/3AuL/XBG3bGSqTIV0Doke61eASSkutPZJDBrg1
+         xGBSMuXBZEGm9KKpZ58QWaEWRDZdA5nqXwFn6IHF4hePMVrdVgbP4XE4iqvLySYmTR3r
+         oP8YtDd4MiGvxRA9KMxvI1rZT0ppEGk6y1G7MilJH3Tu1Jv61+xD/A67POAwOJ0shH0x
+         ftSw==
+X-Gm-Message-State: AAQBX9flZfg+yb44vLzpe4uqGbqu64z5pOp9RuAVima6rW8qOmrjJN+f
+        Dz4HvbGseik+re5djvMBqTDs8DEjDdREvblG
+X-Google-Smtp-Source: AKy350bFoDhg0ywndRPXD1hgcLcVwfLGZIutGa9huWRoKqjC2CVyzg+C465z9zYd6rzX7TJswPmGfA==
+X-Received: by 2002:ad4:5d6d:0:b0:5a6:1571:1eb with SMTP id fn13-20020ad45d6d000000b005a6157101ebmr46195371qvb.27.1680224261529;
+        Thu, 30 Mar 2023 17:57:41 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:d9ee])
+        by smtp.gmail.com with ESMTPSA id mh10-20020a056214564a00b005dd8b9345d7sm221514qvb.111.2023.03.30.17.57.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 17:57:40 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Subject: [PATCH bpf-next 3/3] bpf,docs: Update documentation to reflect new task kfuncs
+Date:   Thu, 30 Mar 2023 19:57:33 -0500
+Message-Id: <20230331005733.406202-4-void@manifault.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230331005733.406202-1-void@manifault.com>
+References: <20230331005733.406202-1-void@manifault.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: sm8250: Add GPU speedbin support
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230120172233.1905761-1-konrad.dybcio@linaro.org>
- <20230120172233.1905761-6-konrad.dybcio@linaro.org>
- <df57f5c1-13aa-c328-57ac-de486d29e549@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <df57f5c1-13aa-c328-57ac-de486d29e549@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Now that struct task_struct objects are RCU safe, and bpf_task_acquire()
+can return NULL, we should update the BPF task kfunc documentation to
+reflect the current state of the API.
 
+Signed-off-by: David Vernet <void@manifault.com>
+---
+ Documentation/bpf/kfuncs.rst | 49 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 43 insertions(+), 6 deletions(-)
 
-On 31.03.2023 02:43, Dmitry Baryshkov wrote:
-> On 20/01/2023 19:22, Konrad Dybcio wrote:
->> SM8250 has (at least) four GPU speed bins. With the support added on the
->> driver side, wire up bin detection in the DTS to restrict lower-quality
->> SKUs from running at frequencies they were not validated at.
->>
->> Tested-by: Marijn Suijten <marijn.suijten@somainline.org> # On Sony Xperia 5 II (speed bin 0x7)
->> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   arch/arm64/boot/dts/qcom/sm8250.dtsi | 23 ++++++++++++++++++++++-
->>   1 file changed, 22 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
->> index 059c83003fb6..95f1a6afcd43 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
->> @@ -981,6 +981,18 @@ ipcc: mailbox@408000 {
->>               #mbox-cells = <2>;
->>           };
->>   +        qfprom: efuse@784000 {
->> +            compatible = "qcom,sm8250-qfprom", "qcom,qfprom";
->> +            reg = <0 0x00784000 0 0x8ff>;
->> +            #address-cells = <1>;
->> +            #size-cells = <1>;
->> +
->> +            gpu_speed_bin: gpu_speed_bin@19b {
->> +                reg = <0x19b 0x1>;
->> +                bits = <5 3>;
->> +            };
->> +        };
->> +
->>           rng: rng@793000 {
->>               compatible = "qcom,prng-ee";
->>               reg = <0 0x00793000 0 0x1000>;
->> @@ -2576,49 +2588,58 @@ gpu: gpu@3d00000 {
->>                 qcom,gmu = <&gmu>;
->>   +            nvmem-cells = <&gpu_speed_bin>;
->> +            nvmem-cell-names = "speed_bin";
->> +
->>               status = "disabled";
->>                 zap-shader {
->>                   memory-region = <&gpu_mem>;
->>               };
->>   -            /* note: downstream checks gpu binning for 670 Mhz */
->>               gpu_opp_table: opp-table {
->>                   compatible = "operating-points-v2";
->>                     opp-670000000 {
->>                       opp-hz = /bits/ 64 <670000000>;
->>                       opp-level = <RPMH_REGULATOR_LEVEL_NOM_L1>;
->> +                    opp-supported-hw = <0x6>;
-> 
-> opp-supported-hw = <0xa>; /* 3 & 1 */
-> 
->>                   };
->>                     opp-587000000 {
->>                       opp-hz = /bits/ 64 <587000000>;
->>                       opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
->> +                    opp-supported-hw = <0x7>;
-> 
-> opp-supported-hw = <0xb>; /* 3, 1, 0 */
-The values here are correct, however I remapped the bins against
-qcom logic.. will fix that in the next rev!
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index bf1b85941452..d8a16c4bef7f 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -471,13 +471,50 @@ struct_ops callback arg. For example:
+ 		struct task_struct *acquired;
+ 
+ 		acquired = bpf_task_acquire(task);
++		if (acquired)
++			/*
++			 * In a typical program you'd do something like store
++			 * the task in a map, and the map will automatically
++			 * release it later. Here, we release it manually.
++			 */
++			bpf_task_release(acquired);
++		return 0;
++	}
++
++
++References acquired on ``struct task_struct *`` objects are RCU protected.
++Therefore, when in an RCU read region, you can obtain a pointer to a task
++embedded in a map value without having to acquire a reference:
++
++.. code-block:: c
++
++	#define private(name) SEC(".data." #name) __hidden __attribute__((aligned(8)))
++	private(TASK) static struct task_struct *global;
++
++	/**
++	 * A trivial example showing how to access a task stored
++	 * in a map using RCU.
++	 */
++	SEC("tp_btf/task_newtask")
++	int BPF_PROG(task_rcu_read_example, struct task_struct *task, u64 clone_flags)
++	{
++		struct task_struct *local_copy;
++
++		bpf_rcu_read_lock();
++		local_copy = global;
++		if (local_copy)
++			/*
++			 * We could also pass local_copy to kfuncs or helper functions here,
++			 * as we're guaranteed that local_copy will be valid until we exit
++			 * the RCU read region below.
++			 */
++			bpf_printk("Global task %s is valid", local_copy->comm);
++		else
++			bpf_printk("No global task found");
++		bpf_rcu_read_unlock();
++
++		/* At this point we can no longer reference local_copy. */
+ 
+-		/*
+-		 * In a typical program you'd do something like store
+-		 * the task in a map, and the map will automatically
+-		 * release it later. Here, we release it manually.
+-		 */
+-		bpf_task_release(acquired);
+ 		return 0;
+ 	}
+ 
+-- 
+2.39.0
 
-Konrad
-> 
-> 
->>                   };
->>                     opp-525000000 {
->>                       opp-hz = /bits/ 64 <525000000>;
->>                       opp-level = <RPMH_REGULATOR_LEVEL_SVS_L2>;
->> +                    opp-supported-hw = <0xf>;
->>                   };
->>                     opp-490000000 {
->>                       opp-hz = /bits/ 64 <490000000>;
->>                       opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
->> +                    opp-supported-hw = <0xf>;
->>                   };
->>                     opp-441600000 {
->>                       opp-hz = /bits/ 64 <441600000>;
->>                       opp-level = <RPMH_REGULATOR_LEVEL_SVS_L0>;
->> +                    opp-supported-hw = <0xf>;
->>                   };
->>                     opp-400000000 {
->>                       opp-hz = /bits/ 64 <400000000>;
->>                       opp-level = <RPMH_REGULATOR_LEVEL_SVS>;
->> +                    opp-supported-hw = <0xf>;
->>                   };
->>                     opp-305000000 {
->>                       opp-hz = /bits/ 64 <305000000>;
->>                       opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
->> +                    opp-supported-hw = <0xf>;
->>                   };
->>               };
->>           };
-> 
