@@ -2,197 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CE36D2BB4
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 01:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100D76D2BB9
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 01:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232984AbjCaXap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 19:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
+        id S233257AbjCaXbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 19:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjCaXan (ORCPT
+        with ESMTP id S229988AbjCaXbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 19:30:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927D812CF0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 16:30:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38475B83294
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 23:30:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0707AC433EF;
-        Fri, 31 Mar 2023 23:30:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680305440;
-        bh=rztUcqlYcdZaRzLY5VUrM4dmO5NewoOi9N88PCpBK3U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jK3TlWReKZ22CyVeRauW6VBW4zWzqkJiBnWSQsYej+IQ/ojiECyqB6zB+ZayUIeB7
-         UtCmzbXc43YjOZ/DCBvznOtCwadsRaE7/7BPa24a1a38rnilsD8sO5WJCHXTnnBzqh
-         O849SgCBL0P5jgthjVyCJME5fL3vPLiarqeSKFXFjE6vDYK6R0EDGanjwVNJ6lYZ5L
-         ROBPOR0jKmf/k0+u1UbZ6BHNB6IrQ8SEQOQin+QBculyqT69SddOE3aS+1MmJ+6i8+
-         crLyumWDEz9MMji6OFspDjmr4nF/fMFjiBT9GalqAnCarnSuILStJTA6bG8ZxQVOjv
-         Ih2Hgg0Yj8u/Q==
-Date:   Fri, 31 Mar 2023 16:30:37 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Rob Clark <robdclark@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10 11/15] drm/atomic-helper: Set fence deadline for
- vblank
-Message-ID: <20230331233037.GA2443175@dev-arch.thelio-3990X>
-References: <20230308155322.344664-1-robdclark@gmail.com>
- <20230308155322.344664-12-robdclark@gmail.com>
- <20230331204412.GA396777@dev-arch.thelio-3990X>
- <CAF6AEGtDbSDNBBdONQ6YubZDaKMpDQ-BJx5mP+aGw4uy9qbXDQ@mail.gmail.com>
+        Fri, 31 Mar 2023 19:31:16 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F2D12CF0;
+        Fri, 31 Mar 2023 16:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680305476; x=1711841476;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=eqPP138TaK57c1S9Lo+rZ6AhgwF9ukTPzloRCJ8xmkk=;
+  b=cowDegOEOPSfatW5XQ1DDiZFbtgTCM60d0m2csbLvlL+c3Rfu/mxL4W8
+   zOaYrLyyGILRUulzac5OiVjvh9i6l/edC2Mb7atrYIIaG8IlRjYZnBBqK
+   bWWYjoPOzTkgS71A3IqBupNGP3DV5WUl+2VyBp2laPmBDwyzvEb/t2Mdi
+   eWYUk/4R9hZRKKkZXahV8jAOKdi53KOQPHvXa3T3v1cHv4MQaptMgxxCU
+   h2IRJdrJbM4LOKlEScTDgggvCBaRGCnkLFjRyN+1xX4BKeWaNfv0UMhb1
+   hhSIn6YerD6V6Z69SSbCeo7yWODQbIxwNc2tg8/vc9dPucAZPP3hdDr1Y
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="427855868"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="427855868"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 16:31:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="931351334"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="931351334"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Mar 2023 16:31:15 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 31 Mar 2023 16:31:15 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Fri, 31 Mar 2023 16:31:15 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Fri, 31 Mar 2023 16:31:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=abTxpz0eyg5yD/4yPhUjhJLdileD7YwPZbBU7ptiFGan/s72lBp0angLpWOgKYEbOY2V3XF15ypHLmdB1XkW61heJgmpNcP2cDwGR+cUhZUNfGGjg9vPNcCXUTy05nAnegg5YcRcFhHuI+LlcCg49GmsOZz3/HsCznIWChxi3Mz+8OnlmyxlQMpOH4PoM/Xrg5q3d8whSD5hku+g10vBLHjtajEa0axrk7H5c5sbimfQFa9B9RbgYVH0h4hG/nGVJI2UfdwlNt6XV6Ph5L6As8MeTkpeoOJLDNDareof9hmJa+8Y7vzuoqLpuQgnybbSTlt6/06Klds2l/nRsI9e9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eqPP138TaK57c1S9Lo+rZ6AhgwF9ukTPzloRCJ8xmkk=;
+ b=A3URgPE7HjooY+rWMwjIocH82XVZsbSvH2GZ0PQbI45tOwn/u8oJ9CuWb7Xd+ZIBwp9XipQSKGbxmVWHrKOIh973Z+Id+OD8ZiubeYf+B1zOub+NyXziGfrw9kFm3Th0DHPsddUhTWky/xRFfxJCe6ltlCeXDu/RqD2TEzkwUkDboOA1JppcBzWTt+FEu2L0axZzP1cJ47IibmZa0WO9WuDrVHgj3O/kuyoBapfMNJsSTvhgJrCVZvmkz8anSzdsSwxx/bBIq9mF7aVV9fkAg/oxdF+FR0ZVlTpEqwPeWP3qiRzk0CG9uKvkA0wzu551QZYtObYC732+tYxSvjBZAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com (2603:10b6:208:3d7::17)
+ by IA1PR11MB8199.namprd11.prod.outlook.com (2603:10b6:208:455::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Fri, 31 Mar
+ 2023 23:31:13 +0000
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::4381:c78f:bb87:3a37]) by IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::4381:c78f:bb87:3a37%3]) with mapi id 15.20.6254.024; Fri, 31 Mar 2023
+ 23:31:13 +0000
+From:   "Yu, Fenghua" <fenghua.yu@intel.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+CC:     Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>
+Subject: RE: [PATCH v3 7/7] dmaengine/idxd: Re-enable kernel workqueue under
+ DMA API
+Thread-Topic: [PATCH v3 7/7] dmaengine/idxd: Re-enable kernel workqueue under
+ DMA API
+Thread-Index: AQHZZCWaCgY3Jdq93USwu66veGT73K8ViPzg
+Date:   Fri, 31 Mar 2023 23:31:13 +0000
+Message-ID: <IA1PR11MB609783D2D1159E4AA6F6099E9B8F9@IA1PR11MB6097.namprd11.prod.outlook.com>
+References: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
+ <20230331231137.1947675-8-jacob.jun.pan@linux.intel.com>
+In-Reply-To: <20230331231137.1947675-8-jacob.jun.pan@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA1PR11MB6097:EE_|IA1PR11MB8199:EE_
+x-ms-office365-filtering-correlation-id: 821ce288-63db-4368-5ef6-08db32400427
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yuQMqe1te91UNKHEyem6WlPuWbCVfAA2xV03boAWkmKZw2emIPK1YE33HORo/q4NJ5WfCSZNdotX45smMxJqn9uBTu63cHtvbZqbHA9SehbAa6DVnv3JOC61WwYbDyNtPKS+6F25fal2uhI5xoFSKlUBrLw6b+BV+p+7pfU3Kf32drKKyRceeg0QEAtYfyOm0flwrsr9jTCYCaB0f0Z0+6S/w8ZAI//185WagjahG2w23gJUY9EM5yZ+cVpI/AKaesa8IyJm5Ep0AfmwdhJ9eKE1qSt+S9OqOWDPpHvYdEXLunm5FV2RBLVz/lb4ByIrMeit//+wm3l/6EDMXT/xBHCeBksW7TFQvGnjLI2B/lftHe7WsWCneqUD49yPQ5Y5Iagzcbot1NptC8X/2l3LyNTc0xz0H5scvsZc3ZFN0vVVKSx8ZAhFtwkmqo9MtxDqBX54Tqv0QlQ61Zj66pbldHTKWPC3yIIiUBifHkFqtFkO0Rjr6tl0HQqoMpA/PgtbZrP9Rfgeyzegc1pVOU6lCzBxFwSyrJrPRg1gIehJ00u+uRlZlKELlX1CvdqP4Kyfv782Aeg1/5kM4FlSbLh3TVI3kC+GCTDIq5On4SfLfn4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6097.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(396003)(376002)(346002)(136003)(451199021)(7696005)(54906003)(122000001)(66946007)(110136005)(71200400001)(478600001)(316002)(41300700001)(52536014)(66476007)(38100700002)(4326008)(5660300002)(82960400001)(4744005)(7416002)(8936002)(83380400001)(2906002)(38070700005)(66446008)(86362001)(66556008)(8676002)(33656002)(64756008)(9686003)(76116006)(26005)(6506007)(186003)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lq0RjKYu4Fc5QPLEPaCP/hms2EDyNBbuSrusCg4NWs3oykVQ8Rhh/Nmx8KDh?=
+ =?us-ascii?Q?6wkLvYrUbd20zQJaJ96yzOZIIVKC2H1t8pMGg3BTV4wb/CzVdLvcalR/rCr6?=
+ =?us-ascii?Q?ggKhxryvf5OpLnhjA785E4N6/UmGcskzg7bCh14oEziRcUiDtmmi9+1cJ0/7?=
+ =?us-ascii?Q?uT+mABVY6oMBmgnSVTBHP2rI8B9ZDmC8zsp81MAfOiAWHHLBKBijFIbQPL5g?=
+ =?us-ascii?Q?t6qLznvED3mTV7h0X7TA7rhbTnRQkmpaxhFGbnJHVSIsQnF0T54QTYp7QFxg?=
+ =?us-ascii?Q?aRmee0r2WykOxsk0DcomDo9D8eFD4UJ/m0sJhWI/YSmB8BH6SoA2o4xNniR5?=
+ =?us-ascii?Q?c26x4zs/LDgzmxI1Et35+LMbNHvRRg3eheIyuz/mVpVcp1IDcW/UU/PDOwsB?=
+ =?us-ascii?Q?HRGvsvIcB+3FQteEhJHwjhzrpZMh0ar8TuxL13yjBk7zYYHJohc4kMKOoXHi?=
+ =?us-ascii?Q?YtPf8yUTwRnLVZfKWIG8pq9DBzrOFg7I6Gf8GNXcjjoVjZuaf47ubhBDZEd+?=
+ =?us-ascii?Q?WT8UcfjK1RRsNWIB7cTH9P86+ftwa6yobfmQ7uwxUkDNZMMo6BPfQF0XyLZW?=
+ =?us-ascii?Q?2XAS6LSDkzDjaGCQ6htw897FhJjXxncCBt/th7KEQCEmiAPB4o184ZOfcY+F?=
+ =?us-ascii?Q?wtrlC4h/FpoFc1BBwlH4hGwbXoVaxFQenJiS4AmHlFslBxx0Vz27NO2skZ11?=
+ =?us-ascii?Q?raZMNmWR5TLzjqdp9YCRvxo0wmrPW3lCUR5neyVbF2z3D6SmKQwISy4fI4OV?=
+ =?us-ascii?Q?8NmtWo7T2TnKGXVK9PJUT0oynHtOuJ4F9o/5SFfpg3mJsb5oqjymeRAfRUnL?=
+ =?us-ascii?Q?Xudn+LzYOS1PKWQ1XJYIYbsfZ1MP7UrNzXsLcND58rcuj5o7MBvaQo91W+1z?=
+ =?us-ascii?Q?s1RzAS4TnFcXUABA74IZhndITcgIQSvkpjAJ2DmPN9WnllkHW5sVMzdVgdsc?=
+ =?us-ascii?Q?6rNnXjV07UTT1Nfi7B5MpfCTD7JsapAlsdMs1LLODkC0guPXKB00Os22L1F/?=
+ =?us-ascii?Q?u6FicD+feicycFxwVDJ6jjmKoaM6jnChqIxCLoYne59Lr16J5IYkvW4LVjJu?=
+ =?us-ascii?Q?L4BZQHum52kX1ssL0MmYZkVXDx7dQC5BEGcFSNqQUnWC1RVtWfT7zvOm32td?=
+ =?us-ascii?Q?boFDNT/V7OLJvHbN3z6i996LIe6TzTla/BnSppSiGGg1VQVu2uw2GxQGzikA?=
+ =?us-ascii?Q?KLFi3x74kHQniHFikxbtRLlMI5oIg4eZQljE/BuyPgTv3GRnIeoNAGsuf2Vj?=
+ =?us-ascii?Q?y8sM4/WRxYpZjaMc3OdcO415a1g/YfpNEPOiM9d3COndx25GhVspKf9fBbKE?=
+ =?us-ascii?Q?SQjTSwFaeiy0HQVQEhDkXyAw3Dh/wLRPnqKYE0HI8YFRegOBV8ldjOVfSUy0?=
+ =?us-ascii?Q?L59KAu4xCIJ3m1hghCmRFy/O4zok/RjRy+42HvD76uuB1ltKNXnU8CLrAiit?=
+ =?us-ascii?Q?p/vvXTIBgwU8ZWKLODxu24onDg95TWRKC9FkbQQZT+DlSQPLuraohf9fjZ17?=
+ =?us-ascii?Q?0chsXwBa9ywQS8GKJlu9v7eh5XUFPuKaIIBjiQha/3uzMbtTNgslEJYlAzse?=
+ =?us-ascii?Q?eqhaSltDvTAlIrWZBpT7tXKfBjpRMfoNTKvdsbl9?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAF6AEGtDbSDNBBdONQ6YubZDaKMpDQ-BJx5mP+aGw4uy9qbXDQ@mail.gmail.com>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6097.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 821ce288-63db-4368-5ef6-08db32400427
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Mar 2023 23:31:13.1433
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0l7SGDPsfILozzLJrsFjwbJDVZt7GvbWyhANoxZI8KaCZpRCFokltiWUghlzufNFb8uWDt8hhVRzRjaE1X/KYw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8199
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 03:14:30PM -0700, Rob Clark wrote:
-> On Fri, Mar 31, 2023 at 1:44 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Hi Rob,
-> >
-> > On Wed, Mar 08, 2023 at 07:53:02AM -0800, Rob Clark wrote:
-> > > From: Rob Clark <robdclark@chromium.org>
-> > >
-> > > For an atomic commit updating a single CRTC (ie. a pageflip) calculate
-> > > the next vblank time, and inform the fence(s) of that deadline.
-> > >
-> > > v2: Comment typo fix (danvet)
-> > > v3: If there are multiple CRTCs, consider the time of the soonest vblank
-> > >
-> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> >
-> > I apologize if this has already been reported or fixed, I searched lore
-> > but did not find anything.
-> >
-> > This change as commit d39e48ca80c0 ("drm/atomic-helper: Set fence
-> > deadline for vblank") in -next causes a hang while running LTP's
-> > read_all test on /proc on my Ampere Altra system (it seems it is hanging
-> > on a pagemap file?). Additionally, I have this splat in dmesg, which
-> > seems related based on the call stack.
-> 
-> Hi, I'm not familiar with this hardware.. do you know which drm driver
-> is used?  I can't tell from the call-stack.
+Hi, Jacob,
 
-I think it is drivers/gpu/drm/ast, as I see ast in lsmod?
+> Kernel workqueues were disabled due to flawed use of kernel VA and SVA AP=
+I.
+> Now That we have the support for attaching PASID to the device's default
 
-> > [   20.542591] fbcon: Taking over console
-> > [   20.550772] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000074
-> > [   20.550776] Mem abort info:
-> > [   20.550777]   ESR = 0x0000000096000004
-> > [   20.550779]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > [   20.550781]   SET = 0, FnV = 0
-> > [   20.550782]   EA = 0, S1PTW = 0
-> > [   20.550784]   FSC = 0x04: level 0 translation fault
-> > [   20.550785] Data abort info:
-> > [   20.550786]   ISV = 0, ISS = 0x00000004
-> > [   20.550788]   CM = 0, WnR = 0
-> > [   20.550789] user pgtable: 4k pages, 48-bit VAs, pgdp=0000080009d16000
-> > [   20.550791] [0000000000000074] pgd=0000000000000000, p4d=0000000000000000
-> > [   20.550796] Internal error: Oops: 0000000096000004 [#1] SMP
-> > [   20.550800] Modules linked in: ip6table_nat tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc binfmt_misc vfat fat xfs snd_usb_audio snd_hwdep snd_usbmidi_lib snd_seq snd_pcm snd_rawmidi snd_timer snd_seq_device snd soundcore joydev mc ipmi_ssif ipmi_devintf ipmi_msghandler arm_spe_pmu arm_cmn arm_dsu_pmu arm_dmc620_pmu cppc_cpufreq loop zram crct10dif_ce polyval_ce nvme polyval_generic ghash_ce sbsa_gwdt igb nvme_core ast nvme_common i2c_algo_bit xgene_hwmon gpio_dwapb scsi_dh_rdac scsi_dh_emc scsi_dh_alua ip6_tables ip_tables dm_multipath fuse
-> > [   20.550869] CPU: 12 PID: 469 Comm: kworker/12:1 Not tainted 6.3.0-rc2-00008-gd39e48ca80c0 #1
-> > [   20.550872] Hardware name: ADLINK AVA Developer Platform/AVA Developer Platform, BIOS TianoCore 2.04.100.07 (SYS: 2.06.20220308) 09/08/2022
-> > [   20.550875] Workqueue: events fbcon_register_existing_fbs
-> > [   20.550884] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [   20.550888] pc : drm_crtc_next_vblank_start+0x2c/0x98
-> > [   20.550894] lr : drm_atomic_helper_wait_for_fences+0x90/0x240
-> > [   20.550898] sp : ffff80000d583960
-> > [   20.550900] x29: ffff80000d583960 x28: ffff07ff8fc187b0 x27: 0000000000000000
-> > [   20.550904] x26: ffff07ff99c08c00 x25: 0000000000000038 x24: ffff07ff99c0c000
-> > [   20.550908] x23: 0000000000000001 x22: 0000000000000038 x21: 0000000000000000
-> > [   20.550912] x20: ffff07ff9640a280 x19: 0000000000000000 x18: ffffffffffffffff
-> > [   20.550915] x17: 0000000000000000 x16: ffffb24d2eece1c0 x15: 0000003038303178
-> > [   20.550919] x14: 3032393100000048 x13: 0000000000000000 x12: 0000000000000000
-> > [   20.550923] x11: 0000000000000000 x10: 0000000000000000 x9 : ffffb24d2eeeaca0
-> > [   20.550926] x8 : ffff80000d583628 x7 : 0000080077783000 x6 : 0000000000000000
-> > [   20.550930] x5 : ffff80000d584000 x4 : ffff07ff99c0c000 x3 : 0000000000000130
-> > [   20.550934] x2 : 0000000000000000 x1 : ffff80000d5839c0 x0 : ffff07ff99c0cc08
-> > [   20.550937] Call trace:
-> > [   20.550939]  drm_crtc_next_vblank_start+0x2c/0x98
-> > [   20.550942]  drm_atomic_helper_wait_for_fences+0x90/0x240
-> > [   20.550946]  drm_atomic_helper_commit+0xb0/0x188
-> > [   20.550949]  drm_atomic_commit+0xb0/0xf0
-> > [   20.550953]  drm_client_modeset_commit_atomic+0x218/0x280
-> > [   20.550957]  drm_client_modeset_commit_locked+0x64/0x1a0
-> > [   20.550961]  drm_client_modeset_commit+0x38/0x68
-> > [   20.550965]  __drm_fb_helper_restore_fbdev_mode_unlocked+0xb0/0xf8
-> > [   20.550970]  drm_fb_helper_set_par+0x44/0x88
-> > [   20.550973]  fbcon_init+0x1e0/0x4a8
-> > [   20.550976]  visual_init+0xbc/0x118
-> > [   20.550981]  do_bind_con_driver.isra.0+0x194/0x3a0
-> > [   20.550984]  do_take_over_console+0x50/0x70
-> > [   20.550987]  do_fbcon_takeover+0x74/0xf8
-> > [   20.550989]  do_fb_registered+0x13c/0x158
-> > [   20.550992]  fbcon_register_existing_fbs+0x78/0xc0
-> > [   20.550995]  process_one_work+0x1ec/0x478
-> > [   20.551000]  worker_thread+0x74/0x418
-> > [   20.551002]  kthread+0xec/0x100
-> > [   20.551005]  ret_from_fork+0x10/0x20
-> > [   20.551011] Code: f9400004 b9409013 f940a082 9ba30a73 (b9407662)
-> > [   20.551013] ---[ end trace 0000000000000000 ]---
-> >
-> > If there is any additional information that I can provide or patches I
-> > can test, I am more than happy to do so.
-> >
-> > Cheers,
-> > Nathan
-> >
-> > # bad: [4b0f4525dc4fe8af17b3daefe585f0c2eb0fe0a5] Add linux-next specific files for 20230331
-> > # good: [b2bc47e9b2011a183f9d3d3454a294a938082fb9] Merge tag 'net-6.3-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
-> > git bisect start '4b0f4525dc4fe8af17b3daefe585f0c2eb0fe0a5' 'b2bc47e9b2011a183f9d3d3454a294a938082fb9'
-> > # good: [ed5f95f3349003d74a4a11b27b0f05d6794c382a] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-> > git bisect good ed5f95f3349003d74a4a11b27b0f05d6794c382a
-> > # bad: [85f7d1bfa30a05df2c9d8a0e9f6b1f23b4a6f13b] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git
-> > git bisect bad 85f7d1bfa30a05df2c9d8a0e9f6b1f23b4a6f13b
-> > # bad: [fbd0f79f200f8e5cb73fb3d7b788de09a8f33a6f] Merge branch 'msm-next' of https://gitlab.freedesktop.org/drm/msm.git
-> > git bisect bad fbd0f79f200f8e5cb73fb3d7b788de09a8f33a6f
-> > # good: [90031bc33f7525f0cc7a9ef0b1df62a1a4463382] Merge tag 'amd-drm-next-6.4-2023-03-17' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
-> > git bisect good 90031bc33f7525f0cc7a9ef0b1df62a1a4463382
-> > # good: [d4e04817db670083aed73de1fadd3b21758e69ba] drm/amdgpu: Return from switch early for EEPROM I2C address
-> > git bisect good d4e04817db670083aed73de1fadd3b21758e69ba
-> > # good: [70e360f9b548d99f959668d4f047d1363d42fe8e] drm: exynos: dsi: Consolidate component and bridge
-> > git bisect good 70e360f9b548d99f959668d4f047d1363d42fe8e
-> > # bad: [0b43595d0cbb06736d1e572e79e29a410a273573] Merge branch 'drm-next' of https://gitlab.freedesktop.org/agd5f/linux
-> > git bisect bad 0b43595d0cbb06736d1e572e79e29a410a273573
-> > # good: [fbb3b3500f76ec8b741bd2d0e761ca3e856ad924] dt-bindings: display: boe,tv101wum-nl6: document rotation
-> > git bisect good fbb3b3500f76ec8b741bd2d0e761ca3e856ad924
-> > # bad: [82bbec189ab34873688484cd14189a5392946fbb] Merge v6.3-rc4 into drm-next
-> > git bisect bad 82bbec189ab34873688484cd14189a5392946fbb
-> > # bad: [d39e48ca80c0960b039cb38633957f0040f63e1a] drm/atomic-helper: Set fence deadline for vblank
-> > git bisect bad d39e48ca80c0960b039cb38633957f0040f63e1a
-> > # good: [d7d5a21dd6b4706c04fbba5d25db8da5f25aab68] dma-buf/dma-resv: Add a way to set fence deadline
-> > git bisect good d7d5a21dd6b4706c04fbba5d25db8da5f25aab68
-> > # good: [f3823da7e4ba7d4781375c2bb786a8a78efc6591] drm/scheduler: Add fence deadline support
-> > git bisect good f3823da7e4ba7d4781375c2bb786a8a78efc6591
-> > # good: [b2c077d001b612b1f34f7e528b2dc6072bd6794e] drm/vblank: Add helper to get next vblank time
-> > git bisect good b2c077d001b612b1f34f7e528b2dc6072bd6794e
-> > # first bad commit: [d39e48ca80c0960b039cb38633957f0040f63e1a] drm/atomic-helper: Set fence deadline for vblank
+s/That/that/
+
+> domain and the ability to reserve global PASIDs from SVA APIs, we can re-=
+enable
+> the kernel work queues and use them under DMA API.
+>=20
+> We also use non-privileged access for in-kernel DMA to be consistent with=
+ the
+> IOMMU settings. Consequently, interrupt for user privilege is enabled for=
+ work
+> completion IRQs.
+>=20
+> Link:https://lore.kernel.org/linux-
+> iommu/20210511194726.GP1002214@nvidia.com/
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+
+Other than the typo,
+
+Reviewed-by: Fenghua Yu <fenghua.yu@intel.com>
+
+Thanks.
+
+-Fenghua
