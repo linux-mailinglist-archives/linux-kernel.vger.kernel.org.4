@@ -2,102 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0170B6D18FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6316D18FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjCaHui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48124 "EHLO
+        id S231232AbjCaHvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjCaHuT (ORCPT
+        with ESMTP id S230470AbjCaHuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:50:19 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7997110AA8;
-        Fri, 31 Mar 2023 00:49:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1680248961; x=1711784961;
-  h=from:to:cc:subject:date:message-id;
-  bh=wvFXHtpZ7xPN75TSbGJGueSihEi7iWOy4Ow7TTI4BhQ=;
-  b=CrV2T2fDOBoAZrLP16Hn/uI0uu1L1tfci67n3YaameI9mUeglvsEG/ay
-   uPai+m7VPp5Iy5JnufED7FWb7NcZkkvn06RCYkOeBk3OEjl29VlsVknyl
-   aqoytvEsqT2de1uyhZOosLVhJNL+4ViphnaYWN24mx/efxquPUNPvRdNE
-   doSPkJT/xCT3DUOGv0R8j4WNV3DhKuBjdDfQcDvFTy5SJ3yTWUazipEIM
-   LN5hdv38P5zHGxBQU+uob+h0b2B23ZN6zdYpfOdxuQ7fk3UP0KmX7M9SV
-   syX85wMlePQaw3Co1eI++9pibYxjKf5ewT6eJwYET3o8ZyQs6SIJ/pOOh
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,307,1673884800"; 
-   d="scan'208";a="331406323"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 31 Mar 2023 15:47:04 +0800
-IronPort-SDR: UiICxUixaSpM0FBiqKJyNulx0j6qIkigx4HrZOjt/8xxmUZDTbFgovVZ4VWSD3y6x8z1gci8Cq
- kuqwMGNr0jUvQ34iK9Ko3/xRiC0AKNeuJXS2n6law6/96u2IOI3ciU+Fd7Vldi69s71lB2/hdr
- 38HkbPvut1uLpJBuldyvSDBK/xCHnra9qTAWnRT3G4JtRz2PmBO1Wd19/91BHCX+EF77o/h/1F
- RDJFrvFU9rwvUxJ2Kl9CRTdmyyErj9Rg3kgvJKG3x2ucSibzBtz2TXPqnohVmDJulqzTYsd8/I
- LLA=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Mar 2023 00:03:12 -0700
-IronPort-SDR: b31kBmBQnRDARAFbLux9YmCnsRW8UbbrsifQPGXsyNtpbsPFvacY+QDWVnEFCJijV5x6zXQEOU
- 8Btw01YRScDFzc03kMKbEW8MnT+H3sOKdn6EjTxHOg/p1xRrwIq7nkg3cAeiGGZob275R+JPIT
- Wbb1P2Exu75Nllr713JLJ0eOFmFgAntqvJ7d62S5V283nHMQOD61g6EdJ5QRpAji0Mz+HUFSek
- KODGfEmGHBOzxE+CyetJELXDwDETVo9ETQgjRMfOtRQrdNSQJHHIFPoSdp8KYLcQh5nrysDDeR
- H84=
-WDCIronportException: Internal
-Received: from bxygm33.ad.shared ([10.225.33.176])
-  by uls-op-cesaip02.wdc.com with ESMTP; 31 Mar 2023 00:46:59 -0700
-From:   Avri Altman <avri.altman@wdc.com>
-To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH v2] scsi: ufs: mcq: Limit the amount of inflight requests
-Date:   Fri, 31 Mar 2023 10:46:50 +0300
-Message-Id: <20230331074650.75-1-avri.altman@wdc.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 31 Mar 2023 03:50:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70E31D919;
+        Fri, 31 Mar 2023 00:49:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91D116243A;
+        Fri, 31 Mar 2023 07:49:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E62B5C433EF;
+        Fri, 31 Mar 2023 07:49:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680248966;
+        bh=N52cquANgi8rH2muZ2w4PLKijbErjnK0PBHAsGbh9ZA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=txDP4opP0hB4ki+4IXdW6ZBivfJPmobPRfqmXFKoadzILc7fafaku2vLt9m1dU71N
+         KvtW8HNCEQfIsDb8aGnWq5ZabC6920pWQ1uGwV3LJKh1bEj/S/UUaMJAHvAgXdtzMk
+         auA4i74PApfg9l/0yYBHwGHmWcRw32bNbaVJUwRes1ADjJluT9cyxOOc9xCfdHrvLv
+         9jRpGDQUx1PplDu03B/KMzqTY8Bjibhc3qJ2BFxfIOScXWxpJuT59a7eNAH4Ky952r
+         oDppEQm+oKN2gin7Noi125pvZtpjfD8vQdetVV02Iq/EvRaJNYRcW1u3FBd17RMAae
+         v9qRmJ4zHL/QQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Jason Xing <kerneljasonxing@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: netcp: MAX_SKB_FRAGS is now 'int'
+Date:   Fri, 31 Mar 2023 09:48:56 +0200
+Message-Id: <20230331074919.1299425-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-in UFS, each request is designated via the triplet <iid, lun, task tag>.
+From: Arnd Bergmann <arnd@arndb.de>
 
-In UFS4.0 the Initiator ID field is 8 bits wide, comprised of the
-EXT_IID and IID fields. Together with the task tag (single byte), they
-limit the driver's hw queues capacity.
+The type of MAX_SKB_FRAGS has changed recently, so the debug printk
+needs to be updated:
 
+drivers/net/ethernet/ti/netcp_core.c: In function 'netcp_create_interface':
+drivers/net/ethernet/ti/netcp_core.c:2084:30: error: format '%ld' expects argument of type 'long int', but argument 3 has type 'int' [-Werror=format=]
+ 2084 |                 dev_err(dev, "tx-pool size too small, must be at least %ld\n",
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes: 3948b05950fd ("net: introduce a config option to tweak MAX_SKB_FRAGS")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-v1 -> v2:
-Attend Johannes's and Bart's comments
+ drivers/net/ethernet/ti/netcp_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Avri Altman <avri.altman@wdc.com>
----
- drivers/ufs/core/ufshcd.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 35a3bd95c5e4..cac7c9918c5b 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -8468,6 +8468,11 @@ static int ufshcd_alloc_mcq(struct ufs_hba *hba)
- 	if (ret)
- 		goto err;
+diff --git a/drivers/net/ethernet/ti/netcp_core.c b/drivers/net/ethernet/ti/netcp_core.c
+index 1bb596a9d8a2..dfdbcdeb991f 100644
+--- a/drivers/net/ethernet/ti/netcp_core.c
++++ b/drivers/net/ethernet/ti/netcp_core.c
+@@ -2081,7 +2081,7 @@ static int netcp_create_interface(struct netcp_device *netcp_device,
+ 	netcp->tx_pool_region_id = temp[1];
  
-+	if (hba->nutrs * hba->nr_hw_queues > SZ_64K - 1) {
-+		dev_info(hba->dev, "there can be at most 64K inflight requests\n");
-+		goto err;
-+	}
-+
- 	/*
- 	 * Previously allocated memory for nutrs may not be enough in MCQ mode.
- 	 * Number of supported tags in MCQ mode may be larger than SDB mode.
+ 	if (netcp->tx_pool_size < MAX_SKB_FRAGS) {
+-		dev_err(dev, "tx-pool size too small, must be at least %ld\n",
++		dev_err(dev, "tx-pool size too small, must be at least %d\n",
+ 			MAX_SKB_FRAGS);
+ 		ret = -ENODEV;
+ 		goto quit;
 -- 
-2.17.1
+2.39.2
 
