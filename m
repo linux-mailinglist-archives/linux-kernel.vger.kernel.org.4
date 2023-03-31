@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEDF26D1FE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794286D1FF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbjCaMSi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 08:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
+        id S232273AbjCaMTJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 08:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbjCaMSd (ORCPT
+        with ESMTP id S232171AbjCaMSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:18:33 -0400
+        Fri, 31 Mar 2023 08:18:38 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2CA1EFE0;
-        Fri, 31 Mar 2023 05:18:31 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A5C1F7AF;
+        Fri, 31 Mar 2023 05:18:36 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 1654524E362;
-        Fri, 31 Mar 2023 20:18:29 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 31 Mar
- 2023 20:18:29 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 050B724E369;
+        Fri, 31 Mar 2023 20:18:30 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 31 Mar
+ 2023 20:18:30 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 31 Mar
- 2023 20:18:28 +0800
+ 2023 20:18:29 +0800
 From:   Jack Zhu <jack.zhu@starfivetech.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
@@ -41,9 +41,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>,
         <changhuang.liang@starfivetech.com>
-Subject: [PATCH v3 4/9] media: dt-bindings: cadence-csi2rx: Add resets property
-Date:   Fri, 31 Mar 2023 20:18:21 +0800
-Message-ID: <20230331121826.96973-5-jack.zhu@starfivetech.com>
+Subject: [PATCH v3 5/9] media: dt-bindings: cadence-csi2rx: Add starfive compatible
+Date:   Fri, 31 Mar 2023 20:18:22 +0800
+Message-ID: <20230331121826.96973-6-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230331121826.96973-1-jack.zhu@starfivetech.com>
 References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
@@ -63,55 +63,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add resets property for Cadence MIPI-CSI2 RX controller
+Add starfive compatible for Starfive JH7110 SoC which has a
+Cadence MIPI-CSI2 RX controller.
 
 Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 ---
- .../bindings/media/cdns,csi2rx.yaml           | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ Documentation/devicetree/bindings/media/cdns,csi2rx.yaml | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-index 89f414eeef47..f8da4a35e98e 100644
+index f8da4a35e98e..30a335b10762 100644
 --- a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
 +++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
-@@ -38,6 +38,24 @@ properties:
-       - const: pixel_if2_clk
-       - const: pixel_if3_clk
+@@ -15,7 +15,10 @@ description:
  
-+  resets:
+ properties:
+   compatible:
+-    const: cdns,csi2rx
 +    items:
-+      - description: CSI2Rx system reset
-+      - description: Gated Register bank reset for APB interface
-+      - description: pixel reset for Stream interface 0
-+      - description: pixel reset for Stream interface 1
-+      - description: pixel reset for Stream interface 2
-+      - description: pixel reset for Stream interface 3
-+
-+  reset-names:
-+    items:
-+      - const: sys
-+      - const: reg_bank
-+      - const: pixel_if0
-+      - const: pixel_if1
-+      - const: pixel_if2
-+      - const: pixel_if3
-+
-   phys:
++      - enum:
++          - starfive,jh7110-csi2rx
++      - const: cdns,csi2rx
+ 
+   reg:
      maxItems: 1
-     description: MIPI D-PHY
-@@ -120,6 +138,12 @@ examples:
-         clock-names = "sys_clk", "p_clk",
-                       "pixel_if0_clk", "pixel_if1_clk",
-                       "pixel_if2_clk", "pixel_if3_clk";
-+        resets = <&bytereset 9>, <&bytereset 4>,
-+                 <&corereset 5>, <&corereset 6>,
-+                 <&corereset 7>, <&corereset 8>;
-+        reset-names = "sys", "reg_bank",
-+                      "pixel_if0", "pixel_if1",
-+                      "pixel_if2", "pixel_if3";
-         phys = <&csi_phy>;
-         phy-names = "dphy";
- 
+@@ -130,7 +133,7 @@ additionalProperties: false
+ examples:
+   - |
+     csi@d060000 {
+-        compatible = "cdns,csi2rx";
++        compatible = "starfive,jh7110-csi2rx", "cdns,csi2rx";
+         reg = <0x0d060000 0x1000>;
+         clocks = <&byteclock 7>, <&byteclock 6>,
+                  <&coreclock 8>, <&coreclock 9>,
 -- 
 2.34.1
 
