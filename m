@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DE46D18E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 105EE6D18E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjCaHq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
+        id S231165AbjCaHq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjCaHqR (ORCPT
+        with ESMTP id S230505AbjCaHqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 31 Mar 2023 03:46:17 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48F71A973
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:46:14 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id bx10so3806940ljb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:46:14 -0700 (PDT)
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678D51A95C
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:46:15 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id j11so27759160lfg.13
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 00:46:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1680248773;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J6XgOZTowFcGahu4EGU1yeiRvS3r5TbCq21y2qrH2tY=;
-        b=ShxO/adjRbHt3ZcSXKAHCOZfKZxIjIZpjHoLvdSa0NraKb1dT6g/nG0gzs+zmU3wHq
-         BLaTic7PYrsGjtBIC69bKi+1R/TLwJNZ9MSqIjEG99GikJsOYyjQlfXVhUJsDLUjOBS5
-         c161O2gPvAguXU6BPN8sNUSvEN3TkwApx1PX1AJyMq0u0FFHFmI3XEeeb847Pbpvj9uD
-         gAfa+jdVjK377DQtIPl5xu1CALt/xcbJzxElaHIJY2lSakDtYbbtczIJPSJFVXC2lLdI
-         v+mUQ9mwBlUf2l41OdHgEqXdui08YtLLZBTPUrIy/5JlJKZdnkYoR3SmX/adhVnnU7I9
-         MTOw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8vyY0YqKS1SLB05+MmKNy/QrEH8YuBL5xLp1nkmp3M0=;
+        b=CCefbeXgqsEJBMHGQDT4yv5/UyPJoy/+zWC5qH5dvQGDNUsF6mMtXAz5wZiYkN5BQo
+         MCWdl/GhEBk2ItYSonQc2Lp35kV9kAmogwuqZWYfVrC4OoF8+pPeiRPCV/qOutLflMyf
+         CNj8daBkbeQObZrLDrEs/zYlfw3FrCvzJr0R33a7+Z7BiKilj4X3mYeHFKgm5mO71JIu
+         ZGcOH32VIh3zW55zqkyMrsIn0kh8hmdg/6WE0kJZkQcCmowkFsdNJ4dVJX3yOKPs7If/
+         wwpMlF9cge5OO+O6Daj2pHBWtsOaY+WRMzo8KOGlx8Vqo9cmgrznLeIlFdifPpdzpBYK
+         r0Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1680248773;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J6XgOZTowFcGahu4EGU1yeiRvS3r5TbCq21y2qrH2tY=;
-        b=fkez14Sb4TQ54ut5gjfGJqsCrqV4EIPqc3qv6gZU/N73YZGJGu8qEARNct9iMV6Xnk
-         bfyKiictZ7YeBUa7bN+MA8xgxbqHdnH89ExwajwxWjtOmSPtKuPWpS08jzOiIQuyq8KE
-         HIp9IvWavCORcG0/WtD2wbROR7XwhQA9hR+TY1+WPgm8l480ZvEVXJp2E6Jt+nJ/uavG
-         kKRVVu7qYhBUN0BfvntmhmCfIiUK9EAtcK6xLJrV8hYBbYspuslLSeH13LtZhZUObLCi
-         yKMOZ2GQBe+xgEEfgjg2jM9HMURD8XL3LBUB6fzOHMo6AJCjFZlZyrvqIc9y0FyRPl81
-         mH/g==
-X-Gm-Message-State: AAQBX9c9f73dMY9KgrIne92b+ORvNNa8zU4nZTezUZOkrqggkk57RmdM
-        R/CkY9MZvWCk2SHT2vRjalB+gA==
-X-Google-Smtp-Source: AKy350bx5mHxBC2VUVKvuqYfJeg6LkdraEWnX/2Xo3NZExar9axfEwGSn+2TaDOSIq9yzESDyYgWOA==
-X-Received: by 2002:a2e:8091:0:b0:298:9ea9:fd9e with SMTP id i17-20020a2e8091000000b002989ea9fd9emr8199264ljg.24.1680248772753;
-        Fri, 31 Mar 2023 00:46:12 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8vyY0YqKS1SLB05+MmKNy/QrEH8YuBL5xLp1nkmp3M0=;
+        b=7V4THt72qOzmcZGy37igwAX1p5NvnUwMW6sWKAOJiApiGhmpGx5BWRhJEIeVWQNDjU
+         EQyuus71Z3zK19y+wLpHFSzYa2rCFKgkc8z5xuefsQsrBLhlLYphvcQMthwM7c5grQMK
+         lV/kDqjXpk1+EZEvLYZbt8x9pJ8bgRQq/blffCaaF9MsJNNxDw0q3B+JvUXd1n3AfXDH
+         Y52791I3BRGY75kdKtvP1Vi0XYgGLEzobjgFjxeYTX+nBoPLg7+RnLYSl8DgfGvjzP4z
+         9DxHc3cecwqhrvQF2diFXXJ4IPFR56cqdGOMXXFn53o1ijnJhR9df4+IadlPzBB65Moa
+         dvRg==
+X-Gm-Message-State: AAQBX9c9ZNWtw7aCJEyfZssPgcKHH0Oy2IewMmKBIW76fvI0C7V9Ks/O
+        hI06IoOvRnJLqvTHNlc5G1/jng==
+X-Google-Smtp-Source: AKy350b4xxIBOgaXMB9NOFPWS1tARj7J6oK3qK1H7J7KhoMM8z2ZImNHVkPe7Cq0Z6so7UmQvFwV+A==
+X-Received: by 2002:ac2:5699:0:b0:4e8:3bac:4e32 with SMTP id 25-20020ac25699000000b004e83bac4e32mr6767504lfr.53.1680248773602;
+        Fri, 31 Mar 2023 00:46:13 -0700 (PDT)
 Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
-        by smtp.gmail.com with ESMTPSA id n20-20020a2e8794000000b0029573844d03sm241201lji.109.2023.03.31.00.46.11
+        by smtp.gmail.com with ESMTPSA id n20-20020a2e8794000000b0029573844d03sm241201lji.109.2023.03.31.00.46.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 00:46:12 -0700 (PDT)
+        Fri, 31 Mar 2023 00:46:13 -0700 (PDT)
 From:   Tudor Ambarus <tudor.ambarus@linaro.org>
 To:     michael@walle.cc, pratyush@kernel.org
 Cc:     miquel.raynal@bootlin.com, richard@nod.at,
         Takahiro.Kuwano@infineon.com, bacem.daassi@infineon.com,
         linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
         Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH v5 00/10]  mtd: spi-nor: Address mode discovery (BFPT method & current address mode)
-Date:   Fri, 31 Mar 2023 07:45:56 +0000
-Message-Id: <20230331074606.3559258-1-tudor.ambarus@linaro.org>
+Subject: [PATCH v5 01/10] mtd: spi-nor: core: Move generic method to core - micron_st_nor_set_4byte_addr_mode
+Date:   Fri, 31 Mar 2023 07:45:57 +0000
+Message-Id: <20230331074606.3559258-2-tudor.ambarus@linaro.org>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+In-Reply-To: <20230331074606.3559258-1-tudor.ambarus@linaro.org>
+References: <20230331074606.3559258-1-tudor.ambarus@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -70,62 +73,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a new version of the following patch sets:
-https://lore.kernel.org/linux-mtd/20220411125346.118274-1-tudor.ambarus@microchip.com/
-https://lore.kernel.org/linux-mtd/20230315034004.5535-1-Takahiro.Kuwano@infineon.com/
+This method is described in JESD216 BFPT[SFDP_DWORD(16)], BIT(30) and
+BIT(22). Move the method to core.
 
-Changes in v5:
-- squash 6/11 and 7/11 to have a single point of failure in case
-  regressions are determnined by bisecting. Update commit message.
-- get rif of the now empty winbond_nor_default_init()
-- s/sfdp_bits_set/SFDP_MASK_CHECK
-- set micron-st's static spi_nor_set_4byte_addr_mode_wren_en4b_ex4 only
-  when the 4byte addr mode method is not determined at BFPT parsing time
-- reverse xmas tree for local variables in
-  cypress_nor_set_addr_mode_nbytes.
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+---
+ drivers/mtd/spi-nor/core.c      | 24 ++++++++++++++++++++++++
+ drivers/mtd/spi-nor/core.h      |  1 +
+ drivers/mtd/spi-nor/micron-st.c | 24 ------------------------
+ 3 files changed, 25 insertions(+), 24 deletions(-)
 
-Changes in v4:
-- consider the BFPT retrieved address mode as an enumeration,
-  manufacturers could support different methods at the same time
-- split renaming of set_4byte_addr_mode methods in several patches for
-  better clarity
-- have initializations in a single line, even if bypasses the 80 chars
-  limit, as they are < 100 chars anyway
-- new patches that introduce spi_nor_set_4byte_addr_mode() and handle
-  spi_nor_restore()
-- clean Takahiro's patch
-
-Takahiro Kuwano (1):
-  mtd: spi-nor: spansion: Determine current address mode
-
-Tudor Ambarus (9):
-  mtd: spi-nor: core: Move generic method to core -
-    micron_st_nor_set_4byte_addr_mode
-  mtd: spi-nor: core: Update name and description of
-    micron_st_nor_set_4byte_addr_mode
-  mtd: spi-nor: core: Update name and description of
-    spansion_set_4byte_addr_mode
-  mtd: spi-nor: core: Update name and description of
-    spi_nor_set_4byte_addr_mode
-  mtd: spi-nor: core: Make spi_nor_set_4byte_addr_mode_brwr public
-  mtd: spi-nor: Set the 4-Byte Address Mode method based on SFDP data
-  mtd: spi-nor: Stop exporting spi_nor_restore()
-  mtd: spi-nor: core: Update flash's current address mode when changing
-    address mode
-  mtd: spi-nor: core: Introduce spi_nor_set_4byte_addr_mode()
-
- Documentation/driver-api/mtd/spi-nor.rst |   3 -
- drivers/mtd/spi-nor/core.c               |  85 +++++++++++++--
- drivers/mtd/spi-nor/core.h               |   4 +
- drivers/mtd/spi-nor/macronix.c           |   8 +-
- drivers/mtd/spi-nor/micron-st.c          |  32 ++----
- drivers/mtd/spi-nor/sfdp.c               |  11 ++
- drivers/mtd/spi-nor/sfdp.h               |  27 +++++
- drivers/mtd/spi-nor/spansion.c           | 131 ++++++++++++++++++++++-
- drivers/mtd/spi-nor/winbond.c            |  24 +++--
- include/linux/mtd/spi-nor.h              |   6 --
- 10 files changed, 272 insertions(+), 59 deletions(-)
-
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 9e6a0730cdb8..d104c81f22c5 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -538,6 +538,30 @@ int spi_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
+ 	return ret;
+ }
+ 
++/**
++ * micron_st_nor_set_4byte_addr_mode() - Set 4-byte address mode for ST and
++ * Micron flashes.
++ * @nor:	pointer to 'struct spi_nor'.
++ * @enable:	true to enter the 4-byte address mode, false to exit the 4-byte
++ *		address mode.
++ *
++ * Return: 0 on success, -errno otherwise.
++ */
++int micron_st_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
++{
++	int ret;
++
++	ret = spi_nor_write_enable(nor);
++	if (ret)
++		return ret;
++
++	ret = spi_nor_set_4byte_addr_mode(nor, enable);
++	if (ret)
++		return ret;
++
++	return spi_nor_write_disable(nor);
++}
++
+ /**
+  * spansion_set_4byte_addr_mode() - Set 4-byte address mode for Spansion
+  * flashes.
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index de31e430f77e..d5cb42245820 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -648,6 +648,7 @@ void spi_nor_spimem_setup_op(const struct spi_nor *nor,
+ int spi_nor_write_enable(struct spi_nor *nor);
+ int spi_nor_write_disable(struct spi_nor *nor);
+ int spi_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable);
++int micron_st_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable);
+ int spi_nor_wait_till_ready(struct spi_nor *nor);
+ int spi_nor_global_block_unlock(struct spi_nor *nor);
+ int spi_nor_prep_and_lock(struct spi_nor *nor);
+diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
+index 7bb86df52f0b..3bbf65234ebd 100644
+--- a/drivers/mtd/spi-nor/micron-st.c
++++ b/drivers/mtd/spi-nor/micron-st.c
+@@ -301,30 +301,6 @@ static const struct flash_info st_nor_parts[] = {
+ 	{ "m25px80",    INFO(0x207114,  0, 64 * 1024, 16) },
+ };
+ 
+-/**
+- * micron_st_nor_set_4byte_addr_mode() - Set 4-byte address mode for ST and
+- * Micron flashes.
+- * @nor:	pointer to 'struct spi_nor'.
+- * @enable:	true to enter the 4-byte address mode, false to exit the 4-byte
+- *		address mode.
+- *
+- * Return: 0 on success, -errno otherwise.
+- */
+-static int micron_st_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
+-{
+-	int ret;
+-
+-	ret = spi_nor_write_enable(nor);
+-	if (ret)
+-		return ret;
+-
+-	ret = spi_nor_set_4byte_addr_mode(nor, enable);
+-	if (ret)
+-		return ret;
+-
+-	return spi_nor_write_disable(nor);
+-}
+-
+ /**
+  * micron_st_nor_read_fsr() - Read the Flag Status Register.
+  * @nor:	pointer to 'struct spi_nor'
 -- 
 2.40.0.348.gf938b09366-goog
 
