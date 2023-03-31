@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D786D29AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BB16D29B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbjCaU4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        id S232338AbjCaVEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 17:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbjCaU4j (ORCPT
+        with ESMTP id S231770AbjCaVEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:56:39 -0400
+        Fri, 31 Mar 2023 17:04:44 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E36422C
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:55:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3757E1D2EB
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:03:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680296151;
+        s=mimecast20190719; t=1680296636;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4iXEOFNILcUMsIjcydKfmGYblvwSUsIqK+R28wpgVSw=;
-        b=QvlhnNWdvR63emgQlVSCI0MMGQmbswSkfPKRjOy2joYUteSP9FktX8hMeLy+5D3a4s3MbQ
-        ed/VqdQTjOEexlYQe7EbLiEQdlApHZdZZiCIdv406XCVdgpO0LH/6C1zCuypj+HQzECVIr
-        nBYbdbr84ARtjDK18wJvjpPIFapq1+o=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bUtpTfIhZLUJQRzvjQdCDBe9iqr/rmYVzQ4AMz2vCfE=;
+        b=J4uh3W02asn8suAf+SujfVohG5j8CyZCgeaJ6VkTHhV4Ts/EjwuDn7bYwRzGFq50GClFmk
+        nhrumIsR1WSpgLhZcPKHAH7gVa6K4zn4JZvzZZrhbxEWO8MxWCFF3bYyeFCIx8hg4QMF00
+        0gkAdXNiJaqBOJ8pA7QHsvWy03zIg/U=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-193-Z-irLgpsOsWstfv7RBHwxQ-1; Fri, 31 Mar 2023 16:55:49 -0400
-X-MC-Unique: Z-irLgpsOsWstfv7RBHwxQ-1
-Received: by mail-qk1-f199.google.com with SMTP id b34-20020a05620a272200b007460c05a463so11073426qkp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:55:49 -0700 (PDT)
+ us-mta-541-l2io4eRjNHqccvSpKKyTfw-1; Fri, 31 Mar 2023 17:03:54 -0400
+X-MC-Unique: l2io4eRjNHqccvSpKKyTfw-1
+Received: by mail-qt1-f197.google.com with SMTP id r4-20020ac867c4000000b003bfefb6dd58so15516650qtp.2
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:03:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680296149;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4iXEOFNILcUMsIjcydKfmGYblvwSUsIqK+R28wpgVSw=;
-        b=aCaqx8dNdrz9DS6ZcVWrl/Hga3d2g467+Sh5lN6kXfruQMwGLUEOxBMk4tobb/8D3K
-         QouzLK4PgqZ+evH7aynTStLI6YqW1h0UiX5ocBPfxOQpnwnOUVsw/KhnywwQijJ7jdhK
-         VQ5gLtkt3389EprmCos+NiSlRUYU33SqQbYVUKn6YYHzGGi+6eLBEb1e9bWODSwUc1PM
-         qp9FrWQlsyF47yDa5uadUHErOH+C44WPpyTZ9xC/2FuKOjN8mh19pkanRlvQWhKTJiy+
-         EYc1iOgt3Z0ZlzTrGFnlRqYPSNq8RLTPAkhIZopfphHVW4ns3XDsek+AhhJSbRNRlC3P
-         lJPQ==
-X-Gm-Message-State: AAQBX9ftPeq4rYPEGkVKpap3TRPh9GYizF/zmi227A+B5haq+bkrIK3X
-        qdcF5xrEKdDKp/La3PQc0BT4oQ3KhdGpbisYYCar9gL0tU8g5JOxlkHhHLShCpNa2SykCR79him
-        XaSNwonPbbTmdrC0o+bYZXXmW
-X-Received: by 2002:a05:6214:d83:b0:5df:3310:c1f9 with SMTP id e3-20020a0562140d8300b005df3310c1f9mr28014874qve.5.1680296149145;
-        Fri, 31 Mar 2023 13:55:49 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b7lU6rfvonQF6UvzHAg1z9y6+ns7pWBTCXqEidZmccRyfV4/pcAgSDviIOorQpDT9jgOtcwg==
-X-Received: by 2002:a05:6214:d83:b0:5df:3310:c1f9 with SMTP id e3-20020a0562140d8300b005df3310c1f9mr28014849qve.5.1680296148838;
-        Fri, 31 Mar 2023 13:55:48 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id o6-20020a0c9006000000b005e0cd3c21c8sm875543qvo.13.2023.03.31.13.55.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 13:55:48 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680296634;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bUtpTfIhZLUJQRzvjQdCDBe9iqr/rmYVzQ4AMz2vCfE=;
+        b=PDsdUrQp5PaPiiucVUmItBoJ1lidsoTdATTVXjZkY34hMdLtwg0kCNop6zP5vMrLsy
+         Khnh4PxHpNQF2ON+bJ5VNC/FVFJBgz/DpUqOoM7i7L24aACEjmzVQEP3T889wf5B4toZ
+         I343FstGvaJVA3nm9mG07LKK38OGAAYEd87EhTj/KaMU6QoBKCspP5sovlAZhyKzGqUk
+         QYET/FFPz0K3k+8mi8jj1aOBBqvLQTp9AsQ58cc2PcRQaVfXofOak9uhbROK2r6lDPFJ
+         oGkVplUJcX1lAuIxGMu4eIaYAib/pzmftsPnsUowH2BtDj5/9nsk1fkQWlgpugsasIyp
+         SbYA==
+X-Gm-Message-State: AAQBX9evKdtU+9U7m3P9JAoOk+LX5VHSVmLxJ4f95n3OC2mOu8YZV71D
+        WBG0dHMYQpnz8F/0UXSwgDNnxbYRJOGNtiS+SXJqKiK4+W4lU6dYOPRS0mTViLtIdE9X5s3TUuw
+        buq7NcakrQ0/Qxao/JXLNMRdB
+X-Received: by 2002:a05:6214:23c8:b0:5c6:ab93:6112 with SMTP id hr8-20020a05621423c800b005c6ab936112mr41644741qvb.30.1680296634179;
+        Fri, 31 Mar 2023 14:03:54 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZJNrNr28ojgFbGTSKPoyvzjJNzlkeUYYlq7VX0czWlVa+idoT5bjB8pmq4W/nFI4r3SgHHsw==
+X-Received: by 2002:a05:6214:23c8:b0:5c6:ab93:6112 with SMTP id hr8-20020a05621423c800b005c6ab936112mr41644711qvb.30.1680296633897;
+        Fri, 31 Mar 2023 14:03:53 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id nd13-20020a056214420d00b005dd8b9345absm847628qvb.67.2023.03.31.14.03.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 14:03:53 -0700 (PDT)
+Subject: Re: [PATCH] scsi: message: fusion: remove unused timeleft variable
+To:     Bill Wendling <morbo@google.com>
+Cc:     sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com, nathan@kernel.org,
+        ndesaulniers@google.com, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20230331162617.1858394-1-trix@redhat.com>
+ <CAGG=3QUYibiR2FLkLWBzr-j9X9nXLJVvmi5WqF=WmRZfgW3tRw@mail.gmail.com>
 From:   Tom Rix <trix@redhat.com>
-To:     jes@trained-monkey.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     linux-acenic@sunsite.dk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] net: alteon: remove unused len variable
-Date:   Fri, 31 Mar 2023 16:55:45 -0400
-Message-Id: <20230331205545.1863496-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+Message-ID: <0afb4c99-63d9-0d53-8dfc-1a07cc562764@redhat.com>
+Date:   Fri, 31 Mar 2023 14:03:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <CAGG=3QUYibiR2FLkLWBzr-j9X9nXLJVvmi5WqF=WmRZfgW3tRw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,39 +85,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/net/ethernet/alteon/acenic.c:2438:10: error: variable
-  'len' set but not used [-Werror,-Wunused-but-set-variable]
-                int i, len = 0;
-                       ^
-This variable is not used so remove it.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/ethernet/alteon/acenic.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On 3/31/23 12:40 PM, Bill Wendling wrote:
+> On Fri, Mar 31, 2023 at 9:26 AM Tom Rix <trix@redhat.com> wrote:
+>> clang with W=1 reports
+>> drivers/message/fusion/mptsas.c:4796:17: error: variable
+>>    'timeleft' set but not used [-Werror,-Wunused-but-set-variable]
+>>          unsigned long    timeleft;
+>>                           ^
+>> This variable is not used so remove it.
+>>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>   drivers/message/fusion/mptsas.c | 3 ---
+>>   1 file changed, 3 deletions(-)
+>>
+>> diff --git a/drivers/message/fusion/mptsas.c b/drivers/message/fusion/mptsas.c
+>> index 86f16f3ea478..d458665e2fc9 100644
+>> --- a/drivers/message/fusion/mptsas.c
+>> +++ b/drivers/message/fusion/mptsas.c
+>> @@ -4793,7 +4793,6 @@ mptsas_issue_tm(MPT_ADAPTER *ioc, u8 type, u8 channel, u8 id, u64 lun,
+>>          MPT_FRAME_HDR   *mf;
+>>          SCSITaskMgmt_t  *pScsiTm;
+>>          int              retval;
+>> -       unsigned long    timeleft;
+>>
+>>          *issue_reset = 0;
+>>          mf = mpt_get_msg_frame(mptsasDeviceResetCtx, ioc);
+>> @@ -4829,8 +4828,6 @@ mptsas_issue_tm(MPT_ADAPTER *ioc, u8 type, u8 channel, u8 id, u64 lun,
+>>          mpt_put_msg_frame_hi_pri(mptsasDeviceResetCtx, ioc, mf);
+>>
+>>          /* Now wait for the command to complete */
+>> -       timeleft = wait_for_completion_timeout(&ioc->taskmgmt_cmds.done,
+>> -           timeout*HZ);
+> It looks bad to remove the call to wait_for_completion_timeout(). Is
+> it truly not needed? If it's needed, the "timeleft" should be checked
+> or a comment left to explain why it's not checked.
 
-diff --git a/drivers/net/ethernet/alteon/acenic.c b/drivers/net/ethernet/alteon/acenic.c
-index d7762da8b2c0..eafef84fe3be 100644
---- a/drivers/net/ethernet/alteon/acenic.c
-+++ b/drivers/net/ethernet/alteon/acenic.c
-@@ -2435,7 +2435,7 @@ static netdev_tx_t ace_start_xmit(struct sk_buff *skb,
- 	} else {
- 		dma_addr_t mapping;
- 		u32 vlan_tag = 0;
--		int i, len = 0;
-+		int i;
- 
- 		mapping = ace_map_tx_skb(ap, skb, NULL, idx);
- 		flagsize = (skb_headlen(skb) << 16);
-@@ -2454,7 +2454,6 @@ static netdev_tx_t ace_start_xmit(struct sk_buff *skb,
- 			const skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
- 			struct tx_ring_info *info;
- 
--			len += skb_frag_size(frag);
- 			info = ap->skb->tx_skbuff + idx;
- 			desc = ap->tx_ring + idx;
- 
--- 
-2.27.0
+Yeah. this is a screw up on my part, sorry.
+
+T
+
+>
+> -bw
+>
+>>          if (!(ioc->taskmgmt_cmds.status & MPT_MGMT_STATUS_COMMAND_GOOD)) {
+>>                  retval = -1; /* return failure */
+>>                  dtmprintk(ioc, printk(MYIOC_s_ERR_FMT
+>> --
+>> 2.27.0
+>>
+>>
 
