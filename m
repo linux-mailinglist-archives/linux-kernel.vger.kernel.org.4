@@ -2,78 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41FC6D13F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E33E6D13FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjCaAUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 20:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
+        id S229557AbjCaAXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 20:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjCaAU3 (ORCPT
+        with ESMTP id S229552AbjCaAXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 20:20:29 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE1312CE3;
-        Thu, 30 Mar 2023 17:19:36 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id kc4so19704285plb.10;
-        Thu, 30 Mar 2023 17:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680221885; x=1682813885;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gjnFvVF+FOS6EOnQPMD9dOZfjJDVnvpVeRajQigpjns=;
-        b=UTd0iBah0+coeAuBT+dAUyXvXWcyjJcNi/m8NIDNOzFy8ZO1tZLvUhyl2Gr5a64cVx
-         O1LGhODXXDmJvvlBzuDXMqZp29lCqBBXr8EUUGcZE2cueYLIv4ReN7OR2WeE6STj7QWA
-         E0SXy6WOC3EhuziBak6OGCDoBCOv1yidmrz0uD6Oz1vOs9DLvaIf+jGMDS776WwVrLe8
-         LleUngPFZjH7j2cMoYbfMMh4ObaZadIBcqyRuuQMhdWOFfkz1XLAPztdy6P7Oznk0lpO
-         XSsNm1VOaoIHSr3IRuOpXrlngIbTeymxjGMCBXkSpouyKdKckBhQANwdS7SfrW31PIqE
-         kVoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680221885; x=1682813885;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gjnFvVF+FOS6EOnQPMD9dOZfjJDVnvpVeRajQigpjns=;
-        b=NBnebYRE2hKFcxl4wlB5LDPHQLxKK5ZaDobjvEUIo01tj8+b0jD7QPyPO3BvuSFsHm
-         2O8/dxoQwqh4lI3qahDmH04YCldhgcXyAcETU0jl3b5TaVF2G0pfw8SXdM5V0i1ohaZ+
-         gLbViDjwF83whQsGBV55cLU9zxjmgguigfiF3qT/ecFv2yTeuiO0hMZJkoyCeAHkuJIL
-         5Mkz2yqT7k9wev6IKRJfY+6LRUBs3zOHMLuX9gvd/mwfLdZtF6htHOdXmgCvzQq9U3Cq
-         lpPSYZKek6zSrjvIn4KPuSr24nSzuR2gePtPbMYPE0eP3HCAY7ZErRQDUUbfF1mHdPxl
-         70Cw==
-X-Gm-Message-State: AAQBX9eUcop6F0hO0kBmKZR9MP8RcBNwa1hZ5pwnAjZdN8I43jQdgDKh
-        tPggBLhwptGjXR6SFZD26Ls=
-X-Google-Smtp-Source: AKy350aUpMe2Oba774PHhZWiIs4Kpj5S0LkhFv6tlX8qHcRc0A5maN8iAgLsN5GAP2s8H5Y2bps9fA==
-X-Received: by 2002:a17:903:2312:b0:1a1:a6e5:764b with SMTP id d18-20020a170903231200b001a1a6e5764bmr33545679plh.60.1680221884970;
-        Thu, 30 Mar 2023 17:18:04 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170902c08400b001a06eb43880sm277692pld.153.2023.03.30.17.18.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 17:18:04 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 17:18:03 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v13 016/113] KVM: TDX: x86: Add ioctl to get TDX
- systemwide parameters
-Message-ID: <20230331001803.GE1112017@ls.amr.corp.intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
- <cb0ae8b4941aaa45e1e5856dde644f9b2f53d9a6.1678643052.git.isaku.yamahata@intel.com>
- <20230325104306.00004585@gmail.com>
- <20230329231722.GA1108448@ls.amr.corp.intel.com>
+        Thu, 30 Mar 2023 20:23:46 -0400
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2099.outbound.protection.outlook.com [40.107.11.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F43830F0;
+        Thu, 30 Mar 2023 17:23:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hF7qdhPA99Kaw7EXrwfFFZNL1Em8ntlzkwG+XAl+1Q1HCzYSB1ngNPhc62y0UWAhGaH6zdy5osLaLPuMXJ1qeAzVppl4q89OAaf4nSaJAJ0+GLFQaAond0UYvunVejwkVHWf7Nzt9pzPC2QQ8wQK5Wr088Z1AQ/VlvuDlVqaokT3Ka4/bKNxbGF8na24j9tPXBZp76pi6BVn/zoH4K8mIjQkRohe0Y7aOwiHiaB62c7wtsbg+zgGSgqcdMLO1vv33e6mRNaDfi1wIVMmeR11KGK+L0KYwKMQybXkZMJVG2k6dQfZVDzUE2diJnc7lrUzRX4YIkW2tJ/VqyA0iCDZjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1b7qRBup3CJcHR6OEG/XJENBYsk0Y8IorVUD1/1ssdY=;
+ b=KIOWffBG1CR8W8t1xU6SaDdZLEcYQA/zRiZoQu/6uS/M7zbkTH3e90EFnrRIO1erEUMTxfHimT7jYK38s958RKTDGsmlsTaCiv2+GTiJ+PKfJTULN95vsIMe7fcCjxDw7vnBJ10NKXhPJDKt5efkgd+5Vy/OudxnbxLdV5C6wqaWauebfUIwXZoYWeiFBNEtuahpJETDKKKx/Ow5soyB2fGel1kE/VhWjX/1WAUIF098sW0VV9ME+gKKSh+yXLTvtDHNdC5z0FpWINnkE6x0Fdt+FvetIHaPjyFmBFdxPB9xSVosvBxoNw1U6xaEODxzyQcvpYcqUMeYZexrPrfkfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1b7qRBup3CJcHR6OEG/XJENBYsk0Y8IorVUD1/1ssdY=;
+ b=FLLS1jidbR6+cZZRdTQKPHDCpII6Vv6vCY7rYnKD0QkD/D3H1lt4Osmfm9OKAmcW4/TD5m/O+RwcHHJSxeCzu+46xuHbXRdy24D1235oyy6leAMVjt8AfSDjo6PnBTBg0IiKoXtpdO9Lg1p470/OJ2Y1W1yZCccuX0qHK8cxQxY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:15f::14)
+ by LO0P265MB5525.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:274::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.23; Fri, 31 Mar
+ 2023 00:20:29 +0000
+Received: from CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::714d:960c:b616:d73f]) by CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::714d:960c:b616:d73f%9]) with mapi id 15.20.6254.022; Fri, 31 Mar 2023
+ 00:20:29 +0000
+Date:   Fri, 31 Mar 2023 01:20:06 +0100
+From:   Gary Guo <gary@garyguo.net>
+To:     Alice Ryhl <alice@ryhl.io>
+Cc:     y86-dev@protonmail.com, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH v3 09/13] rust: init: add `Zeroable` trait and
+ `init::zeroed` function
+Message-ID: <20230331012006.251b5729.gary@garyguo.net>
+In-Reply-To: <19db6213-297b-a33d-7331-3c1a5b72fad9@ryhl.io>
+References: <20230329223239.138757-10-y86-dev@protonmail.com>
+        <19db6213-297b-a33d-7331-3c1a5b72fad9@ryhl.io>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0101.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:191::16) To CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:400:15f::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230329231722.GA1108448@ls.amr.corp.intel.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CWLP265MB5186:EE_|LO0P265MB5525:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3bec74f5-5e68-48e4-8f0e-08db317dbbcd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZGTg/pENA5Aa0JAl6uUVAEphGeyiZnEMTtgO/R255x7og258CnHER+DkGjwANmHPhXzd819y0OXZpKmGXGv6VBoAhuGgWcbxThRvvTygQ4aAiDH51AsaUTCgq3hI0TnrAh8Tvosmi18r8vXa1NripN8bsgViPsH7XYnWA3EMQUojvs604vmam/ZJK7kiabw8PohaYCuCDjqlNRteNmoOAEaAbl5pKsrJN006OGLfcx6u4pEK/5pfKbaZlDKdd+GPHTdw3lETPkM9H/pPGpTWyuOdiRNx9BOWa+rezjpH3/JIlikoFCEBoJaXq70c4JBxKl+zNlihbh/TeK9iIKxp/CeJf63KE61hRHK21XdW3rZKa69ypzZsgJkvpIZNzO2D5JkZse2wsjmg5x/GHzSLAHVDTLvKNCsbvzcS/GnU6S28Gyg5wNZbtLKreCXKDa9xN1SUGry+A6CyfvC5Po1euJFZF5iyYhCcNFOT8YCRI/98CZwLbTxhjTx2UN8xBgS2ygPgZXl8fTsUGcS77EKSrjW0HSSTrufHCbAUkyD9/pYTDllE0aue0JbTcBPSla//VHVT7rUarEZCE5RhUYf6MDLMhSDUH0mjcy/tb3DimYY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(39840400004)(136003)(376002)(366004)(396003)(346002)(451199021)(36756003)(6916009)(54906003)(8676002)(4326008)(66556008)(66946007)(66476007)(6486002)(966005)(316002)(5660300002)(8936002)(478600001)(41300700001)(7416002)(2906002)(86362001)(38100700002)(2616005)(6666004)(6512007)(6506007)(1076003)(53546011)(26005)(186003)(81973001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?g3zOGwd39VI0uE1hDVMDVIdYMlH+Tgt7oJN2vAvjXL4oMunnsSxqNvm0uh3J?=
+ =?us-ascii?Q?MHS/8MjLlbmndgyQ7R7myr0Dm5q/JlRh1MMo+QeuBJ8pD4txqdrTBfkza5RM?=
+ =?us-ascii?Q?ZLjU96f1VlKK330TRvBhb+2rvoz7F3zUgyFv8q+Rtm59UbRdk4nwmrZIK8sR?=
+ =?us-ascii?Q?FFhctHQ8x4bj0FXI+0vgFE7wbacJ6uTO9zHOLlGNU0GiVngY2QNM3gaKC57R?=
+ =?us-ascii?Q?Q+EjXhEXLENl7ncoIMbqslCMrCQCWVllhApF5l2xW3i2xp/9+fKixSkoBRt/?=
+ =?us-ascii?Q?UzXyZLWUF3X3/Nr5vaGVy4c63xMq1+1ylz3+aSscxaxT27xF33+qxTEL/F9u?=
+ =?us-ascii?Q?EOq4ZiRlPLWLVWwrlzkO2bxuODAXr5QMjUnYrBg5iY/XWWmwhpXF9u8qOcpU?=
+ =?us-ascii?Q?pHZ8vgwyMikybEBbSKHTK/XsmmEGZux53NJ3dg5lydHl/mymUHYWY/6NT7jn?=
+ =?us-ascii?Q?ZndiOFJRpH+2BESsur1uXp2MovxmoRxsouq8Au3VjdA8zJ3k+LCTDilpKEOA?=
+ =?us-ascii?Q?7WTHQWrrMDhjBQCKsrI+MvMxK2X9eZHPx2ICLeFVTWbwVMglUVqTKI7pbcWk?=
+ =?us-ascii?Q?7c8e44+OZZSthstfHZABPD8P0DFsmgTxkenhzQRztFV5cFOGfOzH4+Xrpv2V?=
+ =?us-ascii?Q?qOxkISyRatRDJsQHNEZphN8ZPOoqy/CsKplARLAsoRnUC8JAvFZAjYHgpBq8?=
+ =?us-ascii?Q?kLhMmE0apErwjPnK8X+B7QbSna4gwF1ZlzkD+58yRESigyKLYarWhtnL0JIN?=
+ =?us-ascii?Q?x/LE0oWd6RuSXBUsXU0wdrTCLO5wxPznGqK+7XjJzpetJ2RkBR7Ektq2bMM7?=
+ =?us-ascii?Q?Sl1Z74z+glbgMlva4NpHCZL6wTU84qs1HG2LoY100Fm4gJvjpGjtwYQhJ2P/?=
+ =?us-ascii?Q?2iTxEWkUkVBntanWGZj8pqYr9Lz1Rg6iumfaENstlOKm/+M4xJGZWe9XnCYy?=
+ =?us-ascii?Q?hG4eKj9GZ7mK6zLuk+GfiE1c7BbnxmyL39XwOVJ4C+nRRr5L1sy6B8ORjw2x?=
+ =?us-ascii?Q?G5qwOjjYTtlCb37Sa8zcDD2agrlilbT94DSyswtru3bV45WjaWUO7p1csik2?=
+ =?us-ascii?Q?lEh6OGxpr3eXawPt1dzMudbyZR9QpHNOzjBE09CF/NtDjCsGpmqM+xo5vRcc?=
+ =?us-ascii?Q?7DaFNDfVcictPBT1Mae1K1JQA4kyd4H25EVEPz05CmCMs1+/LFNMxQgxlzrn?=
+ =?us-ascii?Q?quoLP8h+XSXR/MQMYKAaWcFSOlyE+E3tOhNyF099+MPLnU5CAsEhhcE/kDJO?=
+ =?us-ascii?Q?s/T4fmjVbLQRNFn4uuHHIHiRizX/mG1auPaXcm2c0PyGNuXuvytzd8lmlDbz?=
+ =?us-ascii?Q?mHyf24aE34av+r+CuGDdirdcel67AKG9Cf0f9TerEvDKUEmfTk2n7FmdCDAM?=
+ =?us-ascii?Q?G5QyVJ62Te6FbGjAMgdYEvHkVQHlLMzOCCWqe0KB07Yi9G/z9jyJxmih41cF?=
+ =?us-ascii?Q?iQEQaJAwm/HrWp/cUMrisyc6Vglz9AaSSelpWPZraJHAKFeKtjsD9PQFiqmV?=
+ =?us-ascii?Q?1xu9Cupo117kkZcs+NMPyCdbuJUHHOegTZYrFnrWWBwckHzz0KFVw/pSf5pl?=
+ =?us-ascii?Q?PCzJt6km7ZmOS9nQL7oLrbYvp+kroixufXH8FWrr?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3bec74f5-5e68-48e4-8f0e-08db317dbbcd
+X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 00:20:29.5908
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aHsjOZ8LRFShUJlHo0FJ3dfjXpSa/bJs7n2eWtRqrJTXOxYScSPYEbsdItnIUDilGiDpRKZYqupLkD7KGkC4Gw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB5525
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,354 +121,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 04:17:22PM -0700,
-Isaku Yamahata <isaku.yamahata@gmail.com> wrote:
+On Fri, 31 Mar 2023 00:40:34 +0200
+Alice Ryhl <alice@ryhl.io> wrote:
 
-> On Sat, Mar 25, 2023 at 10:43:06AM +0200,
-> Zhi Wang <zhi.wang.linux@gmail.com> wrote:
-> 
-> > On Sun, 12 Mar 2023 10:55:40 -0700
-> > isaku.yamahata@intel.com wrote:
+> On 3/30/23 00:33, y86-dev@protonmail.com wrote:
+> > From: Benno Lossin <y86-dev@protonmail.com>
 > > 
-> > Does this have to be a new generic ioctl with a dedicated new x86_ops? SNP
-> > does not use it at all and all the system-scoped ioctl of SNP going through
-> > the CCP driver. So getting system-scope information of TDX/SNP will end up
-> > differently.
+> > Add the `Zeroable` trait which marks types that can be initialized by
+> > writing `0x00` to every byte of the type. Also add the `init::zeroed`
+> > function that creates an initializer for a `Zeroable` type that writes
+> > `0x00` to every byte.
 > > 
-> > Any thought, Sean? Moving getting SNP system-wide information to
-> > KVM dev ioctl seems not ideal and TDX does not have a dedicated driver like
-> > CCP. Maybe make this ioctl TDX-specific? KVM_TDX_DEV_OP?
+> > Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+> > ---
+> > +// SAFETY: `null` pointer is valid.
+> > +unsafe impl<T: ?Sized> Zeroable for *mut T {}
+> > +unsafe impl<T: ?Sized> Zeroable for *const T {}  
 > 
-> We only need global parameters of the TDX module, and we don't interact with TDX
-> module at this point.  One alternative is to export those parameters via sysfs.
-> Also the existence of the sysfs node indicates that the TDX module is
-> loaded(initialized?) or not in addition to boot log.  Thus we can drop system
-> scope one.
-> What do you think?
+> Actually, I just realized that this is not ok for unsized types. When T 
+> is unsized, the raw pointer is a fat pointer with a vtable, and the 
+> vtable part is not necessarily zeroable.
 > 
-> Regarding to other TDX KVM specific ioctls (KVM_TDX_INIT_VM, KVM_TDX_INIT_VCPU,
-> KVM_TDX_INIT_MEM_REGION, and KVM_TDX_FINALIZE_VM), they are specific to KVM.  So
-> I don't think it can be split out to independent driver.
+> However, it would be ok to do it for `*const [T]` since the fat part of 
+> the pointer is just the length in this case, and a length of zero is fine.
+> 
+> See more here:
+> https://github.com/Lokathor/bytemuck/blob/8391afa876ba2e99dffb0c991cc7fa775287d106/src/zeroable.rs#L56-L65
 
-Here is the patch to export those info via sysfs.
+Good catch. vtable completely slipped my mind when I am reviewing this
+code.
 
-From e0744e506eb92e47d8317e489945a3ba804edfa7 Mon Sep 17 00:00:00 2001
-Message-Id: <e0744e506eb92e47d8317e489945a3ba804edfa7.1680221730.git.isaku.yamahata@intel.com>
-In-Reply-To: <8e0bc0e8e5d435f54f10c7642a862629ef2acb89.1680221729.git.isaku.yamahata@intel.com>
-References: <8e0bc0e8e5d435f54f10c7642a862629ef2acb89.1680221729.git.isaku.yamahata@intel.com>
-From: Isaku Yamahata <isaku.yamahata@intel.com>
-Date: Thu, 30 Mar 2023 00:05:03 -0700
-Subject: [PATCH] x86/virt/tdx: Export TD config params of TDX module via sysfs
+Vtable is not *not necessary zeroable*, but actually never zeroable.
+Although currently not yet formally specified, the compiler has always
+assumed vtable part of fat pointers to be non-null, well aligned and
+dereferenceable.
 
-TDX module has parameters for VMM to configure TD.  User space VMM, e.g.
-qemu, needs to know it. Export them to user space via sysfs.
-
-TDX 1.0 provides TDH.SYS.INFO to provide system information in
-TDSYSINFO_STRUCT.  Its future extensibility is limited because of its
-struct.  From TDX 1.5, TDH.SYS.RD(metadata field_id) to read the info
-specified by field id.  So instead of exporting TDSYSINFO_STRUCT, adapt
-metadata way to export those system information.
-
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
----
- Documentation/ABI/testing/sysfs-firmware-tdx |  23 +++
- arch/x86/include/asm/tdx.h                   |  33 ++++
- arch/x86/virt/vmx/tdx/tdx.c                  | 164 +++++++++++++++++++
- arch/x86/virt/vmx/tdx/tdx.h                  |  18 ++
- 4 files changed, 238 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-firmware-tdx
-
-diff --git a/Documentation/ABI/testing/sysfs-firmware-tdx b/Documentation/ABI/testing/sysfs-firmware-tdx
-new file mode 100644
-index 000000000000..1f26fb178144
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-firmware-tdx
-@@ -0,0 +1,23 @@
-+What:           /sys/firmware/tdx/tdx_module/metadata
-+Date:           March 2023
-+KernelVersion:  6.3
-+Contact:        Isaku Yamahata <isaku.yamahata@intel.com>, kvm@vger.kernel.org
-+Users:          qemu, libvirt
-+Description:
-+                The TDX feature requires a firmware that is known as the TDX
-+                module.  The TDX module exposes its metadata in the following
-+                read-only files.  The information corresponds to the TDX global
-+                metadata specified by 64bit field id.  The file name is hex
-+                string in lower case.  The value is binary.
-+                User space VMM like qemu needs refer to them to determine what
-+                parameters are needed or allowed to configure guest TDs.
-+
-+                ================== ============================================
-+                1900000300000000   ATTRIBUTES_FIXED0
-+                1900000300000001   ATTRIBUTES_FIXED1
-+                1900000300000002   XFAM_FIXED0
-+                1900000300000003   XFAM_FIXED1
-+                9900000100000004   NUM_CPUID_CONFIG
-+                9900000300000400   CPUID_LEAVES
-+                9900000300000500   CPUID_VALUES
-+                ================== ============================================
-\ No newline at end of file
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 05870e5ed131..c650ac22a916 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -110,6 +110,39 @@ struct tdx_cpuid_config {
- 	u32	edx;
- } __packed;
- 
-+struct tdx_cpuid_config_leaf {
-+	u32	leaf;
-+	u32	sub_leaf;
-+} __packed;
-+static_assert(offsetof(struct tdx_cpuid_config, leaf) ==
-+	      offsetof(struct tdx_cpuid_config_leaf, leaf));
-+static_assert(offsetof(struct tdx_cpuid_config, sub_leaf) ==
-+	      offsetof(struct tdx_cpuid_config_leaf, sub_leaf));
-+static_assert(offsetofend(struct tdx_cpuid_config, sub_leaf) ==
-+	      sizeof(struct tdx_cpuid_config_leaf));
-+
-+struct tdx_cpuid_config_value {
-+	u32	eax;
-+	u32	ebx;
-+	u32	ecx;
-+	u32	edx;
-+} __packed;
-+static_assert(offsetof(struct tdx_cpuid_config, eax) -
-+	      offsetof(struct tdx_cpuid_config, eax) ==
-+	      offsetof(struct tdx_cpuid_config_value, eax));
-+static_assert(offsetof(struct tdx_cpuid_config, ebx) -
-+	      offsetof(struct tdx_cpuid_config, eax) ==
-+	      offsetof(struct tdx_cpuid_config_value, ebx));
-+static_assert(offsetof(struct tdx_cpuid_config, ecx) -
-+	      offsetof(struct tdx_cpuid_config, eax) ==
-+	      offsetof(struct tdx_cpuid_config_value, ecx));
-+static_assert(offsetof(struct tdx_cpuid_config, edx) -
-+	      offsetof(struct tdx_cpuid_config, eax) ==
-+	      offsetof(struct tdx_cpuid_config_value, edx));
-+static_assert(offsetofend(struct tdx_cpuid_config, edx) -
-+	      offsetof(struct tdx_cpuid_config, eax) ==
-+	      sizeof(struct tdx_cpuid_config_value));
-+
- #define TDSYSINFO_STRUCT_SIZE		1024
- #define TDSYSINFO_STRUCT_ALIGNMENT	1024
- 
-diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-index f9f9c1b76501..56ca520d67d6 100644
---- a/arch/x86/virt/vmx/tdx/tdx.c
-+++ b/arch/x86/virt/vmx/tdx/tdx.c
-@@ -33,6 +33,12 @@
- #include <asm/tdx.h>
- #include "tdx.h"
- 
-+#ifdef CONFIG_SYSFS
-+static int tdx_sysfs_init(void);
-+#else
-+static inline int tdx_sysfs_init(void) { return 0;}
-+#endif
-+
- u32 tdx_global_keyid __ro_after_init;
- EXPORT_SYMBOL_GPL(tdx_global_keyid);
- static u32 tdx_guest_keyid_start __ro_after_init;
-@@ -399,6 +405,10 @@ static int __tdx_get_sysinfo(struct tdsysinfo_struct *sysinfo,
- 	if (ret)
- 		return ret;
- 
-+	ret = tdx_sysfs_init();
-+	if (ret)
-+		return ret;
-+
- 	pr_info("TDX module: atributes 0x%x, vendor_id 0x%x, major_version %u, minor_version %u, build_date %u, build_num %u",
- 		sysinfo->attributes,	sysinfo->vendor_id,
- 		sysinfo->major_version, sysinfo->minor_version,
-@@ -1367,3 +1377,157 @@ int tdx_enable(void)
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(tdx_enable);
-+
-+#ifdef CONFIG_SYSFS
-+
-+static struct kobject *tdx_kobj;
-+static struct kobject *tdx_module_kobj;
-+static struct kobject *tdx_metadata_kobj;
-+
-+#define TDX_METADATA_ATTR(_name, field_id_name, _size)		\
-+static struct bin_attribute tdx_metadata_ ## _name = {		\
-+	.attr = {						\
-+		.name = field_id_name,				\
-+		.mode = 0444,					\
-+	},							\
-+	.size = _size,						\
-+	.read = tdx_metadata_ ## _name ## _show,		\
-+}
-+
-+#define TDX_METADATA_ATTR_SHOW(_name, field_id_name)					\
-+static ssize_t tdx_metadata_ ## _name ## _show(struct file *filp, struct kobject *kobj,	\
-+					       struct bin_attribute *bin_attr,		\
-+					       char *buf, loff_t offset, size_t count)	\
-+{											\
-+	struct tdsysinfo_struct *sysinfo = &PADDED_STRUCT(tdsysinfo);			\
-+											\
-+	return memory_read_from_buffer(buf, count, &offset,				\
-+				       &sysinfo->_name,					\
-+				       sizeof(sysinfo->_name));				\
-+}											\
-+TDX_METADATA_ATTR(_name, field_id_name, sizeof_field(struct tdsysinfo_struct, _name))
-+
-+TDX_METADATA_ATTR_SHOW(attributes_fixed0, TDX_METADATA_ATTRIBUTES_FIXED0_NAME);
-+TDX_METADATA_ATTR_SHOW(attributes_fixed1, TDX_METADATA_ATTRIBUTES_FIXED1_NAME);
-+TDX_METADATA_ATTR_SHOW(xfam_fixed0, TDX_METADATA_XFAM_FIXED0_NAME);
-+TDX_METADATA_ATTR_SHOW(xfam_fixed1, TDX_METADATA_XFAM_FIXED1_NAME);
-+
-+static ssize_t tdx_metadata_num_cpuid_config_show(struct file *filp, struct kobject *kobj,
-+						  struct bin_attribute *bin_attr,
-+						  char *buf, loff_t offset, size_t count)
-+{
-+	struct tdsysinfo_struct *sysinfo = &PADDED_STRUCT(tdsysinfo);
-+	/*
-+	 * Although tdsysinfo_struct.num_cpuid_config is defined as u32 for
-+	 * alignment, TDX 1.5 defines metadata NUM_CONFIG_CPUID as u16.
-+	 */
-+	u16 tmp = (u16)sysinfo->num_cpuid_config;
-+
-+	WARN_ON_ONCE(tmp != sysinfo->num_cpuid_config);
-+	return memory_read_from_buffer(buf, count, &offset, &tmp, sizeof(tmp));
-+}
-+TDX_METADATA_ATTR(num_cpuid_config, TDX_METADATA_NUM_CPUID_CONFIG_NAME, sizeof(u16));
-+
-+static ssize_t tdx_metadata_cpuid_leaves_show(struct file *filp, struct kobject *kobj,
-+					      struct bin_attribute *bin_attr, char *buf,
-+					      loff_t offset, size_t count)
-+{
-+	struct tdsysinfo_struct *sysinfo = &PADDED_STRUCT(tdsysinfo);
-+	ssize_t r;
-+	struct tdx_cpuid_config_leaf *tmp;
-+	u32 i;
-+
-+	tmp = kmalloc(bin_attr->size, GFP_KERNEL);
-+	if (!tmp)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < sysinfo->num_cpuid_config; i++) {
-+		struct tdx_cpuid_config *c = &sysinfo->cpuid_configs[i];
-+		struct tdx_cpuid_config_leaf *leaf = (struct tdx_cpuid_config_leaf *)c;
-+
-+		memcpy(tmp + i, leaf, sizeof(*leaf));
-+	}
-+
-+	r = memory_read_from_buffer(buf, count, &offset, tmp, bin_attr->size);
-+	kfree(tmp);
-+	return r;
-+}
-+
-+TDX_METADATA_ATTR(cpuid_leaves, TDX_METADATA_CPUID_LEAVES_NAME, 0);
-+
-+static ssize_t tdx_metadata_cpuid_values_show(struct file *filp, struct kobject *kobj,
-+					      struct bin_attribute *bin_attr, char *buf,
-+					      loff_t offset, size_t count)
-+{
-+	struct tdsysinfo_struct *sysinfo = &PADDED_STRUCT(tdsysinfo);
-+	struct tdx_cpuid_config_value *tmp;
-+	ssize_t r;
-+	u32 i;
-+
-+	tmp = kmalloc(bin_attr->size, GFP_KERNEL);
-+	if (!tmp)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < sysinfo->num_cpuid_config; i++) {
-+		struct tdx_cpuid_config *c = &sysinfo->cpuid_configs[i];
-+		struct tdx_cpuid_config_value *value = (struct tdx_cpuid_config_value *)&c->eax;
-+
-+		memcpy(tmp + i, value, sizeof(*value));
-+	}
-+
-+	r = memory_read_from_buffer(buf, count, &offset, tmp, bin_attr->size);
-+	kfree(tmp);
-+	return r;
-+}
-+
-+TDX_METADATA_ATTR(cpuid_values, TDX_METADATA_CPUID_VALUES_NAME, 0);
-+
-+static struct bin_attribute *tdx_metadata_attrs[] = {
-+	&tdx_metadata_attributes_fixed0,
-+	&tdx_metadata_attributes_fixed1,
-+	&tdx_metadata_xfam_fixed0,
-+	&tdx_metadata_xfam_fixed1,
-+	&tdx_metadata_num_cpuid_config,
-+	&tdx_metadata_cpuid_leaves,
-+	&tdx_metadata_cpuid_values,
-+	NULL,
-+};
-+
-+static const struct attribute_group tdx_metadata_attr_group = {
-+	.bin_attrs = tdx_metadata_attrs,
-+};
-+
-+static int tdx_sysfs_init(void)
-+{
-+	struct tdsysinfo_struct *sysinfo;
-+	int ret;
-+
-+	tdx_kobj = kobject_create_and_add("tdx", firmware_kobj);
-+	if (!tdx_kobj) {
-+		pr_err("kobject_create_and_add tdx failed\n");
-+		return -EINVAL;
-+	}
-+
-+	tdx_module_kobj = kobject_create_and_add("tdx_module", tdx_kobj);
-+	if (!tdx_module_kobj) {
-+		pr_err("kobject_create_and_add tdx_module failed\n");
-+		return -EINVAL;
-+	}
-+	tdx_metadata_kobj = kobject_create_and_add("metadata", tdx_module_kobj);
-+	if (!tdx_metadata_kobj) {
-+		pr_err("Sysfs exporting tdx global metadata failed %d\n", ret);
-+		return -EINVAL;
-+	}
-+
-+	sysinfo = &PADDED_STRUCT(tdsysinfo);
-+	tdx_metadata_cpuid_leaves.size = sysinfo->num_cpuid_config *
-+		sizeof(struct tdx_cpuid_config_leaf);
-+	tdx_metadata_cpuid_values.size = sysinfo->num_cpuid_config *
-+		sizeof(struct tdx_cpuid_config_value);
-+	ret = sysfs_create_group(tdx_metadata_kobj, &tdx_metadata_attr_group);
-+	if (ret)
-+		pr_err("Sysfs exporting tdx module attributes failed %d\n", ret);
-+
-+	return ret;
-+}
-+#endif
-diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
-index db0cbcceb5b3..a48f38fe6cc4 100644
---- a/arch/x86/virt/vmx/tdx/tdx.h
-+++ b/arch/x86/virt/vmx/tdx/tdx.h
-@@ -93,4 +93,22 @@ struct tdmr_info_list {
- 	int max_tdmrs;	/* How many 'tdmr_info's are allocated */
- };
- 
-+/* TDX metadata base field id. */
-+#define TDX_METADATA_ATTRIBUTES_FIXED0		0x1900000300000000ULL
-+#define TDX_METADATA_ATTRIBUTES_FIXED1		0x1900000300000001ULL
-+#define TDX_METADATA_XFAM_FIXED0		0x1900000300000002ULL
-+#define TDX_METADATA_XFAM_FIXED1		0x1900000300000003ULL
-+#define TDX_METADATA_NUM_CPUID_CONFIG		0x9900000100000004ULL
-+#define TDX_METADATA_CPUID_LEAVES		0x9900000300000400ULL
-+#define TDX_METADATA_CPUID_VALUES		0x9900000300000500ULL
-+
-+/* File name for sysfs: hex with lower case. */
-+#define TDX_METADATA_ATTRIBUTES_FIXED0_NAME	"1900000300000000"
-+#define TDX_METADATA_ATTRIBUTES_FIXED1_NAME	"1900000300000001"
-+#define TDX_METADATA_XFAM_FIXED0_NAME		"1900000300000002"
-+#define TDX_METADATA_XFAM_FIXED1_NAME		"1900000300000003"
-+#define TDX_METADATA_NUM_CPUID_CONFIG_NAME	"9900000100000004"
-+#define TDX_METADATA_CPUID_LEAVES_NAME		"9900000300000400"
-+#define TDX_METADATA_CPUID_VALUES_NAME		"9900000300000500"
-+
- #endif
--- 
-2.25.1
-
-
-
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Best,
+Gary
