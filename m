@@ -2,122 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6126D23AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817A26D23AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbjCaPLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 11:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
+        id S233050AbjCaPLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 11:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbjCaPLG (ORCPT
+        with ESMTP id S232303AbjCaPLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 11:11:06 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DDBC54209
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:11:02 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:32986.221759475
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 24C731001C8;
-        Fri, 31 Mar 2023 23:10:58 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 4ca22286f0024de39acc6a100cbf722e for gangecen@hust.edu.cn;
-        Fri, 31 Mar 2023 23:10:59 CST
-X-Transaction-ID: 4ca22286f0024de39acc6a100cbf722e
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <45b623af-e72e-f728-5ce6-dce014a772ed@189.cn>
-Date:   Fri, 31 Mar 2023 23:10:57 +0800
+        Fri, 31 Mar 2023 11:11:39 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3554682
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:11:34 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32VF9a9N022526;
+        Fri, 31 Mar 2023 15:11:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=peYCy6QUXj6+PheDewCu+f1Nhnx49OIt4ll5OQ5RGd0=;
+ b=cPx2eF9LgrowGWY5Yipwi6ZusEiyLQgflu8iR+eVBLkzwEp+JFnSExlYeXGpxqNNkBkU
+ 9o0sdHViQ3VRdVIdXO83w6eAdUhllneugsIJxIeF9cC2myrq0XNRVZTcsrGKldw842Gf
+ VcrsjG7LvGV+9/4EgVJMe1+PYc/w9qY5pFjxFoR16gLRiEnF8lnsRbNG/e2cI5uh3hZV
+ XttBWAgz7UIKwOJMoKZoL/qqSgGxcoLYYjz8BAXPm8U/hqv8MwbRwphfogHf3Mww2sqw
+ lWEZ3dPMr087pUwudv7SiXttUwCompDcu78Y3loKXJt4ZjTAExU+cKsRR6XGs8fk7xPJ IA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pp16d18p8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 15:11:26 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32VF9eJJ023141;
+        Fri, 31 Mar 2023 15:11:26 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pp16d18nj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 15:11:26 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32ULEGGe019506;
+        Fri, 31 Mar 2023 15:11:24 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3phrk6pvku-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 15:11:24 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32VFBK4Y45810016
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 Mar 2023 15:11:20 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B4C9C2004D;
+        Fri, 31 Mar 2023 15:11:20 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A78520040;
+        Fri, 31 Mar 2023 15:11:20 +0000 (GMT)
+Received: from [9.179.0.144] (unknown [9.179.0.144])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 31 Mar 2023 15:11:20 +0000 (GMT)
+Message-ID: <b2947d2c-8688-ec42-0b7c-e523c80a6cac@linux.ibm.com>
+Date:   Fri, 31 Mar 2023 17:11:19 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PING] drm/bochs: replace ioremap with devm_ioremap to avoid immo
- leak
-To:     Gencen Gan <gangecen@hust.edu.cn>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20230329052655.3487616-1-gangecen@hust.edu.cn>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH] powerpc/pseries/cpuhp: respect current SMT when adding
+ new CPU
 Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <20230329052655.3487616-1-gangecen@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
+Cc:     Nathan Lynch <nathanl@linux.ibm.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org,
+        Srikar Dronamraju <srikar@linux.ibm.com>, npiggin@gmail.com,
+        linuxppc-dev@lists.ozlabs.org
+References: <20230213124510.12651-1-ldufour@linux.ibm.com>
+ <87ilg5aahx.fsf@linux.ibm.com> <20230213150429.GZ19419@kitsune.suse.cz>
+ <87fsb9a7zx.fsf@linux.ibm.com>
+ <45989617-e6f9-0ca5-3371-571268807fc5@linux.ibm.com>
+ <20230330161938.GY3132@kitsune.suse.cz>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <20230330161938.GY3132@kitsune.suse.cz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: sYKYMRSs-PCqj89gJBtLiN0IoZhDAdCf
+X-Proofpoint-GUID: hvAcmABO1qe1KZtdPpeFtmtGrTyVKMoV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-31_07,2023-03-31_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ malwarescore=0 lowpriorityscore=0 suspectscore=0 spamscore=0
+ impostorscore=0 phishscore=0 priorityscore=1501 mlxscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303310120
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 30/03/2023 18:19:38, Michal Suchánek wrote:
+> On Thu, Mar 30, 2023 at 05:51:57PM +0200, Laurent Dufour wrote:
+>> On 13/02/2023 16:40:50, Nathan Lynch wrote:
+>>> Michal Suchánek <msuchanek@suse.de> writes:
+>>>> On Mon, Feb 13, 2023 at 08:46:50AM -0600, Nathan Lynch wrote:
+>>>>> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>>>>>> When a new CPU is added, the kernel is activating all its threads. This
+>>>>>> leads to weird, but functional, result when adding CPU on a SMT 4 system
+>>>>>> for instance.
+>>>>>>
+>>>>>> Here the newly added CPU 1 has 8 threads while the other one has 4 threads
+>>>>>> active (system has been booted with the 'smt-enabled=4' kernel option):
+>>>>>>
+>>>>>> ltcden3-lp12:~ # ppc64_cpu --info
+>>>>>> Core   0:    0*    1*    2*    3*    4     5     6     7
+>>>>>> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
+>>>>>>
+>>>>>> There is no SMT value in the kernel. It is possible to run unbalanced LPAR
+>>>>>> with 2 threads for a CPU, 4 for another one, and 5 on the latest.
+> 
+>> Indeed, that's not so easy. There are multiple ways for the SMT level to be
+>> impacted:
+>>  - smt-enabled kernel option
+>>  - smtstate systemctl service (if activated), saving SMT level at shutdown
+>> time to restore it a boot time
+>>  - pseries-energyd daemon (if activated) could turn off threads
+>>  - ppc64_cpu --smt=x user command
+>>  - sysfs direct writing to turn off/on specific threads.
+>>
+>> There is no SMT level saved, on "disk" or in the kernel, and any of these
+>> options can interact in parallel. So from the user space point of view, the
+>> best we could do is looking for the SMT current values, there could be
+>> multiple values in the case of a mixed SMT state, peek one value and apply it.
+>>
+>> Extending the drmgr's hook is still valid, and I sent a patch series on the
+>> powerpc-utils mailing list to achieve that. However, changing the SMT level
+>> in that hook means that newly added CPU will be first turn on and there is
+>> a window where this threads could be seen active. Not a big deal but not
+>> turning on these extra threads looks better to me.
+> 
+> Which means
+> 
+> 1) add an option to not onlince hotplugged CPUs by default
 
-I'm noticed you patch, interesting!
+After discussing this with Srikar, it happens that exposing the smt-enabled
+value set a boot time (or not) in SYS FS and to update it when SMT level is
+changed using ppc64_cpu will be better. This will aslo allow the energy
+daemon to take this value in account.
 
-On 2023/3/29 13:26, Gencen Gan wrote:
-> From: Gan Gecen <gangecen@hust.edu.cn>
->
-> Smatch reports:
->
-> 	drivers/gpu/drm/tiny/bochs.c:290 bochs_hw_init()
-> 	warn: 'bochs->mmio' from ioremap() not released on
-> 	lines: 246,250,254.
->
-> In the function bochs_load() that calls bochs_hw_init()
-> only, if bochs_hw_init(dev) returns -ENODEV(-19), it
-> will jumps to err_free_dev instead of err_hw_fini, so
-> bochs->immo won't be freed.
+> 2) when a tool that wants to manage CPU onlining is active it can set
+> the option so that no threads are onlined automatically, and online the
+> desired threads
 
-    `mmio`, not `immo`,  you should also fix the typos in you patch's 
-commit title.
+When new CPU are added, the kernel will automatically online the right
+number of threads based on that recorded SMT level.
 
-> We would prefer to replace ioremap with devm_ioremap
-> to avoid adding lengthy error handling. The function
-> `devm_ioremap` will automatically release the allocated
-> resources after use.
+> 
+> 3) when no such tool is active the default should be to online all
+> threeads to preserve compatibility with existing behavior
 
-Yet, I notice that there is iounmap in bochs_hw_fini() function, does 
-double free will happen?
+I don't think we should keep the existing behavior, customers are confused
+and some user space tools like lparstart have difficulties to handled mixed
+SMT levels.
 
-static void bochs_hw_fini(struct drm_device *dev)
-{
-     struct bochs_device *bochs = dev->dev_private;
-     // ...
-     if (bochs->mmio)
-         iounmap(bochs->mmio);
-     // ...
-}
+I'll submit a new series exposing the SMT level and propose a patch for
+ppc64_cpu too.
 
+> 
+>> That's being said, I can't see any benefit of a user space implementation
+>> compared to the option I'm proposing in that patch.
+> 
+> The userspace implementation can implement arbitrily complex policy,
+> that's not something that belongs into the kernel.
+> 
+> Thanks
+> 
+> Michal
 
-I still advise you free it by adding error handling code, free it manually.
-
-Because still there other ioremap() function in the driver.
-
-But you can choose to heard other reviewer's voice, I can only help to 
-review.
-
-> Signed-off-by: Gan Gecen <gangecen@hust.edu.cn>
-> ---
->   drivers/gpu/drm/tiny/bochs.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/tiny/bochs.c b/drivers/gpu/drm/tiny/bochs.c
-> index 024346054c70..0d7e119a732f 100644
-> --- a/drivers/gpu/drm/tiny/bochs.c
-> +++ b/drivers/gpu/drm/tiny/bochs.c
-> @@ -223,7 +223,7 @@ static int bochs_hw_init(struct drm_device *dev)
->   		}
->   		ioaddr = pci_resource_start(pdev, 2);
->   		iosize = pci_resource_len(pdev, 2);
-> -		bochs->mmio = ioremap(ioaddr, iosize);
-> +		bochs->mmio = devm_ioremap(&pdev->dev, ioaddr, iosize);
->   		if (bochs->mmio == NULL) {
->   			DRM_ERROR("Cannot map mmio region\n");
->   			return -ENOMEM;
