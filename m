@@ -2,176 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF1D6D2B8F
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 01:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8086D2B94
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Apr 2023 01:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbjCaXBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 19:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S233075AbjCaXHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 19:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjCaXA7 (ORCPT
+        with ESMTP id S229988AbjCaXHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 19:00:59 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A14F191FF
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 16:00:58 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id n14so6849762plc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 16:00:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680303657;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q2mmMqFiAumzcpbbntPymlIf8Np9wiownjUZMtsJues=;
-        b=Gf+pDUGM0BbEJ6NakQ2q0wy2cvDiJHEgSyfeWbWMUKRQCsK9uE/giv9fduE1LMyq8I
-         9YATutxzd5ejWpOrABBqe87S3QZelq2baM11SXb4u54+iHpdVjLiNyVP9Lgsjni9EgNx
-         FBI7pgBHk1ggfbBWDnlNXtb49wR1fj38ovCENgk1ObS/39rWgf6DJET/ibaEP3wvhdTz
-         mMCx/gUCb70qmzfoVmO/sKO3/3zBLsT/Zglz0Z5WTp70gt7qogjxs6nuhMEy6RPqHuAG
-         +ZF11wPtBaXIkjOBREHplrk9PLS50LGLrnAyfR/UddJPDhUwL98YGqnOdQs+FeMPIP09
-         fvqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680303657;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q2mmMqFiAumzcpbbntPymlIf8Np9wiownjUZMtsJues=;
-        b=ffHZcSCaoy/jMDLOZNMWzSC7i2LitDzYOkyvOqOI7MYSro5etupYtlfVA6hqhHqCIg
-         WrEj2o2C6JhaAKNlAJ2PwjjCnITzAHSLwh/+qgQvVpPqfkdXsTZ6vBsbMxMlL9u/zLef
-         4F8KkF492NQMZS7WKUgxdF5MSow8ZwKrX4zQN2Dlz7tyUw3FDBWYUIsZ8uLfqQ/Ot092
-         pzTjRfId1UfMPNLIfQ1k/0ru9JMyMgKTojC7xwz5bBOSbci75GJYxH/FlE1TSMNMWuQ7
-         uA9NUUigtLUO98FEvb8/v2Z03qGPiZlFeyeYPf9Tx+w+tm6Cri1tDCZHE1JGNaAljDvk
-         AnaA==
-X-Gm-Message-State: AAQBX9fAwXSDzSmm2f2hKPtGkpoZZ55n5mnzXtJRnen+i06kdULIs76D
-        jKwSTydH/5HFTQBwH47WFOsZ0EO0GcI=
-X-Google-Smtp-Source: AKy350bd8XnjczUSt5srF8tRLRsoHz3erZ4xCviClGGawdNEt0UtnGoZcmno2M2f/VtXRuQYJBc6bw==
-X-Received: by 2002:a17:902:e74e:b0:19d:1674:c04d with SMTP id p14-20020a170902e74e00b0019d1674c04dmr32945454plf.61.1680303657395;
-        Fri, 31 Mar 2023 16:00:57 -0700 (PDT)
-Received: from trent-reznor (c-67-169-174-96.hsd1.ca.comcast.net. [67.169.174.96])
-        by smtp.gmail.com with ESMTPSA id m8-20020a170902768800b001a1a9a639c2sm2044288pll.134.2023.03.31.16.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 16:00:56 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 16:00:24 -0700
-From:   Daniel Watson <ozzloy@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8723bs: indent with tab, align with space
-Message-ID: <ZCdmCBIdabBGqm11@trent-reznor>
+        Fri, 31 Mar 2023 19:07:33 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EDB5BB4;
+        Fri, 31 Mar 2023 16:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680304053; x=1711840053;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DnaRmj+QiMWJCcTf2AJsdp5uoJ6bEGi3YKrWISZOyzI=;
+  b=Og74AqYffJVqGW4ToNfwET3v1Jbz7TizZ8CW4sf1JtE1rX5eFKNCuwkN
+   QTg85dGgfFuFviAyYXBp3NdZLIy1Fpv5m2CTD8LuI9vwmv8cjwOXQyxnV
+   ct9A/N7HRkd5ObmvIyt3dABHwb0IdkzUhW5bf1LFOnDmn3EJZH5zZ+ej/
+   e49bW5OwLrZRoCumv1kCWPtZJvnqTMyUi7pSqwZQSOQVJYnqiW2ayP2yt
+   YQhE6PeIKOTL7tUxu1RofbZ1VNVtZK8ricKPSt4b15rooSV5yMAfI7yFA
+   C0VSdq7bDztoTMLtf0dHPT1nRVBdjI4SNywEr7KanMXyaN2L+kYggCmDM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="343245119"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="343245119"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 16:07:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="717888334"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="717888334"
+Received: from srinivas-otcpl-7600.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.106])
+  by orsmga001.jf.intel.com with ESMTP; 31 Mar 2023 16:07:32 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org
+Cc:     "Will Deacon" <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+Subject: [PATCH v3 0/7] Re-enable IDXD kernel workqueue under DMA API
+Date:   Fri, 31 Mar 2023 16:11:30 -0700
+Message-Id: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=AC_FROM_MANY_DOTS,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use tabs to indent code and spaces to align in order to make the code
-consistent and easier to read.
+Hi all,
 
-Signed-off-by: Daniel Watson <ozzloy@gmail.com>
+IDXD kernel work queues were disabled due to the flawed use of kernel VA
+and SVA API.
+Link: https://lore.kernel.org/linux-iommu/20210511194726.GP1002214@nvidia.com/
+
+The solution is to enable it under DMA API where IDXD shared workqueue users
+can use ENQCMDS to submit work on buffers mapped by DMA API.
+
+This patchset adds support for attaching PASID to the device's default
+domain and the ability to reserve global PASIDs from SVA APIs. We can then
+re-enable the kernel work queues and use them under DMA API.
+
+This depends on the IOASID removal series.
+https://lore.kernel.org/all/ZCaUBJvUMsJyD7EW@8bytes.org/
+
+
+Thanks,
+
+Jacob
+
 ---
- drivers/staging/rtl8723bs/include/ieee80211.h | 49 ++++++++++---------
- 1 file changed, 26 insertions(+), 23 deletions(-)
+Changelog:
+v3:
+	- moved global PASID allocation API from SVA to IOMMU (Kevin)
+	- remove #ifdef around global PASID reservation during boot (Baolu)
+	- remove restriction on PASID 0 allocation (Baolu)
+	- fix a bug in sysfs domain change when attaching devices
+	- clear idxd user interrupt enable bit after disabling device( Fenghua)
+v2:
+	- refactored device PASID attach domain ops based on Baolu's early patch
+	- addressed TLB flush gap
+	- explicitly reserve RID_PASID from SVA PASID number space
+	- get dma domain directly, avoid checking domain types
 
-diff --git a/drivers/staging/rtl8723bs/include/ieee80211.h b/drivers/staging/rtl8723bs/include/ieee80211.h
-index 9041d8dc5fb1d..1098b02092003 100644
---- a/drivers/staging/rtl8723bs/include/ieee80211.h
-+++ b/drivers/staging/rtl8723bs/include/ieee80211.h
-@@ -174,7 +174,7 @@ struct ieee_param {
- 			u8 reserved[32];
- 			u8 data[];
- 		} wpa_ie;
--	        struct{
-+		struct{
- 			int command;
- 			int reason_code;
- 		} mlme;
-@@ -271,10 +271,10 @@ struct eapol {
- #define P80211_OUI_LEN 3
- 
- struct ieee80211_snap_hdr {
--        u8    dsap;   /* always 0xAA */
--        u8    ssap;   /* always 0xAA */
--        u8    ctrl;   /* always 0x03 */
--        u8    oui[P80211_OUI_LEN];    /* organizational universal id */
-+	u8    dsap;   /* always 0xAA */
-+	u8    ssap;   /* always 0xAA */
-+	u8    ctrl;   /* always 0x03 */
-+	u8    oui[P80211_OUI_LEN];    /* organizational universal id */
- } __attribute__ ((packed));
- 
- #define SNAP_SIZE sizeof(struct ieee80211_snap_hdr)
-@@ -342,12 +342,13 @@ struct ieee80211_snap_hdr {
- #define IEEE80211_OFDM_RATE_48MB_MASK		(1<<10)
- #define IEEE80211_OFDM_RATE_54MB_MASK		(1<<11)
- 
--#define IEEE80211_CCK_RATES_MASK	        0x0000000F
-+#define IEEE80211_CCK_RATES_MASK		0x0000000F
- #define IEEE80211_CCK_BASIC_RATES_MASK	(IEEE80211_CCK_RATE_1MB_MASK | \
- 	IEEE80211_CCK_RATE_2MB_MASK)
--#define IEEE80211_CCK_DEFAULT_RATES_MASK	(IEEE80211_CCK_BASIC_RATES_MASK | \
--        IEEE80211_CCK_RATE_5MB_MASK | \
--        IEEE80211_CCK_RATE_11MB_MASK)
-+#define IEEE80211_CCK_DEFAULT_RATES_MASK	\
-+	(IEEE80211_CCK_BASIC_RATES_MASK |	\
-+	 IEEE80211_CCK_RATE_5MB_MASK |		\
-+	 IEEE80211_CCK_RATE_11MB_MASK)
- 
- #define IEEE80211_OFDM_RATES_MASK		0x00000FF0
- #define IEEE80211_OFDM_BASIC_RATES_MASK	(IEEE80211_OFDM_RATE_6MB_MASK | \
-@@ -359,8 +360,9 @@ struct ieee80211_snap_hdr {
- 	IEEE80211_OFDM_RATE_36MB_MASK | \
- 	IEEE80211_OFDM_RATE_48MB_MASK | \
- 	IEEE80211_OFDM_RATE_54MB_MASK)
--#define IEEE80211_DEFAULT_RATES_MASK (IEEE80211_OFDM_DEFAULT_RATES_MASK | \
--                                IEEE80211_CCK_DEFAULT_RATES_MASK)
-+#define IEEE80211_DEFAULT_RATES_MASK		\
-+	(IEEE80211_OFDM_DEFAULT_RATES_MASK |	\
-+	 IEEE80211_CCK_DEFAULT_RATES_MASK)
- 
- #define IEEE80211_NUM_OFDM_RATES	    8
- #define IEEE80211_NUM_CCK_RATES	            4
-@@ -509,7 +511,7 @@ Total: 28-2340 bytes
- 
- static inline int is_multicast_mac_addr(const u8 *addr)
- {
--        return ((addr[0] != 0xff) && (0x01 & addr[0]));
-+	return ((addr[0] != 0xff) && (0x01 & addr[0]));
- }
- 
- static inline int is_broadcast_mac_addr(const u8 *addr)
-@@ -612,17 +614,18 @@ enum {
-  * @RTW_IEEE80211_CHAN_NO_HT40MINUS: extension channel below this channel
-  *      is not permitted.
-  */
--  enum rtw_ieee80211_channel_flags {
--          RTW_IEEE80211_CHAN_DISABLED         = 1<<0,
--          RTW_IEEE80211_CHAN_PASSIVE_SCAN     = 1<<1,
--          RTW_IEEE80211_CHAN_NO_IBSS          = 1<<2,
--          RTW_IEEE80211_CHAN_RADAR            = 1<<3,
--          RTW_IEEE80211_CHAN_NO_HT40PLUS      = 1<<4,
--          RTW_IEEE80211_CHAN_NO_HT40MINUS     = 1<<5,
--  };
--
--  #define RTW_IEEE80211_CHAN_NO_HT40 \
--          (RTW_IEEE80211_CHAN_NO_HT40PLUS | RTW_IEEE80211_CHAN_NO_HT40MINUS)
-+enum rtw_ieee80211_channel_flags {
-+	RTW_IEEE80211_CHAN_DISABLED         = 1<<0,
-+	RTW_IEEE80211_CHAN_PASSIVE_SCAN     = 1<<1,
-+	RTW_IEEE80211_CHAN_NO_IBSS          = 1<<2,
-+	RTW_IEEE80211_CHAN_RADAR            = 1<<3,
-+	RTW_IEEE80211_CHAN_NO_HT40PLUS      = 1<<4,
-+	RTW_IEEE80211_CHAN_NO_HT40MINUS     = 1<<5,
-+};
-+
-+#define RTW_IEEE80211_CHAN_NO_HT40	  \
-+	(RTW_IEEE80211_CHAN_NO_HT40PLUS | \
-+	 RTW_IEEE80211_CHAN_NO_HT40MINUS)
- 
- /* Represent channel details, subset of ieee80211_channel */
- struct rtw_ieee80211_channel {
+
+
+Jacob Pan (7):
+  iommu/vt-d: Use non-privileged mode for all PASIDs
+  iommu/vt-d: Remove PASID supervisor request support
+  iommu/sva: Support allocation of global PASIDs outside SVA
+  iommu/vt-d: Reserve RID_PASID from global PASID space
+  iommu/vt-d: Make device pasid attachment explicit
+  iommu/vt-d: Implement set_dev_pasid domain op
+  dmaengine/idxd: Re-enable kernel workqueue under DMA API
+
+ drivers/dma/idxd/device.c   |  30 +-----
+ drivers/dma/idxd/init.c     |  56 ++++++++++-
+ drivers/dma/idxd/sysfs.c    |   7 --
+ drivers/iommu/intel/iommu.c | 180 +++++++++++++++++++++++++++++-------
+ drivers/iommu/intel/iommu.h |   8 ++
+ drivers/iommu/intel/pasid.c |  43 ---------
+ drivers/iommu/intel/pasid.h |   7 --
+ drivers/iommu/iommu-sva.c   |  10 +-
+ drivers/iommu/iommu.c       |  33 +++++++
+ include/linux/iommu.h       |  10 ++
+ 10 files changed, 257 insertions(+), 127 deletions(-)
+
 -- 
-2.34.1
+2.25.1
 
