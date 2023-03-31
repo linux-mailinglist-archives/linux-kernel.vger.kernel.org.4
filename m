@@ -2,119 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BD56D20E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9416D20EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232131AbjCaMt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
+        id S232663AbjCaMvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbjCaMtV (ORCPT
+        with ESMTP id S232404AbjCaMup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:49:21 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332D421A84;
-        Fri, 31 Mar 2023 05:48:57 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 9453058267B;
-        Fri, 31 Mar 2023 08:48:56 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 31 Mar 2023 08:48:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1680266936; x=1680274136; bh=1wl0PaNqVV1tf/UjJBVG7Hr1Nf6zuThoMUu
-        qGEpn1MA=; b=BLukJoG1DbMb6R2AbqA/+7JjbZ7Oc/VY/GccCFivK2SLSyJIUDy
-        eDvuj6KlJ9yQrHhbcVFZFc/7GfKYkkIJnc004z0WtfxhzT8F0Dryc/fj4uAQEHP5
-        0uQBdRp2Y9CzikgGULwwka03ZtEYN+vA0NR1UYoJiMuMTtA+TbmqSw1RKb6bHBwu
-        kgWKCmrmDScSe7b7EAcsyIEqiEeMn1uQFjhnq/BazbUn1vodHcRar+Z8amV+f2ZZ
-        4SEu3kvSxhj8jR9TWpWv6H7rDT3W+eYIj1h32pDouk8U16vHi7UxgZYWiVlTR8pm
-        cvHgSREjUd2DJv11jgWTdKV0doKNHN4KAQQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680266936; x=1680274136; bh=1wl0PaNqVV1tf/UjJBVG7Hr1Nf6zuThoMUu
-        qGEpn1MA=; b=QTw4z9BqGCp34jRTQ9lJ0Te2z7DjXCcjR1cRFuymA6teq1Ue47T
-        RfmowyRx6v1MwMbGt3ApYDk7qwSROS25JV78fgnvrSJIUz/j3GedCAWFmvE8DLl3
-        HoMeyCJb5WbZ+f8j44/HhL12AZyMqN3xRjT/IDdrxGjXOHILLMDS4nNm1QNzKgnt
-        FLCEk9P9FtfqKPKXWuMbSuG7oHcgCKFsVXQhQDt+sRTlprJiPAhFBhU6avHf2Ete
-        uaofk0N4pXe1j7VHba5yYeMGTXuCjt30lCiXSGhI7m4EIcITbbYAAY9vnjAdi0d+
-        SAs1yBNQ6aJg2m3zpufn0UV2fnpNcc/oKsQ==
-X-ME-Sender: <xms:ttYmZMk-K2WF_uQihYdEaE-WxRbKWanSV4_1kq4F_OoJAiQRztqr8Q>
-    <xme:ttYmZL1tFGUNnFuZ3XoKvNtYojk3J4bwbaadBIOeVDI0Ukgz-8ewFG032ufxZ-SbD
-    1b0xoms1quNu7guG_w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiuddgheefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:ttYmZKrf5muOZ7qbqVpPjnkqBNMSMOU4gybMeyJ3rUMZTBnAWuP7Zg>
-    <xmx:ttYmZIlj2z9EhXlgVWbMqhx-qYV5mMM2GAMIKkxak63PHlTsdJDm_Q>
-    <xmx:ttYmZK07ZhhFcRRDILM_35s-tNIWEGc_cMzAk1ijnOb4EPEMJyMkfQ>
-    <xmx:uNYmZAU6_XmPJuSgqvZ3Fo60bA3Va1J04nlnSMvYEI__B3v7Fjseqw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B8952B6008D; Fri, 31 Mar 2023 08:48:54 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
-Mime-Version: 1.0
-Message-Id: <f3637818-7528-4564-a208-6e587efd7128@app.fastmail.com>
-In-Reply-To: <CACRpkdZdnTX4-jnnXZveXxwOg76yH4Zyoa-ZSGeC7KzOnn+6Lg@mail.gmail.com>
-References: <20230327121317.4081816-1-arnd@kernel.org>
- <20230327121317.4081816-18-arnd@kernel.org>
- <CACRpkdZdnTX4-jnnXZveXxwOg76yH4Zyoa-ZSGeC7KzOnn+6Lg@mail.gmail.com>
-Date:   Fri, 31 Mar 2023 14:48:34 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, "Vineet Gupta" <vgupta@kernel.org>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, guoren <guoren@kernel.org>,
-        "Brian Cain" <bcain@quicinc.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Michal Simek" <monstr@monstr.eu>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Dinh Nguyen" <dinguyen@kernel.org>,
-        "Stafford Horne" <shorne@gmail.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Rich Felker" <dalias@libc.org>,
-        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Max Filippov" <jcmvbkbc@gmail.com>,
-        "Christoph Hellwig" <hch@lst.de>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org,
-        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH 17/21] ARM: dma-mapping: use arch_sync_dma_for_{device,cpu}()
- internally
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        Fri, 31 Mar 2023 08:50:45 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F9620607;
+        Fri, 31 Mar 2023 05:50:01 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so23240394pjz.1;
+        Fri, 31 Mar 2023 05:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680267000; x=1682859000;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vbs1HhSjAg0eM+0oNwNTSGrKrWraD1cwEIxOCu9j9DU=;
+        b=fKfpK2fMYdTMJX3uz+qDJmanxioYpuRW97pVn6oqtdjYK8837YfCKIFN2Kd7OS/IQ+
+         BIV2Vt6URNwXi/0aFStdaGsLB0AH5b44EgDz1gn/dtGOvRnI44iaEY3fsCecNBiLqw/m
+         zLgkUNvF9lR3JlLkMU+plqz0XI4BizdeUtJqYAH05INRvoETW/CmU2K0BfhFNbd9IQUo
+         fbCC2XLAp6kRiphM3mhxmv3GQtGjaC2bUDS0FK9SXtE0jz6qxqe5VKIlOYU/ACQbmBif
+         Uhme3YNJNo80zCK2g8XMz0nJIgZ63z7++1KEjuT85BhtLtZ7VpLx0egV6+y3hLHKuECX
+         aM/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680267000; x=1682859000;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vbs1HhSjAg0eM+0oNwNTSGrKrWraD1cwEIxOCu9j9DU=;
+        b=LoJnY5iSczm9JAbnleJ7LQjbzFu+C40yO2v/X1FQBxBqgJVKldQFXpXwziRGFY4Wvd
+         omBnlLde8KSEP33wBPPohEA4kZYnMnJRe1QxLjcrjm4dXnND76k3XCm9h1gi5/PHN1hK
+         dR4+JV+jpo3gpkeYO0MeW/jL9NNSnf62xk6T30KX5kDgESpcwEEVHY02H5CBFOG/t0FR
+         +nVxCvva5mWMen2hcCYWe9Eh2xCj7aGqPZ9t66N6Q66qs+8BAdRCajVSjDU8vKL9Gr7I
+         y7uW21P0fe3t84sj0cDIgrIF+VlaJgJkCZ4g3xk1XFa/bkUgWG+MKzG84OYDYF8Mdtlh
+         49GA==
+X-Gm-Message-State: AAQBX9fFTp40Eoyf6dTIuUKUX2BMG0Db/D2tg9KZ/oV1/BlbHC3E4Gd/
+        qhV8p0Ro5l5sWBIYeeTAQL9hIGktYp0=
+X-Google-Smtp-Source: AKy350aKukhvZw1r5O7mUBtl6YSvHe/5pVxM3Cv37qiG4uGNZL1e4z0q0cEyP12ACxaUj7uCV7QdBQ==
+X-Received: by 2002:a17:90b:4acf:b0:236:99c4:6096 with SMTP id mh15-20020a17090b4acf00b0023699c46096mr29055250pjb.35.1680267000269;
+        Fri, 31 Mar 2023 05:50:00 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:e51f:9935:aaf2:6b7? ([2600:8802:b00:4a48:e51f:9935:aaf2:6b7])
+        by smtp.gmail.com with ESMTPSA id v2-20020a17090a0e0200b00240aff612f0sm1437578pje.5.2023.03.31.05.49.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 05:49:59 -0700 (PDT)
+Message-ID: <17c85ba2-10dd-1507-5b90-0233651fc57b@gmail.com>
+Date:   Fri, 31 Mar 2023 05:49:57 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH net v2] net: dsa: mv88e6xxx: Reset mv88e6393x force WD
+ event bit
+Content-Language: en-US
+To:     Gustav Ekelund <gustav.ekelund@axis.com>, marek.behun@nic.cz,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     kernel@axis.com, Gustav Ekelund <gustaek@axis.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230331084014.1144597-1-gustav.ekelund@axis.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230331084014.1144597-1-gustav.ekelund@axis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,39 +82,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023, at 11:10, Linus Walleij wrote:
-> On Mon, Mar 27, 2023 at 2:16=E2=80=AFPM Arnd Bergmann <arnd@kernel.org=
-> wrote:
->
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> The arm specific iommu code in dma-mapping.c uses the page+offset bas=
-ed
->> __dma_page_cpu_to_dev()/__dma_page_dev_to_cpu() helpers in place of t=
-he
->> phys_addr_t based arch_sync_dma_for_device()/arch_sync_dma_for_cpu()
->> wrappers around the.
->
-> Broken sentence?
 
-I've changed s/the/them/ now, at least I think that's what I meant to
-write in the first place.
 
->> In order to be able to move the latter part set of functions into
->> common code, change the iommu implementation to use them directly
->> and remove the internal ones as a separate interface.
->>
->> As page+offset and phys_address are equivalent, but are used in
->> different parts of the code here, this allows removing some of
->> the conversion but adds them elsewhere.
->>
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Looks good to me, took me some time to verify and understand
-> the open-coded version of PFN_UP() and this refactoring alone
-> makes the patch highly valuable.
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On 3/31/2023 1:40 AM, Gustav Ekelund wrote:
+> From: Gustav Ekelund <gustaek@axis.com>
+> 
+> The force watchdog event bit is not cleared during SW reset in the
+> mv88e6393x switch. This is a different behavior compared to mv886390 which
+> clears the force WD event bit as advertised. This causes a force WD event
+> to be handled over and over again as the SW reset following the event never
+> clears the force WD event bit.
+> 
+> Explicitly clear the watchdog event register to 0 in irq_action when
+> handling an event to prevent the switch from sending continuous interrupts.
+> Marvell aren't aware of any other stuck bits apart from the force WD
+> bit.
+> 
+> Signed-off-by: Gustav Ekelund <gustaek@axis.com>
 
-Thanks!
+Would that deserve:
 
-    ARnd
+Fixes: de776d0d316f ("net: dsa: mv88e6xxx: add support for mv88e6393x 
+family")
+
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
