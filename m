@@ -2,88 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361406D15ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 05:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4696D15F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 05:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjCaDUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 23:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
+        id S229664AbjCaDUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 23:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCaDUL (ORCPT
+        with ESMTP id S229504AbjCaDUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 23:20:11 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860CC12CE6;
-        Thu, 30 Mar 2023 20:20:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680232810; x=1711768810;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=ZADYbqfNW8xuM7gMaCx6gIrssaqHTZAewavO5POSwPk=;
-  b=P7e6DgeWuLQzfVZQr7T3Zf21eDGx5wkSma7q9tlEKYCyetXCB9fiREg/
-   FBt0gMIL0kZxJ4xvdvY8S4/CV2xF9VqIjwyUC0IIclTgEBAyo0Q5cT5jj
-   iI7+jM83hJUdCniTm0oZHCtLNxrbfziS3Hjz39gOmNwIe4N28RI5IJ/8s
-   pLJQq0gfGwsjRSvscIfxzh6CTJYkpopdL1LHch4EptpAGTUYRK0mFmHkg
-   +8S+gzBETJIvxcAHOghCIxpZjsLQZ1aoMJUzgRMgjcxTYCUqWUpwqi5/1
-   +eULURATzyXo+8vQE1062Frw4yfDPfdqMPOfA/z78ljQwQxKvyySXA2XT
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="342992684"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="342992684"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 20:20:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="684938166"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="684938166"
-Received: from chuaweiz-mobl.amr.corp.intel.com (HELO [10.209.109.216]) ([10.209.109.216])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 20:20:07 -0700
-Message-ID: <3af2945e-9a0e-c23a-ff06-d070692f5202@linux.intel.com>
-Date:   Thu, 30 Mar 2023 22:12:42 -0500
+        Thu, 30 Mar 2023 23:20:39 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2C312CF9;
+        Thu, 30 Mar 2023 20:20:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pnlss3bpcz4x4r;
+        Fri, 31 Mar 2023 14:20:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680232835;
+        bh=c+UpRqtLtJjH1YHoCACFoAIHY5iVBRszZsfkpgLUE+I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=M7fcPnB3dE2KM90oKkIukvz9N7sAlomE1Au4/nGefjjXFuWnioz1itXKx3+uAZ00w
+         ae+y1w91A41yYmm+CmNbtmIh3XPlFxlu1GMwHkdb1jZS5ywFlo8OQnsMUSJPRHcSda
+         YrE+fIgo2rPRLwddGSjB5aBxKwLPWiCxVJnc016H0c7D2UMFbITvUfk6IdrUEeUsgA
+         IBen9RDZSTVqYOO4EPOCOh3278HCNqSg3xfIGXH05P3nNGX+/fN1D2gBX5sw2UPHmi
+         pOW+Kryuzb7+Ydxg6qWii9Rh8PLNQOi3MW7xz8Pob81P8JeJLK0m6tk8KQCWOpoQEQ
+         mDz0ma5dSTSaQ==
+Date:   Fri, 31 Mar 2023 14:20:16 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Dave Hansen <dave.hansen@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH RFC 0/2] Begin reorganizing the arch documentation
+Message-ID: <20230331142016.0a6f8f6b@canb.auug.org.au>
+In-Reply-To: <87a5zuf4w7.fsf@meer.lwn.net>
+References: <20230315211523.108836-1-corbet@lwn.net>
+        <fe5d1e0e-0725-45eb-8b96-edcd12ae4a8b@intel.com>
+        <87cz4zb8xu.fsf@meer.lwn.net>
+        <498938d3-60a4-6219-a02c-a03e490103c3@intel.com>
+        <87v8ir9rz6.fsf@meer.lwn.net>
+        <87a5zuf4w7.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH V4 1/2] ASoC: max98363: add soundwire amplifier driver
-Content-Language: en-US
-To:     =?UTF-8?B?4oCcUnlhbg==?= <ryan.lee.analog@gmail.com>,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, krzysztof.kozlowski@linaro.org,
-        rf@opensource.cirrus.com, ckeepax@opensource.cirrus.com,
-        herve.codina@bootlin.com, wangweidong.a@awinic.com,
-        james.schulman@cirrus.com,
-        ajye_huang@compal.corp-partner.google.com, shumingf@realtek.com,
-        povik+lin@cutebit.org, flatmax@flatmax.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        ryans.lee@analog.com
-References: <20230330234319.6841-1-ryan.lee.analog@gmail.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230330234319.6841-1-ryan.lee.analog@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/K+Hq9txQzz_pMH.gpuqUwza";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/K+Hq9txQzz_pMH.gpuqUwza
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi Jon,
 
-On 3/30/23 18:43, “Ryan wrote:
-> From: Ryan Lee <ryans.lee@analog.com>
-> 
-> Added Analog Devices MAX98363 SoundWire Amplifier Driver.
-> The MAX98363 is a SoundWire peripheral device that supports
-> MIPI SoundWire v1.2-compatible digital interface for audio and
-> control data.
-> 
-> Signed-off-by: Ryan Lee <ryans.lee@analog.com>
+On Thu, 30 Mar 2023 12:52:40 -0600 Jonathan Corbet <corbet@lwn.net> wrote:
+>
+> Jonathan Corbet <corbet@lwn.net> writes:
+>=20
+> > Now that I look...the only thing in linux-next currently that conflicts
+> > is the shadow-stack series; if that continues, it might not be necessary
+> > to do anything special. =20
+>=20
+> There's an FPU patch now too.  Git seems to handle the conflicts *almost*
+> seamlessly, though.  So, FYI, I think I'll go ahead and drop this change
+> into docs-next, which will probably get us a cheery note from Stephen in
+> the near future.
+>=20
+> (Stephen: the change is simply:
+>=20
+>   mv Documentation/x86 Documentation/arch/x86
+>=20
+> the only fix I had to do in my test merge was to add the new
+> shadow-stack document in the new directory).
 
-LGTM
+Thanks for the heads up.  Git moved the file and I just had to "git add"
+it in the new place.
+--=20
+Cheers,
+Stephen Rothwell
 
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+--Sig_/K+Hq9txQzz_pMH.gpuqUwza
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQmUXAACgkQAVBC80lX
+0Gz5Xwf8CNPx8jJDlR5Ne71z21R72QmEAuRJ5EZPlilGwneN1s7oQsTZnQoNbY84
+uSq3hvpW6SAE6/hZcS1MVwM+jLNUYLevtWXjPnb44xR9uMVF+S/VxcnMZLrI/T8Y
+63/TDd0loDfQn903uJGYKA+hYlDwIjMj12xwiC3RKxXASyyLj0iwQMYlFANuyMgp
+fNWWhwnDA8xDJKwmQ1dPJpIvfL3+hWSvmLgn6wtIeOxMXr4z14jdWqPlYiw1BjF0
+NrSfk0o9/LzO+drw8hx9mMmhFoovIoKGagIOBAU/TnDBKlI4+/5w+DliJBMS8NCH
+jPUYS9ZG5iLn+h6oDDUfi2eWQDvHMQ==
+=zAyy
+-----END PGP SIGNATURE-----
+
+--Sig_/K+Hq9txQzz_pMH.gpuqUwza--
