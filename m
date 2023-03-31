@@ -2,157 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624EA6D2924
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3526D2935
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbjCaUJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
+        id S232814AbjCaUJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbjCaUJa (ORCPT
+        with ESMTP id S232793AbjCaUJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:09:30 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA6821A8E;
-        Fri, 31 Mar 2023 13:09:24 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id w13so6173891oik.2;
-        Fri, 31 Mar 2023 13:09:24 -0700 (PDT)
+        Fri, 31 Mar 2023 16:09:44 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7945E21A85
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:09:41 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id br6so30349900lfb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680293379;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xw1N8c4NwTk3qWvVTPNQOhGdEVWqHVyp5Ieb2s7Nvq4=;
+        b=w/7NOVgTcl9X9jBc2UOGQaQRJ9osCEI9IGgP/jcTr0DoRie/kKsR/Ck8H5W8on02+3
+         YalQVrSdXbWyReX8wqMByleypEO9uuCFBpj/75cJO8GW7f4Ih8aqzeTyyE/8ZNl6oQRj
+         cB8WovAhdLXFtITD7oZyHq+goJWAT6vFlXtqmtEHMUXLtsGNk5IIUL8u0VX66Rf2vMrE
+         C6lWRAfBvszRuila67dLFSKHnbIc0NCv8ozDcYXQP678STS4oDwoL8zhivdljT4RQGkL
+         nXPDDon0wTDqHumCcjnwRoEGbmYItGrGBd8UuEY4lKmihzQ3NEmjuhiEc0Cmd+3ThmJ/
+         AzZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680293364;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uPkpKFxk7BcOpgUzJha9+qhAMS2yt0UsXgxPanJmeeY=;
-        b=t3/ZYXkRBRznCSyV2h7lSIl9/GFG0cskiooUOZlzkDUalq7T6tDwYov1wwIDnvaSbo
-         zqHDrVllyBVLj2+IatjCnzz61aEsGGNIwqC3lcwbuq0OIXdqaGt0Fehw3uNiVix619Co
-         pwL99kFu+VdXa55ML+pKG2/yl72wk339YuXM5LBqhYyo+dXdVqrNBsRSIbaMnRT1AJvl
-         oWVYMwyMsjAODn8G1YLWSr2IvHiN/TV3WWYzcXtNe6bJLdOoBCHU9KK7Q2VoAZkhA/ch
-         cM4UGAMX2EF0EkCIk74XnFcoNG1CNDrH9gJYq/rHrqsEz/eXJiOUQD/BR173h1TNzhmV
-         7Sqg==
-X-Gm-Message-State: AAQBX9eLd92E7Dwtm8+G11mhX48CW2aJIcN1q+AQxhv8K3dDy42UdLTP
-        UNtToaeOy6mtLKsINeCvpA==
-X-Google-Smtp-Source: AKy350ZNGbtu+wZO9GEFh09+Q8jTGjD4N+L1g95Cjk+YUOMacEt1LSoNV3wAfsJboJEXfnqNLSWQmw==
-X-Received: by 2002:a05:6808:208a:b0:389:8075:4c0b with SMTP id s10-20020a056808208a00b0038980754c0bmr1936699oiw.1.1680293363988;
-        Fri, 31 Mar 2023 13:09:23 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c5-20020a4aacc5000000b00524f381f681sm1203954oon.27.2023.03.31.13.09.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 13:09:23 -0700 (PDT)
-Received: (nullmailer pid 2156389 invoked by uid 1000);
-        Fri, 31 Mar 2023 20:09:22 -0000
-Date:   Fri, 31 Mar 2023 15:09:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [net-next PATCH v6 10/16] dt-bindings: leds: Document support
- for generic ethernet LEDs
-Message-ID: <20230331200922.GA2123749-robh@kernel.org>
-References: <20230327141031.11904-1-ansuelsmth@gmail.com>
- <20230327141031.11904-11-ansuelsmth@gmail.com>
+        d=1e100.net; s=20210112; t=1680293379;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xw1N8c4NwTk3qWvVTPNQOhGdEVWqHVyp5Ieb2s7Nvq4=;
+        b=ckoco+9Ul0JQA0k2R2PLl6nTgExIJQoxFlLxUVtjcXHbgDAQHimek0VPmNhpFt18ZN
+         fBuo3t5Yj+tIx4XuK7Tl1NEdBGO+Ym6ICC/n5K5A9fYeJukvZGDXuNqtBeox40m09q7u
+         3YAAYARC3jGPB9uoSdZKRl8PREFGrtfRYAi+T0XBxba9im3Ailqd+nR6aPqzVItCecYt
+         2BL1BvbbI+pI+6rHuZEB2yQD69ZECQnF5DupnPk25/X21135Qbs/PN3OurEOBAtQ/9um
+         C48hjo4ERfvj9I8Zr0qYXM73OQlPeSyyCVplLcbpz2LFhkhH09OBUqUyOLm8y1JxEv9J
+         uH3A==
+X-Gm-Message-State: AAQBX9f3wAAfxToWstWyU202y15yiU2aqL2lOOYpcWbFtjzFyiFR3li4
+        0ylw1mZUxrM4O/rJNkR1CxLFZQ==
+X-Google-Smtp-Source: AKy350bylfF6KhOVFpj5VtEzS0A2hRudKCGcRrM6eTpMIQbSHzLZ0ojtju+5tmOdPRFro4hPdY7bYQ==
+X-Received: by 2002:a19:ac09:0:b0:4dd:a025:d8e with SMTP id g9-20020a19ac09000000b004dda0250d8emr7668551lfc.47.1680293379631;
+        Fri, 31 Mar 2023 13:09:39 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id c25-20020ac244b9000000b004e9c983a007sm502364lfm.289.2023.03.31.13.09.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 13:09:39 -0700 (PDT)
+Message-ID: <91874e63-553f-ced5-ce32-309ac2ebf6e5@linaro.org>
+Date:   Fri, 31 Mar 2023 22:09:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327141031.11904-11-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 1/9] media: dt-bindings: Add bindings for JH7110 Camera
+ Subsystem
+Content-Language: en-US
+To:     Jack Zhu <jack.zhu@starfivetech.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
+References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
+ <20230331121826.96973-2-jack.zhu@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230331121826.96973-2-jack.zhu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 04:10:25PM +0200, Christian Marangi wrote:
-> Add documentation for support of generic ethernet LEDs.
-> These LEDs are ethernet port LED and are controllable by the ethernet
-> controller or the ethernet PHY.
+On 31/03/2023 14:18, Jack Zhu wrote:
+> Add the bindings documentation for Starfive JH7110 Camera Subsystem
+> which is used for handing image sensor data.
 > 
-> A port may expose multiple LEDs and reg is used to provide an index to
-> differentiate them.
-> Ethernet port LEDs follow generic LED implementation.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 > ---
->  .../bindings/leds/leds-ethernet.yaml          | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/leds-ethernet.yaml
+>  .../bindings/media/starfive,jh7110-camss.yaml | 159 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 +
+>  2 files changed, 166 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/leds/leds-ethernet.yaml b/Documentation/devicetree/bindings/leds/leds-ethernet.yaml
+> diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
 > new file mode 100644
-> index 000000000000..0a03d65beea0
+> index 000000000000..0235c70e7793
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/leds-ethernet.yaml
-> @@ -0,0 +1,76 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +++ b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> @@ -0,0 +1,159 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/leds/leds-ethernet.yaml#
+> +$id: http://devicetree.org/schemas/media/starfive,jh7110-camss.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Common properties for the ethernet port LED.
+> +title: Starfive SoC CAMSS ISP
 > +
 > +maintainers:
-> +  - Christian Marangi <ansuelsmth@gmail.com>
+> +  - Jack Zhu <jack.zhu@starfivetech.com>
+> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
 > +
 > +description:
-> +  Bindings for the LEDs present in ethernet port and controllable by
-> +  the ethernet controller or the ethernet PHY regs.
-> +
-> +  These LEDs provide the same feature of a normal LED and follow
-> +  the same LED definitions.
-> +
-> +  An ethernet port may expose multiple LEDs, reg binding is used to
-> +  differentiate them.
+> +  The Starfive CAMSS ISP is a Camera interface for Starfive JH7110 SoC. It
+> +  consists of a VIN controller (Video In Controller, a top-level control until)
+> +  and an ISP.
 > +
 > +properties:
-> +  '#address-cells':
-> +    const: 1
+> +  compatible:
+> +    const: starfive,jh7110-camss
 > +
-> +  '#size-cells':
-> +    const: 0
+> +  reg:
+> +    maxItems: 2
 > +
-> +patternProperties:
-> +  '^led@[a-f0-9]+$':
-> +    $ref: /schemas/leds/common.yaml#
+> +  reg-names:
+> +    items:
+> +      - const: syscon
+> +      - const: isp
+> +
+> +  clocks:
+> +    maxItems: 7
+> +
+> +  clock-names:
+> +    items:
+> +      - const: apb_func
+> +      - const: wrapper_clk_c
+> +      - const: dvp_inv
+> +      - const: axiwr
+> +      - const: mipi_rx0_pxl
+> +      - const: ispcore_2x
+> +      - const: isp_axi
+> +
+> +  resets:
+> +    maxItems: 6
+> +
+> +  reset-names:
+> +    items:
+> +      - const: wrapper_p
+> +      - const: wrapper_c
+> +      - const: axird
+> +      - const: axiwr
+> +      - const: isp_top_n
+> +      - const: isp_top_axi
+> +
+> +  power-domains:
+> +    items:
+> +      - description: JH7110 ISP Power Domain Switch Controller.
+> +
+> +  interrupts:
+> +    maxItems: 4
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
 > +
 > +    properties:
-> +      reg:
-> +        maxItems: 1
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        unevaluatedProperties: false
 > +        description:
-> +          This define the LED index in the PHY or the MAC. It's really
-> +          driver dependent and required for ports that define multiple
-> +          LED for the same port.
+> +          Input port for receiving DVP data.
 > +
-> +    required:
-> +      - reg
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+
+I don't think we use video-interfaces with port. Are you sure this works
+fine? Please extend the example with appropriate properties to check...
+
+> +            unevaluatedProperties: false
 > +
-> +    unevaluatedProperties: false
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        unevaluatedProperties: false
+> +        description:
+> +          Input port for receiving CSI data.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
 
-This does nothing to help the issues I raised. If the 'led' nodes have 
-custom properties, then you need a schema for the 'led' nodes and just 
-the 'led' nodes. Not a schema for the 'leds' container node.
+Same concerns here.
 
-If your not going to allow extending, then this can all be 1 file like 
-you had (with unevaluatedProperties added of course).
 
-Rob
+Best regards,
+Krzysztof
+
