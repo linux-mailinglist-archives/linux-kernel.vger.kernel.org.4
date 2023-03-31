@@ -2,51 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1875C6D1BDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEAC6D1BEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjCaJS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
+        id S231229AbjCaJVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbjCaJSh (ORCPT
+        with ESMTP id S231169AbjCaJVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:18:37 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C709C19BA;
-        Fri, 31 Mar 2023 02:18:34 -0700 (PDT)
-Received: from [127.0.0.1] (144-178-202-138.static.ef-service.nl [144.178.202.138])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 803F5CC392;
-        Fri, 31 Mar 2023 09:18:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1680254310; bh=NNum4T/G6VJ9cgvUWJ3xhPYUW9hku5cPIzHSMA/iY4Q=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References;
-        b=a3c2aCQkcSm3Xg+pI3kfTnoO+47F52Yu/ldPqA7cb2JkstP99JC1nPYN8AkYdOauN
-         KywT+DULi3dnIiboZ2YEld6kdWoOFlud8v85Z5GhBsTC2F1LX4ePD4RM1Lzcm4hL/Q
-         DH8BmQoprwUyYwXIuKrZOfoech1cJmk15kTpl6b4=
-Date:   Fri, 31 Mar 2023 11:18:29 +0200
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-CC:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Fri, 31 Mar 2023 05:21:38 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3673F1738
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:21:35 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id s20so2050337ljp.7
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:21:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680254493;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9VhVRS/5dxN4m8eKpWEVuk9vUu8h4ihVl/JzGPAbAAs=;
+        b=NBlj2KLvnBb9AqobDDp434EAEE6xLO7381npQBQNFH2D9Laoz8+nIqOsxevbUNwD6U
+         +0R3fdqjEAmwu/ypmi0W23HPZpM0qAkDYnpb9FChZ7mPMnuqkAqQTphJDdo2afmoUVcM
+         0VQq9XisOMxX5fP+8sVxaJkq6tRoCk+u3xtbdZH3az/EbAqypXu0WZQmU7IiDvFLzYgw
+         4ysHZYt9RLXQ0M1BauVYZmO0dys44inrkRtaqyM5LQWvm4EkNsWzr17Q6gT3OKfbtmj9
+         xUhwn416tpJMAaGu5McS1CyBg+iyOxJKiNoUakprMlMCvPpu5XnHHZr/zSLZrxkH7cpG
+         BPfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680254493;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9VhVRS/5dxN4m8eKpWEVuk9vUu8h4ihVl/JzGPAbAAs=;
+        b=L00dKJYVy7fiRGt0Xav1a29lcgsv0yVygV1nBiQwh0mpM5eK2uLSImICjZafG9l91p
+         0WKVveCnAEz5KjfU9Q9SAVHhWFF4hgGQI9wSnok9nkcypcaDnBd3X5ecWLu1SD8IU1g2
+         EnLrP21CVaxzVNDqRIkIKPmjcIE67KZprZHQ5okxISmae4WX7MO7Vj7prXLWxJht7k3w
+         d7ZjaaaKXtDStNZ7Nh2qdhrLaAXeVDt3gB9CVw/bs3/spdBCm5k2f31VCI9SHlIcouHk
+         Rx10jF5m1JoJtR33QEnpCQPykFgETEIWzMHv+ZdJPjP3CYs7T0aMiHCTPj194+0a3I6L
+         QrNw==
+X-Gm-Message-State: AAQBX9cZjGd2z5fEZ5K0W1s8h0Q7TUdfVfgoyGv+fM+TK7nhdncMezCn
+        KjhPHVNxiV/Q/cSfC40H6YAaEw==
+X-Google-Smtp-Source: AKy350beIrX1AdmmYYjbkG6DASBQNS658WjIYaSzAaK3SNaJgM+c4xfw6k2T1YljpJRXICRK/a6xWA==
+X-Received: by 2002:a2e:90c8:0:b0:298:a82f:1770 with SMTP id o8-20020a2e90c8000000b00298a82f1770mr8481686ljg.5.1680254493456;
+        Fri, 31 Mar 2023 02:21:33 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a13-20020a2e88cd000000b0029bd1e3f9easm282629ljk.32.2023.03.31.02.21.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 02:21:33 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 2/3] media: dt-bindings: ov2685: convert to dtschema
-User-Agent: K-9 Mail for Android
-In-Reply-To: <ZCacNEbg8cJo0VAm@valkosipuli.retiisi.eu>
-References: <20230129-ov2685-improvements-v4-0-e71985c5c848@z3ntu.xyz> <20230129-ov2685-improvements-v4-2-e71985c5c848@z3ntu.xyz> <ZCacNEbg8cJo0VAm@valkosipuli.retiisi.eu>
-Message-ID: <9AF47749-12CB-40D5-A300-170A35390CFD@z3ntu.xyz>
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [RESEND PATCH 1/3] dt-bindings: remoteproc: qcom,pas: correct memory-region constraints
+Date:   Fri, 31 Mar 2023 11:21:23 +0200
+Message-Id: <20230331092125.44885-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,221 +78,225 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Qualcomm PAS devices expect exactly one memory region, not many.  Also,
+the memory-region is now defined in device specific binding, not in
+qcom,pas-common.yaml, thus also require it in the same place.
 
+Fixes: cee616c68846 ("dt-bindings: remoteproc: qcom: adsp: move memory-region and firmware-name out of pas-common")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Hi Sakari,
+---
 
-Sakari Ailus <sakari=2Eailus@iki=2Efi> schreef op 31 maart 2023 10:39:16 C=
-EST:
->Hi Luca,
->
->Thanks for the patch=2E
->
->On Thu, Mar 23, 2023 at 06:57:50PM +0100, Luca Weiss wrote:
->> Convert the text-based dt-bindings to yaml=2E
->>=20
->> Changes from original txt:
->> * Take wording for various properties from other yaml bindings, this
->>   removes e=2Eg=2E volt amount from schema since it isn't really releva=
-nt
->>   and the datasheet is a better source=2E
->> * Don't make reset-gpios a required property since it can be tied to
->>   DOVDD instead=2E
->>=20
->> Reviewed-by: Krzysztof Kozlowski <krzysztof=2Ekozlowski@linaro=2Eorg>
->> Signed-off-by: Luca Weiss <luca@z3ntu=2Exyz>
->> ---
->>  =2E=2E=2E/devicetree/bindings/media/i2c/ov2685=2Etxt       |  41 -----=
-----
->>  =2E=2E=2E/devicetree/bindings/media/i2c/ovti,ov2685=2Eyaml | 101 +++++=
-++++++++++++++++
->>  MAINTAINERS                                        |   1 +
->>  3 files changed, 102 insertions(+), 41 deletions(-)
->>=20
->> diff --git a/Documentation/devicetree/bindings/media/i2c/ov2685=2Etxt b=
-/Documentation/devicetree/bindings/media/i2c/ov2685=2Etxt
->> deleted file mode 100644
->> index 625c4a8c0d53d=2E=2E0000000000000
->> --- a/Documentation/devicetree/bindings/media/i2c/ov2685=2Etxt
->> +++ /dev/null
->> @@ -1,41 +0,0 @@
->> -* Omnivision OV2685 MIPI CSI-2 sensor
->> -
->> -Required Properties:
->> -- compatible: shall be "ovti,ov2685"
->> -- clocks: reference to the xvclk input clock
->> -- clock-names: shall be "xvclk"
->> -- avdd-supply: Analog voltage supply, 2=2E8 volts
->> -- dovdd-supply: Digital I/O voltage supply, 1=2E8 volts
->> -- dvdd-supply: Digital core voltage supply, 1=2E8 volts
->> -- reset-gpios: Low active reset gpio
->> -
->> -The device node shall contain one 'port' child node with an
->> -'endpoint' subnode for its digital output video port,
->> -in accordance with the video interface bindings defined in
->> -Documentation/devicetree/bindings/media/video-interfaces=2Etxt=2E
->> -The endpoint optional property 'data-lanes' shall be "<1>"=2E
->> -
->> -Example:
->> -&i2c7 {
->> -	ov2685: camera-sensor@3c {
->> -		compatible =3D "ovti,ov2685";
->> -		reg =3D <0x3c>;
->> -		pinctrl-names =3D "default";
->> -		pinctrl-0 =3D <&clk_24m_cam>;
->> -
->> -		clocks =3D <&cru SCLK_TESTCLKOUT1>;
->> -		clock-names =3D "xvclk";
->> -
->> -		avdd-supply =3D <&pp2800_cam>;
->> -		dovdd-supply =3D <&pp1800>;
->> -		dvdd-supply =3D <&pp1800>;
->> -		reset-gpios =3D <&gpio2 3 GPIO_ACTIVE_LOW>;
->> -
->> -		port {
->> -			ucam_out: endpoint {
->> -				remote-endpoint =3D <&mipi_in_ucam>;
->> -				data-lanes =3D <1>;
->> -			};
->> -		};
->> -	};
->> -};
->> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov2685=2E=
-yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov2685=2Eyaml
->> new file mode 100644
->> index 0000000000000=2E=2E2ac0ca8a0413b
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov2685=2Eyaml
->> @@ -0,0 +1,101 @@
->> +# SPDX-License-Identifier: (GPL-2=2E0 OR BSD-2-Clause)
->> +%YAML 1=2E2
->> +---
->> +$id: http://devicetree=2Eorg/schemas/media/i2c/ovti,ov2685=2Eyaml#
->> +$schema: http://devicetree=2Eorg/meta-schemas/core=2Eyaml#
->> +
->> +title: OmniVision OV2685 Image Sensor
->> +
->> +maintainers:
->> +  - Shunqian Zheng <zhengsq@rock-chips=2Ecom>
->> +
->> +properties:
->> +  compatible:
->> +    const: ovti,ov2685
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    items:
->> +      - description: XVCLK clock
->> +
->> +  clock-names:
->> +    items:
->> +      - const: xvclk
->> +
->> +  dvdd-supply:
->> +    description: Digital Domain Power Supply
->> +
->> +  avdd-supply:
->> +    description: Analog Domain Power Supply
->> +
->> +  dovdd-supply:
->> +    description: I/O Domain Power Supply
->> +
->> +  reset-gpios:
->> +    maxItems: 1
->> +    description: Reset Pin GPIO Control (active low)
->> +
->> +  port:
->> +    description: MIPI CSI-2 transmitter port
->> +    $ref: /schemas/graph=2Eyaml#/$defs/port-base
->> +    additionalProperties: false
->> +
->> +    properties:
->> +      endpoint:
->> +        $ref: /schemas/media/video-interfaces=2Eyaml#
->> +        unevaluatedProperties: false
->> +
->> +        properties:
->> +          data-lanes:
->> +            maxItems: 1
->
->This should be 2 --- the sensor supports two lanes (even if the driver
->doesn't)=2E
+Following dtbs_check errors are expected (not related):
+ - qcom,halt-regs:0: [142] is too short
+ - clocks: [[24, 222], [24, 223], [24, 157], [16], [24, 229], [24, 224], [24, 225], [27, 2], [27, 8]] is too short
+ - 'px-supply' is a required property
+---
+ Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml    | 1 +
+ .../devicetree/bindings/remoteproc/qcom,pas-common.yaml        | 1 -
+ .../devicetree/bindings/remoteproc/qcom,qcs404-pas.yaml        | 3 ++-
+ .../devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml        | 3 ++-
+ .../devicetree/bindings/remoteproc/qcom,sc8180x-pas.yaml       | 3 ++-
+ .../devicetree/bindings/remoteproc/qcom,sc8280xp-pas.yaml      | 3 ++-
+ .../devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml         | 3 ++-
+ .../devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml        | 3 ++-
+ .../devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml        | 3 ++-
+ .../devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml        | 3 ++-
+ 10 files changed, 17 insertions(+), 9 deletions(-)
 
-Right, for some reason the product brief mentions that it features "a sing=
-le-lane MIPI interface" but the datasheet I have writes that it has a 2-lan=
-e MIPI serial output, so I guess it does support two lanes?
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+index 643ee787a81f..b571efe6d550 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+@@ -46,6 +46,7 @@ properties:
+ 
+ required:
+   - compatible
++  - memory-region
+ 
+ unevaluatedProperties: false
+ 
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
+index 171ef85de193..63a82e7a8bf8 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
+@@ -82,7 +82,6 @@ required:
+   - clock-names
+   - interrupts
+   - interrupt-names
+-  - memory-region
+   - qcom,smem-states
+   - qcom,smem-state-names
+ 
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-pas.yaml
+index 5efa0e5c0439..eb868a7ff4cd 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-pas.yaml
+@@ -42,7 +42,7 @@ properties:
+   smd-edge: false
+ 
+   memory-region:
+-    minItems: 1
++    maxItems: 1
+     description: Reference to the reserved-memory for the Hexagon core
+ 
+   firmware-name:
+@@ -52,6 +52,7 @@ properties:
+ required:
+   - compatible
+   - reg
++  - memory-region
+ 
+ allOf:
+   - $ref: /schemas/remoteproc/qcom,pas-common.yaml#
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml
+index 5cefd2c58593..689d5d535331 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml
+@@ -51,7 +51,7 @@ properties:
+       - const: mss
+ 
+   memory-region:
+-    minItems: 1
++    maxItems: 1
+     description: Reference to the reserved-memory for the Hexagon core
+ 
+   qcom,qmp:
+@@ -67,6 +67,7 @@ properties:
+ required:
+   - compatible
+   - reg
++  - memory-region
+ 
+ allOf:
+   - $ref: /schemas/remoteproc/qcom,pas-common.yaml#
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc8180x-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc8180x-pas.yaml
+index c1f8dd8d0e4c..4744a37b2b5d 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sc8180x-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc8180x-pas.yaml
+@@ -38,7 +38,7 @@ properties:
+   smd-edge: false
+ 
+   memory-region:
+-    minItems: 1
++    maxItems: 1
+     description: Reference to the reserved-memory for the Hexagon core
+ 
+   firmware-name:
+@@ -48,6 +48,7 @@ properties:
+ required:
+   - compatible
+   - reg
++  - memory-region
+ 
+ allOf:
+   - $ref: /schemas/remoteproc/qcom,pas-common.yaml#
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc8280xp-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc8280xp-pas.yaml
+index f6fbc531dc28..96d53baf6e00 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sc8280xp-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc8280xp-pas.yaml
+@@ -38,7 +38,7 @@ properties:
+   smd-edge: false
+ 
+   memory-region:
+-    minItems: 1
++    maxItems: 1
+     description: Reference to the reserved-memory for the Hexagon core
+ 
+   firmware-name:
+@@ -48,6 +48,7 @@ properties:
+ required:
+   - compatible
+   - reg
++  - memory-region
+ 
+ allOf:
+   - $ref: /schemas/remoteproc/qcom,pas-common.yaml#
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml
+index c66e298462c7..5d463272165f 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml
+@@ -46,7 +46,7 @@ properties:
+       - const: mss
+ 
+   memory-region:
+-    minItems: 1
++    maxItems: 1
+     description: Reference to the reserved-memory for the Hexagon core
+ 
+   qcom,qmp:
+@@ -62,6 +62,7 @@ properties:
+ required:
+   - compatible
+   - reg
++  - memory-region
+ 
+ allOf:
+   - $ref: /schemas/remoteproc/qcom,pas-common.yaml#
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml
+index fee02fa800b5..f7e40fb166da 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml
+@@ -36,7 +36,7 @@ properties:
+     description: Reference to the AOSS side-channel message RAM.
+ 
+   memory-region:
+-    minItems: 1
++    maxItems: 1
+     description: Reference to the reserved-memory for the Hexagon core
+ 
+   smd-edge: false
+@@ -48,6 +48,7 @@ properties:
+ required:
+   - compatible
+   - reg
++  - memory-region
+ 
+ allOf:
+   - $ref: /schemas/remoteproc/qcom,pas-common.yaml#
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml
+index 2c085ac2c3fb..238c6e5e67c5 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml
+@@ -40,7 +40,7 @@ properties:
+     description: Reference to the AOSS side-channel message RAM.
+ 
+   memory-region:
+-    minItems: 1
++    maxItems: 1
+     description: Reference to the reserved-memory for the Hexagon core
+ 
+   smd-edge: false
+@@ -52,6 +52,7 @@ properties:
+ required:
+   - compatible
+   - reg
++  - memory-region
+ 
+ allOf:
+   - $ref: /schemas/remoteproc/qcom,pas-common.yaml#
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml
+index af24f9a3cdf1..4394dfd2d8e6 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml
+@@ -43,7 +43,7 @@ properties:
+   smd-edge: false
+ 
+   memory-region:
+-    minItems: 1
++    maxItems: 1
+     description: Reference to the reserved-memory for the Hexagon core
+ 
+   firmware-name:
+@@ -53,6 +53,7 @@ properties:
+ required:
+   - compatible
+   - reg
++  - memory-region
+ 
+ allOf:
+   - $ref: /schemas/remoteproc/qcom,pas-common.yaml#
+-- 
+2.34.1
 
->
->I can address this when applying if that's ok=2E
-
-That would be nice, thanks!
-
-Regards
-Luca
-
->
->> +
->> +        required:
->> +          - data-lanes
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - clock-names
->> +  - dvdd-supply
->> +  - avdd-supply
->> +  - dovdd-supply
->> +  - port
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/rk3399-cru=2Eh>
->> +    #include <dt-bindings/gpio/gpio=2Eh>
->> +
->> +    i2c {
->> +        #address-cells =3D <1>;
->> +        #size-cells =3D <0>;
->> +
->> +        ov2685: camera-sensor@3c {
->> +            compatible =3D "ovti,ov2685";
->> +            reg =3D <0x3c>;
->> +            pinctrl-names =3D "default";
->> +            pinctrl-0 =3D <&clk_24m_cam>;
->> +
->> +            clocks =3D <&cru SCLK_TESTCLKOUT1>;
->> +            clock-names =3D "xvclk";
->> +
->> +            avdd-supply =3D <&pp2800_cam>;
->> +            dovdd-supply =3D <&pp1800>;
->> +            dvdd-supply =3D <&pp1800>;
->> +            reset-gpios =3D <&gpio2 3 GPIO_ACTIVE_LOW>;
->> +
->> +            port {
->> +                ucam_out: endpoint {
->> +                    remote-endpoint =3D <&mipi_in_ucam>;
->> +                    data-lanes =3D <1>;
->> +                };
->> +            };
->> +        };
->> +    };
->> +
->> +=2E=2E=2E
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 8ea325040f355=2E=2E5904f47756fe1 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -15410,6 +15410,7 @@ M:	Shunqian Zheng <zhengsq@rock-chips=2Ecom>
->>  L:	linux-media@vger=2Ekernel=2Eorg
->>  S:	Maintained
->>  T:	git git://linuxtv=2Eorg/media_tree=2Egit
->> +F:	Documentation/devicetree/bindings/media/i2c/ovti,ov2685=2Eyaml
->>  F:	drivers/media/i2c/ov2685=2Ec
->> =20
->>  OMNIVISION OV2740 SENSOR DRIVER
->>=20
->
