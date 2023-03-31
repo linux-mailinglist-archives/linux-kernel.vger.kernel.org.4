@@ -2,150 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7EA6D1505
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 03:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FB26D150B
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 03:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbjCaBa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 21:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
+        id S229504AbjCaBdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 21:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjCaBa5 (ORCPT
+        with ESMTP id S229485AbjCaBdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 21:30:57 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2040.outbound.protection.outlook.com [40.107.117.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC65BEB76
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 18:30:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SNBQCH17j0dzIqIj1/3ZVXHVfC/ciBk5X1zsusESDwvEjLyg0V+DEzPPpDHil1L03IndH/InuEnljfP7+u4HGNiXWSZVPjUx43OoDKSEkcTUwV0bZSYC8HygHImKe/wb0B7tRPVv4yD6WM/DCP9j72j/coN9cCi3ETT2rOFM/ArNaPuYfL7MZgJEcVUrlUM5VKzogEfFny3dlGKuN3RPMOpi8919d11shKqgdon/gP3OrId2KWWAnyNv61knyhdMP/e8QMet7am1aDZYW6sGfa9ej4QvEv0x5gfAQa8mSTIf83t71+dES+AeCK3OTJ+PusuNJBILK8k8kZM4aIZX8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m5KMu5gYXKcFL8cSlHpUbxdcLr5Db8D2yeDxnKEamNE=;
- b=GmJteXAjbAe1+bJDz4J6+1H8jKYVjeobfJiKTgal3YWykqUrlzLCqLgTCVb+BoWWn51lN/HiALdli32Acj7+mM7FyYGFFJLE+HVEAE57/bhWo6zA/5HQkpk6TvtWdsUv8hzDeMwpVQti2nriqy1PwBaeh6IIaOBfMFS8f7nSDRhZYYAwXpH313nNykK7Hkq9H2wmduP65M0l7D984vFMVSEjPF0TAxtogpiFAT0E1dUMrXEWjsSBnsNnHDPfbTinvuMUMnjbihFtiwnkXU2V5UyCIBdjN1D1QEw2m9hSQH6tvZEZb8I+uEL8itLnQbGqoJx8r4joFKXyrIaA/Dn76w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m5KMu5gYXKcFL8cSlHpUbxdcLr5Db8D2yeDxnKEamNE=;
- b=rMCRIalqgQE2C5a0XWqphb2+lFy3WTVqD7mhbVXXmmYuNywFIzAOUhRmuCWbDrRaU/uwfzA51q0g7KaSvZ8jnl4bwRUPOsWIry0VhSGYmzFHS0pEPfd0ZJAnpTO+xzRgnFOACFCNqg28UZagCgNblLfjb+yUgNLyR+RedoaJ0d0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
- PUZPR02MB6307.apcprd02.prod.outlook.com (2603:1096:301:f9::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.23; Fri, 31 Mar 2023 01:30:52 +0000
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::9a8c:cd43:d810:b523]) by SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::9a8c:cd43:d810:b523%3]) with mapi id 15.20.6254.021; Fri, 31 Mar 2023
- 01:30:51 +0000
-Message-ID: <6d7ce8e0-216c-0d53-6d13-e33be6365a2f@oppo.com>
-Date:   Fri, 31 Mar 2023 09:30:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH] f2fs: expand f2fs_compr_option to allow ioctl setting
- compression level
-To:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     chao@kernel.org, jaegeuk@kernel.org, linux-kernel@vger.kernel.org
-References: <20230330153719.3085164-1-shengyong@oppo.com>
- <20230330161538.13233-1-frank.li@vivo.com>
-Content-Language: en-US
-From:   Sheng Yong <shengyong@oppo.com>
-In-Reply-To: <20230330161538.13233-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR01CA0045.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::19) To SI2PR02MB5148.apcprd02.prod.outlook.com
- (2603:1096:4:153::6)
+        Thu, 30 Mar 2023 21:33:07 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F258EB72
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 18:33:06 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1a19cf1b8ddso193965ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 18:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680226386;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R5BfCm5LJSVqy2GRHOsUJLl8pmivkWNOPbogWlIH6Rc=;
+        b=Y8Ry0QCYqWVPclUT/1jUKuJYd+7uWZaq74QJQqc8efWHkb900SDo2HMu0kIugifNRh
+         LWqUvZJC63jDus2mCRJPyzprpKkvqn3v1ianxtQ9baMza5eYGYq4dfC70/6SAVp43XXl
+         JvOZzMtCkNHHJGAi+uoHRRxCf8KPTvwcNUbRfQrls8oh0DAEl4DYJsQqSmCZIbTCZEcZ
+         H4aBlgXWvXufx5zMklBmShASI3SDFY70ClUDfDDriq4q9NuHQClzg9OjDyPnPqV1JP2R
+         2C2FxeiTHQSXA+IizhpWOOa43pmaj20t3y3lsM9jf/HOdUXXVZBvMTnNEe3vdEJNzjPk
+         TCNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680226386;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R5BfCm5LJSVqy2GRHOsUJLl8pmivkWNOPbogWlIH6Rc=;
+        b=tIVk5YCh0kVWZRPfl6fVpKqlct1dgnUaBTmWxW6zSNRVHLwhsaNzNOQXwJZ9icboZn
+         JC3G6LO97ImeE9YRjicFE5njnC4PNA2lqxWWXUT3QlcIyJ0ehlVD/1vC5Nf0DBJlDiQm
+         QLdCEEL0dE/gHW6Po8h+sa7Wa0XZspcxaIBcgJ6U4bk8mUzgkbrSASTD8eQ9NSICPkvM
+         wrnT5Z6H5eknRTKpD+/qVe5OYormFLlsvRdFsT8VDT6PFM0PSMTqSHKz3THlToFoD55y
+         AMGv7HOp6YO6qD8WLzBjDYjq+vvQb2784NN+RdJ9axBtFmZsyryX+C49L2ApDtrC34W1
+         YQDA==
+X-Gm-Message-State: AAQBX9de3JIWMPxN3vAn+npl4h9um5EaU2gDO2XYpJpnCdzUBxdUo7bT
+        HzxW6XXHOIC6qENruHiyBJ9s7w==
+X-Google-Smtp-Source: AKy350a+u7aNz6PUTYlfRL+pBCp4Ct/UTl/zfYVGu9lLcjxUhgffncrwJ7qIFLd4w1puQdArVVoXtw==
+X-Received: by 2002:a17:902:c20c:b0:1a2:4bc:5420 with SMTP id 12-20020a170902c20c00b001a204bc5420mr133571pll.10.1680226385545;
+        Thu, 30 Mar 2023 18:33:05 -0700 (PDT)
+Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id 13-20020aa7924d000000b006262520ac59sm469774pfp.127.2023.03.30.18.33.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 18:33:04 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 18:33:01 -0700
+From:   Zach O'Keefe <zokeefe@google.com>
+To:     Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, himadrispandya@gmail.com,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        shy828301@gmail.com,
+        syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2] mm: khugepaged: Fix kernel BUG in
+ hpage_collapse_scan_file
+Message-ID: <20230331013301.ecgkjymaf3ws6rfb@google.com>
+References: <20230330155305.423051-1-ivan.orlov0322@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|PUZPR02MB6307:EE_
-X-MS-Office365-Filtering-Correlation-Id: 158f05c8-9a40-4a57-4f4c-08db31879016
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xV8TbqmQlZ6+fLWWE2LCFZSOot52NRUzpurPrnGYHWIOAicImH4xpxjYF2YmZQYjffHrgMjL7w0bImBm40FsbwsZYJKZyQ+CCCQD8aeOGuT7lhP85DAXfNQS9fhvwZ8ysC2BP1Iv7XGCgkeMhBPda60DABOO7UIkmg/so0zLZNy/z34R7P2KANdyQ/JwnkduU/lxruG0wvS1uuOqR+SjJ7mdSkDChPtSa+FCZ3FsKDq7/agSdtWgQUioxaiGXL6Bk435ErSAt/m5o9wAChI5uuDMBn5whUt/WYLm6SjSXe61t3+47gWFh6RTc4OGXOAtoO2Y2gSsWV7fATJTau2ujkSAdPrU5y8g39J104y+00fcml2+jYd5gUsjBE5tnn6Ueg+s3FF7YEqlEJNZA9XrP7G8xMB/h18xE0ATACvIKP4WcGJRkTZmHe8iv/Zuu+HhOMhmtVE4oCj5cwezXSkWxHeiZW2ozF6ALsVeXzh907xe50rFj5mWwxBbSGE1z+iErN7KBaAR34kgjrqsehgFfq4wmMRSeiaHtrviz287XPI5I5+K1e2kZh0y60yVfMlwL+21w3UADhcgkcqU4ZpyY5xtJf+cvgPh2TCGLIgD+UPl8pXLsUuAoJQRJ8SDETRc
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(136003)(366004)(396003)(451199021)(478600001)(83380400001)(316002)(26005)(6512007)(186003)(53546011)(6506007)(2616005)(38100700002)(86362001)(31696002)(6666004)(36756003)(966005)(41300700001)(6486002)(4744005)(2906002)(66946007)(66476007)(66556008)(4326008)(31686004)(8936002)(8676002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cjdoOXZuR3BTOEpFK3FuTVQ3eTFRUG9DLzRHZHVtZjhJbk9oYk12M1JNdnZm?=
- =?utf-8?B?ZHpDV3R0NXd4bGxPMHk1SWZqbU9sQUdkVEllZVllTmpLNkIxOGlXUU1DL1FW?=
- =?utf-8?B?NXA0bkZOWE9UT0N4K3B1aUlMQ0NCZElvd1FjcjRxbWU5S1Nabmt1WmUyMlB6?=
- =?utf-8?B?emo4ME8ySTBSSURJZytmaHFMVVZZbnFlbnFjSXI0M25hRDZ6MG40ZXFKM2M2?=
- =?utf-8?B?UElnOGhSdkNramZra1BvQy84cnF3cVJiaEdFOW5kUGN5cC84NksrUG95L3gx?=
- =?utf-8?B?Q0xuNmpUMWhIazJIL3NpMnN6MGdqK2xwY2pobTFzMFdtZkFVTkYycjYxb0dL?=
- =?utf-8?B?WUpRRGxQbjdtbktjVmpGek05QzVMcXk0REpheE84MDlIc1p4M3kvTndrK3JM?=
- =?utf-8?B?cXNab3I3dXV0ZVpRWnpSNzBtbjcrL0VlU2kxaDMvckpLNU13WTZmTXRZbkFr?=
- =?utf-8?B?S2ZiSmYwZ1gvOEhsUDhvaVV1bnV4VmplODFPMVZTSTNXVTQ1UEtaeFNScG1j?=
- =?utf-8?B?bVZSVXQ2cUlYbkRKVXJXdXJqV25xdGNOS3VmbW1ZK0N6MGpGTjFEUVBJbFpF?=
- =?utf-8?B?RlY3dnI4eWZLWEM1YlhxUXFobXZ4Qi9KMzBLa0JIMGdHV0d1bFBzenVwQXlP?=
- =?utf-8?B?Rk84Rm1WZEE4K0ZZTVVoOXJLVytSL0pYeGs2N1IrYWc2S3NwcmxMSmRhaTVs?=
- =?utf-8?B?dzlWWEtFQkQ3WmlscEtOb0tzdXdJcnNhUHFybDF5Z01UNG4vbmFORjc5Yzhv?=
- =?utf-8?B?S3JMaFlZMXVKR1crRlNSTXZmejFFN1cxWmFYMld3QVBSNU16Y1MyWThXdjZU?=
- =?utf-8?B?R2UrTzNRcjhyc2dUcisyd3h6cmxXdVlBVFg1eFRvbDBUcFlYRGJLbnF2bWUv?=
- =?utf-8?B?RmFBTkhjZ2Rnb3Zwc0ZYbjA3R25YSTV3djQvQ25ZdHVIb0xhdTA1NytpeUc2?=
- =?utf-8?B?bGlMWml3MVhOSS94TUlrbldoS0ptVTZmYkh6c3hmY2dEbUFJODNtemhyVzJs?=
- =?utf-8?B?R3lRTC9vNmRESEZ0K0g0YWE1SzkxNUl2Zk92cFhRT3ZadG5ldUsrOUNVWHdn?=
- =?utf-8?B?Mk9DRXZwZ0xZWlMwNFdQOTZBaHJRK0VKUFY2L01BRDBlMlZYeVBWV3pYeFRP?=
- =?utf-8?B?cElkTVV6SHRYeFpOUVQzVExWQXMrZ3Z3YkFpNWwvWmo4MGVMa2hBWDE3bC9V?=
- =?utf-8?B?VEliRWpiUkRLNGZTdml6L2VMVGRqZnJrTTBMY1duSGNnUTF2aDQyb3VwZEp5?=
- =?utf-8?B?NkVwNU5GRU5OZk1wU1JvYWlrUEgwdmRzMmYxcWJHNGV6bXdKTnpxVDlDQTd0?=
- =?utf-8?B?T21YNEFjMmpWblRpSUZLRk1kSW9DbDBJWEJmbVNCaXBhSnk5SEluNFlxT1cw?=
- =?utf-8?B?dmN2eDVKTnplTlQrTmY0Z0lyN0tiVGZmaGhpNDBodEhRakoxSWRSSS9TekhF?=
- =?utf-8?B?eHhCZXJhVEhGRE1kazkyRy9VV1dTWlRMQmo4cXgzSzRGMW9hQ2l1ZW5WVVVu?=
- =?utf-8?B?eG1rN3lUdlVpMUM0T056MmZqNzNIdzk4Z0JqUmt5cjJ6UHljRXVvRHZmc1pU?=
- =?utf-8?B?UlBUUXpjaHRCd3hyRllDcFRxbjRjMjlvemRCRkY0NVFvRkk2MHF0S3pGbmRk?=
- =?utf-8?B?dExYZkpDWlJHUURzZGJqSXZWaS8rSEpmbkswVTcySG9DNzJvRXBOQXdDOW5w?=
- =?utf-8?B?b05McGM4ZXNTWEhMbmRob3d0SzZQVXNOR3drRWR1YUI4WTVYWU9OVDJHekFD?=
- =?utf-8?B?bnUvbWk2MWptREpGWTJYaUdibUlyTXFyK1UzbmtGTG5OcmZiRkxZb3dNVy9h?=
- =?utf-8?B?SW9hd2tCbllBZGtISEI5T2xTVzZZVVZIV09BSGVsdkRqQ1B6aFg1VmxzaGRa?=
- =?utf-8?B?dWUxL0xoeTYzcSt1SFFHYUp6Zzgra1J4NTFtQkRyZ0hLc3k4RS9wbzZ0Z0ls?=
- =?utf-8?B?NkpTcU16KzRtODlLWkxIMUNiNEdyNTB3bFdxU280VXYrSTBYOGM1SE1nUWNk?=
- =?utf-8?B?YzdoVEZoMXRCSEcyQmdFS3h0RU0zQ1h5SWRZVTRnK3dqTXZrN1Vmb0JnZHFy?=
- =?utf-8?B?dTlGWmtsYStGci9scWpVa0VEdDVkeW9vS0RHNUYycmowaE1YT05LOWtxR1pj?=
- =?utf-8?Q?i9M2HnP/5MzAHH4Nmj9/5tJ+1?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 158f05c8-9a40-4a57-4f4c-08db31879016
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 01:30:51.3828
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XTfNO5qGPbMVPpY3RR9N7zujDa64D8BJ8qWkfubshmE9iSZsrDZJuB9H7SlZeWKziYqJSZwmORmuP5NrcGkA4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR02MB6307
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330155305.423051-1-ivan.orlov0322@gmail.com>
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/3/31 0:15, Yangtao Li wrote:
-> Hi Sheng Yong,
+On Mar 30 19:53, Ivan Orlov wrote:
+> Syzkaller reported the following issue:
 > 
-> Your idea, I also put forward before.
+> kernel BUG at mm/khugepaged.c:1823!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 5097 Comm: syz-executor220 Not tainted 6.2.0-syzkaller-13154-g857f1268a591 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
+> RIP: 0010:collapse_file mm/khugepaged.c:1823 [inline]
+> RIP: 0010:hpage_collapse_scan_file+0x67c8/0x7580 mm/khugepaged.c:2233
+> Code: 00 00 89 de e8 c9 66 a3 ff 31 ff 89 de e8 c0 66 a3 ff 45 84 f6 0f 85 28 0d 00 00 e8 22 64 a3 ff e9 dc f7 ff ff e8 18 64 a3 ff <0f> 0b f3 0f 1e fa e8 0d 64 a3 ff e9 93 f6 ff ff f3 0f 1e fa 4c 89
+> RSP: 0018:ffffc90003dff4e0 EFLAGS: 00010093
+> RAX: ffffffff81e95988 RBX: 00000000000001c1 RCX: ffff8880205b3a80
+> RDX: 0000000000000000 RSI: 00000000000001c0 RDI: 00000000000001c1
+> RBP: ffffc90003dff830 R08: ffffffff81e90e67 R09: fffffbfff1a433c3
+> R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
+> R13: ffffc90003dff6c0 R14: 00000000000001c0 R15: 0000000000000000
+> FS:  00007fdbae5ee700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fdbae6901e0 CR3: 000000007b2dd000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  madvise_collapse+0x721/0xf50 mm/khugepaged.c:2693
+>  madvise_vma_behavior mm/madvise.c:1086 [inline]
+>  madvise_walk_vmas mm/madvise.c:1260 [inline]
+>  do_madvise+0x9e5/0x4680 mm/madvise.c:1439
+>  __do_sys_madvise mm/madvise.c:1452 [inline]
+>  __se_sys_madvise mm/madvise.c:1450 [inline]
+>  __x64_sys_madvise+0xa5/0xb0 mm/madvise.c:1450
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 > 
-> And has been sent to version 2, but Chao and Jaegeuk have no comments yet.
-> Time to talk about the series?
+
+Thanks, Ivan.
+
+In the process of reviewing this, I starting thinking if the !shmem case was
+also susceptible to a similar race, and I *think* it might be. Unfortunately, my
+time has ran out, and I haven't been able to validate ; I'm less familiar with
+the file-side of things.
+
+The underlying problem is race with truncation/hole-punch  under OOM condition.
+The nice do-while loop near the top of collapse_file() attempts to avoid this
+scenario by making sure enough slots are available. However, when we drop xarray
+lock, we open ourselves up to concurrent removal + slot deletion. Those slots
+then need to be allocated again -- which under OOM condition is failable.
+
+The syzbot reproducer picks on shmem, but I think this can occur for file as
+well. If we find a hole, we unlock the xarray and call
+page_cache_sync_readahead(), which if it succeeds, IIUC, will have allocated a
+new slot in our mapping pointing to the new page. We *then* locks the page. Only
+after the page is locked are we protected from concurrent removal (Note: this is
+what provides us protection in many of the xas_store() cases ; we've held the
+slot's contained page-lock since verifying the slot exists, protecting us from
+removal / reallocation races).
+
+Maybe I'm just low on caffeine at the end of the day, and am missing something,
+but if I had more time, I'd be looking into the file-side some more to verify.
+Apologies that hasn't occurred to me until now ; I was looking at one of your
+comments and double-checked why I *thought* we were safe.
+
+Anyways, irrespective of that looming issues, some more notes to follow:
+
+> The 'xas_store' call during page cache scanning can potentially
+> translate 'xas' into the error state (with the reproducer provided
+> by the syzkaller the error code is -ENOMEM). However, there are no
+> further checks after the 'xas_store', and the next call of 'xas_next'
+> at the start of the scanning cycle doesn't increase the xa_index,
+> and the issue occurs.
 > 
-> https://lore.kernel.org/linux-f2fs-devel/20230112133503.16802-1-frank.li@vivo.com/
+> This patch will add the xarray state error checking after the
+> 'xas_store' and the corresponding result error code. It will
+> also add xarray state error checking via WARN_ON_ONCE macros,
+> to be sure that ENOMEM or other possible errors don't occur
+> at the places they shouldn't.
+
+Thanks for the additions here. I think it's worthwhile providing even more
+details about the specifics of the race we are fixing and/or guarding against to
+help ppl understand how that -ENOMEM comes about if the do-while loop has
+"Ensured" we have slots available (additionally, I think that comment can be
+augmented).
+
+> Tested via syzbot.
 > 
-Hi, Yangtao
+> Reported-by: syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
+> Link: https://syzkaller.appspot.com/bug?id=7d6bb3760e026ece7524500fe44fb024a0e959fc
+> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+> ---
+> V1 -> V2: Add WARN_ON_ONCE error checking and comments
+> 
+>  mm/khugepaged.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 92e6f56a932d..8b6580b13339 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -55,6 +55,7 @@ enum scan_result {
+>  	SCAN_CGROUP_CHARGE_FAIL,
+>  	SCAN_TRUNCATED,
+>  	SCAN_PAGE_HAS_PRIVATE,
+> +	SCAN_STORE_FAILED,
+>  };
 
-Thanks for giving me the information. The f2fs_comp_option_v2 could also help
-to get/set more options for compression. And I suggest to add a version or size
-at the beginning of the struct so that it is easy to expand the struct in the
-future.
+I'm still reluctant to add a new error code for this as this seems like quite a
+rare race that requires OOM to trigger. I'd be happier just reusing SCAN_FAIL,
+or, something we might get some millage out of later: SCAN_OOM.
 
-Thanks,
-shengyong
+Also, a reminder to update include/trace/events/huge_memory.h, if you go that
+route.
 
-> Thx,
-> Yangtao
+>  
+>  #define CREATE_TRACE_POINTS
+> @@ -1840,6 +1841,15 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+>  					goto xa_locked;
+>  				}
+>  				xas_store(&xas, hpage);
+> +				if (xas_error(&xas)) {
+> +					/* revert shmem_charge performed
+> +					 * in the previous condition
+> +					 */
+
+Nit: Here, and following, I think standard convention for multiline comment is
+to have an empty first and last line, eg:
+
+ +					/*
+ +					 * revert shmem_charge performed
+ +					 * in the previous condition
+ +					 */
+
+Though, checkpatch.pl --strict didn't seem to care.
+
+> +					mapping->nrpages--;
+> +					shmem_uncharge(mapping->host, 1);
+> +					result = SCAN_STORE_FAILED;
+> +					goto xa_locked;
+> +				}
+>  				nr_none++;
+>  				continue;
+>  			}
+> @@ -1992,6 +2002,11 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+>  
+>  		/* Finally, replace with the new page. */
+>  		xas_store(&xas, hpage);
+> +		/* We can't get an ENOMEM here (because the allocation happened before)
+> +		 * but let's check for errors (XArray implementation can be
+> +		 * changed in the future)
+> +		 */
+> +		WARN_ON_ONCE(xas_error(&xas));
+
+Nit: it's not just that allocation happened before -- need some guarantee we've
+been protected from concurrent removal. This is what made me look at the file
+side.
+
+>  		continue;
+>  out_unlock:
+>  		unlock_page(page);
+> @@ -2029,6 +2044,11 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+>  	/* Join all the small entries into a single multi-index entry */
+>  	xas_set_order(&xas, start, HPAGE_PMD_ORDER);
+>  	xas_store(&xas, hpage);
+> +	/* Here we can't get an ENOMEM (because entries were
+> +	 * previously allocated) But let's check for errors
+> +	 * (XArray implementation can be changed in the future)
+> +	 */
+> +	WARN_ON_ONCE(xas_error(&xas));
+
+Ditto.
+
+Apologies I won't be around to see this change through -- I'm just out of time,
+and will be shutting my computer down tomorrow for 3 months.  Sorry for the poor
+timing, for raising issues, then disappearing. Hopefully I'm wrong and the
+file-side isn't a concern.
+
+Best,
+Zach
+
+>  xa_locked:
+>  	xas_unlock_irq(&xas);
+>  xa_unlocked:
+> -- 
+> 2.34.1
+> 
