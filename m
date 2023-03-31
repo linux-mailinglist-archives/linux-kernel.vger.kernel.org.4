@@ -2,96 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6C46D19DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85DD6D19E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjCaIaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
+        id S230076AbjCaIcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbjCaIaW (ORCPT
+        with ESMTP id S229437AbjCaIcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:30:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9EA138;
-        Fri, 31 Mar 2023 01:30:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1256162500;
-        Fri, 31 Mar 2023 08:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 61B0CC4339C;
-        Fri, 31 Mar 2023 08:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680251418;
-        bh=7QfrtLvbG0uJ1TrCowUePYGhhQQUz93oXvSuBWFYU8o=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Ae0pi98Q+nasfAkHWYoHFcUb1h3gd1I5498Awcf5IwdmEGh7GD4ZPF9jsoqQx/yIw
-         9w5rU7q3/PxYPTF94G+oPnL85S8RtxB/CuMKVpwe8PY62/tE1W7Sed41cMyJ8ynUi3
-         9wVuID9XBwlozlUy9dwwHabO3JAJuvjZP/lPiAadqwVa6r6F6bdkuWIHFtFS3Kn4jh
-         sExqIpRUQLXFdUbkOdMHbxh1bKl1dmnhKEkLA9Xehv47SjYWaKhQzhLgsdSL3qUMzQ
-         n6zMhpTvZtq1EGyOdbOdSXvezORCgnohYSrn58Kt02/nsp1SO4tHDnc1IGx+pPo75c
-         NT2I2gwMXzFgA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4723BC73FE2;
-        Fri, 31 Mar 2023 08:30:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 31 Mar 2023 04:32:17 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8336138
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680251536; x=1711787536;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=Qx/8ilf/NfkTHLO6+8bPMQwvEosBPGBjQoeaUWFsQWY=;
+  b=NsweAwE3t5yfuxdhDRrssjbpunW78yIRBdlqzGwKXbPN8OyRckJTXTRl
+   iOVK0RiY+YJr9zEROieM3HBvqab83LmYxZ7oE4QvalySxZVgOkhhxvDzy
+   JskAtARtuI5DeHYFjQp/+EmN8RnW9HVElxUPlpMEW80s+FLhx8vNlZHlE
+   t/1Zd+TLMA93ZHgNi+SSjEMAYgkd7ZrQMXiZW1NnqIWsVyWBSf+ZMSOmo
+   TRHO2yssm5tYnct9wh6lb9/abtsPDlfE1B1TwMG6vS7pgScoI6fv3ZS0b
+   Z00NqTs/NpcWkxtbmo7tRy8pBEUzSw9cQB8jsrc8On6Y+fai3L5yxDvU7
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="406407927"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="406407927"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 01:31:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="828638010"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="828638010"
+Received: from slabertx-mobl.ger.corp.intel.com (HELO localhost) ([10.252.52.150])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 01:31:46 -0700
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        David Laight <David.Laight@ACULAB.COM>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
+        David Gow <davidgow@google.com>
+Subject: Re: [PATCH 0/4] log2: make is_power_of_2() more generic
+In-Reply-To: <20230330151846.fdbc8edbfbaa6eaddb056dc7@linux-foundation.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230330104243.2120761-1-jani.nikula@intel.com>
+ <20230330125041.83b0f39fa3a4ec1a42dfd95f@linux-foundation.org>
+ <549987e4967d45159573901d330c96a0@AcuMS.aculab.com>
+ <20230330151846.fdbc8edbfbaa6eaddb056dc7@linux-foundation.org>
+Date:   Fri, 31 Mar 2023 11:31:43 +0300
+Message-ID: <87edp52ufk.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v5 0/3] Fix PHY handle no longer parsing
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168025141828.29195.16930878780114551946.git-patchwork-notify@kernel.org>
-Date:   Fri, 31 Mar 2023 08:30:18 +0000
-References: <20230330091404.3293431-1-michael.wei.hong.sit@intel.com>
-In-Reply-To: <20230330091404.3293431-1-michael.wei.hong.sit@intel.com>
-To:     Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-        boon.leong.ong@intel.com, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, hkallweit1@gmail.com, andrew@lunn.ch,
-        hong.aun.looi@intel.com, weifeng.voon@intel.com,
-        peter.jun.ann.lai@intel.com
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, 30 Mar 2023, Andrew Morton <akpm@linux-foundation.org> wrote:
+> On Thu, 30 Mar 2023 21:53:03 +0000 David Laight <David.Laight@ACULAB.COM>=
+ wrote:
+>
+>> > But wouldn't all these issues be addressed by simply doing
+>> >=20
+>> > #define is_power_of_2(n) (n !=3D 0 && ((n & (n - 1)) =3D=3D 0))
+>> >=20
+>> > ?
+>> >=20
+>> > (With suitable tweaks to avoid evaluating `n' more than once)
+>>=20
+>> I think you need to use the 'horrid tricks' from min() to get
+>> a constant expression from constant inputs.
+>
+> This
+>
+> --- a/include/linux/log2.h~a
+> +++ a/include/linux/log2.h
+> @@ -41,11 +41,11 @@ int __ilog2_u64(u64 n)
+>   * *not* considered a power of two.
+>   * Return: true if @n is a power of 2, otherwise false.
+>   */
+> -static inline __attribute__((const))
+> -bool is_power_of_2(unsigned long n)
+> -{
+> -	return (n !=3D 0 && ((n & (n - 1)) =3D=3D 0));
+> -}
+> +#define is_power_of_2(_n)				\
+> +	({						\
+> +		typeof(_n) n =3D (_n);			\
+> +		n !=3D 0 && ((n & (n - 1)) =3D=3D 0);		\
+> +	})
+>=20=20
+>  /**
+>   * __roundup_pow_of_two() - round up to nearest power of two
+> _
+>
+> worked for me in a simple test.
+>
+> --- a/fs/open.c~b
+> +++ a/fs/open.c
+> @@ -1564,3 +1564,10 @@ int stream_open(struct inode *inode, str
+>  }
+>=20=20
+>  EXPORT_SYMBOL(stream_open);
+> +
+> +#include <linux/log2.h>
+> +
+> +int foo(void)
+> +{
+> +	return is_power_of_2(43);
+> +}
+> _
+>
+>
+> foo:
+> # fs/open.c:1573: }
+> 	xorl	%eax, %eax	#
+> 	ret=09
+>
+>
+> Is there some more tricky situation where it breaks?
 
-This series was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+It doesn't work with BUILD_BUG_ON_ZERO().
 
-On Thu, 30 Mar 2023 17:14:01 +0800 you wrote:
-> After the fixed link support was introduced, it is observed that PHY
-> no longer attach to the MAC properly. So we introduce a helper
-> function to determine if the MAC should expect to connect to a PHY
-> and proceed accordingly.
-> 
-> Michael Sit Wei Hong (3):
->   net: phylink: add phylink_expects_phy() method
->   net: stmmac: check if MAC needs to attach to a PHY
->   net: stmmac: remove redundant fixup to support fixed-link mode
-> 
-> [...]
+test.c:
+#define IS_POWER_OF_2(_n)				\
+	({						\
+		typeof(_n) n =3D (_n);			\
+		n !=3D 0 && ((n & (n - 1)) =3D=3D 0);		\
+	})
 
-Here is the summary with links:
-  - [net,v5,1/3] net: phylink: add phylink_expects_phy() method
-    https://git.kernel.org/netdev/net/c/653a180957a8
-  - [net,v5,2/3] net: stmmac: check if MAC needs to attach to a PHY
-    https://git.kernel.org/netdev/net/c/fe2cfbc96803
-  - [net,v5,3/3] net: stmmac: remove redundant fixup to support fixed-link mode
-    https://git.kernel.org/netdev/net/c/6fc21a6ed595
+#define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+#define FOO(n) ((n) + BUILD_BUG_ON_ZERO(!IS_POWER_OF_2(n)))
+
+int main(void)
+{
+	return FOO(2);
+}
+
+$ gcc test.c
+test.c: In function =E2=80=98main=E2=80=99:
+test.c:16:51: error: bit-field =E2=80=98<anonymous>=E2=80=99 width not an i=
+nteger constant
+   16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); }=
+)))
+      |                                                   ^
+test.c:18:23: note: in expansion of macro =E2=80=98BUILD_BUG_ON_ZERO=E2=80=
+=99
+   18 | #define FOO(n) ((n) + BUILD_BUG_ON_ZERO(!IS_POWER_OF_2(n)))
+      |                       ^~~~~~~~~~~~~~~~~
+test.c:22:9: note: in expansion of macro =E2=80=98FOO=E2=80=99
+   22 |  return FOO(2);
+      |         ^~~
 
 
+BR,
+Jani.
+
+--=20
+Jani Nikula, Intel Open Source Graphics Center
