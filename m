@@ -2,85 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1786D1AA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3476D1AAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjCaIn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
+        id S230488AbjCaIpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbjCaInn (ORCPT
+        with ESMTP id S231958AbjCaIoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:43:43 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F91E1C1EC
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:43:12 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id c9so17528159lfb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:43:11 -0700 (PDT)
+        Fri, 31 Mar 2023 04:44:54 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCD930F5
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:44:30 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3e0965f70ecso663681cf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:44:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680252162;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IevZS0joNS82IencNXfsPkazLIzoG9/Vmz0nPvH8I7o=;
-        b=Xo+gy/WFFx+pso6hhAElvme+rTjYErlFrqUfcvfcHEGUbdxYDrCWKZLg2zFcvofh0w
-         9fB+/LSYS+ZACFMc7N/hvE2/fk3+Kc5SC5StkOBuZq3Mib2fGyxN4WbF4mgYwydTkMPt
-         pe9YGt0e5+r1L9sHyvS8S27nRgowintaETXkWsaE6rP032hN2XqeP8zA2eCVEutjrOaH
-         85JJ5ZO2pYxreEaW2oCas/8BvQE5JZv7AT0e7ch1nFEOSfP/6Q2khH9JW86uypMdj1wh
-         LyHBblU0wnWzkDdgujKgT9J/MVvoBzTlUrVdxKP40aCZWSCdXQuP0meRvvDccOZpSLGI
-         Y7WQ==
+        d=google.com; s=20210112; t=1680252244;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sha7c++P1pbeS2BqNK6x5hml1dJwu4esM9ohuBhGxoo=;
+        b=lNYvkbIyWPH+TukSN5yijUu/JrmZj5WLsnvNYR2WMPTr/aAoGX4PBhqjDnocmACo/T
+         MKxWcIAMY6g3Qj3EA7bH3uhenyiYlZLrcq47lMizoYpId8Y00zJXLJhsXqzYJUDCI+Cs
+         nJFAiwfBkcqXwhCkReUQoQbazemGfu/2fNZZdHzwCN8a/LD6dFtSVYxkOmw8Ts/TZsD9
+         geCQiwZK6Gadn3rKi2GqtqZonAv/8GNP8y8jMIYB2MnziogexhLHL9zEHNcY8w3arIpM
+         ORlmLAp2o9A8/h4lzpencXFRzCRdmDOFVaEetAa+suLQmmE+ripVLYdvVUFqjg4VtSDS
+         M9JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680252162;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IevZS0joNS82IencNXfsPkazLIzoG9/Vmz0nPvH8I7o=;
-        b=UBnbtGwoOOm8foLvvSNt8z6G6W3f7QQ9wy+2ltFt/Us/49eQ5McstDgchZU5NAhGgX
-         8h+Nh2kKvftN7SNufTx0GVB9KfAacuNihpA66dsw/U7v0ObfCdGN8IP1Y7eCmwAcPPKX
-         KpD9n6pTqivHn2YTwLFdisrPTExWPuRHoZtY3uwUxOCReRLJvks/yUskfUZZiM/mFRGI
-         Rm4UZxQbEpK4BmPm5hPA3dVS1/EEB+bhg7iLVIy55DW1kxS8n2LaZT9DiFFWUUmVxsl8
-         Fs76gWHdknMqZxSeJK5xSjNUDSF0UYLg8a60mbs93/g+BlRahfEuwJR9Aio9dOzGyWO1
-         p+kA==
-X-Gm-Message-State: AAQBX9eZSCpVYYq4Cxio6ChsZ1dXe/85rhov8sROcRcbKMzPrvHCPWek
-        s8GSX1SHVFH5/Q5G1QzLjDxtTQ==
-X-Google-Smtp-Source: AKy350ZG/K6wcHdsuRA1BnkFGsAXfMWNfwKAVZ6IoMpIC2JXLzIFxyS/w3Hpu85ByVgXWbR3W3P0Yw==
-X-Received: by 2002:ac2:5287:0:b0:4cc:a107:82f4 with SMTP id q7-20020ac25287000000b004cca10782f4mr7866348lfm.64.1680252162059;
-        Fri, 31 Mar 2023 01:42:42 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id s10-20020a19ad4a000000b004eb15952669sm289570lfd.141.2023.03.31.01.42.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 01:42:41 -0700 (PDT)
-Message-ID: <ff88e5d3-4c31-7698-b8d1-8a03b9fea643@linaro.org>
-Date:   Fri, 31 Mar 2023 10:42:40 +0200
+        d=1e100.net; s=20210112; t=1680252244;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sha7c++P1pbeS2BqNK6x5hml1dJwu4esM9ohuBhGxoo=;
+        b=TYivSQs6Qi/OhDqFXENSlNYb7SfYY1e0URI//ERyI4wCZPjGqeylILNpg3ASeIM8om
+         fvTDg/nhlxgCdvVlDoKNmDsYH7nfEXqvPZ3o1RRx1/LB1RuOGYwpYK/jpo5gDkmqMxr4
+         wMh3x6cLedZ7iNJg/hmGF2TnrjlW8CHgNT5XLYEkdRbUJWiLnpBZxNUu+6d8Yq98NMm4
+         0s61JAFa0WnsqWsdeE6JnZwIo6OtArEaz1ezABwjBrKzQQ8zK26xZNZmDsnlvx3OgPQU
+         xE5P0EKmAZQB8A4IPKef7iy/akBiWGgLhTGf1j6ATYGqwGwZR3d7agIXH2ieOcrqaUUy
+         jGdw==
+X-Gm-Message-State: AAQBX9cp/73XG6xosXRqtHEqBerE6QHp4DlistlhJGXuhNyInDDfu8bz
+        xpQnjyv7hmVaTPC2+0bZRv1CpUbnz803pF8kHLiz6A==
+X-Google-Smtp-Source: AKy350b8nraY3tqqEiP3oP5jd8OLxt+sQatka0/Et5K9qmgE0sibhdHo4mg2zz3tsXHVyCIrioMNFjdncGojggKz9ac=
+X-Received: by 2002:a05:622a:189a:b0:3df:6cbb:c76 with SMTP id
+ v26-20020a05622a189a00b003df6cbb0c76mr199176qtc.13.1680252244119; Fri, 31 Mar
+ 2023 01:44:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 2/6] dt-bindings: display: bridge: toshiba,tc358768:
- Add TC9594
-Content-Language: en-US
-To:     Francesco Dolcini <francesco@dolcini.it>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        devicetree@vger.kernel.org
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-References: <20230330095941.428122-1-francesco@dolcini.it>
- <20230330095941.428122-3-francesco@dolcini.it>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230330095941.428122-3-francesco@dolcini.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <00000000000093079705ea9aada2@google.com> <0000000000004ee9b405f82355d8@google.com>
+In-Reply-To: <0000000000004ee9b405f82355d8@google.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Fri, 31 Mar 2023 10:43:50 +0200
+Message-ID: <CANp29Y7wQccVBGJM_jJzrszzkE9wiHOhjdYoaPtzB=0WP0BbDA@mail.gmail.com>
+Subject: Re: [syzbot] [jfs?] UBSAN: shift-out-of-bounds in dbFindCtl
+To:     syzbot <syzbot+7edb85bc97be9f350d90@syzkaller.appspotmail.com>
+Cc:     dave.kleikamp@oracle.com, jfs-discussion@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liushixin2@huawei.com, shaggy@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-13.2 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,45 +72,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2023 11:59, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
-> 
-> Add TC9594, from the software point of view this is identical to
-> TC358768 with the main difference being automotive qualified.
-> 
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> ---
->  .../devicetree/bindings/display/bridge/toshiba,tc358768.yaml | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
-> index d6dac186ac59..8f22093b61ae 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
-> @@ -4,19 +4,20 @@
->  $id: http://devicetree.org/schemas/display/bridge/toshiba,tc358768.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Toshiba TC358768/TC358778 Parallel RGB to MIPI DSI bridge
-> +title: Toshiba TC358768/TC358778/TC9594 Parallel RGB to MIPI DSI bridge
->  
->  maintainers:
->    - Peter Ujfalusi <peter.ujfalusi@ti.com>
->  
->  description: |
-> -  The TC358768/TC358778 is bridge device which converts RGB to DSI.
-> +  The TC358768/TC358778/TC9594 is bridge device which converts RGB to DSI.
->  
->  properties:
->    compatible:
->      enum:
->        - toshiba,tc358768
->        - toshiba,tc358778
-> +      - toshiba,tc9594
+On Thu, Mar 30, 2023 at 9:45=E2=80=AFPM syzbot
+<syzbot+7edb85bc97be9f350d90@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit fad376fce0af58deebc5075b8539dc05bf639af3
+> Author: Liu Shixin via Jfs-discussion <jfs-discussion@lists.sourceforge.n=
+et>
+> Date:   Thu Nov 3 03:01:59 2022 +0000
+>
+>     fs/jfs: fix shift exponent db_agl2size negative
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D146d74a5c8=
+0000
+> start commit:   b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10=
+-..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Da66c6c673fb55=
+5e8
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D7edb85bc97be9f3=
+50d90
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D16d5817a880=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D15d68cde88000=
+0
+>
+> If the result looks correct, please mark the issue as fixed by replying w=
+ith:
+>
+> #syz fix: fs/jfs: fix shift exponent db_agl2size negative
 
-If it is the same, why they are not compatible? I got only three patches
-out of six, thus I cannot check by myself. Please explain.
+It might well be possible. The patch improves the validation of
+db_agl2size parameter, which affects the execution some frames up in
+the crash stack trace:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/=
+jfs/jfs_dmap.c?id=3D6d36c728bc2e2d632f4b0dea00df5532e20dfdab#n729
 
-Best regards,
-Krzysztof
+#syz fix: fs/jfs: fix shift exponent db_agl2size negative
 
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
+>
