@@ -2,214 +2,434 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E78D6D299B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D831B6D29A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbjCaUqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
+        id S232174AbjCaUsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjCaUqc (ORCPT
+        with ESMTP id S229988AbjCaUsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:46:32 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DC22220E
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:46:31 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id q20so4470448pfs.2
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1680295591;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yvQa5duEFmv21oECF91MpJhqxo4SC69A1svuPHKziuc=;
-        b=KhVXzwIWCeYgb1lZI5Yha5mNmFpNFAJqlC0Egm6HvFwWgb8Ki2n4SSpvugRY3D7BkR
-         s1fg44MShT6ti7TmbJ79LYprwI882/Fr4a77KAADJnzA4VJR6b1Jgmklh5BBwWFDF1SU
-         ZUQ1Nvc4tRsdwUhgNV+GfDF4ysFpvn3hWx25MLLdCX5KuKYS+MCfxG1vlpHbrl2l24Yb
-         AknVvu0jfrSD133BhKNQ5ZXlH1faApCoWGgr/6thHtXalF72GX86hiBrI1MKX9eorMiP
-         3Oz03NZcqXK+VkTJRCzIYyVJX5+OPHiOzkIm1AhN5j9kldHmGj52qDyl6vTjy+8tAxMI
-         7d7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680295591;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yvQa5duEFmv21oECF91MpJhqxo4SC69A1svuPHKziuc=;
-        b=K4+lBt7L2Mib2TfD5x/vPspj7gqPQcmzmptJw+qs/tsE3znO/WWQivpJkGlc6bZw0C
-         cRDxY2OFgJcJY7B0dGDupdxFqROhBdEVpMS+/emlc1FFJvv9xulU3YYstXYm5ISzReqX
-         /TH18YaiB+LBvhdEjC3EjYmxkbgmZhNJypvvE7KpGAasZ5GqY5UjX1YJuL40i4d0clNI
-         Fv4ifyRZW3DpM5NC/GOYkxNuUUA7ju5uEYeQbu2w9DwYYh9CKtMbNHxmiBM+giFt47Wn
-         FIfYxw6A8EjILRO0uvro1T/K8UDBdk6Y7T1S27zPYWS/ISRdv610x0jxMwb6Li4Q2hXi
-         P1Tg==
-X-Gm-Message-State: AAQBX9cBSs8OTRWtzand+X2HWf2xbgpe/ZJJ2M/OJqKKicHHEQI8f49c
-        oJSZazDjpMGW1p/GOL/vZvtD+w==
-X-Google-Smtp-Source: AKy350aw0znO4Oeu3iK9sCJXE4hgEGZz5IvcwXA9QAxhyhMtSSd2RJp67WN+A+KF6JXYg+3wrjWBvQ==
-X-Received: by 2002:a62:4ec9:0:b0:575:b783:b6b3 with SMTP id c192-20020a624ec9000000b00575b783b6b3mr25452388pfb.28.1680295590838;
-        Fri, 31 Mar 2023 13:46:30 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-91-157.pa.nsw.optusnet.com.au. [49.181.91.157])
-        by smtp.gmail.com with ESMTPSA id a3-20020a62bd03000000b005abc0d426c4sm2225403pff.54.2023.03.31.13.46.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 13:46:30 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1piLdj-00FUjp-5i; Sat, 01 Apr 2023 07:46:27 +1100
-Date:   Sat, 1 Apr 2023 07:46:27 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Aleksandr Nogikh <nogikh@google.com>,
-        syzbot <syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [xfs?] WARNING in xfs_bmap_extents_to_btree
-Message-ID: <20230331204627.GH3223426@dread.disaster.area>
-References: <0000000000003da76805f8021fb5@google.com>
- <20230330012750.GF3223426@dread.disaster.area>
- <CANp29Y6XNE_wxx1Osa+RrfqOUP9PZhScGnMUDgQ-qqHzYe9KFg@mail.gmail.com>
- <20230330224302.GG3223426@dread.disaster.area>
- <20230331012537.GC4126677@frogsfrogsfrogs>
+        Fri, 31 Mar 2023 16:48:21 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A114448B;
+        Fri, 31 Mar 2023 13:48:18 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id D66E460515;
+        Fri, 31 Mar 2023 22:48:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680295696; bh=fS91/3cPwJF5+zHbhFgdBHeVwCJg8/LbQ5WlJ+kivfo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NfYm271B/pt548o24aZ69dE9AIVPcZRO4vmTJPFlndsqFIFQoJfhl/20yhLdBoM0b
+         LQGhMSU6jq5PkO0YDMnBYtIrHmhcTXB4Tj6c4BHi3Y9BjeofmiqxEjbjvYiAhv2OND
+         i2GDtNS0tSm3Blt9xi1uoRh9f5fo52QgHQsIG9rE4HqjuNYsidrdS7YdXvYOkLcqBE
+         +XwDZyVhqsv0it3tjcRw8ERvvEngIeJV+QlWPB3XwTZaGLBf6wTFPW3LTkj8Zq5YHH
+         IIzT6Q2jzkHGNMRwsZwIlIZEI2vR1C4Xq7vSCpJFQ05G8OodMwrFDcF1Ys9zSTmklv
+         Psne/w2WU7cjQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id heKpXYI2-ECE; Fri, 31 Mar 2023 22:48:13 +0200 (CEST)
+Received: from [192.168.1.4] (unknown [77.237.101.225])
+        by domac.alu.hr (Postfix) with ESMTPSA id D2D1D60514;
+        Fri, 31 Mar 2023 22:48:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680295693; bh=fS91/3cPwJF5+zHbhFgdBHeVwCJg8/LbQ5WlJ+kivfo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=G/nkr3megpThabjOXE9WWbUIYSCqZmc81iy2AZVGjVmdeBEuK9eB8/FBw1TefXFkU
+         lOQuCdv2L8Hd9/DdiFgKVSup410flZwusVXLowPWKIrytot9b74RWyBQ1vbtzHcbHE
+         srfxjvqMYfUrwnEmhPT9UwYUNC5paCzyxwqV+cL75CDdmDQdyyid0iqs3Po9vqBISl
+         6ZKsy+xzMvd+OYy4wlrcvCGz9bm/mZ8cwp/GdFgN8LgZU7e3GnuRLAwtjERwIB6yl0
+         FDx2+dw4IJAfkQY6WFflQpUuGj7CCrG+HBA7PD84B7TKnRhA8uwpvaSuUkn2GodGKA
+         WqGx75ACQkSWQ==
+Message-ID: <d0d9ac65-a692-4e4e-d721-2ea709e9d4ae@alu.unizg.hr>
+Date:   Fri, 31 Mar 2023 22:48:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: BUG FIX: [PATCH RFC v2] memstick_check() memleak in kernel 6.1.0+
+ introduced pre 4.17
+Content-Language: en-US, hr
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Maxim Levitsky <maximlevitsky@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Hannes Reinecke <hare@suse.de>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        ye xingchen <ye.xingchen@zte.com.cn>, linux-mmc@vger.kernel.org
+References: <7d873dd3-9bab-175b-8158-c458b61a7122@alu.unizg.hr>
+ <f74219a7-1607-deb4-a6ae-7b73e2467ac7@alu.unizg.hr>
+ <df560535-2a8e-de21-d45d-805159d70954@alu.unizg.hr>
+ <2023033124-causing-cassette-4d96@gregkh>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <2023033124-causing-cassette-4d96@gregkh>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230331012537.GC4126677@frogsfrogsfrogs>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 06:25:37PM -0700, Darrick J. Wong wrote:
-> On Fri, Mar 31, 2023 at 09:43:02AM +1100, Dave Chinner wrote:
-> > On Thu, Mar 30, 2023 at 10:52:37AM +0200, Aleksandr Nogikh wrote:
-> > > On Thu, Mar 30, 2023 at 3:27 AM 'Dave Chinner' via syzkaller-bugs
-> > > <syzkaller-bugs@googlegroups.com> wrote:
-> > > >
-> > > > On Tue, Mar 28, 2023 at 09:08:01PM -0700, syzbot wrote:
-> > > > > Hello,
-> > > > >
-> > > > > syzbot found the following issue on:
-> > > > >
-> > > > > HEAD commit:    1e760fa3596e Merge tag 'gfs2-v6.3-rc3-fix' of git://git.ke..
-> > > > > git tree:       upstream
-> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=16f83651c80000
-> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
-> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=0c383e46e9b4827b01b1
-> > > > > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > >
-> > > > > Unfortunately, I don't have any reproducer for this issue yet.
-> > > > >
-> > > > > Downloadable assets:
-> > > > > disk image: https://storage.googleapis.com/syzbot-assets/17229b6e6fe0/disk-1e760fa3.raw.xz
-> > > > > vmlinux: https://storage.googleapis.com/syzbot-assets/69b5d310fba0/vmlinux-1e760fa3.xz
-> > > > > kernel image: https://storage.googleapis.com/syzbot-assets/0c65624aace9/bzImage-1e760fa3.xz
-> > > > >
-> > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > > Reported-by: syzbot+0c383e46e9b4827b01b1@syzkaller.appspotmail.com
-> > > > >
-> > > > > ------------[ cut here ]------------
-> > > > > WARNING: CPU: 1 PID: 24101 at fs/xfs/libxfs/xfs_bmap.c:660 xfs_bmap_extents_to_btree+0xe1b/0x1190
-> > > >
-> > > > Allocation got an unexpected ENOSPC when it was supposed to have a
-> > > > valid reservation for the space. Likely because of an inconsistency
-> > > > that had been induced into the filesystem where superblock space
-> > > > accounting doesn't exactly match the AG space accounting and/or the
-> > > > tracked free space.
-> > > >
-> > > > Given this is a maliciously corrupted filesystem image, this sort of
-> > > > warning is expected and there's probably nothing we can do to avoid
-> > > > it short of a full filesystem verification pass during mount.
-> > > > That's not a viable solution, so I think we should just ignore
-> > > > syzbot when it generates this sort of warning....
-> > > 
-> > > If it's not a warning about a kernel bug, then WARN_ON should probably
-> > > be replaced by some more suitable reporting mechanism. Kernel coding
-> > > style document explicitly says:
-> > > 
-> > > "WARN*() must not be used for a condition that is expected to trigger
-> > > easily, for example, by user space actions.
-> > 
-> > That's exactly the case here. It should *never* happen in normal
-> > production workloads, and it if does then we have the *potential*
-> > for silent data loss occurring. That's *exactly* the sort of thing
-> > we should be warning admins about in no uncertain terms.  Also, we
-> > use WARN_ON_ONCE(), so it's not going to spam the logs.
-> > 
-> > syzbot is a malicious program - it is injecting broken stuff into
-> > the kernel as root to try to trigger situations like this. That
-> > doesn't make a warning it triggers bad or incorrect - syzbot is
-> > pertubing tightly coupled structures in a way that makes the
-> > information shared across those structures inconsistent and
-> > eventually the code is going to trip over that inconsistency.
-> > 
-> > IOWs, once someone has used root permissions to mount a maliciously
-> > crafted filesystem image, *all bets are off*. The machine is running
-> > a potentially compromised kernel at this point. Hence it is almost
-> > guaranteed that at some point the kernel is going to discover things
-> > are *badly wrong* and start dumping "this should never happen!"
-> > warnings into the logs. That's what the warnings are supposed to do,
-> > and the fact that syzbot can trigger them doesn't make the warnings
-> > wrong.
-> > 
-> > > pr_warn_once() is a
-> > > possible alternative, if you need to notify the user of a problem."
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/coding-style.rst?id=1e760fa3596e8c7f08412712c168288b79670d78#n1223
-> > 
-> > It is worth remembering that those are guidelines, not enforcable
-> > rules and any experienced kernel developer will tell you the same
-> > thing.  We know the guidelines, we know when to apply them, we know
-> > there are cases that the guidelines simply can't, don't or won't
-> > cover.
+On 31. 03. 2023. 18:32, Greg KH wrote:
+> On Fri, Mar 31, 2023 at 04:46:03PM +0200, Mirsad Goran Todorovac wrote:
+>> On 29.3.2023. 19:25, Mirsad Goran Todorovac wrote:
+>>> On 23.12.2022. 14:20, Mirsad Goran Todorovac wrote:
+>>>> Hi all,
+>>>>
+>>>> When building a RPM 6.1.0-rc3 for AlmaLinux 8.6, I have enabled CONFIG_DEBUG_KMEMLEAK=y
+>>>> and the result showed an unreferenced object in kworker process:
+>>>>
+>>>> cat /sys/kernel/debug/kmemleak
+>>>> unreferenced object 0xffff888105028d80 (size 16):
+>>>>    comm "kworker/u12:5", pid 359, jiffies 4294902898 (age 1620.144s)
+>>>>    hex dump (first 16 bytes):
+>>>>      6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00  memstick0.......
+>>>>    backtrace:
+>>>>      [<ffffffffb6bb5542>] slab_post_alloc_hook+0xb2/0x340
+>>>>      [<ffffffffb6bbbf5f>] __kmem_cache_alloc_node+0x1bf/0x2c0
+>>>>      [<ffffffffb6af8175>] __kmalloc_node_track_caller+0x55/0x160
+>>>>      [<ffffffffb6ae34a6>] kstrdup+0x36/0x60
+>>>>      [<ffffffffb6ae3508>] kstrdup_const+0x28/0x30
+>>>>      [<ffffffffb70d0757>] kvasprintf_const+0x97/0xd0
+>>>>      [<ffffffffb7c9cdf4>] kobject_set_name_vargs+0x34/0xc0
+>>>>      [<ffffffffb750289b>] dev_set_name+0x9b/0xd0
+>>>>      [<ffffffffc12d9201>] memstick_check+0x181/0x639 [memstick]
+>>>>      [<ffffffffb676e1d6>] process_one_work+0x4e6/0x7e0
+>>>>      [<ffffffffb676e556>] worker_thread+0x76/0x770
+>>>>      [<ffffffffb677b468>] kthread+0x168/0x1a0
+>>>>      [<ffffffffb6604c99>] ret_from_fork+0x29/0x50
+>>>>
+>>>> mtodorov@domac:~/linux/kernel/linux_stable$ git bisect log
+>>>> git bisect start
+>>>> # bad: [f0c4d9fc9cc9462659728d168387191387e903cc] Linux 6.1-rc4
+>>>> git bisect bad f0c4d9fc9cc9462659728d168387191387e903cc
+>>>> # bad: [fbd56ddcecab5a3623a89c8e941fdbcc55b41045] Linux 6.0.1
+>>>> git bisect bad fbd56ddcecab5a3623a89c8e941fdbcc55b41045
+>>>> # bad: [7e18e42e4b280c85b76967a9106a13ca61c16179] Linux 6.0-rc4
+>>>> git bisect bad 7e18e42e4b280c85b76967a9106a13ca61c16179
+>>>> # bad: [568035b01cfb107af8d2e4bd2fb9aea22cf5b868] Linux 6.0-rc1
+>>>> git bisect bad 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+>>>> # bad: [84df9525b0c27f3ebc2ebb1864fa62a97fdedb7d] Linux 4.19
+>>>> git bisect bad 84df9525b0c27f3ebc2ebb1864fa62a97fdedb7d
+>>>> # bad: [94710cac0ef4ee177a63b5227664b38c95bbf703] Linux 4.18
+>>>> git bisect bad 94710cac0ef4ee177a63b5227664b38c95bbf703
+>>>> # bad: [29dcea88779c856c7dc92040a0c01233263101d4] Linux 4.17
+>>>> git bisect bad 29dcea88779c856c7dc92040a0c01233263101d4
+>>>>
+>>>> Greg asked me if I would help bisect the bug, since I failed to
+>>>> reproduce it on pre 4.17 kernels, because they wouldn't boot (black
+>>>> screen) on the Lenovo ALmaLinux 8.7 (CentOS fork) desktop box that
+>>>> only reproduced that bug:
+>>>>
+>>>>      product: 10TX000VCR (LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB)
+>>>>      vendor: LENOVO
+>>>>      version: V530S-07ICB
+>>>>
+>>>> I would welcome any advice.
+>>>>
+>>>> Please find attached the lshw output and the build config from the
+>>>> last kernel version that also exhibits this bug, so the conclusion
+>>>> is that it is not fixed since the report on November 29th 2022:
+>>>>
+>>>> https://lore.kernel.org/regressions/0d9c3f6c-3948-d5d1-bcc1-baf31141beaa@alu.unizg.hr/T/#t
+>>>>
+>>>> With the hint of Tvrtko, I was able to extract the correct list of maintainers this time.
+>>>>
+>>>> The bug occurs in one kernel memory leak, and it is unobvious
+>>>> whether a skilled attacker could use an abusive program to trigger
+>>>> the leak of enough 16 byte slabs (and overhead) to exhaust kernel
+>>>> memory and cause denial-of-service (crash of the system).
+>>>>
+>>>> I apologise for the first unsuccessful attempt.
+>>>
+>>> static struct memstick_dev *memstick_alloc_card(struct memstick_host *host)
+>>>
+>>> calls dev_set_name(&card->dev, "%s", dev_name(&host->dev)); that
+>>> calls err = kobject_set_name_vargs(&dev->kobj, fmt, vargs); that
+>>> executes:
+>>>
+>>>      if (strchr(s, '/')) {
+>>>          char *t;
+>>>
+>>>          t = kstrdup(s, GFP_KERNEL);
+>>>          kfree_const(s);
+>>>          if (!t)
+>>>              return -ENOMEM;
+>>>          strreplace(t, '/', '!');
+>>>          s = t;
+>>>      }
+>>>      kfree_const(kobj->name);
+>>>      kobj->name = s;
+>>>
+>>> so, this kobj->name was never freed in the "goto err_out" case in line 404.
+>>>
+>>> 380 static struct memstick_dev *memstick_alloc_card(struct memstick_host *host)
+>>> 381 {
+>>> 382         struct memstick_dev *card = kzalloc(sizeof(struct memstick_dev),
+>>> 383                                             GFP_KERNEL);
+>>> 384         struct memstick_dev *old_card = host->card;
+>>> 385         struct ms_id_register id_reg;
+>>> 386
+>>> 387         if (card) {
+>>> 388                 card->host = host;
+>>> 389                 dev_set_name(&card->dev, "%s", dev_name(&host->dev));
+>>> 390                 card->dev.parent = &host->dev;
+>>> 391                 card->dev.bus = &memstick_bus_type;
+>>> 392                 card->dev.release = memstick_free_card;
+>>> 393                 card->check = memstick_dummy_check;
+>>> 394
+>>> 395                 card->reg_addr.r_offset = offsetof(struct ms_register, id);
+>>> 396                 card->reg_addr.r_length = sizeof(id_reg);
+>>> 397                 card->reg_addr.w_offset = offsetof(struct ms_register, id);
+>>> 398                 card->reg_addr.w_length = sizeof(id_reg);
+>>> 399
+>>> 400                 init_completion(&card->mrq_complete);
+>>> 401
+>>> 402                 host->card = card;
+>>> 403                 if (memstick_set_rw_addr(card))
+>>> 404                         goto err_out;
+>>> 405
+>>> 406                 card->next_request = h_memstick_read_dev_id;
+>>> 407                 memstick_new_req(host);
+>>> 408                 wait_for_completion(&card->mrq_complete);
+>>> 409
+>>> 410                 if (card->current_mrq.error)
+>>> 411                         goto err_out;
+>>> 412         }
+>>> 413         host->card = old_card;
+>>> 414         return card;
+>>> 415 err_out:
+>>> 416         host->card = old_card;
+>>> 421         kfree(card);
+>>> 422         return NULL;
+>>> 423 }
+>>>
+>>> This little patch fixes it, also at the release() method.
+>>>
+>>> However, release() had not yet been tested, and I am not certain that in that case
+>>> kobj->name would not be kfree_const()-ed automatically.
+>>>
+>>> Maybe it ought to be separated in two independent patches?
+>>>
+>>> diff --git a/drivers/memstick/core/memstick.c b/drivers/memstick/core/memstick.c
+>>> index bf7667845459..403ab06e3ffa 100644
+>>> --- a/drivers/memstick/core/memstick.c
+>>> +++ b/drivers/memstick/core/memstick.c
+>>> @@ -191,6 +191,10 @@ static void memstick_free_card(struct device *dev)
+>>>   {
+>>>          struct memstick_dev *card = container_of(dev, struct memstick_dev,
+>>>                                                   dev);
+>>> +       if ((card->dev).kobj.name) {
+>>> +               kfree_const((card->dev).kobj.name);
+>>> +               (card->dev).kobj.name = NULL;
+>>> +       }
+>>>          kfree(card);
+>>>   }
+>>>
+>>> @@ -410,6 +414,10 @@ static struct memstick_dev *memstick_alloc_card(struct memstick_host *host)
+>>>          return card;
+>>>   err_out:
+>>>          host->card = old_card;
+>>> +       if ((card->dev).kobj.name) {
+>>> +               kfree_const((card->dev).kobj.name);
+>>> +               (card->dev).kobj.name = NULL;
+>>> +       }
+>>>          kfree(card);
+>>>          return NULL;
+>>>   }
+>>>
+>>> This morning I did not feel like we'd fix two memory leaks today.
+>>>
+>>> This one was a nag for three months :-)
+>>>
+>>> Of course, this requires peer review. The fact that it fixed the /sys/kernel/debug/kmemleak
+>>> output doesn't mean that it wouldn't break something, does it?
+>>>
+>>> It is clearly the good wind of the Providence.
+>>
+>> This is the second version of the patch, without the paranoid parentheses.
+>>
+>> I am still in the process of convincing Thunderbird not to convert tabs to
+>> spaces, so please use --ignore-whitespace when testing this patch. :-(
+>>
+>> ---
+>>  drivers/memstick/core/memstick.c | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/memstick/core/memstick.c b/drivers/memstick/core/memstick.c
+>> index bf7667845459..390287c23f27 100644
+>> --- a/drivers/memstick/core/memstick.c
+>> +++ b/drivers/memstick/core/memstick.c
+>> @@ -191,6 +191,10 @@ static void memstick_free_card(struct device *dev)
+>>  {
+>>         struct memstick_dev *card = container_of(dev, struct memstick_dev,
+>>                                                  dev);
+>> +       if (card->dev.kobj.name) {
+>> +               kfree_const(card->dev.kobj.name);
 > 
-> ...and perhaps the WARNs that can result from corrupted metadata should
-> be changed to XFS_IS_CORRUPT() ?
+> Ick, no, please don't mess around with a kobject name from within a
+> driver like this.  That's indicitave that something else is really
+> wrong.
+> 
+> Yes, the nvme core code does it, but it shouldn't.
+> 
+> Hm, the driver core does it in two places too, that's not good, I'll
+> look at fixing that up too.
+> 
+> This patch is implying that anyone who calls "dev_set_name()" also has
+> to do this hack, which shouldn't be the case at all.
+> 
+> thanks,
+> 
+> greg k-h
 
-Well, I think in the case it isn't -corrupt- metadata, more the case
-that there is an inconsistency between different structures that are
-internally consistent.
+Hi, Mr. Greg,
 
-e.g. remove a free space extent from the freespace tree without
-removing the space from the global free space counters.  Now
-delalloc reservation is allowed by the global counters, but when we
-got to allocate the extent - or the bmap btree block to index it -
-we fail the allocation because the free space btrees are empty.
+I tend to agree with you that releasing card->dev.kobj.name
+should be done from the destructor method of the card object.
 
-The allocation structures are not internally inconsistent or
-corrupt, so it's done the right thing by returning ENOSPC. The
-global counters are not obviously inconsistent or corrupt, either.
-So it can be triggered by just the right sort of corruption at
-exactly the right time (i.e at 100% ENOSPC), but the chances of this
-convoluted set of circumstances happening in production systems is
-pretty much infintesimal.
+AFAICT, the kobj.name is allocated deep withing dev_set_name in line 385
+of drivers/memstick/core/memstick.c:
 
-> We still get a kernel log about something going wrong, only now the
-> report doesn't trigger everyone's WARN triggers, and we tell the user to
-> go run xfs_repair.
+376 static struct memstick_dev *memstick_alloc_card(struct memstick_host *host)
+377 {
+378         struct memstick_dev *card = kzalloc(sizeof(struct memstick_dev),
+379                                             GFP_KERNEL);
+380         struct memstick_dev *old_card = host->card;
+381         struct ms_id_register id_reg;
+382 
+383         if (card) {
+384                 card->host = host;
+385                 dev_set_name(&card->dev, "%s", dev_name(&host->dev));
+386                 card->dev.parent = &host->dev;
+387                 card->dev.bus = &memstick_bus_type;
+388                 card->dev.release = memstick_free_card;
+389                 card->check = memstick_dummy_check;
+390 
+391                 card->reg_addr.r_offset = offsetof(struct ms_register, id);
+392                 card->reg_addr.r_length = sizeof(id_reg);
+393                 card->reg_addr.w_offset = offsetof(struct ms_register, id);
+394                 card->reg_addr.w_length = sizeof(id_reg);
+395 
+396                 init_completion(&card->mrq_complete);
+397 
+398                 host->card = card;
+399                 if (memstick_set_rw_addr(card))
+400                         goto err_out;
+401 
+402                 card->next_request = h_memstick_read_dev_id;
+403                 memstick_new_req(host);
+404                 wait_for_completion(&card->mrq_complete);
+405 
+406                 if (card->current_mrq.error)
+407                         goto err_out;
+408         }
+409         host->card = old_card;
+410         return card;
+411 err_out:
+412         host->card = old_card;
+413         if (card->dev.kobj.name) {
+414                 kfree_const(card->dev.kobj.name);
+415                 card->dev.kobj.name = NULL;
+416         }
+417         kfree(card);
+418         return NULL;
+419 }
 
-I think that is exactly the wrong thing to do.
+I am not certain what is semantically right thing to do in this case, I also 
+see there is another kfree(card) in memstick_check():
 
-We have a history of this WARN firing as a result of software bugs
-in XFS - typically a transaction space reservation or allocation
-parameter setup issue - in which case a WARN_ON_ONCE is more
-appropriate here than declaring the filesystem corrupt.
+431 static void memstick_check(struct work_struct *work)
+432 {
+433         struct memstick_host *host = container_of(work, struct memstick_host,
+434                                                   media_checker);
+435         struct memstick_dev *card;
+436 
+437         dev_dbg(&host->dev, "memstick_check started\n");
+438         pm_runtime_get_noresume(host->dev.parent);
+439         mutex_lock(&host->lock);
+440         if (!host->card) {
+441                 if (memstick_power_on(host))
+442                         goto out_power_off;
+443         } else if (host->card->stop)
+444                 host->card->stop(host->card);
+445 
+446         if (host->removing)
+447                 goto out_power_off;
+448 
+449         card = memstick_alloc_card(host);
+450 
+451         if (!card) {
+452                 if (host->card) {
+453                         device_unregister(&host->card->dev);
+454                         host->card = NULL;
+455                 }
+456         } else {
+457                 dev_dbg(&host->dev, "new card %02x, %02x, %02x\n",
+458                         card->id.type, card->id.category, card->id.class);
+459                 if (host->card) {
+460                         if (memstick_set_rw_addr(host->card)
+461                             || !memstick_dev_match(host->card, &card->id)
+462                             || !(host->card->check(host->card))) {
+463                                 device_unregister(&host->card->dev);
+464                                 host->card = NULL;
+465                         } else if (host->card->start)
+466                                 host->card->start(host->card);
+467                 }
+468 
+469                 if (!host->card) {
+470                         host->card = card;
+471                         if (device_register(&card->dev)) {
+472                                 put_device(&card->dev);
+473                                 host->card = NULL;
+474                         }
+475                 } else
+476                         kfree(card);
+477         }
+478 
+479 out_power_off:
+480         if (!host->card)
+481                 host->set_param(host, MEMSTICK_POWER, MEMSTICK_POWER_OFF);
+482 
+483         mutex_unlock(&host->lock);
+484         pm_runtime_put(host->dev.parent);
+485         dev_dbg(&host->dev, "memstick_check finished\n");
+486 }
 
-That's the bottom line - this specific WARN has been placed because
-it is an indicator of a bug in the code, not because it is something
-that occurs because of filesystem corruption. The WARN is an
-indicator that the bug needs to be reported, not simply put back on
-the user to clean up the mess and continue on blissfully unaware
-that they tripped over a kernel bug rather than some nebulous,
-unexplainable corruption.
+Frankly, I was happy to remove /sys/kernel/debug/kmemleak report of the leak,
+and this is still in pre-alpha stage.
 
-syzbot being able to trip over it by corrupting the fs in just the
-right way doesn't mean we should change it - syzbot is a malicious
-attacker, not a production workload, and I really don't think we
-should be changing warnings that we actually want users to report
-just to shut up syzbot.
+This fix was not a formal patch but a PoC - once the blame is located at the
+line 385 in memstick_alloc_card() and on dev_set_name(), I see there are other
+places where the driver could leak memory safe for the initial patched fix.
 
--Dave.
+It seems obvious that the card->dev.kobj.name has to be released and freed or
+it will leak memory. I do not have sufficient insight into the Source to
+do that. I think you will do a better job at it, having the advantage of seeing
+the forest and not just the tree.
+
+Thanks,
+Mirsad
+
 -- 
-Dave Chinner
-david@fromorbit.com
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
+"I see something approaching fast ... Will it be friends with me?"
+
