@@ -2,51 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34ACF6D2917
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A93A6D291C
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233024AbjCaUCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
+        id S231923AbjCaUFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 16:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233037AbjCaUCQ (ORCPT
+        with ESMTP id S229529AbjCaUFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:02:16 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A08E23FF4;
-        Fri, 31 Mar 2023 13:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=O9v/o+LL35F39YCf85iRZwB52pys/g9pBnyqwNmlF9Y=; b=xj5j/DbnOE+bLqw399ZLnj5nOH
-        nUvyiUYUWv3zAuiluYlq3l1r/m8PJz5pHclXKP3g0UaO5Wdba9rBEovo9lqrdhLwe2+j7cSjaleNA
-        uU/uPff2IzKQwH8jYf+MEmTxOgZUu7Rxs/ODZoiNxBNNZc9i2Z0drTrIJ1Z64n8zc5J6/f/1UnGIf
-        UD0q2u6zePcWgzHZ+VzkUnIXRqzKRK0xlsLjn0IhCyo8LvGFpasoZ5tSUZ6Lx5UkhquKb4a+jQLHq
-        0D2Qp10SthXDc95beHKe2z9W2iicw4geJmwyKNk8sBbf43gyvPpecUCLJGMUIhSHQcxLIoompGkcD
-        usbwLA0A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1piKwR-008hY3-0y;
-        Fri, 31 Mar 2023 20:01:43 +0000
-Date:   Fri, 31 Mar 2023 13:01:43 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
-        "open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KEYS: Make use of platform keyring for module signature
- verification
-Message-ID: <ZCc8J6wS1EpXrLQW@bombadil.infradead.org>
-References: <qvgp2il2co4iyxkzxvcs4p2bpyilqsbfgcprtpfrsajwae2etc@3z2s2o52i3xg>
+        Fri, 31 Mar 2023 16:05:32 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950471F79A
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:05:31 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id k37so30432933lfv.0
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680293130; x=1682885130;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HhMkBqMOvsh1hs5NuN3XdIseTUJUxytQaVYnt3fGACo=;
+        b=CKiFHrTcdNs+6RXLHaR0N4wjV3XmkpbLlpU2eTJg6eUxdnNesJSQL5gOC2c6nHDTU9
+         gxpsA2oZSTp7IGANoD0B5g+0ZzZ9iAnw23wzwBevscy/ZndGTbcRlfzNhh/NaabzubS2
+         s8TRR/mgxdeedBpBoRBHYqwATp78WJeMQ+L9EH82IBSkHdXQeWi3Ojp9WUBoyaeN1/OI
+         b33WYYdIoa+Fs3vGUDO3Elh/Qgx30ZcW0g8oWIpWezYzFKuKSI3yKlf06k+1r37CTvQW
+         V7Z4zh1PST/cFgqSkP7zVqpvLwW6b06orTGI1AfTA+k0QXQZcUsSvMjxGJwQX8FrlbrV
+         J9mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680293130; x=1682885130;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HhMkBqMOvsh1hs5NuN3XdIseTUJUxytQaVYnt3fGACo=;
+        b=ahkl5pf1CrlOB9YdAwq98PirTrEJ+vVkfRiEq/N3IHilh29nuMdQHYPEgco4/OQIqE
+         X0ndWN15zimSFXej46WSvN2iAcF45jH6dImnzUgQneD4eAo4fiU5BhlnMM+Hce5HFxTE
+         imuIfYOni3nhe0+T77oyOIRTpNdTJU60l3LviXpuzijTMKtRdZaMFZu/B/xn2WFGGLr+
+         MWkIFXBLJ1TuL7dSul0pIxPDA5qYEfpWPGJGdYfU2/gwVWWHozWhvFA6T32jvYpZ58K5
+         pQbGrYMAOChAMSh3lNnJr+S1tfpQpmEQmEKl+iVLQMbcWTIVH+FE0RqjiUeLmDgZTCMy
+         BF8Q==
+X-Gm-Message-State: AAQBX9cOsUxdC1MBKV/bJ8P//PjTn5NFoz0NrGQnSpLk0v5BEspznXyS
+        /pG/AvRtFv8yZxMjAyXMorsmbrOJQSHH9FFrqcIKGw==
+X-Google-Smtp-Source: AKy350ZzxL9raDUswX9rEq9TaPaTi0wrfS1d40b4KfnhPiA1zGs8nwTqdPTUKJa2azKoy8XydInoIfJUvcJs1iaagjg=
+X-Received: by 2002:a05:6512:23a3:b0:4d8:86c2:75ea with SMTP id
+ c35-20020a05651223a300b004d886c275eamr4951980lfv.3.1680293129654; Fri, 31 Mar
+ 2023 13:05:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20230330155707.3106228-1-peterx@redhat.com> <20230330155707.3106228-2-peterx@redhat.com>
+ <CAJHvVcgDZBi6pH0BD12sQ3T+7Kr9exX1QU3-YLTd1voYhVBN0w@mail.gmail.com>
+ <ZCYMu5P2BJy/2z5t@x1n> <CAJHvVcggL+s=WEGzwR8+QvWgZANiLut+DhmosKtAXZ1F2vtFAg@mail.gmail.com>
+ <CAJwJo6YrfDH5-Tdsbau-AevVUuqiDQE74se3XvenT20Fbrrcnw@mail.gmail.com>
+In-Reply-To: <CAJwJo6YrfDH5-Tdsbau-AevVUuqiDQE74se3XvenT20Fbrrcnw@mail.gmail.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Fri, 31 Mar 2023 13:04:53 -0700
+Message-ID: <CAJHvVcgiLbACcCr1O4ng7vrxC1Sok_HXDuzbvnVyAaeqGfdwuw@mail.gmail.com>
+Subject: Re: [PATCH 01/29] Revert "userfaultfd: don't fail on unrecognized features"
+To:     Dmitry Safonov <0x7f454c46@gmail.com>
+Cc:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        linux-stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <qvgp2il2co4iyxkzxvcs4p2bpyilqsbfgcprtpfrsajwae2etc@3z2s2o52i3xg>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,18 +81,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 04:30:21PM +0200, Ahelenia Ziemia=C5=84ska wrote:
-> This allows a cert in DB to be used to sign modules,
-> in addition to certs in the MoK and built-in keyrings.
->=20
-> This key policy matches what's used for kexec.
->=20
-> Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xy=
-z>
+On Fri, Mar 31, 2023 at 11:08=E2=80=AFAM Dmitry Safonov <0x7f454c46@gmail.c=
+om> wrote:
+>
+> On Fri, 31 Mar 2023 at 17:52, Axel Rasmussen <axelrasmussen@google.com> w=
+rote:
+> >
+> > On Thu, Mar 30, 2023 at 3:27=E2=80=AFPM Peter Xu <peterx@redhat.com> wr=
+ote:
+> > >
+> > > On Thu, Mar 30, 2023 at 12:04:09PM -0700, Axel Rasmussen wrote:
+> > > > On Thu, Mar 30, 2023 at 8:57=E2=80=AFAM Peter Xu <peterx@redhat.com=
+> wrote:
+> > > > >
+> > > > > This is a proposal to revert commit 914eedcb9ba0ff53c33808.
+> > > > >
+> > > > > I found this when writting a simple UFFDIO_API test to be the fir=
+st unit
+> > > > > test in this set.  Two things breaks with the commit:
+> > > > >
+> > > > >   - UFFDIO_API check was lost and missing.  According to man page=
+, the
+> > > > >   kernel should reject ioctl(UFFDIO_API) if uffdio_api.api !=3D 0=
+xaa.  This
+> > > > >   check is needed if the api version will be extended in the futu=
+re, or
+> > > > >   user app won't be able to identify which is a new kernel.
+> > > > >
+> > > > >   - Feature flags checks were removed, which means UFFDIO_API wit=
+h a
+> > > > >   feature that does not exist will also succeed.  According to th=
+e man
+> > > > >   page, we should (and it makes sense) to reject ioctl(UFFDIO_API=
+) if
+> > > > >   unknown features passed in.
+>
+> If features/flags are not checked in kernel, and the kernel doesn't
+> return an error on
+> an unknown flag/error, that makes the syscall non-extendable, meaning
+> that adding
+> any new feature may break existing software, which doesn't sanitize
+> them properly.
+> https://lwn.net/Articles/588444/
 
-Before I nose dive, the commit log should explain why this patch never
-was sent upstream, if it was, why it was rejected. What makes it good now?
+I don't think the same problem applies here. In the case of syscalls,
+the problem is the only way the kernel can communicate is by the
+EINVAL return value. Without the check, if a call succeeds the caller
+can't tell: was the flag supported + applied, or unrecognized +
+ignored?
 
-Who is using it? What are other distributions doing about it?
+With UFFDIO_API (we aren't talking about userfaultfd(2) itself), when
+you pass in a set of flags, we return the subset of flags which were
+enabled, in addition to the return code. So via that mechanism, one is
+"able to check whether it is running on a kernel where [userfaultfd]
+supports [the feature]" as the article describes - the only difference
+is, the caller must check the returned set of features, instead of
+checking for an error code. I don't think it's exactly *how* userspace
+can check that's important, but rather *that* it can check.
 
-  Luis
+Another important difference: I have a hard time imagining a case
+where adding a new feature could break userspace, even with my
+approach, but let's say for the sake of argument one arises in the
+future. Unlike normal syscalls, we have the UFFD_API version check, so
+we have the option of incrementing that to separate users relying on
+the old behavior, from users willing to deal with the new behavior.
+
+(Syscalls can kind of replicate this by adding a new syscall, like
+clone() vs clone2(), but I think that's messier than the API version
+check being built-in to the API.)
+
+>
+> See a bunch of painful exercises from syscalls with numbers in the end:
+> https://lwn.net/Articles/792628/
+> To adding an additional setsockopt() because an old one didn't have
+> sanity checks for flags:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
+/?id=3D8917a777be3b
+> (not the best example, as the new setsockopt() didn't check flags for
+> sanity as well (sic!),
+> but that's near the code I work on now)
+>
+> This is even documented nowadays:
+> https://www.kernel.org/doc/html/latest/process/adding-syscalls.html#desig=
+ning-the-api-planning-for-extension
+>
+> ...and everyone knows what happens when you blame userspace for breaking =
+by
+> not doing what you would have expected it to do:
+> https://lkml.org/lkml/2012/12/23/75
+
+100% agreed. :)
+
+>
+> [..]
+> > > There's one reason that we may consider keeping the behavior.  IMHO i=
+t is
+> > > when there're major softwares that uses the "wrong" ABI (let's say so=
+;
+> > > because it's not following the man pages).  If you're aware any such =
+major
+> > > softwares (especially open sourced) will break due to this revert pat=
+ch,
+> > > please shoot.
+> >
+> > Well, I did find one example, criu:
+> > https://github.com/checkpoint-restore/criu/blob/criu-dev/criu/uffd.c#L2=
+66
+>
+> Mike can speak better than me about uffd, but AFAICS, CRIU correctly dete=
+cts
+> features with kerneldat/kdat:
+> https://github.com/checkpoint-restore/criu/blob/criu-dev/criu/kerndat.c#L=
+1235
+
+Ah, right, this is the simplest case where no optional features are
+asked for. So, it's not a great example; this particular case would
+look the same regardless of what the kernel does.
+
+>
+> So, doing a sane thing in kernel shouldn't break CRIU (at least here).
+>
+> Thanks,
+>              Dmitry
