@@ -2,173 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85DD6D19E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394CE6D19E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 10:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbjCaIcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 04:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
+        id S230358AbjCaIcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 04:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCaIcR (ORCPT
+        with ESMTP id S230059AbjCaIcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:32:17 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8336138
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 01:32:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680251536; x=1711787536;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=Qx/8ilf/NfkTHLO6+8bPMQwvEosBPGBjQoeaUWFsQWY=;
-  b=NsweAwE3t5yfuxdhDRrssjbpunW78yIRBdlqzGwKXbPN8OyRckJTXTRl
-   iOVK0RiY+YJr9zEROieM3HBvqab83LmYxZ7oE4QvalySxZVgOkhhxvDzy
-   JskAtARtuI5DeHYFjQp/+EmN8RnW9HVElxUPlpMEW80s+FLhx8vNlZHlE
-   t/1Zd+TLMA93ZHgNi+SSjEMAYgkd7ZrQMXiZW1NnqIWsVyWBSf+ZMSOmo
-   TRHO2yssm5tYnct9wh6lb9/abtsPDlfE1B1TwMG6vS7pgScoI6fv3ZS0b
-   Z00NqTs/NpcWkxtbmo7tRy8pBEUzSw9cQB8jsrc8On6Y+fai3L5yxDvU7
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="406407927"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="406407927"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 01:31:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="828638010"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="828638010"
-Received: from slabertx-mobl.ger.corp.intel.com (HELO localhost) ([10.252.52.150])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 01:31:46 -0700
-From:   Jani Nikula <jani.nikula@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        David Laight <David.Laight@ACULAB.COM>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        David Gow <davidgow@google.com>
-Subject: Re: [PATCH 0/4] log2: make is_power_of_2() more generic
-In-Reply-To: <20230330151846.fdbc8edbfbaa6eaddb056dc7@linux-foundation.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230330104243.2120761-1-jani.nikula@intel.com>
- <20230330125041.83b0f39fa3a4ec1a42dfd95f@linux-foundation.org>
- <549987e4967d45159573901d330c96a0@AcuMS.aculab.com>
- <20230330151846.fdbc8edbfbaa6eaddb056dc7@linux-foundation.org>
-Date:   Fri, 31 Mar 2023 11:31:43 +0300
-Message-ID: <87edp52ufk.fsf@intel.com>
+        Fri, 31 Mar 2023 04:32:19 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1359138;
+        Fri, 31 Mar 2023 01:32:18 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32V729cS021646;
+        Fri, 31 Mar 2023 08:32:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=r4iJnzwIAsULH4Il/U+tC47GyZ2GCICQr95aHXk6hNQ=;
+ b=g37Gc494Abw1RTFb9iT83ecz//jEA9ZKOtAWfA8jz6XngcM+yYNlfucksHv1mFHZptik
+ cucSAofbUSa8i+0gcvhiGRxptrOCr7PT2yH5nIAfShPqhdxsbRxjf53H09hqZPy6bFCp
+ we0k6KiQblQKwfJpeyYRbRw1cVMHrkd0KMO6zcWdjJEpgymycXocGqBVx3T3j5kgTW7C
+ 7BSINegj73WVFNES24nYpn7jY/Jaro2j0V+qaAF8JuF3n5MgQPEklZ4k/nM5ipF1FluI
+ Xx5ZdY2ZZLo/m5OOaXVaOdHcqHq4ruCWLHm18EM3bkahJfngSXhnabgfxHch1b9OwieF oA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pn7byba35-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 08:32:11 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32V8WBxH012002
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 08:32:11 GMT
+Received: from [10.216.13.246] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 31 Mar
+ 2023 01:32:07 -0700
+Message-ID: <4792f5c8-2902-2e46-b663-22cffe450556@quicinc.com>
+Date:   Fri, 31 Mar 2023 14:02:04 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH V2] net: qrtr: Do not do DEL_SERVER broadcast after
+ DEL_CLIENT
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC:     <mani@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-arm-msm@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1680248937-16617-1-git-send-email-quic_srichara@quicinc.com>
+ <20230331080216.GA6352@thinkpad>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <20230331080216.GA6352@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: yWUOuhIlPHa6RaHAPobr63OwjC3k6wvQ
+X-Proofpoint-GUID: yWUOuhIlPHa6RaHAPobr63OwjC3k6wvQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-31_04,2023-03-30_04,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 spamscore=0 clxscore=1015
+ adultscore=0 mlxlogscore=255 malwarescore=0 mlxscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303310070
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Mar 2023, Andrew Morton <akpm@linux-foundation.org> wrote:
-> On Thu, 30 Mar 2023 21:53:03 +0000 David Laight <David.Laight@ACULAB.COM>=
- wrote:
->
->> > But wouldn't all these issues be addressed by simply doing
->> >=20
->> > #define is_power_of_2(n) (n !=3D 0 && ((n & (n - 1)) =3D=3D 0))
->> >=20
->> > ?
->> >=20
->> > (With suitable tweaks to avoid evaluating `n' more than once)
->>=20
->> I think you need to use the 'horrid tricks' from min() to get
->> a constant expression from constant inputs.
->
-> This
->
-> --- a/include/linux/log2.h~a
-> +++ a/include/linux/log2.h
-> @@ -41,11 +41,11 @@ int __ilog2_u64(u64 n)
->   * *not* considered a power of two.
->   * Return: true if @n is a power of 2, otherwise false.
->   */
-> -static inline __attribute__((const))
-> -bool is_power_of_2(unsigned long n)
-> -{
-> -	return (n !=3D 0 && ((n & (n - 1)) =3D=3D 0));
-> -}
-> +#define is_power_of_2(_n)				\
-> +	({						\
-> +		typeof(_n) n =3D (_n);			\
-> +		n !=3D 0 && ((n & (n - 1)) =3D=3D 0);		\
-> +	})
->=20=20
->  /**
->   * __roundup_pow_of_two() - round up to nearest power of two
-> _
->
-> worked for me in a simple test.
->
-> --- a/fs/open.c~b
-> +++ a/fs/open.c
-> @@ -1564,3 +1564,10 @@ int stream_open(struct inode *inode, str
->  }
->=20=20
->  EXPORT_SYMBOL(stream_open);
-> +
-> +#include <linux/log2.h>
-> +
-> +int foo(void)
-> +{
-> +	return is_power_of_2(43);
-> +}
-> _
->
->
-> foo:
-> # fs/open.c:1573: }
-> 	xorl	%eax, %eax	#
-> 	ret=09
->
->
-> Is there some more tricky situation where it breaks?
+<..>
 
-It doesn't work with BUILD_BUG_ON_ZERO().
+>>   
+>> -static int server_del(struct qrtr_node *node, unsigned int port)
+>> +static int server_del(struct qrtr_node *node, unsigned int port, bool bcast)
+>>   {
+>>   	struct qrtr_lookup *lookup;
+>>   	struct qrtr_server *srv;
+>> @@ -287,7 +287,7 @@ static int server_del(struct qrtr_node *node, unsigned int port)
+>>   	radix_tree_delete(&node->servers, port);
+>>   
+>>   	/* Broadcast the removal of local servers */
+>> -	if (srv->node == qrtr_ns.local_node)
+>> +	if (srv->node == qrtr_ns.local_node && bcast)
+>>   		service_announce_del(&qrtr_ns.bcast_sq, srv);
+>>   
+>>   	/* Announce the service's disappearance to observers */
+>> @@ -373,7 +373,7 @@ static int ctrl_cmd_bye(struct sockaddr_qrtr *from)
+>>   		}
+>>   		slot = radix_tree_iter_resume(slot, &iter);
+>>   		rcu_read_unlock();
+>> -		server_del(node, srv->port);
+>> +		server_del(node, srv->port, true);
+>>   		rcu_read_lock();
+>>   	}
+>>   	rcu_read_unlock();
+>> @@ -459,10 +459,13 @@ static int ctrl_cmd_del_client(struct sockaddr_qrtr *from,
+>>   		kfree(lookup);
+>>   	}
+>>   
+>> -	/* Remove the server belonging to this port */
+>> +	/* Remove the server belonging to this port but don't broadcast
+> 
+> This is still not as per the multi line comment style perferred in kernel.
+> Please read: https://www.kernel.org/doc/html/latest/process/coding-style.html#commenting
+> 
 
-test.c:
-#define IS_POWER_OF_2(_n)				\
-	({						\
-		typeof(_n) n =3D (_n);			\
-		n !=3D 0 && ((n & (n - 1)) =3D=3D 0);		\
-	})
+  Ho, i had it like first style and checkpatch cribbed. Then changed it
+  as per the second style for net/ format. You mean we should stick to
+  1 st style ?
 
-#define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-
-#define FOO(n) ((n) + BUILD_BUG_ON_ZERO(!IS_POWER_OF_2(n)))
-
-int main(void)
-{
-	return FOO(2);
-}
-
-$ gcc test.c
-test.c: In function =E2=80=98main=E2=80=99:
-test.c:16:51: error: bit-field =E2=80=98<anonymous>=E2=80=99 width not an i=
-nteger constant
-   16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); }=
-)))
-      |                                                   ^
-test.c:18:23: note: in expansion of macro =E2=80=98BUILD_BUG_ON_ZERO=E2=80=
-=99
-   18 | #define FOO(n) ((n) + BUILD_BUG_ON_ZERO(!IS_POWER_OF_2(n)))
-      |                       ^~~~~~~~~~~~~~~~~
-test.c:22:9: note: in expansion of macro =E2=80=98FOO=E2=80=99
-   22 |  return FOO(2);
-      |         ^~~
-
-
-BR,
-Jani.
-
---=20
-Jani Nikula, Intel Open Source Graphics Center
+Regards,
+  Sricharan
