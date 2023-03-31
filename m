@@ -2,160 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8516D2230
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDD26D2234
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbjCaOQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
+        id S232480AbjCaOR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjCaOQy (ORCPT
+        with ESMTP id S232464AbjCaORZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:16:54 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E6819A0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:16:53 -0700 (PDT)
+        Fri, 31 Mar 2023 10:17:25 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C1961B9;
+        Fri, 31 Mar 2023 07:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680272213; x=1711808213;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=+Gw96Y45VrA7zDyfXk2bjg7K7rgD+aCxxfZVw9eX3Uw=;
-  b=T1MUh1lAGOW1vgWzdMFiAmYHjba75wonb7Olxl6uBdgsdCkW56Mlo5OC
-   6aAKBAVvJLDrmiSwxl+Q2ey+UkcNa1uvVT91Zt8mifgP1a2npyFcFJQ1j
-   vSpBedIGv8YxrDKK/BQaBEQVJSmmIi5E9BDn0I1eHrjB2J37RIr+XoTb0
-   ycsvmsjwZtU9LFa9JfWVuZa8qHAxQQsSbuKEaqvXpBRQF7RqUyrdB2Eht
-   yluKtFZS1c2RTlArgeIQ9tlMybUTZ02X3y7J+W0a/Eh+Y0wSrswTNeGPI
-   BHF39sQy6oWjRFDA0wsNP08gLiErB+IDNMdz5Ha1qYJVXSRFcPePekOTe
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="321113028"
+  t=1680272243; x=1711808243;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6LPyPGMktGNNzzeF0EgKvNivoqTwJYbCzRum/Ah24es=;
+  b=ErBfFaCty8rhQ3XwNM5LuEWRiKXgdGWIJ10CQaxh6/aLcGSkKkVs5U+y
+   h3VEfsOp6XgQJ834Kpsw0xup+JY+quQsAibrjSmXK7i/RWWg7XyD2Ase6
+   caJjMw9nldceW8gOMEYN9sCqvMjqkerDUEQPbA8DPFyByAw+g7m7JmuQV
+   crRH1W+a/s+QSDzR+XpjC+bwT1jaAckRbtJPmkAgFVOBOY0VyYegyDr6O
+   uEw4LeIFhPvN+zjwC17k6dGJI1+sPV2G//84076/qeewKMjTOk2tkFe87
+   Ht5R2irUfC11hHZ0GwrCsZazKF3YTLQ9hhXE9+UGD7S3OsZ1OcWze5GHe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="343122143"
 X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="321113028"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 07:16:52 -0700
+   d="scan'208";a="343122143"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 07:17:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="717730409"
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="859334784"
 X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="717730409"
-Received: from lab-ah.igk.intel.com ([10.102.138.202])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 07:16:48 -0700
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Date:   Fri, 31 Mar 2023 16:16:36 +0200
-Subject: [PATCH v2] drm/i915/gt: Hold a wakeref for the active VM
+   d="scan'208";a="859334784"
+Received: from meetipat-mobl1.amr.corp.intel.com (HELO [10.251.25.236]) ([10.251.25.236])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 07:17:13 -0700
+Message-ID: <369307a5-e6ca-5e5c-f024-49fd174e4f2e@linux.intel.com>
+Date:   Fri, 31 Mar 2023 07:17:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 0/2] perf top: Add --branch-history option
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+References: <20230330131833.12864-1-adrian.hunter@intel.com>
+ <ZCX7m2bsyk0SwAdy@kernel.org>
+Content-Language: en-US
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <ZCX7m2bsyk0SwAdy@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230330-hold_wakeref_for_active_vm-v2-1-724d201499c2@intel.com>
-X-B4-Tracking: v=1; b=H4sIAETrJmQC/42OSw6DIBRFt2IYl4aP0dhR99EYgvgoL1UxQGgb4
- 96LrqDDc2/uZyMRAkIkt2ojATJG9EsBcamIcXp5AsWxMBFMSCYlo85Po3rrFwSwyvqgtEmYQeWZ
- tpZxqeu6AytJKRh0BDoEvRh3VIxhpgnXw1lLGD/n7KMv7DAmH77ni8wP9a/BzCmngza65aLphG3
- uuCSYrsbPpN/3/QdPBHkC3gAAAA==
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Chris Wilson <chris.p.wilson@linux.intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>
-X-Mailer: b4 0.11.1
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Wilson <chris@chris-wilson.co.uk>
 
-There may be a disconnect between the GT used by the engine and the GT
-used for the VM, requiring us to hold a wakeref on both while the GPU is
-active with this request.
+On 3/30/2023 2:14 PM, Arnaldo Carvalho de Melo wrote:
+> Em Thu, Mar 30, 2023 at 04:18:31PM +0300, Adrian Hunter escreveu:
+>> Hi
+>>
+>> Here are small patches related to option --branch-history.
+>>
+>> Note, currently --branch-history is broken due to patch
+>> "perf report: append inlines to non-dwarf callchains" so
+>> that needs to be reverted / fixed beforehand.
+> Thanks, applied.
 
-v2: added explanation to __queue_and_release_pm
 
-Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-[ahajda: removed not-yet-upstremed wakeref tracking bits]
-Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
----
-Changes in v2:
-- Link to v1: https://lore.kernel.org/r/20230330-hold_wakeref_for_active_vm-v1-1-baca712692f6@intel.com
----
- drivers/gpu/drm/i915/gt/intel_context.h   | 15 +++++++++++----
- drivers/gpu/drm/i915/gt/intel_engine_pm.c |  9 +++++++++
- 2 files changed, 20 insertions(+), 4 deletions(-)
+How about the revert to fix it too?
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_context.h b/drivers/gpu/drm/i915/gt/intel_context.h
-index 0a8d553da3f439..48f888c3da083b 100644
---- a/drivers/gpu/drm/i915/gt/intel_context.h
-+++ b/drivers/gpu/drm/i915/gt/intel_context.h
-@@ -14,6 +14,7 @@
- #include "i915_drv.h"
- #include "intel_context_types.h"
- #include "intel_engine_types.h"
-+#include "intel_gt_pm.h"
- #include "intel_ring_types.h"
- #include "intel_timeline_types.h"
- #include "i915_trace.h"
-@@ -207,8 +208,11 @@ void intel_context_exit_engine(struct intel_context *ce);
- static inline void intel_context_enter(struct intel_context *ce)
- {
- 	lockdep_assert_held(&ce->timeline->mutex);
--	if (!ce->active_count++)
--		ce->ops->enter(ce);
-+	if (ce->active_count++)
-+		return;
-+
-+	ce->ops->enter(ce);
-+	intel_gt_pm_get(ce->vm->gt);
- }
- 
- static inline void intel_context_mark_active(struct intel_context *ce)
-@@ -222,8 +226,11 @@ static inline void intel_context_exit(struct intel_context *ce)
- {
- 	lockdep_assert_held(&ce->timeline->mutex);
- 	GEM_BUG_ON(!ce->active_count);
--	if (!--ce->active_count)
--		ce->ops->exit(ce);
-+	if (--ce->active_count)
-+		return;
-+
-+	intel_gt_pm_put_async(ce->vm->gt);
-+	ce->ops->exit(ce);
- }
- 
- static inline struct intel_context *intel_context_get(struct intel_context *ce)
-diff --git a/drivers/gpu/drm/i915/gt/intel_engine_pm.c b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
-index e971b153fda976..ee531a5c142c77 100644
---- a/drivers/gpu/drm/i915/gt/intel_engine_pm.c
-+++ b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
-@@ -114,6 +114,15 @@ __queue_and_release_pm(struct i915_request *rq,
- 
- 	ENGINE_TRACE(engine, "parking\n");
- 
-+	/*
-+	 * Open coded one half of intel_context_enter, which we have to omit
-+	 * here (see the large comment below) and because the other part must
-+	 * not be called due constructing directly with __i915_request_create
-+	 * which increments active count via intel_context_mark_active.
-+	 */
-+	GEM_BUG_ON(rq->context->active_count != 1);
-+	__intel_gt_pm_get(engine->gt);
-+
- 	/*
- 	 * We have to serialise all potential retirement paths with our
- 	 * submission, as we don't want to underflow either the
 
----
-base-commit: 3385d6482cd60f2a0bbb0fa97b70ae7dbba4f95c
-change-id: 20230330-hold_wakeref_for_active_vm-7f013a449ef3
+-Andi
 
-Best regards,
--- 
-Andrzej Hajda <andrzej.hajda@intel.com>
+
