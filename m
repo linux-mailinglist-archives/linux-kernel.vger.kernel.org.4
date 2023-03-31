@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682416D1482
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA246D1489
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 02:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjCaA5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Mar 2023 20:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
+        id S229500AbjCaA57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Mar 2023 20:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjCaA5k (ORCPT
+        with ESMTP id S229902AbjCaA5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Mar 2023 20:57:40 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE2F12CCD;
-        Thu, 30 Mar 2023 17:57:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0Vf02poT_1680224239;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vf02poT_1680224239)
-          by smtp.aliyun-inc.com;
-          Fri, 31 Mar 2023 08:57:20 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        saeedm@nvidia.com, leon@kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH net-next] net/mlx5e: Remove NULL check before dev_{put, hold}
-Date:   Fri, 31 Mar 2023 08:57:18 +0800
-Message-Id: <20230331005718.50060-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 30 Mar 2023 20:57:48 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC46C11EBA;
+        Thu, 30 Mar 2023 17:57:37 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id p2so15227046qtw.13;
+        Thu, 30 Mar 2023 17:57:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680224256; x=1682816256;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KJ1dpMPje81BSTbH4meHXMrj3lRV6Nvccz4UL4mrSY4=;
+        b=aBCBzBD7+sN6opFiwlYmd2tLXBC9WRxUnRDSg7CAZ3q+UhzujzH/OYCSC1aFLhjnU8
+         Mugq6pGToAkvlO/i7T6WJJ9QJB7OoLR0mSWVz32skX4LopU5tONYvBFr7sG1o5suL6rQ
+         YaJLvsLq0qaTJT+ER/csXHAjvwGuEbapXSnBR4hhNojZvwBltkKKfGh/ILlGTK0TzvOK
+         7Jz731yxkIf2yCPXC2DJNxXzi4FU8dSepdnzINKVyay1rzm6oADtglI00mwwwVcbEBKr
+         W2ur5/cik+J3Nc8/Dt0dOS8Qx8BiMMyrTU0xWrDWRUe8ElDopl7aJOcJvcIsHrBVuCrc
+         +5NQ==
+X-Gm-Message-State: AO0yUKW0H+N9vJ+xY/iya6c4AVL0NWXPRHMVRmxQp7TMm46jWs6hFFGU
+        9C6FMmIHJ+nRoeWKXOQG97Nkn26eoxEsw9eA
+X-Google-Smtp-Source: AK7set8cdqCl1Ccbi6bY6IHStv1RYhtQbV93P49J9OOELuKGOafR5weHiW8S5clqOLZANC0VWpKc7g==
+X-Received: by 2002:ac8:5cd2:0:b0:3bf:a061:6cb1 with SMTP id s18-20020ac85cd2000000b003bfa0616cb1mr43945071qta.46.1680224256505;
+        Thu, 30 Mar 2023 17:57:36 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:d9ee])
+        by smtp.gmail.com with ESMTPSA id bn29-20020a05620a2add00b007441b675e81sm283005qkb.22.2023.03.30.17.57.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 17:57:35 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Subject: [PATCH bpf-next 0/3] Enable RCU semantics for task kptrs
+Date:   Thu, 30 Mar 2023 19:57:30 -0500
+Message-Id: <20230331005733.406202-1-void@manifault.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The call netdev_{put, hold} of dev_{put, hold} will check NULL,
-so there is no need to check before using dev_{put, hold},
-remove it to silence the warnings:
+In commit 22df776a9a86 ("tasks: Extract rcu_users out of union"), the
+'refcount_t rcu_users' field was extracted out of a union with the
+'struct rcu_head rcu' field. This allows us to use the field for
+refcounting struct task_struct with RCU protection, as the RCU callback
+no longer flips rcu_users to be nonzero after the callback is scheduled.
 
-./drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c:734:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
-./drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c:769:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
+This patch set leverages this to do a few things:
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4667
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+1. Marks struct task_struct as RCU safe in the verifier, allowing
+   referenced kptr tasks stored in maps to be accessed in an RCU
+   read region without acquiring a reference (with just a NULL check).
+2. Makes bpf_task_acquire() a KF_ACQUIRE | KF_RCU | KF_RET_NULL kfunc.
+3. Removes bpf_task_kptr_get() and bpf_task_acquire_not_zero(), as
+   they're now redundant with the above two changes.
+4. Updates selftests and documentation accordingly.
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
-index 20c2d2ecaf93..69ac30a728f4 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
-@@ -730,8 +730,7 @@ static int mlx5e_set_vf_tunnel(struct mlx5_eswitch *esw,
- 	}
- 
- out:
--	if (route_dev)
--		dev_put(route_dev);
-+	dev_put(route_dev);
- 	return err;
- }
- 
-@@ -765,8 +764,7 @@ static int mlx5e_update_vf_tunnel(struct mlx5_eswitch *esw,
- 	mlx5e_tc_match_to_reg_mod_hdr_change(esw->dev, mod_hdr_acts, VPORT_TO_REG, act_id, data);
- 
- out:
--	if (route_dev)
--		dev_put(route_dev);
-+	dev_put(route_dev);
- 	return err;
- }
- 
+David Vernet (3):
+  bpf: Make struct task_struct an RCU-safe type
+  bpf: Remove now-defunct task kfuncs
+  bpf,docs: Update documentation to reflect new task kfuncs
+
+ Documentation/bpf/kfuncs.rst                  |  49 ++++++-
+ kernel/bpf/helpers.c                          |  78 +----------
+ kernel/bpf/verifier.c                         |   1 +
+ .../selftests/bpf/prog_tests/task_kfunc.c     |   4 +-
+ .../selftests/bpf/progs/rcu_read_lock.c       |   9 +-
+ .../selftests/bpf/progs/task_kfunc_common.h   |   6 +-
+ .../selftests/bpf/progs/task_kfunc_failure.c  | 126 ++++++++----------
+ .../selftests/bpf/progs/task_kfunc_success.c  |  76 +++++++++--
+ 8 files changed, 174 insertions(+), 175 deletions(-)
+
 -- 
-2.20.1.7.g153144c
+2.39.0
 
