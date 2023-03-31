@@ -2,187 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015266D1CA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6DE6D1CBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjCaJjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
+        id S232279AbjCaJl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232202AbjCaJjk (ORCPT
+        with ESMTP id S232182AbjCaJlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:39:40 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664881EA28;
-        Fri, 31 Mar 2023 02:39:28 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1piBEB-00075I-BA; Fri, 31 Mar 2023 11:39:23 +0200
-Message-ID: <2194d19d-f195-1a1e-41fc-7827ae569351@leemhuis.info>
-Date:   Fri, 31 Mar 2023 11:39:22 +0200
+        Fri, 31 Mar 2023 05:41:52 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0776AC
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:41:50 -0700 (PDT)
+Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PnwJQ00C4zrYS7;
+        Fri, 31 Mar 2023 17:40:37 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 31 Mar 2023 17:41:47 +0800
+From:   Peng Zhang <zhangpeng362@huawei.com>
+To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <akpm@linux-foundation.org>, <willy@infradead.org>,
+        <mike.kravetz@oracle.com>, <sidhartha.kumar@oracle.com>
+CC:     <vishal.moola@gmail.com>, <muchun.song@linux.dev>,
+        <wangkefeng.wang@huawei.com>, <sunnanyong@huawei.com>,
+        ZhangPeng <zhangpeng362@huawei.com>
+Subject: [PATCH v5 0/6] userfaultfd: convert userfaultfd functions to use folios
+Date:   Fri, 31 Mar 2023 17:39:31 +0800
+Message-ID: <20230331093937.945725-1-zhangpeng362@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-US, de-DE
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
-References: <20230314-doc-checkpatch-closes-tag-v3-0-d1bdcf31c71c@tessares.net>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v3 0/4] docs & checkpatch: allow Closes tags with links
-In-Reply-To: <20230314-doc-checkpatch-closes-tag-v3-0-d1bdcf31c71c@tessares.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1680255568;04a097a5;
-X-HE-SMSGID: 1piBEB-00075I-BA
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.23 20:13, Matthieu Baerts wrote:
-> Since v6.3, checkpatch.pl now complains about the use of "Closes:" tags
-> followed by a link [1]. It also complains if a "Reported-by:" tag is
-> followed by a "Closes:" one [2].
-> 
-> As detailed in the first patch, this "Closes:" tag is used for a bit of
-> time, mainly by DRM and MPTCP subsystems. It is used by some bug
-> trackers to automate the closure of issues when a patch is accepted.
-> It is even planned to use this tag with bugzilla.kernel.org [3].
-> 
-> The first patch updates the documentation to explain what is this
-> "Closes:" tag and how/when to use it. The second patch modifies
-> checkpatch.pl to stop complaining about it.
-> 
-> The DRM maintainers and their mailing list have been added in Cc as they
-> are probably interested by these two patches as well.
-> 
-> [1] https://lore.kernel.org/all/3b036087d80b8c0e07a46a1dbaaf4ad0d018f8d5.1674217480.git.linux@leemhuis.info/
-> [2] https://lore.kernel.org/all/bb5dfd55ea2026303ab2296f4a6df3da7dd64006.1674217480.git.linux@leemhuis.info/
-> [3] https://lore.kernel.org/linux-doc/20230315181205.f3av7h6owqzzw64p@meerkat.local/
-> 
-> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+From: ZhangPeng <zhangpeng362@huawei.com>
 
-Maybe it's just me, but I think those changes do not make it clear
-enough when to use Link: and when to use Closes. Find below an
-alternative proposal how I'd do it for consideration that goes
-'all-in' for the sake of simplicity.
+This patch series converts several userfaultfd functions to use folios.
 
-[untested -- and I hope thunderbird won't mangle the patch]
+Change log:
 
-Ciao, Thorsten
+v4->v5:
+- Update commit description and change page_kaddr to kaddr, suggested by
+  Matthew Wilcox. (patch 1,6)
+- Remove pages_per_huge_page from copy_user_folio(), suggested by
+  Matthew Wilcox. (patch 5)
+- Add RB from Sidhartha Kumar. (patch 1,3,4)
 
+v3->v4:
+- Rebase onto mm-unstable per Andrew Morton. Update commit description
+  because some function names are changed. (patch 1,4,6)
 
-diff --git a/Documentation/process/5.Posting.rst b/Documentation/process/5.Posting.rst
-index 7a670a075ab6..fc194b4d1674 100644
---- a/Documentation/process/5.Posting.rst
-+++ b/Documentation/process/5.Posting.rst
-@@ -207,11 +207,17 @@ the patch::
- 	Fixes: 1f2e3d4c5b6a ("The first line of the commit specified by the first 12 characters of its SHA-1 ID")
- 
- Another tag is used for linking web pages with additional backgrounds or
--details, for example a report about a bug fixed by the patch or a document
-+details, for example earlier discussion which lead to the patch or a document
- with a specification implemented by the patch::
- 
- 	Link: https://example.com/somewhere.html  optional-other-stuff
- 
-+If the URL points to a report about a bug fixed by the patch, use this instead::
-+
-+	Closes: https://example.com/somewhere.html  optional-other-stuff
-+
-+Ensure any such links are publicly accessible.
-+
- Many maintainers when applying a patch also add this tag to link to the
- latest public review posting of the patch; often this is automatically done
- by tools like b4 or a git hook like the one described in
-@@ -251,7 +257,7 @@ The tags in common use are:
-  - Reported-by: names a user who reported a problem which is fixed by this
-    patch; this tag is used to give credit to the (often underappreciated)
-    people who test our code and let us know when things do not work
--   correctly. Note, this tag should be followed by a Link: tag pointing to the
-+   correctly. Note, this tag should be followed by a Closes: tag pointing to the
-    report, unless the report is not available on the web.
- 
-  - Cc: the named person received a copy of the patch and had the
-diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-index 69ce64e03c70..73611cf1c372 100644
---- a/Documentation/process/submitting-patches.rst
-+++ b/Documentation/process/submitting-patches.rst
-@@ -126,8 +126,10 @@ For example::
- 
-     Link: https://lore.kernel.org/r/30th.anniversary.repost@klaava.Helsinki.FI/
- 
--Please check the link to make sure that it is actually working and points
--to the relevant message.
-+If the URL points to a bug report that is fixed by the patch, use 'Closes:'
-+instead.
-+
-+Ensure any such links are publicly accessible.
- 
- However, try to make your explanation understandable without external
- resources. In addition to giving a URL to a mailing list archive or bug,
-@@ -498,7 +500,7 @@ Using Reported-by:, Tested-by:, Reviewed-by:, Suggested-by: and Fixes:
- The Reported-by tag gives credit to people who find bugs and report them and it
- hopefully inspires them to help us again in the future. The tag is intended for
- bugs; please do not use it to credit feature requests. The tag should be
--followed by a Link: tag pointing to the report, unless the report is not
-+followed by a Closes: tag pointing to the report, unless the report is not
- available on the web. Please note that if the bug was reported in private, then
- ask for permission first before using the Reported-by tag.
- 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index bd44d12965c9..f9a7c2b856ae 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -3158,14 +3158,14 @@ sub process {
- 				}
- 			}
- 
--# check if Reported-by: is followed by a Link:
-+# check if Reported-by: is followed by a Closes: tag
- 			if ($sign_off =~ /^reported(?:|-and-tested)-by:$/i) {
- 				if (!defined $lines[$linenr]) {
- 					WARN("BAD_REPORTED_BY_LINK",
--					     "Reported-by: should be immediately followed by Link: to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
--				} elsif ($rawlines[$linenr] !~ m{^link:\s*https?://}i) {
-+					     "Reported-by: should be immediately followed by Closes: to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
-+				} elsif ($rawlines[$linenr] !~ m{^closes:\s*https?://}i) {
- 					WARN("BAD_REPORTED_BY_LINK",
--					     "Reported-by: should be immediately followed by Link: with a URL to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
-+					     "Reported-by: should be immediately followed by Closes: with a URL to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
- 				}
- 			}
- 		}
-@@ -3266,13 +3266,13 @@ sub process {
- 
- # Check for odd tags before a URI/URL
- 		if ($in_commit_log &&
--		    $line =~ /^\s*(\w+):\s*http/ && $1 ne 'Link') {
-+		    $line =~ /^\s*(\w+):\s*http/ && $1 ne 'Link' && $1 ne 'Closes') {
- 			if ($1 =~ /^v(?:ersion)?\d+/i) {
- 				WARN("COMMIT_LOG_VERSIONING",
- 				     "Patch version information should be after the --- line\n" . $herecurr);
- 			} else {
- 				WARN("COMMIT_LOG_USE_LINK",
--				     "Unknown link reference '$1:', use 'Link:' instead\n" . $herecurr);
-+				     "Unknown link reference '$1:', use 'Link:' or 'Closes:' instead\n" . $herecurr);
- 			}
- 		}
- 
+v2->v3:
+- Split patch 2 into three patches, suggested by Mike Kravetz. (patch
+  2-4)
+- Add a new patch to convert copy_user_huge_page to copy_user_folio,
+  suggested by Mike Kravetz. (patch 5)
+- Fix two uninitialized bugs, thanks to Dan Carpenter. (patch 6)
+- Do some indenting cleanups.
+
+v1->v2:
+Modified patch 2, suggested by Matthew Wilcox:
+- Rename copy_large_folio_from_user() to copy_folio_from_user().
+- Delete the inner_folio.
+- kmap() and kmap_atomic() are converted to kmap_local_page(). Use
+  pagefault_disable() to ensure that a deadlock will not occur.
+- flush_dcache_folio() is placed outside the loop.
+
+ZhangPeng (6):
+  userfaultfd: convert mfill_atomic_pte_copy() to use a folio
+  userfaultfd: use kmap_local_page() in copy_huge_page_from_user()
+  userfaultfd: convert copy_huge_page_from_user() to
+    copy_folio_from_user()
+  userfaultfd: convert mfill_atomic_hugetlb() to use a folio
+  mm: convert copy_user_huge_page() to copy_user_folio()
+  userfaultfd: convert mfill_atomic() to use a folio
+
+ include/linux/hugetlb.h  |  4 +-
+ include/linux/mm.h       | 14 +++----
+ include/linux/shmem_fs.h |  4 +-
+ mm/hugetlb.c             | 39 ++++++++----------
+ mm/memory.c              | 64 ++++++++++++++---------------
+ mm/shmem.c               | 16 ++++----
+ mm/userfaultfd.c         | 89 ++++++++++++++++++++--------------------
+ 7 files changed, 110 insertions(+), 120 deletions(-)
+
+-- 
+2.25.1
+
