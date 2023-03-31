@@ -2,70 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 645F26D2650
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412BD6D2652
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjCaQyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 12:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
+        id S231666AbjCaQy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjCaQyJ (ORCPT
+        with ESMTP id S232351AbjCaQyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:54:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8CE6EA9;
-        Fri, 31 Mar 2023 09:53:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BD1EB8310E;
-        Fri, 31 Mar 2023 16:53:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 457CDC433D2;
-        Fri, 31 Mar 2023 16:53:48 +0000 (UTC)
-Date:   Fri, 31 Mar 2023 17:53:45 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH 00/21] dma-mapping: unify support for cache flushes
-Message-ID: <ZCcQGX/i8xBPiG7T@arm.com>
-References: <20230327121317.4081816-1-arnd@kernel.org>
+        Fri, 31 Mar 2023 12:54:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80777BDE3
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:54:18 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1piI0q-0007MO-3L; Fri, 31 Mar 2023 18:54:04 +0200
+Message-ID: <24d12b0e-0a96-4027-988a-16b433572f68@pengutronix.de>
+Date:   Fri, 31 Mar 2023 18:53:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327121317.4081816-1-arnd@kernel.org>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [Linux-stm32] [PATCH v2 2/2] net: stmmac: dwmac-imx: use platform
+ specific reset for imx93 SoCs
+Content-Language: en-US
+To:     Shenwei Wang <shenwei.wang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc:     imx@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        netdev@vger.kernel.org,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Revanth Kumar Uppala <ruppala@nvidia.com>
+References: <20230331163143.52506-1-shenwei.wang@nxp.com>
+ <20230331163143.52506-2-shenwei.wang@nxp.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20230331163143.52506-2-shenwei.wang@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,24 +67,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 02:12:56PM +0200, Arnd Bergmann wrote:
-> Another difference that I do not address here is what cache invalidation
-> does for partical cache lines. On arm32, arm64 and powerpc, a partial
-> cache line always gets written back before invalidation in order to
-> ensure that data before or after the buffer is not discarded. On all
-> other architectures, the assumption is cache lines are never shared
-> between DMA buffer and data that is accessed by the CPU.
+Hello Shenwei,
 
-I don't think sharing the DMA buffer with other data is safe even with
-this clean+invalidate on the unaligned cache. Mapping the DMA buffer as
-FROM_DEVICE or BIDIRECTIONAL can cause the shared cache line to be
-evicted and override the device written data. This sharing only works if
-the CPU guarantees not to dirty the corresponding cache line.
+On 31.03.23 18:31, Shenwei Wang wrote:
+> The patch addresses an issue with the reset logic on the i.MX93 SoC, which
+> requires configuration of the correct interface speed under RMII mode to
+> complete the reset. The patch implements a fix_soc_reset function and uses
+> it specifically for the i.MX93 SoCs.
 
-I'm fine with removing this partial cache line hack from arm64 as it's
-not safe anyway. We'll see if any driver stops working. If there's some
-benign sharing (I wouldn't trust it), the cache cleaning prior to
-mapping and invalidate on unmap would not lose any data.
+[...]
+
+>  static int
+>  imx_dwmac_parse_dt(struct imx_priv_data *dwmac, struct device *dev)
+>  {
+> @@ -305,6 +327,9 @@ static int imx_dwmac_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto err_dwmac_init;
+>  
+> +	if (of_machine_is_compatible("fsl,imx93"))
+> +		dwmac->plat_dat->fix_soc_reset = imx_dwmac_mx93_reset;
+
+imx_dwmac_mx93_reset is accessing eqos registers in an eqos driver. I don't
+see why you need to check against SoC compatible instead of device compatible
+here.
+
+My suggestion is to add fix_soc_reset to the struct imx_dwmac_ops associated
+with "nxp,imx93-dwmac-eqos" compatible and use that to populate
+plat_dat->fix_soc_reset unconditionally.
+
+Thanks,
+Ahmad
+
+
+> +
+>  	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+>  	if (ret)
+>  		goto err_drv_probe;
 
 -- 
-Catalin
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
