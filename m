@@ -2,124 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A216D1C1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AE86D1C35
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbjCaJ0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
+        id S232133AbjCaJ13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbjCaJ0X (ORCPT
+        with ESMTP id S231874AbjCaJ1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:26:23 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD1D1D2DD;
-        Fri, 31 Mar 2023 02:26:22 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32V9Q0Wg056198;
-        Fri, 31 Mar 2023 04:26:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680254760;
-        bh=gIvlurnr4TzVrOK7Fbvtp8wI7+jYvwfr27GEkxvhbPA=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=IzQLNJF/SDsPyx/Fc36h8FywkXOM7ig6ENaHw0drRrR8/BCcEQ3GLTmNVII8rDi4z
-         YSialPbAahobwZCkpZxpUIc+bdY4YQWjx3kK3ed8ZGMkBLrZzeHbHtIoMWyOhu5fK7
-         pIdSENoXx9/uSowHlqOExZDjNIG6gK5rAxGt2wNo=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32V9Q0H8016793
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 31 Mar 2023 04:26:00 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 31
- Mar 2023 04:26:00 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 31 Mar 2023 04:26:00 -0500
-Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32V9PuHs031936;
-        Fri, 31 Mar 2023 04:25:57 -0500
-Message-ID: <7a9c96f4-6a94-4a2c-18f5-95f7246e10d5@ti.com>
-Date:   Fri, 31 Mar 2023 14:55:56 +0530
+        Fri, 31 Mar 2023 05:27:02 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289701BF54
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:26:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A6963CE2E04
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:26:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E241FC433D2;
+        Fri, 31 Mar 2023 09:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680254795;
+        bh=ngC/W6NnsF+/WMMI/twPoOWsX6vUYeGknc0YjZdw5Pw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=UWGJNuqrC4qenXiXXTKsAZBAHi0NuRJ93rb+421/6cAQMW52yplSH773ZCxdG2idt
+         jDBm6HevZ7/qjEPw5IwpyvVb8E3u9sCFjWELkjFC+d1Onmbll2P5Hb7druUp/3KHn9
+         fpGeMEzgq5SCTUsJgxExlLwRhNXlgIzZIXOA1A3nbNXIn0oLcmcB13UIstJV6qBKBv
+         wNnUfMqbYw3zk/ubSDGR6p936NQ+sq67AOV0FS9zljl2KsW62vDtpwAlhzWxu2j42S
+         VWLZRpQo7wBebjtmCLS8OGmaPOcsqHtex+QwzFg1WXQzklUuNGeMLpA42avvJ5e/JG
+         0SyQVkl+kQ6Wg==
+From:   Lee Jones <lee@kernel.org>
+To:     lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH 08/19] drm/i915/gem/i915_gem_domain: Provide function names to complete proper kerneldoc
+Date:   Fri, 31 Mar 2023 10:25:56 +0100
+Message-Id: <20230331092607.700644-9-lee@kernel.org>
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+In-Reply-To: <20230331092607.700644-1-lee@kernel.org>
+References: <20230331092607.700644-1-lee@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <rogerq@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH net-next 2/2] net: ethernet: ti: am65-cpsw: Enable USXGMII
- mode for J784S4 CPSW9G
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-References: <20230331065110.604516-1-s-vadapalli@ti.com>
- <20230331065110.604516-3-s-vadapalli@ti.com>
- <ZCaSXQFZ/e/JIDEj@shell.armlinux.org.uk>
- <54c3964b-5dd8-c55e-08db-61df4a07797c@ti.com>
- <ZCaYve8wYl15YRxh@shell.armlinux.org.uk>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <ZCaYve8wYl15YRxh@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Russell,
+Fixes the following W=1 kernel build warning(s):
 
-On 31/03/23 13:54, Russell King (Oracle) wrote:
-> On Fri, Mar 31, 2023 at 01:35:10PM +0530, Siddharth Vadapalli wrote:
->> Hello Russell,
->>
->> Thank you for reviewing the patch.
->>
->> On 31/03/23 13:27, Russell King (Oracle) wrote:
->>> On Fri, Mar 31, 2023 at 12:21:10PM +0530, Siddharth Vadapalli wrote:
->>>> TI's J784S4 SoC supports USXGMII mode. Add USXGMII mode to the
->>>> extra_modes member of the J784S4 SoC data. Additionally, configure the
->>>> MAC Control register for supporting USXGMII mode. Also, for USXGMII
->>>> mode, include MAC_5000FD in the "mac_capabilities" member of struct
->>>> "phylink_config".
->>>
->>> I don't think TI "get" phylink at all...
->>>
->>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>> index 4b4d06199b45..ab33e6fe5b1a 100644
->>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>> @@ -1555,6 +1555,8 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
->>>>  		mac_control |= CPSW_SL_CTL_GIG;
->>>>  	if (interface == PHY_INTERFACE_MODE_SGMII)
->>>>  		mac_control |= CPSW_SL_CTL_EXT_EN;
->>>> +	if (interface == PHY_INTERFACE_MODE_USXGMII)
->>>> +		mac_control |= CPSW_SL_CTL_XGIG | CPSW_SL_CTL_XGMII_EN;
->>>
->>> The configuration of the interface mode should *not* happen in
->>> mac_link_up(), but should happen in e.g. mac_config().
->>
->> I will move all the interface mode associated configurations to mac_config() in
->> the v2 series.
-> 
-> Looking at the whole of mac_link_up(), could you please describe what
-> effect these bits are having:
-> 
-> 	CPSW_SL_CTL_GIG
-> 	CPSW_SL_CTL_EXT_EN
-> 	CPSW_SL_CTL_IFCTL_A
+ drivers/gpu/drm/i915/gem/i915_gem_domain.c:119: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ drivers/gpu/drm/i915/gem/i915_gem_domain.c:180: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ drivers/gpu/drm/i915/gem/i915_gem_domain.c:265: warning: expecting prototype for Changes the cache(). Prototype was for i915_gem_object_set_cache_level() instead
+ drivers/gpu/drm/i915/gem/i915_gem_domain.c:470: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ drivers/gpu/drm/i915/gem/i915_gem_domain.c:514: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
 
-CPSW_SL_CTL_GIG corresponds to enabling Gigabit mode (full duplex only).
-CPSW_SL_CTL_EXT_EN when set enables in-band mode of operation and when cleared
-enables forced mode of operation.
-CPSW_SL_CTL_IFCTL_A is used to set the RMII link speed (0=10 mbps, 1=100 mbps).
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: intel-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: Lee Jones <lee@kernel.org>
+---
+ drivers/gpu/drm/i915/gem/i915_gem_domain.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-Regards,
-Siddharth.
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_domain.c b/drivers/gpu/drm/i915/gem/i915_gem_domain.c
+index 497de40b8e688..d2d5a24301b25 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_domain.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_domain.c
+@@ -116,7 +116,8 @@ void i915_gem_object_flush_if_display_locked(struct drm_i915_gem_object *obj)
+ }
+ 
+ /**
+- * Moves a single object to the WC read, and possibly write domain.
++ * i915_gem_object_set_to_wc_domain - Moves a single object to the WC read, and
++ *                                    possibly write domain.
+  * @obj: object to act on
+  * @write: ask for write access or read only
+  *
+@@ -177,7 +178,8 @@ i915_gem_object_set_to_wc_domain(struct drm_i915_gem_object *obj, bool write)
+ }
+ 
+ /**
+- * Moves a single object to the GTT read, and possibly write domain.
++ * i915_gem_object_set_to_gtt_domain - Moves a single object to the GTT read,
++ *                                     and possibly write domain.
+  * @obj: object to act on
+  * @write: ask for write access or read only
+  *
+@@ -246,7 +248,7 @@ i915_gem_object_set_to_gtt_domain(struct drm_i915_gem_object *obj, bool write)
+ }
+ 
+ /**
+- * Changes the cache-level of an object across all VMA.
++ * i915_gem_object_set_cache_level - Changes the cache-level of an object across all VMA.
+  * @obj: object to act on
+  * @cache_level: new cache level to set for the object
+  *
+@@ -467,7 +469,8 @@ i915_gem_object_pin_to_display_plane(struct drm_i915_gem_object *obj,
+ }
+ 
+ /**
+- * Moves a single object to the CPU read, and possibly write domain.
++ * i915_gem_object_set_to_cpu_domain - Moves a single object to the CPU read,
++ *                                     and possibly write domain.
+  * @obj: object to act on
+  * @write: requesting write or read-only access
+  *
+@@ -511,7 +514,8 @@ i915_gem_object_set_to_cpu_domain(struct drm_i915_gem_object *obj, bool write)
+ }
+ 
+ /**
+- * Called when user space prepares to use an object with the CPU, either
++ * i915_gem_set_domain_ioctl - Called when user space prepares to use an
++ *                             object with the CPU, either
+  * through the mmap ioctl's mapping or a GTT mapping.
+  * @dev: drm device
+  * @data: ioctl data blob
+-- 
+2.40.0.348.gf938b09366-goog
+
