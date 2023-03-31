@@ -2,63 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985D96D1D7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BF86D1DB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 12:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232069AbjCaJ4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
+        id S231173AbjCaKOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 06:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbjCaJy5 (ORCPT
+        with ESMTP id S231368AbjCaKNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:54:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB3E1DFB1;
-        Fri, 31 Mar 2023 02:54:38 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1EB7B6603192;
-        Fri, 31 Mar 2023 10:54:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680256477;
-        bh=uO0m8n14JLI7IWscEOpkhxVDFLw0lJfH0RRYJJ0etvg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QO+tIyI2Vr3sxGboyaTqWX9ggHX4L20aTc8kN94LcMlW0vENMEuNnej/sb8+uNu1b
-         AI87DzJcK3IrbmE21XuNt61EF1MmpcYbUQc2sbQyfGQyWjFe+eBjvpUqo1Dy+orlIK
-         tX4fOIPY7SYJeufHNmlp86G0KrV/z2W3/XpZPPxM1xi4He9FNRtrO9bVSXmte6xoaB
-         StHcmqRm1Z56HLhlLsVNkJPCDOsJRvWQGuFN1dNH8VfQ7zC3vR2qTWjEuls2VvP+/M
-         C8Yfn+4JvusQ2JJSjP28Y7m0sEfhP05R/l1v7+6QX1BBxdDHZdOPmn1V6KgJBEdf/j
-         aiEAVq82o/oug==
-Message-ID: <abb74f12-a1c0-7d5f-ad11-c9c892a38fe2@collabora.com>
-Date:   Fri, 31 Mar 2023 11:54:34 +0200
+        Fri, 31 Mar 2023 06:13:15 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8CF24AC1;
+        Fri, 31 Mar 2023 03:07:48 -0700 (PDT)
+Received: from legion.. ([172.16.0.254])
+        (user=lidaxian@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 32V9tmlN007322-32V9tmlO007322
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 31 Mar 2023 17:56:17 +0800
+From:   Li Yang <lidaxian@hust.edu.cn>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Li Yang <lidaxian@hust.edu.cn>, Dan Carpenter <error27@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] soc: renesas: renesas-soc: release 'chipid' from ioremap()
+Date:   Fri, 31 Mar 2023 17:55:44 +0800
+Message-Id: <20230331095545.31823-1-lidaxian@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v7 09/19] clk: mediatek: Add MT8188 ipesys clock support
-Content-Language: en-US
-To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-clk@vger.kernel.org, netdev@vger.kernel.org
-References: <20230331082131.12517-1-Garmin.Chang@mediatek.com>
- <20230331082131.12517-10-Garmin.Chang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230331082131.12517-10-Garmin.Chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: lidaxian@hust.edu.cn
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,12 +42,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 31/03/23 10:21, Garmin.Chang ha scritto:
-> Add MT8188 ipesys clock controller which provides clock gate
-> control for Image Process Engine.
-> 
-> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
+Smatch reports:
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+drivers/soc/renesas/renesas-soc.c:536 renesas_soc_init() warn:
+'chipid' from ioremap() not released on lines: 475.
 
+If soc_dev_atrr allocation is failed, function renesas_soc_init()
+will return without releasing 'chipid' from ioremap().
+
+Fix this by adding function iounmap().
+
+Fixes: cb5508e47e60 ("soc: renesas: Add support for reading product revision for RZ/G2L family")
+Signed-off-by: Li Yang <lidaxian@hust.edu.cn>
+Reviewed-by: Dan Carpenter <error27@gmail.com>
+---
+ drivers/soc/renesas/renesas-soc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
+index 468ebce1ea88..51191d1a6dd1 100644
+--- a/drivers/soc/renesas/renesas-soc.c
++++ b/drivers/soc/renesas/renesas-soc.c
+@@ -471,8 +471,11 @@ static int __init renesas_soc_init(void)
+ 	}
+ 
+ 	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
+-	if (!soc_dev_attr)
++	if (!soc_dev_attr) {
++		if (chipid)
++			iounmap(chipid);
+ 		return -ENOMEM;
++	}
+ 
+ 	np = of_find_node_by_path("/");
+ 	of_property_read_string(np, "model", &soc_dev_attr->machine);
+-- 
+2.34.1
 
