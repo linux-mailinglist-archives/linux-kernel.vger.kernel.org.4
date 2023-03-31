@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2173B6D1B82
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4436D1B8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbjCaJMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
+        id S231453AbjCaJMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbjCaJMD (ORCPT
+        with ESMTP id S231975AbjCaJMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:12:03 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1A7B758
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:12:02 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so24747987pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:12:02 -0700 (PDT)
+        Fri, 31 Mar 2023 05:12:14 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8961D913
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:12:07 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id kq3so20644645plb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:12:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680253922;
+        d=chromium.org; s=google; t=1680253927;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tIMJE3+dfsZuEjePkz0Wtpnf70h/+RWLQj9/gW4AUjg=;
-        b=f6TZGuc2T50Dq07l1gNxPP0O7ZlppNgkbuVkyNX5gSiwXb0iTsn7PtY/6vt86ERuKc
-         ja0qYPsMZkSzhxgE0CW/LXxFcY1WiVHMlGqErt8ZcQ1boSgcH64zn887opoTy/ver+FI
-         SBFd1tHsszo65lY9MDlGO/jq+Cj2l4ukGF32c=
+        bh=KuyGEC/BCL1exOJo9w5cckpDi+j1ToSvkBZ5wHJd1EI=;
+        b=asCmRmQnDO169ph3UWKR1Z453FBunIfmYwRDQIA8D06CqqHt26CWm64PBNzQPfLq7i
+         9VhRVbihJvA417MwBMmcik33jSerfc/m9zokq3LI30/lC1AN3uxYjN74qdAsdwHwFfEo
+         LD6TuuAm1zjPYtesKo5nMx7iPf9AOv/0ZprM0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680253922;
+        d=1e100.net; s=20210112; t=1680253927;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tIMJE3+dfsZuEjePkz0Wtpnf70h/+RWLQj9/gW4AUjg=;
-        b=4dfB4DxB3p1xP3jD4edqHidbaAuiNelcKMCXC3JlahZHAgoT9VqUez9PiSm8d8EC0J
-         6tlCxfq3Iko3DUdCun7MF1PBTxU3c1PQVBS0xRmUlXBLwhGIcvux+PdA7pFQAbOZlZR7
-         uwpJE50UmeneYQLyDpRtgal9UrxviEXsanA8YabSQFPNJWVFANpQeClllQdzCS6HInjw
-         KmkW/1IDYgldoHQYZCnqAxTs87dsnBg7PmTaqWZKPBV5x8H8f3xM57xHdNUAOOTVTPZO
-         njLzl/u0yrIp0+yAjRDM6Xlb0MC9fhZ0lHjDGax7CbDUcO0TwfuyK1UsHQI1eThrj+pZ
-         PjDQ==
-X-Gm-Message-State: AAQBX9dY4lHXD6BqYn1WVVPqa5kCUJHLZqEe9zx2703HW5ocoXIfY1wD
-        /kUJMrrruFG0GRUx/FcTFFx4bw==
-X-Google-Smtp-Source: AKy350adLiMrhsK7cmp8J1pAPhgKZDQTyzFyeAdOZG+KL5pVuY88iVtb0Cyvl6/30ZS6mkd7WSroUw==
-X-Received: by 2002:a05:6a20:989e:b0:da:c41e:4ddb with SMTP id jk30-20020a056a20989e00b000dac41e4ddbmr9396655pzb.7.1680253921885;
-        Fri, 31 Mar 2023 02:12:01 -0700 (PDT)
+        bh=KuyGEC/BCL1exOJo9w5cckpDi+j1ToSvkBZ5wHJd1EI=;
+        b=hqE+J6ZfxV5GhsvouvDnUQQ8fML8iJvzVvh4/bfjYxzZpD3X+HrL5lWw13R+T0O1w2
+         5JIgpWgb17IFmPFt8NSIGhFuKKsgv/CFstPR+ROv7GQcyhbdvtPz71uFO0OWG5uLw6+3
+         qQA6pRStxzt78xrbndRwOPtlWn+VLMNF85RCHLmiJj80PwnGHl1VYRgpmkP16ltSNUGG
+         nFZxMu2Q++CCr9oldHc0XS3mZI2WsxWtagTgkJXqXjH9qibMinIA3BQTNfF7j6qfefOc
+         tEYuGR0EclsGbhUuU8g7svvsNdkMFvihwPKZ2Iyd3mWs4qwUxZ0BSrKRh9o22rptjL+k
+         25hA==
+X-Gm-Message-State: AO0yUKX0T94cAliox8UHXtHkJwmqVl0jBcouGAL8Ge/y9KSeXt9QkFRn
+        Gea4N8VgOdSl75IXQ0Kb4mcByg==
+X-Google-Smtp-Source: AK7set+ubiZHdR0EYwAEQ+6mxM9jDOMo4i5HJvDrMdaVpzntUKo5Gz+rySNDQSajJbJNpYlHL+hJnA==
+X-Received: by 2002:a05:6a20:4f1f:b0:be:da1c:df65 with SMTP id gi31-20020a056a204f1f00b000beda1cdf65mr21256623pzb.28.1680253927134;
+        Fri, 31 Mar 2023 02:12:07 -0700 (PDT)
 Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:ae9d:db7a:8a71:d458])
-        by smtp.gmail.com with ESMTPSA id n6-20020a62e506000000b006227c3d5e29sm1360905pff.16.2023.03.31.02.11.57
+        by smtp.gmail.com with ESMTPSA id n6-20020a62e506000000b006227c3d5e29sm1360905pff.16.2023.03.31.02.12.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 02:12:01 -0700 (PDT)
+        Fri, 31 Mar 2023 02:12:06 -0700 (PDT)
 From:   Pin-yen Lin <treapking@chromium.org>
 To:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
@@ -80,10 +80,10 @@ Cc:     Xin Ji <xji@analogixsemi.com>, Marek Vasut <marex@denx.de>,
         <nfraprado@collabora.com>,
         Javier Martinez Canillas <javierm@redhat.com>,
         Pin-yen Lin <treapking@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v15 01/10] device property: Add remote endpoint to devcon matcher
-Date:   Fri, 31 Mar 2023 17:11:36 +0800
-Message-Id: <20230331091145.737305-2-treapking@chromium.org>
+        linux-kernel@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
+Subject: [PATCH v15 02/10] platform/chrome: cros_ec_typec: Purge blocking switch devlinks
+Date:   Fri, 31 Mar 2023 17:11:37 +0800
+Message-Id: <20230331091145.737305-3-treapking@chromium.org>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 In-Reply-To: <20230331091145.737305-1-treapking@chromium.org>
 References: <20230331091145.737305-1-treapking@chromium.org>
@@ -101,105 +101,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Prashant Malani <pmalani@chromium.org>
 
-When searching the device graph for device matches, check the
-remote-endpoint itself for a match.
+When using OF graph, the fw_devlink code will create links between the
+individual port driver (cros-ec-typec here) and the parent device for
+a Type-C switch (like mode-switch). Since the mode-switch will in turn
+have the usb-c-connector (i.e the child of the port driver) as a
+supplier, fw_devlink will not be able to resolve the cyclic dependency
+correctly.
 
-Some drivers register devices for individual endpoints. This allows
-the matcher code to evaluate those for a match too, instead
-of only looking at the remote parent devices. This is required when a
-device supports two mode switches in its endpoints, so we can't simply
-register the mode switch with the parent node.
+As a result, the mode-switch driver probe() never runs, so mode-switches
+are never registered. Because of that, the port driver probe constantly
+fails with -EPROBE_DEFER, because the Type-C connector class requires all
+switch devices to be registered prior to port registration.
+
+To break this deadlock and allow the mode-switch registration to occur,
+purge all the usb-c-connector nodes' absent suppliers. This eliminates
+the connector as a supplier for a switch and allows it to be probed.
 
 Signed-off-by: Prashant Malani <pmalani@chromium.org>
 Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 ---
 
-(no changes since v14)
-
-Changes in v14:
-- Collect review tags
-
-Changes in v13:
-- Update the kernel doc of fwnode_connection_find_match
-
-Changes in v12:
-- Check the availability of the device node in fwnode_graph_devcon_matches
-- Ensured valid access to "matches" in fwnode_graph_devcon_matches
-- Updated the documentation in fwnode_connection_find_match(es)
-- Dropped collected tags due to the new changes
+Changes in v15:
+- Collected Reviewed-by tags
 
 Changes in v11:
-- Added missing fwnode_handle_put in drivers/base/property.c
+- Collected Acked-by tag
 
 Changes in v10:
 - Collected Reviewed-by and Tested-by tags
 
+Changes in v7:
+- Fix the long comment lines
+
 Changes in v6:
 - New in v6
 
- drivers/base/property.c | 31 ++++++++++++++++++++++++++-----
- 1 file changed, 26 insertions(+), 5 deletions(-)
+ drivers/platform/chrome/cros_ec_typec.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/base/property.c b/drivers/base/property.c
-index 083a95791d3b..4426ac2b16ca 100644
---- a/drivers/base/property.c
-+++ b/drivers/base/property.c
-@@ -1243,6 +1243,23 @@ static unsigned int fwnode_graph_devcon_matches(const struct fwnode_handle *fwno
- 			continue;
- 		}
+diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+index a673c3342470..5911cd9640cb 100644
+--- a/drivers/platform/chrome/cros_ec_typec.c
++++ b/drivers/platform/chrome/cros_ec_typec.c
+@@ -325,6 +325,16 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
+ 		return -EINVAL;
+ 	}
  
-+		ret = match(node, con_id, data);
-+		fwnode_handle_put(node);
-+		if (ret) {
-+			if (matches)
-+				matches[count] = ret;
-+			count++;
++	/*
++	 * OF graph may have set up some device links with switches,
++	 * since connectors have their own compatible. Purge these
++	 * to avoid a deadlock in switch probe (the switch mistakenly
++	 * assumes the connector is a supplier).
++	 */
++	if (dev_of_node(dev))
++		device_for_each_child_node(dev, fwnode)
++			fw_devlink_purge_absent_suppliers(fwnode);
 +
-+			if (matches && count >= matches_len)
-+				break;
-+		}
-+
-+		/*
-+		 * Some drivers may register devices for endpoints. Check
-+		 * the remote-endpoints for matches in addition to the remote
-+		 * port parent.
-+		 */
-+		node = fwnode_graph_get_remote_endpoint(ep);
- 		ret = match(node, con_id, data);
- 		fwnode_handle_put(node);
- 		if (ret) {
-@@ -1293,8 +1310,11 @@ static unsigned int fwnode_devcon_matches(const struct fwnode_handle *fwnode,
-  * @match: Function to check and convert the connection description
-  *
-  * Find a connection with unique identifier @con_id between @fwnode and another
-- * device node. @match will be used to convert the connection description to
-- * data the caller is expecting to be returned.
-+ * device node. For fwnode graph connections, the graph endpoints are also
-+ * checked. @match will be used to convert the connection description to data
-+ * the caller is expecting to be returned.
-+ *
-+ * Return: The pointer to the matched node, or NULL on error.
-  */
- void *fwnode_connection_find_match(const struct fwnode_handle *fwnode,
- 				   const char *con_id, void *data,
-@@ -1325,9 +1345,10 @@ EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
-  * @matches_len: Length of @matches
-  *
-  * Find up to @matches_len connections with unique identifier @con_id between
-- * @fwnode and other device nodes. @match will be used to convert the
-- * connection description to data the caller is expecting to be returned
-- * through the @matches array.
-+ * @fwnode and other device nodes. For fwnode graph connections, the graph
-+ * endpoints are also checked. @match will be used to convert the connection
-+ * description to data the caller is expecting to be returned through the
-+ * @matches array.
-  * If @matches is NULL @matches_len is ignored and the total number of resolved
-  * matches is returned.
-  *
+ 	/* DT uses "reg" to specify port number. */
+ 	port_prop = dev->of_node ? "reg" : "port-number";
+ 	device_for_each_child_node(dev, fwnode) {
 -- 
 2.40.0.348.gf938b09366-goog
 
