@@ -2,64 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023F06D278B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C56356D278E
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbjCaSHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 14:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        id S232766AbjCaSIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 14:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjCaSHg (ORCPT
+        with ESMTP id S231609AbjCaSIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:07:36 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE38E393;
-        Fri, 31 Mar 2023 11:07:32 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id by14so4768739ljb.12;
-        Fri, 31 Mar 2023 11:07:32 -0700 (PDT)
+        Fri, 31 Mar 2023 14:08:32 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB0C133;
+        Fri, 31 Mar 2023 11:08:31 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id 72-20020a9d064e000000b006a2f108924cso817929otn.1;
+        Fri, 31 Mar 2023 11:08:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680286051;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ii8LD6WV3C4Mz3PNT9z7qUlfncWckLBytbPn5yKSnc=;
-        b=UBIDq+EWVVrV/nFkG74e6Ck3KsIBeFYPLC7Xt2wx83p6yLICE4/wZmSiWaTvztxI8v
-         CV1Dv9YQFFyKTlwnfasNaspTw7NfJz+SBro6PXjhY3wx9ZM3A1AsbK4FqwAFir9NMjc8
-         9UXZNt3ipnWeBi5Dui/8fZS8cHHLaZ+P50TBFZK528A9gZd16gpis7aplDKLJx7+shDJ
-         wtXqoL2A0L8n13TIlX9QA/p4RLyy3eRi+73eoRJkv8TW9sLF9cOGV/szXVXj/gU6Heu8
-         BwMPQA4OPbakFlcV9Om+ysvLY/l3ncY3AgavC7TjuIlYApks3KdnfFkSQmvi2dqpjk1+
-         Wnrg==
+        d=gmail.com; s=20210112; t=1680286111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M3lL8ptrd/luySMEjAQve8KEssZBP6yJTIAyyXPQHgg=;
+        b=TijtgZgJPoSAkrcF9V9ctcDVZf1Gr7uaoWdV1AaSjm/KZE5h4sYlBoiTiAt9zc1eCT
+         bEzo5N3F1nEvBlji5hWX5MiJWmvZ4/j1AY1gk3EaP6GT+eGUy5iA1vfl34lH6syE08ih
+         5m+fEYn4UId09hnyghSoIsBqnVREoKJ8cktxaK3unfkBnREtG+Tvg7W0FV9yFKoyTZ28
+         7RspSMLiGq/E5fUE0YWIYczKAThUMo5PGLplYoO3wc0tbyvULkxXR5Wdd8hGWdjz9Ki/
+         n8HzZzHwhI8BbETWOExrjzXGl+KiuUgdPOU4xcX+xg6NhdUtZvU71oUmjKhit4SAKBYP
+         03KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680286051;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8ii8LD6WV3C4Mz3PNT9z7qUlfncWckLBytbPn5yKSnc=;
-        b=6zqWVc71Jaq9cQih6nu/dQrjl+m7BnLInbNEru4QhOky8k+mlvF+qfb2otN4AAvrZY
-         KFMUMasnybB0EZWdgD5M9+mqW/BPkC5nROuZq2DQjvfJJtS45QKZZ3pkYGTnF1++UnVm
-         5znQMf+fq44bUovwtRfHuDYRjJE8FnDMTKx9kgpfY7UhcVMOpVKRJiyDPITkBaQsDwBQ
-         YvYSipIYUuyx0OZOuKKgtUN20+HQ9rjyv6BeWNBQzbDxxtMQeitsu9V5/GTj7lx2GB/v
-         CM8ojKIX5aFi4Q7NqIxYCZwAAmj0Vw+FaZ+NIJpHucAuhakeyyIVdSGQEWZWF6yjg5bK
-         DAbw==
-X-Gm-Message-State: AAQBX9fmMWmGDeo1EF7/gwrACipOGsRJvOlLBQrpPBrXstFtcqT8uoZv
-        djf0no98Q2mqv7V8n9sY6t6FHIFkZoxRzxmBapJ6Zg0Dfdw=
-X-Google-Smtp-Source: AKy350aJZ07tOb0BEmK67XU1aSTjWS5ZWGMRUNpAkCOO67wCOY4oPZGH0a+FVKSihdSNPSHW7CcfwJie1AFAbCCto40=
-X-Received: by 2002:a05:651c:108:b0:29a:9053:ed24 with SMTP id
- a8-20020a05651c010800b0029a9053ed24mr8730992ljb.6.1680286050817; Fri, 31 Mar
- 2023 11:07:30 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680286111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M3lL8ptrd/luySMEjAQve8KEssZBP6yJTIAyyXPQHgg=;
+        b=PXzEbaWzswOO8Dn7YjaWq2iMZdVDrDPvbPIju6OJGqapmdLCwk0RN4NOSmMHcTEjTu
+         LddJgE2fFYht/vZ5Gz+s8HRQbqc1BSyHf3ddgm4WR1n2BCXrmZmow2pwwVybiLVSAfx2
+         kvuieix+Z8EHoa51Ba+aK25hcqqKuLWwXYfCpJ6RI4M9Y1vqRCdrkzSrddktNs/iTr2J
+         ViCeWZKTe6KV96Pc/ZIdUGk0THvZskXLWCgOX2FKGSbmU37Ud1vBRpGrh/oUTz2yoAAL
+         BNYRFR9Xlej0s2UXj8q2PVAiZJMoE8TRreWrJCevE1P3kSPrhHPSNUAXfLDHgjuedhv3
+         mN3Q==
+X-Gm-Message-State: AO0yUKUax8pCKXGn/pMxnumnPZXKe5S0lASIjkaZA66h0fXVWz6GUfx3
+        SGzdfJV3woGIwd8MEwaeLiNwra536+3ExPyTFbE=
+X-Google-Smtp-Source: AK7set981SrirQiFBWaZxlcKxBR0kBTYWv3oV3+6NxYBBpyhgoIO34kYohYYC30hWZ7ZG587NryXaQK1ELbmMLMxtPw=
+X-Received: by 2002:a05:6830:86:b0:69f:2a7b:22b9 with SMTP id
+ a6-20020a056830008600b0069f2a7b22b9mr8992270oto.0.1680286110928; Fri, 31 Mar
+ 2023 11:08:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230309194402.119562-1-tmaimon77@gmail.com> <20230309194402.119562-2-tmaimon77@gmail.com>
- <495fcc93ab28ff8949569ededee954c1.sboyd@kernel.org>
-In-Reply-To: <495fcc93ab28ff8949569ededee954c1.sboyd@kernel.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Fri, 31 Mar 2023 21:07:19 +0300
-Message-ID: <CAP6Zq1hOHJWQSmGoVDz5bSjwdhNyQmaZVOEE8_dX6S4HCFQ2Jg@mail.gmail.com>
-Subject: Re: [PATCH v15 1/1] clk: npcm8xx: add clock controller
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     avifishman70@gmail.com, benjaminfair@google.com, joel@jms.id.au,
-        mturquette@baylibre.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, openbmc@lists.ozlabs.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230330155707.3106228-1-peterx@redhat.com> <20230330155707.3106228-2-peterx@redhat.com>
+ <CAJHvVcgDZBi6pH0BD12sQ3T+7Kr9exX1QU3-YLTd1voYhVBN0w@mail.gmail.com>
+ <ZCYMu5P2BJy/2z5t@x1n> <CAJHvVcggL+s=WEGzwR8+QvWgZANiLut+DhmosKtAXZ1F2vtFAg@mail.gmail.com>
+In-Reply-To: <CAJHvVcggL+s=WEGzwR8+QvWgZANiLut+DhmosKtAXZ1F2vtFAg@mail.gmail.com>
+From:   Dmitry Safonov <0x7f454c46@gmail.com>
+Date:   Fri, 31 Mar 2023 19:08:19 +0100
+Message-ID: <CAJwJo6YrfDH5-Tdsbau-AevVUuqiDQE74se3XvenT20Fbrrcnw@mail.gmail.com>
+Subject: Re: [PATCH 01/29] Revert "userfaultfd: don't fail on unrecognized features"
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        linux-stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
@@ -70,228 +79,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Stephen,
+On Fri, 31 Mar 2023 at 17:52, Axel Rasmussen <axelrasmussen@google.com> wro=
+te:
+>
+> On Thu, Mar 30, 2023 at 3:27=E2=80=AFPM Peter Xu <peterx@redhat.com> wrot=
+e:
+> >
+> > On Thu, Mar 30, 2023 at 12:04:09PM -0700, Axel Rasmussen wrote:
+> > > On Thu, Mar 30, 2023 at 8:57=E2=80=AFAM Peter Xu <peterx@redhat.com> =
+wrote:
+> > > >
+> > > > This is a proposal to revert commit 914eedcb9ba0ff53c33808.
+> > > >
+> > > > I found this when writting a simple UFFDIO_API test to be the first=
+ unit
+> > > > test in this set.  Two things breaks with the commit:
+> > > >
+> > > >   - UFFDIO_API check was lost and missing.  According to man page, =
+the
+> > > >   kernel should reject ioctl(UFFDIO_API) if uffdio_api.api !=3D 0xa=
+a.  This
+> > > >   check is needed if the api version will be extended in the future=
+, or
+> > > >   user app won't be able to identify which is a new kernel.
+> > > >
+> > > >   - Feature flags checks were removed, which means UFFDIO_API with =
+a
+> > > >   feature that does not exist will also succeed.  According to the =
+man
+> > > >   page, we should (and it makes sense) to reject ioctl(UFFDIO_API) =
+if
+> > > >   unknown features passed in.
 
-Thanks for your comments
+If features/flags are not checked in kernel, and the kernel doesn't
+return an error on
+an unknown flag/error, that makes the syscall non-extendable, meaning
+that adding
+any new feature may break existing software, which doesn't sanitize
+them properly.
+https://lwn.net/Articles/588444/
 
-On Mon, 20 Mar 2023 at 21:50, Stephen Boyd <sboyd@kernel.org> wrote:
+See a bunch of painful exercises from syscalls with numbers in the end:
+https://lwn.net/Articles/792628/
+To adding an additional setsockopt() because an old one didn't have
+sanity checks for flags:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+id=3D8917a777be3b
+(not the best example, as the new setsockopt() didn't check flags for
+sanity as well (sic!),
+but that's near the code I work on now)
+
+This is even documented nowadays:
+https://www.kernel.org/doc/html/latest/process/adding-syscalls.html#designi=
+ng-the-api-planning-for-extension
+
+...and everyone knows what happens when you blame userspace for breaking by
+not doing what you would have expected it to do:
+https://lkml.org/lkml/2012/12/23/75
+
+[..]
+> > There's one reason that we may consider keeping the behavior.  IMHO it =
+is
+> > when there're major softwares that uses the "wrong" ABI (let's say so;
+> > because it's not following the man pages).  If you're aware any such ma=
+jor
+> > softwares (especially open sourced) will break due to this revert patch=
+,
+> > please shoot.
 >
-> Quoting Tomer Maimon (2023-03-09 11:44:02)
-> > diff --git a/drivers/clk/clk-npcm8xx.c b/drivers/clk/clk-npcm8xx.c
-> > new file mode 100644
-> > index 000000000000..67058f121251
-> > --- /dev/null
-> > +++ b/drivers/clk/clk-npcm8xx.c
-> > @@ -0,0 +1,561 @@
-> [...]
-> > +
-> > +struct npcm8xx_pll_data {
-> > +       const char *name;
-> > +       struct clk_parent_data parent;
-> > +       unsigned int reg;
-> > +       unsigned long flags;
-> > +};
-> > +
-> > +struct npcm8xx_clk_div_data {
-> > +       u32 reg;
-> > +       u8 shift;
-> > +       u8 width;
-> > +       const char *name;
-> > +       const struct clk_parent_data parent_data;
-> > +       u8 clk_divider_flags;
-> > +       unsigned long flags;
-> > +       int onecell_idx;
-> > +};
-> > +
-> > +struct npcm8xx_clk_mux_data {
-> > +       u8 shift;
-> > +       u32 mask;
-> > +       const u32 *table;
-> > +       const char *name;
-> > +       const struct clk_parent_data *parent_data;
-> > +       u8 num_parents;
-> > +       unsigned long flags;
-> > +};
-> > +
-> [...]
-> > +
-> > +static struct npcm8xx_pll_data npcm8xx_pll_clks[] = {
->
-> Can this be const?
-Will add
->
-> > +       { NPCM8XX_CLK_S_PLL0, { .name = NPCM8XX_CLK_S_REFCLK }, NPCM8XX_PLLCON0, 0 },
-> > +       { NPCM8XX_CLK_S_PLL1, { .name = NPCM8XX_CLK_S_REFCLK }, NPCM8XX_PLLCON1, 0 },
-> > +       { NPCM8XX_CLK_S_PLL2, { .name = NPCM8XX_CLK_S_REFCLK }, NPCM8XX_PLLCON2, 0 },
-> > +       { NPCM8XX_CLK_S_PLL_GFX, { .name = NPCM8XX_CLK_S_REFCLK }, NPCM8XX_PLLCONG, 0 },
-> > +};
-> > +
-> > +static const u32 cpuck_mux_table[] = { 0, 1, 2, 7 };
-> > +static const struct clk_parent_data cpuck_mux_parents[] = {
-> > +       { .fw_name = NPCM8XX_CLK_S_PLL0, .name = NPCM8XX_CLK_S_PLL0 },
->
-> You should only have .fw_name or .index when introducing new drivers.
-> The .name field is for existing drivers that want to migrate to
-> clk_parent_data.
-I thought using .name was done when the clock defines in the DT, like
-the ref clock.
-If the other clocks are not defined both .fw_name and .name the clocks
-are not registered properly.
->
-> > +       { .fw_name = NPCM8XX_CLK_S_PLL1, .name = NPCM8XX_CLK_S_PLL1 },
-> > +       { .name = NPCM8XX_CLK_S_REFCLK },
->
-> Note, this line says to use '.index = 0', and .name will be ignored.
-> Maybe just use the index for everything? That makes it simpler and
-> potentially faster because we don't have to do string comparisons
-> anywhere.
-Should the clk_parent_data mux use only .index? if yes how should the
-clock tree have a connection between the parent's clock and the mux
-for example:
-for example, how should the driver connect between
-NPCM8XX_CLK_S_PLL1_DIV2 and the index number in the clk_parent_data?
->
-> > +       { .fw_name = NPCM8XX_CLK_S_PLL2, .name = NPCM8XX_CLK_S_PLL2 }
-> > +};
-> > +
-> > +static const u32 pixcksel_mux_table[] = { 0, 2 };
-> > +static const struct clk_parent_data pixcksel_mux_parents[] = {
-> > +       { .fw_name = NPCM8XX_CLK_S_PLL_GFX, .name = NPCM8XX_CLK_S_PLL_GFX },
-> > +       { .name = NPCM8XX_CLK_S_REFCLK }
-> > +};
-> > +
-> [...]
-> > +
-> > +static unsigned long npcm8xx_clk_pll_recalc_rate(struct clk_hw *hw,
-> > +                                                unsigned long parent_rate)
-> > +{
-> > +       struct npcm8xx_clk_pll *pll = to_npcm8xx_clk_pll(hw);
-> > +       unsigned long fbdv, indv, otdv1, otdv2;
-> > +       unsigned int val;
-> > +       u64 ret;
-> > +
-> > +       if (parent_rate == 0) {
-> > +               pr_debug("%s: parent rate is zero\n", __func__);
-> > +               return 0;
-> > +       }
-> > +
-> > +       val = readl_relaxed(pll->pllcon + pll->reg);
->
-> Is pll->reg ever set?
-Will remove.
->
-> > +
-> > +       indv = FIELD_GET(PLLCON_INDV, val);
-> > +       fbdv = FIELD_GET(PLLCON_FBDV, val);
-> > +       otdv1 = FIELD_GET(PLLCON_OTDV1, val);
-> > +       otdv2 = FIELD_GET(PLLCON_OTDV2, val);
-> > +
-> > +       ret = (u64)parent_rate * fbdv;
-> > +       do_div(ret, indv * otdv1 * otdv2);
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +static const struct clk_ops npcm8xx_clk_pll_ops = {
-> > +       .recalc_rate = npcm8xx_clk_pll_recalc_rate,
-> > +};
-> > +
-> > +static struct clk_hw *
-> > +npcm8xx_clk_register_pll(struct device *dev, void __iomem *pllcon,
-> > +                        const char *name, const struct clk_parent_data *parent,
-> > +                        unsigned long flags)
-> > +{
-> > +       struct npcm8xx_clk_pll *pll;
-> > +       struct clk_init_data init = {};
-> > +       int ret;
-> > +
-> > +       pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-> > +       if (!pll)
-> > +               return ERR_PTR(-ENOMEM);
-> > +
-> > +       init.name = name;
-> > +       init.ops = &npcm8xx_clk_pll_ops;
-> > +       init.parent_data = parent;
-> > +       init.num_parents = 1;
-> > +       init.flags = flags;
-> > +
-> > +       pll->pllcon = pllcon;
-> > +       pll->hw.init = &init;
-> > +
-> > +       ret = devm_clk_hw_register(dev, &pll->hw);
-> > +       if (ret) {
-> > +               kfree(pll);
-> > +               return ERR_PTR(ret);
-> > +       }
-> > +
-> > +       return &pll->hw;
-> > +}
-> > +
-> > +static DEFINE_SPINLOCK(npcm8xx_clk_lock);
-> > +
-> > +static int npcm8xx_clk_probe(struct platform_device *pdev)
-> > +{
-> > +       struct clk_hw_onecell_data *npcm8xx_clk_data;
-> > +       struct device *dev = &pdev->dev;
-> > +       void __iomem *clk_base;
-> > +       struct resource *res;
-> > +       struct clk_hw *hw;
-> > +       unsigned int i;
-> > +       int err;
-> > +
-> > +       npcm8xx_clk_data = devm_kzalloc(dev, struct_size(npcm8xx_clk_data, hws,
-> > +                                                        NPCM8XX_NUM_CLOCKS),
-> > +                                       GFP_KERNEL);
-> > +       if (!npcm8xx_clk_data)
-> > +               return -ENOMEM;
-> > +
-> > +       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > +       clk_base = devm_ioremap(dev, res->start, resource_size(res));
->
-> Can you use devm_platform_ioremap_resource() instead?
-We should use devm_ioremap since the clock register is used for the
-reset driver as well.
->
-> > +       if (!clk_base) {
->
-> Then this is checked for error pointer.
->
-> > +               dev_err(&pdev->dev, "Failed to remap I/O memory\n");
->
-> And no error message.
->
-> > +               return -ENOMEM;
-> > +       }
-> > +
-> > +       npcm8xx_clk_data->num = NPCM8XX_NUM_CLOCKS;
-> > +
-> [....]
-> > +       if (IS_ERR(hw)) {
-> > +               dev_err(dev, "npcm8xx_clk: Can't register axi div2\n");
-> > +               return PTR_ERR(hw);
-> > +       }
-> > +       npcm8xx_clk_data->hws[NPCM8XX_CLK_AXI] = hw;
-> > +
-> > +       hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_ATB,
-> > +                                              NPCM8XX_CLK_S_AXI, 0, 1, 2);
-> > +       if (IS_ERR(hw)) {
-> > +               dev_err(dev, "npcm8xx_clk: Can't register atb div2\n");
-> > +               return PTR_ERR(hw);
-> > +       }
-> > +       npcm8xx_clk_data->hws[NPCM8XX_CLK_ATB] = hw;
-> > +
-> > +       /* Register clock dividers specified in npcm8xx_divs */
-> > +       for (i = 0; i < ARRAY_SIZE(npcm8xx_divs); i++) {
-> > +               const struct npcm8xx_clk_div_data *div_data = &npcm8xx_divs[i];
-> > +
-> > +               hw = clk_hw_register_divider_parent_data(dev, div_data->name,
->
-> Do we have a devm_ variant of this function? If not, can you add it?
-I will try to do it.
->
-> > +                                                        &div_data->parent_data,
-> > +                                                        div_data->flags,
+> Well, I did find one example, criu:
+> https://github.com/checkpoint-restore/criu/blob/criu-dev/criu/uffd.c#L266
+
+Mike can speak better than me about uffd, but AFAICS, CRIU correctly detect=
+s
+features with kerneldat/kdat:
+https://github.com/checkpoint-restore/criu/blob/criu-dev/criu/kerndat.c#L12=
+35
+
+So, doing a sane thing in kernel shouldn't break CRIU (at least here).
 
 Thanks,
-
-Tomer
+             Dmitry
