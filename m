@@ -2,166 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16126D2103
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DE86D2101
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbjCaM7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35084 "EHLO
+        id S232630AbjCaM6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbjCaM7K (ORCPT
+        with ESMTP id S232626AbjCaM6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:59:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8F910E
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:58:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680267501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5fILBd8Ie8vifDZ2uoOuBDeMd9GM+Op5sl/9xS/ZTbM=;
-        b=crYWRbZop0tNs6fp7ty+T5oVDNpIWtJxlNk7H5R8feqrWQuWKNRw3BcEBYcsMtBFltezEv
-        ucuUpdJZ7HXH/o5lpi6QCOLLiSKjJld2uHO9Fv/MQQo1UBhEWu/8zMa54oUUw4Lxz3nSQl
-        fVLCcSlLWVrpZtrLUnmku/spkoTDseM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-yy8Nfhc6OKCZMSf5s-m6gg-1; Fri, 31 Mar 2023 08:58:18 -0400
-X-MC-Unique: yy8Nfhc6OKCZMSf5s-m6gg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 31 Mar 2023 08:58:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70360210D
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:58:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D89FD85A588;
-        Fri, 31 Mar 2023 12:58:17 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.32.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7BC0E4020C82;
-        Fri, 31 Mar 2023 12:58:16 +0000 (UTC)
-Date:   Fri, 31 Mar 2023 08:58:13 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Hao Jia <jiahao.os@bytedance.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] sched/core: Adapt WARN_DOUBLE_CLOCK machinery for
- core-sched
-Message-ID: <20230331125813.GA782283@lorien.usersys.redhat.com>
-References: <20230330035827.16937-1-jiahao.os@bytedance.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04F03628C8
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 12:58:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC459C433D2;
+        Fri, 31 Mar 2023 12:58:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680267510;
+        bh=UgrdYIiRIbayP2Q1rIOBzLC98/PLeze/M5lY956Ds+8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VMPzYccq2lNRrECym0avp51Jp5+rIWGRObTEnwkUjKugo0vt1hWQcN7U2wQ1hmCDR
+         M7D+iS5IPTfJ0BIy74aZhka/pU9+QaNID0F0j2YO3rAi6A9uCH9xtEm1zi/xOTvXT7
+         /txk36wbyKb21fsmmIQwk9ugDAG6vs9EOQxq1cqOs9DhTsx13Xl3Ij7U7IeRRpZSyX
+         ALKUPCw1w98j0UrDfsNxCTQAGn+5LOenGvRwWP0LoGk3nK4BU98vy47wWl3SIVOoji
+         JaxNIsQUjq7wAsvaKX3hs+mjjKqW9on47bdG2wnv7nk8HoMuTse6tD1WGDNTZQGqco
+         wbp/0eHLkGR+g==
+Message-ID: <cc346bd6-16bb-a38d-d0d8-ec7e928b27e9@kernel.org>
+Date:   Fri, 31 Mar 2023 20:58:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330035827.16937-1-jiahao.os@bytedance.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] f2fs: support fault injection for
+ f2fs_down_write_trylock()
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230330152510.81886-1-frank.li@vivo.com>
+Content-Language: en-US
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230330152510.81886-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2023/3/30 23:25, Yangtao Li wrote:
+> Similar to FAULT_LOCK_OP, this patch supports to inject fault into
+> f2fs_down_write_trylock().
 
-On Thu, Mar 30, 2023 at 11:58:27AM +0800 Hao Jia wrote:
-> When sched_core_enabled(), we sometimes need to call update_rq_clock()
-> to update the rq clock of sibling CPUs on the same core, before that we
-> need to clear RQCF_UPDATED of rq->clock_update_flags to avoid the
-> WARN_DOUBLE_CLOCK warning. Because at this time the rq->clock_update_flags
-> of sibling CPUs may be RQCF_UPDATED. If sched_core_enabled(), we will get
-> a core wide rq->lock, so at this point we can safely clear RQCF_UPDATED of
-> rq->clock_update_flags of all CPUs on this core to avoid the
-> WARN_DOUBLE_CLOCK warning.
+I guess we can cover all trylock w/ FAULT_LOCK_OP type fault injection,
+rather than just cover f2fs_down_write_trylock().
+
+Including:
+- inode_trylock
+- down_read_trylock
+- down_write_trylock
+- mutex_trylock
+- sb_start_write_trylock
+- trylock_page
+
+Bug only excluding f2fs_trylock_op which was covered by FAULT_LOCK_OP?
+
+What do you think?
+
+Thanks,
+
 > 
-> We sometimes use rq_pin_lock() and raw_spin_rq_lock() separately,
-> For example newidle_balance() and _double_lock_balance(). We will
-> temporarily give up core wide rq->lock, and then use raw_spin_rq_lock()
-> to reacquire core wide rq->lock without rq_pin_lock(), so We can not
-> clear RQCF_UPDATED of rq->clock_update_flags of other cpus on the
-> same core in rq_pin_lock().
+> Usage:
+>    a) echo 524288 > /sys/fs/f2fs/<dev>/inject_type or
+>    b) mount -o fault_type=524288 <dev> <mountpoint>
 > 
-> Steps to reproduce:
-> 1. Enable CONFIG_SCHED_DEBUG and CONFIG_SCHED_CORE when compiling
->    the kernel
-> 2. echo 1 > /sys/kernel/debug/clear_warn_once
->    echo "WARN_DOUBLE_CLOCK" > /sys/kernel/debug/sched/features
-> 3. Run the linux/tools/testing/selftests/sched/cs_prctl_test test
-> 
-> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-
-I think this looks good. One small nit is that I think you might
-replace "core wide" with "core-wide" everywhere.
-
-
-Reviewed-by: Phil Auld <pauld@redhat.com>
-
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
-> v2->v3:
->  - Modify the function name to sched_core_clear_rqcf_updated,
->    and add function comments.
->  - Modify commit information.
->  [v2] https://lore.kernel.org/all/20230215073927.97802-1-jiahao.os@bytedance.com
+> v2:
+> -remove f2fs_down_write_trylock macro
+>   Documentation/ABI/testing/sysfs-fs-f2fs |  1 +
+>   Documentation/filesystems/f2fs.rst      |  1 +
+>   fs/f2fs/checkpoint.c                    |  4 ++--
+>   fs/f2fs/f2fs.h                          |  7 ++++++-
+>   fs/f2fs/file.c                          |  8 ++++----
+>   fs/f2fs/gc.c                            | 10 +++++-----
+>   fs/f2fs/node.c                          |  2 +-
+>   fs/f2fs/super.c                         |  1 +
+>   8 files changed, 21 insertions(+), 13 deletions(-)
 > 
-> v1->v2:
->  - Adapt WARN_DOUBLE_CLOCK machinery for core-sched instead of clearing
->    WARN_DOUBLE_CLOCK warning one by one.
->  - Modify commit information
->  [v1] https://lore.kernel.org/all/20221206070550.31763-1-jiahao.os@bytedance.com
-> 
->  kernel/sched/core.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 0d18c3969f90..5e06da2f07cb 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -429,11 +429,32 @@ void sched_core_put(void)
->  		schedule_work(&_work);
->  }
->  
-> +/*
-> + * Now, we have obtained a core wide rq->lock, then we need to clear
-> + * RQCF_UPDATED of rq->clock_update_flags of the sibiling CPU
-> + * on this core to avoid the WARN_DOUBLE_CLOCK warning.
-> + */
-> +static inline void sched_core_clear_rqcf_updated(struct rq *rq)
-> +{
-> +#ifdef CONFIG_SCHED_DEBUG
-> +	const struct cpumask *smt_mask;
-> +	int i;
+> diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+> index c1314b7fe544..fc0f82f5c9f9 100644
+> --- a/Documentation/ABI/testing/sysfs-fs-f2fs
+> +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+> @@ -714,6 +714,7 @@ Description:	Support configuring fault injection type, should be
+>   		FAULT_DQUOT_INIT         0x000010000
+>   		FAULT_LOCK_OP            0x000020000
+>   		FAULT_BLKADDR            0x000040000
+> +		FAULT_LOCK               0x000080000
+>   		===================      ===========
+>   
+>   What:		/sys/fs/f2fs/<disk>/discard_io_aware_gran
+> diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
+> index 2055e72871fe..a81c896464ff 100644
+> --- a/Documentation/filesystems/f2fs.rst
+> +++ b/Documentation/filesystems/f2fs.rst
+> @@ -206,6 +206,7 @@ fault_type=%d		 Support configuring fault injection type, should be
+>   			 FAULT_DQUOT_INIT	  0x000010000
+>   			 FAULT_LOCK_OP		  0x000020000
+>   			 FAULT_BLKADDR		  0x000040000
+> +			 FAULT_LOCK	          0x000080000
+>   			 ===================	  ===========
+>   mode=%s			 Control block allocation mode which supports "adaptive"
+>   			 and "lfs". In "lfs" mode, there should be no random
+> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+> index 1e0164cde23d..b119c9ab0cc1 100644
+> --- a/fs/f2fs/checkpoint.c
+> +++ b/fs/f2fs/checkpoint.c
+> @@ -372,7 +372,7 @@ static int f2fs_write_meta_pages(struct address_space *mapping,
+>   		goto skip_write;
+>   
+>   	/* if locked failed, cp will flush dirty pages instead */
+> -	if (!f2fs_down_write_trylock(&sbi->cp_global_sem))
+> +	if (!f2fs_down_write_trylock(sbi, &sbi->cp_global_sem))
+>   		goto skip_write;
+>   
+>   	trace_f2fs_writepages(mapping->host, wbc, META);
+> @@ -1185,7 +1185,7 @@ static bool __need_flush_quota(struct f2fs_sb_info *sbi)
+>   	if (!is_journalled_quota(sbi))
+>   		return false;
+>   
+> -	if (!f2fs_down_write_trylock(&sbi->quota_sem))
+> +	if (!f2fs_down_write_trylock(sbi, &sbi->quota_sem))
+>   		return true;
+>   	if (is_sbi_flag_set(sbi, SBI_QUOTA_SKIP_FLUSH)) {
+>   		ret = false;
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index e73fefe0d8fb..d434c25fa175 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -61,6 +61,7 @@ enum {
+>   	FAULT_DQUOT_INIT,
+>   	FAULT_LOCK_OP,
+>   	FAULT_BLKADDR,
+> +	FAULT_LOCK,
+>   	FAULT_MAX,
+>   };
+>   
+> @@ -2193,8 +2194,12 @@ static inline void f2fs_down_write(struct f2fs_rwsem *sem)
+>   	down_write(&sem->internal_rwsem);
+>   }
+>   
+> -static inline int f2fs_down_write_trylock(struct f2fs_rwsem *sem)
+> +static inline int f2fs_down_write_trylock(struct f2fs_sb_info *sbi,
+> +					struct f2fs_rwsem *sem)
+>   {
+> +	if (time_to_inject(sbi, FAULT_LOCK))
+> +		return 0;
 > +
-> +	if (rq->core_enabled) {
-> +		smt_mask = cpu_smt_mask(rq->cpu);
-> +		for_each_cpu(i, smt_mask) {
-> +			if (rq->cpu != i)
-> +				cpu_rq(i)->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
-> +		}
-> +	}
-> +#endif
-> +}
->  #else /* !CONFIG_SCHED_CORE */
->  
->  static inline void sched_core_enqueue(struct rq *rq, struct task_struct *p) { }
->  static inline void
->  sched_core_dequeue(struct rq *rq, struct task_struct *p, int flags) { }
-> +static inline void sched_core_clear_rqcf_updated(struct rq *rq) { }
->  
->  #endif /* CONFIG_SCHED_CORE */
->  
-> @@ -548,6 +569,7 @@ void raw_spin_rq_lock_nested(struct rq *rq, int subclass)
->  		if (likely(lock == __rq_lockp(rq))) {
->  			/* preempt_count *MUST* be > 1 */
->  			preempt_enable_no_resched();
-> +			sched_core_clear_rqcf_updated(rq);
->  			return;
->  		}
->  		raw_spin_unlock(lock);
-> -- 
-> 2.37.0
-> 
-
--- 
-
+>   	return down_write_trylock(&sem->internal_rwsem);
+>   }
+>   
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 14e9a20e68df..db8c435d6201 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -2462,7 +2462,7 @@ static int f2fs_ioc_gc(struct file *filp, unsigned long arg)
+>   		return ret;
+>   
+>   	if (!sync) {
+> -		if (!f2fs_down_write_trylock(&sbi->gc_lock)) {
+> +		if (!f2fs_down_write_trylock(sbi, &sbi->gc_lock)) {
+>   			ret = -EBUSY;
+>   			goto out;
+>   		}
+> @@ -2506,7 +2506,7 @@ static int __f2fs_ioc_gc_range(struct file *filp, struct f2fs_gc_range *range)
+>   
+>   do_more:
+>   	if (!range->sync) {
+> -		if (!f2fs_down_write_trylock(&sbi->gc_lock)) {
+> +		if (!f2fs_down_write_trylock(sbi, &sbi->gc_lock)) {
+>   			ret = -EBUSY;
+>   			goto out;
+>   		}
+> @@ -2851,7 +2851,7 @@ static int f2fs_move_file_range(struct file *file_in, loff_t pos_in,
+>   	f2fs_down_write(&F2FS_I(src)->i_gc_rwsem[WRITE]);
+>   	if (src != dst) {
+>   		ret = -EBUSY;
+> -		if (!f2fs_down_write_trylock(&F2FS_I(dst)->i_gc_rwsem[WRITE]))
+> +		if (!f2fs_down_write_trylock(sbi, &F2FS_I(dst)->i_gc_rwsem[WRITE]))
+>   			goto out_src;
+>   	}
+>   
+> @@ -2971,7 +2971,7 @@ static int f2fs_ioc_flush_device(struct file *filp, unsigned long arg)
+>   	end_segno = min(start_segno + range.segments, dev_end_segno);
+>   
+>   	while (start_segno < end_segno) {
+> -		if (!f2fs_down_write_trylock(&sbi->gc_lock)) {
+> +		if (!f2fs_down_write_trylock(sbi, &sbi->gc_lock)) {
+>   			ret = -EBUSY;
+>   			goto out;
+>   		}
+> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> index 7e97e4284db5..302950c6cbeb 100644
+> --- a/fs/f2fs/gc.c
+> +++ b/fs/f2fs/gc.c
+> @@ -104,7 +104,7 @@ static int gc_thread_func(void *data)
+>   		if (foreground) {
+>   			f2fs_down_write(&sbi->gc_lock);
+>   			goto do_gc;
+> -		} else if (!f2fs_down_write_trylock(&sbi->gc_lock)) {
+> +		} else if (!f2fs_down_write_trylock(sbi, &sbi->gc_lock)) {
+>   			stat_other_skip_bggc_count(sbi);
+>   			goto next;
+>   		}
+> @@ -1577,7 +1577,7 @@ static int gc_data_segment(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
+>   				return submitted;
+>   			}
+>   
+> -			if (!f2fs_down_write_trylock(
+> +			if (!f2fs_down_write_trylock(sbi,
+>   				&F2FS_I(inode)->i_gc_rwsem[WRITE])) {
+>   				iput(inode);
+>   				sbi->skipped_gc_rwsem++;
+> @@ -1620,11 +1620,11 @@ static int gc_data_segment(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
+>   			int err;
+>   
+>   			if (S_ISREG(inode->i_mode)) {
+> -				if (!f2fs_down_write_trylock(&fi->i_gc_rwsem[READ])) {
+> +				if (!f2fs_down_write_trylock(sbi, &fi->i_gc_rwsem[READ])) {
+>   					sbi->skipped_gc_rwsem++;
+>   					continue;
+>   				}
+> -				if (!f2fs_down_write_trylock(
+> +				if (!f2fs_down_write_trylock(sbi,
+>   						&fi->i_gc_rwsem[WRITE])) {
+>   					sbi->skipped_gc_rwsem++;
+>   					f2fs_up_write(&fi->i_gc_rwsem[READ]);
+> @@ -2150,7 +2150,7 @@ int f2fs_resize_fs(struct f2fs_sb_info *sbi, __u64 block_count)
+>   	secs = div_u64(shrunk_blocks, BLKS_PER_SEC(sbi));
+>   
+>   	/* stop other GC */
+> -	if (!f2fs_down_write_trylock(&sbi->gc_lock))
+> +	if (!f2fs_down_write_trylock(sbi, &sbi->gc_lock))
+>   		return -EAGAIN;
+>   
+>   	/* stop CP to protect MAIN_SEC in free_segment_range */
+> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+> index bd1dad523796..e8e838f72ae6 100644
+> --- a/fs/f2fs/node.c
+> +++ b/fs/f2fs/node.c
+> @@ -517,7 +517,7 @@ int f2fs_try_to_free_nats(struct f2fs_sb_info *sbi, int nr_shrink)
+>   	struct f2fs_nm_info *nm_i = NM_I(sbi);
+>   	int nr = nr_shrink;
+>   
+> -	if (!f2fs_down_write_trylock(&nm_i->nat_tree_lock))
+> +	if (!f2fs_down_write_trylock(sbi, &nm_i->nat_tree_lock))
+>   		return 0;
+>   
+>   	spin_lock(&nm_i->nat_list_lock);
+> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> index 7d0202f7b317..768be1c76a47 100644
+> --- a/fs/f2fs/super.c
+> +++ b/fs/f2fs/super.c
+> @@ -62,6 +62,7 @@ const char *f2fs_fault_name[FAULT_MAX] = {
+>   	[FAULT_DQUOT_INIT]	= "dquot initialize",
+>   	[FAULT_LOCK_OP]		= "lock_op",
+>   	[FAULT_BLKADDR]		= "invalid blkaddr",
+> +	[FAULT_LOCK]		= "lock",
+>   };
+>   
+>   void f2fs_build_fault_attr(struct f2fs_sb_info *sbi, unsigned int rate,
