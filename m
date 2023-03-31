@@ -2,192 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B066D1F9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE0D6D1FA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 14:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjCaMEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 08:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
+        id S231960AbjCaMFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 08:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbjCaME1 (ORCPT
+        with ESMTP id S230456AbjCaMFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:04:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9733F1D90A;
-        Fri, 31 Mar 2023 05:04:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3364D6285F;
-        Fri, 31 Mar 2023 12:04:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F19C433EF;
-        Fri, 31 Mar 2023 12:04:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680264265;
-        bh=h1nh1rfKygeOBSqs+0Qh9w3Xt4TkX0FJXwvf6qPEE+o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Kk9Z/i9ElUX9QEmYvLZIE/AJtI7AN4mOBicdZFecBEy48TLLXk9kJBXeNoRDzLk0Y
-         1+427hDffWnfqqKPZ6wlFNn+xgcGYXlB8P1xWLF1E3TmkRKVFl6bBtYZ7xMddwjG9A
-         1Cbzeb8UoPn+Gtml5Y/4f3Wq5/vdnCfdBMmPFcxZOSoGvU8hkrAfHoUe/tlxfYROrF
-         9H/jKklZSgwG/W1aswyJiuf0tjD1LK6UT8cdi/4qKGdErPaiP7GSbG5G56skUxZege
-         ZO/K6XSdpv/AvZWBOs6Y68dGnPUSxp8PcC8Cs+UQRYyDKDom79yWWljodBsogn0ayx
-         v8FGmn8e+jjGg==
-Date:   Fri, 31 Mar 2023 17:34:21 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Walker Chen <walker.chen@starfivetech.com>
-Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Fri, 31 Mar 2023 08:05:35 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE24A1C1F3
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:05:31 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-54601d90118so255161917b3.12
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 05:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680264331;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SBertetORVW57D4Qn1kS8HxfnJyMQ3NfyoVt6rJXeWw=;
+        b=jJYKQuohc4q23MSrpDjfNbvItKi4OeXxV/JiVsMH1u69/oc+hhZnHl+qafU/eiH4n6
+         fW+LnLnJ1EbzJrlZrmw27H30jZAlcHuAElxlUoo5p2XHokmFvACqJ/swhGjAQ3WNqWco
+         DumOcwmKSRpfirCl6ztX/cQNURZ8+AB/lp1zGF80Ul/QKpbuTucfgL8kH8y1HF+8j+9+
+         yq8jO/0GALbIjk7DOXxP5cnYW/SuxOZ/j+PBe9ZNyRhAoEyiR6ye1iP69ZbVcGpU3a+3
+         nSQ1Lhe98iMsb8F3ZOh6VIDOIfw5wXQQjHoL6I9b4Rp0OkH3q45tYXLqlUmlP+IGCdL1
+         6oLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680264331;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SBertetORVW57D4Qn1kS8HxfnJyMQ3NfyoVt6rJXeWw=;
+        b=U/Rj7n93relb2noLH5J7eflCBjU445izdGfqOzyjwwFtM2/8w9p0UsxVG6CaElrUTX
+         j/YPu2cBHJdis4wX1fB9TJ6zFfjgEhkjqbz/Isej7Lh5uvMXaZhhV3vn8l7deiwECKYo
+         tI4E+NLus9ZcViIDNd6h3YgnYEZ1TU3UMtEyfvATGDe5APgi2twofn60MfkXU7lVJMIo
+         QGSVl+X0VgJEKOxGdIr+c9bVW/RRRhjTOwiONjRC67uBIGApXcGJOH3Ll6aYD8JscUrE
+         KNVaq/8nh4SGJ33gOj7ZxvjkP8GE4SzypOfM40sx5Ju5HFnIfyfxqbrywHsXPzqGHXkJ
+         Ua+A==
+X-Gm-Message-State: AAQBX9eoCQ3j4VRIgUnwWVPohnzAFOjdQ4B8S/NjxK7b2CdoyhecPG2w
+        m8GXuc0+guBzl27TOmMrKYCNRldKl+ZW8hycAQ9B/w==
+X-Google-Smtp-Source: AKy350alOUKFv8JHxb8OmChOgvitPrDAx4h8WLR3fhEV2ib1x87O1DkuqB5uGPeBCLNGixpUYQPibS7V5oz35p99nco=
+X-Received: by 2002:a81:ad5d:0:b0:540:e744:13ae with SMTP id
+ l29-20020a81ad5d000000b00540e74413aemr12477767ywk.3.1680264330881; Fri, 31
+ Mar 2023 05:05:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
+ <20230203-evk-board-support-v3-16-0003e80e0095@baylibre.com> <8c917be2-e15a-921f-aaa9-b8753d2463de@gmail.com>
+In-Reply-To: <8c917be2-e15a-921f-aaa9-b8753d2463de@gmail.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Fri, 31 Mar 2023 14:05:20 +0200
+Message-ID: <CAFGrd9oPKn84yK2VpfJQRd1HbBTwq87Fuc6=Uw3uaeLjm89=8w@mail.gmail.com>
+Subject: Re: [PATCH v3 16/17] arm64: dts: mediatek: fix systimer properties
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v6 2/4] dmaengine: dw-axi-dmac: Add support for StarFive
- JH7110 DMA
-Message-ID: <ZCbMRdSCf5vKUk/c@matsya>
-References: <20230322094820.24738-1-walker.chen@starfivetech.com>
- <20230322094820.24738-3-walker.chen@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322094820.24738-3-walker.chen@starfivetech.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-03-23, 17:48, Walker Chen wrote:
-> Add DMA reset operation in device probe and use different configuration
-> on CH_CFG registers according to match data. Update all uses of
-> of_device_is_compatible with of_device_get_match_data.
-> 
-> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
-> ---
->  .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    | 38 ++++++++++++++++---
->  drivers/dma/dw-axi-dmac/dw-axi-dmac.h         |  1 +
->  2 files changed, 34 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> index 4169e1d7d5ca..6cfcb541d8c3 100644
-> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> @@ -21,10 +21,12 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <linux/of_dma.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/property.h>
-> +#include <linux/reset.h>
->  #include <linux/slab.h>
->  #include <linux/types.h>
->  
-> @@ -46,6 +48,10 @@
->  	DMA_SLAVE_BUSWIDTH_32_BYTES	| \
->  	DMA_SLAVE_BUSWIDTH_64_BYTES)
->  
-> +#define AXI_DMA_FLAG_HAS_APB_REGS	BIT(0)
-> +#define AXI_DMA_FLAG_HAS_RESETS		BIT(1)
-> +#define AXI_DMA_FLAG_USE_CFG2		BIT(2)
-> +
->  static inline void
->  axi_dma_iowrite32(struct axi_dma_chip *chip, u32 reg, u32 val)
->  {
-> @@ -86,7 +92,8 @@ static inline void axi_chan_config_write(struct axi_dma_chan *chan,
->  
->  	cfg_lo = (config->dst_multblk_type << CH_CFG_L_DST_MULTBLK_TYPE_POS |
->  		  config->src_multblk_type << CH_CFG_L_SRC_MULTBLK_TYPE_POS);
-> -	if (chan->chip->dw->hdata->reg_map_8_channels) {
-> +	if (chan->chip->dw->hdata->reg_map_8_channels &&
-> +	    !chan->chip->dw->hdata->use_cfg2) {
+Hi Matthias
 
-I think this will break existing users.. 
+Le jeu. 30 mars 2023 =C3=A0 19:34, Matthias Brugger
+<matthias.bgg@gmail.com> a =C3=A9crit :
+>
+>
+>
+> On 29/03/2023 10:54, amergnat@baylibre.com wrote:
+> > From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> >
+> > MT8365 has a SYST timer (System Timer), therefore the compatible node
+> > should be "mediatek,mt6765-timer" instead of "mediatek,mt6795-systimer"
+> > (which corresponds to ARM/ARM64 System Timer).
+> >
+> > Plus, register range should be 0x100 instead of 0x10.
+> >
+> > Finally, interrupt polarity of systimer is LEVEL_HIGH.
+> >
+> > Fix the above properties accordingly.
+> >
+> > Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+>
+> Patch looks good but does not apply cleanly because of previous patches t=
+hat I
+> didn't take and need rework. Please resend the patches I didn't queue wit=
+h the
+> comments addressed.
 
-This is set for reg_map_8_channels && use_cfg2, latter being set only
-for new controller, so what about existing users of these bits?
+Sorry for that, I forgot to drop this patch since it has been already
+fixed in the Bero's series [1]
+I will drop it for the next version
 
->  		cfg_hi = config->tt_fc << CH_CFG_H_TT_FC_POS |
->  			 config->hs_sel_src << CH_CFG_H_HS_SEL_SRC_POS |
->  			 config->hs_sel_dst << CH_CFG_H_HS_SEL_DST_POS |
-> @@ -1367,10 +1374,11 @@ static int parse_device_properties(struct axi_dma_chip *chip)
->  
->  static int dw_probe(struct platform_device *pdev)
->  {
-> -	struct device_node *node = pdev->dev.of_node;
->  	struct axi_dma_chip *chip;
->  	struct dw_axi_dma *dw;
->  	struct dw_axi_dma_hcfg *hdata;
-> +	struct reset_control *resets;
-> +	unsigned int flags;
->  	u32 i;
->  	int ret;
->  
-> @@ -1398,12 +1406,25 @@ static int dw_probe(struct platform_device *pdev)
->  	if (IS_ERR(chip->regs))
->  		return PTR_ERR(chip->regs);
->  
-> -	if (of_device_is_compatible(node, "intel,kmb-axi-dma")) {
-> +	flags = (uintptr_t)of_device_get_match_data(&pdev->dev);
-> +	if (flags & AXI_DMA_FLAG_HAS_APB_REGS) {
->  		chip->apb_regs = devm_platform_ioremap_resource(pdev, 1);
->  		if (IS_ERR(chip->apb_regs))
->  			return PTR_ERR(chip->apb_regs);
->  	}
->  
-> +	if (flags & AXI_DMA_FLAG_HAS_RESETS) {
-> +		resets = devm_reset_control_array_get_exclusive(&pdev->dev);
-> +		if (IS_ERR(resets))
-> +			return PTR_ERR(resets);
-> +
-> +		ret = reset_control_deassert(resets);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	chip->dw->hdata->use_cfg2 = !!(flags & AXI_DMA_FLAG_USE_CFG2);
-> +
->  	chip->core_clk = devm_clk_get(chip->dev, "core-clk");
->  	if (IS_ERR(chip->core_clk))
->  		return PTR_ERR(chip->core_clk);
-> @@ -1554,8 +1575,15 @@ static const struct dev_pm_ops dw_axi_dma_pm_ops = {
->  };
->  
->  static const struct of_device_id dw_dma_of_id_table[] = {
-> -	{ .compatible = "snps,axi-dma-1.01a" },
-> -	{ .compatible = "intel,kmb-axi-dma" },
-> +	{
-> +		.compatible = "snps,axi-dma-1.01a"
-> +	}, {
-> +		.compatible = "intel,kmb-axi-dma",
-> +		.data = (void *)AXI_DMA_FLAG_HAS_APB_REGS,
-> +	}, {
-> +		.compatible = "starfive,jh7110-axi-dma",
-> +		.data = (void *)(AXI_DMA_FLAG_HAS_RESETS | AXI_DMA_FLAG_USE_CFG2),
-> +	},
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, dw_dma_of_id_table);
-> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-> index e9d5eb0fd594..eb267cb24f67 100644
-> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
-> @@ -33,6 +33,7 @@ struct dw_axi_dma_hcfg {
->  	/* Register map for DMAX_NUM_CHANNELS <= 8 */
->  	bool	reg_map_8_channels;
->  	bool	restrict_axi_burst_len;
-> +	bool	use_cfg2;
->  };
->  
->  struct axi_dma_chan {
-> -- 
-> 2.17.1
+[1]: https://lore.kernel.org/all/20230309213501.794764-4-bero@baylibre.com/
 
--- 
-~Vinod
+Regards,
+Alex
