@@ -2,163 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B940B6D2464
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5417F6D2463
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbjCaPs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 11:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232720AbjCaPsx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232429AbjCaPsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 31 Mar 2023 11:48:53 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CCB191C1;
-        Fri, 31 Mar 2023 08:48:34 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32VDDdpe027526;
-        Fri, 31 Mar 2023 17:48:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=tr01CIe/LpDGGpoPafu39bOHteV6ORG+tu0CkFYJUD0=;
- b=6gQgalJF+K4NJ6LEfL4kaEPoUTGxHFNR79jAl81jhjF0Mx+FTLJBcgznJsFwI/Wn+O6j
- rn4h+hBzm3NaU4Gz7RerhnlnzSEQIKAcfjmjPygSvtgGbBhzxazHoDMaJV2eBKPGSl6M
- XSnuApau6a1mK8r3ft+wjcE8L2LR/ZDhJhCDxiRPFj957Sp4xXTNDtA74NgXweXWyXBb
- KPCOSYJCqBNZgzLObPFttzw7ZNZO9Z6t5V2G3dsBLl6EmSOnd7x1vB6cpPi/lCuzx6tF
- 2Prf3R0qEOsBA9lJW3xe3gb8culD7JV+kttFsd4RdhSOG7QwjLROQhneUXd66L6Bs8JV dg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pns3eksj9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Mar 2023 17:48:28 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C786D10002A;
-        Fri, 31 Mar 2023 17:48:27 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C191F21ED4D;
-        Fri, 31 Mar 2023 17:48:27 +0200 (CEST)
-Received: from localhost (10.201.21.178) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 31 Mar
- 2023 17:48:27 +0200
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>, <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH 5/5] ARM: dts: stm32: fix m4_rproc references to use scmi
-Date:   Fri, 31 Mar 2023 17:46:51 +0200
-Message-ID: <20230331154651.3107173-6-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230331154651.3107173-1-arnaud.pouliquen@foss.st.com>
-References: <20230331154651.3107173-1-arnaud.pouliquen@foss.st.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232901AbjCaPst (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Mar 2023 11:48:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00C692032D
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:48:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A96A416F2;
+        Fri, 31 Mar 2023 08:49:08 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D7083F6C4;
+        Fri, 31 Mar 2023 08:48:21 -0700 (PDT)
+Message-ID: <7360f190-784c-8e49-7b3c-bea28e0456d9@arm.com>
+Date:   Fri, 31 Mar 2023 17:48:12 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.21.178]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-31_07,2023-03-31_01,2023-02-09_01
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH] sched/fair: Make tg->load_avg per node
+Content-Language: en-US
+To:     Aaron Lu <aaron.lu@intel.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Nitin Tekchandani <nitin.tekchandani@intel.com>,
+        Waiman Long <longman@redhat.com>,
+        Yu Chen <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
+References: <20230327053955.GA570404@ziqianlu-desk2>
+ <943d44f7-1fa9-8545-dc1d-890e4dd20854@arm.com>
+ <20230328125624.GA6130@ziqianlu-desk2>
+ <76939bf6-1d9d-5f8f-f15c-f03b2322d684@arm.com>
+ <20230329135455.GA108864@ziqianlu-desk2>
+ <20230330174557.m6jsgb6hsni4mxwq@parnassus.localdomain>
+ <20230330195157.afbqtusnnbnvtlyz@parnassus.localdomain>
+ <20230331040609.GA184843@ziqianlu-desk2>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230331040609.GA184843@ziqianlu-desk2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes stm32mp15*-scmi DTS files introduced in [1]:
-This patch fixes the node which uses the MCU reset and adds the
-missing HOLD_BOOT which is also handled by the SCMI reset service.
+On 31/03/2023 06:06, Aaron Lu wrote:
+> Hi Daniel,
+> 
+> Thanks for taking a look.
+> 
+> On Thu, Mar 30, 2023 at 03:51:57PM -0400, Daniel Jordan wrote:
+>> On Thu, Mar 30, 2023 at 01:46:02PM -0400, Daniel Jordan wrote:
+>>> Hi Aaron,
+>>>
+>>> On Wed, Mar 29, 2023 at 09:54:55PM +0800, Aaron Lu wrote:
+>>>> On Wed, Mar 29, 2023 at 02:36:44PM +0200, Dietmar Eggemann wrote:
+>>>>> On 28/03/2023 14:56, Aaron Lu wrote:
+>>>>>> On Tue, Mar 28, 2023 at 02:09:39PM +0200, Dietmar Eggemann wrote:
+>>>>>>> On 27/03/2023 07:39, Aaron Lu wrote:
 
-This change cannot be applied as a fix on commit [1], the management
-of the hold boot impacts also the stm32_rproc driver.
+[...]
 
-[1] 'commit 5b7e58313a77 ("ARM: dts: stm32: Add SCMI version of STM32 boards (DK1/DK2/ED1/EV1)")'
+>>> AMD EPYC 7J13 64-Core Processor
+>>>     2 sockets * 64 cores * 2 threads = 256 CPUs
+> 
+> I have a vague memory AMD machine has a smaller LLC and cpus belonging
+> to the same LLC is also not many, 8-16?
+> 
+> I tend to think cpu number of LLC play a role here since that's the
+> domain where idle cpu is searched on task wake up time.
+> 
+>>>
+>>> sysbench: nr_threads=256
+>>>
+>>> All observability data was taken at one minute in and using one tool at
+>>> a time.
+>>>
+>>>     @migrations[1]: 1113
+>>>     @migrations[0]: 6152
+>>>     @wakeups[1]: 8871744
+>>>     @wakeups[0]: 9773321
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
- arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts | 6 ++++--
- arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts | 6 ++++--
- arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts | 6 ++++--
- arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts | 6 ++++--
- 4 files changed, 16 insertions(+), 8 deletions(-)
+Just a thought: Could the different behaviour come from different
+CPU numbering schemes (consecutive/alternate)?
 
-diff --git a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-index e539cc80bef8..134788e64265 100644
---- a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-@@ -55,8 +55,10 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
-diff --git a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-index 97e4f94b0a24..c42e658debfb 100644
---- a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-@@ -61,8 +61,10 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
-diff --git a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-index 9cf0a44d2f47..7a56ff2d4185 100644
---- a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-@@ -60,8 +60,10 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
-diff --git a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-index 3b9dd6f4ccc9..119874dd91e4 100644
---- a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-@@ -66,8 +66,10 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
--- 
-2.25.1
+(1) My Arm server:
 
+numactl -H
+available: 4 nodes (0-3)
+node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+node 1 cpus: 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47
+node 2 cpus: 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
+node 3 cpus: 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95
+
+
+(2) Intel(R) Xeon(R) Silver 4314
+
+$ numactl -H
+available: 2 nodes (0-1)
+node 0 cpus: 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62
+node 1 cpus: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55 57 59 61 63
+
+[...]
