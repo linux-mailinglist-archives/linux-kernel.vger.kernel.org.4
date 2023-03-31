@@ -2,259 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65456D284F
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60526D2843
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233250AbjCaS41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 14:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
+        id S233238AbjCaSzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 14:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233243AbjCaS4I (ORCPT
+        with ESMTP id S233188AbjCaSzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:56:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D87236B8
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 11:55:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680288911;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ls0LCxScwZAOA9muty3Np74TRSfo9K/6deqKyTgKuYw=;
-        b=XhV6CfSiIUw2yvPt9O+1zjpjuNIPUG/NZQzteBFy+xXRWZg+1+QkkCtzZDCCSrauqCyVMf
-        Bypw8vtWGhiPu2evIf4pNYpNAJLiKtZJ/gOdxZXFIkDQxa65sez6Btgjnz2+uYdFGfgkHD
-        FzdEcdcyRiP81oKmNgB82DHGsSpRFUw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-cJczgCUWPv-Xg5ztmFMrUg-1; Fri, 31 Mar 2023 14:55:06 -0400
-X-MC-Unique: cJczgCUWPv-Xg5ztmFMrUg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 87AD98533DC;
-        Fri, 31 Mar 2023 18:55:05 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.45.242.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0927B202701E;
-        Fri, 31 Mar 2023 18:55:05 +0000 (UTC)
-Received: from [10.1.1.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 16E4730736C72;
-        Fri, 31 Mar 2023 20:55:04 +0200 (CEST)
-Subject: [PATCH bpf V5 1/5] xdp: rss hash types representation
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
-        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
-        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
-        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
-        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
-        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
-        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
-        davem@davemloft.net, tariqt@nvidia.com
-Date:   Fri, 31 Mar 2023 20:55:04 +0200
-Message-ID: <168028890401.4030852.2898747794409591697.stgit@firesoul>
-In-Reply-To: <168028882260.4030852.1100965689789226162.stgit@firesoul>
-References: <168028882260.4030852.1100965689789226162.stgit@firesoul>
-User-Agent: StGit/1.4
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        Fri, 31 Mar 2023 14:55:25 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2070e.outbound.protection.outlook.com [IPv6:2a01:111:f403:704b::70e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AE723B5E
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 11:55:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=miK8kKJmuduHT0+tO5c3LsH9QpjKS+Z/6y5/aWwaCDHdreSrggcaUPU+A++Tqe3M60OHfqXwvx+KDOoc8iz/+NHe6qxcbbfmF4I3xtbGgEP6L+ChXqSluA/2u0tRb2TUp+4DP7J2iobZjF6dnkw5GywRBe685ZDHqeOA3o6JX79w/vtxjDFXlb0oTmQ8Gmhxh91qYNiSfLF3Hj/uu8wdHR2Sy7AeEt1nrSmXWGkUPf2ccxHrTM6OKE5cTUQqVhunpFubRye3zakS01xT8rJv3fDGpsZZzHO7phZ3mKWwZdASHMn9Twn0m4nOYW0W3nqP683Elc0ExL16zSyQiB21iw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MCJWTq6uLv/auggJhoRMfub6sDpvGZuTmTsRwAqj1Z4=;
+ b=Z3HcUtb8XbnkKkH5edjZsVBCxbLu+svN1UWQ3sbBwQjNmsFPHBumsu5U+lbOedjwFphsuUOjpXPa1Q1vWQt1+nTfkAjA5MugXd6yjuWBn8o7Fq4H0rbb+Yqn9UYkhQwL1b+ixoAMTVF6zDvN2V+Tqgvrmq6hbVvkeM3Tcmi9XYFz9dzsTek5Z/wZjRkFDIk+V/eHln/YZ7rRzQJQcGZ2OOffBJ9NUsEmNBTovpzoYxb09dWYUodXyoAPwbufnsGQjEmoBx+d0xv4ruEt4rw24V4JLFC6184r/5N5QhtG8E6Euq3/FqSQM5V4ruUfMPaIVPbTqFNqJhCv5Dqhta5sag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MCJWTq6uLv/auggJhoRMfub6sDpvGZuTmTsRwAqj1Z4=;
+ b=czl0uq42i2IS7KUO/dVhlkAh+e+2H4y69CMF6/SocgCW85c6vg0qb01yV/8j44rISIhd0RBftSsh8LFzbMS0YMuV7bYS5EQtk8MJ6rl4IZ0Us+Rvid9zUIZddIYFMKcsBgfP5SRomcw3sO8xfGXY1GonKMofhZq3CzRN3hGVeyX/TQZf95DVnYY21Ykl2cjCR04PuXzZxCgqGwaDCW1IjXa2PN5pQPszPk4JxO614rZgHNm9SzugdLzXO/lbU8GvSiimDt38DoWxZThFWs2Igo0cVaZ1H5O/xjwGKXilKj5oCyvOyPgTRCJVEJjbC4s+Dby9OlhFl/FLJAWJuEufyQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TYZPR06MB3999.apcprd06.prod.outlook.com (2603:1096:400:2d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.21; Fri, 31 Mar
+ 2023 18:55:15 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::a3a1:af8e:be1e:437c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::a3a1:af8e:be1e:437c%5]) with mapi id 15.20.6222.040; Fri, 31 Mar 2023
+ 18:55:15 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     chao@kernel.org
+Cc:     frank.li@vivo.com, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: f2fs: support fault injection for f2fs_down_write_trylock()
+Date:   Sat,  1 Apr 2023 02:55:05 +0800
+Message-Id: <20230331185505.58726-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cc346bd6-16bb-a38d-d0d8-ec7e928b27e9@kernel.org>
+References: <cc346bd6-16bb-a38d-d0d8-ec7e928b27e9@kernel.org>
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0048.apcprd02.prod.outlook.com
+ (2603:1096:3:18::36) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB3999:EE_
+X-MS-Office365-Filtering-Correlation-Id: c25a4ab3-6699-4ffc-bff1-08db32197690
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bvnth8W+IRi4aphV/NXCZaiTT8d8p8PMg1gZv9Jbu3GLokWZ3bwDnTG+AkYihnUpm8rRFytPNedKBlo8h6+hGMqUzPdQPtVNo9ymR9028nbWpl3t7aL9r6DWipRheWi2HhipIchVmEN97urLgYZOgXA+QX8km+d0m93lzFMhesHx8NegOdiCJsHrSkg15WmicMt/sbygm8dRJUu8yWzT2tIZHWQ8LQ0HnYhAXmbMKyVcH4XtgynxnJO1qGJDmFLJUB4tiVVZr9b8qLt35kOkKrsCDJJ7tUHvN/1ANJOoL49A84JCdO5TyjDbcKNNsuZs3AlRK0Pgu6y5hWyYhQD8swa+5GARW2dIGSRYWTHF/I/74uwJqe5BIuv1V+iAnu6IS7hEU6fCU2fBOPe5GbAfNz4tY3q1fOU62xaqyhpl/6n9c1QmqAP5PjTwP8luaqc8F6I4OzszDWcawjkCzOPhr0goLa0+OvmGHUf0Gqm/yd4C47ZeChj9QOrI2vAUC8daXAghG2zY+QV/Y6/Pb12/o79Tzft6caDgu7bPnX5ZFujtmt80C7icWnzVfHy4a9i0YtTdUEVWcqeiVY4UQUA/V1imrUfQL9wr11acFEqpk8HMpLBwoL9OlMUb8LCSoie0
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(396003)(136003)(39860400002)(376002)(451199021)(38350700002)(83380400001)(4326008)(38100700002)(8676002)(2616005)(36756003)(5660300002)(8936002)(4744005)(316002)(41300700001)(66476007)(86362001)(66946007)(66556008)(6916009)(6486002)(52116002)(6512007)(6666004)(6506007)(2906002)(478600001)(26005)(1076003)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vx999xugBGwMgHtvEDgDaqPz4bCJ9x+yF3jiX0oTksyEHD6IsGOjZh5Tz6f8?=
+ =?us-ascii?Q?OnFX1+sn0UEekbmpQcamDGC9PHXznERf2YwioLmJ6GUDYDLR07Rky6qsr6k6?=
+ =?us-ascii?Q?FEcRyet+90HkF9QJNJ+gV/vrE6CA0XpYLQJ5u6m8nAXymLAxxDVd0vyTReWn?=
+ =?us-ascii?Q?W5XrmOzkk+y/SGvH6QlVM7m/Qt0NYE6ATWVU1GOIkXASt+r0bgJ2n4FXqvUm?=
+ =?us-ascii?Q?1N623gsz6Kt7I6mFnwaRD3z/FFWs/1gDakFYBnhG/hlkpdQk/xSIykL5Xbz7?=
+ =?us-ascii?Q?n1Gdsch6Vlq7RYt+oXWX0Xi3L8z1FUemD30YgZdCpZOdnMAkek8JI9EBsJlD?=
+ =?us-ascii?Q?+V7rTxaqRH9k9aywuD0el44vwgSq//tJQIgPbbUgZwqsHbWUsV7frH6WwR7f?=
+ =?us-ascii?Q?iWwjEVnxLiEC3wI+Q12IiN6k49KYI5LXe1uJ/ih49bAQdllgyQa2ucZ9FhFc?=
+ =?us-ascii?Q?bf4o6p7WgJBDQAWkU04LZRGSss269uzetMRDvOZq1gqa8Kxhm9ycdsGjSLax?=
+ =?us-ascii?Q?kuOJuCgADvJSnvcuAKGI4l53kBOp3onh9gAFOIY+MMJcQQt2eG9DJ0Dg64kk?=
+ =?us-ascii?Q?f0FHKP/fjpe0TCe/e95djK1gEAABm7dl97hgqLJJb32hnCcrSi46Bw4sUdX1?=
+ =?us-ascii?Q?3XaImQuhsaPCt1mhEe8SoRgzRkocEgxLWiipMz5wkPmS44QTe03PVcmEkWZA?=
+ =?us-ascii?Q?H5KtV0csLkIISRq/+4sG+h/NPnGlQ+tjIciQGc+K7WcnR+LnLoscm5egGd80?=
+ =?us-ascii?Q?Q22kDg2XEs35IzRqytDdk6I3xAFg/6nNTvae3jftSl+oUOLzYB/ICH6uVUMD?=
+ =?us-ascii?Q?l7sikLCXTEpdtRN0t/AMlHXJPhbweiMLYbO6QhkQm93JzUY4g7iGu0g9pzDG?=
+ =?us-ascii?Q?D2G8JFp+8/xA/NGQNWw0FVz19Hm8q2RULK3w4v+KDwSjBjA6tGRUTb6BEXHW?=
+ =?us-ascii?Q?U/L3EgMgX66/EdhLTA7Ys17NjUUc+7vYU0yOOL67aUAT5250Pi+oVLIkF2ya?=
+ =?us-ascii?Q?v91guvZydW8E6Pbi4+t4VrhSo1KTJj55axJctW0/Lg5W3xitZ7V09hlGUpQn?=
+ =?us-ascii?Q?qmeQChsEnelrMUrlE1B7eKelEh0u0oUKboyP0ZxcEnlzImekMhr1+POTNnnI?=
+ =?us-ascii?Q?923iC5pLs4bcRRpjHPmRqj1swRHhLnlRPrWOSmeheb5MiCpoowzqzNL91KIi?=
+ =?us-ascii?Q?gIokLW2wwmBuFCBTwel4uJQTXXFVgvGzMLB47eSXpFtVUDZlgU/18I3dVanU?=
+ =?us-ascii?Q?5CVkI578jf9vqawv+n77cLpKLIB/sDUjlUsCO2Q3ijs1o5X2fFIdwdxltfdq?=
+ =?us-ascii?Q?3EAIC1gG25dhfNbHX2Z9aAgwF8HM4AvUC/Obl67fqYapy+2jtA1fVJyBMFX5?=
+ =?us-ascii?Q?0noUPBVzP8pPG5otMCRgjl0RcQG/5I5V0RVq48PB2FBIFH3cryeptFPWPWrU?=
+ =?us-ascii?Q?mm3winAeRltdUUrE/XA/ak8nw29GnrjFOrXLwFIcR38IHyN4+mB0WB1p1ZQ9?=
+ =?us-ascii?Q?y7qb7j9HX+cPNQ6f0iiwQ0VjGtJ6HjMrDPIdAsWAqrjQIsDHJZ/5HcquOwUg?=
+ =?us-ascii?Q?8kSPKRZE1B0qggYZEYRcSNTMuQwipKZIubUvJhrd?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c25a4ab3-6699-4ffc-bff1-08db32197690
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 18:55:14.9799
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MA8aZzDqaXndydFkxnfQMm9MWA4tFoJOEj9RlS6AiRmZDfjS3gONDpAPslSMhiGHRtURxGO/Bd29Cqly2G6nLQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB3999
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RSS hash type specifies what portion of packet data NIC hardware used
-when calculating RSS hash value. The RSS types are focused on Internet
-traffic protocols at OSI layers L3 and L4. L2 (e.g. ARP) often get hash
-value zero and no RSS type. For L3 focused on IPv4 vs. IPv6, and L4
-primarily TCP vs UDP, but some hardware supports SCTP.
+> I guess we can cover all trylock w/ FAULT_LOCK_OP type fault injection,
+> rather than just cover f2fs_down_write_trylock().
+> 
+> Including:
+> - inode_trylock
+> - down_read_trylock
+> - down_write_trylock
+> - mutex_trylock
+> - sb_start_write_trylock
+> - trylock_page
+> 
+> Bug only excluding f2fs_trylock_op which was covered by FAULT_LOCK_OP?
 
-Hardware RSS types are differently encoded for each hardware NIC. Most
-hardware represent RSS hash type as a number. Determining L3 vs L4 often
-requires a mapping table as there often isn't a pattern or sorting
-according to ISO layer.
+> What do you think?
 
-The patch introduce a XDP RSS hash type (enum xdp_rss_hash_type) that
-contain combinations to be used by drivers, which gets build up with bits
-from enum xdp_rss_type_bits. Both enum xdp_rss_type_bits and
-xdp_rss_hash_type get exposed to BPF via BTF, and it is up to the
-BPF-programmer to match using these defines.
+Sounds great, the 3th has been sent.
 
-This proposal change the kfunc API bpf_xdp_metadata_rx_hash() adding
-a pointer value argument for provide the RSS hash type.
-
-Change function signature for all xmo_rx_hash calls in drivers to make it
-compile. The RSS type implementations for each driver comes as separate
-patches.
-
-Fixes: 3d76a4d3d4e5 ("bpf: XDP metadata RX kfuncs")
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Acked-by: Stanislav Fomichev <sdf@google.com>
----
- drivers/net/ethernet/mellanox/mlx4/en_rx.c       |    3 +
- drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c |    3 +
- drivers/net/veth.c                               |    3 +
- include/linux/netdevice.h                        |    3 +
- include/net/xdp.h                                |   45 ++++++++++++++++++++++
- net/core/xdp.c                                   |   10 ++++-
- 6 files changed, 62 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-index 4b5e459b6d49..73d10aa4c503 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-@@ -681,7 +681,8 @@ int mlx4_en_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
- 	return 0;
- }
- 
--int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash)
-+int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+			enum xdp_rss_hash_type *rss_type)
- {
- 	struct mlx4_en_xdp_buff *_ctx = (void *)ctx;
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index c5dae48b7932..efe609f8e3aa 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -169,7 +169,8 @@ static int mlx5e_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
- 	return 0;
- }
- 
--static int mlx5e_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash)
-+static int mlx5e_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+			     enum xdp_rss_hash_type *rss_type)
- {
- 	const struct mlx5e_xdp_buff *_ctx = (void *)ctx;
- 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index c1178915496d..424e8876a16b 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1648,7 +1648,8 @@ static int veth_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
- 	return 0;
- }
- 
--static int veth_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash)
-+static int veth_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+			    enum xdp_rss_hash_type *rss_type)
- {
- 	struct veth_xdp_buff *_ctx = (void *)ctx;
- 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 470085b121d3..c35f04f636f1 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1624,7 +1624,8 @@ struct net_device_ops {
- 
- struct xdp_metadata_ops {
- 	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
--	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash);
-+	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
-+			       enum xdp_rss_hash_type *rss_type);
- };
- 
- /**
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 41c57b8b1671..a76c4ea203ea 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -8,6 +8,7 @@
- 
- #include <linux/skbuff.h> /* skb_shared_info */
- #include <uapi/linux/netdev.h>
-+#include <linux/bitfield.h>
- 
- /**
-  * DOC: XDP RX-queue information
-@@ -425,6 +426,50 @@ XDP_METADATA_KFUNC_xxx
- MAX_XDP_METADATA_KFUNC,
- };
- 
-+enum xdp_rss_hash_type {
-+	/* First part: Individual bits for L3/L4 types */
-+	XDP_RSS_L3_IPV4		= BIT(0),
-+	XDP_RSS_L3_IPV6		= BIT(1),
-+
-+	/* The fixed (L3) IPv4 and IPv6 headers can both be followed by
-+	 * variable/dynamic headers, IPv4 called Options and IPv6 called
-+	 * Extension Headers. HW RSS type can contain this info.
-+	 */
-+	XDP_RSS_L3_DYNHDR	= BIT(2),
-+
-+	/* When RSS hash covers L4 then drivers MUST set XDP_RSS_L4 bit in
-+	 * addition to the protocol specific bit.  This ease interaction with
-+	 * SKBs and avoids reserving a fixed mask for future L4 protocol bits.
-+	 */
-+	XDP_RSS_L4		= BIT(3), /* L4 based hash, proto can be unknown */
-+	XDP_RSS_L4_TCP		= BIT(4),
-+	XDP_RSS_L4_UDP		= BIT(5),
-+	XDP_RSS_L4_SCTP		= BIT(6),
-+	XDP_RSS_L4_IPSEC	= BIT(7), /* L4 based hash include IPSEC SPI */
-+
-+	/* Second part: RSS hash type combinations used for driver HW mapping */
-+	XDP_RSS_TYPE_NONE            = 0,
-+	XDP_RSS_TYPE_L2              = XDP_RSS_TYPE_NONE,
-+
-+	XDP_RSS_TYPE_L3_IPV4         = XDP_RSS_L3_IPV4,
-+	XDP_RSS_TYPE_L3_IPV6         = XDP_RSS_L3_IPV6,
-+	XDP_RSS_TYPE_L3_IPV4_OPT     = XDP_RSS_L3_IPV4 | XDP_RSS_L3_DYNHDR,
-+	XDP_RSS_TYPE_L3_IPV6_EX      = XDP_RSS_L3_IPV6 | XDP_RSS_L3_DYNHDR,
-+
-+	XDP_RSS_TYPE_L4_ANY          = XDP_RSS_L4,
-+	XDP_RSS_TYPE_L4_IPV4_TCP     = XDP_RSS_L3_IPV4 | XDP_RSS_L4 | XDP_RSS_L4_TCP,
-+	XDP_RSS_TYPE_L4_IPV4_UDP     = XDP_RSS_L3_IPV4 | XDP_RSS_L4 | XDP_RSS_L4_UDP,
-+	XDP_RSS_TYPE_L4_IPV4_SCTP    = XDP_RSS_L3_IPV4 | XDP_RSS_L4 | XDP_RSS_L4_SCTP,
-+
-+	XDP_RSS_TYPE_L4_IPV6_TCP     = XDP_RSS_L3_IPV6 | XDP_RSS_L4 | XDP_RSS_L4_TCP,
-+	XDP_RSS_TYPE_L4_IPV6_UDP     = XDP_RSS_L3_IPV6 | XDP_RSS_L4 | XDP_RSS_L4_UDP,
-+	XDP_RSS_TYPE_L4_IPV6_SCTP    = XDP_RSS_L3_IPV6 | XDP_RSS_L4 | XDP_RSS_L4_SCTP,
-+
-+	XDP_RSS_TYPE_L4_IPV6_TCP_EX  = XDP_RSS_TYPE_L4_IPV6_TCP  | XDP_RSS_L3_DYNHDR,
-+	XDP_RSS_TYPE_L4_IPV6_UDP_EX  = XDP_RSS_TYPE_L4_IPV6_UDP  | XDP_RSS_L3_DYNHDR,
-+	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
-+};
-+
- #ifdef CONFIG_NET
- u32 bpf_xdp_metadata_kfunc_id(int id);
- bool bpf_dev_bound_kfunc_id(u32 btf_id);
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 528d4b37983d..fb85aca81961 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -734,13 +734,21 @@ __bpf_kfunc int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx, u64 *tim
-  * bpf_xdp_metadata_rx_hash - Read XDP frame RX hash.
-  * @ctx: XDP context pointer.
-  * @hash: Return value pointer.
-+ * @rss_type: Return value pointer for RSS type.
-+ *
-+ * The RSS hash type (@rss_type) specifies what portion of packet headers NIC
-+ * hardware used when calculating RSS hash value.  The RSS type can be decoded
-+ * via &enum xdp_rss_hash_type either matching on individual L3/L4 bits
-+ * ``XDP_RSS_L*`` or by combined traditional *RSS Hashing Types*
-+ * ``XDP_RSS_TYPE_L*``.
-  *
-  * Return:
-  * * Returns 0 on success or ``-errno`` on error.
-  * * ``-EOPNOTSUPP`` : means device driver doesn't implement kfunc
-  * * ``-ENODATA``    : means no RX-hash available for this frame
-  */
--__bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *hash)
-+__bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+					 enum xdp_rss_hash_type *rss_type)
- {
- 	return -EOPNOTSUPP;
- }
-
-
+Thx,
+Yangtao
