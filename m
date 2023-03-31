@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56356D278E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122946D2791
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbjCaSIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 14:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        id S232201AbjCaSJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 14:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjCaSIc (ORCPT
+        with ESMTP id S231609AbjCaSJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:08:32 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB0C133;
-        Fri, 31 Mar 2023 11:08:31 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id 72-20020a9d064e000000b006a2f108924cso817929otn.1;
-        Fri, 31 Mar 2023 11:08:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680286111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M3lL8ptrd/luySMEjAQve8KEssZBP6yJTIAyyXPQHgg=;
-        b=TijtgZgJPoSAkrcF9V9ctcDVZf1Gr7uaoWdV1AaSjm/KZE5h4sYlBoiTiAt9zc1eCT
-         bEzo5N3F1nEvBlji5hWX5MiJWmvZ4/j1AY1gk3EaP6GT+eGUy5iA1vfl34lH6syE08ih
-         5m+fEYn4UId09hnyghSoIsBqnVREoKJ8cktxaK3unfkBnREtG+Tvg7W0FV9yFKoyTZ28
-         7RspSMLiGq/E5fUE0YWIYczKAThUMo5PGLplYoO3wc0tbyvULkxXR5Wdd8hGWdjz9Ki/
-         n8HzZzHwhI8BbETWOExrjzXGl+KiuUgdPOU4xcX+xg6NhdUtZvU71oUmjKhit4SAKBYP
-         03KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680286111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M3lL8ptrd/luySMEjAQve8KEssZBP6yJTIAyyXPQHgg=;
-        b=PXzEbaWzswOO8Dn7YjaWq2iMZdVDrDPvbPIju6OJGqapmdLCwk0RN4NOSmMHcTEjTu
-         LddJgE2fFYht/vZ5Gz+s8HRQbqc1BSyHf3ddgm4WR1n2BCXrmZmow2pwwVybiLVSAfx2
-         kvuieix+Z8EHoa51Ba+aK25hcqqKuLWwXYfCpJ6RI4M9Y1vqRCdrkzSrddktNs/iTr2J
-         ViCeWZKTe6KV96Pc/ZIdUGk0THvZskXLWCgOX2FKGSbmU37Ud1vBRpGrh/oUTz2yoAAL
-         BNYRFR9Xlej0s2UXj8q2PVAiZJMoE8TRreWrJCevE1P3kSPrhHPSNUAXfLDHgjuedhv3
-         mN3Q==
-X-Gm-Message-State: AO0yUKUax8pCKXGn/pMxnumnPZXKe5S0lASIjkaZA66h0fXVWz6GUfx3
-        SGzdfJV3woGIwd8MEwaeLiNwra536+3ExPyTFbE=
-X-Google-Smtp-Source: AK7set981SrirQiFBWaZxlcKxBR0kBTYWv3oV3+6NxYBBpyhgoIO34kYohYYC30hWZ7ZG587NryXaQK1ELbmMLMxtPw=
-X-Received: by 2002:a05:6830:86:b0:69f:2a7b:22b9 with SMTP id
- a6-20020a056830008600b0069f2a7b22b9mr8992270oto.0.1680286110928; Fri, 31 Mar
- 2023 11:08:30 -0700 (PDT)
+        Fri, 31 Mar 2023 14:09:32 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247D510FA;
+        Fri, 31 Mar 2023 11:09:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1680286155; i=w_armin@gmx.de;
+        bh=Am7Nhw3dTswBeMtyeu1EM5iLerWvPqMeO4mcyN/Sagw=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=j7oorQ+K9UXIQ+cwJucUFBmWN7x+UAPcUH05jLK5CJGAy25xKL/x/Ko2hfhvl7y3A
+         tObP2+vvE2UAyS1uq3TY8mgkec8oTR/P/m0OMlTQPhALTBl5VGkvAY5WFw/09cL1YV
+         g2dR8V6h8ty6+EaIinCRkqgIPasckj2BvUK/2RBLIFEPL7vWoRieweT/qkgXJ0yczc
+         S6aaw886PMNTAdq23ebOOS3K4ijBGh1iLmyh2KnBWhs/GFzmUf///6ur3w9UUMY9dd
+         1KCsQxWhuWB0oJTLyrdhl8/o10GpdWnWPDx7C4Xu/LwVj/OE4UBi+sMqoPqSjNHI8D
+         628OZ6o8cTrUA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MHG8m-1pdtLn0oMK-00DE59; Fri, 31 Mar 2023 20:09:15 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     markpearson@lenovo.com, mirsad.todorovac@alu.unizg.hr
+Cc:     hdegoede@redhat.com, markgross@kernel.org, thomas@t-8ch.de,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] platform/x86: think-lmi: Fix memory leak when showing current settings
+Date:   Fri, 31 Mar 2023 20:09:12 +0200
+Message-Id: <20230331180912.38392-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230330155707.3106228-1-peterx@redhat.com> <20230330155707.3106228-2-peterx@redhat.com>
- <CAJHvVcgDZBi6pH0BD12sQ3T+7Kr9exX1QU3-YLTd1voYhVBN0w@mail.gmail.com>
- <ZCYMu5P2BJy/2z5t@x1n> <CAJHvVcggL+s=WEGzwR8+QvWgZANiLut+DhmosKtAXZ1F2vtFAg@mail.gmail.com>
-In-Reply-To: <CAJHvVcggL+s=WEGzwR8+QvWgZANiLut+DhmosKtAXZ1F2vtFAg@mail.gmail.com>
-From:   Dmitry Safonov <0x7f454c46@gmail.com>
-Date:   Fri, 31 Mar 2023 19:08:19 +0100
-Message-ID: <CAJwJo6YrfDH5-Tdsbau-AevVUuqiDQE74se3XvenT20Fbrrcnw@mail.gmail.com>
-Subject: Re: [PATCH 01/29] Revert "userfaultfd: don't fail on unrecognized features"
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Provags-ID: V03:K1:dOb2W6pt4BTY8NZxprhaSQSTlNEUARb01MBam187alshfjHp2GI
+ R/Ax8hMw+yFfQ77jh3YDlEAiAhsH9tAlC7meTfHmuMeV0pQA2gZQMCaNztbgatf+URWOsPk
+ KMvEZOzNpU2VYpbabOuTBErll/x6Y4JuGrGcc2KBrtNlzfxPwVuGO9k3R6kySUs+NcGj2Rf
+ NeuZ7gPHe9/8+fW54o7OQ==
+UI-OutboundReport: notjunk:1;M01:P0:o+H64xJYP30=;WDH1W3NNdk3p5InRRtW7K+q0T+4
+ EzZS/mbniABKHkWXgOiJUAez678uato/IBsCwDJm2gPWlvcRczBDaLqqrJPYZjwf9QhSDjs3u
+ WeCAOJUXUpVQplPA7XXCCX7Yi70TDrBIcFI+18WOWumJiQzgOVPOdhjTfOrNFE2aX5iFBTXku
+ bs9fqiGkvfekmd745jTrXXJpzREjDqsTKdAIL5RRv1y+FP54dol9lRzsbWdSNWqX7oKZ4LveX
+ zL/2CfINU9EIvbiB5Ec9Ruj8BJ8Gv1Lak5CGzeaS2+J4k34AjECch6Z57ectoxFTIQgleKswa
+ IqP3MNep8MenhKG0Zaj8F9P0OpCYifK21PjruN/GcgYjFyjJc5oxbXDlwrU6U942TiXZyYUA+
+ zbh24laozwIiUH0rYMgtbq0Sprlm7X8o+8o1hjcqx+yNDGe4PfX7OIcBvGM6UjvgGN28idXos
+ 88ytvsnU330yHvBE3CkDkLX9rSE8T8mTNAn4zHp98oRd/scAQL4Hhl9uEfNESJ7odVxcxsGMJ
+ YVeCnMBHtU03GNlxXNq6sHQFi5Z2p1I62wHpAq712ZPSzH/J8ZkYjfkWvIa74H1t2yKjs/VJ2
+ X9lNxJ4CxjYmhTAHhXlP8lPpS8PaPU6ZcphFv0cVzY2X8M4kdmSgp/Dpo2RYv+EMTe+SK9Sc2
+ p9XWkjedfW/jBRLxDizILWIJq/elQURrRmXocfBKuNVvGX89urcV+y4HelkNyW6ga7ONWP+IE
+ wCgXCNZq6McMw1omZltSnCStmj8AnuJ6dlH/vJmR9Moy9miLBTLHSbaNZfHSrvlW19jccxamS
+ vBaJYwPBSvV2vX8BIQYdkRb0mee8RGWIN0DneB5+QAiUE7ima+skP+tJrADj+RVBDJ9v2Rxur
+ TAxqqDZy01c+Cn1CW222/Jv6GchYcy4dD80JDkvUgESfg0GLZrbBib7fgJdXRO5g1yxpkkT7S
+ XRrtPLWAsafxzSH9QiEmoDg+SHU=
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,84 +69,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Mar 2023 at 17:52, Axel Rasmussen <axelrasmussen@google.com> wro=
-te:
->
-> On Thu, Mar 30, 2023 at 3:27=E2=80=AFPM Peter Xu <peterx@redhat.com> wrot=
-e:
-> >
-> > On Thu, Mar 30, 2023 at 12:04:09PM -0700, Axel Rasmussen wrote:
-> > > On Thu, Mar 30, 2023 at 8:57=E2=80=AFAM Peter Xu <peterx@redhat.com> =
-wrote:
-> > > >
-> > > > This is a proposal to revert commit 914eedcb9ba0ff53c33808.
-> > > >
-> > > > I found this when writting a simple UFFDIO_API test to be the first=
- unit
-> > > > test in this set.  Two things breaks with the commit:
-> > > >
-> > > >   - UFFDIO_API check was lost and missing.  According to man page, =
-the
-> > > >   kernel should reject ioctl(UFFDIO_API) if uffdio_api.api !=3D 0xa=
-a.  This
-> > > >   check is needed if the api version will be extended in the future=
-, or
-> > > >   user app won't be able to identify which is a new kernel.
-> > > >
-> > > >   - Feature flags checks were removed, which means UFFDIO_API with =
-a
-> > > >   feature that does not exist will also succeed.  According to the =
-man
-> > > >   page, we should (and it makes sense) to reject ioctl(UFFDIO_API) =
-if
-> > > >   unknown features passed in.
+When retriving a item string with tlmi_setting(), the result has to be
+freed using kfree(). In current_value_show() however, malformed
+item strings are not freed, causing a memory leak.
+Fix this by eliminating the early return responsible for this.
 
-If features/flags are not checked in kernel, and the kernel doesn't
-return an error on
-an unknown flag/error, that makes the syscall non-extendable, meaning
-that adding
-any new feature may break existing software, which doesn't sanitize
-them properly.
-https://lwn.net/Articles/588444/
+Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Link: https://lore.kernel.org/platform-driver-x86/01e920bc-5882-ba0c-dd15-=
+868bf0eca0b8@alu.unizg.hr/T/#t
+Fixes: a40cd7ef22fb ("platform/x86: think-lmi: Add WMI interface support o=
+n Lenovo platforms")
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+Changes in v2:
+- Add Reported-by: and Link: tags
+=2D--
+ drivers/platform/x86/think-lmi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-See a bunch of painful exercises from syscalls with numbers in the end:
-https://lwn.net/Articles/792628/
-To adding an additional setsockopt() because an old one didn't have
-sanity checks for flags:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-id=3D8917a777be3b
-(not the best example, as the new setsockopt() didn't check flags for
-sanity as well (sic!),
-but that's near the code I work on now)
+diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think=
+-lmi.c
+index cc66f7cbccf2..8cafb9d4016c 100644
+=2D-- a/drivers/platform/x86/think-lmi.c
++++ b/drivers/platform/x86/think-lmi.c
+@@ -930,10 +930,12 @@ static ssize_t current_value_show(struct kobject *ko=
+bj, struct kobj_attribute *a
+ 	/* validate and split from `item,value` -> `value` */
+ 	value =3D strpbrk(item, ",");
+ 	if (!value || value =3D=3D item || !strlen(value + 1))
+-		return -EINVAL;
++		ret =3D -EINVAL;
++	else
++		ret =3D sysfs_emit(buf, "%s\n", value + 1);
 
-This is even documented nowadays:
-https://www.kernel.org/doc/html/latest/process/adding-syscalls.html#designi=
-ng-the-api-planning-for-extension
+-	ret =3D sysfs_emit(buf, "%s\n", value + 1);
+ 	kfree(item);
++
+ 	return ret;
+ }
 
-...and everyone knows what happens when you blame userspace for breaking by
-not doing what you would have expected it to do:
-https://lkml.org/lkml/2012/12/23/75
+=2D-
+2.30.2
 
-[..]
-> > There's one reason that we may consider keeping the behavior.  IMHO it =
-is
-> > when there're major softwares that uses the "wrong" ABI (let's say so;
-> > because it's not following the man pages).  If you're aware any such ma=
-jor
-> > softwares (especially open sourced) will break due to this revert patch=
-,
-> > please shoot.
->
-> Well, I did find one example, criu:
-> https://github.com/checkpoint-restore/criu/blob/criu-dev/criu/uffd.c#L266
-
-Mike can speak better than me about uffd, but AFAICS, CRIU correctly detect=
-s
-features with kerneldat/kdat:
-https://github.com/checkpoint-restore/criu/blob/criu-dev/criu/kerndat.c#L12=
-35
-
-So, doing a sane thing in kernel shouldn't break CRIU (at least here).
-
-Thanks,
-             Dmitry
