@@ -2,165 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF50A6D2993
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 22:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC8F6D27C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbjCaUna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 16:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
+        id S232996AbjCaS0F convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 14:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbjCaUn2 (ORCPT
+        with ESMTP id S231146AbjCaS0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 16:43:28 -0400
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109891E73E
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:43:27 -0700 (PDT)
-Received: by mail-oo1-xc34.google.com with SMTP id w13-20020a4aca0d000000b0053b8aa32089so3709243ooq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 13:43:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680295406;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gbJR1JChzmLTsVV+iWqp2hMTIHEnfqkgzoCIgyYNt9Y=;
-        b=mtQb5LlUhEmXR/NfZBfC1qdFoj8FmXhaVQdtj43GHYsXr2rrb+9cdRt06c3M45CSq3
-         CdIqt8RN9MPw67cGIDn6tbZBifoKYWQayevCowTwzuKXA9LcZDH/uTRF4i6KD4MkKeIm
-         zY9L0U6VQajiEHIt4WHLNyD3ghRPr8IYOK1FWQ6PPvybLHSmu2q0a9A3r//DoLjWfoJm
-         7Iaz0/oJGeW2Xl0JuZ63eUS5Yb6Nhs22ACUPmD2qwidlfgKQtSmlodVROXoiJVI03Lwl
-         L+9sGfl4kyfgE2nMqzHmufT9VqCoGmxqL315JG5dlb+UiiAre2ySiwovpDOuJl9mEcDf
-         5w7Q==
+        Fri, 31 Mar 2023 14:26:04 -0400
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCB01BF4C;
+        Fri, 31 Mar 2023 11:26:03 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id er13so52176144edb.9;
+        Fri, 31 Mar 2023 11:26:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680295406;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gbJR1JChzmLTsVV+iWqp2hMTIHEnfqkgzoCIgyYNt9Y=;
-        b=zZNXZuxHnFyH9HTztRCK8JLJzQjC2No4GNQcMGVeKNaV50DeoiBkWK05WXqQlmNmBj
-         To0k1G42IPo4ecsUR8C13tzoCEytjUZoucksJsXg19bGI/FQ1Ca+YDOIibgSdzTANp9R
-         JcWjlGP+P1R6kNmKj8iNLJF/V0jCwoXsNRXLGqyn2i7fwJOhSwxCSmDdP7RbJBQFYSsQ
-         510X+z09cPME3+wFl9mjqLTrcN1DLXGTj2fevSVsla5mXj8HRmpyJCLFP9dpfLKUkwRj
-         yuS6GkUXxpOfYmzt8wH23uAH/E6WdXE2BIifGvRB8bZmo3Xq1LrE2ywM0ZKX8wS90NnO
-         ke4w==
-X-Gm-Message-State: AO0yUKV+PGZeX5gbSWaNE4Cj2HCB+AryHM6ybymqalXqSz+wXRKllOhQ
-        BglwfC3Uq+zqWuzLLc/rrc2ZRQ==
-X-Google-Smtp-Source: AK7set8V3Ca+tICQ9ImYTvIekiytSecy9jsH4rdXe0Ny8GVw06BgVSCnoiUhP9+fRLKJDMrgoj4ILA==
-X-Received: by 2002:a4a:2c86:0:b0:53b:5510:9594 with SMTP id o128-20020a4a2c86000000b0053b55109594mr14082165ooo.1.1680295406387;
-        Fri, 31 Mar 2023 13:43:26 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id 188-20020a4a1dc5000000b00529cc3986c8sm1235060oog.40.2023.03.31.13.43.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 13:43:25 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 14:24:28 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] counter: 104-quad-8: Refactor to buffer states
- for CMR, IOR, and IDR
-Message-ID: <ZCclXMQ2NIUOdjas@fedora>
-References: <cover.1679605919.git.william.gray@linaro.org>
- <c5adb13b4b0887beb1df40b34d2ef03d63a2860d.1679605919.git.william.gray@linaro.org>
- <ZB2OG4zZXsqqyN8v@smile.fi.intel.com>
- <ZB2Ob9VGe3GoEVko@smile.fi.intel.com>
- <ZB2k9m7rL7Hpy/zU@fedora>
- <ZB2qI7k/Igws5khg@smile.fi.intel.com>
- <ZB3DJjQLa48AodSD@fedora>
- <ZCDc0zPtPSyDgOaF@fedora>
- <ZCFn+A6oAVNOe3yp@smile.fi.intel.com>
+        d=1e100.net; s=20210112; t=1680287161;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RaB5p8dANCz2nc2jG5lwXWHNdu974YJYtJWNgZD8A8M=;
+        b=CCZN5FF3/Ox0z+h8BWZVY6/HoRSeD1i1u16vmqKTicuMWY++c3ywrBgQiWz0tsdTtJ
+         AUx/um1OdzrqWczZomQsFxFvWtQ8YgGtays5Z92yeEMSAi8Ab+IgnMm1ZhcUBz+QuqNc
+         t7EXkeqqkWIidhoz8y7PIklVMPemnXVQhueMyVY4BNDpl+ANtqiYQ0/P5D7Gkd3m6RJm
+         d8Zlvnd4wIGt0XDu1oSyVd11op324SMA98I4MTZ8U1j/cBOmAtY6Ue0cwWusn8lZSjjS
+         IlE+L2Lm6PDRPDOygCs7NnNEStmPeCVd0nEvFi10TmJdMancdDvcDrgSPXLQzo4cCy20
+         JgSQ==
+X-Gm-Message-State: AAQBX9cyv+bilD0bZXUrPpvDpA/rN84+8gI/pykm6ru+kAZZ1bvUnDdW
+        5ng1PJ4DUDcm/W0DTUbsne1hBczrtOfCb3bmA0s=
+X-Google-Smtp-Source: AKy350adaPntcUkPWxFx1duflu6YE6LOfmcIB7o/QroDfpS7WhdUUDgFayI/MvYK8jxyM1CnjZnJ4ixoynkk5RoXGTU=
+X-Received: by 2002:a50:d49e:0:b0:4fc:ebe2:2fc9 with SMTP id
+ s30-20020a50d49e000000b004fcebe22fc9mr13651347edi.3.1680287161357; Fri, 31
+ Mar 2023 11:26:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="G5V++XAWDcOgjajm"
-Content-Disposition: inline
-In-Reply-To: <ZCFn+A6oAVNOe3yp@smile.fi.intel.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230330194439.14361-1-mario.limonciello@amd.com>
+ <20230330194439.14361-2-mario.limonciello@amd.com> <CAJZ5v0jbMXk5k_KG19bQnffhCkGnu=MQXjGrBPipZxA_Cg8O9w@mail.gmail.com>
+ <2676888c-e93f-53aa-a4f7-e85b66f351c8@amd.com> <CAJZ5v0iia9__-jWmawvsxninoTM5ZRtqhyUJme=noZMZJdUBrA@mail.gmail.com>
+ <8a04da89-1c98-8b29-bf96-1e8d0ed47e58@amd.com>
+In-Reply-To: <8a04da89-1c98-8b29-bf96-1e8d0ed47e58@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 31 Mar 2023 20:25:50 +0200
+Message-ID: <CAJZ5v0j-uMmi7QmC3XhtNbc+aroBkexriLQWfnyCrjBMf70Z=w@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] PM: Add a sysfs file to represent time spent in
+ hardware sleep state
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sven van Ashbrook <svenva@chromium.org>,
+        John Stultz <jstultz@google.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Raul Rangel <rrangel@chromium.org>,
+        David E Box <david.e.box@intel.com>,
+        Rajat Jain <rajatja@google.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 31, 2023 at 8:13 PM Limonciello, Mario
+<mario.limonciello@amd.com> wrote:
+>
+> On 3/31/2023 13:07, Rafael J. Wysocki wrote:
+> > On Fri, Mar 31, 2023 at 8:05 PM Limonciello, Mario
+> > <mario.limonciello@amd.com> wrote:
+> >>
+> >> On 3/31/2023 13:01, Rafael J. Wysocki wrote:
+> >>> On Thu, Mar 30, 2023 at 9:45 PM Mario Limonciello
+> >>> <mario.limonciello@amd.com> wrote:
+> >>>>
+> >>>> Userspace can't easily discover how much of a sleep cycle was spent in a
+> >>>> hardware sleep state without using kernel tracing and vendor specific sysfs
+> >>>> or debugfs files.
+> >>>>
+> >>>> To make this information more discoverable, introduce a new sysfs file
+> >>>> to represent the time spent in a sleep state.
+> >>>
+> >>> This is only in the most recent suspend-resume cycle, isn't it?
+> >>
+> >> Yes; that's correct.
+> >>
+> >>>
+> >>> Wouldn't it be useful to have another attribute printing the
+> >>> accumulated total HW sleep time?
+> >>>
+> >>
+> >> I had considered this; but I didn't think it was actually very useful
+> >> because userspace will get control at the end of every cycle and can
+> >> accumulate those numbers if desirable.
+> >
+> > Unless "user space" in question is actually a human, that is.
+>
+> This is what I envisioned:
+>
+> * In traditional Linux some software like systemd could capture this and
+> log it.
+> It could subtract at the time the suspend started from the time it ended
+> and use that to calculate a percentage of time in hardware sleep state
+> and then put that percentage in the system journal.
+>
+> * In ChromeOS something like powerd would be the only thing reading this
+> number and it could be adding it up during dark resume until the system
+> gets to a full resume.
+>
+> * If a human is manually capturing these values they'll be most
+> interested in whether an individual cycle reached hardware sleep.
 
---G5V++XAWDcOgjajm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Or whether or not it has been reached in any cycle so far?  Or in the
+most recent 10 cycles?  Or similar?
 
-On Mon, Mar 27, 2023 at 12:55:04PM +0300, Andy Shevchenko wrote:
-> +Cc clang (for the ideas you might have, while the issue seems related to=
- GCC[?] )
->=20
-> On Sun, Mar 26, 2023 at 08:01:23PM -0400, William Breathitt Gray wrote:
-> > On Fri, Mar 24, 2023 at 11:35:02AM -0400, William Breathitt Gray wrote:
-> > > There are eight calls to quad8_control_register_update() in 104-quad-=
-8:
-> > >=20
-> > >         quad8_control_register_update(priv, priv->idr, id, DISABLE_IN=
-DEX_MODE, INDEX_MODE);
-> > >         quad8_control_register_update(priv, priv->cmr, id, mode_cfg, =
-QUADRATURE_MODE);
-> > >         quad8_control_register_update(priv, priv->ior, event_node->ch=
-annel, flg_pins, FLG_PINS);
-> > >         quad8_control_register_update(priv, priv->idr, channel_id, in=
-dex_polarity, INDEX_POLARITY);
-> > >         quad8_control_register_update(priv, priv->idr, channel_id, sy=
-nchronous_mode, INDEX_MODE);
-> > >         quad8_control_register_update(priv, priv->cmr, count->id, cou=
-nt_mode, COUNT_MODE);
-> > >         quad8_control_register_update(priv, priv->ior, count->id, ena=
-ble, AB_GATE);
-> > >         quad8_control_register_update(priv, priv->ior, count->id, !pr=
-eset_enable, LOAD_PIN);
-> >=20
-> > I attempted the cross-compiling using an x86-64 system and I was able to
-> > recreate the build error. I tried to isolate the problem line by
-> > commenting out quad8_control_register_update() calls and discover that
-> > this appears to be an inline issue after all: if there are more than six
-> > calls to quad8_control_register_update() are in the code, then the
-> > '__bad_mask' build error occurs.
-> >=20
-> > The build error doesn't occur if I force the inline via __always_inline,
-> > so I'll add that to quad8_control_register_update() to resolve this
-> > issue and submit a v3 patchset later this week.
->=20
-> Doe it mean it's a compiler error? Or is it a code error?
->=20
-> I'm wondering if clang also fails here.
->=20
-> --=20
-> With Best Regards,
-> Andy Shevchenko
+Or how much time the system spent in HW sleep in general?
 
-Al, I think you were the one who introduced the field_multiplier()
-implementation in commit 00b0c9b82663ac ("Add primitives for
-manipulating bitfields both in host- and fixed-endian."). Is this build
-error [0] expected in your opinion?
+> If it didn't they'll want to look at debug data from that cycle.
+> The aggregate will be noise.
 
-I see that the field specification must be a constant according to the
-commit description, so does that mean a "const u8 field" parameter is
-valid? Does the field_multiplier() implementation have an expectation
-that the condition check will be evaluated by the compiler during the
-build and bypass the __bad_mask() compile time error so that it doesn't
-appear?
+Not necessarily and the point is that you can relatively easily
+provide both values, the one from the most recent cycle and the grand
+total.
 
-William Breathitt Gray
+> Do you think of another use case?
 
-[0] https://lore.kernel.org/all/202303241128.WBKc4LIy-lkp@intel.com/
-
---G5V++XAWDcOgjajm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZCclXAAKCRC1SFbKvhIj
-K78CAPwPh4AKoC34hyvsngmJT9sInLAPMmuoK926accTBjmCxwEAm2Vg3mw6/mBU
-VHdlglwqFRrfFerddC9Mct8nmG89hwY=
-=K6oT
------END PGP SIGNATURE-----
-
---G5V++XAWDcOgjajm--
+Well, if the kernel can easily compute and expose the grand total
+value, why is it better to offload that to user space, possibly in
+different ways in different system configurations?  What if somebody
+runs a minimum user space?
