@@ -2,145 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7516D220E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802546D2210
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 16:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbjCaOJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 10:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
+        id S232611AbjCaOJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 10:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbjCaOJX (ORCPT
+        with ESMTP id S232159AbjCaOJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 10:09:23 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1BD1D2E9
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 07:09:22 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7A6385C0134;
-        Fri, 31 Mar 2023 10:09:21 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 31 Mar 2023 10:09:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680271761; x=
-        1680358161; bh=EaVflyvFJJS8OV3iRBiACwzm3hra/ZJRlkep6hNK0bk=; b=j
-        pCOwpMi1UI56UEDD2hHgaG2SYy+bY77qUFLjTwp5rZXyaPqE+5WGBTSOp+TZzasy
-        2NgXs8BMQFVGKKhGUOTUY3NZNF8ExGUU6kAWnzGz5v0ZDLib6j2/Z81fVxo5qw3q
-        n5G5uJ/sPeik3HBOYJDRhZmsCmrXphwPQyd8WctGTeG+CUS1VGanKGpPKns1bTO+
-        TTLt6x+VfmYAv7A3CEESSqghwPcI8PvUnloXFhoC2cLQS2rZzCQwA1dUC4lJU7tv
-        iHZhyub4AgRXOYsYwwg2lZ3mn+9e55lZAuJ4iiTTjQOjIh0KzSZJerNjGVLnViEu
-        6KUWNp0huV52oQGRbVr2g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680271761; x=1680358161; bh=EaVflyvFJJS8O
-        V3iRBiACwzm3hra/ZJRlkep6hNK0bk=; b=nnLMo5YyWHcMpqmVJGgD0lUQ55z9x
-        KB6SjTTAqXqR4ULVDUnPozkGk41jRwyxOejIA0UQvC1u5x82g84G/vtpssLxbLhK
-        +3RqarJdcBECY/s8wP1LLBdyRcQpeWUlCwlG7sS0V6k94tqtL31Axx7ifvkElTci
-        p5VqZGsuc1DQWXm0Zz3AkRUlCmaJkC/ry0MDzU7bAjIWDFysLSXJiCld3aaKNDBb
-        g/0RqdfqigWzUnp53s5UYulkDydMtKeHkdIMDObT45Q6xY5pEemZ9SvG37m8PRNZ
-        loYh+r6b3qo2mImH+ADT047+1ZP8iTdOQmhEsgV0Y/Y9YlyGgNQFXKnpw==
-X-ME-Sender: <xms:kOkmZPiMuOlV5aNAmA7dWjohWcp73zCNLdLz3j0i1qVts5UJwHxYpQ>
-    <xme:kOkmZMDx0J67K-2fDcqZMwtH_g-iRj4AJzgDrzX4RGLjvE1B82ihtPnsbsTs7BRyv
-    QfDD7tN_rHBPy9cVTo>
-X-ME-Received: <xmr:kOkmZPHGiaxq4pL3yK9RLjxvh5VAwgcO2UgRVK08VZzWfTQRrfPH8dbLzYgkD1poyyetyA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiuddgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpeekvddvjeffheetgedtvdfgieejiedvgeejieet
-    jeehieehveffueekfeehffdvveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:kOkmZMSmdegpVP-lUH6V9z5lgfYALUaIP7Kdi45MjDZzYQ0N2kgJ7A>
-    <xmx:kOkmZMzd356S80SE6boCGW2LlQlnp39v0rKcaVfDmbqaLglu9u-mAQ>
-    <xmx:kOkmZC5Ujacwz3XOk7adi9MrdYDxjAY8EumqLLZgTwXveL3de9ORQQ>
-    <xmx:kekmZIcAEh8A69vKa7e9k-yS588bwaf6O4DvOHOx5bh2SzwLUFvMzw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 31 Mar 2023 10:09:19 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id F156F10A05E; Fri, 31 Mar 2023 17:09:16 +0300 (+03)
-Date:   Fri, 31 Mar 2023 17:09:16 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     David Laight <David.Laight@ACULAB.COM>,
-        'Wu Zongyong' <wuzongyong@linux.alibaba.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wutu.xq2@linux.alibaba.com" <wutu.xq2@linux.alibaba.com>
-Subject: Re: [RFC PATCH] x86/insn: support decode MOVSXD instruction for MMIO
-Message-ID: <20230331140916.ofb7ecrjpg7shaav@box>
-References: <1655f5dc49ab77f94e350ecbdc93e8d9b31acf61.1680058548.git.wuzongyong@linux.alibaba.com>
- <20230330123951.b5vujv67c7q3dhay@box.shutemov.name>
- <20230331022414.GB435@L-PF27918B-1352.localdomain>
- <94c3f7ba1caa45f7ba503cde6e0c79d2@AcuMS.aculab.com>
- <20230331100620.mkqg72vwhmlliunn@box.shutemov.name>
- <2220e2f1-2c91-e054-c107-a761fdfe7ffb@amd.com>
+        Fri, 31 Mar 2023 10:09:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591B01E73F;
+        Fri, 31 Mar 2023 07:09:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DEDC21FD7C;
+        Fri, 31 Mar 2023 14:09:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680271774; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RNZ94o/MZbKL9G0QQj9aIoZ+VfTlCGmKP5S0MBE57OA=;
+        b=EmbrFBr4HpWgMMI2YmJCxOMOaBnmJw45SOZKjPttuASA/igdkaW9Hmqp3gy7NGbdoEUDDd
+        +lCjWE2EvlrAWvUqdyqzI3+vMJtZdgdVDD+t7nzrPqiuXdpNK2ALqUBXl2hvLm7qfFRG/n
+        9b+s00dGhtfHbr1PX+YKXYDuT8MXbl0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680271774;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RNZ94o/MZbKL9G0QQj9aIoZ+VfTlCGmKP5S0MBE57OA=;
+        b=98OycAMMB7IHnPkxOLCqJH4lN66ZwBU/EBZ2fTULo+1yPYh5fkdQW/kiuLQ30MXKvDX8ak
+        X+P+as1Gi1B1H9Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F101134F7;
+        Fri, 31 Mar 2023 14:09:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gsqyDp7pJmQUXwAAMHmgww
+        (envelope-from <krisman@suse.de>); Fri, 31 Mar 2023 14:09:34 +0000
+From:   Gabriel Krisman Bertazi <krisman@suse.de>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/11] io_uring/rsrc: cache struct io_rsrc_node
+References: <cover.1680187408.git.asml.silence@gmail.com>
+        <7f5eb1b89e8dcf93739607c79bbf7aec1784cbbe.1680187408.git.asml.silence@gmail.com>
+Date:   Fri, 31 Mar 2023 11:09:32 -0300
+In-Reply-To: <7f5eb1b89e8dcf93739607c79bbf7aec1784cbbe.1680187408.git.asml.silence@gmail.com>
+        (Pavel Begunkov's message of "Thu, 30 Mar 2023 15:53:28 +0100")
+Message-ID: <87cz4p1083.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2220e2f1-2c91-e054-c107-a761fdfe7ffb@amd.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 08:40:30AM -0500, Tom Lendacky wrote:
-> On 3/31/23 05:06, Kirill A. Shutemov wrote:
-> > On Fri, Mar 31, 2023 at 08:49:48AM +0000, David Laight wrote:
-> > > From: Wu Zongyong
-> > > > Sent: 31 March 2023 03:24
-> > > > 
-> > > > On Thu, Mar 30, 2023 at 03:39:51PM +0300, kirill.shutemov@linux.intel.com wrote:
-> > > > > On Wed, Mar 29, 2023 at 10:59:37AM +0800, Wu Zongyong wrote:
-> > > > > > It seems MOVSXD which opcode is 0x63 is not handled, support
-> > > > > > to decode it in insn_decode_mmio().
-> > > > > 
-> > > > > Do you have a particular user in mind?
-> > > > To be honest, I don't find a specific user which uses the MOVSXD.
-> > > > 
-> > > > But both Intel and AMD's instructions reference contains MOVSXD and lots
-> > > > of MOVSXD instructions occur when I "objdump -S vmlinux", so I think it
-> > > > may be useful to support it in insn_decode_mmio().
-> > > > 
-> > > > Are there some special consideration about this instruction?
-> > > 
-> > > It is a sign-extending memory read (32bit to 64bit).
-> > > You pretty much never want to do that to a device register.
-> > > Also kernel code should be using readl() (etc) which do
-> > > unsigned reads.
-> > > So they should never happen for mmio.
-> > > 
-> > > Of course, if you mmap() PCIe space directly into a program's
-> > > address space anything might happen ...
-> > 
-> > There are two users of the interface: TDX and SEV. TDX doesn't allow
-> > userspace MMIO. SEV *seems* allows it, but I am not sure how it is safe.
-> > 
-> > Tom?
-> 
-> The insn_decode_mmio() function is only called by the SEV/TDX related code
-> and is specifically MMIO oriented. As David said, this instruction is likely
-> not being used for that in the kernel. If we come across a case where this
-> is used, we can look at how it is being used in that situation and it can be
-> addressed then.
+Pavel Begunkov <asml.silence@gmail.com> writes:
 
-I was asking if SEV supports userspace MMIO. And if yes, how do you make
-it safe?
+> Add allocation cache for struct io_rsrc_node, it's always allocated and
+> put under ->uring_lock, so it doesn't need any extra synchronisation
+> around caches.
+
+Hi Pavel,
+
+I'm curious if you considered using kmem_cache instead of the custom
+cache for this case?  I'm wondering if this provokes visible difference in
+performance in your benchmark.
+
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+>  include/linux/io_uring_types.h |  1 +
+>  io_uring/io_uring.c            | 11 +++++++++--
+>  io_uring/rsrc.c                | 23 +++++++++++++++--------
+>  io_uring/rsrc.h                |  5 ++++-
+>  4 files changed, 29 insertions(+), 11 deletions(-)
+>
+> diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+> index 47496059e13a..5d772e36e7fc 100644
+> --- a/include/linux/io_uring_types.h
+> +++ b/include/linux/io_uring_types.h
+> @@ -332,6 +332,7 @@ struct io_ring_ctx {
+>  
+>  	/* protected by ->uring_lock */
+>  	struct list_head		rsrc_ref_list;
+> +	struct io_alloc_cache		rsrc_node_cache;
+>  
+>  	struct list_head		io_buffers_pages;
+>  
+> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+> index 8c3886a4ca96..beedaf403284 100644
+> --- a/io_uring/io_uring.c
+> +++ b/io_uring/io_uring.c
+> @@ -310,6 +310,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+>  	INIT_LIST_HEAD(&ctx->sqd_list);
+>  	INIT_LIST_HEAD(&ctx->cq_overflow_list);
+>  	INIT_LIST_HEAD(&ctx->io_buffers_cache);
+> +	io_alloc_cache_init(&ctx->rsrc_node_cache, sizeof(struct io_rsrc_node));
+>  	io_alloc_cache_init(&ctx->apoll_cache, sizeof(struct async_poll));
+>  	io_alloc_cache_init(&ctx->netmsg_cache, sizeof(struct io_async_msghdr));
+>  	init_completion(&ctx->ref_comp);
+> @@ -2791,6 +2792,11 @@ static void io_req_caches_free(struct io_ring_ctx *ctx)
+>  	mutex_unlock(&ctx->uring_lock);
+>  }
+>  
+> +void io_rsrc_node_cache_free(struct io_cache_entry *entry)
+> +{
+> +	kfree(container_of(entry, struct io_rsrc_node, cache));
+> +}
+> +
+>  static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
+>  {
+>  	io_sq_thread_finish(ctx);
+> @@ -2816,9 +2822,9 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
+>  
+>  	/* there are no registered resources left, nobody uses it */
+>  	if (ctx->rsrc_node)
+> -		io_rsrc_node_destroy(ctx->rsrc_node);
+> +		io_rsrc_node_destroy(ctx, ctx->rsrc_node);
+>  	if (ctx->rsrc_backup_node)
+> -		io_rsrc_node_destroy(ctx->rsrc_backup_node);
+> +		io_rsrc_node_destroy(ctx, ctx->rsrc_backup_node);
+>  
+>  	WARN_ON_ONCE(!list_empty(&ctx->rsrc_ref_list));
+>  
+> @@ -2830,6 +2836,7 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
+>  #endif
+>  	WARN_ON_ONCE(!list_empty(&ctx->ltimeout_list));
+>  
+> +	io_alloc_cache_free(&ctx->rsrc_node_cache, io_rsrc_node_cache_free);
+>  	if (ctx->mm_account) {
+>  		mmdrop(ctx->mm_account);
+>  		ctx->mm_account = NULL;
+> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+> index 0f4e245dee1b..345631091d80 100644
+> --- a/io_uring/rsrc.c
+> +++ b/io_uring/rsrc.c
+> @@ -164,7 +164,7 @@ static void __io_rsrc_put_work(struct io_rsrc_node *ref_node)
+>  		kfree(prsrc);
+>  	}
+>  
+> -	io_rsrc_node_destroy(ref_node);
+> +	io_rsrc_node_destroy(rsrc_data->ctx, ref_node);
+>  	if (atomic_dec_and_test(&rsrc_data->refs))
+>  		complete(&rsrc_data->done);
+>  }
+> @@ -175,9 +175,10 @@ void io_wait_rsrc_data(struct io_rsrc_data *data)
+>  		wait_for_completion(&data->done);
+>  }
+>  
+> -void io_rsrc_node_destroy(struct io_rsrc_node *ref_node)
+> +void io_rsrc_node_destroy(struct io_ring_ctx *ctx, struct io_rsrc_node *node)
+>  {
+> -	kfree(ref_node);
+> +	if (!io_alloc_cache_put(&ctx->rsrc_node_cache, &node->cache))
+> +		kfree(node);
+>  }
+>  
+>  void io_rsrc_node_ref_zero(struct io_rsrc_node *node)
+> @@ -198,13 +199,19 @@ void io_rsrc_node_ref_zero(struct io_rsrc_node *node)
+>  	}
+>  }
+>  
+> -static struct io_rsrc_node *io_rsrc_node_alloc(void)
+> +static struct io_rsrc_node *io_rsrc_node_alloc(struct io_ring_ctx *ctx)
+>  {
+>  	struct io_rsrc_node *ref_node;
+> +	struct io_cache_entry *entry;
+>  
+> -	ref_node = kzalloc(sizeof(*ref_node), GFP_KERNEL);
+> -	if (!ref_node)
+> -		return NULL;
+> +	entry = io_alloc_cache_get(&ctx->rsrc_node_cache);
+> +	if (entry) {
+> +		ref_node = container_of(entry, struct io_rsrc_node, cache);
+> +	} else {
+> +		ref_node = kzalloc(sizeof(*ref_node), GFP_KERNEL);
+> +		if (!ref_node)
+> +			return NULL;
+> +	}
+>  
+>  	ref_node->refs = 1;
+>  	INIT_LIST_HEAD(&ref_node->node);
+> @@ -243,7 +250,7 @@ int io_rsrc_node_switch_start(struct io_ring_ctx *ctx)
+>  {
+>  	if (ctx->rsrc_backup_node)
+>  		return 0;
+> -	ctx->rsrc_backup_node = io_rsrc_node_alloc();
+> +	ctx->rsrc_backup_node = io_rsrc_node_alloc(ctx);
+>  	return ctx->rsrc_backup_node ? 0 : -ENOMEM;
+>  }
+>  
+> diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
+> index 17293ab90f64..d1555eaae81a 100644
+> --- a/io_uring/rsrc.h
+> +++ b/io_uring/rsrc.h
+> @@ -4,6 +4,8 @@
+>  
+>  #include <net/af_unix.h>
+>  
+> +#include "alloc_cache.h"
+> +
+>  #define IO_RSRC_TAG_TABLE_SHIFT	(PAGE_SHIFT - 3)
+>  #define IO_RSRC_TAG_TABLE_MAX	(1U << IO_RSRC_TAG_TABLE_SHIFT)
+>  #define IO_RSRC_TAG_TABLE_MASK	(IO_RSRC_TAG_TABLE_MAX - 1)
+> @@ -37,6 +39,7 @@ struct io_rsrc_data {
+>  };
+>  
+>  struct io_rsrc_node {
+> +	struct io_cache_entry		cache;
+>  	int refs;
+>  	struct list_head		node;
+>  	struct io_rsrc_data		*rsrc_data;
+> @@ -65,7 +68,7 @@ void io_rsrc_put_tw(struct callback_head *cb);
+>  void io_rsrc_node_ref_zero(struct io_rsrc_node *node);
+>  void io_rsrc_put_work(struct work_struct *work);
+>  void io_wait_rsrc_data(struct io_rsrc_data *data);
+> -void io_rsrc_node_destroy(struct io_rsrc_node *ref_node);
+> +void io_rsrc_node_destroy(struct io_ring_ctx *ctx, struct io_rsrc_node *ref_node);
+>  int io_rsrc_node_switch_start(struct io_ring_ctx *ctx);
+>  int io_queue_rsrc_removal(struct io_rsrc_data *data, unsigned idx,
+>  			  struct io_rsrc_node *node, void *rsrc);
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Gabriel Krisman Bertazi
