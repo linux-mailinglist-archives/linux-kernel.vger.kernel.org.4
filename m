@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3342E6D1C4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E9F6D1C51
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbjCaJ2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
+        id S232202AbjCaJ3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbjCaJ2X (ORCPT
+        with ESMTP id S232128AbjCaJ24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:28:23 -0400
+        Fri, 31 Mar 2023 05:28:56 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C48C1E732
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:27:53 -0700 (PDT)
-X-UUID: 3413c18ccfa611edb6b9f13eb10bd0fe-20230331
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2679C1D2F7
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 02:28:23 -0700 (PDT)
+X-UUID: 394a635ecfa611edb6b9f13eb10bd0fe-20230331
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=avL8CU6kY5CS4NKIn08+zcUBC0UI/MDg7QxLShqe7BY=;
-        b=aRLXWOtfC9pfQlrLiiVitZq7A9juNIhcu8H9DoRQ1gzuQ4/xPZsN17/an3iMuvQiX8iPxnr8wFQPB2siAwY8XvldVFDsK2ATVo+J7pcK+OT/AtzN2zH6Dk7sjIrGp3GJFCaLpORy9TQitex6E746XLuB/B/UldCSm35StA0axNc=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=woMdJmPGwqbmkNZP2IiNYeJBaZIPhitmDLlx3uTqBlE=;
+        b=aJ1B8PIFPT6L2CEJH+H2McTj79ic49HEN9zKuRjrEWEW2TulJC/MhTfzn+hSoARpY7l9/odJbik1jr68/Fc9DACsaUnp+FEHbNP0CmHXqOdF6a2hVyTxdm+WlbagcJCaSejPY5CSlRCmqSH3SgNlzeI0eA1WL3tieFYq8dsvZLE=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:2b5f194f-a467-4a30-b95b-bb9c29408ed7,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:e5f6f6b4-beed-4dfc-bd9c-e1b22fa6ccc4,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-O-INFO: VERSION:1.1.22,REQID:cabbaf4d-e56f-428d-88a6-ed4944ada1e1,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.22,REQID:cabbaf4d-e56f-428d-88a6-ed4944ada1e1,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:120426c,CLOUDID:4cd2152a-564d-42d9-9875-7c868ee415ec,B
+        ulkID:230331172717Z0H6RC8V,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
+        L:0,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
-X-UUID: 3413c18ccfa611edb6b9f13eb10bd0fe-20230331
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+X-UUID: 394a635ecfa611edb6b9f13eb10bd0fe-20230331
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
         (envelope-from <bo.ye@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 255766054; Fri, 31 Mar 2023 17:27:06 +0800
+        with ESMTP id 1312685728; Fri, 31 Mar 2023 17:27:15 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Fri, 31 Mar 2023 17:27:05 +0800
+ 15.2.1118.25; Fri, 31 Mar 2023 17:27:13 +0800
 Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Fri, 31 Mar 2023 17:27:04 +0800
+ 15.2.1118.25 via Frontend Transport; Fri, 31 Mar 2023 17:27:12 +0800
 From:   Bo Ye <bo.ye@mediatek.com>
 To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
+        <angelogioacchino.delregno@collabora.com>,
+        xiongping1 <xiongping1@xiaomi.com>,
+        qixiaoyu1 <qixiaoyu1@xiaomi.com>
 CC:     <yongdong.zhang@mediatek.com>, <peng.zhou@mediatek.com>,
         <browse.zhang@mediatek.com>, <light.hsieh@mediatek.com>,
-        Qilin Tan <qilin.tan@mediatek.com>,
+        Qilin Tan <qilin.tan@mediatek.com>, Bo Ye <bo.ye@mediatek.com>,
         <linux-f2fs-devel@lists.sourceforge.net>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>
-Subject: [PATCH 1/2] f2fs: fix iostat lock protection
-Date:   Fri, 31 Mar 2023 17:26:56 +0800
-Message-ID: <20230331092658.72386-1-bo.ye@mediatek.com>
+Subject: [PATCH 2/2] f2fs: add __pack attribute for extent_info
+Date:   Fri, 31 Mar 2023 17:26:57 +0800
+Message-ID: <20230331092658.72386-2-bo.ye@mediatek.com>
 X-Mailer: git-send-email 2.17.0
+In-Reply-To: <20230331092658.72386-1-bo.ye@mediatek.com>
+References: <20230331092658.72386-1-bo.ye@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,41 +78,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Qilin Tan <qilin.tan@mediatek.com>
 
-Made iostat lock irq safe to avoid potentinal deadlock.
+Need add __pack for struct extent_info to align to memory
+layout of struct rb_entry.
 
-Deadlock scenario:
-f2fs_attr_store
-  -> f2fs_sbi_store
-  -> _sbi_store
-  -> spin_lock(sbi->iostat_lock)
-    <interrupt request>
-    -> scsi_end_request
-    -> bio_endio
-    -> f2fs_dio_read_end_io
-    -> f2fs_update_iostat
-    -> spin_lock_irqsave(sbi->iostat_lock)  ===> Dead lock here
+struct rb_entry {
+    struct rb_node rb_node;     /* rb node located in rb-tree */
+    union {
+        struct {
+            unsigned int ofs;   /* start offset of the entry */
+            unsigned int len;   /* length of the entry */
+        };
+        unsigned long long key;     /* 64-bits key */
+    } __packed;
+};
 
+struct extent_info {
+    unsigned int fofs;      /* start offset in a file */
+    unsigned int len;       /* length of the extent */
+    union {
+        ...
+        /* block age extent_cache */
+        struct {
+            /* block age of the extent */
+            unsigned long long age;
+            /* last total blocks allocated */
+            unsigned long long last_blocks;
+        };
+};
+
+The new fields(age, last_blocks) are u64 in change 71644dff4811, it
+cause the memory alignment based on 8 bytes in some complier. So the
+field fofs and len are alloced with 8 bytes and using the last 4 byts.
+Its memory is not aligned with struct rb_entry. the ofs of rb_entry
+pointer to a invalid value and cause writing file failed.
+
+struct extent_info's offset should be 12 rather than 16 from the
+beginning of struct rb_entry.
+
+The offset dump for the bad case as:
+kworker/u16:6: [name:f2fs&]f2fs_lookup_rb_tree_for_insert:MTK_DEBUG: ino=1629 re=0xc675dc08 ofs=0 re->ofs=0, re->len=68 ei=0xc675dc18 ei.fofs=68 ei.len=277
+
+Fixes: 71644dff4811 ("f2fs: add block_age-based extent cache")
+Signed-off-by: Bo Ye <bo.ye@mediatek.com>
 Signed-off-by: Qilin Tan <qilin.tan@mediatek.com>
 ---
- fs/f2fs/sysfs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/f2fs/f2fs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index 0b19163c90d4..fd238a68017e 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -575,9 +575,9 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
- 	if (!strcmp(a->attr.name, "iostat_period_ms")) {
- 		if (t < MIN_IOSTAT_PERIOD_MS || t > MAX_IOSTAT_PERIOD_MS)
- 			return -EINVAL;
--		spin_lock(&sbi->iostat_lock);
-+		spin_lock_irq(&sbi->iostat_lock);
- 		sbi->iostat_period_ms = (unsigned int)t;
--		spin_unlock(&sbi->iostat_lock);
-+		spin_unlock_irq(&sbi->iostat_lock);
- 		return count;
- 	}
- #endif
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index b0ab2062038a..7c690667a42f 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -660,7 +660,7 @@ struct extent_info {
+ 			unsigned long long last_blocks;
+ 		};
+ 	};
+-};
++} __packed;
+ 
+ struct extent_node {
+ 	struct rb_node rb_node;		/* rb node located in rb-tree */
 -- 
 2.17.0
 
