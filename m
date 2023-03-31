@@ -2,220 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C086D2776
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 577E36D2779
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 20:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbjCaSCL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 14:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
+        id S231722AbjCaSDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 14:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232696AbjCaSBz (ORCPT
+        with ESMTP id S229983AbjCaSDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:01:55 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D670C2368D;
-        Fri, 31 Mar 2023 11:01:26 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id b20so92874236edd.1;
-        Fri, 31 Mar 2023 11:01:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680285685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L7ILAI9xgsrv2CUqZcgKibSQHX480a+0uL0n4h1D8/Y=;
-        b=CoczZ3AzmndNpFoOOzXWYGXvbnKOoJghI63AJwFHsJe2S8j7kUUEUHzbW21vOmizwo
-         sgIzJlUOCfEPrbVSMQIBel0uV1XIy1sYnlyeDlZyTrJYhpj44L8jW1uvOYoyvOTFz10S
-         xcgOYyvTlRO4f6+oJmabZAkk4g4uF2FZddsP7mfhxmsAY7sR3IGeRRf2DkFeDmiU34JX
-         5h3/+6cfSzTN6rQ3AcAzI8SarvXtmmtIDfD+va2J17j0TQOBgbKBHAL8I5kYU+OECOQh
-         zpHGdEh+M4xKiZ7KNmXVSyFDlBvOh433UmXBQIzkhB7YPv7/Ro7jAu1XDYvS9UdVdSoV
-         gURw==
-X-Gm-Message-State: AAQBX9cw8PE6+IHr4fdkbAX0r4QVVJP6E9kTSBINrU56+RC3mvZ0JlRk
-        1CPos3U/LfJKNeyBoZjI0PtR8PgjZYq7rEn70xQ=
-X-Google-Smtp-Source: AKy350brxbsTDKjCTT/ajAFrxPEwoCv3Ui+iRpDOJ+kJUqQcbF3+5/FWXEjIUjIVTFQuMrmr/cdJZ10UqGeWk7atlJI=
-X-Received: by 2002:a50:d49e:0:b0:4fc:ebe2:2fc9 with SMTP id
- s30-20020a50d49e000000b004fcebe22fc9mr13616496edi.3.1680285685066; Fri, 31
- Mar 2023 11:01:25 -0700 (PDT)
+        Fri, 31 Mar 2023 14:03:01 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915F7B769;
+        Fri, 31 Mar 2023 11:02:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680285778; x=1711821778;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1ZE2ydukO2Pi03RV+PLnVNWf0erf6eWYtcxgNoWA6ks=;
+  b=SBSoccinQPeSmPnwUBf5Vx1bX/tuc7XKHsR8zWaDa3AKdib0BeBYXAIU
+   4mtCnB33B5zJtePQZY1eG4Dqe8p9L5a2vECYSWxEZpvpW9R6jsZctZKAR
+   rfWw9ysLAbqlnwsHO6he6z0bHhjK/Bscef/sHTcTjVnu+WWzgT90uyngm
+   DxLbWSYYZuxCu4FBzs7weQB+377ZSTGKE3VZLF4gj7Q0jA3tdG/kBIUIW
+   l74aDjP2axhaLr5MVPm7pk1vMUeggtO6BOwdovP3QATe69jS5qfiaplvZ
+   xOjSZYsX4Wn95tlinbe6qxnQHPusBSutnOpnHsGyWt6fJXjK2eAganGRg
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="339021794"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="339021794"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 11:02:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10666"; a="828805835"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="828805835"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 31 Mar 2023 11:02:49 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1piJ5M-000M1Z-2c;
+        Fri, 31 Mar 2023 18:02:48 +0000
+Date:   Sat, 1 Apr 2023 02:02:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     oe-kbuild-all@lists.linux.dev, Peter Geis <pgwipeout@gmail.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Finley Xiao <finley.xiao@rock-chips.com>,
+        Jagan Teki <jagan@edgeble.ai>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCHv1 2/2] soc: rockchip: power-domain: add rk3588 mem module
+ support
+Message-ID: <202304010108.ta6EkS7C-lkp@intel.com>
+References: <20230331163058.5688-3-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-References: <20230330194439.14361-1-mario.limonciello@amd.com> <20230330194439.14361-2-mario.limonciello@amd.com>
-In-Reply-To: <20230330194439.14361-2-mario.limonciello@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 31 Mar 2023 20:01:14 +0200
-Message-ID: <CAJZ5v0jbMXk5k_KG19bQnffhCkGnu=MQXjGrBPipZxA_Cg8O9w@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] PM: Add a sysfs file to represent time spent in
- hardware sleep state
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Sven van Ashbrook <svenva@chromium.org>,
-        John Stultz <jstultz@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Raul Rangel <rrangel@chromium.org>,
-        David E Box <david.e.box@intel.com>,
-        Rajat Jain <rajatja@google.com>,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331163058.5688-3-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 9:45 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> Userspace can't easily discover how much of a sleep cycle was spent in a
-> hardware sleep state without using kernel tracing and vendor specific sysfs
-> or debugfs files.
->
-> To make this information more discoverable, introduce a new sysfs file
-> to represent the time spent in a sleep state.
+Hi Sebastian,
 
-This is only in the most recent suspend-resume cycle, isn't it?
+I love your patch! Yet something to improve:
 
-Wouldn't it be useful to have another attribute printing the
-accumulated total HW sleep time?
+[auto build test ERROR on rockchip/for-next]
+[also build test ERROR on linus/master v6.3-rc4 next-20230331]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> This file will be present only if the system supports s2idle.
->
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> v4->v5:
->  * Provide time in microseconds instead of percent. Userspace can convert
->    this if desirable.
-> ---
->  Documentation/ABI/testing/sysfs-power |  9 +++++++++
->  include/linux/suspend.h               |  2 ++
->  kernel/power/main.c                   | 29 +++++++++++++++++++++++++++
->  3 files changed, 40 insertions(+)
->
-> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
-> index f99d433ff311..9e0c31b9ce85 100644
-> --- a/Documentation/ABI/testing/sysfs-power
-> +++ b/Documentation/ABI/testing/sysfs-power
-> @@ -413,6 +413,15 @@ Description:
->                 The /sys/power/suspend_stats/last_failed_step file contains
->                 the last failed step in the suspend/resume path.
->
-> +What:          /sys/power/suspend_stats/last_hw_sleep
-> +Date:          June 2023
-> +Contact:       Mario Limonciello <mario.limonciello@amd.com>
-> +Description:
-> +               The /sys/power/suspend_stats/last_hw_sleep file
-> +               contains the duration of time spent in a hardware sleep
-> +               state during from the previous suspend cycle. This number
+url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Reichel/clk-rockchip-rk3588-make-gate-linked-clocks-ignore-unused/20230401-003605
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+patch link:    https://lore.kernel.org/r/20230331163058.5688-3-sebastian.reichel%40collabora.com
+patch subject: [PATCHv1 2/2] soc: rockchip: power-domain: add rk3588 mem module support
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20230401/202304010108.ta6EkS7C-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8a9b7bc14bff10030ef40e0350429490ff984f26
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sebastian-Reichel/clk-rockchip-rk3588-make-gate-linked-clocks-ignore-unused/20230401-003605
+        git checkout 8a9b7bc14bff10030ef40e0350429490ff984f26
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/
 
-"during from"?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304010108.ta6EkS7C-lkp@intel.com/
 
-I would say "in the most recent system suspend-resume cycle".
+All errors (new ones prefixed by >>):
 
-> +               is measured in microseconds.
-> +
->  What:          /sys/power/sync_on_suspend
->  Date:          October 2019
->  Contact:       Jonas Meurer <jonas@freesources.org>
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index cfe19a028918..e0f2ac5f4406 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -68,6 +68,7 @@ struct suspend_stats {
->         int     last_failed_errno;
->         int     errno[REC_FAILED_NUM];
->         int     last_failed_step;
-> +       u64     last_hw_sleep;
->         enum suspend_stat_step  failed_steps[REC_FAILED_NUM];
->  };
->
-> @@ -489,6 +490,7 @@ void restore_processor_state(void);
->  extern int register_pm_notifier(struct notifier_block *nb);
->  extern int unregister_pm_notifier(struct notifier_block *nb);
->  extern void ksys_sync_helper(void);
-> +extern void pm_set_hw_sleep_time(u64 t);
->
->  #define pm_notifier(fn, pri) {                         \
->         static struct notifier_block fn##_nb =                  \
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index 31ec4a9b9d70..6a2bf8784ce8 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -6,6 +6,7 @@
->   * Copyright (c) 2003 Open Source Development Lab
->   */
->
-> +#include <linux/acpi.h>
->  #include <linux/export.h>
->  #include <linux/kobject.h>
->  #include <linux/string.h>
-> @@ -83,6 +84,12 @@ int unregister_pm_notifier(struct notifier_block *nb)
->  }
->  EXPORT_SYMBOL_GPL(unregister_pm_notifier);
->
-> +void pm_set_hw_sleep_time(u64 t)
-> +{
-> +       suspend_stats.last_hw_sleep = t;
-> +}
-> +EXPORT_SYMBOL_GPL(pm_set_hw_sleep_time);
-> +
->  int pm_notifier_call_chain_robust(unsigned long val_up, unsigned long val_down)
->  {
->         int ret;
-> @@ -377,6 +384,13 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
->  }
->  static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
->
-> +static ssize_t last_hw_sleep_show(struct kobject *kobj,
-> +               struct kobj_attribute *attr, char *buf)
-> +{
-> +       return sysfs_emit(buf, "%llu\n", suspend_stats.last_hw_sleep);
-> +}
-> +static struct kobj_attribute last_hw_sleep = __ATTR_RO(last_hw_sleep);
-> +
->  static struct attribute *suspend_attrs[] = {
->         &success.attr,
->         &fail.attr,
-> @@ -391,12 +405,27 @@ static struct attribute *suspend_attrs[] = {
->         &last_failed_dev.attr,
->         &last_failed_errno.attr,
->         &last_failed_step.attr,
-> +       &last_hw_sleep.attr,
->         NULL,
->  };
->
-> +static umode_t suspend_attr_is_visible(struct kobject *kobj, struct attribute *attr, int idx)
-> +{
-> +       if (attr == &last_hw_sleep.attr) {
-> +#ifdef CONFIG_ACPI
-> +               if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)
-> +                       return 0444;
-> +#endif
-> +               return 0;
-> +       }
-> +
-> +       return 0444;
+   drivers/soc/rockchip/pm_domains.c: In function 'rockchip_pmu_domain_mem_reset':
+>> drivers/soc/rockchip/pm_domains.c:462:9: error: implicit declaration of function 'dsb' [-Werror=implicit-function-declaration]
+     462 |         dsb(sy);
+         |         ^~~
+>> drivers/soc/rockchip/pm_domains.c:462:13: error: 'sy' undeclared (first use in this function); did you mean 's8'?
+     462 |         dsb(sy);
+         |             ^~
+         |             s8
+   drivers/soc/rockchip/pm_domains.c:462:13: note: each undeclared identifier is reported only once for each function it appears in
+   cc1: some warnings being treated as errors
 
-if (attr != &last_hw_sleep.attr)
-        return 0444;
 
-#ifdef CONFIG_ACPI
-if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)
-        return 0444;
-#endif
+vim +/dsb +462 drivers/soc/rockchip/pm_domains.c
 
-return 0;
+   441	
+   442	static int rockchip_pmu_domain_mem_reset(struct rockchip_pm_domain *pd)
+   443	{
+   444		struct rockchip_pmu *pmu = pd->pmu;
+   445		struct generic_pm_domain *genpd = &pd->genpd;
+   446		bool is_on;
+   447		int ret = 0;
+   448	
+   449		ret = readx_poll_timeout_atomic(rockchip_pmu_domain_is_chain_on, pd, is_on,
+   450						is_on == true, 0, 10000);
+   451		if (ret) {
+   452			dev_err(pmu->dev,
+   453				"failed to get chain status '%s', target_on=1, val=%d\n",
+   454				genpd->name, is_on);
+   455			goto error;
+   456		}
+   457	
+   458		udelay(20);
+   459	
+   460		regmap_write(pmu->regmap, pmu->info->mem_pwr_offset + pd->info->pwr_offset,
+   461			     (pd->info->pwr_mask | pd->info->pwr_w_mask));
+ > 462		dsb(sy);
+   463	
+   464		ret = readx_poll_timeout_atomic(rockchip_pmu_domain_is_mem_on, pd, is_on,
+   465						is_on == false, 0, 10000);
+   466		if (ret) {
+   467			dev_err(pmu->dev,
+   468				"failed to get mem status '%s', target_on=0, val=%d\n",
+   469				genpd->name, is_on);
+   470			goto error;
+   471		}
+   472	
+   473		regmap_write(pmu->regmap, pmu->info->mem_pwr_offset + pd->info->pwr_offset,
+   474			     pd->info->pwr_w_mask);
+   475		dsb(sy);
+   476	
+   477		ret = readx_poll_timeout_atomic(rockchip_pmu_domain_is_mem_on, pd, is_on,
+   478						is_on == true, 0, 10000);
+   479		if (ret) {
+   480			dev_err(pmu->dev,
+   481				"failed to get mem status '%s', target_on=1, val=%d\n",
+   482				genpd->name, is_on);
+   483		}
+   484	
+   485	error:
+   486		return ret;
+   487	}
+   488	
 
-> +}
-> +
->  static const struct attribute_group suspend_attr_group = {
->         .name = "suspend_stats",
->         .attrs = suspend_attrs,
-> +       .is_visible = suspend_attr_is_visible,
->  };
->
->  #ifdef CONFIG_DEBUG_FS
-> --
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
