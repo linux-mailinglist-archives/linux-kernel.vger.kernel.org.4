@@ -2,201 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724E36D1F67
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8C96D1F6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 13:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjCaLqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 07:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
+        id S231250AbjCaLuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 07:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbjCaLqp (ORCPT
+        with ESMTP id S230185AbjCaLuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:46:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ADB1EA11;
-        Fri, 31 Mar 2023 04:46:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5C6E62836;
-        Fri, 31 Mar 2023 11:46:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3C31C433D2;
-        Fri, 31 Mar 2023 11:46:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680263199;
-        bh=R9Yumhm1RMDdrtlrXq9zoIJGJBh/7IIt4c1jg6vLDdI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KHmvMrQUdq35+Ksi/AkM2SThIklUFlK5p9qKwCS61ubSQHKh4R6m0Z6OP4J/Lz5ZX
-         p+QTPGGTULCt0NQj4CHMRSqV40/HeSdl3JBCZRlAyC4qvM7ogUxSrr4/W0Vvw3zaj0
-         fXpcPNl09E3SLDnPykpwAVc2qSDS72iVmAj5CuFja6DzQ1wus+6KbIvFufwgZAK415
-         LiG2GvefKZv5D604ixLQg2XD/gs9gHRyS3mfcQqyuQpvaAIpxiHmSS50GxdrKc7o+Q
-         J7LkxA/ngsTV6QljR6XXhQy/U1MT4413HJ4k4DpsbbLIAEGwp/xuYoDlbNC+lPetWe
-         x+4WTVELtTVeg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 51F8C4052D; Fri, 31 Mar 2023 08:46:36 -0300 (-03)
-Date:   Fri, 31 Mar 2023 08:46:36 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v1 1/4] tools api: Add io__getline
-Message-ID: <ZCbIHBDwcZ1IX8z8@kernel.org>
-References: <20230331004844.1592789-1-irogers@google.com>
- <20230331004844.1592789-2-irogers@google.com>
+        Fri, 31 Mar 2023 07:50:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1564237
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 04:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680263362;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zD7Fcr7w9U80vT79GcOoW/MaviXOYk1Az8mLggNbZ00=;
+        b=PhN4aOPf2C8cSZtVxMjtMDyjImTsfLwx83WT6xDnSymARsx7AEVuvVxKbs54dL716Vl485
+        yZplKk7pv384Y6WOuKtrFW7LpNFyK5uVGG7GjNkLJvrwX/fuXMg3bwWH9SXxGUzfgfHG1+
+        u1Xz++v1RlP6F+Noh6Q73WxkbphIIzI=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-615-CUtM6Pb2O8q4cbUhoF1CBA-1; Fri, 31 Mar 2023 07:49:20 -0400
+X-MC-Unique: CUtM6Pb2O8q4cbUhoF1CBA-1
+Received: by mail-lj1-f199.google.com with SMTP id 11-20020a2eb94b000000b002a6013f5f70so2773633ljs.8
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 04:49:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680263358;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zD7Fcr7w9U80vT79GcOoW/MaviXOYk1Az8mLggNbZ00=;
+        b=AqJ/4lilT+iUCUx1IMCvL8GPH6XROaXRkE26sWfXv5ubGa30Kt695HDqqQ5FCC0Yf5
+         XGXosRfvi5NxUekHEUNuFF1yaGChoGz/ptjqdrjmb8HDVctEpzgfbFeHmutLxgl2Lj45
+         25uj7Rl5ETuqltDWand9VNUI7FgoP6g0x+VwA4djEpR1RU7RQxx2+dj4RfxZEprj3Ucn
+         Rf8MyYJkThVdtCaTU77hp5qyd92d4G8VxuwcD9eUBI1Xtb33UWZEDP3ipIkXWWntXQdm
+         q90vPQBCeT21oNDuWSsURIEHsv3rEv8RlCp2mjV+uvEXrml7FDXKv1Uor95MUsNGg95E
+         DVPg==
+X-Gm-Message-State: AAQBX9drJUbU6TQqzZuSDxNxUQiugBGAmidbQSr/qTTiMC2cku1FxIIw
+        9ZHylSbOGf7OUeeYLiVFZauIl0Di2k7NWJyG7Olz0ftYeircMjZid2+7lY49ANYU/UEwgtzOMHR
+        Lz/MxDCUxp+y4GdyYd7rKCUPb
+X-Received: by 2002:a19:550b:0:b0:4e9:c627:195d with SMTP id n11-20020a19550b000000b004e9c627195dmr7334161lfe.57.1680263358572;
+        Fri, 31 Mar 2023 04:49:18 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YXUZu270+8qjZ4z0+edJ3P9KJHYqAy5QUXqjX7+ncQ8rXhZDHeTQST65e/JzidOlbbZmKR2Q==
+X-Received: by 2002:a19:550b:0:b0:4e9:c627:195d with SMTP id n11-20020a19550b000000b004e9c627195dmr7334151lfe.57.1680263358254;
+        Fri, 31 Mar 2023 04:49:18 -0700 (PDT)
+Received: from [192.168.42.100] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
+        by smtp.gmail.com with ESMTPSA id f4-20020a19ae04000000b004db3e2d3efesm346623lfc.204.2023.03.31.04.49.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 04:49:16 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <39b58460-6322-2c07-990a-864dc210ba0a@redhat.com>
+Date:   Fri, 31 Mar 2023 13:49:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230331004844.1592789-2-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net
+Subject: Re: [PATCH bpf RFC-V3 1/5] xdp: rss hash types representation
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>
+References: <168019602958.3557870.9960387532660882277.stgit@firesoul>
+ <168019606574.3557870.15629824904085210321.stgit@firesoul>
+ <ZCXWerysZL1XwVfX@google.com>
+ <04256caf-aa28-7e0a-59b1-ecf2b237c96f@redhat.com>
+ <CAKH8qBv9QngYcMjcL=sZR8wVCufPSAv-ZW72OJB-LhZF5a_DrQ@mail.gmail.com>
+ <c305e8ed-bd2c-3301-3a19-c983ff14a3ed@redhat.com>
+In-Reply-To: <c305e8ed-bd2c-3301-3a19-c983ff14a3ed@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Mar 30, 2023 at 05:48:41PM -0700, Ian Rogers escreveu:
-> Reads a line to allocated memory up to a newline following the getline
-> API.
+
+On 30/03/2023 21.08, Jesper Dangaard Brouer wrote:
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/lib/api/io.h        | 40 +++++++++++++++++++++++++++++++++++++++
->  tools/perf/tests/api-io.c | 36 +++++++++++++++++++++++++++++++++++
->  2 files changed, 76 insertions(+)
+> On 30/03/2023 21.02, Stanislav Fomichev wrote:
+>> On Thu, Mar 30, 2023 at 11:56 AM Jesper Dangaard Brouer
+>>>
+>>> On 30/03/2023 20.35, Stanislav Fomichev wrote:
+>>>> On 03/30, Jesper Dangaard Brouer wrote:
+> [...]
+>>> [...]
+>>>>> diff --git a/net/core/xdp.c b/net/core/xdp.c
+>>>>> index 528d4b37983d..38d2dee16b47 100644
+>>>>> --- a/net/core/xdp.c
+>>>>> +++ b/net/core/xdp.c
+>>>>> @@ -734,14 +734,22 @@ __bpf_kfunc int
+>>>>> bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx, u64 *tim
+>>>>>     * bpf_xdp_metadata_rx_hash - Read XDP frame RX hash.
+>>>>>     * @ctx: XDP context pointer.
+>>>>>     * @hash: Return value pointer.
+>>>>> + * @rss_type: Return value pointer for RSS type.
+>>>>> + *
+>>>>> + * The RSS hash type (@rss_type) specifies what portion of packet 
+>>>>> headers NIC
+>>>>> + * hardware were used when calculating RSS hash value.  The type 
+>>>>> combinations
+>>>>> + * are defined via &enum xdp_rss_hash_type and individual bits can 
+>>>>> be decoded
+>>>>> + * via &enum xdp_rss_type_bits.
+>>>>>     *
+>>>>>     * Return:
+>>>>>     * * Returns 0 on success or ``-errno`` on error.
+>>>>>     * * ``-EOPNOTSUPP`` : means device driver doesn't implement kfunc
+>>>>>     * * ``-ENODATA``    : means no RX-hash available for this frame
+>>>>>     */
+>>>>> -__bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
+>>>>> u32 *hash)
+>>>>> +__bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
+>>>>> u32 *hash,
+>>>>> +                     enum xdp_rss_hash_type *rss_type)
+>>>>>    {
+>>>> [..]
+>>>>
+>>>>> +    BTF_TYPE_EMIT(enum xdp_rss_type_bits);
+>>>> nit: Do we still need this with an extra argument?
+>>>>
+>>> Yes, unfortunately (compiler optimizes out enum xdp_rss_type_bits).
+>>> Do notice the difference xdp_rss_type_bits vs xdp_rss_hash_type.
+>>> We don't need it for "xdp_rss_hash_type" but need it for
+>>> "xdp_rss_type_bits".
+>  >
+>> Ah, I missed that. Then why not expose xdp_rss_type_bits?
+>> Keep xdp_rss_hash_type for internal drivers' tables, and export the
+>> enum with the bits?
 > 
-> diff --git a/tools/lib/api/io.h b/tools/lib/api/io.h
-> index 777c20f6b604..d874e8fa8b07 100644
-> --- a/tools/lib/api/io.h
-> +++ b/tools/lib/api/io.h
-> @@ -7,7 +7,9 @@
->  #ifndef __API_IO__
->  #define __API_IO__
->  
-> +#include <errno.h>
->  #include <stdlib.h>
-> +#include <string.h>
->  #include <unistd.h>
->  
->  struct io {
-> @@ -112,4 +114,42 @@ static inline int io__get_dec(struct io *io, __u64 *dec)
->  	}
->  }
->  
-> +/* Read up to and including the first newline following the pattern of getline. */
-> +static inline ssize_t io__getline(char **line_out, size_t *line_len_out, struct io *io)
+> Great suggestion, xdp_rss_hash_type will be internal for drivers.
+> I will do that in V4.
 
-Can we have io be the first arg? To be consistent with the other
-functons here and elsewhere in perf.
+I'm running into annoying compiler warnings [-Wenum-conversion]
+about enum conversions.  I'll try to workaround this...
+The easiest solution seem to be to only have a single enum, that both 
+contains the BIT()s and combinations of bits (for driver usage).
 
-- Arnaldo
+E.g.
+  warning: implicit conversion from 'enum xdp_rss_type_bits' to 'enum 
+xdp_rss_hash_type' [-Wenum-conversion]
 
-> +{
-> +	char buf[128];
-> +	int buf_pos = 0;
-> +	char *line = NULL;
-> +	size_t line_len = 0;
-> +	int ch = 0;
-> +
-> +	/* TODO: reuse previously allocated memory. */
-> +	free(*line_out);
-> +	while (ch != '\n') {
-> +		ch = io__get_char(io);
-> +
-> +		if (ch < 0)
-> +			break;
-> +
-> +		if (buf_pos == sizeof(buf)) {
-> +			line = realloc(line, line_len + sizeof(buf));
-> +			if (!line)
-> +				return -ENOMEM;
-> +			memcpy(&line[line_len], buf, sizeof(buf));
-> +			line_len += sizeof(buf);
-> +			buf_pos = 0;
-> +		}
-> +		buf[buf_pos++] = (char)ch;
-> +	}
-> +	line = realloc(line, line_len + buf_pos + 1);
-> +	if (!line)
-> +		return -ENOMEM;
-> +	memcpy(&line[line_len], buf, buf_pos);
-> +	line[line_len + buf_pos] = '\0';
-> +	line_len += buf_pos;
-> +	*line_out = line;
-> +	*line_len_out = line_len;
-> +	return line_len;
-> +}
-> +
->  #endif /* __API_IO__ */
-> diff --git a/tools/perf/tests/api-io.c b/tools/perf/tests/api-io.c
-> index e91cf2c127f1..0ff39cdfcb01 100644
-> --- a/tools/perf/tests/api-io.c
-> +++ b/tools/perf/tests/api-io.c
-> @@ -289,6 +289,40 @@ static int test_get_dec(void)
->  	return ret;
->  }
->  
-> +static int test_get_line(void)
-> +{
-> +	char path[PATH_MAX];
-> +	struct io io;
-> +	char test_string[1024];
-> +	char *line = NULL;
-> +	size_t i, line_len = 0;
-> +	size_t buf_size = 128;
-> +	int ret = 0;
-> +
-> +	for (i = 0; i < 512; i++)
-> +		test_string[i] = 'a';
-> +	test_string[512] = '\n';
-> +	for (i = 513; i < 1023; i++)
-> +		test_string[i] = 'b';
-> +	test_string[1023] = '\0';
-> +
-> +	if (setup_test(path, test_string, buf_size, &io))
-> +		return -1;
-> +
-> +	EXPECT_EQUAL((int)io__getline(&line, &line_len, &io), 513);
-> +	EXPECT_EQUAL((int)strlen(line), 513);
-> +	for (i = 0; i < 512; i++)
-> +		EXPECT_EQUAL(line[i], 'a');
-> +	EXPECT_EQUAL(line[512], '\n');
-> +	EXPECT_EQUAL((int)io__getline(&line, &line_len, &io), 510);
-> +	for (i = 0; i < 510; i++)
-> +		EXPECT_EQUAL(line[i], 'b');
-> +
-> +	free(line);
-> +	cleanup_test(path, &io);
-> +	return ret;
-> +}
-> +
->  static int test__api_io(struct test_suite *test __maybe_unused,
->  			int subtest __maybe_unused)
->  {
-> @@ -300,6 +334,8 @@ static int test__api_io(struct test_suite *test __maybe_unused,
->  		ret = TEST_FAIL;
->  	if (test_get_dec())
->  		ret = TEST_FAIL;
-> +	if (test_get_line())
-> +		ret = TEST_FAIL;
->  	return ret;
->  }
->  
-> -- 
-> 2.40.0.348.gf938b09366-goog
-> 
-
--- 
-
-- Arnaldo
