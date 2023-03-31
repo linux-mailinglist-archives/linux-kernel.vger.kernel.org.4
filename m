@@ -2,69 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712956D248E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 17:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 446FA6D2497
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 18:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233011AbjCaP7x convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Mar 2023 11:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
+        id S233065AbjCaQEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 12:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbjCaP7v (ORCPT
+        with ESMTP id S232921AbjCaQEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 11:59:51 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EC711163
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 08:59:49 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-120-C4-P87iaN1WtnBYIDX4e1A-1; Fri, 31 Mar 2023 16:59:46 +0100
-X-MC-Unique: C4-P87iaN1WtnBYIDX4e1A-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 31 Mar
- 2023 16:59:44 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 31 Mar 2023 16:59:44 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Kirill A. Shutemov'" <kirill@shutemov.name>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-CC:     'Wu Zongyong' <wuzongyong@linux.alibaba.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wutu.xq2@linux.alibaba.com" <wutu.xq2@linux.alibaba.com>
-Subject: RE: [RFC PATCH] x86/insn: support decode MOVSXD instruction for MMIO
-Thread-Topic: [RFC PATCH] x86/insn: support decode MOVSXD instruction for MMIO
-Thread-Index: AQHZY3fogCXZ9lyaeEGX/VkAF56JI68Uk4WggABviA2AAAb3EA==
-Date:   Fri, 31 Mar 2023 15:59:44 +0000
-Message-ID: <a6a150f332b44914ac286550b63feab0@AcuMS.aculab.com>
-References: <1655f5dc49ab77f94e350ecbdc93e8d9b31acf61.1680058548.git.wuzongyong@linux.alibaba.com>
- <20230330123951.b5vujv67c7q3dhay@box.shutemov.name>
- <20230331022414.GB435@L-PF27918B-1352.localdomain>
- <94c3f7ba1caa45f7ba503cde6e0c79d2@AcuMS.aculab.com>
- <20230331100620.mkqg72vwhmlliunn@box.shutemov.name>
- <2220e2f1-2c91-e054-c107-a761fdfe7ffb@amd.com>
- <20230331140916.ofb7ecrjpg7shaav@box>
- <e9c3019f-936f-8bcc-d20f-16220993ff1c@amd.com>
- <20230331152508.s7phgif3iozbbpqn@box>
-In-Reply-To: <20230331152508.s7phgif3iozbbpqn@box>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 31 Mar 2023 12:04:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10831EFC9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680278636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rSNZ8/l+VZ86qtadx/3cTwXAVAmwqfzRU1WoIUzmJNE=;
+        b=AWPD+R8Z7Zo+cKE5Rbz7uqtWVIrqftICpfSBT6cXjajmNvqEIl85iA2MbuZWv3hOkXrnYO
+        wIf84z3zN6hF/rCw3jf/+5TKpzeqM7UfKkFlHjM4cqieVcXX7W5/8jl98/mRCv9Ws0gmkf
+        OVuJgcEOczdPfcDnJqaPnlFTy+tSReI=
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
+ [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-493-7xq3yhjTMdulPo2lV8SAOw-1; Fri, 31 Mar 2023 12:03:55 -0400
+X-MC-Unique: 7xq3yhjTMdulPo2lV8SAOw-1
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-544781e30easo221527887b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 09:03:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680278635;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rSNZ8/l+VZ86qtadx/3cTwXAVAmwqfzRU1WoIUzmJNE=;
+        b=57sCUqO1c4hU1iCtnARwhDqOJBvzMDAYZTlgFD9xqLYn2nNEaHJ4xvfHxzBXGZcifN
+         YiP+eoHVZp3Bq5ibrG61QvgExssc6zRLSTj01zt4+UzkcAFSMjv2HKTQd+xssx5rv7VF
+         /VWFGfwdfCTu9ZUOkEYKBrhRIpCx4JND1VTzuijHEZtBt12HeImrcSHGFXEMFcq0yLoW
+         IOqmSGdzHGHxBDHxLTpch1vMXLjYhqTcrcW1Q1Tvt6yUMckoUEe3NevzbX9yV5TJVFSw
+         1d5B7zM8ey5z3JRMWoNc7XQhQ0W0QypahM2yG0cMIYovmDfQWlVXrkk31jp83dsJQw+o
+         DOGQ==
+X-Gm-Message-State: AAQBX9eHZYp8rz56IMilsJPIvlvyPFLAK8Vu7KjNNhWac/qfqPcgnPe5
+        rOz9T2MpPT4dkVmW6C5LEd/Nonsxgrb6oDyyiv219f4mj4vfGgVyN+m9eSgQxlLfQx8LjJg5+MV
+        KCRZhSyT4ylbeRTeHOeQg8aiU
+X-Received: by 2002:a05:7500:3e83:b0:fe:c8a6:575 with SMTP id li3-20020a0575003e8300b000fec8a60575mr286783gab.18.1680278634914;
+        Fri, 31 Mar 2023 09:03:54 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aYLH+nRBLs0BOSrhOyR0e8vNMPADpf6r8qKAygoUTF/7n8384rN6qordhqj3TeCWcFnm7i8Q==
+X-Received: by 2002:a05:7500:3e83:b0:fe:c8a6:575 with SMTP id li3-20020a0575003e8300b000fec8a60575mr286763gab.18.1680278634565;
+        Fri, 31 Mar 2023 09:03:54 -0700 (PDT)
+Received: from [192.168.1.12] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
+        by smtp.gmail.com with ESMTPSA id y25-20020a37f619000000b0074382b756c2sm760767qkj.14.2023.03.31.09.03.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 09:03:54 -0700 (PDT)
+Message-ID: <f1351c5f-16aa-8407-753c-90049956123d@redhat.com>
+Date:   Fri, 31 Mar 2023 12:03:52 -0400
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
 Content-Language: en-US
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>
+References: <4ce29654-4e1e-4680-9c25-715823ff5e02@p183>
+ <683593a8-79db-4f3b-bc78-7917284683e4@p183>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
+In-Reply-To: <683593a8-79db-4f3b-bc78-7917284683e4@p183>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.0 required=5.0 tests=PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,30 +85,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kirill A. Shutemov
-> Sent: 31 March 2023 16:25
-...
-> > No, SEV doesn't support userspace MMIO.
+On 3/30/23 13:04, Alexey Dobriyan wrote:
+> This patchset somehow breaks the build of the simplest livepatch module:
 > 
-> But where do you filter out userspace MMIO? AFAICS, it goes straight from
-> from #VC to insn_decode_mmio(). Hm?
+> 	make -f linux/linux-1/scripts/Makefile.modfinal
+> 	make[1]: *** No rule to make target 'linux/module-klp/main.tmp.ko', needed by 'linux/module-klp/main.ko'.  Stop.
+> 
 
-Probably by making vm_iomap_memory() fail.
+Thanks for testing.
 
-Otherwise MOVSXD is the least of your problems.
-You'd need to worry about all the AVX opcodes as well.
+Presumably this is an out-of-tree livepatch module?  If so, that is
+still on the TODO list.  If not, that is weird as the patchset itself
+includes updates to samples/ and lib/ livepatches that build and load fine.
 
-Although you might even find kernel code that is using
-kernel_fpu_begin/end() to wrap mmio copies that use the
-big AVX512 registers.
-When each PCIe read takes about 1us (measured into our fpga)
-increasing the TLP to 64 bytes (from 8) makes a massive
-difference to buffer reads.
-(Mostly we try to get the fpga to do writes instead.)
+-- 
+Joe
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+> $ cat Kbuild
+> obj-m := main.o
+> 
+> $ cat main.c
+> #include <linux/module.h>
+> #include <linux/kernel.h>
+> #include <linux/livepatch.h>
+> #include <linux/seq_file.h>
+> 
+> static int livepatch_cmdline_proc_show(struct seq_file *m, void *data)
+> {
+> 	seq_puts(m, "REDACTED 001\n");
+> 	return 0;
+> }
+> 
+> static struct klp_func funcs[] = {
+> 	{
+> 		.old_name = "cmdline_proc_show",
+> 		.new_func = livepatch_cmdline_proc_show,
+> 	},
+> 	{}
+> };
+> 
+> static struct klp_object objs[] = {
+> 	{
+> 		.funcs = funcs,
+> 	},
+> 	{}
+> };
+> 
+> static struct klp_patch g_patch = {
+> 	.mod = THIS_MODULE,
+> 	.objs = objs,
+> };
+> 
+> static int livepatch_init(void)
+> {
+> 	return klp_enable_patch(&g_patch);
+> }
+> 
+> static void livepatch_exit(void)
+> {
+> }
+> module_init(livepatch_init);
+> module_exit(livepatch_exit);
+> MODULE_LICENSE("GPL");
+> MODULE_INFO(livepatch, "Y");
+> 
 
