@@ -2,59 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC1C6D188D
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DFD6D188E
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 09:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjCaH0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 03:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
+        id S230425AbjCaH2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 03:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjCaH0f (ORCPT
+        with ESMTP id S229530AbjCaH2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 03:26:35 -0400
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE383ED;
-        Fri, 31 Mar 2023 00:26:32 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 07:26:09 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1680247588; x=1680506788;
-        bh=uVwhpYDZIIdj+265twvljuSYRqJy0izgHprDWPhFAdk=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=hw6VZAVNB4YexoRNxps4VHNqNH/PrhjbJFt6BrwyKOapdfq698yksDCDKevKNSRpB
-         yUNI98DJav/sC2Oqw1nb9rpJqKiL0gZHNDUevqGD6eAJuZEjbqmIteuVn0KW2pW5u0
-         Za1bxHpkPNek/QDWs95QZO0nEp/9l1T568xgiiWdT4wEdXtXWDnwJcUgGnPNtXkprZ
-         lhhMzJTj9Eq8FAq5jahb3oUc8nhnbZYLAwSbYoVfVYTDb97ad6o+IQuYXa989ueAlz
-         dwHtt2ndeX67oFAy/KkJPHDVejIM9Ui28A/rvlu5mP586ro49OANNWPxlh99C+6oUc
-         xMuUCzefuj0hA==
-To:     Petr Tesarik <petrtesarik@huaweicloud.com>
-From:   Juerg Haefliger <juergh@proton.me>
-Cc:     Christoph Hellwig <hch@lst.de>, Jonathan Corbet <corbet@lwn.net>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
-        Roberto Sassu <roberto.sassu@huawei.com>, petr@tesarici.cz,
-        Alexander Graf <graf@amazon.com>
-Subject: Re: [RFC v1 3/4] swiotlb: Allow dynamic allocation of bounce buffers
-Message-ID: <20230331092553.677e9649@smeagol>
-In-Reply-To: <4268fa4e-4f0f-a2f6-a2a5-5b78ca4a073d@huaweicloud.com>
-References: <4268fa4e-4f0f-a2f6-a2a5-5b78ca4a073d@huaweicloud.com>
-Feedback-ID: 45149698:user:proton
+        Fri, 31 Mar 2023 03:28:21 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1621C768B;
+        Fri, 31 Mar 2023 00:28:21 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 813DF5C019A;
+        Fri, 31 Mar 2023 03:28:20 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Fri, 31 Mar 2023 03:28:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680247700; x=1680334100; bh=5MJfRpO+dCBuD2QslsP+SHMLwF08YAQPZ56
+        IkAHTbT0=; b=XLCxyHafha+KRYaz/Xp/c2jIG4Q+V18mqz9L5W1fhQmGBqiNlVv
+        7j8vZ3S2AfG2SIClEEwMv7/XC/htYnuvcNqoyvGmXvn1kkEcxINFNicBjBRQVVLF
+        iz5dqgp2RnxKOfKrMNsgjDDcU4qaZgFwWQKgHvC8HEzGQ/PApmuNRid0QliTgM8m
+        VTAgWxBxi6Xg04e06wSVFrAaP0aiK+TrjiLvuXr05lPb7IFlie0a87o7c4nj6VeV
+        rSPs4e3fzbP4KRQoZdWQV/XAx+sPwRdSV8/NBFhX1E1DCVZmmY9e5PK4dvWblkWw
+        +dhK6oSscSztWdpueJsQ6qjmb0tJgRD4M1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680247700; x=1680334100; bh=5MJfRpO+dCBuD2QslsP+SHMLwF08YAQPZ56
+        IkAHTbT0=; b=EJLBUuFHcas3fEMOIEwV1AgefTVcrxPr7G5wkugubuV37eS6RAa
+        efX7mMYC8+3sqk8AA49pe82WX9VmcT3ne1QCMd6cQrfi0InVAnKBot02MZqqBqDe
+        fVJVIOcSz1e/u2okUC3yMkzdH5sJmzx4WbVpaUWRcApRs9slc06IHn0ZHUPYWC1h
+        H8XmEloTjTJOBixeKvYpKYZnVXsLCtLD9eZyq6lqd48NaYXwMjeXFIOCWlCvozMt
+        0UcRBMz5rryBbkjj2vwMAVn6FmaoDxFkxZ5Z2GkQNMTGs+4tt9H4OvREMjVTK66F
+        WXffatQVyvoTXT2jxT6gHgUGXXs/m63o9FQ==
+X-ME-Sender: <xms:lIsmZCxROcorE8JDboyMqAa1kUmw8MhJF81dq2tEn1gK6Kzm79OQgA>
+    <xme:lIsmZOQz293jC9gSf9RLEOnHi7JnSJdnEIUd6JmTup3O6SvuocmXWLZNPLwmBSQ27
+    RoatHC-cd92rF-lIg>
+X-ME-Received: <xmr:lIsmZEVIhOzhuglxbgFY2fX4PUVeJtbM0MmYGig7VwTPJot4z4cse7xw5IxCWOZajjJ7HNvFIG1MOqePXBHEWMet8g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeitddguddulecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomheptehl
+    ihgtvgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnh
+    epheduuddvteekvdektdduledugfffhfdugeejgeeuvdevtdetveejheehiefffeegnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
+    esrhihhhhlrdhioh
+X-ME-Proxy: <xmx:lIsmZIgvwEfrWPsWIPGu0p-K9ekXvkV_RqMdh5d7sS4f3gs0mIPoPw>
+    <xmx:lIsmZEAxLDUknQKkN30GQtdqg44a4gQykjPgPvlLcB1We5HGsFLNMg>
+    <xmx:lIsmZJIU97-7qVrnswYonGot2ZcQyzppuw2-pG98gfiwcAOw13tdPw>
+    <xmx:lIsmZNJvo_yQqazjeEqlR6tVruIKuGSFCUgPyxh9kjUMGjyz4g8Q5g>
+Feedback-ID: i56684263:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 31 Mar 2023 03:28:16 -0400 (EDT)
+Message-ID: <1cd137de-6ca0-a079-429f-6cb964a0f811@ryhl.io>
+Date:   Fri, 31 Mar 2023 09:28:28 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="b1_RX1JEplCPdOoZLmijgm2vZMNZS7zoj4VjnqCNmqCo"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 01/13] rust: sync: introduce `LockClassKey`
+Content-Language: en-US
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        rust-for-linux@vger.kernel.org
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>
+References: <20230330043954.562237-1-wedsonaf@gmail.com>
+From:   Alice Ryhl <alice@ryhl.io>
+In-Reply-To: <20230330043954.562237-1-wedsonaf@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,144 +96,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
+On 3/30/23 06:39, Wedson Almeida Filho wrote:
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
+> 
+> It is a wrapper around C's `lock_class_key`, which is used by the
+> synchronisation primitives that are checked with lockdep. This is in
+> preparation for introducing Rust abstractions for these primitives.
+> 
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Waiman Long <longman@redhat.com>
+> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> ---
+> +// SAFETY: `bindings::lock_class_key` is designed to be used concurrently from multiple threads and
+> +// provides its own synchronization.
+> +unsafe impl Sync for LockClassKey {}
 
---b1_RX1JEplCPdOoZLmijgm2vZMNZS7zoj4VjnqCNmqCo
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+No Send?
 
-On Tue, 28 Mar 2023 09:54:35 +0200
-Petr Tesarik <petrtesarik@huaweicloud.com> wrote:
+> +
+> +impl LockClassKey {
+> +    /// Creates a new lock class key.
+> +    pub const fn new() -> Self {
+> +        Self(Opaque::uninit())
+> +    }
+> +
+> +    #[allow(dead_code)]
+> +    pub(crate) fn as_ptr(&self) -> *mut bindings::lock_class_key {
+> +        self.0.get()
+> +    }
 
-> On 3/28/2023 6:07 AM, Christoph Hellwig wrote:
-> > [adding Alex as he has been interested in this in the past]
-> >
-> > On Mon, Mar 20, 2023 at 01:28:15PM +0100, Petr Tesarik wrote:
-> >> Second, on the Raspberry Pi 4, swiotlb is used by dma-buf for pages
-> >> moved from the rendering GPU (v3d driver), which can access all
-> >> memory, to the display output (vc4 driver), which is connected to a
-> >> bus with an address limit of 1 GiB and no IOMMU. These buffers can
-> >> be large (several megabytes) and cannot be handled by SWIOTLB,
-> >> because they exceed maximum segment size of 256 KiB. Such mapping
-> >> failures can be easily reproduced on a Raspberry Pi4: Starting
-> >> GNOME remote desktop results in a flood of kernel messages like
-> >> these:
-> >
-> > Shouldn't we make sure dma-buf allocates the buffers for the most
-> > restricted devices, and more importantly does something like a dma
-> > coherent allocation instead of a dynamic mapping of random memory?
-> >
-> > While a larger swiotlb works around this I don't think this fixes the r=
-oot
-> > cause.
->
-> I tend to agree here. However, it's the DMABUF design itself that causes
-> some trouble. The buffer is allocated by the v3d driver, which does not
-> have the restriction, so the DMA API typically allocates an address
-> somewhere near the 4G boundary. Userspace then exports the buffer, sends
-> it to another process as a file descriptor and imports it into the vc4
-> driver, which requires DMA below 1G. In the beginning, v3d had no idea
-> that the buffer would be exported to userspace, much less that it would
-> be later imported into vc4.
->
-> Anyway, I suspected that the buffers need not be imported into the vc4
-> driver (also hinted by Eric Anholt in a 2018 blog post [1]), and it
-> seems I was right. I encountered the issue with Ubuntu 22.10; I
-> installed latest openSUSE Tumbleweed yesterday, and I was not able to
-> reproduce the issue there, most likely because the Mesa drivers have
-> been fixed meanwhile. This makes the specific case of the Raspberry Pi 4
-> drivers moot. The issue may still affect other combinations of drivers,
-> but I don't have any other real-world example ATM.
-
-I'm only seeing this problem with Wayland, no issue when switching Ubuntu t=
-o
-X. It seems Tumbleweed is using X by default.
-
-...Juerg
-
-
-> [1] https://anholt.github.io/twivc4/2018/02/12/twiv/
->
-> >> 1. The value is limited to ULONG_MAX, which is too little both for
-> >>    physical addresses (e.g. x86 PAE or 32-bit ARM LPAE) and DMA
-> >>    addresses (e.g. Xen guests on 32-bit ARM).
-> >>
-> >> 2. Since buffers are currently allocated with page granularity, a
-> >>    PFN can be used instead. However, some values are reserved by
-> >>    the maple tree implementation. Liam suggests to use
-> >>    xa_mk_value() in that case, but that reduces the usable range by
-> >>    half. Luckily, 31 bits are still enough to hold a PFN on all
-> >>    32-bit platforms.
-> >>
-> >> 3. Software IO TLB is used from interrupt context. The maple tree
-> >>    implementation is not IRQ-safe (MT_FLAGS_LOCK_IRQ does nothing
-> >>    AFAICS). Instead, I use an external lock, spin_lock_irqsave() and
-> >>    spin_unlock_irqrestore().
-> >>
-> >> Note that bounce buffers are never allocated dynamically if the
-> >> software IO TLB is in fact a DMA restricted pool, which is intended
-> >> to be stay in its designated location in physical memory.
-> >
-> > I'm a little worried about all that because it causes quite a bit
-> > of overhead even for callers that don't end up going into the
-> > dynamic range or do not use swiotlb at all.  I don't really have a
-> > good answer here except for the usual avoid bounce buffering whenever
-> > you can that might not always be easy to do.
->
-> I'm also worried about all this overhead. OTOH I was not able to confirm
-> it, because the difference between two successive fio test runs on an
-> unmodified kernel was bigger than the difference between a vanilla and a
-> patched kernel, except the maximum completion latency, which OTOH
-> affected less than 0.01% of all requests.
->
-> BTW my testing also suggests that the streaming DMA API is quite
-> inefficient, because UAS performance _improved_ with swiotlb=3Dforce.
-> Sure, this should probably be addressed in the UAS and/or xHCI driver,
-> but what I mean is that moving away from swiotlb may even cause
-> performance regressions, which is counter-intuitive. At least I would
-> _not_ have expected it.
->
-> >> +=09gfp =3D (attrs & DMA_ATTR_MAY_SLEEP) ? GFP_KERNEL : GFP_NOWAIT;
-> >> +=09slot =3D kmalloc(sizeof(*slot), gfp | __GFP_NOWARN);
-> >> +=09if (!slot)
-> >> +=09=09goto err;
-> >> +
-> >> +=09slot->orig_addr =3D orig_addr;
-> >> +=09slot->alloc_size =3D alloc_size;
-> >> +=09slot->page =3D dma_direct_alloc_pages(dev, PAGE_ALIGN(alloc_size),
-> >> +=09=09=09=09=09    &slot->dma_addr, dir,
-> >> +=09=09=09=09=09    gfp | __GFP_NOWARN);
-> >> +=09if (!slot->page)
-> >> +=09=09goto err_free_slot;
-> >
-> > Without GFP_NOIO allocations this will deadlock eventually.
->
-> Ah, that would affect the non-sleeping case (GFP_KERNEL), right?
->
-> Petr T
->
-
-
---b1_RX1JEplCPdOoZLmijgm2vZMNZS7zoj4VjnqCNmqCo
-Content-Type: application/pgp-signature; name=attachment.sig
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=attachment.sig
-
-LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0NCg0KaVFJekJBRUJDZ0FkRmlFRWhaZlU5Nkl1
-cHJ2aUxkZUxEOU9MQ1F1bVFyY0ZBbVFtaXdFQUNna1FEOU9MQ1F1bQ0KUXJkR2dBLy9icjU5YUxH
-S3hSSC9vOC9nUzdnMlVQb1NkVVdZUHg1MjdMTWJ5NkorQnZXY2I4aEo0dTJZNTJrTQ0KcUlBQkRJ
-RHpZaU13K1FkZExBUjlWMzY1WGNBYWtxU2JoZi9iUThDS1FKOG90OHBJWDNqd2laY3p3akloMVJC
-Rw0Kc2hmdW1FWFRNTVJsQkZUSGxubFRrd1dtdnNrS2xkVHlPeWNML1c5aERITW0zSm92U0VBQzB6
-YlVrZ0YyekIxOA0KZ1gwT0dGd0x1MEZ4VGlJcCtEeE9BREFORXpyeGtTeEwzRU9jUndrWHZzbkJw
-Tzl1T0U2bVdZQmZQdWY0aGQ0Zw0KN3dKL0VvR2hTdVNRNzBON29MS1NDK1g4K1NCS1R5WURYeE03
-RTNENnRUaUY4RkQ5K3RkQ3UxMVBjbmV4SGdPWA0KaVhSazNZcGtQMUFnQ0gxWnJ1ZmVJaXRpMEJD
-Y3gzUlhPNU5JQTFlVU55Sjc4eldzaVpPakxaZnBlRWJiTzg1Wg0KNURsWDNIdFN1M2RMVXFOQURW
-SUJzY3BZeWNKazBuWHZXcVlRM3AySDlPbmN5TmszdEdZK0ZBOGNhNUhlU0hyTg0KVWpnSklXTGpR
-SGprZWg1ekE2a2VQOC9uSDUvYlRTQmtYQVFFT2F4anlUa2pnZnBvQXlaZXFsdEc4ZGVwSkkybg0K
-VDh3YlBBTHczMzNCVy8xUGtCeUJJMTRCWGxpWlUrQkxNU2labVpKek9CUUlGeE92ZWZmSG5pc2sx
-akVOcUlGeQ0KMXo5a2NLc1gvYUx1WWhSeVhyQmc1QllIa0szOVJFdW5rSVJTd1hIN2JvZ0pnZ2xx
-KzMycTEvaXUwMWFxQ0pWbA0KMXpLa1BuUjBETStneTVpMHZMZ00yM29vM0sxQ21sb1h3UkhPOUpw
-dGRTMFoyMDByMW5FPQ0KPTlMNlgNCi0tLS0tRU5EIFBHUCBTSUdOQVRVUkUtLS0tLQ0K
-
---b1_RX1JEplCPdOoZLmijgm2vZMNZS7zoj4VjnqCNmqCo--
-
+I would just make this pub and drop the `#[allow(dead_code)]`. I think 
+it is often useful to have methods like this available publicly.
