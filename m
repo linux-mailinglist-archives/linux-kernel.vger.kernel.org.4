@@ -2,97 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B11F6D2A66
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4486D2A65
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 23:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233327AbjCaVxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 17:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
+        id S233220AbjCaVxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 17:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233233AbjCaVxa (ORCPT
+        with ESMTP id S233215AbjCaVx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 17:53:30 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0728A1BC0
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:53:01 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 21:52:46 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680299574; x=1680558774;
-        bh=Za/m4aK9PnJEmnWJB3YV+TN80PGCqO5M482kG2Z4FzU=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=bp06f2HFPkWAuvmFbH5+BrrVjCnYBmETv//Z6r7awcX8quV3JtC6GLwpBD0ePTaBi
-         YM6jx4Cu64pWBD4kceJX0BMGE2V6tuP1hNmHw/N0fF+acmzXr/fsy6RnshFkPdjWXL
-         Jb96CjH2DWAFhWw8gwsTA0qBHkJDdKtpg3Xbzw7EhCENzdg7XuS3D8fctEWEerrqJp
-         UMOkOOKdu6Ho8/nYBHJqLKhnKBdIoNUbdCI2MrlZ5kDn1jlaV7mHBDb3K0+0J3jNuk
-         3DHBySotwGyvFPp5eRWFCAWc5u6TinoRUcqrZuCltH70oEUL2YEKy2zIbgF6vAqfKJ
-         wFOnlHfHhRF2w==
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <alice@ryhl.io>
-From:   y86-dev@protonmail.com
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Alice Ryhl <aliceryhl@google.com>
-Subject: [PATCH v4 05/15] rust: types: add `Opaque::raw_get`
-Message-ID: <20230331215053.585759-6-y86-dev@protonmail.com>
-In-Reply-To: <20230331215053.585759-1-y86-dev@protonmail.com>
-References: <20230331215053.585759-1-y86-dev@protonmail.com>
-Feedback-ID: 40624463:user:proton
+        Fri, 31 Mar 2023 17:53:29 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABE2CA0B
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Mar 2023 14:52:57 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680299571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Hyu7B5PMD/6Hjx3PVFsOPviX5E90ag0vc/ISSLayx4=;
+        b=Jb+3UqWAMcMCm/IW5t98tTatXDLNhFaDT2PAQ17N7MvuDRPIQFkECCVaAbMTNkBR1MSoS6
+        OtHV+jOQJqRzzsfWXBV4j6t8S/xrZ71Tmlud0yfIfr6OlEbZ9pzz5odKzezLIUeiXfmqCv
+        e0QWbpYrH7zKpntNUUxHU67KPX3dNlO0P2VQ4lqs5hfrZF6+UVsuajR5ExtGkH+LWB3UXe
+        c3fLQLLHgf7VrTC5GliyQ0W854umpcauoNH73Uag6ZKJFH+Ua0yTLw3J7JYFxpRviQrDJJ
+        +GTLBGs4hYpCiV7RXNf/PsQIu1thkWu1iojooX+vWKVME7adcHIijjBmSzwjIw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680299571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Hyu7B5PMD/6Hjx3PVFsOPviX5E90ag0vc/ISSLayx4=;
+        b=mNy/akH/qQWxhte5iHap01uZz88g/ZXpEUvUU7mQYy1cdFIZMk+SuHC23Ln7e1K3HStM76
+        MZWc70grf26T8wAQ==
+To:     "Yang, WenYou" <WenYou.Yang@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "Quan, Evan" <Evan.Quan@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "Phillips, Kim" <kim.phillips@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Liang, Richard qi" <Richardqi.Liang@amd.com>,
+        "Li, Ying" <YING.LI@amd.com>, "Liu, Kun" <Kun.Liu2@amd.com>,
+        "gpiccoli@igalia.com" <gpiccoli@igalia.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3 1/2] cpu/smt: add a notifier to notify the SMT changes
+In-Reply-To: <DM6PR12MB3531340547BE346D07E88BE3FD8F9@DM6PR12MB3531.namprd12.prod.outlook.com>
+References: <20230329015149.870132-1-WenYou.Yang@amd.com>
+ <20230329015149.870132-2-WenYou.Yang@amd.com>
+ <20230329071014.GC7701@hirez.programming.kicks-ass.net>
+ <BYAPR12MB352749E2864A87C3C32B7D0FFD899@BYAPR12MB3527.namprd12.prod.outlook.com>
+ <20230329085023.GO4253@hirez.programming.kicks-ass.net>
+ <DM6PR12MB3531933678779C5923989925FD899@DM6PR12MB3531.namprd12.prod.outlook.com>
+ <DM6PR12MB3531340547BE346D07E88BE3FD8F9@DM6PR12MB3531.namprd12.prod.outlook.com>
+Date:   Fri, 31 Mar 2023 23:52:50 +0200
+Message-ID: <87pm8osi4t.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benno Lossin <y86-dev@protonmail.com>
+On Fri, Mar 31 2023 at 05:49, WenYou Yang wrote:
 
-This function mirrors `UnsafeCell::raw_get`. It avoids creating a
-reference and allows solely using raw pointers.
-The `pin-init` API will be using this, since uninitialized memory
-requires raw pointers.
+<SNIP>
+        Removing pointlessly copied mail headers. Please fix your email
+        client
+</SNIP>
 
-Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-Reviewed-by: Gary Guo <gary@garyguo.net>
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
----
- rust/kernel/types.rs | 8 ++++++++
- 1 file changed, 8 insertions(+)
+>> >
+>> > So what do you want to have happen when someone goes and manually
+>> > offlines all the SMT siblings using
+>> > /sys/devices/system/cpu/cpu*/online
+>> > ?
+>> 
+>> I don't consider this situation.  Any suggestions will be deeply appreciated.
+>
+> Hi Peter,
+>
+> I don't find a good method to handle this situation.
+> Yes, manually offlining all the SMT sibling will get the same result of SMT disabling on the fly.
+>
+> Actually, the normal way to enable/disable SMT on the fly is to echo on/off > /sys/device/system/cpu/smt/control
 
-diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-index 9d0fdbc55843..ff2b2fac951d 100644
---- a/rust/kernel/types.rs
-+++ b/rust/kernel/types.rs
-@@ -238,6 +238,14 @@ impl<T> Opaque<T> {
-     pub fn get(&self) -> *mut T {
-         UnsafeCell::raw_get(self.0.as_ptr())
-     }
-+
-+    /// Gets the value behind `this`.
-+    ///
-+    /// This function is useful to get access to the value without creatin=
-g intermediate
-+    /// references.
-+    pub const fn raw_get(this: *const Self) -> *mut T {
-+        UnsafeCell::raw_get(this.cast::<UnsafeCell<T>>())
-+    }
- }
+That's the most convenient way, right.
 
- /// A sum type that always holds either a value of type `L` or `R`.
---
-2.39.2
+But why do we need a kernel notifier for this, if you can do the same
+with a sysfs knob for your driver?
 
+Then user space can fiddle with SMT control in sysfs and afterwards tell
+the driver that it should reconfigure.
 
+That makes a ton more sense than this random notifier.
+
+Thanks,
+
+        tglx
