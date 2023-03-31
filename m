@@ -2,69 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9044E6D1713
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 07:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB526D1716
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 07:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjCaF5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 01:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S229853AbjCaF7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 01:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjCaF44 (ORCPT
+        with ESMTP id S229529AbjCaF7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 01:56:56 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F90BCA18
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 22:56:53 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id v6-20020a05600c470600b003f034269c96so2895721wmo.4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 22:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680242213;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mN3w6GX389HXcLgiOXptgNDp1zW7cj4B8n/slgcn6bY=;
-        b=t0WQLv4U3/0ElrPtMJspM+AyO2Zx3ojgCMOcPLxvAsL78qOGE7fwE1WT/qMXVEZ2FQ
-         K2V6ofe2bmOBt1xkm/G8toBlaAK3OzTVnn93ZiusPyGJ0DVY2gaTb1/D1f7F0IwGvckz
-         trX3tvqXlT3oZavEuK5NuPZcEifCX4Ra9h03pYECnM5HIpmH/SKypocRWps6vza/z5C4
-         77CKPlAV+Y6z0764QEU4b9U7MR5tNcb+XkQc4QT2y8qwZ/z9v2JabaOv8EITVn8NLKmN
-         ndIWxPS7CG4s0QWlSgRfSUwFA8913GItgB2IIFSAG/1hdDqAViXJ/t1J28S9hUZLPlcU
-         xyig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680242213;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mN3w6GX389HXcLgiOXptgNDp1zW7cj4B8n/slgcn6bY=;
-        b=NodJfP+5gWO8BgCZ6Slw/qtJnud6HeHP9bHwamX9JjA1YdkGqVinixb6tkREeqJJEJ
-         8JV6yK0PW9AufLLWZ0fSqznCFnG8bnmjRJkXfL/J/sqkYAXxN+tyVCqkwVlWXdA0c9Uf
-         Bp1uIz7rc+t3w/S2qltDFGIfrpwCzPL5zgLIM4OBUa/QvHt1BUMFo/KQEi9o5nLj1+LC
-         cYayiqEQQuMv9CZrACWHNqp9FPc/Npz+sI2QpBGoqe9ZqHKVbCVBXDHyKySA9HKe2CLW
-         YdQhVZqZbnQKwl9ZpDZNcFBbgJPbOCyrP/s7nGX3Im68YsYoOlfVT5Gu+AE0MlITYiqw
-         0RAg==
-X-Gm-Message-State: AAQBX9cYFCdrlT0kJFU4Vu9Wbp1hclTu55wo3wpDzq6Cp3Qna9Tg/h1T
-        sJZu0A1LGt5dqaFAUgr2oAA7oQ==
-X-Google-Smtp-Source: AKy350aXtTOpaATPWtYal1vn8b3mYalsNWGg2HUCVwL1NofktQ2VxNP0LqB9SHAIhpZxHznlle5Kww==
-X-Received: by 2002:a05:600c:244:b0:3ef:76dc:4b92 with SMTP id 4-20020a05600c024400b003ef76dc4b92mr9089072wmj.28.1680242212945;
-        Thu, 30 Mar 2023 22:56:52 -0700 (PDT)
-Received: from linaro.org ([2a00:23c5:680a:d01:24d4:5fa:d4b2:7c14])
-        by smtp.gmail.com with ESMTPSA id iz5-20020a05600c554500b003ef67ac3846sm8464055wmb.24.2023.03.30.22.56.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 22:56:52 -0700 (PDT)
-From:   Mike Leach <mike.leach@linaro.org>
-To:     linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org, acme@kernel.org
-Cc:     suzuki.poulose@arm.com, leo.yan@linaro.org, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, gankulkarni@os.amperecomputing.com,
-        darren@os.amperecomputing.com, Mike Leach <mike.leach@linaro.org>
-Subject: [PATCH v9 3/3] perf: cs-etm: Handle PERF_RECORD_AUX_OUTPUT_HW_ID packet
-Date:   Fri, 31 Mar 2023 06:56:45 +0100
-Message-Id: <20230331055645.26918-4-mike.leach@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230331055645.26918-1-mike.leach@linaro.org>
-References: <20230331055645.26918-1-mike.leach@linaro.org>
+        Fri, 31 Mar 2023 01:59:39 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2070.outbound.protection.outlook.com [40.107.93.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBF3CA18
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Mar 2023 22:59:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mI7uChfOjCm9ma4d8yxyzTYQ+Tvg/lkOhr1EXS9iXFK6wo1I/HWua/ebgekSJgCsSm3W14YfdADJ+RbuMkk6WxK4WzRs/q9klOh7XZNj9ViFRO3mEO82bnK9Cm3FL7B6N95xygTdvrbhnh1akfz4Zp7merTmzDArvo6MADBjwHRWUzSD0WK5kwEKKLBBdlmYQyxo7fDYTaLnnkIcgJ+JuwjD+oglJtCnUdIHSN9n5x6bNEYzAyLI3E8YPkfttx6avgPnBzADpWqSvbDbY4s0DY6kyYb4nXP+KcOmGuMAx0yOn5qRoIwTjo1Wstomvdfk46wicC//Pb5pESqHpd5DDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/UQ3OqWU4W9Zv5JgV5qFsy5xkNtsCmAEEsbwUAelPa0=;
+ b=cAr5nW0DsUwGnlFRE9cxEYG91M2boyUccMsdeKQarcoWVd5RP1uS1enffU3O1In4Ak5N++w/l0zj6rKt+2Rh4GVQa9emFSLsWrzbAzSFhjxdKLteuonRIfoYSAbDZLszXVvS2qBfuVQLfN9dfqe799mS29S8TnC0CVqfDxpY1zGfoOlPBAYSCjJeEBz60TixY9LwJG+oo0syf1914FW6YQAOTuW/vBrMiYkTOM0f9T8JmgKzFaZrV9TTi3572FsvGf4BTWjwAhHphj76xBVmAVVNieKuVy4eMHzDwoWjlGOml3InQ2FMdo9eYpqmUEz2ZeZMAYyCj4emqPWaEJZkEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/UQ3OqWU4W9Zv5JgV5qFsy5xkNtsCmAEEsbwUAelPa0=;
+ b=zdzoodkM5Rs2CvMG3oPFiWXU1FvwXTTPbwNiUNhDpNt+rEbPQZW6orz1Hfol9Y5+hbzQBZRDGkmhM75TDlIpVCKxKpbiTt8F0BKqKId7f0e1ijjE7vnmQmyhgorFgRi3INBPkEnDlOaDV8Dznwu1rSmBrc5yDAU37vu9QJCYw8s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by IA1PR12MB8287.namprd12.prod.outlook.com (2603:10b6:208:3f5::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.33; Fri, 31 Mar
+ 2023 05:59:35 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4624:dc39:943e:6ae]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4624:dc39:943e:6ae%5]) with mapi id 15.20.6254.022; Fri, 31 Mar 2023
+ 05:59:35 +0000
+Message-ID: <6ad72a7f-302f-4be1-0d53-00ff9dc37ef7@amd.com>
+Date:   Fri, 31 Mar 2023 07:59:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/scheduler: set entity to NULL in
+ drm_sched_entity_pop_job()
+Content-Language: en-US
+To:     Danilo Krummrich <dakr@redhat.com>, luben.tuikov@amd.com,
+        airlied@gmail.com, daniel@ffwll.ch, l.stach@pengutronix.de,
+        "Prosyak, Vitaly" <Vitaly.Prosyak@amd.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230331000622.4156-1-dakr@redhat.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230331000622.4156-1-dakr@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0080.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9a::13) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|IA1PR12MB8287:EE_
+X-MS-Office365-Filtering-Correlation-Id: f4fd912d-3a1d-4f57-773b-08db31ad1ac9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WWcyqGCvcC7WxGxo8kXdwO9hllyZbTH8MjTaMDYwNLPaN/c1b+LlZoTHS0KEBVwRcirU3C0e/jYuCP0DpZCxTKubd4gm3Dy8P1dw3usJJ3EX631n4DhlDySUcs60CUSe5YQC4L89bxdVyEJzOPWnawaAHKy8oF7v3ie87VhBzfaGQNxjeRcQet3L6cYl7hMQlN1cyG2lkBnJ66qFQcMvSUWwykYjyekCVlMjJg+iB2UcvXiLGF++oRXT+2VZMNaKSfpRpNk7Ajb4A9qh/M+eoI62iMFTKr9Qsh+Ylubmrm0dqRwTEWbIfQzK8V8fojUGXSZYNxtnbQFBjruJBP3jyoHY8As+aNkx8Lh8jYoLMp7417qNJ8NVW8v10q+kF7xwa87mW8tJAknVojEmoLD23QMFn61td4ycZyLh4/gFzzDiDxHUmqk44UU42gBatMF7CntjnNgelQA1hq8M7Ioieh+AT4A3ueXhYd/55mGu1hEljMgpAdlrhfddDbKbK72tHf9lE1dyTrMty0GJKXgyqo4CeIAGE8+eHxz3FRom/1asKhvHqN558v/bmaIjk3LAd0WsstHDU5Xm5F9fRfhz80gqcNXrNvoO84CBhdBFHsxBRfhGhMipnZXSGcTYBwT9+/AKRX2uo8KfyDSfVFZ7hg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(136003)(376002)(39860400002)(451199021)(36756003)(186003)(6486002)(2906002)(6506007)(5660300002)(66556008)(26005)(66476007)(8676002)(4326008)(66946007)(110136005)(6512007)(41300700001)(31696002)(316002)(86362001)(8936002)(38100700002)(6666004)(478600001)(2616005)(6636002)(83380400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b0xqVDBtckt5dUZIZ0VOcU5zaUVkRGF1Y2NGcHZFaUJFd0RpS1RFYVcxclBI?=
+ =?utf-8?B?UGlGOE5ReWNENHY0SmR6SUZHc2lLMnU5anZxZkhqNlpoVGFuWk9mc29lQlZC?=
+ =?utf-8?B?WVNXUGt4U3hSWG9Lb2dSVmF2T1ZteUxlMEhnd3l6TE5SbDlpN1J1NlZUeVhT?=
+ =?utf-8?B?UXVIdm5TMXNDNlJFZHlSTy9tTHg0UExoNlBmSnhnbWdraGVtUE8vUE1udU9B?=
+ =?utf-8?B?bE53YUNXYm4xekRrSUFrZnN4S2srOXJDbHRsNlB6a0lGZjY2WHhkMWErMVJD?=
+ =?utf-8?B?aEEvK2hPUEhDZytVbjBLOWFFSkJBb2xMK09qY21PTlBIVW1DeG12NFQ5ODhF?=
+ =?utf-8?B?Z1BEL3dacXhxQVpORDdQL1EyemhoK1MvTWhPbEJNbkJOdjJLT2pUMHBzNGp0?=
+ =?utf-8?B?UFJVY2RqcEwxMXc4b1hKVnNGWmM0WWVxaEJrL3hZV0hSbEN6Zk12dnRGTTc5?=
+ =?utf-8?B?K2VUaFcxcmtJcHIwdXNWYXp5d1N6aXFTZ3VsL3VyN3UvSDdmVjRENjZaVUdI?=
+ =?utf-8?B?bXloYU9Wa05SczAzN1pHVFp1SWRFQTQwOXprcmxXejlYbWJYNTZ1N3Bud20v?=
+ =?utf-8?B?c3lFbVdObGl1YWh5OFU4N3hyNnNoSGlIV3k5aUU3czU4YXNhWnJXTUVrQk1n?=
+ =?utf-8?B?RUpVVzlOQW42Umt3UnZ1OXY4QVRhMnlWZzBQZ2VQS1RkbjlTS1ppaHJzVmlQ?=
+ =?utf-8?B?YUY1UnVKWXNiTzY2b2hiWXlQenR5Q0ZydW5DUE5SR0M4K3M0UFdQbWh3V3VD?=
+ =?utf-8?B?VFN4OHZNVnpoeGthRmRmUXhodFpLSkxNQ0ZieTV0dmJtZ2plbVN5TkVpcDIw?=
+ =?utf-8?B?TGlVc3NQc3V2NUZMc0VxeTVHNWxEMFQvRXlUcnhPMjY3NkY3WVNxYXY3aGZq?=
+ =?utf-8?B?cktCZmk0d3JEcTA2MGp4R3BvTjZabVI5QThBN2tuVmJzb1NYeEgwYi84YnBw?=
+ =?utf-8?B?N0NiSDZkKzMzdHZ4YjNpdDNGYjkwQjhxK1VEQktnTFdKcllZVkNacXZLSGlE?=
+ =?utf-8?B?ZlNYWEhGS0ZFM1FXcHRNS0M2YTY3d2NxN3pJZGR2aStROVBQR3ZqeGVXQko0?=
+ =?utf-8?B?TTRFbVNTU0xyVVlocHloenNIQzRRRisrT0lFMGxzK0JFSVg5RmsxRW5pUG1z?=
+ =?utf-8?B?ZzJuS1BCa0M2WDdMTTRLdElHaWFVQnQvVUJHYktESWFIc25ETFFtKzBxWHpR?=
+ =?utf-8?B?ckM2M3ZpMVpJRkxRRmcwKzB1TTBzUFN2WWFYUXlFN0gwVUhERVI3bHVLcm9Z?=
+ =?utf-8?B?cDBqUXVwL3Y0NTF2c3E5NWhCaHlIT0owYTdMNWQ4MzFXZ1c5M2pVUC9jd29u?=
+ =?utf-8?B?SG04NGE2UmxBUy8rVmVyQmxQN0JiRjF3L2ZnaVdvQ2dPR1IvS2thR3pCbVdX?=
+ =?utf-8?B?c3JBeE01ck5YbElqWDhBRUZvQk9rR00wNUNzdFpBaGhIZnRFdi9FaUtYa3Rx?=
+ =?utf-8?B?ZTcwTU4vMXdoQjZ6MWdZaHQzOVlpOENQUkJpM3YrU0I2MXRGT3FEdzVkbDRX?=
+ =?utf-8?B?Ri9YZWZqMFoxMFNOUVNEV3Y2dzBYSDg2NDR1RDRaRHBvUHpSekpreVhweEU2?=
+ =?utf-8?B?eExHMHpUZVBqeFY1WXlsU29uSjJDd0xmWWhuQ0V4VktmQkdtakkyMFh6MC9S?=
+ =?utf-8?B?SlM4cGJTSVl4YnEySDZmVk9jUjd2YVdmUG5mTDFPUEt2aUVWbW5URnJuNkxT?=
+ =?utf-8?B?aWMrREhxWk44anR0R0paaStORVNTVlBjY2duNFFnZ3pJaWcxZEV2TGU0eFFS?=
+ =?utf-8?B?eFdlWjJDMXJDbVJ0bUhSUEhPaUVrRWFIdTZBL2hSc1FhV0E1aXBrTEUrVnN2?=
+ =?utf-8?B?UE5uT1kwODFSd1ZTclJ5Ty9kQ0pJQkFWVC8ySWJBTDVMTnpJVXI0aGdvSnN2?=
+ =?utf-8?B?cy8zQklMUk91M3RiOFBjcDdNa2pUZFc1YWt5ejFBNUVud0V4c0toZmdlcDda?=
+ =?utf-8?B?NEJ6bk15dHdlYnM5bEY0SmovNlgrY003d2RZZ0NOS2dYMEpJUGpoQ2U0SDJl?=
+ =?utf-8?B?VVZ6aVNsUXJDdEdMZEZOU2VvVmhpN3V3VHU1RkhrS0wxWEtMZXV3UEJTN1ls?=
+ =?utf-8?B?ODhBenh1UUtBVlE3RGJsZnA0TmgwUlRSUE9CNUxNcjN4WmtpTFpaaDFjdzEw?=
+ =?utf-8?Q?DFVk=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4fd912d-3a1d-4f57-773b-08db31ad1ac9
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 05:59:35.4208
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xJEp9lB84dx7rLQx59UKIFdcU/TMBhXWsH442U3auNbdlncySdpvVUxxLFp2pfXG
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8287
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,399 +126,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using dynamically assigned CoreSight trace IDs the drivers can output
-the ID / CPU association as a PERF_RECORD_AUX_OUTPUT_HW_ID packet.
+Am 31.03.23 um 02:06 schrieb Danilo Krummrich:
+> It already happend a few times that patches slipped through which
+> implemented access to an entity through a job that was already removed
+> from the entities queue. Since jobs and entities might have different
+> lifecycles, this can potentially cause UAF bugs.
+>
+> In order to make it obvious that a jobs entity pointer shouldn't be
+> accessed after drm_sched_entity_pop_job() was called successfully, set
+> the jobs entity pointer to NULL once the job is removed from the entity
+> queue.
+>
+> Moreover, debugging a potential NULL pointer dereference is way easier
+> than potentially corrupted memory through a UAF.
+>
+> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 
-Update cs-etm decoder to handle this packet by setting the CPU/Trace ID
-mapping.
+In general "YES PLEASE!", but I fear that this will break amdgpus reset 
+sequence.
 
-Signed-off-by: Mike Leach <mike.leach@linaro.org>
-Reviewed-by: James Clark <james.clark@arm.com>
-Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
----
- tools/include/linux/coresight-pmu.h           |  15 ++
- .../perf/util/cs-etm-decoder/cs-etm-decoder.c |   7 +
- tools/perf/util/cs-etm.c                      | 246 ++++++++++++++++--
- 3 files changed, 250 insertions(+), 18 deletions(-)
+On the other hand when amdgpu still relies on that pointer it's clearly 
+a bug (which I pointed out tons of times before).
 
-diff --git a/tools/include/linux/coresight-pmu.h b/tools/include/linux/coresight-pmu.h
-index 1760f9a574b0..cef3b1c25335 100644
---- a/tools/include/linux/coresight-pmu.h
-+++ b/tools/include/linux/coresight-pmu.h
-@@ -31,6 +31,9 @@
-  */
- #define CORESIGHT_TRACE_ID_UNUSED_FLAG	BIT(31)
- 
-+/* Value to set for unused trace ID values */
-+#define CORESIGHT_TRACE_ID_UNUSED_VAL	0x7F
-+
- /*
-  * Below are the definition of bit offsets for perf option, and works as
-  * arbitrary values for all ETM versions.
-@@ -55,4 +58,16 @@
- #define ETM4_CFG_BIT_RETSTK	12
- #define ETM4_CFG_BIT_VMID_OPT	15
- 
-+/*
-+ * Interpretation of the PERF_RECORD_AUX_OUTPUT_HW_ID payload.
-+ * Used to associate a CPU with the CoreSight Trace ID.
-+ * [07:00] - Trace ID - uses 8 bits to make value easy to read in file.
-+ * [59:08] - Unused (SBZ)
-+ * [63:60] - Version
-+ */
-+#define CS_AUX_HW_ID_TRACE_ID_MASK	GENMASK_ULL(7, 0)
-+#define CS_AUX_HW_ID_VERSION_MASK	GENMASK_ULL(63, 60)
-+
-+#define CS_AUX_HW_ID_CURR_VERSION 0
-+
- #endif
-diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-index d0e521dfcf35..82a27ab90c8b 100644
---- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-+++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-@@ -668,6 +668,7 @@ cs_etm_decoder__create_etm_decoder(struct cs_etm_decoder_params *d_params,
- 	switch (t_params->protocol) {
- 	case CS_ETM_PROTO_ETMV3:
- 	case CS_ETM_PROTO_PTM:
-+		csid = (t_params->etmv3.reg_idr & CORESIGHT_TRACE_ID_VAL_MASK);
- 		cs_etm_decoder__gen_etmv3_config(t_params, &config_etmv3);
- 		decoder->decoder_name = (t_params->protocol == CS_ETM_PROTO_ETMV3) ?
- 							OCSD_BUILTIN_DCD_ETMV3 :
-@@ -675,11 +676,13 @@ cs_etm_decoder__create_etm_decoder(struct cs_etm_decoder_params *d_params,
- 		trace_config = &config_etmv3;
- 		break;
- 	case CS_ETM_PROTO_ETMV4i:
-+		csid = (t_params->etmv4.reg_traceidr & CORESIGHT_TRACE_ID_VAL_MASK);
- 		cs_etm_decoder__gen_etmv4_config(t_params, &trace_config_etmv4);
- 		decoder->decoder_name = OCSD_BUILTIN_DCD_ETMV4I;
- 		trace_config = &trace_config_etmv4;
- 		break;
- 	case CS_ETM_PROTO_ETE:
-+		csid = (t_params->ete.reg_traceidr & CORESIGHT_TRACE_ID_VAL_MASK);
- 		cs_etm_decoder__gen_ete_config(t_params, &trace_config_ete);
- 		decoder->decoder_name = OCSD_BUILTIN_DCD_ETE;
- 		trace_config = &trace_config_ete;
-@@ -688,6 +691,10 @@ cs_etm_decoder__create_etm_decoder(struct cs_etm_decoder_params *d_params,
- 		return -1;
- 	}
- 
-+	/* if the CPU has no trace ID associated, no decoder needed */
-+	if (csid == CORESIGHT_TRACE_ID_UNUSED_VAL)
-+		return 0;
-+
- 	if (d_params->operation == CS_ETM_OPERATION_DECODE) {
- 		if (ocsd_dt_create_decoder(decoder->dcd_tree,
- 					   decoder->decoder_name,
-diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-index 5fc9c288080b..94e2d02009eb 100644
---- a/tools/perf/util/cs-etm.c
-+++ b/tools/perf/util/cs-etm.c
-@@ -220,6 +220,143 @@ static int cs_etm__map_trace_id(u8 trace_chan_id, u64 *cpu_metadata)
- 	return 0;
- }
- 
-+static int cs_etm__metadata_get_trace_id(u8 *trace_chan_id, u64 *cpu_metadata)
-+{
-+	u64 cs_etm_magic = cpu_metadata[CS_ETM_MAGIC];
-+
-+	switch (cs_etm_magic) {
-+	case __perf_cs_etmv3_magic:
-+		*trace_chan_id = (u8)(cpu_metadata[CS_ETM_ETMTRACEIDR] &
-+				      CORESIGHT_TRACE_ID_VAL_MASK);
-+		break;
-+	case __perf_cs_etmv4_magic:
-+	case __perf_cs_ete_magic:
-+		*trace_chan_id = (u8)(cpu_metadata[CS_ETMV4_TRCTRACEIDR] &
-+				      CORESIGHT_TRACE_ID_VAL_MASK);
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * update metadata trace ID from the value found in the AUX_HW_INFO packet.
-+ * This will also clear the CORESIGHT_TRACE_ID_UNUSED_FLAG flag if present.
-+ */
-+static int cs_etm__metadata_set_trace_id(u8 trace_chan_id, u64 *cpu_metadata)
-+{
-+	u64 cs_etm_magic = cpu_metadata[CS_ETM_MAGIC];
-+
-+	switch (cs_etm_magic) {
-+	case __perf_cs_etmv3_magic:
-+		 cpu_metadata[CS_ETM_ETMTRACEIDR] = trace_chan_id;
-+		break;
-+	case __perf_cs_etmv4_magic:
-+	case __perf_cs_ete_magic:
-+		cpu_metadata[CS_ETMV4_TRCTRACEIDR] = trace_chan_id;
-+		break;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * FIELD_GET (linux/bitfield.h) not available outside kernel code,
-+ * and the header contains too many dependencies to just copy over,
-+ * so roll our own based on the original
-+ */
-+#define __bf_shf(x) (__builtin_ffsll(x) - 1)
-+#define FIELD_GET(_mask, _reg)						\
-+	({								\
-+		(typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
-+	})
-+
-+/*
-+ * Handle the PERF_RECORD_AUX_OUTPUT_HW_ID event.
-+ *
-+ * The payload associates the Trace ID and the CPU.
-+ * The routine is tolerant of seeing multiple packets with the same association,
-+ * but a CPU / Trace ID association changing during a session is an error.
-+ */
-+static int cs_etm__process_aux_output_hw_id(struct perf_session *session,
-+					    union perf_event *event)
-+{
-+	struct cs_etm_auxtrace *etm;
-+	struct perf_sample sample;
-+	struct int_node *inode;
-+	struct evsel *evsel;
-+	u64 *cpu_data;
-+	u64 hw_id;
-+	int cpu, version, err;
-+	u8 trace_chan_id, curr_chan_id;
-+
-+	/* extract and parse the HW ID */
-+	hw_id = event->aux_output_hw_id.hw_id;
-+	version = FIELD_GET(CS_AUX_HW_ID_VERSION_MASK, hw_id);
-+	trace_chan_id = FIELD_GET(CS_AUX_HW_ID_TRACE_ID_MASK, hw_id);
-+
-+	/* check that we can handle this version */
-+	if (version > CS_AUX_HW_ID_CURR_VERSION)
-+		return -EINVAL;
-+
-+	/* get access to the etm metadata */
-+	etm = container_of(session->auxtrace, struct cs_etm_auxtrace, auxtrace);
-+	if (!etm || !etm->metadata)
-+		return -EINVAL;
-+
-+	/* parse the sample to get the CPU */
-+	evsel = evlist__event2evsel(session->evlist, event);
-+	if (!evsel)
-+		return -EINVAL;
-+	err = evsel__parse_sample(evsel, event, &sample);
-+	if (err)
-+		return err;
-+	cpu = sample.cpu;
-+	if (cpu == -1) {
-+		/* no CPU in the sample - possibly recorded with an old version of perf */
-+		pr_err("CS_ETM: no CPU AUX_OUTPUT_HW_ID sample. Use compatible perf to record.");
-+		return -EINVAL;
-+	}
-+
-+	/* See if the ID is mapped to a CPU, and it matches the current CPU */
-+	inode = intlist__find(traceid_list, trace_chan_id);
-+	if (inode) {
-+		cpu_data = inode->priv;
-+		if ((int)cpu_data[CS_ETM_CPU] != cpu) {
-+			pr_err("CS_ETM: map mismatch between HW_ID packet CPU and Trace ID\n");
-+			return -EINVAL;
-+		}
-+
-+		/* check that the mapped ID matches */
-+		err = cs_etm__metadata_get_trace_id(&curr_chan_id, cpu_data);
-+		if (err)
-+			return err;
-+		if (curr_chan_id != trace_chan_id) {
-+			pr_err("CS_ETM: mismatch between CPU trace ID and HW_ID packet ID\n");
-+			return -EINVAL;
-+		}
-+
-+		/* mapped and matched - return OK */
-+		return 0;
-+	}
-+
-+	/* not one we've seen before - lets map it */
-+	cpu_data = etm->metadata[cpu];
-+	err = cs_etm__map_trace_id(trace_chan_id, cpu_data);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * if we are picking up the association from the packet, need to plug
-+	 * the correct trace ID into the metadata for setting up decoders later.
-+	 */
-+	err = cs_etm__metadata_set_trace_id(trace_chan_id, cpu_data);
-+	return err;
-+}
-+
- void cs_etm__etmq_set_traceid_queue_timestamp(struct cs_etm_queue *etmq,
- 					      u8 trace_chan_id)
- {
-@@ -2668,11 +2805,16 @@ static int cs_etm__queue_aux_fragment(struct perf_session *session, off_t file_o
- 	}
- 
- 	/*
--	 * In per-thread mode, CPU is set to -1, but TID will be set instead. See
--	 * auxtrace_mmap_params__set_idx(). Return 'not found' if neither CPU nor TID match.
-+	 * In per-thread mode, auxtrace CPU is set to -1, but TID will be set instead. See
-+	 * auxtrace_mmap_params__set_idx(). However, the sample AUX event will contain a
-+	 * CPU as we set this always for the AUX_OUTPUT_HW_ID event.
-+	 * So now compare only TIDs if auxtrace CPU is -1, and CPUs if auxtrace CPU is not -1.
-+	 * Return 'not found' if mismatch.
- 	 */
--	if ((auxtrace_event->cpu == (__u32) -1 && auxtrace_event->tid != sample->tid) ||
--			auxtrace_event->cpu != sample->cpu)
-+	if (auxtrace_event->cpu == (__u32) -1) {
-+		if (auxtrace_event->tid != sample->tid)
-+			return 1;
-+	} else if (auxtrace_event->cpu != sample->cpu)
- 		return 1;
- 
- 	if (aux_event->flags & PERF_AUX_FLAG_OVERWRITE) {
-@@ -2721,6 +2863,17 @@ static int cs_etm__queue_aux_fragment(struct perf_session *session, off_t file_o
- 	return 1;
- }
- 
-+static int cs_etm__process_aux_hw_id_cb(struct perf_session *session, union perf_event *event,
-+					u64 offset __maybe_unused, void *data __maybe_unused)
-+{
-+	/* look to handle PERF_RECORD_AUX_OUTPUT_HW_ID early to ensure decoders can be set up */
-+	if (event->header.type == PERF_RECORD_AUX_OUTPUT_HW_ID) {
-+		(*(int *)data)++; /* increment found count */
-+		return cs_etm__process_aux_output_hw_id(session, event);
-+	}
-+	return 0;
-+}
-+
- static int cs_etm__queue_aux_records_cb(struct perf_session *session, union perf_event *event,
- 					u64 offset __maybe_unused, void *data __maybe_unused)
- {
-@@ -2839,13 +2992,13 @@ static int cs_etm__map_trace_ids_metadata(int num_cpu, u64 **metadata)
- 		cs_etm_magic = metadata[i][CS_ETM_MAGIC];
- 		switch (cs_etm_magic) {
- 		case __perf_cs_etmv3_magic:
--			trace_chan_id = (u8)((metadata[i][CS_ETM_ETMTRACEIDR]) &
--					     CORESIGHT_TRACE_ID_VAL_MASK);
-+			metadata[i][CS_ETM_ETMTRACEIDR] &= CORESIGHT_TRACE_ID_VAL_MASK;
-+			trace_chan_id = (u8)(metadata[i][CS_ETM_ETMTRACEIDR]);
- 			break;
- 		case __perf_cs_etmv4_magic:
- 		case __perf_cs_ete_magic:
--			trace_chan_id = (u8)((metadata[i][CS_ETMV4_TRCTRACEIDR]) &
--					      CORESIGHT_TRACE_ID_VAL_MASK);
-+			metadata[i][CS_ETMV4_TRCTRACEIDR] &= CORESIGHT_TRACE_ID_VAL_MASK;
-+			trace_chan_id = (u8)(metadata[i][CS_ETMV4_TRCTRACEIDR]);
- 			break;
- 		default:
- 			/* unknown magic number */
-@@ -2858,6 +3011,35 @@ static int cs_etm__map_trace_ids_metadata(int num_cpu, u64 **metadata)
- 	return 0;
- }
- 
-+/*
-+ * If we found AUX_HW_ID packets, then set any metadata marked as unused to the
-+ * unused value to reduce the number of unneeded decoders created.
-+ */
-+static int cs_etm__clear_unused_trace_ids_metadata(int num_cpu, u64 **metadata)
-+{
-+	u64 cs_etm_magic;
-+	int i;
-+
-+	for (i = 0; i < num_cpu; i++) {
-+		cs_etm_magic = metadata[i][CS_ETM_MAGIC];
-+		switch (cs_etm_magic) {
-+		case __perf_cs_etmv3_magic:
-+			if (metadata[i][CS_ETM_ETMTRACEIDR] & CORESIGHT_TRACE_ID_UNUSED_FLAG)
-+				metadata[i][CS_ETM_ETMTRACEIDR] = CORESIGHT_TRACE_ID_UNUSED_VAL;
-+			break;
-+		case __perf_cs_etmv4_magic:
-+		case __perf_cs_ete_magic:
-+			if (metadata[i][CS_ETMV4_TRCTRACEIDR] & CORESIGHT_TRACE_ID_UNUSED_FLAG)
-+				metadata[i][CS_ETMV4_TRCTRACEIDR] = CORESIGHT_TRACE_ID_UNUSED_VAL;
-+			break;
-+		default:
-+			/* unknown magic number */
-+			return -EINVAL;
-+		}
-+	}
-+	return 0;
-+}
-+
- int cs_etm__process_auxtrace_info_full(union perf_event *event,
- 				       struct perf_session *session)
- {
-@@ -2869,6 +3051,7 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
- 	int priv_size = 0;
- 	int num_cpu;
- 	int err = 0;
-+	int aux_hw_id_found;
- 	int i, j;
- 	u64 *ptr = NULL;
- 	u64 **metadata = NULL;
-@@ -3017,8 +3200,43 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
- 	if (err)
- 		goto err_delete_thread;
- 
--	/* before aux records are queued, need to map metadata to trace IDs */
--	err = cs_etm__map_trace_ids_metadata(num_cpu, metadata);
-+	/*
-+	 * Map Trace ID values to CPU metadata.
-+	 *
-+	 * Trace metadata will always contain Trace ID values from the legacy algorithm. If the
-+	 * files has been recorded by a "new" perf updated to handle AUX_HW_ID then the metadata
-+	 * ID value will also have the CORESIGHT_TRACE_ID_UNUSED_FLAG set.
-+	 *
-+	 * The updated kernel drivers that use AUX_HW_ID to sent Trace IDs will attempt to use
-+	 * the same IDs as the old algorithm as far as is possible, unless there are clashes
-+	 * in which case a different value will be used. This means an older perf may still
-+	 * be able to record and read files generate on a newer system.
-+	 *
-+	 * For a perf able to interpret AUX_HW_ID packets we first check for the presence of
-+	 * those packets. If they are there then the values will be mapped and plugged into
-+	 * the metadata. We then set any remaining metadata values with the used flag to a
-+	 * value CORESIGHT_TRACE_ID_UNUSED_VAL - which indicates no decoder is required.
-+	 *
-+	 * If no AUX_HW_ID packets are present - which means a file recorded on an old kernel
-+	 * then we map Trace ID values to CPU directly from the metadata - clearing any unused
-+	 * flags if present.
-+	 */
-+
-+	/* first scan for AUX_OUTPUT_HW_ID records to map trace ID values to CPU metadata */
-+	aux_hw_id_found = 0;
-+	err = perf_session__peek_events(session, session->header.data_offset,
-+					session->header.data_size,
-+					cs_etm__process_aux_hw_id_cb, &aux_hw_id_found);
-+	if (err)
-+		goto err_delete_thread;
-+
-+	/* if HW ID found then clear any unused metadata ID values */
-+	if (aux_hw_id_found)
-+		err = cs_etm__clear_unused_trace_ids_metadata(num_cpu, metadata);
-+	/* otherwise, this is a file with metadata values only, map from metadata */
-+	else
-+		err = cs_etm__map_trace_ids_metadata(num_cpu, metadata);
-+
- 	if (err)
- 		goto err_delete_thread;
- 
-@@ -3027,14 +3245,6 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
- 		goto err_delete_thread;
- 
- 	etm->data_queued = etm->queues.populated;
--	/*
--	 * Print warning in pipe mode, see cs_etm__process_auxtrace_event() and
--	 * cs_etm__queue_aux_fragment() for details relating to limitations.
--	 */
--	if (!etm->data_queued)
--		pr_warning("CS ETM warning: Coresight decode and TRBE support requires random file access.\n"
--			   "Continuing with best effort decoding in piped mode.\n\n");
--
- 	return 0;
- 
- err_delete_thread:
--- 
-2.17.1
+Luben any opinion on that? Could you drive cleaning that up as well?
+
+Thanks,
+Christian.
+
+> ---
+> I'm aware that drivers could already use job->entity in arbitrary places, since
+> they in control of when the entity is actually freed. A quick grep didn't give
+> me any results where this would actually be the case, however maybe I also just
+> didn't catch it.
+>
+> If, therefore, we don't want to set job->entity to NULL I think we should at
+> least add a comment somewhere.
+> ---
+>
+>   drivers/gpu/drm/scheduler/sched_entity.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
+> index 15d04a0ec623..a9c6118e534b 100644
+> --- a/drivers/gpu/drm/scheduler/sched_entity.c
+> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
+> @@ -448,6 +448,12 @@ struct drm_sched_job *drm_sched_entity_pop_job(struct drm_sched_entity *entity)
+>   			drm_sched_rq_update_fifo(entity, next->submit_ts);
+>   	}
+>   
+> +	/* Jobs and entities might have different lifecycles. Since we're
+> +	 * removing the job from the entities queue, set the jobs entity pointer
+> +	 * to NULL to prevent any future access of the entity through this job.
+> +	 */
+> +	sched_job->entity = NULL;
+> +
+>   	return sched_job;
+>   }
+>   
 
