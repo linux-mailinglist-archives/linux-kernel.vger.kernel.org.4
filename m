@@ -2,114 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73ED6D1D1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB4A6D1D5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Mar 2023 11:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbjCaJzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Mar 2023 05:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
+        id S232501AbjCaJzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Mar 2023 05:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjCaJyX (ORCPT
+        with ESMTP id S230412AbjCaJym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:54:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BF1172C;
-        Fri, 31 Mar 2023 02:53:42 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DAE666603193;
-        Fri, 31 Mar 2023 10:53:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680256421;
-        bh=lYuwy5PNbHveUqITfyBOBH4VBeg+QrO312pmvp34imI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=R1PP/ANMnDEwlLmop4KwyIE6ajslhceXPLKAsCRayaggPIqR5xHQ5m5d4HFfVc1Qo
-         AXxK3es7x9/UWIv1GmGBcNB4B4MKyeNLM6joUQum6FBFgMyMXuT7j+mLS8RAIyYudS
-         VIGUM5SNCbOnvTskxCLSyaYTMJABGprNzQI+D/9/SRNomkxfZjieBn9PKULNzCXE7c
-         NkuCNJByDVJe7E60v84D5l9g4zUtoey5L1okU14Nz3z4xNEh2UIBuXWRtxz2iqOSRG
-         0E/bsucStViM0HIYPj3j8Il3JOo4yXohFhAlqAmDBATea0gGUhVoItevidkdlxV3q4
-         guk+DTUidFvgg==
-Message-ID: <816f8d82-b66d-6fad-51d7-a37c241b0417@collabora.com>
-Date:   Fri, 31 Mar 2023 11:53:38 +0200
+        Fri, 31 Mar 2023 05:54:42 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96B21DFB8;
+        Fri, 31 Mar 2023 02:54:00 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1piBS3-00AlBo-Tq; Fri, 31 Mar 2023 17:53:44 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 31 Mar 2023 17:53:43 +0800
+Date:   Fri, 31 Mar 2023 17:53:43 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     horia.geanta@nxp.com, pankaj.gupta@nxp.com, gaurav.jain@nxp.com,
+        davem@davemloft.net, kim.phillips@freescale.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH v2] crypto: caam: Clear some memory in instantiate_rng()
+Message-ID: <ZCatp5UWC/la+flQ@gondor.apana.org.au>
+References: <41a7e41bb5a14f1e6e68a81c16c90e3ad4542ab1.1679381782.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v7 06/19] clk: mediatek: Add MT8188 camsys clock support
-Content-Language: en-US
-To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-clk@vger.kernel.org, netdev@vger.kernel.org
-References: <20230331082131.12517-1-Garmin.Chang@mediatek.com>
- <20230331082131.12517-7-Garmin.Chang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230331082131.12517-7-Garmin.Chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <41a7e41bb5a14f1e6e68a81c16c90e3ad4542ab1.1679381782.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=4.3 required=5.0 tests=HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 31/03/23 10:21, Garmin.Chang ha scritto:
-> Add MT8188 camsys clock controllers which provide clock gate
-> control for camera IP blocks.
+On Tue, Mar 21, 2023 at 07:59:30AM +0100, Christophe JAILLET wrote:
+> According to the comment at the end of the 'for' loop just a few lines
+> below, it looks needed to clear 'desc'.
 > 
-> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> So it should also be cleared for the first iteration.
+> 
+> Move the memset() to the beginning of the loop to be safe.
+> 
+> Fixes: 281922a1d4f5 ("crypto: caam - add support for SEC v5.x RNG4")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->   drivers/clk/mediatek/Kconfig          |   7 ++
->   drivers/clk/mediatek/Makefile         |   1 +
->   drivers/clk/mediatek/clk-mt8188-cam.c | 120 ++++++++++++++++++++++++++
->   3 files changed, 128 insertions(+)
->   create mode 100644 drivers/clk/mediatek/clk-mt8188-cam.c
+> v1 --> v2:
+>    - move the memset() instead of doing s/kmalloc/kzalloc/
+>    - adding a Fixes tag
 > 
-> diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
-> index 681d392620c5..9170f76a8ee7 100644
-> --- a/drivers/clk/mediatek/Kconfig
-> +++ b/drivers/clk/mediatek/Kconfig
-> @@ -692,6 +692,13 @@ config COMMON_CLK_MT8188
->   	help
->             This driver supports MediaTek MT8188 clocks.
->   
-> +config COMMON_CLK_MT8188_CAMSYS
-> +	tristate "Clock driver for MediaTek MT8188 camsys"
-> +	depends on COMMON_CLK_MT8188_VPPSYS
-> +	default COMMON_CLK_MT8188_VPPSYS
-> +	help
-> +	  This driver supports MediaTek MT8188 camsys and camsys_raw clocks.
-> +
->   config COMMON_CLK_MT8192
->   	tristate "Clock driver for MediaTek MT8192"
->   	depends on ARM64 || COMPILE_TEST
-> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-> index 1a642510ce38..c235e9a0d305 100644
-> --- a/drivers/clk/mediatek/Makefile
-> +++ b/drivers/clk/mediatek/Makefile
-> @@ -102,6 +102,7 @@ obj-$(CONFIG_COMMON_CLK_MT8186_VENCSYS) += clk-mt8186-venc.o
->   obj-$(CONFIG_COMMON_CLK_MT8186_WPESYS) += clk-mt8186-wpe.o
->   obj-$(CONFIG_COMMON_CLK_MT8188) += clk-mt8188-apmixedsys.o clk-mt8188-topckgen.o \
->   				   clk-mt8188-peri_ao.o clk-mt8188-infra_ao.o
-> +j-$(CONFIG_COMMON_CLK_MT8188_CAMSYS) += clk-mt8188-cam.o
+> v1:
+>    https://lore.kernel.org/all/16d6bf3bd7a6e96a8262fcd4680e3ccbb5a50478.1679355849.git.christophe.jaillet@wanadoo.fr/
+> 
+> For for loop has been introduceD in commit 1005bccd7a4a ("crypto: caam -
+> enable instantiation of all RNG4 state handles"). But if 'desc' really
+> needs to be cleared, the issue was there before (thus the Fixes tag in
+> the commit log)
+> ---
+>  drivers/crypto/caam/ctrl.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-Please fix that typo here.
-
-After which,
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-
+Patch applied.  Thanks.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
